@@ -239,7 +239,6 @@
 
     this.queryReports = function (date, _hostname) {
       var queryData = {};
-      var hostname = _hostname || window.location.hostname;
 
       queryData.visitorLocations = new Keen.Query("count", {
         eventCollection: "session_data",
@@ -249,9 +248,9 @@
           "end": date.endDate
         },
         filters: [{
-          "property_name": "referrer.domain",
-          "operator": "in",
-          "property_value": ["www." + hostname, hostname]
+            "property_name": "accountId",
+            "operator": "eq",
+            "property_value": $$.server.accountId
         }, {
           "property_name": "ip_geo_info",
           "operator": "ne",
@@ -267,9 +266,9 @@
         },
         groupBy: "user_agent.device",
         filters: [{
-          "property_name": "referrer.domain",
-          "operator": "in",
-          "property_value": ["www." + hostname, hostname]
+            "property_name": "accountId",
+            "operator": "eq",
+            "property_value": $$.server.accountId
         }]
       });
 
@@ -282,9 +281,9 @@
         },
         interval: interval,
         filters: [{
-          "property_name": "referrer.domain",
-          "operator": "in",
-          "property_value": ["www." + hostname, hostname]
+            "property_name": "accountId",
+            "operator": "eq",
+            "property_value": $$.server.accountId
         }]
       });
 
@@ -297,9 +296,9 @@
         },
         interval: interval,
         filters: [{
-          "property_name": "referrer.domain",
-          "operator": "in",
-          "property_value": ["www." + hostname, hostname]
+            "property_name": "accountId",
+            "operator": "eq",
+            "property_value": $$.server.accountId
         }]
       });
 
@@ -311,9 +310,9 @@
         },
         interval: interval,
         filters: [{
-          "property_name": "url.domain",
-          "operator": "eq",
-          "property_value": hostname
+           "property_name": "url.domain",
+           "operator": "in",
+           "property_value": ["www." + _hostname, _hostname]
         }]
       });
 
@@ -325,9 +324,9 @@
         },
         interval: interval,
         filters: [{
-          "property_name": "url.domain",
-          "operator": "eq",
-          "property_value": hostname
+           "property_name": "url.domain",
+           "operator": "in",
+           "property_value": ["www." + _hostname, _hostname]
         }]
       });
 
@@ -340,9 +339,9 @@
         },
         interval: interval,
         filters: [{
-          "property_name": "referrer.domain",
-          "operator": "in",
-          "property_value": ["www." + hostname, hostname]
+            "property_name": "accountId",
+            "operator": "eq",
+            "property_value": $$.server.accountId
         }]
       });
 
@@ -355,9 +354,9 @@
         },
         interval: interval,
         filters: [{
-          "property_name": "referrer.domain",
-          "operator": "in",
-          "property_value": ["www." + hostname, hostname]
+            "property_name": "accountId",
+            "operator": "eq",
+            "property_value": $$.server.accountId
         }]
       });
 
@@ -370,9 +369,9 @@
         },
         interval: interval,
         filters: [{
-          "property_name": "referrer.domain",
-          "operator": "in",
-          "property_value": ["www." + hostname, hostname]
+            "property_name": "accountId",
+            "operator": "eq",
+            "property_value": $$.server.accountId
         }]
       });
 
@@ -384,9 +383,9 @@
           "end": date.endDate
         },
         filters: [{
-          "property_name": "referrer.domain",
-          "operator": "in",
-          "property_value": ["www." + hostname, hostname]
+            "property_name": "accountId",
+            "operator": "eq",
+            "property_value": $$.server.accountId
         }]
       });
 
@@ -399,11 +398,15 @@
         },
         interval: interval,
         filters: [{
-          "property_name": "referrer.domain",
-          "operator": "in",
-          "property_value": ["www." + hostname, hostname]
+            "property_name": "accountId",
+            "operator": "eq",
+            "property_value": $$.server.accountId
         }, {
-          "property_name": "page_length",
+          "property_name": "session_length",
+          "operator": "lte",
+          "property_value": 5000
+        }, {
+          "property_name": "page_depth",
           "operator": "eq",
           "property_value": 1
         }]
@@ -417,11 +420,15 @@
           "end": date.endDate
         },
         filters: [{
-          "property_name": "referrer.domain",
-          "operator": "in",
-          "property_value": ["www." + hostname, hostname]
+            "property_name": "accountId",
+            "operator": "eq",
+            "property_value": $$.server.accountId
         }, {
-          "property_name": "page_length",
+          "property_name": "session_length",
+          "operator": "lte",
+          "property_value": 5000
+        }, {
+          "property_name": "page_depth",
           "operator": "eq",
           "property_value": 1
         }]
@@ -436,9 +443,9 @@
           "end": date.endDate
         },
         filters: [{
-          "property_name": "referrer.domain",
-          "operator": "in",
-          "property_value": ["www." + hostname, hostname]
+            "property_name": "accountId",
+            "operator": "eq",
+            "property_value": $$.server.accountId
         }]
       });
 
@@ -450,9 +457,9 @@
           "end": date.endDate
         },
         filters: [{
-          "property_name": "referrer.domain",
-          "operator": "in",
-          "property_value": ["www." + hostname, hostname]
+            "property_name": "accountId",
+            "operator": "eq",
+            "property_value": $$.server.accountId
         }, {
           "property_name": "new_visitor",
           "operator": "eq",
@@ -468,9 +475,9 @@
           "end": date.endDate
         },
         filters: [{
-          "property_name": "referrer.domain",
-          "operator": "in",
-          "property_value": ["www." + hostname, hostname]
+            "property_name": "accountId",
+            "operator": "eq",
+            "property_value": $$.server.accountId
         }, {
           "property_name": "new_visitor",
           "operator": "eq",
@@ -487,9 +494,9 @@
           "end": timeframePreviousEnd
         },
         filters: [{
-          "property_name": "referrer.domain",
-          "operator": "in",
-          "property_value": ["www." + hostname, hostname]
+            "property_name": "accountId",
+            "operator": "eq",
+            "property_value": $$.server.accountId
         }]
       });
 
@@ -501,13 +508,11 @@
       var self = this;
       var hostname = account.subdomain + '.indigenous.io';
 
-      if (account.subdomain === 'main') {
-        hostname = hostname.replace('main', 'www');
-      }
-
       if (account.domain) {
         hostname = account.domain;
       }
+
+      hostname = 'indigenous.io';
 
       KeenService.keenClient(function (client) {
         var queryData = self.queryReports(date, hostname);
@@ -539,18 +544,16 @@
       var filters = [];
       var hostname = account.subdomain + '.indigenous.io';
 
-      if (account.subdomain === 'main') {
-        hostname = hostname.replace('main', 'www');
-      }
-
       if (account.domain) {
         hostname = account.domain;
       }
 
+      hostname = 'indigenous.io';
+
       filters.push({
-        "property_name": "url.domain",
-        "operator": "eq",
-        "property_value": hostname
+         "property_name": "url.domain",
+         "operator": "in",
+         "property_value": ["www." + hostname, hostname]
       });
 
       var reportData = {};
@@ -623,11 +626,13 @@
 
     this.visitorsReport = function (date, account, fn) {
       var self = this;
-      var _hostname = window.location.hostname;
-      //window.location.hostname
-      if (account.subdomain === 'main') {
-        _hostname = _hostname.replace('main', 'www');
+      var _hostname = account.subdomain + '.indigenous.io';
+
+      if (account.domain) {
+        _hostname = account.domain;
       }
+
+      _hostname = 'indigenous.io';
 
       KeenService.keenClient(function (client) {
         var queryData = self.queryVisitorReports(date, _hostname);
@@ -643,7 +648,6 @@
 
     this.queryVisitorReports = function (date, _hostname) {
       var queryData = {};
-      var hostname = _hostname || window.location.hostname;
 
       queryData.returningVisitors = new Keen.Query("count_unique", {
         eventCollection: "session_data",
@@ -651,9 +655,9 @@
         timeframe: "this_month",
         interval: "daily",
         filters: [{
-          "property_name": "referrer.domain",
-          "operator": "in",
-          "property_value": ["www." + hostname, hostname]
+            "property_name": "accountId",
+            "operator": "eq",
+            "property_value": $$.server.accountId
         }, {
           "property_name": "new_visitor",
           "operator": "eq",
@@ -667,9 +671,9 @@
         timeframe: "this_month",
         interval: "daily",
         filters: [{
-          "property_name": "referrer.domain",
-          "operator": "in",
-          "property_value": ["www." + hostname, hostname]
+            "property_name": "accountId",
+            "operator": "eq",
+            "property_value": $$.server.accountId
         }, {
           "property_name": "new_visitor",
           "operator": "eq",
@@ -682,9 +686,9 @@
         targetProperty: "permanent_tracker",
         latest: 1,
         filters: [{
-          "property_name": "referrer.domain",
-          "operator": "in",
-          "property_value": ["www." + hostname, hostname]
+            "property_name": "accountId",
+            "operator": "eq",
+            "property_value": $$.server.accountId
         }]
       });
 

@@ -81,11 +81,17 @@
                     </div>
                     <div class="panel-footer border-light">
                         <div class="row">
-                            <div class="col-xs-12 text-center">
+                            <div class="col-xs-6 text-center border-right border-dark">
                                 <div class="rate">
                                     <span class="value">{{locationData.length || '--'}}</span>
                                 </div>
                                 States
+                            </div>
+                            <div class="col-xs-6 text-center">
+                                <div class="rate">
+                                    <span class="value">{{mostPopularState['ip_geo_info.province'] || '--'}}</span>
+                                </div>
+                                Most Popular
                             </div>
                         </div>
                     </div>
