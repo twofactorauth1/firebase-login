@@ -2732,6 +2732,7 @@
             $scope.clickImageButton(editor, false);
         };
 
+       
         /*
          * @getProducts
          * - get a list of products
@@ -2748,6 +2749,7 @@
                     });
                 }
             });
+          $scope.availableProductTagsString = $scope.availableProductTags.join(","); 
           $scope.products = products;
         });
 

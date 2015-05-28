@@ -17,6 +17,7 @@ var appConfig = require('../configs/app.config.js');
 var authenticationDao = require('../dao/authentication.dao');
 var fs = require('fs');
 var userActivityManager = require('../useractivities/useractivity_manager');
+var sitemigration_middleware = require('../sitemigration/middleware/sitemigration_middleware');
 
 
 var router = function() {
@@ -29,7 +30,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
 
     initialize: function() {
 
-        app.get("/*", this.setup.bind(this), this.index.bind(this));
+        app.get("/*", [sitemigration_middleware.checkForRedirect, this.setup.bind(this)], this.index.bind(this));
 
         return this;
     },
