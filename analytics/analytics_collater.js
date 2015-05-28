@@ -271,6 +271,8 @@ var collator = {
                     collator._closePagesWithNoPings(sessionEvent, callback);
                 }
             });
+        } else {
+            callback(null);
         }
     },
 
@@ -279,7 +281,7 @@ var collator = {
         dao.findAndOrder({session_id:sessionEvent.get('session_id')}, null, $$.m.PageEvent, 'start_time', 1, function(err, pageList) {
             if (err) {
                 log.error('Error retrieving page list for session event with id: ' + sessionEvent.get('session_id'));
-                cb(err);
+                callback(err);
             } else {
                 //set the end_time for each page as the start_time from the next one.
                 _.each(pageList, function (page, index, list) {
