@@ -162,8 +162,8 @@
         $scope.validateBeforeSave = function()
         {
             $scope.isValid = true;
-            _.each($scope.account.business.hours, function(element, index) {
-                $scope.validateHours(element,index);
+            _.each($scope.account.business.hours, function(element, index) {                
+                    $scope.validateHours(element,index);
              });
         }
 
@@ -240,7 +240,7 @@
                     }
                     
                 }
-                else
+                else if(!hours.wholeday)
                 {                        
                     angular.element("#business_hours_start_"+index+" .error").html("");
                     angular.element("#business_hours_start_"+index).removeClass('has-error');            
