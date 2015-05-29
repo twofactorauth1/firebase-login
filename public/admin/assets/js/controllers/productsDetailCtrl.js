@@ -39,10 +39,15 @@
     
     ProductService.getProduct($stateParams.productId, function (product) {
       $scope.product = product;
-      $scope.getProductTags();
-      if (angular.isDefined($scope.product.icon) && !$scope.product.is_image) {
-        angular.element(' #convert ').iconpicker('setIcon', $scope.product.icon);
-      }
+      var p_icon = $scope.product.icon || 'fa-cube';
+      angular.element('#convert').iconpicker({
+        iconset: 'fontawesome',
+        icon: p_icon,
+        rows: 5,
+        cols: 5,
+        placement: 'right'
+      });
+      $scope.getProductTags();      
 
       if (!$scope.product.attributes) {
         $scope.product.attributes = [{
@@ -291,13 +296,7 @@
      * - icon picker for product image replacement
      */
     
-      angular.element('#convert').iconpicker({
-        iconset: 'fontawesome',
-        icon: 'fa-cube',
-        rows: 5,
-        cols: 5,
-        placement: 'right'
-      });
+     
     
 
     $('#convert').on('change', function(e) {
