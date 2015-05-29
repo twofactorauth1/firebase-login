@@ -19,7 +19,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
         $scope.thumbnailSlider = [];
         $scope.contactDetails = [];
         $scope.activeEditor = null;
-        $scope.activated = true;
+        $scope.activated = false;
 
         //displays the year dynamically for the footer
         var d = new Date();
@@ -716,7 +716,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
 
 
         $scope.activateCKEditor = function() {
-            if ($scope.activated) {
+            
                 $scope.isEditing = true;
                 for (name in CKEDITOR.instances) {
                     if(CKEDITOR.instances[name])
@@ -770,10 +770,8 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
                         }
                     }
 
-                }, 500)
-            }
+                }, 500)            
             $scope.parentScope.resizeIframe();
-            $scope.activated = true;
         };
 
 
@@ -1880,6 +1878,17 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
                
             },300);
         };
+
+        
+        angular.element("body").on("DOMNodeInserted", ".editable", function(e) {
+            if (!$scope.activated && $scope.parentScope) {
+              $scope.activated = true;
+              setTimeout(function() {
+                console.log("Activate Ckeditor")
+                $scope.activateCKEditor();
+              }, 1000)
+            }
+        });
     }
 
 ]);

@@ -11,7 +11,7 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
 
         $scope.testing = 'hello';
         $scope.activeEditor = null;
-        $scope.activated = true;
+        $scope.activated = false;
 
         /*
          * @back
@@ -424,7 +424,7 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
          */
 
         $scope.activateCKEditor = function() {
-            if ($scope.activated) {
+            
                 $scope.isEditing = true;
                 for (name in CKEDITOR.instances) {
                     if(CKEDITOR.instances[name])
@@ -460,9 +460,9 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
                         }
                     });
                 });                
-            }
+            
             $scope.parentScope.resizeIframe();
-            $scope.activated = true;
+            
         };
 
         /*
@@ -574,6 +574,7 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
          * -
          */
 
+        
         $scope.sharePost = function(post, type) {
             var url = $location.$$absUrl;
             var postData = {};
@@ -612,6 +613,17 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
                     break;
             }
         }
+
+
+        angular.element("body").on("DOMNodeInserted", ".editable", function(e) {
+            if (!$scope.activated && $scope.parentScope) {
+              $scope.activated = true;
+              setTimeout(function() {
+                console.log("Activate Ckeditor")
+                $scope.activateCKEditor();
+              }, 1000)
+            }
+        });
 
     }
 ]);
