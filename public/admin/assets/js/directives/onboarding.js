@@ -198,7 +198,8 @@ app.directive('indigOnboarding', function ($location, $sce, $state, toaster, $te
        */
 
       $scope.taskComplete = function () {
-          if ($scope.userPreferences.tasks[$scope.objType] !== 'finished') {
+
+          if ($scope.userPreferences && $scope.userPreferences.tasks && $scope.userPreferences.tasks[$scope.objType] !== 'finished') {
               $scope.userPreferences.tasks[$scope.objType] = 'finished';
                 UserService.updateUserPreferences($scope.userPreferences, false, function (updatedPreferences) {
 
