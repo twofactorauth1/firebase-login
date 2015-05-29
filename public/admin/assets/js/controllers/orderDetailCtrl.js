@@ -316,7 +316,22 @@
           email = model.email;
         }
 
-        return '#' + model.sku + ' ' + model.name + ' ($' + model.regular_price + ') ';
+        var _sku = '';
+        if (model.sku) {
+          _sku = '#'+model.sku
+        }
+
+        var _name = '';
+        if (model.name || model.title) {
+          _name = model.name || model.title;
+        }
+
+        var _price = '';
+        if (model.regular_price) {
+          _price = ' ($' + model.regular_price + ') ';
+        }
+
+        return _sku + ' ' + _name + _price;
       }
 
       return '';

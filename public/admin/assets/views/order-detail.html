@@ -410,7 +410,9 @@
                             <tbody>
                                 <tr ng-repeat="item in order.line_items">
                                     <td width="40">
-                                        <img src="{{item.product.icon}}" class="img-circle" style="width:35px;height:35px" popover-template="'productImage.html'" popover-title="{{item.product.name}}" popover-trigger="mouseenter" popover-placement="right"/>
+                                        <img ng-if="item.product.is_image && item.product.icon" src="{{item.product.icon}}" class="img-circle" style="width:35px;height:35px" popover-template="'productImage.html'" popover-title="{{item.product.name}}" popover-trigger="mouseenter" popover-placement="right"/>
+                                        <span ng-if="!item.product.is_image && item.product.icon" class="fa {{item.product.icon}}"></span>
+                                        <span ng-if="!item.product.icon" class="fa fa-cube"></span>
                                     </td>
                                     <td>
                                         {{item.product.sku}}
@@ -564,7 +566,9 @@
 </script>
 <script type="text/ng-template" id="product-typeahead-template.html">
     <a>
-        <img ng-src="{{match.model.icon ? match.model.icon : '/admin/assets/images/default-product.png'}}" width="35">
-        <span bind-html-unsafe="match.model.name | typeaheadHighlight:query"></span>
+        <img ng-if="match.model.is_image" ng-src="{{match.model.icon}}" width="25" height="25" class="img-circle margin-right-5">
+        <h3 ng-if="!match.model.icon" class="pull-left margin-right-5"><span class="fa fa-cube"></span></h3>
+        <h3 ng-if="!match.model.is_image && match.model.icon" class="pull-left margin-right-5"><span class="fa {{match.model.icon}}"></span></h3>
+        <span bind-html-unsafe="match.model.name || match.model.title | typeaheadHighlight:query"></span>
     </a>
 </script>

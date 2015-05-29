@@ -36,7 +36,7 @@
     $scope.product_tags = [];
     var productPlanStatus = {};
     var productPlanSignupFee = {};
-    
+
     ProductService.getProduct($stateParams.productId, function (product) {
       $scope.product = product;
       $scope.getProductTags();
@@ -79,7 +79,6 @@
           });
       }
 
-      console.log('$scope.product.variations.length ', $scope.product.variations.length);
       // if ($scope.product.variations.length <= 0) {
       //     $scope.showVariations = false;
       //     $scope.product.variations = [{
@@ -137,7 +136,7 @@
      * @insertMedia
      * - insert media function
      */
-    
+
     $scope.insertMedia = function (asset) {
 
       if ($scope.currentDownload) {
@@ -147,11 +146,10 @@
         console.log('product image');
         $scope.product.icon = asset.url;
       }
-       $scope.setDownloadId();
+      $scope.setDownloadId();
     };
 
-    $scope.setDownloadId = function(download)
-    {
+    $scope.setDownloadId = function (download) {
       $scope.currentDownload = download;
     }
 
@@ -238,17 +236,39 @@
     };
 
     /*
+     * @validateProduct
+     * - validate the product before saved
+     */
+
+    $scope.validateProduct = function () {
+      if (!$scope.product.name) {
+        toaster.pop('error', 'Product name is required to save.');
+        $scope.productNameError = true;
+        return false;
+      }
+      return true;
+    };
+
+    $scope.$watch('product.name', function(newValue) {
+      if (newValue && newValue.length > 0) {
+        $scope.productNameError = false;
+      }
+    });
+
+    /*
      * @saveProductFn
      * - save product function
      */
 
     $scope.saveProductFn = function () {
       $scope.setProductTags();
-      ProductService.saveProduct($scope.product, function (product) {
-        //format variation attributes
-        $scope.originalProduct = angular.copy(product);
-        toaster.pop('success', 'Product Saved.');
-      });
+      if ($scope.validateProduct()) {
+        ProductService.saveProduct($scope.product, function (product) {
+          //format variation attributes
+          $scope.originalProduct = angular.copy(product);
+          toaster.pop('success', 'Product Saved.');
+        });
+      }
     };
 
     $scope.removeVariation = function () {
@@ -290,19 +310,19 @@
      * @convert:iconpicker
      * - icon picker for product image replacement
      */
-    
-      angular.element('#convert').iconpicker({
-        iconset: 'fontawesome',
-        icon: 'fa-cube',
-        rows: 5,
-        cols: 5,
-        placement: 'right'
-      });
-    
 
-    $('#convert').on('change', function(e) {
+    angular.element('#convert').iconpicker({
+      iconset: 'fontawesome',
+      icon: 'fa-cube',
+      rows: 5,
+      cols: 5,
+      placement: 'right'
+    });
+
+
+    $('#convert').on('change', function (e) {
       if ($scope.product) {
-          $scope.product.icon = e.icon;
+        $scope.product.icon = e.icon;
       }
     });
 
@@ -411,21 +431,21 @@
       });
     };
 
-    $scope.getProductTags = function()
-    {  
-      if($scope.product.tags)
-        $scope.product.tags.forEach(function(v,i) {
-            $scope.product_tags.push({text:v})
+    $scope.getProductTags = function () {
+      if ($scope.product.tags)
+        $scope.product.tags.forEach(function (v, i) {
+          $scope.product_tags.push({
+            text: v
+          })
         });
     }
 
-    $scope.setProductTags = function()
-    {
-        $scope.product.tags = [];
-        $scope.product_tags.forEach(function(v,i) {
-            if (v.text)
-                    $scope.product.tags.push(v.text);
-        });
+    $scope.setProductTags = function () {
+      $scope.product.tags = [];
+      $scope.product_tags.forEach(function (v, i) {
+        if (v.text)
+          $scope.product.tags.push(v.text);
+      });
     }
 
   }]);
