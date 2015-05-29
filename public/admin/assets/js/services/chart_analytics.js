@@ -988,7 +988,7 @@
               verticalAlign: 'bottom'
             },
             enableButtons: true,
-            enableDoubleClickZoomTo: true,
+            //enableDoubleClickZoomTo: true,
             enableDoubleClickZoom: true,
             enableTouchZoom: false
           },
