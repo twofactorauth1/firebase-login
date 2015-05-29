@@ -324,8 +324,8 @@
         if (model.email) {
           email = model.email;
         }
-
-        return '#' + model.sku + ' ' + model.name + ' ($' + model.regular_price + ') ';
+        var name = model.sku ? model.sku + ' ' + model.name : model.name;
+        return '#' + name + ' ($' + model.regular_price + ') ';
       }
 
       return '';
