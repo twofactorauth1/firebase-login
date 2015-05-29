@@ -43,15 +43,14 @@
     ProductService.getProduct($stateParams.productId, function (product) {
       $scope.product = product;
       var p_icon = $scope.product.icon || 'fa-cube';
-      $timeout(function () {
-        angular.element('#convert').iconpicker({
+     
+      angular.element('#convert').iconpicker({
         iconset: 'fontawesome',
         icon: p_icon,
         rows: 5,
         cols: 5,
         placement: 'right'
       });
-      }, 2000);
       
       $scope.getProductTags();      
 
