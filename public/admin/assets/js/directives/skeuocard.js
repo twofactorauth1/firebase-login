@@ -64,17 +64,16 @@ app.directive('indigewebSkeuocard',['PaymentService', 'UserService', function(Pa
                 };
 
                 scope.checkCardName = function() {
-                    var name = $('#card_name #name').val();
-                    if (!name) {
-                        $("#card_name .error").html("Card Name Required");
-                        $("#card_name").addClass('has-error');
-                        $("#card_name .glyphicon").addClass('glyphicon-remove');
-
-                    } else {
-                        $("#card_name .error").html("");
-                        $("#card_name").removeClass('has-error').addClass('has-success');
-                        $("#card_name .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
-                    }
+                     var name = $('#card_name #name').val();
+                     if (!name) {
+                    //     $("#card_name .error").html("Card Name Required");
+                    //     $("#card_name").addClass('has-error');
+                    //     $("#card_name .glyphicon").addClass('glyphicon-remove');
+                     } else {
+                         $("#card_name .error").html("");
+                         $("#card_name").removeClass('has-error').addClass('has-success');
+                         $("#card_name .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
+                     }
                     scope.cardNameValidated = true;
                 };
 
