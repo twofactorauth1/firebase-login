@@ -420,8 +420,6 @@ app.constant('JS_REQUIRES', {
     'jquery-sparkline': '../js/libs/jquery.sparkline.build/dist/jquery.sparkline.min.js',    
     'jquery-nestable-plugin': ['../js/libs/jquery-nestable/jquery.nestable.js'],
     'touchspin-plugin': ['../js/libs/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.js', '../js/libs/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.css'],
-    //'bootstrap': '../js/libs/bootstrap/dist/js/bootstrap.min.js',
-    'bootstrap-icon-picker': ['../js/libs/bootstrap-icon-picker/bootstrap-iconpicker/js/iconset/iconset-fontawesome-4.2.0.min.js', '../js/libs/bootstrap-icon-picker/bootstrap-iconpicker/js/bootstrap-iconpicker.min.js'],
     "bootstrap-confirmation": ['../js/libs/bootstrap-confirmation/bootstrap-confirmation.js'],
     'spectrum': ['../js/libs/spectrum/spectrum.js', '../js/libs/angular-spectrum-colorpicker/dist/angular-spectrum-colorpicker.min.js'],
     'uuid': '../js/libs_misc/uuid.js',
@@ -615,5 +613,9 @@ app.constant('JS_REQUIRES', {
   }, {
     name: 'ngJoyRide',
     files: ['../js/libs/ng-joyride/ng-joyride.js']
-  }]
+  },{
+      name: 'bootstrap-icon-picker',
+      files: ['../js/libs/bootstrap-icon-picker/bootstrap-iconpicker/js/iconset/iconset-fontawesome-4.2.0.min.js', '../js/libs/bootstrap-icon-picker/bootstrap-iconpicker/js/bootstrap-iconpicker.min.js']
+  }
+  ]
 });
