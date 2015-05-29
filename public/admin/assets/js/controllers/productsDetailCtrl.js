@@ -21,8 +21,11 @@
      * -
      */
 
-    $scope.closeModal = function () {
-      $scope.modalInstance.close();
+    $scope.closeModal = function (cancel) {
+      if (cancel == true) {
+        $scope.editCancelFn();
+      } else
+        $scope.modalInstance.close();
     };
 
     UserService.getUser(function (user) {
@@ -372,6 +375,7 @@
 
     $scope.editCancelFn = function () {
       $scope.editingPlan = false;
+      $scope.signup_fee = null;
       $scope.newSubscription = {
         planId: CommonService.generateUniqueAlphaNumericShort()
       };
