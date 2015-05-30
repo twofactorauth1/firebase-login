@@ -222,11 +222,20 @@
      */
 
     $scope.addNote = function () {
-      OrderService.completeOrder($scope.order._id, $scope.newNote, function (updatedOrder) {
-        toaster.pop('success', 'Note added to order.');
+      if($scope.order && $scope.order._id)
+      {
+          OrderService.completeOrder($scope.order._id, $scope.newNote, function (updatedOrder) {
+          toaster.pop('success', 'Note added to order.');
+          $scope.newNote = '';
+          $scope.pushLocalNote(updatedOrder);
+        });
+      }
+      else if($scope.order)
+      {
+        $scope.order.notes.push({note:$scope.newNote})
         $scope.newNote = '';
-        $scope.pushLocalNote(updatedOrder);
-      });
+      }
+      
     };
 
     /*
@@ -297,7 +306,7 @@
     $scope.formatInput = function (model) {
       if (model) {
         var email = 'No Email';
-        if (model.details[0].emails.length > 0) {
+        if (model.details[0] && model.details[0].emails.length > 0) {
           email = model.details[0].emails[0].email;
         }
 
@@ -336,6 +345,7 @@
         }
 
         return _sku + ' ' + _name + _price;
+
       }
 
       return '';

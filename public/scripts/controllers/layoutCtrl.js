@@ -1767,6 +1767,15 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
             }
         };
 
+        $scope.checkCardName = function() {
+            var name = $('#card_name #name').val();
+             if (name) {
+                $("#card_name .error").html("");
+                $("#card_name").removeClass('has-error').addClass('has-success');
+                $("#card_name .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
+            }
+        };
+
         /********** END SIGNUP SECTION **********/
 
         $scope.addImage = function(component) {

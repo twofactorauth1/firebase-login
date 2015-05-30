@@ -104,8 +104,8 @@
                     {day: "Wed", start:"9:00 am",end:"5:00 pm", start2:"9:00 am", end2:"5:00 pm", closed:false, split:false},
                     {day: "Thu", start:"9:00 am",end:"5:00 pm", start2:"9:00 am", end2:"5:00 pm", closed:false, split:false},
                     {day: "Fri", start:"9:00 am",end:"5:00 pm", start2:"9:00 am", end2:"5:00 pm", closed:false, split:false},
-                    {day: "Sat", start:"",end:"", start2:"", end2:"", closed:true, split:false},
-                    {day: "Sun", start:"",end:"", start2:"", end2:"", closed:true, split:false}];
+                    {day: "Sat", start:"9:00 am",end:"5:00 pm", start2:"9:00 am", end2:"5:00 pm", closed:true, split:false},
+                    {day: "Sun", start:"9:00 am",end:"5:00 pm", start2:"9:00 am", end2:"5:00 pm", closed:true, split:false}];
         };
 
         $scope.setDefaults = function() {
@@ -129,6 +129,20 @@
 
             if (!$scope.account.business.hours || !$scope.account.business.hours.length)
                 $scope.accountAddHoursFn();
+            if($scope.account.business.hours) {
+                _.each($scope.account.business.hours, function(element, index) {
+                    if(element.day == "Sat" || element.day == "Sun") {
+                        if (element.start == "")
+                            element.start = "9:00 am";
+                        if (element.end == "")
+                            element.end = "5:00 pm";
+                        if (element.start2 == "")
+                            element.start2 = "9:00 am";
+                        if (element.end2 == "")
+                            element.end2 = "9:00 am";
+                    }
+             });
+            }
         };
 
         $scope.profileSaveFn = function() {

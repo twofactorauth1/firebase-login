@@ -518,7 +518,7 @@
                     <div class="panel-footer border-light">
                         <label for="newNote"> New Note </label>
                         <textarea id="newNote" class="form-control margin-bottom-15 autosize area-animated msd-elastic: \n;" ng-model="newNote"></textarea>
-                        <button type="button" ng-disabled="!(newNote && order)" class="btn btn-info btn-block btn-o btn-wide btn-scroll btn-scroll-top ti-plus" ng-click="addNote()">
+                        <button type="button" ng-disabled="!(newNote)" class="btn btn-info btn-block btn-o btn-wide btn-scroll btn-scroll-top ti-plus" ng-click="addNote()">
                             <span>Add</span>
                         </button>
                     </div>
@@ -566,9 +566,9 @@
 </script>
 <script type="text/ng-template" id="product-typeahead-template.html">
     <a>
-        <img ng-if="match.model.is_image" ng-src="{{match.model.icon}}" width="25" height="25" class="img-circle margin-right-5">
-        <h3 ng-if="!match.model.icon" class="pull-left margin-right-5"><span class="fa fa-cube"></span></h3>
-        <h3 ng-if="!match.model.is_image && match.model.icon" class="pull-left margin-right-5"><span class="fa {{match.model.icon}}"></span></h3>
+        <img ng-if="match.model.icon && match.model.is_image" ng-src="{{match.model.icon ? match.model.icon : '/admin/assets/images/default-product.png'}}" width="35" >
+            <span ng-if="!match.model.icon" width="35" class="fa fa-cube"></span>            
+            <span ng-if="!match.model.is_image && match.model.icon" class="fa {{match.model.icon}}" width="35"></span>    
         <span bind-html-unsafe="match.model.name | typeaheadHighlight:query"></span>
     </a>
 </script>

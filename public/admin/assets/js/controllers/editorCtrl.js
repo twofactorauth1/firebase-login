@@ -1642,6 +1642,22 @@
                     })
                 }
 
+                if ($scope.componentEditing.type === "contact-us") {
+                    if($scope.componentEditing.hours) {
+                        _.each($scope.componentEditing.hours, function(element, index) {
+                            if(element.day == "Sat" || element.day == "Sun") {
+                                if (element.start == "")
+                                    element.start = "9:00 am";
+                                if (element.end == "")
+                                    element.end = "5:00 pm";
+                                if (!element.start2 || element.start2 == "")
+                                    element.start2 = "9:00 am";
+                                if (!element.end2 || element.end2 == "")
+                                    element.end2 = "9:00 am";
+                            }
+                     });
+                    }
+                }
 
             });
             $scope.originalComponent = angular.copy($scope.componentEditing);
