@@ -153,7 +153,7 @@ module.exports = {
                         });
                 } else {
                     log.warn('unsupported payment method: ' + paymentDetails.method_id);
-                    callback('unpaid', null);
+                    callback(null, savedOrder, null, contact);
                 }
             },
             //update
