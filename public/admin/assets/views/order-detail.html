@@ -4,7 +4,7 @@
         <div class="row">
             <div class="col-sm-8">
                 <h1 class="mainTitle">Order #{{ order.order_id }}</h1>
-                <span class="mainDescription">This order is currently <span class="label label-default">{{order.status}}</span></span>
+                <span class="mainDescription">This order is currently <span class="label label-default">{{formatOrderStatus(order.status)}}</span></span>
             </div>
             <div ncy-breadcrumb></div>
         </div>
@@ -569,6 +569,6 @@
         <img ng-if="match.model.is_image" ng-src="{{match.model.icon}}" width="25" height="25" class="img-circle margin-right-5">
         <h3 ng-if="!match.model.icon" class="pull-left margin-right-5"><span class="fa fa-cube"></span></h3>
         <h3 ng-if="!match.model.is_image && match.model.icon" class="pull-left margin-right-5"><span class="fa {{match.model.icon}}"></span></h3>
-        <span bind-html-unsafe="match.model.name || match.model.title | typeaheadHighlight:query"></span>
+        <span bind-html-unsafe="match.model.name | typeaheadHighlight:query"></span>
     </a>
 </script>

@@ -2,7 +2,7 @@
 /*global app, moment, angular, window*/
 /*jslint unparam:true*/
 (function (angular) {
-  app.controller('OrderDetailCtrl', ["$scope", "toaster", "$modal", "$filter", "$stateParams", "OrderService", "CustomerService", "UserService", "ProductService", "SweetAlert", function ($scope, toaster, $modal, $filter, $stateParams, OrderService, CustomerService, UserService, ProductService, SweetAlert) {
+  app.controller('OrderDetailCtrl', ["$scope", "toaster", "$modal", "$filter", "$stateParams", "OrderService", "CustomerService", "UserService", "ProductService", "SweetAlert", "orderConstant", function ($scope, toaster, $modal, $filter, $stateParams, OrderService, CustomerService, UserService, ProductService, SweetAlert, orderConstant) {
 
     //TODO
     // - $q all api calls
@@ -32,6 +32,10 @@
         templateUrl: modal,
         scope: $scope
       });
+    };
+
+    $scope.formatOrderStatus = function (status) {
+      return OrderService.formatOrderStatus(status);
     };
 
     /*
@@ -322,8 +326,8 @@
         }
 
         var _name = '';
-        if (model.name || model.title) {
-          _name = model.name || model.title;
+        if (model.name) {
+          _name = model.name;
         }
 
         var _price = '';

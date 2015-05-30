@@ -39,10 +39,18 @@
 
     ProductService.getProduct($stateParams.productId, function (product) {
       $scope.product = product;
-      $scope.getProductTags();
-      if (angular.isDefined($scope.product.icon) && !$scope.product.is_image) {
-        angular.element(' #convert ').iconpicker('setIcon', $scope.product.icon);
-      }
+      var p_icon = $scope.product.icon || 'fa-cube';
+      $timeout(function () {
+        angular.element('#convert').iconpicker({
+        iconset: 'fontawesome',
+        icon: p_icon,
+        rows: 5,
+        cols: 5,
+        placement: 'right'
+      });
+      }, 2000);
+      
+      $scope.getProductTags();      
 
       if (!$scope.product.attributes) {
         $scope.product.attributes = [{
