@@ -110,17 +110,13 @@
             $scope.showChangeURL = false;
         };
 
-        $scope.$watch('createpage.title', function(newValue, oldValue) {
-            if (newValue) {
-                $scope.createpage.handle = $filter('slugify')(newValue);
-            }
-        });
+        $scope.createpage = {};
 
-        $scope.$watch('createpage.handle', function(newValue, oldValue) {
-            if (newValue) {
-                $scope.createpage.handle = $filter('slugify')(newValue);
+        $scope.slugifyHandle = function (title) {
+            if (title) {
+                $scope.createpage.handle = $filter('slugify')(title);
             }
-        });
+        };
 
         $scope.validateCreatePage = function(page, restrict) {
             $scope.createPageValidated = false;
