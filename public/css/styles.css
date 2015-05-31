@@ -4830,9 +4830,11 @@ fieldset[disabled] .btn-vimeo-square.active {
   visibility: visible;
   width: auto;
 }
-#editor-toolbar .cke_chrome div.cke_combopanel__fontsize,
-#editor-toolbar .cke_chrome div.cke_combopanel__lineheight {
+#editor-toolbar .cke_chrome div.cke_combopanel__fontsize {
   max-width: 120px;
+}
+#editor-toolbar .cke_chrome div.cke_combopanel__lineheight {
+  max-width: 110px;
 }
 #editor-toolbar .cke_inner {
   display: inline-block;
