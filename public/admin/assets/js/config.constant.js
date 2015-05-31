@@ -290,6 +290,30 @@ app.constant('contactConstant', {
   }
 });
 
+app.constant('postConstant', {
+  post_status: {
+    PUBLISHED: 'PUBLISHED',
+    DRAFT: 'DRAFT',
+    FUTURE: 'FUTURE',
+    PRIVATE: 'PRIVATE',
+
+    dp: [{
+        label: "Published",
+        data: "PUBLISHED"
+      }, {
+        label: "Draft",
+        data: "DRAFT"
+      }, {
+        label: "Future",
+        data: "FUTURE"
+      }, {
+        label: "Private",
+        data: "PRIVATE"
+      }      
+    ]
+  }
+});
+
 app.constant('userConstant', {
 
   social_types: {
@@ -412,7 +436,7 @@ app.constant('userConstant', {
   activity_types: {
     PHONE: "p",
     EMAIL: "e"
-  }
+  }  
 });
 /*
 app.constant('ENV', {
