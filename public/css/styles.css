@@ -1064,6 +1064,9 @@ ul.nav {
 .navigation-v3 .navbar li {
   min-height: 125px;
 }
+.navigation-v3 .navbar .container {
+  width: 100%;
+}
 .navigation-v3 .navbar .nav > li > a {
   float: none;
   padding: 10px 20px 10px;
