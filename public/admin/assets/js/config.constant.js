@@ -162,6 +162,39 @@ app.constant('ONBOARDINGCONSTANT', {
 
 });
 
+app.constant('orderConstant', {
+  order_status: {
+    PENDING_PAYMENT: "pending_payment",
+    PROCESSING: "processing",
+    ON_HOLD: "on_hold",
+    COMPLETED: "completed",
+    CANCELLED: "cancelled",
+    REFUNDED: "refunded",
+    FAILED: "failed",
+
+    dp: [{
+        label: "Pending Payment",
+        data: "pending_payment"
+      }, {
+        label: "Processing",
+        data: "processing"
+      }, {
+        label: "On Hold",
+        data: "on_hold"
+      }, {
+        label: "Completed",
+        data: "completed"
+      }, {
+        label: "Refunded",
+        data: "refunded"
+      }, {
+        label: "Failed",
+        data: "failed"
+      }
+    ]
+  }
+});
+
 app.constant('social', {
   types: {
     LOCAL: "lo",

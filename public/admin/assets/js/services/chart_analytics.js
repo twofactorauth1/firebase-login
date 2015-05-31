@@ -506,13 +506,11 @@
     this.runReports = function (date, account, fn) {
 
       var self = this;
-      var hostname = account.subdomain + '.indigenous.io';
+      var hostname = account.subdomain + '.indigenous.local';
 
       if (account.domain) {
         hostname = account.domain;
       }
-
-      hostname = 'indigenous.io';
 
       KeenService.keenClient(function (client) {
         var queryData = self.queryReports(date, hostname);
@@ -542,13 +540,17 @@
 
     this.runPagedReports = function (date, account, fn) {
       var filters = [];
-      var hostname = account.subdomain + '.indigenous.io';
+      var windowHostname = window.location.hostname;
+      var hostname = '';
+      if (windowHostname.indexOf(".local") > -1) {
+        hostname = account.subdomain + '.indigenous.local';
+      } else {
+        hostname = account.subdomain + '.indigenous.io';
+      }
 
       if (account.domain) {
         hostname = account.domain;
       }
-
-      hostname = 'indigenous.io';
 
       filters.push({
          "property_name": "url.domain",
@@ -626,13 +628,11 @@
 
     this.visitorsReport = function (date, account, fn) {
       var self = this;
-      var _hostname = account.subdomain + '.indigenous.io';
+      var _hostname = account.subdomain + '.indigenous.local';
 
       if (account.domain) {
         _hostname = account.domain;
       }
-
-      _hostname = 'indigenous.io';
 
       KeenService.keenClient(function (client) {
         var queryData = self.queryVisitorReports(date, _hostname);

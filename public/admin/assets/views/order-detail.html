@@ -4,7 +4,7 @@
         <div class="row">
             <div class="col-sm-8">
                 <h1 class="mainTitle">Order #{{ order.order_id }}</h1>
-                <span class="mainDescription">This order is currently <span class="label label-default">{{order.status}}</span></span>
+                <span class="mainDescription">This order is currently <span class="label label-default">{{formatOrderStatus(order.status)}}</span></span>
             </div>
             <div ncy-breadcrumb></div>
         </div>
@@ -410,9 +410,9 @@
                             <tbody>
                                 <tr ng-repeat="item in order.line_items">
                                     <td width="40">
-                                        <img ng-if="item.product.icon && item.product.is_image" src="{{item.product.icon}}" class="img-circle" style="width:35px;height:35px" popover-template="'productImage.html'" popover-title="{{item.product.name}}" popover-trigger="mouseenter" popover-placement="right"/>
-                                        <h3 ng-if="!item.product.icon"><span class="fa fa-cube"></span></h3>
-                                        <h3 ng-if="!item.product.is_image && item.product.icon"><span class="fa {{item.product.icon}}"></span></h3
+                                        <img ng-if="item.product.is_image && item.product.icon" src="{{item.product.icon}}" class="img-circle" style="width:35px;height:35px" popover-template="'productImage.html'" popover-title="{{item.product.name}}" popover-trigger="mouseenter" popover-placement="right"/>
+                                        <span ng-if="!item.product.is_image && item.product.icon" class="fa {{item.product.icon}}"></span>
+                                        <span ng-if="!item.product.icon" class="fa fa-cube"></span>
                                     </td>
                                     <td>
                                         {{item.product.sku}}

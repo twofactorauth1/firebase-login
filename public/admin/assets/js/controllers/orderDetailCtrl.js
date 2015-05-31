@@ -2,7 +2,7 @@
 /*global app, moment, angular, window*/
 /*jslint unparam:true*/
 (function (angular) {
-  app.controller('OrderDetailCtrl', ["$scope", "toaster", "$modal", "$filter", "$stateParams", "OrderService", "CustomerService", "UserService", "ProductService", "SweetAlert", function ($scope, toaster, $modal, $filter, $stateParams, OrderService, CustomerService, UserService, ProductService, SweetAlert) {
+  app.controller('OrderDetailCtrl', ["$scope", "toaster", "$modal", "$filter", "$stateParams", "OrderService", "CustomerService", "UserService", "ProductService", "SweetAlert", "orderConstant", function ($scope, toaster, $modal, $filter, $stateParams, OrderService, CustomerService, UserService, ProductService, SweetAlert, orderConstant) {
 
     //TODO
     // - $q all api calls
@@ -32,6 +32,10 @@
         templateUrl: modal,
         scope: $scope
       });
+    };
+
+    $scope.formatOrderStatus = function (status) {
+      return OrderService.formatOrderStatus(status);
     };
 
     /*
@@ -324,8 +328,24 @@
         if (model.email) {
           email = model.email;
         }
-        var name = model.sku ? model.sku + ' ' + model.name : model.name;
-        return '#' + name + ' ($' + model.regular_price + ') ';
+
+        var _sku = '';
+        if (model.sku) {
+          _sku = '#'+model.sku
+        }
+
+        var _name = '';
+        if (model.name) {
+          _name = model.name;
+        }
+
+        var _price = '';
+        if (model.regular_price) {
+          _price = ' ($' + model.regular_price + ') ';
+        }
+
+        return _sku + ' ' + _name + _price;
+
       }
 
       return '';
