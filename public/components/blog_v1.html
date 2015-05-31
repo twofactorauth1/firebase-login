@@ -85,26 +85,22 @@
                         <!-- end #et_pt_blog -->
                     </article>
                         <div ng-show="!isEditing" class="pagination pagination-centered" ng-show="(control.blogposts.length||blog.blogposts.length) > pageSize">
-                            <ul class="pagination-controle">
-                             <li>
+                            
                               <button type="button" class="btn btn-primary" ng-disabled="curPage == 0"
                              ng-click="curPage=curPage-1">
                              <span class="fa fa-arrow-left"></span>
                              <span class="hidden-xs">PREV</span>
                               </button>
-                             </li>
-                             <li>
+                            
                              <span>Page {{curPage + 1}} of {{ numberOfPages() }}</span>
-                             </li>
-                             <li>
+                             
                              <button type="button" class="btn btn-primary"
                              ng-disabled="curPage >= (control.blogposts||blog.blogposts).length/pageSize - 1"
                              ng-click="curPage = curPage+1">
                              <span class="hidden-xs">Next</span>
                              <span class="fa fa-arrow-right"></span>
                              </button>
-                             </li>
-                            </ul>
+                             
                         </div>
                     <!-- .entry -->
                 </div>
