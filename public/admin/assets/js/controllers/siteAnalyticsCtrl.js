@@ -128,12 +128,14 @@
       var locationData = [];
       if (result0) {
         var _formattedLocations = [];
-        _.each(result0, function(loc) {
+        _.each(result0, function (loc) {
           if (loc['ip_geo_info.province']) {
             _formattedLocations.push(loc);
           }
         });
-        $scope.mostPopularState = _.max(_formattedLocations, function(o){return o.result});
+        $scope.mostPopularState = _.max(_formattedLocations, function (o) {
+          return o.result;
+        });
         _.each(result0, function (location) {
           var _geo_info = ChartAnalyticsService.stateToAbbr(location['ip_geo_info.province']);
           if (_geo_info) {
