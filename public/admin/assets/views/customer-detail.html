@@ -58,8 +58,8 @@
                                         <div class="map margin-bottom-15">
                                             <span class="text-bold">Location</span>
                                             <hr class="margin-top-5">
-                                            <map zoom="10" center="{{location.lat}}, {{location.lng}}" disable-default-u-i="true" scale-control="false" pan-control="false" zoom-control="false" class="height-155" ng-if="!loadingMap && location.lat" scrollwheel="false">
-                                                <marker position="{{location.lat}}, {{location.lng}}"></marker>
+                                            <map zoom="10" center="{{location.lat}}, {{location.lon}}" disable-default-u-i="true" scale-control="false" pan-control="false" zoom-control="false" class="height-155" ng-if="!loadingMap && location.lat" scrollwheel="false">
+                                                <marker position="{{location.lat}}, {{location.lon}}"></marker>
                                             </map>
                                             <div class="load1 csspinner height-155" ng-if="loadingMap"></div>
                                             <div class="height-155" ng-if="!loadingMap && !location.lat">
