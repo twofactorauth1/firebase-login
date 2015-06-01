@@ -12223,6 +12223,18 @@ table.grid thead th {
 .customer-detail .no-location {
   line-height: 155px;
 }
+.customer-detail .notes {
+  padding: 0;
+  margin-bottom: 0;
+}
+.customer-detail .notes li {
+  display: block;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+  padding: 10px;
+}
+.customer-detail .notes li:last-child {
+  border-bottom: none;
+}
 .side-margin {
   margin: 5px;
 }

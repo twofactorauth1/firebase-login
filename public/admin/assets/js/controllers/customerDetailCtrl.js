@@ -32,89 +32,94 @@
     $scope.data = {
       fullName: ''
     };
+
+    /*
+     * @addNote
+     * add a note to an order
+     */
+
+     $scope.newNote = {};
+
+    $scope.addNote = function (_note) {
+      console.log('$scope.newNoteText ', $scope.newNote);
+      var date = moment();
+      var _noteToPush = {
+        note: _note,
+        user_id: $scope.currentUser._id,
+        date: date.toISOString()
+      };
+
+      console.log('_noteToPush ', _noteToPush);
+
+      $scope.customer.notes.push(_noteToPush);
+      $scope.matchUsers($scope.customer);
+
+      $scope.newNote.text = '';
+
+      $scope.customerSaveFn();
+
+    };
+
+    /*
+     * @getUsers
+     * get all users for this account
+     */
+
+    UserService.getUsers(function (users) {
+      $scope.users = users;
+      $scope.getCustomer();
+    });
+
+    /*
+     * @matchUsers
+     * match users to the order notes
+     */
+
+    $scope.matchUsers = function (customer) {
+      var notes = customer.notes;
+      if (notes.length > 0) {
+
+        _.each(notes, function (_note) {
+          var matchingUser = _.find($scope.users, function (_user) {
+            return _user._id === _note.user_id;
+          });
+          if (matchingUser) {
+            _note.user = matchingUser;
+          }
+        });
+
+        return notes;
+      }
+    };
+
+    /*
+     * @pushLocalNote
+     * push a recently created note to the ui
+     */
+
+    $scope.pushLocalNote = function (customer) {
+      customer.notes = $scope.matchUsers(customer);
+      var noteToPush = customer.notes[customer.notes.length - 1];
+      $scope.customer.notes.push(noteToPush);
+    };
+
     /*
      * @getCustomer
      * -
      */
 
-    CustomerService.getCustomer($stateParams.contactId, function (customer) {
-      $scope.customer = customer;
-      $scope.setTags();
-      $scope.setDefaults();
-      if (customer.fingerprint !== undefined) {
-        var keenParams = {
-          event_collection: 'session_data',
-          filters: [{
-            "property_name": "fingerprint",
-            "operator": "eq",
-            "property_value": customer.fingerprint
-          }]
-        };
-        KeenService.singleExtraction(keenParams, function (data) {
-          var keepGoing = true;
-          data.result.forEach(function (value, index) {
-            if (keepGoing && value.ip_geo_info && value.ip_geo_info.city) {
-              $scope.ip_geo_address = _.filter([value.ip_geo_info.city, value.ip_geo_info.province, value.ip_geo_info.postal_code], function (str) {
-                $scope.city = value.ip_geo_info.city;
-                return (str !== "" || str !== undefined || str !== null);
-              }).join(",");
-              keepGoing = false;
-              $scope.loadingMap = false;
-            } else if (keepGoing && value.ip_geo_info_gen && value.ip_geo_info_gen.country) {
-              $scope.ip_geo_address = _.filter([value.ip_geo_info_gen.city, value.ip_geo_info_gen.province, value.ip_geo_info_gen.postal_code], function (str) {
-                $scope.city = value.ip_geo_info_gen.city;
-                return (str !== "" || str !== undefined || str !== null);
-              }).join(",");
-              keepGoing = false;
-              $scope.loadingMap = false;
-            }
-
-          });
-
-          $scope.localtime = moment().format('h:mm a');
-          if ($scope.ip_geo_address) {
-            CustomerService.getGeoSearchAddress($scope.ip_geo_address, function (data) {
-              if (data.error === undefined) {
-                $scope.location.lat = parseFloat(data.lat);
-                $scope.location.lng = parseFloat(data.lon);
-                $scope.loadingMap = false;
-              } else {
-                $scope.loadingMap = false;
-              }
-
-            });
-          } else {
-            $scope.loadingMap = false;
-          }
-        });
-      } else {
-        if ($scope.customer.details.length !== 0 && $scope.customer.details[0].addresses && $scope.customer.details[0].addresses.length !== 0) {
-          $scope.ip_geo_address = $scope.displayAddressFormat($scope.customer.details[0].addresses[0]);
-          $scope.city = $scope.customer.details[0].addresses[0].city;
-          $scope.loadingMap = false;
-        }
-        if ($scope.ip_geo_address) {
-          CustomerService.getGeoSearchAddress($scope.ip_geo_address, function (data) {
-            if (data.error === undefined) {
-              $scope.location.lat = parseFloat(data.lat);
-              $scope.location.lng = parseFloat(data.lon);
-              if ($scope.markers && $scope.markers.mainMarker) {
-                $scope.markers.mainMarker.lat = parseFloat(data.lat);
-                $scope.markers.mainMarker.lng = parseFloat(data.lon);
-              }
-
-              $scope.loadingMap = false;
-            } else {
-              $scope.loadingMap = false;
-            }
-          });
-        }
-      }
-
-      $scope.data.fullName = [$scope.customer.first, $scope.customer.middle, $scope.customer.last].join(' ').trim();
-      // $scope.contactLabel = CustomerService.contactLabel(customer);
-      // $scope.checkBestEmail = CustomerService.checkBestEmail(customer);
-    });
+    $scope.getCustomer = function () {
+      CustomerService.getCustomer($stateParams.contactId, function (customer) {
+        customer.notes = $scope.matchUsers(customer);
+        $scope.customer = customer;
+        $scope.setTags();
+        $scope.setDefaults();
+        $scope.getMapData();
+        $scope.data.fullName = [$scope.customer.first, $scope.customer.middle, $scope.customer.last].join(' ').trim();
+        // $scope.contactLabel = CustomerService.contactLabel(customer);
+        // $scope.checkBestEmail = CustomerService.checkBestEmail(customer);
+      });
+    };
 
     /*
      * @displayAddressFormat
@@ -122,7 +127,7 @@
      */
 
     $scope.displayAddressFormat = function (address) {
-      return _.filter([address.address, address.address2, address.city, address.state, address.country, address.zip], function (str) {
+      return _.filter([address.address, address.address2, address.city, address.state, address.zip], function (str) {
         return str !== "";
       }).join(",");
     };
@@ -155,12 +160,113 @@
       }
     };
 
-    //header map
-    $scope.$on('mapInitialized', function (evt, evtMap) {
-      console.log('map initialized');
-      // var map = evtMap;
-      // var marker = map.markers[0];
-    });
+    $scope.getMapData = function () {
+      var _firstAddress;
+
+      if ($scope.customer.details[0].addresses.length > -1) {
+        _firstAddress = $scope.customer.details[0].addresses[0];
+      }
+
+      //customer has no address
+      if (!_firstAddress) {
+        console.log('no address');
+        $scope.loadingMap = false;
+      } else {
+        console.log('has address');
+        //customer has address and lat/lon
+        if (_firstAddress.lat && _firstAddress.lon) {
+          $scope.showMap(_firstAddress.lat, _firstAddress.lon);
+        } else {
+          //customer has address but no lat/lon
+          console.log('no lat/lon');
+          //if customer has a fingerprint get data from keen
+          if ($scope.customer.fingerprint !== undefined) {
+            console.log('has fingerprint');
+            var keenParams = {
+              event_collection: 'session_data',
+              filters: [{
+                "property_name": "fingerprint",
+                "operator": "eq",
+                "property_value": $scope.customer.fingerprint
+              }]
+            };
+            KeenService.singleExtraction(keenParams, function (data) {
+              var keepGoing = true;
+              data.result.forEach(function (value, index) {
+                if (keepGoing && value.ip_geo_info && value.ip_geo_info.city) {
+                  $scope.ip_geo_address = _.filter([value.ip_geo_info.city, value.ip_geo_info.province, value.ip_geo_info.postal_code], function (str) {
+                    $scope.city = value.ip_geo_info.city;
+                    return (str !== "" || str !== undefined || str !== null);
+                  }).join(",");
+                  keepGoing = false;
+                  $scope.loadingMap = false;
+                } else if (keepGoing && value.ip_geo_info_gen && value.ip_geo_info_gen.country) {
+                  $scope.ip_geo_address = _.filter([value.ip_geo_info_gen.city, value.ip_geo_info_gen.province, value.ip_geo_info_gen.postal_code], function (str) {
+                    $scope.city = value.ip_geo_info_gen.city;
+                    return (str !== "" || str !== undefined || str !== null);
+                  }).join(",");
+                  keepGoing = false;
+                  $scope.loadingMap = false;
+                }
+
+              });
+
+              $scope.localtime = moment().format('h:mm a');
+              if ($scope.ip_geo_address) {
+                CustomerService.getGeoSearchAddress($scope.ip_geo_address, function (data) {
+                  if (data.error === undefined) {
+                    $scope.location.lat = parseFloat(data.lat);
+                    $scope.location.lng = parseFloat(data.lon);
+                    $scope.loadingMap = false;
+                  } else {
+                    $scope.loadingMap = false;
+                  }
+
+                });
+              } else {
+                $scope.loadingMap = false;
+              }
+            });
+          } else {
+            console.log('no fingerprint');
+            //get lat/lon from address
+            $scope.convertAddressToLatLon(_firstAddress, function (data) {
+              if (data) {
+                //save updated lat/lon
+                _firstAddress.lat = parseFloat(data.lat);
+                _firstAddress.lon = parseFloat(data.lon);
+                $scope.customerSaveFn();
+
+                $scope.showMap(data.lat, data.lon);
+              }
+              $scope.loadingMap = false;
+            });
+          }
+
+        }
+      }
+    };
+
+    $scope.convertAddressToLatLon = function (_address, fn) {
+      CustomerService.getGeoSearchAddress($scope.displayAddressFormat(_address), function (data) {
+        if (data.error === undefined) {
+          fn(data);
+        } else {
+          console.warn(data.error);
+          fn();
+        }
+      });
+    };
+
+    $scope.showMap = function (_lat, _lon) {
+      $scope.loadingMap = false;
+      $scope.location.lat = parseFloat(_lat);
+      $scope.location.lon = parseFloat(_lon);
+      if ($scope.markers && $scope.markers.mainMarker) {
+        $scope.markers.mainMarker.lat = parseFloat(_lat);
+        $scope.markers.mainMarker.lng = parseFloat(_lon);
+      }
+    };
 
     /*
      * @customer defaults
@@ -222,77 +328,44 @@
       });
     };
 
-    /*
-     * @checkAddressLatLng
-     * -
-     */
-
-    $scope.checkAddressLatLng = function (addresses, fn) {
-      // var self = this;
-
-      // var _addresses = [];
-      // for (var i = 0; i < addresses.length; i++) {
-      //   console.log('addresses ', addresses[i]);
-      //   if (addresses[i].lat == '' || addresses[i].lon == '') {
-      //     console.log('latlng empty', addresses[i].address);
-      //     var formatedAddress = addresses[i].address+' '+addresses[i].city+' '+addresses[i].state+' '+addresses[i].zip;
-      //     console.log('formatted ', formatedAddress);
-      //     GeocodeService.geocodeAddress(formatedAddress, function(latlng) {
-      //       console.log('latlng ', latlng);
-      //       self.addresses[i]['lat'] = latlng.results[0].geometry.location.B;
-      //       self.addresses[i]['lon'] = latlng.results[0].geometry.location.k;
-      //       _addresses.push(addresses[i]);
-      //     });
-
-      //   } else {
-      //     _addresses.push(addresses[i]);
-      //   }
-      // };
-
-      fn(addresses);
-    };
-
-    /*
-     * @checkAddressLatLng
-     * -
-     */
-
     $scope.customerSaveFn = function () {
 
       $scope.saveLoading = true;
-      // if ($scope.customer.details[0].phones) {
-      //     $scope.customer.details[0].phones = _.filter($scope.customer.details[0].phones, function(num) {
-      //         return num.number !== "";
-      //     });
-      // }
 
-      $scope.checkAddressLatLng($scope.customer.details[0].addresses, function (addresses) {
-        $scope.customer.details[0].addresses = addresses;
-        if ($scope.checkContactValidity()) {
-          var tempTags = [];
-          $scope.customer_data = angular.copy($scope.customer);
-          _.each($scope.customer_data.tags, function (tag) {
-            tempTags.push(tag.data);
-          });
-          $scope.customer_data.tags = tempTags;
-          CustomerService.saveCustomer($scope.customer_data, function (customer) {
-            $scope.customer = customer;
-            $scope.setDefaults();
-            $scope.setTags();
-            $scope.saveLoading = false;
-            $scope.refreshMap();
-            if ($scope.currentState === 'customerAdd') {
-              toaster.pop('success', 'Contact Created.');
-            } else {
-              toaster.pop('success', 'Contact Saved.');
-            }
-          });
-        } else {
+      if ($scope.checkContactValidity()) {
+
+        var tempTags = [];
+        $scope.customer_data = angular.copy($scope.customer);
+        _.each($scope.customer_data.tags, function (tag) {
+          tempTags.push(tag.data);
+        });
+        $scope.customer_data.tags = tempTags;
+
+        // if ($scope.customer_data.details[0].addresses.length > -1) {
+        //   _.each($scope.customer_data.details[0].addresses, function(_address) {
+        //     $scope.convertAddressToLatLon(_address, function (data) {
+        //       _address.lat = parseFloat(data.lat);
+        //       _address.lon = parseFloat(data.lon);
+        //     });
+        //   });
+        // }
+
+        CustomerService.saveCustomer($scope.customer_data, function (customer) {
+          $scope.customer = customer;
+          $scope.setDefaults();
+          $scope.setTags();
           $scope.saveLoading = false;
-          toaster.pop('warning', 'Contact Name OR Email is required');
-        }
 
-      });
+          if ($scope.currentState === 'customerAdd') {
+            toaster.pop('success', 'Contact Created.');
+          } else {
+            toaster.pop('success', 'Contact Saved.');
+          }
+        });
+      } else {
+        $scope.saveLoading = false;
+        toaster.pop('warning', 'Contact Name OR Email is required');
+      }
 
     };
 
@@ -436,27 +509,27 @@
 
     $scope.setFullName = function () {
       var newValue = $scope.data.fullName;
-        var nameSplit = newValue.match(/\S+/g);
-        if (nameSplit) {
-          if (nameSplit.length >= 3) {
-            $scope.customer.first = nameSplit[0];
-            $scope.customer.middle = nameSplit[1];
-            $scope.customer.last = nameSplit[2];
-          } else if (nameSplit.length === 2) {
-            $scope.customer.first = nameSplit[0];
-            $scope.customer.middle = '';
-            $scope.customer.last = nameSplit[1];
-          } else if (nameSplit.length === 1) {
-            $scope.customer.first = nameSplit[0];
-            $scope.customer.middle = '';
-            $scope.customer.last = '';
-          }
-        } else {
-          $scope.customer.first = '';
+      var nameSplit = newValue.match(/\S+/g);
+      if (nameSplit) {
+        if (nameSplit.length >= 3) {
+          $scope.customer.first = nameSplit[0];
+          $scope.customer.middle = nameSplit[1];
+          $scope.customer.last = nameSplit[2];
+        } else if (nameSplit.length === 2) {
+          $scope.customer.first = nameSplit[0];
+          $scope.customer.middle = '';
+          $scope.customer.last = nameSplit[1];
+        } else if (nameSplit.length === 1) {
+          $scope.customer.first = nameSplit[0];
           $scope.customer.middle = '';
           $scope.customer.last = '';
         }
+      } else {
+        $scope.customer.first = '';
+        $scope.customer.middle = '';
+        $scope.customer.last = '';
       }
+    };
 
     /*
      * @insertPhoto
@@ -771,8 +844,6 @@
           } else {
             order.line_items_total = 0;
           }
-
-          order.total = order.total;
         });
         $scope.orders = orders;
       }

@@ -50,12 +50,12 @@
             console.log('disconnectSocial >>>');
             SweetAlert.swal({
                     title: "Are you sure?",
-                    text: "Do you want to delete this social network?",
+                    text: "Do you want to disconnect this social network?",
                     type: "warning",
                     showCancelButton: true,
                     confirmButtonColor: "#DD6B55",
-                    confirmButtonText: "Yes, delete it!",
-                    cancelButtonText: "No, do not delete it!",
+                    confirmButtonText: "Yes, disconnect it!",
+                    cancelButtonText: "No, do not disconnect it!",
                     closeOnConfirm: true,
                     closeOnCancel: true
                 },
