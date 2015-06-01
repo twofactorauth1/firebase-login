@@ -436,27 +436,27 @@
 
     $scope.setFullName = function () {
       var newValue = $scope.data.fullName;
-        var nameSplit = newValue.match(/\S+/g);
-        if (nameSplit) {
-          if (nameSplit.length >= 3) {
-            $scope.customer.first = nameSplit[0];
-            $scope.customer.middle = nameSplit[1];
-            $scope.customer.last = nameSplit[2];
-          } else if (nameSplit.length === 2) {
-            $scope.customer.first = nameSplit[0];
-            $scope.customer.middle = '';
-            $scope.customer.last = nameSplit[1];
-          } else if (nameSplit.length === 1) {
-            $scope.customer.first = nameSplit[0];
-            $scope.customer.middle = '';
-            $scope.customer.last = '';
-          }
-        } else {
-          $scope.customer.first = '';
+      var nameSplit = newValue.match(/\S+/g);
+      if (nameSplit) {
+        if (nameSplit.length >= 3) {
+          $scope.customer.first = nameSplit[0];
+          $scope.customer.middle = nameSplit[1];
+          $scope.customer.last = nameSplit[2];
+        } else if (nameSplit.length === 2) {
+          $scope.customer.first = nameSplit[0];
+          $scope.customer.middle = '';
+          $scope.customer.last = nameSplit[1];
+        } else if (nameSplit.length === 1) {
+          $scope.customer.first = nameSplit[0];
           $scope.customer.middle = '';
           $scope.customer.last = '';
         }
+      } else {
+        $scope.customer.first = '';
+        $scope.customer.middle = '';
+        $scope.customer.last = '';
       }
+    }
 
     /*
      * @insertPhoto
