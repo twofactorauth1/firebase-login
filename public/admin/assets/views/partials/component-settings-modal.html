@@ -238,8 +238,9 @@
                 <div class="form-group">
                     <label for="component-title">Version</label>
                     <span tooltip-placement="top" tooltip-html-unsafe="The version of the component."><i class="fa fa-info-circle" /></span>
-                    <select ng-model="componentEditing.version" ng-change="saveComponent()" ng-options="version for version in componentEditingVersions" class="form-control margin-bottom-0">
-                    </select>
+                    <select ng-model="componentEditing.version" ng-change="saveComponent()" class="form-control margin-bottom-0" >
+                                    <option ng-repeat="version in componentEditingVersions track by $index" value="{{version}}" ng-selected="{{version == componentEditing.version}}">{{version}}</option>
+                                </select>
                 </div>
                 <hr ng-if="componentEditing.type == 'image-text'"></hr>
                 <div class="form-group" ng-if="componentEditing.type == 'image-text'">
