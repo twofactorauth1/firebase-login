@@ -1060,7 +1060,7 @@
                 $scope.post_data = $scope.childScope.getPostData();
             }           
             setTimeout(function() {
-                $scope.activateCKEditor();
+                $scope.bindEvents();
             }, 1000)
             $scope.backup['website'] = angular.copy($scope['website']);
         };
