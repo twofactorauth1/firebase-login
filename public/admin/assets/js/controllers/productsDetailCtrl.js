@@ -322,14 +322,6 @@
      * - icon picker for product image replacement
      */
 
-    angular.element('#convert').iconpicker({
-      iconset: 'fontawesome',
-      icon: 'fa-cube',
-      rows: 5,
-      cols: 5,
-      placement: 'right'
-    });
-
 
     $('#convert').on('change', function (e) {
       if ($scope.product && !$scope.product.is_image) {
