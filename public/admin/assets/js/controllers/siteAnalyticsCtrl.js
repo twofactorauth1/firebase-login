@@ -316,27 +316,12 @@
       // Traffic Sources
       // ======================================
 
-      var _trafficSourceData = [];
-      var _totalTypes = 0;
-      _.each(results[12].result, function (trafficSource) {
-        var subObj = [];
-        if (trafficSource.source_type) {
-          subObj.push(trafficSource.source_type.charAt(0).toUpperCase() + trafficSource.source_type.slice(1));
-        } else {
-          subObj.push('Other');
-        }
-        subObj.push(trafficSource.result);
-        _totalTypes += trafficSource.result;
-        _trafficSourceData.push(subObj);
-      });
+      $scope.trafficSourceData = results[12].result;
 
-      $scope.totalTypes = _totalTypes;
-      $scope.trafficSourceData = _trafficSourceData;
-
-      ChartAnalyticsService.trafficSources($scope.trafficSourceData, function (data) {
-        $scope.trafficSourcesConfig = data;
-        $scope.trafficSourcesConfig.loading = false;
-      });
+      // ChartAnalyticsService.trafficSources($scope.trafficSourceData, function (data) {
+      //   $scope.trafficSourcesConfig = data;
+      //   $scope.trafficSourcesConfig.loading = false;
+      // });
 
       // ======================================
       // New vs. Returning Customers

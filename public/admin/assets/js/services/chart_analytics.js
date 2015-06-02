@@ -436,8 +436,8 @@
 
       queryData.trafficSources = new Keen.Query("count_unique", {
         eventCollection: "session_data",
-        targetProperty: "session_id",
-        groupBy: "source_type",
+        targetProperty: "referrer.domain",
+        groupBy: "referrer.domain",
         timeframe: {
           "start": date.startDate,
           "end": date.endDate
@@ -879,7 +879,8 @@
             plotBackgroundColor: null,
             plotBorderWidth: 0,
             plotShadow: false,
-            spacing: [25, 25, 25, 25]
+            spacing: [25, 25, 25, 25],
+            height: 300
           },
           title: {
             text: ''
@@ -921,10 +922,15 @@
     this.newVsReturning = function (newVsReturning, fn) {
       var newVsReturningConfig = {
         options: {
-          chart: {},
+          chart: {
+            height: 300
+          },
           colors: ['#41b0c7', '#fcb252', '#309cb2', '#f8cc49', '#f8d949'],
           title: {
             text: ''
+          },
+          legend: {
+            enabled: true
           },
           exporting: {
             enabled: false

@@ -131,6 +131,76 @@
                 </div>
             </div>
         </div>
+        <div class="col-xs-12 col-sm-4">
+            <div id="device" class="panel panel-white height-400" ng-class="{'load1 csspinner': !desktop}">
+                <div class="panel-heading border-light">
+                    <h4 class="panel-title text-primary">Device</h4>
+                    <ct-paneltool class="panel-tools" tool-collapse="tool-collapse"></ct-paneltool>
+                </div>
+                <div collapse="device" ng-init="device=false" class="panel-wrapper">
+                    <div class="panel-body">
+                        <div class="clearfix mb30"></div>
+                        <div class="col-xs-12">
+                            <h1 class="center"><i class="fa fa-desktop" style="font-size: 70px;" ng-class="{'animated tada': newDesktop}"></i>
+                                    </h1>
+                            <h3 class="center">{{desktop}}</h3>
+                            <h5 class="center">Desktop</h5>
+                        </div>
+                        <div class="clearfix mb45"></div>
+                        <div class="col-xs-12">
+                            <h1 class="center"><i class="fa fa-mobile" style="font-size: 70px;"></i>
+                                    </h1>
+                            <h3 class="center">{{mobile}}</h3>
+                            <h5 class="center">Mobile</h5>
+                        </div>
+                        <div class="clearfix mb45"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-4" id="new-vs-returning">
+            <div id="newVReturning" class="panel panel-white height-400" ng-class="{'load1 csspinner': !newVsReturning}">
+                <div class="panel-heading border-light">
+                    <h4 class="panel-title text-primary">New vs. Returning</h4>
+                    <ct-paneltool class="panel-tools" tool-collapse="tool-collapse"></ct-paneltool>
+                </div>
+                <div collapse="newVReturning" ng-init="newVReturning=false" class="panel-wrapper">
+                    <div class="panel-body no-padding">
+                        <div class="new-vs-returning-wrap" ng-if="!newVsReturningConfig.loading">
+                            <highchart config="newVsReturningConfig" id="new-vs-returning-chart"></highchart>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-4" id="traffic-sources">
+            <div id="trafficSources" class="panel panel-white height-400" ng-class="{'load1 csspinner': !trafficSourceData}">
+                <div class="panel-heading border-light">
+                    <h4 class="panel-title text-primary">Traffic Sources</h4>
+                    <ct-paneltool class="panel-tools" tool-collapse="tool-collapse"></ct-paneltool>
+                </div>
+                <div collapse="trafficSources" ng-init="trafficSources=false" class="panel-wrapper">
+                    <div class="panel-body no-padding height-350 panel-scroll" perfect-scrollbar wheel-propagation="false" suppress-scroll-x="true">
+                        <div class="table-responsive">
+                            <table class="table table-hover margin-bottom-0">
+                                <thead>
+                                    <tr>
+                                        <th class="center">Referrer</th>
+                                        <th class="center">Result</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="trafficSource in trafficSourceData">
+                                        <td class="center">{{trafficSource['referrer.domain']}}</td>
+                                        <td class="center">{{trafficSource.result}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <div id="pageanalytics" class="panel panel-white no-radius" ng-class="{'load1 csspinner': !pagedformattedTopPages}">
         <div class="panel-heading border-light">
