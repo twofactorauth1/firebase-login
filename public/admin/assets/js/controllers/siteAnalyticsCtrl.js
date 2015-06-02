@@ -128,12 +128,14 @@
       var locationData = [];
       if (result0) {
         var _formattedLocations = [];
-        _.each(result0, function(loc) {
+        _.each(result0, function (loc) {
           if (loc['ip_geo_info.province']) {
             _formattedLocations.push(loc);
           }
         });
-        $scope.mostPopularState = _.max(_formattedLocations, function(o){return o.result});
+        $scope.mostPopularState = _.max(_formattedLocations, function (o) {
+          return o.result;
+        });
         _.each(result0, function (location) {
           var _geo_info = ChartAnalyticsService.stateToAbbr(location['ip_geo_info.province']);
           if (_geo_info) {
@@ -314,27 +316,12 @@
       // Traffic Sources
       // ======================================
 
-      var _trafficSourceData = [];
-      var _totalTypes = 0;
-      _.each(results[12].result, function (trafficSource) {
-        var subObj = [];
-        if (trafficSource.source_type) {
-          subObj.push(trafficSource.source_type.charAt(0).toUpperCase() + trafficSource.source_type.slice(1));
-        } else {
-          subObj.push('Other');
-        }
-        subObj.push(trafficSource.result);
-        _totalTypes += trafficSource.result;
-        _trafficSourceData.push(subObj);
-      });
+      $scope.trafficSourceData = results[12].result;
 
-      $scope.totalTypes = _totalTypes;
-      $scope.trafficSourceData = _trafficSourceData;
-
-      ChartAnalyticsService.trafficSources($scope.trafficSourceData, function (data) {
-        $scope.trafficSourcesConfig = data;
-        $scope.trafficSourcesConfig.loading = false;
-      });
+      // ChartAnalyticsService.trafficSources($scope.trafficSourceData, function (data) {
+      //   $scope.trafficSourcesConfig = data;
+      //   $scope.trafficSourcesConfig.loading = false;
+      // });
 
       // ======================================
       // New vs. Returning Customers
