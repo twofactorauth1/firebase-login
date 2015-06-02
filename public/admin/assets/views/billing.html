@@ -96,7 +96,7 @@
                             <td ng-show="invoice.paid && invoice.total/100 > 0">PAID</td>
                             <td ng-hide="invoice.paid">NOT PAID</td>
                             <td class="table-action">
-                                <a href="" ng-click="changeInvoice(invoice); openModal('view-transaction-modal')"><i class="fa fa-eye"></i>
+                                <a href="" ng-click="changeInvoice(invoice, $index); openModal('view-transaction-modal')"><i class="fa fa-eye"></i>
                                             </a>
                             </td>
                         </tr>
@@ -111,7 +111,7 @@
                 <span aria-hidden="true">&times;</span>
                 <span class="sr-only">Close</span>
             </button>
-            <h3 class="modal-title">Transaction #{{selectedInvoice.id}}</h3>
+            <h3 class="modal-title">Transaction #{{selectedItemIndex + 1}}</h3>
         </div>
         <div class="modal-body view-transaction-modal">
             <img src="../admin/assets/images/paid-in-full.png" class="center paid" width="100" />
