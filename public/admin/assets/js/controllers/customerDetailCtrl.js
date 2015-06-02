@@ -235,7 +235,7 @@
                 //save updated lat/lon
                 _firstAddress.lat = parseFloat(data.lat);
                 _firstAddress.lon = parseFloat(data.lon);
-                $scope.customerSaveFn();
+                $scope.customerSaveFn(true);
 
                 $scope.showMap(data.lat, data.lon);
               }
@@ -328,7 +328,7 @@
       });
     };
 
-    $scope.customerSaveFn = function () {
+    $scope.customerSaveFn = function (hideToaster) {
 
       $scope.saveLoading = true;
 
@@ -356,15 +356,19 @@
           $scope.setTags();
           $scope.saveLoading = false;
 
-          if ($scope.currentState === 'customerAdd') {
-            toaster.pop('success', 'Contact Created.');
-          } else {
-            toaster.pop('success', 'Contact Saved.');
+          if (!hideToaster) {
+            if ($scope.currentState === 'customerAdd') {
+              toaster.pop('success', 'Contact Created.');
+            } else {
+              toaster.pop('success', 'Contact Saved.');
+            }
           }
         });
       } else {
         $scope.saveLoading = false;
-        toaster.pop('warning', 'Contact Name OR Email is required');
+        if (!hideToaster) {
+          toaster.pop('warning', 'Contact Name OR Email is required');
+        }
       }
 
     };
