@@ -652,5 +652,15 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
             });
          })
 
+        /********** BLOG PAGE PAGINATION RELATED **********/
+        $scope.curPage = 0;
+        $scope.pageSize = 10;
+        $scope.numberOfPages = function() {
+            if (that.blogposts)
+                return Math.ceil(that.blogposts.length / $scope.pageSize);
+            else
+                return 0;
+        };
+
     }
 ]);
