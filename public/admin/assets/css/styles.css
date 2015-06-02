@@ -11020,6 +11020,19 @@ td.small-width {
 table.grid thead th {
   vertical-align: bottom;
 }
+.table > thead > tr > th[st-sort]:before {
+  font-family: FontAwesome;
+  content: "\f0dc";
+  display: inline-block;
+  padding-right: 3px;
+  vertical-align: middle;
+}
+.st-sort-ascent:before {
+  content: "\f0de" !important;
+}
+.st-sort-descent:before {
+  content: "\f0dd" !important;
+}
 /* ---------------------------------------------------------------------- */
 /*  User profile
 /* ---------------------------------------------------------------------- */
