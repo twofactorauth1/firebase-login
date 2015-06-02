@@ -187,28 +187,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
                                 $scope.parentScope.afteriframeLoaded($scope.currentpage);
                             }
                             $scope.dataLoaded = true;
-                            $scope.$watch('blog.postTags || control.postTags', function(newValue, oldValue) {
-                                if (newValue !== undefined && newValue.length) {
-                                    var tagsArr = [];
-                                    that.totalPosts.forEach(function(val) {
-                                        if (val.post_tags)
-                                            tagsArr.push(val.post_tags);
-                                    })
-                                    newValue.forEach(function(value, index) {
-                                        var default_size = 2;
-                                        var count = _.countBy(_.flatten(tagsArr), function(num) {
-                                            return num == value
-                                        })["true"];
-                                        if (count)
-                                            default_size += count;
-                                        $scope.tagCloud.push({
-                                            text: value,
-                                            weight: default_size, //Math.floor((Math.random() * newValue.length) + 1),
-                                            link: '/tag/' + value
-                                        })
-                                    });
-                                }
-                            });
+                            
                         })
                         var locId = $location.$$hash;
                         if (locId) {
@@ -218,7 +197,33 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
                         }
                         $scope.setUnderbnavMargin();
                     }, 500);
-                });
+                        setTimeout(function() {
+                            $scope.$apply(function() {
+                                $scope.$watch('layout.postTags', function(newValue, oldValue) {
+                                    if (newValue !== undefined && newValue.length) {
+                                        var tagsArr = [];
+                                        that.totalPosts.forEach(function(val) {
+                                            if (val.post_tags)
+                                                tagsArr.push(val.post_tags);
+                                        })
+                                        newValue.forEach(function(value, index) {
+                                            var default_size = 2;
+                                            var count = _.countBy(_.flatten(tagsArr), function(num) {
+                                                return num == value
+                                            })["true"];
+                                            if (count)
+                                                default_size += count;
+                                            $scope.tagCloud.push({
+                                                text: value,
+                                                weight: default_size, //Math.floor((Math.random() * newValue.length) + 1),
+                                                link: '/tag/' + value
+                                            })
+                                        });
+                                    }
+                                });
+                            })
+                        }, 1000);
+                    });
 
                 var iframe = window.document.getElementById("iframe-website")
                 $scope.isAdmin = iframe;
