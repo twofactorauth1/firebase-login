@@ -753,25 +753,27 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
                     });
                 });
                 setTimeout(function() {
-                    if (angular.element("div.meet-team-height").length) {
-                        var maxTeamHeight = Math.max.apply(null, angular.element("div.meet-team-height").map(function() {
-                            return angular.element(this).height();
-                        }).get());
-                        angular.element(".meet-team-height").css("min-height", maxTeamHeight);
-                    }
-                    for (var i = 1; i <= 3; i++) { 
-                        if($("div.feature-height-"+i).length)
-                        {
-                          var maxFeatureHeight = Math.max.apply(null, $("div.feature-height-"+i).map(function ()
-                          {
-                              return $(this).height();
-                          }).get());
-                          $("div.feature-height-"+ i + " .feature-single").css("min-height", maxFeatureHeight - 10);
+                    $scope.$apply(function() {
+                        if (angular.element("div.meet-team-height").length) {
+                            var maxTeamHeight = Math.max.apply(null, angular.element("div.meet-team-height").map(function() {
+                                return angular.element(this).height();
+                            }).get());
+                            angular.element(".meet-team-height").css("min-height", maxTeamHeight);
                         }
-                    }
-
+                        for (var i = 1; i <= 3; i++) { 
+                            if($("div.feature-height-"+i).length)
+                            {
+                              var maxFeatureHeight = Math.max.apply(null, $("div.feature-height-"+i).map(function ()
+                              {
+                                  return $(this).height();
+                              }).get());
+                              $("div.feature-height-"+ i + " .feature-single").css("min-height", maxFeatureHeight - 10);
+                            }
+                        }                      
+                        $scope.parentScope.resizeIframe();
+                  });  
                 }, 500)            
-            $scope.parentScope.resizeIframe();
+            
         };
 
 
@@ -1879,16 +1881,16 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
             },300);
         };
 
-        
-        angular.element("body").on("DOMNodeInserted", ".editable", function(e) {
-            if (!$scope.activated && $scope.parentScope) {
-              $scope.activated = true;
-              setTimeout(function() {
-                console.log("Activate Ckeditor")
-                $scope.activateCKEditor();
-              }, 1000)
-            }
-        });
+        if($scope.parentScope)
+            angular.element("body").on("DOMNodeInserted", ".editable", function(e) {
+                if (!$scope.activated) {
+                  $scope.activated = true;
+                  setTimeout(function() {
+                    console.log("Activate Ckeditor")
+                    $scope.activateCKEditor();
+                  }, 1000)
+                }
+            });
     }
 
 ]);

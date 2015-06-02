@@ -460,8 +460,9 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
                         }
                     });
                 });                
-            
-            $scope.parentScope.resizeIframe();
+            $scope.$apply(function() {
+                $scope.parentScope.resizeIframe();
+            });
             
         };
 
@@ -614,16 +615,16 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
             }
         }
 
-
-        angular.element("body").on("DOMNodeInserted", ".editable", function(e) {
-            if (!$scope.activated && $scope.parentScope) {
-              $scope.activated = true;
-              setTimeout(function() {
-                console.log("Activate Ckeditor")
-                $scope.activateCKEditor();
-              }, 1000)
-            }
-        });
+        if($scope.parentScope)
+            angular.element("body").on("DOMNodeInserted", ".editable", function(e) {
+                if (!$scope.activated && $scope.parentScope) {
+                  $scope.activated = true;
+                  setTimeout(function() {
+                    console.log("Activate Ckeditor")
+                    $scope.activateCKEditor();
+                  }, 1000)
+                }
+            });
 
     }
 ]);
