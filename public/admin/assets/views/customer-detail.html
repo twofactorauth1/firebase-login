@@ -92,7 +92,7 @@
                                                 <tr>
                                                     <td>email:</td>
                                                     <td>
-                                                        <div ng-repeat="email in customer.details[0].emails">
+                                                        <div ng-repeat="email in customer.details[0].emails track by $index">
                                                             <a href="mailto:{{email.email}}">{{email.email}}</a>
                                                             <br>
                                                         </div>
@@ -101,7 +101,7 @@
                                                 <tr>
                                                     <td>phone:</td>
                                                     <td>
-                                                        <div ng-repeat="phone in customer.details[0].phones">
+                                                        <div ng-repeat="phone in customer.details[0].phones  track by $index">
                                                             {{phone.number}}
                                                             <br>
                                                         </div>
@@ -110,7 +110,7 @@
                                                 <tr>
                                                     <td>address:</td>
                                                     <td>
-                                                        <div ng-repeat="address in customer.details[0].addresses">
+                                                        <div ng-repeat="address in customer.details[0].addresses  track by $index">
                                                             <a href>
                                                                 {{address.address}} {{address.address2}}, <br> {{address.city}} {{address.state}} {{address.postcode}}
                                                             </a>
@@ -230,7 +230,7 @@
                                                         <i ng-if="!showAddEmail(email)" ng-click="removeEmail($index)" class="ti-minus"></i>
                                                     </span>
                                                 </div>
-                                                <div class="form-group" ng-repeat="email in customer.details[0].emails">
+                                                <div class="form-group" ng-repeat="email in customer.details[0].emails  track by $index">
                                                     <span class="input-icon input-icon-right">
                                                         <input type="email" placeholder="email address" class="form-control" name="email" ng-model="customer.details[0].emails[$index].email" ng-blur="updateCustomer()">
                                                         <i ng-if="showAddEmail(email)" ng-click="customerAddEmailFn()" class="ti-plus"></i>
@@ -242,7 +242,7 @@
                                                 <label class="control-label">
                                                     Phone Number
                                                 </label>
-                                                <div class="form-group" ng-repeat="phone in customer.details[0].phones">
+                                                <div class="form-group" ng-repeat="phone in customer.details[0].phones  track by $index">
                                                     <span class="input-icon input-icon-right">
                                                         <input type="text" placeholder="phone pumber" class="form-control" name="phone" ng-model="customer.details[0].phones[$index].number" ng-blur="updateCustomer()">
                                                         <i ng-if="showAddPhone(phone)" ng-click="addCustomerContactFn()" class="ti-plus"></i>
@@ -250,7 +250,7 @@
                                                     </span>
                                                 </div>
                                             </div>
-                                            <div ng-repeat="address in customer.details[0].addresses">
+                                            <div ng-repeat="address in customer.details[0].addresses  track by $index">
                                                 <div class="row">
                                                     <div class="col-md-4">
                                                         <div class="form-group">
