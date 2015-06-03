@@ -42,7 +42,7 @@ Download and install these dependencies to start developing on the application
 
 • **Application looks ugly** - make sure you compile the less files manually once with 'grunt less' and then you run 'grunt watch' every time you develop to watch for file changes.
 
-• **Failed to load c++ bson extension** - On a mac, this may've been caused by a missing (or out-of-date) xcode command line/build tools. At the command line, run "x
+• **Failed to load c++ bson extension** - On a mac, this may've been caused by a missing (or out-of-date) xcode command line/build tools.
 
 • **node-gyp module error** - your node.js on your machine is most likely out of date 
 
