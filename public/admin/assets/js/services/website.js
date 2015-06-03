@@ -421,5 +421,22 @@
 				fn(data);
 			})
 		};
+
+		//page/:pageId/blog/:postId'
+	    this.updatePost = function(pageId, postId, postdata, fn) {
+	        var apiUrl = baseUrl + ['cms', 'page', pageId, 'blog', postId].join('/');
+	        $http({
+	            url: apiUrl,
+	            method: "POST",
+	            data: angular.toJson(postdata)
+	        })
+	            .success(function (data, status, headers, config) {
+	                fn(data);
+	            })
+	            .error(function (err) {
+	                console.log('END:Website Service updatePage with ERROR');
+	                fn(err, null);
+	            });
+	    };
 	});
 })(angular);

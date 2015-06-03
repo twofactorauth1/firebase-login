@@ -1081,6 +1081,8 @@
             var redirectUrl = $location.$$search['posthandle'] ? "/website/posts" : "/website/pages";
             if (isDirty) {
                 event.preventDefault();
+                $scope.updatePageComponents();
+                $scope.updateBlogPageData();
                 SweetAlert.swal({
                         title: "Are you sure?",
                         text: "You have unsaved data that will be lost",
@@ -1097,10 +1099,12 @@
                             SweetAlert.swal("Saved!", "Your edits were saved to the page.", "success");
                             $scope.redirect = true;
                             $scope.savePage();
+                            $location.path(redirectUrl);
                         } else {
                             SweetAlert.swal("Cancelled", "Your edits were NOT saved.", "error");
+                            $location.path(redirectUrl);
                         }
-                        $location.path(redirectUrl);
+                        
                     });
             } else {
                 $location.path(redirectUrl);
@@ -1145,7 +1149,7 @@
             var msg = "Post Saved";
             if (autoSave)
                 msg = "Auto Saved";
-            var iFrame = document.getElementById("iframe-website");
+           
             $scope.childScope.checkOrSetPageDirty(true);
 
             if ($location.$$search['posthandle']) {
@@ -1160,6 +1164,77 @@
                     toaster.pop('error', "Page Title or URL can not be blank.");
                     return false;
                 }
+                
+                var iFrame = document.getElementById("iframe-website");
+                if(!$scope.redirect)
+                    $scope.updatePageComponents();
+                
+                WebsiteService.getSinglePage($scope.currentPage.websiteId, $scope.currentPage.handle, function(data) {
+                    //TODO: Make this check on change of page title or url in the page settings modal
+                    //TODO: Better way to handle this there should be check on server side itself while saving the page
+                    if(data && data._id)
+                    {
+                        if(data._id !== $scope.currentPage._id)
+                        {
+                            toaster.pop('error', "Page URL " + $scope.currentPage.handle, "Already exists");
+                            return false;
+                        }
+                    }
+                    if ($scope.templateActive) {
+                        $scope.template.config.components = $scope.currentPage.components;
+                        WebsiteService.updateTemplate($scope.template._id, $scope.template, function() {
+                            console.log('success');
+                            toaster.pop('success', "Template Saved", "The " + $scope.currentPage.handle + " template was saved successfully.");
+                        });
+                    }
+                    
+                    $scope.saveBlogData();
+
+                    WebsiteService.updatePage($scope.currentPage.websiteId, $scope.currentPage._id, $scope.currentPage, function(data) {
+                        $scope.isEditing = true;
+
+                        WebsiteService.setEditedPageHandle($scope.currentPage.handle);
+                        if (!$scope.redirect)
+                            $scope.autoSavePage();
+                        else
+                            $scope.stopAutoSavePage();
+                        $scope.redirect = false;
+                        if (autoSave)
+                            toaster.pop('success', "Auto Saved", "The " + $scope.currentPage.handle + " page was saved successfully.");
+                        else
+                            toaster.pop('success', "Page Saved", "The " + $scope.currentPage.handle + " page was saved successfully.");
+                        $scope.saveLoading = false;
+
+                        if($scope.originalCurrentPage.handle !== $scope.currentPage.handle)
+                        {
+                            window.location = '/admin/#/website/pages/?pagehandle=' + $scope.currentPage.handle;
+                        }
+                        //Update linked list                        
+                        $scope.website.linkLists.forEach(function(value, index) {
+                          if(value.handle === "head-menu") {
+                            WebsiteService.updateLinkList($scope.website.linkLists[index], $scope.website._id, 'head-menu', function(data) {
+                                console.log('Updated linked list');    
+                            });
+                          }
+                        }); 
+                        setTimeout(function() {
+                            if(iFrame && iFrame.contentWindow)
+                                $scope.activateCKEditor();
+                        }, 1000)
+                    });
+                    var data = {
+                        _id: $scope.website._id,
+                        accountId: $scope.website.accountId,
+                        settings: $scope.website.settings
+                    };
+                });
+
+
+            }
+        };
+
+        $scope.updatePageComponents = function(){
+                var iFrame = document.getElementById("iframe-website");
                 var componentJSON = $scope.currentPage.components;
                 var pageId = $scope.currentPage._id;
 
@@ -1272,71 +1347,40 @@
                     }
                     newComponentOrder.push(matchedComponent);
                 };
-
-
                 $scope.currentPage.components = newComponentOrder;
+        }
 
-                WebsiteService.getSinglePage($scope.currentPage.websiteId, $scope.currentPage.handle, function(data) {
-                    //TODO: Make this check on change of page title or url in the page settings modal
-                    //TODO: Better way to handle this there should be check on server side itself while saving the page
-                    if(data && data._id)
-                    {
-                        if(data._id !== $scope.currentPage._id)
-                        {
-                            toaster.pop('error', "Page URL " + $scope.currentPage.handle, "Already exists");
-                            return false;
-                        }
+        $scope.updateBlogPageData = function()
+        {
+            var iframe = document.getElementById("iframe-website");
+            if (iframe) {
+                var posts = iframe.contentWindow.body.querySelectorAll('.blog-entry');
+                $scope.blogposts = $scope.childScope.getAllBlogs();
+                for (var i = 0; i < posts.length; i++) {
+                    var blog_id = posts[i].attributes['data-id'].value;
+                    var post_excerpt_div = posts[i].querySelectorAll('.post_excerpt');
+                    var post_title_div = posts[i].querySelectorAll('.post_title');
+                    var post_excerpt = post_excerpt_div.length ? post_excerpt_div[0].outerText : "";
+                    var post_title = post_title_div.length ? post_title_div[0].outerText : "";
+                    var matching_post = _.find($scope.blogposts, function(item) {
+                        return item._id === blog_id
+                    })
+                    if (matching_post) {
+                        matching_post.post_excerpt = post_excerpt;
+                        matching_post.post_title = post_title;                       
                     }
-                    if ($scope.templateActive) {
-                        $scope.template.config.components = $scope.currentPage.components;
-                        WebsiteService.updateTemplate($scope.template._id, $scope.template, function() {
-                            console.log('success');
-                            toaster.pop('success', "Template Saved", "The " + $scope.currentPage.handle + " template was saved successfully.");
-                        });
-                    }
-
-                    WebsiteService.updatePage($scope.currentPage.websiteId, $scope.currentPage._id, $scope.currentPage, function(data) {
-                        $scope.isEditing = true;
-
-                        WebsiteService.setEditedPageHandle($scope.currentPage.handle);
-                        if (!$scope.redirect)
-                            $scope.autoSavePage();
-                        else
-                            $scope.stopAutoSavePage();
-                        $scope.redirect = false;
-                        if (autoSave)
-                            toaster.pop('success', "Auto Saved", "The " + $scope.currentPage.handle + " page was saved successfully.");
-                        else
-                            toaster.pop('success', "Page Saved", "The " + $scope.currentPage.handle + " page was saved successfully.");
-                        $scope.saveLoading = false;
-
-                        $scope.childScope.saveBlogData(iFrame.contentWindow);
-                        if($scope.originalCurrentPage.handle !== $scope.currentPage.handle)
-                        {
-                            window.location = '/admin/#/website/pages/?pagehandle=' + $scope.currentPage.handle;
-                        }
-                        //Update linked list                        
-                        $scope.website.linkLists.forEach(function(value, index) {
-                          if(value.handle === "head-menu") {
-                            WebsiteService.updateLinkList($scope.website.linkLists[index], $scope.website._id, 'head-menu', function(data) {
-                                console.log('Updated linked list');    
-                            });
-                          }
-                        }); 
-                        setTimeout(function() {
-                            $scope.activateCKEditor();
-                        }, 1000)
-                    });
-                    var data = {
-                        _id: $scope.website._id,
-                        accountId: $scope.website.accountId,
-                        settings: $scope.website.settings
-                    };
-                });
-
-
+                }
             }
-        };
+        }
+
+        $scope.saveBlogData = function() {
+            if(!$scope.redirect)
+                $scope.updateBlogPageData();            
+            $scope.blogposts.forEach(function(value, index) {
+                WebsiteService.updatePost($scope.currentPage._id, value._id, value, function(data) {});
+            })
+        }
+
 
         $scope.updateBlogPost = function(post_data)
         {
@@ -2035,11 +2079,13 @@
             var isDirty = false;
             var iFrame = document.getElementById("iframe-website");
             if ($scope.childScope && $scope.childScope.checkOrSetPageDirty) {
-                var isDirty = $scope.childScope.checkOrSetPageDirty() || $scope.isDirty;
+                var isDirty = $scope.childScope.checkOrSetPageDirty() || $scope.isDirty;                
             }
 
             if (isDirty && !$scope.changesConfirmed) {
                 event.preventDefault();
+                $scope.updatePageComponents();
+                $scope.updateBlogPageData();
                 SweetAlert.swal({
                         title: "Are you sure?",
                         text: "You have unsaved data that will be lost",
@@ -2056,11 +2102,11 @@
                             SweetAlert.swal("Saved!", "Your edits were saved to the page.", "success");
                             $scope.redirect = true;
                             var pageId = $scope.currentPage._id;
-                            WebsiteService.getPageComponents(pageId, function(components) {
-                                $scope.components = components;
-                                $scope.currentPage.components = components;
+                            //WebsiteService.getPageComponents(pageId, function(components) {
+                              //  $scope.components = components;
+                                //$scope.currentPage.components = components;
                                 $scope.savePage();
-                            });
+                            //});
 
                         } else {
                             SweetAlert.swal("Cancelled", "Your edits were NOT saved.", "error");
