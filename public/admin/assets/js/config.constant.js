@@ -606,12 +606,12 @@ app.constant('JS_REQUIRES', {
   }, {
     name: 'ngAside',
     files: ['../js/libs/angular-aside/dist/js/angular-aside.min.js', '../js/libs/angular-aside/dist/css/angular-aside.min.css']
-  },  {
-    name: 'highmaps',
-    files: ['../js/libs/highcharts-release/modules/funnel.js', '../js/libs/highmaps-release/modules/map.js', '../js/libs_misc/highmaps/us-all.js']
   }, {
     name: 'highcharts',
     files: ['../js/libs/highcharts-release/adapters/standalone-framework.js', '../js/libs/highcharts-release/highcharts.js', '../js/libs/highcharts-ng/dist/highcharts-ng.min.js']
+  },{
+    name: 'highmaps',
+    files: ['../js/libs/highcharts-release/modules/funnel.js', '../js/libs/highmaps-release/modules/map.js', '../js/libs_misc/highmaps/us-all.js']
   },{
     name: 'truncate',
     files: ['../js/libs/angular-truncate/src/truncate.js']
