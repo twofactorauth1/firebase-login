@@ -1,9 +1,9 @@
 'use strict';
 
-app
-    .filter('offset', function() {
+app.filter('offset', function() {
         return function(input, start) {
             start = parseInt(start, 10);
-            return input.slice(start);
+            if(input)
+            	return input.slice(start);
         }
     });

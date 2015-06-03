@@ -716,22 +716,33 @@ module.exports = {
         });
     },
 
-    getBlogPost: function(accountId, postId, fn) {
-        blogPostDao.getById(postId, fn);
+    getBlogPost: function(accountId, postId, statusAry, fn) {
+
+        var query = {
+            _id: postId,
+            accountId: accountId,
+            post_status: {'$in': statusAry}
+        };
+        blogPostDao.findOne(query, $$.m.BlogPost, fn);
+        //blogPostDao.getById(postId, fn);
     },
 
-    getBlogPostByTitle: function(accountId, title, fn) {
+    getBlogPostByTitle: function(accountId, title, statusAry, fn) {
+
         var query = {
             accountId: accountId,
-            post_title: title
+            post_title: title,
+            post_status: {'$in': statusAry}
         };
         blogPostDao.findOne(query, $$.m.BlogPost, fn);
     },
 
-    getBlogPostByUrl: function(accountId, url, fn) {
+    getBlogPostByUrl: function(accountId, url, statusAry,  fn) {
+
         var query = {
             accountId: accountId,
-            post_url: url
+            post_url: url,
+            post_status: {'$in': statusAry}
         };
         blogPostDao.findOne(query, $$.m.BlogPost, fn);
     },
@@ -806,37 +817,78 @@ module.exports = {
 
     },
 
-    getPostsByAuthor: function(accountId, author, fn) {
-        blogPostDao.getPostsByAuthor(author, fn);
+    getPostsByAuthor: function(accountId, author, statusAry, fn) {
+
+        var query = {
+            accountId: accountId,
+            post_author: author,
+            post_status: {'$in': statusAry}
+        };
+        blogPostDao.findMany(query, $$.m.BlogPost, fn);
+        //blogPostDao.getPostsByAuthor(author, fn);
     },
 
-    getPostsByTitle: function(accountId, title, fn) {
-        blogPostDao.getPostsByTitle(title, fn);
+    getPostsByTitle: function(accountId, title, statusAry, fn) {
+
+        var query = {
+            accountId: accountId,
+            post_title: title,
+            post_status: {'$in': statusAry}
+        };
+
+        blogPostDao.findMany(query, $$.m.BlogPost, fn);
+        //blogPostDao.getPostsByTitle(title, fn);
     },
 
-    getPostsByData: function(accountId, data, fn) {
-        blogPostDao.getPostsByData(data, fn);
+    getPostsByData: function(accountId, data, statusAry, fn) {
+
+        var query = {
+            accountId: accountId,
+            post_content: new RegExp(data),
+            post_status: {'$in': statusAry}
+        };
+
+        blogPostDao.findMany(query, $$.m.BlogPost, fn);
+        //blogPostDao.getPostsByData(data, fn);
     },
 
-    getPostsByCategory: function(accountId, category, fn) {
-        blogPostDao.getPostsByCategory(category, fn);
+    getPostsByCategory: function(accountId, category, statusAry, fn) {
+
+        var query = {
+            accountId: accountId,
+            post_category: category,
+            post_status: {'$in': statusAry}
+        };
+
+        blogPostDao.findMany(query, $$.m.BlogPost, fn);
+        //blogPostDao.getPostsByCategory(category, fn);
     },
 
-    getPostsByTag: function(accountId, tag, fn) {
-        blogPostDao.getPostsByTags(tag, fn);
+    getPostsByTag: function(accountId, tagAry, statusAry, fn) {
+
+        var query = {
+            accountId: accountId,
+            post_tags: {$in: tagAry},
+            post_status: {'$in': statusAry}
+        };
+        blogPostDao.findMany(query, $$.m.BlogPost, fn);
+        //blogPostDao.getPostsByTags(tag, fn);
     },
 
-    listBlogPosts: function(accountId, limit, fn) {
-        blogPostDao.findManyWithLimit({'accountId':accountId}, limit, $$.m.BlogPost, fn);
+    listBlogPosts: function(accountId, limit, statusAry, fn) {
+
+        blogPostDao.findManyWithLimit({'accountId':accountId, post_status: {'$in': statusAry}}, limit, $$.m.BlogPost, fn);
     },
-    listBlogPostsWithLimit: function(accountId, limit, skip, fn) {
-        blogPostDao.findWithFieldsLimitOrderAndTotal({'accountId':accountId}, skip, limit, "modified.date", null, $$.m.BlogPost, -1, fn);
+    listBlogPostsWithLimit: function(accountId, limit, skip, statusAry, fn) {
+
+        blogPostDao.findWithFieldsLimitOrderAndTotal({'accountId':accountId, post_status: {'$in': statusAry}}, skip, limit, "modified.date", null, $$.m.BlogPost, -1, fn);
     },
-    listBlogPostsByPageId: function(pageId, limit, fn) {
-        blogPostDao.findManyWithLimit({'pageId':pageId}, limit, $$.m.BlogPost, fn);
+    listBlogPostsByPageId: function(pageId, limit, statusAry, fn) {
+
+        blogPostDao.findManyWithLimit({'pageId':pageId, post_status: {'$in': statusAry}}, limit, $$.m.BlogPost, fn);
     },
 
-    listPostIdsByPage: function(accountId, pageId, fn) {
+    listPostIdsByPage: function(accountId, pageId, statusAry, fn) {
         var self = this;
         self.log = log;
         self.log.debug('>> listPostIdsByPage');
@@ -1820,7 +1872,7 @@ module.exports = {
         var self = this;
         log.debug('>> getDistinctBlogPostAuthors');
 
-        blogPostDao.distinct('post_author', {accountId:accountId}, $$.m.cms.BlogPost, function(err, value){
+        blogPostDao.distinct('post_author', {accountId:accountId}, $$.m.BlogPost, function(err, value){
             if(err) {
                 log.error('Error getting distinct authors: ' + err);
                 return fn(err, null);
@@ -1836,7 +1888,7 @@ module.exports = {
         var self = this;
         log.debug('>> getDistinctBlogPostTitles');
 
-        blogPostDao.distinct('post_title', {accountId:accountId}, $$.m.cms.BlogPost, function(err, value){
+        blogPostDao.distinct('post_title', {accountId:accountId}, $$.m.BlogPost, function(err, value){
             if(err) {
                 log.error('Error getting distinct authors: ' + err);
                 return fn(err, null);
@@ -1851,7 +1903,7 @@ module.exports = {
         var self = this;
         log.debug('>> getDistinctBlogPostCategories');
 
-        blogPostDao.distinct('post_category', {accountId:accountId}, $$.m.cms.BlogPost, function(err, value){
+        blogPostDao.distinct('post_category', {accountId:accountId}, $$.m.BlogPost, function(err, value){
             if(err) {
                 log.error('Error getting distinct authors: ' + err);
                 return fn(err, null);
@@ -1866,7 +1918,7 @@ module.exports = {
         var self = this;
         log.debug('>> getDistinctBlogPostTags');
 
-        blogPostDao.distinct('post_tags', {accountId:accountId}, $$.m.cms.BlogPost, function(err, value){
+        blogPostDao.distinct('post_tags', {accountId:accountId}, $$.m.BlogPost, function(err, value){
             if(err) {
                 log.error('Error getting distinct authors: ' + err);
                 return fn(err, null);

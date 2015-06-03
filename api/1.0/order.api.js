@@ -40,6 +40,7 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> createOrder');
 
         var order = new $$.m.Order(req.body);
+        self.log.debug('>> Order Details '+ order);
         var accessToken = self.getAccessToken(req);
         var userId = self.userId(req);
         var accountId = self.accountId(req);
@@ -50,7 +51,7 @@ _.extend(api.prototype, baseApi.prototype, {
         orderManager.createOrder(order, accessToken, userId, function(err, order){
             self.log.debug('<< createOrder');
             self.sendResultOrError(res, err, order, 'Error creating order');
-            if(userId) {
+            if(userId && order) {
                 self.createUserActivity(req, 'CREATE_ORDER', null, {id: order.id()}, function(){});
             }
         });

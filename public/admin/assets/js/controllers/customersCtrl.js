@@ -5,6 +5,8 @@
   app.controller('CustomersCtrl', ["$scope", "toaster", "$modal", "$window", "CustomerService", "SocialConfigService", "userConstant", function ($scope, toaster, $modal, $window, CustomerService, SocialConfigService, userConstant) {
 
     $scope.tableView = 'list';
+    $scope.itemPerPage = 100;
+    $scope.showPages = 15;
 
     /*
      * @getCustomers
@@ -14,14 +16,14 @@
     CustomerService.getCustomers(function (customers) {
       _.each(customers, function (customer) {
         customer.bestEmail = $scope.checkBestEmail(customer);
-        customer.bestAddress = $scope.checkAddress(customer);
-
-        customer.hasPhoto = false;
-        if (customer.photo) {
-          customer.hasPhoto = true;
-        }
+        customer.hasFacebookId = $scope.checkFacebookId(customer);
+        customer.hasTwitterId = $scope.checkTwitterId(customer);
+        customer.hasLinkedInId = $scope.checkLinkedInId(customer);
+        customer.hasGoogleId = $scope.checkGoogleId(customer);
       });
       $scope.customers = customers;
+      $scope.showCustomers = true;
+      console.log("customers loaded");
     });
 
     /*
@@ -43,30 +45,30 @@
         return $scope.contactTags(value);
       },
       phone: function (value) {
-        if (value.details[0].phones && value.details[0].phones[0]) {
+        if (value.details[0] && value.details[0].phones && value.details[0].phones[0]) {
           return value.details[0].phones[0].number.trim();
         } else {
           return "";
         }
       },
       address: function (value) {
-        if (value.details[0].addresses && value.details[0].addresses[0] && value.details[0].addresses[0].city && value.details[0].addresses[0].state) {
+        if (value.details[0] && value.details[0].addresses && value.details[0].addresses[0] && value.details[0].addresses[0].city && value.details[0].addresses[0].state) {
           return [value.details[0].addresses[0].city, value.details[0].addresses[0].state].join(' ').trim();
-        } else if (value.details[0].addresses && value.details[0].addresses[0] && value.details[0].addresses[0].address && !value.details[0].addresses[0].city) {
+        } else if (value.details[0] && value.details[0].addresses && value.details[0].addresses[0] && value.details[0].addresses[0].address && !value.details[0].addresses[0].city) {
           return value.details[0].addresses[0].address;
         }
       },
       social: function (value) {
-        if ($scope.checkLinkedInId(value)) {
+        if (value.hasLinkedInId) {
           return 1;
         }
-        if ($scope.checkGoogleId(value)) {
+        if (value.hasGoogleId) {
           return 2;
         }
-        if ($scope.checkFacebookId(value)) {
+        if (value.hasFacebookId) {
           return 3;
         }
-        if ($scope.checkTwitterId(value)) {
+        if (value.hasTwitterId) {
           return 4;
         } else {
           return 5;
@@ -82,7 +84,8 @@
     $scope.openModal = function (template) {
       $scope.modalInstance = $modal.open({
         templateUrl: template,
-        scope: $scope
+        scope: $scope,
+        backdrop: 'static'
       });
     };
 

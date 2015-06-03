@@ -341,7 +341,7 @@
                                         <span class="label label-success">SUBSCRIBE</span> for
                                         <span ng-if="!activity.customer">[deleted]</span>
                                         <span ng-if="activity.customer.first">{{activity.customer.first+' '+activity.customer.last}}</span>
-                                        <span ng-if=! "activity.customer.first">{{activity.customer.details[0].emails[0].email}}</span>subscribed to a <a href="">Indigenous Yearly</a> for $99.
+                                        <span ng-if="!activity.customer.first">{{activity.customer.details[0].emails[0].email}}</span>subscribed to a <a href="">Indigenous Yearly</a> for $99.
                                     </p>
                                 </div>
                                 <div ng-switch-when="SUBSCRIBE_CANCEL">
@@ -428,6 +428,11 @@
                                         <span ng-if="!activity.customer.first">{{activity.customer.details[0].emails[0].email}}</span>.
                                     </p>
                                     <!-- <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-file"></i> Read the Email</a> -->
+                                </div>
+                                <div ng-switch-default>
+                                    <p>                                        
+                                        <span class="label label-default">{{activity.activityType}}</span> {{activity.detail}}  
+                                    </p>                                    
                                 </div>
                                 
                             </div>

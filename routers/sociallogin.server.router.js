@@ -97,10 +97,10 @@ _.extend(router.prototype, baseRouter.prototype, {
 
         if (req.query.error) {
           self.log.debug('state.failureRedirect set');
-          state.failureRedirect = '/admin#/account';
+          state.failureRedirect = '/admin#/account/integrations';
         }
 
-        var referringUrl = req.query['redirectTo'] || '/admin/account';
+        var referringUrl = req.query['redirectTo'] || '/admin/account/integrations';
         authenticationDao.getAuthenticatedUrlForAccount(this.accountId(req), state.userId, referringUrl, 90, function(err, value){
             if(err) {
                  self.log.error('Error getting referring url for: ' + referringUrl);
@@ -126,7 +126,7 @@ _.extend(router.prototype, baseRouter.prototype, {
         state.appStateDetail = req.query.detail;
         state.forceApprovalPrompt = true;//this may not be needed
 
-        var referringUrl = req.query['redirectTo'] || '/admin/account';
+        var referringUrl = req.query['redirectTo'] || '/admin/account/integrations';
         authenticationDao.getAuthenticatedUrlForAccount(self.accountId(req), state.userId, referringUrl, 90, function(err, value){
             if(err) {
                 self.log.error('Error getting referring url for: ' + referringUrl);
@@ -192,7 +192,7 @@ _.extend(router.prototype, baseRouter.prototype, {
          */
         if(req.query.error || req.query.denied) {
             self.log.warn('Error parameter: ' + req.query.error);
-            return resp.redirect('/admin#/account');
+            return resp.redirect('/admin#/account/integrations');
         }
 
         var type

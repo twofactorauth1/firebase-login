@@ -21,8 +21,11 @@
      * -
      */
 
-    $scope.closeModal = function () {
-      $scope.modalInstance.close();
+    $scope.closeModal = function (cancel) {
+      if (cancel == true) {
+        $scope.editCancelFn();
+      } else
+        $scope.modalInstance.close();
     };
 
     UserService.getUser(function (user) {
@@ -33,15 +36,24 @@
      * @getProduct
      * - get single product based on stateparams
      */
-
+    $scope.product_tags = [];
     var productPlanStatus = {};
     var productPlanSignupFee = {};
 
     ProductService.getProduct($stateParams.productId, function (product) {
+      console.log(product);
       $scope.product = product;
-      if (angular.isDefined($scope.product.icon) && !$scope.product.is_image) {
-        angular.element(' #convert ').iconpicker('setIcon', $scope.product.icon);
-      }
+      var p_icon = $scope.product.icon ;
+     
+      angular.element('#convert').iconpicker({
+        iconset: 'fontawesome',
+        icon: p_icon,
+        rows: 5,
+        cols: 5,
+        placement: 'right'
+      });
+      
+      $scope.getProductTags();      
 
       if (!$scope.product.attributes) {
         $scope.product.attributes = [{
@@ -78,7 +90,6 @@
           });
       }
 
-      console.log('$scope.product.variations.length ', $scope.product.variations.length);
       // if ($scope.product.variations.length <= 0) {
       //     $scope.showVariations = false;
       //     $scope.product.variations = [{
@@ -136,17 +147,23 @@
      * @insertMedia
      * - insert media function
      */
-    $scope.currentDownloadId = '';
+
     $scope.insertMedia = function (asset) {
 
-      if ($scope.currentDownloadId) {
+      if ($scope.currentDownload) {
         console.log('download');
+        $scope.currentDownload.file = asset.url;
       } else {
         console.log('product image');
         $scope.product.icon = asset.url;
       }
-
+      $scope.setDownloadId();
     };
+
+    $scope.setDownloadId = function (download) {
+      $scope.currentDownload = download;
+    }
+
 
     /*
      * @addAttribute
@@ -230,16 +247,39 @@
     };
 
     /*
+     * @validateProduct
+     * - validate the product before saved
+     */
+
+    $scope.validateProduct = function () {
+      if (!$scope.product.name) {
+        toaster.pop('error', 'Product name is required to save.');
+        $scope.productNameError = true;
+        return false;
+      }
+      return true;
+    };
+
+    $scope.$watch('product.name', function(newValue) {
+      if (newValue && newValue.length > 0) {
+        $scope.productNameError = false;
+      }
+    });
+
+    /*
      * @saveProductFn
      * - save product function
      */
 
     $scope.saveProductFn = function () {
-      ProductService.saveProduct($scope.product, function (product) {
-        //format variation attributes
-        $scope.originalProduct = angular.copy(product);
-        toaster.pop('success', 'Product Saved.');
-      });
+      $scope.setProductTags();
+      if ($scope.validateProduct()) {
+        ProductService.saveProduct($scope.product, function (product) {
+          //format variation attributes
+          $scope.originalProduct = angular.copy(product);
+          toaster.pop('success', 'Product Saved.');
+        });
+      }
     };
 
     $scope.removeVariation = function () {
@@ -282,12 +322,11 @@
      * - icon picker for product image replacement
      */
 
-    angular.element('#convert').iconpicker({
-      iconset: 'fontawesome',
-      icon: 'fa-credit-card',
-      rows: 5,
-      cols: 5,
-      placement: 'right'
+
+    $('#convert').on('change', function (e) {
+      if ($scope.product && !$scope.product.is_image) {
+        $scope.product.icon = e.icon;
+      }
     });
 
     $scope.newSubscription = {
@@ -327,6 +366,7 @@
 
 
         productPlanStatus[subscription.id] = true;
+        productPlanSignupFee[subscription.id] = $scope.signup_fee;
         $scope.saveProductFn();
 
         $scope.newSubscription = {
@@ -353,14 +393,16 @@
 
     $scope.editCancelFn = function () {
       $scope.editingPlan = false;
+      $scope.signup_fee = null;
       $scope.newSubscription = {
         planId: CommonService.generateUniqueAlphaNumericShort()
       };
+      $scope.closeModal('add-subscription-modal');
     };
 
     $scope.planDeleteFn = function (planId, showToast, saveProduct, func) {
       var fn = func || false;
-      PaymentService.deletePlan(planId, function () {
+      PaymentService.deletePlan(planId, showToast, function () {
         $scope.plans.forEach(function (value, index) {
           if (value.id === planId) {
             $scope.plans.splice(index, 1);
@@ -392,6 +434,23 @@
         toaster.pop('success', 'Plan updated.');
       });
     };
+
+    $scope.getProductTags = function () {
+      if ($scope.product.tags)
+        $scope.product.tags.forEach(function (v, i) {
+          $scope.product_tags.push({
+            text: v
+          })
+        });
+    }
+
+    $scope.setProductTags = function () {
+      $scope.product.tags = [];
+      $scope.product_tags.forEach(function (v, i) {
+        if (v.text)
+          $scope.product.tags.push(v.text);
+      });
+    }
 
   }]);
 }(angular));

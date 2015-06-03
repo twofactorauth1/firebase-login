@@ -3,16 +3,16 @@
  * controller for editor
  */
 (function(angular) {
-    app.controller('EditorCtrl', ["$scope", "$rootScope", "$interval", "toaster", "$modal", "$filter", "$location", "WebsiteService", "SweetAlert", "hoursConstant", "GeocodeService", "ProductService", "AccountService", function($scope, $rootScope, $interval, toaster, $modal, $filter, $location, WebsiteService, SweetAlert, hoursConstant, GeocodeService, ProductService, AccountService) {
+    app.controller('EditorCtrl', ["$scope", "$rootScope", "$interval", "toaster", "$modal", "$filter", "$location", "WebsiteService", "SweetAlert", "hoursConstant", "GeocodeService", "ProductService", "AccountService","postConstant", function($scope, $rootScope, $interval, toaster, $modal, $filter, $location, WebsiteService, SweetAlert, hoursConstant, GeocodeService, ProductService, AccountService, postConstant) {
 
         var that;
         var user, account, components, currentPageContents, previousComponentOrder, allPages, originalCurrentPageComponents = that = this;
-
+        
         /*
          * @globalvariables
          * -
          */
-
+        $scope.post_statuses = postConstant.post_status.dp;
         var iFrame = document.getElementById("iframe-website");
         var subdomainCharLimit = 4;
         $scope.primaryFontStack = '';
@@ -33,6 +33,7 @@
         $scope.timeInterval = 1200000;
         $scope.redirect = false;
         $scope.single_post = false;
+        $scope.contactHoursInvalid = false;
         var stopInterval;
         
         $scope.$watch('currentPage.handle', function(newValue, oldValue) {
@@ -126,6 +127,12 @@
 
         $scope.closeModal = function() {
             $scope.modalInstance.close();
+            if($scope.componentEditing && $scope.componentEditing.type === 'contact-us' && $scope.contactHoursInvalid)
+            {
+                $scope.componentEditing.hours = $scope.originalComponent.hours;
+                $scope.updateContactUsAddress();
+            }
+            $scope.contactHoursInvalid = false;
         };
 
         /*
@@ -520,7 +527,8 @@
             $scope.editPage();
             $scope.currentPage = page;
             $scope.updatePage($scope.currentPage.handle);
-            // $scope.resizeIframe();
+            $scope.originalBlogPosts  = angular.copy($scope.childScope.getAllBlogs());
+            $scope.resizeIframe();
         };
 
         /*
@@ -570,6 +578,7 @@
                         e.stopPropagation();
                     }
                 });
+
                 //remove click handler before binding click
                 angular.element("#iframe-website").contents().find('body').off("click", ".componentActions .settings, .map-wrap .settings");
                 //add click events for all the settings buttons
@@ -651,6 +660,14 @@
                             };
                         });
                 });
+                // angular.element("#iframe-website").contents().find('body').on("DOMNodeInserted", ".editable", function(e) {
+                //     if (!$scope.activated) {
+                //       $scope.activated = true;
+                //       setTimeout(function() {
+                //         $scope.childScope.activateCKEditor();
+                //       }, 1000)
+                //     }
+                // });
                 angular.element("#iframe-website").contents().find('body').off("click", ".btn-social-link");
                 // Social components
                 angular.element("#iframe-website").contents().find('body').on("click", ".btn-social-link", function(e) {
@@ -1042,9 +1059,9 @@
             if ($scope.single_post) {
                 $scope.childScope.copyPostMode();
                 $scope.post_data = $scope.childScope.getPostData();
-            }
+            }           
             setTimeout(function() {
-                $scope.activateCKEditor();
+                $scope.bindEvents();
             }, 1000)
             $scope.backup['website'] = angular.copy($scope['website']);
         };
@@ -1065,6 +1082,8 @@
             var redirectUrl = $location.$$search['posthandle'] ? "/website/posts" : "/website/pages";
             if (isDirty) {
                 event.preventDefault();
+                $scope.updatePageComponents();
+                $scope.childScope.updateBlogPageData(iFrame);
                 SweetAlert.swal({
                         title: "Are you sure?",
                         text: "You have unsaved data that will be lost",
@@ -1081,10 +1100,12 @@
                             SweetAlert.swal("Saved!", "Your edits were saved to the page.", "success");
                             $scope.redirect = true;
                             $scope.savePage();
+                            $location.path(redirectUrl);
                         } else {
                             SweetAlert.swal("Cancelled", "Your edits were NOT saved.", "error");
+                            $location.path(redirectUrl);
                         }
-                        $location.path(redirectUrl);
+                        
                     });
             } else {
                 $location.path(redirectUrl);
@@ -1129,7 +1150,7 @@
             var msg = "Post Saved";
             if (autoSave)
                 msg = "Auto Saved";
-            var iFrame = document.getElementById("iframe-website");
+           
             $scope.childScope.checkOrSetPageDirty(true);
 
             if ($location.$$search['posthandle']) {
@@ -1144,6 +1165,77 @@
                     toaster.pop('error', "Page Title or URL can not be blank.");
                     return false;
                 }
+                
+                var iFrame = document.getElementById("iframe-website");
+                if(!$scope.redirect)
+                    $scope.updatePageComponents();
+                
+                WebsiteService.getSinglePage($scope.currentPage.websiteId, $scope.currentPage.handle, function(data) {
+                    //TODO: Make this check on change of page title or url in the page settings modal
+                    //TODO: Better way to handle this there should be check on server side itself while saving the page
+                    if(data && data._id)
+                    {
+                        if(data._id !== $scope.currentPage._id)
+                        {
+                            toaster.pop('error', "Page URL " + $scope.currentPage.handle, "Already exists");
+                            return false;
+                        }
+                    }
+                    if ($scope.templateActive) {
+                        $scope.template.config.components = $scope.currentPage.components;
+                        WebsiteService.updateTemplate($scope.template._id, $scope.template, function() {
+                            console.log('success');
+                            toaster.pop('success', "Template Saved", "The " + $scope.currentPage.handle + " template was saved successfully.");
+                        });
+                    }
+                                      
+
+                    WebsiteService.updatePage($scope.currentPage.websiteId, $scope.currentPage._id, $scope.currentPage, function(data) {
+                        $scope.isEditing = true;                        
+                        $scope.saveBlogData();
+                        $scope.originalBlogPosts  = angular.copy($scope.childScope.getAllBlogs());
+                        WebsiteService.setEditedPageHandle($scope.currentPage.handle);
+                        if (!$scope.redirect)
+                            $scope.autoSavePage();
+                        else
+                            $scope.stopAutoSavePage();
+                        if(!$scope.redirect)
+                            if (autoSave)
+                                toaster.pop('success', "Auto Saved", "The " + $scope.currentPage.handle + " page was saved successfully.");
+                            else
+                                toaster.pop('success', "Page Saved", "The " + $scope.currentPage.handle + " page was saved successfully.");
+                        $scope.saveLoading = false;
+                        $scope.redirect = false;
+                        if($scope.originalCurrentPage.handle !== $scope.currentPage.handle)
+                        {
+                            window.location = '/admin/#/website/pages/?pagehandle=' + $scope.currentPage.handle;
+                        }
+                        //Update linked list                        
+                        $scope.website.linkLists.forEach(function(value, index) {
+                          if(value.handle === "head-menu") {
+                            WebsiteService.updateLinkList($scope.website.linkLists[index], $scope.website._id, 'head-menu', function(data) {
+                                console.log('Updated linked list');    
+                            });
+                          }
+                        }); 
+                        setTimeout(function() {
+                            if(iFrame && iFrame.contentWindow)
+                                $scope.activateCKEditor();
+                        }, 1000)
+                    });
+                    var data = {
+                        _id: $scope.website._id,
+                        accountId: $scope.website.accountId,
+                        settings: $scope.website.settings
+                    };
+                });
+
+
+            }
+        };
+
+        $scope.updatePageComponents = function(){
+                var iFrame = document.getElementById("iframe-website");
                 var componentJSON = $scope.currentPage.components;
                 var pageId = $scope.currentPage._id;
 
@@ -1256,71 +1348,21 @@
                     }
                     newComponentOrder.push(matchedComponent);
                 };
-
-
                 $scope.currentPage.components = newComponentOrder;
+        }
+        $scope.saveBlogData = function() {
+            if(!$scope.redirect)
+                $scope.childScope.updateBlogPageData(iFrame);                            
+            $scope.blogposts = $scope.childScope.getAllBlogs();
+            $scope.blogposts.forEach(function(value, index) {
+                var matching_post = _.find($scope.originalBlogPosts, function(item) {
+                    return item._id === value._id
+                })
+                if(!angular.equals(matching_post, value))
+                    WebsiteService.updatePost($scope.currentPage._id, value._id, value, function(data) {});
+            })
+        }
 
-                WebsiteService.getSinglePage($scope.currentPage.websiteId, $scope.currentPage.handle, function(data) {
-                    //TODO: Make this check on change of page title or url in the page settings modal
-                    //TODO: Better way to handle this there should be check on server side itself while saving the page
-                    if(data && data._id)
-                    {
-                        if(data._id !== $scope.currentPage._id)
-                        {
-                            toaster.pop('error', "Page URL " + $scope.currentPage.handle, "Already exists");
-                            return false;
-                        }
-                    }
-                    if ($scope.templateActive) {
-                        $scope.template.config.components = $scope.currentPage.components;
-                        WebsiteService.updateTemplate($scope.template._id, $scope.template, function() {
-                            console.log('success');
-                            toaster.pop('success', "Template Saved", "The " + $scope.currentPage.handle + " template was saved successfully.");
-                        });
-                    }
-
-                    WebsiteService.updatePage($scope.currentPage.websiteId, $scope.currentPage._id, $scope.currentPage, function(data) {
-                        $scope.isEditing = true;
-
-                        WebsiteService.setEditedPageHandle($scope.currentPage.handle);
-                        if (!$scope.redirect)
-                            $scope.autoSavePage();
-                        else
-                            $scope.stopAutoSavePage();
-                        $scope.redirect = false;
-                        if (autoSave)
-                            toaster.pop('success', "Auto Saved", "The " + $scope.currentPage.handle + " page was saved successfully.");
-                        else
-                            toaster.pop('success', "Page Saved", "The " + $scope.currentPage.handle + " page was saved successfully.");
-                        $scope.saveLoading = false;
-
-                        $scope.childScope.saveBlogData(iFrame.contentWindow);
-                        if($scope.originalCurrentPage.handle !== $scope.currentPage.handle)
-                        {
-                            window.location = '/admin/#/website/pages/?pagehandle=' + $scope.currentPage.handle;
-                        }
-                        //Update linked list                        
-                        $scope.website.linkLists.forEach(function(value, index) {
-                          if(value.handle === "head-menu") {
-                            WebsiteService.updateLinkList($scope.website.linkLists[index], $scope.website._id, 'head-menu', function(data) {
-                                console.log('Updated linked list');    
-                            });
-                          }
-                        }); 
-                        setTimeout(function() {
-                            $scope.activateCKEditor();
-                        }, 1000)
-                    });
-                    var data = {
-                        _id: $scope.website._id,
-                        accountId: $scope.website.accountId,
-                        settings: $scope.website.settings
-                    };
-                });
-
-
-            }
-        };
 
         $scope.updateBlogPost = function(post_data)
         {
@@ -1479,33 +1521,18 @@
 
         $scope.addComponent = function(addedType) {
             var pageId = $scope.currentPage._id;
-            if (addedType.type === 'footer') {
-                var footerType = _.findWhere($scope.currentPage.components, {
-                    type: addedType
+            var componentType = null;
+            if (addedType.type === 'footer' || addedType.type === 'navigation' || addedType.type === 'single-post'
+                || addedType.type === 'blog-teaser' || addedType.type === 'blog') {
+                componentType = _.findWhere($scope.currentPage.components, {
+                    type: addedType.type
                 });
-                if (footerType) {
-                    toaster.pop('error', "Footer component already exists");
+                if (componentType) {
+                    toaster.pop('error', componentType.type + " component already exists");
                     return;
                 }
             }
-            if (addedType.type === 'navigation') {
-                var navigationType = _.findWhere($scope.currentPage.components, {
-                    type: addedType
-                });
-                if (navigationType) {
-                    toaster.pop('error', "Navbar header already exists");
-                    return;
-                }
-            }
-            if (addedType.type === 'single-post') {
-                var navigationType = _.findWhere($scope.currentPage.components, {
-                    type: addedType
-                });
-                if (navigationType) {
-                    toaster.pop('error', "Single post component already exists");
-                    return;
-                }
-            }
+            
             $scope.components = $scope.currentPage.components;
 
             var cmpVersion = addedType.version;
@@ -1641,9 +1668,32 @@
                     })
                 }
 
+                if ($scope.componentEditing.type === "contact-us") {
+                    if($scope.componentEditing.hours) {
+                        _.each($scope.componentEditing.hours, function(element, index) {
+                            if(element.day == "Sat" || element.day == "Sun") {
+                                if (element.start == "")
+                                    element.start = "9:00 am";
+                                if (element.end == "")
+                                    element.end = "5:00 pm";
+                                if (!element.start2 || element.start2 == "")
+                                    element.start2 = "9:00 am";
+                                if (!element.end2 || element.end2 == "")
+                                    element.end2 = "9:00 am";
+                            }
+                     });
+                    }
+                }
 
             });
             $scope.originalComponent = angular.copy($scope.componentEditing);
+            $scope.contactHoursInvalid = false;
+            $scope.contactHours = [];
+            
+            for(var i=0; i<=6; i++)
+            {
+                $scope.contactHours.push({ "valid" : true});
+            }
 
             if ($scope.componentEditing) {
                 WebsiteService.getComponentVersions($scope.componentEditing.type, function(versions) {
@@ -2010,12 +2060,14 @@
         var offFn = $rootScope.$on('$locationChangeStart', function(event, newUrl, oldUrl) {
             var isDirty = false;
             var iFrame = document.getElementById("iframe-website");
-            if ($scope.childScope.checkOrSetPageDirty) {
-                var isDirty = $scope.childScope.checkOrSetPageDirty() || $scope.isDirty;
+            if ($scope.childScope && $scope.childScope.checkOrSetPageDirty) {
+                var isDirty = $scope.childScope.checkOrSetPageDirty() || $scope.isDirty;                
             }
 
             if (isDirty && !$scope.changesConfirmed) {
                 event.preventDefault();
+                $scope.updatePageComponents();
+                $scope.childScope.updateBlogPageData(iFrame);
                 SweetAlert.swal({
                         title: "Are you sure?",
                         text: "You have unsaved data that will be lost",
@@ -2032,11 +2084,11 @@
                             SweetAlert.swal("Saved!", "Your edits were saved to the page.", "success");
                             $scope.redirect = true;
                             var pageId = $scope.currentPage._id;
-                            WebsiteService.getPageComponents(pageId, function(components) {
-                                $scope.components = components;
-                                $scope.currentPage.components = components;
+                            //WebsiteService.getPageComponents(pageId, function(components) {
+                              //  $scope.components = components;
+                                //$scope.currentPage.components = components;
                                 $scope.savePage();
-                            });
+                            //});
 
                         } else {
                             SweetAlert.swal("Cancelled", "Your edits were NOT saved.", "error");
@@ -2738,6 +2790,7 @@
             $scope.clickImageButton(editor, false);
         };
 
+       
         /*
          * @getProducts
          * - get a list of products
@@ -2749,12 +2802,108 @@
             _.each(products, function(product) {
                 if (product.tags && product.tags.length > 0) {
                     _.each(product.tags, function(tag) {
-                        $scope.availableProductTags.push(tag);
+                        if($scope.availableProductTags.indexOf(tag) === -1)
+                            $scope.availableProductTags.push(tag);
                     });
                 }
             });
+          $scope.availableProductTagsString = $scope.availableProductTags.join(","); 
           $scope.products = products;
         });
+
+        /*
+         * @validateHours
+         * 
+         */
+
+        $scope.validateHours = function(hours, index)
+        {
+            $scope.contactHours[index].valid = true;
+            if(!hours.closed)
+            {
+                var startTime = hours.start;
+                var endTime = hours.end;
+                if(startTime && endTime)
+                {
+                    startTime = startTime.split(" ")[1] == 'pm' && startTime.split(":")[0] != '12' ? parseInt(startTime.split(":")[0]) + 12 : parseInt(startTime.split(":")[0])
+                    endTime = endTime.split(" ")[1] == 'pm' && endTime.split(":")[0] != '12' ? parseInt(endTime.split(":")[0]) + 12 : parseInt(endTime.split(":")[0])
+                    startTime = parseInt(hours.start.split(":")[1]) == 30 ? startTime + 0.5 : startTime;
+                    endTime = parseInt(hours.end.split(":")[1]) == 30 ? endTime + 0.5 : endTime;    
+                }
+                
+                if(hours.split && $scope.componentEditing.splitHours)
+                {
+                    angular.element("#business_hours_start_"+index).removeClass('has-error');
+                    angular.element("#business_hours_start2_"+index).removeClass('has-error');
+                    angular.element("#business_hours_end_"+index).removeClass('has-error');
+                    var startTime2 = hours.start2;
+                    var endTime2 = hours.end2;
+                    if(startTime2 && endTime2)
+                    {
+                        startTime2 = startTime2.split(" ")[1] == 'pm' && startTime2.split(":")[0] != '12' ? parseInt(startTime2.split(":")[0]) + 12 : parseInt(startTime2.split(":")[0])
+                        endTime2 = endTime2.split(" ")[1] == 'pm' && endTime2.split(":")[0] != '12' ? parseInt(endTime2.split(":")[0]) + 12 : parseInt(endTime2.split(":")[0])
+                        startTime2 = parseInt(hours.start2.split(":")[1]) == 30 ? startTime2 + 0.5 : startTime2;
+                        endTime2 = parseInt(hours.end2.split(":")[1]) == 30 ? endTime2 + 0.5 : endTime2;    
+                    }
+                    
+                    
+                    var msg = ""
+                    if(startTime > endTime || startTime > startTime2 || startTime > endTime2)
+                    {
+                        if(startTime > endTime)
+                        { 
+                            angular.element("#business_hours_start_"+index).addClass('has-error');
+                        }
+                        else if(startTime > startTime2)
+                        {
+                            angular.element("#business_hours_start_"+index).addClass('has-error');
+                        }
+                        else if(startTime > endTime2)
+                        {
+                            angular.element("#business_hours_start_"+index).addClass('has-error');
+                        }
+                        $scope.contactHours[index].valid = false;
+                    }
+                    if(endTime > startTime2 || endTime > endTime2)
+                    {
+                        
+                        if(endTime > startTime2)
+                        {
+                            angular.element("#business_hours_end_"+index).addClass('has-error');
+                        }
+                        else if(endTime > endTime2)
+                        {
+                            angular.element("#business_hours_end_"+index).addClass('has-error');
+                        }
+                        $scope.contactHours[index].valid = false;
+                    }                        
+                    if(startTime2 > endTime2)
+                    {
+                        angular.element("#business_hours_start2_"+index).addClass('has-error');
+                        $scope.contactHours[index].valid = false;
+                    }
+                    
+                }
+                else if(!hours.wholeday)
+                {        
+                    angular.element("#business_hours_start_"+index).removeClass('has-error');            
+                    if(startTime > endTime)
+                    {
+                        angular.element("#business_hours_start_"+index).addClass('has-error');
+                        $scope.contactHours[index].valid = false;
+                    }
+                }
+            }
+
+            var validate = _.where($scope.contactHours, {
+                valid: false
+            });
+            if(validate && validate.length)
+                $scope.contactHoursInvalid = true;
+            else
+                $scope.contactHoursInvalid = false;
+
+        }
 
         /*
          * @numberOfProductOptions

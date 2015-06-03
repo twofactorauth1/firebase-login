@@ -46,7 +46,7 @@ exports.campaign_manager_test = {
 
     testDistinct: function(test) {
         console.log('starting testDistinct');
-        blogPostDao.distinct('post_author', {accountId:6}, $$.m.cms.BlogPost, function(err, value){
+        blogPostDao.distinct('post_author', {accountId:6}, $$.m.BlogPost, function(err, value){
             console.log('error: ', err);
             console.log('value: ', value);
             test.ok(true);

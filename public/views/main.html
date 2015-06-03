@@ -13,11 +13,11 @@
     <div ng-show="isEditing ? true : isLoaded">
         <ul as-sortable="sortableOptions" class="ui-sortable" style="list-style: none;padding: 0;" ng-model="currentcomponents">
         <li ng-repeat="component in currentcomponents" as-sortable-item class="fragment {{transitionState}}"  style="position: relative;">
-            <div class="componentActions" ng-class="{'masthead-actions':component.type == 'masthead' && component.bg.img.undernav}" as-sortable-item-handle>
+            <div class="componentActions" ng-class="{'masthead-actions':component.type == 'masthead'}" as-sortable-item-handle>
                 <span class="reorder fa fa-arrows"><p>Reorder</p></span>
                 <h4 class="pull-left">{{component.type | cleanType}}</h4>
                 <span class="delete delete-component fa fa-trash" data-id="{{component._id}}" ng-if="component.type != 'footer' && component.type != 'single-post'"><p>Delete</p></span>
-                <span class="duplicate fa fa-copy" data-index = "{{$index + 1}}" data-id="{{component._id}}" ng-if="component.type != 'footer' && component.type != 'navigation' && component.type != 'single-post'"><p>Duplicate</p></span>
+                <span class="duplicate fa fa-copy" data-index = "{{$index + 1}}" data-id="{{component._id}}" ng-if="component.type != 'footer' && component.type != 'navigation' && component.type != 'single-post'  && component.type != 'blog' && component.type != 'blog-teaser'"><p>Duplicate</p></span>
                 <span class="settings fa fa-cog" data-id="{{component._id}}" ng-if="component.type != 'footer'"><p>Settings</p></span>
             </div>
             <div ng-include="'/components/component-wrap.html'"></div>
@@ -29,7 +29,7 @@
                 </a>
             </div>
         </li>
-        <li ng-if="currentpage && currentpage.components && currentpage.components.length===0" class="no-component">
+        <li ng-if="!currentpage.components || currentpage.components.length == 0 " class="no-component">
             <div class="well empty-page">
                 <h1 class="center">This Page is Empty.</h1>
                 <h4 class="center">Add some components and start editing!</h4>

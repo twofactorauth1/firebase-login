@@ -282,8 +282,41 @@ app.controller('DashboardCtrl', ["$scope", "OrderService", "CustomerService", "C
     start: new Date(),
     end: new Date()
   };
+
+  $scope.activityTypes = [];
+
+  contactConstant.customer_activity_types.dp.forEach(function(value, index) {
+    $scope.activityTypes.push(value.label);
+  });
+
+  $scope.updateActivityTypeFn = function(selection) {
+      var activity_hash = _.findWhere(contactConstant.customer_activity_types.dp, {
+          label: selection
+      });
+      if(activity_hash)
+          $scope.newActivity.activityType = activity_hash.data;
+  };
+
   //$scope.all_activities = angular.copy($scope.activities);
   $scope.addActivityFn = function () {
+    angular.element("#activity_type .error").html("");
+      angular.element("#activity_type .error").removeClass('has-error');
+      var activity_type = angular.element("#activity_type input").val();
+      var activity_hash = _.findWhere(contactConstant.customer_activity_types.dp, {
+          label: activity_type
+      });
+      if(!activity_type)
+      {
+         angular.element("#activity_type .error").html("Activity Type Required");
+         angular.element("#activity_type .error").addClass('has-error');
+         return;
+      }
+      if(!activity_hash)
+      {
+          $scope.newActivity.activityType = activity_type;
+      }else
+          $scope.newActivity.activityType = activity_hash.data;
+
     CustomerService.postCustomerActivity($scope.newActivity, function (activity) {
       $scope.activities.push(activity);
       $scope.activities = _.sortBy($scope.activities, function (o) {

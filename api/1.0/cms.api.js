@@ -101,6 +101,8 @@ _.extend(api.prototype, baseApi.prototype, {
         app.post(this.url('page/:id/blog'), this.isAuthAndSubscribedApi.bind(this), this.createBlogPost.bind(this));
         app.get(this.url('page/:id/blog'), this.setup.bind(this), this.listBlogPostsByPageId.bind(this));
         app.get(this.url('blog'), this.setup.bind(this), this.listBlogPosts.bind(this));
+        app.get(this.url('editor/blog'), this.isAuthAndSubscribedApi.bind(this), this.listAllBlogPosts.bind(this));
+        app.get(this.url('editor/blog/:postId'), this.isAuthAndSubscribedApi.bind(this), this.getEditableBlogPost.bind(this));
         app.get(this.url('website/:id/page/blog/:title'), this.setup.bind(this), this.getBlogPostByTitle.bind(this));
         app.get(this.url('page/:id/blog/:postId'), this.setup.bind(this), this.getBlogPost.bind(this));
         app.post(this.url('page/:id/blog/:postId'), this.isAuthAndSubscribedApi.bind(this), this.updateBlogPost.bind(this));
@@ -766,16 +768,15 @@ _.extend(api.prototype, baseApi.prototype, {
             if (isAllowed !== true) {
                 return self.send403(req);
             } else {
-                var themeId = req.params.id;
+                var templateId = req.params.id;
                 var accountId = parseInt(self.accountId(req));
-                var themeObj = new $$.m.cms.Theme(req.body);
-                themeObj.attributes.modified.by = self.userId(req);
-                themeObj.attributes.modified.date = new Date();
-                themeObj.set('_id', themeId);
+                var templateObj = new $$.m.cms.Template(req.body);
+                templateObj.attributes.modified.by = self.userId(req);
+                templateObj.attributes.modified.date = new Date();
+                templateObj.set('_id', templateId);
 
-                self.log.debug('themeObj ', themeObj);
-
-                cmsManager.updateTemplate(themeObj, function(err, value){
+                self.log.debug('templateObj ', templateObj);
+                cmsManager.updateTemplate(templateObj, function(err, value){
                     self.log.debug('<< updateTemplate ', value.components);
                     self.sendResultOrError(res, err, value, 'Error updating template.');
 
@@ -1187,7 +1188,7 @@ _.extend(api.prototype, baseApi.prototype, {
     },
 
     /**
-     * The method may be called by unauthenticated user.  No security is needed.
+     * The method may be called by unauthenticated user.  No security is needed. It will only return 'PUBLISHED' posts.
      * @param req
      * @param res
      */
@@ -1198,20 +1199,43 @@ _.extend(api.prototype, baseApi.prototype, {
         var accountId = parseInt(self.accountId(req));
         var blogPostId = req.params.postId;
         self.log.debug('Account ID: ' + accountId + ' Blog Post ID: ' + blogPostId);
-        cmsManager.getBlogPost(accountId, blogPostId, function (err, value) {
+
+        /*
+         * If the request is from a logged in user, return posts in PRIVATE status as well as PUB
+         */
+        var statusAry = [$$.m.BlogPost.status.PUBLISHED];
+        if(self.userId(req) !== null) {
+            statusAry.push($$.m.BlogPost.status.PRIVATE);
+        }
+
+        cmsManager.getBlogPost(accountId, blogPostId, statusAry, function (err, value) {
             self.log.debug('<< getBlogPost');
             self.sendResultOrError(res, err, value, "Error getting Blog Post");
             self = null;
         });
     },
 
+    /**
+     * The method may be called by unauthenticated user.  No security is needed. It will only return 'PUBLISHED' posts.
+     * @param req
+     * @param res
+     */
     getBlogPostByTitle: function(req, resp) {
         var self = this;
         self.log.debug('>> getBlogPostByTitle');
         var accountId = parseInt(self.accountId(req));
         var blogPostTitle = req.params.title;
 
-        cmsManager.getBlogPostByUrl(accountId, blogPostTitle, function(err, value){
+        /*
+         * If the request is from a logged in user, return posts in PRIVATE status as well as PUB
+         */
+        var statusAry = [$$.m.BlogPost.status.PUBLISHED];
+        if(self.userId(req) !== null) {
+            statusAry.push($$.m.BlogPost.status.PRIVATE);
+        }
+
+
+        cmsManager.getBlogPostByUrl(accountId, blogPostTitle, statusAry, function(err, value){
             self.log.debug('<< getBlogPostByTitle');
             self.sendResultOrError(resp, err, value, "Error getting Blog Post");
             self = null;
@@ -1281,7 +1305,7 @@ _.extend(api.prototype, baseApi.prototype, {
     },
 
     /**
-     * This method may be called by unauthenticated users.  No security is needed.
+     * This method may be called by unauthenticated users.  No security is needed.  It will only return 'PUBLISHED' posts.
      * @param req
      * @param res
      */
@@ -1291,24 +1315,89 @@ _.extend(api.prototype, baseApi.prototype, {
         var accountId = parseInt(self.accountId(req));
         var limit = parseInt(req.query['limit'] || 0);//suitable default?
         var skip = parseInt(req.query['skip'] || 0);//TODO: use skip for paging
+
+        /*
+         * If the request is from a logged in user, return posts in PRIVATE status as well as PUB
+         */
+        var statusAry = [$$.m.BlogPost.status.PUBLISHED];
+        if(self.userId(req) !== null) {
+            statusAry.push($$.m.BlogPost.status.PRIVATE);
+            //For now, we will add future and draft.  Once the frontend is decoupled from backend, this needs to be removed.
+            statusAry.push($$.m.BlogPost.status.DRAFT);
+            statusAry.push($$.m.BlogPost.status.FUTURE);
+        }
+
         if(req.query['limit']) {
-                cmsManager.listBlogPostsWithLimit(accountId, limit, skip, function (err, value) {
+                cmsManager.listBlogPostsWithLimit(accountId, limit, skip, statusAry, function (err, value) {
                     self.log.debug('<< listBlogPostsWithLimit '+ value);
                     self.sendResultOrError(res, err, value, "Error listing Blog Posts");
                     self = null;
                 });
         } else{
-            cmsManager.listBlogPosts(accountId, limit, function (err, value) {
-            self.log.debug('<< listBlogPosts '+ value);
-            self.sendResultOrError(res, err, value, "Error listing Blog Posts");
-            self = null;
-        });
+            cmsManager.listBlogPosts(accountId, limit, statusAry, function (err, value) {
+                self.log.debug('<< listBlogPosts '+ value);
+                self.sendResultOrError(res, err, value, "Error listing Blog Posts");
+                self = null;
+            });
         }
 
     },
 
     /**
-     * This method may be called by unauthenticated users.  No security is needed.
+     * This method is called by the admin for authenticated users.
+     * @param req
+     * @param res
+     */
+    listAllBlogPosts: function(req, res) {
+        var self = this;
+        self.log.debug('>> listAllBlogPosts');
+        var accountId = parseInt(self.accountId(req));
+        var limit = parseInt(req.query['limit'] || 0);
+        var skip = parseInt(req.query['skip'] || 0);
+        var statusAry = $$.m.BlogPost.allStatus;
+
+        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(req);
+            } else {
+                cmsManager.listBlogPostsWithLimit(accountId, limit, skip, statusAry, function (err, value) {
+                    self.log.debug('<< listAllBlogPosts');
+                    self.sendResultOrError(res, err, value, "Error listing All Blog Posts");
+                    self = null;
+                });
+            }
+        });
+    },
+
+    /**
+     * This method is called by the admin for authenticated users.
+     * @param req
+     * @param res
+     */
+    getEditableBlogPost: function(req, res) {
+
+        var self = this;
+        self.log.debug('>> getEditableBlogPost');
+        var accountId = parseInt(self.accountId(req));
+        var blogPostId = req.params.postId;
+        var statusAry = $$.m.BlogPost.allStatus;
+
+        self.checkPermissionForAccount(req, self.sc.privs.VIEW_WEBSITE, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(req);
+            } else {
+                cmsManager.getBlogPost(accountId, blogPostId, statusAry, function (err, value) {
+                    self.log.debug('<< getEditableBlogPost');
+                    self.sendResultOrError(res, err, value, "Error getting Blog Post");
+                    self = null;
+                });
+            }
+        });
+
+    },
+
+    /**
+     * This method may be called by unauthenticated users.  No security is needed. It will only return 'PUBLISHED posts.
      * @param req
      * @param res
      */
@@ -1319,7 +1408,15 @@ _.extend(api.prototype, baseApi.prototype, {
         var limit = parseInt(req.query['limit'] || 0); //suitable default?
         var skip = parseInt(req.query['skip'] || 0);   //TODO: use skip for paging
 
-        cmsManager.listBlogPostsByPageId(pageId, limit, function (err, value) {
+        /*
+         * If the request is from a logged in user, return posts in PRIVATE status as well as PUB
+         */
+        var statusAry = [$$.m.BlogPost.status.PUBLISHED];
+        if(self.userId(req) !== null) {
+            statusAry.push($$.m.BlogPost.status.PRIVATE);
+        }
+
+        cmsManager.listBlogPostsByPageId(pageId, limit, statusAry, function (err, value) {
             self.log.debug('<< listBlogPostsByPageId ' + value);
             self.sendResultOrError(res, err, value, "Error listing Blog Posts");
             self = null;
@@ -1327,7 +1424,7 @@ _.extend(api.prototype, baseApi.prototype, {
     },
 
     /**
-     * This method may be called by unauthenticated users.  No security is needed.
+     * This method may be called by unauthenticated users.  No security is needed.  It will only return PUBLISHED posts.
      * @param req
      * @param res
      */
@@ -1338,7 +1435,15 @@ _.extend(api.prototype, baseApi.prototype, {
         var accountId = parseInt(self.accountId(req));
         var author = req.params.author;
 
-        cmsManager.getPostsByAuthor(accountId, author, function (err, value) {
+        /*
+         * If the request is from a logged in user, return posts in PRIVATE status as well as PUB
+         */
+        var statusAry = [$$.m.BlogPost.status.PUBLISHED];
+        if(self.userId(req) !== null) {
+            statusAry.push($$.m.BlogPost.status.PRIVATE);
+        }
+
+        cmsManager.getPostsByAuthor(accountId, author, statusAry, function (err, value) {
             self.log.debug('<< getPostsByAuthor');
             self.sendResultOrError(res, err, value, "Error getting Blog Posts by author");
             self = null;
@@ -1347,7 +1452,7 @@ _.extend(api.prototype, baseApi.prototype, {
     },
 
     /**
-     * This method may be called by unauthenticated users.  No security is needed.
+     * This method may be called by unauthenticated users.  No security is needed.  It will only return PUBLISHED posts.
      * @param req
      * @param res
      */
@@ -1358,7 +1463,16 @@ _.extend(api.prototype, baseApi.prototype, {
         var accountId = parseInt(self.accountId(req));
         var title = req.params.title;
 
-        cmsManager.getPostsByTitle(accountId, title, function (err, value) {
+        /*
+         * If the request is from a logged in user, return posts in PRIVATE status as well as PUB
+         */
+        var statusAry = [$$.m.BlogPost.status.PUBLISHED];
+        if(self.userId(req) !== null) {
+            statusAry.push($$.m.BlogPost.status.PRIVATE);
+        }
+
+
+        cmsManager.getPostsByTitle(accountId, title, statusAry, function (err, value) {
             self.log.debug('<< getPostsByTitle');
             self.sendResultOrError(res, err, value, "Error getting Blog Posts by title");
             self = null;
@@ -1366,7 +1480,7 @@ _.extend(api.prototype, baseApi.prototype, {
     },
 
     /**
-     * This method may be called by unauthenticated users.  No security is needed.
+     * This method may be called by unauthenticated users.  No security is needed.  It will only return PUBLISHED posts.
      * @param req
      * @param res
      */
@@ -1377,7 +1491,15 @@ _.extend(api.prototype, baseApi.prototype, {
         var accountId = parseInt(self.accountId(req));
         var content = req.params.content;
 
-        cmsManager.getPostsByData(accountId, content, function (err, value) {
+        /*
+         * If the request is from a logged in user, return posts in PRIVATE status as well as PUB
+         */
+        var statusAry = [$$.m.BlogPost.status.PUBLISHED];
+        if(self.userId(req) !== null) {
+            statusAry.push($$.m.BlogPost.status.PRIVATE);
+        }
+
+        cmsManager.getPostsByData(accountId, content, statusAry, function (err, value) {
             self.log.debug('<< getPostsByContent');
             self.sendResultOrError(res, err, value, "Error getting Blog Posts by content");
             self = null;
@@ -1385,7 +1507,7 @@ _.extend(api.prototype, baseApi.prototype, {
     },
 
     /**
-     * This method may be called by unauthenticated users.  No security is needed.
+     * This method may be called by unauthenticated users.  No security is needed.  It will only return PUBLISHED posts.
      * @param req
      * @param res
      */
@@ -1395,8 +1517,16 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> getPostsByCategory');
         var accountId = parseInt(self.accountId(req));
         var category = req.params.category;
+        /*
+         * If the request is from a logged in user, return posts in PRIVATE status as well as PUB
+         */
+        var statusAry = [$$.m.BlogPost.status.PUBLISHED];
+        if(self.userId(req) !== null) {
+            statusAry.push($$.m.BlogPost.status.PRIVATE);
+        }
 
-        cmsManager.getPostsByCategory(accountId, category, function (err, value) {
+
+        cmsManager.getPostsByCategory(accountId, category, statusAry, function (err, value) {
             self.log.debug('<< getPostsByCategory');
             self.sendResultOrError(res, err, value, "Error getting Blog Posts by category");
             self = null;
@@ -1404,7 +1534,7 @@ _.extend(api.prototype, baseApi.prototype, {
     },
 
     /**
-     * This method may be called by unauthenticated users.  No security is needed.
+     * This method may be called by unauthenticated users.  No security is needed.  It will only return PUBLISHED posts.
      * @param req
      * @param res
      */
@@ -1414,8 +1544,15 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> getPostsByTag');
         var accountId = parseInt(self.accountId(req));
         var tag = req.params.tag;
+        /*
+         * If the request is from a logged in user, return posts in PRIVATE status as well as PUB
+         */
+        var statusAry = [$$.m.BlogPost.status.PUBLISHED];
+        if(self.userId(req) !== null) {
+            statusAry.push($$.m.BlogPost.status.PRIVATE);
+        }
 
-        cmsManager.getPostsByTag(accountId, [tag], function (err, value) {
+        cmsManager.getPostsByTag(accountId, [tag], statusAry, function (err, value) {
             self.log.debug('<< getPostsByTag');
             self.sendResultOrError(res, err, value, "Error getting Blog Posts by tag");
             self = null;

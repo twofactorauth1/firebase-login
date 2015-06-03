@@ -376,7 +376,7 @@ module.exports.group = {
 
         $.when(p1).done(function(){
             //verify order; modify order; verify order
-            cmsManager.listPostIdsByPage(accountId, testPageId, function(err, posts){
+            cmsManager.listPostIdsByPage(accountId, testPageId, null, function(err, posts){
                 if(err) {
                     test.ok(false, 'Error in testReorderBlogPost verifying post order.');
                     test.done();
@@ -393,7 +393,7 @@ module.exports.group = {
                         test.done();
                     }
 
-                    cmsManager.listPostIdsByPage(accountId, testPageId, function(err, posts){
+                    cmsManager.listPostIdsByPage(accountId, testPageId, null, function(err, posts){
                         if(err) {
                             test.ok(false, 'Error in testReorderBlogPost verifying post order.');
                             test.done();

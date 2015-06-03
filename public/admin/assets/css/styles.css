@@ -50,6 +50,54 @@
 
 */
 /* Mixin */
+.mb0 {
+  margin-bottom: 0px!important;
+}
+.mb5 {
+  margin-bottom: 5px;
+}
+.mb10 {
+  margin-bottom: 10px;
+}
+.mb15 {
+  margin-bottom: 15px;
+}
+.mb20 {
+  margin-bottom: 20px;
+}
+.mb25 {
+  margin-bottom: 25px;
+}
+.mb30 {
+  margin-bottom: 30px;
+}
+.mb35 {
+  margin-bottom: 35px;
+}
+.mb40 {
+  margin-bottom: 40px;
+}
+.mb45 {
+  margin-bottom: 45px;
+}
+.mr5 {
+  margin-right: 5px;
+}
+.mr10 {
+  margin-right: 10px;
+}
+.mr20 {
+  margin-right: 20px;
+}
+.mr30 {
+  margin-right: 30px;
+}
+.mt5 {
+  margin-top: 5px;
+}
+.mt10 {
+  margin-top: 10px;
+}
 /* ---------------------------------------------------------------------- */
 /*  Basic Elements & Classes
 /* ---------------------------------------------------------------------- */
@@ -2378,6 +2426,9 @@ ul.sub-menu li ul.sub-menu li ul.sub-menu li a {
 .height-330 {
   height: 330px !important;
 }
+.height-340 {
+  height: 330px !important;
+}
 .height-350 {
   height: 350px !important;
 }
@@ -2893,6 +2944,9 @@ a.text-light:hover {
   /* HP Printers */
   word-wrap: break-word;
   /* IE 5+ */
+}
+.cursor-pointer {
+  cursor: pointer;
 }
 /* ---------------------------------------------------------------------- */
 /* Dropdown Menu
@@ -12068,6 +12122,58 @@ table.grid thead th {
 [date-picker] .disabled.now {
   color: #ffffff !important;
 }
+.indigeweb-skeuocard input {
+  color: #007fbc;
+  font-size: 14px;
+  color: #555;
+  background-color: #fff;
+  background-image: none;
+  border: 1px solid #ccc!important;
+  border-radius: 6px !important;
+  padding: 10px 16px;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  -webkit-transition: border-color ease-in-out 0.15s, -webkit-box-shadow ease-in-out 0.15s;
+  -o-transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+  transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+}
+.indigeweb-skeuocard input:focus {
+  border: 1px solid #4bafca !important;
+  -webkit-box-shadow: 0px 0px 0 3px #e0f1fc !important;
+  -moz-box-shadow: 0px 0px 0 3px #e0f1fc!important;
+  box-shadow: 0px 0px 0 3px #e0f1fc!important;
+}
+.indigeweb-skeuocard .has-success .form-control {
+  border-color: #2ecc71 !important;
+}
+.indigeweb-skeuocard .has-success .glyphicon {
+  color: #2ecc71;
+}
+.indigeweb-skeuocard .has-error .form-control {
+  border-color: #e74c3c !important;
+}
+.indigeweb-skeuocard .has-error .glyphicon {
+  color: #e74c3c;
+}
+.indigeweb-skeuocard .has-error .help-block {
+  color: #e74c3c;
+}
+.indigeweb-skeuocard ::-webkit-input-placeholder {
+  color: #cdcdcd;
+}
+.indigeweb-skeuocard :-moz-placeholder {
+  color: #cdcdcd;
+}
+.indigeweb-skeuocard ::-moz-placeholder {
+  color: #cdcdcd;
+}
+.indigeweb-skeuocard :-ms-input-placeholder {
+  color: #cdcdcd;
+}
+.indigeweb-skeuocard .form-control-feedback {
+  position: absolute;
+  right: 8px;
+}
 /* ---------------------------------------------------------------------- */
 /*  Getting Started
 /* ---------------------------------------------------------------------- */
@@ -12123,8 +12229,23 @@ table.grid thead th {
 .customer-detail .no-location {
   line-height: 155px;
 }
+.customer-detail .notes {
+  padding: 0;
+  margin-bottom: 0;
+}
+.customer-detail .notes li {
+  display: block;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+  padding: 10px;
+}
+.customer-detail .notes li:last-child {
+  border-bottom: none;
+}
 .side-margin {
   margin: 5px;
+}
+.autocomplete ul {
+  padding: 0px;
 }
 /* ---------------------------------------------------------------------- */
 /*  Order Detail
@@ -12246,6 +12367,10 @@ table.grid tbody td strong {
   table.grid tbody tr {
     width: 24%!important;
   }
+}
+.table > tfoot > tr > td {
+  padding: 0;
+  border: 0;
 }
 .as-sortable-drag {
   opacity: .8;
@@ -12645,6 +12770,9 @@ fieldset[disabled] .btn-vimeo-square.active {
 }
 .customers table.grid thead th {
   width: 11.1%;
+}
+.ui-select-multiple.ui-select-bootstrap input.ui-select-search:not([placeholder='']) {
+  max-width: 100% !important;
 }
 /* ---------------------------------------------------------------------- */
 /*  Orders
@@ -13169,4 +13297,10 @@ tags-input.ti-input-sm .tags .input,
 }
 .product-detail #variation-manager #panel4 .panel-body {
   border-top: 1px solid #eee;
+}
+/* ---------------------------------------------------------------------- */
+/*  Integrations
+/* ---------------------------------------------------------------------- */
+.integrations .integration-avatar {
+  min-height: 35px;
 }

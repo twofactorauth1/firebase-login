@@ -1,8 +1,8 @@
 'use strict';
 /*global mainApp, moment, angular, cartData*/
 /*jslint unparam:true*/
-mainApp.controller('ProductsComponentCtrl', ['$scope', 'productService', 'userService', 'orderService', 'paymentService', 'cartService', 'accountService',
-  function ($scope, ProductService, UserService, OrderService, PaymentService, cartService, AccountService) {
+mainApp.controller('ProductsComponentCtrl', ['$scope', 'productService', 'userService', 'orderService', 'paymentService', 'cartService', 'accountService','$filter',
+  function ($scope, ProductService, UserService, OrderService, PaymentService, cartService, AccountService, $filter) {
     $scope.checkoutModalState = 1;
 
     /*
@@ -12,8 +12,10 @@ mainApp.controller('ProductsComponentCtrl', ['$scope', 'productService', 'userSe
 
     ProductService.getAllProducts(function (data) {
       $scope.products = data;
+      //$scope.products = $filter('selectedTags')($scope.products,$scope.component.productTags);
     });
 
+    
     /*
      * @getTax
      * -

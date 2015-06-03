@@ -10,6 +10,54 @@
 
 */
 /* Mixin */
+.mb0 {
+  margin-bottom: 0px!important;
+}
+.mb5 {
+  margin-bottom: 5px;
+}
+.mb10 {
+  margin-bottom: 10px;
+}
+.mb15 {
+  margin-bottom: 15px;
+}
+.mb20 {
+  margin-bottom: 20px;
+}
+.mb25 {
+  margin-bottom: 25px;
+}
+.mb30 {
+  margin-bottom: 30px;
+}
+.mb35 {
+  margin-bottom: 35px;
+}
+.mb40 {
+  margin-bottom: 40px;
+}
+.mb45 {
+  margin-bottom: 45px;
+}
+.mr5 {
+  margin-right: 5px;
+}
+.mr10 {
+  margin-right: 10px;
+}
+.mr20 {
+  margin-right: 20px;
+}
+.mr30 {
+  margin-right: 30px;
+}
+.mt5 {
+  margin-top: 5px;
+}
+.mt10 {
+  margin-top: 10px;
+}
 hr {
   margin-top: 20px;
   margin-bottom: 20px;
@@ -364,6 +412,10 @@ ol.circles-list > li:before {
 .cke_widget_inline img {
   max-width: 100%;
 }
+.editable h1,
+.editable h2 {
+  margin-top: 0px;
+}
 .accordion-v1 .title {
   text-align: center;
   margin-bottom: 20px;
@@ -408,7 +460,7 @@ div[data-type='campaign'] .inner-page .overlay {
 }
 .contact-us-v1 .widget-weather .temp {
   background: rgba(0, 0, 0, 0.5);
-  padding: 5px !important;
+  padding: 15px !important;
   height: 218px;
 }
 .contact-us-v1 .widget-weather .temp span {
@@ -578,6 +630,9 @@ div[data-type='campaign'] .inner-page .overlay {
 .feature-list-v1 div[data-class="feature-list"] {
   background: url('../assets/images/indimain/wave-bg.jpg');
   background-size: 15% auto;
+}
+div[data-type="feature-list"] .inner-page {
+  padding: 30px 0;
 }
 @media screen and (max-width: 1024px) {
   div[data-type="feature-list"] .inner-page {
@@ -899,9 +954,6 @@ ul.nav {
   min-height: 85px;
   min-width: 85px;
 }
-.navigation-v1 .navigation-logo img {
-  max-height: 70px;
-}
 .navigation1 {
   position: relative;
   z-index: 5;
@@ -912,6 +964,7 @@ ul.nav {
 .navigation-v2 .navbar {
   border: none!important;
   background: none;
+  box-shadow: none;
 }
 .navigation-v2 .navbar .navbar-header {
   float: none;
@@ -966,7 +1019,6 @@ ul.nav {
 .navigation-v2 .navbar .navbar-brand img {
   margin: 0 auto;
   display: block;
-  max-height: 110px;
 }
 @media (max-width: 625px) {
   .navigation-v2 .navbar .navbar-brand img {
@@ -1012,6 +1064,9 @@ ul.nav {
 .navigation-v3 .navbar li {
   min-height: 125px;
 }
+.navigation-v3 .navbar .container {
+  width: 100%;
+}
 .navigation-v3 .navbar .nav > li > a {
   float: none;
   padding: 10px 20px 10px;
@@ -1026,9 +1081,6 @@ ul.nav {
   -ms-transition: all 0.4s;
   -o-transition: all 0.4s;
   transition: all 0.4s;
-}
-.navigation-v3 .navigation-logo img {
-  max-height: 105px;
 }
 .navigation1 {
   position: relative;
@@ -2174,6 +2226,7 @@ div[data-class='image-text'] p {
   margin: 0;
   padding: 0;
   border: 0;
+  border: 1px solid #eeeeee;
 }
 .simple-form-v1 .btn .fa,
 .simple-form-v1 input .fa {
@@ -2244,7 +2297,8 @@ div[data-class='image-text'] p {
   font-size: 28px;
   margin-top: 10px;
 }
-.simple-form-v2 input {
+.simple-form-v2 input,
+.simple-form-v2 textarea {
   width: 100%;
   text-indent: 10px;
 }
@@ -2259,7 +2313,6 @@ div[data-class='image-text'] p {
   height: 50px;
   margin: 0;
   padding: 0;
-  border: 0;
 }
 .simple-form-v2 .btn {
   text-transform: uppercase;
@@ -2703,10 +2756,6 @@ div[data-class='image-text'] p {
 }
 .blog-teaser-v1 .label-info {
   margin-right: 5px;
-}
-.blog-teaser-v1 .title {
-  text-align: center;
-  font-weight: bold;
 }
 .blog-teaser-v1 .single-blog {
   min-height: 380px;
@@ -3756,7 +3805,6 @@ div[data-type=blog] .container {
 .payment-form-v1 .account-info-signup .has-feedback .form-control-feedback,
 .payment-form-v1 .payment-signup .has-feedback .form-control-feedback {
   position: absolute;
-  top: 8px;
   right: 8px;
 }
 .payment-form-v1 .price-signup {
@@ -4785,20 +4833,15 @@ fieldset[disabled] .btn-vimeo-square.active {
   visibility: visible;
   width: auto;
 }
-@media (max-width: 768px) {
-  #editor-toolbar .cke_chrome a.cke_button {
-    height: 30px;
-    width: 25px;
-  }
-  #editor-toolbar .cke_chrome a.cke_button .cke_button_icon {
-    line-height: 30px;
-  }
-  #editor-toolbar .cke_chrome .cke_combo_button {
-    height: 35px;
-  }
-  #editor-toolbar .cke_toolbar {
-    float: none;
-  }
+#editor-toolbar .cke_chrome div.cke_combopanel__fontsize {
+  max-width: 120px;
+}
+#editor-toolbar .cke_chrome div.cke_combopanel__lineheight {
+  max-width: 110px;
+}
+#editor-toolbar .cke_inner {
+  display: inline-block;
+  background: #efa022;
 }
 .componentActions {
   position: absolute;
@@ -5496,6 +5539,9 @@ fieldset[disabled] .btn-vimeo-square.active {
 .height-330 {
   height: 330px !important;
 }
+.height-340 {
+  height: 330px !important;
+}
 .height-350 {
   height: 350px !important;
 }
@@ -6011,4 +6057,7 @@ a.text-light:hover {
   /* HP Printers */
   word-wrap: break-word;
   /* IE 5+ */
+}
+.cursor-pointer {
+  cursor: pointer;
 }

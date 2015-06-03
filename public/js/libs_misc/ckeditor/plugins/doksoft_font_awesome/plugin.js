@@ -106,7 +106,7 @@
 				var H = l.document.$;					
 				CKEDITOR.dtd.$removeEmpty["span"] = false;
 				if (f == 0) {
-					n("http://netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css", true);
+					n("../../js/libs/font-awesome/css/font-awesome.min.css", true);
 				}
 				x(z + "jscolor/jscolor.js", true);				
 			});

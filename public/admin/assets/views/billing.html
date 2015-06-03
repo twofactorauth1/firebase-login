@@ -1,4 +1,5 @@
 <div ng-controller="BillingCtrl" class="billing">
+    <indig-onboarding min-requirements="minRequirements"></indig-onboarding>
     <!-- start: PAGE TITLE -->
     <section id="page-title" class="padding-top-15 padding-bottom-15">
         <div class="row">
@@ -43,13 +44,14 @@
                 </div>
             </div>
             <div class="panel-body">
-                <div class="pricing-table pricing-blue">
+                <div class="pricing-table pricing-blue" ng-show="subscription">
                     <ul class="plan plan2">
                         <li class="plan-name">
-                            All Inclusive
+                            {{subscription.plan.name || 'All Inclusive' }}
                         </li>
+
                         <li class="plan-price">
-                            <h3> $49 <span class="price-cents">95</span><span class="price-month">/month</span></h3>
+                            <h3 class="center"> <i class="fa fa-usd fa-1"></i>{{subscription.plan.amount ? (subscription.plan.amount/100).toFixed(2) : 49}}<span class="price-cents"></span><span> /{{subscription.plan.interval || 'Month'}}</span></h3>
                         </li>
                         <li>
                             <strong>Customer</strong> Relationship Manager
@@ -90,10 +92,11 @@
                             <td>{{invoice.date * 1000 | date : 'longDate'}}</td>
                             <td>${{(invoice.total/100).toFixed( 2 )}}</td>
                             <!--<td>Visa - 8943</td>-->
-                            <td ng-show="invoice.paid">PAID</td>
+                            <td ng-show="invoice.paid && invoice.total/100 <= 0">NO CHARGE</td>
+                            <td ng-show="invoice.paid && invoice.total/100 > 0">PAID</td>
                             <td ng-hide="invoice.paid">NOT PAID</td>
                             <td class="table-action">
-                                <a href="" ng-click="changeInvoice(invoice); openModal('view-transaction-modal')"><i class="fa fa-eye"></i>
+                                <a href="" ng-click="changeInvoice(invoice, $index); openModal('view-transaction-modal')"><i class="fa fa-eye"></i>
                                             </a>
                             </td>
                         </tr>
@@ -108,7 +111,7 @@
                 <span aria-hidden="true">&times;</span>
                 <span class="sr-only">Close</span>
             </button>
-            <h3 class="modal-title">Transaction #{{selectedInvoice.id}}</h3>
+            <h3 class="modal-title">Transaction #{{selectedItemIndex + 1}}</h3>
         </div>
         <div class="modal-body view-transaction-modal">
             <img src="../admin/assets/images/paid-in-full.png" class="center paid" width="100" />

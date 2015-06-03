@@ -47,7 +47,8 @@
                             </div>
 
                             <div class="col-sm-3 col-md-3 col-lg-2 col-xs-6 center">
-                                <button type="button" ng-disabled="!iframeLoaded" ng-click="savePage()" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-save btn-o">
+                                <button type="button" ng-disabled="!iframeLoaded || saveLoading" ng-click="savePage()" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-save btn-o">
+                                    <span class="fa fa-spinner fa-spin" ng-if="saveLoading"></span>
                                     <span>Save</span>
                                 </button>
                                 <div class="hidden-lg margin-bottom-10"></div>

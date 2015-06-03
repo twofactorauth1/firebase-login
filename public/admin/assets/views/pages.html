@@ -1,4 +1,5 @@
 <div ng-controller="PagesCtrl" class="pages">
+    <indig-onboarding min-requirements="minRequirements"></indig-onboarding>
     <!-- start: PAGE TITLE -->
     <section id="page-title" class="padding-top-15 padding-bottom-15">
         <div class="row">
@@ -109,8 +110,14 @@
                                 <td class="hidden-xs" ng-class="{'center': tableView != 'grid'}"><strong>Modified: </strong>{{page.modified.date | date:'MMM d yy'}}</td>
                             </tr>
                         </tbody>
+                        <tfoot>
+                        <tr>
+                            <td class="text-center" st-pagination="" st-displayed-pages="showPages" st-items-by-page="itemPerPage" colspan="6">
+                            </td>
+                        </tr>
+                        </tfoot>
                     </table>
-                    <div class="load1 csspinner height-400" ng-show="!displayedPages"></div>
+                    <div class="load1 csspinner height-400" ng-show="!displayPages"></div>
                 </div>
             </div>
         </div>
@@ -215,12 +222,12 @@
                 <div class="col-xs-7">
                     <div class="form-group" ng-class="{ 'has-error': titleError}">
                         <label for="new-page-title" tooltip-placement="bottom" tooltip="Provide the title of the page you want to create">Page Title</label>
-                        <input id="new-page-title" class="form-control input-lg" type="text" ng-model="createpage.title" ng-change="validateCreatePage(createpage)">
+                        <input id="new-page-title" class="form-control input-lg" type="text" ng-model="createpage.title" ng-change="slugifyHandle(createpage.title)">
                     </div>
                     <div class="form-group" ng-class="{ 'has-error': handleError}" ng-show="showChangeURL">
                         <slug from="createpage.title" to="createpage.handle"></slug>
                         <label for="new-page-url" class="tooltips" tooltip-placement="bottom" tooltip="Modify the url where your page will be reached">Page Url</label>
-                        <input id="new-page-url" class="form-control" type="text" ng-model="createpage.handle" ng-change="validateCreatePage(createpage, true)">
+                        <input id="new-page-url" class="form-control" type="text" ng-model="createpage.handle" ng-change="slugifyHandle(createpage.handle)">
                     </div>
                     <p ng-show="createpage.title">Page Url will be
                         <strong>/{{createpage.handle}}</strong>

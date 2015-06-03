@@ -302,6 +302,7 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> plan', plan);
         self.log.debug('>> anonymousId', anonymousId);
         self.log.debug('>> coupon', coupon);
+        self.log.debug('>> setupFee', setupFee);
 
 
         async.waterfall([

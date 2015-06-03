@@ -8,9 +8,10 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
         var blogposts = {};
 
         route = $location.$$path;
-
+        $scope.tagCloud = [];
         $scope.testing = 'hello';
         $scope.activeEditor = null;
+        $scope.activated = false;
 
         /*
          * @back
@@ -102,6 +103,7 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
             if (err) {
                 console.log('BlogCtrl Error: ' + err);
             } else {
+                that.totalPosts = angular.copy(data);
                 that.currentTag, that.currentAuthor, that.currentCat = '';
                 //get post tags for sidebar
                 //should be replaced by get tags filter
@@ -423,44 +425,46 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
          */
 
         $scope.activateCKEditor = function() {
-            //if ($scope.activated == false) {
-            $scope.isEditing = true;
-            for (name in CKEDITOR.instances) {
-                CKEDITOR.instances[name].destroy()
-                //CKEDITOR.instances[name].removeAllListeners();
-                //CKEDITOR.remove(CKEDITOR.instances[name]);
-            }
-            CKEDITOR.disableAutoInline = true;
-            var elements = angular.element('.editable');
-            elements.each(function(index) {
-                if (!angular.element(this).parent().hasClass('edit-wrap')) {
-                    var dataClass = angular.element(this).data('class').replace('.item.', ' ');
-                    angular.element(this).wrapAll('<div class="edit-wrap"></div>').parent().append('<span class="editable-title">' + $scope.toTitleCase(dataClass) + '</span>');
+            
+                $scope.isEditing = true;
+                for (name in CKEDITOR.instances) {
+                    if(CKEDITOR.instances[name])
+                        CKEDITOR.instances[name].destroy()
                 }
-                CKEDITOR.inline(this, {
-                    on: {
-                        instanceReady: function(ev) {
-                            var editor = ev.editor;
-                            if(index === 0)
-                                $scope.activeEditor = editor;
-                            editor.setReadOnly(false);
-                            editor.on('change', function() {
-                                $scope.isPageDirty = true;
-                            });
-                            editor.on('focus', function() {
-                                $scope.activeEditor = editor;
-                            });
-                            editor.on('blur', function() {
-                                $scope.activeEditor = null;
-                            });
-                        }
-                    },
-                    sharedSpaces: {
-                        top: 'editor-toolbar'
+                CKEDITOR.disableAutoInline = true;
+                var elements = angular.element('.editable');
+                elements.each(function(index) {
+                    if (!angular.element(this).parent().hasClass('edit-wrap')) {
+                        var dataClass = angular.element(this).data('class').replace('.item.', ' ');
+                        angular.element(this).wrapAll('<div class="edit-wrap"></div>').parent().append('<span class="editable-title">' + toTitleCase(dataClass) + '</span>');
                     }
-                });
+                    CKEDITOR.inline(this, {
+                        on: {
+                            instanceReady: function(ev) {
+                                var editor = ev.editor;
+                                editor.setReadOnly(false);
+                                if(index === 0)
+                                    $scope.activeEditor = editor;
+                                editor.on('change', function() {
+                                    $scope.isPageDirty = true;
+                                });
+                                editor.on('focus', function() {
+                                    $scope.activeEditor = editor;
+                                });
+                                editor.on('blur', function() {
+                                    $scope.activeEditor = null;
+                                });
+                            }
+                        },
+                        sharedSpaces: {
+                            top: 'editor-toolbar'
+                        }
+                    });
+                });                
+            $scope.$apply(function() {
+                $scope.parentScope.resizeIframe();
             });
-            $scope.parentScope.resizeIframe();
+            
         };
 
         /*
@@ -472,6 +476,16 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
             for (name in CKEDITOR.instances) {
                 CKEDITOR.instances[name].destroy()
             }
+        };
+
+        /*
+         * @toTitleCase
+         * -
+         */
+        function toTitleCase(str) {
+            return str.replace(/\w\S*/g, function(txt) {
+                return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+            });
         };
 
 
@@ -562,6 +576,7 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
          * -
          */
 
+        
         $scope.sharePost = function(post, type) {
             var url = $location.$$absUrl;
             var postData = {};
@@ -600,6 +615,52 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
                     break;
             }
         }
+
+        if($scope.parentScope)
+            angular.element("body").on("DOMNodeInserted", ".editable", function(e) {
+                if (!$scope.activated && $scope.parentScope) {
+                  $scope.activated = true;
+                  setTimeout(function() {
+                    console.log("Activate Ckeditor")
+                    $scope.activateCKEditor();
+                  }, 1000)
+                }
+            });
+
+         angular.element(document).ready(function() {
+          $scope.$watch('blog.postTags', function(newValue, oldValue) {
+                if (newValue !== undefined && newValue.length) {
+                    var tagsArr = [];
+                    that.totalPosts.forEach(function(val) {
+                        if (val.post_tags)
+                            tagsArr.push(val.post_tags);
+                    })
+                    newValue.forEach(function(value, index) {
+                        var default_size = 2;
+                        var count = _.countBy(_.flatten(tagsArr), function(num) {
+                            return num == value
+                        })["true"];
+                        if (count)
+                            default_size += count;
+                        $scope.tagCloud.push({
+                            text: value,
+                            weight: default_size, //Math.floor((Math.random() * newValue.length) + 1),
+                            link: '/tag/' + value
+                        })
+                    });
+                }
+            });
+         })
+
+        /********** BLOG PAGE PAGINATION RELATED **********/
+        $scope.curPage = 0;
+        $scope.pageSize = 10;
+        $scope.numberOfPages = function() {
+            if (that.blogposts)
+                return Math.ceil(that.blogposts.length / $scope.pageSize);
+            else
+                return 0;
+        };
 
     }
 ]);

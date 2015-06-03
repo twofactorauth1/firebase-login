@@ -52,6 +52,13 @@
     };
 
     /*
+     * @productionReadyAccount, checks to see if the account type is suitable for display
+     */
+    $scope.productionReadyAccount = function(acc) {
+      return (acc.type === 'tw') || (acc.type === 'fb');
+    };
+
+    /*
      * @initializeSocialConfig
      * -
      */
@@ -178,6 +185,7 @@
             });
           });
         }
+        $scope.minRequirements = true;
         toaster.pop('success', 'Feed Added');
       });
     };

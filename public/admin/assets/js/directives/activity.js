@@ -67,13 +67,17 @@ app.directive('customerActivity', ['$filter', 'CustomerService', '$modal', 'cont
                     var activity_hash = _.findWhere(contactConstant.customer_activity_types.dp, {
                         label: activity_type
                     });
-                    if(!activity_hash)
+                    if(!activity_type)
                     {
-                         angular.element("#customer_activity_type .error").html("Valid Activity Type Required");
+                         angular.element("#customer_activity_type .error").html("Activity Type Required");
                          angular.element("#customer_activity_type .error").addClass('has-error');
                          return;
                     }
-                    scope.newActivity.activityType = activity_hash.data;
+                    if(!activity_hash)
+                    {
+                        scope.newActivity.activityType = activity_type;
+                    }else                    
+                        scope.newActivity.activityType = activity_hash.data;
                     scope.newActivity.start = new Date();
                     scope.newActivity.end = new Date();
                 }

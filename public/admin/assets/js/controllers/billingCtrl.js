@@ -25,8 +25,9 @@
       });
     };
 
-    $scope.changeInvoice = function (invoice) {
+    $scope.changeInvoice = function (invoice, index) {
       $scope.selectedInvoice = invoice;
+      $scope.selectedItemIndex=index;
     };
 
     /*
@@ -35,7 +36,7 @@
      */
 
     $scope.updateStripeIdFn = function (billing) {
-      $scope.user.stripeId = billing.billing.stripeCustomerId;
+      $scope.currentUser.stripeId = billing.billing.stripeCustomerId;
       $scope.selectPlanView = 'plan';
     };
 
@@ -102,6 +103,7 @@
       };
       $scope.subscriptionSelected = true;
       $scope.subscription.plan.id = planId;
+      $scope.savePlanFn($scope.subscription.plan.id);
     };
 
     /*
@@ -121,11 +123,11 @@
      */
 
     $scope.savePlanFn = function (planId) {
-      if ($scope.user.stripeId) {
-        PaymentService.postSubscribeToIndigenous($scope.user.stripeId, planId, null, $scope.planStatus[planId], function (subscription) {
+      if ($scope.currentUser.stripeId) {
+        PaymentService.postSubscribeToIndigenous($scope.currentUser.stripeId, planId, null, $scope.planStatus[planId], function (subscription) {
           $scope.cancelOldSubscriptionsFn();
           $scope.subscription = subscription;
-          PaymentService.getUpcomingInvoice($scope.user.stripeId, function (upcomingInvoice) {
+          PaymentService.getUpcomingInvoice($scope.currentUser.stripeId, function (upcomingInvoice) {
             $scope.upcomingInvoice = upcomingInvoice;
           });
           PaymentService.getInvoicesForAccount(function (invoices) {
@@ -205,6 +207,11 @@
         }
       }
     });
+
+    $scope.checkOnboardMinRequirements = function() {
+      console.log('checking onboarding requirements');
+        $scope.minRequirements = true;
+    };
 
     /*
      * @getAccount

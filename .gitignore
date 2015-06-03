@@ -36,3 +36,5 @@ configs/mongodb.config.js
 .kateproject*
 *.min.css
 
+
+tmp/1432022004448.png

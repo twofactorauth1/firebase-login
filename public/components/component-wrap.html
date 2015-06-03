@@ -7,7 +7,7 @@
        opacity: {{component.bg.opacity/100 || 1}};
     }
 </style>
-<div class="component-wrap" ng-if="component.visibility" ng-class="{'mt200':component.type == 'masthead' && component.bg.img.undernav}">
+<div class="component-wrap" ng-if="component.visibility" ng-class="{'mt200':component.type == 'masthead'}">
 
     <div class="component {{component.type}}{{$index + 1}}" data-id="{{component._id}}" data-type="{{component.type}}">
 
@@ -35,7 +35,7 @@
             </div>
 
             <div ng-if="component.type == 'email'">
-                 <div ng-include="'/templates/emails/welcome-aboard.html'"></div>
+                 <div ng-include="'/templates/emails/base-email.html'"></div>
             </div>
 
 
@@ -48,7 +48,7 @@
                         ng-style="{'background': component.bg.color}"
                             ></div>
 
-                        <div ng-if="component.bg.img.show && component.type == 'masthead'"
+                        <div ng-if="component.bg.img.show && component.type == 'masthead' && !isEditing"
                             class="bg cover"
                             ng-class="{parallax:component.bg.img.parallax,'blur-image':component.bg.img.blur}"
                             {{component.bg.img.parallax ? parallax-background : ""}}
@@ -59,15 +59,32 @@
                                 background-repeat: no-repeat;
                                 background-position: {{component.bg.img.position}};'>
                         </div>
-                        <div ng-if="component.bg.img.show && component.type != 'masthead'"
+                        <div ng-if="component.bg.img.show && component.type == 'masthead' && isEditing"
                             class="bg cover"
+                            ng-class="{parallax:component.bg.img.parallax,'blur-image':component.bg.img.blur}"
+                            style='
+                                background: url("{{component.bg.img.url}}");
+                                background-size: cover;
+                                background-repeat: no-repeat;
+                                background-position: {{component.bg.img.position}};'>
+                        </div>
+                        <div ng-if="component.bg.img.show && component.type != 'masthead' && isEditing"
+                            class="bg cover"
+                            ng-class="{parallax:component.bg.img.parallax,'blur-image':component.bg.img.blur}"                            
+                            style='
+                                background: url("{{component.bg.img.url}}");
+                                background-size: cover;
+                                background-repeat: no-repeat;
+                                background: {{component.bg.img.url}};'>
+                        </div>
+                        <div ng-if="component.bg.img.show && component.type != 'masthead' && !isEditing" 
+                            class="bg"
                             ng-class="{parallax:component.bg.img.parallax,'blur-image':component.bg.img.blur}"
                             {{component.bg.img.parallax ? parallax-background : ""}}
                             ng-attr-parallax-ratio="{{component.bg.img.parallax ? '0.4' : '1'}}"
                             style='
-                                background: url("{{component.bg.img.url}}") fixed;
+                                background: url("{{component.bg.img.url}}") no-repeat fixed;
                                 background-size: cover;
-                                background-repeat: no-repeat;
                                 background: {{component.bg.img.url}};'>
                         </div>
                         <div ng-if="component.bg.img.overlay"

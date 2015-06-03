@@ -2,7 +2,7 @@
 /*global app, moment, angular, window*/
 /*jslint unparam:true*/
 (function (angular) {
-  app.controller('OrderDetailCtrl', ["$scope", "toaster", "$modal", "$filter", "$stateParams", "OrderService", "CustomerService", "UserService", "ProductService", "SweetAlert", function ($scope, toaster, $modal, $filter, $stateParams, OrderService, CustomerService, UserService, ProductService, SweetAlert) {
+  app.controller('OrderDetailCtrl', ["$scope", "toaster", "$modal", "$filter", "$stateParams", "OrderService", "CustomerService", "UserService", "ProductService", "SweetAlert", "orderConstant", function ($scope, toaster, $modal, $filter, $stateParams, OrderService, CustomerService, UserService, ProductService, SweetAlert, orderConstant) {
 
     //TODO
     // - $q all api calls
@@ -32,6 +32,10 @@
         templateUrl: modal,
         scope: $scope
       });
+    };
+
+    $scope.formatOrderStatus = function (status) {
+      return OrderService.formatOrderStatus(status);
     };
 
     /*
@@ -180,11 +184,12 @@
         var i = 0;
         var j = 0;
         for (i; i < notes.length; i++) {
-          for (j; j < $scope.users.length; j++) {
-            if (notes[i].user_id === $scope.users[j]._id) {
-              notes[i].user = $scope.users[j];
+          if($scope.users)
+            for (j; j < $scope.users.length; j++) {
+              if (notes[i].user_id === $scope.users[j]._id) {
+                notes[i].user = $scope.users[j];
+              }
             }
-          }
         }
       }
 
@@ -217,11 +222,20 @@
      */
 
     $scope.addNote = function () {
-      OrderService.completeOrder($scope.order._id, $scope.newNote, function (updatedOrder) {
-        toaster.pop('success', 'Note added to order.');
+      if($scope.order && $scope.order._id)
+      {
+          OrderService.completeOrder($scope.order._id, $scope.newNote, function (updatedOrder) {
+          toaster.pop('success', 'Note added to order.');
+          $scope.newNote = '';
+          $scope.pushLocalNote(updatedOrder);
+        });
+      }
+      else if($scope.order)
+      {
+        $scope.order.notes.push({note:$scope.newNote})
         $scope.newNote = '';
-        $scope.pushLocalNote(updatedOrder);
-      });
+      }
+      
     };
 
     /*
@@ -290,12 +304,10 @@
      */
 
     $scope.formatInput = function (model) {
-      console.log('model >>> ', model);
       if (model) {
-
         var email = 'No Email';
-        if (model.email) {
-          email = model.email;
+        if (model.details[0] && model.details[0].emails.length > 0) {
+          email = model.details[0].emails[0].email;
         }
 
         return model.first + ' ' + model.last + ' (#' + model._id + ' ' + email + ') ';
@@ -317,7 +329,23 @@
           email = model.email;
         }
 
-        return '#' + model.sku + ' ' + model.name + ' ($' + model.regular_price + ') ';
+        var _sku = '';
+        if (model.sku) {
+          _sku = '#'+model.sku
+        }
+
+        var _name = '';
+        if (model.name) {
+          _name = model.name;
+        }
+
+        var _price = '';
+        if (model.regular_price) {
+          _price = ' ($' + model.regular_price + ') ';
+        }
+
+        return _sku + ' ' + _name + _price;
+
       }
 
       return '';
@@ -412,7 +440,7 @@
 
       var phone = '';
       if (phones.length > 0) {
-        phone = phones[0].phone;
+        phone = phones[0].number;
       }
 
       var email = '';
@@ -434,12 +462,12 @@
 
       if (defaultBilling) {
 
-        if (defaultBilling.address_1) {
-          billingAddress1 = defaultBilling.address_1;
+        if (defaultBilling.address) {
+          billingAddress1 = defaultBilling.address;
         }
 
-        if (defaultBilling.address_2) {
-          billingAddress2 = defaultBilling.address_2;
+        if (defaultBilling.address2) {
+          billingAddress2 = defaultBilling.address2;
         }
 
         if (defaultBilling.city) {
@@ -450,8 +478,8 @@
           billingState = defaultBilling.state;
         }
 
-        if (defaultBilling.postcode) {
-          billingPostcode = defaultBilling.postcode;
+        if (defaultBilling.zip) {
+          billingPostcode = defaultBilling.zip;
         }
 
         if (defaultBilling.country) {
@@ -469,12 +497,12 @@
 
       if (defaultShipping) {
 
-        if (defaultShipping.address_1) {
-          shippingAddress1 = defaultShipping.address_1;
+        if (defaultShipping.address) {
+          shippingAddress1 = defaultShipping.address;
         }
 
-        if (defaultShipping.address_2) {
-          shippingAddress2 = defaultShipping.address_2;
+        if (defaultShipping.address2) {
+          shippingAddress2 = defaultShipping.address2;
         }
 
         if (defaultShipping.city) {
@@ -485,8 +513,8 @@
           shippingState = defaultShipping.state;
         }
 
-        if (defaultShipping.postcode) {
-          shippingPostcode = defaultShipping.postcode;
+        if (defaultShipping.zip) {
+          shippingPostcode = defaultShipping.zip;
         }
 
         if (defaultShipping.country) {
@@ -536,6 +564,8 @@
      */
 
     $scope.statusUpdated = function (newStatus) {
+      if ($scope.order.status == newStatus)
+        return;
       var toasterMsg = 'Status has been updated to ';
       var note = 'Order status changed from ' + $scope.order.status + ' to ' + newStatus;
       if (newStatus === 'processing') {
@@ -545,6 +575,11 @@
 
       if (newStatus === 'on_hold') {
         toaster.pop('success', toasterMsg + '"On Hold"');
+      }
+
+
+      if (newStatus === 'pending_payment') {
+        toaster.pop('success', toasterMsg + '"Pending Payment"');
       }
 
       if (newStatus === 'completed') {
@@ -591,6 +626,7 @@
         toaster.pop('success', toasterMsg + '"Failed"');
       }
       $scope.order.status = newStatus;
+      $scope.currentStatus = newStatus;
     };
 
     /*
@@ -625,6 +661,10 @@
 
     $scope.saveOrder = function () {
 
+      // Set order customer Id
+      if($scope.selectedCustomer)
+        $scope.order.customer_id = $scope.selectedCustomer._id;
+
       //validate
 
       if (!$scope.order.customer_id) {
@@ -635,10 +675,12 @@
       if ($stateParams.orderId) {
         OrderService.updateOrder($scope.order, function (updatedOrder) {
           console.log('updatedOrder ', updatedOrder);
+          toaster.pop('success', 'Order updated successfully.');
         });
       } else {
         OrderService.createOrder($scope.order, function (updatedOrder) {
           console.log('order updated');
+          toaster.pop('success', 'Order updated successfully.');
         });
       }
     };

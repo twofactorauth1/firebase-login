@@ -1,6 +1,6 @@
 <script type="text/ng-template" id="add-subscription-modal">
     <div class="modal-header">
-        <button type="button" class="close" ng-click="closeModal()">&times;</button>
+        <button type="button" class="close" ng-click="closeModal(editingPlan)">&times;</button>
         <h4 class="modal-title">
             <span ng-if="!editingPlan">Add Subscription</span>
             <span ng-if="editingPlan">Edit Subscription</span>
@@ -52,7 +52,7 @@
                     <span tooltip-placement="top" tooltip-html-unsafe="Enter a one time signup fee"><i class="fa fa-info-circle" /></span>
                     <div class="input-group input-subscription">
                         <span class="input-group-addon">$</span>
-                        <input ng-change="setFormDirtyFn()" type="text" class="form-control " id="signup_fee" placeholder="Signup Fee" ng-model='signup_fee' />
+                        <input ng-change="setFormDirtyFn()" type="text" class="form-control " id="signup_fee" placeholder="Signup Fee" ng-model='$parent.signup_fee' />
                     </div>
                 </div>
             </div>

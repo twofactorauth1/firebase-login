@@ -5,6 +5,8 @@
 (function(angular) {
     app.controller('PostsCtrl', ["$scope", "toaster", "$modal", "$filter", "WebsiteService", "$log", function($scope, toaster, $modal, $filter, WebsiteService, $log) {
         $scope.tableView = 'list';
+        $scope.itemPerPage = 40;
+        $scope.showPages = 15;
         WebsiteService.getPosts(function(posts) {
             var postsArr = [];
             for (var key in posts) {
@@ -21,6 +23,7 @@
             }
             $scope.posts = postsArr;
             $scope.orderByFn();
+            $scope.showPosts = true;
             //$log.debug($scope.posts);
         });
 
@@ -122,7 +125,7 @@
             postData.websiteId = $scope.website._id;
             WebsiteService.createPost($scope.blogId || -1, postData, function(data) {
               toaster.pop('success', "Post Created", "The " + data.post_title + " post was created successfully.");
-              
+              $scope.minRequirements = true;
               $scope.cancel();
               $scope.posts.unshift(data);
               $scope.displayedPosts.unshift(data);

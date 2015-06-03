@@ -1,4 +1,5 @@
 <div ng-controller="SocialFeedCtrl" class="social-feed" ng-init="getSocialConfig()">
+    <indig-onboarding min-requirements="minRequirements"></indig-onboarding>
     <!-- start: PAGE TITLE -->
     <section id="page-title" class="padding-top-15 padding-bottom-15">
         <div class="row">
@@ -29,12 +30,12 @@
                                 <div class="form-group margin-bottom-0" ng-class="{'has-error': noPostTo}">
                                     <ui-select ng-model="selectedSocial" on-select="postToChange($select.selected)" theme="bootstrap">
                                         <ui-select-match placeholder="Select a Social Profile">
-                                            <span class="fa" ng-class="{'fa-facebook': $select.selected.type == 'fb'}"></span>
-                                            <small ng-bind-html="$select.selected.name || $select.selected.profile.name"></small>
+                                            <span class="fa" ng-class="{'fa-facebook': $select.selected.type == 'fb', 'fa-twitter': $select.selected.type == 'tw'}"></span>
+                                            <small ng-bind-html="$select.selected.username || $select.selected.name || $select.selected.profile.name"></small>
                                         </ui-select-match>
-                                        <ui-select-choices repeat="type in trackedAccounts | filter: {'type': 'fb'}">
-                                            <span class="fa" ng-class="{'fa-facebook': type.type == 'fb'}"></span>
-                                            <small ng-bind-html="type.name || type.profile.name | highlight: $select.search"></small>
+                                        <ui-select-choices repeat="acc in trackedAccounts | filter:productionReadyAccount">
+                                            <span class="fa" ng-class="{'fa-facebook': acc.type == 'fb', 'fa-twitter': acc.type == 'tw'}"></span>
+                                            <small ng-bind-html="acc.username || acc.name || acc.profile.name | highlight: $select.search"></small>
                                         </ui-select-choices>
                                     </ui-select>
                                     <span class="help-block margin-bottom-0" ng-show="noPostTo"><span class="symbol required"></span> <span class="text-bold">Error:</span> No Social Profile Selected</span>

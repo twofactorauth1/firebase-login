@@ -52,7 +52,11 @@ var blogpost = $$.m.ModelBase.extend({
 
             post_excerpt: null,
 
-            post_status: null,
+            post_status: 'PUBLISHED',
+
+            created_date: new Date(),
+
+            publish_date: null,
 
             post_category: null,
 
@@ -99,7 +103,16 @@ var blogpost = $$.m.ModelBase.extend({
         storage: "mongo",
         table: "posts",
         idStrategy: "uuid"
-    }
+    },
+
+    status: {
+        PUBLISHED: 'PUBLISHED',
+        DRAFT: 'DRAFT',
+        FUTURE: 'FUTURE',
+        PRIVATE: 'PRIVATE'
+    },
+
+    allStatus: ['PUBLISHED', 'DRAFT', 'FUTURE', 'PRIVATE']
 });
 
 $$.m.BlogPost = blogpost;

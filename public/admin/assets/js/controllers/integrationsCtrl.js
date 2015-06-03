@@ -50,12 +50,12 @@
             console.log('disconnectSocial >>>');
             SweetAlert.swal({
                     title: "Are you sure?",
-                    text: "Do you want to delete this social network?",
+                    text: "Do you want to disconnect this social network?",
                     type: "warning",
                     showCancelButton: true,
                     confirmButtonColor: "#DD6B55",
-                    confirmButtonText: "Yes, delete it!",
-                    cancelButtonText: "No, do not delete it!",
+                    confirmButtonText: "Yes, disconnect it!",
+                    cancelButtonText: "No, do not disconnect it!",
                     closeOnConfirm: true,
                     closeOnCancel: true
                 },
@@ -99,6 +99,7 @@
                     path: "/"
                 });
             }
+            $scope.minRequirements = true;
             // ToasterService.setHtmlPending('success', socailAccount + ' is integreted successfully.', '<div class="mb15"></div><a href="/admin#/customer?onboarding=create-contact" class="btn btn-primary">Next Step: Import / Create Contacts</a>', 0, 'trustedHtml');
             window.location = '/redirect/?next=' + $scope.currentHost + '/socialconfig/' + socailAccount.toLowerCase() + '?redirectTo=' + $scope.redirectUrl + '&socialNetwork=' + socailAccount;
         };
