@@ -528,6 +528,7 @@
             $scope.currentPage = page;
             $scope.updatePage($scope.currentPage.handle);
             $scope.originalBlogPosts  = angular.copy($scope.childScope.getAllBlogs());
+            $scope.resizeIframe();
         };
 
         /*
