@@ -527,7 +527,7 @@
             $scope.editPage();
             $scope.currentPage = page;
             $scope.updatePage($scope.currentPage.handle);
-            // $scope.resizeIframe();
+            $scope.originalBlogPosts  = angular.copy($scope.childScope.getAllBlogs());
         };
 
         /*
@@ -1082,7 +1082,7 @@
             if (isDirty) {
                 event.preventDefault();
                 $scope.updatePageComponents();
-                $scope.updateBlogPageData();
+                $scope.childScope.updateBlogPageData(iFrame);
                 SweetAlert.swal({
                         title: "Are you sure?",
                         text: "You have unsaved data that will be lost",
@@ -1190,24 +1190,21 @@
                                       
 
                     WebsiteService.updatePage($scope.currentPage.websiteId, $scope.currentPage._id, $scope.currentPage, function(data) {
-                        $scope.isEditing = true;
-                        var blogComponent = _.findWhere($scope.currentPage.components, {
-                            type: 'blog'
-                        });
-                        if(blogComponent)
-                            $scope.saveBlogData();
+                        $scope.isEditing = true;                        
+                        $scope.saveBlogData();
+                        $scope.originalBlogPosts  = angular.copy($scope.childScope.getAllBlogs());
                         WebsiteService.setEditedPageHandle($scope.currentPage.handle);
                         if (!$scope.redirect)
                             $scope.autoSavePage();
                         else
                             $scope.stopAutoSavePage();
-                        $scope.redirect = false;
-                        if (autoSave)
-                            toaster.pop('success', "Auto Saved", "The " + $scope.currentPage.handle + " page was saved successfully.");
-                        else
-                            toaster.pop('success', "Page Saved", "The " + $scope.currentPage.handle + " page was saved successfully.");
+                        if(!$scope.redirect)
+                            if (autoSave)
+                                toaster.pop('success', "Auto Saved", "The " + $scope.currentPage.handle + " page was saved successfully.");
+                            else
+                                toaster.pop('success', "Page Saved", "The " + $scope.currentPage.handle + " page was saved successfully.");
                         $scope.saveLoading = false;
-
+                        $scope.redirect = false;
                         if($scope.originalCurrentPage.handle !== $scope.currentPage.handle)
                         {
                             window.location = '/admin/#/website/pages/?pagehandle=' + $scope.currentPage.handle;
@@ -1352,35 +1349,16 @@
                 };
                 $scope.currentPage.components = newComponentOrder;
         }
-
-        $scope.updateBlogPageData = function()
-        {
-            var iframe = document.getElementById("iframe-website");
-            if (iframe) {
-                var posts = iframe.contentWindow.body.querySelectorAll('.blog-entry');
-                $scope.blogposts = $scope.childScope.getAllBlogs();
-                for (var i = 0; i < posts.length; i++) {
-                    var blog_id = posts[i].attributes['data-id'].value;
-                    var post_excerpt_div = posts[i].querySelectorAll('.post_excerpt');
-                    var post_title_div = posts[i].querySelectorAll('.post_title');
-                    var post_excerpt = post_excerpt_div.length ? post_excerpt_div[0].outerText : "";
-                    var post_title = post_title_div.length ? post_title_div[0].outerText : "";
-                    var matching_post = _.find($scope.blogposts, function(item) {
-                        return item._id === blog_id
-                    })
-                    if (matching_post) {
-                        matching_post.post_excerpt = post_excerpt;
-                        matching_post.post_title = post_title;                       
-                    }
-                }
-            }
-        }
-
         $scope.saveBlogData = function() {
             if(!$scope.redirect)
-                $scope.updateBlogPageData();            
+                $scope.childScope.updateBlogPageData(iFrame);                            
+            $scope.blogposts = $scope.childScope.getAllBlogs();
             $scope.blogposts.forEach(function(value, index) {
-                WebsiteService.updatePost($scope.currentPage._id, value._id, value, function(data) {});
+                var matching_post = _.find($scope.originalBlogPosts, function(item) {
+                    return item._id === value._id
+                })
+                if(!angular.equals(matching_post, value))
+                    WebsiteService.updatePost($scope.currentPage._id, value._id, value, function(data) {});
             })
         }
 
@@ -2088,7 +2066,7 @@
             if (isDirty && !$scope.changesConfirmed) {
                 event.preventDefault();
                 $scope.updatePageComponents();
-                $scope.updateBlogPageData();
+                $scope.childScope.updateBlogPageData(iFrame);
                 SweetAlert.swal({
                         title: "Are you sure?",
                         text: "You have unsaved data that will be lost",
