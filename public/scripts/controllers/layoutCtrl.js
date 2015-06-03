@@ -39,9 +39,9 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
             return function(blogpost) {
                 if (component.postorder) {
                     if (component.postorder == 1 || component.postorder == 2) {
-                        return Date.parse($filter('date')(blogpost.modified.date, "MM/dd/yyyy"));
+                        return Date.parse($filter('date')(blogpost.modified.date, "MM/dd/yyyy HH:mm:ss"));
                     } else if (component.postorder == 3 || component.postorder == 4) {
-                        return Date.parse($filter('date')(blogpost.created.date, "MM/dd/yyyy"));
+                        return Date.parse($filter('date')(blogpost.created.date, "MM/dd/yyyy HH:mm:ss"));
                     } else if (component.postorder == 5 || component.postorder == 6) {
                         return Date.parse($filter('date')(blogpost.publish_date || blogpost.created.date, "MM/dd/yyyy"));
                     }
