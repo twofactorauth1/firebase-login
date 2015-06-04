@@ -215,13 +215,17 @@
               $scope.localtime = moment().format('h:mm a');
               if ($scope.ip_geo_address) {
                 CustomerService.getGeoSearchAddress($scope.ip_geo_address, function (data) {
+
                   if (data.error === undefined) {
                     $scope.location.lat = parseFloat(data.lat);
                     $scope.location.lng = parseFloat(data.lon);
                     $scope.loadingMap = false;
+                    $scope.showMap(data.lat, data.lon);
                   } else {
                     $scope.loadingMap = false;
                   }
+
+
 
                 });
               } else {

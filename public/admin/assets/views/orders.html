@@ -118,7 +118,7 @@
                                         <ui-select-match placeholder="Select Status">
                                             <!-- <span class="fa" ng-class="{'fa-facebook': $select.selected.type == 'fb'}"></span> -->
                                             <small ng-bind-html="$select.selected.name"></small>
-                                            <button class="clear" ng-click="clear($event)">X</button>
+                                            <button class="clear" ng-click="clear($event, '#searchStatus')">X</button>
                                         </ui-select-match>
                                         <ui-select-null-choice>No Status</ui-select-null-choice>
                                         <ui-select-choices repeat="status in orderStatusOptions">

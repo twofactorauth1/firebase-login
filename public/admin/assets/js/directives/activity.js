@@ -129,17 +129,19 @@ app.directive('customerActivity', ['$filter', 'CustomerService', '$modal', 'cont
                     });
 
                     CustomerService.getCustomerActivities(scope.customerId, function(activities) {
-                        for (var i = 0; i < activities.length; i++) {
-                            activities[i]['customer'] = scope.$parent.customer;
-                            activities[i]['activityType'] = activities[i]['activityType'];
-                        };
-                        scope.activities = activities;
-                        scope.activities = _.sortBy(scope.activities, function(o) {
-                            return o.start;
-                        }).reverse();
-                        scope.all_activities = angular.copy(activities);
-                        scope.total = scope.all_activities.length;
-                        scope.disablePaging = false;
+                        CustomerService.getCustomer(scope.customerId, function (customer) {
+                            for (var i = 0; i < activities.length; i++) {
+                                activities[i]['customer'] = customer;
+                                activities[i]['activityType'] = activities[i]['activityType'];
+                            };
+                            scope.activities = activities;
+                            scope.activities = _.sortBy(scope.activities, function(o) {
+                                return o.start;
+                            }).reverse();
+                            scope.all_activities = angular.copy(activities);
+                            scope.total = scope.all_activities.length;
+                            scope.disablePaging = false;
+                        })
                     });
                 } else {
                     if (scope.customersAtRisk) {

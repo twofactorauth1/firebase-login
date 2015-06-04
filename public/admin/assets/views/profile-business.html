@@ -108,7 +108,8 @@
                         <div collapse="businessHours" ng-init="businessHours=false" class="panel-wrapper">
                             <div class="panel-body">
                                 <div ng-if="!account.business.splitHours" ng-repeat="val in account.business.hours" ng-class="(currentDate | date:'EEE') === val.day ? 'current-day' : ''"><span class="text-bold">{{val.day}} </span> : <span ng-hide="val.closed || val.wholeday">{{val.start}} - {{val.end}}</span><span ng-show="val.closed && !val.wholeday">Closed</span><span ng-show="!val.closed && val.wholeday">Opened 24 hours</span></div>
-                                <div ng-if="account.business.splitHours" ng-repeat="val in account.business.hours"><span class="text-bold">{{val.day}} </span> : <span ng-hide="val.closed" ng-if="val.split">{{val.start}} - {{val.end}} and {{val.start2}} - {{val.end2}}</span><span ng-hide="val.closed" ng-if="!val.split">{{val.start}} - {{val.end}}</span><span ng-show="val.closed">Closed</span></div>
+                                <div ng-if="account.business.splitHours" ng-repeat="val in account.business.hours"><span class="text-bold">{{val.day}} </span> : <span ng-hide="val.closed || val.wholeday" ng-if="val.split">{{val.start}} - {{val.end}} and {{val.start2}} - {{val.end2}}</span><span ng-hide="val.closed || val.wholeday" ng-if="!val.split">{{val.start}} - {{val.end}}</span><span ng-show="val.closed && !val.wholeday">Closed</span>
+                                <span ng-show="!val.closed && val.wholeday">Opened 24 hours</span></div>
                             </div>
                         </div>
                     </div>
@@ -260,46 +261,52 @@
                             <switch id="splitHours" ng-model="account.business.splitHours" class="pull-right" ></switch>
                         </div>
                         <div class="form-group row">
-                            <div ng-if="account.business.splitHours" class="col-xs-12 multiple-hours" ng-repeat="val in account.business.hours">
+                            <div ng-if="account.business.splitHours" class="col-xs-12 multiple-hours min-height45" ng-repeat="val in account.business.hours">
                                 <div class="col-xs-1">
                                     <label for="val.day">{{val.day}}:</label>
                                 </div>
                                 <div class="col-xs-2" id="business_hours_start_{{$index}}">
-                                    <select ng-hide="val.closed" ng-change="validateHours(val, $index)" ng-change="validateHours(val, $index)" class="chosen-select hour-start-select form-control" ng-model="val.start" ng-options="item for item in hours.HOURS">
+                                    <select ng-hide="val.closed || val.wholeday" ng-change="validateHours(val, $index)" ng-change="validateHours(val, $index)" class="chosen-select hour-start-select form-control" ng-model="val.start" ng-options="item for item in hours.HOURS">
                                     </select>
                                     <span ng-if="!val.closed" class="error help-block" />
                                 </div>
                                 <div class="col-xs-2 " id="business_hours_end_{{$index}}">
-                                    <select ng-hide="val.closed" ng-change="validateHours(val, $index)" class="chosen-select hour-start-select form-control" ng-model="val.end" ng-options="item for item in hours.HOURS">
+                                    <select ng-hide="val.closed || val.wholeday" ng-change="validateHours(val, $index)" class="chosen-select hour-start-select form-control" ng-model="val.end" ng-options="item for item in hours.HOURS">
                                     </select>
                                     <span ng-if="!val.closed" class="error help-block" />
                                 </div>
-                                <label class="pull-left" ng-hide="val.closed" ng-if="val.split" style="margin:10px"> & </label>
-                                <div class="col-xs-2" id="business_hours_start2_{{$index}}">
-                                    <select ng-hide="val.closed" ng-change="validateHours(val, $index)" ng-if="val.split" class="chosen-select hour-start-select form-control" ng-model="val.start2" ng-options="item for item in hours.HOURS">
+                                <label class="pull-left" ng-hide="val.closed || val.wholeday" ng-if="val.split" style="margin:10px"> & </label>
+                                <div class="col-xs-2" ng-if="val.split" id="business_hours_start2_{{$index}}">
+                                    <select ng-hide="val.closed || val.wholeday" ng-change="validateHours(val, $index)" ng-if="val.split" class="chosen-select hour-start-select form-control" ng-model="val.start2" ng-options="item for item in hours.HOURS">
                                     </select>
                                     <span ng-if="!val.closed" class="error help-block" />
                                 </div>
-                                <div class="col-xs-2">
-                                    <select ng-if="val.split" ng-change="validateHours(val, $index)" ng-hide="val.closed" class="chosen-select hour-start-select form-control" ng-model="val.end2" ng-options="item for item in hours.HOURS">
+                                <div class="col-xs-2" ng-if="val.split">
+                                    <select ng-change="validateHours(val, $index)" ng-hide="val.closed || val.wholeday" class="chosen-select hour-start-select form-control" ng-model="val.end2" ng-options="item for item in hours.HOURS">
                                     </select>
                                 </div>
-                                <div class="col-xs-5 margin-left-5">
-                                    <div class="checkbox clip-check check-primary checkbox-inline">
-                                        <input type="checkbox" id="hoursClosed-{{$index}}" ng-model="val.closed">
-                                        <label for="hoursClosed-{{$index}}">
-                                            Closed
-                                        </label>
-                                    </div>
-                                    <div class="checkbox clip-check check-primary checkbox-inline" ng-hide="val.closed">
+                                <div class=" margin-left-5">
+                                    <div class="checkbox clip-check check-primary checkbox-inline" ng-hide="val.closed || val.wholeday">
                                         <input type="checkbox" id="hoursSplit-{{$index}}" ng-model="val.split">
                                         <label for="hoursSplit-{{$index}}">
                                             Split
                                         </label>
                                     </div>
+                                    <div ng-hide="val.closed || val.split" class="checkbox clip-check check-primary checkbox-inline">
+                                        <input type="checkbox" id="wholeday-{{$index}}" ng-change="val.closed = false" ng-model="val.wholeday">
+                                        <label for="wholeday-{{$index}}">
+                                            Open 24 hours
+                                        </label>
+                                    </div>
+                                    <div class="checkbox clip-check check-primary checkbox-inline">
+                                        <input type="checkbox" id="hoursClosed-{{$index}}" ng-model="val.closed" ng-change="val.wholeday = false">
+                                        <label for="hoursClosed-{{$index}}">
+                                            Closed
+                                        </label>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-xs-12" ng-repeat="val in account.business.hours" ng-if="!account.business.splitHours">
+                            <div class="col-xs-12 min-height45" ng-repeat="val in account.business.hours" ng-if="!account.business.splitHours">
                                 <div class="col-xs-1">
                                     <label for="val.day">{{val.day}}:</label>
                                 </div>
