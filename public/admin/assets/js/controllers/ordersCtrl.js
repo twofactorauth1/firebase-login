@@ -164,9 +164,10 @@
      */
 
     //TODO: Not clearing table
-    $scope.clear = function ($event) {
+    $scope.clear = function ($event, elem) {
       $event.stopPropagation();
-      $scope.filterorder = undefined;
+      $scope.filterorder.selected = null;
+      $scope.triggerInput(elem);
     };
 
 
