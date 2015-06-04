@@ -41,8 +41,9 @@
     var productPlanSignupFee = {};
 
     ProductService.getProduct($stateParams.productId, function (product) {
+      console.log(product);
       $scope.product = product;
-      var p_icon = $scope.product.icon || 'fa-cube';
+      var p_icon = $scope.product.icon ;
      
       angular.element('#convert').iconpicker({
         iconset: 'fontawesome',
@@ -321,17 +322,9 @@
      * - icon picker for product image replacement
      */
 
-    angular.element('#convert').iconpicker({
-      iconset: 'fontawesome',
-      icon: 'fa-cube',
-      rows: 5,
-      cols: 5,
-      placement: 'right'
-    });
-
 
     $('#convert').on('change', function (e) {
-      if ($scope.product) {
+      if ($scope.product && !$scope.product.is_image) {
         $scope.product.icon = e.icon;
       }
     });

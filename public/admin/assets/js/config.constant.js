@@ -148,7 +148,7 @@ app.constant('ONBOARDINGCONSTANT', {
   }, {
     pane: {
       heading: "Dashboard",
-      text: "Now everything is set up, its time to start tracking.",
+      text: "Now everything is set up. It's time to start tracking.",
       taskKey: 'dashboard',
       state: 'app.dashboard',
       minRequire: false
@@ -156,7 +156,7 @@ app.constant('ONBOARDINGCONSTANT', {
     steps: [{
       type: 'title',
       heading: "Dashboard",
-      text: "Now everything is set up, its time to start tracking."
+      text: "Now everything is set up. It's time to start tracking."
     }]
   }]
 
@@ -514,12 +514,6 @@ app.constant('JS_REQUIRES', {
     'sweetAlertCtrl': 'assets/js/controllers/sweetAlertCtrl.js',
     'mapsCtrl': 'assets/js/controllers/mapsCtrl.js',
     'ordersCtrl': 'assets/js/controllers/ordersCtrl.js',
-    'accountService': 'assets/js/services/account.js',
-    'productService': 'assets/js/services/product.js',
-    'paymentService': 'assets/js/services/product.js',
-    'toasterService': 'assets/js/services/toaster.js',
-    'websiteService': 'assets/js/services/webiste.js',
-    'userService': 'assets/js/services/user.js',
     'selectCtrl': 'assets/js/controllers/selectCtrl.js',
     'wizardCtrl': 'assets/js/controllers/wizardCtrl.js',
     'uploadCtrl': 'assets/js/controllers/uploadCtrl.js',
@@ -535,6 +529,7 @@ app.constant('JS_REQUIRES', {
     'websiteService': 'assets/js/services/webiste.js',
     'userService': 'assets/js/services/user.js',
     'customerService': 'assets/js/services/customer.js',
+    'toasterService': 'assets/js/services/toaster.js',
     'ImportContactService': 'assets/js/services/import_contacts.js',
     'chartAnalyticsService': 'assets/js/services/chart_analytics.js',
     'chartCommerceService': 'assets/js/services/chart_commerce.js',
@@ -606,12 +601,12 @@ app.constant('JS_REQUIRES', {
   }, {
     name: 'ngAside',
     files: ['../js/libs/angular-aside/dist/js/angular-aside.min.js', '../js/libs/angular-aside/dist/css/angular-aside.min.css']
-  },  {
-    name: 'highmaps',
-    files: ['../js/libs/highcharts-release/modules/funnel.js', '../js/libs/highmaps-release/modules/map.js', '../js/libs_misc/highmaps/us-all.js']
   }, {
     name: 'highcharts',
     files: ['../js/libs/highcharts-release/adapters/standalone-framework.js', '../js/libs/highcharts-release/highcharts.js', '../js/libs/highcharts-ng/dist/highcharts-ng.min.js']
+  },{
+    name: 'highmaps',
+    files: ['../js/libs/highcharts-release/modules/funnel.js', '../js/libs/highmaps-release/modules/map.js', '../js/libs_misc/highmaps/us-all.js']
   },{
     name: 'truncate',
     files: ['../js/libs/angular-truncate/src/truncate.js']

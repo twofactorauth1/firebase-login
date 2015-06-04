@@ -6027,3 +6027,6 @@ a.text-light:hover {
   word-wrap: break-word;
   /* IE 5+ */
 }
+.cursor-pointer {
+  cursor: pointer;
+}

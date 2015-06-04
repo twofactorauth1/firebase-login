@@ -2,7 +2,7 @@
 /*global app, moment, angular, $$*/
 /*jslint unparam:true*/
 (function (angular) {
-  app.controller('CustomerDetailCtrl', ["$scope", "$modal", "toaster", "$stateParams", "contactConstant", "CustomerService", "KeenService", "CommonService", "UserService", 'SweetAlert', '$state', 'OrderService', function ($scope, $modal, toaster, $stateParams, contactConstant, CustomerService, KeenService, CommonService, UserService, SweetAlert, $state, OrderService) {
+  app.controller('CustomerDetailCtrl', ["$scope", "$rootScope", "$modal", "toaster", "$stateParams", "contactConstant", "CustomerService", "KeenService", "CommonService", "UserService", 'SweetAlert', '$state', 'OrderService', function ($scope, $rootScope, $modal, toaster, $stateParams, contactConstant, CustomerService, KeenService, CommonService, UserService, SweetAlert, $state, OrderService) {
 
     /*
      * @openModal
@@ -116,6 +116,7 @@
         $scope.setDefaults();
         $scope.getMapData();
         $scope.data.fullName = [$scope.customer.first, $scope.customer.middle, $scope.customer.last].join(' ').trim();
+        $scope.originalCustomer = angular.copy($scope.customer);
         // $scope.contactLabel = CustomerService.contactLabel(customer);
         // $scope.checkBestEmail = CustomerService.checkBestEmail(customer);
       });
@@ -355,7 +356,7 @@
           $scope.setDefaults();
           $scope.setTags();
           $scope.saveLoading = false;
-
+          $scope.originalCustomer = angular.copy($scope.customer);
           if (!hideToaster) {
             if ($scope.currentState === 'customerAdd') {
               toaster.pop('success', 'Contact Created.');
@@ -887,6 +888,50 @@
         }
       });
     };
+
+
+    /*
+         * @locationChangeStart
+         * - Before user leaves editor, ask if they want to save changes
+         */
+
+        $scope.changesConfirmed = false;
+        $scope.isDirty = false;
+
+        var offFn = $rootScope.$on('$locationChangeStart', function(event, newUrl, oldUrl) {             
+            if (!angular.equals($scope.originalCustomer, $scope.customer)) {
+                $scope.isDirty = true;
+            }
+
+            if ($scope.isDirty  && !$scope.changesConfirmed) {
+                event.preventDefault();
+                SweetAlert.swal({
+                        title: "Are you sure?",
+                        text: "You have unsaved data that will be lost",
+                        type: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#DD6B55",
+                        confirmButtonText: "Yes, save changes!",
+                        cancelButtonText: "No, do not save changes!",
+                        closeOnConfirm: false,
+                        closeOnCancel: false
+                    },
+                    function(isConfirm) {
+                        if (isConfirm) {
+                            SweetAlert.swal("Saved!", "Your edits were saved to the page.", "success");
+                            $scope.customerSaveFn();
+
+                        } else {
+                            SweetAlert.swal("Cancelled", "Your edits were NOT saved.", "error");
+                        }
+                        $scope.isDirty = false;
+                        $scope.changesConfirmed = true;
+                        //set window location
+                        window.location = newUrl;
+                        offFn();
+                    });
+            } 
+        });
 
   }]);
 }(angular));

@@ -19,7 +19,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
         $scope.thumbnailSlider = [];
         $scope.contactDetails = [];
         $scope.activeEditor = null;
-        $scope.activated = true;
+        $scope.activated = false;
 
         //displays the year dynamically for the footer
         var d = new Date();
@@ -39,9 +39,9 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
             return function(blogpost) {
                 if (component.postorder) {
                     if (component.postorder == 1 || component.postorder == 2) {
-                        return Date.parse($filter('date')(blogpost.modified.date, "MM/dd/yyyy"));
+                        return Date.parse($filter('date')(blogpost.modified.date, "MM/dd/yyyy HH:mm:ss"));
                     } else if (component.postorder == 3 || component.postorder == 4) {
-                        return Date.parse($filter('date')(blogpost.created.date, "MM/dd/yyyy"));
+                        return Date.parse($filter('date')(blogpost.created.date, "MM/dd/yyyy HH:mm:ss"));
                     } else if (component.postorder == 5 || component.postorder == 6) {
                         return Date.parse($filter('date')(blogpost.publish_date || blogpost.created.date, "MM/dd/yyyy"));
                     }
@@ -187,28 +187,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
                                 $scope.parentScope.afteriframeLoaded($scope.currentpage);
                             }
                             $scope.dataLoaded = true;
-                            $scope.$watch('blog.postTags || control.postTags', function(newValue, oldValue) {
-                                if (newValue !== undefined && newValue.length) {
-                                    var tagsArr = [];
-                                    that.totalPosts.forEach(function(val) {
-                                        if (val.post_tags)
-                                            tagsArr.push(val.post_tags);
-                                    })
-                                    newValue.forEach(function(value, index) {
-                                        var default_size = 2;
-                                        var count = _.countBy(_.flatten(tagsArr), function(num) {
-                                            return num == value
-                                        })["true"];
-                                        if (count)
-                                            default_size += count;
-                                        $scope.tagCloud.push({
-                                            text: value,
-                                            weight: default_size, //Math.floor((Math.random() * newValue.length) + 1),
-                                            link: '/tag/' + value
-                                        })
-                                    });
-                                }
-                            });
+                            
                         })
                         var locId = $location.$$hash;
                         if (locId) {
@@ -218,7 +197,33 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
                         }
                         $scope.setUnderbnavMargin();
                     }, 500);
-                });
+                        setTimeout(function() {
+                            $scope.$apply(function() {
+                                $scope.$watch('layout.postTags', function(newValue, oldValue) {
+                                    if (newValue !== undefined && newValue.length) {
+                                        var tagsArr = [];
+                                        that.totalPosts.forEach(function(val) {
+                                            if (val.post_tags)
+                                                tagsArr.push(val.post_tags);
+                                        })
+                                        newValue.forEach(function(value, index) {
+                                            var default_size = 2;
+                                            var count = _.countBy(_.flatten(tagsArr), function(num) {
+                                                return num == value
+                                            })["true"];
+                                            if (count)
+                                                default_size += count;
+                                            $scope.tagCloud.push({
+                                                text: value,
+                                                weight: default_size, //Math.floor((Math.random() * newValue.length) + 1),
+                                                link: '/tag/' + value
+                                            })
+                                        });
+                                    }
+                                });
+                            })
+                        }, 1000);
+                    });
 
                 var iframe = window.document.getElementById("iframe-website")
                 $scope.isAdmin = iframe;
@@ -716,7 +721,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
 
 
         $scope.activateCKEditor = function() {
-            if ($scope.activated) {
+            
                 $scope.isEditing = true;
                 for (name in CKEDITOR.instances) {
                     if(CKEDITOR.instances[name])
@@ -753,27 +758,27 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
                     });
                 });
                 setTimeout(function() {
-                    if (angular.element("div.meet-team-height").length) {
-                        var maxTeamHeight = Math.max.apply(null, angular.element("div.meet-team-height").map(function() {
-                            return angular.element(this).height();
-                        }).get());
-                        angular.element(".meet-team-height").css("min-height", maxTeamHeight);
-                    }
-                    for (var i = 1; i <= 3; i++) { 
-                        if($("div.feature-height-"+i).length)
-                        {
-                          var maxFeatureHeight = Math.max.apply(null, $("div.feature-height-"+i).map(function ()
-                          {
-                              return $(this).height();
-                          }).get());
-                          $("div.feature-height-"+ i + " .feature-single").css("min-height", maxFeatureHeight - 10);
+                    $scope.$apply(function() {
+                        if (angular.element("div.meet-team-height").length) {
+                            var maxTeamHeight = Math.max.apply(null, angular.element("div.meet-team-height").map(function() {
+                                return angular.element(this).height();
+                            }).get());
+                            angular.element(".meet-team-height").css("min-height", maxTeamHeight);
                         }
-                    }
-
-                }, 500)
-            }
-            $scope.parentScope.resizeIframe();
-            $scope.activated = true;
+                        for (var i = 1; i <= 3; i++) { 
+                            if($("div.feature-height-"+i).length)
+                            {
+                              var maxFeatureHeight = Math.max.apply(null, $("div.feature-height-"+i).map(function ()
+                              {
+                                  return $(this).height();
+                              }).get());
+                              $("div.feature-height-"+ i + " .feature-single").css("min-height", maxFeatureHeight - 10);
+                            }
+                        }                      
+                        $scope.parentScope.resizeIframe();
+                  });  
+                }, 500)            
+            
         };
 
 
@@ -809,9 +814,14 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
             });
         };
 
-        $scope.saveBlogData = function(iframe) {
-            if (iframe) {
-                var posts = iframe.body.querySelectorAll('.blog-entry');
+        $scope.getAllBlogs = function() {
+            return that.blogposts;
+        }
+
+        $scope.updateBlogPageData = function(iframe)
+        {
+            if (iframe && iframe.contentWindow) {
+                var posts = iframe.contentWindow.body.querySelectorAll('.blog-entry');
                 for (var i = 0; i < posts.length; i++) {
                     var blog_id = posts[i].attributes['data-id'].value;
                     var post_excerpt_div = posts[i].querySelectorAll('.post_excerpt');
@@ -823,8 +833,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
                     })
                     if (matching_post) {
                         matching_post.post_excerpt = post_excerpt;
-                        matching_post.post_title = post_title;
-                        PostService.updatePost($scope.currentpage._id, blog_id, matching_post, function(data) {});
+                        matching_post.post_title = post_title;                       
                     }
                 }
             }
@@ -1880,6 +1889,17 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
                
             },300);
         };
+
+        if($scope.parentScope)
+            angular.element("body").on("DOMNodeInserted", ".editable", function(e) {
+                if (!$scope.activated) {
+                  $scope.activated = true;
+                  setTimeout(function() {
+                    console.log("Activate Ckeditor")
+                    $scope.activateCKEditor();
+                  }, 1000)
+                }
+            });
     }
 
 ]);

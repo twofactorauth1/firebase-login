@@ -8,10 +8,10 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
         var blogposts = {};
 
         route = $location.$$path;
-
+        $scope.tagCloud = [];
         $scope.testing = 'hello';
         $scope.activeEditor = null;
-        $scope.activated = true;
+        $scope.activated = false;
 
         /*
          * @back
@@ -103,6 +103,7 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
             if (err) {
                 console.log('BlogCtrl Error: ' + err);
             } else {
+                that.totalPosts = angular.copy(data);
                 that.currentTag, that.currentAuthor, that.currentCat = '';
                 //get post tags for sidebar
                 //should be replaced by get tags filter
@@ -424,7 +425,7 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
          */
 
         $scope.activateCKEditor = function() {
-            if ($scope.activated) {
+            
                 $scope.isEditing = true;
                 for (name in CKEDITOR.instances) {
                     if(CKEDITOR.instances[name])
@@ -460,9 +461,10 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
                         }
                     });
                 });                
-            }
-            $scope.parentScope.resizeIframe();
-            $scope.activated = true;
+            $scope.$apply(function() {
+                $scope.parentScope.resizeIframe();
+            });
+            
         };
 
         /*
@@ -574,6 +576,7 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
          * -
          */
 
+        
         $scope.sharePost = function(post, type) {
             var url = $location.$$absUrl;
             var postData = {};
@@ -612,6 +615,52 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
                     break;
             }
         }
+
+        if($scope.parentScope)
+            angular.element("body").on("DOMNodeInserted", ".editable", function(e) {
+                if (!$scope.activated && $scope.parentScope) {
+                  $scope.activated = true;
+                  setTimeout(function() {
+                    console.log("Activate Ckeditor")
+                    $scope.activateCKEditor();
+                  }, 1000)
+                }
+            });
+
+         angular.element(document).ready(function() {
+          $scope.$watch('blog.postTags', function(newValue, oldValue) {
+                if (newValue !== undefined && newValue.length) {
+                    var tagsArr = [];
+                    that.totalPosts.forEach(function(val) {
+                        if (val.post_tags)
+                            tagsArr.push(val.post_tags);
+                    })
+                    newValue.forEach(function(value, index) {
+                        var default_size = 2;
+                        var count = _.countBy(_.flatten(tagsArr), function(num) {
+                            return num == value
+                        })["true"];
+                        if (count)
+                            default_size += count;
+                        $scope.tagCloud.push({
+                            text: value,
+                            weight: default_size, //Math.floor((Math.random() * newValue.length) + 1),
+                            link: '/tag/' + value
+                        })
+                    });
+                }
+            });
+         })
+
+        /********** BLOG PAGE PAGINATION RELATED **********/
+        $scope.curPage = 0;
+        $scope.pageSize = 10;
+        $scope.numberOfPages = function() {
+            if (that.blogposts)
+                return Math.ceil(that.blogposts.length / $scope.pageSize);
+            else
+                return 0;
+        };
 
     }
 ]);

@@ -25,8 +25,9 @@
       });
     };
 
-    $scope.changeInvoice = function (invoice) {
+    $scope.changeInvoice = function (invoice, index) {
       $scope.selectedInvoice = invoice;
+      $scope.selectedItemIndex=index;
     };
 
     /*

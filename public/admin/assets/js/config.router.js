@@ -262,7 +262,8 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         template: '<div ui-view class="fade-in-up"></div>',
         title: 'Support',
         ncyBreadcrumb: {
-            label: 'Support'
+            label: 'Support',
+            skip: true
         }
     }).state('app.support.gettingstarted', {
         url: '/getting-started',
