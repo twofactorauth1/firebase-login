@@ -527,7 +527,8 @@
             $scope.editPage();
             $scope.currentPage = page;
             $scope.updatePage($scope.currentPage.handle);
-            $scope.originalBlogPosts  = angular.copy($scope.childScope.getAllBlogs());
+            if($scope.childScope.getAllBlogs)
+                $scope.originalBlogPosts  = angular.copy($scope.childScope.getAllBlogs());
             $scope.resizeIframe();
         };
 
@@ -1083,7 +1084,8 @@
             if (isDirty) {
                 event.preventDefault();
                 $scope.updatePageComponents();
-                $scope.childScope.updateBlogPageData(iFrame);
+                if($scope.childScope.updateBlogPageData)
+                    $scope.childScope.updateBlogPageData(iFrame);
                 SweetAlert.swal({
                         title: "Are you sure?",
                         text: "You have unsaved data that will be lost",
@@ -1193,7 +1195,8 @@
                     WebsiteService.updatePage($scope.currentPage.websiteId, $scope.currentPage._id, $scope.currentPage, function(data) {
                         $scope.isEditing = true;                        
                         $scope.saveBlogData();
-                        $scope.originalBlogPosts  = angular.copy($scope.childScope.getAllBlogs());
+                        if($scope.childScope.getAllBlogs)
+                            $scope.originalBlogPosts  = angular.copy($scope.childScope.getAllBlogs());
                         WebsiteService.setEditedPageHandle($scope.currentPage.handle);
                         if (!$scope.redirect)
                             $scope.autoSavePage();
@@ -2067,7 +2070,8 @@
             if (isDirty && !$scope.changesConfirmed) {
                 event.preventDefault();
                 $scope.updatePageComponents();
-                $scope.childScope.updateBlogPageData(iFrame);
+                if($scope.childScope.updateBlogPageData)
+                    $scope.childScope.updateBlogPageData(iFrame);
                 SweetAlert.swal({
                         title: "Are you sure?",
                         text: "You have unsaved data that will be lost",
