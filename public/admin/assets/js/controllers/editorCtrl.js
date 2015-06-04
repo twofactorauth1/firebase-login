@@ -1141,6 +1141,34 @@
             }
         };
 
+
+        /*
+         * @validateEditPost
+         * -
+         */
+
+        $scope.editPostValidated = false;
+
+        $scope.validateEditPost = function(post) {
+            if (post.post_url == '') {
+                $scope.handleError = true;
+                angular.element('#edit-post-url').parents('div.form-group').addClass('has-error');
+            } else {
+                $scope.handleError = false;
+                angular.element('#edit-post-url').parents('div.form-group').removeClass('has-error');
+            }
+            if (post.post_title == '') {
+                $scope.titleError = true;
+                angular.element('#edit-post-title').parents('div.form-group').addClass('has-error');
+            } else {
+                $scope.titleError = false;
+                angular.element('#edit-post-title').parents('div.form-group').removeClass('has-error');
+            }
+            if (post && post.post_title && post.post_title != '' && post.post_url && post.post_url != '') {
+                $scope.editPostValidated = true;
+            }
+        };
+
         /*
          * @savePage
          * -
@@ -1157,8 +1185,16 @@
 
             if ($location.$$search['posthandle']) {
                 $scope.single_post = true;
+                $scope.validateEditPost($scope.post_data);
+
+                if (!$scope.editPostValidated) {
+                    $scope.saveLoading = false;
+                    toaster.pop('error', "Post Title or URL can not be blank.");
+                    return false;
+                }
                 $scope.childScope.savePostMode(toaster, msg);
-                $scope.isEditing = true;
+                $scope.isEditing = true;                
+                
             } else {
                 $scope.validateEditPage($scope.currentPage);
 
@@ -2682,7 +2718,12 @@
                 $scope.$apply(function() {
                     toaster.pop('success', msg);
                     if(post)
+                    {
                         $scope.post_data = $scope.childScope.getPostData();
+                        if($scope.post_data.post_url && $location.$$search['posthandle'] !== $scope.post_data.post_url)
+                            window.location = '/admin/#/website/posts/?posthandle=' + $scope.post_data.post_url;
+                    }
+                    
                     if (redirect)
                         $location.path("/website/posts");
                     else if(post)

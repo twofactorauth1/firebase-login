@@ -6,11 +6,11 @@
     <div class="modal-body no-padding" style="max-height:500px; margin:10px">
         <div class="form-group">
                         <label>Title:</label>
-                        <input class="form-control input-lg" ng-change="updateBlogPost(post_data)" type="text" ng-model="post_data.post_title">
+                        <input id="edit-post-title" class="form-control input-lg" ng-blur="validateEditPost(post_data)" ng-change="updateBlogPost(post_data)" type="text" ng-model="post_data.post_title">
                     </div>
                     <div class="form-group">
                         <label>URL:</label>
-                        <input class="form-control input-lg" type="text" ng-model="post_data.post_url">
+                        <input id="edit-post-url" ng-blur="validateEditPost(post_data)" class="form-control input-lg" type="text" ng-model="post_data.post_url">
                     </div>
                     <div class="form-group">
                         <label>Status:</label>
