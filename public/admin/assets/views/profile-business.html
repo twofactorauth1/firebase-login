@@ -260,7 +260,7 @@
                             <switch id="splitHours" ng-model="account.business.splitHours" class="pull-right" ></switch>
                         </div>
                         <div class="form-group row">
-                            <div ng-if="account.business.splitHours" class="col-xs-12 multiple-hours" ng-repeat="val in account.business.hours">
+                            <div ng-if="account.business.splitHours" class="col-xs-12 multiple-hours min-height45" ng-repeat="val in account.business.hours">
                                 <div class="col-xs-1">
                                     <label for="val.day">{{val.day}}:</label>
                                 </div>
@@ -284,7 +284,7 @@
                                     <select ng-if="val.split" ng-change="validateHours(val, $index)" ng-hide="val.closed" class="chosen-select hour-start-select form-control" ng-model="val.end2" ng-options="item for item in hours.HOURS">
                                     </select>
                                 </div>
-                                <div class="col-xs-5 margin-left-5">
+                                <div class="col-xs-2 margin-left-5">
                                     <div class="checkbox clip-check check-primary checkbox-inline">
                                         <input type="checkbox" id="hoursClosed-{{$index}}" ng-model="val.closed">
                                         <label for="hoursClosed-{{$index}}">
@@ -299,7 +299,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-xs-12" ng-repeat="val in account.business.hours" ng-if="!account.business.splitHours">
+                            <div class="col-xs-12 min-height45" ng-repeat="val in account.business.hours" ng-if="!account.business.splitHours">
                                 <div class="col-xs-1">
                                     <label for="val.day">{{val.day}}:</label>
                                 </div>
