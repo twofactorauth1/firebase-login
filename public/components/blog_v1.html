@@ -84,7 +84,7 @@
                         </div>
                         <!-- end #et_pt_blog -->
                     </article>
-                        <div ng-show="!isEditing" class="pagination pagination-centered" ng-show="(layout.blogposts.length||blog.blogposts.length) > pageSize">
+                        <div class="pagination pagination-centered" ng-show="(!isEditing && layout.blogposts.length||blog.blogposts.length) > pageSize">
                             
                               <button type="button" class="btn btn-primary" ng-disabled="curPage == 0"
                              ng-click="curPage=curPage-1">
