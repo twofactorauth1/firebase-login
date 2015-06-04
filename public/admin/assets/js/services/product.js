@@ -66,13 +66,13 @@
                 });
         };
 
-        // this.deleteCustomer = function (id, fn) {
-        //     var apiUrl = baseUrl + ['contact', id].join('/');
-        //     $http.delete(apiUrl)
-        //     .success(function (data, status, headers, config) {
-        //         fn(data);
-        //     });
-        // };
+        this.deleteProduct = function (id, fn) {
+            var apiUrl = baseUrl + ['Products', id].join('/');
+            $http.delete(apiUrl)
+            .success(function (data, status, headers, config) {
+                fn(data);
+            });
+        };
 
         // this.postCustomer = function (customer, fn) {
         //     var apiUrl = baseUrl + ['contact'].join('/');

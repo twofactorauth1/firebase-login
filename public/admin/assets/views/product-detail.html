@@ -68,6 +68,13 @@
                             <a ng-show="product.is_image" class="btn btn-success media-modal pull-right" media-modal-show-insert="true" on-insert-mediacb="insertMedia" user='user' insert-media-type='"image"'> <span class="fa fa-image"></span> <span class="hidden-xs">Change Image</span>
                             </a>
                         </div>
+                        <div class="btn-group btn-group-justified margin-top-10">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-danger btn-o btn-wide btn-scroll btn-scroll-top ti-trash" ng-click="deleteProductFn(product)">
+                                    <span>Delete Product</span>
+                                </button>
+                            </div>
+                        </div>
                     </div>
                     <div ng-class="{'col-sm-8': showVariations, 'col-sm-4 padding-right-0': !showVariations}">
                         <div class="panel panel-transparent  margin-bottom-0">
