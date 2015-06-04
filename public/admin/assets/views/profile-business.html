@@ -147,7 +147,7 @@
                                 </label>
                                 <div class="form-group" ng-repeat="phone in account.business.phones">
                                     <span class="input-icon input-icon-right">
-                                        <input type="text" placeholder="phone pumber" class="form-control" name="phone" ng-model="account.business.phones[$index].number">
+                                        <input type="text" placeholder="phone number" class="form-control" name="phone" ng-model="account.business.phones[$index].number">
                                         <i ng-if="showAddPhone(phone)" ng-click="accountAddPhoneFn()" class="ti-plus"></i>
                                         <i ng-if="!showAddPhone(phone)" ng-click="removePhone($index)" class="ti-minus"></i>
                                     </span>
