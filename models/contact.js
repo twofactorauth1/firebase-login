@@ -247,10 +247,18 @@ var contact = $$.m.ModelBase.extend({
   },
 
 
-  createdBy: function(userId, socialType, socialId) {    
-    this.set('by', userId);
-    this.set('strategy', socialType);
-    this.set('socialId', socialId)
+  createdBy: function(userId, socialType, socialId) {   
+     var created = this.get("created");
+        if (created != null) {
+          created.by = userId;
+          created.strategy = socialType;
+          created.socialId = socialId;
+          
+          this.set({
+            created: created
+          });
+        }
+
   },
 
 

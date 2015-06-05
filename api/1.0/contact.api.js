@@ -159,15 +159,14 @@ _.extend(api.prototype, baseApi.prototype, {
         var accountId = parseInt(self.accountId(req));
 
         var contact = new $$.m.Contact(req.body);
-
+       
         if (isNew === true) {
             contact.set("accountId", accountId);
-            if(this.userId(req)) {
+            if(this.userId(req)) {                
                 contact.createdBy(this.userId(req), $$.constants.social.types.LOCAL);
             }
         }
-
-
+        
         contactDao.saveOrUpdateContact(contact, function (err, value) {
             if (!err) {
                 self.log.debug('>> saveOrUpdate', value);
@@ -495,7 +494,6 @@ _.extend(api.prototype, baseApi.prototype, {
                     var contact = new $$.m.Contact(req.body);
                     contact.set('accountId', value.id());
                     contact.set('type', 'ld');
-                    contact.created("date", new Date().getTime());
                     contactDao.saveOrUpdateContact(contact, function(err, savedContact){
                         if(err) {
                             self.log.error('Error signing up: ' + err);
