@@ -421,6 +421,7 @@
             title: 'Single Post',
             type: 'single-post',
             icon: 'custom single-post',
+            preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/45274f46-0a21-11e5-83dc-0aee4119203c.png',
             filter: 'blog',
             description: 'Used for single post design. This is a mandatory page used to show single posts. This will apply to all posts.',
             enabled: false
@@ -465,7 +466,7 @@
             title: 'Testimonials',
             type: 'testimonials',
             icon: 'fa fa-info',
-            preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/testimonials.png',
+            preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/45263570-0a21-11e5-87dd-b37fd2717aeb.png',
             filter: 'text',
             description: 'A component to showcase your testimonials.',
             enabled: true
