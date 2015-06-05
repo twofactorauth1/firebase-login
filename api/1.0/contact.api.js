@@ -165,9 +165,8 @@ _.extend(api.prototype, baseApi.prototype, {
             if(this.userId(req)) {
                 contact.createdBy(this.userId(req), $$.constants.social.types.LOCAL);
             }
-
-            contact.created("date", new Date().getTime());
         }
+
 
         contactDao.saveOrUpdateContact(contact, function (err, value) {
             if (!err) {
