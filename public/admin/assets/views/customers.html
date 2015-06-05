@@ -116,7 +116,7 @@
                                 <th class="hidden-xs" st-sort="getters.address" ng-show="column.address" ng-class="{'column-width': tableView == 'grid'}">Address</th>
                                 <th class="hidden-xs center" st-sort="getters.phone" ng-show="column.phone" ng-class="{'column-width': tableView == 'grid'}">Phone</th>
                                 <th class="hidden-xs" st-sort="getters.social" ng-show="column.social" ng-class="{'column-width': tableView == 'grid'}">Social</th>
-                                <th class="hidden-xs" st-sort="getters.created" ng-show="column.created" ng-class="{'column-width': tableView == 'grid'}">Created</th>
+                                <th class="hidden-xs" st-sort-default="{{order}}" st-sort="getters.created" ng-show="column.created" ng-class="{'column-width': tableView == 'grid'}">Created</th>
                                 <!-- <th class="hidden-xs" st-sort="getters.modified" ng-show="column.modified">Modified</th> -->
                             </tr>
                             <tr ng-if="showFilter">

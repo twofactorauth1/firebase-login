@@ -7,7 +7,7 @@
     $scope.tableView = 'list';
     $scope.itemPerPage = 100;
     $scope.showPages = 15;
-
+    $scope.order = "reverse";
     /*
      * @getCustomers
      * -
@@ -33,7 +33,7 @@
 
     $scope.getters = {
       created: function (value) {
-        return value.created.date;
+        return value.created.date || -1;
       },
       modified: function (value) {
         return value.modified.date;
