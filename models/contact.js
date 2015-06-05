@@ -103,6 +103,7 @@ var contact = $$.m.ModelBase.extend({
        *      large: ""
        *   }
        *   websites:[]
+       *   company: ""
        *   phones: [{
        *       _id:"",
        *       type: string "m|w|h|o" //mobile, work, home, other
