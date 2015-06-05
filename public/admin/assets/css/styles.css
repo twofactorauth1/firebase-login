@@ -12293,6 +12293,9 @@ table tbody td .screenshot {
 table tbody td strong {
   display: none;
 }
+table thead th[st-sort] {
+  cursor: pointer;
+}
 table.grid thead tr {
   width: 100%;
 }
