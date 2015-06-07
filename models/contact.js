@@ -44,7 +44,7 @@ var contact = $$.m.ModelBase.extend({
       _v: "0.1",
 
       created: {
-        date: "", //Date created
+        date: new Date(), //Date created
         by: null, //this is a nullable ID value, if created by an existing user, this will be populated.
         strategy: "", // lo|fb|tw|li|etc.  See $$.constants.user.credential_types
         socialId: null //The socialId of the source of this contact, if applicable
@@ -103,6 +103,7 @@ var contact = $$.m.ModelBase.extend({
        *      large: ""
        *   }
        *   websites:[]
+       *   company: ""
        *   phones: [{
        *       _id:"",
        *       type: string "m|w|h|o" //mobile, work, home, other
@@ -247,17 +248,18 @@ var contact = $$.m.ModelBase.extend({
   },
 
 
-  createdBy: function(userId, socialType, socialId) {
-    var created = {
-      date: new Date().getTime(),
-      by: userId,
-      strategy: socialType,
-      socialId: socialId
-    };
+  createdBy: function(userId, socialType, socialId) {   
+     var created = this.get("created");
+        if (created != null) {
+          created.by = userId;
+          created.strategy = socialType;
+          created.socialId = socialId;
+          
+          this.set({
+            created: created
+          });
+        }
 
-    this.set({
-      created: created
-    });
   },
 
 

@@ -428,8 +428,8 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
             
                 $scope.isEditing = true;
                 for (name in CKEDITOR.instances) {
-                    if(CKEDITOR.instances[name])
-                        CKEDITOR.instances[name].destroy()
+                    CKEDITOR.instances[name].removeCustomListeners();
+                    CKEDITOR.remove(CKEDITOR.instances[name]);
                 }
                 CKEDITOR.disableAutoInline = true;
                 var elements = angular.element('.editable');

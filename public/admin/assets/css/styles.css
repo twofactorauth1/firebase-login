@@ -12293,6 +12293,9 @@ table tbody td .screenshot {
 table tbody td strong {
   display: none;
 }
+table thead th[st-sort] {
+  cursor: pointer;
+}
 table.grid thead tr {
   width: 100%;
 }
@@ -13148,7 +13151,7 @@ tags-input .tags {
 }
 tags-input .tags .tag-item {
   color: white;
-  background: #428bca;
+  background: #47b1cc !important;
   border: 1px solid #357ebd;
   border-radius: 4px;
 }

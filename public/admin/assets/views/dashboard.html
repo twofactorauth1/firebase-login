@@ -152,7 +152,7 @@
                                 <li class="timeline-item success" ng-repeat="activity in activities | orderBy:'start':true">
                                     <div class="margin-left-15">
                                         <div class="text-muted text-small">
-                                            {{activity.start | timeAgoFilter}} {{getActivityName(activity.activityType)}}
+                                            {{activity.start | date:'MMM d, y h:mm:ss a'}} {{getActivityName(activity.activityType)}}
                                         </div>
                                         <p>
                                             <div ng-switch on="activity.activityType">

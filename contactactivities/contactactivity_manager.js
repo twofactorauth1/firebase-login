@@ -15,7 +15,8 @@ module.exports = {
     var self = this;
     log.debug('>> createActivity');
     contactActivity.attributes.start = new Date(contactActivity.attributes.start);
-    contactActivity.attributes.end = new Date(contactActivity.attributes.end);
+    if(contactActivity.attributes.end)
+      contactActivity.attributes.end = new Date(contactActivity.attributes.end);
     dao.saveOrUpdate(contactActivity, function(err, value) {
       if (err) {
         log.error('Error creating activity: ' + err);

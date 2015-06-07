@@ -3926,6 +3926,7 @@ div[data-type=blog] .container {
 }
 .thumbnail-slider-v1 .carousel-control.right {
   background: none;
+  right: -20px;
 }
 .thumbnail-slider-v1 .carousel-inner {
   max-height: 200px;
@@ -3933,6 +3934,14 @@ div[data-type=blog] .container {
 }
 .thumbnail-slider-v1 div.carousel-control {
   cursor: pointer;
+  top: 62px;
+  width: 2%;
+}
+.thumbnail-slider-v1 .carousel-control.left {
+  left: -22px;
+}
+div[data-type="thumbnail-slider"] .inner-page {
+  max-width: 100%;
 }
 /********** Video **********/
 .video-block .btn .fa {
