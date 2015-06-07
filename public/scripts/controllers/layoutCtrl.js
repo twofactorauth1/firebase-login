@@ -723,9 +723,11 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
         $scope.activateCKEditor = function() {
             
                 $scope.isEditing = true;
-                for (name in CKEDITOR.instances) {
-                    if(CKEDITOR.instances[name])
-                        CKEDITOR.instances[name].destroy()
+                for (name in CKEDITOR.instances) {                       
+                        //CKEDITOR.instances[name].fire("unlockSnapshot");
+                        //CKEDITOR.instances[name].updateElement();
+                        CKEDITOR.instances[name].removeCustomListeners();
+                        CKEDITOR.remove(CKEDITOR.instances[name]);
                 }
                 CKEDITOR.disableAutoInline = true;
                 var elements = angular.element('.editable');
@@ -772,7 +774,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
                               {
                                   return $(this).height();
                               }).get());
-                              $("div.feature-height-"+ i + " .feature-single").css("min-height", maxFeatureHeight - 10);
+                              $("div.feature-height-"+ i + " .feature-single").css("min-height", maxFeatureHeight + 10);
                             }
                         }                      
                         $scope.parentScope.resizeIframe();
