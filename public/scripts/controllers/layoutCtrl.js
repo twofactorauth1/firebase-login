@@ -771,7 +771,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
                               {
                                   return $(this).height();
                               }).get());
-                              $("div.feature-height-"+ i + " .feature-single").css("min-height", maxFeatureHeight + 30);
+                              $("div.feature-height-"+ i + " .feature-single").css("min-height", maxFeatureHeight + 20);
                             }
                         }                      
                         $scope.parentScope.resizeIframe();
