@@ -46,6 +46,7 @@
       _account.commerceSettings = $scope.settings;
       console.log('$scope.settings ', $scope.settings);
       AccountService.updateAccount(_account, function (updatedAccount) {
+        toaster.clear();
         toaster.pop('success', 'Settings Successfully Updated');
         console.log('updatedAccount ', updatedAccount);
       });
