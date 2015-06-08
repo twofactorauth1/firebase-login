@@ -903,7 +903,7 @@
         $scope.isDirty = false;
 
         var offFn = $rootScope.$on('$locationChangeStart', function(event, newUrl, oldUrl) {             
-            if (!angular.equals($scope.originalCustomer, $scope.customer)) {
+            if ($scope.originalCustomer && $scope.customer && !angular.equals($scope.originalCustomer, $scope.customer)) {
                 $scope.isDirty = true;
             }
 
