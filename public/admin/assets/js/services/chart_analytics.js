@@ -544,6 +544,9 @@
       var hostname = '';
       if (windowHostname.indexOf(".local") > -1) {
         hostname = account.subdomain + '.indigenous.local';
+      }
+      else if (windowHostname.indexOf(".test.") > -1) {
+        hostname = windowHostname;
       } else {
         hostname = account.subdomain + '.indigenous.io';
       }
