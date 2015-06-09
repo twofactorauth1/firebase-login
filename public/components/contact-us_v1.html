@@ -9,9 +9,8 @@
                 <div class="panel-body">
                     <div class="row">
                         <div class="col-xs-12 temp  settings" tab-active="address" data-id="{{component._id}}">
-                            <span class="blocked" ng-if="!contact.geo_address_string"> Enter Address Here</span>
+                           
                             <span class="blocked" ng-bind-html="contact.geo_address_string"></span>
-                            <span class="blocked" ng-if="!contact.contactPhone">Enter Phone Number here</span>
                             <span class="blocked" ng-bind-html="contact.contactPhone"></span>
                             <!-- <span ng-if="!component.hours.length">Enter Business hours here</span> -->
                             <div ng-if="component.showHours && !component.splitHours" ng-repeat="val in component.hours" ng-class="(currentDate | date:'EEE') === val.day ? 'current-day' : ''"><span>{{val.day}} </span>: <span ng-hide="val.closed || val.wholeday">{{val.start}} - {{val.end}}</span><span ng-show="val.closed && !val.wholeday">Closed</span><span ng-show="!val.closed && val.wholeday">Opened 24 hours</span></div>
