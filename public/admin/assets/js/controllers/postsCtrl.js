@@ -100,7 +100,8 @@
             }
             if (post && post.post_title && post.post_title != '' && post.post_author && post.post_author != '' && post.post_url && post.post_url != '') {
               $scope.createPostValidated = true;
-            }
+            } else
+                $scope.createPostValidated = false;
           };
 
         $scope.openPostModal = function(size) {

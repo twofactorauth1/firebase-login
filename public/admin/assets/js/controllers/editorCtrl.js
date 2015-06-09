@@ -1139,7 +1139,8 @@
             }
             if (page && page.title && page.title != '' && page.handle && page.handle != '') {
                 $scope.editPageValidated = true;
-            }
+            } else
+                $scope.editPageValidated = false;
         };
 
 
@@ -1167,7 +1168,8 @@
             }
             if (post && post.post_title && post.post_title != '' && post.post_url && post.post_url != '') {
                 $scope.editPostValidated = true;
-            }
+            } else
+                $scope.editPostValidated = false;
         };
 
         /*
