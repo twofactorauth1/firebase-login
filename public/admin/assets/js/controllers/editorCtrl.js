@@ -1389,12 +1389,19 @@
                             componentVarContents = componentVarContents.replace(/(\r\n|\n|\r)/gm, "");
                             //Hack for link plugin popup functionality
                             componentVarContents = componentVarContents.replace("data-cke-pa-onclick", "onclick");
+
                             var regex = /^<(\"[^\"]*\"|'[^']*'|[^'\">])*>/;
                             if (regex.test(componentVarContents)) {
                                 var jHtmlObject = angular.element(componentVarContents);
                                 var editor = jQuery("<p>").append(jHtmlObject);
                                 editor.find(".cke_reset").remove();
                                 editor.find(".cke_image_resizer").remove();
+                                var img_anchors = editor.find("img[data-cke-real-element-type='anchor']");
+                                img_anchors.each(function() {
+                                  var data =  angular.element(this).attr('data-cke-realelement');
+                                  var data_element = decodeURIComponent(data);
+                                  $(this).replaceWith( $(data_element));
+                                })
                                 var newHtml = editor.html();
                                 componentVarContents = newHtml;
                             }
