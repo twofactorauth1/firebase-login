@@ -35,6 +35,8 @@
         $scope.single_post = false;
         $scope.contactHoursInvalid = false;
         var stopInterval;
+        $scope.newPage = {};
+        $scope.newPost = {};
         
         $scope.$watch('currentPage.handle', function(newValue, oldValue) {
             if (newValue) {
@@ -161,6 +163,18 @@
                 $scope.openModal("post-settings-modal")
             else
                 $scope.openModal("page-settings-modal")
+        };
+
+        /*
+         * @openDuplicateModal
+         * -
+         */
+
+        $scope.openDuplicateModal = function() { 
+             if ($scope.single_post)
+                $scope.openModal("post-duplicate-modal")
+            else
+                $scope.openModal("page-duplicate-modal")
         };
 
         /*
@@ -1039,9 +1053,11 @@
 
         $scope.checkForDuplicatePage = function()
         {
+            
             WebsiteService.getSinglePage($scope.currentPage.websiteId, $scope.currentPage.handle, function(data) {
             if(data && data._id)
                 {
+                    
                     if(data._id !== $scope.currentPage._id)
                     {
                         toaster.pop('error', "Page URL " + $scope.currentPage.handle, "Already exists");
@@ -1082,7 +1098,7 @@
             }
             $scope.childScope.checkOrSetPageDirty(true);
             var redirectUrl = $location.$$search['posthandle'] ? "/website/posts" : "/website/pages";
-            if (isDirty) {
+            if (isDirty && !$scope.duplicate) {
                 event.preventDefault();
                 $scope.updatePageComponents();
                 if($scope.childScope.updateBlogPageData)
@@ -1123,6 +1139,7 @@
         $scope.editPageValidated = false;
 
         $scope.validateEditPage = function(page) {
+
             if (page.handle == '') {
                 $scope.handleError = true;
                 angular.element('#edit-page-url').parents('div.form-group').addClass('has-error');
@@ -1141,6 +1158,31 @@
                 $scope.editPageValidated = true;
             } else
                 $scope.editPageValidated = false;
+        };
+
+
+        /*
+         * @validateNewPage
+         * -
+         */
+
+        $scope.newPageValidated = false;
+
+        $scope.validateNewPage = function(page) {            
+            if (!page.handle || page.handle == '') {
+                angular.element('#new-page-url').parents('div.form-group').addClass('has-error');
+            } else {
+                angular.element('#new-page-url').parents('div.form-group').removeClass('has-error');
+            }
+            if (!page.title || page.title == '') {
+                angular.element('#new-page-title').parents('div.form-group').addClass('has-error');
+            } else {
+                angular.element('#new-page-title').parents('div.form-group').removeClass('has-error');
+            }
+            if (page && page.title && page.title != '' && page.handle && page.handle != '') {
+                $scope.newPageValidated = true;
+            } else
+                $scope.newPageValidated = false;
         };
 
 
@@ -1171,6 +1213,35 @@
             } else
                 $scope.editPostValidated = false;
         };
+
+        /*
+         * @validateNewPost
+         * -
+         */
+
+        $scope.newPostValidated = false;
+
+        $scope.validateNewPost = function(post) {
+            if (!post.post_url || post.post_url == '') {
+                $scope.handleError = true;
+                angular.element('#new-post-url').parents('div.form-group').addClass('has-error');
+            } else {
+                $scope.handleError = false;
+                angular.element('#new-post-url').parents('div.form-group').removeClass('has-error');
+            }
+            if (!post.post_title || post.post_title == '') {
+                $scope.titleError = true;
+                angular.element('#new-post-title').parents('div.form-group').addClass('has-error');
+            } else {
+                $scope.titleError = false;
+                angular.element('#new-post-title').parents('div.form-group').removeClass('has-error');
+            }
+            if (post && post.post_title && post.post_title != '' && post.post_url && post.post_url != '') {
+                $scope.newPostValidated = true;
+            } else
+                $scope.newPostValidated = false;
+        };
+
 
         /*
          * @savePage
@@ -2989,6 +3060,58 @@
           }
         ];
 
+        $scope.createDuplicatePage =function(newPage)
+        {
+            $scope.validateNewPage(newPage);
+            if (!$scope.newPageValidated) {
+                toaster.pop('error', "Page Title or URL can not be blank.");
+                return false;
+            }
+            WebsiteService.getSinglePage($scope.currentPage.websiteId, newPage.handle, function(data) {
+                if(data && data._id)
+                {
+                    toaster.pop('error', "Page URL " + newPage.handle, "Already exists");
+                    return false;
+                }
+                newPage.components = $scope.currentPage.components;
+                WebsiteService.createDuplicatePage($scope.currentPage.websiteId, newPage, function(data) {
+                    $scope.duplicate = true;
+                    console.log("Duplicate Page Created");
+                    window.location = '/admin/#/website/pages/?pagehandle=' + newPage.handle;
+                    window.location.reload();
+                })
+            })
+        }
 
+        $scope.createDuplicatePost =function(newPost)
+        {
+            $scope.validateNewPost(newPost);
+            if (!$scope.newPostValidated) {
+                toaster.pop('error', "Post Title or URL can not be blank.");
+                return false;
+            }
+            WebsiteService.getSinglePost($scope.currentPage.websiteId, newPost.post_url, function(data) {
+                if(data && data._id)
+                {
+                    toaster.pop('error', "Post URL " + newPost.post_url, "Already exists");
+                    return false;
+                }
+
+                var post_data = $scope.childScope.getBlogPost();
+                newPost.post_content = post_data.post_content;
+                newPost.post_tags = post_data.post_tags;
+                newPost.post_author = post_data.post_author;
+                newPost.post_category = post_data.post_category;
+                newPost.post_excerpt = post_data.post_excerpt;
+                newPost.featured_image = post_data.featured_image;
+                newPost.publish_date = post_data.publish_date;
+                WebsiteService.createPost(-1, newPost, function(data) {
+                    $scope.duplicate = true;
+                     console.log("Duplicate Post Created");
+                     window.location = '/admin/#/website/posts/?posthandle=' + newPost.post_url;
+                     window.location.reload();
+                })
+            })
+        }
     }]);
 })(angular);

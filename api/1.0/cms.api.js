@@ -66,6 +66,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('website/:websiteId/pages'), this.setup.bind(this), this.getAllPages.bind(this));
         app.get(this.url('website/:websiteId/page/:id'), this.setup.bind(this), this.getPageById.bind(this));
         app.post(this.url('website/:websiteId/page'), this.isAuthAndSubscribedApi.bind(this), this.createPage.bind(this));
+        app.post(this.url('website/:websiteId/duplicate/page'), this.isAuthAndSubscribedApi.bind(this), this.createDuplicatePage.bind(this));
         app.post(this.url('website/:websiteId/page/:id'), this.isAuthAndSubscribedApi.bind(this), this.updatePage.bind(this));
         app.put(this.url('website/:websiteId/page'), this.isAuthAndSubscribedApi.bind(this), this.createPage.bind(this));
         app.put(this.url('website/:websiteId/page/:id'), this.isAuthAndSubscribedApi.bind(this), this.updatePage.bind(this));
@@ -102,6 +103,8 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('page/:id/blog'), this.setup.bind(this), this.listBlogPostsByPageId.bind(this));
         app.get(this.url('blog'), this.setup.bind(this), this.listBlogPosts.bind(this));
         app.get(this.url('editor/blog'), this.isAuthAndSubscribedApi.bind(this), this.listAllBlogPosts.bind(this));
+        app.get(this.url('website/:id/blog/:handle'), this.setup.bind(this), this.getBlogPostByUrl.bind(this));
+        app.get(this.url('website/:websiteid/page/:handle'), this.setup.bind(this), this.getPageByHandle.bind(this));
         app.get(this.url('editor/blog/:postId'), this.isAuthAndSubscribedApi.bind(this), this.getEditableBlogPost.bind(this));
         app.get(this.url('website/:id/page/blog/:title'), this.setup.bind(this), this.getBlogPostByTitle.bind(this));
         app.get(this.url('page/:id/blog/:postId'), this.setup.bind(this), this.getBlogPost.bind(this));
@@ -513,6 +516,56 @@ _.extend(api.prototype, baseApi.prototype, {
                     page.set('accountId', accountId);
                     self.log.debug('>> page created');
                     cmsManager.createPage(page, function (err, value) {
+                        self.log.debug('<< createPage');
+                        self.sendResultOrError(res, err, value, "Error creating Page");
+                        cmsManager.updatePageScreenshot(value.id(), function(err, value){
+                            if(err) {self.log.warn('Error updating screenshot for pageId ' + value.id() + ': ' + err);}
+                            self = null;
+                        });
+                        var pageUrl = self._buildPageUrl(req, page.get('handle'));
+                        self._updatePageCache(pageUrl);
+                        self.createUserActivity(req, 'CREATE_PAGE', null, null, function(){});
+                    });
+                } else {
+                    self.log.error('Cannot create null page.');
+                    self.wrapError(res, 400, 'Bad Parameter', 'Cannot create a null page.');
+                    self = null;
+                }
+            }
+        });
+
+    },
+
+    createDuplicatePage: function (req, res) {
+        var self = this;
+        self.log.debug('>> createDuplicatePage');
+
+        var websiteId = req.params.websiteId;
+        var accountId = parseInt(self.accountId(req));
+
+        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(req);
+            } else {
+                var pageObj = req.body;
+                self.log.debug('>> page body');
+                var page = require('../../cms/model/page');
+                var temp = $$.u.idutils.generateUUID();
+                if (page != null) {
+                    self.log.debug('>> page not null');
+                    page = new Page({
+                        _id: temp,
+                        title: pageObj.title,
+                        handle: pageObj.handle,
+                        mainmenu: pageObj.mainmenu,
+                        components: pageObj.components
+                    });
+                    page.attributes.modified.date = new Date();
+                    page.attributes.created.date = new Date();
+                    page.set('websiteId', websiteId);
+                    page.set('accountId', accountId);
+                    self.log.debug('>> page created');
+                    cmsManager.createPageFromPage(page, function (err, value) {
                         self.log.debug('<< createPage');
                         self.sendResultOrError(res, err, value, "Error creating Page");
                         cmsManager.updatePageScreenshot(value.id(), function(err, value){
@@ -1173,7 +1226,8 @@ _.extend(api.prototype, baseApi.prototype, {
                 blogPost.set('pageId', pageId);
                 blogPost.attributes.modified.date = new Date();
                 blogPost.attributes.created.date = new Date();
-                blogPost.attributes.publish_date = moment().format('MM/DD/YYYY');
+                if(!blogPost.attributes.publish_date)
+                    blogPost.attributes.publish_date = moment().format('MM/DD/YYYY');
                 self.log.debug('<< Publish Date is' + blogPost.attributes.publish_date);
                 cmsManager.createBlogPost(accountId, blogPost, function (err, value) {
                     self.log.debug('<< createBlogPost' + JSON.stringify(blogPost));
@@ -1237,6 +1291,25 @@ _.extend(api.prototype, baseApi.prototype, {
 
         cmsManager.getBlogPostByUrl(accountId, blogPostTitle, statusAry, function(err, value){
             self.log.debug('<< getBlogPostByTitle');
+            self.sendResultOrError(resp, err, value, "Error getting Blog Post");
+            self = null;
+        });
+    },
+
+
+    getBlogPostByUrl: function(req, resp) {
+        var self = this;
+        self.log.debug('>> getBlogPostByUrl');
+        var accountId = parseInt(self.accountId(req));
+        var blogPostUrl = req.params.handle;
+
+        var statusAry = [$$.m.BlogPost.status.PUBLISHED];        
+            statusAry.push($$.m.BlogPost.status.PRIVATE);            
+            statusAry.push($$.m.BlogPost.status.DRAFT);
+            statusAry.push($$.m.BlogPost.status.FUTURE);  
+
+        cmsManager.getBlogPostByUrl(accountId, blogPostUrl, statusAry, function(err, value){
+            self.log.debug('<< getBlogPostByUrl');
             self.sendResultOrError(resp, err, value, "Error getting Blog Post");
             self = null;
         });

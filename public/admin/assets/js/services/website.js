@@ -54,6 +54,19 @@
             });
 		};
 
+		//website/:websiteid/page/:handle
+		this.getSinglePost = function (websiteID, handle, fn) {
+			var apiUrl = baseUrl + ['cms', 'website', websiteID || $$.server.websiteId, 'blog', handle].join('/');
+			$http.get(apiUrl)
+			.success(function (data, status, headers, config) {
+				fn(data);
+			})
+			.error(function (err) {
+                console.log('END:getSinglePost with ERROR');
+                fn(err, null);
+            });
+		};
+
 		//page/:id/versions
 		this.getPageVersions = function (pageId, fn) {
 			var apiUrl = baseUrl + ['cms', 'page', pageId, 'versions'].join('/');
@@ -270,6 +283,26 @@
                 console.log('END:Create Page with ERROR');
             });
 		};
+
+		//website/:websiteId/duplicate/page
+		this.createDuplicatePage = function(websiteId, pagedata, fn) {
+			var self = this;
+			var apiUrl = baseUrl + ['cms', 'website', websiteId, 'duplicate', 'page'].join('/');
+			$http({
+			    url: apiUrl,
+			    method: "POST",
+			    data: angular.toJson(pagedata)
+			})
+			.success(function (data, status, headers, config) {
+				console.log('data >>> ', data);
+				fn(data);
+			})
+			.error(function (err) {
+                console.log('END:Create Page with ERROR');
+            });
+		};
+
+		
 
 		//template/:id/website/:websiteId/page/
 		this.createPageFromTemplate = function(templateId, pagedata, fn) {
