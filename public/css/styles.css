@@ -4294,6 +4294,11 @@ fieldset[disabled] .btn-vimeo-square.active {
   color: #1ab7ea;
   background-color: #ffffff;
 }
+.fa-reddit {
+  color: #000 !important;
+  background-color: #eff7ff;
+  border-color: rgba(0, 0, 0, 0.2);
+}
 /********** Customer Account **********/
 .customer-account-v1 .address-info {
   background: #EFF6F9;
