@@ -62,7 +62,7 @@ var component = $$.m.ModelBase.extend({
              *
              *
              */
-            imgurl : "http://api.randomuser.me/portraits/med/women/51.jpg",
+            imgurl : "<img data-cke-saved-src=\"http://api.randomuser.me/portraits/med/women/51.jpg\" src=\"http://api.randomuser.me/portraits/med/women/51.jpg\">​​",
 
             /**
              *

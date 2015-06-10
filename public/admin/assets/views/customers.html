@@ -12,7 +12,7 @@
     </section>
     <!-- end: PAGE TITLE -->
     <!-- start: CONTENT -->
-    <div st-table="displayedCustomers" st-safe-src="customers">
+    <div st-table="displayedCustomers" st-sort-table st-safe-src="customers">
         <div class="container-fluid container-fullw bg-white padding-top-0 padding-bottom-0">
             <div class="row">
                 <div class="col-sm-12">
@@ -112,7 +112,7 @@
                                 <th st-sort="first" ng-show="column.name" ng-class="{'column-width': tableView == 'grid'}">First Name</th>
                                 <th st-sort="last" ng-show="column.name" ng-class="{'column-width': tableView == 'grid'}">Last Name</th>
                                 <th st-sort="getters.tags" ng-show="column.tags" ng-class="{'column-width': tableView == 'grid'}">Tags</th>
-                                <th class="hidden-xs" st-sort="bestEmail" ng-show="column.email" ng-class="{'column-width': tableView == 'grid'}">Email</th>
+                                <th st-sort="bestEmail" ng-show="column.email" ng-class="{'column-width': tableView == 'grid'}">Email</th>
                                 <th class="hidden-xs" st-sort="getters.address" ng-show="column.address" ng-class="{'column-width': tableView == 'grid'}">Address</th>
                                 <th class="hidden-xs center" st-sort="getters.phone" ng-show="column.phone" ng-class="{'column-width': tableView == 'grid'}">Phone</th>
                                 <th class="hidden-xs" st-sort="getters.social" ng-show="column.social" ng-class="{'column-width': tableView == 'grid'}">Social</th>

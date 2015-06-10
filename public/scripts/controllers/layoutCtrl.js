@@ -732,9 +732,11 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
 
         $scope.activateCKEditor = function() {            
                 $scope.isEditing = true;
-                for (name in CKEDITOR.instances) {  
+                for (name in CKEDITOR.instances) {                     
+                    {
                         CKEDITOR.instances[name].removeCustomListeners();
                         CKEDITOR.remove(CKEDITOR.instances[name]);
+                    }                        
                 }
                 CKEDITOR.disableAutoInline = true;
                 var elements = angular.element('.editable');
@@ -1898,6 +1900,12 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
                
             },300);
         };
+
+        $scope.isValidUrl = function(string)
+        {
+            var regex = /^(f|ht)tps?:/;
+            return regex.test(string);
+        }
 
         if($scope.parentScope)
             angular.element("body").on("DOMNodeInserted", ".editable", function(e) {

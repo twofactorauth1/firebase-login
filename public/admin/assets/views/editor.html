@@ -30,38 +30,44 @@
                             </div>
                         </div> -->
                         <div>
-                            <div class="col-sm-15 col-xs-6 center">
+                            <div class="col-sm-2 col-xs-6 center">
                                 <a ng-if="!single_post" ng-disabled="!iframeLoaded" type="button" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-eye btn-o" ng-click="getUrl(currentPage.handle, false)" target="_blank">
-                                    <span>View Page</span>
+                                    <span>View</span>
                                 </a>
                                 <a ng-if="single_post" ng-disabled="!iframeLoaded" type="button" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-eye btn-o" ng-click="getUrl(post_data.post_url, true)" target="_blank">
-                                    <span>View Post</span>
+                                    <span>View</span>
                                 </a>
                                 <div class="hidden-lg margin-bottom-10"></div>
                             </div>
-                            <div class="col-sm-15 col-xs-6 center">
+                            <div class="col-sm-2 col-xs-6 center">
                                 <button type="button" ng-disabled="!iframeLoaded" ng-click="openSettingsModal()" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-settings btn-o">
-                                    <span>{{single_post ? 'Post Settings' :  'Page Settings'}}</span>
+                                    <span>Settings</span>
                                 </button>
                                 <div class="hidden-lg margin-bottom-10"></div>
                             </div>
 
-                            <div class="col-sm-15 col-xs-6 center">
+                            <div class="col-sm-2 col-xs-6 center">
                                 <button type="button" ng-disabled="!iframeLoaded || saveLoading" ng-click="savePage()" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-save btn-o">
                                     <span class="fa fa-spinner fa-spin" ng-if="saveLoading"></span>
                                     <span>Save</span>
                                 </button>
                                 <div class="hidden-lg margin-bottom-10"></div>
                             </div>
-                            <div class="col-sm-15 col-xs-6 center">
+                            <div class="col-sm-2 col-xs-6 center">
                                 <button type="button" ng-disabled="!iframeLoaded" ng-click="cancelPage()" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-close btn-o">
                                     <span>Cancel</span>
                                 </button>
                                 <div class="hidden-lg margin-bottom-10"></div>
                             </div>
-                             <div class="col-sm-15 col-xs-6 center">
+                            <div class="col-sm-2 col-xs-6 center">
                                 <button type="button" ng-disabled="!iframeLoaded" ng-click="insertMediaOnClick()" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-layout-media-overlay-alt btn-o">
-                                    <span>Media Manager</span>
+                                    <span>Media</span>
+                                </button>
+                                <div class="hidden-lg margin-bottom-10"></div>
+                            </div>
+                            <div class="col-sm-2 col-xs-6 center">
+                                <button type="button" ng-disabled="!iframeLoaded" ng-click="openDuplicateModal()" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-layout-media-overlay-alt btn-o">
+                                    <span>Duplicate</span>
                                 </button>
                                 <div class="hidden-lg margin-bottom-10"></div>
                             </div>
@@ -86,3 +92,5 @@
 <div data-ng-include=" 'assets/views/partials/social-links-modal.html' "></div>
 <div data-ng-include=" 'assets/views/partials/page-settings-modal.html' "></div>
 <div data-ng-include=" 'assets/views/partials/post-settings-modal.html' "></div>
+<div data-ng-include=" 'assets/views/partials/page-duplicate-modal.html' "></div>
+<div data-ng-include=" 'assets/views/partials/post-duplicate-modal.html' "></div>
