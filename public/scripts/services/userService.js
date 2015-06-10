@@ -139,6 +139,23 @@ mainApp.service('userService', ['$http', 'ipCookie', function ($http, ipCookie) 
         });
     };
 
+    this.getLoggedInUser = function(fn) {
+        var apiUrl = baseUrl + ['user'].join('/');
+        $http({
+            url: apiUrl,
+            method: "GET"
+        })
+        .success(function (data, status, headers, config) {
+            console.log('getLoggedInUser success  ', data);
+            fn(data);
+        })
+        .error(function (err) {
+            console.log('END:getLoggedInUser with ERROR', err);
+        });
+    };
+
+
+
     this.saveOrUpdateTmpAccount = function(data, fn) {
         var apiUrl = baseUrl + ['account', 'tmp'].join('/');
         $http({

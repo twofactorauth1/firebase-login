@@ -528,6 +528,15 @@ div[data-type='campaign'] .inner-page .overlay {
     background-attachment: scroll !important;
   }
 }
+.adminbar ul.nav {
+  margin-top: 0!important;
+}
+.adminbar .navbar {
+  min-height: inherit;
+}
+.adminbar .navbar .nav {
+  margin: 0;
+}
 .inner-page {
   padding: 50px 0;
   max-width: 1000px;
@@ -2813,6 +2822,9 @@ div[data-class='image-text'] p {
   display: block;
   position: relative;
   max-width: 200px;
+}
+.footer-container {
+  color: white;
 }
 @media only screen and (min-width: 700px) and (max-width: 1920px) {
   .footer-after {

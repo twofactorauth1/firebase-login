@@ -309,7 +309,45 @@ app.constant('postConstant', {
       }, {
         label: "Private",
         data: "PRIVATE"
-      }      
+      }
+    ]
+  }
+});
+
+// {
+//   name: 'Digital',
+//   value: 'digital'
+// }, {
+//   name: 'Subscription',
+//   value: 'subscription'
+// }, {
+//   name: 'External',
+//   value: 'external'
+// }, {
+//   name: 'Virtual',
+//   value: 'virtual'
+// }
+
+app.constant('productConstant', {
+  product_types: {
+    DIGITAL: 'DIGITAL',
+    SUBSCRIPTION: 'SUBSCRIPTION',
+    EXTERNAL: 'EXTERNAL',
+    VIRTUAL: 'VIRTUAL',
+
+    dp: [{
+        label: "Digital",
+        data: "DIGITAL"
+      }, {
+        label: "Subscription",
+        data: "SUBSCRIPTION"
+      }, {
+        label: "External",
+        data: "EXTERNAL"
+      }, {
+        label: "Virtual",
+        data: "VIRTUAL"
+      }
     ]
   }
 });
@@ -438,6 +476,7 @@ app.constant('userConstant', {
     EMAIL: "e"
   }  
 });
+
 /*
 app.constant('ENV', {
   name: 'development',

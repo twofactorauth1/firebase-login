@@ -105,7 +105,7 @@
                                             <label for="form-field-select-1">
                                                 Type
                                             </label>
-                                            <select ng-model="product.type" class="form-control" ng-options="type.value as type.name for type in productTypeOptions">
+                                            <select ng-model="product.type" class="form-control" ng-options="type.data as type.label for type in productTypeOptions">
                                                 <option value="">-- choose type --</option>
                                             </select>
                                         </div>

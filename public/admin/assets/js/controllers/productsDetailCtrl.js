@@ -2,7 +2,7 @@
 /*global app, moment, angular, window*/
 /*jslint unparam:true*/
 (function (angular) {
-  app.controller('ProductsDetailCtrl', ["$scope", "$modal", "$timeout", "$state", "$stateParams", "$q", "CommonService", "ProductService", "PaymentService", "UserService", "toaster", "SweetAlert", function ($scope, $modal, $timeout, $state, $stateParams, $q, CommonService, ProductService, PaymentService, UserService, toaster, SweetAlert) {
+  app.controller('ProductsDetailCtrl', ["$scope", "$modal", "$timeout", "$state", "$stateParams", "$q", "CommonService", "ProductService", "PaymentService", "UserService", "toaster", "SweetAlert", "productConstant", function ($scope, $modal, $timeout, $state, $stateParams, $q, CommonService, ProductService, PaymentService, UserService, toaster, SweetAlert, ProductConstant) {
 
     /*
      * @openModal
@@ -297,25 +297,7 @@
       value: 'inactive'
     }];
 
-    $scope.productTypeOptions = [
-      // {
-      //     name: 'Physical',
-      //     value: 'physical'
-      // },
-      {
-        name: 'Digital',
-        value: 'digital'
-      }, {
-        name: 'Subscription',
-        value: 'subscription'
-      }, {
-        name: 'External',
-        value: 'external'
-      }, {
-        name: 'Virtual',
-        value: 'virtual'
-      }
-    ];
+    $scope.productTypeOptions = ProductConstant.product_types.dp;
 
     /*
      * @convert:iconpicker
