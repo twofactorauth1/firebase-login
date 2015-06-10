@@ -5,6 +5,8 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
         var account, theme, website, pages, teaserposts, route, postname, products, courses, setNavigation, that = this;
 
         route = $location.$$path;
+        console.log('$location ', $location);
+        $scope.adminUrl = $location.$$absUrl + '/admin'
         if (route.indexOf('/') === 0) {
             route = route.replace('/', '');
         }
@@ -70,6 +72,14 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
                     return that.courses[i];
                 }
             };
+        };
+
+        $scope.visitAdmin = function() {
+            window.location = $location.$$absUrl + 'admin';
+        };
+
+        $scope.visitEditor = function() {
+            window.location = $location.$$absUrl + 'admin/website/pages/?pagehandle='+route;
         };
 
         accountService(function(err, data) {
