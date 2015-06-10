@@ -1338,7 +1338,7 @@
                         }); 
                         setTimeout(function() {
                             if(iFrame && iFrame.contentWindow)
-                                $scope.activateCKEditor();
+                                $scope.activateCKEditor(true);
                         }, 1000)
                     });
                     var data = {
@@ -1739,9 +1739,9 @@
          * -
          */
 
-        $scope.activateCKEditor = function() {
+        $scope.activateCKEditor = function(destroy) {
             $scope.bindEvents();
-            $scope.childScope.activateCKEditor()
+            $scope.childScope.activateCKEditor(destroy)
         };
 
         /*
