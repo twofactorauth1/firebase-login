@@ -12633,6 +12633,17 @@ fieldset[disabled] .btn-vimeo-square.active {
   background-color: #1ab7ea;
   border-color: rgba(0, 0, 0, 0.2);
 }
+.app-sidebar-fixed #page-actions {
+  top: 0px;
+  position: relative;
+}
+.app-sidebar-fixed #page-actions .btn-wide {
+  min-width: 110px;
+}
+#page-actions {
+  top: 0px;
+  position: relative;
+}
 .btn-vimeo-square .badge {
   color: #1ab7ea;
   background-color: #ffffff;
