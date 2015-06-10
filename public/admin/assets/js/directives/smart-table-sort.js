@@ -6,7 +6,7 @@ app.directive('stSortTable', function(){
                     return ctrl.tableState();   
                 }
                 scope.setSortOrder = function(order) {
-                    ctrl.tableState.sortBy(order.predicate, order.reverse);                   
+                    ctrl.sortBy(order.predicate, order.reverse);                   
                 } 
             }
         };
