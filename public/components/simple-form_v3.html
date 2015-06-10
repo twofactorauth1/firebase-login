@@ -20,11 +20,14 @@
         <div class="col-sm-6 col-xs-12" data-ng-show="component.imgurl && component.text">
                 <div class="row panel-body contact-left" style="margin: 0 20px; background-color:{{primaryColor}};color: {{component.txtcolor}}">
                     <div class="col-xs-12">
-                        <div class="editable" data-class="url">
+                        <div ng-if="isValidUrl(component.imgurl)" class="editable" data-class="imgurl">
                             <img ng-src="{{component.imgurl}}" class="img-responsive contact-img center {{component.imagestyle}}">
                         </div>
+                         <div ng-if="!isValidUrl(component.imgurl)" class="center img-responsive contact-img {{component.imagestyle}}">
+                            <div class="editable" data-class="imgurl" ng-bind-html="component.imgurl | unsafe"></div>
+                        </div>
                     </div>
-                    <div id="para" class="editable col-xs-12" data-class="text">
+                    <div class="editable col-xs-12" data-class="text">
                         <convert-html contents="{{component.text}}"></convert-html>
                     </div>
                 </div>

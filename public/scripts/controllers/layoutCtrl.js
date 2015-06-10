@@ -1889,6 +1889,12 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
             },300);
         };
 
+        $scope.isValidUrl = function(string)
+        {
+            var regex = /^(f|ht)tps?:/;
+            return regex.test(string);
+        }
+
         if($scope.parentScope)
             angular.element("body").on("DOMNodeInserted", ".editable", function(e) {
                 if (!$scope.activated) {
