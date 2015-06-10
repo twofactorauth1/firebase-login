@@ -31,6 +31,12 @@
                         </div> -->
                         <div>
                             <div class="col-sm-2 col-xs-6 center">
+                                <button type="button" ng-disabled="!iframeLoaded" ng-click="openSettingsModal()" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-settings btn-o">
+                                    <span>Settings</span>
+                                </button>
+                                <div class="hidden-lg margin-bottom-10"></div>
+                            </div>
+                            <div class="col-sm-2 col-xs-6 center">
                                 <a ng-if="!single_post" ng-disabled="!iframeLoaded" type="button" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-eye btn-o" ng-click="getUrl(currentPage.handle, false)" target="_blank">
                                     <span>View</span>
                                 </a>
@@ -40,22 +46,8 @@
                                 <div class="hidden-lg margin-bottom-10"></div>
                             </div>
                             <div class="col-sm-2 col-xs-6 center">
-                                <button type="button" ng-disabled="!iframeLoaded" ng-click="openSettingsModal()" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-settings btn-o">
-                                    <span>Settings</span>
-                                </button>
-                                <div class="hidden-lg margin-bottom-10"></div>
-                            </div>
-
-                            <div class="col-sm-2 col-xs-6 center">
-                                <button type="button" ng-disabled="!iframeLoaded || saveLoading" ng-click="savePage()" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-save btn-o">
-                                    <span class="fa fa-spinner fa-spin" ng-if="saveLoading"></span>
-                                    <span>Save</span>
-                                </button>
-                                <div class="hidden-lg margin-bottom-10"></div>
-                            </div>
-                            <div class="col-sm-2 col-xs-6 center">
-                                <button type="button" ng-disabled="!iframeLoaded" ng-click="cancelPage()" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-close btn-o">
-                                    <span>Cancel</span>
+                                <button type="button" ng-disabled="!iframeLoaded" ng-click="openDuplicateModal()" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-layout-media-overlay-alt btn-o">
+                                    <span>Duplicate</span>
                                 </button>
                                 <div class="hidden-lg margin-bottom-10"></div>
                             </div>
@@ -66,8 +58,15 @@
                                 <div class="hidden-lg margin-bottom-10"></div>
                             </div>
                             <div class="col-sm-2 col-xs-6 center">
-                                <button type="button" ng-disabled="!iframeLoaded" ng-click="openDuplicateModal()" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-layout-media-overlay-alt btn-o">
-                                    <span>Duplicate</span>
+                                <button type="button" ng-disabled="!iframeLoaded || saveLoading" ng-click="savePage()" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-save btn-o">
+                                    <span class="fa fa-spinner fa-spin" ng-if="saveLoading"></span>
+                                    <span>Save</span>
+                                </button>
+                                <div class="hidden-lg margin-bottom-10"></div>
+                            </div>
+                            <div class="col-sm-2 col-xs-6 center">
+                                <button type="button" ng-disabled="!iframeLoaded" ng-click="cancelPage()" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-close btn-o">
+                                    <span>Cancel</span>
                                 </button>
                                 <div class="hidden-lg margin-bottom-10"></div>
                             </div>
