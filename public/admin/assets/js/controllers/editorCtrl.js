@@ -676,6 +676,11 @@
                             };
                         });
                 });
+                angular.element("#iframe-website").contents().find('body').off("click", ".goback");
+                //add click events for all the delete component buttons.
+                angular.element("#iframe-website").contents().find('body').on("click", ".goback", function(e) {
+                    SweetAlert.swal("Info!", "This link is disabled in the editor, this would go back on the frontend.", "warning");
+                });
                 // angular.element("#iframe-website").contents().find('body').on("DOMNodeInserted", ".editable", function(e) {
                 //     if (!$scope.activated) {
                 //       $scope.activated = true;
