@@ -720,19 +720,13 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
         };
 
 
-        $scope.activateCKEditor = function(destroy) {            
+        $scope.activateCKEditor = function() {            
                 $scope.isEditing = true;
-                for (name in CKEDITOR.instances) { 
-                    if(destroy)
-                    {
-                        CKEDITOR.instances[name].destroy()
-                    } 
-                    else
+                for (name in CKEDITOR.instances) {                     
                     {
                         CKEDITOR.instances[name].removeCustomListeners();
                         CKEDITOR.remove(CKEDITOR.instances[name]);
-                    }
-                        
+                    }                        
                 }
                 CKEDITOR.disableAutoInline = true;
                 var elements = angular.element('.editable');
