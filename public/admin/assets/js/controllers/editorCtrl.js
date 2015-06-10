@@ -1339,10 +1339,6 @@
                         setTimeout(function() {
                             if(iFrame && iFrame.contentWindow)
                                 $scope.activateCKEditor();
-                        }, 500)
-                        setTimeout(function() {
-                            if(iFrame && iFrame.contentWindow)
-                                $scope.activateCKEditor();
                         }, 1000)
                     });
                     var data = {
