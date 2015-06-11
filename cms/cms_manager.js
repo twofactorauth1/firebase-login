@@ -1558,6 +1558,7 @@ module.exports = {
         var query = {
             accountId: accountId,
             websiteId: websiteId,
+            type: 'page',
             $and: [
                 {$or: [{secure:false},{secure:{$exists:false}}]},
                 {$or: [{latest:true},{latest:{$exists:false}}]}
