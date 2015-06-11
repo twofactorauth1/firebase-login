@@ -38,6 +38,11 @@
         $scope.newPage = {};
         $scope.newPost = {};
         
+        $scope.slugifyHandle = function (title) {
+          if (title) {
+            $scope.newPage.handle = $filter('slugify')(title);
+          }
+        };
         $scope.$watch('currentPage.handle', function(newValue, oldValue) {
             if (newValue) {
                 $scope.currentPage.handle = $filter('slugify')(newValue);
