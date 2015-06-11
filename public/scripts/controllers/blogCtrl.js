@@ -305,6 +305,8 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
         $scope.updateBlogPost = function(post) {
             $scope.$apply(function() {
                 that.post.post_title = post.post_title;
+                that.post.post_url = post.post_url;
+                that.post.post_status = post.post_status;
             })
         }
 

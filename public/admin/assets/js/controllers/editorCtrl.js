@@ -1198,7 +1198,7 @@
 
         $scope.editPostValidated = false;
 
-        $scope.validateEditPost = function(post) {
+        $scope.validateEditPost = function(post, update) {
             if (post.post_url == '') {
                 $scope.handleError = true;
                 angular.element('#edit-post-url').parents('div.form-group').addClass('has-error');
@@ -1217,6 +1217,8 @@
                 $scope.editPostValidated = true;
             } else
                 $scope.editPostValidated = false;
+            if(update)
+                $scope.updateBlogPost(post);    
         };
 
         /*
@@ -2811,13 +2813,13 @@
          * -
          */
 
-        $scope.showToaster = function(value, toast, msg, post, redirect) {
-            $scope.saveLoading = value;
+        $scope.showToaster = function(value, toast, msg, post, redirect) {            
             if (toast)
                 $scope.$apply(function() {
                     toaster.pop('success', msg);
                     if(post)
                     {
+                        $scope.saveLoading = false;
                         $scope.post_data = $scope.childScope.getPostData();
                         if($scope.post_data.post_url && $location.$$search['posthandle'] !== $scope.post_data.post_url)
                             window.location = '/admin/#/website/posts/?posthandle=' + $scope.post_data.post_url;
