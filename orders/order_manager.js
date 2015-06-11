@@ -550,7 +550,7 @@ module.exports = {
     updateOrderById: function(order, fn) {
         var self = this;
         log.debug('>> updateOrderById');
-        dao.getById(order._id, $$.m.Order, function(err, order){
+        dao.getById(order._id, $$.m.Order, function(err, ord){
             if(err) {
                 log.error('Error getting order: ' + err);
                 return fn(err, null);
