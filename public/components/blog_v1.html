@@ -115,7 +115,7 @@
 
                     <div class="posts" ng-if="blog.latestposts || layout.latestposts">
                         <h4><i class="fa fa-list-alt"></i> Latest Posts</h4>
-                        <ul data-ng-repeat="blogPost in blog.latestposts || layout.latestposts |limitTo: 3 track by $index">
+                        <ul data-ng-repeat="blogPost in blog.latestposts || layout.latestposts  | filter: blogpost.publish_date || blogpost.created.date | orderBy : sortBlogFn(component): customSortOrder(component) |limitTo: 3 track by $index">
                             <li>
                                 <a href="/page/blog/{{blogPost.post_url}}">
                                     <span data-ng-if="blogPost.post_title">{{blogPost.post_title}}</span>
