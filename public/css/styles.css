@@ -4782,6 +4782,9 @@ fieldset[disabled] .btn-vimeo-square.active {
 #editor-toolbar .cke_chrome a.cke_button .cke_button__numberedlist_icon:before {
   content: "\f0cb";
 }
+#editor-toolbar .cke_chrome a.cke_button .cke_button__table_icon:before {
+  content: "\f0ce";
+}
 #editor-toolbar .cke_chrome a.cke_button .cke_button__bulletedlist_icon:before {
   content: "\f0ca";
 }
