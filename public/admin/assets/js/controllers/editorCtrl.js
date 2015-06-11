@@ -1336,10 +1336,10 @@
                             });
                           }
                         }); 
-                        setTimeout(function() {
-                            if(iFrame && iFrame.contentWindow)
-                                $scope.activateCKEditor();
-                        }, 1000)
+                        // setTimeout(function() {
+                        //     if(iFrame && iFrame.contentWindow)
+                        //         $scope.activateCKEditor();
+                        // }, 1000)
                     });
                     var data = {
                         _id: $scope.website._id,
@@ -1705,7 +1705,7 @@
             $scope.updateIframeComponents();
             $scope.componentEditing = null;
             setTimeout(function() {
-                $scope.activateCKEditor();
+                $scope.resizeIframe();
             }, 1000)
 
             $scope.$apply(function() {
@@ -1907,6 +1907,19 @@
             $scope.updateIframeComponents();
             $scope.isEditing = true;
             $scope.isDirty = true;
+            // setTimeout(function() {
+            //     $scope.activateCKEditor();
+            // }, 1000)
+        };
+
+
+        /*
+         * @updateComponentWithEditor
+         * -
+         */
+
+        $scope.updateComponentWithEditor = function() {
+            $scope.saveComponent();
             setTimeout(function() {
                 $scope.activateCKEditor();
             }, 1000)
