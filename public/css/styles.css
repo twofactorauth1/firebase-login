@@ -2191,9 +2191,11 @@ div[data-class='image-text'] p {
 }
 .simple-form-v1 .simple-form-title {
   padding-left: 10px;
+  position: relative;
 }
 .simple-form-v1 .simple-form-subtitle {
   margin: 0 10px;
+  position: relative;
 }
 .simple-form-v1 #user_email,
 .simple-form-v1 #user_first,
