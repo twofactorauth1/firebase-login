@@ -327,13 +327,33 @@ _.extend(api.prototype, baseApi.prototype, {
                 }
             },
             function(user, account, callback){
+                //store the plan, coupon, setupFee on the account billing object in case of any billing anomalies
+                var billingObj = account.get('billing');
+                billingObj.plan = plan;
+                billingObj.coupon = coupon;
+                billingObj.setupFee = setupFee;
+                accountDao.saveOrUpdate(account, function (err, updatedAccount) {
+                    if(err || updatedAccount === null) {
+                        self.log.error('Error creating Stripe customer: ' + err);
+                        return self.wrapError(res, 500, 'Error storing plan, coupon, and setupFee', err);
+                    } else {
+                        self.log.debug('Added plan, coupon, and setupFee to account billing obj');
+                        callback(null, user, updatedAccount);
+                    }
+                });
+            },
+            function(user, account, callback){
                 self.log.debug('Created user[' + user.id() + '] and account[' + account.id() + '] objects.');
                 paymentsManager.createStripeCustomerForUser(cardToken, user, account.id(), function(err, stripeCustomer) {
                     if (err) {
                         self.log.error('Error creating Stripe customer: ' + err);
-                        return self.wrapError(res, 500, 'Error creating Stripe Customer', err);
+                        accountDao.deleteAccountAndArtifacts(account.id(), function(_err, value){
+                            return self.wrapError(res, 500, 'Error creating Stripe Customer', err.code);
+                        });
+                    } else {
+                        callback(null, stripeCustomer, user, account);
                     }
-                    callback(null, stripeCustomer, user, account);
+
                 });
             },
             function(stripeCustomer, user, account, callback){
@@ -341,9 +361,14 @@ _.extend(api.prototype, baseApi.prototype, {
                 paymentsManager.createStripeSubscription(stripeCustomer.id, plan, account.id(), user.id(), coupon, setupFee, function(err, sub) {
                     if (err) {
                         self.log.error('Error creating Stripe subscription: ' + err);
-                        return self.wrapError(res, 500, 'Error creating Stripe Subscription', err);
+                        accountDao.deleteAccountAndArtifacts(account.id(), function(_err, value){
+                            return self.wrapError(res, 500, 'Error creating Stripe Subscription', err.code);
+                        });
+                    } else {
+                        userManager.sendWelcomeEmail(account.id(), account, user, email, username, function(){});
+                        callback(null, sub, stripeCustomer, user, account);
                     }
-                    callback(null, sub, stripeCustomer, user, account);
+
                 });
 
             },

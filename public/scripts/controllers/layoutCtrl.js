@@ -1618,7 +1618,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
                         if ($scope.subscriptionPlanOneTimeFee) {
                             newUser.setupFee = $scope.subscriptionPlanOneTimeFee * 100;
                         }
-                        userService.initializeUser(newUser, function(data) {
+                        userService.initializeUser(newUser, function(err, data) {
                             if (data && data.accountUrl) {
                                 /*
                                  * I'm not sure why these lines were added.  The accountUrl is a string.
@@ -1635,6 +1635,11 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
                                 window.location = data.accountUrl;
                             } else {
                                 $scope.isFormValid = false;
+                                if(err.message === 'card_declined') {
+                                    angular.element("#card_number .error").html('There was an error charging your card.');
+                                    angular.element("#card_number").addClass('has-error');
+                                    angular.element("#card_number .glyphicon").addClass('glyphicon-remove');
+                                }
                                 $scope.showFooter(true);
                             }
                         });

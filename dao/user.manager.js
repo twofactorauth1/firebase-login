@@ -64,6 +64,7 @@ module.exports = {
                      * Send welcome email.  This is done asynchronously.
                      * But only do this if we are not running unit tests.
                      */
+                    /*
                     if (process.env.NODE_ENV != "testing") {
                         fs.readFile(notificationConfig.WELCOME_HTML, 'utf-8', function (err, htmlContent) {
                             if (err) {
@@ -90,7 +91,7 @@ module.exports = {
 
                         });
                     }
-
+                    */
 
 
                     log.debug('Creating customer contact for main account.');
@@ -133,6 +134,40 @@ module.exports = {
             });
 
         });
+    },
+
+    sendWelcomeEmail: function(accountId, account, user, email, username, callback){
+        /*
+         * Send welcome email.  This is done asynchronously.
+         * But only do this if we are not running unit tests.
+         */
+        if (process.env.NODE_ENV != "testing") {
+            fs.readFile(notificationConfig.WELCOME_HTML, 'utf-8', function (err, htmlContent) {
+                if (err) {
+                    log.error('Error getting welcome email file.  Welcome email not sent for accountId ' + accountId);
+                } else {
+                    log.debug('account ', account.attributes.subdomain);
+                    var siteUrl = account.get('subdomain') + '.' + appConfig.subdomain_suffix;
+
+                    var vars = [
+                        {
+                            "name": "SITEURL",
+                            "content": siteUrl
+                        },
+                        {
+                            "name": "USERNAME",
+                            "content": user.get('username')
+                        }
+                    ];
+                    mandrillHelper.sendAccountWelcomeEmail(notificationConfig.WELCOME_FROM_EMAIL,
+                        notificationConfig.WELCOME_FROM_NAME, email, username, notificationConfig.WELCOME_EMAIL_SUBJECT,
+                        htmlContent, accountId, user.id(), vars, function (err, result) {
+                        });
+                }
+
+            });
+        }
+        callback();
     },
 
     createAccountAndUser: function(username, password, email, accountToken, anonymousId, fingerprint, sendWelcomeEmail, fn) {
@@ -211,36 +246,7 @@ module.exports = {
                             }
                             return;
                         });
-                        /*
-                         * Send welcome email.  This is done asynchronously.
-                         * But only do this if we are not running unit tests.
-                         */
-                        if (process.env.NODE_ENV != "testing") {
-                            fs.readFile(notificationConfig.WELCOME_HTML, 'utf-8', function (err, htmlContent) {
-                                if (err) {
-                                    log.error('Error getting welcome email file.  Welcome email not sent for accountId ' + accountId);
-                                } else {
-                                    log.debug('account ', account.attributes.subdomain);
-                                    var siteUrl = account.get('subdomain') + '.' + appConfig.subdomain_suffix;
 
-                                    var vars = [
-                                        {
-                                            "name": "SITEURL",
-                                            "content": siteUrl
-                                        },
-                                        {
-                                            "name": "USERNAME",
-                                            "content": savedUser.attributes.username
-                                        }
-                                    ];
-                                    mandrillHelper.sendAccountWelcomeEmail(notificationConfig.WELCOME_FROM_EMAIL,
-                                        notificationConfig.WELCOME_FROM_NAME, email, username, notificationConfig.WELCOME_EMAIL_SUBJECT,
-                                        htmlContent, accountId, userId, vars, function (err, result) {
-                                        });
-                                }
-
-                            });
-                        }
 
 
 
@@ -270,20 +276,18 @@ module.exports = {
                                             log.error('Error creating default page for account: ' + err);
                                             fn(err, null);
                                         } else {
-                                            log.debug('<< createUserFromUsernamePassword');
-                                            fn(null, {account: account, user:savedUser});
-
+                                            //pick up updated account
+                                            accountDao.getAccountByID(account.id(), function(err, updatedAccount){
+                                                log.debug('<< createUserFromUsernamePassword');
+                                                fn(null, {account: updatedAccount, user:savedUser});
+                                            });
                                         }
-
                                     });
                                 }
 
                             });
                         });
                     });
-
-
-
 
                 });
         });

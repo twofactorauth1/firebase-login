@@ -86,10 +86,10 @@ mainApp.service('userService', ['$http', 'ipCookie', function ($http, ipCookie) 
             data: angular.toJson(user)
         })
         .success(function (data, status, headers, config) {
-            fn(data);
+            fn(null, data);
         })
         .error(function (err) {
-            fn(null);
+            fn(err, null);
         });
     };
 
