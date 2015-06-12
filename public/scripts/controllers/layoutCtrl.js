@@ -141,10 +141,16 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
                     userService.getTmpAccount(function(data) {
                         var tmpAccount = data;
                         //$scope.tmpAccount = tmpAccount;
+                        $scope.newAccount.hidePassword = false;
                         if (tmpAccount.tempUser) {
                             if (tmpAccount.tempUser.email) {
                                 $scope.newAccount.email = tmpAccount.tempUser.email;
                                 $scope.newAccount.tempUserId = tmpAccount.tempUser._id;
+                                $scope.newAccount.hidePassword = true;
+                            }
+                            //if it is a twitter account, we need the email still but not a password
+                            if(tmpAccount.tempUser.credentials[0].type==='tw') {
+                                $scope.newAccount.hidePassword = true;
                             }
                             if (tmpAccount.tempUser.businessName) {
                                 $scope.newAccount.businessName = tmpAccount.tempUser.businessName;
@@ -1499,6 +1505,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
             $scope.newAccount.tempUserId = null;
             $scope.newAccount.email = null;
             $scope.tmpAccount.tempUser = null;
+            $scope.newAccount.hidePassword = false;
         };
 
         $scope.makeSocailAccount = function(socialType) {
@@ -1531,7 +1538,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
             }
 
             //pass
-            if (!$scope.newAccount.password && !$scope.newAccount.tempUserId) {
+            if (!$scope.newAccount.password && !$scope.newAccount.tempUserId && !$scope.newAccount.hidePassword) {
                 $scope.checkPasswordLength(newAccount);
                 return;
             }

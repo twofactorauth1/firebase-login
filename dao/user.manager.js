@@ -120,8 +120,12 @@ module.exports = {
                                         log.error('Error creating default page for account: ' + err);
                                         fn(err, null);
                                     } else {
-                                        log.debug('<< createAccountAndUserFromTempAccount');
-                                        fn(null, {account: account, user:savedUser});
+                                        //pick up updated account
+                                        accountDao.getAccountByID(account.id(), function(err, updatedAccount){
+                                            log.debug('<< createAccountAndUserFromTempAccount');
+                                            fn(null, {account: updatedAccount, user:savedUser});
+                                        });
+
 
                                     }
 
