@@ -268,6 +268,7 @@
       };
       $scope.order.line_items.push(_line_item);
       $scope.calculateTotals();
+      $scope.clearProduct();
       $scope.closeModal();
     };
 
