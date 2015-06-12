@@ -1863,8 +1863,8 @@
         $scope.saveComponent = function(update) {
 
             var componentId = $scope.componentEditing._id;
-            if (!update)
-                $scope.updateSingleComponent(componentId);
+            //if (!update)
+                ////$scope.updateSingleComponent(componentId);
 
             var componentIndex;
             for (var i = 0; i < $scope.components.length; i++) {
@@ -1876,9 +1876,9 @@
             $scope.updateIframeComponents();
             $scope.isEditing = true;
             $scope.isDirty = true;
-            // setTimeout(function() {
-            //     $scope.activateCKEditor();
-            // }, 1000)
+            setTimeout(function() {
+                $scope.activateCKEditor();
+            }, 1000)
         };
 
 
@@ -2563,7 +2563,7 @@
             $scope.componentEditing = _.findWhere($scope.components, {
                 _id: componentId
             });
-            $scope.updateSingleComponent(componentId);
+            //$scope.updateSingleComponent(componentId);
             $scope.componentEditing.features.splice(index + 1, 0, newFeature)
             $scope.saveCustomComponent();
         };
