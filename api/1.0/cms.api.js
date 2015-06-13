@@ -145,7 +145,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         var self = this;
         self.log.debug('>> saveOrUpdateWebsite');
-        var settings = req.body.settings;
+        var settings = req.body;
         var accountId = req.body.accountId;
         var websiteId = req.body._id;
         //console.log('Other Data: '+JSON.stringify(req.body));

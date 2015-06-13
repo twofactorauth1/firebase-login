@@ -1999,6 +1999,7 @@
          */
 
         $scope.deletePage = function() {
+            $scope.childScope.checkOrSetPageDirty(true);
             SweetAlert.swal({
                     title: "Are you sure?",
                     text: "Do you want to delete this page",
