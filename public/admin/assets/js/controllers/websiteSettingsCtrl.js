@@ -1,7 +1,8 @@
 'use strict';
 /*global app, moment, angular, window*/
+/*jslint unparam:true*/
 (function (angular) {
-  app.controller('WebsiteSettingsCtrl', ["$scope", "$modal", "WebsiteService", "AccountService", function ($scope, $modal, WebsiteService, AccountService) {
+  app.controller('WebsiteSettingsCtrl', ["$scope", "WebsiteService", "AccountService", function ($scope, WebsiteService, AccountService) {
     $scope.keywords = [];
     WebsiteService.getWebsite(function (website) {
       $scope.website = website;
@@ -25,7 +26,7 @@
       $scope.website.settings.favicon = asset.url;
     };
 
-    $scope.removeFavicon = function (asset) {
+    $scope.removeFavicon = function () {
       $scope.website.settings.favicon = '';
     };
 
