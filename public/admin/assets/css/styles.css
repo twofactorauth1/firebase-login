@@ -13340,3 +13340,36 @@ tags-input.ti-input-sm .tags .input,
 .business .multiple-hours .checkbox {
   margin-right: 0px !important;
 }
+/* ---------------------------------------------------------------------- */
+/*  Website Settings
+/* ---------------------------------------------------------------------- */
+.website-settings .favicon-image {
+  background: url('https://s3-us-west-2.amazonaws.com/indigenous-admin/Browser-Mockup.png') no-repeat;
+  height: 60px;
+  background-size: cover;
+  margin-bottom: 15px;
+}
+.website-settings .favicon-image .pagetitle {
+  margin-left: 94px;
+  position: absolute;
+  margin-top: 12px;
+}
+.website-settings .favicon-image .pageurl {
+  margin-left: 104px;
+  position: absolute;
+  margin-top: 37px;
+}
+.website-settings .favicon-image .top-favicon {
+  width: 16px;
+  height: 16px;
+  right: -75px;
+  position: relative;
+  top: 11px;
+}
+.website-settings .favicon-image .bottom-favicon {
+  width: 16px;
+  height: 16px;
+  right: -64px;
+  position: relative;
+  top: 35px;
+}

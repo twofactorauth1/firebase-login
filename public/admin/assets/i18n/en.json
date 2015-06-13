@@ -64,7 +64,8 @@
                 "ANALYTICS": "Site Analytics",
                 "PAGES": "Pages",
                 "POSTS": "Posts",
-                "TEMPLATES": "Templates"
+                "TEMPLATES": "Templates",
+                "SETTINGS": "Settings"
             },
             "customers": {
                 "MAIN": "Customers"

@@ -248,6 +248,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
                 console.log('Controller:LayoutCtrl -> Method:websiteService Error: ' + err);
             } else {
                 that.website = data;
+                $scope.website = data;
             }
         });
 
