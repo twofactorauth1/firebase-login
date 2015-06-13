@@ -80,8 +80,13 @@ _.extend(api.prototype, baseApi.prototype, {
     updateOrder: function(req, res) {
         var self = this;
         self.log.debug('>> updateOrder');
-
-        var order = req.body.order;
+       
+        console.dir(req.body);
+        var order = new $$.m.Order(req.body.order);
+        var orderId = req.params.id;
+        order.set('_id', orderId);
+        self.log.debug('>> Order', order);
+        
         self.checkPermission(req, self.sc.privs.VIEW_ORDER, function(err, isAllowed) {
             if (isAllowed !== true) {
                 return self.send403(res);

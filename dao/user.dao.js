@@ -333,7 +333,8 @@ var dao = {
                 var facebookDao = require('./social/facebook.dao');
                 return facebookDao.refreshUserFromProfile(user, defaultPhoto, fxn);
             case social.TWITTER:
-                return fxn(null, user);
+                var twitterDao = require('./social/twitter.dao');
+                return twitterDao.refreshUserFromProfile(user, defaultPhoto, fxn);
             case social.GOOGLE:
                 var googleDao = require('./social/google.dao');
                 return googleDao.refreshUserFromProfile(user, defaultPhoto, fxn);

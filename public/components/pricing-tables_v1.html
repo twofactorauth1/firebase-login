@@ -68,5 +68,12 @@
                 </div>
         </div>
 </div>
+
+<div ng-if="!component.tables.length">
+   <a href="" ng-if="isEditing" ng-click="addPricingTable(component._id,$index)" class="btn btn-default">
+        <i class="fa fa-plus" ></i>
+    </a>
+</div>
+
 </div>
 </div>

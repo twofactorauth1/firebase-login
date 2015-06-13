@@ -37,7 +37,7 @@
                 </div>
                 <div ng-include="'/components/component-wrap.html'"></div>
                 <div ng-class="{'zee-blur': !component.visibility}"></div>
-                <div class="add-component" data-index="{{$index + 1}}" ng-show="isEditing" ng-if="component.type != 'footer'">
+                <div class="add-component" data-index="{{$index + 1}}" ng-show="isEditing" ng-if="component.type != 'footer' || currentpage.components.length == 1">
                     <a href="">
                         <i class="fa fa-plus"></i>
                         <p>Add New</p>

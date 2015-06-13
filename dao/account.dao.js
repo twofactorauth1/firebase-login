@@ -432,7 +432,7 @@ var dao = {
 
   removeSubscriptionLockFromAccount: function(accountId, fn) {
     var self = this;
-    self.log.debug('>> addSubscriptionLockToAccount');
+    self.log.debug('>> removeSubscriptionLockToAccount');
     self.getById(accountId, $$.m.Account, function(err, account) {
       if (err) {
         self.log.error('Error getting account for id [' + accountId + ']: ' + err);
@@ -444,7 +444,7 @@ var dao = {
           self.log.error('Error updating account for id [' + accountId + ']: ' + err);
           return fn(err, null);
         } else {
-          self.log.debug('<< addSubscriptionLockToAccount');
+          self.log.debug('<< removeSubscriptionLockToAccount');
           return fn(null, savedAccount);
         }
       });

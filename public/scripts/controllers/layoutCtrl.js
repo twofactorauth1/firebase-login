@@ -141,10 +141,16 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
                     userService.getTmpAccount(function(data) {
                         var tmpAccount = data;
                         //$scope.tmpAccount = tmpAccount;
+                        $scope.newAccount.hidePassword = false;
                         if (tmpAccount.tempUser) {
                             if (tmpAccount.tempUser.email) {
                                 $scope.newAccount.email = tmpAccount.tempUser.email;
                                 $scope.newAccount.tempUserId = tmpAccount.tempUser._id;
+                                $scope.newAccount.hidePassword = true;
+                            }
+                            //if it is a twitter account, we need the email still but not a password
+                            if(tmpAccount.tempUser.credentials[0].type==='tw') {
+                                $scope.newAccount.hidePassword = true;
                             }
                             if (tmpAccount.tempUser.businessName) {
                                 $scope.newAccount.businessName = tmpAccount.tempUser.businessName;
@@ -735,8 +741,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
                 $scope.isEditing = true;
                 for (name in CKEDITOR.instances) {                     
                     {
-                        CKEDITOR.instances[name].removeCustomListeners();
-                        CKEDITOR.remove(CKEDITOR.instances[name]);
+                        //CKEDITOR.instances[name].updateElement();
                     }                        
                 }
                 CKEDITOR.disableAutoInline = true;
@@ -746,28 +751,29 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
                         var dataClass = angular.element(this).data('class').replace('.item.', ' ');
                         angular.element(this).wrapAll('<div class="edit-wrap"></div>').parent().append('<span class="editable-title">' + toTitleCase(dataClass) + '</span>');
                     }
-                    CKEDITOR.inline(this, {
-                        on: {
-                            instanceReady: function(ev) {
-                                var editor = ev.editor;
-                                editor.setReadOnly(false);
-                                if(index === 0)
-                                    $scope.activeEditor = editor;
-                                editor.on('change', function() {
-                                    $scope.isPageDirty = true;
-                                });
-                                editor.on('focus', function() {
-                                    $scope.activeEditor = editor;
-                                });
-                                editor.on('blur', function() {
-                                    $scope.activeEditor = null;
-                                });
+                    if(!$(this).hasClass('cke_editable_inline'))
+                        CKEDITOR.inline(this, {
+                            on: {
+                                instanceReady: function(ev) {
+                                    var editor = ev.editor;
+                                    editor.setReadOnly(false);
+                                    if(index === 0)
+                                        $scope.activeEditor = editor;
+                                    editor.on('change', function() {
+                                        $scope.isPageDirty = true;
+                                    });
+                                    editor.on('focus', function() {
+                                        $scope.activeEditor = editor;
+                                    });
+                                    editor.on('blur', function() {
+                                        $scope.activeEditor = null;
+                                    });
+                                }
+                            },
+                            sharedSpaces: {
+                                top: 'editor-toolbar'
                             }
-                        },
-                        sharedSpaces: {
-                            top: 'editor-toolbar'
-                        }
-                    });
+                        });
                 });
                 setTimeout(function() {
                     $scope.$apply(function() {
@@ -784,7 +790,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
                               {
                                   return $(this).height();
                               }).get());
-                              $("div.feature-height-"+ i + " .feature-single").css("min-height", maxFeatureHeight + 20);
+                              $("div.feature-height-"+ i + " .feature-single").css("min-height", maxFeatureHeight - 20);
                             }
                         }                      
                         $scope.parentScope.resizeIframe();
@@ -1499,6 +1505,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
             $scope.newAccount.tempUserId = null;
             $scope.newAccount.email = null;
             $scope.tmpAccount.tempUser = null;
+            $scope.newAccount.hidePassword = false;
         };
 
         $scope.makeSocailAccount = function(socialType) {
@@ -1531,7 +1538,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
             }
 
             //pass
-            if (!$scope.newAccount.password && !$scope.newAccount.tempUserId) {
+            if (!$scope.newAccount.password && !$scope.newAccount.tempUserId && !$scope.newAccount.hidePassword) {
                 $scope.checkPasswordLength(newAccount);
                 return;
             }
@@ -1618,7 +1625,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
                         if ($scope.subscriptionPlanOneTimeFee) {
                             newUser.setupFee = $scope.subscriptionPlanOneTimeFee * 100;
                         }
-                        userService.initializeUser(newUser, function(data) {
+                        userService.initializeUser(newUser, function(err, data) {
                             if (data && data.accountUrl) {
                                 /*
                                  * I'm not sure why these lines were added.  The accountUrl is a string.
@@ -1635,6 +1642,11 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
                                 window.location = data.accountUrl;
                             } else {
                                 $scope.isFormValid = false;
+                                if(err.message === 'card_declined') {
+                                    angular.element("#card_number .error").html('There was an error charging your card.');
+                                    angular.element("#card_number").addClass('has-error');
+                                    angular.element("#card_number .glyphicon").addClass('glyphicon-remove');
+                                }
                                 $scope.showFooter(true);
                             }
                         });
