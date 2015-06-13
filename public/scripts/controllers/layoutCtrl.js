@@ -741,7 +741,12 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
                 $scope.isEditing = true;
                 for (name in CKEDITOR.instances) {                     
                     {
-                        //CKEDITOR.instances[name].updateElement();
+                       var b = CKEDITOR.instances[name];
+                       b.updateElement();
+                       var d = b.getData(1);
+                       if(d)
+                            b.setData(d);
+                       b.fire("contentDom");
                     }                        
                 }
                 CKEDITOR.disableAutoInline = true;
@@ -773,30 +778,8 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
                             sharedSpaces: {
                                 top: 'editor-toolbar'
                             }
-                        });
-                });
-                setTimeout(function() {
-                    $scope.$apply(function() {
-                        if (angular.element("div.meet-team-height").length) {
-                            var maxTeamHeight = Math.max.apply(null, angular.element("div.meet-team-height").map(function() {
-                                return angular.element(this).height();
-                            }).get());
-                            angular.element(".meet-team-height").css("min-height", maxTeamHeight);
-                        }
-                        for (var i = 1; i <= 3; i++) { 
-                            if($("div.feature-height-"+i).length)
-                            {
-                              var maxFeatureHeight = Math.max.apply(null, $("div.feature-height-"+i).map(function ()
-                              {
-                                  return $(this).height();
-                              }).get());
-                              $("div.feature-height-"+ i + " .feature-single").css("min-height", maxFeatureHeight - 20);
-                            }
-                        }                      
-                        $scope.parentScope.resizeIframe();
-                  });  
-                }, 500)            
-            
+                    });
+                }); 
         };
 
 
