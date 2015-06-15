@@ -2914,6 +2914,9 @@ div[data-type=single-post] .container {
 .single-post-v1 tags-input .tags .tag-item {
   background: #47b1cc;
 }
+.single-post-v1 .editable.post_excerpt_div {
+  min-height: 10px;
+}
 .single-blog .blog-meta {
   margin-top: 15px;
   margin-bottom: 30px;
