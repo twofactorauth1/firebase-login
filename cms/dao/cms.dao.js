@@ -302,7 +302,7 @@ var dao = {
                 */
                 var versionAry = [];
                 _.each(files, function(element, index, list){
-                    if(element.indexOf(type) === 0) {
+                    if(element.indexOf(type + '_v') === 0) {
                         versionAry.push(element.replace(type + '_v', '').replace('.html',''));
                     }
                 });
