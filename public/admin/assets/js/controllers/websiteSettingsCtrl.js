@@ -2,7 +2,7 @@
 /*global app, moment, angular, window*/
 /*jslint unparam:true*/
 (function (angular) {
-  app.controller('WebsiteSettingsCtrl', ["$scope", "WebsiteService", "AccountService", function ($scope, WebsiteService, AccountService) {
+  app.controller('WebsiteSettingsCtrl', ["$scope", "WebsiteService", "AccountService","toaster", function ($scope, WebsiteService, AccountService, toaster) {
     $scope.keywords = [];
     WebsiteService.getWebsite(function (website) {
       $scope.website = website;
@@ -18,6 +18,7 @@
       AccountService.updateAccount($scope.account, function () {
         WebsiteService.updateWebsite($scope.website, function () {
           console.log('updated');
+          toaster.pop('success', "Website Settings Updated", "The website setting was updated successfully.");
         });
       });
     };
