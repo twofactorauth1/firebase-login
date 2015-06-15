@@ -75,10 +75,10 @@ var component = $$.m.ModelBase.extend({
             },
 
             tagCloud: {
-                bgcolor: null;
-                txtcolor: null;
-                txthovercolor: null;
-            }
+                bgcolor: null,
+                txtcolor: null,
+                txthovercolor: null
+            },
 
             /**
              * The default sort order of component
