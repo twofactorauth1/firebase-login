@@ -1876,9 +1876,9 @@
             $scope.updateIframeComponents();
             $scope.isEditing = true;
             $scope.isDirty = true;
-            //setTimeout(function() {
-                //$scope.activateCKEditor();
-            //}, 1000)
+            setTimeout(function() {
+                $scope.activateCKEditor();
+            }, 1000)
         };
 
 
