@@ -3051,7 +3051,6 @@
 
         $scope.checkForSaveBeforeLeave = function(url, reload)
         {
-            $scope.isDirty = false;
             var isDirty = false;
             var iFrame = document.getElementById("iframe-website");
             if ($scope.childScope.checkOrSetPageDirty) {
@@ -3062,7 +3061,6 @@
             if(!redirectUrl)
                 redirectUrl = $location.$$search['posthandle'] ? "/admin/#/website/posts" : "/admin/#/website/pages";
             if (isDirty) {
-                event.preventDefault();
                 $scope.updatePageComponents();
                 if($scope.childScope.updateBlogPageData)
                     $scope.childScope.updateBlogPageData(iFrame);
