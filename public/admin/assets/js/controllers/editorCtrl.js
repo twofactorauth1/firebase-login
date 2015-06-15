@@ -1630,7 +1630,7 @@
             $scope.components = $scope.currentPage.components;
 
             var cmpVersion = addedType.version;
-
+            $scope.isDirty = true;
             WebsiteService.saveComponent(addedType, cmpVersion || 1, function(data) {
 
                 if (data) {
@@ -3051,6 +3051,7 @@
 
         $scope.checkForSaveBeforeLeave = function(url, reload)
         {
+            $scope.changesConfirmed = true;
             var isDirty = false;
             var iFrame = document.getElementById("iframe-website");
             if ($scope.childScope.checkOrSetPageDirty) {
@@ -3059,7 +3060,7 @@
             $scope.childScope.checkOrSetPageDirty(true);
             var redirectUrl = url; 
             if(!redirectUrl)
-                redirectUrl = $location.$$search['posthandle'] ? "/admin/#/website/posts" : "/admin/#/website/pages";
+                redirectUrl = $location.$$search['posthandle'] ? "/website/posts" : "/website/pages";
             if (isDirty) {
                 $scope.updatePageComponents();
                 if($scope.childScope.updateBlogPageData)
@@ -3080,20 +3081,33 @@
                             SweetAlert.swal("Saved!", "Your edits were saved to the page.", "success");
                             $scope.redirect = true;
                             $scope.savePage();
-                            window.location = redirectUrl;
                             if(reload)
-                                window.location.reload();
+                            {
+                              window.location = redirectUrl; 
+                              window.location.reload(); 
+                            }
+                            else
+                                $location.path(redirectUrl);
+                                
                         } else {
                             SweetAlert.swal("Cancelled", "Your edits were NOT saved.", "error");
-                            window.location = redirectUrl;
                             if(reload)
-                                window.location.reload();
+                            {
+                              window.location = redirectUrl; 
+                              window.location.reload(); 
+                            }
+                            else
+                                $location.path(redirectUrl);
                         }                        
                     });
             } else {
-                window.location = redirectUrl;
-                if(reload)
-                    window.location.reload();
+                    if(reload)
+                        {
+                          window.location = redirectUrl; 
+                          window.location.reload(); 
+                        }
+                        else
+                            $location.path(redirectUrl);
             }
         }
         $scope.createDuplicatePage =function(newPage)
