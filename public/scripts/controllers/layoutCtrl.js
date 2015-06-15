@@ -779,7 +779,28 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
                                 top: 'editor-toolbar'
                             }
                     });
-                }); 
+                });
+                setTimeout(function() {
+                    $scope.$apply(function() {
+                        if (angular.element("div.meet-team-height").length) {
+                            var maxTeamHeight = Math.max.apply(null, angular.element("div.meet-team-height").map(function() {
+                                return angular.element(this).height();
+                            }).get());
+                            angular.element(".meet-team-height").css("min-height", maxTeamHeight);
+                        }
+                        for (var i = 1; i <= 3; i++) { 
+                            if($("div.feature-height-"+i).length)
+                            {
+                              var maxFeatureHeight = Math.max.apply(null, $("div.feature-height-"+i).map(function ()
+                              {
+                                  return $(this).height();
+                              }).get());
+                              $("div.feature-height-"+ i + " .feature-single").css("min-height", maxFeatureHeight - 20);
+                            }
+                        }                      
+                        $scope.parentScope.resizeIframe();
+                  });  
+                }, 500)    
         };
 
 
