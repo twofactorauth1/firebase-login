@@ -1,3 +1,15 @@
+<style>
+    div.jqcloud {
+        background-color: {{component.tagCloud.bgcolor || 'inherit'}};
+    }
+    div.jqcloud span {
+         color: {{component.tagCloud.txtcolor}} !important;
+    }
+    div.jqcloud a:hover
+    {
+        color: {{component.tagCloud.txthovercolor}} !important;
+    }
+</style>
 <div ng-class="component.type+'-v'+component.version">
     <div data-class="blog" data-id="{{component._id}}">
         <div id="content-area">

@@ -82,6 +82,30 @@
                             <spectrum-colorpicker format="'hex'" options="spectrum.options" class="pull-right" ng-model="componentEditing.bg.color" ng-change="saveComponent()"></spectrum-colorpicker>
                         </div>
                     </div>
+                    <div class="form-group" ng-if="componentEditing.type === 'blog'">
+                        <label for="tag-txt-color">Tags Font Color:</label>
+                        <span tooltip-placement="top" tooltip-html-unsafe="Font color of tags."><i class="fa fa-info-circle" /></span>
+                        <div class="pull-right">
+                            <h4 class="pull-left"><i class="fa fa-eyedropper" /></h4>
+                            <spectrum-colorpicker format="'hex'" options="spectrum.options" class="pull-right" ng-model="componentEditing.tagCloud.txtcolor" ng-change="saveComponent()"></spectrum-colorpicker>
+                        </div>
+                    </div>
+                    <div class="form-group" ng-if="componentEditing.type === 'blog'">
+                        <label for="tag-txt-color">Tags Font Hover Color:</label>
+                        <span tooltip-placement="top" tooltip-html-unsafe="Font hover color of tags."><i class="fa fa-info-circle" /></span>
+                        <div class="pull-right">
+                            <h4 class="pull-left"><i class="fa fa-eyedropper" /></h4>
+                            <spectrum-colorpicker format="'hex'" options="spectrum.options" class="pull-right" ng-model="componentEditing.tagCloud.txthovercolor" ng-change="saveComponent()"></spectrum-colorpicker>
+                        </div>
+                    </div>
+                    <div class="form-group" ng-if="componentEditing.type === 'blog'">
+                        <label for="tag-bg-color">Tags Background Color:</label>
+                        <span tooltip-placement="top" tooltip-html-unsafe="Background color of tags."><i class="fa fa-info-circle" /></span>
+                        <div class="pull-right">
+                            <h4 class="pull-left"><i class="fa fa-eyedropper" /></h4>
+                            <spectrum-colorpicker format="'hex'" options="spectrum.options" class="pull-right" ng-model="componentEditing.tagCloud.bgcolor" ng-change="saveComponent()"></spectrum-colorpicker>
+                        </div>
+                    </div>
                     <form class="form-horizontal" ng-show="!componentEditing.bg.img.show" ng-hide="componentEditing.type == 'navigation' && componentEditing.version == 1">
                         <div class="row">
                             <div class="col-sm-10">
@@ -105,6 +129,7 @@
                         </div>
                     </form>
                     <hr/>
+
                     <div class="form-group" ng-if="componentEditing.type != 'navigation' && componentEditing.type != 'top-bar'">
                         <label for="bg_hide" class="margin-bottom-0">Show Background Image</label>
                         <span tooltip-placement="top" tooltip-html-unsafe="show/hide background image of component."><i class="fa fa-info-circle" /></span>
@@ -112,6 +137,7 @@
                         <br>
                         <small>Please select an image of 1280 x 400px minimum to prevent blurriness</small>
                     </div>
+                    
                     <div class="form-group" ng-if="componentEditing.type === 'blog' || componentEditing.type === 'blog-teaser'">
                         <label for="post-order">Post Order </label>
                         <span tooltip-placement="top" tooltip-html-unsafe="Post order."><i class="fa fa-info-circle" /></span>
