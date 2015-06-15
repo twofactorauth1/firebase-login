@@ -2833,9 +2833,10 @@ div[data-class='image-text'] p {
   .footer-after {
     background: #292929;
     padding: 20px 0 0 0;
-    font-size: 15px;
+    font-size: 12px;
     height: 55px;
     display: block;
+    margin-top: 15px;
   }
   .footer-after p {
     color: #fff;
@@ -2852,6 +2853,8 @@ div[data-class='image-text'] p {
   .footer-logo {
     margin: -35px 5px 0 0;
     float: right;
+    z-index: 1000;
+    position: relative;
   }
   #footer {
     font-family: Helvetica;
