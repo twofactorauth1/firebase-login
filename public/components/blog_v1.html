@@ -1,3 +1,15 @@
+<style>
+    div.jqcloud {
+        background-color: {{component.tagCloud.bgcolor || 'inherit'}};
+    }
+    div.jqcloud span {
+         color: {{component.tagCloud.txtcolor}} !important;
+    }
+    div.jqcloud a:hover
+    {
+        color: {{component.tagCloud.txthovercolor}} !important;
+    }
+</style>
 <div ng-class="component.type+'-v'+component.version">
     <div data-class="blog" data-id="{{component._id}}">
         <div id="content-area">
@@ -84,29 +96,23 @@
                         </div>
                         <!-- end #et_pt_blog -->
                     </article>
-                        <div ng-show="!isEditing" class="pagination pagination-centered" ng-show="(layout.blogposts.length||blog.blogposts.length) > pageSize">
-                            
+                        <div class="pagination pagination-centered" ng-show="(!isEditing && layout.blogposts.length||blog.blogposts.length) > pageSize">
                               <button type="button" class="btn btn-primary" ng-disabled="curPage == 0"
                              ng-click="curPage=curPage-1">
                              <span class="fa fa-arrow-left"></span>
                              <span class="hidden-xs">PREV</span>
                               </button>
-                            
                              <span>Page {{curPage + 1}} of {{ numberOfPages() }}</span>
-                             
                              <button type="button" class="btn btn-primary"
                              ng-disabled="curPage >= (layout.blogposts||blog.blogposts).length/pageSize - 1"
                              ng-click="curPage = curPage+1">
                              <span class="hidden-xs">Next</span>
                              <span class="fa fa-arrow-right"></span>
                              </button>
-                             
                         </div>
                     <!-- .entry -->
                 </div>
-                
 
-                
                 <!-- #main-area -->
                 <div id="sidebar" class="col-sm-4 col-xs-12">
                     <div class="searchbar hidden">
@@ -114,14 +120,14 @@
                     </div>
                     <div class="clearfix mb30 hidden"></div>
 
-                    <div class="tags" data-ng-if="blog.postTags || layout.postTags">
+                    <div class="tags" data-ng-if="blog.postTags.length >= 1 || layout.postTags.length >= 1">
                         <h4><i class="fa fa-tag"></i> Tags</h4>
                         <jqcloud words="tagCloud" width="230" height="300" steps="7"></jqcloud>
                     </div>
 
                     <div class="posts" ng-if="blog.latestposts || layout.latestposts">
                         <h4><i class="fa fa-list-alt"></i> Latest Posts</h4>
-                        <ul data-ng-repeat="blogPost in blog.latestposts || layout.latestposts |limitTo: 3 track by $index">
+                        <ul data-ng-repeat="blogPost in blog.latestposts || layout.latestposts  | filter: blogpost.publish_date || blogpost.created.date | orderBy : sortBlogFn(component): customSortOrder(component) |limitTo: 3 track by $index">
                             <li>
                                 <a href="/page/blog/{{blogPost.post_url}}">
                                     <span data-ng-if="blogPost.post_title">{{blogPost.post_title}}</span>
@@ -132,7 +138,7 @@
                         </ul>
                     </div>
 
-                    <div ng-if="blog.categories || layout.categories">
+                    <div ng-if="blog.categories.length >= 1 || layout.categories.length >= 1">
                         <div class="clearfix mb30"></div>
                         <div class="categories">
                             <h4><i class="fa fa-list-ul"></i> Categories</h4>

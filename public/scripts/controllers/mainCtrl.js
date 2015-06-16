@@ -1,7 +1,7 @@
 'use strict';
 
-mainApp.controller('MainCtrl', ['$scope', 'websiteService', 'accountService', 'themeService', 'pagesService', 'ENV', '$location', '$document', '$anchorScroll', '$window',
-    function ($scope, websiteService, accountService, themeService, pagesService, ENV, $location, $document, $anchorScroll, $window) {
+mainApp.controller('MainCtrl', ['$scope', 'websiteService', 'accountService', 'themeService', 'pagesService', 'ENV', '$location', '$document', '$anchorScroll', '$window', 'userService',
+    function ($scope, websiteService, accountService, themeService, pagesService, ENV, $location, $document, $anchorScroll, $window, userService) {
 
         var account, pages, website, that = this;
         that.segmentIOWriteKey = ENV.segmentKey;
@@ -20,6 +20,14 @@ mainApp.controller('MainCtrl', ['$scope', 'websiteService', 'accountService', 't
               return false;
             }
         };
+
+        $scope.showAdminBar = false;
+
+        userService.getLoggedInUser(function(data) {
+            if (data._id) {
+                $scope.showAdminBar = true;
+            }
+        });
 
         accountService(function (err, data) {
             if (err) {

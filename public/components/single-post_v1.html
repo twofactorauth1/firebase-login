@@ -264,7 +264,13 @@
 </div>
 
 <div class="clearfix row-fluid">
-    <div ng-click="$back()" class="goback col-xs-12">
+    <div ng-if="!isEditing" ng-click="$back()" class="goback col-xs-12">
+        <p>
+            <span><i class="fa fa-arrow-circle-o-left"></i> Go Back</span>
+        </p>
+        <div class="col-xs-3"></div>
+    </div>
+    <div ng-if="isEditing" class="goback col-xs-12">
         <p>
             <span><i class="fa fa-arrow-circle-o-left"></i> Go Back</span>
         </p>

@@ -139,7 +139,7 @@ app.controller('AppCtrl', ['$rootScope', '$scope', '$state', '$translate', '$loc
         }, true);
         // Apply on resize
         $win.on('resize', function() {
-            $scope.$apply();
+            //$scope.$apply();
         });
 
         // Top Bar User

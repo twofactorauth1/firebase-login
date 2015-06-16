@@ -123,7 +123,10 @@
 
     $scope.getters = {
       customerName: function (value) {
-        return value.customer.first + ' ' + value.customer.last;
+        if(value.customer)
+          return value.customer.first + ' ' + value.customer.last;
+        else
+          return "";
       },
       line_items: function (value) {
         return value.line_items.length;
@@ -164,9 +167,10 @@
      */
 
     //TODO: Not clearing table
-    $scope.clear = function ($event) {
+    $scope.clear = function ($event, elem) {
       $event.stopPropagation();
-      $scope.filterorder = undefined;
+      $scope.filterorder.selected = null;
+      $scope.triggerInput(elem);
     };
 
 

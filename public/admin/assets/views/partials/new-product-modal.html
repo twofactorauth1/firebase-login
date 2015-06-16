@@ -18,17 +18,13 @@
                 <label for="form-field-select-1">
                     Type
                 </label>
-                <select class="cs-select cs-skin-elastic" ng-model="newProduct.type">
-                    <option value="">Select a Product Type</option>
-                    <option value="digital">Digital</option>
-                    <option value="physical">Physical</option>
-                    <option value="subscription">Subscription</option>
-                    <option value="external">External</option>
+                <select ng-model="newProduct.type" class="form-control" ng-options="type.data as type.label for type in productTypeOptions">
+                    <option value="">-- choose type --</option>
                 </select>
             </div>
         </form>
     </div>
     <div class="modal-footer">
-        <button class="btn btn-primary" ng-class='{"disabled": !newProduct.name.length || !newProduct.type}' ng-click="addProduct()">Add</button>
+        <button class="btn btn-primary" ng-class='{"disabled": !newProduct.name || !newProduct.type}' ng-click="addProduct()">Add</button>
     </div>
 </script>

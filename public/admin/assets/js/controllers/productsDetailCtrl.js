@@ -2,7 +2,7 @@
 /*global app, moment, angular, window*/
 /*jslint unparam:true*/
 (function (angular) {
-  app.controller('ProductsDetailCtrl', ["$scope", "$modal", "$timeout", "$state", "$stateParams", "$q", "CommonService", "ProductService", "PaymentService", "UserService", "toaster", function ($scope, $modal, $timeout, $state, $stateParams, $q, CommonService, ProductService, PaymentService, UserService, toaster) {
+  app.controller('ProductsDetailCtrl', ["$scope", "$modal", "$timeout", "$state", "$stateParams", "$q", "CommonService", "ProductService", "PaymentService", "UserService", "toaster", "SweetAlert", "productConstant", function ($scope, $modal, $timeout, $state, $stateParams, $q, CommonService, ProductService, PaymentService, UserService, toaster, SweetAlert, ProductConstant) {
 
     /*
      * @openModal
@@ -297,25 +297,7 @@
       value: 'inactive'
     }];
 
-    $scope.productTypeOptions = [
-      // {
-      //     name: 'Physical',
-      //     value: 'physical'
-      // },
-      {
-        name: 'Digital',
-        value: 'digital'
-      }, {
-        name: 'Subscription',
-        value: 'subscription'
-      }, {
-        name: 'External',
-        value: 'external'
-      }, {
-        name: 'Virtual',
-        value: 'virtual'
-      }
-    ];
+    $scope.productTypeOptions = ProductConstant.product_types.dp;
 
     /*
      * @convert:iconpicker
@@ -451,6 +433,33 @@
           $scope.product.tags.push(v.text);
       });
     }
+
+    /*
+     * @deleteCustomerFn
+     * -
+     */
+
+    $scope.deleteProductFn = function (product) {
+      SweetAlert.swal({
+        title: "Are you sure?",
+        text: "Do you want to delete this product?",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: "Yes, delete it!",
+        cancelButtonText: "No, do not delete it!",
+        closeOnConfirm: true,
+        closeOnCancel: true
+      }, function (isConfirm) {
+        if (isConfirm) {
+          ProductService.deleteProduct(product._id, function () {
+            toaster.pop('warning', 'Customer Deleted.');
+            $state.go('app.commerce.products');
+          });
+        }
+      });
+    };
+
 
   }]);
 }(angular));

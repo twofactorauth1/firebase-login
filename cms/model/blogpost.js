@@ -52,7 +52,7 @@ var blogpost = $$.m.ModelBase.extend({
 
             post_excerpt: null,
 
-            post_status: 'PUBLISHED',
+            post_status: 'DRAFT',
 
             created_date: new Date(),
 

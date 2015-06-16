@@ -112,9 +112,26 @@
                                                     <td>
                                                         <div ng-repeat="address in customer.details[0].addresses  track by $index">
                                                             <a href>
-                                                                {{address.address}} {{address.address2}}, <br> {{address.city}} {{address.state}} {{address.postcode}}
+                                                                {{address.address}} {{address.address2}}<br>{{address.city}} {{address.state}} {{address.postcode}}
                                                             </a>
                                                             <br>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>website:</td>
+                                                    <td>
+                                                        <div>
+                                                            <a href="http://{{customer.details[0].websites[0].website}}">{{customer.details[0].websites[0].website}}</a>
+                                                            <br>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>company name:</td>
+                                                    <td>
+                                                        <div>
+                                                            {{customer.details[0].company}}
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -244,12 +261,36 @@
                                                 </label>
                                                 <div class="form-group" ng-repeat="phone in customer.details[0].phones  track by $index">
                                                     <span class="input-icon input-icon-right">
-                                                        <input type="text" placeholder="phone pumber" class="form-control" name="phone" ng-model="customer.details[0].phones[$index].number" ng-blur="updateCustomer()">
+                                                        <input type="text" placeholder="phone number" class="form-control" name="phone" ng-model="customer.details[0].phones[$index].number" ng-blur="updateCustomer()">
                                                         <i ng-if="showAddPhone(phone)" ng-click="addCustomerContactFn()" class="ti-plus"></i>
                                                         <i ng-if="!showAddPhone(phone)" ng-click="removePhone($index)" class="ti-minus"></i>
                                                     </span>
                                                 </div>
                                             </div>
+
+
+                                            <div>
+                                                <label class="control-label">
+                                                    Website URL
+                                                </label>
+                                                <div class="form-group" >
+                                                    <span class="input-icon input-icon-right">
+                                                        <input type="text" placeholder="Website URL" class="form-control" name="website" ng-model="customer.details[0].websites[0].website" ng-blur="updateCustomer()">
+                                                    </span>
+                                                </div>
+                                            </div>
+
+                                            <div>
+                                                <label class="control-label">
+                                                    Company Name
+                                                </label>
+                                                <div class="form-group" >
+                                                    <span class="input-icon input-icon-right">
+                                                        <input type="text" placeholder="Company name" class="form-control" name="company" ng-model="customer.details[0].company" ng-blur="updateCustomer()">
+                                                    </span>
+                                                </div>
+                                            </div>
+
                                             <div ng-repeat="address in customer.details[0].addresses  track by $index">
                                                 <div class="row">
                                                     <div class="col-md-4">

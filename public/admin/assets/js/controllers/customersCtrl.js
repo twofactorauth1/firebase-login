@@ -2,12 +2,15 @@
 /*global app, moment, angular, window*/
 /*jslint unparam:true*/
 (function (angular) {
-  app.controller('CustomersCtrl', ["$scope", "toaster", "$modal", "$window", "CustomerService", "SocialConfigService", "userConstant", function ($scope, toaster, $modal, $window, CustomerService, SocialConfigService, userConstant) {
+  app.controller('CustomersCtrl', ["$scope", "$state", "toaster", "$modal", "$window", "CustomerService", "SocialConfigService", "userConstant", function ($scope, $state, toaster, $modal, $window, CustomerService, SocialConfigService, userConstant) {
 
     $scope.tableView = 'list';
     $scope.itemPerPage = 100;
     $scope.showPages = 15;
-
+    
+    if(!$state.current.sort) 
+      $scope.order = "reverse";
+      
     /*
      * @getCustomers
      * -
@@ -22,8 +25,11 @@
         customer.hasGoogleId = $scope.checkGoogleId(customer);
       });
       $scope.customers = customers;
+      if($state.current.sort)
+        $scope.setSortOrder($state.current.sort);    
       $scope.showCustomers = true;
       console.log("customers loaded");
+
     });
 
     /*
@@ -31,9 +37,9 @@
      * - getters for the sort on the table
      */
 
-    $scope.getters = {
+    $scope.getters = {      
       created: function (value) {
-        return value.created.date;
+        return value.created.date || -1;
       },
       modified: function (value) {
         return value.modified.date;
@@ -168,7 +174,9 @@
       return returnVal;
     };
 
-    $scope.viewSingle = function (customer) {
+    $scope.viewSingle = function (customer) {      
+      var tableState = $scope.getSortOrder();
+      $state.current.sort = tableState.sort;
       window.location = '/admin/#/customers/' + customer._id;
     };
 

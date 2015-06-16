@@ -2,7 +2,7 @@
 /*global app, moment, angular, window*/
 /*jslint unparam:true*/
 (function (angular) {
-  app.controller('ProductsCtrl', ["$scope", "$modal", "ProductService", "$filter", function ($scope, $modal, ProductService, $filter) {
+  app.controller('ProductsCtrl', ["$scope", "$modal", "ProductService", "$filter", "productConstant", function ($scope, $modal, ProductService, $filter, ProductConstant) {
     $scope.tableView = 'list';
     $scope.itemPerPage = 100;
     $scope.showPages = 15;
@@ -13,6 +13,8 @@
       $scope.products = products;
       $scope.showProducts = true;
     });
+    console.log('ProductConstant.product_types.dp ', ProductConstant.product_types.dp);
+    $scope.productTypeOptions = ProductConstant.product_types.dp;
 
     $scope.openProductModal = function (size) {
       $scope.modalInstance = $modal.open({

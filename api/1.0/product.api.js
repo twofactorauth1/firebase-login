@@ -173,16 +173,20 @@ _.extend(api.prototype, baseApi.prototype, {
                     return self.send403(res);
                 } else {
                     productManager.deleteProduct(productId, function(err, value){
-                        self.log.debug('<< deleteProduct');
-                        self.sendResultOrError(res, err, value, 'Error deleting product');
-                        self.createUserActivity(req, 'DELETE_PRODUCT', null, {id: value.id()}, function(){});
+                        self.log.debug('<< deleteProduct'); 
+                        if (!err && value != null) {
+                            self.sendResult(res, {deleted:true});                            
+                            self.createUserActivity(req, 'DELETE_PRODUCT', null, {id: productId}, function(){});
+                        } else {
+                            self.wrapError(res, 401, null, err, value);
+                        }  
                     });
                 }
             });
         });
 
     },
-
+                    
     getProductsByType: function(req, res) {
         var self = this;
         self.log.debug('>> getProductsByType');

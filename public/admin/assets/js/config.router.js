@@ -115,6 +115,15 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
             parent: 'app.website.templates'
         },
         resolve: loadSequence('editorCtrl', 'userService', 'htmlToPlaintext', 'spectrum', 'ui.sortable', 'assetsService', 'toasterService', 'geocodeService')
+    }).state('app.website.settings', {
+        url: '/settings',
+        templateUrl: "assets/views/website-settings.html",
+        title: 'Website Settings',
+        icon: 'ti-layout-media-left-alt',
+        ncyBreadcrumb: {
+            label: 'Website Settings'
+        },
+        resolve: loadSequence('websiteSettingsCtrl', 'websiteService', 'accountService', 'assetsService', 'userService')
     }).state('app.customers', {
         url: '/customers',
         templateUrl: "assets/views/customers.html",

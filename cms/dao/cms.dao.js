@@ -302,7 +302,7 @@ var dao = {
                 */
                 var versionAry = [];
                 _.each(files, function(element, index, list){
-                    if(element.indexOf(type) === 0) {
+                    if(element.indexOf(type + '_v') === 0) {
                         versionAry.push(element.replace(type + '_v', '').replace('.html',''));
                     }
                 });
@@ -827,10 +827,9 @@ var dao = {
         });
     },
 
-    updateWebsiteSettings: function(newSettings, accountId, websiteId, fn) {
+    updateWebsiteSettings: function(websiteObj, accountId, websiteId, fn) {
         var self = this,
             website;
-        self.log.debug('New Settings: ' + JSON.stringify(newSettings));
         //ensure website exists and belongs to this account
         self.getById(websiteId, Website, function(err, value) {
             if (err) {
@@ -851,16 +850,14 @@ var dao = {
                 return;
             }
 
-            var settings = value.get('settings');
-            self.log.debug('Website Settings: ' + JSON.stringify(settings));
-            if (settings == null) {
-                settings = newSettings;
-                value.set('settings', settings);
-                self.log.debug('Website Settings2: ' + JSON.stringify(value.get('settings')));
-            } else {
-                settings = newSettings;
-                value.set('settings', settings);
-            }
+            var settings = websiteObj.settings;
+            value.set('settings', settings);
+
+            var seo = websiteObj.seo;
+            value.set('seo', seo);
+
+            var title = websiteObj.title;
+            value.set('title', title);
 
             self.saveOrUpdate(value, function(err, saved) {
                 console.log('saved');

@@ -240,7 +240,15 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
          */
 
         $scope.savePostMode = function(toaster, msg) {
+            var post_data = $scope.getBlogPost();            
+            var pageId = $scope.parentScope.currentPage._id;
+            PostService.updatePost(pageId, post_data._id, post_data, function(data) {
+                $scope.parentScope.showToaster(false, true, msg, data);
+            });
+        };
 
+        $scope.getBlogPost = function()
+        {
             var post_data = angular.copy(that.post);
             post_data.post_tags.forEach(function(v, i) {
                 if (v.text)
@@ -271,11 +279,8 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
             if (postImageUrl) {
                 post_data.featured_image = postImageUrl;
             }
-            var pageId = $scope.parentScope.currentPage._id;
-            PostService.updatePost(pageId, post_data._id, post_data, function(data) {
-                $scope.parentScope.showToaster(false, true, msg, data);
-            });
-        };
+            return post_data;
+        }
 
         /*
          * @refreshPost
@@ -300,6 +305,8 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
         $scope.updateBlogPost = function(post) {
             $scope.$apply(function() {
                 that.post.post_title = post.post_title;
+                that.post.post_url = post.post_url;
+                that.post.post_status = post.post_status;
             })
         }
 
@@ -428,8 +435,8 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
             
                 $scope.isEditing = true;
                 for (name in CKEDITOR.instances) {
-                    if(CKEDITOR.instances[name])
-                        CKEDITOR.instances[name].destroy()
+                    CKEDITOR.instances[name].removeCustomListeners();
+                    CKEDITOR.remove(CKEDITOR.instances[name]);
                 }
                 CKEDITOR.disableAutoInline = true;
                 var elements = angular.element('.editable');
@@ -660,6 +667,31 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
                 return Math.ceil(that.blogposts.length / $scope.pageSize);
             else
                 return 0;
+        };
+
+        $scope.sortBlogFn = function(component) {
+            return function(blogpost) {
+                if (component.postorder) {
+                    if (component.postorder == 1 || component.postorder == 2) {
+                        return Date.parse($filter('date')(blogpost.modified.date, "MM/dd/yyyy HH:mm:ss"));
+                    } else if (component.postorder == 3 || component.postorder == 4) {
+                        return Date.parse($filter('date')(blogpost.created.date, "MM/dd/yyyy HH:mm:ss"));
+                    } else if (component.postorder == 5 || component.postorder == 6) {
+                        return Date.parse($filter('date')(blogpost.publish_date || blogpost.created.date, "MM/dd/yyyy"));
+                    }
+                } else
+                    return Date.parse($filter('date')(blogpost.publish_date || blogpost.created.date, "MM/dd/yyyy"));
+            };
+        };
+
+        $scope.customSortOrder = function(component) {
+            if (component.postorder == 1 || component.postorder == 3 || component.postorder == 5) {
+                return false;
+            } else if (component.postorder == 2 || component.postorder == 4 || component.postorder == 6) {
+                return true;
+            } else {
+                return true;
+            }
         };
 
     }

@@ -128,7 +128,8 @@ var mainApp = angular
         $rootScope.$on("$routeChangeSuccess", function (scope, next, current) {
             // $rootScope.transitionState = "active";
             analyticsService.pageStart(function() {
-                if (!window.isAdmin) {
+                var editorIndex = window.location.search.indexOf("editor=true");
+                if (editorIndex == -1) {
                     analyticsService.pagePing();
                     clearInterval(runningInterval);
 

@@ -86,10 +86,10 @@ mainApp.service('userService', ['$http', 'ipCookie', function ($http, ipCookie) 
             data: angular.toJson(user)
         })
         .success(function (data, status, headers, config) {
-            fn(data);
+            fn(null, data);
         })
         .error(function (err) {
-            fn(null);
+            fn(err, null);
         });
     };
 
@@ -138,6 +138,23 @@ mainApp.service('userService', ['$http', 'ipCookie', function ($http, ipCookie) 
             console.log('END:getTmpAccount with ERROR');
         });
     };
+
+    this.getLoggedInUser = function(fn) {
+        var apiUrl = baseUrl + ['user'].join('/');
+        $http({
+            url: apiUrl,
+            method: "GET"
+        })
+        .success(function (data, status, headers, config) {
+            console.log('getLoggedInUser success  ', data);
+            fn(data);
+        })
+        .error(function (err) {
+            console.log('END:getLoggedInUser with ERROR', err);
+        });
+    };
+
+
 
     this.saveOrUpdateTmpAccount = function(data, fn) {
         var apiUrl = baseUrl + ['account', 'tmp'].join('/');

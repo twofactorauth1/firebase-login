@@ -315,7 +315,7 @@ _.extend(baseRouter.prototype, {
                             value.replace(/\?authtoken.*/g, "");
                             logger.debug('redirecting to ' + value);
                             accountDao.getAccountByID(req.session.accountId, function(err, account){
-                                if(err) {
+                                if(err || !account) {
                                     logger.error('Error getting account by session value: ' +err);
                                     logger.debug('redirecting to /home');
                                     resp.redirect("/home");

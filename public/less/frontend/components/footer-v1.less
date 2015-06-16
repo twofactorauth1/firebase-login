@@ -1,11 +1,18 @@
 @desktop:   ~"only screen and (min-width: 700px) and (max-width: 1920px)";
 @mobile:    ~"only screen and (max-width: 700px)";
 
+.footer-container {
+  color: white;
+  height: 53px;
+}
 @media @desktop{
   .footer-after{
   background: #292929;
   padding: 20px 0 0 0;
   font-size: 12px;
+  height: 55px;
+  display: block;
+  margin-top: 15px;
   }
 
   .footer-after p{
@@ -29,6 +36,8 @@
   .footer-logo {
     margin: -35px 5px 0 0;
     float: right;
+    z-index: 1000;
+    position: relative;
   }
 
   #footer {
@@ -42,6 +51,8 @@
     text-align: center;
     padding: 20px 20px 0 20px;
     font-size: 12px;
+    height: 55px;
+  display: block;
   }
   .footer-after a{
     color: #FFF;

@@ -4,62 +4,76 @@
     </div>
 </div> -->
 <div id="childScope">
-     <div data-sample="1" id="top">
+    <div data-sample="1" id="top">
         <!-- This div will handle all toolbars. -->
     </div>
     <div ng-show="isEditing">
         <div id="editor-toolbar" ng-class="{'fullyLocaded': isLoaded}"></div>
     </div>
+    <div ng-hide="isEditing || !showAdminBar" class="adminbar">
+        <nav class="navbar navbar-default">
+            <div class="container">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <ul class="nav navbar-nav navbar-left">
+                        <li><button type="button" class="btn btn-default navbar-btn" ng-click="visitAdmin()"><i class="fa fa-chevron-left"></i> Admin</button></li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><button type="button" class="btn btn-default navbar-btn" ng-click="visitEditor()"><i class="fa fa-edit"></i> Edit</button></li>
+                    </ul>
+                <!-- /.navbar-collapse -->
+            </div>
+            <!-- /.container-fluid -->
+        </nav>
+    </div>
     <div ng-show="isEditing ? true : isLoaded">
-        <ul as-sortable="sortableOptions" class="ui-sortable" style="list-style: none;padding: 0;" ng-model="currentcomponents">
-        <li ng-repeat="component in currentcomponents" as-sortable-item class="fragment {{transitionState}}"  style="position: relative;">
-            <div class="componentActions" ng-class="{'masthead-actions':component.type == 'masthead'}" as-sortable-item-handle>
-                <span class="reorder fa fa-arrows"><p>Reorder</p></span>
-                <h4 class="pull-left">{{component.type | cleanType}}</h4>
-                <span class="delete delete-component fa fa-trash" data-id="{{component._id}}" ng-if="component.type != 'footer' && component.type != 'single-post'"><p>Delete</p></span>
-                <span class="duplicate fa fa-copy" data-index = "{{$index + 1}}" data-id="{{component._id}}" ng-if="component.type != 'footer' && component.type != 'navigation' && component.type != 'single-post'  && component.type != 'blog' && component.type != 'blog-teaser'"><p>Duplicate</p></span>
-                <span class="settings fa fa-cog" data-id="{{component._id}}" ng-if="component.type != 'footer'"><p>Settings</p></span>
-            </div>
-            <div ng-include="'/components/component-wrap.html'"></div>
-            <div ng-class="{'zee-blur': !component.visibility}"></div>
-            <div class="add-component" data-index = "{{$index + 1}}" ng-show="isEditing" ng-if="component.type != 'footer'">
-                <a href="">
-                <i class="fa fa-plus"></i>
-                <p>Add New</p>
-                </a>
-            </div>
-        </li>
-        <li ng-if="!currentpage.components || currentpage.components.length == 0 " class="no-component">
-            <div class="well empty-page">
-                <h1 class="center">This Page is Empty.</h1>
-                <h4 class="center">Add some components and start editing!</h4>
-            </div>
-            <div class="clearfix mb15"></div>
-            <div class="add-component" data-index = 1 tooltip="Add Component Below" tooltip-trigger="mouseenter" tooltip-placement="top">
-                <a href="">
-                    <i class="fa fa-plus"></i>
-                </a>
-            </div>
-        </li>
-    </ul>
+        <ul as-sortable="sortableOptions" class="ui-sortable" style="list-style: none;padding: 0;" ng-model="currentcomponents" ng-class="{'adminbarspacing': showAdminBar}">
+            <li ng-repeat="component in currentcomponents" as-sortable-item class="fragment {{transitionState}}" style="position: relative;">
+                <div class="componentActions" ng-class="{'masthead-actions':component.type == 'masthead'}" as-sortable-item-handle>
+                    <span class="reorder fa fa-arrows"><p>Reorder</p></span>
+                    <h4 class="pull-left">{{component.type | cleanType}}</h4>
+                    <span class="delete delete-component fa fa-trash" data-id="{{component._id}}" ng-if="component.type != 'footer' && component.type != 'single-post'"><p>Delete</p></span>
+                    <span class="duplicate fa fa-copy" data-index="{{$index + 1}}" data-id="{{component._id}}" ng-if="component.type != 'footer' && component.type != 'navigation' && component.type != 'single-post'  && component.type != 'blog' && component.type != 'blog-teaser'"><p>Duplicate</p></span>
+                    <span class="settings fa fa-cog" data-id="{{component._id}}" ng-if="component.type != 'footer'"><p>Settings</p></span>
+                </div>
+                <div ng-include="'/components/component-wrap.html'"></div>
+                <div ng-class="{'zee-blur': !component.visibility}"></div>
+                <div class="add-component" data-index="{{$index + 1}}" ng-show="isEditing" ng-if="component.type != 'footer' || currentpage.components.length == 1">
+                    <a href="">
+                        <i class="fa fa-plus"></i>
+                        <p>Add New</p>
+                    </a>
+                </div>
+            </li>
+            <li ng-if="!currentpage.components || currentpage.components.length == 0 " class="no-component">
+                <div class="well empty-page">
+                    <h1 class="center">This Page is Empty.</h1>
+                    <h4 class="center">Add some components and start editing!</h4>
+                </div>
+                <div class="clearfix mb15"></div>
+                <div class="add-component" data-index=1 tooltip="Add Component Below" tooltip-trigger="mouseenter" tooltip-placement="top">
+                    <a href="">
+                        <i class="fa fa-plus"></i>
+                    </a>
+                </div>
+            </li>
+        </ul>
     </div>
 </div>
-
-
-
 <style>
-    .zee-blur {
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        right: 0;
-        left: 0;
-        opacity: .4;
-        background-color: black;
-    }
-    .sticking{position: fixed;
-        top: 54px;
-    }
+.zee-blur {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    opacity: .4;
+    background-color: black;
+}
+
+.sticking {
+    position: fixed;
+    top: 54px;
+}
 </style>
 <script type="text/javascript">
 $(document).ready(function() {
@@ -75,19 +89,17 @@ $(document).ready(function() {
             else
                 $(element).addClass("sticking");
         }
-}
+    }
 
     $(window).scroll(function() {
-            headerHeight = 0;    
-            currentHeader = null;        
-            $(".fragment").each(function() {
-                currentHeader = $(this).find(".componentActions");            
-                if (currentHeader.length == 0)
-                    return;
-                makeSticky($(this), currentHeader);
-            });
+        headerHeight = 0;
+        currentHeader = null;
+        $(".fragment").each(function() {
+            currentHeader = $(this).find(".componentActions");
+            if (currentHeader.length == 0)
+                return;
+            makeSticky($(this), currentHeader);
+        });
     });
 })
-
-
 </script>

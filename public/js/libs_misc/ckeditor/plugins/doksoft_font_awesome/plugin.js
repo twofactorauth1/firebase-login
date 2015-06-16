@@ -100,7 +100,7 @@
 				}
 			}
 			l.on("instanceReady", function(ev) {				
-				bindClick(l);
+				
 			});
 			l.on("contentDom", function() {
 				var H = l.document.$;					
@@ -108,7 +108,8 @@
 				if (f == 0) {
 					n("../../js/libs/font-awesome/css/font-awesome.min.css", true);
 				}
-				x(z + "jscolor/jscolor.js", true);				
+				x(z + "jscolor/jscolor.js", true);
+				bindClick(l);				
 			});
 
 			l.addCommand("doksoft_font_awesome-" + l.name, new CKEDITOR.dialogCommand("doksoft_font_awesome-" + l.name));

@@ -171,6 +171,7 @@ app.constant('orderConstant', {
     CANCELLED: "cancelled",
     REFUNDED: "refunded",
     FAILED: "failed",
+    FAILED: "cancelled",
 
     dp: [{
         label: "Pending Payment",
@@ -190,6 +191,9 @@ app.constant('orderConstant', {
       }, {
         label: "Failed",
         data: "failed"
+      }, {
+        label: "Cancelled",
+        data: "cancelled"
       }
     ]
   }
@@ -309,7 +313,45 @@ app.constant('postConstant', {
       }, {
         label: "Private",
         data: "PRIVATE"
-      }      
+      }
+    ]
+  }
+});
+
+// {
+//   name: 'Digital',
+//   value: 'digital'
+// }, {
+//   name: 'Subscription',
+//   value: 'subscription'
+// }, {
+//   name: 'External',
+//   value: 'external'
+// }, {
+//   name: 'Virtual',
+//   value: 'virtual'
+// }
+
+app.constant('productConstant', {
+  product_types: {
+    DIGITAL: 'DIGITAL',
+    SUBSCRIPTION: 'SUBSCRIPTION',
+    EXTERNAL: 'EXTERNAL',
+    VIRTUAL: 'VIRTUAL',
+
+    dp: [{
+        label: "Digital",
+        data: "DIGITAL"
+      }, {
+        label: "Subscription",
+        data: "SUBSCRIPTION"
+      }, {
+        label: "External",
+        data: "EXTERNAL"
+      }, {
+        label: "Virtual",
+        data: "VIRTUAL"
+      }
     ]
   }
 });
@@ -438,6 +480,7 @@ app.constant('userConstant', {
     EMAIL: "e"
   }  
 });
+
 /*
 app.constant('ENV', {
   name: 'development',
@@ -508,6 +551,7 @@ app.constant('JS_REQUIRES', {
     'commerceSettingsCtrl': 'assets/js/controllers/commerceSettingsCtrl.js',
     'integrationsCtrl': 'assets/js/controllers/integrationsCtrl.js',
     'orderDetailCtrl': 'assets/js/controllers/orderDetailCtrl.js',
+    'websiteSettingsCtrl': 'assets/js/controllers/websiteSettingsCtrl.js',
 
     'asideCtrl': 'assets/js/controllers/asideCtrl.js',
     'toasterCtrl': 'assets/js/controllers/toasterCtrl.js',

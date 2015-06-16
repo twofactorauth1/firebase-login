@@ -1,7 +1,7 @@
 'use strict';
 /*global app, moment, angular, window*/
 (function (angular) {
-  app.controller('CommerceSettingsCtrl', ["$scope", "UserService", "AccountService", function ($scope, UserService, AccountService) {
+  app.controller('CommerceSettingsCtrl', ["$scope", "toaster", "UserService", "AccountService", function ($scope, toaster, UserService, AccountService) {
 
     /*
      * @calculateTaxOptions
@@ -46,6 +46,8 @@
       _account.commerceSettings = $scope.settings;
       console.log('$scope.settings ', $scope.settings);
       AccountService.updateAccount(_account, function (updatedAccount) {
+        toaster.clear();
+        toaster.pop('success', 'Settings Successfully Updated');
         console.log('updatedAccount ', updatedAccount);
       });
     };
