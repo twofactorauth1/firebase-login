@@ -31,5 +31,6 @@
             </div>
         </div>
     </div>
+    <button ng-if="isEditing && component.features.length === 0" ng-click="addFeatureList(component._id,0)" class="btn btn-primary btn-lg pull-right btn-add-feature" >Add new Feature</button>
 
 </div>
