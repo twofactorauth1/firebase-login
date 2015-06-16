@@ -4947,6 +4947,9 @@ fieldset[disabled] .btn-vimeo-square.active {
 .ui-sortable .dragging {
   height: 60px!important;
 }
+.ui-sortable .as-sortable-dragging {
+  height: 60px!important;
+}
 .ui-sortable .as-sortable-placeholder {
   height: 60px!important;
 }
