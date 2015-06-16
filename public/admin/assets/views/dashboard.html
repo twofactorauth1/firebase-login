@@ -159,10 +159,6 @@
                                                 <div ng-switch-when="EMAIL">
                                                     {{activity.detail}}
                                                 </div>
-                                                <div ng-switch-when="TWEET">
-                                                    <a href="javascript:void(0);" class="btn btn-xs btn-green">
-                                                        <i class="fa fa-reply"></i> Reply to Tweet</a>
-                                                </div>
                                                 <div ng-switch-when="CONTACT_CREATED">
                                                     <p class="cl-effect-13">
                                                         <a href="/admin/#/customers/{{activity.customer._id}}"><span ng-if="activity.customer.first">{{activity.customer.first+' '+activity.customer.last}}</span>

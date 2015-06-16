@@ -95,7 +95,7 @@
                         </div>
                         <div class="panel-scroll">
                             <ul class="timeline-xs padding-left-15 padding-right-15" style="height:450px!important" perfect-scrollbar wheel-propagation="false" suppress-scroll-x="true" ng-if="activities.length">
-                                <li class="timeline-item success" ng-repeat="activity in activities | orderBy:'-start' | limitTo: 500">
+                                <li class="timeline-item success" ng-repeat="activity in activities | orderBy:'-start' | offset:  curPage * pageSize | limitTo: pageSize">
                                     <div class="margin-left-15">
                                         <div class="text-muted text-small">
                                             {{activity.start | timeAgoFilter}} {{activity.activityType}}
@@ -110,8 +110,6 @@
                                                         An email was sent
                                                     </p>
                                                 </div>
-                                                <a ng-switch-when="TWEET" href="javascript:void(0);" class="btn btn-xs btn-green">
-                                                    <i class="fa fa-reply"></i> Reply to Tweet</a>
                                                 <div ng-switch-when="CONTACT_CREATED">
                                                     <p>
                                                         <span class="label label-info">CONTACT CREATED</span> for
@@ -228,6 +226,20 @@
                                     </div>
                                 </li>
                             </ul>
+                        </div>
+                        <div class="pagination pagination-centered" ng-if="activities.length > pageSize">
+                            <button type="button" class="btn btn-primary" ng-disabled="curPage == 0"
+                             ng-click="changePage(-1)">
+                             <span class="fa fa-arrow-left"></span>
+                             <span class="hidden-xs">PREV</span>
+                              </button>
+                             <span>Page {{curPage + 1}} of {{ numberOfPages() }}</span>
+                             <button type="button" class="btn btn-primary"
+                             ng-disabled="curPage >= activities.length/pageSize - 1"
+                             ng-click="changePage(1)">
+                             <span class="hidden-xs">Next</span>
+                             <span class="fa fa-arrow-right"></span>
+                             </button>
                         </div>
                     </div>
                 </div>

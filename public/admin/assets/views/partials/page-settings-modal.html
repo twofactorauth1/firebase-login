@@ -16,12 +16,12 @@
                         <label>Title:</label>
                         <input id="edit-page-title" class="form-control input-lg" type="text" ng-model="currentPage.title">
                     </div>
-                    <div class="form-group" ng-hide="currentPage.handle == 'index'">
+                    <div class="form-group" ng-class="{'has-error': duplicateUrl}">
                         <label>URL:</label>
-                        <input id="edit-page-url" ng-blur="checkForDuplicatePage()" class="form-control input-lg" type="text" ng-model="currentPage.handle">
+                        <input id="edit-page-url" ng-blur="checkForDuplicatePage()" class="form-control input-lg" type="text" ng-model="currentPage.handle" ng-disabled="currentPage.handle == 'index' && !duplicateUrl">
                     </div>
                     <div class="padding-right-0">
-                        <div class="form-group" ng-hide="currentPage.handle == 'index'">
+                        <div class="form-group" ng-hide="currentPage.handle == 'index' && !duplicateUrl">
                             <label>Show Page:</label>
                             <switch ng-model="currentPage.visible.visibility" class="pull-right"></switch>
                             <span class="help-block"><i class="ti-info-alt text-primary"></i> Visitors will only see your page when 'Show Page' is on.</span>

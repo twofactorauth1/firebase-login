@@ -591,6 +591,9 @@ div[data-type='campaign'] .inner-page .overlay {
   text-align: center;
   position: relative;
 }
+.feature-list-v1 .btn-add-feature {
+  position: relative !important;
+}
 .feature-list-v1 .feature-single {
   min-height: 320px;
   margin: 10px;
@@ -689,6 +692,9 @@ div[data-type="feature-list"] .inner-page {
 .feature-list-v2 img {
   max-width: 100%;
 }
+.feature-list-v2 .btn-add-feature {
+  position: relative !important;
+}
 .editing .features-wrap .feature:hover .add-addtional {
   bottom: -20px;
 }
@@ -700,6 +706,9 @@ div[data-type="feature-list"] .inner-page {
 .feature-list-v3 .feature-list-subtitle {
   color: #fff;
   text-align: center;
+}
+.feature-list-v3 .btn-add-feature {
+  position: relative !important;
 }
 .feature-list-v3 .feature-single {
   min-height: 320px;
@@ -763,6 +772,9 @@ div[data-type="feature-list"] .inner-page {
 .feature-list-v4 .feature-title h4,
 .feature-list-v4 .feature-title h5 {
   margin-top: 0;
+}
+.feature-list-v4 .btn-add-feature {
+  position: relative !important;
 }
 .feature-list-v4 .container-xs-height {
   display: table;
@@ -4945,6 +4957,9 @@ fieldset[disabled] .btn-vimeo-square.active {
   margin-bottom: 0;
 }
 .ui-sortable .dragging {
+  height: 60px!important;
+}
+.ui-sortable .as-sortable-dragging {
   height: 60px!important;
 }
 .ui-sortable .as-sortable-placeholder {

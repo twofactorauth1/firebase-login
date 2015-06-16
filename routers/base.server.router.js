@@ -295,9 +295,9 @@ _.extend(baseRouter.prototype, {
         logger.debug('session accountId: ' + req.session.accountId + ' session sub: ' + req.session.subdomain);
         var path = req.url;
         //logger.debug('req.session.locked: ' + req.session.locked);
-        if(req.session.locked === 'true' || req.session.locked === true) {
-            return resp.redirect('/interim.html');
-        }
+        // if(req.session.locked === 'true' || req.session.locked === true) {
+        //     return resp.redirect('/interim.html');
+        // }
         if (req.isAuthenticated() && (self.matchHostToSession(req) || req.originalUrl.indexOf('authtoken') !== -1) && req.session.midSignup !== true) {
             logger.debug('isAuthenticated');
             if(urlUtils.getSubdomainFromRequest(req).isMainApp === true) {

@@ -564,7 +564,7 @@ _.extend(api.prototype, baseApi.prototype, {
                                                 });
                                             } else {
                                                 var component = emailPage.get('components')[0];
-                                                self.log.debug('Using this for data', component);
+                                                self.log.debug('Using this for data', emailPage.get('_id'));
                                                 app.render('emails/base_email', component, function(err, html){
                                                     if(err) {
                                                         self.log.error('error rendering html: ' + err);

@@ -1063,20 +1063,22 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
         $scope.sortableOptions = {
             parentElement: "body",
             dragStart: function(e, ui) {
-                var componentId = e.source.itemScope.modelValue._id;
-                e.source.itemScope.modelValue = $scope.parentScope.updateComponent(componentId);
-                e.source.itemScope.element.addClass(" dragging");
-                clearTimeout($scope.wait);
                 $scope.parentScope.resizeIframe();
+                //angular.element(".ui-sortable").addClass("active");
+                //var componentId = e.source.itemScope.modelValue._id;
+                //e.source.itemScope.modelValue = $scope.parentScope.updateComponent(componentId);
+                //e.source.itemScope.element.addClass(" dragging");
+                clearTimeout($scope.wait);                
             },
             dragMove: function(e, ui) {
                 console.log('sorting update');
             },
             dragEnd: function(e, ui) {
-                e.dest.sortableScope.element.removeClass("dragging");
+                //e.dest.sortableScope.element.removeClass("dragging");
                 $scope.wait = setTimeout(function() {
-                    $scope.activateCKEditor();
+                    //$scope.activateCKEditor();
                     angular.element(".ui-sortable").removeClass("active");
+                    $scope.parentScope.resizeIframe();
                 }, 1500);
 
             for (var i = 0; i < $scope.currentpage.components.length; i++) {

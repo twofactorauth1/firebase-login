@@ -36,7 +36,7 @@
                             <i class="fa fa-close" ng-click="removeAccount('fb')"></i>
                         </div>
                         <a ng-if="!tmpAccount.tempUser || tmpAccount.tempUser.created.strategy === 'lo'" ng-click="makeSocailAccount('twitter')" class="btn btn-large btn-default twitter"><i class="fa fa-twitter"></i></a>
-                         <div ng-if="tmpAccount.tempUser.created.strategy === 'tw'">
+                        <div ng-if="tmpAccount.tempUser.created.strategy === 'tw'">
                             <img style="width: 50px;height: 50px; display: inline-block; margin-right: 10px;" ng-src="{{newAccount.profilePhoto.url || '/images/default-user.png'}}" class="img-responsive profilePhoto img-circle">
                             <span>{{tmpAccount.tempUser.username}}</span>
                             <i class="fa fa-close" ng-click="removeAccount('tw')"></i>
@@ -62,29 +62,23 @@
             <div class="inner-page">
                 <h4>Account Info</h4>
                 <!-- Business Name -->
-
                 <div id="business-name" class="form-group col-xs-12 has-feedback">
                     <input class="form-control input-lg" type="text" ng-model="newAccount.businessName" placeholder="Business Name" ng-blur="checkDomainExists(newAccount)" />
                     <span class="glyphicon form-control-feedback"></span>
                     <span class="error help-block" />
                     <span class="help-block" ng-show="newAccount.businessName">Your URL will be <strong>{{newAccount.businessName | urlFilter}}.indigenous.io</strong> and can be changed later.</span>
                 </div>
-
                 <!-- EMAIL AND PASSOWORD -->
-
                 <div id="email" class="form-group col-sm-6 has-feedback" ng-hide="newAccount.tempUserId">
                     <input class="form-control input-lg" type="email" ng-model="newAccount.email" placeholder="Email" ng-blur="checkEmailExists(newAccount)" />
                     <span class="glyphicon form-control-feedback"></span>
                     <span class="error help-block" />
                 </div>
-
-
                 <div id="password" class="form-group col-sm-6 has-feedback" ng-hide="newAccount.hidePassword">
                     <input class="form-control input-lg" type="password" ng-model="newAccount.password" placeholder="Password" ng-blur="checkPasswordLength(newAccount)" />
                     <span class="glyphicon form-control-feedback"></span>
                     <span class="error help-block" />
                 </div>
-
             </div>
             <div class="clearfix mb40"></div>
         </div>
@@ -130,7 +124,6 @@
                 <div class="clearfix mb20"></div>
                 <div class="card-wrapper mb20"></div>
                 <h4>Payment Info</h4>
-
                 <form name="card-details" action="" class="form-group col-xs-12 mb0 has-feedback">
                     <div class="row">
                         <div id="card_number" class="form-group small-6 columns col-sm-6">
@@ -163,17 +156,12 @@
                     <input class="form-control input-lg" type="text" ng-blur="checkCoupon()" ng-model="newAccount.coupon" placeholder="Coupon Code" />
                     <span class="error" />
                 </div>
-
                 <div class="clearfix mb15"></div>
-
                 <div>
                     <img class="center" style="display: block;" src="https://s3-us-west-2.amazonaws.com/indigenous-admin/trust-seals-stripe.png">
                 </div>
-
                 <div class="clearfix mb30"></div>
-
                 <!-- BUY -->
-
                 <div class="submit-signup mb10">
                     <a type="button" class="btn btn-primary btn-lg center" ng-click="createAccount(newAccount)"> Become an Indigenous Member Now</a>
                 </div>
@@ -181,8 +169,6 @@
             </div>
         </div>
     </div>
-
-
     <!-- Terms of Service Modal -->
     <div class="modal fade" id="terms-of-service">
         <div class="modal-dialog">
@@ -335,11 +321,13 @@
 <!-- /.modal -->
 <div ng-show="isFormValid" id="overlay">
     <div id="loading">
-        <div><i class="fa fa-spinner fa-spin"></i></div>    
-        <div class="msg col-sm-12"><span>Account is being set up...</span></div>
+        <div class="msg col-sm-12"><h1 class="text-center">Congratulations!</h1>
+        <h4 class="text-center">We’re honored to have you.</h4>
+        </div>
+        <div><i class="fa fa-spinner fa-spin"></i></div>
+        <div class="msg col-sm-12"><span>We’re building your account now.</span></div>
     </div>
 </div>
-
 <script type="text/javascript">
 card = $('form[name="card-details"]').card({
     container: '.card-wrapper'
