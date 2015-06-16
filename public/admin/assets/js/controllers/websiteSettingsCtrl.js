@@ -2,7 +2,7 @@
 /*global app, moment, angular, window*/
 /*jslint unparam:true*/
 (function (angular) {
-  app.controller('WebsiteSettingsCtrl', ["$scope", "WebsiteService", "AccountService", "UserService", "toaster", function ($scope, WebsiteService, AccountService, toaster, UserService) {
+  app.controller('WebsiteSettingsCtrl', ["$scope", "WebsiteService", "AccountService", "UserService", "toaster", function ($scope, WebsiteService, AccountService, UserService, toaster) {
     $scope.keywords = [];
     WebsiteService.getWebsite(function (website) {
       $scope.website = website;

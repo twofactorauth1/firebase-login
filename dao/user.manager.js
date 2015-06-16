@@ -44,8 +44,10 @@ module.exports = {
                 var email = user.get('email');
 
                 user.createUserAccount(accountId, username, null, roleAry);
-                
-                user.set('_id', null);
+                if(user.id().substring(0, 4) ==='temp') {
+                    //user does not exist.  set temp ID to null.
+                    user.set('_id', null);
+                }
                 dao.saveOrUpdate(user, function(err, savedUser){
                     if(err) {
                         log.error('Error saving user: ' + err);

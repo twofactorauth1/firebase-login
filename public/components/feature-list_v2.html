@@ -34,12 +34,16 @@
                 <a href="" ng-click="addFeatureList(component._id,$index)">
                     <i class="fa fa-plus"></i>
                 </a>
-            </div>
+            </div>           
         </div>
-
+         <div ng-if="!component.features.length">
+               <a href="" ng-if="isEditing" ng-click="addFeatureList(component._id,$index)" class="btn btn-default">
+                    <i class="fa fa-plus" ></i>
+                </a>
+            </div>
         <div class="clearfix mb30 visible-xs"></div>
         <hr class="visible-xs" ng-if="$index + 1 < component.features.length"></hr>
 
     </div>
-
+    <button ng-if="isEditing && component.features.length === 0" ng-click="addFeatureList(component._id,0)" class="btn btn-primary btn-lg pull-right btn-add-feature" >Add new Feature</button>
 </div>
