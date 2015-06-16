@@ -2,8 +2,8 @@
 /**
  * Indigenous Main Controller
  */
-app.controller('AppCtrl', ['$rootScope', '$scope', '$state', '$translate', '$localStorage', '$window', '$document', '$timeout', '$modal', 'cfpLoadingBar', 'UserService',
-    function($rootScope, $scope, $state, $translate, $localStorage, $window, $document, $timeout, $modal, cfpLoadingBar, UserService) {
+app.controller('AppCtrl', ['$rootScope', '$scope', '$state', '$translate', '$localStorage', '$window', '$document', '$timeout', '$modal', 'cfpLoadingBar', 'UserService', 'AccountService',
+    function($rootScope, $scope, $state, $translate, $localStorage, $window, $document, $timeout, $modal, cfpLoadingBar, UserService, AccountService) {
 
         // Loading bar transition
         // -----------------------------------
@@ -146,6 +146,17 @@ app.controller('AppCtrl', ['$rootScope', '$scope', '$state', '$translate', '$loc
         // -----------------------------------
         UserService.getUser(function(user) {
             $scope.currentUser = user;
+        });
+
+        AccountService.getAccount(function(account) {
+            if (account.locked) {
+                $state.go('app.support.gettingstarted');
+                account.locked = false;
+                AccountService.updateAccount(account, function() {
+                    console.log('account updated');
+                });
+            }
+
         });
 
     }
