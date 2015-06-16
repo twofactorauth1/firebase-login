@@ -75,7 +75,7 @@ var account = $$.m.ModelBase.extend({
 
             'credentials': [],
 
-            "locked": false,// this setting needs to be removed to access the site
+            "locked": true,// this setting needs to be removed to access the site
 
             _v:"0.1"
         }
