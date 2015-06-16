@@ -2129,9 +2129,12 @@
                     url: asset.url
                 });
             } else {
-                $scope.componentEditing.bg.img.url = asset.url;
-                $scope.saveComponent();
-                return;
+                if($scope.componentEditing.bg.img)
+                {
+                    $scope.componentEditing.bg.img.url = asset.url;
+                    $scope.saveComponent();
+                    return;
+                }
             }
             $scope.updateIframeComponents();
         };
