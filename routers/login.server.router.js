@@ -306,13 +306,16 @@ _.extend(router.prototype, BaseRouter.prototype, {
 
 
     handleResetPasswordByToken: function (req, resp) {
-        var email = req.body.email;
+        var self = this;
+        self.log.debug('>> handleResetPasswordByToken');
+        var email = req.body.username;
         var password = req.body.password;
         var password2 = req.body.password2;
         var token = req.params.token;
-
+        self.log.debug('email: ' + email);
         if (password !== password2) {
             req.flash("error", "Passwords do not match");
+            self.log.error('Passwords do not match');
             return resp.redirect("/forgotpassword/reset/" + token);
         }
         new ForgotPasswordView(req, resp).handleResetByToken(token, password, email);
