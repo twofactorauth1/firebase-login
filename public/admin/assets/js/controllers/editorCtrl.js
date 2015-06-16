@@ -1063,14 +1063,15 @@
 
         $scope.checkForDuplicatePage = function()
         {
-            
             WebsiteService.getSinglePage($scope.currentPage.websiteId, $scope.currentPage.handle, function(data) {
             if(data && data._id)
                 {
-                    
                     if(data._id !== $scope.currentPage._id)
                     {
+                        $scope.duplicateUrl = true;
                         toaster.pop('error', "Page URL " + $scope.currentPage.handle, "Already exists");
+                    } else {
+                        $scope.duplicateUrl = false;
                     }
                 }
             })

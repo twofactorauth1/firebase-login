@@ -367,6 +367,7 @@ var dao = {
             query.websiteId = websiteId;
         }
         query.page_type = pageType;
+        query.latest = true;
         return this.findOne(query, Page, fn);
     },
 
