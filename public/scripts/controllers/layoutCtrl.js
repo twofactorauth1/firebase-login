@@ -741,7 +741,12 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
                 $scope.isEditing = true;
                 for (name in CKEDITOR.instances) {                     
                     {
-                        //CKEDITOR.instances[name].updateElement();
+                       var b = CKEDITOR.instances[name];
+                       b.updateElement();
+                       var d = b.getData(1);
+                       if(d)
+                            b.setData(d);
+                       b.fire("contentDom");
                     }                        
                 }
                 CKEDITOR.disableAutoInline = true;
@@ -773,7 +778,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
                             sharedSpaces: {
                                 top: 'editor-toolbar'
                             }
-                        });
+                    });
                 });
                 setTimeout(function() {
                     $scope.$apply(function() {
@@ -795,8 +800,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
                         }                      
                         $scope.parentScope.resizeIframe();
                   });  
-                }, 500)            
-            
+                }, 500)    
         };
 
 

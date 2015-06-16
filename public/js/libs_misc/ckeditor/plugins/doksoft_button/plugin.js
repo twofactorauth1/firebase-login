@@ -144,10 +144,10 @@ CKEDITOR.plugins.add("doksoft_button", {
 		});
 		
 		b.on("instanceReady", function(ev) {				
-				bindClick(b);
+				
 			});
 		b.on("contentDom", function() {
-			
+			bindClick(b);
 		});
 		if (b.addMenuItems) {
 			b.addMenuItems({

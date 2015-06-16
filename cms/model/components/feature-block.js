@@ -77,7 +77,8 @@ var component = $$.m.ModelBase.extend({
                     height : 470,
                     parallax : true,
                     blur : false,
-                    overlay: false
+                    overlay: false,
+                    show: true
                 },
                 color : ""
             }

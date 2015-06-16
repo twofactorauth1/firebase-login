@@ -461,7 +461,7 @@ div[data-type='campaign'] .inner-page .overlay {
 .contact-us-v1 .widget-weather .temp {
   background: rgba(0, 0, 0, 0.5);
   padding: 15px !important;
-  height: 218px;
+  height: 230px;
 }
 .contact-us-v1 .widget-weather .temp span {
   padding-bottom: 5px;
@@ -2836,6 +2836,7 @@ div[data-class='image-text'] p {
     font-size: 12px;
     height: 55px;
     display: block;
+    margin-top: 15px;
   }
   .footer-after p {
     color: #fff;
@@ -2852,6 +2853,8 @@ div[data-class='image-text'] p {
   .footer-logo {
     margin: -35px 5px 0 0;
     float: right;
+    z-index: 1000;
+    position: relative;
   }
   #footer {
     font-family: Helvetica;
@@ -2913,6 +2916,9 @@ div[data-type=single-post] .container {
 }
 .single-post-v1 tags-input .tags .tag-item {
   background: #47b1cc;
+}
+.single-post-v1 .editable.post_excerpt_div {
+  min-height: 10px;
 }
 .single-blog .blog-meta {
   margin-top: 15px;
@@ -3097,6 +3103,9 @@ div[data-type=blog] .container {
 }
 #sidebar .tag-cloud li:nth-child(4) {
   font-size: 3em;
+}
+#sidebar div.jqcloud {
+  width: 100% !important;
 }
 #main-area {
   word-wrap: break-word;
