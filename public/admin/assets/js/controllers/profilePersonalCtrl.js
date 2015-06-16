@@ -30,5 +30,18 @@
                 toaster.pop('success', 'Profile Saved.');
             });
         };
+        /**********PAGINATION RELATED **********/
+        $scope.curPage = 0;
+        $scope.pageSize = 100;
+        $scope.numberOfPages = function() {
+            if ($scope.activities)
+                return Math.ceil($scope.activities.length / $scope.pageSize);
+            else
+                return 0;
+        };
+        $scope.changePage = function(page)
+        {
+            $scope.curPage = $scope.curPage + page;
+        }
     }]);
 })(angular);

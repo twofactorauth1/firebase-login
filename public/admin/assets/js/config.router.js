@@ -247,7 +247,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         ncyBreadcrumb: {
             label: 'Personal Profile'
         },
-        resolve: loadSequence('profilePersonalCtrl', 'toasterService', 'assetsService')
+        resolve: loadSequence('profilePersonalCtrl', 'toasterService', 'assetsService', 'offset')
     }).state('app.account.billing', {
         url: '/billing',
         templateUrl: "assets/views/billing.html",
