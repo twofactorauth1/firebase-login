@@ -24,7 +24,7 @@ mainApp.controller('MainCtrl', ['$scope', 'websiteService', 'accountService', 't
         $scope.showAdminBar = false;
 
         userService.getLoggedInUser(function(data) {
-            if (data) {
+            if (data._id) {
                 $scope.showAdminBar = true;
             }
         });

@@ -123,7 +123,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         ncyBreadcrumb: {
             label: 'Website Settings'
         },
-        resolve: loadSequence('websiteSettingsCtrl', 'websiteService', 'accountService', 'assetsService')
+        resolve: loadSequence('websiteSettingsCtrl', 'websiteService', 'accountService', 'assetsService', 'userService')
     }).state('app.customers', {
         url: '/customers',
         templateUrl: "assets/views/customers.html",
