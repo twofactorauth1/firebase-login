@@ -15,7 +15,10 @@
                     <div class="panel panel-transparent row margin-bottom-0">
                         <div class="panel-body">
                             <div class="pull-right">
-                                <button ng-click="saveWebsiteSettings()" class="btn btn-o btn-primary">Save</button>
+                                <button type="button" ng-disabled="saveLoading" ng-click="saveWebsiteSettings()" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-save btn-o">
+                                    <span class="fa fa-spinner fa-spin" ng-if="saveLoading"></span>
+                                    <span>Save</span>
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -75,8 +78,10 @@
             <form>
                 <div class="col-xs-6">
                     <div class="form-group">
-                        <label>Subdomain</label>
-                        <input type="text" class="form-control" ng-model="account.subdomain" />
+                        <label>Indigenous Domain</label>
+                        <input class="form-control" type="text" ng-model="account.subdomain" ng-blur="checkDomainExists(account)" />
+                        <span class="help-block">Hello</span>
+                        <span class="error-block" ng-if="domainError">Domain Already Exists</span>
                     </div>
                     <div class="form-group">
                         <label>Custom Domain</label>
