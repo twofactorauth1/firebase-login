@@ -67,7 +67,7 @@
             }
             pages[key].hasScreenshot = true;
           }
-          if (pages[key].type != 'template') {
+          if (pages[key].type != 'template' && pages[key].handle != 'blog' && pages[key].handle != 'single-post') {
             pagesArr.push(pages[key]);
           }
         }

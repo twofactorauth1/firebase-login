@@ -91,6 +91,25 @@
             </form>
             <div class="clearfix"></div>
         </tab>
+        <tab heading="Blog">
+            <form class="col-sm-6 form-horizontal">
+                <div class="form-group">
+                    <label>Enable Blog</label>
+                    <span tooltip-placement="top" tooltip-html-unsafe="Enable the blog for your website"><i class="fa fa-info-circle" /></span>
+                    <switch ng-model="account.showhide.blog" class="pull-right"></switch>
+                </div>
+                <div class="form-group">
+                    <label>Blog Template</label>
+                    <button class="btn btn-primary btn-o pull-right" ng-click="editTemplate('blog')"><span class="fa fa-edit"></span> Edit</button>
+                </div>
+                <div class="form-group">
+                    <label>Post Template</label>
+                    <button class="btn btn-primary btn-o pull-right" ng-click="editTemplate('post')"><span class="fa fa-edit"></span> Edit</button>
+                </div>
+                <div class="clearfix"></div>
+            </form>
+            <div class="clearfix"></div>
+        </tab>
     </tabset>
 </div>
 <div id="model_container"></div>

@@ -77,6 +77,10 @@ var account = $$.m.ModelBase.extend({
 
             "locked": true,// this setting needs to be removed to access the site
 
+            "showhide": {
+                "blog": false
+            }
+
             _v:"0.1"
         }
     },

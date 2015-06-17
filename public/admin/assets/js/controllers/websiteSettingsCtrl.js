@@ -13,6 +13,16 @@
       $scope.account = account;
     });
 
+    // WebsiteService.getPages(function (pages) {
+    //   console.log('pages ', pages);
+    //   $scope.blogPage = _.find(pages, function(page){
+    //     return page.handle === 'blog';
+    //   });
+    //   $scope.singlePost = _.find(pages, function(page){
+    //     return page.handle === 'single-post';
+    //   });
+    // });
+
     $scope.saveLoading = false;
 
     $scope.saveWebsiteSettings = function () {
@@ -38,12 +48,22 @@
     $scope.checkDomainExists = function (account) {
       UserService.checkDuplicateSubdomain(account.subdomain, account._id, function (data) {
         console.log('data ', data);
-          if (data != 'true') {
-            $scope.domainError = true;
-          } else {
-            $scope.domainError = false;
-          }
-        });
+        if (data != 'true') {
+          $scope.domainError = true;
+        } else {
+          $scope.domainError = false;
+        }
+      });
+    };
+
+    $scope.editTemplate = function(type) {
+      if (type === 'blog') {
+        window.location = '/admin/#/website/pages/?pagehandle=blog';
+      }
+
+      if (type === 'post') {
+        window.location = '/admin/#/website/pages/?pagehandle=single-post';
+      }
     };
 
   }]);
