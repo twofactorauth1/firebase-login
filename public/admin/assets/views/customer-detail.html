@@ -294,7 +294,7 @@
                                             <div ng-repeat="address in customer.details[0].addresses  track by $index">
                                                 <div class="row">
                                                     <div class="col-md-4">
-                                                        <div class="form-group">
+                                                        <div class="form-group" ng-class="{'has-error':errorMapData}">
                                                             <label class="control-label">
                                                                 Address Line 1
                                                             </label>
@@ -302,7 +302,7 @@
                                                         </div>
                                                     </div>
                                                     <div class="col-md-8">
-                                                        <div class="form-group">
+                                                        <div class="form-group" ng-class="{'has-error':errorMapData}">
                                                             <label class="control-label">
                                                                 Address Line 2
                                                             </label>
@@ -312,7 +312,7 @@
                                                 </div>
                                                 <div class="row">
                                                     <div class="col-md-4">
-                                                        <div class="form-group">
+                                                        <div class="form-group" ng-class="{'has-error':errorMapData}">
                                                             <label class="control-label">
                                                                 City
                                                             </label>
@@ -320,7 +320,7 @@
                                                         </div>
                                                     </div>
                                                     <div class="col-md-8">
-                                                        <div class="form-group">
+                                                        <div class="form-group" ng-class="{'has-error':errorMapData}">
                                                             <label class="control-label">
                                                                 State
                                                             </label>
@@ -330,7 +330,7 @@
                                                 </div>
                                                 <div class="row">
                                                     <div class="col-md-4">
-                                                        <div class="form-group">
+                                                        <div class="form-group" ng-class="{'has-error':errorMapData}">
                                                             <label class="control-label">
                                                                 Country
                                                             </label>
@@ -338,7 +338,7 @@
                                                         </div>
                                                     </div>
                                                     <div class="col-md-8">
-                                                        <div class="form-group">
+                                                        <div class="form-group" ng-class="{'has-error':errorMapData}">
                                                             <label class="control-label">
                                                                 Zip Code
                                                             </label>

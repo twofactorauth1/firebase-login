@@ -3676,16 +3676,16 @@ div[data-type=blog] .container {
   letter-spacing: 0px;
 }
 .payment-form-v1 #terms-of-service span.s2 {
-  text-decoration: underline ;
+  text-decoration: underline;
   letter-spacing: 0px;
 }
 .payment-form-v1 #terms-of-service span.s3 {
-  text-decoration: underline ;
+  text-decoration: underline;
   letter-spacing: 0.0px;
   color: #272727;
 }
 .payment-form-v1 #terms-of-service span.s4 {
-  text-decoration: underline ;
+  text-decoration: underline;
   letter-spacing: 0.0px;
   color: #1e497d;
 }
@@ -3902,14 +3902,13 @@ div[data-type=blog] .container {
 }
 #overlay {
   position: relative;
-  min-height: 400px;
   width: 100%;
   margin: 0 auto;
 }
 #loading {
   position: absolute;
   color: black;
-  top: 50%;
+  top: 70px;
   left: 50%;
   font-size: 40px;
 }
@@ -3917,7 +3916,7 @@ div[data-type=blog] .container {
   font-size: 20px;
 }
 #loading div.msg {
-  right: 40%;
+  right: 50%;
 }
 .thumbnail-slider-v1 .single-image {
   padding: 0;
