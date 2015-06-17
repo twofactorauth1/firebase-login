@@ -55,7 +55,7 @@
                         </div>
                     </div>
                 </div>
-                <p class="center">or use your email address in a form below</p>
+                <p class="center" ng-if="!tmpAccount.tempUser || tmpAccount.tempUser.created.strategy === 'lo'">or use your email address in a form below</p>
             </div>
         </div>
         <div class="account-info-signup">
