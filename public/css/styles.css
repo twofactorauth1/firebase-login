@@ -4747,6 +4747,7 @@ fieldset[disabled] .btn-vimeo-square.active {
   border-radius: 0;
   background: #efa022;
   padding: 0;
+  height: 54px;
 }
 #editor-toolbar .cke_chrome a.cke_button_disabled:active,
 #editor-toolbar .cke_chrome a.cke_button_disabled:focus,
@@ -4777,6 +4778,7 @@ fieldset[disabled] .btn-vimeo-square.active {
 }
 #editor-toolbar .cke_chrome .cke_combo_button {
   margin-top: 13px;
+  padding: 2px 2px!important;
 }
 #editor-toolbar .cke_chrome a.cke_button {
   height: 50px;
@@ -4899,6 +4901,7 @@ fieldset[disabled] .btn-vimeo-square.active {
 #editor-toolbar .cke_inner {
   display: inline-block;
   background: #efa022;
+  height: 54px;
 }
 .componentActions {
   position: absolute;
