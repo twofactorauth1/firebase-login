@@ -50,7 +50,9 @@ var website = $$.m.ModelBase.extend({
              *      backgroundImage: {url}
              * }
              */
-            settings: {},
+            settings: {
+                footerlink : "false",
+            },
 
 
             /**
