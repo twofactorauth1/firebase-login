@@ -9,6 +9,14 @@
     $scope.showPages = 15;
     WebsiteService.getPages(function (pages) {
       console.log('pages >>> ', pages);
+      var indexExists = _.find(pages, function(page){
+        return page.handle === 'index';
+      });
+      if (!indexExists) {
+        $scope.createpage.homepage = true;
+        $scope.createpage.title = 'Home';
+        $scope.createpage.handle = 'index';
+      }
       var pagesArr = $scope.formatPages(pages);
       $scope.pages = pagesArr;
       $scope.orderByFn();
