@@ -13081,6 +13081,7 @@ fieldset[disabled] .btn-vimeo-square.active {
   display: table-cell;
   vertical-align: middle;
   text-align: center;
+  width: 100%;
 }
 #media-manager-modal .filemanager .thmb-prev img {
   max-height: 150px;

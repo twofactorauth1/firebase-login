@@ -425,11 +425,8 @@
                                         </div>
                                     </td>
                                     <td class="center">
-                                        <span ng-if="!item[$index].editing">{{item.regular_price | currency}}</span>
-                                        <div ng-if="item[$index].editing">
-                                            <label>Price</label>
-                                            <input type="text"  numbers-only="numbers-only" class="form-control" ng-model="item.regular_price" ng-change="calculateTotals()"/>
-                                        </div>
+                                        <span >{{item.regular_price | currency}}</span>
+
                                     </td>
                                     <td class="center">
                                         <span ng-if="!item[$index].editing">{{item.quantity}}</span>
@@ -439,12 +436,9 @@
                                         </div>
                                     </td>
                                     <td class="center">
-                                        <span ng-if="!item[$index].editing && !item.discount || !item[$index].editing && item.discount <= 0">{{item.total | currency}}</span>
-                                        <span ng-if="!item[$index].editing && item.discount && item.discount > 0"><s>{{totalWithDiscount(item.total, item.discount) | currency}}</s> {{item.total | currency}}</span>
-                                        <div ng-if="item[$index].editing">
-                                                <label>Total</label>
-                                                <input type="text" numbers-only="numbers-only" class="form-control" ng-model="item.total" />
-                                        </div>
+                                        <span ng-if="!item.discount || item.discount <= 0">{{item.total | currency}}</span>
+                                        <span ng-if="item.discount && item.discount > 0"><s>{{totalWithDiscount(item.total, item.discount) | currency}}</s> {{item.total | currency}}</span>
+
                                     </td>
                                     <td class="center">
                                         <span ng-if="!item[$index].editing">{{item.discount | currency}}</span>

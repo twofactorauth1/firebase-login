@@ -927,6 +927,9 @@ div[data-type="feature-list"] .inner-page {
   padding: 0 30px;
 }
 .navbar {
+  border: none!important;
+  background: none;
+  box-shadow: none;
   margin-bottom: 0px;
   min-height: 85px;
   -webkit-box-shadow: 0px 1px 10px 0px rgba(0, 0, 0, 0.25);
@@ -1078,6 +1081,9 @@ ul.nav {
   display: inline-block;
 }
 .navigation-v3 .navbar {
+  border: none!important;
+  background: none;
+  box-shadow: none;
   min-height: 115px;
   border: none;
   border-radius: 0px;
