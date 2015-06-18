@@ -69,7 +69,7 @@
                     <span class="help-block" ng-show="newAccount.businessName">Your URL will be <strong>{{newAccount.businessName | urlFilter}}.indigenous.io</strong> and can be changed later.</span>
                 </div>
                 <!-- EMAIL AND PASSOWORD -->
-                <div id="email" class="form-group col-sm-6 has-feedback" ng-hide="newAccount.tempUserId">
+                <div id="email" class="form-group col-sm-6 has-feedback" ng-hide="tmpAccount.tempUser">
                     <input class="form-control input-lg" type="email" ng-model="newAccount.email" placeholder="Email" ng-blur="checkEmailExists(newAccount)" />
                     <span class="glyphicon form-control-feedback"></span>
                     <span class="error help-block" />
