@@ -71,7 +71,7 @@ if (process.env.IS_SECURE == null) {
  * A "whitelist" of subdomains that are never "account specific".
  * If a use hits one of these, they are at the main indigenous.io app.
  */
-process.env.GLOBAL_SUBDOMAINS = "www,main,app";
+process.env.GLOBAL_SUBDOMAINS = "www,app";
 
 /**
  * A comma separated list of strings that represent different environments.
