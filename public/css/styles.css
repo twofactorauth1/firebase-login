@@ -101,11 +101,6 @@ hr {
 .goback p {
   text-align: left;
 }
-#body,
-#main-area,
-#content-area {
-  min-height: 600px;
-}
 .ng-hide {
   display: none!important;
 }
@@ -533,6 +528,7 @@ div[data-type='campaign'] .inner-page .overlay {
 }
 .adminbar .navbar {
   min-height: inherit;
+  background: #f8f8f8;
 }
 .adminbar .navbar .nav {
   margin: 0;
@@ -998,8 +994,9 @@ ul.nav {
   margin-top: 50px;
 }
 .navigation-v2 .navbar .navbar-brand {
-  margin: 25px auto!important;
+  margin: 0 auto!important;
   height: auto;
+  padding: 0;
 }
 .navigation-v2 .navbar ul.navbar-nav {
   width: 100%;
@@ -2132,7 +2129,6 @@ div[data-class='image-text'] p {
   margin-top: -210px;
 }
 .navbar-v2 div[data-type='masthead'] .home-text {
-  margin-top: 200px;
   min-height: 260px;
 }
 .masthead .btn .fa {
@@ -2192,9 +2188,6 @@ div[data-class='image-text'] p {
   text-align: center;
 }
 @media (max-width: 625px) {
-  .navbar-v2 .masthead-v1 .home-text {
-    margin-top: 140px!important;
-  }
   .masthead-v1 .masthead-subtitle {
     max-width: 100%;
   }
