@@ -1064,6 +1064,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
             parentElement: "body",
             dragStart: function(e, ui) {
                 $scope.parentScope.resizeIframe();
+                $scope.isPageDirty = true;
                 //angular.element(".ui-sortable").addClass("active");
                 //var componentId = e.source.itemScope.modelValue._id;
                 //e.source.itemScope.modelValue = $scope.parentScope.updateComponent(componentId);
@@ -1078,7 +1079,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
                 $scope.wait = setTimeout(function() {
                     //$scope.activateCKEditor();
                     angular.element(".ui-sortable").removeClass("active");
-                    $scope.parentScope.resizeIframe();
+                    $scope.parentScope.resizeIframe();                    
                 }, 1500);
 
             for (var i = 0; i < $scope.currentpage.components.length; i++) {
