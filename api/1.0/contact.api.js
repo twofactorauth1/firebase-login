@@ -565,6 +565,9 @@ _.extend(api.prototype, baseApi.prototype, {
                                             } else {
                                                 var component = emailPage.get('components')[0];
                                                 self.log.debug('Using this for data', emailPage.get('_id'));
+                                                self.log.debug('Using this account for data', account);
+                                                if(!component.logourl && account && account.attributes.business)
+                                                    component.logourl = account.attributes.business.logo;
                                                 app.render('emails/base_email', component, function(err, html){
                                                     if(err) {
                                                         self.log.error('error rendering html: ' + err);
