@@ -14,7 +14,7 @@ var facebookClientSecret = process.env.FACEBOOK_CLIENT_SECRET || 'bb266b72037221
 module.exports = {
     CLIENT_ID: facebookClientId,
     CLIENT_SECRET: facebookClientSecret,
-    CALLBACK_URL_LOGIN: appConfig.server_url + "/oauth2/callback",
+    CALLBACK_URL_LOGIN: appConfig.www_url + "/oauth2/callback",
 
 
     SCOPE_STREAM: "read_stream",

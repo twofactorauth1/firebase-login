@@ -19,25 +19,33 @@ var socialConfigManager = require('../socialconfig/socialconfig_manager');
 var mandrillHelper = require('../utils/mandrillhelper');
 var notificationConfig = require('../configs/notification.config');
 var fs = require('fs');
+var async = require('async');
 
 module.exports = {
 
     createAccountAndUserFromTempAccount: function(accountToken, fingerprint, sendWelcomeEmail, fn) {
         var self = this;
         log.debug('>> createAccountAndUserFromTempAccount');
-
-        accountDao.getTempAccount(accountToken, function(err, tempAccount){
-            if(err) {
-                log.error('Error getting temp account: ' + err);
-                return fn(err, null);
-            }
-            log.debug('got tempAccount: ', tempAccount);
-            var user = new $$.m.User(tempAccount.get('tempUser'));
-            accountDao.convertTempAccount(accountToken, function(err, account) {
-                if(err) {
-                    log.error('Error converting temp account: ' + err);
-                    return fn(err, null);
-                }
+        async.waterfall([
+            function convertAccount(callback){
+                accountDao.getTempAccount(accountToken, function(err, tempAccount){
+                    if(err) {
+                        log.error('Error getting temp account: ' + err);
+                        callback(err);
+                    }
+                    log.debug('got tempAccount: ', tempAccount);
+                    var user = new $$.m.User(tempAccount.get('tempUser'));
+                    accountDao.convertTempAccount(accountToken, function(err, account) {
+                        if (err) {
+                            log.error('Error converting temp account: ' + err);
+                            callback(err);
+                        }
+                        callback(null, account, user);
+                    });
+                });
+            },
+            function convertUser(account, user, callback){
+                log.debug('Created account with id: ' + account.id());
                 var accountId = account.id();
                 var roleAry = ["super","admin","member"];
                 var username = user.get('username');
@@ -48,97 +56,89 @@ module.exports = {
                     //user does not exist.  set temp ID to null.
                     user.set('_id', null);
                 }
-                dao.saveOrUpdate(user, function(err, savedUser){
-                    if(err) {
+                dao.saveOrUpdate(user, function(err, savedUser) {
+                    if (err) {
                         log.error('Error saving user: ' + err);
-                        return fn(err, null);
+                        callback(err);
                     }
-                    var userId = savedUser.id();
-                    log.debug('Created user with id: ' + userId);
-                    socialConfigManager.createSocialConfigFromUser(accountId, savedUser, function(err, value){
-                        if(err) {
-                            log.error('Error creating social config for account:' + accountId);
-                        }
-                        return;
-                    });
-
-                    /*
-                     * Send welcome email.  This is done asynchronously.
-                     * But only do this if we are not running unit tests.
-                     */
-                    /*
-                    if (process.env.NODE_ENV != "testing") {
-                        fs.readFile(notificationConfig.WELCOME_HTML, 'utf-8', function (err, htmlContent) {
-                            if (err) {
-                                log.error('Error getting welcome email file.  Welcome email not sent for accountId ' + accountId);
-                            } else {
-                                log.debug('account ', account.attributes.subdomain);
-                                var siteUrl = account.get('subdomain') + '.' + appConfig.subdomain_suffix;
-
-                                var vars = [
-                                    {
-                                        "name": "SITEURL",
-                                        "content": siteUrl
-                                    },
-                                    {
-                                        "name": "USERNAME",
-                                        "content": savedUser.attributes.username
-                                    }
-                                ];
-                                mandrillHelper.sendAccountWelcomeEmail(notificationConfig.WELCOME_FROM_EMAIL,
-                                    notificationConfig.WELCOME_FROM_NAME, email, username, notificationConfig.WELCOME_EMAIL_SUBJECT,
-                                    htmlContent, accountId, userId, vars, function (err, result) {
-                                    });
-                            }
-
-                        });
-                    }
-                    */
-
-
-                    log.debug('Creating customer contact for main account.');
-                    contactDao.createCustomerContact(user, appConfig.mainAccountID, fingerprint, function(err, contact){
-                        if(err) {
-                            log.error('Error creating customer for user: ' + userId);
-                        } else {
-                            log.debug('Created customer for user:' + userId);
-                        }
-                    });
-                    log.debug('Initializing user security.');
-                    securityManager.initializeUserPrivileges(userId, username, roleAry, accountId, function(err, value){
-                        if(err) {
-                            log.error('Error initializing user privileges for userID: ' + userId);
-                            return fn(err, null);
-                        }
-                        log.debug('creating website for account');
-                        cmsManager.createWebsiteForAccount(accountId, 'admin', function(err, value){
-                            if(err) {
-                                log.error('Error creating website for account: ' + err);
-                                fn(err, null);
-                            } else {
-                                log.debug('creating default page');
-                                cmsManager.createDefaultPageForAccount(accountId, value.id(), function(err, value){
-                                    if(err) {
-                                        log.error('Error creating default page for account: ' + err);
-                                        fn(err, null);
-                                    } else {
-                                        //pick up updated account
-                                        accountDao.getAccountByID(account.id(), function(err, updatedAccount){
-                                            log.debug('<< createAccountAndUserFromTempAccount');
-                                            fn(null, {account: updatedAccount, user:savedUser});
-                                        });
-
-
-                                    }
-
-                                });
-                            }
-
-                        });
-                    });
+                    callback(null, account, savedUser);
                 });
-            });
+            },
+            function setupCustomerContactAndSocialConfig(account, user, callback){
+                log.debug('Created user with id: ' + user.id());
+                socialConfigManager.createSocialConfigFromUser(account.id(), user, function(err, value){
+                    if(err) {
+                        log.error('Error creating social config for account:' + account.id());
+                    }
 
+                });
+
+                log.debug('Creating customer contact for main account.');
+                contactDao.createCustomerContact(user, appConfig.mainAccountID, fingerprint, function(err, contact){
+                    if(err) {
+                        log.error('Error creating customer for user: ' + user.id());
+                    } else {
+                        log.debug('Created customer for user:' + user.id());
+                    }
+                    callback(null, account, user);
+                });
+            },
+            function setupSecurity(account, user, callback){
+                log.debug('Initializing user security.');
+                var userId = user.id();
+                var username = user.get('username');
+                var roleAry = ["super","admin","member"];
+                var accountId = account.id();
+                securityManager.initializeUserPrivileges(userId, username, roleAry, accountId, function(err, value) {
+                    if (err) {
+                        log.error('Error initializing user privileges for userID: ' + userId);
+                        callback(err);
+                    }
+                    callback(null, account, user);
+                });
+            },
+            function setupCMS(account, user, callback){
+                log.debug('creating website for account');
+                var accountId = account.id();
+                cmsManager.createWebsiteForAccount(accountId, 'admin', function(err, value){
+                    if(err) {
+                        log.error('Error creating website for account: ' + err);
+                        callback(err);
+                    } else {
+                        log.debug('creating default pages');
+                        cmsManager.createDefaultPageForAccount(accountId, value.id(), function (err, value) {
+                            if (err) {
+                                log.error('Error creating default page for account: ' + err);
+                                callback(err);
+                            }
+                            callback(null, account, user);
+                        });
+                    }
+                });
+            },
+            function finalizeAccount(account, user, callback){
+                log.debug('Finalizing account');
+                accountDao.getAccountByID(account.id(), function(err, updatedAccount){
+                    if(err) {
+                        log.error('Error getting updated account: ' + err);
+                        callback(err);
+                    } else {
+                        var businessObj = updatedAccount.get('business');
+                        var email = user.get('email');
+                        businessObj.email = email;
+                        accountDao.saveOrUpdate(updatedAccount, function(err, savedAccount){
+                            if(err) {
+                                log.error('Error saving account: ' + err);
+                                callback(err);
+                            }
+                            log.debug('<< createAccountAndUserFromTempAccount');
+                            fn(null, {account: savedAccount, user:user});
+                        });
+                    }
+                });
+            }
+        ], function asyncComplete(err){
+            fn(err);
         });
     },
 
@@ -206,8 +206,7 @@ module.exports = {
                 }
             });
 
-            deferred
-                .done(function(account) {
+            deferred.done(function(account) {
                     var accountId;
                     if (account != null) {
                         accountId = account.id();
@@ -284,9 +283,20 @@ module.exports = {
                                         } else {
                                             //pick up updated account
                                             accountDao.getAccountByID(account.id(), function(err, updatedAccount){
-                                                log.debug('<< createUserFromUsernamePassword');
-                                                fn(null, {account: updatedAccount, user:savedUser});
+                                                var businessObj = updatedAccount.get('business');
+                                                var email = user.get('email');
+                                                businessObj.email = email;
+                                                accountDao.saveOrUpdate(updatedAccount, function(err, savedAccount){
+                                                    if(err) {
+                                                        log.error('Error saving account: ' + err);
+                                                        callback(err);
+                                                    }
+                                                    log.debug('<< createUserFromUsernamePassword');
+                                                    fn(null, {account: savedAccount, user:savedUser});
+                                                });
+
                                             });
+
                                         }
                                     });
                                 }

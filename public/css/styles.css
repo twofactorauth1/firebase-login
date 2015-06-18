@@ -101,11 +101,6 @@ hr {
 .goback p {
   text-align: left;
 }
-#body,
-#main-area,
-#content-area {
-  min-height: 600px;
-}
 .ng-hide {
   display: none!important;
 }
@@ -533,6 +528,7 @@ div[data-type='campaign'] .inner-page .overlay {
 }
 .adminbar .navbar {
   min-height: inherit;
+  background: #f8f8f8;
 }
 .adminbar .navbar .nav {
   margin: 0;
@@ -927,6 +923,9 @@ div[data-type="feature-list"] .inner-page {
   padding: 0 30px;
 }
 .navbar {
+  border: none!important;
+  background: none;
+  box-shadow: none;
   margin-bottom: 0px;
   min-height: 85px;
   -webkit-box-shadow: 0px 1px 10px 0px rgba(0, 0, 0, 0.25);
@@ -995,8 +994,9 @@ ul.nav {
   margin-top: 50px;
 }
 .navigation-v2 .navbar .navbar-brand {
-  margin: 25px auto!important;
+  margin: 0 auto!important;
   height: auto;
+  padding: 0;
 }
 .navigation-v2 .navbar ul.navbar-nav {
   width: 100%;
@@ -1078,6 +1078,9 @@ ul.nav {
   display: inline-block;
 }
 .navigation-v3 .navbar {
+  border: none!important;
+  background: none;
+  box-shadow: none;
   min-height: 115px;
   border: none;
   border-radius: 0px;
@@ -2126,7 +2129,6 @@ div[data-class='image-text'] p {
   margin-top: -210px;
 }
 .navbar-v2 div[data-type='masthead'] .home-text {
-  margin-top: 200px;
   min-height: 260px;
 }
 .masthead .btn .fa {
@@ -2186,9 +2188,6 @@ div[data-class='image-text'] p {
   text-align: center;
 }
 @media (max-width: 625px) {
-  .navbar-v2 .masthead-v1 .home-text {
-    margin-top: 140px!important;
-  }
   .masthead-v1 .masthead-subtitle {
     max-width: 100%;
   }
@@ -2360,34 +2359,6 @@ div[data-class='image-text'] p {
   top: 8px;
   right: 8px;
 }
-/********** Simple Form v3 **********/
-.simple-form-v3 input[type='radio'] {
-  margin-right: 5px;
-}
-.simple-form-v3 .btn-editable {
-  padding-top: 15px !important;
-  -moz-user-select: text;
-}
-.simple-form-v3 .has-success .form-control {
-  border-color: #2ecc71;
-}
-.simple-form-v3 .has-success .glyphicon {
-  color: #2ecc71;
-}
-.simple-form-v3 .has-error .form-control {
-  border-color: #e74c3c;
-}
-.simple-form-v3 .has-error .glyphicon {
-  color: #e74c3c;
-}
-.simple-form-v3 .has-error .help-block {
-  color: #e74c3c;
-}
-.simple-form-v3 .has-feedback .form-control-feedback {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-}
 /********** Products v1 component **********/
 .products-v1 .nav-tabs {
   width: 425px;
@@ -2469,6 +2440,12 @@ div[data-class='image-text'] p {
   margin-right: 15px;
   height: 180px;
   margin: 0 auto;
+}
+.products-v1 .no-product-img {
+  height: 160px;
+}
+.products-v1 .product-description {
+  min-height: 20px;
 }
 .products-v1 .product-content {
   height: 330px;
@@ -3670,16 +3647,16 @@ div[data-type=blog] .container {
   letter-spacing: 0px;
 }
 .payment-form-v1 #terms-of-service span.s2 {
-  text-decoration: underline ;
+  text-decoration: underline;
   letter-spacing: 0px;
 }
 .payment-form-v1 #terms-of-service span.s3 {
-  text-decoration: underline ;
+  text-decoration: underline;
   letter-spacing: 0.0px;
   color: #272727;
 }
 .payment-form-v1 #terms-of-service span.s4 {
-  text-decoration: underline ;
+  text-decoration: underline;
   letter-spacing: 0.0px;
   color: #1e497d;
 }
@@ -3896,14 +3873,13 @@ div[data-type=blog] .container {
 }
 #overlay {
   position: relative;
-  min-height: 400px;
   width: 100%;
   margin: 0 auto;
 }
 #loading {
   position: absolute;
   color: black;
-  top: 50%;
+  top: 70px;
   left: 50%;
   font-size: 40px;
 }
@@ -3911,7 +3887,7 @@ div[data-type=blog] .container {
   font-size: 20px;
 }
 #loading div.msg {
-  right: 40%;
+  right: 50%;
 }
 .thumbnail-slider-v1 .single-image {
   padding: 0;
@@ -4747,6 +4723,7 @@ fieldset[disabled] .btn-vimeo-square.active {
   border-radius: 0;
   background: #efa022;
   padding: 0;
+  height: 54px;
 }
 #editor-toolbar .cke_chrome a.cke_button_disabled:active,
 #editor-toolbar .cke_chrome a.cke_button_disabled:focus,
@@ -4777,6 +4754,7 @@ fieldset[disabled] .btn-vimeo-square.active {
 }
 #editor-toolbar .cke_chrome .cke_combo_button {
   margin-top: 13px;
+  padding: 2px 2px!important;
 }
 #editor-toolbar .cke_chrome a.cke_button {
   height: 50px;
@@ -4899,6 +4877,7 @@ fieldset[disabled] .btn-vimeo-square.active {
 #editor-toolbar .cke_inner {
   display: inline-block;
   background: #efa022;
+  height: 54px;
 }
 .componentActions {
   position: absolute;

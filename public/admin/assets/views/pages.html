@@ -224,12 +224,12 @@
                         <label for="new-page-title" tooltip-placement="bottom" tooltip="Provide the title of the page you want to create">Page Title</label>
                         <input id="new-page-title" class="form-control input-lg" type="text" ng-model="createpage.title" ng-change="slugifyHandle(createpage.title)">
                     </div>
-                    <div class="form-group" ng-class="{ 'has-error': handleError}" ng-show="showChangeURL">
+                    <div class="form-group" ng-class="{ 'has-error': handleError}" ng-show="showChangeURL" ng-if="!createpage.homepage">
                         <slug from="createpage.title" to="createpage.handle"></slug>
                         <label for="new-page-url" class="tooltips" tooltip-placement="bottom" tooltip="Modify the url where your page will be reached">Page Url</label>
                         <input id="new-page-url" class="form-control" type="text" ng-model="createpage.handle" ng-change="slugifyHandle(createpage.handle)">
                     </div>
-                    <p ng-show="createpage.title">Page Url will be
+                    <p ng-show="createpage.title" ng-if="!createpage.homepage">Page Url will be
                         <strong>/{{createpage.handle}}</strong>
                         <span class="links cl-effect-1">
                                 <a href="" ng-click="showChangeURL = true" ng-show="!showChangeURL">Modify</a>
@@ -239,11 +239,19 @@
                             </span>
                     </p>
                     <div class="clearfix mb15"></div>
-                    <div class="form-group">
+                    <div class="form-group" ng-hide="createpage.homepage">
                         <div class="checkbox clip-check check-info checkbox-inline">
                             <input type="checkbox" id="checkbox10" ng-model="createpage.mainmenu" checked>
                             <label for="checkbox10">
                                 Add to Main Menu?
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group" ng-if="createpage.homepage">
+                        <div class="checkbox clip-check check-info checkbox-inline">
+                            <input type="checkbox" id="checkbox11" ng-model="createpage.homepage" checked>
+                            <label for="checkbox11">
+                                Create as Home Page?
                             </label>
                         </div>
                     </div>

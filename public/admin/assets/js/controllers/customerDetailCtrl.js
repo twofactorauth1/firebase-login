@@ -38,18 +38,15 @@
      * add a note to an order
      */
 
-     $scope.newNote = {};
+    $scope.newNote = {};
 
     $scope.addNote = function (_note) {
-      console.log('$scope.newNoteText ', $scope.newNote);
       var date = moment();
       var _noteToPush = {
         note: _note,
         user_id: $scope.currentUser._id,
         date: date.toISOString()
       };
-
-      console.log('_noteToPush ', _noteToPush);
 
       $scope.customer.notes.push(_noteToPush);
       $scope.matchUsers($scope.customer);
@@ -138,25 +135,34 @@
      * -
      */
 
-    $scope.refreshMap = function () {
+    $scope.refreshMap = function (fn) {
       if ($scope.customer.details.length !== 0 && $scope.customer.details[0].addresses && $scope.customer.details[0].addresses.length !== 0) {
-        $scope.ip_geo_address = $scope.displayAddressFormat($scope.customer.details[0].addresses[0]);
+        var formattedAddress = angular.copy($scope.customer.details[0].addresses[0]);
+        formattedAddress.address2 = '';
+        $scope.ip_geo_address = $scope.displayAddressFormat(formattedAddress);
         $scope.city = $scope.customer.details[0].addresses[0].city;
         $scope.loadingMap = false;
       }
-      if ($scope.ip_geo_address && !$scope.location.lng && !$scope.location.lng) {
+      if ($scope.ip_geo_address) {
+        var validMapData = false;
         CustomerService.getGeoSearchAddress($scope.ip_geo_address, function (data) {
           if (data.error === undefined) {
             $scope.location.lat = parseFloat(data.lat);
-            $scope.location.lng = parseFloat(data.lon);
+            $scope.location.lon = parseFloat(data.lon);
             if ($scope.markers && $scope.markers.mainMarker) {
               $scope.markers.mainMarker.lat = parseFloat(data.lat);
-              $scope.markers.mainMarker.lng = parseFloat(data.lon);
+              $scope.markers.mainMarker.lon = parseFloat(data.lon);
             }
             $scope.loadingMap = false;
+            validMapData = true;
           } else {
             $scope.loadingMap = false;
           }
+
+          if (fn) {
+            fn(validMapData);
+          }
+
         });
       }
     };
@@ -170,19 +176,15 @@
 
       //customer has no address
       if (!_firstAddress) {
-        console.log('no address');
         $scope.loadingMap = false;
       } else {
-        console.log('has address');
         //customer has address and lat/lon
         if (_firstAddress.lat && _firstAddress.lon) {
           $scope.showMap(_firstAddress.lat, _firstAddress.lon);
         } else {
           //customer has address but no lat/lon
-          console.log('no lat/lon');
           //if customer has a fingerprint get data from keen
           if ($scope.customer.fingerprint !== undefined) {
-            console.log('has fingerprint');
             var keenParams = {
               event_collection: 'session_data',
               filters: [{
@@ -218,7 +220,7 @@
 
                   if (data.error === undefined) {
                     $scope.location.lat = parseFloat(data.lat);
-                    $scope.location.lng = parseFloat(data.lon);
+                    $scope.location.lon = parseFloat(data.lon);
                     $scope.loadingMap = false;
                     $scope.showMap(data.lat, data.lon);
                   } else {
@@ -233,8 +235,8 @@
               }
             });
           } else {
-            console.log('no fingerprint');
             //get lat/lon from address
+            _firstAddress.address2 = '';
             $scope.convertAddressToLatLon(_firstAddress, function (data) {
               if (data) {
                 //save updated lat/lon
@@ -269,7 +271,7 @@
       $scope.location.lon = parseFloat(_lon);
       if ($scope.markers && $scope.markers.mainMarker) {
         $scope.markers.mainMarker.lat = parseFloat(_lat);
-        $scope.markers.mainMarker.lng = parseFloat(_lon);
+        $scope.markers.mainMarker.lon = parseFloat(_lon);
       }
     };
 
@@ -354,20 +356,28 @@
         //     });
         //   });
         // }
-
-        CustomerService.saveCustomer($scope.customer_data, function (customer) {
-          $scope.customer = customer;
-          $scope.setDefaults();
-          $scope.setTags();
-          $scope.saveLoading = false;
-          $scope.originalCustomer = angular.copy($scope.customer);
-          if (!hideToaster) {
-            if ($scope.currentState === 'customerAdd') {
-              toaster.pop('success', 'Contact Created.');
-            } else {
-              toaster.pop('success', 'Contact Saved.');
-            }
+        $scope.refreshMap(function (validMapData) {
+          if (!validMapData) {
+            $scope.errorMapData = true;
+            toaster.pop('warning', 'Address could not be found.');
+          } else {
+            $scope.errorMapData = false;
+            CustomerService.saveCustomer($scope.customer_data, function (customer) {
+              $scope.customer = customer;
+              $scope.setDefaults();
+              $scope.setTags();
+              $scope.saveLoading = false;
+              $scope.originalCustomer = angular.copy($scope.customer);
+              if (!hideToaster) {
+                if ($scope.currentState === 'customerAdd') {
+                  toaster.pop('success', 'Contact Created.');
+                } else {
+                  toaster.pop('success', 'Contact Saved.');
+                }
+              }
+            });
           }
+
         });
       } else {
         $scope.saveLoading = false;
@@ -895,47 +905,47 @@
 
 
     /*
-         * @locationChangeStart
-         * - Before user leaves editor, ask if they want to save changes
-         */
+     * @locationChangeStart
+     * - Before user leaves editor, ask if they want to save changes
+     */
 
-        $scope.changesConfirmed = false;
-        $scope.isDirty = false;
+    $scope.changesConfirmed = false;
+    $scope.isDirty = false;
 
-        var offFn = $rootScope.$on('$locationChangeStart', function(event, newUrl, oldUrl) {             
-            if ($scope.originalCustomer && $scope.customer && !angular.equals($scope.originalCustomer, $scope.customer)) {
-                $scope.isDirty = true;
+    var offFn = $rootScope.$on('$locationChangeStart', function (event, newUrl, oldUrl) {
+      if ($scope.originalCustomer && $scope.customer && !angular.equals($scope.originalCustomer, $scope.customer)) {
+        $scope.isDirty = true;
+      }
+
+      if ($scope.isDirty && !$scope.changesConfirmed) {
+        event.preventDefault();
+        SweetAlert.swal({
+            title: "Are you sure?",
+            text: "You have unsaved data that will be lost",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "Yes, save changes!",
+            cancelButtonText: "No, do not save changes!",
+            closeOnConfirm: false,
+            closeOnCancel: false
+          },
+          function (isConfirm) {
+            if (isConfirm) {
+              SweetAlert.swal("Saved!", "Your edits were saved to the page.", "success");
+              $scope.customerSaveFn();
+
+            } else {
+              SweetAlert.swal("Cancelled", "Your edits were NOT saved.", "error");
             }
-
-            if ($scope.isDirty  && !$scope.changesConfirmed) {
-                event.preventDefault();
-                SweetAlert.swal({
-                        title: "Are you sure?",
-                        text: "You have unsaved data that will be lost",
-                        type: "warning",
-                        showCancelButton: true,
-                        confirmButtonColor: "#DD6B55",
-                        confirmButtonText: "Yes, save changes!",
-                        cancelButtonText: "No, do not save changes!",
-                        closeOnConfirm: false,
-                        closeOnCancel: false
-                    },
-                    function(isConfirm) {
-                        if (isConfirm) {
-                            SweetAlert.swal("Saved!", "Your edits were saved to the page.", "success");
-                            $scope.customerSaveFn();
-
-                        } else {
-                            SweetAlert.swal("Cancelled", "Your edits were NOT saved.", "error");
-                        }
-                        $scope.isDirty = false;
-                        $scope.changesConfirmed = true;
-                        //set window location
-                        window.location = newUrl;
-                        offFn();
-                    });
-            } 
-        });
+            $scope.isDirty = false;
+            $scope.changesConfirmed = true;
+            //set window location
+            window.location = newUrl;
+            offFn();
+          });
+      }
+    });
 
   }]);
 }(angular));

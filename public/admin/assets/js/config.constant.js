@@ -245,7 +245,11 @@ app.constant('contactConstant', {
     EMAIL_UNSUB: 'EMAIL_UNSUB',
     SUBSCRIPTION_PAID: 'SUBSCRIPTION_PAID',
     SUBSCRIBE_CANCEL: 'SUBSCRIBE_CANCEL',
+    ACCOUNT_CREATED: 'ACCOUNT_CREATED',
     dp: [{
+      label: "Account Created",
+      data: "ACCOUNT_CREATED"
+    },{
       label: "Page View",
       data: "PAGE_VIEW"
     }, {
@@ -552,6 +556,7 @@ app.constant('JS_REQUIRES', {
     'integrationsCtrl': 'assets/js/controllers/integrationsCtrl.js',
     'orderDetailCtrl': 'assets/js/controllers/orderDetailCtrl.js',
     'websiteSettingsCtrl': 'assets/js/controllers/websiteSettingsCtrl.js',
+    'customerSettingsCtrl': 'assets/js/controllers/customerSettingsCtrl.js',
 
     'asideCtrl': 'assets/js/controllers/asideCtrl.js',
     'toasterCtrl': 'assets/js/controllers/toasterCtrl.js',

@@ -9,6 +9,16 @@
     $scope.showPages = 15;
     WebsiteService.getPages(function (pages) {
       console.log('pages >>> ', pages);
+      var indexExists = _.find(pages, function (page) {
+        return page.handle === 'index';
+      });
+      if (!indexExists) {
+        $scope.createpage.homepage = true;
+        $scope.createpage.title = 'Home';
+        $scope.createpage.handle = 'index';
+      } else {
+        $scope.createpage.homepage = false;
+      }
       var pagesArr = $scope.formatPages(pages);
       $scope.pages = pagesArr;
       $scope.orderByFn();
@@ -57,7 +67,7 @@
             }
             pages[key].hasScreenshot = true;
           }
-          if (pages[key].type != 'template') {
+          if (pages[key].type != 'template' && pages[key].handle != 'blog' && pages[key].handle != 'single-post') {
             pagesArr.push(pages[key]);
           }
         }
@@ -159,6 +169,7 @@
         }
       };
 
+
       if (!hasHandle) {
         WebsiteService.createPageFromTemplate($scope.selectedTemplate._id, pageData, function (newpage) {
           toaster.pop('success', 'Page Created', 'The ' + newpage.title + ' page was created successfully.');
@@ -169,6 +180,10 @@
             newpage.components = newpage.components.length;
           } else {
             newpage.components = 0;
+          }
+
+          if (page.handle) {
+            $scope.createpage.homepage = false;
           }
 
           $scope.pages.unshift(newpage);

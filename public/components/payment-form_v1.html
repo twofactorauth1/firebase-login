@@ -55,7 +55,7 @@
                         </div>
                     </div>
                 </div>
-                <p class="center">or use your email address in a form below</p>
+                <p class="center" ng-if="!tmpAccount.tempUser || tmpAccount.tempUser.created.strategy === 'lo'">or use your email address in a form below</p>
             </div>
         </div>
         <div class="account-info-signup">
@@ -66,10 +66,10 @@
                     <input class="form-control input-lg" type="text" ng-model="newAccount.businessName" placeholder="Business Name" ng-blur="checkDomainExists(newAccount)" />
                     <span class="glyphicon form-control-feedback"></span>
                     <span class="error help-block" />
-                    <span class="help-block" ng-show="newAccount.businessName">Your URL will be <strong>{{newAccount.businessName | urlFilter}}.indigenous.io</strong> and can be changed later.</span>
+                    <span class="help-block" ng-show="newAccount.businessName">Your Indigenous URL will be <strong>{{newAccount.businessName | urlFilter}}.indigenous.io</strong> and will be changed once your site is ready to publish.</span>
                 </div>
                 <!-- EMAIL AND PASSOWORD -->
-                <div id="email" class="form-group col-sm-6 has-feedback" ng-hide="newAccount.tempUserId">
+                <div id="email" class="form-group col-sm-6 has-feedback" ng-hide="tmpAccount.tempUser">
                     <input class="form-control input-lg" type="email" ng-model="newAccount.email" placeholder="Email" ng-blur="checkEmailExists(newAccount)" />
                     <span class="glyphicon form-control-feedback"></span>
                     <span class="error help-block" />
@@ -321,11 +321,12 @@
 <!-- /.modal -->
 <div ng-show="isFormValid" id="overlay">
     <div id="loading">
+        <div class="msg col-sm-12"><img style="margin: 0 auto;width: 100px;display: block;" src="https://s3.amazonaws.com/indigenous-digital-assets/account_6/smaller_1430710720590.png"></div>
         <div class="msg col-sm-12"><h1 class="text-center">Congratulations!</h1>
         <h4 class="text-center">We’re honored to have you.</h4>
         </div>
-        <div><i class="fa fa-spinner fa-spin"></i></div>
-        <div class="msg col-sm-12"><span>We’re building your account now.</span></div>
+        <div class="msg col-sm-12"><div class="text-center"><i class="fa fa-spinner fa-spin"></i></div></div>
+        <div class="msg col-sm-12"><h4 class="text-center">We’re building your account now.</h4></div>
     </div>
 </div>
 <script type="text/javascript">

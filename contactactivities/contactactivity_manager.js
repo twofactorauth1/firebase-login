@@ -165,7 +165,8 @@ module.exports = {
                 return fn(err, null);
             } else {
                 var idAry = _.map(contacts, function(contact){return contact.id();});
-                queryObj.contactId = {'$in':idAry};
+                if(idAry && idAry.length > 0)
+                    queryObj.contactId = {'$in':idAry};
                 log.debug('Submitting query: ' + JSON.stringify(queryObj));
                 dao.findWithFieldsLimitAndTotal(queryObj, skip, limit, null, null, $$.m.ContactActivity, function(err, list) {
                     if (err) {

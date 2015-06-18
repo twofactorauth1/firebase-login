@@ -9,27 +9,29 @@
                 <div class="editable" data-class="text" ng-bind-html="component.text | unsafe">
                 </div>
             </div>
-        </header>        
+        </header>      
         <div class="tab-pane active row" id="{{productSection['product-section-id']}}">
-            <div data-class="product-section-id" class="col-xs-12 col-sm-6 col-md-4" ng-repeat="product in filteredProducts =(products | selectedTags:component.productTags) | offset: getProductOffset(currentProductPage, component.numtodisplay) | limitTo: component.numtodisplay">
+            <div data-class="product-section-id" class="col-xs-12 col-sm-6 col-md-4" ng-repeat="product in filteredProducts =(products | selectedTags:component.productTags) | offset: getProductOffset(currentProductPage, component.numtodisplay || 'Infinity') | limitTo: component.numtodisplay || 'Infinity'">
                 <div class="product">
                     <div class="thumbnail">
-                        <div class="product-img">
+                        <div ng-if="product.is_image || product.icon" class="product-img">
                             <div ng-if="product.is_image" class="img-wrap">
                                 <div class="product-img" style="background:url('{{product.icon}}');background-size:cover"></div>
                             </div>
                             <div ng-if="!product.is_image && product.icon" class="img-wrap icon">
                                 <i class="fa {{product.icon}}"></i>
-                            </div>
-                            <div ng-if="!product.is_image && !product.icon" class="img-wrap no-preview">
+                            </div>                            
+                        </div>
+                        <div ng-if="!product.is_image && !product.icon" class="no-product-img">
+                            <div class="img-wrap no-preview">
                                 <h3>No Preview <br> Available</h3>
                             </div>
-                        </div>
+                        </div>    
                         <div class="caption">
                             <h4 class="pull-right">{{product.regular_price | currency}}</h4>
                             <h4 class="title"><a href="#">{{product.name | characters:18 :true}}</a></h4>
                             <div class="clearfix"></div>
-                            <p class="description">{{product.description}}</p>
+                            <p class="description product-description">{{product.description}}</p>
                         </div>
                         <div class="actions">
                             <a class="btn btn-primary btn-block center" href="#" ng-if="product.hasVariations" data-toggle="modal" data-target="#product-details-modal" ng-click="updateSelectedProduct(product)">

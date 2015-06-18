@@ -52,7 +52,7 @@
 					<span class="title" translate="sidebar.nav.website.PAGES"> Pages </span>
 				</a>
 			</li>
-			<li ui-sref-active="active">
+			<li ui-sref-active="active" ng-if="account.showhide.blog">
 				<a ui-sref="app.website.posts">
 					<span class="title" translate="sidebar.nav.website.POSTS"> Posts </span>
 				</a>
@@ -70,7 +70,7 @@
 		</ul>
 	</li>
 	<li ng-class="{'active open':$state.includes('app.customers')}">
-		<a ui-sref="app.customers">
+		<a href="javascript:void(0)">
 			<div class="item-content">
 				<div class="item-media">
 					<i class="ti-user"></i>
@@ -80,6 +80,18 @@
 				</div>
 			</div>
 		</a>
+		<ul class="sub-menu">
+			<li ui-sref-active="active">
+				<a ui-sref="app.customers">
+					<span class="title" translate="sidebar.nav.customers.MANAGE"> Customer Management </span>
+				</a>
+			</li>
+			<li ui-sref-active="active">
+				<a ui-sref="app.customerSettings">
+					<span class="title" translate="sidebar.settings.MAIN"> Settings </span>
+				</a>
+			</li>
+		</ul>
 	</li>
 	<li ng-class="{'active open':$state.includes('app.products', 'app.orders')}">
 		<a href="javascript:void(0)">

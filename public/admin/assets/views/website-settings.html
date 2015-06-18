@@ -46,10 +46,10 @@
                         <label>Footer Link</label>
                         <span id="helpBlock" class="help-block">Remove the Indigenous Logo from the footer component.</span>
                         <label class="radio-inline">
-                            <input type="radio" name="footerLink" id="footerLink1" value="true" ng-model="website.settings.footerlink"> Yes
+                            <input type="radio" name="footerLink" id="footerLink1" value="false" ng-model="website.settings.footerlink"> Yes
                         </label>
                         <label class="radio-inline">
-                            <input type="radio" name="footerLink" id="footerLink2" value="false" ng-model="website.settings.footerlink"> No
+                            <input type="radio" name="footerLink" id="footerLink2" value="true" ng-model="website.settings.footerlink"> No
                         </label>
                     </div>
                 </div>
@@ -88,6 +88,25 @@
                         <input type="text" class="form-control" ng-model="account.domain" />
                     </div>
                 </div>
+            </form>
+            <div class="clearfix"></div>
+        </tab>
+        <tab heading="Blog">
+            <form class="col-sm-6 form-horizontal">
+                <div class="form-group">
+                    <label>Enable Blog</label>
+                    <span tooltip-placement="top" tooltip-html-unsafe="Enable the blog for your website"><i class="fa fa-info-circle" /></span>
+                    <switch ng-model="account.showhide.blog" class="pull-right"></switch>
+                </div>
+                <div class="form-group">
+                    <label>Blog Template</label>
+                    <button class="btn btn-primary btn-o pull-right" ng-click="editTemplate('blog')"><span class="fa fa-edit"></span> Edit</button>
+                </div>
+                <div class="form-group">
+                    <label>Post Template</label>
+                    <button class="btn btn-primary btn-o pull-right" ng-click="editTemplate('post')"><span class="fa fa-edit"></span> Edit</button>
+                </div>
+                <div class="clearfix"></div>
             </form>
             <div class="clearfix"></div>
         </tab>

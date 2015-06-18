@@ -167,13 +167,9 @@
                                                     <!-- <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-reply"></i> Send Welcome Email</a> -->
                                                 </div>
                                                 <div ng-switch-when="ACCOUNT_CREATED">
-                                                    <p>
-                                                        <span class="label label-info">CONTACT CREATED</span> for
-                                                        <span ng-if="!activity.customer">[deleted]</span>
-                                                        <span ng-if="activity.customer.first">{{activity.customer.first+' '+activity.customer.last}}</span>
-                                                        <span ng-if="!activity.customer.first">{{activity.customer.details[0].emails[0].email}}</span>.
+                                                     <p>
+                                                        <span class="label label-default">ACCOUNT CREATED</span> {{activity.detail}}
                                                     </p>
-                                                    <!-- <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-reply"></i> Send Welcome Email</a> -->
                                                 </div>
                                                 <div ng-switch-when="SUBSCRIBE">
                                                     <p>

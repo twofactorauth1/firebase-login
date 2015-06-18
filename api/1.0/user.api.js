@@ -15,6 +15,7 @@ var userManager = require('../../dao/user.manager');
 var paymentsManager = require('../../payments/payments_manager');
 var async = require('async');
 var UAParser = require('ua-parser-js');
+var contactActivityManager = require('../../contactactivities/contactactivity_manager');
 var parser = new UAParser();
 
 var api = function() {
@@ -393,6 +394,7 @@ _.extend(api.prototype, baseApi.prototype, {
                         req.session.domain = updatedAccount.get('domain');
                         //req.session.locked = true;//TODO: change this eventually
                         self.log.debug('Just set session accountId to: ' + req.session.accountId);
+                       
                         callback(null, account.id(), sub.id, user);
                     });
                 });
@@ -410,7 +412,15 @@ _.extend(api.prototype, baseApi.prototype, {
                         user.set("accountUrl", value.toLowerCase());
                         var json = user.toJSON('public', {accountId:accountId});
                         self.log.debug('<< initalizeUserAndAccount: ', json);
-                        req.session.midSignup = false;
+                        req.session.midSignup = false;                       
+                        self.createUserActivityWithParams(accountId, user.id(), 'CREATE_ACCOUNT', null, null, function(){});
+                        var activity = new $$.m.ContactActivity({
+                            accountId: accountId,
+                            activityType: "ACCOUNT_CREATED",
+                            detail : "Congratulations, your account was successfully created.",
+                            start: new Date()
+                        });
+                        contactActivityManager.createActivity(activity, function(err, value){});
                         res.send(json);
                     });
                 });

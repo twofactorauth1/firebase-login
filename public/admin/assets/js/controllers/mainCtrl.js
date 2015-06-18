@@ -149,6 +149,7 @@ app.controller('AppCtrl', ['$rootScope', '$scope', '$state', '$translate', '$loc
         });
 
         AccountService.getAccount(function(account) {
+            $scope.account = account;
             if (account.locked) {
                 $state.go('app.support.gettingstarted');
                 account.locked = false;
