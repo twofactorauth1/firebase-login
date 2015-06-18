@@ -1,0 +1,33 @@
+<!-- start: PAGE TITLE -->
+<div ng-controller="CustomerSettingsCtrl" class="customer-settings">
+    <section id="page-title" class="padding-top-15 padding-bottom-15 margin-bottom-15">
+        <div class="row">
+            <div class="col-sm-8">
+                <h1 class="mainTitle" translate="sidebar.nav.customers.SETTINGS"></h1>
+                <span class="mainDescription">Adjust all settings for the customers section</span>
+            </div>
+            <div ncy-breadcrumb></div>
+        </div>
+    </section>
+    <tabset class="tabbable">
+        <tab heading="Membership">
+            <form class="col-sm-6 form-horizontal">
+                <div class="form-group">
+                    <label>Enable Taxes</label>
+                    <span tooltip-placement="top" tooltip-html-unsafe="Enable taxes for your products."><i class="fa fa-info-circle" /></span>
+                    <switch ng-model="settings.taxes" class="pull-right" ng-change="updateSettings()"></switch>
+                </div>
+                <div class="clearfix"></div>
+                <div ng-if="settings.taxes">
+                    <div class="form-group">
+                        <label>Calculate Tax Based On:</label>
+                        <select ng-model="settings.taxbased" class="form-control" ng-options="calc.value as calc.name for calc in calculateTaxOptions" ng-change="updateSettings()">
+                            <option value="">-- choose --</option>
+                        </select>
+                    </div>
+                </div>
+            </form>
+            <div class="clearfix"></div>
+        </tab>
+    </tabset>
+</div>

@@ -12740,6 +12740,13 @@ fieldset[disabled] .btn-vimeo-square.active {
   border-bottom: 0;
   padding-bottom: 0;
 }
+.manage-feed .tab-content {
+  min-height: 200px;
+}
+.manage-feed .tab-content ul li:last-child .parentaccount {
+  border-bottom: none;
+  margin-bottom: 0px;
+}
 .manage-feed .fb-admin-pages {
   margin: 0;
   padding: 0;
