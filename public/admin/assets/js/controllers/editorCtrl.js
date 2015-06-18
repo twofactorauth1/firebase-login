@@ -119,7 +119,11 @@
     $scope.getUrl = function (handle, is_post) {
       if (is_post)
         handle = "blog/" + handle;
-      var _url = 'http://' + window.location.host + '/' + handle;
+      if (handle != 'index') {
+        var _url = 'http://' + window.location.host + '/' + handle;
+      } else {
+        var _url = 'http://' + window.location.host + '/';
+      }
       if ($scope.account.domain) {
         _url = $scope.account.domain + '/' + handle;
       }
