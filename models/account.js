@@ -79,7 +79,7 @@ var account = $$.m.ModelBase.extend({
 
             "showhide": {
                 "blog": false
-            }
+            },
 
             _v:"0.1"
         }
