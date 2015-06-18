@@ -245,7 +245,11 @@ app.constant('contactConstant', {
     EMAIL_UNSUB: 'EMAIL_UNSUB',
     SUBSCRIPTION_PAID: 'SUBSCRIPTION_PAID',
     SUBSCRIBE_CANCEL: 'SUBSCRIBE_CANCEL',
+    ACCOUNT_CREATED: 'ACCOUNT_CREATED',
     dp: [{
+      label: "Account Created",
+      data: "ACCOUNT_CREATED"
+    },{
       label: "Page View",
       data: "PAGE_VIEW"
     }, {

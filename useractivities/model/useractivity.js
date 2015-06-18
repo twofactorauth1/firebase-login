@@ -40,6 +40,7 @@ var userActivity = $$.m.ModelBase.extend({
         LOGIN: 'LOGIN',
         LOGOUT: 'LOGOUT',
         REAUTH: 'REAUTH',
+        CREATE_ACCOUNT: 'CREATE_ACCOUNT',
         MODIFY_ACCOUNT_BILLING: 'MODIFY_ACCOUNT_BILLING',
         MODIFY_ACCOUNT: 'MODIFY_ACCOUNT',
         DELETE_ACCOUNT: 'DELETE_ACCOUNT',

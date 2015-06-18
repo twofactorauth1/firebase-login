@@ -41,6 +41,7 @@ var contactActivity = $$.m.ModelBase.extend({
         idStrategy: "uuid"
     },
     types: {
+        ACCOUNT_CREATED: 'ACCOUNT_CREATED',
         PAGE_VIEW: 'PAGE_VIEW',
         SUBSCRIBE: 'SUBSCRIBE',
         COURSE_SUBSCRIBE: 'COURSE_SUBSCRIBE',
