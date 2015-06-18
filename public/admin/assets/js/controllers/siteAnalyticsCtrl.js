@@ -220,6 +220,8 @@
       $scope.desktop = desktop;
       $scope.mobile = mobile;
 
+      $scope.device_data_loaded = true;
+
       // ----------------------------------------
       // Visitors
       // ----------------------------------------
