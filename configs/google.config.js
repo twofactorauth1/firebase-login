@@ -19,16 +19,27 @@ var analyticsScope = process.env.GOOGLE_ANALYTICS_SCOPE || 'ga:pageviews,ga:time
 //var clientSecret = 'lg41TWgRgRfZQ22Y9Qd902pH';
 
 
-//TEST Environment Credentials (*.test.indigenous.io)
-//var clientId = '277102651227-koaeib7b05jjc355thcq3bqtkbuv1o5r.apps.googleusercontent.com';
-//var clientSecret = 'lg41TWgRgRfZQ22Y9Qd902pH';
+/*
+ Client ID
+ 277102651227-q4rq36pdioba0vomtmssv07ojqie046b.apps.googleusercontent.com
+ Email address
+ 277102651227-q4rq36pdioba0vomtmssv07ojqie046b@developer.gserviceaccount.com
+ Client secret
+ sKl01ZtMha3K4BnBygiSQ82g
+ Redirect URIs
+ http://www.test.indigenous.io/oauth2/callback
+ */
+
+//testing out www callbacks
+clientId = process.env.GOOGLE_CLIENT_ID || '277102651227-q4rq36pdioba0vomtmssv07ojqie046b.apps.googleusercontent.com';
+clientSecret = process.env.GOOGLE_CLIENT_SECRET || 'sKl01ZtMha3K4BnBygiSQ82g';
 
 module.exports = {
     ANALYTICS_ID: analyticsId,
     ANALYTICS_SCOPE: analyticsScope,
     CLIENT_ID: clientId,
     CLIENT_SECRET: clientSecret,
-    CALLBACK_URL_LOGIN: appConfig.server_url + "/oauth2/callback",
+    CALLBACK_URL_LOGIN: appConfig.www_url + "/oauth2/callback",
     SERVER_KEY: serverKey,
 
     PROD_CLIENT_ID: '277102651227-m80ppab4ler5fo08jle3a2g0vhnjce99.apps.googleusercontent.com',

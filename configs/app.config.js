@@ -71,7 +71,7 @@ if (process.env.IS_SECURE == null) {
  * A "whitelist" of subdomains that are never "account specific".
  * If a use hits one of these, they are at the main indigenous.io app.
  */
-process.env.GLOBAL_SUBDOMAINS = "www,home,app";
+process.env.GLOBAL_SUBDOMAINS = "www,main,app";
 
 /**
  * A comma separated list of strings that represent different environments.
@@ -94,11 +94,16 @@ var MAIN_ACCOUNT_ID = process.env.MAIN_ACCOUNT_ID || 6;
 
 var serverUrl = (process.env.IS_SECURE == "true" || process.env.IS_SECURE == true) ? "https://" : "http://";
 serverUrl += "app." + process.env.ROOT_HOST;
+var wwwUrl = (process.env.IS_SECURE == "true" || process.env.IS_SECURE == true) ? "https://" : "http://";
+wwwUrl += "www." + process.env.ROOT_HOST;
+
 var subdomainSuffix = process.env.ROOT_HOST;
+
 
 
 if (process.env.PORT && process.env.PORT != 80 && process.env.PORT != 443 && process.env.PORT != 8080 && process.env.IS_PROXIED != "true") {
     serverUrl += ":" + process.env.PORT;
+    wwwUrl += ":" + process.env.PORT;
     subdomainSuffix += ":" + process.env.PORT;
 }
 
@@ -119,6 +124,7 @@ module.exports = {
     environment: process.env.NODE_ENV,
     port: process.env.PORT,
     server_url: serverUrl,
+    www_url: wwwUrl,
     subdomain_suffix: subdomainSuffix,
     support_email: "support@indigenous.io",
     cluster: false,
