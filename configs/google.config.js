@@ -8,31 +8,27 @@
 var appConfig =  require('./app.config');
 
 
-var clientId = process.env.GOOGLE_CLIENT_ID || '277102651227-koaeib7b05jjc355thcq3bqtkbuv1o5r.apps.googleusercontent.com';
-var clientSecret = process.env.GOOGLE_CLIENT_SECRET || 'lg41TWgRgRfZQ22Y9Qd902pH';
+var clientId = process.env.GOOGLE_CLIENT_ID || '277102651227-q4rq36pdioba0vomtmssv07ojqie046b.apps.googleusercontent.com';
+var clientSecret = process.env.GOOGLE_CLIENT_SECRET || 'sKl01ZtMha3K4BnBygiSQ82g';
 var serverKey = process.env.GOOGLE_SERVER_KEY || 'AIzaSyCAkloYlXlZx_---WXevaNHv03ReYpnvLs';
 var analyticsId = process.env.GOOGLE_ANALYTICS_ID || 'ga:82461709';
 var analyticsScope = process.env.GOOGLE_ANALYTICS_SCOPE || 'ga:pageviews,ga:timeOnPage,ga:exits,ga:avgTimeOnPage,ga:entranceRate,ga:entrances,ga:exitRate,ga:uniquePageviews';
 
-//TEST Environment Credentials (*.test.indigenous.io)
-//var clientId = '277102651227-koaeib7b05jjc355thcq3bqtkbuv1o5r.apps.googleusercontent.com';
-//var clientSecret = 'lg41TWgRgRfZQ22Y9Qd902pH';
-
-
-/*
- Client ID
- 277102651227-q4rq36pdioba0vomtmssv07ojqie046b.apps.googleusercontent.com
- Email address
- 277102651227-q4rq36pdioba0vomtmssv07ojqie046b@developer.gserviceaccount.com
- Client secret
- sKl01ZtMha3K4BnBygiSQ82g
- Redirect URIs
- http://www.test.indigenous.io/oauth2/callback
+/* TEST Environment Credentials (*.test.indigenous.io)
+ Client ID - 277102651227-q4rq36pdioba0vomtmssv07ojqie046b.apps.googleusercontent.com
+ Email address - 277102651227-q4rq36pdioba0vomtmssv07ojqie046b@developer.gserviceaccount.com
+ Client secret - sKl01ZtMha3K4BnBygiSQ82g
+ Redirect URIs - http://www.test.indigenous.io/oauth2/callback
  */
 
-//testing out www callbacks
-clientId = process.env.GOOGLE_CLIENT_ID || '277102651227-q4rq36pdioba0vomtmssv07ojqie046b.apps.googleusercontent.com';
-clientSecret = process.env.GOOGLE_CLIENT_SECRET || 'sKl01ZtMha3K4BnBygiSQ82g';
+/* PROD Environment Credentials
+ Client ID	    277102651227-r68qe8t01epg79kgfe9n5jke5ahb1gf4.apps.googleusercontent.com
+ Email address	277102651227-r68qe8t01epg79kgfe9n5jke5ahb1gf4@developer.gserviceaccount.com
+ Client secret	ct7uGq1d8QNmqYiLEico6j2W
+ Redirect URIs	https://www.indigenous.io/oauth2/callback
+
+ */
+
 
 module.exports = {
     ANALYTICS_ID: analyticsId,
@@ -42,8 +38,8 @@ module.exports = {
     CALLBACK_URL_LOGIN: appConfig.www_url + "/oauth2/callback",
     SERVER_KEY: serverKey,
 
-    PROD_CLIENT_ID: '277102651227-m80ppab4ler5fo08jle3a2g0vhnjce99.apps.googleusercontent.com',
-    PROD_CLIENT_SECRET: 'yPiJOniUgxjT94O7M_4tNj_M',
+    PROD_CLIENT_ID: '277102651227-r68qe8t01epg79kgfe9n5jke5ahb1gf4.apps.googleusercontent.com',
+    PROD_CLIENT_SECRET: 'ct7uGq1d8QNmqYiLEico6j2W',
 
 
 

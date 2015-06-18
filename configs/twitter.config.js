@@ -7,7 +7,7 @@
 
 var appConfig =  require('./app.config');
 
-//user:  cycleboy99
+//user:  indigenous_io
 var clientId = process.env.TWITTER_CLIENT_ID || 'wYCvZVUB0Qm24oxnVkCTZNsOm';
 var clientSecret = process.env.TWITTER_CLIENT_SECRET || 'BqkHN5QDxMbX2Z4BeT505eQhBhbBPOayulDXebh0bubfCAg0Dd';
 
