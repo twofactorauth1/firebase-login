@@ -413,7 +413,8 @@ _.extend(api.prototype, baseApi.prototype, {
                         var json = user.toJSON('public', {accountId:accountId});
                         self.log.debug('<< initalizeUserAndAccount: ', json);
                         req.session.midSignup = false;                       
-                        self.createUserActivityWithParams(accountId, user.id(), 'CREATE_ACCOUNT', null, null, function(){});
+                        self.createUserActivityWithParams(accountId, user.id(), 'CREATE_ACCOUNT', null, "Congratulations, your account was successfully created.", function(){});
+
                         var activity = new $$.m.ContactActivity({
                             accountId: accountId,
                             activityType: "ACCOUNT_CREATED",
