@@ -138,7 +138,7 @@ module.exports = {
 
     getServerUrl: function (subdomain, domain) {
         if (subdomain == null && domain == null) {
-            return serverUrl;
+            return wwwUrl;
         }
 
         var _serverUrl = (process.env.IS_SECURE == "true" || process.env.IS_SECURE == true) ? "https://" : "http://";
