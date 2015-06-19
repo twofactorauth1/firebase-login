@@ -360,6 +360,11 @@ var dao = {
         return this.findOne(query, fn);
     },
 
+    getUserAccount: function(accountId, fn) {
+        var query = { "accounts.accountId" : accountId };
+        return this.findOne(query, fn);
+    },
+
 
     getUserForAccountBySocialProfile: function(accountId, socialType, socialId, fn) {
         var query = { "accounts.accountId":accountId, "credentials.type":socialType, "credentials.socialId":socialId };
