@@ -1603,9 +1603,223 @@ var dao = {
             }
         });
 
+        var blogPage = new $$.m.cms.Page({
+            "accountId" : accountId,
+            "websiteId" : websiteId,
+            "handle" : "blog",
+            "title" : "Blog",
+            "seo" : {},
+            "visibility" : {
+                "visible" : true,
+                "asOf" : null,
+                "displayOn" : null
+            },
+            "components" : [
+                {
+                    "_id" : $$.u.idutils.generateUUID(),
+                    "anchor" : null,
+                    "type" : "navigation",
+                    "version" : 1,
+                    "visibility" : true,
+                    "title" : "Title",
+                    "subtitle" : "Subtitle.",
+                    "txtcolor" : "#888",
+                    "bg" : {
+                        "img" : {
+                            "url" : "",
+                            "width" : 1235,
+                            "height" : 935,
+                            "parallax" : true,
+                            "blur" : false
+                        },
+                        "color" : ""
+                    },
+                    "btn" : {
+                        "text" : "",
+                        "url" : "",
+                        "icon" : ""
+                    }
+                },
+                {
+                     "_id" : $$.u.idutils.generateUUID(),
+                    "anchor" : null,
+                    "type" : "blog",
+                    "version" : 1,
+                    "visibility" : true,
+                    "txtcolor" : "#444",
+                    "posts" : [
+                        {
+                            "title" : "Hello World",
+                            "content" : "this is the content",
+                            "created" : {
+                                "date" : new Date(),
+                                "by" : null
+                            },
+                            "modified" : {
+                                "date" : "",
+                                "by" : null
+                            }
+                        },
+                        {
+                            "title" : "Hello World 2",
+                            "content" : "this is the content",
+                            "created" : {
+                                "date" : new Date(),
+                                "by" : null
+                            },
+                            "modified" : {
+                                "date" : "",
+                                "by" : null
+                            }
+                        }
+                    ],
+                    "bg" : {
+                        "img" : {
+                            "url" : "",
+                            "width" : null,
+                            "height" : null,
+                            "parallax" : false,
+                            "blur" : false
+                        },
+                        "color" : "#f6f6f6"
+                    },
+                    "btn" : {
+                        "text" : "I'm Interested",
+                        "url" : "http://google.com",
+                        "icon" : "fa fa-rocket"
+                    },
+                    "post_title" : "<p></p>",
+                    "post_excerpt" : "<p><br></p>"
+                },
+
+                {
+                     "_id" : $$.u.idutils.generateUUID(),
+                    "anchor" : null,
+                    "type" : "footer",
+                    "version" : 1,
+                    "visibility" : true,
+                    "txtcolor" : null,
+                    "bg" : {
+                        "img" : {
+                            "url" : "",
+                            "width" : null,
+                            "height" : null,
+                            "parallax" : false,
+                            "blur" : false
+                        },
+                        "color" : ""
+                    },
+                    "title" : null
+                }
+            ],
+            "screenshot" : null,
+            "secure" : false,
+            "created" : {
+                "date" : new Date(),
+                "by" : null
+            },
+            "modified" : {
+                "date" : new Date(),
+                "by" : null
+            }
+        });
+
+        var singlePostPage = new $$.m.cms.Page({
+            "accountId" : accountId,
+            "websiteId" : websiteId,
+            "handle" : "single-post",
+            "title" : "Single Post",
+            "seo" : null,
+            "visibility" : {
+            "visible" : true,
+            "asOf" : null,
+            "displayOn" : null
+            },
+            "components" : [
+            {
+                "_id" : $$.u.idutils.generateUUID(),
+                "anchor" : null,
+                "type" : "navigation",
+                "version" : 1,
+                "visibility" : true,
+                "title" : "Title",
+                "subtitle" : "Subtitle.",
+                "txtcolor" : "#888",
+                "bg" : {
+                    "img" : {
+                        "url" : "",
+                        "width" : 1235,
+                        "height" : 935,
+                        "parallax" : true,
+                        "blur" : false
+                    },
+                    "color" : ""
+                },
+                "btn" : {
+                    "text" : "",
+                    "url" : "",
+                    "icon" : ""
+                }
+            },
+            {
+                "_id" : $$.u.idutils.generateUUID(),
+                "anchor" : null,
+                "type" : "single-post",
+                "version" : 1,
+                "visibility" : true,
+                "title" : "Title",
+                "subtitle" : "Subtitle.",
+                "txtcolor" : "#888888",
+                "bg" : {
+                    "img" : {
+                        "url" : "",
+                        "width" : 1235,
+                        "height" : 935,
+                        "parallax" : true,
+                        "blur" : false
+                    },
+                    "color" : ""
+                },
+                "btn" : {
+                    "text" : "",
+                    "url" : "",
+                    "icon" : ""
+                },
+                "post_content" : ""
+            },
+            {
+                "_id" : $$.u.idutils.generateUUID(),
+                "anchor" : null,
+                "type" : "footer",
+                "version" : 1,
+                "visibility" : true,
+                "txtcolor" : null,
+                "bg" : {
+                    "img" : {
+                        "url" : "",
+                        "width" : null,
+                        "height" : null,
+                        "parallax" : false,
+                        "blur" : false
+                    },
+                    "color" : ""
+                },
+                "title" : null
+            }],
+            "created" : {
+            "date" : new Date(),
+                "by" : null
+            },
+            "modified" : {
+            "date" : new Date(),
+                "by" : null
+            },
+            "screenshot" : null
+        });
+
 
         var defaultPageArray = [page, welcomeEmailPage, newOrderEmailPage, orderProcessingEmailPage,
-            orderCompletedEmailPage, orderCancelledEmailPage, customerInvoiceEmailPage, customerAccountPage];
+            orderCompletedEmailPage, orderCancelledEmailPage, customerInvoiceEmailPage, blogPage, singlePostPage];
 
         async.each(defaultPageArray, function(page, callback){
             self.log.debug('saving default page with handle: ' + page.get('handle') );
