@@ -7,6 +7,7 @@
     $scope.tableView = 'list';
     $scope.itemPerPage = 40;
     $scope.showPages = 15;
+    $scope.showChangeURL = false;
     WebsiteService.getPages(function (pages) {
       console.log('pages >>> ', pages);
       var indexExists = _.find(pages, function (page) {
@@ -229,6 +230,11 @@
       $scope.filterScreenshot = {};
       $scope.triggerInput(input);
     };
+
+    $scope.toggleHandle = function(val)
+    {
+      $scope.showChangeURL = val;
+    }
 
   }]);
 })(angular);
