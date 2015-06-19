@@ -475,6 +475,18 @@ _.extend(api.prototype, baseApi.prototype, {
             } else {
                 console.dir(req.body);
                 self.log.debug('signing up contact with account: ' + value.get('token'));
+                var emailPreferences = value.get('email_preferences');
+                if(emailPreferences.new_customer === true) {
+
+                    var accountId = value.id();
+                    var vars = [];
+                    var toAddress = value.get('business').email;
+                    var toName = '';
+                    mandrillHelper.sendNewCustomerEmail(toAddress, toName, accountId, vars, function(err, value){
+                        self.log.debug('email sent');
+                    });
+
+                }
                 //TODO: check if contact exists
                 var query = {};
                 query.accountId = value.id();

@@ -207,6 +207,7 @@ module.exports = {
                         callback(err);
                     } else {
                         var business = account.get('business');
+                        var emailPreferences = account.get('email_preferences');
                         if(!business || !business.emails || !business.emails[0].email) {
                             log.warn('No account email.  No NEW_ORDER email sent');
                             callback(null, updatedOrder);
@@ -228,11 +229,13 @@ module.exports = {
                                         callback(null, updatedOrder);
                                     });
 
-                                    //TODO: check for admin notification
-                                    //Send additional details
-                                    mandrillHelper.sendOrderEmail(fromAddress, fromName, fromAddress, fromName, subject, html, accountId, orderId, vars, function(){
-                                        log.debug('Admin Notification Sent');
-                                    });
+                                    if(emailPreferences.new_order === true) {
+                                        //Send additional details
+                                        mandrillHelper.sendOrderEmail(fromAddress, fromName, fromAddress, fromName, subject, html, accountId, orderId, vars, function(){
+                                            log.debug('Admin Notification Sent');
+                                        });
+                                    }
+
                                 });
 
                             }
