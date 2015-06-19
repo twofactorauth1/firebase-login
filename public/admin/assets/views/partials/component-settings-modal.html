@@ -74,7 +74,7 @@
                         </div>
                     </div>
                     <hr ng-show="componentEditing.type == 'navigation'" />
-                    <div class="form-group" ng-hide="componentEditing.bg.img.show">
+                     <div class="form-group" ng-hide="componentEditing.bg.img.show ||  (componentEditing.type == 'navigation' && componentEditing.version == 1)">
                         <label for="colorpicker">Background Color:</label>
                         <span tooltip-placement="top" tooltip-html-unsafe="Background color of component."><i class="fa fa-info-circle" /></span>
                         <div class="pull-right">
@@ -106,7 +106,7 @@
                             <spectrum-colorpicker format="'hex'" options="spectrum.options" class="pull-right" ng-model="componentEditing.tagCloud.bgcolor" ng-change="saveComponent()"></spectrum-colorpicker>
                         </div>
                     </div>
-                    <form class="form-horizontal" ng-show="!componentEditing.bg.img.show" >
+                    <form class="form-horizontal" ng-show="!componentEditing.bg.img.show" ng-hide="componentEditing.type == 'navigation' && componentEditing.version == 1">
                         <div class="row">
                             <div class="col-sm-10">
                                 <label class="pull-left">Add BG Opacity</label>
