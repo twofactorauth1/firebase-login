@@ -1396,6 +1396,9 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
       angular.element("#contact_phone_" + component._id + " .glyphicon").removeClass('glyphicon-ok');
       angular.element("#contact_phone_" + component._id).removeClass('has-success');
 
+      var fingerprint = new Fingerprint().get();
+      var sessionId = ipCookie("session_cookie")["id"];
+
       if (!contact || !contact.email) {
         angular.element("#contact_email_" + component._id + " .error").html("Email Required");
         angular.element("#contact_email_" + component._id).addClass('has-error');
@@ -1435,6 +1438,8 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
           contact.last_name = full_name[1];
         }
         var contact_info = {
+          fingerprint: fingerprint,
+          sessionId: sessionId,
           first: contact.first_name,
           last: contact.last_name,
           fromEmail: component.from_email,
