@@ -130,6 +130,26 @@
        
       }
     };
+    $scope.inserted = false;
+    $scope.$watch('tableView', function (newValue, oldValue) {
+      if (newValue == "grid") {
+         setTimeout(function() {
+          if(!$scope.inserted)
+          {
+           $scope.inserted = true;
+           if($("tr.product-item").length)
+           {
+              var maxProductHeight = Math.max.apply(null, $("tr.product-item").map(function ()
+              {
+                  return $(this).height();
+              }).get());
+              $("tr.product-item").css("min-height", maxProductHeight + 30);
+
+            }
+          }
+        }, 500)
+      }
+    });
 
   }]);
 }(angular));

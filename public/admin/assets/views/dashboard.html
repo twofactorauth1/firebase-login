@@ -161,7 +161,7 @@
                                                 </div>
                                                 <div ng-switch-when="CONTACT_CREATED">
                                                     <p class="cl-effect-13">
-                                                        <a href="/admin/#/customers/{{activity.customer._id}}"><span ng-if="activity.customer.first">{{activity.customer.first+' '+activity.customer.last}}</span>
+                                                        <a href="/admin/#/customers/{{activity.customer._id}}"><span ng-if="activity.customer.first">{{activity.customer.first.toString()+' '+activity.customer.last.toString()}}</span>
                                                     <span ng-if="!activity.customer.first">{{activity.customer.details[0].emails[0].email}}</span></a> was added.
                                                     </p>
                                                     <!-- <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-reply"></i> Send Welcome Email</a> -->
@@ -175,7 +175,7 @@
                                                     <p>
                                                         <span class="label label-success">SUBSCRIBE</span> for
                                                         <span ng-if="!activity.customer">[deleted]</span>
-                                                        <span ng-if="activity.customer.first">{{activity.customer.first+' '+activity.customer.last}}</span>
+                                                        <span ng-if="activity.customer.first">{{activity.customer.first.toString()+' '+activity.customer.last.toString()}}</span>
                                                         <span ng-if="!activity.customer.first">{{activity.customer.details[0].emails[0].email}}</span> subscribed to a <a href="">Indigenous Yearly</a> for $99.
                                                     </p>
                                                 </div>
@@ -183,7 +183,7 @@
                                                     <p>
                                                         <span class="label label-danger">SUBSCRIPTION CANCELED</span> for
                                                         <span ng-if="!activity.customer">[deleted]</span>
-                                                        <span ng-if="activity.customer.first">{{activity.customer.first+' '+activity.customer.last}}</span>
+                                                        <span ng-if="activity.customer.first">{{activity.customer.first.toString()+' '+activity.customer.last.toString()}}</span>
                                                         <span ng-if="!activity.customer.first">{{activity.customer.details[0].emails[0].email}}</span>.
                                                     </p>
                                                 </div>
@@ -192,7 +192,7 @@
                                                         <span class="label label-default">PAGE VIEW</span>
                                                     </p>
                                                     <p ng-if="activity.customer && activity.customer.first">
-                                                        {{activity.customer.first+' '+activity.customer.last}} viewed {{activity.attributes.page}} for {{activity.attributes.timespent}}.</p>
+                                                        {{activity.customer.first.toString()+' '+activity.customer.last.toString()}} viewed {{activity.attributes.page}} for {{activity.attributes.timespent}}.</p>
                                                     <p ng-if="activity.customer && !activity.customer.first && activity.customer.details[0].emails[0]">
                                                         {{activity.customer.details[0].emails[0].email}} viewed {{activity.attributes.page}} for {{activity.attributes.timespent}}.</p>
                                                     <p ng-if="activity.customer && !activity.customer.first && !activity.customer.details[0].emails[0]">
@@ -213,7 +213,7 @@
                                                     <p>
                                                         <span class="label label-info">FORM SUBMITTED</span> for
                                                         <span ng-if="!activity.customer">[deleted]</span>
-                                                        <span ng-if="activity.customer.first">{{activity.customer.first+' '+activity.customer.last}}</span>
+                                                        <span ng-if="activity.customer.first">{{activity.customer.first.toString()+' '+activity.customer.last.toString()}}</span>
                                                         <span ng-if="!activity.customer.first">{{activity.customer.details[0].emails[0].email}}</span>.
                                                     </p>
                                                     <!-- <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-file"></i> Read the Email</a> -->
@@ -222,7 +222,7 @@
                                                     <p>
                                                         <span class="label label-info">EMAIL DELIVERED</span> to
                                                         <span ng-if="!activity.customer">[deleted]</span>
-                                                        <span ng-if="activity.customer.first">{{activity.customer.first+' '+activity.customer.last}}</span>
+                                                        <span ng-if="activity.customer.first">{{activity.customer.first.toString()+' '+activity.customer.last.toString()}}</span>
                                                         <span ng-if="!activity.customer.first">{{activity.customer.details[0].emails[0].email}}</span>.
                                                     </p>
                                                     <!-- <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-file"></i> Read the Email</a> -->
@@ -231,7 +231,7 @@
                                                     <p>
                                                         <span class="label label-info">EMAIL OPENED</span> for
                                                         <span ng-if="!activity.customer">[deleted]</span>
-                                                        <span ng-if="activity.customer.first">{{activity.customer.first+' '+activity.customer.last}}</span>
+                                                        <span ng-if="activity.customer.first">{{activity.customer.first.toString()+' '+activity.customer.last.toString()}}</span>
                                                         <span ng-if="!activity.customer.first">{{activity.customer.details[0].emails[0].email}}</span>.
                                                     </p>
                                                     <!-- <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-file"></i> Read the Email</a> -->
@@ -240,7 +240,7 @@
                                                     <p>
                                                         <span class="label label-info">EMAIL CLICKED</span> for
                                                         <span ng-if="!activity.customer">[deleted]</span>
-                                                        <span ng-if="activity.customer.first">{{activity.customer.first+' '+activity.customer.last}}</span>
+                                                        <span ng-if="activity.customer.first">{{activity.customer.first.toString()+' '+activity.customer.last.toString()}}</span>
                                                         <span ng-if="!activity.customer.first">{{activity.customer.details[0].emails[0].email}}</span>.
                                                     </p>
                                                     <!-- <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-file"></i> Read the Email</a> -->
@@ -249,7 +249,7 @@
                                                     <p>
                                                         <span class="label label-info">EMAIL UNSUBSCRIBE</span> for
                                                         <span ng-if="!activity.customer">[deleted]</span>
-                                                        <span ng-if="activity.customer.first">{{activity.customer.first+' '+activity.customer.last}}</span>
+                                                        <span ng-if="activity.customer.first">{{activity.customer.first.toString()+' '+activity.customer.last.toString()}}</span>
                                                         <span ng-if="!activity.customer.first">{{activity.customer.details[0].emails[0].email}}</span>.
                                                     </p>
                                                     <!-- <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-file"></i> Read the Email</a> -->
@@ -258,7 +258,7 @@
                                                     <p>
                                                         <span class="label label-info">SUBSCRIPTION PAID</span> for
                                                         <span ng-if="!activity.customer">[deleted]</span>
-                                                        <span ng-if="activity.customer.first">{{activity.customer.first+' '+activity.customer.last}}</span>
+                                                        <span ng-if="activity.customer.first">{{activity.customer.first.toString()+' '+activity.customer.last.toString()}}</span>
                                                         <span ng-if="!activity.customer.first">{{activity.customer.details[0].emails[0].email}}</span>.
                                                     </p>
                                                     <!-- <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-file"></i> Read the Email</a> -->

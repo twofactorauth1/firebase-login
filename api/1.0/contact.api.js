@@ -8,6 +8,7 @@
 var baseApi = require('../base.api');
 var accountDao = require('../../dao/account.dao');
 var contactDao = require('../../dao/contact.dao');
+var userDao = require('../../dao/user.dao');
 var cmsDao = require('../../cms/dao/cms.dao');
 var campaignManager = require('../../campaign/campaign_manager');
 var contactActivityManager = require('../../contactactivities/contactactivity_manager.js');
@@ -597,6 +598,24 @@ _.extend(api.prototype, baseApi.prototype, {
                                                         mandrillHelper.sendAccountWelcomeEmail(fromEmail, fromName, contactEmail.email, contactName, emailSubject, html, value.id(), savedContact.id(), vars, function(err, result){
                                                             self.log.debug('result: ', result);
                                                         });
+                                                        if(req.body.activity){
+                                                            var accountEmail = null;
+                                                            if(account && account.attributes.business && account.attributes.business.emails && account.attributes.business.emails[0] && account.attributes.business.emails[0].email)
+                                                            {
+                                                                self.log.debug('user email: ', account.attributes.business.emails[0].email);
+                                                                accountEmail = account.attributes.business.emails[0].email;
+                                                                self._sendEmailOnCreateAccount(req, resp, accountEmail, req.body.activity.contact, account._id, component)
+                                                            }
+                                                            else{
+                                                                userDao.getUserAccount(query.accountId, function(err, user){
+                                                                    self.log.debug('user: ', user);
+                                                                    self.log.debug('user email: ', user.attributes.email);
+                                                                    accountEmail = user.attributes.email;                                                                
+                                                                    self._sendEmailOnCreateAccount(req, resp, accountEmail, req.body.activity.contact, account._id, component);   
+                                                                })
+                                                            }
+                                                            
+                                                        }
                                                     }
                                                 });
                                             }
@@ -989,7 +1008,37 @@ _.extend(api.prototype, baseApi.prototype, {
             }
         });
 
+    },
+    _sendEmailOnCreateAccount: function(req, resp, accountEmail, fields, accountId, comp) {
+        var self = this;
+        var component = {};
+        component.logourl = comp.logourl;
+        var text = [];
+         for(var attributename in fields){
+            text.push("<b>"+attributename+"</b>: "+fields[attributename]);
+        }
+        self.log.debug(fields);
+        component.title = "New customer created";
+        component.text = text;
+        app.render('emails/new_customer_created', component, function(err, html){
+            if(err) {
+                self.log.error('error rendering html: ' + err);
+                self.log.warn('email will not be sent to account owner.');
+            } else {
+                self.log.debug('sending email to: ', accountEmail);
+
+                var fromEmail = notificationConfig.FROM_EMAIL;
+                var fromName =  notificationConfig.WELCOME_FROM_NAME;
+                var emailSubject = notificationConfig.NEW_CUSTOMER_EMAIL_SUBJECT;
+                var vars = [];
+                
+                mandrillHelper.sendBasicEmail(fromEmail, fromName, accountEmail, null, emailSubject, html, accountId, vars, function(err, result){
+                    self.log.debug('result: ', result);
+                });
+            }
+        });
     }
+    
     //endregion CONTACT ACTIVITY
 });
 
