@@ -840,14 +840,7 @@ var dao = {
                 return fn(err, null);
             }
 
-            async.each(list, function(sessionEvent, cb){
-                self.log.debug('****************');
-                self.log.debug('****************');
-                self.log.debug('****************');
-                self.log.debug(sessionEvent);
-                self.log.debug('****************');
-                self.log.debug('****************');
-                self.log.debug('****************');
+            async.each(list, function(sessionEvent, cb){                
                 var activity = new $$.m.ContactActivity({
                     accountId: accountId,
                     contactId: contactId,
