@@ -149,7 +149,7 @@
                         </div>
                         <div class="panel-scroll">
                             <ul class="timeline-xs padding-left-15 padding-right-15" style="height:375px!important" perfect-scrollbar wheel-propagation="false" suppress-scroll-x="true">
-                                <li class="timeline-item success" ng-repeat="activity in activities | orderBy:'start':true">
+                                <li class="timeline-item success" ng-if="activity.activityType !== 'PAGE_VIEW'" ng-repeat="activity in activities | orderBy:'start':true">
                                     <div class="margin-left-15">
                                         <div class="text-muted text-small">
                                             {{activity.start | date:'MMM d, y h:mm:ss a'}} {{getActivityName(activity.activityType)}}
