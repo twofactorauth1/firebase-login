@@ -9,6 +9,12 @@
             "SEEALL": "See All"
         },
 
+        "settings": {
+            "MAIN": "Settings",
+            "HEADER": "Unread messages",
+            "SEEALL": "See All"
+        },
+
         "activities": {
             "MAIN": "Activities",
             "HEADER": "You have new notifications",

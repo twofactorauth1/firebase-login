@@ -12679,6 +12679,12 @@ fieldset[disabled] .btn-vimeo-square.active {
     float: left;
   }
 }
+.ng-aside.vertical .modal-dialog .modal-content {
+  max-height: none!important;
+}
+.ng-aside.vertical .modal-dialog .modal-body {
+  max-height: 400px!important;
+}
 /* ---------------------------------------------------------------------- */
 /*  Billing
 /* ---------------------------------------------------------------------- */
@@ -13349,32 +13355,32 @@ tags-input.ti-input-sm .tags .input,
   margin-right: 0px !important;
 }
 /* ---------------------------------------------------------------------- */
-/*  Website Settings
+/*   Settings
 /* ---------------------------------------------------------------------- */
-.website-settings .favicon-image {
+.sitesettings .favicon-image {
   background: url('https://s3-us-west-2.amazonaws.com/indigenous-admin/Browser-Mockup.png') no-repeat;
   height: 60px;
   background-size: cover;
   margin-bottom: 15px;
 }
-.website-settings .favicon-image .pagetitle {
+.sitesettings .favicon-image .pagetitle {
   margin-left: 94px;
   position: absolute;
   margin-top: 12px;
 }
-.website-settings .favicon-image .pageurl {
+.sitesettings .favicon-image .pageurl {
   margin-left: 104px;
   position: absolute;
   margin-top: 37px;
 }
-.website-settings .favicon-image .top-favicon {
+.sitesettings .favicon-image .top-favicon {
   width: 16px;
   height: 16px;
   right: -75px;
   position: relative;
   top: 11px;
 }
-.website-settings .favicon-image .bottom-favicon {
+.sitesettings .favicon-image .bottom-favicon {
   width: 16px;
   height: 16px;
   right: -64px;
