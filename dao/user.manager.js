@@ -255,14 +255,7 @@ module.exports = {
 
 
 
-                        log.debug('Creating customer contact for main account.');
-                        contactDao.createCustomerContact(user, appConfig.mainAccountID, fingerprint, function(err, contact){
-                            if(err) {
-                                log.error('Error creating customer for user: ' + userId);
-                            } else {
-                                log.debug('Created customer for user:' + userId);
-                            }
-                        });
+
                         log.debug('Initializing user security.');
                         securityManager.initializeUserPrivileges(userId, username, roleAry, accountId, function(err, value){
                             if(err) {
