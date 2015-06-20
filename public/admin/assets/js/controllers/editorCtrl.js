@@ -3030,7 +3030,7 @@
       $scope.childScope.checkOrSetPageDirty(true);
       var redirectUrl = url;
       if (!redirectUrl)
-        redirectUrl = $location.$$search['posthandle'] ? "/website/posts" : "/website/pages";
+        redirectUrl = $location.$$search['posthandle'] ? "/admin/#/website/posts" : "/admin/#/website/pages";
       if (isDirty) {
         $scope.updatePageComponents();
         if ($scope.childScope.updateBlogPageData)
@@ -3051,27 +3051,21 @@
               SweetAlert.swal("Saved!", "Your edits were saved to the page.", "success");
               $scope.redirect = true;
               $scope.savePage();
-              if (reload) {
-                window.location = redirectUrl;
+              window.location = redirectUrl;
+              if (reload) 
                 window.location.reload();
-              } else
-                $location.path(redirectUrl);
-
+              
             } else {
               SweetAlert.swal("Cancelled", "Your edits were NOT saved.", "error");
-              if (reload) {
-                window.location = redirectUrl;
+              window.location = redirectUrl;
+              if (reload) 
                 window.location.reload();
-              } else
-                $location.path(redirectUrl);
             }
           });
       } else {
-        if (reload) {
           window.location = redirectUrl;
-          window.location.reload();
-        } else
-          $location.path(redirectUrl);
+          if (reload) 
+            window.location.reload();
       }
     }
     $scope.createDuplicatePage = function (newPage) {
