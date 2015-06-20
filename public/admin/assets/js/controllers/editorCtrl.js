@@ -770,7 +770,7 @@
             $scope.iframeHeight = ($("#iframe-website").contents().find("body").height() + 70 + incrementHeight) + "px";
 
           });
-        }, 100);
+        }, 500);
       }
     };
 
