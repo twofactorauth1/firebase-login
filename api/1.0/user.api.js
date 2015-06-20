@@ -17,6 +17,9 @@ var async = require('async');
 var UAParser = require('ua-parser-js');
 var contactActivityManager = require('../../contactactivities/contactactivity_manager');
 var parser = new UAParser();
+var contactDao = require('../../dao/contact.dao');
+var appConfig = require('../../configs/app.config');
+var orderManager = require('../../orders/order_manager');
 
 var api = function() {
     this.init.apply(this, arguments);
@@ -395,11 +398,11 @@ _.extend(api.prototype, baseApi.prototype, {
                         //req.session.locked = true;//TODO: change this eventually
                         self.log.debug('Just set session accountId to: ' + req.session.accountId);
                        
-                        callback(null, account.id(), sub.id, user);
+                        callback(null, account.id(), sub.id, user, stripeCustomer.id);
                     });
                 });
             },
-            function(accountId, subId, user, callback) {
+            function(accountId, subId, user, stripeCustomerId, callback) {
                 self.log.debug('Updated account billing.');
                 self.sm.addSubscriptionToAccount(accountId, subId, plan, user.id(), function(err, value){
                     authenticationDao.getAuthenticatedUrlForAccount(accountId, user.id(), "admin", function (err, value) {
@@ -411,17 +414,46 @@ _.extend(api.prototype, baseApi.prototype, {
                         }
                         user.set("accountUrl", value.toLowerCase());
                         var json = user.toJSON('public', {accountId:accountId});
-                        self.log.debug('<< initalizeUserAndAccount: ', json);
+
                         req.session.midSignup = false;                       
                         self.createUserActivityWithParams(accountId, user.id(), 'CREATE_ACCOUNT', null, "Congratulations, your account was successfully created.", function(){});
 
-                        var activity = new $$.m.ContactActivity({
-                            accountId: accountId,
-                            activityType: "ACCOUNT_CREATED",
-                            detail : "Congratulations, your account was successfully created.",
-                            start: new Date()
+                        self.log.debug('Creating customer contact for main account.');
+                        contactDao.createCustomerContact(user, appConfig.mainAccountID, fingerprint, function(err, contact){
+                            if(err) {
+                                self.log.error('Error creating customer for user: ' + user.id());
+                            } else {
+                                self.log.debug('Created customer for user:' + user.id());
+                                var activity = new $$.m.ContactActivity({
+                                    accountId: appConfig.mainAccountID,
+                                    contactId: contact.id(),
+                                    activityType: $$.m.ContactActivity.types.SUBSCRIBE,
+                                    detail : "Subscribed to Indigenous",
+                                    start: new Date(),
+                                    extraFields: {
+                                        plan: plan,
+                                        setupFee: setupFee,
+                                        coupon: coupon
+                                    }
+                                });
+                                contactActivityManager.createActivity(activity, function(err, value){});
+                                self.log.debug('creating Order for main account');
+                                paymentsManager.getInvoiceForSubscription(stripeCustomerId, subId, null, function(err, invoice){
+                                    if(err) {
+                                        self.log.error('Error getting invoice for subscription: ' + err);
+                                    } else {
+                                        orderManager.createOrderFromStripeInvoice(invoice, appConfig.mainAccountID, contact.id(), function(err, order){
+                                            if(err) {
+                                                self.log.error('Error creating order for invoice: ' + err);
+                                            } else {
+                                                self.log.debug('Order created.');
+                                            }
+                                        });
+                                    }
+                                });
+                            }
                         });
-                        contactActivityManager.createActivity(activity, function(err, value){});
+                        self.log.debug('<< initalizeUserAndAccount: ', json);
                         res.send(json);
                     });
                 });
