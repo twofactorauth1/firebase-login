@@ -12,6 +12,7 @@ var welcomeFromEmail = process.env.WELCOME_FROM_EMAIL || 'hello@indigenous.io';
 var welcomeFromName =  process.env.WELCOME_FROM_NAME || 'Indigenous';
 var welcomeHTML = process.env.WELCOME_HTML || 'public/templates/emails/welcome-aboard.html';
 var welcomeEmailSubject = process.env.WELCOME_EMAIL_SUBJECT || 'Welcome to Indigenous!';
+var newCustomerEmailSubject = process.env.NEW_CUSTOMER_EMAIL_SUBJECT || 'New customer created';
 
 /*
  * Override the connection string with an environment variable
@@ -35,5 +36,6 @@ module.exports = {
     WELCOME_FROM_EMAIL: welcomeFromEmail,
     WELCOME_FROM_NAME: welcomeFromName,
     WELCOME_HTML: welcomeHTML,
-    WELCOME_EMAIL_SUBJECT: welcomeEmailSubject
+    WELCOME_EMAIL_SUBJECT: welcomeEmailSubject,
+    NEW_CUSTOMER_EMAIL_SUBJECT: newCustomerEmailSubject
 };

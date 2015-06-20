@@ -232,10 +232,10 @@
                     <p ng-show="createpage.title" ng-if="!createpage.homepage">Page Url will be
                         <strong>/{{createpage.handle}}</strong>
                         <span class="links cl-effect-1">
-                                <a href="" ng-click="showChangeURL = true" ng-show="!showChangeURL">Modify</a>
+                                <a href="" ng-click="toggleHandle(true)" ng-show="!showChangeURL">Modify</a>
                             </span>
                         <span class="links cl-effect-1">
-                                <a href="" ng-click="showChangeURL = false" ng-show="showChangeURL">Cancel</a>
+                                <a href="" ng-click="toggleHandle(false)" ng-show="showChangeURL">Cancel</a>
                             </span>
                     </p>
                     <div class="clearfix mb15"></div>

@@ -120,7 +120,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="product in displayedProducts" ng-click="viewSingleProduct(product)">
+                <tr ng-repeat="product in displayedProducts" class="product-item" ng-click="viewSingleProduct(product)">
                     <td class="center product-img">
                         <img ng-if="product.icon && product.is_image" src="{{product.icon}}" class="img-circle img-thumbnail" alt="image" style="width:50px;height:50px">
                         <h3 ng-if="!product.icon"><span class="fa fa-cube"></span></h3>
