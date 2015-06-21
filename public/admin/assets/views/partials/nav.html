@@ -69,6 +69,18 @@
 			</li> -->
 		</ul>
 	</li>
+	<li ng-class="{'active open':$state.includes('app.emails')}">
+		<a ui-sref="app.emails">
+			<div class="item-content">
+				<div class="item-media">
+					<i class="ti-email"></i>
+				</div>
+				<div class="item-inner">
+					<span class="title" translate="sidebar.nav.emails.MAIN"> Emails </span>
+				</div>
+			</div>
+		</a>
+	</li>
 	<li ng-class="{'active open':$state.includes('app.customers')}">
 		<a href="javascript:void(0)">
 			<div class="item-content">
