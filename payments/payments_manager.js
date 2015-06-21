@@ -95,6 +95,25 @@ module.exports = {
                 return fn(null, value);
             }
         });
+    },
+
+    getInvoiceForSubscription: function(stripeCustomerId, subscriptionId, accessToken, fn) {
+        log.debug('>> getInvoiceForSubscription');
+        stripeDao.listInvoices(stripeCustomerId, null, null, 100, null, accessToken, function(err, invoiceListObj){
+            if(err) {
+                log.error('Error listing invoices: ' + err);
+                return fn(err, null);
+            } else {
+                var invoiceObj = {};
+                _.each(invoiceListObj.data, function(invoice){
+                    if(invoice && invoice.subscription === subscriptionId) {
+                        invoiceObj = invoice;
+                    }
+                });
+                return fn(null, invoiceObj);
+            }
+        });
+
     }
 
 

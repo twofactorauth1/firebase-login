@@ -72,6 +72,8 @@ _.extend(api.prototype, baseApi.prototype, {
         app.put(this.url('website/:websiteId/page/:id'), this.isAuthAndSubscribedApi.bind(this), this.updatePage.bind(this));
         app.delete(this.url('website/:websiteId/page/:id/:label'), this.isAuthAndSubscribedApi.bind(this), this.deletePage.bind(this));
 
+        app.get(this.url('website/:websiteId/emails'), this.setup.bind(this), this.getAllEmails.bind(this));
+
 
         // TEMPLATES
         app.get(this.url('template'), this.isAuthApi.bind(this), this.listTemplates.bind(this));
@@ -682,6 +684,25 @@ _.extend(api.prototype, baseApi.prototype, {
             });
         }
         
+
+    },
+
+    /**
+     * Currently no security.
+     * @param req
+     * @param res
+     */
+    getAllEmails: function(req, res) {
+        var self = this;
+        self.log.debug('>> getAllEmails');
+        var websiteId = req.params.websiteId;
+        var accountId = parseInt(self.accountId(req));
+        self.log.debug('>> getAllEmails without Limit');
+            cmsManager.getEmailsByWebsiteId(websiteId, accountId, function(err, map){
+                self.log.debug('<< getAllEmails');
+                self.sendResultOrError(res, err, map, 'Error getting all emails for account');
+                self = null;
+            });
 
     },
     //endregion

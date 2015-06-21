@@ -75,7 +75,7 @@ var account = $$.m.ModelBase.extend({
 
             'credentials': [],
 
-            "locked": false,
+            "locked": true,
 
             "showhide": {
                 "blog": false

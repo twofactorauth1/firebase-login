@@ -1590,6 +1590,33 @@ module.exports = {
         });
     },
 
+    getEmailsByWebsiteId: function(websiteId, accountId, fn) {
+        var self = this;
+        self.log = log;
+        self.log.debug('>> getPagesByWebsiteId');
+        var query = {
+            accountId: accountId,
+            websiteId: websiteId,
+            type: 'email',
+            $and: [
+                {$or: [{secure:false},{secure:{$exists:false}}]},
+                {$or: [{latest:true},{latest:{$exists:false}}]}
+            ]
+
+
+        };
+        self.log.debug('start query');
+        cmsDao.findMany(query, $$.m.cms.Page, function(err, list){
+            self.log.debug('end query');
+            if(err) {
+                self.log.error('Error getting pages by websiteId: ' + err);
+                fn(err, null);
+            } else {
+                fn(null, list);
+            }
+        });
+    },
+
     getPagesByWebsiteIdWithLimit: function(websiteId, accountId, skip, limit, fn) {
         var self = this;
         self.log = log;

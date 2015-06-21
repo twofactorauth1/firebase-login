@@ -476,7 +476,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 console.dir(req.body);
                 self.log.debug('signing up contact with account: ' + value.get('token'));
                 var emailPreferences = value.get('email_preferences');
-                if(emailPreferences.new_customer === true) {
+                if(emailPreferences.new_customer === true && !req.body.activity) {
 
                     var accountId = value.id();
                     var vars = [];
