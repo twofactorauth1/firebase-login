@@ -1477,15 +1477,13 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
             angular.element("#contact_email_" + component._id + " .error").html("");
             angular.element("#contact_email_" + component._id).removeClass('has-error');
             angular.element("#contact_email_" + component._id + " .glyphicon").removeClass('glyphicon-remove');
-            contact.email = '';
-            contact.message = '';
             contact.success = true;
-            component.fields.forEach(function (value) {
-              value.model = null;
-            })
             setTimeout(function () {
               $scope.$apply(function () {
                 contact.success = false;
+                angular.forEach(contact, function(value, key) {
+                    delete contact[key];
+                });
               });
             }, 3000);
           }
