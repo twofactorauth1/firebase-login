@@ -124,6 +124,24 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
             label: 'Website Settings'
         },
         resolve: loadSequence('websiteSettingsCtrl', 'websiteService', 'accountService', 'assetsService', 'userService')
+    }).state('app.emails', {
+        url: '/emails',
+        templateUrl: "assets/views/emails.html",
+        title: 'Emails',
+        icon: 'ti-layout-media-left-alt',
+        ncyBreadcrumb: {
+            label: 'Emails'
+        },
+        resolve: loadSequence('emailsCtrl')
+    }).state('app.editor', {
+        url: '/editor',
+        templateUrl: "assets/views/editor.html",
+        title: 'Editor',
+        icon: 'ti-layout-media-left-alt',
+        ncyBreadcrumb: {
+            label: 'Editor'
+        },
+        resolve: loadSequence('editorCtrl', 'userService', 'htmlToPlaintext', 'spectrum', 'ui.sortable', 'assetsService', 'toasterService', 'geocodeService')
     }).state('app.customers', {
         url: '/customers',
         templateUrl: "assets/views/customers.html",

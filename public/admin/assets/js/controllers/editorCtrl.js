@@ -59,6 +59,10 @@
       document.getElementById("iframe-website").setAttribute("src", '/page/' + $location.$$search['pagehandle'] + '?editor=true');
     }
 
+    if ($location.$$search['email']) {
+      document.getElementById("iframe-website").setAttribute("src", '/' + $location.$$search['email'] + '?editor=true');
+    }
+
     /*
      * @location:templatehandle
      * - get the templatehandle, replace iframe src and set templateActive to true
