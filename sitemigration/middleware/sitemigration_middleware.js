@@ -12,7 +12,7 @@ var log = $$.g.getLogger("sitemigration_middleware");
 
 module.exports = {
     checkForRedirect: function(req, resp, next) {
-        log.debug('checkForRedirect ' + req.host + ' ' + req.path);
+        //log.debug('checkForRedirect ' + req.host + ' ' + req.path);
         manager.getMigrationByDomain(req.host, function(err, migration){
             if(err || !migration) {
                 return next();
