@@ -476,7 +476,12 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
                                 top: 'editor-toolbar'
                             }
                     });
-                });    
+                }); 
+                setTimeout(function () {
+                    $scope.$apply(function () {          
+                         $scope.parentScope.resizeIframe();
+                    });
+                }, 500)
         };
 
         /*
