@@ -1,9 +1,9 @@
 <div ng-controller="SettingsCtrl" class="sitesettings">
     <div class="modal-header">
-        <h3 class="modal-title"><i class="ti-settings"></i> {{settingsTitle}}</h3>
+        <h3 class="modal-title"><i class="ti-settings"></i> {{viewTitle}}</h3>
     </div>
-    <div class="modal-body bg-white no-padding padding-top-10">
-        <div ng-show="settings == 'all'" class="padding-10">
+    <div class="modal-body bg-white no-padding">
+        <div ng-show="settingsView == 'all'" class="padding-10 padding-top-20">
             <div class="col-sm-3">
                 <div class="panel panel-transparent margin-bottom-0">
                     <div class="panel-heading padding-bottom-0 padding-top-0" style="min-height: inherit">
@@ -15,16 +15,13 @@
                     <div class="panel-body padding-top-0 padding-bottom-0">
                         <ul class="list-unstyled cl-effect-1" style="line-height:25px">
                             <li>
-                                <a ng-click="viewSettings('website', 'Basic')">Basic</a>
+                                <a ng-click="viewSettings('website', 'SEO')">SEO</a>
                             </li>
                             <li>
                                 <a ng-click="viewSettings('website', 'Domain')">Domain</a>
                             </li>
                             <li>
                                 <a ng-click="viewSettings('website', 'Blog')">Blog</a>
-                            </li>
-                            <li>
-                                <a ng-click="viewSettings('website', 'Blog')">Notifications</a>
                             </li>
                         </ul>
                     </div>
@@ -43,9 +40,6 @@
                             <li>
                                 <a ng-click="viewSettings('customers', 'Membership')">Membership</a>
                             </li>
-                            <li>
-                                <a ng-click="viewSettings('website', 'Blog')">Notifications</a>
-                            </li>
                         </ul>
                     </div>
                 </div>
@@ -63,9 +57,6 @@
                             <li>
                                 <a ng-click="viewSettings('commerce', 'Taxes')">Taxes</a>
                             </li>
-                            <li>
-                                <a ng-click="viewSettings('website', 'Blog')">Notifications</a>
-                            </li>
                         </ul>
                     </div>
                 </div>
@@ -81,13 +72,13 @@
                     <div class="panel-body padding-top-0 padding-bottom-0">
                         <ul class="list-unstyled cl-effect-1" style="line-height:25px">
                             <li>
-                                <a ng-click="viewSettings('commerce', 'Taxes')">Business Profile</a>
+                                <a ui-sref="app.account.profilebusiness" ng-click="cancel($event)">Business Profile</a>
                             </li>
                             <li>
-                                <a ng-click="viewSettings('website', 'Blog')">Billing</a>
+                                <a ui-sref="app.account.billing" ng-click="cancel($event)">Billing</a>
                             </li>
                             <li>
-                                <a ng-click="viewSettings('website', 'Blog')">Integrations</a>
+                                <a ui-sref="app.account.integrations" ng-click="cancel($event)">Integrations</a>
                             </li>
                         </ul>
                     </div>
@@ -95,9 +86,9 @@
             </div>
             <div class="clearfix"></div>
         </div>
-        <div ng-show="settings == 'website'">
+        <div ng-show="settingsView == 'website'">
             <tabset class="tabbable tabs-left margin-bottom-0">
-                <tab heading="Basic">
+                <tab heading="SEO">
                     <form>
                         <div class="col-xs-6">
                             <div class="form-group">
@@ -168,31 +159,48 @@
                             <span tooltip-placement="top" tooltip-html-unsafe="Enable the blog for your website"><i class="fa fa-info-circle" /></span>
                             <switch ng-model="account.showhide.blog" class="pull-right"></switch>
                         </div>
-                        <div class="form-group">
-                            <label>Blog Template</label>
-                            <button class="btn btn-primary btn-o pull-right" ng-click="editTemplate('blog')"><span class="fa fa-edit"></span> Edit</button>
-                        </div>
-                        <div class="form-group">
-                            <label>Post Template</label>
-                            <button class="btn btn-primary btn-o pull-right" ng-click="editTemplate('post')"><span class="fa fa-edit"></span> Edit</button>
-                        </div>
                         <div class="clearfix"></div>
                     </form>
                     <div class="clearfix"></div>
                 </tab>
             </tabset>
         </div>
-        <div ng-show="settings == 'customers'">
+        <div ng-show="settingsView == 'customers'">
+        </div>
+        <div ng-show="settingsView == 'commerce'">
+            <tabset class="tabbable tabs-left margin-bottom-0">
+                <tab heading="Taxes">
+                    <form class="col-sm-6 form-horizontal">
+                        <div class="form-group">
+                            <label>Enable Taxes</label>
+                            <span tooltip-placement="bottom" tooltip-html-unsafe="Enable taxes for your products."><i class="fa fa-info-circle" /></span>
+                            <switch ng-model="settings.taxes" class="pull-right"></switch>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div ng-if="settings.taxes">
+                            <div class="form-group">
+                                <label>Calculate Tax Based On:</label>
+                                <select ng-model="settings.taxbased" class="form-control" ng-options="calc.value as calc.name for calc in calculateTaxOptions" ng-change="updateSettings()">
+                                    <option value="">-- choose --</option>
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="clearfix"></div>
+                </tab>
+            </tabset>
         </div>
     </div>
     <div class="clearfix"></div>
     <div class="modal-footer">
-        <div ng-if="settings != 'all'">
+        <div ng-if="settingsView != 'all'">
             <button class="btn btn-primary pull-left" ng-click="viewSettings('all')">Show All</button>
         </div>
-        <div ng-if="settings != 'all'">
-            <button class="btn btn-primary" ng-click="saveWebsiteSettings">Save </button>
+        <div class="pull-right">
+            <button class="btn btn-primary" ng-click="cancel($event)">Cancel</button>
         </div>
-        <button class="btn btn-primary" ng-click="cancel($event)">Cancel</button>
+        <div ng-if="settingsView != 'all'" class="pull-right margin-right-5">
+            <button class="btn btn-primary" ng-click="saveSettings()">Save </button>
+        </div>
     </div>
 </div>
