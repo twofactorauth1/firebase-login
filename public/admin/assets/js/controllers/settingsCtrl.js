@@ -2,7 +2,7 @@
 /*global app, moment, angular, window*/
 /*jslint unparam:true*/
 (function (angular) {
-  app.controller('SettingsCtrl', ["$scope", "WebsiteService", "AccountService", "UserService", "toaster", "$timeout", function ($scope, WebsiteService, AccountService, UserService, toaster, $timeout) {
+  app.controller('SettingsCtrl', ["$scope", "$state", "WebsiteService", "AccountService", "UserService", "toaster", "$timeout", function ($scope, $state, WebsiteService, AccountService, UserService, toaster, $timeout) {
     $scope.keywords = [];
 
     /*
@@ -126,6 +126,16 @@
       name: 'Business Location',
       value: 'business_location'
     }];
+
+    /*
+     * @navigateTo
+     * - navigate to view and close aside
+     */
+
+    $scope.navigateTo = function (section, $event) {
+      $state.go(section);
+      $scope.cancel($event);
+    };
 
 
     /*
