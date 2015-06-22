@@ -3,7 +3,7 @@
  * controller for editor
  */
 (function (angular) {
-  app.controller('EditorCtrl', ["$scope", "$window", "$rootScope", "$interval", "toaster", "$modal", "$filter", "$location", "WebsiteService", "SweetAlert", "hoursConstant", "GeocodeService", "ProductService", "AccountService", "postConstant", function ($scope, $window, $rootScope, $interval, toaster, $modal, $filter, $location, WebsiteService, SweetAlert, hoursConstant, GeocodeService, ProductService, AccountService, postConstant) {
+  app.controller('EditorCtrl', ["$scope", "$rootScope", "$interval", "toaster", "$modal", "$filter", "$location", "WebsiteService", "SweetAlert", "hoursConstant", "GeocodeService", "ProductService", "AccountService", "postConstant", function ($scope, $rootScope, $interval, toaster, $modal, $filter, $location, WebsiteService, SweetAlert, hoursConstant, GeocodeService, ProductService, AccountService, postConstant) {
 
     var that;
     var user, account, components, currentPageContents, previousComponentOrder, allPages, originalCurrentPageComponents = that = this;
@@ -2018,7 +2018,7 @@
               $scope.closeModal();
               setTimeout(function () {
                 window.location = '/admin/#/website/pages';
-              }, 1000)
+              }, 500)
             });
           } else {
             SweetAlert.swal("Cancelled", "Page not deleted.", "error");
