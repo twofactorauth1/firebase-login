@@ -169,13 +169,15 @@ var post = $$.m.ModelBase.extend({
 
 
     convertFromTwitterTweet: function(tweet) {
+        //console.dir(tweet);
+
         var obj = {
             _id: $$.u.idutils.generateUniqueAlphaNumeric(16),
             type: $$.constants.social.types.TWITTER,
             sourceId: tweet.id_str,
             postType: "tweet",
             pagingId: tweet.id_str,
-            link: ['http://twitter.com', tweet.user.id_str, 'status', tweet.id_str].join('/'),
+            //link: ['http://twitter.com', tweet.user.id_str, 'status', tweet.id_str].join('/'),
             retweet_count: tweet.retweet_count,
             favorite_count: tweet.favorite_count
         };
@@ -186,11 +188,13 @@ var post = $$.m.ModelBase.extend({
                 name: tweet.user.name,
                 profile_pic: tweet.user.profile_image_url_https
             };
+            obj.link = ['http://twitter.com', tweet.user.id_str, 'status', tweet.id_str].join('/');
         } else if(tweet.sender) {
             obj.from = {
                 sourceId: tweet.sender.id,
                 name: tweet.sender.name
             };
+            obj.link = ['http://twitter.com', tweet.sender.id_str, 'status', tweet.id_str].join('/');
         }
 
         if (tweet.created_at) {

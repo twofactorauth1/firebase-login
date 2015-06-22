@@ -8,8 +8,8 @@
 var appConfig =  require('./app.config');
 
 //user:  indigenous_io
-var clientId = process.env.TWITTER_CLIENT_ID || '6pHsghek08Z4GwEsO5kTcL7mA';
-var clientSecret = process.env.TWITTER_CLIENT_SECRET || 'XTq17FWMpyLpfQjcct5MsaLg2dO6XjTMNJJQpQlhzIRsXEwaVd';
+var clientId = process.env.TWITTER_CLIENT_ID || 'wSMdlqug83B79YUErBkUIH2Zp';
+var clientSecret = process.env.TWITTER_CLIENT_SECRET || 'HcqvFORryo91d1o2ehSRT2yKa6oqJskgL7jsF2wMgdD6qb2Hxc';
 
 /*
  Consumer Key (API Key)	wYCvZVUB0Qm24oxnVkCTZNsOm
