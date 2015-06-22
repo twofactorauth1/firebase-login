@@ -2016,7 +2016,7 @@
             WebsiteService.deletePage(pageId, websiteId, title, function (data) {
               toaster.pop('success', "Page Deleted", "The " + title + " page was deleted successfully.");
               $scope.closeModal();
-              $location.path("/website/pages");
+              window.location = "/admin/#/website/pages";
             });
           } else {
             SweetAlert.swal("Cancelled", "Page not deleted.", "error");
