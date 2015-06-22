@@ -78,7 +78,7 @@
             },
             "customers": {
                 "MAIN": "Customers",
-                "MANAGE": "Customer Management",
+                "MANAGE": "Manage",
                 "SETTINGS": "Customer Settings"
             },
             "commerce": {
