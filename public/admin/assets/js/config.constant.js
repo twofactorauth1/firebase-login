@@ -552,11 +552,9 @@ app.constant('JS_REQUIRES', {
     'profileBusinessCtrl': 'assets/js/controllers/profileBusinessCtrl.js',
     'profilePersonalCtrl': 'assets/js/controllers/profilePersonalCtrl.js',
     'templatesCtrl': 'assets/js/controllers/templatesCtrl.js',
-    'commerceSettingsCtrl': 'assets/js/controllers/commerceSettingsCtrl.js',
     'integrationsCtrl': 'assets/js/controllers/integrationsCtrl.js',
     'orderDetailCtrl': 'assets/js/controllers/orderDetailCtrl.js',
-    'websiteSettingsCtrl': 'assets/js/controllers/websiteSettingsCtrl.js',
-    'customerSettingsCtrl': 'assets/js/controllers/customerSettingsCtrl.js',
+    'settingsCtrl': 'assets/js/controllers/settingsCtrl.js',
     'emailsCtrl': 'assets/js/controllers/emailsCtrl.js',
 
     'asideCtrl': 'assets/js/controllers/asideCtrl.js',

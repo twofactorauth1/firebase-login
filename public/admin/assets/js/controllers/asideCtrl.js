@@ -8,9 +8,9 @@
 app.controller('AsideCtrl', ["$scope", "$aside", function ($scope, $aside) {
   $scope.openAside = function (position) {
     $aside.open({
-      templateUrl: 'asideContent.html',
+      templateUrl: '/admin/assets/views/partials/settings.html',
       placement: position,
-      size: 'sm',
+      size: 'lg',
       backdrop: true,
       controller: function ($scope, $modalInstance) {
         $scope.ok = function (e) {
