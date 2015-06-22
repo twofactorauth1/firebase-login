@@ -50,6 +50,12 @@
 
     AccountService.getAccount(function (account) {
       $scope.account = account;
+      if (!account.commerceSettings) {
+        account.commerceSettings = {
+          taxes: true,
+          taxbased: ''
+        };
+      }
     });
 
     /*
@@ -110,33 +116,17 @@
      * -
      */
 
-    // $scope.calculateTaxOptions = [{
-    //   name: 'Customer Shipping Address',
-    //   value: 'customer_shipping'
-    // }, {
-    //   name: 'Customer Billing Address',
-    //   value: 'customer_billing'
-    // }, {
-    //   name: 'Business Location',
-    //   value: 'business_location'
-    // }];
+    $scope.calculateTaxOptions = [{
+      name: 'Customer Shipping Address',
+      value: 'customer_shipping'
+    }, {
+      name: 'Customer Billing Address',
+      value: 'customer_billing'
+    }, {
+      name: 'Business Location',
+      value: 'business_location'
+    }];
 
-    /*
-     * @getUserPreferences
-     * -
-     */
-
-    // AccountService.getAccount(function (account) {
-    //   console.log('account ', account);
-    //   $scope.account = account;
-    //   if (!account.commerceSettings) {
-    //     account.commerceSettings = {
-    //       taxes: true,
-    //       taxbased: ''
-    //     };
-    //   }
-    //   $scope.settings = account.commerceSettings;
-    // });
 
     /*
      * @updateSettings

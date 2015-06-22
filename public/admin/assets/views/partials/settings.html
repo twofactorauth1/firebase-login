@@ -174,13 +174,13 @@
                         <div class="form-group">
                             <label>Enable Taxes</label>
                             <span tooltip-placement="bottom" tooltip-html-unsafe="Enable taxes for your products."><i class="fa fa-info-circle" /></span>
-                            <switch ng-model="settings.taxes" class="pull-right"></switch>
+                            <switch ng-model="account.commerceSettings.taxes" class="pull-right"></switch>
                         </div>
                         <div class="clearfix"></div>
-                        <div ng-if="settings.taxes">
+                        <div ng-if="account.commerceSettings.taxes">
                             <div class="form-group">
                                 <label>Calculate Tax Based On:</label>
-                                <select ng-model="settings.taxbased" class="form-control" ng-options="calc.value as calc.name for calc in calculateTaxOptions" ng-change="updateSettings()">
+                                <select ng-model="account.commerceSettings.taxbased" class="form-control" ng-options="calc.value as calc.name for calc in calculateTaxOptions">
                                     <option value="">-- choose --</option>
                                 </select>
                             </div>
