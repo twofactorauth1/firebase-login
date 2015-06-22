@@ -3,7 +3,7 @@
  * controller for editor
  */
 (function (angular) {
-  app.controller('EditorCtrl', ["$scope", "$rootScope", "$interval", "toaster", "$modal", "$filter", "$location", "WebsiteService", "SweetAlert", "hoursConstant", "GeocodeService", "ProductService", "AccountService", "postConstant", function ($scope, $rootScope, $interval, toaster, $modal, $filter, $location, WebsiteService, SweetAlert, hoursConstant, GeocodeService, ProductService, AccountService, postConstant) {
+  app.controller('EditorCtrl', ["$scope", "$window", "$rootScope", "$interval", "toaster", "$modal", "$filter", "$location", "WebsiteService", "SweetAlert", "hoursConstant", "GeocodeService", "ProductService", "AccountService", "postConstant", function ($scope, $window, $rootScope, $interval, toaster, $modal, $filter, $location, WebsiteService, SweetAlert, hoursConstant, GeocodeService, ProductService, AccountService, postConstant) {
 
     var that;
     var user, account, components, currentPageContents, previousComponentOrder, allPages, originalCurrentPageComponents = that = this;
@@ -2016,7 +2016,9 @@
             WebsiteService.deletePage(pageId, websiteId, title, function (data) {
               toaster.pop('success', "Page Deleted", "The " + title + " page was deleted successfully.");
               $scope.closeModal();
-              window.location = "/admin/#/website/pages";
+              setTimeout(function () {
+                window.location = '/admin/#/website/pages';
+              }, 1000)
             });
           } else {
             SweetAlert.swal("Cancelled", "Page not deleted.", "error");
