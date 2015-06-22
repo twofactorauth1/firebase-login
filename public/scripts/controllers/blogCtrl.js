@@ -194,8 +194,11 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
                     var found = $filter('getByProperty')('post_url', $route.current.params.postname, data);
                     if (found) {
                         that.post = found;
-                        var iframe = window.parent.document.getElementById("iframe-website")
-                        iframe && iframe.contentWindow && iframe.contentWindow.parent.checkIfSinglePost && iframe.contentWindow.parent.checkIfSinglePost(found);
+                        if($scope.parentScope)
+                        {
+                            $scope.parentScope.loadPost && $scope.parentScope.loadPost(found);
+                            $scope.copyPostMode();
+                        }                            
                     }
                     return;
                 }

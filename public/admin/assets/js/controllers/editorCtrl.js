@@ -1086,16 +1086,13 @@
     $scope.editPage = function () {
       $scope.isEditing = true;
       $scope.childScope.triggerEditMode();
-      if ($scope.single_post) {
-        $scope.childScope.copyPostMode();
-        $scope.post_data = $scope.childScope.getPostData();
-      }
+      
       setTimeout(function () {
         $scope.bindEvents();
       }, 1000)
       $scope.backup['website'] = angular.copy($scope['website']);
     };
-
+    
     /*
      * @cancelPage
      * -
@@ -2757,14 +2754,13 @@
     };
 
     /*
-     * @checkIfSinglePost
+     * @loadPost
      * -
      */
 
-    $scope.checkIfSinglePost = function (post) {
+    $scope.loadPost = function (post) {
       if (post) {
-        $scope.singlePost = true;
-        $scope.childScope.copyPostMode();
+        $scope.singlePost = true;        
         $scope.post_data = post;
       }
     };
