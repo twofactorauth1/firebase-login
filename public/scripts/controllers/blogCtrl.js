@@ -194,6 +194,7 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
                     var found = $filter('getByProperty')('post_url', $route.current.params.postname, data);
                     if (found) {
                         that.post = found;
+                        that.blogPageUrl = $location.$$absUrl;
                         if($scope.parentScope)
                         {
                             $scope.parentScope.loadPost && $scope.parentScope.loadPost(found);
@@ -706,6 +707,11 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
                 return true;
             }
         };
+
+        $scope.getBlogPageUrl = function()
+        {
+
+        }
 
     }
 ]);
