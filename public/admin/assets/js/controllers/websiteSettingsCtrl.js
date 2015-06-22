@@ -11,6 +11,9 @@
 
     AccountService.getAccount(function (account) {
       $scope.account = account;
+      $scope.blogSettings = null;
+      if(account && account.showhide && account.showhide)
+        $scope.blogSettings = angular.copy(account.showhide.blog);
     });
 
     // WebsiteService.getPages(function (pages) {
@@ -31,6 +34,11 @@
         WebsiteService.updateWebsite($scope.website, function () {
           $scope.saveLoading = false;
           toaster.pop('success', " Website Settings saved.");
+          if($scope.account && $scope.account.showhide)
+          {
+            if($scope.blogSettings !== $scope.account.showhide.blog)
+              window.location.reload();
+          }            
         });
       });
     };

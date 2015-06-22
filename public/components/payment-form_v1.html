@@ -47,7 +47,7 @@
                             <span>{{tmpAccount.tempUser.username}}</span>
                             <i class="fa fa-close" ng-click="removeAccount('go')"></i>
                         </div>
-                        <a ng-if="!tmpAccount.tempUser || tmpAccount.tempUser.created.strategy === 'lo'" class="btn btn-large btn-default linkedin" ng-click="makeSocailAccount('linkedin')"><i class="fa fa-linkedin"></i></a>
+                        <a ng-if="!tmpAccount.tempUser || tmpAccount.tempUser.created.strategy === 'lo'" class="btn btn-large btn-default linkedin hidden" ng-click="makeSocailAccount('linkedin')"><i class="fa fa-linkedin"></i></a>
                         <div ng-if="tmpAccount.tempUser.created.strategy === 'li'">
                             <img style="width: 50px;height: 50px; display: inline-block; margin-right: 10px;" ng-src="{{newAccount.profilePhoto.url || '/images/default-user.png'}}" class="img-responsive profilePhoto img-circle">
                             <span>{{tmpAccount.tempUser.username}}</span>
