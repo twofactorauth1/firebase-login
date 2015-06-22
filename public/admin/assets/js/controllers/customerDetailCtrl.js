@@ -183,14 +183,14 @@
           $scope.showMap(_firstAddress.lat, _firstAddress.lon);
         } else {
           //customer has address but no lat/lon
-          //if customer has a fingerprint get data from keen
-          if ($scope.customer.fingerprint !== undefined) {
+          //if customer has a session id get data from keen
+          if ($scope.customer.sessionId !== undefined) {
             var keenParams = {
               event_collection: 'session_data',
               filters: [{
-                "property_name": "fingerprint",
+                "property_name": "sessionId",
                 "operator": "eq",
-                "property_value": $scope.customer.fingerprint
+                "property_value": $scope.customer.sessionId
               }]
             };
             KeenService.singleExtraction(keenParams, function (data) {
