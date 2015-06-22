@@ -73,6 +73,9 @@
                 "TEMPLATES": "Templates",
                 "SETTINGS": "Settings"
             },
+            "emails": {
+                "MAIN": "Emails"
+            },
             "customers": {
                 "MAIN": "Customers",
                 "MANAGE": "Customer Management",

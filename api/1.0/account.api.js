@@ -36,6 +36,8 @@ _.extend(api.prototype, baseApi.prototype, {
 
         app.get(this.url('billing'), this.isAuthApi.bind(this), this.getCurrentAccountBilling.bind(this));
         app.post(this.url('billing'), this.isAuthApi.bind(this), this.updateCurrentAccountBilling.bind(this));
+        app.get(this.url('emailpreferences'), this.isAuthApi.bind(this), this.getCurrentAccountEmailPreferences.bind(this));
+        app.post(this.url('emailpreferences'), this.isAuthApi.bind(this), this.updateCurrentAccountEmailPreferences.bind(this));
         app.get(this.url(':id'), this.isAuthApi.bind(this), this.getAccountById.bind(this));
         app.post(this.url(''), this.isAuthApi.bind(this), this.createAccount.bind(this));
         app.put(this.url(':id'), this.isAuthApi.bind(this), this.updateAccount.bind(this));
@@ -179,6 +181,74 @@ _.extend(api.prototype, baseApi.prototype, {
 
     },
 
+    getCurrentAccountEmailPreferences: function(req, resp){
+        var self = this;
+        self.log.debug('>> getCurrentAccountEmailPreferences');
+        var accountId = self.accountId(req);
+        self.checkPermissionForAccount(req, self.sc.privs.VIEW_ACCOUNT, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                accountDao.getAccountByID(accountId, function(err, account){
+                    if(err || account===null) {
+                        self.log.error('error getting current account: ' + err);
+                        return self.wrapError(resp, 500, null, err, account);
+                    } else {
+                        var emailPreferences = account.get('email_preferences');
+                        if(emailPreferences !== null) {
+                            self.log.debug('<< getCurrentAccountEmailPreferences');
+                            return resp.send(emailPreferences);
+                        } else {
+                            var defaultPreferences = new $$.m.Account({}).get('email_preferences');
+                            account.set('email_preferences', defaultPreferences);
+                            accountDao.saveOrUpdate(account, function(err, savedAccount){
+                                if(err) {
+                                    self.log.error('Error updating account with default prefs', err);
+                                    return self.wrapError(resp, 500, null, err, savedAccount);
+                                } else {
+                                    self.log.debug('<< getCurrentAccountEmailPreferences');
+                                    return resp.send(defaultPreferences);
+                                }
+                            });
+                        }
+
+                    }
+                });
+
+            }
+        });
+
+    },
+
+    updateCurrentAccountEmailPreferences: function(req, resp) {
+        var self = this;
+        self.log.debug('>> updateCurrentAccountEmailPreferences');
+        var accountId = self.accountId(req);
+        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_ACCOUNT, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                var emailPreferences = req.body;
+                accountDao.getAccountByID(accountId, function(err, account) {
+                    if (err || account === null) {
+                        self.log.error('error getting current account: ' + err);
+                        return self.wrapError(resp, 500, null, err, account);
+                    } else {
+                        account.set('email_preferences', emailPreferences);
+                        accountDao.saveOrUpdate(account, function(err, savedAccount){
+                            if(err) {
+                                self.log.error('Error updating account prefs', err);
+                                return self.wrapError(resp, 500, null, err, savedAccount);
+                            } else {
+                                self.log.debug('<< updateCurrentAccountEmailPreferences');
+                                return resp.send(account.get('email_preferences'));
+                            }
+                        });
+                    }
+                });
+            }
+        });
+    },
 
     getAccountById: function(req,resp) {
 

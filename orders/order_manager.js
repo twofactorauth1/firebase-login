@@ -17,6 +17,123 @@ var cmsManager = require('../cms/cms_manager');
 
 module.exports = {
 
+    createPaidOrder: function(order, fn) {
+        var self = this;
+        log.debug('>> createPaidOrder');
+
+        //set order_id based on orders length for the account
+        var query = {
+            account_id: order.get('account_id')
+        };
+
+        dao.findMany(query, $$.m.Order, function(err, orders){
+            order.set('order_id', orders.length);
+            dao.saveOrUpdate(order, function(err, savedOrder){
+                if(err) {
+                    log.error('Error saving order: ' + err);
+                    return fn(err, null);
+                } else {
+                    log.debug('<< createPaidOrder');
+                    return fn(null, savedOrder);
+                }
+            });
+        });
+
+
+    },
+
+    createOrderFromStripeInvoice: function(invoice, accountId, contactId, fn) {
+        var self = this;
+        log.debug('>> createOrderFromStripeInvoice');
+        //set order_id based on orders length for the account
+        var query = {
+            account_id: accountId
+        };
+
+        dao.findMany(query, $$.m.Order, function(err, orders){
+            var orderId = orders.length;
+            var total = invoice.total / 100;
+            var subtotal = invoice.subtotal / 100;
+            var discount = subtotal - total;
+            var order = new $$.m.Order({
+                "account_id": accountId,
+                "customer_id" : contactId,
+                "session_id" : null,
+                "order_id" : orderId,
+                "completed_at" : new Date(),
+                "updated_at" : null,
+                "created_at" : new Date(),
+                "status" : "completed",
+                "total" : total,
+                "cart_discount" : 0.0,
+                "total_discount" : discount,
+                "total_shipping" : 0.0,
+                "total_tax" : 0.0,
+                "subtotal" : subtotal,
+                "shipping_tax" : 0.0,
+                "cart_tax" : 0.0,
+                "currency" : "usd",
+                "line_items" : [
+
+                ],
+                "total_line_items_quantity" : 0,
+                "payment_details" : {
+                    "method_title" : 'Credit Card Payment',//Check Payment, Credit Card Payment
+                    "method_id" : 'cc',//check, cc
+                    "card_token": null,//Stripe card token if applicable
+                    "charge_description": null, //description of charge if applicable
+                    "statement_description": null,//22char string for cc statement if applicable
+                    "paid" : true
+                },
+
+                "notes" : [
+                    /*
+                     {
+                     "note" : "Order status changed from processing to completed",
+                     "user_id" : 1,
+                     "date" : ISODate("2015-04-13T12:02:18.055Z")
+                     }
+                     */
+                ],
+                created: {
+                    date: new Date(),
+                    by: null
+                },
+                modified: {
+                    date: null,
+                    by: null
+                }
+            });
+
+            var line_items = [];
+            _.each(invoice.lines.data, function(invoiceItem){
+                var total = invoiceItem.amount /100;
+                var name = invoiceItem.description;
+                if(invoiceItem.plan !== null) {
+                    name = invoiceItem.plan.name;
+                }
+                var obj = {
+                    name: name,
+                    total:total
+                };
+                line_items.push(obj);
+            });
+            order.set('line_items', line_items);
+            order.set('total_line_items_quantity', line_items.length);
+
+            dao.saveOrUpdate(order, function(err, savedOrder){
+                if(err) {
+                    log.error('Error saving order: ' + err);
+                    return fn(err, null);
+                } else {
+                    log.debug('<< createOrderFromStripeInvoice');
+                    return fn(null, savedOrder);
+                }
+            });
+        });
+
+    },
+
     createOrder: function(order, accessToken, userId, fn) {
         var self = this;
         log.debug('>> createOrder');
@@ -207,6 +324,7 @@ module.exports = {
                         callback(err);
                     } else {
                         var business = account.get('business');
+                        var emailPreferences = account.get('email_preferences');
                         if(!business || !business.emails || !business.emails[0].email) {
                             log.warn('No account email.  No NEW_ORDER email sent');
                             callback(null, updatedOrder);
@@ -228,11 +346,13 @@ module.exports = {
                                         callback(null, updatedOrder);
                                     });
 
-                                    //TODO: check for admin notification
-                                    //Send additional details
-                                    mandrillHelper.sendOrderEmail(fromAddress, fromName, fromAddress, fromName, subject, html, accountId, orderId, vars, function(){
-                                        log.debug('Admin Notification Sent');
-                                    });
+                                    if(emailPreferences.new_order === true) {
+                                        //Send additional details
+                                        mandrillHelper.sendOrderEmail(fromAddress, fromName, fromAddress, fromName, subject, html, accountId, orderId, vars, function(){
+                                            log.debug('Admin Notification Sent');
+                                        });
+                                    }
+
                                 });
 
                             }

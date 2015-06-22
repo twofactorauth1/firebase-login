@@ -124,6 +124,18 @@
             });
 		};
 
+		this.getEmails = function (fn) {
+			var apiUrl = baseUrl + ['cms', 'website', $$.server.websiteId.replace(/&quot;/g,''), 'emails'].join('/');
+			$http.get(apiUrl)
+			.success(function (data, status, headers, config) {
+				fn(data);
+			})
+			.error(function (err) {
+                console.log('END:Website Service with ERROR');
+                fn(err, null);
+            });
+		};
+
 		this.getPosts = function (fn) {
 			var apiUrl = baseUrl + ['cms', 'editor', 'blog'].join('/');
 			$http.get(apiUrl)

@@ -53,7 +53,7 @@ mainApp.controller('ProductsComponentCtrl', ['$scope', 'productService', 'userSe
       } else {
         console.log('commerceSettings ', account.commerceSettings);
         $scope.settings = account.commerceSettings;
-        if ($scope.settings.taxes && $scope.settings.taxbased === 'business_location') {
+        if ($scope.settings && $scope.settings.taxes && $scope.settings.taxbased === 'business_location') {
           if (account.business.addresses[0].zip) {
             console.log('getting tax ', account.business.addresses[0].zip);
             if (account.business.addresses[0].zip) {

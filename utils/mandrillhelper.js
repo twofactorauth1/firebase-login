@@ -10,7 +10,9 @@ var mandrillConfig = require('../configs/mandrill.config');
 var mandrill = require('mandrill-api/mandrill');
 var mandrill_client = new mandrill.Mandrill(mandrillConfig.CLIENT_API_KEY);
 var moment = require('moment');
+var notificationConfig = require('../configs/notification.config');
 var log =  $$.g.getLogger("mandrillhelper");
+var fs = require('fs');
 
 var mandrillHelper =  {
 
@@ -303,6 +305,111 @@ var mandrillHelper =  {
             // A mandrill error occurred: Unknown_Subaccount - No subaccount exists with the id 'customer-123'
             fn(e, null);
         });
+    },
+
+    sendNewCustomerEmail: function(toAddress, toName, accountId, vars, fn) {
+        var self = this;
+        self.log =log;
+        self.log.debug('>> sendNewCustomerEmail');
+        vars.push({
+            "name": "SENDDATE",
+            "content": moment().format('MMM Do, YYYY')
+        });
+
+        fs.readFile('templates/emails/new_customer.html', 'utf-8', function(err, htmlContent){
+        //app.render('emails/new_customer_created', {}, function(err, htmlContent) {
+            if (err) {
+                self.log.error('Error getting new customer email file.  Welcome email not sent for accountId ' + accountId, err);
+            } else {
+                var subject = 'You have a new customer!';
+                var fromAddress = notificationConfig.WELCOME_FROM_EMAIL;
+                var fromName = notificationConfig.WELCOME_FROM_NAME;
+                var message = {
+                    'html': htmlContent,
+                    'subject': subject,
+                    'from_email':fromAddress,
+                    'to': [
+                        {
+                            'email': toAddress,
+                            'type': 'to'
+                        }
+                    ],
+                    "headers": {
+                        'encoding': 'UTF8'
+                    },
+                    "important": false,
+                    "track_opens": true,
+                    "track_clicks": true,
+                    "auto_text": null,
+                    "auto_html": null,
+                    "inline_css": null,
+                    "url_strip_qs": null,
+                    "preserve_recipients": null,
+                    "view_content_link": false,
+                    "bcc_address": null,
+                    "tracking_domain": null,
+                    "signing_domain": null,
+                    "return_path_domain": null,
+                    "merge": false,
+                    "merge_vars": [
+                        {
+                            "rcpt": toAddress,
+                            "vars": vars
+                        }
+                    ],
+                    "subaccount": null,
+                    "google_analytics_domains": [
+                        "indigenous.io" //TODO: This should be dynamic
+                    ],
+                    "google_analytics_campaign": null,
+                    "metadata": {
+                        "accountId": accountId
+                    },
+                    "recipient_metadata": [
+                        {
+                            "rcpt": toAddress,
+                            "values": {
+
+                            }
+                        }
+                    ],
+                    "attachments": null,
+                    "images": null
+                };
+                if(fromName && fromName.length > 0) {
+                    message.from_name = fromName;
+                }
+                if(toName && toName.length > 0) {
+                    message.to.name = toName;
+                }
+                var async = false;
+                var ip_pool = "Main Pool";
+
+                var send_at = moment().utc().toISOString();
+
+                self.log.debug('message: ' + JSON.stringify(message));
+                self.log.debug('async: ' + async);
+                self.log.debug('ip_pool: ' + ip_pool);
+                self.log.debug('send_at: ' + send_at);
+
+
+                mandrill_client.messages.send({"message": message, "async": async, "ip_pool": ip_pool, "send_at": send_at}, function(result) {
+                    self.log.debug('result >>> ', result);
+                    fn(null, result);
+                }, function(e) {
+                    // Mandrill returns the error as an object with name and message keys
+                    self.log.error('A mandrill error occurred: ' + e.name + ' - ' + e.message);
+                    // A mandrill error occurred: Unknown_Subaccount - No subaccount exists with the id 'customer-123'
+                    fn(e, null);
+                });
+            }
+        });
+
+
+
+
+
+
     },
 
     sendBasicEmail: function(fromAddress, fromName, toAddress, toName, subject, htmlContent, accountId, vars, fn) {

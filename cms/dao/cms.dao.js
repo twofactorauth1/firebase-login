@@ -1819,7 +1819,7 @@ var dao = {
 
 
         var defaultPageArray = [page, welcomeEmailPage, newOrderEmailPage, orderProcessingEmailPage,
-            orderCompletedEmailPage, orderCancelledEmailPage, customerInvoiceEmailPage, customerAccountPage, blogPage,
+            orderCompletedEmailPage, orderCancelledEmailPage, customerInvoiceEmailPage, blogPage,
             singlePostPage];
 
         async.each(defaultPageArray, function(page, callback){

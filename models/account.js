@@ -55,7 +55,7 @@ var account = $$.m.ModelBase.extend({
                 "addresses" : [],
                 "type" :'',
                 "nonProfit" : false,
-
+                "email": null,
                 'splitHours': false,
                 'hours': [
                    {'day': "Mon", 'start':"9:00 am",'end':"5:00 pm", 'start2':"9:00 am", 'end2':"5:00 pm", 'closed':false, 'split':false, 'wholeday':false},
@@ -75,10 +75,14 @@ var account = $$.m.ModelBase.extend({
 
             'credentials': [],
 
-            "locked": true,// this setting needs to be removed to access the site
+            "locked": true,
 
             "showhide": {
                 "blog": false
+            },
+            "email_preferences": {
+                new_customer: true,
+                new_order: true
             },
 
             _v:"0.1"

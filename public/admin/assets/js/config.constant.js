@@ -558,6 +558,7 @@ app.constant('JS_REQUIRES', {
     'websiteSettingsCtrl': 'assets/js/controllers/websiteSettingsCtrl.js',
     'customerSettingsCtrl': 'assets/js/controllers/customerSettingsCtrl.js',
     'settingsCtrl': 'assets/js/controllers/settingsCtrl.js',
+    'emailsCtrl': 'assets/js/controllers/emailsCtrl.js',
 
     'asideCtrl': 'assets/js/controllers/asideCtrl.js',
     'toasterCtrl': 'assets/js/controllers/toasterCtrl.js',
