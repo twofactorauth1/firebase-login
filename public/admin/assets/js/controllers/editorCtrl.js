@@ -773,12 +773,15 @@
               incrementHeight = incrementHeight + editorToolbar.height();
             $scope.iframeHeight = ($("#iframe-website").contents().find("body").height() + 70 + incrementHeight) + "px";
             if(scrollToComponentId) {
-              var top = angular.element("#iframe-website").contents().find("#"+scrollToComponentId).offset().top;
+              var scrollToComponentElement = angular.element("#iframe-website").contents().find("#"+scrollToComponentId);
+              if(scrollToComponentElement && scrollToComponentElement.offset().top)
+              {
+                var top = scrollToComponentElement.offset().top;
                 setTimeout(function () {
                   angular.element(window).scrollTop(top-20);
                 },100);
+              }
             }
-
           });
         }, 100);
       }
