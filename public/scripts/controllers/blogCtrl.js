@@ -194,8 +194,12 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
                     var found = $filter('getByProperty')('post_url', $route.current.params.postname, data);
                     if (found) {
                         that.post = found;
-                        var iframe = window.parent.document.getElementById("iframe-website")
-                        iframe && iframe.contentWindow && iframe.contentWindow.parent.checkIfSinglePost && iframe.contentWindow.parent.checkIfSinglePost(found);
+                        that.blogPageUrl = $location.$$absUrl;
+                        if($scope.parentScope)
+                        {
+                            $scope.parentScope.loadPost && $scope.parentScope.loadPost(found);
+                            $scope.copyPostMode();
+                        }                            
                     }
                     return;
                 }
@@ -476,7 +480,12 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
                                 top: 'editor-toolbar'
                             }
                     });
-                });    
+                }); 
+                setTimeout(function () {
+                    $scope.$apply(function () {          
+                         $scope.parentScope.resizeIframe();
+                    });
+                }, 500)
         };
 
         /*
@@ -698,6 +707,11 @@ mainApp.controller('BlogCtrl', ['$scope', 'postsService', 'pagesService', '$loca
                 return true;
             }
         };
+
+        $scope.getBlogPageUrl = function()
+        {
+
+        }
 
     }
 ]);

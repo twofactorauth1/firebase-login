@@ -411,8 +411,8 @@
                                 <tr ng-repeat="item in order.line_items">
                                     <td width="40">
                                         <img ng-if="item.product.is_image && item.product.icon" src="{{item.product.icon}}" class="img-circle" style="width:35px;height:35px" popover-template="'productImage.html'" popover-title="{{item.product.name}}" popover-trigger="mouseenter" popover-placement="right"/>
-                                        <span ng-if="!item.product.is_image && item.product.icon" class="fa {{item.product.icon}}"></span>
-                                        <span ng-if="!item.product.icon" class="fa fa-cube"></span>
+                                        <span ng-if="!item.product.is_image && item.product.icon" class="fa {{item.product.icon}}" popover-template="'productIcon.html'" popover-title="{{item.product.name}}" popover-trigger="mouseenter" popover-placement="right"></span>
+                                        <span popover-template="'productIcon.html'" popover-title="{{item.product.name}}" popover-trigger="mouseenter" popover-placement="right" ng-if="!item.product.icon" class="fa fa-cube"></span>
                                     </td>
                                     <td>
                                         {{item.product.sku}}
@@ -526,6 +526,10 @@
  <script type="text/ng-template" id="productImage.html">
     <img src="{{item.product.icon}}" width="150"/>
   </script>
+
+<script type="text/ng-template" id="productIcon.html">
+<icon class="fa {{item.product.icon}}" style="font-size: 75px"></span>
+</script>
 
 <script type="text/ng-template" id="customTemplate.html">
     <a>

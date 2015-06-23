@@ -1,110 +1,206 @@
-<!-- start: SETTINGS -->
-<button ct-toggle="toggle" target="settings" parent-active-class="active" class="btn btn-default">
-	<i class="fa fa-spin fa-gear"></i>
-</button>
-<div class="panel-heading ng-scope" translate="setting.MAIN">
-	Style Selector
+<div ng-controller="SettingsCtrl" class="sitesettings">
+    <div class="modal-header">
+        <h3 class="modal-title"><i class="ti-settings"></i> {{viewTitle}}</h3>
+    </div>
+    <div class="modal-body bg-white no-padding">
+        <div ng-show="settingsView == 'all'" class="padding-10 padding-top-20">
+            <div class="col-sm-3">
+                <div class="panel panel-transparent margin-bottom-0">
+                    <div class="panel-heading padding-bottom-0 padding-top-0" style="min-height: inherit">
+                        <div class="panel-title text-azure text-large">
+                            <i class="ti-desktop"></i> Website
+                        </div>
+                        <hr class="margin-top-5 margin-bottom-5">
+                    </div>
+                    <div class="panel-body padding-top-0 padding-bottom-0">
+                        <ul class="list-unstyled cl-effect-1" style="line-height:25px">
+                            <li>
+                                <a ng-click="viewSettings('website', 'SEO')">SEO</a>
+                            </li>
+                            <li>
+                                <a ng-click="viewSettings('website', 'Domain')">Domain</a>
+                            </li>
+                            <li>
+                                <a ng-click="viewSettings('website', 'Blog')">Blog</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- <div class="col-sm-3">
+                <div class="panel panel-transparent margin-bottom-0">
+                    <div class="panel-heading padding-bottom-0 padding-top-0" style="min-height: inherit">
+                        <div class="panel-title text-azure text-large">
+                            <i class="ti-user"></i> Customers
+                        </div>
+                        <hr class="margin-top-5 margin-bottom-5">
+                    </div>
+                    <div class="panel-body padding-top-0 padding-bottom-0">
+                        <ul class="list-unstyled cl-effect-1" style="line-height:25px">
+                            <li>
+                                <a ng-click="viewSettings('customers', 'Membership')">Membership</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div> -->
+            <div class="col-sm-3">
+                <div class="panel panel-transparent margin-bottom-0">
+                    <div class="panel-heading padding-bottom-0 padding-top-0" style="min-height: inherit">
+                        <div class="panel-title text-azure text-large">
+                            <i class="ti-shopping-cart"></i> Commerce
+                        </div>
+                        <hr class="margin-top-5 margin-bottom-5">
+                    </div>
+                    <div class="panel-body padding-top-0 padding-bottom-0">
+                        <ul class="list-unstyled cl-effect-1" style="line-height:25px">
+                            <li>
+                                <a ng-click="viewSettings('commerce', 'Taxes')">Taxes</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="panel panel-transparent margin-bottom-0">
+                    <div class="panel-heading padding-bottom-0 padding-top-0" style="min-height: inherit">
+                        <div class="panel-title text-azure text-large">
+                            <i class="ti-panel"></i> Account
+                        </div>
+                        <hr class="margin-top-5 margin-bottom-5">
+                    </div>
+                    <div class="panel-body padding-top-0 padding-bottom-0">
+                        <ul class="list-unstyled cl-effect-1" style="line-height:25px">
+                            <li>
+                                <a ng-click="navigateTo('app.account.profilebusiness', $event)">Business Profile</a>
+                            </li>
+                            <li>
+                                <a ng-click="navigateTo('app.account.billing', $event)">Billing</a>
+                            </li>
+                            <li>
+                                <a ng-click="navigateTo('app.account.integrations', $event)">Integrations</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div ng-show="settingsView == 'website'">
+            <tabset class="tabbable tabs-left margin-bottom-0">
+                <tab heading="SEO">
+                    <form>
+                        <div class="col-xs-6">
+                            <div class="form-group">
+                                <label>Title</label>
+                                <input type="text" class="form-control" ng-model="website.title" />
+                            </div>
+                            <div class="form-group">
+                                <label>Description</label>
+                                <textarea type="text" class="form-control" ng-model="website.seo.description"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label>Keywords</label>
+                                <tags-input ng-model="keywords"></tags-input>
+                            </div>
+                            <div class="form-group">
+                                <label>Footer Link</label>
+                                <span id="helpBlock" class="help-block">Remove the Indigenous Logo from the footer component.</span>
+                                <label class="radio-inline">
+                                    <input type="radio" name="footerLink" id="footerLink1" value="false" ng-model="website.settings.footerlink"> Yes
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="footerLink" id="footerLink2" value="true" ng-model="website.settings.footerlink"> No
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <div class="form-group">
+                                <label>Favicon</label>
+                                <div>
+                                    <span class="help-block">A favicon (pronounced “fave-icon”) is a small, iconic image that represents your website. Favicons are most often found in the address bar of your web browser, but they can also be used in lists of bookmarks in web browsers and feed aggregators.</span>
+                                    <div class="favicon-image">
+                                        <p class="pagetitle" ng-text-truncate="website.title" ng-tt-chars-threshold="12" ng-tt-no-toggling></p>
+                                        <p class="pageurl"><span ng-if="!account.domain">http://{{account.subdomain}}.indigenous.io</span><span ng-if="account.domain">http://{{account.domain}}</span></p>
+                                        <img class="top-favicon" src="{{ website.settings.favicon }}" err-src="https://s3.amazonaws.com/indigenous-account-websites/acct_6/favicon.ico">
+                                        <img class="bottom-favicon" src="{{ website.settings.favicon }}" err-src="https://s3.amazonaws.com/indigenous-account-websites/acct_6/favicon.ico">
+                                    </div>
+                                    <div class="user-image-buttons-edit">
+                                        <span class="btn btn-primary media-modal" media-modal-show-insert="true" on-insert-mediacb="insertFavicon" user='user' flow-btn><i class="fa fa-pencil"></i> Edit</span>
+                                        <span class="btn btn-danger" ng-if="website.settings.favicon" ng-click="removeFavicon()"><i class="fa fa-times"></i> Delete</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="clearfix"></div>
+                </tab>
+                <tab heading="Domain">
+                    <form>
+                        <div class="col-xs-6">
+                            <div class="form-group">
+                                <label>Indigenous Domain</label>
+                                <input class="form-control" type="text" ng-model="account.subdomain" ng-blur="checkDomainExists(account)" />
+                                <span class="help-block">Hello</span>
+                                <span class="error-block" ng-if="domainError">Domain Already Exists</span>
+                            </div>
+                            <div class="form-group">
+                                <label>Custom Domain</label>
+                                <input type="text" class="form-control" ng-model="account.domain" />
+                            </div>
+                        </div>
+                    </form>
+                    <div class="clearfix"></div>
+                </tab>
+                <tab heading="Blog">
+                    <form class="col-sm-6 form-horizontal">
+                        <div class="form-group">
+                            <label>Enable Blog</label>
+                            <span tooltip-placement="top" tooltip-html-unsafe="Enable the blog for your website"><i class="fa fa-info-circle" /></span>
+                            <switch ng-model="account.showhide.blog" class="pull-right"></switch>
+                        </div>
+                        <div class="clearfix"></div>
+                    </form>
+                    <div class="clearfix"></div>
+                </tab>
+            </tabset>
+        </div>
+        <!-- <div ng-show="settingsView == 'customers'">
+        </div> -->
+        <div ng-show="settingsView == 'commerce'">
+            <tabset class="tabbable tabs-left margin-bottom-0">
+                <tab heading="Taxes">
+                    <form class="col-sm-6 form-horizontal">
+                        <div class="form-group">
+                            <label>Enable Taxes</label>
+                            <span tooltip-placement="bottom" tooltip-html-unsafe="Enable taxes for your products."><i class="fa fa-info-circle" /></span>
+                            <switch ng-model="account.commerceSettings.taxes" class="pull-right"></switch>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div ng-if="account.commerceSettings.taxes">
+                            <div class="form-group">
+                                <label>Calculate Tax Based On:</label>
+                                <select ng-model="account.commerceSettings.taxbased" class="form-control" ng-options="calc.value as calc.name for calc in calculateTaxOptions">
+                                    <option value="">-- choose --</option>
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="clearfix"></div>
+                </tab>
+            </tabset>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    <div class="modal-footer">
+        <div ng-if="settingsView != 'all'">
+            <button class="btn btn-primary pull-left" ng-click="viewSettings('all')">Show All</button>
+        </div>
+        <div class="pull-right">
+            <button class="btn btn-primary" ng-click="cancel($event)">Cancel</button>
+        </div>
+        <div ng-if="settingsView != 'all'" class="pull-right margin-right-5">
+            <button class="btn btn-primary" ng-click="saveSettings()">Save </button>
+        </div>
+    </div>
 </div>
-<div class="panel-body ng-scope">
-	<!-- start: FIXED HEADER -->
-	<div class="setting-box clearfix">
-		<span class="setting-title pull-left" translate="setting.FIXEDHEADER"> Fixed header</span>
-		<span class="setting-switch pull-right">
-			<switch ng-model="app.layout.isNavbarFixed" class="green"></switch>
-		</span>
-	</div>
-	<!-- end: FIXED HEADER -->
-	<!-- start: FIXED SIDEBAR -->
-	<div class="setting-box clearfix">
-		<span class="setting-title pull-left" translate="setting.FIXEDSIDEBAR">Fixed sidebar</span>
-		<span class="setting-switch pull-right">
-			<switch ng-model="app.layout.isSidebarFixed" class="green"></switch>
-		</span>
-	</div>
-	<!-- end: FIXED SIDEBAR -->
-	<!-- start: CLOSED SIDEBAR -->
-	<div class="setting-box clearfix">
-		<span class="setting-title pull-left" translate="setting.CLOSEDSIDEBAR">Closed sidebar</span>
-		<span class="setting-switch pull-right">
-			<switch ng-model="app.layout.isSidebarClosed" class="green"></switch>
-		</span>
-	</div>
-	<!-- end: CLOSED SIDEBAR -->
-	<!-- start: FIXED FOOTER -->
-	<div class="setting-box clearfix">
-		<span class="setting-title pull-left" translate="setting.FIXEDFOOTER">Fixed footer</span>
-		<span class="setting-switch pull-right">
-			<switch ng-model="app.layout.isFooterFixed" class="green"></switch>
-		</span>
-	</div>
-	<!-- end: FIXED FOOTER -->
-	<!-- start: THEME SWITCHER -->
-	<div class="colors-row setting-box">
-		<div class="color-theme theme-1">
-			<div class="color-layout">
-				<label ng-click=" app.layout.theme='theme-1'; app.layout.logo='assets/images/logo.png'; ">
-					<input type="radio" name="setting-theme" ng-model="app.layout.theme" value="theme-1">
-					<span class="ti-check"></span>
-					<span class="split header"> <span class="color th-header"></span> <span class="color th-collapse"></span> </span>
-					<span class="split"> <span class="color th-sidebar"><i class="element"></i></span> <span class="color th-body"></span> </span>
-				</label>
-			</div>
-		</div>
-		<div class="color-theme theme-2">
-			<div class="color-layout">
-				<label ng-click=" app.layout.theme='theme-2'; app.layout.logo='assets/images/logo2.png'; ">
-					<input type="radio" name="setting-theme" ng-model="app.layout.theme" value="theme-2">
-					<span class="ti-check"></span>
-					<span class="split header"> <span class="color th-header"></span> <span class="color th-collapse"></span> </span>
-					<span class="split"> <span class="color th-sidebar"><i class="element"></i></span> <span class="color th-body"></span> </span>
-				</label>
-			</div>
-		</div>
-	</div>
-	<div class="colors-row setting-box">
-		<div class="color-theme theme-3">
-			<div class="color-layout">
-				<label ng-click=" app.layout.theme='theme-3'; app.layout.logo='assets/images/logo2.png';">
-					<input type="radio" name="setting-theme" ng-model="app.layout.theme" value="theme-3">
-					<span class="ti-check"></span>
-					<span class="split header"> <span class="color th-header"></span> <span class="color th-collapse"></span> </span>
-					<span class="split"> <span class="color th-sidebar"><i class="element"></i></span> <span class="color th-body"></span> </span>
-				</label>
-			</div>
-		</div>
-		<div class="color-theme theme-4">
-			<div class="color-layout">
-				<label ng-click=" app.layout.theme='theme-4'; app.layout.logo='assets/images/logo.png';">
-					<input type="radio" name="setting-theme" ng-model="app.layout.theme" value="theme-4">
-					<span class="ti-check"></span>
-					<span class="split header"> <span class="color th-header"></span> <span class="color th-collapse"></span> </span>
-					<span class="split"> <span class="color th-sidebar"><i class="element"></i></span> <span class="color th-body"></span> </span>
-				</label>
-			</div>
-		</div>	
-	</div>
-	<div class="colors-row setting-box">
-		<div class="color-theme theme-5">
-			<div class="color-layout">
-				<label ng-click=" app.layout.theme='theme-5'; app.layout.logo='assets/images/logo2.png';">
-					<input type="radio" name="setting-theme" ng-model="app.layout.theme" value="theme-5">
-					<span class="ti-check"></span>
-					<span class="split header"> <span class="color th-header"></span> <span class="color th-collapse"></span> </span>
-					<span class="split"> <span class="color th-sidebar"><i class="element"></i></span> <span class="color th-body"></span> </span>
-				</label>
-			</div>
-		</div>
-		<div class="color-theme theme-6">
-			<div class="color-layout">
-				<label ng-click=" app.layout.theme='theme-6'; app.layout.logo='assets/images/logo2.png';">
-					<input type="radio" name="setting-theme" ng-model="app.layout.theme" value="theme-6">
-					<span class="ti-check"></span>
-					<span class="split header"> <span class="color th-header"></span> <span class="color th-collapse"></span> </span>
-					<span class="split"> <span class="color th-sidebar"><i class="element"></i></span> <span class="color th-body"></span> </span>
-				</label>
-			</div>
-		</div>	
-	</div>
-	<!-- end: THEME SWITCHER -->
-</div>
-<!-- end: SETTINGS -->

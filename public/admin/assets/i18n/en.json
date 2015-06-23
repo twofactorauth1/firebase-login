@@ -9,6 +9,12 @@
             "SEEALL": "See All"
         },
 
+        "settings": {
+            "MAIN": "Settings",
+            "HEADER": "Unread messages",
+            "SEEALL": "See All"
+        },
+
         "activities": {
             "MAIN": "Activities",
             "HEADER": "You have new notifications",
@@ -72,7 +78,7 @@
             },
             "customers": {
                 "MAIN": "Customers",
-                "MANAGE": "Customer Management",
+                "MANAGE": "Manage",
                 "SETTINGS": "Customer Settings"
             },
             "commerce": {

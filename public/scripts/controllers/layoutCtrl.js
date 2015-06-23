@@ -77,11 +77,11 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
     };
 
     $scope.visitAdmin = function () {
-      window.location = $location.$$absUrl + 'admin';
+      $window.location.href = "/admin";
     };
 
     $scope.visitEditor = function () {
-      window.location = $location.$$absUrl + 'admin/website/pages/?pagehandle=' + route;
+      $window.location.href = "/admin/#/website/pages/?pagehandle=" + route;
     };
 
     accountService(function (err, data) {

@@ -774,7 +774,7 @@
             $scope.iframeHeight = ($("#iframe-website").contents().find("body").height() + 70 + incrementHeight) + "px";
 
           });
-        }, 500);
+        }, 1000);
       }
     };
 
@@ -1086,16 +1086,13 @@
     $scope.editPage = function () {
       $scope.isEditing = true;
       $scope.childScope.triggerEditMode();
-      if ($scope.single_post) {
-        $scope.childScope.copyPostMode();
-        $scope.post_data = $scope.childScope.getPostData();
-      }
+      
       setTimeout(function () {
         $scope.bindEvents();
       }, 1000)
       $scope.backup['website'] = angular.copy($scope['website']);
     };
-
+    
     /*
      * @cancelPage
      * -
@@ -2016,7 +2013,9 @@
             WebsiteService.deletePage(pageId, websiteId, title, function (data) {
               toaster.pop('success', "Page Deleted", "The " + title + " page was deleted successfully.");
               $scope.closeModal();
-              $location.path("/website/pages");
+              setTimeout(function () {
+                window.location = '/admin/#/website/pages';
+              }, 500)
             });
           } else {
             SweetAlert.swal("Cancelled", "Page not deleted.", "error");
@@ -2755,14 +2754,13 @@
     };
 
     /*
-     * @checkIfSinglePost
+     * @loadPost
      * -
      */
 
-    $scope.checkIfSinglePost = function (post) {
+    $scope.loadPost = function (post) {
       if (post) {
-        $scope.singlePost = true;
-        $scope.childScope.copyPostMode();
+        $scope.singlePost = true;        
         $scope.post_data = post;
       }
     };

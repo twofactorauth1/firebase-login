@@ -31,7 +31,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
     $stateProvider.state('app', {
         url: "",
         templateUrl: "assets/views/app.html",
-        resolve: loadSequence('modernizr', 'underscore', 'moment', 'angularMoment', 'uiSwitch', 'perfect-scrollbar-plugin', 'toaster', 'ngAside', 'vAccordion', 'sweet-alert', 'chartjs', 'tc.chartjs', 'oitozero.ngSweetAlert', 'chatCtrl', 'smart-table', 'touchspin-plugin', 'slugifier', 'commonService', 'timeAgoFilter','angularFileUpload', 'ngTextTruncate', 'infinite-scroll', 'ui.select', 'blueimp', 'ngTagsInput', 'titleCase', 'bootstrap-confirmation', 'ladda', 'angular-ladda', 'uuid', 'formatText'),
+        resolve: loadSequence('modernizr', 'underscore', 'moment', 'angularMoment', 'uiSwitch', 'perfect-scrollbar-plugin', 'toaster', 'ngAside', 'vAccordion', 'sweet-alert', 'chartjs', 'tc.chartjs', 'oitozero.ngSweetAlert', 'chatCtrl', 'smart-table', 'touchspin-plugin', 'slugifier', 'commonService', 'timeAgoFilter','angularFileUpload', 'ngTextTruncate', 'infinite-scroll', 'ui.select', 'blueimp', 'ngTagsInput', 'titleCase', 'bootstrap-confirmation', 'ladda', 'angular-ladda', 'uuid', 'formatText', 'asideCtrl', 'settingsCtrl', 'assetsService'),
         abstract: true
     }).state('app.dashboard', {
         url: "/dashboard",
@@ -115,15 +115,6 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
             parent: 'app.website.templates'
         },
         resolve: loadSequence('editorCtrl', 'userService', 'htmlToPlaintext', 'spectrum', 'ui.sortable', 'assetsService', 'toasterService', 'geocodeService')
-    }).state('app.website.settings', {
-        url: '/settings',
-        templateUrl: "assets/views/website-settings.html",
-        title: 'Website Settings',
-        icon: 'ti-layout-media-left-alt',
-        ncyBreadcrumb: {
-            label: 'Website Settings'
-        },
-        resolve: loadSequence('websiteSettingsCtrl', 'websiteService', 'accountService', 'assetsService', 'userService')
     }).state('app.emails', {
         url: '/emails',
         templateUrl: "assets/views/emails.html",
@@ -161,15 +152,6 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
             parent: 'app.customers'
         },
         resolve: loadSequence('customerDetailCtrl', 'customerService', 'ngMap', 'keenService', 'offset','assetsService', 'toasterService', 'orderService')
-    }).state('app.customerSettings', {
-        url: '/customersettings',
-        templateUrl: "assets/views/customer-settings.html",
-        title: 'Customer Settings',
-        icon: 'ti-layout-media-left-alt',
-        ncyBreadcrumb: {
-            label: 'Customer Settings'
-        },
-        resolve: loadSequence('customerSettingsCtrl', 'orderService', 'customerService', 'dateRangePicker', 'sweet-alert')
     }).state('app.commerce', {
         url: '/commerce',
         template: '<div ui-view class="fade-in-up"></div>',
@@ -215,15 +197,6 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
             parent: 'app.commerce.orders'
         },
         resolve: loadSequence('orderDetailCtrl', 'orderService', 'customerService', 'userService')
-    }).state('app.commerce.settings', {
-        url: '/settings',
-        templateUrl: "assets/views/commerce-settings.html",
-        title: 'Commerce Settings',
-        icon: 'ti-layout-media-left-alt',
-        ncyBreadcrumb: {
-            label: 'Commerce Settings'
-        },
-        resolve: loadSequence('commerceSettingsCtrl', 'orderService', 'customerService', 'dateRangePicker', 'sweet-alert')
     }).state('app.marketing', {
         url: '/marketing',
         template: '<div ui-view class="fade-in-up"></div>',
