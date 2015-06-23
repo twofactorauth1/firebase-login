@@ -14,6 +14,7 @@
         return page.handle === 'index';
       });
       if (!indexExists) {
+        $scope.createpage.showhomepage = true;
         $scope.createpage.homepage = true;
         $scope.createpage.title = 'Home';
         $scope.createpage.handle = 'index';
@@ -25,6 +26,16 @@
       $scope.orderByFn();
       $scope.displayPages = true;
     });
+
+    $scope.setHomePage = function()
+    {
+      if($scope.createpage.homepage)
+      {
+        $scope.createpage.title = 'Home';
+        $scope.createpage.handle = 'index';
+      }
+        
+    }
 
     $scope.default_image_url = "/admin/assets/images/default-page.jpg";
 
@@ -183,8 +194,9 @@
             newpage.components = 0;
           }
 
-          if (page.handle) {
+          if (page.handle === "index") {
             $scope.createpage.homepage = false;
+            $scope.createpage.showhomepage = false;
           }
 
           $scope.pages.unshift(newpage);
