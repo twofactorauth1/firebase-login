@@ -759,7 +759,7 @@
       $scope.setToolbarsTop();
     });
 
-    $scope.resizeIframe = function () {
+    $scope.resizeIframe = function (scrollToComponentId) {
       var iframe = document.getElementById("iframe-website");
       if (iframe) {
         //var iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
@@ -772,6 +772,12 @@
             if (editorToolbar)
               incrementHeight = incrementHeight + editorToolbar.height();
             $scope.iframeHeight = ($("#iframe-website").contents().find("body").height() + 70 + incrementHeight) + "px";
+            if(scrollToComponentId) {
+              var top = angular.element("#iframe-website").contents().find("#"+scrollToComponentId).offset().top;
+                setTimeout(function () {
+                  angular.element(window).scrollTop(top-20);
+                },100);
+            }
 
           });
         }, 100);

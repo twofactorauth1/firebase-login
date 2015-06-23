@@ -1064,7 +1064,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
         $scope.first = false;
         angular.element(".ui-sortable .delete-component,.ui-sortable .duplicate,.ui-sortable .settings").addClass("hide");
         //angular.element(".ui-sortable").addClass("active");
-        //var componentId = e.source.itemScope.modelValue._id;
+        $scope.componentId = e.source.itemScope.modelValue._id;
         //e.source.itemScope.modelValue = $scope.parentScope.updateComponent(componentId);
         //e.source.itemScope.element.addClass(" dragging");
         clearTimeout($scope.wait);
@@ -1077,7 +1077,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
         $scope.wait = setTimeout(function () {
           //$scope.activateCKEditor();
           angular.element(".ui-sortable").removeClass("active");
-          $scope.parentScope.resizeIframe();
+          $scope.parentScope.resizeIframe($scope.componentId);
           $scope.first=true;
           angular.element(".ui-sortable .delete-component,.ui-sortable .duplicate,.ui-sortable .settings").removeClass("hide");
           for (var i = 0; i < $scope.currentpage.components.length; i++) {
