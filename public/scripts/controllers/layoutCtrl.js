@@ -1054,12 +1054,15 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
     $scope.sortingLog = [];
 
     $scope.wait;
-
+    $scope.first=true;
     $scope.sortableOptions = {
       parentElement: "body",
-      dragStart: function (e, ui) {
+      containerPositioning: 'relative',
+      dragStart: function (e, ui) {        
         $scope.parentScope.resizeIframe();
         $scope.isPageDirty = true;
+        $scope.first = false;
+        angular.element(".ui-sortable .delete-component,.ui-sortable .duplicate,.ui-sortable .settings").addClass("hide");
         //angular.element(".ui-sortable").addClass("active");
         //var componentId = e.source.itemScope.modelValue._id;
         //e.source.itemScope.modelValue = $scope.parentScope.updateComponent(componentId);
@@ -1075,9 +1078,9 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
           //$scope.activateCKEditor();
           angular.element(".ui-sortable").removeClass("active");
           $scope.parentScope.resizeIframe();
-        }, 1500);
-
-        for (var i = 0; i < $scope.currentpage.components.length; i++) {
+          $scope.first=true;
+          angular.element(".ui-sortable .delete-component,.ui-sortable .duplicate,.ui-sortable .settings").removeClass("hide");
+          for (var i = 0; i < $scope.currentpage.components.length; i++) {
           if ($scope.currentpage.components[i].type == 'masthead') {
             if (i != 0 && $scope.currentpage.components[i - 1].type == "navigation") {
               $scope.allowUndernav = true;
@@ -1089,9 +1092,11 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
               $scope.allowUndernav = false;
               $scope.addUndernavClasses = false;
             }
-
           }
         };
+        }, 1500);
+
+        
       }
     };
 
