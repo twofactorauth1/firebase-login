@@ -313,7 +313,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.checkPermission(req, self.sc.privs.MODIFY_ACCOUNT, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(res);
+                return self.send403(resp);
             } else {
                 accountDao.saveOrUpdate(account, function(err, value){
                     if(!err &&value != null){
