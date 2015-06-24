@@ -667,8 +667,15 @@
       // Set order customer Id
       if($scope.selectedCustomer)
         $scope.order.customer_id = $scope.selectedCustomer._id;
+      else        
+        $scope.order.customer_id = null;
 
       //validate
+
+      if (!$scope.order) {
+        toaster.pop('error', 'Orders can not be blank.');
+        return;
+      }
 
       if (!$scope.order.customer_id) {
         toaster.pop('error', 'Orders must contain a customer.');
