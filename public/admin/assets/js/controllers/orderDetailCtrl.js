@@ -566,7 +566,7 @@
      * the order status has been updated
      */
 
-    $scope.statusUpdated = function (newStatus) {
+    $scope.statusUpdated = function (newStatus) {     
       if ($scope.order.status == newStatus)
         return;
       var toasterMsg = 'Status has been updated to ';
@@ -618,9 +618,11 @@
             OrderService.refundOrder($scope.order._id, $scope.reasonData, function (data) {
               console.log('data ', data);
               SweetAlert.swal("Refunded", "Order has been refunded.", "success");
+              $scope.order.status = newStatus;
+              $scope.currentStatus = newStatus;
             });
           } else {
-            SweetAlert.swal("Cancelled", "Order refund cancelled.)", "error");
+            SweetAlert.swal("Cancelled", "Order refund cancelled.", "error");
           }
         });
       }
@@ -628,8 +630,12 @@
       if (newStatus === 'failed') {
         toaster.pop('success', toasterMsg + '"Failed"');
       }
-      $scope.order.status = newStatus;
-      $scope.currentStatus = newStatus;
+      if (newStatus !== 'refunded')
+      {
+        $scope.order.status = newStatus;
+        $scope.currentStatus = newStatus;
+      }
+      
     };
 
     /*
