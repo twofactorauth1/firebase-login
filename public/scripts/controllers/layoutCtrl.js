@@ -786,7 +786,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
         $scope.$apply(function () {
           if (angular.element("div.meet-team-height").length) {
             var maxTeamHeight = Math.max.apply(null, angular.element("div.meet-team-height").map(function () {
-              return angular.element(this).height();
+              return this.offsetHeight;
             }).get());
             angular.element(".meet-team-height").css("min-height", maxTeamHeight);
           }
@@ -1859,9 +1859,9 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
           $scope.team_inserted = true;
           if (angular.element("div.meet-team-height").length) {
             var maxTeamHeight = Math.max.apply(null, angular.element("div.meet-team-height").map(function () {
-              return angular.element(this).height();
+              return this.offsetHeight;
             }).get());
-            angular.element(".meet-team-height").css("min-height", maxTeamHeight + 10);
+            angular.element(".meet-team-height").css("min-height", maxTeamHeight);
           }
         }
       }, 1000)
@@ -1873,9 +1873,6 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
 
     angular.element($window).bind('resize', function () {
       $scope.setUnderbnavMargin();
-      $scope.feature_inserted = false;
-      if (!$scope.feature_inserted) {
-        $scope.feature_inserted = true;
         for (var i = 0; i <= 3; i++) {
           if ($("div.feature-height-" + i).length) {
             var maxFeatureHeight = Math.max.apply(null, $("div.feature-height-" + i).map(function () {
@@ -1884,8 +1881,6 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
             $("div.feature-height-" + i + " .feature-single").css("min-height", maxFeatureHeight - 20);
           }
         }
-        $scope.feature_inserted = true;
-      }
     });
     $scope.setUnderbnavMargin = function () {
       setTimeout(function () {
