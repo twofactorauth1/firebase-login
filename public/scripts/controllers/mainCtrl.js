@@ -23,12 +23,18 @@ mainApp.controller('MainCtrl', ['$scope', 'websiteService', 'accountService', 't
 
         $scope.showAdminBar = false;
 
+        userService.isAuthenticatedSession(function(data){
+            if(data === true) {
+                $scope.showAdminBar = true;
+            }
+        });
+/*
         userService.getLoggedInUser(function(data) {
             if (data._id) {
                 $scope.showAdminBar = true;
             }
         });
-
+*/
         accountService(function (err, data) {
             if (err) {
                 console.log('Controller:MainCtrl -> Method:accountService Error: ' + err);

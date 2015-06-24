@@ -134,7 +134,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         var self = this;
         var websiteId = req.params.id;
-        var accountId = self.accountId(req);
+        var accountId = self.currentAccountId(req);
         //TODO: Add security - VIEW_WEBSITE - *CURRENTLY GLOBAL READ*
 
         cmsDao.getWebsiteById(websiteId, function (err, value) {
@@ -320,7 +320,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var websiteId = req.params.websiteid;
         var pageHandle = req.params.handle;
         self.log.debug('>> getPageByHandle Website Id: '+websiteId+' Handle: '+pageHandle);
-        var accountId = parseInt(self.accountId(req));
+        var accountId = parseInt(self.currentAccountId(req));
 
         cmsDao.getLatestPageForWebsite(websiteId, pageHandle, function (err, value) {
             self.sendResultOrError(resp, err, value, "Error Retrieving Page for Website");
@@ -336,7 +336,7 @@ _.extend(api.prototype, baseApi.prototype, {
     getPagesById: function (req, resp) {
         var self = this;
         var pageId = req.params.id;
-        var accountId = parseInt(self.accountId(req));
+        var accountId = parseInt(self.currentAccountId(req));
         self.log.debug('>> getPagesById');
 
         cmsDao.getPagesById(accountId, function (err, value) {
@@ -356,7 +356,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var pageId = req.params.id;
 
         self.log.debug('>> getPageById');
-        var accountId = parseInt(self.accountId(req));
+        var accountId = parseInt(self.currentAccountId(req));
 
         cmsDao.getPageById(pageId, function (err, value) {
             self.sendResultOrError(resp, err, value, "Error Retrieving Page by Id");
@@ -665,7 +665,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var self = this;
         self.log.debug('>> getAllPages');
         var websiteId = req.params.websiteId;
-        var accountId = parseInt(self.accountId(req));
+        var accountId = parseInt(self.currentAccountId(req));
         if(req.query['limit']) {
             var skip = parseInt(req.query['skip'] || 0);
             var limit = parseInt(req.query['limit'] || 0);
@@ -696,7 +696,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var self = this;
         self.log.debug('>> getAllEmails');
         var websiteId = req.params.websiteId;
-        var accountId = parseInt(self.accountId(req));
+        var accountId = parseInt(self.currentAccountId(req));
         self.log.debug('>> getAllEmails without Limit');
             cmsManager.getEmailsByWebsiteId(websiteId, accountId, function(err, map){
                 self.log.debug('<< getAllEmails');
@@ -1271,7 +1271,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         var self = this;
         self.log.debug('>> getBlogPost');
-        var accountId = parseInt(self.accountId(req));
+        var accountId = parseInt(self.currentAccountId(req));
         var blogPostId = req.params.postId;
         self.log.debug('Account ID: ' + accountId + ' Blog Post ID: ' + blogPostId);
 
@@ -1298,7 +1298,7 @@ _.extend(api.prototype, baseApi.prototype, {
     getBlogPostByTitle: function(req, resp) {
         var self = this;
         self.log.debug('>> getBlogPostByTitle');
-        var accountId = parseInt(self.accountId(req));
+        var accountId = parseInt(self.currentAccountId(req));
         var blogPostTitle = req.params.title;
 
         /*
@@ -1321,7 +1321,7 @@ _.extend(api.prototype, baseApi.prototype, {
     getBlogPostByUrl: function(req, resp) {
         var self = this;
         self.log.debug('>> getBlogPostByUrl');
-        var accountId = parseInt(self.accountId(req));
+        var accountId = parseInt(self.currentAccountId(req));
         var blogPostUrl = req.params.handle;
 
         var statusAry = [$$.m.BlogPost.status.PUBLISHED];        
@@ -1406,7 +1406,7 @@ _.extend(api.prototype, baseApi.prototype, {
     listBlogPosts: function (req, res) {
         var self = this;
         self.log.debug('>> listBlogPosts');
-        var accountId = parseInt(self.accountId(req));
+        var accountId = parseInt(self.currentAccountId(req));
         var limit = parseInt(req.query['limit'] || 0);//suitable default?
         var skip = parseInt(req.query['skip'] || 0);//TODO: use skip for paging
 
@@ -1526,7 +1526,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         var self = this;
         self.log.debug('>> getPostsByAuthor');
-        var accountId = parseInt(self.accountId(req));
+        var accountId = parseInt(self.currentAccountId(req));
         var author = req.params.author;
 
         /*
@@ -1554,7 +1554,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         var self = this;
         self.log.debug('>> getPostsByTitle');
-        var accountId = parseInt(self.accountId(req));
+        var accountId = parseInt(self.currentAccountId(req));
         var title = req.params.title;
 
         /*
@@ -1582,7 +1582,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         var self = this;
         self.log.debug('>> getPostsByContent');
-        var accountId = parseInt(self.accountId(req));
+        var accountId = parseInt(self.currentAccountId(req));
         var content = req.params.content;
 
         /*
@@ -1609,7 +1609,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         var self = this;
         self.log.debug('>> getPostsByCategory');
-        var accountId = parseInt(self.accountId(req));
+        var accountId = parseInt(self.currentAccountId(req));
         var category = req.params.category;
         /*
          * If the request is from a logged in user, return posts in PRIVATE status as well as PUB
@@ -1636,7 +1636,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         var self = this;
         self.log.debug('>> getPostsByTag');
-        var accountId = parseInt(self.accountId(req));
+        var accountId = parseInt(self.currentAccountId(req));
         var tag = req.params.tag;
         /*
          * If the request is from a logged in user, return posts in PRIVATE status as well as PUB
@@ -1770,7 +1770,7 @@ _.extend(api.prototype, baseApi.prototype, {
     getBlogAuthors: function(req, resp) {
         var self = this;
         self.log.debug('>> getBlogAuthors');
-        var accountId = parseInt(self.accountId(req));
+        var accountId = parseInt(self.currentAccountId(req));
 
         cmsManager.getDistinctBlogPostAuthors(accountId, function(err, value){
             self.log.debug('<< getBlogAuthors');
@@ -1782,7 +1782,7 @@ _.extend(api.prototype, baseApi.prototype, {
     getBlogTags: function(req, resp) {
         var self = this;
         self.log.debug('>> getBlogTags');
-        var accountId = parseInt(self.accountId(req));
+        var accountId = parseInt(self.currentAccountId(req));
 
         cmsManager.getDistinctBlogPostTags(accountId, function(err, value){
             self.log.debug('<< getBlogTags');
@@ -1794,7 +1794,7 @@ _.extend(api.prototype, baseApi.prototype, {
     getBlogCategories: function(req, resp) {
         var self = this;
         self.log.debug('>> getBlogCategories');
-        var accountId = parseInt(self.accountId(req));
+        var accountId = parseInt(self.currentAccountId(req));
 
         cmsManager.getDistinctBlogPostCategories(accountId, function(err, value){
             self.log.debug('<< getBlogCategories');
@@ -1806,7 +1806,7 @@ _.extend(api.prototype, baseApi.prototype, {
     getBlogTitles: function(req, resp) {
         var self = this;
         self.log.debug('>> getBlogTitles');
-        var accountId = parseInt(self.accountId(req));
+        var accountId = parseInt(self.currentAccountId(req));
 
         cmsManager.getDistinctBlogPostTitles(accountId, function(err, value){
             self.log.debug('<< getBlogTitles');

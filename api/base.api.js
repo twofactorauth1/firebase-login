@@ -14,7 +14,7 @@ var urlUtils = require('../utils/urlutils');
 //var geoip = require('geoip-lite');
 var logger = global.getLogger("base.api");
 var userActivityManager = require('../useractivities/useractivity_manager');
-
+var accountDao = require("../dao/account.dao");
 
 var apiBase = function(options) {
 
@@ -80,26 +80,21 @@ _.extend(apiBase.prototype, {
 
     setup: function(req,resp, next) {
         var self = this;
-        if (req["session"] != null && (req.session["accountId"] == null || self.matchHostToSession(req) === false)) {
-            var accountDao = require("../dao/account.dao");
-            accountDao.getAccountByHost(req.get("host"), function(err, value) {
-                if (!err && value != null) {
-                    if (value === true) {
-                        logger.warn('Deprecated code reached.');
-                        req.session.accountId = 0;
-                    } else {
-                        req.session.accountId = value.id();
-                        req.session.subdomain = value.get('subdomain');
-                        req.session.domain = value.get('domain');
-                        //logger.debug('setting accountId: ' + req.session.accountId);
-                    }
+        accountDao.getAccountByHost(req.get("host"), function(err, value) {
+            if (!err && value != null) {
+                if (value === true) {
+                    logger.warn('Deprecated code reached.');
+                    req.session.accountId = 0;
+                } else {
+                    req.session.unAuthAccountId = value.id();
+                    req.session.unAuthSubdomain = value.get('subdomain');
+                    req.session.unAuthDomain = value.get('domain');
+                    //logger.debug('setting accountId: ' + req.session.accountId);
                 }
+            }
 
-                return next();
-            });
-        } else {
             return next();
-        }
+        });
     },
 
     matchHostToSession: function(req) {
@@ -197,11 +192,30 @@ _.extend(apiBase.prototype, {
         }
     },
 
-
+    /**
+     * This method is used to get the accountId of an authenticated session
+     * @param req
+     * @returns {*}
+     */
     accountId: function(req) {
         try {
             return (req.session.accountId == null || req.session.accountId == 0) ? 0 : req.session.accountId;
         }catch(exception) {
+            return null;
+        }
+    },
+
+    /**
+     * This method is used to get the accountId of an unauthenticated session
+     * @param req
+     * @returns {*}
+     */
+    currentAccountId: function(req) {
+        try {
+            var accountId = req.session.unAuthAccountId !== null ? req.session.unAuthAccountId: req.session.accountId;
+            console.log('currentAccountId: ' + accountId);
+            return accountId;
+        } catch(exception) {
             return null;
         }
     },

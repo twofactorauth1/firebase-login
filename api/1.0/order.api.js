@@ -43,7 +43,7 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> Order Details '+ order);
         var accessToken = self.getAccessToken(req);
         var userId = self.userId(req);
-        var accountId = self.accountId(req);
+        var accountId = self.currentAccountId(req);
         order.set('account_id', accountId);
 
         //No security

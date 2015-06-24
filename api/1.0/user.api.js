@@ -51,6 +51,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.post(this.url('member/:id/resetpassword'), this.isAuthAndSubscribedApi.bind(this), this.resetPassword.bind(this));
         app.post(this.url('initialize'), this.initializeUserAndAccount.bind(this));
 
+        app.get(this.url('authenticated'), this.setup.bind(this), this.isAuthenticatedSession.bind(this));
         app.get(this.url(':id'), this.isAuthApi.bind(this), this.getUserById.bind(this));
         app.put(this.url(':id'), this.isAuthApi.bind(this), this.updateUser.bind(this));
         app.delete(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.deleteUser.bind(this));
@@ -803,6 +804,19 @@ _.extend(api.prototype, baseApi.prototype, {
                 });
             }
         });
+    },
+
+    isAuthenticatedSession: function(req, resp) {
+        var self = this;
+        self.log.debug('>> isAuthenticatedSession');
+        var authenticatedAccountId = parseInt(self.accountId(req));
+        var currentSessionAccountId = parseInt(self.currentAccountId(req));
+        var respObj = {currentSession:false};
+        if(authenticatedAccountId===currentSessionAccountId) {
+            respObj.currentSession = true;
+        }
+        self.log.debug('<< isAuthenticatedSession');
+        return resp.send(resp, respObj);
     }
 });
 

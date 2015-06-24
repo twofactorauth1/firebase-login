@@ -194,7 +194,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var self = this;
         self.log.debug('>> getPagesWithCampaign');
 
-        var accountId = parseInt(self.accountId(req));
+        var accountId = parseInt(self.currentAccountId(req));
         var campaignId = req.params.id;
 
         //TODO: add security - VIEW_CAMPAIGN

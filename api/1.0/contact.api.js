@@ -122,7 +122,7 @@ _.extend(api.prototype, baseApi.prototype, {
     createContact: function (req, resp) {
         var self = this;
         self.log.debug('>> createContact');
-        var accountId = parseInt(self.accountId(req));
+        var accountId = parseInt(self.currentAccountId(req));
 
         self.checkPermissionForAccount(req, self.sc.privs.MODIFY_CONTACT, accountId, function(err, isAllowed) {
             if (isAllowed !== true) {
