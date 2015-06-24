@@ -32,7 +32,7 @@
                     <li ng-class="{'active': currentStatus == 'cancelled'}">
                         <a href="#" ng-click="statusUpdated('cancelled')">Cancelled</a>
                     </li>
-                    <li ng-class="{'active': currentStatus == 'refunded'}">
+                    <li ng-if="order._id" ng-class="{'active': currentStatus == 'refunded'}">
                         <a href="#" ng-click="statusUpdated('refunded')">Refunded</a>
                     </li>
                     <li ng-class="{'active': currentStatus == 'failed'}">
