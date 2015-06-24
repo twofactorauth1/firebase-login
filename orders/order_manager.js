@@ -309,7 +309,9 @@ module.exports = {
             //send new order email
             function(updatedOrder, contact, callback) {
                 log.debug('Sending new order email');
-                var toAddress = contact.getEmails()[0].email;
+                var toAddress = "";
+                if(contact.getEmails()[0])
+                    toAddress = contact.getEmails()[0].email;
                 var toName = contact.get('first') + ' ' + contact.get('last');
                 var accountId = updatedOrder.get('account_id');
                 var orderId = updatedOrder.id();
