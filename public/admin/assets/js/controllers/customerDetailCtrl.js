@@ -110,10 +110,9 @@
         customer.notes = $scope.matchUsers(customer);
         $scope.customer = customer;
         $scope.setTags();
-        $scope.setDefaults();
-        $scope.getMapData();
+        $scope.setDefaults();        
         $scope.data.fullName = [$scope.customer.first, $scope.customer.middle, $scope.customer.last].join(' ').trim();
-        $scope.originalCustomer = angular.copy($scope.customer);
+        $scope.getMapData();
         // $scope.contactLabel = CustomerService.contactLabel(customer);
         // $scope.checkBestEmail = CustomerService.checkBestEmail(customer);
       });
@@ -213,11 +212,10 @@
                 }
 
               });
-
+                
               $scope.localtime = moment().format('h:mm a');
               if ($scope.ip_geo_address) {
                 CustomerService.getGeoSearchAddress($scope.ip_geo_address, function (data) {
-
                   if (data.error === undefined) {
                     $scope.location.lat = parseFloat(data.lat);
                     $scope.location.lon = parseFloat(data.lon);
@@ -226,12 +224,11 @@
                   } else {
                     $scope.loadingMap = false;
                   }
-
-
-
+                  $scope.originalCustomer = angular.copy($scope.customer);
                 });
               } else {
                 $scope.loadingMap = false;
+                $scope.originalCustomer = angular.copy($scope.customer);
               }
             });
           } else {
@@ -246,6 +243,7 @@
 
                 $scope.showMap(data.lat, data.lon);
               }
+              $scope.originalCustomer = angular.copy($scope.customer);
               $scope.loadingMap = false;
             });
           }
