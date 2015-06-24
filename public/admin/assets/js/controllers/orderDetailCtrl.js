@@ -13,6 +13,8 @@
 
     $scope.taxPercent = 0.08;
 
+    $scope.FailedStatus = orderConstant.order_status.FAILED;
+
     /*
      * @closeModal
      * -

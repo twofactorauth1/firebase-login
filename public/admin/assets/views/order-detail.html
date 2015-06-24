@@ -473,7 +473,7 @@
                     </div>
                     <div class="panel-footer border-light">
                         <div class="pull-right">
-                            <button type="button" class="btn btn-info btn-o btn-wide btn-scroll btn-scroll-top ti-plus" ng-click="openProductLineItemModal()">
+                            <button ng-disabled="order.status === FailedStatus" type="button" class="btn btn-info btn-o btn-wide btn-scroll btn-scroll-top ti-plus" ng-click="openProductLineItemModal()">
                                 <span>Add Product</span>
                             </button>
                             <!-- <button type="button" class="btn btn-info btn-o btn-wide btn-scroll btn-scroll-top ti-plus" ng-click="addFee()">
