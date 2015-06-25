@@ -3,53 +3,49 @@
     .imgedit-wrap {
         padding: 25px;
     }
-	.modal-body {
-		padding: 0;
-	}
-	.modal-footer {
-		margin-top: 0;
-
+    .modal-body {
+        padding: 0;
+    }
+    .modal-footer {
+        margin-top: 0;
         &.upload {
             height: ~"calc(100% - 60px)";
             overflow: auto;
         }
-	}
-
-	.single-filemanager {
-		.filemanager-options {
-			margin: 0;
-		}
-	}
-
-	.filemanager-options {
-		margin: 0 15px 0 15px;
-		z-index: 9999;
-		position: relative;
-		.ckbox {
-			display: block;
-			position: relative;
-			top: 0;
-			left: 0;
-		}
-		hr {
-			margin: 10px 0;
-		}
-	}
-	.filemanager {
-		.media {
-//            height: 470px;
-//			max-height: 470px;
-			overflow-y: scroll;
-			padding: 20px;
-			margin-right: 15px;
-			padding: 20px 5px 0px 20px;
-		}
-		.dropdown-menu {
-			position: absolute;
-			top: 100%;
-			left: -100px;
-		}
-
+    }
+    .single-filemanager {
+        .filemanager-options {
+            margin: 0;
+        }
+    }
+    .filemanager-options {
+        margin: 0 15px 0 15px;
+        z-index: 9999;
+        position: relative;
+        .ckbox {
+            display: block;
+            position: relative;
+            top: 0;
+            left: 0;
+        }
+        hr {
+            margin: 10px 0;
+        }
+    }
+    .filemanager {
+        .media {
+            height: 470px;
+            max-height: 470px;
+            overflow-y: scroll;
+            padding: 20px;
+            margin-right: 15px;
+            padding: 20px 5px 0px 20px;
+        }
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: -100px;
+        }
         .thmb-prev {
             background: #eee;
             overflow: hidden;
@@ -57,28 +53,24 @@
             width: 100%;
             height: 150px;
         }
-
         .thmb-prev > div {
             display: table-cell;
             vertical-align: middle;
             text-align: center;
             width: 100%;
         }
-
         .thmb-prev img {
             max-height: 150px;
             width: auto;
             max-width: 100%;
         }
-	}
+    }
     label[for="upload_image"] {
         margin-bottom: 0 !important;
     }
-
     // .media > * {
     //     display: none;
     // }
-
     .all .media > *:not([id]),
     .all .media #all-warning-box,
     .image .media #image-warning-box,
@@ -87,23 +79,18 @@
     .document .media #document-warning-box {
         display: inline;
     }
-
     .document .media > [class*="documnet"] {
         display: inline;
     }
-
     .audio .media > [class*="audio"] {
         display: inline;
     }
-
     .video .media > [class*="video"] {
         display: inline;
     }
-
     .image .media > [class*="image"] {
         display: inline;
     }
-
     .all [data-active="all"],
     .video [data-active="video"],
     .audio [data-active="audio"],
@@ -122,13 +109,11 @@
     [class*="video"]~#video-warning-box {
         display: none !important;
     }
-
-    [id="warning-box"]{
+    [id="warning-box"] {
         padding: 20px;
         color: red;
         font-size: 20px;
     }
-
     .modal-dialog.modal-lg {
         //max-width: calc(100% - 30px);
         //max-width: calc(95%);
