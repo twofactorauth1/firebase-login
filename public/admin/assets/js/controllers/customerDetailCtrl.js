@@ -361,9 +361,9 @@
         //   });
         // }
         $scope.refreshMap(function (validMapData) {
-          if (!validMapData) {
-            $scope.errorMapData = true;
+          if (!validMapData) {            
             if (!hideToaster) {
+              $scope.errorMapData = true;
               toaster.pop('warning', 'Address could not be found.');
             }
           } else {
