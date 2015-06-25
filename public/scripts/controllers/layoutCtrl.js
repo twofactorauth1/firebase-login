@@ -138,9 +138,16 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
           route = route.replace('/', '');
           that.pages = data[route];
         }
-
-        if ($scope.$location.$$path === '/signup') {
+        var payment_form_exists = false;
+        if(that.pages && that.pages.components && that.pages.components.length)
+        {
+          payment_form_exists = _.find(that.pages.components, function (item) {
+            return item.type === 'payment-form'
+          });
+        }
+        if(payment_form_exists) {
           userService.getTmpAccount(function (data) {
+            $scope.tmpAccount = data;
             var tmpAccount = data;
             //$scope.tmpAccount = tmpAccount;
             $scope.newAccount.hidePassword = false;
@@ -1519,11 +1526,11 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
         return;
       }
     };
-    if ($scope.$location.$$path === '/signup') {
-      userService.getTmpAccount(function (data) {
-        $scope.tmpAccount = data;
-      });
-    };
+    //if ($scope.$location.$$path === '/signup') {
+     // userService.getTmpAccount(function (data) {
+      //  $scope.tmpAccount = data;
+     // });
+    //};
 
     $scope.showFooter = function (status) {
       if (status)
