@@ -570,6 +570,7 @@
           $scope.componentEditing.bg.img.blur = false;
           $scope.componentEditing.bg.img.parallax = false;
           $scope.componentEditing.bg.img.overlay = false;
+          $scope.saveComponent();
         }
 
       }
