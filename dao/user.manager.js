@@ -187,7 +187,8 @@ module.exports = {
         async.waterfall([
             function stepOne(callback){
                 //encrypt the password
-                $$.m.User.encryptPasswordAsync(password, function(err, hash){
+                var userForEncryption = new $$.m.User({});
+                userForEncryption.encryptPasswordAsync(password, function(err, hash){
                     if(err) {
                         log.error('Error encrypting password: ' + err);
                         callback(err);

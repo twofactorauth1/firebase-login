@@ -10,6 +10,8 @@ var crypto = require('../utils/security/crypto');
 var constants = requirejs("constants/constants");
 var passwordLib = require('password-hash-and-salt');
 
+var CURRENT_SCHEME = 2;
+
 var user = $$.m.ModelBase.extend({
 
   defaults: function () {
@@ -654,7 +656,8 @@ var user = $$.m.ModelBase.extend({
             creds = {
                 username: username,
                 password: password,
-                type: $$.constants.user.credential_types.LOCAL
+                type: $$.constants.user.credential_types.LOCAL,
+                scheme: CURRENT_SCHEME
             };
         } else {
             creds.password = password;
@@ -694,7 +697,7 @@ var user = $$.m.ModelBase.extend({
     console.log('refreshToken is ' + refreshToken);
     var creds = this.getCredentials(socialType);
     if (creds == null) {
-      creds = {};
+      creds = {scheme: CURRENT_SCHEME};
     }
     creds.type = socialType;
     creds.socialId = socialId;
@@ -758,7 +761,7 @@ var user = $$.m.ModelBase.extend({
             isNew = true;
         }
 
-        creds = creds || {};
+        creds = creds || {scheme: CURRENT_SCHEME};
         creds.type = options.type;
         if (options.username != null) {
             creds.username = options.username;
@@ -913,7 +916,8 @@ var user = $$.m.ModelBase.extend({
                     {
                         username: username,
                         password: password,
-                        type: $$.constants.user.credential_types.LOCAL
+                        type: $$.constants.user.credential_types.LOCAL,
+                        scheme: CURRENT_SCHEME
                     }
                 ],
                 permissions: permissions
@@ -928,7 +932,8 @@ var user = $$.m.ModelBase.extend({
                     {
                         username: username,
                         password: null,
-                        type: $$.constants.user.credential_types.LOCAL
+                        type: $$.constants.user.credential_types.LOCAL,
+                        scheme: CURRENT_SCHEME
                     }
                 ],
                 permissions: permissions
@@ -1029,7 +1034,8 @@ var user = $$.m.ModelBase.extend({
 
             if (creds == null) {
                 creds = {
-                    type: type
+                    type: type,
+                    scheme: CURRENT_SCHEME
                 };
                 credentials.push(creds);
             }
