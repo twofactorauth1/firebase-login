@@ -1459,6 +1459,9 @@ contenthover a {
   list-style-type: none;
   padding-left: 0;
 }
+.meet-team-v2 .social li {
+  display: inline-block;
+}
 .meet-team-v2 .social a {
   font-size: 1.1em;
   padding: 0 0.3em;
@@ -1773,6 +1776,9 @@ contenthover a {
   font-size: 14px;
   list-style-type: none;
   padding-left: 0;
+}
+.meet-team-v5 .social li {
+  display: inline-block;
 }
 .meet-team-v5 .social a {
   font-size: 1.1em;

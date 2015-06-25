@@ -136,12 +136,20 @@
          * @param {Object} [scrollableContainer] (optional) Scrollable container object
          * @returns {Object} Object with properties offsetX, offsetY.
          */
-        positionStarted: function (event, target, scrollableContainer) {
+        positionStarted: function (event, target, scrollableContainer, scope) {
           var pos = {};
-          pos.offsetX = event.pageX - this.offset(target, scrollableContainer).left;
-          pos.offsetY = event.pageY - this.offset(target, scrollableContainer).top;
-          pos.startX = pos.lastX = event.pageX;
-          pos.startY = pos.lastY = event.pageY;
+          if (scope.$parent && scope.$parent.first) {
+            pos.offsetX = 10;
+            pos.offsetY = 10;
+            pos.startX = 10;
+            pos.startY = 10;
+          } else {
+            pos.offsetX = event.pageX - this.offset(target, scrollableContainer).left;
+            pos.offsetY = event.pageY - this.offset(target, scrollableContainer).top;
+            pos.startX = pos.lastX = event.pageX;
+            pos.startY = pos.lastY = event.pageY;
+          }
+          
           pos.nowX = pos.nowY = pos.distX = pos.distY = pos.dirAx = 0;
           pos.dirX = pos.dirY = pos.lastDirX = pos.lastDirY = pos.distAxX = pos.distAxY = 0;
           return pos;
@@ -208,7 +216,7 @@
          */
         movePosition: function (event, element, pos, container, containerPositioning, scrollableContainer) {
           var bounds;
-          var useRelative = true//(containerPositioning === 'relative');
+          var useRelative = (containerPositioning === 'relative');
 
           element.x = event.pageX - pos.offsetX;
           element.y = event.pageY - pos.offsetY;
@@ -634,7 +642,7 @@
            * @param event the event object.
            */
           dragStart = function (event) {
-            angular.element(".ui-sortable").addClass("active");
+           
             var eventObj, tagName;
 
             if (!hasTouch && (event.button === 2 || event.which === 3)) {
@@ -652,7 +660,7 @@
             dragHandled = true;
             event.preventDefault();
             eventObj = $helper.eventObj(event);
-
+            angular.element(".ui-sortable").addClass("active");
             // (optional) Scrollable container as reference for top & left offset calculations, defaults to Document
             scrollableContainer = angular.element($document[0].querySelector(scope.sortableScope.options.scrollableContainer)).length > 0 ?
               $document[0].querySelector(scope.sortableScope.options.scrollableContainer) : $document[0].documentElement;
@@ -671,8 +679,11 @@
 
             dragElement = angular.element($document[0].createElement(scope.sortableScope.element.prop('tagName')))
               .addClass(scope.sortableScope.element.attr('class')).addClass(sortableConfig.dragClass);
+            //dragElement.css('margin-top', '0px');
+            //dragElement.css('position', 'absolute');
             dragElement.css('width', $helper.width(scope.itemScope.element) + 'px');
             dragElement.css('height', $helper.height(scope.itemScope.element) + 'px');
+
 
             placeHolder = createPlaceholder(scope.itemScope)
               .addClass(sortableConfig.placeHolderClass).addClass(scope.sortableScope.options.additionalPlaceholderClass);
@@ -684,8 +695,9 @@
               placeElement.addClass(sortableConfig.hiddenClass);
             }
 
-            itemPosition = $helper.positionStarted(eventObj, scope.itemScope.element, scrollableContainer);
+            itemPosition = $helper.positionStarted(eventObj, scope.itemScope.element, scrollableContainer, scope);
             //fill the immediate vacuum.
+            
             scope.itemScope.element.after(placeHolder);
             //hidden place element in original position.
             scope.itemScope.element.after(placeElement);
@@ -800,7 +812,7 @@
 
               //Set Class as dragging starts
               dragElement.addClass(sortableConfig.dragging);
-
+              dragElement.css("position","absolute");
               targetScope = fetchScope(targetElement);
 
               if (!targetScope || !targetScope.type) {

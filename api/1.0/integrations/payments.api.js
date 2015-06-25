@@ -301,7 +301,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var self = this;
         self.log.debug('>> validateCoupon');
         var accessToken = self._getAccessToken(req);
-        var accountId = parseInt(self.accountId(req));
+        var accountId = parseInt(self.currentAccountId(req));
         var couponName = req.params.name;
         if(accessToken === null && accountId != appConfig.mainAccountID) {
             return self.wrapError(resp, 403, 'Unauthenticated', 'Stripe Account has not been connected', 'Connect the Stripe account and retry this operation.');
@@ -580,7 +580,7 @@ _.extend(api.prototype, baseApi.prototype, {
     listPlans: function(req, resp) {
         var self = this;
         self.log.debug('>> listPlans');
-        var accountId = parseInt(self.accountId(req));
+        var accountId = parseInt(self.currentAccountId(req));
 
         self.checkPermission(req, self.sc.privs.VIEW_PAYMENTS, function(err, isAllowed) {
             if (isAllowed !== true) {
@@ -602,7 +602,7 @@ _.extend(api.prototype, baseApi.prototype, {
     getPlan: function(req, resp) {
         var self = this;
         self.log.debug('>> getPlan');
-        var accountId = parseInt(self.accountId(req));
+        var accountId = parseInt(self.currentAccountId(req));
 
         var planId = req.params.id;
         var accessToken = self._getAccessToken(req);
@@ -1185,7 +1185,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var accessToken = null;
         var p1 = $.Deferred();
 
-        var accountId = self.accountId(req);
+        var accountId = self.currentAccountId(req);
         if(accountId === appConfig.mainAccountID) {
             //no need to use an access token
         } else if(req.session.stripeAccessToken) {

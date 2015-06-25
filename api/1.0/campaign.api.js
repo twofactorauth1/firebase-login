@@ -347,7 +347,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var self = this;
         self.log.debug('>> triggerCampaignStep');
 
-        var accountId = parseInt(self.accountId(req));
+        var accountId = parseInt(self.currentAccountId(req));
         var campaignId = req.params.id;
         var contactId = parseInt(req.params.contactid);
         var stepNumber = parseInt(req.params.stepNumber);

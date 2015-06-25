@@ -171,7 +171,6 @@ app.constant('orderConstant', {
     CANCELLED: "cancelled",
     REFUNDED: "refunded",
     FAILED: "failed",
-    FAILED: "cancelled",
 
     dp: [{
         label: "Pending Payment",

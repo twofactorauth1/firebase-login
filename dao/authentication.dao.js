@@ -458,47 +458,53 @@ var dao = {
             if (!err) {
                 var user = value;
                 user.clearPasswordRecoverToken();
-
-                var localCredentials;
-                if (accountId > 0) {
-                    user.createOrUpdateUserAccountCredentials(accountId, $$.constants.user.credential_types.LOCAL, null, password);
-
-                    //Modify the main credentials if usernames are the same
-                    localCredentials = user.getCredentials($$.constants.user.credential_types.LOCAL);
-                    var socialCredentials = user.getUserAccountCredentials(accountId, $$.constants.user.credential_types.LOCAL);
-                    if (localCredentials != null && socialCredentials != null && localCredentials.username == socialCredentials.username) {
-                        user.createOrUpdateLocalCredentials(password);
+                user.encryptPasswordAsync(password, function(err, hash){
+                    if(err) {
+                        this.log.error('Error encrypting password: ' + err);
+                        return fn(err, null);
                     }
-                    var accountIds = user.getAllAccountIds();
-                    accountIds.forEach(function(acctId) {
-                        var _userAcctCreds = user.getUserAccountCredentials(acctId, $$.constants.user.credential_types.LOCAL);
-                        if (_userAcctCreds != null && localCredentials != null && _userAcctCreds.username == localCredentials.username) {
-                            user.createOrUpdateUserAccountCredentials(acctId, $$.constants.user.credential_types.LOCAL, null, password);
-                        }
-                    });
-                } else {
-                    user.createOrUpdateLocalCredentials(password);
+                    var localCredentials;
+                    if (accountId > 0) {
+                        user.createOrUpdateUserAccountCredentials(accountId, $$.constants.user.credential_types.LOCAL, null, hash, null, null);
 
-                    //See if we need to update social credentials as well
-                    localCredentials = user.getCredentials($$.constants.user.credential_types.LOCAL);
-                    var accountIds = user.getAllAccountIds();
-                    accountIds.forEach(function(acctId) {
-                        var _userAcctCreds = user.getUserAccountCredentials(acctId, $$.constants.user.credential_types.LOCAL);
-                        if (_userAcctCreds != null && localCredentials != null && _userAcctCreds.username == localCredentials.username) {
-                            user.createOrUpdateUserAccountCredentials(acctId, $$.constants.user.credential_types.LOCAL, null, password);
+                        //Modify the main credentials if usernames are the same
+                        localCredentials = user.getCredentials($$.constants.user.credential_types.LOCAL);
+                        var socialCredentials = user.getUserAccountCredentials(accountId, $$.constants.user.credential_types.LOCAL);
+                        if (localCredentials != null && socialCredentials != null && localCredentials.username == socialCredentials.username) {
+                            user.createOrUpdateLocalCredentials(hash);
                         }
-                    });
-                }
-
-                userDao.saveOrUpdate(user, function (err, value) {
-                    if (!err) {
-                        var userActivity = new $$.m.UserActivity({accountId:accountId, userId:user.id(), type:'RESET_PASSWORD'});
-                        userActivityManager.createUserActivity(userActivity, function(){});
-                        fn(null, value);
+                        var accountIds = user.getAllAccountIds();
+                        accountIds.forEach(function(acctId) {
+                            var _userAcctCreds = user.getUserAccountCredentials(acctId, $$.constants.user.credential_types.LOCAL);
+                            if (_userAcctCreds != null && localCredentials != null && _userAcctCreds.username == localCredentials.username) {
+                                user.createOrUpdateUserAccountCredentials(acctId, $$.constants.user.credential_types.LOCAL, null, hash, null, null);
+                            }
+                        });
                     } else {
-                        return fn("An error occurred: " + err);
+                        user.createOrUpdateLocalCredentials(hash);
+
+                        //See if we need to update social credentials as well
+                        localCredentials = user.getCredentials($$.constants.user.credential_types.LOCAL);
+                        var accountIds = user.getAllAccountIds();
+                        accountIds.forEach(function(acctId) {
+                            var _userAcctCreds = user.getUserAccountCredentials(acctId, $$.constants.user.credential_types.LOCAL);
+                            if (_userAcctCreds != null && localCredentials != null && _userAcctCreds.username == localCredentials.username) {
+                                user.createOrUpdateUserAccountCredentials(acctId, $$.constants.user.credential_types.LOCAL, null, hash, null, null);
+                            }
+                        });
                     }
+
+                    userDao.saveOrUpdate(user, function (err, value) {
+                        if (!err) {
+                            var userActivity = new $$.m.UserActivity({accountId:accountId, userId:user.id(), type:'RESET_PASSWORD'});
+                            userActivityManager.createUserActivity(userActivity, function(){});
+                            fn(null, value);
+                        } else {
+                            return fn("An error occurred: " + err);
+                        }
+                    });
                 });
+
             } else {
                 fn(err, value);
             }

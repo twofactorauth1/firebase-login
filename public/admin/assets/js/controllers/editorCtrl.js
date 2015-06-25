@@ -570,6 +570,7 @@
           $scope.componentEditing.bg.img.blur = false;
           $scope.componentEditing.bg.img.parallax = false;
           $scope.componentEditing.bg.img.overlay = false;
+          $scope.saveComponent();
         }
 
       }
@@ -759,7 +760,7 @@
       $scope.setToolbarsTop();
     });
 
-    $scope.resizeIframe = function () {
+    $scope.resizeIframe = function (scrollToComponentId) {
       var iframe = document.getElementById("iframe-website");
       if (iframe) {
         //var iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
@@ -772,9 +773,18 @@
             if (editorToolbar)
               incrementHeight = incrementHeight + editorToolbar.height();
             $scope.iframeHeight = ($("#iframe-website").contents().find("body").height() + 70 + incrementHeight) + "px";
-
+            if(scrollToComponentId) {
+              var scrollToComponentElement = angular.element("#iframe-website").contents().find("#"+scrollToComponentId);
+              if(scrollToComponentElement && scrollToComponentElement.offset().top)
+              {
+                var top = scrollToComponentElement.offset().top;
+                setTimeout(function () {
+                  angular.element(window).scrollTop(top-20);
+                },100);
+              }
+            }
           });
-        }, 1000);
+        }, 100);
       }
     };
 
@@ -1855,8 +1865,8 @@
     $scope.saveComponent = function (update) {
 
       var componentId = $scope.componentEditing._id;
-      //if (!update)
-      //$scope.updateSingleComponent(componentId);
+      if (!update)
+        $scope.updateSingleComponent(componentId);
 
       var componentIndex;
       for (var i = 0; i < $scope.components.length; i++) {

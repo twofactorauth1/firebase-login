@@ -8,6 +8,9 @@
 require('./base.model.js');
 var crypto = require('../utils/security/crypto');
 var constants = requirejs("constants/constants");
+var passwordLib = require('password-hash-and-salt');
+
+var CURRENT_SCHEME = 2;
 
 var user = $$.m.ModelBase.extend({
 
@@ -633,28 +636,60 @@ var user = $$.m.ModelBase.extend({
       photos.push(photo);
     }
   },
-  //endregion
+    //endregion
 
 
-  //region CREDENTIALS
-  createOrUpdateLocalCredentials: function (password) {
-    var username = this.get("username");
-    if (username == null) {
-      return;
-    }
+    //region CREDENTIALS
+    /**
+     *
+     * @param password ENCRYPTED
+     * @returns {*}
+     */
+    createOrUpdateLocalCredentials: function (password) {
+        var username = this.get("username");
+        if (username == null) {
+            return;
+        }
 
-    var creds = this.getCredentials($$.constants.user.credential_types.LOCAL);
-    if (creds == null) {
-      creds = {
-        username: username,
-        password: password,
-        type: $$.constants.user.credential_types.LOCAL
-      };
-    } else {
-      creds.password = password;
-    }
-    return this._setCredentials(creds, true);
-  },
+        var creds = this.getCredentials($$.constants.user.credential_types.LOCAL);
+        if (creds == null) {
+            creds = {
+                username: username,
+                password: password,
+                type: $$.constants.user.credential_types.LOCAL,
+                scheme: CURRENT_SCHEME
+            };
+        } else {
+            creds.password = password;
+        }
+        return this._setCredentials(creds, false);
+    },
+
+    /**
+     *
+     * @param newPassword ENCRYPTED
+     * @param newScheme
+     * @returns {*}
+     */
+    updateLocalCredentialsAndScheme: function (newPassword, newScheme) {
+        var username = this.get("username");
+        if (username == null) {
+            return;
+        }
+
+        var creds = this.getCredentials($$.constants.user.credential_types.LOCAL);
+        creds.password = newPassword;
+        creds.scheme = newScheme;
+
+        return this._setCredentials(creds, false);
+
+    },
+
+    updateLocalAccountCredentialsAndScheme: function(accountId, newPassword, newScheme) {
+        var credentials = this.getUserAccountCredentials(accountId, $$.constants.user.credential_types.LOCAL);
+        credentials.password = newPassword;
+        credentials.scheme = newScheme;
+    },
 
 
   createOrUpdateSocialCredentials: function (socialType, socialId, accessToken, refreshToken, expires, username, socialUrl, scope) {
@@ -662,7 +697,7 @@ var user = $$.m.ModelBase.extend({
     console.log('refreshToken is ' + refreshToken);
     var creds = this.getCredentials(socialType);
     if (creds == null) {
-      creds = {};
+      creds = {scheme: CURRENT_SCHEME};
     }
     creds.type = socialType;
     creds.socialId = socialId;
@@ -706,74 +741,83 @@ var user = $$.m.ModelBase.extend({
   },
 
 
-  _setCredentials: function (options, encryptPassword) {
-    var credentials = this.get("credentials"),
-      creds;
-    for (var i = 0; i < credentials.length; i++) {
-      if (credentials[i].type == options.type) {
-        creds = credentials[i];
-        break;
-      }
-    }
+    /**
+     *
+     * @param options (may contain an ENCRYPTED password)
+     * @param encryptPassword
+     * @private
+     */
+    _setCredentials: function (options, encryptPassword) {
+        var credentials = this.get("credentials"), creds;
+        for (var i = 0; i < credentials.length; i++) {
+            if (credentials[i].type == options.type) {
+                creds = credentials[i];
+                break;
+            }
+        }
 
-    var isNew = false;
-    if (creds == null) {
-      isNew = true;
-    }
+        var isNew = false;
+        if (creds == null) {
+            isNew = true;
+        }
 
-    creds = creds || {};
-    creds.type = options.type;
-    if (options.username != null) {
-      creds.username = options.username;
-    }
-    if (options.password != null) {
-      creds.password = options.password;
-    }
-    if (options.socialUrl != null) {
-      creds.socialUrl = options.socialUrl;
-    }
+        creds = creds || {scheme: CURRENT_SCHEME};
+        creds.type = options.type;
+        if (options.username != null) {
+            creds.username = options.username;
+        }
+        if (options.password != null) {
+            creds.password = options.password;
+        }
+        if (options.socialUrl != null) {
+            creds.socialUrl = options.socialUrl;
+        }
 
-    creds.socialId = options.socialId;
-    creds.accessToken = options.accessToken;
-    if (options.refreshToken != null) {
-      creds.refreshToken = options.refreshToken;
-    }
-    console.log('creds.refreshToken [' + creds.refreshToken + '] and options.refreshToken[' + options.refreshToken + ']');
+        creds.socialId = options.socialId;
+        creds.accessToken = options.accessToken;
+        if (options.refreshToken != null) {
+            creds.refreshToken = options.refreshToken;
+        }
+        console.log('creds.refreshToken [' + creds.refreshToken + '] and options.refreshToken[' + options.refreshToken + ']');
 
-    if (options.expires != null && options.expires > 0) {
-      creds.expires = options.expires;
-    }
+        if (options.expires != null && options.expires > 0) {
+            creds.expires = options.expires;
+        }
 
-    if (creds != null && encryptPassword === true && creds.password != null) {
-      creds.password = this._encryptPassword(creds.password);
-    }
-
-    //Ensure any rogue options make it in
-    for (var key in options) {
-      if (creds.hasOwnProperty(key) === false) {
-        creds[key] = options[key];
-      }
-    }
-
-    if (creds != null && isNew === true) {
-      credentials.push(creds);
-    }
-  },
+        /*
+         * No longer encrypting passwords here.
+         * if (creds != null && encryptPassword === true && creds.password != null) {
+         creds.password = this._encryptPassword(creds.password);
+         }
+         */
 
 
-  verifyPassword: function (password, type, fn) {
-    var credentials = this.getCredentials(type);
-    this._verifyPasswordForCredentials(credentials, password, fn);
-  },
+        //Ensure any rogue options make it in
+        for (var key in options) {
+            if (creds.hasOwnProperty(key) === false) {
+                creds[key] = options[key];
+            }
+        }
+
+        if (creds != null && isNew === true) {
+            credentials.push(creds);
+        }
+    },
 
 
-  verifyPasswordForAccount: function (accountId, password, type, fn) {
-    var credentials = this.getUserAccountCredentials(accountId, type);
-    return this._verifyPasswordForCredentials(credentials, password, fn);
-  },
+    verifyPassword: function (password, type, fn) {
+        var credentials = this.getCredentials(type);
+        this._verifyPasswordForCredentials(credentials, password, null, fn);
+    },
 
 
-  _verifyPasswordForCredentials: function (credentials, password, fn) {
+    verifyPasswordForAccount: function (accountId, password, type, fn) {
+        var credentials = this.getUserAccountCredentials(accountId, type);
+        return this._verifyPasswordForCredentials(credentials, password, accountId, fn);
+    },
+
+
+  _verifyPasswordForCredentials: function (credentials, password, accountId, fn) {
     if (credentials === null) {
       return fn("No login credentials found");
     }
@@ -781,7 +825,7 @@ var user = $$.m.ModelBase.extend({
     if (credentials.hasOwnProperty("password")) {
       var encryptedPass = credentials.password;
 
-      this._verifyPassword(password, encryptedPass, function (err, value) {
+      this._verifyPassword(password, encryptedPass, credentials.scheme, accountId, function (err, value) {
         if (err) {
           return fn(err, value);
         } else if (value === false) {
@@ -851,127 +895,166 @@ var user = $$.m.ModelBase.extend({
   },
 
 
-  createUserAccount: function (accountId, username, password, permissions) {
-    if (_.isArray(password)) {
-      permissions = password;
-      password = null;
-    }
+    /**
+     * @param accountId
+     * @param username
+     * @param password ENCRYPTED
+     * @param permissions
+     * @returns {*}
+     */
+    createUserAccount: function (accountId, username, password, permissions) {
+        if (_.isArray(password)) {
+            permissions = password;
+            password = null;
+        }
 
-    var userAccount = {
-      accountId: accountId,
-      username: username,
-      credentials: [
-        {
-          username: username,
-          password: password == null ? null : this._encryptPassword(password),
-          type: $$.constants.user.credential_types.LOCAL
+        if(password !== null) {
+            var userAccount = {
+                accountId: accountId,
+                username: username,
+                credentials: [
+                    {
+                        username: username,
+                        password: password,
+                        type: $$.constants.user.credential_types.LOCAL,
+                        scheme: CURRENT_SCHEME
+                    }
+                ],
+                permissions: permissions
+            };
+            this._createUserAccount(userAccount, permissions);
+
+        } else {
+            var userAccount = {
+                accountId: accountId,
+                username: username,
+                credentials: [
+                    {
+                        username: username,
+                        password: null,
+                        type: $$.constants.user.credential_types.LOCAL,
+                        scheme: CURRENT_SCHEME
+                    }
+                ],
+                permissions: permissions
+            };
+
+            this._createUserAccount(userAccount, permissions);
+        }
+
+
+    },
+
+
+    _createUserAccount: function (userAccount, permissions) {
+        var self = this;
+        var accounts = this.get("accounts");
+        if (accounts == null) {
+            accounts = [];
+            this.set({
+                accounts: accounts
+            });
+        }
+
+        var accountId = userAccount.accountId;
+        var username = userAccount.username;
+
+        //if we have a user account with matching account id, merge it, do not create new
+        var oldAccount = this.getUserAccount(accountId);
+        if (oldAccount != null) {
+            if (oldAccount.username == null || oldAccount.username == username) {
+                //this is ok, lets merge them together
+                oldAccount.username = username;
+
+                //Look to see if we already have creds of the same type, if so,
+                // we merge the new into the old
+                var newCredentials = userAccount.credentials,
+                    newCreds,
+                    oldCreds;
+
+                var fxn = function (_oldCreds) {
+                    if (_oldCreds.type === newCreds.type) {
+                        oldCreds = _oldCreds;
+                    }
+                };
+
+                for (var i = 0; i < newCredentials.length; i++) {
+                    newCreds = newCredentials[i];
+                    oldCreds = null;
+                    oldAccount.credentials.forEach(fxn);
+
+                    if (oldCreds != null) {
+                        oldCreds.username = newCredentials.username;
+                        if (newCredentials.password != null) {
+                            //oldCreds.password = self._encryptPassword(newCreds.password);
+                            oldCreds.password = newCreds.password;
+                        }
+                        oldCreds.socialId = newCreds.socialId;
+                        oldCreds.accessToken = newCreds.accessToken;
+                    } else {
+                        oldAccount.credentials.push(newCreds);
+                    }
                 }
-            ],
-      permissions: permissions
-    };
 
-    return this._createUserAccount(userAccount, permissions);
-  },
-
-
-  _createUserAccount: function (userAccount, permissions) {
-    var self = this;
-    var accounts = this.get("accounts");
-    if (accounts == null) {
-      accounts = [];
-      this.set({
-        accounts: accounts
-      });
-    }
-
-    var accountId = userAccount.accountId;
-    var username = userAccount.username;
-
-    //if we have a user account with matching account id, merge it, do not create new
-    var oldAccount = this.getUserAccount(accountId);
-    if (oldAccount != null) {
-      if (oldAccount.username == null || oldAccount.username == username) {
-        //this is ok, lets merge them together
-        oldAccount.username = username;
-
-        //Look to see if we already have creds of the same type, if so,
-        // we merge the new into the old
-        var newCredentials = userAccount.credentials,
-          newCreds,
-          oldCreds;
-
-        var fxn = function (_oldCreds) {
-          if (_oldCreds.type === newCreds.type) {
-            oldCreds = _oldCreds;
-          }
-        };
-
-        for (var i = 0; i < newCredentials.length; i++) {
-          newCreds = newCredentials[i];
-          oldCreds = null;
-          oldAccount.credentials.forEach(fxn);
-
-          if (oldCreds != null) {
-            oldCreds.username = newCredentials.username;
-            if (newCredentials.password != null) {
-              oldCreds.password = self._encryptPassword(newCreds.password);
+                //Attempt to merge the permissions
+                permissions.forEach(function (permission) {
+                    if (oldAccount.permissions.indexOf(permissions) == -1) {
+                        oldAccount.permissions.push(permission);
+                    }
+                });
             }
-            oldCreds.socialId = newCreds.socialId;
-            oldCreds.accessToken = newCreds.accessToken;
-          } else {
-            oldAccount.credentials.push(newCreds);
-          }
+            return oldAccount;
+        } else {
+            accounts.push(userAccount);
+            return userAccount;
         }
-
-        //Attempt to merge the permissions
-        permissions.forEach(function (permission) {
-          if (oldAccount.permissions.indexOf(permissions) == -1) {
-            oldAccount.permissions.push(permission);
-          }
-        });
-      }
-      return oldAccount;
-    } else {
-      accounts.push(userAccount);
-      return userAccount;
-    }
-  },
+    },
 
 
-  createOrUpdateUserAccountCredentials: function (accountId, type, username, password, socialId, accessToken) {
-    var userAccount = this.getUserAccount(accountId);
+    /**
+     * @param accountId
+     * @param type
+     * @param username
+     * @param password ENCRYPTED
+     * @param socialId
+     * @param accessToken
+     */
+    createOrUpdateUserAccountCredentials: function (accountId, type, username, password, socialId, accessToken) {
+        var userAccount = this.getUserAccount(accountId);
 
-    if (userAccount != null) {
-      var creds = null;
-      var credentials = userAccount.credentials;
-      for (var i = 0; i < credentials.length; i++) {
-        if (credentials[i].type == type) {
-          creds = credentials[i];
-          break;
+        if (userAccount != null) {
+            var creds = null;
+            var credentials = userAccount.credentials;
+            for (var i = 0; i < credentials.length; i++) {
+                if (credentials[i].type == type) {
+                    creds = credentials[i];
+                    break;
+                }
+            }
+
+            if (creds == null) {
+                creds = {
+                    type: type,
+                    scheme: CURRENT_SCHEME
+                };
+                credentials.push(creds);
+            }
+
+            if (username) {
+                creds.username = username;
+            }
+
+            if (socialId) {
+                creds.socialId = socialId;
+            }
+            if (accessToken) {
+                creds.accessToken = accessToken;
+            }
+            if (password) {
+                creds.password = password;
+            }
         }
-      }
-
-      if (creds == null) {
-        creds = {
-          type: type
-        };
-        credentials.push(creds);
-      }
-
-      if (username) {
-        creds.username = username;
-      }
-      if (password) {
-        creds.password = this._encryptPassword(password);
-      }
-      if (socialId) {
-        creds.socialId = socialId;
-      }
-      if (accessToken) {
-        creds.accessToken = accessToken;
-      }
-    }
-  },
+    },
 
 
   getUserAccountBaggage: function (accountId, key) {
@@ -1222,14 +1305,55 @@ var user = $$.m.ModelBase.extend({
 
 
   //region Encryption
-  _encryptPassword: function (password) {
-    //TODO: Use Salt and BCrypt or similar
-    return crypto.hash(password);
-  },
+    /**
+     * @deprecated for _encryptPasswordAsync
+     * @param password
+     * @returns {*}
+     * @private
+     */
+    _encryptPassword: function (password) {
+        //TODO: Use Salt and BCrypt or similar
+        return crypto.hash(password);
+    },
+
+    encryptPasswordAsync: function(password, fn) {
+        passwordLib(password).hash(fn);
+    },
 
 
-  _verifyPassword: function (password, encryptedPassword, fn) {
-      crypto.verify(password, encryptedPassword, fn);
+    _verifyPassword: function (password, encryptedPassword, scheme, accountId, fn) {
+        var self = this;
+        if(!scheme || scheme===1) {
+            crypto.verify(password, encryptedPassword, function(err, value){
+                if(err) {
+                    return fn(err, value);
+                } else if(value === true) {
+                    //update the password.
+                    passwordLib(password).hash(function(error, hash) {
+                        if(accountId === null) {
+                            self.updateLocalCredentialsAndScheme(hash, 2);
+                        } else {
+                            self.updateLocalAccountCredentialsAndScheme(accountId, hash, 2);
+                        }
+
+                        $$.dao.UserDao.saveOrUpdate(self, function(err, savedUser){
+                            if(err) {
+                                return fn(err, value);
+                            } else {
+                                return fn(null, value);
+                            }
+                        });
+                    });
+                } else {
+                    return fn(err, value);
+                }
+            });
+        } else if(scheme === 2) {
+            passwordLib(password).verifyAgainst(encryptedPassword, fn);
+        } else {
+            console.log('No scheme on credentials');
+            fn(null, false);
+        }
     }
     //endregion
 }, {

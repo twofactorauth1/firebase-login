@@ -38,6 +38,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.post(this.url('billing'), this.isAuthApi.bind(this), this.updateCurrentAccountBilling.bind(this));
         app.get(this.url('emailpreferences'), this.isAuthApi.bind(this), this.getCurrentAccountEmailPreferences.bind(this));
         app.post(this.url('emailpreferences'), this.isAuthApi.bind(this), this.updateCurrentAccountEmailPreferences.bind(this));
+
         app.get(this.url(':id'), this.isAuthApi.bind(this), this.getAccountById.bind(this));
         app.post(this.url(''), this.isAuthApi.bind(this), this.createAccount.bind(this));
         app.put(this.url(':id'), this.isAuthApi.bind(this), this.updateAccount.bind(this));
@@ -312,7 +313,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.checkPermission(req, self.sc.privs.MODIFY_ACCOUNT, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(res);
+                return self.send403(resp);
             } else {
                 accountDao.saveOrUpdate(account, function(err, value){
                     if(!err &&value != null){

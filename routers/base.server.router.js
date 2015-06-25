@@ -46,83 +46,49 @@ _.extend(baseRouter.prototype, {
     setup: function(req, resp, next) {
         //TODO: Cache Account By Host
         var self = this;
-        /*
-         * If we have a session but no session accountId OR the session host doesn't match current host, do the following
-         */
-        if (req["session"] != null && (req.session["accountId"] == null || self.matchHostToSession(req)===false)) {
-            var accountDao = require("../dao/account.dao");
-            accountDao.getAccountByHost(req.get("host"), function(err, value) {
-                if (!err && value != null) {
-                    if (value === true) {
-                        logger.warn('We should not reach this code.  value ===true');
-                        logger.debug("host: " + req.get("host") + " -> accountId:0");
-                        req.session.accountId = 0;
-                    } else {
-                        logger.debug("host: " + req.get("host") + " -> accountId:" + value.id());
-                        req.session.accountId = value.id();
-                        req.session.subdomain = value.get('subdomain');
-                        req.session.domain = value.get('domain');
-                        req.session.locked = value.get('locked');
-                    }
+        accountDao.getAccountByHost(req.get("host"), function(err, value) {
+            if (!err && value != null) {
+                if (value === true) {
+                    logger.warn('We should not reach this code.  value ===true');
+                    logger.debug("host: " + req.get("host") + " -> accountId:0");
+                    req.session.accountId = 0;
                 } else {
-                    logger.warn("No account found from getAccountByHost");
+                    logger.debug("host: " + req.get("host") + " -> accountId:" + value.id());
+                    req.session.unAuthAccountId = value.id();
+                    req.session.unAuthSubdomain = value.get('subdomain');
+                    req.session.unAuthDomain = value.get('domain');
+                    //req.session.locked = value.get('locked');
                 }
-                if(req.session.accountId !== appConfig.mainAccountID) {
-                    self.sm.verifySubscription(req, function(err, isValid){
-                        if(err) {
-                            logger.error('Could not verify subscription: ' + err);
-                            accountDao.addSubscriptionLockToAccount(req.session.accountId, function(err, value){
-                                return next();
-                            });
-                        } else if(isValid !== true) {
-                            logger.warn('Subscription for account ' + req.session.accountId + ' is not valid.');
-                            accountDao.addSubscriptionLockToAccount(req.session.accountId, function(err, value){
-                                return next();
-                            });
-                        } else {
-                            return next();
-                        }
-                    });
-                } else {
-
-                    return next();
-                }
-            });
-        } else {
+            } else {
+                logger.warn("No account found from getAccountByHost");
+            }
             return next();
-        }
+
+        });
+
     },
 
     setupForSocialAuth: function(req, resp, next) {
         //TODO: Cache Account By Host
         var self = this;
-        /*
-         * If we have a session but no session accountId OR the session host doesn't match current host, do the following
-         */
-        if (req["session"] != null && (req.session["accountId"] == null )) {
-            var accountDao = require("../dao/account.dao");
-            accountDao.getAccountByHost(req.get("host"), function(err, value) {
-                if (!err && value != null) {
-                    if (value === true) {
-                        logger.warn('We should not reach this code.  value ===true');
-                        logger.debug("host: " + req.get("host") + " -> accountId:0");
-                        req.session.accountId = 0;
-                    } else {
-                        logger.debug("host: " + req.get("host") + " -> accountId:" + value.id());
-                        req.session.accountId = value.id();
-                        req.session.subdomain = value.get('subdomain');
-                        req.session.domain = value.get('domain');
-                        req.session.locked = value.get('locked');
-                    }
+        accountDao.getAccountByHost(req.get("host"), function(err, value) {
+            if (!err && value != null) {
+                if (value === true) {
+                    logger.warn('We should not reach this code.  value ===true');
+                    logger.debug("host: " + req.get("host") + " -> accountId:0");
+                    req.session.accountId = 0;
                 } else {
-                    logger.warn("No account found from getAccountByHost");
+                    logger.debug("host: " + req.get("host") + " -> accountId:" + value.id());
+                    req.session.unAuthAccountId = value.id();
+                    req.session.unAuthSubdomain = value.get('subdomain');
+                    req.session.unAuthDomain = value.get('domain');
                 }
+            } else {
+                logger.warn("No account found from getAccountByHost");
+            }
 
-                return next();
-            });
-        } else {
             return next();
-        }
+        });
     },
 
     setupForSocialSignup: function(req, resp, next) {
@@ -142,10 +108,9 @@ _.extend(baseRouter.prototype, {
                         req.session.accountId = 0;
                     } else {
                         logger.debug("host: " + req.get("host") + " -> accountId:" + value.id());
-                        req.session.accountId = 'new';
-                        req.session.subdomain = 'new';
-                        //req.session.domain = value.get('domain');
-                        req.session.locked = value.get('locked');
+                        req.session.unAuthAccountId = 'new';
+                        req.session.unAuthSubdomain = 'new';
+                        req.session.unAuthDomain = value.get('domain');
                     }
                 } else {
                     logger.warn("No account found from getAccountByHost");
@@ -182,7 +147,7 @@ _.extend(baseRouter.prototype, {
 
     isHomeAuth: function(req, resp, next) {
         var self = this;
-        logger.debug('>> isHomeAuth (' + req.originalUrl + ')');
+        logger.debug('>> isHomeAuth (' + req.originalUrl + ') session accountId: ' + req.session.accountId);
         var path = req.url;
         if (req.isAuthenticated()) {
             if(urlUtils.getSubdomainFromRequest(req).isMainApp === true) {
@@ -191,26 +156,28 @@ _.extend(baseRouter.prototype, {
                     //magic number meaning user is authenticated but has multiple accounts
                     logger.debug('returning next');
                     return next();
-                }
-                authenticationDao.getAuthenticatedUrlForRedirect(req.session.accountId, req.user.id(), req.url,
-                    function(err, value){
-                        if (err) {
-                            logger.error('Error getting authenticated url for redirect: ' + err);
-                            logger.debug('redirecting to /home');
-                            resp.redirect("/home");
-                            self = null;
-                            return;
-                        } else {
-                            value.replace(/\?authtoken.*/g, "");
-                            logger.debug('redirecting to ' + value);
-                            resp.redirect(value);
-                            self = null;
+                } else {
+                    authenticationDao.getAuthenticatedUrlForRedirect(req.session.accountId, req.user.id(), req.url,
+                        function(err, value){
+                            if (err) {
+                                logger.error('Error getting authenticated url for redirect: ' + err);
+                                logger.debug('redirecting to /home');
+                                resp.redirect("/home");
+                                self = null;
+                                return;
+                            } else {
+                                value.replace(/\?authtoken.*/g, "");
+                                logger.debug('redirecting to ' + value);
+                                resp.redirect(value);
+                                self = null;
+                            }
                         }
-                    }
-                );
+                    );
+                }
+
             } else {
                 if(req.originalUrl.indexOf('authtoken') === -1) {
-                    logger.debug('<< isAuth');
+                    logger.debug('<< isHomeAuth');
                     return next();
                 } else {
 
@@ -220,42 +187,56 @@ _.extend(baseRouter.prototype, {
                 }
 
             }
-        }
-
-        var checkAuthToken = function(req, fn) {
-            if (req.query.authtoken != null) {
-                var accountId = 0;
-                if (req["session"] != null) {
-                    accountId = req.session.accountId;
-                }
-                authenticationDao.verifyAuthToken(accountId, req.query.authtoken, true, function(err, value) {
-                    if (err) {
-                        return fn(err);
+        } else {
+            var checkAuthToken = function(req, fn) {
+                if (req.query.authtoken != null) {
+                    var accountId = 0;
+                    if (req["session"] != null) {
+                        accountId = req.session.accountId;
                     }
-
-                    req.login(value, function(err) {
+                    authenticationDao.verifyAuthToken(accountId, req.query.authtoken, true, function(err, value) {
                         if (err) {
                             return fn(err);
                         }
-                        return fn(null, value);//here
+
+                        req.login(value, function(err) {
+                            if (err) {
+                                return fn(err);
+                            }
+                            return fn(null, value);//here
+                        });
+                    });
+                } else {
+                    return fn("No auth token found");
+                }
+            };
+
+            if (req["session"] != null && req.session["accountId"] == null) {
+                var accountDao = require("../dao/account.dao");
+                accountDao.getAccountByHost(req.get("host"), function(err, value) {
+                    if (!err && value != null) {
+                        if (value === true) {
+                            req.session.accountId = 0;
+                        } else {
+                            req.session.accountId = value.id();
+                        }
+                    }
+
+                    checkAuthToken(req, function(err, value) {
+                        if (!err) {
+                            //need to remove the auth token here.
+                            var redirectUrl = req.url.replace(/\?authtoken.*/g, "");
+                            logger.debug('<< isAuth.  Redirecting to: ' + redirectUrl);
+                            return resp.redirect(redirectUrl);
+                        } else {
+                            logger.error('Error in checkAuthToken: ' + err);
+                            cookies.setRedirectUrl(req, resp);
+                            logger.debug('Redirecting to /login');
+                            return resp.redirect("/login");
+                        }
                     });
                 });
             } else {
-                return fn("No auth token found");
-            }
-        };
-
-        if (req["session"] != null && req.session["accountId"] == null) {
-            var accountDao = require("../dao/account.dao");
-            accountDao.getAccountByHost(req.get("host"), function(err, value) {
-                if (!err && value != null) {
-                    if (value === true) {
-                        req.session.accountId = 0;
-                    } else {
-                        req.session.accountId = value.id();
-                    }
-                }
-
                 checkAuthToken(req, function(err, value) {
                     if (!err) {
                         //need to remove the auth token here.
@@ -269,22 +250,10 @@ _.extend(baseRouter.prototype, {
                         return resp.redirect("/login");
                     }
                 });
-            });
-        } else {
-            checkAuthToken(req, function(err, value) {
-                if (!err) {
-                    //need to remove the auth token here.
-                    var redirectUrl = req.url.replace(/\?authtoken.*/g, "");
-                    logger.debug('<< isAuth.  Redirecting to: ' + redirectUrl);
-                    return resp.redirect(redirectUrl);
-                } else {
-                    logger.error('Error in checkAuthToken: ' + err);
-                    cookies.setRedirectUrl(req, resp);
-                    logger.debug('Redirecting to /login');
-                    return resp.redirect("/login");
-                }
-            });
+            }
         }
+
+
 
     },
 
@@ -337,6 +306,10 @@ _.extend(baseRouter.prototype, {
             } else {
                 if(req.originalUrl.indexOf('authtoken') === -1) {
                     logger.debug('<< isAuth');
+                    if(req.session.accountId === -1) {
+                        logger.debug('redirecting to /home');
+                        return resp.redirect('/home');
+                    }
                     return next();
                 } else {
 

@@ -154,6 +154,20 @@ mainApp.service('userService', ['$http', 'ipCookie', function ($http, ipCookie) 
         });
     };
 
+    this.isAuthenticatedSession = function(fn) {
+        var apiUrl = baseUrl + ['user', 'authenticated'].join('/');
+        $http({
+            url: apiUrl,
+            method: "GET"
+        }).success(function (data, status, headers, config) {
+                console.log('isAuthenticatedSession success  ', data);
+                fn(data.currentSession);
+        }).error(function (err) {
+                console.log('END:isAuthenticatedSession with ERROR', err);
+                fn(false);
+        });
+    };
+
 
 
     this.saveOrUpdateTmpAccount = function(data, fn) {

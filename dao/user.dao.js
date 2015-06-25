@@ -385,6 +385,19 @@ var dao = {
     removeTmpUser: function(user, fn) {
         $$.g.cache.remove(user.id(), 'users');
         fn(null, 'ok');
+    },
+
+    updatePasswordAndScheme: function(userId, newPassword, newScheme, fn) {
+        var self = this;
+        self.log.debug('>> updatePasswordAndScheme');
+        self.findById(userId, $$.m.User, function(err, user){
+            if(err) {
+                self.log.error('Error finding user for id: ' + userId, err);
+                return fn(err, null);
+            } else {
+                var credentials = user.get()
+            }
+        });
     }
 };
 

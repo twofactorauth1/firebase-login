@@ -326,7 +326,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var geoInfo = self.geo(req);
         //sessionEvent.set('ip_geo_info', geoInfo);
 
-        sessionEvent.set('accountId', self.accountId(req));
+        sessionEvent.set('accountId', self.currentAccountId(req));
 
         var subdomainObj = urlUtils.getSubdomainFromRequest(req);
         if(subdomainObj.isMainApp===true) {
