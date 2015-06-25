@@ -7,9 +7,15 @@
                 <div class="mb15 clearfix visible-sm visible-xs"></div>
             </div>
             <div class="col-md-8">
-                <div ng-if="component.teamSettings.name" class="editable name" data-class="teamMembers.item.name" data-index="{{$index}}" ng-bind-html="teamMember.name | unsafe"></div>
-                <div ng-if="component.teamSettings.position" class="editable position" data-class="teamMembers.item.position" data-index="{{$index}}" ng-bind-html="teamMember.position | unsafe"></div>
-                <div ng-if="component.teamSettings.bio" class="editable bio" data-class="teamMembers.item.bio" data-index="{{$index}}" ng-bind-html="teamMember.bio | unsafe"></div>
+                <div ng-if="component.teamSettings.name" class="name">
+                    <div class="editable" data-class="teamMembers.item.name" data-index="{{$index}}" ng-bind-html="teamMember.name"></div>
+                </div>
+                <div ng-if="component.teamSettings.position" class="profile-position">
+                    <div class="editable" data-class="teamMembers.item.position" data-index="{{$index}}" ng-bind-html="teamMember.position"></div>
+                </div>
+                <div ng-if="component.teamSettings.bio && !teamMember.becomeMember" class="bio">
+                    <div class="editable" data-class="teamMembers.item.bio" data-index="{{$index}}" ng-bind-html="teamMember.bio"></div>
+                </div>
                 <div ng-if="component.teamSettings.networks" class="row social-link {{isEditing ? 'edit-mode' : ''}}">
                     <ul class="social">
                         <li ng-repeat="network in teamMember.networks">
@@ -19,7 +25,7 @@
                             <a ng-if="isEditing" href="#" data-index="{{$index}}" parent-data-index="{{$parent.$parent.$index}}" class="clickable-link btn-social-link btn btn-{{network.icon}}"><span class="fa fa-{{network.icon}}"></span></a>
                         </li>
                     </ul>
-                   <div ng-if="isEditing" class="add-addtional-team center">
+                    <div ng-if="isEditing" class="add-addtional-team center">
                         <a ng-if="isEditing" parent-data-index="{{$parent.$index}}" class="clickable-link btn-social-link"><i class="fa fa-plus"></i></a>
                     </div>
                 </div>
@@ -37,4 +43,3 @@
         </div>
     </div>
 </div>
-
