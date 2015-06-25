@@ -152,6 +152,7 @@ module.exports = {
                 var totalAmount = 0;
                 var subTotal = 0;
                 var totalLineItemsQuantity = 0;
+                var taxPercent = 0.08;
                 _.each(order.get('line_items'), function(line_item){
                     totalAmount += parseFloat(line_item.total);
                     subTotal += parseFloat(line_item.total);
@@ -166,14 +167,20 @@ module.exports = {
                     totalAmount -= parseFloat(order.get('total_discount'));
                     log.debug('subtracting total_discount of ' + order.get('total_discount'));
                 }
-                if(order.get('total_tax')) {
+                if(order.get('total_tax') && order.get('total_tax') > 0) {
                     totalAmount += parseFloat(order.get('total_tax'));
+                    log.debug('adding tax of ' + order.get('total_tax'));
+                }
+                else
+                {
+                    totalAmount += parseFloat(totalAmount * taxPercent);
                     log.debug('adding tax of ' + order.get('total_tax'));
                 }
                 if(order.get('total_shipping')) {
                     totalAmount += parseFloat(order.get('total_shipping'));
                     log.debug('adding shipping of ' + order.get('total_shipping'));
                 }
+                               
                 order.set('subtotal', subTotal.toFixed(2));
                 order.set('total', totalAmount.toFixed(2));
                 log.debug('total is now: ' + order.get('total'));
@@ -677,6 +684,42 @@ module.exports = {
                 log.error('Error getting order: ' + err);
                 return fn(err, null);
             } else {
+                var totalAmount = 0;
+                var subTotal = 0;
+                var totalLineItemsQuantity = 0;
+                var taxPercent = 0.08;
+                _.each(order.get('line_items'), function(line_item){
+                    totalAmount += parseFloat(line_item.total);
+                    subTotal += parseFloat(line_item.total);
+                    totalLineItemsQuantity += parseFloat(line_item.quantity);
+                });
+                log.debug('subtotal: ' + totalAmount);
+                if(order.get('cart_discount')) {
+                    totalAmount -= parseFloat(order.get('cart_discount'));
+                    log.debug('subtracting cart_discount of ' + order.get('cart_discount'));
+                }
+                if(order.get('total_discount')) {
+                    totalAmount -= parseFloat(order.get('total_discount'));
+                    log.debug('subtracting total_discount of ' + order.get('total_discount'));
+                }
+                if(order.get('total_tax') && order.get('total_tax') > 0) {
+                    totalAmount += parseFloat(order.get('total_tax'));
+                    log.debug('adding tax of ' + order.get('total_tax'));
+                }
+                else
+                {
+                    totalAmount += parseFloat(totalAmount * taxPercent);
+                    log.debug('adding tax of ' + order.get('total_tax'));
+                }
+                if(order.get('total_shipping')) {
+                    totalAmount += parseFloat(order.get('total_shipping'));
+                    log.debug('adding shipping of ' + order.get('total_shipping'));
+                }
+                               
+                order.set('subtotal', subTotal.toFixed(2));
+                order.set('total', totalAmount.toFixed(2));
+                log.debug('total is now: ' + order.get('total'));
+                order.set('total_line_items_quantity', totalLineItemsQuantity);
                 dao.saveOrUpdate(order, function(err, updatedOrder){
                 if(err) {
                     log.error('Error updating order: ' + err);
