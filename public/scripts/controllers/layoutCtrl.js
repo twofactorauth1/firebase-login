@@ -1900,7 +1900,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
           if (angular.element(".mt200")) {
             angular.element(".mt200").css("margin-top", -margin);
             if (!$scope.parentScope && $scope.allowFullScreen)
-              angular.element(".mt200").css("height", $(window).height());
+              angular.element(".mt200").css("height", $window.innerHeight + navHeight);
           }
 
           if (angular.element(".mastHeadUndernav"))
