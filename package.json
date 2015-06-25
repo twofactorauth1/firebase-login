@@ -49,6 +49,7 @@
     "passport-local": "~0.1.6",
     "passport-oauth": "~0.1.2",
     "passport-twitter": "~1.0.2",
+    "password-hash-and-salt": "^0.1.2",
     "prerender-node": "^1.2.1",
     "request": "^2.34.0",
     "requirejs": "2.1.10",
