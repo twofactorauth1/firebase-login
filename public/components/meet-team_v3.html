@@ -18,7 +18,7 @@
     <div class="mb30"></div>
 
     <div class="row team-member-wrap">
-        <div class="col-sm-4 col-md-3 col-xs-12 text-center team-member-container wow fadeInDown animated" ng-repeat="teamMember in component.teamMembers">
+        <div class="col-sm-4 col-md-3 col-xs-12 text-center team-member-container wow fadeInDown animated meet-team-height" ng-repeat="teamMember in component.teamMembers">
             <div class="team-member {{isEditing ? 'edit-mode' : ''}}">
                 <div ng-if="component.teamSettings.profilepic" class="profile-img meet-team-image" data-index="{{$index}}" style="background: url('{{teamMember.profilepic}}') center center no-repeat;background-size: cover;width: 212px;height: 220px;">
                 </div>

@@ -570,6 +570,7 @@
           $scope.componentEditing.bg.img.blur = false;
           $scope.componentEditing.bg.img.parallax = false;
           $scope.componentEditing.bg.img.overlay = false;
+          $scope.saveComponent();
         }
 
       }
@@ -1864,8 +1865,8 @@
     $scope.saveComponent = function (update) {
 
       var componentId = $scope.componentEditing._id;
-      //if (!update)
-      //$scope.updateSingleComponent(componentId);
+      if (!update)
+        $scope.updateSingleComponent(componentId);
 
       var componentIndex;
       for (var i = 0; i < $scope.components.length; i++) {

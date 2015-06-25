@@ -138,9 +138,16 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
           route = route.replace('/', '');
           that.pages = data[route];
         }
-
-        if ($scope.$location.$$path === '/signup') {
+        var payment_form_exists = false;
+        if(that.pages && that.pages.components && that.pages.components.length)
+        {
+          payment_form_exists = _.find(that.pages.components, function (item) {
+            return item.type === 'payment-form'
+          });
+        }
+        if(payment_form_exists) {
           userService.getTmpAccount(function (data) {
+            $scope.tmpAccount = data;
             var tmpAccount = data;
             //$scope.tmpAccount = tmpAccount;
             $scope.newAccount.hidePassword = false;
@@ -786,7 +793,7 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
         $scope.$apply(function () {
           if (angular.element("div.meet-team-height").length) {
             var maxTeamHeight = Math.max.apply(null, angular.element("div.meet-team-height").map(function () {
-              return angular.element(this).height();
+              return this.offsetHeight;
             }).get());
             angular.element(".meet-team-height").css("min-height", maxTeamHeight);
           }
@@ -1183,10 +1190,13 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
           if (value && value.type === 'masthead') {
             if (index != 0 && $scope.currentpage.components[index - 1].type == "navigation") {
               $scope.allowUndernav = true;
-              if (value.bg && value.bg.img && value.bg.img.undernav)
-                $scope.addUndernavClasses = true
+              if (value.bg && value.bg.img && value.bg.img.undernav) {
+                $scope.addUndernavClasses = true;
+                if (value.bg.img.fullscreen)
+                  $scope.allowFullScreen = true;
+              }
               else
-                $scope.addUndernavClasses = false
+                $scope.addUndernavClasses = false;
             } else
               $scope.allowUndernav = false;
           }
@@ -1519,11 +1529,11 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
         return;
       }
     };
-    if ($scope.$location.$$path === '/signup') {
-      userService.getTmpAccount(function (data) {
-        $scope.tmpAccount = data;
-      });
-    };
+    //if ($scope.$location.$$path === '/signup') {
+     // userService.getTmpAccount(function (data) {
+      //  $scope.tmpAccount = data;
+     // });
+    //};
 
     $scope.showFooter = function (status) {
       if (status)
@@ -1859,9 +1869,9 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
           $scope.team_inserted = true;
           if (angular.element("div.meet-team-height").length) {
             var maxTeamHeight = Math.max.apply(null, angular.element("div.meet-team-height").map(function () {
-              return angular.element(this).height();
+              return this.offsetHeight;
             }).get());
-            angular.element(".meet-team-height").css("min-height", maxTeamHeight + 10);
+            angular.element(".meet-team-height").css("min-height", maxTeamHeight);
           }
         }
       }, 1000)
@@ -1873,9 +1883,6 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
 
     angular.element($window).bind('resize', function () {
       $scope.setUnderbnavMargin();
-      $scope.feature_inserted = false;
-      if (!$scope.feature_inserted) {
-        $scope.feature_inserted = true;
         for (var i = 0; i <= 3; i++) {
           if ($("div.feature-height-" + i).length) {
             var maxFeatureHeight = Math.max.apply(null, $("div.feature-height-" + i).map(function () {
@@ -1884,16 +1891,18 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
             $("div.feature-height-" + i + " .feature-single").css("min-height", maxFeatureHeight - 20);
           }
         }
-        $scope.feature_inserted = true;
-      }
     });
     $scope.setUnderbnavMargin = function () {
       setTimeout(function () {
         if ($scope.addUndernavClasses) {
           var navHeight = angular.element("#bs-example-navbar-collapse-1").height();
           var margin = 200 + navHeight;
-          if (angular.element(".mt200"))
+          if (angular.element(".mt200")) {
             angular.element(".mt200").css("margin-top", -margin);
+            if (!$scope.parentScope && $scope.allowFullScreen)
+              angular.element(".mt200").css("height", $window.innerHeight + navHeight);
+          }
+
           if (angular.element(".mastHeadUndernav"))
             angular.element(".mastHeadUndernav").css("height", margin);
           if (angular.element(".masthead-actions"))

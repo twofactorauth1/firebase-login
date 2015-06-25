@@ -393,6 +393,14 @@ _.extend(api.prototype, baseApi.prototype, {
                             self.log.error('Error saving billing information to account: ' + err);
                             return self.wrapError(res, 500, 'Error saving billing information to account', err);
                         }
+                       
+                        if(req.user || req.session.cookie) {
+                            //we are currently logged in with another account.  We need to logout before logging into the new account.
+                            //req.session.cookie = null;
+                            req.session.accountId = null;
+                            req.logout();
+                            req.user = null;
+                        }
                         req.session.accountId = updatedAccount.id();
                         req.session.subdomain = updatedAccount.get('subdomain');
                         req.session.domain = updatedAccount.get('domain');

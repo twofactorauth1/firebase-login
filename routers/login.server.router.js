@@ -87,6 +87,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
             } else {
                 var accountIds = req.user.getAllAccountIds();
                 if (accountIds.length > 1) {
+                    req.session.accountId = -1;
                     resp.redirect("/home");
                     self = req = resp = null;
                     return;
@@ -169,6 +170,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
                             var subObject = urlUtils.getSubdomainFromRequest(req);
                             if(subObject.isMainApp && accountIds.length > 1) {
                                 self.log.debug('redirecting to /home');
+                                req.session.accountId = -1;
                                 resp.redirect("/home");
                                 userActivityManager.createUserLoginActivity(0, self.userId(req), function(){});
                                 self = req = resp = null;

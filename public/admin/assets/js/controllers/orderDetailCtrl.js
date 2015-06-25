@@ -13,6 +13,8 @@
 
     $scope.taxPercent = 0.08;
 
+    $scope.FailedStatus = orderConstant.order_status.FAILED;
+
     /*
      * @closeModal
      * -
@@ -564,7 +566,7 @@
      * the order status has been updated
      */
 
-    $scope.statusUpdated = function (newStatus) {
+    $scope.statusUpdated = function (newStatus) {     
       if ($scope.order.status == newStatus)
         return;
       var toasterMsg = 'Status has been updated to ';
@@ -616,9 +618,11 @@
             OrderService.refundOrder($scope.order._id, $scope.reasonData, function (data) {
               console.log('data ', data);
               SweetAlert.swal("Refunded", "Order has been refunded.", "success");
+              $scope.order.status = newStatus;
+              $scope.currentStatus = newStatus;
             });
           } else {
-            SweetAlert.swal("Cancelled", "Order refund cancelled.)", "error");
+            SweetAlert.swal("Cancelled", "Order refund cancelled.", "error");
           }
         });
       }
@@ -626,8 +630,12 @@
       if (newStatus === 'failed') {
         toaster.pop('success', toasterMsg + '"Failed"');
       }
-      $scope.order.status = newStatus;
-      $scope.currentStatus = newStatus;
+      if (newStatus !== 'refunded')
+      {
+        $scope.order.status = newStatus;
+        $scope.currentStatus = newStatus;
+      }
+      
     };
 
     /*
@@ -665,8 +673,15 @@
       // Set order customer Id
       if($scope.selectedCustomer)
         $scope.order.customer_id = $scope.selectedCustomer._id;
+      else        
+        $scope.order.customer_id = null;
 
       //validate
+
+      if (!$scope.order) {
+        toaster.pop('error', 'Orders can not be blank.');
+        return;
+      }
 
       if (!$scope.order.customer_id) {
         toaster.pop('error', 'Orders must contain a customer.');

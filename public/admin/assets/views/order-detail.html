@@ -32,7 +32,7 @@
                     <li ng-class="{'active': currentStatus == 'cancelled'}">
                         <a href="#" ng-click="statusUpdated('cancelled')">Cancelled</a>
                     </li>
-                    <li ng-class="{'active': currentStatus == 'refunded'}">
+                    <li ng-if="order._id" ng-class="{'active': currentStatus == 'refunded'}">
                         <a href="#" ng-click="statusUpdated('refunded')">Refunded</a>
                     </li>
                     <li ng-class="{'active': currentStatus == 'failed'}">
@@ -40,7 +40,7 @@
                     </li>
                 </ul>
             </div>
-            <button type="button" class="btn btn-wide btn-o btn-primary" ng-click="saveOrder()">
+            <button ng-disabled="order.status === FailedStatus" type="button" class="btn btn-wide btn-o btn-primary" ng-click="saveOrder()">
                     Save
             </button>
             <!-- <div class="btn-group" dropdown is-open="email.isopen">
@@ -473,7 +473,7 @@
                     </div>
                     <div class="panel-footer border-light">
                         <div class="pull-right">
-                            <button type="button" class="btn btn-info btn-o btn-wide btn-scroll btn-scroll-top ti-plus" ng-click="openProductLineItemModal()">
+                            <button ng-disabled="order.status === FailedStatus" type="button" class="btn btn-info btn-o btn-wide btn-scroll btn-scroll-top ti-plus" ng-click="openProductLineItemModal()">
                                 <span>Add Product</span>
                             </button>
                             <!-- <button type="button" class="btn btn-info btn-o btn-wide btn-scroll btn-scroll-top ti-plus" ng-click="addFee()">

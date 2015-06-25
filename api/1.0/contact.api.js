@@ -221,7 +221,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.checkPermissionForAccount(req, self.sc.privs.VIEW_CONTACT, accountId, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(req);
+                return self.send403(res);
             } else {
                 contactDao.getContactsAll(accountId, skip, limit, function (err, value) {
                     self.log.debug('<< listContacts');
@@ -243,7 +243,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.checkPermissionForAccount(req, self.sc.privs.VIEW_CONTACT, accountId, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(req);
+                return self.send403(res);
             } else {
                 contactDao.getContactsShort(accountId, skip, letter, limit, function (err, value) {
                     self.log.debug('<< getContactsByLetter');
@@ -266,7 +266,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.checkPermissionForAccount(req, self.sc.privs.VIEW_CONTACT, accountId, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(req);
+                return self.send403(resp);
             } else {
                 if(req.params.email) {
                     term = req.params.email;
@@ -307,7 +307,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.checkPermissionForAccount(req, self.sc.privs.VIEW_CONTACT, accountId, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(req);
+                return self.send403(res);
             } else {
                 contactDao.findContactsShortForm(accountId, letter, skip, limit, fields, function(err, list){
                     self.log.debug('<< getContactsShortForm');
@@ -334,7 +334,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.checkPermissionForAccount(req, self.sc.privs.MODIFY_CONTACT, accountId, function(err, isAllowed){
             if (isAllowed !== true) {
-                return self.send403(req);
+                return self.send403(resp);
             } else {
                 contactDao.getById(contactId, $$.m.Contact, function(err, contact){
                     if(err) {
@@ -377,7 +377,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.checkPermissionForAccount(req, self.sc.privs.VIEW_CONTACT, accountId, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(req);
+                return self.send403(resp);
             } else {
                 if (letter == null || letter == "") {
                     letter = "a";
@@ -417,7 +417,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.checkPermissionForAccount(req, self.sc.privs.VIEW_CONTACT, accountId, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(req);
+                return self.send403(res);
             } else {
                 contactDao.findDuplicates(accountId, function (err, value) {
                     self.log.debug('<< checkForDuplicates');
@@ -441,7 +441,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.checkPermissionForAccount(req, self.sc.privs.MODIFY_CONTACT, accountId, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(req);
+                return self.send403(res);
             } else {
                 var dupeAry = _.toArray(req.body);
 
@@ -699,7 +699,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.checkPermissionForAccount(req, self.sc.privs.VIEW_CONTACT, accountId, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(req);
+                return self.send403(resp);
             } else {
                 var skip, limit;
                 if(req.query.skip) {
@@ -733,7 +733,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.checkPermissionForAccount(req, self.sc.privs.VIEW_CONTACT, accountId, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(req);
+                return self.send403(resp);
             } else {
                 var skip, limit;
                 if(req.query.skip) {
@@ -766,7 +766,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.checkPermissionForAccount(req, self.sc.privs.VIEW_CONTACT, accountId, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(req);
+                return self.send403(resp);
             } else {
                 var skip, limit;
                 if(req.query.skip) {
@@ -794,7 +794,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.checkPermissionForAccount(req, self.sc.privs.VIEW_CONTACT, accountId, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(req);
+                return self.send403(resp);
             } else {
                 if (!activityId) {
                     return self.wrapError(resp, 400, null, "Invalid parameter for activity id");
@@ -818,7 +818,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var accountId = parseInt(self.accountId(req));
         self.checkPermissionForAccount(req, self.sc.privs.MODIFY_CONTACT, accountId, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(req);
+                return self.send403(resp);
             } else {
                 var contactActivity = new $$.m.ContactActivity(req.body);
                 contactActivity.set('accountId', accountId);
@@ -876,7 +876,7 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> accountId', accountId);
         self.checkPermissionForAccount(req, self.sc.privs.VIEW_CONTACT, accountId, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(req);
+                return self.send403(resp);
             } else {
                 var contactId = req.query['contactId'];
                 var activityTypes = req.query['activityType'];
@@ -937,7 +937,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
                 self.checkPermissionForAccount(req, self.sc.privs.MODIFY_CONTACT, value.get('contactId'), function(err, isAllowed) {
                     if (isAllowed !== true) {
-                        return self.send403(req);
+                        return self.send403(resp);
                     } else {
                         value.attributes.details.forEach(function (obj) {
                             if (obj.emails && obj.emails.length) {
@@ -1009,7 +1009,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.checkPermissionForAccount(req, self.sc.privs.VIEW_CONTACT, accountId, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(req);
+                return self.send403(resp);
             } else {
                 contactActivityManager.markActivityRead(activityId, function(err, value){
                     self.log.debug('<< markActivityRead');
