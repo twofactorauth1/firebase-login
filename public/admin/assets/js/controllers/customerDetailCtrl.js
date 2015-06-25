@@ -142,8 +142,8 @@
         $scope.city = $scope.customer.details[0].addresses[0].city;
         $scope.loadingMap = false;
       }
-      if ($scope.ip_geo_address) {
-        var validMapData = false;
+      var validMapData = false;
+      if ($scope.ip_geo_address) {        
         CustomerService.getGeoSearchAddress($scope.ip_geo_address, function (data) {
           if (data.error === undefined) {
             $scope.location.lat = parseFloat(data.lat);
@@ -163,6 +163,12 @@
           }
 
         });
+      }
+      else
+      {
+        if (fn) {
+            fn(validMapData);
+          }
       }
     };
 
@@ -357,7 +363,9 @@
         $scope.refreshMap(function (validMapData) {
           if (!validMapData) {
             $scope.errorMapData = true;
-            toaster.pop('warning', 'Address could not be found.');
+            if (!hideToaster) {
+              toaster.pop('warning', 'Address could not be found.');
+            }
           } else {
             $scope.errorMapData = false;
             CustomerService.saveCustomer($scope.customer_data, function (customer) {
