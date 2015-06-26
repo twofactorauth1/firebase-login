@@ -32,7 +32,10 @@ html(class="no-js", lang="en" ng-app="mainApp" ng-controller="MainCtrl as main")
             if og.image
                 meta(property='og:image', content=og.image)
             base(href="/")
-            link(rel="shortcut icon", href=account.website.settings.favicon)
+            if account.website.settings.favicon
+                link(rel="shortcut icon", href=account.website.settings.favicon)
+            else
+                link(rel="shortcut icon", href='https://s3.amazonaws.com/indigenous-account-websites/acct_6/favicon.ico')
 
     body(class='theme-main navbar-v#{ account.website.nav_version } ng-cloak', ng-cloak)
         block body_content
