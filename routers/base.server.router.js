@@ -421,7 +421,8 @@ _.extend(baseRouter.prototype, {
 
     accountId: function(req) {
         try {
-            return (req.session.accountId == null || req.session.accountId == 0) ? 0 : req.session.accountId;
+            return (req.session.unAuthAccountId === null) ? 0 : req.session.unAuthAccountId;
+            //return (req.session.accountId == null || req.session.accountId == 0) ? 0 : req.session.accountId;
         }catch(exception) {
             return null;
         }
