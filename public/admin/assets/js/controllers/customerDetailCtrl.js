@@ -47,7 +47,8 @@
         user_id: $scope.currentUser._id,
         date: date.toISOString()
       };
-
+      if(!$scope.customer.notes)
+        $scope.customer.notes = [];
       $scope.customer.notes.push(_noteToPush);
       $scope.matchUsers($scope.customer);
 
