@@ -1,7 +1,7 @@
 <div ng-class="component.type+'-v'+component.version">
     <div class="col-md-12"><br>
         <div class="title center">
-            <div class="editable" data-class="title" ng-bind-html="component.title | unsafe" data-index="{{$index}}">
+            <div class="editable" data-class="title" ng-bind-html="component.title | unsafe">
             </div>
         </div>
         <div class="well mb0" style="background: none" data-ng-repeat="slider in thumbnailSlider track by $index" data-ng-if="slider.thumbnailId == component._id">
