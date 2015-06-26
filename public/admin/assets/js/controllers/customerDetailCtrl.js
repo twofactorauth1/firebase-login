@@ -161,13 +161,12 @@
           if (fn) {
             fn(validMapData);
           }
-
         });
       }
       else
       {
         if (fn) {
-            fn(validMapData);
+            fn(true);
           }
       }
     };
