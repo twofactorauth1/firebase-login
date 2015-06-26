@@ -149,6 +149,8 @@
           if (data.error === undefined) {
             $scope.location.lat = parseFloat(data.lat);
             $scope.location.lon = parseFloat(data.lon);
+            $scope.customer_data.details[0].addresses[0].lat = $scope.location.lat;
+            $scope.customer_data.details[0].addresses[0].lon = $scope.location.lon;
             if ($scope.markers && $scope.markers.mainMarker) {
               $scope.markers.mainMarker.lat = parseFloat(data.lat);
               $scope.markers.mainMarker.lon = parseFloat(data.lon);
