@@ -50,7 +50,7 @@
 
                         <div ng-if="component.bg.img.show && component.type == 'masthead' && !isEditing"
                             class="bg cover"
-                            ng-class="{parallax:component.bg.img.parallax,'blur-image':component.bg.img.blur}"
+                            ng-class="{parallax:component.bg.img.parallax,'blur-image':component.bg.img.blur,'full-screen':component.bg.img.fullscreen}"
                             {{component.bg.img.parallax ? parallax-background : ""}}
                             ng-attr-parallax-ratio="{{component.bg.img.parallax ? '0.4' : '1'}}"
                             style='

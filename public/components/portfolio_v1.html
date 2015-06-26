@@ -1,5 +1,5 @@
 <div class="portfolio-title col-xs-12 mb30">
-    <span class="editable" data-class="title" data-ng-bind-html="component.title">
+    <span class="editable" data-class="title" data-ng-bind-html="component.title | unsafe">
     </span>
 </div>
 
@@ -69,7 +69,7 @@
 
                                 <p id="sdbr-descr">{{projectObject.project.subtitle}}</p>
                             </div>
-                            <div id="project-content" class="col-md-8 col-md-offset-1" ng-bind-html='projectObject.project.description'>
+                            <div id="project-content" class="col-md-8 col-md-offset-1" ng-bind-html='projectObject.project.description | unsafe'>
                             </div>
                         </div>
 
