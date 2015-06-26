@@ -113,7 +113,8 @@ _.extend(baseView.prototype, {
 
     accountId: function() {
         try {
-            return this.req.session.accountId || 0;
+            //console.log("base.server.view: " + this.req.session.unAuthAccountId);
+            return this.req.session.unAuthAccountId || 0;
         }catch(exception) {
             return null;
         }

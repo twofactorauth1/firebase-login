@@ -824,7 +824,7 @@ _.extend(api.prototype, baseApi.prototype, {
             respObj.currentSession = true;
         }
         self.log.debug('<< isAuthenticatedSession');
-        return resp.send(resp, respObj);
+        return resp.send(respObj);
     }
 });
 

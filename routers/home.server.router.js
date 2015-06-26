@@ -77,7 +77,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
     index: function(req,resp) {
         var self = this
             , accountId = this.accountId(req);
-        self.log.debug('>> index');
+        self.log.debug('>> index ' + accountId);
         if (accountId > 0)  {
             //new WebsiteView(req, resp).show(accountId);
             new WebsiteView(req, resp).renderNewIndex(accountId);
