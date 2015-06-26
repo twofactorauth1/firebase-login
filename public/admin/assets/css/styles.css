@@ -13073,6 +13073,8 @@ fieldset[disabled] .btn-vimeo-square.active {
   margin: 10px 0;
 }
 #media-manager-modal .filemanager .media {
+  height: 470px;
+  max-height: 470px;
   overflow-y: scroll;
   padding: 20px;
   margin-right: 15px;
