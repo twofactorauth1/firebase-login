@@ -71,10 +71,11 @@
           data: reasonData
         })
         .success(function (data, status, headers, config) {
-          fn(data);
+          fn(data, null);
         })
         .error(function (error) {
           console.error('OrderService: refundOrder error >>> ', error);
+          fn(null, error);
         });
     };
 

@@ -615,11 +615,18 @@
               reason: "duplicate" //duplicate, fraudulent, requested_by_customer
             };
 
-            OrderService.refundOrder($scope.order._id, $scope.reasonData, function (data) {
-              console.log('data ', data);
-              SweetAlert.swal("Refunded", "Order has been refunded.", "success");
-              $scope.order.status = newStatus;
-              $scope.currentStatus = newStatus;
+            OrderService.refundOrder($scope.order._id, $scope.reasonData, function (data, error) {
+              if(error)
+              {
+                SweetAlert.swal(error.status, error.message, "error");
+              }
+              else
+              {
+                console.log('data ', data);
+                SweetAlert.swal("Refunded", "Order has been refunded.", "success");
+                $scope.order.status = newStatus;
+                $scope.currentStatus = newStatus;
+              }                
             });
           } else {
             SweetAlert.swal("Cancelled", "Order refund cancelled.", "error");
