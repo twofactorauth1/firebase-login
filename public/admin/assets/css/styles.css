@@ -12229,6 +12229,10 @@ table.grid thead th {
 .autocomplete ul {
   padding: 0px;
 }
+.customer-tags ul.dropdown-menu {
+  max-height: 138px;
+  z-index: 1090;
+}
 /* ---------------------------------------------------------------------- */
 /*  Order Detail
 /* ---------------------------------------------------------------------- */
