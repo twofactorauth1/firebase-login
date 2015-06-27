@@ -214,6 +214,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
                                             self.log.debug('Setting subdomain to: ' + account.get('subdomain'));
                                             req.session.subdomain = account.get('subdomain');
                                             req.session.domain = account.get('domain');
+                                            req.session.accountId = account.id();
                                             self.log.debug('redirecting to ' + value);
                                             resp.redirect(value);
                                             userActivityManager.createUserLoginActivity(self.accountId(req), self.userId(req), function(){});
