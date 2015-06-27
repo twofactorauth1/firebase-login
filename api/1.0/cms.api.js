@@ -154,7 +154,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed){
             if(isAllowed !== true) {
-                return self.send403(req);
+                return self.send403(resp);
             } else {
                 cmsDao.updateWebsiteSettings(settings, accountId, websiteId, function (err, value) {
                     self.log.debug('<< saveOrUpdateWebsite');
@@ -176,7 +176,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.checkPermissionForAccount(req, self.sc.privs.VIEW_WEBSITE, accountId, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(req);
+                return self.send403(resp);
             } else {
                 cmsDao.getOrCreateWebsiteByAccountId(accountId, req.user.id(), true, function (err, value) {
                     self.sendResultOrError(resp, err, value, "Error retrieving website by account id");
@@ -195,7 +195,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.checkPermissionForAccount(req, self.sc.privs.VIEW_WEBSITE, accountId, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(req);
+                return self.send403(res);
             } else {
                 var websiteId = req.params.id;
                 cmsManager.getWebsiteLinklists(websiteId, function (err, value) {
@@ -221,7 +221,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.checkPermissionForAccount(req, self.sc.privs.VIEW_WEBSITE, accountId, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(req);
+                return self.send403(res);
             } else {
                 cmsManager.getWebsiteLinklistsByHandle(websiteId, handle, function (err, value) {
                     self.log.debug('<< getWebsiteLinklistsByHandle');
@@ -244,7 +244,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(req);
+                return self.send403(res);
             } else {
                 cmsManager.addWebsiteLinklists(websiteId, linkLists, function (err, value) {
                     self.log.debug('<< addWebsiteLinklists');
@@ -268,7 +268,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(req);
+                return self.send403(res);
             } else {
                 cmsManager.updateWebsiteLinklists(websiteId, handle, linkLists, function (err, value) {
                     self.log.debug('<< updateWebsiteLinklists');
@@ -291,7 +291,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(req);
+                return self.send403(res);
             } else {
                 cmsManager.deleteWebsiteLinklists(websiteId, handle, function (err, value) {
                     self.log.debug('<< deleteWebsiteLinklists');
@@ -380,7 +380,7 @@ _.extend(api.prototype, baseApi.prototype, {
         }
         self.checkPermissionForAccount(req, self.sc.privs.VIEW_WEBSITE, accountId, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(req);
+                return self.send403(resp);
             } else {
                 cmsManager.getPageVersions(pageId, version, function(err, pages){
                     self.log.debug('<< getPageVersionsById');
@@ -407,7 +407,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(req);
+                return self.send403(resp);
             } else {
                 cmsManager.deletePageVersion(pageId, version, function(err, result){
                     self.log.debug('<< deletePageVersionById');
@@ -441,7 +441,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(req);
+                return self.send403(resp);
             } else {
                 cmsManager.revertPage(pageId, version, function(err, page){
                     self.log.debug('<< revertPage');
@@ -468,7 +468,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(req);
+                return self.send403(resp);
             } else {
                 var page = new Page(_page);
                 //set screenshot to null so it will refresh properly.
@@ -498,7 +498,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(req);
+                return self.send403(res);
             } else {
                 var pageObj = req.body;
                 self.log.debug('>> page body');
@@ -547,7 +547,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(req);
+                return self.send403(res);
             } else {
                 var pageObj = req.body;
                 self.log.debug('>> page body');
@@ -597,7 +597,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(req);
+                return self.send403(res);
             } else {
                 var pageId = req.params.id;
                 var _page = req.body;
@@ -630,7 +630,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(req);
+                return self.send403(res);
             } else {
                 var pageId = req.params.id;
                 var websiteId = req.params.websiteId;
@@ -729,7 +729,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.checkPermissionForAccount(req, self.sc.privs.VIEW_THEME, accountId, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(req);
+                return self.send403(res);
             } else {
                 cmsManager.getAllTemplates(accountId, function(err, value){
                     self.log.debug('<< listTemplates');
@@ -749,7 +749,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
     //     self.checkPermissionForAccount(req, self.sc.privs.VIEW_THEME, accountId, function(err, isAllowed) {
     //         if (isAllowed !== true) {
-    //             return self.send403(req);
+    //             return self.send403(res);
     //         } else {
     //             cmsManager.getThemeById(themeId, function(err, value){
     //                 self.log.debug('<< getThemeById');
@@ -768,7 +768,7 @@ _.extend(api.prototype, baseApi.prototype, {
     //     var accountId = parseInt(self.accountId(req));
     //     self.checkPermissionForAccount(req, self.sc.privs.VIEW_THEME, accountId, function(err, isAllowed) {
     //         if (isAllowed !== true) {
-    //             return self.send403(req);
+    //             return self.send403(res);
     //         } else {
     //             cmsManager.getThemeByName(themeName, function(err, value){
     //                 self.log.debug('<< getThemeByName');
@@ -790,7 +790,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
     //     self.checkPermissionForAccount(req, self.sc.privs.MODIFY_THEME, accountId, function(err, isAllowed) {
     //         if (isAllowed !== true) {
-    //             return self.send403(req);
+    //             return self.send403(res);
     //         } else {
     //             cmsManager.createTemplate(templateObj, function(err, value){
     //                 self.log.debug('<< createTemplate');
@@ -813,7 +813,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
     //     self.checkPermission(req, self.sc.privs.MODIFY_THEME, function(err, isAllowed) {
     //         if (isAllowed !== true) {
-    //             return self.send403(req);
+    //             return self.send403(res);
     //         } else {
     //             var websiteId = req.params.websiteId;
     //             var accountId = parseInt(self.accountId(req));
@@ -840,7 +840,7 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> updateTemplate');
         self.checkPermission(req, self.sc.privs.MODIFY_THEME, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(req);
+                return self.send403(res);
             } else {
                 var templateId = req.params.id;
                 var accountId = parseInt(self.accountId(req));
@@ -868,7 +868,7 @@ _.extend(api.prototype, baseApi.prototype, {
     //     self.log.debug('>> deleteTheme');
     //     self.checkPermission(req, self.sc.privs.MODIFY_THEME, function(err, isAllowed) {
     //         if (isAllowed !== true) {
-    //             return self.send403(req);
+    //             return self.send403(res);
     //         } else {
     //             var themeId = req.params.id;
     //             var accountId = parseInt(self.accountId(req));
@@ -889,7 +889,7 @@ _.extend(api.prototype, baseApi.prototype, {
     //     self.log.debug('>> createWebsiteFromTheme');
     //     self.checkPermission(req, self.sc.privs.MODIFY_WEBSITE, function(err, isAllowed) {
     //         if (isAllowed !== true) {
-    //             return self.send403(req);
+    //             return self.send403(res);
     //         } else {
     //             var themeId = req.params.id;
     //             var accountId = parseInt(self.accountId(req));
@@ -910,7 +910,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.checkPermission(req, self.sc.privs.MODIFY_WEBSITE, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(req);
+                return self.send403(res);
             } else {
                 var pageData = req.body;
                 var templateId = req.params.id;
@@ -939,7 +939,7 @@ _.extend(api.prototype, baseApi.prototype, {
     //     self.log.debug('>> setTheme');
     //     self.checkPermission(req, self.sc.privs.MODIFY_ACCOUNT, function(err, isAllowed) {
     //         if (isAllowed !== true) {
-    //             return self.send403(req);
+    //             return self.send403(res);
     //         } else {
     //             var themeId = req.params.themeId;
     //             var websiteId = req.params.websiteId;
@@ -972,7 +972,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.checkPermissionForAccount(req, self.sc.privs.VIEW_WEBSITE, accountId, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(req);
+                return self.send403(res);
             } else {
                 cmsManager.getPageComponents(pageId, function (err, value) {
                     self.log.debug('<< getComponentsByPage');
@@ -997,7 +997,7 @@ _.extend(api.prototype, baseApi.prototype, {
         accountId = parseInt(accountId);
         self.checkPermissionForAccount(req, self.sc.privs.VIEW_WEBSITE, accountId, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(req);
+                return self.send403(res);
             } else {
                 cmsManager.getPageComponentsByType(pageId, type, function (err, value) {
                     self.log.debug('<< getComponentsByType');
@@ -1023,7 +1023,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(req);
+                return self.send403(res);
             } else {
                 var component = require('../../cms/model/components/' + componentObj.type);
                 var temp = $$.u.idutils.generateUUID();
@@ -1067,7 +1067,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(req);
+                return self.send403(res);
             } else {
                 //var componentId = req.params.componentId;
 
@@ -1096,7 +1096,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(req);
+                return self.send403(res);
             } else {
                 cmsManager.updateAllPageComponents(pageId, componentAry, function (err, value) {
                     self.log.debug('<< updateAllComponents');
@@ -1122,7 +1122,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(req);
+                return self.send403(res);
             } else {
                 var componentId = req.params.componentId;
 
@@ -1150,7 +1150,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(req);
+                return self.send403(res);
             } else {
                 var componentId = req.params.componentId;
                 var newOrder = req.params.newOrder;
@@ -1177,7 +1177,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var type = req.params.type;
         self.checkPermission(req, self.sc.privs.VIEW_WEBSITE, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(req);
+                return self.send403(res);
             } else {
                 cmsManager.getComponentVersions(type, function(err, value){
                     self.log.debug('<< getAvailableComponentVersions');
@@ -1197,7 +1197,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.checkPermission(req, self.sc.privs.VIEW_WEBSITE, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(req);
+                return self.send403(res);
             } else {
                 var componentClass = require('../../cms/model/components/' + type);
                 if(componentClass != null) {
@@ -1241,7 +1241,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(req);
+                return self.send403(res);
             } else {
                 blogPost.set('accountId', accountId);
                 blogPost.set('pageId', pageId);
@@ -1353,7 +1353,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(req);
+                return self.send403(res);
             } else {
                 blogPost.set('accountId', accountId);
                 blogPost.set('_id', postId);
@@ -1381,7 +1381,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(req);
+                return self.send403(res);
             } else {
                 var blogPostId = req.params.postId;
                 var pageId = req.params.id;
@@ -1452,7 +1452,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(req);
+                return self.send403(res);
             } else {
                 cmsManager.listBlogPostsWithLimit(accountId, limit, skip, statusAry, function (err, value) {
                     self.log.debug('<< listAllBlogPosts');
@@ -1478,7 +1478,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.checkPermissionForAccount(req, self.sc.privs.VIEW_WEBSITE, accountId, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(req);
+                return self.send403(res);
             } else {
                 cmsManager.getBlogPost(accountId, blogPostId, statusAry, function (err, value) {
                     self.log.debug('<< getEditableBlogPost');
@@ -1661,7 +1661,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(req);
+                return self.send403(res);
             } else {
                 var pageId = req.params.id;
 
@@ -1686,7 +1686,7 @@ _.extend(api.prototype, baseApi.prototype, {
         
         self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(req);
+                return self.send403(res);
             } else {
                 var pageId = req.params.id;
                 var postId = "" + req.params.postId;
@@ -1715,7 +1715,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(req);
+                return self.send403(res);
             } else {
                 cmsManager.generateScreenshot(accountId, pageHandle, function(err, url){
                     self.log.debug('<< generateScreenshot');
@@ -1734,7 +1734,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(req);
+                return self.send403(res);
             } else {
 
                 cmsManager.getSavedScreenshot(accountId, pageHandle, function(err, url){
