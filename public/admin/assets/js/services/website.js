@@ -42,8 +42,8 @@
 		};
 
 		//website/:websiteid/page/:handle
-		this.getSinglePage = function (websiteID, handle, fn) {
-			var apiUrl = baseUrl + ['cms', 'website', websiteID || $$.server.websiteId, 'page', handle].join('/');
+		this.getSinglePage = function (handle, fn) {
+			var apiUrl = baseUrl + ['cms', 'website', $$.server.websiteId, 'page', handle].join('/');
 			$http.get(apiUrl)
 			.success(function (data, status, headers, config) {
 				fn(data);

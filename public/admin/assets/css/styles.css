@@ -12689,6 +12689,14 @@ fieldset[disabled] .btn-vimeo-square.active {
 .ng-aside.vertical .modal-dialog .modal-body {
   max-height: 400px!important;
 }
+#componentloader {
+  position: relative;
+  width: 100%;
+  min-height: 500px;
+  transform: translate3d(0, 0, 0);
+  overflow: auto;
+  clear: both;
+}
 /* ---------------------------------------------------------------------- */
 /*  Billing
 /* ---------------------------------------------------------------------- */
