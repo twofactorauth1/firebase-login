@@ -150,6 +150,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
 
                     self.log.debug('AccountId: ' + self.accountId(req));
 
+                    /*
                     self.setup(req, resp, function (err, value) {
                         if (self.accountId(value) > 0) {
                             self.log.debug('redirecting to /admin');
@@ -163,6 +164,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
 
                             self = req = resp = null;
                         } else {
+                        */
                             /*
                              * Get account from url.  If main app, check for multi-users
                              */
@@ -192,8 +194,10 @@ _.extend(router.prototype, BaseRouter.prototype, {
                                     return;
                                 });
                             } else if(subObject.subdomain === null || subObject.subdomain === ''){
-                                self.log.debug('logged into main... redirecting to custom subdomain');
-                                authenticationDao.getAuthenticatedUrlForAccount(parseInt(self.accountId(req)), self.userId(req), "admin", function (err, value) {
+                                var accountId = self.accountId(req);
+                                self.log.debug('logged into main... redirecting to custom subdomain (' + accountId + ')');
+
+                                authenticationDao.getAuthenticatedUrlForAccount(parseInt(accountId), self.userId(req), "admin", function (err, value) {
                                     if (err) {
                                         self.log.debug('redirecting to /home');
                                         resp.redirect("/home");
@@ -259,9 +263,9 @@ _.extend(router.prototype, BaseRouter.prototype, {
                                 });
                             }
 
-
+                        /*
                         }
-                    });
+                    });*/
                 }
             } else {
                 self.log.warn("No account found from getAccountByHost");
