@@ -27,13 +27,14 @@
                 </div>
                 <div class="team-member-meta">
                     <div ng-if="component.teamSettings.name" class="name">
-                        <div class="editable" data-class="teamMembers.item.name" data-index="{{$index}}" ng-bind-html="teamMember.name"></div>
+                        <div class="editable" data-class="teamMembers.item.name" data-index="{{$index}}" ng-bind-html="teamMember.name | unsafe"></div>
                     </div>
                     <div ng-if="component.teamSettings.position" class="profile-position">
-                        <div class="editable" data-class="teamMembers.item.position" data-index="{{$index}}" ng-bind-html="teamMember.position"></div>
+                        <div class="editable" data-class="teamMembers.item.position" data-index="{{$index}}" ng-bind-html="teamMember.position | unsafe">
+                    </div>
                     </div>
                     <div ng-if="component.teamSettings.bio && !teamMember.becomeMember" class="bio">
-                        <div class="editable" data-class="teamMembers.item.bio" data-index="{{$index}}" ng-bind-html="teamMember.bio"></div>
+                        <div class="editable" data-class="teamMembers.item.bio" data-index="{{$index}}" ng-bind-html="teamMember.bio | unsafe"></div>
                     </div>
                     <div ng-if="component.teamSettings.networks" class="social-link {{isEditing ? 'edit-mode' : ''}}">
                         <ul class="social">

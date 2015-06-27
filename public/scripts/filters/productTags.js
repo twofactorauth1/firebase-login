@@ -5,7 +5,10 @@ mainApp.filter('selectedTags', function() {
             return products.filter(function(product) {
                 if(!tags || tags.length === 0)
                 {
-                    return true;
+                    if(product.status === 'active')
+                        return true;
+                    else
+                        return false;
                 }
                 else{
                     for (var i in product.tags) {
