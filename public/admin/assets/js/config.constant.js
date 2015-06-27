@@ -529,6 +529,7 @@ app.constant('JS_REQUIRES', {
     'spectrum': ['../js/libs/spectrum/spectrum.js', '../js/libs/angular-spectrum-colorpicker/dist/angular-spectrum-colorpicker.min.js'],
     'uuid': '../js/libs_misc/uuid.js',
     'angular-cookie': '../js/libs/angular-cookie/angular-cookie.min.js',
+    'ckeditor': '../js/libs_misc/ckeditor/ckeditor.js',
 
     //*** Controllers
     'dashboardCtrl': 'assets/js/controllers/dashboardCtrl.js',
