@@ -703,6 +703,10 @@ app.constant('JS_REQUIRES', {
     name: 'ui.sortable',
     files: ['../js/libs/ng-sortable/dist/ng-sortable.min.js']
   }, {
+    name: 'slick',
+    files: ['../js/libs/slick-carousel/slick/slick.js', '../js/libs/angular-slick/dist/slick.js']
+  },
+  {
     name: 'wu.masonry',
     files: ['../js/libs/angular-masonry/angular-masonry.js', '../js/libs/masonry/dist/masonry.pkgd.min.js']
   }, {

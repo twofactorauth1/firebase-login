@@ -17,18 +17,6 @@
             <div class="col-sm-12">
                 <div class="panel panel-transparent row margin-bottom-0">
                     <div class="panel-body">
-                        <!-- <div class="col-md-7 col-md-offset-3 col-sm-8 col-sm-offset-4 col-xs-12">
-                            <div class="col-sm-3 col-xs-6 center">
-                                <button type="button" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-announcement btn-o">
-                                    <span>SEO</span>
-                                </button>
-                            </div>
-                            <div class="col-sm-3 col-xs-6 center">
-                                <button type="button" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-layers-alt btn-o">
-                                    <span>Dupicate</span>
-                                </button>
-                            </div>
-                        </div> -->
                         <div>
                             <div class="col-sm-2 col-xs-6 center">
                                 <button type="button" ng-disabled="!iframeLoaded" ng-click="openSettingsModal()" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-settings btn-o">
@@ -58,9 +46,15 @@
                                 <div class="hidden-lg margin-bottom-10"></div>
                             </div>
                             <div class="col-sm-2 col-xs-6 center">
-                                <button type="button" ng-disabled="!iframeLoaded || saveLoading" ng-click="savePage()" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-save btn-o">
-                                    <span class="fa fa-spinner fa-spin" ng-if="saveLoading"></span>
-                                    <span>Save</span>
+                                <button type="button" ng-disabled="saveLoading" ng-click="savePage()" class="btn btn-primary btn-wide btn-scroll btn-scroll-top btn-o ti-save">
+                                    <span ng-if="saveLoading">
+                                        <span class="fa fa-spinner fa-spin"></span>
+                                    </span>
+                                    <span>
+                                        <div ng-if="!saveLoading">
+                                        Save
+                                        </div>
+                                    </span>
                                 </button>
                                 <div class="hidden-lg margin-bottom-10"></div>
                             </div>

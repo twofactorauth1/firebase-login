@@ -1,35 +1,33 @@
 <div ng-class="component.type+'-v'+component.version">
-
-    <div class="title">
-        <div class="editable" data-class="title" ng-bind-html="component.title | unsafe"></div>
+    <div class="title mb30">
+        <div elem ng-model="component.title"></div>
     </div>
-
-    <div class="mb30"></div>
-
     <div class="row features-wrap">
-        <div ng-repeat="feature in component.features track by $index"  class="feature" data-index="{{$index}}">
-            <div class="row row-xs-height feature-single" ng-style="{&#39;background&#39;: component.blockbgcolor}">
+        <div ng-repeat="feature in component.features" class="feature">
+            <div class="row row-xs-height feature-single" ng-style="{'background': component.blockbgcolor}">
                 <div class="col-sm-3 col-xs-3 col-xs-height">
-                    <div class="editable" data-class="features.item.top" data-index="{{$index}}" ng-bind-html="feature.top | unsafe">
-                    </div>
+                    <div elem ng-model="feature.top"></div>
                 </div>
                 <div class="col-sm-9 img-rounded demo col-top col-xs-9 col-xs-height">
-                   <div class="feature-content">
-                    <div class="editable" data-class="features.item.content" data-index="{{$index}}" ng-bind-html="feature.content | unsafe">
+                    <div class="feature-content">
+                        <div elem ng-model="feature.content"></div>
                     </div>
                 </div>
+            </div>
+            <div ng-if="isEditing">
+                <div class="delete-feature center" ng-click="deleteFeatureList($index)">
+                    <i class='fa fa-trash'></i>
+                </div>
+                <div class="add-addtional center" ng-click="addFeatureList($index)">
+                    <i class="fa fa-plus"></i>
                 </div>
             </div>
-             <div ng-if="isEditing" class="delete-feature center">
-                    <button ng-click="deleteFeatureList(component._id,$index)" class="ng-scope btn-delete-feature"><i class='fa fa-trash'></i></button>
+            <div ng-if="!$last">
+                <hr/>
             </div>
-            <div ng-if="isEditing" class="add-addtional center">
-                <a href="" ng-click="addFeatureList(component._id,$index)">
-                    <i class="fa fa-plus"></i>
-                </a>
-            </div>
-            <hr ng-if="!$last" />
+        </div>
+        <div ng-if="isEditing && component.features.length === 0" class="col-xs-12">
+            <button ng-click="addFeatureList(0)" class="center btn btn-primary btn-lg btn-wide btn-o add-feature"> <i class="fa fa-plus"></i> Add New Feature</button>
         </div>
     </div>
-    <button ng-if="isEditing && component.features.length === 0" ng-click="addFeatureList(component._id,0)" class="btn btn-primary btn-lg pull-right btn-add-feature" >Add new Feature</button>
 </div>

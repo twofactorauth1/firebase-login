@@ -49,6 +49,9 @@ html(lang='en', data-ng-app='clipApp')
     link(rel='stylesheet', href='../js/libs/ng-tags-input/ng-tags-input.min.css')
     link(rel='stylesheet', href='../js/libs_misc/ng-joyride/ng-joyride.css')
     link(rel='stylesheet', href='../js/libs/allmighty-autocomplete/style/autocomplete.css')
+
+    // EDITOR
+    link(rel='stylesheet', href='/js/libs/slick-carousel/slick/slick.css')
   body(ng-controller='AppCtrl')
     #app(ui-view='', ng-class="{'app-mobile' : app.isMobile, 'app-navbar-fixed' : app.layout.isNavbarFixed, 'app-sidebar-fixed' : app.layout.isSidebarFixed, 'app-sidebar-closed':app.layout.isSidebarClosed, 'app-footer-fixed':app.layout.isFooterFixed}")
     // jQuery
@@ -133,6 +136,7 @@ html(lang='en', data-ng-app='clipApp')
     script(src='assets/js/directives/numbers-only.js')
     script(src='assets/js/directives/smart-table-sort.js')
     script(src="assets/js/directives/component-loader.js")
+    script(src="assets/js/directives/editor.js")
     // Components
     script(src="assets/js/directives/components/feature-list.js")
     script(src="assets/js/directives/components/footer.js")

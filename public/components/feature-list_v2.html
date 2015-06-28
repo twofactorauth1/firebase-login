@@ -5,45 +5,32 @@
 * Please contact info@indigenous.io for approval or questions.
 *
 -->
-
 <div ng-class="component.type+'-v'+component.version">
-
     <div class="feature-list-title">
-        <div class="editable" data-class="title" ng-bind-html="component.title | unsafe">
-        </div>
+        <div elem ng-model="feature.title"></div>
     </div>
-
     <div class="clearfix mb15"></div>
-
     <div ng-repeat="feature in component.features track by $index" class="features-wrap">
-
         <div class="feature feature-height-{{component.version}}" ng-class="{'col-sm-3':component.features.length >= 4, 'col-sm-4':component.features.length == 3, 'col-sm-6':component.features.length == 2, 'col-sm-12':component.features.length == 1}">
-            <div class="feature-single feature-single-0" ng-style="{&#39;background&#39;: component.blockbgcolor}">
-                <div class="editable" data-class="features.item.top" data-index="{{$index}}" ng-bind-html="feature.top | unsafe">
-                    </div>
+            <div class="feature-single feature-single-0" ng-style="{'background': component.blockbgcolor}">
+                <div elem ng-model="feature.top"></div>
                 <div class="feature-content">
-                    <div class="editable" data-class="features.item.content" data-index="{{$index}}" ng-bind-html="feature.content | unsafe">
-                    </div>
+                    <div elem ng-model="feature.content"></div>
                 </div>
-
             </div>
-              <div ng-if="isEditing" class="delete-feature center">
-                    <button ng-click="deleteFeatureList(component._id,$index)" class="btn btn-primary btn-lg ng-scope btn-delete-feature"><i class='fa fa-trash'></i></button>
+            <div ng-if="isEditing">
+                <div class="delete-feature center">
+                    <button ng-click="deleteFeatureList($index)"><i class='fa fa-trash'></i></button>
+                </div>
+                <div class="add-addtional center">
+                    <button ng-click="addFeatureList($index)"><i class='fa fa-plus'></i></button>
+                </div>
             </div>
-            <div ng-if="isEditing" class="add-addtional center">
-                <a href="" ng-click="addFeatureList(component._id,$index)">
-                    <i class="fa fa-plus"></i>
-                </a>
-            </div>           
         </div>
-         <div ng-if="!component.features.length">
-               <a href="" ng-if="isEditing" ng-click="addFeatureList(component._id,$index)" class="btn btn-default">
-                    <i class="fa fa-plus" ></i>
-                </a>
-            </div>
         <div class="clearfix mb30 visible-xs"></div>
         <hr class="visible-xs" ng-if="$index + 1 < component.features.length"></hr>
-
     </div>
-    <button ng-if="isEditing && component.features.length === 0" ng-click="addFeatureList(component._id,0)" class="btn btn-primary btn-lg pull-right btn-add-feature" >Add new Feature</button>
+    <div ng-if="isEditing && component.features.length === 0" class="col-xs-12">
+        <button ng-click="addFeatureList(0)" class="center btn btn-primary btn-lg btn-wide btn-o add-feature"> <i class="fa fa-plus"></i> Add New Feature</button>
+    </div>
 </div>
