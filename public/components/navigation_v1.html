@@ -50,9 +50,9 @@
                 <div  ng-if="!component.customnav" class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav navbar-right" data-ng-repeat="mainMenu in website.linkLists track by $index" data-ng-if=" mainMenu.handle=='head-menu' ">
                         <li data-ng-repeat="link in mainMenu.links track by $index">
-                            <a data-ng-show="isSection(link.linkTo.type)" data-ng-href="{{link.linkTo|generateURLforLinks}}" class="{{link.class}}" du-smooth-scroll>{{link.label || link.url}}</a>
-                            <a ng-if="link.linkTo.type === 'external'" target="_blank" data-ng-hide="isSection(link.linkTo.type)" data-ng-href="{{link.linkTo|generateURLforLinks}}" class="{{link.linkTo.data === currentpage.handle ? 'active' : link.class}}">{{link.label || link.url}}</a>
-                            <a ng-if="link.linkTo.type !== 'external'" data-ng-hide="isSection(link.linkTo.type)" data-ng-href="{{link.linkTo|generateURLforLinks}}" class="{{link.linkTo.data === currentpage.handle ? 'active' : link.class}}">{{link.label || link.url}}</a>
+                            <a data-ng-show="link.linkTo.type == 'section'" data-ng-href="{{link.linkTo|generateURLforLinks}}" class="{{link.class}}" du-smooth-scroll>{{link.label || link.url}}</a>
+                            <a ng-if="link.linkTo.type === 'external'" target="_blank" data-ng-hide="link.linkTo.type == 'section'" data-ng-href="{{link.linkTo|generateURLforLinks}}" class="{{link.linkTo.data === currentpage.handle ? 'active' : link.class}}">{{link.label || link.url}}</a>
+                            <a ng-if="link.linkTo.type !== 'external'" data-ng-hide="link.linkTo.type == 'section'" data-ng-href="{{link.linkTo|generateURLforLinks}}" class="{{link.linkTo.data === currentpage.handle ? 'active' : link.class}}">{{link.label || link.url}}</a>
                         </li>
                         <li ng-if="cartDetails.length > 0">
                             <a href="" data-toggle="modal" data-target="#cart-checkout-modal"><i class="fa fa-shopping-cart"></i> ({{cartDetails.length || 0}})</a>
@@ -62,9 +62,9 @@
                 <div ng-if="component.customnav" class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav navbar-right" data-ng-repeat="mainMenu in component.linkLists track by $index" data-ng-if=" mainMenu.handle=='head-menu'">
                         <li data-ng-repeat="link in mainMenu.links track by $index">
-                            <a data-ng-show="isSection(link.linkTo.type)" data-ng-href="{{link.linkTo|generateURLforLinks}}" class="{{link.class}}" du-smooth-scroll>{{link.label || link.url}}</a>
-                            <a ng-if="link.linkTo.type === 'external'" target="_blank" data-ng-hide="isSection(link.linkTo.type)" data-ng-href="{{link.linkTo|generateURLforLinks}}" class="{{link.linkTo.data === currentpage.handle ? 'active' : link.class}}">{{link.label || link.url}}</a>
-                            <a  ng-if="link.linkTo.type !== 'external'" data-ng-hide="isSection(link.linkTo.type)" data-ng-href="{{link.linkTo|generateURLforLinks}}" class="{{link.linkTo.data === currentpage.handle ? 'active' : link.class}}">{{link.label || link.url}}</a>
+                            <a data-ng-show="link.linkTo.type == 'section' " data-ng-href="{{link.linkTo|generateURLforLinks}}" class="{{link.class}}" du-smooth-scroll>{{link.label || link.url}}</a>
+                            <a ng-if="link.linkTo.type === 'external'" target="_blank" data-ng-hide="link.linkTo.type == 'section'" data-ng-href="{{link.linkTo|generateURLforLinks}}" class="{{link.linkTo.data === currentpage.handle ? 'active' : link.class}}">{{link.label || link.url}}</a>
+                            <a  ng-if="link.linkTo.type !== 'external'" data-ng-hide="link.linkTo.type == 'section'" data-ng-href="{{link.linkTo|generateURLforLinks}}" class="{{link.linkTo.data === currentpage.handle ? 'active' : link.class}}">{{link.label || link.url}}</a>
                         </li>
                         <li ng-if="cartDetails.length > 0">
                             <a href="" data-toggle="modal" data-target="#cart-checkout-modal"><i class="fa fa-shopping-cart"></i> ({{cartDetails.length || 0}})</a>
