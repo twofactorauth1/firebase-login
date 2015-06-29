@@ -5,6 +5,9 @@
     <div ng-switch-when="contact-us">
         <div contact-us-component component="value" version="value.version"></div>
     </div>
+    <div ng-switch-when="coming-soon">
+        <div coming-soon-component component="value" version="value.version"></div>
+    </div>
     <div ng-switch-when="feature-block">
         <div feature-block-component component="value" version="value.version"></div>
     </div>
@@ -40,6 +43,9 @@
     </div>
     <div ng-switch-when="social-link">
         <div social-link-component component="value" version="value.version"></div>
+    </div>
+    <div ng-switch-when="video">
+        <div video-component component="value" version="value.version"></div>
     </div>
     <div ng-switch-default style="color: red; outline-color: red; padding: 10px">
         ERROR: could not find matching directive for component.type = {{value.type}}

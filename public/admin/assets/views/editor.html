@@ -72,14 +72,12 @@
     </div>
     <div id="editor-toolbar" sticky offset="65"></div>
     <div class="clearfix"></div>
-    <div class="col-xs-12">
-        <div ng-if="components.length" ng-hide="!ckeditorLoaded">
-            <div component-loader components="components"></div>
-        </div>
-        <div class="loading-editor" ct-fullheight="window" data-ct-fullheight-exclusion="header" ng-hide="ckeditorLoaded">
-            <div class="col-xs-12">
-                <h1 class="center"><span class="fa fa-spinner fa-spin"></span><br> Loading Editor...</h1>
-            </div>
+    <div ng-if="components.length" ng-hide="!ckeditorLoaded">
+        <div component-loader components="components"></div>
+    </div>
+    <div class="loading-editor" ct-fullheight="window" data-ct-fullheight-exclusion="header" ng-hide="ckeditorLoaded">
+        <div class="col-xs-12">
+            <h1 class="center"><span class="fa fa-spinner fa-spin"></span><br> Loading Editor...</h1>
         </div>
     </div>
 </div>
