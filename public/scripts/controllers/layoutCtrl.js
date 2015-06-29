@@ -7,7 +7,14 @@ mainApp.controller('LayoutCtrl', ['$scope', '$timeout', 'pagesService', 'website
     pagesService(function (err, data) {
       $scope.page = data;
       $scope.components = data.components;
+      	setTimeout(function () {
+            var locId = $location.$$hash;
+            if (locId) {
+              var element = document.getElementById(locId);
+              if (element)
+                $document.scrollToElementAnimated(element);
+            }
+        }, 1000);
     });
-
   }
 ]);

@@ -9,6 +9,14 @@
       WebsiteService.updatePage($scope.page, function (data) {
         $scope.saveLoading = false;
         toaster.pop('success', "Page Saved", "The " + $scope.page.handle + " page was saved successfully.");
+        //Update linked list                        
+            $scope.website.linkLists.forEach(function (value, index) {
+              if (value.handle === "head-menu") {
+                WebsiteService.updateLinkList($scope.website.linkLists[index], $scope.website._id, 'head-menu', function (data) {
+                  console.log('Updated linked list');
+                });
+              }
+            });
       });
     };
 
@@ -39,6 +47,19 @@
         }, 100);
       }
     });
+
+    WebsiteService.getWebsite(function (website) {
+      $scope.website = website;
+    });
+    WebsiteService.getPages(function (pages) {        
+        var parsed = angular.fromJson(pages);
+        var arr = [];
+        for (var x in parsed) {
+          arr.push(parsed[x]);
+        }
+        $scope.allPages = arr;
+        $scope.filterdedPages = $filter('orderBy')($scope.allPages, "title", false);       
+      });
 
   }]);
 }(angular));

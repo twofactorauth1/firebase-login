@@ -9,6 +9,7 @@ app.directive('componentSettings', ['$modal', '$http', '$timeout', '$q', '$compi
     replace: false,
     scope: false,
     controller: function ($scope, WebsiteService, CustomerService, $compile, $timeout) {
+      //$scope.initialize = false;
       $scope.openModal = function (template, id) {
         $scope.changeComponentEditing(id);
         $scope.modalInstance = $modal.open({
@@ -21,6 +22,8 @@ app.directive('componentSettings', ['$modal', '$http', '$timeout', '$q', '$compi
         $scope.componentEditing = _.find($scope.components, function (component) {
           return component._id === id;
         });
+        //if($scope.componentEditing && $scope.componentEditing.type === "navigation")
+          //$scope.loadWebsitePages();
       };
 
       $scope.closeModal = function () {
@@ -32,6 +35,25 @@ app.directive('componentSettings', ['$modal', '$http', '$timeout', '$q', '$compi
         });
       };
 
+      $scope.$watch('newLink.linkPage', function (newValue) {
+          if(newValue)
+          {
+            $scope.currentPage = _.find($scope.filterdedPages, function (page) {
+              return page.handle === newValue;
+            });
+          }
+      })
+
+      $scope.initializeEditLinks = function (link) {
+          if(link.page)
+          {
+            link.data = null;
+            $scope.currentPage = _.find($scope.filterdedPages, function (page) {
+              return page.handle === link.page;
+            });
+          }
+       };
+
       /*
        * @initializeLinks
        * -
@@ -42,7 +64,8 @@ app.directive('componentSettings', ['$modal', '$http', '$timeout', '$q', '$compi
         $scope.newLink = {
           linkUrl: null,
           linkTitle: null,
-          linkType: null
+          linkType: null,
+          linkPage: null
         };
       };
 
@@ -61,7 +84,7 @@ app.directive('componentSettings', ['$modal', '$http', '$timeout', '$q', '$compi
        */
 
       $scope.setLinkTitle = function (value, index, newLink) {
-        var newArray = _.first(angular.copy($scope.$scope.components), [index + 1]);
+        var newArray = _.first(angular.copy($scope.components), [index + 1]);
         var hash = _.filter(newArray, function (obj) {
           return obj.type === value;
         })
@@ -122,7 +145,8 @@ app.directive('componentSettings', ['$modal', '$http', '$timeout', '$q', '$compi
                   type: "link",
                   linkTo: {
                     data: $scope.newLink.linkUrl,
-                    type: $scope.newLink.linkType
+                    type: $scope.newLink.linkType,
+                    page: $scope.newLink.linkPage
                   }
                 });
                 $scope.initializeLinks(false);
@@ -136,7 +160,8 @@ app.directive('componentSettings', ['$modal', '$http', '$timeout', '$q', '$compi
                   type: "link",
                   linkTo: {
                     data: $scope.newLink.linkUrl,
-                    type: $scope.newLink.linkType
+                    type: $scope.newLink.linkType,
+                    page: $scope.newLink.linkPage
                   }
                 });
                 $scope.initializeLinks(false);
@@ -198,7 +223,7 @@ app.directive('componentSettings', ['$modal', '$http', '$timeout', '$q', '$compi
                 };
                 if (newLinkListOrder.length) {
                   $scope.website.linkLists[index].links = newLinkListOrder;
-                  $scope.childScope.updateWebsite($scope.website);
+                  //$scope.updateWebsite($scope.website);
                 }
 
               }
@@ -218,7 +243,7 @@ app.directive('componentSettings', ['$modal', '$http', '$timeout', '$q', '$compi
             $scope.website.linkLists.forEach(function (value, index) {
               if (value.handle === "head-menu") {
                 $scope.website.linkLists[index].links = [];
-                $scope.childScope.updateWebsite($scope.website);
+                //$scope.updateWebsite($scope.website);
               }
             });
           }

@@ -20,8 +20,11 @@ mainApp.filter('generateURLforLinks', function () {
             case "url":
                 return linkToObject.data;
                 break;
-            case "section":
-                return '/#'+linkToObject.data;
+            case "section":                
+                if(linkToObject.page)
+                    return '/'+linkToObject.page+'/#'+linkToObject.data;
+                else
+                    return '/#'+linkToObject.data;
                 break;
             case "product":
                 _url = ""; //Not yet implemented
