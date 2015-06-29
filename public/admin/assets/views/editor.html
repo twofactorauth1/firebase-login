@@ -71,11 +71,10 @@
         </div>
     </div>
     <div class="clearfix"></div>
-    <!-- <div ng-if="components.length" ng-hide="!ckeditorLoaded">
+    <div ng-if="components.length" ng-hide="!ckeditorLoaded">
         <div component-loader components="components"></div>
     </div>
-    ng-hide="ckeditorLoaded" -->
-    <div id="main-editor">
+    <div id="main-editor" ng-hide="ckeditorLoaded">
         <div class="loading-editor" ct-fullheight="window" data-ct-fullheight-exclusion="header">
             <div class="col-xs-12">
                 <h1 class="center"><span class="fa fa-spinner fa-spin"></span><br> Loading Editor...</h1>
