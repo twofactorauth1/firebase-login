@@ -12819,12 +12819,18 @@ fieldset[disabled] .btn-vimeo-square.active {
   animation: bounceOut 1s;
 }
 #editor-toolbar {
-  position: fixed;
-  top: 0;
   z-index: 9999;
   display: block;
   width: 100%;
   height: 54px;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+#editor-toolbar::-webkit-scrollbar {
+  display: none;
+}
+#editor-toolbar.controls-fixed {
+  top: 128px;
 }
 #editor-toolbar #cke_1_top {
   overflow: auto;

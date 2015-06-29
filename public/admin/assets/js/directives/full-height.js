@@ -36,7 +36,6 @@ function ($window, $rootScope, $timeout, mq) {
                         var exclusionItems = attrs.ctFullheightExclusion.split(',');
                         angular.forEach(exclusionItems, function (_element) {
                             exclusionHeight = exclusionHeight + $(_element).outerHeight(true);
-                            console.log('exclusionHeight ', exclusionHeight);
                         });
                     }
                     if (attrs.ctFullheight == 'window') {
