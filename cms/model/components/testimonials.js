@@ -30,7 +30,7 @@ var component = $$.m.ModelBase.extend({
              */
             anchor: null,
 
-            title:"<h1>Testimonials</h1>",
+            title:"<span style='font-size:36px'>Testimonials</span>",
 
             txtcolor: "#444",
 
@@ -42,18 +42,18 @@ var component = $$.m.ModelBase.extend({
 
             testimonials : [ 
                 {
-                    "img" : "",
-                    "name" : "",
-                    "site" : "",
-                    "text" : "",
-                    "active" : false
+                    "img" : "<img src='https://s3-us-west-2.amazonaws.com/indigenous-admin/default-user.png'/>",
+                    "name" : "First Last",
+                    "site" : "www.examplesite.com",
+                    "text" : "This is the testimonial.",
+                    "active" : true
                 }, 
                 {
-                    "img" : "",
-                    "name" : "",
-                    "site" : "",
-                    "text" : "",
-                    "active" : false
+                    "img" : "<img src='https://s3-us-west-2.amazonaws.com/indigenous-admin/default-user.png'/>",
+                    "name" : "First Last",
+                    "site" : "www.examplesite.com",
+                    "text" : "This is the testimonial.",
+                    "active" : true
                 }
             ]
 
