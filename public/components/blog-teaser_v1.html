@@ -5,23 +5,20 @@
 * Please contact info@indigenous.io for approval or questions.
 *
 -->
-
 <div ng-class="component.type+'-v'+component.version">
     <div class="title">
-        <div class="editable" data-class="title" ng-bind-html="component.title | unsafe"></div>
+        <div elem ng-model="component.title"></div>
     </div>
-
     <div class="posts">
-
-        <div class="row" ng-repeat="blogpost in layout.teaserposts | orderBy : sortBlogFn(component):customSortOrder(component) | limitTo: 3">
+        <div class="row" ng-repeat="post in teaserposts | orderBy : sortBlogFn(component):customSortOrder(component) | limitTo: 3">
             <div class="col-xs-12">
                 <div class="row">
                     <div class="col-xs-12">
                         <h4>
                             <strong>
-                                <a data-ng-href="/blog/{{blogpost['post_url']}}">
+                                <a data-ng-href="/blog/{{post['post_url']}}">
                                     <div class="editable" data-class="post_title">
-                                        {{blogpost.post_title}}
+                                        {{post.post_title}}
                                     </div>
                                 </a>
                             </strong>
@@ -29,22 +26,22 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-lg-4 col-md-4 col-sm-4" ng-if="blogpost.featured_image">
+                    <div class="col-lg-4 col-md-4 col-sm-4" ng-if="post.featured_image">
                         <div class="featured-image">
                             <div class="editable" data-class="featimage">
-                                <img ng-src="{{blogpost.featured_image}}" class="thumbnail img-responsive" />
+                                <img ng-src="{{post.featured_image}}" class="thumbnail img-responsive" />
                             </div>
                         </div>
                     </div>
-                    <div ng-class="{'col-xs-8':blogpost.featured_image, 'col-xs-12':!blogpost.featured_image}" class="col-lg-8 col-md-8 col-sm-8">
+                    <div ng-class="{'col-xs-8':post.featured_image, 'col-xs-12':!post.featured_image}" class="col-lg-8 col-md-8 col-sm-8">
                         <p>
                             <div class="excerpt">
                                 <div class="editable" data-class="post_excerpt">
-                                    {{blogpost.post_excerpt}}
+                                    {{post.post_excerpt}}
                                 </div>
                             </div>
                         </p>
-                        <p><a class="btn btn-o btn-default" data-ng-href="/page/blog/{{blogpost['post_url']}}">Read more</a>
+                        <p><a class="btn btn-o btn-default" data-ng-href="/blog/{{post['post_url']}}">Read more</a>
                         </p>
                     </div>
                 </div>
@@ -52,21 +49,19 @@
                     <div class="col-xs-12">
                         <p></p>
                         <p>
-                            <span data-ng-if="blogpost.post_author"><i class="fa fa-user"></i> by <a href="/author/{{blogpost.post_author}}">{{blogpost.post_author}}</a></span> | <i class="fa fa-calendar"></i> {{blogpost.created.date | amDateFormat:'MM/DD/YYYY'}} <span data-ng-if="blogpost.post_tags">| <i class="fa fa-tag"></i> Tags :</span>
-                            <a href="/tag/{{post_tags}}" data-ng-repeat="post_tags in blogpost.post_tags track by $index"><span class="label label-info">{{post_tags}}</span></a>
+                            <span data-ng-if="post.post_author"><i class="fa fa-user"></i> by <a href="/author/{{post.post_author}}">{{post.post_author}}</a></span> | <i class="fa fa-calendar"></i> {{post.created.date | amDateFormat:'MM/DD/YYYY'}} <span data-ng-if="post.post_tags">| <i class="fa fa-tag"></i> Tags :</span>
+                            <a href="/tag/{{post_tags}}" data-ng-repeat="post_tags in post.post_tags track by $index"><span class="label label-info">{{post_tags}}</span></a>
                         </p>
                     </div>
                 </div>
             </div>
         </div>
-
         <hr>
         <div class="clearfix mb15 visible-xs"></div>
-
     </div>
     <div class="clearfix mb30"></div>
     <div class="col-xs-12 mb15">
-        <a class="btn btn-o btn-default center btn-lg btn-full-blog" href="/page/blog">See Full Blog</a>
+        <a class="btn btn-o btn-default center btn-lg btn-full-blog" href="/blog">See Full Blog</a>
     </div>
     <div class="clearfix"></div>
 </div>

@@ -12689,6 +12689,30 @@ fieldset[disabled] .btn-vimeo-square.active {
 .ng-aside.vertical .modal-dialog .modal-body {
   max-height: 400px!important;
 }
+.blurred-editor {
+  -webkit-filter: blur(5px);
+  -moz-filter: blur(5px);
+  -o-filter: blur(5px);
+  -ms-filter: blur(5px);
+  filter: blur(5px);
+  overflow: hidden;
+}
+.blurred-editor.ng-hide-remove {
+  -webkit-animation: fadeIn 1s;
+  -moz-animation: fadeIn 1s;
+  -ms-animation: fadeIn 1s;
+  animation: fadeIn 1s;
+}
+.loading-editor {
+  position: relative;
+  background: rgba(255, 255, 255, 0.9);
+}
+.loading-editor.ng-hide-add {
+  -webkit-animation: fadeOut 1s;
+  -moz-animation: fadeOut 1s;
+  -ms-animation: fadeOut 1s;
+  animation: fadeOut 1s;
+}
 #componentloader {
   position: relative;
   width: 100%;
@@ -12696,6 +12720,100 @@ fieldset[disabled] .btn-vimeo-square.active {
   transform: translate3d(0, 0, 0);
   overflow: hidden;
   clear: both;
+}
+#componentloader .as-sortable-placeholder {
+  height: 57px!important;
+  overflow: hidden;
+  list-style-type: none;
+}
+#componentloader .ui-sortable {
+  margin-bottom: 0;
+  margin-top: 50px;
+  padding: 0;
+}
+#componentloader .ui-sortable li {
+  list-style-type: none;
+}
+#componentloader .ui-sortable .componentDragging {
+  height: 57px!important;
+  overflow: hidden;
+}
+#componentloader .ui-sortable .componentActions span.fa {
+  padding: 10px;
+  text-align: center;
+  line-height: 18px;
+}
+#componentloader .ui-sortable .componentActions p {
+  margin-bottom: 0;
+  font-size: 14px;
+}
+#componentloader .ui-sortable .componentActions h4 {
+  background: rgba(44, 62, 80, 0.8);
+  padding: 17px;
+  color: white;
+  font-size: 18px;
+  margin: 0;
+  height: 56px;
+}
+#componentloader .ui-sortable.active .fragment {
+  height: 57px!important;
+  overflow: hidden;
+}
+#componentloader .ui-sortable.active .fragment .component-inner .bg {
+  background-image: none;
+}
+#componentloader .ui-sortable.active .fragment .componentActions {
+  display: block;
+  visibility: visible;
+  border: 1px solid #ccc;
+  background: #fafafa;
+}
+#componentloader .ui-sortable.active .fragment .componentActions h4 {
+  display: block;
+}
+#componentloader .as-sortable-drag {
+  pointer-events: none;
+  z-index: 9999;
+  list-style: none;
+  opacity: 0.9;
+}
+#componentloader .fragment {
+  border: none;
+  display: block;
+}
+#componentloader .fragment .component-inner {
+  border: 2px solid transparent;
+}
+#componentloader .fragment.dragging {
+  z-index: 99999!important;
+}
+#componentloader .fragment:hover .component-inner {
+  border: 2px dashed #34495e;
+}
+#componentloader .fragment:hover .componentActions {
+  display: block;
+  line-height: 39px;
+  visibility: visible;
+  -webkit-animation: fadeIn 1s;
+  -moz-animation: fadeIn 1s;
+  -ms-animation: fadeIn 1s;
+  animation: fadeIn 1s;
+}
+#componentloader .fragment:hover .add-component {
+  display: block;
+  visibility: visible;
+}
+#componentloader .fragment.ng-enter {
+  -webkit-animation: bounceIn 1s;
+  -moz-animation: bounceIn 1s;
+  -ms-animation: bounceIn 1s;
+  animation: bounceIn 1s;
+}
+#componentloader .fragment.ng-leave {
+  -webkit-animation: bounceOut 1s;
+  -moz-animation: bounceOut 1s;
+  -ms-animation: bounceOut 1s;
+  animation: bounceOut 1s;
 }
 #editor-toolbar {
   position: fixed;
@@ -12923,41 +13041,12 @@ fieldset[disabled] .btn-vimeo-square.active {
 .componentActions .duplicate:hover {
   color: #219265;
 }
-.componentActions .settings {
+.componentActions .settings-btn {
   float: right;
   pointer-events: all;
 }
-.componentActions .settings:hover {
+.componentActions .settings-btn:hover {
   color: #efa022;
-}
-.ui-sortable {
-  margin-bottom: 0;
-}
-.ui-sortable .dragging {
-  height: 60px!important;
-}
-.ui-sortable .as-sortable-dragging {
-  height: 60px!important;
-}
-.ui-sortable .as-sortable-placeholder {
-  height: 60px!important;
-}
-.ui-sortable .componentActions span.fa {
-  padding: 10px;
-  text-align: center;
-  line-height: 18px;
-}
-.ui-sortable .componentActions p {
-  margin-bottom: 0;
-  font-size: 14px;
-}
-.ui-sortable .componentActions h4 {
-  background: rgba(44, 62, 80, 0.8);
-  padding: 18px;
-  color: white;
-  font-size: 18px;
-  margin: 0;
-  height: 56px;
 }
 .editable-title {
   display: none;
@@ -12969,9 +13058,6 @@ fieldset[disabled] .btn-vimeo-square.active {
 .modal-body .nav-tabs h4 {
   margin: 2px 10px 0 0;
   color: #b6b6b6;
-}
-.ui-sortable {
-  margin-top: 50px;
 }
 .post_content_div {
   min-height: 500px;

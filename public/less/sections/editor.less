@@ -374,13 +374,141 @@ fieldset[disabled] .btn-vimeo-square.active {
     }
 }
 
+.blurred-editor {
+    -webkit-filter: blur(5px);
+    -moz-filter: blur(5px);
+    -o-filter: blur(5px);
+    -ms-filter: blur(5px);
+    filter: blur(5px);
+    overflow: hidden;
+    &.ng-hide-remove {
+        -webkit-animation: fadeIn 1s;
+        -moz-animation: fadeIn 1s;
+        -ms-animation: fadeIn 1s;
+        animation: fadeIn 1s;
+    }
+}
+
+.loading-editor {
+    position: relative;
+    background: rgba(255, 255, 255, 0.9);
+    &.ng-hide-add {
+        -webkit-animation: fadeOut 1s;
+        -moz-animation: fadeOut 1s;
+        -ms-animation: fadeOut 1s;
+        animation: fadeOut 1s;
+    }
+}
+
 #componentloader {
     position: relative;
     width: 100%;
     min-height: 500px;
     transform: translate3d(0, 0, 0);
     overflow: hidden;
-    clear:both;
+    clear: both;
+    .as-sortable-placeholder {
+        height: 57px!important;
+        overflow: hidden;
+        list-style-type: none;
+    }
+    .ui-sortable {
+        margin-bottom: 0;
+        margin-top: 50px;
+        padding: 0;
+        li {
+            list-style-type: none;
+        }
+        .componentDragging {
+            height: 57px!important;
+            overflow: hidden;
+        }
+        .componentActions {
+            span.fa {
+                padding: 10px;
+                text-align: center;
+                line-height: 18px;
+            }
+            p {
+                margin-bottom: 0;
+                font-size: 14px;
+            }
+            h4 {
+                background: rgba(44, 62, 80, 0.8);
+                padding: 17px;
+                color: white;
+                font-size: 18px;
+                margin: 0;
+                height: 56px;
+            }
+        }
+        &.active {
+            .fragment {
+                height: 57px!important;
+                overflow: hidden;
+                .component-inner {
+                    .bg {
+                        background-image: none;
+                    }
+                }
+                .componentActions {
+                    display: block;
+                    visibility: visible;
+                    border: 1px solid #ccc;
+                    background: #fafafa;
+                    h4 {
+                        display: block;
+                    }
+                }
+            }
+        }
+    }
+    .as-sortable-drag {
+        pointer-events: none;
+        z-index: 9999;
+        list-style: none;
+        opacity: 0.9;
+    }
+    .fragment {
+        border: none;
+        display: block;
+        .component-inner {
+            border: 2px solid transparent;
+        }
+        &.dragging {
+            z-index: 99999!important;
+        }
+        &:hover {
+            .component-inner {
+                border: 2px dashed #34495e;
+            }
+            .componentActions {
+                display: block;
+                line-height: 39px;
+                visibility: visible;
+                -webkit-animation: fadeIn 1s;
+                -moz-animation: fadeIn 1s;
+                -ms-animation: fadeIn 1s;
+                animation: fadeIn 1s;
+            }
+            .add-component {
+                display: block;
+                visibility: visible;
+            }
+        }
+        &.ng-enter {
+            -webkit-animation: bounceIn 1s;
+            -moz-animation: bounceIn 1s;
+            -ms-animation: bounceIn 1s;
+            animation: bounceIn 1s;
+        }
+        &.ng-leave {
+            -webkit-animation: bounceOut 1s;
+            -moz-animation: bounceOut 1s;
+            -ms-animation: bounceOut 1s;
+            animation: bounceOut 1s;
+        }
+    }
 }
 
 #editor-toolbar {
@@ -644,43 +772,11 @@ fieldset[disabled] .btn-vimeo-square.active {
             color: #219265;
         }
     }
-    .settings {
+    .settings-btn {
         float: right;
         pointer-events: all;
         &:hover {
             color: #efa022;
-        }
-    }
-}
-
-.ui-sortable {
-    margin-bottom: 0;
-    .dragging {
-        height: 60px!important;
-    }
-    .as-sortable-dragging {
-        height: 60px!important;
-    }
-    .as-sortable-placeholder {
-        height: 60px!important;
-    }
-    .componentActions {
-        span.fa {
-            padding: 10px;
-            text-align: center;
-            line-height: 18px;
-        }
-        p {
-            margin-bottom: 0;
-            font-size: 14px;
-        }
-        h4 {
-            background: rgba(44, 62, 80, 0.8);
-            padding: 18px;
-            color: white;
-            font-size: 18px;
-            margin: 0;
-            height: 56px;
         }
     }
 }
@@ -703,40 +799,37 @@ fieldset[disabled] .btn-vimeo-square.active {
     }
 }
 
+.post_content_div {
+    min-height: 500px;
+}
 
-    .ui-sortable {
-        margin-top: 50px;
+.edit-wrap {
+    margin: -1px;
+    position: relative;
+    .editable {
+        img {
+            max-width: 100%;
+        }
+        &:focus {
+            outline: none;
+        }
     }
-    .post_content_div {
-        min-height: 500px;
-    }
-    .edit-wrap {
+    &:hover {
+        outline: 1px dashed #efa022;
         margin: -1px;
-        position: relative;
-        .editable {
-            img {
-                max-width: 100%;
-            }
-            &:focus {
-                outline: none;
-            }
-        }
-        &:hover {
-            outline: 1px dashed #efa022;
-            margin: -1px;
+        display: block;
+        z-index: 999;
+        .editable-title {
+            position: absolute;
+            left: 0;
+            top: -20px;
+            background: #efa022;
+            color: #fff!important;
+            border-top-right-radius: 3px;
+            border-top-left-radius: 3px;
+            padding: 0 15px;
             display: block;
-                z-index: 999;
-            .editable-title {
-                position: absolute;
-                left: 0;
-                top: -20px;
-                background: #efa022;
-                color: #fff!important;
-                border-top-right-radius: 3px;
-                border-top-left-radius: 3px;
-                padding: 0 15px;
-                display: block;
-                z-index: 999;
-            }
+            z-index: 999;
         }
     }
+}

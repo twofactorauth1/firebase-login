@@ -236,86 +236,6 @@ hr {
 .component-inner {
   padding: 2px;
 }
-.ui-sortable.active .fragment {
-  overflow: hidden;
-}
-.fragment {
-  border: none;
-  display: block;
-}
-.fragment .component-inner {
-  border: 2px solid transparent;
-}
-.fragment.dragging {
-  z-index: 99999!important;
-}
-.fragment:hover .component-inner {
-  border: 2px dashed #34495e;
-}
-.fragment:hover .componentActions {
-  display: block;
-  line-height: 39px;
-  visibility: visible;
-}
-.fragment:hover .add-component {
-  display: block;
-  visibility: visible;
-}
-.fragment.ng-enter {
-  -webkit-animation: bounceIn 1s;
-  -moz-animation: bounceIn 1s;
-  -ms-animation: bounceIn 1s;
-  animation: bounceIn 1s;
-}
-.fragment.ng-leave {
-  -webkit-animation: bounceOut 1s;
-  -moz-animation: bounceOut 1s;
-  -ms-animation: bounceOut 1s;
-  animation: bounceOut 1s;
-}
-.ui-sortable {
-  margin-bottom: 0;
-}
-.ui-sortable .dragging {
-  height: 57px!important;
-}
-.ui-sortable .as-sortable-placeholder {
-  height: 57px!important;
-}
-.ui-sortable .componentActions span.fa {
-  padding: 10px;
-  text-align: center;
-  line-height: 18px;
-}
-.ui-sortable .componentActions p {
-  margin-bottom: 0;
-  font-size: 14px;
-}
-.ui-sortable .componentActions h4 {
-  background: rgba(44, 62, 80, 0.8);
-  padding: 17px;
-  color: white;
-  font-size: 18px;
-  margin: 0;
-}
-.as-sortable-drag {
-  pointer-events: none;
-  z-index: 9999;
-  list-style: none;
-  opacity: 0.9;
-}
-ul.ui-sortable.active .fragment {
-  height: 57px!important;
-}
-ul.ui-sortable.active .fragment .componentActions {
-  display: block;
-  visibility: visible;
-  border: 1px solid #ccc;
-  background: #fafafa;
-}
-ul.ui-sortable.active .fragment .componentActions h4 {
-  display: block;
-}
 ol.circles-list {
   list-style-type: none;
   list-style-type: decimal !ie;
@@ -2782,14 +2702,14 @@ div[data-class='image-text'] p {
   transition-delay: 0.4s;
 }
 /********** Blog Teaser v1 **********/
-.blog-teaser-v1 {
-  padding: 15px;
-}
 .blog-teaser-v1 .posts {
   margin-top: 45px;
 }
 .blog-teaser-v1 .posts .featured-image {
   padding-top: 15px;
+}
+.blog-teaser-v1 .component-inner {
+  padding: 15px;
 }
 .blog-teaser-v1 .label-info {
   margin-right: 5px;

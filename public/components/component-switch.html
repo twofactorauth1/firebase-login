@@ -1,0 +1,47 @@
+<div ng-switch="value.type">
+    <div ng-switch-when="blog-teaser">
+        <div blog-teaser-component component="value" version="value.version"></div>
+    </div>
+    <div ng-switch-when="contact-us">
+        <div contact-us-component component="value" version="value.version"></div>
+    </div>
+    <div ng-switch-when="feature-block">
+        <div feature-block-component component="value" version="value.version"></div>
+    </div>
+    <div ng-switch-when="feature-list">
+        <div feature-list-component component="value" version="value.version"></div>
+    </div>
+    <div ng-switch-when="footer">
+        <div footer-component component="value" version="value.version"></div>
+    </div>
+    <div ng-switch-when="image-text">
+        <div image-text-component component="value" version="value.version"></div>
+    </div>
+    <div ng-switch-when="image-gallery">
+        <div image-gallery-component component="value" version="value.version"></div>
+    </div>
+    <div ng-switch-when="masthead">
+        <div masthead-component component="value" version="value.version"></div>
+    </div>
+    <div ng-switch-when="meet-team">
+        <div meet-team-component component="value" version="value.version"></div>
+    </div>
+    <div ng-switch-when="navigation">
+        <div navigation-component component="value" version="value.version"></div>
+    </div>
+    <div ng-switch-when="products">
+        <div products-component component="value" version="value.version"></div>
+    </div>
+    <div ng-switch-when="testimonials">
+        <div testimonials-component component="value" version="value.version"></div>
+    </div>
+    <div ng-switch-when="simple-form">
+        <div simple-form-component component="value" version="value.version"></div>
+    </div>
+    <div ng-switch-when="social-link">
+        <div social-link-component component="value" version="value.version"></div>
+    </div>
+    <div ng-switch-default style="color: red; outline-color: red; padding: 10px">
+        ERROR: could not find matching directive for component.type = {{value.type}}
+    </div>
+</div>

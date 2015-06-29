@@ -1,13 +1,9 @@
-
 <div ng-class="component.type+'-v'+component.version" style="background-image: url({{componentEditing.bg.img.url}})">
-	<div ng-if="component.bg.img.undernav && allowUndernav"  class="mastHeadUndernav" style="height:200px"></div>
+    <div ng-if="component.bg.img.undernav && allowUndernav" class="mastHeadUndernav"></div>
     <div class="home-text">
-
         <div class="masthead-text">
-            <div class="editable" data-class="text" ng-bind-html="component.text | unsafe"></div>
+            <div elem ng-model="component.text"></div>
         </div>
-
         <div class="clearfix"></div>
-
     </div>
 </div>

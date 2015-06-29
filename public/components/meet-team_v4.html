@@ -1,5 +1,5 @@
 <div ng-class="component.type+'-v'+component.version">
-    <div class="editable title" data-class="title"  ng-bind-html="component.title | unsafe"></div>
+    <div elem ng-model="component.title"></div>
     <div class="team-member-wrap">
         <div class="row clearfix mb30 team-member {{isEditing ? 'edit-mode' : ''}}" ng-repeat="teamMember in component.teamMembers">
             <div ng-if="component.teamSettings.profilepic" class="col-md-4 text-center">
@@ -8,13 +8,13 @@
             </div>
             <div class="col-md-8">
                 <div ng-if="component.teamSettings.name" class="name">
-                    <div class="editable" data-class="teamMembers.item.name" data-index="{{$index}}" ng-bind-html="teamMember.name | unsafe"></div>
+                    <div elem ng-model="teamMember.name"></div>
                 </div>
                 <div ng-if="component.teamSettings.position" class="profile-position">
-                    <div class="editable" data-class="teamMembers.item.position" data-index="{{$index}}" ng-bind-html="teamMember.position | unsafe"></div>
+                    <div elem ng-model="teamMember.position"></div>
                 </div>
                 <div ng-if="component.teamSettings.bio && !teamMember.becomeMember" class="bio">
-                    <div class="editable" data-class="teamMembers.item.bio" data-index="{{$index}}" ng-bind-html="teamMember.bio | unsafe"></div>
+                    <div elem ng-model="teamMember.bio"></div>
                 </div>
                 <div ng-if="component.teamSettings.networks" class="row social-link {{isEditing ? 'edit-mode' : ''}}">
                     <ul class="social">

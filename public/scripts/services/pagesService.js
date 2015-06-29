@@ -51,8 +51,7 @@ mainApp.factory('pagesService', ['websiteService','$http', '$location', function
                     $http.get('/api/1.0/cms/website/' + websiteObject._id + '/page/' + path, { cache: true})
                         .success(function (page) {
                             if (page !== null && page.accountId) {
-                                pages[page.handle] = page;
-                                callback(null, pages);
+                                callback(null, page);
                             }else if(page != null && path == 'index') {
                                 $http.get('/api/1.0/cms/website/' + websiteObject._id + '/page/coming-soon', { cache: true})
                                     .success(function (page) {

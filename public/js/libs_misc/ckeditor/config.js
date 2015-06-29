@@ -38,8 +38,8 @@ CKEDITOR.editorConfig = function( config ) {
 
 	config.forcePasteAsPlainText = true;
 
-	config.allowedContent = true;
-	config.extraAllowedContent = true;
+	// config.allowedContent = true;
+	// config.extraAllowedContent = true;
 	config.disableAutoInline = true;
 	config.autoParagraph = false;
 	config.enterMode = CKEDITOR.ENTER_BR;
@@ -55,8 +55,8 @@ CKEDITOR.editorConfig = function( config ) {
 	config.filebrowserBrowseUrl = '';
 
 	// CKEDITOR.dtd.$removeEmpty['i'] = false;
-	CKEDITOR.dtd.$removeEmpty['span'] = false;
-	CKEDITOR.dtd.$editable.span = true;
+	// CKEDITOR.dtd.$removeEmpty['span'] = false;
+	// CKEDITOR.dtd.$editable.span = true;
 	// CKEDITOR.dtd.$editable.a = true;
 	// CKEDITOR.dtd.$editable.img = true;
 };
