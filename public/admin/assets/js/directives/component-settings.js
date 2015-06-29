@@ -44,10 +44,11 @@ app.directive('componentSettings', ['$modal', '$http', '$timeout', '$q', '$compi
           }
       })
 
-      $scope.initializeEditLinks = function (link) {
+      $scope.initializeEditLinks = function (link, status) {
           if(link.page)
           {
-            link.data = null;
+            if(status)
+              link.data = null;
             $scope.currentPage = _.find($scope.filterdedPages, function (page) {
               return page.handle === link.page;
             });
