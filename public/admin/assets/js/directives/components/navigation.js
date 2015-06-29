@@ -6,9 +6,9 @@ app.directive('navigationComponent', ['WebsiteService', 'AccountService', functi
     },
     templateUrl: '/components/component-wrap.html',
     controller: function ($scope, WebsiteService, AccountService, $compile) {
-      WebsiteService.getWebsite(function (website) {
-        $scope.website = website;
-      });
+      //WebsiteService.getWebsite(function (website) {
+        $scope.website = $scope.$parent.website;
+      //});
 
       AccountService.getAccount(function (account) {
         $scope.account = account;
