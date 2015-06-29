@@ -1,0 +1,34 @@
+<div id="componentloader" ng-if="page.components.length">
+    <div id="editor-toolbar"></div>
+    <ul as-sortable="sortableOptions" class="ui-sortable adminbarspacing padding-0" ng-model="components">
+        <li ng-repeat="value in page.components" as-sortable-item class="fragment">
+            <div class="componentActions" ng-class="{'masthead-actions':value.type == 'masthead'}">
+                <span class="reorder fa fa-arrows" as-sortable-item-handle><p>Reorder</p></span>
+                <h4 class="pull-left">{{value.type | formatText}}</h4>
+                <span class="delete delete-component fa fa-trash" ng-if="value.type != 'footer' && value.type != 'single-post'" ng-click="deleteComponent($index)"><p>Delete</p></span>
+                <span class="duplicate fa fa-copy" ng-if="value.type != 'footer' && value.type != 'navigation' && value.type != 'single-post'  && value.type != 'blog' && value.type != 'blog-teaser'" ng-click="openDuplicateModal($index)"><p>Duplicate</p></span>
+                <span class="component-settings settings-btn fa fa-cog" ng-if="value.type != 'footer'" ng-click="openModal('component-settings-modal', value._id)"><p>Settings</p></span>
+            </div>
+            <div data-ng-include=" '../components/component-switch.html' "></div>
+            <div ng-class="{'zee-blur': !value.visibility}"></div>
+            <div class="add-component" ng-if="value.type != 'footer' || components.length == 1">
+                <a class="add-new-component" ng-click="openModal('add-component-modal', $index)" data-toggle="modal" data-target="#add-component-modal">
+                    <i class="fa fa-plus"></i>
+                    <p>Add New</p>
+                </a>
+            </div>
+        </li>
+        <li ng-if="components.length == 0 " class="no-component">
+            <div class="well empty-page">
+                <h1 class="center">This Page is Empty.</h1>
+                <h4 class="center">Add some components and start editing!</h4>
+            </div>
+            <div class="clearfix mb15"></div>
+            <div class="add-component" data-index=1 tooltip="Add Component Below" tooltip-trigger="mouseenter" tooltip-placement="top">
+                <a href="">
+                    <i class="fa fa-plus"></i>
+                </a>
+            </div>
+        </li>
+    </ul>
+</div>
