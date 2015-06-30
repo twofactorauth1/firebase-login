@@ -48,6 +48,19 @@
       }
     });
 
+    window.clickandInsertImageButton = function (editor) {
+      $scope.clickImageButton(editor, false);
+    };
+
+    $scope.clickImageButton = function (editor, edit) {
+      $scope.insertMediaImage = true;
+      $scope.inlineInput = editor;
+      $scope.isEditMode = edit;
+      //$scope.openModal('mediamodal');
+      angular.element("#media-manager-modal").modal('show');
+      $scope.showInsert = true;
+    };
+
     WebsiteService.getWebsite(function (website) {
       $scope.website = website;
     });
