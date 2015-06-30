@@ -59,14 +59,87 @@
       $scope.clickImageButton(editor, false);
     };
 
+    window.clickImageButton = function (btn) {
+      var urlInput = $(btn).closest('td').prev('td').find('input');
+      $scope.clickImageButton(urlInput, true);
+    };
+
     $scope.clickImageButton = function (editor, edit) {
       $scope.insertMediaImage = true;
       $scope.inlineInput = editor;
       $scope.isEditMode = edit;
-      //$scope.openModal('mediamodal');
       angular.element("#media-manager-modal").modal('show');
       $scope.showInsert = true;
     };
+
+    /*
+       * @insertMedia
+       * - insertmedia into various components
+       */
+
+      $scope.insertMedia = function (asset) {
+        if ($scope.imageChange) {
+          $scope.imageChange = false;
+          var type = $scope.componentEditing.type;
+          //if image/text component
+          if (type == 'image-text') {
+            $scope.componentEditing.imgurl = asset.url;
+          } else if (type == 'feature-list') {
+            var targetIndex = angular.element($scope.componentArrTarget).closest('.single-feature').data('index');
+            $scope.componentEditing.features[targetIndex].imgurl = asset.url;
+          } else if (type == 'simple-form') {
+            $scope.componentEditing.imgurl = asset.url;
+          } else if (type == 'image-gallery') {
+            $scope.componentEditing.images[$scope.componentImageIndex].url = asset.url;
+          } else if (type == 'thumbnail-slider') {
+            $scope.componentEditing.thumbnailCollection[$scope.componentImageIndex].url = asset.url;
+          } else if (type == 'meet-team') {
+            $scope.componentEditing.teamMembers[$scope.componentImageIndex].profilepic = asset.url;
+          } else {
+            console.log('unknown component or image location');
+          }
+        } else if ($scope.postImage && !$scope.componentEditing) {
+          $scope.postImage = false;
+          $scope.postImageUrl = asset.url;
+          toaster.pop('success', "Post Image added successfully");
+          return;
+        } else if ($scope.profilepic && !$scope.componentEditing) {
+          $scope.profilepic = false;
+          $scope.customerAccount.photo = asset.url;
+          return;
+        } else if ($scope.insertMediaImage) {
+          $scope.insertMediaImage = false;
+          $scope.childScope.addCKEditorImage(asset.url, $scope.inlineInput, $scope.isEditMode);
+          return;
+        } else if ($scope.logoImage && $scope.componentEditing) {
+          $scope.logoImage = false;
+          $scope.componentEditing.logourl = asset.url;
+        } else if ($scope.changeblobImage) {
+          $scope.changeblobImage = false;
+          $scope.blog_post.featured_image = asset.url;
+          var iFrame = document.getElementById("iframe-website");
+          $scope.childScope.setBlogImage(asset.url);
+          iFrame && iFrame.contentWindow && iFrame.contentWindow.updateCustomComponent && iFrame.contentWindow.updateCustomComponent();
+          return;
+        } else if ($scope.imgGallery && $scope.componentEditing) {
+          $scope.imgGallery = false;
+          $scope.componentEditing.images.splice($scope.imgGalleryIndex + 1, 0, {
+            url: asset.url
+          });
+        } else if ($scope.imgThumbnail && $scope.componentEditing) {
+          $scope.imgThumbnail = false;
+          $scope.componentEditing.thumbnailCollection.push({
+            url: asset.url
+          });
+        } else {
+          if ($scope.componentEditing.bg.img) {
+            $scope.componentEditing.bg.img.url = asset.url;
+            $scope.saveComponent();
+            return;
+          }
+        }
+        $scope.updateIframeComponents();
+      };
 
     WebsiteService.getWebsite(function (website) {
       $scope.website = website;
