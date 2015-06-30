@@ -70,7 +70,9 @@
             </div>
         </div>
     </div>
-    <div id="editor-toolbar" sticky offset="65"></div>
+    <div sticky offset="65" sticky-class="editor-toolbar-wrap">
+        <div id="editor-toolbar"></div>
+    </div>
     <div class="clearfix"></div>
     <div ng-if="components.length" ng-hide="!ckeditorLoaded">
         <div component-loader components="components"></div>

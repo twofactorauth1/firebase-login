@@ -708,6 +708,9 @@ app.constant('JS_REQUIRES', {
   }, {
     name: 'slick',
     files: ['../js/libs/slick-carousel/slick/slick.js', '../js/libs/angular-slick/dist/slick.js']
+  }, {
+    name: 'jqcloud',
+    files: ["../js/libs/jqcloud2/dist/jqcloud.min.js", "../js/libs/angular-jqcloud/angular-jqcloud.js"]
   },
   {
     name: 'wu.masonry',

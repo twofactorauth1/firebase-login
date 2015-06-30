@@ -1,4 +1,7 @@
 <div ng-switch="value.type">
+    <div ng-switch-when="blog">
+        <div blog-component component="value" version="value.version"></div>
+    </div>
     <div ng-switch-when="blog-teaser">
         <div blog-teaser-component component="value" version="value.version"></div>
     </div>
@@ -35,11 +38,26 @@
     <div ng-switch-when="products">
         <div products-component component="value" version="value.version"></div>
     </div>
+    <div ng-switch-when="pricing-tables">
+        <div pricing-tables-component component="value" version="value.version"></div>
+    </div>
     <div ng-switch-when="testimonials">
         <div testimonials-component component="value" version="value.version"></div>
     </div>
+    <div ng-switch-when="thumbnail-slider">
+        <div thumbnail-slider-component component="value" version="value.version"></div>
+    </div>
+    <div ng-switch-when="text-only">
+        <div text-only-component component="value" version="value.version"></div>
+    </div>
+    <div ng-switch-when="top-bar">
+        <div top-bar-component component="value" version="value.version"></div>
+    </div>
     <div ng-switch-when="simple-form">
         <div simple-form-component component="value" version="value.version"></div>
+    </div>
+    <div ng-switch-when="single-post">
+        <div single-post-component component="value" version="value.version"></div>
     </div>
     <div ng-switch-when="social-link">
         <div social-link-component component="value" version="value.version"></div>

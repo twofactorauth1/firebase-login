@@ -69,11 +69,16 @@ app.directive('addNewComponent', ['$modal', '$http', '$timeout', '$q', '$compile
           if (newComponent) {
             $scope.closeModal();
             $scope.components.splice($scope.clickedIndex + 1, 0, newComponent);
-            var element = angular.element('#' + newComponent._id);
-            var pos = element.position().top + element.parent().scrollTop();
-            element.parent().animate({
-              scrollTop: pos
-            }, 1000);
+            $timeout(function () {
+              var element = angular.element('#' + newComponent._id);
+              console.log('element ', element);
+              if (element) {
+                var pos = element.position().top + element.parent().scrollTop();
+                element.parent().animate({
+                  scrollTop: pos
+                }, 1000);
+              }
+            });
             toaster.pop('success', "Component Added", "The " + newComponent.type + " component was added successfully.");
           }
         });
@@ -82,6 +87,9 @@ app.directive('addNewComponent', ['$modal', '$http', '$timeout', '$q', '$compile
       $scope.openModal = function (template, index) {
         if (template === 'add-component-modal') {
           $scope.changeIndex(index);
+        }
+        if (template === 'component-settings-modal') {
+          $scope.changeComponentEditing(id);
         }
         $scope.modalInstance = $modal.open({
           templateUrl: template,
