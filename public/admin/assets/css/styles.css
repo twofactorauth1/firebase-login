@@ -13104,6 +13104,7 @@ fieldset[disabled] .btn-vimeo-square.active {
 }
 ul.ui-sortable.active {
   margin-bottom: 0;
+  padding: 0px;
 }
 ul.ui-sortable.active .as-sortable-placeholder {
   height: 57px!important;
@@ -13117,6 +13118,11 @@ ul.ui-sortable.active .fragment .componentActions {
   visibility: visible;
   border: 1px solid #ccc;
   background: #fafafa;
+}
+ul.ui-sortable.active .fragment .componentActions .delete-component,
+ul.ui-sortable.active .fragment .componentActions .duplicate,
+ul.ui-sortable.active .fragment .componentActions .component-settings {
+  display: none;
 }
 ul.ui-sortable.active .fragment .componentActions h4 {
   display: block;
@@ -13135,6 +13141,9 @@ ul.ui-sortable.active .fragment .componentActions span.fa {
 ul.ui-sortable.active .fragment .componentActions p {
   margin-bottom: 0;
   font-size: 14px;
+}
+ul.ui-sortable.active .fragment .add-new-component {
+  display: none;
 }
 /* ---------------------------------------------------------------------- */
 /*  Billing

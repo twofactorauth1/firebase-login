@@ -850,17 +850,21 @@ fieldset[disabled] .btn-vimeo-square.active {
 }
 ul.ui-sortable.active {
     margin-bottom: 0;
+    padding: 0px;
     .as-sortable-placeholder {
         height: 57px!important;
     }
   .fragment {
         overflow: hidden;
         height: 57px!important;
-            .componentActions {
+        .componentActions {
           display: block;
           visibility: visible;
           border: 1px solid #ccc;
           background: #fafafa;
+          .delete-component, .duplicate, .component-settings {
+                display: none;
+          }
           h4 {
             display: block;
             background: rgba(44, 62, 80, 0.8);
@@ -879,6 +883,9 @@ ul.ui-sortable.active {
           margin-bottom: 0;
           font-size: 14px;
         } 
+    }
+    .add-new-component {
+        display: none;
     }
 
   }
