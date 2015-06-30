@@ -13102,6 +13102,40 @@ fieldset[disabled] .btn-vimeo-square.active {
   display: block;
   z-index: 999;
 }
+ul.ui-sortable.active {
+  margin-bottom: 0;
+}
+ul.ui-sortable.active .as-sortable-placeholder {
+  height: 57px!important;
+}
+ul.ui-sortable.active .fragment {
+  overflow: hidden;
+  height: 57px!important;
+}
+ul.ui-sortable.active .fragment .componentActions {
+  display: block;
+  visibility: visible;
+  border: 1px solid #ccc;
+  background: #fafafa;
+}
+ul.ui-sortable.active .fragment .componentActions h4 {
+  display: block;
+  background: rgba(44, 62, 80, 0.8);
+  padding: 18px;
+  color: white;
+  font-size: 18px;
+  margin: 0;
+  height: 56px;
+}
+ul.ui-sortable.active .fragment .componentActions span.fa {
+  padding: 10px;
+  text-align: center;
+  line-height: 18px;
+}
+ul.ui-sortable.active .fragment .componentActions p {
+  margin-bottom: 0;
+  font-size: 14px;
+}
 /* ---------------------------------------------------------------------- */
 /*  Billing
 /* ---------------------------------------------------------------------- */

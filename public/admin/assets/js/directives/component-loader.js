@@ -20,23 +20,25 @@ app.directive('componentLoader', ['$timeout', '$modal', 'toaster', function ($ti
           toaster.pop('success', "Page Saved", "The " + $scope.page.handle + " page was saved successfully.");
         });
       };
-
+      $scope.wait;
+      $scope.first=true;
       $scope.sortableOptions = {
         parentElement: "#componentloader",
         containerPositioning: 'relative',
         dragStart: function (e, ui) {
-          $scope.dragging = true;
-          e.source.itemScope.element.addClass("componentDragging");
-
+        $scope.dragging = true;
+        $scope.first = false;        
+        clearTimeout($scope.wait);
         },
         dragMove: function (e, ui) {
           console.log('sorting update');
         },
         dragEnd: function (e, ui) {
+          $scope.first = true;
           $scope.dragging = false;
-          $timeout(function () {
-            e.dest.sortableScope.element.removeClass("componentDragging");
-          }, 500);
+          $scope.wait = setTimeout(function () {
+          angular.element(".ui-sortable").removeClass("active");
+          }, 1500);
         }
       };
     }

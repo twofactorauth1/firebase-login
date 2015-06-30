@@ -701,7 +701,7 @@ app.constant('JS_REQUIRES', {
     files: ['../js/libs/angular-daterangepicker/js/angular-daterangepicker.min.js', '../js/libs/bootstrap-daterangepicker/daterangepicker.js']
   }, {
     name: 'ui.sortable',
-    files: ['../js/libs/ng-sortable/dist/ng-sortable.min.js']
+    files: ['../js/libs_misc/ng-sortable/dist/ng-sortable.js','../js/libs_misc/ng-sortable/dist/ng-sortable.style.min.css']
   }, {
     name: 'ngSticky',
     files: ['../js/libs/ngSticky/dist/sticky.min.js']
