@@ -3062,9 +3062,6 @@
 #componentloader #blog-sidebar .tag-cloud li:nth-child(4) {
   font-size: 3em;
 }
-#componentloader #blog-sidebar div.jqcloud {
-  width: 100% !important;
-}
 #componentloader #main-area {
   word-wrap: break-word;
   background: #ffffff;

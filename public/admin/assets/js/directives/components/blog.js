@@ -7,8 +7,8 @@ app.directive('blogComponent', ['$filter', '$timeout', 'WebsiteService', functio
     templateUrl: '/components/component-wrap.html',
     controller: function ($scope, WebsiteService, $compile, $filter, $timeout) {
       $scope.blog = {};
+      $scope.showCloud = false;
       WebsiteService.getPosts(function (posts) {
-        console.log('posts ', posts);
         $scope.blog.blogposts = posts;
 
         $scope.blog.postTags = [];
@@ -16,7 +16,6 @@ app.directive('blogComponent', ['$filter', '$timeout', 'WebsiteService', functio
 
         _.each(posts, function (post) {
           //get post tags for sidebar
-          console.log('tags ', post.post_tags);
           if (post.post_tags) {
             _.each(post.post_tags, function (tag) {
               if ($scope.blog.postTags.indexOf(tag) <= -1) {
@@ -34,29 +33,7 @@ app.directive('blogComponent', ['$filter', '$timeout', 'WebsiteService', functio
 
         });
 
-        angular.element(document).ready(function () {
-          $timeout(function () {
-            var _tagCloud = [];
-            $scope.$watch('blog.postTags', function (newValue, oldValue) {
-              if (newValue !== undefined && newValue.length) {
-                _.each(newValue, function (tag) {
-                  var default_size = 2;
-                  var count = _.countBy(_.flatten($scope.blog.postTags), function (num) {
-                    return num == tag
-                  })["true"];
-                  if (count)
-                    default_size += count;
-                  _tagCloud.push({
-                    text: tag,
-                    weight: default_size, //Math.floor((Math.random() * newValue.length) + 1),
-                    link: '/tag/' + tag
-                  });
-                });
-                $scope.tagCloud = _tagCloud;
-              }
-            });
-          }, 500);
-        });
+        $scope.activateTagCloud($scope.blog.postTags);
 
 
         //if tagname is present, filter the cached posts with the tagname
@@ -120,6 +97,36 @@ app.directive('blogComponent', ['$filter', '$timeout', 'WebsiteService', functio
         //   return;
         // }
       });
+
+      $scope.activateTagCloud = function (tags) {
+        var _tagCloud = [];
+        _.each(tags, function (tag) {
+          var default_size = 2;
+          var count = _.countBy(_.flatten(tags), function (num) {
+            return num == tag
+          })["true"];
+          if (count) {
+            default_size += count;
+          }
+          _tagCloud.push({
+            text: tag,
+            weight: default_size, //Math.floor((Math.random() * newValue.length) + 1),
+            link: '/tag/' + tag
+          });
+        });
+        $scope.tagCloud = _tagCloud;
+        $(".jqcloud").jQCloud($scope.tagCloud, {
+          autoResize: true,
+          width: 230,
+          height: 300,
+          afterCloudRender: function () {
+            $timeout(function() {
+              angular.element('.jqcloud').css({'width': '100%'});
+              angular.element('.jqcloud').jQCloud('update', $scope.tagCloud);
+            });
+          }
+        });
+      };
 
       /********** BLOG PAGE PAGINATION RELATED **********/
       $scope.curPage = 0;
