@@ -3049,9 +3049,6 @@ div[data-type=blog] .container {
 #blog-sidebar .tag-cloud li:nth-child(4) {
   font-size: 3em;
 }
-#blog-sidebar div.jqcloud {
-  width: 100% !important;
-}
 #main-area {
   word-wrap: break-word;
   background: #ffffff;
