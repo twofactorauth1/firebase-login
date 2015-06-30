@@ -37,7 +37,7 @@ app.directive('componentLoader', ['$timeout', '$modal', 'toaster', function ($ti
           $scope.first = true;
           $scope.dragging = false;
           $scope.wait = setTimeout(function () {
-          angular.element(".ui-sortable").removeClass("active");
+           e.dest.sortableScope.element.removeClass("active");
           }, 1500);
         }
       };
