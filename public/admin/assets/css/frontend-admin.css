@@ -1205,36 +1205,36 @@
 #componentloader .single-image img {
   height: 170px;
 }
-#componentloader .editing .team-member-wrap .social-link {
+#componentloader .editing.team-member-wrap .social-link {
   border: 2px solid rgba(0, 0, 0, 0);
   position: relative;
 }
-#componentloader .editing .team-member-wrap .social-link.edit-mode {
+#componentloader .editing.team-member-wrap .social-link.edit-mode {
   padding-top: 30px;
 }
-#componentloader .editing .team-member-wrap .social-link:hover {
+#componentloader .editing.team-member-wrap .social-link:hover {
   border: 2px dashed rgba(0, 0, 0, 0.4);
 }
-#componentloader .editing .team-member-wrap .social-link:hover .add-addtional-team {
+#componentloader .editing.team-member-wrap .social-link:hover .add-addtional-team {
   display: block;
   font-size: 20px !important;
   top: 0px;
 }
-#componentloader .editing .team-member-wrap .team-member {
+#componentloader .editing.team-member-wrap .team-member {
   border: 4px solid rgba(0, 0, 0, 0);
   position: relative;
 }
-#componentloader .editing .team-member-wrap .team-member.edit-mode {
+#componentloader .editing.team-member-wrap .team-member.edit-mode {
   padding-top: 30px;
 }
-#componentloader .editing .team-member-wrap .team-member:hover {
+#componentloader .editing.team-member-wrap .team-member:hover {
   border: 4px dashed rgba(0, 0, 0, 0.4);
 }
-#componentloader .editing .team-member-wrap .team-member:hover .add-addtional {
+#componentloader .editing.team-member-wrap .team-member:hover .add-addtional {
   display: block;
-  font-size: 28px;
+  font-size: 18px;
 }
-#componentloader .editing .team-member-wrap .team-member:hover .delete-team-member .btn-delete-team-member {
+#componentloader .editing.team-member-wrap .team-member:hover .delete-team-member {
   background: rgba(0, 0, 0, 0.5);
   display: block;
   border: 0;
@@ -1244,8 +1244,12 @@
   top: 0;
   right: 0;
   z-index: 1050;
+  font-size: 18px;
 }
-#componentloader .editing .team-member-wrap .delete-team-member .btn-delete-team-member {
+#componentloader .editing.team-member-wrap .team-member:hover .delete-team-member .btn-delete-team-member {
+  display: block;
+}
+#componentloader .editing.team-member-wrap .delete-team-member .btn-delete-team-member {
   display: none;
 }
 #componentloader .meet-team-v1 {
@@ -1366,37 +1370,37 @@
   vertical-align: middle;
   text-align: center;
 }
-#componentloader .editing .meet-team-v2 .team-member-wrap .social-link {
+#componentloader .meet-team-v2 .editing.team-member-wrap .social-link {
   border: 2px solid rgba(0, 0, 0, 0);
   position: relative;
 }
-#componentloader .editing .meet-team-v2 .team-member-wrap .social-link.edit-mode {
+#componentloader .meet-team-v2 .editing.team-member-wrap .social-link.edit-mode {
   padding-top: 30px;
 }
-#componentloader .editing .meet-team-v2 .team-member-wrap .social-link:hover {
+#componentloader .meet-team-v2 .editing.team-member-wrap .social-link:hover {
   border: 2px dashed rgba(0, 0, 0, 0.4);
 }
-#componentloader .editing .meet-team-v2 .team-member-wrap .social-link:hover .add-addtional-team {
+#componentloader .meet-team-v2 .editing.team-member-wrap .social-link:hover .add-addtional-team {
   display: block;
   font-size: 20px !important;
   top: 0px;
 }
-#componentloader .editing .meet-team-v2 .team-member-wrap .team-member {
+#componentloader .meet-team-v2 .editing.team-member-wrap .team-member {
   border: 4px solid rgba(0, 0, 0, 0);
   position: relative;
 }
-#componentloader .editing .meet-team-v2 .team-member-wrap .team-member.edit-mode {
+#componentloader .meet-team-v2 .editing.team-member-wrap .team-member.edit-mode {
   padding-left: 15px;
   padding-right: 15px;
 }
-#componentloader .editing .meet-team-v2 .team-member-wrap .team-member:hover {
+#componentloader .meet-team-v2 .editing.team-member-wrap .team-member:hover {
   border: 4px dashed rgba(0, 0, 0, 0.4);
 }
-#componentloader .editing .meet-team-v2 .team-member-wrap .team-member:hover .add-addtional {
+#componentloader .meet-team-v2 .editing.team-member-wrap .team-member:hover .add-addtional {
   display: block;
-  font-size: 28px;
+  font-size: 18px;
 }
-#componentloader .editing .meet-team-v2 .team-member-wrap .team-member:hover .delete-team-member .btn-delete-team-member {
+#componentloader .meet-team-v2 .editing.team-member-wrap .team-member:hover .delete-team-member {
   background: rgba(0, 0, 0, 0.5);
   display: block;
   border: 0;
@@ -1406,8 +1410,12 @@
   top: 0;
   right: 0;
   z-index: 1050;
+  font-size: 18px;
 }
-#componentloader .editing .meet-team-v2 .team-member-wrap .delete-team-member .btn-delete-team-member {
+#componentloader .meet-team-v2 .editing.team-member-wrap .team-member:hover .delete-team-member .btn-delete-team-member {
+  display: block;
+}
+#componentloader .meet-team-v2 .editing.team-member-wrap .delete-team-member .btn-delete-team-member {
   display: none;
 }
 #componentloader .meet-team-v2 {
@@ -1452,39 +1460,39 @@
     margin: 0;
   }
 }
-#componentloader .editing .meet-team-v3 .team-member-wrap .social-link {
+#componentloader .meet-team-v3 .editing.team-member-wrap .social-link {
   border: 2px solid rgba(0, 0, 0, 0);
   position: relative;
 }
-#componentloader .editing .meet-team-v3 .team-member-wrap .social-link.edit-mode {
+#componentloader .meet-team-v3 .editing.team-member-wrap .social-link.edit-mode {
   padding-top: 30px;
 }
-#componentloader .editing .meet-team-v3 .team-member-wrap .social-link:hover {
+#componentloader .meet-team-v3 .editing.team-member-wrap .social-link:hover {
   border: 2px dashed rgba(0, 0, 0, 0.4);
 }
-#componentloader .editing .meet-team-v3 .team-member-wrap .social-link:hover .add-addtional-team {
+#componentloader .meet-team-v3 .editing.team-member-wrap .social-link:hover .add-addtional-team {
   display: block;
   font-size: 20px !important;
   top: 0px;
 }
-#componentloader .editing .meet-team-v3 .team-member-wrap .team-member {
+#componentloader .meet-team-v3 .editing.team-member-wrap .team-member {
   border: 4px solid rgba(0, 0, 0, 0);
   position: relative;
 }
-#componentloader .editing .meet-team-v3 .team-member-wrap .team-member.edit-mode {
+#componentloader .meet-team-v3 .editing.team-member-wrap .team-member.edit-mode {
   margin: 5px;
 }
-#componentloader .editing .meet-team-v3 .team-member-wrap .team-member:hover {
+#componentloader .meet-team-v3 .editing.team-member-wrap .team-member:hover {
   border: 4px dashed rgba(0, 0, 0, 0.4);
 }
-#componentloader .editing .meet-team-v3 .team-member-wrap .add-addtional {
+#componentloader .meet-team-v3 .editing.team-member-wrap .add-addtional {
   bottom: -20px;
 }
-#componentloader .editing .meet-team-v3 .team-member-wrap .team-member:hover .add-addtional {
+#componentloader .meet-team-v3 .editing.team-member-wrap .team-member:hover .add-addtional {
   display: block;
-  font-size: 28px;
+  font-size: 18px;
 }
-#componentloader .editing .meet-team-v3 .team-member-wrap .team-member:hover .delete-team-member .btn-delete-team-member {
+#componentloader .meet-team-v3 .editing.team-member-wrap .team-member:hover .delete-team-member {
   background: rgba(0, 0, 0, 0.5);
   display: block;
   border: 0;
@@ -1494,8 +1502,12 @@
   top: 0;
   right: 0;
   z-index: 1050;
+  font-size: 18px;
 }
-#componentloader .editing .meet-team-v3 .team-member-wrap .delete-team-member .btn-delete-team-member {
+#componentloader .meet-team-v3 .editing.team-member-wrap .team-member:hover .delete-team-member .btn-delete-team-member {
+  display: block;
+}
+#componentloader .meet-team-v3 .editing.team-member-wrap .delete-team-member .btn-delete-team-member {
   display: none;
 }
 #componentloader .meet-team-v3 {
@@ -1601,39 +1613,39 @@
     margin: 0;
   }
 }
-#componentloader .editing .meet-team-v4 .team-member-wrap .social-link {
+#componentloader .meet-team-v4 .editing.team-member-wrap .social-link {
   border: 2px solid rgba(0, 0, 0, 0);
   position: relative;
 }
-#componentloader .editing .meet-team-v4 .team-member-wrap .social-link.edit-mode {
+#componentloader .meet-team-v4 .editing.team-member-wrap .social-link.edit-mode {
   padding-top: 30px;
 }
-#componentloader .editing .meet-team-v4 .team-member-wrap .social-link:hover {
+#componentloader .meet-team-v4 .editing.team-member-wrap .social-link:hover {
   border: 2px dashed rgba(0, 0, 0, 0.4);
 }
-#componentloader .editing .meet-team-v4 .team-member-wrap .social-link:hover .add-addtional-team {
+#componentloader .meet-team-v4 .editing.team-member-wrap .social-link:hover .add-addtional-team {
   display: block;
   font-size: 20px !important;
   top: 0px;
 }
-#componentloader .editing .meet-team-v4 .team-member-wrap .team-member {
+#componentloader .meet-team-v4 .editing.team-member-wrap .team-member {
   border: 4px solid rgba(0, 0, 0, 0);
   position: relative;
 }
-#componentloader .editing .meet-team-v4 .team-member-wrap .team-member.edit-mode {
+#componentloader .meet-team-v4 .editing.team-member-wrap .team-member.edit-mode {
   padding: 5px;
 }
-#componentloader .editing .meet-team-v4 .team-member-wrap .team-member:hover {
+#componentloader .meet-team-v4 .editing.team-member-wrap .team-member:hover {
   border: 4px dashed rgba(0, 0, 0, 0.4);
 }
-#componentloader .editing .meet-team-v4 .team-member-wrap .add-addtional {
+#componentloader .meet-team-v4 .editing.team-member-wrap .add-addtional {
   bottom: -20px;
 }
-#componentloader .editing .meet-team-v4 .team-member-wrap .team-member:hover .add-addtional {
+#componentloader .meet-team-v4 .editing.team-member-wrap .team-member:hover .add-addtional {
   display: block;
-  font-size: 28px;
+  font-size: 18px;
 }
-#componentloader .editing .meet-team-v4 .team-member-wrap .team-member:hover .delete-team-member .btn-delete-team-member {
+#componentloader .meet-team-v4 .editing.team-member-wrap .team-member:hover .delete-team-member {
   background: rgba(0, 0, 0, 0.5);
   display: block;
   border: 0;
@@ -1643,8 +1655,12 @@
   top: 0;
   right: 0;
   z-index: 1050;
+  font-size: 18px;
 }
-#componentloader .editing .meet-team-v4 .team-member-wrap .delete-team-member .btn-delete-team-member {
+#componentloader .meet-team-v4 .editing.team-member-wrap .team-member:hover .delete-team-member .btn-delete-team-member {
+  display: block;
+}
+#componentloader .meet-team-v4 .editing.team-member-wrap .delete-team-member .btn-delete-team-member {
   display: none;
 }
 #componentloader .meet-team-v4 {
@@ -1687,36 +1703,36 @@
     margin: 0;
   }
 }
-#componentloader .editing .meet-team-v5 .team-member-wrap .social-link {
+#componentloader .meet-team-v5 .editing.team-member-wrap .social-link {
   border: 2px solid rgba(0, 0, 0, 0);
   position: relative;
 }
-#componentloader .editing .meet-team-v5 .team-member-wrap .social-link.edit-mode {
+#componentloader .meet-team-v5 .editing.team-member-wrap .social-link.edit-mode {
   padding-top: 30px;
 }
-#componentloader .editing .meet-team-v5 .team-member-wrap .social-link:hover {
+#componentloader .meet-team-v5 .editing.team-member-wrap .social-link:hover {
   border: 2px dashed rgba(0, 0, 0, 0.4);
 }
-#componentloader .editing .meet-team-v5 .team-member-wrap .social-link:hover .add-addtional-team {
+#componentloader .meet-team-v5 .editing.team-member-wrap .social-link:hover .add-addtional-team {
   display: block;
   font-size: 20px !important;
   top: 0px;
 }
-#componentloader .editing .meet-team-v5 .team-member-wrap .team-member {
+#componentloader .meet-team-v5 .editing.team-member-wrap .team-member {
   border: 4px solid rgba(0, 0, 0, 0);
   position: relative;
 }
-#componentloader .editing .meet-team-v5 .team-member-wrap .team-member.edit-mode {
+#componentloader .meet-team-v5 .editing.team-member-wrap .team-member.edit-mode {
   padding-top: 20px;
 }
-#componentloader .editing .meet-team-v5 .team-member-wrap .team-member:hover {
+#componentloader .meet-team-v5 .editing.team-member-wrap .team-member:hover {
   border: 4px dashed rgba(0, 0, 0, 0.4);
 }
-#componentloader .editing .meet-team-v5 .team-member-wrap .team-member:hover .add-addtional {
+#componentloader .meet-team-v5 .editing.team-member-wrap .team-member:hover .add-addtional {
   display: block;
-  font-size: 28px;
+  font-size: 18px;
 }
-#componentloader .editing .meet-team-v5 .team-member-wrap .team-member:hover .delete-team-member .btn-delete-team-member {
+#componentloader .meet-team-v5 .editing.team-member-wrap .team-member:hover .delete-team-member {
   background: rgba(0, 0, 0, 0.5);
   display: block;
   border: 0;
@@ -1726,8 +1742,12 @@
   top: 0;
   right: 0;
   z-index: 1050;
+  font-size: 18px;
 }
-#componentloader .editing .meet-team-v5 .team-member-wrap .delete-team-member .btn-delete-team-member {
+#componentloader .meet-team-v5 .editing.team-member-wrap .team-member:hover .delete-team-member .btn-delete-team-member {
+  display: block;
+}
+#componentloader .meet-team-v5 .editing.team-member-wrap .delete-team-member .btn-delete-team-member {
   display: none;
 }
 #componentloader .meet-team-v5 {

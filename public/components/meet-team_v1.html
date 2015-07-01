@@ -2,12 +2,9 @@
     <div class="title mb30">
         <div elem ng-model="component.title"></div>
     </div>
-    <div class="row team-member-wrap">
+    <div class="row team-member-wrap {{isEditing ? 'editing' : ''}}">
         <div class="col-xs-12 col-sm-4 col-md-3 profilepic meet-team-height pull-left" data-ng-repeat="teamMember in component.teamMembers track by $index">
-            <button ng-click="deleteTeamMember($index)" class="btn-delete-team-member">
-                            <i class='fa fa-trash'></i>
-                        </button>
-            <!-- <div class="{{teamMember.becomeMember?'become-member':''}} team-member team-member-{{$index}} {{isEditing ? 'edit-mode' : ''}}">
+            <div class="{{teamMember.becomeMember?'become-member':''}} team-member team-member-{{$index}} {{isEditing ? 'edit-mode' : ''}}">
                 <div ng-if="component.teamSettings.profilepic" class="profile-img meet-team-image">
                     <div class="profilepic-hover">
                         <div class="mask left" style="width:115px"></div>
@@ -68,7 +65,7 @@
                         </li>
                     </ul>
                     <div ng-if="isEditing" class="add-addtional-team center">
-                        <a ng-if="isEditing" class="clickable-link btn-social-link"><i class="fa fa-plus"></i></a>
+                        <button ng-if="isEditing" class="clickable-link btn-social-link"><i class="fa fa-plus"></i></button>
                     </div>
                 </div>
                 <div ng-if="isEditing">
@@ -77,13 +74,13 @@
                             <i class='fa fa-trash'></i>
                         </button>
                     </div>
-                    <div class="add-addtional center">
-                        <a href="" ng-click="addTeamMember(0)">
+                    <div class="add-addtional">
+                        <button  ng-click="addTeamMember(0)">
                             <i class="fa fa-plus"></i>
-                        </a>
+                        </button>
                     </div>
                 </div>
-            </div> -->
+            </div>
         </div>
     </div>
     <div ng-if="isEditing && component.teamMembers.length === 0" class="col-xs-12 text-center">
