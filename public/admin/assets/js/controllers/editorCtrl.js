@@ -21,11 +21,12 @@
       });
     };
 
-    angular.element(window.document).on('keydown', function (e) {
-      if (e.which === 8 || e.which === 46) {
-        e.preventDefault();
-      }
-    });
+    // angular.element(window.document).on('keydown', function (e) {     
+    //     if (e.which === 8 || e.which === 46) {
+    //       if (!angular.element(this).hasClass("cke_editable_inline")) 
+    //          e.preventDefault();
+    //     }
+    // });
 
     //Disable all links in edit
     angular.element("body").on("click", ".component a", function (e) {
