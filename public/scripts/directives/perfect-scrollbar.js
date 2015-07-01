@@ -1,7 +1,7 @@
 
 angular.module('mainApp')
-  .directive('perfectScrollbar', ['$parse', '$window',
-    function ($parse, $window) {
+  .directive('perfectScrollbar', ['$parse', '$window', '$rootScope',
+    function ($parse, $window, $rootScope) {
       var psOptions = ['wheelSpeed', 'wheelPropagation', 'minScrollbarLength', 'useBothWheelAxes', 'useKeyboard', 'suppressScrollX', 'suppressScrollY', 'scrollXMarginOffset', 'scrollYMarginOffset', 'includePadding' //, 'onScroll', 'scrollDown'
       ];
 
@@ -13,7 +13,7 @@ angular.module('mainApp')
         link: function ($scope, $elem, $attr) {
           var jqWindow = angular.element($window);
           var options = {};
-          if (!$scope.app.isMobile) {
+          if (!$rootScope.app.isMobile) {
             for (var i = 0, l = psOptions.length; i < l; i++) {
               var opt = psOptions[i];
               if ($attr[opt] !== undefined) {
