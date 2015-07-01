@@ -1,12 +1,9 @@
-app.directive('socialLinkComponent',["$modal", function ($modal) {
+app.directive('socialLinkComponent', function () {
   return {
     scope: {
       component: '=',
       version: '='
     },
-    templateUrl: '/components/component-wrap.html',
-    link: function (scope, element, attrs, ctrl) {
-      scope.isEditing = true;      
-    }
+    templateUrl: '/components/component-wrap.html'
   }
-}]);
+});

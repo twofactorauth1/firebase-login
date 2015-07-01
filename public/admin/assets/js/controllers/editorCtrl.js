@@ -3,6 +3,7 @@
 /*jslint unparam:true*/
 (function (angular) {
   app.controller('EditorCtrl', ["$scope", "$rootScope", "$interval", "$timeout", "toaster", "$modal", "$filter", "$location", "WebsiteService", "SweetAlert", "hoursConstant", "GeocodeService", "ProductService", "AccountService", "postConstant", function ($scope, $rootScope, $interval, $timeout, toaster, $modal, $filter, $location, WebsiteService, SweetAlert, hoursConstant, GeocodeService, ProductService, AccountService, postConstant) {
+
     $scope.isEditing = true;
     $scope.savePage = function () {
       $scope.saveLoading = true;
@@ -19,7 +20,7 @@
         });
       });
     };
-    
+
     angular.element(window.document).on('keydown', function (e) {
       if (e.which === 8 || e.which === 46) {
         e.preventDefault();
