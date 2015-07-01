@@ -27,6 +27,14 @@
       }
     });
 
+    //Disable all links in edit
+    angular.element("body").on("click", ".component a", function (e) {
+      if (!angular.element(this).hasClass("clickable-link")) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+    });
+
     $scope.retrievePage = function (_handle) {
       WebsiteService.getSinglePage(_handle, function (data) {
         $scope.page = data;
