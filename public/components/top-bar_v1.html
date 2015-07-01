@@ -17,17 +17,17 @@
 </style>
 <div ng-class="component.type+'-v'+component.version">
     <nav class="navbar navbar-default navbar-static-top">
-      <div class="container">
+      <div class="container {{isEditing ? 'top-bar-wrap' : ''}}">
 
         <div class="main-block">
           
            <ul class="nav left-navbar-nav left-block {{isEditing ? 'edit-mode' : ''}}">
             <li ng-repeat="network in component.networks">
                 <a ng-if="!isEditing" href="{{getUrl(network.url)}}" ><i class="fa fa-lg fa-{{network.icon}}"></i></a>
-                <a ng-if="isEditing" data-index="{{$index}}" class="clickable-link btn-social-link" href="" style="z-index:1033;"><i class="fa fa-lg fa-{{network.icon}}"></i></a>
+                <a ng-if="isEditing" ng-click="openModal('social-links-modal', component._id, $index)" class="clickable-link social-links" href="" style="z-index:1033;"><i class="fa fa-lg fa-{{network.icon}}"></i></a>
             </li>
             <div ng-if="isEditing" class="add-addtional center">
-            <a ng-if="isEditing" class="clickable-link btn-social-link" data-toggle="modal"><i class="fa fa-plus"></i></a>
+            <a ng-if="isEditing" ng-click="openModal('social-links-modal', component._id)" class="clickable-link social-links" data-toggle="modal"><i class="fa fa-plus"></i></a>
             </div>
           </ul>
            
