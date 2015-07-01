@@ -1,7 +1,7 @@
 /*global app, moment, angular, window, CKEDITOR*/
 /*jslint unparam:true*/
 
-app.directive('componentSettings', ['$modal', '$http', '$timeout', '$q', '$compile', '$filter', 'WebsiteService', 'CustomerService', 'toaster', function ($modal, $http, $timeout, $q, $compile, $filter, WebsiteService, CustomerService, toaster) {
+app.directive('componentSettings', ['$modal', '$http', '$timeout', '$q', '$compile', '$filter', 'WebsiteService', 'CustomerService', 'toaster', 'ProductService', function ($modal, $http, $timeout, $q, $compile, $filter, WebsiteService, CustomerService, ProductService, toaster) {
   return {
     require: [],
     restrict: 'C',
@@ -11,7 +11,7 @@ app.directive('componentSettings', ['$modal', '$http', '$timeout', '$q', '$compi
     link: function (scope, element, attrs, ctrl) {
 
     },
-    controller: function ($scope, WebsiteService, CustomerService, $compile, $timeout) {
+    controller: function ($scope, WebsiteService, CustomerService, ProductService, $compile, $timeout) {
 
       //$scope.initialize = false;
       $scope.openModal = function (template, id) {
@@ -21,6 +21,26 @@ app.directive('componentSettings', ['$modal', '$http', '$timeout', '$q', '$compi
           scope: $scope
         });
       };
+
+      /*
+       * @getAllProducts
+       * - get products for products and pricing table components
+       */
+
+      $scope.availableProductTags = [];
+
+      ProductService.getProducts(function (data) {
+        $scope.products = data;
+        _.each(data, function (product) {
+          if (product.tags && product.tags.length > 0) {
+            _.each(product.tags, function (tag) {
+              if ($scope.availableProductTags.indexOf(tag) === -1)
+                $scope.availableProductTags.push(tag);
+            });
+          }
+        });
+        $scope.availableProductTagsString = $scope.availableProductTags.join(",");
+      });
 
       /*
        * @editComponent
@@ -495,6 +515,41 @@ app.directive('componentSettings', ['$modal', '$http', '$timeout', '$q', '$compi
         else
           return value.replace("-", " ");
       };
+
+      /*
+       * @numberOfProductOptions
+       * - list of product options for the dropdown in component settings
+       */
+
+      $scope.numberOfProductOptions = [{
+        name: 'All',
+        value: 'Infinity'
+      }, {
+        name: '1',
+        value: 1
+      }, {
+        name: '2',
+        value: 2
+      }, {
+        name: '3',
+        value: 3
+      }, {
+        name: '4',
+        value: 5
+      }, {
+        name: '5',
+        value: 5
+      }, {
+        name: '10',
+        value: 10
+      }, {
+        name: '15',
+        value: 15
+      }, {
+        name: '20',
+        value: 20
+      }];
+
 
       /*
        * @deleteLinkFromNav

@@ -2,12 +2,10 @@
     <div class="products">
         <header class="jumbotron hero-spacer col-xs-12d">
             <div class="title">
-                <div class="editable" data-class="title" ng-bind-html="component.title | unsafe">
-                </div>
+                <div elem ng-model="component.title"></div>
             </div>
             <div class="text">
-                <div class="editable" data-class="text" ng-bind-html="component.text | unsafe">
-                </div>
+                <div elem ng-model="component.text"></div>
             </div>
         </header>      
         <div class="tab-pane active row" id="{{productSection['product-section-id']}}">
@@ -117,7 +115,8 @@
                             </div>
                         </div>
                         <div class="col-sm-4 gray-bg order-summary" ng-if="cartDetails.length > 0">
-                            <div data-ng-include=" 'views/partials/order-summary.html' "></div>
+                            <!-- <div data-ng-include
+=" 'admin/views/partials/order-summary.html' "></div> -->
                         </div>
                     </div>
                     <div class="row billing-shipping" ng-if="checkoutModalState == 2">
@@ -263,7 +262,7 @@
                             </div>
                         </div>
                         <div class="col-sm-4 gray-bg order-summary">
-                            <div data-ng-include=" 'views/partials/order-summary.html' "></div>
+                           <!--  <div data-ng-include=" 'admin/views/partials/order-summary.html' "></div> -->
                         </div>
                     </div>
                     <div class="row payment" ng-show="checkoutModalState == 3">
@@ -304,7 +303,7 @@
                             </div>
                         </div>
                         <div class="col-sm-4 gray-bg order-summary">
-                            <div data-ng-include=" 'views/partials/order-summary.html' "></div>
+                            <!-- <div data-ng-include=" 'admin/views/partials/order-summary.html' "></div> -->
                         </div>
                     </div>
                     <div class="row processing" style="height:400px" ng-if="checkoutModalState == 4">

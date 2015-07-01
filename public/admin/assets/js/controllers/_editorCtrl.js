@@ -2904,26 +2904,6 @@
 
 
     /*
-     * @getProducts
-     * - get a list of products
-     */
-
-    $scope.availableProductTags = [];
-
-    ProductService.getProducts(function (products) {
-      _.each(products, function (product) {
-        if (product.tags && product.tags.length > 0) {
-          _.each(product.tags, function (tag) {
-            if ($scope.availableProductTags.indexOf(tag) === -1)
-              $scope.availableProductTags.push(tag);
-          });
-        }
-      });
-      $scope.availableProductTagsString = $scope.availableProductTags.join(",");
-      $scope.products = products;
-    });
-
-    /*
      * @validateHours
      * 
      */
@@ -2997,40 +2977,6 @@
         $scope.contactHoursInvalid = false;
 
     }
-
-    /*
-     * @numberOfProductOptions
-     * - list of product options for the dropdown in component settings
-     */
-
-    $scope.numberOfProductOptions = [{
-      name: 'All',
-      value: 'Infinity'
-    }, {
-      name: '1',
-      value: 1
-    }, {
-      name: '2',
-      value: 2
-    }, {
-      name: '3',
-      value: 3
-    }, {
-      name: '4',
-      value: 5
-    }, {
-      name: '5',
-      value: 5
-    }, {
-      name: '10',
-      value: 10
-    }, {
-      name: '15',
-      value: 15
-    }, {
-      name: '20',
-      value: 20
-    }];
 
     $scope.checkForSaveBeforeLeave = function (url, reload) {
       $scope.changesConfirmed = true;
