@@ -121,7 +121,7 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> createSocialConfig');
         self.checkPermission(req, self.sc.privs.MODIFY_SOCIALCONFIG, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(res);
+                return self.send403(resp);
             } else {
                 var socialConfig = new $$.m.SocialConfig(req.body);
                 var accountId = parseInt(self.accountId(req));
@@ -143,7 +143,7 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> updateSocialConfig');
         self.checkPermission(req, self.sc.privs.MODIFY_SOCIALCONFIG, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(res);
+                return self.send403(resp);
             } else {
                 var socialConfig = new $$.m.SocialConfig(req.body);
                 var accountId = parseInt(self.accountId(req));
@@ -177,7 +177,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var accountId = parseInt(self.accountId(req));
         self.checkPermission(req, self.sc.privs.MODIFY_SOCIALCONFIG, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(res);
+                return self.send403(resp);
             } else {
                 var socialAccount = req.body;
                 self.log.debug('socialAccount:', socialAccount);
@@ -202,7 +202,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var accountId = parseInt(self.accountId(req));
         self.checkPermission(req, self.sc.privs.VIEW_SOCIALCONFIG, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(res);
+                return self.send403(resp);
             } else {
                 socialConfigManager.getSocialConfig(accountId, id, function(err, config){
                     if(err) {
@@ -226,7 +226,7 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> removeSocialAccount');
         self.checkPermission(req, self.sc.privs.MODIFY_SOCIALCONFIG, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(res);
+                return self.send403(resp);
             } else {
                 var accountId = parseInt(self.accountId(req));
                 var id = null;
@@ -262,7 +262,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.checkPermission(req, self.sc.privs.VIEW_SOCIALCONFIG, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(res);
+                return self.send403(resp);
             } else {
                 var objIndex = parseInt(req.params.index);
                 var accountId = parseInt(self.accountId(req));
@@ -401,7 +401,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.checkPermission(req, self.sc.privs.VIEW_SOCIALCONFIG, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(res);
+                return self.send403(resp);
             } else {
                 socialConfigManager.getFacebookPageInfo(accountId, socialAccountId, pageId, function(err, page){
                     self.log.debug('<< getFacebookPages');
@@ -421,7 +421,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.checkPermission(req, self.sc.privs.VIEW_SOCIALCONFIG, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(res);
+                return self.send403(resp);
             } else {
                 socialConfigManager.getFacebookPostComments(accountId, socialAccountId, postId, function(err, comments){
                     self.log.debug('<< getPostComments');
@@ -441,7 +441,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.checkPermission(req, self.sc.privs.VIEW_SOCIALCONFIG, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(res);
+                return self.send403(resp);
             } else {
                 socialConfigManager.getFacebookProfile(accountId, socialAccountId, function(err, profile){
                     self.log.debug('<< getFacebookProfile');
@@ -463,7 +463,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.checkPermission(req, self.sc.privs.MODIFY_SOCIALCONFIG, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(res);
+                return self.send403(resp);
             } else {
                 socialConfigManager.createFacebookPost(accountId, socialAccountId, message, url, function(err, value){
                     self.log.debug('<< createFacebookPost');
@@ -490,7 +490,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.checkPermission(req, self.sc.privs.MODIFY_SOCIALCONFIG, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(res);
+                return self.send403(resp);
             } else {
                 socialConfigManager.shareFacebookLink(accountId, socialAccountId, url, picture, name, caption,
                     description, function(err, value){
@@ -512,7 +512,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.checkPermission(req, self.sc.privs.MODIFY_SOCIALCONFIG, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(res);
+                return self.send403(resp);
             } else {
                 socialConfigManager.deleteFacebookPost(accountId, socialAccountId, postId, function(err, value){
                     self.log.debug('<< deleteFacebookPost');
@@ -534,7 +534,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.checkPermission(req, self.sc.privs.MODIFY_SOCIALCONFIG, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(res);
+                return self.send403(resp);
             } else {
                 socialConfigManager.addFacebookComment(accountId, socialAccountId, postId, comment, function(err, value){
                     self.log.debug('<< addPostComment');
@@ -555,7 +555,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.checkPermission(req, self.sc.privs.MODIFY_SOCIALCONFIG, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(res);
+                return self.send403(resp);
             } else {
                 socialConfigManager.addFacebookLike(accountId, socialAccountId, postId, function(err, value){
                     self.log.debug('<< addPostLike');
@@ -576,7 +576,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.checkPermission(req, self.sc.privs.MODIFY_SOCIALCONFIG, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(res);
+                return self.send403(resp);
             } else {
                 socialConfigManager.deleteFacebookLike(accountId, socialAccountId, postId, function(err, value){
                     self.log.debug('<< deletePostLike');
@@ -596,7 +596,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.checkPermission(req, self.sc.privs.VIEW_SOCIALCONFIG, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(res);
+                return self.send403(resp);
             } else {
                 socialConfigManager.getFacebookPosts(accountId, socialAccountId, function(err, posts){
                     self.log.debug('<< getFacebookPosts');
@@ -616,7 +616,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.checkPermission(req, self.sc.privs.VIEW_SOCIALCONFIG, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(res);
+                return self.send403(resp);
             } else {
                 socialConfigManager.getFacebookStatuses(accountId, socialAccountId, function(err, posts){
                     self.log.debug('<< getFacebookPosts');
@@ -635,7 +635,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.checkPermission(req, self.sc.privs.VIEW_SOCIALCONFIG, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(res);
+                return self.send403(resp);
             } else {
                 socialConfigManager.getFacebookTagged(accountId, socialAccountId, function(err, posts){
                     self.log.debug('<< getFacebookPosts');
@@ -654,7 +654,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.checkPermission(req, self.sc.privs.VIEW_SOCIALCONFIG, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(res);
+                return self.send403(resp);
             } else {
                 socialConfigManager.getTwitterFeed(accountId, socialAccountId, function(err, posts){
                     self.log.debug('<< getTwitterFeed');
@@ -673,7 +673,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.checkPermission(req, self.sc.privs.VIEW_SOCIALCONFIG, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(res);
+                return self.send403(resp);
             } else {
                 socialConfigManager.getTwitterFollowers(accountId, socialAccountId, function(err, followers){
                     self.log.debug('<< getTwitterFollowers');
@@ -692,7 +692,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.checkPermission(req, self.sc.privs.VIEW_SOCIALCONFIG, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(res);
+                return self.send403(resp);
             } else {
                 socialConfigManager.getTwitterProfile(accountId, socialAccountId, function(err, profile){
                     self.log.debug('<< getTwitterProfile');
@@ -712,7 +712,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.checkPermission(req, self.sc.privs.MODIFY_SOCIALCONFIG, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(res);
+                return self.send403(resp);
             } else {
                 socialConfigManager.createTwitterPost(accountId, socialAccountId, post, function(err, savedPost){
                     self.log.debug('<< createTwitterPost');
@@ -734,7 +734,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.checkPermission(req, self.sc.privs.MODIFY_SOCIALCONFIG, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(res);
+                return self.send403(resp);
             } else {
                 socialConfigManager.replyToTwitterPost(accountId, socialAccountId, tweetId, post, function(err, savedPost){
                     self.log.debug('<< createTwitterReply');
@@ -756,7 +756,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.checkPermission(req, self.sc.privs.MODIFY_SOCIALCONFIG, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(res);
+                return self.send403(resp);
             } else {
                 socialConfigManager.retweetTwitterPost(accountId, socialAccountId, tweetId, function(err, savedPost){
                     self.log.debug('<< createTwitterRetweet');
@@ -777,7 +777,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.checkPermission(req, self.sc.privs.MODIFY_SOCIALCONFIG, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(res);
+                return self.send403(resp);
             } else {
                 socialConfigManager.favoriteTwitterPost(accountId, socialAccountId, tweetId, function(err, savedPost){
                     self.log.debug('<< createTwitterFavorite');
@@ -798,7 +798,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.checkPermission(req, self.sc.privs.MODIFY_SOCIALCONFIG, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(res);
+                return self.send403(resp);
             } else {
                 socialConfigManager.unfavoriteTwitterPost(accountId, socialAccountId, tweetId, function(err, savedPost){
                     self.log.debug('<< deleteTwitterFavorite');
@@ -821,7 +821,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.checkPermission(req, self.sc.privs.MODIFY_SOCIALCONFIG, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(res);
+                return self.send403(resp);
             } else {
                 socialConfigManager.followTwitterUser(accountId, socialAccountId, userId, function(err, savedPost){
                     self.log.debug('<< createTwitterFollower');
@@ -842,7 +842,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.checkPermission(req, self.sc.privs.MODIFY_SOCIALCONFIG, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(res);
+                return self.send403(resp);
             } else {
                 socialConfigManager.unfollowTwitterUser(accountId, socialAccountId, userId, function(err, savedPost){
                     self.log.debug('<< deleteTwitterFollower');
@@ -866,7 +866,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.checkPermission(req, self.sc.privs.MODIFY_SOCIALCONFIG, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(res);
+                return self.send403(resp);
             } else {
                 socialConfigManager.directMessageTwitterUser(accountId, socialAccountId, userId, screenName, post,
                     function (err, savedPost){
@@ -893,7 +893,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.checkPermission(req, self.sc.privs.MODIFY_SOCIALCONFIG, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(res);
+                return self.send403(resp);
             } else {
                 socialConfigManager.getTwitterDirectMessages(accountId, socialAccountId, since, until, limit, function(err, msgs){
                     self.log.debug('<< getTwitterDMs');
@@ -913,7 +913,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.checkPermission(req, self.sc.privs.MODIFY_SOCIALCONFIG, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(res);
+                return self.send403(resp);
             } else {
                 socialConfigManager.deleteTwitterPost(accountId, socialAccountId, postId, function(err, savedPost){
                     self.log.debug('<< deleteTwitterPost');
@@ -937,7 +937,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
       self.checkPermission(req, self.sc.privs.MODIFY_SOCIALCONFIG, function(err, isAllowed) {
           if (isAllowed !== true) {
-              return self.send403(res);
+              return self.send403(resp);
           } else {
               socialConfigManager.getGoogleContacts(accountId, socialAccountId, req.user, groupId, function(err, contacts){
                   self.log.debug('<< getGoogleContacts');
@@ -1003,7 +1003,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.checkPermission(req, self.sc.privs.MODIFY_SOCIALCONFIG, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(res);
+                return self.send403(resp);
             } else {
                 socialConfigManager.shareLinkedinLink(accountId, socialAccountId, url, picture, name, caption,
                     description, function(err, value){

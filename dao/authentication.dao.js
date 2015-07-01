@@ -67,10 +67,12 @@ var dao = {
                                     } else {
                                         req.session.accounts = user.getAllAccountIds();
                                         req.session.accountId = user.getAllAccountIds()[0];
+                                        req.session.unAuthAccountId = user.getAllAccountIds()[0];
                                         req.session.subdomain = account.get('subdomain');
                                         req.session.domain = account.get('domain');
                                     }
                                     log.info("Login successful. AccountId is now " + req.session.accountId);
+                                    log.info('UnAuthAccountId is ' + req.session.unAuthAccountId);
                                     accountDao.getPreviewData(req.session.accounts, function(err, data){
                                         log.debug('got preview data');
                                         req.session.accounts = data;
