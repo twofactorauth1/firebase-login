@@ -1,4 +1,4 @@
-app.directive('videoComponent', function () {
+app.directive('singlePostComponent', function () {
   return {
     scope: {
       component: '=',

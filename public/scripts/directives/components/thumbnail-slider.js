@@ -1,4 +1,4 @@
-app.directive('videoComponent', function () {
+app.directive('thumbnailSliderComponent', function () {
   return {
     scope: {
       component: '=',
