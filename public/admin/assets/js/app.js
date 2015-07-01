@@ -18,5 +18,6 @@ angular.module("clip-two", [
     'duScroll',
     'pascalprecht.translate',
     'autocomplete',
-    'config'
+    'config',
+    'leaflet-directive'
 ]);
