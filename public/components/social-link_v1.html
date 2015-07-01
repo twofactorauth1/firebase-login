@@ -6,13 +6,13 @@
                     <a href="{{network.url}}" class="btn btn-social-icon btn-lg btn-{{network.name}}" target="_blank"><i class="fa fa-{{network.icon}}"></i></a>
                 </div>
                 <div ng-if="isEditing">
-                    <button ng-if="isEditing" data-index="{{$index}}" style="z-index:1033;"  class="btn btn-social-link btn-social-icon btn-lg btn-{{network.name}}">
+                    <button ng-click="openModal('social-links-modal', component._id, $index)" style="z-index:1033;" class="btn social-links btn-social-icon btn-lg btn-{{network.name}}">
                         <i class="fa fa-{{network.icon}}"></i>
                     </button>
                 </div>
             </li>
         </ul>
-        <button ng-if="isEditing" class="btn btn-primary btn-lg pull-right btn-social-link" >Add Social Link</button>
+        <button ng-if="isEditing" ng-click="openModal('social-links-modal', component._id)" class="social-links center btn btn-primary btn-lg btn-wide btn-o pull-right"> <i class="fa fa-plus"></i> Add Social Link</button>
     </div>
 </div>
 

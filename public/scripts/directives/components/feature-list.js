@@ -6,22 +6,6 @@ app.directive('featureListComponent', function () {
       component: '=',
       version: '='
     },
-    templateUrl: '/components/component-wrap.html',
-    link: function (scope, element, attrs, ctrl) {
-      scope.isEditing = true;
-      scope.addFeatureList = function (index) {
-      	if (!index) {
-      		index = 0;
-      	}
-        var newFeature = {
-          "top": "<div style='text-align:center'><span class=\"fa fa-arrow-right\" style=\"color:#0061a7;font-size:96px;\"></span></div>",
-          "content": "<p style=\"text-align: center;\"><span style=\"font-size:24px;\">Feature One</span></p><p style=\"text-align: center;\">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nisi ab, placeat. Officia qui molestiae incidunt est adipisci.</p><p style=\"text-align: center;\"><a style=\"-moz-box-shadow:inset 0px 1px 0px 0px #54a3f7;-webkit-box-shadow:inset 0px 1px 0px 0px #54a3f7;box-shadow:inset 0px 1px 0px 0px #54a3f7;background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #007dc1), color-stop(1, #0061a7));background:-moz-linear-gradient(top, #007dc1 5%, #0061a7 100%);background:-webkit-linear-gradient(top, #007dc1 5%, #0061a7 100%);background:-o-linear-gradient(top, #007dc1 5%, #0061a7 100%);background:-ms-linear-gradient(top, #007dc1 5%, #0061a7 100%);background:linear-gradient(to bottom, #007dc1 5%, #0061a7 100%);filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#007dc1', endColorstr='#0061a7',GradientType=0);background-color:#007dc1;-moz-border-radius:3px;-webkit-border-radius:3px;border-radius:3px;border:1px solid #124d77;display:inline-block;color:#ffffff;font-family:verdana;font-size:19px;font-weight:normal;font-style:normal;padding:14px 70px;text-decoration:none;text-shadow:0px 1px 0px #154682;\" data-cke-saved-href=\"http://\" href=\"http://\">Learn More</a></p>"
-        };
-        scope.component.features.splice(index + 1, 0, newFeature);
-      };
-      scope.deleteFeatureList = function (index) {
-        scope.component.features.splice(index, 1);
-      };
-    }
+    templateUrl: '/components/component-wrap.html'
   };
 });
