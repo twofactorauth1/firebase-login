@@ -529,6 +529,7 @@ app.constant('JS_REQUIRES', {
     'spectrum': ['../js/libs/spectrum/spectrum.js', '../js/libs/angular-spectrum-colorpicker/dist/angular-spectrum-colorpicker.min.js'],
     'uuid': '../js/libs_misc/uuid.js',
     'angular-cookie': '../js/libs/angular-cookie/angular-cookie.min.js',
+    'ckeditor': '../js/libs_misc/ckeditor/ckeditor.js',
 
     //*** Controllers
     'dashboardCtrl': 'assets/js/controllers/dashboardCtrl.js',
@@ -594,6 +595,8 @@ app.constant('JS_REQUIRES', {
     'timeAgoFilter': 'assets/js/filters/timeAgoFilter.js',
     'titleCase': 'assets/js/filters/titleCase.js',
     'orderByArrayLength': 'assets/js/filters/orderByArrayLength.js',
+    'toTrusted': 'assets/js/filters/to_trusted.js',
+    'generateURLforLinks': 'assets/js/filters/generateURLforLinks.js',
 
     //*** Directives
     'mediaModal': 'assets/js/directives/mediadirective.js',
@@ -698,8 +701,18 @@ app.constant('JS_REQUIRES', {
     files: ['../js/libs/angular-daterangepicker/js/angular-daterangepicker.min.js', '../js/libs/bootstrap-daterangepicker/daterangepicker.js']
   }, {
     name: 'ui.sortable',
-    files: ['../js/libs/ng-sortable/dist/ng-sortable.min.js']
+    files: ['../js/libs_misc/ng-sortable/dist/ng-sortable.js','../js/libs_misc/ng-sortable/dist/ng-sortable.style.min.css']
   }, {
+    name: 'ngSticky',
+    files: ['../js/libs/ngSticky/dist/sticky.min.js']
+  }, {
+    name: 'slick',
+    files: ['../js/libs/slick-carousel/slick/slick.js', '../js/libs/angular-slick/dist/slick.js']
+  }, {
+    name: 'jqcloud',
+    files: ["../js/libs/jqcloud2/dist/jqcloud.min.js", "../js/libs/angular-jqcloud/angular-jqcloud.js"]
+  },
+  {
     name: 'wu.masonry',
     files: ['../js/libs/angular-masonry/angular-masonry.js', '../js/libs/masonry/dist/masonry.pkgd.min.js']
   }, {

@@ -120,7 +120,8 @@
     "ng-text-truncate": "https://github.com/lorenooliveira/ng-text-truncate.git",
     "ngInfiniteScroll": "1.0.0",
     "bootstrap-confirmation": "https://github.com/Tavicu/bootstrap-confirmation.git",
-    "allmighty-autocomplete": "*"
+    "allmighty-autocomplete": "*",
+    "ngSticky": "~1.7.9"
   },
   "resolutions": {
     "angular": "~1.3.5",

@@ -8,7 +8,7 @@ mainApp.filter('generateURLforLinks', function () {
            switch (linkToObject.type) {
             case "page":
                 //if (linkToObject.data != 'blog') {
-                    _url = '/page/'+linkToObject.data;
+                    _url = '/'+linkToObject.data;
                 // } else {
                 //     _url = '/'+linkToObject.data;
                 // }
@@ -20,8 +20,11 @@ mainApp.filter('generateURLforLinks', function () {
             case "url":
                 return linkToObject.data;
                 break;
-            case "section":
-                return '/#'+linkToObject.data;
+            case "section":                
+                if(linkToObject.page)
+                    return '/'+linkToObject.page+'/#'+linkToObject.data;
+                else
+                    return '/#'+linkToObject.data;
                 break;
             case "product":
                 _url = ""; //Not yet implemented

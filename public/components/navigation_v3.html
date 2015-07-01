@@ -1,16 +1,10 @@
 <style>
-    .navigation-v3 .navbar ul.navbar-nav li a {
-        color:{{component.txtcolor || 'white'}};
-    }
     .navigation-v3 .navbar-default .navbar-nav > li > a:hover, .navigation-v3 .navbar-default .navbar-nav > li > a:focus{
         background-color: {{component.nav.hoverbg || 'transparent'}};
         color: {{component.nav.hover}};
     }
     .navigation-v3 .navbar-default {
         background: {{component.nav.bg}};
-    }
-    .navbar {
-        background: {{component.nav.bg}}!important;
     }
     /*.navigation-v3 .navbar ul.navbar-nav li {
         border-bottom: 4px solid {{component.nav.bg}};
@@ -24,7 +18,7 @@
     }
 </style>
 <div ng-class="component.type+'-v'+component.version">
-    <nav class="navbar navbar-default" role="navigation">
+    <nav class="navbar navbar-default" role="navigation" ng-style="{'background' : component.nav.bg }">
         <div class="container">
         <div class="col-sm-3">
              <div class="navbar-header">
@@ -50,18 +44,18 @@
             <div ng-if="!component.customnav" class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-right" data-ng-repeat="mainMenu in layout.website.linkLists track by $index" data-ng-if=" mainMenu.handle=='head-menu' ">
                     <li data-ng-repeat="link in mainMenu.links track by $index">
-                        <a data-ng-show="isSection(link.linkTo.type)" data-ng-href="{{link.linkTo|generateURLforLinks}}" class="{{link.class}}" du-smooth-scroll>{{link.label || link.url}}</a>
-                        <a ng-if="link.linkTo.type === 'external'" target="_blank" data-ng-hide="isSection(link.linkTo.type)" data-ng-href="{{link.linkTo|generateURLforLinks}}" class="{{link.linkTo.data === currentpage.handle ? 'active' : link.class}}">{{link.label || link.url}}</a>
-                        <a ng-if="link.linkTo.type !== 'external'" data-ng-hide="isSection(link.linkTo.type)" data-ng-href="{{link.linkTo|generateURLforLinks}}" class="{{link.linkTo.data === currentpage.handle ? 'active' : link.class}}">{{link.label || link.url}}</a>
+                        <a data-ng-show="link.linkTo.type == 'section'" data-ng-href="{{link.linkTo|generateURLforLinks}}" class="{{link.class}}" du-smooth-scroll ng-style="{'color' : component.txtcolor }">{{link.label || link.url}}</a>
+                        <a ng-if="link.linkTo.type === 'external'" target="_blank" data-ng-hide="link.linkTo.type == 'section'" data-ng-href="{{link.linkTo|generateURLforLinks}}" class="{{link.linkTo.data === currentpage.handle ? 'active' : link.class}}" ng-style="{'color' : component.txtcolor }">{{link.label || link.url}}</a>
+                        <a ng-if="link.linkTo.type !== 'external'" data-ng-hide="link.linkTo.type == 'section'" data-ng-href="{{link.linkTo|generateURLforLinks}}" class="{{link.linkTo.data === currentpage.handle ? 'active' : link.class}}" ng-style="{'color' : component.txtcolor }">{{link.label || link.url}}</a>
                     </li>
                 </ul>
             </div>
             <div ng-if="component.customnav" class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-right" data-ng-repeat="mainMenu in component.linkLists track by $index" data-ng-if=" mainMenu.handle=='head-menu' ">
                     <li data-ng-repeat="link in mainMenu.links track by $index">
-                        <a data-ng-show="isSection(link.linkTo.type)" data-ng-href="{{link.linkTo|generateURLforLinks}}" class="{{link.class}}" du-smooth-scroll>{{link.label || link.url}}</a>
-                        <a ng-if="link.linkTo.type === 'external'" target="_blank" data-ng-hide="isSection(link.linkTo.type)" data-ng-href="{{link.linkTo|generateURLforLinks}}" class="{{link.linkTo.data === currentpage.handle ? 'active' : link.class}}">{{link.label || link.url}}</a>
-                        <a  ng-if="link.linkTo.type !== 'external'" data-ng-hide="isSection(link.linkTo.type)" data-ng-href="{{link.linkTo|generateURLforLinks}}" class="{{link.linkTo.data === currentpage.handle ? 'active' : link.class}}">{{link.label || link.url}}</a>
+                        <a data-ng-show="link.linkTo.type == 'section'" data-ng-href="{{link.linkTo|generateURLforLinks}}" class="{{link.class}}" du-smooth-scroll ng-style="{'color' : component.txtcolor }">{{link.label || link.url}}</a>
+                        <a ng-if="link.linkTo.type === 'external'" target="_blank" data-ng-hide="link.linkTo.type == 'section'" data-ng-href="{{link.linkTo|generateURLforLinks}}" class="{{link.linkTo.data === currentpage.handle ? 'active' : link.class}}" ng-style="{'color' : component.txtcolor }">{{link.label || link.url}}</a>
+                        <a  ng-if="link.linkTo.type !== 'external'" data-ng-hide="link.linkTo.type == 'section'" data-ng-href="{{link.linkTo|generateURLforLinks}}" class="{{link.linkTo.data === currentpage.handle ? 'active' : link.class}}" ng-style="{'color' : component.txtcolor }">{{link.label || link.url}}</a>
                     </li>
                 </ul>
             </div>

@@ -660,7 +660,8 @@
             dragHandled = true;
             event.preventDefault();
             eventObj = $helper.eventObj(event);
-            angular.element(".ui-sortable").addClass("active");
+            if(scope.itemScope.element.parent().hasClass("ui-sortable"))
+                angular.element(".ui-sortable").addClass("active");
             // (optional) Scrollable container as reference for top & left offset calculations, defaults to Document
             scrollableContainer = angular.element($document[0].querySelector(scope.sortableScope.options.scrollableContainer)).length > 0 ?
               $document[0].querySelector(scope.sortableScope.options.scrollableContainer) : $document[0].documentElement;

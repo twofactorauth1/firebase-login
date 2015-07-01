@@ -1,49 +1,41 @@
 <div ng-class="component.type+'-v'+component.version">
-<div class="title">
-    <div class="editable" data-class="title" ng-bind-html="component.title | unsafe">
+    <div class="title">
+        <div elem="component.title" elem-title="Title"></div>
     </div>
-</div>
-
-<div class="clearfix mb15"></div>
-<div class="row testimonial-wrap">
-<div class="col-xs-12 testimonials" ng-repeat="testimonial in component.testimonials track by $index">
-
-    <div class="single-testimonial {{isEditing ? 'edit-mode' : ''}}">
-        <div class="row">
-            <div class="img col-sm-3 {{$index % 2 == 0 ? 'pull-left' : 'pull-right'}}">
-                <div class="center editable" data-text="Insert image here" data-index="{{$index}}" data-class="testimonials.item.img" ng-bind-html="testimonial.img | unsafe"></div>
-            </div>
-            <div class="clearfix visible-xs"></div>
-            <div class="col-sm-9">
-                <h3 class="name">
-                    <div class="editable" data-index="{{$index}}" data-text="Enter Name here" data-class="testimonials.item.name" ng-bind-html="testimonial.name | unsafe">
+    <div class="clearfix mb15"></div>
+    <div class="row testimonial-wrap">
+        <div class="col-xs-12 testimonials" ng-repeat="testimonial in component.testimonials track by $index">
+            <div class="single-testimonial {{isEditing ? 'edit-mode' : ''}}">
+                <div class="row">
+                    <div class="img col-sm-3 {{$index % 2 == 0 ? 'pull-left' : 'pull-right'}}">
+                        <div elem ng-model="testimonial.img"></div>
                     </div>
+                    <div class="clearfix visible-xs"></div>
+                    <div class="col-sm-9">
+                        <h3 class="name">
+                    <div elem ng-model="testimonial.name"></div>
                 </h3>
-                <div class="site">
-                    <div class="editable" data-index="{{$index}}" data-text="Enter Site here" data-class="testimonials.item.site" ng-bind-html="testimonial.site | unsafe">
+                        <div class="site">
+                            <div elem ng-model="testimonial.site"></div>
+                        </div>
+                        <div class="text">
+                            <div elem ng-model="testimonial.text"></div>
+                        </div>
                     </div>
                 </div>
-                <div class="text">
-                    <div class="editable" data-index="{{$index}}" data-text="Enter Description here"  data-class="testimonials.item.text" ng-bind-html="testimonial.text | unsafe">
-                    </div>
+                <div ng-if="isEditing" class="delete-single-testimonial center">
+                    <button ng-click="deleteTestimonial(component._id,$index)" class="ng-scope btn-delete-single-testimonial">
+                        <i class='fa fa-trash'></i>
+                    </button>
                 </div>
-            </div>           
-        </div> 
-         <div ng-if="isEditing" class="delete-single-testimonial center">
-                <button ng-click="deleteTestimonial(component._id,$index)" class="ng-scope btn-delete-single-testimonial">
-                    <i class='fa fa-trash'></i>
-                </button>
+                <div ng-if="isEditing" class="add-addtional center">
+                    <a href="" ng-click="addTestimonial(component._id,$index)">
+                        <i class="fa fa-plus"></i>
+                    </a>
+                </div>
             </div>
-            <div ng-if="isEditing" class="add-addtional center">
-                <a href="" ng-click="addTestimonial(component._id,$index)">
-                    <i class="fa fa-plus"></i>
-                </a>
-            </div>  
+            <div class="clearfix mb30"></div>
+        </div>
     </div>
-
-    <div class="clearfix mb30"></div>
-
-</div>
-</div>
-<button ng-if="isEditing && component.testimonials.length === 0" ng-click="addTestimonial(component._id,0)" class="btn btn-primary btn-lg pull-right btn-add-testimonial" >Add new testimonial</button>
+    <button ng-if="isEditing && component.testimonials.length === 0" ng-click="addTestimonial(component._id,0)" class="btn btn-primary btn-lg pull-right btn-add-testimonial">Add new testimonial</button>
 </div>

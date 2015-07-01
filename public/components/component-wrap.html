@@ -7,18 +7,15 @@
        opacity: {{component.bg.opacity/100 || 1}};
     }
 </style>
-<div class="component-wrap" ng-if="component.visibility" ng-class="{'mt200':component.type == 'masthead'}">
+<div class="component-wrap" ng-if="component.visibility">
 
-    <div class="component {{component.type}}{{$index + 1}}" data-id="{{component._id}}" data-type="{{component.type}}">
+    <div class="component {{component.type}}-v{{$index + 1}}">
 
-        <div id="{{component.anchor}}" ng-style="{&#39;color&#39;:component.txtcolor||primaryTextColor}">
+        <div id="{{component.anchor}}" ng-style="{'color':component.txtcolor||primaryTextColor}">
 
-            <!--<div-->
-                    <!--ng-if="!component.bg.img.url"-->
-                    <!--style='background: {{component.bg.color}};color: {{component.txtcolor||primaryTextColor}};'>-->
             <div
                     ng-if="!component.bg.img.url && component.type != 'email'"
-                    ng-style="{&#39;background&#39;: component.bg.color, &#39;color&#39;:component.txtcolor||primaryTextColor}">
+                    ng-style="{'background': component.bg.color, 'color':component.txtcolor||primaryTextColor}">
 
                 <div class="component-inner">
 

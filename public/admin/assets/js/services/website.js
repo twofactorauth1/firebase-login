@@ -42,8 +42,8 @@
 		};
 
 		//website/:websiteid/page/:handle
-		this.getSinglePage = function (websiteID, handle, fn) {
-			var apiUrl = baseUrl + ['cms', 'website', websiteID || $$.server.websiteId, 'page', handle].join('/');
+		this.getSinglePage = function (handle, fn) {
+			var apiUrl = baseUrl + ['cms', 'website', $$.server.websiteId, 'page', handle].join('/');
 			$http.get(apiUrl)
 			.success(function (data, status, headers, config) {
 				fn(data);
@@ -165,16 +165,16 @@
 		};
 
 		// website/:websiteId/page/:id
-		this.updatePage = function(websiteId, pageId, pagedata, fn) {
+		this.updatePage = function(page, fn) {
 			var self = this;
 
-			if (!pagedata.modified) {pagedata.modified = {}}
-			pagedata.modified.date = new Date();
-			var apiUrl = baseUrl + ['cms', 'website', websiteId, 'page', pageId].join('/');
+			if (!page.modified) {page.modified = {}}
+			page.modified.date = new Date();
+			var apiUrl = baseUrl + ['cms', 'website',  $$.server.websiteId, 'page', page._id].join('/');
 			$http({
 			    url: apiUrl,
 			    method: "POST",
-			    data: angular.toJson(pagedata)
+			    data: angular.toJson(page)
 			})
 			.success(function (data, status, headers, config) {
 				fn(data);
@@ -444,10 +444,7 @@
                 fn(err, null);
             });
 		};
-		this.saveComponent = function (component, cmpVersion, fn) {
-			console.log('Saving Component >>>');
-			console.log('component ', component);
-			console.log('cmpVersion ', cmpVersion);
+		this.getComponent = function (component, cmpVersion, fn) {
 			var apiUrl = baseUrl + ['cms', 'component', component.type].join('/');
 			$http({
 			    url: apiUrl,

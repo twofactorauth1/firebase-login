@@ -1,4 +1,5 @@
 <script type="text/ng-template" id="component-settings-modal">
+<div id="component-setting-modal">
     <div class="modal-header">
         <div class="modal-btns">
             <button type="button" class="close" ng-click="closeModal()">
@@ -330,13 +331,20 @@
                            
                             
                             <div class="col-xs-12">
-                                <label ng-if="newLink.linkType=='section'" for="link-url">Select Component</label>
-                                <label ng-if="newLink.linkType=='page'" for="link-url">Select Page</label>
-                                <label ng-if="newLink.linkType=='external'" for="link-url">Enter Url</label>
-                                <select style="text-transform:capitalize" ng-if="newLink.linkType=='section'"  placeholder="Select a component" ng-model="newLink.linkUrl" class="form-control margin-bottom-0">
+                                <label ng-if="newLink.linkType=='section'" for="link-page">Select Page</label>
+                                <select ng-if="newLink.linkType=='section'" placeholder="Select a page" ng-model="newLink.linkPage" class="form-control margin-bottom-0">
+                                    <option value="" disabled>Select a Page</option>
+                                    <option ng-repeat="page in filterdedPages track by $index" data-ng-if="page.title && page.handle" value="{{page.handle}}">{{page.title}}</option>
+                                </select>
+                                <label style="margin-top:10px" ng-if="newLink.linkType=='section'" for="link-url">Select Component</label>
+                                 <select style="text-transform:capitalize" ng-if="newLink.linkType=='section'"  placeholder="Select a component" ng-model="newLink.linkUrl" class="form-control margin-bottom-0">
                                     <option value="" disabled>Select a Component</option>
                                     <option ng-repeat="component in currentPage.components track by $index" data-ng-if="component.anchor" value="{{component.anchor}}">{{setLinkTitle(component.type, $index)}}</option>
                                 </select>
+                                
+                                <label ng-if="newLink.linkType=='page'" for="link-url">Select Page</label>
+                                <label ng-if="newLink.linkType=='external'" for="link-url">Enter Url</label>
+                               
                                 <select ng-if="newLink.linkType=='page'" placeholder="Select a page" ng-model="newLink.linkUrl" class="form-control margin-bottom-0">
                                     <option value="" disabled>Select a Page</option>
                                     <option ng-repeat="page in filterdedPages track by $index" data-ng-if="page.title && page.handle" value="{{page.handle}}" ng-selected="{{link.label == page.title}}">{{page.title}}</option>
@@ -371,7 +379,7 @@
                                     <div class="col-xs-2">
                                         <h4>
                                                             <i class="fa fa-trash-o pull-right" ng-hide="edit[$index]" ng-click="deleteLinkFromNav($index);" style="margin-top: 3px;"></i>
-                                                            <i ng-show="!edit[$index]" class="fa fa-pencil-square-o pull-right" ng-click="edit[$index]=true; linkType[$index]=link.linkTo.type" style="margin-top: 3px;"></i>
+                                                            <i ng-show="!edit[$index]" class="fa fa-pencil-square-o pull-right" ng-click="edit[$index]=true; linkType[$index]=link.linkTo.type;initializeEditLinks(link.linkTo, false)" style="margin-top: 3px;"></i>
                                                             <i ng-show="edit[$index]" class="fa fa-times pull-right" ng-click="edit[$index]= false" style="margin-top: 3px;"></i>
                                                         </h4>
                                     </div>
@@ -398,7 +406,12 @@
                                         <div class="clearfix margin-bottom-10"></div>
                                         <div class="row">
                                             <div class="col-xs-12">
-                                            <label ng-if="linkType[$index]=='section'" for="link-url">Select Component</label>
+                                             <label ng-if="linkType[$index]=='section'" for="link-page">Select Page</label>
+                                                <select ng-if="linkType[$index]=='section'" placeholder="Select a page" ng-model="link.linkTo.page" ng-change="initializeEditLinks(link.linkTo, true)" class="form-control margin-bottom-0">
+                                                    <option value="" disabled>Select a Page</option>
+                                                    <option ng-repeat="page in filterdedPages track by $index" data-ng-if="page.title && page.handle" value="{{page.handle}}" ng-selected="{{link.linkTo.page == page.handle}}">{{page.title}}</option>
+                                                </select>
+                                            <label style="margin-top:10px" ng-if="linkType[$index]=='section'" for="link-url">Select Component</label>
                                             <label ng-if="linkType[$index]=='page'" for="link-url">Select Page</label>
                                             <label ng-if="linkType[$index]=='external'" for="link-url">Enter Url</label>
                                                 <select id="linkSection" style="text-transform:capitalize" ng-if="linkType[$index]=='section'" ng-model="link.linkTo.data" placeholder="Select a component" ng-change="updateLinkList()" class="form-control margin-bottom-0">
@@ -438,7 +451,7 @@
                                     <div class="col-xs-2">
                                         <h4>
                                                             <i class="fa fa-trash-o pull-right" ng-hide="edit[$index]" ng-click="deleteLinkFromNav($index);" style="margin-top: 3px;"></i>
-                                                            <i ng-show="!edit[$index]" class="fa fa-pencil-square-o pull-right" ng-click="edit[$index]=true; linkType[$index]=link.linkTo.type" style="margin-top: 3px;"></i>
+                                                            <i ng-show="!edit[$index]" class="fa fa-pencil-square-o pull-right" ng-click="edit[$index]=true; linkType[$index]=link.linkTo.type;initializeEditLinks(link.linkTo, false)" style="margin-top: 3px;"></i>
                                                             <i ng-show="edit[$index]" class="fa fa-times pull-right" ng-click="edit[$index]= false" style="margin-top: 3px;"></i>
                                                         </h4>
                                     </div>
@@ -762,5 +775,11 @@
             </button>
         </div>
     </div>
+    <a class="btn btn-outline pull-right media-modal hidden" on-insert-mediacb="insertMedia" user='user' data-main='true'>
+        <i class="fa fa fa-image"></i>
+        <span class="hidden-xs">Media</span>
+    </a>
     <!-- /.modal -->
+</div>
+
 </script>
