@@ -1,12 +1,14 @@
 <div ng-class="component.type+'-v'+component.version">
-    <div class="title">
+    <div class="title mb30">
         <div elem ng-model="component.title"></div>
     </div>
-    <div class="mb30"></div>
     <div class="row team-member-wrap">
-        <div class="col-xs-12 col-sm-4 col-md-3 profilepic meet-team-height pull-left" ng-repeat="teamMember in component.teamMembers">
-            <div class="{{teamMember.becomeMember?'become-member':''}} team-member {{isEditing ? 'edit-mode' : ''}}">
-                <div ng-if="component.teamSettings.profilepic" class="profile-img meet-team-image" data-index="{{$index}}">
+        <div class="col-xs-12 col-sm-4 col-md-3 profilepic meet-team-height pull-left" data-ng-repeat="teamMember in component.teamMembers track by $index">
+            <button ng-click="deleteTeamMember($index)" class="btn-delete-team-member">
+                            <i class='fa fa-trash'></i>
+                        </button>
+            <!-- <div class="{{teamMember.becomeMember?'become-member':''}} team-member team-member-{{$index}} {{isEditing ? 'edit-mode' : ''}}">
+                <div ng-if="component.teamSettings.profilepic" class="profile-img meet-team-image">
                     <div class="profilepic-hover">
                         <div class="mask left" style="width:115px"></div>
                         <div class="mask right" style="width:115px"></div>
@@ -43,7 +45,7 @@
                         <img ng-if="!teamMember.becomeMember" ng-src="{{teamMember.profilepic}}" class="{{component.imgstyle}} profile-img img-thumbnail img-circle" style="width: 229px;height: 230px" />
                     </div>
                     <a ng-if="teamMember.becomeMember" href="{{teamMember.link}}">
-                        <img data-index="{{$index}}" ng-show="teamMember.profilepic" ng-src="{{teamMember.profilepic}}" class="thumbnail img-circle profile-img meet-team-image" />
+                        <img ng-show="teamMember.profilepic" ng-src="{{teamMember.profilepic}}" class="thumbnail img-circle profile-img meet-team-image" />
                     </a>
                 </div>
                 <div ng-if="component.teamSettings.name" class="name">
@@ -62,24 +64,29 @@
                             <a ng-if="!isEditing" href="{{network.url}}" target="_blank" class="btn btn-{{network.icon}}">
                                 <span class="fa fa-{{network.icon}}"></span>
                             </a>
-                            <a ng-if="isEditing" href="#" data-index="{{$index}}" parent-data-index="{{$parent.$parent.$index}}" class="clickable-link btn-social-link btn btn-{{network.icon}}"><span class="fa fa-{{network.icon}}"></span></a>
+                            <a ng-if="isEditing" href="#" class="clickable-link btn-social-link btn btn-{{network.icon}}"><span class="fa fa-{{network.icon}}"></span></a>
                         </li>
                     </ul>
                     <div ng-if="isEditing" class="add-addtional-team center">
-                        <a ng-if="isEditing" parent-data-index="{{$parent.$index}}" class="clickable-link btn-social-link"><i class="fa fa-plus"></i></a>
+                        <a ng-if="isEditing" class="clickable-link btn-social-link"><i class="fa fa-plus"></i></a>
                     </div>
                 </div>
-                <div ng-if="isEditing" class="delete-team-member center">
-                    <button ng-click="deleteTeamMember(component._id, $index)" class="ng-scope btn-delete-team-member">
-                        <i class='fa fa-trash'></i>
-                    </button>
+                <div ng-if="isEditing">
+                    <div class="delete-team-member center">
+                        <button ng-click="deleteTeamMember($index)" class="btn-delete-team-member">
+                            <i class='fa fa-trash'></i>
+                        </button>
+                    </div>
+                    <div class="add-addtional center">
+                        <a href="" ng-click="addTeamMember(0)">
+                            <i class="fa fa-plus"></i>
+                        </a>
+                    </div>
                 </div>
-                <div ng-if="isEditing" class="add-addtional center">
-                    <a href="" ng-click="addTeamMember(component._id,$index)">
-                        <i class="fa fa-plus"></i>
-                    </a>
-                </div>
-            </div>
+            </div> -->
         </div>
+    </div>
+    <div ng-if="isEditing && component.teamMembers.length === 0" class="col-xs-12 text-center">
+        <a ng-click="addTeamMember(0)" class="btn btn-primary btn-lg btn-wide btn-o add-team-member"> <i class="fa fa-plus"></i> Add New Team Member</a>
     </div>
 </div>
