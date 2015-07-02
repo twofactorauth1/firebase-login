@@ -14,28 +14,28 @@
                     <div class="mb10"></div>
                     <div class="form-group">
                         <label>Title:</label>
-                        <input id="edit-page-title" class="form-control input-lg" type="text" ng-model="currentPage.title">
+                        <input id="edit-page-title" class="form-control input-lg" type="text" ng-model="page.title">
                     </div>
                     <div class="form-group" ng-class="{'has-error': duplicateUrl}">
                         <label>URL:</label>
-                        <input id="edit-page-url" ng-blur="checkForDuplicatePage()" class="form-control input-lg" type="text" ng-model="currentPage.handle" ng-disabled="currentPage.handle == 'index' && !duplicateUrl">
+                        <input id="edit-page-url" ng-blur="checkForDuplicatePage()" class="form-control input-lg" type="text" ng-model="page.handle" ng-disabled="page.handle == 'index' && !duplicateUrl">
                     </div>
                     <div class="padding-right-0">
-                        <div class="form-group" ng-hide="currentPage.handle == 'index' && !duplicateUrl">
+                        <div class="form-group" ng-hide="page.handle == 'index' && !duplicateUrl">
                             <label>Show Page:</label>
-                            <switch ng-model="currentPage.visible.visibility" class="pull-right"></switch>
+                            <switch ng-model="page.visible.visibility" class="pull-right"></switch>
                             <span class="help-block"><i class="ti-info-alt text-primary"></i> Visitors will only see your page when 'Show Page' is on.</span>
                         </div>
                         <div class="form-group">
                             <label>Secure:</label>
-                            <switch ng-model="currentPage.secure" class="pull-right"></switch>
+                            <switch ng-model="page.secure" class="pull-right"></switch>
                             <span class="help-block"><i class="ti-info-alt text-primary"></i> Make this page secure and allow only logged in users.</span>
                         </div>
                     </div>
                     <div class="clearfix margin-bottom-"></div>
                     <div class="well margin-bottom-0">
                         <p>Danger Zone</p>
-                        <button class="btn btn-block btn-danger mb10" data-ng-disabled="currentPage.handle==='index'" ng-click="deletePage()"><i class="fa fa-trash"></i> Delete Page</button>
+                        <button class="btn btn-block btn-danger mb10" data-ng-disabled="page.handle==='index'" ng-click="deletePage()"><i class="fa fa-trash"></i> Delete Page</button>
                     </div>
                 </div>
             </tab>
@@ -56,7 +56,7 @@
                                 <tr ng-repeat="version in pageVersions | orderBy: 'modified.date':true">
                                     <th scope="row">{{version.modified.date | date:'MMM d, y h:mm:ss a'}}</th>
                                     <td>
-                                    <!--
+                                        <!--
                                     <a href="" ng-click="showPreview(version)">Preview</a> | <a href="" ng-click="revertPage(version)">Restore</a> <a href="" ng-click="deletePage()" class="hidden">Delete</a> -->
                                     </td>
                                 </tr>

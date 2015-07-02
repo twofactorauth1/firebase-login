@@ -297,9 +297,9 @@
 		};
 
 		//website/:websiteId/duplicate/page
-		this.createDuplicatePage = function(websiteId, pagedata, fn) {
+		this.createDuplicatePage = function(pagedata, fn) {
 			var self = this;
-			var apiUrl = baseUrl + ['cms', 'website', websiteId, 'duplicate', 'page'].join('/');
+			var apiUrl = baseUrl + ['cms', 'website', $$.server.websiteId, 'duplicate', 'page'].join('/');
 			$http({
 			    url: apiUrl,
 			    method: "POST",

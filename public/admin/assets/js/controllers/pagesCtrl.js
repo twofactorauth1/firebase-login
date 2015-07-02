@@ -1,7 +1,6 @@
 'use strict';
-/**
- * controller for products
- */
+/*global app, moment, angular, window, CKEDITOR*/
+/*jslint unparam:true*/
 (function (angular) {
   app.controller('PagesCtrl', ["$scope", "$location", "toaster", "$filter", "$modal", "WebsiteService", function ($scope, $location, toaster, $filter, $modal, WebsiteService) {
     $scope.tableView = 'list';
@@ -27,63 +26,60 @@
       $scope.displayPages = true;
     });
 
-    $scope.setHomePage = function()
-    {
-      if($scope.createpage.homepage)
-      {
+    $scope.setHomePage = function () {
+      if ($scope.createpage.homepage) {
         $scope.createpage.title = 'Home';
         $scope.createpage.handle = 'index';
       }
-        
-    }
+    };
 
     $scope.default_image_url = "/admin/assets/images/default-page.jpg";
 
     $scope.filterPages = function () {
       $scope.showFilter = !$scope.showFilter;
-      $scope.filterScreenshots($scope.pages)
-    }
+      $scope.filterScreenshots($scope.pages);
+    };
 
     $scope.orderByFn = function () {
       $scope.pages = $filter('orderBy')($scope.pages, 'modified.date', true);
-    }
+    };
 
     $scope.filterScreenshots = function (pages) {
-      for (var key in pages) {
-        if (pages.hasOwnProperty(key)) {
-          pages[key].hasScreenshot = false;
-          if (pages[key].screenshot) {
-            if ($("#screenshot_" + pages[key]._id).attr("src") === $scope.default_image_url) {
-              pages[key].hasScreenshot = false;
+      _.each(pages, function (page) {
+        if (page) {
+          page.hasScreenshot = false;
+          if (page.screenshot) {
+            if ($("#screenshot_" + page._id).attr("src") === $scope.default_image_url) {
+              page.hasScreenshot = false;
             } else {
-              pages[key].hasScreenshot = true;
+              page.hasScreenshot = true;
             }
           }
         }
-      }
-    }
+      });
+    };
 
     $scope.formatPages = function (pages) {
       var pagesArr = [];
-      for (var key in pages) {
-        if (pages.hasOwnProperty(key)) {
-          if (pages[key].components) {
-            pages[key].components = pages[key].components.length;
+      _.each(pages, function (page) {
+        if (page) {
+          if (page.components) {
+            page.components = page.components.length;
           } else {
-            pages[key].components = 0;
+            page.components = 0;
           }
-          pages[key].hasScreenshot = false;
-          if (pages[key].screenshot) {
-            if ($("#screenshot_" + pages[key]._id).attr("src") === $scope.default_image_url) {
-              pages[key].hasScreenshot = false;
+          page.hasScreenshot = false;
+          if (page.screenshot) {
+            if ($("#screenshot_" + page._id).attr("src") === $scope.default_image_url) {
+              page.hasScreenshot = false;
             }
-            pages[key].hasScreenshot = true;
+            page.hasScreenshot = true;
           }
-          if (pages[key].type != 'template' && pages[key].handle != 'blog' && pages[key].handle != 'single-post') {
-            pagesArr.push(pages[key]);
+          if (page.type !== 'template' && page.handle !== 'blog' && page.handle !== 'single-post') {
+            pagesArr.push(page);
           }
         }
-      }
+      });
       return pagesArr;
     };
 
@@ -136,21 +132,22 @@
     $scope.validateCreatePage = function (page, restrict) {
       $scope.createPageValidated = false;
       if (page) {
-        if (page.handle == '') {
+        if (page.handle === '') {
           $scope.handleError = true;
         } else {
           $scope.handleError = false;
-          if (!restrict)
+          if (!restrict) {
             page.handle = $filter('slugify')(page.title);
-          else
+          } else {
             page.handle = $filter('slugify')(page.handle);
+          }
         }
-        if (page.title == '') {
+        if (page.title === '') {
           $scope.titleError = true;
         } else {
           $scope.titleError = false;
         }
-        if (page && page.title && page.title != '' && page.handle && page.handle != '') {
+        if (page && page.title && page.title !== '' && page.handle && page.handle !== '') {
           $scope.createPageValidated = true;
         }
       }
@@ -159,13 +156,12 @@
     $scope.createPageFromTemplate = function (page, $event) {
       $scope.validateCreatePage(page, true);
 
+      $scope.titleError = false;
+      $scope.handleError = false;
       if (!$scope.createPageValidated) {
         $scope.titleError = true;
         $scope.handleError = true;
         return false;
-      } else {
-        $scope.titleError = false;
-        $scope.handleError = false;
       }
 
       var pageData = {
@@ -175,11 +171,11 @@
       };
 
       var hasHandle = false;
-      for (var i = 0; i < $scope.pages.length; i++) {
-        if ($scope.pages[i].handle === page.handle) {
+      _.each($scope.pages, function (_page) {
+        if (_page.handle === page.handle) {
           hasHandle = true;
         }
-      };
+      });
 
 
       if (!hasHandle) {
@@ -243,10 +239,9 @@
       $scope.triggerInput(input);
     };
 
-    $scope.toggleHandle = function(val)
-    {
+    $scope.toggleHandle = function (val) {
       $scope.showChangeURL = val;
-    }
+    };
 
   }]);
-})(angular);
+}(angular));
