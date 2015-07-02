@@ -433,6 +433,18 @@ div[data-type='campaign'] .inner-page .overlay {
 .contact-us-v1 .current-day {
   font-weight: bold;
 }
+.contact-us-v1 .editing .widget-weather .settings {
+  position: relative !important;
+  right: 0;
+  top: 0;
+  border-left: none;
+  border-bottom: none;
+  width: 100%;
+  color: white;
+}
+.contact-us-v1 .leaflet-popup-pane {
+  color: #000;
+}
 .component-wrap {
   display: block;
   position: relative;

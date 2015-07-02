@@ -7,6 +7,7 @@ app.directive('contactUsComponent', ['leafletData', '$timeout', function (leafle
     },
     templateUrl: '/components/component-wrap.html',
     controller: function ($scope, GeocodeService, $compile) {
+	   $scope.isEditing = true;
 			angular.extend($scope, {
 		      mapLocation: {
 		        lat: 51,

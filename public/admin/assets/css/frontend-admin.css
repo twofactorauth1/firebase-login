@@ -470,6 +470,18 @@
 #componentloader .contact-us-v1 .current-day {
   font-weight: bold;
 }
+#componentloader .contact-us-v1 .editing .widget-weather .settings {
+  position: relative !important;
+  right: 0;
+  top: 0;
+  border-left: none;
+  border-bottom: none;
+  width: 100%;
+  color: white;
+}
+#componentloader .contact-us-v1 .leaflet-popup-pane {
+  color: #000;
+}
 #componentloader .component-wrap {
   display: block;
   position: relative;
