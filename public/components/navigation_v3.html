@@ -1,17 +1,17 @@
 <style>
     .navigation-v3 .navbar-default .navbar-nav > li > a:hover, .navigation-v3 .navbar-default .navbar-nav > li > a:focus{
-        background-color: {{component.nav.hoverbg || 'transparent'}};
-        color: {{component.nav.hover}};
+        background-color: {{component.nav.hoverbg || 'transparent'}}!important;
+        color: {{component.nav.hover}}!important;
     }
     .navigation-v3 .navbar-default {
         background: {{component.nav.bg}};
     }
-    /*.navigation-v3 .navbar ul.navbar-nav li {
+    .navigation-v3 .navbar ul.navbar-nav li {
         border-bottom: 4px solid {{component.nav.bg}};
     }
     .navigation-v3 .navbar ul.navbar-nav li:hover {
-        border-bottom: 4px solid {{component.nav.hover}};
-    }*/
+        border-bottom: 4px solid {{component.nav.hover}}!important;
+    }
     .navigation-v3 .navbar ul.navbar-nav li a.active {
          color: {{component.activetxtcolor || '#4bb0cb'}};
          background-color: {{component.nav.hoverbg || 'transparent'}};
