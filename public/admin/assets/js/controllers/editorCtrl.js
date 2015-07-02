@@ -28,17 +28,19 @@
       var temp = Math.uuid();
       newComponent._id = temp;
       newComponent.anchor = temp;
-      $scope.components.splice(index+1, 0, newComponent);
+      $scope.components.splice(index + 1, 0, newComponent);
       toaster.pop('success', "Component Added", "The " + newComponent.type + " component was added successfully.");
     };
 
     //disable delete redirect
-    angular.element(window.document).on('keydown', function (e) {
-      if (e.which === 8 || e.which === 46) {
-        if (!angular.element(this).hasClass("cke_editable_inline"))
-          e.preventDefault();
-      }
-    });
+    // var rx = /INPUT|SELECT|TEXTAREA/i;
+    // angular.element('window.document').on('keydown', function (e) {
+    //   if (e.which === 8 || e.which === 46) {
+    //     if (!rx.test(e.target.tagName) || e.target.disabled || e.target.readOnly) {
+    //       e.preventDefault();
+    //     }
+    //   }
+    // });
 
     //Disable all links in edit
     angular.element("body").on("click", ".component a", function (e) {
