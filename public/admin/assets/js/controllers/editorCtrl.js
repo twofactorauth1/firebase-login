@@ -21,12 +21,24 @@
       });
     };
 
-    // angular.element(window.document).on('keydown', function (e) {     
-    //     if (e.which === 8 || e.which === 46) {
-    //       if (!angular.element(this).hasClass("cke_editable_inline")) 
-    //          e.preventDefault();
-    //     }
-    // });
+    $scope.duplicateComponent = function (index) {
+      console.log('index ', index);
+      var matchingComponent = $scope.components[index];
+      var newComponent = angular.copy(matchingComponent);
+      var temp = Math.uuid();
+      newComponent._id = temp;
+      newComponent.anchor = temp;
+      $scope.components.splice(index+1, 0, newComponent);
+      toaster.pop('success', "Component Added", "The " + newComponent.type + " component was added successfully.");
+    };
+
+    //disable delete redirect
+    angular.element(window.document).on('keydown', function (e) {
+      if (e.which === 8 || e.which === 46) {
+        if (!angular.element(this).hasClass("cke_editable_inline"))
+          e.preventDefault();
+      }
+    });
 
     //Disable all links in edit
     angular.element("body").on("click", ".component a", function (e) {
@@ -172,7 +184,7 @@
       }
 
     };
-    
+
     WebsiteService.getWebsite(function (website) {
       $scope.website = website;
     });
