@@ -122,8 +122,8 @@ app.directive('blogComponent', ['$filter', '$timeout', 'WebsiteService', functio
           afterCloudRender: function () {
             $timeout(function() {
               angular.element('.jqcloud').css({'width': '100%'});
-              angular.element('.jqcloud').jQCloud('update', $scope.tagCloud);
-            });
+              //angular.element('.jqcloud').jQCloud('update', $scope.tagCloud);
+            }, 500);
           }
         });
       };
