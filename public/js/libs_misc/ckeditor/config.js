@@ -38,8 +38,8 @@ CKEDITOR.editorConfig = function( config ) {
 
 	config.forcePasteAsPlainText = true;
 
-	// config.allowedContent = true;
-	// config.extraAllowedContent = true;
+	config.allowedContent = true;
+	config.extraAllowedContent = true;
 	config.disableAutoInline = true;
 	config.autoParagraph = false;
 	config.enterMode = CKEDITOR.ENTER_BR;
