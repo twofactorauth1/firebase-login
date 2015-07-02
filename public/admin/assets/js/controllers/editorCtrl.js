@@ -218,9 +218,11 @@
     /*
      * @insertMedia
      * - insertmedia into various components
+     * - TODO: change to switch case and stop using if else
      */
 
     $scope.insertMedia = function (asset) {
+      console.log('insertMedia ', asset);
       if ($scope.imageChange) {
         $scope.imageChange = false;
         var type = $scope.componentEditing.type;
@@ -248,39 +250,27 @@
         } else {
           console.log('unknown component or image location');
         }
-      }
-
-      if ($scope.postImage && !$scope.componentEditing) {
+      } else if ($scope.postImage && !$scope.componentEditing) {
         $scope.postImage = false;
         $scope.postImageUrl = asset.url;
         toaster.pop('success', "Post Image added successfully");
         return;
-      }
-
-      if ($scope.profilepic && !$scope.componentEditing) {
+      } else if ($scope.profilepic && !$scope.componentEditing) {
         $scope.profilepic = false;
         $scope.customerAccount.photo = asset.url;
         return;
-      }
-
-      if ($scope.insertMediaImage) {
+      } else if ($scope.insertMediaImage) {
         $scope.insertMediaImage = false;
         // $scope.childScope.addCKEditorImage(asset.url, $scope.inlineInput, $scope.isEditMode);
         return;
-      }
-
-      if ($scope.logoImage && $scope.componentEditing) {
+      } else if ($scope.logoImage && $scope.componentEditing) {
         $scope.logoImage = false;
         $scope.componentEditing.logourl = asset.url;
-      }
-
-      if ($scope.changeblobImage) {
+      } else if ($scope.changeblobImage) {
         $scope.changeblobImage = false;
         $scope.blog_post.featured_image = asset.url;
         return;
-      }
-
-      if ($scope.imgThumbnail && $scope.componentEditing) {
+      } else if ($scope.imgThumbnail && $scope.componentEditing) {
         $scope.imgThumbnail = false;
         $scope.componentEditing.thumbnailCollection.push({
           url: asset.url
