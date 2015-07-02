@@ -16,7 +16,7 @@
     <div>
         <div ng-cloak>
             <div ng-repeat="image in component.images track by $index">
-                <div class="col-sm-3 col-xs-12 image-wrap">
+                <div class="col-sm-3 col-xs-12 image-wrap {{isEditing ? 'editing' : ''}}">
                     <div class="thumbnail imgHeight single-image">
                         <a href="{{image.url}}" title="{{image.label}}" data-gallery>
                             <img class="img-responsive img-gallery-{{$index}} image-gallery" data-index="{{$index}}" ng-click="addImageFromMedia(component._id, $index, true)" alt="{{image.label}}" ng-src="{{image.url}}">

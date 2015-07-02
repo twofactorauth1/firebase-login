@@ -2,7 +2,7 @@
     <div class="title mb30">
         <div elem ng-model="component.title"></div>
     </div>
-    <div class="row features-wrap">
+    <div class="row features-wrap {{isEditing ? 'editing' : ''}}">
         <div ng-repeat="feature in component.features" class="feature">
             <div class="row row-xs-height feature-single" ng-style="{'background': component.blockbgcolor}">
                 <div class="col-sm-3 col-xs-3 col-xs-height">

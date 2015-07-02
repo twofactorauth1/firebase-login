@@ -490,24 +490,24 @@ div[data-type='campaign'] .inner-page .overlay {
   }
 }
 /********** Feature List v1 **********/
-.features-wrap .feature {
+.editing.features-wrap .feature {
   border: 4px solid rgba(0, 0, 0, 0);
   position: relative;
 }
-.features-wrap .feature:hover {
+.editing.features-wrap .feature:hover {
   border: 4px dashed rgba(0, 0, 0, 0.4);
 }
-.features-wrap .feature:hover .add-addtional {
+.editing.features-wrap .feature:hover .add-addtional {
   display: block;
   font-size: 28px;
   bottom: -20px;
   opacity: .8;
 }
-.features-wrap .feature:hover .add-addtional:hover {
+.editing.features-wrap .feature:hover .add-addtional:hover {
   opacity: 1;
   cursor: pointer;
 }
-.features-wrap .feature:hover .delete-feature {
+.editing.features-wrap .feature:hover .delete-feature {
   background: rgba(0, 0, 0, 0.5);
   font-size: 20px;
   display: block;
@@ -519,26 +519,26 @@ div[data-type='campaign'] .inner-page .overlay {
   right: 0;
   opacity: .8;
 }
-.features-wrap .feature:hover .delete-feature:hover {
+.editing.features-wrap .feature:hover .delete-feature:hover {
   opacity: 1;
   cursor: pointer;
 }
-.features-wrap .feature.ng-enter {
+.editing.features-wrap .feature.ng-enter {
   -webkit-animation: bounceIn 1s;
   -moz-animation: bounceIn 1s;
   -ms-animation: bounceIn 1s;
   animation: bounceIn 1s;
 }
-.features-wrap .feature.ng-leave {
+.editing.features-wrap .feature.ng-leave {
   -webkit-animation: bounceOut 1s;
   -moz-animation: bounceOut 1s;
   -ms-animation: bounceOut 1s;
   animation: bounceOut 1s;
 }
-.features-wrap .delete-feature {
+.editing.features-wrap .delete-feature {
   display: none;
 }
-.features-wrap .add-feature {
+.editing.features-wrap .add-feature {
   display: block;
 }
 .feature-list-v1 .features-wrap {
@@ -3341,22 +3341,22 @@ div[data-type=blog] .container {
   -ms-animation: arrowBounce 2.5s infinite;
   animation: arrowBounce 2.5s infinite;
 }
-.image-wrap:hover {
+.editing.image-wrap:hover {
   border: 4px dashed rgba(0, 0, 0, 0.4);
   padding-right: 6px;
   padding-left: 6px;
   margin-top: -4px;
   margin-bottom: 0px;
 }
-.image-wrap:hover .add-addtional {
+.editing.image-wrap:hover .add-addtional {
   display: block;
   font-size: 28px;
 }
-.image-wrap:hover .imgHeight {
+.editing.image-wrap:hover .imgHeight {
   max-height: 146px;
   min-height: 146px;
 }
-.image-wrap:hover .delete-single-image .btn-delete-single-image {
+.editing.image-wrap:hover .delete-single-image .btn-delete-single-image {
   background: rgba(0, 0, 0, 0.5);
   display: block;
   border: 0;
@@ -3366,7 +3366,7 @@ div[data-type=blog] .container {
   top: 0;
   right: 0;
 }
-.image-wrap .delete-single-image .btn-delete-single-image {
+.editing.image-wrap .delete-single-image .btn-delete-single-image {
   display: none;
 }
 .image-gallery-v1 .single-image {

@@ -526,24 +526,24 @@
     padding: 50px 15px;
   }
 }
-#componentloader .features-wrap .feature {
+#componentloader .editing.features-wrap .feature {
   border: 4px solid rgba(0, 0, 0, 0);
   position: relative;
 }
-#componentloader .features-wrap .feature:hover {
+#componentloader .editing.features-wrap .feature:hover {
   border: 4px dashed rgba(0, 0, 0, 0.4);
 }
-#componentloader .features-wrap .feature:hover .add-addtional {
+#componentloader .editing.features-wrap .feature:hover .add-addtional {
   display: block;
   font-size: 28px;
   bottom: -20px;
   opacity: .8;
 }
-#componentloader .features-wrap .feature:hover .add-addtional:hover {
+#componentloader .editing.features-wrap .feature:hover .add-addtional:hover {
   opacity: 1;
   cursor: pointer;
 }
-#componentloader .features-wrap .feature:hover .delete-feature {
+#componentloader .editing.features-wrap .feature:hover .delete-feature {
   background: rgba(0, 0, 0, 0.5);
   font-size: 20px;
   display: block;
@@ -555,26 +555,26 @@
   right: 0;
   opacity: .8;
 }
-#componentloader .features-wrap .feature:hover .delete-feature:hover {
+#componentloader .editing.features-wrap .feature:hover .delete-feature:hover {
   opacity: 1;
   cursor: pointer;
 }
-#componentloader .features-wrap .feature.ng-enter {
+#componentloader .editing.features-wrap .feature.ng-enter {
   -webkit-animation: bounceIn 1s;
   -moz-animation: bounceIn 1s;
   -ms-animation: bounceIn 1s;
   animation: bounceIn 1s;
 }
-#componentloader .features-wrap .feature.ng-leave {
+#componentloader .editing.features-wrap .feature.ng-leave {
   -webkit-animation: bounceOut 1s;
   -moz-animation: bounceOut 1s;
   -ms-animation: bounceOut 1s;
   animation: bounceOut 1s;
 }
-#componentloader .features-wrap .delete-feature {
+#componentloader .editing.features-wrap .delete-feature {
   display: none;
 }
-#componentloader .features-wrap .add-feature {
+#componentloader .editing.features-wrap .add-feature {
   display: block;
 }
 #componentloader .feature-list-v1 .features-wrap {
@@ -3354,22 +3354,22 @@
   -ms-animation: arrowBounce 2.5s infinite;
   animation: arrowBounce 2.5s infinite;
 }
-#componentloader .image-wrap:hover {
+#componentloader .editing.image-wrap:hover {
   border: 4px dashed rgba(0, 0, 0, 0.4);
   padding-right: 6px;
   padding-left: 6px;
   margin-top: -4px;
   margin-bottom: 0px;
 }
-#componentloader .image-wrap:hover .add-addtional {
+#componentloader .editing.image-wrap:hover .add-addtional {
   display: block;
   font-size: 28px;
 }
-#componentloader .image-wrap:hover .imgHeight {
+#componentloader .editing.image-wrap:hover .imgHeight {
   max-height: 146px;
   min-height: 146px;
 }
-#componentloader .image-wrap:hover .delete-single-image .btn-delete-single-image {
+#componentloader .editing.image-wrap:hover .delete-single-image .btn-delete-single-image {
   background: rgba(0, 0, 0, 0.5);
   display: block;
   border: 0;
@@ -3379,7 +3379,7 @@
   top: 0;
   right: 0;
 }
-#componentloader .image-wrap .delete-single-image .btn-delete-single-image {
+#componentloader .editing.image-wrap .delete-single-image .btn-delete-single-image {
   display: none;
 }
 #componentloader .image-gallery-v1 .single-image {

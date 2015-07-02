@@ -10,7 +10,7 @@
         <div elem ng-model="feature.title"></div>
     </div>
     <div class="clearfix mb15"></div>
-    <div ng-repeat="feature in component.features track by $index" class="features-wrap">
+    <div ng-repeat="feature in component.features track by $index" class="features-wrap {{isEditing ? 'editing' : ''}}">
         <div class="feature feature-height-{{component.version}}" ng-class="{'col-sm-3':component.features.length >= 4, 'col-sm-4':component.features.length == 3, 'col-sm-6':component.features.length == 2, 'col-sm-12':component.features.length == 1}">
             <div class="feature-single feature-single-0" ng-style="{'background': component.blockbgcolor}">
                 <div elem ng-model="feature.top"></div>
