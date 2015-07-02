@@ -2,23 +2,24 @@ app.directive('contactUsComponent', ['leafletData', '$timeout', function (leafle
   return {
     scope: {
       component: '=',
-      version: '='
+      version: '=',
+      map: '&'
     },
     templateUrl: '/components/component-wrap.html',
     controller: function ($scope, GeocodeService, $compile) {
 			angular.extend($scope, {
-			      mapLocation: {
-			        lat: 51,
-			        lng: 0,
-			        zoom: 10
-			      },
-			      defaults: {
-			        scrollWheelZoom: false
-			      },
-			      markers: {
+		      mapLocation: {
+		        lat: 51,
+		        lng: 0,
+		        zoom: 10
+		      },
+		      defaults: {
+		        scrollWheelZoom: false
+		      },
+		      markers: {
 
-			      }
-		});
+		      }
+			});
 			$scope.stringifyAddress = function (address) {
 		      if (address) {
 			//var address = $scope.htmlToPlaintext(address);
@@ -34,58 +35,61 @@ app.directive('contactUsComponent', ['leafletData', '$timeout', function (leafle
 				return _bottomline;
 		      }
 		};
-	  $scope.contactAddress = $scope.stringifyAddress($scope.component.location);
-		  if ($scope.component.location.lat && $scope.component.location.lat) {
-		    angular.extend($scope, {
-		      mapLocation: {
-		        lat: parseFloat($scope.component.location.lat),
-		        lng: parseFloat($scope.component.location.lon),
-		        zoom: 10
-		      },
-		      markers: {
-		        mainMarker: {
-		          lat: parseFloat($scope.component.location.lat),
-		          lng: parseFloat($scope.component.location.lon),
-		          focus: false,
-		          message: $scope.contactAddress,
-		          draggable: false
-		        }
-		      }
-		    });
-		    leafletData.getMap('leafletmap').then(function (map) {
-		      $timeout(function () {
-		        map.invalidateSize();
-		      }, 500);
-		    });
-		  } else {
-		        GeocodeService.getGeoSearchAddress($scope.contactAddress, function (data) {
-		          if (data.lat && data.lon) {
-		            $scope.component.location.lat = data.lat;
-		            $scope.component.location.lon = data.lon;
-			            angular.extend($scope, {
-			              mapLocation: {
-			                lat: parseFloat($scope.component.location.lat),
-			                lng: parseFloat($scope.component.location.lon),
-			                zoom: 10
-			              },
-			              markers: {
-			                mainMarker: {
-			                  lat: parseFloat($scope.component.location.lat),
-			                  lng: parseFloat($scope.component.location.lon),
-			                  focus: false,
-			                  message: $scope.contactAddress,
-			                  draggable: false
-			                }
-			              }
-			            });
-			            leafletData.getMap('leafletmap').then(function (map) {
-					      $timeout(function () {
-					        map.invalidateSize();
-					      }, 500);
-					    });
-				}
-		        })
+	  $scope.updateContactUsAddress = function () {
+		$scope.contactAddress = $scope.stringifyAddress($scope.component.location);
+		if ($scope.component.location.lat && $scope.component.location.lat) {
+		angular.extend($scope, {
+		  mapLocation: {
+		    lat: parseFloat($scope.component.location.lat),
+		    lng: parseFloat($scope.component.location.lon),
+		    zoom: 10
+		  },
+		  markers: {
+		    mainMarker: {
+		      lat: parseFloat($scope.component.location.lat),
+		      lng: parseFloat($scope.component.location.lon),
+		      focus: false,
+		      message: $scope.contactAddress,
+		      draggable: false
 		    }
+		  }
+		});
+		leafletData.getMap('leafletmap').then(function (map) {
+		  $timeout(function () {
+		    map.invalidateSize();
+		  }, 500);
+		});
+		} else {
+		    GeocodeService.getGeoSearchAddress($scope.contactAddress, function (data) {
+		        if (data.lat && data.lon) {
+		          $scope.component.location.lat = data.lat;
+		          $scope.component.location.lon = data.lon;
+		          angular.extend($scope, {
+		            mapLocation: {
+		              lat: parseFloat($scope.component.location.lat),
+		              lng: parseFloat($scope.component.location.lon),
+		              zoom: 10
+		            },
+		            markers: {
+		              mainMarker: {
+		                lat: parseFloat($scope.component.location.lat),
+		                lng: parseFloat($scope.component.location.lon),
+		                focus: false,
+		                message: $scope.contactAddress,
+		                draggable: false
+		              }
+		            }
+		          });
+		          leafletData.getMap('leafletmap').then(function (map) {
+		          $timeout(function () {
+		            map.invalidateSize();
+		          }, 500);
+		      });
+		  	}
+		    })
+		}
+		};
+		$scope.updateContactUsAddress();
 	}
   }
 }]);
