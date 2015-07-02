@@ -61,11 +61,11 @@
                             <a ng-if="!isEditing" href="{{network.url}}" target="_blank" class="btn btn-{{network.icon}}">
                                 <span class="fa fa-{{network.icon}}"></span>
                             </a>
-                            <a ng-if="isEditing" href="#" class="clickable-link btn-social-link btn btn-{{network.icon}}"><span class="fa fa-{{network.icon}}"></span></a>
+                            <a ng-if="isEditing" ng-click="openModal('social-links-modal', $index, $parent.$parent.$index)" href="#" class="clickable-link social-links btn btn-{{network.icon}}"><span class="fa fa-{{network.icon}}"></span></a>
                         </li>
                     </ul>
-                    <div ng-if="isEditing" class="add-addtional-team center">
-                        <button ng-if="isEditing" class="clickable-link btn-social-link"><i class="fa fa-plus"></i></button>
+                    <div ng-if="isEditing" class="add-addtional-team">
+                        <button ng-if="isEditing" ng-click="openModal('social-links-modal', null, $parent.$index)" class="clickable-link social-links"><i class="fa fa-plus"></i></button>
                     </div>
                 </div>
                 <div ng-if="isEditing">
@@ -75,7 +75,7 @@
                         </button>
                     </div>
                     <div class="add-addtional">
-                        <button  ng-click="addTeamMember(0)">
+                        <button  ng-click="addTeamMember($index)">
                             <i class="fa fa-plus"></i>
                         </button>
                     </div>

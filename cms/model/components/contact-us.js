@@ -116,7 +116,7 @@ var component = $$.m.ModelBase.extend({
              *
              *
              */
-            txtcolor: "#FFFFFF",
+            txtcolor: "#444",
 
             /**
              *

@@ -9,23 +9,23 @@ app.directive('socialLinks', ['$modal', '$http', '$timeout', '$q', '$compile', '
     replace: false,
     scope: false,
     link: function (scope, element, attrs, ctrl) {
-      scope.openModal = function (template, id, index, parentIndex) {
-        scope.setEditingComponent(id, index, parentIndex);
+      scope.openModal = function (template, index, parentIndex) {
+        scope.setEditingComponent(index, parentIndex);
         scope.modalInstance = $modal.open({
           templateUrl: template,
           scope: scope
         });
       };
 
-      scope.setEditingComponent = function (id, index, parent_index) {
+      scope.setEditingComponent = function (index, parent_index) {
         var network = [];
         var editIndex = index;
-        var nested = angular.isDefined(parent_index) ? true : false;
+        var nested = angular.isDefined(parent_index) && parent_index !== null ? true : false;
         if (nested)
-          network = angular.isDefined(editIndex) ? scope.component.teamMembers[parent_index].networks[editIndex] : null;
+          network = angular.isDefined(editIndex) && editIndex !== null ? scope.component.teamMembers[parent_index].networks[editIndex] : null;
         else
           network = scope.component.networks[editIndex];
-        var update = angular.isDefined(editIndex) ? true : false;
+        var update = angular.isDefined(editIndex) && editIndex !== null ? true : false;
         scope.setSelectedSocialLink(network, scope.component._id, update, nested, parent_index);
       }
 
@@ -225,6 +225,47 @@ app.directive('socialLinks', ['$modal', '$http', '$timeout', '$q', '$compile', '
             break;
         }
       };
+
+       /*
+     * @updateTeamNetworks
+     * -
+     */
+
+    scope.updateTeamNetworks = function (old_value, mode, new_value, parent_index) {
+      var selectedName;
+      switch (mode) {
+        case "add":
+          if (new_value && new_value.name && new_value.url) {
+            if (!scope.component.teamMembers[parent_index].networks)
+              scope.component.teamMembers[parent_index].networks = [];
+            scope.component.teamMembers[parent_index].networks.push({
+              name: new_value.name,
+              url: new_value.url,
+              icon: new_value.icon
+            });
+          }
+          break;
+        case "update":
+          if (new_value && new_value.name && new_value.url) {
+            selectedName = _.findWhere(scope.component.teamMembers[parent_index].networks, {
+              name: old_value.name
+            });
+            selectedName.name = new_value.name;
+            selectedName.url = new_value.url;
+            selectedName.icon = new_value.icon;
+          }
+          break;
+        case "delete":
+          selectedName = _.findWhere(scope.component.teamMembers[parent_index].networks, {
+            name: old_value.name
+          });
+          if (selectedName) {
+            var index = scope.component.teamMembers[parent_index].networks.indexOf(selectedName)
+            scope.component.teamMembers[parent_index].networks.splice(index, 1);
+          }
+          break;
+      }
+    };
 
       /*
        * @social_links
