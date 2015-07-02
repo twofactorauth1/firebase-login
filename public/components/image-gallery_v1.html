@@ -19,7 +19,7 @@
                 <div class="col-sm-3 col-xs-12 image-wrap">
                     <div class="thumbnail imgHeight single-image">
                         <a href="{{image.url}}" title="{{image.label}}" data-gallery>
-                            <img class="img-responsive img-gallery-{{$index}} image-gallery" data-index="{{$index}}" alt="{{image.label}}" ng-src="{{image.url}}">
+                            <img class="img-responsive img-gallery-{{$index}} image-gallery" data-index="{{$index}}" ng-click="addImageFromMedia(component._id, $index, true)" alt="{{image.label}}" ng-src="{{image.url}}">
                         </a>
                         <span class="caption" ng-if="isEditing">
                             <i class="fa fa-times-circle" ng-click="deleteImage(component, $index)"></i>
@@ -29,7 +29,7 @@
                         <button ng-click="deleteImageFromGallery(component._id, $index)" class="ng-scope btn-delete-single-image"><i class='fa fa-trash'></i></button>
                     </div>
                     <div ng-if="isEditing" class="center">
-                        <a ng-click="addImageToGallery(component._id, $index)" class="add-addtional"><i class='fa fa-plus'></i></a>
+                        <a ng-click="addImageFromMedia(component._id, $index, false)" class="add-addtional"><i class='fa fa-plus'></i></a>
                     </div>
                 </div>
             </div>

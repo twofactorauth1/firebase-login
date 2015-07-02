@@ -24,13 +24,13 @@
         <div image-text-component component="value" version="value.version"></div>
     </div>
     <div ng-switch-when="image-gallery">
-        <div image-gallery-component component="value" version="value.version" media="addImageToGallery(componentId, index)"></div>
+        <div image-gallery-component component="value" version="value.version" media="addImageFromMedia(componentId, index, update)"></div>
     </div>
     <div ng-switch-when="masthead">
         <div masthead-component component="value" version="value.version"></div>
     </div>
     <div ng-switch-when="meet-team">
-        <div meet-team-component component="value" version="value.version"></div>
+        <div meet-team-component component="value" media="addImageFromMedia(componentId, index, update)" version="value.version"></div>
     </div>
     <div ng-switch-when="navigation">
         <div navigation-component component="value" version="value.version"></div>

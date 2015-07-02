@@ -88,14 +88,15 @@
     };
 
     /*
-     * @addImageToGallery
+     * @addImageFromMedia
      * -
      */
 
-    $scope.addImageToGallery = function (componentId, index) {
-      console.log('addImageToGallery >>>', componentId, index);
-      $scope.imgGallery = true;
-      $scope.imgGalleryIndex = index;
+    $scope.addImageFromMedia = function (componentId, index, update) {
+      console.log('addImageFromMedia >>>', componentId, index);
+      $scope.imageChange = true;
+      $scope.updateImage = update;
+      $scope.componentImageIndex = index;
       $scope.componentEditing = _.findWhere($scope.components, {
         _id: componentId
       });
@@ -139,7 +140,13 @@
         } else if (type == 'simple-form') {
           $scope.componentEditing.imgurl = asset.url;
         } else if (type == 'image-gallery') {
-          $scope.componentEditing.images[$scope.componentImageIndex].url = asset.url;
+          if($scope.updateImage)
+              $scope.componentEditing.images[$scope.componentImageIndex].url = asset.url;
+          else
+            $scope.componentEditing.images.splice($scope.componentImageIndex + 1, 0, {
+                url: asset.url
+              });
+          $scope.updateImage = false;
         } else if (type == 'thumbnail-slider') {
           $scope.componentEditing.thumbnailCollection[$scope.componentImageIndex].url = asset.url;
         } else if (type == 'meet-team') {
@@ -147,7 +154,6 @@
         } else {
           console.log('unknown component or image location');
         }
-        $scope.bindEvents();
       } else if ($scope.postImage && !$scope.componentEditing) {
         $scope.postImage = false;
         $scope.postImageUrl = asset.url;
@@ -168,11 +174,6 @@
         $scope.changeblobImage = false;
         $scope.blog_post.featured_image = asset.url;
         return;
-      } else if ($scope.imgGallery && $scope.componentEditing) {
-        $scope.imgGallery = false;
-        $scope.componentEditing.images.splice($scope.imgGalleryIndex + 1, 0, {
-          url: asset.url
-        });
       } else if ($scope.imgThumbnail && $scope.componentEditing) {
         $scope.imgThumbnail = false;
         $scope.componentEditing.thumbnailCollection.push({

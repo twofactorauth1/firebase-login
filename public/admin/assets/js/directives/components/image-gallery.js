@@ -9,12 +9,12 @@ app.directive('imageGalleryComponent', ['$timeout', function ($timeout) {
     link: function (scope, element, attrs, ctrl) {
       scope.isEditing = true;
       /*
-       * @addImageToGallery
+       * @addImageFromMedia
        * -
        */
 
-      scope.addImageToGallery = function (componentId, index) {
-      	scope.media({componentId: componentId, index: index});
+      scope.addImageFromMedia = function (componentId, index, update) {
+      	scope.media({componentId: componentId, index: index, update: update});
       };
 
       /*

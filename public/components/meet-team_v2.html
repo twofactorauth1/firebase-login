@@ -18,7 +18,7 @@
             <div class="team-member {{isEditing ? 'edit-mode' : ''}}">
                 <div ng-if="component.teamSettings.profilepic" class="row">
                     <div class="col-md-12 text-center">
-                        <div class="profile-img meet-team-image" data-index="{{$index}}" style="background: url('{{teamMember.profilepic}}') center center no-repeat;background-size: 250px 250px;"></div>
+                        <div class="profile-img meet-team-image" ng-click="addImageFromMedia(component._id, $index, true)" style="background: url('{{teamMember.profilepic}}') center center no-repeat;background-size: 250px 250px;"></div>
                     </div>
                 </div>
                 <div class="row">

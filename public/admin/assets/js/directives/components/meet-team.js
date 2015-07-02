@@ -2,11 +2,16 @@ app.directive('meetTeamComponent', function () {
   return {
     scope: {
       component: '=',
-      version: '='
+      version: '=',
+      media: '&'
     },
     templateUrl: '/components/component-wrap.html',
     link: function (scope, element, attrs, ctrl) {
       scope.isEditing = true;
+
+      scope.addImageFromMedia = function (componentId, index, update) {
+        scope.media({componentId: componentId, index: index, update: update});
+      };
 
       /*
        * @deleteTeamMember

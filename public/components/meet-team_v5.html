@@ -16,7 +16,7 @@
             <div class="col-md-6 text-center team-member meet-team-height {{isEditing ? 'edit-mode' : ''}}" ng-repeat="member in component.teamMembers">
                 <div ng-if="component.teamSettings.profilepic" class="row">
                     <div class="col-md-12 text-center">
-                        <img ng-src="{{member.profilepic}}" height="250px" width="250px" class="{{component.imagestyle}} meet-team-image" data-index="{{$index}}" />
+                        <img ng-src="{{member.profilepic}}" height="250px" width="250px" class="{{component.imagestyle}} meet-team-image" ng-click="addImageFromMedia(component._id, $index, true)" />
                     </div>
                 </div>
                 <div class="row">
