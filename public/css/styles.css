@@ -3046,6 +3046,9 @@ div[data-type=blog] .container {
   padding: 0;
   max-width: 100%;
 }
+.blog-v1 #content-area .container {
+  width: 100%;
+}
 .currently-viewing {
   background: #47b1cc;
   padding: 20px;
