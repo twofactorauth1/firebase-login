@@ -1,6 +1,6 @@
 app.directive('productsComponent', ['$filter', 'productService', 'accountService', 'cartService', function ($filter, ProductService, AccountService, cartService) {
   return {
-  	require: [],
+    require: [],
     scope: {
       component: '=',
       version: '='
@@ -491,6 +491,94 @@ app.directive('productsComponent', ['$filter', 'productService', 'accountService
           });
         });
         return matchedAttribute;
+      };
+
+      scope.checkCardNumber = function () {
+        var card_number = angular.element('#number').val();
+        if (!card_number) {
+          angular.element("#card_number .error").html("Card Number Required");
+          angular.element("#card_number").addClass('has-error');
+          angular.element("#card_number .glyphicon").addClass('glyphicon-remove');
+        } else {
+          angular.element("#card_number .error").html("");
+          angular.element("#card_number").removeClass('has-error').addClass('has-success');
+          angular.element("#card_number .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
+        }
+      };
+
+      scope.checkCardExpiry = function () {
+        var expiry = angular.element('#expiry').val();
+        var card_expiry = expiry.split("/")
+        var exp_month = card_expiry[0].trim();
+        var exp_year;
+        if (card_expiry.length > 1)
+          exp_year = card_expiry[1].trim();
+
+        if (!expiry || !exp_month || !exp_year) {
+          if (!expiry)
+            angular.element("#card_expiry .error").html("Expiry Required");
+          else if (!exp_month)
+            angular.element("#card_expiry .error").html("Expiry Month Required");
+          else if (!exp_year)
+            angular.element("#card_expiry .error").html("Expiry Year Required");
+          angular.element("#card_expiry").addClass('has-error');
+          angular.element("#card_expiry .glyphicon").addClass('glyphicon-remove');
+        } else {
+          angular.element("#card_expiry .error").html("");
+          angular.element("#card_expiry .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
+          angular.element("#card_expiry").removeClass('has-error').addClass('has-success');
+        }
+      };
+
+      scope.checkCardCvv = function () {
+        var card_cvc = angular.element('#cvc').val();
+        if (!card_cvc) {
+          angular.element("#card_cvc .error").html("CVC Required");
+          angular.element("#card_cvc").addClass('has-error');
+          angular.element("#card_cvc .glyphicon").addClass('glyphicon-remove');
+        } else {
+          angular.element("#card_cvc .error").html("");
+          angular.element("#card_cvc").removeClass('has-error').addClass('has-success');
+          angular.element("#card_cvc .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
+        }
+      };
+
+      scope.checkCoupon = function () {
+        console.log('>> checkCoupon');
+        var coupon = scope.newAccount.coupon
+          //console.dir(coupon);
+          //console.log(scope.newAccount.coupon);
+        if (coupon) {
+          PaymentService.validateCoupon(coupon, function (data) {
+            if (data.id && data.id === coupon) {
+              console.log('valid');
+              angular.element("#coupon-name .error").html("");
+              angular.element("#coupon-name").removeClass('has-error').addClass('has-success');
+              angular.element("#coupon-name .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
+              scope.couponIsValid = true;
+            } else {
+              console.log('invalid');
+              angular.element("#coupon-name .error").html("Invalid Coupon");
+              angular.element("#coupon-name").addClass('has-error');
+              angular.element("#coupon-name .glyphicon").addClass('glyphicon-remove');
+              scope.couponIsValid = false;
+            }
+          });
+        } else {
+          angular.element("#coupon-name .error").html("");
+          angular.element("#coupon-name").removeClass('has-error').addClass('has-success');
+          angular.element("#coupon-name .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
+          scope.couponIsValid = true;
+        }
+      };
+
+      scope.checkCardName = function () {
+        var name = $('#card_name #name').val();
+        if (name) {
+          $("#card_name .error").html("");
+          $("#card_name").removeClass('has-error').addClass('has-success');
+          $("#card_name .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
+        }
       };
     }
   }

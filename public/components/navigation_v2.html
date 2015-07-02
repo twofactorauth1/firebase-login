@@ -27,10 +27,7 @@
                 </button>
                 <a class="navbar-brand" href="/" data-name="{{account.company.name}}" style="margin:{{component.logo.margin.t}} {{component.logo.margin.r}} {{component.logo.margin.b}} {{component.logo.margin.l}}!important;padding:{{component.logo.padding}};">
                     <div class="nav-logo">
-                        <div class="navigation-logo" tooltip-placement="bottom" tooltip="{{isEditing && parentScope.single_post ? 'This component is only editable on the single-post page' : ''}}" ng-class="{'editable': !parentScope.single_post}" data-class="logo" data-index="{{$index}}" ng-if="component.logo" ng-bind-html="component.logo | unsafe"></div>
-                        <div class="navigation-logo" tooltip-placement="bottom" tooltip="{{isEditing && parentScope.single_post ? 'This component is only editable on the single-post page' : ''}}" ng-class="{'editable': !parentScope.single_post}" data-class="logo" data-index="{{$index}}" ng-if="!component.logo">
-                            <img data-ng-show="account.business.logo && !component.logo" ng-src="{{account.business.logo}}">
-                        </div>
+                        <div elem ng-model="component.logo" class="navigation-logo"></div>
                     </div>
                 </a>
 
