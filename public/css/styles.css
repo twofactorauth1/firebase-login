@@ -3336,22 +3336,22 @@ div[data-type=blog] .container {
   -ms-animation: arrowBounce 2.5s infinite;
   animation: arrowBounce 2.5s infinite;
 }
-.editing .image-wrap:hover {
+.image-wrap:hover {
   border: 4px dashed rgba(0, 0, 0, 0.4);
   padding-right: 6px;
   padding-left: 6px;
   margin-top: -4px;
   margin-bottom: 0px;
 }
-.editing .image-wrap:hover .add-addtional {
+.image-wrap:hover .add-addtional {
   display: block;
   font-size: 28px;
 }
-.editing .image-wrap:hover .imgHeight {
+.image-wrap:hover .imgHeight {
   max-height: 146px;
   min-height: 146px;
 }
-.editing .image-wrap:hover .delete-single-image .btn-delete-single-image {
+.image-wrap:hover .delete-single-image .btn-delete-single-image {
   background: rgba(0, 0, 0, 0.5);
   display: block;
   border: 0;
@@ -3361,7 +3361,7 @@ div[data-type=blog] .container {
   top: 0;
   right: 0;
 }
-.editing .image-wrap .delete-single-image .btn-delete-single-image {
+.image-wrap .delete-single-image .btn-delete-single-image {
   display: none;
 }
 .image-gallery-v1 .single-image {
