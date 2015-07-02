@@ -114,6 +114,7 @@ app.directive('blogComponent', ['$filter', '$timeout', 'WebsiteService', functio
             link: '/tag/' + tag
           });
         });
+        $scope.rendered = false;
         $scope.tagCloud = _tagCloud;
         $(".jqcloud").jQCloud($scope.tagCloud, {
           autoResize: true,
@@ -121,9 +122,13 @@ app.directive('blogComponent', ['$filter', '$timeout', 'WebsiteService', functio
           height: 300,
           afterCloudRender: function () {
             $timeout(function() {
-              angular.element('.jqcloud').css({'width': '100%'});
-              //angular.element('.jqcloud').jQCloud('update', $scope.tagCloud);
-            }, 500);
+              if(!$scope.rendered)
+              {
+                $scope.rendered = true;
+                angular.element('.jqcloud').css({'width': '100%'});
+                angular.element('.jqcloud').jQCloud('update', $scope.tagCloud);
+              }
+            }, 1000);
           }
         });
       };
