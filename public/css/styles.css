@@ -2949,22 +2949,6 @@ div.blog-thumb span.overlay {
 div[data-class="blog"] .single-blog {
   padding: 0 0 25px 0;
 }
-.post_tags {
-  padding: 0;
-  margin-bottom: 20px;
-}
-.post_tags li {
-  display: inline-block;
-  margin-bottom: 10px;
-  background: #47b1cc;
-  padding: 5px;
-  margin-right: 10px;
-  border-radius: 5px;
-  font-size: 12px;
-}
-.post_tags li a {
-  color: #ffffff;
-}
 .btn-orange {
   background: #efa022!important;
   border-bottom: 5px solid #e4730c!important;
@@ -3035,6 +3019,22 @@ div[data-class="blog"] .single-blog {
 #component-setting-modal .close {
   font-size: 35px;
   margin-left: 10px;
+}
+.post_tags {
+  padding: 0;
+  margin-bottom: 20px;
+}
+.post_tags li {
+  display: inline-block;
+  margin-bottom: 10px;
+  background: #47b1cc;
+  padding: 5px;
+  margin-right: 10px;
+  border-radius: 5px;
+  font-size: 12px;
+}
+.post_tags li a {
+  color: #ffffff;
 }
 div[data-type=blog] .container {
   width: auto;

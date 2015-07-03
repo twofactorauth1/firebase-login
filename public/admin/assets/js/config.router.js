@@ -104,7 +104,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
             label: 'Single Post',
             parent: 'app.website.posts'
         },
-        resolve: loadSequence('editorCtrl', 'userService',  'htmlToPlaintext', 'spectrum', 'ui.sortable', 'assetsService', 'toasterService', 'geocodeService')
+        resolve: loadSequence('editorCtrl', 'userService', 'htmlToPlaintext', 'spectrum', 'ui.sortable', 'assetsService', 'toasterService', 'geocodeService', 'productService', 'accountService', 'toTrusted', 'generateURLforLinks', 'truncate', 'ckeditor', 'ngSticky', 'slick', 'offset', 'jqcloud', 'jsVideoUrlParser', 'selectedTags')
     }).state('app.website.singletemplate', {
         url: '/templates/:id',
         templateUrl: "assets/views/editor.html",

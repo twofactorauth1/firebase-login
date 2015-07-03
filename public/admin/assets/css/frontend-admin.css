@@ -2962,22 +2962,6 @@
 #componentloader div[data-class="blog"] .single-blog {
   padding: 0 0 25px 0;
 }
-#componentloader .post_tags {
-  padding: 0;
-  margin-bottom: 20px;
-}
-#componentloader .post_tags li {
-  display: inline-block;
-  margin-bottom: 10px;
-  background: #47b1cc;
-  padding: 5px;
-  margin-right: 10px;
-  border-radius: 5px;
-  font-size: 12px;
-}
-#componentloader .post_tags li a {
-  color: #ffffff;
-}
 #componentloader .btn-orange {
   background: #efa022!important;
   border-bottom: 5px solid #e4730c!important;
@@ -3048,6 +3032,22 @@
 #componentloader #component-setting-modal .close {
   font-size: 35px;
   margin-left: 10px;
+}
+#componentloader .post_tags {
+  padding: 0;
+  margin-bottom: 20px;
+}
+#componentloader .post_tags li {
+  display: inline-block;
+  margin-bottom: 10px;
+  background: #47b1cc;
+  padding: 5px;
+  margin-right: 10px;
+  border-radius: 5px;
+  font-size: 12px;
+}
+#componentloader .post_tags li a {
+  color: #ffffff;
 }
 #componentloader div[data-type=blog] .container {
   width: auto;

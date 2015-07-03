@@ -62,7 +62,6 @@
       if ($scope.account.domain) {
         _url = $scope.account.domain + '/' + handle;
       }
-
       window.open(_url, '_blank');
     };
 
@@ -113,6 +112,27 @@
       WebsiteService.getSinglePage(_handle, function (data) {
         $scope.page = data;
         $scope.components = $scope.page.components;
+        $scope.activateCKeditor();
+      });
+    };
+
+    /*
+     * @retrievePost
+     * -
+     */
+    $scope.blog = {};
+    $scope.retrievePost = function (_handle) {
+      WebsiteService.getSinglePage('single-post', function (data) {
+        console.log('single-post page ', data);
+        $scope.page = data;
+        $scope.components = $scope.page.components;
+        $scope.activateCKeditor();
+        WebsiteService.getSinglePost(_handle, function (data) {
+          console.log('post data ', data);
+          $scope.blog.post = data;
+          $scope.single_post = true;
+          console.log('$scope.blog ', $scope.blog);
+        });
       });
     };
 
@@ -137,20 +157,32 @@
     }
 
     /*
+     * @location:posthandle
+     * -
+     */
+
+    if ($location.search().posthandle) {
+      $scope.retrievePost($location.search().posthandle);
+    }
+
+    /*
      * @ckeditor:instanceReady
      * -
      */
 
     $scope.ckeditorLoaded = false;
-    CKEDITOR.on("instanceReady", function () {
-      if (!$scope.ckeditorLoaded) {
-        $timeout(function () {
-          $scope.$apply(function () {
-            $scope.ckeditorLoaded = true;
-          });
-        }, 100);
-      }
-    });
+
+    $scope.activateCKeditor = function () {
+      CKEDITOR.on("instanceReady", function () {
+        if (!$scope.ckeditorLoaded) {
+          $timeout(function () {
+            $scope.$apply(function () {
+              $scope.ckeditorLoaded = true;
+            });
+          }, 100);
+        }
+      });
+    };
 
     /*
      * @clickandInsertImageButton

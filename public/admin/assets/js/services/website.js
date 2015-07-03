@@ -55,8 +55,8 @@
 		};
 
 		//website/:websiteid/page/:handle
-		this.getSinglePost = function (websiteID, handle, fn) {
-			var apiUrl = baseUrl + ['cms', 'website', websiteID || $$.server.websiteId, 'blog', handle].join('/');
+		this.getSinglePost = function (handle, fn) {
+			var apiUrl = baseUrl + ['cms', 'website', $$.server.websiteId, 'blog', handle].join('/');
 			$http.get(apiUrl)
 			.success(function (data, status, headers, config) {
 				fn(data);

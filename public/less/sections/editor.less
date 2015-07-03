@@ -845,48 +845,53 @@ fieldset[disabled] .btn-vimeo-square.active {
             padding: 0 15px;
             display: block;
             z-index: 999;
+            font-family: Helvetica, Arial;
+            font-weight: 500;
+            font-size: 14px;
+            height: 20px;
+            line-height: 19px;
         }
     }
 }
+
 ul.ui-sortable.active {
     margin-bottom: 0;
     padding: 0px;
     .as-sortable-placeholder {
         height: 57px!important;
     }
-  .fragment {
+    .fragment {
         overflow: hidden;
         height: 57px!important;
         .componentActions {
-          display: block;
-          visibility: visible;
-          border: 1px solid #ccc;
-          background: #fafafa;
-          .delete-component, .duplicate, .component-settings {
-                display: none;
-          }
-          h4 {
             display: block;
-            background: rgba(44, 62, 80, 0.8);
-              padding: 18px;
-              color: white;
-              font-size: 18px;
-              margin: 0;
-              height:56px;
-          }
-          span.fa {
-          padding: 10px;
-          text-align: center;
-          line-height: 18px;
+            visibility: visible;
+            border: 1px solid #ccc;
+            background: #fafafa;
+            .delete-component, .duplicate, .component-settings {
+                display: none;
+            }
+            h4 {
+                display: block;
+                background: rgba(44, 62, 80, 0.8);
+                padding: 18px;
+                color: white;
+                font-size: 18px;
+                margin: 0;
+                height: 56px;
+            }
+            span.fa {
+                padding: 10px;
+                text-align: center;
+                line-height: 18px;
+            }
+            p {
+                margin-bottom: 0;
+                font-size: 14px;
+            }
         }
-        p {
-          margin-bottom: 0;
-          font-size: 14px;
-        } 
+        .add-new-component {
+            display: none;
+        }
     }
-    .add-new-component {
-        display: none;
-    }
-
-  }
 }
