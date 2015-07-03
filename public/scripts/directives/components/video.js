@@ -1,4 +1,4 @@
-app.directive('videoComponent', function () {
+app.directive('videoComponent',['$sce', function ($sce) {
   return {
     scope: {
       component: '=',
@@ -39,4 +39,4 @@ app.directive('videoComponent', function () {
       }
     }
   };
-});
+}]);
