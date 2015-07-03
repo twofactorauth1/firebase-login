@@ -30,16 +30,16 @@ app.directive("elem", function ($timeout) {
             instanceReady: function (ev) {
               var editor = ev.editor;
               editor.setReadOnly(false);
-              editor.on('blur', function (e) {
+              editor.on('change', function (e) {
                 if (!scope.initial) {
                   clearTimeout(scope.delay);
-                  //var selection = editor.getSelection();
-                  //var bookmarks = selection.createBookmarks(true);
+                  var selection = editor.getSelection();
+                  var bookmarks = selection.createBookmarks(true);
                   scope.delay = setTimeout(function () {
                     scope.update(e);
-                    //var range = selection.getRanges()[0];
-                   //range.moveToBookmark(bookmarks[0]);
-                   // range.select();
+                    var range = selection.getRanges()[0];
+                    range.moveToBookmark(bookmarks[0]);
+                    range.select();
                   }, 500);
                 } else {
                   scope.initial = false;
