@@ -178,6 +178,7 @@
           $timeout(function () {
             $scope.$apply(function () {
               $scope.ckeditorLoaded = true;
+              $(window).trigger('resize');
             });
           }, 100);
         }
