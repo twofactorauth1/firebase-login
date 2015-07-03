@@ -23,6 +23,7 @@ app.directive("elem", function ($timeout) {
         scope.initial = true;
 
         var elem = angular.element(element[0].querySelector('.editable'))[0];
+
         CKEDITOR.inline(elem, {
           on: {
             instanceReady: function (ev) {

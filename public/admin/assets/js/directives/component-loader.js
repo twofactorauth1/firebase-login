@@ -5,7 +5,9 @@ app.directive('componentLoader', ['$timeout', '$modal', 'toaster', function ($ti
     templateUrl: '/admin/assets/views/partials/component-loader.html',
 
     link: function (scope, element, attributes, controller) {
-      CKEDITOR.disableAutoInline = true;
+      if( typeof(CKEDITOR) !== "undefined" ){
+        CKEDITOR.disableAutoInline = true;
+      }
     },
     controller: function ($scope, WebsiteService, CustomerService, $modal) {
       $scope.deleteComponent = function (index) {

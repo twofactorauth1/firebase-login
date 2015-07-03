@@ -55,8 +55,8 @@
 		};
 
 		//website/:websiteid/page/:handle
-		this.getSinglePost = function (websiteID, handle, fn) {
-			var apiUrl = baseUrl + ['cms', 'website', websiteID || $$.server.websiteId, 'blog', handle].join('/');
+		this.getSinglePost = function (handle, fn) {
+			var apiUrl = baseUrl + ['cms', 'website', $$.server.websiteId, 'blog', handle].join('/');
 			$http.get(apiUrl)
 			.success(function (data, status, headers, config) {
 				fn(data);
@@ -297,9 +297,9 @@
 		};
 
 		//website/:websiteId/duplicate/page
-		this.createDuplicatePage = function(websiteId, pagedata, fn) {
+		this.createDuplicatePage = function(pagedata, fn) {
 			var self = this;
-			var apiUrl = baseUrl + ['cms', 'website', websiteId, 'duplicate', 'page'].join('/');
+			var apiUrl = baseUrl + ['cms', 'website', $$.server.websiteId, 'duplicate', 'page'].join('/');
 			$http({
 			    url: apiUrl,
 			    method: "POST",
