@@ -141,9 +141,9 @@ app.directive('componentSettings', ['$modal', '$http', '$timeout', '$q', '$compi
 
       $scope.revertComponent = function () {
         $scope.componentEditing = $scope.originalComponent;
-        if ($scope.componentEditing.type === 'navigation') {
-          $scope.website.linkLists = $scope.backup["website"].linkLists;
-        }
+        //if ($scope.componentEditing.type === 'navigation') {
+          //$scope.website.linkLists = $scope.backup["website"].linkLists;
+        //}
 
         $scope.closeModal();
       };
