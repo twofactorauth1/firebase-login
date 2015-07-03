@@ -1,3 +1,6 @@
+'use strict';
+/*global app, moment, angular, window, CKEDITOR*/
+/*jslint unparam:true*/
 app.directive('imageGalleryComponent', ['$timeout', function ($timeout) {
   return {
     scope: {
@@ -14,7 +17,11 @@ app.directive('imageGalleryComponent', ['$timeout', function ($timeout) {
        */
 
       scope.addImageFromMedia = function (componentId, index, update) {
-      	scope.media({componentId: componentId, index: index, update: update});
+        scope.media({
+          componentId: componentId,
+          index: index,
+          update: update
+        });
       };
 
       /*
@@ -26,5 +33,5 @@ app.directive('imageGalleryComponent', ['$timeout', function ($timeout) {
         scope.component.images.splice(index, 1);
       };
     }
-  }
+  };
 }]);
