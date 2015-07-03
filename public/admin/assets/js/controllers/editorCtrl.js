@@ -50,6 +50,8 @@
      */
 
     $scope.getUrl = function (handle, is_post) {
+      console.log('handle ', handle);
+      console.log('is_post ', is_post);
       var _url;
       if (is_post) {
         handle = "blog/" + handle;
