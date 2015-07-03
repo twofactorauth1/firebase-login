@@ -128,7 +128,9 @@ var component = $$.m.ModelBase.extend({
                 icon : "fa fa-rocket"
             },
 
-            visibility: true
+            visibility: true,
+
+            submitBtn: "I'm Interested"
         }
     },
 

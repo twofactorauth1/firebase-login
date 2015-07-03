@@ -2308,7 +2308,7 @@ div[data-class='image-text'] p {
   color: white;
   padding: 0 0 20px 10px;
   font-weight: 600;
-  font-family: Capita;
+  font-family: Capital;
   text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.4);
   font-size: 28px;
   margin-top: 10px;
@@ -2317,6 +2317,8 @@ div[data-class='image-text'] p {
 .simple-form-v2 textarea {
   width: 100%;
   text-indent: 10px;
+  border-radius: 6px !important;
+  padding: 10px 16px;
 }
 .simple-form-v2 .inner-page {
   padding: 15px 0 30px;
@@ -2329,9 +2331,8 @@ div[data-class='image-text'] p {
   height: 50px;
   margin: 0;
   padding: 0;
-}
-.simple-form-v2 .btn {
   text-transform: uppercase;
+  background-color: #ffffff !important;
 }
 .simple-form-v2 .has-success .form-control {
   border-color: #2ecc71;
@@ -2352,6 +2353,10 @@ div[data-class='image-text'] p {
   position: absolute;
   top: 8px;
   right: 8px;
+}
+.simple-form-v2 fieldset {
+  background: none;
+  border: 0px;
 }
 /********** Products v1 component **********/
 .products-v1 .nav-tabs {
