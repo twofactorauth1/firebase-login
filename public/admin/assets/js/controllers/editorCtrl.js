@@ -176,10 +176,8 @@
       CKEDITOR.on("instanceReady", function () {
         if (!$scope.ckeditorLoaded) {
           $timeout(function () {
-            $scope.$apply(function () {
               $scope.ckeditorLoaded = true;
               $(window).trigger('resize');
-            });
           }, 100);
         }
       });
