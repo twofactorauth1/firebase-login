@@ -8,8 +8,9 @@ app.directive("elem", function ($timeout) {
     scope: {
       title: '@ngModel',
       ngModel: '=',
+      className: '@className'
     },
-    template: '<div class="edit-wrap"><span class="editable-title">{{title | formatText}}</span><div class="editable" ng-bind-html="ngModel | unsafe"></div></div>',
+    template: '<div class="edit-wrap"><span class="editable-title">{{title | formatText}}</span><div class="editable {{className}}" ng-bind-html="ngModel | unsafe"></div></div>',
     link: function (scope, element, attrs, ctrl) {
       $timeout(function () {
 
@@ -29,11 +30,21 @@ app.directive("elem", function ($timeout) {
             instanceReady: function (ev) {
               var editor = ev.editor;
               editor.setReadOnly(false);
-              editor.on('blur', function (e) {
+              editor.on('change', function (e) {
+                if (!scope.initial) {
                   clearTimeout(scope.delay);
+                  var selection = editor.getSelection();
+                  var bookmarks = selection.createBookmarks(true);
                   scope.delay = setTimeout(function () {
                     scope.update(e);
+                    var range = selection.getRanges()[0];
+                    range.moveToBookmark(bookmarks[0]);
+                    range.select();
                   }, 500);
+                } else {
+                  scope.initial = false;
+                }
+
               });
             }
           },
