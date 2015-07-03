@@ -97,6 +97,34 @@ app.directive('contactUsComponent', ['GeocodeService', 'leafletData', '$timeout'
         }
       };
       scope.updateContactUsAddress();
+      scope.$watch(scope.component.location, function (newValue) {
+        if (newValue) {
+          if (scope.component.location.lat && scope.component.location.lat) {
+            angular.extend(scope, {
+              mapLocation: {
+                lat: parseFloat(scope.component.location.lat),
+                lng: parseFloat(scope.component.location.lon),
+                zoom: 10
+              },
+              markers: {
+                mainMarker: {
+                  lat: parseFloat(scope.component.location.lat),
+                  lng: parseFloat(scope.component.location.lon),
+                  focus: false,
+                  message: scope.contactAddress,
+                  draggable: false
+                }
+              }
+            });
+            leafletData.getMap('leafletmap').then(function (map) {
+              $timeout(function () {
+                map.invalidateSize();
+                $(window).trigger("resize");
+              }, 1000);
+            });
+          }
+        }
+      })
     }
   };
 }]);

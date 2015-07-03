@@ -1,7 +1,7 @@
 /*global app, moment, angular, window, CKEDITOR*/
 /*jslint unparam:true*/
 
-app.directive('componentSettings', ['$modal', '$http', '$timeout', '$q', '$compile', '$filter', 'WebsiteService', 'CustomerService', 'toaster', 'ProductService', function ($modal, $http, $timeout, $q, $compile, $filter, WebsiteService, CustomerService, ProductService, toaster) {
+app.directive('componentSettings', ['$modal', '$http', '$timeout', '$q', '$compile', '$filter', 'WebsiteService', 'CustomerService', 'ProductService', 'GeocodeService', 'toaster', function ($modal, $http, $timeout, $q, $compile, $filter, WebsiteService, CustomerService, ProductService, GeocodeService, toaster) {
   return {
     require: [],
     restrict: 'C',
@@ -707,6 +707,32 @@ app.directive('componentSettings', ['$modal', '$http', '$timeout', '$q', '$compi
 
         }
       };
+
+      /*
+     * @stringifyAddress
+     * -
+     */
+
+      $scope.stringifyAddress = function (address) {
+        if (address) {
+          return _.filter([address.address, address.city, address.state, address.zip], function (str) {
+            return str !== "";
+          }).join(", ")
+        }
+      };
+
+      $scope.updateContactUsAddress = function()
+      {
+        if(($scope.componentEditing.location.city && $scope.componentEditing.location.state) || $scope.componentEditing.location.zip)
+        {
+          GeocodeService.getGeoSearchAddress($scope.stringifyAddress($scope.componentEditing.location), function (data) {
+          if (data.lat && data.lon) {
+            $scope.componentEditing.location.lat = data.lat;
+            $scope.componentEditing.location.lon = data.lon;
+          }
+        });
+        }
+      }
     }
   };
 }]);
