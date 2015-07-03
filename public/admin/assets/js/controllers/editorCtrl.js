@@ -205,6 +205,17 @@
     };
 
     /*
+     * @addBackground Image
+     * -
+     */
+
+    $scope.addBackground = function (componentId) {
+      $scope.componentEditing = _.findWhere($scope.components, {
+        _id: componentId
+      });
+    };
+
+    /*
      * @addImageFromMedia
      * -
      */
