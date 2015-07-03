@@ -1,15 +1,15 @@
 <style>
-    .{{component.type}}-v{{$index + 1}} .bg-overlay {
+    .{{component.type}}{{$index + 1}} .bg-overlay {
         background: {{component.bg.img.overlaycolor || 'rgba(0, 0, 0, 0.58)'}}!important;
         opacity: {{component.bg.img.overlayopacity/100 || 1}};
     }
-    .{{component.type}}-v{{$index + 1}} {
+    .{{component.type}}{{$index + 1}} {
        opacity: {{component.bg.opacity/100 || 1}};
     }
 </style>
 <div class="component-wrap" ng-if="component.visibility">
 
-    <div class="component {{component.type}}-v{{$index + 1}}">
+    <div class="component {{component.type}}{{$index + 1}}">
 
         <div id="{{component.anchor}}" ng-style="{'color':component.txtcolor||primaryTextColor}">
 
