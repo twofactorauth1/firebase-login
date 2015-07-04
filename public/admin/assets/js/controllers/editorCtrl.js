@@ -2,7 +2,7 @@
 /*global app, moment, angular, window, CKEDITOR*/
 /*jslint unparam:true*/
 (function (angular) {
-  app.controller('EditorCtrl', ["$scope", "$rootScope", "$interval", "$timeout", "toaster", "$modal", "$filter", "$location", "WebsiteService", "SweetAlert", "hoursConstant", "GeocodeService", "ProductService", "AccountService", "postConstant", function ($scope, $rootScope, $interval, $timeout, toaster, $modal, $filter, $location, WebsiteService, SweetAlert, hoursConstant, GeocodeService, ProductService, AccountService, postConstant) {
+  app.controller('EditorCtrl', ["$scope", "$document", "$rootScope", "$interval", "$timeout", "toaster", "$modal", "$filter", "$location", "WebsiteService", "SweetAlert", "hoursConstant", "GeocodeService", "ProductService", "AccountService", "postConstant", function ($scope, $document, $rootScope, $interval, $timeout, toaster, $modal, $filter, $location, WebsiteService, SweetAlert, hoursConstant, GeocodeService, ProductService, AccountService, postConstant) {
 
     /*
      * @savePage
@@ -50,8 +50,6 @@
      */
 
     $scope.getUrl = function (handle, is_post) {
-      console.log('handle ', handle);
-      console.log('is_post ', is_post);
       var _url;
       if (is_post) {
         handle = "blog/" + handle;
@@ -79,6 +77,10 @@
       newComponent._id = temp;
       newComponent.anchor = temp;
       $scope.components.splice(index + 1, 0, newComponent);
+      $timeout(function() {
+        var element = document.getElementById(newComponent._id);
+        $document.scrollToElementAnimated(element, 175, 1000);
+      }, 500);
       toaster.pop('success', "Component Added", "The " + newComponent.type + " component was added successfully.");
     };
 
@@ -125,15 +127,12 @@
     $scope.blog = {};
     $scope.retrievePost = function (_handle) {
       WebsiteService.getSinglePage('single-post', function (data) {
-        console.log('single-post page ', data);
         $scope.page = data;
         $scope.components = $scope.page.components;
         $scope.activateCKeditor();
         WebsiteService.getSinglePost(_handle, function (data) {
-          console.log('post data ', data);
           $scope.blog.post = data;
           $scope.single_post = true;
-          console.log('$scope.blog ', $scope.blog);
         });
       });
     };
@@ -178,8 +177,8 @@
       CKEDITOR.on("instanceReady", function () {
         if (!$scope.ckeditorLoaded) {
           $timeout(function () {
-              $scope.ckeditorLoaded = true;
-              $(window).trigger('resize');
+            $scope.ckeditorLoaded = true;
+            $(window).trigger('resize');
           }, 100);
         }
       });
@@ -266,7 +265,6 @@
      */
 
     $scope.insertMedia = function (asset) {
-      console.log('insertMedia ', asset);
       if ($scope.imageChange) {
         $scope.imageChange = false;
         var type = $scope.componentEditing.type;
@@ -334,25 +332,45 @@
      * -
      */
 
-    $scope.closeModal = function () {
-      $scope.modalInstance.close();
-      if ($scope.componentEditing && $scope.componentEditing.type === 'contact-us' && $scope.contactHoursInvalid) {
-        $scope.componentEditing.hours = $scope.originalComponent.hours;
-        $scope.updateContactUsAddress();
-      }
-      $scope.contactHoursInvalid = false;
-    };
+    // $scope.closeModal = function () {
+    //   console.log('closeModal >>> ');
+    //   $timeout(function () {
+    //       $scope.modalInstance.close();
+    //       angular.element('.modal-backdrop').remove();
+    //   });
+    //   if ($scope.componentEditing && $scope.componentEditing.type === 'contact-us' && $scope.contactHoursInvalid) {
+    //     $scope.componentEditing.hours = $scope.originalComponent.hours;
+    //     $scope.updateContactUsAddress();
+    //   }
+    //   $scope.contactHoursInvalid = false;
+    // };
 
     /*
      * @openModal
      * -
      */
 
-    $scope.openModal = function (modal) {
-      $scope.modalInstance = $modal.open({
+    $scope.openModal = function (modal, controller, index) {
+      var _modal = {
         templateUrl: modal,
-        scope: $scope
-      });
+        resolve: {
+          components: function () {
+            return $scope.components
+          }
+        }
+      };
+
+      if (controller) {
+        _modal.controller = controller;
+      }
+
+      if (index >= 0) {
+        _modal.resolve.clickedIndex = function () {
+          return index
+        }
+      }
+
+      $scope.modalInstance = $modal.open(_modal);
       $scope.modalInstance.result.then(null, function () {
         angular.element('.sp-container').addClass('sp-hidden');
       });
@@ -511,7 +529,6 @@
       if (!redirectUrl) {
         redirectUrl = $location.search().posthandle ? "/admin/#/website/posts" : "/admin/#/website/pages";
       }
-      console.log('$scope.isDirty ', $scope);
       if ($scope.isDirty) {
         SweetAlert.swal({
           title: "Are you sure?",
