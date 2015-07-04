@@ -1,4 +1,4 @@
-'use strict';
+// 'use strict'; <--- DO NOT USE! CKEDITOR FAILS (https://github.com/WebSpellChecker/ckeditor-plugin-scayt/issues/65)
 /*global app, moment, angular, window, CKEDITOR*/
 /*jslint unparam:true*/
 app.directive("elem", function ($timeout) {
@@ -31,20 +31,7 @@ app.directive("elem", function ($timeout) {
               var editor = ev.editor;
               editor.setReadOnly(false);
               editor.on('change', function (e) {
-                if (!scope.initial) {
-                  clearTimeout(scope.delay);
-                  var selection = editor.getSelection();
-                  var bookmarks = selection.createBookmarks(true);
-                  scope.delay = setTimeout(function () {
-                    scope.update(e);
-                    var range = selection.getRanges()[0];
-                    range.moveToBookmark(bookmarks[0]);
-                    range.select();
-                  }, 500);
-                } else {
-                  scope.initial = false;
-                }
-
+                scope.update(e);
               });
             }
           },
