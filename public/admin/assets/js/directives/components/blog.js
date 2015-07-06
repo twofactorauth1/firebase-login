@@ -5,6 +5,9 @@ app.directive('blogComponent', ['$filter', '$timeout', 'WebsiteService', functio
       version: '='
     },
     templateUrl: '/components/component-wrap.html',
+    link: function (scope, element, attrs) {
+      scope.isEditing = true;
+    },
     controller: function ($scope, WebsiteService, $compile, $filter, $timeout) {
       $scope.blog = {};
       $scope.showCloud = false;

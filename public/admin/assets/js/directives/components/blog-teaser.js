@@ -3,8 +3,11 @@ app.directive('blogTeaserComponent', ['WebsiteService','$filter', function (Webs
     scope: {
       component: '=',
       version: '='
-    },
+    },    
     templateUrl: '/components/component-wrap.html',
+    link: function (scope, element, attrs) {
+      scope.isEditing = true;
+    },
     controller: function ($scope, WebsiteService, $compile) {
       WebsiteService.getPosts(function (posts) {
         $scope.teaserposts = posts;

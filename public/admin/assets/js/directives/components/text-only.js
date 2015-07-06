@@ -4,6 +4,9 @@ app.directive('textOnlyComponent', function () {
       component: '=',
       version: '='
     },
-    templateUrl: '/components/component-wrap.html'
+    templateUrl: '/components/component-wrap.html',
+    link: function (scope, element, attrs) {
+      scope.isEditing = true;
+    }
   }
 });

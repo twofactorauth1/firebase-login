@@ -6,6 +6,7 @@ app.directive('thumbnailSliderComponent', ['$window', function ($window) {
     },
     templateUrl: '/components/component-wrap.html',
     link: function (scope, element, attrs) {
+      scope.isEditing = true;
       var w = angular.element($window);
       var check_if_mobile = mobilecheck();
       var thumbnailId = scope.component._id;

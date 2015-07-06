@@ -6,7 +6,7 @@ app.directive('footerComponent', ['WebsiteService', function (WebsiteService) {
     },
     templateUrl: '/components/component-wrap.html',
     link: function (scope, element, attrs, ctrl) {
-
+      scope.isEditing = true;
       WebsiteService.getWebsite(function (website) {
         scope.website = website;
       });

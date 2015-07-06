@@ -6,6 +6,7 @@ app.directive('productsComponent', ['$filter', 'ProductService', 'AccountService
     },
     templateUrl: '/components/component-wrap.html',
     link: function (scope, element, attrs, ctrl) {
+      scope.isEditing = true;
       scope.checkoutModalState = 1;
 
       /*
