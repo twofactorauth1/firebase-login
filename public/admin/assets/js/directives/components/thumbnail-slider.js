@@ -1,9 +1,10 @@
-app.directive('thumbnailSliderComponent', ['$window', function ($window) {
+app.directive('thumbnailSliderComponent', ['$window', '$timeout', function ($window, $timeout) {
   return {
     scope: {
       component: '=',
       version: '=',
-      media: '&'
+      media: '&',
+      control: '='
     },
     templateUrl: '/components/component-wrap.html',
     link: function (scope, element, attrs) {
@@ -16,12 +17,13 @@ app.directive('thumbnailSliderComponent', ['$window', function ($window) {
       var winWidth = w.width();
 
       scope.bindThumbnailSlider = function (width, is_mobile) {
+        var thumbnail = scope.component.thumbnailCollection;
         var number_of_arr = 4;
         if (width <= 750 || is_mobile) {
           number_of_arr = 1;
         }
         scope.imagesPerPage = number_of_arr;
-          scope.slider = partition(angular.copy(scope.component.thumbnailCollection), number_of_arr);
+          scope.slider = partition(thumbnail, number_of_arr);
         if (scope.slider.length > 1)
           scope.displayThumbnailPaging = true;
         else
@@ -31,10 +33,11 @@ app.directive('thumbnailSliderComponent', ['$window', function ($window) {
       scope.deleteImageFromThumbnail = function (index, parentIndex) {
         var imageIndex = parentIndex > 0 ? (parentIndex * scope.imagesPerPage + index) : index;
           scope.component.thumbnailCollection.splice(imageIndex, 1);
+          scope.bindThumbnailSlider(winWidth, check_if_mobile);
       };
 
 
-      scope.bindThumbnailSlider(w.width(), check_if_mobile);
+      scope.bindThumbnailSlider(winWidth, check_if_mobile);
 
       function mobilecheck() {
         var check = false;
@@ -55,6 +58,10 @@ app.directive('thumbnailSliderComponent', ['$window', function ($window) {
         }
         return newArr;
       };
+
+      scope.control.refreshSlider = function() {
+        scope.bindThumbnailSlider(winWidth, check_if_mobile);
+      }
 
       /*
        * @addImageFromMedia

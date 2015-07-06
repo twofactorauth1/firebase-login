@@ -251,12 +251,14 @@
       }
     };
 
+    
+
     /*
      * @insertMedia
      * - insertmedia into various components
      * - TODO: change to switch case and stop using if else
      */
-
+    $scope.thumbnailSlider = {};
     $scope.insertMedia = function (asset) {
       if ($scope.imageChange) {
         $scope.imageChange = false;
@@ -279,16 +281,15 @@
             $scope.updateImage = false;
           }
         } else if (type === 'thumbnail-slider') {
-          $timeout(function () {
             if ($scope.updateImage) {
               $scope.componentEditing.thumbnailCollection[$scope.componentImageIndex].url = asset.url;
             } else {
-              $scope.componentEditing.thumbnailCollection.push({
+              $scope.componentEditing.thumbnailCollection.splice($scope.componentImageIndex + 1, 0, {
                  url: asset.url
               });
               $scope.updateImage = false;
             }
-          })
+            $scope.thumbnailSlider.refreshSlider();
         } else if (type === 'meet-team') {
           $scope.componentEditing.teamMembers[$scope.componentImageIndex].profilepic = asset.url;
         } else {
