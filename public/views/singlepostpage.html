@@ -2,7 +2,7 @@
     <div ng-show="isEditing">
         <div id="editor-toolbar"></div>
     </div>
-    <div style="{{isEditing ? 'margin-top:50px;' : ''}}" class="ui-sortable fragment" ng-repeat="component in blog.pages.components | createUrlFilter track by $index">
+    <div style="{{isEditing ? 'margin-top:50px;' : ''}}" class="ui-sortable fragment" ng-repeat="component in page.components | createUrlFilter track by $index">
         <div ng-if="component.type=='single-post'" class="componentActions">
             <span class="settings single-post-settings fa fa-cog" data-id="{{component._id}}"><p>Preview</p></span>
         </div>

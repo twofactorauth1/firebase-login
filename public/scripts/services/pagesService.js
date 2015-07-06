@@ -8,6 +8,7 @@ mainApp.factory('pagesService', ['websiteService','$http', '$location', function
 
     return function (callback) {
         var path = $location.$$path.replace('/page/', '');
+        console.log('path ', path);
 
         if ( path == "/" || path == "" ) {
             path = "index";

@@ -60,23 +60,23 @@ var mainApp = angular
             // })
             .when('/tag/:tagname', {
                 templateUrl: '../views/blog.html',
-                controller: 'BlogCtrl as blog'
+                controller: 'LayoutCtrl as layout'
             })
             .when('/category/:catname', {
                 templateUrl: '../views/blog.html',
-                controller: 'BlogCtrl as blog'
+                controller: 'LayoutCtrl as layout'
             })
             .when('/author/:authorname', {
                 templateUrl: '../views/blog.html',
-                controller: 'BlogCtrl as blog'
+                controller: 'LayoutCtrl as layout'
             })
             .when('/page/blog/:postname', {
                 templateUrl: '../views/singlepostpage.html',
-                controller: 'BlogCtrl as blog'
+                controller: 'LayoutCtrl as layout'
             })
             .when('/page/post/:postname', {
                 templateUrl: '../views/singlepostpage.html',
-                controller: 'BlogCtrl as blog'
+                controller: 'LayoutCtrl as layout'
             })
             .when('/page/:pagename', {
                 templateUrl: '../views/main.html',
@@ -92,7 +92,7 @@ var mainApp = angular
             })
             .when('/blog/:postname', {
                 templateUrl: '../views/singlepostpage.html',
-                controller: 'BlogCtrl as blog'
+                controller: 'LayoutCtrl as layout'
             })
             .otherwise( {
                 templateUrl: '../views/main.html',
