@@ -7,6 +7,7 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$modalInstance', '$http
   $scope.clickedIndex = clickedIndex;
   $scope.componentEditing = components[clickedIndex];
   $scope.contactMap = contactMap;
+  
   /*
    * @getAllProducts
    * - get products for products and pricing table components
@@ -541,17 +542,9 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$modalInstance', '$http
       }).join(", ")
     }
   };
-
-  $scope.contactmapSettings = function () {
-    if($scope.componentEditing == "contact-us")
-    {
-      $scope.originalContactMap = angular.copy($scope.componentEditing.location);
-    }
-  } 
-  
   
   $scope.updateContactUsAddress = function () {
-    if($scope.originalContactMap !== $scope.componentEditing.location)
+    if(!angular.equals($scope.originalContactMap, $scope.componentEditing.location))
       if (($scope.componentEditing.location.city && $scope.componentEditing.location.state) || $scope.componentEditing.location.zip) {
         GeocodeService.getGeoSearchAddress($scope.stringifyAddress($scope.componentEditing.location), function (data) {
           if (data.lat && data.lon) {
@@ -562,7 +555,7 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$modalInstance', '$http
         });
       }
   };
-
+  
   /*
    * @editComponent
    * -
@@ -596,6 +589,7 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$modalInstance', '$http
     }
 
     if ($scope.componentEditing.type === "contact-us") {
+      $scope.originalContactMap = angular.copy($scope.componentEditing.location);
       if ($scope.componentEditing.hours) {
         _.each($scope.componentEditing.hours, function (element, index) {
           if (element.day === "Sat" || element.day === "Sun") {
@@ -654,5 +648,5 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$modalInstance', '$http
     });
   };
 
-  $scope.editComponent();
+  $scope.editComponent(); 
 }]);
