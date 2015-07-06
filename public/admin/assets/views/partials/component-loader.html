@@ -1,6 +1,6 @@
-<div id="componentloader" ng-if="page.components.length">
+<div id="componentloader" ng-if="components.length">
     <ul as-sortable="sortableOptions" class="ui-sortable adminbarspacing padding-0" ng-model="components">
-        <li ng-repeat="value in page.components" as-sortable-item class="fragment">
+        <li ng-repeat="value in components" as-sortable-item class="fragment">
             <div class="componentActions" ng-class="{'masthead-actions':value.type == 'masthead'}">
                 <span class="reorder fa fa-arrows" as-sortable-item-handle><p>Reorder</p></span>
                 <h4 class="pull-left">{{value.type | formatText}}</h4>
