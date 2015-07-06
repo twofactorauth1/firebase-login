@@ -7,7 +7,7 @@
        opacity: {{component.bg.opacity/100 || 1}};
     }
 </style>
-<div class="component-wrap" ng-if="component.visibility">
+<div class="component-wrap" ng-if="component.visibility" ng-class="{'editing': isEditing}">
 
     <div class="component {{component.type}}{{$index + 1}}">
 

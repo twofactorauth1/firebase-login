@@ -204,6 +204,10 @@ hr {
 .component-hidden {
   text-align: center;
   padding: 5px 0;
+  height: 150px;
+}
+.component-hidden > h3 {
+  margin-top: 50px;
 }
 .add-addtional,
 .add-addtional-feature,
@@ -514,6 +518,7 @@ div[data-type='campaign'] .inner-page .overlay {
   font-size: 28px;
   bottom: -20px;
   opacity: .8;
+  color: #ffffff;
 }
 .editing.features-wrap .feature:hover .add-addtional:hover {
   opacity: 1;
@@ -524,12 +529,12 @@ div[data-type='campaign'] .inner-page .overlay {
   font-size: 20px;
   display: block;
   border: 0;
-  color: #ffffff;
   padding: 10px 15px;
   position: absolute;
   top: 0;
   right: 0;
   opacity: .8;
+  color: #ffffff;
 }
 .editing.features-wrap .feature:hover .delete-feature:hover {
   opacity: 1;
@@ -1237,6 +1242,7 @@ contenthover a {
 }
 .editing.team-member-wrap .team-member:hover .delete-team-member .btn-delete-team-member {
   display: block;
+  color: white;
 }
 .editing.team-member-wrap .delete-team-member .btn-delete-team-member {
   display: none;

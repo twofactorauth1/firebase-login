@@ -65,19 +65,19 @@
                         </li>
                     </ul>
                     <div ng-if="isEditing" class="add-addtional-team">
-                        <button ng-if="isEditing" ng-click="openModal('social-links-modal', null, $parent.$index)" class="clickable-link social-links"><i class="fa fa-plus"></i></button>
+                        <a ng-if="isEditing" ng-click="openModal('social-links-modal', null, $parent.$index)" class="clickable-link social-links"><i class="fa fa-plus"></i></a>
                     </div>
                 </div>
                 <div ng-if="isEditing">
                     <div class="delete-team-member center">
-                        <button ng-click="deleteTeamMember($index)" class="btn-delete-team-member">
+                        <a ng-click="deleteTeamMember($index)" class="btn-delete-team-member">
                             <i class='fa fa-trash'></i>
-                        </button>
+                        </a>
                     </div>
                     <div class="add-addtional">
-                        <button  ng-click="addTeamMember($index)">
+                        <a  ng-click="addTeamMember($index)">
                             <i class="fa fa-plus"></i>
-                        </button>
+                        </a>
                     </div>
                 </div>
             </div>

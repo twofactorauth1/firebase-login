@@ -22,11 +22,11 @@
                 </div>
             </div>
             <div ng-if="isEditing">
-                <div class="delete-feature center">
-                    <button ng-click="deleteFeatureList($index)"><i class='fa fa-trash'></i></button>
+                <div class="delete-feature center" ng-click="deleteFeatureList($index)">
+                    <i class='fa fa-trash'></i>
                 </div>
-                <div class="add-addtional center">
-                    <button ng-click="addFeatureList($index)"><i class='fa fa-plus'></i></button>
+                <div class="add-addtional center" ng-click="addFeatureList($index)">
+                    <i class='fa fa-plus'></i>
                 </div>
             </div>
         </div>
