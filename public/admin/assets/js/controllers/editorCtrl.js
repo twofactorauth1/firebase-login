@@ -228,6 +228,20 @@
       $scope.showInsert = true;
     };
 
+    $scope.addImageToThumbnail = function (componentId, index, update, parentIndex, numberPerPage) {
+      $scope.imageChange = true;
+      $scope.updateImage = update;
+      $scope.componentImageIndex = index;
+      if (parentIndex && numberPerPage) {
+        $scope.componentImageIndex = (parseInt(parentIndex) * parseInt(numberPerPage)) + parseInt(index);
+      }
+      $scope.componentEditing = _.findWhere($scope.components, {
+        _id: componentId
+      });
+      angular.element("#media-manager-modal").modal('show');
+      $scope.showInsert = true;
+    };
+
     /*
      * @clickImageButton
      * -
@@ -284,7 +298,16 @@
             $scope.updateImage = false;
           }
         } else if (type === 'thumbnail-slider') {
-          $scope.componentEditing.thumbnailCollection[$scope.componentImageIndex].url = asset.url;
+          $timeout(function () {
+            if ($scope.updateImage) {
+              $scope.componentEditing.thumbnailCollection[$scope.componentImageIndex].url = asset.url;
+            } else {
+              $scope.componentEditing.thumbnailCollection.push({
+                 url: asset.url
+              });
+              $scope.updateImage = false;
+            }
+          })
         } else if (type === 'meet-team') {
           $scope.componentEditing.teamMembers[$scope.componentImageIndex].profilepic = asset.url;
         } else {

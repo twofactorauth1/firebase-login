@@ -2,52 +2,39 @@ app.directive('thumbnailSliderComponent', ['$window', function ($window) {
   return {
     scope: {
       component: '=',
-      version: '='
+      version: '=',
+      media: '&'
     },
     templateUrl: '/components/component-wrap.html',
     link: function (scope, element, attrs) {
       scope.isEditing = true;
+      scope.imagesPerPage = 4;
+      scope.slider = [];
       var w = angular.element($window);
       var check_if_mobile = mobilecheck();
-      var thumbnailId = scope.component._id;
-      scope.thumbnailSlider = [];
-
-      var matching = _.find(scope.thumbnailSlider, function (item) {
-        return item.thumbnailId == thumbnailId
-      })
-
-      if (!matching) {
-        scope.thumbnailSlider.push({
-          thumbnailId: thumbnailId,
-          thumbnailSliderCollection: angular.copy(scope.component.thumbnailCollection)
-        });
-
-      } else
-        matching.thumbnailSliderCollection = angular.copy(scope.component.thumbnailCollection);
 
       var winWidth = w.width();
 
-      scope.bindThumbnailSlider = function (width, is_mobile, thumbnailId) {
+      scope.bindThumbnailSlider = function (width, is_mobile) {
         var number_of_arr = 4;
         if (width <= 750 || is_mobile) {
           number_of_arr = 1;
         }
         scope.imagesPerPage = number_of_arr;
-
-        var matching = _.find(scope.thumbnailSlider, function (item) {
-          return item.thumbnailId == thumbnailId
-        })
-
-        if (matching) {
-          matching.thumbnailCollection = partition(matching.thumbnailSliderCollection, number_of_arr);
-          if (matching.thumbnailCollection.length > 1)
-            matching.displayThumbnailPaging = true;
-          else
-            matching.displayThumbnailPaging = false;
-        }
+          scope.slider = partition(angular.copy(scope.component.thumbnailCollection), number_of_arr);
+        if (scope.slider.length > 1)
+          scope.displayThumbnailPaging = true;
+        else
+          scope.displayThumbnailPaging = false;
       };
 
-      scope.bindThumbnailSlider(w.width(), check_if_mobile, thumbnailId);
+      scope.deleteImageFromThumbnail = function (index, parentIndex) {
+        var imageIndex = parentIndex > 0 ? (parentIndex * scope.imagesPerPage + index) : index;
+          scope.component.thumbnailCollection.splice(imageIndex, 1);
+      };
+
+
+      scope.bindThumbnailSlider(w.width(), check_if_mobile);
 
       function mobilecheck() {
         var check = false;
@@ -68,6 +55,21 @@ app.directive('thumbnailSliderComponent', ['$window', function ($window) {
         }
         return newArr;
       };
+
+      /*
+       * @addImageFromMedia
+       * -
+       */
+
+      scope.addImageFromMedia = function (componentId, index, update, parentIndex) {
+        var imageIndex = parentIndex > 0 ? (parentIndex * scope.imagesPerPage + index) : index;
+        scope.media({
+          componentId: componentId,
+          index: imageIndex,
+          update: update
+        });
+      };
+
     }
   }
 }]);
