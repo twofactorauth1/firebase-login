@@ -9,7 +9,7 @@ app.directive('thumbnailSliderComponent', ['$window', function ($window) {
       var w = angular.element($window);
       var check_if_mobile = mobilecheck();
       var winWidth = w.width();
-
+      scope.showSlider = true;
       scope.bindThumbnailSlider = function (width, is_mobile) {
         var number_of_arr = 4;
         if (width <= 750 || is_mobile) {

@@ -17,17 +17,22 @@ app.directive('thumbnailSliderComponent', ['$window', '$timeout', function ($win
       var winWidth = w.width();
 
       scope.bindThumbnailSlider = function (width, is_mobile) {
+        scope.showSlider = false;
         var thumbnail = scope.component.thumbnailCollection;
         var number_of_arr = 4;
         if (width <= 750 || is_mobile) {
           number_of_arr = 1;
         }
         scope.imagesPerPage = number_of_arr;
-          scope.slider = partition(thumbnail, number_of_arr);
+        scope.slider = partition(thumbnail, number_of_arr);
         if (scope.slider.length > 1)
           scope.displayThumbnailPaging = true;
         else
           scope.displayThumbnailPaging = false;
+           $timeout(function () {
+            scope.showSlider = true;
+          }, 0);
+
       };
 
       scope.deleteImageFromThumbnail = function (index, parentIndex) {
