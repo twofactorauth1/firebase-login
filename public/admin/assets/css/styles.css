@@ -12699,6 +12699,15 @@ fieldset[disabled] .btn-vimeo-square.active {
   overflow: hidden;
   clear: both;
 }
+#componentloader h1,
+#componentloader h2,
+#componentloader h3,
+#componentloader h4,
+#componentloader h5 {
+  font-weight: normal;
+  color: inherit;
+  font-family: inherit;
+}
 #componentloader .as-sortable-placeholder {
   height: 57px!important;
   overflow: hidden;
