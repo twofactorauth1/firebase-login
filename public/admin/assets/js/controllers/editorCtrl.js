@@ -107,6 +107,7 @@
      */
     $scope.blog = {};
     $scope.retrievePost = function (_handle) {
+      $scope.isSinglePost = true;
       WebsiteService.getSinglePage('single-post', function (data) {
         $scope.page = data;
         $scope.components = $scope.page.components;

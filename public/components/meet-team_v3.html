@@ -36,12 +36,12 @@
                         <div elem ng-model="teamMember.bio"></div>
                     </div>
                     <div ng-if="component.teamSettings.networks" class="social-link {{isEditing ? 'edit-mode' : ''}}">
-                        <ul class="social">
+                        <ul class="profile-social">
                             <li ng-repeat="network in teamMember.networks">
-                                <a ng-if="!isEditing" href="{{network.url}}" target="_blank" class="btn btn-{{network.icon}}">
-                                    <span class="fa fa-{{network.icon}}"></span>
+                                <a ng-if="!isEditing" href="{{network.url}}" target="_blank">
+                                    <span class="fa fa-{{network.icon}} btn-{{network.icon}}"></span>
                                 </a>
-                                <a ng-if="isEditing" href="#" ng-click="openModal('social-links-modal', $index, $parent.$parent.$index)" class="clickable-link social-links btn btn-{{network.icon}}"><span class="fa fa-{{network.icon}}"></span></a>
+                                <a ng-if="isEditing" ng-click="openModal('social-links-modal', $index, $parent.$parent.$index)" href="#" class="clickable-link social-links"><span class="btn-{{network.icon}} fa fa-{{network.icon}}"></span></a>
                             </li>
                         </ul>
                         <div ng-if="isEditing" class="add-addtional-team">

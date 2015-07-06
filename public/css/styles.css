@@ -1247,6 +1247,28 @@ contenthover a {
 .editing.team-member-wrap .delete-team-member .btn-delete-team-member {
   display: none;
 }
+.team-member-wrap .profile-social li span {
+  width: 40px;
+  height: 40px;
+  border-radius: 30px;
+  line-height: 35px;
+  color: white;
+  border: 2px solid white;
+  margin-right: 5px;
+}
+.team-member-wrap .profile-social li span:hover {
+  border: 2px solid white;
+}
+.team-member-wrap .profile-social {
+  padding: 0;
+  text-align: center;
+  bottom: 0;
+  margin-bottom: 5px;
+  margin-top: 5px;
+}
+.team-member-wrap .profile-social li {
+  display: inline-block;
+}
 .meet-team-v1 {
   overflow: hidden;
 }
@@ -1323,28 +1345,6 @@ contenthover a {
 }
 .meet-team-v1 .become-member .name {
   display: none !important;
-}
-.meet-team-v1 .profile-social li span {
-  width: 40px;
-  height: 40px;
-  border-radius: 30px;
-  line-height: 35px;
-  color: white;
-  border: 2px solid white;
-  margin-right: 5px;
-}
-.meet-team-v1 .profile-social li span:hover {
-  border: 2px solid white;
-}
-.meet-team-v1 .profile-social {
-  padding: 0;
-  text-align: center;
-  bottom: 0;
-  margin-bottom: 5px;
-  margin-top: 5px;
-}
-.meet-team-v1 .profile-social li {
-  display: inline-block;
 }
 .meet-team-v1 .profile-position {
   text-align: center;

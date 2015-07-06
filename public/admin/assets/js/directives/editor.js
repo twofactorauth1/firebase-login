@@ -12,6 +12,7 @@ app.directive("elem", function ($timeout) {
     },
     template: '<div class="edit-wrap"><span class="editable-title">{{title | formatText}}</span><div class="editable {{className}}" ng-bind-html="ngModel | unsafe"></div></div>',
     link: function (scope, element, attrs, ngModel) {
+      console.log('isSinglePost ', scope.$parent.$parent);
 
       scope.update = function (e) {
         scope.$apply(function () {
