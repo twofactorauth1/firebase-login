@@ -208,10 +208,8 @@
      * -
      */
 
-    $scope.addBackground = function (componentId) {
-      $scope.componentEditing = _.findWhere($scope.components, {
-        _id: componentId
-      });
+    $scope.setEditingComponent = function (index) {
+      $scope.componentEditing = $scope.components[index];
     };
 
     /*
@@ -351,6 +349,7 @@
      */
 
     $scope.openModal = function (modal, controller, index) {
+      $scope.setEditingComponent(index);
       var _modal = {
         templateUrl: modal,
         resolve: {
