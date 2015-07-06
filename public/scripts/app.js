@@ -50,32 +50,24 @@ var mainApp = angular
                 templateUrl: '../views/main.html',
                 controller: 'LayoutCtrl as layout'
             })
-            // .when('/blog', {
-            //     templateUrl: '../views/blog.html',
-            //     controller: 'BlogCtrl as blog'
-            // })
-            // .when('/blog/:postname', {
-            //     templateUrl: '../views/singlepostpage.html',
-            //     controller: 'BlogCtrl as blog'
-            // })
             .when('/tag/:tagname', {
-                templateUrl: '../views/blog.html',
+                templateUrl: '../views/main.html',
                 controller: 'LayoutCtrl as layout'
             })
             .when('/category/:catname', {
-                templateUrl: '../views/blog.html',
+                templateUrl: '../views/main.html',
                 controller: 'LayoutCtrl as layout'
             })
             .when('/author/:authorname', {
-                templateUrl: '../views/blog.html',
+                templateUrl: '../views/main.html',
                 controller: 'LayoutCtrl as layout'
             })
             .when('/page/blog/:postname', {
-                templateUrl: '../views/singlepostpage.html',
+                templateUrl: '../views/main.html',
                 controller: 'LayoutCtrl as layout'
             })
             .when('/page/post/:postname', {
-                templateUrl: '../views/singlepostpage.html',
+                templateUrl: '../views/main.html',
                 controller: 'LayoutCtrl as layout'
             })
             .when('/page/:pagename', {
@@ -91,7 +83,7 @@ var mainApp = angular
                 controller: 'LayoutCtrl as layout'
             })
             .when('/blog/:postname', {
-                templateUrl: '../views/singlepostpage.html',
+                templateUrl: '../views/main.html',
                 controller: 'LayoutCtrl as layout'
             })
             .otherwise( {

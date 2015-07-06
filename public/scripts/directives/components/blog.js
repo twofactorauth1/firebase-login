@@ -6,6 +6,7 @@ app.directive('blogComponent', ['postsService', '$filter', '$timeout', function 
     },
     templateUrl: '/components/component-wrap.html',
     controller: function ($scope, postsService) {
+      console.log('blogComponent >>>');
       $scope.blog = {};
       $scope.showCloud = false;
       /*
