@@ -5,7 +5,7 @@
             </div>
         </div>
         <div class="mb0" style="background: none" data-ng-repeat="slider in thumbnailSlider track by $index" data-ng-if="slider.thumbnailId == component._id">
-            <div id="myCarousel-{{component.anchor}}" active="1" class="carousel slide">
+            <div id="myCarousel-{{component.anchor || component._id}}" active="1" class="carousel slide">
                 <ol class="carousel-indicators hidden" ng-hide="slider.thumbnailCollection[0][0].detail">
                     <li data-target="#myCarousel" style="background-color: {{component.indicatorcolor}};" data-slide-to="{{$index}}" class="{{$index==0?'active':''}}" data-ng-repeat="collection in slider.thumbnailCollection"></li>
                 </ol>
@@ -16,11 +16,11 @@
                                 <div class="image-wrap">
                                     <div class="imgHeight single-image">
                                     <a href="" class="{{isFirst?'':'thumbnail '}}" style="text-align: center;border: 0;margin-top: 20px;background: none;">
-                                        <img src="{{image.url}}" alt="Image" class="img-responsive hover image-thumbnail" data-index="{{$index}}" parent-index = "{{$parent.$index}}" number-per-page="{{imagesPerPage}}" style="max-height: 100px; margin:{{image.margin}}; " />
+                                        <img src="{{image.url}}" alt="Image" class="img-responsive hover image-thumbnail" data-index="{{$index}}" parent-index="{{$parent.$index}}" number-per-page="{{imagesPerPage}}" style="max-height: 100px; margin:{{image.margin}}; " />
                                     </a>
                                     </div>
                                     <div ng-if="isEditing" class="delete-single-image center">
-                                        <button ng-click="deleteImageFromThumbnail(component._id, $index, $parent.$parent.$index)" class="ng-scope btn-delete-single-image"><i class='fa fa-trash'></i></button>
+                                        <button ng-click="deleteImageFromThumbnail(component._id, $index, $parent.$parent.$index)" class="btn-delete-single-image"><i class='fa fa-trash'></i></button>
                                     </div>
                                     <div ng-if="isEditing" class="add-addtional center">
                                         <a href="">
