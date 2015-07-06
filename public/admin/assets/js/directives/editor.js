@@ -15,6 +15,7 @@ app.directive("elem", function ($timeout) {
 
       scope.update = function (e) {
         scope.$apply(function () {
+          console.log("update modal value");
           ngModel.$setViewValue(e.editor.getData());
         });
       };
@@ -28,18 +29,6 @@ app.directive("elem", function ($timeout) {
             editor.setReadOnly(false);
             editor.setData(ngModel.$viewValue);
             editor.on('change', function (e) {
-              scope.update(e);
-            });
-            editor.on('dataReady', function (e) {
-              scope.update(e);
-            });
-            editor.on('key', function (e) {
-              scope.update(e);
-            });
-            editor.on('paste', function (e) {
-              scope.update(e);
-            });
-            editor.on('selectionChange', function (e) {
               scope.update(e);
             });
           }
