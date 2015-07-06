@@ -3,7 +3,7 @@ app.directive('includeReplace', function () {
         require: 'ngInclude',
         restrict: 'A', /* optional */
         link: function (scope, el, attrs) {
-            el.replaceWith(el.children());
+            //el.replaceWith(el.children());
         }
     };
 });
