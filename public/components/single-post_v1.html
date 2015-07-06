@@ -22,7 +22,14 @@
                             </h2>
                             <div class="blog-meta single-post-publish-date">
                                 <div data-class="publish_date">
-                                    <input ng-if="isEditing" placeholder="Publish Date" type="text" ng-model="blog.post.publish_date" class="datepicker" data-provide="datepicker">
+                                    <p class="input-group" ng-if="isEditing">
+                                        <input type="text" class="form-control" datepicker-popup="dd-MMMM-yyyy" ng-model="blog.post.publish_date" is-open="opened" min-date="minDate" max-date="'2015-06-22'" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
+                                        <span class="input-group-btn">
+                                            <button type="button" class="btn btn-default" ng-click="open($event)">
+                                                <i class="glyphicon glyphicon-calendar"></i>
+                                            </button>
+                                        </span>
+                                    </p>
                                 </div>
                                 <span ng-if="!isEditing">  {{ blog.post.publish_date || blog.post.created.date  | date: 'MM/dd/yyyy' }} </span>
                             </div>
