@@ -8,7 +8,7 @@
                 <span class="duplicate fa fa-copy" ng-if="value.type != 'footer' && value.type != 'navigation' && value.type != 'single-post'  && value.type != 'blog' && value.type != 'blog-teaser'" ng-click="duplicateComponent($index)"><p>Duplicate</p></span>
                 <span class="component-settings settings-btn fa fa-cog" ng-if="value.type != 'footer'" ng-click="openModal('component-settings-modal', value._id)"><p>Settings</p></span>
             </div>
-            <div data-ng-include=" '../components/component-switch.html' "></div>
+            <div ng-include=" '../components/component-switch.html' " include-replace></div>
             <div ng-class="{'zee-blur': !value.visibility}"></div>
             <div ng-if="value.type != 'footer' || components.length == 1">
                 <div class="add-new-component add-component" ng-click="openModal('add-component-modal', 'AddComponentModalCtrl', $index)" data-toggle="modal" data-target="#add-component-modal">
