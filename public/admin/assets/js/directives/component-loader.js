@@ -5,9 +5,7 @@ app.directive('componentLoader', ['$timeout', '$modal', '$document', 'toaster', 
     templateUrl: '/admin/assets/views/partials/component-loader.html',
 
     link: function (scope, element, attributes, controller) {
-      if (typeof (CKEDITOR) !== "undefined") {
-        CKEDITOR.disableAutoInline = true;
-      }
+      CKEDITOR.disableAutoInline = true;
     },
     controller: function ($scope, WebsiteService, CustomerService, $modal) {
       $scope.deleteComponent = function (index) {
@@ -22,7 +20,7 @@ app.directive('componentLoader', ['$timeout', '$modal', '$document', 'toaster', 
           toaster.pop('success', "Page Saved", "The " + $scope.page.handle + " page was saved successfully.");
         });
       };
-      $scope.wait;
+      $scope.wait = '';
       $scope.first = true;
       $scope.sortableOptions = {
         parentElement: "#componentloader",
@@ -43,7 +41,6 @@ app.directive('componentLoader', ['$timeout', '$modal', '$document', 'toaster', 
             $timeout(function () {
               var anchor = $scope.components[e.dest.index].anchor || $scope.components[e.dest.index]._id;
               var element = document.getElementById(anchor);
-              var rect = element.getBoundingClientRect();
               if (element) {
                 $document.scrollToElementAnimated(element, 175, 1000);
               }
