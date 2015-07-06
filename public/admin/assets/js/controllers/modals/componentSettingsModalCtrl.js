@@ -1,12 +1,12 @@
 'use strict';
 /*global app, moment, angular*/
 /*jslint unparam:true*/
-app.controller('ComponentSettingsModalCtrl', ['$scope', '$modalInstance', '$http', '$timeout', '$q', '$compile', '$filter', 'WebsiteService', 'CustomerService', 'ProductService', 'GeocodeService', 'toaster', 'components', 'clickedIndex', function ($scope, $modalInstance, $http, $timeout, $q, $compile, $filter, WebsiteService, CustomerService, ProductService, GeocodeService, toaster, components, clickedIndex) {
+app.controller('ComponentSettingsModalCtrl', ['$scope', '$modalInstance', '$http', '$timeout', '$q', '$compile', '$filter', 'WebsiteService', 'CustomerService', 'ProductService', 'GeocodeService', 'toaster', 'components', 'clickedIndex', 'contactMap', function ($scope, $modalInstance, $http, $timeout, $q, $compile, $filter, WebsiteService, CustomerService, ProductService, GeocodeService, toaster, components, clickedIndex, contactMap) {
 
   $scope.components = components;
   $scope.clickedIndex = clickedIndex;
   $scope.componentEditing = components[clickedIndex];
-
+  $scope.contactMap = contactMap;
   /*
    * @getAllProducts
    * - get products for products and pricing table components
@@ -542,15 +542,25 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$modalInstance', '$http
     }
   };
 
-  $scope.updateContactUsAddress = function () {
-    if (($scope.componentEditing.location.city && $scope.componentEditing.location.state) || $scope.componentEditing.location.zip) {
-      GeocodeService.getGeoSearchAddress($scope.stringifyAddress($scope.componentEditing.location), function (data) {
-        if (data.lat && data.lon) {
-          $scope.componentEditing.location.lat = data.lat;
-          $scope.componentEditing.location.lon = data.lon;
-        }
-      });
+  $scope.contactmapSettings = function () {
+    if($scope.componentEditing == "contact-us")
+    {
+      $scope.originalContactMap = angular.copy($scope.componentEditing.location);
     }
+  } 
+  
+  
+  $scope.updateContactUsAddress = function () {
+    if($scope.originalContactMap !== $scope.componentEditing.location)
+      if (($scope.componentEditing.location.city && $scope.componentEditing.location.state) || $scope.componentEditing.location.zip) {
+        GeocodeService.getGeoSearchAddress($scope.stringifyAddress($scope.componentEditing.location), function (data) {
+          if (data.lat && data.lon) {
+            $scope.componentEditing.location.lat = data.lat;
+            $scope.componentEditing.location.lon = data.lon;
+            $scope.contactMap.refreshMap();
+          }
+        });
+      }
   };
 
   /*

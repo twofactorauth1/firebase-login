@@ -259,6 +259,7 @@
      * - TODO: change to switch case and stop using if else
      */
     $scope.thumbnailSlider = {};
+    $scope.contactMap = {};
     $scope.insertMedia = function (asset) {
       if ($scope.imageChange) {
         $scope.imageChange = false;
@@ -360,6 +361,9 @@
         resolve: {
           components: function () {
             return $scope.components
+          },
+          contactMap: function () {
+            return $scope.contactMap
           }
         }
       };
@@ -373,7 +377,6 @@
           return index
         }
       }
-
       $scope.modalInstance = $modal.open(_modal);
       $scope.modalInstance.result.then(null, function () {
         angular.element('.sp-container').addClass('sp-hidden');

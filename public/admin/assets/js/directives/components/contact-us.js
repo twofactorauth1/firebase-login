@@ -5,24 +5,13 @@ app.directive('contactUsComponent', ['GeocodeService', 'leafletData', '$timeout'
     scope: {
       component: '=',
       version: '=',
-      map: '&'
+      map: '&',
+      control:'='
     },
     templateUrl: '/components/component-wrap.html',
     link: function (scope, element, attrs) {
       scope.isEditing = true;
-      angular.extend(scope, {
-        mapLocation: {
-          lat: 51,
-          lng: 0,
-          zoom: 10
-        },
-        defaults: {
-          scrollWheelZoom: false
-        },
-        markers: {
-
-        }
-      });
+      
       scope.stringifyAddress = function (address) {
         if (address) {
           //var address = scope.htmlToPlaintext(address);
@@ -41,6 +30,9 @@ app.directive('contactUsComponent', ['GeocodeService', 'leafletData', '$timeout'
       };
 
       scope.updateContactUsAddress = function () {
+        //grupo = L.featureGroup();
+       //grupo.clearLayers();
+        
         console.log('updateContactUsAddress');
         scope.contactAddress = scope.stringifyAddress(scope.component.location);
         if (scope.component.location.lat && scope.component.location.lat) {
@@ -63,6 +55,7 @@ app.directive('contactUsComponent', ['GeocodeService', 'leafletData', '$timeout'
           leafletData.getMap('leafletmap').then(function (map) {
             $timeout(function () {
               map.invalidateSize();
+              map.setView(new L.LatLng(scope.component.location.lat, scope.component.location.lon));
               $(window).trigger("resize");
             }, 1000);
           });
@@ -90,6 +83,8 @@ app.directive('contactUsComponent', ['GeocodeService', 'leafletData', '$timeout'
               leafletData.getMap('leafletmap').then(function (map) {
                 $timeout(function () {
                   map.invalidateSize();
+                  map.setView(new L.LatLng(scope.component.location.lat, scope.component.location.lon));
+                  $(window).trigger("resize");
                 }, 1000);
               });
             }
@@ -97,34 +92,10 @@ app.directive('contactUsComponent', ['GeocodeService', 'leafletData', '$timeout'
         }
       };
       scope.updateContactUsAddress();
-      scope.$watch(scope.component.location, function (newValue) {
-        if (newValue) {
-          if (scope.component.location.lat && scope.component.location.lat) {
-            angular.extend(scope, {
-              mapLocation: {
-                lat: parseFloat(scope.component.location.lat),
-                lng: parseFloat(scope.component.location.lon),
-                zoom: 10
-              },
-              markers: {
-                mainMarker: {
-                  lat: parseFloat(scope.component.location.lat),
-                  lng: parseFloat(scope.component.location.lon),
-                  focus: false,
-                  message: scope.contactAddress,
-                  draggable: false
-                }
-              }
-            });
-            leafletData.getMap('leafletmap').then(function (map) {
-              $timeout(function () {
-                map.invalidateSize();
-                $(window).trigger("resize");
-              }, 1000);
-            });
-          }
-        }
-      })
+
+      scope.control.refreshMap = function() {
+        scope.updateContactUsAddress();
+      }
     }
   };
 }]);
