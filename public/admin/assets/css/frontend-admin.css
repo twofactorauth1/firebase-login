@@ -542,25 +542,25 @@
     padding: 50px 15px;
   }
 }
-#componentloader .editing.features-wrap .feature {
+#componentloader .editing .features-wrap .feature {
   border: 4px solid rgba(0, 0, 0, 0);
   position: relative;
 }
-#componentloader .editing.features-wrap .feature:hover {
+#componentloader .editing .features-wrap .feature:hover {
   border: 4px dashed rgba(0, 0, 0, 0.4);
 }
-#componentloader .editing.features-wrap .feature:hover .add-addtional {
+#componentloader .editing .features-wrap .feature:hover .add-addtional {
   display: block;
   font-size: 28px;
   bottom: -20px;
   opacity: .8;
   color: #ffffff;
 }
-#componentloader .editing.features-wrap .feature:hover .add-addtional:hover {
+#componentloader .editing .features-wrap .feature:hover .add-addtional:hover {
   opacity: 1;
   cursor: pointer;
 }
-#componentloader .editing.features-wrap .feature:hover .delete-feature {
+#componentloader .editing .features-wrap .feature:hover .delete-feature {
   background: rgba(0, 0, 0, 0.5);
   font-size: 20px;
   display: block;
@@ -572,26 +572,26 @@
   opacity: .8;
   color: #ffffff;
 }
-#componentloader .editing.features-wrap .feature:hover .delete-feature:hover {
+#componentloader .editing .features-wrap .feature:hover .delete-feature:hover {
   opacity: 1;
   cursor: pointer;
 }
-#componentloader .editing.features-wrap .feature.ng-enter {
+#componentloader .editing .features-wrap .feature.ng-enter {
   -webkit-animation: bounceIn 1s;
   -moz-animation: bounceIn 1s;
   -ms-animation: bounceIn 1s;
   animation: bounceIn 1s;
 }
-#componentloader .editing.features-wrap .feature.ng-leave {
+#componentloader .editing .features-wrap .feature.ng-leave {
   -webkit-animation: bounceOut 1s;
   -moz-animation: bounceOut 1s;
   -ms-animation: bounceOut 1s;
   animation: bounceOut 1s;
 }
-#componentloader .editing.features-wrap .delete-feature {
+#componentloader .editing .features-wrap .delete-feature {
   display: none;
 }
-#componentloader .editing.features-wrap .add-feature {
+#componentloader .editing .features-wrap .add-feature {
   display: block;
 }
 #componentloader .feature-list-v1 .features-wrap {

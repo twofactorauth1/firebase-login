@@ -13,20 +13,20 @@
         <div elem ng-model="feature.title"></div>
     </div>
     <div class="clearfix mb15"></div>
-    <div ng-repeat="feature in component.features track by $index" class="features-wrap {{isEditing ? 'editing' : ''}}">
-        <div class="col-sm-4 feature feature-height-{{component.version}}">
+    <div class="row features-wrap">
+        <div ng-repeat="feature in component.features track by $index" class="feature col-sm-4 feature-height-{{component.version}}">
             <div class="feature-single" ng-style="{'background': component.blockbgcolor}">
                 <div elem ng-model="feature.top"></div>
                 <div class="feature-content">
                     <div elem ng-model="feature.content"></div>
                 </div>
-            </div>
-            <div ng-if="isEditing">
-                <div class="delete-feature center" ng-click="deleteFeatureList($index)">
-                    <i class='fa fa-trash'></i>
-                </div>
-                <div class="add-addtional center" ng-click="addFeatureList($index)">
-                    <i class='fa fa-plus'></i>
+                <div ng-if="isEditing">
+                    <div class="delete-feature center" ng-click="deleteFeatureList($index)">
+                        <i class='fa fa-trash'></i>
+                    </div>
+                    <div class="add-addtional center" ng-click="addFeatureList($index)">
+                        <i class='fa fa-plus'></i>
+                    </div>
                 </div>
             </div>
         </div>
