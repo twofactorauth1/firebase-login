@@ -5,7 +5,6 @@ app.directive('contactUsComponent', ['GeocodeService', 'leafletData', '$timeout'
     scope: {
       component: '=',
       version: '=',
-      map: '&',
       control:'='
     },
     templateUrl: '/components/component-wrap.html',

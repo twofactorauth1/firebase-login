@@ -8,8 +8,6 @@ app.directive('contactUsComponent', ['customerService', 'leafletData', '$timeout
     },
     templateUrl: '/components/component-wrap.html',
     link: function (scope, element, attrs) {
-      scope.isEditing = true;
-      
       scope.stringifyAddress = function (address) {
         if (address) {
           //var address = scope.htmlToPlaintext(address);
