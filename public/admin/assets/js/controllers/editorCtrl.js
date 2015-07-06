@@ -663,7 +663,7 @@
         $scope.first = true;
         $scope.dragging = false;
         $scope.wait = setTimeout(function () {
-          e.dest.sortable$scope.element.removeClass("active");
+          e.dest.sortableScope.element.removeClass("active");
           $timeout(function () {
             var anchor = $scope.components[e.dest.index].anchor || $scope.components[e.dest.index]._id;
             var element = document.getElementById(anchor);
