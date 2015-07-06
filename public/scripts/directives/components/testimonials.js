@@ -4,6 +4,9 @@ app.directive('testimonialsComponent', function () {
       component: '=',
       version: '='
     },
-    templateUrl: '/components/component-wrap.html'
+    templateUrl: '/components/component-wrap.html',
+    link: function (scope, element, attrs, ctrl) {
+    	scope.dataLoaded = true;
+    }
   }
 });
