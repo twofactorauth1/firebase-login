@@ -303,7 +303,7 @@
         return;
       } else if ($scope.insertMediaImage) {
         $scope.insertMediaImage = false;
-        // $scope.childScope.addCKEditorImage(asset.url, $scope.inlineInput, $scope.isEditMode);
+         $scope.addCKEditorImage(asset.url, $scope.inlineInput, $scope.isEditMode);
         return;
       } else if ($scope.logoImage && $scope.componentEditing) {
         $scope.logoImage = false;
