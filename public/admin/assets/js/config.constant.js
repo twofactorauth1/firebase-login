@@ -558,6 +558,7 @@ app.constant('JS_REQUIRES', {
     'settingsCtrl': 'assets/js/controllers/settingsCtrl.js',
     'emailsCtrl': 'assets/js/controllers/emailsCtrl.js',
     'addComponentModalCtrl': 'assets/js/controllers/modals/addComponentModalCtrl.js',
+    'componentSettingsModalCtrl': 'assets/js/controllers/modals/componentSettingsModalCtrl.js',
 
     'asideCtrl': 'assets/js/controllers/asideCtrl.js',
     'toasterCtrl': 'assets/js/controllers/toasterCtrl.js',
