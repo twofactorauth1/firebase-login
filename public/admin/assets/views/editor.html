@@ -79,18 +79,18 @@
     </div>
     <div class="clearfix"></div>
     <div ng-if="components.length" ng-hide="!ckeditorLoaded">
-        <div component-loader components="components"></div>
+        <div data-ng-include data-src=" 'assets/views/partials/component-loader.html' "></div>
     </div>
     <div class="loading-editor" ct-fullheight="window" data-ct-fullheight-exclusion="header" ng-hide="ckeditorLoaded">
         <div class="col-xs-12">
             <h1 class="center"><span class="fa fa-spinner fa-spin"></span><br> Loading Editor...</h1>
         </div>
     </div>
-    <div data-ng-include=" 'assets/views/partials/add-component-modal.html' " ></div>
-    <div data-ng-include=" 'assets/views/partials/component-settings-modal.html' " ></div>
-    <div data-ng-include=" 'assets/views/partials/social-links-modal.html' " ></div>
-    <div data-ng-include=" 'assets/views/partials/page-settings-modal.html' " ></div>
-    <div data-ng-include=" 'assets/views/partials/post-settings-modal.html' " ></div>
-    <div data-ng-include=" 'assets/views/partials/page-duplicate-modal.html' " ></div>
-    <div data-ng-include=" 'assets/views/partials/post-duplicate-modal.html' " ></div>
+    <div data-ng-include data-src=" 'assets/views/partials/add-component-modal.html' " ></div>
+    <div data-ng-include data-src=" 'assets/views/partials/component-settings-modal.html' " ></div>
+    <div data-ng-include data-src=" 'assets/views/partials/social-links-modal.html' " ></div>
+    <div data-ng-include data-src=" 'assets/views/partials/page-settings-modal.html' " ></div>
+    <div data-ng-include data-src=" 'assets/views/partials/post-settings-modal.html' " ></div>
+    <div data-ng-include data-src=" 'assets/views/partials/page-duplicate-modal.html' " ></div>
+    <div data-ng-include data-src=" 'assets/views/partials/post-duplicate-modal.html' " ></div>
 </div>

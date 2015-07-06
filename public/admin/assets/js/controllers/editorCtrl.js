@@ -65,25 +65,6 @@
       window.open(_url, '_blank');
     };
 
-    /*
-     * @duplicateComponent
-     * -
-     */
-
-    $scope.duplicateComponent = function (index) {
-      var matchingComponent = $scope.components[index];
-      var newComponent = angular.copy(matchingComponent);
-      var temp = Math.uuid();
-      newComponent._id = temp;
-      newComponent.anchor = temp;
-      $scope.components.splice(index + 1, 0, newComponent);
-      $timeout(function() {
-        var element = document.getElementById(newComponent._id);
-        $document.scrollToElementAnimated(element, 175, 1000);
-      }, 500);
-      toaster.pop('success', "Component Added", "The " + newComponent.type + " component was added successfully.");
-    };
-
     //disable delete redirect
     // var rx = /INPUT|SELECT|TEXTAREA/i;
     // angular.element('window.document').on('keydown', function (e) {
@@ -324,7 +305,7 @@
         return;
       } else if ($scope.insertMediaImage) {
         $scope.insertMediaImage = false;
-         $scope.addCKEditorImage(asset.url, $scope.inlineInput, $scope.isEditMode);
+        $scope.addCKEditorImage(asset.url, $scope.inlineInput, $scope.isEditMode);
         return;
       } else if ($scope.logoImage && $scope.componentEditing) {
         $scope.logoImage = false;
@@ -622,6 +603,72 @@
           SweetAlert.swal("Cancelled", "Page not deleted.", "error");
         }
       });
+    };
+
+    CKEDITOR.disableAutoInline = true;
+
+    /*
+     * @deleteComponent
+     * -
+     */
+
+    $scope.deleteComponent = function (index) {
+      $scope.components.splice(index, 1);
+    };
+
+    /*
+     * @duplicateComponent
+     * -
+     */
+
+    $scope.duplicateComponent = function (index) {
+      var matchingComponent = $scope.components[index];
+      var newComponent = angular.copy(matchingComponent);
+      var temp = Math.uuid();
+      newComponent._id = temp;
+      newComponent.anchor = temp;
+      $scope.components.splice(index + 1, 0, newComponent);
+      $timeout(function () {
+        var element = document.getElementById(newComponent._id);
+        $document.scrollToElementAnimated(element, 175, 1000);
+      }, 500);
+      toaster.pop('success', "Component Added", "The " + newComponent.type + " component was added successfully.");
+    };
+
+    /*
+     * @sortableOptions
+     * -
+     */
+
+    $scope.sortableCompoents = $scope.components;
+
+    $scope.wait = '';
+    $scope.first = true;
+    $scope.sortableOptions = {
+      parentElement: "#componentloader",
+      containerPositioning: 'relative',
+      dragStart: function (e, ui) {
+        $scope.dragging = true;
+        $scope.first = false;
+        clearTimeout($scope.wait);
+      },
+      dragMove: function (e, ui) {
+        console.log('sorting update');
+      },
+      dragEnd: function (e, ui) {
+        $scope.first = true;
+        $scope.dragging = false;
+        $scope.wait = setTimeout(function () {
+          e.dest.sortable$scope.element.removeClass("active");
+          $timeout(function () {
+            var anchor = $scope.components[e.dest.index].anchor || $scope.components[e.dest.index]._id;
+            var element = document.getElementById(anchor);
+            if (element) {
+              $document.scrollToElementAnimated(element, 175, 1000);
+            }
+          }, 500);
+        }, 500);
+      }
     };
 
   }]);
