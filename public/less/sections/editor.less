@@ -1,32 +1,6 @@
-.as-sortable-drag {
-    opacity: .8;
-    border: 1px solid #cccccc!important;
-    border-radius: 5px;
-    background: #f6f6f6!important;
-    color: #6a6a6a;
-    text-align: left;
-    h4 {
-        margin-left: 0;
-    }
-}
-
-#reorderNavBarContainer {
-    .as-sortable-placeholder {
-        background: #eeeeee;
-        border: 1px dashed #c2c2c2!important;
-        margin-bottom: 10px;
-    }
-    ul {
-        list-style: none;
-        padding-left: 0;
-        text-transform: capitalize;
-        li, .as-sortable-item {
-            position: relative;
-            border: 1px solid #cccccc!important;
-            border-radius: 5px;
-            background: #f6f6f6!important;
-            color: #6a6a6a;
-        }
+.as-sortable-dragging {
+    .componentActions {
+        margin-top: -20px;
     }
 }
 
@@ -382,10 +356,7 @@ fieldset[disabled] .btn-vimeo-square.active {
     filter: blur(5px);
     overflow: hidden;
     &.ng-hide-remove {
-        -webkit-animation: fadeIn 1s;
-        -moz-animation: fadeIn 1s;
-        -ms-animation: fadeIn 1s;
-        animation: fadeIn 1s;
+        .animation(fadeIn 1s);
     }
 }
 
@@ -397,10 +368,7 @@ fieldset[disabled] .btn-vimeo-square.active {
         margin-top: 10%;
     }
     &.ng-hide-add {
-        -webkit-animation: fadeOut 1s;
-        -moz-animation: fadeOut 1s;
-        -ms-animation: fadeOut 1s;
-        animation: fadeOut 1s;
+        .animation(fadeOut 1s);
     }
 }
 
@@ -421,10 +389,6 @@ fieldset[disabled] .btn-vimeo-square.active {
         padding: 0;
         li {
             list-style-type: none;
-        }
-        .componentDragging {
-            height: 57px!important;
-            overflow: hidden;
         }
         .componentActions {
             span.fa {
@@ -466,20 +430,11 @@ fieldset[disabled] .btn-vimeo-square.active {
             }
         }
     }
-    .as-sortable-drag {
-        pointer-events: none;
-        z-index: 9999;
-        list-style: none;
-        opacity: 0.9;
-    }
     .fragment {
         border: none;
         display: block;
         .component-inner {
             border: 2px solid transparent;
-        }
-        &.dragging {
-            z-index: 99999!important;
         }
         &:hover {
             .component-inner {
@@ -489,10 +444,7 @@ fieldset[disabled] .btn-vimeo-square.active {
                 display: block;
                 line-height: 39px;
                 visibility: visible;
-                -webkit-animation: fadeIn 1s;
-                -moz-animation: fadeIn 1s;
-                -ms-animation: fadeIn 1s;
-                animation: fadeIn 1s;
+                .animation(fadeIn 1s);
             }
             .add-component {
                 display: block;
@@ -500,27 +452,16 @@ fieldset[disabled] .btn-vimeo-square.active {
             }
         }
         &.ng-enter {
-            -webkit-animation: bounceIn 1s;
-            -moz-animation: bounceIn 1s;
-            -ms-animation: bounceIn 1s;
-            animation: bounceIn 1s;
+            .animation(bounceIn 1s);
         }
         &.ng-leave {
-            -webkit-animation: bounceOut 1s;
-            -moz-animation: bounceOut 1s;
-            -ms-animation: bounceOut 1s;
-            animation: bounceOut 1s;
+            .animation(bounceOut 1s);
         }
     }
 }
 
 .componentActions {
     position: absolute;
-    /*
-    100000 is for
-      .add-component
-  */
-    
     z-index: 1032;
     width: 100%;
     margin-right: 10px;
@@ -863,6 +804,15 @@ ul.ui-sortable.active {
     .fragment {
         overflow: hidden;
         height: 57px!important;
+        &:hover {
+            .componentActions {
+                .animation(none)!important;
+            }
+            .add-new-component {
+                display: none!important;
+                visibility: hidden!important;
+            }
+        }
         .componentActions {
             display: block;
             visibility: visible;

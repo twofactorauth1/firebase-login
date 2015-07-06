@@ -77,10 +77,11 @@
 	background-image: -o-linear-gradient(left, @startColor, @endColor);
 }
 
-.animation (@name, @duration) {
-	-webkit-animation: @name @duration;
-	-moz-animation:    @name @duration;
-	-ms-animation:     @name @duration;
+.animation (@arguments) {
+	-webkit-animation: @arguments;
+	-moz-animation:    @arguments;
+	-ms-animation:     @arguments;
+	animation: @arguments;
 }
 
 .transition (@transition) {

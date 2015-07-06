@@ -11,7 +11,7 @@
 
     <div class="component {{component.type}}{{$index + 1}}">
 
-        <div id="{{component.anchor}}" ng-style="{'color':component.txtcolor||primaryTextColor}">
+        <div id="{{component.anchor || component._id}}" ng-style="{'color':component.txtcolor||primaryTextColor}">
 
             <div
                     ng-if="!component.bg.img.url && component.type != 'email'"

@@ -41,14 +41,14 @@ app.directive('componentLoader', ['$timeout', '$modal', '$document', 'toaster', 
           $scope.wait = setTimeout(function () {
             e.dest.sortableScope.element.removeClass("active");
             $timeout(function () {
-              var element = document.getElementById($scope.components[e.dest.index]._id);
+              var anchor = $scope.components[e.dest.index].anchor || $scope.components[e.dest.index]._id;
+              var element = document.getElementById(anchor);
               var rect = element.getBoundingClientRect();
-              console.log(rect.top, rect.right, rect.bottom, rect.left);
               if (element) {
                 $document.scrollToElementAnimated(element, 175, 1000);
               }
             }, 500);
-          }, 1500);
+          }, 500);
         }
       };
     }

@@ -12361,34 +12361,8 @@ table.grid tbody td strong {
   padding: 0;
   border: 0;
 }
-.as-sortable-drag {
-  opacity: .8;
-  border: 1px solid #cccccc!important;
-  border-radius: 5px;
-  background: #f6f6f6!important;
-  color: #6a6a6a;
-  text-align: left;
-}
-.as-sortable-drag h4 {
-  margin-left: 0;
-}
-#reorderNavBarContainer .as-sortable-placeholder {
-  background: #eeeeee;
-  border: 1px dashed #c2c2c2!important;
-  margin-bottom: 10px;
-}
-#reorderNavBarContainer ul {
-  list-style: none;
-  padding-left: 0;
-  text-transform: capitalize;
-}
-#reorderNavBarContainer ul li,
-#reorderNavBarContainer ul .as-sortable-item {
-  position: relative;
-  border: 1px solid #cccccc!important;
-  border-radius: 5px;
-  background: #f6f6f6!important;
-  color: #6a6a6a;
+.as-sortable-dragging .componentActions {
+  margin-top: -20px;
 }
 .add-component-modal .tab-content {
   max-height: 300px;
@@ -12737,10 +12711,6 @@ fieldset[disabled] .btn-vimeo-square.active {
 #componentloader .ui-sortable li {
   list-style-type: none;
 }
-#componentloader .ui-sortable .componentDragging {
-  height: 57px!important;
-  overflow: hidden;
-}
 #componentloader .ui-sortable .componentActions span.fa {
   padding: 10px;
   text-align: center;
@@ -12774,21 +12744,12 @@ fieldset[disabled] .btn-vimeo-square.active {
 #componentloader .ui-sortable.active .fragment .componentActions h4 {
   display: block;
 }
-#componentloader .as-sortable-drag {
-  pointer-events: none;
-  z-index: 9999;
-  list-style: none;
-  opacity: 0.9;
-}
 #componentloader .fragment {
   border: none;
   display: block;
 }
 #componentloader .fragment .component-inner {
   border: 2px solid transparent;
-}
-#componentloader .fragment.dragging {
-  z-index: 99999!important;
 }
 #componentloader .fragment:hover .component-inner {
   border: 2px dashed #34495e;
@@ -12820,10 +12781,6 @@ fieldset[disabled] .btn-vimeo-square.active {
 }
 .componentActions {
   position: absolute;
-  /*
-    100000 is for
-      .add-component
-  */
   z-index: 1032;
   width: 100%;
   margin-right: 10px;
@@ -13117,6 +13074,16 @@ ul.ui-sortable.active .as-sortable-placeholder {
 ul.ui-sortable.active .fragment {
   overflow: hidden;
   height: 57px!important;
+}
+ul.ui-sortable.active .fragment:hover .componentActions {
+  -webkit-animation: none !important;
+  -moz-animation: none !important;
+  -ms-animation: none !important;
+  animation: none !important;
+}
+ul.ui-sortable.active .fragment:hover .add-new-component {
+  display: none!important;
+  visibility: hidden!important;
 }
 ul.ui-sortable.active .fragment .componentActions {
   display: block;
