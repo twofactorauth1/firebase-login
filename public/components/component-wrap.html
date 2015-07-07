@@ -8,107 +8,62 @@
     }
 </style>
 <div class="component-wrap" ng-if="component.visibility" ng-class="{'editing': isEditing}">
-
     <div class="component {{component.type}}{{$index + 1}}">
-
         <div id="{{component.anchor || component._id}}" ng-style="{'color':component.txtcolor||primaryTextColor}">
-
-            <div
-                    ng-if="!component.bg.img.url && component.type != 'email'"
-                    ng-style="{'background': component.bg.color, 'color':component.txtcolor||primaryTextColor}">
-
+            <div ng-if="!component.bg.img.url && component.type != 'email'" ng-style="{'background': component.bg.color, 'color':component.txtcolor||primaryTextColor}">
                 <div class="component-inner">
-
-                    <div class="container inner-page" ng-if="component.type != 'navigation' && component.type != 'footer' && component.type != 'contact-us'  && component.type != 'top-bar' && component.type != 'payment-form'">
-        				<div data-ng-include data-src="'/components/'+component.type+'_v'+component.version+'.html'" ></div>
+                    <div class="container inner-page" ng-if="component.type != 'single-post' && component.type != 'blog' && component.type != 'navigation' && component.type != 'footer' && component.type != 'contact-us'  && component.type != 'top-bar' && component.type != 'payment-form'">
+                        <div data-ng-include data-src="'/components/'+component.type+'_v'+component.version+'.html'"></div>
                     </div>
-
-                    <div ng-if="component.type == 'navigation' || component.type == 'footer' || component.type == 'contact-us' || component.type == 'top-bar' || component.type == 'payment-form'">
-                    	<div data-ng-include  data-src="'/components/'+component.type+'_v'+component.version+'.html'" ></div>
+                    <div ng-if="component.type == 'single-post' || component.type == 'blog' || component.type == 'navigation' || component.type == 'footer' || component.type == 'contact-us' || component.type == 'top-bar' || component.type == 'payment-form'">
+                        <div data-ng-include data-src="'/components/'+component.type+'_v'+component.version+'.html'"></div>
                     </div>
-
                 </div>
-
             </div>
-
             <div ng-if="component.type == 'email'">
-                 <div data-ng-include data-src="'/templates/emails/base-email.html'" ></div>
+                <div data-ng-include data-src="'/templates/emails/base-email.html'"></div>
             </div>
-
-
-            <div ng-if="component.bg.img.url && component.type != 'email' "
-                    class="ipad-bg">
+            <div ng-if="component.bg.img.url && component.type != 'email' " class="ipad-bg">
                 <div>
                     <div class="component-inner">
-
-                        <div ng-if="component.bg.color" class="bg"
-                        ng-style="{'background': component.bg.color}"
-                            ></div>
-
-                        <div ng-if="component.bg.img.show && component.type == 'masthead' && !isEditing"
-                            class="bg cover"
-                            ng-class="{parallax:component.bg.img.parallax,'blur-image':component.bg.img.blur,'full-screen':component.bg.img.fullscreen}"
-                            {{component.bg.img.parallax ? parallax-background : ""}}
-                            ng-attr-parallax-ratio="{{component.bg.img.parallax ? '0.4' : '1'}}"
-                            style='
+                        <div ng-if="component.bg.color" class="bg" ng-style="{'background': component.bg.color}"></div>
+                        <div ng-if="component.bg.img.show && component.type == 'masthead' && !isEditing" class="bg cover" ng-class="{parallax:component.bg.img.parallax,'blur-image':component.bg.img.blur,'full-screen':component.bg.img.fullscreen}" {{component.bg.img.parallax ? parallax-background : ""}} ng-attr-parallax-ratio="{{component.bg.img.parallax ? '0.4' : '1'}}" style='
                                 background: url("{{component.bg.img.url}}") fixed;
                                 background-size: cover;
                                 background-repeat: no-repeat;
                                 background-position: {{component.bg.img.position}};'>
                         </div>
-                        <div ng-if="component.bg.img.show && component.type == 'masthead' && isEditing"
-                            class="bg cover"
-                            ng-class="{parallax:component.bg.img.parallax,'blur-image':component.bg.img.blur}"
-                            style='
+                        <div ng-if="component.bg.img.show && component.type == 'masthead' && isEditing" class="bg cover" ng-class="{parallax:component.bg.img.parallax,'blur-image':component.bg.img.blur}" style='
                                 background: url("{{component.bg.img.url}}");
                                 background-size: cover;
                                 background-repeat: no-repeat;
                                 background-position: {{component.bg.img.position}};'>
                         </div>
-                        <div ng-if="component.bg.img.show && component.type != 'masthead' && isEditing"
-                            class="bg cover"
-                            ng-class="{parallax:component.bg.img.parallax,'blur-image':component.bg.img.blur}"                            
-                            style='
+                        <div ng-if="component.bg.img.show && component.type != 'masthead' && isEditing" class="bg cover" ng-class="{parallax:component.bg.img.parallax,'blur-image':component.bg.img.blur}" style='
                                 background: url("{{component.bg.img.url}}");
                                 background-size: cover;
                                 background-repeat: no-repeat;
                                 background: {{component.bg.img.url}};'>
                         </div>
-                        <div ng-if="component.bg.img.show && component.type != 'masthead' && !isEditing" 
-                            class="bg"
-                            ng-class="{parallax:component.bg.img.parallax,'blur-image':component.bg.img.blur}"
-                            {{component.bg.img.parallax ? parallax-background : ""}}
-                            ng-attr-parallax-ratio="{{component.bg.img.parallax ? '0.4' : '1'}}"
-                            style='
+                        <div ng-if="component.bg.img.show && component.type != 'masthead' && !isEditing" class="bg" ng-class="{parallax:component.bg.img.parallax,'blur-image':component.bg.img.blur}" {{component.bg.img.parallax ? parallax-background : ""}} ng-attr-parallax-ratio="{{component.bg.img.parallax ? '0.4' : '1'}}" style='
                                 background: url("{{component.bg.img.url}}") no-repeat fixed;
                                 background-size: cover;
                                 background: {{component.bg.img.url}};'>
                         </div>
-                        <div ng-if="component.bg.img.overlay"
-                            class="bg"
-                            ng-class="{'bg-overlay':component.bg.img.overlay }"
-                            style='background-color: transparent;'>
+                        <div ng-if="component.bg.img.overlay" class="bg" ng-class="{'bg-overlay':component.bg.img.overlay }" style='background-color: transparent;'>
                         </div>
-
-                        <div class="container inner-page" ng-if="component.type != 'navigation' && component.type != 'footer' && component.type != 'contact-us' && component.type != 'payment-form'">
-                            <div data-ng-include data-src="'/components/'+component.type+'_v'+component.version+'.html'" ></div>
+                        <div class="container inner-page" ng-if="component.type != 'single-post' && component.type != 'blog' && component.type != 'navigation' && component.type != 'footer' && component.type != 'contact-us' && component.type != 'payment-form'">
+                            <div data-ng-include data-src="'/components/'+component.type+'_v'+component.version+'.html'"></div>
                         </div>
-
-                        <div ng-if="component.type == 'navigation' || component.type == 'footer' || component.type == 'contact-us' || component.type == 'payment-form' ">
-                            <div data-ng-include data-src="'/components/'+component.type+'_v'+component.version+'.html'" ></div>
+                        <div ng-if="component.type == 'single-post' || component.type == 'blog' || component.type == 'navigation' || component.type == 'footer' || component.type == 'contact-us' || component.type == 'payment-form' ">
+                            <div data-ng-include data-src="'/components/'+component.type+'_v'+component.version+'.html'"></div>
                         </div>
-
                     </div>
-
                 </div>
-
             </div>
-
         </div>
-
     </div>
-
 </div>
 <div class="component-hidden" ng-show="isEditing" ng-style="{&#39;background&#39;: component.bg.color, &#39;color&#39;:component.txtcolor||primaryTextColor}" ng-if="!component.visibility">
-     <h3 class="hidden-component">Hidden</h3>
+    <h3 class="hidden-component">Hidden</h3>
 </div>

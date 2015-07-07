@@ -17,6 +17,10 @@ app.directive('singlePostComponent', ['$location', 'accountService', 'postServic
           scope.blog.post = post;
         });
       });
+
+      scope.$back = function () {
+        window.history.back();
+      };
     }
   }
 }]);
