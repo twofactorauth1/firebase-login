@@ -2,9 +2,7 @@ app.directive('singlePostComponent',['$location', "WebsiteService", function ($l
   return {
     scope: {
       component: '=',
-      version: '=',
-      media: '&',
-      control: "="
+      version: '='
     },
     templateUrl: '/components/component-wrap.html',
     link: function (scope, element, attrs) {
@@ -55,10 +53,8 @@ app.directive('singlePostComponent',['$location', "WebsiteService", function ($l
         scope.endOpened = false;
         scope.startOpened = !scope.startOpened;
       };
-      scope.media();
-      scope.control.setSinglePost = function (post_data) {
-        scope.blog.post = post_data;
-      }      
+      if(scope.$parent.blog)
+        scope.blog.post = scope.$parent.blog.post;    
     }
   }
 }]);
