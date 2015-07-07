@@ -50,6 +50,10 @@ var mainApp = angular
         templateUrl: '../views/main.html',
         controller: 'LayoutCtrl as layout'
       })
+      .when('/404', {
+        templateUrl: '../views/404.html',
+        controller: 'NotFoundCtrl as notfound'
+      })
       .otherwise({
         templateUrl: '../views/main.html',
         controller: 'LayoutCtrl as layout'
