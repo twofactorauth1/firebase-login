@@ -6,11 +6,11 @@
     <div class="modal-body no-padding" style="max-height:500px; margin:10px">
         <div class="form-group">
                         <label>Title:</label>
-                        <input id="new-post-title" class="form-control input-lg" type="text" ng-model="newPost.post_title">
+                        <input id="new-post-title" ng-change="slugifyPostHandle(newPost.post_title)" class="form-control input-lg" type="text" ng-model="newPost.post_title">
                     </div>
                     <div class="form-group">
                         <label>URL:</label>
-                        <input id="new-post-url" class="form-control input-lg" type="text" ng-model="newPost.post_url">
+                        <input id="new-post-url" ng-change="slugifyPostHandle(newPost.post_url)" class="form-control input-lg" type="text" ng-model="newPost.post_url">
                     </div>
                     <div class="mb20"></div>
     </div>

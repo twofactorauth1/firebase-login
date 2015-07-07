@@ -122,6 +122,7 @@
     $scope.blog = {};
     $scope.retrievePost = function (_handle) {
       $scope.isSinglePost = true;
+      $scope.newPost = {};
       $scope.post_statuses = postConstant.post_status.dp;
       $scope.loadSinglePost = {};
       WebsiteService.getSinglePage('single-post', function (data) {
@@ -483,6 +484,12 @@
       }
     };
 
+    $scope.slugifyPostHandle = function (title) {
+      if (title) {
+        $scope.newPost.post_url = $filter('slugify')(title);
+      }
+    };
+
     $scope.newPage = {};
 
     /*
@@ -538,6 +545,63 @@
       } else {
         $scope.newPageValidated = false;
       }
+    };
+
+    $scope.createDuplicatePost = function (newPost) {
+      $scope.validateNewPost(newPost);
+      if (!$scope.newPostValidated) {
+        toaster.pop('error', "Post Title or URL can not be blank.");
+        return false;
+      }
+      WebsiteService.getSinglePost(newPost.post_url, function (data) {
+        if (data && data._id) {
+          toaster.pop('error', "Post URL " + newPost.post_url, "Already exists");
+          return false;
+        }
+
+        var post_data = $scope.blog.post;
+        newPost.post_content = post_data.post_content;
+        newPost.post_tags = post_data.post_tags;
+        newPost.post_author = post_data.post_author;
+        newPost.post_category = post_data.post_category;
+        newPost.post_excerpt = post_data.post_excerpt;
+        newPost.featured_image = post_data.featured_image;
+        newPost.publish_date = post_data.publish_date;
+        WebsiteService.createPost(-1, newPost, function (data) {
+          $scope.duplicate = true;
+          console.log("Duplicate Post Created");
+          window.location = '/admin/#/website/posts/?posthandle=' + newPost.post_url;
+          window.location.reload();
+        })
+      })
+    }
+
+    /*
+     * @validateNewPost
+     * -
+     */
+
+    $scope.newPostValidated = false;
+
+    $scope.validateNewPost = function (post) {
+      if (!post.post_url || post.post_url == '') {
+        $scope.handleError = true;
+        angular.element('#new-post-url').parents('div.form-group').addClass('has-error');
+      } else {
+        $scope.handleError = false;
+        angular.element('#new-post-url').parents('div.form-group').removeClass('has-error');
+      }
+      if (!post.post_title || post.post_title == '') {
+        $scope.titleError = true;
+        angular.element('#new-post-title').parents('div.form-group').addClass('has-error');
+      } else {
+        $scope.titleError = false;
+        angular.element('#new-post-title').parents('div.form-group').removeClass('has-error');
+      }
+      if (post && post.post_title && post.post_title != '' && post.post_url && post.post_url != '') {
+        $scope.newPostValidated = true;
+      } else
+        $scope.newPostValidated = false;
     };
 
     /*
