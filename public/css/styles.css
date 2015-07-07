@@ -345,6 +345,47 @@ ol.circles-list > li:before {
 .editable h2 {
   margin-top: 0px;
 }
+.btn-linked-in {
+  color: #fff;
+  background-color: #007bb6;
+  border-color: rgba(0, 0, 0, 0.2);
+}
+.btn-linked-in:hover,
+.btn-linked-in:focus,
+.btn-linked-in:active,
+.btn-linked-in.active,
+.open > .dropdown-toggle.btn-linked-in {
+  color: #fff;
+  background-color: #005983;
+  border-color: rgba(0, 0, 0, 0.2);
+}
+.btn-linked-in:active,
+.btn-linked-in.active,
+.open > .dropdown-toggle.btn-linked-in {
+  background-image: none;
+}
+.btn-linked-in.disabled,
+.btn-linked-in[disabled],
+fieldset[disabled] .btn-linked-in,
+.btn-linked-in.disabled:hover,
+.btn-linked-in[disabled]:hover,
+fieldset[disabled] .btn-linked-in:hover,
+.btn-linked-in.disabled:focus,
+.btn-linked-in[disabled]:focus,
+fieldset[disabled] .btn-linked-in:focus,
+.btn-linked-in.disabled:active,
+.btn-linked-in[disabled]:active,
+fieldset[disabled] .btn-linked-in:active,
+.btn-linked-in.disabled.active,
+.btn-linked-in[disabled].active,
+fieldset[disabled] .btn-linked-in.active {
+  background-color: #007bb6;
+  border-color: rgba(0, 0, 0, 0.2);
+}
+.btn-linked-in .badge {
+  color: #007bb6;
+  background-color: #ffffff;
+}
 .accordion-v1 .title {
   text-align: center;
   margin-bottom: 20px;

@@ -382,6 +382,47 @@
 #componentloader .editable h2 {
   margin-top: 0px;
 }
+#componentloader .btn-linked-in {
+  color: #fff;
+  background-color: #007bb6;
+  border-color: rgba(0, 0, 0, 0.2);
+}
+#componentloader .btn-linked-in:hover,
+#componentloader .btn-linked-in:focus,
+#componentloader .btn-linked-in:active,
+#componentloader .btn-linked-in.active,
+#componentloader .open > .dropdown-toggle.btn-linked-in {
+  color: #fff;
+  background-color: #005983;
+  border-color: rgba(0, 0, 0, 0.2);
+}
+#componentloader .btn-linked-in:active,
+#componentloader .btn-linked-in.active,
+#componentloader .open > .dropdown-toggle.btn-linked-in {
+  background-image: none;
+}
+#componentloader .btn-linked-in.disabled,
+#componentloader .btn-linked-in[disabled],
+#componentloader fieldset[disabled] .btn-linked-in,
+#componentloader .btn-linked-in.disabled:hover,
+#componentloader .btn-linked-in[disabled]:hover,
+#componentloader fieldset[disabled] .btn-linked-in:hover,
+#componentloader .btn-linked-in.disabled:focus,
+#componentloader .btn-linked-in[disabled]:focus,
+#componentloader fieldset[disabled] .btn-linked-in:focus,
+#componentloader .btn-linked-in.disabled:active,
+#componentloader .btn-linked-in[disabled]:active,
+#componentloader fieldset[disabled] .btn-linked-in:active,
+#componentloader .btn-linked-in.disabled.active,
+#componentloader .btn-linked-in[disabled].active,
+#componentloader fieldset[disabled] .btn-linked-in.active {
+  background-color: #007bb6;
+  border-color: rgba(0, 0, 0, 0.2);
+}
+#componentloader .btn-linked-in .badge {
+  color: #007bb6;
+  background-color: #ffffff;
+}
 #componentloader .accordion-v1 .title {
   text-align: center;
   margin-bottom: 20px;
