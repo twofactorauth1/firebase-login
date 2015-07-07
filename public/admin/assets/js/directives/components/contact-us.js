@@ -53,7 +53,7 @@ app.directive('contactUsComponent', ['GeocodeService', 'leafletData', '$timeout'
               map.invalidateSize();
               map.setView(new L.LatLng(scope.component.location.lat, scope.component.location.lon),9);
               $(window).trigger("resize");
-            }, 1000);
+            }, 2000);
           });
         } else {
           GeocodeService.getGeoSearchAddress(scope.contactAddress, function (data) {
@@ -81,7 +81,7 @@ app.directive('contactUsComponent', ['GeocodeService', 'leafletData', '$timeout'
                   map.invalidateSize();
                   map.setView(new L.LatLng(scope.component.location.lat, scope.component.location.lon),9);
                   $(window).trigger("resize");
-                }, 1000);
+                }, 2000);
               });
             }
           });

@@ -363,6 +363,9 @@
           },
           contactMap: function () {
             return $scope.contactMap
+          },
+          website: function () {
+            return $scope.website
           }
         }
       };
@@ -416,22 +419,7 @@
     WebsiteService.getWebsite(function (website) {
       $scope.website = website;
     });
-
-    /*
-     * @getPages
-     * -
-     */
-
-    WebsiteService.getPages(function (pages) {
-      var parsed = angular.fromJson(pages);
-      var arr = [];
-      _.each(parsed, function (page) {
-        arr.push(page);
-      });
-      $scope.allPages = arr;
-      $scope.filterdedPages = $filter('orderBy')($scope.allPages, "title", false);
-    });
-
+    
     /*
      * @checkForDuplicatePage
      * - Check for duplicate page

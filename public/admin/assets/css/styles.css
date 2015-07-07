@@ -13126,6 +13126,9 @@ ul.ui-sortable.active .fragment .componentActions p {
 ul.ui-sortable.active .fragment .add-new-component {
   display: none;
 }
+ul.nav-bar {
+  list-style: none;
+}
 /* ---------------------------------------------------------------------- */
 /*  Billing
 /* ---------------------------------------------------------------------- */
