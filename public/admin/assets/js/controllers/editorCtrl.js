@@ -120,11 +120,12 @@
      * -
      */
     $scope.blog = {};
+    $scope.loadSinglePost = {};
     $scope.retrievePost = function (_handle) {
       $scope.isSinglePost = true;
       $scope.newPost = {};
       $scope.post_statuses = postConstant.post_status.dp;
-      $scope.loadSinglePost = {};
+      
       WebsiteService.getSinglePage('single-post', function (data) {
         $scope.page = data;
         $scope.components = $scope.page.components;
