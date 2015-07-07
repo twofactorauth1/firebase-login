@@ -8,6 +8,7 @@ mainApp.factory('pagesService', ['websiteService','$http', '$location', function
 
     return function (callback) {
         var path = $location.$$path.replace('/page/', '');
+        console.log('path ', path);
 
         if ( path == "/" || path == "" ) {
             path = "index";
@@ -37,6 +38,8 @@ mainApp.factory('pagesService', ['websiteService','$http', '$location', function
             path = path.replace('/', '');
         }
 
+        console.log('pagesService path >>> ', path);
+
         websiteService(function (err, data) {
             if (err) {
                 // console.log(err, "PageService >> WebsiteService ERROR");
@@ -50,9 +53,9 @@ mainApp.factory('pagesService', ['websiteService','$http', '$location', function
                     websiteObject = data;
                     $http.get('/api/1.0/cms/website/' + websiteObject._id + '/page/' + path, { cache: true})
                         .success(function (page) {
+                            console.log('page >>> ', page);
                             if (page !== null && page.accountId) {
-                                pages[page.handle] = page;
-                                callback(null, pages);
+                                callback(null, page);
                             }else if(page != null && path == 'index') {
                                 $http.get('/api/1.0/cms/website/' + websiteObject._id + '/page/coming-soon', { cache: true})
                                     .success(function (page) {

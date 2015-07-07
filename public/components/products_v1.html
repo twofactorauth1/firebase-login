@@ -1,13 +1,11 @@
-<div class="products-v1" data-class="products" data-id="{{component._id}}" ng-controller="ProductsComponentCtrl">
+<div class="products-v1" data-class="products" data-id="{{component._id}}">
     <div class="products">
         <header class="jumbotron hero-spacer col-xs-12d">
             <div class="title">
-                <div class="editable" data-class="title" ng-bind-html="component.title | unsafe">
-                </div>
+                <div elem ng-model="component.title"></div>
             </div>
             <div class="text">
-                <div class="editable" data-class="text" ng-bind-html="component.text | unsafe">
-                </div>
+                <div elem ng-model="component.text"></div>
             </div>
         </header>      
         <div class="tab-pane active row" id="{{productSection['product-section-id']}}">
@@ -69,7 +67,6 @@
             <div class="clearfix mb15"></div>
         </div>
         <pagination ng-show="filteredProducts.length" total-items="filteredProducts.length" ng-model="currentProductPage" items-per-page="component.numtodisplay" class="pagination-sm" boundary-links="true" rotate="false" num-pages="numPages"></pagination>
-        <!-- </div> -->
     </div>
     <button class="btn btn-primary btn-lg btnLaunchCart" data-toggle="modal" data-target="#cart-checkout-modal">
         <span class="fa fa-shopping-cart"></span> <span ng-if="cartDetails.length > 0">({{cartDetails.length}})</span>
@@ -118,7 +115,7 @@
                             </div>
                         </div>
                         <div class="col-sm-4 gray-bg order-summary" ng-if="cartDetails.length > 0">
-                            <div data-ng-include=" 'views/partials/order-summary.html' "></div>
+                            <div data-ng-include=" '../views/partials/order-summary.html' "></div>
                         </div>
                     </div>
                     <div class="row billing-shipping" ng-if="checkoutModalState == 2">
@@ -264,7 +261,7 @@
                             </div>
                         </div>
                         <div class="col-sm-4 gray-bg order-summary">
-                            <div data-ng-include=" 'views/partials/order-summary.html' "></div>
+                            <div data-ng-include=" '../views/partials/order-summary.html' "></div>
                         </div>
                     </div>
                     <div class="row payment" ng-show="checkoutModalState == 3">
@@ -305,7 +302,7 @@
                             </div>
                         </div>
                         <div class="col-sm-4 gray-bg order-summary">
-                            <div data-ng-include=" 'views/partials/order-summary.html' "></div>
+                            <div data-ng-include=" '../views/partials/order-summary.html' "></div>
                         </div>
                     </div>
                     <div class="row processing" style="height:400px" ng-if="checkoutModalState == 4">
@@ -321,7 +318,7 @@
                         <div class="clearfix" style="margin-bottom:30px"></div>
                         <div class="col-xs-12 text-center">
                             <span class="fa fa-check-circle fa-5x text-green"></span>
-                            <!-- <button class="btn btn-lg btn-orange">View Order</button> -->
+
                         </div>
                     </div>
                     <div class="clearfix"></div>
@@ -343,9 +340,9 @@
                     </button>
                 </div>
             </div>
-            <!-- /.modal-content -->
+
         </div>
-        <!-- /.modal-dialog -->
+
     </div>
     <div class="modal fade" id="product-details-modal">
         <div class="modal-dialog modal-lg">
@@ -434,8 +431,10 @@
         </div>
     </div>
 </div>
+
 <script type="text/javascript">
-card = $('.payment').card({
-    container: '.card-wrapper'
-});
+ if($('.payment').card)
+ card = $('.payment').card({
+     container: '.card-wrapper'
+ });
 </script>

@@ -116,25 +116,29 @@ app.controller('DashboardCtrl', ["$scope", "OrderService", "CustomerService", "C
    * @getCustomers
    * - get customer for the customer widget
    */
+    $scope.customerNames = [];
+    CustomerService.getCustomers(function (customers) {
 
-  CustomerService.getCustomers(function (customers) {
-    $scope.customers = customers;
-    $scope.customersThisMonth = [];
-    var tempData = [];
-    _.each($scope.getDaysThisMonth(), function (day) {
-      var thisDaysCustomers = 0;
-      _.each(customers, function (customer) {
-        if (customer.created.date) {
-          if ($scope.isSameDateAs(new Date(customer.created.date), new Date(day))) {
-            $scope.customersThisMonth.push(customer);
-            thisDaysCustomers = thisDaysCustomers + 1;
-          }
-        }
-      });
+        $scope.customers = customers;
+        $scope.customersThisMonth = [];
+        var tempData = [];
+        _.each($scope.getDaysThisMonth(), function (day) {
+            var thisDaysCustomers = 0;
+            _.each(customers, function (customer) {
+                if (customer.created.date) {
+                    if ($scope.isSameDateAs(new Date(customer.created.date), new Date(day))) {
+                        $scope.customersThisMonth.push(customer);
+                        thisDaysCustomers = thisDaysCustomers + 1;
+                    }
+                }
 
-      tempData.push(thisDaysCustomers);
-    });
-    $scope.analyticsCustomers = tempData;
+            });
+            tempData.push(thisDaysCustomers);
+        });
+        _.each(customers, function(customer) {
+            $scope.customerNames.push(customer.first + ' ' + customer.last);
+        });
+        $scope.analyticsCustomers = tempData;
   });
 
   /*
@@ -295,6 +299,14 @@ app.controller('DashboardCtrl', ["$scope", "OrderService", "CustomerService", "C
       });
       if(activity_hash)
           $scope.newActivity.activityType = activity_hash.data;
+  };
+
+  $scope.updateCustomerNameFn = function(selection) {
+      var firstLast = selection.split(' ');
+      var customerHash = _.findWhere($scope.customers, {first: firstLast[0], last:firstLast[1]});
+      if(customerHash) {
+          $scope.newActivity.contactId = customerHash._id;
+      }
   };
 
   //$scope.all_activities = angular.copy($scope.activities);

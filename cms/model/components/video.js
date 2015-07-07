@@ -57,7 +57,7 @@ var component = $$.m.ModelBase.extend({
              *
              *
              */
-            videoType: 'html5',
+            videoType: 'youtube',
             /**
             *
             *

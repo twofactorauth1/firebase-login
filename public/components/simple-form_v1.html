@@ -14,13 +14,11 @@
             <div class="inner-page row">
 
                 <div class="simple-form-title" >
-                    <div class="editable" data-class="maintitle" ng-bind-html="component.maintitle | unsafe" data-index="{{$index}}">
-                    </div>
+                    <div elem ng-model="component.maintitle"></div>
                 </div>
 
                 <div class="simple-form-subtitle">
-                    <div class="editable" data-class="subtitle" ng-bind-html="component.subtitle | unsafe" data-index="{{$index}}">
-                    </div>
+                    <div elem ng-model="component.subtitle"></div>
                 </div>
 
                 <div class="clearfix mb15"></div>
@@ -48,8 +46,7 @@
                 <div class="col-sm-3">
                     <div class="clear">
                         <div ng-click="isEditing ? '' : createUser(user, component)" class="btn btn-o btn-default pull-right btn-block btn-editable" role="button">
-                        <div class="editable" data-class="submitBtn" ng-bind-html="(component.submitBtn || 'I\'m Interested') | unsafe"> 
-                        </div>
+                            <div elem ng-model="component.submitBtn"></div>
                         </div>
                     </div>
                 </div>

@@ -9,170 +9,121 @@
  * Main module of the application.
  */
 var mainApp = angular
-    .module('mainApp', [
-        'ipCookie',
-        'ngResource',
-        'ngRoute',
-        'ngSanitize',
-        'ngTouch',
-        'angular-parallax',
-        'config',
-        'dm.style',
-        'coursePreview',
-        'duScroll',
-        'mrPageEnterAnimate',
-        'angularMoment',
-        'mgo-angular-wizard',
-        'timer',
-        'ui',
-        'ui.bootstrap',
-        "com.2fdevs.videogular",
-        "com.2fdevs.videogular.plugins.controls",
-        "com.2fdevs.videogular.plugins.overlayplay",
-        "com.2fdevs.videogular.plugins.buffering",
-        "com.2fdevs.videogular.plugins.poster",
-        "ngTagsInput",
-        "truncate",
-        'ngInputDate',
-        'angular-jqcloud',
-        'socialLinks',
-        'slick',
-        'leaflet-directive',
-        'ui.sortable'
-    ])
-    .config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
-        //$locationProvider.html5Mode(true);
-        if(window.history && window.history.pushState){
-            $locationProvider.html5Mode(true).hashPrefix('!');
-        }        
-        $routeProvider
-            .when('/', {
-                templateUrl: '../views/main.html',
-                controller: 'LayoutCtrl as layout'
-            })
-            // .when('/blog', {
-            //     templateUrl: '../views/blog.html',
-            //     controller: 'BlogCtrl as blog'
-            // })
-            // .when('/blog/:postname', {
-            //     templateUrl: '../views/singlepostpage.html',
-            //     controller: 'BlogCtrl as blog'
-            // })
-            .when('/tag/:tagname', {
-                templateUrl: '../views/blog.html',
-                controller: 'BlogCtrl as blog'
-            })
-            .when('/category/:catname', {
-                templateUrl: '../views/blog.html',
-                controller: 'BlogCtrl as blog'
-            })
-            .when('/author/:authorname', {
-                templateUrl: '../views/blog.html',
-                controller: 'BlogCtrl as blog'
-            })
-            .when('/page/blog/:postname', {
-                templateUrl: '../views/singlepostpage.html',
-                controller: 'BlogCtrl as blog'
-            })
-            .when('/page/post/:postname', {
-                templateUrl: '../views/singlepostpage.html',
-                controller: 'BlogCtrl as blog'
-            })
-            .when('/page/:pagename', {
-                templateUrl: '../views/main.html',
-                controller: 'LayoutCtrl as layout'
-            })
-            .when('/signup', {
-                templateUrl: '../views/main.html',
-                controller: 'LayoutCtrl as layout'
-            })
-            .when('/page/:pagename/:custid', {
-                templateUrl: '../views/main.html',
-                controller: 'LayoutCtrl as layout'
-            })
-            .when('/blog/:postname', {
-                templateUrl: '../views/singlepostpage.html',
-                controller: 'BlogCtrl as blog'
-            })
-            .otherwise( {
-                templateUrl: '../views/main.html',
-                controller: 'LayoutCtrl as layout'
-            });
-            //.otherwise({redirectTo: '/'});
-    }])
-    // .controller('LayoutCtrl', function($scope, parallaxHelper){
-    //     $scope.background = parallaxHelper.createAnimator(-0.3, 150, -150);
-    // })
-    .run(function( $rootScope, $location, $anchorScroll, $routeParams, $document, $timeout, ipCookie, analyticsService) {
+  .module('mainApp', [
+    'ipCookie',
+    'ngResource',
+    'ngRoute',
+    'ngSanitize',
+    'ngTouch',
+    'angular-parallax',
+    'config',
+    'dm.style',
+    'coursePreview',
+    'duScroll',
+    'mrPageEnterAnimate',
+    'angularMoment',
+    'mgo-angular-wizard',
+    'timer',
+    'ui',
+    'ui.bootstrap',
+    "com.2fdevs.videogular",
+    "com.2fdevs.videogular.plugins.controls",
+    "com.2fdevs.videogular.plugins.overlayplay",
+    "com.2fdevs.videogular.plugins.buffering",
+    "com.2fdevs.videogular.plugins.poster",
+    "ngTagsInput",
+    "truncate",
+    'ngInputDate',
+    'angular-jqcloud',
+    'socialLinks',
+    'slick',
+    'leaflet-directive',
+    'ui.sortable'
+  ])
+  .config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
+    //$locationProvider.html5Mode(true);
+    if (window.history && window.history.pushState) {
+      $locationProvider.html5Mode(true).hashPrefix('!');
+    }
+    $routeProvider
+      .when('/', {
+        templateUrl: '../views/main.html',
+        controller: 'LayoutCtrl as layout'
+      })
+      .otherwise({
+        templateUrl: '../views/main.html',
+        controller: 'LayoutCtrl as layout'
+      });
+    //.otherwise({redirectTo: '/'});
+  }])
+  // .controller('LayoutCtrl', function($scope, parallaxHelper){
+  //     $scope.background = parallaxHelper.createAnimator(-0.3, 150, -150);
+  // })
+  .run(function ($rootScope, $location, $anchorScroll, $routeParams, $document, $timeout, ipCookie, analyticsService) {
 
-        var runningInterval;
+    var runningInterval;
 
-        analyticsService.sessionStart(function(data) {
-        });
+    analyticsService.sessionStart(function (data) {});
 
-        $rootScope.app = {
-            isMobile: (function () { // true if the browser is a mobile device
-              var check = false;
-              if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-                check = true;
-              };
-              return check;
-            })()
-          };
+    $rootScope.app = {
+      isMobile: (function () { // true if the browser is a mobile device
+        var check = false;
+        if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+          check = true;
+        };
+        return check;
+      })()
+    };
 
 
-        $rootScope.$on("$routeChangeStart", function (scope, next, current) {
-            var self = this;
-        });
+    $rootScope.$on("$routeChangeStart", function (scope, next, current) {
+      var self = this;
+    });
 
-        $rootScope.$on("$routeChangeSuccess", function (scope, next, current) {
-            // $rootScope.transitionState = "active";
-            analyticsService.pageStart(function() {
-                var editorIndex = window.location.search.indexOf("editor=true");
-                if (editorIndex == -1) {
-                    analyticsService.pagePing();
-                    clearInterval(runningInterval);
+    $rootScope.$on("$routeChangeSuccess", function (scope, next, current) {
+      // $rootScope.transitionState = "active";
+      analyticsService.pageStart(function () {
+        var editorIndex = window.location.search.indexOf("editor=true");
+        if (editorIndex == -1) {
+          analyticsService.pagePing();
+          clearInterval(runningInterval);
 
-                    var counter = 0;
-                    //every 15 seconds send page tracking data
-                    runningInterval = setInterval(function(){
-                            analyticsService.pagePing();
-                            counter++;
+          var counter = 0;
+          //every 15 seconds send page tracking data
+          runningInterval = setInterval(function () {
+            analyticsService.pagePing();
+            counter++;
 
-                            if (counter >= (1000 * 60 * 60))
-                            {
-                                clearInterval(runningInterval);
-                            }
-                    }, 15000);
-                }
-            });
-        });
-
-        $rootScope.$on('$viewContentLoaded', function(scope, newRoute, oldRoute) {
-
-          // addEventListener('load', load, false);
-
-          // function load(){
-          //     var someElement = angular.element(document.getElementById(loc));
-          //     if ($location.hash()) {
-          //       $document.scrollToElement(someElement, offset, duration);
-          //     }
-          //     $rootScope.$apply();
-          // };
-
-        });
-
-    })
-    .run(function($rootScope, $location){
-      $rootScope.$on('duScrollspy:becameActive', function($event, $element){
-        //Automaticly update location
-        var hash = $element.prop('hash');
-        if(hash) {
-          $location.hash(hash.substr(1)).replace();
-          $rootScope.$apply();
+            if (counter >= (1000 * 60 * 60)) {
+              clearInterval(runningInterval);
+            }
+          }, 15000);
         }
       });
     });
 
+    $rootScope.$on('$viewContentLoaded', function (scope, newRoute, oldRoute) {
 
+      // addEventListener('load', load, false);
 
+      // function load(){
+      //     var someElement = angular.element(document.getElementById(loc));
+      //     if ($location.hash()) {
+      //       $document.scrollToElement(someElement, offset, duration);
+      //     }
+      //     $rootScope.$apply();
+      // };
+
+    });
+
+  })
+  .run(function ($rootScope, $location) {
+    $rootScope.$on('duScrollspy:becameActive', function ($event, $element) {
+      //Automaticly update location
+      var hash = $element.prop('hash');
+      if (hash) {
+        $location.hash(hash.substr(1)).replace();
+        $rootScope.$apply();
+      }
+    });
+  });

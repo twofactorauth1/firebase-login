@@ -5,207 +5,49 @@
 * Please contact info@indigenous.io for approval or questions.
 *
 -->
-<meta property="og:type" content="article"/>
+<meta property="og:type" content="article" />
 <meta property="og:title" content="{{blog.post.post_title}}" />
 <meta property="og:image" content="{{blog.post.featured_image}}" />
-
 <div ng-class="component.type+'-v'+component.version">
     <div id="content-area">
         <div class="container website clearfix row-fluid">
-            <div id="main-area" class="col-xs-12">
-                <div class="modal" style="z-index: 9999;" data-backdrop="false" id="component-setting-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <div class="modal-btns">
-                                    <a aria-hidden="true" class="close" data-dismiss="modal" type="button" style="margin-left: 15px;">×</a>
-                                    <a aria-hidden="true" class="close" type="button" style="line-height: 24px;" ng-mouseenter="hover = true" ng-mouseleave="hover = false"><i class="fa fa-eye" style="font-size: 20px;"></i></a>
-                                </div>
-                                <h4 class="modal-title">Single Post Settings</h4>
-                            </div>
-                            <div class="modal-body" style="padding:0;" ng-class="{hidden: hover}">
-                                
-                                <tabset>    
-                                    <tab>
-                                        <tab-heading>
-                                            <span>Preview</span>
-                                        </tab-heading> 
-                                        <section class="entry clearfix" ng-if="isEditing">
-                                        <div class="single-blog responsive clearfix"
-                                         data-postId="{{blog.post._id}}">
-                                        <div class="blog-entry clearfix" data-id="{{blog.post._id}}">
-                                            <h2 class="blog-title">
-                                                <a data-ng-if="blog.post.post_url" href="javascript:void(0)">
-                                                    <div class="post_title"
-                                                         data-ng-if="blog.post.post_title">
-                                                        {{blog.post.post_title}}
-                                                    </div>
-                                                </a>
-                                            </h2>
-
-                                            <div class="blog-meta">
-                                               <span data-ng-if="blog.post.publish_date || blog.post.created.date">
-                                                 Posted Date: {{blog.post.publish_date || blog.post.created.date | date: 'MM/dd/yyyy'}}
-                                                </span>
-                                                 <span data-ng-if="blog.post.post_author">
-                                                   Posted by <a href="javascript:void(0)">{{blog.post.post_author}}</a>
-                                                </span>
-                                                 <span data-ng-if="blog.post.post_category">
-                                                  in <a href="javascript:void(0)">{{blog.post.post_category}}</a>
-                                                </span>
-                                            </div>
-
-                                            <ul class="post_tags" data-ng-if="blog.post.post_tags">
-                                                <li data-ng-repeat="tag in blog.post.post_tags track by $index"><a href="javascript:void(0)">{{tag.text ? tag.text:tag}}</a></li>
-                                            </ul>
-
-                                            <div class="blog-thumb alignleft" ng-if="blog.post.featured_image">
-                                                <img ng-src="{{blog.post.featured_image}}"/>
-                                            </div>
-                                            <a class="btn btn-warning" type="button" ng-click="changeBlogImage(blog.post)" style="margin-right:10px">
-                                                    <span class="fa fa-edit"></span>
-                                                    <span ng-if="blog.post.featured_image" class="hidden-xs">Change Image</span>
-                                                    <span ng-if="!blog.post.featured_image"class="hidden-xs">Add Image</span>
-                                            </a>
-                                            <!-- end .thumb -->
-
-                                            <div class="entry-excerpt"><p>
-                                                <div class="editable post_excerpt_div" data-class="post_excerpt">
-                                                    {{blog.post.post_excerpt }}
-                                                </div>
-                                                </p></div>                                   
-                                            </div>
-
-                                        <!-- end .et_pt_blogentry -->
-
-                                    </div>
-                                    <!-- end #et_pt_blog -->
-                            </section>                           
-                                    </tab>  
-                                </tabset>
-                            </div>
-                            <div class="modal-footer">
-                                <div class="form-group row mb0">
-                                    <button type="button" class="btn btn-info btn-wide btn-o" data-dismiss="modal">
-                                        Done
-                                     </button>
-                                    <button type="button" ng-click="revertComponent()" class="btn btn-green pull-right" data-dismiss="modal" style="margin-right:5px;">
-                                        Revert
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                 <script type="text/ng-template" id="single-post-settings-modal">
-                <div class="modal-header">
-                    <button type="button" class="close" ng-click="cancel()">
-                        <span aria-hidden="true">&times;</span>
-                        <span class="sr-only">Close</span>
-                    </button>
-                    <h3 class="modal-title">Single Post Settings</h3>
-                </div>
-        <div class="modal-body">                                
-            <tabset>    
-                <tab>
-                    <tab-heading>
-                        <span>Preview</span>
-                    </tab-heading> 
-                    <section class="entry clearfix" ng-if="isEditing">
-                    <div class="single-blog responsive clearfix"
-                     data-postId="{{blog.post._id}}">
-                    <div class="blog-entry clearfix" data-id="{{blog.post._id}}">
-                        <h2 class="blog-title">
-                            <a data-ng-if="blog.post.post_url" href="javascript:void(0)">
-                                <div class="post_title"
-                                     data-ng-if="blog.post.post_title">
-                                    {{blog.post.post_title}}
-                                </div>
-                            </a>
-                        </h2>
-
-                        <div class="blog-meta">
-                           <span data-ng-if="blog.post.publish_date || blog.post.created.date">
-                             Posted Date: {{blog.post.publish_date || blog.post.created.date | date: 'MM/dd/yyyy'}}
-                            </span>
-                             <span data-ng-if="blog.post.post_author">
-                               Posted by <a href="javascript:void(0)">{{blog.post.post_author}}</a>
-                            </span>
-                             <span data-ng-if="blog.post.post_category">
-                              in <a href="javascript:void(0)">{{blog.post.post_category}}</a>
-                            </span>
-                        </div>
-
-                        <ul class="post_tags" data-ng-if="blog.post.post_tags">
-                            <li data-ng-repeat="tag in blog.post.post_tags track by $index"><a href="javascript:void(0)">{{tag.text ? tag.text:tag}}</a></li>
-                        </ul>
-
-                        <div class="blog-thumb alignleft" ng-if="blog.post.featured_image">
-                            <img ng-src="{{blog.post.featured_image}}"/>
-                        </div>
-                        <a class="btn btn-warning" type="button" ng-click="changeBlogImage(blog.post)" style="margin-right:10px">
-                                <span class="fa fa-edit"></span>
-                                <span ng-if="blog.post.featured_image" class="hidden-xs">Change Image</span>
-                                <span ng-if="!blog.post.featured_image"class="hidden-xs">Add Image</span>
-                        </a>
-                        <!-- end .thumb -->
-
-                        <div class="entry-excerpt"><p>
-                            <div class="editable post_excerpt_div" data-class="post_excerpt">
-                                {{blog.post.post_excerpt }}
-                            </div>
-                            </p></div>                                   
-                        </div>
-
-                    <!-- end .et_pt_blogentry -->
-
-                </div>
-                <!-- end #et_pt_blog -->
-                </section>                           
-                </tab>  
-            </tabset>
-        </div>
-            <div class="modal-footer">
-                <button class="btn btn-primary btn-o" ng-click="createPost(post, $event)">Add Post</button>
-            </div>
-        </script>
-
+            <div id="main-area" class="col-xs-12 margin-top-30">
                 <article class="entry clearfix">
                     <div id="et_pt_blog" class="responsive clearfix single-blog" data-postid="{{blog.post._id}}">
                         <div class="et_pt_blogentry clearfix">
                             <h2 class="et_pt_title">
                             <div class="single-post-title" data-class="post_title">
-                                <div ng-if="blog.post.post_title" class="post_title_div blog_post_title editable" ng-bind-html="blog.post.post_title | unsafe" data-class="post_title"><span></span></div>
-                                <div class="editable post_title_div blog.post_title" ng-if="!blog.post.post_title" data-class="post_title">
-                                    <span> Enter Post Title</span>
-                                </div>
+                                <div elem ng-model="blog.post.post_title"></div>
                             </div>
                             </h2>
                             <div class="blog-meta single-post-publish-date">
                                 <div data-class="publish_date">
-                                    <input ng-if="isEditing" placeholder="Publish Date" type="text" ng-model="blog.post.publish_date" class="datepicker" data-provide="datepicker">
+                                    <p class="input-group" ng-if="isEditing">
+                                        <input type="text" class="form-control" datepicker-popup="dd-MMMM-yyyy" ng-model="blog.post.publish_date" is-open="opened" min-date="minDate" max-date="'2015-06-22'" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
+                                        <span class="input-group-btn">
+                                            <button type="button" class="btn btn-default" ng-click="open($event)">
+                                                <i class="glyphicon glyphicon-calendar"></i>
+                                            </button>
+                                        </span>
+                                    </p>
                                 </div>
                                 <span ng-if="!isEditing">  {{ blog.post.publish_date || blog.post.created.date  | date: 'MM/dd/yyyy' }} </span>
                             </div>
                             <div class="single-post-author" ng-show="blog.post.post_author">
-                                 Posted by
-                                 <div ng-if="isEditing" class="post_text_div">
-                                    <div ng-if="isEditing" class="editable blog_post_author" ng-bind-html="blog.post.post_author | unsafe" data-class="post_author"><span></span></div>
-                                 </div>
-
+                                Posted by
+                                <div ng-if="isEditing" class="post_text_div">
+                                    <div elem ng-model="blog.post.post_author"></div>
+                                </div>
                                 <a ng-if="!isEditing" href="/author/{{blog.post.post_author}}">{{blog.post.post_author}}</a>
                             </div>
-
                             <div class="single-post-category" ng-if="blog.post.post_category">
                                 in
                                 <div ng-if="isEditing" class="post_text_div">
-                                    <div ng-if="isEditing" class="editable blog_post_category" data-class="post_category"><span> {{blog.post.post_category}}</span></div>
+                                    <div elem ng-model="blog.post.post_category"></div>
                                     <a ng-if="!isEditing" href="/category/{{blog.post.post_category}}">{{blog.post.post_category}}</a>
                                 </div>
                             </div>
                         </div>
-
                         <div class="single-post-tags" ng-show="blog.post.post_tags">
                             <div ng-if="isEditing">ADD TAGS</div>
                             <tags-input ng-if="isEditing" ng-model="blog.post.post_tags"></tags-input>
@@ -215,14 +57,12 @@
                                 </li>
                             </ul>
                         </div>
-
                         <div class="et_pt_thumb alignleft">
                             <a href=""><span class="overlay"></span></a>
                         </div>
                         <!-- end .thumb -->
-
                         <div class="single-post-content" class="entry-content">
-                            <div class="post_content_div editable" ng-bind-html="blog.post.post_content | unsafe" data-class="post_content"></div>
+                            <div elem ng-model="blog.post.post_content"></div>
                         </div>
                     </div>
                     <!-- end .et_pt_blogentry -->
@@ -254,15 +94,11 @@
                 </section>
             </div>
             <!-- end #et_pt_blog -->
-
         </div>
         <!-- #main-area -->
-
-
     </div>
     <!-- .container -->
 </div>
-
 <div class="clearfix row-fluid">
     <div ng-if="!isEditing" ng-click="$back()" class="goback col-xs-12">
         <p>

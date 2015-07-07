@@ -8,7 +8,7 @@
 
 <div ng-class="component.type+'-v'+component.version">
     <div class="image-gallery-title">
-        <div class="editable" data-class="title" data-index="{{$index}}" ng-bind-html="component.title | unsafe"></div>
+        <div elem ng-model="component.title"></div>
     </div>
 
     <div class="clearfix mb20"></div>
@@ -16,22 +16,20 @@
     <div>
         <div ng-cloak>
             <div ng-repeat="image in component.images track by $index">
-                <div class="col-sm-3 col-xs-12 image-wrap">
+                <div class="col-sm-3 col-xs-12 image-wrap {{isEditing ? 'editing' : ''}}">
                     <div class="thumbnail imgHeight single-image">
                         <a href="{{image.url}}" title="{{image.label}}" data-gallery>
-                            <img class="img-responsive img-gallery-{{$index}} image-gallery" data-index="{{$index}}" alt="{{image.label}}" ng-src="{{image.url}}">
+                            <img class="img-responsive img-gallery-{{$index}} image-gallery" data-index="{{$index}}" ng-click="addImageFromMedia(component._id, $index, true)" alt="{{image.label}}" ng-src="{{image.url}}">
                         </a>
                         <span class="caption" ng-if="isEditing">
                             <i class="fa fa-times-circle" ng-click="deleteImage(component, $index)"></i>
                         </span>
                     </div>
                     <div ng-if="isEditing" class="delete-single-image center">
-                        <button ng-click="DeleteImageFromGallery(component._id, $index)" class="ng-scope btn-delete-single-image"><i class='fa fa-trash'></i></button>
+                        <button ng-click="deleteImageFromGallery(component._id, $index)" class="ng-scope btn-delete-single-image"><i class='fa fa-trash'></i></button>
                     </div>
-                    <div ng-if="isEditing" class="add-addtional center">
-                        <a href="">
-                            <i class="fa fa-plus" ng-click="AddImageToGallery(component._id, $index)"></i>
-                        </a>
+                    <div ng-if="isEditing" class="center">
+                        <a ng-click="addImageFromMedia(component._id, $index, false)" class="add-addtional"><i class='fa fa-plus'></i></a>
                     </div>
                 </div>
             </div>
@@ -71,5 +69,5 @@
             </div>
         </div>
     </div>
-    <button ng-if="isEditing && component.images.length === 0" ng-click="AddImageToGallery(component._id,0)" class="btn btn-primary btn-lg pull-right btn-add-image" >Add new Image</button>
+    <button ng-if="isEditing && component.images.length === 0" ng-click="addImageFromMedia(component._id,0)" class="btn btn-primary btn-lg pull-right btn-add-image" >Add new Image</button>
 </div>

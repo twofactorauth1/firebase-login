@@ -40,11 +40,7 @@
                                             <span>New Post</span>
                                         </button>
                                     </div>
-                                    <div class="form-group  pull-right margin-bottom-0">
-                                        <button type="button" class="btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti ti-plus ng-click-active" ng-click="openPostModal()">
-                                            <span>New Post</span>
-                                        </button>
-                                    </div>
+                                    
                                     <div class="form-group margin-bottom-0">
                                         <div class="btn-group tableView">
                                             <button class="btn btn-info" ng-class="{'active': tableView == 'list'}" href="" ng-click="tableView = 'list'" tooltip-placement="top" tooltip="List"> <span class="fa fa-th-list"></span> </button>
@@ -92,7 +88,18 @@
                                     <input st-search="handle" placeholder="Url" class="form-control" type="search" />
                                 </th>
                                 <th>
-                                    <input st-search="status" placeholder="Status" class="form-control" type="search" />
+                                    <input st-search="post_status" placeholder="Status" class="form-control hidden" type="search" id="searchStatus" ng-model="filterpost.selected.data" />
+                                    <ui-select ng-model="filterpost.selected" on-select="triggerInput('#searchStatus')" theme="bootstrap">
+                                        <ui-select-match placeholder="Select Status">
+                                            <!-- <span class="fa" ng-class="{'fa-facebook': $select.selected.type == 'fb'}"></span> -->
+                                            <small ng-bind-html="$select.selected.data"></small>
+                                            <button class="clear" ng-click="clear($event, '#searchStatus')">X</button>
+                                        </ui-select-match>
+                                        <ui-select-null-choice>No Status</ui-select-null-choice>
+                                        <ui-select-choices repeat="status in post_statuses">
+                                            <small ng-bind-html="status.data | highlight: $select.search"></small>
+                                        </ui-select-choices>
+                                    </ui-select>
                                 </th>
                                 <th>
                                     <!-- <input st-search="created" placeholder="Created" class="form-control" type="search" /> -->
@@ -109,7 +116,7 @@
                                 </td>
                                 <td><strong>Title: </strong>{{post.post_title | limitTo: 20 }}{{post.post_title.length > 20 ? '...' : ''}}</td>
                                 <td class="hidden-xs"><strong>Url: </strong>{{post.post_url | limitTo: 20 }}{{post.post_url.length > 20 ? '...' : ''}}</td>
-                                <td class="hidden-xs"><strong>Status: </strong> {{post.post_status}}</td>
+                                <td class="hidden-xs"><strong>Status: </strong>{{post.post_status.trim()}}</td>
                                 <td class="hidden-xs"><strong>Created: </strong> {{post.created.date | date:'MMM d yy'}}</td>
                                 <td class="hidden-xs"><strong>Modified: </strong>{{post.modified.date | date:'MMM d yy'}}</td>
                             </tr>

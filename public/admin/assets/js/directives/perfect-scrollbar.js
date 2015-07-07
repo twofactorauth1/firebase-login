@@ -11,7 +11,7 @@ function ($parse, $window) {
 		link: function($scope, $elem, $attr) {
 			var jqWindow = angular.element($window);
 			var options = {};
-			if(!$scope.app.isMobile) {
+			if(!$scope.$root.app.isMobile) {
 				for(var i = 0, l = psOptions.length; i < l; i++) {
 					var opt = psOptions[i];
 					if($attr[opt] !== undefined) {

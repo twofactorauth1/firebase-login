@@ -95,6 +95,7 @@ app.directive('mediaModal', ['$http', '$timeout', 'FileUploader', 'AssetsService
 
                 contentElement.css('visibility', 'hidden');
                 mediaModalElement.on('shown.bs.modal', function(e) {
+                    console.log('$scope.$parent.showInsert ', $scope.$parent.showInsert);
                     if (e.relatedTarget) {
                         $scope.showInsert = $(e.relatedTarget).attr("media-modal-show-insert");
                         $(window).trigger("resize")
@@ -271,10 +272,14 @@ app.directive('mediaModal', ['$http', '$timeout', 'FileUploader', 'AssetsService
             };
 
             $scope.m.onInsertMedia = function() {
-                console.log('$scope ', $scope);
+                console.log('$scope ', $scope.onInsertMediacb);
                 if ($scope.batch.length > 0) {
-                    $scope.onInsertMediacb && $scope.onInsertMediacb($scope.batch[$scope.batch.length - 1], $scope.type || $scope.insertMediaType);
-                    $scope.type = null;
+                    if ($scope.onInsertMediacb) {
+                        $scope.onInsertMediacb && $scope.onInsertMediacb($scope.batch[$scope.batch.length - 1], $scope.type || $scope.insertMediaType);
+                        $scope.type = null;
+                    } else {
+                        $scope.$parent.insertMedia($scope.batch[$scope.batch.length - 1], $scope.type || $scope.insertMediaType);
+                    }
                 }
                 $scope.m.selectTriggerFn(false);
                 $scope.singleSelected = false;

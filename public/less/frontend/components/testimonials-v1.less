@@ -1,102 +1,95 @@
 /********** Testimonials **********/
-.editing .testimonials-v1 .testimonial-wrap {  
-  .single-testimonial {
-    border: 4px solid rgba(0, 0, 0, 0);
-    position: relative;
-  }
-  .single-testimonial.edit-mode {
-    padding-left: 15px;
-    padding-right: 15px;
-  }
-  .single-testimonial:hover {
-    border: 4px dashed rgba(0, 0, 0, 0.4);
-  }
-  .single-testimonial:hover {
-    .add-addtional {
-      display: block;
-      font-size: 28px;
-      bottom: -25px;
+
+.editing .testimonials-v1 .testimonial-wrap {
+    .single-testimonial {
+        border: 4px solid rgba(0, 0, 0, 0);
+        position: relative;
+    }
+    .single-testimonial.edit-mode {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+    .single-testimonial:hover {
+        border: 4px dashed rgba(0, 0, 0, 0.4);
+    }
+    .single-testimonial:hover {
+        .add-addtional {
+            display: block;
+            font-size: 28px;
+            bottom: -25px;
+        }
+        .delete-single-testimonial {
+            .btn-delete-single-testimonial {
+                background: rgba(0, 0, 0, 0.5);
+                display: block;
+                border: 0;
+                color: #ffffff;
+                padding: 10px 15px;
+                position: absolute;
+                top: 0;
+                right: 0;
+                z-index: 1050;
+            }
+        }
     }
     .delete-single-testimonial {
-      .btn-delete-single-testimonial {
-        background: rgba(0, 0, 0, 0.5);
-        display: block;
-        border: 0;
-        color: #ffffff;
-        padding: 10px 15px;
-        position: absolute;
-        top: 0;
-        right: 0;
-        z-index: 1050;
-      }
+        .btn-delete-single-testimonial {
+            display: none;
+        }
     }
-  }
-  .delete-single-testimonial {
-    .btn-delete-single-testimonial {
-      display: none;
-    }
-  }
-  div.editable:empty:not(:focus):before{
-        content:attr(data-text)
+    div.editable:empty:not(:focus):before {
+        content: attr(data-text)
     }
 }
+
 .testimonials-v1 {
-  div[data-class="testimonials"] {
-    background: url('../assets/images/indimain/wave-bg.jpg');
-    background-size: 15% auto;
-  }
-  .btn-add-testimonial
-  {
-    position:relative !important;
-  }
-  .testimonials {
-      span[data-cke-display-name="image"] {
-        max-width:100%;
-        img{
-          max-width:100%;
+    div[data-class="testimonials"] {
+        background: url('../assets/images/indimain/wave-bg.jpg');
+        background-size: 15% auto;
+    }
+    .btn-add-testimonial {
+        position: relative !important;
+    }
+    .testimonials {
+        span[data-cke-display-name="image"] {
+            max-width: 100%;
+            img {
+                max-width: 100%;
+            }
         }
-      }   
-      display: block;
-      position: relative;
-      
-      .slick-dots {
-        bottom: -15px!important;
-      }
-
-      .single-testimonial {        
-        padding-bottom: 25px;
-      }
-
-      .last {
-        border-bottom: none;
-      }
-
-      .title {
-        text-align: center;
-        margin-bottom: 35px;
-      }
-
-      .img img{       
-        margin: 0 auto;
-        min-width: 100%;
-      }
-     
-      .name {        
+        display: block;
         position: relative;
-        margin-bottom: 0;
-        font-weight: bold;
-      }
-
-      .site {       
-        font-weight: bold;
-        font-size: 14px;
-        font-weight: bold;
-      }
-
-      .text {        
-        line-height: 18px;
-        font-size: 14px;
-        margin-top: 20px;
-      } 
-  }
+        .slick-dots {
+            bottom: -15px!important;
+        }
+        .single-testimonial {
+            padding-bottom: 25px;
+        }
+        .last {
+            border-bottom: none;
+        }
+        .title {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+        .img img {
+            margin: 0 auto;
+            min-width: 100%;
+        }
+        .name {
+            position: relative;
+            margin-bottom: 0;
+            font-weight: bold;
+        }
+        .site {
+            font-weight: bold;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        .text {
+            line-height: 18px;
+            font-size: 14px;
+            margin-top: 20px;
+        }
+    }
 }

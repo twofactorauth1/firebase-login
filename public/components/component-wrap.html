@@ -7,27 +7,24 @@
        opacity: {{component.bg.opacity/100 || 1}};
     }
 </style>
-<div class="component-wrap" ng-if="component.visibility" ng-class="{'mt200':component.type == 'masthead'}">
+<div class="component-wrap" ng-if="component.visibility" ng-class="{'editing': isEditing}">
 
-    <div class="component {{component.type}}{{$index + 1}}" data-id="{{component._id}}" data-type="{{component.type}}">
+    <div class="component {{component.type}}{{$index + 1}}">
 
-        <div id="{{component.anchor}}" ng-style="{&#39;color&#39;:component.txtcolor||primaryTextColor}">
+        <div id="{{component.anchor || component._id}}" ng-style="{'color':component.txtcolor||primaryTextColor}">
 
-            <!--<div-->
-                    <!--ng-if="!component.bg.img.url"-->
-                    <!--style='background: {{component.bg.color}};color: {{component.txtcolor||primaryTextColor}};'>-->
             <div
                     ng-if="!component.bg.img.url && component.type != 'email'"
-                    ng-style="{&#39;background&#39;: component.bg.color, &#39;color&#39;:component.txtcolor||primaryTextColor}">
+                    ng-style="{'background': component.bg.color, 'color':component.txtcolor||primaryTextColor}">
 
                 <div class="component-inner">
 
                     <div class="container inner-page" ng-if="component.type != 'navigation' && component.type != 'footer' && component.type != 'contact-us'  && component.type != 'top-bar' && component.type != 'payment-form'">
-        				<div ng-include="'/components/'+component.type+'_v'+component.version+'.html'"></div>
+        				<div data-ng-include data-src="'/components/'+component.type+'_v'+component.version+'.html'" ></div>
                     </div>
 
                     <div ng-if="component.type == 'navigation' || component.type == 'footer' || component.type == 'contact-us' || component.type == 'top-bar' || component.type == 'payment-form'">
-                    	<div ng-include="'/components/'+component.type+'_v'+component.version+'.html'"></div>
+                    	<div data-ng-include  data-src="'/components/'+component.type+'_v'+component.version+'.html'" ></div>
                     </div>
 
                 </div>
@@ -35,7 +32,7 @@
             </div>
 
             <div ng-if="component.type == 'email'">
-                 <div ng-include="'/templates/emails/base-email.html'"></div>
+                 <div data-ng-include data-src="'/templates/emails/base-email.html'" ></div>
             </div>
 
 
@@ -94,11 +91,11 @@
                         </div>
 
                         <div class="container inner-page" ng-if="component.type != 'navigation' && component.type != 'footer' && component.type != 'contact-us' && component.type != 'payment-form'">
-                            <div ng-include="'/components/'+component.type+'_v'+component.version+'.html'"></div>
+                            <div data-ng-include data-src="'/components/'+component.type+'_v'+component.version+'.html'" ></div>
                         </div>
 
                         <div ng-if="component.type == 'navigation' || component.type == 'footer' || component.type == 'contact-us' || component.type == 'payment-form' ">
-                            <div ng-include="'/components/'+component.type+'_v'+component.version+'.html'"></div>
+                            <div data-ng-include data-src="'/components/'+component.type+'_v'+component.version+'.html'" ></div>
                         </div>
 
                     </div>
@@ -112,6 +109,6 @@
     </div>
 
 </div>
-<div class="component-hidden" ng-style="{&#39;background&#39;: component.bg.color, &#39;color&#39;:component.txtcolor||primaryTextColor}" ng-if="!component.visibility">
+<div class="component-hidden" ng-show="isEditing" ng-style="{&#39;background&#39;: component.bg.color, &#39;color&#39;:component.txtcolor||primaryTextColor}" ng-if="!component.visibility">
      <h3 class="hidden-component">Hidden</h3>
 </div>

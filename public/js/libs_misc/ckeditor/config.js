@@ -50,13 +50,13 @@ CKEDITOR.editorConfig = function( config ) {
 	// config.protectedSource.push( /<span[\s\S]*?\>/g ); //allows beginning <i> tag
 	// config.protectedSource.push( /<\/span[\s\S]*?\>/g ); //allows ending </i> tag
 
-	config.extraPlugins = 'panel,floatpanel,dialogadvtab,contextmenu,colordialog,colorbutton,pastetext,doksoft_button,mediamanager,sharedspace,image2,tooltip,lineheight,doksoft_font_awesome,table,tabletools,quicktable';
+	config.extraPlugins = 'panel,floatpanel,dialogadvtab,contextmenu,colordialog,colorbutton,pastetext,doksoft_button,mediamanager,sharedspace,image2,tooltip,lineheight,doksoft_font_awesome,table,tabletools,quicktable,tableresize';
 
 	config.filebrowserBrowseUrl = '';
 
 	// CKEDITOR.dtd.$removeEmpty['i'] = false;
-	CKEDITOR.dtd.$removeEmpty['span'] = false;
-	CKEDITOR.dtd.$editable.span = true;
+	// CKEDITOR.dtd.$removeEmpty['span'] = false;
+	// CKEDITOR.dtd.$editable.span = true;
 	// CKEDITOR.dtd.$editable.a = true;
 	// CKEDITOR.dtd.$editable.img = true;
 };

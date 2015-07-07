@@ -3,10 +3,12 @@
  * controller for products
  */
 (function(angular) {
-    app.controller('PostsCtrl', ["$scope", "toaster", "$modal", "$filter", "WebsiteService", "$log", function($scope, toaster, $modal, $filter, WebsiteService, $log) {
+    app.controller('PostsCtrl', ["$scope", "toaster", "$modal", "$filter", "WebsiteService", "$log", "postConstant", function($scope, toaster, $modal, $filter, WebsiteService, $log, postConstant) {
         $scope.tableView = 'list';
         $scope.itemPerPage = 40;
         $scope.showPages = 15;
+        $scope.post_statuses = postConstant.post_status.dp;
+        $scope.filterpost = {};
         WebsiteService.getPosts(function(posts) {
             var postsArr = [];
             for (var key in posts) {
@@ -137,5 +139,14 @@
             window.location = '/admin/#/website/posts/?posthandle=' + post.post_url;
         };
 
+        /*
+         * @clear
+         * - clear the filter box to bring back original list
+         */
+        $scope.clear = function ($event, elem) {
+          $event.stopPropagation();
+          $scope.filterpost.selected = null;
+          $scope.triggerInput(elem);
+        };
     }]);
 })(angular);

@@ -96,6 +96,7 @@ module.exports = function(grunt) {
                     // '../indigeweb/public/css/style.default.css_o': [ 'public/less/style.default_o.less' ],
                     // '../indigeweb/public/pipeshift/css/site.css': [ 'public/pipeshift/less/theme.less', 'public/pipeshift/less/main.less' ],
                     // '../indigeweb/public/css/angular-admin.css': [ 'public/less/angular-admin.less' ]
+                    '../indigeweb/public/admin/assets/css/frontend-admin.css': [ 'public/less/frontend-admin.less' ],
                     '../indigeweb/public/css/styles.css': [ 'public/less/frontend.less' ],
                     '../indigeweb/public/admin/assets/css/styles.css': [ 'public/less/styles.less' ],
                 }
