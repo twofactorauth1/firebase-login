@@ -3,13 +3,13 @@
  * controller for personal business page
  */
 (function(angular) {
-    app.controller('ProfileBusinessCtrl', ["$scope", "$modal", "$timeout", "toaster", "$stateParams", "UserService", "CommonService", "hoursConstant", function($scope, $modal, $timeout, toaster, $stateParams, UserService, CommonService, hoursConstant) {
+    app.controller('ProfileBusinessCtrl', ["$scope", "$modal", "$timeout", "toaster", "$stateParams", "UserService", "CommonService", "hoursConstant", "AccountService", function($scope, $modal, $timeout, toaster, $stateParams, UserService, CommonService, hoursConstant, AccountService) {
         console.log('profile business >>> ');
         $scope.isValid = true;
         $scope.hours = hoursConstant;
         //account API call for object population
         //account API call for object population
-        UserService.getAccount(function(account) {
+        AccountService.getAccount(function(account) {
             $scope.account = account;
             console.log('$scope.account >>> ', $scope.account);
             $scope.setDefaults();
@@ -109,6 +109,7 @@
         };
 
         $scope.setDefaults = function() {
+            console.log('setDefaults >>> ', $scope.account);
             if (!$scope.account.business.phones)
                 $scope.account.business.phones = [];
 
