@@ -54,12 +54,10 @@ var mainApp = angular
         templateUrl: '../views/main.html',
         controller: 'LayoutCtrl as layout'
       });
-    //.otherwise({redirectTo: '/'});
+
   }])
-  // .controller('LayoutCtrl', function($scope, parallaxHelper){
-  //     $scope.background = parallaxHelper.createAnimator(-0.3, 150, -150);
-  // })
-  .run(function ($rootScope, $location, $anchorScroll, $routeParams, $document, $timeout, ipCookie, analyticsService) {
+
+.run(function ($rootScope, $location, $anchorScroll, $routeParams, $document, $timeout, ipCookie, analyticsService) {
 
     var runningInterval;
 
@@ -102,19 +100,6 @@ var mainApp = angular
       });
     });
 
-    $rootScope.$on('$viewContentLoaded', function (scope, newRoute, oldRoute) {
-
-      // addEventListener('load', load, false);
-
-      // function load(){
-      //     var someElement = angular.element(document.getElementById(loc));
-      //     if ($location.hash()) {
-      //       $document.scrollToElement(someElement, offset, duration);
-      //     }
-      //     $rootScope.$apply();
-      // };
-
-    });
 
   })
   .run(function ($rootScope, $location) {

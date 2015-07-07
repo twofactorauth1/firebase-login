@@ -13,10 +13,7 @@
                         <h4> Currently Viewing Author: <strong>{{blog.currentAuthor}}</strong> </h4>
                     </div>
                     <article class="entry clearfix" ng-if="blog.blogposts">
-                        <div class="single-blog responsive clearfix"
-                             ng-repeat="blogpost in blog.blogposts | filter: blogpost.publish_date || blogpost.created.date | orderBy : sortBlogFn(component): customSortOrder(component) | offset:  curPage * pageSize | limitTo: pageSize"
-                             data-postId="{{blogpost._id}}">
-
+                        <div class="single-blog responsive clearfix" ng-repeat="blogpost in blog.blogposts | filter: blogpost.publish_date || blogpost.created.date | orderBy : sortBlogFn(component): customSortOrder(component) | offset:  curPage * pageSize | limitTo: pageSize" data-postId="{{blogpost._id}}">
                             <div class="blog-entry clearfix" data-id="{{blogpost._id}}">
                                 <h2 class="blog-title">
                                     <a data-ng-if="blogpost.post_url" href="/page/blog/{{blogpost.post_url}}">
@@ -30,77 +27,59 @@
                                         <span class="hidden-xs">Delete</span>
                                     </a>
                                 </h2>
-
                                 <div class="blog-meta">
-                                   <span data-ng-if="blogpost.publish_date || blogpost.created.date">
+                                    <span data-ng-if="blogpost.publish_date || blogpost.created.date">
                                      • {{blogpost.publish_date || blogpost.created.date | date: 'MM/dd/yyyy'}}
                                     </span>
-                                     <span data-ng-if="blogpost.post_author">
+                                    <span data-ng-if="blogpost.post_author">
                                        Posted by <a href="/author/{{blogpost.post_author}}">{{blogpost.post_author}}</a>
                                     </span>
-
-                                     <span data-ng-if="blogpost.post_category">
+                                    <span data-ng-if="blogpost.post_category">
                                       in <a href="/category/{{blogpost.post_category}}">{{blogpost.post_category}}</a>
                                     </span>
-
-                                    <!-- <span data-ng-if="blogpost.comment_count">
-                                       in <a href="/page/category/{{blogpost.comment_count}}">{{blogpost.comment_count}}</a>
-                                     </span>-->
                                 </div>
-
                                 <ul class="post_tags" data-ng-if="blogpost.post_tags">
                                     <li data-ng-repeat="post_tags in blogpost.post_tags track by $index"><a href="/tag/{{post_tags}}">{{post_tags}}</a></li>
                                 </ul>
-
                                 <div class="blog-thumb alignleft" ng-if="blogpost.featured_image">
-                                    <img ng-src="{{blogpost.featured_image}}"/>
+                                    <img ng-src="{{blogpost.featured_image}}" />
                                 </div>
                                 <a ng-if="isEditing" class="btn btn-warning" type="button" ng-click="changeBlogImage(blogpost)" style="margin-right:10px">
-                                        <span class="fa fa-edit"></span>
-                                        <span ng-if="blogpost.featured_image" class="hidden-xs">Change Image</span>
-                                        <span ng-if="!blogpost.featured_image"class="hidden-xs">Add Image</span>
+                                    <span class="fa fa-edit"></span>
+                                    <span ng-if="blogpost.featured_image" class="hidden-xs">Change Image</span>
+                                    <span ng-if="!blogpost.featured_image" class="hidden-xs">Add Image</span>
                                 </a>
                                 <!-- end .thumb -->
-
-                                <div class="entry-excerpt"><p>
-
-                                    <div class="editable post_excerpt" data-class="post_excerpt"
-                                         data-ng-if="blogpost.post_excerpt">
-                                        {{blogpost.post_excerpt}}
-                                    </div>
-                                    <div class="editable post_excerpt" data-class="post_excerpt"
-                                         data-ng-if="!blogpost.post_excerpt">
-                                    </div>
-                                    </p></div>
-                                <a data-ng-if="blogpost.post_url"
-                                   href="/page/blog/{{blogpost.post_url}}"
-                                   class="btn btn-orange pull-right"><span>READ MORE</span></a>
-                                   <div class="clearfix"></div>
-                                   <hr></hr>
+                                <div class="entry-excerpt">
+                                    <p>
+                                        <div class="editable post_excerpt" data-class="post_excerpt" data-ng-if="blogpost.post_excerpt">
+                                            {{blogpost.post_excerpt}}
+                                        </div>
+                                        <div class="editable post_excerpt" data-class="post_excerpt" data-ng-if="!blogpost.post_excerpt">
+                                        </div>
+                                    </p>
+                                </div>
+                                <a data-ng-if="blogpost.post_url" href="/page/blog/{{blogpost.post_url}}" class="btn btn-orange pull-right"><span>READ MORE</span></a>
+                                <div class="clearfix"></div>
+                                <hr></hr>
                             </div>
-
                             <!-- end .et_pt_blogentry -->
-
                         </div>
                         <!-- end #et_pt_blog -->
                     </article>
-                        <div class="pagination pagination-centered" ng-show="(!isEditing && blog.blogposts.length) > pageSize">
-                              <button type="button" class="btn btn-primary" ng-disabled="curPage == 0"
-                             ng-click="curPage=curPage-1">
-                             <span class="fa fa-arrow-left"></span>
-                             <span class="hidden-xs">PREV</span>
-                              </button>
-                             <span>Page {{curPage + 1}} of {{ numberOfPages() }}</span>
-                             <button type="button" class="btn btn-primary"
-                             ng-disabled="curPage >= (layout.blogposts||blog.blogposts).length/pageSize - 1"
-                             ng-click="curPage = curPage+1">
-                             <span class="hidden-xs">Next</span>
-                             <span class="fa fa-arrow-right"></span>
-                             </button>
-                        </div>
+                    <div class="pagination pagination-centered" ng-show="(!isEditing && blog.blogposts.length) > pageSize">
+                        <button type="button" class="btn btn-primary" ng-disabled="curPage == 0" ng-click="curPage=curPage-1">
+                            <span class="fa fa-arrow-left"></span>
+                            <span class="hidden-xs">PREV</span>
+                        </button>
+                        <span>Page {{curPage + 1}} of {{ numberOfPages() }}</span>
+                        <button type="button" class="btn btn-primary" ng-disabled="curPage >= (layout.blogposts||blog.blogposts).length/pageSize - 1" ng-click="curPage = curPage+1">
+                            <span class="hidden-xs">Next</span>
+                            <span class="fa fa-arrow-right"></span>
+                        </button>
+                    </div>
                     <!-- .entry -->
                 </div>
-
                 <!-- #main-area -->
                 <div id="blog-sidebar" class="col-sm-4 col-xs-12">
                     <div class="searchbar hidden">
@@ -112,7 +91,6 @@
                         <!-- <jqcloud words="tagCloud" width="230" height="300" steps="7" ng-if="showCloud"></jqcloud> -->
                         <div class="jqcloud" style="height:300px;width:300px;display:block"></div>
                     </div>
-
                     <div class="posts" ng-if="blog.latestposts">
                         <h4><i class="fa fa-list-alt"></i> Latest Posts</h4>
                         <ul data-ng-repeat="blogPost in blog.blogposts  | filter: blogpost.publish_date || blogpost.created.date | orderBy : sortBlogFn(component): customSortOrder(component) |limitTo: 3 track by $index">
@@ -125,7 +103,6 @@
                             </li>
                         </ul>
                     </div>
-
                     <div ng-if="blog.categories.length >= 1">
                         <div class="clearfix mb30"></div>
                         <div class="categories">
@@ -135,7 +112,6 @@
                             </ul>
                         </div>
                     </div>
-
                     <div ng-if="blog.blogpost.comments">
                         <div class="clearfix mb30"></div>
                         <div class="comments hidden">
@@ -147,17 +123,14 @@
                             </ul>
                         </div>
                     </div>
-
-
-                    </div>
                 </div>
             </div>
-            <!-- .container -->
         </div>
-        <!-- #content-area -->
+        <!-- .container -->
     </div>
+    <!-- #content-area -->
 </div>
-
+</div>
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
