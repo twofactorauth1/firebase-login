@@ -787,7 +787,7 @@
                                     <li data-ng-repeat="tag in blog.post.post_tags track by $index"><a href="javascript:void(0)">{{tag.text ? tag.text:tag}}</a></li>
                                 </ul>
                                 <div class="blog-thumb alignleft" ng-if="blog.post.featured_image">
-                                    <img style="width:30%;" ng-src="{{blog.post.featured_image}}" />
+                                    <img ng-src="{{blog.post.featured_image}}" />
                                 </div>
                                 <a class="btn btn-warning" type="button" blog-post-image="true" media-modal-show-insert="true" type="button" class="pull-right btn btn-primary" data-toggle="modal"  data-target="#media-manager-modal" style="margin-right:10px">
                                     <span class="fa fa-edit"></span>

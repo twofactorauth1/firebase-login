@@ -9,6 +9,9 @@ app.directive('singlePostComponent',['$location', "WebsiteService", function ($l
     link: function (scope, element, attrs) {
       scope.isEditing = true;
       scope.blog = {};
+      scope.control.setSinglePost = function(post_data) {
+        scope.blog.post = post_data;
+      }
       /*
        * @dateOptions
        * -
@@ -55,9 +58,7 @@ app.directive('singlePostComponent',['$location', "WebsiteService", function ($l
         scope.startOpened = !scope.startOpened;
       };
 
-      scope.control.setSinglePost = function(post_data) {
-        scope.blog.post = post_data;
-      }
+      
     }
   }
 }]);
