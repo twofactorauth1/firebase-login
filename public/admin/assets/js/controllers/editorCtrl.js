@@ -49,6 +49,21 @@
       $scope.checkForSaveBeforeLeave();
     };
 
+     /*
+     * @getWebsite
+     * -
+     */
+
+    $scope.getWebsite = function (fn) {
+      WebsiteService.getWebsite(function (website) {
+        $scope.website = website;
+        if(fn)
+          fn($scope.website);
+      });
+    } 
+    
+    $scope.getWebsite();
+
     /*
      * @getAccount
      * -
@@ -108,6 +123,7 @@
      */
 
     $scope.retrievePage = function (_handle) {
+      
       WebsiteService.getSinglePage(_handle, function (data) {
         $scope.page = data;
         $scope.components = $scope.page.components;
@@ -447,15 +463,6 @@
         $scope.openSimpleModal("page-duplicate-modal");
       }
     };
-
-    /*
-     * @getWebsite
-     * -
-     */
-
-    WebsiteService.getWebsite(function (website) {
-      $scope.website = website;
-    });
     
     /*
      * @checkForDuplicatePage
