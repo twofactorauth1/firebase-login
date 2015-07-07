@@ -329,24 +329,33 @@
 
     };
 
-
-    /*
+     /*
      * @closeModal
      * -
      */
 
-    // $scope.closeModal = function () {
-    //   console.log('closeModal >>> ');
-    //   $timeout(function () {
-    //       $scope.modalInstance.close();
-    //       angular.element('.modal-backdrop').remove();
-    //   });
-    //   if ($scope.componentEditing && $scope.componentEditing.type === 'contact-us' && $scope.contactHoursInvalid) {
-    //     $scope.componentEditing.hours = $scope.originalComponent.hours;
-    //     $scope.updateContactUsAddress();
-    //   }
-    //   $scope.contactHoursInvalid = false;
-    // };
+    $scope.closeModal = function () {
+      console.log('closeModal >>> ');
+      $timeout(function () {
+          $scope.modalInstance.close();
+          angular.element('.modal-backdrop').remove();
+      });
+    };
+
+    /*
+     * @openSimpleModal
+     * -
+     */
+    $scope.openSimpleModal = function (modal) {
+      var _modal = {
+        templateUrl: modal,
+        scope: $scope
+      };
+      $scope.modalInstance = $modal.open(_modal);
+      $scope.modalInstance.result.then(null, function () {
+        angular.element('.sp-container').addClass('sp-hidden');
+      });
+    };
 
     /*
      * @openModal
@@ -360,18 +369,19 @@
         resolve: {
           components: function () {
             return $scope.components
-          },
-          contactMap: function () {
-            return $scope.contactMap
-          },
-          website: function () {
-            return $scope.website
           }
         }
       };
 
       if (controller) {
         _modal.controller = controller;
+        
+        _modal.resolve.contactMap = function () {
+          return $scope.contactMap
+        };
+         _modal.resolve.website = function () {
+          return $scope.website
+        };
       }
 
       if (index >= 0) {
@@ -392,9 +402,9 @@
 
     $scope.openSettingsModal = function () {
       if ($scope.single_post) {
-        $scope.openModal("post-settings-modal");
+        $scope.openSimpleModal("post-settings-modal");
       } else {
-        $scope.openModal("page-settings-modal");
+        $scope.openSimpleModal("page-settings-modal");
       }
     };
 
@@ -405,9 +415,9 @@
 
     $scope.openDuplicateModal = function () {
       if ($scope.single_post) {
-        $scope.openModal("post-duplicate-modal");
+        $scope.openSimpleModal("post-duplicate-modal");
       } else {
-        $scope.openModal("page-duplicate-modal");
+        $scope.openSimpleModal("page-duplicate-modal");
       }
     };
 
