@@ -120,25 +120,27 @@
      * -
      */
     $scope.blog = {};
-    $scope.loadSinglePost = {};
+    $scope.loadSinglePost={};
     $scope.retrievePost = function (_handle) {
-      $scope.isSinglePost = true;
-      $scope.newPost = {};
-      $scope.post_statuses = postConstant.post_status.dp;
-      
+      $scope.isSinglePost = true;  
+      $scope.newPost = {}; 
+      $scope.handle = _handle;
+      $scope.post_statuses = postConstant.post_status.dp; 
       WebsiteService.getSinglePage('single-post', function (data) {
         $scope.page = data;
         $scope.components = $scope.page.components;
         $scope.activateCKeditor();
-        WebsiteService.getSinglePost(_handle, function (data) {
+      });  
+    };
+
+    $scope.getSinglePostData = function()
+    {
+      WebsiteService.getSinglePost($scope.handle, function (data) {
           $scope.blog.post = data;
           $scope.single_post = true;
-          $(document).ready(function() {
-              $scope.loadSinglePost.setSinglePost && $scope.loadSinglePost.setSinglePost($scope.blog.post);
-          });
-        });
+          $scope.loadSinglePost.setSinglePost && $scope.loadSinglePost.setSinglePost($scope.blog.post);          
       });
-    };
+    }
 
     /*
      * @calculateWindowHeight
