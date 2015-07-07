@@ -401,14 +401,11 @@
          _modal.resolve.website = function () {
           return $scope.website
         };
-      }
-      if($scope.isSinglePost)
-      {
          _modal.resolve.blog = function () {
           return $scope.blog.post
         };
       }
-
+      
       if (index >= 0) {
         _modal.resolve.clickedIndex = function () {
           return index
