@@ -426,6 +426,13 @@ _.extend(api.prototype, baseApi.prototype, {
 
                         req.session.midSignup = false;                       
                         self.createUserActivityWithParams(accountId, user.id(), 'CREATE_ACCOUNT', null, "Congratulations, your account was successfully created.", function(){});
+                        var activity = new $$.m.ContactActivity({
+                            accountId: accountId,
+                            activityType: "ACCOUNT_CREATED",
+                            detail : "Congratulations, your account was successfully created.",
+                            start: new Date()
+                        });
+                        contactActivityManager.createActivity(activity, function(err, value){});
 
                         self.log.debug('Creating customer contact for main account.');
                         contactDao.createCustomerContact(user, appConfig.mainAccountID, fingerprint, function(err, contact){

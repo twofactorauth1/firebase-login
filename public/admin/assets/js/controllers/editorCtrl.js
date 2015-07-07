@@ -10,20 +10,34 @@
      */
 
     $scope.isEditing = true;
+
     $scope.savePage = function () {
       $scope.saveLoading = true;
-      WebsiteService.updatePage($scope.page, function (data) {
-        $scope.saveLoading = false;
-        toaster.pop('success', "Page Saved", "The " + $scope.page.handle + " page was saved successfully.");
-        //Update linked list
-        $scope.website.linkLists.forEach(function (value, index) {
-          if (value.handle === "head-menu") {
-            WebsiteService.updateLinkList($scope.website.linkLists[index], $scope.website._id, 'head-menu', function (data) {
-              console.log('Updated linked list');
-            });
-          }
+      if($scope.isSinglePost)
+      {
+        var post_data = angular.copy($scope.blog.post);
+        post_data.post_tags.forEach(function(v, i) {
+            if (v.text)
+                post_data.post_tags[i] = v.text;
         });
-      });
+        WebsiteService.updatePost($scope.page._id,post_data._id,post_data, function (data) {
+          $scope.saveLoading = false;
+          toaster.pop('success', "Post Saved", "The " + $scope.blog.post.post_title + " post was saved successfully.");                   
+        });
+      }
+      else
+        WebsiteService.updatePage($scope.page, function (data) {
+          $scope.saveLoading = false;
+          toaster.pop('success', "Page Saved", "The " + $scope.page.handle + " page was saved successfully.");
+          //Update linked list
+          $scope.website.linkLists.forEach(function (value, index) {
+            if (value.handle === "head-menu") {
+              WebsiteService.updateLinkList($scope.website.linkLists[index], $scope.website._id, 'head-menu', function (data) {
+                console.log('Updated linked list');
+              });
+            }
+          });
+        });
     };
 
     /*
@@ -34,6 +48,21 @@
     $scope.cancelPage = function () {
       $scope.checkForSaveBeforeLeave();
     };
+
+     /*
+     * @getWebsite
+     * -
+     */
+
+    $scope.getWebsite = function (fn) {
+      WebsiteService.getWebsite(function (website) {
+        $scope.website = website;
+        if(fn)
+          fn($scope.website);
+      });
+    } 
+    
+    $scope.getWebsite();
 
     /*
      * @getAccount
@@ -94,6 +123,7 @@
      */
 
     $scope.retrievePage = function (_handle) {
+      
       WebsiteService.getSinglePage(_handle, function (data) {
         $scope.page = data;
         $scope.components = $scope.page.components;
@@ -107,17 +137,26 @@
      */
     $scope.blog = {};
     $scope.retrievePost = function (_handle) {
-      $scope.isSinglePost = true;
+      $scope.isSinglePost = true;  
+      $scope.newPost = {}; 
+      $scope.handle = _handle;
+      $scope.post_statuses = postConstant.post_status.dp; 
       WebsiteService.getSinglePage('single-post', function (data) {
         $scope.page = data;
-        $scope.components = $scope.page.components;
-        $scope.activateCKeditor();
-        WebsiteService.getSinglePost(_handle, function (data) {
-          $scope.blog.post = data;
-          $scope.single_post = true;
+        WebsiteService.getSinglePost($scope.handle, function (data) {
+            $scope.blog.post = data;
+            $scope.single_post = true;
+            $scope.components = $scope.page.components;
+            $scope.activateCKeditor();
         });
-      });
+        
+      });  
     };
+
+    $scope.getSinglePostData = function()
+    {
+      
+    }
 
     /*
      * @calculateWindowHeight
@@ -259,7 +298,8 @@
      */
     $scope.thumbnailSlider = {};
     $scope.contactMap = {};
-    $scope.insertMedia = function (asset) {
+
+    $scope.insertMedia = function (asset, blogImage) {
       if ($scope.imageChange) {
         $scope.imageChange = false;
         var type = $scope.componentEditing.type;
@@ -311,9 +351,8 @@
       } else if ($scope.logoImage && $scope.componentEditing) {
         $scope.logoImage = false;
         $scope.componentEditing.logourl = asset.url;
-      } else if ($scope.changeblobImage) {
-        $scope.changeblobImage = false;
-        $scope.blog_post.featured_image = asset.url;
+      } else if (blogImage) {
+        $scope.blog.post.featured_image = asset.url;
         return;
       } else if ($scope.imgThumbnail && $scope.componentEditing) {
         $scope.imgThumbnail = false;
@@ -329,24 +368,33 @@
 
     };
 
-
-    /*
+     /*
      * @closeModal
      * -
      */
 
-    // $scope.closeModal = function () {
-    //   console.log('closeModal >>> ');
-    //   $timeout(function () {
-    //       $scope.modalInstance.close();
-    //       angular.element('.modal-backdrop').remove();
-    //   });
-    //   if ($scope.componentEditing && $scope.componentEditing.type === 'contact-us' && $scope.contactHoursInvalid) {
-    //     $scope.componentEditing.hours = $scope.originalComponent.hours;
-    //     $scope.updateContactUsAddress();
-    //   }
-    //   $scope.contactHoursInvalid = false;
-    // };
+    $scope.closeModal = function () {
+      console.log('closeModal >>> ');
+      $timeout(function () {
+          $scope.modalInstance.close();
+          angular.element('.modal-backdrop').remove();
+      });
+    };
+
+    /*
+     * @openSimpleModal
+     * -
+     */
+    $scope.openSimpleModal = function (modal) {
+      var _modal = {
+        templateUrl: modal,
+        scope: $scope
+      };
+      $scope.modalInstance = $modal.open(_modal);
+      $scope.modalInstance.result.then(null, function () {
+        angular.element('.sp-container').addClass('sp-hidden');
+      });
+    };
 
     /*
      * @openModal
@@ -357,20 +405,28 @@
       $scope.setEditingComponent(index);
       var _modal = {
         templateUrl: modal,
+        //scope: $scope,
         resolve: {
           components: function () {
             return $scope.components
-          },
-          contactMap: function () {
-            return $scope.contactMap
           }
         }
       };
 
       if (controller) {
         _modal.controller = controller;
+        
+        _modal.resolve.contactMap = function () {
+          return $scope.contactMap
+        };
+         _modal.resolve.website = function () {
+          return $scope.website
+        };
+         _modal.resolve.blog = function () {
+          return $scope.blog.post
+        };
       }
-
+      
       if (index >= 0) {
         _modal.resolve.clickedIndex = function () {
           return index
@@ -389,9 +445,9 @@
 
     $scope.openSettingsModal = function () {
       if ($scope.single_post) {
-        $scope.openModal("post-settings-modal");
+        $scope.openSimpleModal("post-settings-modal");
       } else {
-        $scope.openModal("page-settings-modal");
+        $scope.openSimpleModal("page-settings-modal");
       }
     };
 
@@ -402,36 +458,12 @@
 
     $scope.openDuplicateModal = function () {
       if ($scope.single_post) {
-        $scope.openModal("post-duplicate-modal");
+        $scope.openSimpleModal("post-duplicate-modal");
       } else {
-        $scope.openModal("page-duplicate-modal");
+        $scope.openSimpleModal("page-duplicate-modal");
       }
     };
-
-    /*
-     * @getWebsite
-     * -
-     */
-
-    WebsiteService.getWebsite(function (website) {
-      $scope.website = website;
-    });
-
-    /*
-     * @getPages
-     * -
-     */
-
-    WebsiteService.getPages(function (pages) {
-      var parsed = angular.fromJson(pages);
-      var arr = [];
-      _.each(parsed, function (page) {
-        arr.push(page);
-      });
-      $scope.allPages = arr;
-      $scope.filterdedPages = $filter('orderBy')($scope.allPages, "title", false);
-    });
-
+    
     /*
      * @checkForDuplicatePage
      * - Check for duplicate page
@@ -458,6 +490,12 @@
     $scope.slugifyHandle = function (title) {
       if (title) {
         $scope.newPage.handle = $filter('slugify')(title);
+      }
+    };
+
+    $scope.slugifyPostHandle = function (title) {
+      if (title) {
+        $scope.newPost.post_url = $filter('slugify')(title);
       }
     };
 
@@ -516,6 +554,63 @@
       } else {
         $scope.newPageValidated = false;
       }
+    };
+
+    $scope.createDuplicatePost = function (newPost) {
+      $scope.validateNewPost(newPost);
+      if (!$scope.newPostValidated) {
+        toaster.pop('error', "Post Title or URL can not be blank.");
+        return false;
+      }
+      WebsiteService.getSinglePost(newPost.post_url, function (data) {
+        if (data && data._id) {
+          toaster.pop('error', "Post URL " + newPost.post_url, "Already exists");
+          return false;
+        }
+
+        var post_data = $scope.blog.post;
+        newPost.post_content = post_data.post_content;
+        newPost.post_tags = post_data.post_tags;
+        newPost.post_author = post_data.post_author;
+        newPost.post_category = post_data.post_category;
+        newPost.post_excerpt = post_data.post_excerpt;
+        newPost.featured_image = post_data.featured_image;
+        newPost.publish_date = post_data.publish_date;
+        WebsiteService.createPost(-1, newPost, function (data) {
+          $scope.duplicate = true;
+          console.log("Duplicate Post Created");
+          window.location = '/admin/#/website/posts/?posthandle=' + newPost.post_url;
+          window.location.reload();
+        })
+      })
+    }
+
+    /*
+     * @validateNewPost
+     * -
+     */
+
+    $scope.newPostValidated = false;
+
+    $scope.validateNewPost = function (post) {
+      if (!post.post_url || post.post_url == '') {
+        $scope.handleError = true;
+        angular.element('#new-post-url').parents('div.form-group').addClass('has-error');
+      } else {
+        $scope.handleError = false;
+        angular.element('#new-post-url').parents('div.form-group').removeClass('has-error');
+      }
+      if (!post.post_title || post.post_title == '') {
+        $scope.titleError = true;
+        angular.element('#new-post-title').parents('div.form-group').addClass('has-error');
+      } else {
+        $scope.titleError = false;
+        angular.element('#new-post-title').parents('div.form-group').removeClass('has-error');
+      }
+      if (post && post.post_title && post.post_title != '' && post.post_url && post.post_url != '') {
+        $scope.newPostValidated = true;
+      } else
+        $scope.newPostValidated = false;
     };
 
     /*

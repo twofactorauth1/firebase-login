@@ -6,22 +6,22 @@
     <div class="modal-body no-padding" style="max-height:500px; margin:10px">
         <div class="form-group">
                         <label>Title:</label>
-                        <input id="edit-post-title" class="form-control input-lg" ng-blur="validateEditPost(post_data, true)" type="text" ng-model="post_data.post_title">
+                        <input id="edit-post-title" class="form-control input-lg" ng-blur="validateEditPost(blog.post, true)" type="text" ng-model="blog.post.post_title">
                     </div>
                     <div class="form-group">
                         <label>URL:</label>
-                        <input id="edit-post-url" ng-blur="validateEditPost(post_data, true)" class="form-control input-lg" type="text" ng-model="post_data.post_url">
+                        <input id="edit-post-url" ng-blur="validateEditPost(blog.post, true)" class="form-control input-lg" type="text" ng-model="blog.post.post_url">
                     </div>
                     <div class="form-group">
                         <label>Status:</label>
-                        <select ng-model="post_data.post_status" ng-change="updateBlogPost(post_data)" class="form-control margin-bottom-0">
-                        <option ng-repeat="status in post_statuses track by $index" value="{{status.data}}" ng-selected="{{status.data == post_data.post_status}}">{{status.label}}</option>
+                        <select ng-model="blog.post.post_status" ng-change="updateBlogPost(blog.post)" class="form-control margin-bottom-0">
+                        <option ng-repeat="status in post_statuses track by $index" value="{{status.data}}" ng-selected="{{status.data == blog.post.post_status}}">{{status.label}}</option>
                         </select>
                     </div>
                     <div class="mb20"></div>
                     <div class="well">
                         <p>Danger Zone</p>
-                        <button class="btn btn-block btn-danger" ng-click="deletePost(post_data)"><i class="fa fa-trash"></i> Delete Post</button>
+                        <button class="btn btn-block btn-danger" ng-click="deletePost(blog.post)"><i class="fa fa-trash"></i> Delete Post</button>
                     </div>
     </div>
     <div class="modal-footer">

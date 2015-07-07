@@ -9,9 +9,13 @@ app.directive('navigationComponent', ['WebsiteService', 'AccountService', functi
       scope.isEditing = true;
     },
     controller: function ($scope, WebsiteService, AccountService, $compile) {
-      //WebsiteService.getWebsite(function (website) {
+      
+      if($scope.$parent.website)
         $scope.website = $scope.$parent.website;
-      //});
+      else
+        $scope.$parent.getWebsite(function (website) {
+          $scope.website = website;
+        });     
 
       AccountService.getAccount(function (account) {
         $scope.account = account;

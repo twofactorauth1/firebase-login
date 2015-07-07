@@ -28,10 +28,7 @@ app.directive('contactUsComponent', ['GeocodeService', 'leafletData', '$timeout'
         }
       };
 
-      scope.updateContactUsAddress = function () {
-        //grupo = L.featureGroup();
-       //grupo.clearLayers();
-        
+      scope.updateContactUsAddress = function (timeout) {        
         console.log('updateContactUsAddress');
         scope.contactAddress = scope.stringifyAddress(scope.component.location);
         if (scope.component.location.lat && scope.component.location.lat) {
@@ -54,9 +51,9 @@ app.directive('contactUsComponent', ['GeocodeService', 'leafletData', '$timeout'
           leafletData.getMap('leafletmap').then(function (map) {
             $timeout(function () {
               map.invalidateSize();
-              map.setView(new L.LatLng(scope.component.location.lat, scope.component.location.lon));
+              map.setView(new L.LatLng(scope.component.location.lat, scope.component.location.lon),9);
               $(window).trigger("resize");
-            }, 2000);
+            }, timeout);
           });
         } else {
           GeocodeService.getGeoSearchAddress(scope.contactAddress, function (data) {
@@ -82,18 +79,31 @@ app.directive('contactUsComponent', ['GeocodeService', 'leafletData', '$timeout'
               leafletData.getMap('leafletmap').then(function (map) {
                 $timeout(function () {
                   map.invalidateSize();
-                  map.setView(new L.LatLng(scope.component.location.lat, scope.component.location.lon));
+                  map.setView(new L.LatLng(scope.component.location.lat, scope.component.location.lon),9);
                   $(window).trigger("resize");
-                }, 2000);
+                }, timeout);
               });
             }
           });
         }
       };
-      scope.updateContactUsAddress();
+      angular.extend(scope, {
+          mapLocation: {
+            lat: 51,
+            lng: 0,
+            zoom: 10
+          },
+          defaults: {
+          scrollWheelZoom: false
+          },
+          markers: {
+
+          }
+      });
+      scope.updateContactUsAddress(2000);
 
       scope.control.refreshMap = function() {
-        scope.updateContactUsAddress();
+        scope.updateContactUsAddress(0);
       }
     }
   };

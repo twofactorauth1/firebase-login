@@ -1,13 +1,14 @@
 'use strict';
 /*global app, moment, angular*/
 /*jslint unparam:true*/
-app.controller('ComponentSettingsModalCtrl', ['$scope', '$modalInstance', '$http', '$timeout', '$q', '$compile', '$filter', 'WebsiteService', 'CustomerService', 'ProductService', 'GeocodeService', 'toaster', 'components', 'clickedIndex', 'contactMap', function ($scope, $modalInstance, $http, $timeout, $q, $compile, $filter, WebsiteService, CustomerService, ProductService, GeocodeService, toaster, components, clickedIndex, contactMap) {
-
+app.controller('ComponentSettingsModalCtrl', ['$scope', '$modalInstance', '$http', '$timeout', '$q', '$compile', '$filter', 'WebsiteService', 'CustomerService', 'ProductService', 'GeocodeService', 'toaster', 'components', 'clickedIndex', 'contactMap', 'website', 'blog', function ($scope, $modalInstance, $http, $timeout, $q, $compile, $filter, WebsiteService, CustomerService, ProductService, GeocodeService, toaster, components, clickedIndex, contactMap, website, blog) {
+  $scope.blog ={};
   $scope.components = components;
   $scope.clickedIndex = clickedIndex;
   $scope.componentEditing = components[clickedIndex];
   $scope.contactMap = contactMap;
-  
+  $scope.website = website;
+  $scope.blog.post = blog;
   /*
    * @getAllProducts
    * - get products for products and pricing table components
@@ -485,7 +486,7 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$modalInstance', '$http
             };
             if (newLinkListOrder.length) {
               $scope.componentEditing.linkLists[index].links = newLinkListOrder;
-              $scope.saveCustomComponent();
+              //$scope.saveCustomComponent();
             }
           }
         });
@@ -516,7 +517,7 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$modalInstance', '$http
         $scope.website.linkLists.forEach(function (value, index) {
           if (value.handle === "head-menu") {
             $scope.componentEditing.linkLists[index].links = [];
-            $scope.saveCustomComponent();
+            //$scope.saveCustomComponent();
           }
         });
       } else {
@@ -647,6 +648,21 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$modalInstance', '$http
       }
     });
   };
+
+  /*
+     * @getPages
+     * -
+     */
+
+    WebsiteService.getPages(function (pages) {
+      var parsed = angular.fromJson(pages);
+      var arr = [];
+      _.each(parsed, function (page) {
+        arr.push(page);
+      });
+      $scope.allPages = arr;
+      $scope.filterdedPages = $filter('orderBy')($scope.allPages, "title", false);
+    });
 
   $scope.editComponent(); 
 }]);
