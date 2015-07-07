@@ -48,7 +48,7 @@ app.directive('contactUsComponent', ['customerService', 'leafletData', '$timeout
           leafletData.getMap('leafletmap').then(function (map) {
             $timeout(function () {
               map.invalidateSize();
-              map.setView(new L.LatLng(scope.component.location.lat, scope.component.location.lon));
+              map.setView(new L.LatLng(scope.component.location.lat, scope.component.location.lon),9);
               $(window).trigger("resize");
             }, 1000);
           });
@@ -76,7 +76,7 @@ app.directive('contactUsComponent', ['customerService', 'leafletData', '$timeout
               leafletData.getMap('leafletmap').then(function (map) {
                 $timeout(function () {
                   map.invalidateSize();
-                  map.setView(new L.LatLng(scope.component.location.lat, scope.component.location.lon));
+                  map.setView(new L.LatLng(scope.component.location.lat, scope.component.location.lon),9);
                   $(window).trigger("resize");
                 }, 1000);
               });
@@ -84,6 +84,19 @@ app.directive('contactUsComponent', ['customerService', 'leafletData', '$timeout
           });
         }
       };
+      angular.extend(scope, {
+        mapLocation: {
+          lat: 51,
+          lng: 0,
+          zoom: 10
+        },
+        defaults: {
+        scrollWheelZoom: false
+        },
+        markers: {
+
+        }
+      });
       scope.updateContactUsAddress();
     }
   };
