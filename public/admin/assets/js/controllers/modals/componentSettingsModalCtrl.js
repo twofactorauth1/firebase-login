@@ -1,14 +1,14 @@
 'use strict';
 /*global app, moment, angular*/
 /*jslint unparam:true*/
-app.controller('ComponentSettingsModalCtrl', ['$scope', '$modalInstance', '$http', '$timeout', '$q', '$compile', '$filter', 'WebsiteService', 'CustomerService', 'ProductService', 'GeocodeService', 'toaster', 'components', 'clickedIndex', 'contactMap', 'website', function ($scope, $modalInstance, $http, $timeout, $q, $compile, $filter, WebsiteService, CustomerService, ProductService, GeocodeService, toaster, components, clickedIndex, contactMap, website) {
-
+app.controller('ComponentSettingsModalCtrl', ['$scope', '$modalInstance', '$http', '$timeout', '$q', '$compile', '$filter', 'WebsiteService', 'CustomerService', 'ProductService', 'GeocodeService', 'toaster', 'components', 'clickedIndex', 'contactMap', 'website', 'blog', function ($scope, $modalInstance, $http, $timeout, $q, $compile, $filter, WebsiteService, CustomerService, ProductService, GeocodeService, toaster, components, clickedIndex, contactMap, website, blog) {
+  $scope.blog ={};
   $scope.components = components;
   $scope.clickedIndex = clickedIndex;
   $scope.componentEditing = components[clickedIndex];
   $scope.contactMap = contactMap;
   $scope.website = website;
-  
+  $scope.blog.post = blog;
   /*
    * @getAllProducts
    * - get products for products and pricing table components
@@ -662,7 +662,7 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$modalInstance', '$http
       });
       $scope.allPages = arr;
       $scope.filterdedPages = $filter('orderBy')($scope.allPages, "title", false);
-    });  
+    });
 
   $scope.editComponent(); 
 }]);

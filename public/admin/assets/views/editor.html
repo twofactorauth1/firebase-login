@@ -3,9 +3,9 @@
     <section id="page-title" class="padding-top-15 padding-bottom-15">
         <div class="row">
             <div class="col-sm-8">
-                <h1 ng-if="single_post" class="mainTitle">{{ post_data.post_title || 'Single Post'}}</h1>
+                <h1 ng-if="single_post" class="mainTitle">{{ blog.post.post_title || 'Single Post'}}</h1>
                 <h1 ng-if="!single_post" class="mainTitle">{{ page.title || 'Title'}}</h1>
-                <span ng-if="single_post && post_data.post_tags" class="mainDescription">There are currently {{post_data.post_tags.length}} tags.</span>
+                <span ng-if="single_post && blog.post.post_tags" class="mainDescription">There are currently {{blog.post.post_tags.length}} tags.</span>
                 <span ng-if="!single_post && page.components" class="mainDescription">There are currently {{page.components.length}} components.</span>
             </div>
             <div ncy-breadcrumb></div>

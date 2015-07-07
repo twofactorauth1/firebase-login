@@ -1,12 +1,14 @@
-app.directive('singlePostComponent', function () {
+app.directive('singlePostComponent',['$location', "WebsiteService", function ($location, WebsiteService) {
   return {
     scope: {
       component: '=',
-      version: '='
+      version: '=',
+      control: '='
     },
     templateUrl: '/components/component-wrap.html',
     link: function (scope, element, attrs) {
       scope.isEditing = true;
+      scope.blog = {};
       /*
        * @dateOptions
        * -
@@ -52,6 +54,10 @@ app.directive('singlePostComponent', function () {
         scope.endOpened = false;
         scope.startOpened = !scope.startOpened;
       };
+
+      scope.control.setSinglePost = function(post_data) {
+        scope.blog.post = post_data;
+      }
     }
   }
-});
+}]);

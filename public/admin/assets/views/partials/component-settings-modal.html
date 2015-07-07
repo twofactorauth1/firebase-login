@@ -761,7 +761,7 @@
                     <tab-heading>
                         <span>Preview</span>
                     </tab-heading>
-                    <section class="entry clearfix" ng-if="isEditing">
+                    <section class="entry clearfix">
                         <div class="single-blog responsive clearfix" data-postId="{{blog.post._id}}">
                             <div class="blog-entry clearfix" data-id="{{blog.post._id}}">
                                 <h2 class="blog-title">
@@ -787,9 +787,9 @@
                                     <li data-ng-repeat="tag in blog.post.post_tags track by $index"><a href="javascript:void(0)">{{tag.text ? tag.text:tag}}</a></li>
                                 </ul>
                                 <div class="blog-thumb alignleft" ng-if="blog.post.featured_image">
-                                    <img ng-src="{{blog.post.featured_image}}" />
+                                    <img style="width:30%;" ng-src="{{blog.post.featured_image}}" />
                                 </div>
-                                <a class="btn btn-warning" type="button" ng-click="changeBlogImage(blog.post)" style="margin-right:10px">
+                                <a class="btn btn-warning" type="button" blog-post-image="true" media-modal-show-insert="true" type="button" class="pull-right btn btn-primary" data-toggle="modal"  data-target="#media-manager-modal" style="margin-right:10px">
                                     <span class="fa fa-edit"></span>
                                     <span ng-if="blog.post.featured_image" class="hidden-xs">Change Image</span>
                                     <span ng-if="!blog.post.featured_image" class="hidden-xs">Add Image</span>

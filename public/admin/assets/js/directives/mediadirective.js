@@ -98,6 +98,7 @@ app.directive('mediaModal', ['$http', '$timeout', 'FileUploader', 'AssetsService
                     console.log('$scope.$parent.showInsert ', $scope.$parent.showInsert);
                     if (e.relatedTarget) {
                         $scope.showInsert = $(e.relatedTarget).attr("media-modal-show-insert");
+                        $scope.blogImage = $(e.relatedTarget).attr("blog-post-image");
                         $(window).trigger("resize")
                         contentElement.css('visibility', 'visible')
                     } else if ($scope.$parent.showInsert) {
@@ -278,7 +279,7 @@ app.directive('mediaModal', ['$http', '$timeout', 'FileUploader', 'AssetsService
                         $scope.onInsertMediacb && $scope.onInsertMediacb($scope.batch[$scope.batch.length - 1], $scope.type || $scope.insertMediaType);
                         $scope.type = null;
                     } else {
-                        $scope.$parent.insertMedia($scope.batch[$scope.batch.length - 1], $scope.type || $scope.insertMediaType);
+                        $scope.$parent.insertMedia($scope.batch[$scope.batch.length - 1], $scope.blogImage);
                     }
                 }
                 $scope.m.selectTriggerFn(false);

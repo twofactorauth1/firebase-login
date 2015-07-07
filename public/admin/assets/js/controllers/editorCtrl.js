@@ -10,20 +10,34 @@
      */
 
     $scope.isEditing = true;
+
     $scope.savePage = function () {
       $scope.saveLoading = true;
-      WebsiteService.updatePage($scope.page, function (data) {
-        $scope.saveLoading = false;
-        toaster.pop('success', "Page Saved", "The " + $scope.page.handle + " page was saved successfully.");
-        //Update linked list
-        $scope.website.linkLists.forEach(function (value, index) {
-          if (value.handle === "head-menu") {
-            WebsiteService.updateLinkList($scope.website.linkLists[index], $scope.website._id, 'head-menu', function (data) {
-              console.log('Updated linked list');
-            });
-          }
+      if($scope.isSinglePost)
+      {
+        var post_data = angular.copy($scope.blog.post);
+        post_data.post_tags.forEach(function(v, i) {
+            if (v.text)
+                post_data.post_tags[i] = v.text;
         });
-      });
+        WebsiteService.updatePost($scope.page._id,post_data._id,post_data, function (data) {
+          $scope.saveLoading = false;
+          toaster.pop('success', "Post Saved", "The " + $scope.blog.post.post_title + " post was saved successfully.");                   
+        });
+      }
+      else
+        WebsiteService.updatePage($scope.page, function (data) {
+          $scope.saveLoading = false;
+          toaster.pop('success', "Page Saved", "The " + $scope.page.handle + " page was saved successfully.");
+          //Update linked list
+          $scope.website.linkLists.forEach(function (value, index) {
+            if (value.handle === "head-menu") {
+              WebsiteService.updateLinkList($scope.website.linkLists[index], $scope.website._id, 'head-menu', function (data) {
+                console.log('Updated linked list');
+              });
+            }
+          });
+        });
     };
 
     /*
@@ -108,6 +122,8 @@
     $scope.blog = {};
     $scope.retrievePost = function (_handle) {
       $scope.isSinglePost = true;
+      $scope.post_statuses = postConstant.post_status.dp;
+      $scope.loadSinglePost = {};
       WebsiteService.getSinglePage('single-post', function (data) {
         $scope.page = data;
         $scope.components = $scope.page.components;
@@ -115,6 +131,7 @@
         WebsiteService.getSinglePost(_handle, function (data) {
           $scope.blog.post = data;
           $scope.single_post = true;
+          $scope.loadSinglePost.setSinglePost($scope.blog.post);
         });
       });
     };
@@ -259,7 +276,8 @@
      */
     $scope.thumbnailSlider = {};
     $scope.contactMap = {};
-    $scope.insertMedia = function (asset) {
+
+    $scope.insertMedia = function (asset, blogImage) {
       if ($scope.imageChange) {
         $scope.imageChange = false;
         var type = $scope.componentEditing.type;
@@ -311,9 +329,8 @@
       } else if ($scope.logoImage && $scope.componentEditing) {
         $scope.logoImage = false;
         $scope.componentEditing.logourl = asset.url;
-      } else if ($scope.changeblobImage) {
-        $scope.changeblobImage = false;
-        $scope.blog_post.featured_image = asset.url;
+      } else if (blogImage) {
+        $scope.blog.post.featured_image = asset.url;
         return;
       } else if ($scope.imgThumbnail && $scope.componentEditing) {
         $scope.imgThumbnail = false;
@@ -366,6 +383,7 @@
       $scope.setEditingComponent(index);
       var _modal = {
         templateUrl: modal,
+        //scope: $scope,
         resolve: {
           components: function () {
             return $scope.components
@@ -381,6 +399,12 @@
         };
          _modal.resolve.website = function () {
           return $scope.website
+        };
+      }
+      if($scope.isSinglePost)
+      {
+         _modal.resolve.blog = function () {
+          return $scope.blog.post
         };
       }
 
