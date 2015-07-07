@@ -133,9 +133,9 @@
         WebsiteService.getSinglePost(_handle, function (data) {
           $scope.blog.post = data;
           $scope.single_post = true;
-          //$scope.$apply(function () {
-            $scope.loadSinglePost.setSinglePost && $scope.loadSinglePost.setSinglePost($scope.blog.post);
-          //})
+          $(document).ready(function() {
+              $scope.loadSinglePost.setSinglePost && $scope.loadSinglePost.setSinglePost($scope.blog.post);
+          });
         });
       });
     };
