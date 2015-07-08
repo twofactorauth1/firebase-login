@@ -1021,6 +1021,20 @@
   position: relative;
   z-index: 5;
 }
+#componentloader .navigation-v1 .navbar .navbar-header {
+  float: none;
+}
+#componentloader .navigation-v1 .navbar .navbar-brand {
+  float: none;
+  display: block;
+  margin: 5px auto;
+  max-width: 500px;
+  text-align: left;
+}
+#componentloader .navigation-v1 .navbar .navbar-brand img {
+  margin: 0 auto;
+  display: block;
+}
 #componentloader .navigation-v2 #header .navbar.navbar-default {
   border: none!important;
 }

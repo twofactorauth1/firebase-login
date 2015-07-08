@@ -1004,6 +1004,20 @@ ul.nav {
   position: relative;
   z-index: 5;
 }
+.navigation-v1 .navbar .navbar-header {
+  float: none;
+}
+.navigation-v1 .navbar .navbar-brand {
+  float: none;
+  display: block;
+  margin: 5px auto;
+  max-width: 500px;
+  text-align: left;
+}
+.navigation-v1 .navbar .navbar-brand img {
+  margin: 0 auto;
+  display: block;
+}
 .navigation-v2 #header .navbar.navbar-default {
   border: none!important;
 }
