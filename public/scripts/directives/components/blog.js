@@ -1,4 +1,4 @@
-app.directive('blogComponent', ['postsService', '$filter', '$timeout', function (postsService, $filter, $timeout) {
+app.directive('blogComponent', ['postsService', '$filter', '$location', '$timeout', function (postsService, $filter, $location, $timeout) {
   return {
     scope: {
       component: '=',
@@ -6,22 +6,44 @@ app.directive('blogComponent', ['postsService', '$filter', '$timeout', function 
     },
     templateUrl: '/components/component-wrap.html',
     controller: function ($scope, postsService) {
-      console.log('blogComponent >>>');
       $scope.blog = {};
       $scope.showCloud = false;
+
+      var path = $location.$$path.replace('/page/', '');
+
       /*
        * @postsService
        * -
        */
 
       postsService(function (err, posts) {
-      	console.log('post data ', posts);
-      	$scope.blog.blogposts = posts;
+        $scope.blog.blogposts = posts;
 
         $scope.blog.postTags = [];
         $scope.blog.categories = [];
 
         _.each(posts, function (post) {
+          if (path.indexOf("tag/") > -1) {
+            $scope.blog.currentTag = path.replace('/tag/', '');
+            $scope.blog.blogposts = _.filter($scope.blog.blogposts, function (post) {
+              if (post.post_tags) {
+                return post.post_tags.indexOf($scope.blog.currentTag) > -1;
+              }
+            });
+          }
+          if (path.indexOf("category/") > -1) {
+            $scope.blog.currentCat = path.replace('/category/', '');
+            $scope.blog.blogposts = _.filter($scope.blog.blogposts, function (post) {
+              return post.post_category === $scope.blog.currentCat;
+            });
+          }
+          if (path.indexOf("author/") > -1) {
+            $scope.blog.currentAuthor = path.replace('/author/', '');
+            $scope.blog.blogposts = _.filter($scope.blog.blogposts, function (post) {
+              return post.post_author === $scope.blog.currentAuthor;
+            });
+          }
+
           //get post tags for sidebar
           if (post.post_tags) {
             _.each(post.post_tags, function (tag) {
@@ -66,11 +88,12 @@ app.directive('blogComponent', ['postsService', '$filter', '$timeout', function 
           width: 230,
           height: 300,
           afterCloudRender: function () {
-            $timeout(function() {
-              if(!$scope.rendered)
-              {
+            $timeout(function () {
+              if (!$scope.rendered) {
                 $scope.rendered = true;
-                angular.element('.jqcloud').css({'width': '100%'});
+                angular.element('.jqcloud').css({
+                  'width': '100%'
+                });
                 angular.element('.jqcloud').jQCloud('update', $scope.tagCloud);
               }
             }, 1000);

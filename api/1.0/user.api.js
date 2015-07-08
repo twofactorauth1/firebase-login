@@ -402,6 +402,7 @@ _.extend(api.prototype, baseApi.prototype, {
                             req.user = null;
                         }
                         req.session.accountId = updatedAccount.id();
+                        req.session.unAuthAccountId = updatedAccount.id();
                         req.session.subdomain = updatedAccount.get('subdomain');
                         req.session.domain = updatedAccount.get('domain');
                         //req.session.locked = true;//TODO: change this eventually

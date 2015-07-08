@@ -1,7 +1,12 @@
 <style>
-    .simple-form-v1 .simple-form-title {
-        color:{{component.txtcolor || 'white'}};
+.simple-form-v1 .simple-form-title {
+    color: {
+        {
+            component.txtcolor || 'white'
+        }
     }
+    ;
+}
 </style>
 <div ng-class="component.type+'-v'+component.version">
     <div id="error-msg" class="alert alert-danger hidden">
@@ -9,39 +14,31 @@
         <span class="message"></span>
     </div>
     <div>
-
-    <div class="component-body">
+        <div class="component-body">
             <div class="inner-page row">
-
-                <div class="simple-form-title" >
+                <div class="simple-form-title">
                     <div elem ng-model="component.maintitle"></div>
                 </div>
-
                 <div class="simple-form-subtitle">
                     <div elem ng-model="component.subtitle"></div>
                 </div>
-
                 <div class="clearfix mb15"></div>
-
                 <div id="user_{{field.name}}_{{component._id}}" ng-repeat="field in component.fields" ng-if="field.value" class="col-sm-4 form-group has-feedback">
                     <div class="left-inner-addon">
-                        <input  type="text" class="form-control" ng-model="field.model" placeholder="{{field.display}}">
+                        <input type="text" class="form-control" ng-model="field.model" placeholder="{{field.display}}">
                     </div>
                     <span class="glyphicon form-control-feedback"></span>
                     <span class="error help-block" />
                 </div>
-                
                 <div class="clearfix mb15"></div>
-                 
                 <div id="user_email_{{component._id}}" class="col-sm-9 form-group has-feedback">
                     <div class="left-inner-addon">
                         <span><i class="fa fa-envelope"></i></span>
                         <input type="email" ng-model="user.email" class="form-control" placeholder="Email" />
-                </div>
+                    </div>
                     <span class="glyphicon form-control-feedback"></span>
                     <span class="error help-block" />
                 </div>
-                             
                 <div class="clearfix mb15 visible-xs"></div>
                 <div class="col-sm-3">
                     <div class="clear">
@@ -50,11 +47,11 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="clearfix mb15"></div>
-
-                <div class="row thank-you animated" ng-class="{fadeOut: !user.success, tada: user.success}">
-                    <h3 class="center mb20">Thank You for Submitting!</h3>
+                <div ng-if="user.success">
+                    <div class="row thank-you animated" ng-class="{fadeOut: !user.success, tada: user.success}">
+                        <h3 class="center mb20">Thank You for Submitting!</h3>
+                    </div>
                 </div>
             </div>
         </div>

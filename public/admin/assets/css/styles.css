@@ -912,7 +912,7 @@ h5.over-title {
   bottom: 0;
   background: #f7f7f8;
   overflow: visible;
-  z-index: 1051;
+  z-index: 9998;
 }
 #sidebar > div,
 #sidebar .sidebar-container {

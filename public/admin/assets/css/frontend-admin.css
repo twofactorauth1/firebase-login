@@ -382,6 +382,47 @@
 #componentloader .editable h2 {
   margin-top: 0px;
 }
+#componentloader .btn-linked-in {
+  color: #fff;
+  background-color: #007bb6;
+  border-color: rgba(0, 0, 0, 0.2);
+}
+#componentloader .btn-linked-in:hover,
+#componentloader .btn-linked-in:focus,
+#componentloader .btn-linked-in:active,
+#componentloader .btn-linked-in.active,
+#componentloader .open > .dropdown-toggle.btn-linked-in {
+  color: #fff;
+  background-color: #005983;
+  border-color: rgba(0, 0, 0, 0.2);
+}
+#componentloader .btn-linked-in:active,
+#componentloader .btn-linked-in.active,
+#componentloader .open > .dropdown-toggle.btn-linked-in {
+  background-image: none;
+}
+#componentloader .btn-linked-in.disabled,
+#componentloader .btn-linked-in[disabled],
+#componentloader fieldset[disabled] .btn-linked-in,
+#componentloader .btn-linked-in.disabled:hover,
+#componentloader .btn-linked-in[disabled]:hover,
+#componentloader fieldset[disabled] .btn-linked-in:hover,
+#componentloader .btn-linked-in.disabled:focus,
+#componentloader .btn-linked-in[disabled]:focus,
+#componentloader fieldset[disabled] .btn-linked-in:focus,
+#componentloader .btn-linked-in.disabled:active,
+#componentloader .btn-linked-in[disabled]:active,
+#componentloader fieldset[disabled] .btn-linked-in:active,
+#componentloader .btn-linked-in.disabled.active,
+#componentloader .btn-linked-in[disabled].active,
+#componentloader fieldset[disabled] .btn-linked-in.active {
+  background-color: #007bb6;
+  border-color: rgba(0, 0, 0, 0.2);
+}
+#componentloader .btn-linked-in .badge {
+  color: #007bb6;
+  background-color: #ffffff;
+}
 #componentloader .accordion-v1 .title {
   text-align: center;
   margin-bottom: 20px;
@@ -979,6 +1020,20 @@
 #componentloader .navigation1 {
   position: relative;
   z-index: 5;
+}
+#componentloader .navigation-v1 .navbar .navbar-header {
+  float: none;
+}
+#componentloader .navigation-v1 .navbar .navbar-brand {
+  float: none;
+  display: block;
+  margin: 5px auto;
+  max-width: 500px;
+  text-align: left;
+}
+#componentloader .navigation-v1 .navbar .navbar-brand img {
+  margin: 0 auto;
+  display: block;
 }
 #componentloader .navigation-v2 #header .navbar.navbar-default {
   border: none!important;
@@ -2900,11 +2955,6 @@
 #componentloader .single-post-v1 .inner-page {
   padding: 0;
   max-width: 100%;
-}
-#componentloader .single-post-v1 .container {
-  width: 100%;
-  margin: 0;
-  padding: 0;
 }
 #componentloader .single-post-v1 .container.row-fluid {
   max-width: 1100px;

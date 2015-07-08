@@ -92,11 +92,14 @@
         templateUrl: template,
         scope: $scope
       });
+      $scope.modalInstance.result.finally($scope.closeModal());
     };
 
     $scope.closeModal = function () {
       $scope.modalInstance.close();
+      $scope.resetTemplateDetails();
     };
+
 
     $scope.getters = {
       components: function (value) {

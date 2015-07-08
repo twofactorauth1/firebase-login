@@ -9,7 +9,7 @@ app.directive('navigationComponent', ['WebsiteService', 'AccountService', functi
       scope.isEditing = true;
     },
     controller: function ($scope, WebsiteService, AccountService, $compile) {
-      
+      $scope.isSinglePost = $scope.$parent.isSinglePost;
       if($scope.$parent.website)
         $scope.website = $scope.$parent.website;
       else

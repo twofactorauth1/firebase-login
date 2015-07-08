@@ -27,7 +27,8 @@
                 </button>
                 <a class="navbar-brand" href="/" data-name="{{account.company.name}}" style="margin:{{component.logo.margin.t}} {{component.logo.margin.r}} {{component.logo.margin.b}} {{component.logo.margin.l}}!important;padding:{{component.logo.padding}};">
                     <div class="nav-logo">
-                        <div elem ng-model="component.logo" class="navigation-logo"></div>
+                        <div ng-if="!isSinglePost" elem ng-model="component.logo" class="navigation-logo"></div>
+                        <div ng-if="isSinglePost" class="navigation-logo" tooltip-placement="bottom" tooltip="This component is only editable on the single-post page" ng-bind-html="component.logo | unsafe"></div>
                     </div>
                 </a>
 

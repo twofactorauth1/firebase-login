@@ -129,6 +129,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
                 } else {
                     self.log.debug("host: " + req.get("host") + " -> accountId:" + value.id());
                     req.session.accountId = value.id();
+                    req.session.unAuthAccountId = value.id();
                     req.session.subdomain = value.get('subdomain');
                     req.session.domain = value.get('domain');
                     //req.session.locked = value.get('locked');
@@ -215,7 +216,9 @@ _.extend(router.prototype, BaseRouter.prototype, {
                                             req.session.subdomain = account.get('subdomain');
                                             req.session.domain = account.get('domain');
                                             req.session.accountId = account.id();
+                                            req.session.unAuthAccountId = account.id();
                                             self.log.debug('redirecting to ' + value);
+
                                             resp.redirect(value);
                                             userActivityManager.createUserLoginActivity(self.accountId(req), self.userId(req), function(){});
                                             self = null;
