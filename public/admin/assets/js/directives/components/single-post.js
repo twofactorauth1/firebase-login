@@ -1,4 +1,4 @@
-app.directive('singlePostComponent',['$location', "WebsiteService", function ($location, WebsiteService) {
+app.directive('singlePostComponent',['$location', "WebsiteService", "$timeout", function ($location, WebsiteService, $timeout) {
   return {
     scope: {
       component: '=',
@@ -8,6 +8,7 @@ app.directive('singlePostComponent',['$location', "WebsiteService", function ($l
     link: function (scope, element, attrs) {
       scope.isEditing = true;
       scope.blog = {};
+      scope.datePicker = {};
       /*
        * @dateOptions
        * -
@@ -26,8 +27,7 @@ app.directive('singlePostComponent',['$location', "WebsiteService", function ($l
       scope.open = function ($event) {
         $event.preventDefault();
         $event.stopPropagation();
-
-        scope.opened = !scope.opened;
+        scope.datePicker.isOpen = true;
       };
 
       /*
