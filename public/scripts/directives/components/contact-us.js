@@ -1,6 +1,6 @@
-/*global app, moment, angular, window, CKEDITOR*/
+/*global app, moment, angular, window, L*/
 /*jslint unparam:true*/
-app.directive('contactUsComponent', ['customerService', 'leafletData', '$timeout', function (GeocodeService, leafletData, $timeout) {
+app.directive('contactUsComponent', ['customerService', 'leafletData', '$timeout', function (customerService, leafletData, $timeout) {
   return {
     scope: {
       component: '=',
@@ -26,7 +26,6 @@ app.directive('contactUsComponent', ['customerService', 'leafletData', '$timeout
       };
 
       scope.updateContactUsAddress = function () {
-        console.log('updateContactUsAddress');
         scope.contactAddress = scope.stringifyAddress(scope.component.location);
         if (scope.component.location.lat && scope.component.location.lon) {
           angular.extend(scope, {
@@ -45,10 +44,10 @@ app.directive('contactUsComponent', ['customerService', 'leafletData', '$timeout
               }
             }
           });
-          leafletData.getMap('leafletmap').then(function (map) {
+          leafletData.getMap('leafletmap-' + scope.component._id).then(function (map) {
             $timeout(function () {
               map.invalidateSize();
-              map.setView(new L.LatLng(scope.component.location.lat, scope.component.location.lon),10);
+              map.setView(new L.LatLng(scope.component.location.lat, scope.component.location.lon), 10);
               $(window).trigger("resize");
             }, 1000);
           });
@@ -73,10 +72,10 @@ app.directive('contactUsComponent', ['customerService', 'leafletData', '$timeout
                   }
                 }
               });
-              leafletData.getMap('leafletmap').then(function (map) {
+              leafletData.getMap('leafletmap-' + scope.component._id).then(function (map) {
                 $timeout(function () {
                   map.invalidateSize();
-                  map.setView(new L.LatLng(scope.component.location.lat, scope.component.location.lon),10);
+                  map.setView(new L.LatLng(scope.component.location.lat, scope.component.location.lon), 10);
                   $(window).trigger("resize");
                 }, 1000);
               });
@@ -91,7 +90,7 @@ app.directive('contactUsComponent', ['customerService', 'leafletData', '$timeout
           zoom: 10
         },
         defaults: {
-        scrollWheelZoom: false
+          scrollWheelZoom: false
         },
         markers: {
 
