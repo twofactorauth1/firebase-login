@@ -553,7 +553,9 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$modalInstance', '$http
   
   $scope.updateContactUsAddress = function () {
     if(!angular.equals($scope.originalContactMap, $scope.componentEditing.location))
-      if (($scope.componentEditing.location.city && $scope.componentEditing.location.state) || $scope.componentEditing.location.zip) {
+      $scope.componentEditing.location.lat = null;
+      $scope.componentEditing.location.lon = null;
+      if (($scope.componentEditing.location.city && $scope.componentEditing.location.state) || $scope.componentEditing.location.zip) {      
         GeocodeService.getGeoSearchAddress($scope.stringifyAddress($scope.componentEditing.location), function (data) {
           if (data.lat && data.lon) {
             $scope.componentEditing.location.lat = data.lat;
