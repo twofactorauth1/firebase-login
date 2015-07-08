@@ -537,12 +537,19 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$modalInstance', '$http
    */
 
   $scope.stringifyAddress = function (address) {
-    if (address) {
-      return _.filter([address.address, address.city, address.state, address.zip], function (str) {
-        return str !== "";
-      }).join(", ")
-    }
-  };
+        if (address) {
+          var _topline = _.filter([address.address, address.address2], function (str) {
+            return str !== "";
+          }).join(", ");
+          var _bottomline = _.filter([address.city, address.state, address.zip], function (str) {
+            return str !== "";
+          }).join(", ");
+          if (_topline) {
+            return _topline + ' <br> ' + _bottomline;
+          }
+          return _bottomline;
+        }
+      };
   
   $scope.updateContactUsAddress = function () {
     if(!angular.equals($scope.originalContactMap, $scope.componentEditing.location))

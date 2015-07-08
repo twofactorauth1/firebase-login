@@ -31,7 +31,7 @@ app.directive('contactUsComponent', ['GeocodeService', 'leafletData', '$timeout'
       scope.updateContactUsAddress = function (timeout) {        
         console.log('updateContactUsAddress');
         scope.contactAddress = scope.stringifyAddress(scope.component.location);
-        if (scope.component.location.lat && scope.component.location.lat) {
+        if (scope.component.location.lat && scope.component.location.lon) {
           angular.extend(scope, {
             mapLocation: {
               lat: parseFloat(scope.component.location.lat),
@@ -51,7 +51,7 @@ app.directive('contactUsComponent', ['GeocodeService', 'leafletData', '$timeout'
           leafletData.getMap('leafletmap').then(function (map) {
             $timeout(function () {
               map.invalidateSize();
-              map.setView(new L.LatLng(scope.component.location.lat, scope.component.location.lon),9);
+              map.setView(new L.LatLng(scope.component.location.lat, scope.component.location.lon),10);
               $(window).trigger("resize");
             }, timeout);
           });
@@ -79,7 +79,7 @@ app.directive('contactUsComponent', ['GeocodeService', 'leafletData', '$timeout'
               leafletData.getMap('leafletmap').then(function (map) {
                 $timeout(function () {
                   map.invalidateSize();
-                  map.setView(new L.LatLng(scope.component.location.lat, scope.component.location.lon),9);
+                  map.setView(new L.LatLng(scope.component.location.lat, scope.component.location.lon),10);
                   $(window).trigger("resize");
                 }, timeout);
               });
@@ -100,10 +100,11 @@ app.directive('contactUsComponent', ['GeocodeService', 'leafletData', '$timeout'
 
           }
       });
-      scope.updateContactUsAddress(2000);
-
+      $(document).ready(function() {
+        scope.updateContactUsAddress(2000);
+      });
       scope.control.refreshMap = function() {
-        scope.updateContactUsAddress(0);
+        scope.updateContactUsAddress(100);
       }
     }
   };
