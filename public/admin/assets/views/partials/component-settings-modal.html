@@ -215,7 +215,7 @@
                                     <span tooltip-placement="top" tooltip-html-unsafe="Add/remove Overlay to background image."><i class="fa fa-info-circle" /></span>
                                     <switch ng-model="componentEditing.bg.img.overlay" class="pull-right" ng-change="saveComponent()"></switch>
                                 </div>
-                                <div class="form-group" ng-if="componentEditing.type != 'navigation'" ng-show="componentEditing.bg.img.overlay">
+                                <div class="form-group" ng-if="componentEditing.type != 'navigation'" ng-show="componentEditing.bg.img.show && componentEditing.bg.img.overlay">
                                     <label for="bg_overlay_color">Overlay Color</label>
                                     <span tooltip-placement="top" tooltip-html-unsafe="Add color to Overlay effect."><i class="fa fa-info-circle" /></span>
                                     <div class="pull-right">
@@ -223,7 +223,7 @@
                                         <spectrum-colorpicker format="rgba" options="spectrum.options" class="pull-right" ng-model="componentEditing.bg.img.overlaycolor" ng-change="saveComponent()"></spectrum-colorpicker>
                                     </div>
                                 </div>
-                                <div ng-if="componentEditing.type != 'navigation'" ng-show="componentEditing.bg.img.overlay">
+                                <div ng-if="componentEditing.type != 'navigation'" ng-show="componentEditing.bg.img.overlay && componentEditing.bg.img.show">
                                     <div class="row">
                                         <div class="col-xs-8">
                                             <label for="bg_overlay_opacity">Overlay Opacity</label>

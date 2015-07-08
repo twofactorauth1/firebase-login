@@ -39,7 +39,7 @@
                                 background-size: cover;
                                 background: {{component.bg.img.url}};'>
                         </div>
-                        <div ng-if="component.bg.img.overlay" class="bg" ng-class="{'bg-overlay':component.bg.img.overlay }" style='background-color: transparent;'>
+                        <div ng-if="component.bg.img.show && component.bg.img.overlay" class="bg" ng-class="{'bg-overlay':component.bg.img.overlay }" style='background-color: transparent;'>
                         </div>
                         <div class="container inner-page" ng-if="component.type != 'single-post' && component.type != 'blog' && component.type != 'navigation' && component.type != 'footer' && component.type != 'contact-us' && component.type != 'payment-form'">
                             <div data-ng-include data-src="'/components/'+component.type+'_v'+component.version+'.html'"></div>
