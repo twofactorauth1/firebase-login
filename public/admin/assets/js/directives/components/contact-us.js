@@ -106,6 +106,10 @@ app.directive('contactUsComponent', ['GeocodeService', 'leafletData', '$timeout'
       scope.control.refreshMap = function() {
         scope.updateContactUsAddress(100);
       }
+      scope.control.updateAddressString = function()
+      {
+        scope.contactAddress = scope.stringifyAddress(scope.component.location);
+      }
     }
   };
 }]);
