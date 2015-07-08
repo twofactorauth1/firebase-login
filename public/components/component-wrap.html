@@ -27,25 +27,14 @@
                 <div>
                     <div class="component-inner">
                         <div ng-if="component.bg.color" class="bg" ng-style="{'background': component.bg.color}"></div>
-                        <div ng-if="component.bg.img.show && component.type == 'masthead' && !isEditing" class="bg cover" ng-class="{parallax:component.bg.img.parallax,'blur-image':component.bg.img.blur,'full-screen':component.bg.img.fullscreen}" {{component.bg.img.parallax ? parallax-background : ""}} ng-attr-parallax-ratio="{{component.bg.img.parallax ? '0.4' : '1'}}" style='
+                        <div ng-if="component.bg.img.show && component.type == 'masthead'" class="bg cover" ng-class="{parallax:component.bg.img.parallax,'blur-image':component.bg.img.blur,'full-screen':component.bg.img.fullscreen}" {{component.bg.img.parallax ? parallax-background : ""}} ng-attr-parallax-ratio="{{component.bg.img.parallax ? '0.4' : '1'}}" style='
                                 background: url("{{component.bg.img.url}}") fixed;
                                 background-size: cover;
                                 background-repeat: no-repeat;
                                 background-position: {{component.bg.img.position}};'>
                         </div>
-                        <div ng-if="component.bg.img.show && component.type == 'masthead' && isEditing" class="bg cover" ng-class="{parallax:component.bg.img.parallax,'blur-image':component.bg.img.blur}" style='
-                                background: url("{{component.bg.img.url}}");
-                                background-size: cover;
-                                background-repeat: no-repeat;
-                                background-position: {{component.bg.img.position}};'>
-                        </div>
-                        <div ng-if="component.bg.img.show && component.type != 'masthead' && isEditing" class="bg cover" ng-class="{parallax:component.bg.img.parallax,'blur-image':component.bg.img.blur}" style='
-                                background: url("{{component.bg.img.url}}");
-                                background-size: cover;
-                                background-repeat: no-repeat;
-                                background: {{component.bg.img.url}};'>
-                        </div>
-                        <div ng-if="component.bg.img.show && component.type != 'masthead' && !isEditing" class="bg" ng-class="{parallax:component.bg.img.parallax,'blur-image':component.bg.img.blur}" {{component.bg.img.parallax ? parallax-background : ""}} ng-attr-parallax-ratio="{{component.bg.img.parallax ? '0.4' : '1'}}" style='
+                       
+                        <div ng-if="component.bg.img.show && component.type != 'masthead'" class="bg" ng-class="{parallax:component.bg.img.parallax,'blur-image':component.bg.img.blur}" {{component.bg.img.parallax ? parallax-background : ""}} ng-attr-parallax-ratio="{{component.bg.img.parallax ? '0.4' : '1'}}" style='
                                 background: url("{{component.bg.img.url}}") no-repeat fixed;
                                 background-size: cover;
                                 background: {{component.bg.img.url}};'>
