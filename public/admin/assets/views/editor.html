@@ -3,10 +3,10 @@
     <section id="page-title" class="padding-top-15 padding-bottom-15">
         <div class="row">
             <div class="col-sm-8">
-                <h1 ng-if="single_post" class="mainTitle">{{ blog.post.post_title || 'Single Post'}}</h1>
-                <h1 ng-if="!single_post" class="mainTitle">{{ page.title || 'Title'}}</h1>
-                <span ng-if="single_post && blog.post.post_tags" class="mainDescription">There are currently {{blog.post.post_tags.length}} tags.</span>
-                <span ng-if="!single_post && page.components" class="mainDescription">There are currently {{page.components.length}} components.</span>
+                <h1 ng-if="isSinglePost" class="mainTitle">{{ blog.post.post_title || 'Single Post'}}</h1>
+                <h1 ng-if="!isSinglePost" class="mainTitle">{{ page.title || 'Title'}}</h1>
+                <span ng-if="isSinglePost && blog.post.post_tags" class="mainDescription">There are currently {{blog.post.post_tags.length}} tags.</span>
+                <span ng-if="!isSinglePost && page.components" class="mainDescription">There are currently {{page.components.length}} components.</span>
             </div>
             <div ncy-breadcrumb></div>
         </div>
@@ -25,12 +25,12 @@
                                 <div class="hidden-lg margin-bottom-10"></div>
                             </div>
                             <div class="col-sm-2 col-xs-6 center">
-                                <div ng-if="!single_post">
+                                <div ng-if="!isSinglePost">
                                     <a ng-disabled="!ckeditorLoaded" type="button" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-eye btn-o" ng-click="getUrl(page.handle, false)" target="_blank">
                                         <span>View</span>
                                     </a>
                                 </div>
-                                <div ng-if="single_post">
+                                <div ng-if="isSinglePost">
                                     <a ng-disabled="!ckeditorLoaded" type="button" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-eye btn-o" ng-click="getUrl(blog.post.post_url, true)" target="_blank">
                                         <span>View</span>
                                     </a>
