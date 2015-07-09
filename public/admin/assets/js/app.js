@@ -19,6 +19,6 @@ angular.module("clip-two", [
     'pascalprecht.translate',
     'autocomplete',
     'config',
-    // 'leaflet-directive',
+    'leaflet-directive',
     'angular-parallax'
 ]);
