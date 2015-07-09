@@ -230,7 +230,7 @@ module.exports = {
         //     title = pageHandle.charAt(0).toUpperCase() + pageHandle.substring(1);
         // }
 
-        var template, website, page;
+        var template, website, page, account;
 
         var p1 = $.Deferred();
         templateDao.getById(templateId, $$.m.cms.Template, function(err, _template) {
@@ -272,12 +272,36 @@ module.exports = {
             }
         });
 
-
+        var p2 = $.Deferred();
         $.when(p1).done(function(){
+
+            accountDao.getById(accountId, $$.m.Account, function(err, _account){
+                if(err) {
+                    log.error('Error getting account by ID: ' + err);
+                    p2.reject();
+                    return fn(err, null);
+                }
+                account = _account;
+                p2.resolve();
+            });
+
+        });
+
+
+        $.when(p2).done(function(){
             //at this point we have the theme and website.
             log.debug('mainmenu ' + mainmenu);
             log.debug('Creating Page');
             var componentAry = template.get('config')['components'];
+            var logo = account.get('business')['logo'];
+            if (logo) {
+                _.each(componentAry, function(component) {
+                    if (component.type === 'navigation') {
+                        component.logo = '<img src="'+logo+'"/>';
+                    }
+                });
+            }
+
             var screenshot = template.get('previewUrl');
             page = new $$.m.cms.Page({
                 'accountId': accountId,
