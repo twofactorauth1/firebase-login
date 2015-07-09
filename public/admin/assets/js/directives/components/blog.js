@@ -124,14 +124,17 @@ app.directive('blogComponent', ['$filter', '$timeout', 'WebsiteService', functio
           width: 230,
           height: 300,
           afterCloudRender: function () {
-            $timeout(function() {
-              if(!$scope.rendered)
-              {
-                $scope.rendered = true;
-                angular.element('.jqcloud').css({'width': '100%'});
-                angular.element('.jqcloud').jQCloud('update', $scope.tagCloud);
-              }
-            }, 1000);
+            $(document).ready(function() {
+              $timeout(function() {
+                if(!$scope.rendered)
+                {
+                  $scope.rendered = true;
+                  angular.element('.jqcloud').css({'width': '100%'});
+                  angular.element('.jqcloud').jQCloud('update', $scope.tagCloud);
+                }
+              }, 2000);
+            });
+            
           }
         });
       };
