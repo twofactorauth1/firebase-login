@@ -122,21 +122,14 @@ app.directive('blogComponent', ['$filter', '$timeout', 'WebsiteService', functio
         $(".jqcloud").jQCloud($scope.tagCloud, {
           autoResize: true,
           width: 230,
-          height: 300,
-          afterCloudRender: function () {
-            $(document).ready(function() {
-              $timeout(function() {
-                if(!$scope.rendered)
-                {
-                  $scope.rendered = true;
-                  angular.element('.jqcloud').css({'width': '100%'});
-                  angular.element('.jqcloud').jQCloud('update', $scope.tagCloud);
-                }
-              }, 2000);
-            });
-            
-          }
+          height: 300          
         });
+        $(document).ready(function() {
+          $timeout(function () {
+            angular.element('.jqcloud').css({'width': '100%'});
+            angular.element('.jqcloud').jQCloud('update', $scope.tagCloud);
+          },1000)
+        })
       };
 
       /********** BLOG PAGE PAGINATION RELATED **********/
