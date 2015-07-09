@@ -204,7 +204,10 @@
     $scope.ckeditorLoaded = false;
 
     $scope.activateCKeditor = function () {
-      CKEDITOR.on("instanceReady", function () {
+      CKEDITOR.on("instanceReady", function (ev) {
+        ev.editor.on( 'key', function() {
+          $scope.isDirty = true;
+        });
         if (!$scope.ckeditorLoaded) {
           $timeout(function () {
             $scope.ckeditorLoaded = true;
