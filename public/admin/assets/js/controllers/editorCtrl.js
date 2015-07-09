@@ -11,9 +11,11 @@
 
 
     $scope.isEditing = true;
-
+    //$scope.isDirty = false;
+    $scope.isDirty = {};
     $scope.savePage = function () {
       $scope.saveLoading = true;
+      $scope.isDirty.dirty = false;
       if($scope.isSinglePost)
       {
         $scope.validateEditPost($scope.blog.post);
@@ -134,6 +136,7 @@
       WebsiteService.getSinglePage(_handle, function (data) {
         $scope.page = data;
         $scope.components = $scope.page.components;
+        $scope.originalComponents = angular.copy($scope.components);
         $scope.activateCKeditor();
         $rootScope.breadcrumbTitle = $scope.page.title;
       });
@@ -206,7 +209,7 @@
     $scope.activateCKeditor = function () {
       CKEDITOR.on("instanceReady", function (ev) {
         ev.editor.on( 'key', function() {
-          $scope.isDirty = true;
+          $scope.isDirty.dirty = true;
         });
         if (!$scope.ckeditorLoaded) {
           $timeout(function () {
@@ -437,6 +440,9 @@
          _modal.resolve.blog = function () {
           return $scope.blog.post
         };
+        _modal.resolve.isDirty = function () {
+          return $scope.isDirty
+        };
       }
       
       if (index >= 0) {
@@ -666,11 +672,15 @@
       //   var isDirty = $scope.childScope.checkOrSetPageDirty() || $scope.isDirty;
       // }
       // $scope.childScope.checkOrSetPageDirty(true);
+      if($scope.originalComponents && $scope.components && $scope.originalComponents.length !== $scope.components.length)
+      {
+        $scope.isDirty.dirty = true;
+      }
       var redirectUrl = url;
       if (!redirectUrl) {
         redirectUrl = $location.search().posthandle ? "/admin/#/website/posts" : "/admin/#/website/pages";
       }
-      if ($scope.isDirty) {
+      if ($scope.isDirty.dirty) {
         SweetAlert.swal({
           title: "Are you sure?",
           text: "You have unsaved data that will be lost",

@@ -1,7 +1,7 @@
 'use strict';
 /*global app, moment, angular*/
 /*jslint unparam:true*/
-app.controller('ComponentSettingsModalCtrl', ['$scope', '$modalInstance', '$http', '$timeout', '$q', '$compile', '$filter', 'WebsiteService', 'CustomerService', 'ProductService', 'GeocodeService', 'toaster', 'components', 'clickedIndex', 'contactMap', 'website', 'blog', function ($scope, $modalInstance, $http, $timeout, $q, $compile, $filter, WebsiteService, CustomerService, ProductService, GeocodeService, toaster, components, clickedIndex, contactMap, website, blog) {
+app.controller('ComponentSettingsModalCtrl', ['$scope', '$modalInstance', '$http', '$timeout', '$q', '$compile', '$filter', 'WebsiteService', 'CustomerService', 'ProductService', 'GeocodeService', 'toaster', 'components', 'clickedIndex', 'contactMap', 'website', 'blog', 'isDirty', function ($scope, $modalInstance, $http, $timeout, $q, $compile, $filter, WebsiteService, CustomerService, ProductService, GeocodeService, toaster, components, clickedIndex, contactMap, website, blog, isDirty) {
   $scope.blog ={};
   $scope.components = components;
   $scope.clickedIndex = clickedIndex;
@@ -9,6 +9,7 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$modalInstance', '$http
   $scope.contactMap = contactMap;
   $scope.website = website;
   $scope.blog.post = blog;
+  $scope.isDirty = isDirty;
   /*
    * @getAllProducts
    * - get products for products and pricing table components
@@ -566,6 +567,11 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$modalInstance', '$http
         });
       }
   };
+
+  $scope.saveComponent =function()
+  {
+    $scope.isDirty.dirty = true;
+  }
   
   /*
    * @editComponent
