@@ -84,6 +84,14 @@ var account = $$.m.ModelBase.extend({
                 new_customer: true,
                 new_order: true
             },
+            created: {
+                date: new Date(),
+                by: null
+            },
+            modified: {
+                date: null,
+                by: null
+            },
 
             _v:"0.1"
         }
