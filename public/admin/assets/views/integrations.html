@@ -88,7 +88,7 @@
         </div>
     </div>
     <div class="col-sm-12 margin-bottom-15">
-        <div class="col-sm-6 col-md-4 col-lg-3 margin-top-15" ng-repeat="sa in socialAccounts| filter: socialFilter">
+        <div class="col-sm-6 col-md-4 col-lg-3 margin-top-15" ng-repeat="sa in socialAccounts| filter: socialFilter" ng-class="{'load1 csspinner': sa.loading}">
             <div class="thumbnail padding-10  margin-bottom-0">
                 <img src="https://s3-us-west-2.amazonaws.com/indigenous-admin/fb-lofo.jpg" class="img-thumbnail" alt="..." ng-show="sa.type==credentialTypes.FACEBOOK">
                 <img src="https://s3-us-west-2.amazonaws.com/indigenous-admin/google%2B-logo.jpg" class="img-thumbnail" alt="..." ng-show="sa.type==credentialTypes.GOOGLE">
@@ -106,7 +106,7 @@
                                 <span class="text-bold margin-left-5">{{sa.username || sa.profile.name}}</span>
                                 <div class="btn-group btn-group-justified margin-top-10">
                                     <div class="btn-group">
-                                        <button type="button" class="btn btn-danger btn-o btn-wide btn-scroll btn-scroll-top ti-trash" ng-click="disconnectSocial(sa.id)">
+                                        <button type="button" class="btn btn-danger btn-o btn-wide btn-scroll btn-scroll-top ti-trash" ng-click="disconnectSocial(sa)">
                                             <span>Disconnect</span>
                                         </button>
                                     </div>

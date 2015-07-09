@@ -53,7 +53,7 @@
      * disconnect the social account 
      */
 
-    $scope.disconnectSocial = function (id) {
+    $scope.disconnectSocial = function (sa) {
       console.log('disconnectSocial >>>');
       SweetAlert.swal({
         title: "Are you sure?",
@@ -67,7 +67,8 @@
         closeOnCancel: true
       }, function (isConfirm) {
         if (isConfirm) {
-          SocialConfigService.deleteSocialConfigEntry(id, function () {
+          sa.loading = true;
+          SocialConfigService.deleteSocialConfigEntry(sa.id, function () {
             SocialConfigService.getAllSocialConfig(function (data) {
               $scope.socialAccounts = data.socialAccounts;
             });
