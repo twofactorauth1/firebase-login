@@ -12,7 +12,7 @@
         </div>
         <div class="modal-body no-padding" ng-class="{hidden: hover}">
             <tabset>
-                <tab>
+                <tab ng-if="!isSinglePost">
                     <tab-heading>
                         <span>Basic</span>
                     </tab-heading>
@@ -249,7 +249,7 @@
                         </div>
                     </div>
                 </tab>
-                <tab>
+                <tab ng-if="!isSinglePost">
                     <tab-heading>
                         <span>Advanced</span>
                     </tab-heading>

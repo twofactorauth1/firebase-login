@@ -443,6 +443,9 @@
         _modal.resolve.isDirty = function () {
           return $scope.isDirty
         };
+        _modal.resolve.isSinglePost = function () {
+          return $scope.isSinglePost
+        };
       }
       
       if (index >= 0) {

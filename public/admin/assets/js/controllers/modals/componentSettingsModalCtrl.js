@@ -1,7 +1,7 @@
 'use strict';
 /*global app, moment, angular*/
 /*jslint unparam:true*/
-app.controller('ComponentSettingsModalCtrl', ['$scope', '$modalInstance', '$http', '$timeout', '$q', '$compile', '$filter', 'WebsiteService', 'CustomerService', 'ProductService', 'GeocodeService', 'toaster', 'components', 'clickedIndex', 'contactMap', 'website', 'blog', 'isDirty', function ($scope, $modalInstance, $http, $timeout, $q, $compile, $filter, WebsiteService, CustomerService, ProductService, GeocodeService, toaster, components, clickedIndex, contactMap, website, blog, isDirty) {
+app.controller('ComponentSettingsModalCtrl', ['$scope', '$modalInstance', '$http', '$timeout', '$q', '$compile', '$filter', 'WebsiteService', 'CustomerService', 'ProductService', 'GeocodeService', 'toaster', 'components', 'clickedIndex', 'contactMap', 'website', 'blog', 'isDirty', 'isSinglePost', function ($scope, $modalInstance, $http, $timeout, $q, $compile, $filter, WebsiteService, CustomerService, ProductService, GeocodeService, toaster, components, clickedIndex, contactMap, website, blog, isDirty, isSinglePost) {
   $scope.blog ={};
   $scope.components = components;
   $scope.clickedIndex = clickedIndex;
@@ -10,6 +10,7 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$modalInstance', '$http
   $scope.website = website;
   $scope.blog.post = blog;
   $scope.isDirty = isDirty;
+  $scope.isSinglePost = isSinglePost;
   /*
    * @getAllProducts
    * - get products for products and pricing table components
