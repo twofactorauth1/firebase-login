@@ -10,34 +10,41 @@ app.controller('AddComponentModalCtrl', ['$scope', '$document', '$modalInstance'
 
   $scope.components = components;
   $scope.clickedIndex = clickedIndex;
+  $scope.saveLoading = false;
 
   $scope.addComponent = function (addedType) {
-    var componentType = null;
-    if (addedType.type === 'footer' || addedType.type === 'navigation' || addedType.type === 'single-post' || addedType.type === 'blog-teaser' || addedType.type === 'blog') {
-      componentType = _.findWhere($scope.components, {
-        type: addedType.type
-      });
-      if (componentType) {
-        toaster.pop('error', componentType.type + " component already exists");
-        return;
+    if(!$scope.saveLoading)
+    {
+      $scope.saveLoading = true;
+      var componentType = null;
+      if (addedType.type === 'footer' || addedType.type === 'navigation' || addedType.type === 'single-post' || addedType.type === 'blog-teaser' || addedType.type === 'blog') {
+        componentType = _.findWhere($scope.components, {
+          type: addedType.type
+        });
+        if (componentType) {
+          toaster.pop('error', componentType.type + " component already exists");
+          $scope.saveLoading = false;
+          return;
+        }
       }
-    }
 
-    WebsiteService.getComponent(addedType, addedType.version || 1, function (newComponent) {
-      if (newComponent) {
-        $scope.closeModal();
-        $scope.components.splice($scope.clickedIndex + 1, 0, newComponent);
-        $timeout(function () {
-          var element = document.getElementById(newComponent._id);
-          var rect = element.getBoundingClientRect();
-          console.log(rect.top, rect.right, rect.bottom, rect.left);
-          if (element) {
-            $document.scrollToElementAnimated(element, 175, 1000);
-          }
-        }, 500);
-        toaster.pop('success', "Component Added", "The " + newComponent.type + " component was added successfully.");
-      }
-    });
+      WebsiteService.getComponent(addedType, addedType.version || 1, function (newComponent) {
+        if (newComponent) {
+          $scope.saveLoading = false;
+          $scope.closeModal();
+          $scope.components.splice($scope.clickedIndex + 1, 0, newComponent);
+          $timeout(function () {
+            var element = document.getElementById(newComponent._id);
+            var rect = element.getBoundingClientRect();
+            console.log(rect.top, rect.right, rect.bottom, rect.left);
+            if (element) {
+              $document.scrollToElementAnimated(element, 175, 1000);
+            }
+          }, 500);
+          toaster.pop('success', "Component Added", "The " + newComponent.type + " component was added successfully.");
+        }
+      });
+    }
   };
 
   $scope.closeModal = function () {
