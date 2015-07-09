@@ -101,7 +101,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         title: 'Post Single',
         icon: 'ti-layout-media-left-alt',
         ncyBreadcrumb: {
-            label: 'Single Post',
+            label: '{{breadcrumbTitle}}',
             parent: 'app.website.posts'
         },
         resolve: loadSequence('editorCtrl', 'userService', 'htmlToPlaintext', 'spectrum', 'ui.sortable', 'assetsService', 'toasterService', 'geocodeService', 'productService', 'accountService', 'toTrusted', 'generateURLforLinks', 'truncate', 'ckeditor', 'ngSticky', 'slick', 'offset', 'jqcloud', 'jsVideoUrlParser', 'selectedTags', 'addComponentModalCtrl', 'componentSettingsModalCtrl')

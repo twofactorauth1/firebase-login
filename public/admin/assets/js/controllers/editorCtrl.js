@@ -9,6 +9,7 @@
      * -
      */
 
+
     $scope.isEditing = true;
 
     $scope.savePage = function () {
@@ -134,6 +135,7 @@
         $scope.page = data;
         $scope.components = $scope.page.components;
         $scope.activateCKeditor();
+        $rootScope.breadcrumbTitle = $scope.page.title;
       });
     };
 
@@ -153,6 +155,7 @@
             $scope.blog.post = data;
             $scope.single_post = true;
             $scope.components = $scope.page.components;
+            $rootScope.breadcrumbTitle = $scope.blog.post.post_title;
             $scope.activateCKeditor();
         });
         
