@@ -1,12 +1,4 @@
-<style>
-    .{{component.type}}{{$index + 1}} .bg-overlay {
-        background: {{component.bg.img.overlaycolor || 'rgba(0, 0, 0, 0.58)'}}!important;
-        opacity: {{component.bg.img.overlayopacity/100 || 1}};
-    }
-    .{{component.type}}{{$index + 1}} {
-       opacity: {{component.bg.opacity/100 || 1}};
-    }
-</style>
+
 <div class="component-wrap" ng-if="component.visibility" ng-class="{'editing': isEditing}">
     <div class="component {{component.type}}{{$index + 1}}">
         <div id="{{component.anchor || component._id}}" ng-style="{'color':component.txtcolor||primaryTextColor}">
@@ -21,7 +13,7 @@
                 </div>
             </div>
             <div ng-if="component.type == 'email'">
-                <div data-ng-include data-src="'/templates/emails/base-email.html'"></div>
+                <div data-ng-include data-src="'/components/'+component.type+'_v'+component.version+'.html'"></div>
             </div>
             <div ng-if="component.bg.img.url && component.type != 'email' " class="ipad-bg">
                 <div>
@@ -33,7 +25,6 @@
                                 background-repeat: no-repeat;
                                 background-position: {{component.bg.img.position}};'>
                         </div>
-                       
                         <div ng-if="component.bg.img.show && component.type != 'masthead'" class="bg" ng-class="{parallax:component.bg.img.parallax,'blur-image':component.bg.img.blur}" {{component.bg.img.parallax ? parallax-background : ""}} ng-attr-parallax-ratio="{{component.bg.img.parallax ? '0.4' : '1'}}" style='
                                 background: url("{{component.bg.img.url}}") no-repeat fixed;
                                 background-size: cover;
