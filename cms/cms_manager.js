@@ -278,9 +278,11 @@ module.exports = {
             log.debug('mainmenu ' + mainmenu);
             log.debug('Creating Page');
             var componentAry = template.get('config')['components'];
+            var screenshot = template.get('previewUrl');
             page = new $$.m.cms.Page({
                 'accountId': accountId,
                 'handle': pageHandle,
+                'screenshot': screenshot,
                 'mainmenu': mainmenu,
                 'title': title,
                 'websiteId': websiteId,
