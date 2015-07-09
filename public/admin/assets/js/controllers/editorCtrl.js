@@ -15,6 +15,12 @@
       $scope.saveLoading = true;
       if($scope.isSinglePost)
       {
+        $scope.validateEditPost($scope.blog.post);
+        if (!$scope.editPostValidated) {
+          $scope.saveLoading = false;
+          toaster.pop('error', "Post Title or URL can not be blank.");
+          return false;
+        }
         var post_data = angular.copy($scope.blog.post);
         post_data.post_tags.forEach(function(v, i) {
             if (v.text)
@@ -611,6 +617,34 @@
         $scope.newPostValidated = true;
       } else
         $scope.newPostValidated = false;
+    };
+
+     /*
+     * @validateEditPost
+     * -
+     */
+
+    $scope.editPostValidated = false;
+
+    $scope.validateEditPost = function (post, update) {
+      if (post.post_url == '') {
+        $scope.handleError = true;
+        angular.element('#edit-post-url').parents('div.form-group').addClass('has-error');
+      } else {
+        $scope.handleError = false;
+        angular.element('#edit-post-url').parents('div.form-group').removeClass('has-error');
+      }
+      if (post.post_title == '') {
+        $scope.titleError = true;
+        angular.element('#edit-post-title').parents('div.form-group').addClass('has-error');
+      } else {
+        $scope.titleError = false;
+        angular.element('#edit-post-title').parents('div.form-group').removeClass('has-error');
+      }
+      if (post && post.post_title && post.post_title != '' && post.post_url && post.post_url != '') {
+        $scope.editPostValidated = true;
+      } else
+        $scope.editPostValidated = false;
     };
 
     /*
