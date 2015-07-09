@@ -1,108 +1,112 @@
 'use strict';
-/**
- * controller for integrations
- */
-(function(angular) {
-    app.controller('IntegrationsCtrl', ["$scope", "SocialConfigService", "userConstant", "SweetAlert", "ipCookie", function($scope, SocialConfigService, userConstant, SweetAlert, ipCookie) {
+/*global app, moment, angular, window, L*/
+/*jslint unparam:true*/
+(function (angular) {
+  app.controller('IntegrationsCtrl', ["$scope", "SocialConfigService", "userConstant", "SweetAlert", "ipCookie", "toaster", function ($scope, SocialConfigService, userConstant, SweetAlert, ipCookie, toaster) {
 
+    console.log('cookie ', ipCookie("socialAccount"));
+    var completedIntegration = ipCookie("socialAccount");
+    if (completedIntegration) {
+      toaster.pop('success', "Integrated Successfully", ipCookie("socialAccount") + ' has been added.');
+      ipCookie.remove("socialAccount", {
+        path: "/"
+      });
+    }
 
-        /*
-         * Global Variables
-         * - credentialTypes: constant for social network names
-         */
+    /*
+     * Global Variables
+     * - credentialTypes: constant for social network names
+     */
 
-        $scope.credentialTypes = userConstant.credential_types;
+    $scope.credentialTypes = userConstant.credential_types;
 
-        /*
-         * @getAllSocialConfig
-         * get the social accounts
-         */
+    /*
+     * @getAllSocialConfig
+     * get the social accounts
+     */
 
-        SocialConfigService.getAllSocialConfig(function(data) {
+    SocialConfigService.getAllSocialConfig(function (data) {
 
-            _.each(data.socialAccounts, function(socialAccount) {
-                //get profile/page info
-                if (socialAccount.type == 'fb') {
-                    SocialConfigService.getFBProfile(socialAccount.id, function(profile) {
-                        socialAccount.profile = profile;
-                    });
-                }
+      _.each(data.socialAccounts, function (socialAccount) {
+        //get profile/page info
+        if (socialAccount.type === 'fb') {
+          SocialConfigService.getFBProfile(socialAccount.id, function (profile) {
+            socialAccount.profile = profile;
+          });
+        }
+      });
+
+      $scope.socialAccounts = data.socialAccounts;
+    });
+
+    /*
+     * @socialFilter
+     * filter the social account to only get the parent accounts
+     */
+
+    $scope.socialFilter = function (item) {
+      return item.accountType !== 'adminpage';
+    };
+
+    /*
+     * @disconnectSocial
+     * disconnect the social account 
+     */
+
+    $scope.disconnectSocial = function (id) {
+      console.log('disconnectSocial >>>');
+      SweetAlert.swal({
+        title: "Are you sure?",
+        text: "Do you want to disconnect this social network?",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: "Yes, disconnect it!",
+        cancelButtonText: "No, do not disconnect it!",
+        closeOnConfirm: true,
+        closeOnCancel: true
+      }, function (isConfirm) {
+        if (isConfirm) {
+          SocialConfigService.deleteSocialConfigEntry(id, function () {
+            SocialConfigService.getAllSocialConfig(function (data) {
+              $scope.socialAccounts = data.socialAccounts;
             });
+          });
+        }
+      });
+    };
 
-            $scope.socialAccounts = data.socialAccounts;
+    /*
+     * @socailRedirect
+     * redirect users to social network and setting up a temporary cookie
+     */
+
+    $scope.currentHost = window.location.host;
+    $scope.redirectUrl = '/admin/account/integrations';
+
+    $scope.socailRedirect = function (socialAccount) {
+      var account_cookie = ipCookie("socialAccount");
+      //Set the amount of time a socialAccount should last.
+      var expireTime = new Date();
+      expireTime.setMinutes(expireTime.getMinutes() + 10);
+      if (account_cookie === undefined) {
+        ipCookie("socialAccount", socialAccount, {
+          expires: expireTime,
+          path: "/"
         });
+      } else {
+        //If it does exist, delete it and set a new one with new expiration time
+        ipCookie.remove("socialAccount", {
+          path: "/"
+        });
+        ipCookie("socialAccount", socialAccount, {
+          expires: expireTime,
+          path: "/"
+        });
+      }
+      $scope.minRequirements = true;
+      window.location = '/redirect/?next=' + $scope.currentHost + '/socialconfig/' + socialAccount.toLowerCase() + '?redirectTo=' + $scope.redirectUrl + '&socialNetwork=' + socialAccount;
+    };
 
-        /*
-         * @socialFilter
-         * filter the social account to only get the parent accounts
-         */
-
-        $scope.socialFilter = function(item) {
-            return item.accountType !== 'adminpage'
-        };
-
-        /*
-         * @disconnectSocial
-         * disconnect the social account 
-         */
-
-        $scope.disconnectSocial = function(id) {
-            console.log('disconnectSocial >>>');
-            SweetAlert.swal({
-                    title: "Are you sure?",
-                    text: "Do you want to disconnect this social network?",
-                    type: "warning",
-                    showCancelButton: true,
-                    confirmButtonColor: "#DD6B55",
-                    confirmButtonText: "Yes, disconnect it!",
-                    cancelButtonText: "No, do not disconnect it!",
-                    closeOnConfirm: true,
-                    closeOnCancel: true
-                },
-                function(isConfirm) {
-                    if (isConfirm) {
-                        SocialConfigService.deleteSocialConfigEntry(id, function() {
-                            SocialConfigService.getAllSocialConfig(function(data) {
-                                $scope.socialAccounts = data.socialAccounts;
-                            });
-                        });
-                    };
-                });
-        };
-
-        /*
-         * @socailRedirect
-         * redirect users to social network and setting up a temporary cookie
-         */
-
-        $scope.currentHost = window.location.host;
-        $scope.redirectUrl = '/admin/account/integrations';
-
-        $scope.socailRedirect = function(socailAccount) {
-            var account_cookie = ipCookie("socialAccount");
-            //Set the amount of time a socailAccount should last.
-            var expireTime = new Date();
-            expireTime.setMinutes(expireTime.getMinutes() + 10);
-            var msg = socailAccount + ' is integreted successfully.';
-            if (account_cookie == undefined) {
-                ipCookie("socialAccount", msg, {
-                    expires: expireTime,
-                    path: "/"
-                });
-            } else {
-                //If it does exist, delete it and set a new one with new expiration time
-                ipCookie.remove("socialAccount", {
-                    path: "/"
-                });
-                ipCookie("socialAccount", msg, {
-                    expires: expireTime,
-                    path: "/"
-                });
-            }
-            $scope.minRequirements = true;
-            // ToasterService.setHtmlPending('success', socailAccount + ' is integreted successfully.', '<div class="mb15"></div><a href="/admin#/customer?onboarding=create-contact" class="btn btn-primary">Next Step: Import / Create Contacts</a>', 0, 'trustedHtml');
-            window.location = '/redirect/?next=' + $scope.currentHost + '/socialconfig/' + socailAccount.toLowerCase() + '?redirectTo=' + $scope.redirectUrl + '&socialNetwork=' + socailAccount;
-        };
-
-    }]);
-})(angular);
+  }]);
+}(angular));
