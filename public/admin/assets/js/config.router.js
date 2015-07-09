@@ -94,6 +94,9 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
             label: '{{breadcrumbTitle}}',
             parent: 'app.website.pages'
         },
+        onExit: function($rootScope) {
+         $rootScope.breadcrumbTitle = undefined;
+        },
         resolve: loadSequence('editorCtrl', 'userService', 'htmlToPlaintext', 'spectrum', 'ui.sortable', 'assetsService', 'toasterService', 'geocodeService', 'productService', 'accountService', 'toTrusted', 'generateURLforLinks', 'truncate', 'ckeditor', 'ngSticky', 'slick', 'offset', 'jqcloud', 'jsVideoUrlParser', 'selectedTags', 'addComponentModalCtrl', 'componentSettingsModalCtrl')
     }).state('app.website.singlepost', {
         url: '/posts/:id',
@@ -103,6 +106,9 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         ncyBreadcrumb: {
             label: '{{breadcrumbTitle}}',
             parent: 'app.website.posts'
+        },
+        onExit: function($rootScope) {
+         $rootScope.breadcrumbTitle = undefined;
         },
         resolve: loadSequence('editorCtrl', 'userService', 'htmlToPlaintext', 'spectrum', 'ui.sortable', 'assetsService', 'toasterService', 'geocodeService', 'productService', 'accountService', 'toTrusted', 'generateURLforLinks', 'truncate', 'ckeditor', 'ngSticky', 'slick', 'offset', 'jqcloud', 'jsVideoUrlParser', 'selectedTags', 'addComponentModalCtrl', 'componentSettingsModalCtrl')
     }).state('app.website.singletemplate', {
