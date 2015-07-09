@@ -5,13 +5,33 @@
 app.controller('AppCtrl', ['$rootScope', '$scope', '$state', '$translate', '$localStorage', '$window', '$document', '$timeout', '$modal', 'cfpLoadingBar', 'UserService', 'AccountService',
   function ($rootScope, $scope, $state, $translate, $localStorage, $window, $document, $timeout, $modal, cfpLoadingBar, UserService, AccountService) {
 
+    AccountService.getAccount(function (account) {
+      $scope.account = account;
+      if (account.locked_sub && !$state.includes('app.account.billing')) {
+        $state.go('app.account.billing');
+      }
+      if (account.locked) {
+        $state.go('app.support.gettingstarted');
+        account.locked = false;
+        AccountService.updateAccount(account, function () {
+          console.log('account updated');
+        });
+      }
+
+    });
+
     // Loading bar transition
     // -----------------------------------
     var $win = $($window);
 
     $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
       //start loading bar on stateChangeStart
-      cfpLoadingBar.start();
+
+      if ($scope.account && $scope.account.locked_sub && $state.includes('app.account.billing')) {
+        cfpLoadingBar.complete();
+      } else {
+        cfpLoadingBar.start();
+      }
 
     });
     $rootScope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
@@ -146,18 +166,6 @@ app.controller('AppCtrl', ['$rootScope', '$scope', '$state', '$translate', '$loc
     // -----------------------------------
     UserService.getUser(function (user) {
       $scope.currentUser = user;
-    });
-
-    AccountService.getAccount(function (account) {
-      $scope.account = account;
-      if (account.locked) {
-        $state.go('app.support.gettingstarted');
-        account.locked = false;
-        AccountService.updateAccount(account, function () {
-          console.log('account updated');
-        });
-      }
-
     });
 
   }
