@@ -444,9 +444,13 @@ div[data-type='campaign'] .inner-page .overlay {
   margin-right: 0px;
 }
 .contact-us-v1 .widget-weather .temp {
-  background: rgba(0, 0, 0, 0.5);
   padding: 15px !important;
   height: 230px;
+  text-align: center;
+  vertical-align: middle;
+  display: table-cell;
+  float: none;
+  min-width: 260px;
 }
 .contact-us-v1 .widget-weather .temp span {
   padding-bottom: 5px;

@@ -71,6 +71,16 @@ var component = $$.m.ModelBase.extend({
              */
             showHours: true,
             /**
+             *
+             *
+             */
+            boxColor: "#000",
+            /**
+             *
+             *
+             */
+            boxOpacity: 0.5,
+            /**
              * The hours a business is open, array
              *[
              *  "mon-friday: 8-5",
