@@ -30,7 +30,8 @@ var geoiputil = {
              }
              */
             log.debug('<< getGeoForIP', body);
-            return fn(null, body);
+            var json = JSON.parse(body);
+            return fn(null, json);
         });
     }
 
