@@ -5647,6 +5647,14 @@ input[type="checkbox"] {
 .clip-radio.radio-purple input[type="radio"]:checked + label:before {
   background: #804c75;
 }
+.switch {
+  background: #C91F37!important;
+  border-color: #C91F37!important;
+}
+.switch.checked {
+  background: #64bd63!important;
+  border-color: #64bd63!important;
+}
 /* ---------------------------------------------------------------------- */
 /*  Icons
 /* ---------------------------------------------------------------------- */
