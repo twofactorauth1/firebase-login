@@ -524,19 +524,19 @@ _.extend(api.prototype, baseApi.prototype, {
                              "postal": "94040"
                              }
                              */
-                            var city = value.city || '';
-                            var state = value.state || '';
-                            var zip = value.postal || '';
-                            var country = value.country || '';
-                            var countryCode = value.country || '';
+                            var city = value['city'] || '';
+                            var state = value['state'] || '';
+                            var zip = value['postal'] || '';
+                            var country = value['country'] || '';
+                            var countryCode = value['country'] || '';
                             var displayName = 'GEOIP';
                             var lat = '';
                             var lon = '';
                             if(value.loc) {
-                                lat = value.loc.split(',')[0];
-                                lon = value.loc.split(',')[0];
+                                lat = value['loc'].split(',')[0];
+                                lon = value['loc'].split(',')[1];
                             }
-
+                            self.log.debug('creating address from ' + city + ', ' + state + ', ' + zip + ', ' + country);
                             contact.createAddress(null, null, null, null, city, state, zip, country, countryCode, displayName, lat, lon, true, true);
                         }
                         contactDao.saveOrUpdateContact(contact, function(err, savedContact){
