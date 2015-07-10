@@ -139,27 +139,28 @@
                                             <input type="checkbox" value="true" checked>Shipping same as billing information
                                         </label>
                                     </div>
-                                    <div>
+                                    <div class="row">
                                         <div class="col-sm-6">
-                                            <div class="form-group has-feedback">
+                                            <div class="form-group has-feedback" ng-class="{'has-error': invalidFirstName}">
                                                 <label class="control-label" for="firstName">First Name</label>
-                                                <input type="text" placeholder="First Name" class="form-control" id="firstName" ng-model="newContact.first" ng-blur="checkBillingFirst()">
-                                                <span class="form-control-feedback"></span>
-                                                <span class="error help-block" />
+                                                <input type="text" placeholder="First Name" class="form-control" id="firstName" ng-model="newContact.first" ng-blur="checkBillingFirst(newContact.first)">
+                                                <span class="help-block" ng-if="invalidFirstName"></i>Required</span>
                                             </div>
                                         </div>
                                         <div class="col-sm-6">
-                                            <div class="form-group">
+                                            <div class="form-group" ng-class="{'has-error': invalidLastName}">
                                                 <label class="control-label" for="lastName">Last Name</label>
-                                                <input type="text" placeholder="Last Name" class="form-control" id="lastName" ng-model="newContact.last">
+                                                <input type="text" placeholder="Last Name" class="form-control" id="lastName" ng-blur="checkBillingLast(newContact.last)" ng-model="newContact.last">
+                                                <span class="help-block" ng-if="invalidLastName"></i>Required</span>
                                             </div>
                                         </div>
                                     </div>
-                                    <div>
+                                    <div class="row">
                                         <div class="col-sm-6">
-                                            <div class="form-group">
+                                            <div class="form-group" ng-class="{'has-error': invalidEmail}">
                                                 <label class="control-label" for="email">Email</label>
-                                                <input type="text" placeholder="Email" class="form-control" id="email" ng-model="newContact.details[0].emails[0].email">
+                                                <input type="text" placeholder="Email" class="form-control" id="email" ng-blur="checkBillingEmail(newContact.details[0].emails[0].email)" ng-model="newContact.details[0].emails[0].email">
+                                                <span class="help-block" ng-if="invalidEmail"></i>Required</span>
                                             </div>
                                         </div>
                                         <div class="col-sm-6">
@@ -169,38 +170,43 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div>
+                                    <div class="row">
                                         <div class="col-sm-6">
-                                            <div class="form-group">
+                                            <div class="form-group" ng-class="{'has-error': invalidAddress}">
                                                 <label class="control-label" for="address">Address</label>
-                                                <input type="text" placeholder="Address" class="form-control" id="address" ng-model="newContact.details[0].addresses[0].address">
+                                                <input type="text" ng-blur="checkBillingAddress(newContact.details[0].addresses[0].address)" placeholder="Address" class="form-control" id="address" ng-model="newContact.details[0].addresses[0].address">
+                                                <span class="help-block" ng-if="invalidAddress"></i>Required</span>
                                             </div>
                                         </div>
                                         <div class="col-sm-6">
                                             <div class="form-group">
                                                 <label class="control-label" for="address2">Address 2</label>
                                                 <input type="text" placeholder="Address 2" class="form-control" id="address2" ng-model="newContact.details[0].addresses[0].address2">
+
                                             </div>
                                         </div>
                                     </div>
-                                    <div>
+                                    <div class="row">
                                         <div class="col-sm-4">
-                                            <div class="form-group">
+                                            <div class="form-group" ng-class="{'has-error': invalidCity}">
                                                 <label class="control-label" for="city">City</label>
-                                                <input type="text" placeholder="City" class="form-control" id="city" ng-model="newContact.details[0].addresses[0].city">
+                                                <input type="text" ng-blur="checkBillingCity(newContact.details[0].addresses[0].city)" placeholder="City" class="form-control" id="city" ng-model="newContact.details[0].addresses[0].city">
+                                                <span class="help-block" ng-if="invalidCity"></i>Required</span>
                                             </div>
                                         </div>
                                         <div class="col-sm-2">
-                                            <div class="form-group">
+                                            <div class="form-group" ng-class="{'has-error': invalidState}">
                                                 <label class="control-label" for="state">State</label>
-                                                <input type="text" placeholder="State" class="form-control" id="state" ng-model="newContact.details[0].addresses[0].state">
+                                                <input type="text" ng-blur="checkBillingState(newContact.details[0].addresses[0].state)" placeholder="State" class="form-control" id="state" ng-model="newContact.details[0].addresses[0].state">
+                                                <span class="help-block" ng-if="invalidState"></i>Required</span>
                                             </div>
                                         </div>
                                         <div class="col-sm-6">
-                                            <div class="form-group" ng-class="{'has-error': invalidZipCode}">
+                                            <div class="form-group" ng-class="{'has-error': invalidZipCode || emptyZipCode}">
                                                 <label class="control-label" for="zipCode">Zip Code</label>
                                                 <input type="text" placeholder="Zip Code" class="form-control" id="zipCode" ng-model="newContact.details[0].addresses[0].zip" ng-blur="shippingPostCodeChanged(newContact.details[0].addresses[0].zip)">
-                                                <span class="help-block" ng-if="invalidZipCode"><i class="fa fa-times text-danger"></i> Zip Code is not valid.</span>
+                                                <span class="help-block" ng-if="emptyZipCode"></i>Required.</span>
+                                                <span class="help-block" ng-if="invalidZipCode"></i>Zip Code is not valid.</span>
                                             </div>
                                         </div>
                                     </div>
@@ -325,18 +331,18 @@
                 </div>
                 <div class="modal-footer cart-footer" ng-hide="checkoutModalState !== 3">
                     <button class="btn btn-orange btn-checkout pull-right" ng-click="makeCartPayment()"><i class="fa fa-shopping-cart"></i> Checkout</button>
-                    <button class="btn btn-info continue-shopping pull-left" ng-click="checkoutModalState = 2"><i class="fa fa-chevron-left"></i> Back
+                    <button class="btn btn-info continue-shopping pull-left" ng-click="setCheckoutState(2)"><i class="fa fa-chevron-left"></i> Back
                     </button>
                 </div>
                 <div class="modal-footer billing-footer" ng-hide="checkoutModalState !== 2">
-                    <button class="btn btn-success btn-payment pull-right" ng-click="checkoutModalState = 3"><i class="fa fa-credit-card"></i> Payment <i class="fa fa-chevron-right"></i></button>
-                    <button class="btn pull-left btn-info back-to-shopping-cart" ng-click="checkoutModalState = 1"><i class="fa fa-chevron-left"></i> Back
+                    <button class="btn btn-success btn-payment pull-right" ng-click="validateAddressDetails(newContact.details[0].addresses[0], newContact.details[0].emails[0].email)"><i class="fa fa-credit-card"></i> Payment <i class="fa fa-chevron-right"></i></button>
+                    <button class="btn pull-left btn-info back-to-shopping-cart" ng-click="setCheckoutState(1)"><i class="fa fa-chevron-left"></i> Back
                     </button>
                 </div>
                 <div class="modal-footer payment-footer" ng-hide="checkoutModalState !== 1">
-                    <button class="btn btn-success btn-confirm-payment pull-right" ng-disabled="!cartDetails || cartDetails.length <= 0" ng-click="checkoutModalState = 2"> Next <i class="fa fa-chevron-right"></i>
+                    <button class="btn btn-success btn-confirm-payment pull-right" ng-disabled="!cartDetails || cartDetails.length <= 0" ng-click="setCheckoutState(2)"> Next <i class="fa fa-chevron-right"></i>
                     </button>
-                    <button class="btn pull-left btn-info back-to-billing-shipping" data-dismiss="modal" ng-click="checkoutModalState = 1"><i class="fa fa-chevron-left"></i> Continue Shopping
+                    <button class="btn pull-left btn-info back-to-billing-shipping" data-dismiss="modal" ng-click="setCheckoutState(1)"><i class="fa fa-chevron-left"></i> Continue Shopping
                     </button>
                 </div>
             </div>

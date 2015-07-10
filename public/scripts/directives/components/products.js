@@ -8,6 +8,7 @@ app.directive('productsComponent', ['$filter', 'productService', 'accountService
     templateUrl: '/components/component-wrap.html',
     link: function (scope, element, attrs, ctrl) {
       scope.checkoutModalState = 1;
+      scope.newContact = {};
 
       /*
        * @getAllProducts
@@ -81,6 +82,14 @@ app.directive('productsComponent', ['$filter', 'productService', 'accountService
       scope.invalidZipCode = false;
       scope.shippingPostCodeChanged = function (postcode) {
         console.log('isValidUSZip(postcode) ', isValidUSZip(postcode));
+        scope.emptyZipCode = false;
+        scope.invalidZipCode=false;
+        if(!postcode)
+        {
+          scope.emptyZipCode = false;
+          scope.emptyZipCode = true;
+          return;
+        }
         if (isValidUSZip(postcode)) {
           if (postcode && scope.settings.taxes && scope.settings.taxbased !== 'business_location') {
             scope.calculatingTax = true;
@@ -98,6 +107,84 @@ app.directive('productsComponent', ['$filter', 'productService', 'accountService
           scope.showTax = false;
         }
       };
+
+      // Validations
+      scope.checkBillingFirst = function (first) {
+        if(!first)
+          scope.invalidFirstName = true;
+        else
+          scope.invalidFirstName = false;
+      }
+
+      scope.checkBillingLast = function (last) {
+        if(!last)
+          scope.invalidLastName = true;
+        else
+          scope.invalidLastName = false;
+      }
+
+      scope.checkBillingEmail = function (email) {
+        if(!email)
+          scope.invalidEmail = true;
+        else
+          scope.invalidEmail = false;
+      }
+
+      scope.checkBillingAddress = function (address) {
+        if(!address)
+          scope.invalidAddress = true;
+        else
+          scope.invalidAddress = false;
+      }
+
+      scope.checkBillingState = function (state) {
+        if(!state)
+          scope.invalidState = true;
+        else
+          scope.invalidState = false;
+      }
+
+      scope.checkBillingCity = function (city) {
+        if(!city)
+          scope.invalidCity = true;
+        else
+          scope.invalidCity = false;
+      }
+      scope.validateAddressDetails = function (details, email) {
+        scope.invalidFirstName = false;
+        scope.invalidLastName = false;
+        scope.invalidEmail = false;
+        scope.invalidAddress = false;
+        scope.invalidState = false;
+        scope.invalidCity = false;
+        scope.invalidZipCode = false;
+        scope.emptyZipCode = false;
+        var first,last,address,state,city,zip;
+        if(scope.newContact)
+        {
+          first = scope.newContact.first;
+          last = scope.newContact.last;
+        }
+        if(details)
+        {
+          address = details.address;
+          state = details.state;
+          city = details.city;
+          zip = details.zip;          
+        }
+
+        scope.checkBillingFirst(first);
+        scope.checkBillingLast(last);
+        scope.checkBillingEmail(email);
+        scope.checkBillingAddress(address);
+        scope.checkBillingState(state);
+        scope.checkBillingCity(city);        
+        scope.shippingPostCodeChanged(zip);
+
+        if(scope.invalidFirstName || scope.invalidLastName || scope.invalidEmail || scope.invalidAddress || scope.invalidState || scope.invalidCity || scope.invalidZipCode || scope.emptyZipCode)
+          return;
+        scope.checkoutModalState = 3;
+      }
 
       /*
        * @updateSelectedProduct
@@ -580,6 +667,12 @@ app.directive('productsComponent', ['$filter', 'productService', 'accountService
           $("#card_name .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
         }
       };
+    },
+    controller: function ($scope) {
+      $scope.setCheckoutState = function (state)
+      {
+         $scope.checkoutModalState = state;
+      }
     }
   }
 }]);
