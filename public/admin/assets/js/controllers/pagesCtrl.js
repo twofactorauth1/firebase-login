@@ -167,6 +167,10 @@
         return false;
       }
 
+      if ($scope.createpage.showhomepage) {
+        page.handle = 'index';
+      }
+
       var pageData = {
         title: page.title,
         handle: page.handle,
