@@ -137,14 +137,14 @@
                             <div class="panel-body padding-top-0">
                                 <form role="form" class="ng-pristine ng-valid">
                                     <div class="form-group">
-                                        <label>
-                                            SKU
+                                        <label tooltip-placement="top" tooltip-html-unsafe="the unique identifier that refers to the particular stock keeping unit for inventory management">
+                                            SKU <i class="fa fa-info-circle" />
                                         </label>
                                         <input type="text" placeholder="SKU" ng-model="product.sku" class="form-control">
                                     </div>
                                     <div class="form-group">
-                                        <label>
-                                            Regular Price
+                                        <label tooltip-placement="top" tooltip-html-unsafe="the price a customer sees until you enable a sale">
+                                            Regular Price <i class="fa fa-info-circle" />
                                         </label>
                                         <div class="input-group">
                                             <span class="input-group-addon">$</span>
@@ -152,8 +152,8 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label>
-                                            Sale Price
+                                        <label tooltip-placement="top" tooltip-html-unsafe="the price the customer sees while a sale is enabled">
+                                            Sale Price <i class="fa fa-info-circle" />
                                         </label>
                                         <div class="input-group">
                                             <span class="input-group-addon">$</span>
@@ -161,8 +161,8 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label>
-                                            Cost
+                                        <label tooltip-placement="top" tooltip-html-unsafe="the price you purchase these items for">
+                                            Cost <i class="fa fa-info-circle" />
                                         </label>
                                         <div class="input-group">
                                             <span class="input-group-addon">$</span>
@@ -170,8 +170,8 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label>
-                                            Taxable
+                                        <label tooltip-placement="top" tooltip-html-unsafe="calculate taxes when the customer purchases this item">
+                                            Taxable <i class="fa fa-info-circle" />
                                         </label>
                                         <div class="input-group">
                                             <switch ng-model="product.taxable" type="checkbox" switch-label="Taxable"></switch>
