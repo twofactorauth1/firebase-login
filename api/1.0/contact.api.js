@@ -507,6 +507,10 @@ _.extend(api.prototype, baseApi.prototype, {
                     var contact = new $$.m.Contact(req.body);
                     contact.set('accountId', value.id());
                     contact.set('type', 'ld');
+                    if(contact.get('fingerprint')) {
+                        contact.set('fingerprint', ''+contact.get('fingerprint'));
+                    }
+                    
                     contactDao.saveOrUpdateContact(contact, function(err, savedContact){
                         if(err) {
                             self.log.error('Error signing up: ' + err);
