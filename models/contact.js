@@ -288,7 +288,9 @@ var contact = $$.m.ModelBase.extend({
         details: details
       });
     }
-
+    if(type === null) {
+        return details[0];
+    }
     return _.find(details, function(_detail) {
       return _detail.type === type
     });
