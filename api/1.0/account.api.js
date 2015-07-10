@@ -315,7 +315,8 @@ _.extend(api.prototype, baseApi.prototype, {
             if (isAllowed !== true) {
                 return self.send403(resp);
             } else {
-                accountDao.saveOrUpdate(account, function(err, value){
+
+                accountDao.updateAccount(account, self.userId(req), function(err, value){
                     if(!err &&value != null){
                         self.log.debug('<< updateAccount');
                         resp.send(value.toJSON("public"));
@@ -325,6 +326,7 @@ _.extend(api.prototype, baseApi.prototype, {
                         self.wrapError(resp, 500, null, err, value);
                     }
                 });
+                
             }
         });
 

@@ -47,7 +47,7 @@
         user_id: $scope.currentUser._id,
         date: date.toISOString()
       };
-      if(!$scope.customer.notes)
+      if (!$scope.customer.notes)
         $scope.customer.notes = [];
       $scope.customer.notes.push(_noteToPush);
       $scope.matchUsers($scope.customer);
@@ -111,12 +111,19 @@
         customer.notes = $scope.matchUsers(customer);
         $scope.customer = customer;
         $scope.setTags();
-        $scope.setDefaults();        
+        $scope.setDefaults();
         $scope.data.fullName = [$scope.customer.first, $scope.customer.middle, $scope.customer.last].join(' ').trim();
         $scope.getMapData();
         // $scope.contactLabel = CustomerService.contactLabel(customer);
         // $scope.checkBestEmail = CustomerService.checkBestEmail(customer);
       });
+    };
+
+    $scope.resizeMap = function () {
+      $scope.loadingMap = true;
+      setTimeout(function () {
+        $scope.loadingMap = false;
+      }, 500);
     };
 
     /*
@@ -144,7 +151,7 @@
         $scope.loadingMap = false;
       }
       var validMapData = false;
-      if ($scope.ip_geo_address) {        
+      if ($scope.ip_geo_address) {
         CustomerService.getGeoSearchAddress($scope.ip_geo_address, function (data) {
           if (data.error === undefined) {
             $scope.location.lat = parseFloat(data.lat);
@@ -165,12 +172,10 @@
             fn(validMapData);
           }
         });
-      }
-      else
-      {
+      } else {
         if (fn) {
-            fn(true);
-          }
+          fn(true);
+        }
       }
     };
 
@@ -220,7 +225,7 @@
                 }
 
               });
-                
+
               $scope.localtime = moment().format('h:mm a');
               if ($scope.ip_geo_address) {
                 CustomerService.getGeoSearchAddress($scope.ip_geo_address, function (data) {
@@ -363,7 +368,7 @@
         //   });
         // }
         $scope.refreshMap(function (validMapData) {
-          if (!validMapData) {            
+          if (!validMapData) {
             if (!hideToaster) {
               $scope.errorMapData = true;
               toaster.pop('warning', 'Address could not be found.');

@@ -489,7 +489,63 @@ var dao = {
       });
     });
 
-  }
+  },
+
+    updateAccount: function(modifiedAccount, userId, fn) {
+        var self = this;
+        self.log.debug('>> updateAccount');
+
+        self.getById(modifiedAccount.id(), $$.m.Account, function(err, account) {
+            if(err) {
+                self.log.error('Error fetching account: ' +err);
+                return fn(err, null);
+            } else {
+                //validation
+                async.waterfall([
+                    function validateSubdomain(callback) {
+                        if(account.get('subdomain') !== modifiedAccount.get('subdomain')) {
+                            self.getAccountBySubdomain(modifiedAccount.get('subdomain'), function(err, value){
+                                if(err) {
+                                    self.log.error('Error verifying subdomain: ' + err);
+                                    return fn(err, null);
+                                } else if(value === null) {
+                                    //cool
+                                    callback(null);
+                                } else {
+                                    self.log.debug('subdomain exists');
+                                    return fn('Subdomain [' + modifiedAccount.get('subdomain') + '] already exists');
+                                }
+                            });
+                        } else {
+                            callback(null);
+                        }
+                    },
+                    /*
+                     * Add any other validation steps here.
+                     */
+                    function doUpdate(callback) {
+                        self.log.debug('updating account');
+                        modifiedAccount.set('created', account.get('created'));
+                        var modifiedObject = {
+                            date: new Date(),
+                            by: userId
+                        };
+                        modifiedAccount.set('modified', modifiedObject);
+                        self.log.debug('<< updateAccount');
+                        self.saveOrUpdate(modifiedAccount, fn);
+                    }
+                ], function(err){
+                    if(err) {
+                        return fn(err);
+                    } else {
+                        self.log.warn('Unexpected method call');
+                        return;
+                    }
+                });
+
+            }
+        });
+    }
 };
 
 dao = _.extend(dao, $$.dao.BaseDao.prototype, dao.options).init();

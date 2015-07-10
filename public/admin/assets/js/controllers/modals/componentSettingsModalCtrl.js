@@ -1,7 +1,7 @@
 'use strict';
 /*global app, moment, angular*/
 /*jslint unparam:true*/
-app.controller('ComponentSettingsModalCtrl', ['$scope', '$modalInstance', '$http', '$timeout', '$q', '$compile', '$filter', 'WebsiteService', 'CustomerService', 'ProductService', 'GeocodeService', 'toaster', 'components', 'clickedIndex', 'contactMap', 'website', 'blog', function ($scope, $modalInstance, $http, $timeout, $q, $compile, $filter, WebsiteService, CustomerService, ProductService, GeocodeService, toaster, components, clickedIndex, contactMap, website, blog) {
+app.controller('ComponentSettingsModalCtrl', ['$scope', '$modalInstance', '$http', '$timeout', '$q', '$compile', '$filter', 'WebsiteService', 'CustomerService', 'ProductService', 'GeocodeService', 'toaster', 'components', 'clickedIndex', 'contactMap', 'website', 'blog', 'isDirty', 'isSinglePost', function ($scope, $modalInstance, $http, $timeout, $q, $compile, $filter, WebsiteService, CustomerService, ProductService, GeocodeService, toaster, components, clickedIndex, contactMap, website, blog, isDirty, isSinglePost) {
   $scope.blog ={};
   $scope.components = components;
   $scope.clickedIndex = clickedIndex;
@@ -9,6 +9,8 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$modalInstance', '$http
   $scope.contactMap = contactMap;
   $scope.website = website;
   $scope.blog.post = blog;
+  $scope.isDirty = isDirty;
+  $scope.isSinglePost = isSinglePost;
   /*
    * @getAllProducts
    * - get products for products and pricing table components
@@ -566,6 +568,11 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$modalInstance', '$http
         });
       }
   };
+
+  $scope.saveComponent =function()
+  {
+    $scope.isDirty.dirty = true;
+  }
   
   /*
    * @editComponent
@@ -575,12 +582,15 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$modalInstance', '$http
   $scope.editComponent = function () {
 
     if ($scope.componentEditing) {
-      $scope.componentEditing.icon = _.findWhere($scope.componentTypes, {
+      var componentType = _.findWhere($scope.componentTypes, {
         type: $scope.componentEditing.type
-      }).icon;
-      $scope.componentEditing.header_title = _.findWhere($scope.componentTypes, {
-        type: $scope.componentEditing.type
-      }).title;
+      });
+      if (componentType && componentType.icon) {
+        $scope.componentEditing.icon = componentType.icon;
+      }
+      if (componentType && componentType.title) {
+        $scope.componentEditing.header_title = componentType.title;
+      }
     }
 
     if ($scope.componentEditing.type === "simple-form" && !$scope.componentEditing.fields.length) {

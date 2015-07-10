@@ -271,11 +271,15 @@
      * - save product function
      */
 
+     $scope.saveLoading = false;
+
     $scope.saveProductFn = function () {
+      $scope.saveLoading = true;
       $scope.setProductTags();
       if ($scope.validateProduct()) {
         ProductService.saveProduct($scope.product, function (product) {
           //format variation attributes
+          $scope.saveLoading = false;
           $scope.originalProduct = angular.copy(product);
           toaster.pop('success', 'Product Saved.');
         });

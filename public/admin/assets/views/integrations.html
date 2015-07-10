@@ -1,6 +1,5 @@
 <div ng-controller="IntegrationsCtrl" class="integrations">
     <indig-onboarding min-requirements="minRequirements"></indig-onboarding>
-    <!-- start: PAGE TITLE -->
     <section id="page-title" class="padding-top-15 padding-bottom-15">
         <div class="row">
             <div class="col-sm-8">
@@ -10,8 +9,6 @@
             <div ncy-breadcrumb></div>
         </div>
     </section>
-    <!-- end: PAGE TITLE -->
-    <!-- start: YOUR CONTENT HERE -->
     <div class="container-fluid container-fullw bg-white">
         <div class="panel panel-transparent margin-bottom-0">
             <div class="panel-body no-padding">
@@ -20,24 +17,24 @@
                         <label>Choose an Integration</label>
                         <ul>
                             <li class="social-twitter" tooltip="Twitter" tooltip-placement="top">
-                                <a href="#" ng-click="socailRedirect('Twitter');">
-                                            Twitter
-                                        </a>
+                                <a ng-click="socailRedirect('Twitter');">
+                                    Twitter
+                                </a>
                             </li>
                             <li class="social-facebook" tooltip="Facebook" tooltip-placement="top">
-                                <a ng-click="socailRedirect('Facebook');" href="#">
-                                            Facebook
-                                        </a>
+                                <a ng-click="socailRedirect('Facebook');">
+                                    Facebook
+                                </a>
                             </li>
                             <li class="social-google" tooltip="Google" tooltip-placement="top">
-                                <a ng-click="socailRedirect('Google');" href="#">
-                                            Google+
-                                        </a>
+                                <a ng-click="socailRedirect('Google');">
+                                    Google+
+                                </a>
                             </li>
                             <li class="social-stripe" tooltip="Stripe" tooltip-placement="top">
                                 <a href="/redirect/?next={{currentHost}}/stripe/connect&socialNetwork=stripe">
-                                            Stripe
-                                        </a>
+                                    Stripe
+                                </a>
                             </li>
                         </ul>
                     </div>
@@ -45,45 +42,44 @@
                         <label class="text-muted">Integrations Coming Soon</label>
                         <ul>
                             <li class="social-linkedin" tooltip="LinkedIn" tooltip-placement="top">
-                            <!-- ng-click="socailRedirect('LinkedIn');" -->
                                 <a href="#">
-                                            LinkedIn
-                                        </a>
+                                    LinkedIn
+                                </a>
                             </li>
                             <li class="social-instagram" tooltip="Instagram" tooltip-placement="top">
                                 <a href="#" disabled="disabled">
-                                            Instagram
-                                        </a>
+                                    Instagram
+                                </a>
                             </li>
                             <li class="social-pinterest" tooltip="Pinterest" tooltip-placement="top">
                                 <a href="#" disabled="disabled">
-                                            Pinterest
-                                        </a>
+                                    Pinterest
+                                </a>
                             </li>
                             <li class="social-youtube" tooltip="YouTube" tooltip-placement="top">
                                 <a href="#" disabled="disabled">
-                                            YouTube
-                                        </a>
+                                    YouTube
+                                </a>
                             </li>
                             <li class="social-vimeo" tooltip="Vimeo" tooltip-placement="top">
                                 <a href="#" disabled="disabled">
-                                            Vimeo
-                                        </a>
+                                    Vimeo
+                                </a>
                             </li>
                             <li class="social-authorize" tooltip="Authorize" tooltip-placement="top">
                                 <a href="#" disabled="disabled">
-                                            Authorize.Net
-                                        </a>
+                                    Authorize.Net
+                                </a>
                             </li>
                             <li class="social-paypal" tooltip="PayPal" tooltip-placement="top">
                                 <a href="#" disabled="disabled">
-                                            Paypal
-                                        </a>
+                                    Paypal
+                                </a>
                             </li>
                             <li class="social-wallet" tooltip="Wallet" tooltip-placement="top">
                                 <a href="#" disabled="disabled">
-                                            Google Wallet
-                                        </a>
+                                    Google Wallet
+                                </a>
                             </li>
                         </ul>
                     </div>
@@ -92,7 +88,7 @@
         </div>
     </div>
     <div class="col-sm-12 margin-bottom-15">
-        <div class="col-sm-6 col-md-4 col-lg-3 margin-top-15" ng-repeat="sa in socialAccounts| filter: socialFilter">
+        <div class="col-sm-6 col-md-4 col-lg-3 margin-top-15" ng-repeat="sa in socialAccounts| filter: socialFilter" ng-class="{'load1 csspinner': sa.loading}">
             <div class="thumbnail padding-10  margin-bottom-0">
                 <img src="https://s3-us-west-2.amazonaws.com/indigenous-admin/fb-lofo.jpg" class="img-thumbnail" alt="..." ng-show="sa.type==credentialTypes.FACEBOOK">
                 <img src="https://s3-us-west-2.amazonaws.com/indigenous-admin/google%2B-logo.jpg" class="img-thumbnail" alt="..." ng-show="sa.type==credentialTypes.GOOGLE">
@@ -110,7 +106,7 @@
                                 <span class="text-bold margin-left-5">{{sa.username || sa.profile.name}}</span>
                                 <div class="btn-group btn-group-justified margin-top-10">
                                     <div class="btn-group">
-                                        <button type="button" class="btn btn-danger btn-o btn-wide btn-scroll btn-scroll-top ti-trash" ng-click="disconnectSocial(sa.id)">
+                                        <button type="button" class="btn btn-danger btn-o btn-wide btn-scroll btn-scroll-top ti-trash" ng-click="disconnectSocial(sa)">
                                             <span>Disconnect</span>
                                         </button>
                                     </div>
@@ -122,5 +118,4 @@
             </div>
         </div>
     </div>
-    <!-- end: YOUR CONTENT HERE -->
 </div>

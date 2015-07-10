@@ -10,22 +10,29 @@
      */
 
     $scope.isEditing = true;
-
+    //$scope.isDirty = false;
+    $scope.isDirty = {};
     $scope.savePage = function () {
       $scope.saveLoading = true;
-      if($scope.isSinglePost)
-      {
-        var post_data = angular.copy($scope.blog.post);
-        post_data.post_tags.forEach(function(v, i) {
-            if (v.text)
-                post_data.post_tags[i] = v.text;
-        });
-        WebsiteService.updatePost($scope.page._id,post_data._id,post_data, function (data) {
+      $scope.isDirty.dirty = false;
+      if ($scope.isSinglePost) {
+        $scope.validateEditPost($scope.blog.post);
+        if (!$scope.editPostValidated) {
           $scope.saveLoading = false;
-          toaster.pop('success', "Post Saved", "The " + $scope.blog.post.post_title + " post was saved successfully.");                   
+          toaster.pop('error', "Post Title or URL can not be blank.");
+          return false;
+        }
+        var post_data = angular.copy($scope.blog.post);
+        post_data.post_tags.forEach(function (v, i) {
+          if (v.text) {
+            post_data.post_tags[i] = v.text;
+          }
         });
-      }
-      else
+        WebsiteService.updatePost($scope.page._id, post_data._id, post_data, function (data) {
+          $scope.saveLoading = false;
+          toaster.pop('success', "Post Saved", "The " + $scope.blog.post.post_title + " post was saved successfully.");
+        });
+      } else {
         WebsiteService.updatePage($scope.page, function (data) {
           $scope.saveLoading = false;
           toaster.pop('success', "Page Saved", "The " + $scope.page.handle + " page was saved successfully.");
@@ -38,6 +45,7 @@
             }
           });
         });
+      }
     };
 
     /*
@@ -49,7 +57,7 @@
       $scope.checkForSaveBeforeLeave();
     };
 
-     /*
+    /*
      * @getWebsite
      * -
      */
@@ -57,11 +65,12 @@
     $scope.getWebsite = function (fn) {
       WebsiteService.getWebsite(function (website) {
         $scope.website = website;
-        if(fn)
+        if (fn) {
           fn($scope.website);
+        }
       });
-    } 
-    
+    };
+
     $scope.getWebsite();
 
     /*
@@ -123,11 +132,13 @@
      */
 
     $scope.retrievePage = function (_handle) {
-      
       WebsiteService.getSinglePage(_handle, function (data) {
+        console.log('data ', data);
         $scope.page = data;
         $scope.components = $scope.page.components;
+        $scope.originalComponents = angular.copy($scope.components);
         $scope.activateCKeditor();
+        $rootScope.breadcrumbTitle = $scope.page.title;
       });
     };
 
@@ -137,26 +148,26 @@
      */
     $scope.blog = {};
     $scope.retrievePost = function (_handle) {
-      $scope.isSinglePost = true;  
-      $scope.newPost = {}; 
+      $scope.isSinglePost = true;
+      $scope.newPost = {};
       $scope.handle = _handle;
-      $scope.post_statuses = postConstant.post_status.dp; 
+      $scope.post_statuses = postConstant.post_status.dp;
       WebsiteService.getSinglePage('single-post', function (data) {
         $scope.page = data;
         WebsiteService.getSinglePost($scope.handle, function (data) {
-            $scope.blog.post = data;
-            $scope.single_post = true;
-            $scope.components = $scope.page.components;
-            $scope.activateCKeditor();
+          $scope.blog.post = data;
+          $scope.single_post = true;
+          $scope.components = $scope.page.components;
+          $rootScope.breadcrumbTitle = $scope.blog.post.post_title;
+          $scope.activateCKeditor();
         });
-        
-      });  
+
+      });
     };
 
-    $scope.getSinglePostData = function()
-    {
-      
-    }
+    $scope.getSinglePostData = function () {
+      console.log('getSinglePostData');
+    };
 
     /*
      * @calculateWindowHeight
@@ -179,6 +190,16 @@
     }
 
     /*
+     * @location:email
+     * -
+     */
+
+
+    if ($location.search().email) {
+      $scope.retrievePage($location.search().email);
+    }
+
+    /*
      * @location:posthandle
      * -
      */
@@ -195,7 +216,10 @@
     $scope.ckeditorLoaded = false;
 
     $scope.activateCKeditor = function () {
-      CKEDITOR.on("instanceReady", function () {
+      CKEDITOR.on("instanceReady", function (ev) {
+        ev.editor.on('key', function () {
+          $scope.isDirty.dirty = true;
+        });
         if (!$scope.ckeditorLoaded) {
           $timeout(function () {
             $scope.ckeditorLoaded = true;
@@ -321,15 +345,15 @@
             $scope.updateImage = false;
           }
         } else if (type === 'thumbnail-slider') {
-            if ($scope.updateImage) {
-              $scope.componentEditing.thumbnailCollection[$scope.componentImageIndex].url = asset.url;
-            } else {
-              $scope.componentEditing.thumbnailCollection.splice($scope.componentImageIndex + 1, 0, {
-                 url: asset.url
-              });
-              $scope.updateImage = false;
-            }
-            $scope.thumbnailSlider.refreshSlider();
+          if ($scope.updateImage) {
+            $scope.componentEditing.thumbnailCollection[$scope.componentImageIndex].url = asset.url;
+          } else {
+            $scope.componentEditing.thumbnailCollection.splice($scope.componentImageIndex + 1, 0, {
+              url: asset.url
+            });
+            $scope.updateImage = false;
+          }
+          $scope.thumbnailSlider.refreshSlider();
         } else if (type === 'meet-team') {
           $scope.componentEditing.teamMembers[$scope.componentImageIndex].profilepic = asset.url;
         } else {
@@ -368,7 +392,7 @@
 
     };
 
-     /*
+    /*
      * @closeModal
      * -
      */
@@ -376,8 +400,8 @@
     $scope.closeModal = function () {
       console.log('closeModal >>> ');
       $timeout(function () {
-          $scope.modalInstance.close();
-          angular.element('.modal-backdrop').remove();
+        $scope.modalInstance.close();
+        angular.element('.modal-backdrop').remove();
       });
     };
 
@@ -408,29 +432,35 @@
         //scope: $scope,
         resolve: {
           components: function () {
-            return $scope.components
+            return $scope.components;
           }
         }
       };
 
       if (controller) {
         _modal.controller = controller;
-        
+
         _modal.resolve.contactMap = function () {
-          return $scope.contactMap
+          return $scope.contactMap;
         };
-         _modal.resolve.website = function () {
-          return $scope.website
+        _modal.resolve.website = function () {
+          return $scope.website;
         };
-         _modal.resolve.blog = function () {
-          return $scope.blog.post
+        _modal.resolve.blog = function () {
+          return $scope.blog.post;
+        };
+        _modal.resolve.isDirty = function () {
+          return $scope.isDirty;
+        };
+        _modal.resolve.isSinglePost = function () {
+          return $scope.isSinglePost;
         };
       }
-      
+
       if (index >= 0) {
         _modal.resolve.clickedIndex = function () {
-          return index
-        }
+          return index;
+        };
       }
       $scope.modalInstance = $modal.open(_modal);
       $scope.modalInstance.result.then(null, function () {
@@ -463,7 +493,7 @@
         $scope.openSimpleModal("page-duplicate-modal");
       }
     };
-    
+
     /*
      * @checkForDuplicatePage
      * - Check for duplicate page
@@ -581,9 +611,9 @@
           console.log("Duplicate Post Created");
           window.location = '/admin/#/website/posts/?posthandle=' + newPost.post_url;
           window.location.reload();
-        })
-      })
-    }
+        });
+      });
+    };
 
     /*
      * @validateNewPost
@@ -593,24 +623,54 @@
     $scope.newPostValidated = false;
 
     $scope.validateNewPost = function (post) {
-      if (!post.post_url || post.post_url == '') {
+      if (!post.post_url || post.post_url === '') {
         $scope.handleError = true;
         angular.element('#new-post-url').parents('div.form-group').addClass('has-error');
       } else {
         $scope.handleError = false;
         angular.element('#new-post-url').parents('div.form-group').removeClass('has-error');
       }
-      if (!post.post_title || post.post_title == '') {
+      if (!post.post_title || post.post_title === '') {
         $scope.titleError = true;
         angular.element('#new-post-title').parents('div.form-group').addClass('has-error');
       } else {
         $scope.titleError = false;
         angular.element('#new-post-title').parents('div.form-group').removeClass('has-error');
       }
-      if (post && post.post_title && post.post_title != '' && post.post_url && post.post_url != '') {
+      if (post && post.post_title && post.post_title !== '' && post.post_url && post.post_url !== '') {
         $scope.newPostValidated = true;
-      } else
+      } else {
         $scope.newPostValidated = false;
+      }
+    };
+
+    /*
+     * @validateEditPost
+     * -
+     */
+
+    $scope.editPostValidated = false;
+
+    $scope.validateEditPost = function (post, update) {
+      if (post.post_url === '') {
+        $scope.handleError = true;
+        angular.element('#edit-post-url').parents('div.form-group').addClass('has-error');
+      } else {
+        $scope.handleError = false;
+        angular.element('#edit-post-url').parents('div.form-group').removeClass('has-error');
+      }
+      if (post.post_title === '') {
+        $scope.titleError = true;
+        angular.element('#edit-post-title').parents('div.form-group').addClass('has-error');
+      } else {
+        $scope.titleError = false;
+        angular.element('#edit-post-title').parents('div.form-group').removeClass('has-error');
+      }
+      if (post && post.post_title && post.post_title !== '' && post.post_url && post.post_url !== '') {
+        $scope.editPostValidated = true;
+      } else {
+        $scope.editPostValidated = false;
+      }
     };
 
     /*
@@ -626,11 +686,14 @@
       //   var isDirty = $scope.childScope.checkOrSetPageDirty() || $scope.isDirty;
       // }
       // $scope.childScope.checkOrSetPageDirty(true);
+      if ($scope.originalComponents && $scope.components && $scope.originalComponents.length !== $scope.components.length) {
+        $scope.isDirty.dirty = true;
+      }
       var redirectUrl = url;
       if (!redirectUrl) {
         redirectUrl = $location.search().posthandle ? "/admin/#/website/posts" : "/admin/#/website/pages";
       }
-      if ($scope.isDirty) {
+      if ($scope.isDirty.dirty) {
         SweetAlert.swal({
           title: "Are you sure?",
           text: "You have unsaved data that will be lost",
@@ -703,7 +766,7 @@
       });
     };
 
-    CKEDITOR.disableAutoInline = true;
+    // CKEDITOR.disableAutoInline = true;
 
     /*
      * @deleteComponent
