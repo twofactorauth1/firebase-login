@@ -63,8 +63,20 @@
                             </div>
                         </div>
                         <div>
-                            <label>Icon or Image</label>
-                            <switch ng-model="product.is_image" type="checkbox" switch-label="Image"></switch>
+                            <div class="form-group">
+                                <div class="radio clip-radio radio-primary radio-inline">
+                                    <input type="radio" id="product_image_icon" name="inline" value="0" ng-model="product.is_image">
+                                    <label for="product_image_icon">
+                                        Icon
+                                    </label>
+                                </div>
+                                <div class="radio clip-radio radio-primary radio-inline">
+                                    <input type="radio" id="product_image_image" name="inline" value="1" ng-model="product.is_image">
+                                    <label for="product_image_image">
+                                        Image
+                                    </label>
+                                </div>
+                            </div>
                             <a ng-show="product.is_image" class="btn btn-success media-modal pull-right" media-modal-show-insert="true" on-insert-mediacb="insertMedia" user='user' insert-media-type='"image"'> <span class="fa fa-image"></span> <span class="hidden-xs">Change Image</span>
                             </a>
                         </div>
