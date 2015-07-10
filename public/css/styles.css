@@ -1226,9 +1226,6 @@ ul.nav {
   position: relative;
   z-index: 5;
 }
-.navigation-v1 .navbar .navbar-header {
-  float: none;
-}
 .navigation-v1 .navbar .navbar-brand {
   float: none;
   display: block;
@@ -3173,6 +3170,9 @@ div[data-type=single-post] .container {
 .single-post-v1 .inner-page {
   padding: 0;
   max-width: 100%;
+}
+.single-post-v1 .post-social-link a {
+  color: #337ab7;
 }
 .single-post-v1 #main-area {
   padding-top: 80px;
