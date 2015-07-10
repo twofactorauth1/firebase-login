@@ -255,7 +255,8 @@ _.extend(router.prototype, BaseRouter.prototype, {
         var activeAccountId = parseInt(req.params.id);
         var accountAry = _.pluck(req.session.accounts, 'id');
         if(_.contains(accountAry, activeAccountId)){
-            req.session.accountId = activeAccountId
+            req.session.accountId = activeAccountId;
+            req.session.unAuthAccountId = activeAccountId;
             var dataObj = _.find(req.session.accounts, function(previewData){if(previewData.id === activeAccountId)return true;});
             req.session.subdomain = dataObj.subdomain;
             req.session.domain = dataObj.domain;

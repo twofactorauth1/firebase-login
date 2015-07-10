@@ -264,17 +264,18 @@
 
     $scope.addImageFromMedia = function (componentId, index, update) {
       $scope.imageChange = true;
+      $scope.showInsert = true;
       $scope.updateImage = update;
       $scope.componentImageIndex = index;
       $scope.componentEditing = _.findWhere($scope.components, {
         _id: componentId
       });
       angular.element("#media-manager-modal").modal('show');
-      $scope.showInsert = true;
     };
 
     $scope.addImageToThumbnail = function (componentId, index, update, parentIndex, numberPerPage) {
       $scope.imageChange = true;
+      $scope.showInsert = true;
       $scope.updateImage = update;
       $scope.componentImageIndex = index;
       if (parentIndex && numberPerPage) {
@@ -284,7 +285,6 @@
         _id: componentId
       });
       angular.element("#media-manager-modal").modal('show');
-      $scope.showInsert = true;
     };
 
     /*
@@ -294,10 +294,10 @@
 
     $scope.clickImageButton = function (editor, edit) {
       $scope.insertMediaImage = true;
+      $scope.showInsert = true;
       $scope.inlineInput = editor;
       $scope.isEditMode = edit;
       angular.element("#media-manager-modal").modal('show');
-      $scope.showInsert = true;
     };
 
     /*
