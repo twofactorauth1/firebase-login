@@ -133,7 +133,7 @@
      */
 
     $scope.navigateTo = function (section, $event) {
-      $state.go(section, {}, {reload:true});
+      $state.go(section);
       $scope.cancel($event);
     };
 
