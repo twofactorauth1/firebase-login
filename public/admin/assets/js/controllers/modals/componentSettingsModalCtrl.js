@@ -582,12 +582,15 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$modalInstance', '$http
   $scope.editComponent = function () {
 
     if ($scope.componentEditing) {
-      $scope.componentEditing.icon = _.findWhere($scope.componentTypes, {
+      var componentType = _.findWhere($scope.componentTypes, {
         type: $scope.componentEditing.type
-      }).icon;
-      $scope.componentEditing.header_title = _.findWhere($scope.componentTypes, {
-        type: $scope.componentEditing.type
-      }).title;
+      });
+      if (componentType && componentType.icon) {
+        $scope.componentEditing.icon = componentType.icon;
+      }
+      if (componentType && componentType.title) {
+        $scope.componentEditing.header_title = componentType.title;
+      }
     }
 
     if ($scope.componentEditing.type === "simple-form" && !$scope.componentEditing.fields.length) {

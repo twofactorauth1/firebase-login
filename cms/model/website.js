@@ -51,7 +51,7 @@ var website = $$.m.ModelBase.extend({
              * }
              */
             settings: {
-                footerlink : "false",
+                footerlink : true,
             },
 
 

@@ -20,8 +20,8 @@
                             <!-- <button type="button" class="btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti ti-receipt ng-click-active pull-right">
                                 <span>Duplicate</span>
                             </button> -->
-                            <button type="button" ng-click="saveProductFn()" class="btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti ti-credit-card ng-click-active pull-right margin-right-5">
-                                <span>Save</span>
+                            <button type="button" ng-click="saveProductFn()" class="btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti ti-credit-card ng-click-active pull-right margin-right-5" ng-disabled="saveLoading">
+                                <span><i ng-class="{'fa fa-spin fa-spinner':saveLoading}"></i> Save</span>
                             </button>
                             <!-- <a ladda="ldloading.expand_right" class="btn btn-wide btn-primary" data-style="expand-right" ng-click="clickBtn('expand-right')">
                                 expand-right

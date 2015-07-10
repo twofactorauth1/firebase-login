@@ -112,7 +112,7 @@
                                                     <td>
                                                         <div ng-repeat="address in customer.details[0].addresses  track by $index">
                                                             <a href>
-                                                                {{address.address}} {{address.address2}}<br>{{address.city}} {{address.state}} {{address.postcode}}
+                                                                {{address.address}} {{address.address2}}<br>{{address.city}} {{address.state}} {{address.country}} {{address.zip}}
                                                             </a>
                                                             <br>
                                                         </div>
@@ -226,7 +226,7 @@
                         <!-- start: TAB EDIT ACCOUNT -->
                         <tab heading="Edit Customer" active="editActive">
                             <div class="col-xs-12">
-                                <button class="btn btn-info btn-o pull-right" ng-click="customerSaveFn()">Save</button>
+                                <button class="btn btn-info btn-o pull-right" ng-click="customerSaveFn()" ng-disabled="saveLoading"><span ng-class="{'fa fa-spin fa-spinner': saveLoading}"></span> Save</button>
                             </div>
                             <div class="clearfix"></div>
                             <form action="#" role="form" id="form">
