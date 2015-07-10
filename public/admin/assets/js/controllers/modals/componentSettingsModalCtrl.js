@@ -2,7 +2,7 @@
 /*global app, moment, angular*/
 /*jslint unparam:true*/
 app.controller('ComponentSettingsModalCtrl', ['$scope', '$modalInstance', '$http', '$timeout', '$q', '$compile', '$filter', 'WebsiteService', 'CustomerService', 'ProductService', 'GeocodeService', 'toaster', 'components', 'clickedIndex', 'contactMap', 'website', 'blog', 'isDirty', 'isSinglePost', function ($scope, $modalInstance, $http, $timeout, $q, $compile, $filter, WebsiteService, CustomerService, ProductService, GeocodeService, toaster, components, clickedIndex, contactMap, website, blog, isDirty, isSinglePost) {
-  $scope.blog ={};
+  $scope.blog = {};
   $scope.components = components;
   $scope.clickedIndex = clickedIndex;
   $scope.componentEditing = components[clickedIndex];
@@ -23,8 +23,9 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$modalInstance', '$http
     _.each(data, function (product) {
       if (product.tags && product.tags.length > 0) {
         _.each(product.tags, function (tag) {
-          if ($scope.availableProductTags.indexOf(tag) === -1)
+          if ($scope.availableProductTags.indexOf(tag) === -1) {
             $scope.availableProductTags.push(tag);
+          }
         });
       }
     });
@@ -265,8 +266,9 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$modalInstance', '$http
   $scope.removeImage = function (remove) {
     if ($scope.componentEditing && $scope.componentEditing.bg && $scope.componentEditing.bg.img) {
       if (($scope.componentEditing.bg.img.show === false && remove === true) || remove === false) {
-        if (remove === false)
+        if (remove === false) {
           $scope.componentEditing.bg.img.url = null;
+        }
         $scope.componentEditing.bg.img.blur = false;
         $scope.componentEditing.bg.img.parallax = false;
         $scope.componentEditing.bg.img.overlay = false;
@@ -290,12 +292,13 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$modalInstance', '$http
         return page.handle === newValue;
       });
     }
-  })
+  });
 
   $scope.initializeEditLinks = function (link, status) {
     if (link.page) {
-      if (status)
+      if (status) {
         link.data = null;
+      }
       $scope.currentPage = _.find($scope.filterdedPages, function (page) {
         return page.handle === link.page;
       });
@@ -335,11 +338,11 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$modalInstance', '$http
     var newArray = _.first(angular.copy($scope.components), [index + 1]);
     var hash = _.filter(newArray, function (obj) {
       return obj.type === value;
-    })
-    if (hash.length > 1)
+    });
+    if (hash.length > 1) {
       return value.replace("-", " ") + "-" + (hash.length - 1);
-    else
-      return value.replace("-", " ");
+    }
+    return value.replace("-", " ");
   };
 
   /*
@@ -389,7 +392,7 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$modalInstance', '$http
           value.links.splice(index, 1);
           setTimeout(function () {
             $scope.updateLinkList();
-          }, 1000)
+          }, 1000);
         }
       });
     } else {
@@ -398,7 +401,7 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$modalInstance', '$http
           value.links.splice(index, 1);
           setTimeout(function () {
             $scope.updateLinkList();
-          }, 1000)
+          }, 1000);
         }
       });
     }
@@ -419,7 +422,7 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$modalInstance', '$http
             name: "Head Menu",
             handle: "head-menu",
             links: []
-          })
+          });
         }
         $scope.componentEditing.linkLists.forEach(function (value, index) {
           if (value.handle === "head-menu") {
@@ -455,7 +458,7 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$modalInstance', '$http
     }
     setTimeout(function () {
       $scope.updateLinkList();
-    }, 1000)
+    }, 1000);
   };
 
   /*
@@ -466,29 +469,27 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$modalInstance', '$http
   $scope.updateLinkList = function (index) {
     var linkLabelsArr = [];
     var editedLinksLists = angular.element('.head-menu-links');
-    // if(index)
-    // editedLinksLists.splice(index,1);
-    for (var i = 0; i < editedLinksLists.length; i++) {
-      var linkLabel = editedLinksLists[i].attributes['data-label'].value;
-      if (linkLabel)
+    _.each(editedLinksLists, function (link) {
+      var linkLabel = link.attributes['data-label'].value;
+      if (linkLabel) {
         linkLabelsArr.push(linkLabel);
-    }
+      }
+    });
     if (linkLabelsArr.length) {
       if ($scope.componentEditing.customnav) {
         $scope.componentEditing.linkLists.forEach(function (value, index) {
           if (value.handle === "head-menu") {
             var newLinkListOrder = [];
-            for (var i = 0; i < editedLinksLists.length; i++) {
+            _.each(editedLinksLists, function (link, index) {
               if (value) {
                 var matchedLinkList = _.findWhere(value.links, {
-                  label: linkLabelsArr[i]
+                  label: linkLabelsArr[index]
                 });
                 newLinkListOrder.push(matchedLinkList);
               }
-            };
+            });
             if (newLinkListOrder.length) {
               $scope.componentEditing.linkLists[index].links = newLinkListOrder;
-              //$scope.saveCustomComponent();
             }
           }
         });
@@ -496,17 +497,16 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$modalInstance', '$http
         $scope.website.linkLists.forEach(function (value, index) {
           if (value.handle === "head-menu") {
             var newLinkListOrder = [];
-            for (var i = 0; i < editedLinksLists.length; i++) {
+            _.each(editedLinksLists, function (link, index) {
               if (value) {
                 var matchedLinkList = _.findWhere(value.links, {
-                  label: linkLabelsArr[i]
+                  label: linkLabelsArr[index]
                 });
                 newLinkListOrder.push(matchedLinkList);
               }
-            };
+            });
             if (newLinkListOrder.length) {
               $scope.website.linkLists[index].links = newLinkListOrder;
-              //$scope.updateWebsite($scope.website);
             }
 
           }
@@ -552,28 +552,28 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$modalInstance', '$http
       return _bottomline;
     }
   };
-  
+
   $scope.updateContactUsAddress = function () {
-    if(!angular.equals($scope.originalContactMap, $scope.componentEditing.location))
+    if (!angular.equals($scope.originalContactMap, $scope.componentEditing.location)) {
       $scope.contactMap.updateAddressString();
-      $scope.componentEditing.location.lat = null;
-      $scope.componentEditing.location.lon = null;
-      if (($scope.componentEditing.location.city && $scope.componentEditing.location.state) || $scope.componentEditing.location.zip) {      
-        GeocodeService.getGeoSearchAddress($scope.stringifyAddress($scope.componentEditing.location), function (data) {
-          if (data.lat && data.lon) {
-            $scope.componentEditing.location.lat = data.lat;
-            $scope.componentEditing.location.lon = data.lon;
-            $scope.contactMap.refreshMap();
-          }
-        });
-      }
+    }
+    $scope.componentEditing.location.lat = null;
+    $scope.componentEditing.location.lon = null;
+    if (($scope.componentEditing.location.city && $scope.componentEditing.location.state) || $scope.componentEditing.location.zip) {
+      GeocodeService.getGeoSearchAddress($scope.stringifyAddress($scope.componentEditing.location), function (data) {
+        if (data.lat && data.lon) {
+          $scope.componentEditing.location.lat = data.lat;
+          $scope.componentEditing.location.lon = data.lon;
+          $scope.contactMap.refreshMap();
+        }
+      });
+    }
   };
 
-  $scope.saveComponent =function()
-  {
+  $scope.saveComponent = function () {
     $scope.isDirty.dirty = true;
-  }
-  
+  };
+
   /*
    * @editComponent
    * -
@@ -670,19 +670,19 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$modalInstance', '$http
   };
 
   /*
-     * @getPages
-     * -
-     */
+   * @getPages
+   * -
+   */
 
-    WebsiteService.getPages(function (pages) {
-      var parsed = angular.fromJson(pages);
-      var arr = [];
-      _.each(parsed, function (page) {
-        arr.push(page);
-      });
-      $scope.allPages = arr;
-      $scope.filterdedPages = $filter('orderBy')($scope.allPages, "title", false);
+  WebsiteService.getPages(function (pages) {
+    var parsed = angular.fromJson(pages);
+    var arr = [];
+    _.each(parsed, function (page) {
+      arr.push(page);
     });
+    $scope.allPages = arr;
+    $scope.filterdedPages = $filter('orderBy')($scope.allPages, "title", false);
+  });
 
-  $scope.editComponent(); 
+  $scope.editComponent();
 }]);
