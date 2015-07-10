@@ -13,8 +13,7 @@ app.controller('AddComponentModalCtrl', ['$scope', '$document', '$modalInstance'
   $scope.saveLoading = false;
 
   $scope.addComponent = function (addedType) {
-    if(!$scope.saveLoading)
-    {
+    if (!$scope.saveLoading) {
       $scope.saveLoading = true;
       var componentType = null;
       if (addedType.type === 'footer' || addedType.type === 'navigation' || addedType.type === 'single-post' || addedType.type === 'blog-teaser' || addedType.type === 'blog') {
@@ -167,7 +166,7 @@ app.controller('AddComponentModalCtrl', ['$scope', '$document', '$modalInstance'
     title: 'Pricing Tables',
     type: 'pricing-tables',
     preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/pricing-tables.png',
-    filter: 'products',
+    filter: 'text',
     description: 'Subscription product types with multiple options are best when shown in a pricing table to help the visitor decide which one is best for them.',
     enabled: true
   }, {
