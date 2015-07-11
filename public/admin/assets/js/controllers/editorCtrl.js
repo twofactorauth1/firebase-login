@@ -51,6 +51,7 @@
     $scope.savePage = function () {
       $scope.saveLoading = true;
       $scope.isDirty.dirty = false;
+
       if ($scope.isSinglePost) {
         $scope.validateEditPost($scope.blog.post);
         if (!$scope.editPostValidated) {
@@ -65,11 +66,18 @@
           }
         });
         WebsiteService.updatePost($scope.page._id, post_data._id, post_data, function (data) {
+          if (post_data.post_url !== $scope.originalPost.post_url) {
+            $location.search('posthandle', post_data.post_url)
+          }
           $scope.saveLoading = false;
           toaster.pop('success', "Post Saved", "The " + $scope.blog.post.post_title + " post was saved successfully.");
         });
       } else {
         WebsiteService.updatePage($scope.page, function (data) {
+          console.log($scope.page.handle, $scope.originalPage.handle);
+          if ($scope.page.handle !== $scope.originalPage.handle) {
+            $location.search('pagehandle', $scope.page.handle)
+          }
           $scope.saveLoading = false;
           toaster.pop('success', "Page Saved", "The " + $scope.page.handle + " page was saved successfully.");
           //Update linked list
@@ -173,6 +181,7 @@
         $scope.page = data;
         $scope.components = $scope.page.components;
         $scope.originalComponents = angular.copy($scope.components);
+        $scope.originalPage = angular.copy(data);
         $scope.activateCKeditor();
         $rootScope.breadcrumbTitle = $scope.page.title;
       });
@@ -194,6 +203,7 @@
           $scope.blog.post = data;
           $scope.single_post = true;
           $scope.components = $scope.page.components;
+          $scope.originalPost = angular.copy(data);
           $rootScope.breadcrumbTitle = $scope.blog.post.post_title;
           $scope.activateCKeditor();
         });
