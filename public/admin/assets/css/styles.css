@@ -12761,6 +12761,7 @@ fieldset[disabled] .btn-vimeo-square.active {
   font-size: 18px;
   margin: 0;
   height: 56px;
+  pointer-events: none;
 }
 .sortable-ghost .delete-component,
 .sortable-ghost .duplicate,
@@ -12833,7 +12834,6 @@ fieldset[disabled] .btn-vimeo-square.active {
   z-index: 1032;
   width: 100%;
   margin-right: 10px;
-  pointer-events: none;
 }
 .componentActions span {
   background: rgba(44, 62, 80, 0.8);
@@ -12847,6 +12847,26 @@ fieldset[disabled] .btn-vimeo-square.active {
   pointer-events: all;
 }
 .componentActions .reorder:hover {
+  color: #54C8E8;
+}
+.componentActions .single-reorder {
+  float: left;
+  pointer-events: all;
+}
+.componentActions .single-reorder i {
+  margin-top: 8px;
+}
+.componentActions .single-reorder span {
+  padding: 0;
+  text-align: center;
+  line-height: 19px;
+  display: block;
+  height: 56px;
+  padding-left: 10px;
+  padding-right: 10px;
+  float: left;
+}
+.componentActions .single-reorder span:hover {
   color: #54C8E8;
 }
 .componentActions .hidden-component {

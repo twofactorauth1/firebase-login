@@ -13,6 +13,33 @@
         $scope.preDragging = false;
       }
     };
+
+    $scope.singleReorder = function (value, component, index) {
+      console.log('singleReorder >>> ', value);
+      if (value === 'down') {
+        $scope.components.splice(index, 1);
+        $scope.components.splice(index + 1, 0, component);
+        $scope.scrollToComponent(index + 1);
+      }
+
+      if (value === 'up') {
+        $scope.components.splice(index, 1);
+        $scope.components.splice(index - 1, 0, component);
+        $scope.scrollToComponent(index - 1);
+      }
+
+    };
+
+    $scope.scrollToComponent = function (destIndex) {
+      $timeout(function () {
+        var anchor = $scope.components[destIndex].anchor || $scope.components[destIndex]._id;
+        var element = document.getElementById(anchor);
+        if (element) {
+          $document.scrollToElementAnimated(element, 175, 1000);
+        }
+      }, 500);
+    };
+
     /*
      * @savePage
      * -
@@ -816,22 +843,20 @@
     // $scope.first = true;
 
     $scope.barConfig = {
-      animation: 300,
+      animation: 0,
       handle: '.reorder',
       draggable: '.fragment',
       ghostClass: "sortable-ghost",
       scroll: true,
       scrollSensitivity: 200,
-      scrollSpeed: 10, // px
+      scrollSpeed: 20, // px
       onSort: function (evt) {
-        console.log('onSort >>> ', evt);
+        $scope.scrollToComponent(evt.newIndex);
       },
       onStart: function (evt) {
-        console.log('onStart >>> ', evt);
         $scope.dragging = true;
       },
       onEnd: function (evt) {
-        console.log('onEnd >>> ', evt);
         $scope.dragging = false;
       }
     };
