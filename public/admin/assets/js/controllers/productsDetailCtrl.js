@@ -163,7 +163,7 @@
 
     $scope.setDownloadId = function (download) {
       $scope.currentDownload = download;
-    }
+    };
 
 
     /*
