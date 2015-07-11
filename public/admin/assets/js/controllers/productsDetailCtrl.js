@@ -43,6 +43,7 @@
     ProductService.getProduct($stateParams.productId, function (product) {
       console.log(product);
       $scope.product = product;
+      console.log('product ', product);
       var p_icon = $scope.product.icon ;
      
       angular.element('#convert').iconpicker({

@@ -49,7 +49,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div ng-show="product.is_image">
+                        <div ng-if="product.is_image">
                             <div class="image">
                                 <div class="thumbnail">
                                     <img ng-src="{{ product.icon }}" err-src="assets/images/default-user.png" alt="">
@@ -65,20 +65,22 @@
                         <div>
                             <div class="form-group pull-left">
                                 <div class="radio clip-radio radio-primary radio-inline">
-                                    <input type="radio" id="product_image_icon" name="inline" value="0" ng-model="product.is_image">
+                                    <input type="radio" id="product_image_icon" name="inline" ng-value="false" ng-model="product.is_image">
                                     <label for="product_image_icon">
                                         Icon
                                     </label>
                                 </div>
                                 <div class="radio clip-radio radio-primary radio-inline">
-                                    <input type="radio" id="product_image_image" name="inline" value="1" ng-model="product.is_image">
+                                    <input type="radio" id="product_image_image" name="inline" ng-value="true" ng-model="product.is_image">
                                     <label for="product_image_image">
                                         Image
                                     </label>
                                 </div>
                             </div>
-                            <a ng-show="product.is_image" class="btn btn-success media-modal pull-right" media-modal-show-insert="true" on-insert-mediacb="insertMedia" user='user' insert-media-type='"image"'> <span class="fa fa-image"></span> <span class="hidden-xs">Change Image</span>
+                            <div class="pull-right" ng-if="product.is_image">
+                                 <a class="btn btn-success media-modal" media-modal-show-insert="true" on-insert-mediacb="insertMedia" user='user' insert-media-type='"image"'> <span class="fa fa-image"></span> <span class="hidden-xs">Change Image</span>
                             </a>
+                            </div>
                         </div>
                         <div class="btn-group btn-group-justified margin-top-10">
                             <div class="btn-group">
