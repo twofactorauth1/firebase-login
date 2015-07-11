@@ -129,37 +129,35 @@
                                 </div>
                             </div>
                         </form>
-
-                    <hr/>
-                    <div class="form-group" ng-if="componentEditing.type == 'contact-us'">
-                        <label for="colorpicker">Box Background Color:</label>
-                        <span tooltip-placement="top" tooltip-html-unsafe="Set Background color of Contact Box."><i class="fa fa-info-circle" /></span>
-                        <div class="pull-right">
-                            <h4 class="pull-left"><i class="fa fa-eyedropper" /></h4>
-                            <spectrum-colorpicker format="'hex'" options="spectrum.options" class="pull-right" ng-model="componentEditing.boxColor" ng-change="saveComponent()"></spectrum-colorpicker>
+                        <hr/>
+                        <div class="form-group" ng-if="componentEditing.type == 'contact-us'">
+                            <label for="colorpicker">Box Background Color:</label>
+                            <span tooltip-placement="top" tooltip-html-unsafe="Set Background color of Contact Box."><i class="fa fa-info-circle" /></span>
+                            <div class="pull-right">
+                                <h4 class="pull-left"><i class="fa fa-eyedropper" /></h4>
+                                <spectrum-colorpicker format="'hex'" options="spectrum.options" class="pull-right" ng-model="componentEditing.boxColor" ng-change="saveComponent()"></spectrum-colorpicker>
+                            </div>
                         </div>
-                    </div>
-                    <div class="row" ng-if="componentEditing.type == 'contact-us'">
-                        <div class="col-sm-10">
-                            <label class="pull-left">Box Opacity</label>
+                        <div class="row" ng-if="componentEditing.type == 'contact-us'">
+                            <div class="col-sm-10">
+                                <label class="pull-left">Box Opacity</label>
+                            </div>
+                            <div class="col-sm-2">
+                                <select id="infoBox_opacity" ng-model="componentEditing.boxOpacity" ng-change="saveComponent()" class="pull-right form-control margin-bottom-0">
+                                    <option value="" disabled>%</option>
+                                    <option value=".1">10</option>
+                                    <option value=".2">20</option>
+                                    <option value=".3">30</option>
+                                    <option value=".4">40</option>
+                                    <option value=".5">50</option>
+                                    <option value=".6">60</option>
+                                    <option value=".7">70</option>
+                                    <option value=".8">80</option>
+                                    <option value=".9">90</option>
+                                    <option value="1">100</option>
+                                </select>
+                            </div>
                         </div>
-                        <div class="col-sm-2">
-                            <select id="infoBox_opacity" ng-model="componentEditing.boxOpacity" ng-change="saveComponent()" class="pull-right form-control margin-bottom-0">
-                                <option value="" disabled>%</option>
-                                <option value=".1">10</option>
-                                <option value=".2">20</option>
-                                <option value=".3">30</option>
-                                <option value=".4">40</option>
-                                <option value=".5">50</option>
-                                <option value=".6">60</option>
-                                <option value=".7">70</option>
-                                <option value=".8">80</option>
-                                <option value=".9">90</option>
-                                <option value="1">100</option>
-                            </select>
-                        </div>
-                    </div>
-
                         <hr/>
                         <div class="form-group" ng-if="componentEditing.type != 'navigation' && componentEditing.type != 'top-bar' && componentEditing.type != 'blog'">
                             <label for="bg_hide" class="margin-bottom-0">Show Background Image</label>
@@ -639,6 +637,16 @@
                         <input id="contact-phone" validation-type="phone" indigeweb-validate-form-fields class="form-control" type="text" ng-model="componentEditing.contact.phone">
                     </div>
                 </tab>
+                <tab active="tabs.map" ng-if="componentEditing.type === 'contact-us'" ng-click="refreshSlider()">
+                    <tab-heading>
+                        <span>Map</span>
+                    </tab-heading>
+                    <div class="form-group" ng-if="componentEditing.map.zoom">
+                        <label for="mapZoom">Map Zoom:</label>
+                        <rzslider name="mapZoom" rz-slider-model="componentEditing.map.zoom" rz-slider-floor="0" rz-slider-ceil="19"></rzslider>
+                        <div class="help-block">Zoom level on map 0 (World) - 19 (Street) </div>
+                    </div>
+                </tab>
                 <tab ng-if="componentEditing.type === 'simple-form'">
                     <tab-heading>
                         <span>Fields</span>
@@ -820,7 +828,7 @@
                                 <div class="blog-thumb alignleft" ng-if="blog.post.featured_image">
                                     <img ng-src="{{blog.post.featured_image}}" />
                                 </div>
-                                <a class="btn btn-warning" type="button" blog-post-image="true" media-modal-show-insert="true" type="button" class="pull-right btn btn-primary" data-toggle="modal"  data-target="#media-manager-modal" style="margin-right:10px">
+                                <a class="btn btn-warning" type="button" blog-post-image="true" media-modal-show-insert="true" type="button" class="pull-right btn btn-primary" data-toggle="modal" data-target="#media-manager-modal" style="margin-right:10px">
                                     <span class="fa fa-edit"></span>
                                     <span ng-if="blog.post.featured_image" class="hidden-xs">Change Image</span>
                                     <span ng-if="!blog.post.featured_image" class="hidden-xs">Add Image</span>

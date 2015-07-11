@@ -4,7 +4,7 @@
             <span aria-hidden="true">&times;</span>
             <span class="sr-only">Close</span>
         </button>
-        <h3 class="modal-title">New Page</h3>
+        <h3 class="modal-title"><span ng-if="!templateDetails">Select Template</span><span ng-if="templateDetails">Template Details</span></h3>
     </div>
     <div class="modal-body pages-modal bg-white" ng-class="{'no-padding': !templateDetails}">
         <tabset class="tabbable tabs-left margin-bottom-0" ng-hide="templateDetails">

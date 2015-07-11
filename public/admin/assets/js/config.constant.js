@@ -707,6 +707,9 @@ app.constant('JS_REQUIRES', {
     name: 'ui.sortable',
     files: ['../js/libs/Sortable/Sortable.min.js', '../js/libs/Sortable/ng-sortable.js']
   }, {
+    name: 'angular-slider',
+    files: ['../js/libs/angularjs-slider/dist/rzslider.min.js', '../js/libs/angularjs-slider/dist/rzslider.min.css']
+  }, {
     name: 'ngSticky',
     files: ['../js/libs/ngSticky/dist/sticky.min.js']
   }, {
