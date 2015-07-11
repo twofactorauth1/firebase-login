@@ -22,15 +22,36 @@
      */
 
     $scope.closeModal = function (cancel) {
-      if (cancel == true) {
+      if (cancel === true) {
         $scope.editCancelFn();
-      } else
+      } else {
         $scope.modalInstance.close();
+      }
     };
 
     UserService.getUser(function (user) {
       $scope.user = user;
     });
+
+    $scope.selectedDate = {
+      startDate: moment().subtract(29, 'days').toDate(),
+      endDate: new Date()
+    };
+
+    $scope.pickerOptions = {
+      startDate: moment().subtract(29, 'days').toDate(),
+      endDate: new Date(),
+      format: 'YYYY-MM-DD',
+      opens: 'left',
+      ranges: {
+        'Today': [moment(), moment()],
+        'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+        'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+        'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+        'This Month': [moment().startOf('month'), moment().endOf('month')],
+        'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+      }
+    };
 
     /*
      * @getProduct
@@ -44,8 +65,8 @@
       console.log(product);
       $scope.product = product;
       console.log('product ', product);
-      var p_icon = $scope.product.icon ;
-     
+      var p_icon = $scope.product.icon;
+
       angular.element('#convert').iconpicker({
         iconset: 'fontawesome',
         icon: p_icon,
@@ -53,8 +74,8 @@
         cols: 5,
         placement: 'right'
       });
-      
-      $scope.getProductTags();      
+
+      $scope.getProductTags();
 
       if (!$scope.product.attributes) {
         $scope.product.attributes = [{
@@ -261,7 +282,7 @@
       return true;
     };
 
-    $scope.$watch('product.name', function(newValue) {
+    $scope.$watch('product.name', function (newValue) {
       if (newValue && newValue.length > 0) {
         $scope.productNameError = false;
       }
@@ -272,9 +293,14 @@
      * - save product function
      */
 
-     $scope.saveLoading = false;
+    $scope.saveLoading = false;
 
     $scope.saveProductFn = function () {
+      if ($scope.selectedDate) {
+        $scope.product.sale_date_from = new Date($scope.selectedDate.startDate).toISOString();
+        $scope.product.sale_date_to = new Date($scope.selectedDate.endDate).toISOString();
+      }
+
       $scope.saveLoading = true;
       $scope.setProductTags();
       if ($scope.validateProduct()) {
@@ -423,21 +449,23 @@
     };
 
     $scope.getProductTags = function () {
-      if ($scope.product.tags)
+      if ($scope.product.tags) {
         $scope.product.tags.forEach(function (v, i) {
           $scope.product_tags.push({
             text: v
-          })
+          });
         });
-    }
+      }
+    };
 
     $scope.setProductTags = function () {
       $scope.product.tags = [];
       $scope.product_tags.forEach(function (v, i) {
-        if (v.text)
+        if (v.text) {
           $scope.product.tags.push(v.text);
+        }
       });
-    }
+    };
 
     /*
      * @deleteCustomerFn
