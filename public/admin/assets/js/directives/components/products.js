@@ -1,4 +1,4 @@
-app.directive('productsComponent', ['$filter', 'ProductService', 'AccountService', function ($filter, ProductService, AccountService) {
+app.directive('productsComponent', ['$filter', 'PaymentService', 'ProductService', 'AccountService', function ($filter, PaymentService, ProductService, AccountService) {
   return {
     scope: {
       component: '=',
@@ -98,6 +98,7 @@ app.directive('productsComponent', ['$filter', 'ProductService', 'AccountService
         scope.cartDetails = filtered;
         scope.calculateTotalChargesfn();
       };
+
       scope.checkCardNumber = function () {
         var card_number = angular.element('#number').val();
         if (!card_number) {

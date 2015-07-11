@@ -1,4 +1,4 @@
-app.directive('productsComponent', ['$filter', 'productService', 'accountService', 'cartService', function ($filter, ProductService, AccountService, cartService) {
+app.directive('productsComponent', ['$filter', 'paymentService', 'productService', 'accountService', 'cartService', 'userService', 'orderService', function ($filter, PaymentService, ProductService, AccountService, cartService, UserService, OrderService) {
   return {
     require: [],
     scope: {
