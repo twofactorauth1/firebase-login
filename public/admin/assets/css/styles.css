@@ -12411,9 +12411,6 @@ table.grid tbody td strong {
   padding: 0;
   border: 0;
 }
-.as-sortable-dragging .componentActions {
-  margin-top: -20px;
-}
 .add-component-modal .tab-content {
   max-height: 300px;
   height: 100%;
@@ -12741,6 +12738,37 @@ fieldset[disabled] .btn-vimeo-square.active {
   -ms-animation: fadeOut 1s;
   animation: fadeOut 1s;
 }
+.component-sortable {
+  padding: 0;
+  overflow: hidden;
+}
+.component-sortable li {
+  list-style-type: none;
+}
+.component-sortable .componentActions span.fa {
+  padding: 10px;
+  text-align: center;
+  line-height: 18px;
+}
+.component-sortable .componentActions p {
+  margin-bottom: 0;
+  font-size: 14px;
+}
+.component-sortable .componentActions h4 {
+  background: rgba(44, 62, 80, 0.8);
+  padding: 17px;
+  color: white;
+  font-size: 18px;
+  margin: 0;
+  height: 56px;
+}
+.sortable-ghost .delete-component,
+.sortable-ghost .duplicate,
+.sortable-ghost .component-settings,
+.sortable-ghost .add-component,
+.sortable-ghost .add-new-component {
+  display: none!important;
+}
 #componentloader {
   position: relative;
   width: 100%;
@@ -12758,50 +12786,12 @@ fieldset[disabled] .btn-vimeo-square.active {
   color: inherit;
   font-family: inherit;
 }
-#componentloader .as-sortable-placeholder {
-  height: 57px!important;
-  overflow: hidden;
-  list-style-type: none;
-}
-#componentloader .ui-sortable {
-  margin-bottom: 0;
-  padding: 0;
-}
-#componentloader .ui-sortable li {
-  list-style-type: none;
-}
-#componentloader .ui-sortable .componentActions span.fa {
-  padding: 10px;
-  text-align: center;
-  line-height: 18px;
-}
-#componentloader .ui-sortable .componentActions p {
-  margin-bottom: 0;
-  font-size: 14px;
-}
-#componentloader .ui-sortable .componentActions h4 {
-  background: rgba(44, 62, 80, 0.8);
-  padding: 17px;
-  color: white;
-  font-size: 18px;
-  margin: 0;
-  height: 56px;
-}
-#componentloader .ui-sortable.active .fragment {
-  height: 57px!important;
-  overflow: hidden;
-}
-#componentloader .ui-sortable.active .fragment .component-inner .bg {
-  background-image: none;
-}
-#componentloader .ui-sortable.active .fragment .componentActions {
-  display: block;
-  visibility: visible;
-  border: 1px solid #ccc;
-  background: #fafafa;
-}
-#componentloader .ui-sortable.active .fragment .componentActions h4 {
-  display: block;
+#componentloader .component-sortable.dragging .delete-component,
+#componentloader .component-sortable.dragging .duplicate,
+#componentloader .component-sortable.dragging .component-settings,
+#componentloader .component-sortable.dragging .add-component,
+#componentloader .component-sortable.dragging .add-new-component {
+  display: none!important;
 }
 #componentloader .fragment {
   border: none;
@@ -13122,59 +13112,6 @@ fieldset[disabled] .btn-vimeo-square.active {
   font-size: 14px;
   height: 20px;
   line-height: 19px;
-}
-ul.ui-sortable.active {
-  margin-bottom: 0;
-  padding: 0px;
-}
-ul.ui-sortable.active .as-sortable-placeholder {
-  height: 57px!important;
-}
-ul.ui-sortable.active .fragment {
-  overflow: hidden;
-  height: 57px!important;
-}
-ul.ui-sortable.active .fragment:hover .componentActions {
-  -webkit-animation: none !important;
-  -moz-animation: none !important;
-  -ms-animation: none !important;
-  animation: none !important;
-}
-ul.ui-sortable.active .fragment:hover .add-new-component {
-  display: none!important;
-  visibility: hidden!important;
-}
-ul.ui-sortable.active .fragment .componentActions {
-  display: block;
-  visibility: visible;
-  border: 1px solid #ccc;
-  background: #fafafa;
-}
-ul.ui-sortable.active .fragment .componentActions .delete-component,
-ul.ui-sortable.active .fragment .componentActions .duplicate,
-ul.ui-sortable.active .fragment .componentActions .component-settings {
-  display: none;
-}
-ul.ui-sortable.active .fragment .componentActions h4 {
-  display: block;
-  background: rgba(44, 62, 80, 0.8);
-  padding: 18px;
-  color: white;
-  font-size: 18px;
-  margin: 0;
-  height: 56px;
-}
-ul.ui-sortable.active .fragment .componentActions span.fa {
-  padding: 10px;
-  text-align: center;
-  line-height: 18px;
-}
-ul.ui-sortable.active .fragment .componentActions p {
-  margin-bottom: 0;
-  font-size: 14px;
-}
-ul.ui-sortable.active .fragment .add-new-component {
-  display: none;
 }
 ul.nav-bar {
   list-style: none;

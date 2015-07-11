@@ -4,6 +4,15 @@
 (function (angular) {
   app.controller('EditorCtrl', ["$scope", "$document", "$rootScope", "$interval", "$timeout", "toaster", "$modal", "$filter", "$location", "WebsiteService", "SweetAlert", "hoursConstant", "GeocodeService", "ProductService", "AccountService", "postConstant", function ($scope, $document, $rootScope, $interval, $timeout, toaster, $modal, $filter, $location, WebsiteService, SweetAlert, hoursConstant, GeocodeService, ProductService, AccountService, postConstant) {
 
+    $scope.preDragging = false;
+    $scope.preDrag = function (value) {
+      if (value === 'enter') {
+        $scope.preDragging = true;
+      }
+      if (value === 'leave') {
+        $scope.preDragging = false;
+      }
+    };
     /*
      * @savePage
      * -
@@ -801,36 +810,58 @@
      * -
      */
 
-    $scope.sortableCompoents = $scope.components;
+    // $scope.sortableCompoents = $scope.components;
 
-    $scope.wait = '';
-    $scope.first = true;
-    $scope.sortableOptions = {
-      parentElement: "#componentloader",
-      containerPositioning: 'relative',
-      dragStart: function (e, ui) {
+    // $scope.wait = '';
+    // $scope.first = true;
+
+    $scope.barConfig = {
+      animation: 300,
+      handle: '.reorder',
+      draggable: '.fragment',
+      ghostClass: "sortable-ghost",
+      scroll: true,
+      scrollSensitivity: 200,
+      scrollSpeed: 10, // px
+      onSort: function (evt) {
+        console.log('onSort >>> ', evt);
+      },
+      onStart: function (evt) {
+        console.log('onStart >>> ', evt);
         $scope.dragging = true;
-        $scope.first = false;
-        clearTimeout($scope.wait);
       },
-      dragMove: function (e, ui) {
-        console.log('sorting update');
-      },
-      dragEnd: function (e, ui) {
-        $scope.first = true;
+      onEnd: function (evt) {
+        console.log('onEnd >>> ', evt);
         $scope.dragging = false;
-        $scope.wait = setTimeout(function () {
-          e.dest.sortableScope.element.removeClass("active");
-          $timeout(function () {
-            var anchor = $scope.components[e.dest.index].anchor || $scope.components[e.dest.index]._id;
-            var element = document.getElementById(anchor);
-            if (element) {
-              $document.scrollToElementAnimated(element, 175, 1000);
-            }
-          }, 500);
-        }, 500);
       }
     };
+
+    // $scope.sortableOptions = {
+    //   parentElement: "#componentloader",
+    //   containerPositioning: 'relative',
+    //   dragStart: function (e, ui) {
+    //     $scope.dragging = true;
+    //     $scope.first = false;
+    //     clearTimeout($scope.wait);
+    //   },
+    //   dragMove: function (e, ui) {
+    //     console.log('sorting update');
+    //   },
+    //   dragEnd: function (e, ui) {
+    //     $scope.first = true;
+    //     $scope.dragging = false;
+    //     $scope.wait = setTimeout(function () {
+    //       // e.dest.sortableScope.element.removeClass("active");
+    //       $timeout(function () {
+    //         var anchor = $scope.components[e.dest.index].anchor || $scope.components[e.dest.index]._id;
+    //         var element = document.getElementById(anchor);
+    //         if (element) {
+    //           $document.scrollToElementAnimated(element, 175, 1000);
+    //         }
+    //       }, 500);
+    //     }, 500);
+    //   }
+    // };
 
   }]);
 }(angular));

@@ -1,8 +1,8 @@
-.as-sortable-dragging {
-    .componentActions {
-        margin-top: -20px;
-    }
-}
+// .as-sortable-dragging {
+//     .componentActions {
+//         margin-top: -20px;
+//     }
+// }
 
 .add-component-modal {
     .tab-content {
@@ -372,6 +372,44 @@ fieldset[disabled] .btn-vimeo-square.active {
     }
 }
 
+.component-sortable {
+    padding: 0;
+    overflow: hidden;
+        li {
+        list-style-type: none;
+    }
+    
+    .componentActions {
+        span.fa {
+            padding: 10px;
+            text-align: center;
+            line-height: 18px;
+        }
+        p {
+            margin-bottom: 0;
+            font-size: 14px;
+        }
+        h4 {
+            background: rgba(44, 62, 80, 0.8);
+            padding: 17px;
+            color: white;
+            font-size: 18px;
+            margin: 0;
+            height: 56px;
+        }
+    }
+
+}
+.sortable-ghost {
+    .delete-component,
+    .duplicate,
+    .component-settings,
+    .add-component,
+    .add-new-component {
+        display: none!important;
+    }
+}
+
 #componentloader {
     position: relative;
     width: 100%;
@@ -384,57 +422,66 @@ fieldset[disabled] .btn-vimeo-square.active {
         color: inherit;
         font-family: inherit;
     }
-    .as-sortable-placeholder {
-        height: 57px!important;
-        overflow: hidden;
-        list-style-type: none;
-    }
-    .ui-sortable {
-        margin-bottom: 0;
-        padding: 0;
-        li {
-            list-style-type: none;
-        }
-        .componentActions {
-            span.fa {
-                padding: 10px;
-                text-align: center;
-                line-height: 18px;
-            }
-            p {
-                margin-bottom: 0;
-                font-size: 14px;
-            }
-            h4 {
-                background: rgba(44, 62, 80, 0.8);
-                padding: 17px;
-                color: white;
-                font-size: 18px;
-                margin: 0;
-                height: 56px;
-            }
-        }
-        &.active {
-            .fragment {
-                height: 57px!important;
-                overflow: hidden;
-                .component-inner {
-                    .bg {
-                        background-image: none;
-                    }
-                }
-                .componentActions {
-                    display: block;
-                    visibility: visible;
-                    border: 1px solid #ccc;
-                    background: #fafafa;
-                    h4 {
-                        display: block;
-                    }
-                }
-            }
+    .component-sortable.dragging {
+        .delete-component,
+        .duplicate,
+        .component-settings,
+        .add-component,
+        .add-new-component {
+            display: none!important;
         }
     }
+    // .as-sortable-placeholder {
+    //     height: 57px!important;
+    //     overflow: hidden;
+    //     list-style-type: none;
+    // }
+    // .ui-sortable {
+    //     margin-bottom: 0;
+    //     padding: 0;
+    //     li {
+    //         list-style-type: none;
+    //     }
+    //     .componentActions {
+    //         span.fa {
+    //             padding: 10px;
+    //             text-align: center;
+    //             line-height: 18px;
+    //         }
+    //         p {
+    //             margin-bottom: 0;
+    //             font-size: 14px;
+    //         }
+    //         h4 {
+    //             background: rgba(44, 62, 80, 0.8);
+    //             padding: 17px;
+    //             color: white;
+    //             font-size: 18px;
+    //             margin: 0;
+    //             height: 56px;
+    //         }
+    //     }
+        // &.active {
+        //     .fragment {
+        //         height: 57px!important;
+        //         overflow: hidden;
+        //         .component-inner {
+        //             .bg {
+        //                 background-image: none;
+        //             }
+        //         }
+        //         .componentActions {
+        //             display: block;
+        //             visibility: visible;
+        //             border: 1px solid #ccc;
+        //             background: #fafafa;
+        //             h4 {
+        //                 display: block;
+        //             }
+        //         }
+        //     }
+        // }
+    // }
     .fragment {
         border: none;
         display: block;
@@ -800,56 +847,56 @@ fieldset[disabled] .btn-vimeo-square.active {
     }
 }
 
-ul.ui-sortable.active {
-    margin-bottom: 0;
-    padding: 0px;
-    .as-sortable-placeholder {
-        height: 57px!important;
-    }
-    .fragment {
-        overflow: hidden;
-        height: 57px!important;
-        &:hover {
-            .componentActions {
-                .animation(none)!important;
-            }
-            .add-new-component {
-                display: none!important;
-                visibility: hidden!important;
-            }
-        }
-        .componentActions {
-            display: block;
-            visibility: visible;
-            border: 1px solid #ccc;
-            background: #fafafa;
-            .delete-component, .duplicate, .component-settings {
-                display: none;
-            }
-            h4 {
-                display: block;
-                background: rgba(44, 62, 80, 0.8);
-                padding: 18px;
-                color: white;
-                font-size: 18px;
-                margin: 0;
-                height: 56px;
-            }
-            span.fa {
-                padding: 10px;
-                text-align: center;
-                line-height: 18px;
-            }
-            p {
-                margin-bottom: 0;
-                font-size: 14px;
-            }
-        }
-        .add-new-component {
-            display: none;
-        }
-    }
-}
+// ul.ui-sortable.active {
+//     margin-bottom: 0;
+//     padding: 0px;
+//     .as-sortable-placeholder {
+//         height: 57px!important;
+//     }
+//     .fragment {
+//         overflow: hidden;
+//         height: 57px!important;
+//         &:hover {
+//             .componentActions {
+//                 .animation(none)!important;
+//             }
+//             .add-new-component {
+//                 display: none!important;
+//                 visibility: hidden!important;
+//             }
+//         }
+//         .componentActions {
+//             display: block;
+//             visibility: visible;
+//             border: 1px solid #ccc;
+//             background: #fafafa;
+//             .delete-component, .duplicate, .component-settings {
+//                 display: none;
+//             }
+//             h4 {
+//                 display: block;
+//                 background: rgba(44, 62, 80, 0.8);
+//                 padding: 18px;
+//                 color: white;
+//                 font-size: 18px;
+//                 margin: 0;
+//                 height: 56px;
+//             }
+//             span.fa {
+//                 padding: 10px;
+//                 text-align: center;
+//                 line-height: 18px;
+//             }
+//             p {
+//                 margin-bottom: 0;
+//                 font-size: 14px;
+//             }
+//         }
+//         .add-new-component {
+//             display: none;
+//         }
+//     }
+// }
 ul.nav-bar {
     list-style: none;
 }
