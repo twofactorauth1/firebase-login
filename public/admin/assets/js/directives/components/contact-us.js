@@ -1,16 +1,21 @@
 /*global app, moment, angular, window, CKEDITOR*/
 /*jslint unparam:true*/
-app.directive('contactUsComponent', ['GeocodeService', 'leafletData', '$timeout', function (GeocodeService, leafletData, $timeout) {
+app.directive('contactUsComponent', ['GeocodeService', 'leafletData', '$timeout', '$window', function (GeocodeService, leafletData, $timeout, $window) {
   return {
     scope: {
       component: '=',
       version: '=',
-      control:'='
+      control: '='
     },
     templateUrl: '/components/component-wrap.html',
     link: function (scope, element, attrs) {
       scope.isEditing = true;
-      
+      if (!scope.component.map) {
+        scope.component.map = {};
+        if (!scope.component.map.zoom) {
+          scope.component.map.zoom = 10;
+        }
+      }
       scope.stringifyAddress = function (address) {
         if (address) {
           //var address = scope.htmlToPlaintext(address);
@@ -28,8 +33,7 @@ app.directive('contactUsComponent', ['GeocodeService', 'leafletData', '$timeout'
         }
       };
 
-      scope.updateContactUsAddress = function (timeout) {        
-        console.log('updateContactUsAddress');
+      scope.updateContactUsAddress = function (timeout) {
         scope.contactAddress = scope.stringifyAddress(scope.component.location);
         if (scope.component.location.lat && scope.component.location.lon) {
           angular.extend(scope, {
@@ -48,11 +52,11 @@ app.directive('contactUsComponent', ['GeocodeService', 'leafletData', '$timeout'
               }
             }
           });
-          leafletData.getMap('leafletmap').then(function (map) {
+          leafletData.getMap('leafletmap-' + scope.component._id).then(function (map) {
+            map.setView(new L.LatLng(scope.component.location.lat, scope.component.location.lon), 10);
             $timeout(function () {
               map.invalidateSize();
-              map.setView(new L.LatLng(scope.component.location.lat, scope.component.location.lon),10);
-              $(window).trigger("resize");
+              angular.element($window).triggerHandler('resize');
             }, timeout);
           });
         } else {
@@ -76,11 +80,11 @@ app.directive('contactUsComponent', ['GeocodeService', 'leafletData', '$timeout'
                   }
                 }
               });
-              leafletData.getMap('leafletmap').then(function (map) {
+              leafletData.getMap('leafletmap-' + scope.component._id).then(function (map) {
+                map.setView(new L.LatLng(scope.component.location.lat, scope.component.location.lon), 10);
                 $timeout(function () {
                   map.invalidateSize();
-                  map.setView(new L.LatLng(scope.component.location.lat, scope.component.location.lon),10);
-                  $(window).trigger("resize");
+                  angular.element($window).triggerHandler('resize');
                 }, timeout);
               });
             }
@@ -88,26 +92,32 @@ app.directive('contactUsComponent', ['GeocodeService', 'leafletData', '$timeout'
         }
       };
       angular.extend(scope, {
-          mapLocation: {
-            lat: 51,
-            lng: 0,
-            zoom: 10
-          },
-          defaults: {
+        mapLocation: {
+          lat: 51,
+          lng: 0,
+          zoom: scope.component.map.zoom
+        },
+        defaults: {
           scrollWheelZoom: false
-          },
-          markers: {
+        },
+        markers: {
 
-          }
+        }
       });
-      $(document).ready(function() {
-        scope.updateContactUsAddress(2000);
+      scope.$watch('component.map.zoom', function (newValue, oldValue) {
+        if (newValue) {
+          $timeout(function () {
+            scope.mapLocation.zoom = newValue;
+          });
+        }
       });
-      scope.control.refreshMap = function() {
+      $(document).ready(function () {
+        scope.updateContactUsAddress(3000);
+      });
+      scope.control.refreshMap = function () {
         scope.updateContactUsAddress(100);
       }
-      scope.control.updateAddressString = function()
-      {
+      scope.control.updateAddressString = function () {
         scope.contactAddress = scope.stringifyAddress(scope.component.location);
       }
     }

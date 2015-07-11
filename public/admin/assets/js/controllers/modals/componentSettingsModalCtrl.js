@@ -1,7 +1,7 @@
 'use strict';
 /*global app, moment, angular*/
 /*jslint unparam:true*/
-app.controller('ComponentSettingsModalCtrl', ['$scope', '$modalInstance', '$http', '$timeout', '$q', '$compile', '$filter', 'WebsiteService', 'CustomerService', 'ProductService', 'GeocodeService', 'toaster', 'components', 'clickedIndex', 'contactMap', 'website', 'blog', 'isDirty', 'isSinglePost', function ($scope, $modalInstance, $http, $timeout, $q, $compile, $filter, WebsiteService, CustomerService, ProductService, GeocodeService, toaster, components, clickedIndex, contactMap, website, blog, isDirty, isSinglePost) {
+app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalInstance', '$http', '$timeout', '$q', '$compile', '$filter', 'WebsiteService', 'CustomerService', 'ProductService', 'GeocodeService', 'toaster', 'components', 'clickedIndex', 'contactMap', 'website', 'blog', 'isDirty', 'isSinglePost', function ($scope, $rootScope, $modalInstance, $http, $timeout, $q, $compile, $filter, WebsiteService, CustomerService, ProductService, GeocodeService, toaster, components, clickedIndex, contactMap, website, blog, isDirty, isSinglePost) {
   $scope.blog = {};
   $scope.components = components;
   $scope.clickedIndex = clickedIndex;
@@ -31,6 +31,25 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$modalInstance', '$http
     });
     $scope.availableProductTagsString = $scope.availableProductTags.join(",");
   });
+
+  $scope.testOptions = {
+    min: 5,
+    max: 100,
+    step: 5,
+    precision: 2,
+    orientation: 'horizontal', // vertical
+    handle: 'round', //'square', 'triangle' or 'custom'
+    tooltip: 'show', //'hide','always'
+    tooltipseparator: ':',
+    tooltipsplit: false,
+    enabled: true,
+    naturalarrowkeys: false,
+    range: false,
+    ngDisabled: false,
+    reversed: false
+  };
+
+  $scope.sliderValue = 1;
 
   /*
    * @revertComponent
@@ -537,6 +556,13 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$modalInstance', '$http
    * @stringifyAddress
    * -
    */
+
+   $scope.refreshSlider =function() {
+    console.log('refresh slider');
+    $timeout(function() {
+      $rootScope.$broadcast('rzSliderForceRender');
+    });
+   };
 
   $scope.stringifyAddress = function (address) {
     if (address) {
