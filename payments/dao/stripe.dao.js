@@ -193,7 +193,9 @@ var dao = {
     getStripeCustomer: function(stripeCustomerId, fn) {
         //stripe.customers.retrieve({CUSTOMER_ID});
         var self = this;
-        self.log.debug('>> getStripeCustomer');
+        stripe.account.retrieve(function(err, account) {
+            self.log.debug('>> account ', account);
+        });
         stripe.customers.retrieve(stripeCustomerId, function(err, customer) {
             // asynchronously called
             if (err) {
@@ -204,6 +206,26 @@ var dao = {
 
             self.log.debug('<< getStripeCustomer');
             return fn(err, customer);
+        });
+    },
+
+    /**
+     * Security check is done in the API layer.
+     * @param stripeCustomerId
+     * @param fn
+     */
+    getStripeAccount: function(fn) {
+        //stripe.customers.retrieve({CUSTOMER_ID});
+        var self = this;
+        stripe.account.retrieve(function(err, account) {
+            if (err) {
+                fn(err, account);
+                fn = null;
+                return;
+            }
+
+            self.log.debug('<< getStripeAccount');
+            return fn(err, account);
         });
     },
 

@@ -36,7 +36,7 @@ _.extend(router.prototype, baseRouter.prototype, {
 
     handleStripeCallback: function(req, res) {
         var self = this;
-        self.log.debug('>> handleStripeCallback ', req.session.state.redirectUrl); //.sessionStore.session.state.redirectUrl
+        self.log.debug('>> handleStripeCallback ', req); //.sessionStore.session.state.redirectUrl
         var accountId = self.accountId(req);
         var path = "admin";
         if (req.session.state.redirectUrl) {

@@ -451,7 +451,7 @@ var dao = {
     });
   },
 
-  addStripeTokensToAccount: function(accountId, accessToken, refreshToken, fn) {
+  addStripeTokensToAccount: function(accountId, accessToken, refreshToken, businessName, businessLogo, fn) {
     var self = this;
     self.log.debug('>> addStripeTokensToAccount(' + accountId + ',' + accessToken + ',' + refreshToken + ')');
 
@@ -474,7 +474,7 @@ var dao = {
       });
 
       if (foundStripe == false) {
-        credentials.push({type: 'stripe', accessToken: accessToken, refreshToken: refreshToken, expires: null});
+        credentials.push({type: 'stripe', accessToken: accessToken, refreshToken: refreshToken, username: businessName, image: businessLogo, expires: null});
       }
       account.set('credentials', credentials);
       self.saveOrUpdate(account, function(err, updatedAccount) {
