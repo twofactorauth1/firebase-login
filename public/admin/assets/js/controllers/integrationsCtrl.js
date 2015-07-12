@@ -7,6 +7,7 @@
     console.log('cookie ', ipCookie("socialAccount"));
     var completedIntegration = ipCookie("socialAccount");
     if (completedIntegration) {
+      $scope.minRequirements = true;
       toaster.pop('success', "Integrated Successfully", ipCookie("socialAccount") + ' has been added.');
       ipCookie.remove("socialAccount", {
         path: "/"
@@ -105,7 +106,6 @@
           path: "/"
         });
       }
-      $scope.minRequirements = true;
       window.location = '/redirect/?next=' + $scope.currentHost + '/socialconfig/' + socialAccount.toLowerCase() + '?redirectTo=' + $scope.redirectUrl + '&socialNetwork=' + socialAccount;
     };
 

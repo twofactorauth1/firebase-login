@@ -208,10 +208,8 @@
       }
     });
 
-    $scope.checkOnboardMinRequirements = function() {
-      console.log('checking onboarding requirements');
-        $scope.minRequirements = true;
-    };
+    //set the onboarding min requirements to true because there are none
+    $scope.minRequirements = true;
 
     /*
      * @getAccount
