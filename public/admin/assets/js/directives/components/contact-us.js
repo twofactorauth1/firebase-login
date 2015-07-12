@@ -1,6 +1,6 @@
 /*global app, moment, angular, window, CKEDITOR*/
 /*jslint unparam:true*/
-app.directive('contactUsComponent', ['GeocodeService', 'leafletData', '$timeout', '$window', function (GeocodeService, leafletData, $timeout, $window) {
+app.directive('contactUsComponent', ['AccountService', 'GeocodeService', 'leafletData', '$timeout', '$window', function (AccountService, GeocodeService, leafletData, $timeout, $window) {
   return {
     scope: {
       component: '=',
@@ -16,6 +16,7 @@ app.directive('contactUsComponent', ['GeocodeService', 'leafletData', '$timeout'
           scope.component.map.zoom = 10;
         }
       }
+
       scope.stringifyAddress = function (address) {
         if (address) {
           //var address = scope.htmlToPlaintext(address);
@@ -31,6 +32,17 @@ app.directive('contactUsComponent', ['GeocodeService', 'leafletData', '$timeout'
 
           return _bottomline;
         }
+      };
+
+      scope.checkBusinessAddress = function (fn) {
+        AccountService.getAccount(function (account) {
+          if (account.business.addresses.length > -1) {
+            scope.component.location = account.business.addresses[0];
+            if (fn) {
+              fn();
+            }
+          }
+        });
       };
 
       scope.updateContactUsAddress = function (timeout) {
@@ -60,7 +72,15 @@ app.directive('contactUsComponent', ['GeocodeService', 'leafletData', '$timeout'
             }, timeout);
           });
         } else {
-          GeocodeService.getGeoSearchAddress(scope.contactAddress, function (data) {
+          var _bottomline = _.filter([scope.component.location.city, scope.component.location.state], function (str) {
+            return str !== "";
+          }).join(", ");
+          var _topline = _.filter([scope.component.location.address, _bottomline, scope.component.location.zip], function (str) {
+            return str !== "";
+          }).join(" ");
+
+          GeocodeService.getGeoSearchAddress(_topline, function (data) {
+            console.log('data >>> ', data);
             if (data.lat && data.lon) {
               scope.component.location.lat = data.lat;
               scope.component.location.lon = data.lon;
@@ -114,10 +134,22 @@ app.directive('contactUsComponent', ['GeocodeService', 'leafletData', '$timeout'
         }
       });
       $(document).ready(function () {
-        scope.updateContactUsAddress(3000);
+        if (!scope.component.location.address && !scope.component.location.address2 && !scope.component.location.city && !scope.component.location.state && !scope.component.location.zip) {
+          scope.checkBusinessAddress(function () {
+            scope.updateContactUsAddress(3000);
+          });
+        } else {
+          scope.updateContactUsAddress(3000);
+        }
       });
       scope.control.refreshMap = function () {
-        scope.updateContactUsAddress(100);
+        if (!scope.component.location.address && !scope.component.location.address2 && !scope.component.location.city && !scope.component.location.state && !scope.component.location.zip) {
+          scope.checkBusinessAddress(function () {
+            scope.updateContactUsAddress(3000);
+          });
+        } else {
+          scope.updateContactUsAddress(3000);
+        }
       }
       scope.control.updateAddressString = function () {
         scope.contactAddress = scope.stringifyAddress(scope.component.location);
