@@ -40,7 +40,7 @@ app.directive('contactUsComponent', ['GeocodeService', 'leafletData', '$timeout'
             mapLocation: {
               lat: parseFloat(scope.component.location.lat),
               lng: parseFloat(scope.component.location.lon),
-              zoom: 10
+              zoom: scope.component.map.zoom
             },
             markers: {
               mainMarker: {
@@ -68,7 +68,7 @@ app.directive('contactUsComponent', ['GeocodeService', 'leafletData', '$timeout'
                 mapLocation: {
                   lat: parseFloat(scope.component.location.lat),
                   lng: parseFloat(scope.component.location.lon),
-                  zoom: 10
+                  zoom: scope.component.map.zoom
                 },
                 markers: {
                   mainMarker: {
@@ -108,6 +108,8 @@ app.directive('contactUsComponent', ['GeocodeService', 'leafletData', '$timeout'
         if (newValue) {
           $timeout(function () {
             scope.mapLocation.zoom = newValue;
+            scope.mapLocation.lat = parseFloat(scope.component.location.lat);
+            scope.mapLocation.lng = parseFloat(scope.component.location.lon);
           });
         }
       });
