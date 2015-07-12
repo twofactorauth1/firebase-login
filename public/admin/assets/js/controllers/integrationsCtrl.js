@@ -2,7 +2,7 @@
 /*global app, moment, angular, window, L*/
 /*jslint unparam:true*/
 (function (angular) {
-  app.controller('IntegrationsCtrl', ["$scope", "SocialConfigService", "userConstant", "SweetAlert", "ipCookie", "toaster", function ($scope, SocialConfigService, userConstant, SweetAlert, ipCookie, toaster) {
+  app.controller('IntegrationsCtrl', ["$scope", "SocialConfigService", "AccountService", "userConstant", "SweetAlert", "ipCookie", "toaster", function ($scope, SocialConfigService, AccountService, userConstant, SweetAlert, ipCookie, toaster) {
 
     console.log('cookie ', ipCookie("socialAccount"));
     var completedIntegration = ipCookie("socialAccount");
@@ -26,18 +26,32 @@
      * get the social accounts
      */
 
-    SocialConfigService.getAllSocialConfig(function (data) {
-
-      _.each(data.socialAccounts, function (socialAccount) {
-        //get profile/page info
-        if (socialAccount.type === 'fb') {
-          SocialConfigService.getFBProfile(socialAccount.id, function (profile) {
-            socialAccount.profile = profile;
-          });
-        }
+    AccountService.getAccount(function (account) {
+      console.log('account ', account.credentials);
+      $scope.account = account;
+      var stripe = _.find(account.credentials, function (cred) {
+        return cred.type === 'stripe';
       });
+      SocialConfigService.getAllSocialConfig(function (data) {
+        if (stripe) {
+          stripe.accountType = "account";
+          stripe.id = Math.uuid(8);
+          stripe.type = "st";
+          data.socialAccounts.push(stripe);
+        }
+        _.each(data.socialAccounts, function (socialAccount) {
+          //get profile/page info
+          console.log('socialAccount ', socialAccount);
+          if (socialAccount.type === 'fb') {
+            SocialConfigService.getFBProfile(socialAccount.id, function (profile) {
+              socialAccount.profile = profile;
+            });
+          }
+        });
 
-      $scope.socialAccounts = data.socialAccounts;
+        $scope.socialAccounts = data.socialAccounts;
+        console.log();
+      });
     });
 
     /*
@@ -69,11 +83,23 @@
       }, function (isConfirm) {
         if (isConfirm) {
           sa.loading = true;
-          SocialConfigService.deleteSocialConfigEntry(sa.id, function () {
-            SocialConfigService.getAllSocialConfig(function (data) {
-              $scope.socialAccounts = data.socialAccounts;
+          if (sa.type === $scope.credentialTypes.STRIPE) {
+            $scope.account.credentials = _.without($scope.account.credentials, _.findWhere($scope.account.credentials, {
+              accessToken: sa.accessToken
+            }));
+            AccountService.updateAccount($scope.account, function (account) {
+              $scope.socialAccounts = _.without($scope.socialAccounts, _.findWhere($scope.socialAccounts, {
+                accessToken: sa.accessToken
+              }));
+              $scope.account = account;
             });
-          });
+          } else {
+            SocialConfigService.deleteSocialConfigEntry(sa.id, function () {
+              SocialConfigService.getAllSocialConfig(function (data) {
+                $scope.socialAccounts = data.socialAccounts;
+              });
+            });
+          }
         }
       });
     };
@@ -106,7 +132,14 @@
           path: "/"
         });
       }
-      window.location = '/redirect/?next=' + $scope.currentHost + '/socialconfig/' + socialAccount.toLowerCase() + '?redirectTo=' + $scope.redirectUrl + '&socialNetwork=' + socialAccount;
+
+      var _redirectUrl = '/redirect/?next=' + $scope.currentHost + '/socialconfig/' + socialAccount.toLowerCase() + '?redirectTo=' + $scope.redirectUrl + '&socialNetwork=' + socialAccount;
+      if (socialAccount === 'Stripe') {
+        ///redirect/?next={{currentHost}}/stripe/connect&socialNetwork=stripe
+        _redirectUrl = '/redirect/?next=' + $scope.currentHost + '/'+socialAccount.toLowerCase()+'/connect/?redirectTo=' + $scope.redirectUrl + '&socialNetwork=' + socialAccount.toLowerCase();
+      }
+      console.log('redirectUrl ', _redirectUrl);
+      window.location = _redirectUrl;
     };
 
   }]);

@@ -271,7 +271,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         ncyBreadcrumb: {
             label: 'Integrations'
         },
-        resolve: loadSequence('integrationsCtrl', 'socialConfigService', 'angular-cookie')
+        resolve: loadSequence('integrationsCtrl', 'socialConfigService', 'angular-cookie', 'accountService')
     }).state('app.support', {
         url: '/support',
         template: '<div ui-view class="fade-in-up"></div>',

@@ -394,6 +394,7 @@ app.constant('userConstant', {
     FACEBOOK: "fb",
     TWITTER: "tw",
     LINKEDIN: "li",
+    STRIPE: "st",
     GOOGLE: "go",
     FULL_CONTACT: "fc",
   },
