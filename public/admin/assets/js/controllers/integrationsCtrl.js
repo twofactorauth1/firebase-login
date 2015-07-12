@@ -136,7 +136,7 @@
       var _redirectUrl = '/redirect/?next=' + $scope.currentHost + '/socialconfig/' + socialAccount.toLowerCase() + '?redirectTo=' + $scope.redirectUrl + '&socialNetwork=' + socialAccount;
       if (socialAccount === 'Stripe') {
         ///redirect/?next={{currentHost}}/stripe/connect&socialNetwork=stripe
-        _redirectUrl = '/redirect/?next=' + $scope.currentHost + '/'+socialAccount.toLowerCase()+'/connect/?redirectTo=' + $scope.redirectUrl + '&socialNetwork=' + socialAccount.toLowerCase();
+        _redirectUrl = '/redirect/?next=' + $scope.currentHost + '/'+socialAccount.toLowerCase()+'/connect/callback&redirectTo=' + $scope.redirectUrl + '&socialNetwork=' + socialAccount.toLowerCase();
       }
       console.log('redirectUrl ', _redirectUrl);
       window.location = _redirectUrl;

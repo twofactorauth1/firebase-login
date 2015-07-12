@@ -36,9 +36,13 @@ _.extend(router.prototype, baseRouter.prototype, {
 
     handleStripeCallback: function(req, res) {
         var self = this;
-        self.log.debug('>> handleStripeCallback');
+        self.log.debug('>> handleStripeCallback ', req.session.state.redirectUrl); //.sessionStore.session.state.redirectUrl
         var accountId = self.accountId(req);
         var path = "admin";
+        if (req.session.state.redirectUrl) {
+            var arr = req.session.state.redirectUrl.split("/admin");
+            path = '/admin'+arr[1];
+        }
 
         authenticationDao.getAuthenticatedUrlForAccount(accountId, req.user.id(), path, null, function(err, value) {
             self.log.debug('<< handleStripeCallback');
