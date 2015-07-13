@@ -67,11 +67,17 @@
 
     $scope.saveSettings = function () {
       $scope.saveLoading = true;
-      AccountService.updateAccount($scope.account, function () {
-        WebsiteService.updateWebsite($scope.website, function () {
+      AccountService.updateAccount($scope.account, function (data, error) {
+        if(error)
+        {
           $scope.saveLoading = false;
-          toaster.pop('success', " Website Settings saved.");
-        });
+          toaster.pop('error', error.message);
+        }
+        else  
+          WebsiteService.updateWebsite($scope.website, function () {
+            $scope.saveLoading = false;
+            toaster.pop('success', " Website Settings saved.");
+          });
       });
     };
 

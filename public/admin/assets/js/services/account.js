@@ -16,6 +16,9 @@
           $http.put(apiUrl, account)
             .success(function (data, status, headers, config) {
                 fn(data);
+            }) 
+            .error(function (error) {
+              fn(null, error);
             });
     };
 
