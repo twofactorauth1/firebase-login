@@ -130,7 +130,8 @@ var contact = $$.m.ModelBase.extend({
        * }]
        */
       details: [],
-        fingerprint: ''
+        fingerprint: '',
+        unsubscribed: false
     }
   },
 
