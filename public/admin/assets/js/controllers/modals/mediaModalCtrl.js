@@ -5,6 +5,7 @@ app.controller('MediaModalCtrl', ['$scope', '$modalInstance', '$http', '$timeout
   var uploader, footerElement, headerElement, contentElement, mediaElement, mediaModalElement;
 
   $scope.showInsert = showInsert;
+  $scope.loadingAssets = true;
 
   AssetsService.getAssetsByAccount(function (data) {
     if (data instanceof Array) {
@@ -13,6 +14,9 @@ app.controller('MediaModalCtrl', ['$scope', '$modalInstance', '$http', '$timeout
       if ($scope.insertMediaType) {
         $scope.m.selectAll(scope.insertMediaType, true);
       }
+      $timeout(function() {
+        $scope.loadingAssets = false;
+      }, 500);
     }
   });
 

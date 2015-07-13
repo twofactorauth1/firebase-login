@@ -89,8 +89,8 @@
                             <small class="text-muted">{{asset.created.date | timeAgoFilter}}</small>
                         </div>
                     </div>
-                    <div id="warning-box" ng-hide="assets.length" ng-if="showType != 'all'"> No {{showType}} uploaded.</div>
-                    <div id="warning-box" ng-hide="assets.length" ng-if="showType == 'all'"> No media uploaded.</div>
+                    <div id="warning-box" ng-hide="assets.length || loadingAssets" ng-if="showType != 'all'"> No {{showType}} uploaded.</div>
+                    <div id="warning-box" ng-hide="assets.length || loadingAssets" ng-if="showType == 'all'"> No media uploaded.</div>
                 </div>
             </div>
             <div class="editimage" ng-show="editingImage" style="height:{{bodyHeight}};">
@@ -156,7 +156,6 @@
             <div class="clearfix"></div>
         </div>
         <div class="modal-footer" ng-class="{upload: uploader.queue.length > 0}">
-            <pre>showInsert: {{showInsert}} singleSelected: {{singleSelected}}</pre>
             <div class="row" ng-if="editingImage">
                 <button class="btn btn-primary" ng-click="m.goback()"> <i class="fa fa-chevron-left"></i> Back</button>
                 <button class="btn btn-primary"><i class="fa fa-history"></i> Restore</button>

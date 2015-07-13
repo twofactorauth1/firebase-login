@@ -54,8 +54,14 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
 
   $scope.sliderValue = 1;
 
-  $scope.addBackground = function(componentId) {
+  $scope.addBackground = function() {
     $scope.$parent.showInsert = true;
+    $scope.openParentModal('media-modal', 'MediaModalCtrl', null, 'lg');
+  };
+
+   $scope.addFeaturedPost = function() {
+    $scope.$parent.showInsert = true;
+    $scope.$parent.blogImage = true;
     $scope.openParentModal('media-modal', 'MediaModalCtrl', null, 'lg');
   };
 
