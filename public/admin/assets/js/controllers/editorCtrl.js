@@ -70,7 +70,7 @@
             $location.search('posthandle', post_data.post_url)
           }
           $scope.saveLoading = false;
-          toaster.pop('success', "Post Saved", "The " + $scope.blog.post.post_title + " post was saved successfully.");
+          toaster.pop('success', "Post Saved", "The " + $filter('htmlToPlaintext')($scope.blog.post.post_title) + " post was saved successfully.");
         });
       } else {
         WebsiteService.updatePage($scope.page, function (data) {
@@ -204,7 +204,7 @@
           $scope.single_post = true;
           $scope.components = $scope.page.components;
           $scope.originalPost = angular.copy(data);
-          $rootScope.breadcrumbTitle = $scope.blog.post.post_title;
+          $rootScope.breadcrumbTitle = $filter('htmlToPlaintext')($scope.blog.post.post_title);
           $scope.activateCKeditor();
         });
 
