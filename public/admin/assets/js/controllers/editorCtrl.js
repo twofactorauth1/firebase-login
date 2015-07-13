@@ -726,14 +726,15 @@
 
     $scope.checkForSaveBeforeLeave = function (url, reload) {
       $scope.changesConfirmed = true;
-      // var isDirty = false;
-      // var iFrame = document.getElementById("iframe-website");
-      // if ($scope.childScope.checkOrSetPageDirty) {
-      //   var isDirty = $scope.childScope.checkOrSetPageDirty() || $scope.isDirty;
-      // }
-      // $scope.childScope.checkOrSetPageDirty(true);
       if ($scope.originalComponents && $scope.components && $scope.originalComponents.length !== $scope.components.length) {
         $scope.isDirty.dirty = true;
+      }
+      if($scope.isSinglePost)
+      {
+        if($scope.blog.post && !angular.equals($scope.originalPost, $scope.blog.post))
+        {
+          $scope.isDirty.dirty = true;
+        }
       }
       var redirectUrl = url;
       if (!redirectUrl) {
