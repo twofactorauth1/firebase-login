@@ -13249,6 +13249,28 @@ ul.nav-bar {
 .products table.grid .product-img h3 {
   line-height: 50px;
 }
+.products .blurred {
+  -webkit-filter: blur(5px);
+  -moz-filter: blur(5px);
+  -o-filter: blur(5px);
+  -ms-filter: blur(5px);
+  filter: blur(5px);
+}
+.products .no-stripe {
+  height: 255px;
+  position: absolute;
+  background: rgba(255, 255, 255, 0.8);
+  width: 100%;
+  min-height: 100%;
+  padding: 15px;
+  margin-left: -15px;
+  margin-top: 60px;
+  margin-bottom: 60px;
+  z-index: 999;
+}
+.products .no-stripe .no-stripe-wrap {
+  margin-top: 60px;
+}
 /* ---------------------------------------------------------------------- */
 /*  Customers
 /* ---------------------------------------------------------------------- */

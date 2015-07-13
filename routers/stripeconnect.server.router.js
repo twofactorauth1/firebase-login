@@ -36,12 +36,14 @@ _.extend(router.prototype, baseRouter.prototype, {
 
     handleStripeCallback: function(req, res) {
         var self = this;
-        self.log.debug('>> handleStripeCallback ', req); //.sessionStore.session.state.redirectUrl
+        self.log.debug('>> handleStripeCallback ', req.headers.referer); //.sessionStore.session.state.redirectUrl
         var accountId = self.accountId(req);
         var path = "admin";
-        if (req.session.state.redirectUrl) {
-            var arr = req.session.state.redirectUrl.split("/admin");
-            path = '/admin'+arr[1];
+        if (req.headers.referer) {
+            var arr = req.headers.referer.split("&redirectTo=");
+            var arr2 = arr[1].split("&");
+            path = arr2[0];
+            self.log.debug('>> path ', path);
         }
 
         authenticationDao.getAuthenticatedUrlForAccount(accountId, req.user.id(), path, null, function(err, value) {

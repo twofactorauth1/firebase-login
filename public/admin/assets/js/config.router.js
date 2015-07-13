@@ -174,7 +174,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         ncyBreadcrumb: {
             label: 'Products'
         },
-        resolve: loadSequence('productsCtrl', 'productService')
+        resolve: loadSequence('productsCtrl', 'productService', 'accountService', 'angular-cookie')
     }).state('app.commerce.productsingle', {
         url: '/products/:productId',
         templateUrl: "assets/views/product-detail.html",
