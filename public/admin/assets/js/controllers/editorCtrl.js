@@ -281,6 +281,7 @@
      */
 
     window.clickandInsertImageButton = function (editor) {
+      console.log('clickandInsertImageButton >>> ');
       $scope.clickImageButton(editor, false);
     };
 
@@ -290,6 +291,7 @@
      */
 
     window.clickImageButton = function (btn) {
+      console.log('clickImageButton >>> ');
       var urlInput = $(btn).closest('td').prev('td').find('input');
       $scope.clickImageButton(urlInput, true);
     };
@@ -316,7 +318,8 @@
       $scope.componentEditing = _.findWhere($scope.components, {
         _id: componentId
       });
-      angular.element("#media-manager-modal").modal('show');
+      console.log('componentEditing ', $scope.componentEditing);
+      $scope.openModal('media-modal', 'MediaModalCtrl', null, 'lg');
     };
 
     $scope.addImageToThumbnail = function (componentId, index, update, parentIndex, numberPerPage) {
@@ -330,7 +333,7 @@
       $scope.componentEditing = _.findWhere($scope.components, {
         _id: componentId
       });
-      angular.element("#media-manager-modal").modal('show');
+      $scope.openModal('media-modal', 'MediaModalCtrl', null, 'lg');
     };
 
     /*
@@ -343,7 +346,7 @@
       $scope.showInsert = true;
       $scope.inlineInput = editor;
       $scope.isEditMode = edit;
-      angular.element("#media-manager-modal").modal('show');
+      $scope.openModal('media-modal', 'MediaModalCtrl', null, 'lg');
     };
 
     /*
@@ -370,6 +373,7 @@
     $scope.contactMap = {};
 
     $scope.insertMedia = function (asset, blogImage) {
+      console.log('$scope.componentEditing ', $scope.componentEditing);
       if ($scope.imageChange) {
         $scope.imageChange = false;
         var type = $scope.componentEditing.type;
@@ -471,11 +475,11 @@
      * -
      */
 
-    $scope.openModal = function (modal, controller, index) {
-      $scope.setEditingComponent(index);
+    $scope.openModal = function (modal, controller, index, size) {
+      console.log('openModal >>> ', modal, controller, index);
       var _modal = {
         templateUrl: modal,
-        //scope: $scope,
+        size: 'md',
         resolve: {
           components: function () {
             return $scope.components;
@@ -501,12 +505,29 @@
         _modal.resolve.isSinglePost = function () {
           return $scope.isSinglePost;
         };
+
+        _modal.resolve.showInsert = function () {
+          return $scope.showInsert;
+        };
+
+        _modal.resolve.insertMedia = function () {
+          return $scope.insertMedia;
+        };
+
+        _modal.resolve.openParentModal = function () {
+          return $scope.openModal;
+        };
       }
 
-      if (index >= 0) {
+      if (index && index >= 0) {
+        $scope.setEditingComponent(index);
         _modal.resolve.clickedIndex = function () {
           return index;
         };
+      }
+
+      if (size) {
+        _modal.size = 'lg';
       }
       $scope.modalInstance = $modal.open(_modal);
       $scope.modalInstance.result.then(null, function () {

@@ -44,7 +44,7 @@
                                 <div class="hidden-lg margin-bottom-10"></div>
                             </div>
                             <div class="col-sm-2 col-xs-6 center">
-                                <button type="button" ng-disabled="!ckeditorLoaded" ng-click="insertMediaOnClick()" class="media-modal btn btn-primary btn-wide btn-scroll btn-scroll-top ti-layout-media-overlay-alt btn-o">
+                                <button type="button" ng-disabled="!ckeditorLoaded" ng-click="openModal('media-modal', 'MediaModalCtrl', null, 'lg')" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-layout-media-overlay-alt btn-o">
                                     <span>Media</span>
                                 </button>
                                 <div class="hidden-lg margin-bottom-10"></div>
@@ -86,6 +86,7 @@
             <h1 class="center"><span class="fa fa-spinner fa-spin"></span><br> Loading Editor...</h1>
         </div>
     </div>
+    <div data-ng-include data-src=" 'assets/views/partials/mediamodal.html' " ></div>
     <div data-ng-include data-src=" 'assets/views/partials/add-component-modal.html' " ></div>
     <div data-ng-include data-src=" 'assets/views/partials/component-settings-modal.html' " ></div>
     <div data-ng-include data-src=" 'assets/views/partials/social-links-modal.html' " ></div>

@@ -185,7 +185,7 @@
                             <div class="col-xs-6">
                                 <div class="form-group add-image" ng-show="componentEditing.bg.img.show" ng-if="!componentEditing.bg.img.url">
                                     <div class="btn-wrap">
-                                        <input id="abi" ng-model="componentEditing.bg.img.url" media-modal-show-insert="true" type="button" class="pull-right btn btn-primary" data-toggle="modal" data-target="#media-manager-modal" value="Add BG Image">
+                                        <input id="abi" ng-model="componentEditing.bg.img.url" type="button" class="pull-right btn btn-primary"  value="Add BG Image" ng-click="addBackground(componentEditing._id)">
                                     </div>
                                 </div>
                                 <div class="bgimg" id="bgimg" ng-if="componentEditing.bg.img.url" ng-show="componentEditing.bg.img.show">

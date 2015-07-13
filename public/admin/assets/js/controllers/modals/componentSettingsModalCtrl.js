@@ -1,9 +1,10 @@
 'use strict';
 /*global app, moment, angular*/
 /*jslint unparam:true*/
-app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalInstance', '$http', '$timeout', '$q', '$compile', '$filter', 'WebsiteService', 'CustomerService', 'ProductService', 'GeocodeService', 'toaster', 'components', 'clickedIndex', 'contactMap', 'website', 'blog', 'isDirty', 'isSinglePost', function ($scope, $rootScope, $modalInstance, $http, $timeout, $q, $compile, $filter, WebsiteService, CustomerService, ProductService, GeocodeService, toaster, components, clickedIndex, contactMap, website, blog, isDirty, isSinglePost) {
+app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalInstance', '$http', '$timeout', '$q', '$compile', '$filter', 'WebsiteService', 'CustomerService', 'ProductService', 'GeocodeService', 'toaster', 'components', 'clickedIndex', 'contactMap', 'website', 'blog', 'isDirty', 'isSinglePost', 'openParentModal', 'showInsert', function ($scope, $rootScope, $modalInstance, $http, $timeout, $q, $compile, $filter, WebsiteService, CustomerService, ProductService, GeocodeService, toaster, components, clickedIndex, contactMap, website, blog, isDirty, isSinglePost, openParentModal, showInsert) {
   $scope.blog = {};
   $scope.components = components;
+  $scope.openParentModal = openParentModal;
   $scope.clickedIndex = clickedIndex;
   $scope.componentEditing = components[clickedIndex];
   $scope.contactMap = contactMap;
@@ -11,6 +12,8 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
   $scope.blog.post = blog;
   $scope.isDirty = isDirty;
   $scope.isSinglePost = isSinglePost;
+  $scope.showInsert = showInsert;
+
   /*
    * @getAllProducts
    * - get products for products and pricing table components
@@ -50,6 +53,11 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
   };
 
   $scope.sliderValue = 1;
+
+  $scope.addBackground = function(componentId) {
+    $scope.$parent.showInsert = true;
+    $scope.openParentModal('media-modal', 'MediaModalCtrl', null, 'lg');
+  };
 
   /*
    * @revertComponent
