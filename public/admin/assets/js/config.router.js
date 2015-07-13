@@ -84,7 +84,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         ncyBreadcrumb: {
             label: 'Posts'
         },
-        resolve: loadSequence('postsCtrl', 'userService')
+        resolve: loadSequence('postsCtrl', 'userService', 'htmlToPlaintext')
     }).state('app.website.singlepage', {
         url: '/pages/:id',
         templateUrl: "assets/views/editor.html",
