@@ -383,14 +383,14 @@
                     </div>
                     <div class="clearfix"></div>
                     <div ng-if="!componentEditing.customnav" id="reorderNavBarContainer" class="form-group">
-                        <ul ng-hide="" as-sortable="sortableOptions" ng-model="mainMenu.links" class="nav-bar" data-ng-repeat="mainMenu in website.linkLists track by $index" data-ng-if="mainMenu.handle=='head-menu' ">
-                            <li ng-if="!componentEditing.customnav" data-ng-repeat="link in mainMenu.links" as-sortable-item class="margin-bottom-10">
+                        <ul ng-hide="" ng-sortable="barConfig" class="component-sortable" ng-class="{'dragging': dragging}" ng-model="mainMenu.links" class="nav-bar" data-ng-repeat="mainMenu in website.linkLists track by $index" data-ng-if="mainMenu.handle=='head-menu' ">
+                            <li ng-if="!componentEditing.customnav" data-ng-repeat="link in mainMenu.links" class="margin-bottom-10 fragment">
                                 <div class="head-menu-links" data-label="{{link.label}}">
                                     <div class="container-fluid">
                                         <div>
                                             <div class="col-xs-1">
                                                 <h4>
-                                                            <span data-as-sortable-item-handle class="fa fa-arrows"></span>
+                                                            <span class="reorder fa fa-arrows"></span>
                                                         </h4>
                                             </div>
                                             <div class="col-xs-8">
@@ -455,13 +455,13 @@
                         </ul>
                         </div>
                         <div ng-if="componentEditing.customnav" id="reorderNavBarContainer" class="form-group">
-                            <ul as-sortable="sortableOptions" ng-model="customMenu.links" class="nav-bar" data-ng-repeat="customMenu in componentEditing.linkLists track by $index" data-ng-if="customMenu.handle=='head-menu' ">
-                                <li ng-if="componentEditing.customnav" data-ng-repeat="link in customMenu.links" as-sortable-item class="margin-bottom-10">
+                            <ul ng-sortable="barConfig" class="component-sortable" ng-model="customMenu.links" ng-class="{'dragging': dragging}" class="nav-bar" data-ng-repeat="customMenu in componentEditing.linkLists track by $index" data-ng-if="customMenu.handle=='head-menu' ">
+                                <li ng-if="componentEditing.customnav" data-ng-repeat="link in customMenu.links" class="margin-bottom-10 fragment">
                                     <div class="head-menu-links" data-label="{{link.label}}">
                                         <div class="container-fluid">
                                             <div class="col-xs-1">
                                                 <h4>
-                                                            <span data-as-sortable-item-handle class="fa fa-arrows"></span>
+                                                            <span class="fa fa-arrows reorder"></span>
                                                         </h4>
                                             </div>
                                             <div class="col-xs-8" style="padding-left:0;">
