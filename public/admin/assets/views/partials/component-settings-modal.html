@@ -807,7 +807,7 @@
                                     <a data-ng-if="blog.post.post_url" href="javascript:void(0)">
                                         <div class="post_title"
                                              data-ng-if="blog.post.post_title">
-                                            {{blog.post.post_title}}
+                                            {{blog.post.post_title | htmlToPlaintext}}
                                         </div>
                                     </a>
                                 </h2>
