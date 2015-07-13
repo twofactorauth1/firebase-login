@@ -519,7 +519,7 @@
         };
       }
 
-      if (angular.isDefined(index) && index >= 0) {
+      if (angular.isDefined(index) && index !==null && index >= 0) {
         $scope.setEditingComponent(index);
         _modal.resolve.clickedIndex = function () {
           return index;

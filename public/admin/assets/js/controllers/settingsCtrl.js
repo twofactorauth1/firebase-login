@@ -2,7 +2,7 @@
 /*global app, moment, angular, window*/
 /*jslint unparam:true*/
 (function (angular) {
-  app.controller('SettingsCtrl', ["$scope", "$state", "WebsiteService", "AccountService", "UserService", "toaster", "$timeout", function ($scope, $state, WebsiteService, AccountService, UserService, toaster, $timeout) {
+  app.controller('SettingsCtrl', ["$scope", "$modal", "$state", "WebsiteService", "AccountService", "UserService", "toaster", "$timeout", function ($scope, $modal, $state, WebsiteService, AccountService, UserService, toaster, $timeout) {
     $scope.keywords = [];
 
     /*
@@ -159,6 +159,37 @@
     //     console.log('updatedAccount ', updatedAccount);
     //   });
     // };
+
+    /*
+     * @openMediaModal
+     * -
+     */
+
+    $scope.openMediaModal = function () {
+      $scope.showInsert = true;
+      $scope.modalInstance = $modal.open({
+        templateUrl: 'media-modal',
+        controller: 'MediaModalCtrl',
+        size: 'lg',
+        resolve: {
+          showInsert: function () {
+            return $scope.showInsert;
+          },
+          insertMedia: function () {
+            return $scope.insertFavicon;
+          }
+        }
+      });
+    };
+
+    /*
+     * @closeModal
+     * -
+     */
+
+    $scope.closeModal = function () {
+      $scope.modalInstance.close();
+    };
 
 
   }]);
