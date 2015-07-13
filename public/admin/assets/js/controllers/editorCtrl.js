@@ -372,7 +372,7 @@
     $scope.thumbnailSlider = {};
     $scope.contactMap = {};
 
-    $scope.insertMedia = function (asset, blogImage) {
+    $scope.insertMedia = function (asset) {
       console.log('$scope.componentEditing ', $scope.componentEditing);
       if ($scope.imageChange) {
         $scope.imageChange = false;
@@ -425,7 +425,7 @@
       } else if ($scope.logoImage && $scope.componentEditing) {
         $scope.logoImage = false;
         $scope.componentEditing.logourl = asset.url;
-      } else if (blogImage) {
+      } else if ($scope.blogImage) {
         $scope.blog.post.featured_image = asset.url;
         return;
       } else if ($scope.imgThumbnail && $scope.componentEditing) {

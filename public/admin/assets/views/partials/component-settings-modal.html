@@ -828,7 +828,7 @@
                                 <div class="blog-thumb alignleft" ng-if="blog.post.featured_image">
                                     <img ng-src="{{blog.post.featured_image}}" />
                                 </div>
-                                <a class="btn btn-warning" type="button" blog-post-image="true" media-modal-show-insert="true" type="button" class="pull-right btn btn-primary" data-toggle="modal" data-target="#media-manager-modal" style="margin-right:10px">
+                                <a class="btn btn-warning" type="button" blog-post-image="true" ng-click="addFeaturedPost()" type="button" class="pull-right btn btn-primary" style="margin-right:10px">
                                     <span class="fa fa-edit"></span>
                                     <span ng-if="blog.post.featured_image" class="hidden-xs">Change Image</span>
                                     <span ng-if="!blog.post.featured_image" class="hidden-xs">Add Image</span>
