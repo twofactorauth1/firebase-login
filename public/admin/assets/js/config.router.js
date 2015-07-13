@@ -157,7 +157,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
             label: '{{ fullName }}',
             parent: 'app.customers'
         },
-        resolve: loadSequence('customerDetailCtrl', 'customerService', 'ngMap', 'keenService', 'offset','assetsService', 'toasterService', 'orderService')
+        resolve: loadSequence('customerDetailCtrl', 'customerService', 'ngMap', 'keenService', 'offset','assetsService', 'toasterService', 'orderService', 'mediaModalCtrl')
     }).state('app.commerce', {
         url: '/commerce',
         template: '<div ui-view class="fade-in-up"></div>',
@@ -183,7 +183,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         ncyBreadcrumb: {
             label: 'Single Product'
         },
-        resolve: loadSequence('productsDetailCtrl', 'productService', 'assetsService', 'dateRangePicker')
+        resolve: loadSequence('productsDetailCtrl', 'productService', 'assetsService', 'dateRangePicker', 'mediaModalCtrl')
     }).state('app.commerce.orders', {
         url: '/orders',
         templateUrl: "assets/views/orders.html",
@@ -244,7 +244,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         ncyBreadcrumb: {
             label: 'Business Profile'
         },
-        resolve: loadSequence('profileBusinessCtrl', 'toasterService', 'assetsService')
+        resolve: loadSequence('profileBusinessCtrl', 'toasterService', 'assetsService', 'mediaModalCtrl')
     }).state('app.account.profilepersonal', {
         url: '/profile-personal',
         templateUrl: "assets/views/profile-personal.html",
@@ -253,7 +253,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         ncyBreadcrumb: {
             label: 'Personal Profile'
         },
-        resolve: loadSequence('profilePersonalCtrl', 'toasterService', 'assetsService', 'offset')
+        resolve: loadSequence('profilePersonalCtrl', 'toasterService', 'assetsService', 'offset', 'mediaModalCtrl')
     }).state('app.account.billing', {
         url: '/billing',
         templateUrl: "assets/views/billing.html",

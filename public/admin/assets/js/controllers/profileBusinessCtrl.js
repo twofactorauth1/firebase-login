@@ -28,6 +28,28 @@
       }
     });
 
+    /*
+     * @openMediaModal
+     * -
+     */
+
+    $scope.openMediaModal = function () {
+      $scope.showInsert = true;
+      $scope.modalInstance = $modal.open({
+        templateUrl: 'media-modal',
+        controller: 'MediaModalCtrl',
+        size: 'lg',
+        resolve: {
+          showInsert: function () {
+            return $scope.showInsert;
+          },
+          insertMedia: function () {
+            return $scope.insertPhoto;
+          }
+        }
+      });
+    };
+
     // Add remove photo
     $scope.insertPhoto = function (asset) {
       $scope.account.business.logo = asset.url;
