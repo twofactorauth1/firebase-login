@@ -66,7 +66,7 @@ passport.use(new StripeStrategy({
 
             user._setCredentials(stripeAccount, false);
             // add accessToken to account.
-            stripeDao.getStripeAccount(function(err, account){
+            stripeDao.getStripeAccount(accessToken, function(err, account){
                 console.log('account >>> ', account);
                 accountDao.addStripeTokensToAccount(stripeAccount.baggage.accountId, accessToken, refreshToken, account.business_name, account.business_logo, function(err, value){
                     if(err) {

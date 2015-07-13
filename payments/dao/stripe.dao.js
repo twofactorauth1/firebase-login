@@ -193,9 +193,7 @@ var dao = {
     getStripeCustomer: function(stripeCustomerId, fn) {
         //stripe.customers.retrieve({CUSTOMER_ID});
         var self = this;
-        stripe.account.retrieve(function(err, account) {
-            self.log.debug('>> account ', account);
-        });
+        self.log.debug('>> getStripeCustomer');
         stripe.customers.retrieve(stripeCustomerId, function(err, customer) {
             // asynchronously called
             if (err) {
@@ -214,10 +212,13 @@ var dao = {
      * @param stripeCustomerId
      * @param fn
      */
-    getStripeAccount: function(fn) {
+    getStripeAccount: function(accessToken, fn) {
         //stripe.customers.retrieve({CUSTOMER_ID});
         var self = this;
-        stripe.account.retrieve(function(err, account) {
+        self.log.debug('>> getStripeAccount');
+        var apiToken = self.delegateStripe(accessToken);
+
+        stripe.account.retrieve(apiToken, function(err, account) {
             if (err) {
                 fn(err, account);
                 fn = null;
