@@ -40,7 +40,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.delete(this.url('events/:id'), this.isAuthAndSubscribedApi.bind(this), this.deleteEvent.bind(this));
 
         app.post(this.url('mandrill/event'), this.filterMandrillEvents.bind(this), this.sendToKeen.bind(this));
-        app.post(this.url('mandirll/event/unsub'), this.handleUnsubscribe.bind(this));
+        app.post(this.url('mandrill/event/unsub'), this.handleUnsubscribe.bind(this));
 
         //visit
         app.post(this.url('session/:id/sessionStart'), this.setup.bind(this), this.storeSessionInfo.bind(this));
