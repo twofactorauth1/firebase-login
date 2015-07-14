@@ -259,7 +259,7 @@ module.exports = function(grunt) {
             },
             admin: {
                 src: jsincludeGenerator.buildJSArraySync('templates/snippets/admin_body_scripts.jade'),
-                dest: 'public/admin/js/admin-vendor-indigenous.js'
+                dest: 'public/admin/assets/js/admin-vendor-indigenous.js'
             }
         },
 
