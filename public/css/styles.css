@@ -2246,6 +2246,9 @@ contenthover a {
   background: none!important;
 }
 /********** Image Text v1 **********/
+.image-text-v1 img {
+  max-width: 100%;
+}
 .image-text-v1 span[data-cke-display-name="image"] {
   max-width: 100%;
 }

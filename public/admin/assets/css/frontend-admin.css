@@ -2255,6 +2255,9 @@
 #componentloader .testimonials-v2 .right.carousel-control {
   background: none!important;
 }
+#componentloader .image-text-v1 img {
+  max-width: 100%;
+}
 #componentloader .image-text-v1 span[data-cke-display-name="image"] {
   max-width: 100%;
 }
