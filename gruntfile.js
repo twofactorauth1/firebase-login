@@ -255,13 +255,11 @@ module.exports = function(grunt) {
                 */
 
                 src: jsincludeGenerator.buildJSArraySync('templates/snippets/index_body_scripts.jade'),
-                /*src: wiredepJSAry,*/
                 dest: 'public/js/indigenous.js'
             },
             admin: {
                 src: jsincludeGenerator.buildJSArraySync('templates/snippets/admin_body_scripts.jade'),
-                /*src: wiredepJSAry,*/
-                dest: 'public/admin/js/admin-indigenous.js'
+                dest: 'public/admin/js/admin-vendor-indigenous.js'
             }
         },
 
@@ -331,7 +329,8 @@ module.exports = function(grunt) {
                     ]
                     */
 
-                    'public/js/ng-indigenous.js': jsincludeGenerator.includeDirectory('public/scripts')
+                    'public/js/ng-indigenous.js': jsincludeGenerator.includeDirectory('public/scripts'),
+                    'public/admin/assets/js/ng-admin-indigenous.js': jsincludeGenerator.includeDirectory('public/admin/assets/js')
                 }
             }
         },
