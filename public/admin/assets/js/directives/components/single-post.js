@@ -1,4 +1,7 @@
-app.directive('singlePostComponent',['$location', "WebsiteService", "$timeout", function ($location, WebsiteService, $timeout) {
+'use strict';
+/*global app, moment, angular, window*/
+/*jslint unparam:true*/
+app.directive('singlePostComponent', ['$location', "WebsiteService", "$timeout", function ($location, WebsiteService, $timeout) {
   return {
     scope: {
       component: '=',
@@ -53,8 +56,9 @@ app.directive('singlePostComponent',['$location', "WebsiteService", "$timeout", 
         scope.endOpened = false;
         scope.startOpened = !scope.startOpened;
       };
-      if(scope.$parent.blog)
-        scope.blog.post = scope.$parent.blog.post;    
+      if (scope.$parent.blog) {
+        scope.blog.post = scope.$parent.blog.post;
+      }
     }
-  }
+  };
 }]);

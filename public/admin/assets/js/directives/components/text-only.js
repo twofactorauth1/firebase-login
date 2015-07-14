@@ -1,3 +1,6 @@
+'use strict';
+/*global app, moment, angular, window*/
+/*jslint unparam:true*/
 app.directive('textOnlyComponent', function () {
   return {
     scope: {
@@ -8,5 +11,5 @@ app.directive('textOnlyComponent', function () {
     link: function (scope, element, attrs) {
       scope.isEditing = true;
     }
-  }
+  };
 });

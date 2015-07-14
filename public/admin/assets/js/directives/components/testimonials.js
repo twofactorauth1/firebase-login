@@ -1,3 +1,6 @@
+'use strict';
+/*global app, moment, angular, window*/
+/*jslint unparam:true*/
 app.directive('testimonialsComponent', ['$timeout', function ($timeout) {
   return {
     scope: {
@@ -33,5 +36,5 @@ app.directive('testimonialsComponent', ['$timeout', function ($timeout) {
         });
       };
     }
-  }
+  };
 }]);
