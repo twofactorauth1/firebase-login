@@ -69,12 +69,11 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
    * @revertComponent
    * -
    */
-
-  $scope.revertComponent = function () {
-    // $scope.componentEditing = $scope.originalComponent;
-    //if ($scope.componentEditing.type === 'navigation') {
-    //$scope.website.linkLists = $scope.backup["website"].linkLists;
-    //}
+  $scope.originalWebsite = angular.copy($scope.website);
+  $scope.revertComponent = function () {   
+    if ($scope.componentEditing.type === 'navigation') {
+      $scope.website.linkLists = $scope.originalWebsite.linkLists;
+    }
 
     $scope.components[clickedIndex] = $scope.originalComponent;
 
