@@ -1236,6 +1236,11 @@ ul.nav {
   margin: 5px auto;
   text-align: left;
 }
+@media (min-width: 1600px) {
+  .navigation-v1 .container {
+    width: 90%;
+  }
+}
 .navigation-v2 #header .navbar.navbar-default {
   border: none!important;
 }
@@ -1309,6 +1314,11 @@ ul.nav {
   .navigation-v2 .navbar .navbar-header {
     margin-left: 0px;
     margin-right: 0px;
+  }
+}
+@media (min-width: 1600px) {
+  .navigation-v2 .container {
+    width: 90%;
   }
 }
 .navigation1 {

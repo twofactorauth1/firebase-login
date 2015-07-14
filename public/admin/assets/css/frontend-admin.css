@@ -1253,6 +1253,11 @@
   margin: 5px auto;
   text-align: left;
 }
+@media (min-width: 1600px) {
+  #componentloader .navigation-v1 .container {
+    width: 90%;
+  }
+}
 #componentloader .navigation-v2 #header .navbar.navbar-default {
   border: none!important;
 }
@@ -1326,6 +1331,11 @@
   #componentloader .navigation-v2 .navbar .navbar-header {
     margin-left: 0px;
     margin-right: 0px;
+  }
+}
+@media (min-width: 1600px) {
+  #componentloader .navigation-v2 .container {
+    width: 90%;
   }
 }
 #componentloader .navigation1 {
