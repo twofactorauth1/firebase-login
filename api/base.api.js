@@ -406,6 +406,26 @@ _.extend(apiBase.prototype, {
         return token;
     },
 
+    getStripeTokenFromAccount: function(req, fn) {
+        var self = this;
+        self.log.debug('>> getStripeTokenFromAccount');
+        var token = null;
+        if(req.session.stripeAccessToken) {
+            return fn(null, req.session.stripeAccessToken);
+        } else {
+            var accountId = parseInt(self.accountId(req));
+            accountDao.getStripeTokensFromAccount(accountId, function(err, creds){
+                if(creds && creds.accessToken) {
+                    req.session.stripeAccessToken = creds.accessToken;
+                    return fn(null, req.session.stripeAccessToken);
+                } else {
+                    return fn(null, null);
+                }
+            });
+        }
+
+    },
+
     createUserActivity: function(req, type, note, detail, fn) {
         var self = this;
         var userId = self.userId(req);

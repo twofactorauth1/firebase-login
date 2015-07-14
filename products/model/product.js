@@ -21,6 +21,7 @@ var product = $$.m.ModelBase.extend({
             description: null,
             regular_price: 0,
             cost: 0,
+            on_sale: false,
             sales_price: 0,
             sale_date_from: null,
             sale_date_to: null,

@@ -4,6 +4,42 @@
 (function (angular) {
   app.controller('EditorCtrl', ["$scope", "$document", "$rootScope", "$interval", "$timeout", "toaster", "$modal", "$filter", "$location", "WebsiteService", "SweetAlert", "hoursConstant", "GeocodeService", "ProductService", "AccountService", "postConstant", function ($scope, $document, $rootScope, $interval, $timeout, toaster, $modal, $filter, $location, WebsiteService, SweetAlert, hoursConstant, GeocodeService, ProductService, AccountService, postConstant) {
 
+    $scope.preDragging = false;
+    $scope.preDrag = function (value) {
+      if (value === 'enter') {
+        $scope.preDragging = true;
+      }
+      if (value === 'leave') {
+        $scope.preDragging = false;
+      }
+    };
+
+    $scope.singleReorder = function (value, component, index) {
+      console.log('singleReorder >>> ', value);
+      if (value === 'down') {
+        $scope.components.splice(index, 1);
+        $scope.components.splice(index + 1, 0, component);
+        $scope.scrollToComponent(index + 1);
+      }
+
+      if (value === 'up') {
+        $scope.components.splice(index, 1);
+        $scope.components.splice(index - 1, 0, component);
+        $scope.scrollToComponent(index - 1);
+      }
+
+    };
+
+    $scope.scrollToComponent = function (destIndex) {
+      $timeout(function () {
+        var anchor = $scope.components[destIndex].anchor || $scope.components[destIndex]._id;
+        var element = document.getElementById(anchor);
+        if (element) {
+          $document.scrollToElementAnimated(element, 175, 1000);
+        }
+      }, 500);
+    };
+
     /*
      * @savePage
      * -
@@ -15,6 +51,7 @@
     $scope.savePage = function () {
       $scope.saveLoading = true;
       $scope.isDirty.dirty = false;
+
       if ($scope.isSinglePost) {
         $scope.validateEditPost($scope.blog.post);
         if (!$scope.editPostValidated) {
@@ -29,11 +66,18 @@
           }
         });
         WebsiteService.updatePost($scope.page._id, post_data._id, post_data, function (data) {
+          if (post_data.post_url !== $scope.originalPost.post_url) {
+            $location.search('posthandle', post_data.post_url)
+          }
           $scope.saveLoading = false;
-          toaster.pop('success', "Post Saved", "The " + $scope.blog.post.post_title + " post was saved successfully.");
+          toaster.pop('success', "Post Saved", "The " + $filter('htmlToPlaintext')($scope.blog.post.post_title) + " post was saved successfully.");
         });
       } else {
         WebsiteService.updatePage($scope.page, function (data) {
+          console.log($scope.page.handle, $scope.originalPage.handle);
+          if ($scope.page.handle !== $scope.originalPage.handle) {
+            $location.search('pagehandle', $scope.page.handle)
+          }
           $scope.saveLoading = false;
           toaster.pop('success', "Page Saved", "The " + $scope.page.handle + " page was saved successfully.");
           //Update linked list
@@ -137,6 +181,7 @@
         $scope.page = data;
         $scope.components = $scope.page.components;
         $scope.originalComponents = angular.copy($scope.components);
+        $scope.originalPage = angular.copy(data);
         $scope.activateCKeditor();
         $rootScope.breadcrumbTitle = $scope.page.title;
       });
@@ -158,7 +203,8 @@
           $scope.blog.post = data;
           $scope.single_post = true;
           $scope.components = $scope.page.components;
-          $rootScope.breadcrumbTitle = $scope.blog.post.post_title;
+          $scope.originalPost = angular.copy(data);
+          $rootScope.breadcrumbTitle = $filter('htmlToPlaintext')($scope.blog.post.post_title);
           $scope.activateCKeditor();
         });
 
@@ -235,6 +281,7 @@
      */
 
     window.clickandInsertImageButton = function (editor) {
+      console.log('clickandInsertImageButton >>> ');
       $scope.clickImageButton(editor, false);
     };
 
@@ -244,6 +291,7 @@
      */
 
     window.clickImageButton = function (btn) {
+      console.log('clickImageButton >>> ');
       var urlInput = $(btn).closest('td').prev('td').find('input');
       $scope.clickImageButton(urlInput, true);
     };
@@ -270,7 +318,8 @@
       $scope.componentEditing = _.findWhere($scope.components, {
         _id: componentId
       });
-      angular.element("#media-manager-modal").modal('show');
+      console.log('componentEditing ', $scope.componentEditing);
+      $scope.openModal('media-modal', 'MediaModalCtrl', null, 'lg');
     };
 
     $scope.addImageToThumbnail = function (componentId, index, update, parentIndex, numberPerPage) {
@@ -284,7 +333,7 @@
       $scope.componentEditing = _.findWhere($scope.components, {
         _id: componentId
       });
-      angular.element("#media-manager-modal").modal('show');
+      $scope.openModal('media-modal', 'MediaModalCtrl', null, 'lg');
     };
 
     /*
@@ -297,7 +346,7 @@
       $scope.showInsert = true;
       $scope.inlineInput = editor;
       $scope.isEditMode = edit;
-      angular.element("#media-manager-modal").modal('show');
+      $scope.openModal('media-modal', 'MediaModalCtrl', null, 'lg');
     };
 
     /*
@@ -323,7 +372,8 @@
     $scope.thumbnailSlider = {};
     $scope.contactMap = {};
 
-    $scope.insertMedia = function (asset, blogImage) {
+    $scope.insertMedia = function (asset) {
+      console.log('$scope.componentEditing ', $scope.componentEditing);
       if ($scope.imageChange) {
         $scope.imageChange = false;
         var type = $scope.componentEditing.type;
@@ -375,7 +425,7 @@
       } else if ($scope.logoImage && $scope.componentEditing) {
         $scope.logoImage = false;
         $scope.componentEditing.logourl = asset.url;
-      } else if (blogImage) {
+      } else if ($scope.blogImage) {
         $scope.blog.post.featured_image = asset.url;
         return;
       } else if ($scope.imgThumbnail && $scope.componentEditing) {
@@ -425,11 +475,11 @@
      * -
      */
 
-    $scope.openModal = function (modal, controller, index) {
-      $scope.setEditingComponent(index);
+    $scope.openModal = function (modal, controller, index, size) {
+      console.log('openModal >>> ', modal, controller, index);
       var _modal = {
         templateUrl: modal,
-        //scope: $scope,
+        size: 'md',
         resolve: {
           components: function () {
             return $scope.components;
@@ -455,12 +505,29 @@
         _modal.resolve.isSinglePost = function () {
           return $scope.isSinglePost;
         };
+
+        _modal.resolve.showInsert = function () {
+          return $scope.showInsert;
+        };
+
+        _modal.resolve.insertMedia = function () {
+          return $scope.insertMedia;
+        };
+
+        _modal.resolve.openParentModal = function () {
+          return $scope.openModal;
+        };
       }
 
-      if (index >= 0) {
+      if (angular.isDefined(index) && index !==null && index >= 0) {
+        $scope.setEditingComponent(index);
         _modal.resolve.clickedIndex = function () {
           return index;
         };
+      }
+
+      if (size) {
+        _modal.size = 'lg';
       }
       $scope.modalInstance = $modal.open(_modal);
       $scope.modalInstance.result.then(null, function () {
@@ -680,14 +747,15 @@
 
     $scope.checkForSaveBeforeLeave = function (url, reload) {
       $scope.changesConfirmed = true;
-      // var isDirty = false;
-      // var iFrame = document.getElementById("iframe-website");
-      // if ($scope.childScope.checkOrSetPageDirty) {
-      //   var isDirty = $scope.childScope.checkOrSetPageDirty() || $scope.isDirty;
-      // }
-      // $scope.childScope.checkOrSetPageDirty(true);
       if ($scope.originalComponents && $scope.components && $scope.originalComponents.length !== $scope.components.length) {
         $scope.isDirty.dirty = true;
+      }
+      if($scope.isSinglePost)
+      {
+        if($scope.blog.post && !angular.equals($scope.originalPost, $scope.blog.post))
+        {
+          $scope.isDirty.dirty = true;
+        }
       }
       var redirectUrl = url;
       if (!redirectUrl) {
@@ -801,36 +869,56 @@
      * -
      */
 
-    $scope.sortableCompoents = $scope.components;
+    // $scope.sortableCompoents = $scope.components;
 
-    $scope.wait = '';
-    $scope.first = true;
-    $scope.sortableOptions = {
-      parentElement: "#componentloader",
-      containerPositioning: 'relative',
-      dragStart: function (e, ui) {
+    // $scope.wait = '';
+    // $scope.first = true;
+
+    $scope.barConfig = {
+      animation: 0,
+      handle: '.reorder',
+      draggable: '.fragment',
+      ghostClass: "sortable-ghost",
+      scroll: true,
+      scrollSensitivity: 200,
+      scrollSpeed: 20, // px
+      onSort: function (evt) {
+        $scope.scrollToComponent(evt.newIndex);
+      },
+      onStart: function (evt) {
         $scope.dragging = true;
-        $scope.first = false;
-        clearTimeout($scope.wait);
       },
-      dragMove: function (e, ui) {
-        console.log('sorting update');
-      },
-      dragEnd: function (e, ui) {
-        $scope.first = true;
+      onEnd: function (evt) {
         $scope.dragging = false;
-        $scope.wait = setTimeout(function () {
-          e.dest.sortableScope.element.removeClass("active");
-          $timeout(function () {
-            var anchor = $scope.components[e.dest.index].anchor || $scope.components[e.dest.index]._id;
-            var element = document.getElementById(anchor);
-            if (element) {
-              $document.scrollToElementAnimated(element, 175, 1000);
-            }
-          }, 500);
-        }, 500);
       }
     };
+
+    // $scope.sortableOptions = {
+    //   parentElement: "#componentloader",
+    //   containerPositioning: 'relative',
+    //   dragStart: function (e, ui) {
+    //     $scope.dragging = true;
+    //     $scope.first = false;
+    //     clearTimeout($scope.wait);
+    //   },
+    //   dragMove: function (e, ui) {
+    //     console.log('sorting update');
+    //   },
+    //   dragEnd: function (e, ui) {
+    //     $scope.first = true;
+    //     $scope.dragging = false;
+    //     $scope.wait = setTimeout(function () {
+    //       // e.dest.sortableScope.element.removeClass("active");
+    //       $timeout(function () {
+    //         var anchor = $scope.components[e.dest.index].anchor || $scope.components[e.dest.index]._id;
+    //         var element = document.getElementById(anchor);
+    //         if (element) {
+    //           $document.scrollToElementAnimated(element, 175, 1000);
+    //         }
+    //       }, 500);
+    //     }, 500);
+    //   }
+    // };
 
   }]);
 }(angular));

@@ -130,6 +130,35 @@
                             </div>
                         </form>
                         <hr/>
+                        <div class="form-group" ng-if="componentEditing.type == 'contact-us'">
+                            <label for="colorpicker">Box Background Color:</label>
+                            <span tooltip-placement="top" tooltip-html-unsafe="Set Background color of Contact Box."><i class="fa fa-info-circle" /></span>
+                            <div class="pull-right">
+                                <h4 class="pull-left"><i class="fa fa-eyedropper" /></h4>
+                                <spectrum-colorpicker format="'hex'" options="spectrum.options" class="pull-right" ng-model="componentEditing.boxColor" ng-change="saveComponent()"></spectrum-colorpicker>
+                            </div>
+                        </div>
+                        <div class="row" ng-if="componentEditing.type == 'contact-us'">
+                            <div class="col-sm-10">
+                                <label class="pull-left">Box Opacity</label>
+                            </div>
+                            <div class="col-sm-2">
+                                <select id="infoBox_opacity" ng-model="componentEditing.boxOpacity" ng-change="saveComponent()" class="pull-right form-control margin-bottom-0">
+                                    <option value="" disabled>%</option>
+                                    <option value=".1">10</option>
+                                    <option value=".2">20</option>
+                                    <option value=".3">30</option>
+                                    <option value=".4">40</option>
+                                    <option value=".5">50</option>
+                                    <option value=".6">60</option>
+                                    <option value=".7">70</option>
+                                    <option value=".8">80</option>
+                                    <option value=".9">90</option>
+                                    <option value="1">100</option>
+                                </select>
+                            </div>
+                        </div>
+                        <hr/>
                         <div class="form-group" ng-if="componentEditing.type != 'navigation' && componentEditing.type != 'top-bar' && componentEditing.type != 'blog'">
                             <label for="bg_hide" class="margin-bottom-0">Show Background Image</label>
                             <span tooltip-placement="top" tooltip-html-unsafe="show/hide background image of component."><i class="fa fa-info-circle" /></span>
@@ -156,12 +185,12 @@
                             <div class="col-xs-6">
                                 <div class="form-group add-image" ng-show="componentEditing.bg.img.show" ng-if="!componentEditing.bg.img.url">
                                     <div class="btn-wrap">
-                                        <input id="abi" ng-model="componentEditing.bg.img.url" media-modal-show-insert="true" type="button" class="pull-right btn btn-primary" data-toggle="modal" data-target="#media-manager-modal" value="Add BG Image">
+                                        <input id="abi" ng-model="componentEditing.bg.img.url" type="button" class="pull-right btn btn-primary"  value="Add BG Image" ng-click="addBackground(componentEditing._id)">
                                     </div>
                                 </div>
                                 <div class="bgimg" id="bgimg" ng-if="componentEditing.bg.img.url" ng-show="componentEditing.bg.img.show">
                                     <i class="fa fa-close" ng-click="removeImage(false)"></i>
-                                    <img ng-src="{{componentEditing.bg.img.url}}" ng-model="componentEditing.bg.img.url" media-modal-show-insert="true" data-toggle="modal" data-target="#media-manager-modal" class="img-thumbnail">
+                                    <img ng-src="{{componentEditing.bg.img.url}}" ng-model="componentEditing.bg.img.url" ng-click="addBackground(componentEditing._id)" class="img-thumbnail">
                                 </div>
                                 <div class="clearfix margin-bottom-10"></div>
                                 <div class="form-group" ng-if="componentEditing.type == 'masthead'" ng-show="componentEditing.bg.img.show">
@@ -354,14 +383,14 @@
                     </div>
                     <div class="clearfix"></div>
                     <div ng-if="!componentEditing.customnav" id="reorderNavBarContainer" class="form-group">
-                        <ul ng-hide="" as-sortable="sortableOptions" ng-model="mainMenu.links" class="nav-bar" data-ng-repeat="mainMenu in website.linkLists track by $index" data-ng-if="mainMenu.handle=='head-menu' ">
-                            <li ng-if="!componentEditing.customnav" data-ng-repeat="link in mainMenu.links" as-sortable-item class="margin-bottom-10">
+                        <ul ng-hide="" ng-sortable="barConfig" class="component-sortable" ng-class="{'dragging': dragging}" ng-model="mainMenu.links" class="nav-bar" data-ng-repeat="mainMenu in website.linkLists track by $index" data-ng-if="mainMenu.handle=='head-menu' ">
+                            <li ng-if="!componentEditing.customnav" data-ng-repeat="link in mainMenu.links" class="margin-bottom-10 fragment">
                                 <div class="head-menu-links" data-label="{{link.label}}">
                                     <div class="container-fluid">
                                         <div>
                                             <div class="col-xs-1">
                                                 <h4>
-                                                            <span data-as-sortable-item-handle class="fa fa-arrows"></span>
+                                                            <span class="reorder fa fa-arrows"></span>
                                                         </h4>
                                             </div>
                                             <div class="col-xs-8">
@@ -426,13 +455,13 @@
                         </ul>
                         </div>
                         <div ng-if="componentEditing.customnav" id="reorderNavBarContainer" class="form-group">
-                            <ul as-sortable="sortableOptions" ng-model="customMenu.links" class="nav-bar" data-ng-repeat="customMenu in componentEditing.linkLists track by $index" data-ng-if="customMenu.handle=='head-menu' ">
-                                <li ng-if="componentEditing.customnav" data-ng-repeat="link in customMenu.links" as-sortable-item class="margin-bottom-10">
+                            <ul ng-sortable="barConfig" class="component-sortable" ng-model="customMenu.links" ng-class="{'dragging': dragging}" class="nav-bar" data-ng-repeat="customMenu in componentEditing.linkLists track by $index" data-ng-if="customMenu.handle=='head-menu' ">
+                                <li ng-if="componentEditing.customnav" data-ng-repeat="link in customMenu.links" class="margin-bottom-10 fragment">
                                     <div class="head-menu-links" data-label="{{link.label}}">
                                         <div class="container-fluid">
                                             <div class="col-xs-1">
                                                 <h4>
-                                                            <span data-as-sortable-item-handle class="fa fa-arrows"></span>
+                                                            <span class="fa fa-arrows reorder"></span>
                                                         </h4>
                                             </div>
                                             <div class="col-xs-8" style="padding-left:0;">
@@ -608,6 +637,16 @@
                         <input id="contact-phone" validation-type="phone" indigeweb-validate-form-fields class="form-control" type="text" ng-model="componentEditing.contact.phone">
                     </div>
                 </tab>
+                <tab active="tabs.map" ng-if="componentEditing.type === 'contact-us'" ng-click="refreshSlider()">
+                    <tab-heading>
+                        <span>Map</span>
+                    </tab-heading>
+                    <div class="form-group">
+                        <label for="mapZoom">Map Zoom:</label>
+                        <rzslider name="mapZoom" rz-slider-model="componentEditing.map.zoom" rz-slider-floor="0" rz-slider-ceil="19"></rzslider>
+                        <div class="help-block">Zoom level on map 0 (World) - 19 (Street) </div>
+                    </div>
+                </tab>
                 <tab ng-if="componentEditing.type === 'simple-form'">
                     <tab-heading>
                         <span>Fields</span>
@@ -768,7 +807,7 @@
                                     <a data-ng-if="blog.post.post_url" href="javascript:void(0)">
                                         <div class="post_title"
                                              data-ng-if="blog.post.post_title">
-                                            {{blog.post.post_title}}
+                                            {{blog.post.post_title | htmlToPlaintext}}
                                         </div>
                                     </a>
                                 </h2>
@@ -789,7 +828,7 @@
                                 <div class="blog-thumb alignleft" ng-if="blog.post.featured_image">
                                     <img ng-src="{{blog.post.featured_image}}" />
                                 </div>
-                                <a class="btn btn-warning" type="button" blog-post-image="true" media-modal-show-insert="true" type="button" class="pull-right btn btn-primary" data-toggle="modal"  data-target="#media-manager-modal" style="margin-right:10px">
+                                <a class="btn btn-warning" type="button" blog-post-image="true" ng-click="addFeaturedPost()" type="button" class="pull-right btn btn-primary" style="margin-right:10px">
                                     <span class="fa fa-edit"></span>
                                     <span ng-if="blog.post.featured_image" class="hidden-xs">Change Image</span>
                                     <span ng-if="!blog.post.featured_image" class="hidden-xs">Add Image</span>

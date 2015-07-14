@@ -3,7 +3,7 @@
     <section id="page-title" class="padding-top-15 padding-bottom-15">
         <div class="row">
             <div class="col-sm-8">
-                <h1 ng-if="isSinglePost" class="mainTitle">{{ blog.post.post_title || 'Single Post'}}</h1>
+                <h1 ng-if="isSinglePost" class="mainTitle">{{ blog.post.post_title || 'Single Post' | htmlToPlaintext}}</h1>
                 <h1 ng-if="!isSinglePost" class="mainTitle">{{ page.title || 'Title'}}</h1>
                 <span ng-if="isSinglePost && blog.post.post_tags" class="mainDescription">There are currently {{blog.post.post_tags.length}} tags.</span>
                 <span ng-if="!isSinglePost && page.components" class="mainDescription">There are currently {{page.components.length}} components.</span>
@@ -44,7 +44,7 @@
                                 <div class="hidden-lg margin-bottom-10"></div>
                             </div>
                             <div class="col-sm-2 col-xs-6 center">
-                                <button type="button" ng-disabled="!ckeditorLoaded" ng-click="insertMediaOnClick()" class="media-modal btn btn-primary btn-wide btn-scroll btn-scroll-top ti-layout-media-overlay-alt btn-o">
+                                <button type="button" ng-disabled="!ckeditorLoaded" ng-click="openModal('media-modal', 'MediaModalCtrl', null, 'lg')" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-layout-media-overlay-alt btn-o">
                                     <span>Media</span>
                                 </button>
                                 <div class="hidden-lg margin-bottom-10"></div>

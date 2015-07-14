@@ -23,36 +23,42 @@
                     <div elem ng-model="component.subtitle"></div>
                 </div>
                 <div class="clearfix mb15"></div>
-                <div id="user_{{field.name}}_{{component._id}}" ng-repeat="field in component.fields" ng-if="field.value" class="col-sm-4 form-group has-feedback">
-                    <div class="left-inner-addon">
-                        <input type="text" class="form-control" ng-model="field.model" placeholder="{{field.display}}">
+                <form name="simpleForm" ng-submit="createUser(simpleForm)">
+                    <!-- FIRST -->
+                    <div class="form-group col-sm-4" ng-if="fieldShow('first')" ng-class="{ 'has-error' : simpleForm.first.$invalid && !simpleForm.first.$pristine }">
+                        <input type="text" name="first" ng-model="user.first" class="form-control" placeholder="First" required>
+                        <p ng-show="simpleForm.first.$invalid && !simpleForm.first.$pristine" class="help-block">Enter a valid first name.</p>
                     </div>
-                    <span class="glyphicon form-control-feedback"></span>
-                    <span class="error help-block" />
-                </div>
-                <div class="clearfix mb15"></div>
-                <div id="user_email_{{component._id}}" class="col-sm-9 form-group has-feedback">
-                    <div class="left-inner-addon">
-                        <span><i class="fa fa-envelope"></i></span>
-                        <input type="email" ng-model="user.email" class="form-control" placeholder="Email" />
+                    <!-- LAST -->
+                    <div class="form-group col-sm-4" ng-if="fieldShow('last')" ng-class="{ 'has-error' : simpleForm.last.$invalid && !simpleForm.last.$pristine }">
+                        <input type="text" name="last" ng-model="user.last" class="form-control" placeholder="Last" required>
+                        <p ng-show="simpleForm.last.$invalid && !simpleForm.last.$pristine" class="help-block">Enter a valid last name.</p>
                     </div>
-                    <span class="glyphicon form-control-feedback"></span>
-                    <span class="error help-block" />
-                </div>
-                <div class="clearfix mb15 visible-xs"></div>
-                <div class="col-sm-3">
-                    <div class="clear">
-                        <div ng-click="isEditing ? '' : createUser(user, component)" class="btn btn-o btn-default pull-right btn-block btn-editable" role="button">
-                            <div elem ng-model="component.submitBtn"></div>
+                    <!-- PHONE -->
+                    <div class="form-group col-sm-4" ng-if="fieldShow('phone')" ng-class="{ 'has-error' : simpleForm.phone.$invalid && !simpleForm.phone.$pristine }">
+                        <input type="text" name="phone" ng-model="user.phone" ng-pattern="phoneNumberPattern" class="form-control" placeholder="Phone" required>
+                        <p ng-show="simpleForm.phone.$invalid && !simpleForm.phone.$pristine" class="help-block">Enter a valid phone number.</p>
+                    </div>
+                    <div class="clearfix mb15"></div>
+                    <!-- EMAIL -->
+                    <div class="form-group col-sm-9" ng-class="{ 'has-error' : userExists || simpleForm.email.$invalid && !simpleForm.email.$pristine }">
+                        <input type="email" name="email" ng-model="user.email" class="form-control" placeholder="Email" required>
+                        <p ng-if="simpleForm.email.$invalid && !simpleForm.email.$pristine && !userExists" class="help-block">Enter a valid email.</p>
+                        <p ng-if="userExists" class="help-block">Email already exists.</p>
+                    </div>
+                    <div class="clearfix mb15 visible-xs"></div>
+                    <div class="col-sm-3">
+                        <button type="submit" class="btn btn-o btn-default pull-right btn-block" ng-disabled="simpleForm.$invalid">
+                            <span elem ng-model="component.submitBtn"></span>
+                        </button>
+                    </div>
+                    <div class="clearfix mb15"></div>
+                    <div ng-show="formSuccess">
+                        <div class="row thank-you animated" ng-class="{fadeOut: !formSuccess, tada: formSuccess}">
+                            <h3 class="center mb20">Thank You for Submitting!</h3>
                         </div>
                     </div>
-                </div>
-                <div class="clearfix mb15"></div>
-                <div ng-if="user.success">
-                    <div class="row thank-you animated" ng-class="{fadeOut: !user.success, tada: user.success}">
-                        <h3 class="center mb20">Thank You for Submitting!</h3>
-                    </div>
-                </div>
+                </form>
             </div>
         </div>
     </div>

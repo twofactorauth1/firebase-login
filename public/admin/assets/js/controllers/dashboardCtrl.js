@@ -1,21 +1,20 @@
 'use strict';
-/*global app, moment*/
+/*global app, moment, angular, window*/
+/*jslint unparam:true*/
 app.controller('DashboardCtrl', ["$scope", "OrderService", "CustomerService", "ChartAnalyticsService", "UserService", "ChartCommerceService", "$modal", "$filter", "contactConstant", function ($scope, OrderService, CustomerService, ChartAnalyticsService, UserService, ChartCommerceService, $modal, $filter, contactConstant) {
 
   /*
    * @getActivityName
    * - get activity actual name 
    */
-  $scope.getActivityName = function(activity)
-  {
+  $scope.getActivityName = function (activity) {
     var activity_hash = _.findWhere(contactConstant.customer_activity_types.dp, {
-        data: activity
+      data: activity
     });
-    if(activity_hash)
+    if (activity_hash) {
       return activity_hash.label;
-    else
-      activity;
-  }
+    }
+  };
 
   /*
    * @isSameDateAs
@@ -116,29 +115,29 @@ app.controller('DashboardCtrl', ["$scope", "OrderService", "CustomerService", "C
    * @getCustomers
    * - get customer for the customer widget
    */
-    $scope.customerNames = [];
-    CustomerService.getCustomers(function (customers) {
+  $scope.customerNames = [];
+  CustomerService.getCustomers(function (customers) {
 
-        $scope.customers = customers;
-        $scope.customersThisMonth = [];
-        var tempData = [];
-        _.each($scope.getDaysThisMonth(), function (day) {
-            var thisDaysCustomers = 0;
-            _.each(customers, function (customer) {
-                if (customer.created.date) {
-                    if ($scope.isSameDateAs(new Date(customer.created.date), new Date(day))) {
-                        $scope.customersThisMonth.push(customer);
-                        thisDaysCustomers = thisDaysCustomers + 1;
-                    }
-                }
+    $scope.customers = customers;
+    $scope.customersThisMonth = [];
+    var tempData = [];
+    _.each($scope.getDaysThisMonth(), function (day) {
+      var thisDaysCustomers = 0;
+      _.each(customers, function (customer) {
+        if (customer.created.date) {
+          if ($scope.isSameDateAs(new Date(customer.created.date), new Date(day))) {
+            $scope.customersThisMonth.push(customer);
+            thisDaysCustomers = thisDaysCustomers + 1;
+          }
+        }
 
-            });
-            tempData.push(thisDaysCustomers);
-        });
-        _.each(customers, function(customer) {
-            $scope.customerNames.push(customer.first + ' ' + customer.last);
-        });
-        $scope.analyticsCustomers = tempData;
+      });
+      tempData.push(thisDaysCustomers);
+    });
+    _.each(customers, function (customer) {
+      $scope.customerNames.push(customer.first + ' ' + customer.last);
+    });
+    $scope.analyticsCustomers = tempData;
   });
 
   /*
@@ -289,45 +288,48 @@ app.controller('DashboardCtrl', ["$scope", "OrderService", "CustomerService", "C
 
   $scope.activityTypes = [];
 
-  contactConstant.customer_activity_types.dp.forEach(function(value, index) {
+  contactConstant.customer_activity_types.dp.forEach(function (value, index) {
     $scope.activityTypes.push(value.label);
   });
 
-  $scope.updateActivityTypeFn = function(selection) {
-      var activity_hash = _.findWhere(contactConstant.customer_activity_types.dp, {
-          label: selection
-      });
-      if(activity_hash)
-          $scope.newActivity.activityType = activity_hash.data;
+  $scope.updateActivityTypeFn = function (selection) {
+    var activity_hash = _.findWhere(contactConstant.customer_activity_types.dp, {
+      label: selection
+    });
+    if (activity_hash) {
+      $scope.newActivity.activityType = activity_hash.data;
+    }
   };
 
-  $scope.updateCustomerNameFn = function(selection) {
-      var firstLast = selection.split(' ');
-      var customerHash = _.findWhere($scope.customers, {first: firstLast[0], last:firstLast[1]});
-      if(customerHash) {
-          $scope.newActivity.contactId = customerHash._id;
-      }
+  $scope.updateCustomerNameFn = function (selection) {
+    var firstLast = selection.split(' ');
+    var customerHash = _.findWhere($scope.customers, {
+      first: firstLast[0],
+      last: firstLast[1]
+    });
+    if (customerHash) {
+      $scope.newActivity.contactId = customerHash._id;
+    }
   };
 
   //$scope.all_activities = angular.copy($scope.activities);
   $scope.addActivityFn = function () {
     angular.element("#activity_type .error").html("");
-      angular.element("#activity_type .error").removeClass('has-error');
-      var activity_type = angular.element("#activity_type input").val();
-      var activity_hash = _.findWhere(contactConstant.customer_activity_types.dp, {
-          label: activity_type
-      });
-      if(!activity_type)
-      {
-         angular.element("#activity_type .error").html("Activity Type Required");
-         angular.element("#activity_type .error").addClass('has-error');
-         return;
-      }
-      if(!activity_hash)
-      {
-          $scope.newActivity.activityType = activity_type;
-      }else
-          $scope.newActivity.activityType = activity_hash.data;
+    angular.element("#activity_type .error").removeClass('has-error');
+    var activity_type = angular.element("#activity_type input").val();
+    var activity_hash = _.findWhere(contactConstant.customer_activity_types.dp, {
+      label: activity_type
+    });
+    if (!activity_type) {
+      angular.element("#activity_type .error").html("Activity Type Required");
+      angular.element("#activity_type .error").addClass('has-error');
+      return;
+    }
+    if (!activity_hash) {
+      $scope.newActivity.activityType = activity_type;
+    } else {
+      $scope.newActivity.activityType = activity_hash.data;
+    }
 
     CustomerService.postCustomerActivity($scope.newActivity, function (activity) {
       $scope.activities.push(activity);

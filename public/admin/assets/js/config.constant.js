@@ -394,6 +394,7 @@ app.constant('userConstant', {
     FACEBOOK: "fb",
     TWITTER: "tw",
     LINKEDIN: "li",
+    STRIPE: "st",
     GOOGLE: "go",
     FULL_CONTACT: "fc",
   },
@@ -559,6 +560,7 @@ app.constant('JS_REQUIRES', {
     'emailsCtrl': 'assets/js/controllers/emailsCtrl.js',
     'addComponentModalCtrl': 'assets/js/controllers/modals/addComponentModalCtrl.js',
     'componentSettingsModalCtrl': 'assets/js/controllers/modals/componentSettingsModalCtrl.js',
+    'mediaModalCtrl': 'assets/js/controllers/modals/mediaModalCtrl.js',
 
     'asideCtrl': 'assets/js/controllers/asideCtrl.js',
     'toasterCtrl': 'assets/js/controllers/toasterCtrl.js',
@@ -705,7 +707,10 @@ app.constant('JS_REQUIRES', {
     files: ['../js/libs/angular-daterangepicker/js/angular-daterangepicker.min.js', '../js/libs/bootstrap-daterangepicker/daterangepicker.js']
   }, {
     name: 'ui.sortable',
-    files: ['../js/libs_misc/ng-sortable/dist/ng-sortable.js','../js/libs_misc/ng-sortable/dist/ng-sortable.style.min.css']
+    files: ['../js/libs/Sortable/Sortable.min.js', '../js/libs/Sortable/ng-sortable.js']
+  }, {
+    name: 'angular-slider',
+    files: ['../js/libs/angularjs-slider/dist/rzslider.min.js', '../js/libs/angularjs-slider/dist/rzslider.min.css']
   }, {
     name: 'ngSticky',
     files: ['../js/libs/ngSticky/dist/sticky.min.js']

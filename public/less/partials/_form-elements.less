@@ -1,6 +1,7 @@
 /* ---------------------------------------------------------------------- */
 /*  Forms
 /* ---------------------------------------------------------------------- */
+
 fieldset {
     background: @white;
     border: 1px solid #e6e8e8;
@@ -8,12 +9,10 @@ fieldset {
     margin: 20px 0 20px 0;
     padding: 25px;
     position: relative;
-
     .form-group {
         margin-left: 0;
         margin-right: 0;
     }
-
     legend {
         background: inherit;
         font-family: @font-family-secondary;
@@ -44,7 +43,22 @@ fieldset {
     opacity: 1;
 }
 
-textarea, select, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"] {
+textarea,
+select,
+input[type="text"],
+input[type="password"],
+input[type="datetime"],
+input[type="datetime-local"],
+input[type="date"],
+input[type="month"],
+input[type="time"],
+input[type="week"],
+input[type="number"],
+input[type="email"],
+input[type="url"],
+input[type="search"],
+input[type="tel"],
+input[type="color"] {
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
@@ -64,11 +78,9 @@ textarea, select, input[type="text"], input[type="password"], input[type="dateti
     -ms-transition: 300ms ease-in-out;
     -o-transition: 300ms ease-in-out;
     transition: 300ms ease-in-out;
-
     &:hover {
         border-color: darken(@border-default, 10%);
     }
-
     &:focus {
         box-shadow: none !important;
         border-color: darken(@border-default, 5%) !important;
@@ -76,7 +88,22 @@ textarea, select, input[type="text"], input[type="password"], input[type="dateti
     }
 }
 
-textarea.underline, select.underline, input[type="text"].underline, input[type="password"].underline, input[type="datetime"].underline, input[type="datetime-local"].underline, input[type="date"].underline, input[type="month"].underline, input[type="time"].underline, input[type="week"].underline, input[type="number"].underline, input[type="email"].underline, input[type="url"].underline, input[type="search"].underline, input[type="tel"].underline, input[type="color"].underline {
+textarea.underline,
+select.underline,
+input[type="text"].underline,
+input[type="password"].underline,
+input[type="datetime"].underline,
+input[type="datetime-local"].underline,
+input[type="date"].underline,
+input[type="month"].underline,
+input[type="time"].underline,
+input[type="week"].underline,
+input[type="number"].underline,
+input[type="email"].underline,
+input[type="url"].underline,
+input[type="search"].underline,
+input[type="tel"].underline,
+input[type="color"].underline {
     background: none !important;
     background-image: none;
     border: 1px solid @border-default;
@@ -92,11 +119,9 @@ textarea.underline, select.underline, input[type="text"].underline, input[type="
     transition-duration: 0.1s;
     box-shadow: none !important;
     .transition (border 300ms ease-out);
-
     &:hover {
         border-color: darken(@border-default, 10%);
     }
-
     &:focus {
         box-shadow: none !important;
         border-color: @primary !important;
@@ -104,10 +129,11 @@ textarea.underline, select.underline, input[type="text"].underline, input[type="
     }
 }
 
-textarea[disabled], input[disabled], select[disabled] {
+textarea[disabled],
+input[disabled],
+select[disabled] {
     background: @lightGrey !important;
     border-color: #F8F8F8 !important;
-
     &:hover, &:focus {
         background: @lightGrey !important;
         border-color: #F8F8F8;
@@ -130,13 +156,16 @@ select[multiple="multiple"]:focus option {
     background: #F8F8F8 !important;
 }
 
-.has-error .form-control, .has-warning .form-control, .has-success .form-control {
+.has-error .form-control,
+.has-warning .form-control,
+.has-success .form-control {
     &:focus, &:hover {
         box-shadow: none;
     }
 }
 
-.validation-invalid, .validation-valid {
+.validation-invalid,
+.validation-valid {
     font-size: 12px;
     padding: 0 5px;
 }
@@ -145,11 +174,9 @@ select[multiple="multiple"]:focus option {
     .control-label {
         color: @text-color !important;
     }
-
     .error {
         color: #a94442;
     }
-
     .form-control {
         color: @text-dark;
         border-color: #F8F8F8;
@@ -159,13 +186,11 @@ select[multiple="multiple"]:focus option {
         border-color: #a94442 !important;
         border-width: 1px !important;
         border-style: dotted;
-
         &:focus, &:hover {
             border-color: #F8F8F8;
             border-bottom-color: #a94442 !important;
         }
     }
-
     label {
         color: #a94442 !important;
     }
@@ -173,11 +198,9 @@ select[multiple="multiple"]:focus option {
 
 .has-warning {
     color: @warning;
-
     .control-label {
         color: @text-color !important;
     }
-
     .form-control {
         color: @text-dark;
         border-color: #F8F8F8;
@@ -187,13 +210,11 @@ select[multiple="multiple"]:focus option {
         border-color: #8a6d3b !important;
         border-width: 1px !important;
         border-style: dotted;
-
         &:focus, &:hover {
             border-color: #F8F8F8;
             border-bottom-color: #8a6d3b !important;
         }
     }
-
     label {
         color: #8a6d3b;
     }
@@ -201,11 +222,9 @@ select[multiple="multiple"]:focus option {
 
 .has-success {
     color: @success;
-
     .control-label {
         color: @text-color !important;
     }
-
     .form-control {
         color: @text-dark;
         border-color: #F8F8F8;
@@ -215,13 +234,11 @@ select[multiple="multiple"]:focus option {
         border-color: #3c763d !important;
         border-width: 1px !important;
         border-style: dotted;
-
         &:focus, &:hover {
             border-color: #F8F8F8;
             border-bottom-color: #3c763d !important;
         }
     }
-
     label {
         color: #3c763d;
     }
@@ -232,7 +249,8 @@ label {
     color: #858585;
 }
 
-span.input-icon, span.input-help {
+span.input-icon,
+span.input-help {
     display: block;
     position: relative;
 }
@@ -252,7 +270,8 @@ span.input-help > input {
     padding-right: 6px;
 }
 
-.input-icon > [class*="fa-"], .input-icon > [class*="ti-"] {
+.input-icon > [class*="fa-"],
+.input-icon > [class*="ti-"] {
     bottom: 0;
     color: @primary;
     display: inline-block;
@@ -264,7 +283,8 @@ span.input-help > input {
     z-index: 2;
 }
 
-.input-icon.input-icon-right > [class*="fa-"], .input-icon.input-icon-right > [class*="ti-"] {
+.input-icon.input-icon-right > [class*="fa-"],
+.input-icon.input-icon-right > [class*="ti-"] {
     left: auto;
     right: 4px;
 }
@@ -319,7 +339,6 @@ select.form-control option {
 
 textarea.autosize {
     min-height: 71px;
-
     &.area-animated {
         &:focus {
             vertical-align: top;
@@ -338,7 +357,6 @@ textarea.autosize {
     position: relative;
     padding-top: 12px;
     background: @white;
-
     textarea {
         background: url("../images/line_detail.png") repeat;
         line-height: 20px;
@@ -347,12 +365,10 @@ textarea.autosize {
         border: none;
         padding: 0;
         position: relative;
-
         &:focus {
             background-color: @white !important;
         }
     }
-
     &:before {
         background: url("../images/note_dot.png") repeat-x;
         position: absolute;
@@ -365,11 +381,15 @@ textarea.autosize {
     }
 }
 
-.radio label.radio-inline, .checkbox label.checkbox-inline {
+.radio label.radio-inline,
+.checkbox label.checkbox-inline {
     display: inline-block;
 }
 
-.radio-inline, .radio-inline + .radio-inline, .checkbox-inline, .checkbox-inline + .checkbox-inline {
+.radio-inline,
+.radio-inline + .radio-inline,
+.checkbox-inline,
+.checkbox-inline + .checkbox-inline {
     margin-right: 10px !important;
     margin-top: 5px !important;
     margin-left: 0 !important;
@@ -422,7 +442,8 @@ textarea.autosize {
     color: @warning;
 }
 
-.has-error .note-editor, .has-error .cke_chrome {
+.has-error .note-editor,
+.has-error .cke_chrome {
     border-color: #B94A48 !important;
 }
 
@@ -437,15 +458,17 @@ textarea.autosize {
     margin-top: 7px;
 }
 
-.form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control {
+.form-control[disabled],
+.form-control[readonly],
+fieldset[disabled] .form-control {
     cursor: default;
 }
 
 .ui-select-multiple.ui-select-bootstrap input.ui-select-search {
     max-width: 50px;
 }
-
 /* Default custom select inspired by tympanus.net */
+
 div.cs-select {
     display: inline-block;
     vertical-align: middle;
@@ -466,14 +489,14 @@ div.cs-select {
 
 div.cs-select.disabled {
     opacity: 0.5;
-
     span {
         cursor: default !important;
     }
 }
 
 div.cs-select:focus {
-    outline: none; /* For better accessibility add a style for this in your skin */
+    outline: none;
+    /* For better accessibility add a style for this in your skin */
 }
 
 .cs-select select {
@@ -489,8 +512,8 @@ div.cs-select:focus {
     overflow: hidden;
     text-overflow: ellipsis;
 }
-
 /* Placeholder and selected option */
+
 .cs-select > span {
     padding-right: 3em;
 }
@@ -526,8 +549,8 @@ div.cs-select:focus {
 .cs-select.cs-active {
     z-index: 101;
 }
-
 /* Options */
+
 .cs-select .cs-options {
     position: absolute;
     overflow: hidden;
@@ -554,8 +577,8 @@ div.cs-select:focus {
 .cs-select ul li.cs-focus span {
     background-color: #ddd;
 }
-
 /* Optgroup and optgroup label */
+
 .cs-select li.cs-optgroup ul {
     padding-left: 1em;
 }
@@ -585,8 +608,8 @@ div.cs-skin-slide::before {
 }
 
 .cs-skin-slide.cs-active::before {
-    -webkit-transform: scale3d(1,4,1);
-    transform: scale3d(1,4,1);
+    -webkit-transform: scale3d(1, 4, 1);
+    transform: scale3d(1, 4, 1);
     background: @lightGrey;
     box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
 }
@@ -598,7 +621,6 @@ div.cs-skin-slide::before {
     -webkit-transition: text-indent 0.3s, opacity 0.3s;
     transition: text-indent 0.3s, opacity 0.3s;
 }
-
 
 .cs-skin-slide.cs-active > span {
     text-indent: -290px;
@@ -616,8 +638,8 @@ div.cs-skin-slide::before {
 }
 
 .cs-skin-slide.cs-active > span::after {
-    -webkit-transform: translate3d(0,-50%,0);
-    transform: translate3d(0,-50%,0);
+    -webkit-transform: translate3d(0, -50%, 0);
+    transform: translate3d(0, -50%, 0);
 }
 
 .cs-skin-slide .cs-options {
@@ -627,27 +649,26 @@ div.cs-skin-slide::before {
     padding: 5px;
     top: 50%;
     left: 50%;
-    -webkit-transform: translate3d(-50%,-50%,0);
-    transform: translate3d(-50%,-50%,0);
+    -webkit-transform: translate3d(-50%, -50%, 0);
+    transform: translate3d(-50%, -50%, 0);
 }
 
 .cs-skin-slide.cs-active .cs-options {
     overflow-y: auto;
 }
 
-
 .cs-skin-slide .cs-options li {
     opacity: 0;
-    -webkit-transform: translate3d(30%,0,0);
-    transform: translate3d(30%,0,0);
+    -webkit-transform: translate3d(30%, 0, 0);
+    transform: translate3d(30%, 0, 0);
     -webkit-transition: -webkit-transform 0.3s, opacity 0.3s;
     transition: transform 0.3s, opacity 0.3s;
     margin-bottom: 5px;
 }
 
 .cs-skin-slide.cs-active .cs-options li {
-    -webkit-transform: translate3d(0,0,0);
-    transform: translate3d(0,0,0);
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
     opacity: 1;
 }
 
@@ -685,7 +706,6 @@ div.cs-skin-slide::before {
     -webkit-transition-delay: 0.35s;
     transition-delay: 0.35s;
 }
-
 /* more options need more delay declaration */
 
 .cs-skin-slide .cs-options li span {
@@ -712,19 +732,17 @@ div.cs-skin-slide::before {
 .cs-select [class*=" fa-"] {
     line-height: inherit !important;
     display: block !important;
-
     span {
         font-family: @font-family-primary;
         padding-left: 30px !important;
     }
-
     &:before {
         font-family: 'themify';
         position: absolute;
         left: 5px;
         top: 50%;
-        -webkit-transform: translate3d(0,-50%,0);
-        transform: translate3d(0,-50%,0);
+        -webkit-transform: translate3d(0, -50%, 0);
+        transform: translate3d(0, -50%, 0);
         font-size: 17px;
     }
 }
@@ -739,12 +757,12 @@ div.cs-skin-slide::before {
     font-family: 'fontawesome';
 }
 /* Skin Elastic */
+
 div.cs-skin-elastic {
     background: transparent;
     font-size: 14px;
     color: @text-dark;
 }
-
 
 .cs-skin-elastic > span {
     background-color: #fff;
@@ -781,8 +799,8 @@ div.cs-skin-elastic {
     height: 100%;
     left: 0;
     top: 0;
-    -webkit-transform: scale3d(1,0,1);
-    transform: scale3d(1,0,1);
+    -webkit-transform: scale3d(1, 0, 1);
+    transform: scale3d(1, 0, 1);
     background: @lightGrey;
     box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
     -webkit-transform-origin: 50% 0%;
@@ -792,8 +810,8 @@ div.cs-skin-elastic {
 }
 
 .cs-skin-elastic.cs-active .cs-options > ul::before {
-    -webkit-transform: scale3d(1,1,1);
-    transform: scale3d(1,1,1);
+    -webkit-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
     -webkit-transition: none;
     transition: none;
     -webkit-animation: expand 0.6s ease-out;
@@ -802,15 +820,15 @@ div.cs-skin-elastic {
 
 .cs-skin-elastic .cs-options ul li {
     opacity: 0;
-    -webkit-transform: translate3d(0,-25px,0);
-    transform: translate3d(0,-25px,0);
+    -webkit-transform: translate3d(0, -25px, 0);
+    transform: translate3d(0, -25px, 0);
     -webkit-transition: opacity 0.15s, -webkit-transform 0.15s;
     transition: opacity 0.15s, transform 0.15s;
 }
 
 .cs-skin-elastic.cs-active .cs-options ul li {
-    -webkit-transform: translate3d(0,0,0);
-    transform: translate3d(0,0,0);
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
     opacity: 1;
     -webkit-transition: none;
     transition: none;
@@ -838,108 +856,92 @@ div.cs-skin-elastic {
 
 @-webkit-keyframes expand {
     0% {
-        -webkit-transform: scale3d(1,0,1);
+        -webkit-transform: scale3d(1, 0, 1);
     }
-
     25% {
-        -webkit-transform: scale3d(1,1.2,1);
+        -webkit-transform: scale3d(1, 1.2, 1);
     }
-
     50% {
-        -webkit-transform: scale3d(1,0.85,1);
+        -webkit-transform: scale3d(1, 0.85, 1);
     }
-
     75% {
-        -webkit-transform: scale3d(1,1.05,1);
+        -webkit-transform: scale3d(1, 1.05, 1);
     }
-
     100% {
-        -webkit-transform: scale3d(1,1,1);
+        -webkit-transform: scale3d(1, 1, 1);
     }
 }
 
 @keyframes expand {
     0% {
-        -webkit-transform: scale3d(1,0,1);
-        transform: scale3d(1,0,1);
+        -webkit-transform: scale3d(1, 0, 1);
+        transform: scale3d(1, 0, 1);
     }
-
     25% {
-        -webkit-transform: scale3d(1,1.2,1);
-        transform: scale3d(1,1.2,1);
+        -webkit-transform: scale3d(1, 1.2, 1);
+        transform: scale3d(1, 1.2, 1);
     }
-
     50% {
-        -webkit-transform: scale3d(1,0.85,1);
-        transform: scale3d(1,0.85,1);
+        -webkit-transform: scale3d(1, 0.85, 1);
+        transform: scale3d(1, 0.85, 1);
     }
-
     75% {
-        -webkit-transform: scale3d(1,1.05,1);
-        transform: scale3d(1,1.05,1);
+        -webkit-transform: scale3d(1, 1.05, 1);
+        transform: scale3d(1, 1.05, 1);
     }
-
     100% {
-        -webkit-transform: scale3d(1,1,1);
-        transform: scale3d(1,1,1);
+        -webkit-transform: scale3d(1, 1, 1);
+        transform: scale3d(1, 1, 1);
     }
 }
 
-
 @-webkit-keyframes bounce {
     0% {
-        -webkit-transform: translate3d(0,-25px,0);
+        -webkit-transform: translate3d(0, -25px, 0);
         opacity: 0;
     }
-
     25% {
-        -webkit-transform: translate3d(0,10px,0);
+        -webkit-transform: translate3d(0, 10px, 0);
     }
-
     50% {
-        -webkit-transform: translate3d(0,-6px,0);
+        -webkit-transform: translate3d(0, -6px, 0);
     }
-
     75% {
-        -webkit-transform: translate3d(0,2px,0);
+        -webkit-transform: translate3d(0, 2px, 0);
     }
-
     100% {
-        -webkit-transform: translate3d(0,0,0);
+        -webkit-transform: translate3d(0, 0, 0);
         opacity: 1;
     }
 }
 
 @keyframes bounce {
     0% {
-        -webkit-transform: translate3d(0,-25px,0);
-        transform: translate3d(0,-25px,0);
+        -webkit-transform: translate3d(0, -25px, 0);
+        transform: translate3d(0, -25px, 0);
         opacity: 0;
     }
-
     25% {
-        -webkit-transform: translate3d(0,10px,0);
-        transform: translate3d(0,10px,0);
+        -webkit-transform: translate3d(0, 10px, 0);
+        transform: translate3d(0, 10px, 0);
     }
-
     50% {
-        -webkit-transform: translate3d(0,-6px,0);
-        transform: translate3d(0,-6px,0);
+        -webkit-transform: translate3d(0, -6px, 0);
+        transform: translate3d(0, -6px, 0);
     }
-
     75% {
-        -webkit-transform: translate3d(0,2px,0);
-        transform: translate3d(0,2px,0);
+        -webkit-transform: translate3d(0, 2px, 0);
+        transform: translate3d(0, 2px, 0);
     }
-
     100% {
-        -webkit-transform: translate3d(0,0,0);
-        transform: translate3d(0,0,0);
+        -webkit-transform: translate3d(0, 0, 0);
+        transform: translate3d(0, 0, 0);
         opacity: 1;
     }
 }
 
-input[type="radio"], input[type="checkbox"] {
+input[type="radio"],
+input[type="checkbox"] {
     box-sizing: border-box;
     cursor: pointer;
     line-height: normal;
@@ -949,7 +951,6 @@ input[type="radio"], input[type="checkbox"] {
     margin-bottom: 10px;
     margin-top: 10px;
     padding-left: 0;
-
     label {
         cursor: pointer;
         display: inline-block;
@@ -960,7 +961,6 @@ input[type="radio"], input[type="checkbox"] {
         line-height: 23px;
         transition: border 0.2s linear 0s, color 0.2s linear 0s;
         white-space: nowrap;
-
         &:before {
             background-color: #ffffff;
             border: 1px solid @border-default;
@@ -975,7 +975,6 @@ input[type="radio"], input[type="checkbox"] {
             top: 1px;
             transition: border 0.2s linear 0s, color 0.2s linear 0s;
         }
-
         &:after {
             display: inline-block;
             font-size: 11px;
@@ -987,16 +986,12 @@ input[type="radio"], input[type="checkbox"] {
             width: 19px;
         }
     }
-
     input[type="checkbox"] {
         display: none;
-
         &:checked {
-
             + label:before {
                 border-width: 10px;
             }
-
             + label:after {
                 color: #fff;
                 content: "\f00c";
@@ -1004,29 +999,23 @@ input[type="radio"], input[type="checkbox"] {
             }
         }
     }
-
     input[type="checkbox"][disabled] {
-
         + label {
             opacity: 0.65;
-
             &:before {
                 background-color: #F8F8F8;
             }
         }
     }
-
     &.check-md {
         label {
             margin-right: 15px;
             padding-left: 35px !important;
             line-height: 28px;
-
             &:before {
                 height: 25px;
                 width: 25px;
             }
-
             &:after {
                 font-size: 14px;
                 height: 24px;
@@ -1034,29 +1023,23 @@ input[type="radio"], input[type="checkbox"] {
                 width: 24px;
             }
         }
-
         input[type="checkbox"] {
-
             &:checked {
-
                 + label:before {
                     border-width: 12px;
                 }
             }
         }
     }
-
     &.check-lg {
         label {
             margin-right: 15px;
             padding-left: 40px !important;
             line-height: 33px;
-
             &:before {
                 height: 30px;
                 width: 30px;
             }
-
             &:after {
                 font-size: 17px;
                 height: 29px;
@@ -1064,11 +1047,8 @@ input[type="radio"], input[type="checkbox"] {
                 width: 29px;
             }
         }
-
         input[type="checkbox"] {
-
             &:checked {
-
                 + label:before {
                     border-width: 15px;
                 }
@@ -1105,7 +1085,6 @@ input[type="radio"], input[type="checkbox"] {
     margin-bottom: 10px;
     margin-top: 10px;
     padding-left: 0;
-
     label {
         cursor: pointer;
         display: inline-block;
@@ -1115,7 +1094,6 @@ input[type="radio"], input[type="checkbox"] {
         position: relative;
         margin-bottom: 6px;
         line-height: 23px;
-
         &:before {
             background-color: #ffffff;
             border: 1px solid #d0d0d0;
@@ -1130,7 +1108,6 @@ input[type="radio"], input[type="checkbox"] {
             bottom: 2px;
             transition: all 0.3s cubic-bezier(0.455, 0.03, 0.215, 1.33) 0s;
         }
-
         &:after {
             border: 1px solid @border-default;
             content: "";
@@ -1145,10 +1122,8 @@ input[type="radio"], input[type="checkbox"] {
             transition: all 0.3s cubic-bezier(0.455, 0.03, 0.215, 1.33) 0s;
         }
     }
-
     input[type="radio"] {
         display: none;
-
         &:checked {
             + label:before {
                 border-width: 6px;
@@ -1157,30 +1132,24 @@ input[type="radio"], input[type="checkbox"] {
             }
         }
     }
-
     input[type="radio"][disabled] + label {
         opacity: 0.65;
     }
-
     &.radio-md {
         label {
             padding-left: 30px !important;
             line-height: 28px;
-
             &:before {
                 height: 25px;
                 width: 25px;
             }
-
             &:after {
                 height: 25px;
                 width: 25px;
             }
         }
-
         input[type="radio"] {
             display: none;
-
             &:checked {
                 + label:before {
                     border-width: 7px;
@@ -1188,26 +1157,21 @@ input[type="radio"], input[type="checkbox"] {
             }
         }
     }
-
     &.radio-lg {
         label {
             padding-left: 35px !important;
             line-height: 33px;
-
             &:before {
                 height: 30px;
                 width: 30px;
             }
-
             &:after {
                 height: 30px;
                 width: 30px;
             }
         }
-
         input[type="radio"] {
             display: none;
-
             &:checked {
                 + label:before {
                     border-width: 8px;
@@ -1239,4 +1203,14 @@ input[type="radio"], input[type="checkbox"] {
 
 .clip-radio.radio-purple input[type="radio"]:checked + label:before {
     background: @purple;
+}
+
+.switch {
+    background: #C91F37!important;
+    border-color: #C91F37!important;
+}
+
+.switch.checked {
+  background: #64bd63!important;
+  border-color: #64bd63!important;
 }

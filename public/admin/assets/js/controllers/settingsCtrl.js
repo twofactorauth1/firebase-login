@@ -2,7 +2,7 @@
 /*global app, moment, angular, window*/
 /*jslint unparam:true*/
 (function (angular) {
-  app.controller('SettingsCtrl', ["$scope", "$state", "WebsiteService", "AccountService", "UserService", "toaster", "$timeout", function ($scope, $state, WebsiteService, AccountService, UserService, toaster, $timeout) {
+  app.controller('SettingsCtrl', ["$scope", "$modal", "$state", "WebsiteService", "AccountService", "UserService", "toaster", "$timeout", function ($scope, $modal, $state, WebsiteService, AccountService, UserService, toaster, $timeout) {
     $scope.keywords = [];
 
     /*
@@ -67,11 +67,17 @@
 
     $scope.saveSettings = function () {
       $scope.saveLoading = true;
-      AccountService.updateAccount($scope.account, function () {
-        WebsiteService.updateWebsite($scope.website, function () {
+      AccountService.updateAccount($scope.account, function (data, error) {
+        if(error)
+        {
           $scope.saveLoading = false;
-          toaster.pop('success', " Website Settings saved.");
-        });
+          toaster.pop('error', error.message);
+        }
+        else  
+          WebsiteService.updateWebsite($scope.website, function () {
+            $scope.saveLoading = false;
+            toaster.pop('success', " Website Settings saved.");
+          });
       });
     };
 
@@ -133,7 +139,7 @@
      */
 
     $scope.navigateTo = function (section, $event) {
-      $state.go(section, {}, {reload:true});
+      $state.go(section);
       $scope.cancel($event);
     };
 
@@ -153,6 +159,37 @@
     //     console.log('updatedAccount ', updatedAccount);
     //   });
     // };
+
+    /*
+     * @openMediaModal
+     * -
+     */
+
+    $scope.openMediaModal = function () {
+      $scope.showInsert = true;
+      $scope.modalInstance = $modal.open({
+        templateUrl: 'media-modal',
+        controller: 'MediaModalCtrl',
+        size: 'lg',
+        resolve: {
+          showInsert: function () {
+            return $scope.showInsert;
+          },
+          insertMedia: function () {
+            return $scope.insertFavicon;
+          }
+        }
+      });
+    };
+
+    /*
+     * @closeModal
+     * -
+     */
+
+    $scope.closeModal = function () {
+      $scope.modalInstance.close();
+    };
 
 
   }]);

@@ -451,7 +451,7 @@ var dao = {
     });
   },
 
-  addStripeTokensToAccount: function(accountId, accessToken, refreshToken, fn) {
+  addStripeTokensToAccount: function(accountId, accessToken, refreshToken, businessName, businessLogo, fn) {
     var self = this;
     self.log.debug('>> addStripeTokensToAccount(' + accountId + ',' + accessToken + ',' + refreshToken + ')');
 
@@ -474,7 +474,7 @@ var dao = {
       });
 
       if (foundStripe == false) {
-        credentials.push({type: 'stripe', accessToken: accessToken, refreshToken: refreshToken, expires: null});
+        credentials.push({type: 'stripe', accessToken: accessToken, refreshToken: refreshToken, username: businessName, image: businessLogo, expires: null});
       }
       account.set('credentials', credentials);
       self.saveOrUpdate(account, function(err, updatedAccount) {
@@ -490,6 +490,30 @@ var dao = {
     });
 
   },
+
+    getStripeTokensFromAccount: function(accountId, fn) {
+        var self = this;
+        self.getById(accountId, $$.m.Account, function(err, account) {
+            if (err) {
+                self.log.error('Error getting account: ' + err);
+                return fn(err, null);
+            } else if (account === null) {
+                self.log.error('Error getting account for id: ' + accountId);
+                return fn('No account found', null);
+            } else {
+                var credentials = account.get('credentials');
+                var stripeCred = null;
+                _.each(credentials, function(cred){
+                    if(cred.type === 'stripe') {
+                        stripeCred = cred;
+                    }
+
+                });
+                return fn(null, stripeCred);
+            }
+        });
+
+    },
 
     updateAccount: function(modifiedAccount, userId, fn) {
         var self = this;

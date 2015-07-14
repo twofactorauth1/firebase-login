@@ -240,6 +240,7 @@
         $scope.closeModal();
         $scope.customers.unshift(returnedCustomer);
         toaster.pop('success', 'Customer Successfully Added');
+        $scope.minRequirements = true;
       });
     };
 

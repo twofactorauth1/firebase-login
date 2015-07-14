@@ -61,7 +61,7 @@ mainApp.factory('pagesService', ['websiteService','$http', '$location', function
                                     .success(function (page) {
                                         if (page !== null) {
                                             pages[page.handle] = page;
-                                            callback(null, pages);
+                                            callback(null, page);
                                         } else {
                                             callback("page not found",null);
                                         }

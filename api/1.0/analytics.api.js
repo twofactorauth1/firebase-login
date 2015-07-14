@@ -40,6 +40,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.delete(this.url('events/:id'), this.isAuthAndSubscribedApi.bind(this), this.deleteEvent.bind(this));
 
         app.post(this.url('mandrill/event'), this.filterMandrillEvents.bind(this), this.sendToKeen.bind(this));
+        app.post(this.url('mandirll/event/unsub'), this.handleUnsubscribe.bind(this));
 
         //visit
         app.post(this.url('session/:id/sessionStart'), this.setup.bind(this), this.storeSessionInfo.bind(this));
@@ -196,6 +197,65 @@ _.extend(api.prototype, baseApi.prototype, {
         });
     },
 
+    handleUnsubscribe: function(req, resp) {
+        var self = this;
+        self.log.debug('>> handleUnsubscribe');
+        var msg;
+        var objArray = [];
+        if(req.body.mandrill_events) {
+            try {
+                msg = JSON.parse(req.body.mandrill_events);
+                if(_.isArray(msg)) {
+                    _.each(msg, function (value, key, list) {
+                        var type = value.event;
+                        var obj = {};
+                        obj.email = value.msg.email;
+                        obj.sender = value.msg.sender;
+                        obj.ts = moment.utc(value.ts*1000).toDate();
+                        obj.accountId = value.msg.metadata.accountId;
+                        if (type === 'unsub') {
+                            obj.activityType = $$.m.ContactActivity.types.EMAIL_UNSUB;
+                            objArray.push(obj);
+                        }
+                    });
+                }
+            } catch(err) {
+                self.log.debug('error parsing events: ' + err);
+                msg = req.body;
+            }
+        }
+        self.send200(resp);
+        async.each(objArray, function(obj, callback){
+            /*
+             *  - Get contact by accountId and email address.
+             *  - Mark the contact as "unsubscribed"
+             *  - create contact activity
+             */
+            contactDao.getContactByEmailAndAccount(obj.email, obj.accountId, function(err, contact){
+                if(err || contact===null) {
+                    self.log.error('Error finding contact for [' + obj.email + '] and [' + obj.accountId + ']');
+                    return;
+                } else {
+                    contact.set('unsubscribed', true);
+                    contactDao.saveOrUpdateContact(contact, function(err, updatedContact){
+                        if(err) {
+                            self.log.error('Error marking contact unsubscribed', err);
+                            return;
+                        } else {
+                            var activity = new $$.m.ContactActivity({
+                                accountId: contact.get('accountId'),
+                                contactId: contact.id(),
+                                activityType: obj.activityType,
+                                start: obj.ts
+                            });
+                            contactActivityManager.createActivity(activity, function(err, value){});
+                        }
+                    });
+                }
+            });
+        });
+    },
+
     saveAnalyticEvent: function(req, res) {
         var self = this;
         self.log.debug('>> saveAnalyticEvent');
@@ -323,8 +383,13 @@ _.extend(api.prototype, baseApi.prototype, {
         //console.log('Storing Session API >>> ', new Date().getTime());
         sessionEvent.set('server_time', new Date().getTime());
         sessionEvent.set('ip_address', self.ip(req));
-        var geoInfo = self.geo(req);
+        //var geoInfo = self.geo(req);
         //sessionEvent.set('ip_geo_info', geoInfo);
+
+        /*
+         * set the fingerprint to be a string
+         */
+        sessionEvent.set('fingerprint', ''+sessionEvent.get('fingerprint'));
 
         sessionEvent.set('accountId', self.currentAccountId(req));
 
@@ -351,6 +416,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var pageEvent = new $$.m.PageEvent(req.body);
         pageEvent.set('session_id', req.params.id);
         pageEvent.set('server_time', new Date().getTime());
+        
         analyticsManager.storePageEvent(pageEvent, function(err){
             if(err) {
                 self.log.error('Error saving page event: ' + err);

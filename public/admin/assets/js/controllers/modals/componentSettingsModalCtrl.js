@@ -1,9 +1,10 @@
 'use strict';
 /*global app, moment, angular*/
 /*jslint unparam:true*/
-app.controller('ComponentSettingsModalCtrl', ['$scope', '$modalInstance', '$http', '$timeout', '$q', '$compile', '$filter', 'WebsiteService', 'CustomerService', 'ProductService', 'GeocodeService', 'toaster', 'components', 'clickedIndex', 'contactMap', 'website', 'blog', 'isDirty', 'isSinglePost', function ($scope, $modalInstance, $http, $timeout, $q, $compile, $filter, WebsiteService, CustomerService, ProductService, GeocodeService, toaster, components, clickedIndex, contactMap, website, blog, isDirty, isSinglePost) {
-  $scope.blog ={};
+app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalInstance', '$http', '$timeout', '$q', '$compile', '$filter', 'WebsiteService', 'CustomerService', 'ProductService', 'GeocodeService', 'toaster', 'components', 'clickedIndex', 'contactMap', 'website', 'blog', 'isDirty', 'isSinglePost', 'openParentModal', 'showInsert', function ($scope, $rootScope, $modalInstance, $http, $timeout, $q, $compile, $filter, WebsiteService, CustomerService, ProductService, GeocodeService, toaster, components, clickedIndex, contactMap, website, blog, isDirty, isSinglePost, openParentModal, showInsert) {
+  $scope.blog = {};
   $scope.components = components;
+  $scope.openParentModal = openParentModal;
   $scope.clickedIndex = clickedIndex;
   $scope.componentEditing = components[clickedIndex];
   $scope.contactMap = contactMap;
@@ -11,6 +12,8 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$modalInstance', '$http
   $scope.blog.post = blog;
   $scope.isDirty = isDirty;
   $scope.isSinglePost = isSinglePost;
+  $scope.showInsert = showInsert;
+
   /*
    * @getAllProducts
    * - get products for products and pricing table components
@@ -23,13 +26,44 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$modalInstance', '$http
     _.each(data, function (product) {
       if (product.tags && product.tags.length > 0) {
         _.each(product.tags, function (tag) {
-          if ($scope.availableProductTags.indexOf(tag) === -1)
+          if ($scope.availableProductTags.indexOf(tag) === -1) {
             $scope.availableProductTags.push(tag);
+          }
         });
       }
     });
     $scope.availableProductTagsString = $scope.availableProductTags.join(",");
   });
+
+  $scope.testOptions = {
+    min: 5,
+    max: 100,
+    step: 5,
+    precision: 2,
+    orientation: 'horizontal', // vertical
+    handle: 'round', //'square', 'triangle' or 'custom'
+    tooltip: 'show', //'hide','always'
+    tooltipseparator: ':',
+    tooltipsplit: false,
+    enabled: true,
+    naturalarrowkeys: false,
+    range: false,
+    ngDisabled: false,
+    reversed: false
+  };
+
+  $scope.sliderValue = 1;
+
+  $scope.addBackground = function() {
+    $scope.$parent.showInsert = true;
+    $scope.openParentModal('media-modal', 'MediaModalCtrl', null, 'lg');
+  };
+
+   $scope.addFeaturedPost = function() {
+    $scope.$parent.showInsert = true;
+    $scope.$parent.blogImage = true;
+    $scope.openParentModal('media-modal', 'MediaModalCtrl', null, 'lg');
+  };
 
   /*
    * @revertComponent
@@ -265,8 +299,9 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$modalInstance', '$http
   $scope.removeImage = function (remove) {
     if ($scope.componentEditing && $scope.componentEditing.bg && $scope.componentEditing.bg.img) {
       if (($scope.componentEditing.bg.img.show === false && remove === true) || remove === false) {
-        if (remove === false)
+        if (remove === false) {
           $scope.componentEditing.bg.img.url = null;
+        }
         $scope.componentEditing.bg.img.blur = false;
         $scope.componentEditing.bg.img.parallax = false;
         $scope.componentEditing.bg.img.overlay = false;
@@ -290,12 +325,13 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$modalInstance', '$http
         return page.handle === newValue;
       });
     }
-  })
+  });
 
   $scope.initializeEditLinks = function (link, status) {
     if (link.page) {
-      if (status)
+      if (status) {
         link.data = null;
+      }
       $scope.currentPage = _.find($scope.filterdedPages, function (page) {
         return page.handle === link.page;
       });
@@ -335,11 +371,11 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$modalInstance', '$http
     var newArray = _.first(angular.copy($scope.components), [index + 1]);
     var hash = _.filter(newArray, function (obj) {
       return obj.type === value;
-    })
-    if (hash.length > 1)
+    });
+    if (hash.length > 1) {
       return value.replace("-", " ") + "-" + (hash.length - 1);
-    else
-      return value.replace("-", " ");
+    }
+    return value.replace("-", " ");
   };
 
   /*
@@ -389,7 +425,7 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$modalInstance', '$http
           value.links.splice(index, 1);
           setTimeout(function () {
             $scope.updateLinkList();
-          }, 1000)
+          }, 1000);
         }
       });
     } else {
@@ -398,7 +434,7 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$modalInstance', '$http
           value.links.splice(index, 1);
           setTimeout(function () {
             $scope.updateLinkList();
-          }, 1000)
+          }, 1000);
         }
       });
     }
@@ -419,7 +455,7 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$modalInstance', '$http
             name: "Head Menu",
             handle: "head-menu",
             links: []
-          })
+          });
         }
         $scope.componentEditing.linkLists.forEach(function (value, index) {
           if (value.handle === "head-menu") {
@@ -455,7 +491,7 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$modalInstance', '$http
     }
     setTimeout(function () {
       $scope.updateLinkList();
-    }, 1000)
+    }, 1000);
   };
 
   /*
@@ -466,29 +502,27 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$modalInstance', '$http
   $scope.updateLinkList = function (index) {
     var linkLabelsArr = [];
     var editedLinksLists = angular.element('.head-menu-links');
-    // if(index)
-    // editedLinksLists.splice(index,1);
-    for (var i = 0; i < editedLinksLists.length; i++) {
-      var linkLabel = editedLinksLists[i].attributes['data-label'].value;
-      if (linkLabel)
+    _.each(editedLinksLists, function (link) {
+      var linkLabel = link.attributes['data-label'].value;
+      if (linkLabel) {
         linkLabelsArr.push(linkLabel);
-    }
+      }
+    });
     if (linkLabelsArr.length) {
       if ($scope.componentEditing.customnav) {
         $scope.componentEditing.linkLists.forEach(function (value, index) {
           if (value.handle === "head-menu") {
             var newLinkListOrder = [];
-            for (var i = 0; i < editedLinksLists.length; i++) {
+            _.each(editedLinksLists, function (link, index) {
               if (value) {
                 var matchedLinkList = _.findWhere(value.links, {
-                  label: linkLabelsArr[i]
+                  label: linkLabelsArr[index]
                 });
                 newLinkListOrder.push(matchedLinkList);
               }
-            };
+            });
             if (newLinkListOrder.length) {
               $scope.componentEditing.linkLists[index].links = newLinkListOrder;
-              //$scope.saveCustomComponent();
             }
           }
         });
@@ -496,17 +530,16 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$modalInstance', '$http
         $scope.website.linkLists.forEach(function (value, index) {
           if (value.handle === "head-menu") {
             var newLinkListOrder = [];
-            for (var i = 0; i < editedLinksLists.length; i++) {
+            _.each(editedLinksLists, function (link, index) {
               if (value) {
                 var matchedLinkList = _.findWhere(value.links, {
-                  label: linkLabelsArr[i]
+                  label: linkLabelsArr[index]
                 });
                 newLinkListOrder.push(matchedLinkList);
               }
-            };
+            });
             if (newLinkListOrder.length) {
               $scope.website.linkLists[index].links = newLinkListOrder;
-              //$scope.updateWebsite($scope.website);
             }
 
           }
@@ -538,6 +571,13 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$modalInstance', '$http
    * -
    */
 
+   $scope.refreshSlider =function() {
+    console.log('refresh slider');
+    $timeout(function() {
+      $rootScope.$broadcast('rzSliderForceRender');
+    });
+   };
+
   $scope.stringifyAddress = function (address) {
     if (address) {
       var _topline = _.filter([address.address, address.address2], function (str) {
@@ -552,28 +592,28 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$modalInstance', '$http
       return _bottomline;
     }
   };
-  
+
   $scope.updateContactUsAddress = function () {
-    if(!angular.equals($scope.originalContactMap, $scope.componentEditing.location))
+    if (!angular.equals($scope.originalContactMap, $scope.componentEditing.location)) {
       $scope.contactMap.updateAddressString();
-      $scope.componentEditing.location.lat = null;
-      $scope.componentEditing.location.lon = null;
-      if (($scope.componentEditing.location.city && $scope.componentEditing.location.state) || $scope.componentEditing.location.zip) {      
-        GeocodeService.getGeoSearchAddress($scope.stringifyAddress($scope.componentEditing.location), function (data) {
-          if (data.lat && data.lon) {
-            $scope.componentEditing.location.lat = data.lat;
-            $scope.componentEditing.location.lon = data.lon;
-            $scope.contactMap.refreshMap();
-          }
-        });
-      }
+    }
+    $scope.componentEditing.location.lat = null;
+    $scope.componentEditing.location.lon = null;
+    if (($scope.componentEditing.location.city && $scope.componentEditing.location.state) || $scope.componentEditing.location.zip) {
+      GeocodeService.getGeoSearchAddress($scope.stringifyAddress($scope.componentEditing.location), function (data) {
+        if (data.lat && data.lon) {
+          $scope.componentEditing.location.lat = data.lat;
+          $scope.componentEditing.location.lon = data.lon;
+          $scope.contactMap.refreshMap();
+        }
+      });
+    }
   };
 
-  $scope.saveComponent =function()
-  {
+  $scope.saveComponent = function () {
     $scope.isDirty.dirty = true;
-  }
-  
+  };
+
   /*
    * @editComponent
    * -
@@ -670,19 +710,19 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$modalInstance', '$http
   };
 
   /*
-     * @getPages
-     * -
-     */
+   * @getPages
+   * -
+   */
 
-    WebsiteService.getPages(function (pages) {
-      var parsed = angular.fromJson(pages);
-      var arr = [];
-      _.each(parsed, function (page) {
-        arr.push(page);
-      });
-      $scope.allPages = arr;
-      $scope.filterdedPages = $filter('orderBy')($scope.allPages, "title", false);
+  WebsiteService.getPages(function (pages) {
+    var parsed = angular.fromJson(pages);
+    var arr = [];
+    _.each(parsed, function (page) {
+      arr.push(page);
     });
+    $scope.allPages = arr;
+    $scope.filterdedPages = $filter('orderBy')($scope.allPages, "title", false);
+  });
 
-  $scope.editComponent(); 
+  $scope.editComponent();
 }]);

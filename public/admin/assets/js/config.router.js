@@ -31,7 +31,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
     $stateProvider.state('app', {
         url: "",
         templateUrl: "assets/views/app.html",
-        resolve: loadSequence('modernizr', 'underscore', 'moment', 'angularMoment', 'uiSwitch', 'perfect-scrollbar-plugin', 'toaster', 'ngAside', 'vAccordion', 'sweet-alert', 'chartjs', 'tc.chartjs', 'oitozero.ngSweetAlert', 'chatCtrl', 'smart-table', 'touchspin-plugin', 'slugifier', 'commonService', 'timeAgoFilter','angularFileUpload', 'ngTextTruncate', 'infinite-scroll', 'ui.select', 'blueimp', 'ngTagsInput', 'titleCase', 'bootstrap-confirmation', 'ladda', 'angular-ladda', 'uuid', 'formatText', 'asideCtrl', 'settingsCtrl', 'assetsService'),
+        resolve: loadSequence('modernizr', 'underscore', 'moment', 'angularMoment', 'uiSwitch', 'perfect-scrollbar-plugin', 'toaster', 'ngAside', 'vAccordion', 'sweet-alert', 'chartjs', 'tc.chartjs', 'oitozero.ngSweetAlert', 'chatCtrl', 'smart-table', 'touchspin-plugin', 'slugifier', 'commonService', 'timeAgoFilter','angularFileUpload', 'ngTextTruncate', 'infinite-scroll', 'ui.select', 'blueimp', 'ngTagsInput', 'titleCase', 'bootstrap-confirmation', 'ladda', 'angular-ladda', 'uuid', 'formatText', 'asideCtrl', 'settingsCtrl', 'assetsService', 'mediaModalCtrl'),
         abstract: true
     }).state('app.dashboard', {
         url: "/dashboard",
@@ -84,7 +84,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         ncyBreadcrumb: {
             label: 'Posts'
         },
-        resolve: loadSequence('postsCtrl', 'userService')
+        resolve: loadSequence('postsCtrl', 'userService', 'htmlToPlaintext')
     }).state('app.website.singlepage', {
         url: '/pages/:id',
         templateUrl: "assets/views/editor.html",
@@ -97,7 +97,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         onExit: function($rootScope) {
          $rootScope.breadcrumbTitle = undefined;
         },
-        resolve: loadSequence('editorCtrl', 'userService', 'htmlToPlaintext', 'spectrum', 'ui.sortable', 'assetsService', 'toasterService', 'geocodeService', 'productService', 'accountService', 'toTrusted', 'generateURLforLinks', 'truncate', 'ckeditor', 'ngSticky', 'slick', 'offset', 'jqcloud', 'jsVideoUrlParser', 'selectedTags', 'addComponentModalCtrl', 'componentSettingsModalCtrl')
+        resolve: loadSequence('editorCtrl', 'userService', 'htmlToPlaintext', 'spectrum', 'ui.sortable', 'angular-slider', 'assetsService', 'toasterService', 'geocodeService', 'productService', 'paymentService', 'accountService', 'toTrusted', 'generateURLforLinks', 'truncate', 'ckeditor', 'ngSticky', 'slick', 'offset', 'jqcloud', 'jsVideoUrlParser', 'selectedTags', 'addComponentModalCtrl', 'componentSettingsModalCtrl')
     }).state('app.website.singlepost', {
         url: '/posts/:id',
         templateUrl: "assets/views/editor.html",
@@ -110,7 +110,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         onExit: function($rootScope) {
          $rootScope.breadcrumbTitle = undefined;
         },
-        resolve: loadSequence('editorCtrl', 'userService', 'htmlToPlaintext', 'spectrum', 'ui.sortable', 'assetsService', 'toasterService', 'geocodeService', 'productService', 'accountService', 'toTrusted', 'generateURLforLinks', 'truncate', 'ckeditor', 'ngSticky', 'slick', 'offset', 'jqcloud', 'jsVideoUrlParser', 'selectedTags', 'addComponentModalCtrl', 'componentSettingsModalCtrl')
+        resolve: loadSequence('editorCtrl', 'userService', 'htmlToPlaintext', 'spectrum', 'ui.sortable', 'angular-slider', 'assetsService', 'toasterService', 'geocodeService', 'productService', 'paymentService', 'accountService', 'toTrusted', 'generateURLforLinks', 'truncate', 'ckeditor', 'ngSticky', 'slick', 'offset', 'jqcloud', 'jsVideoUrlParser', 'selectedTags', 'addComponentModalCtrl', 'componentSettingsModalCtrl')
     }).state('app.website.singletemplate', {
         url: '/templates/:id',
         templateUrl: "assets/views/editor.html",
@@ -120,7 +120,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
             label: 'Single Template',
             parent: 'app.website.templates'
         },
-        resolve: loadSequence('editorCtrl', 'userService', 'htmlToPlaintext', 'spectrum', 'ui.sortable', 'assetsService', 'toasterService', 'geocodeService')
+        resolve: loadSequence('editorCtrl', 'userService', 'htmlToPlaintext', 'spectrum', 'ui.sortable', 'angular-slider', 'assetsService', 'toasterService', 'geocodeService')
     }).state('app.emails', {
         url: '/emails',
         templateUrl: "assets/views/emails.html",
@@ -138,7 +138,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         ncyBreadcrumb: {
             label: 'Editor'
         },
-        resolve: loadSequence('editorCtrl', 'userService', 'htmlToPlaintext', 'spectrum', 'ui.sortable', 'assetsService', 'toasterService', 'geocodeService', 'productService', 'accountService', 'toTrusted', 'generateURLforLinks', 'truncate', 'ckeditor', 'ngSticky', 'slick', 'offset', 'jqcloud', 'jsVideoUrlParser', 'selectedTags', 'addComponentModalCtrl', 'componentSettingsModalCtrl')
+        resolve: loadSequence('editorCtrl', 'userService', 'htmlToPlaintext', 'spectrum', 'ui.sortable', 'angular-slider', 'assetsService', 'toasterService', 'geocodeService', 'productService', 'accountService', 'toTrusted', 'generateURLforLinks', 'truncate', 'ckeditor', 'ngSticky', 'slick', 'offset', 'jqcloud', 'jsVideoUrlParser', 'selectedTags', 'addComponentModalCtrl', 'componentSettingsModalCtrl')
     }).state('app.customers', {
         url: '/customers',
         templateUrl: "assets/views/customers.html",
@@ -174,7 +174,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         ncyBreadcrumb: {
             label: 'Products'
         },
-        resolve: loadSequence('productsCtrl', 'productService')
+        resolve: loadSequence('productsCtrl', 'productService', 'accountService', 'angular-cookie')
     }).state('app.commerce.productsingle', {
         url: '/products/:productId',
         templateUrl: "assets/views/product-detail.html",
@@ -183,7 +183,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         ncyBreadcrumb: {
             label: 'Single Product'
         },
-        resolve: loadSequence('productsDetailCtrl', 'productService', 'assetsService')
+        resolve: loadSequence('productsDetailCtrl', 'productService', 'assetsService', 'dateRangePicker')
     }).state('app.commerce.orders', {
         url: '/orders',
         templateUrl: "assets/views/orders.html",
@@ -271,7 +271,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         ncyBreadcrumb: {
             label: 'Integrations'
         },
-        resolve: loadSequence('integrationsCtrl', 'socialConfigService', 'angular-cookie')
+        resolve: loadSequence('integrationsCtrl', 'socialConfigService', 'angular-cookie', 'accountService')
     }).state('app.support', {
         url: '/support',
         template: '<div ui-view class="fade-in-up"></div>',

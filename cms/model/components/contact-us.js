@@ -71,6 +71,16 @@ var component = $$.m.ModelBase.extend({
              */
             showHours: true,
             /**
+             *
+             *
+             */
+            boxColor: "#000",
+            /**
+             *
+             *
+             */
+            boxOpacity: 0.5,
+            /**
              * The hours a business is open, array
              *[
              *  "mon-friday: 8-5",
@@ -95,8 +105,8 @@ var component = $$.m.ModelBase.extend({
             location: {
                 address:"",
                 address2:"",
-                city:"San Diego",
-                state:"CA",
+                city:"",
+                state:"",
                 zip:"",
                 lat:"",
                 lon:"",

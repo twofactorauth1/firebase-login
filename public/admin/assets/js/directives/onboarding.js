@@ -1,7 +1,7 @@
 'use strict';
 /*global app, moment, angular*/
 /*jslint unparam:true*/
-app.directive('indigOnboarding', function ($location, $sce, $state, toaster, $templateCache, UserService, ONBOARDINGCONSTANT) {
+app.directive('indigOnboarding', function ($rootScope, $location, $sce, $state, toaster, $templateCache, UserService, ONBOARDINGCONSTANT) {
   return {
     scope: {
       minRequirements: '='
@@ -22,8 +22,16 @@ app.directive('indigOnboarding', function ($location, $sce, $state, toaster, $te
        */
 
       $scope.$watch('minRequirements', function (newValue, oldValue) {
-        if (!oldValue && newValue) {
-          $scope.taskComplete();
+        if (newValue) {
+          if (!$scope.userPreferences) {
+            $scope.getUserPreferences(function () {
+              $scope.minReq = newValue;
+              $scope.taskComplete();
+            });
+          } else {
+            $scope.minReq = newValue;
+            $scope.taskComplete();
+          }
         }
       });
 
@@ -40,12 +48,12 @@ app.directive('indigOnboarding', function ($location, $sce, $state, toaster, $te
           //format tasks to match model
           var _formattedTasks = {};
           var needsUpdate = false;
-          _.each($scope.onboardingStepMap, function(stepmap) {
-            var _matchingTask = _.find(preferences.tasks , function(v, k) {
+          _.each($scope.onboardingStepMap, function (stepmap) {
+            var _matchingTask = _.find(preferences.tasks, function (v, k) {
               return k === stepmap.pane.taskKey;
             });
 
-            if (_matchingTask && _matchingTask === 'not_started' || _matchingTask === 'started' || _matchingTask === 'finished') {
+            if (['not_started', 'started', 'finished'].indexOf(_matchingTask) !== -1) {
               //properly formated
               _formattedTasks[stepmap.pane.taskKey] = _matchingTask;
             } else {
@@ -53,7 +61,7 @@ app.directive('indigOnboarding', function ($location, $sce, $state, toaster, $te
               needsUpdate = true;
               _formattedTasks[stepmap.pane.taskKey] = 'not_started';
             }
-            if (stepmap.pane.taskKey === 'sign_up' && _matchingTask != 'finished') {
+            if (stepmap.pane.taskKey === 'sign_up' && _matchingTask !== 'finished') {
               needsUpdate = true;
               _formattedTasks[stepmap.pane.taskKey] = 'finished';
             }
@@ -63,12 +71,11 @@ app.directive('indigOnboarding', function ($location, $sce, $state, toaster, $te
 
             $scope.userPreferences.tasks = _formattedTasks;
             UserService.updateUserPreferences($scope.userPreferences, false, function (updatedPreferences) {
-              console.log('updatedPreferences ', updatedPreferences);
               if (fn) {
                 fn();
               }
             });
-          };
+          }
 
           $scope.userTasks = preferences.tasks;
           if (fn && !needsUpdate) {
@@ -106,10 +113,10 @@ app.directive('indigOnboarding', function ($location, $sce, $state, toaster, $te
        */
 
       $scope.onFinish = function () {
-        if (!$scope.userPreferences.tasks[$scope.objType].minRequire) {
+        if ($scope.userPreferences.tasks[$scope.objType] === 'started') {
           $scope.taskComplete();
         } else {
-        $scope.userPreferences.tasks[$scope.objType] = 'started';
+          $scope.userPreferences.tasks[$scope.objType] = 'started';
           UserService.updateUserPreferences($scope.userPreferences, false, function (updatedPreferences) {
             console.log('updatedPreferences ', updatedPreferences);
           });
@@ -130,7 +137,6 @@ app.directive('indigOnboarding', function ($location, $sce, $state, toaster, $te
         if (_matchingTask) {
 
           $scope.objType = _matchingTask.pane.taskKey;
-
 
           var status = _.find($scope.userTasks, function (v, k) {
             return k === $scope.objType;
@@ -176,14 +182,14 @@ app.directive('indigOnboarding', function ($location, $sce, $state, toaster, $te
       $scope.stateOrLocationChanged = function () {
         //clear any toasters from previous page
         toaster.clear('*');
-        if ($location.$$search['resetTask']) {
+        if ($location.search().resetTask) {
           $scope.resetTask = true;
         }
 
-        if ($location.$$search['completeTask']) {
+        if ($location.search().completeTask) {
           $scope.manualComplete = true;
         }
-        if ($location.$$search['onboarding']) {
+        if ($location.search().onboarding) {
           $scope.getUserPreferences($scope.checkTaskStatus);
           //remove parameters
           $location.url($location.path());
@@ -197,40 +203,46 @@ app.directive('indigOnboarding', function ($location, $sce, $state, toaster, $te
        * - mark task as complete after minimum requirements for task have been met
        */
 
-      $scope.taskComplete = function () {
+      $scope.taskComplete = function (_complete) {
+        if (!$scope.objType) {
+          var _matchingTask = _.find($scope.onboardingStepMap, function (task) {
+            return task.pane.state === $state.current.name;
+          });
 
-          if ($scope.userPreferences && $scope.userPreferences.tasks && $scope.userPreferences.tasks[$scope.objType] !== 'finished') {
-              $scope.userPreferences.tasks[$scope.objType] = 'finished';
-                UserService.updateUserPreferences($scope.userPreferences, false, function (updatedPreferences) {
+          $scope.objType = _matchingTask.pane.taskKey;
+        }
+        if ($scope.userPreferences && $scope.userPreferences.tasks && $scope.userPreferences.tasks[$scope.objType] !== 'finished' && $scope.minReq) {
+          $scope.userPreferences.tasks[$scope.objType] = 'finished';
+          UserService.updateUserPreferences($scope.userPreferences, false, function (updatedPreferences) {
 
-                //find any remaining tasks
-                $scope.startJoyRide = false;
+            //find any remaining tasks
+            $scope.startJoyRide = false;
 
-                var tasksRemaining = false;
-                _.each($scope.onboardingStepMap, function (step) {
-                  var matchingTask = _.find($scope.userTasks, function (v, k) {
-                    return k === step.pane.taskKey;
-                  });
-                  if (matchingTask === 'not_started' || matchingTask === 'started') {
-                    tasksRemaining = true;
-                  }
-                  step.pane.status = matchingTask;
-                });
-
-                if (tasksRemaining) {
-                  var nextTask = _.find($scope.onboardingStepMap, function (step) {
-                    return step.pane.status !== 'finished';
-                  });
-                  var url = $state.href(nextTask.pane.state, {}, {
-                    absolute: false
-                  });
-                  url += '?onboarding=' + nextTask.pane.taskKey;
-                  toaster.pop('success', null, 'Complete: Next task is <br> <a class="btn btn-primary" href="' + url + '">' + nextTask.pane.heading + '</a>', 15000, 'trustedHtml');
-                } else {
-                  toaster.pop('success', 'Task Complete. No more tasks to complete.');
-                }
+            var tasksRemaining = false;
+            _.each($scope.onboardingStepMap, function (step) {
+              var matchingTask = _.find($scope.userTasks, function (v, k) {
+                return k === step.pane.taskKey;
               });
-          }
+              if (matchingTask === 'not_started' || matchingTask === 'started') {
+                tasksRemaining = true;
+              }
+              step.pane.status = matchingTask;
+            });
+
+            if (tasksRemaining) {
+              var nextTask = _.find($scope.onboardingStepMap, function (step) {
+                return step.pane.status !== 'finished';
+              });
+              var url = $state.href(nextTask.pane.state, {}, {
+                absolute: false
+              });
+              url += '?onboarding=' + nextTask.pane.taskKey;
+              toaster.pop('success', null, 'Complete: Next task is <br> <a class="btn btn-primary" href="' + url + '">' + nextTask.pane.heading + '</a>', 15000, 'trustedHtml');
+            } else {
+              toaster.pop('success', 'Task Complete. No more tasks to complete.');
+            }
+          });
+        }
       };
 
       /*
@@ -240,6 +252,12 @@ app.directive('indigOnboarding', function ($location, $sce, $state, toaster, $te
 
       $scope.$on("$stateChangeSuccess", function (event, current, previous) {
         $scope.stateOrLocationChanged();
+      });
+
+      $rootScope.$on('$routeChangeStart', function (event, next, current) {
+        if (!current) {
+          console.log('routeChangeStart');
+        }
       });
 
       /*

@@ -1,4 +1,4 @@
-app.directive('productsComponent', ['$filter', 'ProductService', 'AccountService', function ($filter, ProductService, AccountService) {
+app.directive('productsComponent', ['$log', '$filter', 'PaymentService', 'ProductService', 'AccountService', function ($log, $filter, PaymentService, ProductService, AccountService) {
   return {
     scope: {
       component: '=',
@@ -8,6 +8,7 @@ app.directive('productsComponent', ['$filter', 'ProductService', 'AccountService
     link: function (scope, element, attrs, ctrl) {
       scope.isEditing = true;
       scope.checkoutModalState = 1;
+      scope.currentProductPage = 1;
 
       /*
        * @getAllProducts
@@ -15,10 +16,44 @@ app.directive('productsComponent', ['$filter', 'ProductService', 'AccountService
        */
 
       ProductService.getProducts(function (data) {
-      	console.log('products ', data);
-        scope.products = data;
+        console.log('products ', data);
+        var _filteredProducts = [];
+        _.each(data, function (product) {
+          if (scope.filterProduct(product)) {
+            _filteredProducts.push(product);
+          }
+        });
+        scope.products = angular.copy(_filteredProducts);
+        scope.filteredProducts = _filteredProducts;
         //scope.products = $filter('selectedTags')(scope.products,scope.component.productTags);
       });
+
+      // scope.$watch('currentProductPage', function (newValue, oldValue) {
+      //   console.log('currentProductPage >>> ', newValue);
+      // });
+
+      scope.pageChanged = function (pageNo) {
+        $log.log('Page changed to: ' + pageNo);
+        scope.currentProductPage = pageNo;
+        if (scope.products) {
+            var begin = ((scope.currentProductPage - 1) * scope.component.numtodisplay);
+            var end = begin + scope.component.numtodisplay;
+            scope.filteredProducts = scope.products.slice(begin, end);
+          }
+      };
+
+      scope.filterProduct = function (element) {
+        var _tags = scope.component.productTags;
+        if (element.tags && _tags.length > 0) {
+          if (_.intersection(_tags, element.tags).length > 0) {
+            return element;
+          }
+        }
+
+        if (_tags.length <= 0) {
+          return element;
+        }
+      };
 
       /*
        * @updatePrice
@@ -98,6 +133,7 @@ app.directive('productsComponent', ['$filter', 'ProductService', 'AccountService
         scope.cartDetails = filtered;
         scope.calculateTotalChargesfn();
       };
+
       scope.checkCardNumber = function () {
         var card_number = angular.element('#number').val();
         if (!card_number) {
@@ -301,33 +337,7 @@ app.directive('productsComponent', ['$filter', 'ProductService', 'AccountService
         }
       });
 
-      /*
-       * @setPage
-       * -
-       */
 
-      scope.currentProductPage = 1;
-      scope.setPage = function (pageNo) {
-        scope.currentProductPage = pageNo;
-      };
-
-      /*
-       * @pageChanged
-       * -
-       */
-
-      scope.pageChanged = function () {
-        console.log('Page changed to: ' + scope.currentProductPage);
-      };
-
-      /*
-       * @getProductOffset
-       * -
-       */
-
-      scope.getProductOffset = function (currentProductPage, numtodisplay) {
-        return (currentProductPage * numtodisplay) - numtodisplay;
-      };
 
       /*
        * @variationAttributeExists

@@ -132,13 +132,13 @@
             </div>
         </div>
         <div class="col-xs-12 col-sm-4">
-            <div id="device" class="panel panel-white height-400" ng-class="{'load1 csspinner': !device_data_loaded}">
+            <div id="device" class="panel panel-white" ng-class="{'load1 csspinner': !device_data_loaded}">
                 <div class="panel-heading border-light">
                     <h4 class="panel-title text-primary">Device</h4>
                     <ct-paneltool class="panel-tools" tool-collapse="tool-collapse"></ct-paneltool>
                 </div>
                 <div collapse="device" ng-init="device=false" class="panel-wrapper">
-                    <div class="panel-body">
+                    <div class="panel-body  height-350">
                         <div class="clearfix mb30"></div>
                         <div class="col-xs-12">
                             <h1 class="center"><i class="fa fa-desktop" style="font-size: 70px;" ng-class="{'animated tada': newDesktop}"></i>
@@ -159,13 +159,13 @@
             </div>
         </div>
         <div class="col-xs-12 col-sm-4" id="new-vs-returning">
-            <div id="newVReturning" class="panel panel-white height-400" ng-class="{'load1 csspinner': !newVsReturning}">
+            <div id="newVReturning" class="panel panel-white " ng-class="{'load1 csspinner': !newVsReturning}">
                 <div class="panel-heading border-light">
                     <h4 class="panel-title text-primary">New vs. Returning</h4>
                     <ct-paneltool class="panel-tools" tool-collapse="tool-collapse"></ct-paneltool>
                 </div>
                 <div collapse="newVReturning" ng-init="newVReturning=false" class="panel-wrapper">
-                    <div class="panel-body no-padding">
+                    <div class="panel-body height-350 no-padding">
                         <div class="new-vs-returning-wrap" ng-if="!newVsReturningConfig.loading">
                             <highchart config="newVsReturningConfig" id="new-vs-returning-chart"></highchart>
                         </div>
@@ -174,7 +174,7 @@
             </div>
         </div>
         <div class="col-xs-12 col-sm-4" id="traffic-sources">
-            <div id="trafficSources" class="panel panel-white height-400" ng-class="{'load1 csspinner': !trafficSourceData}">
+            <div id="trafficSources" class="panel panel-white " ng-class="{'load1 csspinner': !trafficSourceData}">
                 <div class="panel-heading border-light">
                     <h4 class="panel-title text-primary">Traffic Sources</h4>
                     <ct-paneltool class="panel-tools" tool-collapse="tool-collapse"></ct-paneltool>

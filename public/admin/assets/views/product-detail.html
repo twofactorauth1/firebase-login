@@ -49,7 +49,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div ng-show="product.is_image">
+                        <div ng-if="product.is_image">
                             <div class="image">
                                 <div class="thumbnail">
                                     <img ng-src="{{ product.icon }}" err-src="assets/images/default-user.png" alt="">
@@ -63,10 +63,24 @@
                             </div>
                         </div>
                         <div>
-                            <label>Icon or Image</label>
-                            <switch ng-model="product.is_image" type="checkbox" switch-label="Image"></switch>
-                            <a ng-show="product.is_image" class="btn btn-success media-modal pull-right" media-modal-show-insert="true" on-insert-mediacb="insertMedia" user='user' insert-media-type='"image"'> <span class="fa fa-image"></span> <span class="hidden-xs">Change Image</span>
+                            <div class="form-group pull-left">
+                                <div class="radio clip-radio radio-primary radio-inline">
+                                    <input type="radio" id="product_image_icon" name="inline" ng-value="false" ng-model="product.is_image">
+                                    <label for="product_image_icon">
+                                        Icon
+                                    </label>
+                                </div>
+                                <div class="radio clip-radio radio-primary radio-inline">
+                                    <input type="radio" id="product_image_image" name="inline" ng-value="true" ng-model="product.is_image">
+                                    <label for="product_image_image">
+                                        Image
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="pull-right" ng-if="product.is_image">
+                                 <a class="btn btn-success" ng-click="openMediaModal()"> <span class="fa fa-image"></span> <span class="hidden-xs">Change Image</span>
                             </a>
+                            </div>
                         </div>
                         <div class="btn-group btn-group-justified margin-top-10">
                             <div class="btn-group">
@@ -125,32 +139,52 @@
                             <div class="panel-body padding-top-0">
                                 <form role="form" class="ng-pristine ng-valid">
                                     <div class="form-group">
-                                        <label>
-                                            SKU
+                                        <label tooltip-placement="top" tooltip-html-unsafe="unique alphanumeric identifier that refers to a particular product, used for inventory management">
+                                            SKU <i class="fa fa-info-circle" />
                                         </label>
                                         <input type="text" placeholder="SKU" ng-model="product.sku" class="form-control">
                                     </div>
                                     <div class="form-group">
-                                        <label>
-                                            Regular Price
+                                        <label tooltip-placement="top" tooltip-html-unsafe="the price a customer sees until you enable a sale">
+                                            Regular Price <i class="fa fa-info-circle" />
                                         </label>
                                         <div class="input-group">
                                             <span class="input-group-addon">$</span>
                                             <input type="text" class="form-control" ng-model="product.regular_price">
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label>
-                                            Sale Price
-                                        </label>
-                                        <div class="input-group">
-                                            <span class="input-group-addon">$</span>
-                                            <input type="text" class="form-control" ng-model="product.sales_price">
+                                    <div>
+                                        <div class="form-group">
+                                            <label tooltip-placement="top" tooltip-html-unsafe="enable to specify dates of sale">
+                                                On Sale <i class="fa fa-info-circle" />
+                                            </label>
+                                            <div class="input-group">
+                                                <switch ng-model="product.on_sale" type="checkbox" switch-label="OnSale"></switch>
+                                            </div>
+                                        </div>
+                                        <div class="form-group" ng-show="product.on_sale">
+                                            <label tooltip-placement="top" tooltip-html-unsafe="the price the customer sees while a sale is enabled">
+                                                Sale Price <i class="fa fa-info-circle" />
+                                            </label>
+                                            <div class="input-group">
+                                                <span class="input-group-addon">$</span>
+                                                <input type="text" class="form-control" ng-model="product.sales_price">
+                                            </div>
+                                        </div>
+                                        <div class="form-group" ng-show="product.on_sale">
+                                            <label tooltip-placement="top" tooltip-html-unsafe="the dates of the sale">
+                                                Sale Dates <i class="fa fa-info-circle" />
+                                            </label>
+                                            <div class="input-group">
+                                                <div class="input-group-addon"><i class="fa fa-calendar"></i></div>
+                                                <input date-range-picker class="form-control deshboard-date-picker date-picker hidden-xs" type="text" ng-model="selectedDate" options="pickerOptions" />
+                                                <span class="input-group-addon" onClick="$('.deshboard-date-picker').click();"><i class="fa fa-chevron-down fa-fw"></i></span>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label>
-                                            Cost
+                                        <label tooltip-placement="top" tooltip-html-unsafe="the price at which you purchase or create a product">
+                                            Cost <i class="fa fa-info-circle" />
                                         </label>
                                         <div class="input-group">
                                             <span class="input-group-addon">$</span>
@@ -158,8 +192,8 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label>
-                                            Taxable
+                                        <label tooltip-placement="top" tooltip-html-unsafe="calculate taxes when the customer purchases this item">
+                                            Taxable <i class="fa fa-info-circle" />
                                         </label>
                                         <div class="input-group">
                                             <switch ng-model="product.taxable" type="checkbox" switch-label="Taxable"></switch>

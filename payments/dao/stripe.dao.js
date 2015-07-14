@@ -208,6 +208,29 @@ var dao = {
     },
 
     /**
+     * Security check is done in the API layer.
+     * @param stripeCustomerId
+     * @param fn
+     */
+    getStripeAccount: function(accessToken, fn) {
+        //stripe.customers.retrieve({CUSTOMER_ID});
+        var self = this;
+        self.log.debug('>> getStripeAccount');
+        var apiToken = self.delegateStripe(accessToken);
+
+        stripe.account.retrieve(apiToken, function(err, account) {
+            if (err) {
+                fn(err, account);
+                fn = null;
+                return;
+            }
+
+            self.log.debug('<< getStripeAccount');
+            return fn(err, account);
+        });
+    },
+
+    /**
      * Values passed will replace existing values (any card data will replace all card data.)
      * Values not passed will be ignored.  To add additional card data (rather than replace)
      * use the card API.
