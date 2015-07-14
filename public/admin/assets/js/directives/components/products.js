@@ -1,41 +1,47 @@
 'use strict';
-/*global app, moment, angular, window*/
-/*jslint unparam:true*/
-app.directive('productsComponent', ['$log', '$filter', 'PaymentService', 'ProductService', 'AccountService', 'UserService', function ($log, $filter, PaymentService, ProductService, AccountService, UserService) {
+/*global app*/
+app.directive('productsComponent', ['ProductService', function (ProductService) {
   return {
     scope: {
       component: '=',
       version: '='
     },
     templateUrl: '/components/component-wrap.html',
-    link: function (scope, element, attrs, ctrl) {
+    link: function (scope) {
+
+      //show editing in admin
       scope.isEditing = true;
+      //assign and hold the checkout modal state
       scope.checkoutModalState = 1;
+      //assign and hold the currentProductPage for pagination
       scope.currentProductPage = 1;
 
-      scope.$watch('component.numtodisplay', function (newValue, oldValue) {
-        if (newValue) {
-          scope.component.numtodisplay = newValue;
-          scope.pageChanged(scope.currentProductPage);
-        }
-      });
+      /*
+       * @filterTags
+       * - if component has tags filter them or return the _product
+       */
 
-      function filterProduct(element) {
+      function filterTags(_product) {
         var _tags = scope.component.productTags;
         if (_tags) {
-          if (element.tags && _tags.length > 0) {
-            if (_.intersection(_tags, element.tags).length > 0) {
-              return element;
+          if (_product.tags && _tags.length > 0) {
+            if (_.intersection(_tags, _product.tags).length > 0) {
+              return _product;
             }
           }
         }
-        return element;
+        return _product;
       }
+
+      /*
+       * @filterProducts
+       * - filter the products and assign them to the scope
+       */
 
       function filterProducts(data) {
         var _filteredProducts = [];
         _.each(data, function (product) {
-          if (filterProduct(product)) {
+          if (filterTags(product)) {
             _filteredProducts.push(product);
           }
         });
@@ -43,7 +49,24 @@ app.directive('productsComponent', ['$log', '$filter', 'PaymentService', 'Produc
         scope.filteredProducts = _filteredProducts;
       }
 
-      scope.$watch('component.productTags', function (newValue, oldValue) {
+      /*
+       * @watch:numtodisplay
+       * - watch for the display number to change in the component settings
+       */
+
+      scope.$watch('component.numtodisplay', function (newValue) {
+        if (newValue) {
+          scope.component.numtodisplay = newValue;
+          scope.pageChanged(scope.currentProductPage);
+        }
+      });
+
+      /*
+       * @watch:productTags
+       * - watch for product tags to change in component settings and filter products
+       */
+
+      scope.$watch('component.productTags', function (newValue) {
         if (newValue) {
           scope.component.productTags = newValue;
           filterProducts(scope.originalProducts);
@@ -61,12 +84,12 @@ app.directive('productsComponent', ['$log', '$filter', 'PaymentService', 'Produc
         filterProducts(data);
       });
 
-      // scope.$watch('currentProductPage', function (newValue, oldValue) {
-      //   console.log('currentProductPage >>> ', newValue);
-      // });
+      /*
+       * @pageChanged
+       * - when a page is changes splice the array to show offset products
+       */
 
       scope.pageChanged = function (pageNo) {
-        $log.log('Page changed to: ' + pageNo);
         scope.currentProductPage = pageNo;
         if (scope.products) {
           var begin = ((scope.currentProductPage - 1) * scope.component.numtodisplay);
