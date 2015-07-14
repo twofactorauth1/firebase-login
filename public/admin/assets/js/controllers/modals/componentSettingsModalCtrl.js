@@ -621,9 +621,16 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
   $scope.editComponent = function () {
 
     if ($scope.componentEditing) {
-      var componentType = _.findWhere($scope.componentTypes, {
-        type: $scope.componentEditing.type
-      });
+      var componentType;
+      if($scope.componentEditing.type === 'navigation')
+        componentType = _.findWhere($scope.componentTypes, {
+           type: $scope.componentEditing.type, version: parseInt($scope.componentEditing.version)
+        });
+      else
+        componentType = _.findWhere($scope.componentTypes, {
+          type: $scope.componentEditing.type
+        });
+
       if (componentType && componentType.icon) {
         $scope.componentEditing.icon = componentType.icon;
       }
