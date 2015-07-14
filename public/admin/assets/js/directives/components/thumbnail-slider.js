@@ -15,7 +15,7 @@ app.directive('thumbnailSliderComponent', ['$window', '$timeout', function ($win
       scope.imagesPerPage = 4;
       scope.slider = [];
       var w = angular.element($window);
-
+      var check_if_mobile = mobilecheck();
       function mobilecheck() {
         var check = false;
         (function (a, b) {
@@ -24,30 +24,7 @@ app.directive('thumbnailSliderComponent', ['$window', '$timeout', function ($win
         return check;
       };
 
-      var check_if_mobile = mobilecheck();
-
       var winWidth = w.width();
-
-      scope.deleteImageFromThumbnail = function (index, parentIndex) {
-        var imageIndex = parentIndex > 0 ? (parentIndex * scope.imagesPerPage + index) : index;
-        scope.component.thumbnailCollection.splice(imageIndex, 1);
-        scope.bindThumbnailSlider(winWidth, check_if_mobile);
-      };
-
-
-      scope.bindThumbnailSlider(winWidth, check_if_mobile);
-
-      function partition(arr, size) {
-        var newArr = [];
-        var isArray = angular.isArray(arr[0]);
-        if (isArray) {
-          return arr;
-        }
-        _.each(arr, function (val) {
-          newArr.push(arr.slice(val, val + size));
-        });
-        return newArr;
-      }
 
       scope.bindThumbnailSlider = function (width, is_mobile) {
         scope.showSlider = false;
@@ -68,6 +45,29 @@ app.directive('thumbnailSliderComponent', ['$window', '$timeout', function ($win
         }, 0);
 
       };
+
+      scope.deleteImageFromThumbnail = function (index, parentIndex) {
+        var imageIndex = parentIndex > 0 ? (parentIndex * scope.imagesPerPage + index) : index;
+        scope.component.thumbnailCollection.splice(imageIndex, 1);
+        scope.bindThumbnailSlider(winWidth, check_if_mobile);
+      };
+
+
+      scope.bindThumbnailSlider(winWidth, check_if_mobile);
+
+      function partition(arr, size) {
+        var newArr = [];
+        var isArray = angular.isArray(arr[0]);
+        if (isArray) {
+          return arr;
+        }
+        for (var i = 0; i < arr.length; i += size) {
+          newArr.push(arr.slice(i, i + size));
+        }
+        return newArr;
+      }
+
+
 
       scope.control.refreshSlider = function () {
         scope.bindThumbnailSlider(winWidth, check_if_mobile);
