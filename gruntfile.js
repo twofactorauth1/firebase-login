@@ -257,6 +257,11 @@ module.exports = function(grunt) {
                 src: jsincludeGenerator.buildJSArraySync('templates/snippets/index_body_scripts.jade'),
                 /*src: wiredepJSAry,*/
                 dest: 'public/js/indigenous.js'
+            },
+            admin: {
+                src: jsincludeGenerator.buildJSArraySync('templates/snippets/admin_body_scripts.jade'),
+                /*src: wiredepJSAry,*/
+                dest: 'public/admin/js/admin-indigenous.js'
             }
         },
 
