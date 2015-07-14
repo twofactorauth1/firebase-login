@@ -1,4 +1,7 @@
-app.directive('productsComponent', ['$log', '$filter', 'PaymentService', 'ProductService', 'AccountService', function ($log, $filter, PaymentService, ProductService, AccountService) {
+'use strict';
+/*global app, moment, angular, window*/
+/*jslint unparam:true*/
+app.directive('productsComponent', ['$log', '$filter', 'PaymentService', 'ProductService', 'AccountService', 'cartService', 'UserService', 'OrderService', function ($log, $filter, PaymentService, ProductService, AccountService, cartService, UserService, OrderService) {
   return {
     scope: {
       component: '=',
@@ -18,15 +21,6 @@ app.directive('productsComponent', ['$log', '$filter', 'PaymentService', 'Produc
         }
       });
 
-      scope.$watch('component.productTags', function (newValue, oldValue) {
-        console.log('newValue ', newValue);
-        if (newValue) {
-          scope.component.productTags = newValue;
-          filterProducts(scope.originalProducts);
-          scope.pageChanged(scope.currentProductPage);
-        }
-      });
-
       function filterProducts(data) {
         var _filteredProducts = [];
         _.each(data, function (product) {
@@ -36,7 +30,16 @@ app.directive('productsComponent', ['$log', '$filter', 'PaymentService', 'Produc
         });
         scope.products = angular.copy(_filteredProducts);
         scope.filteredProducts = _filteredProducts;
-      };
+      }
+
+      scope.$watch('component.productTags', function (newValue, oldValue) {
+        console.log('newValue ', newValue);
+        if (newValue) {
+          scope.component.productTags = newValue;
+          filterProducts(scope.originalProducts);
+          scope.pageChanged(scope.currentProductPage);
+        }
+      });
 
       /*
        * @getAllProducts
@@ -175,6 +178,7 @@ app.directive('productsComponent', ['$log', '$filter', 'PaymentService', 'Produc
 
       scope.basicInfo = {};
       scope.validateBasicInfo = function () {
+        console.warn('using?');
         // check to make sure the form is completely valid
         // if (isValid) {
         //   alert('our form is amazing');
@@ -194,7 +198,6 @@ app.directive('productsComponent', ['$log', '$filter', 'PaymentService', 'Produc
         _.each(scope.cartDetails, function (item) {
           _subTotal = parseFloat(_subTotal) + (parseFloat(item.regular_price) * item.quantity);
           if (item.taxable && scope.showTax) {
-            var _tax;
             if (scope.taxPercent === 0) {
               scope.taxPercent = 1;
             }
@@ -378,5 +381,5 @@ app.directive('productsComponent', ['$log', '$filter', 'PaymentService', 'Produc
         return matchedAttribute;
       };
     }
-  }
+  };
 }]);

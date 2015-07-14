@@ -1,3 +1,6 @@
+'use strict';
+/*global app, moment, angular, window*/
+/*jslint unparam:true*/
 app.directive('blogComponent', ['$filter', '$timeout', 'WebsiteService', function ($filter, $timeout, WebsiteService) {
   return {
     scope: {
@@ -106,7 +109,7 @@ app.directive('blogComponent', ['$filter', '$timeout', 'WebsiteService', functio
         _.each(tags, function (tag) {
           var default_size = 2;
           var count = _.countBy(_.flatten(tags), function (num) {
-            return num == tag
+            return num === tag;
           })["true"];
           if (count) {
             default_size += count;
@@ -119,16 +122,17 @@ app.directive('blogComponent', ['$filter', '$timeout', 'WebsiteService', functio
         });
         $scope.rendered = false;
         $scope.tagCloud = _tagCloud;
-        $timeout(function() {
+        $timeout(function () {
           $(".jqcloud").jQCloud($scope.tagCloud, {
             autoResize: true,
             width: 230,
             height: 300,
             afterCloudRender: function () {
-              if(!$scope.rendered)
-              {
+              if (!$scope.rendered) {
                 $scope.rendered = true;
-                angular.element('.jqcloud').css({'width': '100%'});
+                angular.element('.jqcloud').css({
+                  'width': '100%'
+                });
                 angular.element('.jqcloud').jQCloud('update', $scope.tagCloud);
               }
             }
@@ -140,36 +144,41 @@ app.directive('blogComponent', ['$filter', '$timeout', 'WebsiteService', functio
       $scope.curPage = 0;
       $scope.pageSize = 10;
       $scope.numberOfPages = function () {
-        if ($scope.blog.blogposts)
+        if ($scope.blog.blogposts) {
           return Math.ceil($scope.blog.blogposts.length / $scope.pageSize);
-        else
-          return 0;
+        }
+
+        return 0;
       };
 
       $scope.sortBlogFn = function (component) {
         return function (blogpost) {
           if (component.postorder) {
-            if (component.postorder == 1 || component.postorder == 2) {
+            if (component.postorder === 1 || component.postorder === 2) {
               return Date.parse($filter('date')(blogpost.modified.date, "MM/dd/yyyy HH:mm:ss"));
-            } else if (component.postorder == 3 || component.postorder == 4) {
+            }
+            if (component.postorder === 3 || component.postorder === 4) {
               return Date.parse($filter('date')(blogpost.created.date, "MM/dd/yyyy HH:mm:ss"));
-            } else if (component.postorder == 5 || component.postorder == 6) {
+            }
+            if (component.postorder === 5 || component.postorder === 6) {
               return Date.parse($filter('date')(blogpost.publish_date || blogpost.created.date, "MM/dd/yyyy"));
             }
-          } else
+          } else {
             return Date.parse($filter('date')(blogpost.publish_date || blogpost.created.date, "MM/dd/yyyy"));
+          }
         };
       };
 
       $scope.customSortOrder = function (component) {
-        if (component.postorder == 1 || component.postorder == 3 || component.postorder == 5) {
+        if (component.postorder === 1 || component.postorder === 3 || component.postorder === 5) {
           return false;
-        } else if (component.postorder == 2 || component.postorder == 4 || component.postorder == 6) {
-          return true;
-        } else {
+        }
+        if (component.postorder === 2 || component.postorder === 4 || component.postorder === 6) {
           return true;
         }
+
+        return true;
       };
     }
-  }
+  };
 }]);

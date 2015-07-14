@@ -1,4 +1,5 @@
-/*global app, moment, angular, window, CKEDITOR*/
+'use strict';
+/*global app, moment, angular, window, CKEDITOR, L*/
 /*jslint unparam:true*/
 app.directive('contactUsComponent', ['AccountService', 'GeocodeService', 'leafletData', '$timeout', '$window', function (AccountService, GeocodeService, leafletData, $timeout, $window) {
   return {
@@ -9,6 +10,7 @@ app.directive('contactUsComponent', ['AccountService', 'GeocodeService', 'leafle
     },
     templateUrl: '/components/component-wrap.html',
     link: function (scope, element, attrs) {
+
       scope.isEditing = true;
       if (!scope.component.map) {
         scope.component.map = {};
@@ -111,6 +113,7 @@ app.directive('contactUsComponent', ['AccountService', 'GeocodeService', 'leafle
           });
         }
       };
+
       angular.extend(scope, {
         mapLocation: {
           lat: 51,
@@ -124,6 +127,7 @@ app.directive('contactUsComponent', ['AccountService', 'GeocodeService', 'leafle
 
         }
       });
+
       scope.$watch('component.map.zoom', function (newValue, oldValue) {
         if (newValue) {
           $timeout(function () {
@@ -133,6 +137,7 @@ app.directive('contactUsComponent', ['AccountService', 'GeocodeService', 'leafle
           });
         }
       });
+
       $(document).ready(function () {
         if (!scope.component.location.address && !scope.component.location.address2 && !scope.component.location.city && !scope.component.location.state && !scope.component.location.zip) {
           scope.checkBusinessAddress(function () {
@@ -142,6 +147,7 @@ app.directive('contactUsComponent', ['AccountService', 'GeocodeService', 'leafle
           scope.updateContactUsAddress(3000);
         }
       });
+
       scope.control.refreshMap = function () {
         if (!scope.component.location.address && !scope.component.location.address2 && !scope.component.location.city && !scope.component.location.state && !scope.component.location.zip) {
           scope.checkBusinessAddress(function () {
@@ -150,10 +156,12 @@ app.directive('contactUsComponent', ['AccountService', 'GeocodeService', 'leafle
         } else {
           scope.updateContactUsAddress(3000);
         }
-      }
+      };
+
       scope.control.updateAddressString = function () {
         scope.contactAddress = scope.stringifyAddress(scope.component.location);
-      }
+      };
+
     }
   };
 }]);

@@ -1,3 +1,6 @@
+'use strict';
+/*global app, moment, angular, window*/
+/*jslint unparam:true*/
 app.directive('videoComponent', ['$sce', function ($sce) {
   return {
     scope: {
@@ -5,15 +8,16 @@ app.directive('videoComponent', ['$sce', function ($sce) {
       version: '='
     },
     templateUrl: '/components/component-wrap.html',
-    link: function (scope, element, attrs, ctrl) {    
+    link: function (scope, element, attrs, ctrl) {
       scope.isEditing = true;
       scope.flvVideoUrl = function (iframeUrl, url) {
         var parsedUrl = urlParser.parse(url);
         var retUrl = "";
-        if (parsedUrl)
+        if (parsedUrl) {
           retUrl = iframeUrl + parsedUrl.id + '?showinfo=0&rel=0&hd=1';
-        else
-          retUrl = iframeUrl
+        } else {
+          retUrl = iframeUrl;
+        }
         return $sce.trustAsResourceUrl(retUrl);
       };
 
@@ -37,7 +41,7 @@ app.directive('videoComponent', ['$sce', function ($sce) {
           enterFullScreenIcon: "&#xe007;",
           exitFullScreenIcon: "&#xe008;"
         }
-      }
+      };
     }
-  }
+  };
 }]);
