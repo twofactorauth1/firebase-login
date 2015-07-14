@@ -74,10 +74,16 @@
           toaster.pop('error', error.message);
         }
         else  
+        {
+          var mainAccount = AccountService.getMainAccount();
+          if(mainAccount)
+              mainAccount.showhide.blog = $scope.account.showhide.blog;        
           WebsiteService.updateWebsite($scope.website, function () {
-            $scope.saveLoading = false;
-            toaster.pop('success', " Website Settings saved.");
+              $scope.saveLoading = false;
+              toaster.pop('success', " Website Settings saved.");
           });
+        }
+         
       });
     };
 
