@@ -430,7 +430,7 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
     value: 3
   }, {
     name: '4',
-    value: 5
+    value: 4
   }, {
     name: '5',
     value: 5

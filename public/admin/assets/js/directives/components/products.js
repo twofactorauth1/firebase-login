@@ -14,17 +14,28 @@ app.directive('productsComponent', ['$log', '$filter', 'PaymentService', 'Produc
       scope.currentProductPage = 1;
 
       scope.$watch('component.numtodisplay', function (newValue, oldValue) {
-        console.log('newValue ', newValue);
         if (newValue) {
           scope.component.numtodisplay = newValue;
           scope.pageChanged(scope.currentProductPage);
         }
       });
 
+      function filterProduct(element) {
+        var _tags = scope.component.productTags;
+        if (_tags) {
+          if (element.tags && _tags.length > 0) {
+            if (_.intersection(_tags, element.tags).length > 0) {
+              return element;
+            }
+          }
+        }
+        return element;
+      }
+
       function filterProducts(data) {
         var _filteredProducts = [];
         _.each(data, function (product) {
-          if (scope.filterProduct(product)) {
+          if (filterProduct(product)) {
             _filteredProducts.push(product);
           }
         });
@@ -33,7 +44,6 @@ app.directive('productsComponent', ['$log', '$filter', 'PaymentService', 'Produc
       }
 
       scope.$watch('component.productTags', function (newValue, oldValue) {
-        console.log('newValue ', newValue);
         if (newValue) {
           scope.component.productTags = newValue;
           filterProducts(scope.originalProducts);
@@ -47,7 +57,6 @@ app.directive('productsComponent', ['$log', '$filter', 'PaymentService', 'Produc
        */
 
       ProductService.getProducts(function (data) {
-        console.log('products ', data);
         scope.originalProducts = angular.copy(data);
         filterProducts(data);
       });
@@ -63,21 +72,6 @@ app.directive('productsComponent', ['$log', '$filter', 'PaymentService', 'Produc
           var begin = ((scope.currentProductPage - 1) * scope.component.numtodisplay);
           var end = begin + scope.component.numtodisplay;
           scope.filteredProducts = scope.products.slice(begin, end);
-        }
-      };
-
-      scope.filterProduct = function (element) {
-        var _tags = scope.component.productTags;
-        if (_tags) {
-          if (element.tags && _tags.length > 0) {
-            if (_.intersection(_tags, element.tags).length > 0) {
-              return element;
-            }
-          }
-
-          if (_tags.length <= 0) {
-            return element;
-          }
         }
       };
     }

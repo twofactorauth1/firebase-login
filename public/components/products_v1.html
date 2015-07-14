@@ -24,6 +24,7 @@
                             <div class="img-wrap no-preview">
                                 <h3>No Preview <br> Available</h3>
                             </div>
+                            <div class="clearfix"></div>
                         </div>
                         <div class="caption">
                             <h4 class="pull-right">{{product.regular_price | currency}}</h4>
@@ -66,8 +67,6 @@
             </div>
             <div class="clearfix mb15"></div>
         </div>
-        <!-- <pre>products.length: {{products.length}} productOffset: {{productOffset}} currentProductPage: {{currentProductPage}} component.numtodisplay: {{component.numtodisplay}}</pre>
-        <pagination ng-show="products.length" total-items="products.length" ng-model="currentProductPage" ng-change="pageChanged(currentProductPage)" items-per-page="component.numtodisplay" class="pagination-sm" boundary-links="true" rotate="false" num-pages="numPages"></pagination> -->
         <div ng-if="products.length > component.numtodisplay && component.numtodisplay != 'Infinity'">
             <pagination total-items="products.length" items-per-page="component.numtodisplay" ng-model="currentProductPage" ng-change="pageChanged(currentProductPage)"></pagination>
         </div>
