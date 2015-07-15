@@ -15,6 +15,7 @@ var contactDao = require('../../dao/contact.dao');
 var contactActivityManager = require('../../contactactivities/contactactivity_manager');
 var urlUtils = require('../../utils/urlutils');
 var campaignManager = require('../../campaign/campaign_manager');
+var appConfig = require('../../configs/app.config');
 
 var api = function() {
     this.init.apply(this, arguments);
@@ -232,9 +233,33 @@ _.extend(api.prototype, baseApi.prototype, {
              *  - create contact activity
              */
             contactDao.getContactByEmailAndAccount(obj.email, obj.accountId, function(err, contact){
-                if(err || contact===null) {
+                if(err) {
                     self.log.error('Error finding contact for [' + obj.email + '] and [' + obj.accountId + ']');
                     return;
+                } else if(contact === null){
+                    //this might be a user and contact on main account
+                    contactDao.getContactByEmailAndAccount(obj.email, appConfig.mainAccountID, function(err, contact){
+                        if(err || contact === null) {
+                            self.log.error('Error finding contact for [' + obj.email + '] and [' + appConfig.mainAccountID + ']');
+                            return;
+                        } else {
+                            contact.set('unsubscribed', true);
+                            contactDao.saveOrUpdateContact(contact, function(err, updatedContact){
+                                if(err) {
+                                    self.log.error('Error marking contact unsubscribed', err);
+                                    return;
+                                } else {
+                                    var activity = new $$.m.ContactActivity({
+                                        accountId: contact.get('accountId'),
+                                        contactId: contact.id(),
+                                        activityType: obj.activityType,
+                                        start: obj.ts
+                                    });
+                                    contactActivityManager.createActivity(activity, function(err, value){});
+                                }
+                            });
+                        }
+                    });
                 } else {
                     contact.set('unsubscribed', true);
                     contactDao.saveOrUpdateContact(contact, function(err, updatedContact){
