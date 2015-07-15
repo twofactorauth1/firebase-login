@@ -1240,6 +1240,9 @@ ul.nav {
     width: 90%;
   }
 }
+.navigation-v1 .navbar-header {
+  float: none;
+}
 .navigation-v2 #header .navbar.navbar-default {
   border: none!important;
 }
@@ -2254,6 +2257,10 @@ contenthover a {
 .testimonials-v2 .right.carousel-control {
   background: none!important;
 }
+.testimonials-v2 .slick-slider {
+  -webkit-user-select: inherit;
+  -khtml-user-select: inherit;
+}
 /********** Image Text v1 **********/
 .image-text-v1 img {
   max-width: 100%;
@@ -2801,6 +2808,10 @@ div[data-class='image-text'] p {
   position: absolute;
   top: 0px;
   right: 13px;
+}
+.editing .products-v1 .btnLaunchCart {
+  position: absolute;
+  margin-top: 60px;
 }
 /*--------------------------
 ----Project Modal Styles----

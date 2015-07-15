@@ -1257,6 +1257,9 @@
     width: 90%;
   }
 }
+#componentloader .navigation-v1 .navbar-header {
+  float: none;
+}
 #componentloader .navigation-v2 #header .navbar.navbar-default {
   border: none!important;
 }
@@ -2264,6 +2267,10 @@
 #componentloader .testimonials-v2 .right.carousel-control {
   background: none!important;
 }
+#componentloader .testimonials-v2 .slick-slider {
+  -webkit-user-select: inherit;
+  -khtml-user-select: inherit;
+}
 #componentloader .image-text-v1 img {
   max-width: 100%;
 }
@@ -2805,6 +2812,10 @@
   position: absolute;
   top: 0px;
   right: 13px;
+}
+#componentloader .editing .products-v1 .btnLaunchCart {
+  position: absolute;
+  margin-top: 60px;
 }
 #componentloader .portfolio.fade.modal {
   overflow-x: hidden;

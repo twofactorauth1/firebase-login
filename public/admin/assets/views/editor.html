@@ -18,7 +18,7 @@
                 <div class="panel panel-transparent row margin-bottom-0">
                     <div class="panel-body">
                         <div>
-                            <div class="col-sm-2 col-xs-6 center">
+                            <div ng-if="!emailPage" class="col-sm-2 col-xs-6 center">
                                 <button type="button" ng-disabled="!ckeditorLoaded" ng-click="openSettingsModal()" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-settings btn-o">
                                     <span>Settings</span>
                                 </button>

@@ -151,7 +151,7 @@ app.directive('indigOnboarding', function ($rootScope, $location, $sce, $state, 
           }
 
           if ($scope.manualComplete) {
-            $scope.taskComplete();
+            $scope.taskComplete(true);
           }
         }
 
@@ -203,7 +203,7 @@ app.directive('indigOnboarding', function ($rootScope, $location, $sce, $state, 
        * - mark task as complete after minimum requirements for task have been met
        */
 
-      $scope.taskComplete = function (_complete) {
+      $scope.taskComplete = function (skipMinRequirements) {
         if (!$scope.objType) {
           var _matchingTask = _.find($scope.onboardingStepMap, function (task) {
             return task.pane.state === $state.current.name;
@@ -211,7 +211,7 @@ app.directive('indigOnboarding', function ($rootScope, $location, $sce, $state, 
 
           $scope.objType = _matchingTask.pane.taskKey;
         }
-        if ($scope.userPreferences && $scope.userPreferences.tasks && $scope.userPreferences.tasks[$scope.objType] !== 'finished' && $scope.minReq) {
+        if ($scope.userPreferences && $scope.userPreferences.tasks && $scope.userPreferences.tasks[$scope.objType] !== 'finished' && ($scope.minReq || skipMinRequirements)) {
           $scope.userPreferences.tasks[$scope.objType] = 'finished';
           UserService.updateUserPreferences($scope.userPreferences, false, function (updatedPreferences) {
 

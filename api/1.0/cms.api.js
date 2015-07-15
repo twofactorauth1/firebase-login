@@ -1230,8 +1230,8 @@ _.extend(api.prototype, baseApi.prototype, {
         var self = this;
         self.log.debug('>> createBlogPost');
         var blog=req.body;
-        if(blog.post_tags && !Array.isArray(blog.post_tags))
-            blog.post_tags=blog.post_tags.split(',');
+        //if(blog.post_tags && !Array.isArray(blog.post_tags))
+            //blog.post_tags=blog.post_tags.split(',');
 
         var blogPost = new $$.m.BlogPost(blog);
         //var blogPost = new $$.m.BlogPost(req.body);
