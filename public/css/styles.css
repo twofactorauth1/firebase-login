@@ -1240,6 +1240,9 @@ ul.nav {
     width: 90%;
   }
 }
+.navigation-v1 .navbar-header {
+  float: none;
+}
 .navigation-v2 #header .navbar.navbar-default {
   border: none!important;
 }
