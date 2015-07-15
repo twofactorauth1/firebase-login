@@ -293,7 +293,6 @@
     };
 
     this.createPost = function (pageId, postdata, fn) {
-      postdata.post_tags = null;
       if (!postdata.created) {
         postdata.created = {};
       }

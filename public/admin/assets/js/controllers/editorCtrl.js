@@ -665,15 +665,15 @@
           return false;
         }
 
-        var post_data = $scope.blog.post;
-        newPost.post_content = post_data.post_content;
-        newPost.post_tags = post_data.post_tags;
-        newPost.post_author = post_data.post_author;
-        newPost.post_category = post_data.post_category;
-        newPost.post_excerpt = post_data.post_excerpt;
-        newPost.featured_image = post_data.featured_image;
-        newPost.publish_date = post_data.publish_date;
-        WebsiteService.createPost(-1, newPost, function (data) {
+        var post_data = angular.copy($scope.blog.post);
+        post_data.post_url = newPost.post_url;
+        post_data.post_title = newPost.post_title;
+        post_data.post_tags.forEach(function (v, i) {
+          if (v.text) {
+            post_data.post_tags[i] = v.text;
+          }
+        });
+        WebsiteService.createPost($scope.page._id, post_data, function (data) {
           $scope.duplicate = true;
           console.log("Duplicate Post Created");
           window.location = '/admin/#/website/posts/?posthandle=' + newPost.post_url;
