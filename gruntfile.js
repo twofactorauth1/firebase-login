@@ -272,7 +272,9 @@ module.exports = function(grunt) {
             js: {
                 files: {
                     'public/js/indigenous.js': ['public/js/indigenous.js'],
-                    'public/js/ng-indigenous.js': ['public/js/ng-indigenous.js']
+                    'public/js/ng-indigenous.js': ['public/js/ng-indigenous.js'],
+                    'public/admin/assets/js/admin-vendor-indigenous.js': ['public/admin/assets/js/admin-vendor-indigenous.js'],
+                    'public/admin/assets/js/ng-admin-indigenous.js': ['public/admin/assets/js/ng-admin-indigenous.js']
                 }
             }
         },
