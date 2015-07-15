@@ -15,6 +15,7 @@ var contactDao = require('../../dao/contact.dao');
 var contactActivityManager = require('../../contactactivities/contactactivity_manager');
 var urlUtils = require('../../utils/urlutils');
 var campaignManager = require('../../campaign/campaign_manager');
+var appConfig = require('../../configs/app.config');
 
 var api = function() {
     this.init.apply(this, arguments);
@@ -40,7 +41,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.delete(this.url('events/:id'), this.isAuthAndSubscribedApi.bind(this), this.deleteEvent.bind(this));
 
         app.post(this.url('mandrill/event'), this.filterMandrillEvents.bind(this), this.sendToKeen.bind(this));
-        app.post(this.url('mandirll/event/unsub'), this.handleUnsubscribe.bind(this));
+        app.post(this.url('mandrill/event/unsub'), this.handleUnsubscribe.bind(this));
 
         //visit
         app.post(this.url('session/:id/sessionStart'), this.setup.bind(this), this.storeSessionInfo.bind(this));
@@ -65,10 +66,12 @@ _.extend(api.prototype, baseApi.prototype, {
                     //msg = {'mandrill_events': JSON.parse(req.body.mandrill_events)};
                     _.each(msg, function(value, key, list){
                         var obj = {};
-                        var name = 'mandrill_' + value.event;
-                        obj.collection = name;
-                        obj.value = value;
-                        messagesToSend.push(obj);
+                        if(value.event) {
+                            var name = 'mandrill_' + value.event;
+                            obj.collection = name;
+                            obj.value = value;
+                            messagesToSend.push(obj);
+                        }
                     });
                 } else {
                     messagesToSend.push(msg);
@@ -127,37 +130,39 @@ _.extend(api.prototype, baseApi.prototype, {
                     _.each(msg, function (value, key, list) {
                         var type = value.event;
                         var obj = {};
-                        obj.email = value.msg.email;
-                        obj.sender = value.msg.sender;
-                        obj.ts = moment.utc(value.ts*1000).toDate();
-                        if (type === 'send') {
-                            obj.activityType = $$.m.ContactActivity.types.EMAIL_DELIVERED;
-                            objArray.push(obj);
-                        } else if (type === 'open') {
-                            obj.activityType = $$.m.ContactActivity.types.EMAIL_OPENED;
-                            objArray.push(obj);
-                            //if value.msg.metadata.campaignId, trigger campaignStep
-                            if(value.msg.metadata.campaignId) {
-                                self.log.debug('triggering campaign step');
-                                var metadata = value.msg.metadata;
-                                campaignManager.handleCampaignEmailOpenEvent(metadata.accountId, metadata.campaignId, metadata.contactId, function(err, value){
-                                    if(err) {
-                                        self.log.error('Error handling email open event:' + err);
-                                        return;
-                                    } else {
-                                        self.log.debug('Handled email open event.');
-                                        return;
-                                    }
-                                });
+                        if(value.msg) {
+                            obj.email = value.msg.email;
+                            obj.sender = value.msg.sender;
+                            obj.ts = moment.utc(value.ts*1000).toDate();
+                            if (type === 'send') {
+                                obj.activityType = $$.m.ContactActivity.types.EMAIL_DELIVERED;
+                                objArray.push(obj);
+                            } else if (type === 'open') {
+                                obj.activityType = $$.m.ContactActivity.types.EMAIL_OPENED;
+                                objArray.push(obj);
+                                //if value.msg.metadata.campaignId, trigger campaignStep
+                                if(value.msg.metadata.campaignId) {
+                                    self.log.debug('triggering campaign step');
+                                    var metadata = value.msg.metadata;
+                                    campaignManager.handleCampaignEmailOpenEvent(metadata.accountId, metadata.campaignId, metadata.contactId, function(err, value){
+                                        if(err) {
+                                            self.log.error('Error handling email open event:' + err);
+                                            return;
+                                        } else {
+                                            self.log.debug('Handled email open event.');
+                                            return;
+                                        }
+                                    });
+                                }
+                            } else if (type === 'click') {
+                                obj.activityType = $$.m.ContactActivity.types.EMAIL_CLICKED;
+                                objArray.push(obj);
+                            } else if (type === 'unsub') {
+                                obj.activityType = $$.m.ContactActivity.types.EMAIL_UNSUB;
+                                objArray.push(obj);
                             }
-
-                        } else if (type === 'click') {
-                            obj.activityType = $$.m.ContactActivity.types.EMAIL_CLICKED;
-                            objArray.push(obj);
-                        } else if (type === 'unsub') {
-                            obj.activityType = $$.m.ContactActivity.types.EMAIL_UNSUB;
-                            objArray.push(obj);
                         }
+
                     });
                 }
             } catch(err) {
@@ -174,6 +179,7 @@ _.extend(api.prototype, baseApi.prototype, {
             var query = {};
             //TODO: get contactId from sender Email
             //query.accountId = value.id();
+
             query['details.emails.email'] = value.email;
 
             contactDao.findMany(query, $$.m.Contact, function(err, list){
@@ -231,10 +237,35 @@ _.extend(api.prototype, baseApi.prototype, {
              *  - Mark the contact as "unsubscribed"
              *  - create contact activity
              */
-            contactDao.getContactByEmailAndAccount(obj.email, obj.accountId, function(err, contact){
-                if(err || contact===null) {
+            contactDao.findContactsByEmail(obj.accountId, obj.email, function(err, contact){
+                if(err) {
                     self.log.error('Error finding contact for [' + obj.email + '] and [' + obj.accountId + ']');
                     return;
+                } else if(contact === null || contact.length ===0){
+                    //this might be a user and contact on main account
+                    contactDao.findContactsByEmail(appConfig.mainAccountID, obj.email, function(err, contacts){
+                        if(err || contacts === null || contacts.length===0) {
+                            self.log.error('Error finding contact for [' + obj.email + '] and [' + appConfig.mainAccountID + ']');
+                            return;
+                        } else {
+                            var contact = contacts[0];
+                            contact.set('unsubscribed', true);
+                            contactDao.saveOrUpdateContact(contact, function(err, updatedContact){
+                                if(err) {
+                                    self.log.error('Error marking contact unsubscribed', err);
+                                    return;
+                                } else {
+                                    var activity = new $$.m.ContactActivity({
+                                        accountId: contact.get('accountId'),
+                                        contactId: contact.id(),
+                                        activityType: obj.activityType,
+                                        start: obj.ts
+                                    });
+                                    contactActivityManager.createActivity(activity, function(err, value){});
+                                }
+                            });
+                        }
+                    });
                 } else {
                     contact.set('unsubscribed', true);
                     contactDao.saveOrUpdateContact(contact, function(err, updatedContact){

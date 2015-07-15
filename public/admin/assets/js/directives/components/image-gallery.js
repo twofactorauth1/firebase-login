@@ -1,4 +1,5 @@
 'use strict';
+
 /*global app, moment, angular, window, CKEDITOR*/
 /*jslint unparam:true*/
 app.directive('imageGalleryComponent', ['$timeout', function ($timeout) {

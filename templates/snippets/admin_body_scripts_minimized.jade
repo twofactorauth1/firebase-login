@@ -1,0 +1,48 @@
+script(src="../admin/assets/js/admin-vendor-indigenous.js")
+script(src="../admin/assets/js/ng-admin-indigenous.js")
+
+// Google Apis
+script(src='//maps.googleapis.com/maps/api/js?v=3.exp&libraries=weather,visualization')
+//Stripe
+script(src='https://js.stripe.com/v2/?tmp')
+
+script(type="text/javascript").
+    (function(w,d,s,g,js,fs){g=w.gapi||(w.gapi={});g.analytics={q:[],ready:function(f){this.q.push(f);}}; js=d.createElement(s);fs=d.getElementsByTagName(s)[0]; js.src='https://apis.google.com/js/platform.js'; fs.parentNode.insertBefore(js,fs);js.onload=function(){g.load('analytics');};}(window,document,'script'));
+
+script.
+    (function(){var w=window;var ic=w.Intercom;if(typeof ic==="function"){ic('reattach_activator');ic('update',intercomSettings);}else{var d=document;var i=function(){i.c(arguments)};i.q=[];i.c=function(args){i.q.push(args)};w.Intercom=i;function l(){var s=d.createElement('script');s.type='text/javascript';s.async=true;s.src='https://widget.intercom.io/widget/b3st2skm';var x=d.getElementsByTagName('script')[0];x.parentNode.insertBefore(s,x);}if(w.attachEvent){w.attachEvent('onload',l);}else{w.addEventListener('load',l,false);}}})()
+
+script(src="https://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/hmac-sha256.js")
+script(src="https://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/enc-base64-min.js")
+
+script(type="text/javascript").
+    var hash = CryptoJS.HmacSHA256('#{user.email}', "vZ7kG_bS_S-jnsNq4M2Vxjsa5mZCxOCJM9nezRUQ");
+    window.intercomSettings = {
+      name: '#{user.first} #{user.last}',
+      email: '#{user.email}',
+      user_hash: hash.toString(CryptoJS.enc.Hex),
+      created_at: new Date().getTime(),
+      app_id: "b3st2skm"
+    };
+
+script(type="text/javascript").
+    window.analytics = window.analytics || [], window.analytics.methods = ["identify", "group", "track", "page", "pageview", "alias", "ready", "on", "once", "off", "trackLink", "trackForm", "trackClick", "trackSubmit"], window.analytics.factory = function (t) {
+        return function () {
+            var a = Array.prototype.slice.call(arguments);
+            return a.unshift(t), window.analytics.push(a), window.analytics
+        }
+    };
+    for (var i = 0; i < window.analytics.methods.length; i++) {
+        var key = window.analytics.methods[i];
+        window.analytics[key] = window.analytics.factory(key)
+    }
+    window.analytics.load = function (t) {
+        if (!document.getElementById("analytics-js")) {
+            var a = document.createElement("script");
+            a.type = "text/javascript", a.id = "analytics-js", a.async = !0, a.src = ("https:" === document.location.protocol ? "https://" : "http://") + "cdn.segment.io/analytics.js/v1/" + t + "/analytics.min.js";
+            var n = document.getElementsByTagName("script")[0];
+            n.parentNode.insertBefore(a, n)
+        }
+    }, window.analytics.SNIPPET_VERSION = "2.0.9",
+            window.analytics.load('#{segmentIOWriteKey}');
+    window.analytics.page('admin', {accountId:#{account._id}});

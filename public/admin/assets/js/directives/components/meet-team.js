@@ -1,3 +1,6 @@
+'use strict';
+/*global app, moment, angular, window*/
+/*jslint unparam:true*/
 app.directive('meetTeamComponent', function () {
   return {
     scope: {
@@ -10,7 +13,11 @@ app.directive('meetTeamComponent', function () {
       scope.isEditing = true;
 
       scope.addImageFromMedia = function (componentId, index, update) {
-        scope.media({componentId: componentId, index: index, update: update});
+        scope.media({
+          componentId: componentId,
+          index: index,
+          update: update
+        });
       };
 
       /*
@@ -19,7 +26,7 @@ app.directive('meetTeamComponent', function () {
        */
 
       scope.deleteTeamMember = function (index) {
-      	console.log('index', index);
+        console.log('index', index);
         scope.component.teamMembers.splice(index, 1);
       };
 
@@ -37,10 +44,10 @@ app.directive('meetTeamComponent', function () {
             "url": "http://www.linkedin.com",
             "icon": "linkedin"
           }]
-      }
-      scope.component.teamMembers.splice(index + 1, 0, newTeam);
-    };
+        };
+        scope.component.teamMembers.splice(index + 1, 0, newTeam);
+      };
 
     }
-  }
+  };
 });

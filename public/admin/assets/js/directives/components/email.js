@@ -1,3 +1,6 @@
+'use strict';
+/*global app, moment, angular, window*/
+/*jslint unparam:true*/
 app.directive('emailComponent', function () {
   return {
     scope: {
@@ -8,5 +11,5 @@ app.directive('emailComponent', function () {
     link: function (scope, element, attrs) {
       console.log('email');
     }
-  }
+  };
 });

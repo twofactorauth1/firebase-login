@@ -1,3 +1,6 @@
+'use strict';
+/*global app, moment, angular, window*/
+/*jslint unparam:true*/
 app.directive('simpleFormComponent', function () {
   return {
     scope: {
@@ -16,5 +19,5 @@ app.directive('simpleFormComponent', function () {
         }
       };
     }
-  }
+  };
 });

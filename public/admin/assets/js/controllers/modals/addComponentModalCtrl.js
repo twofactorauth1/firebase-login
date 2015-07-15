@@ -1,16 +1,18 @@
 'use strict';
-/*global app, moment, angular*/
-/*jslint unparam:true*/
-app.controller('AddComponentModalCtrl', ['$scope', '$document', '$modalInstance', '$anchorScroll', '$http', '$timeout', '$q', '$compile', '$filter', 'WebsiteService', 'CustomerService', 'toaster', 'components', 'clickedIndex', function ($scope, $document, $modalInstance, $anchorScroll, $http, $timeout, $q, $compile, $filter, WebsiteService, CustomerService, toaster, components, clickedIndex) {
+/*global app*/
+app.controller('AddComponentModalCtrl', ['$scope', '$document', '$modalInstance', '$timeout', 'WebsiteService', 'toaster', 'components', 'clickedIndex', function ($scope, $document, $modalInstance, $timeout, WebsiteService, toaster, components, clickedIndex) {
+
+  //passed in components from parent ctrl
+  $scope.components = components;
+  //passed in clickedIndex from parent ctrl
+  $scope.clickedIndex = clickedIndex;
+  //save loading var to
+  $scope.saveLoading = false;
 
   /*
-   * @components, @clickedIndex
-   * - passed in variables from openModal
+   * @addComponent
+   * - add the component to the page by retrieving the component and animating the entry
    */
-
-  $scope.components = components;
-  $scope.clickedIndex = clickedIndex;
-  $scope.saveLoading = false;
 
   $scope.addComponent = function (addedType) {
     if (!$scope.saveLoading) {
@@ -34,8 +36,6 @@ app.controller('AddComponentModalCtrl', ['$scope', '$document', '$modalInstance'
           $scope.components.splice($scope.clickedIndex + 1, 0, newComponent);
           $timeout(function () {
             var element = document.getElementById(newComponent._id);
-            var rect = element.getBoundingClientRect();
-            console.log(rect.top, rect.right, rect.bottom, rect.left);
             if (element) {
               $document.scrollToElementAnimated(element, 175, 1000);
             }
@@ -45,6 +45,11 @@ app.controller('AddComponentModalCtrl', ['$scope', '$document', '$modalInstance'
       });
     }
   };
+
+  /*
+   * @closeModal
+   * - close the modal and remove the backdrop
+   */
 
   $scope.closeModal = function () {
     $timeout(function () {
@@ -231,15 +236,13 @@ app.controller('AddComponentModalCtrl', ['$scope', '$document', '$modalInstance'
     enabled: true
   }];
 
-  /*
-   * @componentLabel, enabledComponentTypes
-   * -
-   */
+  //component label placeholder
+  var componentLabel;
 
-  var componentLabel,
-    enabledComponentTypes = _.where($scope.componentTypes, {
-      enabled: true
-    });
+  //enabled component types
+  var enabledComponentTypes = _.where($scope.componentTypes, {
+    enabled: true
+  });
 
   /************************************************************************************************************
    * Takes the componentTypes object and gets the value for the filter property from any that are enabled.

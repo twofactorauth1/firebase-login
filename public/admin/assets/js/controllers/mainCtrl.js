@@ -7,6 +7,7 @@ app.controller('AppCtrl', ['$rootScope', '$scope', '$state', '$translate', '$loc
 
     AccountService.getAccount(function (account) {
       $scope.account = account;
+      AccountService.setMainAccount($scope.account);
       if (account.locked_sub && !$state.includes('app.account.billing')) {
         $state.go('app.account.billing');
       }

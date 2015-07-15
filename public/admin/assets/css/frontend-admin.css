@@ -527,7 +527,6 @@
   border-left: none;
   border-bottom: none;
   width: 100%;
-  color: white;
 }
 #componentloader .contact-us-v1 .leaflet-popup-pane {
   color: #000;
@@ -1253,6 +1252,11 @@
   margin: 5px auto;
   text-align: left;
 }
+@media (min-width: 1600px) {
+  #componentloader .navigation-v1 .container {
+    width: 90%;
+  }
+}
 #componentloader .navigation-v2 #header .navbar.navbar-default {
   border: none!important;
 }
@@ -1326,6 +1330,11 @@
   #componentloader .navigation-v2 .navbar .navbar-header {
     margin-left: 0px;
     margin-right: 0px;
+  }
+}
+@media (min-width: 1600px) {
+  #componentloader .navigation-v2 .container {
+    width: 90%;
   }
 }
 #componentloader .navigation1 {
@@ -2255,6 +2264,9 @@
 #componentloader .testimonials-v2 .right.carousel-control {
   background: none!important;
 }
+#componentloader .image-text-v1 img {
+  max-width: 100%;
+}
 #componentloader .image-text-v1 span[data-cke-display-name="image"] {
   max-width: 100%;
 }
@@ -2739,7 +2751,7 @@
   margin: 0 auto;
 }
 #componentloader .products-v1 .no-product-img {
-  height: 160px;
+  height: 180px;
 }
 #componentloader .products-v1 .product-description {
   min-height: 20px;

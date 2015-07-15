@@ -1,3 +1,6 @@
+'use strict';
+/*global app, moment, angular, window*/
+/*jslint unparam:true*/
 app.directive('featureBlockComponent', function () {
   return {
     scope: {
@@ -8,5 +11,5 @@ app.directive('featureBlockComponent', function () {
     link: function (scope, element, attrs) {
       scope.isEditing = true;
     }
-  }
+  };
 });

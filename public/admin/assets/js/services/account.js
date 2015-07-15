@@ -2,6 +2,15 @@
   app.service('AccountService', ['$http', function ($http) {
     var baseUrl = '/api/1.0/account/';
 
+    this.mainAccount = null;
+    this.getMainAccount = function () {
+      return this.mainAccount;
+    };
+
+    this.setMainAccount = function (account) {
+      this.mainAccount = account;
+    };
+
     this.getAccount = function (fn) {
       var apiUrl = baseUrl;
       $http.get(apiUrl)

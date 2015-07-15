@@ -1,4 +1,7 @@
-app.directive('socialLinkComponent',["$modal", function ($modal) {
+'use strict';
+/*global app, moment, angular, window*/
+/*jslint unparam:true*/
+app.directive('socialLinkComponent', ["$modal", function ($modal) {
   return {
     scope: {
       component: '=',
@@ -8,5 +11,5 @@ app.directive('socialLinkComponent',["$modal", function ($modal) {
     link: function (scope, element, attrs, ctrl) {
       scope.isEditing = true;
     }
-  }
+  };
 }]);
