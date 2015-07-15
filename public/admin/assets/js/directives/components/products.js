@@ -39,16 +39,13 @@ app.directive('productsComponent', ['ProductService', function (ProductService) 
        */
 
       function filterProducts(data, fn) {
-        console.log('filteredProducts >>>', data.length);
         var _filteredProducts = [];
         _.each(data, function (product) {
           if (filterTags(product)) {
             _filteredProducts.push(product);
           }
         });
-        scope.products = angular.copy(_filteredProducts);
-        scope.filteredProducts = _filteredProducts;
-        console.log('>>>> filteredProducts', _filteredProducts.length);
+        scope.products = _filteredProducts;
         if (fn) {
           fn();
         }
@@ -62,7 +59,6 @@ app.directive('productsComponent', ['ProductService', function (ProductService) 
       scope.$watch('component.numtodisplay', function (newValue, oldValue) {
         if (newValue !== oldValue) {
           scope.component.numtodisplay = newValue;
-          console.log('scope.originalProducts ', scope.originalProducts);
           filterProducts(scope.originalProducts, function () {
             scope.pageChanged(1);
           });
@@ -77,7 +73,6 @@ app.directive('productsComponent', ['ProductService', function (ProductService) 
       scope.$watch('component.productTags', function (newValue, oldValue) {
         if (newValue !== oldValue) {
           scope.component.productTags = newValue;
-          console.log('scope.originalProducts ', scope.originalProducts);
           filterProducts(scope.originalProducts, function () {
             scope.pageChanged(1);
           });
@@ -90,9 +85,10 @@ app.directive('productsComponent', ['ProductService', function (ProductService) 
        */
 
       ProductService.getProducts(function (data) {
-        console.log('data ', data);
         scope.originalProducts = angular.copy(data);
-        filterProducts(data);
+        filterProducts(data, function () {
+          scope.pageChanged(1);
+        });
       });
 
       /*
@@ -101,11 +97,15 @@ app.directive('productsComponent', ['ProductService', function (ProductService) 
        */
 
       scope.pageChanged = function (pageNo) {
-        console.log('pageChanged >>> ', pageNo);
         scope.currentProductPage = pageNo;
         if (scope.products) {
           var begin = ((scope.currentProductPage - 1) * scope.component.numtodisplay);
-          var end = begin + scope.component.numtodisplay;
+          var numDisplay = scope.component.numtodisplay;
+          //check if set to 0 and change to all products
+          if (numDisplay === 0) {
+            numDisplay = scope.products.length;
+          }
+          var end = begin + numDisplay;
           scope.filteredProducts = scope.products.slice(begin, end);
         }
       };
