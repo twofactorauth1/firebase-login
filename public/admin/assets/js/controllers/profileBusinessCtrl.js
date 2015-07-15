@@ -229,7 +229,7 @@
       UserService.putAccount($scope.account, function (account) {
         $scope.account = account;
         toaster.pop('success', 'Profile Saved.');
-        $scope.minRequirements = true;
+        //$scope.minRequirements = true;
         $scope.setDefaults();
       });
     };
