@@ -36,6 +36,10 @@ var component = $$.m.ModelBase.extend({
 
             text : "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Recusandae culpa reprehenderit porro quod repudiandae nisi fuga voluptatem commodi animi numquam aliquid corporis ea vero distinctio fugit error, maiores officiis vel id laboriosam nemo soluta. Vitae cum quae mollitia similique recusandae, voluptatum, debitis ipsam eaque libero, veniam rem rerum facilis id minima.&nbsp;",
 
+            productTags: [],
+
+            numtodisplay: 0,
+
             /**
              * The type of component this is
              */

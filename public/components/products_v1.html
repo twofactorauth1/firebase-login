@@ -67,6 +67,7 @@
             </div>
             <div class="clearfix mb15"></div>
         </div>
+        <pre>component.numtodisplay: {{component.numtodisplay}} products.length: {{products.length}} currentProductPage: {{currentProductPage}} component.productTags: {{component.productTags}} filteredProducts: {{filteredProducts.length}}</pre>
         <div ng-if="products.length > component.numtodisplay && component.numtodisplay != 'Infinity'">
             <pagination total-items="products.length" items-per-page="component.numtodisplay" ng-model="currentProductPage" ng-change="pageChanged(currentProductPage)"></pagination>
         </div>

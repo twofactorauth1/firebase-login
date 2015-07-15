@@ -8,7 +8,6 @@ app.directive('productsComponent', ['ProductService', function (ProductService) 
     },
     templateUrl: '/components/component-wrap.html',
     link: function (scope) {
-
       //show editing in admin
       scope.isEditing = true;
       //assign and hold the checkout modal state
@@ -23,14 +22,15 @@ app.directive('productsComponent', ['ProductService', function (ProductService) 
 
       function filterTags(_product) {
         var _tags = scope.component.productTags;
-        if (_tags) {
-          if (_product.tags && _tags.length > 0) {
+        if (_tags && _tags.length > 0) {
+          if (_product.tags) {
             if (_.intersection(_tags, _product.tags).length > 0) {
-              return _product;
+              return true;
             }
           }
+        } else {
+          return true;
         }
-        return _product;
       }
 
       /*
@@ -38,7 +38,8 @@ app.directive('productsComponent', ['ProductService', function (ProductService) 
        * - filter the products and assign them to the scope
        */
 
-      function filterProducts(data) {
+      function filterProducts(data, fn) {
+        console.log('filteredProducts >>>', data.length);
         var _filteredProducts = [];
         _.each(data, function (product) {
           if (filterTags(product)) {
@@ -47,6 +48,10 @@ app.directive('productsComponent', ['ProductService', function (ProductService) 
         });
         scope.products = angular.copy(_filteredProducts);
         scope.filteredProducts = _filteredProducts;
+        console.log('>>>> filteredProducts', _filteredProducts.length);
+        if (fn) {
+          fn();
+        }
       }
 
       /*
@@ -54,10 +59,13 @@ app.directive('productsComponent', ['ProductService', function (ProductService) 
        * - watch for the display number to change in the component settings
        */
 
-      scope.$watch('component.numtodisplay', function (newValue) {
-        if (newValue) {
+      scope.$watch('component.numtodisplay', function (newValue, oldValue) {
+        if (newValue !== oldValue) {
           scope.component.numtodisplay = newValue;
-          scope.pageChanged(scope.currentProductPage);
+          console.log('scope.originalProducts ', scope.originalProducts);
+          filterProducts(scope.originalProducts, function () {
+            scope.pageChanged(1);
+          });
         }
       });
 
@@ -66,11 +74,13 @@ app.directive('productsComponent', ['ProductService', function (ProductService) 
        * - watch for product tags to change in component settings and filter products
        */
 
-      scope.$watch('component.productTags', function (newValue) {
-        if (newValue) {
+      scope.$watch('component.productTags', function (newValue, oldValue) {
+        if (newValue !== oldValue) {
           scope.component.productTags = newValue;
-          filterProducts(scope.originalProducts);
-          scope.pageChanged(scope.currentProductPage);
+          console.log('scope.originalProducts ', scope.originalProducts);
+          filterProducts(scope.originalProducts, function () {
+            scope.pageChanged(1);
+          });
         }
       });
 
@@ -80,6 +90,7 @@ app.directive('productsComponent', ['ProductService', function (ProductService) 
        */
 
       ProductService.getProducts(function (data) {
+        console.log('data ', data);
         scope.originalProducts = angular.copy(data);
         filterProducts(data);
       });
@@ -90,6 +101,7 @@ app.directive('productsComponent', ['ProductService', function (ProductService) 
        */
 
       scope.pageChanged = function (pageNo) {
+        console.log('pageChanged >>> ', pageNo);
         scope.currentProductPage = pageNo;
         if (scope.products) {
           var begin = ((scope.currentProductPage - 1) * scope.component.numtodisplay);

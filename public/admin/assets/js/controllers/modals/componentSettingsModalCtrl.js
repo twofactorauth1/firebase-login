@@ -418,7 +418,7 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
 
   $scope.numberOfProductOptions = [{
     name: 'All',
-    value: 'Infinity'
+    value: 0
   }, {
     name: '1',
     value: 1
