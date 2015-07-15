@@ -231,7 +231,7 @@
      */
 
 
-    if ($location.search().pagehandle) {
+    if ($location.search().pagehandle) {      
       $scope.retrievePage($location.search().pagehandle);
     }
 
@@ -242,6 +242,7 @@
 
 
     if ($location.search().email) {
+      $scope.emailPage = true;
       $scope.retrievePage($location.search().email);
     }
 
