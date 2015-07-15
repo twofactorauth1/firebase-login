@@ -232,17 +232,18 @@ _.extend(api.prototype, baseApi.prototype, {
              *  - Mark the contact as "unsubscribed"
              *  - create contact activity
              */
-            contactDao.getContactByEmailAndAccount(obj.email, obj.accountId, function(err, contact){
+            contactDao.findContactsByEmail(obj.accountId, obj.email, function(err, contact){
                 if(err) {
                     self.log.error('Error finding contact for [' + obj.email + '] and [' + obj.accountId + ']');
                     return;
-                } else if(contact === null){
+                } else if(contact === null || contact.length ===0){
                     //this might be a user and contact on main account
-                    contactDao.getContactByEmailAndAccount(obj.email, appConfig.mainAccountID, function(err, contact){
-                        if(err || contact === null) {
+                    contactDao.findContactsByEmail(appConfig.mainAccountID, obj.email, function(err, contacts){
+                        if(err || contacts === null || contacts.length===0) {
                             self.log.error('Error finding contact for [' + obj.email + '] and [' + appConfig.mainAccountID + ']');
                             return;
                         } else {
+                            var contact = contacts[0];
                             contact.set('unsubscribed', true);
                             contactDao.saveOrUpdateContact(contact, function(err, updatedContact){
                                 if(err) {
