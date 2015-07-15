@@ -1,7 +1,7 @@
 'use strict';
 /*global app, moment, angular*/
 /*jslint unparam:true*/
-app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalInstance', '$http', '$timeout', '$q', '$compile', '$filter', 'WebsiteService', 'CustomerService', 'ProductService', 'GeocodeService', 'toaster', 'components', 'clickedIndex', 'contactMap', 'website', 'blog', 'isDirty', 'isSinglePost', 'openParentModal', 'showInsert', function ($scope, $rootScope, $modalInstance, $http, $timeout, $q, $compile, $filter, WebsiteService, CustomerService, ProductService, GeocodeService, toaster, components, clickedIndex, contactMap, website, blog, isDirty, isSinglePost, openParentModal, showInsert) {
+app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalInstance', '$http', '$timeout', '$q', '$compile', '$filter', 'WebsiteService', 'CustomerService', 'ProductService', 'GeocodeService', 'toaster', 'components', 'clickedIndex', 'contactMap', 'website', 'blog', 'isDirty', 'isSinglePost', 'openParentModal', 'showInsert', 'underNav', function ($scope, $rootScope, $modalInstance, $http, $timeout, $q, $compile, $filter, WebsiteService, CustomerService, ProductService, GeocodeService, toaster, components, clickedIndex, contactMap, website, blog, isDirty, isSinglePost, openParentModal, showInsert, underNav) {
   $scope.blog = {};
   $scope.components = components;
   $scope.openParentModal = openParentModal;
@@ -13,7 +13,7 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
   $scope.isDirty = isDirty;
   $scope.isSinglePost = isSinglePost;
   $scope.showInsert = showInsert;
-
+  $scope.underNav = underNav;
   /*
    * @getAllProducts
    * - get products for products and pricing table components
@@ -645,6 +645,11 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
 
   $scope.saveComponent = function () {
     $scope.isDirty.dirty = true;
+  };
+
+  $scope.saveUnderNav = function () {
+    $scope.isDirty.dirty = true;
+    $scope.underNav.setUnderNav();
   };
 
   /*

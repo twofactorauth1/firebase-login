@@ -269,6 +269,7 @@
         if (!$scope.ckeditorLoaded) {
           $timeout(function () {
             $scope.ckeditorLoaded = true;
+            //$scope.setUnderbnavMargin();
             $(window).trigger('resize');
           }, 100);
         }
@@ -371,6 +372,7 @@
      */
     $scope.thumbnailSlider = {};
     $scope.contactMap = {};
+    $scope.underNav = {};
 
     $scope.insertMedia = function (asset) {
       console.log('$scope.componentEditing ', $scope.componentEditing);
@@ -516,6 +518,10 @@
 
         _modal.resolve.openParentModal = function () {
           return $scope.openModal;
+        };
+
+        _modal.resolve.underNav = function () {
+          return $scope.underNav;
         };
       }
 
