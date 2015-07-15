@@ -28,7 +28,7 @@ _.extend(router.prototype, baseRouter.prototype, {
         // ------------------------------------------------
 
         app.get('/stripe/connect', passport.authenticate('stripe', { scope: 'read_write' }));
-        app.get('/stripe/connect/callback', passport.authenticate('stripe', { failureRedirect: '/login' }), this.handleStripeCallback.bind(this));
+        app.get('/stripe/connect/callback', passport.authenticate('stripe', { scope: 'read_write', failureRedirect: '/login' }), this.handleStripeCallback.bind(this));
 
         this.log.debug('<< initialize');
         return this;

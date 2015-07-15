@@ -9,7 +9,9 @@ app.directive('productsComponent', ['paymentService', 'productService', 'account
     },
     templateUrl: '/components/component-wrap.html',
     link: function (scope) {
+      //assign and hold the checkout modal state
       scope.checkoutModalState = 1;
+      //default newContact object for checkout modal
       scope.newContact = {};
       //assign and hold the currentProductPage for pagination
       scope.currentProductPage = 1;
@@ -52,7 +54,7 @@ app.directive('productsComponent', ['paymentService', 'productService', 'account
 
       /*
        * @getAllProducts
-       * - get products for products and pricing table components
+       * - get all products, set originalProducts obj and filter
        */
 
       ProductService.getAllProducts(function (data) {
@@ -65,7 +67,7 @@ app.directive('productsComponent', ['paymentService', 'productService', 'account
 
       /*
        * @getTax
-       * -
+       * - fetch the tax for any given postcode and calculate percent
        */
 
       scope.getTax = function (postcode, fn) {
@@ -88,7 +90,7 @@ app.directive('productsComponent', ['paymentService', 'productService', 'account
 
       /*
        * @getUserPreferences
-       * -
+       * - fetch the user tax preferences for calculations
        */
 
       scope.taxPercent = 1; //set at 1 to not disturb multiplication
@@ -112,15 +114,20 @@ app.directive('productsComponent', ['paymentService', 'productService', 'account
       });
 
       /*
-       * @shippingPostCodeChanged
-       * - when a shipping zipcode is modified update the taxpercent if customer_shipping is the taxbased
+       * @isValidUSZip
+       * - validate the US Zip Code
        */
 
       //TODO: Add country check
       function isValidUSZip(sZip) {
-        var regex = new RegExp(/^[abceghjklmnprstvxy][0-9][abceghjklmnprstvwxyz]\s?[0-9][abceghjklmnprstvwxyz][0-9]$/i);
+        var regex = /(^\d{5}$)|(^\d{5}-\d{4}$)/;
         return regex.test(sZip);
       }
+
+      /*
+       * @shippingPostCodeChanged
+       * - when a shipping zipcode is modified update the taxpercent if customer_shipping is the taxbased
+       */
 
       scope.invalidZipCode = false;
       scope.shippingPostCodeChanged = function (postcode) {
@@ -150,7 +157,12 @@ app.directive('productsComponent', ['paymentService', 'productService', 'account
         }
       };
 
-      // Validations
+      /*
+       * @checkBillingFirst,checkBillingLast, checkBillingEmail, checkBillingAddress, checkBillingState, checkBillingCity, validateAddressDetails
+       * - validatitions for checkout
+       */
+
+      //TODO: change to $isValid angular style
       scope.checkBillingFirst = function (first) {
         if (!first) {
           scope.invalidFirstName = true;
@@ -239,67 +251,67 @@ app.directive('productsComponent', ['paymentService', 'productService', 'account
        * - when product details is clicked update selected product
        */
 
-      scope.updateSelectedProduct = function (product) {
-        product.attributes = scope.selectedProductAttributes(product);
-        scope.selectedProduct = product;
-      };
+      // scope.updateSelectedProduct = function (product) {
+      //   product.attributes = scope.selectedProductAttributes(product);
+      //   scope.selectedProduct = product;
+      // };
 
       /*
        * @selectChanged
-       * -
+       * - one of the selected attributes has changed
        */
 
-      scope.selectChanged = function () {
-        var selectedAttributes = scope.selectedProduct.attributes;
-        var allselected = false;
-        _.each(selectedAttributes, function (attribute) {
-          if (attribute.selected) {
-            allselected = true;
-          } else {
-            allselected = false;
-          }
-        });
-        if (allselected) {
-          console.log('updating price');
-          // scope.updatePrice();
-        } else {
-          console.log('all not selected');
-        }
-      };
+      // scope.selectChanged = function () {
+      //   var selectedAttributes = scope.selectedProduct.attributes;
+      //   var allselected = false;
+      //   _.each(selectedAttributes, function (attribute) {
+      //     if (attribute.selected) {
+      //       allselected = true;
+      //     } else {
+      //       allselected = false;
+      //     }
+      //   });
+      //   if (allselected) {
+      //     console.log('updating price');
+      //     // scope.updatePrice();
+      //   } else {
+      //     console.log('all not selected');
+      //   }
+      // };
 
       /*
        * @selectedProductAttributes
        * - get attributes availiable for the selected product
        */
 
-      scope.selectedProductAttributes = function (product) {
-        var attributes;
-        if (product) {
-          var formattedAttributes = [];
-          _.each(product.variations, function (variation) {
-            _.each(variation.attributes, function (attribute) {
-              var foundAttr = _.find(formattedAttributes, function (formAttr) {
-                return formAttr.name === attribute.name;
-              });
-              if (foundAttr) {
-                if (foundAttr.values.indexOf(attribute.option) < 0) {
-                  foundAttr.values.push(attribute.option);
-                }
-              } else {
-                var _attribute = {
-                  name: attribute.name,
-                  values: [attribute.option]
-                };
-                formattedAttributes.push(_attribute);
-              }
-            });
-          });
-          attributes = formattedAttributes;
-        } else {
-          attributes = [];
-        }
-        return attributes;
-      };
+      // scope.selectedProductAttributes = function (product) {
+      //   var attributes;
+      //   if (product) {
+      //     var formattedAttributes = [];
+      //     _.each(product.variations, function (variation) {
+      //       _.each(variation.attributes, function (attribute) {
+      //         var foundAttr = _.find(formattedAttributes, function (formAttr) {
+      //           return formAttr.name === attribute.name;
+      //         });
+      //         if (foundAttr) {
+      //           if (foundAttr.values.indexOf(attribute.option) < 0) {
+      //             foundAttr.values.push(attribute.option);
+      //           }
+      //         } else {
+      //           var _attribute = {
+      //             name: attribute.name,
+      //             values: [attribute.option]
+      //           };
+      //           formattedAttributes.push(_attribute);
+      //         }
+      //       });
+      //     });
+      //     attributes = formattedAttributes;
+      //   } else {
+      //     attributes = [];
+      //   }
+      //   return attributes;
+      // };
 
       /*
        * @updatePrice
@@ -491,6 +503,33 @@ app.directive('productsComponent', ['paymentService', 'productService', 'account
           //     console.log('card details ', data);
           // });
           // Is this checking to see if the customer already exists
+          var _formattedDetails = [{
+            _id: Math.uuid(10),
+            emails: [{
+              _id: Math.uuid(10),
+              email: scope.newContact.details[0].emails[0].email
+            }],
+            phones: [{
+              _id: Math.uuid(10),
+              number: scope.newContact.details[0].phones[0].number
+            }],
+            addresses: [{
+              _id: Math.uuid(10),
+              address: scope.newContact.details[0].addresses[0].address,
+              address2: scope.newContact.details[0].addresses[0].address2,
+              state: scope.newContact.details[0].addresses[0].state,
+              zip: scope.newContact.details[0].addresses[0].zip,
+              country: "US",
+              defaultShipping: false,
+              defaultBilling: false,
+              city: scope.newContact.details[0].addresses[0].city,
+              countryCode: "",
+              displayName: ""
+            }],
+          }];
+          console.log('scope.newContact ', scope.newContact);
+          scope.newContact.details = _formattedDetails;
+          console.log('scope.newContact ', scope.newContact);
           UserService.postContact(scope.newContact, function (customer) {
             var order = {
               "customer_id": customer._id,
