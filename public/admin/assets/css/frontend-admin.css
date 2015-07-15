@@ -2267,6 +2267,10 @@
 #componentloader .testimonials-v2 .right.carousel-control {
   background: none!important;
 }
+#componentloader .testimonials-v2 .slick-slider {
+  -webkit-user-select: inherit;
+  -khtml-user-select: inherit;
+}
 #componentloader .image-text-v1 img {
   max-width: 100%;
 }
