@@ -2809,6 +2809,10 @@
   top: 0px;
   right: 13px;
 }
+#componentloader .editing .products-v1 .btnLaunchCart {
+  position: absolute;
+  margin-top: 30px;
+}
 #componentloader .portfolio.fade.modal {
   overflow-x: hidden;
 }

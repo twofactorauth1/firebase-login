@@ -2805,6 +2805,10 @@ div[data-class='image-text'] p {
   top: 0px;
   right: 13px;
 }
+.editing .products-v1 .btnLaunchCart {
+  position: absolute;
+  margin-top: 30px;
+}
 /*--------------------------
 ----Project Modal Styles----
 ----------------------------*/
