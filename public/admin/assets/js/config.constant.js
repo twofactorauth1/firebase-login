@@ -712,6 +712,9 @@ app.constant('JS_REQUIRES', {
     name: 'angular-slider',
     files: ['../js/libs/angularjs-slider/dist/rzslider.min.js', '../js/libs/angularjs-slider/dist/rzslider.min.css']
   }, {
+    name: 'ngCurrency',
+    files: ['../js/libs/ng-currency/dist/ng-currency.min.js']
+  }, {
     name: 'ngSticky',
     files: ['../js/libs/ngSticky/dist/sticky.min.js']
   }, {
