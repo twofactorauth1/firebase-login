@@ -85,6 +85,7 @@
         startDate: new Date(product.sale_date_from),
         endDate: new Date(product.sale_date_to)
       };
+      product.regular_price = parseFloat(product.regular_price);
       $scope.product = product;
       console.log('product ', product);
       var p_icon = $scope.product.icon;
@@ -488,6 +489,15 @@
           $scope.product.tags.push(v.text);
         }
       });
+    };
+
+    /*
+     * @checkSalePrice
+     * - check the sale to price to ensure its not more than the price
+     */
+
+    $scope.checkSalePrice = function () {
+      console.log('sales_price ', $scope.product.sales_price);
     };
 
     /*

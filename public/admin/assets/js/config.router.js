@@ -186,7 +186,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         ncyBreadcrumb: {
             label: 'Single Product'
         },
-        resolve: loadSequence('productsDetailCtrl', 'productService', 'assetsService', 'dateRangePicker')
+        resolve: loadSequence('productsDetailCtrl', 'productService', 'assetsService', 'dateRangePicker', 'ngCurrency')
     }).state('app.commerce.orders', {
         url: '/orders',
         templateUrl: "assets/views/orders.html",
