@@ -55,7 +55,7 @@ var account = $$.m.ModelBase.extend({
                 "addresses" : [],
                 "type" :'',
                 "nonProfit" : false,
-                "email": null,
+                "emails": [],
                 'splitHours': false,
                 'hours': [
                    {'day': "Mon", 'start':"9:00 am",'end':"5:00 pm", 'start2':"9:00 am", 'end2':"5:00 pm", 'closed':false, 'split':false, 'wholeday':false},
