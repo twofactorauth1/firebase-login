@@ -16,11 +16,11 @@
             <div class="col-md-4">
                 <div class="user-left">
                     <div class="center">
-                        <h4>{{currentUser.first}} {{currentUser.middle}} {{currentUser.last}}</h4>
+                        <h4>{{profileUser.first}} {{profileUser.middle}} {{profileUser.last}}</h4>
                         <div>
                             <div class="user-image">
                                 <div class="thumbnail">
-                                    <img ng-src="{{currentUser.profilePhotos[0]}}" err-src="assets/images/default-user.png" alt="">
+                                    <img ng-src="{{profileUser.profilePhotos[0]}}" err-src="assets/images/default-user.png" alt="">
                                 </div>
                             </div>
                         </div>
@@ -35,7 +35,7 @@
                         <tbody>
                             <tr>
                                 <td>gender:</td>
-                                <td>{{currentUser.gender}}</td>
+                                <td>{{profileUser.gender}}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -50,8 +50,8 @@
                                 <td>email:</td>
                                 <td>
                                     <div>
-                                        <a href="mailto:{{currentUser.email}}">
-                                            {{currentUser.email}}
+                                        <a href="mailto:{{profileUser.email}}">
+                                            {{profileUser.email}}
                                         </a>
                                         <br>
                                     </div>
@@ -60,7 +60,7 @@
                             <tr>
                                 <td>phone:</td>
                                 <td>
-                                    <span>{{currentUser.phone}}<br></span>
+                                    <span>{{profileUser.phone}}<br></span>
                                 </td>
                             </tr>
                         </tbody>
@@ -264,31 +264,31 @@
                             <label class="control-label">
                                 First Name
                             </label>
-                            <input type="text" placeholder="First Name" class="form-control" name="firstname" ng-model="currentUser.first">
+                            <input type="text" placeholder="First Name" class="form-control" name="firstname" ng-model="profileUser.first">
                         </div>
                         <div class="form-group">
                             <label class="control-label">
                                 Middle Name
                             </label>
-                            <input type="text" placeholder="Middle Name" class="form-control" name="middlename" ng-model="currentUser.middle">
+                            <input type="text" placeholder="Middle Name" class="form-control" name="middlename" ng-model="profileUser.middle">
                         </div>
                         <div class="form-group">
                             <label class="control-label">
                                 Last Name
                             </label>
-                            <input type="text" placeholder="Last Name" class="form-control" name="lastname" ng-model="currentUser.last">
+                            <input type="text" placeholder="Last Name" class="form-control" name="lastname" ng-model="profileUser.last">
                         </div>
                         <div class="form-group">
                             <label class="control-label">
                                 Email Address
                             </label>
-                            <input type="email" placeholder="Email Address" class="form-control" name="emailaddress" ng-model="currentUser.email">
+                            <input type="email" placeholder="Email Address" class="form-control" name="emailaddress" ng-model="profileUser.email">
                         </div>
                         <div class="form-group">
                             <label class="control-label">
                                 Phone Number
                             </label>
-                            <input type="text" placeholder="Phone Number" class="form-control" name="phonenumber" ng-model="currentUser.phone">
+                            <input type="text" placeholder="Phone Number" class="form-control" name="phonenumber" ng-model="profileUser.phone">
                         </div>
                     </div>
                     <div class="col-md-6">
@@ -300,7 +300,7 @@
                                 <div>
                                     <div class="user-image">
                                         <div class="thumbnail margin-bottom-5">
-                                            <img ng-src="{{ currentUser.profilePhotos[0] }}" err-src="/admin/assets/images/default-user.png">
+                                            <img ng-src="{{ profileUser.profilePhotos[0] }}" err-src="/admin/assets/images/default-user.png">
                                         </div>
                                     </div>
                                     <div class="user-image-buttons-edit">
@@ -316,11 +316,11 @@
                                 Gender
                             </label>
                             <div class="clip-radio radio-primary">
-                                <input type="radio" id="us-female" name="gender" value="female" ng-model="currentUser.gender">
+                                <input type="radio" id="us-female" name="gender" value="female" ng-model="profileUser.gender">
                                 <label for="us-female">
                                     Female
                                 </label>
-                                <input type="radio" id="us-male" name="gender" value="male" ng-model="currentUser.gender">
+                                <input type="radio" id="us-male" name="gender" value="male" ng-model="profileUser.gender">
                                 <label for="us-male">
                                     Male
                                 </label>
