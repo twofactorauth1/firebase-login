@@ -367,6 +367,30 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
 
       UserService.getTmpAccount(function (data) {
         scope.tmpAccount = data;
+        var tmpAccount = data;
+        //$scope.tmpAccount = tmpAccount;
+        scope.newAccount.hidePassword = false;
+        if (tmpAccount.tempUser) {
+          if (tmpAccount.tempUser.email) {
+            scope.newAccount.email = tmpAccount.tempUser.email;
+            scope.newAccount.tempUserId = tmpAccount.tempUser._id;
+            scope.newAccount.hidePassword = true;
+          }
+          //if it is a twitter account, we need the email still but not a password
+          if (tmpAccount.tempUser.credentials[0].type === 'tw') {
+            scope.newAccount.hidePassword = true;
+          }
+          if (tmpAccount.tempUser.businessName) {
+            scope.newAccount.businessName = tmpAccount.tempUser.businessName;
+          }
+          if (tmpAccount.tempUser.profilePhotos && tmpAccount.tempUser.profilePhotos.length) {
+            scope.newAccount.profilePhoto = tmpAccount.tempUser.profilePhotos[0];
+          }
+        } else {
+          UserService.saveOrUpdateTmpAccount(tmpAccount, function (data) {});
+        }
+
+
       });
 
       scope.showFooter = function (status) {
@@ -476,18 +500,6 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
               }
               UserService.initializeUser(newUser, function (err, data) {
                 if (data && data.accountUrl) {
-                  /*
-                   * I'm not sure why these lines were added.  The accountUrl is a string.
-                   * It will never have a host attribute.
-                   *
-                   * var currentHost = $.url(window.location.origin).attr('host');
-                   * var futureHost = $.url(data.accountUrl).attr('host');
-                   * if (currentHost.indexOf(futureHost) > -1) {
-                   *      window.location = data.accountUrl;
-                   * } else {
-                   *      window.location = currentHost;
-                   * }
-                   */
                   window.location = data.accountUrl;
                 } else {
                   scope.isFormValid = false;
