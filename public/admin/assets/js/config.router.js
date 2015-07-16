@@ -118,7 +118,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         icon: 'ti-layout-media-left-alt',
         ncyBreadcrumb: {
             label: '{{breadcrumbTitle}}',
-            parent: 'app.website.app.website.templates'
+            parent: 'app.website.templates'
         },
         onExit: function($rootScope) {
          $rootScope.breadcrumbTitle = undefined;

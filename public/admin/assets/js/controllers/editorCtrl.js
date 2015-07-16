@@ -236,7 +236,7 @@
         $scope.originalComponents = angular.copy($scope.components);
         $scope.originalPage = angular.copy($scope.template);
         $scope.activateCKeditor();
-        $rootScope.breadcrumbTitle = $scope.page.title;
+        $rootScope.breadcrumbTitle = $scope.page.title || $scope.page.handle;
       });
     };
 
