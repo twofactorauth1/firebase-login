@@ -116,3 +116,7 @@ var mainApp = angular
       }
     });
   });
+  mainApp.constant('formValidations', {
+   'email': /^[_a-z0-9]+(\.[_a-z0-9]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$/,
+   'phone': /^\(?(\d{3})\)?[ .-]?(\d{3})[ .-]?(\d{4})$/
+  });

@@ -1,5 +1,5 @@
 /*global app, Fingerprint*/
-app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'paymentService', 'userService', 'ipCookie', function ($filter, $q, ProductService, PaymentService, UserService, ipCookie) {
+app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'paymentService', 'userService', 'ipCookie', 'formValidations', function ($filter, $q, ProductService, PaymentService, UserService, ipCookie, formValidations) {
   return {
     require: [],
     scope: {
@@ -10,6 +10,7 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
     link: function (scope, element, attrs, ctrl) {
 
       scope.planStatus = {};
+      scope.emailValidation = formValidations.email;
       var productId = scope.component.productId;
       console.log('productId ', productId);
       ProductService.getProduct(productId, function (product) {
@@ -115,7 +116,7 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
 
         if (!user || !user.email) {
 
-          angular.element("#user_email_" + component._id + " .error").html("Email Required");
+          angular.element("#user_email_" + component._id + " .error").html("Valid Email Required");
           angular.element("#user_email_" + component._id).addClass('has-error');
           angular.element("#user_email_" + component._id + " .glyphicon").addClass('glyphicon-remove');
           return;
@@ -257,7 +258,7 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
         var sessionId = ipCookie("session_cookie").id;
 
         if (!contact || !contact.email) {
-          angular.element("#contact_email_" + component._id + " .error").html("Email Required");
+          angular.element("#contact_email_" + component._id + " .error").html("Valid Email Required");
           angular.element("#contact_email_" + component._id).addClass('has-error');
           angular.element("#contact_email_" + component._id + " .glyphicon").addClass('glyphicon-remove');
           return;
@@ -556,7 +557,7 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
       scope.checkEmailExists = function (newAccount) {
         scope.newAccount.email = newAccount.email;
         if (!newAccount.email) {
-          angular.element("#email .error").html("Email Required");
+          angular.element("#email .error").html("Valid Email Required");
           angular.element("#email").addClass('has-error');
           angular.element("#email .glyphicon").addClass('glyphicon-remove');
         } else {

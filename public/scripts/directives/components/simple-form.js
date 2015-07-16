@@ -1,7 +1,7 @@
 'use strict';
 /*global app, moment, angular, window, Fingerprint*/
 /*jslint unparam:true*/
-app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userService', function (ipCookie, $window, $timeout, userService) {
+app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userService', 'formValidations', function (ipCookie, $window, $timeout, userService, formValidations) {
   return {
     scope: {
       component: '=',
@@ -9,6 +9,7 @@ app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userSe
     },
     templateUrl: '/components/component-wrap.html',
     link: function (scope, element, attrs) {
+      
       scope.fieldShow = function (name) {
         var field = _.find(scope.component.fields, function (_field) {
           return _field.name === name;
@@ -17,8 +18,8 @@ app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userSe
           return true;
         }
       };
-
-      scope.phoneNumberPattern = /^\(?(\d{3})\)?[ .-]?(\d{3})[ .-]?(\d{4})$/;
+      scope.emailValidation = formValidations.email;
+      scope.phoneNumberPattern = formValidations.phone;
       scope.user = {};
       scope.createUser = function (simpleForm) {
         scope.userExists = false;

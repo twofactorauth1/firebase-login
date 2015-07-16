@@ -42,7 +42,7 @@
                     <div class="clearfix mb15"></div>
                     <!-- EMAIL -->
                     <div class="form-group col-sm-9" ng-class="{ 'has-error' : userExists || simpleForm.email.$invalid && !simpleForm.email.$pristine }">
-                        <input type="email" name="email" ng-model="user.email" class="form-control" placeholder="Email" required>
+                        <input type="email" name="email" ng-model="user.email" class="form-control" ng-pattern="emailValidation" placeholder="Email" required>
                         <p ng-if="simpleForm.email.$invalid && !simpleForm.email.$pristine && !userExists" class="help-block">Enter a valid email.</p>
                         <p ng-if="userExists" class="help-block">Email already exists.</p>
                     </div>
