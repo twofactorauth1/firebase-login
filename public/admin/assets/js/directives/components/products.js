@@ -1,5 +1,5 @@
 'use strict';
-/*global app*/
+/*global app, moment*/
 app.directive('productsComponent', ['ProductService', function (ProductService) {
   return {
     scope: {
@@ -34,6 +34,30 @@ app.directive('productsComponent', ['ProductService', function (ProductService) 
       }
 
       /*
+       * @checkOnSale
+       * - check if today is inbetween sales dates
+       */
+
+      function checkOnSale(_product) {
+        if (_product.sale_date_from && _product.sale_date_to) {
+          console.log('contains sales dates ');
+          var date = new Date();
+          console.log('date ', date);
+          var startDate = new Date(_product.sale_date_from);
+          console.log('startDate ', startDate);
+          var endDate = new Date(_product.sale_date_to);
+          console.log('endDate ', endDate);
+          if (startDate <= date && date <= endDate) {
+            return true; //false in this case
+          }
+
+        }
+        if (_product.onSale) {
+          return true;
+        }
+      }
+
+      /*
        * @filterProducts
        * - filter the products and assign them to the scope
        */
@@ -42,6 +66,9 @@ app.directive('productsComponent', ['ProductService', function (ProductService) 
         var _filteredProducts = [];
         _.each(data, function (product) {
           if (filterTags(product)) {
+            if (checkOnSale(product)) {
+              product.onSaleToday = true;
+            }
             _filteredProducts.push(product);
           }
         });

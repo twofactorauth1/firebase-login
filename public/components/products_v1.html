@@ -12,6 +12,7 @@
             <div data-class="product-section-id" class="col-xs-12 col-sm-6 col-md-4" ng-repeat="product in filteredProducts">
                 <div class="product">
                     <div class="thumbnail">
+                        <div ng-if="product.onSaleToday" class="ribbon red"><span>SALE</span></div>
                         <div ng-if="product.is_image || product.icon" class="product-img">
                             <div ng-if="product.is_image" class="img-wrap">
                                 <div class="product-img" style="background:url('{{product.icon}}');background-size:cover"></div>
@@ -27,7 +28,7 @@
                             <div class="clearfix"></div>
                         </div>
                         <div class="caption">
-                            <h4 class="pull-right">{{product.regular_price | currency}}</h4>
+                            <h4 class="pull-right"><span ng-class="{'strikethrough': product.onSaleToday}">{{product.regular_price | currency}}</span><span ng-if="product.onSaleToday">{{product.sales_price | currency}}</span></h4>
                             <h4 class="title"><a href="#">{{product.name | characters:18 :true}}</a></h4>
                             <div class="clearfix"></div>
                             <p class="description product-description">{{product.description}}</p>

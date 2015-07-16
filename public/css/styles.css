@@ -2687,6 +2687,13 @@ div[data-class='image-text'] p {
     float: none;
   }
 }
+.products-v1 .strikethrough {
+  font-size: 14px;
+  text-decoration: line-through;
+  font-style: italic;
+  margin-right: 5px;
+  color: #c2c2c5;
+}
 .products-v1 .nav-tabs {
   background: white;
 }
@@ -2721,6 +2728,7 @@ div[data-class='image-text'] p {
   text-shadow: 2px 1px 0px rgba(107, 101, 101, 0.08);
   font-weight: normal;
   text-align: center;
+  margin-top: 0;
 }
 .products-v1 .tab-content {
   margin-top: 40px;
@@ -2812,6 +2820,66 @@ div[data-class='image-text'] p {
 .editing .products-v1 .btnLaunchCart {
   position: absolute;
   margin-top: 60px;
+}
+.ribbon {
+  position: absolute;
+  right: 10px;
+  top: -5px;
+  z-index: 1;
+  overflow: hidden;
+  width: 82px;
+  height: 75px;
+  text-align: right;
+}
+.ribbon span {
+  font-size: 10px;
+  color: #fff;
+  text-transform: uppercase;
+  text-align: center;
+  font-weight: bold;
+  line-height: 20px;
+  transform: rotate(45deg);
+  width: 100px;
+  display: block;
+  background: #79A70A;
+  background: linear-gradient(#9bc90d 0%, #79a70a 100%);
+  box-shadow: 0 3px 10px -5px #000000;
+  position: absolute;
+  top: 19px;
+  right: -21px;
+}
+.ribbon span::before {
+  content: '';
+  position: absolute;
+  left: 0px;
+  top: 100%;
+  z-index: -1;
+  border-left: 3px solid #79A70A;
+  border-right: 3px solid transparent;
+  border-bottom: 3px solid transparent;
+  border-top: 3px solid #79A70A;
+}
+.ribbon span::after {
+  content: '';
+  position: absolute;
+  right: 0%;
+  top: 100%;
+  z-index: -1;
+  border-right: 3px solid #79A70A;
+  border-left: 3px solid transparent;
+  border-bottom: 3px solid transparent;
+  border-top: 3px solid #79A70A;
+}
+.red span {
+  background: linear-gradient(#f70505 0%, #8f0808 100%);
+}
+.red span::before {
+  border-left-color: #8F0808;
+  border-top-color: #8F0808;
+}
+.red span::after {
+  border-right-color: #8F0808;
+  border-top-color: #8F0808;
 }
 /*--------------------------
 ----Project Modal Styles----
