@@ -49,7 +49,7 @@ app.directive('contactUsComponent', ['AccountService', 'GeocodeService', 'leafle
 
       scope.updateContactUsAddress = function (timeout) {
         scope.contactAddress = scope.stringifyAddress(scope.component.location);
-        if (scope.component.location.lat && scope.component.location.lon) {
+        if (scope.component.location && scope.component.location.lat && scope.component.location.lon) {
           angular.extend(scope, {
             mapLocation: {
               lat: parseFloat(scope.component.location.lat),
@@ -74,13 +74,18 @@ app.directive('contactUsComponent', ['AccountService', 'GeocodeService', 'leafle
             }, timeout);
           });
         } else {
-          var _bottomline = _.filter([scope.component.location.city, scope.component.location.state], function (str) {
-            return str !== "";
-          }).join(", ");
-          var _topline = _.filter([scope.component.location.address, _bottomline, scope.component.location.zip], function (str) {
-            return str !== "";
-          }).join(" ");
+          var _bottomline = "";
+          var _topline = "";
+          if(scope.component.location)
+          {
+            _bottomline = _.filter([scope.component.location.city, scope.component.location.state], function (str) {
+              return str !== "";
+            }).join(", ");
 
+            _topline = _.filter([scope.component.location.address, _bottomline, scope.component.location.zip], function (str) {
+              return str !== "";
+            }).join(" ");
+          }
           GeocodeService.getGeoSearchAddress(_topline, function (data) {
             console.log('data >>> ', data);
             if (data.lat && data.lon) {
@@ -132,8 +137,11 @@ app.directive('contactUsComponent', ['AccountService', 'GeocodeService', 'leafle
         if (newValue) {
           $timeout(function () {
             scope.mapLocation.zoom = newValue;
-            scope.mapLocation.lat = parseFloat(scope.component.location.lat);
-            scope.mapLocation.lng = parseFloat(scope.component.location.lon);
+            if(scope.component.location && scope.component.location.lat && scope.component.location.lon)
+            {
+              scope.mapLocation.lat = parseFloat(scope.component.location.lat);
+              scope.mapLocation.lng = parseFloat(scope.component.location.lon);
+            }            
           });
         }
       });
