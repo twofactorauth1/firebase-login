@@ -5,7 +5,7 @@
                 <span class="reorder fa fa-arrows" ng-if="!isSinglePost && value.type != 'email' " ng-mouseenter="preDrag('enter')" ng-mouseleave="preDrag('leave')"><p>Reorder</p></span>
                 <div class="single-reorder" ng-if="!isSinglePost && value.type != 'email' ">
                     <span ng-if="$index != 0" ng-click="singleReorder('up', value, $index)"><i class="fa fa-chevron-up"></i><p>Up</p></span>
-                    <span ng-if="$index != components.length" ng-click="singleReorder('down', value, $index)"><i class="fa fa-chevron-down"></i><p>Down</p></span>
+                    <span ng-if="$index != components.length - 1" ng-click="singleReorder('down', value, $index)"><i class="fa fa-chevron-down"></i><p>Down</p></span>
                 </div>
                 <h4 class="pull-left">{{value.type | formatText}}</h4>
                 <span class="delete delete-component fa fa-trash" ng-if="!preDragging && !isSinglePost && value.type != 'email' && value.type != 'footer' && value.type != 'single-post'" ng-click="deleteComponent($index)"><p>Delete</p></span>
