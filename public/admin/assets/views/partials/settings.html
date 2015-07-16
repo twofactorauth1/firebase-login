@@ -141,12 +141,12 @@
                             <div class="form-group">
                                 <label>Indigenous Domain</label>
                                 <input class="form-control" type="text" ng-model="account.subdomain" ng-blur="checkDomainExists(account)" />
-                                <span class="help-block">Hello</span>
                                 <span class="error-block" ng-if="domainError">Domain Already Exists</span>
                             </div>
                             <div class="form-group">
                                 <label>Custom Domain</label>
-                                <input type="text" class="form-control" ng-model="account.domain" />
+                                <input type="text" class="form-control" ng-model="account.domain" readonly />
+                                <span class="help-block">Contact us for support</span>
                             </div>
                         </div>
                     </form>
