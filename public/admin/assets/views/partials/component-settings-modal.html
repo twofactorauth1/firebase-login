@@ -114,8 +114,8 @@
                                 </div>
                                 <div class="col-sm-2">
                                     <select id="bg_opacity" ng-model="componentEditing.bg.opacity" ng-change="saveComponent()" class="pull-right form-control margin-bottom-0">
-                                    <option value="" disabled>%</option>
-                                    <option ng-repeat="opacity in componentOpacityValues track by $index" value="{{opacity.value}}" ng-selected="{{componentEditing.bg.opacity == opacity.value}}">{{opacity.label}}</option>
+                                        <option value="" disabled>%</option>
+                                        <option ng-repeat="opacity in componentOpacityValues track by $index" value="{{opacity.value}}" ng-selected="{{componentEditing.bg.opacity == opacity.value}}">{{opacity.label}}</option>
                                     </select>
                                 </div>
                             </div>
@@ -167,7 +167,7 @@
                             <div class="col-xs-6">
                                 <div class="form-group add-image" ng-show="componentEditing.bg.img.show" ng-if="!componentEditing.bg.img.url">
                                     <div class="btn-wrap">
-                                        <input id="abi" ng-model="componentEditing.bg.img.url" type="button" class="pull-right btn btn-primary"  value="Add BG Image" ng-click="addBackground(componentEditing._id)">
+                                        <input id="abi" ng-model="componentEditing.bg.img.url" type="button" class="pull-right btn btn-primary" value="Add BG Image" ng-click="addBackground(componentEditing._id)">
                                     </div>
                                 </div>
                                 <div class="bgimg" id="bgimg" ng-if="componentEditing.bg.img.url" ng-show="componentEditing.bg.img.show">
@@ -631,14 +631,49 @@
                 </tab>
                 <tab ng-if="componentEditing.type === 'simple-form'">
                     <tab-heading>
-                        <span>Fields</span>
+                        <span>Form</span>
                     </tab-heading>
-                    <div class="form-group" ng-repeat="field in componentEditing.fields">
-                        <div class="col-xs-12 ckbox ckbox-success">
-                            <input type="checkbox" id="chk_{{field.name}}" ng-model="field.value" ng-change="saveComponent()" class="ng-pristine ng-untouched ng-valid" checked="checked">
-                            <label for="chk_{{field.name}}">{{field.display}}</label>
+                    <div class="form-group">
+                        <label>Fields to Show:</label>
+                        <div ng-repeat="field in componentEditing.fields">
+                            <div class="col-xs-12 ckbox ckbox-success">
+                                <input type="checkbox" id="chk_{{field.name}}" ng-model="field.value" ng-change="saveComponent()" class="ng-pristine ng-untouched ng-valid" checked="checked">
+                                <label for="chk_{{field.name}}">{{field.display}}</label>
+                            </div>
                         </div>
                         <div class="clearfix"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="redirect">Redirect:</label>
+                        <span tooltip-placement="top" tooltip-html-unsafe="Redirect after submission"><i class="fa fa-info-circle" /></span>
+                        <switch name="redirect" ng-model="componentEditing.redirect" class="pull-right"></switch>
+                    </div>
+                    <div class="form-group" ng-if="componentEditing.redirect">
+                        <label for="link-title">Redirect To:</label>
+                        <br>
+                        <div class="radio-inline">
+                            <label for="redirectOptions" class="pull-right">Page</label>
+                            <input type="radio" name="redirectOptions" ng-model="componentEditing.redirectType" ng-click="componentEditing.redirectType='page'" value="page">
+                        </div>
+                        <div class="radio-inline">
+                            <label for="redirectOptions" class="pull-right">External</label>
+                            <input type="radio" name="redirectOptions" ng-model="componentEditing.redirectType" ng-click="componentEditing.redirectType='external'" value="external">
+                        </div>
+                    </div>
+                    <div class="form-group" ng-if="componentEditing.redirect && componentEditing.redirectType === 'page'">
+                        <label for="link-page">Select Page</label>
+                        <div ng-if="allPages">
+                            <select placeholder="Select a page" class="form-control margin-bottom-0" data-ng-options="page.handle as page.title for page in allPages " data-ng-model="componentEditing.redirectUrl">
+                                <option value="" disabled>Select a Page</option>
+                            </select>
+                        </div>
+                        <div ng-if="!allPages">
+                            <h4><span class="fa fa-spinner fa-spin"></span> Loading Pages...</h4>
+                        </div>
+                    </div>
+                    <div class="form-group" ng-if="componentEditing.redirect && componentEditing.redirectType === 'external'">
+                        <label>External URL:</label>
+                        <input class="form-control" type="text" ng-model="componentEditing.redirectUrl">
                     </div>
                 </tab>
                 <tab ng-if="componentEditing.type === 'video'">
