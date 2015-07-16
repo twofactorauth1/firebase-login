@@ -196,7 +196,7 @@ app.controller('MediaModalCtrl', ['$scope', '$modalInstance', '$http', '$timeout
   $scope.m.singleSelect = function (asset) {
     $scope.singleSelected = asset.checked;
     $timeout(function () {
-      if (!$scope.isSingleSelect) {
+      if (!$scope.isSingleSelect || !$scope.singleSelected || $scope.selectModel.select_all) {
         //$scope.batch.push(asset);
         var hasAsset = false;
         $scope.batch.forEach(function (v, i) {
