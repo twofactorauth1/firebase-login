@@ -72,7 +72,16 @@
           $scope.saveLoading = false;
           toaster.pop('success', "Post Saved", "The " + $filter('htmlToPlaintext')($scope.blog.post.post_title) + " post was saved successfully.");
         });
-      } else {
+      }
+      else if($scope.templateActive)
+      {
+        WebsiteService.updateTemplate($scope.page._id, $scope.page, function () {
+          console.log('success');
+          $scope.saveLoading = false;
+          toaster.pop('success', "Template Saved", "The " + $scope.page.handle + " template was saved successfully.");
+        });
+      }
+      else {
         WebsiteService.updatePage($scope.page, function (data) {
           console.log($scope.page.handle, $scope.originalPage.handle);
           if ($scope.page.handle !== $scope.originalPage.handle) {
@@ -211,6 +220,26 @@
       });
     };
 
+    /*
+     * @retrieveTemplate
+     * -
+     */
+
+    $scope.retrieveTemplate = function (_handle) {
+      $scope.templateActive = true;
+      WebsiteService.getTemplates(function (templates) {
+        $scope.page = _.find(templates, function (tmpl) {
+          return tmpl.handle == _handle;
+        });
+        
+        $scope.components = $scope.page.config.components;
+        $scope.originalComponents = angular.copy($scope.components);
+        $scope.originalPage = angular.copy($scope.template);
+        $scope.activateCKeditor();
+        $rootScope.breadcrumbTitle = $scope.page.title;
+      });
+    };
+
     $scope.getSinglePostData = function () {
       console.log('getSinglePostData');
     };
@@ -253,6 +282,15 @@
 
     if ($location.search().posthandle) {
       $scope.retrievePost($location.search().posthandle);
+    }
+
+    /*
+     * @location:posthandle
+     * -
+     */
+
+    if ($location.search().templatehandle) {
+      $scope.retrieveTemplate($location.search().templatehandle);
     }
 
     /*
