@@ -39,20 +39,16 @@ app.directive('productsComponent', ['ProductService', function (ProductService) 
        */
 
       function checkOnSale(_product) {
-        if (_product.sale_date_from && _product.sale_date_to) {
-          console.log('contains sales dates ');
-          var date = new Date();
-          console.log('date ', date);
-          var startDate = new Date(_product.sale_date_from);
-          console.log('startDate ', startDate);
-          var endDate = new Date(_product.sale_date_to);
-          console.log('endDate ', endDate);
-          if (startDate <= date && date <= endDate) {
-            return true; //false in this case
+        if (_product.on_sale) {
+          if (_product.sale_date_from && _product.sale_date_to) {
+            var date = new Date();
+            var startDate = new Date(_product.sale_date_from);
+            var endDate = new Date(_product.sale_date_to);
+            if (startDate <= date && date <= endDate) {
+              return true; //false in this case
+            }
+            return false;
           }
-
-        }
-        if (_product.onSale) {
           return true;
         }
       }
