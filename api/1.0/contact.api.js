@@ -634,7 +634,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
                                                             self.log.debug('notificationConfig.WELCOME_FROM_EMAIL ', notificationConfig.WELCOME_FROM_EMAIL);
                                                             self.log.debug('notificationConfig.WELCOME_FROM_NAME ', notificationConfig.WELCOME_FROM_NAME);
-                                                            self.log.debug('contactEmail.email ', contactEmail.email);
+                                                            self.log.debug('contactEmail.email ', contactEmail);
                                                             self.log.debug('contactName ', contactName);
                                                             self.log.debug('notificationConfig.WELCOME_EMAIL_SUBJECT ', notificationConfig.WELCOME_EMAIL_SUBJECT);
                                                             //self.log.debug('value.id() ', value.id());
@@ -643,7 +643,7 @@ _.extend(api.prototype, baseApi.prototype, {
                                                             self.log.debug('notificationConfig.WELCOME_FROM_EMAIL ', notificationConfig.WELCOME_FROM_EMAIL);
 
                                                             try{
-                                                                mandrillHelper.sendAccountWelcomeEmail(fromEmail, fromName, contactEmail.email, contactName, emailSubject, html, query.accountId, savedContact.id(), vars, function(err, result){
+                                                                mandrillHelper.sendAccountWelcomeEmail(fromEmail, fromName, contactEmail, contactName, emailSubject, html, query.accountId, savedContact.id(), vars, function(err, result){
                                                                     self.log.debug('result: ', result);
                                                                 });
                                                             } catch(exception) {
