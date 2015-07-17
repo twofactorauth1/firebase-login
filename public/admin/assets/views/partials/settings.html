@@ -140,13 +140,13 @@
                         <div class="col-xs-6">
                             <div class="form-group">
                                 <label>Indigenous Domain</label>
-                                <input class="form-control" type="text" ng-model="account.subdomain" ng-blur="checkDomainExists(account)" />
+                                <input class="form-control" type="text" ng-model="account.subdomain" ng-change="checkDomainExists(account)" ng-model-options="{ debounce: 800 }" />
                                 <span class="error-block" ng-if="domainError">Domain Already Exists</span>
                             </div>
                             <div class="form-group">
                                 <label>Custom Domain</label>
                                 <input type="text" class="form-control" ng-model="account.domain" readonly />
-                                <span class="help-block">Contact us for support</span>
+                                <span class="help-block"><a href="#" onclick="Intercom('showNewMessage', 'Support for Custom Domain:')">Chat with us about your custom domain</a></span>
                             </div>
                         </div>
                     </form>
