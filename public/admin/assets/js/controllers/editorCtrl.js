@@ -890,7 +890,7 @@
       $scope.components.splice(index, 1);
       $timeout(function () {
         $scope.scrollToComponent(index)
-      },500)
+      },1000)
     };
 
     /*
