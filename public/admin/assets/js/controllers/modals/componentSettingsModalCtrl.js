@@ -14,6 +14,8 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
   $scope.isSinglePost = isSinglePost;
   $scope.showInsert = showInsert;
   $scope.underNav = underNav;
+
+
   /*
    * @getAllProducts
    * - get products for products and pricing table components
@@ -54,12 +56,12 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
 
   $scope.sliderValue = 1;
 
-  $scope.addBackground = function() {
+  $scope.addBackground = function () {
     $scope.$parent.showInsert = true;
     $scope.openParentModal('media-modal', 'MediaModalCtrl', null, 'lg');
   };
 
-   $scope.addFeaturedPost = function() {
+  $scope.addFeaturedPost = function () {
     $scope.$parent.showInsert = true;
     $scope.$parent.blogImage = true;
     $scope.openParentModal('media-modal', 'MediaModalCtrl', null, 'lg');
@@ -70,7 +72,7 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
    * -
    */
   $scope.originalWebsite = angular.copy($scope.website);
-  $scope.revertComponent = function () {   
+  $scope.revertComponent = function () {
     if ($scope.componentEditing.type === 'navigation') {
       $scope.website.linkLists = $scope.originalWebsite.linkLists;
     }
@@ -290,39 +292,37 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
     enabled: true
   }];
 
-  $scope.componentOpacityValues = [
-  {
-    label: 10, 
+  $scope.componentOpacityValues = [{
+    label: 10,
     value: 0.1
-  },{
-    label: 20, 
+  }, {
+    label: 20,
     value: 0.2
-  },{
-    label: 30, 
+  }, {
+    label: 30,
     value: 0.3
-  },{
-    label: 40, 
+  }, {
+    label: 40,
     value: 0.4
-  },{
-    label: 50, 
+  }, {
+    label: 50,
     value: 0.5
-  },{
-    label: 60, 
+  }, {
+    label: 60,
     value: 0.6
-  },{
-    label: 70, 
+  }, {
+    label: 70,
     value: 0.7
-  },{
-    label: 80, 
+  }, {
+    label: 80,
     value: 0.8
-  },{
-    label: 90, 
+  }, {
+    label: 90,
     value: 0.9
-  },{
-    label: 100, 
+  }, {
+    label: 100,
     value: 1
-  }
-  ]
+  }];
 
   /*
    * @removeImage
@@ -604,12 +604,12 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
    * -
    */
 
-   $scope.refreshSlider =function() {
+  $scope.refreshSlider = function () {
     console.log('refresh slider');
-    $timeout(function() {
+    $timeout(function () {
       $rootScope.$broadcast('rzSliderForceRender');
     });
-   };
+  };
 
   $scope.stringifyAddress = function (address) {
     if (address) {
@@ -661,14 +661,16 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
 
     if ($scope.componentEditing) {
       var componentType;
-      if($scope.componentEditing.type === 'navigation')
+      if ($scope.componentEditing.type === 'navigation') {
         componentType = _.findWhere($scope.componentTypes, {
-           type: $scope.componentEditing.type, version: parseInt($scope.componentEditing.version)
+          type: $scope.componentEditing.type,
+          version: parseInt($scope.componentEditing.version, 10)
         });
-      else
+      } else {
         componentType = _.findWhere($scope.componentTypes, {
           type: $scope.componentEditing.type
         });
+      }
 
       if (componentType && componentType.icon) {
         $scope.componentEditing.icon = componentType.icon;
@@ -767,6 +769,11 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
     });
     $scope.allPages = arr;
     $scope.filterdedPages = $filter('orderBy')($scope.allPages, "title", false);
+  });
+
+  WebsiteService.getEmails(function (emails) {
+    console.log('emails ', emails);
+    $scope.emails = emails;
   });
 
   $scope.editComponent();

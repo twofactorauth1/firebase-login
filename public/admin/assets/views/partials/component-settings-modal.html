@@ -637,7 +637,7 @@
                         <label>Fields to Show:</label>
                         <div ng-repeat="field in componentEditing.fields">
                             <div class="col-xs-12 ckbox ckbox-success">
-                                <input type="checkbox" id="chk_{{field.name}}" ng-model="field.value" ng-change="saveComponent()" class="ng-pristine ng-untouched ng-valid" checked="checked">
+                                <input type="checkbox" id="chk_{{field.name}}" ng-model="field.value" checked="checked">
                                 <label for="chk_{{field.name}}">{{field.display}}</label>
                             </div>
                         </div>

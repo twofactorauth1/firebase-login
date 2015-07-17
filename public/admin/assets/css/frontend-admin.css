@@ -3965,7 +3965,7 @@
   font-family: 'FontAwesome' !important;
 }
 #componentloader .payment-form-v1 .inner-page {
-  max-width: 600px;
+  max-width: 600px!important;
   padding: 25px 0;
 }
 #componentloader .payment-form-v1 .fa-check {
@@ -4207,7 +4207,7 @@
   right: 8px;
 }
 #componentloader .payment-form-v1 .price-signup {
-  background: #3cb878;
+  background: #4bafca;
   color: #ffffff;
 }
 #componentloader .payment-form-v1 .price-signup h2 {
@@ -4221,15 +4221,6 @@
 #componentloader .payment-form-v1 .price-signup h2 span {
   font-size: 24px;
 }
-#componentloader .payment-form-v1 .price-signup .assertions {
-  color: #1b7144;
-  text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.5);
-  font-size: 20px;
-}
-#componentloader .payment-form-v1 .price-signup .assertions span {
-  font-size: 35px;
-  font-weight: bold;
-}
 #componentloader .payment-form-v1 .price-signup:after {
   content: '';
   position: absolute;
@@ -4237,10 +4228,34 @@
   margin-left: -25px;
   width: 0;
   height: 0;
-  border-top: solid 25px #3cb878;
+  border-top: solid 25px #4bafca;
   border-left: solid 25px transparent;
   border-right: solid 25px transparent;
   display: block;
+}
+#componentloader .payment-form-v1 .assertions-wrap {
+  background: #f1f1f1;
+  color: #ffffff;
+}
+#componentloader .payment-form-v1 .assertions-wrap h2 {
+  font-size: 54px;
+  font-weight: bold;
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
+}
+#componentloader .payment-form-v1 .assertions-wrap h2 i {
+  font-size: 30px;
+}
+#componentloader .payment-form-v1 .assertions-wrap h2 span {
+  font-size: 24px;
+}
+#componentloader .payment-form-v1 .assertions-wrap .assertions {
+  color: #444444;
+  text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.5);
+  font-size: 20px;
+}
+#componentloader .payment-form-v1 .assertions-wrap .assertions span {
+  font-size: 35px;
+  font-weight: bold;
 }
 #componentloader .payment-form-v1 .payment-signup .submit-signup .btn {
   max-width: 430px;
