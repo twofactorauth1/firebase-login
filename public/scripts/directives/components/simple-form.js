@@ -1,14 +1,20 @@
 'use strict';
-/*global app, moment, angular, window, Fingerprint*/
-/*jslint unparam:true*/
-app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userService', function (ipCookie, $window, $timeout, userService) {
+/*global app, window, Fingerprint, CryptoJS*/
+app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userService', 'formValidations', function (ipCookie, $window, $timeout, userService, formValidations) {
   return {
     scope: {
       component: '=',
       version: '='
     },
     templateUrl: '/components/component-wrap.html',
-    link: function (scope, element, attrs) {
+    link: function (scope) {
+
+      scope.fieldsLength = function () {
+        return _.filter(scope.component.fields, function (_field) {
+          return _field.value === true;
+        }).length;
+      };
+
       scope.fieldShow = function (name) {
         var field = _.find(scope.component.fields, function (_field) {
           return _field.name === name;
@@ -17,8 +23,8 @@ app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userSe
           return true;
         }
       };
-
-      scope.phoneNumberPattern = /^\(?(\d{3})\)?[ .-]?(\d{3})[ .-]?(\d{4})$/;
+      scope.emailValidation = formValidations.email;
+      scope.phoneNumberPattern = formValidations.phone;
       scope.user = {};
       scope.createUser = function (simpleForm) {
         scope.userExists = false;
@@ -46,7 +52,7 @@ app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userSe
           activity: {
             activityType: 'CONTACT_FORM',
             note: scope.user.message || "Contact form data.",
-            sessionId: ipCookie("session_cookie")["id"],
+            sessionId: ipCookie("session_cookie").id,
             contact: scope.user
           }
         };
@@ -84,17 +90,26 @@ app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userSe
               app_id: "b3st2skm"
             };
 
-            scope.formSuccess = true;
-            scope.user = {};
-            simpleForm.$setPristine(true);
+            if (!scope.component.redirect) {
+              scope.formSuccess = true;
+              scope.user = {};
+              simpleForm.$setPristine(true);
 
-            $timeout(function () {
-              scope.formSuccess = false;
-            }, 3000);
+              $timeout(function () {
+                scope.formSuccess = false;
+              }, 3000);
+            } else {
+              if (scope.component.redirectType === 'page') {
+                window.location.href = scope.component.redirectUrl;
+              }
+              if (scope.component.redirectType === 'external') {
+                window.location.href = 'http://' + scope.component.redirectUrl;
+              }
+            }
 
           }
         });
       };
     }
-  }
+  };
 }]);

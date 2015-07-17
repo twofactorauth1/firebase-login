@@ -10,6 +10,13 @@ app.directive('simpleFormComponent', function () {
     templateUrl: '/components/component-wrap.html',
     link: function (scope, element, attrs) {
       scope.isEditing = true;
+
+      scope.fieldsLength = function () {
+        return _.filter(scope.component.fields, function (_field) {
+          return _field.value === true;
+        }).length;
+      };
+
       scope.fieldShow = function (name) {
         var field = _.find(scope.component.fields, function (_field) {
           return _field.name === name;

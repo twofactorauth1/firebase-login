@@ -125,7 +125,11 @@ module.exports = {
                     } else {
                         var businessObj = updatedAccount.get('business');
                         var email = user.get('email');
-                        businessObj.email = email;
+                        businessObj.emails = [];
+                        businessObj.emails.push({
+                            _id: $$.u.idutils.generateUniqueAlphaNumericShort(),
+                            email: email
+                        });
                         accountDao.saveOrUpdate(updatedAccount, function(err, savedAccount){
                             if(err) {
                                 log.error('Error saving account: ' + err);
@@ -292,7 +296,11 @@ module.exports = {
                 accountDao.getAccountByID(accountId, function(err, updatedAccount){
                     var businessObj = updatedAccount.get('business');
                     var email = user.get('email');
-                    businessObj.email = email;
+                    businessObj.emails = [];
+                        businessObj.emails.push({
+                            _id: $$.u.idutils.generateUniqueAlphaNumericShort(),
+                            email: email
+                        });
                     accountDao.saveOrUpdate(updatedAccount, function(err, savedAccount){
                         if(err) {
                             log.error('Error saving account: ' + err);

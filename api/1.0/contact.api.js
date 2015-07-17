@@ -611,15 +611,18 @@ _.extend(api.prototype, baseApi.prototype, {
                                                     var component = emailPage.get('components')[0];
                                                     self.log.debug('Using this for data', emailPage.get('_id'));
                                                     self.log.debug('Using this account for data', account);
-                                                    if(!component.logourl && account && account.attributes.business)
+                                                    self.log.debug('This component:', component);
+                                                    if(!component.logourl && account && account.attributes.business) {
                                                         component.logourl = account.attributes.business.logo;
+                                                    }
+
                                                     app.render('emails/base_email', component, function(err, html){
                                                         if(err) {
                                                             self.log.error('error rendering html: ' + err);
                                                             self.log.warn('email will not be sent.');
                                                         } else {
                                                             console.log('savedContact ', savedContact);
-                                                            var contactEmail = savedContact.getEmails()[0];
+                                                            var contactEmail = savedContact.getEmails()[0].email;
                                                             var contactName = savedContact.get('first') + ' ' + savedContact.get('last');
                                                             self.log.debug('sending email to: ',contactEmail);
 
@@ -631,17 +634,22 @@ _.extend(api.prototype, baseApi.prototype, {
 
                                                             self.log.debug('notificationConfig.WELCOME_FROM_EMAIL ', notificationConfig.WELCOME_FROM_EMAIL);
                                                             self.log.debug('notificationConfig.WELCOME_FROM_NAME ', notificationConfig.WELCOME_FROM_NAME);
-                                                            self.log.debug('contactEmail.email ', contactEmail.email);
+                                                            self.log.debug('contactEmail.email ', contactEmail);
                                                             self.log.debug('contactName ', contactName);
                                                             self.log.debug('notificationConfig.WELCOME_EMAIL_SUBJECT ', notificationConfig.WELCOME_EMAIL_SUBJECT);
-                                                            self.log.debug('value.id() ', value.id());
+                                                            //self.log.debug('value.id() ', value.id());
                                                             self.log.debug('savedContact.id() ', savedContact.id());
                                                             self.log.debug('vars ', vars);
                                                             self.log.debug('notificationConfig.WELCOME_FROM_EMAIL ', notificationConfig.WELCOME_FROM_EMAIL);
 
-                                                            mandrillHelper.sendAccountWelcomeEmail(fromEmail, fromName, contactEmail.email, contactName, emailSubject, html, value.id(), savedContact.id(), vars, function(err, result){
-                                                                self.log.debug('result: ', result);
-                                                            });
+                                                            try{
+                                                                mandrillHelper.sendAccountWelcomeEmail(fromEmail, fromName, contactEmail, contactName, emailSubject, html, query.accountId, savedContact.id(), vars, function(err, result){
+                                                                    self.log.debug('result: ', result);
+                                                                });
+                                                            } catch(exception) {
+                                                                self.log.error(exception);
+                                                            }
+
                                                             if(req.body.activity){
                                                                 var accountEmail = null;
                                                                 if(account && account.attributes.business && account.attributes.business.emails && account.attributes.business.emails[0] && account.attributes.business.emails[0].email)

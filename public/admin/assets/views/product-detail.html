@@ -137,21 +137,22 @@
                     <div class="col-sm-4" ng-if="!showVariations">
                         <div class="panel panel-transparent  margin-bottom-0">
                             <div class="panel-body padding-top-0">
-                                <form role="form" class="ng-pristine ng-valid">
+                                <form role="form" name="productDetail">
                                     <div class="form-group">
                                         <label tooltip-placement="top" tooltip-html-unsafe="unique alphanumeric identifier that refers to a particular product, used for inventory management">
                                             SKU <i class="fa fa-info-circle" />
                                         </label>
                                         <input type="text" placeholder="SKU" ng-model="product.sku" class="form-control">
                                     </div>
-                                    <div class="form-group">
+                                    <div class="form-group" ng-class="{ 'has-error' : productDetail.regular_price.$invalid && !productDetail.regular_price.$pristine }">
                                         <label tooltip-placement="top" tooltip-html-unsafe="the price a customer sees until you enable a sale">
                                             Regular Price <i class="fa fa-info-circle" />
                                         </label>
                                         <div class="input-group">
                                             <span class="input-group-addon">$</span>
-                                            <input type="text" class="form-control" ng-model="product.regular_price">
+                                            <input type="text" name="regular_price" class="form-control" ng-model="product.regular_price" ng-currency min="product.sale_price" currency-symbol="">
                                         </div>
+                                        <p ng-show="productDetail.regular_price.$invalid && !productDetail.regular_price.$pristine" class="help-block">Regular Price cannot be less than sale price</p>
                                     </div>
                                     <div>
                                         <div class="form-group">
@@ -162,14 +163,15 @@
                                                 <switch ng-model="product.on_sale" type="checkbox" switch-label="OnSale"></switch>
                                             </div>
                                         </div>
-                                        <div class="form-group" ng-show="product.on_sale">
+                                        <div class="form-group" ng-show="product.on_sale" ng-class="{ 'has-error' : productDetail.sale_price.$invalid && !productDetail.sale_price.$pristine }">
                                             <label tooltip-placement="top" tooltip-html-unsafe="the price the customer sees while a sale is enabled">
                                                 Sale Price <i class="fa fa-info-circle" />
                                             </label>
                                             <div class="input-group">
                                                 <span class="input-group-addon">$</span>
-                                                <input type="text" class="form-control" ng-model="product.sales_price">
+                                                <input type="text" name="sale_price" class="form-control" ng-model="product.sale_price" ng-currency min="1" max="product.regular_price" currency-symbol=""/>
                                             </div>
+                                            <p ng-show="productDetail.sale_price.$invalid && !productDetail.sale_price.$pristine" class="help-block">Sale Price cannot be more than regular price</p>
                                         </div>
                                         <div class="form-group" ng-show="product.on_sale">
                                             <label tooltip-placement="top" tooltip-html-unsafe="the dates of the sale">
@@ -177,20 +179,20 @@
                                             </label>
                                             <div class="input-group">
                                                 <div class="input-group-addon"><i class="fa fa-calendar"></i></div>
-                                                <input date-range-picker class="form-control deshboard-date-picker date-picker hidden-xs" type="text" ng-model="selectedDate" options="pickerOptions" />
+                                                <input date-range-picker class="form-control deshboard-date-picker date-picker hidden-xs" type="text" ng-model="selectedDate.range" options="pickerOptions" />
                                                 <span class="input-group-addon" onClick="$('.deshboard-date-picker').click();"><i class="fa fa-chevron-down fa-fw"></i></span>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="form-group">
+                                    <!-- <div class="form-group">
                                         <label tooltip-placement="top" tooltip-html-unsafe="the price at which you purchase or create a product">
                                             Cost <i class="fa fa-info-circle" />
                                         </label>
                                         <div class="input-group">
                                             <span class="input-group-addon">$</span>
-                                            <input type="text" class="form-control" ng-model="product.cost">
+                                            <input type="text" class="form-control" ng-model="product.cost" currency-input>
                                         </div>
-                                    </div>
+                                    </div> -->
                                     <div class="form-group">
                                         <label tooltip-placement="top" tooltip-html-unsafe="calculate taxes when the customer purchases this item">
                                             Taxable <i class="fa fa-info-circle" />

@@ -43,7 +43,7 @@ var component = $$.m.ModelBase.extend({
              *
              *
              */
-            title:"<h2 style=\"text-align: center;\">Feature List</h2><h3 style=\"text-align: center;\">This is the feature List Title</h3>",
+            title:"<span style=\"font-size: 30px;font-weight:normal;display:block;text-align: center;\">Feature List</span><span style=\"font-size: 24px;font-weight:normal;display:block;text-align: center;\">This is the feature List Title</span>",
 
 
             /**

@@ -7,86 +7,29 @@
         <h3 class="modal-title"><span ng-if="!templateDetails">Select Template</span><span ng-if="templateDetails">Template Details</span></h3>
     </div>
     <div class="modal-body pages-modal bg-white" ng-class="{'no-padding': !templateDetails}">
-        <tabset class="tabbable tabs-left margin-bottom-0" ng-hide="templateDetails">
-            <tab>
-                <tab-heading>
-                    All
-                </tab-heading>
-                <div ng-repeat="template in templates | orderBy:'title'" ng-if="template.filter != 'coming-soon'" class="template-select">
-                    <div class="single-type margin-bottom-15" ng-click="setTemplateDetails(template)">
-                        <div class="col-sm-3 col-xs-12">
-                            <div class="img-wrap">
-                                <a ng-href="{{template.previewUrl}}" title="" data-gallery="">
-                                    <span style="background: url('{{template.previewUrl}}');background-size: cover;height: 65px;background-position: center;border-radius: 5px;border: 1px solid #e7e7e7;display: block;"></span>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="col-sm-8 col-xs-12">
-                            <h4>{{template.name}}</h4>
-                            <p>{{template.description}}</p>
-                        </div>
-                        <div class="col-sm-1 hidden-xs">
-                            <h1>
-                                    <span class="fa fa-chevron-right"></span>
-                                </h1>
+        <div ng-hide="templateDetails" style="  max-height: 300px;height: 100%;overflow: auto;">
+            <div ng-repeat="template in templates | orderBy:'title'">
+                <div class="single-type margin-bottom-15" ng-click="setTemplateDetails(template)">
+                    <div class="col-sm-3 col-xs-12">
+                        <div class="img-wrap">
+                            <a ng-href="{{template.previewUrl}}" title="" data-gallery="">
+                                <span style="background: url('{{template.previewUrl}}');background-size: cover;height: 65px;background-position: center;border-radius: 5px;border: 1px solid #e7e7e7;display: block;"></span>
+                            </a>
                         </div>
                     </div>
-                    <div class="clearfix"></div>
-                </div>
-            </tab>
-            <tab>
-                <tab-heading>
-                    Home
-                </tab-heading>
-                <div ng-repeat="template in templates | orderBy:'title'" ng-if="template.filter == 'home'">
-                    <div class="single-type margin-bottom-15" ng-click="setTemplateDetails(template)">
-                        <div class="col-sm-3 col-xs-12">
-                            <div class="img-wrap">
-                                <a ng-href="{{template.previewUrl}}" title="" data-gallery="">
-                                    <span style="background: url('{{template.previewUrl}}');background-size: cover;height: 65px;background-position: center;border-radius: 5px;border: 1px solid #e7e7e7;display: block;"></span>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="col-sm-8 col-xs-12">
-                            <h4>{{template.name}}</h4>
-                            <p>{{template.description}}</p>
-                        </div>
-                        <div class="col-sm-1 hidden-xs">
-                            <h1>
-                                    <span class="fa fa-chevron-right"></span>
-                                </h1>
-                        </div>
+                    <div class="col-sm-8 col-xs-12">
+                        <h4>{{template.name}}</h4>
+                        <p>{{template.description}}</p>
                     </div>
-                    <div class="clearfix"></div>
-                </div>
-            </tab>
-            <tab class="hidden">
-                <tab-heading>
-                    Coming Soon
-                </tab-heading>
-                <div ng-repeat="template in templates | orderBy:'title'" ng-if="template.filter == 'coming-soon'">
-                    <div class="single-type margin-bottom-15" ng-click="setTemplateDetails(template)">
-                        <div class="col-sm-3 col-xs-12">
-                            <div class="img-wrap">
-                                <a ng-href="{{template.previewUrl}}" title="">
-                                    <span style="background: url('{{template.previewUrl}}');background-size: cover;height: 65px;background-position: center;border-radius: 5px;border: 1px solid #e7e7e7;display: block;"></span>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="col-sm-8 col-xs-12">
-                            <h4>{{template.name}}</h4>
-                            <p>{{template.description}}</p>
-                        </div>
-                        <div class="col-xs-1 hidden-xs">
-                            <h1>
-                                    <span class="fa fa-chevron-right"></span>
-                                </h1>
-                        </div>
+                    <div class="col-sm-1 hidden-xs">
+                        <h1>
+                                        <span class="fa fa-chevron-right"></span>
+                                    </h1>
                     </div>
-                    <div class="clearfix"></div>
                 </div>
-            </tab>
-        </tabset>
+                <div class="clearfix"></div>
+            </div>
+        </div>
         <div class="template-details" ng-show="templateDetails">
             <div class="col-xs-5">
                 <p>Template Selected</p>

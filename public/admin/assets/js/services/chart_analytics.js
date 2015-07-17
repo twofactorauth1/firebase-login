@@ -16,6 +16,24 @@
       return minutes + ":" + seconds;
     };
 
+    this.getHostName = function(account)
+    {
+      var hostname = '';
+      var windowHostname = window.location.hostname;
+      if (windowHostname.indexOf(".local") > -1) {
+        hostname = account.subdomain + '.indigenous.local';
+      }
+      else if (windowHostname.indexOf(".test.") > -1) {
+        hostname = windowHostname;
+      } else {
+        hostname = account.subdomain + '.indigenous.io';
+      }
+      if (account.domain) {
+        hostname = account.domain;
+      }
+      return hostname;
+    };
+
     this.calculatePercentage = function (oldval, newval) {
       var result;
       oldval = parseInt(oldval, 10);
@@ -506,11 +524,7 @@
     this.runReports = function (date, account, fn) {
 
       var self = this;
-      var hostname = account.subdomain + '.indigenous.local';
-
-      if (account.domain) {
-        hostname = account.domain;
-      }
+      var hostname = this.getHostName(account);
 
       KeenService.keenClient(function (client) {
         var queryData = self.queryReports(date, hostname);
@@ -540,21 +554,7 @@
 
     this.runPagedReports = function (date, account, fn) {
       var filters = [];
-      var windowHostname = window.location.hostname;
-      var hostname = '';
-      if (windowHostname.indexOf(".local") > -1) {
-        hostname = account.subdomain + '.indigenous.local';
-      }
-      else if (windowHostname.indexOf(".test.") > -1) {
-        hostname = windowHostname;
-      } else {
-        hostname = account.subdomain + '.indigenous.io';
-      }
-
-      if (account.domain) {
-        hostname = account.domain;
-      }
-
+      var hostname = this.getHostName(account);
       filters.push({
          "property_name": "url.domain",
          "operator": "in",
@@ -631,11 +631,7 @@
 
     this.visitorsReport = function (date, account, fn) {
       var self = this;
-      var _hostname = account.subdomain + '.indigenous.local';
-
-      if (account.domain) {
-        _hostname = account.domain;
-      }
+      var _hostname = this.getHostName(account);
 
       KeenService.keenClient(function (client) {
         var queryData = self.queryVisitorReports(date, _hostname);

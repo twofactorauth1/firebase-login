@@ -55,11 +55,6 @@
       $scope.user = user;
     });
 
-    $scope.selectedDate = {
-      startDate: moment().subtract(29, 'days').toDate(),
-      endDate: new Date()
-    };
-
     $scope.pickerOptions = {
       startDate: moment().subtract(29, 'days').toDate(),
       endDate: new Date(),
@@ -82,9 +77,15 @@
     $scope.product_tags = [];
     var productPlanStatus = {};
     var productPlanSignupFee = {};
+    $scope.selectedDate = {};
 
     ProductService.getProduct($stateParams.productId, function (product) {
       console.log(product);
+      $scope.selectedDate.range = {
+        startDate: new Date(product.sale_date_from),
+        endDate: new Date(product.sale_date_to)
+      };
+      product.regular_price = parseFloat(product.regular_price);
       $scope.product = product;
       console.log('product ', product);
       var p_icon = $scope.product.icon;
@@ -318,9 +319,10 @@
     $scope.saveLoading = false;
 
     $scope.saveProductFn = function () {
-      if ($scope.selectedDate) {
-        $scope.product.sale_date_from = new Date($scope.selectedDate.startDate).toISOString();
-        $scope.product.sale_date_to = new Date($scope.selectedDate.endDate).toISOString();
+      console.log('$scope.selectedDate ', $scope.selectedDate);
+      if ($scope.selectedDate.range) {
+        $scope.product.sale_date_from = new Date($scope.selectedDate.range.startDate).toISOString();
+        $scope.product.sale_date_to = new Date($scope.selectedDate.range.endDate).toISOString();
       }
 
       $scope.saveLoading = true;
@@ -487,6 +489,15 @@
           $scope.product.tags.push(v.text);
         }
       });
+    };
+
+    /*
+     * @checkSalePrice
+     * - check the sale to price to ensure its not more than the price
+     */
+
+    $scope.checkSalePrice = function () {
+      console.log('sales_price ', $scope.product.sales_price);
     };
 
     /*

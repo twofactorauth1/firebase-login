@@ -117,10 +117,13 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         title: 'Template Single',
         icon: 'ti-layout-media-left-alt',
         ncyBreadcrumb: {
-            label: 'Single Template',
+            label: '{{breadcrumbTitle}}',
             parent: 'app.website.templates'
         },
-        resolve: loadSequence('editorCtrl', 'userService', 'htmlToPlaintext', 'spectrum', 'ui.sortable', 'angular-slider', 'assetsService', 'toasterService', 'geocodeService')
+        onExit: function($rootScope) {
+         $rootScope.breadcrumbTitle = undefined;
+        },
+        resolve: loadSequence('editorCtrl', 'userService', 'htmlToPlaintext', 'spectrum', 'ui.sortable', 'angular-slider', 'assetsService', 'toasterService', 'geocodeService', 'productService', 'paymentService', 'accountService', 'toTrusted', 'generateURLforLinks', 'truncate', 'ckeditor', 'ngSticky', 'slick', 'offset', 'jqcloud', 'jsVideoUrlParser', 'selectedTags', 'addComponentModalCtrl', 'componentSettingsModalCtrl')
     }).state('app.emails', {
         url: '/emails',
         templateUrl: "assets/views/emails.html",
@@ -183,7 +186,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         ncyBreadcrumb: {
             label: 'Single Product'
         },
-        resolve: loadSequence('productsDetailCtrl', 'productService', 'assetsService', 'dateRangePicker')
+        resolve: loadSequence('productsDetailCtrl', 'productService', 'assetsService', 'dateRangePicker', 'ngCurrency')
     }).state('app.commerce.orders', {
         url: '/orders',
         templateUrl: "assets/views/orders.html",

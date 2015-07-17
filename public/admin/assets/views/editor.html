@@ -7,6 +7,7 @@
                 <h1 ng-if="!isSinglePost" class="mainTitle">{{ page.title || 'Title'}}</h1>
                 <span ng-if="isSinglePost && blog.post.post_tags" class="mainDescription">There are currently {{blog.post.post_tags.length}} tags.</span>
                 <span ng-if="!isSinglePost && page.components" class="mainDescription">There are currently {{page.components.length}} components.</span>
+                <span ng-if="templateActive" class="mainDescription">There are currently {{page.config.components.length}} components.</span>
             </div>
             <div ncy-breadcrumb></div>
         </div>

@@ -3,7 +3,7 @@
  * controller for personal business page
  */
 (function (angular) {
-  app.controller('ProfilePersonalCtrl', ["$scope", "$modal", "$timeout", "toaster", "$stateParams", "UserService", "CommonService", function ($scope, $modal, $timeout, toaster, $stateParams, UserService, CommonService) {
+  app.controller('ProfilePersonalCtrl', ["$scope", "$modal", "$timeout", "toaster", "$stateParams", "UserService", "CommonService", "$state", function ($scope, $modal, $timeout, toaster, $stateParams, UserService, CommonService) {
     console.log('profile personal >>> ');
 
 
@@ -12,6 +12,8 @@
     // Add remove photo
 
 
+    
+    $scope.profileUser = {};
     UserService.getUserActivity(function (activities) {
       $scope.activities = activities;
     });
@@ -39,16 +41,27 @@
     };
 
     $scope.insertPhoto = function (asset) {
-      $scope.currentUser.profilePhotos[0] = asset.url;
+      $scope.profileUser.profilePhotos[0] = asset.url;
     };
 
     $scope.removePhoto = function (asset) {
-      $scope.currentUser.profilePhotos[0] = null;
+      $scope.profileUser.profilePhotos[0] = null;
     };
 
+    $scope.setProfileUser = function(user) {
+      $scope.profileUser= angular.copy(user);
+    };
+
+    $scope.refreshUser = function() {
+       angular.copy($scope.profileUser, $scope.currentUser);
+     };
+
+    $scope.setProfileUser($scope.currentUser);
+
     $scope.profileSaveFn = function () {
-      UserService.putUser($scope.currentUser, function (user) {
-        $scope.currentUser = user;
+      //$scope.currentUser = $scope.profileUser;
+      UserService.putUser($scope.profileUser, function (user) {        
+        $scope.refreshUser();
         toaster.pop('success', 'Profile Saved.');
       });
     };

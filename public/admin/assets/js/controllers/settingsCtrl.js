@@ -50,6 +50,7 @@
 
     AccountService.getAccount(function (account) {
       $scope.account = account;
+      $scope.originalAccount = angular.copy(account);
       if (!account.commerceSettings) {
         account.commerceSettings = {
           taxes: true,
@@ -113,14 +114,16 @@
     $scope.domainError = false;
 
     $scope.checkDomainExists = function (account) {
-      UserService.checkDuplicateSubdomain(account.subdomain, account._id, function (data) {
-        console.log('data ', data);
-        if (data !== 'true') {
-          $scope.domainError = true;
-        } else {
-          $scope.domainError = false;
-        }
-      });
+      if ($scope.originalAccount.subdomain != account.subdomain) {
+        UserService.checkDuplicateSubdomain(account.subdomain, account._id, function (data) {
+          console.log('data ', data);
+          if (data !== 'true') {
+            $scope.domainError = true;
+          } else {
+            $scope.domainError = false;
+          }
+        });
+      }
     };
 
     /*
