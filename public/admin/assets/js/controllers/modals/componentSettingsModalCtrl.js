@@ -1,7 +1,7 @@
 'use strict';
 /*global app, moment, angular*/
 /*jslint unparam:true*/
-app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalInstance', '$http', '$timeout', '$q', '$compile', '$filter', 'WebsiteService', 'CustomerService', 'ProductService', 'GeocodeService', 'toaster', 'components', 'clickedIndex', 'contactMap', 'website', 'blog', 'isDirty', 'isSinglePost', 'openParentModal', 'showInsert', 'underNav', function ($scope, $rootScope, $modalInstance, $http, $timeout, $q, $compile, $filter, WebsiteService, CustomerService, ProductService, GeocodeService, toaster, components, clickedIndex, contactMap, website, blog, isDirty, isSinglePost, openParentModal, showInsert, underNav) {
+app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalInstance', '$http', '$timeout', '$q', '$compile', '$filter', 'WebsiteService', 'CustomerService', 'ProductService', 'GeocodeService', 'toaster', 'hoursConstant', 'components', 'clickedIndex', 'contactMap', 'website', 'blog', 'isDirty', 'isSinglePost', 'openParentModal', 'showInsert', 'underNav', function ($scope, $rootScope, $modalInstance, $http, $timeout, $q, $compile, $filter, WebsiteService, CustomerService, ProductService, GeocodeService, toaster, hoursConstant, components, clickedIndex, contactMap, website, blog, isDirty, isSinglePost, openParentModal, showInsert, underNav) {
   $scope.blog = {};
   $scope.components = components;
   $scope.openParentModal = openParentModal;
@@ -15,6 +15,7 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
   $scope.showInsert = showInsert;
   $scope.underNav = underNav;
 
+  $scope.errorMapData = false;
 
   /*
    * @getAllProducts
@@ -345,9 +346,24 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
 
   $scope.closeModal = function () {
     $timeout(function () {
-      $scope.$apply(function () {
-        $modalInstance.close();
-        angular.element('.modal-backdrop').remove();
+      $scope.$apply(function () {              
+        if($scope.originalContactMap && !angular.equals($scope.originalContactMap, $scope.componentEditing.location))
+        {
+          $scope.validateGeoAddress(function () {
+            if($scope.errorMapData)
+            {
+              angular.copy($scope.originalContactMap, $scope.componentEditing.location);  
+              $scope.contactMap.refreshMap();
+            }
+            $modalInstance.close();
+            angular.element('.modal-backdrop').remove();
+          });     
+        }
+        else
+        {
+          $modalInstance.close();
+          angular.element('.modal-backdrop').remove(); 
+        }
       });
     });
   };
@@ -611,37 +627,57 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
     });
   };
 
+   /*
+   * @stringifyAddress
+   * -
+   */
+
   $scope.stringifyAddress = function (address) {
-    if (address) {
-      var _topline = _.filter([address.address, address.address2], function (str) {
+    var _bottomline = "";
+    var _topline = "";
+    if(address)
+    {
+      _bottomline = _.filter([address.city, address.state], function (str) {
         return str !== "";
       }).join(", ");
-      var _bottomline = _.filter([address.city, address.state, address.zip], function (str) {
+
+      _topline = _.filter([address.address, _bottomline, address.zip], function (str) {
         return str !== "";
-      }).join(", ");
-      if (_topline) {
-        return _topline + ' <br> ' + _bottomline;
-      }
-      return _bottomline;
+      }).join(" ");
     }
+    return _topline;
   };
 
   $scope.updateContactUsAddress = function () {
-    if (!angular.equals($scope.originalContactMap, $scope.componentEditing.location)) {
-      $scope.contactMap.updateAddressString();
-    }
-    $scope.componentEditing.location.lat = null;
-    $scope.componentEditing.location.lon = null;
-    if (($scope.componentEditing.location.city && $scope.componentEditing.location.state) || $scope.componentEditing.location.zip) {
-      GeocodeService.getGeoSearchAddress($scope.stringifyAddress($scope.componentEditing.location), function (data) {
-        if (data.lat && data.lon) {
-          $scope.componentEditing.location.lat = data.lat;
-          $scope.componentEditing.location.lon = data.lon;
-          $scope.contactMap.refreshMap();
-        }
-      });
-    }
+    $scope.errorMapData = false;
+    if (!angular.equals($scope.originalContactMap, $scope.componentEditing.location)) {      
+       $scope.validateGeoAddress();      
+    }      
   };
+
+$scope.validateGeoAddress = function (fn) {
+  if(!($scope.componentEditing.location.city && $scope.componentEditing.location.state) || $scope.componentEditing.location.zip)
+  {
+    $scope.errorMapData = true;
+    if (fn)
+      fn();
+  }
+  else
+  {
+    GeocodeService.getGeoSearchAddress($scope.stringifyAddress($scope.componentEditing.location), function (data) {
+    if (data.lat && data.lon) {
+      $scope.errorMapData = false;
+      $scope.componentEditing.location.lat = data.lat;
+      $scope.componentEditing.location.lon = data.lon;
+      $scope.contactMap.refreshMap();
+    }
+    else
+      $scope.errorMapData = true;
+      if (fn) 
+        fn();
+    })
+  }  
+}
 
   $scope.saveComponent = function () {
     $scope.isDirty.dirty = true;
@@ -697,6 +733,7 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
     }
 
     if ($scope.componentEditing.type === "contact-us") {
+      $scope.hours = hoursConstant;
       $scope.originalContactMap = angular.copy($scope.componentEditing.location);
       if ($scope.componentEditing.hours) {
         _.each($scope.componentEditing.hours, function (element, index) {
