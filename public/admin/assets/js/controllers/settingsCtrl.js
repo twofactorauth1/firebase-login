@@ -2,7 +2,7 @@
 /*global app, moment, angular, window*/
 /*jslint unparam:true*/
 (function (angular) {
-  app.controller('SettingsCtrl', ["$scope", "$modal", "$state", "WebsiteService", "AccountService", "UserService", "toaster", "$timeout", function ($scope, $modal, $state, WebsiteService, AccountService, UserService, toaster, $timeout) {
+  app.controller('SettingsCtrl', ["$scope", "$log", "$modal", "$state", "WebsiteService", "AccountService", "UserService", "toaster", "$timeout", function ($scope, $log, $modal, $state, WebsiteService, AccountService, UserService, toaster, $timeout) {
     $scope.keywords = [];
 
     /*
@@ -116,13 +116,17 @@
     $scope.checkDomainExists = function (account) {
       if ($scope.originalAccount.subdomain != account.subdomain) {
         UserService.checkDuplicateSubdomain(account.subdomain, account._id, function (data) {
-          console.log('data ', data);
-          if (data !== 'true') {
+          $log.debug('checkDomainExists', data);
+
+          if(data.isDuplicate) {
             $scope.domainError = true;
           } else {
             $scope.domainError = false;
           }
         });
+      }
+      else {
+        $scope.domainError = false;
       }
     };
 

@@ -56,7 +56,8 @@
     $scope.checkDomainExists = function (account) {
       UserService.checkDuplicateSubdomain(account.subdomain, account._id, function (data) {
         console.log('data ', data);
-        if (data != 'true') {
+
+        if(data.isDuplicate) {
           $scope.domainError = true;
         } else {
           $scope.domainError = false;
