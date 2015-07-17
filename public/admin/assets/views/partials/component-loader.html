@@ -1,4 +1,4 @@
-<div id="componentloader" ng-if="components.length">
+<div id="componentloader">
     <ul ng-sortable="barConfig" class="component-sortable" ng-class="{'dragging': dragging}" ng-model="components">
         <li ng-repeat="value in components" class="fragment">
             <div class="componentActions" ng-class="{'masthead-actions':value.type == 'masthead'}">
@@ -21,16 +21,15 @@
                 </div>
             </div>
         </li>
-        <li ng-if="components.length == 0 " class="no-component">
+        <li ng-if="!components.length">
             <div class="well empty-page">
                 <h1 class="center">This Page is Empty.</h1>
                 <h4 class="center">Add some components and start editing!</h4>
             </div>
             <div class="clearfix mb15"></div>
-            <div class="add-component" data-index=1 tooltip="Add Component Below" tooltip-trigger="mouseenter" tooltip-placement="top">
-                <a href="">
-                    <i class="fa fa-plus"></i>
-                </a>
+            <div class="add-new-component add-component" ng-click="openModal('add-component-modal', 'AddComponentModalCtrl', 0)">
+            <i class="fa fa-plus"></i>
+            <p>Add New</p>
             </div>
         </li>
     </ul>

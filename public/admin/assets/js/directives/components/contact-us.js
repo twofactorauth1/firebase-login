@@ -18,7 +18,26 @@ app.directive('contactUsComponent', ['AccountService', 'GeocodeService', 'leafle
           scope.component.map.zoom = 10;
         }
       }
-
+      function hexToRgb(hex, opacity) {      
+        var c;
+        opacity = opacity || 1;
+        c = hex.substring(1).split('');
+        if(c.length== 3){
+            c= [c[0], c[0], c[1], c[1], c[2], c[2]];
+        }
+        c= '0x'+c.join('');
+        return 'rgba('+[(c>>16)&255, (c>>8)&255, c&255].join(',')+','+ opacity +')';
+      };
+      scope.$watch('component.boxColor', function (newValue, oldValue) {
+        if (newValue) {
+          scope.boxColor = hexToRgb(scope.component.boxColor, scope.component.boxOpacity);
+        }
+      });
+      scope.$watch('component.boxOpacity', function (newValue, oldValue) {
+        if (newValue) {
+          scope.boxColor = hexToRgb(scope.component.boxColor, scope.component.boxOpacity);
+        }
+      });
       scope.stringifyAddress = function (address) {
         if (address) {
           //var address = scope.htmlToPlaintext(address);

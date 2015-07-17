@@ -5,18 +5,18 @@
             <div class="inner-page">
                 <img src="https://s3.amazonaws.com/indigenous-account-websites/acct_6/logo.png" width="276" height="57" class="center" style="display: block;">
                 <div class="clearfix mb20"></div>
-                <h1 class="center hidden-xs">Are you ready to...</h1>
-                <h2 class="center visible-xs">Are you ready to...</h2>
+                <h1 class="center hidden-xs">Are you ready to...?</h1>
+                <h2 class="center visible-xs">Are you ready to...?</h2>
                 <div class="clearfix mb30"></div>
                 <div>
-                    <div class="col-sm-7 col-sm-offset-3 col-xs-8 col-xs-offset-2 mb10">
-                        <h3 class="center text-left"><i class="fa fa-check"></i> Tell your story</h3>
+                    <div class="mb10">
+                        <h3 class="center"><i class="fa fa-check"></i> Build a sophisticated website</h3>
                     </div>
-                    <div class="col-sm-7 col-sm-offset-3 col-xs-9 col-xs-offset-2 mb10">
-                        <h3 class="center text-left"><i class="fa fa-check"></i> Build your client base</h3>
+                    <div class="mb10">
+                        <h3 class="center"><i class="fa fa-check"></i> Save time and money</h3>
                     </div>
-                    <div class="col-sm-7 col-sm-offset-3 col-xs-8 col-xs-offset-2 mb10">
-                        <h3 class="center text-left"><i class="fa fa-check"></i> Increase revenue</h3>
+                    <div class="mb10">
+                        <h3 class="center"><i class="fa fa-check"></i> Grow your client base</h3>
                     </div>
                 </div>
                 <div class="clearfix"></div>
@@ -27,7 +27,7 @@
                 <h2 class="center">Sign up for Indigenous</h2>
                 <div class="clearfix mb20"></div>
                 <div class="social btn-toolbar">
-                    <p class="pull-left">Connect with: </p>
+                    <p class="pull-left">Sign in with: </p>
                     <div class="signup-social-toolbar pull-left">
                         <a ng-if="!tmpAccount.tempUser || tmpAccount.tempUser.created.strategy === 'lo'" ng-click="makeSocailAccount('facebook')" class="btn btn-large btn-default facebook"><i class="fa fa-facebook"></i></a>
                         <div ng-if="tmpAccount.tempUser.created.strategy === 'fb'">
@@ -84,28 +84,7 @@
         </div>
         <div class="price-signup">
             <div class="inner-page">
-                <div class="assertions">
-                    <div class="clearfix mb20"></div>
-                    <div class="col-xs-4 center">
-                        <span class="fa fa-lock mb10"></span>
-                        <div class="clearfix"></div>
-                        <span>100%</span>
-                        <br> Secure
-                        <br> Data</div>
-                    <div class="col-xs-4 center">
-                        <span class="fa fa-credit-card mb10"></span>
-                        <div class="clearfix"></div>
-                        <span>No</span>
-                        <br> Hidden
-                        <br> Fees</div>
-                    <div class="col-xs-4 center">
-                        <span class="fa fa-life-ring mb10"></span>
-                        <div class="clearfix"></div>
-                        <span>Live</span>
-                        <br> Customer
-                        <br> Support</div>
-                </div>
-                <div class="clearfix mb30"></div>
+            <div class="clearfix mb20"></div>
                 <div ng-repeat="plan in subscriptionPlans" ng-class="{ 'notSelected': newAccount.membership != plan.id , 'selected': newAccount.membership == plan.id  }">
                     <h4 class="center">{{plan.name}}</h4>
                     <h2 class="center"><i class="fa fa-usd fa-1"></i>{{(plan.amount/100).toFixed(2)}} <span>/ {{plan.interval}}</span></h2>
@@ -162,10 +141,39 @@
                 </div>
                 <div class="clearfix mb30"></div>
                 <!-- BUY -->
-                <div class="submit-signup mb10">
-                    <a type="button" class="btn btn-primary btn-lg center" ng-click="createAccount(newAccount)"> Become an Indigenous Member Now</a>
+                <div class="submit-signup mb10 center">
+                    <a type="button" style="background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #fb8823), color-stop(1, #f86807));background:-moz-linear-gradient(top, #fb8823 5%, #f86807 100%);background:-webkit-linear-gradient(top, #fb8823 5%, #f86807 100%);background:-o-linear-gradient(top, #fb8823 5%, #f86807 100%);background:-ms-linear-gradient(top, #fb8823 5%, #f86807 100%);background:linear-gradient(to bottom, #fb8823 5%, #f86807 100%);filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#fb8823', endColorstr='#f86807',GradientType=0);background-color:#fbb450;-moz-border-radius:7px;-webkit-border-radius:7px;border-radius:7px;border:1px solid #c97e1c;display:inline-block;color:#ffffff;font-family:arial;font-size:18px;font-weight:normal;font-style:%1;padding:14px 45px;text-decoration:none;text-shadow:1px 1px 0px #cc4b14;" ng-click="createAccount(newAccount)"> BECOME AN INDIGENOUS MEMBER NOW</a>
                 </div>
-                <p class="center">By clicking this button you agree to our <a href="" type="button" data-toggle="modal" data-target="#terms-of-service">Terms of Use</a>.</p>
+                <p class="center margin-top-10">By clicking this button you agree to our <a href="" type="button" data-toggle="modal" data-target="#terms-of-service">Terms of Service</a>.</p>
+                <br>
+                <p class="center">* 14-day free trial with sign-up fee waived, then $49.95/month. <br> Once payment is processed, there are no refunds and there is no proration. <br> For cancellations, please contact our support via chat.</p>
+                <div class="clearfix margin-bottom-10"></div>
+            </div>
+        </div>
+        <div class="assertions-wrap">
+            <div class="inner-page">
+                <div class="assertions">
+                    <div class="clearfix mb20"></div>
+                    <div class="col-xs-4 center">
+                        <span class="fa fa-lock mb10"></span>
+                        <div class="clearfix"></div>
+                        <span>100%</span>
+                        <br> Secure
+                        <br> Data</div>
+                    <div class="col-xs-4 center">
+                        <span class="fa fa-credit-card mb10"></span>
+                        <div class="clearfix"></div>
+                        <span>No</span>
+                        <br> Hidden
+                        <br> Fees</div>
+                    <div class="col-xs-4 center">
+                        <span class="fa fa-life-ring mb10"></span>
+                        <div class="clearfix"></div>
+                        <span>Support</span>
+                        <br> Live
+                        <br> Chat</div>
+                </div>
+                <div class="clearfix mb30"></div>
             </div>
         </div>
     </div>

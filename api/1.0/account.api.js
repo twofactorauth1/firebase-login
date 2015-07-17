@@ -77,14 +77,14 @@ _.extend(api.prototype, baseApi.prototype, {
     getCurrentAccountBilling: function(req, res) {
         var self = this;
         self.log.debug('>> getCurrentAccountBilling');
-        var accountId = self.accountId(req);
+        var accountId = parseInt(self.accountId(req));
         accountDao.getAccountByID(accountId, function(err, account){
             if(err || account===null) {
                 self.log.debug('<< getCurrentAccountBilling');
                 return self.wrapError(res, 500, null, err, account);
             } else {
                 self.log.debug('<< getCurrentAccountBilling');
-                return self.checkPermissionAndSendResponse(req, self.sc.privs.VIEW_ACCOUNT, resp, account.get('billing'));
+                return self.checkPermissionAndSendResponse(req, self.sc.privs.VIEW_ACCOUNT, res, account.get('billing'));
                 //return res.send(account.get('billing'));
             }
         });

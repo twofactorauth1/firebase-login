@@ -24,6 +24,17 @@ app.directive('contactUsComponent', ['customerService', 'leafletData', '$timeout
           return _bottomline;
         }
       };
+      function hexToRgb(hex, opacity) {      
+        var c;
+        opacity = opacity || 1;
+        c = hex.substring(1).split('');
+        if(c.length== 3){
+            c= [c[0], c[0], c[1], c[1], c[2], c[2]];
+        }
+        c= '0x'+c.join('');
+        return 'rgba('+[(c>>16)&255, (c>>8)&255, c&255].join(',')+','+ opacity +')';
+      };
+      scope.boxColor = hexToRgb(scope.component.boxColor, scope.component.boxOpacity);
 
       scope.updateContactUsAddress = function () {
         scope.contactAddress = scope.stringifyAddress(scope.component.location);

@@ -586,29 +586,29 @@
                     <tab-heading>
                         <span>Address</span>
                     </tab-heading>
-                    <div class="form-group">
+                    <div class="form-group" ng-class="{'has-error':errorMapData}">
                         <label for="location-address">Address </label>
                         <span tooltip-placement="top" tooltip-html-unsafe="Contact Us address line 1."><i class="fa fa-info-circle" /></span>
                         <input id="location-address" class="form-control" type="text" ng-model="componentEditing.location.address" ng-blur="updateContactUsAddress()">
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" ng-class="{'has-error':errorMapData}">
                         <label for="location-address2">Address2 </label>
                         <span tooltip-placement="top" tooltip-html-unsafe="Contact Us address line 2."><i class="fa fa-info-circle" /></span>
                         <input id="location-address2" class="form-control" type="text" ng-model="componentEditing.location.address2" ng-blur="updateContactUsAddress()">
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" ng-class="{'has-error':errorMapData}">
                         <label for="location-city">City </label>
                         <span tooltip-placement="top" tooltip-html-unsafe="Contact Us City."><i class="fa fa-info-circle" /></span>
                         <input id="location-city" class="form-control" type="text" ng-model="componentEditing.location.city" ng-blur="updateContactUsAddress()">
                         <div class="error"></div>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" ng-class="{'has-error':errorMapData}">
                         <label for="location-state">State </label>
                         <span tooltip-placement="top" tooltip-html-unsafe="Contact Us State."><i class="fa fa-info-circle" /></span>
                         <input id="location-state" class="form-control" type="text" ng-model="componentEditing.location.state" ng-blur="updateContactUsAddress()">
                         <div class="error"></div>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" ng-class="{'has-error':errorMapData}">
                         <label for="location-zip">Zip Code </label>
                         <span tooltip-placement="top" tooltip-html-unsafe="Contact Us zip code."><i class="fa fa-info-circle" /></span>
                         <input id="location-zip" validation-type="zip" indigeweb-validate-form-fields class="form-control" type="text" ng-model="componentEditing.location.zip" ng-blur="updateContactUsAddress()">
@@ -637,7 +637,7 @@
                         <label>Fields to Show:</label>
                         <div ng-repeat="field in componentEditing.fields">
                             <div class="col-xs-12 ckbox ckbox-success">
-                                <input type="checkbox" id="chk_{{field.name}}" ng-model="field.value" ng-change="saveComponent()" class="ng-pristine ng-untouched ng-valid" checked="checked">
+                                <input type="checkbox" id="chk_{{field.name}}" ng-model="field.value" checked="checked">
                                 <label for="chk_{{field.name}}">{{field.display}}</label>
                             </div>
                         </div>

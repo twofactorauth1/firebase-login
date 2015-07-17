@@ -1,7 +1,7 @@
 'use strict';
 /*global app, moment, angular*/
 /*jslint unparam:true*/
-app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalInstance', '$http', '$timeout', '$q', '$compile', '$filter', 'WebsiteService', 'CustomerService', 'ProductService', 'GeocodeService', 'toaster', 'components', 'clickedIndex', 'contactMap', 'website', 'blog', 'isDirty', 'isSinglePost', 'openParentModal', 'showInsert', 'underNav', function ($scope, $rootScope, $modalInstance, $http, $timeout, $q, $compile, $filter, WebsiteService, CustomerService, ProductService, GeocodeService, toaster, components, clickedIndex, contactMap, website, blog, isDirty, isSinglePost, openParentModal, showInsert, underNav) {
+app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalInstance', '$http', '$timeout', '$q', '$compile', '$filter', 'WebsiteService', 'CustomerService', 'ProductService', 'GeocodeService', 'toaster', 'hoursConstant', 'components', 'clickedIndex', 'contactMap', 'website', 'blog', 'isDirty', 'isSinglePost', 'openParentModal', 'showInsert', 'underNav', function ($scope, $rootScope, $modalInstance, $http, $timeout, $q, $compile, $filter, WebsiteService, CustomerService, ProductService, GeocodeService, toaster, hoursConstant, components, clickedIndex, contactMap, website, blog, isDirty, isSinglePost, openParentModal, showInsert, underNav) {
   $scope.blog = {};
   $scope.components = components;
   $scope.openParentModal = openParentModal;
@@ -14,6 +14,9 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
   $scope.isSinglePost = isSinglePost;
   $scope.showInsert = showInsert;
   $scope.underNav = underNav;
+
+  $scope.errorMapData = false;
+
   /*
    * @getAllProducts
    * - get products for products and pricing table components
@@ -54,12 +57,12 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
 
   $scope.sliderValue = 1;
 
-  $scope.addBackground = function() {
+  $scope.addBackground = function () {
     $scope.$parent.showInsert = true;
     $scope.openParentModal('media-modal', 'MediaModalCtrl', null, 'lg');
   };
 
-   $scope.addFeaturedPost = function() {
+  $scope.addFeaturedPost = function () {
     $scope.$parent.showInsert = true;
     $scope.$parent.blogImage = true;
     $scope.openParentModal('media-modal', 'MediaModalCtrl', null, 'lg');
@@ -70,7 +73,7 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
    * -
    */
   $scope.originalWebsite = angular.copy($scope.website);
-  $scope.revertComponent = function () {   
+  $scope.revertComponent = function () {
     if ($scope.componentEditing.type === 'navigation') {
       $scope.website.linkLists = $scope.originalWebsite.linkLists;
     }
@@ -290,39 +293,37 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
     enabled: true
   }];
 
-  $scope.componentOpacityValues = [
-  {
-    label: 10, 
+  $scope.componentOpacityValues = [{
+    label: 10,
     value: 0.1
-  },{
-    label: 20, 
+  }, {
+    label: 20,
     value: 0.2
-  },{
-    label: 30, 
+  }, {
+    label: 30,
     value: 0.3
-  },{
-    label: 40, 
+  }, {
+    label: 40,
     value: 0.4
-  },{
-    label: 50, 
+  }, {
+    label: 50,
     value: 0.5
-  },{
-    label: 60, 
+  }, {
+    label: 60,
     value: 0.6
-  },{
-    label: 70, 
+  }, {
+    label: 70,
     value: 0.7
-  },{
-    label: 80, 
+  }, {
+    label: 80,
     value: 0.8
-  },{
-    label: 90, 
+  }, {
+    label: 90,
     value: 0.9
-  },{
-    label: 100, 
+  }, {
+    label: 100,
     value: 1
-  }
-  ]
+  }];
 
   /*
    * @removeImage
@@ -345,9 +346,24 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
 
   $scope.closeModal = function () {
     $timeout(function () {
-      $scope.$apply(function () {
-        $modalInstance.close();
-        angular.element('.modal-backdrop').remove();
+      $scope.$apply(function () {              
+        if($scope.originalContactMap && !angular.equals($scope.originalContactMap, $scope.componentEditing.location))
+        {
+          $scope.validateGeoAddress(function () {
+            if($scope.errorMapData)
+            {
+              angular.copy($scope.originalContactMap, $scope.componentEditing.location);  
+              $scope.contactMap.refreshMap();
+            }
+            $modalInstance.close();
+            angular.element('.modal-backdrop').remove();
+          });     
+        }
+        else
+        {
+          $modalInstance.close();
+          angular.element('.modal-backdrop').remove(); 
+        }
       });
     });
   };
@@ -604,44 +620,64 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
    * -
    */
 
-   $scope.refreshSlider =function() {
+  $scope.refreshSlider = function () {
     console.log('refresh slider');
-    $timeout(function() {
+    $timeout(function () {
       $rootScope.$broadcast('rzSliderForceRender');
     });
-   };
+  };
+
+   /*
+   * @stringifyAddress
+   * -
+   */
 
   $scope.stringifyAddress = function (address) {
-    if (address) {
-      var _topline = _.filter([address.address, address.address2], function (str) {
+    var _bottomline = "";
+    var _topline = "";
+    if(address)
+    {
+      _bottomline = _.filter([address.city, address.state], function (str) {
         return str !== "";
       }).join(", ");
-      var _bottomline = _.filter([address.city, address.state, address.zip], function (str) {
+
+      _topline = _.filter([address.address, _bottomline, address.zip], function (str) {
         return str !== "";
-      }).join(", ");
-      if (_topline) {
-        return _topline + ' <br> ' + _bottomline;
-      }
-      return _bottomline;
+      }).join(" ");
     }
+    return _topline;
   };
 
   $scope.updateContactUsAddress = function () {
-    if (!angular.equals($scope.originalContactMap, $scope.componentEditing.location)) {
-      $scope.contactMap.updateAddressString();
-    }
-    $scope.componentEditing.location.lat = null;
-    $scope.componentEditing.location.lon = null;
-    if (($scope.componentEditing.location.city && $scope.componentEditing.location.state) || $scope.componentEditing.location.zip) {
-      GeocodeService.getGeoSearchAddress($scope.stringifyAddress($scope.componentEditing.location), function (data) {
-        if (data.lat && data.lon) {
-          $scope.componentEditing.location.lat = data.lat;
-          $scope.componentEditing.location.lon = data.lon;
-          $scope.contactMap.refreshMap();
-        }
-      });
-    }
+    $scope.errorMapData = false;
+    if (!angular.equals($scope.originalContactMap, $scope.componentEditing.location)) {      
+       $scope.validateGeoAddress();      
+    }      
   };
+
+$scope.validateGeoAddress = function (fn) {
+  if(!($scope.componentEditing.location.city && $scope.componentEditing.location.state) || $scope.componentEditing.location.zip)
+  {
+    $scope.errorMapData = true;
+    if (fn)
+      fn();
+  }
+  else
+  {
+    GeocodeService.getGeoSearchAddress($scope.stringifyAddress($scope.componentEditing.location), function (data) {
+    if (data.lat && data.lon) {
+      $scope.errorMapData = false;
+      $scope.componentEditing.location.lat = data.lat;
+      $scope.componentEditing.location.lon = data.lon;
+      $scope.contactMap.refreshMap();
+    }
+    else
+      $scope.errorMapData = true;
+      if (fn) 
+        fn();
+    })
+  }  
+}
 
   $scope.saveComponent = function () {
     $scope.isDirty.dirty = true;
@@ -661,14 +697,16 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
 
     if ($scope.componentEditing) {
       var componentType;
-      if($scope.componentEditing.type === 'navigation')
+      if ($scope.componentEditing.type === 'navigation') {
         componentType = _.findWhere($scope.componentTypes, {
-           type: $scope.componentEditing.type, version: parseInt($scope.componentEditing.version)
+          type: $scope.componentEditing.type,
+          version: parseInt($scope.componentEditing.version, 10)
         });
-      else
+      } else {
         componentType = _.findWhere($scope.componentTypes, {
           type: $scope.componentEditing.type
         });
+      }
 
       if (componentType && componentType.icon) {
         $scope.componentEditing.icon = componentType.icon;
@@ -695,6 +733,7 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
     }
 
     if ($scope.componentEditing.type === "contact-us") {
+      $scope.hours = hoursConstant;
       $scope.originalContactMap = angular.copy($scope.componentEditing.location);
       if ($scope.componentEditing.hours) {
         _.each($scope.componentEditing.hours, function (element, index) {
@@ -767,6 +806,11 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
     });
     $scope.allPages = arr;
     $scope.filterdedPages = $filter('orderBy')($scope.allPages, "title", false);
+  });
+
+  WebsiteService.getEmails(function (emails) {
+    console.log('emails ', emails);
+    $scope.emails = emails;
   });
 
   $scope.editComponent();
