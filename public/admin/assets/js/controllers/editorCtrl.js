@@ -888,6 +888,9 @@
 
     $scope.deleteComponent = function (index) {
       $scope.components.splice(index, 1);
+      $timeout(function () {
+        $scope.scrollToComponent(index)
+      },500)
     };
 
     /*
