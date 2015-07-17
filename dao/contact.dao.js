@@ -13,6 +13,7 @@ var analyticsManager = require('../analytics/analytics_manager');
 requirejs('constants/constants');
 require('../models/contact');
 var async = require('async');
+var appConfig = require('../configs/app.config');
 
 var dao = {
 
@@ -492,25 +493,32 @@ var dao = {
             });
             $.when(p1).done(function(savedContact){
                 //create activity for subscription purchased
+                /*
+                 * If this is the main account, we are already creating this activity
+                 */
+                if(accountId === appConfig.mainAccountID) {
+                    self.log.debug('<< createCustomerContact');
+                    return fn(null, savedContact);
+                } else {
+                    var activity = new $$.m.ContactActivity({
+                        accountId: savedContact.get('accountId'),
+                        contactId: savedContact.id(),
+                        activityType: $$.m.ContactActivity.types.SUBSCRIBE,
+                        note: "Subscription purchased.",
+                        start:new Date() //datestamp
 
-                var activity = new $$.m.ContactActivity({
-                    accountId: savedContact.get('accountId'),
-                    contactId: savedContact.id(),
-                    activityType: $$.m.ContactActivity.types.SUBSCRIBE,
-                    note: "Subscription purchased.",
-                    start:new Date() //datestamp
+                    });
 
-                });
-                contactActivityManager.createActivity(activity, function(err, value){
-                    if(err) {
-                        self.log.error('Error creating contactActivity for contact with id: ' + savedContact.id());
-                        return fn(err, savedContact);
-                    } else {
-                        self.log.debug('<< createCustomerContact');
-                        return fn(null, savedContact);
-                    }
-                });
-
+                    contactActivityManager.createActivity(activity, function(err, value){
+                        if(err) {
+                            self.log.error('Error creating contactActivity for contact with id: ' + savedContact.id());
+                            return fn(err, savedContact);
+                        } else {
+                            self.log.debug('<< createCustomerContact');
+                            return fn(null, savedContact);
+                        }
+                    });
+                }
             });
 
         });
