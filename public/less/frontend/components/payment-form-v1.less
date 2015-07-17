@@ -9,7 +9,7 @@
         font-family: 'FontAwesome'!important;
     }
     .inner-page {
-        max-width: 600px;
+        max-width: 600px!important;
         padding: 25px 0;
     }
     .fa-check {
@@ -124,7 +124,6 @@
     .social-signup {
         background: #4bafca;
         color: #ffffff;
-        padding: 5px;
         h2 {
             font-weight: 700;
         }
@@ -193,6 +192,35 @@
             display: block;
         }
     }
+    .payment-signup {
+        &:after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            margin-left: -25px;
+            width: 0;
+            height: 0;
+            border-bottom: solid 25px #f1f1f1;
+            border-left: solid 25px transparent;
+            border-right: solid 25px transparent;
+            display: block;
+            margin-top: -25px;
+        }
+    }
+    .account-info-signup {
+        &:after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            margin-left: -25px;
+            width: 0;
+            height: 0;
+            border-top: solid 25px #fafafa;
+            border-left: solid 25px transparent;
+            border-right: solid 25px transparent;
+            display: block;
+        }
+    }
     .account-info-signup,
     .payment-signup {
         h4 {
@@ -249,7 +277,37 @@
         }
     }
     .price-signup {
-        background: #3cb878;
+        background: #4bafca;
+        color: #ffffff;
+        h2 {
+            i {
+                font-size: 30px;
+            }
+            font-size: 54px;
+            font-weight: bold;
+            text-shadow: 1px 1px 1px rgba(0,
+            0,
+            0,
+            0.3);
+            span {
+                font-size: 24px;
+            }
+        }
+        &:after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            margin-left: -25px;
+            width: 0;
+            height: 0;
+            border-top: solid 25px #4bafca;
+            border-left: solid 25px transparent;
+            border-right: solid 25px transparent;
+            display: block;
+        }
+    }
+    .assertions-wrap {
+        background: #f1f1f1;
         color: #ffffff;
         h2 {
             i {
@@ -266,25 +324,13 @@
             }
         }
         .assertions {
-            color: #1b7144;
+            color: #444444;
             text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.5);
             font-size: 20px;
             span {
                 font-size: 35px;
                 font-weight: bold;
             }
-        }
-        &:after {
-            content: '';
-            position: absolute;
-            left: 50%;
-            margin-left: -25px;
-            width: 0;
-            height: 0;
-            border-top: solid 25px #3cb878;
-            border-left: solid 25px transparent;
-            border-right: solid 25px transparent;
-            display: block;
         }
     }
     .payment-signup {
