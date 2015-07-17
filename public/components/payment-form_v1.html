@@ -70,12 +70,12 @@
                 </div>
                 <!-- EMAIL AND PASSOWORD -->
                 <div id="email" class="form-group col-sm-6 has-feedback" ng-hide="tmpAccount.tempUser">
-                    <input class="form-control input-lg" type="email" ng-model="newAccount.email" ng-pattern="emailValidation" placeholder="Email" ng-blur="checkEmailExists(newAccount)" />
+                    <input class="form-control input-lg" type="email" ng-model="newAccount.email" ng-pattern="emailValidation" placeholder="Email" ng-change="checkEmailExists(newAccount)" ng-model-options="{ debounce: 800 }" />
                     <span class="glyphicon form-control-feedback"></span>
                     <span class="error help-block" />
                 </div>
                 <div id="password" class="form-group col-sm-6 has-feedback" ng-hide="newAccount.hidePassword">
-                    <input class="form-control input-lg" type="password" ng-model="newAccount.password" placeholder="Password" ng-blur="checkPasswordLength(newAccount)" />
+                    <input class="form-control input-lg" type="password" ng-model="newAccount.password" placeholder="Password" ng-change="checkPasswordLength(newAccount)" ng-model-options="{ debounce: 800 }" />
                     <span class="glyphicon form-control-feedback"></span>
                     <span class="error help-block" />
                 </div>
