@@ -160,6 +160,7 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
         scope.showFooter(false);
         var tmpAccount = scope.tmpAccount;
         tmpAccount.subdomain = $.trim(newAccount.businessName).replace(" ", "").replace(".", "_").replace("@", "");
+        tmpAccount.business = tmpAccount.business || {};
         tmpAccount.business.name = newAccount.businessName;
         UserService.saveOrUpdateTmpAccount(tmpAccount, function (data) {
           var newUser = {
