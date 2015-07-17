@@ -4080,7 +4080,6 @@ div[data-type=blog] .container {
 .payment-form-v1 .social-signup {
   background: #4bafca;
   color: #ffffff;
-  padding: 5px;
 }
 .payment-form-v1 .social-signup h2 {
   font-weight: 700;
@@ -4143,6 +4142,31 @@ div[data-type=blog] .container {
   width: 0;
   height: 0;
   border-top: solid 25px #ffffff;
+  border-left: solid 25px transparent;
+  border-right: solid 25px transparent;
+  display: block;
+}
+.payment-form-v1 .payment-signup:after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  margin-left: -25px;
+  width: 0;
+  height: 0;
+  border-bottom: solid 25px #f1f1f1;
+  border-left: solid 25px transparent;
+  border-right: solid 25px transparent;
+  display: block;
+  margin-top: -25px;
+}
+.payment-form-v1 .account-info-signup:after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  margin-left: -25px;
+  width: 0;
+  height: 0;
+  border-top: solid 25px #fafafa;
   border-left: solid 25px transparent;
   border-right: solid 25px transparent;
   display: block;
