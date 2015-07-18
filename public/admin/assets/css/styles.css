@@ -13865,3 +13865,9 @@ tags-input.ti-input-sm .tags .input,
 .sitesettings .tab-pane {
   min-height: 200px;
 }
+.sitesettings .input-icon i {
+  left: auto;
+  right: 10px;
+  position: absolute;
+  top: 10px;
+}

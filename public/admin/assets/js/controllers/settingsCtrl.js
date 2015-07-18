@@ -69,22 +69,19 @@
     $scope.saveSettings = function () {
       $scope.saveLoading = true;
       AccountService.updateAccount($scope.account, function (data, error) {
-        if(error)
-        {
+        if (error) {
           $scope.saveLoading = false;
           toaster.pop('error', error.message);
-        }
-        else  
-        {
+        } else {
           var mainAccount = AccountService.getMainAccount();
-          if(mainAccount)
-              mainAccount.showhide.blog = $scope.account.showhide.blog;        
+          if (mainAccount)
+            mainAccount.showhide.blog = $scope.account.showhide.blog;
           WebsiteService.updateWebsite($scope.website, function () {
-              $scope.saveLoading = false;
-              toaster.pop('success', " Website Settings saved.");
+            $scope.saveLoading = false;
+            toaster.pop('success', " Website Settings saved.");
           });
         }
-         
+
       });
     };
 
@@ -112,22 +109,36 @@
      */
 
     $scope.domainError = false;
+    $scope.modifysub = {};
+    $scope.modifysub.show = false;
 
     $scope.checkDomainExists = function (account) {
-      if ($scope.originalAccount.subdomain != account.subdomain) {
-        UserService.checkDuplicateSubdomain(account.subdomain, account._id, function (data) {
-          $log.debug('checkDomainExists', data);
+      console.log('account.subdomain >>> ', account.subdomain);
+      if (account.subdomain) {
+        $scope.checkingSubdomain = true;
+        if ($scope.originalAccount.subdomain != account.subdomain) {
+          UserService.checkDuplicateSubdomain(account.subdomain, account._id, function (data) {
+            $scope.hasCheckedSubdomain = true;
+            $log.debug('checkDomainExists', data);
+            $scope.checkingSubdomain = false;
+            if (data.isDuplicate) {
+              $scope.domainError = true;
+            } else {
+              $scope.domainError = false;
+            }
+          });
+        } else {
+          $scope.hasCheckedSubdomain = false;
+          $scope.domainError = false;
+          $scope.checkingSubdomain = false;
+        }
+      }
+    };
 
-          if(data.isDuplicate) {
-            $scope.domainError = true;
-          } else {
-            $scope.domainError = false;
-          }
-        });
-      }
-      else {
-        $scope.domainError = false;
-      }
+    $scope.revertSubdomain = function() {
+      $scope.hasCheckedSubdomain = '';
+      $scope.modifysub.show = false;
+      $scope.account.subdomain = $scope.originalAccount.subdomain;
     };
 
     /*
