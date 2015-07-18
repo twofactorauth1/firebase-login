@@ -2,9 +2,10 @@
 /*global app, moment, angular, window*/
 /*jslint unparam:true*/
 (function (angular) {
-  app.controller('SettingsCtrl', ["$scope", "$log", "$modal", "$state", "WebsiteService", "AccountService", "UserService", "toaster", "$timeout", function ($scope, $log, $modal, $state, WebsiteService, AccountService, UserService, toaster, $timeout) {
+  app.controller('SettingsCtrl', ["$scope", "$log", "$modal", "$state", "WebsiteService", "AccountService", "UserService", "toaster", "$timeout", '$location', function ($scope, $log, $modal, $state, WebsiteService, AccountService, UserService, toaster, $timeout, $location) {
     $scope.keywords = [];
 
+    console.log($location.absUrl().replace('main', 'hey'));
     /*
      * @settingsTitles
      * list of settings titles to map to
@@ -73,9 +74,14 @@
           $scope.saveLoading = false;
           toaster.pop('error', error.message);
         } else {
+          if ($scope.account.subdomain !== $scope.originalAccount.subdomain) {
+            var _newUrl = $location.absUrl().split($scope.originalAccount.subdomain);
+            window.location.href = _newUrl[0] + $scope.account.subdomain + _newUrl[1];
+          }
           var mainAccount = AccountService.getMainAccount();
-          if (mainAccount)
+          if (mainAccount) {
             mainAccount.showhide.blog = $scope.account.showhide.blog;
+          }
           WebsiteService.updateWebsite($scope.website, function () {
             $scope.saveLoading = false;
             toaster.pop('success', " Website Settings saved.");
@@ -135,7 +141,7 @@
       }
     };
 
-    $scope.revertSubdomain = function() {
+    $scope.revertSubdomain = function () {
       $scope.hasCheckedSubdomain = '';
       $scope.modifysub.show = false;
       $scope.account.subdomain = $scope.originalAccount.subdomain;
