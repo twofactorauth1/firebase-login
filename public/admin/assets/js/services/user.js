@@ -153,7 +153,7 @@
     };
 
     this.checkDuplicateSubdomain = function(subDomain, accountId, fn) {
-      var apiUrl = baseUrl + ['account', subDomain, accountId, 'duplicate'].join('/');
+      var apiUrl = baseUrl + ['account', subDomain, 'duplicate'].join('/');
       $http.get(apiUrl)
       .success(function(data, status, headers, config) {
         fn(data);

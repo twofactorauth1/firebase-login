@@ -2150,7 +2150,7 @@
     $scope.checkIfSubdomaddCKEditorImageInputainExists = function () {
       var parent_div = angular.element('div.form-group.subdomain');
       UserService.checkDuplicateSubdomain($scope.account.subdomain, $scope.account._id, function (result) {
-        if (result === "true") {
+        if(data.isDuplicate) {
           parent_div.addClass('has-error');
           parent_div.find('span.error').remove();
           parent_div.append("<span class='error help-block'>Domain already exists</span>");

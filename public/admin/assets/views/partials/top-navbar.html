@@ -5,7 +5,7 @@
         <i class="ti-align-justify"></i>
     </a>
     <a class="navbar-brand hidden-md hidden-lg" ui-sref="app.dashboard">
-        <img ng-src="{{app.layout.logo}}" alt="{{app.name}}" />
+        <img ng-src="{{app.layout.logo}}" alt="{{app.name}}" /> <label class="label label-info">BETA</label>
     </a>
     <a href="#" class="sidebar-toggler pull-right visible-md visible-lg" ng-click="app.layout.isSidebarClosed = !app.layout.isSidebarClosed">
         <i class="ti-align-justify"></i>
@@ -19,7 +19,7 @@
 <!-- start: NAVBAR COLLAPSE -->
 <div class="navbar-collapse collapse padding-right-0" collapse="navbarCollapsed" ng-init="navbarCollapsed = true" off-click="navbarCollapsed = true" off-click-if='!navbarCollapsed' off-click-filter="#menu-toggler">
     <a class="navbar-brand hidden-xs hidden-sm" ui-sref="app.dashboard">
-        <img ng-src="{{app.layout.logo}}" alt="{{app.name}}" />
+        <img ng-src="{{app.layout.logo}}" alt="{{app.name}}" class="pull-left" /> <p class="pull-left margin-bottom-0 margin-top-5" style="margin-left:10px;font-size:10px"><label class="label label-info label-sm">BETA</label></p>
     </a>
     <ul class="nav navbar-right margin-right-0" ct-fullheight="window" data-ct-fullheight-exclusion="header" data-ct-fullheight-if="isSmallDevice">
         <!-- start: MESSAGES DROPDOWN -->

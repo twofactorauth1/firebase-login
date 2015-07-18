@@ -2,9 +2,10 @@
 /*global app, moment, angular, window*/
 /*jslint unparam:true*/
 (function (angular) {
-  app.controller('SettingsCtrl', ["$scope", "$modal", "$state", "WebsiteService", "AccountService", "UserService", "toaster", "$timeout", function ($scope, $modal, $state, WebsiteService, AccountService, UserService, toaster, $timeout) {
+  app.controller('SettingsCtrl', ["$scope", "$log", "$modal", "$state", "WebsiteService", "AccountService", "UserService", "toaster", "$timeout", '$location', function ($scope, $log, $modal, $state, WebsiteService, AccountService, UserService, toaster, $timeout, $location) {
     $scope.keywords = [];
 
+    console.log($location.absUrl().replace('main', 'hey'));
     /*
      * @settingsTitles
      * list of settings titles to map to
@@ -69,22 +70,24 @@
     $scope.saveSettings = function () {
       $scope.saveLoading = true;
       AccountService.updateAccount($scope.account, function (data, error) {
-        if(error)
-        {
+        if (error) {
           $scope.saveLoading = false;
           toaster.pop('error', error.message);
-        }
-        else  
-        {
+        } else {
+          if ($scope.account.subdomain !== $scope.originalAccount.subdomain) {
+            var _newUrl = $location.absUrl().split($scope.originalAccount.subdomain);
+            window.location.href = _newUrl[0] + $scope.account.subdomain + _newUrl[1];
+          }
           var mainAccount = AccountService.getMainAccount();
-          if(mainAccount)
-              mainAccount.showhide.blog = $scope.account.showhide.blog;        
+          if (mainAccount) {
+            mainAccount.showhide.blog = $scope.account.showhide.blog;
+          }
           WebsiteService.updateWebsite($scope.website, function () {
-              $scope.saveLoading = false;
-              toaster.pop('success', " Website Settings saved.");
+            $scope.saveLoading = false;
+            toaster.pop('success', " Website Settings saved.");
           });
         }
-         
+
       });
     };
 
@@ -112,18 +115,36 @@
      */
 
     $scope.domainError = false;
+    $scope.modifysub = {};
+    $scope.modifysub.show = false;
 
     $scope.checkDomainExists = function (account) {
-      if ($scope.originalAccount.subdomain != account.subdomain) {
-        UserService.checkDuplicateSubdomain(account.subdomain, account._id, function (data) {
-          console.log('data ', data);
-          if (data !== 'true') {
-            $scope.domainError = true;
-          } else {
-            $scope.domainError = false;
-          }
-        });
+      console.log('account.subdomain >>> ', account.subdomain);
+      if (account.subdomain) {
+        $scope.checkingSubdomain = true;
+        if ($scope.originalAccount.subdomain != account.subdomain) {
+          UserService.checkDuplicateSubdomain(account.subdomain, account._id, function (data) {
+            $scope.hasCheckedSubdomain = true;
+            $log.debug('checkDomainExists', data);
+            $scope.checkingSubdomain = false;
+            if (data.isDuplicate) {
+              $scope.domainError = true;
+            } else {
+              $scope.domainError = false;
+            }
+          });
+        } else {
+          $scope.hasCheckedSubdomain = false;
+          $scope.domainError = false;
+          $scope.checkingSubdomain = false;
+        }
       }
+    };
+
+    $scope.revertSubdomain = function () {
+      $scope.hasCheckedSubdomain = '';
+      $scope.modifysub.show = false;
+      $scope.account.subdomain = $scope.originalAccount.subdomain;
     };
 
     /*

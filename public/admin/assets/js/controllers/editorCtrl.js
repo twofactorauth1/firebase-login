@@ -32,7 +32,7 @@
 
     $scope.scrollToComponent = function (destIndex) {
       $timeout(function () {
-        var anchor = $scope.components[destIndex].anchor || $scope.components[destIndex]._id;
+        var anchor = $scope.components[destIndex] && ($scope.components[destIndex].anchor || $scope.components[destIndex]._id);
         var element = document.getElementById(anchor);
         if (element) {
           $document.scrollToElementAnimated(element, 175, 1000);
@@ -192,6 +192,8 @@
         $scope.originalComponents = angular.copy($scope.components);
         $scope.originalPage = angular.copy(data);
         $scope.activateCKeditor();
+        if(!$scope.components || $scope.components.length === 0)
+          $scope.ckeditorLoaded = true;
         $rootScope.breadcrumbTitle = $scope.page.title;
       });
     };
@@ -342,7 +344,8 @@
      */
 
     $scope.setEditingComponent = function (index) {
-      $scope.componentEditing = $scope.components[index];
+      if($scope.components)
+        $scope.componentEditing = $scope.components[index];
     };
 
     /*
@@ -523,6 +526,8 @@
         size: 'md',
         resolve: {
           components: function () {
+            if(!$scope.components)
+              $scope.components = [];
             return $scope.components;
           }
         }
@@ -888,6 +893,9 @@
 
     $scope.deleteComponent = function (index) {
       $scope.components.splice(index, 1);
+      $timeout(function () {
+        $scope.scrollToComponent(index)
+      },1000)
     };
 
     /*
