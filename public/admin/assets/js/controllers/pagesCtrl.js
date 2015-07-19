@@ -276,7 +276,7 @@
           });
 
         }
-        repeater = $timeout($scope.getPages, 60000);
+        repeater = $timeout($scope.getPages, 30000);
       });
     };
 
