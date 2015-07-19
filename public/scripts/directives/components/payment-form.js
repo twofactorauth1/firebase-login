@@ -341,23 +341,25 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
       };
 
       scope.checkCoupon = function () {
+        scope.couponChecked = true;
+        scope.checkingCoupon = true;
         console.log('>> checkCoupon');
         var coupon = scope.newAccount.coupon;
         //console.dir(coupon);
         //console.log(scope.newAccount.coupon);
         if (coupon) {
           PaymentService.validateCoupon(coupon, function (data) {
+            console.log('data ', data);
+            scope.currentCoupon = data;
+            scope.checkingCoupon = false;
+            console.log('validate coupon');
             if (data.id && data.id === coupon) {
               console.log('valid');
               angular.element("#coupon-name .error").html("");
-              angular.element("#coupon-name").removeClass('has-error').addClass('has-success');
-              angular.element("#coupon-name .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
               scope.couponIsValid = true;
             } else {
               console.log('invalid');
               angular.element("#coupon-name .error").html("Invalid Coupon");
-              angular.element("#coupon-name").addClass('has-error');
-              angular.element("#coupon-name .glyphicon").addClass('glyphicon-remove');
               scope.couponIsValid = false;
             }
           });
@@ -365,7 +367,6 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
           angular.element("#coupon-name .error").html("");
           angular.element("#coupon-name").removeClass('has-error').addClass('has-success');
           angular.element("#coupon-name .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
-          scope.couponIsValid = true;
         }
       };
 
