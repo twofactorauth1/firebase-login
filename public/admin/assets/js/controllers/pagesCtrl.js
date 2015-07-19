@@ -201,9 +201,7 @@
     };
 
     $scope.viewSingle = function (page) {
-      window.location = '/admin/#/website/pages/?pagehandle=' + page.handle;
-      // console.log('$location.path() ',$location.path());
-      // $location.path('website/pages/?pagehandle=' + page.handle).replace();
+      $location.path('/website/pages/').search({pagehandle: page.handle});
     };
 
     $scope.filterScreenshot = {};

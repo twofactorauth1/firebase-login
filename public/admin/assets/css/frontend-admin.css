@@ -1585,11 +1585,6 @@
 #componentloader .meet-team-v1 {
   overflow: hidden;
 }
-#componentloader .meet-team-v1 .title {
-  font-weight: bold;
-  text-align: center;
-  text-transform: uppercase;
-}
 #componentloader .meet-team-v1 .name {
   padding-bottom: 5px;
   text-align: center;

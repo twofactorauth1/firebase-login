@@ -723,9 +723,7 @@
         });
         WebsiteService.createPost($scope.page._id, post_data, function (data) {
           $scope.duplicate = true;
-          console.log("Duplicate Post Created");
-          window.location = '/admin/#/website/posts/?posthandle=' + newPost.post_url;
-          window.location.reload();
+          $location.path('/website/posts/').search({posthandle: newPost.post_url});
         });
       });
     };

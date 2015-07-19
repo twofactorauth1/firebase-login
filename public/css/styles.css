@@ -1572,11 +1572,6 @@ contenthover a {
 .meet-team-v1 {
   overflow: hidden;
 }
-.meet-team-v1 .title {
-  font-weight: bold;
-  text-align: center;
-  text-transform: uppercase;
-}
 .meet-team-v1 .name {
   padding-bottom: 5px;
   text-align: center;

@@ -1,8 +1,6 @@
 <div ng-class="component.type+'-v'+component.version">
     <div class="title">
-        <div class="editable" data-class="title" data-index="{{$index}}">
-            <span ng-bind-html="component.title | unsafe" />
-        </div>
+        <div elem ng-model="component.title"></div>
     </div>
 
     <div class="{{component.bg.img.parallax?'parallax':''}}" parallax-background parallax-ratio="0.4" style="'background': url({{component.bg.img.url}}) no-repeat fixed; 'background-color':{{component.bg.color}}">

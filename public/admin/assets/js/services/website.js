@@ -99,22 +99,9 @@
       });
     };
 
-    // this.getPages = function (fn) {
-    //   var apiUrl = baseUrl + ['cms', 'website', $$.server.websiteId.replace(/&quot;/g, ''), 'pages'].join('/');
-    //   $http.get(apiUrl)
-    //     .success(function (data, status, headers, config) {
-    //       fn(data);
-    //     })
-    //     .error(function (err) {
-    //       console.log('END:Website Service with ERROR');
-    //       fn(err, null);
-    //     });
-    // };
-
     var resetCache = false;
 
     this.getPages = function (fn) {
-      console.log('getPages >>>');
       var self = this;
       var data = pagecache.get('pages');
       if (data && !resetCache) {
@@ -126,7 +113,6 @@
         var apiUrl = baseUrl + ['cms', 'website', $$.server.websiteId.replace(/&quot;/g, ''), 'pages'].join('/');
         $http.get(apiUrl)
           .success(function (data) {
-            console.log('data ', data);
             resetCache = false;
             pagecache.put('pages', data);
             if (fn) {
