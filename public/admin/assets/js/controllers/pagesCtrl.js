@@ -238,7 +238,7 @@
     $scope.pages = [];
 
     $scope.getPages = function () {
-      window.clearTimeout(repeater);
+      $timeout.cancel(repeater);
       WebsiteService.getPages(function (pages) {
         if ($scope.pages.length === 0) {
           var indexExists = _.find(pages, function (page) {

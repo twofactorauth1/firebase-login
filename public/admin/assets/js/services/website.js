@@ -141,10 +141,10 @@
           .success(function (data) {
             resetCache = false;
             pagecache.put('pages', data);
-            self.getPagesHeartbeat();
             if (fn) {
               formatPages(angular.copy(data), function (_formattedPages) {
                 deferred.resolve(fn(_formattedPages));
+                self.getPagesHeartbeat();
               });
             }
           }).error(function (msg, code) {
@@ -155,12 +155,13 @@
       return deferred.promise;
     };
 
+    var heartrepeater;
+
     this.getPagesHeartbeat = function () {
       var self = this;
-      var repeater = null;
 
       function checkPulse() {
-        window.clearTimeout(self.repeater);
+        $timeout.cancel(self.heartrepeater);
         var apiUrl = baseUrl + ['cms', 'website', $$.server.websiteId.replace(/&quot;/g, ''), 'pagesheartbeat'].join('/');
         $http.get(apiUrl)
           .success(function (data, status, headers, config) {
@@ -172,7 +173,7 @@
           .error(function (err) {
             console.warn('END:Website Service with ERROR');
           });
-        self.repeater = setTimeout(checkPulse, 60000);
+        self.heartrepeater = $timeout(checkPulse, 60000);
       }
 
       checkPulse();
