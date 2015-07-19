@@ -172,7 +172,7 @@
           .error(function (err) {
             console.warn('END:Website Service with ERROR');
           });
-        self.repeater = setTimeout(checkPulse, 30000);
+        self.repeater = setTimeout(checkPulse, 60000);
       }
 
       checkPulse();
