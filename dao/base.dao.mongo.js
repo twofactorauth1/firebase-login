@@ -90,6 +90,27 @@ var mongodao = {
         });
     },
 
+    _findCountMongo: function (query, type, fn) {
+        var self = this;
+        self.log.error('result ', query);
+        if (fn == null) {
+            fn = type;
+            type = null;
+        }
+
+        var collection = this.getTable(type);
+
+        this.mongo(collection).find(query).count(function (err, result) {
+            if (!err) {
+                self.log.error('result ', result);
+                fn(null, result);
+            } else {
+                self.log.error("An error occurred: #findOneMongo() with query: " + JSON.stringify(query), err);
+                fn(err, result);
+            }
+        });
+    },
+
 
     _findManyMongo: function (query, type, fn) {
         this._findManyWithFieldsMongo(query, null, type, fn);

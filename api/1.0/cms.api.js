@@ -64,6 +64,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         app.get(this.url('website/:websiteId/pages/:id'), this.setup.bind(this), this.getPagesById.bind(this));
         app.get(this.url('website/:websiteId/pages'), this.setup.bind(this), this.getAllPages.bind(this));
+        app.get(this.url('website/:websiteId/pagesheartbeat'), this.setup.bind(this), this.getPageHeartbeat.bind(this));
         app.get(this.url('website/:websiteId/page/:id'), this.setup.bind(this), this.getPageById.bind(this));
         app.post(this.url('website/:websiteId/page'), this.isAuthAndSubscribedApi.bind(this), this.createPage.bind(this));
         app.post(this.url('website/:websiteId/duplicate/page'), this.isAuthAndSubscribedApi.bind(this), this.createDuplicatePage.bind(this));
@@ -684,6 +685,24 @@ _.extend(api.prototype, baseApi.prototype, {
             });
         }
         
+
+    },
+
+    /**
+     * Currently no security.
+     * @param req
+     * @param res
+     */
+    getPageHeartbeat: function(req, res) {
+        var self = this;
+        self.log.debug('>> getPageHeartbeat');
+        var websiteId = req.params.websiteId;
+        var accountId = parseInt(self.currentAccountId(req));
+        cmsManager.getPagesLengthByWebsiteId(websiteId, accountId, function(err, value){
+            self.log.debug('<< getPageHeartbeat ', value);
+            self.sendResultOrError(res, err, {'pagelength': value}, 'Error getting pages heartbeat for account');
+            self = null;
+        });
 
     },
 

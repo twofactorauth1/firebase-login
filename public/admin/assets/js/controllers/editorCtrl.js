@@ -4,6 +4,28 @@
 (function (angular) {
   app.controller('EditorCtrl', ["$scope", "$document", "$rootScope", "$interval", "$timeout", "toaster", "$modal", "$filter", "$location", "WebsiteService", "SweetAlert", "hoursConstant", "GeocodeService", "ProductService", "AccountService", "postConstant", function ($scope, $document, $rootScope, $interval, $timeout, toaster, $modal, $filter, $location, WebsiteService, SweetAlert, hoursConstant, GeocodeService, ProductService, AccountService, postConstant) {
 
+    /*
+     * @ckeditor:instanceReady
+     * -
+     */
+
+    $scope.ckeditorLoaded = false;
+
+    $scope.activateCKeditor = function () {
+      CKEDITOR.on("instanceReady", function (ev) {
+        ev.editor.on('key', function () {
+          $scope.isDirty.dirty = true;
+        });
+        if (!$scope.ckeditorLoaded) {
+          $timeout(function () {
+            $scope.ckeditorLoaded = true;
+            //$scope.setUnderbnavMargin();
+            $(window).trigger('resize');
+          }, 100);
+        }
+      });
+    };
+
     $scope.preDragging = false;
     $scope.preDrag = function (value) {
       if (value === 'enter') {
@@ -72,16 +94,13 @@
           $scope.saveLoading = false;
           toaster.pop('success', "Post Saved", "The " + $filter('htmlToPlaintext')($scope.blog.post.post_title) + " post was saved successfully.");
         });
-      }
-      else if($scope.templateActive)
-      {
+      } else if ($scope.templateActive) {
         WebsiteService.updateTemplate($scope.page._id, $scope.page, function () {
           console.log('success');
           $scope.saveLoading = false;
           toaster.pop('success', "Template Saved", "The " + $scope.page.handle + " template was saved successfully.");
         });
-      }
-      else {
+      } else {
         WebsiteService.updatePage($scope.page, function (data) {
           console.log($scope.page.handle, $scope.originalPage.handle);
           if ($scope.page.handle !== $scope.originalPage.handle) {
@@ -185,15 +204,17 @@
      */
 
     $scope.retrievePage = function (_handle) {
+      console.log('retrievePage >>> ', _handle);
       WebsiteService.getSinglePage(_handle, function (data) {
-        console.log('data ', data);
+        console.log('retrievePage data ', data);
         $scope.page = data;
         $scope.components = $scope.page.components;
         $scope.originalComponents = angular.copy($scope.components);
         $scope.originalPage = angular.copy(data);
-        $scope.activateCKeditor();
-        if(!$scope.components || $scope.components.length === 0)
+         $scope.activateCKeditor();
+        if (!$scope.components || $scope.components.length === 0) {
           $scope.ckeditorLoaded = true;
+        }
         $rootScope.breadcrumbTitle = $scope.page.title;
       });
     };
@@ -233,7 +254,7 @@
         $scope.page = _.find(templates, function (tmpl) {
           return tmpl.handle == _handle;
         });
-        
+
         $scope.components = $scope.page.config.components;
         $scope.originalComponents = angular.copy($scope.components);
         $scope.originalPage = angular.copy($scope.template);
@@ -262,7 +283,7 @@
      */
 
 
-    if ($location.search().pagehandle) {      
+    if ($location.search().pagehandle) {
       $scope.retrievePage($location.search().pagehandle);
     }
 
@@ -296,28 +317,6 @@
     }
 
     /*
-     * @ckeditor:instanceReady
-     * -
-     */
-
-    $scope.ckeditorLoaded = false;
-
-    $scope.activateCKeditor = function () {
-      CKEDITOR.on("instanceReady", function (ev) {
-        ev.editor.on('key', function () {
-          $scope.isDirty.dirty = true;
-        });
-        if (!$scope.ckeditorLoaded) {
-          $timeout(function () {
-            $scope.ckeditorLoaded = true;
-            //$scope.setUnderbnavMargin();
-            $(window).trigger('resize');
-          }, 100);
-        }
-      });
-    };
-
-    /*
      * @clickandInsertImageButton
      * -
      */
@@ -344,7 +343,7 @@
      */
 
     $scope.setEditingComponent = function (index) {
-      if($scope.components)
+      if ($scope.components)
         $scope.componentEditing = $scope.components[index];
     };
 
@@ -526,7 +525,7 @@
         size: 'md',
         resolve: {
           components: function () {
-            if(!$scope.components)
+            if (!$scope.components)
               $scope.components = [];
             return $scope.components;
           }
@@ -569,7 +568,7 @@
         };
       }
 
-      if (angular.isDefined(index) && index !==null && index >= 0) {
+      if (angular.isDefined(index) && index !== null && index >= 0) {
         $scope.setEditingComponent(index);
         _modal.resolve.clickedIndex = function () {
           return index;
@@ -800,10 +799,8 @@
       if ($scope.originalComponents && $scope.components && $scope.originalComponents.length !== $scope.components.length) {
         $scope.isDirty.dirty = true;
       }
-      if($scope.isSinglePost)
-      {
-        if($scope.blog.post && !angular.equals($scope.originalPost, $scope.blog.post))
-        {
+      if ($scope.isSinglePost) {
+        if ($scope.blog.post && !angular.equals($scope.originalPost, $scope.blog.post)) {
           $scope.isDirty.dirty = true;
         }
       }
@@ -895,7 +892,7 @@
       $scope.components.splice(index, 1);
       $timeout(function () {
         $scope.scrollToComponent(index)
-      },1000)
+      }, 1000)
     };
 
     /*

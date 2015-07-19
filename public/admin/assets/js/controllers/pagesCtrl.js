@@ -2,29 +2,12 @@
 /*global app, moment, angular, window, CKEDITOR*/
 /*jslint unparam:true*/
 (function (angular) {
-  app.controller('PagesCtrl', ["$scope", "$location", "toaster", "$filter", "$modal", "WebsiteService", function ($scope, $location, toaster, $filter, $modal, WebsiteService) {
+  app.controller('PagesCtrl', ["$scope", "$location", "toaster", "$filter", "$modal", "WebsiteService", "$timeout", function ($scope, $location, toaster, $filter, $modal, WebsiteService, $timeout) {
     $scope.tableView = 'list';
     $scope.itemPerPage = 40;
     $scope.showPages = 15;
     $scope.showChangeURL = false;
-    WebsiteService.getPages(function (pages) {
-      console.log('pages >>> ', pages);
-      var indexExists = _.find(pages, function (page) {
-        return page.handle === 'index';
-      });
-      if (!indexExists) {
-        $scope.createpage.showhomepage = true;
-        $scope.createpage.homepage = true;
-        $scope.createpage.title = 'Home';
-        $scope.createpage.handle = 'index';
-      } else {
-        $scope.createpage.homepage = false;
-      }
-      var pagesArr = $scope.formatPages(pages);
-      $scope.pages = pagesArr;
-      $scope.orderByFn();
-      $scope.displayPages = true;
-    });
+    $scope.createpage = {};
 
     $scope.setHomePage = function () {
       if ($scope.createpage.homepage) {
@@ -59,7 +42,7 @@
       });
     };
 
-    $scope.formatPages = function (pages) {
+    $scope.formatPages = function (pages, fn) {
       var pagesArr = [];
       _.each(pages, function (page) {
         if (page) {
@@ -80,7 +63,10 @@
           }
         }
       });
-      return pagesArr;
+
+      if (fn) {
+        fn(pagesArr);
+      }
     };
 
     WebsiteService.getTemplates(function (templates) {
@@ -123,8 +109,6 @@
       $scope.selectedTemplate = null;
       $scope.showChangeURL = false;
     };
-
-    $scope.createpage = {};
 
     $scope.slugifyHandle = function (title) {
       if (title) {
@@ -249,6 +233,53 @@
     $scope.toggleHandle = function (val) {
       $scope.showChangeURL = val;
     };
+
+    var repeater;
+    $scope.pages = [];
+
+    $scope.getPages = function () {
+      WebsiteService.getPages(function (pages) {
+        if ($scope.pages.length === 0) {
+          var indexExists = _.find(pages, function (page) {
+            return page.handle === 'index';
+          });
+          if (!indexExists) {
+            $scope.createpage.showhomepage = true;
+            $scope.createpage.homepage = true;
+            $scope.createpage.title = 'Home';
+            $scope.createpage.handle = 'index';
+          } else {
+            $scope.createpage.homepage = false;
+          }
+          $scope.formatPages(pages, function (pagesArr) {
+            $scope.pages = pagesArr;
+            $scope.orderByFn();
+            $scope.displayPages = true;
+          });
+        }
+        if (pages.length > $scope.pages.length && $scope.pages.length !== 0) {
+          console.log($scope.pages);
+          console.log(pages);
+          var intersection = _.filter(pages, function (obj) {
+            return !_.find($scope.pages, function (item) {
+              return item._id === obj._id;
+            });
+          });
+          console.log('intersection ', intersection);
+          $scope.formatPages(intersection, function (pagesArr) {
+            _.each(pagesArr, function (_pages) {
+              $scope.pages.push(_pages);
+            });
+            $scope.orderByFn();
+            $scope.displayPages = true;
+          });
+
+        }
+        repeater = $timeout($scope.getPages, 30000);
+      });
+    };
+
+    $scope.getPages();
 
   }]);
 }(angular));
