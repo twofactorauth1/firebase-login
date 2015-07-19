@@ -131,8 +131,8 @@
             pagecache.put('pages', data);
             if (fn) {
               fn(data);
-              self.getPagesHeartbeat();
             }
+            self.getPagesHeartbeat();
           }).error(function (msg, code) {
             console.warn(msg, code);
           });
@@ -141,25 +141,27 @@
 
     var heartrepeater;
 
-    function checkPulse() {
-      $timeout.cancel(heartrepeater);
-      var apiUrl = baseUrl + ['cms', 'website', $$.server.websiteId.replace(/&quot;/g, ''), 'pagesheartbeat'].join('/');
-      $http.get(apiUrl)
-        .success(function (data, status, headers, config) {
-          if (data.pagelength > _.size(pagecache.get('pages'))) {
-            resetCache = true;
-            this.getPages(null);
-          }
-        })
-        .error(function (err) {
-          console.warn('END:Website Service with ERROR');
-        });
-      heartrepeater = $timeout(checkPulse, 30000);
-    }
-
     this.getPagesHeartbeat = function () {
-      console.log('getPagesHeartbeat >>>');
+      var self = this;
+
+      function checkPulse() {
+        $timeout.cancel(self.heartrepeater);
+        var apiUrl = baseUrl + ['cms', 'website', $$.server.websiteId.replace(/&quot;/g, ''), 'pagesheartbeat'].join('/');
+        $http.get(apiUrl)
+          .success(function (data, status, headers, config) {
+            if (data.pagelength > _.size(pagecache.get('pages'))) {
+              resetCache = true;
+              self.getPages(null);
+            }
+          })
+          .error(function (err) {
+            console.warn('END:Website Service with ERROR');
+          });
+        self.heartrepeater = $timeout(checkPulse, 30000);
+      }
+
       checkPulse();
+
     };
 
 

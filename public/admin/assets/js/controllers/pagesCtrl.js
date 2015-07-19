@@ -239,7 +239,8 @@
 
     $scope.getPages = function () {
       $timeout.cancel(repeater);
-      WebsiteService.getPages(function (pages) {
+      WebsiteService.getPages(function (returnedPages) {
+        var pages = angular.copy(returnedPages);
         if ($scope.pages.length === 0) {
           var indexExists = _.find(pages, function (page) {
             return page.handle === 'index';
