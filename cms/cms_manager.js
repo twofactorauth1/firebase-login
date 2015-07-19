@@ -1624,7 +1624,10 @@ module.exports = {
             accountId: accountId,
             websiteId: websiteId,
             type: 'page',
-            latest: true
+            $and: [
+                {$or: [{secure:false},{secure:{$exists:false}}]},
+                {$or: [{latest:true},{latest:{$exists:false}}]}
+            ]
         };
         self.log.debug('start query');
         cmsDao.findMany(query, $$.m.cms.Page, function(err, list){
@@ -1639,6 +1642,12 @@ module.exports = {
                     if(map[value.get('handle')] === undefined) {
                         map[value.get('handle')] = value;
                         count++;
+                    } else {
+                        var currentVersion = map[value.get('handle')].get('version');
+                        if(value.get('version') > currentVersion) {
+                            map[value.get('handle')] = value;
+                            count++;
+                        }
                     }
 
                 });

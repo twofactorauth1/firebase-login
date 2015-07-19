@@ -89,7 +89,7 @@
         });
         WebsiteService.updatePost($scope.page._id, post_data._id, post_data, function (data) {
           if (post_data.post_url !== $scope.originalPost.post_url) {
-            $location.search('posthandle', post_data.post_url)
+            $location.search('posthandle', post_data.post_url);
           }
           $scope.saveLoading = false;
           toaster.pop('success', "Post Saved", "The " + $filter('htmlToPlaintext')($scope.blog.post.post_title) + " post was saved successfully.");
@@ -104,7 +104,7 @@
         WebsiteService.updatePage($scope.page, function (data) {
           console.log($scope.page.handle, $scope.originalPage.handle);
           if ($scope.page.handle !== $scope.originalPage.handle) {
-            $location.search('pagehandle', $scope.page.handle)
+            $location.search('pagehandle', $scope.page.handle);
           }
           $scope.saveLoading = false;
           toaster.pop('success', "Page Saved", "The " + $scope.page.handle + " page was saved successfully.");
@@ -204,14 +204,12 @@
      */
 
     $scope.retrievePage = function (_handle) {
-      console.log('retrievePage >>> ', _handle);
       WebsiteService.getSinglePage(_handle, function (data) {
-        console.log('retrievePage data ', data);
         $scope.page = data;
         $scope.components = $scope.page.components;
         $scope.originalComponents = angular.copy($scope.components);
         $scope.originalPage = angular.copy(data);
-         $scope.activateCKeditor();
+        $scope.activateCKeditor();
         if (!$scope.components || $scope.components.length === 0) {
           $scope.ckeditorLoaded = true;
         }
@@ -252,7 +250,7 @@
       $scope.templateActive = true;
       WebsiteService.getTemplates(function (templates) {
         $scope.page = _.find(templates, function (tmpl) {
-          return tmpl.handle == _handle;
+          return tmpl.handle === _handle;
         });
 
         $scope.components = $scope.page.config.components;
@@ -343,8 +341,9 @@
      */
 
     $scope.setEditingComponent = function (index) {
-      if ($scope.components)
+      if ($scope.components) {
         $scope.componentEditing = $scope.components[index];
+      }
     };
 
     /*
@@ -370,7 +369,7 @@
       $scope.updateImage = update;
       $scope.componentImageIndex = index;
       if (parentIndex && numberPerPage) {
-        $scope.componentImageIndex = (parseInt(parentIndex) * parseInt(numberPerPage)) + parseInt(index);
+        $scope.componentImageIndex = (parseInt(parentIndex, 10) * parseInt(numberPerPage, 10)) + parseInt(index, 10);
       }
       $scope.componentEditing = _.findWhere($scope.components, {
         _id: componentId

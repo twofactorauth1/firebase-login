@@ -2,7 +2,7 @@
 /*global app, moment, angular, window, $$*/
 /*jslint unparam:true*/
 (function (angular) {
-  app.service('WebsiteService', function ($http, $cacheFactory, $timeout) {
+  app.service('WebsiteService', function ($http, $cacheFactory, $timeout, $q) {
     var baseUrl = '/api/1.0/';
     this.editPageHandle = null;
 
@@ -41,12 +41,10 @@
     //website/:websiteid/page/:handle
     this.getSinglePage = function (handle, fn) {
       var _pages = pagecache.get('pages');
-      console.log('_pages cache ', _pages);
-      var _matchingPage = _.find(_pages, function(_page) {
+      var _matchingPage = _.find(_pages, function (_page) {
         return _page.handle === handle;
       });
       if (_matchingPage) {
-        console.log('data ', _matchingPage);
         fn(_matchingPage);
       } else {
         var apiUrl = baseUrl + ['cms', 'website', $$.server.websiteId, 'page', handle].join('/');
@@ -113,38 +111,48 @@
     //     });
     // };
 
-    function formatPages(data) {
+    function formatPages(data, fn) {
       var _pages = [];
       _.each(data, function (_page) {
         if (_page.type !== 'template' && _page.handle !== 'blog' && _page.handle !== 'single-post') {
           _pages.push(_page);
         }
       });
-      return _pages;
+      if (fn) {
+        fn(_pages);
+      }
     }
 
-    this.getPages = function (fn, beat) {
+    var resetCache = false;
+
+    this.getPages = function (fn) {
       var self = this;
+      var deferred = $q.defer();
       var data = pagecache.get('pages');
-      if (data) {
-        fn(formatPages(angular.copy(data)));
+      if (data && !resetCache) {
+        if (fn) {
+          formatPages(angular.copy(data), function (_formattedPages) {
+            deferred.resolve(fn(_formattedPages));
+          });
+        }
       } else {
         var apiUrl = baseUrl + ['cms', 'website', $$.server.websiteId.replace(/&quot;/g, ''), 'pages'].join('/');
         $http.get(apiUrl)
-          .success(function (data, status, headers, config) {
+          .success(function (data) {
+            resetCache = false;
             pagecache.put('pages', data);
-            if (!beat) {
-              self.getPagesHeartbeat();
-            }
+            self.getPagesHeartbeat();
             if (fn) {
-              fn(formatPages(angular.copy(data)));
+              formatPages(angular.copy(data), function (_formattedPages) {
+                deferred.resolve(fn(_formattedPages));
+              });
             }
-          })
-          .error(function (err) {
-            console.warn('END:Website Service with ERROR');
-            fn(err, null);
+          }).error(function (msg, code) {
+            deferred.reject(msg);
+            console.warn(msg, code);
           });
       }
+      return deferred.promise;
     };
 
     this.getPagesHeartbeat = function () {
@@ -152,13 +160,13 @@
       var repeater = null;
 
       function checkPulse() {
+        window.clearTimeout(self.repeater);
         var apiUrl = baseUrl + ['cms', 'website', $$.server.websiteId.replace(/&quot;/g, ''), 'pagesheartbeat'].join('/');
         $http.get(apiUrl)
           .success(function (data, status, headers, config) {
-
             if (data.pagelength > _.size(pagecache.get('pages'))) {
-              pagecache.put('pages', null);
-              self.getPages(null, true);
+              resetCache = true;
+              self.getPages(null);
             }
           })
           .error(function (err) {
@@ -364,9 +372,7 @@
         data: angular.toJson(pagedata)
       }).success(function (data, status, headers, config) {
         var _pages = pagecache.get('pages');
-        console.log(_pages);
         _pages[data.handle] = data;
-        console.log(_pages);
         pagecache.put('pages', _pages);
         fn(data);
       }).error(function (err) {
