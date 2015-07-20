@@ -89,7 +89,7 @@ app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userSe
               email: scope.user.email,
               phone: scope.user.phone,
               user_hash: hash.toString(CryptoJS.enc.Hex),
-              created_at: new Date().now() / 1000,
+              created_at: moment(new Date()),
               app_id: "b3st2skm"
             };
 
