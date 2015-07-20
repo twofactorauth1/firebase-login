@@ -21,7 +21,7 @@ script(type="text/javascript").
       name: '#{user.first} #{user.last}',
       email: '#{user.email}',
       user_hash: hash.toString(CryptoJS.enc.Hex),
-      created_at: new Date().getTime(),
+      created_at: moment(new Date()),
       app_id: "b3st2skm"
     };
 
