@@ -18,7 +18,6 @@ var mainApp = angular
     'angular-parallax',
     'config',
     'dm.style',
-    'coursePreview',
     'duScroll',
     'mrPageEnterAnimate',
     'angularMoment',
@@ -31,14 +30,11 @@ var mainApp = angular
     "com.2fdevs.videogular.plugins.overlayplay",
     "com.2fdevs.videogular.plugins.buffering",
     "com.2fdevs.videogular.plugins.poster",
-    "ngTagsInput",
     "truncate",
-    'ngInputDate',
     'angular-jqcloud',
     'socialLinks',
     'slick',
-    'leaflet-directive',
-    'ui.sortable'
+    'leaflet-directive'
   ])
   .config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
     //$locationProvider.html5Mode(true);
