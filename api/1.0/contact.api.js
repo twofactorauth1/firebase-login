@@ -494,8 +494,16 @@ _.extend(api.prototype, baseApi.prototype, {
                 query['details.emails.email'] = req.body.details[0].emails[0].email;
                 var skipWelcomeEmail = req.body.skipWelcomeEmail;
                 var fromContactEmail = req.body.fromEmail;
+                var emailId = req.body.emailId;
+                var emailSubject = req.body.emailSubject;
+                var fromContactName = req.body.fromName;
+                var activity = req.body.activity;
                 delete req.body.skipWelcomeEmail;
-                //delete req.body.fromEmail;
+                delete req.body.fromEmail;
+                delete req.body.fromName;
+                delete req.body.emailId;
+                delete req.body.emailSubject;
+                delete req.body.activity;
 
                 contactDao.findMany(query, $$.m.Contact, function(err, list){
                     if(err) {
@@ -587,13 +595,14 @@ _.extend(api.prototype, baseApi.prototype, {
                                             self.log.error('Error getting account: ' + err);
                                             self.log.error('No email will be sent.');
                                         } else {
-                                            cmsDao.getPageByType(query.accountId, null, 'email', function(err, emailPage){
+                                            cmsDao.getPageById(emailId, function(err, emailPage){
                                                 if(err || emailPage === null) {
                                                     self.log.debug('Could not get email page.  Using default.');
                                                     fs.readFile(notificationConfig.WELCOME_HTML, 'utf-8', function(err, htmlContent){
                                                         if(err) {
                                                             self.log.error('Error getting welcome email file.  Welcome email not sent for accountId ' + value.id());
                                                         } else {
+                                                            self.log.debug('value ', value);
                                                             var contactEmail = savedContact.getEmails()[0];
                                                             var contactName = savedContact.get('first') + ' ' + savedContact.get('last');
                                                             var fromEmail = fromContactEmail || notificationConfig.WELCOME_FROM_EMAIL;
@@ -603,7 +612,7 @@ _.extend(api.prototype, baseApi.prototype, {
                                                             var vars = [];
                                                             mandrillHelper.sendAccountWelcomeEmail(fromEmail,
                                                                 notificationConfig.WELCOME_FROM_NAME, contactEmail.email, contactName, notificationConfig.WELCOME_EMAIL_SUBJECT,
-                                                                '<h1>hey</h1>', value.id(), savedContact.id(), vars, function(err, result){});
+                                                                '<h1>hey</h1>', value.ip, savedContact.id(), vars, function(err, result){});
                                                         }
 
                                                     });
@@ -615,6 +624,10 @@ _.extend(api.prototype, baseApi.prototype, {
                                                     if(!component.logourl && account && account.attributes.business) {
                                                         component.logourl = account.attributes.business.logo;
                                                     }
+
+                                                    component.logo.replace('"//', '"http://');
+                                                    component.text.replace('"//', '"http://');
+                                                    component.title.replace('"//', '"http://');
 
                                                     app.render('emails/base_email', component, function(err, html){
                                                         if(err) {
@@ -628,14 +641,16 @@ _.extend(api.prototype, baseApi.prototype, {
 
 
                                                             var fromEmail = fromContactEmail || component.from_email || notificationConfig.WELCOME_FROM_EMAIL;
-                                                            var fromName = component.from_name || notificationConfig.WELCOME_FROM_NAME;
-                                                            var emailSubject = component.email_subject || notificationConfig.WELCOME_EMAIL_SUBJECT;
+                                                            // var fromName = component.fromName || notificationConfig.WELCOME_FROM_NAME;
+                                                            // var emailSubject = emailSubject || notificationConfig.WELCOME_EMAIL_SUBJECT;
                                                             var vars = [];
 
                                                             self.log.debug('notificationConfig.WELCOME_FROM_EMAIL ', notificationConfig.WELCOME_FROM_EMAIL);
                                                             self.log.debug('notificationConfig.WELCOME_FROM_NAME ', notificationConfig.WELCOME_FROM_NAME);
                                                             self.log.debug('contactEmail.email ', contactEmail);
                                                             self.log.debug('contactName ', contactName);
+                                                            self.log.debug('emailSubject ', emailSubject);
+                                                            self.log.debug('fromContactName ', fromContactName);
                                                             self.log.debug('notificationConfig.WELCOME_EMAIL_SUBJECT ', notificationConfig.WELCOME_EMAIL_SUBJECT);
                                                             //self.log.debug('value.id() ', value.id());
                                                             self.log.debug('savedContact.id() ', savedContact.id());
@@ -643,27 +658,27 @@ _.extend(api.prototype, baseApi.prototype, {
                                                             self.log.debug('notificationConfig.WELCOME_FROM_EMAIL ', notificationConfig.WELCOME_FROM_EMAIL);
 
                                                             try{
-                                                                mandrillHelper.sendAccountWelcomeEmail(fromEmail, fromName, contactEmail, contactName, emailSubject, html, query.accountId, savedContact.id(), vars, function(err, result){
+                                                                mandrillHelper.sendAccountWelcomeEmail(fromEmail, fromContactName, contactEmail, contactName, emailSubject, html, query.accountId, savedContact.id(), vars, function(err, result){
                                                                     self.log.debug('result: ', result);
                                                                 });
                                                             } catch(exception) {
                                                                 self.log.error(exception);
                                                             }
 
-                                                            if(req.body.activity){
+                                                            if(activity){
                                                                 var accountEmail = null;
                                                                 if(account && account.attributes.business && account.attributes.business.emails && account.attributes.business.emails[0] && account.attributes.business.emails[0].email)
                                                                 {
                                                                     self.log.debug('user email: ', account.attributes.business.emails[0].email);
                                                                     accountEmail = account.attributes.business.emails[0].email;
-                                                                    self._sendEmailOnCreateAccount(req, resp, accountEmail, req.body.activity.contact, account._id, component)
+                                                                    self._sendEmailOnCreateAccount(req, resp, accountEmail, activity.contact, account._id, component)
                                                                 }
                                                                 else{
                                                                     userDao.getUserAccount(query.accountId, function(err, user){
                                                                         self.log.debug('user: ', user);
                                                                         self.log.debug('user email: ', user.attributes.email);
                                                                         accountEmail = user.attributes.email;
-                                                                        self._sendEmailOnCreateAccount(req, resp, accountEmail, req.body.activity.contact, account._id, component);
+                                                                        self._sendEmailOnCreateAccount(req, resp, accountEmail, activity.contact, account._id, component);
                                                                     })
                                                                 }
 
@@ -678,15 +693,15 @@ _.extend(api.prototype, baseApi.prototype, {
                                     self.log.debug('Skipping email.');
                                 }
                                 //create contact_form activity
-                                if(req.body.activity){
+                                if(activity){
                                     var contactActivity = new $$.m.ContactActivity({
                                         accountId: query.accountId,
                                         contactId: savedContact.id(),
-                                        activityType: req.body.activity.activityType,
-                                        note: req.body.activity.note,
+                                        activityType: activity.activityType,
+                                        note: activity.note,
                                         start:new Date(),
-                                        extraFields: req.body.activity.contact,
-                                        sessionId: req.body.activity.sessionId
+                                        extraFields: activity.contact,
+                                        sessionId: activity.sessionId
                                     });
                                     contactActivityManager.createActivity(contactActivity, function(err, value){
                                         if(err) {

@@ -346,23 +346,19 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
 
   $scope.closeModal = function () {
     $timeout(function () {
-      $scope.$apply(function () {              
-        if($scope.originalContactMap && !angular.equals($scope.originalContactMap, $scope.componentEditing.location))
-        {
+      $scope.$apply(function () {
+        if ($scope.originalContactMap && !angular.equals($scope.originalContactMap, $scope.componentEditing.location)) {
           $scope.validateGeoAddress(function () {
-            if($scope.errorMapData)
-            {
-              angular.copy($scope.originalContactMap, $scope.componentEditing.location);  
+            if ($scope.errorMapData) {
+              angular.copy($scope.originalContactMap, $scope.componentEditing.location);
               $scope.contactMap.refreshMap();
             }
             $modalInstance.close();
             angular.element('.modal-backdrop').remove();
-          });     
-        }
-        else
-        {
+          });
+        } else {
           $modalInstance.close();
-          angular.element('.modal-backdrop').remove(); 
+          angular.element('.modal-backdrop').remove();
         }
       });
     });
@@ -627,7 +623,7 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
     });
   };
 
-   /*
+  /*
    * @stringifyAddress
    * -
    */
@@ -635,8 +631,7 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
   $scope.stringifyAddress = function (address) {
     var _bottomline = "";
     var _topline = "";
-    if(address)
-    {
+    if (address) {
       _bottomline = _.filter([address.city, address.state], function (str) {
         return str !== "";
       }).join(", ");
@@ -650,34 +645,30 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
 
   $scope.updateContactUsAddress = function () {
     $scope.errorMapData = false;
-    if (!angular.equals($scope.originalContactMap, $scope.componentEditing.location)) {      
-       $scope.validateGeoAddress();      
-    }      
+    if (!angular.equals($scope.originalContactMap, $scope.componentEditing.location)) {
+      $scope.validateGeoAddress();
+    }
   };
 
-$scope.validateGeoAddress = function (fn) {
-  if(!($scope.componentEditing.location.city && $scope.componentEditing.location.state) || $scope.componentEditing.location.zip)
-  {
-    $scope.errorMapData = true;
-    if (fn)
-      fn();
-  }
-  else
-  {
-    GeocodeService.getGeoSearchAddress($scope.stringifyAddress($scope.componentEditing.location), function (data) {
-    if (data.lat && data.lon) {
-      $scope.errorMapData = false;
-      $scope.componentEditing.location.lat = data.lat;
-      $scope.componentEditing.location.lon = data.lon;
-      $scope.contactMap.refreshMap();
-    }
-    else
+  $scope.validateGeoAddress = function (fn) {
+    if (!($scope.componentEditing.location.city && $scope.componentEditing.location.state) || $scope.componentEditing.location.zip) {
       $scope.errorMapData = true;
-      if (fn) 
+      if (fn)
         fn();
-    })
-  }  
-}
+    } else {
+      GeocodeService.getGeoSearchAddress($scope.stringifyAddress($scope.componentEditing.location), function (data) {
+        if (data.lat && data.lon) {
+          $scope.errorMapData = false;
+          $scope.componentEditing.location.lat = data.lat;
+          $scope.componentEditing.location.lon = data.lon;
+          $scope.contactMap.refreshMap();
+        } else
+          $scope.errorMapData = true;
+        if (fn)
+          fn();
+      })
+    }
+  }
 
   $scope.saveComponent = function () {
     $scope.isDirty.dirty = true;
@@ -715,21 +706,26 @@ $scope.validateGeoAddress = function (fn) {
         $scope.componentEditing.header_title = componentType.title;
       }
     }
+    if ($scope.componentEditing.type === "simple-form") {
+      if (!$scope.componentEditing.fields.length) {
+        $scope.componentEditing.fields.push({
+          "display": "First Name",
+          "value": false,
+          "name": "first"
+        }, {
+          "display": "Last Name",
+          "value": false,
+          "name": "last"
+        }, {
+          "display": "Phone Number",
+          "value": false,
+          "name": "phone"
+        });
+      }
 
-    if ($scope.componentEditing.type === "simple-form" && !$scope.componentEditing.fields.length) {
-      $scope.componentEditing.fields.push({
-        "display": "First Name",
-        "value": false,
-        "name": "first"
-      }, {
-        "display": "Last Name",
-        "value": false,
-        "name": "last"
-      }, {
-        "display": "Phone Number",
-        "value": false,
-        "name": "phone"
-      });
+      if (!$scope.componentEditing.redirectType) {
+        $scope.componentEditing.redirectType = 'page';
+      }
     }
 
     if ($scope.componentEditing.type === "contact-us") {
