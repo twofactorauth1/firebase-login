@@ -4,6 +4,28 @@
 (function (angular) {
   app.controller('EditorCtrl', ["$scope", "$document", "$rootScope", "$interval", "$timeout", "toaster", "$modal", "$filter", "$location", "WebsiteService", "SweetAlert", "hoursConstant", "GeocodeService", "ProductService", "AccountService", "postConstant", function ($scope, $document, $rootScope, $interval, $timeout, toaster, $modal, $filter, $location, WebsiteService, SweetAlert, hoursConstant, GeocodeService, ProductService, AccountService, postConstant) {
 
+    /*
+     * @ckeditor:instanceReady
+     * -
+     */
+
+    $scope.ckeditorLoaded = false;
+
+    $scope.activateCKeditor = function () {
+      CKEDITOR.on("instanceReady", function (ev) {
+        ev.editor.on('key', function () {
+          $scope.isDirty.dirty = true;
+        });
+        if (!$scope.ckeditorLoaded) {
+          $timeout(function () {
+            $scope.ckeditorLoaded = true;
+            //$scope.setUnderbnavMargin();
+            $(window).trigger('resize');
+          }, 100);
+        }
+      });
+    };
+
     $scope.preDragging = false;
     $scope.preDrag = function (value) {
       if (value === 'enter') {
@@ -67,25 +89,22 @@
         });
         WebsiteService.updatePost($scope.page._id, post_data._id, post_data, function (data) {
           if (post_data.post_url !== $scope.originalPost.post_url) {
-            $location.search('posthandle', post_data.post_url)
+            $location.search('posthandle', post_data.post_url);
           }
           $scope.saveLoading = false;
           toaster.pop('success', "Post Saved", "The " + $filter('htmlToPlaintext')($scope.blog.post.post_title) + " post was saved successfully.");
         });
-      }
-      else if($scope.templateActive)
-      {
+      } else if ($scope.templateActive) {
         WebsiteService.updateTemplate($scope.page._id, $scope.page, function () {
           console.log('success');
           $scope.saveLoading = false;
           toaster.pop('success', "Template Saved", "The " + $scope.page.handle + " template was saved successfully.");
         });
-      }
-      else {
+      } else {
         WebsiteService.updatePage($scope.page, function (data) {
           console.log($scope.page.handle, $scope.originalPage.handle);
           if ($scope.page.handle !== $scope.originalPage.handle) {
-            $location.search('pagehandle', $scope.page.handle)
+            $location.search('pagehandle', $scope.page.handle);
           }
           $scope.saveLoading = false;
           toaster.pop('success', "Page Saved", "The " + $scope.page.handle + " page was saved successfully.");
@@ -186,14 +205,14 @@
 
     $scope.retrievePage = function (_handle) {
       WebsiteService.getSinglePage(_handle, function (data) {
-        console.log('data ', data);
         $scope.page = data;
         $scope.components = $scope.page.components;
         $scope.originalComponents = angular.copy($scope.components);
         $scope.originalPage = angular.copy(data);
         $scope.activateCKeditor();
-        if(!$scope.components || $scope.components.length === 0)
+        if (!$scope.components || $scope.components.length === 0) {
           $scope.ckeditorLoaded = true;
+        }
         $rootScope.breadcrumbTitle = $scope.page.title;
       });
     };
@@ -231,9 +250,9 @@
       $scope.templateActive = true;
       WebsiteService.getTemplates(function (templates) {
         $scope.page = _.find(templates, function (tmpl) {
-          return tmpl.handle == _handle;
+          return tmpl.handle === _handle;
         });
-        
+
         $scope.components = $scope.page.config.components;
         $scope.originalComponents = angular.copy($scope.components);
         $scope.originalPage = angular.copy($scope.template);
@@ -262,7 +281,7 @@
      */
 
 
-    if ($location.search().pagehandle) {      
+    if ($location.search().pagehandle) {
       $scope.retrievePage($location.search().pagehandle);
     }
 
@@ -296,28 +315,6 @@
     }
 
     /*
-     * @ckeditor:instanceReady
-     * -
-     */
-
-    $scope.ckeditorLoaded = false;
-
-    $scope.activateCKeditor = function () {
-      CKEDITOR.on("instanceReady", function (ev) {
-        ev.editor.on('key', function () {
-          $scope.isDirty.dirty = true;
-        });
-        if (!$scope.ckeditorLoaded) {
-          $timeout(function () {
-            $scope.ckeditorLoaded = true;
-            //$scope.setUnderbnavMargin();
-            $(window).trigger('resize');
-          }, 100);
-        }
-      });
-    };
-
-    /*
      * @clickandInsertImageButton
      * -
      */
@@ -344,8 +341,9 @@
      */
 
     $scope.setEditingComponent = function (index) {
-      if($scope.components)
+      if ($scope.components) {
         $scope.componentEditing = $scope.components[index];
+      }
     };
 
     /*
@@ -371,7 +369,7 @@
       $scope.updateImage = update;
       $scope.componentImageIndex = index;
       if (parentIndex && numberPerPage) {
-        $scope.componentImageIndex = (parseInt(parentIndex) * parseInt(numberPerPage)) + parseInt(index);
+        $scope.componentImageIndex = (parseInt(parentIndex, 10) * parseInt(numberPerPage, 10)) + parseInt(index, 10);
       }
       $scope.componentEditing = _.findWhere($scope.components, {
         _id: componentId
@@ -526,7 +524,7 @@
         size: 'md',
         resolve: {
           components: function () {
-            if(!$scope.components)
+            if (!$scope.components)
               $scope.components = [];
             return $scope.components;
           }
@@ -569,7 +567,7 @@
         };
       }
 
-      if (angular.isDefined(index) && index !==null && index >= 0) {
+      if (angular.isDefined(index) && index !== null && index >= 0) {
         $scope.setEditingComponent(index);
         _modal.resolve.clickedIndex = function () {
           return index;
@@ -725,9 +723,7 @@
         });
         WebsiteService.createPost($scope.page._id, post_data, function (data) {
           $scope.duplicate = true;
-          console.log("Duplicate Post Created");
-          window.location = '/admin/#/website/posts/?posthandle=' + newPost.post_url;
-          window.location.reload();
+          $location.path('/website/posts/').search({posthandle: newPost.post_url});
         });
       });
     };
@@ -800,10 +796,8 @@
       if ($scope.originalComponents && $scope.components && $scope.originalComponents.length !== $scope.components.length) {
         $scope.isDirty.dirty = true;
       }
-      if($scope.isSinglePost)
-      {
-        if($scope.blog.post && !angular.equals($scope.originalPost, $scope.blog.post))
-        {
+      if ($scope.isSinglePost) {
+        if ($scope.blog.post && !angular.equals($scope.originalPost, $scope.blog.post)) {
           $scope.isDirty.dirty = true;
         }
       }
@@ -895,7 +889,7 @@
       $scope.components.splice(index, 1);
       $timeout(function () {
         $scope.scrollToComponent(index)
-      },1000)
+      }, 1000)
     };
 
     /*

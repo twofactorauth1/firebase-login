@@ -180,6 +180,14 @@ _.extend(baseDao.prototype, mongoBaseDao, {
         }
     },
 
+    findCount: function (query, type, fn) {
+        if (this.getStorage(type) === "mongo") {
+            this._findCountMongo(query, type, fn);
+        } else {
+            fn("No storage medium available for this model");
+        }
+    },
+
 
     findMany: function (query, type, fn) {
         if (this.getStorage(type) === "mongo") {

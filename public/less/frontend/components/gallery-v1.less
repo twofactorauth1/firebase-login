@@ -1,54 +1,55 @@
 /********** Gallery **********/
 
-    .overlay-gallery-image {
-      position: relative;
-      background: rgba(230, 145, 10, 0.95);
-      color: white;
-      padding: 10px 20px;
-      -webkit-transition: all 0.6s ease;
-      -moz-transition:    all 0.6s ease;
-      -o-transition:      all 0.6s ease;
-      margin-top: -63px;
-      z-index: 99999;
-    }
-    .overlay-gallery-image {
-      h3, small {
+.overlay-gallery-image {
+    position: relative;
+    background: rgba(230, 145, 10, 0.95);
+    color: white;
+    padding: 10px 20px;
+    -webkit-transition: all 0.6s ease;
+    -moz-transition: all 0.6s ease;
+    -o-transition: all 0.6s ease;
+    margin-top: -63px;
+    z-index: 99999;
+}
+
+.overlay-gallery-image {
+    h3, small {
         text-align: left;
         color: white;
-      }
     }
-    .overlay-gallery-image:hover figcaption {
-      opacity: 1;
+}
+
+.overlay-gallery-image:hover figcaption {
+    opacity: 1;
+}
+
+.overlay-gallery-image:hover:before {
+    opacity: 1;
+}
+
+.gallery-v1 {
+    // .thumbnail .image {
+    //   width: 228px;
+    //   height: 228px;
+    //   background-repeat: no-repeat;
+    //   -webkit-background-size: cover;
+    //   -moz-background-size: cover;
+    //   -o-background-size: cover;
+    //   background-size: cover;
+    // }
+    .btn-add-image {
+        position: relative !important;
     }
-    .overlay-gallery-image:hover:before {
-      opacity: 1;
-    }
-
-    .gallery-v1 {
-      // .thumbnail .image {
-      //   width: 228px;
-      //   height: 228px;
-      //   background-repeat: no-repeat;
-      //   -webkit-background-size: cover;
-      //   -moz-background-size: cover;
-      //   -o-background-size: cover;
-      //   background-size: cover;
-      // }
-
-      .btn-add-image
-      {
-        position:relative !important;
-      }
-    }
-
-
     .contenthover {
         padding: 20px 20px 10px 20px;
     }
-    .contenthover, .contenthover h3, contenthover a {
+    .contenthover,
+    .contenthover h3,
+    contenthover a {
         color: #fff;
     }
-    .contenthover h3, .contenthover p {
+    .contenthover h3,
+    .contenthover p {
         margin: 0 0 10px 0;
         line-height: 1.4em;
         padding: 0;
@@ -67,5 +68,6 @@
         background: #34742d
     }
     .single-image img {
-      height: 170px;
+        height: 170px;
     }
+}

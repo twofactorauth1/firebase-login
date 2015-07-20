@@ -89,7 +89,7 @@
                     <h4 class="center">{{plan.name}}</h4>
                     <h2 class="center"><i class="fa fa-usd fa-1"></i>{{(plan.amount/100).toFixed(2)}} <span>/ {{plan.interval}}</span></h2>
                     <div class="clearfix mb15"></div>
-                    <p class="center">+ <i class="fa fa-usd fa-1"></i>{{subscriptionPlanOneTimeFee}} One Time Setup Fee</p>
+                    <p class="center"><span ng-show="currentCoupon.created != 1420262069">+ <i class="fa fa-usd fa-1"></i> {{subscriptionPlanOneTimeFee}} One Time</span> <span ng-if="currentCoupon.created == 1420262069">No</span> Setup Fee</p>
                     <div class="col-xs-12">
                         <a type="button" class="btn btn-success btn-block center" ng-if="newAccount.membership != plan.id" ng-hide="subscriptionPlans.length == 1" ng-click="selectSubscriptionPlanFn(plan.id, plan.amount, plan.interval, planStatus[plan.id].signup_fee)">Choose</a>
                         <a type="button" class="btn btn-green btn-block center active" ng-hide="subscriptionPlans.length == 1" ng-if="newAccount.membership == plan.id">Selected</a>
@@ -131,9 +131,11 @@
                     </div>
                 </form>
                 <!-- Coupon DETAILS -->
-                <div id="coupon-name" class="form-group col-xs-12">
-                    <input class="form-control input-lg" type="text" ng-blur="checkCoupon()" ng-model="newAccount.coupon" placeholder="Coupon Code" />
-                    <span class="error" />
+                <div class="form-group col-xs-12 has-feedback" ng-class="{'has-error': !couponIsValid && couponChecked && !checkingCoupon, 'has-success': couponIsValid && !checkingCoupon}">
+                    <input class="form-control input-lg" type="text" ng-change="checkCoupon()" ng-model="newAccount.coupon" placeholder="Coupon Code" ng-model-options="{ debounce: 800 }"/>
+                    <span class="form-control-feedback" ng-class="{'glyphicon glyphicon-remove': !couponIsValid && couponChecked && !checkingCoupon, 'glyphicon glyphicon-ok': couponIsValid, 'fa fa-spinner fa-spin':checkingCoupon}"></span>
+                    <span class="error help-block" ng-if="!couponIsValid && couponChecked && !checkingCoupon">Invalid Coupon</span>
+                    <span class="success help-block" ng-if="couponIsValid && couponChecked && !checkingCoupon">Coupon Accepted</span>
                 </div>
                 <div class="clearfix mb15"></div>
                 <div>
@@ -146,7 +148,7 @@
                 </div>
                 <p class="center margin-top-10">By clicking this button you agree to our <a href="" type="button" data-toggle="modal" data-target="#terms-of-service">Terms of Service</a>.</p>
                 <br>
-                <p class="center">* 14-day free trial with sign-up fee waived, then $49.95/month. <br> Once payment is processed, there are no refunds and there is no proration. <br> For cancellations, please contact our support via chat.</p>
+                <p class="center">* <span ng-if="currentCoupon.created == 1420262069">14-day free trial with sign-up fee waived, then $49.95/month. <br></span> Once payment is processed, there are no refunds and there is no proration. <br> For cancellations, please contact our support via chat.</p>
                 <div class="clearfix margin-bottom-10"></div>
             </div>
         </div>

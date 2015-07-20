@@ -7,12 +7,7 @@
 -->
 
 <div class="component-header container">
-    <div class="editable" data-class="label">
-        <h2 class="section-title">{{component.label}}</h2>
-    </div>
-    <div class="editable" data-class="description">
-        <p>{{component.description}}</p>
-    </div>
+    <div elem ng-model="component.title"></div>
 </div>
 <div id="#myCarousel-{{component._id}}" class="carousel slide">
     <!-- Indicators -->

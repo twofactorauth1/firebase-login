@@ -1616,6 +1616,46 @@ module.exports = {
         });
     },
 
+    getPagesLengthByWebsiteId: function(websiteId, accountId, fn) {
+        var self = this;
+        self.log = log;
+        self.log.debug('>> getPagesLengthByWebsiteId');
+        var query = {
+            accountId: accountId,
+            websiteId: websiteId,
+            type: 'page',
+            $and: [
+                {$or: [{secure:false},{secure:{$exists:false}}]},
+                {$or: [{latest:true},{latest:{$exists:false}}]}
+            ]
+        };
+        self.log.debug('start query');
+        cmsDao.findMany(query, $$.m.cms.Page, function(err, list){
+            self.log.debug('end query');
+            if(err) {
+                self.log.error('Error getting pages by websiteId: ' + err);
+                fn(err, null);
+            } else {
+                var count = 0;
+                var map = {};
+                _.each(list, function(value){
+                    if(map[value.get('handle')] === undefined) {
+                        map[value.get('handle')] = value;
+                        count++;
+                    } else {
+                        var currentVersion = map[value.get('handle')].get('version');
+                        if(value.get('version') > currentVersion) {
+                            map[value.get('handle')] = value;
+                            count++;
+                        }
+                    }
+
+                });
+                fn(null, count);
+            }
+        });
+    },
+
     getEmailsByWebsiteId: function(websiteId, accountId, fn) {
         var self = this;
         self.log = log;

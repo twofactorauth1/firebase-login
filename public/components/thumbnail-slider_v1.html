@@ -1,8 +1,7 @@
 <div ng-class="component.type+'-v'+component.version">
     <div class="col-md-12"><br>
         <div class="title center">
-            <div class="editable" data-class="title" ng-bind-html="component.title | unsafe">
-            </div>
+            <div elem ng-model="component.title"></div>
         </div>
         <div class="mb0" style="background: none" >
             <div ng-if="showSlider" id="myCarousel-{{component.anchor || component._id}}" active="1" class="carousel slide">

@@ -2,9 +2,11 @@
 /*global app, moment, angular, window, $$*/
 /*jslint unparam:true*/
 (function (angular) {
-  app.service('WebsiteService', function ($http) {
+  app.service('WebsiteService', function ($http, $cacheFactory, $timeout, $q) {
     var baseUrl = '/api/1.0/';
     this.editPageHandle = null;
+
+    var pagecache = $cacheFactory('pages');
 
     this.getEditedPageHandle = function () {
       return this.editPageHandle;
@@ -31,22 +33,30 @@
       }).success(function (data, status, headers, config) {
         fn(data);
       }).error(function (err) {
-        console.log('END:Website Service with ERROR', err);
+        console.warn('END:Website Service with ERROR', err);
         fn(err, null);
       });
     };
 
     //website/:websiteid/page/:handle
     this.getSinglePage = function (handle, fn) {
-      var apiUrl = baseUrl + ['cms', 'website', $$.server.websiteId, 'page', handle].join('/');
-      $http.get(apiUrl)
-        .success(function (data, status, headers, config) {
-          fn(data);
-        })
-        .error(function (err) {
-          console.log('END:getSinglePage with ERROR');
-          fn(err, null);
-        });
+      var _pages = pagecache.get('pages');
+      var _matchingPage = _.find(_pages, function (_page) {
+        return _page.handle === handle;
+      });
+      if (_matchingPage) {
+        fn(_matchingPage);
+      } else {
+        var apiUrl = baseUrl + ['cms', 'website', $$.server.websiteId, 'page', handle].join('/');
+        $http.get(apiUrl)
+          .success(function (data, status, headers, config) {
+            fn(data);
+          })
+          .error(function (err) {
+            console.warn('END:getSinglePage with ERROR');
+            fn(err, null);
+          });
+      }
     };
 
     //website/:websiteid/page/:handle
@@ -57,7 +67,7 @@
           fn(data);
         })
         .error(function (err) {
-          console.log('END:getSinglePost with ERROR');
+          console.warn('END:getSinglePost with ERROR');
           fn(err, null);
         });
     };
@@ -70,7 +80,7 @@
           fn(data);
         })
         .error(function (err) {
-          console.log('END:getPageVersions with ERROR');
+          console.warn('END:getPageVersions with ERROR');
           fn(err, null);
         });
     };
@@ -84,22 +94,62 @@
       }).success(function (data, status, headers, config) {
         fn(data);
       }).error(function (err) {
-        console.log('END:Website Service revertPageVersion with ERROR');
+        console.warn('END:Website Service revertPageVersion with ERROR');
         fn(err, null);
       });
     };
 
+    var resetCache = false;
+
     this.getPages = function (fn) {
-      var apiUrl = baseUrl + ['cms', 'website', $$.server.websiteId.replace(/&quot;/g, ''), 'pages'].join('/');
-      $http.get(apiUrl)
-        .success(function (data, status, headers, config) {
+      var self = this;
+      var data = pagecache.get('pages');
+      if (data && !resetCache) {
+        if (fn) {
           fn(data);
-        })
-        .error(function (err) {
-          console.log('END:Website Service with ERROR');
-          fn(err, null);
-        });
+          self.getPagesHeartbeat();
+        }
+      } else {
+        var apiUrl = baseUrl + ['cms', 'website', $$.server.websiteId.replace(/&quot;/g, ''), 'pages'].join('/');
+        $http.get(apiUrl)
+          .success(function (data) {
+            resetCache = false;
+            pagecache.put('pages', data);
+            if (fn) {
+              fn(data);
+            }
+            self.getPagesHeartbeat();
+          }).error(function (msg, code) {
+            console.warn(msg, code);
+          });
+      }
     };
+
+    var heartrepeater;
+
+    this.getPagesHeartbeat = function () {
+      var self = this;
+
+      function checkPulse() {
+        $timeout.cancel(self.heartrepeater);
+        var apiUrl = baseUrl + ['cms', 'website', $$.server.websiteId.replace(/&quot;/g, ''), 'pagesheartbeat'].join('/');
+        $http.get(apiUrl)
+          .success(function (data, status, headers, config) {
+            if (data.pagelength > _.size(pagecache.get('pages'))) {
+              resetCache = true;
+              self.getPages(null);
+            }
+          })
+          .error(function (err) {
+            console.warn('END:Website Service with ERROR');
+          });
+        self.heartrepeater = $timeout(checkPulse, 30000);
+      }
+
+      checkPulse();
+
+    };
+
 
     this.getPagesWithLimit = function (accountId, queryParams, fn) {
       var apiUrl = baseUrl + ['cms', 'website', accountId, 'pages'].join('/');
@@ -110,7 +160,7 @@
       }).success(function (data, status, headers, config) {
         fn(data);
       }).error(function (err) {
-        console.log('END:Website Service with ERROR');
+        console.warn('END:Website Service with ERROR');
         fn(err, null);
       });
     };
@@ -122,7 +172,7 @@
           fn(data);
         })
         .error(function (err) {
-          console.log('END:Website Service with ERROR');
+          console.warn('END:Website Service with ERROR');
           fn(err, null);
         });
     };
@@ -134,7 +184,7 @@
           fn(data.results);
         })
         .error(function (err) {
-          console.log('END:Get Posts with ERROR');
+          console.warn('END:Get Posts with ERROR');
           fn(err, null);
         });
     };
@@ -148,7 +198,7 @@
       }).success(function (data, status, headers, config) {
         fn(data);
       }).error(function (err) {
-        console.log('END:Get Posts with ERROR');
+        console.warn('END:Get Posts with ERROR');
         fn(err, null);
       });
     };
@@ -165,9 +215,12 @@
         method: "POST",
         data: angular.toJson(page)
       }).success(function (data, status, headers, config) {
+        var _pages = pagecache.get('pages');
+        _pages[data.handle] = data;
+        pagecache.put('pages', _pages);
         fn(data);
       }).error(function (err) {
-        console.log('END:Website Service updatePage with ERROR');
+        console.warn('END:Website Service updatePage with ERROR');
         fn(err, null);
       });
     };
@@ -181,7 +234,7 @@
       }).success(function (data, status, headers, config) {
         fn(data);
       }).error(function (err) {
-        console.log('END:Website Service with ERROR');
+        console.warn('END:Website Service with ERROR');
         fn(err, null);
       });
     };
@@ -197,7 +250,7 @@
       }).success(function (data, status, headers, config) {
         fn(data);
       }).error(function (err) {
-        console.log('END:updateAllComponents with ERROR', err);
+        console.warn('END:updateAllComponents with ERROR', err);
         fn(err);
       });
     };
@@ -213,7 +266,7 @@
       }).success(function (data, status, headers, config) {
         fn(data);
       }).error(function (err) {
-        console.log('END:Website Service with ERROR');
+        console.warn('END:Website Service with ERROR');
         fn(err);
       });
     };
@@ -233,7 +286,7 @@
       }).success(function (data, status, headers, config) {
         fn(data);
       }).error(function (err) {
-        console.log('END:Website Service with ERROR');
+        console.warn('END:Website Service with ERROR');
       });
     };
 
@@ -246,7 +299,7 @@
       }).success(function (data, status, headers, config) {
         fn(data);
       }).error(function (err) {
-        console.log('END:Website Service with ERROR');
+        console.warn('END:Website Service with ERROR');
       });
     };
 
@@ -258,9 +311,12 @@
         method: "POST",
         data: angular.toJson(pagedata)
       }).success(function (data, status, headers, config) {
+        var _pages = pagecache.get('pages');
+        _pages[data.handle] = data;
+        pagecache.put('pages', _pages);
         fn(data);
       }).error(function (err) {
-        console.log('END:Create Page with ERROR');
+        console.warn('END:Create Page with ERROR');
       });
     };
 
@@ -274,7 +330,7 @@
       }).success(function (data, status, headers, config) {
         fn(data);
       }).error(function (err) {
-        console.log('END:Create Page with ERROR');
+        console.warn('END:Create Page with ERROR');
       });
     };
 
@@ -286,9 +342,12 @@
         method: "POST",
         data: angular.toJson(pagedata)
       }).success(function (data, status, headers, config) {
+        var _pages = pagecache.get('pages');
+        _pages[data.handle] = data;
+        pagecache.put('pages', _pages);
         fn(data);
       }).error(function (err) {
-        console.log('END:createPageFromTemplate with ERROR');
+        console.warn('END:createPageFromTemplate with ERROR');
       });
     };
 
@@ -309,7 +368,7 @@
       }).success(function (data, status, headers, config) {
         fn(data);
       }).error(function (err) {
-        console.log('END:Create Page with ERROR', err);
+        console.warn('END:Create Page with ERROR', err);
       });
     };
 
@@ -319,7 +378,7 @@
       $http.delete(apiUrl).success(function (data, status, headers, config) {
         fn(data);
       }).error(function (err) {
-        console.log('END:Delete Page with ERROR', err);
+        console.warn('END:Delete Page with ERROR', err);
         fn(err);
       });
     };
@@ -341,7 +400,7 @@
       }).success(function (data, status, headers, config) {
         fn(data);
       }).error(function (err) {
-        console.log('END:Update Template with ERROR', err);
+        console.warn('END:Update Template with ERROR', err);
       });
     };
 
@@ -382,7 +441,7 @@
       }).success(function (data, status, headers, config) {
         fn(data);
       }).error(function (err) {
-        console.log('END:Website Service with ERROR', err);
+        console.warn('END:Website Service with ERROR', err);
         fn(err, null);
       });
     };
@@ -417,7 +476,7 @@
       }).success(function (data, status, headers, config) {
         fn(data);
       }).error(function (err) {
-        console.log('END:Website Service updatePage with ERROR');
+        console.warn('END:Website Service updatePage with ERROR');
         fn(err, null);
       });
     };
