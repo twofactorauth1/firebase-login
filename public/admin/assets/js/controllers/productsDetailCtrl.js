@@ -431,6 +431,7 @@
 
     $scope.editCancelFn = function () {
       $scope.editingPlan = false;
+      $scope.saveLoadingPlan = false;
       $scope.signup_fee = null;
       $scope.newSubscription = {
         planId: CommonService.generateUniqueAlphaNumericShort()
@@ -465,7 +466,7 @@
     };
 
     $scope.editSubscriptionFn = function (newSubscription) {
-      $scope.editingPlan = false;
+      $scope.saveLoadingPlan = true;
       $scope.planDeleteFn(newSubscription.planId, false, false, function () {
         $scope.addSubscriptionFn(newSubscription, false);
         $scope.editCancelFn();
