@@ -1,11 +1,11 @@
 'use strict';
 /*global mainApp*/
-mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', '$window', '$location', '$document', function ($scope, pagesService, $window, $location, $document) {
+mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', '$window', '$location', '$document', '$timeout', function ($scope, pagesService, $window, $location, $document, $timeout) {
   $scope.isEditing = false;
 
   function checkIntercom(data) {
     if (data.hideIntercom) {
-      angular.element('#intercom-container').hide();
+      $scope.$parent.hideIntercom = true;
     }
   }
 

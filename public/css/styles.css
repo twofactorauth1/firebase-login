@@ -24,6 +24,10 @@
 .error-actions .btn {
   margin-right: 10px;
 }
+.hideIntercom #intercom-container {
+  display: none!important;
+  visibility: hidden!important;
+}
 /* Mixin */
 .mb0 {
   margin-bottom: 0px!important;
@@ -2266,13 +2270,11 @@ div[data-type="feature-block"] .component-inner {
 }
 .image-text-v1 .image-text-title {
   text-align: center;
-  font-weight: bold;
   display: block;
   position: relative;
 }
 .image-text-v1 .image-text-subtitle {
   margin-top: 0px;
-  font-weight: bold;
 }
 .image-text-v1 .btn {
   margin: 20px auto;
@@ -2285,15 +2287,6 @@ div[data-type="feature-block"] .component-inner {
 }
 #paradata span h5 {
   font-size: 18px;
-}
-div[data-class='image-text'] h3 {
-  font-weight: bold;
-}
-div[data-class='text'] {
-  font-size: 14px;
-}
-div[data-class='image-text'] p {
-  font-size: 14px;
 }
 .image-text {
   padding: 0 20px;
