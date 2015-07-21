@@ -34,7 +34,8 @@ app.directive('contactUsComponent', ['customerService', 'leafletData', '$timeout
         c= '0x'+c.join('');
         return 'rgba('+[(c>>16)&255, (c>>8)&255, c&255].join(',')+','+ opacity +')';
       };
-      scope.boxColor = hexToRgb(scope.component.boxColor, scope.component.boxOpacity);
+      if(scope.component.boxColor)
+        scope.boxColor = hexToRgb(scope.component.boxColor, scope.component.boxOpacity);
 
       scope.updateContactUsAddress = function () {
         scope.contactAddress = scope.stringifyAddress(scope.component.location);

@@ -20,7 +20,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', '$window', '$locatio
       setTimeout(function () {
         var locId = $location.$$hash;
         if (locId) {
-          var element = $document.getElementById(locId);
+          var element = document.getElementById(locId);
           if (element) {
             $document.scrollToElementAnimated(element);
           }
