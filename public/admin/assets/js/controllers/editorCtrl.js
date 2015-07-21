@@ -861,11 +861,10 @@
       }, function (isConfirm) {
         if (isConfirm) {
           SweetAlert.swal("Saved!", "Page is deleted.", "success");
-          var pageId = $scope.page._id;
           var websiteId = $scope.page.websiteId;
           var title = $scope.page.title;
 
-          WebsiteService.deletePage(pageId, websiteId, title, function (data) {
+          WebsiteService.deletePage($scope.page, websiteId, title, function (data) {
             toaster.pop('success', "Page Deleted", "The " + title + " page was deleted successfully.");
             $scope.closeModal();
             $timeout(function () {

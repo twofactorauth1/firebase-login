@@ -375,9 +375,12 @@
     };
 
     //website/:websiteId/page/:id/:label
-    this.deletePage = function (pageId, websiteId, label, fn) {
-      var apiUrl = baseUrl + ['cms', 'website', websiteId, 'page', pageId, label].join('/');
+    this.deletePage = function (page, websiteId, label, fn) {
+      var apiUrl = baseUrl + ['cms', 'website', websiteId, 'page', page._id, label].join('/');
       $http.delete(apiUrl).success(function (data, status, headers, config) {
+        var _pages = pagecache.get('pages');
+        delete _pages[page.handle];
+        pagecache.put('pages', _pages);
         fn(data);
       }).error(function (err) {
         console.warn('END:Delete Page with ERROR', err);
