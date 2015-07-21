@@ -379,24 +379,25 @@
         $state.go('account');
       }
       $scope.newSubscription = newSubscription;
-
+      var subscription_fee = $scope.signup_fee;
       $scope.newSubscription.amount = $scope.newSubscription.amount * 100;
       PaymentService.postCreatePlan($scope.newSubscription, function (subscription) {
-        subscription.signup_fee = $scope.signup_fee;
+        $scope.signup_fee = subscription_fee;
+        subscription.signup_fee = subscription_fee;
         $scope.plans.push(subscription);
         var price = parseInt(subscription.amount, 10);
         if ($scope.product.product_attributes.stripePlans) {
           $scope.product.product_attributes.stripePlans.push({
             id: subscription.id,
             active: true,
-            signup_fee: $scope.signup_fee,
+            signup_fee: subscription_fee,
             price: price,
           });
         } else {
           $scope.product.product_attributes.stripePlans = [{
             id: subscription.id,
             active: true,
-            signup_fee: $scope.signup_fee,
+            signup_fee: subscription_fee,
             price: price,
           }];
         }
