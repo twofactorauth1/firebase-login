@@ -215,9 +215,11 @@
         method: "POST",
         data: angular.toJson(page)
       }).success(function (data, status, headers, config) {
-        var _pages = pagecache.get('pages');
-        _pages[data.handle] = data;
-        pagecache.put('pages', _pages);
+        if (page.type === 'page') {
+          var _pages = pagecache.get('pages');
+          _pages[data.handle] = data;
+          pagecache.put('pages', _pages);
+        }
         fn(data);
       }).error(function (err) {
         console.warn('END:Website Service updatePage with ERROR');
