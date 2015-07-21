@@ -101,6 +101,13 @@
           toaster.pop('success', "Template Saved", "The " + $scope.page.handle + " template was saved successfully.");
         });
       } else {
+        $scope.validateEditPage($scope.page);
+
+        if (!$scope.editPageValidated) {
+          $scope.saveLoading = false;
+          toaster.pop('error', "Page Title or URL can not be blank.");
+          return false;
+        }
         WebsiteService.updatePage($scope.page, function (data) {
           console.log($scope.page.handle, $scope.originalPage.handle);
           if ($scope.page.handle !== $scope.originalPage.handle) {
@@ -615,6 +622,7 @@
      */
 
     $scope.checkForDuplicatePage = function () {
+      $scope.validateEditPage($scope.page);
       WebsiteService.getSinglePage($scope.page.handle, function (data) {
         if (data && data._id) {
           if (data._id !== $scope.page._id) {
@@ -625,6 +633,35 @@
           }
         }
       });
+    };
+
+    /*
+     * @validateEditPage
+     * -
+     */
+
+    $scope.editPageValidated = false;
+
+    $scope.validateEditPage = function (page) {
+
+      if (page.handle == '') {
+        $scope.handleError = true;
+        angular.element('#edit-page-url').parents('div.form-group').addClass('has-error');
+      } else {
+        $scope.handleError = false;
+        angular.element('#edit-page-url').parents('div.form-group').removeClass('has-error');
+      }
+      if (page.title == '') {
+        $scope.titleError = true;
+        angular.element('#edit-page-title').parents('div.form-group').addClass('has-error');
+      } else {
+        $scope.titleError = false;
+        angular.element('#edit-page-title').parents('div.form-group').removeClass('has-error');
+      }
+      if (page && page.title && page.title != '' && page.handle && page.handle != '') {
+        $scope.editPageValidated = true;
+      } else
+        $scope.editPageValidated = false;
     };
 
     /*
