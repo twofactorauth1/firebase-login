@@ -135,7 +135,8 @@ app.controller('DashboardCtrl', ["$scope", "OrderService", "CustomerService", "C
       tempData.push(thisDaysCustomers);
     });
     _.each(customers, function (customer) {
-      $scope.customerNames.push(customer.first + ' ' + customer.last);
+      if(customer.first || customer.last)
+        $scope.customerNames.push(customer.first + ' ' + customer.last);
     });
     $scope.analyticsCustomers = tempData;
   });
