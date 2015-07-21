@@ -1257,9 +1257,6 @@
     width: 90%;
   }
 }
-#componentloader .navigation-v1 .navbar-header {
-  float: none;
-}
 #componentloader .navigation-v2 #header .navbar.navbar-default {
   border: none!important;
 }
