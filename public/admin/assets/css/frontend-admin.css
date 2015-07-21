@@ -2275,13 +2275,11 @@
 }
 #componentloader .image-text-v1 .image-text-title {
   text-align: center;
-  font-weight: bold;
   display: block;
   position: relative;
 }
 #componentloader .image-text-v1 .image-text-subtitle {
   margin-top: 0px;
-  font-weight: bold;
 }
 #componentloader .image-text-v1 .btn {
   margin: 20px auto;
@@ -2294,15 +2292,6 @@
 }
 #componentloader #paradata span h5 {
   font-size: 18px;
-}
-#componentloader div[data-class='image-text'] h3 {
-  font-weight: bold;
-}
-#componentloader div[data-class='text'] {
-  font-size: 14px;
-}
-#componentloader div[data-class='image-text'] p {
-  font-size: 14px;
 }
 #componentloader .image-text {
   padding: 0 20px;
