@@ -1,14 +1,14 @@
 <style>
-    .{{component.type}}{{$index + 1}} .bg-overlay {
-        background: {{component.bg.img.overlaycolor || 'rgba(0, 0, 0, 0.58)'}}!important;
+    .{{component.type}}{{component._id}} .bg-overlay {
+        background: {{component.bg.img.overlaycolor || 'transparent'}}!important;
         opacity: {{component.bg.img.overlayopacity/100 || 1}};
     }
-    .{{component.type}}{{$index + 1}} {
+    .{{component.type}}{{component._id}} {
        opacity: {{component.bg.opacity/100 || 1}};
     }
 </style>
 <div class="component-wrap" ng-if="component.visibility" ng-class="{'editing': isEditing,'undernav200':component.type == 'masthead'}">
-    <div class="component {{component.type}}{{$index + 1}}">
+    <div class="component {{component.type}}{{component._id}}">
         <div id="{{component.anchor || component._id}}" ng-style="{'color':component.txtcolor||primaryTextColor}">
             <div ng-if="!component.bg.img.url && component.type != 'email'" ng-style="{'background': component.bg.color, 'color':component.txtcolor||primaryTextColor}">
                 <div ng-class="{'component-inner': component.type != 'footer'}">
@@ -38,7 +38,7 @@
                                 background-size: cover;
                                 background: {{component.bg.img.url}};'>
                         </div>
-                        <div ng-if="component.bg.img.show && component.bg.img.overlay" class="bg" ng-class="{'bg-overlay':component.bg.img.overlay }" style='background-color: transparent;'>
+                        <div ng-if="component.bg.img.show && component.bg.img.overlay" class="bg" ng-class="{'bg-overlay':component.bg.img.overlay }">
                         </div>
                         <div class="container inner-page" ng-if="component.type != 'single-post' && component.type != 'blog' && component.type != 'navigation' && component.type != 'footer' && component.type != 'contact-us' && component.type != 'payment-form'">
                             <div data-ng-include data-src="'/components/'+component.type+'_v'+component.version+'.html'"></div>
