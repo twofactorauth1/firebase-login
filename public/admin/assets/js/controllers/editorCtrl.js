@@ -10,11 +10,19 @@
      */
 
     $scope.ckeditorLoaded = false;
-
+    $scope.activeEditor = null;
     $scope.activateCKeditor = function () {
       CKEDITOR.on("instanceReady", function (ev) {
         ev.editor.on('key', function () {
           $scope.isDirty.dirty = true;
+        });
+        if (!$scope.activeEditor)
+          $scope.activeEditor = ev.editor;
+        ev.editor.on('focus', function () {
+          $scope.activeEditor = ev.editor;
+        });
+        ev.editor.on('blur', function () {
+          $scope.activeEditor = null;
         });
         if (!$scope.ckeditorLoaded) {
           $timeout(function () {

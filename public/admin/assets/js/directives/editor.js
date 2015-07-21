@@ -14,9 +14,11 @@ app.directive("elem", function ($timeout) {
     link: function (scope, element, attrs, ngModel) {
 
       scope.update = function (e) {
-        scope.$apply(function () {
-          ngModel.$setViewValue(e.editor.getData());
-        });
+        $timeout(function () {
+          scope.$apply(function () {
+            ngModel.$setViewValue(e.editor.getData());
+          });
+        },0);
       };
 
       var elem = angular.element(element[0].querySelector('.editable'))[0];
