@@ -82,16 +82,16 @@ app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userSe
               name = '';
             }
 
-            var hash = CryptoJS.HmacSHA256(scope.user.email, "vZ7kG_bS_S-jnsNq4M2Vxjsa5mZCxOCJM9nezRUQ");
-            //send data to intercom
-            $window.intercomSettings = {
-              name: name,
-              email: scope.user.email,
-              phone: scope.user.phone,
-              user_hash: hash.toString(CryptoJS.enc.Hex),
-              created_at: Math.floor(Date.now() / 1000),
-              app_id: "b3st2skm"
-            };
+            // var hash = CryptoJS.HmacSHA256(scope.user.email, "vZ7kG_bS_S-jnsNq4M2Vxjsa5mZCxOCJM9nezRUQ");
+            // //send data to intercom
+            // $window.intercomSettings = {
+            //   name: name,
+            //   email: scope.user.email,
+            //   phone: scope.user.phone,
+            //   user_hash: hash.toString(CryptoJS.enc.Hex),
+            //   created_at: Math.floor(Date.now() / 1000),
+            //   app_id: "b3st2skm"
+            // };
 
             if (!scope.component.redirect) {
               scope.formSuccess = true;
