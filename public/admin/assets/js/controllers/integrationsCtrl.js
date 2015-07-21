@@ -2,17 +2,7 @@
 /*global app, moment, angular, window, L*/
 /*jslint unparam:true*/
 (function (angular) {
-  app.controller('IntegrationsCtrl', ["$scope", "SocialConfigService", "AccountService", "userConstant", "SweetAlert", "ipCookie", "toaster", function ($scope, SocialConfigService, AccountService, userConstant, SweetAlert, ipCookie, toaster) {
-
-    console.log('cookie ', ipCookie("socialAccount"));
-    var completedIntegration = ipCookie("socialAccount");
-    if (completedIntegration) {
-      $scope.minRequirements = true;
-      toaster.pop('success', "Integrated Successfully", ipCookie("socialAccount") + ' has been added.');
-      ipCookie.remove("socialAccount", {
-        path: "/"
-      });
-    }
+  app.controller('IntegrationsCtrl', ["$scope", "SocialConfigService", "AccountService", "userConstant", "SweetAlert", "ipCookie", "toaster", "$location", function ($scope, SocialConfigService, AccountService, userConstant, SweetAlert, ipCookie, toaster, $location) {
 
     /*
      * Global Variables
@@ -26,33 +16,56 @@
      * get the social accounts
      */
 
-    AccountService.getAccount(function (account) {
-      console.log('account ', account.credentials);
-      $scope.account = account;
-      var stripe = _.find(account.credentials, function (cred) {
-        return cred.type === 'stripe';
-      });
-      SocialConfigService.getAllSocialConfig(function (data) {
-        if (stripe) {
-          stripe.accountType = "account";
-          stripe.id = Math.uuid(8);
-          stripe.type = "st";
-          data.socialAccounts.push(stripe);
-        }
-        _.each(data.socialAccounts, function (socialAccount) {
-          //get profile/page info
-          console.log('socialAccount ', socialAccount);
-          if (socialAccount.type === 'fb') {
-            SocialConfigService.getFBProfile(socialAccount.id, function (profile) {
-              socialAccount.profile = profile;
-            });
-          }
+    $scope.getAccount = function () {
+      AccountService.getAccount(function (account) {
+        console.log('account ', account.credentials);
+        $scope.account = account;
+        var stripe = _.find(account.credentials, function (cred) {
+          return cred.type === 'stripe';
         });
+        SocialConfigService.getAllSocialConfig(function (data) {
+          if (stripe) {
+            stripe.accountType = "account";
+            stripe.id = Math.uuid(8);
+            stripe.type = "st";
+            data.socialAccounts.push(stripe);
+          }
+          _.each(data.socialAccounts, function (socialAccount) {
+            //get profile/page info
+            console.log('socialAccount ', socialAccount);
+            if (socialAccount.type === 'fb') {
+              SocialConfigService.getFBProfile(socialAccount.id, function (profile) {
+                socialAccount.profile = profile;
+              });
+            }
+          });
 
-        $scope.socialAccounts = data.socialAccounts;
-        console.log();
+          $scope.socialAccounts = data.socialAccounts;
+          console.log();
+        });
       });
-    });
+    };
+
+    console.log('cookie ', ipCookie("socialAccount"));
+    var completedIntegration = ipCookie("socialAccount");
+    if (completedIntegration) {
+      if (ipCookie("socialAccount").redirectTo !== '/account/integrations') {
+        var redirectUrl = ipCookie("socialAccount").redirectTo;
+        ipCookie.remove("socialAccount", {
+          path: "/"
+        });
+        $location.path(redirectUrl);
+      } else {
+        $scope.minRequirements = true;
+        toaster.pop('success', "Integrated Successfully", ipCookie("socialAccount").socialAccount + ' has been added.');
+        ipCookie.remove("socialAccount", {
+          path: "/"
+        });
+        $scope.getAccount();
+      }
+    } else {
+      $scope.getAccount();
+    }
 
     /*
      * @socialFilter
@@ -118,7 +131,11 @@
       var expireTime = new Date();
       expireTime.setMinutes(expireTime.getMinutes() + 10);
       if (account_cookie === undefined) {
-        ipCookie("socialAccount", socialAccount, {
+        var cookieValue = {
+          "socialAccount": socialAccount,
+          "redirectTo": '/account/integrations',
+        };
+        ipCookie("socialAccount", cookieValue, {
           expires: expireTime,
           path: "/"
         });
@@ -127,18 +144,22 @@
         ipCookie.remove("socialAccount", {
           path: "/"
         });
-        ipCookie("socialAccount", socialAccount, {
+        var cookieValue = {
+          "socialAccount": socialAccount,
+          "redirectTo": '/account/integrations',
+        };
+        ipCookie("socialAccount", cookieValue, {
           expires: expireTime,
-          path: "/"
+          path: "/",
+          redirectTo: "/account/integrations"
         });
       }
 
       var _redirectUrl = '/redirect/?next=' + $scope.currentHost + '/socialconfig/' + socialAccount.toLowerCase() + '?redirectTo=' + $scope.redirectUrl + '&socialNetwork=' + socialAccount;
       if (socialAccount === 'Stripe') {
         ///redirect/?next={{currentHost}}/stripe/connect&socialNetwork=stripe
-        _redirectUrl = '/redirect/?next=' + $scope.currentHost + '/'+socialAccount.toLowerCase()+'/connect/callback&redirectTo=' + $scope.redirectUrl + '&socialNetwork=' + socialAccount.toLowerCase();
+        _redirectUrl = '/redirect/?next=' + $scope.currentHost + '/stripe/connect/';
       }
-      console.log('redirectUrl ', _redirectUrl);
       window.location = _redirectUrl;
     };
 

@@ -183,7 +183,11 @@
       var expireTime = new Date();
       expireTime.setMinutes(expireTime.getMinutes() + 10);
       if (account_cookie === undefined) {
-        ipCookie("socialAccount", socialAccount, {
+        var cookieValue = {
+          "socialAccount": socialAccount,
+          "redirectTo": '/commerce/products',
+        };
+        ipCookie("socialAccount", cookieValue, {
           expires: expireTime,
           path: "/"
         });
@@ -192,15 +196,17 @@
         ipCookie.remove("socialAccount", {
           path: "/"
         });
-        ipCookie("socialAccount", socialAccount, {
+        var cookieValue = {
+          "socialAccount": socialAccount,
+          "redirectTo": '/commerce/products',
+        };
+        ipCookie("socialAccount", cookieValue, {
           expires: expireTime,
           path: "/"
         });
       }
 
-      var _redirectUrl = '/redirect/?next=' + $scope.currentHost + '/'+socialAccount.toLowerCase()+'/connect/callback&redirectTo=' + $scope.redirectUrl + '&socialNetwork=' + socialAccount.toLowerCase();
-      console.log('redirectUrl ', _redirectUrl);
-      window.location = _redirectUrl;
+      window.location = '/redirect/?next=' + $scope.currentHost + '/'+socialAccount.toLowerCase()+'/connect/';
     };
 
   }]);
