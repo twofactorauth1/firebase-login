@@ -2156,6 +2156,7 @@
 #componentloader .testimonials-v1 .testimonials .img img {
   margin: 0 auto;
   min-width: 100%;
+  max-width: 100%;
 }
 #componentloader .testimonials-v1 .testimonials .name {
   position: relative;
