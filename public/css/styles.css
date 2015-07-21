@@ -4286,6 +4286,9 @@ div[data-type=blog] .container {
   height: 60px;
   line-height: 30px;
 }
+.payment-form-v1 .payment-signup .submit-signup a {
+  cursor: pointer;
+}
 #overlay {
   position: relative;
   width: 100%;

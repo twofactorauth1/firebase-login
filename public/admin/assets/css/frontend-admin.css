@@ -4284,6 +4284,9 @@
   height: 60px;
   line-height: 30px;
 }
+#componentloader .payment-form-v1 .payment-signup .submit-signup a {
+  cursor: pointer;
+}
 #componentloader #overlay {
   position: relative;
   width: 100%;
