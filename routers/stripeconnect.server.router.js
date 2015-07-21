@@ -26,7 +26,6 @@ _.extend(router.prototype, baseRouter.prototype, {
         // ------------------------------------------------
         //  CONNECT
         // ------------------------------------------------
-
         app.get('/stripe/connect', passport.authenticate('stripe', { scope: 'read_write' }));
         app.get('/stripe/connect/callback', passport.authenticate('stripe', { scope: 'read_write', failureRedirect: '/login' }), this.handleStripeCallback.bind(this));
 
@@ -38,13 +37,13 @@ _.extend(router.prototype, baseRouter.prototype, {
         var self = this;
         self.log.debug('>> handleStripeCallback ', req.headers.referer); //.sessionStore.session.state.redirectUrl
         var accountId = self.accountId(req);
-        var path = "admin";
-        if (req.headers.referer) {
-            var arr = req.headers.referer.split("&redirectTo=");
-            var arr2 = arr[1].split("&");
-            path = arr2[0];
-            self.log.debug('>> path ', path);
-        }
+        var path = "admin/#/account/integrations";
+        // if (req.headers.referer) {
+        //     var _str1 = req.headers.referer.split("?next=")[1];
+        //     var _str2 = _str1.split("stripe/connect/callback/redirectTo/");
+        //     path = _str2[1];
+        //     self.log.debug('>> path ', path);
+        // }
 
         authenticationDao.getAuthenticatedUrlForAccount(accountId, req.user.id(), path, null, function(err, value) {
             self.log.debug('<< handleStripeCallback');

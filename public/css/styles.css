@@ -2146,6 +2146,7 @@ div[data-type="feature-block"] .component-inner {
 .testimonials-v1 .testimonials .img img {
   margin: 0 auto;
   min-width: 100%;
+  max-width: 100%;
 }
 .testimonials-v1 .testimonials .name {
   position: relative;
@@ -4285,6 +4286,9 @@ div[data-type=blog] .container {
   box-shadow: 0px 1px 7px rgba(0, 0, 0, 0.5);
   height: 60px;
   line-height: 30px;
+}
+.payment-form-v1 .payment-signup .submit-signup a {
+  cursor: pointer;
 }
 #overlay {
   position: relative;

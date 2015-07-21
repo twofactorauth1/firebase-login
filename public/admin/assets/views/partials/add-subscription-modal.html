@@ -96,13 +96,13 @@
         <div class="clearfix"></div>
     </div>
     <div class="modal-footer">
-        <button class="btn btn-primary" ng-disabled="subscriptionForm.$invalid" ng-click="editSubscriptionFn(newSubscription)" ng-if="editingPlan">
+        <button class="btn btn-primary" ng-disabled="subscriptionForm.$invalid || saveLoadingPlan" ng-click="editSubscriptionFn(newSubscription)" ng-if="editingPlan">
             Update
         </button>
         <button class="btn btn-success" ng-disabled="subscriptionForm.$invalid" ng-click="addSubscriptionFn(newSubscription, true)" ng-if="!editingPlan">
             <span class="fa fa-plus"></span> Add
         </button>
-        <button class="btn btn-danger" ng-click="editCancelFn()" ng-if="editingPlan">
+        <button class="btn btn-danger" ng-disabled="saveLoadingPlan" ng-click="editCancelFn()" ng-if="editingPlan">
             Cancel
         </button>
     </div>

@@ -2156,6 +2156,7 @@
 #componentloader .testimonials-v1 .testimonials .img img {
   margin: 0 auto;
   min-width: 100%;
+  max-width: 100%;
 }
 #componentloader .testimonials-v1 .testimonials .name {
   position: relative;
@@ -4283,6 +4284,9 @@
   box-shadow: 0px 1px 7px rgba(0, 0, 0, 0.5);
   height: 60px;
   line-height: 30px;
+}
+#componentloader .payment-form-v1 .payment-signup .submit-signup a {
+  cursor: pointer;
 }
 #componentloader #overlay {
   position: relative;

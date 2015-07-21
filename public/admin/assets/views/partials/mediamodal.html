@@ -172,7 +172,7 @@
                     <button type="button" class="btn btn-success btn-s" ng-click="uploader.uploadAll()" ng-disabled="!uploader.getNotUploadedItems().length" ng-if="uploader.queue.length > 1">
                         <span class="glyphicon glyphicon-upload"></span> Upload all
                     </button>
-                    <button type="button" ng-show="showInsert && singleSelected" class="btn btn-primary insert-image" ng-click="m.onInsertMedia()">Insert Images
+                    <button type="button" ng-show="showInsert && singleSelected && !uploader.queue.length" class="btn btn-primary insert-image" ng-click="m.onInsertMedia()">Insert Images
                     </button>
                     <div class="clearfix"></div>
                 </div>

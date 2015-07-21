@@ -364,6 +364,7 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
             }
           });
         } else {
+          scope.couponIsValid = true;
           angular.element("#coupon-name .error").html("");
           angular.element("#coupon-name").removeClass('has-error').addClass('has-success');
           angular.element("#coupon-name .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
