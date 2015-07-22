@@ -62,7 +62,11 @@ app.directive('blogComponent', ['postsService', '$filter', '$location', '$timeou
 
         });
 
-        $scope.activateTagCloud($scope.blog.postTags);
+        $(document).ready(function () {
+          $timeout(function () {
+            $scope.activateTagCloud($scope.blog.postTags);
+          },500)
+        });
       });
 
       $scope.activateTagCloud = function (tags) {
@@ -89,14 +93,14 @@ app.directive('blogComponent', ['postsService', '$filter', '$location', '$timeou
           height: 300,
           afterCloudRender: function () {
             $timeout(function () {
-              if (!$scope.rendered) {
-                $scope.rendered = true;
+              //if (!$scope.rendered) {
+                //$scope.rendered = true;
                 angular.element('.jqcloud').css({
                   'width': '100%'
                 });
-                angular.element('.jqcloud').jQCloud('update', $scope.tagCloud);
-              }
-            }, 1000);
+                //angular.element('.jqcloud').jQCloud('update', $scope.tagCloud);
+              //}
+            }, 100);
           }
         });
       };
