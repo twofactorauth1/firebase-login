@@ -4,7 +4,7 @@
         opacity: {{component.bg.img.overlayopacity/100 || 1}};
     }
     .{{component.type}}{{component._id}} {
-       opacity: {{component.bg.opacity/100 || 1}};
+       opacity: {{component.bg.opacity || 1}};
     }
 </style>
 <div class="component-wrap" ng-if="component.visibility" ng-class="{'editing': isEditing,'undernav200':component.type == 'masthead'}">
