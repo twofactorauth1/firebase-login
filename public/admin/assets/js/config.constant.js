@@ -55,19 +55,6 @@ app.constant('ONBOARDINGCONSTANT', {
     }]
   }, {
     pane: {
-      heading: "Billing",
-      text: "Manage the type of account you have and your method of payment.",
-      taskKey: 'billing',
-      state: 'app.account.billing',
-      minRequire: false
-    },
-    steps: [{
-      type: 'title',
-      heading: "Manage your account type and payment method",
-      text: "Select your plan and enter your payment method for your Indigenous account."
-    }]
-  }, {
-    pane: {
       heading: "Homepage",
       text: "Choose a template and begin customizing your site.",
       taskKey: 'single_page',
@@ -144,19 +131,6 @@ app.constant('ONBOARDINGCONSTANT', {
       type: 'title',
       heading: "Commerce",
       text: "Import or create new products to start selling and creating revenue.",
-    }]
-  }, {
-    pane: {
-      heading: "Dashboard",
-      text: "Now everything is set up. It's time to start tracking.",
-      taskKey: 'dashboard',
-      state: 'app.dashboard',
-      minRequire: false
-    },
-    steps: [{
-      type: 'title',
-      heading: "Dashboard",
-      text: "Now everything is set up. It's time to start tracking."
     }]
   }]
 
