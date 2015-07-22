@@ -934,6 +934,41 @@
       });
     };
 
+    /*
+     * @deletePost
+     * -
+     */
+
+    $scope.deletePost = function () {
+      SweetAlert.swal({
+          title: "Are you sure?",
+          text: "Do you want to delete this page",
+          type: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#DD6B55",
+          confirmButtonText: "Yes, delete post!",
+          cancelButtonText: "No, do not delete post!",
+          closeOnConfirm: false,
+          closeOnCancel: false
+        },
+        function (isConfirm) {
+          if (isConfirm) {
+            var title = $scope.blog.post.post_title;
+            SweetAlert.swal("Saved!", "Post is deleted.", "success");
+            WebsiteService.deletePost($scope.page._id, $scope.blog.post._id, function (data) {
+              toaster.pop('success', "Post Deleted", "The " + title + " post was deleted successfully.");
+              $scope.closeModal();
+              $timeout(function () {
+                window.location = '/admin/#/website/posts';
+              }, 500);
+            });
+            
+          } else {
+            SweetAlert.swal("Cancelled", "Post not deleted.", "error");
+          }
+        });
+    };
+
     // CKEDITOR.disableAutoInline = true;
 
     /*

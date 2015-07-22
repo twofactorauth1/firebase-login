@@ -398,6 +398,17 @@
       });
     };
 
+    this.deletePost = function (pageId, postId, fn) {
+    var apiUrl = baseUrl + ['cms', 'page', pageId, 'blog', postId].join('/');
+      $http.delete(apiUrl)
+      .success(function (data, status, headers, config) {
+        fn(data);
+      }).error(function (err) {
+        console.warn('END:Delete Page with ERROR', err);
+        fn(err);
+      });
+    };
+
     this.getTemplates = function (fn) {
       var apiUrl = baseUrl + ['cms', 'template'].join('/');
       $http.get(apiUrl)
