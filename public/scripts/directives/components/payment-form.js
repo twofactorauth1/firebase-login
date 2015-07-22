@@ -93,7 +93,13 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
 
       scope.makeSocailAccount = function (socialType) {
         if (socialType) {
-          window.location.href = "/signup/" + socialType + "?redirectTo=/signup";
+          var _url = "/signup/" + socialType + "?redirectTo=/signup";
+          console.log('scope.newAccount ', JSON.stringify(scope.newAccount));
+          if (scope.newAccount.coupon) {
+            _url = _url + "?coupon="+scope.poulateCoupon;
+          }
+          console.log('_url >>> ', _url);
+          window.location.href = _url;
           return;
         }
       };
@@ -389,11 +395,21 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
         }
       };
 
-      scope.poulateCoupon = $location.search().coupon;
       if ($location.search().coupon) {
-        scope.poulateCoupon = $location.search().coupon;
+        scope.poulateCoupon = angular.copy($location.search().coupon);
+        // $location.search('coupon', null);
+        scope.poulateCoupon = scope.poulateCoupon;
         scope.newAccount.coupon = scope.poulateCoupon;
         scope.checkCoupon();
+      }
+
+      if ($location.search().email) {
+        scope.poulateEmail = angular.copy($location.search().email);
+        // $location.search('email', null);
+        console.log('scope.poulateEmail ', scope.poulateEmail);
+        scope.newAccount.email = scope.poulateEmail;
+        console.log('scope.newAccount.email ', scope.newAccount.email);
+        scope.checkEmailExists(scope.newAccount);
       }
     }
   };
