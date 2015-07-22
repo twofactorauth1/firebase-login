@@ -18,7 +18,7 @@
                                 <h2 class="blog-title">
                                     <a data-ng-if="blogpost.post_url" href="/page/blog/{{blogpost.post_url}}">
                                         <div class="editable post_title" data-class="post_title"
-                                             data-ng-if="blogpost.post_title">
+                                             data-ng-if="blogpost.post_title" >
                                             {{blogpost.post_title}}
                                         </div>
                                     </a>
@@ -52,8 +52,7 @@
                                 <!-- end .thumb -->
                                 <div class="entry-excerpt">
                                     <p>
-                                        <div class="editable post_excerpt" data-class="post_excerpt" data-ng-if="blogpost.post_excerpt">
-                                            {{blogpost.post_excerpt}}
+                                        <div class="editable post_excerpt" data-class="post_excerpt" ng-bind-html="blogpost.post_excerpt | unsafe" data-ng-if="blogpost.post_excerpt">
                                         </div>
                                         <div class="editable post_excerpt" data-class="post_excerpt" data-ng-if="!blogpost.post_excerpt">
                                         </div>
