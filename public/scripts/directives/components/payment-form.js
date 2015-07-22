@@ -206,7 +206,7 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
               }
               UserService.initializeUser(newUser, function (err, data) {
                 if (data && data.accountUrl) {
-                  var hash = CryptoJS.HmacSHA256(scope.user.email, "vZ7kG_bS_S-jnsNq4M2Vxjsa5mZCxOCJM9nezRUQ");
+                  var hash = CryptoJS.HmacSHA256(newUser.email, "vZ7kG_bS_S-jnsNq4M2Vxjsa5mZCxOCJM9nezRUQ");
                   //send data to intercom
                   window.intercomSettings = {
                     name: newUser.username,
