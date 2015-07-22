@@ -145,7 +145,7 @@
           .error(function (err) {
             console.warn('END:Website Service with ERROR');
           });
-        self.heartrepeater = $timeout(checkPulse, 30000);
+        self.heartrepeater = $timeout(checkPulse, 60000);
       }
 
       checkPulse();
@@ -219,8 +219,11 @@
       }).success(function (data, status, headers, config) {
         if (page.type === 'page') {
           var _pages = pagecache.get('pages');
-          _pages[data.handle] = data;
-          pagecache.put('pages', _pages);
+          if(_pages)
+          {
+            _pages[data.handle] = data;
+            pagecache.put('pages', _pages);
+          }
         }
         fn(data);
       }).error(function (err) {
@@ -388,6 +391,17 @@
           delete _pages[page.handle];
           pagecache.put('pages', _pages);
         }
+        fn(data);
+      }).error(function (err) {
+        console.warn('END:Delete Page with ERROR', err);
+        fn(err);
+      });
+    };
+
+    this.deletePost = function (pageId, postId, fn) {
+    var apiUrl = baseUrl + ['cms', 'page', pageId, 'blog', postId].join('/');
+      $http.delete(apiUrl)
+      .success(function (data, status, headers, config) {
         fn(data);
       }).error(function (err) {
         console.warn('END:Delete Page with ERROR', err);

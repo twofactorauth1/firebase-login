@@ -109,29 +109,34 @@
           toaster.pop('success', "Template Saved", "The " + $scope.page.handle + " template was saved successfully.");
         });
       } else {
-        $scope.validateEditPage($scope.page);
-
-        if (!$scope.editPageValidated) {
+        //$scope.validateEditPage($scope.page);
+        
+        $scope.checkForDuplicatePage(function () {
+          if (!$scope.editPageValidated) {
           $scope.saveLoading = false;
           toaster.pop('error', "Page Title or URL can not be blank.");
-          return false;
-        }
-        WebsiteService.updatePage($scope.page, function (data) {
-          console.log($scope.page.handle, $scope.originalPage.handle);
-          if ($scope.page.handle !== $scope.originalPage.handle) {
-            $location.search('pagehandle', $scope.page.handle);
+            return false;
           }
-          $scope.saveLoading = false;
-          toaster.pop('success', "Page Saved", "The " + $scope.page.handle + " page was saved successfully.");
-          //Update linked list
-          $scope.website.linkLists.forEach(function (value, index) {
-            if (value.handle === "head-menu") {
-              WebsiteService.updateLinkList($scope.website.linkLists[index], $scope.website._id, 'head-menu', function (data) {
-                console.log('Updated linked list');
+          if(!$scope.duplicateUrl)
+            WebsiteService.updatePage($scope.page, function (data) {
+              console.log($scope.page.handle, $scope.originalPage.handle);
+              if ($scope.page.handle !== $scope.originalPage.handle) {
+                $location.search('pagehandle', $scope.page.handle);
+              }
+              $scope.saveLoading = false;
+              toaster.pop('success', "Page Saved", "The " + $scope.page.handle + " page was saved successfully.");
+              //Update linked list
+              $scope.website.linkLists.forEach(function (value, index) {
+                if (value.handle === "head-menu") {
+                  WebsiteService.updateLinkList($scope.website.linkLists[index], $scope.website._id, 'head-menu', function (data) {
+                    console.log('Updated linked list');
+                  });
+                }
               });
-            }
-          });
-        });
+            });
+          else
+            $scope.saveLoading = false;
+        });        
       }
     };
 
@@ -483,6 +488,7 @@
         $scope.logoImage = false;
         $scope.componentEditing.logourl = asset.url;
       } else if ($scope.blogImage) {
+        $scope.blogImage = false;
         $scope.blog.post.featured_image = asset.url;
         return;
       } else if ($scope.imgThumbnail && $scope.componentEditing) {
@@ -629,18 +635,24 @@
      * - Check for duplicate page
      */
 
-    $scope.checkForDuplicatePage = function () {
+    $scope.checkForDuplicatePage = function (fn) {
       $scope.validateEditPage($scope.page);
-      WebsiteService.getSinglePage($scope.page.handle, function (data) {
-        if (data && data._id) {
-          if (data._id !== $scope.page._id) {
-            $scope.duplicateUrl = true;
-            toaster.pop('error', "Page URL " + $scope.page.handle, "Already exists");
-          } else {
-            $scope.duplicateUrl = false;
+      if($scope.editPageValidated)
+        WebsiteService.getSinglePage($scope.page.handle, function (data) {
+          if (data && data._id) {
+            if (data._id !== $scope.page._id) {
+              $scope.duplicateUrl = true;
+              toaster.pop('error', "Page URL " + $scope.page.handle, "Already exists");
+            } else {
+              $scope.duplicateUrl = false;
+            }            
           }
-        }
-      });
+          if(fn)
+            fn();
+        });
+      else
+        if(fn)
+          fn();
     };
 
     /*
@@ -920,6 +932,41 @@
           SweetAlert.swal("Cancelled", "Page not deleted.", "error");
         }
       });
+    };
+
+    /*
+     * @deletePost
+     * -
+     */
+
+    $scope.deletePost = function () {
+      SweetAlert.swal({
+          title: "Are you sure?",
+          text: "Do you want to delete this page",
+          type: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#DD6B55",
+          confirmButtonText: "Yes, delete post!",
+          cancelButtonText: "No, do not delete post!",
+          closeOnConfirm: false,
+          closeOnCancel: false
+        },
+        function (isConfirm) {
+          if (isConfirm) {
+            var title = $scope.blog.post.post_title;
+            SweetAlert.swal("Saved!", "Post is deleted.", "success");
+            WebsiteService.deletePost($scope.page._id, $scope.blog.post._id, function (data) {
+              toaster.pop('success', "Post Deleted", "The " + title + " post was deleted successfully.");
+              $scope.closeModal();
+              $timeout(function () {
+                window.location = '/admin/#/website/posts';
+              }, 500);
+            });
+            
+          } else {
+            SweetAlert.swal("Cancelled", "Post not deleted.", "error");
+          }
+        });
     };
 
     // CKEDITOR.disableAutoInline = true;

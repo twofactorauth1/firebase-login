@@ -1188,6 +1188,9 @@ div[data-type="feature-list"] .inner-page {
   min-width: 200px;
   min-height: 100px;
 }
+.navbar .navigation-logo.edit-wrap div.editable {
+  min-height: 100px;
+}
 .navbar-brand {
   max-width: 100%!important;
   margin: 5px auto!important;
@@ -1251,6 +1254,9 @@ ul.nav {
   border: none!important;
   background: none;
   box-shadow: none;
+}
+.navigation-v2 .navbar .navigation-logo.edit-wrap div.editable {
+  min-height: 100px;
 }
 .navigation-v2 .navbar .navbar-header {
   float: none;
@@ -1355,6 +1361,9 @@ ul.nav {
   min-height: 115px;
   border: none;
   border-radius: 0px;
+}
+.navigation-v3 .navbar .navigation-logo.edit-wrap div.editable {
+  min-height: 100px;
 }
 .navigation-v3 .navbar li {
   min-height: 125px;
@@ -2492,6 +2501,28 @@ div[data-type="feature-block"] .component-inner {
 .simple-form-v1 {
   padding: 0px!important;
   margin: 0px!important;
+}
+.simple-form-v1 .custom-orange {
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #fb8823), color-stop(1, #f86807));
+  background: -moz-linear-gradient(top, #fb8823 5%, #f86807 100%);
+  background: -webkit-linear-gradient(top, #fb8823 5%, #f86807 100%);
+  background: -o-linear-gradient(top, #fb8823 5%, #f86807 100%);
+  background: -ms-linear-gradient(top, #fb8823 5%, #f86807 100%);
+  background: linear-gradient(to bottom, #fb8823 5%, #f86807 100%);
+  background-color: #fbb450;
+  -moz-border-radius: 7px;
+  -webkit-border-radius: 7px;
+  border-radius: 7px;
+  border: 1px solid #c97e1c;
+  display: inline-block;
+  color: #ffffff;
+  font-family: arial;
+  font-size: 18px;
+  font-weight: normal;
+  font-style: %1;
+  padding: 14px 45px;
+  text-decoration: none;
+  text-shadow: 1px 1px 0px #cc4b14;
 }
 .simple-form-v1 .simple-form-title {
   padding-left: 10px;

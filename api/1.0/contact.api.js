@@ -626,9 +626,8 @@ _.extend(api.prototype, baseApi.prototype, {
                                                     }
 
                                                     component.logo.replace('"//', '"http://');
-                                                    component.text.replace('"//', '"http://');
-                                                    component.title.replace('"//', '"http://');
-
+                                                    component.text = component.text.replace('"//', '"http://').replace(new RegExp('FHEMAIL', 'g'), savedContact.getEmails()[0].email);
+                                                    component.title = component.title.replace('"//', '"http://').replace(new RegExp('FHEMAIL', 'g'), savedContact.getEmails()[0].email);
                                                     app.render('emails/base_email', component, function(err, html){
                                                         if(err) {
                                                             self.log.error('error rendering html: ' + err);

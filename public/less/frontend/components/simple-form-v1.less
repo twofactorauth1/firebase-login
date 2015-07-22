@@ -3,27 +3,47 @@
 .simple-form-v1 {
     padding: 0px!important;
     margin: 0px!important;
-
+    .custom-orange {
+        background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #fb8823), color-stop(1, #f86807));
+        background: -moz-linear-gradient(top, #fb8823 5%, #f86807 100%);
+        background: -webkit-linear-gradient(top, #fb8823 5%, #f86807 100%);
+        background: -o-linear-gradient(top, #fb8823 5%, #f86807 100%);
+        background: -ms-linear-gradient(top, #fb8823 5%, #f86807 100%);
+        background: linear-gradient(to bottom, #fb8823 5%, #f86807 100%);
+        //filter: progid: DXImageTransform.Microsoft.gradient(startColorstr='#fb8823', endColorstr='#f86807', GradientType=0);
+        background-color: #fbb450;
+        -moz-border-radius: 7px;
+        -webkit-border-radius: 7px;
+        border-radius: 7px;
+        border: 1px solid #c97e1c;
+        display: inline-block;
+        color: #ffffff;
+        font-family: arial;
+        font-size: 18px;
+        font-weight: normal;
+        font-style: %1;
+        padding: 14px 45px;
+        text-decoration: none;
+        text-shadow: 1px 1px 0px #cc4b14;
+    }
     .simple-form-title {
         padding-left: 10px;
         position: relative;
     }
-
     .simple-form-subtitle {
         margin: 0 10px;
         position: relative;
     }
-
-    #user_email,#user_first,#user_last,#user_phone {
+    #user_email,
+    #user_first,
+    #user_last,
+    #user_phone {
         padding-left: 20px;
     }
-
-    .btn-editable
-    {
-        padding-top:15px !important;
+    .btn-editable {
+        padding-top: 15px !important;
         -moz-user-select: text;
     }
-
     .thank-you {
         padding: 0;
         margin-bottom: -70px;
@@ -48,7 +68,8 @@
         max-width: 1100px;
         margin: 0 auto;
     }
-    .btn, input {
+    .btn,
+    input {
         height: 50px;
         margin: 0;
         padding: 0;
@@ -58,7 +79,6 @@
             padding: 0 0 0 10px;
         }
     }
-
     .btn {
         &:focus {
             color: white;
@@ -76,7 +96,6 @@
         padding: 17px 13px;
         pointer-events: none;
     }
-
     .right-inner-addon {
         position: relative;
     }
@@ -89,25 +108,23 @@
         padding: 10px 12px;
         pointer-events: none;
     }
-
     .has-success {
         .form-control {
             border-color: #2ecc71;
         }
         .glyphicon {
-            color:#2ecc71;
+            color: #2ecc71;
         }
     }
-
     .has-error {
         .form-control {
             border-color: #e74c3c;
         }
         .glyphicon {
-            color:#e74c3c;
+            color: #e74c3c;
         }
         .help-block {
-            color:#e74c3c;
+            color: #e74c3c;
         }
     }
     .has-feedback .form-control-feedback {
