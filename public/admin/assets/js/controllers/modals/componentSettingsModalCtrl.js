@@ -14,6 +14,7 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
   $scope.isSinglePost = isSinglePost;
   $scope.showInsert = showInsert;
   $scope.underNav = underNav;
+  $scope.originalBlog = angular.copy($scope.blog.post);
 
   $scope.errorMapData = false;
 
@@ -77,7 +78,10 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
     if ($scope.componentEditing.type === 'navigation') {
       $scope.website.linkLists = $scope.originalWebsite.linkLists;
     }
-
+    if($scope.blog.post && $scope.originalBlog) {
+      $scope.blog.post.featured_image = $scope.originalBlog.featured_image;
+      $scope.blog.post.post_excerpt = $scope.originalBlog.post_excerpt;
+    }
     $scope.components[clickedIndex] = $scope.originalComponent;
 
     $scope.closeModal();
