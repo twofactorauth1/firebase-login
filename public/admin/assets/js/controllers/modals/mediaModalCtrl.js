@@ -286,7 +286,7 @@ app.controller('MediaModalCtrl', ['$scope', '$modalInstance', '$http', '$timeout
         insertMedia($scope.batch[$scope.batch.length - 1], $scope.type || $scope.insertMediaType);
         $scope.type = null;
       } else {
-        insertMedia($scope.batch[$scope.batch.length - 1], $scope.blogImage);
+        insertMedia($scope.batch[$scope.batch.length - 1]);
       }
     }
     $scope.m.selectTriggerFn(false);

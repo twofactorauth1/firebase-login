@@ -488,6 +488,7 @@
         $scope.logoImage = false;
         $scope.componentEditing.logourl = asset.url;
       } else if ($scope.blogImage) {
+        $scope.blogImage = false;
         $scope.blog.post.featured_image = asset.url;
         return;
       } else if ($scope.imgThumbnail && $scope.componentEditing) {
