@@ -145,7 +145,7 @@
           .error(function (err) {
             console.warn('END:Website Service with ERROR');
           });
-        self.heartrepeater = $timeout(checkPulse, 30000);
+        self.heartrepeater = $timeout(checkPulse, 60000);
       }
 
       checkPulse();
