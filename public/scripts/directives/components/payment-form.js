@@ -79,7 +79,7 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
       scope.yearly_sub_cost = 32.91;
       scope.selected_sub_cost = scope.monthly_sub_cost;
 
-      
+
       scope.removeAccount = function (type) {
         scope.newAccount.businessName = null;
         scope.newAccount.profilePhoto = null;
@@ -206,6 +206,15 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
               }
               UserService.initializeUser(newUser, function (err, data) {
                 if (data && data.accountUrl) {
+                  var hash = CryptoJS.HmacSHA256(newUser.email, "vZ7kG_bS_S-jnsNq4M2Vxjsa5mZCxOCJM9nezRUQ");
+                  //send data to intercom
+                  window.intercomSettings = {
+                    name: newUser.username,
+                    email: newUser.email,
+                    user_hash: hash.toString(CryptoJS.enc.Hex),
+                    created_at: Math.floor(Date.now() / 1000),
+                    app_id: "b3st2skm"
+                  };
                   window.location = data.accountUrl;
                 } else {
                   scope.isFormValid = false;

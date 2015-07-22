@@ -458,11 +458,11 @@ img-crop {
 /*  Sweet Alert
 /* ---------------------------------------------------------------------- */
 .sweet-overlay {
-  z-index: 9998 !important;
+  z-index: 99998 !important;
 }
 
 .sweet-alert {
-  z-index: 9999 !important;
+  z-index: 99999 !important;
 }
 .sweet-alert h2 {
   color: #5b5b60 !important;
