@@ -135,6 +135,8 @@
         var apiUrl = baseUrl + ['cms', 'website', $$.server.websiteId.replace(/&quot;/g, ''), 'pagesheartbeat'].join('/');
         $http.get(apiUrl)
           .success(function (data, status, headers, config) {
+            console.log('data.pagelength >>> ', data.pagelength);
+            console.log('_.size(pagecache.get(pages)) ', _.size(pagecache.get('pages')));
             if (data.pagelength > _.size(pagecache.get('pages'))) {
               resetCache = true;
               self.getPages(null);
@@ -379,8 +381,13 @@
       var apiUrl = baseUrl + ['cms', 'website', websiteId, 'page', page._id, label].join('/');
       $http.delete(apiUrl).success(function (data, status, headers, config) {
         var _pages = pagecache.get('pages');
-        delete _pages[page.handle];
-        pagecache.put('pages', _pages);
+        var _matchingPage = _.find(_pages, function (_page) {
+          return _page.handle === page.handle;
+        });
+        if (_matchingPage) {
+          delete _pages[page.handle];
+          pagecache.put('pages', _pages);
+        }
         fn(data);
       }).error(function (err) {
         console.warn('END:Delete Page with ERROR', err);
