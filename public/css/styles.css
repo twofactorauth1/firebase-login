@@ -1188,6 +1188,9 @@ div[data-type="feature-list"] .inner-page {
   min-width: 200px;
   min-height: 100px;
 }
+.navbar .navigation-logo.edit-wrap div.editable {
+  min-height: 100px;
+}
 .navbar-brand {
   max-width: 100%!important;
   margin: 5px auto!important;
@@ -1251,6 +1254,9 @@ ul.nav {
   border: none!important;
   background: none;
   box-shadow: none;
+}
+.navigation-v2 .navbar .navigation-logo.edit-wrap div.editable {
+  min-height: 100px;
 }
 .navigation-v2 .navbar .navbar-header {
   float: none;
@@ -1355,6 +1361,9 @@ ul.nav {
   min-height: 115px;
   border: none;
   border-radius: 0px;
+}
+.navigation-v3 .navbar .navigation-logo.edit-wrap div.editable {
+  min-height: 100px;
 }
 .navigation-v3 .navbar li {
   min-height: 125px;
