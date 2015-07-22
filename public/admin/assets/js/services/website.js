@@ -219,8 +219,11 @@
       }).success(function (data, status, headers, config) {
         if (page.type === 'page') {
           var _pages = pagecache.get('pages');
-          _pages[data.handle] = data;
-          pagecache.put('pages', _pages);
+          if(_pages)
+          {
+            _pages[data.handle] = data;
+            pagecache.put('pages', _pages);
+          }
         }
         fn(data);
       }).error(function (err) {

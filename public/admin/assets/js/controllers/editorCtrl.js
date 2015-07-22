@@ -109,29 +109,34 @@
           toaster.pop('success', "Template Saved", "The " + $scope.page.handle + " template was saved successfully.");
         });
       } else {
-        $scope.validateEditPage($scope.page);
-
-        if (!$scope.editPageValidated) {
+        //$scope.validateEditPage($scope.page);
+        
+        $scope.checkForDuplicatePage(function () {
+          if (!$scope.editPageValidated) {
           $scope.saveLoading = false;
           toaster.pop('error', "Page Title or URL can not be blank.");
-          return false;
-        }
-        WebsiteService.updatePage($scope.page, function (data) {
-          console.log($scope.page.handle, $scope.originalPage.handle);
-          if ($scope.page.handle !== $scope.originalPage.handle) {
-            $location.search('pagehandle', $scope.page.handle);
+            return false;
           }
-          $scope.saveLoading = false;
-          toaster.pop('success', "Page Saved", "The " + $scope.page.handle + " page was saved successfully.");
-          //Update linked list
-          $scope.website.linkLists.forEach(function (value, index) {
-            if (value.handle === "head-menu") {
-              WebsiteService.updateLinkList($scope.website.linkLists[index], $scope.website._id, 'head-menu', function (data) {
-                console.log('Updated linked list');
+          if(!$scope.duplicateUrl)
+            WebsiteService.updatePage($scope.page, function (data) {
+              console.log($scope.page.handle, $scope.originalPage.handle);
+              if ($scope.page.handle !== $scope.originalPage.handle) {
+                $location.search('pagehandle', $scope.page.handle);
+              }
+              $scope.saveLoading = false;
+              toaster.pop('success', "Page Saved", "The " + $scope.page.handle + " page was saved successfully.");
+              //Update linked list
+              $scope.website.linkLists.forEach(function (value, index) {
+                if (value.handle === "head-menu") {
+                  WebsiteService.updateLinkList($scope.website.linkLists[index], $scope.website._id, 'head-menu', function (data) {
+                    console.log('Updated linked list');
+                  });
+                }
               });
-            }
-          });
-        });
+            });
+          else
+            $scope.saveLoading = false;
+        });        
       }
     };
 
@@ -629,18 +634,24 @@
      * - Check for duplicate page
      */
 
-    $scope.checkForDuplicatePage = function () {
+    $scope.checkForDuplicatePage = function (fn) {
       $scope.validateEditPage($scope.page);
-      WebsiteService.getSinglePage($scope.page.handle, function (data) {
-        if (data && data._id) {
-          if (data._id !== $scope.page._id) {
-            $scope.duplicateUrl = true;
-            toaster.pop('error', "Page URL " + $scope.page.handle, "Already exists");
-          } else {
-            $scope.duplicateUrl = false;
+      if($scope.editPageValidated)
+        WebsiteService.getSinglePage($scope.page.handle, function (data) {
+          if (data && data._id) {
+            if (data._id !== $scope.page._id) {
+              $scope.duplicateUrl = true;
+              toaster.pop('error', "Page URL " + $scope.page.handle, "Already exists");
+            } else {
+              $scope.duplicateUrl = false;
+            }            
           }
-        }
-      });
+          if(fn)
+            fn();
+        });
+      else
+        if(fn)
+          fn();
     };
 
     /*
