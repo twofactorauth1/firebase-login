@@ -1,5 +1,5 @@
 /*global app, Fingerprint*/
-app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'paymentService', 'userService', 'ipCookie', 'formValidations', function ($filter, $q, ProductService, PaymentService, UserService, ipCookie, formValidations) {
+app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'paymentService', 'userService', 'ipCookie', 'formValidations', '$location', function ($filter, $q, ProductService, PaymentService, UserService, ipCookie, formValidations, $location) {
   return {
     require: [],
     scope: {
@@ -8,6 +8,8 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
     },
     templateUrl: '/components/component-wrap.html',
     link: function (scope, element, attrs, ctrl) {
+      scope.newAccount = {};
+
       UserService.getTmpAccount(function (data) {
         scope.tmpAccount = data;
         var tmpAccount = data;
@@ -233,8 +235,6 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
         });
       };
 
-      scope.newAccount = {};
-
       scope.checkDomainExists = function (newAccount) {
         if (!newAccount.businessName) {
           angular.element("#business-name .error").html("Url Required");
@@ -388,6 +388,13 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
           $("#card_name .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
         }
       };
+
+      scope.poulateCoupon = $location.search().coupon;
+      if ($location.search().coupon) {
+        scope.poulateCoupon = $location.search().coupon;
+        scope.newAccount.coupon = scope.poulateCoupon;
+        scope.checkCoupon();
+      }
     }
   };
 }]);
