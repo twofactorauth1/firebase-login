@@ -580,11 +580,17 @@
                     <tab-heading>
                         <span>Address</span>
                     </tab-heading>
+                     <div class="form-group" ng-class="{'has-error':errorMapData}">
+                        <label for="location-address">Address Suggestions</label>
+                        <span tooltip-placement="top" tooltip-html-unsafe="Address Suggestions"><i class="fa fa-info-circle" /></span>
+                        <input id="autocomplete-place" class="form-control" g-places-autocomplete ng-model="place.address">
+                    </div>
+
                     <div class="form-group" ng-class="{'has-error':errorMapData}">
                         <label for="location-address">Address </label>
                         <span tooltip-placement="top" tooltip-html-unsafe="Contact Us address line 1."><i class="fa fa-info-circle" /></span>
-                        <input id="location-address" class="form-control" type="text" ng-model="componentEditing.location.address" ng-blur="updateContactUsAddress()">
-                    </div>
+                        <input id="location-address" class="form-control" ng-model="componentEditing.location.address" ng-blur="updateContactUsAddress()">
+                    </div>                     
                     <div class="form-group" ng-class="{'has-error':errorMapData}">
                         <label for="location-address2">Address2 </label>
                         <span tooltip-placement="top" tooltip-html-unsafe="Contact Us address line 2."><i class="fa fa-info-circle" /></span>

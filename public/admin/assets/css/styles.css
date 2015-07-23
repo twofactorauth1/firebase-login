@@ -12905,7 +12905,7 @@ fieldset[disabled] .btn-vimeo-square.active {
   color: #b6b6b6;
 }
 .editor-toolbar-wrap {
-  z-index: 9997;
+  z-index: 1088;
 }
 #editor-toolbar {
   z-index: 100;
@@ -13135,6 +13135,9 @@ fieldset[disabled] .btn-vimeo-square.active {
 }
 ul.nav-bar {
   list-style: none;
+}
+.pac-container {
+  z-index: 10020 !important;
 }
 /* ---------------------------------------------------------------------- */
 /*  Billing
