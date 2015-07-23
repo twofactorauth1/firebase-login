@@ -143,17 +143,6 @@ if account._id == 6
     script.
         (function(){var w=window;var ic=w.Intercom;if(typeof ic==="function"){ic('reattach_activator');ic('update',intercomSettings);}else{var d=document;var i=function(){i.c(arguments)};i.q=[];i.c=function(args){i.q.push(args)};w.Intercom=i;function l(){var s=d.createElement('script');s.type='text/javascript';s.async=true;s.src='https://widget.intercom.io/widget/';var x=d.getElementsByTagName('script')[0];x.parentNode.insertBefore(s,x);}if(w.attachEvent){w.attachEvent('onload',l);}else{w.addEventListener('load',l,false);}}})()
 
-    script(type='text/javascript').
-      (function() {
-      window._pa = window._pa || {};
-      // _pa.orderId = "myOrderId"; // OPTIONAL: attach unique conversion identifier to conversions
-      // _pa.revenue = "19.99"; // OPTIONAL: attach dynamic purchase values to conversions
-      // _pa.productId = "myProductId"; // OPTIONAL: Include product ID for use with dynamic ads
-      var pa = document.createElement('script'); pa.type = 'text/javascript'; pa.async = true;
-      pa.src = ('https:' == document.location.protocol ? 'https:' : 'http:') + "//tag.marinsm.com/serve/55b1401997c9d1666a00000f.js";
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(pa, s);
-      })();
-
 
 if account._id == 37
     script(type='text/javascript').
