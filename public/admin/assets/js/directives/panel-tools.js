@@ -5,7 +5,7 @@
 app.directive('ctPaneltool', function () {
     var templates = {
         /* jshint multistr: true */
-        collapse: "<a href='#' class='btn btn-transparent btn-sm' panel-collapse='' tooltip-placement='top' tooltip='Collapse' ng-click='{{panelId}} = !{{panelId}}' ng-init='{{panelId}}=false'>" + "<i ng-if='{{panelId}}' class='ti-angle-down'></i>" + "<i ng-if='!{{panelId}}' class='ti-angle-up'></i>" + "</a>",
+        collapse: "<a href='#' class='btn btn-transparent btn-sm' panel-collapse='' tooltip-placement='top' ng-attr-tooltip='{{{{panelId}} ? \"Expand\" : \"Collapse\"}}' ng-click='{{panelId}} = !{{panelId}}' ng-init='{{panelId}}=false'>" + "<i ng-if='{{panelId}}' class='ti-angle-down'></i>" + "<i ng-if='!{{panelId}}' class='ti-angle-up'></i>" + "</a>",
         dismiss: "<a href='#' class='btn btn-transparent btn-sm' panel-dismiss='' tooltip-placement='top' tooltip='Close' ng-click='{{dismissFn}}'>" + "<i class='ti-close'></i>" + "</a>",
         refresh: "<a href='#' class='btn btn-transparent btn-sm' panel-refresh='' tooltip-placement='top' tooltip='Refresh' data-spinner='{{spinner}}'>" + "<i class='ti-reload'></i>" + "</a>"
     };

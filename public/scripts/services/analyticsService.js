@@ -126,8 +126,41 @@ mainApp.service('analyticsService', ['$http', '$location', 'ipCookie', function 
             session_length: 0,
             timezone: timezone.name(),
             new_visitor: new_visitor,
-            entrance: parsedEntranceUrl.attr("path")
+            entrance: parsedEntranceUrl.attr("path"),
+            fullEntrance: $location.absUrl(),
         };
+
+        var campaign = {};
+        var hasUtm = false;
+
+        if ($location.search().utm_source) {
+            hasUtm = true;
+            campaign.utm_source = $location.search().utm_source;
+        }
+
+        if ($location.search().utm_medium) {
+            hasUtm = true;
+            campaign.utm_medium = $location.search().utm_medium;
+        }
+
+        if ($location.search().utm_campaign) {
+            hasUtm = true;
+            campaign.utm_campaign = $location.search().utm_campaign;
+        }
+
+        if ($location.search().utm_term) {
+            hasUtm = true;
+            campaign.utm_term = $location.search().utm_term;
+        }
+
+        if ($location.search().utm_content) {
+            hasUtm = true;
+            campaign.utm_content = $location.search().utm_content;
+        }
+
+        if (hasUtm) {
+            sessionProperties.campaign = campaign;
+        }
 
         /*
         //If you know that the user is currently logged in, add information about the user.
@@ -162,6 +195,8 @@ mainApp.service('analyticsService', ['$http', '$location', 'ipCookie', function 
 
         //api/1.0/analytics/session/{sessionId}/sessionStart
         var apiUrl = baseUrl + ['analytics', 'session', ipCookie("session_cookie")["id"], 'sessionStart'].join('/');
+        console.log('session start campaign >>> ', sessionProperties.campaign);
+        console.log('session start fullEntrance >>> ', sessionProperties.fullEntrance);
           $http.post(apiUrl, sessionProperties)
             .success(function(data, status, headers, config) {
               fn(data);

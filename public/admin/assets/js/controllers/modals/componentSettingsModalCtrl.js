@@ -15,7 +15,8 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
   $scope.showInsert = showInsert;
   $scope.underNav = underNav;
   $scope.originalBlog = angular.copy($scope.blog.post);
-
+  $scope.place = {};
+  $scope.place.address = null;
   $scope.errorMapData = false;
 
   /*
@@ -351,19 +352,8 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
   $scope.closeModal = function () {
     $timeout(function () {
       $scope.$apply(function () {
-        if ($scope.originalContactMap && !angular.equals($scope.originalContactMap, $scope.componentEditing.location)) {
-          $scope.validateGeoAddress(function () {
-            if ($scope.errorMapData) {
-              angular.copy($scope.originalContactMap, $scope.componentEditing.location);
-              $scope.contactMap.refreshMap();
-            }
-            $modalInstance.close();
-            angular.element('.modal-backdrop').remove();
-          });
-        } else {
           $modalInstance.close();
           angular.element('.modal-backdrop').remove();
-        }
       });
     });
   };
@@ -655,7 +645,7 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
   };
 
   $scope.validateGeoAddress = function (fn) {
-    if (!($scope.componentEditing.location.city && $scope.componentEditing.location.state) || $scope.componentEditing.location.zip) {
+    if (!(($scope.componentEditing.location.city && $scope.componentEditing.location.state) || $scope.componentEditing.location.zip)) {
       $scope.errorMapData = true;
       if (fn)
         fn();
@@ -814,4 +804,66 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
   });
 
   $scope.editComponent();
+  var componentForm = {
+      street_number: 'short_name',
+      route: 'long_name',
+      locality: 'long_name',
+      administrative_area_level_1: 'short_name',
+      postal_code: 'short_name',
+      country: 'short_name'
+  };
+  $scope.setDefaultAddress = function () {
+    $scope.componentEditing.location.address = "";
+    $scope.componentEditing.location.address2 = "";
+    $scope.componentEditing.location.city = "";
+    $scope.componentEditing.location.state = "";
+    $scope.componentEditing.location.zip = "";
+    $scope.componentEditing.location.country = "";
+  }
+  $scope.fillInAddress = function(place) {  
+  // Get each component of the address from the place details
+  // and fill the corresponding field on the form. 
+    $scope.setDefaultAddress();   
+    for (var i = 0; i < place.address_components.length; i++) {
+      var addressType = place.address_components[i].types[0];
+      if (componentForm[addressType]) {
+        var val = place.address_components[i][componentForm[addressType]];
+        if(addressType === 'street_number')
+        {
+          $scope.componentEditing.location.address = val;
+        }
+        else if(addressType === 'route')
+        {
+          $scope.componentEditing.location.address2 = val;
+        }
+        else if(addressType === 'locality')
+        {
+          $scope.componentEditing.location.city = val;
+        }
+        else if(addressType === 'administrative_area_level_1')
+        {
+          $scope.componentEditing.location.state = val;
+        }
+        else if(addressType === 'postal_code')
+        {
+          $scope.componentEditing.location.zip = val;
+        }
+        else if(addressType === 'country')
+        {
+          $scope.componentEditing.location.country = val;
+        }
+      }
+    }
+    $scope.componentEditing.location.lat = place.geometry.location.lat();
+    $scope.componentEditing.location.lon = place.geometry.location.lng();
+}
+  $scope.$watch('place.address', function (newValue) {
+    if (newValue) {
+      if(angular.isObject(newValue)) {
+          $scope.fillInAddress(newValue);
+          $scope.contactMap.refreshMap();
+      }
+    }
+  });
+
 }]);

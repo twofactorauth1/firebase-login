@@ -535,6 +535,7 @@ app.constant('JS_REQUIRES', {
     'addComponentModalCtrl': 'assets/js/controllers/modals/addComponentModalCtrl.js',
     'componentSettingsModalCtrl': 'assets/js/controllers/modals/componentSettingsModalCtrl.js',
     'mediaModalCtrl': 'assets/js/controllers/modals/mediaModalCtrl.js',
+    'templateSettingsModalCtrl': 'assets/js/controllers/modals/templateSettingsModalCtrl.js',
 
     'asideCtrl': 'assets/js/controllers/asideCtrl.js',
     'toasterCtrl': 'assets/js/controllers/toasterCtrl.js',
@@ -713,5 +714,9 @@ app.constant('JS_REQUIRES', {
   }, {
     name: 'ngJoyRide',
     files: ['../js/libs/ng-joyride/ng-joyride.js']
+  },
+  {
+    name: 'googlePlaces',
+    files: ['../js/libs/angular-google-places-autocomplete/src/autocomplete.js','../js/libs/angular-google-places-autocomplete/src/autocomplete.css']
   }]
 });
