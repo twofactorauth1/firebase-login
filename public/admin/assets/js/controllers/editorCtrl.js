@@ -229,6 +229,7 @@
         $scope.components = $scope.page.components;
         $scope.originalComponents = angular.copy($scope.components);
         $scope.originalPage = angular.copy(data);
+        $scope.activePage = true;
         $scope.activateCKeditor();
         if (!$scope.components || $scope.components.length === 0) {
           $scope.ckeditorLoaded = true;
@@ -284,6 +285,16 @@
     $scope.getSinglePostData = function () {
       console.log('getSinglePostData');
     };
+
+    /*
+   * @removeTemplateImage
+   * -
+   */
+
+  $scope.removeTemplateImage = function () {
+    console.log('remove template image');
+    $scope.page.previewUrl = null;
+  };
 
     /*
      * @calculateWindowHeight
@@ -612,8 +623,14 @@
     $scope.openSettingsModal = function () {
       if ($scope.single_post) {
         $scope.openSimpleModal("post-settings-modal");
-      } else {
+      } 
+
+      if ($scope.activePage) {
         $scope.openSimpleModal("page-settings-modal");
+      }
+
+      if ($scope.templateActive) {
+        $scope.openModal("template-settings-modal", 'TemplateSettingsModalCtrl');
       }
     };
 
