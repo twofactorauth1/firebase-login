@@ -752,7 +752,7 @@
           chart: {
             spacing: [25, 25, 25, 25]
           },
-          colors: ['#41b0c7', '#fcb252', '#309cb2', '#f8cc49', '#f8d949'],
+          colors: ['#41b0c7', '#fcb252', '#993300', '#f8cc49', '#f8d949'],
           title: {
             text: null
           },
