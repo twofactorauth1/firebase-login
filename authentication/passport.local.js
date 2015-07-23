@@ -20,7 +20,7 @@ passport.use(new LocalStrategy({
     function(req, username, password, done) {
         var self = this;
 
-        authenticationDao.authenticateByUsernamePassword(req, username, password, function(err, value) {
+        authenticationDao.authenticateByUsernamePassword(req, username.toLowerCase(), password, function(err, value) {
             if (err) {
                 return done(null, false, {message:value});
             } else if(value == null) {

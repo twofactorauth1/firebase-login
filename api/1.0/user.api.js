@@ -227,7 +227,7 @@ _.extend(api.prototype, baseApi.prototype, {
     userExists: function(req,resp) {
         var self = this;
 
-        var username = req.params.username;
+        var username = req.params.username.toLowerCase();
         self.log.debug('>> userExists ', username);
 
         // var accountId = this.accountId(req);
@@ -247,7 +247,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
     userExistsForAccount: function(req,resp) {
         var self = this;
-        var username = req.params.username;
+        var username = req.params.username.toLowerCase();
         var accountId = req.params.accountId;
 
         accountId = parseInt(accountId);
@@ -276,7 +276,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var username = req.body.username;
         var password1 = req.body.password;
         var password2 = req.body.password2;
-        var email = req.body.username;
+        var email = req.body.username.toLowerCase();
         var accountToken = req.body.accountToken;
         var anonymousId = req.body.anonymousId;
         var coupon = req.body.coupon;

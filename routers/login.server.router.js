@@ -327,7 +327,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
 
 
     handleForgotPassword: function (req, resp) {
-        var username = req.body.username;
+        var username = req.body.username.toLowerCase();
         new ForgotPasswordView(req, resp).handleForgotPassword(username);
     },
 
@@ -341,7 +341,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
     handleResetPasswordByToken: function (req, resp) {
         var self = this;
         self.log.debug('>> handleResetPasswordByToken');
-        var email = req.body.username;
+        var email = req.body.username.toLowerCase();
         var password = req.body.password;
         var password2 = req.body.password2;
         var token = req.params.token;
@@ -393,7 +393,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
         var username = req.body.username;
         var password1 = req.body.password;
         var password2 = req.body.password2;
-        var email = req.body.username;
+        var email = req.body.username.toLowerCase();
 
         if (username == null || username.trim() == "") {
             req.flash("error", "You must enter a valid username");
@@ -456,7 +456,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
             return {
                 user: {
                     id: user.attributes._id,
-                    email: user.attributes.email,
+                    email: user.attributes.email.toLowerCase(),
                     admin: false
                 }
             };
