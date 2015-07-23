@@ -20,5 +20,6 @@ angular.module("clip-two", [
     'autocomplete',
     'config',
     'leaflet-directive',
-    'angular-parallax'
+    'angular-parallax',
+    'google.places'
 ]);
