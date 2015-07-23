@@ -93,8 +93,7 @@ _.extend(view.prototype, BaseView.prototype, {
                 //we have the user value, now lets load the
                 var data = self.baseData({
                     reset:true,
-                    token:token,
-                    infoMsg:"Password recovery found."
+                    token:token
                 });
 
                 self.resp.render('forgotpassword', data);
