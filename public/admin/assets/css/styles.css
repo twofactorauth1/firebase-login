@@ -12905,7 +12905,7 @@ fieldset[disabled] .btn-vimeo-square.active {
   color: #b6b6b6;
 }
 .editor-toolbar-wrap {
-  z-index: 9997;
+  z-index: 1088;
 }
 #editor-toolbar {
   z-index: 100;
