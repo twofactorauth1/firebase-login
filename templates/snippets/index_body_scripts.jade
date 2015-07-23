@@ -159,24 +159,7 @@ if !includeEditor
       script.
           (function(){var w=window;var ic=w.Intercom;if(typeof ic==="function"){ic('reattach_activator');ic('update',intercomSettings);}else{var d=document;var i=function(){i.c(arguments)};i.q=[];i.c=function(args){i.q.push(args)};w.Intercom=i;function l(){var s=d.createElement('script');s.type='text/javascript';s.async=true;s.src='https://widget.intercom.io/widget/';var x=d.getElementsByTagName('script')[0];x.parentNode.insertBefore(s,x);}if(w.attachEvent){w.attachEvent('onload',l);}else{w.addEventListener('load',l,false);}}})()
 
-    if account.accountUrl == 'https://main.indigenous.io'
-      // Facebook Conversion Code for Free Trial Sign-ups
-      script.
-          (function() {
-          var _fbq = window._fbq || (window._fbq = []);
-          if (!_fbq.loaded) {
-          var fbds = document.createElement('script');
-          fbds.async = true;
-          fbds.src = '//connect.facebook.net/en_US/fbds.js';
-          var s = document.getElementsByTagName('script')[0];
-          s.parentNode.insertBefore(fbds, s);
-          _fbq.loaded = true;
-          }
-          })();
-          window._fbq = window._fbq || [];
-          window._fbq.push(['track', '6032779610613', {'value':'0.00','currency':'USD'}]);
-        noscript
-          img(height='1', width='1', alt='', style='display:none', src='https://www.facebook.com/tr?ev=6032779610613&cd[value]=0.00&cd[currency]=USD&noscript=1')
+
 
   if account._id == 37
       script(type='text/javascript').
