@@ -1436,8 +1436,8 @@ _.extend(api.prototype, baseApi.prototype, {
         if(self.userId(req) !== null) {
             statusAry.push($$.m.BlogPost.status.PRIVATE);
             //For now, we will add future and draft.  Once the frontend is decoupled from backend, this needs to be removed.
-            statusAry.push($$.m.BlogPost.status.DRAFT);
-            statusAry.push($$.m.BlogPost.status.FUTURE);
+            // statusAry.push($$.m.BlogPost.status.DRAFT);
+            // statusAry.push($$.m.BlogPost.status.FUTURE);
         }
 
         if(req.query['limit']) {
