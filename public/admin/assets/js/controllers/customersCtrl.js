@@ -348,6 +348,7 @@
       toaster.pop('success', "Contacts import initiated.");
       SocialConfigService.importGoogleContactsForGroup($scope.tempGoogleAccount.id, groupId.id, function () {
         $scope.closeModal();
+        $scope.minRequirements = true;
         toaster.pop('success', "Your Google contacts are being imported in the background.");
       });
       $scope.tempGoogleAccount = null;
