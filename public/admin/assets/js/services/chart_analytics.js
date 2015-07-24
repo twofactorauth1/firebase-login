@@ -29,6 +29,9 @@
       if (account.domain) {
         hostname = account.domain;
       }
+      if (account._id === 6 && windowHostname.indexOf(".local") <= 0 && windowHostname.indexOf(".test") <= 0) {
+        hostname = 'indigenous.io';
+      }
       return hostname;
     };
 
@@ -523,6 +526,7 @@
 
       var self = this;
       var hostname = this.getHostName(account);
+      console.log('hostname ', hostname);
 
       KeenService.keenClient(function (client) {
         var queryData = self.queryReports(date, hostname);
