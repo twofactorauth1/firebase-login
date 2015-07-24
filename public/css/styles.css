@@ -186,21 +186,15 @@ hr {
 }
 .add-component {
   font-size: 50px;
-  position: absolute;
-  background: rgba(44, 62, 80, 0.8);
   padding: 20px 20px 15px;
-  color: white;
+  color: #444;
   font-size: 20px;
   cursor: pointer;
   left: 45%;
-  z-index: 9998;
-  margin-top: -25px;
+  z-index: 5;
   padding: 5px 15px;
   text-align: center;
-  /*
-      99999 is for
-        .componentActions
-    */
+  background: #fff;
 }
 .add-component p {
   margin-bottom: 0;
@@ -223,7 +217,15 @@ hr {
 .component-hidden {
   text-align: center;
   padding: 5px 0;
-  height: 150px;
+  min-height: 150px;
+  margin-top: -56px !important;
+  margin-bottom: -58px !important;
+  background: #f1f1f1!important;
+  position: relative;
+  -webkit-transition: margin 0.5s;
+  -moz-transition: margin 0.5s;
+  -ms-transition: margin 0.5s;
+  -o-transition: margin 0.5s;
 }
 .component-hidden > h3 {
   margin-top: 50px;
@@ -289,11 +291,6 @@ ol.circles-list > li:before {
   background-color: #464646;
   content: counter(li-counter);
   counter-increment: li-counter;
-}
-.componentActions,
-.no-component {
-  display: none;
-  visibility: hidden;
 }
 .no-component .add-component {
   display: block;
@@ -515,6 +512,14 @@ div[data-type='campaign'] .inner-page .overlay {
 .component-wrap {
   display: block;
   position: relative;
+  margin-top: -56px !important;
+  margin-bottom: -58px !important;
+  background: #f1f1f1;
+  z-index: 10;
+  -webkit-transition: margin 0.5s;
+  -moz-transition: margin 0.5s;
+  -ms-transition: margin 0.5s;
+  -o-transition: margin 0.5s;
 }
 .component-wrap .component > [id] .bg {
   position: absolute;

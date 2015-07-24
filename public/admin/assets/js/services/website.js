@@ -118,7 +118,7 @@
             if (fn) {
               fn(data);
             }
-            self.getPagesHeartbeat();
+            // self.getPagesHeartbeat();
           }).error(function (msg, code) {
             console.warn(msg, code);
           });

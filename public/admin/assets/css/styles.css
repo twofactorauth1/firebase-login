@@ -12755,13 +12755,12 @@ fieldset[disabled] .btn-vimeo-square.active {
   font-size: 14px;
 }
 .component-sortable .componentActions h4 {
-  background: rgba(44, 62, 80, 0.8);
   padding: 17px;
-  color: white;
+  color: #444;
   font-size: 18px;
   margin: 0;
   height: 56px;
-  pointer-events: none;
+  font-weight: bold;
 }
 .sortable-ghost .delete-component,
 .sortable-ghost .duplicate,
@@ -12801,17 +12800,13 @@ fieldset[disabled] .btn-vimeo-square.active {
 #componentloader .fragment .component-inner {
   border: 2px solid transparent;
 }
+#componentloader .fragment:hover .component-wrap,
+#componentloader .fragment:hover .component-hidden {
+  margin-top: 0!important;
+  margin-bottom: 0!important;
+}
 #componentloader .fragment:hover .component-inner {
   border: 2px dashed #34495e;
-}
-#componentloader .fragment:hover .componentActions {
-  display: block;
-  line-height: 39px;
-  visibility: visible;
-  -webkit-animation: fadeIn 1s;
-  -moz-animation: fadeIn 1s;
-  -ms-animation: fadeIn 1s;
-  animation: fadeIn 1s;
 }
 #componentloader .fragment:hover .add-component {
   display: block;
@@ -12830,15 +12825,13 @@ fieldset[disabled] .btn-vimeo-square.active {
   animation: bounceOut 1s;
 }
 .componentActions {
-  position: absolute;
-  z-index: 1032;
-  width: 100%;
-  margin-right: 10px;
+  position: relative;
+  height: 56px;
+  background: #fff;
 }
 .componentActions span {
-  background: rgba(44, 62, 80, 0.8);
   padding: 20px;
-  color: white;
+  color: #444;
   font-size: 20px;
   cursor: pointer;
 }

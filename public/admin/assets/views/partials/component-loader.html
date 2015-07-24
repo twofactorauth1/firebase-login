@@ -1,16 +1,22 @@
 <div id="componentloader">
-    <ul ng-sortable="barConfig" class="component-sortable" ng-class="{'dragging': dragging}" ng-model="components">
+    <ul class="component-sortable">
         <li ng-repeat="value in components" class="fragment">
             <div class="componentActions" ng-class="{'masthead-actions':value.type == 'masthead'}">
-                <span class="reorder fa fa-arrows" ng-if="!isSinglePost && value.type != 'email' " ng-mouseenter="preDrag('enter')" ng-mouseleave="preDrag('leave')"><p>Reorder</p></span>
-                <div class="single-reorder" ng-if="!isSinglePost && value.type != 'email' ">
-                    <span ng-if="$index != 0" ng-click="singleReorder('up', value, $index)"><i class="fa fa-chevron-up"></i><p>Up</p></span>
-                    <span ng-if="$index != components.length - 1" ng-click="singleReorder('down', value, $index)"><i class="fa fa-chevron-down"></i><p>Down</p></span>
+                <div class="col-xs-4">
+                    <!-- <span class="reorder fa fa-arrows" ng-if="!isSinglePost && value.type != 'email' " ng-mouseenter="preDrag('enter')" ng-mouseleave="preDrag('leave')"><p>Reorder</p></span> -->
+                    <div class="single-reorder" ng-if="!isSinglePost && value.type != 'email' ">
+                        <span ng-if="$index != 0" ng-click="singleReorder('up', value, $index)"><i class="fa fa-chevron-up"></i><p>Up</p></span>
+                        <span ng-if="$index != components.length - 1" ng-click="singleReorder('down', value, $index)"><i class="fa fa-chevron-down"></i><p>Down</p></span>
+                    </div>
                 </div>
-                <h4 class="pull-left">{{value.type | formatText}}</h4>
-                <span class="delete delete-component fa fa-trash" ng-if="!preDragging && !isSinglePost && value.type != 'email' && value.type != 'footer' && value.type != 'single-post'" ng-click="deleteComponent($index)"><p>Delete</p></span>
-                <span class="duplicate fa fa-copy" ng-if="!preDragging && value.type != 'email' && value.type != 'footer' && value.type != 'navigation' && value.type != 'single-post'  && value.type != 'blog' && value.type != 'blog-teaser'" ng-click="duplicateComponent($index)"><p>Duplicate</p></span>
-                <span class="component-settings settings-btn fa fa-cog" ng-if="!preDragging && value.type != 'footer' && !isSinglePost || isSinglePost && value.type == 'single-post'" ng-click="openModal('component-settings-modal', 'ComponentSettingsModalCtrl', $index)"><p>Settings</p></span>
+                <div class="col-xs-4">
+                    <h4 class="center">{{value.type | formatText}}</h4>
+                </div>
+                <div class="col-xs-4">
+                    <span class="delete delete-component fa fa-trash" ng-if="!preDragging && !isSinglePost && value.type != 'email' && value.type != 'footer' && value.type != 'single-post'" ng-click="deleteComponent($index)"><p>Delete</p></span>
+                    <span class="duplicate fa fa-copy" ng-if="!preDragging && value.type != 'email' && value.type != 'footer' && value.type != 'navigation' && value.type != 'single-post'  && value.type != 'blog' && value.type != 'blog-teaser'" ng-click="duplicateComponent($index)"><p>Duplicate</p></span>
+                    <span class="component-settings settings-btn fa fa-cog" ng-if="!preDragging && value.type != 'footer' && !isSinglePost || isSinglePost && value.type == 'single-post'" ng-click="openModal('component-settings-modal', 'ComponentSettingsModalCtrl', $index)"><p>Settings</p></span>
+                </div>
             </div>
             <div ng-include=" '../components/component-switch.html' "></div>
             <div ng-class="{'zee-blur': !value.visibility}"></div>
@@ -28,8 +34,8 @@
             </div>
             <div class="clearfix mb15"></div>
             <div class="add-new-component add-component" ng-click="openModal('add-component-modal', 'AddComponentModalCtrl', 0)">
-            <i class="fa fa-plus"></i>
-            <p>Add New</p>
+                <i class="fa fa-plus"></i>
+                <p>Add New</p>
             </div>
         </li>
     </ul>
