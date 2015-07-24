@@ -20,7 +20,7 @@
                     </div>
                 </div>
             </div>
-            <div ng-if="component.type == 'email'">
+            <div ng-if="component.type == 'email'" style="clear:both">
                 <div data-ng-include data-src="'/components/'+component.type+'_v'+component.version+'.html'"></div>
             </div>
             <div ng-if="component.bg.img.url && component.type != 'email' " class="ipad-bg">
