@@ -12786,6 +12786,16 @@ fieldset[disabled] .btn-vimeo-square.active {
   color: inherit;
   font-family: inherit;
 }
+#componentloader .component-wrap {
+  margin-top: -56px !important;
+  margin-bottom: -58px !important;
+  background: #f1f1f1;
+  z-index: 10;
+  -webkit-transition: margin 0.5s;
+  -moz-transition: margin 0.5s;
+  -ms-transition: margin 0.5s;
+  -o-transition: margin 0.5s;
+}
 #componentloader .component-sortable.dragging .delete-component,
 #componentloader .component-sortable.dragging .duplicate,
 #componentloader .component-sortable.dragging .component-settings,

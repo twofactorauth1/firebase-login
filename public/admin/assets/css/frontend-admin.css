@@ -531,14 +531,6 @@
 #componentloader .component-wrap {
   display: block;
   position: relative;
-  margin-top: -56px !important;
-  margin-bottom: -58px !important;
-  background: #f1f1f1;
-  z-index: 10;
-  -webkit-transition: margin 0.5s;
-  -moz-transition: margin 0.5s;
-  -ms-transition: margin 0.5s;
-  -o-transition: margin 0.5s;
 }
 #componentloader .component-wrap .component > [id] .bg {
   position: absolute;
