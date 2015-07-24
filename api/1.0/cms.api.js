@@ -561,7 +561,8 @@ _.extend(api.prototype, baseApi.prototype, {
                         title: pageObj.title,
                         handle: pageObj.handle,
                         mainmenu: pageObj.mainmenu,
-                        components: pageObj.components
+                        components: pageObj.components,
+                        type: pageObj.type
                     });
                     page.attributes.modified.date = new Date();
                     page.attributes.created.date = new Date();

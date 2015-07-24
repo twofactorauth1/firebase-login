@@ -643,6 +643,9 @@
       if ($scope.single_post) {
         $scope.openSimpleModal("post-duplicate-modal");
       } else {
+        $scope.duplicate_type = "Page";
+        if($scope.emailPage)
+          $scope.duplicate_type = "Email";
         $scope.openSimpleModal("page-duplicate-modal");
       }
     };
@@ -732,6 +735,9 @@
     });
 
     $scope.createDuplicatePage = function (newPage) {
+      if($scope.emailPage)
+        newPage.type = "email";
+
       $scope.validateNewPage(newPage);
       if (!$scope.newPageValidated) {
         toaster.pop('error', "Page Title or URL can not be blank.");
@@ -745,7 +751,10 @@
         newPage.components = $scope.page.components;
         WebsiteService.createDuplicatePage(newPage, function (data) {
           $scope.duplicate = true;
-          $scope.checkForSaveBeforeLeave('/admin/#/website/pages/?pagehandle=' + newPage.handle, true);
+          if($scope.emailPage)
+            $scope.checkForSaveBeforeLeave('/admin/#/editor?email=' + newPage.handle, true);            
+          else
+            $scope.checkForSaveBeforeLeave('/admin/#/website/pages/?pagehandle=' + newPage.handle, true);
         });
       });
     };
