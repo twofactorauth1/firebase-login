@@ -9,6 +9,7 @@ app.directive('testimonialsComponent', ['$timeout', function ($timeout) {
     },
     templateUrl: '/components/component-wrap.html',
     link: function (scope, element, attrs) {
+      scope.autoplay = false;
       scope.isEditing = true;
       $timeout(function () {
         scope.dataLoaded = true;
@@ -20,8 +21,6 @@ app.directive('testimonialsComponent', ['$timeout', function ($timeout) {
           scope.dataLoaded = true;
         });
       };
-
-
       scope.addTestimonial = function (index) {
         scope.dataLoaded = false;
         var newTestimonial = {
