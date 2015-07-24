@@ -1,16 +1,16 @@
 'use strict';
-/*global app, moment, angular, window*/
-/*jslint unparam:true*/
+/*global app, window*/
 (function (angular) {
   app.controller('CustomersCtrl', ["$scope", "$state", "toaster", "$modal", "$window", "CustomerService", "SocialConfigService", "userConstant", function ($scope, $state, toaster, $modal, $window, CustomerService, SocialConfigService, userConstant) {
 
     $scope.tableView = 'list';
     $scope.itemPerPage = 100;
     $scope.showPages = 15;
-    
-    if(!$state.current.sort) 
+
+    if (!$state.current.sort) {
       $scope.order = "reverse";
-      
+    }
+
     /*
      * @getCustomers
      * -
@@ -25,8 +25,9 @@
         customer.hasGoogleId = $scope.checkGoogleId(customer);
       });
       $scope.customers = customers;
-      if($state.current.sort)
-        $scope.setSortOrder($state.current.sort);    
+      if ($state.current.sort) {
+        $scope.setSortOrder($state.current.sort);
+      }
       $scope.showCustomers = true;
       console.log("customers loaded");
 
@@ -37,7 +38,7 @@
      * - getters for the sort on the table
      */
 
-    $scope.getters = {      
+    $scope.getters = {
       created: function (value) {
         return value.created.date || -1;
       },
@@ -53,14 +54,14 @@
       phone: function (value) {
         if (value.details[0] && value.details[0].phones && value.details[0].phones[0]) {
           return value.details[0].phones[0].number.trim();
-        } else {
-          return "";
         }
+        return "";
       },
       address: function (value) {
         if (value.details[0] && value.details[0].addresses && value.details[0].addresses[0] && value.details[0].addresses[0].city && value.details[0].addresses[0].state) {
           return [value.details[0].addresses[0].city, value.details[0].addresses[0].state].join(' ').trim();
-        } else if (value.details[0] && value.details[0].addresses && value.details[0].addresses[0] && value.details[0].addresses[0].address && !value.details[0].addresses[0].city) {
+        }
+        if (value.details[0] && value.details[0].addresses && value.details[0].addresses[0] && value.details[0].addresses[0].address && !value.details[0].addresses[0].city) {
           return value.details[0].addresses[0].address;
         }
       },
@@ -76,9 +77,9 @@
         }
         if (value.hasTwitterId) {
           return 4;
-        } else {
-          return 5;
         }
+
+        return 5;
       }
     };
 
@@ -87,11 +88,12 @@
      * -
      */
 
-    $scope.openModal = function (template) {
+    $scope.openModal = function (template, _size) {
       $scope.modalInstance = $modal.open({
         templateUrl: template,
         scope: $scope,
-        backdrop: 'static'
+        backdrop: 'static',
+        size: _size || md
       });
     };
 
@@ -174,7 +176,7 @@
       return returnVal;
     };
 
-    $scope.viewSingle = function (customer) {      
+    $scope.viewSingle = function (customer) {
       var tableState = $scope.getSortOrder();
       $state.current.sort = tableState.sort;
       window.location = '/admin/#/customers/' + customer._id;
@@ -291,7 +293,7 @@
           foundSocialId = true;
           $scope.closeModal();
           toaster.pop('success', "Contacts import initiated.");
-          SocialConfigService.importLinkedinContact(value.id, function (data) {
+          SocialConfigService.importLinkedinContact(value.id, function () {
             $scope.closeModal();
             toaster.pop('success', "Contacts import complete.");
           });
@@ -305,7 +307,7 @@
 
     $scope.importGmailContacts = function () {
       var foundSocialId = false;
-      $scope.socialAccounts.forEach(function (value, index) {
+      $scope.socialAccounts.forEach(function (value) {
         if (value.type === userConstant.social_types.GOOGLE) {
           foundSocialId = true;
           $scope.closeModal();
@@ -321,6 +323,177 @@
         toaster.pop('warning', "No google account integrated.");
       }
     };
+
+    $scope.customerColumns = [{
+      name: 'First Name',
+      value: 'first',
+      match: ''
+    }, {
+      name: 'Middle Name',
+      value: 'middle',
+      match: ''
+    }, {
+      name: 'Last Name',
+      value: 'last',
+      match: ''
+    }, {
+      name: 'Email Address',
+      value: 'email',
+      match: ''
+    }, {
+      name: 'Phone Number',
+      value: 'phone',
+      match: ''
+    }, {
+      name: 'Website URL',
+      value: 'website',
+      match: ''
+    }, {
+      name: 'Company Name',
+      value: 'company',
+      match: ''
+    }, {
+      name: 'Gender',
+      value: 'gender',
+      match: ''
+    }, {
+      name: 'Tags',
+      value: 'tags',
+      match: ''
+    }, {
+      name: 'Address',
+      value: 'address',
+      match: ''
+    }];
+
+    $scope.csvComplete = function (results, file) {
+      $scope.uploadingCsv = false;
+      $scope.csvHeaders = results.data[0];
+      $scope.csvResults = results.data;
+    };
+
+    $scope.previewCustomer = {};
+
+    $scope.updatePreview = function (item, model) {
+      console.log(item, model);
+      var _match = _.find($scope.customerColumns, function(_column) {
+        return _column.match === model;
+      });
+      console.log(_match);
+    };
+
+    $scope.uploadMatchedCSV = function () {
+      var _formattedColumns = [];
+      _.each($scope.customerColumns, function (_column) {
+        var indexMatch = _.indexOf($scope.csvHeaders, _column.match);
+        if (indexMatch >= 0) {
+          _column.index = indexMatch;
+        }
+        _formattedColumns[_column.value] = _column;
+      });
+      console.log('uploadMatchedCSV >>> ', $scope.customerColumns);
+      var customersToAdd = [];
+      _.each($scope.csvResults, function (_result, i) {
+        console.log('_result ', _result);
+        if (i !== 0) {
+          // var _formattedCustomer = {
+          //   first: _result[_formattedColumns.first.index],
+          //   middle: '',
+          //   last: '',
+          //   details: [{
+          //     _id: "",
+          //     socialId: "", //The social Id from where these details came
+          //     source: "csv",
+          //     location: "" //Location string
+          //     emails: []
+          //     photos: {
+          //       square: ""
+          //       small: ""
+          //       medium: ""
+          //       large: ""
+          //     }
+          //     websites: []
+          //     company: ""
+          //     phones: [{
+          //       _id: "",
+          //       type: string "m|w|h|o" //mobile, work, home, other
+          //       number: string,
+          //       default: false
+          //     }],
+          //     addresses: [{
+          //       _id: ""
+          //       type: string "w|h|o"
+          //       address: string
+          //       address2: string
+          //       city: string
+          //       state: string
+          //       zip: string
+          //       country: string,
+          //       countryCode: string
+          //       displayName: string,
+          //       lat: "",
+          //       lon: "",
+          //       defaultShipping: false
+          //       defaultBilling: false
+
+          //     }]
+          //   }]
+          // };
+
+          var _formattedCustomer = {
+            first: _result[_formattedColumns.first.index]
+          };
+
+          customersToAdd.push(_formattedCustomer);
+        }
+      });
+      console.log('customersToAdd ', customersToAdd);
+    };
+
+    $scope.csvUploaded = function (event, files) {
+      $scope.uploadingCsv = true;
+      var config = {
+        delimiter: "", // auto-detect
+        newline: "", // auto-detect
+        header: false,
+        dynamicTyping: false,
+        preview: 0,
+        encoding: "",
+        worker: false,
+        comments: false,
+        step: undefined,
+        complete: function (results, file) {
+          $scope.csvComplete(results, file);
+        },
+        error: undefined,
+        download: false,
+        skipEmptyLines: false,
+        chunk: undefined,
+        fastMode: undefined,
+        beforeFirstChunk: undefined,
+      };
+      Papa.parse(files[0], config);
+    };
+
+    // $('#files').parse({
+    //     config: config,
+    //     before: function(file, inputElem)
+    //     {
+    //       start = now();
+    //       console.log("Parsing file...", file);
+    //     },
+    //     error: function(err, file)
+    //     {
+    //       console.log("ERROR:", err, file);
+    //       firstError = firstError || err;
+    //       errorCount++;
+    //     },
+    //     complete: function()
+    //     {
+    //       end = now();
+    //       printStats("Done with all files");
+    //     }
+    //   });
 
     /*
      * @triggerInput

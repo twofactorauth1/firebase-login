@@ -506,6 +506,7 @@ app.constant('JS_REQUIRES', {
     'uuid': '../js/libs_misc/uuid.js',
     'angular-cookie': '../js/libs/angular-cookie/angular-cookie.min.js',
     'ckeditor': '../js/libs_misc/ckeditor/ckeditor.js',
+    'papaParse': '../js/libs/papaparse/papaparse.min.js',
 
     //*** Controllers
     'dashboardCtrl': 'assets/js/controllers/dashboardCtrl.js',
@@ -601,7 +602,7 @@ app.constant('JS_REQUIRES', {
     files: ['../js/libs/angular-filter/dist/angular-filter.min.js']
   }, {
     name: 'toaster',
-    files: ['../js/libs/AngularJS-Toaster/toaster.js', '../js/libs/AngularJS-Toaster/toaster.css']
+    files: ['../js/libs/AngularJS-Toaster/toaster.min.js', '../js/libs/AngularJS-Toaster/toaster.min.css']
   }, {
     name: 'skeuocard',
     files: ['../js/libs/skeuocard/lib/js/jquery.card.js']

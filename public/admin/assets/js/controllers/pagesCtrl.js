@@ -237,7 +237,7 @@
     $scope.pages = [];
 
     $scope.getPages = function () {
-      $timeout.cancel(repeater);
+      // $timeout.cancel(repeater);
       WebsiteService.getPages(function (returnedPages) {
         var pages = angular.copy(returnedPages);
         if ($scope.pages.length === 0) {
@@ -259,14 +259,11 @@
           });
         }
         if (pages.length > $scope.pages.length && $scope.pages.length !== 0) {
-          console.log($scope.pages);
-          console.log(pages);
           var intersection = _.filter(pages, function (obj) {
             return !_.find($scope.pages, function (item) {
               return item._id === obj._id;
             });
           });
-          console.log('intersection ', intersection);
           $scope.formatPages(intersection, function (pagesArr) {
             _.each(pagesArr, function (_pages) {
               $scope.pages.push(_pages);
