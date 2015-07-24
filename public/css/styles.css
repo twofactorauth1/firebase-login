@@ -2213,6 +2213,9 @@ div[data-type="feature-block"] .component-inner {
 .editing .testimonials-v2 .testimonial-wrap div.editable:empty:not(:focus):before {
   content: attr(data-text);
 }
+.editing .testimonials-v2 .testimonial-wrap img {
+  width: 100%;
+}
 .editing .testimonials-v2 .testimonials {
   padding: 25px;
   margin-bottom: 20px;
