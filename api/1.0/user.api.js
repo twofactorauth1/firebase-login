@@ -273,7 +273,7 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> initializeUserAndAccount');
         console.dir(req.body);
 
-        var username = req.body.username;
+        var username = req.body.username.toLowerCase();
         var password1 = req.body.password;
         var password2 = req.body.password2;
         var email = req.body.username.toLowerCase();
