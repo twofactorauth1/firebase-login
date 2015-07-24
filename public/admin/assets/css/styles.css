@@ -12799,6 +12799,7 @@ fieldset[disabled] .btn-vimeo-square.active {
 }
 #componentloader .fragment .component-inner {
   border: 2px solid transparent;
+  clear: both;
 }
 #componentloader .fragment:hover .component-wrap,
 #componentloader .fragment:hover .component-hidden {
