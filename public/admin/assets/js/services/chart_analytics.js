@@ -16,14 +16,12 @@
       return minutes + ":" + seconds;
     };
 
-    this.getHostName = function(account)
-    {
+    this.getHostName = function (account) {
       var hostname = '';
       var windowHostname = window.location.hostname;
       if (windowHostname.indexOf(".local") > -1) {
         hostname = account.subdomain + '.indigenous.local';
-      }
-      else if (windowHostname.indexOf(".test.") > -1) {
+      } else if (windowHostname.indexOf(".test.") > -1) {
         hostname = windowHostname;
       } else {
         hostname = account.subdomain + '.indigenous.io';
@@ -266,9 +264,9 @@
           "end": date.endDate
         },
         filters: [{
-            "property_name": "accountId",
-            "operator": "eq",
-            "property_value": $$.server.accountId
+          "property_name": "accountId",
+          "operator": "eq",
+          "property_value": $$.server.accountId
         }, {
           "property_name": "ip_geo_info",
           "operator": "ne",
@@ -284,9 +282,9 @@
         },
         groupBy: "user_agent.device",
         filters: [{
-            "property_name": "accountId",
-            "operator": "eq",
-            "property_value": $$.server.accountId
+          "property_name": "accountId",
+          "operator": "eq",
+          "property_value": $$.server.accountId
         }]
       });
 
@@ -299,9 +297,9 @@
         },
         interval: interval,
         filters: [{
-            "property_name": "accountId",
-            "operator": "eq",
-            "property_value": $$.server.accountId
+          "property_name": "accountId",
+          "operator": "eq",
+          "property_value": $$.server.accountId
         }]
       });
 
@@ -314,9 +312,9 @@
         },
         interval: interval,
         filters: [{
-            "property_name": "accountId",
-            "operator": "eq",
-            "property_value": $$.server.accountId
+          "property_name": "accountId",
+          "operator": "eq",
+          "property_value": $$.server.accountId
         }]
       });
 
@@ -328,9 +326,9 @@
         },
         interval: interval,
         filters: [{
-           "property_name": "url.domain",
-           "operator": "in",
-           "property_value": ["www." + _hostname, _hostname]
+          "property_name": "url.domain",
+          "operator": "in",
+          "property_value": ["www." + _hostname, _hostname]
         }]
       });
 
@@ -342,9 +340,9 @@
         },
         interval: interval,
         filters: [{
-           "property_name": "url.domain",
-           "operator": "in",
-           "property_value": ["www." + _hostname, _hostname]
+          "property_name": "url.domain",
+          "operator": "in",
+          "property_value": ["www." + _hostname, _hostname]
         }]
       });
 
@@ -357,9 +355,9 @@
         },
         interval: interval,
         filters: [{
-            "property_name": "accountId",
-            "operator": "eq",
-            "property_value": $$.server.accountId
+          "property_name": "accountId",
+          "operator": "eq",
+          "property_value": $$.server.accountId
         }]
       });
 
@@ -372,9 +370,9 @@
         },
         interval: interval,
         filters: [{
-            "property_name": "accountId",
-            "operator": "eq",
-            "property_value": $$.server.accountId
+          "property_name": "accountId",
+          "operator": "eq",
+          "property_value": $$.server.accountId
         }]
       });
 
@@ -387,9 +385,9 @@
         },
         interval: interval,
         filters: [{
-            "property_name": "accountId",
-            "operator": "eq",
-            "property_value": $$.server.accountId
+          "property_name": "accountId",
+          "operator": "eq",
+          "property_value": $$.server.accountId
         }]
       });
 
@@ -401,9 +399,9 @@
           "end": date.endDate
         },
         filters: [{
-            "property_name": "accountId",
-            "operator": "eq",
-            "property_value": $$.server.accountId
+          "property_name": "accountId",
+          "operator": "eq",
+          "property_value": $$.server.accountId
         }]
       });
 
@@ -416,9 +414,9 @@
         },
         interval: interval,
         filters: [{
-            "property_name": "accountId",
-            "operator": "eq",
-            "property_value": $$.server.accountId
+          "property_name": "accountId",
+          "operator": "eq",
+          "property_value": $$.server.accountId
         }, {
           "property_name": "session_length",
           "operator": "lte",
@@ -438,9 +436,9 @@
           "end": date.endDate
         },
         filters: [{
-            "property_name": "accountId",
-            "operator": "eq",
-            "property_value": $$.server.accountId
+          "property_name": "accountId",
+          "operator": "eq",
+          "property_value": $$.server.accountId
         }, {
           "property_name": "session_length",
           "operator": "lte",
@@ -461,9 +459,9 @@
           "end": date.endDate
         },
         filters: [{
-            "property_name": "accountId",
-            "operator": "eq",
-            "property_value": $$.server.accountId
+          "property_name": "accountId",
+          "operator": "eq",
+          "property_value": $$.server.accountId
         }]
       });
 
@@ -475,9 +473,9 @@
           "end": date.endDate
         },
         filters: [{
-            "property_name": "accountId",
-            "operator": "eq",
-            "property_value": $$.server.accountId
+          "property_name": "accountId",
+          "operator": "eq",
+          "property_value": $$.server.accountId
         }, {
           "property_name": "new_visitor",
           "operator": "eq",
@@ -493,9 +491,9 @@
           "end": date.endDate
         },
         filters: [{
-            "property_name": "accountId",
-            "operator": "eq",
-            "property_value": $$.server.accountId
+          "property_name": "accountId",
+          "operator": "eq",
+          "property_value": $$.server.accountId
         }, {
           "property_name": "new_visitor",
           "operator": "eq",
@@ -512,9 +510,9 @@
           "end": timeframePreviousEnd
         },
         filters: [{
-            "property_name": "accountId",
-            "operator": "eq",
-            "property_value": $$.server.accountId
+          "property_name": "accountId",
+          "operator": "eq",
+          "property_value": $$.server.accountId
         }]
       });
 
@@ -544,7 +542,7 @@
           queryData.trafficSources,
           queryData.returningVisitors,
           queryData.newVisitors,
-        // queryData.pageDepth,
+          // queryData.pageDepth,
           queryData.sessionPreviousAvgLengthReport
         ], function (results) {
           fn(results);
@@ -556,9 +554,9 @@
       var filters = [];
       var hostname = this.getHostName(account);
       filters.push({
-         "property_name": "url.domain",
-         "operator": "in",
-         "property_value": ["www." + hostname, hostname]
+        "property_name": "url.domain",
+        "operator": "in",
+        "property_value": ["www." + hostname, hostname]
       });
 
       var reportData = {};
@@ -654,9 +652,9 @@
         timeframe: "this_month",
         interval: "daily",
         filters: [{
-            "property_name": "accountId",
-            "operator": "eq",
-            "property_value": $$.server.accountId
+          "property_name": "accountId",
+          "operator": "eq",
+          "property_value": $$.server.accountId
         }, {
           "property_name": "new_visitor",
           "operator": "eq",
@@ -670,9 +668,9 @@
         timeframe: "this_month",
         interval: "daily",
         filters: [{
-            "property_name": "accountId",
-            "operator": "eq",
-            "property_value": $$.server.accountId
+          "property_name": "accountId",
+          "operator": "eq",
+          "property_value": $$.server.accountId
         }, {
           "property_name": "new_visitor",
           "operator": "eq",
@@ -685,9 +683,9 @@
         targetProperty: "permanent_tracker",
         latest: 1,
         filters: [{
-            "property_name": "accountId",
-            "operator": "eq",
-            "property_value": $$.server.accountId
+          "property_name": "accountId",
+          "operator": "eq",
+          "property_value": $$.server.accountId
         }]
       });
 
