@@ -1,7 +1,7 @@
 'use strict';
 /*global app, window*/
 (function (angular) {
-  app.controller('CustomersCtrl', ["$scope", "$state", "toaster", "$modal", "$window", "CustomerService", "SocialConfigService", "userConstant", function ($scope, $state, toaster, $modal, $window, CustomerService, SocialConfigService, userConstant) {
+  app.controller('CustomersCtrl', ["$scope", "$state", "toaster", "$modal", "$window", "CustomerService", "SocialConfigService", "userConstant", '$timeout', function ($scope, $state, toaster, $modal, $window, CustomerService, SocialConfigService, userConstant, $timeout) {
 
     $scope.tableView = 'list';
     $scope.itemPerPage = 100;
@@ -16,22 +16,25 @@
      * -
      */
 
-    CustomerService.getCustomers(function (customers) {
-      _.each(customers, function (customer) {
-        customer.bestEmail = $scope.checkBestEmail(customer);
-        customer.hasFacebookId = $scope.checkFacebookId(customer);
-        customer.hasTwitterId = $scope.checkTwitterId(customer);
-        customer.hasLinkedInId = $scope.checkLinkedInId(customer);
-        customer.hasGoogleId = $scope.checkGoogleId(customer);
-      });
-      $scope.customers = customers;
-      if ($state.current.sort) {
-        $scope.setSortOrder($state.current.sort);
-      }
-      $scope.showCustomers = true;
-      console.log("customers loaded");
+    $scope.getCustomers = function () {
+      CustomerService.getCustomers(function (customers) {
+        _.each(customers, function (customer) {
+          customer.bestEmail = $scope.checkBestEmail(customer);
+          customer.hasFacebookId = $scope.checkFacebookId(customer);
+          customer.hasTwitterId = $scope.checkTwitterId(customer);
+          customer.hasLinkedInId = $scope.checkLinkedInId(customer);
+          customer.hasGoogleId = $scope.checkGoogleId(customer);
+        });
+        $scope.customers = customers;
+        if ($state.current.sort) {
+          $scope.setSortOrder($state.current.sort);
+        }
+        $scope.showCustomers = true;
 
-    });
+      });
+    };
+
+    $scope.getCustomers();
 
     /*
      * @getters
@@ -88,12 +91,38 @@
      * -
      */
 
-    $scope.openModal = function (template, _size) {
-      $scope.modalInstance = $modal.open({
+    $scope.openModal = function (template, controller, _size) {
+      // console.log('');
+      // $scope.modalInstance = $modal.open({
+      //   templateUrl: template,
+      //   controller: controller,
+      //   scope: $scope,
+      //   backdrop: 'static',
+      //   size: _size || 'md'
+      // });
+      // angular.element('.modal-body').editable({selector: '.editable'});
+      console.log('openModal >>> ', template, controller, _size);
+      var _modal = {
         templateUrl: template,
-        scope: $scope,
-        backdrop: 'static',
-        size: _size || md
+        size: 'md',
+        resolve: {
+          getCustomers: function () {
+            return $scope.getCustomers();
+          }
+        }
+      };
+
+      if (controller) {
+        _modal.controller = controller;
+      }
+
+      if (_size) {
+        _modal.size = _size;
+      }
+
+      $scope.modalInstance = $modal.open(_modal);
+      $scope.modalInstance.result.then(null, function () {
+        angular.element('.sp-container').addClass('sp-hidden');
       });
     };
 
@@ -221,7 +250,6 @@
     $scope.customersLimit = 50;
 
     $scope.addCustomers = function () {
-      console.log('add customer');
       $scope.customersLimit += 50;
     };
 
@@ -323,177 +351,6 @@
         toaster.pop('warning', "No google account integrated.");
       }
     };
-
-    $scope.customerColumns = [{
-      name: 'First Name',
-      value: 'first',
-      match: ''
-    }, {
-      name: 'Middle Name',
-      value: 'middle',
-      match: ''
-    }, {
-      name: 'Last Name',
-      value: 'last',
-      match: ''
-    }, {
-      name: 'Email Address',
-      value: 'email',
-      match: ''
-    }, {
-      name: 'Phone Number',
-      value: 'phone',
-      match: ''
-    }, {
-      name: 'Website URL',
-      value: 'website',
-      match: ''
-    }, {
-      name: 'Company Name',
-      value: 'company',
-      match: ''
-    }, {
-      name: 'Gender',
-      value: 'gender',
-      match: ''
-    }, {
-      name: 'Tags',
-      value: 'tags',
-      match: ''
-    }, {
-      name: 'Address',
-      value: 'address',
-      match: ''
-    }];
-
-    $scope.csvComplete = function (results, file) {
-      $scope.uploadingCsv = false;
-      $scope.csvHeaders = results.data[0];
-      $scope.csvResults = results.data;
-    };
-
-    $scope.previewCustomer = {};
-
-    $scope.updatePreview = function (item, model) {
-      console.log(item, model);
-      var _match = _.find($scope.customerColumns, function(_column) {
-        return _column.match === model;
-      });
-      console.log(_match);
-    };
-
-    $scope.uploadMatchedCSV = function () {
-      var _formattedColumns = [];
-      _.each($scope.customerColumns, function (_column) {
-        var indexMatch = _.indexOf($scope.csvHeaders, _column.match);
-        if (indexMatch >= 0) {
-          _column.index = indexMatch;
-        }
-        _formattedColumns[_column.value] = _column;
-      });
-      console.log('uploadMatchedCSV >>> ', $scope.customerColumns);
-      var customersToAdd = [];
-      _.each($scope.csvResults, function (_result, i) {
-        console.log('_result ', _result);
-        if (i !== 0) {
-          // var _formattedCustomer = {
-          //   first: _result[_formattedColumns.first.index],
-          //   middle: '',
-          //   last: '',
-          //   details: [{
-          //     _id: "",
-          //     socialId: "", //The social Id from where these details came
-          //     source: "csv",
-          //     location: "" //Location string
-          //     emails: []
-          //     photos: {
-          //       square: ""
-          //       small: ""
-          //       medium: ""
-          //       large: ""
-          //     }
-          //     websites: []
-          //     company: ""
-          //     phones: [{
-          //       _id: "",
-          //       type: string "m|w|h|o" //mobile, work, home, other
-          //       number: string,
-          //       default: false
-          //     }],
-          //     addresses: [{
-          //       _id: ""
-          //       type: string "w|h|o"
-          //       address: string
-          //       address2: string
-          //       city: string
-          //       state: string
-          //       zip: string
-          //       country: string,
-          //       countryCode: string
-          //       displayName: string,
-          //       lat: "",
-          //       lon: "",
-          //       defaultShipping: false
-          //       defaultBilling: false
-
-          //     }]
-          //   }]
-          // };
-
-          var _formattedCustomer = {
-            first: _result[_formattedColumns.first.index]
-          };
-
-          customersToAdd.push(_formattedCustomer);
-        }
-      });
-      console.log('customersToAdd ', customersToAdd);
-    };
-
-    $scope.csvUploaded = function (event, files) {
-      $scope.uploadingCsv = true;
-      var config = {
-        delimiter: "", // auto-detect
-        newline: "", // auto-detect
-        header: false,
-        dynamicTyping: false,
-        preview: 0,
-        encoding: "",
-        worker: false,
-        comments: false,
-        step: undefined,
-        complete: function (results, file) {
-          $scope.csvComplete(results, file);
-        },
-        error: undefined,
-        download: false,
-        skipEmptyLines: false,
-        chunk: undefined,
-        fastMode: undefined,
-        beforeFirstChunk: undefined,
-      };
-      Papa.parse(files[0], config);
-    };
-
-    // $('#files').parse({
-    //     config: config,
-    //     before: function(file, inputElem)
-    //     {
-    //       start = now();
-    //       console.log("Parsing file...", file);
-    //     },
-    //     error: function(err, file)
-    //     {
-    //       console.log("ERROR:", err, file);
-    //       firstError = firstError || err;
-    //       errorCount++;
-    //     },
-    //     complete: function()
-    //     {
-    //       end = now();
-    //       printStats("Done with all files");
-    //     }
-    //   });
 
     /*
      * @triggerInput

@@ -507,6 +507,7 @@ app.constant('JS_REQUIRES', {
     'angular-cookie': '../js/libs/angular-cookie/angular-cookie.min.js',
     'ckeditor': '../js/libs_misc/ckeditor/ckeditor.js',
     'papaParse': '../js/libs/papaparse/papaparse.min.js',
+    'string_score': '../js/libs/string_score/string_score.min.js',
 
     //*** Controllers
     'dashboardCtrl': 'assets/js/controllers/dashboardCtrl.js',
@@ -537,6 +538,7 @@ app.constant('JS_REQUIRES', {
     'componentSettingsModalCtrl': 'assets/js/controllers/modals/componentSettingsModalCtrl.js',
     'mediaModalCtrl': 'assets/js/controllers/modals/mediaModalCtrl.js',
     'templateSettingsModalCtrl': 'assets/js/controllers/modals/templateSettingsModalCtrl.js',
+    'importCustomerModalCtrl': 'assets/js/controllers/modals/importCustomerModalCtrl.js',
 
     'asideCtrl': 'assets/js/controllers/asideCtrl.js',
     'toasterCtrl': 'assets/js/controllers/toasterCtrl.js',
@@ -671,7 +673,7 @@ app.constant('JS_REQUIRES', {
     files: ['../js/libs/v-accordion/dist/v-accordion.min.js', '../js/libs/v-accordion/dist/v-accordion.min.css']
   }, {
     name: 'xeditable',
-    files: ['../js/libs/angular-xeditable/dist/js/xeditable.min.js', '../js/libs/angular-xeditable/dist/css/xeditable.css', 'assets/js/config/config-xeditable.js']
+    files: ['../js/libs/angular-xeditable/dist/js/xeditable.min.js', '../js/libs/angular-xeditable/dist/css/xeditable.css']
   }, {
     name: 'checklist-model',
     files: ['../js/libs/checklist-model/checklist-model.js']

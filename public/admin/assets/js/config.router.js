@@ -31,7 +31,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
     $stateProvider.state('app', {
         url: "",
         templateUrl: "assets/views/app.html",
-        resolve: loadSequence('modernizr', 'underscore', 'moment', 'angularMoment', 'uiSwitch', 'perfect-scrollbar-plugin', 'toaster', 'ngAside', 'vAccordion', 'sweet-alert', 'chartjs', 'tc.chartjs', 'oitozero.ngSweetAlert', 'chatCtrl', 'smart-table', 'touchspin-plugin', 'slugifier', 'commonService', 'timeAgoFilter','angularFileUpload', 'ngTextTruncate', 'infinite-scroll', 'ui.select', 'blueimp', 'ngTagsInput', 'titleCase', 'bootstrap-confirmation', 'ladda', 'angular-ladda', 'uuid', 'formatText', 'asideCtrl', 'settingsCtrl', 'assetsService', 'mediaModalCtrl'),
+        resolve: loadSequence('modernizr', 'underscore', 'moment', 'angularMoment', 'uiSwitch', 'perfect-scrollbar-plugin', 'toaster', 'ngAside', 'vAccordion', 'sweet-alert', 'chartjs', 'tc.chartjs', 'oitozero.ngSweetAlert', 'chatCtrl', 'smart-table', 'touchspin-plugin', 'slugifier', 'commonService', 'timeAgoFilter','angularFileUpload', 'ngTextTruncate', 'infinite-scroll', 'ui.select', 'blueimp', 'ngTagsInput', 'titleCase', 'bootstrap-confirmation', 'ladda', 'angular-ladda', 'uuid', 'formatText', 'asideCtrl', 'settingsCtrl', 'assetsService', 'mediaModalCtrl', 'xeditable'),
         abstract: true
     }).state('app.dashboard', {
         url: "/dashboard",
@@ -150,7 +150,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         ncyBreadcrumb: {
             label: 'Customers'
         },
-        resolve: loadSequence('customersCtrl', 'ImportContactService', "socialConfigService", 'customerService', 'papaParse')
+        resolve: loadSequence('customersCtrl', 'ImportContactService', "socialConfigService", 'customerService', 'papaParse', 'string_score', 'importCustomerModalCtrl')
     }).state('app.singleCustomer', {
         url: '/customers/:contactId',
         templateUrl: "assets/views/customer-detail.html",
