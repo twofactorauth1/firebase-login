@@ -590,7 +590,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.checkPermission(req, self.sc.privs.MODIFY_USER, function (err, isAllowed) {
             if (isAllowed !== true || !_.contains(value.getAllAccountIds(), self.accountId(req))) {
-                return self.send403(res);
+                return self.send403(resp);
             } else {
                 userManager.createAccountUser(accountId, user.username, password, user.email, user.first, user.last, req.user, function(err, user){
                     self.log.debug('<< createUserForAccount');

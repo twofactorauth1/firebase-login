@@ -613,5 +613,42 @@ module.exports = {
                 }
             }
         });
+    },
+
+    setUserPassword: function(userId, newPassword, callingUser, fn){
+        var self = this;
+        self.log = log;
+        self.log.debug('>> setUserPassword');
+
+        /*
+         * 1. Get user by Id
+         * 2. Encrypt password
+         * 3. Update local credentials
+         */
+        dao.getById(userId, $$.m.User, function(err, user){
+            if(err) {
+                self.log.error('Error fetching user by Id', err);
+                return fn(err, null);
+            } else if(user === null) {
+                self.log.warn('Could not find user with id [' + userId + ']');
+                return fn(null, null);
+            } else {
+                user.encryptPasswordAsync(newPassword, function(err, hash){
+                    if(err) {
+                        self.log.error('Error encrypting password:', err);
+                        return fn(err, null);
+                    } else {
+                        user.updateAllLocalCredentials(hash);
+                        var modified = {
+                            date: new Date(),
+                            by: callingUser
+                        };
+                        user.set('modified', modified);
+                        dao.saveOrUpdate(user, fn);
+                    }
+                });
+            }
+        });
+
     }
 };

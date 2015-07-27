@@ -667,6 +667,22 @@ var user = $$.m.ModelBase.extend({
 
     /**
      *
+     * @param password ENCRYPTED
+     */
+    updateAllLocalCredentials: function(password) {
+        var self = this;
+        self.createOrUpdateLocalCredentials(password);
+
+        var accountIds = self.getAllAccountIds();
+        _.each(accountIds, function(accountId){
+            var credentials = self.getUserAccountCredentials(accountId, $$.constants.user.credential_types.LOCAL);
+            credentials.password = password;
+        });
+        return;
+    },
+
+    /**
+     *
      * @param newPassword ENCRYPTED
      * @param newScheme
      * @returns {*}
