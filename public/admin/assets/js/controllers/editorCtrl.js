@@ -57,7 +57,9 @@
         $scope.components.splice(index - 1, 0, component);
         $scope.scrollToComponent(index - 1);
       }
-
+      $timeout(function () {
+        $(window).trigger('resize');
+      },0)
     };
 
     $scope.scrollToComponent = function (destIndex) {
@@ -95,13 +97,23 @@
             post_data.post_tags[i] = v.text;
           }
         });
-        WebsiteService.updatePost($scope.page._id, post_data._id, post_data, function (data) {
-          if (post_data.post_url !== $scope.originalPost.post_url) {
-            $location.search('posthandle', post_data.post_url);
+        WebsiteService.getSinglePost(post_data.post_url, function (data) {
+          if (data && data._id) {
+            if (data._id !==  post_data._id) {
+              $scope.saveLoading = false;
+              toaster.pop('error', "Page URL " + post_data.post_url, "Already exists");
+            } else {
+               WebsiteService.updatePost($scope.page._id, post_data._id, post_data, function (data) {
+                if (post_data.post_url !== $scope.originalPost.post_url) {
+                  $location.search('posthandle', post_data.post_url);
+                }
+                $scope.saveLoading = false;
+                toaster.pop('success', "Post Saved", "The " + $filter('htmlToPlaintext')($scope.blog.post.post_title) + " post was saved successfully.");
+              });
+            }            
           }
-          $scope.saveLoading = false;
-          toaster.pop('success', "Post Saved", "The " + $filter('htmlToPlaintext')($scope.blog.post.post_title) + " post was saved successfully.");
-        });
+        })
+       
       } else if ($scope.templateActive) {
         WebsiteService.updateTemplate($scope.page._id, $scope.page, function () {
           console.log('success');
@@ -1027,6 +1039,20 @@
       }, 500);
       toaster.pop('success', "Component Added", "The " + newComponent.type + " component was added successfully.");
     };
+
+    $scope.addUnderNavSetting = function(fn)
+    {
+      $scope.allowUndernav = false;
+      $scope.components.forEach(function (value, index) {
+        if (value && value.type === 'masthead') {
+            if (index != 0 && $scope.components[index - 1].type == "navigation") {
+              $scope.allowUndernav = true;              
+            } else
+              $scope.allowUndernav = false;
+          }
+      })
+      fn($scope.allowUndernav);
+    }
 
     /*
      * @sortableOptions
