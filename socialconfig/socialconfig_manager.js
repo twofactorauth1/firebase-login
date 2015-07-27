@@ -190,6 +190,7 @@ module.exports = {
                 //return _obj.socialId !== socialId || _obj.parentSocialAccount != parentId;
             });
             config.set('trackedObjects', updatedTrackedObjects);
+            config.set('modified', {date: new Date(), by:null});
 
             log.debug('Before call to save, ', config);
             socialconfigDao.saveOrUpdate(config, function(err, value){
