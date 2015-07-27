@@ -45,7 +45,7 @@
     "angular-bootstrap-nav-tree": "*",
     "angular-ladda": "~0.2.2",
     "angular-smart-table": "2.0.1",
-    "angular-ui-select": "~0.11.1",
+    "angular-ui-select": "0.12.0",
     "angular-ui-utils": "mask-0.2.2",
     "ngImgCrop": "~0.3.2",
     "angular-file-upload": "~1.1.5",

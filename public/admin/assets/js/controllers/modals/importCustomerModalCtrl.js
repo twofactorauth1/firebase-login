@@ -1,6 +1,6 @@
 'use strict';
-/*global app*/
-app.controller('ImportCustomerModalCtrl', ['$scope', '$modalInstance', '$timeout', 'FileUploader', 'editableOptions', 'CustomerService', '$cacheFactory', 'getCustomers', function ($scope, $modalInstance, $timeout, FileUploader, editableOptions, CustomerService, $cacheFactory, getCustomers) {
+/*global app, Papa*/
+app.controller('ImportCustomerModalCtrl', ['$scope', '$timeout', 'FileUploader', 'editableOptions', 'CustomerService', 'getCustomers', function ($scope, $timeout, FileUploader, editableOptions, CustomerService, getCustomers) {
 
   editableOptions.theme = 'bs3';
 
@@ -8,17 +8,23 @@ app.controller('ImportCustomerModalCtrl', ['$scope', '$modalInstance', '$timeout
 
   var uploader = new FileUploader({
     url: '/api/1.0/assets/',
+    filters: []
   });
-  $scope.uploader = uploader;
 
   // FILTERS
 
   uploader.filters.push({
-    name: 'customFilter',
-    fn: function () {
-      return this.queue.length < 10;
+    name: 'csvFilter',
+    fn: function (item) {
+      if (/\/(csv)$/.test(item.type) === true) {
+        return true;
+      }
+      $scope.fileTypeError = 'Incorrect filetype';
+      return false;
     }
   });
+
+  $scope.uploader = uploader;
 
   // CALLBACKS
 
@@ -27,7 +33,7 @@ app.controller('ImportCustomerModalCtrl', ['$scope', '$modalInstance', '$timeout
   };
   uploader.onAfterAddingFile = function (fileItem) {
     console.info('onAfterAddingFile', fileItem);
-    $scope.csvUploaded(null, [fileItem._file]);
+    $scope.csvUploaded([fileItem._file]);
   };
   uploader.onAfterAddingAll = function (addedFileItems) {
     console.info('onAfterAddingAll', addedFileItems);
@@ -140,7 +146,7 @@ app.controller('ImportCustomerModalCtrl', ['$scope', '$modalInstance', '$timeout
       };
       _.each($scope.csvHeaders, function (_header) {
         var columnName = _column.value;
-        var header = _header.replace(/[^a-zA-Z ]/g, "").toLowerCase();
+        var header = _header.replace(new RegExp('[^a-zA-Z ]'), "").toLowerCase();
         if (_column.known.indexOf(_header.toLowerCase()) > -1) {
           bestMatch.value = _header;
           bestMatch.percent = 1;
@@ -168,7 +174,7 @@ app.controller('ImportCustomerModalCtrl', ['$scope', '$modalInstance', '$timeout
     percent: 0
   };
 
-  $scope.csvComplete = function (results, file) {
+  $scope.csvComplete = function (results) {
     $timeout(function () {
       $scope.uploadingCsv = false;
       $scope.csvHeaders = results.data[0];
@@ -185,7 +191,7 @@ app.controller('ImportCustomerModalCtrl', ['$scope', '$modalInstance', '$timeout
     $scope.csvResults = [];
     $scope.previewCustomer = {};
     $scope.currentRow = 1;
-    var startUpload = 0;
+    startUpload = 0;
     $scope.endUpload = 0;
     _.each($scope.customerColumns, function (_col) {
       _col.match = '';
@@ -214,14 +220,14 @@ app.controller('ImportCustomerModalCtrl', ['$scope', '$modalInstance', '$timeout
     }
   };
 
-  function validateEmail(value) {
-    if (value) {
-      var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-      if (value.match(mailformat)) {
-        return true;
-      }
-    }
-  }
+  // function validateEmail(value) {
+  //   if (value) {
+  //     var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+  //     if (value.match(mailformat)) {
+  //       return true;
+  //     }
+  //   }
+  // }
 
 
   // $scope.errorMap = [];
@@ -239,11 +245,10 @@ app.controller('ImportCustomerModalCtrl', ['$scope', '$modalInstance', '$timeout
   //   console.log('errorMap ', $scope.errorMap);
   // };
 
-  $scope.updatePreview = function (item, model) {
-    if (item || model) {
-      var _match = _.find($scope.customerColumns, function (_column) {
-        return _column.match === model;
-      });
+  $scope.updatePreview = function (item, model, selected) {
+    console.log('updatePreview ', item, model, selected);
+    if (selected && !selected.match) {
+      selected.index = null;
     }
     var _formattedColumns = $scope.formatColumns();
     $scope.previewCustomer.first = $scope.csvResults[$scope.currentRow][_formattedColumns.first.index];
@@ -254,6 +259,10 @@ app.controller('ImportCustomerModalCtrl', ['$scope', '$modalInstance', '$timeout
     $scope.previewCustomer.website = $scope.csvResults[$scope.currentRow][_formattedColumns.website.index];
     $scope.previewCustomer.address = $scope.csvResults[$scope.currentRow][_formattedColumns.address.index];
     $scope.previewCustomer.company = $scope.csvResults[$scope.currentRow][_formattedColumns.company.index];
+  };
+
+  $scope.removePreviewRow = function (item, model) {
+    console.log('removePreviewRow ', item, model);
   };
 
   $scope.updateColumn = function (data, col) {
@@ -337,9 +346,10 @@ app.controller('ImportCustomerModalCtrl', ['$scope', '$modalInstance', '$timeout
     });
 
     $scope.uploadingServerCsv = true;
-    console.log('upload started ...', $scope.uploadingServerCsv);
 
-    CustomerService.importCsvCustomers(customersToAdd, function () {});
+    CustomerService.importCsvCustomers(customersToAdd, function () {
+      console.log('upload started ...', $scope.uploadingServerCsv);
+    });
     console.log('customersToAdd ', customersToAdd);
   };
 
@@ -356,45 +366,49 @@ app.controller('ImportCustomerModalCtrl', ['$scope', '$modalInstance', '$timeout
   });
 
 
-  $scope.csvUploaded = function (event, files) {
-    console.log('files ', files);
-    startUpload = new Date();
-    $scope.fileName = files[0].name;
-    $scope.uploadingCsv = true;
-    var config = {
-      delimiter: "", // auto-detect
-      newline: "", // auto-detect
-      header: false,
-      dynamicTyping: false,
-      preview: 0,
-      encoding: "",
-      worker: false,
-      comments: false,
-      complete: function (results, file) {
-        results.data = _results;
-        $scope.csvComplete(results, file);
-      },
-      step: function (results, parser) {
-        _results.push(results.data[0]);
-        var progress = results.meta.cursor;
-        var newPercent = Math.round(progress / files[0].size * 100);
-        if (newPercent != $scope.csv.percent) {
-          $timeout(function () {
-            $scope.csv.percent = newPercent;
-            $scope.$apply();
-          });
-        }
-      },
-      error: undefined,
-      download: false,
-      skipEmptyLines: true,
-      chunk: undefined,
-      fastMode: undefined,
-      beforeFirstChunk: undefined,
-    };
-    $timeout(function () {
-      Papa.parse(files[0], config);
-    }, 1000);
+  $scope.csvUploaded = function (files) {
+    if (files[0].type === 'text/csv') {
+      startUpload = new Date();
+      $scope.fileName = files[0].name;
+      $scope.uploadingCsv = true;
+      var config = {
+        delimiter: "", // auto-detect
+        newline: "", // auto-detect
+        header: false,
+        dynamicTyping: false,
+        preview: 0,
+        encoding: "",
+        worker: false,
+        comments: false,
+        complete: function (results, file) {
+          results.data = _results;
+          $scope.csvComplete(results, file);
+        },
+        step: function (results) {
+          _results.push(results.data[0]);
+          var progress = results.meta.cursor;
+          var newPercent = Math.round(progress / files[0].size * 100);
+          if (newPercent !== $scope.csv.percent) {
+            $timeout(function () {
+              $scope.csv.percent = newPercent;
+              $scope.$apply();
+            });
+          }
+        },
+        error: undefined,
+        download: false,
+        skipEmptyLines: true,
+        keepEmptyRows: false,
+        chunk: undefined,
+        fastMode: undefined,
+        beforeFirstChunk: undefined,
+      };
+      $timeout(function () {
+        Papa.parse(files[0], config);
+      }, 1000);
+    } else {
+      console.log('Incorrect filetype');
+    }
   };
 
 }]);

@@ -44,7 +44,7 @@
                                                     {{column.name}}
                                                 </label>
                                                 <div class="col-sm-8">
-                                                    <ui-select ng-model="column.match" name="{{column.value}}" theme="bootstrap" on-select="updatePreview($item, $model)">
+                                                    <ui-select ng-model="column.match" name="{{column.value}}" theme="bootstrap" on-select="updatePreview($item, $model, column)">
                                                         <ui-select-match placeholder="Select a Field" allow-clear="true">
                                                             <small ng-bind-html="$select.selected"></small>
                                                         </ui-select-match>
@@ -162,7 +162,7 @@
             <div class="col-xs-8">
                 <a class="btn btn-primary pull-left margin-right-10" ng-click="changeFile()"><span class="fa fa-exchange"></span>  Change</a>
                 <div class="pull-left text-left">
-                    <h4><strong>File:</strong> {{fileName}}</h4>
+                    <h4><strong>File:</strong> <span ng-text-truncate="fileName" ng-tt-chars-threshold="25" ng-tt-no-toggling></span></h4>
                     <span class="help-block margin-bottom-0" style="margin-top:-10px">Uploaded {{csvResults.length - 1}} customers in {{endUpload}}sec</span>
                 </div>
             </div>
