@@ -295,7 +295,7 @@ app.controller('ImportCustomerModalCtrl', ['$scope', '$timeout', 'FileUploader',
             if (_formatVal === 'phone') {
               var _phone = {
                 _id: Math.uuid(8),
-                phone: _csvResult
+                number: _csvResult
               };
               _details.phones.push(_phone);
             }
