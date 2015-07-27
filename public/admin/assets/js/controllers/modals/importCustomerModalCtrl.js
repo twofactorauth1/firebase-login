@@ -34,27 +34,27 @@ app.controller('ImportCustomerModalCtrl', ['$scope', '$timeout', 'FileUploader',
     name: 'First Name',
     value: 'first',
     match: '',
-    known: ['first', 'first name']
+    known: ['given name', 'first', 'first name']
   }, {
     name: 'Middle Name',
     value: 'middle',
     match: '',
-    known: ['middle', 'middle name']
+    known: ['addtional name', 'middle', 'middle name']
   }, {
     name: 'Last Name',
     value: 'last',
     match: '',
-    known: ['last', 'last name']
+    known: ['family name', 'last', 'last name']
   }, {
     name: 'Email Address',
     value: 'email',
     match: '',
-    known: ['email', 'email address', 'e-mail', 'e-mail address']
+    known: ['e-mail 1 - value', 'email', 'email address', 'e-mail', 'e-mail address']
   }, {
     name: 'Phone Number',
     value: 'phone',
     match: '',
-    known: ['phone', 'business phone', 'personal phone', 'phone number', 'number']
+    known: ['phone 1 - value', 'phone', 'business phone', 'personal phone', 'phone number', 'number']
   }, {
     name: 'Website URL',
     value: 'website',
@@ -84,27 +84,27 @@ app.controller('ImportCustomerModalCtrl', ['$scope', '$timeout', 'FileUploader',
     name: 'Address',
     value: 'address',
     match: '',
-    known: ['address', 'business street']
+    known: ['address 1 - street', 'address', 'business street']
   }, {
     name: 'Address 2',
     value: 'address2',
     match: '',
-    known: ['address2', 'business street 2']
+    known: ['address 1 - extended address', 'address2', 'business street 2']
   }, {
     name: 'City',
     value: 'city',
     match: '',
-    known: ['city', 'business city']
+    known: ['address 1 - city', 'city', 'business city']
   }, {
     name: 'State',
     value: 'state',
     match: '',
-    known: ['state', 'business state']
+    known: ['address 1 - region', 'state', 'business state']
   }, {
     name: 'Zip',
     value: 'zip',
     match: '',
-    known: ['zip', 'zip code', 'postal code', 'business postal code']
+    known: ['address 1 - postal code', 'zip', 'zip code', 'postal code', 'business postal code']
   }];
 
 
@@ -142,6 +142,15 @@ app.controller('ImportCustomerModalCtrl', ['$scope', '$timeout', 'FileUploader',
   var _results = [];
   $scope.csv = {
     percent: 0
+  };
+
+  /*
+   * @closeModal
+   * -
+   */
+
+  $scope.closeModal = function () {
+    $scope.modalInstance.close();
   };
 
   $scope.csvComplete = function (results) {
@@ -226,8 +235,8 @@ app.controller('ImportCustomerModalCtrl', ['$scope', '$timeout', 'FileUploader',
     first: '',
     middle: '',
     last: '',
-    birthday : '',
-    gender : '',
+    birthday: '',
+    gender: '',
     details: [{
       _id: Math.uuid(8),
       source: "csv",

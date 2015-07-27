@@ -13307,6 +13307,9 @@ ul.nav-bar {
 .form-horizontal .editable.editable-hide {
   line-height: auto;
 }
+#import-customer-modal .preview-customers .form-group {
+  height: 34px;
+}
 /* ---------------------------------------------------------------------- */
 /*  Orders
 /* ---------------------------------------------------------------------- */
