@@ -24,8 +24,9 @@ app.directive('mastheadComponent', ['$window', function ($window) {
         }
       });
       scope.setUnderbnavMargin = function () {
+        scope.allowUndernav = scope.$parent.allowUndernav;
         setTimeout(function () {
-          if (scope.addUndernavClasses) {
+          if (scope.addUndernavClasses && scope.allowUndernav) {
             var navHeight = angular.element("#bs-example-navbar-collapse-1").height();
             var margin = 200 + navHeight;
             if (angular.element(".undernav200")) {

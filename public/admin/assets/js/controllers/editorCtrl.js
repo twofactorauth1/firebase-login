@@ -57,7 +57,7 @@
         $scope.components.splice(index - 1, 0, component);
         $scope.scrollToComponent(index - 1);
       }
-
+      $(window).trigger('resize');
     };
 
     $scope.scrollToComponent = function (destIndex) {
@@ -1027,6 +1027,20 @@
       }, 500);
       toaster.pop('success', "Component Added", "The " + newComponent.type + " component was added successfully.");
     };
+
+    $scope.addUnderNavSetting = function(fn)
+    {
+      $scope.allowUndernav = false;
+      $scope.components.forEach(function (value, index) {
+        if (value && value.type === 'masthead') {
+            if (index != 0 && $scope.components[index - 1].type == "navigation") {
+              $scope.allowUndernav = true;              
+            } else
+              $scope.allowUndernav = false;
+          }
+      })
+      fn($scope.allowUndernav);
+    }
 
     /*
      * @sortableOptions
