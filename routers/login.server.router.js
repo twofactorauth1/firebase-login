@@ -128,10 +128,15 @@ _.extend(router.prototype, BaseRouter.prototype, {
                     req.session.accountId = 0;
                 } else {
                     self.log.debug("host: " + req.get("host") + " -> accountId:" + value.id());
-                    req.session.accountId = value.id();
-                    req.session.unAuthAccountId = value.id();
-                    req.session.subdomain = value.get('subdomain');
-                    req.session.domain = value.get('domain');
+                    /*
+                     * no longer setting these values here.  They are set in the authentication dao.
+                     */
+                    //self.log.debug('right now: ' + req.session.accountId + ' and ' + req.session.unAuthAccountId);
+                    //req.session.accountId = value.id();
+                    //req.session.unAuthAccountId = value.id();
+                    //req.session.subdomain = value.get('subdomain');
+                    //req.session.domain = value.get('domain');
+                    //self.log.debug('after: ' + req.session.accountId + ' and ' + req.session.unAuthAccountId);
                     //req.session.locked = value.get('locked');
                     var redirectUrl = cookies.getRedirectUrl(req, resp, null, true);
                     self.log.debug('onLogin redirectUrl from cookie: ' + redirectUrl);
