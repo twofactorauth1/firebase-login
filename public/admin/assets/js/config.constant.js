@@ -500,11 +500,8 @@ app.constant('JS_REQUIRES', {
     'jquery-nestable-plugin': ['../js/libs_misc/jquery-nestable/jquery.nestable.js'],
     'touchspin-plugin': ['../js/libs/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.js', '../js/libs/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.css'],
     // 'bootstrap': '../js/libs/bootstrap/dist/js/bootstrap.min.js',
-    // 'bootstrap-icon-picker': ['../js/libs/bootstrap-icon-picker/bootstrap-iconpicker/js/iconset/iconset-fontawesome-4.2.0.min.js', '../js/libs/bootstrap-icon-picker/bootstrap-iconpicker/js/bootstrap-iconpicker.min.js'],
     "bootstrap-confirmation": ['../js/libs/bootstrap-confirmation/bootstrap-confirmation.js'],
-    'spectrum': ['../js/libs/spectrum/spectrum.js', '../js/libs/angular-spectrum-colorpicker/dist/angular-spectrum-colorpicker.min.js'],
     'uuid': '../js/libs_misc/uuid.js',
-    'angular-cookie': '../js/libs/angular-cookie/angular-cookie.min.js',
     'ckeditor': '../js/libs_misc/ckeditor/ckeditor.js',
     'papaParse': '../js/libs/papaparse/papaparse.min.js',
     'string_score': '../js/libs/string_score/string_score.min.js',
@@ -584,9 +581,6 @@ app.constant('JS_REQUIRES', {
 
     //*** Directives
     'mediaModal': 'assets/js/directives/mediadirective.js',
-
-    //*** Utils
-    'namespaces': '../js/utils/namespaces.js'
 
 
   },
@@ -682,10 +676,10 @@ app.constant('JS_REQUIRES', {
     files: ['../js/libs/angular-slugify/angular-slugify.js']
   }, {
     name: 'dateRangePicker',
-    files: ['../js/libs/angular-daterangepicker/js/angular-daterangepicker.min.js', '../js/libs/bootstrap-daterangepicker/daterangepicker.js']
+    files: ['../js/libs/angular-daterangepicker/js/angular-daterangepicker.min.js', '../js/libs/bootstrap-daterangepicker/daterangepicker.js', '../js/libs/bootstrap-daterangepicker/daterangepicker-bs3.css']
   }, {
     name: 'ui.sortable',
-    files: ['../js/libs/Sortable/Sortable.min.js', '../js/libs/Sortable/ng-sortable.js']
+    files: ['../js/libs/Sortable/Sortable.min.js', '../js/libs/Sortable/ng-sortable.js', '../js/libs_misc/ng-sortable/dist/ng-sortable.min.css']
   }, {
     name: 'angular-slider',
     files: ['../js/libs/angularjs-slider/dist/rzslider.min.js', '../js/libs/angularjs-slider/dist/rzslider.min.css']
@@ -700,9 +694,8 @@ app.constant('JS_REQUIRES', {
     files: ['../js/libs/slick-carousel/slick/slick.js', '../js/libs/angular-slick/dist/slick.js']
   }, {
     name: 'jqcloud',
-    files: ["../js/libs/jqcloud2/dist/jqcloud.min.js", "../js/libs/angular-jqcloud/angular-jqcloud.js"]
-  },
-  {
+    files: ["../js/libs/jqcloud2/dist/jqcloud.min.js", "../js/libs/angular-jqcloud/angular-jqcloud.js", "../js/libs/jqcloud2/dist/jqcloud.min.css"]
+  }, {
     name: 'wu.masonry',
     files: ['../js/libs/angular-masonry/angular-masonry.js', '../js/libs/masonry/dist/masonry.pkgd.min.js']
   }, {
@@ -710,16 +703,21 @@ app.constant('JS_REQUIRES', {
     files: ['../js/libs/ng-text-truncate/ng-text-truncate.js']
   }, {
     name: 'ngTagsInput',
-    files: ['../js/libs/ng-tags-input/ng-tags-input.min.js']
+    files: ['../js/libs/ng-tags-input/ng-tags-input.min.js', '../js/libs/ng-tags-input/ng-tags-input.min.css']
   }, {
     name: 'blueimp',
     files: ['../js/libs/blueimp-gallery/js/jquery.blueimp-gallery.min.js', '../js/libs/blueimp-gallery/css/blueimp-gallery.min.css']
   }, {
-    name: 'ngJoyRide',
-    files: ['../js/libs/ng-joyride/ng-joyride.js']
-  },
-  {
     name: 'googlePlaces',
     files: ['../js/libs/angular-google-places-autocomplete/src/autocomplete.js','../js/libs/angular-google-places-autocomplete/src/autocomplete.css']
+  }, {
+    name: 'angular-cookie',
+    files: ['../js/libs/angular-cookie/angular-cookie.min.js']
+  }, {
+    name: 'bootstrap-icon-picker',
+    files: ['../js/libs/bootstrap-icon-picker/bootstrap-iconpicker/js/iconset/iconset-fontawesome-4.2.0.min.js', '../js/libs/bootstrap-icon-picker/bootstrap-iconpicker/js/bootstrap-iconpicker.min.js', '../js/libs/bootstrap-icon-picker/bootstrap-iconpicker/css/bootstrap-iconpicker.min.css']
+  }, {
+    name: 'spectrum',
+    files: ['../js/libs/spectrum/spectrum.js', '../js/libs/angular-spectrum-colorpicker/dist/angular-spectrum-colorpicker.min.js', '../js/libs/spectrum/spectrum.css'],
   }]
 });
