@@ -76,8 +76,10 @@
 
       $scope.newNote.text = '';
 
-      $scope.customerSaveFn();
-
+      CustomerService.saveCustomer($scope.customer, function (customer) {
+        $scope.customer = customer;
+        toaster.pop('success', 'Notes Added.');
+      });
     };
 
     /*
