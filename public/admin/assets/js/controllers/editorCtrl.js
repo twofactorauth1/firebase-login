@@ -57,7 +57,9 @@
         $scope.components.splice(index - 1, 0, component);
         $scope.scrollToComponent(index - 1);
       }
-      $(window).trigger('resize');
+      $timeout(function () {
+        $(window).trigger('resize');
+      },0)
     };
 
     $scope.scrollToComponent = function (destIndex) {
