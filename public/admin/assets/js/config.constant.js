@@ -720,6 +720,6 @@ app.constant('JS_REQUIRES', {
   },
   {
     name: 'googlePlaces',
-    files: ['../js/libs/angular-google-places-autocomplete/src/autocomplete.css']
+    files: ['../js/libs/angular-google-places-autocomplete/dist/autocomplete.min.css']
   }]
 });
