@@ -101,7 +101,7 @@
           if (data && data._id) {
             if (data._id !==  post_data._id) {
               $scope.saveLoading = false;
-              toaster.pop('error', "Page URL " + post_data.post_url, "Already exists");
+              toaster.pop('error', "Post URL " + post_data.post_url, "Already exists");
             } else {
                WebsiteService.updatePost($scope.page._id, post_data._id, post_data, function (data) {
                 if (post_data.post_url !== $scope.originalPost.post_url) {
