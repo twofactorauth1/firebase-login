@@ -12800,6 +12800,9 @@ fieldset[disabled] .btn-vimeo-square.active {
   -ms-transition: margin 0.5s;
   -o-transition: margin 0.5s;
 }
+#componentloader .component-wrap-post {
+  margin-bottom: 0px!important;
+}
 #componentloader .component-sortable.dragging .delete-component,
 #componentloader .component-sortable.dragging .duplicate,
 #componentloader .component-sortable.dragging .component-settings,
