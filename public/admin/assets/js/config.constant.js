@@ -709,7 +709,7 @@ app.constant('JS_REQUIRES', {
     files: ['../js/libs/blueimp-gallery/js/jquery.blueimp-gallery.min.js', '../js/libs/blueimp-gallery/css/blueimp-gallery.min.css']
   }, {
     name: 'googlePlaces',
-    files: ['../js/libs/angular-google-places-autocomplete/src/autocomplete.js','../js/libs/angular-google-places-autocomplete/src/autocomplete.css']
+    files: ['../js/libs/angular-google-places-autocomplete/dist/autocomplete.min.css']
   }, {
     name: 'angular-cookie',
     files: ['../js/libs/angular-cookie/angular-cookie.min.js']
