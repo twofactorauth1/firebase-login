@@ -37,7 +37,7 @@ app.directive('meetTeamComponent', function () {
         var newTeam = {
           "name": "<p>First Last</p>",
           "position": "<p>Position of Person</p>",
-          "profilepic": "https://s3.amazonaws.com/indigenous-account-websites/acct_6/mike.jpg",
+          "profilepic": "https://s3-us-west-2.amazonaws.com/indigenous-admin/default-user.png",
           "bio": "<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Explicabo laboriosam, officiis vero eius ipsam aspernatur, quidem consequuntur veritatis aut laborum corporis impedit, quam saepe alias quis tempora non. Et, suscipit.</p>",
           "networks": [{
             "name": "linkedin",
