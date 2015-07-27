@@ -78,6 +78,7 @@
 
       CustomerService.saveCustomer($scope.customer, function (customer) {
         $scope.customer = customer;
+        $scope.changesConfirmed = true;
         toaster.pop('success', 'Notes Added.');
       });
     };
