@@ -26,45 +26,10 @@ app.controller('ImportCustomerModalCtrl', ['$scope', '$timeout', 'FileUploader',
 
   $scope.uploader = uploader;
 
-  // CALLBACKS
-
-  uploader.onWhenAddingFileFailed = function (item, filter, options) {
-    console.info('onWhenAddingFileFailed', item, filter, options);
-  };
   uploader.onAfterAddingFile = function (fileItem) {
-    console.info('onAfterAddingFile', fileItem);
     $scope.csvUploaded([fileItem._file]);
   };
-  uploader.onAfterAddingAll = function (addedFileItems) {
-    console.info('onAfterAddingAll', addedFileItems);
-  };
-  uploader.onBeforeUploadItem = function (item) {
-    console.info('onBeforeUploadItem', item);
-  };
-  uploader.onProgressItem = function (fileItem, progress) {
-    console.info('onProgressItem', fileItem, progress);
-  };
-  uploader.onProgressAll = function (progress) {
-    console.info('onProgressAll', progress);
-  };
-  uploader.onSuccessItem = function (fileItem, response, status, headers) {
-    console.info('onSuccessItem', fileItem, response, status, headers);
-  };
-  uploader.onErrorItem = function (fileItem, response, status, headers) {
-    console.info('onErrorItem', fileItem, response, status, headers);
-  };
-  uploader.onCancelItem = function (fileItem, response, status, headers) {
-    console.info('onCancelItem', fileItem, response, status, headers);
-  };
-  uploader.onCompleteItem = function (fileItem, response, status, headers) {
-    console.info('onCompleteItem', fileItem, response, status, headers);
-  };
-  uploader.onCompleteAll = function () {
-    console.info('onCompleteAll');
-  };
 
-  console.info('uploader', uploader);
-  console.log('ImportCustomerModalCtrl');
   $scope.customerColumns = [{
     name: 'First Name',
     value: 'first',
@@ -105,6 +70,11 @@ app.controller('ImportCustomerModalCtrl', ['$scope', '$timeout', 'FileUploader',
     value: 'gender',
     match: '',
     known: ['gender', 'sex']
+  }, {
+    name: 'Birthday',
+    value: 'birthday',
+    match: '',
+    known: ['birthday', 'bday', 'b-day', 'dob', 'date of birth']
   }, {
     name: 'Tags',
     value: 'tags',
@@ -183,7 +153,6 @@ app.controller('ImportCustomerModalCtrl', ['$scope', '$timeout', 'FileUploader',
       var _diff = (new Date() - startUpload) / 1000;
       $scope.endUpload = _diff.toFixed(2);
     }, 2500);
-    // $scope.validateCsvImport();
   };
 
   $scope.changeFile = function () {
@@ -201,9 +170,7 @@ app.controller('ImportCustomerModalCtrl', ['$scope', '$timeout', 'FileUploader',
     $scope.csv.percent = 0;
   };
 
-  $scope.previewCustomer = {
-    first: 'hello'
-  };
+  $scope.previewCustomer = {};
   $scope.currentRow = 1;
 
   $scope.increaseRow = function () {
@@ -220,45 +187,16 @@ app.controller('ImportCustomerModalCtrl', ['$scope', '$timeout', 'FileUploader',
     }
   };
 
-  // function validateEmail(value) {
-  //   if (value) {
-  //     var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-  //     if (value.match(mailformat)) {
-  //       return true;
-  //     }
-  //   }
-  // }
-
-
-  // $scope.errorMap = [];
-
-  // $scope.validateCsvImport = function () {
-  //   console.log('validating ...');
-  //   var _formattedColumns = $scope.formatColumns();
-  //   _.each($scope.csvResults, function (_result, i) {
-  //     if (i != 0) {
-  //       if (!validateEmail(_result[_formattedColumns.email.index])) {
-  //         $scope.errorMap.push({value: _result[_formattedColumns.email.index], row: i, index: _formattedColumns.email.index});
-  //       }
-  //     }
-  //   });
-  //   console.log('errorMap ', $scope.errorMap);
-  // };
-
   $scope.updatePreview = function (item, model, selected) {
-    console.log('updatePreview ', item, model, selected);
     if (selected && !selected.match) {
       selected.index = null;
     }
     var _formattedColumns = $scope.formatColumns();
-    $scope.previewCustomer.first = $scope.csvResults[$scope.currentRow][_formattedColumns.first.index];
-    $scope.previewCustomer.middle = $scope.csvResults[$scope.currentRow][_formattedColumns.middle.index];
-    $scope.previewCustomer.last = $scope.csvResults[$scope.currentRow][_formattedColumns.last.index];
-    $scope.previewCustomer.email = $scope.csvResults[$scope.currentRow][_formattedColumns.email.index];
-    $scope.previewCustomer.phone = $scope.csvResults[$scope.currentRow][_formattedColumns.phone.index];
-    $scope.previewCustomer.website = $scope.csvResults[$scope.currentRow][_formattedColumns.website.index];
-    $scope.previewCustomer.address = $scope.csvResults[$scope.currentRow][_formattedColumns.address.index];
-    $scope.previewCustomer.company = $scope.csvResults[$scope.currentRow][_formattedColumns.company.index];
+    _.each($scope.customerColumns, function (_column) {
+      var _colVal = _column.value;
+      var _formatIndex = _formattedColumns[_colVal].index;
+      $scope.previewCustomer[_colVal] = $scope.csvResults[$scope.currentRow][_formatIndex];
+    });
   };
 
   $scope.removePreviewRow = function (item, model) {
@@ -266,7 +204,6 @@ app.controller('ImportCustomerModalCtrl', ['$scope', '$timeout', 'FileUploader',
   };
 
   $scope.updateColumn = function (data, col) {
-    console.log('updateRow >>> ', data, col, $scope.currentRow);
     var _formattedColumns = $scope.formatColumns();
     $scope.csvResults[$scope.currentRow][_formattedColumns[col.value].index] = data;
   };
@@ -285,83 +222,122 @@ app.controller('ImportCustomerModalCtrl', ['$scope', '$timeout', 'FileUploader',
 
   var startServerUploadTime;
 
+  var blankFormattedCustomer = {
+    first: '',
+    middle: '',
+    last: '',
+    birthday : '',
+    gender : '',
+    details: [{
+      _id: Math.uuid(8),
+      source: "csv",
+      location: "",
+      emails: [],
+      photos: {
+        square: "",
+        small: "",
+        medium: "",
+        large: ""
+      },
+      websites: [],
+      company: "",
+      phones: [],
+      addresses: [{
+        _id: Math.uuid(8),
+        type: "w",
+        address: '',
+        address2: '',
+        city: '',
+        state: '',
+        zip: '',
+        country: '',
+        countryCode: '',
+        displayName: '',
+        lat: "",
+        lon: "",
+        defaultShipping: false,
+        defaultBilling: false
+      }]
+    }]
+  };
+
   $scope.uploadMatchedCSV = function () {
     startServerUploadTime = new Date();
     var _formattedColumns = $scope.formatColumns();
     var customersToAdd = [];
+    var partAddress = ['address', 'address2', 'city', 'state', 'zip', 'country', 'lat', 'lon'];
+    var nameParts = ['first', 'middle', 'last'];
+    var topLevelParts = ['company', 'gender', 'birthday'];
+    var _formattedCustomer = angular.copy(blankFormattedCustomer);
     _.each($scope.csvResults, function (_result, i) {
       if (i !== 0) {
-        // var _formattedCustomer = {
-        //   first: _result[_formattedColumns.first.index],
-        //   middle: '',
-        //   last: '',
-        //   details: [{
-        //     _id: "",
-        //     socialId: "", //The social Id from where these details came
-        //     source: "csv",
-        //     location: "" //Location string
-        //     emails: []
-        //     photos: {
-        //       square: ""
-        //       small: ""
-        //       medium: ""
-        //       large: ""
-        //     }
-        //     websites: []
-        //     company: ""
-        //     phones: [{
-        //       _id: "",
-        //       type: string "m|w|h|o" //mobile, work, home, other
-        //       number: string,
-        //       default: false
-        //     }],
-        //     addresses: [{
-        //       _id: ""
-        //       type: string "w|h|o"
-        //       address: string
-        //       address2: string
-        //       city: string
-        //       state: string
-        //       zip: string
-        //       country: string,
-        //       countryCode: string
-        //       displayName: string,
-        //       lat: "",
-        //       lon: "",
-        //       defaultShipping: false
-        //       defaultBilling: false
 
-        //     }]
-        //   }]
-        // };
+        _.each($scope.customerColumns, function (_column) {
+          var _colVal = _column.value;
+          var _formatIndex = _formattedColumns[_colVal].index;
+          var _csvResult = _result[_formatIndex];
+          if (_csvResult) {
+            var _formatVal = _formattedColumns[_colVal].value;
+            var _details = _formattedCustomer.details[0];
 
-        var _formattedCustomer = {
-          first: _result[_formattedColumns.first.index],
-          middle: _result[_formattedColumns.middle.index],
-          last: _result[_formattedColumns.last.index]
-        };
+            if (partAddress.indexOf(_colVal) > -1) {
+              _details.addresses[0][_colVal] = _csvResult;
+            }
+
+            if (_formatVal === 'email') {
+              var _email = {
+                _id: Math.uuid(8),
+                email: _csvResult
+              };
+              _details.emails.push(_email);
+            }
+
+            if (_formatVal === 'phone') {
+              var _phone = {
+                _id: Math.uuid(8),
+                phone: _csvResult
+              };
+              _details.phones.push(_phone);
+            }
+
+            if (_formatVal === 'website') {
+              var _website = {
+                _id: Math.uuid(8),
+                website: _csvResult
+              };
+              _details.websites.push(_website);
+            }
+
+            if (topLevelParts.indexOf(_colVal) > -1) {
+              _formattedCustomer[_colVal] = _csvResult;
+            }
+
+            if (nameParts.indexOf(_colVal) > -1) {
+              _formattedCustomer[_colVal] = _csvResult;
+            }
+          }
+
+        });
 
         customersToAdd.push(_formattedCustomer);
+        _formattedCustomer = angular.copy(blankFormattedCustomer);
       }
     });
 
     $scope.uploadingServerCsv = true;
-
+    console.log('customersToAdd ', customersToAdd);
     CustomerService.importCsvCustomers(customersToAdd, function () {
       console.log('upload started ...', $scope.uploadingServerCsv);
     });
-    console.log('customersToAdd ', customersToAdd);
   };
 
   $scope.$on('importingCustomers', function (event, args) {
-    console.log('import ', event, args);
     $scope.serverUploadPercent = Math.round(args.current / args.total * 100);
     if (args.current === args.total) {
-      console.log('upload complete ...');
       $scope.uploadingComplete = true;
       var _diff = (new Date() - startServerUploadTime) / 1000;
       $scope.endServerUpload = _diff.toFixed(2);
-      $scope.getCustomers();
+      // $scope.getCustomers();
     }
   });
 

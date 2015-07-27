@@ -121,7 +121,6 @@
 
             this.importCsvCustomers = function(customers, fn) {
                 var self = this;
-                console.log('importCsvCustomers >>> ', customers);
                 if (customers) {
                     customerArr = customers;
                 }
@@ -131,7 +130,6 @@
                 }
 
                 self.postCustomer(self.getCache(), customerArr[customerUploading], function(newCustomer) {
-                    console.log('newCustomer ', newCustomer);
                     if (customerUploading <= customerArr.length) {
                         $rootScope.$broadcast('importingCustomers', { current: customerUploading, total: customerArr.length });
                         customerUploading++;

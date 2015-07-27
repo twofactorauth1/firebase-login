@@ -101,7 +101,7 @@
         <div ng-if="uploadingServerCsv" class="center fade-in-right">
             <span class="fa fa-4x" ng-class="{'fa-spinner fa-spin': serverUploadPercent < 100, 'fa-check text-success': serverUploadPercent == 100}"></span>
             <h3>Uploading New Customers... <strong>{{serverUploadPercent}}%</strong></h3>
-            <progressbar animate="false" class="progress-striped progress-lg active" value="serverUploadPercent" type="success"></progressbar>
+            <progressbar animate="false" class="progress-striped progress-lg" ng-class="{'active': serverUploadPercent < 100}" value="serverUploadPercent" type="success"></progressbar>
             <span ng-if="uploadingComplete"><h4>Successfully added {{csvResults.length}} new customers in {{endServerUpload}} sec.</h4></span>
         </div>
         <div class="clearfix"></div>
