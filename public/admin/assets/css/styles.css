@@ -13255,6 +13255,7 @@ ul.nav-bar {
 /* ---------------------------------------------------------------------- */
 .products table.grid thead th {
   width: 20% !important;
+  float: left;
 }
 .products table.grid .product-img {
   height: 80px;
@@ -13297,6 +13298,7 @@ ul.nav-bar {
 }
 .customers table.grid thead th {
   width: 11.1%;
+  float: left;
 }
 .ui-select-multiple.ui-select-bootstrap input.ui-select-search:not([placeholder='']) {
   max-width: 100% !important;
