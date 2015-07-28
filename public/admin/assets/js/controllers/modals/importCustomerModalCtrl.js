@@ -1,6 +1,6 @@
 'use strict';
 /*global app, Papa*/
-app.controller('ImportCustomerModalCtrl', ['$scope', '$timeout', 'FileUploader', 'editableOptions', 'CustomerService', function ($scope, $timeout, FileUploader, editableOptions, CustomerService) {
+app.controller('ImportCustomerModalCtrl', ['$scope', '$timeout', '$modalInstance', 'FileUploader', 'editableOptions', 'CustomerService', function ($scope, $timeout, $modalInstance, FileUploader, editableOptions, CustomerService) {
 
   /*
    * @editableOptions
@@ -15,7 +15,10 @@ app.controller('ImportCustomerModalCtrl', ['$scope', '$timeout', 'FileUploader',
    */
 
   $scope.closeModal = function () {
-    // $scope.modalInstance.close();
+    $timeout(function () {
+      $modalInstance.close();
+      angular.element('.modal-backdrop').remove();
+    });
   };
 
   $scope.validateEmail = function (_email) {
