@@ -15,7 +15,7 @@ app.controller('ImportCustomerModalCtrl', ['$scope', '$timeout', 'FileUploader',
    */
 
   $scope.closeModal = function () {
-    $scope.modalInstance.close();
+    // $scope.modalInstance.close();
   };
 
   $scope.validateEmail = function (_email) {
