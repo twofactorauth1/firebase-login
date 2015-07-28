@@ -1,7 +1,7 @@
 'use strict';
 /*global app, moment, angular, window*/
 /*jslint unparam:true*/
-app.directive('blogComponent', ['$filter', '$timeout', 'WebsiteService', function ($filter, $timeout, WebsiteService) {
+app.directive('blogComponent', ['$filter', '$timeout', 'WebsiteService', 'toaster', function ($filter, $timeout, WebsiteService, toaster) {
   return {
     scope: {
       component: '=',
@@ -179,6 +179,15 @@ app.directive('blogComponent', ['$filter', '$timeout', 'WebsiteService', functio
 
         return true;
       };
+
+      $scope.deleteBlogPost = function (postId, blogpost) {
+      console.log('delete post');
+      WebsiteService.deletePost($scope.$parent.page._id, postId, function (data) {
+        var index = $scope.blog.blogposts.indexOf(blogpost);
+        $scope.blog.blogposts.splice(index, 1);
+        toaster.pop('success', 'Post deleted successfully');
+      });
+    };
     }
   };
 }]);
