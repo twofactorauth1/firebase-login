@@ -405,6 +405,17 @@
       console.log('componentEditing ', $scope.componentEditing);
       $scope.openModal('media-modal', 'MediaModalCtrl', null, 'lg');
     };
+    /*
+     * @changeBlogImage
+     * -
+     */
+    $scope.changeBlogImage = function (blog, index) {
+      $scope.changeblobImage = true;
+      $scope.showInsert = true;
+      $scope.blog_post = blog;
+      $scope.openModal('media-modal', 'MediaModalCtrl', null, 'lg');
+    };
+    
 
     $scope.addImageToThumbnail = function (componentId, index, update, parentIndex, numberPerPage) {
       $scope.imageChange = true;
@@ -494,7 +505,13 @@
         } else {
           console.log('unknown component or image location');
         }
-      } else if ($scope.postImage && !$scope.componentEditing) {
+      }
+      else if ($scope.changeblobImage) {
+        $scope.changeblobImage = false;
+        $scope.blog_post.featured_image = asset.url;
+        return;
+      }
+      else if ($scope.postImage && !$scope.componentEditing) {
         $scope.postImage = false;
         $scope.postImageUrl = asset.url;
         toaster.pop('success', "Post Image added successfully");

@@ -44,7 +44,7 @@
                                 <div class="blog-thumb alignleft" ng-if="blogpost.featured_image">
                                     <img ng-src="{{blogpost.featured_image}}" />
                                 </div>
-                                <a ng-if="isEditing" class="btn btn-warning" type="button" ng-click="changeBlogImage(blogpost)" style="margin-right:10px">
+                                <a ng-if="isEditing" class="btn btn-warning" type="button" ng-click="changeBlogImage(blogpost, $index, true)" style="margin-right:10px">
                                     <span class="fa fa-edit"></span>
                                     <span ng-if="blogpost.featured_image" class="hidden-xs">Change Image</span>
                                     <span ng-if="!blogpost.featured_image" class="hidden-xs">Add Image</span>

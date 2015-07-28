@@ -5,11 +5,18 @@ app.directive('blogComponent', ['$filter', '$timeout', 'WebsiteService', 'toaste
   return {
     scope: {
       component: '=',
-      version: '='
+      version: '=',
+      media: '&'
     },
     templateUrl: '/components/component-wrap.html',
     link: function (scope, element, attrs) {
       scope.isEditing = true;
+      scope.changeBlogImage = function (blog, index) {
+        scope.media({
+          blog: blog,
+          index: index
+        });
+      };
     },
     controller: function ($scope, WebsiteService, $compile, $filter, $timeout) {
       $scope.blog = {};
