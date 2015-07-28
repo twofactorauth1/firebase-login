@@ -126,6 +126,17 @@
       });
     };
 
+    $scope.openSimpleModal = function (modal) {
+      var _modal = {
+        templateUrl: modal,
+        scope: $scope
+      };
+      $scope.modalInstance = $modal.open(_modal);
+      $scope.modalInstance.result.then(null, function () {
+        angular.element('.sp-container').addClass('sp-hidden');
+      });
+    };
+
     /*
      * @closeModal
      * -
