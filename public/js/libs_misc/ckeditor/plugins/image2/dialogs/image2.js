@@ -559,8 +559,8 @@ CKEDITOR.dialog.add( 'image2', function( editor ) {
 									widget.removeClass("img-rounded");
 									widget.removeClass("img-thumbnail");
 									widget.removeClass("img-circle");
-
 									widget.addClass(this.getValue());
+									widget.setData("class", this.getValue())
 								}
 							}
 						]
