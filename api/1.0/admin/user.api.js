@@ -25,6 +25,9 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url(':id'), this.isAuthApi.bind(this), this.getUser.bind(this));
         app.post(this.url('account/:id'), this.isAuthApi.bind(this), this.createUserForAccount.bind(this));
         app.get(this.url('account/:id/users'), this.isAuthApi.bind(this), this.listUsersForAccount.bind(this));
+
+        app.post(this.url('account/:id/user/:userId'), this.isAuthApi.bind(this), this.addUserToAccount.bind(this));
+        app.delete(this.url('account/:id/user/:userId'), this.isAuthApi.bind(this), this.removeUserFromAccount.bind(this));
     },
 
     getUser: function(req, resp) {
@@ -106,6 +109,50 @@ _.extend(api.prototype, baseApi.prototype, {
                 userManager.getUserAccounts(accountId, function(err, users){
                     self.log.debug('<< listUsersForAccount');
                     return self.sendResultOrError(resp, err, users, 'Error listing users', null);
+                });
+            }
+        });
+    },
+
+    addUserToAccount: function(req, resp) {
+        var self = this;
+        self.log.debug('>> addUserToAccount');
+
+        var accountId = parseInt(req.params.id);
+        var userId = parseInt(req.params.userId);
+        var roleAry = [];
+        if(req.body.roleAry) {
+            roleAry = req.body.roleAry.split(',');
+        }
+        var callingUser = parseInt(self.userId(req));
+
+        self._isAdmin(req, function(err, value) {
+            if (value !== true) {
+                return self.send403(resp);
+            } else {
+                userManager.addUserToAccount(accountId, userId, roleAry, callingUser, function(err, user){
+                    self.log.debug('<< addUserToAccount');
+                    return self.sendResultOrError(resp, err, user, 'Error adding user to account', null);
+                });
+            }
+        });
+
+    },
+
+    removeUserFromAccount: function(req, resp) {
+        var self = this;
+        self.log.debug('>> removeUserFromAccount');
+
+        var accountId = parseInt(req.params.id);
+        var userId = parseInt(req.params.userId);
+
+        self._isAdmin(req, function(err, value) {
+            if (value !== true) {
+                return self.send403(resp);
+            } else {
+                userManager.deleteOrRemoveUserForAccount(accountId, userId, function(err, value){
+                    self.log.debug('<< removeUserFromAccount');
+                    return self.sendResultOrError(resp, err, value, 'Error removing user from account', null);
                 });
             }
         });

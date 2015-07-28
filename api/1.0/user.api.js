@@ -592,7 +592,8 @@ _.extend(api.prototype, baseApi.prototype, {
             if (isAllowed !== true || !_.contains(value.getAllAccountIds(), self.accountId(req))) {
                 return self.send403(resp);
             } else {
-                userManager.createAccountUser(accountId, user.username, password, user.email, user.first, user.last, req.user, function(err, user){
+                var roleAry = ['member'];
+                userManager.createAccountUser(accountId, user.username, password, user.email, user.first, user.last, req.user, roleAry, function(err, user){
                     self.log.debug('<< createUserForAccount');
                     var responseObj = null;
                     if(user) {
