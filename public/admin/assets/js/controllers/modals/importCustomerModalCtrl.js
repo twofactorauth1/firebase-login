@@ -117,7 +117,7 @@ app.controller('ImportCustomerModalCtrl', ['$scope', '$timeout', 'FileUploader',
     name: 'First Name',
     value: 'first',
     match: '',
-    known: ['given name', 'first', 'first name'],
+    known: ['given name', 'first name', 'first'],
     errorRows: []
   }, {
     name: 'Middle Name',

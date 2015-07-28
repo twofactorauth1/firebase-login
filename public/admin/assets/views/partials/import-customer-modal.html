@@ -110,6 +110,9 @@
                                                     <div ng-if="column.value === 'email'">
                                                         <a href="#" editable-email="previewCustomer[column.value]" onbeforesave="updateColumn($data, column)" ng-class="{'editable-error': !validateEmail(previewCustomer[column.value])}">{{ previewCustomer[column.value] || "empty" }}</a>
                                                     </div>
+                                                    <!-- <div ng-if="column.value === 'phone'">
+                                                        <a href="#" editable-email="previewCustomer[column.value]" onbeforesave="updateColumn($data, column)" ng-class="{'editable-error': !validateEmail(previewCustomer[column.value])}">{{ previewCustomer[column.value] || "empty" }}</a>
+                                                    </div> -->
                                                     <div ng-if="column.value != 'email'">
                                                         <a href="#" editable-text="previewCustomer[column.value]" onbeforesave="updateColumn($data, column)">{{ previewCustomer[column.value] || "empty" }}</a>
                                                     </div>
