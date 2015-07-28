@@ -834,7 +834,8 @@
         });
         WebsiteService.createPost($scope.page._id, post_data, function (data) {
           $scope.duplicate = true;
-          $location.path('/website/posts/').search({posthandle: newPost.post_url});
+          $scope.checkForSaveBeforeLeave('/admin/#/website/posts/?posthandle=' + newPost.post_url, true);          
+          //$location.path('/website/posts/').search({posthandle: newPost.post_url});
         });
       });
     };
