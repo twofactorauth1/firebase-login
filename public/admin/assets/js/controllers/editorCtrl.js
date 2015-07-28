@@ -825,6 +825,7 @@
         }
 
         var post_data = angular.copy($scope.blog.post);
+        post_data._id = null;
         post_data.post_url = newPost.post_url;
         post_data.post_title = newPost.post_title;
         post_data.post_tags.forEach(function (v, i) {
@@ -834,8 +835,7 @@
         });
         WebsiteService.createPost($scope.page._id, post_data, function (data) {
           $scope.duplicate = true;
-          $scope.checkForSaveBeforeLeave('/admin/#/website/posts/?posthandle=' + newPost.post_url, true);          
-          //$location.path('/website/posts/').search({posthandle: newPost.post_url});
+          $scope.checkForSaveBeforeLeave('/admin/#/website/posts/?posthandle=' + newPost.post_url, true);                    
         });
       });
     };
