@@ -1,17 +1,39 @@
 'use strict';
 /*global app, Papa*/
-app.controller('ImportCustomerModalCtrl', ['$scope', '$timeout', 'FileUploader', 'editableOptions', 'CustomerService', 'getCustomers', function ($scope, $timeout, FileUploader, editableOptions, CustomerService, getCustomers) {
+app.controller('ImportCustomerModalCtrl', ['$scope', '$timeout', 'FileUploader', 'editableOptions', 'CustomerService', function ($scope, $timeout, FileUploader, editableOptions, CustomerService) {
+
+  /*
+   * @editableOptions
+   * - editable options for xeditable in preview customers
+   */
 
   editableOptions.theme = 'bs3';
 
-  $scope.getCustomers = getCustomers;
+  /*
+   * @closeModal
+   * -
+   */
+
+  $scope.closeModal = function () {
+    $scope.modalInstance.close();
+  };
+
+
+  /*
+   * @uploader
+   * - instance of file uploaded
+   */
 
   var uploader = new FileUploader({
     url: '/api/1.0/assets/',
     filters: []
   });
+  $scope.uploader = uploader;
 
-  // FILTERS
+  /*
+   * @uploader.filters
+   * - filters for the fileuploader
+   */
 
   uploader.filters.push({
     name: 'csvFilter',
@@ -24,37 +46,46 @@ app.controller('ImportCustomerModalCtrl', ['$scope', '$timeout', 'FileUploader',
     }
   });
 
-  $scope.uploader = uploader;
+  /*
+   * @onAfterAddingFile
+   * - uploader callback on upload
+   */
 
   uploader.onAfterAddingFile = function (fileItem) {
     $scope.csvUploaded([fileItem._file]);
   };
 
+  /*
+   * @customerColumns
+   * - list of main columns with list of known for mapping
+   * - ['given name', 'first', 'first name'] -- specific to general
+   */
+
   $scope.customerColumns = [{
     name: 'First Name',
     value: 'first',
     match: '',
-    known: ['first', 'first name']
+    known: ['given name', 'first', 'first name']
   }, {
     name: 'Middle Name',
     value: 'middle',
     match: '',
-    known: ['middle', 'middle name']
+    known: ['addtional name', 'middle', 'middle name']
   }, {
     name: 'Last Name',
     value: 'last',
     match: '',
-    known: ['last', 'last name']
+    known: ['family name', 'last', 'last name']
   }, {
     name: 'Email Address',
     value: 'email',
     match: '',
-    known: ['email', 'email address', 'e-mail', 'e-mail address']
+    known: ['e-mail 1 - value', 'email', 'email address', 'e-mail', 'e-mail address']
   }, {
     name: 'Phone Number',
     value: 'phone',
     match: '',
-    known: ['phone', 'business phone', 'personal phone', 'phone number', 'number']
+    known: ['phone 1 - value', 'phone', 'business phone', 'personal phone', 'phone number', 'number']
   }, {
     name: 'Website URL',
     value: 'website',
@@ -84,29 +115,33 @@ app.controller('ImportCustomerModalCtrl', ['$scope', '$timeout', 'FileUploader',
     name: 'Address',
     value: 'address',
     match: '',
-    known: ['address', 'business street']
+    known: ['address 1 - street', 'address', 'business street']
   }, {
     name: 'Address 2',
     value: 'address2',
     match: '',
-    known: ['address2', 'business street 2']
+    known: ['address 1 - extended address', 'address2', 'business street 2']
   }, {
     name: 'City',
     value: 'city',
     match: '',
-    known: ['city', 'business city']
+    known: ['address 1 - city', 'city', 'business city']
   }, {
     name: 'State',
     value: 'state',
     match: '',
-    known: ['state', 'business state']
+    known: ['address 1 - region', 'state', 'business state']
   }, {
     name: 'Zip',
     value: 'zip',
     match: '',
-    known: ['zip', 'zip code', 'postal code', 'business postal code']
+    known: ['address 1 - postal code', 'zip', 'zip code', 'postal code', 'business postal code']
   }];
 
+  /*
+   * @guessHeaders
+   * - on upload match fileds automatically based on known variations
+   */
 
   $scope.guessHeaders = function () {
     _.each($scope.customerColumns, function (_column) {
@@ -135,6 +170,11 @@ app.controller('ImportCustomerModalCtrl', ['$scope', '$timeout', 'FileUploader',
     $scope.updatePreview();
   };
 
+  /*
+   * @variables
+   * - variables for parsing and matching
+   */
+
   $scope.csvResults = [];
   $scope.uploadingCsv = false;
   var startUpload;
@@ -143,6 +183,15 @@ app.controller('ImportCustomerModalCtrl', ['$scope', '$timeout', 'FileUploader',
   $scope.csv = {
     percent: 0
   };
+  $scope.previewCustomer = {};
+  $scope.currentRow = 1;
+  var startServerUploadTime;
+
+
+  /*
+   * @csvComplete
+   * - after csv has been uploaded but not imported
+   */
 
   $scope.csvComplete = function (results) {
     $timeout(function () {
@@ -154,6 +203,11 @@ app.controller('ImportCustomerModalCtrl', ['$scope', '$timeout', 'FileUploader',
       $scope.endUpload = _diff.toFixed(2);
     }, 2500);
   };
+
+  /*
+   * @changeFile
+   * - redirect to upload section and reset variables
+   */
 
   $scope.changeFile = function () {
     $scope.csvHeaders = [];
@@ -170,8 +224,10 @@ app.controller('ImportCustomerModalCtrl', ['$scope', '$timeout', 'FileUploader',
     $scope.csv.percent = 0;
   };
 
-  $scope.previewCustomer = {};
-  $scope.currentRow = 1;
+  /*
+   * @increaseRow
+   * - increase the row and update the preview customer
+   */
 
   $scope.increaseRow = function () {
     if ($scope.currentRow < $scope.csvResults.length - 1) {
@@ -180,12 +236,22 @@ app.controller('ImportCustomerModalCtrl', ['$scope', '$timeout', 'FileUploader',
     }
   };
 
+  /*
+   * @decreaseRow
+   * - decrease the row and update the preview customer
+   */
+
   $scope.decreaseRow = function () {
     if ($scope.currentRow > 1) {
       $scope.currentRow = $scope.currentRow - 1;
       $scope.updatePreview();
     }
   };
+
+  /*
+   * @updatePreview
+   * - update the preview when details are changed
+   */
 
   $scope.updatePreview = function (item, model, selected) {
     if (selected && !selected.match) {
@@ -199,14 +265,20 @@ app.controller('ImportCustomerModalCtrl', ['$scope', '$timeout', 'FileUploader',
     });
   };
 
-  $scope.removePreviewRow = function (item, model) {
-    console.log('removePreviewRow ', item, model);
-  };
+  /*
+   * @updateColumn
+   * - update an individual column when editing with xeditable
+   */
 
   $scope.updateColumn = function (data, col) {
     var _formattedColumns = $scope.formatColumns();
     $scope.csvResults[$scope.currentRow][_formattedColumns[col.value].index] = data;
   };
+
+  /*
+   * @formatColumns
+   * - format columns for values as keys for easy pulling
+   */
 
   $scope.formatColumns = function () {
     var _formattedColumns = [];
@@ -220,14 +292,17 @@ app.controller('ImportCustomerModalCtrl', ['$scope', '$timeout', 'FileUploader',
     return _formattedColumns;
   };
 
-  var startServerUploadTime;
+  /*
+   * @blankFormattedCustomer
+   * - black formatted customer object for uploading
+   */
 
   var blankFormattedCustomer = {
     first: '',
     middle: '',
     last: '',
-    birthday : '',
-    gender : '',
+    birthday: '',
+    gender: '',
     details: [{
       _id: Math.uuid(8),
       source: "csv",
@@ -260,6 +335,11 @@ app.controller('ImportCustomerModalCtrl', ['$scope', '$timeout', 'FileUploader',
       }]
     }]
   };
+
+  /*
+   * @uploadMatchedCSV
+   * - import the formtted CSV and create customers
+   */
 
   $scope.uploadMatchedCSV = function () {
     startServerUploadTime = new Date();
@@ -331,6 +411,11 @@ app.controller('ImportCustomerModalCtrl', ['$scope', '$timeout', 'FileUploader',
     });
   };
 
+  /*
+   * @on:importingCustomers
+   * - callback from service to update import progress
+   */
+
   $scope.$on('importingCustomers', function (event, args) {
     $scope.serverUploadPercent = Math.round(args.current / args.total * 100);
     if (args.current === args.total) {
@@ -341,6 +426,10 @@ app.controller('ImportCustomerModalCtrl', ['$scope', '$timeout', 'FileUploader',
     }
   });
 
+  /*
+   * @csvUploaded
+   * - begin the CSV upload with uploader config
+   */
 
   $scope.csvUploaded = function (files) {
     if (files[0].type === 'text/csv') {

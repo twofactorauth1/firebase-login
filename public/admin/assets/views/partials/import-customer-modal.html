@@ -1,43 +1,47 @@
 <script type="text/ng-template" id="import-customer-modal">
-    <div class="modal-header">
-        <button type="button" class="close" ng-click="closeModal()">
-            <span aria-hidden="true">&times;</span>
-            <span class="sr-only">Close</span>
-        </button>
-        <h3 class="modal-title">Import Customers</h3>
-    </div>
-    <div class="modal-body bg-white" style="overflow:hidden">
-        <div ng-if="!uploadingCsv && csvResults.length == 0" class="fade-out-right">
-            <div nv-file-drop="" uploader="uploader" filters="queueLimit, customFilter">
-                <div ng-show="uploader.isHTML5">
-                    <div class="well my-drop-zone center" nv-file-over="" uploader="uploader">
-                        <div class="margin-top-30 margin-bottom-30">
-                            <h4>Drag & Drop your CSV File here or </h4>
-                            <span class="btn btn-default btn-primary btn-wide btn-file">
+    <div id="import-customer-modal">
+        <div class="modal-header">
+            <button type="button" class="close" ng-click="closeModal()">
+                <span aria-hidden="true">&times;</span>
+                <span class="sr-only">Close</span>
+            </button>
+            <h3 class="modal-title">Import Customers</h3>
+        </div>
+        <div class="modal-body bg-white" ng-class="{'no-padding': !uploadingCsv && csvResults.length > 0 && !uploadingServerCsv}" style="overflow:hidden">
+            <div ng-if="!uploadingCsv && csvResults.length == 0" class="fade-out-right">
+                <div nv-file-drop="" uploader="uploader" filters="queueLimit, customFilter">
+                    <div ng-show="uploader.isHTML5">
+                        <div class="well my-drop-zone center" nv-file-over="" uploader="uploader">
+                            <div class="margin-top-30 margin-bottom-30">
+                                <h4>Drag & Drop your CSV File here or </h4>
+                                <span class="btn btn-default btn-primary btn-wide btn-file">
                                 Browse <input type="file" nv-file-select="" uploader="uploader" filters="queueLimit, customFilter" />
                             </span>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div ng-if="uploadingCsv && csvResults.length <= 0" class="center fade-in-right">
-            <span class="fa fa-4x" ng-class="{'fa-spinner fa-spin': csv.percent < 100, 'fa-check text-success': csv.percent == 100}"></span>
-            <h3>Uploading CSV... <strong>{{csv.percent}}%</strong></h3>
-            <progressbar animate="false" class="progress-striped progress-lg active" value="csv.percent" type="success"></progressbar>
-        </div>
-        <div ng-if="!uploadingCsv && csvResults.length > 0 && !uploadingServerCsv" class="fade-in-right" style="position: relative;top: 0;">
-            <div class="well well-sm margin-bottom-15">
-                <h4>Field <strong>Mapping:</strong></h4>
-                <span class="help-block margin-bottom-0">Check to make sure all the fields are matched correctly.</span>
+            <div ng-if="uploadingCsv && csvResults.length <= 0" class="center fade-in-right">
+                <span class="fa fa-4x" ng-class="{'fa-spinner fa-spin': csv.percent < 100, 'fa-check text-success': csv.percent == 100}"></span>
+                <h3>Uploading CSV... <strong>{{csv.percent}}%</strong></h3>
+                <progressbar animate="false" class="progress-striped progress-lg active" value="csv.percent" type="success"></progressbar>
             </div>
-            <div class="form-horizontal">
-                <div class="row">
-                    <div class="col-sm-12 col-md-6">
-                        <div class="panel panel-white margin-bottom-0">
-                            <div class="panel-body no-padding">
-                                <tabset>
-                                    <tab heading="Basic Fields">
+            <div ng-if="!uploadingCsv && csvResults.length > 0 && !uploadingServerCsv" class="fade-in-right padding-15" style="position: relative;top: 0;" ct-fullheight=".modal.in" data-ct-fullheight-exclusion=".modal.in .modal-header, .modal.in .modal-footer" data-ct-fullheight-num="110">
+                <div class="well well-sm margin-bottom-15 hidden">
+                    <h4>Field <strong>Mapping:</strong></h4>
+                    <span class="help-block margin-bottom-0">Check to make sure all the fields are matched correctly.</span>
+                </div>
+                <div class="form-horizontal">
+                    <div class="row">
+                        <div class="col-sm-12 col-md-6">
+                            <div class="panel panel-white margin-bottom-0">
+                                <div class="panel-heading border-light">
+                                    <h4 class="panel-title">Field <span class="text-bold">Mapping</span></h4>
+                                </div>
+                                <div class="panel-body">
+                                    <p class="text-small margin-bottom-15">Look over the fields we automatically matched.</p>
+                                    <div class="row">
                                         <div class="col-xs-12 col-sm-6 col-md-12" ng-repeat="column in customerColumns">
                                             <div class="form-group" ng-class="{'margin-bottom-0':$last}">
                                                 <label class="col-sm-4 control-label" for="{{column.value}}">
@@ -56,39 +60,39 @@
                                             </div>
                                             <div class="clearfix"></div>
                                         </div>
-                                        <div class="clearfix"></div>
-                                    </tab>
-                                    <tab heading="Custom Fields">
-                                    </tab>
-                                </tabset>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-sm-12 col-md-6">
-                        <div class="panel panel-white margin-bottom-0">
-                            <div class="panel-heading border-light panel-primary">
-                                <h4 class="panel-title">Preview Customers <span class="text-bold">{{currentRow}} / {{csvResults.length - 1}}</span></h4>
-                                <ul class="panel-heading-tabs border-light">
-                                    <li>
-                                        <div class="btn-group">
-                                            <button ng-click="decreaseRow()" class="btn btn-default pull-left"><span class="fa fa-chevron-left"></span></button>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="btn-group">
-                                            <button ng-click="increaseRow()" class="btn btn-default pull-right"><span class="fa fa-chevron-right"></span></button>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="panel-body">
-                                <div class="form-horizontal">
-                                    <div class="form-group col-xs-12 col-sm-6 col-md-12" ng-repeat="column in customerColumns" ng-class="{'margin-bottom-0':$last}">
-                                        <label class="col-sm-4 control-label">
-                                            {{column.name}}
-                                        </label>
-                                        <div class="col-sm-8 editable-section">
-                                            <a href="#" editable-text="previewCustomer[column.value]" onbeforesave="updateColumn($data, column)">{{ previewCustomer[column.value] || "empty" }}</a>
+                        <div class="col-sm-12 col-md-6">
+                            <div class="panel panel-white margin-bottom-0 preview-customers">
+                                <div class="panel-heading border-light panel-primary">
+                                    <h4 class="panel-title">Preview <span class="text-bold">Customers</span></h4>
+                                    <ul class="panel-heading-tabs border-light">
+                                        <li>
+                                            <div class="btn-group">
+                                                <button ng-click="decreaseRow()" class="btn btn-default pull-left"><span class="fa fa-chevron-left"></span></button>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="btn-group">
+                                                <button ng-click="increaseRow()" class="btn btn-default pull-right"><span class="fa fa-chevron-right"></span></button>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="panel-body">
+                                    <p class="text-small margin-bottom-15">Currently viewing row <span class="text-bold">{{currentRow}} / {{csvResults.length - 1}}</span></p>
+                                    <div class="row">
+                                        <div class="col-xs-12 col-sm-6 col-md-12" ng-repeat="column in customerColumns">
+                                            <div class="form-group" ng-class="{'margin-bottom-0':$last}">
+                                                <label class="col-sm-4 control-label">
+                                                    {{column.name}}
+                                                </label>
+                                                <div class="col-sm-8 editable-section">
+                                                    <a href="#" editable-text="previewCustomer[column.value]" onbeforesave="updateColumn($data, column)">{{ previewCustomer[column.value] || "empty" }}</a>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -97,15 +101,14 @@
                     </div>
                 </div>
             </div>
-        </div>
-        <div ng-if="uploadingServerCsv" class="center fade-in-right">
-            <span class="fa fa-4x" ng-class="{'fa-spinner fa-spin': serverUploadPercent < 100, 'fa-check text-success': serverUploadPercent == 100}"></span>
-            <h3>Uploading New Customers... <strong>{{serverUploadPercent}}%</strong></h3>
-            <progressbar animate="false" class="progress-striped progress-lg" ng-class="{'active': serverUploadPercent < 100}" value="serverUploadPercent" type="success"></progressbar>
-            <span ng-if="uploadingComplete"><h4>Successfully added {{csvResults.length}} new customers in {{endServerUpload}} sec.</h4></span>
-        </div>
-        <div class="clearfix"></div>
-        <!-- <div class="row choose-import" data-import-section="choose">
+            <div ng-if="uploadingServerCsv" class="center fade-in-right">
+                <span class="fa fa-4x" ng-class="{'fa-spinner fa-spin': serverUploadPercent < 100, 'fa-check text-success': serverUploadPercent == 100}"></span>
+                <h3>Uploading New Customers... <strong>{{serverUploadPercent}}%</strong></h3>
+                <progressbar animate="false" class="progress-striped progress-lg" ng-class="{'active': serverUploadPercent < 100}" value="serverUploadPercent" type="success"></progressbar>
+                <span ng-if="uploadingComplete"><h4>Successfully added {{csvResults.length}} new customers in {{endServerUpload}} sec.</h4></span>
+            </div>
+            <div class="clearfix"></div>
+            <!-- <div class="row choose-import" data-import-section="choose">
             <p class="center"><b>Choose one of the import options from below:</b>
             </p>
             <div class="clearfix mb30"></div>
@@ -156,18 +159,20 @@
             <button class="btn btn-primary btn-lg">Fix Duplicate Contacts</button>
             <div class="clearfix mb30"></div>
         </div> -->
-    </div>
-    <div class="modal-footer" ng-if="!uploadingCsv && csvResults.length > 0 && !uploadingServerCsv">
-        <div class="row">
-            <div class="col-xs-8">
-                <a class="btn btn-primary pull-left margin-right-10" ng-click="changeFile()"><span class="fa fa-exchange"></span>  Change</a>
-                <div class="pull-left text-left">
-                    <h4><strong>File:</strong> <span ng-text-truncate="fileName" ng-tt-chars-threshold="25" ng-tt-no-toggling></span></h4>
-                    <span class="help-block margin-bottom-0" style="margin-top:-10px">Uploaded {{csvResults.length - 1}} customers in {{endUpload}}sec</span>
+        </div>
+        <div class="clearfix"></div>
+        <div class="modal-footer" ng-if="!uploadingCsv && csvResults.length > 0 && !uploadingServerCsv">
+            <div class="row">
+                <div class="col-xs-8">
+                    <a class="btn btn-primary pull-left margin-right-10" ng-click="changeFile()"><span class="fa fa-exchange"></span>  Change</a>
+                    <div class="pull-left text-left">
+                        <h4><strong>File:</strong> <span ng-text-truncate="fileName" ng-tt-chars-threshold="25" ng-tt-no-toggling></span></h4>
+                        <span class="help-block margin-bottom-0" style="margin-top:-10px">Uploaded {{csvResults.length - 1}} customers in {{endUpload}}sec</span>
+                    </div>
                 </div>
-            </div>
-            <div class="col-xs-4">
-                <button class="btn btn-primary pull-right" ng-click="uploadMatchedCSV()"><span class="fa fa-cloud-upload"></span> Import</button>
+                <div class="col-xs-4">
+                    <button class="btn btn-primary pull-right" ng-click="uploadMatchedCSV()"><span class="fa fa-cloud-upload"></span> Import</button>
+                </div>
             </div>
         </div>
     </div>

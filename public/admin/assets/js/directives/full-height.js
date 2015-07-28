@@ -38,9 +38,19 @@ function ($window, $rootScope, $timeout, mq) {
                             exclusionHeight = exclusionHeight + $(_element).outerHeight(true);
                         });
                     }
-                    if (attrs.ctFullheight == 'window') {
+
+                    if (attrs.ctFullheightNum) {
+                        exclusionHeight = exclusionHeight + parseInt(attrs.ctFullheightNum);
+                    }
+
+
+                    page = $(attrs.ctFullheight);
+
+                    if (attrs.ctFullheight == 'window' || !attrs.ctFullheight) {
                         page = $win;
-                    } else {
+                    }
+
+                    if (attrs.ctFullheight == 'document') {
                         page = $document;
                     }
 
@@ -53,6 +63,7 @@ function ($window, $rootScope, $timeout, mq) {
                             page = $win;
                         }
                         $(elem).css('height', page.innerHeight() - exclusionHeight);
+                        $(elem).css('overflow', 'auto');
                     }
                 }, 300);
             };
