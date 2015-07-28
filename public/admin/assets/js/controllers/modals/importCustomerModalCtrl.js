@@ -18,6 +18,58 @@ app.controller('ImportCustomerModalCtrl', ['$scope', '$timeout', 'FileUploader',
     $scope.modalInstance.close();
   };
 
+  $scope.validateEmail = function (_email) {
+    var regex = new RegExp('^[_a-z0-9]+(\.[_a-z0-9]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$');
+    return regex.test(_email);
+  };
+
+  $scope.validatePhone = function (_phone) {
+    var regex = new RegExp('^([0-9\(\)\/\+ \-]*)$');
+    return regex.test(_phone);
+  };
+
+  /*
+   * @validatePhones
+   * - validate a list of phones and update error rows array
+   */
+
+  $scope.validatePhones = function (fn) {
+    //get matched email headers
+    var _formattedColumns = $scope.formatColumns();
+    var _phoneIndex = _formattedColumns['phone'].index;
+    var _errorRows = [];
+    _.each($scope.csvResults, function (_row, index) {
+      if (index != 0) {
+        var _phone = _row[_phoneIndex];
+        if (!$scope.validatePhone(_phone)) {
+          _errorRows.push(index);
+        }
+      }
+    });
+
+    if (_errorRows.length > 0) {
+
+      var matchingColumn = _.find($scope.customerColumns, function (_col) {
+        return _col.value === 'phone';
+      });
+      if (matchingColumn.errorRows.length > 0) {
+        matchingColumn.errorRows = _.union(_errorRows, matchingColumn.errorRows);
+        $scope.errorRows = _.union(matchingColumn.errorRows, $scope.errorRows);
+      } else {
+        matchingColumn.errorRows = _errorRows;
+        if ($scope.errorRows.length > 0) {
+          $scope.errorRows = _.union(_errorRows, $scope.errorRows);
+        } else {
+          $scope.errorRows = _errorRows;
+        }
+      }
+      console.log('$scope.errorRows >>>', $scope.errorRows);
+    }
+    if (fn) {
+      fn();
+    }
+  };
+
 
   /*
    * @uploader
@@ -65,77 +117,92 @@ app.controller('ImportCustomerModalCtrl', ['$scope', '$timeout', 'FileUploader',
     name: 'First Name',
     value: 'first',
     match: '',
-    known: ['given name', 'first', 'first name']
+    known: ['given name', 'first', 'first name'],
+    errorRows: []
   }, {
     name: 'Middle Name',
     value: 'middle',
     match: '',
-    known: ['addtional name', 'middle', 'middle name']
+    known: ['addtional name', 'middle', 'middle name'],
+    errorRows: []
   }, {
     name: 'Last Name',
     value: 'last',
     match: '',
-    known: ['family name', 'last', 'last name']
+    known: ['family name', 'last', 'last name'],
+    errorRows: []
   }, {
     name: 'Email Address',
     value: 'email',
     match: '',
-    known: ['e-mail 1 - value', 'email', 'email address', 'e-mail', 'e-mail address']
+    known: ['e-mail 1 - value', 'email', 'email address', 'e-mail', 'e-mail address'],
+    errorRows: []
   }, {
     name: 'Phone Number',
     value: 'phone',
     match: '',
-    known: ['phone 1 - value', 'phone', 'business phone', 'personal phone', 'phone number', 'number']
+    known: ['phone 1 - value', 'phone', 'business phone', 'personal phone', 'phone number', 'number'],
+    errorRows: []
   }, {
     name: 'Website URL',
     value: 'website',
     match: '',
-    known: ['website', 'web page', 'url', 'site', 'site url']
+    known: ['website', 'web page', 'url', 'site', 'site url'],
+    errorRows: []
   }, {
     name: 'Company Name',
     value: 'company',
     match: '',
-    known: ['company', 'company name']
+    known: ['company', 'company name'],
+    errorRows: []
   }, {
     name: 'Gender',
     value: 'gender',
     match: '',
-    known: ['gender', 'sex']
+    known: ['gender', 'sex'],
+    errorRows: []
   }, {
     name: 'Birthday',
     value: 'birthday',
     match: '',
-    known: ['birthday', 'bday', 'b-day', 'dob', 'date of birth']
+    known: ['birthday', 'bday', 'b-day', 'dob', 'date of birth'],
+    errorRows: []
   }, {
     name: 'Tags',
     value: 'tags',
     match: '',
-    known: []
+    known: [],
+    errorRows: []
   }, {
     name: 'Address',
     value: 'address',
     match: '',
-    known: ['address 1 - street', 'address', 'business street']
+    known: ['address 1 - street', 'address', 'business street'],
+    errorRows: []
   }, {
     name: 'Address 2',
     value: 'address2',
     match: '',
-    known: ['address 1 - extended address', 'address2', 'business street 2']
+    known: ['address 1 - extended address', 'address2', 'business street 2'],
+    errorRows: []
   }, {
     name: 'City',
     value: 'city',
     match: '',
-    known: ['address 1 - city', 'city', 'business city']
+    known: ['address 1 - city', 'city', 'business city'],
+    errorRows: []
   }, {
     name: 'State',
     value: 'state',
     match: '',
-    known: ['address 1 - region', 'state', 'business state']
+    known: ['address 1 - region', 'state', 'business state'],
+    errorRows: []
   }, {
     name: 'Zip',
     value: 'zip',
     match: '',
-    known: ['address 1 - postal code', 'zip', 'zip code', 'postal code', 'business postal code']
+    known: ['address 1 - postal code', 'zip', 'zip code', 'postal code', 'business postal code'],
+    errorRows: []
   }];
 
   /*
@@ -143,7 +210,7 @@ app.controller('ImportCustomerModalCtrl', ['$scope', '$timeout', 'FileUploader',
    * - on upload match fileds automatically based on known variations
    */
 
-  $scope.guessHeaders = function () {
+  $scope.guessHeaders = function (fn) {
     _.each($scope.customerColumns, function (_column) {
       var bestMatch = {
         value: '',
@@ -168,6 +235,10 @@ app.controller('ImportCustomerModalCtrl', ['$scope', '$timeout', 'FileUploader',
       }
     });
     $scope.updatePreview();
+
+    if (fn) {
+      fn();
+    }
   };
 
   /*
@@ -186,6 +257,8 @@ app.controller('ImportCustomerModalCtrl', ['$scope', '$timeout', 'FileUploader',
   $scope.previewCustomer = {};
   $scope.currentRow = 1;
   var startServerUploadTime;
+  $scope.alerts = [];
+  $scope.errorRows = [];
 
 
   /*
@@ -198,7 +271,16 @@ app.controller('ImportCustomerModalCtrl', ['$scope', '$timeout', 'FileUploader',
       $scope.uploadingCsv = false;
       $scope.csvHeaders = results.data[0];
       $scope.csvResults = results.data;
-      $scope.guessHeaders();
+
+      console.time("start validating ...");
+      $scope.guessHeaders(function() {
+        $scope.validateEmails(function() {
+          $scope.validatePhones(function() {
+            console.timeEnd("start validating ...");
+          });
+        });
+      });
+
       var _diff = (new Date() - startUpload) / 1000;
       $scope.endUpload = _diff.toFixed(2);
     }, 2500);
@@ -249,6 +331,20 @@ app.controller('ImportCustomerModalCtrl', ['$scope', '$timeout', 'FileUploader',
   };
 
   /*
+   * @goToRow
+   * - decrease the row and update the preview customer
+   */
+
+  $scope.goToRow = function (_row) {
+    $scope.currentRow = _row;
+    $scope.updatePreview();
+    $scope.showPreviewPulse = true;
+    $timeout(function() {
+      $scope.showPreviewPulse = false;
+    }, 1000);
+  };
+
+  /*
    * @updatePreview
    * - update the preview when details are changed
    */
@@ -271,8 +367,19 @@ app.controller('ImportCustomerModalCtrl', ['$scope', '$timeout', 'FileUploader',
    */
 
   $scope.updateColumn = function (data, col) {
+    console.log('updateColumn >>>');
     var _formattedColumns = $scope.formatColumns();
     $scope.csvResults[$scope.currentRow][_formattedColumns[col.value].index] = data;
+    $scope.errorRows = _.reject($scope.errorRows, function (d) {
+      return d === $scope.currentRow;
+    });
+    var matchingColumn = _.find($scope.customerColumns, function (_col) {
+      return _col.value === col.value;
+    });
+    matchingColumn.errorRows = _.reject(matchingColumn.errorRows, function (d) {
+      return d === $scope.currentRow;
+    });
+    console.log('$scope.errorRows >>>', $scope.errorRows);
   };
 
   /*
@@ -425,6 +532,52 @@ app.controller('ImportCustomerModalCtrl', ['$scope', '$timeout', 'FileUploader',
       // $scope.getCustomers();
     }
   });
+
+  /*
+   * @validateEmails
+   * - validate a list of emails and update error rows array
+   */
+
+  $scope.validateEmails = function (fn) {
+    //get matched email headers
+    var _formattedColumns = $scope.formatColumns();
+    var _emailIndex = _formattedColumns['email'].index;
+    var _errorRows = [];
+    _.each($scope.csvResults, function (_row, index) {
+      if (index != 0) {
+        var _email = _row[_emailIndex];
+        if (!$scope.validateEmail(_email)) {
+          _errorRows.push(index);
+        }
+      }
+    });
+
+    if (_errorRows.length > 0) {
+
+      var matchingColumn = _.find($scope.customerColumns, function (_col) {
+        return _col.value === 'email';
+      });
+      if (matchingColumn.errorRows.length > 0) {
+        matchingColumn.errorRows = _.union(_errorRows, matchingColumn.errorRows);
+        $scope.errorRows = _.union(matchingColumn.errorRows, $scope.errorRows);
+      } else {
+        matchingColumn.errorRows = _errorRows;
+        if ($scope.errorRows.length > 0) {
+          $scope.errorRows = _.union(_errorRows, $scope.errorRows);
+        } else {
+          $scope.errorRows = _errorRows;
+        }
+      }
+      console.log('$scope.errorRows >>>', $scope.errorRows);
+    }
+    if (fn) {
+      fn();
+    }
+  };
+
+  $scope.closeAlert = function (index) {
+    $scope.alerts.splice(index, 1);
+  };
 
   /*
    * @csvUploaded

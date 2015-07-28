@@ -32,6 +32,19 @@
                     <h4>Field <strong>Mapping:</strong></h4>
                     <span class="help-block margin-bottom-0">Check to make sure all the fields are matched correctly.</span>
                 </div>
+                <div ng-if="errorRows.length > 0">
+                    <div class="alert alert-warning alert-dismissible" role="alert" ng-class="{'animated shake': errorRows.length > 0}">
+                       <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <div><span><strong>Caution:</strong> There are {{errorRows.length}} validation errors for your import. You can fix them manually or we will include them in the customer notes.</span>
+                            <br> Error Rows: <a ng-click="goToRow(err)" ng-repeat="err in errorRows" class="margin-right-5"><span class="badge badge-warning">{{err}}</span></a></div>
+                    </div>
+                </div>
+                <div ng-if="errorRows.length <= 0">
+                    <div class="alert alert-success alert-dismissible" role="alert" ng-class="{'animated bounce': errorRows.length <= 0}">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <div><span><strong>Success:</strong> There are no errors. Ready to Upload!</span></div>
+                    </div>
+                </div>
                 <div class="form-horizontal">
                     <div class="row">
                         <div class="col-sm-12 col-md-6">
@@ -47,7 +60,7 @@
                                                 <label class="col-sm-4 control-label" for="{{column.value}}">
                                                     {{column.name}}
                                                 </label>
-                                                <div class="col-sm-8">
+                                                <div class="col-sm-6">
                                                     <ui-select ng-model="column.match" name="{{column.value}}" theme="bootstrap" on-select="updatePreview($item, $model, column)">
                                                         <ui-select-match placeholder="Select a Field" allow-clear="true">
                                                             <small ng-bind-html="$select.selected"></small>
@@ -57,6 +70,10 @@
                                                         </ui-select-choices>
                                                     </ui-select>
                                                 </div>
+                                                <div class="col-sm-2" ng-if="column.match">
+                                                    <span class="text-small text-danger" ng-if="column.errorRows.length > 0"> <span tooltip-placement="top" tooltip-html-unsafe="{{column.errorRows.length}} Errors" class="fa fa-times fa-2x"></span></span>
+                                                    <span class="text-small text-success" ng-if="column.errorRows.length <= 0"><span tooltip-placement="top" tooltip-html-unsafe="Zero Errors" class="fa fa-check-circle-o fa-2x"></span></span>
+                                                </div>
                                             </div>
                                             <div class="clearfix"></div>
                                         </div>
@@ -65,7 +82,7 @@
                             </div>
                         </div>
                         <div class="col-sm-12 col-md-6">
-                            <div class="panel panel-white margin-bottom-0 preview-customers">
+                            <div class="panel panel-white margin-bottom-0 preview-customers" ng-class="{'animated pulse': showPreviewPulse}">
                                 <div class="panel-heading border-light panel-primary">
                                     <h4 class="panel-title">Preview <span class="text-bold">Customers</span></h4>
                                     <ul class="panel-heading-tabs border-light">
@@ -85,12 +102,17 @@
                                     <p class="text-small margin-bottom-15">Currently viewing row <span class="text-bold">{{currentRow}} / {{csvResults.length - 1}}</span></p>
                                     <div class="row">
                                         <div class="col-xs-12 col-sm-6 col-md-12" ng-repeat="column in customerColumns">
-                                            <div class="form-group" ng-class="{'margin-bottom-0':$last}">
+                                            <div class="form-group" ng-class="{'margin-bottom-0':$last, 'has-error': column.value === 'email' && !validateEmail(previewCustomer[column.value])}">
                                                 <label class="col-sm-4 control-label">
                                                     {{column.name}}
                                                 </label>
                                                 <div class="col-sm-8 editable-section">
-                                                    <a href="#" editable-text="previewCustomer[column.value]" onbeforesave="updateColumn($data, column)">{{ previewCustomer[column.value] || "empty" }}</a>
+                                                    <div ng-if="column.value === 'email'">
+                                                        <a href="#" editable-email="previewCustomer[column.value]" onbeforesave="updateColumn($data, column)" ng-class="{'editable-error': !validateEmail(previewCustomer[column.value])}">{{ previewCustomer[column.value] || "empty" }}</a>
+                                                    </div>
+                                                    <div ng-if="column.value != 'email'">
+                                                        <a href="#" editable-text="previewCustomer[column.value]" onbeforesave="updateColumn($data, column)">{{ previewCustomer[column.value] || "empty" }}</a>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -171,7 +193,7 @@
                     </div>
                 </div>
                 <div class="col-xs-4">
-                    <button class="btn btn-primary pull-right" ng-click="uploadMatchedCSV()"><span class="fa fa-cloud-upload"></span> Import</button>
+                    <button class="btn pull-right" ng-class="{'btn-warning': errorRows.length > 0, 'btn-primary': errorRows.length <= 0}" ng-click="uploadMatchedCSV()"><span class="fa fa-cloud-upload"></span> Import</button>
                 </div>
             </div>
         </div>

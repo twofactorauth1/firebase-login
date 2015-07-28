@@ -4746,7 +4746,7 @@ select[multiple="multiple"]:focus option {
   padding: 0 5px;
 }
 .has-error .control-label {
-  color: #8e8e93 !important;
+  color: #d43f3a !important;
 }
 .has-error .error {
   color: #a94442;
@@ -13309,6 +13309,26 @@ ul.nav-bar {
 }
 #import-customer-modal .preview-customers .form-group {
   height: 34px;
+}
+.alert-dismissable .close,
+.alert-dismissible .close {
+  font-size: 22px!important;
+}
+.editable-empty,
+.editable-empty:hover,
+.editable-empty:focus,
+a.editable-empty,
+a.editable-empty:hover,
+a.editable-empty:focus {
+  color: #858585!important;
+}
+.editable-error,
+.editable-error:hover,
+.editable-error:focus,
+a.editable-error,
+a.editable-error:hover,
+a.editable-error:focus {
+  color: #D14!important;
 }
 /* ---------------------------------------------------------------------- */
 /*  Orders
