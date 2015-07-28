@@ -585,7 +585,7 @@ app.controller('ImportCustomerModalCtrl', ['$scope', '$timeout', 'FileUploader',
    */
 
   $scope.csvUploaded = function (files) {
-    if (files[0].type === 'text/csv') {
+    if (files[0].type === 'text/csv' || files[0].type === 'application/vnd.ms-excel') {
       startUpload = new Date();
       $scope.fileName = files[0].name;
       $scope.uploadingCsv = true;
