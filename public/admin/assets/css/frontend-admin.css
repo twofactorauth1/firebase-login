@@ -3305,6 +3305,9 @@
 #componentloader .single-post-v1 .editable.post_excerpt_div {
   min-height: 10px;
 }
+#componentloader .single-post-v1 .single-post-content img {
+  max-width: 100%;
+}
 #componentloader .single-blog .blog-meta {
   margin-top: 15px;
   margin-bottom: 30px;
