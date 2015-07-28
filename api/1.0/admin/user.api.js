@@ -23,6 +23,8 @@ _.extend(api.prototype, baseApi.prototype, {
 
         app.post(this.url(':id/password'), this.isAuthApi.bind(this), this.setUserPassword.bind(this));
         app.get(this.url(':id'), this.isAuthApi.bind(this), this.getUser.bind(this));
+        app.post(this.url('account/:id'), this.isAuthApi.bind(this), this.createUserForAccount.bind(this));
+        app.get(this.url('account/:id/users'), this.isAuthApi.bind(this), this.listUsersForAccount.bind(this));
     },
 
     getUser: function(req, resp) {
@@ -65,6 +67,50 @@ _.extend(api.prototype, baseApi.prototype, {
 
     },
 
+    createUserForAccount: function(req, resp) {
+        var self = this;
+        self.log.debug('>> createUserForAccount');
+
+        var accountId = parseInt(req.params.id);
+        var username = req.body.username;
+        var password = req.body.password;
+        var email = req.body.username;
+        var roleAry = [];
+        if(req.body.roleAry) {
+            roleAry = req.body.roleAry.split(',');
+        }
+        var callingUser = parseInt(self.userId(req));
+        self._isAdmin(req, function(err, value) {
+            if (value !== true) {
+                return self.send403(resp);
+            } else {
+                userManager.createUser(accountId, username, password, email, roleAry, callingUser, function(err, user){
+                    self.log.debug('<< createUserForAccount');
+                    return self.sendResultOrError(resp, err, user, 'Error creating user', null);
+                });
+            }
+        });
+
+    },
+
+    listUsersForAccount: function(req, resp) {
+        var self = this;
+        self.log.debug('>> listUsersForAccount');
+
+        var accountId = parseInt(req.params.id);
+
+        self._isAdmin(req, function(err, value) {
+            if (value !== true) {
+                return self.send403(resp);
+            } else {
+                userManager.getUserAccounts(accountId, function(err, users){
+                    self.log.debug('<< listUsersForAccount');
+                    return self.sendResultOrError(resp, err, users, 'Error listing users', null);
+                });
+            }
+        });
+    },
+
     /**
      *
      * @param req
@@ -83,4 +129,3 @@ _.extend(api.prototype, baseApi.prototype, {
 });
 
 module.exports = new api();
-
