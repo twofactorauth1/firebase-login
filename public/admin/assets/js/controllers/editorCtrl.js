@@ -97,21 +97,20 @@
             post_data.post_tags[i] = v.text;
           }
         });
-        WebsiteService.getSinglePost(post_data.post_url, function (data) {
-          if (data && data._id) {
-            if (data._id !==  post_data._id) {
+        WebsiteService.getSinglePost(post_data.post_url, function (data) {          
+            if (data && data._id && data._id !==  post_data._id) {
               $scope.saveLoading = false;
               toaster.pop('error', "Post URL " + post_data.post_url, "Already exists");
             } else {
                WebsiteService.updatePost($scope.page._id, post_data._id, post_data, function (data) {
                 if (post_data.post_url !== $scope.originalPost.post_url) {
+                  angular.copy(post_data, $scope.originalPost);
                   $location.search('posthandle', post_data.post_url);
                 }
                 $scope.saveLoading = false;
                 toaster.pop('success', "Post Saved", "The " + $filter('htmlToPlaintext')($scope.blog.post.post_title) + " post was saved successfully.");
               });
-            }            
-          }
+            }
         })
        
       } else if ($scope.templateActive) {
