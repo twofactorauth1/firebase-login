@@ -622,7 +622,7 @@ app.constant('JS_REQUIRES', {
     files: ['../js/libs/ngImgCrop/compile/minified/ng-img-crop.js', '../js/libs/ngImgCrop/compile/minified/ng-img-crop.css']
   }, {
     name: 'angularFileUpload',
-    files: ['../js/libs/angular-file-upload/angular-file-upload.min.js']
+    files: ['../js/libs/angular-file-upload/dist/angular-file-upload.min.js']
   }, {
     name: 'infinite-scroll',
     files: ['../js/libs/ngInfiniteScroll/build/ng-infinite-scroll.min.js']
