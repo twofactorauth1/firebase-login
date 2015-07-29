@@ -31,12 +31,10 @@ app.directive('featureListComponent',["$window", function ($window) {
           }).get());
           element.css("min-height", maxFeatureHeight);
         }
-      }
-
+      };
       angular.element($window).bind('resize', function () {
         scope.resizeFeatureTiles();
       });
-
       angular.element(document).ready(function () {
         setTimeout(function () {
           scope.resizeFeatureTiles();

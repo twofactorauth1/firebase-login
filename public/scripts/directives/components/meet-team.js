@@ -14,17 +14,15 @@ app.directive('meetTeamComponent',["$window", function ($window) {
 		      }).get());
 		      element.css("min-height", maxTeamHeight);
 		    }
-		}
-			
+		};			
 		angular.element($window).bind('resize', function () {
-		scope.resizeTeamTiles();
-		})
-
+			scope.resizeTeamTiles();
+		});
 		angular.element(document).ready(function () {
 			setTimeout(function () {
 			  scope.resizeTeamTiles();
 			}, 500)
-		})
+		});
     }
   }
 }]);
