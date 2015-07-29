@@ -84,6 +84,10 @@ var account = $$.m.ModelBase.extend({
                 new_customer: true,
                 new_order: true
             },
+            commerceSettings : {
+                taxes : true,
+                taxbased : "business_location"
+            },
             created: {
                 date: new Date(),
                 by: null
