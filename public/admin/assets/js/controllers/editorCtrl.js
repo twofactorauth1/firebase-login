@@ -832,11 +832,8 @@
           }
         });
         WebsiteService.createPost($scope.page._id, post_data, function (data) {
-          $scope.duplicate = true; << << << < HEAD
-          $location.path('/website/posts/').search({
-            posthandle: newPost.post_url
-          }); === === =
-          $scope.checkForSaveBeforeLeave('/admin/#/website/posts/?posthandle=' + newPost.post_url, true); >>> >>> > origin / develop
+          $scope.duplicate = true;
+          $scope.checkForSaveBeforeLeave('/admin/#/website/posts/?posthandle=' + newPost.post_url, true);
         });
       });
     };
