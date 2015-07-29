@@ -965,6 +965,7 @@ div[data-type="feature-list"] .inner-page {
   margin: 10px;
   padding: 20px;
   transition: none!important;
+  width: 100%;
 }
 .feature-list-v3 .feature-single .feature-icon {
   font-size: 14em;

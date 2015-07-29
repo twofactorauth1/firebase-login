@@ -12818,8 +12818,7 @@ fieldset[disabled] .btn-vimeo-square.active {
   border: 2px solid transparent;
   clear: both;
 }
-#componentloader .fragment:hover .component-wrap,
-#componentloader .fragment:hover .component-hidden {
+#componentloader .fragment:hover .component-wrap.display-settings {
   margin-top: 0!important;
   margin-bottom: 0!important;
 }
@@ -13309,6 +13308,10 @@ ul.nav-bar {
 }
 #import-customer-modal .preview-customers .form-group {
   height: 34px;
+}
+#import-customer-modal .field-mapper .field-status {
+  height: 30px;
+  line-height: 45px;
 }
 .alert-dismissable .close,
 .alert-dismissible .close {
