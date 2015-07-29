@@ -12844,7 +12844,10 @@ fieldset[disabled] .btn-vimeo-square.active {
 .componentActions {
   position: relative;
   height: 56px;
-  background: #fff;
+  -webkit-box-shadow: inset 0px 0px 5px 0px rgba(0, 0, 0, 0.5);
+  -moz-box-shadow: inset 0px 0px 5px 0px rgba(0, 0, 0, 0.5);
+  box-shadow: inset 0px 0px 5px 0px rgba(0, 0, 0, 0.5);
+  background: #f1f1f1;
 }
 .componentActions span {
   padding: 20px;
