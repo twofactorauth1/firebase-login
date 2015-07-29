@@ -29,12 +29,12 @@ app.directive('contactUsComponent', ['AccountService', 'GeocodeService', 'leafle
         return 'rgba('+[(c>>16)&255, (c>>8)&255, c&255].join(',')+','+ opacity +')';
       };
       scope.$watch('component.boxColor', function (newValue, oldValue) {
-        if (newValue) {
+        if (newValue && scope.component.boxColor) {
           scope.boxColor = hexToRgb(scope.component.boxColor, scope.component.boxOpacity);
         }
       });
       scope.$watch('component.boxOpacity', function (newValue, oldValue) {
-        if (newValue) {
+        if (newValue && scope.component.boxColor) {
           scope.boxColor = hexToRgb(scope.component.boxColor, scope.component.boxOpacity);
         }
       });
