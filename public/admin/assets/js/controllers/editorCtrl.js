@@ -59,7 +59,7 @@
       }
       $timeout(function () {
         $(window).trigger('resize');
-      },0)
+      }, 0)
     };
 
     $scope.scrollToComponent = function (destIndex) {
@@ -99,21 +99,21 @@
         });
         WebsiteService.getSinglePost(post_data.post_url, function (data) {
           if (data && data._id) {
-            if (data._id !==  post_data._id) {
+            if (data._id !== post_data._id) {
               $scope.saveLoading = false;
               toaster.pop('error', "Post URL " + post_data.post_url, "Already exists");
             } else {
-               WebsiteService.updatePost($scope.page._id, post_data._id, post_data, function (data) {
+              WebsiteService.updatePost($scope.page._id, post_data._id, post_data, function (data) {
                 if (post_data.post_url !== $scope.originalPost.post_url) {
                   $location.search('posthandle', post_data.post_url);
                 }
                 $scope.saveLoading = false;
                 toaster.pop('success', "Post Saved", "The " + $filter('htmlToPlaintext')($scope.blog.post.post_title) + " post was saved successfully.");
               });
-            }            
+            }
           }
         })
-       
+
       } else if ($scope.templateActive) {
         WebsiteService.updateTemplate($scope.page._id, $scope.page, function () {
           console.log('success');
@@ -122,14 +122,14 @@
         });
       } else {
         //$scope.validateEditPage($scope.page);
-        
+
         $scope.checkForDuplicatePage(function () {
           if (!$scope.editPageValidated) {
-          $scope.saveLoading = false;
-          toaster.pop('error', "Page Title or URL can not be blank.");
+            $scope.saveLoading = false;
+            toaster.pop('error', "Page Title or URL can not be blank.");
             return false;
           }
-          if(!$scope.duplicateUrl)
+          if (!$scope.duplicateUrl)
             WebsiteService.updatePage($scope.page, function (data) {
               console.log($scope.page.handle, $scope.originalPage.handle);
               if ($scope.page.handle !== $scope.originalPage.handle) {
@@ -148,7 +148,7 @@
             });
           else
             $scope.saveLoading = false;
-        });        
+        });
       }
     };
 
@@ -299,14 +299,14 @@
     };
 
     /*
-   * @removeTemplateImage
-   * -
-   */
+     * @removeTemplateImage
+     * -
+     */
 
-  $scope.removeTemplateImage = function () {
-    console.log('remove template image');
-    $scope.page.previewUrl = null;
-  };
+    $scope.removeTemplateImage = function () {
+      console.log('remove template image');
+      $scope.page.previewUrl = null;
+    };
 
     /*
      * @calculateWindowHeight
@@ -635,7 +635,7 @@
     $scope.openSettingsModal = function () {
       if ($scope.single_post) {
         $scope.openSimpleModal("post-settings-modal");
-      } 
+      }
 
       if ($scope.activePage) {
         $scope.openSimpleModal("page-settings-modal");
@@ -656,7 +656,7 @@
         $scope.openSimpleModal("post-duplicate-modal");
       } else {
         $scope.duplicate_type = "Page";
-        if($scope.emailPage)
+        if ($scope.emailPage)
           $scope.duplicate_type = "Email";
         $scope.openSimpleModal("page-duplicate-modal");
       }
@@ -669,7 +669,7 @@
 
     $scope.checkForDuplicatePage = function (fn) {
       $scope.validateEditPage($scope.page);
-      if($scope.editPageValidated)
+      if ($scope.editPageValidated)
         WebsiteService.getSinglePage($scope.page.handle, function (data) {
           if (data && data._id) {
             if (data._id !== $scope.page._id) {
@@ -677,14 +677,14 @@
               toaster.pop('error', "Page URL " + $scope.page.handle, "Already exists");
             } else {
               $scope.duplicateUrl = false;
-            }            
+            }
           }
-          if(fn)
+          if (fn)
             fn();
         });
       else
-        if(fn)
-          fn();
+      if (fn)
+        fn();
     };
 
     /*
@@ -747,7 +747,7 @@
     });
 
     $scope.createDuplicatePage = function (newPage) {
-      if($scope.emailPage)
+      if ($scope.emailPage)
         newPage.type = "email";
 
       $scope.validateNewPage(newPage);
@@ -763,8 +763,8 @@
         newPage.components = $scope.page.components;
         WebsiteService.createDuplicatePage(newPage, function (data) {
           $scope.duplicate = true;
-          if($scope.emailPage)
-            $scope.checkForSaveBeforeLeave('/admin/#/editor?email=' + newPage.handle, true);            
+          if ($scope.emailPage)
+            $scope.checkForSaveBeforeLeave('/admin/#/editor?email=' + newPage.handle, true);
           else
             $scope.checkForSaveBeforeLeave('/admin/#/website/pages/?pagehandle=' + newPage.handle, true);
         });
@@ -818,7 +818,9 @@
         });
         WebsiteService.createPost($scope.page._id, post_data, function (data) {
           $scope.duplicate = true;
-          $location.path('/website/posts/').search({posthandle: newPost.post_url});
+          $location.path('/website/posts/').search({
+            posthandle: newPost.post_url
+          });
         });
       });
     };
@@ -1000,7 +1002,7 @@
                 window.location = '/admin/#/website/posts';
               }, 500);
             });
-            
+
           } else {
             SweetAlert.swal("Cancelled", "Post not deleted.", "error");
           }
@@ -1040,16 +1042,15 @@
       toaster.pop('success', "Component Added", "The " + newComponent.type + " component was added successfully.");
     };
 
-    $scope.addUnderNavSetting = function(fn)
-    {
+    $scope.addUnderNavSetting = function (fn) {
       $scope.allowUndernav = false;
       $scope.components.forEach(function (value, index) {
         if (value && value.type === 'masthead') {
-            if (index != 0 && $scope.components[index - 1].type == "navigation") {
-              $scope.allowUndernav = true;              
-            } else
-              $scope.allowUndernav = false;
-          }
+          if (index != 0 && $scope.components[index - 1].type == "navigation") {
+            $scope.allowUndernav = true;
+          } else
+            $scope.allowUndernav = false;
+        }
       })
       fn($scope.allowUndernav);
     }
