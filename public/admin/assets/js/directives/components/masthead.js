@@ -34,21 +34,29 @@ app.directive('mastheadComponent',["$window", function ($window) {
         setTimeout(function () {
           if (scope.addUndernavClasses && scope.allowUndernav) {
             var navHeight = angular.element("#bs-example-navbar-collapse-1").height();
-            var margin = 200 + navHeight;
+            var margin = 270 + navHeight;
+            var impmargin = "margin-top: -"+ margin + 'px !important'; 
             if (angular.element(".undernav200")) {
-              angular.element(".undernav200").css("margin-top", -margin);
+              angular.element(".undernav200").attr('style',impmargin);
+              angular.element(".undernav200").css("background", 'transparent');
+            }
+            if (angular.element(".undernav")) {
+              angular.element(".undernav").css("background", 'transparent');
+              angular.element(".undernav").css("z-index", 11);
             }
 
             if (angular.element(".mastHeadUndernav"))
-              angular.element(".mastHeadUndernav").css("height", margin);
+              angular.element(".mastHeadUndernav").css("height", 0);
+            //if (angular.element(".masthead-actions"))
+              //angular.element(".masthead-actions").css("margin-top", margin - 4);
             if (angular.element(".masthead-actions"))
-              angular.element(".masthead-actions").css("margin-top", margin - 4);
+              angular.element(".masthead-actions").css("z-index", 11);
 
           } else {
             if (angular.element(".undernav200"))
-              angular.element(".undernav200").css("margin-top", 0);
-            if (angular.element(".masthead-actions"))
-              angular.element(".masthead-actions").css("margin-top", 0);
+              angular.element(".undernav200").attr('style',"margin-top:0px!important");
+            //if (angular.element(".masthead-actions"))
+             // angular.element(".masthead-actions").css("margin-top", 0);
           }
 
         }, 300);
