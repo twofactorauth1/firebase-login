@@ -89,6 +89,7 @@ app.controller('MediaModalCtrl', ['$scope', '$modalInstance', '$http', '$timeout
 
   uploader.onSuccessItem = function (fileItem, response, status, headers) {
     $scope.uploadComplete = false;
+    $scope.selectModel.select_all = false;
     response.files[0].filename = fileItem.file.name;
     response.files[0].mimeType = fileItem.file.type;
     $scope.originalAssets.push(response.files[0]);
@@ -266,6 +267,7 @@ app.controller('MediaModalCtrl', ['$scope', '$modalInstance', '$http', '$timeout
         ToasterService.show('success', 'Image(s) deleted');
       }
       $scope.selectModel.select_all = false;
+      $scope.singleSelected = false;
     });
   };
 

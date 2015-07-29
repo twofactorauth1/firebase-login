@@ -1,7 +1,7 @@
 'use strict';
 /*global app, moment, angular, window*/
 /*jslint unparam:true*/
-app.directive('meetTeamComponent', function () {
+app.directive('meetTeamComponent',["$window", function ($window) {
   return {
     scope: {
       component: '=',
@@ -48,6 +48,23 @@ app.directive('meetTeamComponent', function () {
         scope.component.teamMembers.splice(index + 1, 0, newTeam);
       };
 
+      scope.resizeTeamTiles = function (argument) {
+        var element = angular.element("#"+scope.component._id + " div.meet-team-height")
+        if (element && element.length) {
+          var maxTeamHeight = Math.max.apply(null, element.map(function () {
+            return this.offsetHeight;
+          }).get());
+          element.css("min-height", maxTeamHeight);
+        }
+      };
+      angular.element($window).bind('resize', function () {
+        scope.resizeTeamTiles();
+      });
+      angular.element(document).ready(function () {
+        setTimeout(function () {
+          scope.resizeTeamTiles();
+        }, 500)
+      });
     }
   };
-});
+}]);

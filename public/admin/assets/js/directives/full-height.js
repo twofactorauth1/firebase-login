@@ -63,7 +63,8 @@ function ($window, $rootScope, $timeout, mq) {
                             page = $win;
                         }
                         $(elem).css('height', page.innerHeight() - exclusionHeight);
-                        $(elem).css('overflow', 'auto');
+                        if(attrs.dataCtOverflow)
+                            $(elem).css('overflow', 'auto');
                     }
                 }, 300);
             };
