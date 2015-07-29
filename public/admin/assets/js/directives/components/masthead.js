@@ -23,15 +23,7 @@ app.directive('mastheadComponent',["$window", function ($window) {
       });
 
       angular.element($window).bind('resize', function () {
-        scope.setUnderbnavMargin();
-        for (var i = 0; i <= 3; i++) {
-          if ($("div.feature-height-" + i).length) {
-            var maxFeatureHeight = Math.max.apply(null, $("div.feature-height-" + i).map(function () {
-              return $(this).height();
-            }).get());
-            $("div.feature-height-" + i + " .feature-single").css("min-height", maxFeatureHeight - 20);
-          }
-        }
+        scope.setUnderbnavMargin();        
       });
       scope.setUnderbnavMargin = function () {
         scope.allowUndernav = false;
