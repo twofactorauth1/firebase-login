@@ -9,6 +9,8 @@ app.controller('ImportCustomerModalCtrl', ['$scope', '$timeout', 'FileUploader',
 
   editableOptions.theme = 'bs3';
 
+  $scope.showCSVUpload = false;
+
   /*
    * @closeModal
    * -
@@ -87,16 +89,16 @@ app.controller('ImportCustomerModalCtrl', ['$scope', '$timeout', 'FileUploader',
    * - filters for the fileuploader
    */
 
-  uploader.filters.push({
-    name: 'csvFilter',
-    fn: function (item) {
-      if (/\/(csv)$/.test(item.type) === true) {
-        return true;
-      }
-      $scope.fileTypeError = 'Incorrect filetype';
-      return false;
-    }
-  });
+  // uploader.filters.push({
+  //   name: 'csvFilter',
+  //   fn: function (item) {
+  //     if (/\/(csv)$/.test(item.type) === true) {
+  //       return true;
+  //     }
+  //     $scope.fileTypeError = 'Incorrect filetype';
+  //     return false;
+  //   }
+  // });
 
   /*
    * @onAfterAddingFile
@@ -585,6 +587,7 @@ app.controller('ImportCustomerModalCtrl', ['$scope', '$timeout', 'FileUploader',
    */
 
   $scope.csvUploaded = function (files) {
+    $scope.incorrectFileType = false;
     if (files[0].type === 'text/csv' || files[0].type === 'application/vnd.ms-excel') {
       startUpload = new Date();
       $scope.fileName = files[0].name;
@@ -625,7 +628,9 @@ app.controller('ImportCustomerModalCtrl', ['$scope', '$timeout', 'FileUploader',
         Papa.parse(files[0], config);
       }, 1000);
     } else {
-      console.log('Incorrect filetype');
+      console.log('files ', files[0].type, files[0].name);
+      $scope.incorrectFileType = true;
+      $scope.incorrectFile = files[0];
     }
   };
 
