@@ -11,8 +11,10 @@ app.directive('testimonialsComponent', ['$timeout', function ($timeout) {
     link: function (scope, element, attrs) {
       scope.autoplay = false;
       scope.isEditing = true;
-      $timeout(function () {
-        scope.dataLoaded = true;
+      $(document).ready(function () {
+        $timeout(function () {
+          scope.dataLoaded = true;
+        },1000);
       });
       scope.deleteTestimonial = function (index) {
         scope.dataLoaded = false;
