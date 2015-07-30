@@ -12813,6 +12813,7 @@ fieldset[disabled] .btn-vimeo-square.active {
 }
 #componentloader .fragment .component-inner {
   border: 2px solid transparent;
+  clear: both;
 }
 #componentloader .fragment:hover .component-wrap.display-settings {
   margin-top: 0!important;
@@ -12824,6 +12825,14 @@ fieldset[disabled] .btn-vimeo-square.active {
 #componentloader .fragment:hover .add-component {
   display: block;
   visibility: visible;
+}
+#componentloader .fragment:hover .add-component-container {
+  position: relative;
+  z-index: 11;
+  display: block;
+}
+#componentloader .fragment:hover .hover-action {
+  z-index: 11;
 }
 #componentloader .fragment.ng-enter {
   -webkit-animation: bounceIn 1s;
@@ -13147,6 +13156,10 @@ ul.nav-bar {
 }
 .pac-container {
   z-index: 10020 !important;
+}
+.nav-undernav {
+  background: transparent !important;
+  z-index: 11 !important;
 }
 /* ---------------------------------------------------------------------- */
 /*  Billing

@@ -40,23 +40,23 @@ app.directive('mastheadComponent',["$window", function ($window) {
               angular.element(".undernav200").attr('style',impmargin);
               angular.element(".undernav200").css("background", 'transparent');
             }
-            if (angular.element(".undernav")) {
-              angular.element(".undernav").css("background", 'transparent');
-              angular.element(".undernav").css("z-index", 11);
-            }
+            
+            angular.element(".undernav").addClass("nav-undernav");
 
             if (angular.element(".mastHeadUndernav"))
               angular.element(".mastHeadUndernav").css("height", 0);
-            //if (angular.element(".masthead-actions"))
-              //angular.element(".masthead-actions").css("margin-top", margin - 4);
-            if (angular.element(".masthead-actions"))
-              angular.element(".masthead-actions").css("z-index", 11);
+            if (angular.element(".masthead-actions")){
+              angular.element(".masthead-actions").addClass("hover-action");
+              //angular.element(".masthead-actions").css("margin-top", 56);
+            }
+              
 
           } else {
             if (angular.element(".undernav200"))
-              angular.element(".undernav200").attr('style',"margin-top:0px!important");
-            //if (angular.element(".masthead-actions"))
-             // angular.element(".masthead-actions").css("margin-top", 0);
+              angular.element(".undernav200").attr('style',"margin-top:0px");
+            if (angular.element(".masthead-actions"))
+              angular.element(".masthead-actions").removeClass("hover-action");
+            angular.element(".undernav").removeClass("nav-undernav");
           }
 
         }, 300);

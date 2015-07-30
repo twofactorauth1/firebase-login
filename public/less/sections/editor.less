@@ -429,6 +429,7 @@ fieldset[disabled] .btn-vimeo-square.active {
         display: block;
         .component-inner {
             border: 2px solid transparent;
+            clear: both;
         }
         &:hover {
             .component-wrap.display-settings {
@@ -441,6 +442,14 @@ fieldset[disabled] .btn-vimeo-square.active {
             .add-component {
                 display: block;
                 visibility: visible;
+            }
+            .add-component-container {
+                position: relative;
+                z-index: 11;
+                display: block;
+            }
+            .hover-action {
+                z-index: 11;
             }
         }
         &.ng-enter {
@@ -810,4 +819,8 @@ ul.nav-bar {
 
 .pac-container {
     z-index: 10020 !important;
+}
+.nav-undernav {
+    background: transparent !important;
+    z-index: 11 !important;
 }
