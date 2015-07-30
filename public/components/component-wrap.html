@@ -11,7 +11,7 @@
     <div class="component {{component.type}}{{component._id}}">
         <div id="{{component.anchor || component._id}}" ng-style="{'color':component.txtcolor||primaryTextColor}">
             <div ng-if="!component.bg.img.url && component.type != 'email'" ng-style="{'background': component.bg.color, 'color':component.txtcolor||primaryTextColor}">
-                <div ng-class="{'component-inner': component.type != 'footer'}">
+                <div style="clear: both;" ng-class="{'component-inner': component.type != 'footer'}">
                     <div class="container inner-page" ng-if="component.type != 'single-post' && component.type != 'blog' && component.type != 'navigation' && component.type != 'footer' && component.type != 'contact-us'  && component.type != 'top-bar' && component.type != 'payment-form'">
                         <div data-ng-include data-src="'/components/'+component.type+'_v'+component.version+'.html'"></div>
                     </div>
