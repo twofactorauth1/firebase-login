@@ -12746,9 +12746,6 @@ fieldset[disabled] .btn-vimeo-square.active {
   padding: 0;
   overflow: hidden;
 }
-.component-sortable li {
-  list-style-type: none;
-}
 .component-sortable .componentActions span.fa {
   padding: 10px;
   text-align: center;
