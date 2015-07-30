@@ -16,6 +16,10 @@ app.directive('productsComponent', ['paymentService', 'productService', 'account
       //assign and hold the currentProductPage for pagination
       scope.currentProductPage = 1;
 
+      // initializations
+      scope.showTax = true;
+      scope.showNotTaxed = false; // Some items are not taxed when summing
+
       /*
        * @filterTags
        * - if component has tags filter them or return the _product
@@ -435,7 +439,11 @@ app.directive('productsComponent', ['paymentService', 'productService', 'account
             if (scope.taxPercent === 0) {
               scope.taxPercent = 1;
             }
-            _totalTax += parseFloat((item.regular_price * scope.taxPercent) / 100) * item.quantity;
+            _totalTax += (item.regular_price * parseFloat(scope.taxPercent) / 100) * item.quantity;
+          }
+
+          if(!item.taxable) {
+            scope.showNotTaxed = true;
           }
         });
         scope.subTotal = _subTotal;

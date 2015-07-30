@@ -369,9 +369,6 @@ fieldset[disabled] .btn-vimeo-square.active {
 .component-sortable {
     padding: 0;
     overflow: hidden;
-    li {
-        list-style-type: none;
-    }
     .componentActions {
         span.fa {
             padding: 10px;
@@ -437,6 +434,14 @@ fieldset[disabled] .btn-vimeo-square.active {
             .add-component {
                 display: block;
                 visibility: visible;
+            }
+            .add-component-container {
+                position: relative;
+                z-index: 11;
+                display: block;
+            }
+            .hover-action {
+                z-index: 11;
             }
         }
         &.ng-enter {
@@ -836,4 +841,9 @@ div[class^="spacing-"] {
 
 .spacing-pt {
     margin: -30px auto 15px;
+}
+
+.nav-undernav {
+    background: transparent !important;
+    z-index: 11 !important;
 }

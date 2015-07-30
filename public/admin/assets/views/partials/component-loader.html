@@ -20,7 +20,7 @@
             </div>
             <div ng-include=" '../components/component-switch.html' "></div>
             <div ng-class="{'zee-blur': !value.visibility}"></div>
-            <div ng-if="(!preDragging && !isSinglePost && value.type != 'email' && value.type != 'footer' && components.length >= 1) || (value.type == 'footer' && components.length == 1)" >
+            <div ng-class="{'add-component-container':value.type == 'navigation'}" ng-if="(!preDragging && !isSinglePost && value.type != 'email' && value.type != 'footer' && components.length >= 1) || (value.type == 'footer' && components.length == 1)" >
                 <div class="add-new-component add-component" ng-click="openModal('add-component-modal', 'AddComponentModalCtrl', $index)">
                     <i class="fa fa-plus"></i>
                     <p>Add New</p>

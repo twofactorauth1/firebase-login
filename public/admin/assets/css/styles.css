@@ -12746,9 +12746,6 @@ fieldset[disabled] .btn-vimeo-square.active {
   padding: 0;
   overflow: hidden;
 }
-.component-sortable li {
-  list-style-type: none;
-}
 .component-sortable .componentActions span.fa {
   padding: 10px;
   text-align: center;
@@ -12814,6 +12811,14 @@ fieldset[disabled] .btn-vimeo-square.active {
 #componentloader .fragment:hover .add-component {
   display: block;
   visibility: visible;
+}
+#componentloader .fragment:hover .add-component-container {
+  position: relative;
+  z-index: 11;
+  display: block;
+}
+#componentloader .fragment:hover .hover-action {
+  z-index: 11;
 }
 #componentloader .fragment.ng-enter {
   -webkit-animation: bounceIn 1s;
@@ -13147,6 +13152,7 @@ ul.nav-bar {
 .pac-container {
   z-index: 10020 !important;
 }
+<<<<<<< HEAD
 div[class^="spacing-"] {
   width: 60px;
 }
@@ -13165,6 +13171,11 @@ div[class^="spacing-"] {
 }
 .spacing-pt {
   margin: -30px auto 15px;
+=======
+.nav-undernav {
+  background: transparent !important;
+  z-index: 11 !important;
+>>>>>>> origin/develop
 }
 /* ---------------------------------------------------------------------- */
 /*  Billing
