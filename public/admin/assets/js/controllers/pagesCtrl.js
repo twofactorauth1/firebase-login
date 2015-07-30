@@ -141,6 +141,7 @@
     };
 
     $scope.createPageFromTemplate = function (page, $event) {
+      $scope.saveLoading = true;
       $scope.validateCreatePage(page, true);
 
       $scope.titleError = false;
@@ -148,6 +149,7 @@
       if (!$scope.createPageValidated) {
         $scope.titleError = true;
         $scope.handleError = true;
+        $scope.saveLoading = false;
         return false;
       }
 
@@ -174,6 +176,7 @@
           var newpage = angular.copy(_newPage);
           toaster.pop('success', 'Page Created', 'The ' + newpage.title + ' page was created successfully.');
           $scope.minRequirements = true;
+          $scope.saveLoading = false;
           $scope.closeModal();
 
           if (newpage.components) {
@@ -198,6 +201,7 @@
         toaster.pop('error', "Page URL " + page.handle, "Already exists");
         $event.preventDefault();
         $event.stopPropagation();
+        $scope.saveLoading = false;
       }
     };
 
