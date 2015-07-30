@@ -9,12 +9,14 @@ app.directive('showSettings', ['$timeout', function ($timeout) {
       var promise;
       elem.on('mouseenter', function () {
         promise = $timeout(function () {
-          elem.find('.component-wrap').addClass('display-settings');
+          elem.find('.componentActions').addClass('display-settings');
+          elem.find('.add-component').addClass('display-settings');
         }, 800);
       });
       elem.on('mouseleave', function () {
         $timeout.cancel(promise);
-        elem.find('.component-wrap').removeClass('display-settings');
+        elem.find('.componentActions').removeClass('display-settings');
+        elem.find('.add-component').removeClass('display-settings');
       });
     }
   };

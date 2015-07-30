@@ -186,18 +186,28 @@ hr {
 }
 .add-component {
   font-size: 50px;
-  padding: 20px 20px 15px;
-  color: #444;
+  padding: 0px;
+  color: #fff;
   font-size: 20px;
   cursor: pointer;
   left: 45%;
   z-index: 5;
-  padding: 5px 15px;
   text-align: center;
-  -webkit-box-shadow: inset 0px 0px 5px 0px rgba(0, 0, 0, 0.5);
-  -moz-box-shadow: inset 0px 0px 5px 0px rgba(0, 0, 0, 0.5);
-  box-shadow: inset 0px 0px 5px 0px rgba(0, 0, 0, 0.5);
-  background: #f1f1f1;
+  -webkit-box-shadow: inset 0px 0px 5px 0px rgba(255, 255, 255, 0.5);
+  -moz-box-shadow: inset 0px 0px 5px 0px rgba(255, 255, 255, 0.5);
+  box-shadow: inset 0px 0px 5px 0px rgba(255, 255, 255, 0.5);
+  background: #efa022;
+  max-height: 0px;
+  overflow: hidden;
+  -webkit-transition: max-height 0.5s;
+  -moz-transition: max-height 0.5s;
+  -ms-transition: max-height 0.5s;
+  -o-transition: max-height 0.5s;
+}
+.add-component.display-settings {
+  max-height: 56px;
+  padding: 10px 0;
+  line-height: 18px;
 }
 .add-component p {
   margin-bottom: 0;
@@ -260,9 +270,6 @@ hr {
 .no-component {
   display: block;
   visibility: visible;
-}
-.component-inner {
-  padding: 2px;
 }
 ol.circles-list {
   list-style-type: none;
@@ -548,7 +555,7 @@ div[data-type='campaign'] .inner-page .overlay {
 }
 .inner-page {
   padding: 50px 0;
-  max-width: 1000px!important;
+  max-width: 1000px;
   margin: 0 auto;
   display: block;
 }

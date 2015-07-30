@@ -260,6 +260,83 @@
                         </div>
                     </div>
                 </tab>
+                <tab>
+                    <tab-heading>
+                        <span>Spacing</span>
+                    </tab-heading>
+                    <div class="form-group">
+                        <label>Custom Spacing:</label>
+                        <span tooltip-placement="top" tooltip-html-unsafe="Use Page Settings for Spacing Settings"><i class="fa fa-info-circle" /></span>
+                        <switch ng-model="componentEditing.spacing.page" class="pull-right"></switch>
+                        <span class="help-block">Spacing will inherit page spacing unless switched on.</span>
+                    </div>
+                    <div class="form-group">
+                        <label>Max Width</label>
+                        <ui-select ng-model="componentEditing.spacing.mw" theme="bootstrap" ng-disabled="!componentEditing.spacing.page">
+                            <ui-select-match placeholder="Select a Resolution">
+                                <small ng-bind-html="$select.selected"></small>
+                            </ui-select-match>
+                            <ui-select-choices repeat="res in resolutions | filter: $select.search track by $index">
+                                <small ng-bind-html="res | highlight: $select.search"></small>
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                    <div class="well margin-bottom-0 partition-light-primary">
+                        <label class="text-white lead">Margin</label>
+                        <div class="spacing-mt">
+                            <input type="text" ng-model="componentEditing.spacing.mt" touchspin data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down" ng-disabled="!componentEditing.spacing.page">
+                        </div>
+                        <div class="col-xs-2">
+                            <div class="spacing-ml">
+                                <input type="text" ng-model="componentEditing.spacing.ml" touchspin data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down" ng-disabled="!componentEditing.spacing.page">
+                                <div class="checkbox clip-check check-primary checkbox-inline">
+                                    <input type="checkbox" id="margin-left" ng-model="componentEditing.spacing.ml" ng-true-value="'auto'" ng-false-value="'0'" ng-disabled="!componentEditing.spacing.page">
+                                    <label for="margin-left" class="text-white">
+                                        Auto
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-8">
+                            <div class="well partition-dark-primary">
+                                <label class="text-white lead">Padding</label>
+                                <div class="spacing-pt">
+                                    <input type="text" ng-model="componentEditing.spacing.pt" touchspin data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down" ng-disabled="!componentEditing.spacing.page">
+                                </div>
+                                <div class="col-xs-6">
+                                    <div class="spacing-pl">
+                                        <input type="text" ng-model="componentEditing.spacing.pl" touchspin data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down" ng-disabled="!componentEditing.spacing.page">
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <div class="spacing-pr">
+                                        <input type="text" ng-model="componentEditing.spacing.pr" touchspin data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down" ng-disabled="!componentEditing.spacing.page">
+                                    </div>
+                                </div>
+                                <div class="clearfix margin-bottom-15"></div>
+                                <div class="spacing-pb">
+                                    <input type="text" ng-model="componentEditing.spacing.pb" touchspin data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down" ng-disabled="!componentEditing.spacing.page">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-2">
+                            <div class="spacing-mr">
+                                <input type="text" ng-model="componentEditing.spacing.mr" touchspin data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down" ng-disabled="!componentEditing.spacing.page">
+                                <div class="checkbox clip-check check-primary checkbox-inline">
+                                    <input type="checkbox" id="margin-right" ng-model="componentEditing.spacing.mr" ng-true-value="'auto'" ng-false-value="'0'" ng-disabled="!componentEditing.spacing.page">
+                                    <label class="text-white" for="margin-right">
+                                        Auto
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="spacing-mb">
+                            <input type="text" ng-model="componentEditing.spacing.mb" touchspin data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down" ng-disabled="!componentEditing.spacing.page">
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </tab>
                 <tab ng-if="!isSinglePost">
                     <tab-heading>
                         <span>Advanced</span>
@@ -580,17 +657,16 @@
                     <tab-heading>
                         <span>Address</span>
                     </tab-heading>
-                     <div class="form-group" ng-class="{'has-error':errorMapData}">
+                    <div class="form-group" ng-class="{'has-error':errorMapData}">
                         <label for="location-address">Address Suggestions</label>
                         <span tooltip-placement="top" tooltip-html-unsafe="Address Suggestions"><i class="fa fa-info-circle" /></span>
                         <input id="autocomplete-place" class="form-control" g-places-autocomplete ng-model="place.address">
                     </div>
-
                     <div class="form-group" ng-class="{'has-error':errorMapData}">
                         <label for="location-address">Address </label>
                         <span tooltip-placement="top" tooltip-html-unsafe="Contact Us address line 1."><i class="fa fa-info-circle" /></span>
                         <input id="location-address" class="form-control" ng-model="componentEditing.location.address" ng-blur="updateContactUsAddress()">
-                    </div>                     
+                    </div>
                     <div class="form-group" ng-class="{'has-error':errorMapData}">
                         <label for="location-address2">Address2 </label>
                         <span tooltip-placement="top" tooltip-html-unsafe="Contact Us address line 2."><i class="fa fa-info-circle" /></span>
@@ -665,22 +741,22 @@
                                 <span tooltip-placement="top" tooltip-html-unsafe="Title of the Email"><i class="fa fa-info-circle" /></span>
                                 <input class="form-control" type="text" ng-model="componentEditing.emailSubject">
                             </div>
-                             <div class="form-group margin-bottom-0">
-                                    <label for="link-page">Select Email</label>
-                                    <div ng-if="emails">
-                                        <ui-select ng-model="componentEditing.emailId" theme="bootstrap">
-                                            <ui-select-match placeholder="Select a email">
-                                                <small ng-bind-html="$select.selected.title"></small>
-                                            </ui-select-match>
-                                            <ui-select-choices repeat="email._id as email in emails | filter: $select.search track by $index">
-                                                <small ng-bind-html="email.title | highlight: $select.search"></small>
-                                            </ui-select-choices>
-                                        </ui-select>
-                                    </div>
-                                    <div ng-if="!emails">
-                                        <h4><span class="fa fa-spinner fa-spin"></span> Loading Emails...</h4>
-                                    </div>
+                            <div class="form-group margin-bottom-0">
+                                <label for="link-page">Select Email</label>
+                                <div ng-if="emails">
+                                    <ui-select ng-model="componentEditing.emailId" theme="bootstrap">
+                                        <ui-select-match placeholder="Select a email">
+                                            <small ng-bind-html="$select.selected.title"></small>
+                                        </ui-select-match>
+                                        <ui-select-choices repeat="email._id as email in emails | filter: $select.search track by $index">
+                                            <small ng-bind-html="email.title | highlight: $select.search"></small>
+                                        </ui-select-choices>
+                                    </ui-select>
                                 </div>
+                                <div ng-if="!emails">
+                                    <h4><span class="fa fa-spinner fa-spin"></span> Loading Emails...</h4>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="well margin-bottom-0">

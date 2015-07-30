@@ -1511,7 +1511,7 @@ ul.sub-menu li ul.sub-menu li ul.sub-menu li a {
   position: relative;
 }
 .main-content .container {
-  max-width: none !important;
+  max-width: none;
   width: 100% !important;
   display: inline-block;
 }
@@ -12791,14 +12791,8 @@ fieldset[disabled] .btn-vimeo-square.active {
   font-family: inherit;
 }
 #componentloader .component-wrap {
-  margin-top: -56px !important;
-  margin-bottom: -58px !important;
   background: #f1f1f1;
   z-index: 10;
-  -webkit-transition: margin 0.5s;
-  -moz-transition: margin 0.5s;
-  -ms-transition: margin 0.5s;
-  -o-transition: margin 0.5s;
 }
 #componentloader .component-wrap-post {
   margin-bottom: 0px!important;
@@ -12815,15 +12809,7 @@ fieldset[disabled] .btn-vimeo-square.active {
   display: block;
 }
 #componentloader .fragment .component-inner {
-  border: 2px solid transparent;
   clear: both;
-}
-#componentloader .fragment:hover .component-wrap.display-settings {
-  margin-top: 0!important;
-  margin-bottom: 0!important;
-}
-#componentloader .fragment:hover .component-inner {
-  border: 2px dashed #34495e;
 }
 #componentloader .fragment:hover .add-component {
   display: block;
@@ -12843,17 +12829,26 @@ fieldset[disabled] .btn-vimeo-square.active {
 }
 .componentActions {
   position: relative;
-  height: 56px;
-  -webkit-box-shadow: inset 0px 0px 5px 0px rgba(0, 0, 0, 0.5);
-  -moz-box-shadow: inset 0px 0px 5px 0px rgba(0, 0, 0, 0.5);
-  box-shadow: inset 0px 0px 5px 0px rgba(0, 0, 0, 0.5);
-  background: #f1f1f1;
+  max-height: 0px;
+  -webkit-box-shadow: inset 0px 0px 5px 0px rgba(255, 255, 255, 0.5);
+  -moz-box-shadow: inset 0px 0px 5px 0px rgba(255, 255, 255, 0.5);
+  box-shadow: inset 0px 0px 5px 0px rgba(255, 255, 255, 0.5);
+  background: #efa022;
+  color: white;
+  overflow: hidden;
+  -webkit-transition: max-height 0.5s;
+  -moz-transition: max-height 0.5s;
+  -ms-transition: max-height 0.5s;
+  -o-transition: max-height 0.5s;
 }
 .componentActions span {
   padding: 20px;
-  color: #444;
+  color: #fff;
   font-size: 20px;
   cursor: pointer;
+}
+.componentActions.display-settings {
+  max-height: 56px;
 }
 .componentActions .reorder {
   float: left;
@@ -13151,6 +13146,25 @@ ul.nav-bar {
 }
 .pac-container {
   z-index: 10020 !important;
+}
+div[class^="spacing-"] {
+  width: 60px;
+}
+.spacing-mt {
+  margin: -30px auto 15px;
+}
+.spacing-mr,
+.spacing-ml {
+  margin: 65px auto 0;
+}
+.spacing-mb,
+.spacing-pr,
+.spacing-pl,
+.spacing-pb {
+  margin: 0 auto 0;
+}
+.spacing-pt {
+  margin: -30px auto 15px;
 }
 /* ---------------------------------------------------------------------- */
 /*  Billing

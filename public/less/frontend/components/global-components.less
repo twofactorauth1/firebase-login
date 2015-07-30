@@ -131,16 +131,23 @@ hr {
 
 .add-component {
     font-size: 50px;
-    padding: 20px 20px 15px;
-    color: #444;
+    padding: 0px;
+    color: #fff;
     font-size: 20px;
     cursor: pointer;
     left: 45%;
     z-index: 5;
-    padding: 5px 15px;
     text-align: center;
-    .box-shadow(inset 0px 0px 5px 0px rgba(0, 0, 0, 0.5));
-    background: #f1f1f1;
+    .box-shadow(inset 0px 0px 5px 0px rgba(255, 255, 255, 0.5));
+    background: #efa022;
+    max-height: 0px;
+    overflow: hidden;
+    .transition(max-height .5s);
+    &.display-settings {
+        max-height: 56px;
+        padding: 10px 0;
+        line-height: 18px;
+    }
     p {
         margin-bottom: 0;
         font-size: 14px;
@@ -202,10 +209,6 @@ hr {
 .no-component {
     display: block;
     visibility: visible;
-}
-
-.component-inner {
-    padding: 2px;
 }
 
 ol.circles-list {

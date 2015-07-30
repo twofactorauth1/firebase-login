@@ -412,11 +412,8 @@ fieldset[disabled] .btn-vimeo-square.active {
         font-family: inherit;
     }
     .component-wrap {
-        margin-top: -56px!important;
-        margin-bottom: -58px!important;
         background: #f1f1f1;
         z-index: 10;
-        .transition(margin .5s);
     }
     .component-wrap-post {
         margin-bottom: 0px!important;
@@ -430,16 +427,12 @@ fieldset[disabled] .btn-vimeo-square.active {
         border: none;
         display: block;
         .component-inner {
-            border: 2px solid transparent;
+            // border: 2px solid transparent;
             clear: both;
         }
         &:hover {
-            .component-wrap.display-settings {
-                margin-top: 0!important;
-                margin-bottom: 0!important;
-            }
             .component-inner {
-                border: 2px dashed #34495e;
+                // border: 2px dashed #34495e;
             }
             .add-component {
                 display: block;
@@ -457,14 +450,20 @@ fieldset[disabled] .btn-vimeo-square.active {
 
 .componentActions {
     position: relative;
-    height: 56px;
-    .box-shadow(inset 0px 0px 5px 0px rgba(0, 0, 0, 0.5));
-    background: #f1f1f1;
+    max-height: 0px;
+    .box-shadow(inset 0px 0px 5px 0px rgba(255, 255, 255, 0.5));
+    background: #efa022;
+    color: white;
+    overflow: hidden;
+    .transition(max-height .5s);
     span {
         padding: 20px;
-        color: #444;
+        color: #fff;
         font-size: 20px;
         cursor: pointer;
+    }
+    &.display-settings {
+        max-height: 56px;
     }
     .reorder {
         float: left;
@@ -813,4 +812,28 @@ ul.nav-bar {
 
 .pac-container {
     z-index: 10020 !important;
+}
+
+div[class^="spacing-"] {
+    width: 60px;
+}
+
+.spacing-mt {
+    margin: -30px auto 15px;
+}
+
+.spacing-mr,
+.spacing-ml {
+    margin: 65px auto 0;
+}
+
+.spacing-mb,
+.spacing-pr,
+.spacing-pl,
+.spacing-pb {
+    margin: 0 auto 0;
+}
+
+.spacing-pt {
+    margin: -30px auto 15px;
 }

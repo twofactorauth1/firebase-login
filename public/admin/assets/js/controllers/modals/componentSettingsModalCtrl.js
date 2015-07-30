@@ -79,7 +79,7 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
     if ($scope.componentEditing.type === 'navigation') {
       $scope.website.linkLists = $scope.originalWebsite.linkLists;
     }
-    if($scope.blog.post && $scope.originalBlog) {
+    if ($scope.blog.post && $scope.originalBlog) {
       $scope.blog.post.featured_image = $scope.originalBlog.featured_image;
       $scope.blog.post.post_excerpt = $scope.originalBlog.post_excerpt;
     }
@@ -352,8 +352,8 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
   $scope.closeModal = function () {
     $timeout(function () {
       $scope.$apply(function () {
-          $modalInstance.close();
-          angular.element('.modal-backdrop').remove();
+        $modalInstance.close();
+        angular.element('.modal-backdrop').remove();
       });
     });
   };
@@ -673,6 +673,50 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
     $scope.underNav.setUnderNav();
   };
 
+  $scope.spacingArr = [{
+    name: 'Top',
+    category: 'padding',
+    value: 'paddingTop',
+    icon: 'long-arrow-up'
+  }, {
+    name: 'Bottom',
+    category: 'padding',
+    value: 'paddingBottom',
+    icon: 'long-arrow-down'
+  }, {
+    name: 'Right',
+    category: 'padding',
+    value: 'paddingRight',
+    icon: 'long-arrow-right'
+  }, {
+    name: 'Left',
+    category: 'padding',
+    value: 'paddingLeft',
+    icon: 'long-arrow-left'
+  }, {
+    name: 'Top',
+    category: 'margin',
+    value: 'marginTop',
+    icon: 'long-arrow-up'
+  }, {
+    name: 'Bottom',
+    category: 'margin',
+    value: 'marginBottom',
+    icon: 'long-arrow-down'
+  }, {
+    name: 'Right',
+    category: 'margin',
+    value: 'marginRight',
+    icon: 'long-arrow-right'
+  }, {
+    name: 'Left',
+    category: 'margin',
+    value: 'marginLeft',
+    icon: 'long-arrow-left'
+  }];
+
+  $scope.resolutions = [320, 360, 480, 720, 768, 1024, 1280, 1360, 1366, 1440, 1600, 1680, 1920];
+
   /*
    * @editComponent
    * -
@@ -682,6 +726,22 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
 
     if ($scope.componentEditing) {
       var componentType;
+
+      if (!$scope.componentEditing.spacing) {
+        console.log('component editing doesnt have spacing');
+        $scope.componentEditing.spacing = {
+          'paddingTop': 50,
+          'paddingBottom': 50,
+          'paddingLeft': 0,
+          'paddingRight': 0,
+          'marginTop': 0,
+          'marginBottom': 0,
+          'marginRight': 0,
+          'marginLeft': 0,
+          'maxWidth': 1000
+        };
+      }
+
       if ($scope.componentEditing.type === 'navigation') {
         componentType = _.findWhere($scope.componentTypes, {
           type: $scope.componentEditing.type,
@@ -805,12 +865,12 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
 
   $scope.editComponent();
   var componentForm = {
-      street_number: 'short_name',
-      route: 'long_name',
-      locality: 'long_name',
-      administrative_area_level_1: 'short_name',
-      postal_code: 'short_name',
-      country: 'short_name'
+    street_number: 'short_name',
+    route: 'long_name',
+    locality: 'long_name',
+    administrative_area_level_1: 'short_name',
+    postal_code: 'short_name',
+    country: 'short_name'
   };
   $scope.setDefaultAddress = function () {
     $scope.componentEditing.location.address = "";
@@ -820,48 +880,37 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
     $scope.componentEditing.location.zip = "";
     $scope.componentEditing.location.country = "";
   }
-  $scope.fillInAddress = function(place) {  
-  // Get each component of the address from the place details
-  // and fill the corresponding field on the form. 
-    $scope.setDefaultAddress();   
+  $scope.fillInAddress = function (place) {
+    // Get each component of the address from the place details
+    // and fill the corresponding field on the form. 
+    $scope.setDefaultAddress();
     for (var i = 0; i < place.address_components.length; i++) {
       var addressType = place.address_components[i].types[0];
       if (componentForm[addressType]) {
         var val = place.address_components[i][componentForm[addressType]];
-        if(addressType === 'street_number')
-        {
+        if (addressType === 'street_number') {
           $scope.componentEditing.location.address = val;
-        }
-        else if(addressType === 'route')
-        {
+        } else if (addressType === 'route') {
           $scope.componentEditing.location.address2 = val;
-        }
-        else if(addressType === 'locality')
-        {
+        } else if (addressType === 'locality') {
           $scope.componentEditing.location.city = val;
-        }
-        else if(addressType === 'administrative_area_level_1')
-        {
+        } else if (addressType === 'administrative_area_level_1') {
           $scope.componentEditing.location.state = val;
-        }
-        else if(addressType === 'postal_code')
-        {
+        } else if (addressType === 'postal_code') {
           $scope.componentEditing.location.zip = val;
-        }
-        else if(addressType === 'country')
-        {
+        } else if (addressType === 'country') {
           $scope.componentEditing.location.country = val;
         }
       }
     }
     $scope.componentEditing.location.lat = place.geometry.location.lat();
     $scope.componentEditing.location.lon = place.geometry.location.lng();
-}
+  }
   $scope.$watch('place.address', function (newValue) {
     if (newValue) {
-      if(angular.isObject(newValue)) {
-          $scope.fillInAddress(newValue);
-          $scope.contactMap.refreshMap();
+      if (angular.isObject(newValue)) {
+        $scope.fillInAddress(newValue);
+        $scope.contactMap.refreshMap();
       }
     }
   });
