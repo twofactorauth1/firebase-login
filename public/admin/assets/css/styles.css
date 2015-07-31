@@ -13152,7 +13152,6 @@ ul.nav-bar {
 .pac-container {
   z-index: 10020 !important;
 }
-<<<<<<< HEAD
 div[class^="spacing-"] {
   width: 60px;
 }
@@ -13171,11 +13170,10 @@ div[class^="spacing-"] {
 }
 .spacing-pt {
   margin: -30px auto 15px;
-=======
+}
 .nav-undernav {
   background: transparent !important;
   z-index: 11 !important;
->>>>>>> origin/develop
 }
 /* ---------------------------------------------------------------------- */
 /*  Billing

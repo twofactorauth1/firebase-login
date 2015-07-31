@@ -11,7 +11,7 @@ app.directive('showSettings', ['$timeout', function ($timeout) {
         promise = $timeout(function () {
           elem.find('.componentActions').addClass('display-settings');
           elem.find('.add-component').addClass('display-settings');
-        }, 800);
+        }, 500);
       });
       elem.on('mouseleave', function () {
         $timeout.cancel(promise);
