@@ -32,6 +32,10 @@
           }, 100);
         }
       });
+      $timeout(function () {
+        if (!$scope.ckeditorLoaded)
+            $scope.ckeditorLoaded = true;
+      }, 12000);
     };
 
     $scope.preDragging = false;
@@ -242,9 +246,6 @@
         $scope.originalPage = angular.copy(data);
         $scope.activePage = true;
         $scope.activateCKeditor();
-        if (!$scope.components || $scope.components.length === 0) {
-          $scope.ckeditorLoaded = true;
-        }
         $rootScope.breadcrumbTitle = $scope.page.title;
       });
     };
