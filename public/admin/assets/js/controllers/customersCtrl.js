@@ -438,19 +438,19 @@
 
 
     };
-    $scope.socailType = "";
-    $scope.socailList = false;
-    $scope.groupList = false;
+    // $scope.socailType = "";
+    // $scope.socailList = false;
+    // $scope.groupList = false;
 
-    $scope.showSocialAccountSelect = function (socailType) {
-      $scope.socailType = socailType;
-      $scope.socailList = true;
-      if (socailType === userConstant.social_types.GOOGLE) {
-        $scope.groupList = true;
-      } else {
-        $scope.groupList = false;
-      }
-    };
+    // $scope.showSocialAccountSelect = function (socailType) {
+    //   $scope.socailType = socailType;
+    //   $scope.socailList = true;
+    //   if (socailType === userConstant.social_types.GOOGLE) {
+    //     $scope.groupList = true;
+    //   } else {
+    //     $scope.groupList = false;
+    //   }
+    // };
 
   }]);
 }(angular));

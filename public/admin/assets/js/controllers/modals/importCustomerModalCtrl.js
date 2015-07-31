@@ -1,6 +1,6 @@
 'use strict';
 /*global app, Papa*/
-app.controller('ImportCustomerModalCtrl', ['$scope', '$timeout', '$modalInstance', 'FileUploader', 'editableOptions', 'CustomerService', function ($scope, $timeout, $modalInstance, FileUploader, editableOptions, CustomerService) {
+app.controller('ImportCustomerModalCtrl', ['$scope', '$timeout', '$modalInstance', 'FileUploader', 'editableOptions', 'CustomerService', 'userConstant', function ($scope, $timeout, $modalInstance, FileUploader, editableOptions, CustomerService, userConstant) {
 
   /*
    * @editableOptions
@@ -9,7 +9,28 @@ app.controller('ImportCustomerModalCtrl', ['$scope', '$timeout', '$modalInstance
 
   editableOptions.theme = 'bs3';
 
-  $scope.showCSVUpload = false;
+
+  $scope.socailType = "";
+  $scope.socailList = false;
+  $scope.groupList = false;
+
+  $scope.showSocialAccountSelect = function (socailType) {
+
+    $scope.socailType = socailType;
+    $scope.socailList = false;
+    $scope.showCSVUpload = false;
+
+    if (socailType === 'csv') {
+      $scope.showCSVUpload = true;
+    }
+
+    if (socailType === userConstant.social_types.GOOGLE) {
+      $scope.socailList = true;
+      $scope.groupList = true;
+    } else {
+      $scope.groupList = false;
+    }
+  };
 
   /*
    * @closeModal
@@ -41,10 +62,10 @@ app.controller('ImportCustomerModalCtrl', ['$scope', '$timeout', '$modalInstance
   $scope.validatePhones = function (fn) {
     //get matched email headers
     var _formattedColumns = $scope.formatColumns();
-    var _phoneIndex = _formattedColumns['phone'].index;
+    var _phoneIndex = _formattedColumns.phone.index;
     var _errorRows = [];
     _.each($scope.csvResults, function (_row, index) {
-      if (index != 0) {
+      if (index !== 0) {
         var _phone = _row[_phoneIndex];
         if (!$scope.validatePhone(_phone)) {
           _errorRows.push(index);
@@ -278,9 +299,9 @@ app.controller('ImportCustomerModalCtrl', ['$scope', '$timeout', '$modalInstance
       $scope.csvResults = results.data;
 
       console.time("start validating ...");
-      $scope.guessHeaders(function() {
-        $scope.validateEmails(function() {
-          $scope.validatePhones(function() {
+      $scope.guessHeaders(function () {
+        $scope.validateEmails(function () {
+          $scope.validatePhones(function () {
             console.timeEnd("start validating ...");
           });
         });
@@ -344,7 +365,7 @@ app.controller('ImportCustomerModalCtrl', ['$scope', '$timeout', '$modalInstance
     $scope.currentRow = _row;
     $scope.updatePreview();
     $scope.showPreviewPulse = true;
-    $timeout(function() {
+    $timeout(function () {
       $scope.showPreviewPulse = false;
     }, 1000);
   };
@@ -546,10 +567,10 @@ app.controller('ImportCustomerModalCtrl', ['$scope', '$timeout', '$modalInstance
   $scope.validateEmails = function (fn) {
     //get matched email headers
     var _formattedColumns = $scope.formatColumns();
-    var _emailIndex = _formattedColumns['email'].index;
+    var _emailIndex = _formattedColumns.email.index;
     var _errorRows = [];
     _.each($scope.csvResults, function (_row, index) {
-      if (index != 0) {
+      if (index !== 0) {
         var _email = _row[_emailIndex];
         if (!$scope.validateEmail(_email)) {
           _errorRows.push(index);
