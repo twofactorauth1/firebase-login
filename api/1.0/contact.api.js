@@ -540,7 +540,7 @@ _.extend(api.prototype, baseApi.prototype, {
                     }
                     geoIPUtil.getGeoForIP(self.ip(req), function(err, value){
                         self.log.debug('Got the following: ', value);
-                        if(!err) {
+                        if(!err && value) {
                             /*
                              Assume: {
                              "ip": "8.8.8.8",
@@ -566,6 +566,7 @@ _.extend(api.prototype, baseApi.prototype, {
                             self.log.debug('creating address from ' + city + ', ' + state + ', ' + zip + ', ' + country);
                             contact.createAddress(null, null, null, null, city, state, zip, country, countryCode, displayName, lat, lon, true, true);
                         }
+                        var ip = value ? value.ip : null;
                         contactDao.saveOrUpdateContact(contact, function(err, savedContact){
                             if(err) {
                                 self.log.error('Error signing up: ' + err);
@@ -631,7 +632,7 @@ _.extend(api.prototype, baseApi.prototype, {
                                                             var vars = [];
                                                             mandrillHelper.sendAccountWelcomeEmail(fromEmail,
                                                                 notificationConfig.WELCOME_FROM_NAME, contactEmail.email, contactName, notificationConfig.WELCOME_EMAIL_SUBJECT,
-                                                                '<h1>hey</h1>', value.ip, savedContact.id(), vars, function(err, result){});
+                                                                '<h1>hey</h1>', ip, savedContact.id(), vars, function(err, result){});
                                                         }
 
                                                     });
