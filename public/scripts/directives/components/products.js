@@ -1,6 +1,6 @@
 'use strict';
 /*global app*/
-app.directive('productsComponent', ['paymentService', 'productService', 'accountService', 'cartService', 'userService', 'orderService', function (PaymentService, ProductService, AccountService, cartService, UserService, OrderService) {
+app.directive('productsComponent', ['paymentService', 'productService', 'accountService', 'cartService', 'userService', 'orderService', 'formValidations', function (PaymentService, ProductService, AccountService, cartService, UserService, OrderService, formValidations) {
   return {
     require: [],
     scope: {
@@ -162,68 +162,80 @@ app.directive('productsComponent', ['paymentService', 'productService', 'account
       };
 
       /*
-       * @checkBillingFirst,checkBillingLast, checkBillingEmail, checkBillingAddress, checkBillingState, checkBillingCity, validateAddressDetails
+       * @checkBillingFirst,checkBillingLast, checkBillingEmail, checkBillingAddress, checkBillingState, checkBillingCity, checkBillingPhone, validateAddressDetails
        * - validatitions for checkout
        */
 
       //TODO: change to $isValid angular style
       scope.checkBillingFirst = function (first) {
         if (!first) {
-          scope.invalidFirstName = true;
+          scope.emptyFirstName = true;
         } else {
-          scope.invalidFirstName = false;
+          scope.emptyFirstName = false;
         }
       };
 
       scope.checkBillingLast = function (last) {
         if (!last) {
-          scope.invalidLastName = true;
+          scope.emptyLastName = true;
         } else {
-          scope.invalidLastName = false;
+          scope.emptyLastName = false;
         }
       };
 
       scope.checkBillingEmail = function (email) {
         if (!email) {
-          scope.invalidEmail = true;
-        } else {
+          scope.emptyEmail = true;
           scope.invalidEmail = false;
+        } else {
+          scope.emptyEmail = false;
+          scope.invalidEmail = !formValidations.email.test(email);
         }
       };
 
       scope.checkBillingAddress = function (address) {
         if (!address) {
-          scope.invalidAddress = true;
+          scope.emptyAddress = true;
         } else {
-          scope.invalidAddress = false;
+          scope.emptyAddress = false;
         }
       };
 
       scope.checkBillingState = function (state) {
         if (!state) {
-          scope.invalidState = true;
+          scope.emptyState = true;
         } else {
-          scope.invalidState = false;
+          scope.emptyState = false;
         }
       };
 
       scope.checkBillingCity = function (city) {
         if (!city) {
-          scope.invalidCity = true;
+          scope.emptyCity = true;
         } else {
-          scope.invalidCity = false;
+          scope.emptyCity = false;
         }
       };
 
-      scope.validateAddressDetails = function (details, email) {
-        scope.invalidFirstName = false;
-        scope.invalidLastName = false;
-        scope.invalidEmail = false;
-        scope.invalidAddress = false;
-        scope.invalidState = false;
-        scope.invalidCity = false;
+      scope.checkBillingPhone = function (phone) {
+        if (!phone) {
+          scope.invalidPhone = false;
+        } else {
+          scope.invalidPhone = !formValidations.phone.test(phone);
+        }
+      };
+
+      scope.validateAddressDetails = function (details, email, phone) {
+        scope.emptyFirstName = false;
+        scope.emptyLastName = false;
+        scope.emptyEmail = false;
+        scope.emptyAddress = false;
+        scope.emptyState = false;
+        scope.emptyCity = false;
         scope.invalidZipCode = false;
         scope.emptyZipCode = false;
+        scope.inValidEmail = false;
+        scope.inValidPhone = false;
         var first, last, address, state, city, zip;
         if (scope.newContact) {
           first = scope.newContact.first;
@@ -242,9 +254,10 @@ app.directive('productsComponent', ['paymentService', 'productService', 'account
         scope.checkBillingAddress(address);
         scope.checkBillingState(state);
         scope.checkBillingCity(city);
+        scope.checkBillingPhone(phone);
         scope.shippingPostCodeChanged(zip);
 
-        if (scope.invalidFirstName || scope.invalidLastName || scope.invalidEmail || scope.invalidAddress || scope.invalidState || scope.invalidCity || scope.invalidZipCode || scope.emptyZipCode) {
+        if (scope.emptyFirstName || scope.emptyLastName || scope.emptyEmail || scope.emptyAddress || scope.emptyState || scope.emptyCity || scope.invalidZipCode || scope.emptyZipCode || scope.inValidEmail || scope.inValidPhone) {
           return;
         }
         scope.checkoutModalState = 3;
