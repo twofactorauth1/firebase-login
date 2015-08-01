@@ -186,21 +186,28 @@ hr {
 }
 .add-component {
   font-size: 50px;
-  position: absolute;
-  background: rgba(44, 62, 80, 0.8);
-  padding: 20px 20px 15px;
-  color: white;
+  padding: 0px;
+  color: #fff;
   font-size: 20px;
   cursor: pointer;
   left: 45%;
-  z-index: 9998;
-  margin-top: -25px;
-  padding: 5px 15px;
+  z-index: 5;
   text-align: center;
-  /*
-      99999 is for
-        .componentActions
-    */
+  -webkit-box-shadow: inset 0px 0px 5px 0px rgba(255, 255, 255, 0.5);
+  -moz-box-shadow: inset 0px 0px 5px 0px rgba(255, 255, 255, 0.5);
+  box-shadow: inset 0px 0px 5px 0px rgba(255, 255, 255, 0.5);
+  background: #efa022;
+  max-height: 0px;
+  overflow: hidden;
+  -webkit-transition: max-height 0.5s;
+  -moz-transition: max-height 0.5s;
+  -ms-transition: max-height 0.5s;
+  -o-transition: max-height 0.5s;
+}
+.add-component.display-settings {
+  max-height: 56px;
+  padding: 10px 0;
+  line-height: 18px;
 }
 .add-component p {
   margin-bottom: 0;
@@ -223,7 +230,15 @@ hr {
 .component-hidden {
   text-align: center;
   padding: 5px 0;
-  height: 150px;
+  min-height: 150px;
+  margin-top: -56px !important;
+  margin-bottom: -58px !important;
+  background: #f1f1f1!important;
+  position: relative;
+  -webkit-transition: margin 0.5s;
+  -moz-transition: margin 0.5s;
+  -ms-transition: margin 0.5s;
+  -o-transition: margin 0.5s;
 }
 .component-hidden > h3 {
   margin-top: 50px;
@@ -256,9 +271,6 @@ hr {
   display: block;
   visibility: visible;
 }
-.component-inner {
-  padding: 2px;
-}
 ol.circles-list {
   list-style-type: none;
   list-style-type: decimal !ie;
@@ -289,11 +301,6 @@ ol.circles-list > li:before {
   background-color: #464646;
   content: counter(li-counter);
   counter-increment: li-counter;
-}
-.componentActions,
-.no-component {
-  display: none;
-  visibility: hidden;
 }
 .no-component .add-component {
   display: block;
@@ -548,7 +555,7 @@ div[data-type='campaign'] .inner-page .overlay {
 }
 .inner-page {
   padding: 50px 0;
-  max-width: 1000px!important;
+  max-width: 1000px;
   margin: 0 auto;
   display: block;
 }
@@ -968,6 +975,7 @@ div[data-type="feature-list"] .inner-page {
   margin: 10px;
   padding: 20px;
   transition: none!important;
+  width: 100%;
 }
 .feature-list-v3 .feature-single .feature-icon {
   font-size: 14em;
@@ -2208,6 +2216,9 @@ div[data-type="feature-block"] .component-inner {
 .editing .testimonials-v2 .testimonial-wrap div.editable:empty:not(:focus):before {
   content: attr(data-text);
 }
+.editing .testimonials-v2 .testimonial-wrap img {
+  width: 100%;
+}
 .editing .testimonials-v2 .testimonials {
   padding: 25px;
   margin-bottom: 20px;
@@ -3309,6 +3320,9 @@ div[data-type=single-post] .container {
 }
 .single-post-v1 .editable.post_excerpt_div {
   min-height: 10px;
+}
+.single-post-v1 .single-post-content img {
+  max-width: 100%;
 }
 .single-blog .blog-meta {
   margin-top: 15px;

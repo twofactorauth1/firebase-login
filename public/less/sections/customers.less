@@ -4,19 +4,64 @@
 
 .customers {
     .social {
-    	list-style-type: none;
-    	margin-bottom: 0;
+        list-style-type: none;
+        margin-bottom: 0;
     }
     .column-width {
-    	width: 12.5%;
+        width: 12.5%;
     }
-
     table.grid thead th {
-	width: 11.1%;
+        width: 11.1%;
+        float:left;
     }
 }
 
-.ui-select-multiple.ui-select-bootstrap input.ui-select-search:not([placeholder=''])
-{
+.ui-select-multiple.ui-select-bootstrap input.ui-select-search:not([placeholder='']) {
     max-width: 100% !important;
+}
+
+.form-horizontal {
+    .editable {
+        line-height: 30px;
+        &.editable-hide {
+            line-height: auto;
+        }
+    }
+}
+
+#import-customer-modal {
+    .preview-customers {
+        .form-group {
+            height: 34px;
+        }
+    }
+    .field-mapper {
+        .field-status {
+            height: 30px;
+            line-height: 45px;
+        }
+    }
+}
+
+.alert-dismissable .close,
+.alert-dismissible .close {
+    font-size: 22px!important;
+}
+
+.editable-empty,
+.editable-empty:hover,
+.editable-empty:focus,
+a.editable-empty,
+a.editable-empty:hover,
+a.editable-empty:focus {
+    color: #858585!important;
+}
+
+.editable-error,
+.editable-error:hover,
+.editable-error:focus,
+a.editable-error,
+a.editable-error:hover,
+a.editable-error:focus {
+    color: #D14!important;
 }

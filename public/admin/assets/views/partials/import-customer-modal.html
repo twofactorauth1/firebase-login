@@ -1,66 +1,218 @@
 <script type="text/ng-template" id="import-customer-modal">
-    <div class="modal-header">
-        <button type="button" class="close" ng-click="closeModal()">
-            <span aria-hidden="true">&times;</span>
-            <span class="sr-only">Close</span>
-        </button>
-        <h3 class="modal-title">Import Customers</h3>
-    </div>
-    <div class="modal-body bg-white">
-        <div class="row choose-import" data-import-section="choose">
-            <p class="center"><b>Choose one of the import options from below:</b>
-            </p>
-            <div class="clearfix mb30"></div>
-            <div class="social-icons center margin-top-30 margin-bottom-30">
-                <ul>
-                    <li class="social-twitter hidden" tooltip="Twitter" tooltip-placement="top"  ng-click="showSocialAccountSelect('tw')">
-                        <a> Twitter </a>
-                    </li>
-                    <li class="social-facebook hidden" tooltip="Facebook" tooltip-placement="top">
-                        <a data-import-source="facebook" ng-click="showSocialAccountSelect('fb')"> Facebook </a>
-                    </li>
-                    <li class="social-google" tooltip="Google" tooltip-placement="top">
-                        <a data-import-source="googleplus" ng-click="showSocialAccountSelect('go')"> Google+ </a>
-                    </li>
-                    <li class="social-linkedin hidden" tooltip="LinkedIn" tooltip-placement="top" data-import-source="linkedin" ng-click="showSocialAccountSelect('li')">
-                        <a> LinkedIn </a>
-                    </li>
-                </ul>
-
-               
+    <div id="import-customer-modal">
+        <div class="modal-header">
+            <button type="button" class="close" ng-click="closeModal()">
+                <span aria-hidden="true">&times;</span>
+                <span class="sr-only">Close</span>
+            </button>
+            <h3 class="modal-title">Import Customers</h3>
+        </div>
+        <div class="modal-body bg-white" ng-class="{'no-padding': !uploadingCsv && csvResults.length > 0 && !uploadingServerCsv}" style="overflow:hidden">
+            <div ng-if="!uploadingCsv && csvResults.length <= 0">
+                <p class="help-block">Import your contacts from one of the options below.</p>
+                <div class="row">
+                    <div class="col-xs-6">
+                        <div class="list-group-item center list-group-item-warning" ng-if="!googlePlusActive">
+                            <span class="fa-stack fa-2x">
+                                <i class="fa fa-square fa-stack-2x google-plus"></i>
+                                <i class="fa fa-google-plus fa-stack-1x fa-inverse"></i>
+                            </span>
+                            <h2 class="StepTitle">Google Plus</h2>
+                            <p>Go to <a ng-click="closeModal('/account/integrations')">Integrations</a> to add a Google Account.</p>
+                        </div>
+                        <a class="list-group-item center" ng-if="googlePlusActive" ng-click="showSocialAccountSelect('go')" ng-class="{'list-group-item-info': socailList}">
+                            <span class="fa-stack fa-2x"> <i class="fa fa-square fa-stack-2x google-plus"></i> <i class="fa fa-google-plus fa-stack-1x fa-inverse"></i> </span>
+                            <h2 class="StepTitle">Google Plus</h2>
+                            <p>Import contacts from Google.</p>
+                        </a>
+                    </div>
+                    <div class="col-xs-6">
+                        <a class="list-group-item center" ng-click="googlePlusActive || showSocialAccountSelect('csv')" ng-class="{'list-group-item-info': showCSVUpload}" ng-disabled="!googlePlusActive">
+                            <span class="fa-stack fa-2x"> <i class="fa fa-square fa-stack-2x text-primary"></i> <i class="fa fa-file-text-o fa-stack-1x fa-inverse"></i> </span>
+                            <h2 class="StepTitle">CSV</h2>
+                            <p>Import contacts from any CSV file.</p>
+                        </a>
+                    </div>
+                </div>
+                <div class="form-group margin-top-15 margin-bottom-15 fade-in-right" ng-if="socailList">
+                    <ui-select ng-model="selectedSocial" on-select="importContacts($select.selected)" theme="bootstrap">
+                        <ui-select-match placeholder="Select a Social Profile">
+                            <small ng-bind-html="$select.selected.username || $select.selected.type"></small>
+                        </ui-select-match>
+                        <ui-select-choices repeat="type in socialAccounts | filter: {'type': socailType} ">
+                            <small ng-bind-html="type.username || type.type | highlight: $select.search"></small>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+                <div class="form-group margin-bottom-0 fade-in-right" ng-if="groupList">
+                    <ui-select ng-model="selectedGroup" on-select="importGoogleContacts($select.selected)" theme="bootstrap">
+                        <ui-select-match placeholder="Select a Group">
+                            <small ng-bind-html="$select.selected.username || $select.selected.type"></small>
+                        </ui-select-match>
+                        <ui-select-choices repeat="type in socialAccountGroups">
+                            <small ng-bind-html="type.name || type.id | highlight: $select.search"></small>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
             </div>
-            <div class="clearfix mb30"></div>
+            <div ng-if="!uploadingCsv && csvResults.length <= 0 && showCSVUpload" class="fade-in-right margin-top-15">
+                <div ng-if="incorrectFileType">
+                    <div class="alert alert-danger alert-dismissible" role="alert" ng-class="{'animated shake': errorRows.length > 0}">
+                        <div>Incorrect file type uploaded. {{incorrectFile.type}} {{incorrectFile.name}}. Please upload a CSV.</div>
+                    </div>
+                </div>
+                <div nv-file-drop="" uploader="uploader" filters="queueLimit, customFilter">
+                    <div ng-show="uploader.isHTML5">
+                        <div class="well my-drop-zone center" nv-file-over="" uploader="uploader">
+                            <div class="margin-top-30 margin-bottom-30">
+                                <h4>Drag & Drop your CSV File here or </h4>
+                                <span class="btn btn-default btn-primary btn-wide btn-file">
+                                Browse <input type="file" nv-file-select="" uploader="uploader" filters="queueLimit, customFilter" />
+                            </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div ng-if="uploadingCsv && csvResults.length <= 0" class="center fade-in-right">
+                <span class="fa fa-4x" ng-class="{'fa-spinner fa-spin': csv.percent < 100, 'fa-check text-success': csv.percent == 100}"></span>
+                <h3>Uploading CSV... <strong>{{csv.percent}}%</strong></h3>
+                <progressbar animate="false" class="progress-striped progress-lg active" value="csv.percent" type="success"></progressbar>
+            </div>
+            <div ng-if="!uploadingCsv && csvResults.length > 0 && !uploadingServerCsv" class="fade-in-right padding-15" style="position: relative;top: 0;overflow:auto" ct-fullheight=".modal.in" data-ct-overflow="true" data-ct-fullheight-exclusion=".modal.in .modal-header, .modal.in .modal-footer" data-ct-fullheight-num="110">
+                <div class="well well-sm margin-bottom-15 hidden">
+                    <h4>Field <strong>Mapping:</strong></h4>
+                    <span class="help-block margin-bottom-0">Check to make sure all the fields are matched correctly.</span>
+                </div>
+                <div ng-if="errorRows.length > 0">
+                    <div class="alert alert-warning alert-dismissible" role="alert" ng-class="{'animated shake': errorRows.length > 0}">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <div><span><strong>Caution:</strong> There are {{errorRows.length}} validation errors for your import. You can fix them manually or we will include them in the customer notes.</span>
+                            <br> Error Rows: <a ng-click="goToRow(err)" ng-repeat="err in errorRows | orderBy: err" class="margin-right-5"><span class="badge badge-warning">{{err}}</span></a></div>
+                    </div>
+                </div>
+                <div ng-if="errorRows.length <= 0">
+                    <div class="alert alert-success alert-dismissible" role="alert" ng-class="{'animated bounce': errorRows.length <= 0}">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <div><span><strong>Success:</strong> There are no errors. Ready to Upload!</span></div>
+                    </div>
+                </div>
+                <div class="form-horizontal">
+                    <div class="row">
+                        <div class="col-sm-12 col-md-6">
+                            <div class="panel panel-white margin-bottom-0 field-mapper">
+                                <div class="panel-heading border-light">
+                                    <h4 class="panel-title">Field <span class="text-bold">Mapping</span></h4>
+                                </div>
+                                <div class="panel-body">
+                                    <p class="text-small margin-bottom-15">Look over the fields we automatically matched.</p>
+                                    <div class="row">
+                                        <div class="col-xs-12 col-sm-6 col-md-12" ng-repeat="column in customerColumns">
+                                            <div class="form-group" ng-class="{'margin-bottom-0':$last}">
+                                                <label class="col-sm-4 control-label" for="{{column.value}}">
+                                                    {{column.name}}
+                                                </label>
+                                                <div class="col-sm-1 field-status">
+                                                    <div ng-if="column.match">
+                                                        <p class="text-small text-danger" ng-if="column.errorRows.length > 0"> <span tooltip-placement="top" tooltip-html-unsafe="{{column.errorRows.length}} Errors" class="fa fa-times fa-2x"></span>
+                                                        </p>
+                                                        <p class="text-small text-success" ng-if="column.errorRows.length <= 0"><span tooltip-placement="top" tooltip-html-unsafe="Zero Errors" class="fa fa-check-circle-o fa-2x"></span>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-7">
+                                                    <ui-select ng-model="column.match" name="{{column.value}}" theme="bootstrap" on-select="updatePreview($item, $model, column)">
+                                                        <ui-select-match placeholder="Select a Field" allow-clear="true">
+                                                            <small ng-bind-html="$select.selected"></small>
+                                                        </ui-select-match>
+                                                        <ui-select-choices repeat="header in csvHeaders | filter: $select.search track by $index">
+                                                            <small ng-bind-html="header | highlight: $select.search"></small>
+                                                        </ui-select-choices>
+                                                    </ui-select>
+                                                </div>
+                                            </div>
+                                            <div class="clearfix"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-6">
+                            <div class="panel panel-white margin-bottom-0 preview-customers" ng-class="{'animated pulse': showPreviewPulse}">
+                                <div class="panel-heading border-light panel-primary">
+                                    <h4 class="panel-title">Preview <span class="text-bold">Customers</span></h4>
+                                    <ul class="panel-heading-tabs border-light">
+                                        <li>
+                                            <div class="btn-group">
+                                                <button ng-click="decreaseRow()" class="btn btn-default pull-left"><span class="fa fa-chevron-left"></span></button>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="btn-group">
+                                                <button ng-click="increaseRow()" class="btn btn-default pull-right"><span class="fa fa-chevron-right"></span></button>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="panel-body">
+                                    <p class="text-small margin-bottom-15">Currently viewing row <span class="text-bold">{{currentRow}} / {{csvResults.length - 1}}</span></p>
+                                    <div class="row">
+                                        <div class="col-xs-12 col-sm-6 col-md-12" ng-repeat="column in customerColumns">
+                                            <div class="form-group" ng-class="{'margin-bottom-0':$last, 'has-error': column.value === 'email' && !validateEmail(previewCustomer[column.value])}">
+                                                <label class="col-sm-4 control-label">
+                                                    {{column.name}}
+                                                </label>
+                                                <div class="col-sm-8 editable-section">
+                                                    <div ng-if="column.value === 'email'">
+                                                        <a href="#" editable-email="previewCustomer[column.value]" onbeforesave="updateColumn($data, column)" ng-class="{'editable-error': !validateEmail(previewCustomer[column.value])}">{{ previewCustomer[column.value] || "empty" }}</a>
+                                                    </div>
+                                                    <!-- <div ng-if="column.value === 'phone'">
+                                                        <a href="#" editable-email="previewCustomer[column.value]" onbeforesave="updateColumn($data, column)" ng-class="{'editable-error': !validateEmail(previewCustomer[column.value])}">{{ previewCustomer[column.value] || "empty" }}</a>
+                                                    </div> -->
+                                                    <div ng-if="column.value != 'email'">
+                                                        <a href="#" editable-text="previewCustomer[column.value]" onbeforesave="updateColumn($data, column)">{{ previewCustomer[column.value] || "empty" }}</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div ng-if="uploadingServerCsv" class="center fade-in-right">
+                <span class="fa fa-4x" ng-class="{'fa-spinner fa-spin': serverUploadPercent < 100, 'fa-check text-success': serverUploadPercent == 100}"></span>
+                <h3>Uploading New Customers... <strong>{{serverUploadPercent}}%</strong></h3>
+                <progressbar animate="false" class="progress-striped progress-lg" ng-class="{'active': serverUploadPercent < 100}" value="serverUploadPercent" type="success"></progressbar>
+                <span ng-if="uploadingComplete"><h4>Successfully added {{csvResults.length}} new customers in {{endServerUpload}} sec.</h4></span>
+            </div>
+            <div class="clearfix"></div>
+            <div class="row import-success hidden" data-import-section="success">
+                <span class="fa fa-check"></span>
+                <div class="clearfix mb15"></div>
+                <h3> Successfully Imported Contacts </h3>
+                <div class="clearfix mb15"></div>
+                <button class="btn btn-primary btn-lg">View Imported Contacts</button>
+                <button class="btn btn-primary btn-lg">Fix Duplicate Contacts</button>
+                <div class="clearfix mb30"></div>
+            </div>
         </div>
-         <div class="form-group margin-bottom-0" ng-if="socailList">
-            <ui-select ng-model="selectedSocial" on-select="importContacts($select.selected)" theme="bootstrap">
-                <ui-select-match placeholder="Select a Social Profile">
-                    
-                    <small ng-bind-html="$select.selected.username || $select.selected.type"></small>
-                </ui-select-match>
-                <ui-select-choices repeat="type in socialAccounts | filter: {'type': socailType} ">
-                    <small ng-bind-html="type.username || type.type | highlight: $select.search"></small>
-                </ui-select-choices>
-            </ui-select>
-        </div>
-
-        <div class="form-group margin-bottom-0" ng-if="groupList">
-            <ui-select ng-model="selectedGroup" on-select="importGoogleContacts($select.selected)" theme="bootstrap">
-                <ui-select-match placeholder="Select a Group">
-                    <small ng-bind-html="$select.selected.username || $select.selected.type"></small>
-                </ui-select-match>
-                <ui-select-choices repeat="type in socialAccountGroups">
-                    <small ng-bind-html="type.name || type.id | highlight: $select.search"></small>
-                </ui-select-choices>
-            </ui-select>
-        </div>
-        <div class="row import-success hidden" data-import-section="success">
-            <span class="fa fa-check"></span>
-            <div class="clearfix mb15"></div>
-            <h3> Successfully Imported Contacts </h3>
-            <div class="clearfix mb15"></div>
-            <button class="btn btn-primary btn-lg">View Imported Contacts</button>
-            <button class="btn btn-primary btn-lg">Fix Duplicate Contacts</button>
-            <div class="clearfix mb30"></div>
+        <div class="clearfix"></div>
+        <div class="modal-footer" ng-if="!uploadingCsv && csvResults.length > 0 && !uploadingServerCsv">
+            <div class="row">
+                <div class="col-xs-8">
+                    <a class="btn btn-primary pull-left margin-right-10" ng-click="changeFile()"><span class="fa fa-exchange"></span>  Change</a>
+                    <div class="pull-left text-left">
+                        <h4><strong>File:</strong> <span ng-text-truncate="fileName" ng-tt-chars-threshold="25" ng-tt-no-toggling></span></h4>
+                        <span class="help-block margin-bottom-0" style="margin-top:-10px">Uploaded {{csvResults.length - 1}} customers in {{endUpload}}sec</span>
+                    </div>
+                </div>
+                <div class="col-xs-4">
+                    <button class="btn pull-right" ng-class="{'btn-warning': errorRows.length > 0, 'btn-primary': errorRows.length <= 0}" ng-click="uploadMatchedCSV()"><span class="fa fa-cloud-upload"></span> Import</button>
+                </div>
+            </div>
         </div>
     </div>
 </script>

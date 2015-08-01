@@ -1511,7 +1511,7 @@ ul.sub-menu li ul.sub-menu li ul.sub-menu li a {
   position: relative;
 }
 .main-content .container {
-  max-width: none !important;
+  max-width: none;
   width: 100% !important;
   display: inline-block;
 }
@@ -4343,20 +4343,24 @@ a.text-light:hover {
   animation: fadeOut 0.5s;
 }
 .fade-in-right.ng-enter {
-  -webkit-animation: fadeInRight 0.5s;
-  animation: fadeInRight 0.5s;
+  -webkit-animation: fadeInRight 0.65s;
+  animation: fadeInRight 0.65s;
 }
-.fade-in-right.ng-leave {
-  -webkit-animation: fadeOutLeft 0.5s;
-  animation: fadeOutLeft 0.5s;
+.fade-in-right.ng-leave,
+.fade-out-right.ng-leave {
+  -webkit-animation: fadeOutLeft 0.65s;
+  animation: fadeOutLeft 0.65s;
+  position: absolute;
 }
 .fade-in-left.ng-enter {
-  -webkit-animation: fadeInLeft 0.5s;
-  animation: fadeInLeft 0.5s;
+  -webkit-animation: fadeInLeft 0.6s;
+  animation: fadeInLeft 0.6s;
 }
-.fade-in-left.ng-leave {
-  -webkit-animation: fadeOutRight 0.5s;
-  animation: fadeOutRight 0.5s;
+.fade-in-left.ng-leave,
+.fade-out-left.ng-leave {
+  -webkit-animation: fadeOutRight 0.6s;
+  animation: fadeOutRight 0.6s;
+  position: absolute;
 }
 .fade-in-up.ng-enter {
   -webkit-animation: fadeInUpShort 0.5s;
@@ -4742,7 +4746,7 @@ select[multiple="multiple"]:focus option {
   padding: 0 5px;
 }
 .has-error .control-label {
-  color: #8e8e93 !important;
+  color: #d43f3a !important;
 }
 .has-error .error {
   color: #a94442;
@@ -12742,9 +12746,6 @@ fieldset[disabled] .btn-vimeo-square.active {
   padding: 0;
   overflow: hidden;
 }
-.component-sortable li {
-  list-style-type: none;
-}
 .component-sortable .componentActions span.fa {
   padding: 10px;
   text-align: center;
@@ -12755,13 +12756,12 @@ fieldset[disabled] .btn-vimeo-square.active {
   font-size: 14px;
 }
 .component-sortable .componentActions h4 {
-  background: rgba(44, 62, 80, 0.8);
   padding: 17px;
-  color: white;
+  color: #444;
   font-size: 18px;
   margin: 0;
   height: 56px;
-  pointer-events: none;
+  font-weight: bold;
 }
 .sortable-ghost .delete-component,
 .sortable-ghost .duplicate,
@@ -12787,6 +12787,13 @@ fieldset[disabled] .btn-vimeo-square.active {
   color: inherit;
   font-family: inherit;
 }
+#componentloader .component-wrap {
+  background: #f1f1f1;
+  z-index: 10;
+}
+#componentloader .component-wrap-post {
+  margin-bottom: 0px!important;
+}
 #componentloader .component-sortable.dragging .delete-component,
 #componentloader .component-sortable.dragging .duplicate,
 #componentloader .component-sortable.dragging .component-settings,
@@ -12799,23 +12806,19 @@ fieldset[disabled] .btn-vimeo-square.active {
   display: block;
 }
 #componentloader .fragment .component-inner {
-  border: 2px solid transparent;
-}
-#componentloader .fragment:hover .component-inner {
-  border: 2px dashed #34495e;
-}
-#componentloader .fragment:hover .componentActions {
-  display: block;
-  line-height: 39px;
-  visibility: visible;
-  -webkit-animation: fadeIn 1s;
-  -moz-animation: fadeIn 1s;
-  -ms-animation: fadeIn 1s;
-  animation: fadeIn 1s;
+  clear: both;
 }
 #componentloader .fragment:hover .add-component {
   display: block;
   visibility: visible;
+}
+#componentloader .fragment:hover .add-component-container {
+  position: relative;
+  z-index: 11;
+  display: block;
+}
+#componentloader .fragment:hover .hover-action {
+  z-index: 11;
 }
 #componentloader .fragment.ng-enter {
   -webkit-animation: bounceIn 1s;
@@ -12830,17 +12833,27 @@ fieldset[disabled] .btn-vimeo-square.active {
   animation: bounceOut 1s;
 }
 .componentActions {
-  position: absolute;
-  z-index: 1032;
-  width: 100%;
-  margin-right: 10px;
+  position: relative;
+  max-height: 0px;
+  -webkit-box-shadow: inset 0px 0px 5px 0px rgba(255, 255, 255, 0.5);
+  -moz-box-shadow: inset 0px 0px 5px 0px rgba(255, 255, 255, 0.5);
+  box-shadow: inset 0px 0px 5px 0px rgba(255, 255, 255, 0.5);
+  background: #efa022;
+  color: white;
+  overflow: hidden;
+  -webkit-transition: max-height 0.5s;
+  -moz-transition: max-height 0.5s;
+  -ms-transition: max-height 0.5s;
+  -o-transition: max-height 0.5s;
 }
 .componentActions span {
-  background: rgba(44, 62, 80, 0.8);
   padding: 20px;
-  color: white;
+  color: #fff;
   font-size: 20px;
   cursor: pointer;
+}
+.componentActions.display-settings {
+  max-height: 56px;
 }
 .componentActions .reorder {
   float: left;
@@ -12895,7 +12908,7 @@ fieldset[disabled] .btn-vimeo-square.active {
   pointer-events: all;
 }
 .componentActions .settings-btn:hover {
-  color: #efa022;
+  color: #696969;
 }
 .editable-title {
   display: none;
@@ -13139,6 +13152,29 @@ ul.nav-bar {
 .pac-container {
   z-index: 10020 !important;
 }
+div[class^="spacing-"] {
+  width: 60px;
+}
+.spacing-mt {
+  margin: -30px auto 15px;
+}
+.spacing-mr,
+.spacing-ml {
+  margin: 65px auto 0;
+}
+.spacing-mb,
+.spacing-pr,
+.spacing-pl,
+.spacing-pb {
+  margin: 0 auto 0;
+}
+.spacing-pt {
+  margin: -30px auto 15px;
+}
+.nav-undernav {
+  background: transparent !important;
+  z-index: 11 !important;
+}
 /* ---------------------------------------------------------------------- */
 /*  Billing
 /* ---------------------------------------------------------------------- */
@@ -13244,6 +13280,7 @@ ul.nav-bar {
 /* ---------------------------------------------------------------------- */
 .products table.grid thead th {
   width: 20% !important;
+  float: left;
 }
 .products table.grid .product-img {
   height: 80px;
@@ -13286,9 +13323,43 @@ ul.nav-bar {
 }
 .customers table.grid thead th {
   width: 11.1%;
+  float: left;
 }
 .ui-select-multiple.ui-select-bootstrap input.ui-select-search:not([placeholder='']) {
   max-width: 100% !important;
+}
+.form-horizontal .editable {
+  line-height: 30px;
+}
+.form-horizontal .editable.editable-hide {
+  line-height: auto;
+}
+#import-customer-modal .preview-customers .form-group {
+  height: 34px;
+}
+#import-customer-modal .field-mapper .field-status {
+  height: 30px;
+  line-height: 45px;
+}
+.alert-dismissable .close,
+.alert-dismissible .close {
+  font-size: 22px!important;
+}
+.editable-empty,
+.editable-empty:hover,
+.editable-empty:focus,
+a.editable-empty,
+a.editable-empty:hover,
+a.editable-empty:focus {
+  color: #858585!important;
+}
+.editable-error,
+.editable-error:hover,
+.editable-error:focus,
+a.editable-error,
+a.editable-error:hover,
+a.editable-error:focus {
+  color: #D14!important;
 }
 /* ---------------------------------------------------------------------- */
 /*  Orders
@@ -13821,7 +13892,7 @@ tags-input.ti-input-sm .tags .input,
 /*  Integrations
 /* ---------------------------------------------------------------------- */
 .integrations .integration-avatar {
-  min-height: 35px;
+  min-height: 38px;
 }
 /* ---------------------------------------------------------------------- */
 /*  business profile

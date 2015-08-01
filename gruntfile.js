@@ -256,11 +256,15 @@ module.exports = function(grunt) {
 
                 src: jsincludeGenerator.buildJSArraySync('templates/snippets/index_body_scripts.jade'),
                 dest: 'public/js/indigenous.js'
+            },
+            admin: {
+                src: ['public/admin/assets/js/**/*.js'],
+                dest: 'public/admin/assets/js/ng-admin-indigenous.js'
+            },
+            vendor: {
+                src: jsincludeGenerator.buildJSArraySync('templates/snippets/admin_body_scripts.jade'),
+                dest: 'public/admin/assets/js/admin-vendor-indigenous.js'
             }
-            // admin: {
-            //     src: jsincludeGenerator.buildJSArraySync('templates/snippets/admin_body_scripts.jade'),
-            //     dest: 'public/admin/assets/js/admin-vendor-indigenous.js'
-            // }
         },
 
         uglify: {
@@ -272,7 +276,9 @@ module.exports = function(grunt) {
             js: {
                 files: {
                     'public/js/indigenous.js': ['public/js/indigenous.js'],
-                    'public/js/ng-indigenous.js': ['public/js/ng-indigenous.js']
+                    'public/js/ng-indigenous.js': ['public/js/ng-indigenous.js'],
+                    'public/admin/assets/js/ng-admin-indigenous.js': ['public/admin/assets/js/ng-admin-indigenous.js'],
+                    'public/admin/assets/js/admin-vendor-indigenous.js': ['public/admin/assets/js/admin-vendor-indigenous.js']
                 }
             }
         },
@@ -330,8 +336,8 @@ module.exports = function(grunt) {
                     ]
                     */
 
-                    'public/js/ng-indigenous.js': jsincludeGenerator.includeDirectory('public/scripts')
-                    // 'public/admin/assets/js/ng-admin-indigenous.js': jsincludeGenerator.includeDirectory('public/admin/assets/js')
+                    'public/js/ng-indigenous.js': jsincludeGenerator.includeDirectory('public/scripts'),
+                    'public/admin/assets/js/ng-admin-indigenous.js': jsincludeGenerator.includeDirectory('public/admin/assets/js')
                 }
             }
         },

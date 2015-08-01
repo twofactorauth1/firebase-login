@@ -83,6 +83,8 @@ _.extend(api.prototype, baseApi.prototype, {
         //duplicate check
         app.get(this.url('duplicates/check'), this.isAuthAndSubscribedApi.bind(this), this.checkForDuplicates.bind(this));
         app.post(this.url('duplicates/merge'), this.isAuthAndSubscribedApi.bind(this), this.mergeDuplicates.bind(this));
+
+        app.post(this.url('importcsv'), this.isAuthApi.bind(this), this.importCsvContacts.bind(this));
     },
 
     getMyIp: function(req, resp) {
@@ -183,6 +185,23 @@ _.extend(api.prototype, baseApi.prototype, {
                 self.wrapError(resp, 500, "There was an error updating contact", err, value);
             }
         });
+    },
+
+    importCsvContacts: function (req, resp) {
+        var self = this;
+        self.log.debug('>> importCsvContacts');
+        var accountId = parseInt(self.currentAccountId(req));
+
+        var contact = new $$.m.Contact(req.body);
+
+        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_CONTACT, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(req);
+            } else {
+                self.log.debug('contacts ', contact);
+            }
+        });
+
     },
 
 
@@ -521,7 +540,7 @@ _.extend(api.prototype, baseApi.prototype, {
                     }
                     geoIPUtil.getGeoForIP(self.ip(req), function(err, value){
                         self.log.debug('Got the following: ', value);
-                        if(!err) {
+                        if(!err && value) {
                             /*
                              Assume: {
                              "ip": "8.8.8.8",
@@ -547,6 +566,7 @@ _.extend(api.prototype, baseApi.prototype, {
                             self.log.debug('creating address from ' + city + ', ' + state + ', ' + zip + ', ' + country);
                             contact.createAddress(null, null, null, null, city, state, zip, country, countryCode, displayName, lat, lon, true, true);
                         }
+                        var ip = value ? value.ip : null;
                         contactDao.saveOrUpdateContact(contact, function(err, savedContact){
                             if(err) {
                                 self.log.error('Error signing up: ' + err);
@@ -612,7 +632,7 @@ _.extend(api.prototype, baseApi.prototype, {
                                                             var vars = [];
                                                             mandrillHelper.sendAccountWelcomeEmail(fromEmail,
                                                                 notificationConfig.WELCOME_FROM_NAME, contactEmail.email, contactName, notificationConfig.WELCOME_EMAIL_SUBJECT,
-                                                                '<h1>hey</h1>', value.ip, savedContact.id(), vars, function(err, result){});
+                                                                '<h1>hey</h1>', ip, savedContact.id(), vars, function(err, result){});
                                                         }
 
                                                     });

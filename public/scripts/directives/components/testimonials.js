@@ -6,7 +6,10 @@ app.directive('testimonialsComponent', function () {
     },
     templateUrl: '/components/component-wrap.html',
     link: function (scope, element, attrs, ctrl) {
-    	scope.dataLoaded = true;
+      scope.autoplay = true;
+    	$(document).ready(function () {
+          scope.dataLoaded = true;
+      });
     }
   }
 });

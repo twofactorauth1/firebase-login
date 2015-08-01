@@ -227,7 +227,7 @@ _.extend(api.prototype, baseApi.prototype, {
     userExists: function(req,resp) {
         var self = this;
 
-        var username = req.params.username;
+        var username = req.params.username.toLowerCase();
         self.log.debug('>> userExists ', username);
 
         // var accountId = this.accountId(req);
@@ -247,7 +247,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
     userExistsForAccount: function(req,resp) {
         var self = this;
-        var username = req.params.username;
+        var username = req.params.username.toLowerCase();
         var accountId = req.params.accountId;
 
         accountId = parseInt(accountId);
@@ -273,10 +273,10 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> initializeUserAndAccount');
         console.dir(req.body);
 
-        var username = req.body.username;
+        var username = req.body.username.toLowerCase();
         var password1 = req.body.password;
         var password2 = req.body.password2;
-        var email = req.body.username;
+        var email = req.body.username.toLowerCase();
         var accountToken = req.body.accountToken;
         var anonymousId = req.body.anonymousId;
         var coupon = req.body.coupon;
@@ -590,9 +590,10 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.checkPermission(req, self.sc.privs.MODIFY_USER, function (err, isAllowed) {
             if (isAllowed !== true || !_.contains(value.getAllAccountIds(), self.accountId(req))) {
-                return self.send403(res);
+                return self.send403(resp);
             } else {
-                userManager.createAccountUser(accountId, user.username, password, user.email, user.first, user.last, req.user, function(err, user){
+                var roleAry = ['member'];
+                userManager.createAccountUser(accountId, user.username, password, user.email, user.first, user.last, req.user, roleAry, function(err, user){
                     self.log.debug('<< createUserForAccount');
                     var responseObj = null;
                     if(user) {

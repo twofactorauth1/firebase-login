@@ -55,6 +55,9 @@ var orderApi = require('./1.0/order.api');
 //User Activities
 var userActivityApi = require('./1.0/useractivity.api');
 
+//Admin
+var adminUserApi = require('./1.0/admin/user.api');
+
 module.exports = {
 
 };

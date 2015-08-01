@@ -115,23 +115,27 @@
 }
 
 .fade-in-right.ng-enter {
-    -webkit-animation: fadeInRight 0.5s;
-    animation: fadeInRight 0.5s;
+    -webkit-animation: fadeInRight 0.65s;
+    animation: fadeInRight 0.65s;
 }
 
-.fade-in-right.ng-leave {
-    -webkit-animation: fadeOutLeft 0.5s;
-    animation: fadeOutLeft 0.5s;
+.fade-in-right.ng-leave,
+.fade-out-right.ng-leave {
+    -webkit-animation: fadeOutLeft 0.65s;
+    animation: fadeOutLeft 0.65s;
+    position: absolute;
 }
 
 .fade-in-left.ng-enter {
-    -webkit-animation: fadeInLeft 0.5s;
-    animation: fadeInLeft 0.5s;
+    -webkit-animation: fadeInLeft 0.6s;
+    animation: fadeInLeft 0.6s;
 }
 
-.fade-in-left.ng-leave {
-    -webkit-animation: fadeOutRight 0.5s;
-    animation: fadeOutRight 0.5s;
+.fade-in-left.ng-leave,
+.fade-out-left.ng-leave {
+    -webkit-animation: fadeOutRight 0.6s;
+    animation: fadeOutRight 0.6s;
+    position: absolute;
 }
 
 .fade-in-up.ng-enter {

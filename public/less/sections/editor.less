@@ -1,8 +1,3 @@
-// .as-sortable-dragging {
-//     .componentActions {
-//         margin-top: -20px;
-//     }
-// }
 .add-component-modal {
     .tab-content {
         max-height: 300px;
@@ -374,9 +369,6 @@ fieldset[disabled] .btn-vimeo-square.active {
 .component-sortable {
     padding: 0;
     overflow: hidden;
-    li {
-        list-style-type: none;
-    }
     .componentActions {
         span.fa {
             padding: 10px;
@@ -388,13 +380,12 @@ fieldset[disabled] .btn-vimeo-square.active {
             font-size: 14px;
         }
         h4 {
-            background: rgba(44, 62, 80, 0.8);
             padding: 17px;
-            color: white;
+            color: #444;
             font-size: 18px;
             margin: 0;
             height: 56px;
-            pointer-events: none;
+            font-weight: bold;
         }
     }
 }
@@ -417,81 +408,40 @@ fieldset[disabled] .btn-vimeo-square.active {
         color: inherit;
         font-family: inherit;
     }
+    .component-wrap {
+        background: #f1f1f1;
+        z-index: 10;
+    }
+    .component-wrap-post {
+        margin-bottom: 0px!important;
+    }
     .component-sortable.dragging {
         .delete-component, .duplicate, .component-settings, .add-component, .add-new-component {
             display: none!important;
         }
     }
-    // .as-sortable-placeholder {
-    //     height: 57px!important;
-    //     overflow: hidden;
-    //     list-style-type: none;
-    // }
-    // .ui-sortable {
-    //     margin-bottom: 0;
-    //     padding: 0;
-    //     li {
-    //         list-style-type: none;
-    //     }
-    //     .componentActions {
-    //         span.fa {
-    //             padding: 10px;
-    //             text-align: center;
-    //             line-height: 18px;
-    //         }
-    //         p {
-    //             margin-bottom: 0;
-    //             font-size: 14px;
-    //         }
-    //         h4 {
-    //             background: rgba(44, 62, 80, 0.8);
-    //             padding: 17px;
-    //             color: white;
-    //             font-size: 18px;
-    //             margin: 0;
-    //             height: 56px;
-    //         }
-    //     }
-    // &.active {
-    //     .fragment {
-    //         height: 57px!important;
-    //         overflow: hidden;
-    //         .component-inner {
-    //             .bg {
-    //                 background-image: none;
-    //             }
-    //         }
-    //         .componentActions {
-    //             display: block;
-    //             visibility: visible;
-    //             border: 1px solid #ccc;
-    //             background: #fafafa;
-    //             h4 {
-    //                 display: block;
-    //             }
-    //         }
-    //     }
-    // }
-    // }
     .fragment {
         border: none;
         display: block;
         .component-inner {
-            border: 2px solid transparent;
+            // border: 2px solid transparent;
+            clear: both;
         }
         &:hover {
             .component-inner {
-                border: 2px dashed #34495e;
-            }
-            .componentActions {
-                display: block;
-                line-height: 39px;
-                visibility: visible;
-                .animation(fadeIn 1s);
+                // border: 2px dashed #34495e;
             }
             .add-component {
                 display: block;
                 visibility: visible;
+            }
+            .add-component-container {
+                position: relative;
+                z-index: 11;
+                display: block;
+            }
+            .hover-action {
+                z-index: 11;
             }
         }
         &.ng-enter {
@@ -504,17 +454,21 @@ fieldset[disabled] .btn-vimeo-square.active {
 }
 
 .componentActions {
-    position: absolute;
-    z-index: 1032;
-    width: 100%;
-    margin-right: 10px;
+    position: relative;
+    max-height: 0px;
+    .box-shadow(inset 0px 0px 5px 0px rgba(255, 255, 255, 0.5));
+    background: #efa022;
+    color: white;
+    overflow: hidden;
+    .transition(max-height .5s);
     span {
-        background: rgba(44, 62, 80, 0.8);
         padding: 20px;
-        color: white;
+        color: #fff;
         font-size: 20px;
         cursor: pointer;
-        ;
+    }
+    &.display-settings {
+        max-height: 56px;
     }
     .reorder {
         float: left;
@@ -568,7 +522,7 @@ fieldset[disabled] .btn-vimeo-square.active {
         float: right;
         pointer-events: all;
         &:hover {
-            color: #efa022;
+            color: #696969;
         }
     }
 }
@@ -857,59 +811,39 @@ fieldset[disabled] .btn-vimeo-square.active {
     }
 }
 
-// ul.ui-sortable.active {
-//     margin-bottom: 0;
-//     padding: 0px;
-//     .as-sortable-placeholder {
-//         height: 57px!important;
-//     }
-//     .fragment {
-//         overflow: hidden;
-//         height: 57px!important;
-//         &:hover {
-//             .componentActions {
-//                 .animation(none)!important;
-//             }
-//             .add-new-component {
-//                 display: none!important;
-//                 visibility: hidden!important;
-//             }
-//         }
-//         .componentActions {
-//             display: block;
-//             visibility: visible;
-//             border: 1px solid #ccc;
-//             background: #fafafa;
-//             .delete-component, .duplicate, .component-settings {
-//                 display: none;
-//             }
-//             h4 {
-//                 display: block;
-//                 background: rgba(44, 62, 80, 0.8);
-//                 padding: 18px;
-//                 color: white;
-//                 font-size: 18px;
-//                 margin: 0;
-//                 height: 56px;
-//             }
-//             span.fa {
-//                 padding: 10px;
-//                 text-align: center;
-//                 line-height: 18px;
-//             }
-//             p {
-//                 margin-bottom: 0;
-//                 font-size: 14px;
-//             }
-//         }
-//         .add-new-component {
-//             display: none;
-//         }
-//     }
-// }
 ul.nav-bar {
     list-style: none;
 }
+
 .pac-container {
     z-index: 10020 !important;
+}
+
+div[class^="spacing-"] {
+    width: 60px;
+}
+
+.spacing-mt {
+    margin: -30px auto 15px;
+}
+
+.spacing-mr,
+.spacing-ml {
+    margin: 65px auto 0;
+}
+
+.spacing-mb,
+.spacing-pr,
+.spacing-pl,
+.spacing-pb {
+    margin: 0 auto 0;
+}
+
+.spacing-pt {
+    margin: -30px auto 15px;
+}
+
+.nav-undernav {
+    background: transparent !important;
+    z-index: 11 !important;
 }

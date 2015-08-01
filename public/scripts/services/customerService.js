@@ -53,4 +53,12 @@ mainApp.service('customerService', ['$http', function ($http) {
         });
     };
 
+    this.postCsvCustomers = function(customers, fn) {
+        var apiUrl = baseUrl + ['contact', 'importcsv'].join('/');
+        $http.post(apiUrl, customers)
+            .success(function(data, status, headers, config) {
+                fn(data);
+            });
+    };
+
 }]);

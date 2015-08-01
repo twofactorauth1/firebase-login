@@ -131,22 +131,23 @@ hr {
 
 .add-component {
     font-size: 50px;
-    position: absolute;
-    background: rgba(44, 62, 80, 0.8);
-    padding: 20px 20px 15px;
-    color: white;
+    padding: 0px;
+    color: #fff;
     font-size: 20px;
     cursor: pointer;
     left: 45%;
-    z-index: 9998;
-    margin-top: -25px;
-    padding: 5px 15px;
+    z-index: 5;
     text-align: center;
-    /*
-      99999 is for
-        .componentActions
-    */
-    
+    .box-shadow(inset 0px 0px 5px 0px rgba(255, 255, 255, 0.5));
+    background: #efa022;
+    max-height: 0px;
+    overflow: hidden;
+    .transition(max-height .5s);
+    &.display-settings {
+        max-height: 56px;
+        padding: 10px 0;
+        line-height: 18px;
+    }
     p {
         margin-bottom: 0;
         font-size: 14px;
@@ -170,7 +171,12 @@ hr {
 .component-hidden {
     text-align: center;
     padding: 5px 0;
-    height: 150px;
+    min-height: 150px;
+    margin-top: -56px !important;
+    margin-bottom: -58px !important;
+    background: #f1f1f1!important;
+    position: relative;
+    .transition(margin .5s);
 }
 
 .component-hidden > h3 {
@@ -203,10 +209,6 @@ hr {
 .no-component {
     display: block;
     visibility: visible;
-}
-
-.component-inner {
-    padding: 2px;
 }
 
 ol.circles-list {
@@ -242,12 +244,6 @@ ol.circles-list > li:before {
     background-color: #464646;
     content: counter(li-counter);
     counter-increment: li-counter;
-}
-
-.componentActions,
-.no-component {
-    display: none;
-    visibility: hidden;
 }
 
 .no-component {

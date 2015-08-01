@@ -13,19 +13,13 @@ script(src='../js/libs/angular-ui-router/release/angular-ui-router.min.js')
 script(src='../js/libs/angular-filter/dist/angular-filter.min.js')
 // Angular storage
 script(src='../js/libs/ngstorage/ngStorage.min.js')
-
-script(src='../js/libs/jsVideoUrlParser/dist/jsVideoUrlParser.min.js')
 // Angular Translate
 script(src='../js/libs/angular-translate/angular-translate.min.js')
 script(src='../js/libs/angular-translate-loader-url/angular-translate-loader-url.min.js')
 script(src='../js/libs/angular-translate-loader-static-files/angular-translate-loader-static-files.min.js')
 script(src='../js/libs/angular-translate-storage-local/angular-translate-storage-local.min.js')
 script(src='../js/libs/angular-translate-storage-cookie/angular-translate-storage-cookie.min.js')
-//Masonry
-script(src='../js/libs/masonry/dist/masonry.pkgd.min.js')
-script(src='../js/libs/angular-masonry/angular-masonry.js')
-// Utils
-script(src='../js/utils/namespaces.js')
+
 // oclazyload
 script(src='../js/libs/oclazyload/dist/ocLazyLoad.min.js')
 // breadcrumb
@@ -48,13 +42,14 @@ script(src='../js/libs/bootstrap-icon-picker/bootstrap-iconpicker/js/iconset/ico
 script(src='../js/libs/bootstrap-icon-picker/bootstrap-iconpicker/js/bootstrap-iconpicker.min.js')
 script(src="../js/libs/leaflet/dist/leaflet.js")
 script(src="../js/libs/angular-leaflet-directive/dist/angular-leaflet-directive.min.js")
-script(src="../js/libs/angular-google-places-autocomplete/src/autocomplete.js")
+script(src="../js/libs/angular-google-places-autocomplete/dist/autocomplete.min.js")
 //config
 script(src="../js/scripts/config.js")
+script(src="../js/utils/namespaces.js")
+//- END AUTOINCLUDE SECTION
 // Keen Library
 script(type="text/javascript").
     !function(a,b){a("Keen","https://d26b395fwzu5fz.cloudfront.net/3.1.0/keen.min.js",b)}(function(a,b,c){var d,e,f;c["_"+a]={},c[a]=function(b){c["_"+a].clients=c["_"+a].clients||{},c["_"+a].clients[b.projectId]=this,this._config=b},c[a].ready=function(b){c["_"+a].ready=c["_"+a].ready||[],c["_"+a].ready.push(b)},d=["addEvent","setGlobalProperties","trackExternalLink","on"];for(var g=0;g<d.length;g++){var h=d[g],i=function(a){return function(){return this["_"+a]=this["_"+a]||[],this["_"+a].push(arguments),this}};c[a].prototype[h]=i(h)}e=document.createElement("script"),e.async=!0,e.src=b,f=document.getElementsByTagName("script")[0],f.parentNode.insertBefore(e,f)},this);
-//- END AUTOINCLUDE SECTION
 // Scripts
 script(src='assets/js/app.js')
 script(src='assets/js/main.js')
@@ -88,6 +83,8 @@ script(src='assets/js/directives/smart-table-sort.js')
 script(src="assets/js/directives/include-replace.js")
 script(src="assets/js/directives/carousel.js")
 script(src="assets/js/directives/angularparallax.js")
+script(src="assets/js/directives/file-change.js")
+script(src="assets/js/directives/show-settings.js")
 
 // Components
 script(src="assets/js/directives/editor.js")
@@ -146,18 +143,8 @@ script(type="text/javascript").
 script.
     (function(){var w=window;var ic=w.Intercom;if(typeof ic==="function"){ic('reattach_activator');ic('update',intercomSettings);}else{var d=document;var i=function(){i.c(arguments)};i.q=[];i.c=function(args){i.q.push(args)};w.Intercom=i;function l(){var s=d.createElement('script');s.type='text/javascript';s.async=true;s.src='https://widget.intercom.io/widget/b3st2skm';var x=d.getElementsByTagName('script')[0];x.parentNode.insertBefore(s,x);}if(w.attachEvent){w.attachEvent('onload',l);}else{w.addEventListener('load',l,false);}}})()
 
-script(src="https://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/hmac-sha256.js")
-script(src="https://crypto-js.googlecode.com/svn/tags/3.1.2/build/components/enc-base64-min.js")
-
-script(type="text/javascript").
-    var hash = CryptoJS.HmacSHA256('#{user.email}', "vZ7kG_bS_S-jnsNq4M2Vxjsa5mZCxOCJM9nezRUQ");
-    window.intercomSettings = {
-      name: '#{user.first} #{user.last}',
-      email: '#{user.email}',
-      user_hash: hash.toString(CryptoJS.enc.Hex),
-      created_at: Math.floor(Date.now() / 1000),
-      app_id: "b3st2skm"
-    };
+script(src="../js/libs_misc/crypto/hmac-sha256.js")
+script(src="../js/libs_misc/crypto/enc-base64-min.js")
 
 if account._id == 6 && account.accountUrl != 'https://main.indigenous.io'
       script.
@@ -167,6 +154,16 @@ if account._id == 6 && account.accountUrl != 'https://main.indigenous.io'
       script.
           (function(){var w=window;var ic=w.Intercom;if(typeof ic==="function"){ic('reattach_activator');ic('update',intercomSettings);}else{var d=document;var i=function(){i.c(arguments)};i.q=[];i.c=function(args){i.q.push(args)};w.Intercom=i;function l(){var s=d.createElement('script');s.type='text/javascript';s.async=true;s.src='https://widget.intercom.io/widget/';var x=d.getElementsByTagName('script')[0];x.parentNode.insertBefore(s,x);}if(w.attachEvent){w.attachEvent('onload',l);}else{w.addEventListener('load',l,false);}}})()
 
+      script(type="text/javascript").
+          var hash = CryptoJS.HmacSHA256('#{user.email}', "vZ7kG_bS_S-jnsNq4M2Vxjsa5mZCxOCJM9nezRUQ");
+          window.intercomSettings = {
+            name: '#{user.first} #{user.last}',
+            email: '#{user.email}',
+            user_hash: hash.toString(CryptoJS.enc.Hex),
+            created_at: Math.floor(Date.now() / 1000),
+            app_id: "b3st2skm"
+          };
+
 if account._id == 6 && account.accountUrl == 'https://main.indigenous.io'
       script.
         window.intercomSettings = {
@@ -174,6 +171,16 @@ if account._id == 6 && account.accountUrl == 'https://main.indigenous.io'
           };
       script.
           (function(){var w=window;var ic=w.Intercom;if(typeof ic==="function"){ic('reattach_activator');ic('update',intercomSettings);}else{var d=document;var i=function(){i.c(arguments)};i.q=[];i.c=function(args){i.q.push(args)};w.Intercom=i;function l(){var s=d.createElement('script');s.type='text/javascript';s.async=true;s.src='https://widget.intercom.io/widget/';var x=d.getElementsByTagName('script')[0];x.parentNode.insertBefore(s,x);}if(w.attachEvent){w.attachEvent('onload',l);}else{w.addEventListener('load',l,false);}}})()
+
+      script(type="text/javascript").
+          var hash = CryptoJS.HmacSHA256('#{user.email}', "vZ7kG_bS_S-jnsNq4M2Vxjsa5mZCxOCJM9nezRUQ");
+          window.intercomSettings = {
+            name: '#{user.first} #{user.last}',
+            email: '#{user.email}',
+            user_hash: hash.toString(CryptoJS.enc.Hex),
+            created_at: Math.floor(Date.now() / 1000),
+            app_id: "b3st2skm"
+          };
 
       // Facebook Conversion Code for Free Trial Sign-ups
       script.

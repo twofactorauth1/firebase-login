@@ -1,7 +1,7 @@
 'use strict';
 /*global app, moment, angular, window*/
 /*jslint unparam:true*/
-app.directive('meetTeamComponent', function () {
+app.directive('meetTeamComponent',["$window", function ($window) {
   return {
     scope: {
       component: '=',
@@ -37,7 +37,7 @@ app.directive('meetTeamComponent', function () {
         var newTeam = {
           "name": "<p>First Last</p>",
           "position": "<p>Position of Person</p>",
-          "profilepic": "https://s3.amazonaws.com/indigenous-account-websites/acct_6/mike.jpg",
+          "profilepic": "https://s3-us-west-2.amazonaws.com/indigenous-admin/default-user.png",
           "bio": "<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Explicabo laboriosam, officiis vero eius ipsam aspernatur, quidem consequuntur veritatis aut laborum corporis impedit, quam saepe alias quis tempora non. Et, suscipit.</p>",
           "networks": [{
             "name": "linkedin",
@@ -48,6 +48,23 @@ app.directive('meetTeamComponent', function () {
         scope.component.teamMembers.splice(index + 1, 0, newTeam);
       };
 
+      scope.resizeTeamTiles = function (argument) {
+        var element = angular.element("#"+scope.component._id + " div.meet-team-height")
+        if (element && element.length) {
+          var maxTeamHeight = Math.max.apply(null, element.map(function () {
+            return this.offsetHeight;
+          }).get());
+          element.css("min-height", maxTeamHeight);
+        }
+      };
+      angular.element($window).bind('resize', function () {
+        scope.resizeTeamTiles();
+      });
+      angular.element(document).ready(function () {
+        setTimeout(function () {
+          scope.resizeTeamTiles();
+        }, 500)
+      });
     }
   };
-});
+}]);

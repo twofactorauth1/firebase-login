@@ -25,14 +25,14 @@
                                 </button>
                                 <div class="hidden-lg margin-bottom-10"></div>
                             </div>
-                            <div class="col-sm-2 col-xs-6 center">
+                            <div ng-if="!emailPage" class="col-sm-2 col-xs-6 center">
                                 <div ng-if="!isSinglePost">
                                     <a ng-disabled="!ckeditorLoaded" type="button" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-eye btn-o" ng-click="getUrl(page.handle, false)" target="_blank">
                                         <span>View</span>
                                     </a>
                                 </div>
                                 <div ng-if="isSinglePost">
-                                    <a ng-disabled="!ckeditorLoaded" type="button" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-eye btn-o" ng-click="getUrl(blog.post.post_url, true)" target="_blank">
+                                    <a ng-disabled="!ckeditorLoaded" type="button" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-eye btn-o" ng-click="getUrl(originalPost.post_url, true)" target="_blank">
                                         <span>View</span>
                                     </a>
                                 </div>

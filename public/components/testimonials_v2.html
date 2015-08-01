@@ -24,7 +24,7 @@
     </div>
     <div class="clearfix"></div>
     <div class="testimonial-wrap" style="position: relative;">
-        <slick init-onload="false" data="dataLoaded" slides-to-show='1' slides-to-scroll='1' autoplay="true" autoplaySpeed="5000" class="carousel-caption" dots="true" arrows="false">
+        <slick init-onload="false" data="dataLoaded" slides-to-show='1' slides-to-scroll='1' autoplay="{{autoplay}}" autoplaySpeed="5000" class="carousel-caption" dots="true" arrows="false">
             <div ng-repeat="testimonial in component.testimonials track by $index" active="testimonial.active" class="col-sm-12 testimonials single-testimonial">
                 <div class="img">
                     <div elem ng-model="testimonial.img"></div>
@@ -44,12 +44,12 @@
                 </div>
                 <div ng-if="isEditing">
                     <div class="delete-single-testimonial center">
-                        <button ng-click="deleteTestimonial(component._id,$index)" class="ng-scope btn-delete-single-testimonial">
+                        <button ng-click="deleteTestimonial($index)" class="ng-scope btn-delete-single-testimonial">
                             <i class='fa fa-trash'></i>
                         </button>
                     </div>
                     <div class="add-addtional center">
-                        <a href="" ng-click="addTestimonial(component._id,$index, component)">
+                        <a href="" ng-click="addTestimonial($index)">
                             <i class="fa fa-plus"></i>
                         </a>
                     </div>
@@ -57,5 +57,5 @@
             </div>
         </slick>
     </div>
-    <button ng-if="isEditing && component.testimonials.length === 0" ng-click="addTestimonial(component._id,0)" class="btn btn-primary btn-lg pull-right btn-add-testimonial">Add new testimonial</button>
+    <button ng-if="isEditing && component.testimonials.length === 0" ng-click="addTestimonial(0)" class="btn btn-primary btn-lg pull-right btn-add-testimonial">Add new testimonial</button>
 </div>

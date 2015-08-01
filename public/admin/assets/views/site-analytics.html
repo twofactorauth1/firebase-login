@@ -185,14 +185,14 @@
                             <table class="table table-hover margin-bottom-0">
                                 <thead>
                                     <tr>
-                                        <th class="center">Referrer</th>
-                                        <th class="center">Result</th>
+                                        <th>Referrer</th>
+                                        <th>Count</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr ng-repeat="trafficSource in trafficSourceData">
-                                        <td class="center">{{trafficSource['referrer.domain']}}</td>
-                                        <td class="center">{{trafficSource.result}}</td>
+                                        <td>{{trafficSource['referrer.domain']}}</td>
+                                        <td>{{trafficSource.result}}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -214,8 +214,8 @@
                         <thead>
                             <tr>
                                 <th>Page</th>
-                                <th ng-click="changeSorting('pageviews')" class="center">Pageviews</th>
-                                <th ng-click="changeSorting('uniquePageviews')" class="center">Unique Pageviews</th>
+                                <th ng-click="changeSorting('pageviews')" class="center">Page Views</th>
+                                <th ng-click="changeSorting('uniquePageviews')" class="center">Unique Page Views</th>
                                 <th ng-click="changeSorting('avgTime')" class="center">Avg. Time on Page</th>
                                 <!-- <th ng-click="changeSorting('entrances')">Entrances</th>
                                                 <th ng-click="changeSorting('bounceRate')">Bounce Rate</th>

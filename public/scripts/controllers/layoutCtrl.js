@@ -16,6 +16,14 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', '$window', '$locatio
     } else {
       $scope.page = data;
       $scope.components = data.components;
+      $scope.components.forEach(function (value, index) {
+        if (value && value.type === 'masthead') {
+          if (index != 0 && $scope.components[index - 1].type == "navigation") {
+            $scope.allowUndernav = true;              
+          } else
+            $scope.allowUndernav = false;
+        }
+      })
       checkIntercom(data);
       setTimeout(function () {
         var locId = $location.$$hash;

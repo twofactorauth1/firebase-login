@@ -134,7 +134,7 @@ app.set('view engine', 'jade');
 app.set('views', path.join(__dirname, 'templates'));
 
 app.use(connect.compress());
-
+app.use(express.compress());
 app.use(express.favicon());
 app.use(busboy());
 app.use(express.json());

@@ -141,6 +141,7 @@
     };
 
     $scope.createPageFromTemplate = function (page, $event) {
+      $scope.saveLoading = true;
       $scope.validateCreatePage(page, true);
 
       $scope.titleError = false;
@@ -148,6 +149,7 @@
       if (!$scope.createPageValidated) {
         $scope.titleError = true;
         $scope.handleError = true;
+        $scope.saveLoading = false;
         return false;
       }
 
@@ -174,6 +176,7 @@
           var newpage = angular.copy(_newPage);
           toaster.pop('success', 'Page Created', 'The ' + newpage.title + ' page was created successfully.');
           $scope.minRequirements = true;
+          $scope.saveLoading = false;
           $scope.closeModal();
 
           if (newpage.components) {
@@ -198,6 +201,7 @@
         toaster.pop('error', "Page URL " + page.handle, "Already exists");
         $event.preventDefault();
         $event.stopPropagation();
+        $scope.saveLoading = false;
       }
     };
 
@@ -237,7 +241,7 @@
     $scope.pages = [];
 
     $scope.getPages = function () {
-      $timeout.cancel(repeater);
+      // $timeout.cancel(repeater);
       WebsiteService.getPages(function (returnedPages) {
         var pages = angular.copy(returnedPages);
         if ($scope.pages.length === 0) {
@@ -259,14 +263,11 @@
           });
         }
         if (pages.length > $scope.pages.length && $scope.pages.length !== 0) {
-          console.log($scope.pages);
-          console.log(pages);
           var intersection = _.filter(pages, function (obj) {
             return !_.find($scope.pages, function (item) {
               return item._id === obj._id;
             });
           });
-          console.log('intersection ', intersection);
           $scope.formatPages(intersection, function (pagesArr) {
             _.each(pagesArr, function (_pages) {
               $scope.pages.push(_pages);
@@ -276,7 +277,7 @@
           });
 
         }
-        repeater = $timeout($scope.getPages, 30000);
+        // repeater = $timeout($scope.getPages, 30000);
       });
     };
 

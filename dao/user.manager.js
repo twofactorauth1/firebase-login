@@ -180,6 +180,144 @@ module.exports = {
         callback();
     },
 
+
+    addUserToAccount: function(accountId, userId, roleAry, callingUser, fn) {
+        var self = this;
+        log.debug('>> addUserToAccount');
+
+        async.waterfall([
+            function stepZero(callback) {
+                dao.getById(userId, $$.m.User, function(err, user){
+                    if(err) {
+                        log.error('Error fetching user:', err);
+                        callback(err);
+                    } else if(user === null) {
+                        log.error('Could not find user');
+                        callback('Could not find user');
+                    } else {
+                        callback(null, user);
+                    }
+                });
+            },
+            function stepOne(user, callback){
+                var creds = user.getCredentials('lo');
+                var username = user.get('username');
+                user.createUserAccount(accountId, username, creds.password, roleAry);
+                dao.saveOrUpdate(user, function(err, savedUser){
+                    if(err) {
+                        log.error('Error saving user:', err);
+                        callback(err);
+                    } else {
+                        callback(null, savedUser, username);
+                    }
+                });
+            },
+            function stepTwo(user, username, callback) {
+                log.debug('Initializing user security.');
+                securityManager.initializeUserPrivileges(user.id(), username, roleAry, accountId, function(err, value) {
+                    if (err) {
+                        log.error('Error initializing user privileges for userID: ' + user.id());
+                        callback(err);
+                    } else {
+                        callback(null, user);
+                    }
+                });
+            }
+        ], function(err, user){
+            if(err) {
+                return fn(err, null);
+            } else {
+                return fn(null, user);
+            }
+        });
+
+    },
+
+    /**
+     * This method creates a NEW user and initiates the security privileges for him/her.
+     * @param accountId
+     * @param username
+     * @param password
+     * @param email
+     * @param roleAry
+     * @param callingUser
+     * @param fn
+     */
+    createUser: function(accountId, username, password, email, roleAry, callingUser, fn) {
+        var self = this;
+        log.debug('>> createUser');
+
+        async.waterfall([
+            function stepZero(callback){
+                log.debug('Checking if user exists');
+                //check for an existing user
+                dao.usernameExists(username, function(err, exists){
+                    if(err) {
+                        log.error('Error checking that username exists', err);
+                        callback(err);
+                    } else {
+                        if(exists === true) {
+                            callback('Username [' + username + '] already exists');
+                        } else {
+                            callback();
+                        }
+                    }
+                });
+            },
+            function stepOne(callback){
+                log.debug('Creating user');
+                var user = new $$.m.User({
+                    username:username,
+                    email:email,
+                    created: {
+                        date: new Date().getTime(),
+                        strategy: $$.constants.user.credential_types.LOCAL,
+                        by: callingUser, //self-created
+                        isNew: true
+                    }
+                });
+                user.encryptPasswordAsync(password, function(err, hash){
+                    if(err) {
+                        log.error('Error encrypting password: ' + err);
+                        callback(err);
+                    } else {
+                        callback(null, hash, user);
+                    }
+                });
+            },
+            function stepTwo(hash, user, callback){
+                log.debug('Storing encrypted password');
+                user.createOrUpdateLocalCredentials(hash);
+                user.createUserAccount(accountId, username, hash, roleAry);
+                dao.saveOrUpdate(user, function(err, savedUser){
+                    if(err) {
+                        log.error('Error saving user:', err);
+                        callback(err);
+                    } else {
+                        callback(null, savedUser);
+                    }
+                });
+            },
+            function stepThree(user, callback) {
+                log.debug('Initializing user security.');
+                securityManager.initializeUserPrivileges(user.id(), username, roleAry, accountId, function(err, value) {
+                    if (err) {
+                        log.error('Error initializing user privileges for userID: ' + user.id());
+                        callback(err);
+                    } else {
+                        callback(null, user);
+                    }
+                });
+            }
+        ], function(err, user){
+            if(err) {
+                return fn(err, null);
+            } else {
+                return fn(null, user);
+            }
+        });
+    },
+
     createAccountAndUser: function(username, password, email, accountToken, anonymousId, fingerprint, sendWelcomeEmail, fn) {
         var self = this;
         if (_.isFunction(accountToken)) {
@@ -297,10 +435,10 @@ module.exports = {
                     var businessObj = updatedAccount.get('business');
                     var email = user.get('email');
                     businessObj.emails = [];
-                        businessObj.emails.push({
-                            _id: $$.u.idutils.generateUniqueAlphaNumericShort(),
-                            email: email
-                        });
+                    businessObj.emails.push({
+                        _id: $$.u.idutils.generateUniqueAlphaNumericShort(),
+                        email: email
+                    });
                     accountDao.saveOrUpdate(updatedAccount, function(err, savedAccount){
                         if(err) {
                             log.error('Error saving account: ' + err);
@@ -310,135 +448,15 @@ module.exports = {
                         fn(null, {account: savedAccount, user:user});
                     });
                 });
-            }],
-            function(err){
-                if(err) {
-                    log.error('error processing tasks: ' + err);
-                    return fn(err, null);
-                }
-            });
-            /*
-
-
-
-
-        dao.getUserByUsername(username, function(err, value) {
-            if (err) {
-                return fn(err, value);
             }
-
-            if (value != null) {
-                //return fn(true, "An account with this username already exists");
-                user = value;
+        ],
+        function(err){
+            if(err) {
+                log.error('error processing tasks: ' + err);
+                return fn(err, null);
             }
-
-
-            var deferred = $.Deferred();
-
-            accountDao.convertTempAccount(accountToken, function(err, value) {
-                if (!err) {
-                    deferred.resolve(value);
-                } else {
-                    deferred.reject();
-                    return fn(err, value);
-                }
-            });
-
-            deferred.done(function(account) {
-                    var accountId;
-                    if (account != null) {
-                        accountId = account.id();
-                    }
-
-                    if (accountId == null) {
-                        return fn(true, "Failed to create user, no account found");
-                    }
-
-
-                    if(user === null) {
-                        user = new $$.m.User({
-
-                            username:username,
-                            email:email,
-                            created: {
-                                date: new Date().getTime(),
-                                strategy: $$.constants.user.credential_types.LOCAL,
-                                by: null, //self-created
-                                isNew: true
-                            }
-                        });
-                        user.createOrUpdateLocalCredentials(password);
-
-                    }
-
-
-                    var roleAry = ["super","admin","member"];
-                    user.createUserAccount(accountId, username, password, roleAry);
-
-                    dao.saveOrUpdate(user, function(err, savedUser){
-                        if(err) {
-                            log.error('Error saving user: ' + err);
-                            return fn(err, null);
-                        }
-                        var userId = savedUser.id();
-                        log.debug('Created user with id: ' + userId);
-                        //analyticsManager.linkUsers(anonymousId, userId, function(err, value){});
-                        socialConfigManager.createSocialConfigFromUser(accountId, savedUser, function(err, value){
-                            if(err) {
-                                log.error('Error creating social config for account:' + accountId);
-                            }
-                            return;
-                        });
-
-
-
-
-
-                        log.debug('Initializing user security.');
-                        securityManager.initializeUserPrivileges(userId, username, roleAry, accountId, function(err, value){
-                            if(err) {
-                                log.error('Error initializing user privileges for userID: ' + userId);
-                                return fn(err, null);
-                            }
-                            log.debug('creating website for account');
-                            cmsManager.createWebsiteForAccount(accountId, 'admin', function(err, value){
-                                if(err) {
-                                    log.error('Error creating website for account: ' + err);
-                                    fn(err, null);
-                                } else {
-                                    log.debug('creating default page');
-                                    cmsManager.createDefaultPageForAccount(accountId, value.id(), function(err, value){
-                                        if(err) {
-                                            log.error('Error creating default page for account: ' + err);
-                                            fn(err, null);
-                                        } else {
-                                            //pick up updated account
-                                            accountDao.getAccountByID(account.id(), function(err, updatedAccount){
-                                                var businessObj = updatedAccount.get('business');
-                                                var email = user.get('email');
-                                                businessObj.email = email;
-                                                accountDao.saveOrUpdate(updatedAccount, function(err, savedAccount){
-                                                    if(err) {
-                                                        log.error('Error saving account: ' + err);
-                                                        callback(err);
-                                                    }
-                                                    log.debug('<< createUserFromUsernamePassword');
-                                                    fn(null, {account: savedAccount, user:savedUser});
-                                                });
-
-                                            });
-
-                                        }
-                                    });
-                                }
-
-                            });
-                        });
-                    });
-
-                });
         });
-        */
+
     },
 
     createAccountUserFromContact: function(accountId, username, password, contact, requser, fn) {
@@ -500,7 +518,7 @@ module.exports = {
 
     },
 
-    createAccountUser: function(accountId, username, password, email, first, last, user, fn) {
+    createAccountUser: function(accountId, username, password, email, first, last, user, roleAry, fn) {
         var self = this;
         self.log = log;
         self.log.debug('>> createAccountUser');
@@ -539,7 +557,7 @@ module.exports = {
                     });
                     user.createOrUpdateLocalCredentials(hash);
                 }
-                var roleAry = ["member"];
+
                 user.createUserAccount(accountId, username, hash, roleAry);
 
                 dao.saveOrUpdate(user, function(err, savedUser) {
@@ -591,7 +609,7 @@ module.exports = {
             } else {
                 if(user.getAllAccountIds().length > 1) {
                     user.removeAccount(accountId);
-                    dao.saveOrUpdate(user, $$.m.User, function(err, savedUser){
+                    dao.saveOrUpdate(user, function(err, savedUser){
                         if(err) {
                             self.log.error('Error updating user: ' + err);
                             return fn(err, null);
@@ -613,5 +631,42 @@ module.exports = {
                 }
             }
         });
+    },
+
+    setUserPassword: function(userId, newPassword, callingUser, fn){
+        var self = this;
+        self.log = log;
+        self.log.debug('>> setUserPassword');
+
+        /*
+         * 1. Get user by Id
+         * 2. Encrypt password
+         * 3. Update local credentials
+         */
+        dao.getById(userId, $$.m.User, function(err, user){
+            if(err) {
+                self.log.error('Error fetching user by Id', err);
+                return fn(err, null);
+            } else if(user === null) {
+                self.log.warn('Could not find user with id [' + userId + ']');
+                return fn(null, null);
+            } else {
+                user.encryptPasswordAsync(newPassword, function(err, hash){
+                    if(err) {
+                        self.log.error('Error encrypting password:', err);
+                        return fn(err, null);
+                    } else {
+                        user.updateAllLocalCredentials(hash);
+                        var modified = {
+                            date: new Date(),
+                            by: callingUser
+                        };
+                        user.set('modified', modified);
+                        dao.saveOrUpdate(user, fn);
+                    }
+                });
+            }
+        });
+
     }
 };

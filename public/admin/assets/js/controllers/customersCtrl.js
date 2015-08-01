@@ -1,43 +1,47 @@
 'use strict';
-/*global app, moment, angular, window*/
-/*jslint unparam:true*/
+/*global app, window*/
 (function (angular) {
-  app.controller('CustomersCtrl', ["$scope", "$state", "toaster", "$modal", "$window", "CustomerService", "SocialConfigService", "userConstant", function ($scope, $state, toaster, $modal, $window, CustomerService, SocialConfigService, userConstant) {
+  app.controller('CustomersCtrl', ["$scope", "$state", "toaster", "$modal", "$window", "CustomerService", "SocialConfigService", "userConstant", '$timeout', function ($scope, $state, toaster, $modal, $window, CustomerService, SocialConfigService, userConstant, $timeout) {
 
     $scope.tableView = 'list';
     $scope.itemPerPage = 100;
     $scope.showPages = 15;
-    
-    if(!$state.current.sort) 
+
+    if (!$state.current.sort) {
       $scope.order = "reverse";
-      
+    }
+
     /*
      * @getCustomers
      * -
      */
 
-    CustomerService.getCustomers(function (customers) {
-      _.each(customers, function (customer) {
-        customer.bestEmail = $scope.checkBestEmail(customer);
-        customer.hasFacebookId = $scope.checkFacebookId(customer);
-        customer.hasTwitterId = $scope.checkTwitterId(customer);
-        customer.hasLinkedInId = $scope.checkLinkedInId(customer);
-        customer.hasGoogleId = $scope.checkGoogleId(customer);
-      });
-      $scope.customers = customers;
-      if($state.current.sort)
-        $scope.setSortOrder($state.current.sort);    
-      $scope.showCustomers = true;
-      console.log("customers loaded");
+    $scope.getCustomers = function () {
+      CustomerService.getCustomers(function (customers) {
+        _.each(customers, function (customer) {
+          customer.bestEmail = $scope.checkBestEmail(customer);
+          customer.hasFacebookId = $scope.checkFacebookId(customer);
+          customer.hasTwitterId = $scope.checkTwitterId(customer);
+          customer.hasLinkedInId = $scope.checkLinkedInId(customer);
+          customer.hasGoogleId = $scope.checkGoogleId(customer);
+        });
+        $scope.customers = customers;
+        if ($state.current.sort) {
+          $scope.setSortOrder($state.current.sort);
+        }
+        $scope.showCustomers = true;
 
-    });
+      });
+    };
+
+    $scope.getCustomers();
 
     /*
      * @getters
      * - getters for the sort on the table
      */
 
-    $scope.getters = {      
+    $scope.getters = {
       created: function (value) {
         return value.created.date || -1;
       },
@@ -53,14 +57,14 @@
       phone: function (value) {
         if (value.details[0] && value.details[0].phones && value.details[0].phones[0]) {
           return value.details[0].phones[0].number.trim();
-        } else {
-          return "";
         }
+        return "";
       },
       address: function (value) {
         if (value.details[0] && value.details[0].addresses && value.details[0].addresses[0] && value.details[0].addresses[0].city && value.details[0].addresses[0].state) {
           return [value.details[0].addresses[0].city, value.details[0].addresses[0].state].join(' ').trim();
-        } else if (value.details[0] && value.details[0].addresses && value.details[0].addresses[0] && value.details[0].addresses[0].address && !value.details[0].addresses[0].city) {
+        }
+        if (value.details[0] && value.details[0].addresses && value.details[0].addresses[0] && value.details[0].addresses[0].address && !value.details[0].addresses[0].city) {
           return value.details[0].addresses[0].address;
         }
       },
@@ -76,9 +80,9 @@
         }
         if (value.hasTwitterId) {
           return 4;
-        } else {
-          return 5;
         }
+
+        return 5;
       }
     };
 
@@ -87,11 +91,49 @@
      * -
      */
 
-    $scope.openModal = function (template) {
-      $scope.modalInstance = $modal.open({
+    $scope.openModal = function (template, controller, _size) {
+      // console.log('');
+      // $scope.modalInstance = $modal.open({
+      //   templateUrl: template,
+      //   controller: controller,
+      //   scope: $scope,
+      //   backdrop: 'static',
+      //   size: _size || 'md'
+      // });
+      // angular.element('.modal-body').editable({selector: '.editable'});
+      console.log('openModal >>> ', template, controller, _size);
+      var _modal = {
         templateUrl: template,
-        scope: $scope,
-        backdrop: 'static'
+        size: 'md',
+        resolve: {
+          getCustomers: function () {
+            return $scope.getCustomers();
+          }
+        }
+      };
+
+      if (controller) {
+        _modal.controller = controller;
+      }
+
+      if (_size) {
+        _modal.size = _size;
+      }
+
+      $scope.modalInstance = $modal.open(_modal);
+      $scope.modalInstance.result.then(null, function () {
+        angular.element('.sp-container').addClass('sp-hidden');
+      });
+    };
+
+    $scope.openSimpleModal = function (modal) {
+      var _modal = {
+        templateUrl: modal,
+        scope: $scope
+      };
+      $scope.modalInstance = $modal.open(_modal);
+      $scope.modalInstance.result.then(null, function () {
+        angular.element('.sp-container').addClass('sp-hidden');
       });
     };
 
@@ -174,7 +216,7 @@
       return returnVal;
     };
 
-    $scope.viewSingle = function (customer) {      
+    $scope.viewSingle = function (customer) {
       var tableState = $scope.getSortOrder();
       $state.current.sort = tableState.sort;
       window.location = '/admin/#/customers/' + customer._id;
@@ -219,7 +261,6 @@
     $scope.customersLimit = 50;
 
     $scope.addCustomers = function () {
-      console.log('add customer');
       $scope.customersLimit += 50;
     };
 
@@ -268,10 +309,10 @@
         }
       }
     }, true);
-    $scope.socialAccounts = {};
-    SocialConfigService.getAllSocialConfig(function (data) {
-      $scope.socialAccounts = data.socialAccounts;
-    });
+    // $scope.socialAccounts = {};
+    // SocialConfigService.getAllSocialConfig(function (data) {
+    //   $scope.socialAccounts = data.socialAccounts;
+    // });
 
     $scope.importFacebookFriends = function () {
       CustomerService.importFacebookFriends(function (data, success) {
@@ -291,7 +332,7 @@
           foundSocialId = true;
           $scope.closeModal();
           toaster.pop('success', "Contacts import initiated.");
-          SocialConfigService.importLinkedinContact(value.id, function (data) {
+          SocialConfigService.importLinkedinContact(value.id, function () {
             $scope.closeModal();
             toaster.pop('success', "Contacts import complete.");
           });
@@ -305,7 +346,7 @@
 
     $scope.importGmailContacts = function () {
       var foundSocialId = false;
-      $scope.socialAccounts.forEach(function (value, index) {
+      $scope.socialAccounts.forEach(function (value) {
         if (value.type === userConstant.social_types.GOOGLE) {
           foundSocialId = true;
           $scope.closeModal();
@@ -348,6 +389,7 @@
       toaster.pop('success', "Contacts import initiated.");
       SocialConfigService.importGoogleContactsForGroup($scope.tempGoogleAccount.id, groupId.id, function () {
         $scope.closeModal();
+        $scope.minRequirements = true;
         toaster.pop('success', "Your Google contacts are being imported in the background.");
       });
       $scope.tempGoogleAccount = null;
@@ -396,19 +438,19 @@
 
 
     };
-    $scope.socailType = "";
-    $scope.socailList = false;
-    $scope.groupList = false;
+    // $scope.socailType = "";
+    // $scope.socailList = false;
+    // $scope.groupList = false;
 
-    $scope.showSocialAccountSelect = function (socailType) {
-      $scope.socailType = socailType;
-      $scope.socailList = true;
-      if (socailType === userConstant.social_types.GOOGLE) {
-        $scope.groupList = true;
-      } else {
-        $scope.groupList = false;
-      }
-    };
+    // $scope.showSocialAccountSelect = function (socailType) {
+    //   $scope.socailType = socailType;
+    //   $scope.socailList = true;
+    //   if (socailType === userConstant.social_types.GOOGLE) {
+    //     $scope.groupList = true;
+    //   } else {
+    //     $scope.groupList = false;
+    //   }
+    // };
 
   }]);
 }(angular));

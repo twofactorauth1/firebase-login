@@ -79,6 +79,6 @@
     <div class="clearfix"></div>
     <div class="modal-footer" ng-show="templateDetails">
         <button class="btn btn-warning btn-o pull-left" ng-click="resetTemplateDetails()">Back</button>
-        <button class="btn btn-primary btn-o" ng-click="createPageFromTemplate(createpage, $event)">Add Page</button>
+        <button ng-disabled="saveLoading" class="btn btn-primary btn-o" ng-click="createPageFromTemplate(createpage, $event)">Add Page</button>
     </div>
 </script>

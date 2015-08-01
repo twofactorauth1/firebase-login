@@ -107,7 +107,7 @@
       if (data && !resetCache) {
         if (fn) {
           fn(data);
-          self.getPagesHeartbeat();
+          // self.getPagesHeartbeat();
         }
       } else {
         var apiUrl = baseUrl + ['cms', 'website', $$.server.websiteId.replace(/&quot;/g, ''), 'pages'].join('/');
@@ -118,7 +118,7 @@
             if (fn) {
               fn(data);
             }
-            self.getPagesHeartbeat();
+            // self.getPagesHeartbeat();
           }).error(function (msg, code) {
             console.warn(msg, code);
           });

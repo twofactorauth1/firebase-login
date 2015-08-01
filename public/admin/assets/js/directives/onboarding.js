@@ -208,8 +208,8 @@ app.directive('indigOnboarding', function ($rootScope, $location, $sce, $state, 
           var _matchingTask = _.find($scope.onboardingStepMap, function (task) {
             return task.pane.state === $state.current.name;
           });
-
-          $scope.objType = _matchingTask.pane.taskKey;
+          if(_matchingTask)
+            $scope.objType = _matchingTask.pane.taskKey;
         }
         if ($scope.userPreferences && $scope.userPreferences.tasks && $scope.userPreferences.tasks[$scope.objType] !== 'finished' && ($scope.minReq || skipMinRequirements)) {
           $scope.userPreferences.tasks[$scope.objType] = 'finished';

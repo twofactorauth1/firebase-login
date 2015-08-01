@@ -3,8 +3,8 @@
  * service for customer
  */
 (function(angular) {
-    app.service('CustomerService', ['$http', '$cacheFactory', 'ImportContactService', 'contactConstant', 'userConstant',
-        function($http, $cacheFactory, ImportContactService, contactConstant, userConstant) {
+    app.service('CustomerService', ['$http', '$rootScope', '$cacheFactory', 'ImportContactService', 'contactConstant', 'userConstant',
+        function($http, $rootScope, $cacheFactory, ImportContactService, contactConstant, userConstant) {
             var baseUrl = '/api/1.0/';
 
             this.getCache = function() {
@@ -113,6 +113,29 @@
                     apiFn = this.postCustomer;
                 }
                 apiFn(this.getCache(), customer, fn);
+            };
+
+            var customerUploading = 0;
+            var customerArr = [];
+            var passedFn = '';
+
+            this.importCsvCustomers = function(customers, fn) {
+                var self = this;
+                if (customers) {
+                    customerArr = customers;
+                }
+
+                if (fn) {
+                    passedFn = fn;
+                }
+
+                self.postCustomer(self.getCache(), customerArr[customerUploading], function(newCustomer) {
+                    if (customerUploading <= customerArr.length) {
+                        $rootScope.$broadcast('importingCustomers', { current: customerUploading, total: customerArr.length });
+                        customerUploading++;
+                        self.importCsvCustomers();
+                    }
+                });
             };
 
             this.postTwoNetSubscribe = function(customerId, fn) {

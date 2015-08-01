@@ -150,6 +150,7 @@ var dao = {
             else if (account === true || account.id() === appConfig.mainAccountID) {
                 req.session.accountId = 0;
                 //Lets look up the user by socialId
+                self.log.debug('Setting accountId to 0');
                 userDao.getUserBySocialId(socialType, socialId, function (err, value) {
                     if (err) {
                         fn(err, "An error occurred attempting to retrieve user by social profile");
@@ -159,6 +160,7 @@ var dao = {
 
                     if (value == null) {
                         //look up by email
+                        self.log.debug('looking up user by email');
                         userDao.getUserByUsername(email, function (err, value) {
                             if (err) {
                                 fn(err, "An error occurred retrieving user by username");
@@ -179,6 +181,7 @@ var dao = {
                                         } else {
                                             req.session.accounts = value.getAllAccountIds();
                                             req.session.accountId = value.getAllAccountIds()[0];
+                                            req.session.unAuthAccountId = value.getAllAccountIds()[0];
                                             req.session.subdomain = account.get('subdomain');
                                             req.session.domain = account.get('domain');
                                         }
@@ -215,6 +218,7 @@ var dao = {
                         } else {
                             req.session.accounts = value.getAllAccountIds();
                             req.session.accountId = value.getAllAccountIds()[0];
+                            req.session.unAuthAccountId = value.getAllAccountIds()[0];
                             self.log.debug('req.session.accountId: ' + req.session.accountId);
                             accountDao.getAccountByID(req.session.accountId, function(err, account){
                                 if(err) {
@@ -237,6 +241,7 @@ var dao = {
                 });
             } else {
                 req.session.accountId = account.id();
+                req.session.unAuthAccountId = account.id();
                 req.session.subdomain = account.get('subdomain');
                 req.session.domain = account.get('domain');
                 userDao.getUserForAccountBySocialProfile(account.id(), socialType, socialId, function (err, value) {
