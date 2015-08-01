@@ -24,7 +24,8 @@
         </div>
         <div class="social-signup">
             <div class="inner-page">
-                <h2 class="center">SIGN UP FOR A 14 DAY FREE TRIAL*</h2>
+                <h2 class="center" ng-if="subscriptionPlans[0].trial_period_days">SIGN UP FOR A {{subscriptionPlans[0].trial_period_days}} DAY FREE TRIAL*</h2>
+                <h2 class="center" ng-if="!subscriptionPlans[0].trial_period_days">SIGN UP FOR INDIGENOUS*</h2>
                 <div class="clearfix mb20"></div>
                 <div class="social btn-toolbar">
                     <p class="pull-left">Sign in with: </p>
@@ -89,7 +90,7 @@
                     <h4 class="center">{{plan.name}}</h4>
                     <h2 class="center"><i class="fa fa-usd fa-1"></i>{{(plan.amount/100).toFixed(2)}} <span>/ {{plan.interval}}</span></h2>
                     <div class="clearfix mb15"></div>
-                    <p class="center"><span ng-show="currentCoupon.created != 1437591986">+ <i class="fa fa-usd fa-1"></i> {{subscriptionPlanOneTimeFee}} One Time</span> <span ng-if="currentCoupon.created == 1437591986">No</span> Setup Fee</p>
+                    <p class="center"><span ng-show="currentCoupon.created != 1437591986 && paymentFormProduct.product_attributes.stripePlans[0].signup_fee">+ <i class="fa fa-usd fa-1"></i> {{subscriptionPlanOneTimeFee}} One Time Setup Fee</span> <span ng-if="currentCoupon.created == 1437591986">No Setup Fee</span></p>
                     <div class="col-xs-12">
                         <a type="button" class="btn btn-success btn-block center" ng-if="newAccount.membership != plan.id" ng-hide="subscriptionPlans.length == 1" ng-click="selectSubscriptionPlanFn(plan.id, plan.amount, plan.interval, planStatus[plan.id].signup_fee)">Choose</a>
                         <a type="button" class="btn btn-green btn-block center active" ng-hide="subscriptionPlans.length == 1" ng-if="newAccount.membership == plan.id">Selected</a>
@@ -148,7 +149,7 @@
                 </div>
                 <p class="center margin-top-10">By clicking this button you agree to our <a href="" type="button" data-toggle="modal" data-target="#terms-of-service">Terms of Service</a>.</p>
                 <br>
-                <p class="center">* 14-day free trial <span ng-if="currentCoupon.created == 1437591986"> with sign-up fee waived</span>, <span ng-if="!currentCoupon.created">then a one time charge for $546.95 ($497 + $49.95),</span> then $49.95/month. <br> Once payment is processed, there are no refunds and there is no proration. <br> For cancellations, please contact our support via chat.</p>
+                <p class="center">* <span ng-if="subscriptionPlans[0].trial_period_days">{{subscriptionPlans[0].trial_period_days}}-day free trial</span> <span ng-if="currentCoupon.created == 1437591986"> with sign-up fee waived, </span> <span ng-if="!currentCoupon.created && paymentFormProduct.product_attributes.stripePlans[0].signup_fee">then a one time charge for $546.95 ($497 + $49.95), then</span> $49.95/month. <br> Once payment is processed, there are no refunds and there is no proration. <br> For cancellations, please contact our support via chat.</p>
                 <div class="clearfix margin-bottom-10"></div>
             </div>
         </div>
