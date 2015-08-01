@@ -726,19 +726,20 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
 
     if ($scope.componentEditing) {
       var componentType;
-
+      console.log('$scope.componentEditing.spacing', $scope.componentEditing.spacing);
       if (!$scope.componentEditing.spacing) {
         console.log('component editing doesnt have spacing');
         $scope.componentEditing.spacing = {
-          'paddingTop': 50,
-          'paddingBottom': 50,
-          'paddingLeft': 0,
-          'paddingRight': 0,
-          'marginTop': 0,
-          'marginBottom': 0,
-          'marginRight': 0,
-          'marginLeft': 0,
-          'maxWidth': 1000
+          'pt': 50,
+          'pb': 50,
+          'pl': 0,
+          'pr': 0,
+          'mt': 0,
+          'mb': 0,
+          'mr': 'auto',
+          'ml': 'auto',
+          'mw': 1024,
+          'usePage': false
         };
       }
 
