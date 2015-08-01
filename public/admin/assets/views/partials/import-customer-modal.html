@@ -9,7 +9,7 @@
         </div>
         <div class="modal-body bg-white" ng-class="{'no-padding': !uploadingCsv && csvResults.length > 0 && !uploadingServerCsv}" style="overflow:hidden">
             <div ng-if="!uploadingCsv && csvResults.length <= 0">
-                <p class="help-block">Import your contacts from one of the options below. {{googlePlusActive}}</p>
+                <p class="help-block">Import your contacts from one of the options below.</p>
                 <div class="row">
                     <div class="col-xs-6">
                         <div class="list-group-item center list-group-item-warning" ng-if="!googlePlusActive">
@@ -79,7 +79,7 @@
                 <h3>Uploading CSV... <strong>{{csv.percent}}%</strong></h3>
                 <progressbar animate="false" class="progress-striped progress-lg active" value="csv.percent" type="success"></progressbar>
             </div>
-            <div ng-if="!uploadingCsv && csvResults.length > 0 && !uploadingServerCsv" class="fade-in-right padding-15" style="position: relative;top: 0;" ct-fullheight=".modal.in" data-ct-overflow="true" data-ct-fullheight-exclusion=".modal.in .modal-header, .modal.in .modal-footer" data-ct-fullheight-num="110">
+            <div ng-if="!uploadingCsv && csvResults.length > 0 && !uploadingServerCsv" class="fade-in-right padding-15" style="position: relative;top: 0;overflow:auto" ct-fullheight=".modal.in" data-ct-overflow="true" data-ct-fullheight-exclusion=".modal.in .modal-header, .modal.in .modal-footer" data-ct-fullheight-num="110">
                 <div class="well well-sm margin-bottom-15 hidden">
                     <h4>Field <strong>Mapping:</strong></h4>
                     <span class="help-block margin-bottom-0">Check to make sure all the fields are matched correctly.</span>
