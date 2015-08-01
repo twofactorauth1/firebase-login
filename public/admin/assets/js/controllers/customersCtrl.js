@@ -309,10 +309,10 @@
         }
       }
     }, true);
-    $scope.socialAccounts = {};
-    SocialConfigService.getAllSocialConfig(function (data) {
-      $scope.socialAccounts = data.socialAccounts;
-    });
+    // $scope.socialAccounts = {};
+    // SocialConfigService.getAllSocialConfig(function (data) {
+    //   $scope.socialAccounts = data.socialAccounts;
+    // });
 
     $scope.importFacebookFriends = function () {
       CustomerService.importFacebookFriends(function (data, success) {

@@ -9,18 +9,28 @@
         </div>
         <div class="modal-body bg-white" ng-class="{'no-padding': !uploadingCsv && csvResults.length > 0 && !uploadingServerCsv}" style="overflow:hidden">
             <div ng-if="!uploadingCsv && csvResults.length <= 0">
-                <p class="help-block">Import your contacts from one of the options below.</p>
+                <p class="help-block">Import your contacts from one of the options below. {{googlePlusActive}}</p>
                 <div class="row">
                     <div class="col-xs-6">
-                        <a class="list-group-item center" ng-click="showSocialAccountSelect('go')" ng-class="{'list-group-item-info': socailList}">
+                        <div class="list-group-item center list-group-item-warning" ng-if="!googlePlusActive">
+                            <span class="fa-stack fa-2x">
+                                <i class="fa fa-square fa-stack-2x google-plus"></i>
+                                <i class="fa fa-google-plus fa-stack-1x fa-inverse"></i>
+                            </span>
+                            <h2 class="StepTitle">Google Plus</h2>
+                            <p>Go to <a ng-click="closeModal('/account/integrations')">Integrations</a> to add a Google Account.</p>
+                        </div>
+                        <a class="list-group-item center" ng-if="googlePlusActive" ng-click="showSocialAccountSelect('go')" ng-class="{'list-group-item-info': socailList}">
                             <span class="fa-stack fa-2x"> <i class="fa fa-square fa-stack-2x google-plus"></i> <i class="fa fa-google-plus fa-stack-1x fa-inverse"></i> </span>
                             <h2 class="StepTitle">Google Plus</h2>
+                            <p>Import contacts from Google.</p>
                         </a>
                     </div>
                     <div class="col-xs-6">
-                        <a class="list-group-item center" ng-click="showSocialAccountSelect('csv')" ng-class="{'list-group-item-info': showCSVUpload}">
+                        <a class="list-group-item center" ng-click="googlePlusActive || showSocialAccountSelect('csv')" ng-class="{'list-group-item-info': showCSVUpload}" ng-disabled="!googlePlusActive">
                             <span class="fa-stack fa-2x"> <i class="fa fa-square fa-stack-2x text-primary"></i> <i class="fa fa-file-text-o fa-stack-1x fa-inverse"></i> </span>
                             <h2 class="StepTitle">CSV</h2>
+                            <p>Import contacts from any CSV file.</p>
                         </a>
                     </div>
                 </div>
