@@ -453,9 +453,8 @@
         }]
       });
 
-      queryData.trafficSources = new Keen.Query("count_unique", {
+      queryData.trafficSources = new Keen.Query("count", {
         eventCollection: "session_data",
-        targetProperty: "referrer.domain",
         groupBy: "referrer.domain",
         timeframe: {
           "start": date.startDate,

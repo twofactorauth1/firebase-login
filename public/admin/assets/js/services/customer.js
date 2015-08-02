@@ -130,10 +130,13 @@
                 }
 
                 self.postCustomer(self.getCache(), customerArr[customerUploading], function(newCustomer) {
-                    if (customerUploading <= customerArr.length) {
-                        $rootScope.$broadcast('importingCustomers', { current: customerUploading, total: customerArr.length });
+                    if (customerUploading < customerArr.length - 1) {
+                        $rootScope.$broadcast('importingCustomers', { current: customerUploading + 1, total: customerArr.length });
                         customerUploading++;
                         self.importCsvCustomers();
+                    } 
+                    if (customerUploading === customerArr.length - 1) {
+                        $rootScope.$broadcast('importingCustomers', { current: customerUploading + 1, total: customerArr.length });
                     }
                 });
             };

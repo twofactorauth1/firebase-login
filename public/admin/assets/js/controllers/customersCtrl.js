@@ -107,7 +107,7 @@
         size: 'md',
         resolve: {
           getCustomers: function () {
-            return $scope.getCustomers();
+            return $scope.getCustomers;
           }
         }
       };

@@ -983,7 +983,9 @@
             }, 500);
           });
         } else {
-          SweetAlert.swal("Cancelled", "Page not deleted.", "error");
+          $timeout(function () {
+              SweetAlert.swal("Cancelled", "Page not deleted.", "error");
+            }, 500);
         }
       });
     };

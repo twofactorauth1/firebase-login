@@ -1,7 +1,7 @@
 'use strict';
 /*global app, moment, angular, window*/
 /*jslint unparam:true*/
-app.directive('simpleFormComponent', function () {
+app.directive('simpleFormComponent',["formValidations", function (formValidations) {
   return {
     scope: {
       component: '=',
@@ -10,7 +10,8 @@ app.directive('simpleFormComponent', function () {
     templateUrl: '/components/component-wrap.html',
     link: function (scope, element, attrs) {
       scope.isEditing = true;
-
+      scope.emailValidation = formValidations.email;
+      scope.phoneNumberPattern = formValidations.phone;
       scope.fieldsLength = function () {
         return _.filter(scope.component.fields, function (_field) {
           return _field.value === true;
@@ -27,4 +28,4 @@ app.directive('simpleFormComponent', function () {
       };
     }
   };
-});
+}]);

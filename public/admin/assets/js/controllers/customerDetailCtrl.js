@@ -396,6 +396,7 @@
           if (!validMapData) {
             if (!hideToaster) {
               $scope.errorMapData = true;
+              $scope.saveLoading = false;
               toaster.pop('warning', 'Address could not be found.');
             }
           } else {
