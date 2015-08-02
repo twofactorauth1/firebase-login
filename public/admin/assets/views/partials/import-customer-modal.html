@@ -14,9 +14,9 @@
                     <div class="col-xs-6">
                         <div class="list-group-item center list-group-item-warning" ng-if="!googlePlusActive">
                             <span class="fa-stack fa-2x">
-                                <i class="fa fa-square fa-stack-2x google-plus"></i>
-                                <i class="fa fa-google-plus fa-stack-1x fa-inverse"></i>
-                            </span>
+                                    <i class="fa fa-square fa-stack-2x google-plus"></i>
+                                    <i class="fa fa-google-plus fa-stack-1x fa-inverse"></i>
+                                </span>
                             <h2 class="StepTitle">Google Plus</h2>
                             <p>Go to <a ng-click="closeModal('/account/integrations')">Integrations</a> to add a Google Account.</p>
                         </div>
@@ -67,8 +67,8 @@
                             <div class="margin-top-30 margin-bottom-30">
                                 <h4>Drag & Drop your CSV File here or </h4>
                                 <span class="btn btn-default btn-primary btn-wide btn-file">
-                                Browse <input type="file" nv-file-select="" uploader="uploader" filters="queueLimit, customFilter" />
-                            </span>
+                                    Browse <input type="file" nv-file-select="" uploader="uploader" filters="queueLimit, customFilter" />
+                                </span>
                             </div>
                         </div>
                     </div>
@@ -89,6 +89,7 @@
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                         <div><span><strong>Caution:</strong> There are {{errorRows.length}} validation errors for your import. You can fix them manually or we will include them in the customer notes.</span>
                             <br> Error Rows: <a ng-click="goToRow(err)" ng-repeat="err in errorRows | orderBy: err" class="margin-right-5"><span class="badge badge-warning">{{err}}</span></a></div>
+                        <pre>{{errorRows}}</pre>
                     </div>
                 </div>
                 <div ng-if="errorRows.length <= 0">
@@ -121,7 +122,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-7">
-                                                    <ui-select ng-model="column.match" name="{{column.value}}" theme="bootstrap" on-select="updatePreview($item, $model, column)">
+                                                    <ui-select ng-model="column.match" name="{{column.value}}" theme="bootstrap" on-select="updatePreview(column)">
                                                         <ui-select-match placeholder="Select a Field" allow-clear="true">
                                                             <small ng-bind-html="$select.selected"></small>
                                                         </ui-select-match>
@@ -167,8 +168,8 @@
                                                         <a href="#" editable-email="previewCustomer[column.value]" onbeforesave="updateColumn($data, column)" ng-class="{'editable-error': !validateEmail(previewCustomer[column.value])}">{{ previewCustomer[column.value] || "empty" }}</a>
                                                     </div>
                                                     <!-- <div ng-if="column.value === 'phone'">
-                                                        <a href="#" editable-email="previewCustomer[column.value]" onbeforesave="updateColumn($data, column)" ng-class="{'editable-error': !validateEmail(previewCustomer[column.value])}">{{ previewCustomer[column.value] || "empty" }}</a>
-                                                    </div> -->
+                                                            <a href="#" editable-email="previewCustomer[column.value]" onbeforesave="updateColumn($data, column)" ng-class="{'editable-error': !validateEmail(previewCustomer[column.value])}">{{ previewCustomer[column.value] || "empty" }}</a>
+                                                        </div> -->
                                                     <div ng-if="column.value != 'email'">
                                                         <a href="#" editable-text="previewCustomer[column.value]" onbeforesave="updateColumn($data, column)">{{ previewCustomer[column.value] || "empty" }}</a>
                                                     </div>
@@ -184,9 +185,15 @@
             </div>
             <div ng-if="uploadingServerCsv" class="center fade-in-right">
                 <span class="fa fa-4x" ng-class="{'fa-spinner fa-spin': serverUploadPercent < 100, 'fa-check text-success': serverUploadPercent == 100}"></span>
-                <h3>Uploading New Customers... <strong>{{serverUploadPercent}}%</strong></h3>
-                <progressbar animate="false" class="progress-striped progress-lg" ng-class="{'active': serverUploadPercent < 100}" value="serverUploadPercent" type="success"></progressbar>
-                <span ng-if="uploadingComplete"><h4>Successfully added {{csvResults.length}} new customers in {{endServerUpload}} sec.</h4></span>
+                <div ng-if="!uploadingComplete">
+                    <h3 ng-if="serverUploadPercent < 100">Uploading New Customers... <strong>{{serverUploadPercent}}%</strong></h3>
+                    <progressbar animate="false" class="progress-lg" ng-class="{'active progress-striped': serverUploadPercent < 100}" value="serverUploadPercent" type="success"></progressbar>
+                </div>
+                <span ng-if="uploadingComplete">
+                <h3 ng-if="uploadingComplete">Upload Complete!</h3>
+                <h4>Successfully added {{csvResults.length - 1}} new customers in {{endServerUpload}} sec.</h4>
+                <button class="btn btn-primary btn-o" ng-click="closeModal()">View New Customers</button>
+                </span>
             </div>
             <div class="clearfix"></div>
             <div class="row import-success hidden" data-import-section="success">
