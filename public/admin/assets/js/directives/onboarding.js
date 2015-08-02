@@ -147,7 +147,7 @@ app.directive('indigOnboarding', function ($rootScope, $location, $sce, $state, 
           }
 
           if (status === 'started' && !$scope.manualComplete && !$scope.resetTask) {
-            toaster.pop('info', null, 'Your almost completed this step. Finish the task or manually complete. <br><div class="margin-top-10"><a class="btn btn-primary margin-right-10" href="' + $scope.getOnboardURL(_matchingTask) + '">Task Info</a><a class="btn btn-warning" href="' + $scope.getOnboardURL(_matchingTask, true) + '">Mark Complete</a></div>', 15000, 'trustedHtml');
+            toaster.pop('info', null, 'You\'re almost done with this step. Finish the task or manually complete. <br><div class="margin-top-10"><a class="btn btn-primary margin-right-10" href="' + $scope.getOnboardURL(_matchingTask) + '">Task Info</a><a class="btn btn-warning" href="' + $scope.getOnboardURL(_matchingTask, true) + '">Mark Complete</a></div>', 15000, 'trustedHtml');
           }
 
           if ($scope.manualComplete) {
