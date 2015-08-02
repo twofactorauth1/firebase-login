@@ -190,7 +190,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr ng-repeat="trafficSource in trafficSourceData">
+                                    <tr ng-repeat="trafficSource in trafficSourceData | orderBy:'-result'">
                                         <td>{{trafficSource['referrer.domain']}}</td>
                                         <td>{{trafficSource.result}}</td>
                                     </tr>
