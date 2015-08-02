@@ -250,9 +250,7 @@
 #componentloader .component-hidden {
   text-align: center;
   padding: 5px 0;
-  min-height: 150px;
-  margin-top: -56px !important;
-  margin-bottom: -58px !important;
+  height: 150px;
   background: #f1f1f1!important;
   position: relative;
   -webkit-transition: margin 0.5s;
@@ -260,8 +258,8 @@
   -ms-transition: margin 0.5s;
   -o-transition: margin 0.5s;
 }
-#componentloader .component-hidden > h3 {
-  margin-top: 50px;
+#componentloader .component-hidden h3 {
+  line-height: 150px;
 }
 #componentloader .add-addtional,
 #componentloader .add-addtional-feature,

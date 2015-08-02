@@ -230,9 +230,7 @@ hr {
 .component-hidden {
   text-align: center;
   padding: 5px 0;
-  min-height: 150px;
-  margin-top: -56px !important;
-  margin-bottom: -58px !important;
+  height: 150px;
   background: #f1f1f1!important;
   position: relative;
   -webkit-transition: margin 0.5s;
@@ -240,8 +238,8 @@ hr {
   -ms-transition: margin 0.5s;
   -o-transition: margin 0.5s;
 }
-.component-hidden > h3 {
-  margin-top: 50px;
+.component-hidden h3 {
+  line-height: 150px;
 }
 .add-addtional,
 .add-addtional-feature,

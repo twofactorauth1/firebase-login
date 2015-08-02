@@ -5,14 +5,16 @@
         </div>
         <div class="panel-body">
             <div class="col-sm-6">
-                <div class="form-group">
-                    <label>Link Text</label>
-                    <input class="form-control" type="text" placeholder="Link text" ng-model="product.externalLinklinkText">
-                </div>
-                <div class="form-group">
-                    <label>Link Url</label>
-                    <input indigeweb-validate-form-fields validation-type="url" class="form-control" type="text" placeholder="Link url" ng-model="product.externalLinklinkUrl">
-                </div>
+                <form name="externalLinkForm">
+                    <div class="form-group">
+                        <label>Link Text</label>
+                        <input class="form-control" type="text" placeholder="Link text" ng-model="product.externalLinklinkText">
+                    </div>
+                    <div class="form-group" ng-class="{'has-error': externalLinkForm.link.$error.url}">
+                        <label>Link Url</label>
+                        <input class="form-control" name="link" type="url" placeholder="Link url" ng-model="product.externalLinklinkUrl">
+                        <span class="error" ng-show="externalLinkForm.link.$error.url"> Not a valid URL. Must contain http://</span>
+                    </div>
             </div>
             <div class="col-sm-6">
                 <div class="form-group">
@@ -29,6 +31,7 @@
                         <option value='same'>Same Window</option>
                     </select>
                 </div>
+                </form>
             </div>
         </div>
     </div>
