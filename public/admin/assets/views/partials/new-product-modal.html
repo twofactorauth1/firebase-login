@@ -25,6 +25,6 @@
         </form>
     </div>
     <div class="modal-footer">
-        <button class="btn btn-primary" ng-class='{"disabled": !newProduct.name || !newProduct.type}' ng-click="addProduct()">Add</button>
+        <button class="btn btn-primary" ng-disabled='!newProduct.name || !newProduct.type' ng-click="addProduct()">Add</button>
     </div>
 </script>
