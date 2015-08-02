@@ -9,6 +9,7 @@ var SEGMENTIO_CONFIG = require('./configs/segmentio.config.js');
 var KEEN_CONFIG = require('./configs/keen.config');
 var GOOGLE_CONFIG = require('./configs/google.config');
 var TWONET_CONFIG = require('./configs/twonet.config');
+var LEADDYNO_CONFIG = require('./configs/leaddyno.config');
 
 //var wiredepJSAry = require('wiredep')().js;
 
@@ -419,13 +420,14 @@ module.exports = function(grunt) {
                         twonetKey: TWONET_CONFIG.TWONET_KEY,
                         twonetSecret: TWONET_CONFIG.TWONET_SECRET,
                         twonetUserGuid: TWONET_CONFIG.TWONET_USERGUID,
-                        twonetTrackGuid: TWONET_CONFIG.TWONET_TRACKGUID
+                        twonetTrackGuid: TWONET_CONFIG.TWONET_TRACKGUID,
+                        leaddyno: LEADDYNO_CONFIG.LEAD_DYNO_KEY
                     }
                 }
             },
             production: {
                 options: {
-                    dest: 'public/js/scripts/config.js'
+                    dest: 'public/admin/assets/js/config.js'
                 },
                 constants: {
                     ENV: {
@@ -443,7 +445,8 @@ module.exports = function(grunt) {
                         twonetKey: TWONET_CONFIG.TWONET_KEY,
                         twonetSecret: TWONET_CONFIG.TWONET_SECRET,
                         twonetUserGuid: TWONET_CONFIG.TWONET_USERGUID,
-                        twonetTrackGuid: TWONET_CONFIG.TWONET_TRACKGUID
+                        twonetTrackGuid: TWONET_CONFIG.TWONET_TRACKGUID,
+                        leaddyno: LEADDYNO_CONFIG.LEAD_DYNO_KEY
                     }
                 }
             }
