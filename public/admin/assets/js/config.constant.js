@@ -55,7 +55,7 @@ app.constant('ONBOARDINGCONSTANT', {
     }]
   }, {
     pane: {
-      heading: "Homepage",
+      heading: "Website",
       text: "Choose a template and begin customizing your site.",
       taskKey: 'single_page',
       state: 'app.website.pages',
