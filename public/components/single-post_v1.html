@@ -33,7 +33,7 @@
                                 </div>
                                 <span ng-if="!isEditing">  {{ blog.post.publish_date || blog.post.created.date  | date: 'MM/dd/yyyy' }} </span>
                             </div>
-                            <div class="single-post-author" ng-show="blog.post.post_author">
+                            <div class="single-post-author" ng-show="blog.post.post_author || isEditing">
                                 Posted by
                                 <div ng-if="isEditing" class="post_text_div">
                                     <div elem ng-model="blog.post.post_author"></div>
