@@ -3,7 +3,7 @@
  * controller for products
  */
 (function(angular) {
-    app.controller('PostsCtrl', ["$scope", "toaster", "$modal", "$filter", "WebsiteService", "$log", "postConstant", function($scope, toaster, $modal, $filter, WebsiteService, $log, postConstant) {
+    app.controller('PostsCtrl', ["$scope", "$location", "toaster", "$modal", "$filter", "WebsiteService", "$log", "postConstant", function($scope, $location, toaster, $modal, $filter, WebsiteService, $log, postConstant) {
         $scope.tableView = 'list';
         $scope.itemPerPage = 40;
         $scope.showPages = 15;
@@ -142,7 +142,11 @@
         };
 
         $scope.viewSingle = function(post) {
-            window.location = '/admin/#/website/posts/?posthandle=' + post.post_url;
+            $location.path('/website/posts/').search({posthandle: post.post_url});
+        };
+
+        $scope.goToPage = function(page) {
+            $location.path('/website/pages/').search({pagehandle: page});
         };
 
         /*

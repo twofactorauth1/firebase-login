@@ -40,12 +40,24 @@
                                             <span>New Post</span>
                                         </button>
                                     </div>
-                                    
                                     <div class="form-group margin-bottom-0">
                                         <div class="btn-group tableView">
                                             <button class="btn btn-info" ng-class="{'active': tableView == 'list'}" href="" ng-click="tableView = 'list'" tooltip-placement="top" tooltip="List"> <span class="fa fa-th-list"></span> </button>
                                             <button class="btn btn-info" ng-class="{'active': tableView == 'grid'}" href="" ng-click="tableView = 'grid'" tooltip-placement="top" tooltip="Grid"> <span class="fa fa-th"></span> </button>
                                         </div>
+                                    </div>
+                                    <div class="btn-group pull-right margin-right-5" dropdown is-open="status.isopen">
+                                        <button type="button" class="btn btn-wide btn-primary dropdown-toggle" dropdown-toggle ng-disabled="disabled">
+                                            Templates <span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu" role="menu">
+                                            <li>
+                                                <a href="#" ng-click="goToPage('blog')">Blog</a>
+                                            </li>
+                                            <li>
+                                                <a href="#" ng-click="goToPage('single-post')">Single Post</a>
+                                            </li>
+                                        </ul>
                                     </div>
                                 </div>
                             </form>
@@ -122,10 +134,10 @@
                             </tr>
                         </tbody>
                         <tfoot>
-                        <tr>
-                            <td class="text-center" st-pagination="" st-displayed-pages="showPages" st-items-by-page="itemPerPage" colspan="6">
-                            </td>
-                        </tr>
+                            <tr>
+                                <td class="text-center" st-pagination="" st-displayed-pages="showPages" st-items-by-page="itemPerPage" colspan="6">
+                                </td>
+                            </tr>
                         </tfoot>
                     </table>
                     <div class="load1 csspinner height-400" ng-show="!showPosts"></div>
@@ -144,43 +156,42 @@
             <h3 class="modal-title">New Post</h3>
         </div>
         <div class="modal-body bg-white">
-                <div id="new_page">
-                    <div class="form-group" ng-class="{ 'has-error': postAuthorError}">
-                        <label for="post-author" tooltip-placement="bottom" tooltip="Provide the author of the post you want to create">Post Author</label>
-                        <input id="post-author" class="form-control input-lg" type="text" placeholder="Post Author" ng-model="post.post_author" ng-change="validateCreatePost(post)">
-                    </div>
-                    <div class="form-group" ng-class="{ 'has-error': postTitleError}">
-                        <label for="post-title" tooltip-placement="bottom" tooltip="Provide the title of the post you want to create">Post Title</label>
-                        <input id="post-title" class="form-control input-lg" type="text" placeholder="Post Title" ng-model="post.post_title" ng-change="validateCreatePost(post)">
-                    </div>
-                    <div class="form-group" ng-class="{ 'has-error': postUrlError}" ng-show="showChangeURL">
-                        <slug from="post.post_title" to="post.post_url"></slug>
-                        <label for="post-url" tooltip-placement="bottom" tooltip="Provide the url of the post you want to create">Post Url</label>
-                        <input id="post-url" class="form-control input-lg" type="text" placeholder="Post Url" ng-model="post.post_url" ng-change="validateCreatePost(post, true)">
-                    </div>
-                    <p ng-show="post.post_title">Post Url will be
-                        <strong>/{{post.post_url}}</strong>
-                            <span class="links cl-effect-1">
+            <div id="new_page">
+                <div class="form-group" ng-class="{ 'has-error': postAuthorError}">
+                    <label for="post-author" tooltip-placement="bottom" tooltip="Provide the author of the post you want to create">Post Author</label>
+                    <input id="post-author" class="form-control input-lg" type="text" placeholder="Post Author" ng-model="post.post_author" ng-change="validateCreatePost(post)">
+                </div>
+                <div class="form-group" ng-class="{ 'has-error': postTitleError}">
+                    <label for="post-title" tooltip-placement="bottom" tooltip="Provide the title of the post you want to create">Post Title</label>
+                    <input id="post-title" class="form-control input-lg" type="text" placeholder="Post Title" ng-model="post.post_title" ng-change="validateCreatePost(post)">
+                </div>
+                <div class="form-group" ng-class="{ 'has-error': postUrlError}" ng-show="showChangeURL">
+                    <slug from="post.post_title" to="post.post_url"></slug>
+                    <label for="post-url" tooltip-placement="bottom" tooltip="Provide the url of the post you want to create">Post Url</label>
+                    <input id="post-url" class="form-control input-lg" type="text" placeholder="Post Url" ng-model="post.post_url" ng-change="validateCreatePost(post, true)">
+                </div>
+                <p ng-show="post.post_title">Post Url will be
+                    <strong>/{{post.post_url}}</strong>
+                    <span class="links cl-effect-1">
                                 <a href="" ng-click="showChangeURL = true" ng-show="!showChangeURL">Modify</a>
                             </span>
-                            <span class="links cl-effect-1">
+                    <span class="links cl-effect-1">
                                 <a href="" ng-click="showChangeURL = false" ng-show="showChangeURL">Cancel</a>
                             </span>
-                    </p>
-                    <div class="clearfix mb15"></div>
-                    <div class="form-group hidden">
-                        <div class="ckbox ckbox-success">
-                            <input type="checkbox" id="comment_status" ng-model="post.comment_status" checked>
-                            <label for="comment_status">Comment Status On?</label>
-                        </div>
+                </p>
+                <div class="clearfix mb15"></div>
+                <div class="form-group hidden">
+                    <div class="ckbox ckbox-success">
+                        <input type="checkbox" id="comment_status" ng-model="post.comment_status" checked>
+                        <label for="comment_status">Comment Status On?</label>
                     </div>
                 </div>
-                <div class="clearfix"></div>
             </div>
-            <div class="modal-footer">
-                <button class="btn btn-primary btn-o" ng-click="createPost(post, $event)">Add Post</button>
-            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary btn-o" ng-click="createPost(post, $event)">Add Post</button>
+        </div>
     </script>
     <!-- end:  NEW PAGE MODAL -->
-
 </div>
