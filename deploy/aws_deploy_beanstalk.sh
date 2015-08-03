@@ -43,10 +43,12 @@ pip list | grep awscli > /dev/null
 if [ "$1" = "master" ]; then
     echo "Generating constants for production."
     grunt ngconstant:production
+    cp public/admin/assets/js/config.js public/js/scripts/config.js
     export APP_DESCRIPTION="Production Build"
 elif [ "$1" = "develop" ]; then
     echo "Generating constants for development."
     grunt ngconstant:development
+    cp public/admin/assets/js/config.js public/js/scripts/config.js
     export APP_DESCRIPTION="Test Build"
     echo $APP_DESCRIPTION
 else
