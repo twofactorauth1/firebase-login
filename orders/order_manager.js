@@ -261,7 +261,7 @@ module.exports = {
                             if(err) {
                                 log.error('Error creating Stripe Charge: ' + err);
                                 //set the status of the order to failed
-                                savedOrder.set('status', savedOrder.status.FAILED);
+                                savedOrder.set('status', $$.m.Order.status.FAILED);
                                 savedOrder.set('note', savedOrder.get('note') + '\n Payment error: ' + err);
                                 var modified = {
                                     date: new Date(),
