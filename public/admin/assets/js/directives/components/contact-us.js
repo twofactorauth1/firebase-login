@@ -18,7 +18,6 @@ app.directive('contactUsComponent', ['AccountService', 'GeocodeService', '$timeo
           scope.component.map.zoom = 10;
         }
       }
-     
       function hexToRgb(hex, opacity) {      
         var c;
         opacity = opacity || 1;
@@ -75,7 +74,8 @@ app.directive('contactUsComponent', ['AccountService', 'GeocodeService', '$timeo
 
       scope.updateContactUsAddress = function () {
         scope.contactAddress = scope.stringifyAddress(scope.component.location);
-        if (scope.component.location.lat && scope.component.location.lon) {         
+
+        if (scope.component.location.lat && scope.component.location.lon) {
           scope.reloadMap();
         } else {
           GeocodeService.getGeoSearchAddress(scope.contactAddress, function (data) {
@@ -117,7 +117,7 @@ app.directive('contactUsComponent', ['AccountService', 'GeocodeService', '$timeo
             });
         } else {
           $timeout(function () {
-            scope.updateContactUsAddress();              
+            scope.updateContactUsAddress();
           },500);
         }
         }
