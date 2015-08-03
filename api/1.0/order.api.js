@@ -41,20 +41,23 @@ _.extend(api.prototype, baseApi.prototype, {
 
         var order = new $$.m.Order(req.body);
         self.log.debug('>> Order Details '+ order);
-        var accessToken = self.getAccessToken(req);
-        var userId = self.userId(req);
-        var accountId = self.currentAccountId(req);
-        order.set('account_id', accountId);
+        self.getStripeTokenFromAccount(req, function(err, accessToken){
+            var userId = self.userId(req);
+            var accountId = self.currentAccountId(req);
+            order.set('account_id', accountId);
 
-        //No security
+            //No security
 
-        orderManager.createOrder(order, accessToken, userId, function(err, order){
-            self.log.debug('<< createOrder');
-            self.sendResultOrError(res, err, order, 'Error creating order');
-            if(userId && order) {
-                self.createUserActivity(req, 'CREATE_ORDER', null, {id: order.id()}, function(){});
-            }
+            orderManager.createOrder(order, accessToken, userId, function(err, order){
+                self.log.debug('<< createOrder');
+                self.sendResultOrError(res, err, order, 'Error creating order');
+                if(userId && order) {
+                    self.createUserActivity(req, 'CREATE_ORDER', null, {id: order.id()}, function(){});
+                }
+            });
         });
+        //var accessToken = self.getAccessToken(req);
+
 
     },
 
@@ -196,12 +199,15 @@ _.extend(api.prototype, baseApi.prototype, {
                 var userId = self.userId(req);
                 var amount = req.body.amount;
                 var reason = req.body.reason;
-                var accessToken = self.getAccessToken(req);
-                orderManager.refundOrder(accountId, orderId, note, userId, amount, reason, accessToken, function(err, order){
-                    self.log.debug('<< refundOrder');
-                    self.sendResultOrError(res, err, order, 'Error refunding order');
-                    self.createUserActivity(req, 'REFUND_ORDER', null, {id: orderId}, function(){});
+                //var accessToken = self.getAccessToken(req);
+                self.getStripeTokenFromAccount(req, function(err, accessToken){
+                    orderManager.refundOrder(accountId, orderId, note, userId, amount, reason, accessToken, function(err, order){
+                        self.log.debug('<< refundOrder');
+                        self.sendResultOrError(res, err, order, 'Error refunding order');
+                        self.createUserActivity(req, 'REFUND_ORDER', null, {id: orderId}, function(){});
+                    });
                 });
+
             }
         });
 
