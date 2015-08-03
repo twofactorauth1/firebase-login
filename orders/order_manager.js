@@ -154,19 +154,18 @@ module.exports = {
                 var totalAmount = 0;
                 var subTotal = 0;
                 var totalLineItemsQuantity = 0;
-                //var taxPercent = 0.08;
-                accountDao.getAccountByID(order.get('account_id'), function(err, acc) {
-                    log.debug('accountDao.getAccountByID returned acc.id = ' + acc.get('id'));
-                    if( acc.business.addresses.length < 1 ) {
-                        log.error('No business address available for account: ' + acc.get('id'));
-                    }
-                    else {
-                        var bizAddr = acc.business.addresses[0];
+                var taxPercent = 0.08;
+                //accountDao.getAccountByID(order.get('account_id'), function(err, acc) {
+                //    log.debug('accountDao.getAccountByID returned acc.id = ' + acc.get('id'));
+                //    if( acc.business.addresses.length < 1 ) {
+                //        log.error('No business address available for account: ' + acc.get('id'));
+                //    }
+                //    else {
+                //        var bizAddr = acc.business.addresses[0];
+                        //log.debug('createOrder: business address');
+                        //log.debug(bizAddr);
 
-                        log.debug('createOrder: business address');
-                        log.debug(bizAddr);
-
-                        productManager.getTax(bizAddr.zip, function (err, taxPercent) {
+                        //productManager.getTax(bizAddr.zip, function (err, taxPercent) {
                             log.debug('createOrder: taxPercent=' + taxPercent);
 
                             _.each(order.get('line_items'), function (line_item) {
@@ -201,21 +200,38 @@ module.exports = {
                             log.debug('total is now: ' + order.get('total'));
                             order.set('total_line_items_quantity', totalLineItemsQuantity);
                             callback(null, order);
-                        });
-                    }
-                });
+                        //});
+                    //}
+                //});
             },
             //save
             function(validatedOrder, callback){
-                log.debug('saving validated order');
-                dao.saveOrUpdate(validatedOrder, function(err, savedOrder){
-                    if(err) {
-                        log.error('Error saving order: ' + err);
-                        callback(err);
-                    } else {
-                        callback(null, savedOrder);
-                    }
-                });
+                //look for customer instead of customer_id
+                if(validatedOrder.get('customer') && validatedOrder.get('customer_id')) {
+                    log.warn('request contains BOTH customer and customer_id.  Dropping customer.');
+                    validatedOrder.set('customer', null);
+                    callback(null, validatedOrder);
+                } else if(validatedOrder.get('customer') === null && validatedOrder.get('customer_id') === null) {
+                    //return an error.
+                    callback('Either a customer or customer_id is required.');
+                } else if(validatedOrder.get('customer')) {
+                    var contact = new $$.m.Contact(validatedOrder.get('customer'));
+                    contact.set('accountId', parseInt(validatedOrder.get('account_id')));
+                    contact.createdBy(userId, $$.constants.social.types.LOCAL);
+                    contactDao.saveOrUpdateContact(contact, function(err, savedContact){
+                        if(err) {
+                            log.error('Error creating contact for new order', err);
+                            callback(err);
+                        } else {
+                            validatedOrder.set('customer_id', savedContact.id());
+                            validatedOrder.set('customer', null);
+                            callback(null, validatedOrder);
+                        }
+                    });
+                } else {
+                    //we have the id.
+                    callback(null, validatedOrder);
+                }
             },
             //get contact
             function(savedOrder, callback) {
@@ -704,58 +720,60 @@ module.exports = {
                 var totalAmount = 0;
                 var subTotal = 0;
                 var totalLineItemsQuantity = 0;
-                //var taxPercent = 0.08;
-                accountDao.getAccountByID(order.get('account_id'), function(acc) {
+                var taxPercent = 0.08;
+                //accountDao.getAccountByID(order.get('account_id'), function(acc) {
+                //
+                //    var bizAddr = acc.business.addresses[0];
+                //
+                //    log.debug('updateOrderById: business address');
+                //    log.debug(bizAddr);
+                //
+                //    productManager.getTax(bizAddr.zip, function(err, taxPercent) {
+                //        log.debug('updateOrderById: taxPercent=' + taxPercent);
 
-                    var bizAddr = acc.business.addresses[0];
-
-                    log.debug('updateOrderById: business address');
-                    log.debug(bizAddr);
-
-                    productManager.getTax(bizAddr.zip, function(err, taxPercent) {
-                        log.debug('updateOrderById: taxPercent=' + taxPercent);
-
-                        _.each(order.get('line_items'), function (line_item) {
-                            totalAmount += parseFloat(line_item.total);
-                            subTotal += parseFloat(line_item.total);
-                            totalLineItemsQuantity += parseFloat(line_item.quantity);
-                        });
-                        log.debug('subtotal: ' + totalAmount);
-                        if (order.get('cart_discount')) {
-                            totalAmount -= parseFloat(order.get('cart_discount'));
-                            log.debug('subtracting cart_discount of ' + order.get('cart_discount'));
-                        }
-                        if (order.get('total_discount')) {
-                            totalAmount -= parseFloat(order.get('total_discount'));
-                            log.debug('subtracting total_discount of ' + order.get('total_discount'));
-                        }
-                        if (order.get('total_tax') && order.get('total_tax') > 0) {
-                            totalAmount += parseFloat(order.get('total_tax'));
-                            log.debug('adding tax of ' + order.get('total_tax'));
-                        }
-                        else {
-                            totalAmount += parseFloat(totalAmount * taxPercent);
-                            log.debug('adding tax of ' + order.get('total_tax'));
-                        }
-                        if (order.get('total_shipping')) {
-                            totalAmount += parseFloat(order.get('total_shipping'));
-                            log.debug('adding shipping of ' + order.get('total_shipping'));
-                        }
-
-                        order.set('subtotal', subTotal.toFixed(2));
-                        order.set('total', totalAmount.toFixed(2));
-                        log.debug('total is now: ' + order.get('total'));
-                        order.set('total_line_items_quantity', totalLineItemsQuantity);
-                        dao.saveOrUpdate(order, function (err, updatedOrder) {
-                            if (err) {
-                                log.error('Error updating order: ' + err);
-                                return fn(err, null);
-                            }
-                            log.debug('<< updateOrderById');
-                            return fn(null, updatedOrder);
-                        });
+                    _.each(order.get('line_items'), function(line_item){
+                        totalAmount += parseFloat(line_item.total);
+                        subTotal += parseFloat(line_item.total);
+                        totalLineItemsQuantity += parseFloat(line_item.quantity);
                     });
-            });
+                    log.debug('subtotal: ' + totalAmount);
+                    if(order.get('cart_discount')) {
+                        totalAmount -= parseFloat(order.get('cart_discount'));
+                        log.debug('subtracting cart_discount of ' + order.get('cart_discount'));
+                    }
+                    if(order.get('total_discount')) {
+                        totalAmount -= parseFloat(order.get('total_discount'));
+                        log.debug('subtracting total_discount of ' + order.get('total_discount'));
+                    }
+                    if(order.get('total_tax') && order.get('total_tax') > 0) {
+                        totalAmount += parseFloat(order.get('total_tax'));
+                        log.debug('adding tax of ' + order.get('total_tax'));
+                    }
+                    else
+                    {
+                        totalAmount += parseFloat(totalAmount * taxPercent);
+                        log.debug('adding tax of ' + order.get('total_tax'));
+                    }
+                    if(order.get('total_shipping')) {
+                        totalAmount += parseFloat(order.get('total_shipping'));
+                        log.debug('adding shipping of ' + order.get('total_shipping'));
+                    }
+
+                    order.set('subtotal', subTotal.toFixed(2));
+                    order.set('total', totalAmount.toFixed(2));
+                    log.debug('total is now: ' + order.get('total'));
+                    order.set('total_line_items_quantity', totalLineItemsQuantity);
+                    dao.saveOrUpdate(order, function(err, updatedOrder){
+                    if(err) {
+                        log.error('Error updating order: ' + err);
+                        return fn(err, null);
+                    }
+                    log.debug('<< updateOrderById');
+                    return fn(null, updatedOrder);
+                });
+
+        //    });
+        //});
 
             }
         });
