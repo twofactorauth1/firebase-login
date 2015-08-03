@@ -860,8 +860,17 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
   });
 
   WebsiteService.getEmails(function (emails) {
-    console.log('emails ', emails);
+
     $scope.emails = emails;
+
+    //select the default email for simple form as welcome-aboard
+    if ($scope.componentEditing.type === 'simple-form' && !$scope.componentEditing.emailId) {
+      var _welcomeEmail = _.find(emails, function(_email) {
+        return _email.handle === 'welcome-aboard';
+      });
+      $scope.componentEditing.emailId = _welcomeEmail._id;
+    }
+
   });
 
   $scope.editComponent();
