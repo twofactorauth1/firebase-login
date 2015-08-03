@@ -9,6 +9,7 @@ app.directive('featureListComponent',["$window", function ($window) {
     },
     templateUrl: '/components/component-wrap.html',
     link: function (scope, element, attrs, ctrl) {
+
       scope.isEditing = true;
       scope.addFeatureList = function (index) {
         if (!index) {
@@ -20,9 +21,11 @@ app.directive('featureListComponent',["$window", function ($window) {
         };
         scope.component.features.splice(index + 1, 0, newFeature);
       };
+
       scope.deleteFeatureList = function (index) {
         scope.component.features.splice(index, 1);
       };
+
       scope.resizeFeatureTiles = function (argument) {
         var element = angular.element("#"+scope.component._id + " div.feature-height")
         if (element && element.length) {
