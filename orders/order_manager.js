@@ -170,9 +170,7 @@ module.exports = {
                 if(order.get('total_tax') && order.get('total_tax') > 0) {
                     totalAmount += parseFloat(order.get('total_tax'));
                     log.debug('adding tax of ' + order.get('total_tax'));
-                }
-                else
-                {
+                } else {
                     totalAmount += parseFloat(totalAmount * taxPercent);
                     log.debug('adding tax of ' + order.get('total_tax'));
                 }
@@ -187,6 +185,34 @@ module.exports = {
                 order.set('total_line_items_quantity', totalLineItemsQuantity);
                 callback(null, order);
 
+            },
+            function(validatedOrder, callback){
+                //look for customer instead of customer_id
+                if(validatedOrder.get('customer') && validatedOrder.get('customer_id')) {
+                    log.warn('request contains BOTH customer and customer_id.  Dropping customer.');
+                    validatedOrder.set('customer', null);
+                    callback(null, validatedOrder);
+                } else if(validatedOrder.get('customer') === null && validatedOrder.get('customer_id') === null) {
+                    //return an error.
+                    callback('Either a customer or customer_id is required.');
+                } else if(validatedOrder.get('customer')) {
+                    var contact = new $$.m.Contact(validatedOrder.get('customer'));
+                    contact.set('accountId', parseInt(validatedOrder.get('account_id')));
+                    contact.createdBy(userId, $$.constants.social.types.LOCAL);
+                    contactDao.saveOrUpdateContact(contact, function(err, savedContact){
+                        if(err) {
+                            log.error('Error creating contact for new order', err);
+                            callback(err);
+                        } else {
+                            validatedOrder.set('customer_id', savedContact.id());
+                            validatedOrder.set('customer', null);
+                            callback(null, validatedOrder);
+                        }
+                    });
+                } else {
+                    //we have the id.
+                    callback(null, validatedOrder);
+                }
             },
             //save
             function(validatedOrder, callback){

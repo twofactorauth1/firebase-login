@@ -14,6 +14,7 @@ var order = $$.m.ModelBase.extend({
             "_id" : null,
             "account_id": null,
             "customer_id" : null,
+            "customer": null,
             "session_id" : null,
             "order_id" : -1,
             "completed_at" : null,
