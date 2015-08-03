@@ -264,7 +264,7 @@ module.exports = {
                 if(paymentDetails.method_id === 'cc') {
                     var card = paymentDetails.card_token;
                     //total is a double but amount needs to be in cents (integer)
-                    var amount = savedOrder.get('total') * 100;
+                    var amount = Math.floor(savedOrder.get('total') * 100);
                     log.debug('amount ', savedOrder.get('total'));
                     var currency = savedOrder.get('currency');
                     var customerId = contact.get('stripeId');
