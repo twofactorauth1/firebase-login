@@ -19,7 +19,6 @@ angular.module("clip-two", [
     'pascalprecht.translate',
     'autocomplete',
     'config',
-    'leaflet-directive',
     'angular-parallax',
     'google.places'
 ]);
