@@ -129,7 +129,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.checkPermissionForAccount(req, self.sc.privs.MODIFY_CONTACT, accountId, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(req);
+                return self.send403(resp);
             } else {
                 self._saveOrUpdateContact(req, resp, true);
 
@@ -146,7 +146,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.checkPermissionForAccount(req, self.sc.privs.MODIFY_CONTACT, accountId, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(req);
+                return self.send403(resp);
             } else {
                 self._saveOrUpdateContact(req, resp, false);
 
@@ -196,9 +196,10 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.checkPermissionForAccount(req, self.sc.privs.MODIFY_CONTACT, accountId, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(req);
+                return self.send403(resp);
             } else {
                 self.log.debug('contacts ', contact);
+                self.sendResult(resp, {ok:true})
             }
         });
 
@@ -213,7 +214,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         self.checkPermissionForAccount(req, self.sc.privs.MODIFY_CONTACT, accountId, function(err, isAllowed) {
             if (isAllowed !== true) {
-                return self.send403(req);
+                return self.send403(resp);
             } else {
                 if (!contactId) {
                     self.wrapError(resp, 400, null, "Invalid paramater for ID");
