@@ -1,6 +1,6 @@
 /*global app, moment, angular, window, L*/
 /*jslint unparam:true*/
-app.directive('contactUsComponent', ['customerService', 'leafletData', '$timeout', function (customerService, leafletData, $timeout) {
+app.directive('contactUsComponent', ['customerService', '$timeout', function (customerService, $timeout) {
   return {
     scope: {
       component: '=',
@@ -24,6 +24,13 @@ app.directive('contactUsComponent', ['customerService', 'leafletData', '$timeout
           return _bottomline;
         }
       };
+      scope.reloadMap = function()
+      {
+        if(scope.map){
+         google.maps.event.trigger(scope.map, 'resize');
+         scope.map.setCenter(new google.maps.LatLng(scope.component.location.lat, scope.component.location.lon));
+       }
+      }
       function hexToRgb(hex, opacity) {      
         var c;
         opacity = opacity || 1;
@@ -40,73 +47,25 @@ app.directive('contactUsComponent', ['customerService', 'leafletData', '$timeout
       scope.updateContactUsAddress = function () {
         scope.contactAddress = scope.stringifyAddress(scope.component.location);
         if (scope.component.location.lat && scope.component.location.lon) {
-          angular.extend(scope, {
-            mapLocation: {
-              lat: parseFloat(scope.component.location.lat),
-              lng: parseFloat(scope.component.location.lon),
-              zoom: 10
-            },
-            markers: {
-              mainMarker: {
-                lat: parseFloat(scope.component.location.lat),
-                lng: parseFloat(scope.component.location.lon),
-                focus: false,
-                message: scope.contactAddress,
-                draggable: false
-              }
-            }
-          });
-          leafletData.getMap('leafletmap-' + scope.component._id).then(function (map) {
-            $timeout(function () {
-              map.invalidateSize();
-              map.setView(new L.LatLng(scope.component.location.lat, scope.component.location.lon), 10);
-              $(window).trigger("resize");
-            }, 1000);
-          });
+          $timeout(function () {
+              scope.reloadMap();
+          }, 500);
         } else {
           customerService.getGeoSearchAddress(scope.contactAddress, function (data) {
             if (data.lat && data.lon) {
               scope.component.location.lat = data.lat;
               scope.component.location.lon = data.lon;
-              angular.extend(scope, {
-                mapLocation: {
-                  lat: parseFloat(scope.component.location.lat),
-                  lng: parseFloat(scope.component.location.lon),
-                  zoom: 10
-                },
-                markers: {
-                  mainMarker: {
-                    lat: parseFloat(scope.component.location.lat),
-                    lng: parseFloat(scope.component.location.lon),
-                    focus: false,
-                    message: scope.contactAddress,
-                    draggable: false
-                  }
-                }
-              });
-              leafletData.getMap('leafletmap-' + scope.component._id).then(function (map) {
-                $timeout(function () {
-                  map.invalidateSize();
-                  map.setView(new L.LatLng(scope.component.location.lat, scope.component.location.lon), 10);
-                  $(window).trigger("resize");
-                }, 1000);
-              });
+              $timeout(function () {
+                scope.reloadMap();
+              }, 3000);
             }
           });
         }
       };
-      angular.extend(scope, {
-        mapLocation: {
-          lat: 51,
-          lng: 0,
-          zoom: 10
-        },
-        defaults: {
-          scrollWheelZoom: false
-        },
-        markers: {
-
-        }
+      scope.$on('mapInitialized', function(event, map) {
+        scope.map = map;
+        google.maps.event.trigger(scope.map, 'resize');
+        scope.map.setCenter(new google.maps.LatLng(51, 0));
       });
       scope.updateContactUsAddress();
     }

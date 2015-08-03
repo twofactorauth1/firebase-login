@@ -1,9 +1,10 @@
 <div ng-class="component.type+'-v'+component.version">
     <div class="row ">
         <div class="map-wrap {{isEditing ? 'editing' : ''}}">
-            <div tabindex="0" class="leaflet-container leaflet-fade-anim" id="map-marker" style="height: 280px; width: 100%; position: relative;">
-                <leaflet id="leafletmap-{{component._id}}" center="mapLocation" markers="markers" defaults="defaults" width="100%" height="280px"></leaflet>
-            </div>
+            <map zoom="{{component.map.zoom || 10}}" center="{{component.location.lat}}, {{component.location.lon}}" disable-default-u-i="true" scale-control="false" pan-control="false" zoom-control="false"  scrollwheel="false">
+
+            <marker  position="{{component.location.lat}}, {{component.location.lon}}"></marker>
+           </map>
             <div class="clearfix visible-xs"></div>
             <div class="panel-default widget-weather col-xs-12 col-sm-4 col-md-3 col-lg-3  col-sm-offset-9" style="{{component.splitHours ? 'width:30%' : ''}}">
                 <div class="panel-body">
