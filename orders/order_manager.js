@@ -253,7 +253,10 @@ module.exports = {
 
                         dao.findMany(query, $$.m.Order, function(err, orders){
                             savedOrder.set('order_id', orders.length);
-                            callback(null, savedOrder, contact);
+                            dao.saveOrUpdate(savedOrder, function(err, updatedOrder){
+                                callback(err, updatedOrder, contact);
+                            });
+                            //callback(null, savedOrder, contact);
                         });
                     }
                 });
