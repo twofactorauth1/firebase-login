@@ -120,10 +120,10 @@
                     </h4>
             <!--<h4>Payment Method: <span class="pull-right">Visa xxxx-xxxx-xxxx-2345 06/15</span></h4>-->
             <h4>Date:
-                        <span class="pull-right">{{selectedInvoice.date * 1000 | date : 'longDate'}}</span>
+                        <span class="pull-right">{{_moment(selectedInvoice.date)}}</span>
                     </h4>
             <h4>Period:
-                        <span class="pull-right">{{selectedInvoice.lines.data[0].period.start * 1000 | date : 'longDate'}} - {{plusOneMonth(selectedInvoice.lines.data[0].period.start * 1000)}}</span>
+                        <span class="pull-right">{{_moment(selectedInvoice.lines.data[0].period.start, {subtractNum: 30, subtractType: 'days'})}} - {{_moment(selectedInvoice.lines.data[0].period.start)}}</span>
                     </h4>
             <h4>Amount Paid:
                         <span class="pull-right">${{(selectedInvoice.total/100).toFixed( 2 )}}</span>
