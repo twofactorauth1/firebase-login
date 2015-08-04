@@ -967,8 +967,8 @@
         confirmButtonColor: "#DD6B55",
         confirmButtonText: "Yes, delete page!",
         cancelButtonText: "No, do not delete page!",
-        closeOnConfirm: false,
-        closeOnCancel: false
+        closeOnConfirm: true,
+        closeOnCancel: true
       }, function (isConfirm) {
         if (isConfirm) {
           SweetAlert.swal("Saved!", "Page is deleted.", "success");
