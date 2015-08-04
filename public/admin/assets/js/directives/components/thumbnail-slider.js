@@ -5,7 +5,6 @@ app.directive('thumbnailSliderComponent', ['$window', '$timeout', function ($win
   return {
     scope: {
       component: '=',
-      version: '=',
       media: '&',
       control: '='
     },

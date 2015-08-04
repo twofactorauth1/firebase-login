@@ -1,8 +1,7 @@
 app.directive('blogComponent', ['postsService', '$filter', '$location', '$timeout', function (postsService, $filter, $location, $timeout) {
   return {
     scope: {
-      component: '=',
-      version: '='
+      component: '='
     },
     templateUrl: '/components/component-wrap.html',
     controller: function ($scope, postsService) {

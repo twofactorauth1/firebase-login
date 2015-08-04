@@ -1,8 +1,7 @@
 app.directive('imageTextComponent', function () {
   return {
     scope: {
-      component: '=',
-      version: '='
+      component: '='
     },
     templateUrl: '/components/component-wrap.html'
   }

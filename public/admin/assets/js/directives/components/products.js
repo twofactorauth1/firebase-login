@@ -3,8 +3,7 @@
 app.directive('productsComponent', ['ProductService', function (ProductService) {
   return {
     scope: {
-      component: '=',
-      version: '='
+      component: '='
     },
     templateUrl: '/components/component-wrap.html',
     link: function (scope) {

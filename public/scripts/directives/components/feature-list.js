@@ -3,8 +3,7 @@
 app.directive('featureListComponent',['$window', function ($window) {
   return {
     scope: {
-      component: '=',
-      version: '='
+      component: '='
     },
     templateUrl: '/components/component-wrap.html',
     link: function (scope, element, attrs, ctrl) {

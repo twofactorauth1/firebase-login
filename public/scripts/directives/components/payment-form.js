@@ -3,8 +3,7 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
     return {
         require: [],
         scope: {
-            component: '=',
-            version: '='
+            component: '='
         },
         templateUrl: '/components/component-wrap.html',
         link: function(scope, element, attrs, ctrl) {

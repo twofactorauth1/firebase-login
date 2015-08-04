@@ -1,8 +1,7 @@
 app.directive('socialLinkComponent', function () {
   return {
     scope: {
-      component: '=',
-      version: '='
+      component: '='
     },
     templateUrl: '/components/component-wrap.html'
   }

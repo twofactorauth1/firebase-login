@@ -1,8 +1,7 @@
 app.directive('videoComponent',['$sce', function ($sce) {
   return {
     scope: {
-      component: '=',
-      version: '='
+      component: '='
     },
     templateUrl: '/components/component-wrap.html',
     link: function (scope, element, attrs, ctrl) {

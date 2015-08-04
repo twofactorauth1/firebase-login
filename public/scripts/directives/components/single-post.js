@@ -1,8 +1,7 @@
 app.directive('singlePostComponent', ['$location', 'accountService', 'postService', function ($location, AccountService, PostService) {
   return {
     scope: {
-      component: '=',
-      version: '='
+      component: '='
     },
     templateUrl: '/components/component-wrap.html',
     link: function (scope, element, attrs) {
