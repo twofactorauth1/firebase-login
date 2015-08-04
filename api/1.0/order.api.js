@@ -41,7 +41,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         var order = new $$.m.Order(req.body);
         self.log.debug('>> Order Details '+ order);
-        self.getStripeTokenFromAccount(req, function(err, accessToken){
+        self.getStripeTokenFromUnAuthenticatedAccount(req, function(err, accessToken){
             var userId = self.userId(req);
             var accountId = self.currentAccountId(req);
             order.set('account_id', accountId);
