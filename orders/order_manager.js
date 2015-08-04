@@ -305,7 +305,7 @@ module.exports = {
                                     by: userId
                                 };
                                 savedOrder.set('modified', modified);
-                                dao.saveOrUpdate(savedOrder, function(err, updatedSavedOrder){
+                                dao.saveOrUpdate(savedOrder, function(_err, updatedSavedOrder){
                                     callback(err);
                                 });
                             } else {
