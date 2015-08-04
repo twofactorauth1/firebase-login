@@ -682,9 +682,11 @@ app.controller('ImportCustomerModalCtrl', ['$scope', '$location', '$timeout', '$
    * - begin the CSV upload with uploader config
    */
 
+   var acceptedFiletypes = ['text/csv', 'application/vnd.ms-excel', 'application/msexcel', 'application/x-msexcel', 'application/x-ms-excel', 'application/x-excel', 'application/x-dos_ms_excel', 'application/xls', 'application/x-xls', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'];
+
   $scope.csvUploaded = function (files) {
     $scope.incorrectFileType = false;
-    if (files[0].type === 'text/csv' || files[0].type === 'application/vnd.ms-excel') {
+    if (acceptedFiletypes.indexOf(files[0].type) > -1) {
       startUpload = new Date();
       $scope.fileName = files[0].name;
       $scope.uploadingCsv = true;
