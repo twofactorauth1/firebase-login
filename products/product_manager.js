@@ -49,8 +49,8 @@ module.exports = {
                 log.error('Error updating product: ' + err);
                 fn(err, null);
             } else {
-                log.debug('<< updateProduct');
-                fn(null, body);
+                log.debug('<< getTax');
+                fn(null, JSON.parse(body));
             }
         });
     },
