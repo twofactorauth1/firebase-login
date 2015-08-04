@@ -155,6 +155,7 @@ module.exports = {
                 var subTotal = 0;
                 var totalLineItemsQuantity = 0;
                 var taxPercent = 0.08;
+
                 //accountDao.getAccountByID(order.get('account_id'), function(err, acc) {
                 //    log.debug('accountDao.getAccountByID returned acc.id = ' + acc.get('id'));
                 //    if( acc.business.addresses.length < 1 ) {
@@ -252,7 +253,10 @@ module.exports = {
 
                         dao.findMany(query, $$.m.Order, function(err, orders){
                             savedOrder.set('order_id', orders.length);
-                            callback(null, savedOrder, contact);
+                            dao.saveOrUpdate(savedOrder, function(err, updatedOrder){
+                                callback(err, updatedOrder, contact);
+                            });
+                            //callback(null, savedOrder, contact);
                         });
                     }
                 });
@@ -301,7 +305,7 @@ module.exports = {
                                     by: userId
                                 };
                                 savedOrder.set('modified', modified);
-                                dao.saveOrUpdate(savedOrder, function(err, updatedSavedOrder){
+                                dao.saveOrUpdate(savedOrder, function(_err, updatedSavedOrder){
                                     callback(err);
                                 });
                             } else {

@@ -82,6 +82,7 @@ Strategy.prototype.authenticate = function(req, options) {
         return this.fail();
     }
     options.state = req.session.accountId + "," + req.user.id();
+    options.scope = 'read_write';
     var callbackURL = options.callbackURL || this._callbackURL;
     if (callbackURL) {
         var parsed = url.parse(callbackURL);
