@@ -60,6 +60,13 @@
 
     $scope.profileSaveFn = function () {
       //$scope.currentUser = $scope.profileUser;
+      var email = _.filter($scope.profileUser.emails, function (mail) {
+        return mail.email !== "";
+      });
+      if (email.length <= 0) {
+        toaster.pop("error", "Email is required.");
+        return;
+      }
       UserService.putUser($scope.profileUser, function (user) {        
         $scope.refreshUser();
         toaster.pop('success', 'Profile Saved.');

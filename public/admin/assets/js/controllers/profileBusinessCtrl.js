@@ -221,9 +221,17 @@
     };
 
     $scope.profileSaveFn = function () {
+      console.log('profileSaveFn >>>');
       $scope.validateBeforeSave();
       if (!$scope.isValid) {
         toaster.pop("error", "Business hours are not valid");
+        return;
+      }
+      var email = _.filter($scope.account.business.emails, function (mail) {
+        return mail.email !== "";
+      });
+      if (email.length <= 0) {
+        toaster.pop("error", "Email is required.");
         return;
       }
       UserService.putAccount($scope.account, function (account) {
