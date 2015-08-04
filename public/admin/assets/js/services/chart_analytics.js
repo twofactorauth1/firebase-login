@@ -274,6 +274,10 @@
           "property_name": "ip_geo_info",
           "operator": "ne",
           "property_value": "null"
+        }, {
+          "property_name": "fingerprint",
+          "operator": "ne",
+          "property_value": 0
         }]
       });
 
@@ -288,6 +292,10 @@
           "property_name": "accountId",
           "operator": "eq",
           "property_value": $$.server.accountId
+        }, {
+          "property_name": "fingerprint",
+          "operator": "ne",
+          "property_value": 0
         }]
       });
 
@@ -303,6 +311,10 @@
           "property_name": "accountId",
           "operator": "eq",
           "property_value": $$.server.accountId
+        }, {
+          "property_name": "fingerprint",
+          "operator": "ne",
+          "property_value": 0
         }]
       });
 
@@ -318,6 +330,10 @@
           "property_name": "accountId",
           "operator": "eq",
           "property_value": $$.server.accountId
+        }, {
+          "property_name": "fingerprint",
+          "operator": "ne",
+          "property_value": 0
         }]
       });
 
@@ -361,6 +377,10 @@
           "property_name": "accountId",
           "operator": "eq",
           "property_value": $$.server.accountId
+        }, {
+          "property_name": "fingerprint",
+          "operator": "ne",
+          "property_value": 0
         }]
       });
 
@@ -376,6 +396,10 @@
           "property_name": "accountId",
           "operator": "eq",
           "property_value": $$.server.accountId
+        }, {
+          "property_name": "fingerprint",
+          "operator": "ne",
+          "property_value": 0
         }]
       });
 
@@ -391,6 +415,10 @@
           "property_name": "accountId",
           "operator": "eq",
           "property_value": $$.server.accountId
+        }, {
+          "property_name": "fingerprint",
+          "operator": "ne",
+          "property_value": 0
         }]
       });
 
@@ -405,6 +433,10 @@
           "property_name": "accountId",
           "operator": "eq",
           "property_value": $$.server.accountId
+        }, {
+          "property_name": "fingerprint",
+          "operator": "ne",
+          "property_value": 0
         }]
       });
 
@@ -428,6 +460,10 @@
           "property_name": "page_depth",
           "operator": "eq",
           "property_value": 1
+        }, {
+          "property_name": "fingerprint",
+          "operator": "ne",
+          "property_value": 0
         }]
       });
 
@@ -450,6 +486,10 @@
           "property_name": "page_depth",
           "operator": "eq",
           "property_value": 1
+        }, {
+          "property_name": "fingerprint",
+          "operator": "ne",
+          "property_value": 0
         }]
       });
 
@@ -464,6 +504,10 @@
           "property_name": "accountId",
           "operator": "eq",
           "property_value": $$.server.accountId
+        }, {
+          "property_name": "fingerprint",
+          "operator": "ne",
+          "property_value": 0
         }]
       });
 
@@ -482,6 +526,10 @@
           "property_name": "new_visitor",
           "operator": "eq",
           "property_value": false
+        }, {
+          "property_name": "fingerprint",
+          "operator": "ne",
+          "property_value": 0
         }]
       });
 
@@ -500,6 +548,10 @@
           "property_name": "new_visitor",
           "operator": "eq",
           "property_value": true
+        }, {
+          "property_name": "fingerprint",
+          "operator": "ne",
+          "property_value": 0
         }]
       });
 
@@ -516,7 +568,11 @@
           "operator": "eq",
           "property_value": $$.server.accountId
         }]
-      });
+      }, {
+          "property_name": "fingerprint",
+          "operator": "ne",
+          "property_value": 0
+        });
 
       return queryData;
     };

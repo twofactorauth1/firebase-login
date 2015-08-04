@@ -11,7 +11,7 @@
     </div>
     <div class="clearfix mb15"></div>
     <div class="row features-wrap">
-        <div class="feature feature-height" ng-class="{'col-sm-6':component.features.length > 1, 'col-sm-12':component.features.length < 1}" data-ng-repeat="feature in component.features track by $index">
+        <div class="feature feature-height" ng-class="{'col-sm-6':component.features.length > 1, 'col-sm-12':component.features.length < 1}" data-ng-repeat="feature in component.features">
             <div class="feature-single feature-single-{{$index}}" ng-style="{&#39;background&#39;: component.blockbgcolor}">
                 <div elem ng-model="feature.top"></div>
                 <div class="feature-content">

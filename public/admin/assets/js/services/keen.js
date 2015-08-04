@@ -5,6 +5,7 @@
 (function(angular) {
     app.service('KeenService', ['$http','ENV', function($http,ENV) {
         var baseUrl = 'https://api.keen.io/3.0/projects/';
+        console.log('ENV ', ENV);
         var readKey = ENV.keenReadKey;
         var writeKey = ENV.keenWriteKey;
         var projectId = ENV.keenProjectId;

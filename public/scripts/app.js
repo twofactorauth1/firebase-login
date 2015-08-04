@@ -34,7 +34,7 @@ var mainApp = angular
     'angular-jqcloud',
     'socialLinks',
     'slick',
-    'leaflet-directive'
+    'ngMap'
   ])
   .config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
     //$locationProvider.html5Mode(true);

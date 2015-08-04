@@ -1,6 +1,6 @@
 'use strict';
 /*global app, Papa*/
-app.controller('ImportCustomerModalCtrl', ['$scope', '$location', '$timeout', '$modalInstance', 'FileUploader', 'editableOptions', 'CustomerService', 'userConstant', 'SocialConfigService', 'getCustomers', function ($scope, $location, $timeout, $modalInstance, FileUploader, editableOptions, CustomerService, userConstant, SocialConfigService, getCustomers) {
+app.controller('ImportCustomerModalCtrl', ['$scope', '$location', '$timeout', '$modalInstance', 'FileUploader', 'editableOptions', 'CustomerService', 'userConstant', 'SocialConfigService', 'getCustomers', 'toaster', function ($scope, $location, $timeout, $modalInstance, FileUploader, editableOptions, CustomerService, userConstant, SocialConfigService, getCustomers, toaster) {
 
   $scope.getCustomers = getCustomers;
   /*
@@ -26,6 +26,51 @@ app.controller('ImportCustomerModalCtrl', ['$scope', '$location', '$timeout', '$
     }
   });
 
+  $scope.dropdownFocus = function () {
+    console.log('dropdownFocus >>>');
+  };
+
+  $scope.importContacts = function (selectedAccount) {
+    console.log('importContacts >>> ', selectedAccount);
+    var foundSocialId = false;
+    if (selectedAccount.type === userConstant.social_types.GOOGLE) {
+      foundSocialId = true;
+      $scope.tempGoogleAccount = selectedAccount;
+      SocialConfigService.getGoogleGroups(selectedAccount.id, function (data) {
+        data.push({
+          name: 'All',
+          id: 'All'
+        });
+        $scope.socialAccountGroups = data;
+      });
+      //$scope.closeModal();
+      //toaster.pop('success', "Contacts import initiated.");
+      //SocialConfigService.importGoogleContact(selectedAccount.id, function(data) {
+      //    $scope.closeModal();
+      //    toaster.pop('success', "Your Google contacts are being imported in the background.");
+      //});
+    }
+    if (selectedAccount.type === userConstant.social_types.LINKEDIN) {
+      foundSocialId = true;
+      $scope.closeModal();
+      toaster.pop('success', "Contacts import initiated.");
+      SocialConfigService.importLinkedinContact(selectedAccount.id, function () {
+        $scope.closeModal();
+        toaster.pop('success', "Your LinkedIn contacts are being imported in the background.");
+
+      });
+      $scope.socailList = false;
+      $scope.groupList = false;
+    }
+
+    if (foundSocialId === false) {
+      $scope.closeModal();
+      toaster.pop('warning', "No such account integrated.");
+      $scope.socailList = false;
+      $scope.groupList = false;
+    }
+  };
+
   $scope.showSocialAccountSelect = function (socailType) {
 
     $scope.socailType = socailType;
@@ -42,6 +87,19 @@ app.controller('ImportCustomerModalCtrl', ['$scope', '$location', '$timeout', '$
     } else {
       $scope.groupList = false;
     }
+  };
+
+  $scope.importGoogleContacts = function (groupId) {
+    $scope.closeModal();
+    toaster.pop('success', "Contacts import initiated.");
+    SocialConfigService.importGoogleContactsForGroup($scope.tempGoogleAccount.id, groupId.id, function () {
+      $scope.closeModal();
+      $scope.minRequirements = true;
+      toaster.pop('success', "Your Google contacts are being imported in the background.");
+    });
+    $scope.tempGoogleAccount = null;
+    $scope.socailList = false;
+    $scope.groupList = false;
   };
 
   /*
@@ -265,7 +323,7 @@ app.controller('ImportCustomerModalCtrl', ['$scope', '$location', '$timeout', '$
           bestMatch.value = _header;
           bestMatch.percent = 1;
         } else {
-            //if not in known list get a best match percent score
+          //if not in known list get a best match percent score
           var percentMatch = header.score(columnName);
           if (percentMatch > bestMatch.percent) {
             bestMatch.value = _header;

@@ -2,7 +2,7 @@
 /*global app, moment, angular, window*/
 /*jslint unparam:true*/
 (function (angular) {
-  app.controller('ProductsCtrl', ["$scope", "$modal", "AccountService", "ProductService", "$filter", "productConstant", "ipCookie", function ($scope, $modal, AccountService, ProductService, $filter, ProductConstant, ipCookie) {
+  app.controller('ProductsCtrl', ["$scope", "$modal", "$window", "AccountService", "ProductService", "$filter", "productConstant", "ipCookie", function ($scope, $modal, $window, AccountService, ProductService, $filter, ProductConstant, ipCookie) {
     $scope.tableView = 'list';
     $scope.itemPerPage = 100;
     $scope.showPages = 15;
@@ -151,21 +151,33 @@
 
       }
     };
+
+    $scope.resizeGrid = function(filtered)
+    {
+      setTimeout(function () {
+            if (!$scope.inserted) {
+              $scope.inserted = true;
+              if ($("tr.product-item").length) {
+                $scope.maxProductHeight = Math.max.apply(null, $("tr.product-item").map(function () {
+                  return $(this).height();
+                }).get());
+                $scope.maxProductHeight = $scope.maxProductHeight + 3;             
+              }
+            }
+            $("tr.product-item").css("min-height", $scope.maxProductHeight);           
+        }, 500)
+    }
+
     $scope.inserted = false;
     $scope.$watch('tableView', function (newValue, oldValue) {
       if (newValue == "grid") {
-        setTimeout(function () {
-          if (!$scope.inserted) {
-            $scope.inserted = true;
-            if ($("tr.product-item").length) {
-              var maxProductHeight = Math.max.apply(null, $("tr.product-item").map(function () {
-                return $(this).height();
-              }).get());
-              $("tr.product-item").css("min-height", maxProductHeight + 30);
+        $scope.resizeGrid();
+      }
+    });
 
-            }
-          }
-        }, 500)
+    $scope.$watch('displayedProducts', function (newValue, oldValue) {
+      if (newValue && $scope.tableView === 'grid') {
+        $scope.resizeGrid();
       }
     });
 

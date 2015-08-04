@@ -411,7 +411,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var self = this;
         var sessionEvent = new $$.m.SessionEvent(req.body);
         sessionEvent.set('session_id', req.params.id);
-        //console.log('Storing Session API >>> ', new Date().getTime());
+        console.log('server_time '+ new Date().getTime() + ' session_start ' +sessionEvent.get('session_start'));
         sessionEvent.set('server_time', new Date().getTime());
         sessionEvent.set('ip_address', self.ip(req));
         //var geoInfo = self.geo(req);

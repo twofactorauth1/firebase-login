@@ -35,7 +35,7 @@ var collator = {
     findCheckGroupAndSend: function(cb) {
         var self = this;
 
-        log.debug('>> findCheckGroupAndSend');
+        log.debug('>> findCheckGroupAndSend (' + self.secondsThreshold + ')');
         var startTime = new Date();
         //search through session events where session_end = 0
         var query = {session_end:0};
@@ -83,11 +83,12 @@ var collator = {
                 return;
             }
             //log.debug('maxValue: ', value);
-            if(value === undefined) {
+            if(!value) {
                 log.debug('No pings found for session ' + sessionEvent.id() + '.  Closing.');
                 collator._closeSessionWithNoPings(sessionEvent, callback);
             } else {
-                var lastSeenVsNowInSecs = (new Date().getTime() - value) / 1000;
+                log.debug('value:', value);
+                var lastSeenVsNowInSecs = (new Date().getTime() - value) / 1000;//TODO: This may be the problem!!!
                 log.debug('lastSeenVsNowInSecs '+ lastSeenVsNowInSecs+' secondsSinceLastPingThreshold '+secondsSinceLastPingThreshold);
                 if(lastSeenVsNowInSecs >= secondsSinceLastPingThreshold) {
                     collator._groupAndSendWithCallback(sessionEvent, value, function(err, value){
@@ -228,10 +229,14 @@ var collator = {
     },
 
     _closeSessionWithNoPings: function(sessionEvent, callback){
+        log.debug('closing sessin with no pings');
         var serverTime = moment();
         var secondsToSubtract = collator.secondsThreshold*2;
+        log.debug('secondsToSubtract: ' + secondsToSubtract);
 
         var serverTime = serverTime.subtract(secondsToSubtract, 'seconds');
+
+        log.debug('server time was: ' + moment().valueOf() + ' but is now ' + serverTime);
 
         if(sessionEvent.get('server_time') === undefined || sessionEvent.get('server_time')===null) {
             //close it right now.

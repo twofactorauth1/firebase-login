@@ -1,7 +1,7 @@
 'use strict';
 /*global app, moment, angular, window, CKEDITOR, L*/
 /*jslint unparam:true*/
-app.directive('contactUsComponent', ['AccountService', 'GeocodeService', 'leafletData', '$timeout', '$window', function (AccountService, GeocodeService, leafletData, $timeout, $window) {
+app.directive('contactUsComponent', ['AccountService', 'GeocodeService', '$timeout', '$window', function (AccountService, GeocodeService, $timeout, $window) {
   return {
     scope: {
       component: '=',
@@ -10,7 +10,7 @@ app.directive('contactUsComponent', ['AccountService', 'GeocodeService', 'leafle
     },
     templateUrl: '/components/component-wrap.html',
     link: function (scope, element, attrs) {
-
+      scope.showInfo = false;
       scope.isEditing = true;
       if (!scope.component.map) {
         scope.component.map = {};
@@ -66,128 +66,62 @@ app.directive('contactUsComponent', ['AccountService', 'GeocodeService', 'leafle
         });
       };
 
-      scope.updateContactUsAddress = function (timeout) {
-        scope.contactAddress = scope.stringifyAddress(scope.component.location);
-        if (scope.component.location && scope.component.location.lat && scope.component.location.lon) {
-          angular.extend(scope, {
-            mapLocation: {
-              lat: parseFloat(scope.component.location.lat),
-              lng: parseFloat(scope.component.location.lon),
-              zoom: scope.component.map.zoom
-            },
-            markers: {
-              mainMarker: {
-                lat: parseFloat(scope.component.location.lat),
-                lng: parseFloat(scope.component.location.lon),
-                focus: false,
-                message: scope.contactAddress,
-                draggable: false
-              }
-            }
-          });
-          leafletData.getMap('leafletmap-' + scope.component._id).then(function (map) {
-            map.setView(new L.LatLng(scope.component.location.lat, scope.component.location.lon), 10);
-            $timeout(function () {
-              map.invalidateSize();
-              angular.element($window).triggerHandler('resize');
-            }, timeout);
-          });
-        } else {
-          var _bottomline = "";
-          var _topline = "";
-          if(scope.component.location)
-          {
-            _bottomline = _.filter([scope.component.location.city, scope.component.location.state], function (str) {
-              return str !== "";
-            }).join(", ");
+      scope.reloadMap = function()
+      {
+         google.maps.event.trigger(scope.map, 'resize');
+         scope.map.setCenter(new google.maps.LatLng(scope.component.location.lat, scope.component.location.lon));
+      }
 
-            _topline = _.filter([scope.component.location.address, _bottomline, scope.component.location.zip], function (str) {
-              return str !== "";
-            }).join(" ");
-          }
-          GeocodeService.getGeoSearchAddress(_topline, function (data) {
-            console.log('data >>> ', data);
+      scope.updateContactUsAddress = function () {
+        scope.contactAddress = scope.stringifyAddress(scope.component.location);
+
+        if (scope.component.location.lat && scope.component.location.lon) {
+          scope.reloadMap();
+        } else {
+          GeocodeService.getGeoSearchAddress(scope.contactAddress, function (data) {
             if (data.lat && data.lon) {
               scope.component.location.lat = data.lat;
               scope.component.location.lon = data.lon;
-              angular.extend(scope, {
-                mapLocation: {
-                  lat: parseFloat(scope.component.location.lat),
-                  lng: parseFloat(scope.component.location.lon),
-                  zoom: scope.component.map.zoom
-                },
-                markers: {
-                  mainMarker: {
-                    lat: parseFloat(scope.component.location.lat),
-                    lng: parseFloat(scope.component.location.lon),
-                    focus: false,
-                    message: scope.contactAddress,
-                    draggable: false
-                  }
-                }
-              });
-              leafletData.getMap('leafletmap-' + scope.component._id).then(function (map) {
-                map.setView(new L.LatLng(scope.component.location.lat, scope.component.location.lon), 10);
-                $timeout(function () {
-                  map.invalidateSize();
-                  angular.element($window).triggerHandler('resize');
-                }, timeout);
-              });
+              scope.reloadMap();
             }
           });
         }
       };
-
-      angular.extend(scope, {
-        mapLocation: {
-          lat: 51,
-          lng: 0,
-          zoom: scope.component.map.zoom
-        },
-        defaults: {
-          scrollWheelZoom: false
-        },
-        markers: {
-
-        }
+      scope.$on('mapInitialized', function(event, map) {
+        scope.map = map;
+        google.maps.event.trigger(scope.map, 'resize');
+        scope.map.setCenter(new google.maps.LatLng(51, 0));
       });
-
-      scope.$watch('component.map.zoom', function (newValue, oldValue) {
-        if (newValue) {
-          $timeout(function () {
-            scope.mapLocation.zoom = newValue;
-            if(scope.component.location && scope.component.location.lat && scope.component.location.lon)
-            {
-              scope.mapLocation.lat = parseFloat(scope.component.location.lat);
-              scope.mapLocation.lng = parseFloat(scope.component.location.lon);
-            }            
-          });
-        }
-      });
-
-      $(document).ready(function () {
-        if (!scope.component.location.address && !scope.component.location.address2 && !scope.component.location.city && !scope.component.location.state && !scope.component.location.zip) {
-          scope.checkBusinessAddress(function () {
-            scope.updateContactUsAddress(3000);
-          });
-        } else {
-          scope.updateContactUsAddress(3000);
-        }
-      });
-
       scope.control.refreshMap = function () {
         if (!scope.component.location.address && !scope.component.location.address2 && !scope.component.location.city && !scope.component.location.state && !scope.component.location.zip) {
           scope.checkBusinessAddress(function () {
-            scope.updateContactUsAddress(3000);
+              scope.updateContactUsAddress();
           });
         } else {
-          scope.updateContactUsAddress(3000);
+          scope.updateContactUsAddress();
         }
       };
 
       scope.control.updateAddressString = function () {
         scope.contactAddress = scope.stringifyAddress(scope.component.location);
       };
+
+      scope.$parent.$watch('ckeditorLoaded', function (newValue, oldValue) {
+        if(newValue)
+        {
+          if (!scope.component.location.address && !scope.component.location.address2 && !scope.component.location.city && !scope.component.location.state && !scope.component.location.zip) {
+            scope.checkBusinessAddress(function () {
+              $timeout(function () {
+                scope.updateContactUsAddress();
+              },500);
+            });
+        } else {
+          $timeout(function () {
+            scope.updateContactUsAddress();
+          },500);
+        }
+        }
+      })
 
     }
   };

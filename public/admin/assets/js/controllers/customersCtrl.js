@@ -384,60 +384,6 @@
       $scope.triggerInput(input);
     };
 
-    $scope.importGoogleContacts = function (groupId) {
-      $scope.closeModal();
-      toaster.pop('success', "Contacts import initiated.");
-      SocialConfigService.importGoogleContactsForGroup($scope.tempGoogleAccount.id, groupId.id, function () {
-        $scope.closeModal();
-        $scope.minRequirements = true;
-        toaster.pop('success', "Your Google contacts are being imported in the background.");
-      });
-      $scope.tempGoogleAccount = null;
-      $scope.socailList = false;
-      $scope.groupList = false;
-    };
-
-    $scope.importContacts = function (selectedAccount) {
-      var foundSocialId = false;
-      if (selectedAccount.type === userConstant.social_types.GOOGLE) {
-        foundSocialId = true;
-        $scope.tempGoogleAccount = selectedAccount;
-        SocialConfigService.getGoogleGroups(selectedAccount.id, function (data) {
-          data.push({
-            name: 'All',
-            id: 'All'
-          });
-          $scope.socialAccountGroups = data;
-        });
-        //$scope.closeModal();
-        //toaster.pop('success', "Contacts import initiated.");
-        //SocialConfigService.importGoogleContact(selectedAccount.id, function(data) {
-        //    $scope.closeModal();
-        //    toaster.pop('success', "Your Google contacts are being imported in the background.");
-        //});
-      }
-      if (selectedAccount.type === userConstant.social_types.LINKEDIN) {
-        foundSocialId = true;
-        $scope.closeModal();
-        toaster.pop('success', "Contacts import initiated.");
-        SocialConfigService.importLinkedinContact(selectedAccount.id, function () {
-          $scope.closeModal();
-          toaster.pop('success', "Your LinkedIn contacts are being imported in the background.");
-
-        });
-        $scope.socailList = false;
-        $scope.groupList = false;
-      }
-
-      if (foundSocialId === false) {
-        $scope.closeModal();
-        toaster.pop('warning', "No such account integrated.");
-        $scope.socailList = false;
-        $scope.groupList = false;
-      }
-
-
-    };
     // $scope.socailType = "";
     // $scope.socailList = false;
     // $scope.groupList = false;
