@@ -41,7 +41,7 @@
                 </ul>
             </div>
             <button ng-disabled="order.status === FailedStatus" type="button" class="btn btn-wide btn-o btn-primary" ng-click="saveOrder()">
-                    Save
+                Save
             </button>
             <!-- <div class="btn-group" dropdown is-open="email.isopen">
                 <button type="button" class="btn btn-wide btn-primary dropdown-toggle" dropdown-toggle ng-disabled="disabled">
@@ -410,7 +410,7 @@
                             <tbody>
                                 <tr ng-repeat="item in order.line_items">
                                     <td width="40">
-                                        <img ng-if="item.product.is_image && item.product.icon" src="{{item.product.icon}}" class="img-circle" style="width:35px;height:35px" popover-template="'productImage.html'" popover-title="{{item.product.name}}" popover-trigger="mouseenter" popover-placement="right"/>
+                                        <img ng-if="item.product.is_image && item.product.icon" src="{{item.product.icon}}" class="img-circle" style="width:35px;height:35px" popover-template="'productImage.html'" popover-title="{{item.product.name}}" popover-trigger="mouseenter" popover-placement="right" />
                                         <span ng-if="!item.product.is_image && item.product.icon" class="fa {{item.product.icon}}" popover-template="'productIcon.html'" popover-title="{{item.product.name}}" popover-trigger="mouseenter" popover-placement="right"></span>
                                         <span popover-template="'productIcon.html'" popover-title="{{item.product.name}}" popover-trigger="mouseenter" popover-placement="right" ng-if="!item.product.icon" class="fa fa-cube"></span>
                                     </td>
@@ -425,26 +425,24 @@
                                         </div>
                                     </td>
                                     <td class="center">
-                                        <span >{{item.regular_price | currency}}</span>
-
+                                        <span>{{item.regular_price | currency}}</span>
                                     </td>
                                     <td class="center">
                                         <span ng-if="!item[$index].editing">{{item.quantity}}</span>
                                         <div ng-if="item[$index].editing">
                                             <label>Quantity</label>
-                                            <input type="text" numbers-only="numbers-only" class="form-control" ng-model="item.quantity" ng-change="calculateTotals()"/>
+                                            <input type="text" numbers-only="numbers-only" class="form-control" ng-model="item.quantity" ng-change="calculateTotals()" />
                                         </div>
                                     </td>
                                     <td class="center">
                                         <span ng-if="!item.discount || item.discount <= 0">{{item.total | currency}}</span>
                                         <span ng-if="item.discount && item.discount > 0"><s>{{totalWithDiscount(item.total, item.discount) | currency}}</s> {{item.total | currency}}</span>
-
                                     </td>
                                     <td class="center">
                                         <span ng-if="!item[$index].editing">{{item.discount | currency}}</span>
                                         <div ng-if="item[$index].editing">
                                             <label>Discount</label>
-                                            <input type="text" numbers-only="numbers-only" class="form-control" ng-model="item.discount" ng-change="calculateTotals()"/>
+                                            <input type="text" numbers-only="numbers-only" class="form-control" ng-model="item.discount" ng-change="calculateTotals()" />
                                         </div>
                                     </td>
                                     <td class="center" width="100">
@@ -522,15 +520,13 @@
     </div>
     <!-- end: YOUR CONTENT HERE -->
 </div>
-
- <script type="text/ng-template" id="productImage.html">
-    <img src="{{item.product.icon}}" width="150"/>
-  </script>
-
-<script type="text/ng-template" id="productIcon.html">
-<icon class="fa {{item.product.icon}}" style="font-size: 75px"></span>
+<script type="text/ng-template" id="productImage.html">
+    <img src="{{item.product.icon}}" width="150" />
 </script>
-
+<script type="text/ng-template" id="productIcon.html">
+    <icon class="fa {{item.product.icon}}" style="font-size: 75px">
+        </span>
+</script>
 <script type="text/ng-template" id="customTemplate.html">
     <a>
         <img ng-src="{{match.model.photo ? match.model.photo : '/admin/assets/images/default-user.png'}}" width="35">
@@ -550,10 +546,43 @@
             <label for="form-field-select-1">
                 Select Product
             </label>
-            <span class="input-icon input-icon-right">
-                <input type="text" ng-model="$parent.selectedProduct" typeahead="product as product for product in products | filter:$viewValue" typeahead-min-length="1" typeahead-loading="true" typeahead-template-url="product-typeahead-template.html" typeahead-input-formatter="formatProductInput($model)" class="form-control">
-                <i class="ti-close" style="color: #a94442" ng-if="selectedProduct" ng-click="clearProduct()"></i>
-            </span>
+            <ui-select ng-model="$parent.selectedProduct" theme="bootstrap">
+                <ui-select-match placeholder="Select a Product">
+                    <small ng-bind-html="$select.selected.name"></small>
+                </ui-select-match>
+                <ui-select-choices repeat="product in products | filter: $select.search track by $index">
+                    <img ng-if="product.icon && product.is_image" ng-src="{{product.icon ? product.icon : '/admin/assets/images/default-product.png'}}" width="40" height="40" class="screenshot img-circle">
+                    <div class="img-thumbnail img-circle" ng-if="!product.icon">
+                        <span class="fa fa-cube fa-2x text-primary"></span>
+                    </div>
+                    <div class="img-thumbnail img-circle" ng-if="!product.is_image && product.icon">
+                        <span class="fa {{product.icon}} fa-2x text-primary"></span>
+                    </div>
+                    <small class="margin-left-5 text-bold text-large" ng-if="product.name" ng-bind-html="product.name | highlight: $select.search"></small>
+                    <small class="margin-left-5 text-bold text-large text-muted" ng-if="!product.name" ng-bind-html="'No Product Name' | highlight: $select.search"></small>
+                    <small class="margin-left-5 text-bold text-large text-muted">(<span ng-if="product.regular_price">${{product.regular_price}}</span><span ng-if="!product.regular_price">Free</span>)</small>
+                </ui-select-choices>
+            </ui-select>
+        </div>
+        <div class="form-group margin-bottom-0" ng-if="selectedProduct">
+            <label>Selected Product</label>
+            <div class="well margin-bottom-0">
+                <div class="col-xs-3">
+                    <img ng-if="product.icon && product.is_image" ng-src="{{product.icon ? product.icon : '/admin/assets/images/default-product.png'}}" width="100" height="100" class="screenshot img-circle">
+                    <div class="img-thumbnail img-circle" ng-if="!product.icon">
+                        <span class="fa fa-cube fa-4x text-primary"></span>
+                    </div>
+                    <div class="img-thumbnail img-circle" ng-if="!product.is_image && product.icon">
+                        <span class="fa {{product.icon}} fa-4x text-primary"></span>
+                    </div>
+                </div>
+                <div class="col-xs-9">
+                    <h4>{{selectedProduct.name || 'No Product Name'}}</h4>
+                    <p>{{selectedProduct.description}}</p>
+                    <p class="text-bold"> {{selectedProduct.regular_price | currency}}</p>
+                </div>
+                <div class="clearfix"></div>
+            </div>
         </div>
         <div class="clearfix"></div>
     </div>
@@ -564,9 +593,9 @@
 </script>
 <script type="text/ng-template" id="product-typeahead-template.html">
     <a>
-        <img ng-if="match.model.icon && match.model.is_image" ng-src="{{match.model.icon ? match.model.icon : '/admin/assets/images/default-product.png'}}" width="35" >
-            <span ng-if="!match.model.icon" width="35" class="fa fa-cube"></span>            
-            <span ng-if="!match.model.is_image && match.model.icon" class="fa {{match.model.icon}}" width="35"></span>    
+        <img ng-if="match.model.icon && match.model.is_image" ng-src="{{match.model.icon ? match.model.icon : '/admin/assets/images/default-product.png'}}" width="35">
+        <span ng-if="!match.model.icon" width="35" class="fa fa-cube"></span>
+        <span ng-if="!match.model.is_image && match.model.icon" class="fa {{match.model.icon}}" width="35"></span>
         <span bind-html-unsafe="match.model.name | typeaheadHighlight:query"></span>
     </a>
 </script>
