@@ -498,7 +498,6 @@ app.constant('JS_REQUIRES', {
     //*** jQuery Plugins
     'perfect-scrollbar-plugin': ['../js/libs/perfect-scrollbar/js/min/perfect-scrollbar.jquery.min.js', '../js/libs/perfect-scrollbar/css/perfect-scrollbar.min.css'],
     'ladda': ['../js/libs/ladda/dist/ladda.min.js', '../js/libs/ladda/dist/ladda-themeless.min.css'],
-    'sweet-alert': ['../js/libs/sweetalert/lib/sweet-alert.min.js', '../js/libs/sweetalert/lib/sweet-alert.css'],
     'chartjs': '../js/libs/chartjs/Chart.min.js',
     'jquery-sparkline': '../js/libs/jquery.sparkline.build/dist/jquery.sparkline.min.js',
     'jsVideoUrlParser': '../js/libs/jsVideoUrlParser/dist/jsVideoUrlParser.min.js',
@@ -645,7 +644,7 @@ app.constant('JS_REQUIRES', {
     files: ['../js/libs/angular-truncate/src/truncate.js']
   }, {
     name: 'oitozero.ngSweetAlert',
-    files: ['../js/libs/angular-sweetalert-promised/SweetAlert.min.js']
+    files: ['../js/libs/angular-sweetalert-promised/SweetAlert.min.js', '../js/libs/sweetalert/lib/sweet-alert.min.js', '../js/libs/sweetalert/lib/sweet-alert.css']
   }, {
     name: 'monospaced.elastic',
     files: ['../js/libs/angular-elastic/elastic.js']
