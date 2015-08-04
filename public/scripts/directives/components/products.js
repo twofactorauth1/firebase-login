@@ -107,7 +107,7 @@ app.directive('productsComponent', ['paymentService', 'productService', 'account
           console.log('commerceSettings ', account.commerceSettings);
           scope.settings = account.commerceSettings;
           if (scope.settings && scope.settings.taxes && scope.settings.taxbased === 'business_location') {
-            if (account.business.addresses[0].zip) {
+            if (account.business.addresses && account.business.addresses.length > 0 && account.business.addresses[0].zip) {
               console.log('getting tax ', account.business.addresses[0].zip);
               if (account.business.addresses[0].zip) {
                 scope.getTax(account.business.addresses[0].zip);
