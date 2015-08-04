@@ -551,9 +551,13 @@ app.directive('productsComponent', ['paymentService', 'productService', 'account
           console.log('scope.newContact ', scope.newContact);
           scope.newContact.details = _formattedDetails;
           console.log('scope.newContact ', scope.newContact);
-          UserService.postContact(scope.newContact, function (customer) {
+
+          var customer = scope.newContact;
+          console.log('customer, ', customer);
+          //UserService.postContact(scope.newContact, function (customer) {
             var order = {
-              "customer_id": customer._id,
+              //"customer_id": customer._id,
+              "customer": customer,
               "session_id": null,
               "status": "processing",
               "cart_discount": 0,
@@ -618,6 +622,8 @@ app.directive('productsComponent', ['paymentService', 'productService', 'account
               order.line_items.push(_item);
             });
             OrderService.createOrder(order, function () {
+              console.log('order, ', order);
+
               scope.checkoutModalState = 5;
               scope.cartDetails = [];
               _.each(scope.products, function (product) {
@@ -626,10 +632,10 @@ app.directive('productsComponent', ['paymentService', 'productService', 'account
               scope.subTotal = 0;
               scope.totalTax = 0;
               scope.total = 0;
-              // PaymentService.saveCartDetails(token, parseInt(scope.total * 100), function(data) {});
-            });
+            // PaymentService.saveCartDetails(token, parseInt(scope.total * 100), function(data) {});
           });
         });
+      //});
       };
 
       /*
