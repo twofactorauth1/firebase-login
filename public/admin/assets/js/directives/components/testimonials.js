@@ -8,6 +8,8 @@ app.directive('testimonialsComponent', ['$timeout', function ($timeout) {
     },
     templateUrl: '/components/component-wrap.html',
     link: function (scope, element, attrs) {
+      scope.touchMove = false;
+      scope.draggable = false;
       scope.autoplay = false;
       scope.isEditing = true;
       $(document).ready(function () {
