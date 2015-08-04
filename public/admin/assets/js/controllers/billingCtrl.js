@@ -25,9 +25,23 @@
       });
     };
 
+    $scope._moment = function (_date, options) {
+      if (_date.toString().length === 10) {
+        _date = _date * 1000;
+      }
+      var formattedDate = moment(_date);
+
+      if (options) {
+        if (options.subtractNum && options.subtractType) {
+          formattedDate = formattedDate.subtract(options.subtractNum, options.subtractType);
+        }
+      }
+      return formattedDate.format("MMMM Do, YYYY");
+    };
+
     $scope.changeInvoice = function (invoice, index) {
       $scope.selectedInvoice = invoice;
-      $scope.selectedItemIndex=index;
+      $scope.selectedItemIndex = index;
     };
 
     /*
