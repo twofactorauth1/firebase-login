@@ -84,7 +84,9 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
       $scope.blog.post.post_excerpt = $scope.originalBlog.post_excerpt;
     }
     $scope.components[clickedIndex] = $scope.originalComponent;
-
+    $timeout(function () {
+      $(window).trigger('resize');
+    }, 0)
     $scope.closeModal();
   };
 
