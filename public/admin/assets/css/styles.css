@@ -13894,6 +13894,18 @@ tags-input.ti-input-sm .tags .input,
 .integrations .integration-avatar {
   min-height: 38px;
 }
+.integrations .single-integration.ng-enter {
+  -webkit-animation: bounceIn 1s;
+  -moz-animation: bounceIn 1s;
+  -ms-animation: bounceIn 1s;
+  animation: bounceIn 1s;
+}
+.integrations .single-integration.ng-leave {
+  -webkit-animation: bounceOut 1s;
+  -moz-animation: bounceOut 1s;
+  -ms-animation: bounceOut 1s;
+  animation: bounceOut 1s;
+}
 /* ---------------------------------------------------------------------- */
 /*  business profile
 /* ---------------------------------------------------------------------- */
