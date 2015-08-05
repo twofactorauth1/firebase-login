@@ -968,12 +968,11 @@
         confirmButtonColor: "#DD6B55",
         confirmButtonText: "Yes, delete page!",
         cancelButtonText: "No, do not delete page!",
-        closeOnConfirm: true,
+        closeOnConfirm: false,
         closeOnCancel: true
       }, function (isConfirm) {        
         if (isConfirm) {          
           SweetAlert.swal("Saved!", "Page is deleted.", "success");
-          angular.element('.modal.in').show();
           var websiteId = $scope.page.websiteId;
           var title = $scope.page.title;
 
@@ -985,11 +984,7 @@
             }, 500);
           });
         } else {
-          SweetAlert.swal("Cancelled", "Page not deleted.", "error");
-          $timeout(function () {
             angular.element('.modal.in').show();
-          }, 1000)
-          
         }
               
       });
@@ -1001,6 +996,7 @@
      */
 
     $scope.deletePost = function () {
+      angular.element('.modal.in').hide();
       SweetAlert.swal({
           title: "Are you sure?",
           text: "Do you want to delete this page",
@@ -1010,7 +1006,7 @@
           confirmButtonText: "Yes, delete post!",
           cancelButtonText: "No, do not delete post!",
           closeOnConfirm: false,
-          closeOnCancel: false
+          closeOnCancel: true
         },
         function (isConfirm) {
           if (isConfirm) {
@@ -1025,7 +1021,7 @@
             });
 
           } else {
-            SweetAlert.swal("Cancelled", "Post not deleted.", "error");
+              angular.element('.modal.in').show();
           }
         });
     };
