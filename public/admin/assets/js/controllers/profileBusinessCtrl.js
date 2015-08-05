@@ -228,8 +228,9 @@
         return;
       }
       var email = _.filter($scope.account.business.emails, function (mail) {
-        return mail.email !== "";
+        return mail.email && mail.email.length > 0;
       });
+
       if (email.length <= 0) {
         toaster.pop("error", "Email is required.");
         return;
