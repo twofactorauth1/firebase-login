@@ -959,6 +959,7 @@
      */
 
     $scope.deletePage = function () {
+      angular.element('.modal.in').hide();
       SweetAlert.swal({
         title: "Are you sure?",
         text: "Do you want to delete this page",
@@ -970,6 +971,7 @@
         closeOnConfirm: true,
         closeOnCancel: true
       }, function (isConfirm) {
+        angular.element('.modal.in').show();
         if (isConfirm) {
           SweetAlert.swal("Saved!", "Page is deleted.", "success");
           var websiteId = $scope.page.websiteId;
