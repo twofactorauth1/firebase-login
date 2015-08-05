@@ -858,37 +858,19 @@
 
     $scope.setTags = function () {
       var tempTags = [];
-      _.each($scope.customer.tags, function (tag) {
+      var cutomerTags = [];
+      _.each($scope.customer.tags, function (tag , index) {
         var matchingTag = _.findWhere($scope.customerTags, {
           data: tag
         });
+        cutomerTags.push(matchingTag.label);
         tempTags.push(matchingTag);
       });
+      $scope.myCustomerTags = cutomerTags.join(",");
       $scope.customer.tags = tempTags;
     };
 
-    /*
-     * @displayCustomerTags
-     * -
-     */
-
-    $scope.displayCustomerTags = function () {
-      var tags = "";
-      if ($scope.customer.tags && $scope.customer.tags.length) {
-        $scope.customer.tags.forEach(function (value, index) {
-          if (index === 0) {
-            tags = value.label;
-          } else {
-            if (tags) {
-              tags = tags.concat(", ", value.label);
-            }
-          }
-        });
-      }
-      return tags;
-    };
-
-    /*
+       /*
      * @getOrders
      * - get all the orders for this customer and create line_items_total
      *   and add decimal point to total then create scope

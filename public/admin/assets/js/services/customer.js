@@ -181,7 +181,6 @@
                             tags.push(type.label);
                     });
                 }
-
                 return tags.join(', ');
             };
 
