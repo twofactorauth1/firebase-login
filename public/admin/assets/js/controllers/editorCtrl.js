@@ -970,10 +970,10 @@
         cancelButtonText: "No, do not delete page!",
         closeOnConfirm: true,
         closeOnCancel: true
-      }, function (isConfirm) {
-        angular.element('.modal.in').show();
-        if (isConfirm) {
+      }, function (isConfirm) {        
+        if (isConfirm) {          
           SweetAlert.swal("Saved!", "Page is deleted.", "success");
+          angular.element('.modal.in').show();
           var websiteId = $scope.page.websiteId;
           var title = $scope.page.title;
 
@@ -985,10 +985,10 @@
             }, 500);
           });
         } else {
-          $timeout(function () {
-              SweetAlert.swal("Cancelled", "Page not deleted.", "error");
-            }, 500);
+          SweetAlert.swal("Cancelled", "Page not deleted.", "error");
+          angular.element('.modal.in').show();
         }
+              
       });
     };
 
