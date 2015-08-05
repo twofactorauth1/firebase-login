@@ -351,6 +351,7 @@
 
 
     if ($location.search().pagehandle) {
+      $scope.isPage = true;
       $scope.retrievePage($location.search().pagehandle);
     }
 
@@ -790,6 +791,10 @@
     $scope.createDuplicatePage = function (newPage) {
       if ($scope.emailPage)
         newPage.type = "email";
+
+      if ($scope.isPage) {
+        newPage.type = "page";
+      }
 
       $scope.validateNewPage(newPage);
       if (!$scope.newPageValidated) {
