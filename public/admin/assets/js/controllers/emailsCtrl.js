@@ -3,7 +3,7 @@
  * controller for products
  */
 (function (angular) {
-  app.controller('EmailsCtrl', ["$scope", "$location", "toaster", "$filter", "$modal", "WebsiteService", function ($scope, $location, toaster, $filter, $modal, WebsiteService) {
+  app.controller('EmailsCtrl', ["$scope", "$location", "toaster", "$filter", "$modal", "WebsiteService", "ChartEmailService", function ($scope, $location, toaster, $filter, $modal, WebsiteService, ChartEmailService) {
 
     /*
      * @getCustomers
@@ -12,7 +12,22 @@
 
     WebsiteService.getEmails(function (emails) {
       console.log('emails ', emails);
-      $scope.emails = emails;
+      ChartEmailService.queryMandrillData(function (data) {
+        console.log('data ', data);
+        _.each(emails, function (_email) {
+          var matchingResult = _.find(data.emailsSent, function (_result) {
+            console.log('_result ', _result);
+            return _result['msg.metadata.emailId'] === _email._id;
+          });
+          console.log('matchingResult ', matchingResult);
+          if (matchingResult) {
+            console.log('matchingResult ', matchingResult);
+            _email.sent = matchingResult.result
+            console.log('_email ', _email);
+          }
+        });
+        $scope.emails = emails;
+      });
     });
 
 
