@@ -352,7 +352,7 @@
       value: 'inactive'
     }];
 
-    $scope.productTypeOptions = ProductConstant.product_types.dp;
+    $scope.productTypes = ProductConstant.product_types;
 
     /*
      * @convert:iconpicker
