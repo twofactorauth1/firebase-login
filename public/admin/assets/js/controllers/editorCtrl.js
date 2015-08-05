@@ -986,7 +986,10 @@
           });
         } else {
           SweetAlert.swal("Cancelled", "Page not deleted.", "error");
-          angular.element('.modal.in').show();
+          $timeout(function () {
+            angular.element('.modal.in').show();
+          }, 1000)
+          
         }
               
       });
