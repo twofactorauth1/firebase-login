@@ -17,7 +17,7 @@ var contactDao = require('../dao/contact.dao');
 
 var mandrillHelper =  {
 
-    sendAccountWelcomeEmail: function(fromAddress, fromName, toAddress, toName, subject, htmlContent, accountId, userId, vars, fn) {
+    sendAccountWelcomeEmail: function(fromAddress, fromName, toAddress, toName, subject, htmlContent, accountId, userId, vars, emailId, fn) {
         var self = this;
         //console.log('Sending mail from ' + fromName + ' with address ' + fromAddress);
         //console.dir(htmlContent);
@@ -72,7 +72,8 @@ var mandrillHelper =  {
                     ],
                     "google_analytics_campaign": null,
                     "metadata": {
-                        "accountId": accountId
+                        "accountId": accountId,
+                        "emailId": emailId
                     },
                     "recipient_metadata": [
                         {
@@ -119,7 +120,7 @@ var mandrillHelper =  {
     },
 
 
-    sendCampaignEmail: function(fromAddress, fromName, toAddress, toName, subject, htmlContent, accountId, campaignId, contactId, vars, stepSettings, fn) {
+    sendCampaignEmail: function(fromAddress, fromName, toAddress, toName, subject, htmlContent, accountId, campaignId, contactId, vars, stepSettings, emailId, fn) {
         var self = this;
         self.log = log;
         console.log('sendCampaignEmail >>>');
@@ -170,7 +171,8 @@ var mandrillHelper =  {
                     ],
                     "google_analytics_campaign": null,
                     "metadata": {
-                        "accountId": accountId
+                        "accountId": accountId,
+                        "emailId": emailId
                     },
                     "recipient_metadata": [
                         {
@@ -235,7 +237,7 @@ var mandrillHelper =  {
 
     },
 
-    sendOrderEmail: function(fromAddress, fromName, toAddress, toName, subject, htmlContent, accountId, orderId, vars, fn) {
+    sendOrderEmail: function(fromAddress, fromName, toAddress, toName, subject, htmlContent, accountId, orderId, vars, emailId, fn) {
         var self = this;
         self.log = log;
         self.log.debug('>> sendOrderEmail');
@@ -290,7 +292,8 @@ var mandrillHelper =  {
                     ],
                     "google_analytics_campaign": null,
                     "metadata": {
-                        "accountId": accountId
+                        "accountId": accountId,
+                        "emailId": emailId
                     },
                     "recipient_metadata": [
                         {
@@ -396,7 +399,8 @@ var mandrillHelper =  {
                             ],
                             "google_analytics_campaign": null,
                             "metadata": {
-                                "accountId": accountId
+                                "accountId": accountId,
+                                "emailId": emailId
                             },
                             "recipient_metadata": [
                                 {
@@ -442,7 +446,7 @@ var mandrillHelper =  {
 
     },
 
-    sendBasicEmail: function(fromAddress, fromName, toAddress, toName, subject, htmlContent, accountId, vars, fn) {
+    sendBasicEmail: function(fromAddress, fromName, toAddress, toName, subject, htmlContent, accountId, vars, emailId, fn) {
         var self = this;
         self.log = log;
         self.log.debug('>> sendBasicEmail');
@@ -493,7 +497,8 @@ var mandrillHelper =  {
                     ],
                     "google_analytics_campaign": null,
                     "metadata": {
-                        "accountId": accountId
+                        "accountId": accountId,
+                        "emailId": emailId
                     },
                     "recipient_metadata": [
                         {

@@ -132,7 +132,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         ncyBreadcrumb: {
             label: 'Emails'
         },
-        resolve: loadSequence('emailsCtrl')
+        resolve: loadSequence('emailsCtrl', 'chartEmailService')
     }).state('app.editor', {
         url: '/editor',
         templateUrl: "assets/views/editor.html",
