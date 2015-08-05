@@ -354,8 +354,21 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
   $scope.closeModal = function () {
     $timeout(function () {
       $scope.$apply(function () {
-        $modalInstance.close();
-        angular.element('.modal-backdrop').remove();
+        if($scope.componentEditing.type === "contact-us")
+        {
+          $scope.validateGeoAddress(function () {
+            if($scope.errorMapData)
+            {
+              $scope.componentEditing.location = $scope.originalContactMap;
+            }
+            $modalInstance.close();
+            angular.element('.modal-backdrop').remove();
+          })
+        }
+        else{
+          $modalInstance.close();
+          angular.element('.modal-backdrop').remove();
+        }        
       });
     });
   };
@@ -619,51 +632,28 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
     });
   };
 
-  /*
-   * @stringifyAddress
-   * -
-   */
-
-  $scope.stringifyAddress = function (address) {
-    var _bottomline = "";
-    var _topline = "";
-    if (address) {
-      _bottomline = _.filter([address.city, address.state], function (str) {
-        return str !== "";
-      }).join(", ");
-
-      _topline = _.filter([address.address, _bottomline, address.zip], function (str) {
-        return str !== "";
-      }).join(" ");
-    }
-    return _topline;
-  };
-
   $scope.updateContactUsAddress = function () {
     $scope.errorMapData = false;
     if (!angular.equals($scope.originalContactMap, $scope.componentEditing.location)) {
-      $scope.validateGeoAddress();
+      {
+        $scope.validateGeoAddress();
+      }
+      
     }
   };
 
-  $scope.validateGeoAddress = function (fn) {
-    if (!(($scope.componentEditing.location.city && $scope.componentEditing.location.state) || $scope.componentEditing.location.zip)) {
-      $scope.errorMapData = true;
-      if (fn)
-        fn();
-    } else {
-      GeocodeService.getGeoSearchAddress($scope.stringifyAddress($scope.componentEditing.location), function (data) {
-        if (data.lat && data.lon) {
-          $scope.errorMapData = false;
-          $scope.componentEditing.location.lat = data.lat;
-          $scope.componentEditing.location.lon = data.lon;
-          $scope.contactMap.refreshMap();
-        } else
-          $scope.errorMapData = true;
-        if (fn)
-          fn();
-      })
-    }
+  $scope.validateGeoAddress = function (fn) {    
+    GeocodeService.validateAddress($scope.componentEditing.location, function (data) {
+      if(data)
+      {
+        $scope.errorMapData = false;
+        $scope.contactMap.refreshMap();
+      }
+      else
+        $scope.errorMapData = true;
+      if(fn)
+        fn()
+    });
   }
 
   $scope.saveComponent = function () {

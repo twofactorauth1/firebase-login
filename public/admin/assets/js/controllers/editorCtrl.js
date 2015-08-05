@@ -76,6 +76,27 @@
       }, 500);
     };
 
+    $scope.validateContactAddress = function(fn)
+    {
+      $scope.contactComponentType = _.findWhere($scope.components, {
+        type : 'contact-us'
+      });
+      if($scope.contactComponentType)
+      {
+        GeocodeService.validateAddress($scope.contactComponentType.location, function (data) {
+          if(!data) {
+            toaster.pop('warning', 'Address could not be found for contact component. Please enter valid address');
+            $scope.saveLoading = false;
+            fn(false);
+          }            
+          else
+            fn(true);
+        });
+      }
+      else
+        fn(true);
+    }
+
     /*
      * @savePage
      * -
@@ -131,24 +152,29 @@
             $scope.saveLoading = false;
             toaster.pop('error', "Page Title or URL can not be blank.");
             return false;
-          }
+          }          
           if (!$scope.duplicateUrl)
-            WebsiteService.updatePage($scope.page, function (data) {
-              console.log($scope.page.handle, $scope.originalPage.handle);
-              if ($scope.page.handle !== $scope.originalPage.handle) {
-                $location.search('pagehandle', $scope.page.handle);
-              }
-              $scope.saveLoading = false;
-              toaster.pop('success', "Page Saved", "The " + $scope.page.handle + " page was saved successfully.");
-              //Update linked list
-              $scope.website.linkLists.forEach(function (value, index) {
-                if (value.handle === "head-menu") {
-                  WebsiteService.updateLinkList($scope.website.linkLists[index], $scope.website._id, 'head-menu', function (data) {
-                    console.log('Updated linked list');
+           $scope.validateContactAddress(function(data){ 
+              if(data)
+              {
+                WebsiteService.updatePage($scope.page, function (data) {
+                  console.log($scope.page.handle, $scope.originalPage.handle);
+                  if ($scope.page.handle !== $scope.originalPage.handle) {
+                    $location.search('pagehandle', $scope.page.handle);
+                  }
+                  $scope.saveLoading = false;
+                  toaster.pop('success', "Page Saved", "The " + $scope.page.handle + " page was saved successfully.");
+                  //Update linked list
+                  $scope.website.linkLists.forEach(function (value, index) {
+                    if (value.handle === "head-menu") {
+                      WebsiteService.updateLinkList($scope.website.linkLists[index], $scope.website._id, 'head-menu', function (data) {
+                        console.log('Updated linked list');
+                      });
+                    }
                   });
-                }
-              });
-            });
+                });
+              }
+            })           
           else
             $scope.saveLoading = false;
         });
