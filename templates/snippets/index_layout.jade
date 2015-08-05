@@ -23,8 +23,8 @@ html(class="no-js", lang="en" ng-app="mainApp" ng-controller="MainCtrl as main",
             title=title
             meta(charset="utf-8")
             meta(name="viewport", content="width=device-width, initial-scale=1.0")
-            meta(name="description", content=seo.description)
-            meta(name="keywords", content=seo.keywords)
+            meta(name="description", content="#{account.website.seo.description}")
+            meta(name="keywords", content='#{_.pluck(account.website.seo.keywords,"text").join(",")}')
             meta(name="author", content=author)
             meta(name="fragment" content="!")
             meta(property='og:type', content=og.type)
