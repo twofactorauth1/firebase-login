@@ -1121,10 +1121,6 @@ div[data-type="feature-list"] .inner-page {
 .top-bar-v1 .right-block {
   margin: 5px !important;
 }
-.top-bar-v1 .right-block .edit-wrap,
-.top-bar-v1 .right-block .editable {
-  display: inline-block;
-}
 .top-bar-v1 .hour-block div.navbar-right {
   margin-right: 15px !important;
 }
