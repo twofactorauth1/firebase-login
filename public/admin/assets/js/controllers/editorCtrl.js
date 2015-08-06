@@ -277,6 +277,25 @@
     };
 
     /*
+     * @retrieveEmail
+     * -
+     */
+
+    $scope.retrieveEmail = function (_emailId) {
+      console.log('retrieveEmail ', _emailId);
+      WebsiteService.getSingleEmail(_emailId, function (data) {
+        console.log('data ', data);
+        $scope.page = data;
+        $scope.components = $scope.page.components;
+        $scope.originalComponents = angular.copy($scope.components);
+        $scope.originalPage = angular.copy(data);
+        $scope.activePage = true;
+        $scope.activateCKeditor();
+        $rootScope.breadcrumbTitle = $scope.page.title;
+      });
+    };
+
+    /*
      * @retrievePost
      * -
      */
@@ -363,7 +382,7 @@
 
     if ($location.search().email) {
       $scope.emailPage = true;
-      $scope.retrievePage($location.search().email);
+      $scope.retrieveEmail($location.search().email);
     }
 
     /*

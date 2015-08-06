@@ -331,6 +331,10 @@ var dao = {
         this.findMany(query, Page, fn);
     },
 
+    getEmailById: function(emailId, fn) {
+        return this.getById(emailId, $$.m.cms.Email, fn);
+    },
+
     getLatestPageForWebsite: function(websiteId, pageName, fn) {
         var query = {
             websiteId: websiteId,
@@ -1283,15 +1287,7 @@ var dao = {
         var welcomeEmailPage = new $$.m.cms.Page({
 
             "accountId" : accountId,
-            "websiteId" : websiteId,
-            "handle" : "welcome-aboard",
             "title" : "Welcome Aboard",
-            "seo" : null,
-            "visibility" : {
-                "visible" : true,
-                "asOf" : null,
-                "displayOn" : null
-            },
             "components" : [
                 {
                     "_id" : componentId,
@@ -1325,24 +1321,13 @@ var dao = {
                 "date" : new Date(),
                 "by" : null
             },
-            "mainmenu" : null,
-            "page_type" : "email",
-            'type': 'email',
             'email_type': 'welcome'
         });
 
         var newOrderEmailPage = new $$.m.cms.Page({
 
             "accountId" : accountId,
-            "websiteId" : websiteId,
-            "handle" : "new-order-email",
             "title" : "New Order",
-            "seo" : null,
-            "visibility" : {
-                "visible" : true,
-                "asOf" : null,
-                "displayOn" : null
-            },
             "components" : [
                 {
                     "_id" : componentId,
@@ -1376,22 +1361,12 @@ var dao = {
                 "date" : new Date(),
                 "by" : null
             },
-            "mainmenu" : null,
-            'type': 'email',
             'email_type': 'new_order'
         });
         var orderProcessingEmailPage = new $$.m.cms.Page({
 
             "accountId" : accountId,
-            "websiteId" : websiteId,
-            "handle" : "order-processing-email",
             "title" : "Order Processing",
-            "seo" : null,
-            "visibility" : {
-                "visible" : true,
-                "asOf" : null,
-                "displayOn" : null
-            },
             "components" : [
                 {
                     "_id" : componentId,
@@ -1425,22 +1400,12 @@ var dao = {
                 "date" : new Date(),
                 "by" : null
             },
-            "mainmenu" : null,
-            'type': 'email',
             'email_type': 'order_processing'
         });
         var orderCompletedEmailPage = new $$.m.cms.Page({
 
             "accountId" : accountId,
-            "websiteId" : websiteId,
-            "handle" : "order-completed-email",
             "title" : "Order Completed",
-            "seo" : null,
-            "visibility" : {
-                "visible" : true,
-                "asOf" : null,
-                "displayOn" : null
-            },
             "components" : [
                 {
                     "_id" : componentId,
@@ -1474,22 +1439,12 @@ var dao = {
                 "date" : new Date(),
                 "by" : null
             },
-            "mainmenu" : null,
-            'type': 'email',
             'email_type': 'order_completed'
         });
         var orderCancelledEmailPage = new $$.m.cms.Page({
 
             "accountId" : accountId,
-            "websiteId" : websiteId,
-            "handle" : "order-cancelled-email",
             "title" : "Order Cancelled",
-            "seo" : null,
-            "visibility" : {
-                "visible" : true,
-                "asOf" : null,
-                "displayOn" : null
-            },
             "components" : [
                 {
                     "_id" : componentId,
@@ -1523,22 +1478,12 @@ var dao = {
                 "date" : new Date(),
                 "by" : null
             },
-            "mainmenu" : null,
-            'type': 'email',
             'email_type': 'order_cancelled'
         });
         var customerInvoiceEmailPage = new $$.m.cms.Page({
 
             "accountId" : accountId,
-            "websiteId" : websiteId,
-            "handle" : "customer-invoice-email",
             "title" : "Customer Invoice",
-            "seo" : null,
-            "visibility" : {
-                "visible" : true,
-                "asOf" : null,
-                "displayOn" : null
-            },
             "components" : [
                 {
                     "_id" : componentId,
@@ -1572,8 +1517,6 @@ var dao = {
                 "date" : new Date(),
                 "by" : null
             },
-            "mainmenu" : null,
-            'type': 'email',
             'email_type': 'customerInvoice'
         });
 

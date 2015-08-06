@@ -3,7 +3,7 @@
  * controller for products
  */
 (function (angular) {
-  app.controller('EmailsCtrl', ["$scope", "$location", "toaster", "$filter", "$modal", "WebsiteService", "ChartEmailService", function ($scope, $location, toaster, $filter, $modal, WebsiteService, ChartEmailService) {
+  app.controller('EmailsCtrl', ["$scope", "$timeout", "$location", "toaster", "$filter", "$modal", "WebsiteService", "ChartEmailService", function ($scope, $timeout, $location, toaster, $filter, $modal, WebsiteService, ChartEmailService) {
 
     /*
      * @getCustomers
@@ -11,22 +11,12 @@
      */
 
     WebsiteService.getEmails(function (emails) {
-      console.log('emails ', emails);
-      ChartEmailService.queryMandrillData(function (data) {
-        console.log('data ', data);
-        _.each(emails, function (_email) {
-          var matchingResult = _.find(data.emailsSent, function (_result) {
-            console.log('_result ', _result);
-            return _result['msg.metadata.emailId'] === _email._id;
+      ChartEmailService.queryMandrillData(emails, function (data) {
+        $timeout(function() {
+          $scope.$apply(function() {
+            $scope.emails = data;
           });
-          console.log('matchingResult ', matchingResult);
-          if (matchingResult) {
-            console.log('matchingResult ', matchingResult);
-            _email.sent = matchingResult.result
-            console.log('_email ', _email);
-          }
         });
-        $scope.emails = emails;
       });
     });
 
@@ -71,11 +61,6 @@
       }
     });
 
-    $scope.$watch('createpage.handle', function (newValue, oldValue) {
-      if (newValue) {
-        $scope.createpage.handle = $filter('slugify')(newValue);
-      }
-    });
 
     $scope.validateCreatePage = function (page, restrict) {
       $scope.createPageValidated = false;
@@ -149,7 +134,7 @@
     };
 
     $scope.viewSingle = function (email) {
-      window.location = '/admin/#/editor?email=' + email.handle;
+      window.location = '/admin/#/editor?email=' + email._id;
     };
 
     $scope.filterScreenshot = {};

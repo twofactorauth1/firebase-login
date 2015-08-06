@@ -59,6 +59,27 @@
       }
     };
 
+    //website/:websiteid/email/:id
+    this.getSingleEmail = function (_emailId, fn) {
+      var _emails = pagecache.get('emails');
+      var _matchingEmail = _.find(_emails, function (_email) {
+        return _email._id === _emailId;
+      });
+      if (_matchingEmail) {
+        fn(_matchingEmail);
+      } else {
+        var apiUrl = baseUrl + ['cms', 'email', _emailId].join('/');
+        $http.get(apiUrl)
+          .success(function (data, status, headers, config) {
+            fn(data);
+          })
+          .error(function (err) {
+            console.warn('END:getSingleEmail with ERROR');
+            fn(err, null);
+          });
+      }
+    };
+
     //website/:websiteid/page/:handle
     this.getSinglePost = function (handle, fn) {
       var apiUrl = baseUrl + ['cms', 'website', $$.server.websiteId, 'blog', handle].join('/');

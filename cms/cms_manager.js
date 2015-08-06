@@ -5,6 +5,7 @@ var cmsDao = require('./dao/cms.dao.js');
 var accountDao = require('../dao/account.dao.js');
 var themeDao = require('./dao/theme.dao.js');
 var templateDao = require('./dao/template.dao.js');
+var emailDao = require('./dao/email.dao.js');
 var urlboxhelper = require('../utils/urlboxhelper');
 var s3dao = require('../dao/integrations/s3.dao');
 var fs = require('fs');
@@ -1656,14 +1657,12 @@ module.exports = {
         });
     },
 
-    getEmailsByWebsiteId: function(websiteId, accountId, fn) {
+    getEmailsByAccountId: function(accountId, fn) {
         var self = this;
         self.log = log;
-        self.log.debug('>> getPagesByWebsiteId');
+        self.log.debug('>> getEmailsByAccountId');
         var query = {
             accountId: accountId,
-            websiteId: websiteId,
-            type: 'email',
             $and: [
                 {$or: [{secure:false},{secure:{$exists:false}}]},
                 {$or: [{latest:true},{latest:{$exists:false}}]}
@@ -1672,10 +1671,10 @@ module.exports = {
 
         };
         self.log.debug('start query');
-        cmsDao.findMany(query, $$.m.cms.Page, function(err, list){
+        emailDao.findMany(query, $$.m.cms.Email, function(err, list){
             self.log.debug('end query');
             if(err) {
-                self.log.error('Error getting pages by websiteId: ' + err);
+                self.log.error('Error getting emails by accountId: ' + err);
                 fn(err, null);
             } else {
                 fn(null, list);
@@ -2166,18 +2165,16 @@ module.exports = {
 
         var query = {
             accountId: accountId,
-            type:'email',
-            email_type:email_type,
             latest:true
         };
 
-        cmsDao.findOne(query, $$.m.cms.Page, function(err, page){
+        emailDao.findOne(query, $$.m.cms.Email, function(err, email){
             if(err) {
-                log.error('Error finding email page: ' + err);
+                log.error('Error finding email email: ' + err);
                 return fn(err, null);
             } else {
                 log.debug('<< getEmailPage');
-                return fn(null, page);
+                return fn(null, email);
             }
         });
     }

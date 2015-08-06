@@ -74,6 +74,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.delete(this.url('website/:websiteId/page/:id/:label'), this.isAuthAndSubscribedApi.bind(this), this.deletePage.bind(this));
 
         app.get(this.url('website/:websiteId/emails'), this.setup.bind(this), this.getAllEmails.bind(this));
+        app.get(this.url('email/:id'), this.setup.bind(this), this.getEmailById.bind(this));
 
 
         // TEMPLATES
@@ -715,15 +716,31 @@ _.extend(api.prototype, baseApi.prototype, {
     getAllEmails: function(req, res) {
         var self = this;
         self.log.debug('>> getAllEmails');
-        var websiteId = req.params.websiteId;
         var accountId = parseInt(self.currentAccountId(req));
         self.log.debug('>> getAllEmails without Limit');
-            cmsManager.getEmailsByWebsiteId(websiteId, accountId, function(err, map){
+            cmsManager.getEmailsByAccountId(accountId, function(err, map){
                 self.log.debug('<< getAllEmails');
                 self.sendResultOrError(res, err, map, 'Error getting all emails for account');
                 self = null;
             });
 
+    },
+
+    /**
+     * This method may be called by unauthenticated users.  No security is needed.
+     * @param req
+     * @param resp
+     */
+    getEmailById: function (req, resp) {
+        var self = this;
+        var emailId = req.params.id;
+        var accountId = parseInt(self.currentAccountId(req));
+        self.log.debug('>> getEmailById');
+
+        cmsDao.getEmailById(emailId, function (err, value) {
+            self.sendResultOrError(resp, err, value, "Error Retrieving Email by Id");
+            self = null;
+        });
     },
     //endregion
 
