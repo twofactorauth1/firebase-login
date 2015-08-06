@@ -75,9 +75,16 @@
       $scope.matchUsers($scope.customer);
 
       $scope.newNote.text = '';
+       var tempTags = [];
+      $scope.customer_data = angular.copy($scope.customer);
+      _.each($scope.customer_data.tags, function (tag) {
+        tempTags.push(tag.data);
+      });
+      $scope.customer_data.tags = tempTags;
 
-      CustomerService.saveCustomer($scope.customer, function (customer) {
+      CustomerService.saveCustomer($scope.customer_data, function (customer) {
         $scope.customer = customer;
+        $scope.setTags();
         $scope.changesConfirmed = true;
         toaster.pop('success', 'Notes Added.');
       });
@@ -863,8 +870,11 @@
         var matchingTag = _.findWhere($scope.customerTags, {
           data: tag
         });
-        cutomerTags.push(matchingTag.label);
-        tempTags.push(matchingTag);
+        if(matchingTag)
+        {
+          cutomerTags.push(matchingTag.label);
+          tempTags.push(matchingTag);
+        }        
       });
       $scope.myCustomerTags = cutomerTags.join(",");
       $scope.customer.tags = tempTags;
