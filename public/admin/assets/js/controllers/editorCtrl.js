@@ -179,6 +179,7 @@
                         $scope.refreshLinkList(value, $scope.originalPage.handle);
                        }
                         WebsiteService.updateLinkList($scope.website.linkLists[index], $scope.website._id, 'head-menu', function (data) {
+                          $scope.originalPage.handle = $scope.page.handle;
                           console.log('Updated linked list');
                         });
                     }
