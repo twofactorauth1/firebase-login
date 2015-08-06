@@ -6,10 +6,14 @@
 app.directive('ctooltip', function ($compile) {
     return {
         restrict: 'A',
+         scope:{
+            msg: '@msg',
+            placement: "@placement"
+        },
         link: function (scope, elem, attrs) {
             if(angular.isUndefined(elem.attr('tooltip'))) {
-                elem.attr('tooltip-placement', 'right');
-                elem.attr('tooltip', 'This link will work on front End only');
+                elem.attr('tooltip-placement', scope.placement || 'right');
+                elem.attr('tooltip', scope.msg || 'This link will work on front End only');
                 $compile(elem)(scope);
             }
         }
