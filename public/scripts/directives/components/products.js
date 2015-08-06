@@ -38,6 +38,26 @@ app.directive('productsComponent', ['paymentService', 'productService', 'account
       }
 
       /*
+       * @checkOnSale
+       * - check if today is inbetween sales dates
+       */
+
+      function checkOnSale(_product) {
+        if (_product.on_sale) {
+          if (_product.sale_date_from && _product.sale_date_to) {
+            var date = new Date();
+            var startDate = new Date(_product.sale_date_from);
+            var endDate = new Date(_product.sale_date_to);
+            if (startDate <= date && date <= endDate) {
+              return true; //false in this case
+            }
+            return false;
+          }
+          return true;
+        }
+      }
+
+      /*
        * @filterProducts
        * - filter the products and assign them to the scope
        */
@@ -46,6 +66,9 @@ app.directive('productsComponent', ['paymentService', 'productService', 'account
         var _filteredProducts = [];
         _.each(data, function (product) {
           if (filterTags(product)) {
+            if (checkOnSale(product)) {
+              product.onSaleToday = true;
+            }
             _filteredProducts.push(product);
           }
         });
@@ -61,6 +84,7 @@ app.directive('productsComponent', ['paymentService', 'productService', 'account
        */
 
       ProductService.getAllProducts(function (data) {
+        console.log('products ', data);
         scope.originalProducts = data;
         filterProducts(scope.originalProducts, function () {
           scope.pageChanged(1);
@@ -446,15 +470,19 @@ app.directive('productsComponent', ['paymentService', 'productService', 'account
         var _totalTax = 0;
         // var total = 0;
         _.each(scope.cartDetails, function (item) {
-          _subTotal = parseFloat(_subTotal) + (parseFloat(item.regular_price) * item.quantity);
+          var _price = item.regular_price;
+          if (checkOnSale(item)) {
+            _price = item.sale_price
+          }
+          _subTotal = parseFloat(_subTotal) + (parseFloat(_price) * item.quantity);
           if (item.taxable && scope.showTax) {
             if (scope.taxPercent === 0) {
               scope.taxPercent = 1;
             }
-            _totalTax += (item.regular_price * parseFloat(scope.taxPercent) / 100) * item.quantity;
+            _totalTax += (_price * parseFloat(scope.taxPercent) / 100) * item.quantity;
           }
 
-          if(!item.taxable) {
+          if (!item.taxable) {
             scope.showNotTaxed = true;
           }
         });
@@ -554,87 +582,87 @@ app.directive('productsComponent', ['paymentService', 'productService', 'account
           var customer = scope.newContact;
           console.log('customer, ', customer);
           //UserService.postContact(scope.newContact, function (customer) {
-            var order = {
-              //"customer_id": customer._id,
-              "customer": customer,
-              "session_id": null,
-              "status": "processing",
-              "cart_discount": 0,
-              "total_discount": 0,
-              "total_shipping": 0,
-              "total_tax": formatNum(scope.totalTax),
-              "shipping_tax": 0,
-              "cart_tax": 0,
-              "currency": "usd",
-              "line_items": [], // { "product_id": 31, "quantity": 1, "variation_id": 7, "subtotal": "20.00", "tax_class": null, "sku": "", "total": "20.00", "name": "Product Name", "total_tax": "0.00" }
-              "total_line_items_quantity": scope.cartDetails.length,
-              "payment_details": {
-                "method_title": 'Credit Card Payment', //Check Payment, Credit Card Payment
-                "method_id": 'cc', //check, cc
-                "card_token": token, //Stripe card token if applicable
-                "charge_description": null, //description of charge if applicable
-                "statement_description": null, //22char string for cc statement if applicable
-                "paid": true
-              },
-              "shipping_methods": "", // "Free Shipping",
-              "shipping_address": {
-                "first_name": customer.first,
-                "last_name": customer.last,
-                "phone": customer.details[0].phones[0].number,
-                "city": customer.details[0].addresses[0].city,
-                "country": "US",
-                "address_1": customer.details[0].addresses[0].address,
-                "company": "",
-                "postcode": customer.details[0].addresses[0].zip,
-                "email": customer.details[0].emails[0].email,
-                "address_2": customer.details[0].addresses[0].address_2,
-                "state": customer.details[0].addresses[0].state
-              },
-              "billing_address": {
-                "first_name": customer.first,
-                "last_name": customer.last,
-                "phone": customer.details[0].phones[0].number,
-                "city": customer.details[0].addresses[0].city,
-                "country": "US",
-                "address_1": customer.details[0].addresses[0].address,
-                "company": "",
-                "postcode": customer.details[0].addresses[0].zip,
-                "email": customer.details[0].emails[0].email,
-                "address_2": customer.details[0].addresses[0].address_2,
-                "state": customer.details[0].addresses[0].state
-              },
-              "notes": []
+          var order = {
+            //"customer_id": customer._id,
+            "customer": customer,
+            "session_id": null,
+            "status": "processing",
+            "cart_discount": 0,
+            "total_discount": 0,
+            "total_shipping": 0,
+            "total_tax": formatNum(scope.totalTax),
+            "shipping_tax": 0,
+            "cart_tax": 0,
+            "currency": "usd",
+            "line_items": [], // { "product_id": 31, "quantity": 1, "variation_id": 7, "subtotal": "20.00", "tax_class": null, "sku": "", "total": "20.00", "name": "Product Name", "total_tax": "0.00" }
+            "total_line_items_quantity": scope.cartDetails.length,
+            "payment_details": {
+              "method_title": 'Credit Card Payment', //Check Payment, Credit Card Payment
+              "method_id": 'cc', //check, cc
+              "card_token": token, //Stripe card token if applicable
+              "charge_description": null, //description of charge if applicable
+              "statement_description": null, //22char string for cc statement if applicable
+              "paid": true
+            },
+            "shipping_methods": "", // "Free Shipping",
+            "shipping_address": {
+              "first_name": customer.first,
+              "last_name": customer.last,
+              "phone": customer.details[0].phones[0].number,
+              "city": customer.details[0].addresses[0].city,
+              "country": "US",
+              "address_1": customer.details[0].addresses[0].address,
+              "company": "",
+              "postcode": customer.details[0].addresses[0].zip,
+              "email": customer.details[0].emails[0].email,
+              "address_2": customer.details[0].addresses[0].address_2,
+              "state": customer.details[0].addresses[0].state
+            },
+            "billing_address": {
+              "first_name": customer.first,
+              "last_name": customer.last,
+              "phone": customer.details[0].phones[0].number,
+              "city": customer.details[0].addresses[0].city,
+              "country": "US",
+              "address_1": customer.details[0].addresses[0].address,
+              "company": "",
+              "postcode": customer.details[0].addresses[0].zip,
+              "email": customer.details[0].emails[0].email,
+              "address_2": customer.details[0].addresses[0].address_2,
+              "state": customer.details[0].addresses[0].state
+            },
+            "notes": []
+          };
+          _.each(scope.cartDetails, function (item) {
+            var totalAmount = item.regular_price * item.quantity;
+            var _item = {
+              "product_id": item._id,
+              "quantity": item.quantity,
+              "regular_price": formatNum(item.regular_price),
+              "variation_id": '',
+              "tax_class": null,
+              "sku": "",
+              "total": formatNum(totalAmount),
+              "name": item.name,
+              "total_tax": "0.00"
             };
-            _.each(scope.cartDetails, function (item) {
-              var totalAmount = item.regular_price * item.quantity;
-              var _item = {
-                "product_id": item._id,
-                "quantity": item.quantity,
-                "regular_price": formatNum(item.regular_price),
-                "variation_id": '',
-                "tax_class": null,
-                "sku": "",
-                "total": formatNum(totalAmount),
-                "name": item.name,
-                "total_tax": "0.00"
-              };
-              order.line_items.push(_item);
-            });
-            OrderService.createOrder(order, function () {
-              console.log('order, ', order);
+            order.line_items.push(_item);
+          });
+          OrderService.createOrder(order, function () {
+            console.log('order, ', order);
 
-              scope.checkoutModalState = 5;
-              scope.cartDetails = [];
-              _.each(scope.products, function (product) {
-                product.clicked = false;
-              });
-              scope.subTotal = 0;
-              scope.totalTax = 0;
-              scope.total = 0;
+            scope.checkoutModalState = 5;
+            scope.cartDetails = [];
+            _.each(scope.products, function (product) {
+              product.clicked = false;
+            });
+            scope.subTotal = 0;
+            scope.totalTax = 0;
+            scope.total = 0;
             // PaymentService.saveCartDetails(token, parseInt(scope.total * 100), function(data) {});
           });
         });
-      //});
+        //});
       };
 
       /*
