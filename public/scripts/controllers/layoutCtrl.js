@@ -31,10 +31,10 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', '$window', '$locatio
           if (locId) {
             var element = document.getElementById(locId);
             if (element) {
-              $document.scrollToElementAnimated(element, 10, 1000);
+              $document.scrollToElementAnimated(element, 0, 1000);
             }
           }
-        }, 2000);
+        }, 3000);
       })
     }
   });
