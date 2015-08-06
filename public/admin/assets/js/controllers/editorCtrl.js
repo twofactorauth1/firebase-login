@@ -34,7 +34,7 @@
       });
       $timeout(function () {
         if (!$scope.ckeditorLoaded)
-            $scope.ckeditorLoaded = true;
+          $scope.ckeditorLoaded = true;
       }, 12000);
     };
 
@@ -76,24 +76,20 @@
       }, 500);
     };
 
-    $scope.validateContactAddress = function(fn)
-    {
+    $scope.validateContactAddress = function (fn) {
       $scope.contactComponentType = _.findWhere($scope.components, {
-        type : 'contact-us'
+        type: 'contact-us'
       });
-      if($scope.contactComponentType)
-      {
+      if ($scope.contactComponentType) {
         GeocodeService.validateAddress($scope.contactComponentType.location, function (data) {
-          if(!data) {
+          if (!data) {
             toaster.pop('warning', 'Address could not be found for contact component. Please enter valid address');
             $scope.saveLoading = false;
             fn(false);
-          }            
-          else
+          } else
             fn(true);
         });
-      }
-      else
+      } else
         fn(true);
     }
 
@@ -152,11 +148,10 @@
             $scope.saveLoading = false;
             toaster.pop('error', "Page Title or URL can not be blank.");
             return false;
-          }          
+          }
           if (!$scope.duplicateUrl)
-           $scope.validateContactAddress(function(data){ 
-              if(data)
-              {
+            $scope.validateContactAddress(function (data) {
+              if (data) {
                 WebsiteService.updatePage($scope.page, function (data) {
                   console.log($scope.page.handle, $scope.originalPage.handle);
                   if ($scope.page.handle !== $scope.originalPage.handle) {
@@ -174,7 +169,7 @@
                   });
                 });
               }
-            })           
+            })
           else
             $scope.saveLoading = false;
         });
@@ -381,7 +376,7 @@
 
 
     if ($location.search().email) {
-      $scope.emailPage = true;
+      $scope.isEmail = true;
       $scope.retrieveEmail($location.search().email);
     }
 
@@ -715,11 +710,12 @@
     $scope.openDuplicateModal = function () {
       if ($scope.single_post) {
         $scope.openSimpleModal("post-duplicate-modal");
-      } else {
-        $scope.duplicate_type = "Page";
-        if ($scope.emailPage)
-          $scope.duplicate_type = "Email";
+      }
+      if ($scope.isPage) {
         $scope.openSimpleModal("page-duplicate-modal");
+      }
+      if ($scope.isEmail) {
+        $scope.openSimpleModal("email-duplicate-modal");
       }
     };
 
@@ -808,8 +804,6 @@
     });
 
     $scope.createDuplicatePage = function (newPage) {
-      if ($scope.emailPage)
-        newPage.type = "email";
 
       if ($scope.isPage) {
         newPage.type = "page";
@@ -828,11 +822,23 @@
         newPage.components = $scope.page.components;
         WebsiteService.createDuplicatePage(newPage, function (data) {
           $scope.duplicate = true;
-          if ($scope.emailPage)
-            $scope.checkForSaveBeforeLeave('/admin/#/editor?email=' + newPage.handle, true);
-          else
-            $scope.checkForSaveBeforeLeave('/admin/#/website/pages/?pagehandle=' + newPage.handle, true);
+          $scope.checkForSaveBeforeLeave('/admin/#/website/pages/?pagehandle=' + newPage.handle, true);
         });
+      });
+    };
+
+    $scope.newEmail = {};
+
+    $scope.createDuplicateEmail = function () {
+      // $scope.validateNewPage(newPage);
+      // if (!$scope.newPageValidated) {
+      //   toaster.pop('error', "Page Title or URL can not be blank.");
+      //   return false;
+      // }
+      $scope.newEmail.components = $scope.page.components;
+      WebsiteService.createEmail($scope.newEmail, function (data) {
+        $scope.duplicate = true;
+        $scope.checkForSaveBeforeLeave('/admin/#/editor?email=' + $scope.newEmail._id, true);
       });
     };
 
@@ -1020,8 +1026,8 @@
         cancelButtonText: "No, do not delete page!",
         closeOnConfirm: false,
         closeOnCancel: true
-      }, function (isConfirm) {        
-        if (isConfirm) {          
+      }, function (isConfirm) {
+        if (isConfirm) {
           SweetAlert.swal("Saved!", "Page is deleted.", "success");
           var websiteId = $scope.page.websiteId;
           var title = $scope.page.title;
@@ -1034,9 +1040,9 @@
             }, 500);
           });
         } else {
-            angular.element('.modal.in').show();
+          angular.element('.modal.in').show();
         }
-              
+
       });
     };
 
@@ -1071,7 +1077,7 @@
             });
 
           } else {
-              angular.element('.modal.in').show();
+            angular.element('.modal.in').show();
           }
         });
     };

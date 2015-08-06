@@ -75,6 +75,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         app.get(this.url('website/:websiteId/emails'), this.setup.bind(this), this.getAllEmails.bind(this));
         app.get(this.url('email/:id'), this.setup.bind(this), this.getEmailById.bind(this));
+        app.post(this.url('email'), this.isAuthAndSubscribedApi.bind(this), this.createEmail.bind(this));
 
 
         // TEMPLATES
@@ -741,6 +742,51 @@ _.extend(api.prototype, baseApi.prototype, {
             self.sendResultOrError(resp, err, value, "Error Retrieving Email by Id");
             self = null;
         });
+    },
+
+    createEmail: function (req, res) {
+        var self = this;
+        self.log.debug('>> createEmail');
+
+        var accountId = parseInt(self.accountId(req));
+
+        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                var emailObj = req.body;
+                self.log.debug('>> email body');
+                var email = require('../../cms/model/email');
+                var temp = $$.u.idutils.generateUUID();
+                if (email != null) {
+                    self.log.debug('>> email not null');
+                    email = new Email({
+                        _id: temp,
+                        title: emailObj.title
+                    });
+                    email.attributes.modified.date = new Date();
+                    email.attributes.created.date = new Date();
+                    email.set('accountId', accountId);
+                    self.log.debug('>> email created');
+                    cmsManager.createEmail(email, function (err, value) {
+                        self.log.debug('<< createEmail');
+                        self.sendResultOrError(res, err, value, "Error creating Email");
+                        // cmsManager.updatePageScreenshot(value.id(), function(err, value){
+                        //     if(err) {self.log.warn('Error updating screenshot for pageId ' + value.id() + ': ' + err);}
+                        //     self = null;
+                        // });
+                        // var pageUrl = self._buildPageUrl(req, page.get('handle'));
+                        // self._updatePageCache(pageUrl);
+                        self.createUserActivity(req, 'CREATE_EMAIL', null, null, function(){});
+                    });
+                } else {
+                    self.log.error('Cannot create null email.');
+                    self.wrapError(res, 400, 'Bad Parameter', 'Cannot create a null email.');
+                    self = null;
+                }
+            }
+        });
+
     },
     //endregion
 

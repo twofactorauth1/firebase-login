@@ -370,6 +370,23 @@
       });
     };
 
+    //email
+    this.createEmail = function (emaildata, fn) {
+      var apiUrl = baseUrl + ['cms', 'email'].join('/');
+      $http({
+        url: apiUrl,
+        method: "POST",
+        data: angular.toJson(emaildata)
+      }).success(function (data, status, headers, config) {
+        var _emails = emailcache.get('emails');
+        _pages[data.handle] = data;
+        pagecache.put('emails', _emails);
+        fn(data);
+      }).error(function (err) {
+        console.warn('END:Create Email with ERROR');
+      });
+    };
+
     //website/:websiteId/duplicate/page
     this.createDuplicatePage = function (pagedata, fn) {
       var apiUrl = baseUrl + ['cms', 'website', $$.server.websiteId, 'duplicate', 'page'].join('/');

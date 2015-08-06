@@ -1685,6 +1685,26 @@ module.exports = {
         });
     },
 
+    createEmail: function(email, fn) {
+        log.debug('>> createEmail');
+        //validate
+        var nameCheckQuery = {'title': email.get('title')};
+        emailDao.exists(nameCheckQuery, $$.m.cms.Email, function(err, value){
+            if(err) {
+                log.error('Exception thrown checking for uniqueness: ' + err);
+                fn(err, null);
+            } else if(value === true) {
+                log.warn('Attempted to create a email with a title that already exists.');
+                fn('Title already exists', null);
+            } else {
+                emailDao.saveOrUpdate(email, function(err, savedEmail){
+                    log.debug('<< createEmail');
+                    fn(null, savedEmail);
+                });
+            }
+        });
+    },
+
     getPagesByWebsiteIdWithLimit: function(websiteId, accountId, skip, limit, fn) {
         var self = this;
         self.log = log;
