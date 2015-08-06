@@ -2,7 +2,7 @@
 /*global app, moment, angular, window*/
 /*jslint unparam:true*/
 (function (angular) {
-  app.controller('OrderDetailCtrl', ["$scope", "toaster", "$modal", "$filter", "$stateParams", "OrderService", "CustomerService", "UserService", "ProductService", "SweetAlert", "orderConstant", function ($scope, toaster, $modal, $filter, $stateParams, OrderService, CustomerService, UserService, ProductService, SweetAlert, orderConstant) {
+  app.controller('OrderDetailCtrl', ["$scope", "toaster", "$modal", "$filter", "$stateParams", "$location", "OrderService", "CustomerService", "UserService", "ProductService", "SweetAlert", "orderConstant", function ($scope, toaster, $modal, $filter, $stateParams, $location, OrderService, CustomerService, UserService, ProductService, SweetAlert, orderConstant) {
 
     //TODO
     // - $q all api calls
@@ -93,6 +93,8 @@
           order.notes = $scope.matchUsers(order);
           order.line_items = $scope.matchProducts(order);
           $scope.currentStatus = order.status;
+
+          order.locked = true;  // TODO: remove this when server sends 'locked' property
           $scope.order = order;
           $scope.selectedCustomer = _.find($scope.customers, function (customer) {
             return customer._id === $scope.order.customer_id;
@@ -156,6 +158,17 @@
     $scope.totalWithDiscount = function (total, discount) {
       return parseFloat(total) + parseFloat(discount);
     };
+
+
+    /*
+     * @navToCustomer
+     */
+    $scope.navToCustomer = function(cust) {
+      var cust_url = '/customers/' + cust._id;
+      //console.log('navigation to customer', cust_url);
+      $location.url(cust_url);
+    };
+
 
     /*
      * @clearCustomer

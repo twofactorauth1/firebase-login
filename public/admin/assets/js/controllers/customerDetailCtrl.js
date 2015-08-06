@@ -880,14 +880,15 @@
       $scope.customer.tags = tempTags;
     };
 
-       /*
+    /*
      * @getOrders
      * - get all the orders for this customer and create line_items_total
      *   and add decimal point to total then create scope
      */
-
+    console.log('$stateParams.contactId ', $stateParams.contactId);
     OrderService.getCustomerOrders($stateParams.contactId, function (orders) {
-      if (orders) {
+      console.log('orders ', orders);
+      if (orders.length > 0) {
         _.each(orders, function (order) {
           if (order.line_items) {
             order.line_items_total = order.line_items.length;
