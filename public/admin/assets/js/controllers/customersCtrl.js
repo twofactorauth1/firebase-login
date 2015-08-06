@@ -265,6 +265,7 @@
     };
 
     $scope.addCustomer = function () {
+      $scope.saveLoading = true;
       var tempTags = [];
       _.each($scope.customer.tags, function (tag) {
         tempTags.push(tag.data);
@@ -276,6 +277,7 @@
         tags: tempTags
       };
       CustomerService.saveCustomer(tempCustomer, function (returnedCustomer) {
+        $scope.saveLoading = false;
         $scope.fullName = '';
         $scope.customer.tags = {};
         $scope.closeModal();
