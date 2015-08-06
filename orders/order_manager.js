@@ -458,22 +458,22 @@ module.exports = {
                         var fromAddress = business.emails[0].email;
                         var fromName = business.name;
 
-                        cmsManager.getEmailPage(accountId, 'new_order', function(err, page){
-                            if(err || !page) {
+                        cmsManager.getEmailPage(accountId, 'new_order', function(err, email){
+                            if(err || !email) {
                                 log.warn('No NEW_ORDER email sent: ' + err);
                                 callback(null, updatedOrder);
                             } else {
-                                var component = page.get('components')[0];
+                                var component = email.get('components')[0];
                                 component.order = updatedOrder.attributes;
                                 log.debug('Using this for data', component);
                                 app.render('emails/base_email_order', component, function(err, html) {
-                                    mandrillHelper.sendOrderEmail(fromAddress, fromName, toAddress, toName, subject, html, accountId, orderId, vars, function(){
+                                    mandrillHelper.sendOrderEmail(fromAddress, fromName, toAddress, toName, subject, html, accountId, orderId, vars, email._id, function(){
                                         callback(null, updatedOrder);
                                     });
 
                                     if(emailPreferences.new_order === true) {
                                         //Send additional details
-                                        mandrillHelper.sendOrderEmail(fromAddress, fromName, fromAddress, fromName, subject, html, accountId, orderId, vars, function(){
+                                        mandrillHelper.sendOrderEmail(fromAddress, fromName, fromAddress, fromName, subject, html, accountId, orderId, vars, email._id, function(){
                                             log.debug('Admin Notification Sent');
                                         });
                                     }
