@@ -13093,6 +13093,7 @@ fieldset[disabled] .btn-vimeo-square.active {
   max-width: 200px;
   overflow: visible;
   visibility: visible;
+  height: 250px;
   width: auto;
 }
 #editor-toolbar .cke_chrome div.cke_combopanel__fontsize {

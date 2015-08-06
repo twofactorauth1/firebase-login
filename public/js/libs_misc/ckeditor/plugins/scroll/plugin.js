@@ -5,9 +5,11 @@ CKEDITOR.plugins.add( "scroll", {
                 var element = $(".cke_panel.cke_panel");
                 if(element && element.is(":visible"))
                 {
-                    var offset = 50;
-                    var setPos = $("#editor-toolbar").position().top + offset + "px";
-                    element.css({ top: setPos });
+                    setTimeout(function(){
+                        var offset = 50;
+                        var setPos = $("#editor-toolbar").position().top + offset + "px";
+                        element.css({ top: setPos });
+                    },0)
                 }
                 
             })
