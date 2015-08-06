@@ -378,13 +378,16 @@ module.exports = {
             fn(null, pageAry[0]);
             log.debug('creating screenshots for default pages');
             _.each(pageAry, function(page){
-                self.updatePageScreenshot(page.id(), function(err, value){
-                    if(err) {
-                        log.error('Error updating screenshot: ' + err);
-                    } else {
-                        log.debug('updated screenshot: ' + value);
-                    }
-                });
+                if(page.get('handle')) {
+                    self.updatePageScreenshot(page.id(), function(err, value){
+                        if(err) {
+                            log.error('Error updating screenshot: ' + err);
+                        } else {
+                            log.debug('updated screenshot: ' + value);
+                        }
+                    });
+                }
+
             });
 
             //return fn(null, pageAry[0]);
