@@ -105,8 +105,9 @@
                         <label for="form-field-select-1">
                             Customer
                         </label>
+                        <span ng-click="navToCustomer(selectedCustomer)" class="pull-right">View Profile</span>
                         <span class="input-icon input-icon-right">
-                        <input type="text" ng-model="selectedCustomer" typeahead="customer as customer for customer in customers | filter:$viewValue" typeahead-min-length="3" typeahead-loading="true" typeahead-template-url="customTemplate.html" typeahead-input-formatter="formatInput($model)" class="form-control">
+                        <input type="text" ng-disabled="order.locked" ng-model="selectedCustomer" typeahead="customer as customer for customer in customers | filter:$viewValue" typeahead-min-length="3" typeahead-loading="true" typeahead-template-url="customTemplate.html" typeahead-input-formatter="formatInput($model)" class="form-control">
                         <i class="ti-close" style="color: #a94442" ng-if="selectedCustomer" ng-click="clearCustomer()"></i></span>
                     </div>
                     <div class="form-group row margin-bottom-0">
