@@ -601,10 +601,11 @@
      * @openSimpleModal
      * -
      */
-    $scope.openSimpleModal = function (modal) {
+    $scope.openSimpleModal = function (modal, _size) {
       var _modal = {
         templateUrl: modal,
-        scope: $scope
+        scope: $scope,
+        size: _size || 'md',
       };
       $scope.modalInstance = $modal.open(_modal);
       $scope.modalInstance.result.then(null, function () {
@@ -693,12 +694,16 @@
         $scope.openSimpleModal("post-settings-modal");
       }
 
-      if ($scope.activePage) {
+      if ($scope.isPage) {
         $scope.openSimpleModal("page-settings-modal");
       }
 
       if ($scope.templateActive) {
         $scope.openModal("template-settings-modal", 'TemplateSettingsModalCtrl');
+      }
+
+      if ($scope.isEmail) {
+        $scope.openSimpleModal("email-settings-modal");
       }
     };
 
@@ -1037,6 +1042,41 @@
             $scope.closeModal();
             $timeout(function () {
               window.location = '/admin/#/website/pages';
+            }, 500);
+          });
+        } else {
+          angular.element('.modal.in').show();
+        }
+
+      });
+    };
+
+    /*
+     * @deleteEmail
+     * -
+     */
+
+    $scope.deleteEmail = function () {
+      angular.element('.modal.in').hide();
+      SweetAlert.swal({
+        title: "Are you sure?",
+        text: "Do you want to delete this email",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: "Yes, delete email!",
+        cancelButtonText: "No, do not delete email!",
+        closeOnConfirm: false,
+        closeOnCancel: true
+      }, function (isConfirm) {
+        if (isConfirm) {
+          SweetAlert.swal("Saved!", "Email is deleted.", "success");
+
+          WebsiteService.deleteEmail($scope.page._id, function (data) {
+            toaster.pop('success', "Email Deleted", "The " + title + " email was deleted successfully.");
+            $scope.closeModal();
+            $timeout(function () {
+              window.location = '/admin/#/website/emails';
             }, 500);
           });
         } else {

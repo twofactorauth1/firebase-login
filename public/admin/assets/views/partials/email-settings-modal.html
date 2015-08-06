@@ -1,11 +1,11 @@
-<script type="text/ng-template" id="email-duplicate-modal">
+<script type="text/ng-template" id="email-settings-modal">
     <div class="modal-header">
-        <button type="button" class="close" ng-click="$parent.closeModal()">&times;</button>
-        <h4 class="modal-title">Duplicate Email</h4>
+        <button type="button" class="close" ng-click="closeModal()">&times;</button>
+        <h4 class="modal-title">Email Settings</h4>
     </div>
     <form name="dupEmailForm" ng-submit="createDuplicateEmail(dupEmailForm.$valid)" novalidate>
-        <div class="modal-body bg-white" style="max-height:500px;">
-            <span class="help-block">Add the duplicate email details below with a new title.</span>
+        <div class="modal-body bg-white" style="max-height:500px;overflow:auto">
+            <span class="help-block">Modify the settings of the email.</span>
             <div class="form-group" ng-class="{ 'has-error' : dupEmailForm.title.$invalid && !dupEmailForm.title.$pristine }">
                 <label>Title* </label>
                 <input name="title" class="form-control" type="text" ng-model="newEmail.title" required>
@@ -27,9 +27,9 @@
                 <input name="replyTo" class="form-control" type="email" ng-model="newEmail.replyTo">
             </div>
         </div>
-        </div>
         <div class="modal-footer">
-            <button class="btn btn-info" ng-disabled="dupEmailForm.$invalid" type="submit"><i class="fa fa-clone"></i> Create Duplicate Email</button>
+            <button class="btn btn-danger pull-left" ng-click="deleteEmail()"><i class="fa fa-trash"></i> Delete Email</button>
+            <button class="btn btn-info" ng-disabled="dupEmailForm.$invalid" type="submit"><i class="fa fa-save"></i> Save Email Settings</button>
         </div>
     </form>
 </script>
