@@ -20,13 +20,18 @@
 			var geocoder = new google.maps.Geocoder();
 			var myLatLng = new google.maps.LatLng(location.lat, location.lon);
 			var address = this.stringifyAddress(location);
-			geocoder.geocode( {latLng: myLatLng, 'address': address }, function(results, status) {
-			 	if (status == google.maps.GeocoderStatus.OK) {
-	      			fn(true);
-	    		}
-	    		else
-	    			fn(false);
-			 });
+			if (!((location.city && location.state) || location.zip))
+			{
+				fn(false, null);
+			}
+			else
+				geocoder.geocode( {latLng: myLatLng, 'address': address }, function(results, status) {
+				 	if (status == google.maps.GeocoderStatus.OK) {
+		      			fn(true, results);
+		    		}
+		    		else
+		    			fn(false, null);
+				});
 		}
 	    this.getGeoSearchAddress = function(addressStr, fn) {
 	        var apiUrl = baseUrl + ['geo', 'search', 'address', addressStr].join('/');

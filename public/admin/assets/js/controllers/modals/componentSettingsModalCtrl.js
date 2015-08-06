@@ -18,7 +18,8 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
   $scope.place = {};
   $scope.place.address = null;
   $scope.errorMapData = false;
-
+  $scope.showAddress = false;
+  $scope.checkIfAddess = false;
   /*
    * @getAllProducts
    * - get products for products and pricing table components
@@ -359,7 +360,7 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
           $scope.validateGeoAddress(function () {
             if($scope.errorMapData)
             {
-              $scope.componentEditing.location = $scope.originalContactMap;
+              $scope.componentEditing.location = $scope.originalComponent.location;
             }
             $modalInstance.close();
             angular.element('.modal-backdrop').remove();
@@ -620,10 +621,6 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
 
     }
   };
-  /*
-   * @stringifyAddress
-   * -
-   */
 
   $scope.refreshSlider = function () {
     console.log('refresh slider');
@@ -632,25 +629,42 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
     });
   };
 
+  $scope.setLatLon = function(lat, lon)
+  {
+      $scope.componentEditing.location.lat = lat;
+      $scope.componentEditing.location.lon = lon;
+  }
+
   $scope.updateContactUsAddress = function () {
-    $scope.errorMapData = false;
     if (!angular.equals($scope.originalContactMap, $scope.componentEditing.location)) {
-      {
+      {        
         $scope.validateGeoAddress();
-      }
-      
+      }      
     }
   };
 
-  $scope.validateGeoAddress = function (fn) {    
-    GeocodeService.validateAddress($scope.componentEditing.location, function (data) {
-      if(data)
+  $scope.validateGeoAddress = function (fn) {
+    $scope.setLatLon();  
+    GeocodeService.validateAddress($scope.componentEditing.location, function (data, results) {
+      if(data && results.length === 1)
       {
-        $scope.errorMapData = false;
-        $scope.contactMap.refreshMap();
+        $timeout(function() {
+          $scope.$apply(function () {
+            $scope.setLatLon(results[0].geometry.location.G, results[0].geometry.location.K);
+            $scope.errorMapData = false;
+            angular.copy($scope.componentEditing.location, $scope.originalContactMap);
+            $scope.contactMap.refreshMap();
+          })
+        }, 0);        
       }
-      else
-        $scope.errorMapData = true;
+      else{
+        $timeout(function() {
+          $scope.$apply(function () {
+            $scope.errorMapData = true;
+            angular.copy($scope.componentEditing.location, $scope.originalContactMap);
+          })
+        }, 0);
+      }
       if(fn)
         fn()
     });
@@ -777,6 +791,7 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
 
     if ($scope.componentEditing.type === "contact-us") {
       $scope.hours = hoursConstant;
+      $scope.place.address = GeocodeService.stringifyAddress($scope.componentEditing.location);
       $scope.originalContactMap = angular.copy($scope.componentEditing.location);
       if ($scope.componentEditing.hours) {
         _.each($scope.componentEditing.hours, function (element, index) {
@@ -912,7 +927,7 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
     if (newValue) {
       if (angular.isObject(newValue)) {
         $scope.fillInAddress(newValue);
-        $scope.contactMap.refreshMap();
+        $scope.validateGeoAddress();
       }
     }
   });

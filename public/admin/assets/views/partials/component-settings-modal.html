@@ -657,43 +657,51 @@
                     <tab-heading>
                         <span>Address</span>
                     </tab-heading>
-                    <div class="form-group" ng-class="{'has-error':errorMapData}">
+                    <div class="form-group">
                         <label for="location-address">Add Address</label>
                         <span tooltip-placement="top" tooltip-html-unsafe="Address Suggestions"><i class="fa fa-info-circle" /></span>
                         <input id="autocomplete-place" class="form-control" g-places-autocomplete ng-model="place.address">
                     </div>
-                    <div class="form-group">
-                        <label for="show-address">Show Address Fields</label>
-                        <span tooltip-placement="top" tooltip-html-unsafe="Show/hide address fields."><i class="fa fa-info-circle" /></span>
-                        <switch id="show-address" ng-model="componentEditing.showAddress" class="pull-right" ng-change="saveComponent()"></switch>
+                    <p>Edit address
+                        <span class="links cl-effect-1">
+                                <a href="" ng-click="showAddress = true" ng-show="!showAddress">Modify</a>
+                            </span>
+                        <span class="links cl-effect-1">
+                            <a href="" ng-click="showAddress = false" ng-show="showAddress">Cancel</a>
+                        </span>
+                    </p>
+                   
+                    <div ng-if="showAddress" class="row">
+                        <div class="form-group col-sm-6" ng-class="{'has-error':errorMapData}">
+                            <label for="location-address">Address </label>
+                            <span tooltip-placement="top" tooltip-html-unsafe="Contact Us address line 1."><i class="fa fa-info-circle" /></span>
+                            <input id="location-address" ng-blur="updateContactUsAddress()" class="form-control" ng-model="componentEditing.location.address">
+                        </div>
+                        <div class="form-group col-sm-6" ng-class="{'has-error':errorMapData}">
+                            <label for="location-address2">Address2 </label>
+                            <span tooltip-placement="top" tooltip-html-unsafe="Contact Us address line 2."><i class="fa fa-info-circle" /></span>
+                            <input id="location-address2" ng-change="checkIfAddess(true)" ng-blur="updateContactUsAddress()" class="form-control" type="text" ng-model="componentEditing.location.address2">
+                        </div>
                     </div>
-                    <div ng-if="componentEditing.showAddress" class="form-group" ng-class="{'has-error':errorMapData}">
-                        <label for="location-address">Address </label>
-                        <span tooltip-placement="top" tooltip-html-unsafe="Contact Us address line 1."><i class="fa fa-info-circle" /></span>
-                        <input id="location-address" ng-blur="updateContactUsAddress()" class="form-control" ng-model="componentEditing.location.address">
-                    </div>
-                    <div ng-if="componentEditing.showAddress" class="form-group" ng-class="{'has-error':errorMapData}">
-                        <label for="location-address2">Address2 </label>
-                        <span tooltip-placement="top" tooltip-html-unsafe="Contact Us address line 2."><i class="fa fa-info-circle" /></span>
-                        <input id="location-address2" ng-blur="updateContactUsAddress()" class="form-control" type="text" ng-model="componentEditing.location.address2">
-                    </div>
-                    <div ng-if="componentEditing.showAddress" class="form-group" ng-class="{'has-error':errorMapData}">
-                        <label for="location-city">City </label>
-                        <span tooltip-placement="top" tooltip-html-unsafe="Contact Us City."><i class="fa fa-info-circle" /></span>
-                        <input id="location-city" ng-blur="updateContactUsAddress()" class="form-control" type="text" ng-model="componentEditing.location.city">
-                        <div class="error"></div>
-                    </div>
-                    <div ng-if="componentEditing.showAddress" class="form-group" ng-class="{'has-error':errorMapData}">
-                        <label for="location-state">State </label>
-                        <span tooltip-placement="top" tooltip-html-unsafe="Contact Us State."><i class="fa fa-info-circle" /></span>
-                        <input id="location-state" ng-blur="updateContactUsAddress()" class="form-control" type="text" ng-model="componentEditing.location.state">
-                        <div class="error"></div>
-                    </div>
-                    <div ng-if="componentEditing.showAddress" class="form-group" ng-class="{'has-error':errorMapData}">
-                        <label for="location-zip">Zip Code </label>
-                        <span tooltip-placement="top" tooltip-html-unsafe="Contact Us zip code."><i class="fa fa-info-circle" /></span>
-                        <input id="location-zip" ng-blur="updateContactUsAddress()" validation-type="zip" indigeweb-validate-form-fields class="form-control" type="text" ng-model="componentEditing.location.zip">
-                    </div>
+                    <div ng-if="showAddress"  class="row">
+                        <div  class="form-group col-sm-4" ng-class="{'has-error':errorMapData}">
+                            <label for="location-city">City </label>
+                            <span tooltip-placement="top" tooltip-html-unsafe="Contact Us City."><i class="fa fa-info-circle" /></span>
+                            <input id="location-city" ng-change="checkIfAddess(true)" ng-blur="updateContactUsAddress()" class="form-control" type="text" ng-model="componentEditing.location.city">
+                            <div class="error"></div>
+                        </div>
+                        <div class="form-group col-sm-4" ng-class="{'has-error':errorMapData}">
+                            <label for="location-state">State </label>
+                            <span tooltip-placement="top" tooltip-html-unsafe="Contact Us State."><i class="fa fa-info-circle" /></span>
+                            <input id="location-state" ng-change="checkIfAddess(true)" ng-blur="updateContactUsAddress()" class="form-control" type="text" ng-model="componentEditing.location.state">
+                            <div class="error"></div>
+                        </div>
+                        <div class="form-group col-sm-4" ng-class="{'has-error':errorMapData}">
+                            <label for="location-zip">Zip Code </label>
+                            <span tooltip-placement="top" tooltip-html-unsafe="Contact Us zip code."><i class="fa fa-info-circle" /></span>
+                            <input id="location-zip" ng-change="checkIfAddess(true)" ng-blur="updateContactUsAddress()" validation-type="zip" indigeweb-validate-form-fields class="form-control" type="text" ng-model="componentEditing.location.zip">
+                        </div>
+                    </div>    
                     <div class="form-group">
                         <label for="contact-phone">Phone number </label>
                         <span tooltip-placement="top" tooltip-html-unsafe="Contact Us Phone number."><i class="fa fa-info-circle" /></span>
