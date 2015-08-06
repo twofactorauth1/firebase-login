@@ -344,55 +344,59 @@ module.exports = {
             function(savedOrder, contact, callback){
                 log.debug('attempting to charge order');
                 var paymentDetails = savedOrder.get('payment_details');
-                if(paymentDetails.method_id === 'cc') {
-                    var card = paymentDetails.card_token;
-                    //total is a double but amount needs to be in cents (integer)
-                    var amount = Math.round(savedOrder.get('total') * 100);
-                    log.debug('amount ', savedOrder.get('total'));
-                    var currency = savedOrder.get('currency');
-                    var customerId = contact.get('stripeId');
-                    var contactId = savedOrder.get('customer_id');
-                    var description = "Charge for order " + savedOrder.id();
-                    if(paymentDetails.charge_description) {
-                        description = paymentDetails.charge_description;
-                    }
-                    var metadata = {
-                        orderId: savedOrder.id(),
-                        accountId: savedOrder.get('account_id')
-                    };
-                    var capture = true;
-                    var statement_description = 'INDIGENOUS CHARGE';
-                    if(paymentDetails.statement_description) {
-                        statement_description = paymentDetails.statement_description;
-                    }
-                    var application_fee = 0;
-                    var userId = null;
-                    log.debug('contact ', contact);
-                    var receipt_email = contact.getEmails()[0].email;
-                    log.debug('Setting receipt_email to ' + receipt_email);
+                if (savedOrder.get('total') > 0) {
+                    if(paymentDetails.method_id === 'cc') {
+                        var card = paymentDetails.card_token;
+                        //total is a double but amount needs to be in cents (integer)
+                        var amount = Math.round(savedOrder.get('total') * 100);
+                        log.debug('amount ', savedOrder.get('total'));
+                        var currency = savedOrder.get('currency');
+                        var customerId = contact.get('stripeId');
+                        var contactId = savedOrder.get('customer_id');
+                        var description = "Charge for order " + savedOrder.id();
+                        if(paymentDetails.charge_description) {
+                            description = paymentDetails.charge_description;
+                        }
+                        var metadata = {
+                            orderId: savedOrder.id(),
+                            accountId: savedOrder.get('account_id')
+                        };
+                        var capture = true;
+                        var statement_description = 'INDIGENOUS CHARGE';
+                        if(paymentDetails.statement_description) {
+                            statement_description = paymentDetails.statement_description;
+                        }
+                        var application_fee = 0;
+                        var userId = null;
+                        log.debug('contact ', contact);
+                        var receipt_email = contact.getEmails()[0].email;
+                        log.debug('Setting receipt_email to ' + receipt_email);
 
-                    stripeDao.createStripeCharge(amount, currency, card, customerId, contactId, description, metadata,
-                        capture, statement_description, receipt_email, application_fee, userId, accessToken,
-                        function(err, charge){
-                            if(err) {
-                                log.error('Error creating Stripe Charge: ' + err);
-                                //set the status of the order to failed
-                                savedOrder.set('status', $$.m.Order.status.FAILED);
-                                savedOrder.set('note', savedOrder.get('note') + '\n Payment error: ' + err);
-                                var modified = {
-                                    date: new Date(),
-                                    by: userId
-                                };
-                                savedOrder.set('modified', modified);
-                                dao.saveOrUpdate(savedOrder, function(_err, updatedSavedOrder){
-                                    callback(err);
-                                });
-                            } else {
-                                callback(null, savedOrder, charge, contact);
-                            }
-                        });
+                        stripeDao.createStripeCharge(amount, currency, card, customerId, contactId, description, metadata,
+                            capture, statement_description, receipt_email, application_fee, userId, accessToken,
+                            function(err, charge){
+                                if(err) {
+                                    log.error('Error creating Stripe Charge: ' + err);
+                                    //set the status of the order to failed
+                                    savedOrder.set('status', $$.m.Order.status.FAILED);
+                                    savedOrder.set('note', savedOrder.get('note') + '\n Payment error: ' + err);
+                                    var modified = {
+                                        date: new Date(),
+                                        by: userId
+                                    };
+                                    savedOrder.set('modified', modified);
+                                    dao.saveOrUpdate(savedOrder, function(_err, updatedSavedOrder){
+                                        callback(err);
+                                    });
+                                } else {
+                                    callback(null, savedOrder, charge, contact);
+                                }
+                            });
+                    } else {
+                        log.warn('unsupported payment method: ' + paymentDetails.method_id);
+                        callback(null, savedOrder, null, contact);
+                    }
                 } else {
-                    log.warn('unsupported payment method: ' + paymentDetails.method_id);
                     callback(null, savedOrder, null, contact);
                 }
             },
