@@ -94,6 +94,21 @@
     }
 
     /*
+     * @refreshLinkList
+     * -
+     */
+
+    $scope.refreshLinkList = function (value, old_handle) {  
+      var new_handle = $scope.page.handle;         
+        _.each(value.links, function (element, index) {
+          if(element.linkTo && element.linkTo.type == "section" && element.linkTo.page == old_handle )
+            element.linkTo.page = new_handle;
+          else if(element.linkTo && element.linkTo.type == "page" && element.linkTo.data == old_handle )
+            element.linkTo.data = new_handle;
+        });
+    }
+
+    /*
      * @savePage
      * -
      */
@@ -153,18 +168,19 @@
             $scope.validateContactAddress(function (data) {
               if (data) {
                 WebsiteService.updatePage($scope.page, function (data) {
-                  console.log($scope.page.handle, $scope.originalPage.handle);
-                  if ($scope.page.handle !== $scope.originalPage.handle) {
-                    $location.search('pagehandle', $scope.page.handle);
-                  }
+                  console.log($scope.page.handle, $scope.originalPage.handle);                  
                   $scope.saveLoading = false;
                   toaster.pop('success', "Page Saved", "The " + $scope.page.handle + " page was saved successfully.");
                   //Update linked list
                   $scope.website.linkLists.forEach(function (value, index) {
                     if (value.handle === "head-menu") {
-                      WebsiteService.updateLinkList($scope.website.linkLists[index], $scope.website._id, 'head-menu', function (data) {
-                        console.log('Updated linked list');
-                      });
+                      if($scope.page.handle !== $scope.originalPage.handle){
+                        $location.search('pagehandle', $scope.page.handle);
+                        $scope.refreshLinkList(value, $scope.originalPage.handle);
+                       }
+                        WebsiteService.updateLinkList($scope.website.linkLists[index], $scope.website._id, 'head-menu', function (data) {
+                          console.log('Updated linked list');
+                        });
                     }
                   });
                 });
