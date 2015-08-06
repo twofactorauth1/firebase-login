@@ -487,6 +487,8 @@ _.extend(api.prototype, baseApi.prototype, {
     signUpNews: function (req, resp) {
         var self = this, contact, accountToken, deferred;
         self.log.debug('>> signUpNews');
+        self.log.debug('>> host', req.get("host"));
+        //req.get("host")
 
         accountDao.getAccountByHost(req.get("host"), function(err, value) {
             if(err) {
