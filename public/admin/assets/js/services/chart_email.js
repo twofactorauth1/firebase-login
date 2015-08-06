@@ -1,10 +1,11 @@
 'use strict';
 /*global app, Keen, $$*/
 (function (angular) {
-  app.service('ChartEmailService', ['KeenService', function (KeenService) {
+  app.service('ChartEmailService', ['KeenService', '$q', function (KeenService, $q) {
 
     this.queryMandrillData = function (emails, fn) {
       var self = this;
+      var deferred = $q.defer();
       // ======================================
       // Emails Sent
       // # of emails sent from this account grouped by emailId
@@ -56,9 +57,11 @@
             emailsClick: response[2].result
           };
           var formatted = self.formatEmails(emails, _response);
-          fn(formatted);
+          deferred.resolve(fn(formatted));
         });
       });
+
+      return deferred.promise;
 
     };
 

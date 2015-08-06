@@ -2,11 +2,12 @@
 /*global app, moment, angular, window, $$*/
 /*jslint unparam:true*/
 (function (angular) {
-  app.service('WebsiteService', function ($http, $cacheFactory, $timeout, $q) {
+  app.service('WebsiteService', function ($http, $cacheFactory, $timeout, $q, ChartEmailService) {
     var baseUrl = '/api/1.0/';
     this.editPageHandle = null;
 
     var pagecache = $cacheFactory('pages');
+    var emailcache = $cacheFactory('emails');
 
     this.getEditedPageHandle = function () {
       return this.editPageHandle;
@@ -61,7 +62,7 @@
 
     //website/:websiteid/email/:id
     this.getSingleEmail = function (_emailId, fn) {
-      var _emails = pagecache.get('emails');
+      var _emails = emailcache.get('emails');
       var _matchingEmail = _.find(_emails, function (_email) {
         return _email._id === _emailId;
       });
@@ -118,6 +119,40 @@
         console.warn('END:Website Service revertPageVersion with ERROR');
         fn(err, null);
       });
+    };
+
+    var resetEmailCache = false;
+
+    this.getEmails = function (fn) {
+      console.log('getEmails >>> ');
+      var self = this;
+      var data = emailcache.get('emails');
+      if (data && !resetEmailCache) {
+        if (fn) {
+          fn(data);
+        }
+      } else {
+        var deferred = $q.defer();
+        var apiUrl = baseUrl + ['cms', 'website', $$.server.websiteId.replace(/&quot;/g, ''), 'emails'].join('/');
+        $http.get(apiUrl)
+          .success(function (data, status, headers, config) {
+            console.log('data >>> ', data);
+            resetEmailCache = false;
+            ChartEmailService.queryMandrillData(data, function (_data) {
+              console.log('_data >>> ', _data);
+              emailcache.put('emails', _data);
+              if (fn) {
+                console.log('resolve >>> ');
+                deferred.resolve(fn(_data));
+              }
+            });
+          })
+          .error(function (err) {
+            console.warn('END:Website Service with ERROR');
+            fn(err, null);
+          });
+        return deferred.promise;
+      }
     };
 
     var resetCache = false;
@@ -188,18 +223,6 @@
       });
     };
 
-    this.getEmails = function (fn) {
-      var apiUrl = baseUrl + ['cms', 'website', $$.server.websiteId.replace(/&quot;/g, ''), 'emails'].join('/');
-      $http.get(apiUrl)
-        .success(function (data, status, headers, config) {
-          fn(data);
-        })
-        .error(function (err) {
-          console.warn('END:Website Service with ERROR');
-          fn(err, null);
-        });
-    };
-
     this.getPosts = function (fn) {
       var apiUrl = baseUrl + ['cms', 'editor', 'blog'].join('/');
       $http.get(apiUrl)
@@ -240,8 +263,7 @@
       }).success(function (data, status, headers, config) {
         if (page.type === 'page') {
           var _pages = pagecache.get('pages');
-          if(_pages)
-          {
+          if (_pages) {
             _pages[data.handle] = data;
             pagecache.put('pages', _pages);
           }
@@ -420,14 +442,14 @@
     };
 
     this.deletePost = function (pageId, postId, fn) {
-    var apiUrl = baseUrl + ['cms', 'page', pageId, 'blog', postId].join('/');
+      var apiUrl = baseUrl + ['cms', 'page', pageId, 'blog', postId].join('/');
       $http.delete(apiUrl)
-      .success(function (data, status, headers, config) {
-        fn(data);
-      }).error(function (err) {
-        console.warn('END:Delete Page with ERROR', err);
-        fn(err);
-      });
+        .success(function (data, status, headers, config) {
+          fn(data);
+        }).error(function (err) {
+          console.warn('END:Delete Page with ERROR', err);
+          fn(err);
+        });
     };
 
     this.getTemplates = function (fn) {

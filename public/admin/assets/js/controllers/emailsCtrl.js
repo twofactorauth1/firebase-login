@@ -3,7 +3,7 @@
  * controller for products
  */
 (function (angular) {
-  app.controller('EmailsCtrl', ["$scope", "$timeout", "$location", "toaster", "$filter", "$modal", "WebsiteService", "ChartEmailService", function ($scope, $timeout, $location, toaster, $filter, $modal, WebsiteService, ChartEmailService) {
+  app.controller('EmailsCtrl', ["$scope", "$timeout", "$location", "toaster", "$filter", "$modal", "WebsiteService", function ($scope, $timeout, $location, toaster, $filter, $modal, WebsiteService) {
 
     /*
      * @getCustomers
@@ -11,11 +11,9 @@
      */
 
     WebsiteService.getEmails(function (emails) {
-      ChartEmailService.queryMandrillData(emails, function (data) {
-        $timeout(function() {
-          $scope.$apply(function() {
-            $scope.emails = data;
-          });
+      $timeout(function() {
+        $scope.$apply(function() {
+          $scope.emails = emails;
         });
       });
     });
