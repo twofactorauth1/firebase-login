@@ -12278,6 +12278,9 @@ table.grid thead tr {
 .order-detail #orderItems .fa-times-circle-o:hover {
   opacity: 1;
 }
+.order-detail span.customer-info {
+  cursor: pointer;
+}
 /* ---------------------------------------------------------------------- */
 /*  Site Analytics
 /* ---------------------------------------------------------------------- */
