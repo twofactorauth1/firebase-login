@@ -755,7 +755,8 @@
                                 <input class="form-control" type="text" ng-model="componentEditing.emailSubject">
                             </div>
                             <div class="form-group margin-bottom-0">
-                                <label tooltip-placement="top" tooltip-html-unsafe="Template for email"><i class="fa fa-info-circle" for="link-page">Select Email</label>
+                                <label for="link-page">Select Email</label>
+                                <span tooltip-placement="top" tooltip-html-unsafe="Template for email"><i class="fa fa-info-circle" /></span>
                                 <div ng-if="emails">
                                     <ui-select ng-model="componentEditing.emailId" theme="bootstrap">
                                         <ui-select-match placeholder="Select a email">
