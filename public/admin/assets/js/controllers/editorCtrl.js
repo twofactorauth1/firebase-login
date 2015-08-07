@@ -5,6 +5,74 @@
   app.controller('EditorCtrl', ["$scope", "$document", "$rootScope", "$interval", "$timeout", "toaster", "$modal", "$filter", "$location", "WebsiteService", "SweetAlert", "hoursConstant", "GeocodeService", "ProductService", "AccountService", "postConstant", function ($scope, $document, $rootScope, $interval, $timeout, toaster, $modal, $filter, $location, WebsiteService, SweetAlert, hoursConstant, GeocodeService, ProductService, AccountService, postConstant) {
 
     /*
+     * @circleOptions
+     * -
+     */
+
+    $scope.circleOptions = {
+      isOpen: false,
+      toggleOnClick: true,
+      background: '#FDB94E',
+      size: "big",
+      button: {
+        content: "",
+        cssClass: "fa fa-edit fa-2x",
+        background: "#efa022",
+        color: "#fff",
+        size: "big"
+      },
+      items: [{
+        content: '<span class="fa fa-paint-brush"></span> Design',
+        cssClass: "",
+        onclick: function (options, item, val, i) {
+          $scope.openModal('component-settings-modal', 'ComponentSettingsModalCtrl', i);
+        }
+      }, {
+        content: '<span class="fa fa-clone"></span> Clone',
+        cssClass: "",
+        onclick: function (options, item, val, i) {
+          $scope.duplicateComponent(i);
+        }
+      }, {
+        content: '<span class="fa fa-chevron-up"></span> Up',
+        cssClass: "",
+        onclick: function (options, item, val, i) {
+          $scope.singleReorder('up', val, i);
+        }
+      }, {
+        content: '<span class="fa fa-chevron-down"></span> Down',
+        cssClass: "",
+        onclick: function (options, item, val, i) {
+          $scope.singleReorder('down', val, i);
+        }
+      }, {
+        content: '<span class="fa fa-plus"></span> Add',
+        cssClass: "",
+        onclick: function (options, item, val, i) {
+          $scope.openModal('add-component-modal', 'AddComponentModalCtrl', i)
+        }
+      }, {
+        content: '<span class="fa fa-times"></span> Delete',
+        cssClass: "",
+        onclick: function (options, item, val, i) {
+          $scope.deleteComponent(i);
+        }
+      },{
+        empty: true
+      },{
+        empty: true
+      },{
+        empty: true
+      }, {
+        empty: true
+      }, {
+        empty: true
+      }, {
+        empty: true
+      }]
+    };
+
+    /*
      * @ckeditor:instanceReady
      * -
      */
@@ -49,7 +117,7 @@
     };
 
     $scope.singleReorder = function (value, component, index) {
-      console.log('singleReorder >>> ', value);
+      console.log('singleReorder >>> ', value, component, index);
       if (value === 'down') {
         $scope.components.splice(index, 1);
         $scope.components.splice(index + 1, 0, component);
@@ -98,14 +166,14 @@
      * -
      */
 
-    $scope.refreshLinkList = function (value, old_handle) {  
-      var new_handle = $scope.page.handle;         
-        _.each(value.links, function (element, index) {
-          if(element.linkTo && element.linkTo.type == "section" && element.linkTo.page == old_handle )
-            element.linkTo.page = new_handle;
-          else if(element.linkTo && element.linkTo.type == "page" && element.linkTo.data == old_handle )
-            element.linkTo.data = new_handle;
-        });
+    $scope.refreshLinkList = function (value, old_handle) {
+      var new_handle = $scope.page.handle;
+      _.each(value.links, function (element, index) {
+        if (element.linkTo && element.linkTo.type == "section" && element.linkTo.page == old_handle)
+          element.linkTo.page = new_handle;
+        else if (element.linkTo && element.linkTo.type == "page" && element.linkTo.data == old_handle)
+          element.linkTo.data = new_handle;
+      });
     }
 
     /*
@@ -168,20 +236,20 @@
             $scope.validateContactAddress(function (data) {
               if (data) {
                 WebsiteService.updatePage($scope.page, function (data) {
-                  console.log($scope.page.handle, $scope.originalPage.handle);                  
+                  console.log($scope.page.handle, $scope.originalPage.handle);
                   $scope.saveLoading = false;
                   toaster.pop('success', "Page Saved", "The " + $scope.page.handle + " page was saved successfully.");
                   //Update linked list
                   $scope.website.linkLists.forEach(function (value, index) {
                     if (value.handle === "head-menu") {
-                      if($scope.page.handle !== $scope.originalPage.handle){
+                      if ($scope.page.handle !== $scope.originalPage.handle) {
                         $location.search('pagehandle', $scope.page.handle);
                         $scope.refreshLinkList(value, $scope.originalPage.handle);
-                       }
-                        WebsiteService.updateLinkList($scope.website.linkLists[index], $scope.website._id, 'head-menu', function (data) {
-                          $scope.originalPage.handle = $scope.page.handle;
-                          console.log('Updated linked list');
-                        });
+                      }
+                      WebsiteService.updateLinkList($scope.website.linkLists[index], $scope.website._id, 'head-menu', function (data) {
+                        $scope.originalPage.handle = $scope.page.handle;
+                        console.log('Updated linked list');
+                      });
                     }
                   });
                 });

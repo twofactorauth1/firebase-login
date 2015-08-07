@@ -716,8 +716,8 @@ app.constant('JS_REQUIRES', {
     name: 'googlePlaces',
     files: ['../js/libs/angular-google-places-autocomplete/dist/autocomplete.min.css']
   }, {
-    name: 'angular-cookie',
-    files: ['../js/libs/angular-cookie/angular-cookie.min.js']
+    name: 'angularCircularNavigation',
+    files: ['../js/libs/angular-circular-navigation/angular-circular-navigation.js', '../js/libs/angular-circular-navigation/angular-circular-navigation.css']
   }, {
     name: 'bootstrap-icon-picker',
     files: ['../js/libs/bootstrap-icon-picker/bootstrap-iconpicker/js/iconset/iconset-fontawesome-4.2.0.min.js', '../js/libs/bootstrap-icon-picker/bootstrap-iconpicker/js/bootstrap-iconpicker.min.js', '../js/libs/bootstrap-icon-picker/bootstrap-iconpicker/css/bootstrap-iconpicker.min.css']

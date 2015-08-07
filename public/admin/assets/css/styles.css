@@ -12804,11 +12804,21 @@ fieldset[disabled] .btn-vimeo-square.active {
 #componentloader .fragment {
   border: none;
   display: block;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
 }
 #componentloader .fragment .component-inner {
   clear: both;
 }
-#componentloader .fragment:hover .add-component {
+#componentloader .fragment .circular {
+  display: none;
+  visibility: none;
+}
+#componentloader .fragment:hover {
+  border: 2px solid orange!important;
+}
+#componentloader .fragment:hover .circular {
   display: block;
   visibility: visible;
 }
