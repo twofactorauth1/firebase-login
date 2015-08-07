@@ -226,18 +226,14 @@ module.exports = {
                         }
                     });
                     log.debug('found product ', product);
-                    var lineItemSubtotal = 0.0;
+                    var lineItemSubtotal = item.quantity * product.get('regular_price');
                     if(product.get('on_sale') === true) {
                         var startDate = product.get('sale_date_from', 'day');
                         var endDate = product.get('sale_date_to', 'day');
                         var rightNow = new Date();
                         if(moment(rightNow).isBefore(endDate) && moment(rightNow).isAfter(startDate)) {
                             lineItemSubtotal = item.quantity * product.get('sale_price');
-                        } else {
-                            lineItemSubtotal = item.quantity * product.get('regular_price');
                         }
-                    } else {
-
                     }
                     if(product.get('taxable') === true) {
                         taxAdded += (lineItemSubtotal * taxPercent);
