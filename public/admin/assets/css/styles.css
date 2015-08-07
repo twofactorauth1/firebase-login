@@ -13371,6 +13371,9 @@ a.editable-error:focus {
 .orders .column-width {
   width: 16.66666666666667%;
 }
+.orders table.grid thead th {
+  float: left;
+}
 .choose-account ul {
   margin-bottom: 0;
   padding-left: 0;
