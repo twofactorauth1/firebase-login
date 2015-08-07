@@ -879,7 +879,10 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
       var _welcomeEmail = _.find(emails, function(_email) {
         return _email.handle === 'welcome-aboard';
       });
-      $scope.componentEditing.emailId = _welcomeEmail._id;
+
+      if(_welcomeEmail) {
+        $scope.componentEditing.emailId = _welcomeEmail._id;
+      }
     }
 
   });
