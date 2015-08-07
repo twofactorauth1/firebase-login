@@ -686,7 +686,7 @@ app.controller('ImportCustomerModalCtrl', ['$scope', '$location', '$timeout', '$
 
   $scope.csvUploaded = function (files) {
     $scope.incorrectFileType = false;
-    console.log('file type >>> ', files[0].type);
+    console.log('file type >>> ', files);
     if (acceptedFiletypes.indexOf(files[0].type) > -1) {
       startUpload = new Date();
       $scope.fileName = files[0].name;
