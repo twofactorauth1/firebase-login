@@ -4,8 +4,7 @@
 app.directive('singlePostComponent', ['$location', "WebsiteService", "$timeout", function ($location, WebsiteService, $timeout) {
   return {
     scope: {
-      component: '=',
-      version: '='
+      component: '='
     },
     templateUrl: '/components/component-wrap.html',
     link: function (scope, element, attrs) {

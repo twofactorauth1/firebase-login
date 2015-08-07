@@ -18,7 +18,8 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
   $scope.place = {};
   $scope.place.address = null;
   $scope.errorMapData = false;
-
+  $scope.showAddress = false;
+  $scope.checkIfAddess = false;
   /*
    * @getAllProducts
    * - get products for products and pricing table components
@@ -84,7 +85,9 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
       $scope.blog.post.post_excerpt = $scope.originalBlog.post_excerpt;
     }
     $scope.components[clickedIndex] = $scope.originalComponent;
-
+    $timeout(function () {
+      $(window).trigger('resize');
+    }, 0)
     $scope.closeModal();
   };
 
@@ -352,8 +355,25 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
   $scope.closeModal = function () {
     $timeout(function () {
       $scope.$apply(function () {
-        $modalInstance.close();
-        angular.element('.modal-backdrop').remove();
+        if($scope.componentEditing.type === "contact-us")
+        {
+          $scope.validateGeoAddress(function () {
+            if($scope.errorMapData)
+            {
+              $scope.componentEditing.location = $scope.originalComponent.location;
+            }
+            if($scope.contactHoursInvalid)
+            {
+              $scope.componentEditing.hours = $scope.originalComponent.hours;
+            }
+            $modalInstance.close();
+            angular.element('.modal-backdrop').remove();
+          })
+        }
+        else{
+          $modalInstance.close();
+          angular.element('.modal-backdrop').remove();
+        }        
       });
     });
   };
@@ -605,10 +625,6 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
 
     }
   };
-  /*
-   * @stringifyAddress
-   * -
-   */
 
   $scope.refreshSlider = function () {
     console.log('refresh slider');
@@ -617,51 +633,45 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
     });
   };
 
-  /*
-   * @stringifyAddress
-   * -
-   */
-
-  $scope.stringifyAddress = function (address) {
-    var _bottomline = "";
-    var _topline = "";
-    if (address) {
-      _bottomline = _.filter([address.city, address.state], function (str) {
-        return str !== "";
-      }).join(", ");
-
-      _topline = _.filter([address.address, _bottomline, address.zip], function (str) {
-        return str !== "";
-      }).join(" ");
-    }
-    return _topline;
-  };
+  $scope.setLatLon = function(lat, lon)
+  {
+      $scope.componentEditing.location.lat = lat;
+      $scope.componentEditing.location.lon = lon;
+  }
 
   $scope.updateContactUsAddress = function () {
-    $scope.errorMapData = false;
     if (!angular.equals($scope.originalContactMap, $scope.componentEditing.location)) {
-      $scope.validateGeoAddress();
+      {        
+        $scope.validateGeoAddress();
+      }      
     }
   };
 
   $scope.validateGeoAddress = function (fn) {
-    if (!(($scope.componentEditing.location.city && $scope.componentEditing.location.state) || $scope.componentEditing.location.zip)) {
-      $scope.errorMapData = true;
-      if (fn)
-        fn();
-    } else {
-      GeocodeService.getGeoSearchAddress($scope.stringifyAddress($scope.componentEditing.location), function (data) {
-        if (data.lat && data.lon) {
-          $scope.errorMapData = false;
-          $scope.componentEditing.location.lat = data.lat;
-          $scope.componentEditing.location.lon = data.lon;
-          $scope.contactMap.refreshMap();
-        } else
-          $scope.errorMapData = true;
-        if (fn)
-          fn();
-      })
-    }
+    $scope.setLatLon();  
+    GeocodeService.validateAddress($scope.componentEditing.location, function (data, results) {
+      if(data && results.length === 1)
+      {
+        $timeout(function() {
+          $scope.$apply(function () {
+            $scope.setLatLon(results[0].geometry.location.G, results[0].geometry.location.K);
+            $scope.errorMapData = false;
+            angular.copy($scope.componentEditing.location, $scope.originalContactMap);
+            $scope.contactMap.refreshMap();
+          })
+        }, 0);        
+      }
+      else{
+        $timeout(function() {
+          $scope.$apply(function () {
+            $scope.errorMapData = true;
+            angular.copy($scope.componentEditing.location, $scope.originalContactMap);
+          })
+        }, 0);
+      }
+      if(fn)
+        fn()
+    });
   }
 
   $scope.saveComponent = function () {
@@ -785,6 +795,7 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
 
     if ($scope.componentEditing.type === "contact-us") {
       $scope.hours = hoursConstant;
+      $scope.place.address = GeocodeService.stringifyAddress($scope.componentEditing.location);
       $scope.originalContactMap = angular.copy($scope.componentEditing.location);
       if ($scope.componentEditing.hours) {
         _.each($scope.componentEditing.hours, function (element, index) {
@@ -920,9 +931,78 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
     if (newValue) {
       if (angular.isObject(newValue)) {
         $scope.fillInAddress(newValue);
-        $scope.contactMap.refreshMap();
+        $scope.validateGeoAddress();
       }
     }
   });
+
+    /*
+     * @validateHours
+     * 
+     */
+
+  $scope.validateHours = function (hours, index) {
+    $scope.contactHours[index].valid = true;
+    if (!hours.closed) {
+      var startTime = hours.start;
+      var endTime = hours.end;
+      if (startTime && endTime) {
+        startTime = startTime.split(" ")[1] == 'pm' && startTime.split(":")[0] != '12' ? parseInt(startTime.split(":")[0]) + 12 : parseInt(startTime.split(":")[0])
+        endTime = endTime.split(" ")[1] == 'pm' && endTime.split(":")[0] != '12' ? parseInt(endTime.split(":")[0]) + 12 : parseInt(endTime.split(":")[0])
+        startTime = parseInt(hours.start.split(":")[1]) == 30 ? startTime + 0.5 : startTime;
+        endTime = parseInt(hours.end.split(":")[1]) == 30 ? endTime + 0.5 : endTime;
+      }
+      if (hours.split && $scope.componentEditing.splitHours) {
+        angular.element("#business_hours_start_" + index).removeClass('has-error');
+        angular.element("#business_hours_start2_" + index).removeClass('has-error');
+        angular.element("#business_hours_end_" + index).removeClass('has-error');
+        var startTime2 = hours.start2;
+        var endTime2 = hours.end2;
+        if (startTime2 && endTime2) {
+          startTime2 = startTime2.split(" ")[1] == 'pm' && startTime2.split(":")[0] != '12' ? parseInt(startTime2.split(":")[0]) + 12 : parseInt(startTime2.split(":")[0])
+          endTime2 = endTime2.split(" ")[1] == 'pm' && endTime2.split(":")[0] != '12' ? parseInt(endTime2.split(":")[0]) + 12 : parseInt(endTime2.split(":")[0])
+          startTime2 = parseInt(hours.start2.split(":")[1]) == 30 ? startTime2 + 0.5 : startTime2;
+          endTime2 = parseInt(hours.end2.split(":")[1]) == 30 ? endTime2 + 0.5 : endTime2;
+        }
+        if (startTime > endTime || startTime > startTime2 || startTime > endTime2) {
+          if (startTime > endTime) {
+            angular.element("#business_hours_start_" + index).addClass('has-error');
+          } else if (startTime > startTime2) {
+            angular.element("#business_hours_start_" + index).addClass('has-error');
+          } else if (startTime > endTime2) {
+            angular.element("#business_hours_start_" + index).addClass('has-error');
+          }
+          $scope.contactHours[index].valid = false;
+        }
+        if (endTime > startTime2 || endTime > endTime2) {
+          if (endTime > startTime2) {
+            angular.element("#business_hours_end_" + index).addClass('has-error');
+          } else if (endTime > endTime2) {
+            angular.element("#business_hours_end_" + index).addClass('has-error');
+          }
+          $scope.contactHours[index].valid = false;
+        }
+        if (startTime2 > endTime2) {
+          angular.element("#business_hours_start2_" + index).addClass('has-error');
+          $scope.contactHours[index].valid = false;
+        }
+      } else if (!hours.wholeday) {
+        angular.element("#business_hours_start_" + index).removeClass('has-error');
+        if (startTime > endTime) {
+          angular.element("#business_hours_start_" + index).addClass('has-error');
+          $scope.contactHours[index].valid = false;
+        }
+      }
+    }
+
+    var validate = _.where($scope.contactHours, {
+      valid: false
+    });
+    if (validate && validate.length)
+      $scope.contactHoursInvalid = true;
+    else
+      $scope.contactHoursInvalid = false;
+
+  }
 
 }]);

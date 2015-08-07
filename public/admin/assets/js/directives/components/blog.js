@@ -5,7 +5,6 @@ app.directive('blogComponent', ['$filter', '$timeout', 'WebsiteService', 'toaste
   return {
     scope: {
       component: '=',
-      version: '=',
       media: '&'
     },
     templateUrl: '/components/component-wrap.html',

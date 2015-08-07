@@ -3,7 +3,7 @@
     <ul style="list-style:none;">
         <li ng-repeat="item in cartDetails track by $index">
             <p class="pull-left text-left product-name">{{item.name}} <span ng-if="item.quantity > 1"> x {{item.quantity}}</span></p>
-            <p class="pull-right text-right product-price">$ {{item.regular_price * item.quantity}}</p>
+            <p class="pull-right text-right product-price"><span ng-class="{'strikethrough text-small': item.onSaleToday}">{{item.regular_price * item.quantity | currency}}</span><span ng-if="item.onSaleToday">{{item.sale_price * item.quantity | currency}}</span></p>
             <div class="clearfix"></div>
         </li>
     </ul>

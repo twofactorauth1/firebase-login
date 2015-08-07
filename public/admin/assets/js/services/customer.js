@@ -177,10 +177,10 @@
                         var type = _.find(contactTypes, function(type) {
                             return type.data === tag;
                         });
-                        tags.push(type.label);
+                        if(type)
+                            tags.push(type.label);
                     });
                 }
-
                 return tags.join(', ');
             };
 

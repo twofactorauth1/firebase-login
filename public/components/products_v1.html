@@ -28,7 +28,7 @@
                             <div class="clearfix"></div>
                         </div>
                         <div class="caption">
-                            <h4 class="pull-right"><span ng-class="{'strikethrough': product.onSaleToday}">{{product.regular_price | currency}}</span><span ng-if="product.onSaleToday">{{product.sales_price | currency}}</span></h4>
+                            <h4 class="pull-right"><span ng-class="{'strikethrough text-small': product.onSaleToday}">{{product.regular_price | currency}}</span><span ng-if="product.onSaleToday">{{product.sale_price | currency}}</span></h4>
                             <h4 class="title"><a href="#">{{product.name | characters:18 :true}}</a></h4>
                             <div class="clearfix"></div>
                             <p class="description product-description">{{product.description}}</p>
@@ -94,7 +94,7 @@
                                             <div class="col-sm-3">
                                                 <input type="text" ng-model="item.quantity" ng-change="calculateTotalChargesfn()" class="form-control spinner-input quantity">
                                             </div>
-                                            <p class="price col-sm-3">$ {{item.regular_price}}</p>
+                                            <p class="price col-sm-3"><span ng-class="{'strikethrough text-small': item.onSaleToday}">{{item.regular_price | currency}}</span><span ng-if="item.onSaleToday">{{item.sale_price | currency}}</span></p>
                                             <div class="col-sm-1">
                                                 <button type="button" class="close" aria-hidden="true" ng-click="removeFromCart(item)">×</button>
                                             </div>

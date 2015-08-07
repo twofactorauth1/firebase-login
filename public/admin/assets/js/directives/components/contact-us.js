@@ -5,7 +5,6 @@ app.directive('contactUsComponent', ['AccountService', 'GeocodeService', '$timeo
   return {
     scope: {
       component: '=',
-      version: '=',
       control: '='
     },
     templateUrl: '/components/component-wrap.html',

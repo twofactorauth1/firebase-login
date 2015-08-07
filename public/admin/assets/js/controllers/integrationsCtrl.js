@@ -18,7 +18,6 @@
 
     $scope.getAccount = function () {
       AccountService.getAccount(function (account) {
-        console.log('account ', account.credentials);
         $scope.account = account;
         var stripe = _.find(account.credentials, function (cred) {
           return cred.type === 'stripe';
@@ -32,7 +31,6 @@
           }
           _.each(data.socialAccounts, function (socialAccount) {
             //get profile/page info
-            console.log('socialAccount ', socialAccount);
             if (socialAccount.type === 'fb') {
               SocialConfigService.getFBProfile(socialAccount.id, function (profile) {
                 socialAccount.profile = profile;
@@ -46,7 +44,6 @@
       });
     };
 
-    console.log('cookie ', ipCookie("socialAccount"));
     var completedIntegration = ipCookie("socialAccount");
     if (completedIntegration) {
       if (ipCookie("socialAccount").redirectTo !== '/account/integrations') {
@@ -81,7 +78,7 @@
      * disconnect the social account 
      */
 
-    $scope.disconnectSocial = function (sa) {
+    $scope.disconnectSocial = function (sa, index) {
       console.log('disconnectSocial >>>');
       SweetAlert.swal({
         title: "Are you sure?",
@@ -95,21 +92,20 @@
         closeOnCancel: true
       }, function (isConfirm) {
         if (isConfirm) {
+          console.log('sa ', sa, index);
           sa.loading = true;
           if (sa.type === $scope.credentialTypes.STRIPE) {
             $scope.account.credentials = _.without($scope.account.credentials, _.findWhere($scope.account.credentials, {
               accessToken: sa.accessToken
             }));
             AccountService.updateAccount($scope.account, function (account) {
-              $scope.socialAccounts = _.without($scope.socialAccounts, _.findWhere($scope.socialAccounts, {
-                accessToken: sa.accessToken
-              }));
+              $scope.socialAccounts.splice(index, 1);
               $scope.account = account;
             });
           } else {
             SocialConfigService.deleteSocialConfigEntry(sa.id, function () {
               SocialConfigService.getAllSocialConfig(function (data) {
-                $scope.socialAccounts = data.socialAccounts;
+                $scope.socialAccounts.splice(index, 1);
               });
             });
           }

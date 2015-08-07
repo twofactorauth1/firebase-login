@@ -34,7 +34,7 @@
       });
       $timeout(function () {
         if (!$scope.ckeditorLoaded)
-            $scope.ckeditorLoaded = true;
+          $scope.ckeditorLoaded = true;
       }, 12000);
     };
 
@@ -75,6 +75,38 @@
         }
       }, 500);
     };
+
+    $scope.validateContactAddress = function (fn) {
+      $scope.contactComponentType = _.findWhere($scope.components, {
+        type: 'contact-us'
+      });
+      if ($scope.contactComponentType) {
+        GeocodeService.validateAddress($scope.contactComponentType.location, function (data) {
+          if (!data) {
+            toaster.pop('warning', 'Address could not be found for contact component. Please enter valid address');
+            $scope.saveLoading = false;
+            fn(false);
+          } else
+            fn(true);
+        });
+      } else
+        fn(true);
+    }
+
+    /*
+     * @refreshLinkList
+     * -
+     */
+
+    $scope.refreshLinkList = function (value, old_handle) {  
+      var new_handle = $scope.page.handle;         
+        _.each(value.links, function (element, index) {
+          if(element.linkTo && element.linkTo.type == "section" && element.linkTo.page == old_handle )
+            element.linkTo.page = new_handle;
+          else if(element.linkTo && element.linkTo.type == "page" && element.linkTo.data == old_handle )
+            element.linkTo.data = new_handle;
+        });
+    }
 
     /*
      * @savePage
@@ -133,22 +165,28 @@
             return false;
           }
           if (!$scope.duplicateUrl)
-            WebsiteService.updatePage($scope.page, function (data) {
-              console.log($scope.page.handle, $scope.originalPage.handle);
-              if ($scope.page.handle !== $scope.originalPage.handle) {
-                $location.search('pagehandle', $scope.page.handle);
-              }
-              $scope.saveLoading = false;
-              toaster.pop('success', "Page Saved", "The " + $scope.page.handle + " page was saved successfully.");
-              //Update linked list
-              $scope.website.linkLists.forEach(function (value, index) {
-                if (value.handle === "head-menu") {
-                  WebsiteService.updateLinkList($scope.website.linkLists[index], $scope.website._id, 'head-menu', function (data) {
-                    console.log('Updated linked list');
+            $scope.validateContactAddress(function (data) {
+              if (data) {
+                WebsiteService.updatePage($scope.page, function (data) {
+                  console.log($scope.page.handle, $scope.originalPage.handle);                  
+                  $scope.saveLoading = false;
+                  toaster.pop('success', "Page Saved", "The " + $scope.page.handle + " page was saved successfully.");
+                  //Update linked list
+                  $scope.website.linkLists.forEach(function (value, index) {
+                    if (value.handle === "head-menu") {
+                      if($scope.page.handle !== $scope.originalPage.handle){
+                        $location.search('pagehandle', $scope.page.handle);
+                        $scope.refreshLinkList(value, $scope.originalPage.handle);
+                       }
+                        WebsiteService.updateLinkList($scope.website.linkLists[index], $scope.website._id, 'head-menu', function (data) {
+                          $scope.originalPage.handle = $scope.page.handle;
+                          console.log('Updated linked list');
+                        });
+                    }
                   });
-                }
-              });
-            });
+                });
+              }
+            })
           else
             $scope.saveLoading = false;
         });
@@ -251,6 +289,25 @@
     };
 
     /*
+     * @retrieveEmail
+     * -
+     */
+
+    $scope.retrieveEmail = function (_emailId) {
+      console.log('retrieveEmail ', _emailId);
+      WebsiteService.getSingleEmail(_emailId, function (data) {
+        console.log('data ', data);
+        $scope.page = data;
+        $scope.components = $scope.page.components;
+        $scope.originalComponents = angular.copy($scope.components);
+        $scope.originalPage = angular.copy(data);
+        $scope.activePage = true;
+        $scope.activateCKeditor();
+        $rootScope.breadcrumbTitle = $scope.page.title;
+      });
+    };
+
+    /*
      * @retrievePost
      * -
      */
@@ -325,6 +382,7 @@
 
 
     if ($location.search().pagehandle) {
+      $scope.isPage = true;
       $scope.retrievePage($location.search().pagehandle);
     }
 
@@ -335,8 +393,8 @@
 
 
     if ($location.search().email) {
-      $scope.emailPage = true;
-      $scope.retrievePage($location.search().email);
+      $scope.isEmail = true;
+      $scope.retrieveEmail($location.search().email);
     }
 
     /*
@@ -560,10 +618,11 @@
      * @openSimpleModal
      * -
      */
-    $scope.openSimpleModal = function (modal) {
+    $scope.openSimpleModal = function (modal, _size) {
       var _modal = {
         templateUrl: modal,
-        scope: $scope
+        scope: $scope,
+        size: _size || 'md',
       };
       $scope.modalInstance = $modal.open(_modal);
       $scope.modalInstance.result.then(null, function () {
@@ -652,12 +711,16 @@
         $scope.openSimpleModal("post-settings-modal");
       }
 
-      if ($scope.activePage) {
+      if ($scope.isPage) {
         $scope.openSimpleModal("page-settings-modal");
       }
 
       if ($scope.templateActive) {
         $scope.openModal("template-settings-modal", 'TemplateSettingsModalCtrl');
+      }
+
+      if ($scope.isEmail) {
+        $scope.openSimpleModal("email-settings-modal");
       }
     };
 
@@ -669,11 +732,12 @@
     $scope.openDuplicateModal = function () {
       if ($scope.single_post) {
         $scope.openSimpleModal("post-duplicate-modal");
-      } else {
-        $scope.duplicate_type = "Page";
-        if ($scope.emailPage)
-          $scope.duplicate_type = "Email";
+      }
+      if ($scope.isPage) {
         $scope.openSimpleModal("page-duplicate-modal");
+      }
+      if ($scope.isEmail) {
+        $scope.openSimpleModal("email-duplicate-modal");
       }
     };
 
@@ -762,8 +826,10 @@
     });
 
     $scope.createDuplicatePage = function (newPage) {
-      if ($scope.emailPage)
-        newPage.type = "email";
+
+      if ($scope.isPage) {
+        newPage.type = "page";
+      }
 
       $scope.validateNewPage(newPage);
       if (!$scope.newPageValidated) {
@@ -778,11 +844,23 @@
         newPage.components = $scope.page.components;
         WebsiteService.createDuplicatePage(newPage, function (data) {
           $scope.duplicate = true;
-          if ($scope.emailPage)
-            $scope.checkForSaveBeforeLeave('/admin/#/editor?email=' + newPage.handle, true);
-          else
-            $scope.checkForSaveBeforeLeave('/admin/#/website/pages/?pagehandle=' + newPage.handle, true);
+          $scope.checkForSaveBeforeLeave('/admin/#/website/pages/?pagehandle=' + newPage.handle, true);
         });
+      });
+    };
+
+    $scope.newEmail = {};
+
+    $scope.createDuplicateEmail = function () {
+      // $scope.validateNewPage(newPage);
+      // if (!$scope.newPageValidated) {
+      //   toaster.pop('error', "Page Title or URL can not be blank.");
+      //   return false;
+      // }
+      $scope.newEmail.components = $scope.page.components;
+      WebsiteService.createEmail($scope.newEmail, function (data) {
+        $scope.duplicate = true;
+        $scope.checkForSaveBeforeLeave('/admin/#/editor?email=' + $scope.newEmail._id, true);
       });
     };
 
@@ -959,6 +1037,7 @@
      */
 
     $scope.deletePage = function () {
+      angular.element('.modal.in').hide();
       SweetAlert.swal({
         title: "Are you sure?",
         text: "Do you want to delete this page",
@@ -968,7 +1047,7 @@
         confirmButtonText: "Yes, delete page!",
         cancelButtonText: "No, do not delete page!",
         closeOnConfirm: false,
-        closeOnCancel: false
+        closeOnCancel: true
       }, function (isConfirm) {
         if (isConfirm) {
           SweetAlert.swal("Saved!", "Page is deleted.", "success");
@@ -983,10 +1062,44 @@
             }, 500);
           });
         } else {
-          $timeout(function () {
-              SweetAlert.swal("Cancelled", "Page not deleted.", "error");
-            }, 500);
+          angular.element('.modal.in').show();
         }
+
+      });
+    };
+
+    /*
+     * @deleteEmail
+     * -
+     */
+
+    $scope.deleteEmail = function () {
+      angular.element('.modal.in').hide();
+      SweetAlert.swal({
+        title: "Are you sure?",
+        text: "Do you want to delete this email",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: "Yes, delete email!",
+        cancelButtonText: "No, do not delete email!",
+        closeOnConfirm: false,
+        closeOnCancel: true
+      }, function (isConfirm) {
+        if (isConfirm) {
+          SweetAlert.swal("Saved!", "Email is deleted.", "success");
+
+          WebsiteService.deleteEmail($scope.page._id, function (data) {
+            toaster.pop('success', "Email Deleted", "The " + title + " email was deleted successfully.");
+            $scope.closeModal();
+            $timeout(function () {
+              window.location = '/admin/#/website/emails';
+            }, 500);
+          });
+        } else {
+          angular.element('.modal.in').show();
+        }
+
       });
     };
 
@@ -996,6 +1109,7 @@
      */
 
     $scope.deletePost = function () {
+      angular.element('.modal.in').hide();
       SweetAlert.swal({
           title: "Are you sure?",
           text: "Do you want to delete this page",
@@ -1005,7 +1119,7 @@
           confirmButtonText: "Yes, delete post!",
           cancelButtonText: "No, do not delete post!",
           closeOnConfirm: false,
-          closeOnCancel: false
+          closeOnCancel: true
         },
         function (isConfirm) {
           if (isConfirm) {
@@ -1020,7 +1134,7 @@
             });
 
           } else {
-            SweetAlert.swal("Cancelled", "Post not deleted.", "error");
+            angular.element('.modal.in').show();
           }
         });
     };

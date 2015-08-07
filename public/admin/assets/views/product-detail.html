@@ -119,7 +119,7 @@
                                             <label for="form-field-select-1">
                                                 Type
                                             </label>
-                                            <select ng-model="product.type" class="form-control" ng-options="type.data as type.label for type in productTypeOptions">
+                                            <select ng-model="product.type" class="form-control" ng-options="type.data as type.label for type in productTypes.dp">
                                                 <option value="">-- choose type --</option>
                                             </select>
                                         </div>
@@ -165,7 +165,7 @@
                                         </div>
                                         <div class="form-group" ng-show="product.on_sale" ng-class="{ 'has-error' : productDetail.sale_price.$invalid && !productDetail.sale_price.$pristine }">
                                             <label tooltip-placement="top" tooltip-html-unsafe="the price the customer sees while a sale is enabled">
-                                                Sale Price <i class="fa fa-info-circle" />
+                                                Sale Price {{product.sale_price}}<i class="fa fa-info-circle" />
                                             </label>
                                             <div class="input-group">
                                                 <span class="input-group-addon">$</span>

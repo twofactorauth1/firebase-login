@@ -89,6 +89,40 @@ var copyutil = {
             });
 
         });
+    },
+
+    updateEmailCollection :function(fn) {
+        var srcURL = mongoConfig.TEST_MONGODB_CONNECT;
+        //var srcURL = mongoConfig.PROD_MONGODB_CONNECT
+        var srcMongo = mongoskin.db(srcURL, {safe: true});
+
+        var emails = srcMongo.collection('emails');
+        var accounts = srcMongo.collection('accounts');
+        //{_id:'1c7ed756-ad0b-4b5a-967b-47e794c5280d'}
+        emails.find().toArray(function(err, emailAry){
+            async.each(emailAry, function(email, cb){
+                var accountId = parseInt(email.accountId);
+                accounts.find({_id: accountId}).toArray(function(err, account){
+                    //console.dir(account[0]);
+                    if(account[0] && account[0].business && account[0].business.emails) {
+                        console.log(account[0].business.name);
+                        console.log(account[0].business.emails[0].email);
+                        email.fromName = account[0].business.name;
+                        email.fromEmail = account[0].business.emails[0].email;
+                        email.replyTo = account[0].business.emails[0].email;
+                        emails.save(email, function(){
+                            cb();
+                        });
+                    } else {
+                        cb();
+                    }
+                });
+
+            }, function done(){
+                console.log('done');
+                fn();
+            });
+        });
     }
 
 

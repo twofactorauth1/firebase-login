@@ -75,9 +75,16 @@
       $scope.matchUsers($scope.customer);
 
       $scope.newNote.text = '';
+       var tempTags = [];
+      $scope.customer_data = angular.copy($scope.customer);
+      _.each($scope.customer_data.tags, function (tag) {
+        tempTags.push(tag.data);
+      });
+      $scope.customer_data.tags = tempTags;
 
-      CustomerService.saveCustomer($scope.customer, function (customer) {
+      CustomerService.saveCustomer($scope.customer_data, function (customer) {
         $scope.customer = customer;
+        $scope.setTags();
         $scope.changesConfirmed = true;
         toaster.pop('success', 'Notes Added.');
       });
@@ -858,34 +865,19 @@
 
     $scope.setTags = function () {
       var tempTags = [];
-      _.each($scope.customer.tags, function (tag) {
+      var cutomerTags = [];
+      _.each($scope.customer.tags, function (tag , index) {
         var matchingTag = _.findWhere($scope.customerTags, {
           data: tag
         });
-        tempTags.push(matchingTag);
+        if(matchingTag)
+        {
+          cutomerTags.push(matchingTag.label);
+          tempTags.push(matchingTag);
+        }        
       });
+      $scope.myCustomerTags = cutomerTags.join(",");
       $scope.customer.tags = tempTags;
-    };
-
-    /*
-     * @displayCustomerTags
-     * -
-     */
-
-    $scope.displayCustomerTags = function () {
-      var tags = "";
-      if ($scope.customer.tags && $scope.customer.tags.length) {
-        $scope.customer.tags.forEach(function (value, index) {
-          if (index === 0) {
-            tags = value.label;
-          } else {
-            if (tags) {
-              tags = tags.concat(", ", value.label);
-            }
-          }
-        });
-      }
-      return tags;
     };
 
     /*
@@ -893,9 +885,10 @@
      * - get all the orders for this customer and create line_items_total
      *   and add decimal point to total then create scope
      */
-
+    console.log('$stateParams.contactId ', $stateParams.contactId);
     OrderService.getCustomerOrders($stateParams.contactId, function (orders) {
-      if (orders) {
+      console.log('orders ', orders);
+      if (orders.length > 0) {
         _.each(orders, function (order) {
           if (order.line_items) {
             order.line_items_total = order.line_items.length;

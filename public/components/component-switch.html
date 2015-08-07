@@ -1,75 +1,75 @@
 <div ng-switch="value.type">
     <div ng-switch-when="blog">
-        <div blog-component component="value" version="value.version" media="changeBlogImage(blog, index)"></div>
+        <div blog-component component="value" media="changeBlogImage(blog, index)"></div>
     </div>
     <div ng-switch-when="blog-teaser">
-        <div blog-teaser-component component="value" version="value.version"></div>
+        <div blog-teaser-component component="value"></div>
     </div>
     <div ng-switch-when="contact-us">
-        <div contact-us-component component="value" control="contactMap" version="value.version"></div>
+        <div contact-us-component component="value" control="contactMap"></div>
     </div>
     <div ng-switch-when="coming-soon">
-        <div coming-soon-component component="value" version="value.version"></div>
+        <div coming-soon-component component="value"></div>
     </div>
     <div ng-switch-when="email">
-        <div email-component component="value" version="value.version"></div>
+        <div email-component component="value"></div>
     </div>
     <div ng-switch-when="feature-block">
-        <div feature-block-component component="value" version="value.version"></div>
+        <div feature-block-component component="value"></div>
     </div>
     <div ng-switch-when="feature-list">
-        <div feature-list-component component="value" version="value.version"></div>
+        <div feature-list-component component="value"></div>
     </div>
     <div ng-switch-when="footer">
-        <div footer-component component="value" version="value.version"></div>
+        <div footer-component component="value"></div>
     </div>
     <div ng-switch-when="image-text">
-        <div image-text-component component="value" version="value.version"></div>
+        <div image-text-component component="value"></div>
     </div>
     <div ng-switch-when="image-gallery">
-        <div image-gallery-component component="value" version="value.version" media="addImageFromMedia(componentId, index, update)"></div>
+        <div image-gallery-component component="value" media="addImageFromMedia(componentId, index, update)"></div>
     </div>
     <div ng-switch-when="masthead">
-        <div masthead-component component="value" control="underNav" version="value.version"></div>
+        <div masthead-component component="value" control="underNav"></div>
     </div>
     <div ng-switch-when="meet-team">
-        <div meet-team-component component="value" media="addImageFromMedia(componentId, index, update)" version="value.version"></div>
+        <div meet-team-component component="value" media="addImageFromMedia(componentId, index, update)"></div>
     </div>
     <div ng-switch-when="navigation">
-        <div navigation-component component="value" version="value.version"></div>
+        <div navigation-component component="value"></div>
     </div>
     <div ng-switch-when="products">
-        <div products-component component="value" version="value.version"></div>
+        <div products-component component="value"></div>
     </div>
     <div ng-switch-when="payment-form">
-        <div payment-form-component component="value" version="value.version"></div>
+        <div payment-form-component component="value"></div>
     </div>
     <div ng-switch-when="pricing-tables">
-        <div pricing-tables-component component="value" version="value.version"></div>
+        <div pricing-tables-component component="value"></div>
     </div>
     <div ng-switch-when="testimonials">
-        <div testimonials-component component="value" version="value.version"></div>
+        <div testimonials-component component="value"></div>
     </div>
     <div ng-switch-when="thumbnail-slider">
-        <div thumbnail-slider-component media="addImageFromMedia(componentId, index, update)" component="value" control="thumbnailSlider" version="value.version"></div>
+        <div thumbnail-slider-component media="addImageFromMedia(componentId, index, update)" component="value" control="thumbnailSlider"></div>
     </div>
     <div ng-switch-when="text-only">
-        <div text-only-component component="value" version="value.version"></div>
+        <div text-only-component component="value"></div>
     </div>
     <div ng-switch-when="top-bar">
-        <div top-bar-component component="value" version="value.version"></div>
+        <div top-bar-component component="value"></div>
     </div>
     <div ng-switch-when="simple-form">
-        <div simple-form-component component="value" version="value.version"></div>
+        <div simple-form-component component="value"></div>
     </div>
     <div ng-switch-when="single-post">
-        <div single-post-component component="value" version="value.version"></div>
+        <div single-post-component component="value"></div>
     </div>
     <div ng-switch-when="social-link">
-        <div social-link-component component="value" version="value.version"></div>
+        <div social-link-component component="value"></div>
     </div>
     <div ng-switch-when="video">
-        <div video-component component="value" version="value.version"></div>
+        <div video-component component="value"></div>
     </div>
     <div ng-switch-default style="color: red; outline-color: red; padding: 10px">
         ERROR: could not find matching directive for component.type = {{value.type}}

@@ -3,8 +3,7 @@
 app.directive('contactUsComponent', ['customerService', '$timeout', function (customerService, $timeout) {
   return {
     scope: {
-      component: '=',
-      version: '='
+      component: '='
     },
     templateUrl: '/components/component-wrap.html',
     link: function (scope, element, attrs) {

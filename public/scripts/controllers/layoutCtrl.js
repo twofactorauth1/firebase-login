@@ -25,15 +25,17 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', '$window', '$locatio
         }
       })
       checkIntercom(data);
-      setTimeout(function () {
-        var locId = $location.$$hash;
-        if (locId) {
-          var element = document.getElementById(locId);
-          if (element) {
-            $document.scrollToElementAnimated(element, 175, 1000);
+      angular.element(document).ready(function () {
+        setTimeout(function () {
+          var locId = $location.$$hash;
+          if (locId) {
+            var element = document.getElementById(locId);
+            if (element) {
+              $document.scrollToElementAnimated(element, 0, 1000);
+            }
           }
-        }
-      }, 1000);
+        }, 3000);
+      })
     }
   });
 }]);

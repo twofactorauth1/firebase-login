@@ -100,7 +100,7 @@ app.directive('indigewebSkeuocard',['PaymentService', 'UserService', function(Pa
                         $("#card_expiry").addClass('has-error');
                         $("#card_expiry .glyphicon").addClass('glyphicon-remove');
                     } else {
-                        console.log('year ', parseInt(exp_year));
+                        console.log('year ', parseInt(exp_year));                        
                         if (parseInt(exp_year) < parseInt(scope.currentYear)) {
                             $("#card_expiry .error").html("Card Year has Expired");
                             $("#card_expiry").addClass('has-error');
@@ -109,7 +109,13 @@ app.directive('indigewebSkeuocard',['PaymentService', 'UserService', function(Pa
                             $("#card_expiry .error").html("Card Month has Expired");
                             $("#card_expiry").addClass('has-error');
                             $("#card_expiry .glyphicon").addClass('glyphicon-remove');
-                        } else {
+                        }
+                        else if(exp_month > 12) {
+                            $("#card_expiry .error").html("Card Month is invalid");
+                            $("#card_expiry").addClass('has-error');
+                            $("#card_expiry .glyphicon").addClass('glyphicon-remove');
+                        }
+                        else {
                             scope.expirationValidated = true;
                             $("#card_expiry .error").html("");
                             $("#card_expiry").removeClass('has-error').addClass('has-success');

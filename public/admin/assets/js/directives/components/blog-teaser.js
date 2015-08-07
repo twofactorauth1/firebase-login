@@ -4,8 +4,7 @@
 app.directive('blogTeaserComponent', ['WebsiteService', '$filter', function (WebsiteService, $filter) {
   return {
     scope: {
-      component: '=',
-      version: '='
+      component: '='
     },
     templateUrl: '/components/component-wrap.html',
     link: function (scope, element, attrs) {

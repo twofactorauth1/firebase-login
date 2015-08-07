@@ -3,7 +3,7 @@
  * controller for products
  */
 (function (angular) {
-  app.controller('EmailsCtrl', ["$scope", "$location", "toaster", "$filter", "$modal", "WebsiteService", function ($scope, $location, toaster, $filter, $modal, WebsiteService) {
+  app.controller('EmailsCtrl', ["$scope", "$timeout", "$location", "toaster", "$filter", "$modal", "WebsiteService", function ($scope, $timeout, $location, toaster, $filter, $modal, WebsiteService) {
 
     /*
      * @getCustomers
@@ -11,8 +11,11 @@
      */
 
     WebsiteService.getEmails(function (emails) {
-      console.log('emails ', emails);
-      $scope.emails = emails;
+      $timeout(function() {
+        $scope.$apply(function() {
+          $scope.emails = emails;
+        });
+      });
     });
 
 
@@ -56,11 +59,6 @@
       }
     });
 
-    $scope.$watch('createpage.handle', function (newValue, oldValue) {
-      if (newValue) {
-        $scope.createpage.handle = $filter('slugify')(newValue);
-      }
-    });
 
     $scope.validateCreatePage = function (page, restrict) {
       $scope.createPageValidated = false;
@@ -134,7 +132,7 @@
     };
 
     $scope.viewSingle = function (email) {
-      window.location = '/admin/#/editor?email=' + email.handle;
+      window.location = '/admin/#/editor?email=' + email._id;
     };
 
     $scope.filterScreenshot = {};

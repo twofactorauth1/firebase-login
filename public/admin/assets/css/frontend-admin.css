@@ -1135,10 +1135,6 @@
 #componentloader .top-bar-v1 .right-block {
   margin: 5px !important;
 }
-#componentloader .top-bar-v1 .right-block .edit-wrap,
-#componentloader .top-bar-v1 .right-block .editable {
-  display: inline-block;
-}
 #componentloader .top-bar-v1 .hour-block div.navbar-right {
   margin-right: 15px !important;
 }

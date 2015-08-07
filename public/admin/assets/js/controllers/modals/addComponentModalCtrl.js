@@ -240,7 +240,7 @@ app.controller('AddComponentModalCtrl', ['$scope', '$document', '$modalInstance'
   var componentLabel;
 
   //enabled component types
-  var enabledComponentTypes = _.where($scope.componentTypes, {
+  $scope.enabledComponentTypes = _.where($scope.componentTypes, {
     enabled: true
   });
 
@@ -249,7 +249,7 @@ app.controller('AddComponentModalCtrl', ['$scope', '$document', '$modalInstance'
    * It then makes that list unique, sorts the results alphabetically, and and removes the misc value if
    * it exists. (The misc value is added back on to the end of the list later)
    ************************************************************************************************************/
-  $scope.componentFilters = _.without(_.uniq(_.pluck(_.sortBy(enabledComponentTypes, 'filter'), 'filter')), 'misc');
+  $scope.componentFilters = _.without(_.uniq(_.pluck(_.sortBy($scope.enabledComponentTypes, 'filter'), 'filter')), 'misc');
 
   // Iterates through the array of filters and replaces each one with an object containing an
   // upper and lowercase version

@@ -4,8 +4,7 @@
 app.directive('simpleFormComponent',["formValidations", function (formValidations) {
   return {
     scope: {
-      component: '=',
-      version: '='
+      component: '='
     },
     templateUrl: '/components/component-wrap.html',
     link: function (scope, element, attrs) {

@@ -5,7 +5,6 @@ app.directive('meetTeamComponent',["$window", function ($window) {
   return {
     scope: {
       component: '=',
-      version: '=',
       media: '&'
     },
     templateUrl: '/components/component-wrap.html',

@@ -487,6 +487,8 @@ _.extend(api.prototype, baseApi.prototype, {
     signUpNews: function (req, resp) {
         var self = this, contact, accountToken, deferred;
         self.log.debug('>> signUpNews');
+        self.log.debug('>> host', req.get("host"));
+        //req.get("host")
 
         accountDao.getAccountByHost(req.get("host"), function(err, value) {
             if(err) {
@@ -501,6 +503,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
                     var accountId = value.id();
                     var vars = [];
+
                     var toAddress = value.get('business').email;
                     var toName = '';
                     mandrillHelper.sendNewCustomerEmail(toAddress, toName, accountId, vars, function(err, value){
@@ -633,7 +636,7 @@ _.extend(api.prototype, baseApi.prototype, {
                                                             var vars = [];
                                                             mandrillHelper.sendAccountWelcomeEmail(fromEmail,
                                                                 notificationConfig.WELCOME_FROM_NAME, contactEmail.email, contactName, notificationConfig.WELCOME_EMAIL_SUBJECT,
-                                                                '<h1>hey</h1>', ip, savedContact.id(), vars, function(err, result){});
+                                                                '<h1>hey</h1>', ip, savedContact.id(), vars, emailPage.get('_id'), function(err, result){});
                                                         }
 
                                                     });
@@ -678,7 +681,7 @@ _.extend(api.prototype, baseApi.prototype, {
                                                             self.log.debug('notificationConfig.WELCOME_FROM_EMAIL ', notificationConfig.WELCOME_FROM_EMAIL);
 
                                                             try{
-                                                                mandrillHelper.sendAccountWelcomeEmail(fromEmail, fromContactName, contactEmail, contactName, emailSubject, html, query.accountId, savedContact.id(), vars, function(err, result){
+                                                                mandrillHelper.sendAccountWelcomeEmail(fromEmail, fromContactName, contactEmail, contactName, emailSubject, html, query.accountId, savedContact.id(), vars, emailPage.get('_id'), function(err, result){
                                                                     self.log.debug('result: ', result);
                                                                 });
                                                             } catch(exception) {
@@ -1120,8 +1123,9 @@ _.extend(api.prototype, baseApi.prototype, {
                 var fromName =  notificationConfig.WELCOME_FROM_NAME;
                 var emailSubject = notificationConfig.NEW_CUSTOMER_EMAIL_SUBJECT;
                 var vars = [];
+
                 
-                mandrillHelper.sendBasicEmail(fromEmail, fromName, accountEmail, null, emailSubject, html, accountId, vars, function(err, result){
+                mandrillHelper.sendBasicEmail(fromEmail, fromName, accountEmail, null, emailSubject, html, accountId, vars, emailPage.get('_id'), function(err, result){
                     self.log.debug('result: ', result);
                 });
             }

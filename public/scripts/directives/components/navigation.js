@@ -1,8 +1,7 @@
 app.directive('navigationComponent', ['websiteService', 'accountService', function (websiteService, accountService) {
   return {
     scope: {
-      component: '=',
-      version: '='
+      component: '='
     },
     templateUrl: '/components/component-wrap.html',
     controller: function ($scope, websiteService, accountService, $compile) {

@@ -35,7 +35,12 @@
                                 </div>
                                 <div class="visible-xs margin-bottom-15 clearfix"></div>
                                 <div class="col-xs-12 col-sm-6">
-                                    <div class="form-group margin-bottom-0 pull-right">
+                                    <div class="form-group margin-bottom-0 pull-right hidden">
+                                        <button type="button" class="btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti ti-plus ng-click-active" ng-click="openModal('new-email-modal')">
+                                            <span>New Email</span>
+                                        </button>
+                                    </div>
+                                    <div class="form-group margin-bottom-0 pull-left">
                                         <div class="btn-group tableView">
                                             <button class="btn btn-info" ng-class="{'active': tableView == 'list'}" href="" ng-click="tableView = 'list'" tooltip-placement="top" tooltip="List"> <span class="fa fa-th-list"></span> </button>
                                             <button class="btn btn-info" ng-class="{'active': tableView == 'grid'}" href="" ng-click="tableView = 'grid'" tooltip-placement="top" tooltip="Grid"> <span class="fa fa-th"></span> </button>
@@ -56,6 +61,8 @@
                             <tr>
                                 <th class="center">Screenshot</th>
                                 <th st-sort="title">Title</th>
+                                <th st-sort="open">Open Rate</th>
+                                <th st-sort="open">Click Rate</th>
                                 <th class="hidden-xs" st-sort="getters.created" ng-class="{'center': tableView != 'grid'}">Created</th>
                                 <th class="hidden-xs" st-sort="getters.modified" ng-class="{'center': tableView != 'grid'}">Modified</th>
                             </tr>
@@ -90,6 +97,8 @@
                                     <img ng-src="{{ template.previewUrl }}" err-src="/admin/assets/images/default-page.jpg" class="img-thumbnail screenshot" alt="image">
                                 </td>
                                 <td><strong>Title: </strong>{{template.title | limitTo: 20 }}{{template.title.length > 20 ? '...' : ''}}</td>
+                                <td><strong>Open Rate: </strong><span class="text-large text-bold">{{template.openRate || '--'}}</span><span ng-if="template.openRate" class="text-small muted"> ({{template.sent}})</span></td>
+                                <td><strong>Click Rate: </strong><span class="text-large text-bold">{{template.clickRate || '--'}}</span><span ng-if="template.clickRate" class="text-small muted"> ({{template.clicks}})</span></td>
                                 <td class="hidden-xs" ng-class="{'center': tableView != 'grid'}"><strong>Created: </strong> {{template.created.date | date:'MMM d yy'}}</td>
                                 <td class="hidden-xs" ng-class="{'center': tableView != 'grid'}"><strong>Modified: </strong>{{template.modified.date | date:'MMM d yy'}}</td>
                             </tr>

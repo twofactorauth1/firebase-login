@@ -5,7 +5,6 @@ app.directive('mastheadComponent',["$window", function ($window) {
   return {
     scope: {
       component: '=',
-      version: '=',
       control: '='
     },
     templateUrl: '/components/component-wrap.html',

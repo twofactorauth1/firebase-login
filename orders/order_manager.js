@@ -147,63 +147,142 @@ module.exports = {
          * - Assumption: total_line_items_quantity = sum(line_items.quantity)
          */
         async.waterfall([
+            //get the account
+            function(callback) {
+                log.debug('fetching account ' + order.get('account_id'));
+                var accountId = parseInt(order.get('account_id'));
+                accountDao.getAccountByID(accountId, function(err, account){
+                    callback(err, account);
+                });
+            },
+            //get the products
+            function(account, callback) {
+                log.debug('fetching products');
+                var productAry = [];
+                async.each(order.get('line_items'), function iterator(item, cb){
+                    productManager.getProduct(item.product_id, function(err, product){
+                        if(err) {
+                            cb(err);
+                        } else {
+                            productAry.push(product);
+                            cb();
+                        }
+                    });
+                }, function done(err){
+                    callback(err, account, productAry);
+                });
+            },
+            //determine tax rate
+            function(account, productAry, callback) {
+                var commerceSettings = account.get('commerceSettings');
+                if(commerceSettings && commerceSettings.taxes === true) {
+                    //figure out the rate
+                    var zip = 0;
+                    if(commerceSettings.taxbased === 'customer_shipping') {
+                        zip = order.get('shipping_address').postcode;
+                    } else if(commerceSettings.taxbased === 'customer_billing') {
+                        zip = order.get('billing_address').postcode;
+                    } else if(commerceSettings.taxbased === 'business_location') {
+                        zip = account.get('business').addresses[0].zip;
+                    } else {
+                        log.warn('Unable to determine tax rate based on ', commerceSettings);
+                    }
+                    if(zip !== 0) {
+                        productManager.getTax(zip, function(err, rate){
+                            log.debug('Using rate:', rate);
+                            if(rate && rate.results && rate.results.length > 0) {
+                                callback(err, account, productAry, rate.results[0].taxSales);
+                            } else {
+                                callback(err, account, productAry, 0);
+                            }
+                        });
+                    }
+                } else {
+                    callback(null, account, productAry, 0);
+                }
+            },
             //validate
-            function(callback){
-                log.debug('validating order, on account=' + order.get('account_id') + ', typeof(order.account_id)=' + typeof(order.get('account_id')));
+            function(account, productAry, taxPercent, callback){
+                log.debug('validating order on account ' + order.get('account_id'));
+                log.debug('using a tax rate of ', taxPercent);
                 //calculate total amount and number line items
                 var totalAmount = 0;
                 var subTotal = 0;
                 var totalLineItemsQuantity = 0;
-                var taxPercent = 0.08;
+                var taxAdded = 0;
 
-                //accountDao.getAccountByID(order.get('account_id'), function(err, acc) {
-                //    log.debug('accountDao.getAccountByID returned acc.id = ' + acc.get('id'));
-                //    if( acc.business.addresses.length < 1 ) {
-                //        log.error('No business address available for account: ' + acc.get('id'));
-                //    }
-                //    else {
-                //        var bizAddr = acc.business.addresses[0];
-                        //log.debug('createOrder: business address');
-                        //log.debug(bizAddr);
+                /*
+                 * loop through line items
+                 *   based on quantity and id, get lineItemSubtotal
+                 *   if item is taxable, get tax rate and add to lineItemTax
+                 *   sum
+                 *
+                 *
+                 */
+                _.each(order.get('line_items'), function iterator(item, index){
+                    var product = _.find(productAry, function(currentProduct){
+                        if(currentProduct.id() === item.product_id) {
+                            return true;
+                        }
+                    });
+                    log.debug('found product ', product);
+                    var lineItemSubtotal = 0.0;
+                    if(product.get('on_sale') === true) {
+                        lineItemSubtotal = item.quantity * product.get('sale_price');
+                    } else {
+                        lineItemSubtotal = item.quantity * product.get('regular_price');
+                    }
+                    if(product.get('taxable') === true) {
+                        taxAdded += (lineItemSubtotal * taxPercent);
+                    }
+                    subTotal += lineItemSubtotal;
+                    totalLineItemsQuantity += parseFloat(item.quantity);
+                });
+                log.debug('Calculated subtotal: ' + subTotal + ' with tax: ' + taxAdded);
+                /*
+                 * We have to ignore discounts and shipping for now.  They *must* come from a validated code server
+                 * side to avoid shenanigans.
+                 */
+                totalAmount = subTotal + taxAdded;
 
-                        //productManager.getTax(bizAddr.zip, function (err, taxPercent) {
-                            log.debug('createOrder: taxPercent=' + taxPercent);
 
-                            _.each(order.get('line_items'), function (line_item) {
-                                totalAmount += parseFloat(line_item.total);
-                                subTotal += parseFloat(line_item.total);
-                                totalLineItemsQuantity += parseFloat(line_item.quantity);
-                            });
-                            log.debug('subtotal: ' + totalAmount);
-                            if (order.get('cart_discount')) {
-                                totalAmount -= parseFloat(order.get('cart_discount'));
-                                log.debug('subtracting cart_discount of ' + order.get('cart_discount'));
-                            }
-                            if (order.get('total_discount')) {
-                                totalAmount -= parseFloat(order.get('total_discount'));
-                                log.debug('subtracting total_discount of ' + order.get('total_discount'));
-                            }
-                            if (order.get('total_tax') && order.get('total_tax') > 0) {
-                                totalAmount += parseFloat(order.get('total_tax'));
-                                log.debug('adding tax of ' + order.get('total_tax'));
-                            }
-                            else {
-                                totalAmount += parseFloat(totalAmount * taxPercent);
-                                log.debug('adding tax of ' + order.get('total_tax'));
-                            }
-                            if (order.get('total_shipping')) {
-                                totalAmount += parseFloat(order.get('total_shipping'));
-                                log.debug('adding shipping of ' + order.get('total_shipping'));
-                            }
+                /*
+                 * Ignoring client side params
 
-                            order.set('subtotal', subTotal.toFixed(2));
-                            order.set('total', totalAmount.toFixed(2));
-                            log.debug('total is now: ' + order.get('total'));
-                            order.set('total_line_items_quantity', totalLineItemsQuantity);
-                            callback(null, order);
-                        //});
-                    //}
-                //});
+                _.each(order.get('line_items'), function (line_item) {
+                    totalAmount += parseFloat(line_item.total);
+                    subTotal += parseFloat(line_item.total);
+                    totalLineItemsQuantity += parseFloat(line_item.quantity);
+                });
+                log.debug('subtotal: ' + totalAmount);
+                if (order.get('cart_discount')) {
+                    totalAmount -= parseFloat(order.get('cart_discount'));
+                    log.debug('subtracting cart_discount of ' + order.get('cart_discount'));
+                }
+                if (order.get('total_discount')) {
+                    totalAmount -= parseFloat(order.get('total_discount'));
+                    log.debug('subtracting total_discount of ' + order.get('total_discount'));
+                }
+                if (order.get('total_tax') && order.get('total_tax') > 0) {
+                    totalAmount += parseFloat(order.get('total_tax'));
+                    log.debug('adding tax of ' + order.get('total_tax'));
+                }
+                else {
+                    totalAmount += parseFloat(totalAmount * taxPercent);
+                    log.debug('adding tax of ' + order.get('total_tax'));
+                }
+                if (order.get('total_shipping')) {
+                    totalAmount += parseFloat(order.get('total_shipping'));
+                    log.debug('adding shipping of ' + order.get('total_shipping'));
+                }
+                */
+
+                order.set('subtotal', subTotal.toFixed(2));
+                order.set('total', totalAmount.toFixed(2));
+                log.debug('total is now: ' + order.get('total'));
+                order.set('total_line_items_quantity', totalLineItemsQuantity);
+                callback(null, order);
+
             },
             //save
             function(validatedOrder, callback){
@@ -265,55 +344,59 @@ module.exports = {
             function(savedOrder, contact, callback){
                 log.debug('attempting to charge order');
                 var paymentDetails = savedOrder.get('payment_details');
-                if(paymentDetails.method_id === 'cc') {
-                    var card = paymentDetails.card_token;
-                    //total is a double but amount needs to be in cents (integer)
-                    var amount = Math.floor(savedOrder.get('total') * 100);
-                    log.debug('amount ', savedOrder.get('total'));
-                    var currency = savedOrder.get('currency');
-                    var customerId = contact.get('stripeId');
-                    var contactId = savedOrder.get('customer_id');
-                    var description = "Charge for order " + savedOrder.id();
-                    if(paymentDetails.charge_description) {
-                        description = paymentDetails.charge_description;
-                    }
-                    var metadata = {
-                        orderId: savedOrder.id(),
-                        accountId: savedOrder.get('account_id')
-                    };
-                    var capture = true;
-                    var statement_description = 'INDIGENOUS CHARGE';
-                    if(paymentDetails.statement_description) {
-                        statement_description = paymentDetails.statement_description;
-                    }
-                    var application_fee = 0;
-                    var userId = null;
-                    log.debug('contant ', contact);
-                    var receipt_email = contact.getEmails()[0];
-                    log.debug('Setting receipt_email to ' + receipt_email);
+                if (savedOrder.get('total') > 0) {
+                    if(paymentDetails.method_id === 'cc') {
+                        var card = paymentDetails.card_token;
+                        //total is a double but amount needs to be in cents (integer)
+                        var amount = Math.round(savedOrder.get('total') * 100);
+                        log.debug('amount ', savedOrder.get('total'));
+                        var currency = savedOrder.get('currency');
+                        var customerId = contact.get('stripeId');
+                        var contactId = savedOrder.get('customer_id');
+                        var description = "Charge for order " + savedOrder.id();
+                        if(paymentDetails.charge_description) {
+                            description = paymentDetails.charge_description;
+                        }
+                        var metadata = {
+                            orderId: savedOrder.id(),
+                            accountId: savedOrder.get('account_id')
+                        };
+                        var capture = true;
+                        var statement_description = 'INDIGENOUS CHARGE';
+                        if(paymentDetails.statement_description) {
+                            statement_description = paymentDetails.statement_description;
+                        }
+                        var application_fee = 0;
+                        var userId = null;
+                        log.debug('contact ', contact);
+                        var receipt_email = contact.getEmails()[0].email;
+                        log.debug('Setting receipt_email to ' + receipt_email);
 
-                    stripeDao.createStripeCharge(amount, currency, card, customerId, contactId, description, metadata,
-                        capture, statement_description, receipt_email, application_fee, userId, accessToken,
-                        function(err, charge){
-                            if(err) {
-                                log.error('Error creating Stripe Charge: ' + err);
-                                //set the status of the order to failed
-                                savedOrder.set('status', $$.m.Order.status.FAILED);
-                                savedOrder.set('note', savedOrder.get('note') + '\n Payment error: ' + err);
-                                var modified = {
-                                    date: new Date(),
-                                    by: userId
-                                };
-                                savedOrder.set('modified', modified);
-                                dao.saveOrUpdate(savedOrder, function(_err, updatedSavedOrder){
-                                    callback(err);
-                                });
-                            } else {
-                                callback(null, savedOrder, charge, contact);
-                            }
-                        });
+                        stripeDao.createStripeCharge(amount, currency, card, customerId, contactId, description, metadata,
+                            capture, statement_description, receipt_email, application_fee, userId, accessToken,
+                            function(err, charge){
+                                if(err) {
+                                    log.error('Error creating Stripe Charge: ' + err);
+                                    //set the status of the order to failed
+                                    savedOrder.set('status', $$.m.Order.status.FAILED);
+                                    savedOrder.set('note', savedOrder.get('note') + '\n Payment error: ' + err);
+                                    var modified = {
+                                        date: new Date(),
+                                        by: userId
+                                    };
+                                    savedOrder.set('modified', modified);
+                                    dao.saveOrUpdate(savedOrder, function(_err, updatedSavedOrder){
+                                        callback(err);
+                                    });
+                                } else {
+                                    callback(null, savedOrder, charge, contact);
+                                }
+                            });
+                    } else {
+                        log.warn('unsupported payment method: ' + paymentDetails.method_id);
+                        callback(null, savedOrder, null, contact);
+                    }
                 } else {
-                    log.warn('unsupported payment method: ' + paymentDetails.method_id);
                     callback(null, savedOrder, null, contact);
                 }
             },
@@ -379,22 +462,22 @@ module.exports = {
                         var fromAddress = business.emails[0].email;
                         var fromName = business.name;
 
-                        cmsManager.getEmailPage(accountId, 'new_order', function(err, page){
-                            if(err || !page) {
+                        cmsManager.getEmailPage(accountId, 'new_order', function(err, email){
+                            if(err || !email) {
                                 log.warn('No NEW_ORDER email sent: ' + err);
                                 callback(null, updatedOrder);
                             } else {
-                                var component = page.get('components')[0];
+                                var component = email.get('components')[0];
                                 component.order = updatedOrder.attributes;
                                 log.debug('Using this for data', component);
                                 app.render('emails/base_email_order', component, function(err, html) {
-                                    mandrillHelper.sendOrderEmail(fromAddress, fromName, toAddress, toName, subject, html, accountId, orderId, vars, function(){
+                                    mandrillHelper.sendOrderEmail(fromAddress, fromName, toAddress, toName, subject, html, accountId, orderId, vars, email._id, function(){
                                         callback(null, updatedOrder);
                                     });
 
                                     if(emailPreferences.new_order === true) {
                                         //Send additional details
-                                        mandrillHelper.sendOrderEmail(fromAddress, fromName, fromAddress, fromName, subject, html, accountId, orderId, vars, function(){
+                                        mandrillHelper.sendOrderEmail(fromAddress, fromName, fromAddress, fromName, subject, html, accountId, orderId, vars, email._id, function(){
                                             log.debug('Admin Notification Sent');
                                         });
                                     }

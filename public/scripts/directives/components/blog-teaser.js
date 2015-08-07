@@ -1,8 +1,7 @@
 app.directive('blogTeaserComponent', ['postsService', '$filter', function (postsService, $filter) {
   return {
     scope: {
-      component: '=',
-      version: '='
+      component: '='
     },
     templateUrl: '/components/component-wrap.html',
     controller: function ($scope, postsService) {

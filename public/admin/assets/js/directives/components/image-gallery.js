@@ -6,7 +6,6 @@ app.directive('imageGalleryComponent', ['$timeout', function ($timeout) {
   return {
     scope: {
       component: '=',
-      version: '=',
       media: '&'
     },
     templateUrl: '/components/component-wrap.html',
