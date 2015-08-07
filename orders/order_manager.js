@@ -15,7 +15,7 @@ var mandrillHelper = require('../utils/mandrillhelper');
 var accountDao = require('../dao/account.dao');
 var cmsManager = require('../cms/cms_manager');
 var productManager = require('../products/product_manager');
-
+require('moment');
 
 module.exports = {
 
@@ -228,9 +228,16 @@ module.exports = {
                     log.debug('found product ', product);
                     var lineItemSubtotal = 0.0;
                     if(product.get('on_sale') === true) {
-                        lineItemSubtotal = item.quantity * product.get('sale_price');
+                        var startDate = product.get('sale_date_from', 'day');
+                        var endDate = product.get('sale_date_to', 'day');
+                        var rightNow = new Date();
+                        if(moment(rightNow).isBefore(endDate) && moment(rightNow).isAfter(startDate)) {
+                            lineItemSubtotal = item.quantity * product.get('sale_price');
+                        } else {
+                            lineItemSubtotal = item.quantity * product.get('regular_price');
+                        }
                     } else {
-                        lineItemSubtotal = item.quantity * product.get('regular_price');
+
                     }
                     if(product.get('taxable') === true) {
                         taxAdded += (lineItemSubtotal * taxPercent);
