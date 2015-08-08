@@ -447,7 +447,9 @@ fieldset[disabled] .btn-vimeo-square.active {
             visibility: none;
         }
         &:hover {
-            box-shadow: 0 0 0 10px orange;
+            .component-inner, .bg.cover {
+                .box-shadow(inset 0px 0px 0px 2px orange);
+            }
             .circular {
                 display: block;
                 visibility: visible;
