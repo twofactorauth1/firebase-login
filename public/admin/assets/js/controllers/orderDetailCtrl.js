@@ -11,8 +11,6 @@
     // 3. getProducts
     // 4. get Order
 
-    $scope.taxPercent = 0.08;
-
     $scope.FailedStatus = orderConstant.order_status.FAILED;
 
     /*
@@ -145,9 +143,6 @@
       } else {
         $scope.calculatedDiscountPercent = '';
       }
-      //todo add tax selected currently using 0.08 or 1.08
-      $scope.calculatedTax = _total * $scope.taxPercent;
-      $scope.calculatedTotal = _total * ($scope.taxPercent + 1);
     };
 
     /*

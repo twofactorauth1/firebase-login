@@ -280,6 +280,7 @@ module.exports = {
                 }
                 */
 
+                order.set('tax_rate', taxPercent);
                 order.set('subtotal', subTotal.toFixed(2));
                 order.set('total', totalAmount.toFixed(2));
                 log.debug('total is now: ' + order.get('total'));

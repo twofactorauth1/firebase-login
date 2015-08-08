@@ -25,6 +25,7 @@ var order = $$.m.ModelBase.extend({
             "cart_discount" : 0.0,
             "total_discount" : 0.0,
             "total_shipping" : 0.0,
+            "tax_rate" : 0.0,  // if taxes are 9%, this value should be 0.09
             "total_tax" : 0.0,
             "subtotal" : 0.0,
             "shipping_tax" : 0.0,
