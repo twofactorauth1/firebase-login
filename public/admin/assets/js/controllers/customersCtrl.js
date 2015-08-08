@@ -11,6 +11,28 @@
       $scope.order = "reverse";
     }
 
+    $scope.default_image_url = "/admin/assets/images/default-user.png";
+
+    $scope.filterCustomerPhotos = function (customers) {
+      _.each(customers, function (customer) {
+        if (customer) {
+          customer.hasPhoto = false;
+          if (customer.photo) {
+            if ($("#customer_photo_" + customer._id).attr("src") === $scope.default_image_url) {
+              customer.hasPhoto = false;
+            } else {
+              customer.hasPhoto = true;
+            }
+          }
+        }
+      });
+    };
+
+    $scope.filterCustomers = function () {
+      $scope.showFilter = !$scope.showFilter;
+      $scope.filterCustomerPhotos($scope.customers);
+    };
+
     /*
      * @getCustomers
      * -

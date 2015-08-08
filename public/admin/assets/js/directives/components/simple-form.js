@@ -21,8 +21,11 @@ app.directive('simpleFormComponent',["formValidations", function (formValidation
         var field = _.find(scope.component.fields, function (_field) {
           return _field.name === name;
         });
-        if (field.value) {
-          return true;
+
+        if(field) {
+          if (field.value) {
+            return true;
+          }
         }
       };
     }

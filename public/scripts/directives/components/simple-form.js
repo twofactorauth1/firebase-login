@@ -18,8 +18,11 @@ app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userSe
         var field = _.find(scope.component.fields, function (_field) {
           return _field.name === name;
         });
-        if (field.value) {
-          return true;
+
+        if(field) {
+          if (field.value) {
+            return true;
+          }
         }
       };
       scope.emailValidation = formValidations.email;

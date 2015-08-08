@@ -11017,6 +11017,9 @@ table.grid thead th {
 .st-sort-descent:before {
   content: "\f0dd" !important;
 }
+table.grid thead tr {
+  display: inline-block;
+}
 /* ---------------------------------------------------------------------- */
 /*  User profile
 /* ---------------------------------------------------------------------- */
@@ -12275,6 +12278,9 @@ table.grid thead th {
 .order-detail #orderItems .fa-times-circle-o:hover {
   opacity: 1;
 }
+.order-detail span.customer-info {
+  cursor: pointer;
+}
 /* ---------------------------------------------------------------------- */
 /*  Site Analytics
 /* ---------------------------------------------------------------------- */
@@ -13367,6 +13373,9 @@ a.editable-error:focus {
 /* ---------------------------------------------------------------------- */
 .orders .column-width {
   width: 16.66666666666667%;
+}
+.orders table.grid thead th {
+  float: left;
 }
 .choose-account ul {
   margin-bottom: 0;
