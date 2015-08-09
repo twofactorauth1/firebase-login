@@ -312,16 +312,16 @@ h5.over-title {
     overflow: hidden;
     z-index: 2;
     position: absolute;
-    -webkit-transform: translate3d(300px, 0, 0);
-    transform: translate3d(300px, 0, 0);
+    -webkit-transform: translate3d(200px, 0, 0);
+    transform: translate3d(200px, 0, 0);
     -webkit-transition: transform 300ms ease 0s;
     -moz-transition: transform 300ms ease 0s;
     -ms-transition: transform 300ms ease 0s;
     -o-transition: transform 300ms ease 0s;
   }
   #app.app-slide-off > #off-sidebar {
-    -webkit-transform: translate3d(300px, 0, 0);
-    transform: translate3d(300px, 0, 0);
+    -webkit-transform: translate3d(200px, 0, 0);
+    transform: translate3d(200px, 0, 0);
     -webkit-transition: transform 300ms ease 0s;
     -moz-transition: transform 300ms ease 0s;
     -ms-transition: transform 300ms ease 0s;
@@ -332,8 +332,8 @@ h5.over-title {
     overflow: hidden;
     z-index: 2;
     position: absolute;
-    -webkit-transform: translate3d(-300px, 0, 0);
-    transform: translate3d(-300px, 0, 0);
+    -webkit-transform: translate3d(-200px, 0, 0);
+    transform: translate3d(-200px, 0, 0);
     -webkit-transition: transform 300ms ease 0s;
     -moz-transition: transform 300ms ease 0s;
     -ms-transition: transform 300ms ease 0s;
@@ -423,7 +423,7 @@ h5.over-title {
 }
 @media (min-width: 768px) {
   #topnav.navbar .navbar-header {
-    width: 300px;
+    width: 200px;
   }
 }
 @media (min-width: 992px) {
@@ -474,7 +474,7 @@ h5.over-title {
 }
 @media (min-width: 768px) {
   #topnav.navbar .navbar-collapse {
-    margin-left: 300px;
+    margin-left: 200px;
     height: 65px !important;
   }
   #topnav.navbar .navbar-collapse .nav {
@@ -906,7 +906,7 @@ h5.over-title {
 /*  Sidebar
 /* ---------------------------------------------------------------------- */
 #sidebar {
-  width: 300px;
+  width: 200px;
   float: left;
   left: 0;
   bottom: 0;
@@ -974,8 +974,8 @@ h5.over-title {
     left: 0;
     z-index: 0;
     float: none;
-    -webkit-transform: translate3d(-300px, 0, 0);
-    transform: translate3d(-300px, 0, 0);
+    -webkit-transform: translate3d(-200px, 0, 0);
+    transform: translate3d(-200px, 0, 0);
     -webkit-transition: transform 300ms ease 0s;
     -moz-transition: transform 300ms ease 0s;
     -ms-transition: transform 300ms ease 0s;
@@ -1198,7 +1198,7 @@ ul.sub-menu li ul.sub-menu li ul.sub-menu li a {
     overflow-x: visible;
     height: auto;
     bottom: auto;
-    width: 300px;
+    width: 200px;
     z-index: 1050;
     display: none;
   }
@@ -1263,7 +1263,7 @@ ul.sub-menu li ul.sub-menu li ul.sub-menu li a {
     top: 0;
     padding: 13px 0;
     border-bottom: none !important;
-    width: 300px;
+    width: 200px;
     background: #efeff0;
     margin-left: 0;
     z-index: 1051;
@@ -1311,7 +1311,7 @@ ul.sub-menu li ul.sub-menu li ul.sub-menu li a {
     display: none;
   }
   .app-sidebar-closed .app-aside > ul.sub-menu {
-    width: 300px;
+    width: 200px;
     display: block !important;
     overflow: auto;
     padding: 0;
@@ -1374,7 +1374,7 @@ ul.sub-menu li ul.sub-menu li ul.sub-menu li a {
     padding: 13px 0;
     bottom: 0;
     border-bottom: none !important;
-    width: 300px;
+    width: 200px;
     background: #efeff0;
     margin-left: 0;
   }
@@ -1521,7 +1521,7 @@ ul.sub-menu li ul.sub-menu li ul.sub-menu li a {
 @media (min-width: 992px) {
   .main-content {
     margin-top: 65px;
-    margin-left: 300px;
+    margin-left: 200px;
   }
   .app-navbar-fixed .main-content {
     margin-top: 0;
@@ -1564,7 +1564,7 @@ ul.sub-menu li ul.sub-menu li ul.sub-menu li a {
 }
 @media (min-width: 992px) {
   #app > footer {
-    margin-left: 300px;
+    margin-left: 200px;
   }
   #app.app-sidebar-closed > footer {
     margin-left: 70px;
@@ -1834,13 +1834,13 @@ ul.sub-menu li ul.sub-menu li ul.sub-menu li a {
 #off-sidebar {
   bottom: 0;
   position: fixed;
-  right: -300px;
+  right: -200px;
   top: 64px;
   -webkit-transition: all 0.3s ease 0s !important;
   -moz-transition: all 0.3s ease 0s !important;
   -ms-transition: all 0.3s ease 0s !important;
   -o-transition: all 0.3s ease 0s !important;
-  width: 300px;
+  width: 200px;
   z-index: 1091;
   background: #ffffff;
   border-left: 1px solid #eeeeee;
@@ -1860,8 +1860,8 @@ ul.sub-menu li ul.sub-menu li ul.sub-menu li a {
     top: 0;
     right: 0;
     z-index: 0;
-    -webkit-transform: translate3d(300px, 0, 0);
-    transform: translate3d(300px, 0, 0);
+    -webkit-transform: translate3d(200px, 0, 0);
+    transform: translate3d(200px, 0, 0);
     -webkit-transition: transform 300ms ease 0s;
     -moz-transition: transform 300ms ease 0s;
     -ms-transition: transform 300ms ease 0s;
@@ -1947,11 +1947,11 @@ ul.sub-menu li ul.sub-menu li ul.sub-menu li a {
   right: 0 !important;
 }
 #off-sidebar #users.chat-open {
-  right: 300px;
+  right: 200px;
 }
 #off-sidebar #users .user-chat {
   position: relative;
-  left: 300px;
+  left: 200px;
   top: 0;
   height: 100%;
 }
