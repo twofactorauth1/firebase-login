@@ -73,9 +73,6 @@
                 "TEMPLATES": "Templates",
                 "SETTINGS": "Settings"
             },
-            "emails": {
-                "MAIN": "Emails"
-            },
             "customers": {
                 "MAIN": "Customers",
                 "MANAGE": "Manage",
@@ -90,7 +87,8 @@
             "marketing": {
                 "MAIN": "Marketing",
                 "SOCIALFEED": "Social Feed",
-                "CAMPAIGNS": "Campaigns"
+                "CAMPAIGNS": "Campaigns",
+                "EMAILS": "Email Templates"
             },
             "account": {
                 "MAIN": "Account",

@@ -4,7 +4,8 @@
         <div class="row">
             <div class="col-sm-8">
                 <h1 class="mainTitle" translate="sidebar.nav.emails.MAIN"></h1>
-                <span ng-if="themes" class="mainDescription">There are currently {{templates.length}} themes.</span>
+                <span ng-if="emails" class="mainDescription">There are currently {{emails.length}} emails.</span>
+                <span ng-if="!emails" class="mainDescription">Loading emails...</span>
             </div>
             <div ncy-breadcrumb></div>
         </div>
