@@ -29,7 +29,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.delete(this.url('campaign/:id/contact/:contactid'), this.isAuthAndSubscribedApi.bind(this), this.cancelContactCampaign.bind(this));
         app.get(this.url('campaign/:id'), this.isAuthAndSubscribedApi.bind(this), this.getCampaign.bind(this));
 
-        app.get(this.url('campaigns'), this.isAuthAndSubscribedApi.bind(this), this.findCampaigns.bind(this));
+        app.get(this.url(''), this.isAuthAndSubscribedApi.bind(this), this.findCampaigns.bind(this));
         app.get(this.url('campaigns/:id/pages'), this.isAuthAndSubscribedApi.bind(this), this.getPagesWithCampaign.bind(this));
         app.get(this.url('campaigns/:id/running'), this.isAuthAndSubscribedApi.bind(this), this.getRunningCampaign.bind(this));
         app.get(this.url('campaigns/running'), this.isAuthAndSubscribedApi.bind(this), this.getRunningCampaigns.bind(this));

@@ -13967,3 +13967,34 @@ tags-input.ti-input-sm .tags .input,
   position: absolute;
   top: 10px;
 }
+.create-campaign .campaign-step {
+  min-height: 350px;
+}
+.create-campaign .campaign-step-wrap .campaign-step.next.ng-hide-remove {
+  -webkit-animation: fadeInRight 1.5s;
+  -moz-animation: fadeInRight 1.5s;
+  -ms-animation: fadeInRight 1.5s;
+  animation: fadeInRight 1.5s;
+}
+.create-campaign .campaign-step-wrap .campaign-step.next.ng-hide-add {
+  position: absolute;
+  top: 0;
+  -webkit-animation: fadeOutLeft 1.5s;
+  -moz-animation: fadeOutLeft 1.5s;
+  -ms-animation: fadeOutLeft 1.5s;
+  animation: fadeOutLeft 1.5s;
+}
+.create-campaign .campaign-step-wrap .campaign-step.prev.ng-hide-remove {
+  position: absolute;
+  top: 0;
+  -webkit-animation: fadeOutRight 1.5s;
+  -moz-animation: fadeOutRight 1.5s;
+  -ms-animation: fadeOutRight 1.5s;
+  animation: fadeOutRight 1.5s;
+}
+.create-campaign .campaign-step-wrap .campaign-step.prev.ng-hide-add {
+  -webkit-animation: fadeInLeft 1.5s;
+  -moz-animation: fadeInLeft 1.5s;
+  -ms-animation: fadeInLeft 1.5s;
+  animation: fadeInLeft 1.5s;
+}

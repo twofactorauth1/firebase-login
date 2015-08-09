@@ -1,0 +1,29 @@
+.create-campaign {
+    .campaign-step {
+        min-height: 350px;
+    }
+    .campaign-step-wrap {
+        .campaign-step {
+            &.next {
+                &.ng-hide-remove {
+                    .animation(fadeInRight 1.5s);
+                }
+                &.ng-hide-add {
+                    position: absolute;
+                    top: 0;
+                    .animation(fadeOutLeft 1.5s);
+                }
+            }
+            &.prev {
+                &.ng-hide-remove {
+                    .animation(fadeOutRight 1.5s);
+                }
+                &.ng-hide-add {
+                    position: absolute;
+                    top: 0;
+                    .animation(fadeInLeft 1.5s);
+                }
+            }
+        }
+    }
+}

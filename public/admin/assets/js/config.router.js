@@ -230,7 +230,18 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         icon: 'ti-layout-media-left-alt',
         ncyBreadcrumb: {
             label: 'Campaigns'
-        }
+        },
+        resolve: loadSequence('campaignsCtrl', 'campaignService')
+    }).state('app.marketing.createcampaign', {
+        url: '/campaigns/create-campaign',
+        templateUrl: "assets/views/create-campaign.html",
+        title: 'Create Campaign',
+        icon: 'ti-layout-media-left-alt',
+        ncyBreadcrumb: {
+            label: 'Create Campaign',
+            parent: 'app.marketing.campaigns'
+        },
+        resolve: loadSequence('createCampaignCtrl', 'campaignService')
     }).state('app.account', {
         url: '/account',
         template: '<div ui-view class="fade-in-up"></div>',

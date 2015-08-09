@@ -88,6 +88,7 @@
                 "MAIN": "Marketing",
                 "SOCIALFEED": "Social Feed",
                 "CAMPAIGNS": "Campaigns",
+                "CREATECAMPAIGN": "Create Campaign",
                 "EMAILS": "Email Templates"
             },
             "account": {
