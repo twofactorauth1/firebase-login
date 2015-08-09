@@ -214,15 +214,15 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
             label: 'Social Feed'
         },
         resolve: loadSequence('socialFeedCtrl', 'socialConfigService', 'wu.masonry','orderByArrayLength')
-    }).state('app.marketing.emails', {
-        url: '/emails',
-        templateUrl: "assets/views/emails.html",
+    }).state('app.marketing.emailtemplates', {
+        url: '/email-templates',
+        templateUrl: "assets/views/email-templates.html",
         title: 'Emails',
         icon: 'ti-layout-media-left-alt',
         ncyBreadcrumb: {
-            label: 'Emails'
+            label: 'Email Templates'
         },
-        resolve: loadSequence('emailsCtrl', 'chartEmailService')
+        resolve: loadSequence('emailTemplatesCtrl', 'chartEmailService')
     }).state('app.marketing.campaigns', {
         url: '/campaigns',
         templateUrl: "assets/views/campaigns.html",

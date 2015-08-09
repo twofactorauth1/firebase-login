@@ -3,7 +3,7 @@
  * controller for products
  */
 (function (angular) {
-  app.controller('EmailsCtrl', ["$scope", "$timeout", "$location", "toaster", "$filter", "$modal", "WebsiteService", function ($scope, $timeout, $location, toaster, $filter, $modal, WebsiteService) {
+  app.controller('EmailTemplatesCtrl', ["$scope", "$timeout", "$location", "toaster", "$filter", "$modal", "WebsiteService", function ($scope, $timeout, $location, toaster, $filter, $modal, WebsiteService) {
 
     /*
      * @getCustomers
