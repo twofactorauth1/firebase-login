@@ -562,7 +562,21 @@
       }).success(function (data, status, headers, config) {
         fn(data);
       }).error(function (err) {
-        console.warn('END:Website Service updatePage with ERROR');
+        console.warn('END:Website Service updatePost with ERROR');
+        fn(err, null);
+      });
+    };
+
+    //page/:pageId/blog/status/:postId'
+    this.publishPost = function (pageId, postId, fn) {
+      var apiUrl = baseUrl + ['cms', 'page', pageId, 'blog', 'status', postId].join('/');
+      $http({
+        url: apiUrl,
+        method: "PUT"
+      }).success(function (data, status, headers, config) {
+        fn(data);
+      }).error(function (err) {
+        console.warn('END:Website Service updatePostStatus with ERROR');
         fn(err, null);
       });
     };
