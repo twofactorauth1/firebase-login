@@ -2217,7 +2217,12 @@
   content: attr(data-text);
 }
 #componentloader .editing .testimonials-v2 .testimonial-wrap img {
-  width: 100%;
+  max-width: 100%;
+}
+@-moz-document url-prefix() {
+  img {
+    width: 100%;
+  }
 }
 #componentloader .editing .testimonials-v2 .testimonials {
   padding: 25px;
