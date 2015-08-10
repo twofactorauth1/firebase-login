@@ -1,12 +1,13 @@
 'use strict';
 
-app
-    .filter('titleCase', function() {
-        return function(input) {
-            var words = input.split(' ');
-            for (var i = 0; i < words.length; i++) {
-                words[i] = words[i].charAt(0).toUpperCase() + words[i].slice(1);
-            }
-            return words.join(' ');
-        };
-    });
+app.filter('titleCase', function () {
+  return function (input) {
+    if (input) {
+      var words = input.split(' ');
+      _.each(words, function (word) {
+        word = word.charAt(0).toUpperCase() + word.slice(1);
+      });
+      return words.join(' ');
+    }
+  };
+});
