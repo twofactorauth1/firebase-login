@@ -177,7 +177,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         ncyBreadcrumb: {
             label: 'Products'
         },
-        resolve: loadSequence('productsCtrl', 'productService', 'accountService', 'angular-cookie')
+        resolve: loadSequence('productsCtrl', 'productService', 'accountService', 'ipCookie')
     }).state('app.commerce.productsingle', {
         url: '/products/:productId',
         templateUrl: "assets/views/product-detail.html",
@@ -285,7 +285,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         ncyBreadcrumb: {
             label: 'Billing'
         },
-        resolve: loadSequence('billingCtrl', 'productService', 'stripe', 'paymentService', 'userService', 'toasterService', 'angular-cookie', 'skeuocard')
+        resolve: loadSequence('billingCtrl', 'productService', 'stripe', 'paymentService', 'userService', 'toasterService', 'ipCookie', 'skeuocard')
     }).state('app.account.integrations', {
         url: '/integrations',
         templateUrl: "assets/views/integrations.html",
@@ -294,7 +294,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         ncyBreadcrumb: {
             label: 'Integrations'
         },
-        resolve: loadSequence('integrationsCtrl', 'socialConfigService', 'angular-cookie', 'accountService')
+        resolve: loadSequence('integrationsCtrl', 'socialConfigService', 'ipCookie', 'accountService')
     }).state('app.support', {
         url: '/support',
         template: '<div ui-view class="fade-in-up"></div>',

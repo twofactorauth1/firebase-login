@@ -37,8 +37,8 @@
                                 <div class="visible-xs margin-bottom-15 clearfix"></div>
                                 <div class="col-xs-12 col-sm-6">
                                     <div class="form-group margin-bottom-0 pull-right">
-                                        <button type="button" ui-sref="app.marketing.createcampaign"class="btn btn-warning btn-wide btn-scroll btn-scroll-top ti ti-plus ng-click-active">
-                                            <span translate="sidebar.nav.marketing.CREATECAMPAIGN">Create Campaign</span>
+                                        <button type="button" ui-sref="app.marketing.createcampaign" class="btn btn-warning btn-wide btn-scroll btn-scroll-top ti ti-plus ng-click-active">
+                                            <span translate="sidebar.nav.marketing.NEWCAMPAIGN">New Campaign</span>
                                         </button>
                                     </div>
                                     <div class="form-group margin-bottom-0 pull-left">
@@ -60,29 +60,24 @@
                     <table class="table table-hover margin-bottom-0" ng-class="{'grid': tableView == 'grid', 'bg-white': tableView != 'grid'}" ng-show="displayedCampaigns">
                         <thead>
                             <tr>
-                                <th class="center">Screenshot</th>
-                                <th st-sort="title">Title</th>
-                                <th st-sort="open">Open Rate</th>
-                                <th st-sort="open">Click Rate</th>
-                                <th class="hidden-xs" st-sort="getters.created" ng-class="{'center': tableView != 'grid'}">Created</th>
-                                <th class="hidden-xs" st-sort="getters.modified" ng-class="{'center': tableView != 'grid'}">Modified</th>
+                                <th class="center" translate="tableFields.STATUS">Status</th>
+                                <th st-sort="title" translate="tableFields.NAME">Name</th>
+                                <th st-sort="title" translate="tableFields.TYPE">Type</th>
+                                <th st-sort="open" translate="createcampaign.OPENRATE">Open Rate</th>
+                                <th st-sort="open" translate="createcampaign.CLICKRATE">Click Rate</th>
+                                <th class="hidden-xs" st-sort="getters.created" ng-class="{'center': tableView != 'grid'}" translate="tableFields.CREATED">Created</th>
                             </tr>
                             <tr ng-if="showFilter">
                                 <th>
-                                    <input st-search="{{'hasScreenshot'}}" placeholder="Screenshot" class="form-control hidden" type="search" id="searchScreenshot" ng-model="filterScreenshot.selected.value" />
-                                    <ui-select ng-model="filterScreenshot.selected" on-select="triggerInput('#searchScreenshot')" theme="bootstrap">
-                                        <ui-select-match placeholder="Screenshot">
-                                            <small ng-bind-html="$select.selected.name"></small>
-                                            <span class="fa fa-times text-danger" ng-click="clearFilter($event, '#searchScreenshot')"></span>
-                                        </ui-select-match>
-                                        <ui-select-choices repeat="option in pageScreenshotOptions">
-                                            <!-- <span class="fa" ng-class="{'fa-facebook': type.type == 'fb'}"></span> -->
-                                            <small ng-bind-html="option.name | highlight: $select.search"></small>
-                                        </ui-select-choices>
-                                    </ui-select>
                                 </th>
                                 <th>
                                     <input st-search="title" placeholder="Title" class="form-control" type="search" />
+                                </th>
+                                <th>
+                                    <!-- <input st-search="created" placeholder="Created" class="form-control" type="search" /> -->
+                                </th>
+                                <th>
+                                    <!-- <input st-search="created" placeholder="Created" class="form-control" type="search" /> -->
                                 </th>
                                 <th>
                                     <!-- <input st-search="created" placeholder="Created" class="form-control" type="search" /> -->
@@ -93,15 +88,29 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr ng-repeat="template in displayedCampaigns" ng-click="viewSingle(template)">
-                                <td class="center">
-                                    <img ng-src="{{ template.previewUrl }}" err-src="/admin/assets/images/default-page.jpg" class="img-thumbnail screenshot" alt="image">
+                            <tr ng-repeat="campaign in displayedCampaigns" ng-click="viewSingle(campaign)">
+                                <td class="center"><strong>Status: </strong>
+                                    <span class="fa-stack">
+                                        <span class="fa fa-circle-thin fa-stack-2x"
+                                        ng-class="{
+                                            'text-muted': campaign.status == 'draft',
+                                            'text-blue': campaign.status == 'running',
+                                            'text-green': campaign.status == 'completed'
+                                        }">
+                                        </span>
+                                    <span class="fa fa-stack-1x" tooltip-placement="top" tooltip="{{campaign.status | titleCase}} " ng-class="{
+                                          'fa-pencil text-muted': campaign.status == 'draft',
+                                          'fa-clock-o text-blue': campaign.status == 'running',
+                                          'fa-check text-green': campaign.status == 'completed'
+                                        }">
+                                        </span>
+                                    </span>
                                 </td>
-                                <td><strong>Title: </strong>{{template.title | limitTo: 20 }}{{template.title.length > 20 ? '...' : ''}}</td>
-                                <td><strong>Open Rate: </strong><span class="text-large text-bold">{{template.openRate || '--'}}</span><span ng-if="template.openRate" class="text-small muted"> ({{template.sent}})</span></td>
-                                <td><strong>Click Rate: </strong><span class="text-large text-bold">{{template.clickRate || '--'}}</span><span ng-if="template.clickRate" class="text-small muted"> ({{template.clicks}})</span></td>
-                                <td class="hidden-xs" ng-class="{'center': tableView != 'grid'}"><strong>Created: </strong> {{template.created.date | date:'MMM d yy'}}</td>
-                                <td class="hidden-xs" ng-class="{'center': tableView != 'grid'}"><strong>Modified: </strong>{{template.modified.date | date:'MMM d yy'}}</td>
+                                <td><strong>Title: </strong>{{campaign.title | limitTo: 20 }}{{campaign.title.length > 20 ? '...' : ''}}</td>
+                                <td><strong>Type: </strong>{{campaign.type | titleCase}}</td>
+                                <td><strong>Open Rate: </strong><span class="text-large text-bold">{{campaign.openRate || '--'}}</span><span ng-if="campaign.openRate" class="text-small muted"> ({{campaign.sent}})</span></td>
+                                <td><strong>Click Rate: </strong><span class="text-large text-bold">{{campaign.clickRate || '--'}}</span><span ng-if="campaign.clickRate" class="text-small muted"> ({{campaign.clicks}})</span></td>
+                                <td class="hidden-xs" ng-class="{'center': tableView != 'grid'}"><strong>Created: </strong> {{campaign.created.date | date:'MMM d yy'}}</td>
                             </tr>
                         </tbody>
                     </table>
