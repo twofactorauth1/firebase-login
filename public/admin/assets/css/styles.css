@@ -394,6 +394,12 @@ h5.over-title {
     padding-right: 15px;
   }
 }
+.unstyled-list li {
+  list-style-type: none;
+}
+.inline-list li {
+  display: inline-block;
+}
 /* ---------------------------------------------------------------------- */
 /*  Top Navbar
 /* ---------------------------------------------------------------------- */
@@ -13967,6 +13973,10 @@ tags-input.ti-input-sm .tags .input,
   position: absolute;
   top: 10px;
 }
+.create-campaign .avatars li img {
+  margin-right: 3px;
+  margin-bottom: 3px;
+}
 .create-campaign .campaign-step {
   min-height: 350px;
 }
@@ -13985,14 +13995,14 @@ tags-input.ti-input-sm .tags .input,
   animation: fadeOutLeft 1.5s;
 }
 .create-campaign .campaign-step-wrap .campaign-step.prev.ng-hide-remove {
-  position: absolute;
-  top: 0;
   -webkit-animation: fadeOutRight 1.5s;
   -moz-animation: fadeOutRight 1.5s;
   -ms-animation: fadeOutRight 1.5s;
   animation: fadeOutRight 1.5s;
 }
 .create-campaign .campaign-step-wrap .campaign-step.prev.ng-hide-add {
+  position: absolute;
+  top: 0;
   -webkit-animation: fadeInLeft 1.5s;
   -moz-animation: fadeInLeft 1.5s;
   -ms-animation: fadeInLeft 1.5s;

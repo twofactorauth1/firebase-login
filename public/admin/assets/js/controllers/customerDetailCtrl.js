@@ -75,12 +75,8 @@
       $scope.matchUsers($scope.customer);
 
       $scope.newNote.text = '';
-       var tempTags = [];
-      $scope.customer_data = angular.copy($scope.customer);
-      _.each($scope.customer_data.tags, function (tag) {
-        tempTags.push(tag.data);
-      });
-      $scope.customer_data.tags = tempTags;
+
+      $scope.customer_data.tags = $scope.unsetTags();
 
       CustomerService.saveCustomer($scope.customer_data, function (customer) {
         $scope.customer = customer;
@@ -139,6 +135,7 @@
      */
 
     $scope.getCustomer = function () {
+      console.log('getCustomer >>>');
       CustomerService.getCustomer($stateParams.contactId, function (customer) {
         customer.notes = $scope.matchUsers(customer);
         $scope.customer = customer;
@@ -384,12 +381,7 @@
 
       if ($scope.checkContactValidity()) {
 
-        var tempTags = [];
-        $scope.customer_data = angular.copy($scope.customer);
-        _.each($scope.customer_data.tags, function (tag) {
-          tempTags.push(tag.data);
-        });
-        $scope.customer_data.tags = tempTags;
+        $scope.unsetTags();
 
         // if ($scope.customer_data.details[0].addresses.length > -1) {
         //   _.each($scope.customer_data.details[0].addresses, function(_address) {
@@ -864,6 +856,7 @@
      */
 
     $scope.setTags = function () {
+      console.log('setTags >>>');
       var tempTags = [];
       var cutomerTags = [];
       _.each($scope.customer.tags, function (tag , index) {
@@ -878,6 +871,18 @@
       });
       $scope.myCustomerTags = cutomerTags.join(",");
       $scope.customer.tags = tempTags;
+      console.log('$scope.customer.tags >>>', $scope.customer.tags);
+    };
+
+    $scope.unsetTags = function() {
+      var tempTags = [];
+        $scope.customer_data = angular.copy($scope.customer);
+        _.each($scope.customer_data.tags, function (tag) {
+          tempTags.push(tag.data);
+        });
+        if (tempTags) {
+          $scope.customer_data.tags = tempTags;
+        }
     };
 
     /*
