@@ -2815,6 +2815,9 @@ div[data-type="feature-block"] .component-inner {
 .products-v1 .btnLaunchCart:focus {
   outline: none;
 }
+.products-v1 .line-wrap-text {
+  word-wrap: break-word;
+}
 .shopping-cart {
   color: #444!important;
   margin-left: -10px;
