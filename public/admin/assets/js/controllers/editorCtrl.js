@@ -385,6 +385,7 @@
       $scope.newPost = {};
       $scope.handle = _handle;
       $scope.post_statuses = postConstant.post_status.dp;
+
       WebsiteService.getSinglePage('single-post', function (data) {
         $scope.page = data;
         WebsiteService.getSinglePost($scope.handle, function (data) {
@@ -397,6 +398,30 @@
         });
 
       });
+    };
+
+     /*
+     * @statusUpdated
+     * the order status has been updated
+     */
+
+    $scope.statusUpdated = function (newStatus) {     
+      if ($scope.blog.post.post_status == newStatus)
+        return;
+      var toasterMsg = 'Status has been updated to ';
+      if (newStatus === postConstant.post_status.PUBLISHED) {
+        WebsiteService.publishPost($scope.page._id, $scope.blog.post._id, function (data) {
+          toaster.pop('success', "Status updated successfully");
+          $scope.blog.post.post_status = newStatus;
+        });
+      }
+      else
+      {
+        toaster.pop('success', "Status updated successfully");
+        $scope.blog.post.post_status = newStatus;
+      }
+      
+      
     };
 
     /*

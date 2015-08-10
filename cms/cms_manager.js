@@ -786,6 +786,40 @@ module.exports = {
         blogPostDao.saveOrUpdate(blogPost, fn);
     },
 
+    publishPost: function(accountId, postId, pageId, userId, fn) {
+        log.debug('>> publishPost ');
+        log.debug('>> PostId ', postId);
+        var query = {
+            _id: postId,         
+            accountId: accountId
+        };
+        blogPostDao.findOne(query, $$.m.BlogPost, function(err, post){
+            log.debug('retrieved post >>> ', post);
+            if(err) {
+                log.error('Error getting post: ' + err);
+                return fn(err, null);
+            }
+            
+            post.set('post_status', $$.m.BlogPost.status.PUBLISHED);
+            post.set('pageId', pageId);
+            var modified = {
+                date: new Date(),
+                by: userId
+            };
+            post.set('modified', modified);
+            blogPostDao.saveOrUpdate(post, function(err, updatedPost){
+                if(err) {
+                    log.error('Error updating post: ' + err);
+                    return fn(err, null);
+                }
+                log.debug('<< publishPost');
+                return fn(null, updatedPost);
+            });
+
+        });
+
+    },
+
     deleteBlogPost: function(accountId, pageId, postId, fn) {
         var self = this;
         self.log = log;

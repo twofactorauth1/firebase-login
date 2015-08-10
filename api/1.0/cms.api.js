@@ -123,6 +123,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('page/:id/blog/tag/:tag'), this.setup.bind(this), this.getPostsByTag.bind(this));
         app.post(this.url('page/:id/blog/posts/reorder'), this.isAuthAndSubscribedApi.bind(this), this.reorderPosts.bind(this));
         app.post(this.url('page/:id/blog/:postId/reorder/:newOrder'), this.isAuthAndSubscribedApi.bind(this), this.reorderBlogPost.bind(this));
+        app.put(this.url('page/:id/blog/status/:postId'), this.isAuthAndSubscribedApi.bind(this), this.publishPost.bind(this));
 
         //authors, tags, categories, titles
         app.get(this.url('blog/authors'), this.setup.bind(this), this.getBlogAuthors.bind(this));
@@ -1455,6 +1456,27 @@ _.extend(api.prototype, baseApi.prototype, {
             }
         });
 
+    },
+
+    publishPost: function(req, res) {
+        var self = this;
+        self.log.debug('>> publishPost');
+        var accountId = parseInt(self.accountId(req));
+        var postId = req.params.postId;
+        var pageId = req.params.id;
+        var userId = self.userId(req);
+
+        self.checkPermission(req, self.sc.privs.MODIFY_WEBSITE, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+               cmsManager.publishPost(accountId, postId, pageId, userId, function (err, value) {
+                    self.log.debug('<< publishPost');
+                    self.sendResultOrError(res, err, value, "Error updating Blog Post Status");
+                    self.createUserActivity(req, $$.m.BlogPost.status.PUBLISHED, null, {id: value.id()}, function(){});
+                });
+            }
+        });
     },
 
     deleteBlogPost: function(req, res) {
