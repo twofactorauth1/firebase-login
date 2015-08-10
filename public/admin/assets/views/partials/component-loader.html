@@ -1,6 +1,7 @@
 <div id="componentloader">
     <ul class="component-sortable">
-        <li ng-repeat="value in components" class="fragment show-settings">
+        <li ng-repeat="value in components" class="fragment show-settings" style="position:relative;">
+            <circular passed-options="circleOptions" passed-index="{{$index}}" passed-component="value" style="z-index:999999" class="circular"> </circular>
             <div class="componentActions" ng-class="{'masthead-actions':value.type == 'masthead'}">
                 <div class="col-xs-4">
                     <!-- <span class="reorder fa fa-arrows" ng-if="!isSinglePost && value.type != 'email' " ng-mouseenter="preDrag('enter')" ng-mouseleave="preDrag('leave')"><p>Reorder</p></span> -->

@@ -44,6 +44,14 @@
                             <div class="stepNumber">
                                 4
                             </div>
+                            <span class="stepDesc text-small"> Summary </span>
+                        </a>
+                    </li>
+                    <li ng-click="form.goTo(5)">
+                        <a href ng-class="{'selected' : currentStep >= 5, 'done' : currentStep > 5}">
+                            <div class="stepNumber">
+                                5
+                            </div>
                             <span class="stepDesc text-small"> Confirm </span>
                         </a>
                     </li>
@@ -208,7 +216,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="margin-bottom-30" style="transform: translate3d(0,0,0);" ng-controller="EditorCtrl" ng-init="retrieveEmail('823cfd0e-24d9-47f0-ac65-af9703cbd1b6')">
+                                    <div class="margin-bottom-30" style="transform: translate3d(0,0,0);" ng-controller="EditorCtrl" ng-init="retrieveEmail('823cfd0e-24d9-47f0-ac65-af9703cbd1b6'); activateCKeditor();">
                                         <div sticky offset="0" sticky-class="editor-toolbar-wrap">
                                             <div id="editor-toolbar"></div>
                                         </div>
