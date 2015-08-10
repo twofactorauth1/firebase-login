@@ -540,7 +540,7 @@ app.directive('productsComponent', ['paymentService', 'productService', 'account
           return;
         }
         var contact = scope.newContact;
-        if (isEmpty(contact.first) || isEmpty(contact.last) || isEmpty(contact.first) || isEmpty(contact.details[0].emails[0].email) || isEmpty(contact.details[0].phones[0].number)) {
+        if (isEmpty(contact.first) || isEmpty(contact.last) || isEmpty(contact.first) || isEmpty(contact.details[0].emails[0].email)) {
           scope.checkoutModalState = 2;
           return;
         }

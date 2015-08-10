@@ -1147,8 +1147,9 @@
      */
 
     $scope.deleteComponent = function (index) {
+      var _type =  $scope.components[index].type ;
       $scope.components.splice(index, 1);
-      toaster.pop('success', "Component Deleted", "The " + $scope.components[index].type + " component was deleted successfully.");
+      toaster.pop('success', "Component Deleted", "The " + _type + " component was deleted successfully.");
       $timeout(function () {
         $scope.scrollToComponent(index)
       }, 1000)
