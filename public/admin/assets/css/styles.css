@@ -12432,6 +12432,9 @@ table.grid tbody td strong {
   height: 100%;
   overflow: auto;
 }
+.ng-aside .modal-content {
+  max-width: 320px;
+}
 .btn-comment-o {
   color: #fff;
   background-color: #F0E301;
@@ -12816,11 +12819,24 @@ fieldset[disabled] .btn-vimeo-square.active {
 #componentloader .fragment {
   border: none;
   display: block;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
 }
 #componentloader .fragment .component-inner {
   clear: both;
 }
-#componentloader .fragment:hover .add-component {
+#componentloader .fragment .circular {
+  display: none;
+  visibility: none;
+}
+#componentloader .fragment:hover .component-inner,
+#componentloader .fragment:hover .bg.cover {
+  -webkit-box-shadow: inset 0px 0px 0px 2px #ffa500;
+  -moz-box-shadow: inset 0px 0px 0px 2px #ffa500;
+  box-shadow: inset 0px 0px 0px 2px #ffa500;
+}
+#componentloader .fragment:hover .circular {
   display: block;
   visibility: visible;
 }
