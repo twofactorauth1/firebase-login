@@ -898,6 +898,20 @@
       });
     };
 
+
+    $scope.updateEmailSettings = function () {
+      WebsiteService.updateEmail($scope.page, function (data, error) {
+        if(data && !error)
+        {
+          toaster.pop('success', "Settings saved successfully");
+        }
+        else if(!data && error && error.message)
+        {
+          toaster.pop('error', error.message);
+        }        
+      });
+    };
+
     /*
      * @validateNewPage
      * -

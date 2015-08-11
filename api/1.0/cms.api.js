@@ -76,6 +76,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('website/:websiteId/emails'), this.setup.bind(this), this.getAllEmails.bind(this));
         app.get(this.url('email/:id'), this.setup.bind(this), this.getEmailById.bind(this));
         app.post(this.url('email'), this.isAuthAndSubscribedApi.bind(this), this.createEmail.bind(this));
+        app.put(this.url('email/:id'), this.isAuthAndSubscribedApi.bind(this), this.updateEmail.bind(this));
         app.delete(this.url('email/:id'), this.isAuthAndSubscribedApi.bind(this), this.deleteEmail.bind(this));
 
         // TEMPLATES
@@ -761,9 +762,9 @@ _.extend(api.prototype, baseApi.prototype, {
                 var temp = $$.u.idutils.generateUUID();
                 if (email != null) {
                     self.log.debug('>> email not null');
-                    var templateObj = new $$.m.cms.Template(req.body);
+                   
                     email = new $$.m.cms.Email(emailObj);
-                    templateObj.set('_id', temp);
+                    email.set('_id', temp);
                     email.attributes.modified.date = new Date();
                     email.attributes.created.date = new Date();
                     email.set('accountId', accountId);
@@ -782,6 +783,44 @@ _.extend(api.prototype, baseApi.prototype, {
                 } else {
                     self.log.error('Cannot create null email.');
                     self.wrapError(res, 400, 'Bad Parameter', 'Cannot create a null email.');
+                    self = null;
+                }
+            }
+        });
+
+    },
+
+    updateEmail: function (req, res) {
+        var self = this;
+        self.log.debug('>> updateEmail');
+
+        var accountId = parseInt(self.accountId(req));
+
+        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                var emailObj = req.body;
+                self.log.debug('>> email body');
+                var email = require('../../cms/model/email');
+               
+                if (email != null) {
+                    self.log.debug('>> email not null');                   
+                    email = new $$.m.cms.Email(emailObj);
+                    var emailId = req.params.id;                
+                    var accountId = parseInt(self.accountId(req));
+                    email.set('accountId', accountId);
+                    email.attributes.modified.date = new Date();
+                    self.log.debug('>> email updated');
+                    cmsManager.updateEmail(email, emailId, function (err, value) {
+                        self.log.debug('<< updateEmail');
+                        self.sendResultOrError(res, err, value, "Error updating Email");
+                       
+                        self.createUserActivity(req, 'UPDATE_EMAIL', null, null, function(){});
+                    });
+                } else {
+                    self.log.error('Cannot update null email.');
+                    self.wrapError(res, 400, 'Bad Parameter', 'Cannot update a null email.');
                     self = null;
                 }
             }

@@ -387,7 +387,23 @@
       });
     };
 
-    //website/:websiteId/page/:id/:label
+    this.updateEmail = function (emaildata, fn) {
+      var apiUrl = baseUrl + ['cms', 'email', emaildata._id].join('/');
+      $http({
+        url: apiUrl,
+        method: "PUT",
+        data: angular.toJson(emaildata)
+      }).success(function (data, status, headers, config) {
+        var _emails = emailcache.get('emails');
+        emailcache.put('emails', _emails);
+        fn(data, null);
+      }).error(function (err) {
+        console.warn('END:Create Email with ERROR');
+        fn(null, err);
+      });
+    };
+
+    //email/:id/
     this.deleteEmail = function (email, fn) {
       var apiUrl = baseUrl + ['cms', 'email', email._id].join('/');
       $http.delete(apiUrl).success(function (data, status, headers, config) {

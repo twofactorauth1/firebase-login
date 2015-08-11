@@ -1728,11 +1728,33 @@ module.exports = {
                 log.error('Exception thrown checking for uniqueness: ' + err);
                 fn(err, null);
             } else if(value === true) {
-                log.warn('Attempted to create a email with a title that already exists.');
+                log.warn('Attempted to create an email with a title that already exists.');
                 fn('Title already exists', null);
             } else {
                 emailDao.saveOrUpdate(email, function(err, savedEmail){
                     log.debug('<< createEmail');
+                    fn(null, savedEmail);
+                });
+            }
+        });
+    },
+
+    updateEmail: function(email, emailId, fn) {
+        log.debug('>> updateEmail');
+        log.debug('>> EmailId', emailId);
+        log.debug('>> Title', email.get('title'));
+        //validate
+        var nameCheckQuery = {'title': email.get('title'), _id : { $ne: emailId }};
+        emailDao.exists(nameCheckQuery, $$.m.cms.Email, function(err, value){
+            if(err) {
+                log.error('Exception thrown checking for uniqueness: ' + err);
+                fn(err, null);
+            } else if(value === true) {
+                log.warn('Attempted to update an email with a title that already exists.');
+                fn('Title already exists', null);
+            } else {
+                emailDao.saveOrUpdate(email, function(err, savedEmail){
+                    log.debug('<< updateEmail');
                     fn(null, savedEmail);
                 });
             }

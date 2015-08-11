@@ -8,28 +8,28 @@
             <span class="help-block">Modify the settings of the email.</span>
             <div class="form-group" ng-class="{ 'has-error' : emailSettingForm.title.$invalid && !emailSettingForm.title.$pristine }">
                 <label>Title* </label>
-                <input name="title" class="form-control" type="text" ng-model="newEmail.title" required>
+                <input name="title" class="form-control" type="text" ng-model="page.title" required>
             </div>
             <div class="form-group" ng-class="{ 'has-error' : emailSettingForm.subject.$invalid && !emailSettingForm.subject.$pristine }">
                 <label>Subject*</label>
-                <input name="subject" class="form-control" type="text" ng-model="newEmail.subject" required>
+                <input name="subject" class="form-control" type="text" ng-model="page.subject" required>
             </div>
             <div class="form-group" ng-class="{ 'has-error' : emailSettingForm.fromName.$invalid && !emailSettingForm.fromName.$pristine }">
                 <label>From Name*</label>
-                <input name="fromName" class="form-control" type="text" ng-model="newEmail.fromName" required>
+                <input name="fromName" class="form-control" type="text" ng-model="page.fromName" required>
             </div>
             <div class="form-group" ng-class="{ 'has-error' : emailSettingForm.fromEmail.$invalid && !emailSettingForm.fromEmail.$pristine }">
                 <label>From Email*</label>
-                <input name="fromEmail" class="form-control" type="email" ng-model="newEmail.fromEmail" required>
+                <input name="fromEmail" class="form-control" type="email" ng-model="page.fromEmail" required>
             </div>
             <div class="form-group margin-bottom-0" ng-class="{ 'has-error' : emailSettingForm.replyTo.$invalid && !emailSettingForm.replyTo.$pristine }">
                 <label>Reply To:</label>
-                <input name="replyTo" class="form-control" type="email" ng-model="newEmail.replyTo">
+                <input name="replyTo" class="form-control" type="email" ng-model="page.replyTo">
             </div>
         </div>
         <div class="modal-footer">
             <button class="btn btn-danger pull-left" ng-click="deleteEmail()"><i class="fa fa-trash"></i> Delete Email</button>
-            <button class="btn btn-info" ng-disabled="emailSettingForm.$invalid" type="submit"><i class="fa fa-save"></i> Save Email Settings</button>
+            <button class="btn btn-info" ng-disabled="emailSettingForm.$invalid"  ng-click="updateEmailSettings()"><i class="fa fa-save"></i> Save Email Settings</button>
         </div>
     </form>
 </script>
