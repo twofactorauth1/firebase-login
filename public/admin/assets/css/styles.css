@@ -12209,6 +12209,9 @@ table.grid thead tr {
   margin: 20px 0;
   padding-bottom: 20px;
 }
+.pages-modal.no-padding.pages-padding-top {
+  padding-top: 1px !important;
+}
 /* ---------------------------------------------------------------------- */
 /*  Page Detail
 /* ---------------------------------------------------------------------- */

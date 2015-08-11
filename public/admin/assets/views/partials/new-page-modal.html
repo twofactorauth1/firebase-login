@@ -6,7 +6,7 @@
         </button>
         <h3 class="modal-title"><span ng-if="!templateDetails">Select Template</span><span ng-if="templateDetails">Template Details</span></h3>
     </div>
-    <div class="modal-body pages-modal bg-white" ng-class="{'no-padding': !templateDetails}">
+    <div class="modal-body pages-modal bg-white" ng-class="{'no-padding pages-padding-top': !templateDetails }">
         <div ng-hide="templateDetails">
             <div ng-repeat="template in templates | orderBy:'title'">
                 <div class="single-type margin-bottom-15" ng-click="setTemplateDetails(template)">
