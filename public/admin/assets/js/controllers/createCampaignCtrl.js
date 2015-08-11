@@ -5,6 +5,9 @@
 
     editableOptions.theme = 'bs3';
 
+    $scope.today = moment().format("dddd, MMMM Do YYYY, h:mm:ss a");
+    $scope.whenToSend = 'now';
+
     /*
      * @defaultNewEmail
      * - default new email to show for initial design unless user selects template

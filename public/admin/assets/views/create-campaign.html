@@ -36,7 +36,7 @@
                             <div class="stepNumber">
                                 3
                             </div>
-                            <span class="stepDesc text-small"> Email Design </span>
+                            <span class="stepDesc text-small"> Design </span>
                         </a>
                     </li>
                     <li ng-click="form.goTo(4)">
@@ -44,15 +44,7 @@
                             <div class="stepNumber">
                                 4
                             </div>
-                            <span class="stepDesc text-small"> Time & Summary </span>
-                        </a>
-                    </li>
-                    <li ng-click="form.goTo(5)">
-                        <a href ng-class="{'selected' : currentStep >= 5, 'done' : currentStep > 5}" tooltip-placement="bottom" tooltip-html-unsafe="New campaign successfully added">
-                            <div class="stepNumber">
-                                5
-                            </div>
-                            <span class="stepDesc text-small"> Complete </span>
+                            <span class="stepDesc text-small"> Delivery </span>
                         </a>
                     </li>
                 </ul>
@@ -236,20 +228,100 @@
                         <!-- end: WIZARD STEP 3 -->
                         <!-- start: WIZARD STEP 4 -->
                         <div id="step-4" ng-show="currentStep == 4" class="campaign-step" ng-class="{'next': goingTo == 'next', 'prev': goingTo == 'prev'}">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="text-center">
-                                        <h1 class=" ti-check block text-primary"></h1>
-                                        <h2 class="StepTitle">Congratulations!</h2>
-                                        <p class="text-large">
-                                            Your tutorial is complete.
+                            <div class="row margin-top-30">
+                                <div class="col-md-5">
+                                    <div class="padding-30 center">
+                                        <h2 class="StepTitle"><i class="fa fa-paper-plane fa-2x text-primary block margin-bottom-10"></i> Delivery</h2>
+                                        <p>
+                                            Review the campaign details, select a time to start the campaign and launch.
                                         </p>
-                                        <p class="text-small">
-                                            Thank you for your registration. Your transaction has been completed, and a receipt for your purchase has been emailed to you. You may log into your account to view details of this transaction.
-                                        </p>
-                                        <a class="btn btn-primary btn-o" href ng-click="form.goTo(1)">
-                                                                        Back to first step
-                                                                    </a>
+                                    </div>
+                                    <div class="list-group">
+                                        <a class="list-group-item" href="#">
+                                            <h5 class="list-group-item-heading">Details</h5>
+                                            <p class="list-group-item-text">
+                                                Adding a new <span class="text-bold">{{newCampaignObj.type}}</span> campaign titled <span class="text-bold">{{newCampaignObj.name}}</span>.
+                                            </p>
+                                        </a>
+                                        <a class="list-group-item" href="#">
+                                            <h5 class="list-group-item-heading">Recipients</h5>
+                                            <p class="list-group-item-text">
+                                                Sending to <span class="text-bold">{{recipients.length}}</span> contacts.
+                                            </p>
+                                        </a>
+                                        <a class="list-group-item" href="#">
+                                            <h5 class="list-group-item-heading">Design</h5>
+                                            <p class="list-group-item-text">
+                                                Using a new email template.
+                                            </p>
+                                        </a>
+                                    </div>
+                                    <div class="panel panel-white">
+                                        <div class="panel-heading border-light">
+                                            <h5 class="panel-title">When to Send?</h5>
+                                        </div>
+                                        <div class="panel-body">
+                                            <div class="radio clip-radio radio-primary">
+                                                <input type="radio" id="radio3" name="vertical" value="now" ng-model="whenToSend">
+                                                <label for="radio3">
+                                                    Send Now
+                                                </label>
+                                                <p class="text-muted margin-15" ng-if="whenToSend === 'now'">{{today }}</p>
+                                            </div>
+                                            <div class="radio clip-radio radio-primary">
+                                                <input type="radio" id="radio4" name="vertical" value="later" ng-model="whenToSend">
+                                                <label for="radio4">
+                                                    Send Later
+                                                </label>
+                                                <p class="input-group pull-left" ng-if="whenToSend === 'later'">
+                                                    <input type="text" class="form-control" datepicker-popup="dd-MMMM-yyyy" ng-model="order.created.date" is-open="opened" min-date="minDate" max-date="'2015-06-22'" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
+                                                    <span class="input-group-btn">
+                                                    <button type="button" class="btn btn-default" ng-click="open($event)">
+                                                        <i class="glyphicon glyphicon-calendar"></i>
+                                                    </button> </span>
+                                                </p>
+                                            </div>
+                                            <div class="radio clip-radio radio-primary" ng-model="whenToSend">
+                                                <input type="radio" id="radio5" name="vertical" value="best">
+                                                <label for="radio5">
+                                                    Send Best Time
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-7">
+                                    <div class="panel panel-white">
+                                        <div class="panel-body">
+                                            <div style="max-height:300px;overflow:hidden" class="border-around border-light">
+                                                <img src="http://indigenous-screenshots.s3.amazonaws.com/account_536/1432017910483.png" class="img-responsive" />
+                                            </div>
+                                            <div class="clearfix"></div>
+                                            <div class="form-group margin-bottom-0 margin-top-30">
+                                                <label class="control-label text-bold">
+                                                    From Name
+                                                </label>
+                                                <span>{{emailToSend.fromName}}</span>
+                                            </div>
+                                            <div class="form-group margin-bottom-0">
+                                                <label class="control-label text-bold">
+                                                    From Email
+                                                </label>
+                                                <span>{{emailToSend.fromEmail}}</span>
+                                            </div>
+                                            <div class="form-group margin-bottom-0">
+                                                <label class="control-label text-bold">
+                                                    Reply To
+                                                </label>
+                                                <span>{{emailToSend.replyTo}}</span>
+                                            </div>
+                                            <div class="form-group margin-bottom-0">
+                                                <label class="control-label text-bold">
+                                                    Subject
+                                                </label>
+                                                <span>{{emailToSend.subject}}</span>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -257,16 +329,26 @@
                         <!-- end: WIZARD STEP 4 -->
                     </div>
                 </div>
-                <div class="col-md-12 bg-light-grey padding-top-30 padding-bottom-30">
+                <div class="col-md-12 bg-light-grey padding-30">
                     <div class="form-group">
                         <div ng-if="currentStep > 1">
                             <button class="btn btn-primary btn-o back-step btn-wide pull-left" ng-click="form.prev(Form)">
                                 <i class="fa fa-chevron-left"></i> Back
                             </button>
                         </div>
-                        <button class="btn btn-primary btn-o next-step btn-wide pull-right" ng-click="form.next(Form)">
-                            Next <i class="fa fa-chevron-right"></i>
-                        </button>
+                        <div ng-if="currentStep < 4">
+                            <button class="btn btn-primary btn-o next-step btn-wide pull-right" ng-click="form.next(Form)">
+                                <span> Next </span> <i class="fa fa-chevron-right"></i>
+                            </button>
+                        </div>
+                        <div ng-if="currentStep == 4">
+                            <button class="btn btn-success btn-wide pull-right" ng-click="completeNewCampaign()">
+                                <span> Activate Campaign </span> <i class="fa fa-clock-o"></i>
+                            </button>
+                            <button class="btn btn-info btn-wide pull-right margin-right-5" ng-click="sendTestCampaign()">
+                                <span> Send Test </span> <i class="fa fa-paper-plane"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
