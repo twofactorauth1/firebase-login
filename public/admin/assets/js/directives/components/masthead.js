@@ -37,9 +37,11 @@ app.directive('mastheadComponent',["$window", function ($window) {
             var impmargin = "margin-top: -"+ margin + 'px !important'; 
             if (angular.element(".undernav200")) {
               angular.element(".undernav200").attr('style',impmargin);
+              angular.element(".undernav200").addClass("masthead-undernav");
             }
             
             angular.element(".undernav").addClass("nav-undernav");
+            angular.element(".undernav").closest('li.fragment').addClass("li-nav-undernav");
 
             if (angular.element(".mastHeadUndernav"))
               angular.element(".mastHeadUndernav").css("height", margin);
@@ -55,6 +57,8 @@ app.directive('mastheadComponent',["$window", function ($window) {
             if (angular.element(".masthead-actions"))
               angular.element(".masthead-actions").removeClass("hover-action");
             angular.element(".undernav").removeClass("nav-undernav");
+            angular.element(".undernav200").removeClass("masthead-undernav");
+            angular.element(".undernav").closest('li.fragment').removeClass("li-nav-undernav");
           }
 
         }, 300);
