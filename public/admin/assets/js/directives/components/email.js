@@ -9,6 +9,7 @@ app.directive('emailComponent', function () {
     templateUrl: '/components/component-wrap.html',
     link: function (scope, element, attrs) {
       console.log('email');
+      scope.isEditing = true;
     }
   };
 });
