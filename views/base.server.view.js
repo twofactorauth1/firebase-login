@@ -129,6 +129,10 @@ _.extend(baseView.prototype, {
         fn();
     },
 
+    getAccountByHost: function(req, fn) {
+        accountDao.getAccountByHost(req.get("host"), fn);
+    },
+
     ip: function(req) {
         try {
             var ip = req.headers['x-forwarded-for'] ||

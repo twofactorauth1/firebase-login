@@ -7,10 +7,12 @@
 
 var BaseView = require('./base.server.view');
 var logger = $$.g.getLogger('angular.admin.server.veiw');
-var segmentioConfig = require('../configs/segmentio.config.js')
+var segmentioConfig = require('../configs/segmentio.config.js');
+var _req = null;
 
 var view = function(req,resp,options) {
     this.init.apply(this, arguments);
+    _req = req;
 };
 
 _.extend(view.prototype, BaseView.prototype, {
@@ -26,9 +28,10 @@ _.extend(view.prototype, BaseView.prototype, {
         };
 
         var self = this;
-        this.getAccount(function(err, value) {
+        this.getAccountByHost(_req, function(err, value) {
             if (!err && value != null) {
                 data.account = value.toJSON();
+                //logger.debug('getAccountByHost', data.account);
             } else {
                 logger.warn('Error or null in getAccount');
                 logger.error('Error: ' + err);
