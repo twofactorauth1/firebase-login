@@ -198,7 +198,7 @@
      * -
      */
 
-    $scope.cancelPage = function () {
+    $scope.cancelPage = function () {      
       $scope.checkForSaveBeforeLeave();
     };
 
@@ -1027,6 +1027,10 @@
       var redirectUrl = url;
       if (!redirectUrl) {
         redirectUrl = $location.search().posthandle ? "/admin/#/website/posts" : "/admin/#/website/pages";
+      }
+      if($scope.isEmail)
+      {
+        redirectUrl = "/admin/#/website/emails"; 
       }
       if ($scope.isDirty.dirty) {
         SweetAlert.swal({
