@@ -761,10 +761,9 @@ _.extend(api.prototype, baseApi.prototype, {
                 var temp = $$.u.idutils.generateUUID();
                 if (email != null) {
                     self.log.debug('>> email not null');
-                    email = new Email({
-                        _id: temp,
-                        title: emailObj.title
-                    });
+                    var templateObj = new $$.m.cms.Template(req.body);
+                    email = new $$.m.cms.Email(emailObj);
+                    templateObj.set('_id', temp);
                     email.attributes.modified.date = new Date();
                     email.attributes.created.date = new Date();
                     email.set('accountId', accountId);

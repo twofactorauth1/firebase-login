@@ -885,9 +885,16 @@
       //   return false;
       // }
       $scope.newEmail.components = $scope.page.components;
-      WebsiteService.createEmail($scope.newEmail, function (data) {
-        $scope.duplicate = true;
-        $scope.checkForSaveBeforeLeave('/admin/#/editor?email=' + $scope.newEmail._id, true);
+      WebsiteService.createEmail($scope.newEmail, function (data, error) {
+        if(data && !error)
+        {
+          $scope.duplicate = true;
+          $scope.checkForSaveBeforeLeave('/admin/#/editor?email=' + data._id, true);
+        }
+        else if(!data && error && error.message)
+        {
+          toaster.pop('error', error.message);
+        }        
       });
     };
 

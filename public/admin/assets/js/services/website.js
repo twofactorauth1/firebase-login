@@ -379,11 +379,11 @@
         data: angular.toJson(emaildata)
       }).success(function (data, status, headers, config) {
         var _emails = emailcache.get('emails');
-        _pages[data.handle] = data;
-        pagecache.put('emails', _emails);
-        fn(data);
+        emailcache.put('emails', _emails);
+        fn(data, null);
       }).error(function (err) {
         console.warn('END:Create Email with ERROR');
+        fn(null, err);
       });
     };
 
