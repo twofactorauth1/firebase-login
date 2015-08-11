@@ -57,15 +57,16 @@
         <div class="container-fluid container-fullw padding-top-0 padding-bottom-0">
             <div class="panel panel-transparent row margin-bottom-0">
                 <div class="panel-body">
-                    <table class="table table-hover margin-bottom-0" ng-class="{'grid': tableView == 'grid', 'bg-white': tableView != 'grid'}" ng-show="displayedCampaigns">
+                    <table class="table table-hover table-striped margin-bottom-0" ng-class="{'grid': tableView == 'grid', 'bg-white': tableView != 'grid'}" ng-show="displayedCampaigns">
                         <thead>
                             <tr>
-                                <th class="center" translate="tableFields.STATUS">Status</th>
+                                <th st-sort="status" class="center" translate="tableFields.STATUS">Status</th>
                                 <th st-sort="title" translate="tableFields.NAME">Name</th>
                                 <th st-sort="title" translate="tableFields.TYPE">Type</th>
-                                <th st-sort="open" translate="createcampaign.OPENRATE">Open Rate</th>
-                                <th st-sort="open" translate="createcampaign.CLICKRATE">Click Rate</th>
+                                <th st-sort="open" translate="campaign.OPENRATE">Open Rate</th>
+                                <th st-sort="open" translate="campaign.CLICKRATE">Click Rate</th>
                                 <th class="hidden-xs" st-sort="getters.created" ng-class="{'center': tableView != 'grid'}" translate="tableFields.CREATED">Created</th>
+                                <th class="center"></th>
                             </tr>
                             <tr ng-if="showFilter">
                                 <th>
@@ -85,32 +86,47 @@
                                 <th>
                                     <!-- <input st-search="modified" placeholder="Modified" class="form-control" type="search" /> -->
                                 </th>
+                                <th>
+                                    <!-- <input st-search="modified" placeholder="Modified" class="form-control" type="search" /> -->
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr ng-repeat="campaign in displayedCampaigns" ng-click="viewSingle(campaign)">
                                 <td class="center"><strong>Status: </strong>
-                                    <span class="fa-stack">
+                                    <span class="fa-stack fa-lg">
                                         <span class="fa fa-circle-thin fa-stack-2x"
                                         ng-class="{
                                             'text-muted': campaign.status == 'draft',
-                                            'text-blue': campaign.status == 'running',
+                                            'text-orange': campaign.status == 'running',
                                             'text-green': campaign.status == 'completed'
                                         }">
                                         </span>
                                     <span class="fa fa-stack-1x" tooltip-placement="top" tooltip="{{campaign.status | titleCase}} " ng-class="{
                                           'fa-pencil text-muted': campaign.status == 'draft',
-                                          'fa-clock-o text-blue': campaign.status == 'running',
+                                          'fa-clock-o text-orange': campaign.status == 'running',
                                           'fa-check text-green': campaign.status == 'completed'
                                         }">
                                         </span>
                                     </span>
                                 </td>
                                 <td><strong>Title: </strong>{{campaign.title | limitTo: 20 }}{{campaign.title.length > 20 ? '...' : ''}}</td>
-                                <td><strong>Type: </strong>{{campaign.type | titleCase}}</td>
+                                <td><strong>Type: </strong> <span class="label label-inverse">{{campaign.type | titleCase}}</span></td>
                                 <td><strong>Open Rate: </strong><span class="text-large text-bold">{{campaign.openRate || '--'}}</span><span ng-if="campaign.openRate" class="text-small muted"> ({{campaign.sent}})</span></td>
                                 <td><strong>Click Rate: </strong><span class="text-large text-bold">{{campaign.clickRate || '--'}}</span><span ng-if="campaign.clickRate" class="text-small muted"> ({{campaign.clicks}})</span></td>
                                 <td class="hidden-xs" ng-class="{'center': tableView != 'grid'}"><strong>Created: </strong> {{campaign.created.date | date:'MMM d yy'}}</td>
+                                <td class="center">
+                                    <div class="dropdown">
+                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="fa fa-2x fa-ellipsis-v"></span></a>
+                                        <ul class="dropdown-menu pull-right">
+                                            <li><a href="#"><span class="fa fa-eye"></span> View</a></li>
+                                            <li><a href="#"><span class="fa fa-pencil"></span> Edit</a></li>
+                                            <li><a href="#"><span class="fa fa-clone"></span> Copy</a></li>
+                                            <li class="divider"></li>
+                                            <li><a href="#"><span class="fa fa-trash"></span> Delete</a></li>
+                                        </ul>
+                                    </div>
+                                </td>
                             </tr>
                         </tbody>
                     </table>

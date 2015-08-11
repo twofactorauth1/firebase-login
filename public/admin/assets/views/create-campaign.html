@@ -3,8 +3,8 @@
     <section id="page-title" class="padding-top-15 padding-bottom-15">
         <div class="row">
             <div class="col-sm-8">
-                <h1 class="mainTitle" translate="sidebar.nav.marketing.CREATECAMPAIGN"></h1>
-                <span class="mainDescription">Create a new campaign to reach a group of contacts</span>
+                <h1 class="mainTitle" translate="campaign.NEWCAMPAIGN"></h1>
+                <span class="mainDescription" translate="campaign.DESCRIPTION">Create a new campaign to reach a group of contacts</span>
             </div>
             <div ncy-breadcrumb></div>
         </div>
@@ -216,7 +216,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="margin-bottom-30" style="transform: translate3d(0,0,0);" ng-controller="EditorCtrl" ng-init="retrieveEmail('823cfd0e-24d9-47f0-ac65-af9703cbd1b6'); activateCKeditor();">
+                                    <div class="margin-bottom-30" style="transform: translate3d(0,0,0);" ng-controller="EditorCtrl" ng-init="retrieveEmail(null, emailToSend); activateCKeditor();">
                                         <div sticky offset="0" sticky-class="editor-toolbar-wrap">
                                             <div id="editor-toolbar"></div>
                                         </div>

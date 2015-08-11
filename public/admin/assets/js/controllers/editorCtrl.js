@@ -361,18 +361,30 @@
      * -
      */
 
-    $scope.retrieveEmail = function (_emailId) {
+    $scope.retrieveEmail = function (_emailId, _email) {
       console.log('retrieveEmail ', _emailId);
-      WebsiteService.getSingleEmail(_emailId, function (data) {
-        console.log('data ', data);
-        $scope.page = data;
-        $scope.components = $scope.page.components;
+      if (_emailId) {
+        WebsiteService.getSingleEmail(_emailId, function (data) {
+          console.log('data ', data);
+          $scope.page = data;
+          $scope.components = $scope.page.components;
+          $scope.originalComponents = angular.copy($scope.components);
+          $scope.originalPage = angular.copy(data);
+          $scope.activePage = true;
+          $scope.activateCKeditor();
+          $rootScope.breadcrumbTitle = $scope.page.title;
+        });
+      }
+
+      if (_email) {
+        $scope.page = _email;
+        $scope.components = _email.components;
         $scope.originalComponents = angular.copy($scope.components);
-        $scope.originalPage = angular.copy(data);
+        $scope.originalPage = angular.copy(_email);
         $scope.activePage = true;
         $scope.activateCKeditor();
         $rootScope.breadcrumbTitle = $scope.page.title;
-      });
+      }
     };
 
     /*
@@ -400,12 +412,12 @@
       });
     };
 
-     /*
+    /*
      * @statusUpdated
      * the order status has been updated
      */
 
-    $scope.statusUpdated = function (newStatus) {     
+    $scope.statusUpdated = function (newStatus) {
       if ($scope.blog.post.post_status == newStatus)
         return;
       var toasterMsg = 'Status has been updated to ';
@@ -414,14 +426,12 @@
           toaster.pop('success', "Status updated successfully");
           $scope.blog.post.post_status = newStatus;
         });
-      }
-      else
-      {
+      } else {
         toaster.pop('success', "Status updated successfully");
         $scope.blog.post.post_status = newStatus;
       }
-      
-      
+
+
     };
 
     /*

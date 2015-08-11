@@ -127,11 +127,13 @@
     "MODIFIED": "Modified",
     "NAME": "Name",
     "TYPE": "Type",
-    "STATUS": "Status"
+    "STATUS": "Status",
+    "ACTIONS": "Actions"
   },
-  "createcampaign": {
+  "campaign": {
     "NEWCAMPAIGN": "New Campaign",
     "OPENRATE": "Open Rate",
-    "CLICKRATE": "Click Rate"
+    "CLICKRATE": "Click Rate",
+    "DESCRIPTION": "Create a new campaign to reach a group of contacts"
   }
 }

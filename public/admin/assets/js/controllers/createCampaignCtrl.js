@@ -1,9 +1,10 @@
 'use strict';
 /*global app, angular*/
 (function (angular) {
-  app.controller('CreateCampaignCtrl', ["$scope", "$timeout", "toaster", "CampaignService", "CustomerService", "CommonService", "editableOptions", function ($scope, $timeout, toaster, CampaignService, CustomerService, CommonService, editableOptions) {
+  app.controller('CreateCampaignCtrl', ["$scope", "$timeout", "toaster", "CampaignService", "CustomerService", "CommonService", "editableOptions", "AccountService", function ($scope, $timeout, toaster, CampaignService, CustomerService, CommonService, editableOptions, AccountService) {
 
     editableOptions.theme = 'bs3';
+
     /*
      * @defaultNewEmail
      * - default new email to show for initial design unless user selects template
@@ -37,11 +38,30 @@
       "screenshot": "//indigenous-screenshots.s3.amazonaws.com/account_536/1432017910483.png",
       "version": 0,
       "latest": true,
-      "subject": "NEw Email",
-      "fromName": "ME",
-      "fromEmail": "info@indigenous.io",
-      "replyTo": "info@indigenous.io"
+      "subject": "New Email",
+      "fromName": "",
+      "fromEmail": "",
+      "replyTo": ""
     };
+
+    /*
+     * @getAccount
+     * - get account and autofill new email details
+     */
+
+    AccountService.getAccount(function(_account) {
+      console.log('account >>> ', _account);
+      if (_account.business.logo) {
+        $scope.emailToSend.components[0].logo = '<img src="'+_account.business.logo+'"/>';
+      }
+      if (_account.business.name) {
+        $scope.emailToSend.fromName = _account.business.name;
+      }
+      if (_account.business.emails[0].email) {
+        $scope.emailToSend.fromEmail = _account.business.emails[0].email;
+        $scope.emailToSend.replyTo = _account.business.emails[0].email;
+      }
+    });
 
 
     $scope.selectedCustomers = {
