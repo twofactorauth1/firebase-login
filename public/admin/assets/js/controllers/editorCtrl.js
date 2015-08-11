@@ -1126,8 +1126,8 @@
       }, function (isConfirm) {
         if (isConfirm) {
           SweetAlert.swal("Saved!", "Email is deleted.", "success");
-
-          WebsiteService.deleteEmail($scope.page._id, function (data) {
+          var title = $scope.page.title;
+          WebsiteService.deleteEmail($scope.page, function (data) {
             toaster.pop('success', "Email Deleted", "The " + title + " email was deleted successfully.");
             $scope.closeModal();
             $timeout(function () {

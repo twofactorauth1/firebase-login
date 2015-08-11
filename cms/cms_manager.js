@@ -1739,6 +1739,20 @@ module.exports = {
         });
     },
 
+    deleteEmail: function(emailId, fn) {
+        var self = this;
+        log.debug('>> deleteEmail');
+        emailDao.removeById(emailId, $$.m.cms.Email, function(err, value){
+            if(err) {
+                log.error('Error deleting email: ' + err);
+                fn(err, null);
+            } else {
+                log.debug('<< deleteEmail');
+                fn(null, value);
+            }
+        });
+    },
+
     getPagesByWebsiteIdWithLimit: function(websiteId, accountId, skip, limit, fn) {
         var self = this;
         self.log = log;

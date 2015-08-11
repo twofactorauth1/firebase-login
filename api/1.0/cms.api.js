@@ -76,7 +76,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('website/:websiteId/emails'), this.setup.bind(this), this.getAllEmails.bind(this));
         app.get(this.url('email/:id'), this.setup.bind(this), this.getEmailById.bind(this));
         app.post(this.url('email'), this.isAuthAndSubscribedApi.bind(this), this.createEmail.bind(this));
-
+        app.delete(this.url('email/:id'), this.isAuthAndSubscribedApi.bind(this), this.deleteEmail.bind(this));
 
         // TEMPLATES
         app.get(this.url('template'), this.isAuthApi.bind(this), this.listTemplates.bind(this));
@@ -787,6 +787,34 @@ _.extend(api.prototype, baseApi.prototype, {
             }
         });
 
+    },
+
+     deleteEmail: function(req, res) {
+
+        var self = this;
+        self.log.debug('>> deleteEmail');
+        var accountId = parseInt(self.accountId(req));
+
+        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                var emailId = req.params.id;
+
+                cmsManager.deleteEmail(emailId, function (err, value) {
+                    self.log.debug('<< deleteEmail');
+                    self.log.debug('err:', err);
+                    self.log.debug('value:', value);
+                    if(err) {
+                        self.wrapError(res, 500, err, "Error deleting email");
+                    } else {
+                        self.send200(res);
+                    }
+                    self.createUserActivity(req, 'DELETE_EMAIL', null, {emailId: emailId}, function(){});
+                    self = null;
+                });
+            }
+        });
     },
     //endregion
 

@@ -387,6 +387,23 @@
       });
     };
 
+    //website/:websiteId/page/:id/:label
+    this.deleteEmail = function (email, fn) {
+      var apiUrl = baseUrl + ['cms', 'email', email._id].join('/');
+      $http.delete(apiUrl).success(function (data, status, headers, config) {
+        var _emails = emailcache.get('emails');
+        _emails = _.reject(_emails, function(_email) {
+          return _email._id === email._id;
+        });  
+              
+        emailcache.put('emails', _emails);
+        fn(data);
+      }).error(function (err) {
+        console.warn('END:Delete Email with ERROR', err);
+        fn(err);
+      });
+    };
+
     //website/:websiteId/duplicate/page
     this.createDuplicatePage = function (pagedata, fn) {
       var apiUrl = baseUrl + ['cms', 'website', $$.server.websiteId, 'duplicate', 'page'].join('/');
