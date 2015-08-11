@@ -116,6 +116,8 @@
     $scope.isEditing = true;
     //$scope.isDirty = false;
     $scope.isDirty = {};
+    $scope.blogImage = {};
+    $scope.blogImage.featured_image = false;
     $scope.savePage = function () {
       $scope.saveLoading = true;
       $scope.isDirty.dirty = false;
@@ -610,8 +612,8 @@
       } else if ($scope.logoImage && $scope.componentEditing) {
         $scope.logoImage = false;
         $scope.componentEditing.logourl = asset.url;
-      } else if ($scope.blogImage) {
-        $scope.blogImage = false;
+      } else if ($scope.blogImage.featured_image) {
+        $scope.blogImage.featured_image = false;
         $scope.blog.post.featured_image = asset.url;
         return;
       } else if ($scope.imgThumbnail && $scope.componentEditing) {
@@ -709,6 +711,10 @@
 
         _modal.resolve.underNav = function () {
           return $scope.underNav;
+        };
+
+        _modal.resolve.blogImage = function () {
+          return $scope.blogImage;
         };
       }
 
