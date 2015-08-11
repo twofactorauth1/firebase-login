@@ -1030,7 +1030,7 @@
       }
       if($scope.isEmail)
       {
-        redirectUrl = "/admin/#/website/emails"; 
+       redirectUrl = "/admin/#/emails"; 
       }
       if ($scope.isDirty.dirty) {
         SweetAlert.swal({
@@ -1131,7 +1131,7 @@
             toaster.pop('success', "Email Deleted", "The " + title + " email was deleted successfully.");
             $scope.closeModal();
             $timeout(function () {
-              window.location = '/admin/#/website/emails';
+              window.location = '/admin/#/emails';
             }, 500);
           });
         } else {
