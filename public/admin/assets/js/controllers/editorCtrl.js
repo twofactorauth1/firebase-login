@@ -277,6 +277,8 @@
      */
 
     $scope.retrievePage = function (_handle) {
+      if(_handle === 'blog')
+        $scope.blog_page = true;
       WebsiteService.getSinglePage(_handle, function (data) {
         $scope.page = data;
         $scope.components = $scope.page.components;
