@@ -379,11 +379,44 @@
         data: angular.toJson(emaildata)
       }).success(function (data, status, headers, config) {
         var _emails = emailcache.get('emails');
-        _pages[data.handle] = data;
-        pagecache.put('emails', _emails);
-        fn(data);
+        emailcache.put('emails', _emails);
+        fn(data, null);
       }).error(function (err) {
         console.warn('END:Create Email with ERROR');
+        fn(null, err);
+      });
+    };
+
+    this.updateEmail = function (emaildata, fn) {
+      var apiUrl = baseUrl + ['cms', 'email', emaildata._id].join('/');
+      $http({
+        url: apiUrl,
+        method: "PUT",
+        data: angular.toJson(emaildata)
+      }).success(function (data, status, headers, config) {
+        var _emails = emailcache.get('emails');
+        emailcache.put('emails', _emails);
+        fn(data, null);
+      }).error(function (err) {
+        console.warn('END:Create Email with ERROR');
+        fn(null, err);
+      });
+    };
+
+    //email/:id/
+    this.deleteEmail = function (email, fn) {
+      var apiUrl = baseUrl + ['cms', 'email', email._id].join('/');
+      $http.delete(apiUrl).success(function (data, status, headers, config) {
+        var _emails = emailcache.get('emails');
+        _emails = _.reject(_emails, function(_email) {
+          return _email._id === email._id;
+        });  
+              
+        emailcache.put('emails', _emails);
+        fn(data);
+      }).error(function (err) {
+        console.warn('END:Delete Email with ERROR', err);
+        fn(err);
       });
     };
 

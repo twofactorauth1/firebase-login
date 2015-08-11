@@ -184,6 +184,8 @@
     $scope.isEditing = true;
     //$scope.isDirty = false;
     $scope.isDirty = {};
+    $scope.blogImage = {};
+    $scope.blogImage.featured_image = false;
     $scope.savePage = function () {
       $scope.saveLoading = true;
       $scope.isDirty.dirty = false;
@@ -266,7 +268,7 @@
      * -
      */
 
-    $scope.cancelPage = function () {
+    $scope.cancelPage = function () {      
       $scope.checkForSaveBeforeLeave();
     };
 
@@ -345,6 +347,8 @@
      */
 
     $scope.retrievePage = function (_handle) {
+      if(_handle === 'blog' || _handle === 'single-post')
+        $scope.post_blog_page = true;
       WebsiteService.getSinglePage(_handle, function (data) {
         $scope.page = data;
         $scope.components = $scope.page.components;
@@ -686,8 +690,8 @@
       } else if ($scope.logoImage && $scope.componentEditing) {
         $scope.logoImage = false;
         $scope.componentEditing.logourl = asset.url;
-      } else if ($scope.blogImage) {
-        $scope.blogImage = false;
+      } else if ($scope.blogImage.featured_image) {
+        $scope.blogImage.featured_image = false;
         $scope.blog.post.featured_image = asset.url;
         return;
       } else if ($scope.imgThumbnail && $scope.componentEditing) {
@@ -785,6 +789,10 @@
 
         _modal.resolve.underNav = function () {
           return $scope.underNav;
+        };
+
+        _modal.resolve.blogImage = function () {
+          return $scope.blogImage;
         };
       }
 
@@ -961,9 +969,30 @@
       //   return false;
       // }
       $scope.newEmail.components = $scope.page.components;
-      WebsiteService.createEmail($scope.newEmail, function (data) {
-        $scope.duplicate = true;
-        $scope.checkForSaveBeforeLeave('/admin/#/editor?email=' + $scope.newEmail._id, true);
+      WebsiteService.createEmail($scope.newEmail, function (data, error) {
+        if(data && !error)
+        {
+          $scope.duplicate = true;
+          $scope.checkForSaveBeforeLeave('/admin/#/editor?email=' + data._id, true);
+        }
+        else if(!data && error && error.message)
+        {
+          toaster.pop('error', error.message);
+        }        
+      });
+    };
+
+
+    $scope.updateEmailSettings = function () {
+      WebsiteService.updateEmail($scope.page, function (data, error) {
+        if(data && !error)
+        {
+          toaster.pop('success', "Settings saved successfully");
+        }
+        else if(!data && error && error.message)
+        {
+          toaster.pop('error', error.message);
+        }        
       });
     };
 
@@ -1097,6 +1126,10 @@
       if (!redirectUrl) {
         redirectUrl = $location.search().posthandle ? "/admin/#/website/posts" : "/admin/#/website/pages";
       }
+      if($scope.isEmail)
+      {
+       redirectUrl = "/admin/#/emails"; 
+      }
       if ($scope.isDirty.dirty) {
         SweetAlert.swal({
           title: "Are you sure?",
@@ -1191,12 +1224,12 @@
       }, function (isConfirm) {
         if (isConfirm) {
           SweetAlert.swal("Saved!", "Email is deleted.", "success");
-
-          WebsiteService.deleteEmail($scope.page._id, function (data) {
+          var title = $scope.page.title;
+          WebsiteService.deleteEmail($scope.page, function (data) {
             toaster.pop('success', "Email Deleted", "The " + title + " email was deleted successfully.");
             $scope.closeModal();
             $timeout(function () {
-              window.location = '/admin/#/website/emails';
+              window.location = '/admin/#/emails';
             }, 500);
           });
         } else {
