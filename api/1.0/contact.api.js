@@ -556,7 +556,7 @@ _.extend(api.prototype, baseApi.prototype, {
                              }
                              */
                             var city = value['city'] || '';
-                            var state = value['state'] || '';
+                            var state = value['region'] || '';
                             var zip = value['postal'] || '';
                             var country = value['country'] || '';
                             var countryCode = value['country'] || '';
