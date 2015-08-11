@@ -396,6 +396,7 @@ app.constant('userConstant', {
     ADMIN: "ad",
     LEAD: 'ld',
     OTHER: "ot",
+    NOTAG: "nt",
 
     dp: [{
       label: "Customer",
@@ -421,6 +422,9 @@ app.constant('userConstant', {
     }, {
       label: "Other",
       data: "ot"
+    }, {
+      label: "No Tag",
+      data: "nt"
     }]
   },
 

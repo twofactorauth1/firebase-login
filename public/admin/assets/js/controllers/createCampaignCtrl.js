@@ -1,7 +1,7 @@
 'use strict';
 /*global app, angular*/
 (function (angular) {
-  app.controller('CreateCampaignCtrl', ["$scope", "$timeout", "toaster", "CampaignService", "CustomerService", "CommonService", "editableOptions", "AccountService", function ($scope, $timeout, toaster, CampaignService, CustomerService, CommonService, editableOptions, AccountService) {
+  app.controller('CreateCampaignCtrl', ["$scope", "toaster", "CampaignService", "CustomerService", "CommonService", "editableOptions", "AccountService", "userConstant", function ($scope, toaster, CampaignService, CustomerService, CommonService, editableOptions, AccountService, userConstant) {
 
     editableOptions.theme = 'bs3';
 
@@ -44,15 +44,50 @@
       "replyTo": ""
     };
 
+    $scope.newCampaignObj = {
+      "_id": CommonService.generateUniqueAlphaNumeric(),
+      "name": "",
+      "type": "onetime",
+      "status": "draft",
+      "startDate": "", //not used on autoresponder
+      "steps": [{
+        "type": "email",
+        "trigger": null,
+        "index": 1,
+        "settings": {
+          "emailId": "000000-0000-000000-00000000",
+          "offset": "320000", //in seconds
+          "fromEmail": "",
+          "fromName": '',
+          "replyTo": '',
+          "subject": '',
+          "vars": {
+
+          },
+          "scheduled": {
+            "minute": 1,
+            "hour": 2,
+            "day": 1
+          },
+          "sendAt": {
+            "year": 2015,
+            "month": 2,
+            "day": 15,
+            "hour": 13,
+            "minute": 0
+          },
+        }
+      }]
+    };
+
     /*
      * @getAccount
      * - get account and autofill new email details
      */
 
-    AccountService.getAccount(function(_account) {
-      console.log('account >>> ', _account);
+    AccountService.getAccount(function (_account) {
       if (_account.business.logo) {
-        $scope.emailToSend.components[0].logo = '<img src="'+_account.business.logo+'"/>';
+        $scope.emailToSend.components[0].logo = '<img src="' + _account.business.logo + '"/>';
       }
       if (_account.business.name) {
         $scope.emailToSend.fromName = _account.business.name;
@@ -68,34 +103,8 @@
       individuals: []
     };
 
-    var customerTags = [{
-      label: "Customer",
-      data: "cu"
-    }, {
-      label: "Colleague",
-      data: "co"
-    }, {
-      label: "Friend",
-      data: "fr"
-    }, {
-      label: "Member",
-      data: "mb"
-    }, {
-      label: "Family",
-      data: "fa"
-    }, {
-      label: "Admin",
-      data: "ad"
-    }, {
-      label: 'Lead',
-      data: 'ld'
-    }, {
-      label: "Other",
-      data: "ot"
-    }, {
-      label: "No Tag",
-      data: "nt"
-    }];
+    var customerTags = userConstant.contact_types.dp;
+    console.log('customerTags ', customerTags);
 
     var nextStep = function () {
       $scope.currentStep++;
@@ -156,48 +165,36 @@
 
     // selected tags
     $scope.tagSelection = [];
-    $scope.totalRecipients = 0;
-    $scope.fullSelectedCustomers = [];
+    $scope.recipients = [];
 
-    var currentTimeout = 0;
-
-    $scope.getTotalRecipients = function () {
-      var totalContacts = [];
+    $scope.getRecipients = function () {
       var fullContacts = [];
       _.each($scope.tagSelection, function (tagName) {
         var matching = _.find($scope.customerCounts, function (count) {
           return count.matchingTag === tagName;
         });
-        if (matching && tagName !== 'No Tag') {
-          _.each($scope.customers, function (single) {
+        _.each($scope.customers, function (single) {
+          if (matching && tagName !== 'No Tag') {
             if (single.tags && single.tags.length > 0 && single.tags.indexOf(matching.uniqueTag) > -1) {
-              if (totalContacts.indexOf(single._id) <= 0) {
-                totalContacts.push(single._id);
-                $timeout(function () {
-                  $scope.fullSelectedCustomers.push(single);
-                }, currentTimeout + 750);
-              }
-            }
-          });
-        }
-        if (tagName === 'No Tag') {
-          _.each($scope.customers, function (single) {
-            if (!single.tags || single.tags.length <= 0) {
-              if (totalContacts.indexOf(single._id) <= 0) {
+              if (_.find($scope.customers, function (customer) {
+                  return single._id === customer._id;
+                })) {
                 fullContacts.push(single);
-                $timeout(function () {
-                  $scope.fullSelectedCustomers.push(single._id);
-                }, currentTimeout + 750);
               }
             }
-          });
-        }
+          }
+          if (tagName === 'No Tag') {
+            if (!single.tags || single.tags.length <= 0) {
+              if (!_.find($scope.customers, function (customer) {
+                  return single._id === customer._id;
+                })) {
+                fullContacts.push(single);
+              }
+            }
+          }
+        });
       });
-
-      currentTimeout = 50;
-
-      // $scope.fullSelectedCustomers = fullContacts;
-      return totalContacts.length;
+      return fullContacts;
     };
 
     // toggle selection
@@ -210,13 +207,10 @@
       } else {
         $scope.tagSelection.push(tagName);
       }
-      $scope.totalRecipients = $scope.getTotalRecipients();
+      $scope.recipients = $scope.getRecipients();
     };
 
     $scope.currentStep = 1;
-    $scope.newCampaign = {
-      type: 'onetime'
-    };
     // Initial Value
     $scope.form = {
 

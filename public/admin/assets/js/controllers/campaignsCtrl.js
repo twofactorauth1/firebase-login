@@ -19,6 +19,8 @@
       });
     });
 
+    $scope.tableView = 'grid';
+
 
     // $scope.openModal = function (template) {
     //   $scope.modalInstance = $modal.open({
