@@ -10,7 +10,7 @@ var baseApi = require('../base.api.js');
 //TODO: there shouldn't be DAO references here
 
 var cmsDao = require('../../cms/dao/cms.dao.js');
-
+var mandrillHelper = require('../../utils/mandrillhelper');
 var Page = require('../../cms/model/page');
 //var Components = require('../../cms/model/components');
 
@@ -76,6 +76,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('website/:websiteId/emails'), this.setup.bind(this), this.getAllEmails.bind(this));
         app.get(this.url('email/:id'), this.setup.bind(this), this.getEmailById.bind(this));
         app.post(this.url('email'), this.isAuthAndSubscribedApi.bind(this), this.createEmail.bind(this));
+        app.post(this.url('testemail'), this.isAuthAndSubscribedApi.bind(this), this.testEmail.bind(this));
         app.put(this.url('email/:id'), this.isAuthAndSubscribedApi.bind(this), this.updateEmail.bind(this));
         app.delete(this.url('email/:id'), this.isAuthAndSubscribedApi.bind(this), this.deleteEmail.bind(this));
 
@@ -331,6 +332,24 @@ _.extend(api.prototype, baseApi.prototype, {
             self.sendResultOrError(resp, err, value, "Error Retrieving Page for Website");
             self = null;
         });
+    },
+
+    testEmail: function(req, resp) {
+        var self = this;
+        self.log.debug('testEmail >>> ');
+        self.sendResultOrError(resp, err, req.body, "Error Retrieving Page by Id");
+        // var emailObj = req.body;
+        // self.log.debug('emailObj >>> ', emailObj);
+        // var accountId = parseInt(self.currentAccountId(req));
+        // app.render('emails/base_email', component, function(err, html){
+        //     if(err) {
+        //         self.log.error('error rendering html: ' + err);
+        //         self.log.warn('email will not be sent.');
+        //     } else {
+        //         //sendBasicEmail: function(fromAddress, fromName, toAddress, toName, subject, html, accountId, vars, emailId, fn)
+        //         mandrillHelper.sendBasicEmail(fromAddress, fromName, toAddress, toName, subject, htmlContent, accountId, vars, emailId, function(err, result){});
+        //     }
+        // });
     },
 
     /**

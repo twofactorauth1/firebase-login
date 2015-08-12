@@ -345,7 +345,7 @@
                             <button class="btn btn-success btn-wide pull-right" ng-click="completeNewCampaign()">
                                 <span> Activate Campaign </span> <i class="fa fa-clock-o"></i>
                             </button>
-                            <button class="btn btn-info btn-wide pull-right margin-right-5" ng-click="sendTestCampaign()">
+                            <button class="btn btn-info btn-wide pull-right margin-right-5" ng-click="openModal('send-test-email-modal')">
                                 <span> Send Test </span> <i class="fa fa-paper-plane"></i>
                             </button>
                         </div>
@@ -355,4 +355,6 @@
         </form>
     </div>
     <!-- end: WIZARD FORM -->
+
+    <div data-ng-include data-src=" 'assets/views/partials/send-test-email-modal.html' " ></div>
 </div>

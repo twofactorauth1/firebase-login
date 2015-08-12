@@ -1,7 +1,12 @@
 'use strict';
-/*global app*/
+/*global app, window*/
 (function (angular) {
-  app.controller('EmailTemplatesCtrl', ["$scope", "$timeout", "$location", "toaster", "$filter", "$modal", "WebsiteService", function ($scope, $timeout, $location, toaster, $filter, $modal, WebsiteService) {
+  app.controller('EmailTemplatesCtrl', ["$scope", "$timeout", "$location", "toaster", "$modal", "WebsiteService", "CommonService", "AccountService", function ($scope, $timeout, $location, toaster, $modal, WebsiteService, CommonService, AccountService) {
+
+    $scope.newEmail = {
+      title:'New Email Title',
+      subject: 'New Email Subject'
+    };
 
     /*
      * @getCustomers
@@ -9,15 +14,70 @@
      */
 
     WebsiteService.getEmails(function (emails) {
-      $timeout(function() {
-        $scope.$apply(function() {
+      $timeout(function () {
+        $scope.$apply(function () {
           $scope.emails = emails;
         });
       });
     });
 
-    $scope.createNewEmail = function() {
-      console.log('createNewEmail >>>');
+    /*
+     * @getAccount
+     * - get account and autofill new email details
+     */
+
+    AccountService.getAccount(function (_account) {
+      $scope.account = _account;
+      if (_account.business.name) {
+        $scope.newEmail.fromName = _account.business.name;
+      }
+      if (_account.business.emails[0].email) {
+        $scope.newEmail.fromEmail = _account.business.emails[0].email;
+        $scope.newEmail.replyTo = _account.business.emails[0].email;
+      }
+    });
+
+    $scope.createNewEmail = function (_newEmail) {
+      //temporarily add a single email obj
+      var emailToSend = {
+        "title": _newEmail.title,
+        "subject": _newEmail.subject,
+        "fromName": _newEmail.fromName,
+        "fromEmail": _newEmail.fromEmail,
+        "replyTo": _newEmail.replyTo,
+        "components": [{
+          "_id": CommonService.generateUniqueAlphaNumericShort(),
+          "anchor": CommonService.generateUniqueAlphaNumericShort(),
+          "type": "email",
+          "version": 1,
+          "txtcolor": "#888888",
+          "logo": "<h2>Logo Here</h2>",
+          "title": "<h2 class='center'>New Email</h2>",
+          "subtitle": "subtitle",
+          "text": "This is your new email",
+          "from_email": "info@indigenous.io",
+          "bg": {
+            "img": {
+              "url": "",
+              "width": null,
+              "height": null,
+              "parallax": false,
+              "blur": false
+            },
+            "color": ""
+          },
+          "visibility": true
+        }]
+      };
+      if ($scope.account.business.logo) {
+        emailToSend.components[0].logo = '<img src="' + $scope.account.business.logo + '"/>';
+      }
+      WebsiteService.createEmail(emailToSend, function (newemail) {
+        toaster.pop('success', 'Email Created', 'The ' + newemail.title + ' email was created successfully.');
+        $scope.emails.unshift(newemail);
+        $scope.displayedEmails.unshift(newemail);
+        $scope.closeModal();
+      });
     };
 
 
@@ -55,86 +115,10 @@
       $scope.showChangeURL = false;
     };
 
-    $scope.$watch('createpage.title', function (newValue, oldValue) {
-      if (newValue) {
-        $scope.createpage.handle = $filter('slugify')(newValue);
-      }
-    });
-
-
-    $scope.validateCreatePage = function (page, restrict) {
-      $scope.createPageValidated = false;
-      if (page) {
-        if (page.handle == '') {
-          $scope.handleError = true;
-        } else {
-          $scope.handleError = false;
-          if (!restrict)
-            page.handle = $filter('slugify')(page.title);
-        }
-        if (page.title == '') {
-          $scope.titleError = true;
-        } else {
-          $scope.titleError = false;
-        }
-        if (page && page.title && page.title != '' && page.handle && page.handle != '') {
-          $scope.createPageValidated = true;
-        }
-      }
-    };
-
-    $scope.createPageFromTemplate = function (page, $event) {
-      $scope.validateCreatePage(page, true);
-
-      if (!$scope.createPageValidated) {
-        $scope.titleError = true;
-        $scope.handleError = true;
-        return false;
-      } else {
-        $scope.titleError = false;
-        $scope.handleError = false;
-      }
-
-      var pageData = {
-        title: page.title,
-        handle: page.handle,
-        mainmenu: page.mainmenu
-      };
-
-      var hasHandle = false;
-      for (var i = 0; i < $scope.pages.length; i++) {
-        if ($scope.pages[i].handle === page.handle) {
-          hasHandle = true;
-        }
-      };
-
-      if (!hasHandle) {
-        WebsiteService.createPageFromTemplate($scope.selectedTemplate._id, pageData, function (newpage) {
-          toaster.pop('success', 'Page Created', 'The ' + newpage.title + ' page was created successfully.');
-          $scope.closeModal();
-
-          if (newpage.components) {
-            newpage.components = newpage.components.length;
-          } else {
-            newpage.components = 0;
-          }
-
-          $scope.pages.unshift(newpage);
-          $scope.displayedPages.unshift(newpage);
-          page.title = "";
-          page.handle = "";
-
-          $scope.resetTemplateDetails();
-        });
-      } else {
-        toaster.pop('error', "Page URL " + page.handle, "Already exists");
-        $event.preventDefault();
-        $event.stopPropagation();
-      }
-    };
-
     $scope.viewSingle = function (email) {
-      window.location = '/admin/#/editor?email=' + email._id;
+      $location.path('/editor').search({
+        email: email._id
+      });
     };
 
     $scope.filterScreenshot = {};
@@ -162,4 +146,4 @@
     };
 
   }]);
-})(angular);
+}(angular));

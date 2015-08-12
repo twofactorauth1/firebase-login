@@ -1,7 +1,7 @@
 'use strict';
 /*global app, angular*/
 (function (angular) {
-  app.controller('CreateCampaignCtrl', ["$scope", "toaster", "CampaignService", "CustomerService", "CommonService", "editableOptions", "AccountService", "userConstant", function ($scope, toaster, CampaignService, CustomerService, CommonService, editableOptions, AccountService, userConstant) {
+  app.controller('CreateCampaignCtrl', ["$scope", "$modal", "toaster", "CampaignService", "CustomerService", "CommonService", "editableOptions", "AccountService", "userConstant", function ($scope, $modal, toaster, CampaignService, CustomerService, CommonService, editableOptions, AccountService, userConstant) {
 
     editableOptions.theme = 'bs3';
 
@@ -81,6 +81,28 @@
           },
         }
       }]
+    };
+
+    $scope.sendTestEmail = function(_email) {
+      console.log('_email ', _email.email);
+      console.log('newCampaignObj ', $scope.newCampaignObj);
+      console.log('emailToSend ', $scope.emailToSend);
+      console.log('recipients ', $scope.recipients);
+      WebsiteService.sendTestEmail(_email, function(data) {
+        console.log('success test send');
+      });
+    };
+
+    $scope.openModal = function (template) {
+      $scope.modalInstance = $modal.open({
+        templateUrl: template,
+        scope: $scope
+      });
+      $scope.modalInstance.result.finally($scope.closeModal());
+    };
+
+    $scope.closeModal = function () {
+      $scope.modalInstance.close();
     };
 
     /*
@@ -198,6 +220,19 @@
         });
       });
       return fullContacts;
+    };
+
+    $scope.completeNewCampaign = function() {
+      console.log('completeNewCampaign >>>');
+      console.log('newCampaignObj ', $scope.newCampaignObj);
+      console.log('emailToSend ', $scope.emailToSend);
+      console.log('recipients ', $scope.recipients);
+
+      //add new email if exists
+      //add campaign
+      //add contacts if new
+      //bulk add contacts to campaign
+      //show success
     };
 
     // toggle selection

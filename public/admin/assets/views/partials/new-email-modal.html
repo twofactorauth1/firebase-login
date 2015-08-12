@@ -1,12 +1,12 @@
 <script type="text/ng-template" id="new-email-modal">
     <div class="modal-header">
-        <button type="button" class="close" ng-click="cancel()">
+        <button type="button" class="close" ng-click="closeModal()">
             <span aria-hidden="true">&times;</span>
             <span class="sr-only">Close</span>
         </button>
         <h3 class="modal-title">New Email Template</h3>
     </div>
-    <form name="newEmailForm" ng-submit="createNewEmail(newEmailForm.$valid)" novalidate>
+    <form name="newEmailForm" ng-submit="createNewEmail(newEmail)" novalidate>
         <div class="modal-body bg-white" style="max-height:500px;">
             <span class="help-block">Add the duplicate email details below with a new title.</span>
             <div class="form-group" ng-class="{ 'has-error' : newEmailForm.title.$invalid && !newEmailForm.title.$pristine }">

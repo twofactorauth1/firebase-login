@@ -138,9 +138,9 @@
           .success(function (data, status, headers, config) {
             console.log('data >>> ', data);
             resetEmailCache = false;
+            emailcache.put('emails', data);
             ChartEmailService.queryMandrillData(data, function (_data) {
               console.log('_data >>> ', _data);
-              emailcache.put('emails', _data);
               if (fn) {
                 console.log('resolve >>> ');
                 deferred.resolve(fn(_data));
@@ -289,6 +289,20 @@
       });
     };
 
+    this.sendTestEmail = function (emailObj, fn) {
+      var apiUrl = baseUrl + ['cms', 'testemail'].join('/');
+      $http({
+        url: apiUrl,
+        method: "POST",
+        data: angular.toJSON(emailObj),
+      }).success(function (data, status, headers, config) {
+        fn(data);
+      }).error(function (err) {
+        console.warn('END:Website Service with ERROR');
+        fn(err, null);
+      });
+    };
+
     //page/:id/components/all
     this.updateAllComponents = function (pageId, componentJSON, fn) {
       var apiUrl = baseUrl + ['cms', 'page', pageId, 'components', 'all'].join('/');
@@ -379,6 +393,7 @@
         data: angular.toJson(emaildata)
       }).success(function (data, status, headers, config) {
         var _emails = emailcache.get('emails');
+        _emails[data.title] = data;
         emailcache.put('emails', _emails);
         fn(data, null);
       }).error(function (err) {
