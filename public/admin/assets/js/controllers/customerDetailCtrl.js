@@ -2,7 +2,7 @@
 /*global app, moment, angular, $$*/
 /*jslint unparam:true*/
 (function (angular) {
-  app.controller('CustomerDetailCtrl', ["$scope", "$rootScope", "$modal", "toaster", "$stateParams", "contactConstant", "CustomerService", "KeenService", "CommonService", "UserService", 'SweetAlert', '$state', 'OrderService', function ($scope, $rootScope, $modal, toaster, $stateParams, contactConstant, CustomerService, KeenService, CommonService, UserService, SweetAlert, $state, OrderService) {
+  app.controller('CustomerDetailCtrl', ["$scope", "$rootScope", "$location", "$modal", "toaster", "$stateParams", "contactConstant", "CustomerService", "KeenService", "CommonService", "UserService", 'SweetAlert', '$state', 'OrderService', function ($scope, $rootScope, $location, $modal, toaster, $stateParams, contactConstant, CustomerService, KeenService, CommonService, UserService, SweetAlert, $state, OrderService) {
 
     /*
      * @openModal
@@ -54,6 +54,10 @@
     $scope.data = {
       fullName: ''
     };
+
+    if ($location.search().order) {
+      $scope.redirectToOrder = true;      
+    }
 
     /*
      * @addNote
@@ -933,6 +937,11 @@
           });
         }
       });
+    };
+
+
+    $scope.$back = function() {
+        window.history.back();
     };
 
 

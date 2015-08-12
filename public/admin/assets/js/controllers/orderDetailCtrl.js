@@ -175,8 +175,7 @@
      */
     $scope.navToCustomer = function(cust) {
       var cust_url = '/customers/' + cust._id;
-      //console.log('navigation to customer', cust_url);
-      $location.url(cust_url);
+      $location.url(cust_url).search({order: "true"});
     };
 
 
