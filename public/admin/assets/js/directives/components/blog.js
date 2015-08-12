@@ -18,7 +18,7 @@ app.directive('blogComponent', ['$filter', '$timeout', 'WebsiteService', 'toaste
         });
       };
 
-      scope.control.saveBlogData = function () {
+    scope.control.saveBlogData = function () {
       _.each(scope.blog.blogposts, function (value, index) {
           var matching_post = _.find(scope.originalBlogPosts, function (item) {
             return item._id === value._id
@@ -204,16 +204,6 @@ app.directive('blogComponent', ['$filter', '$timeout', 'WebsiteService', 'toaste
           $scope.blog.blogposts.splice(index, 1);
           toaster.pop('success', 'Post deleted successfully');
         });
-      };
-
-      $scope.saveBlogData = function () {        
-        $scope.blog.blogposts.forEach(function (value, index) {
-          var matching_post = _.find($scope.originalBlogPosts, function (item) {
-            return item._id === value._id
-          })
-          if (!angular.equals(matching_post, value))
-            WebsiteService.updatePost($scope.$parent.page._id, value._id, value, function (data) {});
-        })
       };
     }
   };
