@@ -304,7 +304,6 @@
       $scope.postingToSocial = false;
       //clear form
       $scope.postContent = null;
-      $scope.isLoaded = false;
 
     };
 
