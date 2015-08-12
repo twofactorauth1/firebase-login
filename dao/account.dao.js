@@ -140,6 +140,15 @@ var dao = {
     }
   },
 
+    getAccountByBillingCustomerId: function(customerId, fn) {
+        var self = this;
+        var query = {
+            'billing.stripeCustomerId':customerId
+        };
+
+        return self.findOne(query, $$.m.Account, fn);
+    },
+
 
   createAccount: function(companyType, companySize, fn) {
     if (_.isFunction(companyType)) {

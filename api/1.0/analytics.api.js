@@ -16,6 +16,7 @@ var contactActivityManager = require('../../contactactivities/contactactivity_ma
 var urlUtils = require('../../utils/urlutils');
 var campaignManager = require('../../campaign/campaign_manager');
 var appConfig = require('../../configs/app.config');
+var accountDao = require('../../dao/account.dao');
 
 var api = function() {
     this.init.apply(this, arguments);
@@ -42,6 +43,8 @@ _.extend(api.prototype, baseApi.prototype, {
 
         app.post(this.url('mandrill/event'), this.filterMandrillEvents.bind(this), this.sendToKeen.bind(this));
         app.post(this.url('mandrill/event/unsub'), this.handleUnsubscribe.bind(this));
+
+        app.post(this.url('stripe/event'), this.sendStripeEventToKeen.bind(this));
 
         //visit
         app.post(this.url('session/:id/sessionStart'), this.setup.bind(this), this.storeSessionInfo.bind(this));
@@ -110,6 +113,50 @@ _.extend(api.prototype, baseApi.prototype, {
         //TODO: Verify message from mandirll
         //TODO: parameterize url
         self.sendResult(res, {'ok': 'ok'});
+    },
+
+    sendStripeEventToKeen: function(req, resp) {
+        var self = this;
+        self.log.debug('>> sendStripeEventToKeen', req.body);
+
+        var msg = null;
+        if(req.body) {
+            msg = JSON.stringify(req.body);
+            self.log.debug('got message', msg);
+            if(msg.data && msg.data.object && msg.data.object.customer) {
+                var customerId = msg.data.object.customer;
+                accountDao.getAccountByBillingCustomerId(customerId, function(err, account){
+                    if(err) {
+                        self.log.error('Error getting account by customerId', err);
+                    } else {
+                        msg.accountId = account.id();
+                    }
+                    //https://api.keen.io/3.0/projects/547edcea46f9a776b6579e2c/events/Stripe_Events?api_key=98f22da64681d5b81e2abb7323493526d8d258f0d355e95f742335b4ff1b75af2709baa51d16b60f168158fe7cfd8d1de89d637ddf8a9ca721859b009c4b004d443728df52346307e456f0511b3e82be4a96efaa9f6dcb7f847053e97eee2b796fc3e2d1a57bb1a86fb07d2e00894966
+                    var url = "https://api.keen.io/3.0/projects/"+keenConfig.KEEN_PROJECT_ID+"/events/Stripe_Events";
+                    var api_key = keenConfig.KEEN_WRITE_KEY;
+
+                    request.post(url + '?api_key=' + api_key)
+                        .send(msg)
+                        .end(function(error, result){
+                            if(error) {
+                                self.log.error('Error during send to keen: ' + err);
+                            } else {
+                                self.log.debug('<< sendStripeEventToKeen');
+                            }
+                            self.sendResult(resp, {'ok': 'ok'});
+                        }
+                    );
+                });
+            } else {
+                self.log.debug('<< sendStripeEventToKeen (no customer)');
+                self.send200(resp);
+            }
+
+        } else {
+            self.log.debug('<< sendStripeEventToKeen (no event)');
+            self.send200(resp);
+        }
+
     },
 
     verifyEvent: function(req, res, next) {
