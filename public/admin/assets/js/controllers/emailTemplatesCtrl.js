@@ -1,7 +1,5 @@
 'use strict';
-/**
- * controller for products
- */
+/*global app*/
 (function (angular) {
   app.controller('EmailTemplatesCtrl', ["$scope", "$timeout", "$location", "toaster", "$filter", "$modal", "WebsiteService", function ($scope, $timeout, $location, toaster, $filter, $modal, WebsiteService) {
 
@@ -17,6 +15,10 @@
         });
       });
     });
+
+    $scope.createNewEmail = function() {
+      console.log('createNewEmail >>>');
+    };
 
 
     $scope.openModal = function (template) {

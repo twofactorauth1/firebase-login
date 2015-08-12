@@ -4533,6 +4533,7 @@ a.text-light:hover {
   margin-right: 3px;
   margin-bottom: 3px;
   text-transform: uppercase;
+  text-align: center;
 }
 .turquoise {
   background: #1abc9c;

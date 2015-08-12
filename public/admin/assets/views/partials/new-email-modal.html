@@ -1,0 +1,38 @@
+<script type="text/ng-template" id="new-email-modal">
+    <div class="modal-header">
+        <button type="button" class="close" ng-click="cancel()">
+            <span aria-hidden="true">&times;</span>
+            <span class="sr-only">Close</span>
+        </button>
+        <h3 class="modal-title">New Email Template</h3>
+    </div>
+    <form name="newEmailForm" ng-submit="createNewEmail(newEmailForm.$valid)" novalidate>
+        <div class="modal-body bg-white" style="max-height:500px;">
+            <span class="help-block">Add the duplicate email details below with a new title.</span>
+            <div class="form-group" ng-class="{ 'has-error' : newEmailForm.title.$invalid && !newEmailForm.title.$pristine }">
+                <label>Title* </label>
+                <input name="title" class="form-control" type="text" ng-model="newEmail.title" required>
+            </div>
+            <div class="form-group" ng-class="{ 'has-error' : newEmailForm.subject.$invalid && !newEmailForm.subject.$pristine }">
+                <label>Subject*</label>
+                <input name="subject" class="form-control" type="text" ng-model="newEmail.subject" required>
+            </div>
+            <div class="form-group" ng-class="{ 'has-error' : newEmailForm.fromName.$invalid && !newEmailForm.fromName.$pristine }">
+                <label>From Name*</label>
+                <input name="fromName" class="form-control" type="text" ng-model="newEmail.fromName" required>
+            </div>
+            <div class="form-group" ng-class="{ 'has-error' : newEmailForm.fromEmail.$invalid && !newEmailForm.fromEmail.$pristine }">
+                <label>From Email*</label>
+                <input name="fromEmail" class="form-control" type="email" ng-model="newEmail.fromEmail" required>
+            </div>
+            <div class="form-group margin-bottom-0" ng-class="{ 'has-error' : newEmailForm.replyTo.$invalid && !newEmailForm.replyTo.$pristine }">
+                <label>Reply To:</label>
+                <input name="replyTo" class="form-control" type="email" ng-model="newEmail.replyTo">
+            </div>
+        </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-info" ng-disabled="newEmailForm.$invalid" type="submit"><i class="fa fa-clone"></i> Create New Email</button>
+        </div>
+    </form>
+</script>

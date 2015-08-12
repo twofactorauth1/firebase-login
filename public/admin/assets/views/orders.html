@@ -156,7 +156,7 @@
                         <tbody>
                             <tr ng-repeat="order in displayedOrders" ng-click="viewSingle(order)">
                                 <td class="center"><strong>Status: </strong>
-                                    <span class="fa-stack">
+                                    <span class="fa-stack fa-lg">
                                         <span class="fa fa-circle-thin fa-stack-2x"
                                         ng-class="{'text-warning': order.status == 'pending',
                                                       'text-muted': order.status == 'on-hold',
@@ -180,7 +180,12 @@
                                     </span>
                                 </td>
                                 <td>
-                                    <img src="{{ status.customer.photo ? status.customer.photo : '/admin/assets/images/default-user.png' }}" class="img-thumbnail screenshot" alt="image"> {{order.customer.first}} {{order.customer.last}}
+                                    <span class="pull-left">
+                                        <img ng-src="status.customer.photo" err-src="" err-contact="order.customer" class="img-thumbnail screenshot" alt="image">
+                                    </span>
+                                    <span class="pull-left" style="line-height: 34px;margin-left: 5px;">
+                                        {{order.customer.first}} {{order.customer.last}}
+                                    </span>
                                 </td>
                                 <td class="hidden-xs center"><strong>Items: </strong>{{order.line_items.length}}</td>
                                 <td class="hidden-xs center"><strong>Total: </strong> {{order.total | currency}}</td>

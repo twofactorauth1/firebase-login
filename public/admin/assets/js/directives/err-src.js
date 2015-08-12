@@ -40,14 +40,14 @@ app.directive('errSrc', function () {
         var letters = '';
         var contact = scope.errContact;
         //get first letter of email
-        if (scope.errContact.details.length > 0 && scope.errContact.details[0].emails[0].email) {
+        if (scope.errContact && scope.errContact.details && scope.errContact.details.length > 0 && scope.errContact.details[0].emails[0].email) {
           letters = scope.errContact.details[0].emails[0].email.charAt(0);
         }
         //get initials
-        if (scope.errContact.first) {
+        if (scope.errContact && scope.errContact.first) {
           letters = scope.errContact.first.charAt(0);
         }
-        if (scope.errContact.last) {
+        if (scope.errContact && scope.errContact.last) {
           letters = letters + ' ' + scope.errContact.last.charAt(0);
         }
 
