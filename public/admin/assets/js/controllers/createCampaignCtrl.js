@@ -1,7 +1,9 @@
 'use strict';
 /*global app, angular*/
 (function (angular) {
-  app.controller('CreateCampaignCtrl', ["$scope", "$modal", "toaster", "CampaignService", "CustomerService", "CommonService", "editableOptions", "AccountService", "userConstant", function ($scope, $modal, toaster, CampaignService, CustomerService, CommonService, editableOptions, AccountService, userConstant) {
+  app.controller('CreateCampaignCtrl',
+      ["$scope", "$modal", "toaster", "WebsiteService", "CampaignService", "CustomerService", "CommonService", "editableOptions", "AccountService", "userConstant",
+        function ($scope, $modal, toaster, WebsiteService, CampaignService, CustomerService, CommonService, editableOptions, AccountService, userConstant) {
 
     editableOptions.theme = 'bs3';
 

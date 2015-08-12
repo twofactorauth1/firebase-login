@@ -294,7 +294,7 @@
       $http({
         url: apiUrl,
         method: "POST",
-        data: angular.toJSON(emailObj),
+        data: angular.toJson(emailObj),
       }).success(function (data, status, headers, config) {
         fn(data);
       }).error(function (err) {
