@@ -108,6 +108,17 @@
         });
     }
 
+    $scope.saveBlogData = function () {
+      $scope.blogposts = $scope.childScope.getAllBlogs();
+      $scope.blogposts.forEach(function (value, index) {
+        var matching_post = _.find($scope.originalBlogPosts, function (item) {
+          return item._id === value._id
+        })
+        if (!angular.equals(matching_post, value))
+          WebsiteService.updatePost($scope.currentPage._id, value._id, value, function (data) {});
+      })
+    }
+
     /*
      * @savePage
      * -
@@ -184,6 +195,8 @@
                           $scope.originalPage.handle = $scope.page.handle;
                           console.log('Updated linked list');
                         });
+                        if($scope.page.handle === 'blog' && $scope.blogControl.saveBlogData)
+                          $scope.blogControl.saveBlogData();
                     }
                   });
                 });
@@ -554,6 +567,7 @@
     $scope.thumbnailSlider = {};
     $scope.contactMap = {};
     $scope.underNav = {};
+    $scope.blogControl = {};
 
     $scope.insertMedia = function (asset) {
       console.log('$scope.componentEditing ', $scope.componentEditing);
