@@ -108,17 +108,6 @@
         });
     }
 
-    $scope.saveBlogData = function () {
-      $scope.blogposts = $scope.childScope.getAllBlogs();
-      $scope.blogposts.forEach(function (value, index) {
-        var matching_post = _.find($scope.originalBlogPosts, function (item) {
-          return item._id === value._id
-        })
-        if (!angular.equals(matching_post, value))
-          WebsiteService.updatePost($scope.currentPage._id, value._id, value, function (data) {});
-      })
-    }
-
     /*
      * @savePage
      * -
