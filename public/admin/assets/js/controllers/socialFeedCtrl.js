@@ -263,8 +263,14 @@
           $scope.duplicatePostError = true;
           return false;
         }
-
-        $scope.afterPosting();
+        SocialConfigService.getFBPosts(socialAccountId, function (posts) {
+          var matchingPost = _.findWhere(posts, {
+            sourceId: data
+          });
+          if(matchingPost)
+            $scope.displayFeed.push(matchingPost);
+          $scope.afterPosting();
+         })
       });
     };
 
@@ -275,7 +281,14 @@
 
     $scope.handleTwitterPost = function (socialAccountId, post) {
       SocialConfigService.postTwitterPost(socialAccountId, post, function (data) {
-        $scope.afterPosting();
+         SocialConfigService.getTwitterFeed(socialAccountId, function (posts) {
+          var matchingPost = _.findWhere(posts, {
+            sourceId: data.id_str
+          });
+          if(matchingPost)
+            $scope.displayFeed.push(matchingPost);
+          $scope.afterPosting();
+         })         
       });
     };
 
@@ -291,6 +304,8 @@
       $scope.postingToSocial = false;
       //clear form
       $scope.postContent = null;
+      $scope.isLoaded = false;
+
     };
 
     /*
