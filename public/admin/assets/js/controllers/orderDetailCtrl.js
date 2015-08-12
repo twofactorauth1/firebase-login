@@ -12,7 +12,7 @@
     // 4. get Order
 
     $scope.FailedStatus = orderConstant.order_status.FAILED;
-
+    
     /*
      * @closeModal
      * -
@@ -46,7 +46,7 @@
     CustomerService.getCustomers(function (customers) {
       console.log('customers >>> ', customers);
       $scope.customers = customers;
-      $scope.getUsers();
+      $scope.getUsers();      
     });
 
     /*
@@ -80,6 +80,19 @@
      * get order based on the orderId in url
      */
 
+    /*
+     * @compareAddress
+     * compare order shipping and billing address
+     */
+
+    $scope.compareAddress = function()
+    {
+      if($scope.order.shipping_address && $scope.order.billing_address && $scope.order.billing_address.hasOwnProperty("address_1") && angular.equals($scope.order.shipping_address, $scope.order.billing_address))
+      {
+        $scope.sameAsBilling = true;
+      }    
+    }
+
     $scope.getOrder = function () {
       OrderService.getOrders(function (orders) {
         if ($stateParams.orderId) {
@@ -98,6 +111,7 @@
             return customer._id === $scope.order.customer_id;
           });
           $scope.calculateTotals();
+          $scope.compareAddress();
         } else {
           $scope.order = {
             created: {
@@ -109,6 +123,7 @@
             notes: []
           };
           console.log('$scope.order ', $scope.order);
+          
         }
       });
     };
