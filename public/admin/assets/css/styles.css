@@ -12512,9 +12512,6 @@ table.grid tbody td strong {
   height: 100%;
   overflow: auto;
 }
-.ng-aside .modal-content {
-  max-width: 320px;
-}
 .btn-comment-o {
   color: #fff;
   background-color: #F0E301;
