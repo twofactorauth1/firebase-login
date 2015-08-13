@@ -120,8 +120,8 @@
                                     </div>
                                     <div class="avatars center">
                                         <ul class="unstyled-list inline-list padding-left-0">
-                                            <li ng-repeat="contact in recipients track by $index | limitTo: 5">
-                                                <img ng-src="{{ contact.photo }}" id="customer_photo_{{contact._id}}" err-src="" err-contact="contact" class="img-thumbnail img-circle screenshot animated bounce" alt="image" width="30" height="30" tooltip-placement="top" tooltip-html-unsafe="{{contact.first}} {{contact.last}} <br> {{checkBestEmail(contact)}}">
+                                            <li tooltip-placement="top" tooltip-html-unsafe="{{contact.first}} {{contact.last}} <br> {{checkBestEmail(contact)}}" ng-repeat="contact in recipients track by $index | limitTo: 5">
+                                                <img ng-src="{{ contact.photo }}" id="customer_photo_{{contact._id}}" err-src="" err-contact="contact" class="img-thumbnail img-circle screenshot animated bounce" alt="image" width="30" height="30">
                                             </li>
                                         </ul>
                                         <button ng-if="recipients.length > 0" class="btn btn-primary btn-wide btn-o margin-bottom-15">View Full Contact List</button>
