@@ -124,7 +124,7 @@
                                                 <img ng-src="{{ contact.photo }}" id="customer_photo_{{contact._id}}" err-src="" err-contact="contact" class="img-thumbnail img-circle screenshot animated bounce" alt="image" width="30" height="30">
                                             </li>
                                         </ul>
-                                        <button ng-if="recipients.length > 0" class="btn btn-primary btn-wide btn-o margin-bottom-15">View Full Contact List</button>
+                                        <button ng-click="openModal('customers-list-modal')" ng-if="recipients.length > 0" class="btn btn-primary btn-wide btn-o margin-bottom-15">View Full Contact List</button>
                                     </div>
                                     <div class="margin-bottom-30 center">
                                         <span class="text-muted text-large">{{recipients.length}} / {{customers.length}} contacts selected.</span>
@@ -364,4 +364,5 @@
     <!-- end: WIZARD FORM -->
 
     <div data-ng-include data-src=" 'assets/views/partials/send-test-email-modal.html' " ></div>
+    <div data-ng-include data-src=" 'assets/views/partials/customers-list-modal.html' "></div>
 </div>

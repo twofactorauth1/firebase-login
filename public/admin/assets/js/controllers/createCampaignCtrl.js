@@ -7,6 +7,7 @@
 
     $scope.today = moment().format("dddd, MMMM Do YYYY, h:mm:ss a");
     $scope.whenToSend = 'now';
+    $scope.tableView = 'list';
 
     /*
      * @defaultNewEmail
