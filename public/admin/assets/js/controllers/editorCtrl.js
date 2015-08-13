@@ -247,13 +247,6 @@
                       if ($scope.page.handle !== $scope.originalPage.handle) {
                         $location.search('pagehandle', $scope.page.handle);
                         $scope.refreshLinkList(value, $scope.originalPage.handle);
-<<<<<<< HEAD
-                      }
-                      WebsiteService.updateLinkList($scope.website.linkLists[index], $scope.website._id, 'head-menu', function (data) {
-                        $scope.originalPage.handle = $scope.page.handle;
-                        console.log('Updated linked list');
-                      });
-=======
                        }
                         WebsiteService.updateLinkList($scope.website.linkLists[index], $scope.website._id, 'head-menu', function (data) {
                           $scope.originalPage.handle = $scope.page.handle;
@@ -261,7 +254,6 @@
                         });
                         if($scope.page.handle === 'blog' && $scope.blogControl.saveBlogData)
                           $scope.blogControl.saveBlogData();
->>>>>>> 26b006888d0daf86e70d4a0566f17fd47a8a21f6
                     }
                   });
                 });
