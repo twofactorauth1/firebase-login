@@ -86,11 +86,11 @@
     };
 
     $scope.sendTestEmail = function(_email) {
-      console.log('_email ', _email.email);
+      console.log('to address ', _email.email);
       console.log('newCampaignObj ', $scope.newCampaignObj);
       console.log('emailToSend ', $scope.emailToSend);
       console.log('recipients ', $scope.recipients);
-      WebsiteService.sendTestEmail(_email, function(data) {
+      WebsiteService.sendTestEmail(_email, $scope.emailToSend, function(data) {
         console.log('success test send');
       });
     };
