@@ -19,7 +19,7 @@
       });
     });
 
-    $scope.tableView = 'grid';
+    $scope.tableView = 'list';
 
 
     // $scope.openModal = function (template) {
