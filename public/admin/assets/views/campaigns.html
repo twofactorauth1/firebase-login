@@ -165,7 +165,7 @@
                                         </span>
                                     </span>
                                 </td>
-                                <td ng-if="tableView != 'grid'" class="text-large"><strong>Title: </strong>{{campaign.title | limitTo: 20 }}{{campaign.title.length > 20 ? '...' : ''}}</td>
+                                <td ng-if="tableView != 'grid'" class="text-large"><strong>Title: </strong>{{campaign.name | limitTo: 20 }}{{campaign.title.length > 20 ? '...' : ''}}</td>
                                 <td ng-if="tableView != 'grid'"><strong>Type: </strong> <span>{{campaign.type | titleCase}}</span></td>
                                 <td ng-if="tableView != 'grid'"><strong>Sent: </strong><span class="text-large text-bold">{{campaign.openRate || 0}}</span><span ng-if="campaign.openRate" class="text-small muted"> ({{campaign.sent}})</span></td>
                                 <td ng-if="tableView != 'grid'"><strong>Clicks: </strong><span class="text-large text-bold">{{campaign.clickRate || 0}}</span><span ng-if="campaign.clickRate" class="text-small muted"> ({{campaign.clicks}})</span></td>
