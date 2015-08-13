@@ -132,8 +132,8 @@
   },
   "campaign": {
     "NEWCAMPAIGN": "New Campaign",
-    "OPENRATE": "Open Rate",
-    "CLICKRATE": "Click Rate",
+    "OPENRATE": "Sent",
+    "CLICKRATE": "Clicks",
     "DESCRIPTION": "Create a new campaign to reach a group of contacts"
   }
 }

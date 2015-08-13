@@ -63,8 +63,8 @@
                                 <th st-sort="status" class="center" translate="tableFields.STATUS">Status</th>
                                 <th st-sort="title" translate="tableFields.NAME">Name</th>
                                 <th st-sort="title" translate="tableFields.TYPE">Type</th>
-                                <th st-sort="open" translate="campaign.OPENRATE">Open Rate</th>
-                                <th st-sort="open" translate="campaign.CLICKRATE">Click Rate</th>
+                                <th st-sort="open" translate="campaign.OPENRATE">Sent</th>
+                                <th st-sort="open" translate="campaign.CLICKRATE">Clicks</th>
                                 <th class="hidden-xs" st-sort="getters.created" ng-class="{'center': tableView != 'grid'}" translate="tableFields.CREATED">Created</th>
                             </tr>
                             <tr ng-if="showFilter">
@@ -137,13 +137,13 @@
                                                 <div class="rate">
                                                     <i class="fa fa-caret-up text-green"></i> <span class="text-large text-bold">{{campaign.openRate || 0 }}<span><span ng-if="campaign.openRate" class="text-small muted"> ({{campaign.sent}})</span>
                                                 </div>
-                                                Open Rate
+                                                Sent
                                             </div>
                                             <div class="col-xs-6 text-center">
                                                 <div class="rate">
                                                     <i class="fa fa-caret-up text-green"></i> <span class="text-large text-bold">{{campaign.clickRate || 0}}</span><span ng-if="campaign.clickRate" class="text-small muted"> ({{campaign.clicks}})</span>
                                                 </div>
-                                                Click Rate
+                                                Clicks
                                             </div>
                                         </div>
                                     </div>
@@ -167,8 +167,8 @@
                                 </td>
                                 <td ng-if="tableView != 'grid'" class="text-large"><strong>Title: </strong>{{campaign.title | limitTo: 20 }}{{campaign.title.length > 20 ? '...' : ''}}</td>
                                 <td ng-if="tableView != 'grid'"><strong>Type: </strong> <span>{{campaign.type | titleCase}}</span></td>
-                                <td ng-if="tableView != 'grid'"><strong>Open Rate: </strong><span class="text-large text-bold">{{campaign.openRate || 0}}</span><span ng-if="campaign.openRate" class="text-small muted"> ({{campaign.sent}})</span></td>
-                                <td ng-if="tableView != 'grid'"><strong>Click Rate: </strong><span class="text-large text-bold">{{campaign.clickRate || 0}}</span><span ng-if="campaign.clickRate" class="text-small muted"> ({{campaign.clicks}})</span></td>
+                                <td ng-if="tableView != 'grid'"><strong>Sent: </strong><span class="text-large text-bold">{{campaign.openRate || 0}}</span><span ng-if="campaign.openRate" class="text-small muted"> ({{campaign.sent}})</span></td>
+                                <td ng-if="tableView != 'grid'"><strong>Clicks: </strong><span class="text-large text-bold">{{campaign.clickRate || 0}}</span><span ng-if="campaign.clickRate" class="text-small muted"> ({{campaign.clicks}})</span></td>
                                 <td ng-if="tableView != 'grid'" class="hidden-xs" ng-class="{'center': tableView != 'grid'}"><strong>Created: </strong> {{campaign.created.date | date:'MMM d yy'}}</td>
                                 <td ng-if="tableView != 'grid'" class="center">
                                     <div class="dropdown">
