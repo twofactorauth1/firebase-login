@@ -373,10 +373,7 @@
             this.createCustomer = function(customer, fn)
             {
                 var apiUrl = baseUrl + ['contact'].join('/');
-                $http.post(apiUrl, customer)
-                .success(function(data, status, headers, config) {
-                    fn(data);
-                });
+                return $http.post(apiUrl, customer);
             };
 
         }

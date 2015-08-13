@@ -264,10 +264,7 @@
          if(!contact)
          {
             var tempCustomer = $scope.createCustomerData(email);
-            CustomerService.createCustomer(tempCustomer, function (returnedCustomer) {
-              contactsArr.push(returnedCustomer._id);
-            });
-           // promises.push(CustomerService.createCustomer(tempCustomer));
+            promises.push(CustomerService.createCustomer(tempCustomer));
          }
          else
          {
@@ -275,19 +272,22 @@
          }
        })
       }
-      // if(promises.length)
-      // {
-      //    $q.all(promises)
-      //       .then(function(data) {
-      //           _.each(data, function(value) {
-      //               var t = value;
-      //           });
-      //       })
-      //       .catch(function(err) {
-      //           console.error(err);
-      //       });      
-      // }
-      fn(contactsArr);
+      if(promises.length)
+      {
+       $q.all(promises)
+        .then(function(data) {
+          _.each(data, function(value) {
+              contactsArr.push(value.data._id);
+          });
+          fn(contactsArr);
+        })
+        .catch(function(err) {
+            console.error(err);
+        });      
+      }
+      else{
+        fn(contactsArr);
+      }      
     }
 
     $scope.completeNewCampaign = function () {
@@ -312,7 +312,8 @@
           
           $scope.checkAndCreateCustomer(function(contactsArr){
             //bulk add contacts to campaign
-            contactsArr = [16541];
+            if(!contactsArr.length)
+              contactsArr = [16541]; //Need to remove hard coded value
             CampaignService.bulkAddContactsToCampaign(contactsArr, _nemCampaign._id, function (success) {
               console.log('bulk add success ', success);
               toaster.pop('success', 'Campaigns created successfully');
