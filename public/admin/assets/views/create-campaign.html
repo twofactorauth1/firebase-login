@@ -11,7 +11,7 @@
     </section>
     <div class="row">
         <!-- start: WIZARD FORM -->
-        <form name="CreateCampaign" id="form" novalidate>
+        <div name="CreateCampaign" id="form" novalidate>
             <div id="wizard" class="swMain">
                 <!-- start: WIZARD SEPS -->
                 <ul class="margin-bottom-0">
@@ -193,25 +193,25 @@
                                                 <label class="control-label text-bold">
                                                     From Name
                                                 </label>
-                                                <span>{{emailToSend.fromName}}</span>
+                                                <span editable-text="emailToSend.fromName">{{emailToSend.fromName}}</span>
                                             </div>
                                             <div class="form-group margin-bottom-0">
                                                 <label class="control-label text-bold">
                                                     From Email
                                                 </label>
-                                                <span>{{emailToSend.fromEmail}}</span>
+                                                <span editable-email="emailToSend.fromEmail">{{emailToSend.fromEmail}}</span>
                                             </div>
                                             <div class="form-group margin-bottom-0">
                                                 <label class="control-label text-bold">
                                                     Reply To
                                                 </label>
-                                                <span>{{emailToSend.replyTo}}</span>
+                                                <span editable-email="emailToSend.replyTo">{{emailToSend.replyTo}}</span>
                                             </div>
                                             <div class="form-group margin-bottom-0">
                                                 <label class="control-label text-bold">
                                                     Subject
                                                 </label>
-                                                <span>{{emailToSend.subject}}</span>
+                                                <span editable-text="emailToSend.subject">{{emailToSend.subject}}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -359,7 +359,7 @@
                     </div>
                 </div>
             </div>
-        </form>
+        </div>
     </div>
     <!-- end: WIZARD FORM -->
 
