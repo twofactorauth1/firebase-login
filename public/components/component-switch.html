@@ -1,6 +1,6 @@
 <div ng-switch="value.type">
     <div ng-switch-when="blog">
-        <div blog-component component="value" media="changeBlogImage(blog, index)"></div>
+        <div blog-component component="value" media="changeBlogImage(blog, index)" control="blogControl"></div>
     </div>
     <div ng-switch-when="blog-teaser">
         <div blog-teaser-component component="value"></div>

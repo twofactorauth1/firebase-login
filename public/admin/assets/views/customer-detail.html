@@ -4,10 +4,17 @@
             <div class="col-sm-8">
                 <h1 class="mainTitle">{{ data.fullName || 'No Customer Name'}} </h1>
                 <span class="mainDescription">{{displayCustomerTags()}}</span>
+
             </div>
             <div ncy-breadcrumb></div>
+            
         </div>
     </section>
+    <div class="col-xs-12" ng-if="redirectToOrder">        
+        <button type="button" class="btn btn-primary btn-o pull-right btn btn-primary btn-o margin-top-5 margin-bottom-5" ng-click="$back()">
+        Back to Order
+        </button>
+    </div>
     <div class="container-fluid container-fullw">
         <div class="row">
             <div class="col-md-12">

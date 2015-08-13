@@ -1681,6 +1681,12 @@
   vertical-align: middle;
   text-align: center;
 }
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+  #componentloader .meet-team-v1 .img-circle {
+    padding: 0;
+    border: 1px;
+  }
+}
 #componentloader .meet-team-v2 .editing.team-member-wrap .social-link {
   border: 2px solid rgba(0, 0, 0, 0);
   position: relative;

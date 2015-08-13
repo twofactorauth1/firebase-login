@@ -171,7 +171,7 @@ module.exports = {
                     ];
                     mandrillHelper.sendAccountWelcomeEmail(notificationConfig.WELCOME_FROM_EMAIL,
                         notificationConfig.WELCOME_FROM_NAME, email, username, notificationConfig.WELCOME_EMAIL_SUBJECT,
-                        htmlContent, accountId, user.id(), vars, function (err, result) {
+                        htmlContent, accountId, user.id(), vars, null, function (err, result) {
                         });
                 }
 

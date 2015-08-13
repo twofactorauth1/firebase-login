@@ -1672,6 +1672,12 @@ div[data-type="feature-block"] .component-inner {
   vertical-align: middle;
   text-align: center;
 }
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+  .meet-team-v1 .img-circle {
+    padding: 0;
+    border: 1px;
+  }
+}
 /********** Meet Team  v2**********/
 .meet-team-v2 .editing.team-member-wrap .social-link {
   border: 2px solid rgba(0, 0, 0, 0);
