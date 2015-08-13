@@ -290,12 +290,19 @@
       });
     };
 
-    this.sendTestEmail = function (emailObj, fn) {
+    this.sendTestEmail = function (emailAddressObj, emailContentObj, fn) {
+      var payload = angular.toJson({
+        address: emailAddressObj,
+        content: emailContentObj,
+      });
+
+      console.log('WebsiteService.sendTestEmail - payload', payload);
+
       var apiUrl = baseUrl + ['cms', 'testemail'].join('/');
       $http({
         url: apiUrl,
         method: "POST",
-        data: angular.toJSON(emailObj),
+        data: payload,
       }).success(function (data, status, headers, config) {
         fn(data);
       }).error(function (err) {
