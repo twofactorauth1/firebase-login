@@ -1,7 +1,7 @@
 'use strict';
 /*global app, angular*/
 (function (angular) {
-  app.controller('CreateCampaignCtrl', ["$scope", "$modal", "toaster", "CampaignService", "CustomerService", "CommonService", "editableOptions", "AccountService", "userConstant", "WebsiteService", function ($scope, $modal, toaster, CampaignService, CustomerService, CommonService, editableOptions, AccountService, userConstant, WebsiteService) {
+  app.controller('CreateCampaignCtrl', ["$scope", "$modal", "toaster", "CampaignService", "CustomerService", "CommonService", "editableOptions", "AccountService", "userConstant", "WebsiteService", "$q", function ($scope, $modal, toaster, CampaignService, CustomerService, CommonService, editableOptions, AccountService, userConstant, WebsiteService, $q) {
 
     editableOptions.theme = 'bs3';
 
@@ -232,6 +232,61 @@
       return fullContacts;
     };
 
+   
+    
+    $scope.createCustomerData = function (email) {
+      // New customer
+      var customer = {          
+          details: [{
+            emails: []
+          }]
+        }
+        customer.details[0].emails.push({
+          email: email
+        });
+        return customer;      
+    };
+
+    $scope.checkAndCreateCustomer = function(fn)
+    {      
+      var contactsArr = [];
+      var promises = [];
+      if($scope.selectedCustomers.newEmails)
+      {
+        var _emails = $scope.selectedCustomers.newEmails.split(",");
+      _.each(_emails, function (email) {
+         var contact = _.findWhere($scope.customers, {
+            email: email
+          });
+         if(!contact)
+         {
+            var tempCustomer = $scope.createCustomerData(email);
+            CustomerService.createCustomer(tempCustomer, function (returnedCustomer) {
+              contactsArr.push(returnedCustomer._id);
+            });
+           // promises.push(CustomerService.createCustomer(tempCustomer));
+         }
+         else
+         {
+          contactsArr.push(contact._id);
+         }
+       })
+      }
+      // if(promises.length)
+      // {
+      //    $q.all(promises)
+      //       .then(function(data) {
+      //           _.each(data, function(value) {
+      //               var t = value;
+      //           });
+      //       })
+      //       .catch(function(err) {
+      //           console.error(err);
+      //       });      
+      // }
+      fn(contactsArr);
+    }
+
     $scope.completeNewCampaign = function () {
       console.log('completeNewCampaign >>>');
       console.log('newCampaignObj ', $scope.newCampaignObj);
@@ -250,13 +305,17 @@
         //add campaign
         CampaignService.createCampaign($scope.newCampaignObj, function (_nemCampaign) {
           console.log('_nemCampaign ', _nemCampaign);
-          //add contacts if new
-          //bulk add contacts to campaign
-          var contactsArr = [16541];
-          CampaignService.bulkAddContactsToCampaign(contactsArr, _nemCampaign._id, function (success) {
-            console.log('bulk add success ', success);
-          });
+          //add contacts if new         
+          
+          $scope.checkAndCreateCustomer(function(contactsArr){
+            //bulk add contacts to campaign
+            contactsArr = [16541];
+            CampaignService.bulkAddContactsToCampaign(contactsArr, _nemCampaign._id, function (success) {
+              console.log('bulk add success ', success);
+            });
           //show success
+          })
+         
         });
       });
     };
