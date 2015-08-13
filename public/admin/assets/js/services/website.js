@@ -139,6 +139,7 @@
             console.log('data >>> ', data);
             resetEmailCache = false;
             emailcache.put('emails', data);
+            console.log('emailcache ', emailcache);
             ChartEmailService.queryMandrillData(data, function (_data) {
               console.log('_data >>> ', _data);
               if (fn) {
@@ -393,8 +394,10 @@
         data: angular.toJson(emaildata)
       }).success(function (data, status, headers, config) {
         var _emails = emailcache.get('emails');
-        _emails[data.title] = data;
-        emailcache.put('emails', _emails);
+        if (_emails) {
+          _emails[data.title] = data;
+          emailcache.put('emails', _emails);
+        }
         fn(data, null);
       }).error(function (err) {
         console.warn('END:Create Email with ERROR');
@@ -423,10 +426,10 @@
       var apiUrl = baseUrl + ['cms', 'email', email._id].join('/');
       $http.delete(apiUrl).success(function (data, status, headers, config) {
         var _emails = emailcache.get('emails');
-        _emails = _.reject(_emails, function(_email) {
+        _emails = _.reject(_emails, function (_email) {
           return _email._id === email._id;
-        });  
-              
+        });
+
         emailcache.put('emails', _emails);
         fn(data);
       }).error(function (err) {

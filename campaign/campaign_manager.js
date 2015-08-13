@@ -14,6 +14,7 @@ var cmsDao = require('../cms/dao/cms.dao');
 var contactDao = require('../dao/contact.dao');
 var contactActivityManager = require('../contactactivities/contactactivity_manager');
 var courseDao = require('../dao/course.dao');
+var emailDao = require('../cms/dao/email.dao');
 var subscriberDao = require('../dao/subscriber.dao');
 var userDao = require('../dao/user.dao');
 var appConfig = require('../configs/app.config');
@@ -175,6 +176,7 @@ module.exports = {
         self.log.debug('>> handleStep (' + stepNumber + ')');
 
         var step = campaignFlow.get('steps')[stepNumber];
+        self.log.debug('>> getSteps ', campaignFlow.get('steps'));
         if(step === null) {
             var errorString = 'Error getting steps';
             self.log.error(errorString);
@@ -191,10 +193,11 @@ module.exports = {
                     self.log.error('Error getting contact for step: ' + err);
                     return fn(err, null);
                 } else if(contact === null) {
+                    self.log.debug('>> campaignFlow ', campaignFlow);
                     self.log.error('Could not find contact for contactId: ' + campaignFlow.get('contactId'));
                     return fn('Could not find contact for contactId: ' + campaignFlow.get('contactId'), null);
                 } else {
-                    var fromAddress = step.settings.from;
+                    var fromAddress = step.settings.fromEmail;
                     var fromName = step.settings.fromName;
                     var toAddress = contact.getEmails()[0].email;
                     self.log.debug('contact.getEmails: ', contact.getEmails());
@@ -205,23 +208,22 @@ module.exports = {
                     var accountId = campaignFlow.get('accountId');
                     var vars = step.settings.vars || [];
 
-                    var pageId = step.settings.pageId;
-                    cmsDao.getPageById(pageId, function(err, page){
+                    var emailId = step.settings.emailId;
+                    emailDao.getEmailById(emailId, function(err, email){
                         if(err) {
-                            self.log.error('Error getting page to render: ' + err);
+                            self.log.error('Error getting email to render: ' + err);
                             return fn(err, null);
                         }
-                        var component = page.get('components')[0];
+                        var component = email.get('components')[0];
                         self.log.debug('Using this for data', component);
-                        app.render('emails/base_email_campaign', component, function(err, html) {
+                        app.render('emails/base_email', component, function(err, html) {
                             if (err) {
                                 self.log.error('error rendering html: ' + err);
                                 self.log.warn('email will not be sent.');
                             } else {
                                 var campaignId = campaignFlow.get('campaignId');
                                 var contactId = campaignFlow.get('contactId');
-                                mandrillHelper.sendCampaignEmail(fromAddress, fromName, toAddress, toName, subject, html, accountId, campaignId, contactId,
-                                    vars, step.settings, function(err, value){
+                                mandrillHelper.sendCampaignEmail(fromAddress, fromName, toAddress, toName, subject, html, accountId, campaignId, contactId, vars, step.settings, emailId, function(err, value){
                                         if(err) {
                                             self.log.error('Error sending email: ', err);
                                             return fn(err, null);
@@ -379,7 +381,7 @@ module.exports = {
                         return fn(err, null);
                     }
                     self.log.debug('Added contact to campaign flow.');
-                    self.handleStep(flow, 1, function(err, value){
+                    self.handleStep(flow, 0, function(err, value){
                         if(err) {
                             self.log.error('Error handling initial step of campaign: ' + err);
                             callback(err);

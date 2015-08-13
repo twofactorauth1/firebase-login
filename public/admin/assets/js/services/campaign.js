@@ -22,18 +22,18 @@
         });
     };
 
-    this.createCampaign = function (order, fn) {
-      var apiUrl = baseUrl;
+    this.createCampaign = function (campaign, fn) {
+      var apiUrl = baseUrl + ['campaign'].join('/');
       $http({
           url: apiUrl,
           method: "POST",
-          data: order
+          data: campaign
         })
         .success(function (data, status, headers, config) {
           fn(data);
         })
         .error(function (error) {
-          console.error('OrderService: createOrder error >>> ', error);
+          console.error('CampaignService: createCampaign error >>> ', error);
         });
     };
 
@@ -51,6 +51,21 @@
         })
         .error(function (error) {
           console.error('OrderService: updateOrder error >>> ', error);
+        });
+    };
+
+    this.bulkAddContactsToCampaign = function (contactsArr, campaignId, fn) {
+      var apiUrl = baseUrl + ['campaign', campaignId,'contacts'].join('/');
+      $http({
+          url: apiUrl,
+          method: "POST",
+          data: contactsArr
+        })
+        .success(function (data, status, headers, config) {
+          fn(data);
+        })
+        .error(function (error) {
+          console.error('CampaignService: bulkAddContactsToCampaign error >>> ', error);
         });
     };
 

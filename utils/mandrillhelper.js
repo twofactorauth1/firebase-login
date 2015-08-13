@@ -119,7 +119,6 @@ var mandrillHelper =  {
 
     },
 
-
     sendCampaignEmail: function(fromAddress, fromName, toAddress, toName, subject, htmlContent, accountId, campaignId, contactId, vars, stepSettings, emailId, fn) {
         var self = this;
         self.log = log;
@@ -194,6 +193,8 @@ var mandrillHelper =  {
                 var async = false;
                 var ip_pool = "Main Pool";
 
+                console.log('stepSettings.sendAt >>>', stepSettings.sendAt);
+
                 //stepSettings.scheduled.minute, stepSettings.scheduled.hour, stepSettings.scheduled.day
                 //var sendMoment = moment().hours(stepSettings.scheduled.hour).minutes(stepSettings.scheduled.minute).add(stepSettings.scheduled.day , 'days');
                 var send_at = null;
@@ -201,12 +202,13 @@ var mandrillHelper =  {
                     send_at = self._getScheduleUtcDateTimeIsoString(stepSettings.scheduled.day, stepSettings.scheduled.hour,
                         stepSettings.scheduled.minute, stepSettings.offset||0);
                 } else if(stepSettings.sendAt) {
-                    console.log('send at month >>> ', stepSettings.sendAt.month);
+                    console.log('send details >>> ', stepSettings.sendAt);
                     send_at = self._getUtcDateTimeIsoString(stepSettings.sendAt.year, stepSettings.sendAt.month-1,
                         stepSettings.sendAt.day, stepSettings.sendAt.hour, stepSettings.sendAt.minute, stepSettings.offset||0);
+                    console.log('send_at formatted >>> ', send_at);
                     if(moment(send_at).isBefore()) {
-                        self.log.debug('Skipping email because ' + send_at + ' is in the past.');
-                        return fn(null, "Skipped.");
+                        self.log.debug('Sending email now because ' + send_at + ' is in the past.');
+                        send_at = moment().utc().toISOString();
                     }
                 } else {
                     //send it now?

@@ -1,7 +1,7 @@
 'use strict';
 /*global app, angular*/
 (function (angular) {
-  app.controller('CreateCampaignCtrl', ["$scope", "$modal", "toaster", "CampaignService", "CustomerService", "CommonService", "editableOptions", "AccountService", "userConstant", function ($scope, $modal, toaster, CampaignService, CustomerService, CommonService, editableOptions, AccountService, userConstant) {
+  app.controller('CreateCampaignCtrl', ["$scope", "$modal", "toaster", "CampaignService", "CustomerService", "CommonService", "editableOptions", "AccountService", "userConstant", "WebsiteService", function ($scope, $modal, toaster, CampaignService, CustomerService, CommonService, editableOptions, AccountService, userConstant, WebsiteService) {
 
     editableOptions.theme = 'bs3';
 
@@ -14,7 +14,7 @@
      */
 
     $scope.emailToSend = {
-      "title": "New Email",
+      "title": "",
       "components": [{
         "_id": CommonService.generateUniqueAlphaNumericShort(),
         "anchor": CommonService.generateUniqueAlphaNumericShort(),
@@ -48,7 +48,6 @@
     };
 
     $scope.newCampaignObj = {
-      "_id": CommonService.generateUniqueAlphaNumeric(),
       "name": "",
       "type": "onetime",
       "status": "draft",
@@ -58,37 +57,30 @@
         "trigger": null,
         "index": 1,
         "settings": {
-          "emailId": "000000-0000-000000-00000000",
-          "offset": "320000", //in seconds
+          "emailId": "",
+          "offset": "", //in minutes
           "fromEmail": "",
           "fromName": '',
           "replyTo": '',
           "subject": '',
-          "vars": {
-
-          },
-          "scheduled": {
-            "minute": 1,
-            "hour": 2,
-            "day": 1
-          },
+          "vars": [],
           "sendAt": {
             "year": 2015,
-            "month": 2,
-            "day": 15,
-            "hour": 13,
-            "minute": 0
+            "month": 8,
+            "day": 13,
+            "hour": 5,
+            "minute": 35
           },
         }
       }]
     };
 
-    $scope.sendTestEmail = function(_email) {
+    $scope.sendTestEmail = function (_email) {
       console.log('_email ', _email.email);
       console.log('newCampaignObj ', $scope.newCampaignObj);
       console.log('emailToSend ', $scope.emailToSend);
       console.log('recipients ', $scope.recipients);
-      WebsiteService.sendTestEmail(_email, function(data) {
+      WebsiteService.sendTestEmail(_email, function (data) {
         console.log('success test send');
       });
     };
@@ -222,17 +214,33 @@
       return fullContacts;
     };
 
-    $scope.completeNewCampaign = function() {
+    $scope.completeNewCampaign = function () {
       console.log('completeNewCampaign >>>');
       console.log('newCampaignObj ', $scope.newCampaignObj);
       console.log('emailToSend ', $scope.emailToSend);
       console.log('recipients ', $scope.recipients);
-
       //add new email if exists
-      //add campaign
-      //add contacts if new
-      //bulk add contacts to campaign
-      //show success
+      WebsiteService.createEmail($scope.emailToSend, function (newEmail) {
+        console.log('newEmail ', newEmail);
+        var stepSettings = $scope.newCampaignObj.steps[0].settings;
+        stepSettings.emailId = newEmail._id;
+        stepSettings.fromEmail = newEmail.fromEmail;
+        stepSettings.fromName = newEmail.fromName;
+        stepSettings.replyTo = newEmail.replyTo;
+        stepSettings.subject = newEmail.subject;
+
+        //add campaign
+        CampaignService.createCampaign($scope.newCampaignObj, function (_nemCampaign) {
+          console.log('_nemCampaign ', _nemCampaign);
+          //add contacts if new
+          //bulk add contacts to campaign
+          var contactsArr = [16541];
+          CampaignService.bulkAddContactsToCampaign(contactsArr, _nemCampaign._id, function(success) {
+            console.log('bulk add success ', success);
+          });
+          //show success
+        });
+      });
     };
 
     // toggle selection

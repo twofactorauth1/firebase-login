@@ -123,7 +123,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var self = this;
         self.log.debug('>> bulkAddContactToCampaign');
         var campaignId = req.params.id;
-        var contactIdAry = req.body.ids;
+        var contactIdAry = req.body;
         self.log.debug('Got ids: ', contactIdAry);
         var accountId = parseInt(self.accountId(req));
 
