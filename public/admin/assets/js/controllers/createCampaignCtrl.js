@@ -198,6 +198,7 @@
       $scope.customerCounts = x;
     });
 
+
     // selected tags
     $scope.tagSelection = [];
     $scope.recipients = [];
@@ -232,7 +233,9 @@
       return fullContacts;
     };
 
-   
+    $scope.contactTags = function (customer) {
+      return CustomerService.contactTags(customer);
+    };
     
     $scope.createCustomerData = function (email) {
       // New customer

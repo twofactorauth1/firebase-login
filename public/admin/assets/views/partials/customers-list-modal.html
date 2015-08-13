@@ -29,7 +29,7 @@
                                     <td><strong>First Name: </strong> <span ng-text-truncate="customer.first" ng-tt-chars-threshold="15" ng-tt-no-toggling></span><span ng-if="!customer.first">--</span></td>
                                     <td><strong>Last Name: </strong> <span ng-text-truncate="customer.last" ng-tt-chars-threshold="15" ng-tt-no-toggling></span><span ng-if="!customer.last">--</span></td>
                                     <td><strong>Tags: </strong>{{contactTags(customer) || '--'}}</td>
-                                    <td class="hidden-xs"><strong>Email: </strong> <span ng-if="customer.bestEmail"><span ng-text-truncate="customer.bestEmail" ng-tt-chars-threshold="15" ng-tt-no-toggling></span></a>
+                                    <td class="hidden-xs"><strong>Email: </strong> <span ng-if="customer.email"><span ng-text-truncate="customer.email" ng-tt-chars-threshold="15" ng-tt-no-toggling></span></a>
                                         </span><span ng-if="!customer.bestEmail">--</span></td>
                                     <td><strong>Address: </strong>
                                         <span ng-if="customer.details[0].addresses[0].city && customer.details[0].addresses[0].state" ng-text-truncate="customer.details[0].addresses[0].city+', '+customer.details[0].addresses[0].state" ng-tt-chars-threshold="15" ng-tt-no-toggling></span>
