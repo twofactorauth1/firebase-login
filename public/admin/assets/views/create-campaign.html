@@ -64,12 +64,19 @@
                                 </div>
                                 <div class="col-md-7">
                                     <div class="clearfix margin-bottom-30"></div>
-                                    <div class="form-group" ng-class="{'has-error':CreateCampaign.name.$dirty && CreateCampaign.name.$invalid}">
+                                    <div class="form-group has-feedback" ng-class="{'has-error':CreateCampaign.name.$dirty && CreateCampaign.name.$invalid}">
                                         <label>
                                             Campaign Name <span class="symbol required"></span>
                                         </label>
+                                        <input type="text" placeholder="Campaign Name" class="form-control input-lg" name="name" ng-model="newCampaignObj.name" ng-change="checkCampaignName(newCampaignObj.name)" ng-required="currentStep == 1" ng-model-options="{ debounce: 800 }"/>
+                                        <span class="form-control-feedback" ng-class="{'glyphicon glyphicon-remove': !campaignNameIsValid && campaignNameChecked && !checkingCampaignName, 'glyphicon glyphicon-ok': couponIsValid, 'fa fa-spinner fa-spin':checkingCampaignName}"></span>
+
                                         <span class="help-block text-small text-muted">Enter a campaign name that will help you remember what the campaign is about. Will only be visible to you.</span>
-                                        <input type="text" placeholder="Campaign Name" class="form-control input-lg" name="name" ng-model="newCampaignObj.name" ng-required="currentStep == 1" />
+
+                                        <span class="error help-block" ng-if="!campaignNameIsValid && campaignNameChecked && !checkingCampaignName">Campaign Name Already Used. Please Choose Another</span>
+                                        <span class="success help-block" ng-if="campaignNameIsValid && campaignNameChecked && !checkingCampaignName">Great Name!</span>
+
+
                                         <span class="error text-small block" ng-if="CreateCampaign.name.$dirty && CreateCampaign.name.$invalid">Campaign Name is required</span>
                                     </div>
                                     <div class="form-group">
@@ -115,7 +122,7 @@
                                     <div class="padding-30 center">
                                         <h2 class="StepTitle"><i class="fa fa-users fa-2x text-primary block margin-bottom-10"></i> Campaign Recipients</h2>
                                         <p>
-                                            Who do you wants to recieve this campaign? Select the customer grouped by tags or individual customers.
+                                            Who do you wants to recieve this campaign? Select the contacts grouped by tags or individual contacts.
                                         </p>
                                     </div>
                                     <div class="avatars center">
@@ -133,7 +140,7 @@
                                 <div class="col-md-7">
                                     <div class="clearfix margin-bottom-30"></div>
                                     <label>
-                                        Select Recipients<span class="symbol required"></span>
+                                        Select Contacts<span class="symbol required"></span>
                                     </label>
                                     <div class="panel panel-white">
                                         <div class="panel-body no-padding">
@@ -146,10 +153,10 @@
                                                         </label>
                                                     </div>
                                                 </tab>
-                                                <tab heading="by Customer">
-                                                    <span>Select individuals from your customer list</span>
+                                                <tab heading="by Contact">
+                                                    <span>Select individuals from your contact list</span>
                                                     <ui-select multiple ng-model="selectedCustomers.individuals" theme="bootstrap" ng-disabled="disabled" close-on-select="false" style="width: 100%;max-height:250px;overflow:auto" reset-search-input="true">
-                                                        <ui-select-match placeholder="Select Customers...">{{$item.first}} {{$item.last}} ({{$item.details[0].emails[0].email}})</ui-select-match>
+                                                        <ui-select-match placeholder="Select Contacts...">{{$item.first}} {{$item.last}} ({{$item.details[0].emails[0].email}})</ui-select-match>
                                                         <ui-select-choices repeat="customer._id as customer in customers | filter:$select.search">
                                                             {{customer.first}} {{customer.last}}
                                                             <small ng-if="customer.details[0].emails[0].email.length > 0">{{customer.details[0].emails[0].email}}</small>
@@ -159,7 +166,7 @@
                                                 <tab heading="by Emails">
                                                     <span>Enter emails manually seperated by a comma.</span>
                                                     <textarea class="form-control autosize area-animated msd-elastic: \n;" ng-model="selectedCustomers.newEmails"></textarea>
-                                                    <span class="text-muted">Emails not currently in your list will automatically become customers.</span>
+                                                    <span class="text-muted">Emails not currently in your list will automatically become contacts.</span>
                                                 </tab>
                                             </tabset>
                                         </div>
