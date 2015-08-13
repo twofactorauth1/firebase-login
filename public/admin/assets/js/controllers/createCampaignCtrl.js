@@ -116,6 +116,14 @@
       }
     });
 
+    WebsiteService.getEmails(function(_emails) {
+      $scope.emails = _emails;
+    });
+
+    $scope.changeCurrentEmail = function(selectedEmail) {
+      console.log('selectedEmail ', selectedEmail);
+    };
+
     $scope.checkCampaignName = function (_name) {
       console.log('checkCampaignName >>>', _name);
       $scope.checkingCampaignName = true;

@@ -68,15 +68,11 @@
                                         <label>
                                             Campaign Name *
                                         </label>
-                                        <input type="text" placeholder="Campaign Name" class="form-control input-lg" name="name" ng-model="newCampaignObj.name" ng-change="checkCampaignName(newCampaignObj.name)" ng-required="currentStep == 1" ng-model-options="{ debounce: 800 }"/>
+                                        <input type="text" placeholder="Campaign Name" class="form-control input-lg" name="name" ng-model="newCampaignObj.name" ng-change="checkCampaignName(newCampaignObj.name)" ng-required="currentStep == 1" ng-model-options="{ debounce: 800 }" />
                                         <span class="form-control-feedback" ng-class="{'glyphicon glyphicon-remove': campaignNameExists && campaignNameChecked && !checkingCampaignName, 'glyphicon glyphicon-ok': !campaignNameExists && campaignNameChecked && newCampaignObj.name, 'fa fa-spinner fa-spin':checkingCampaignName}"></span>
-
                                         <span class="help-block text-small text-muted" ng-if="!campaignNameChecked || !newCampaignObj.name">Enter a campaign name that will help you remember what the campaign is about. Will only be visible to you.</span>
-
                                         <span class="error help-block" ng-if="campaignNameExists && campaignNameChecked && !checkingCampaignName">Campaign Name Already Used. Please Choose Another</span>
                                         <span class="success help-block" ng-if="!campaignNameExists && campaignNameChecked && !checkingCampaignName && newCampaignObj.name">Great Campaign Name!</span>
-
-
                                         <span class="error text-small block" ng-if="CreateCampaign.name.$dirty && CreateCampaign.name.$invalid">Campaign Name is required</span>
                                     </div>
                                     <div class="form-group">
@@ -185,13 +181,38 @@
                                             Design a custom email or select an email from email templates.
                                         </p>
                                     </div>
-                                     <div class="form-group">
+                                    <div class="form-group">
+                                        <label>Email Type</label>
+                                        <div class="clearfix"></div>
+                                        <div class="radio radio-inline clip-radio radio-primary">
+                                            <input type="radio" id="radio4" name="vertical" value="true">
+                                            <label for="radio4">
+                                                New Email
+                                            </label>
+                                        </div>
+                                        <div class="radio radio-inline clip-radio radio-primary" ng-model="whenToSend">
+                                            <input type="radio" id="radio5" name="vertical" value="best">
+                                            <label for="radio5">
+                                                Email Template
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
                                         <label>
                                             Email Title <span class="symbol required"></span>
                                         </label>
-                                        <span class="help-block text-small text-muted">New Email Title</span>
                                         <input type="text" placeholder="Email Title" class="form-control input-lg" name="name" ng-model="emailToSend.title" />
                                     </div>
+                                    <div>
+                                    <ui-select ng-model="steps[0].emailId" theme="bootstrap" on-select="changeCurrentEmail($select.selected)">
+                                        <ui-select-match placeholder="Select a email">
+                                            <small ng-bind-html="$select.selected.title"></small>
+                                        </ui-select-match>
+                                        <ui-select-choices repeat="email._id as email in emails | filter: $select.search track by $index">
+                                            <small ng-bind-html="email.title | highlight: $select.search"></small>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
                                 </div>
                                 <div class="col-md-7">
                                     <div class="panel panel-white margin-top-30 margin-bottom-0">
@@ -369,7 +390,6 @@
         </div>
     </div>
     <!-- end: WIZARD FORM -->
-
-    <div data-ng-include data-src=" 'assets/views/partials/send-test-email-modal.html' " ></div>
+    <div data-ng-include data-src=" 'assets/views/partials/send-test-email-modal.html' "></div>
     <div data-ng-include data-src=" 'assets/views/partials/customers-list-modal.html' "></div>
 </div>
