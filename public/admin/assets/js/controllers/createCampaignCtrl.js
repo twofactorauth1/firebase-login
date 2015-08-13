@@ -1,7 +1,7 @@
 'use strict';
 /*global app, angular*/
 (function (angular) {
-  app.controller('CreateCampaignCtrl', ["$scope", "$modal", "toaster", "CampaignService", "CustomerService", "CommonService", "editableOptions", "AccountService", "userConstant", "WebsiteService", "$q", function ($scope, $modal, toaster, CampaignService, CustomerService, CommonService, editableOptions, AccountService, userConstant, WebsiteService, $q) {
+  app.controller('CreateCampaignCtrl', ["$scope", "$modal", "$location", "toaster", "CampaignService", "CustomerService", "CommonService", "editableOptions", "AccountService", "userConstant", "WebsiteService", "$q", function ($scope, $modal, $location, toaster, CampaignService, CustomerService, CommonService, editableOptions, AccountService, userConstant, WebsiteService, $q) {
 
     editableOptions.theme = 'bs3';
 
@@ -315,6 +315,8 @@
             contactsArr = [16541];
             CampaignService.bulkAddContactsToCampaign(contactsArr, _nemCampaign._id, function (success) {
               console.log('bulk add success ', success);
+              toaster.pop('success', 'Campaigns created successfully');
+              $location.path('/marketing/campaigns');
             });
           //show success
           })
