@@ -64,17 +64,17 @@
                                 </div>
                                 <div class="col-md-7">
                                     <div class="clearfix margin-bottom-30"></div>
-                                    <div class="form-group has-feedback" ng-class="{'has-error':CreateCampaign.name.$dirty && CreateCampaign.name.$invalid}">
+                                    <div class="form-group has-feedback" ng-class="{'has-error':CreateCampaign.name.$dirty && CreateCampaign.name.$invalid || campaignNameExists, 'has-success': !campaignNameExists && campaignNameChecked && newCampaignObj.name}">
                                         <label>
-                                            Campaign Name <span class="symbol required"></span>
+                                            Campaign Name *
                                         </label>
                                         <input type="text" placeholder="Campaign Name" class="form-control input-lg" name="name" ng-model="newCampaignObj.name" ng-change="checkCampaignName(newCampaignObj.name)" ng-required="currentStep == 1" ng-model-options="{ debounce: 800 }"/>
-                                        <span class="form-control-feedback" ng-class="{'glyphicon glyphicon-remove': !campaignNameIsValid && campaignNameChecked && !checkingCampaignName, 'glyphicon glyphicon-ok': couponIsValid, 'fa fa-spinner fa-spin':checkingCampaignName}"></span>
+                                        <span class="form-control-feedback" ng-class="{'glyphicon glyphicon-remove': campaignNameExists && campaignNameChecked && !checkingCampaignName, 'glyphicon glyphicon-ok': !campaignNameExists && campaignNameChecked && newCampaignObj.name, 'fa fa-spinner fa-spin':checkingCampaignName}"></span>
 
-                                        <span class="help-block text-small text-muted">Enter a campaign name that will help you remember what the campaign is about. Will only be visible to you.</span>
+                                        <span class="help-block text-small text-muted" ng-if="!campaignNameChecked || !newCampaignObj.name">Enter a campaign name that will help you remember what the campaign is about. Will only be visible to you.</span>
 
-                                        <span class="error help-block" ng-if="!campaignNameIsValid && campaignNameChecked && !checkingCampaignName">Campaign Name Already Used. Please Choose Another</span>
-                                        <span class="success help-block" ng-if="campaignNameIsValid && campaignNameChecked && !checkingCampaignName">Great Name!</span>
+                                        <span class="error help-block" ng-if="campaignNameExists && campaignNameChecked && !checkingCampaignName">Campaign Name Already Used. Please Choose Another</span>
+                                        <span class="success help-block" ng-if="!campaignNameExists && campaignNameChecked && !checkingCampaignName && newCampaignObj.name">Great Campaign Name!</span>
 
 
                                         <span class="error text-small block" ng-if="CreateCampaign.name.$dirty && CreateCampaign.name.$invalid">Campaign Name is required</span>

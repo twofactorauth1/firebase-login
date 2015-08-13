@@ -75,12 +75,12 @@
       }]
     };
 
-    $scope.sendTestEmail = function(_email) {
+    $scope.sendTestEmail = function (_email) {
       console.log('to address ', _email.email);
       console.log('newCampaignObj ', $scope.newCampaignObj);
       console.log('emailToSend ', $scope.emailToSend);
       console.log('recipients ', $scope.recipients);
-      WebsiteService.sendTestEmail(_email, $scope.emailToSend, function(data) {
+      WebsiteService.sendTestEmail(_email, $scope.emailToSend, function (data) {
         console.log('success test send');
       });
     };
@@ -114,6 +114,17 @@
         $scope.emailToSend.replyTo = _account.business.emails[0].email;
       }
     });
+
+    $scope.checkCampaignName = function (_name) {
+      console.log('checkCampaignName >>>', _name);
+      $scope.checkingCampaignName = true;
+      CampaignService.checkCampaignNameExists(_name, function(exists) {
+        console.log('exists ', exists);
+        $scope.campaignNameChecked = true;
+        $scope.checkingCampaignName = false;
+        $scope.campaignNameExists = exists;
+      });
+    };
 
 
     $scope.selectedCustomers = {
@@ -235,7 +246,7 @@
           //add contacts if new
           //bulk add contacts to campaign
           var contactsArr = [16541];
-          CampaignService.bulkAddContactsToCampaign(contactsArr, _nemCampaign._id, function(success) {
+          CampaignService.bulkAddContactsToCampaign(contactsArr, _nemCampaign._id, function (success) {
             console.log('bulk add success ', success);
           });
           //show success

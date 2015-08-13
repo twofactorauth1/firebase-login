@@ -3,15 +3,25 @@
  * service for orders
  */
 (function (angular) {
-  app.service('CampaignService', function ($http, orderConstant) {
+  app.service('CampaignService', function ($http, orderConstant, $cacheFactory) {
     var baseUrl = '/api/1.0/campaign/';
 
+    var campaigncache = $cacheFactory('campaigns');
+
     this.getCampaigns = function (fn) {
-      var apiUrl = baseUrl;
-      $http.get(apiUrl)
-        .success(function (data, status, headers, config) {
+      var data = campaigncache.get('campaigns');
+      if (data) {
+        if (fn) {
           fn(data);
-        });
+        }
+      } else {
+        var apiUrl = baseUrl;
+        $http.get(apiUrl)
+          .success(function (data, status, headers, config) {
+            campaigncache.put('campaigns', data);
+            fn(data);
+          });
+      }
     };
 
     this.getCampaign = function (orderId, fn) {
@@ -55,7 +65,7 @@
     };
 
     this.bulkAddContactsToCampaign = function (contactsArr, campaignId, fn) {
-      var apiUrl = baseUrl + ['campaign', campaignId,'contacts'].join('/');
+      var apiUrl = baseUrl + ['campaign', campaignId, 'contacts'].join('/');
       $http({
           url: apiUrl,
           method: "POST",
@@ -67,6 +77,21 @@
         .error(function (error) {
           console.error('CampaignService: bulkAddContactsToCampaign error >>> ', error);
         });
+    };
+
+    this.checkCampaignNameExists = function (_name, fn) {
+      var self = this;
+      self.getCampaigns(function(campaigns) {
+        console.log('campaigns ', campaigns);
+        var _matchingCampaign = _.find(campaigns, function(campaign) {
+          return campaign.name === _name;
+        });
+        if (_matchingCampaign) {
+          fn(true);
+        } else {
+          fn(false);
+        }
+      });
     };
 
   });
