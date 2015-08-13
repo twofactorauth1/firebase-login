@@ -119,12 +119,18 @@
     $scope.checkCampaignName = function (_name) {
       console.log('checkCampaignName >>>', _name);
       $scope.checkingCampaignName = true;
-      CampaignService.checkCampaignNameExists(_name, function(exists) {
+      CampaignService.checkCampaignNameExists(_name, function (exists) {
         console.log('exists ', exists);
         $scope.campaignNameChecked = true;
         $scope.checkingCampaignName = false;
         $scope.campaignNameExists = exists;
       });
+    };
+
+    $scope.customerSelected = function (select) {
+      console.log('select ', select);
+      // clear search text
+      select.search = '';
     };
 
 
