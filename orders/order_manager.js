@@ -233,6 +233,9 @@ module.exports = {
                         var rightNow = new Date();
                         if(moment(rightNow).isBefore(endDate) && moment(rightNow).isAfter(startDate)) {
                             lineItemSubtotal = item.quantity * product.get('sale_price');
+                            item.sale_price = product.get('sale_price');
+                            //TODO: Should not need this line.  Receipt template currently needs it.
+                            item.regular_price = product.get('regular_price');
                         }
                     }
                     if(product.get('taxable') === true) {
