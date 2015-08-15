@@ -446,8 +446,20 @@ fieldset[disabled] .btn-vimeo-square.active {
             display: none;
             visibility: none;
         }
+        &.email {
+            .cn-wrapper {
+                li {
+                    display: none;
+                    &:first-child {
+                        display: block!important;
+                        transform: rotate(75deg) skew(60deg) !important;
+                    }
+                }
+            }
+        }
         &:hover {
-            .component-inner, .bg.cover {
+            .component-inner,
+            .bg.cover {
                 .box-shadow(inset 0px 0px 0px 2px orange);
             }
             .circular {
@@ -872,9 +884,11 @@ div[class^="spacing-"] {
     background: transparent !important;
     z-index: 11 !important;
 }
-.masthead-undernav{
+
+.masthead-undernav {
     z-index: 9 !important;
 }
+
 .li-nav-undernav {
     position: relative;
     z-index: 11 !important;

@@ -4556,6 +4556,9 @@ a.text-light:hover {
 .nephritis {
   background: #27ae60;
 }
+.text-nephritis {
+  color: #27ae60;
+}
 .belizehole {
   background: #2980b9;
 }
@@ -12907,6 +12910,13 @@ fieldset[disabled] .btn-vimeo-square.active {
   display: none;
   visibility: none;
 }
+#componentloader .fragment.email .cn-wrapper li {
+  display: none;
+}
+#componentloader .fragment.email .cn-wrapper li:first-child {
+  display: block!important;
+  transform: rotate(75deg) skew(60deg) !important;
+}
 #componentloader .fragment:hover .component-inner,
 #componentloader .fragment:hover .bg.cover {
   -webkit-box-shadow: inset 0px 0px 0px 2px #ffa500;
@@ -14073,9 +14083,37 @@ tags-input.ti-input-sm .tags .input,
   position: absolute;
   top: 10px;
 }
+.create-campaign .mini-editor {
+  -webkit-transition: all 1s;
+  -moz-transition: all 1s;
+  -ms-transition: all 1s;
+  -o-transition: all 1s;
+}
+.create-campaign .show-fullscreen {
+  position: absolute;
+  right: 0;
+  margin-right: 18px;
+  z-index: 9999;
+}
+.create-campaign #componentloader {
+  min-height: auto!important;
+}
+.create-campaign .swMain > ul li > a:before {
+  width: 96%!important;
+  left: -45% !important;
+}
+.create-campaign .swMain > ul li:first-child a:before {
+  display: none!important;
+}
+.create-campaign .swMain > ul li:last-child a:before {
+  width: 100%!important;
+  left: -47% !important;
+  max-width: 100%;
+}
 .create-campaign .avatars li img {
   margin-right: 3px;
   margin-bottom: 3px;
+  padding: 2px;
 }
 .create-campaign .campaign-step {
   min-height: 350px;

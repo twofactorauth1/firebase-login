@@ -1,9 +1,34 @@
 .create-campaign {
+    .mini-editor {
+        .transition(all 1s);
+    }
+    .show-fullscreen {
+        position: absolute;
+        right: 0;
+        margin-right: 18px;
+        z-index: 9999;
+    }
+    #componentloader {
+        min-height: auto!important;
+    }
+    .swMain > ul li > a:before {
+        width: 96%!important;
+        left: -45%!important;
+    }
+    .swMain > ul li:first-child a:before {
+        display: none!important;
+    }
+    .swMain > ul li:last-child a:before {
+        width: 100%!important;
+        left: -47%!important;
+        max-width: 100%;
+    }
     .avatars {
         li {
             img {
                 margin-right: 3px;
                 margin-bottom: 3px;
+                padding: 2px;
             }
         }
     }

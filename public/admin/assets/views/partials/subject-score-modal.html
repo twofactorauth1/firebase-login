@@ -1,0 +1,98 @@
+<script type="text/ng-template" id="subject-score-modal">
+    <div class="modal-header">
+        <button type="button" class="close" ng-click="closeModal()">&times;</button>
+        <h4 class="modal-title">Subject Score Breakdown</h4>
+    </div>
+    <div class="modal-body bg-white no-padding" style="max-height:500px;overflow:auto">
+        <div class="list-group margin-bottom-0">
+            <a class="list-group-item" href="#">
+                <div class="row">
+                    <div class="col-xs-2">
+                        <p class="text-right"><span class="fa fa-3x" ng-class="{'fa-check text-success': subjectRules.lessThan50Char, 'fa-times text-danger': !subjectRules.lessThan50Char}"></span></p>
+                    </div>
+                    <div class="col-xs-10">
+                        <h5 class="list-group-item-heading">Less Than 50 Characters</h5>
+                        <p class="list-group-item-text">To increase speed of reading email subjects should be less than 50 characters.</p>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+            </a>
+            <a class="list-group-item" href="#">
+                <div class="row">
+                    <div class="col-xs-2">
+                        <p class="text-right"><span class="fa fa-3x" ng-class="{'fa-check text-success': subjectRules.moreThan4Words, 'fa-times text-danger': !subjectRules.moreThan4Words}"></span></p>
+                    </div>
+                    <div class="col-xs-10">
+                        <h5 class="list-group-item-heading">More Than 4 Words</h5>
+                        <p class="list-group-item-text">Subject Lines with fewer words recieve less opens than subjects with more than 4 words.</p>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+            </a>
+            <a class="list-group-item" href="#">
+                <div class="row">
+                    <div class="col-xs-2">
+                        <p class="text-right"><span class="fa fa-3x" ng-class="{'fa-check text-success': subjectRules.lessThan10Words, 'fa-times text-danger': !subjectRules.lessThan10Words}"></span></p>
+                    </div>
+                    <div class="col-xs-10">
+                        <h5 class="list-group-item-heading">Less Than 10 Words</h5>
+                        <p class="list-group-item-text">Subject Lines with too many words recieve less opens than subjects with more less 10 words.</p>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+            </a>
+            <a class="list-group-item" href="#">
+                <div class="row">
+                    <div class="col-xs-2">
+                        <p class="text-right"><span class="fa fa-3x" ng-class="{'fa-check text-success': subjectRules.differentFromPreviousSubjects, 'fa-times text-danger': !subjectRules.differentFromPreviousSubjects}"></span></p>
+                    </div>
+                    <div class="col-xs-10">
+                        <h5 class="list-group-item-heading">Unique Subject Line</h5>
+                        <p class="list-group-item-text">If subject lines are too similar to previous emails recipients will look them over and open rates go down over time.</p>
+                        <p class="list-group-item-text" ng-if="bestMatch"><strong>{{emailToSend.subject}}</strong> is too closely related to <strong>{{bestMatch.value}}</strong> with <strong>{{bestMatch.percent| percentage:0}}</strong> match.</p>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+            </a>
+            <a class="list-group-item" href="#">
+                <div class="row">
+                    <div class="col-xs-2">
+                        <p class="text-right"><span class="fa fa-3x" ng-class="{'fa-check text-success': subjectRules.isAlphaNumeric, 'fa-times text-danger': !subjectRules.isAlphaNumeric}"></span></p>
+                    </div>
+                    <div class="col-xs-10">
+                        <h5 class="list-group-item-heading">Does Not Contain Special Characters</h5>
+                        <p class="list-group-item-text">Special characters show less opens and clicks than subjects with no special characters.</p>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+            </a>
+            <a class="list-group-item" href="#">
+                <div class="row">
+                    <div class="col-xs-2">
+                        <p class="text-right"><span class="fa fa-3x" ng-class="{'fa-check text-success': subjectRules.containsWordToUse, 'fa-times text-danger': !subjectRules.containsWordToUse}"></span></p>
+                    </div>
+                    <div class="col-xs-10">
+                        <h5 class="list-group-item-heading">Contains Best Words</h5>
+                        <p class="list-group-item-text">Subject Lines containing these words were opened more often. Word to Use: Freebie, Urgent, Breaking, Important, Alert, Thank You, Sneak Peek, alert, daily, free delivery, cash, quote, save, jokes, promotional, congratulations, revision, forecast, snapshot, token, voluntary, monthly, deduction</p>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+            </a>
+            <a class="list-group-item" href="#">
+                <div class="row">
+                    <div class="col-xs-2">
+                        <p class="text-right"><span class="fa fa-3x" ng-class="{'fa-check text-success': subjectRules.avoidsWordNotToUse, 'fa-times text-danger': !subjectRules.avoidsWordNotToUse}"></span></p>
+                    </div>
+                    <div class="col-xs-10">
+                        <h5 class="list-group-item-heading">Avoid Worst Words</h5>
+                        <p class="list-group-item-text">Subject Lines containing these words were opened less often. Word Not To Use: Free, Reminder, Canceled, Helping, Fundraising, Raffle, Fundraiser, Charity, Donate, Last Chance, Breast Cancer, Sign Up, help, percent off, newsletter, report, program, half, budget, unlimited, discount, down, sale, suburbs, decoder, inland, county, wish, forgotten, thirds, discussion, romantic, videos</p>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+            </a>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-info" ng-click="closeModal()">Done</button>
+    </div>
+</script>

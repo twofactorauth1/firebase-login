@@ -715,7 +715,10 @@ app.constant('JS_REQUIRES', {
     files: ['../js/libs/ng-text-truncate/ng-text-truncate.js']
   }, {
     name: 'ngTagsInput',
-    files: ['../js/libs/ng-tags-input/ng-tags-input.min.js', '../js/libs/ng-tags-input/ng-tags-input.min.css']
+    files: ['../js/libs/ng-tags-input/ng-tags-input.min.js', '../js/libs/ng-tags-input/ng-tags-input.min.css', '../js/libs/ng-tags-input/ng-tags-input.bootstrap.min.css']
+  }, {
+    name: 'angular-percentage-filter',
+    files: ["../js/libs/angular-percentage-filter/percentage.js"]
   }, {
     name: 'blueimp',
     files: ['../js/libs/blueimp-gallery/js/jquery.blueimp-gallery.min.js', '../js/libs/blueimp-gallery/css/blueimp-gallery.min.css']

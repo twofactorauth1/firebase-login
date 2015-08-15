@@ -9,6 +9,12 @@
      * -
      */
 
+     $scope.$watch('$parent.emailToSend', function(newValue, oldValue) {
+      console.log('newValue', newValue);
+      $scope.ckeditorLoaded = false;
+      $scope.retrieveEmail(null, newValue);
+     });
+
     $scope.circleOptions = {
       isOpen: false,
       toggleOnClick: true,
@@ -97,7 +103,7 @@
             $scope.ckeditorLoaded = true;
             //$scope.setUnderbnavMargin();
             $(window).trigger('resize');
-          }, 100);
+          }, 500);
         }
       });
       $timeout(function () {

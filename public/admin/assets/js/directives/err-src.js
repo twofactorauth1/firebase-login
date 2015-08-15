@@ -17,7 +17,7 @@ app.directive('errSrc', function () {
       }, function (value) {
         if (!value && scope.errContact) {
           element.hide();
-          var contentTr = angular.element('<div class="two-letter-label ' + _.sample(colors) + '">' + scope.getContactLetters() + '</div>');
+          var contentTr = angular.element('<div class="animated bounce two-letter-label ' + _.sample(colors) + '">' + scope.getContactLetters() + '</div>');
           contentTr.insertAfter(element);
         } else {
           element.attr('src', scope.errSrc);
@@ -29,7 +29,7 @@ app.directive('errSrc', function () {
           element.attr('src', scope.errSrc);
         } else {
           element.hide();
-          var contentTr = angular.element('<div class="two-letter-label ' + _.sample(colors) + '">' + scope.getContactLetters() + '</div>');
+          var contentTr = angular.element('<div class="animated bounce two-letter-label ' + _.sample(colors) + '">' + scope.getContactLetters() + '</div>');
           contentTr.insertAfter(element);
         }
       });
