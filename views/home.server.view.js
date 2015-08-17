@@ -24,7 +24,7 @@ _.extend(view.prototype, BaseView.prototype, {
         };
 
         var self = this;
-        this.getAccount(function(err, value) {
+        this.getAccountByHost(_req, function(err, value) {
             if (!err && value != null) {
                 data.account = value.toJSON();
             }

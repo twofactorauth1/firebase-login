@@ -83,8 +83,7 @@ app.directive('productsComponent', ['paymentService', 'productService', 'account
        * - get all products, set originalProducts obj and filter
        */
 
-      ProductService.getAllProducts(function (data) {
-        console.log('products ', data);
+      ProductService.getActiveProducts(function (data) {
         scope.originalProducts = data;
         filterProducts(scope.originalProducts, function () {
           scope.pageChanged(1);
@@ -540,7 +539,7 @@ app.directive('productsComponent', ['paymentService', 'productService', 'account
           return;
         }
         var contact = scope.newContact;
-        if (isEmpty(contact.first) || isEmpty(contact.last) || isEmpty(contact.first) || isEmpty(contact.details[0].emails[0].email) || isEmpty(contact.details[0].phones[0].number)) {
+        if (isEmpty(contact.first) || isEmpty(contact.last) || isEmpty(contact.first) || isEmpty(contact.details[0].emails[0].email)) {
           scope.checkoutModalState = 2;
           return;
         }

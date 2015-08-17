@@ -1,125 +1,139 @@
 {
-    "dashboard": {
-        "WELCOME": "Welcome to {{appName}}"
+  "dashboard": {
+    "WELCOME": "Welcome to {{appName}}"
+  },
+  "topbar": {
+    "messages": {
+      "MAIN": "Messages",
+      "HEADER": "Unread messages",
+      "SEEALL": "See All"
     },
-    "topbar": {
-        "messages": {
-            "MAIN": "Messages",
-            "HEADER": "Unread messages",
-            "SEEALL": "See All"
-        },
 
-        "settings": {
-            "MAIN": "Settings",
-            "HEADER": "Unread messages",
-            "SEEALL": "See All"
-        },
+    "settings": {
+      "MAIN": "Settings",
+      "HEADER": "Unread messages",
+      "SEEALL": "See All"
+    },
 
-        "activities": {
-            "MAIN": "Activities",
-            "HEADER": "You have new notifications",
-            "SEEALL": "See All"
-        },
-        "user": {
-            "PROFILE": "My Profile",
-            "CALENDAR": "My Calendar",
-            "MESSAGES": "My Messages",
-            "LOCKSCREEN": "Lock Screen",
-            "LOGOUT": "Log Out"
-        }
+    "activities": {
+      "MAIN": "Activities",
+      "HEADER": "You have new notifications",
+      "SEEALL": "See All"
     },
-    "offsidebar": {
-        "chat": {
-            "ONLINE": "On-Line",
-            "OFFLINE": "Off-Line",
-            "BACK": "Back",
-            "SEND": "Send",
-            "PLACEHOLDER": "Message"
-        },
-        "favorites": {
-            "MAIN": "Favorites"
-        },
-        "settings": {
-            "MAIN": "General Settings",
-            "NOTIFICATIONS": "Enable Notifications",
-            "SHOWEMAIL": "Show your E-mail",
-            "SHOWUSERS": "Show Offline Users",
-            "EMAILALERT": "E-mail Alerts",
-            "SMSALERT": "SMS Alerts",
-            "SAVE": "Save Changes"
-        }
-    },
-    "sidebar": {
-        "heading": {
-            "NAVIGATION": "Main Navigation",
-            "FEATURES": "Core Features",
-            "DOCUMENTATION": "Documentation"
-        },
-        "search": {
-            "PLACEHOLDER": "Search..."
-        },
-        "settings": {
-            "MAIN": "Settings"
-        },
-        "nav": {
-            "dashboard": {
-                "MAIN": "Dashboard"
-            },
-            "website": {
-                "MAIN": "Website",
-                "ANALYTICS": "Site Analytics",
-                "PAGES": "Pages",
-                "POSTS": "Posts",
-                "TEMPLATES": "Templates",
-                "SETTINGS": "Settings"
-            },
-            "emails": {
-                "MAIN": "Emails"
-            },
-            "customers": {
-                "MAIN": "Customers",
-                "MANAGE": "Manage",
-                "SETTINGS": "Customer Settings"
-            },
-            "commerce": {
-                "MAIN": "Commerce",
-                "PRODUCTS": "Products",
-                "ORDERS": "Orders",
-                "SETTINGS": "Commerce Settings"
-            },
-            "marketing": {
-                "MAIN": "Marketing",
-                "SOCIALFEED": "Social Feed",
-                "CAMPAIGNS": "Campaigns"
-            },
-            "account": {
-                "MAIN": "Account",
-                "PROFILE": "My Profile",
-                "PROFILEBUSINESS": "Business Profile",
-                "BILLING": "Billing",
-                "INTEGRATIONS": "Integrations"
-            },
-            "support": {
-                "MAIN": "Support",
-                "GETTINGSTARTED": "Getting Started",
-                "HELPTOPICS": "Help Topics"
-            },
-            "logout": {
-                "MAIN": "Logout"
-            }
-        }
-    },
-    "footer": {
-        "copyright": {
-            "MAIN": "Copyright",
-            "MESSAGE": "All rights reserved"
-        }
-    },
-    "setting": {
-        "MAIN": "Style Selector",
-        "FIXEDHEADER": "Fixed header",
-        "FIXEDSIDEBAR": "Fixed sidebar",
-        "CLOSEDSIDEBAR": "Closed sidebar",
-        "FIXEDFOOTER": "Fixed footer"
+    "user": {
+      "PROFILE": "My Profile",
+      "CALENDAR": "My Calendar",
+      "MESSAGES": "My Messages",
+      "LOCKSCREEN": "Lock Screen",
+      "LOGOUT": "Log Out"
     }
+  },
+  "offsidebar": {
+    "chat": {
+      "ONLINE": "On-Line",
+      "OFFLINE": "Off-Line",
+      "BACK": "Back",
+      "SEND": "Send",
+      "PLACEHOLDER": "Message"
+    },
+    "favorites": {
+      "MAIN": "Favorites"
+    },
+    "settings": {
+      "MAIN": "General Settings",
+      "NOTIFICATIONS": "Enable Notifications",
+      "SHOWEMAIL": "Show your E-mail",
+      "SHOWUSERS": "Show Offline Users",
+      "EMAILALERT": "E-mail Alerts",
+      "SMSALERT": "SMS Alerts",
+      "SAVE": "Save Changes"
+    }
+  },
+  "sidebar": {
+    "heading": {
+      "NAVIGATION": "Main Navigation",
+      "FEATURES": "Core Features",
+      "DOCUMENTATION": "Documentation"
+    },
+    "search": {
+      "PLACEHOLDER": "Search..."
+    },
+    "settings": {
+      "MAIN": "Settings"
+    },
+    "nav": {
+      "dashboard": {
+        "MAIN": "Dashboard"
+      },
+      "website": {
+        "MAIN": "Website",
+        "ANALYTICS": "Site Analytics",
+        "PAGES": "Pages",
+        "POSTS": "Posts",
+        "TEMPLATES": "Templates",
+        "SETTINGS": "Settings"
+      },
+      "customers": {
+        "MAIN": "Customers",
+        "MANAGE": "Manage",
+        "SETTINGS": "Customer Settings"
+      },
+      "commerce": {
+        "MAIN": "Commerce",
+        "PRODUCTS": "Products",
+        "ORDERS": "Orders",
+        "SETTINGS": "Commerce Settings"
+      },
+      "marketing": {
+        "MAIN": "Marketing",
+        "SOCIALFEED": "Social Feed",
+        "CAMPAIGNS": "Campaigns",
+        "NEWCAMPAIGN": "New Campaign",
+        "EMAILS": "Email Templates"
+      },
+      "account": {
+        "MAIN": "Account",
+        "PROFILE": "My Profile",
+        "PROFILEBUSINESS": "Business Profile",
+        "BILLING": "Billing",
+        "INTEGRATIONS": "Integrations"
+      },
+      "support": {
+        "MAIN": "Support",
+        "GETTINGSTARTED": "Getting Started",
+        "HELPTOPICS": "Help Topics"
+      },
+      "logout": {
+        "MAIN": "Logout"
+      }
+    }
+  },
+  "footer": {
+    "copyright": {
+      "MAIN": "Copyright",
+      "MESSAGE": "All rights reserved"
+    }
+  },
+  "setting": {
+    "MAIN": "Style Selector",
+    "FIXEDHEADER": "Fixed header",
+    "FIXEDSIDEBAR": "Fixed sidebar",
+    "CLOSEDSIDEBAR": "Closed sidebar",
+    "FIXEDFOOTER": "Fixed footer"
+  },
+  "tableFields": {
+    "SCREENSHOT": "Screenshot",
+    "CREATED": "Created",
+    "MODIFIED": "Modified",
+    "NAME": "Name",
+    "TYPE": "Type",
+    "STATUS": "Status",
+    "ACTIONS": "Actions"
+  },
+  "campaign": {
+    "NEWCAMPAIGN": "New Campaign",
+    "OPENRATE": "Sent",
+    "CLICKRATE": "Clicks",
+    "DESCRIPTION": "Create a new campaign to reach a group of contacts"
+  }
 }

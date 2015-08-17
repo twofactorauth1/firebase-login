@@ -23,7 +23,8 @@ CKEDITOR.editorConfig = function( config ) {
 		{ name: 'colors' },
 		{ name: 'tools' },
 		{ name: 'others'},
-		{ name: 'about' }
+		{ name: 'about' },
+		{ name: 'mergetags' }
 	];
 
 	// config.font_names = 'GoogleWebFonts;' + config.font_names;
@@ -50,7 +51,7 @@ CKEDITOR.editorConfig = function( config ) {
 	// config.protectedSource.push( /<span[\s\S]*?\>/g ); //allows beginning <i> tag
 	// config.protectedSource.push( /<\/span[\s\S]*?\>/g ); //allows ending </i> tag
 
-	config.extraPlugins = 'panel,floatpanel,dialogadvtab,contextmenu,colordialog,colorbutton,pastetext,doksoft_button,mediamanager,sharedspace,image2,tooltip,lineheight,doksoft_font_awesome,table,tabletools,quicktable,tableresize,scroll';
+	config.extraPlugins = 'panel,floatpanel,dialogadvtab,contextmenu,colordialog,colorbutton,pastetext,doksoft_button,mediamanager,sharedspace,image2,tooltip,lineheight,doksoft_font_awesome,table,tabletools,quicktable,tableresize,scroll','mergetags';
 
 	config.filebrowserBrowseUrl = '';
 

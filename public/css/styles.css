@@ -692,16 +692,9 @@ div[data-type='campaign'] .inner-page .overlay {
   border-bottom: 0;
 }
 .email-v1 .headerContent {
-  color: #202020;
-  font-family: Arial;
-  font-size: 34px;
-  font-weight: bold;
   line-height: 100%;
   padding: 15px;
-  text-align: center;
-  vertical-align: middle;
   background-color: #cfecf5;
-  border: 1px solid #bbe3f0;
 }
 .email-v1 .headerContent a:link,
 .email-v1 .headerContent a:visited,
@@ -1672,6 +1665,12 @@ div[data-type="feature-block"] .component-inner {
   vertical-align: middle;
   text-align: center;
 }
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+  .meet-team-v1 .img-circle {
+    padding: 0;
+    border: 1px;
+  }
+}
 /********** Meet Team  v2**********/
 .meet-team-v2 .editing.team-member-wrap .social-link {
   border: 2px solid rgba(0, 0, 0, 0);
@@ -2211,7 +2210,12 @@ div[data-type="feature-block"] .component-inner {
   content: attr(data-text);
 }
 .editing .testimonials-v2 .testimonial-wrap img {
-  width: 100%;
+  max-width: 100%;
+}
+@-moz-document url-prefix() {
+  img {
+    width: 100%;
+  }
 }
 .editing .testimonials-v2 .testimonials {
   padding: 25px;
@@ -2809,6 +2813,9 @@ div[data-type="feature-block"] .component-inner {
 }
 .products-v1 .btnLaunchCart:focus {
   outline: none;
+}
+.products-v1 .line-wrap-text {
+  word-wrap: break-word;
 }
 .shopping-cart {
   color: #444!important;

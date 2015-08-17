@@ -34,7 +34,7 @@
                                 <div class="visible-xs clearfix margin-bottom-15"></div>
                                 <div class="col-sm-6">
                                     <div class="form-group margin-bottom-0 pull-right">
-                                        <button type="button" class="btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti ti-plus" ng-click="openSimpleModal('new-customer-modal')">
+                                        <button type="button" class="btn btn-warning btn-wide btn-scroll btn-scroll-top ti ti-plus" ng-click="openSimpleModal('new-customer-modal')">
                                             <span>New Customer</span>
                                         </button>
                                     </div>
@@ -173,7 +173,7 @@
                         <tbody>
                             <tr ng-repeat="customer in displayedCustomers" ng-click="viewSingle(customer)">
                                 <td class="center" ng-show="column.photo">
-                                    <img ng-src="{{ customer.photo }}" id="customer_photo_{{customer._id}}" err-src="/admin/assets/images/default-user.png" class="img-thumbnail screenshot" alt="image">
+                                    <img ng-src="{{ customer.photo }}" id="customer_photo_{{customer._id}}" err-src="" err-contact="customer" class="img-thumbnail screenshot" alt="image">
                                 </td>
                                 <td ng-show="column.name"><strong>First Name: </strong> <span ng-text-truncate="customer.first" ng-tt-chars-threshold="15" ng-tt-no-toggling></span><span ng-if="!customer.first">--</span></td>
                                 <td ng-show="column.name"><strong>Last Name: </strong> <span ng-text-truncate="customer.last" ng-tt-chars-threshold="15" ng-tt-no-toggling></span><span ng-if="!customer.last">--</span></td>

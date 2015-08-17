@@ -786,6 +786,40 @@ module.exports = {
         blogPostDao.saveOrUpdate(blogPost, fn);
     },
 
+    publishPost: function(accountId, postId, pageId, userId, fn) {
+        log.debug('>> publishPost ');
+        log.debug('>> PostId ', postId);
+        var query = {
+            _id: postId,         
+            accountId: accountId
+        };
+        blogPostDao.findOne(query, $$.m.BlogPost, function(err, post){
+            log.debug('retrieved post >>> ', post);
+            if(err) {
+                log.error('Error getting post: ' + err);
+                return fn(err, null);
+            }
+            
+            post.set('post_status', $$.m.BlogPost.status.PUBLISHED);
+            post.set('pageId', pageId);
+            var modified = {
+                date: new Date(),
+                by: userId
+            };
+            post.set('modified', modified);
+            blogPostDao.saveOrUpdate(post, function(err, updatedPost){
+                if(err) {
+                    log.error('Error updating post: ' + err);
+                    return fn(err, null);
+                }
+                log.debug('<< publishPost');
+                return fn(null, updatedPost);
+            });
+
+        });
+
+    },
+
     deleteBlogPost: function(accountId, pageId, postId, fn) {
         var self = this;
         self.log = log;
@@ -1694,13 +1728,49 @@ module.exports = {
                 log.error('Exception thrown checking for uniqueness: ' + err);
                 fn(err, null);
             } else if(value === true) {
-                log.warn('Attempted to create a email with a title that already exists.');
+                log.warn('Attempted to create an email with a title that already exists.');
                 fn('Title already exists', null);
             } else {
                 emailDao.saveOrUpdate(email, function(err, savedEmail){
                     log.debug('<< createEmail');
                     fn(null, savedEmail);
                 });
+            }
+        });
+    },
+
+    updateEmail: function(email, emailId, fn) {
+        log.debug('>> updateEmail');
+        log.debug('>> EmailId', emailId);
+        log.debug('>> Title', email.get('title'));
+        //validate
+        var nameCheckQuery = {'title': email.get('title'), _id : { $ne: emailId }};
+        emailDao.exists(nameCheckQuery, $$.m.cms.Email, function(err, value){
+            if(err) {
+                log.error('Exception thrown checking for uniqueness: ' + err);
+                fn(err, null);
+            } else if(value === true) {
+                log.warn('Attempted to update an email with a title that already exists.');
+                fn('Title already exists', null);
+            } else {
+                emailDao.saveOrUpdate(email, function(err, savedEmail){
+                    log.debug('<< updateEmail');
+                    fn(null, savedEmail);
+                });
+            }
+        });
+    },
+
+    deleteEmail: function(emailId, fn) {
+        var self = this;
+        log.debug('>> deleteEmail');
+        emailDao.removeById(emailId, $$.m.cms.Email, function(err, value){
+            if(err) {
+                log.error('Error deleting email: ' + err);
+                fn(err, null);
+            } else {
+                log.debug('<< deleteEmail');
+                fn(null, value);
             }
         });
     },

@@ -2,11 +2,12 @@
 /*global app, moment, angular, window*/
 /*jslint unparam:true*/
 (function (angular) {
-  app.controller('OrdersCtrl', ["$scope", "toaster", "$modal", "$filter", "$state", "OrderService", "CustomerService", function ($scope, toaster, $modal, $filter, $state, OrderService, CustomerService) {
+  app.controller('OrdersCtrl', ["$scope", "toaster", "$modal", "$filter", "$state", "OrderService", "CustomerService", "orderConstant", function ($scope, toaster, $modal, $filter, $state, OrderService, CustomerService, orderConstant) {
     
     $scope.tableView = 'list';
     $scope.itemPerPage = 100;
     $scope.showPages = 15;
+    $scope.orderConstant = orderConstant;
     /*
      * @openModal
      * -
@@ -84,6 +85,10 @@
       $scope.showOrders = true;
     });
 
+    $scope.formatOrderStatus = function (status) {
+      return OrderService.formatOrderStatus(status);
+    };
+    
     /*
      * @orderStatusOptions
      * - an array of order status types for use in a select

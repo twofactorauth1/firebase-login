@@ -5,7 +5,8 @@ app.directive('blogComponent', ['$filter', '$timeout', 'WebsiteService', 'toaste
   return {
     scope: {
       component: '=',
-      media: '&'
+      media: '&',
+      control: '='
     },
     templateUrl: '/components/component-wrap.html',
     link: function (scope, element, attrs) {
@@ -16,13 +17,23 @@ app.directive('blogComponent', ['$filter', '$timeout', 'WebsiteService', 'toaste
           index: index
         });
       };
+
+    scope.control.saveBlogData = function () {
+      _.each(scope.blog.blogposts, function (value, index) {
+          var matching_post = _.find(scope.originalBlogPosts, function (item) {
+            return item._id === value._id
+          })
+          if (!angular.equals(matching_post, value))
+            WebsiteService.updatePost(scope.$parent.page._id, value._id, value, function (data) {});
+        })
+      };
     },
     controller: function ($scope, WebsiteService, $compile, $filter, $timeout) {
       $scope.blog = {};
       $scope.showCloud = false;
       WebsiteService.getPosts(function (posts) {
         $scope.blog.blogposts = posts;
-
+        $scope.originalBlogPosts = angular.copy($scope.blog.blogposts);
         $scope.blog.postTags = [];
         $scope.blog.categories = [];
 
@@ -188,12 +199,12 @@ app.directive('blogComponent', ['$filter', '$timeout', 'WebsiteService', 'toaste
 
       $scope.deleteBlogPost = function (postId, blogpost) {
       console.log('delete post');
-      WebsiteService.deletePost($scope.$parent.page._id, postId, function (data) {
-        var index = $scope.blog.blogposts.indexOf(blogpost);
-        $scope.blog.blogposts.splice(index, 1);
-        toaster.pop('success', 'Post deleted successfully');
-      });
-    };
+        WebsiteService.deletePost($scope.$parent.page._id, postId, function (data) {
+          var index = $scope.blog.blogposts.indexOf(blogpost);
+          $scope.blog.blogposts.splice(index, 1);
+          toaster.pop('success', 'Post deleted successfully');
+        });
+      };
     }
   };
 }]);

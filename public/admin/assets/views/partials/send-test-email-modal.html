@@ -1,0 +1,18 @@
+<script type="text/ng-template" id="send-test-email-modal">
+    <div class="modal-header">
+        <button type="button" class="close" ng-click="closeModal()">&times;</button>
+        <h4 class="modal-title">Send Test Email</h4>
+    </div>
+    <form name="testEmailForm" novalidate>
+        <div class="modal-body bg-white" style="max-height:500px;overflow:auto">
+            <span class="help-block">Enter an email to send the test.</span>
+            <div class="form-group" ng-class="{ 'has-error' : testEmailForm.email.$invalid && !testEmailForm.email.$pristine }">
+                <label>Email*</label>
+                <input name="email" class="form-control" type="email" ng-model="testemail.email" required>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-info" ng-disabled="testEmailForm.$invalid"  ng-click="sendTestEmail(testemail)"><i class="fa fa-save"></i> Send</button>
+        </div>
+    </form>
+</script>

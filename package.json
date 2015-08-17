@@ -82,6 +82,11 @@
     "grunt-ng-annotate": "^0.4.0",
     "grunt-ng-constant": "^1.0.0",
     "grunt-prompt": "^1.2.1",
+    "jasmine-core": "^2.3.4",
+    "karma": "^0.13.8",
+    "karma-cli": "^0.1.0",
+    "karma-jasmine": "^0.3.6",
+    "karma-requirejs": "^0.2.2",
     "superagent": "0.18.1",
     "supertest": "0.13.0"
   },

@@ -1,0 +1,59 @@
+<script type="text/ng-template" id="new-campaign-modal">
+    <div class="modal-header">
+        <button type="button" class="close" ng-click="cancel()">
+            <span aria-hidden="true">&times;</span>
+            <span class="sr-only">Close</span>
+        </button>
+        <h3 class="modal-title">New Campaign</h3>
+    </div>
+    <div class="modal-body bg-white">
+        <form role="form" class="ng-pristine ng-valid">
+            <div class="col-xs-12">
+                <div class="clearfix margin-bottom-30"></div>
+                <div class="form-group" ng-class="{'has-error':CreateCampaign.name.$dirty && CreateCampaign.name.$invalid}">
+                    <label>
+                        Campaign Name <span class="symbol required"></span>
+                    </label>
+                    <span class="help-block text-small text-muted">Enter a campaign name that will help you remember what the campaign is about. Will only be visible to you.</span>
+                    <input type="text" placeholder="Campaign Name" class="form-control input-lg" name="name" ng-model="newCampaign.name" ng-required="currentStep == 1" />
+                    <span class="error text-small block" ng-if="CreateCampaign.name.$dirty && CreateCampaign.name.$invalid">Campaign Name is required</span>
+                </div>
+                <div class="form-group">
+                    <label>
+                        Campaign Type <span class="symbol required"></span>
+                    </label>
+                    <span class="help-block text-small text-muted">Choose the type of campaign you want to create. Default is One Time.</span>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="panel animated no-radius text-center margin-bottom-0 cursor-pointer" ng-class="{true:'panel-light-grey pulse',false:'panel-white'}[newCampaign.type == 'onetime']">
+                                <div class="panel-body" ng-class="{'bg-light-grey': hover1}" ng-mouseenter="hover1 = true" ng-mouseleave="hover1 = false" ng-click="newCampaign.type = 'onetime'">
+                                    <span ng-if="newCampaign.type == 'onetime'" class="fa fa-check-circle text-success fa-2x" style="position:absolute; top:o;right:0;margin-right:5px;margin-top:-10px;"></span>
+                                    <span class="fa-stack fa-2x"> <i class="fa fa-square fa-stack-2x text-primary"></i> <i class="fa fa-envelope fa-stack-1x fa-inverse"></i> </span>
+                                    <h3 class="StepTitle">One Time</h3>
+                                    <p class="text-small">
+                                        Send a standard one time email to a group of contacts.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="panel animated no-radius text-center margin-bottom-0 cursor-pointer" ng-class="{true:'panel-light-grey pulse',false:'panel-white'}[newCampaign.type == 'autoresponder']">
+                                <div class="panel-body" ng-class="{'bg-light-grey': hover2}" ng-mouseenter="hover2 = true" ng-mouseleave="hover2 = false" ng-click="newCampaign.type = 'autoresponder'">
+                                    <span ng-if="newCampaign.type == 'autoresponder'" class="fa fa-check-circle text-success fa-2x" style="position:absolute; top:o;right:0;margin-right:5px;margin-top:-10px;"></span>
+                                    <span class="fa-stack fa-2x"> <i class="fa fa-square fa-stack-2x text-primary"></i> <i class="fa fa-bullhorn fa-stack-1x fa-inverse"></i> </span>
+                                    <h3 class="StepTitle">AutoResponder</h3>
+                                    <p class="text-small">
+                                        Auomatically send an email after a contact subscribes
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" ng-disabled='!newProduct.name || !newProduct.type || saveLoading' ng-click="addProduct()">Add</button>
+    </div>
+</script>

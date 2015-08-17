@@ -138,9 +138,10 @@
           .success(function (data, status, headers, config) {
             console.log('data >>> ', data);
             resetEmailCache = false;
+            emailcache.put('emails', data);
+            console.log('emailcache ', emailcache);
             ChartEmailService.queryMandrillData(data, function (_data) {
               console.log('_data >>> ', _data);
-              emailcache.put('emails', _data);
               if (fn) {
                 console.log('resolve >>> ');
                 deferred.resolve(fn(_data));
@@ -289,6 +290,27 @@
       });
     };
 
+    this.sendTestEmail = function (emailAddressObj, emailContentObj, fn) {
+      var payload = angular.toJson({
+        address: emailAddressObj,
+        content: emailContentObj,
+      });
+
+      console.log('WebsiteService.sendTestEmail - payload', payload);
+
+      var apiUrl = baseUrl + ['cms', 'testemail'].join('/');
+      $http({
+        url: apiUrl,
+        method: "POST",
+        data: payload,
+      }).success(function (data, status, headers, config) {
+        fn(data);
+      }).error(function (err) {
+        console.warn('END:Website Service with ERROR');
+        fn(err, null);
+      });
+    };
+
     //page/:id/components/all
     this.updateAllComponents = function (pageId, componentJSON, fn) {
       var apiUrl = baseUrl + ['cms', 'page', pageId, 'components', 'all'].join('/');
@@ -379,11 +401,47 @@
         data: angular.toJson(emaildata)
       }).success(function (data, status, headers, config) {
         var _emails = emailcache.get('emails');
-        _pages[data.handle] = data;
-        pagecache.put('emails', _emails);
-        fn(data);
+        if (_emails) {
+          _emails[data.title] = data;
+          emailcache.put('emails', _emails);
+        }
+        fn(data, null);
       }).error(function (err) {
         console.warn('END:Create Email with ERROR');
+        fn(null, err);
+      });
+    };
+
+    this.updateEmail = function (emaildata, fn) {
+      var apiUrl = baseUrl + ['cms', 'email', emaildata._id].join('/');
+      $http({
+        url: apiUrl,
+        method: "PUT",
+        data: angular.toJson(emaildata)
+      }).success(function (data, status, headers, config) {
+        var _emails = emailcache.get('emails');
+        emailcache.put('emails', _emails);
+        fn(data, null);
+      }).error(function (err) {
+        console.warn('END:Create Email with ERROR');
+        fn(null, err);
+      });
+    };
+
+    //email/:id/
+    this.deleteEmail = function (email, fn) {
+      var apiUrl = baseUrl + ['cms', 'email', email._id].join('/');
+      $http.delete(apiUrl).success(function (data, status, headers, config) {
+        var _emails = emailcache.get('emails');
+        _emails = _.reject(_emails, function (_email) {
+          return _email._id === email._id;
+        });
+
+        emailcache.put('emails', _emails);
+        fn(data);
+      }).error(function (err) {
+        console.warn('END:Delete Email with ERROR', err);
+        fn(err);
       });
     };
 
@@ -562,7 +620,21 @@
       }).success(function (data, status, headers, config) {
         fn(data);
       }).error(function (err) {
-        console.warn('END:Website Service updatePage with ERROR');
+        console.warn('END:Website Service updatePost with ERROR');
+        fn(err, null);
+      });
+    };
+
+    //page/:pageId/blog/status/:postId'
+    this.publishPost = function (pageId, postId, fn) {
+      var apiUrl = baseUrl + ['cms', 'page', pageId, 'blog', 'status', postId].join('/');
+      $http({
+        url: apiUrl,
+        method: "PUT"
+      }).success(function (data, status, headers, config) {
+        fn(data);
+      }).error(function (err) {
+        console.warn('END:Website Service updatePostStatus with ERROR');
         fn(err, null);
       });
     };

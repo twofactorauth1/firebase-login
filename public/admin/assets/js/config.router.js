@@ -31,7 +31,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
     $stateProvider.state('app', {
         url: "",
         templateUrl: "assets/views/app.html",
-        resolve: loadSequence('modernizr', 'underscore', 'moment', 'angularMoment', 'uiSwitch', 'perfect-scrollbar-plugin', 'toaster', 'ngAside', 'vAccordion', 'chartjs', 'tc.chartjs', 'oitozero.ngSweetAlert', 'chatCtrl', 'smart-table', 'touchspin-plugin', 'slugifier', 'commonService', 'timeAgoFilter','angularFileUpload', 'ngTextTruncate', 'infinite-scroll', 'ui.select', 'blueimp', 'ngTagsInput', 'titleCase', 'bootstrap-confirmation', 'ladda', 'angular-ladda', 'uuid', 'formatText', 'asideCtrl', 'settingsCtrl', 'assetsService', 'mediaModalCtrl', 'xeditable'),
+        resolve: loadSequence('modernizr', 'underscore', 'moment', 'angularMoment', 'uiSwitch', 'perfect-scrollbar-plugin', 'toaster', 'ngAside', 'vAccordion', 'chartjs', 'tc.chartjs', 'oitozero.ngSweetAlert', 'chatCtrl', 'smart-table', 'touchspin-plugin', 'slugifier', 'commonService', 'timeAgoFilter','angularFileUpload', 'ngTextTruncate', 'infinite-scroll', 'ui.select', 'blueimp', 'ngTagsInput', 'titleCase', 'bootstrap-confirmation', 'ladda', 'angular-ladda', 'uuid', 'formatText', 'asideCtrl', 'settingsCtrl', 'assetsService', 'mediaModalCtrl', 'xeditable', 'angular-percentage-filter'),
         abstract: true
     }).state('app.dashboard', {
         url: "/dashboard",
@@ -97,7 +97,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         onExit: function($rootScope) {
          $rootScope.breadcrumbTitle = undefined;
         },
-        resolve: loadSequence('editorCtrl', 'userService', 'htmlToPlaintext', 'spectrum', 'ui.sortable', 'angular-slider', 'assetsService', 'toasterService', 'geocodeService', 'productService', 'paymentService', 'accountService', 'toTrusted', 'generateURLforLinks', 'truncate', 'ckeditor', 'ngSticky', 'slick', 'offset', 'jqcloud', 'jsVideoUrlParser', 'selectedTags', 'addComponentModalCtrl', 'componentSettingsModalCtrl', 'googlePlaces', 'ngMap')
+        resolve: loadSequence('editorCtrl', 'userService', 'htmlToPlaintext', 'spectrum', 'ui.sortable', 'angular-slider', 'assetsService', 'toasterService', 'geocodeService', 'productService', 'paymentService', 'accountService', 'toTrusted', 'generateURLforLinks', 'truncate', 'ckeditor', 'ngSticky', 'slick', 'offset', 'jqcloud', 'jsVideoUrlParser', 'selectedTags', 'addComponentModalCtrl', 'componentSettingsModalCtrl', 'googlePlaces', 'ngMap', 'angularCircularNavigation')
     }).state('app.website.singlepost', {
         url: '/posts/:id',
         templateUrl: "assets/views/editor.html",
@@ -110,7 +110,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         onExit: function($rootScope) {
          $rootScope.breadcrumbTitle = undefined;
         },
-        resolve: loadSequence('editorCtrl', 'userService', 'htmlToPlaintext', 'spectrum', 'ui.sortable', 'angular-slider', 'assetsService', 'toasterService', 'geocodeService', 'productService', 'paymentService', 'accountService', 'toTrusted', 'generateURLforLinks', 'truncate', 'ckeditor', 'ngSticky', 'slick', 'offset', 'jqcloud', 'jsVideoUrlParser', 'selectedTags', 'addComponentModalCtrl', 'componentSettingsModalCtrl', 'googlePlaces','ngMap')
+        resolve: loadSequence('editorCtrl', 'userService', 'htmlToPlaintext', 'spectrum', 'ui.sortable', 'angular-slider', 'assetsService', 'toasterService', 'geocodeService', 'productService', 'paymentService', 'accountService', 'toTrusted', 'generateURLforLinks', 'truncate', 'ckeditor', 'ngSticky', 'slick', 'offset', 'jqcloud', 'jsVideoUrlParser', 'selectedTags', 'addComponentModalCtrl', 'componentSettingsModalCtrl', 'googlePlaces','ngMap', 'angularCircularNavigation')
     }).state('app.website.singletemplate', {
         url: '/templates/:id',
         templateUrl: "assets/views/editor.html",
@@ -123,7 +123,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         onExit: function($rootScope) {
          $rootScope.breadcrumbTitle = undefined;
         },
-        resolve: loadSequence('editorCtrl', 'userService', 'htmlToPlaintext', 'spectrum', 'ui.sortable', 'angular-slider', 'assetsService', 'toasterService', 'geocodeService', 'productService', 'paymentService', 'accountService', 'toTrusted', 'generateURLforLinks', 'truncate', 'ckeditor', 'ngSticky', 'slick', 'offset', 'jqcloud', 'jsVideoUrlParser', 'selectedTags', 'addComponentModalCtrl', 'componentSettingsModalCtrl', 'templateSettingsModalCtrl', 'googlePlaces', 'ngMap')
+        resolve: loadSequence('editorCtrl', 'userService', 'htmlToPlaintext', 'spectrum', 'ui.sortable', 'angular-slider', 'assetsService', 'toasterService', 'geocodeService', 'productService', 'paymentService', 'accountService', 'toTrusted', 'generateURLforLinks', 'truncate', 'ckeditor', 'ngSticky', 'slick', 'offset', 'jqcloud', 'jsVideoUrlParser', 'selectedTags', 'addComponentModalCtrl', 'componentSettingsModalCtrl', 'templateSettingsModalCtrl', 'googlePlaces', 'ngMap', 'angularCircularNavigation')
     }).state('app.emails', {
         url: '/emails',
         templateUrl: "assets/views/emails.html",
@@ -141,7 +141,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         ncyBreadcrumb: {
             label: 'Editor'
         },
-        resolve: loadSequence('editorCtrl', 'userService', 'htmlToPlaintext', 'spectrum', 'ui.sortable', 'angular-slider', 'assetsService', 'toasterService', 'geocodeService', 'productService', 'accountService', 'toTrusted', 'generateURLforLinks', 'truncate', 'ckeditor', 'ngSticky', 'slick', 'offset', 'jqcloud', 'jsVideoUrlParser', 'selectedTags', 'addComponentModalCtrl', 'componentSettingsModalCtrl', 'templateSettingsModalCtrl')
+        resolve: loadSequence('editorCtrl', 'userService', 'htmlToPlaintext', 'spectrum', 'ui.sortable', 'angular-slider', 'assetsService', 'toasterService', 'geocodeService', 'productService', 'accountService', 'toTrusted', 'generateURLforLinks', 'truncate', 'ckeditor', 'ngSticky', 'slick', 'offset', 'jqcloud', 'jsVideoUrlParser', 'selectedTags', 'addComponentModalCtrl', 'componentSettingsModalCtrl', 'templateSettingsModalCtrl', 'angularCircularNavigation')
     }).state('app.customers', {
         url: '/customers',
         templateUrl: "assets/views/customers.html",
@@ -177,7 +177,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         ncyBreadcrumb: {
             label: 'Products'
         },
-        resolve: loadSequence('productsCtrl', 'productService', 'accountService', 'angular-cookie')
+        resolve: loadSequence('productsCtrl', 'productService', 'accountService', 'ipCookie')
     }).state('app.commerce.productsingle', {
         url: '/products/:productId',
         templateUrl: "assets/views/product-detail.html",
@@ -223,6 +223,15 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
             label: 'Social Feed'
         },
         resolve: loadSequence('socialFeedCtrl', 'socialConfigService', 'wu.masonry','orderByArrayLength')
+    }).state('app.marketing.emailtemplates', {
+        url: '/email-templates',
+        templateUrl: "assets/views/email-templates.html",
+        title: 'Emails',
+        icon: 'ti-layout-media-left-alt',
+        ncyBreadcrumb: {
+            label: 'Email Templates'
+        },
+        resolve: loadSequence('emailTemplatesCtrl', 'chartEmailService')
     }).state('app.marketing.campaigns', {
         url: '/campaigns',
         templateUrl: "assets/views/campaigns.html",
@@ -230,7 +239,18 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         icon: 'ti-layout-media-left-alt',
         ncyBreadcrumb: {
             label: 'Campaigns'
-        }
+        },
+        resolve: loadSequence('campaignsCtrl', 'campaignService')
+    }).state('app.marketing.createcampaign', {
+        url: '/campaigns/create-campaign',
+        templateUrl: "assets/views/create-campaign.html",
+        title: 'Create Campaign',
+        icon: 'ti-layout-media-left-alt',
+        ncyBreadcrumb: {
+            label: 'Create Campaign',
+            parent: 'app.marketing.campaigns'
+        },
+        resolve: loadSequence('createCampaignCtrl', 'campaignService', 'editorCtrl', 'userService', 'htmlToPlaintext', 'spectrum', 'ui.sortable', 'angular-slider', 'assetsService', 'toasterService', 'geocodeService', 'productService', 'paymentService', 'accountService', 'toTrusted', 'generateURLforLinks', 'truncate', 'ckeditor', 'ngSticky', 'slick', 'offset', 'jqcloud', 'jsVideoUrlParser', 'selectedTags', 'addComponentModalCtrl', 'componentSettingsModalCtrl', 'googlePlaces', 'ngMap', 'angularCircularNavigation', 'string_score', 'angular-bootstrap-datetimepicker')
     }).state('app.account', {
         url: '/account',
         template: '<div ui-view class="fade-in-up"></div>',
@@ -265,7 +285,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         ncyBreadcrumb: {
             label: 'Billing'
         },
-        resolve: loadSequence('billingCtrl', 'productService', 'stripe', 'paymentService', 'userService', 'toasterService', 'angular-cookie', 'skeuocard')
+        resolve: loadSequence('billingCtrl', 'productService', 'stripe', 'paymentService', 'userService', 'toasterService', 'ipCookie', 'skeuocard')
     }).state('app.account.integrations', {
         url: '/integrations',
         templateUrl: "assets/views/integrations.html",
@@ -274,7 +294,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         ncyBreadcrumb: {
             label: 'Integrations'
         },
-        resolve: loadSequence('integrationsCtrl', 'socialConfigService', 'angular-cookie', 'accountService')
+        resolve: loadSequence('integrationsCtrl', 'socialConfigService', 'ipCookie', 'accountService')
     }).state('app.support', {
         url: '/support',
         template: '<div ui-view class="fade-in-up"></div>',

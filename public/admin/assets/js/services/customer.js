@@ -370,6 +370,11 @@
                 });
             };
 
+            this.createCustomer = function(customer, fn)
+            {
+                var apiUrl = baseUrl + ['contact'].join('/');
+                return $http.post(apiUrl, customer);
+            };
 
         }
     ]);

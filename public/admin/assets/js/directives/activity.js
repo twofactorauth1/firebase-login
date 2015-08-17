@@ -67,7 +67,7 @@ app.directive('customerActivity', ['$filter', 'CustomerService', '$modal', 'cont
                     var activity_hash = _.findWhere(contactConstant.customer_activity_types.dp, {
                         label: activity_type
                     });
-                    if(!activity_type)
+                    if(!activity_type || !activity_type.trim())
                     {
                          angular.element("#customer_activity_type .error").html("Activity Type Required");
                          angular.element("#customer_activity_type .error").addClass('has-error');

@@ -1,0 +1,53 @@
+<script type="text/ng-template" id="customers-list-modal">
+    <div class="modal-header">
+        <button type="button" class="close" ng-click="closeModal()">&times;</button>
+        <h4 class="modal-title">Customer List</h4>
+    </div>
+    
+    <div class="modal-body bg-white no-padding" style="max-height:500px;overflow:auto">
+        <div st-table="recipients" st-safe-src="recipients">       
+            <div class="container-fluid padding-top-0 padding-bottom-0">
+                <div class="panel panel-transparent row margin-bottom-0">
+                    <div class="panel-body no-padding">
+                        <table class="table table-hover bg-white margin-bottom-0" ng-class="{'grid': tableView == 'grid', 'bg-white': tableView == 'list'}" ng-show="recipients">
+                            <thead ng-class="{'bg-white': tableView == 'grid'}">
+                                <tr>
+                                    <th class="center" ng-class="{'column-width': tableView == 'grid'}">Photo</th>
+                                    <th  ng-class="{'column-width': tableView == 'grid'}">First Name</th>
+                                    <th  ng-class="{'column-width': tableView == 'grid'}">Last Name</th>
+                                    <th  ng-class="{'column-width': tableView == 'grid'}">Tags</th>
+                                    <th  ng-class="{'column-width': tableView == 'grid'}">Email</th>
+                                    <th  ng-class="{'column-width': tableView == 'grid'}">Address</th>
+                                    <th  ng-class="{'column-width': tableView == 'grid'}">Phone</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="customer in recipients track by $index">
+                                    <td class="center" >
+                                        <img ng-src="{{ customer.photo }}" id="customer_photo_{{customer._id}}" err-src="" err-contact="customer" class="img-thumbnail screenshot" alt="image">
+                                    </td>
+                                    <td><strong>First Name: </strong> <span ng-text-truncate="customer.first" ng-tt-chars-threshold="15" ng-tt-no-toggling></span><span ng-if="!customer.first">--</span></td>
+                                    <td><strong>Last Name: </strong> <span ng-text-truncate="customer.last" ng-tt-chars-threshold="15" ng-tt-no-toggling></span><span ng-if="!customer.last">--</span></td>
+                                    <td><strong>Tags: </strong>{{contactTags(customer) || '--'}}</td>
+                                    <td class="hidden-xs"><strong>Email: </strong> <span ng-if="customer.email"><span ng-text-truncate="customer.email" ng-tt-chars-threshold="15" ng-tt-no-toggling></span></a>
+                                        </span><span ng-if="!customer.bestEmail">--</span></td>
+                                    <td><strong>Address: </strong>
+                                        <span ng-if="customer.details[0].addresses[0].city && customer.details[0].addresses[0].state" ng-text-truncate="customer.details[0].addresses[0].city+', '+customer.details[0].addresses[0].state" ng-tt-chars-threshold="15" ng-tt-no-toggling></span>
+                                        <span ng-if="customer.details[0].addresses[0].address && !customer.details[0].addresses[0].city">{{customer.details[0].addresses[0].address}}</span>
+                                        <span ng-if="!customer.details[0].addresses[0]">--</span>
+                                    </td>
+                                    <td ng-class="{'center': tableView != 'grid'}"><strong>Phone: </strong> {{customer.details[0].phones[0].number || '--'}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-info btn-wide btn-o" ng-click="closeModal()">
+            Done
+        </button>
+    </div>
+</script>

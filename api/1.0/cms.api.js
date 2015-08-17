@@ -10,7 +10,7 @@ var baseApi = require('../base.api.js');
 //TODO: there shouldn't be DAO references here
 
 var cmsDao = require('../../cms/dao/cms.dao.js');
-
+var mandrillHelper = require('../../utils/mandrillhelper');
 var Page = require('../../cms/model/page');
 //var Components = require('../../cms/model/components');
 
@@ -76,7 +76,9 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('website/:websiteId/emails'), this.setup.bind(this), this.getAllEmails.bind(this));
         app.get(this.url('email/:id'), this.setup.bind(this), this.getEmailById.bind(this));
         app.post(this.url('email'), this.isAuthAndSubscribedApi.bind(this), this.createEmail.bind(this));
-
+        app.post(this.url('testemail'), this.isAuthAndSubscribedApi.bind(this), this.testEmail.bind(this));
+        app.put(this.url('email/:id'), this.isAuthAndSubscribedApi.bind(this), this.updateEmail.bind(this));
+        app.delete(this.url('email/:id'), this.isAuthAndSubscribedApi.bind(this), this.deleteEmail.bind(this));
 
         // TEMPLATES
         app.get(this.url('template'), this.isAuthApi.bind(this), this.listTemplates.bind(this));
@@ -123,6 +125,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('page/:id/blog/tag/:tag'), this.setup.bind(this), this.getPostsByTag.bind(this));
         app.post(this.url('page/:id/blog/posts/reorder'), this.isAuthAndSubscribedApi.bind(this), this.reorderPosts.bind(this));
         app.post(this.url('page/:id/blog/:postId/reorder/:newOrder'), this.isAuthAndSubscribedApi.bind(this), this.reorderBlogPost.bind(this));
+        app.put(this.url('page/:id/blog/status/:postId'), this.isAuthAndSubscribedApi.bind(this), this.publishPost.bind(this));
 
         //authors, tags, categories, titles
         app.get(this.url('blog/authors'), this.setup.bind(this), this.getBlogAuthors.bind(this));
@@ -328,6 +331,44 @@ _.extend(api.prototype, baseApi.prototype, {
         cmsDao.getLatestPageForWebsite(websiteId, pageHandle, function (err, value) {
             self.sendResultOrError(resp, err, value, "Error Retrieving Page for Website");
             self = null;
+        });
+    },
+
+    testEmail: function(req, resp) {
+        var self = this;
+        self.log.debug('testEmail >>> ');
+
+        self.log.debug('testEmail >>> req.body', req.body);
+
+        var emailDataObj = req.body;
+        self.log.debug('emailAddress.email >>> ', emailDataObj.address.email);
+        self.log.debug('emailContent.fromEmail >>> ', emailDataObj.content.fromEmail);
+        self.log.debug('emailContent.fromName >>> ', emailDataObj.content.fromName);
+        self.log.debug('emailContent.replyTo >>> ', emailDataObj.content.replyTo);
+        self.log.debug('emailContent.subject >>> ', emailDataObj.content.subject);
+        var accountId = parseInt(self.currentAccountId(req));
+
+        app.render('emails/base_email', emailDataObj.content.components[0], function(err, html){
+            if(err) {
+                self.log.error('error rendering html: ' + err);
+                self.log.warn('email will not be sent.');
+            } else {
+                //fromAddress, fromName, toAddress, toName, subject, html, accountId, vars, emailId, fn)
+                mandrillHelper.sendBasicEmail(
+                    emailDataObj.content.fromEmail,
+                    emailDataObj.content.fromName,
+                    emailDataObj.address.email,
+                    emailDataObj.address.name || "tester's name",
+                    emailDataObj.content.subject,
+                    html,
+                    accountId,
+                    [],
+                    null,
+                    function(err, result){
+                      self.log.debug('mandrill return');
+                      self.sendResultOrError(resp, err, result, "Error Sending Test Email");
+                });
+            }
         });
     },
 
@@ -760,10 +801,9 @@ _.extend(api.prototype, baseApi.prototype, {
                 var temp = $$.u.idutils.generateUUID();
                 if (email != null) {
                     self.log.debug('>> email not null');
-                    email = new Email({
-                        _id: temp,
-                        title: emailObj.title
-                    });
+                   
+                    email = new $$.m.cms.Email(emailObj);
+                    email.set('_id', temp);
                     email.attributes.modified.date = new Date();
                     email.attributes.created.date = new Date();
                     email.set('accountId', accountId);
@@ -787,6 +827,72 @@ _.extend(api.prototype, baseApi.prototype, {
             }
         });
 
+    },
+
+    updateEmail: function (req, res) {
+        var self = this;
+        self.log.debug('>> updateEmail');
+
+        var accountId = parseInt(self.accountId(req));
+
+        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                var emailObj = req.body;
+                self.log.debug('>> email body');
+                var email = require('../../cms/model/email');
+               
+                if (email != null) {
+                    self.log.debug('>> email not null');                   
+                    email = new $$.m.cms.Email(emailObj);
+                    var emailId = req.params.id;                
+                    var accountId = parseInt(self.accountId(req));
+                    email.set('accountId', accountId);
+                    email.attributes.modified.date = new Date();
+                    self.log.debug('>> email updated');
+                    cmsManager.updateEmail(email, emailId, function (err, value) {
+                        self.log.debug('<< updateEmail');
+                        self.sendResultOrError(res, err, value, "Error updating Email");
+                       
+                        self.createUserActivity(req, 'UPDATE_EMAIL', null, null, function(){});
+                    });
+                } else {
+                    self.log.error('Cannot update null email.');
+                    self.wrapError(res, 400, 'Bad Parameter', 'Cannot update a null email.');
+                    self = null;
+                }
+            }
+        });
+
+    },
+
+     deleteEmail: function(req, res) {
+
+        var self = this;
+        self.log.debug('>> deleteEmail');
+        var accountId = parseInt(self.accountId(req));
+
+        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                var emailId = req.params.id;
+
+                cmsManager.deleteEmail(emailId, function (err, value) {
+                    self.log.debug('<< deleteEmail');
+                    self.log.debug('err:', err);
+                    self.log.debug('value:', value);
+                    if(err) {
+                        self.wrapError(res, 500, err, "Error deleting email");
+                    } else {
+                        self.send200(res);
+                    }
+                    self.createUserActivity(req, 'DELETE_EMAIL', null, {emailId: emailId}, function(){});
+                    self = null;
+                });
+            }
+        });
     },
     //endregion
 
@@ -1455,6 +1561,27 @@ _.extend(api.prototype, baseApi.prototype, {
             }
         });
 
+    },
+
+    publishPost: function(req, res) {
+        var self = this;
+        self.log.debug('>> publishPost');
+        var accountId = parseInt(self.accountId(req));
+        var postId = req.params.postId;
+        var pageId = req.params.id;
+        var userId = self.userId(req);
+
+        self.checkPermission(req, self.sc.privs.MODIFY_WEBSITE, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+               cmsManager.publishPost(accountId, postId, pageId, userId, function (err, value) {
+                    self.log.debug('<< publishPost');
+                    self.sendResultOrError(res, err, value, "Error updating Blog Post Status");
+                    self.createUserActivity(req, $$.m.BlogPost.status.PUBLISHED, null, {id: value.id()}, function(){});
+                });
+            }
+        });
     },
 
     deleteBlogPost: function(req, res) {

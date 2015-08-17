@@ -22,6 +22,7 @@ _.extend(api.prototype, baseApi.prototype, {
     initialize: function () {
 
         app.get(this.url('indigenous'), this.setup.bind(this), this.listIndigenousProducts.bind(this));
+        app.get(this.url('active'), this.setup.bind(this), this.listActiveProducts.bind(this));
         app.post(this.url(''), this.isAuthAndSubscribedApi.bind(this), this.createProduct.bind(this));
         app.get(this.url(':id'), this.setup.bind(this), this.getProduct.bind(this));
         app.get(this.url(''), this.setup.bind(this), this.listProducts.bind(this));
@@ -110,6 +111,26 @@ _.extend(api.prototype, baseApi.prototype, {
         var accountId = parseInt(self.currentAccountId(req));
         productManager.listProducts(accountId, limit, skip, function(err, list){
             self.log.debug('<< listProducts');
+            self.sendResultOrError(res, err, list, 'Error listing products');
+        });
+
+    },
+
+
+    /**
+     * No security necessary.  Anyone can list products.
+     * @param req
+     * @param res
+     */
+    listActiveProducts: function(req, res) {
+        var self = this;
+        self.log.debug('>> listActiveProducts');
+
+        var skip = req.query['skip'];
+        var limit = req.query['limit'];
+        var accountId = parseInt(self.currentAccountId(req));
+        productManager.listActiveProducts(accountId, limit, skip, function(err, list){
+            self.log.debug('<< listActiveProducts');
             self.sendResultOrError(res, err, list, 'Error listing products');
         });
 

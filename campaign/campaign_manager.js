@@ -14,6 +14,7 @@ var cmsDao = require('../cms/dao/cms.dao');
 var contactDao = require('../dao/contact.dao');
 var contactActivityManager = require('../contactactivities/contactactivity_manager');
 var courseDao = require('../dao/course.dao');
+var emailDao = require('../cms/dao/email.dao');
 var subscriberDao = require('../dao/subscriber.dao');
 var userDao = require('../dao/user.dao');
 var appConfig = require('../configs/app.config');
@@ -116,50 +117,63 @@ module.exports = {
             accountId: accountId,
             contactId: contactId
         };
-        campaignDao.findMany(query, $$.m.CampaignFlow, function(err, value){
-            self.log.debug('value ', value);
-             self.log.debug('err ', err);
+        contactDao.getById(contactId, function(err, contact){
             if(err) {
-                self.log.error('Error finding campaign flow: ' + err);
+                self.log.error('Error fetching contact', err);
                 return fn(err, null);
-            } else if(value !== null && value.length < 0) {
-                self.log.debug('Contact already part of this campaign.');
-                return fn(null, value);
             } else {
-                campaignDao.getById(campaignId, $$.m.Campaign, function(err, campaign){
-                    if(err) {
-                        self.log.error('Error finding campaign: ' + err);
-                        return fn(err, null);
-                    }
-                    //need to create flow.
-                    var flow = new $$.m.CampaignFlow({
-                        campaignId: campaignId,
-                        accountId: accountId,
-                        contactId: contactId,
-                        startDate: new Date(),
-                        lastStep: 0,
-                        steps: campaign.get('steps')
-                    });
-                    campaignDao.saveOrUpdate(flow, function(err, savedFlow){
+                if(contact === null || contact.get('accountId') !== accountId) {
+                    self.log.error('Could not find contact for account.');
+                    return fn('Could not find contact for account', null);
+                } else {
+                    campaignDao.findMany(query, $$.m.CampaignFlow, function(err, value){
+                        self.log.debug('value ', value);
+                        self.log.debug('err ', err);
                         if(err) {
-                            self.log.error('Error saving campaign flow: ' + err);
+                            self.log.error('Error finding campaign flow: ' + err);
                             return fn(err, null);
-                        }
-                        self.log.debug('Added contact to campaign flow.');
-                        self.handleStep(flow, 0, function(err, value){
-                            if(err) {
-                                self.log.error('Error handling initial step of campaign: ' + err);
-                                return fn(err, null);
-                            } else {
-                                self.log.debug('<< addContactToCampaign');
-                                return fn(err, savedFlow);
-                            }
-                        });
-                    });
-                });
+                        } else if(value !== null && value.length < 0) {
+                            self.log.debug('Contact already part of this campaign.');
+                            return fn(null, value);
+                        } else {
+                            campaignDao.getById(campaignId, $$.m.Campaign, function(err, campaign){
+                                if(err) {
+                                    self.log.error('Error finding campaign: ' + err);
+                                    return fn(err, null);
+                                }
+                                //need to create flow.
+                                var flow = new $$.m.CampaignFlow({
+                                    campaignId: campaignId,
+                                    accountId: accountId,
+                                    contactId: contactId,
+                                    startDate: new Date(),
+                                    lastStep: 0,
+                                    steps: campaign.get('steps')
+                                });
+                                campaignDao.saveOrUpdate(flow, function(err, savedFlow){
+                                    if(err) {
+                                        self.log.error('Error saving campaign flow: ' + err);
+                                        return fn(err, null);
+                                    }
+                                    self.log.debug('Added contact to campaign flow.');
+                                    self.handleStep(flow, 0, function(err, value){
+                                        if(err) {
+                                            self.log.error('Error handling initial step of campaign: ' + err);
+                                            return fn(err, null);
+                                        } else {
+                                            self.log.debug('<< addContactToCampaign');
+                                            return fn(err, savedFlow);
+                                        }
+                                    });
+                                });
+                            });
 
+                        }
+                    });
+                }
             }
         });
+
 
     },
 
@@ -175,6 +189,7 @@ module.exports = {
         self.log.debug('>> handleStep (' + stepNumber + ')');
 
         var step = campaignFlow.get('steps')[stepNumber];
+        self.log.debug('>> getSteps ', campaignFlow.get('steps'));
         if(step === null) {
             var errorString = 'Error getting steps';
             self.log.error(errorString);
@@ -191,10 +206,11 @@ module.exports = {
                     self.log.error('Error getting contact for step: ' + err);
                     return fn(err, null);
                 } else if(contact === null) {
+                    self.log.debug('>> campaignFlow ', campaignFlow);
                     self.log.error('Could not find contact for contactId: ' + campaignFlow.get('contactId'));
                     return fn('Could not find contact for contactId: ' + campaignFlow.get('contactId'), null);
                 } else {
-                    var fromAddress = step.settings.from;
+                    var fromAddress = step.settings.fromEmail;
                     var fromName = step.settings.fromName;
                     var toAddress = contact.getEmails()[0].email;
                     self.log.debug('contact.getEmails: ', contact.getEmails());
@@ -205,23 +221,24 @@ module.exports = {
                     var accountId = campaignFlow.get('accountId');
                     var vars = step.settings.vars || [];
 
-                    var pageId = step.settings.pageId;
-                    cmsDao.getPageById(pageId, function(err, page){
+                    var emailId = step.settings.emailId;
+                    emailDao.getEmailById(emailId, function(err, email){
                         if(err) {
-                            self.log.error('Error getting page to render: ' + err);
+                            self.log.error('Error getting email to render: ' + err);
                             return fn(err, null);
                         }
-                        var component = page.get('components')[0];
-                        self.log.debug('Using this for data', component);
-                        app.render('emails/base_email_campaign', component, function(err, html) {
+                        var component = email.get('components')[0];
+                        component.logo = component.logo.replace('src="//s3.amazonaws', 'src="http://s3.amazonaws');
+                        component.text = component.text.replace('src="//s3.amazonaws', 'src="http://s3.amazonaws');
+                        component.title = component.title.replace('src="//s3.amazonaws', 'src="http://s3.amazonaws');
+                        app.render('emails/base_email', component, function(err, html) {
                             if (err) {
                                 self.log.error('error rendering html: ' + err);
                                 self.log.warn('email will not be sent.');
                             } else {
                                 var campaignId = campaignFlow.get('campaignId');
                                 var contactId = campaignFlow.get('contactId');
-                                mandrillHelper.sendCampaignEmail(fromAddress, fromName, toAddress, toName, subject, html, accountId, campaignId, contactId,
-                                    vars, step.settings, function(err, value){
+                                mandrillHelper.sendCampaignEmail(fromAddress, fromName, toAddress, toName, subject, html, accountId, campaignId, contactId, vars, step.settings, emailId, function(err, value){
                                         if(err) {
                                             self.log.error('Error sending email: ', err);
                                             return fn(err, null);
@@ -365,21 +382,41 @@ module.exports = {
             }
             async.each(contactIdAry, function(contactId, callback){
                 //need to create flow.
-                var flow = new $$.m.CampaignFlow({
-                    campaignId: campaignId,
-                    accountId: accountId,
-                    contactId: contactId,
-                    startDate: new Date(),
-                    lastStep: 0,
-                    steps: campaign.get('steps')
-                });
-                campaignDao.saveOrUpdate(flow, function(err, savedFlow){
+                contactDao.getById(contactId, function(err, contact){
                     if(err) {
-                        self.log.error('Error saving campaign flow: ' + err);
-                        return fn(err, null);
+                        self.log.warn('Could not fetch contact [' + contactId + '].');
+                        callback();
+                    } else if(contactId.get('accountId') !== accountId) {
+                        self.log.warn('Contact [' + contactId + '] does not belong to account [' + accountId + '].');
+                        callback();
+                    } else {
+                        var flow = new $$.m.CampaignFlow({
+                            campaignId: campaignId,
+                            accountId: accountId,
+                            contactId: contactId,
+                            startDate: new Date(),
+                            lastStep: 0,
+                            steps: campaign.get('steps')
+                        });
+                        campaignDao.saveOrUpdate(flow, function(err, savedFlow){
+                            if(err) {
+                                self.log.error('Error saving campaign flow: ' + err);
+                                return fn(err, null);
+                            }
+                            self.log.debug('Added contact to campaign flow.');
+                            self.handleStep(flow, 1, function(err, value){
+                                if(err) {
+                                    self.log.error('Error handling initial step of campaign: ' + err);
+                                    callback(err);
+                                } else {
+                                    self.log.debug('added contact.');
+                                    callback();
+                                }
+                            });
+                        });
                     }
                     self.log.debug('Added contact to campaign flow.');
-                    self.handleStep(flow, 1, function(err, value){
+                    self.handleStep(flow, 0, function(err, value){
                         if(err) {
                             self.log.error('Error handling initial step of campaign: ' + err);
                             callback(err);
@@ -389,6 +426,7 @@ module.exports = {
                         }
                     });
                 });
+
             }, function(err){
                 if(err) {
                     self.log.error('Error adding contacts to campaign: ' + err);
