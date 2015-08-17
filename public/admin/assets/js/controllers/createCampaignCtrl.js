@@ -320,14 +320,16 @@
       select.search = '';
     };
 
-    $scope.customerRemoved = function (select) {
-      var selected = select.selected[0];
-
-      var existingContactIndex = _.findIndex($scope.recipients, function (recipient) {
-        return recipient._id === selected._id;
+    $scope.customerRemoved = function (select, selected) {
+      var existingContactIndex;
+      var contact = _.findWhere($scope.recipients, {
+        _id: selected._id
       });
-      if (existingContactIndex) {
-        $scope.recipients.slice(existingContactIndex, 1);
+      if(contact)
+        existingContactIndex = _.indexOf($scope.recipients, contact);
+
+      if (existingContactIndex > -1) {
+        $scope.recipients.splice(existingContactIndex, 1);
       }
       // clear search text
       select.search = '';
@@ -360,8 +362,13 @@
     var goToStep = function (i) {
       $scope.currentStep = i;
     };
-    var errorMessage = function () {
-      toaster.pop('error', 'Error', 'please complete the form in this step before proceeding');
+    var errorMessage = function (i) {
+      if($scope.currentStep < i && (i - $scope.currentStep > 1 ))
+      {
+        toaster.pop('error', 'Error', 'Please complete the previous steps before proceeding');  
+      }
+      else
+        toaster.pop('error', 'Error', 'Please complete the form in this step before proceeding');
     };
 
     /*
@@ -377,6 +384,7 @@
 
     CustomerService.getCustomers(function (customers) {
       _.each(customers, function (customer, index) {
+
         if (!$scope.checkBestEmail(customer)) {
           customers.splice(index, 1);
         }
@@ -384,6 +392,7 @@
       $scope.customers = customers;
       var _tags = [];
       _.each(customers, function (customer) {
+        customer.fullName = customer.first + " " + customer.last || '';
         if (customer.tags && customer.tags.length > 0) {
           _.each(customer.tags, function (tag) {
             _tags.push(tag);
@@ -491,13 +500,13 @@
       var contactsArr = [];
       var promises = [];
       if ($scope.selectedCustomers.newEmails) {
-        var _emails = $scope.selectedCustomers.newEmails.split(",");
+        var _emails = $scope.selectedCustomers.newEmails;
         _.each(_emails, function (email) {
           var contact = _.findWhere($scope.customers, {
-            email: email
+            email: email.text
           });
           if (!contact) {
-            var tempCustomer = $scope.createCustomerData(email);
+            var tempCustomer = $scope.createCustomerData(email.text);
             promises.push(CustomerService.createCustomer(tempCustomer));
           } else {
             contactsArr.push(contact._id);
@@ -589,6 +598,49 @@
 
         });
     };
+    $scope.checkNewRecipients = function()
+    {
+      var returnValue = false;
+      if($scope.selectedCustomers.newEmails && $scope.selectedCustomers.newEmails.length)
+          returnValue = true;
+      return returnValue;
+    };
+
+    $scope.validateStep = function(i, valid)
+    {
+      if(valid)
+      {
+        if (i === 2 && !$scope.newCampaignObj.name || !$scope.newCampaignObj.type)
+        valid = false;
+        else if(i === 3 && !$scope.emailToSend.title)
+          valid = false;
+        else if(i === 4 && !$scope.recipients.length && !$scope.checkNewRecipients())
+          valid = false;
+      }
+      return valid;
+    }
+
+    $scope.ValidateBeforeProceed = function(i)
+    {
+      var index = 2;
+      var valid = true;
+      if(i >= 2 )
+        { 
+          while (index <= i && index >= 2)
+            {  
+              valid = $scope.validateStep(index, valid);
+              if(valid)
+                index ++ ;
+              else
+                index = 0;
+            }
+        }
+        if (!valid) {
+          errorMessage(i);
+          valid = false;
+        } 
+        return valid;
+    }
 
     // toggle selection
     $scope.toggleSelection = function (tagName) {
@@ -606,11 +658,15 @@
     $scope.currentStep = 1;
     // Initial Value
     $scope.form = {
-
       next: function () {
-        $scope.goingTo = 'next';
-        $scope.toTheTop();
-        nextStep();
+        var i = $scope.currentStep + 1;
+        var valid = $scope.ValidateBeforeProceed(i);
+        if(valid)
+        {
+          $scope.goingTo = 'next';
+          $scope.toTheTop();
+          nextStep();
+        }        
       },
       prev: function () {
         $scope.goingTo = 'prev';
@@ -622,15 +678,11 @@
         //validate first step
         console.log('$scope.newCampaignObj.name ', $scope.newCampaignObj.name);
         console.log('$scope.newCampaignObj.type ', $scope.newCampaignObj.type);
-        if (i === 2 && !$scope.newCampaignObj.name || !$scope.newCampaignObj.type) {
-          valid = false;
-        }
+        var valid = $scope.ValidateBeforeProceed(i);
         if (valid) {
           $scope.toTheTop();
           goToStep(i);
-        } else {
-          errorMessage();
-        }
+        } 
       },
       submit: function () {
         console.log('submit');

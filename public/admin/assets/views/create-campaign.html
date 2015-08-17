@@ -172,8 +172,7 @@
                                             Email Template
                                         </label>
                                         <div class="well well-sm">
-                                            <div class="row">
-                                                <pre>{{newCampaignObj.steps[0]}}</pre>
+                                            <div class="row">                              
                                                 <div class="col-xs-12">
                                                     <ui-select ng-model="newCampaignObj.steps[0].settings.emailId" theme="bootstrap" ng-disabled="disabled" on-select="changeCurrentEmail($select.selected)" style="min-width:100%">
                                                         <ui-select-match placeholder="Select an email template">{{$select.selected.title}} (subject:{{$select.selected.subject}})</ui-select-match>
@@ -306,7 +305,7 @@
                                                 <tab heading="by Contact">
                                                     <label class="text-muted">Select individuals from your contact list</label>
                                                     <div class="well well-sm">
-                                                        <ui-select multiple ng-model="selectedCustomers.individuals" on-select="customerSelected($select)" on-remove="customerRemoved($select)" theme="bootstrap" ng-disabled="disabled" close-on-select="false" style="min-width:100%" search-enabled="true">
+                                                        <ui-select multiple ng-model="selectedCustomers.individuals" on-select="customerSelected($select)" on-remove="customerRemoved($select, $item)" theme="bootstrap" ng-disabled="disabled" close-on-select="false" style="min-width:100%" search-enabled="true">
                                                             <ui-select-match placeholder="Select Contacts...">{{$item.first}} {{$item.last}} ({{$item.details[0].emails[0].email}})</ui-select-match>
                                                             <ui-select-choices repeat="customer._id as customer in customers | filter:$select.search">
                                                                 <span class="pull-left">
@@ -444,7 +443,7 @@
                                         <a class="list-group-item" href="#">
                                             <h5 class="list-group-item-heading">Content</h5>
                                             <p class="list-group-item-text">
-                                                Using a new email template.
+                                                Using {{selectedEmail.type === 'new' ? 'a new email': 'an exsiting email'}} template.
                                             </p>
                                         </a>
                                         <a class="list-group-item" href="#">

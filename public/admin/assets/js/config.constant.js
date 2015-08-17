@@ -702,6 +702,9 @@ app.constant('JS_REQUIRES', {
     name: 'ngSticky',
     files: ['../js/libs/ngSticky/dist/sticky.min.js']
   }, {
+    name: 'ipCookie',
+    files: ['../js/libs/angular-cookie/angular-cookie.min.js']
+  }, {
     name: 'slick',
     files: ['../js/libs/slick-carousel/slick/slick.js', '../js/libs/angular-slick/dist/slick.js']
   }, {
