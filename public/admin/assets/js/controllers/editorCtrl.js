@@ -1144,7 +1144,7 @@
         redirectUrl = $location.search().posthandle ? "/admin/#/website/posts" : "/admin/#/website/pages";
       }
       if ($scope.isEmail) {
-        redirectUrl = "/admin/#/emails";
+        redirectUrl = "/admin/#/marketing/email-templates";
       }
       if ($scope.isDirty.dirty) {
         SweetAlert.swal({
@@ -1245,7 +1245,7 @@
             toaster.pop('success', "Email Deleted", "The " + title + " email was deleted successfully.");
             $scope.closeModal();
             $timeout(function () {
-              window.location = '/admin/#/emails';
+              window.location = '/admin/#/marketing/email-templates';
             }, 500);
           });
         } else {
