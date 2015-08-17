@@ -5,15 +5,34 @@
 
     editableOptions.theme = 'bs3';
 
-    $scope.today = moment().format("dddd, MMMM Do YYYY, h:mm:ss a");
     $scope.whenToSend = 'now';
     $scope.selectedEmail = {
       type: 'new'
     };
     $scope.tableView = 'list';
 
+    $scope.delivery = {
+      date: moment(),
+      time: moment(),
+      minDate: new Date()
+    };
+
+    $scope.formatDate = function (date) {
+      return moment(date).format("dddd, MMMM Do YYYY, h:mm A");
+    };
+
+
+    $scope.hstep = 1;
+    $scope.mstep = 15;
+
+    $scope.options = {
+      hstep: [1, 2, 3],
+      mstep: [1, 5, 10, 15, 25, 30]
+    };
+
+    $scope.ismeridian = true;
+
     $scope.getProgressType = function (value) {
-      console.log('value ', value);
       var type;
       if (value < 25) {
         type = 'danger';
@@ -64,6 +83,25 @@
       "fromName": "",
       "fromEmail": "",
       "replyTo": ""
+    };
+
+    $scope.component = $scope.emailToSend.components[0];
+
+    $scope.updateTime = function () {
+      var time = moment($scope.delivery.time);
+      var date = moment($scope.delivery.date);
+      var hour = time.get('hour');
+      var minute = time.get('minute');
+      var formatted = date.set('hour', hour).set('minute', minute);
+      $scope.delivery.date = formatted;
+    };
+
+    $scope.togglePreview = function () {
+      if (!$scope.showPreview) {
+        $scope.showPreview = true;
+      } else {
+        $scope.showPreview = false;
+      }
     };
 
     $scope.newCampaignObj = {
@@ -130,7 +168,6 @@
     };
 
     $scope.analyzeSubject = function (subject) {
-      console.log('subject ', subject);
       var subjectWords = subject.split(' ');
       var lowercaseSubjectWords = subject.toLowerCase().split(' ');
       var wordsToUse = ["freebie", "urgent", "breaking", "important", "alert", "thank you", "sneak peek", "alert", "daily", "free delivery", "cash", "quote", "save", "jokes", "promotional", "congratulations", "revision", "forecast", "snapshot", "token", "voluntary", "monthly", "deduction", "upgrade", "just", "content", "go", "wonderful"];
@@ -147,7 +184,6 @@
 
       _.each(subjectWords, function (word) {
         //All Words Capitalized
-        console.log(word[0]);
         if (word[0] !== word[0].toUpperCase()) {
           capitalized = false;
         }
@@ -257,7 +293,6 @@
     });
 
     $scope.changeCurrentEmail = function (selectedEmail) {
-      console.log('selectedEmail ', selectedEmail);
       $scope.emailToSend = selectedEmail;
     };
 
@@ -267,6 +302,7 @@
         $scope.campaignNameChecked = true;
         $scope.checkingCampaignName = false;
         $scope.campaignNameExists = exists;
+        $scope.emailToSend.title = _name + ' Email Template';
       });
     };
 
@@ -486,13 +522,34 @@
 
     $scope.completeNewCampaign = function () {
       //add new email if exists
-      WebsiteService.createEmail($scope.emailToSend, function (newEmail) {
-        var stepSettings = $scope.newCampaignObj.steps[0].settings;
+
+      var stepSettings = $scope.newCampaignObj.steps[0].settings;
+
+      if (!stepSettings.emailId) {
+        WebsiteService.createEmail($scope.emailToSend, function (newEmail) {
+          $scope.createCampaign(newEmail);
+        });
+      } else {
+        $scope.createCampaign($scope.emailToSend);
+      }
+    };
+
+    $scope.createCampaign = function (newEmail) {
+      var stepSettings = $scope.newCampaignObj.steps[0].settings;
         stepSettings.emailId = newEmail._id;
         stepSettings.fromEmail = newEmail.fromEmail;
         stepSettings.fromName = newEmail.fromName;
         stepSettings.replyTo = newEmail.replyTo;
         stepSettings.subject = newEmail.subject;
+
+        //set delivery date
+        var sendAt = $scope.newCampaignObj.steps[0].settings.sendAt;
+        var delivery = moment($scope.delivery.date);
+        sendAt.year = moment.utc(delivery).get('year');
+        sendAt.month = moment.utc(delivery).get('month') + 1;
+        sendAt.day = moment.utc(delivery).get('date');
+        sendAt.hour = moment.utc(delivery).get('hour');
+        sendAt.minute = moment.utc(delivery).get('minute');
 
         //add campaign
         CampaignService.createCampaign($scope.newCampaignObj, function (_nemCampaign) {
@@ -523,7 +580,6 @@
             //bulk add contacts to campaign
             CampaignService.bulkAddContactsToCampaign(contactsArr, _nemCampaign._id, function (success) {
               //show success
-              console.log('success ', success);
               toaster.pop('success', 'Campaigns created successfully');
               $location.path('/marketing/campaigns');
             });
@@ -531,7 +587,6 @@
           });
 
         });
-      });
     };
 
     // toggle selection
@@ -562,19 +617,18 @@
         prevStep();
       },
       goTo: function (i) {
-        if (parseInt($scope.currentStep, 10) > parseInt(i, 10)) {
+        var valid = true;
+        //validate first step
+        console.log('$scope.newCampaignObj.name ', $scope.newCampaignObj.name);
+        console.log('$scope.newCampaignObj.type ', $scope.newCampaignObj.type);
+        if (i === 2 && !$scope.newCampaignObj.name || !$scope.newCampaignObj.type) {
+          valid = false;
+        }
+        if (valid) {
           $scope.toTheTop();
           goToStep(i);
-
         } else {
-          $scope.toTheTop();
-          goToStep(i);
-          // if (form.$valid) {
-          //   $scope.toTheTop();
-          //   goToStep(i);
-
-          // } else
-          //   errorMessage();
+          errorMessage();
         }
       },
       submit: function () {

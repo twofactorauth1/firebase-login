@@ -215,7 +215,9 @@ module.exports = {
                             return fn(err, null);
                         }
                         var component = email.get('components')[0];
-                        self.log.debug('Using this for data', component);
+                        component.logo = component.logo.replace('src="//s3.amazonaws', 'src="http://s3.amazonaws');
+                        component.text = component.text.replace('src="//s3.amazonaws', 'src="http://s3.amazonaws');
+                        component.title = component.title.replace('src="//s3.amazonaws', 'src="http://s3.amazonaws');
                         app.render('emails/base_email', component, function(err, html) {
                             if (err) {
                                 self.log.error('error rendering html: ' + err);

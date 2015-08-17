@@ -14083,6 +14083,64 @@ tags-input.ti-input-sm .tags .input,
   position: absolute;
   top: 10px;
 }
+.create-campaign .panel-light-grey {
+  border: 1px solid rgba(0, 0, 0, 0.07);
+}
+.create-campaign .mobile-bg {
+  background: url('https://s3-us-west-2.amazonaws.com/indigenous-admin/mobile-template.png');
+  background-repeat: no-repeat;
+  background-position-x: 50%;
+  height: 495px;
+  margin: 30px 0;
+}
+.create-campaign .desktop-bg {
+  background: url('https://s3-us-west-2.amazonaws.com/indigenous-admin/desktop-template.png');
+  background-repeat: no-repeat;
+  background-position-x: 50%;
+  height: 495px;
+  margin: 30px 0;
+}
+.create-campaign .datetimepicker .swtich,
+.create-campaign .datetimepicker .switch {
+  background: none!important;
+  width: auto;
+  display: table-cell;
+}
+.create-campaign .delivery-selector .btn-info {
+  background-color: #48b1cc !important;
+  border-color: #36869a;
+}
+.create-campaign .delivery-selector .btn-info span {
+  color: white;
+}
+.create-campaign tags-input .tags {
+  background-color: white!important;
+}
+.create-campaign .ui-select-multiple.ui-select-bootstrap .ui-select-match-item {
+  color: #fff!important;
+  background: #47b1cc;
+  border: 1px solid #357ebd;
+  border-radius: 4px;
+  height: 25px;
+  padding: 0 5px;
+  line-height: 25px;
+  font-size: 14px;
+}
+.create-campaign .well {
+  position: relative;
+}
+.create-campaign .well .form-control-feedback {
+  text-align: left;
+  height: auto;
+  width: auto;
+  margin-right: 16px;
+}
+.create-campaign .well .form-control-feedback.glyphicon {
+  top: 8px;
+}
+.create-campaign .well .form-control-feedback.fa {
+  top: 20px;
+}
 .create-campaign .mini-editor {
   -webkit-transition: all 1s;
   -moz-transition: all 1s;
@@ -14093,7 +14151,7 @@ tags-input.ti-input-sm .tags .input,
   position: absolute;
   right: 0;
   margin-right: 18px;
-  z-index: 9999;
+  z-index: 999;
 }
 .create-campaign #componentloader {
   min-height: auto!important;

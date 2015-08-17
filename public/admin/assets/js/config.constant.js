@@ -726,6 +726,9 @@ app.constant('JS_REQUIRES', {
     name: 'googlePlaces',
     files: ['../js/libs/angular-google-places-autocomplete/dist/autocomplete.min.css']
   }, {
+    name: 'angular-bootstrap-datetimepicker',
+    files: ['../js/libs/angular-bootstrap-datetimepicker/src/js/datetimepicker.js', '../js/libs/angular-bootstrap-datetimepicker/src/css/datetimepicker.css']
+  }, {
     name: 'angularCircularNavigation',
     files: ['../js/libs/angular-circular-navigation/angular-circular-navigation.js', '../js/libs/angular-circular-navigation/angular-circular-navigation.css']
   }, {
