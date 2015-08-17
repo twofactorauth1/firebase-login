@@ -491,13 +491,13 @@
       var contactsArr = [];
       var promises = [];
       if ($scope.selectedCustomers.newEmails) {
-        var _emails = $scope.selectedCustomers.newEmails.split(",");
+        var _emails = $scope.selectedCustomers.newEmails;
         _.each(_emails, function (email) {
           var contact = _.findWhere($scope.customers, {
-            email: email
+            email: email.text
           });
           if (!contact) {
-            var tempCustomer = $scope.createCustomerData(email);
+            var tempCustomer = $scope.createCustomerData(email.text);
             promises.push(CustomerService.createCustomer(tempCustomer));
           } else {
             contactsArr.push(contact._id);
