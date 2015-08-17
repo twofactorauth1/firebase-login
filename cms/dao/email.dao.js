@@ -13,6 +13,10 @@ var dao = {
     options: {
         name: "email.dao",
         defaultModel: $$.m.cms.Email
+    },
+
+    getEmailById: function(emailId, fn) {
+        return this.getById(emailId, $$.m.cms.Email, fn);
     }
 
 };

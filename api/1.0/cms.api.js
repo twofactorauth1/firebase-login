@@ -10,7 +10,7 @@ var baseApi = require('../base.api.js');
 //TODO: there shouldn't be DAO references here
 
 var cmsDao = require('../../cms/dao/cms.dao.js');
-
+var mandrillHelper = require('../../utils/mandrillhelper');
 var Page = require('../../cms/model/page');
 //var Components = require('../../cms/model/components');
 
@@ -76,6 +76,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('website/:websiteId/emails'), this.setup.bind(this), this.getAllEmails.bind(this));
         app.get(this.url('email/:id'), this.setup.bind(this), this.getEmailById.bind(this));
         app.post(this.url('email'), this.isAuthAndSubscribedApi.bind(this), this.createEmail.bind(this));
+        app.post(this.url('testemail'), this.isAuthAndSubscribedApi.bind(this), this.testEmail.bind(this));
         app.put(this.url('email/:id'), this.isAuthAndSubscribedApi.bind(this), this.updateEmail.bind(this));
         app.delete(this.url('email/:id'), this.isAuthAndSubscribedApi.bind(this), this.deleteEmail.bind(this));
 
@@ -330,6 +331,44 @@ _.extend(api.prototype, baseApi.prototype, {
         cmsDao.getLatestPageForWebsite(websiteId, pageHandle, function (err, value) {
             self.sendResultOrError(resp, err, value, "Error Retrieving Page for Website");
             self = null;
+        });
+    },
+
+    testEmail: function(req, resp) {
+        var self = this;
+        self.log.debug('testEmail >>> ');
+
+        self.log.debug('testEmail >>> req.body', req.body);
+
+        var emailDataObj = req.body;
+        self.log.debug('emailAddress.email >>> ', emailDataObj.address.email);
+        self.log.debug('emailContent.fromEmail >>> ', emailDataObj.content.fromEmail);
+        self.log.debug('emailContent.fromName >>> ', emailDataObj.content.fromName);
+        self.log.debug('emailContent.replyTo >>> ', emailDataObj.content.replyTo);
+        self.log.debug('emailContent.subject >>> ', emailDataObj.content.subject);
+        var accountId = parseInt(self.currentAccountId(req));
+
+        app.render('emails/base_email', emailDataObj.content.components[0], function(err, html){
+            if(err) {
+                self.log.error('error rendering html: ' + err);
+                self.log.warn('email will not be sent.');
+            } else {
+                //fromAddress, fromName, toAddress, toName, subject, html, accountId, vars, emailId, fn)
+                mandrillHelper.sendBasicEmail(
+                    emailDataObj.content.fromEmail,
+                    emailDataObj.content.fromName,
+                    emailDataObj.address.email,
+                    emailDataObj.address.name || "tester's name",
+                    emailDataObj.content.subject,
+                    html,
+                    accountId,
+                    [],
+                    null,
+                    function(err, result){
+                      self.log.debug('mandrill return');
+                      self.sendResultOrError(resp, err, result, "Error Sending Test Email");
+                });
+            }
         });
     },
 

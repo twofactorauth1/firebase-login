@@ -13,7 +13,8 @@ var campaign = $$.m.ModelBase.extend({
         return {
             _id: null,
             accountId: 0,
-            title: "",
+            name: "",
+            type: "",
             status: "active",
             visibility: 1,
             startDate: null,

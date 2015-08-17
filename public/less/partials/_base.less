@@ -1,7 +1,11 @@
 /* ---------------------------------------------------------------------- */
+
+
 /*  Basic Elements & Classes
 /* ---------------------------------------------------------------------- */
-html, body {
+
+html,
+body {
     height: 100%;
     width: 100%;
 }
@@ -21,25 +25,18 @@ body {
     margin: 0;
     background: lighten(@grey, 18%);
     -webkit-font-smoothing: antialiased !important;
-
-
-
     &.bg_style_1 {
         background: url("../images/bg.png") rgba(0, 0, 0, 0) !important;
     }
-
     &.bg_style_2 {
         background: url("../images/bg_2.png") rgba(0, 0, 0, 0) !important;
     }
-
     &.bg_style_3 {
         background: url("../images/bg_3.png") rgba(0, 0, 0, 0) !important;
     }
-
     &.bg_style_4 {
         background: url("../images/bg_4.png") rgba(0, 0, 0, 0) !important;
     }
-
     &.bg_style_5 {
         background: url("../images/bg_5.png") rgba(0, 0, 0, 0) !important;
     }
@@ -57,7 +54,10 @@ body {
     color: @white;
 }
 
-a, a:focus, a:hover, a:active {
+a,
+a:focus,
+a:hover,
+a:active {
     outline: 0 !important;
     text-decoration: none !important;
     cursor: pointer;
@@ -69,26 +69,35 @@ button {
 
 a {
     color: @link-color;
-
-    &:hover, &:focus, &:active {
+    &:hover,
+    &:focus,
+    &:active {
         color: darken(@link-color, 20%);
     }
 }
 
-h1, h2 {
+h1,
+h2 {
     font-family: @font-family-primary;
 }
 
-h3, h4, h5 {
+h3,
+h4,
+h5 {
     font-family: @font-family-primary;
 }
 
-h1, h2, h3, h4, h5 {
+h1,
+h2,
+h3,
+h4,
+h5 {
     font-weight: 300;
     margin-top: 0;
     color: @text-dark;
-
-    .text-bold &, &.text-bold, .text-bold {
+    .text-bold &,
+    &.text-bold,
+    .text-bold {
         font-weight: 600;
     }
 }
@@ -100,7 +109,6 @@ h5.over-title {
 
 .mainTitle {
     margin: 20px 0;
-
     small {
         color: @text-color;
         font-size: @font-size-extra-large;
@@ -109,7 +117,6 @@ h5.over-title {
         display: block;
         margin: 10px 0;
     }
-
     i {
         font-size: @font-size-extra-large;
     }
@@ -123,7 +130,7 @@ h5.over-title {
     border-width: 0 0 0 5px;
     margin: 20px 0;
     padding: 10px;
-    background: rgba(255,255,255,0.4);
+    background: rgba(255, 255, 255, 0.4);
 }
 
 .main-wrapper {
@@ -131,7 +138,7 @@ h5.over-title {
 }
 
 .ajax-white-backdrop {
-    background-color: rgba(255,255,255,0.5);
+    background-color: rgba(255, 255, 255, 0.5);
     display: none;
     bottom: 0;
     left: 0;
@@ -184,23 +191,19 @@ h5.over-title {
     position: relative;
     width: 100%;
     overflow: hidden;
-
     .app-content {
         height: 100%;
-
-        &:before, &:after {
+        &:before,
+        &:after {
             content: " ";
             display: table;
         }
-
         &:after {
             clear: both;
         }
     }
-
     @media (max-width: @screen-sm-max) {
         width: 100%;
-
         .app-content {
             .transition(transform 0.3s ease);
             height: 100%;
@@ -208,7 +211,6 @@ h5.over-title {
             position: relative;
             z-index: 1050;
         }
-
         &.app-slide-off {
             > .app-content {
                 box-shadow: 0 0 4px rgba(0, 0, 0, 0.4);
@@ -219,14 +221,12 @@ h5.over-title {
                 transform: translate3d(@sideBar-width, 0, 0);
                 .transition(transform 300ms ease 0s);
             }
-
             > #off-sidebar {
                 -webkit-transform: translate3d(@sideBar-width, 0, 0);
                 transform: translate3d(@sideBar-width, 0, 0);
                 .transition(transform 300ms ease 0s);
             }
         }
-
         &.app-offsidebar-open {
             > .app-content {
                 box-shadow: 0 0 4px rgba(0, 0, 0, 0.4);
@@ -268,7 +268,9 @@ h5.over-title {
     box-shadow: none;
 }
 
-.nav-pills > li.active > a, .nav-pills > li.active > a:hover, .nav-pills > li.active > a:focus {
+.nav-pills > li.active > a,
+.nav-pills > li.active > a:hover,
+.nav-pills > li.active > a:focus {
     background-color: @primary;
     color: #fff;
 }
@@ -277,7 +279,9 @@ h5.over-title {
     border-radius: 10px;
 }
 
-.list-group-item.active, .list-group-item.active:hover, .list-group-item.active:focus {
+.list-group-item.active,
+.list-group-item.active:hover,
+.list-group-item.active:focus {
     background-color: @primary;
     border-color: @primary;
 }
@@ -290,9 +294,20 @@ h5.over-title {
     padding-top: 30px;
     padding-bottom: 30px;
     border-bottom: 1px solid #eee;
-
     @media (max-width: @screen-sm-min) {
         padding-left: 15px;
         padding-right: 15px;
+    }
+}
+
+.unstyled-list {
+    li {
+        list-style-type: none;
+    }
+}
+
+.inline-list {
+    li {
+        display: inline-block;
     }
 }

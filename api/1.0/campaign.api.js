@@ -29,7 +29,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.delete(this.url('campaign/:id/contact/:contactid'), this.isAuthAndSubscribedApi.bind(this), this.cancelContactCampaign.bind(this));
         app.get(this.url('campaign/:id'), this.isAuthAndSubscribedApi.bind(this), this.getCampaign.bind(this));
 
-        app.get(this.url('campaigns'), this.isAuthAndSubscribedApi.bind(this), this.findCampaigns.bind(this));
+        app.get(this.url(''), this.isAuthAndSubscribedApi.bind(this), this.findCampaigns.bind(this));
         app.get(this.url('campaigns/:id/pages'), this.isAuthAndSubscribedApi.bind(this), this.getPagesWithCampaign.bind(this));
         app.get(this.url('campaigns/:id/running'), this.isAuthAndSubscribedApi.bind(this), this.getRunningCampaign.bind(this));
         app.get(this.url('campaigns/running'), this.isAuthAndSubscribedApi.bind(this), this.getRunningCampaigns.bind(this));
@@ -51,6 +51,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 campaignObj.set('accountId', accountId);
                 var createdObj = campaignObj.get('created');
                 createdObj.by = req.user.id();
+                campaignObj.set('status', 'running');
                 campaignObj.set('created', createdObj);
                 campaignManager.createCampaign(campaignObj, function(err, value){
                     self.log.debug('<< createCampaign');
@@ -123,7 +124,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var self = this;
         self.log.debug('>> bulkAddContactToCampaign');
         var campaignId = req.params.id;
-        var contactIdAry = req.body.ids;
+        var contactIdAry = req.body;
         self.log.debug('Got ids: ', contactIdAry);
         var accountId = parseInt(self.accountId(req));
 

@@ -1,10 +1,11 @@
-<div ng-controller="EmailsCtrl" class="templates">
+<div ng-controller="EmailTemplatesCtrl" class="templates">
     <!-- start: PAGE TITLE -->
     <section id="page-title" class="padding-top-15 padding-bottom-15">
         <div class="row">
             <div class="col-sm-8">
-                <h1 class="mainTitle" translate="sidebar.nav.emails.MAIN"></h1>
-                <span ng-if="themes" class="mainDescription">There are currently {{templates.length}} themes.</span>
+                <h1 class="mainTitle" translate="sidebar.nav.marketing.EMAILS"></h1>
+                <span ng-if="emails" class="mainDescription">There are currently {{emails.length}} emails.</span>
+                <span ng-if="!emails" class="mainDescription">Loading emails...</span>
             </div>
             <div ncy-breadcrumb></div>
         </div>
@@ -35,8 +36,8 @@
                                 </div>
                                 <div class="visible-xs margin-bottom-15 clearfix"></div>
                                 <div class="col-xs-12 col-sm-6">
-                                    <div class="form-group margin-bottom-0 pull-right hidden">
-                                        <button type="button" class="btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti ti-plus ng-click-active" ng-click="openModal('new-email-modal')">
+                                    <div class="form-group margin-bottom-0 pull-right">
+                                        <button type="button" class="btn btn-warning btn-wide btn-scroll btn-scroll-top ti ti-plus ng-click-active" ng-click="openModal('new-email-modal')">
                                             <span>New Email</span>
                                         </button>
                                     </div>
@@ -61,8 +62,8 @@
                             <tr>
                                 <th class="center">Screenshot</th>
                                 <th st-sort="title">Title</th>
-                                <th st-sort="open">Open Rate</th>
-                                <th st-sort="open">Click Rate</th>
+                                <th st-sort="open">Sent</th>
+                                <th st-sort="open">Clicks</th>
                                 <th class="hidden-xs" st-sort="getters.created" ng-class="{'center': tableView != 'grid'}">Created</th>
                                 <th class="hidden-xs" st-sort="getters.modified" ng-class="{'center': tableView != 'grid'}">Modified</th>
                             </tr>
@@ -97,8 +98,8 @@
                                     <img ng-src="{{ template.previewUrl }}" err-src="/admin/assets/images/default-page.jpg" class="img-thumbnail screenshot" alt="image">
                                 </td>
                                 <td><strong>Title: </strong>{{template.title | limitTo: 20 }}{{template.title.length > 20 ? '...' : ''}}</td>
-                                <td><strong>Open Rate: </strong><span class="text-large text-bold">{{template.openRate || '--'}}</span><span ng-if="template.openRate" class="text-small muted"> ({{template.sent}})</span></td>
-                                <td><strong>Click Rate: </strong><span class="text-large text-bold">{{template.clickRate || '--'}}</span><span ng-if="template.clickRate" class="text-small muted"> ({{template.clicks}})</span></td>
+                                <td><strong>Sent: </strong><span class="text-large text-bold">{{template.openRate || '--'}}</span><span ng-if="template.openRate" class="text-small muted"> ({{template.sent}})</span></td>
+                                <td><strong>Clicks: </strong><span class="text-large text-bold">{{template.clickRate || '--'}}</span><span ng-if="template.clickRate" class="text-small muted"> ({{template.clicks}})</span></td>
                                 <td class="hidden-xs" ng-class="{'center': tableView != 'grid'}"><strong>Created: </strong> {{template.created.date | date:'MMM d yy'}}</td>
                                 <td class="hidden-xs" ng-class="{'center': tableView != 'grid'}"><strong>Modified: </strong>{{template.modified.date | date:'MMM d yy'}}</td>
                             </tr>
@@ -109,4 +110,6 @@
             </div>
         </div>
     </div>
+
+    <div data-ng-include data-src=" 'assets/views/partials/new-email-modal.html' " ></div>
 </div>

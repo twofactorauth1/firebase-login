@@ -1,4 +1,6 @@
 /* ---------------------------------------------------------------------- */
+
+
 /*  Theme 6
 /* ---------------------------------------------------------------------- */
 
@@ -52,7 +54,8 @@ header {
         background: $header-color !important;
         border-right-color: $headerBorder-color !important;
         border-bottom-color: $headerBorder-color !important;
-        .sidebar-toggler, .sidebar-mobile-toggler {
+        .sidebar-toggler,
+        .sidebar-mobile-toggler {
             color: $headerElements-color !important;
         }
         .navbar-brand {
@@ -119,7 +122,8 @@ header {
             background: $menuMobile-color !important;
             .close-handle {
                 background: $header-color;
-                .arrow-left, .arrow-right {
+                .arrow-left,
+                .arrow-right {
                     background-color: $headerElements-color;
                 }
             }
@@ -293,22 +297,18 @@ header {
                         background: rgba($white, 0.4);
                         &::-webkit-input-placeholder {
                             /* WebKit browsers */
-                            
                             color: $sidebarText-color;
                         }
                         &:-moz-placeholder {
                             /* Mozilla Firefox 4 to 18 */
-                            
                             color: $sidebarText-color;
                         }
                         &::-moz-placeholder {
                             /* Mozilla Firefox 19+ */
-                            
                             color: $sidebarText-color;
                         }
                         &:-ms-input-placeholder {
                             /* Internet Explorer 10+ */
-                            
                             color: $sidebarText-color;
                         }
                     }
@@ -380,22 +380,18 @@ ul.sub-menu {
     .form-control {
         &::-webkit-input-placeholder {
             /* WebKit browsers */
-            
             color: rgba($sidebarText-color, 0.5);
         }
         &:-moz-placeholder {
             /* Mozilla Firefox 4 to 18 */
-            
             color: rgba($sidebarText-color, 0.5);
         }
         &::-moz-placeholder {
             /* Mozilla Firefox 19+ */
-            
             color: rgba($sidebarText-color, 0.5);
         }
         &:-ms-input-placeholder {
             /* Internet Explorer 10+ */
-            
             color: rgba($sidebarText-color, 0.5);
         }
         &:focus {
@@ -407,22 +403,18 @@ ul.sub-menu {
             }
             &::-webkit-input-placeholder {
                 /* WebKit browsers */
-                
                 color: $text-light !important;
             }
             &:-moz-placeholder {
                 /* Mozilla Firefox 4 to 18 */
-                
                 color: $text-light !important;
             }
             &::-moz-placeholder {
                 /* Mozilla Firefox 19+ */
-                
                 color: $text-light !important;
             }
             &:-ms-input-placeholder {
                 /* Internet Explorer 10+ */
-                
                 color: $text-light !important;
             }
         }
@@ -444,7 +436,8 @@ ul.sub-menu {
                 border-color: $offSidebarBorder-color;
                 color: rgba($offSidebarElements-color, 0.7);
                 background: darken($offSidebar-color, 5%);
-                &:hover, &:focus {
+                &:hover,
+                &:focus {
                     background: darken($offSidebar-color, 10%);
                     color: rgba($offSidebarElements-color, 0.8);
                 }

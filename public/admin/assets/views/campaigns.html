@@ -1,13 +1,194 @@
-<!-- start: PAGE TITLE -->
-<section id="page-title" class="padding-top-15 padding-bottom-15">
-	<div class="row">
-		<div class="col-sm-8">
-			<h1 class="mainTitle" translate="sidebar.nav.marketing.CAMPAIGNS"></h1>
-			<span class="mainDescription">View and Manage all your blog posts</span>
-		</div>
-		<div ncy-breadcrumb></div>
-	</div>
-</section>
-<!-- end: PAGE TITLE -->
-<!-- start: YOUR CONTENT HERE -->
-<!-- end: YOUR CONTENT HERE -->
+<div ng-controller="CampaignsCtrl" class="campaigns">
+    <!-- start: PAGE TITLE -->
+    <section id="page-title" class="padding-top-15 padding-bottom-15">
+        <div class="row">
+            <div class="col-sm-8">
+                <h1 class="mainTitle" translate="sidebar.nav.marketing.CAMPAIGNS"></h1>
+                <span ng-if="campaigns" class="mainDescription">There are currently {{campaigns.length}} campaigns.</span>
+                <span ng-if="!campaigns" class="mainDescription">Loading campaigns...</span>
+            </div>
+            <div ncy-breadcrumb></div>
+        </div>
+    </section>
+    <!-- end: PAGE TITLE -->
+    <!-- start: CONTENT -->
+    <div st-table="displayedCampaigns" st-safe-src="campaigns">
+        <div class="container-fluid container-fullw bg-white padding-top-0 padding-bottom-0">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="panel panel-transparent row margin-bottom-0">
+                        <div class="panel-body">
+                            <form role="form" class="ng-pristine ng-valid row">
+                                <div class="col-xs-12 col-sm-6 padding-left-0">
+                                    <div class="form-group">
+                                        <div class="col-xs-7 col-sm-9">
+                                            <span class="input-icon">
+                                                <input type="text" st-search placeholder="Search by title, handle, date..." id="form-field-14" class="form-control">
+                                                <i class="ti-search"></i>
+                                            </span>
+                                        </div>
+                                        <div class="col-xs-5 col-sm-3 padding-right-0">
+                                            <button type="button" class="btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti-filter ng-click-active pull-right" ng-click="showFilter = !showFilter">
+                                                <span>Filter</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="visible-xs margin-bottom-15 clearfix"></div>
+                                <div class="col-xs-12 col-sm-6">
+                                    <div class="form-group margin-bottom-0 pull-right">
+                                        <button type="button" ui-sref="app.marketing.createcampaign" class="btn btn-warning btn-wide btn-scroll btn-scroll-top ti ti-plus ng-click-active">
+                                            <span translate="sidebar.nav.marketing.NEWCAMPAIGN">New Campaign</span>
+                                        </button>
+                                    </div>
+                                    <div class="form-group margin-bottom-0 pull-left">
+                                        <div class="btn-group tableView">
+                                            <button class="btn btn-info" ng-class="{'active': tableView == 'list'}" href="" ng-click="tableView = 'list'" tooltip-placement="top" tooltip="List"> <span class="fa fa-th-list"></span> </button>
+                                            <button class="btn btn-info" ng-class="{'active': tableView == 'grid'}" href="" ng-click="tableView = 'grid'" tooltip-placement="top" tooltip="Grid"> <span class="fa fa-th"></span> </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid container-fullw padding-top-0 padding-bottom-0">
+            <div class="panel panel-transparent row margin-bottom-0">
+                <div class="panel-body">
+                    <table class="table table-hover table-striped margin-bottom-0" ng-class="{'grid': tableView == 'grid', 'bg-white': tableView != 'grid'}" ng-show="displayedCampaigns">
+                        <thead>
+                            <tr>
+                                <th st-sort="status" class="center" translate="tableFields.STATUS">Status</th>
+                                <th st-sort="title" translate="tableFields.NAME">Name</th>
+                                <th st-sort="title" translate="tableFields.TYPE">Type</th>
+                                <th st-sort="open" translate="campaign.OPENRATE">Sent</th>
+                                <th st-sort="open" translate="campaign.CLICKRATE">Clicks</th>
+                                <th class="hidden-xs" st-sort="getters.created" ng-class="{'center': tableView != 'grid'}" translate="tableFields.CREATED">Created</th>
+                            </tr>
+                            <tr ng-if="showFilter">
+                                <th>
+                                </th>
+                                <th>
+                                    <input st-search="title" placeholder="Title" class="form-control" type="search" />
+                                </th>
+                                <th>
+                                    <!-- <input st-search="created" placeholder="Created" class="form-control" type="search" /> -->
+                                </th>
+                                <th>
+                                    <!-- <input st-search="created" placeholder="Created" class="form-control" type="search" /> -->
+                                </th>
+                                <th>
+                                    <!-- <input st-search="created" placeholder="Created" class="form-control" type="search" /> -->
+                                </th>
+                                <th>
+                                    <!-- <input st-search="modified" placeholder="Modified" class="form-control" type="search" /> -->
+                                </th>
+                                <th>
+                                    <!-- <input st-search="modified" placeholder="Modified" class="form-control" type="search" /> -->
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="campaign in displayedCampaigns" ng-click="viewSingle(campaign)">
+                                <td colspan="7" ng-if="tableView == 'grid'" class="no-padding">
+                                    <div class="panel panel-white margin-bottom-0">
+                                        <div class="panel-heading" ng-class="{
+                                            'bg-grey': campaign.status == 'draft',
+                                            'bg-light-yellow': campaign.status == 'running',
+                                            'bg-green': campaign.status == 'completed'
+                                        }">
+                                            <span class="fa-stack fa-lg fa-inverse pull-left" style="margin: -8px 5px 0 -7px;">
+                                                <span class="fa fa-circle-thin fa-stack-2x">
+                                                </span>
+                                            <span class="fa fa-stack-1x" tooltip-placement="top" tooltip="{{campaign.status | titleCase}} " ng-class="{
+                                                  'fa-pencil': campaign.status == 'draft',
+                                                  'fa-clock-o': campaign.status == 'running',
+                                                  'fa-check': campaign.status == 'completed'
+                                                }">
+                                                </span>
+                                            </span>
+                                            <h4 class="panel-title text-white">{{campaign.title | limitTo: 20 }}{{campaign.title.length > 20 ? '...' : ''}}</h4>
+                                            <ul class="panel-heading-tabs border-light">
+                                                <li>
+                                                    <div class="pull-right">
+                                                        <div class="dropdown pull-right">
+                                                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="fa fa-2x fa-ellipsis-v text-white"></span></a>
+                                                            <ul class="dropdown-menu pull-right">
+                                                                <li><a href="#"><span class="fa fa-eye"></span> View</a></li>
+                                                                <li><a href="#"><span class="fa fa-pencil"></span> Edit</a></li>
+                                                                <li><a href="#"><span class="fa fa-clone"></span> Copy</a></li>
+                                                                <li class="divider"></li>
+                                                                <li><a href="#"><span class="fa fa-trash"></span> Delete</a></li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="panel-body">
+                                            <p><strong>Type: </strong> <span class="pull-right">{{campaign.type | titleCase}}</span></p>
+                                            <div class="clearfix margin-bottom-5"></div>
+                                            <p><strong>Created: </strong> <span class="pull-right">{{campaign.created.date | date:'MMM d yy'}}</span></p>
+                                        </div>
+                                        <div class="panel-footer border-light no-padding">
+                                            <div class="col-xs-6 text-center border-right">
+                                                <div class="rate">
+                                                    <i class="fa fa-caret-up text-green"></i> <span class="text-large text-bold">{{campaign.openRate || 0 }}<span><span ng-if="campaign.openRate" class="text-small muted"> ({{campaign.sent}})</span>
+                                                </div>
+                                                Sent
+                                            </div>
+                                            <div class="col-xs-6 text-center">
+                                                <div class="rate">
+                                                    <i class="fa fa-caret-up text-green"></i> <span class="text-large text-bold">{{campaign.clickRate || 0}}</span><span ng-if="campaign.clickRate" class="text-small muted"> ({{campaign.clicks}})</span>
+                                                </div>
+                                                Clicks
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="center" ng-if="tableView != 'grid'"><strong>Status: </strong>
+                                    <span class="fa-stack fa-lg">
+                                        <span class="fa fa-circle-thin fa-stack-2x"
+                                        ng-class="{
+                                            'text-muted': campaign.status == 'draft',
+                                            'text-orange': campaign.status == 'running',
+                                            'text-green': campaign.status == 'completed'
+                                        }">
+                                        </span>
+                                    <span class="fa fa-stack-1x" tooltip-placement="top" tooltip="{{campaign.status | titleCase}} " ng-class="{
+                                          'fa-pencil text-muted': campaign.status == 'draft',
+                                          'fa-clock-o text-orange': campaign.status == 'running',
+                                          'fa-check text-green': campaign.status == 'completed'
+                                        }">
+                                        </span>
+                                    </span>
+                                </td>
+                                <td ng-if="tableView != 'grid'" class="text-large"><strong>Title: </strong>{{campaign.name | limitTo: 20 }}{{campaign.title.length > 20 ? '...' : ''}}</td>
+                                <td ng-if="tableView != 'grid'"><strong>Type: </strong> <span>{{campaign.type | titleCase}}</span></td>
+                                <td ng-if="tableView != 'grid'"><strong>Sent: </strong><span class="text-large text-bold">{{campaign.openRate || 0}}</span><span ng-if="campaign.openRate" class="text-small muted"> ({{campaign.sent}})</span></td>
+                                <td ng-if="tableView != 'grid'"><strong>Clicks: </strong><span class="text-large text-bold">{{campaign.clickRate || 0}}</span><span ng-if="campaign.clickRate" class="text-small muted"> ({{campaign.clicks}})</span></td>
+                                <td ng-if="tableView != 'grid'" class="hidden-xs" ng-class="{'center': tableView != 'grid'}"><strong>Created: </strong> {{campaign.created.date | date:'MMM d yy'}}</td>
+                                <td ng-if="tableView != 'grid'" class="center">
+                                    <div class="dropdown">
+                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="fa fa-2x fa-ellipsis-v" style="color:#eea236;"></span></a>
+                                        <ul class="dropdown-menu pull-right">
+                                            <li><a href="#"><span class="fa fa-eye"></span> View</a></li>
+                                            <li><a href="#"><span class="fa fa-pencil"></span> Edit</a></li>
+                                            <li><a href="#"><span class="fa fa-clone"></span> Copy</a></li>
+                                            <li class="divider"></li>
+                                            <li><a href="#"><span class="fa fa-trash"></span> Delete</a></li>
+                                        </ul>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="load1 csspinner height-400" ng-show="!displayedCampaigns"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div data-ng-include=" 'assets/views/partials/new-campaign-modal.html' "></div>
+</div>

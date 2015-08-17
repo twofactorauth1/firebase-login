@@ -396,6 +396,7 @@ app.constant('userConstant', {
     ADMIN: "ad",
     LEAD: 'ld',
     OTHER: "ot",
+    NOTAG: "nt",
 
     dp: [{
       label: "Customer",
@@ -421,6 +422,9 @@ app.constant('userConstant', {
     }, {
       label: "Other",
       data: "ot"
+    }, {
+      label: "No Tag",
+      data: "nt"
     }]
   },
 
@@ -534,7 +538,9 @@ app.constant('JS_REQUIRES', {
     'integrationsCtrl': 'assets/js/controllers/integrationsCtrl.js',
     'orderDetailCtrl': 'assets/js/controllers/orderDetailCtrl.js',
     'settingsCtrl': 'assets/js/controllers/settingsCtrl.js',
-    'emailsCtrl': 'assets/js/controllers/emailsCtrl.js',
+    'emailTemplatesCtrl': 'assets/js/controllers/emailTemplatesCtrl.js',
+    'campaignsCtrl': 'assets/js/controllers/campaignsCtrl.js',
+    'createCampaignCtrl': 'assets/js/controllers/createCampaignCtrl.js',
     'addComponentModalCtrl': 'assets/js/controllers/modals/addComponentModalCtrl.js',
     'componentSettingsModalCtrl': 'assets/js/controllers/modals/componentSettingsModalCtrl.js',
     'mediaModalCtrl': 'assets/js/controllers/modals/mediaModalCtrl.js',
@@ -561,6 +567,7 @@ app.constant('JS_REQUIRES', {
     'websiteService': 'assets/js/services/webiste.js',
     'userService': 'assets/js/services/user.js',
     'customerService': 'assets/js/services/customer.js',
+    'campaignService': 'assets/js/services/campaign.js',
     'toasterService': 'assets/js/services/toaster.js',
     'ImportContactService': 'assets/js/services/import_contacts.js',
     'chartAnalyticsService': 'assets/js/services/chart_analytics.js',
@@ -708,7 +715,10 @@ app.constant('JS_REQUIRES', {
     files: ['../js/libs/ng-text-truncate/ng-text-truncate.js']
   }, {
     name: 'ngTagsInput',
-    files: ['../js/libs/ng-tags-input/ng-tags-input.min.js', '../js/libs/ng-tags-input/ng-tags-input.min.css']
+    files: ['../js/libs/ng-tags-input/ng-tags-input.min.js', '../js/libs/ng-tags-input/ng-tags-input.min.css', '../js/libs/ng-tags-input/ng-tags-input.bootstrap.min.css']
+  }, {
+    name: 'angular-percentage-filter',
+    files: ["../js/libs/angular-percentage-filter/percentage.js"]
   }, {
     name: 'blueimp',
     files: ['../js/libs/blueimp-gallery/js/jquery.blueimp-gallery.min.js', '../js/libs/blueimp-gallery/css/blueimp-gallery.min.css']
@@ -716,8 +726,11 @@ app.constant('JS_REQUIRES', {
     name: 'googlePlaces',
     files: ['../js/libs/angular-google-places-autocomplete/dist/autocomplete.min.css']
   }, {
-    name: 'angular-cookie',
-    files: ['../js/libs/angular-cookie/angular-cookie.min.js']
+    name: 'angular-bootstrap-datetimepicker',
+    files: ['../js/libs/angular-bootstrap-datetimepicker/src/js/datetimepicker.js', '../js/libs/angular-bootstrap-datetimepicker/src/css/datetimepicker.css']
+  }, {
+    name: 'angularCircularNavigation',
+    files: ['../js/libs/angular-circular-navigation/angular-circular-navigation.js', '../js/libs/angular-circular-navigation/angular-circular-navigation.css']
   }, {
     name: 'bootstrap-icon-picker',
     files: ['../js/libs/bootstrap-icon-picker/bootstrap-iconpicker/js/iconset/iconset-fontawesome-4.2.0.min.js', '../js/libs/bootstrap-icon-picker/bootstrap-iconpicker/js/bootstrap-iconpicker.min.js', '../js/libs/bootstrap-icon-picker/bootstrap-iconpicker/css/bootstrap-iconpicker.min.css']
