@@ -593,6 +593,13 @@
 
         });
     };
+    $scope.checkNewRecipients = function()
+    {
+      var returnValue = false;
+      if($scope.selectedCustomers.newEmails && $scope.selectedCustomers.newEmails.length)
+          returnValue = true;
+      return returnValue;
+    };
 
     $scope.validateStep = function(i, valid)
     {
@@ -602,7 +609,7 @@
         valid = false;
         else if(i === 3 && !$scope.emailToSend.title)
           valid = false;
-        else if(i === 4 && !$scope.recipients.length)
+        else if(i === 4 && !$scope.recipients.length && !$scope.checkNewRecipients())
           valid = false;
       }
       return valid;
@@ -610,10 +617,10 @@
 
     $scope.ValidateBeforeProceed = function(i)
     {
+      var index = 2;
       var valid = true;
       if(i >= 2 )
-        {          
-          var index = 2;
+        { 
           while (index <= i && index >= 2)
             {  
               valid = $scope.validateStep(index, valid);
