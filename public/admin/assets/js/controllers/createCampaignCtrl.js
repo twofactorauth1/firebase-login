@@ -320,14 +320,16 @@
       select.search = '';
     };
 
-    $scope.customerRemoved = function (select) {
-      var selected = select.selected[0];
-
-      var existingContactIndex = _.findIndex($scope.recipients, function (recipient) {
-        return recipient._id === selected._id;
+    $scope.customerRemoved = function (select, selected) {
+      var existingContactIndex;
+      var contact = _.findWhere($scope.recipients, {
+        _id: selected._id
       });
-      if (existingContactIndex) {
-        $scope.recipients.slice(existingContactIndex, 1);
+      if(contact)
+        existingContactIndex = _.indexOf($scope.recipients, contact);
+
+      if (existingContactIndex > -1) {
+        $scope.recipients.splice(existingContactIndex, 1);
       }
       // clear search text
       select.search = '';
