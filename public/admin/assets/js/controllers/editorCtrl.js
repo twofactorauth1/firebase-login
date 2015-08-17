@@ -9,11 +9,11 @@
      * -
      */
 
-     $scope.$watch('$parent.emailToSend', function(newValue, oldValue) {
+    $scope.$watch('$parent.emailToSend', function (newValue, oldValue) {
       console.log('newValue', newValue);
       $scope.ckeditorLoaded = false;
       $scope.retrieveEmail(null, newValue);
-     });
+    });
 
     $scope.circleOptions = {
       isOpen: false,
@@ -234,7 +234,13 @@
       } else {
         //$scope.validateEditPage($scope.page);
 
+
         $scope.checkForDuplicatePage(function () {
+
+          console.log('$scope.duplicateUrl ', $scope.duplicateUrl);
+          if ($scope.isEmail) {
+            $scope.editPageValidated = true;
+          }
           if (!$scope.editPageValidated) {
             $scope.saveLoading = false;
             toaster.pop('error', "Page Title or URL can not be blank.");
@@ -242,7 +248,7 @@
           }
           if (!$scope.duplicateUrl)
             $scope.validateContactAddress(function (data) {
-              if (data) {
+              if (data && !$scope.isEmail) {
                 WebsiteService.updatePage($scope.page, function (data) {
                   console.log($scope.page.handle, $scope.originalPage.handle);
                   $scope.saveLoading = false;
@@ -253,15 +259,23 @@
                       if ($scope.page.handle !== $scope.originalPage.handle) {
                         $location.search('pagehandle', $scope.page.handle);
                         $scope.refreshLinkList(value, $scope.originalPage.handle);
-                      }                      
+                      }
                       WebsiteService.updateLinkList($scope.website.linkLists[index], $scope.website._id, 'head-menu', function (data) {
                         $scope.originalPage.handle = $scope.page.handle;
                         console.log('Updated linked list');
                       });
-                      if($scope.page.handle === 'blog' && $scope.blogControl.saveBlogData)
+                      if ($scope.page.handle === 'blog' && $scope.blogControl.saveBlogData)
                         $scope.blogControl.saveBlogData();
                     }
                   });
+
+                });
+              }
+
+              if ($scope.isEmail) {
+                WebsiteService.updateEmail($scope.page, function(data) {
+                  $scope.saveLoading = false;
+                  toaster.pop('success', "Email Saved", "The " + $scope.page.title + " email was saved successfully.");
                 });
               }
             })
@@ -276,7 +290,7 @@
      * -
      */
 
-    $scope.cancelPage = function () {      
+    $scope.cancelPage = function () {
       $scope.checkForSaveBeforeLeave();
     };
 
@@ -355,7 +369,7 @@
      */
 
     $scope.retrievePage = function (_handle) {
-      if(_handle === 'blog' || _handle === 'single-post')
+      if (_handle === 'blog' || _handle === 'single-post')
         $scope.post_blog_page = true;
       WebsiteService.getSinglePage(_handle, function (data) {
         $scope.page = data;
@@ -979,29 +993,23 @@
       // }
       $scope.newEmail.components = $scope.page.components;
       WebsiteService.createEmail($scope.newEmail, function (data, error) {
-        if(data && !error)
-        {
+        if (data && !error) {
           $scope.duplicate = true;
           $scope.checkForSaveBeforeLeave('/admin/#/editor?email=' + data._id, true);
-        }
-        else if(!data && error && error.message)
-        {
+        } else if (!data && error && error.message) {
           toaster.pop('error', error.message);
-        }        
+        }
       });
     };
 
 
     $scope.updateEmailSettings = function () {
       WebsiteService.updateEmail($scope.page, function (data, error) {
-        if(data && !error)
-        {
+        if (data && !error) {
           toaster.pop('success', "Settings saved successfully");
-        }
-        else if(!data && error && error.message)
-        {
+        } else if (!data && error && error.message) {
           toaster.pop('error', error.message);
-        }        
+        }
       });
     };
 
@@ -1135,9 +1143,8 @@
       if (!redirectUrl) {
         redirectUrl = $location.search().posthandle ? "/admin/#/website/posts" : "/admin/#/website/pages";
       }
-      if($scope.isEmail)
-      {
-       redirectUrl = "/admin/#/emails"; 
+      if ($scope.isEmail) {
+        redirectUrl = "/admin/#/emails";
       }
       if ($scope.isDirty.dirty) {
         SweetAlert.swal({

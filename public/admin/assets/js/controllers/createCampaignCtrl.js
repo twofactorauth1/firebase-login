@@ -303,6 +303,7 @@
         $scope.checkingCampaignName = false;
         $scope.campaignNameExists = exists;
         $scope.emailToSend.title = _name + ' Email Template';
+        $scope.emailToSend.subject = _name;
       });
     };
 
