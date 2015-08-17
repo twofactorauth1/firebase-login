@@ -190,7 +190,8 @@ module.exports = {
 
         var step = campaignFlow.get('steps')[stepNumber];
         self.log.debug('>> getSteps ', campaignFlow.get('steps'));
-        if(step === null) {
+        self.log.debug('>> step ', step);
+        if(step === null || typeof step == "undefined") {
             var errorString = 'Error getting steps';
             self.log.error(errorString);
             return fn(errorString, null);
@@ -386,7 +387,7 @@ module.exports = {
                     if(err) {
                         self.log.warn('Could not fetch contact [' + contactId + '].');
                         callback();
-                    } else if(contactId.get('accountId') !== accountId) {
+                    } else if(contact.get('accountId') !== accountId) {
                         self.log.warn('Contact [' + contactId + '] does not belong to account [' + accountId + '].');
                         callback();
                     } else {
@@ -422,7 +423,7 @@ module.exports = {
                             callback(err);
                         } else {
                             self.log.debug('added contact.');
-                            callback();
+                            //callback();
                         }
                     });
                 });
