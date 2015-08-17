@@ -362,8 +362,13 @@
     var goToStep = function (i) {
       $scope.currentStep = i;
     };
-    var errorMessage = function () {
-      toaster.pop('error', 'Error', 'please complete the form in this step before proceeding');
+    var errorMessage = function (i) {
+      if($scope.currentStep < i && (i - $scope.currentStep > 1 ))
+      {
+        toaster.pop('error', 'Error', 'Please complete the previous steps before proceeding');  
+      }
+      else
+        toaster.pop('error', 'Error', 'Please complete the form in this step before proceeding');
     };
 
     /*
@@ -631,7 +636,7 @@
             }
         }
         if (!valid) {
-          errorMessage();
+          errorMessage(i);
           valid = false;
         } 
         return valid;
