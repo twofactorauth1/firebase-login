@@ -83,8 +83,7 @@ app.directive('productsComponent', ['paymentService', 'productService', 'account
        * - get all products, set originalProducts obj and filter
        */
 
-      ProductService.getAllProducts(function (data) {
-        console.log('products ', data);
+      ProductService.getActiveProducts(function (data) {
         scope.originalProducts = data;
         filterProducts(scope.originalProducts, function () {
           scope.pageChanged(1);

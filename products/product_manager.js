@@ -102,6 +102,20 @@ module.exports = {
         });
     },
 
+    listActiveProducts: function(accountId, limit, skip, fn) {
+        var self = this;
+        log.debug('>> listActiveProducts');
+        productDao.findAllWithFieldsAndLimit({'accountId':accountId, status:'active'}, skip, limit, null, null, $$.m.Product, function(err, list){
+            if(err) {
+                log.error('Exception listing products: ' + err);
+                fn(err, null);
+            } else {
+                log.debug('<< listActiveProducts');
+                fn(null, list);
+            }
+        });
+    },
+
     getProductsByType: function(accountId, productType, fn) {
         var self = this;
         log.debug('>> getProductsByType');

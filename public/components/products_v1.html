@@ -9,7 +9,13 @@
             </div>
         </header>
         <div class="tab-pane active row" id="{{productSection['product-section-id']}}">
-            <div data-class="product-section-id" class="col-xs-12 col-sm-6 col-md-4" ng-repeat="product in filteredProducts">
+            <div data-class="product-section-id"
+                 ng-class="{
+                    'col-xs-4 col-xs-offset-4': filteredProducts.length == 1,
+                    'col-xs-12 col-sm-6': filteredProducts.length == 2,
+                    'col-xs-12 col-sm-6 col-md-4': filteredProducts.length > 2
+                    }"
+                 ng-repeat="product in filteredProducts">
                 <div class="product">
                     <div class="thumbnail">
                         <div ng-if="product.onSaleToday" class="ribbon red"><span>SALE</span></div>
