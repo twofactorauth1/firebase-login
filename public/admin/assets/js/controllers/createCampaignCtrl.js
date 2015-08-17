@@ -594,6 +594,42 @@
         });
     };
 
+    $scope.validateStep = function(i, valid)
+    {
+      if(valid)
+      {
+        if (i === 2 && !$scope.newCampaignObj.name || !$scope.newCampaignObj.type)
+        valid = false;
+        else if(i === 3 && !$scope.emailToSend.title)
+          valid = false;
+        else if(i === 4 && !$scope.recipients.length)
+          valid = false;
+      }
+      return valid;
+    }
+
+    $scope.ValidateBeforeProceed = function(i)
+    {
+      var valid = true;
+      if(i >= 2 )
+        {          
+          var index = 2;
+          while (index <= i && index >= 2)
+            {  
+              valid = $scope.validateStep(index, valid);
+              if(valid)
+                index ++ ;
+              else
+                index = 0;
+            }
+        }
+        if (!valid) {
+          errorMessage();
+          valid = false;
+        } 
+        return valid;
+    }
+
     // toggle selection
     $scope.toggleSelection = function (tagName) {
       var idx = $scope.tagSelection.indexOf(tagName);
@@ -610,11 +646,15 @@
     $scope.currentStep = 1;
     // Initial Value
     $scope.form = {
-
       next: function () {
-        $scope.goingTo = 'next';
-        $scope.toTheTop();
-        nextStep();
+        var i = $scope.currentStep + 1;
+        var valid = $scope.ValidateBeforeProceed(i);
+        if(valid)
+        {
+          $scope.goingTo = 'next';
+          $scope.toTheTop();
+          nextStep();
+        }        
       },
       prev: function () {
         $scope.goingTo = 'prev';
@@ -626,15 +666,11 @@
         //validate first step
         console.log('$scope.newCampaignObj.name ', $scope.newCampaignObj.name);
         console.log('$scope.newCampaignObj.type ', $scope.newCampaignObj.type);
-        if (i === 2 && !$scope.newCampaignObj.name || !$scope.newCampaignObj.type) {
-          valid = false;
-        }
+        var valid = $scope.ValidateBeforeProceed(i);
         if (valid) {
           $scope.toTheTop();
           goToStep(i);
-        } else {
-          errorMessage();
-        }
+        } 
       },
       submit: function () {
         console.log('submit');
