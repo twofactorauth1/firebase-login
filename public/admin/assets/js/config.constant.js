@@ -733,7 +733,7 @@ app.constant('JS_REQUIRES', {
     files: ['../js/libs/angular-bootstrap-datetimepicker/src/js/datetimepicker.js', '../js/libs/angular-bootstrap-datetimepicker/src/css/datetimepicker.css']
   }, {
     name: 'angularCircularNavigation',
-    files: ['../js/libs/angular-circular-navigation/angular-circular-navigation.js', '../js/libs/angular-circular-navigation/angular-circular-navigation.css']
+    files: ['../js/libs_misc/angular-circular-navigation/angular-circular-navigation.js', '../js/libs_misc/angular-circular-navigation/angular-circular-navigation.css']
   }, {
     name: 'bootstrap-icon-picker',
     files: ['../js/libs/bootstrap-icon-picker/bootstrap-iconpicker/js/iconset/iconset-fontawesome-4.2.0.min.js', '../js/libs/bootstrap-icon-picker/bootstrap-iconpicker/js/bootstrap-iconpicker.min.js', '../js/libs/bootstrap-icon-picker/bootstrap-iconpicker/css/bootstrap-iconpicker.min.css']
