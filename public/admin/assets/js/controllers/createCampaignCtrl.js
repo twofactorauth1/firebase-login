@@ -363,7 +363,13 @@
         existingContactIndex = _.indexOf($scope.recipients, contact);
 
       if (existingContactIndex > -1) {
-        $scope.recipients.splice(existingContactIndex, 1);
+        //get the tags that have been selected
+        var tags = $scope.getSelectedTags();
+        var tagExists = _.intersection(contact.tags || ['nt'], tags);
+        if (tagExists.length === 0) {
+          $scope.recipients.splice(existingContactIndex, 1);
+        }
+        
       }
       // clear search text
       select.search = '';
@@ -461,20 +467,26 @@
       return $scope.selectedCustomers.individuals.indexOf(customer._id) > -1;
     }
 
+    $scope.getSelectedTags = function()
+    {
+        var tags = [];
+        _.each($scope.tagSelection, function (fullTag) {
+            var matchingTag = _.find(customerTags, function (matchTag) {
+              return matchTag.label === fullTag;
+            });
+            if (matchingTag) {
+              tags.push(matchingTag.data);
+            }
+        });
+        return tags;
+    }
+
     $scope.getRecipients = function () {
 
       var fullContacts = [];
 
       //get the tags that have been selected
-      var tags = [];
-      _.each($scope.tagSelection, function (fullTag) {
-        var matchingTag = _.find(customerTags, function (matchTag) {
-          return matchTag.label === fullTag;
-        });
-        if (matchingTag) {
-          tags.push(matchingTag.data);
-        }
-      });
+      var tags = $scope.getSelectedTags();
 
       //loop through customers and add if one of the tags matches
 
