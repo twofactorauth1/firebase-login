@@ -340,9 +340,12 @@
                                                 <img ng-src="{{ contact.photo }}" id="customer_photo_{{contact._id}}" err-src="" err-contact="contact" class="img-thumbnail img-circle screenshot animated bounce" alt="image" width="35" height="35">
                                             </li>
                                         </ul>
+
                                         <button ng-click="openModal('customers-list-modal')" ng-if="recipients.length > 0" class="btn btn-primary btn-wide btn-o margin-bottom-15">View Full Contact List</button>
                                     </div>
                                     <div class="margin-bottom-30 center">
+                                        <span ng-if="recipients.length > 100" class="text-muted">(Showing 100 / {{recipients.length}} contacts. To view all contacts, Click "View Full Contact List" button.)</span>
+                                        <div class="clearfix"></div>
                                         <span class="text-muted">{{recipients.length}} / {{customers.length}} contacts selected</span>
                                         <div class="clearfix"></div>
                                         <span class="text-muted" ng-if="selectedCustomers.newEmails.length">{{selectedCustomers.newEmails.length}} 
