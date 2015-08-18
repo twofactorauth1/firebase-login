@@ -382,7 +382,7 @@
                                             </div>
                                             <div class="col-sm-5">
                                                 <div class="radio clip-radio radio-primary" style="margin-top:0px!important">
-                                                    <input type="radio" id="radio3" name="vertical" value="now" ng-model="whenToSend">
+                                                    <input type="radio" ng-change="updateSendNow()" id="radio3" name="vertical" value="now" ng-model="whenToSend">
                                                     <label for="radio3">
                                                         Send Now
                                                     </label>

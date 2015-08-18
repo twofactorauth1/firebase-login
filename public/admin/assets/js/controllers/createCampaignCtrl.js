@@ -21,6 +21,11 @@
       return moment(date).format("dddd, MMMM Do YYYY, h:mm A");
     };
 
+    $scope.updateSendNow = function () {
+      $scope.delivery.date = moment();
+      $scope.delivery.time = moment();
+    };
+
 
     $scope.hstep = 1;
     $scope.mstep = 15;
