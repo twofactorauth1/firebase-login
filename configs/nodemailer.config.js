@@ -19,12 +19,12 @@ var emailUsername = process.env.EMAIL_USERNAME || 'test_operations@indigenous.io
 var emailPassword = process.env.EMAIL_PASSWORD || '!Indigenous1';
 
 var smtpTransportConfigs = {
-    //service:"Gmail",
-    //auth: {
-    //    user: "indigenous.emailer@gmail.com",
-    //    pass: "indigenousemail"
-    //}
-
+    service:"Gmail",
+    auth: {
+        user: emailUsername,
+        pass: emailPassword
+    },
+/*
     host: emailHost,
     port: emailPort,
     secure: emailIsSecure,
@@ -33,6 +33,7 @@ var smtpTransportConfigs = {
         user: emailUsername,
         pass: emailPassword
     },
+    */
     transport: "SMTP",
     secureConnection: true,
     requiresAuth: true,
@@ -72,7 +73,7 @@ module.exports = {
         var log = $$.g.getLogger("nodemailer.config");
 
         $$.g.mailer = $$.g.mailer || {};
-        $$.g.mailer.sendMail = function(from, to, cc, subject, htmlText, text, fn) {
+        $$.g.mailer.sendMail_old = function(from, to, cc, subject, htmlText, text, fn) {
 
             if (_.isString(to)) {
 
