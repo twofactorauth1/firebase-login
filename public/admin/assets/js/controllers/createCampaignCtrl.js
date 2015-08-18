@@ -456,6 +456,11 @@
     $scope.tagSelection = [];
     $scope.recipients = [];
 
+    $scope.eliminateDuplicates = function(customer)
+    {          
+      return $scope.selectedCustomers.individuals.indexOf(customer._id) > -1;
+    }
+
     $scope.getRecipients = function () {
 
       var fullContacts = [];
@@ -477,17 +482,20 @@
         if (customer.tags && customer.tags.length > 0) {
           var tagExists = _.intersection(customer.tags, tags);
           if (tagExists.length > 0) {
-            fullContacts.push(customer);
+            if(!$scope.eliminateDuplicates(customer))
+              fullContacts.push(customer);
           }
         } else {
           if (tags.indexOf('nt') > -1) {
-            fullContacts.push(customer);
+            if(!$scope.eliminateDuplicates(customer))
+              fullContacts.push(customer);
           }
         }
 
         //add customers from individual
-        if ($scope.selectedCustomers.individuals.indexOf(customer._id) > -1) {
-          fullContacts.push(customer);
+        
+        if ($scope.selectedCustomers.individuals.indexOf(customer._id) > -1) {          
+              fullContacts.push(customer);
         }
       });
 
