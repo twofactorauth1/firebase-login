@@ -460,6 +460,7 @@ var dao = {
                 self.log.info('Attempted to create a new customer for an existing contact');
                 var oldType = existingContact.get('type');
                 existingContact.set('type', 'cu');//set type to customer
+                existingContact.set('tags', ['cu']);
                 existingContact.set('fingerprint', fingerprint);
                 self.saveOrUpdate(existingContact, function(err, savedContact){
                     if(err) {
@@ -477,7 +478,8 @@ var dao = {
                     first:user.get('first'),             //string,
                     last:user.get('last'),              //string,
                     type:"cu",              //contact_types,
-                    fingerprint:fingerprint
+                    fingerprint:fingerprint,
+                    tags: ['cu']
 
                 });
                 newContact.createOrUpdateDetails('emails', null, null, null, null, null, user.get('email'), null);

@@ -539,6 +539,7 @@ _.extend(api.prototype, baseApi.prototype, {
                     var contact = new $$.m.Contact(req.body);
                     contact.set('accountId', value.id());
                     contact.set('type', 'ld');
+                    contact.set('tags', ['ld']);
                     if(contact.get('fingerprint')) {
                         contact.set('fingerprint', ''+contact.get('fingerprint'));
                     }
