@@ -347,8 +347,12 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('emailContent.replyTo >>> ', emailDataObj.content.replyTo);
         self.log.debug('emailContent.subject >>> ', emailDataObj.content.subject);
         var accountId = parseInt(self.currentAccountId(req));
-
-        app.render('emails/base_email', emailDataObj.content.components[0], function(err, html){
+        var component = emailDataObj.content.components[0];
+        component.logo = component.logo.replace('src="//s3.amazonaws', 'src="http://s3.amazonaws');
+        component.text = component.text.replace('src="//s3.amazonaws', 'src="http://s3.amazonaws');
+        component.title = component.title.replace('src="//s3.amazonaws', 'src="http://s3.amazonaws');
+        self.log.debug('component >>> ', component);
+        app.render('emails/base_email', component, function(err, html){
             if(err) {
                 self.log.error('error rendering html: ' + err);
                 self.log.warn('email will not be sent.');
