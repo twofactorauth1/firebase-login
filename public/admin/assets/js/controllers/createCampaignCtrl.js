@@ -295,6 +295,7 @@
 
     WebsiteService.getEmails(function (_emails) {
       $scope.emails = _emails;
+      $scope.originalEmails = angular.copy(_emails);
     });
 
     $scope.changeCurrentEmail = function (selectedEmail) {
@@ -309,8 +310,31 @@
         $scope.campaignNameExists = exists;
         $scope.emailToSend.title = _name + ' Email Template';
         $scope.emailToSend.subject = _name;
+        $scope.checkEmailTitle($scope.emailToSend.title);
       });
     };
+
+    $scope.checkEmailTitle = function (_name) {
+      if($scope.selectedEmail.type === 'new')
+      {
+        $scope.checkingEmailTitle = true;
+        var exists = _.findWhere($scope.originalEmails, {
+          title: _name
+        });
+        $scope.emailTitleExists = exists ? true : false;
+      }
+      else
+        $scope.emailTitleExists = false;
+      
+      $scope.emailTitleChecked = true;
+      $scope.checkingEmailTitle = false;
+    };
+
+    $scope.clearEmail = function()
+    {
+      $scope.checkingEmailTitle = false;
+      $scope.emailToSend.title = "";
+    }
 
     $scope.customerSelected = function (select) {
       var selected = select.selected[select.selected.length - 1];
@@ -617,7 +641,7 @@
       {
         if (i === 2 && !$scope.newCampaignObj.name || !$scope.newCampaignObj.type)
         valid = false;
-        else if(i === 3 && !$scope.emailToSend.title)
+        else if(i === 3 && (!$scope.emailToSend.title || $scope.emailTitleExists))
           valid = false;
         else if(i === 4 && !$scope.recipients.length && !$scope.checkNewRecipients())
           valid = false;

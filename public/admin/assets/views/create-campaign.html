@@ -146,13 +146,13 @@
                                         <div class="clearfix"></div>
                                         <div class="well well-sm">
                                             <div class="radio clip-radio radio-primary radio-inline" style="margin-bottom:0px!important;margin-top:0px">
-                                                <input type="radio" id="newEmail" name="emailtype" value="new" ng-model="selectedEmail.type">
+                                                <input type="radio" id="newEmail" ng-click="clearEmail()" name="emailtype" value="new" ng-model="selectedEmail.type">
                                                 <label for="newEmail" style="margin-bottom:0px!important">
                                                     New Email
                                                 </label>
                                             </div>
                                             <div class="radio clip-radio radio-primary radio-inline" style="margin-bottom:0px!important;margin-top:0px">
-                                                <input type="radio" id="emailTemplate" name="emailtype" value="template" ng-model="selectedEmail.type">
+                                                <input type="radio" id="emailTemplate" name="emailtype" value="template" ng-model="selectedEmail.type" ng-click="clearEmail()">
                                                 <label for="emailTemplate" style="margin-bottom:0px!important">
                                                     Email Template
                                                 </label>
@@ -164,12 +164,15 @@
                                             Email Title <span class="symbol required"></span>
                                         </label>
                                         <div class="well well-sm">
-                                            <input type="text" class="form-control input" name="name" ng-model="emailToSend.title" />
+                                             <input type="text" class="form-control input" name="name" ng-model="emailToSend.title" ng-change="checkEmailTitle(emailToSend.title)" ng-model-options="{ debounce: 800 }" />
+                                            <span class="form-control-feedback" ng-class="{'glyphicon glyphicon-remove text-danger': emailTitleExists && emailTitleChecked && !checkingEmailTitle, 'glyphicon glyphicon-ok text-nephritis': !emailTitleExists && emailTitleChecked && emailToSend.title, 'fa fa-spinner fa-spin':checkingEmailTitle}"></span>
+                                            <p class="error text-danger margin-top-5 margin-bottom-0" ng-if="emailTitleExists && emailTitleChecked && !checkingEmailTitle">Email Title Already Used. Please Choose Another</p>
+                                            <p class="success text-nephritis margin-top-5 margin-bottom-0" ng-if="!emailTitleExists && emailTitleChecked && !checkingEmailTitle && emailToSend.title">Great Email Title!</p>
                                         </div>
                                     </div>
                                     <div ng-if="selectedEmail.type === 'template'">
                                         <label>
-                                            Email Template
+                                            Email Template <span class="symbol required"></span>
                                         </label>
                                         <div class="well well-sm">
                                             <div class="row">                              
