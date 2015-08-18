@@ -348,9 +348,16 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('emailContent.subject >>> ', emailDataObj.content.subject);
         var accountId = parseInt(self.currentAccountId(req));
         var component = emailDataObj.content.components[0];
-        component.logo = component.logo.replace('src="//s3.amazonaws', 'src="http://s3.amazonaws');
-        component.text = component.text.replace('src="//s3.amazonaws', 'src="http://s3.amazonaws');
-        component.title = component.title.replace('src="//s3.amazonaws', 'src="http://s3.amazonaws');
+        if(component.logo) {
+            component.logo = component.logo.replace('src="//s3.amazonaws', 'src="http://s3.amazonaws');
+        }
+        if(component.title) {
+            component.title = component.title.replace('src="//s3.amazonaws', 'src="http://s3.amazonaws');
+        }
+        if(component.text) {
+            component.text = component.text.replace('src="//s3.amazonaws', 'src="http://s3.amazonaws');
+        }
+        
         self.log.debug('component >>> ', component);
         app.render('emails/base_email', component, function(err, html){
             if(err) {
