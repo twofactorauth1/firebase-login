@@ -490,9 +490,13 @@
                                                         To
                                                     </label>
                                                     <span> <ng-pluralize count="recipients.length"
-                                                      when="{'0': 'No contacts selected',
-                                                             '1': '{{recipients[0].details[0].emails[0].email}}',
-                                                             'other': '{{recipients.length}} contacts'}">
+                                                      when="{'0': '0 existing contacts',
+                                                             'other': '{{recipients.length}} existing contacts'}">
+                                                            </ng-pluralize>
+                                                    </span>
+                                                    <span> <ng-pluralize count="selectedCustomers.newEmails.length"
+                                                      when="{'1': ' and 1 new contact',
+                                                             'other': ' and {{selectedCustomers.newEmails.length}} new contacts'}">
                                                             </ng-pluralize>
                                                     </span>
                                                 </div>
