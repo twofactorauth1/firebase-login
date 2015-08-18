@@ -19,8 +19,10 @@ app.directive('errSrc', function () {
           element.hide();
           var contentTr = angular.element('<div class="animated bounce two-letter-label ' + _.sample(colors) + '">' + scope.getContactLetters() + '</div>');
           contentTr.insertAfter(element);
-        } else {
-          element.attr('src', scope.errSrc);
+        } 
+        else if(!value)
+        {
+           element.attr('src', scope.errSrc);
         }
       });
 
