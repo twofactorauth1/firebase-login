@@ -491,6 +491,7 @@
                                                     </label>
                                                     <span> <ng-pluralize count="recipients.length"
                                                       when="{'0': '0 existing contacts',
+                                                             '1': '{{recipients[0].details[0].emails[0].email}}',
                                                              'other': '{{recipients.length}} existing contacts'}">
                                                             </ng-pluralize>
                                                     </span>
