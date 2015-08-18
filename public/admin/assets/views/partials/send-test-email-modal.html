@@ -8,7 +8,7 @@
             <span class="help-block">Enter an email to send the test.</span>
             <div class="form-group" ng-class="{ 'has-error' : testEmailForm.email.$invalid && !testEmailForm.email.$pristine }">
                 <label>Email*</label>
-                <input name="email" class="form-control" type="email" ng-model="testemail.email" required>
+                <input name="email" ng-pattern="emailValidation" class="form-control" type="email" ng-model="testemail.email" required>
             </div>
         </div>
         <div class="modal-footer">

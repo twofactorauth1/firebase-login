@@ -1,7 +1,7 @@
 'use strict';
 /*global app, angular, moment*/
 (function (angular) {
-  app.controller('CreateCampaignCtrl', ["$scope", "$modal", "$location", "toaster", "$timeout", "CampaignService", "CustomerService", "CommonService", "editableOptions", "AccountService", "userConstant", "WebsiteService", "$q", function ($scope, $modal, $location, toaster, $timeout, CampaignService, CustomerService, CommonService, editableOptions, AccountService, userConstant, WebsiteService, $q) {
+  app.controller('CreateCampaignCtrl', ["$scope", "$modal", "$location", "toaster", "$timeout", "CampaignService", "CustomerService", "CommonService", "editableOptions", "AccountService", "userConstant", "WebsiteService", "$q", "formValidations", function ($scope, $modal, $location, toaster, $timeout, CampaignService, CustomerService, CommonService, editableOptions, AccountService, userConstant, WebsiteService, $q, formValidations) {
 
     editableOptions.theme = 'bs3';
 
@@ -10,7 +10,7 @@
       type: 'new'
     };
     $scope.tableView = 'list';
-
+    $scope.emailValidation = formValidations.email;
     $scope.delivery = {
       date: moment(),
       time: moment(),
