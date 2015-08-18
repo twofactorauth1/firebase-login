@@ -139,7 +139,12 @@
 
     $scope.sendTestEmail = function (_email) {
       WebsiteService.sendTestEmail(_email, $scope.emailToSend, function (data) {
-        console.log('success test send ', data);
+        if(data && data[0] && data[0]._id)
+        {
+          $scope.closeModal();
+          toaster.pop('success', 'Test Email sent successfully');
+        }
+        console.log('test send status ', data);
       });
     };
 
