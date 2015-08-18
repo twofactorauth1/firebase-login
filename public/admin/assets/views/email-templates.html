@@ -65,7 +65,7 @@
                                 <th st-sort="open">Sent</th>
                                 <th st-sort="open">Clicks</th>
                                 <th class="hidden-xs" st-sort="getters.created" ng-class="{'center': tableView != 'grid'}">Created</th>
-                                <th class="hidden-xs" st-sort="getters.modified" ng-class="{'center': tableView != 'grid'}">Modified</th>
+                                <th class="hidden-xs" st-sort-default="{{order}}" st-sort="getters.modified" ng-class="{'center': tableView != 'grid'}">Modified</th>
                             </tr>
                             <tr ng-if="showFilter">
                                 <th>

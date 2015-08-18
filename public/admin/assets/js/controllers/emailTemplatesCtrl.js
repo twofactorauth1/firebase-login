@@ -36,7 +36,7 @@
         $scope.newEmail.replyTo = _account.business.emails[0].email;
       }
     });
-
+    $scope.order = "reverse";
     $scope.default_image_url = "/admin/assets/images/default-page.jpg";
 
     $scope.filterTemplateScreenShots = function (emails) {
