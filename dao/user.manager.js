@@ -227,6 +227,7 @@ module.exports = {
             if(err) {
                 return fn(err, null);
             } else {
+                log.debug('<< addUserToAccount');
                 return fn(null, user);
             }
         });

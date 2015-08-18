@@ -468,6 +468,14 @@ _.extend(api.prototype, baseApi.prototype, {
                                         });
                                     }
                                 });
+                                self.log.debug('Adding the admin user to the new account');
+                                userManager.addUserToAccount(accountId, 1, ["super","admin","member"], 1, function(err, value){
+                                    if(err) {
+                                        self.log.error('Error adding admin user to account:', err);
+                                    } else {
+                                        self.log.debug('Admin user added to account ' + accountId);
+                                    }
+                                });
                             }
                         });
                         self.log.debug('<< initalizeUserAndAccount: ', json);
