@@ -248,6 +248,10 @@ var dao = {
         self.findMany(query, $$.m.Contact, fn);
     },
 
+    /**
+     * @deprecated
+     * This method does not work
+     */
     getContactByEmail: function (email, fn) {
         if (email == null) {
             return fn(null, null);
@@ -256,7 +260,7 @@ var dao = {
     },
 
     getContactByEmailAndAccount: function(email, accountId, fn) {
-        this.findOne({'email:':email, 'accountId':accountId}, fn);
+        this.findOne({'details.emails.email':email, 'accountId':accountId}, fn);
     },
 
     getContactByEmailAndUserId: function (email, userId, fn) {
@@ -332,7 +336,6 @@ var dao = {
         var self = this;
         console.log('Email (createUserFromEmail): ' + JSON.stringify(email));
 
-        var self = this;
         this.getContactByEmailAndUserId(email, userId, function (err, value) {
 
             if (err) {
@@ -796,40 +799,62 @@ var dao = {
         var self = this;
         self.log.debug('>> saveOrUpdateContact');
         if ((contact.id() === null || contact.id() === 0 || contact.id() == "")) {
-
-            //need to create the contactActivity
-            self.saveOrUpdate(contact, function(err, savedContact){
-
+            /*
+             * Look for the contact by accountId and email.  If found, do a merge.  If not, we're cool.
+             */
+            var accountId = contact.get('accountId');
+            var primaryEmail = contact.getPrimaryEmail();
+            self.getContactByEmailAndAccount(primaryEmail, accountId, function(err, existingContact){
                 if(err) {
-                    self.log.error('Error creating contact: ' + err);
+                    self.log.error('Error checking for existing contact: ', err);
                     fn(err, null);
-                } else {
-                    var activity = new $$.m.ContactActivity({
-                        accountId: savedContact.get('accountId'),
-                        contactId: savedContact.id(),
-                        activityType: $$.m.ContactActivity.types.CONTACT_CREATED,
-                        note: "Contact created.",
-                        start:new Date() //datestamp
+                } else if(existingContact === null || !primaryEmail) {
+                    //need to create the contactActivity
+                    self.saveOrUpdate(contact, function(err, savedContact){
+                        if(err) {
+                            self.log.error('Error creating contact: ' + err);
+                            fn(err, null);
+                        } else {
+                            var activity = new $$.m.ContactActivity({
+                                accountId: savedContact.get('accountId'),
+                                contactId: savedContact.id(),
+                                activityType: $$.m.ContactActivity.types.CONTACT_CREATED,
+                                note: "Contact created.",
+                                start:new Date() //datestamp
 
-                    });
-                    contactActivityManager.createActivity(activity, function(err, value){
-                        if(err) {
-                            self.log.error('Error creating contactActivity for new contact with id: ' + savedContact.id());
-                        } else {
-                            self.log.debug('created contactActivity for new contact with id: ' + savedContact.id());
+                            });
+                            contactActivityManager.createActivity(activity, function(err, value){
+                                if(err) {
+                                    self.log.error('Error creating contactActivity for new contact with id: ' + savedContact.id());
+                                } else {
+                                    self.log.debug('created contactActivity for new contact with id: ' + savedContact.id());
+                                }
+                            });
+                            self._createHistoricActivities(savedContact.get('accountId'), savedContact.id(), savedContact.get('fingerprint'), function(err, val){
+                                if(err) {
+                                    self.log.error('Error creating historic activities for new contact: ' + err);
+                                } else {
+                                    self.log.debug('Successfully created historic activities for new contact');
+                                }
+                            });
+                            self.log.debug('<< saveOrUpdateContact');
+                            fn(null, savedContact);
                         }
                     });
-                    self._createHistoricActivities(savedContact.get('accountId'), savedContact.id(), savedContact.get('fingerprint'), function(err, val){
-                        if(err) {
-                            self.log.error('Error creating historic activities for new contact: ' + err);
-                        } else {
-                            self.log.debug('Successfully created historic activities for new contact');
-                        }
-                    });
-                    self.log.debug('<< saveOrUpdateContact');
-                    fn(null, savedContact);
+                } else {
+                    //this contact already exists.  Let's merge in new data.
+                    self.log.warn('Merging contact with id: ' + existingContact.id());
+                    var merged =  _.defaults(existingContact, contact);
+                    //union details, notes, siteActivity
+                    merged.set('details', _.union(existingContact.get('details'), contact.get('details')));
+                    merged.set('notes', _.union(existingContact.get('notes'), contact.get('notes')));
+                    merged.set('siteActivity', _.union(existingContact.get('siteActivity'), contact.get('siteActivity')));
+                    return self.saveOrUpdate(merged, fn);
                 }
             });
+
+
+
         } else {
             // just an update
             self.saveOrUpdate(contact, fn);

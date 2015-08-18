@@ -196,6 +196,23 @@ var contact = $$.m.ModelBase.extend({
     return emails;
   },
 
+    getPrimaryEmail: function() {
+        var details = this.get('details');
+        var emails = [];
+        _.each(details, function(detail){
+            _.each(detail.emails, function(emailRecord){
+                if(emailRecord.email) {
+                    emails.push(emailRecord.email);
+                }
+            });
+        });
+        if(emails[0]) {
+            return emails[0];
+        } else {
+            return "";
+        }
+    },
+
 
   getPhones: function() {
     var details = this.get("details"),
