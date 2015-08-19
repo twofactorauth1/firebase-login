@@ -191,13 +191,13 @@ module.exports = {
         var step = campaignFlow.get('steps')[stepNumber];
         self.log.debug('>> getSteps ', campaignFlow.get('steps'));
         self.log.debug('>> step ', step);
-        if(step === null || typeof step == "undefined") {
+        if(step === null) {
             var errorString = 'Error getting steps';
             self.log.error(errorString);
             return fn(errorString, null);
         }
 
-        if(step.type === 'email' && (step.trigger === null || step.trigger === 'WAIT' ||
+        if(step && step.type === 'email' && (step.trigger === null || step.trigger === 'WAIT' ||
             (step.trigger === 'SIGNUP' && step.triggered) || (step.trigger === 'EMAIL_OPENED' && step.triggered))) {
             /*
              * Schedule the email.
@@ -281,7 +281,7 @@ module.exports = {
                 }
             });
 
-        } else if(step.type === 'landing'){
+        } else if(step && step.type === 'landing'){
             //there is nothing to do here.
             campaignFlow.set('lastStep', stepNumber);
             step.executed = new Date();
@@ -309,7 +309,7 @@ module.exports = {
                     }
                 }
             });
-        } else if(step.type === 'webinar'){
+        } else if(step && step.type === 'webinar'){
 
             contactDao.getById(campaignFlow.get('contactId'), $$.m.Contact, function(err, contact) {
                 if (err) {
@@ -367,10 +367,8 @@ module.exports = {
             });
 
         } else {
-            self.log.warn('Unknown step type: ' + step.type);
             return fn(null, null);
         }
-
     },
 
     bulkAddContactToCampaign: function(contactIdAry, campaignId, accountId, fn) {
