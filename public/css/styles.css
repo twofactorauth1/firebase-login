@@ -2810,6 +2810,7 @@ div[data-type="feature-block"] .component-inner {
   margin-top: 130px;
   border-top-right-radius: 0px;
   border-bottom-right-radius: 0px;
+  z-index: 999;
 }
 .products-v1 .btnLaunchCart:focus {
   outline: none;
