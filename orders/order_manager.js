@@ -470,7 +470,7 @@ module.exports = {
                         var fromAddress = business.emails[0].email;
                         var fromName = business.name;
 
-                        cmsManager.getEmailPage(accountId, 'new_order', function(err, email){
+                        cmsManager.getEmailPage(accountId, 'new-order', function(err, email){
                             if(err || !email) {
                                 log.warn('No NEW_ORDER email sent: ' + err);
                                 callback(null, updatedOrder);

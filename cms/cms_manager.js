@@ -2266,6 +2266,7 @@ module.exports = {
 
         var query = {
             accountId: accountId,
+            handle: email_type,
             latest:true
         };
 
