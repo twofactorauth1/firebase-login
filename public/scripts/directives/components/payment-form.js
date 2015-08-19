@@ -211,6 +211,7 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                             if (scope.subscriptionPlanOneTimeFee) {
                                 newUser.setupFee = scope.subscriptionPlanOneTimeFee * 100;
                             }
+
                             UserService.initializeUser(newUser, function(err, data) {
                                 if (data && data.accountUrl) {
                                     console.log('$location ', $location);
@@ -302,6 +303,21 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                     newUser.permanent_cookie = ipCookie("permanent_cookie");
                     newUser.fingerprint = new Fingerprint().get();
 
+                    // Add name
+                    var name = $('#card_name #name').val();
+                    if(name) {
+                        var nameAry = name.split(' ');
+                        if(nameAry.length===3) {
+                            newUser.first = nameAry[0];
+                            newUser.middle = nameAry[1];
+                            newUser.last = nameAry[2];
+                        } else if(nameAry.length === 2) {
+                            newUser.first = nameAry[0];
+                            newUser.last = nameAry[1];
+                        } else if(nameAry.length === 1) {
+                            newUser.last = nameAry[0];
+                        }
+                    }
                     UserService.initializeUser(newUser, function(err, data) {
                         if (data && data.accountUrl) {
                             console.log('$location ', $location);

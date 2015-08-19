@@ -282,6 +282,9 @@ _.extend(api.prototype, baseApi.prototype, {
         var coupon = req.body.coupon;
         var fingerprint = req.body.fingerprint;
         var setupFee = req.body.setupFee;
+        var firstName = req.body.first;
+        var lastName = req.body.last;
+        var middle = req.body.middle;
 
         var cardToken = req.body.cardToken;
         var plan = req.body.plan || 'NO_PLAN_ARGUMENT';//TODO: make sure this gets passed
@@ -308,6 +311,15 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> anonymousId', anonymousId);
         self.log.debug('>> coupon', coupon);
         self.log.debug('>> setupFee', setupFee);
+        self.log.debug('>> first', firstName);
+        self.log.debug('>> middle', middle);
+        self.log.debug('>> last', lastName);
+
+        var name = {
+            first:firstName,
+            middle:middle,
+            last:lastName
+        };
 
 
         async.waterfall([
@@ -322,7 +334,7 @@ _.extend(api.prototype, baseApi.prototype, {
                         callback(null, accountAndUser.user, accountAndUser.account);
                     });
                 } else {
-                    userManager.createAccountAndUser(username, password1, email, accountToken, anonymousId, fingerprint, sendWelcomeEmail, function (err, accountAndUser) {
+                    userManager.createAccountAndUser(username, password1, email, accountToken, anonymousId, fingerprint, sendWelcomeEmail, name, function (err, accountAndUser) {
                         if (err) {
                             self.log.error('Error creating account or user: ' + err);
                             return self.wrapError(res, 500, 'Error', 'Error creating account or user.');
@@ -522,6 +534,10 @@ _.extend(api.prototype, baseApi.prototype, {
         var accountToken = req.body.accountToken;
         var anonymousId = req.body.anonymousId;
         var fingerprint = req.body.fingerprint;
+        var firstName = req.body.first;
+        var lastName = req.body.last;
+        var middle = req.body.middle;
+
 
         var sendWelcomeEmail = true;//this can be overridden in the request.
         if(req.body.sendWelcomeEmail && req.body.sendWelcomeEmail === false) {
@@ -557,9 +573,17 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> email', email);
         self.log.debug('>> accountToken', accountToken);
         self.log.debug('>> anonymousId', anonymousId);
+        self.log.debug('>> first', firstName);
+        self.log.debug('>> middle', middle);
+        self.log.debug('>> last', lastName);
 
+        var name = {
+            first:firstName,
+            middle:middle,
+            last:lastName
+        };
 
-        userManager.createAccountAndUser(username, password1, email, accountToken, anonymousId, fingerprint, sendWelcomeEmail, function (err, accountAndUser) {
+        userManager.createAccountAndUser(username, password1, email, accountToken, anonymousId, fingerprint, sendWelcomeEmail, name, function (err, accountAndUser) {
             var userObj = accountAndUser.user;
             self.log.debug('createUserFromUsernamePassword >>>');
                 if (!err) {

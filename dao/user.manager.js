@@ -319,7 +319,7 @@ module.exports = {
         });
     },
 
-    createAccountAndUser: function(username, password, email, accountToken, anonymousId, fingerprint, sendWelcomeEmail, fn) {
+    createAccountAndUser: function(username, password, email, accountToken, anonymousId, fingerprint, sendWelcomeEmail, name, fn) {
         var self = this;
         if (_.isFunction(accountToken)) {
             fn = accountToken;
@@ -360,6 +360,15 @@ module.exports = {
                                     isNew: true
                                 }
                             });
+                            if(name.first) {
+                                user.set('first', name.first);
+                            }
+                            if(name.middle) {
+                                user.set('middle', name.middle);
+                            }
+                            if(name.last) {
+                                user.set('last', name.last);
+                            }
                             user.createOrUpdateLocalCredentials(hash);
                         }
                         callback(null, hash);

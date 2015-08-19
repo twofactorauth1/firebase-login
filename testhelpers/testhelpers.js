@@ -20,7 +20,7 @@ module.exports = {
             fn = testClass;
             testClass = null;
         }
-        userManager.createAccountAndUser("__test_user_" + $$.u.idutils.generateUniqueAlphaNumeric(), "password", "testuser@indigenous.io", null, 'oldId', 'oldId', null, function (err, accountAndUser) {
+        userManager.createAccountAndUser("__test_user_" + $$.u.idutils.generateUniqueAlphaNumeric(), "password", "testuser@indigenous.io", null, 'oldId', 'oldId', null, {first:'first',middle:'middle',last:'last'}, function (err, accountAndUser) {
             if (err) {
                 throw Error("Failed to create test user: " + err.toString());
             }
