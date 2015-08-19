@@ -65,7 +65,7 @@
                                 <th st-sort="type" translate="tableFields.TYPE">Type</th>
                                 <th st-sort="sent" translate="campaign.OPENRATE">Sent</th>
                                 <th st-sort="clicks" translate="campaign.CLICKRATE">Clicks</th>
-                                <th class="hidden-xs" st-sort="getters.created" ng-class="{'center': tableView != 'grid'}" translate="tableFields.CREATED">Created</th>
+                                <th class="hidden-xs" st-sort-default="reverse" st-sort="created.date" ng-class="{'center': tableView != 'grid'}" translate="tableFields.CREATED">Created</th>
                             </tr>
                             <tr ng-if="showFilter">
                                 <th>
