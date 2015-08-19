@@ -284,11 +284,11 @@ _.extend(api.prototype, baseApi.prototype, {
              *  - Mark the contact as "unsubscribed"
              *  - create contact activity
              */
-            contactDao.findContactsByEmail(obj.accountId, obj.email, function(err, contact){
+            contactDao.findContactsByEmail(obj.accountId, obj.email, function(err, contactAry){
                 if(err) {
                     self.log.error('Error finding contact for [' + obj.email + '] and [' + obj.accountId + ']');
                     return;
-                } else if(contact === null || contact.length ===0){
+                } else if(contactAry === null || contactAry.length ===0){
                     //this might be a user and contact on main account
                     contactDao.findContactsByEmail(appConfig.mainAccountID, obj.email, function(err, contacts){
                         if(err || contacts === null || contacts.length===0) {
@@ -314,6 +314,7 @@ _.extend(api.prototype, baseApi.prototype, {
                         }
                     });
                 } else {
+                    var contact = contactAry[0]
                     contact.set('unsubscribed', true);
                     contactDao.saveOrUpdateContact(contact, function(err, updatedContact){
                         if(err) {

@@ -33,13 +33,18 @@
     };
 
     this.createCampaign = function (campaign, fn) {
+      var _campaigns = campaigncache.get('campaigns');
       var apiUrl = baseUrl + ['campaign'].join('/');
       $http({
           url: apiUrl,
           method: "POST",
           data: campaign
         })
-        .success(function (data, status, headers, config) {
+        .success(function (data, status, headers, config) {        
+          if (_campaigns) {
+            _campaigns.push(data);
+            campaigncache.put('campaigns', _campaigns);
+          }
           fn(data);
         })
         .error(function (error) {

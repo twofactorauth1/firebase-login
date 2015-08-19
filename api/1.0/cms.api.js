@@ -12,6 +12,7 @@ var baseApi = require('../base.api.js');
 var cmsDao = require('../../cms/dao/cms.dao.js');
 var mandrillHelper = require('../../utils/mandrillhelper');
 var Page = require('../../cms/model/page');
+require('../../cms/model/email');
 //var Components = require('../../cms/model/components');
 
 
@@ -347,8 +348,19 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('emailContent.replyTo >>> ', emailDataObj.content.replyTo);
         self.log.debug('emailContent.subject >>> ', emailDataObj.content.subject);
         var accountId = parseInt(self.currentAccountId(req));
-
-        app.render('emails/base_email', emailDataObj.content.components[0], function(err, html){
+        var component = emailDataObj.content.components[0];
+        if(component.logo) {
+            component.logo = component.logo.replace('src="//s3.amazonaws', 'src="http://s3.amazonaws');
+        }
+        if(component.title) {
+            component.title = component.title.replace('src="//s3.amazonaws', 'src="http://s3.amazonaws');
+        }
+        if(component.text) {
+            component.text = component.text.replace('src="//s3.amazonaws', 'src="http://s3.amazonaws');
+        }
+        
+        self.log.debug('component >>> ', component);
+        app.render('emails/base_email', component, function(err, html){
             if(err) {
                 self.log.error('error rendering html: ' + err);
                 self.log.warn('email will not be sent.');
@@ -797,26 +809,22 @@ _.extend(api.prototype, baseApi.prototype, {
             } else {
                 var emailObj = req.body;
                 self.log.debug('>> email body');
-                var email = require('../../cms/model/email');
+                var email = new $$.m.cms.Email(emailObj);
                 var temp = $$.u.idutils.generateUUID();
                 if (email != null) {
-                    self.log.debug('>> email not null');
-                   
-                    email = new $$.m.cms.Email(emailObj);
+
                     email.set('_id', temp);
+                    var userId = self.userId(req);
                     email.attributes.modified.date = new Date();
+                    email.attributes.modified.by = userId;
                     email.attributes.created.date = new Date();
+                    email.attributes.created.by = userId;
                     email.set('accountId', accountId);
                     self.log.debug('>> email created');
                     cmsManager.createEmail(email, function (err, value) {
                         self.log.debug('<< createEmail');
                         self.sendResultOrError(res, err, value, "Error creating Email");
-                        // cmsManager.updatePageScreenshot(value.id(), function(err, value){
-                        //     if(err) {self.log.warn('Error updating screenshot for pageId ' + value.id() + ': ' + err);}
-                        //     self = null;
-                        // });
-                        // var pageUrl = self._buildPageUrl(req, page.get('handle'));
-                        // self._updatePageCache(pageUrl);
+
                         self.createUserActivity(req, 'CREATE_EMAIL', null, null, function(){});
                     });
                 } else {
