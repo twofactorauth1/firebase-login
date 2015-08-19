@@ -246,6 +246,90 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                 });
             };
 
+            scope.createAccountWithoutCC = function(newAccount) {
+                //validate
+                //email
+                scope.isFormValid = false;
+                scope.showFooter(true);
+                if (!scope.newAccount.email) {
+                    scope.checkEmailExists(newAccount);
+                    return;
+                }
+
+                //pass
+                if (!scope.newAccount.password && !scope.newAccount.tempUserId && !scope.newAccount.hidePassword) {
+                    scope.checkPasswordLength(newAccount);
+                    return;
+                }
+
+                //url
+                if (!scope.newAccount.businessName) {
+                    scope.checkDomainExists(newAccount);
+                    return;
+                }
+
+                //membership selection
+                if (!scope.newAccount.membership) {
+                    scope.checkMembership(newAccount);
+                    return;
+                }
+
+                var cc_name = angular.element('#name').val();
+
+
+                scope.checkCoupon();
+                if (!scope.couponIsValid) {
+                    return;
+                }
+                //end validate
+                scope.isFormValid = true;
+                scope.showFooter(false);
+                var tmpAccount = scope.tmpAccount;
+                tmpAccount.subdomain = $.trim(newAccount.businessName).replace(" ", "").replace(".", "_").replace("@", "");
+                tmpAccount.business = tmpAccount.business || {};
+                tmpAccount.business.name = newAccount.businessName;
+                UserService.saveOrUpdateTmpAccount(tmpAccount, function(data) {
+                    var newUser = {
+                        username: newAccount.email,
+                        password: newAccount.password,
+                        email: newAccount.email,
+                        accountToken: data.token,
+                        coupon: newAccount.coupon
+                    };
+
+                    newUser.plan = scope.newAccount.membership;
+                    newUser.anonymousId = window.analytics.user().anonymousId();
+                    newUser.permanent_cookie = ipCookie("permanent_cookie");
+                    newUser.fingerprint = new Fingerprint().get();
+
+                    UserService.initializeUser(newUser, function(err, data) {
+                        if (data && data.accountUrl) {
+                            console.log('$location ', $location);
+                            if ($location.host() === 'indigenous.io') {
+                                var hash = CryptoJS.HmacSHA256(newUser.email, "vZ7kG_bS_S-jnsNq4M2Vxjsa5mZCxOCJM9nezRUQ");
+                                //send data to intercom
+                                window.intercomSettings = {
+                                    name: newUser.username,
+                                    email: newUser.email,
+                                    user_hash: hash.toString(CryptoJS.enc.Hex),
+                                    created_at: Math.floor(Date.now() / 1000),
+                                    app_id: "b3st2skm"
+                                };
+                                //send affiliate purchase info
+                                LeadDyno.key = "b2a1f6ba361b15f4ce8ad5c36758de951af61a50";
+                                LeadDyno.recordPurchase();
+                            }
+                            window.location = data.accountUrl;
+                        } else {
+                            scope.isFormValid = false;
+
+                            scope.showFooter(true);
+                        }
+                    });
+
+                });
+            };
+
             scope.checkDomainExists = function(newAccount) {
                 if (!newAccount.businessName) {
                     angular.element("#business-name .error").html("Url Required");

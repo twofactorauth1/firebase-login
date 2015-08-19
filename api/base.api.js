@@ -16,6 +16,9 @@ var logger = global.getLogger("base.api");
 var userActivityManager = require('../useractivities/useractivity_manager');
 var accountDao = require("../dao/account.dao");
 
+//this flag instructs the securitymanager to verify the subscription.
+var verifySubscription = false;
+
 var apiBase = function(options) {
 
     this.init.apply(this, arguments);
@@ -144,7 +147,7 @@ _.extend(apiBase.prototype, {
         self.sm = securityManager;
         if(req.isAuthenticated() && this.matchHostToSession(req)) {
             //don't need to verify inidigenous main account
-            if(appConfig.mainAccountID === self.accountId(req)) {
+            if(appConfig.mainAccountID === self.accountId(req) || verifySubscription===false) {
                 return next();
             } else {
                 self.sm.verifySubscription(req, function(err, isValid){

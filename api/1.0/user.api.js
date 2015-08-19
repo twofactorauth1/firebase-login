@@ -363,22 +363,34 @@ _.extend(api.prototype, baseApi.prototype, {
             },
             function(stripeCustomer, user, account, callback){
                 self.log.debug('Created Stripe customer: ' +  stripeCustomer.id);
-                paymentsManager.createStripeSubscription(stripeCustomer.id, plan, account.id(), user.id(), coupon, setupFee, function(err, sub) {
-                    if (err) {
-                        self.log.error('Error creating Stripe subscription: ' + err);
-                        accountDao.deleteAccountAndArtifacts(account.id(), function(_err, value){
-                            return self.wrapError(res, 500, 'Error creating Stripe Subscription', err.code);
-                        });
-                    } else {
-                        userManager.sendWelcomeEmail(account.id(), account, user, email, username, function(){});
-                        callback(null, sub, stripeCustomer, user, account);
-                    }
+                if(plan) {
+                    paymentsManager.createStripeSubscription(stripeCustomer.id, plan, account.id(), user.id(), coupon, setupFee, function(err, sub) {
+                        if (err) {
+                            self.log.error('Error creating Stripe subscription: ' + err);
+                            accountDao.deleteAccountAndArtifacts(account.id(), function(_err, value){
+                                return self.wrapError(res, 500, 'Error creating Stripe Subscription', err.code);
+                            });
+                        } else {
+                            userManager.sendWelcomeEmail(account.id(), account, user, email, username, function(){});
+                            callback(null, sub, stripeCustomer, user, account);
+                        }
 
-                });
+                    });
+                } else {
+                    userManager.sendWelcomeEmail(account.id(), account, user, email, username, function(){});
+                    callback(null, null, stripeCustomer, user, account);
+                }
+
 
             },
-            function(sub, stripeCustomer, user, account, callback){
-                self.log.debug('Created subscription: ' + sub.id);
+            function(sub, stripeCustomer, user, account, callback) {
+                if(sub) {
+                    self.log.debug('Created subscription: ' + sub.id);
+                } else {
+                    self.log.debug('No subscription created.');
+                    sub = {id:'NOSUBSCRIPTION', plan:{amount:0,name:'NOSUBSCRIPTION'}};
+                }
+
                 accountDao.getAccountByID(account.id(), function(err, account) {
                     if (err || account === null) {
                         self.log.error('Error retrieving new account: ' + err);
@@ -457,19 +469,22 @@ _.extend(api.prototype, baseApi.prototype, {
                                 });
                                 contactActivityManager.createActivity(activity, function(err, value){});
                                 self.log.debug('creating Order for main account');
-                                paymentsManager.getInvoiceForSubscription(stripeCustomerId, subId, null, function(err, invoice){
-                                    if(err) {
-                                        self.log.error('Error getting invoice for subscription: ' + err);
-                                    } else {
-                                        orderManager.createOrderFromStripeInvoice(invoice, appConfig.mainAccountID, contact.id(), function(err, order){
-                                            if(err) {
-                                                self.log.error('Error creating order for invoice: ' + err);
-                                            } else {
-                                                self.log.debug('Order created.');
-                                            }
-                                        });
-                                    }
-                                });
+                                if(sub.id !=='NOSUBSCRIPTION') {
+                                    paymentsManager.getInvoiceForSubscription(stripeCustomerId, subId, null, function(err, invoice){
+                                        if(err) {
+                                            self.log.error('Error getting invoice for subscription: ' + err);
+                                        } else {
+                                            orderManager.createOrderFromStripeInvoice(invoice, appConfig.mainAccountID, contact.id(), function(err, order){
+                                                if(err) {
+                                                    self.log.error('Error creating order for invoice: ' + err);
+                                                } else {
+                                                    self.log.debug('Order created.');
+                                                }
+                                            });
+                                        }
+                                    });
+                                }
+
                                 self.log.debug('Adding the admin user to the new account');
                                 userManager.addUserToAccount(accountId, 1, ["super","admin","member"], 1, function(err, value){
                                     if(err) {
