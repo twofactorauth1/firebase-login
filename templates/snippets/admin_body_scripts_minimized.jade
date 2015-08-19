@@ -24,7 +24,9 @@ script(type="text/javascript").
       name: '#{user.first} #{user.last}',
       email: '#{user.email}',
       user_hash: hash.toString(CryptoJS.enc.Hex),
-      app_id: "b3st2skm"
+      app_id: "b3st2skm",
+      'accountId':#{account._id},
+      'userId':#{user._id}
     };
 
 script(type="text/javascript").
