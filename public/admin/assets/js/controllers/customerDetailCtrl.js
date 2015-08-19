@@ -379,6 +379,16 @@
       });
     };
 
+    $scope.inValidateTags = function()
+    {
+      var status = false;
+      if(!$scope.customer_data.tags)
+        status = true;
+      else if(!$scope.customer_data.tags.length)
+        status = true;
+      return status;
+    }
+
     $scope.customerSaveFn = function (hideToaster) {
 
       $scope.saveLoading = true;
@@ -386,6 +396,13 @@
       if ($scope.checkContactValidity()) {
 
         $scope.unsetTags();
+
+        if(!hideToaster && $scope.inValidateTags())
+        {
+          $scope.saveLoading = false;
+          toaster.pop('warning', 'Please add atleast one tag.');
+          return;
+        }
 
         // if ($scope.customer_data.details[0].addresses.length > -1) {
         //   _.each($scope.customer_data.details[0].addresses, function(_address) {
