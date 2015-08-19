@@ -122,7 +122,7 @@
                                 <!-- <th class="hidden-xs" st-sort="getters.modified" ng-show="column.modified">Modified</th> -->
                             </tr>
                             <tr ng-if="showFilter">
-                                <th ng-show="column.photo">
+                                <th class="column-width" ng-show="column.photo">
                                     <input st-search="{{'hasPhoto'}}" placeholder="Select Photo" class="form-control hidden" type="search" id="searchPicture" ng-model="filterCustomer.photo.selected.value" />
                                     <ui-select ng-model="filterCustomer.photo.selected" on-select="triggerInput('#searchPicture')" theme="bootstrap">
                                         <ui-select-match placeholder="Select Photo">
@@ -135,13 +135,13 @@
                                         </ui-select-choices>
                                     </ui-select>
                                 </th>
-                                <th ng-show="column.name">
+                                <th class="column-width" ng-show="column.name">
                                     <input st-search="{{first}}" placeholder="First Name" class="form-control" type="search" />
                                 </th>
-                                <th ng-show="column.name">
+                                <th class="column-width" ng-show="column.name">
                                     <input st-search="{{last}}" placeholder="Last Name" class="form-control" type="search" />
                                 </th>
-                                <th ng-show="column.tags">
+                                <th class="column-width" ng-show="column.tags">
                                     <input st-search="type" placeholder="Type" class="form-control hidden" type="search" id="searchType" ng-model="filterCustomer.type.selected.data" />
                                     <ui-select ng-model="filterCustomer.type.selected" on-select="triggerInput('#searchType')" theme="bootstrap">
                                         <ui-select-match placeholder="Select Type">
@@ -153,20 +153,18 @@
                                         </ui-select-choices>
                                     </ui-select>
                                 </th>
-                                <th ng-show="column.email">
+                                <th class="column-width" ng-show="column.email">
                                     <input st-search="email" placeholder="Email" class="form-control" type="search" />
                                 </th>
-                                <th ng-show="column.address">
+                                <th class="column-width" ng-show="column.address">
                                     <input st-search="{{details[0].addresses[0].city + details[0].addresses[0].state}}" placeholder="Address" class="form-control" type="search" />
                                 </th>
-                                <th ng-show="column.phone">
+                                <th class="column-width" ng-show="column.phone">
                                     <input st-search="{{details[0].phones[0].number}}" placeholder="Phone" class="form-control" type="search" />
                                 </th>
                                 <th ng-show="column.social">
-                                    <!-- <input st-search="social" placeholder="Social" class="form-control" type="search" /> -->
                                 </th>
                                 <th ng-show="column.created">
-                                    <!-- <input st-search="created" placeholder="Created" class="form-control" type="search" /> -->
                                 </th>
                             </tr>
                         </thead>
