@@ -652,6 +652,20 @@
 
         });
     };
+    $scope.checkCampaignNameExists = function () {
+      var exists = false;
+      if($scope.checkingCampaignName)
+      {
+        exists = true;
+      }
+      if($scope.campaignNameExists)
+      {
+        exists = true;
+      }
+      return exists;
+    };
+   
+
     $scope.checkNewRecipients = function()
     {
       var returnValue = false;
@@ -664,7 +678,7 @@
     {
       if(valid)
       {
-        if (i === 2 && !$scope.newCampaignObj.name || !$scope.newCampaignObj.type)
+        if (i === 2 && (!$scope.newCampaignObj.name || $scope.checkCampaignNameExists()))
         valid = false;
         else if(i === 3 && (!$scope.emailToSend.title || $scope.emailTitleExists))
           valid = false;

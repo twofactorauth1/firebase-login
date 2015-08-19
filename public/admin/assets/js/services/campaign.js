@@ -99,5 +99,20 @@
       });
     };
 
+    this.checkDuplicateCampaign = function (_name) {
+      var self = this;
+      self.getCampaigns(function(campaigns) {
+        console.log('campaigns ', campaigns);
+        var _matchingCampaign = _.find(campaigns, function(campaign) {
+          return campaign.name === _name;
+        });
+        if (_matchingCampaign) {
+          return true;
+        } else {
+          return false;
+        }
+      });
+    };
+
   });
 })(angular);
