@@ -165,6 +165,7 @@ module.exports = {
                                         return fn(err, null);
                                     }
                                     self.log.debug('Added contact to campaign flow.');
+                                    self.updateCampaignParticipants(accountId, campaignId, function(err, value){});
                                     self.handleStep(flow, 0, function(err, value){
                                         if(err) {
                                             self.log.error('Error handling initial step of campaign: ' + err);
@@ -434,6 +435,7 @@ module.exports = {
                 } else {
                     //check if we need to update the status
                     self.updateCampaignStatus(accountId, campaignId, function(err, value){});
+                    self.updateCampaignParticipants(accountId, campaignId, function(err, value){});
                     self.log.debug('<< bulkAddContactToCampaign');
                     return fn(null, 'OK');
                 }
@@ -444,7 +446,38 @@ module.exports = {
     },
 
     /**
-     * Check if this campaign should be 'Running' or
+     * Updates the number of participants in the campaign statistics
+     * @param accountId
+     * @param campaignId
+     * @param fn
+     */
+    updateCampaignParticipants: function(accountId, campaignId, fn) {
+        var self = this;
+        self.log.debug('>> updateCampaignParticipants');
+        self.getCampaignFlowsByCampaign(accountId, campaignId, function(err, flows){
+            if(err) {
+                self.log.error('Error getting campaign flows: ', err);
+                return fn(err, null);
+            }
+            var numParticipants = 0;
+            if(flows) {
+                numParticipants = flows.length;
+            }
+            self.getCampaign(campaignId, function(err, campaign){
+                if(err) {
+                    self.log.error('Error getting campaign: ', err);
+                    return fn(err, null);
+                }
+                var stats = campaign.get('statistics');
+                stats.participants = numParticipants;
+                campaignDao.saveOrUpdate(campaign, fn);
+            });
+
+        });
+    },
+
+    /**
+     * Check if this campaign should be 'running' or 'completed'
      * @param campaignId
      * @param accountId
      * @param fn

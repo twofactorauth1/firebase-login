@@ -49,7 +49,8 @@ var campaign = $$.m.ModelBase.extend({
             statistics: {
                 emailsSent: 0,
                 emailsOpened: 0,
-                emailsClicked: 0
+                emailsClicked: 0,
+                participants: 0
             },
 
             "created": {

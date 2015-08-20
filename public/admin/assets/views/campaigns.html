@@ -63,7 +63,8 @@
                                 <th st-sort="status" class="center" translate="tableFields.STATUS">Status</th>
                                 <th st-sort="name" translate="tableFields.NAME">Name</th>
                                 <th st-sort="type" translate="tableFields.TYPE">Type</th>
-                                <th st-sort="sent" translate="campaign.OPENRATE">Sent</th>
+                                <th st-sort="sent" translate="campaign.SENTRATE">Sent</th>
+                                <th st-sort="open" translate="campaign.OPENRATE">Opens</th>
                                 <th st-sort="clicks" translate="campaign.CLICKRATE">Clicks</th>
                                 <th class="hidden-xs" st-sort-default="reverse" st-sort="created.date" ng-class="{'center': tableView != 'grid'}" translate="tableFields.CREATED">Created</th>
                             </tr>
@@ -137,15 +138,21 @@
                                         <div class="panel-footer border-light no-padding">
                                             <div class="col-xs-6 text-center border-right">
                                                 <div class="rate">
-                                                    <i class="fa fa-caret-up text-green"></i> <span class="text-large text-bold">{{ccampaign.statistics.emailsSent || 0 }}<span><span ng-if="campaign.statistics.emailsSent" class="text-small muted"> ({{campaign.statistics.emailsSent}})</span>
+                                                    <i class="fa fa-caret-up text-green"></i> <span class="text-large text-bold">{{ccampaign.statistics.emailsSent || 0 }}<span><span ng-if="campaign.statistics.participants" class="text-small muted"> ({{campaign.statistics.participants}})</span>
                                                 </div>
                                                 Sent
                                             </div>
+                                            <div class="col-xs-6 text-center border-right">
+                                                <div class="rate">
+                                                    <i class="fa fa-caret-up text-green"></i> <span class="text-large text-bold">{{ccampaign.statistics.emailsOpened || 0 }}<span><span ng-if="campaign.statistics.participants" class="text-small muted"> ({{campaign.statistics.participants}})</span>
+                                                </div>
+                                                Opened
+                                            </div>
                                             <div class="col-xs-6 text-center">
                                                 <div class="rate">
-                                                    <i class="fa fa-caret-up text-green"></i> <span class="text-large text-bold">{{campaign.statistics.emailsClicked || 0}}</span><span ng-if="campaign.statistics.emailsClicked" class="text-small muted"> ({{campaign.statistics.emailsClicked}})</span>
+                                                    <i class="fa fa-caret-up text-green"></i> <span class="text-large text-bold">{{campaign.statistics.emailsClicked || 0}}</span><span ng-if="campaign.statistics.participants" class="text-small muted"> ({{campaign.statistics.participants}})</span>
                                                 </div>
-                                                Clicks
+                                                Clicked
                                             </div>
                                         </div>
                                     </div>
@@ -169,8 +176,9 @@
                                 </td>
                                 <td ng-if="tableView != 'grid'" class="text-large"><strong>Title: </strong>{{campaign.name || '--' | limitTo: 20 }}{{campaign.title.length > 20 ? '...' : ''}}</td>
                                 <td ng-if="tableView != 'grid'"><strong>Type: </strong> <span>{{campaign.type | titleCase}}</span></td>
-                                <td ng-if="tableView != 'grid'"><strong>Sent: </strong><span class="text-large text-bold">{{campaign.statistics.emailsSent || 0}}</span><span ng-if="campaign.statistics.emailsSent" class="text-small muted"> ({{campaign.statistics.emailsSent}})</span></td>
-                                <td ng-if="tableView != 'grid'"><strong>Clicks: </strong><span class="text-large text-bold">{{campaign.clickRate || 0}}</span><span ng-if="campaign.clickRate" class="text-small muted"> ({{campaign.clicks}})</span></td>
+                                <td ng-if="tableView != 'grid'"><strong>Sent: </strong><span class="text-large text-bold">{{campaign.statistics.emailsSent || 0}}</span><span ng-if="campaign.statistics.participants" class="text-small muted"> ({{campaign.statistics.participants}})</span></td>
+                                <td ng-if="tableView != 'grid'"><strong>Opened: </strong><span class="text-large text-bold">{{campaign.statistics.emailsOpened || 0}}</span><span ng-if="campaign.statistics.participants" class="text-small muted"> ({{campaign.statistics.participants}})</span></td>
+                                <td ng-if="tableView != 'grid'"><strong>Clicked: </strong><span class="text-large text-bold">{{campaign.statistics.emailsClicked || 0}}</span><span ng-if="campaign.statistics.participants" class="text-small muted"> ({{campaign.statistics.participants}})</span></td>
                                 <td ng-if="tableView != 'grid'" class="hidden-xs" ng-class="{'center': tableView != 'grid'}"><strong>Created: </strong> {{campaign.created.date | date:'MMM d yy'}}</td>
                                 <!-- <td ng-if="tableView != 'grid'" class="center">
                                     <div class="dropdown">
