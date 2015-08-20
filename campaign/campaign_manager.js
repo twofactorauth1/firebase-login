@@ -75,6 +75,15 @@ module.exports = {
         $$.dao.CampaignMessageDao.findMany(query, fn);
     },
 
+    getCampaignFlowsByCampaign: function(accountId, campaignId, fn) {
+        var query = {
+            accountId:accountId,
+            campaignId:campaignId
+        };
+
+        campaignDao.findMany(query, $$.m.CampaignFlow, fn);
+    },
+
     createCampaign: function(campaignObj, fn) {
         var self = this;
         self.log.debug('>> createCampaign');
@@ -161,6 +170,7 @@ module.exports = {
                                             self.log.error('Error handling initial step of campaign: ' + err);
                                             return fn(err, null);
                                         } else {
+                                            self.updateCampaignStatus(accountId, campaignId, function(err, value){});
                                             self.log.debug('<< addContactToCampaign');
                                             return fn(err, savedFlow);
                                         }
@@ -412,7 +422,7 @@ module.exports = {
                             callback(err);
                         } else {
                             self.log.debug('added contact.');
-                            //callback();
+                            callback();
                         }
                     });
                 });
@@ -422,6 +432,8 @@ module.exports = {
                     self.log.error('Error adding contacts to campaign: ' + err);
                     return fn(err, null);
                 } else {
+                    //check if we need to update the status
+                    self.updateCampaignStatus(accountId, campaignId, function(err, value){});
                     self.log.debug('<< bulkAddContactToCampaign');
                     return fn(null, 'OK');
                 }
@@ -429,6 +441,49 @@ module.exports = {
 
         });
 
+    },
+
+    /**
+     * Check if this campaign should be 'Running' or
+     * @param campaignId
+     * @param accountId
+     * @param fn
+     */
+    updateCampaignStatus: function(accountId, campaignId, fn) {
+        var self = this;
+        /*
+         * Get all the flows for the campaign.
+         * If each flow has executed the final step, the status of the campaign should be 'completed'
+         */
+        self.log.debug('>> updateCampaignStatus');
+        self.getCampaignFlowsByCampaign(accountId, campaignId, function(err, flows){
+            var isDone = true;
+            _.each(flows, function(flow){
+                var flowSteps = flow.get('steps');
+                if(!flowSteps[flowSteps.length-1].executed) {
+                    isDone = false;
+                }
+            });
+
+            if(isDone === true) {
+                campaignDao.getById(campaignId, $$.m.Campaign, function(err, campaign){
+                    if(err) {
+                        self.log.error('Error updating campaign status:', err);
+                        return fn(err, null);
+                    } else {
+                        campaign.set('status', 'completed');
+                        var modified = {
+                            date: new Date(),
+                            by: 'Admin'
+                        };
+                        campaign.set('modified', modified);
+                        return campaignDao.saveOrUpdate(campaign, fn);
+                    }
+                });
+            } else {
+                return fn(null, null);
+            }
+        });
     },
 
     /**
@@ -584,7 +639,77 @@ module.exports = {
      */
     handleCampaignEmailOpenEvent: function(accountId, campaignId, contactId, fn) {
         var self = this;
-        return self._handleSpecificCampaignEvent(accountId, campaignId, contactId, 'EMAIL_OPENED', fn);
+        self.log.debug('>> handleCampaignEmailOpenEvent');
+        self._handleSpecificCampaignEvent(accountId, campaignId, contactId, 'EMAIL_OPENED', fn);
+        self.getCampaign(campaignId, function(err, campaign){
+            if(err) {
+                self.log.error('Error fetching campaign', err);
+                return fn(err, null);
+            } else {
+                var stats = campaign.get('statistics');
+                stats.emailsOpened = stats.emailsOpened + 1;
+                var modified = {
+                    date: new Date(),
+                    by: 'ADMIN'
+                };
+                campaign.set('modified', modified);
+                campaignDao.saveOrUpdate(campaign, function(err, value){});
+            }
+        });
+    },
+
+    /**
+     * This method will update the campaign statistics
+     * @param accountId
+     * @param campaignId
+     * @param contactId
+     * @param fn
+     */
+    handleCampaignEmailSentEvent: function(accountId, campaignId, contactId, fn) {
+        var self = this;
+        self.log.debug('>> handleCampaignEmailSentEvent');
+        self.getCampaign(campaignId, function(err, campaign){
+            if(err) {
+                self.log.error('Error fetching campaign', err);
+                return fn(err, null);
+            } else {
+                var stats = campaign.get('statistics');
+                stats.emailsSent = stats.emailsSent + 1;
+                var modified = {
+                    date: new Date(),
+                    by: 'ADMIN'
+                };
+                campaign.set('modified', modified);
+                campaignDao.saveOrUpdate(campaign, fn);
+            }
+        });
+    },
+
+    /**
+     * This method will update the campaign statistics
+     * @param accountId
+     * @param campaignId
+     * @param contactId
+     * @param fn
+     */
+    handleCampaignEmailClickEvent: function(accountId, campaignId, contactId, fn) {
+        var self = this;
+        self.log.debug('>> handleCampaignEmailClickEvent');
+        self.getCampaign(campaignId, function(err, campaign){
+            if(err) {
+                self.log.error('Error fetching campaign', err);
+                return fn(err, null);
+            } else {
+                var stats = campaign.get('statistics');
+                stats.emailsClicked = stats.emailsClicked + 1;
+                var modified = {
+                    date: new Date(),
+                    by: 'ADMIN'
+                };
+                campaign.set('modified', modified);
+                campaignDao.saveOrUpdate(campaign, fn);
+            }
+        });
     },
 
     _handleSpecificCampaignEvent: function(accountId, campaignId, contactId, trigger, fn) {
