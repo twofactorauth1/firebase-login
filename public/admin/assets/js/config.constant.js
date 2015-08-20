@@ -504,7 +504,7 @@ app.constant('JS_REQUIRES', {
     'ladda': ['../js/libs/ladda/dist/ladda.min.js', '../js/libs/ladda/dist/ladda-themeless.min.css'],
     'chartjs': '../js/libs/chartjs/Chart.min.js',
     'jquery-sparkline': '../js/libs/jquery.sparkline.build/dist/jquery.sparkline.min.js',
-    'jsVideoUrlParser': '../js/libs/jsVideoUrlParser/dist/jsVideoUrlParser.min.js',
+    'jsVideoUrlParser': '../js/libs//js-video-url-parser/dist/jsVideoUrlParser.min.js',
     'jquery-nestable-plugin': ['../js/libs_misc/jquery-nestable/jquery.nestable.js'],
     'touchspin-plugin': ['../js/libs/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.js', '../js/libs/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.css'],
     // 'bootstrap': '../js/libs/bootstrap/dist/js/bootstrap.min.js',
