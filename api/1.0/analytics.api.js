@@ -187,6 +187,7 @@ _.extend(api.prototype, baseApi.prototype, {
                                 obj.activityType = $$.m.ContactActivity.types.EMAIL_DELIVERED;
                                 objArray.push(obj);
                                 if(value.msg.metadata.campaignId) {
+                                    var metadata = value.msg.metadata;
                                     campaignManager.handleCampaignEmailSentEvent(metadata.accountId, metadata.campaignId, metadata.contactId, function(err, value){
                                         if(err) {
                                             self.log.error('Error handling email send event:' + err);
@@ -218,6 +219,7 @@ _.extend(api.prototype, baseApi.prototype, {
                                 obj.activityType = $$.m.ContactActivity.types.EMAIL_CLICKED;
                                 objArray.push(obj);
                                 if(value.msg.metadata.campaignId) {
+                                    var metadata = value.msg.metadata;
                                     campaignManager.handleCampaignEmailClickEvent(metadata.accountId, metadata.campaignId, metadata.contactId, function(err, value){
                                         if(err) {
                                             self.log.error('Error handling email click event:' + err);
