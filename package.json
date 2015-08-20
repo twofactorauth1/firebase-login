@@ -79,7 +79,7 @@
     "grunt-copy-to": "0.0.10",
     "grunt-csssplit": "0.2.1",
     "grunt-jsdoc-to-markdown": "^0.4.2",
-    "grunt-ng-annotate": "^0.4.0",
+    "grunt-ng-annotate": "1.0.1",
     "grunt-ng-constant": "^1.0.0",
     "grunt-prompt": "^1.2.1",
     "jasmine-core": "^2.3.4",

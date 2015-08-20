@@ -19,6 +19,8 @@ var wordpressConverter = require('./utils/wordpressconverter');
 var jsincludeGenerator = require('./utils/jsincludegenerator');
 var srcfiles = [];
 
+var bowerLockdown = require('./utils/bowerlockdown');
+
 module.exports = function(grunt) {
 
     grunt.initConfig({
@@ -292,52 +294,14 @@ module.exports = function(grunt) {
             options: {
 
             },
-            app1: {
+            admin: {
                 files: {
-
-                    /*
-                    'public/js/ng-indigenous.js':[
-                        'public/js/libs/angular-ui/build/angular-ui.min.js',
-                        'public/js/libs/angular-ui/modules/directives/sortable/sortable.js',
-                        'public/scripts/app.js',
-                        'public/scripts/directives/angularparallax.js',
-                        'public/scripts/directives/carousel.js',
-                        'public/scripts/directives/convertHtml.js',
-                        'public/scripts/directives/coursePreview.js',
-                        'public/scripts/directives/dmStyle.js',
-                        'public/scripts/directives/fileChange.js',
-                        'public/scripts/directives/last.js',
-                        'public/scripts/directives/ngEnter.js',
-			            'public/scripts/directives/scrollTo.js',
-                        'public/scripts/directives/skeuocard.js',
-                        'public/scripts/services/accountService.js',
-                        'public/scripts/services/analyticsService.js',
-                        'public/scripts/services/courseService.js',
-                        'public/scripts/services/customerService.js',
-                        'public/scripts/services/pageService.js',
-                        'public/scripts/services/pagesService.js',
-                        'public/scripts/services/paymentService.js',
-                        'public/scripts/services/postsService.js',
-                        'public/scripts/services/postService.js',
-                        'public/scripts/services/productService.js',
-                        'public/scripts/services/themeService.js',
-                        'public/scripts/services/userService.js',
-                        'public/scripts/services/websiteService.js',
-                        'public/scripts/filters/CreateUrlFilter.js',
-                        'public/scripts/filters/generateURLforLinks.js',
-                        'public/scripts/filters/getByProperty.js',
-                        'public/scripts/filters/getByType.js',
-                        'public/scripts/filters/offset.js',
-                        'public/scripts/filters/trustHtml.js',
-                        'public/scripts/controllers/blogCtrl.js',
-                        'public/scripts/controllers/CourseSubscribeModalController.js',
-                        'public/scripts/controllers/layoutCtrl.js',
-                        'public/scripts/controllers/mainCtrl.js'
-                    ]
-                    */
-
-                    'public/js/ng-indigenous.js': jsincludeGenerator.includeDirectory('public/scripts'),
                     'public/admin/assets/js/ng-admin-indigenous.js': jsincludeGenerator.includeDirectory('public/admin/assets/js')
+                }
+            },
+            frontend: {
+                files: {
+                    'public/js/ng-indigenous.js': jsincludeGenerator.includeDirectory('public/scripts'),
                 }
             }
         },
@@ -385,7 +349,8 @@ module.exports = function(grunt) {
             runkeeperadapter:['biometrics/runkeeper/adapter/test/**/*_test.js'],
             runkeeperpoll:['biometrics/runkeeper/adapter/test/runkeeper_test_poll.js'],
             utils:['utils/test/*_test.js'],
-            tzTests: ['test/tztest.js']
+            tzTests: ['test/tztest.js'],
+            leads: ['test/pullLeadDynoData.js']
         },
 
         //NG-Constant for angular constants
@@ -539,6 +504,12 @@ module.exports = function(grunt) {
         console.log('returned array: ', fileAry)
     });
 
+    grunt.registerTask('bower-lock', 'Lockdown Bower Dependencies', function(){
+        var done = this.async();
+        bowerLockdown.lockVersions(done);
+
+    });
+
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-requirejs');
     grunt.loadNpmTasks('grunt-contrib-copy');
@@ -595,4 +566,5 @@ module.exports = function(grunt) {
     grunt.registerTask('updateDocs', 'jsdoc2md');
     grunt.registerTask('testTz', ['nodeunit:tzTests']);
     grunt.registerTask('testGtm', ['nodeunit:gtm']);
+    grunt.registerTask('leads', ['nodeunit:leads']);
 };
