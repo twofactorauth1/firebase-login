@@ -676,11 +676,13 @@ module.exports = {
         var self = this;
         self.log.debug('>> handleCampaignEmailOpenEvent', campaignId);
         self._handleSpecificCampaignEvent(accountId, campaignId, contactId, 'EMAIL_OPENED', function(err, value){
+            self.log.debug('marking email opened.');
             self.getCampaign(campaignId, function(err, campaign){
                 if(err || !campaign) {
                     self.log.error('Error fetching campaign', err);
                     return fn(err, null);
                 } else {
+                    self.log.debug('got campaign');
                     var stats = campaign.get('statistics');
                     stats.emailsOpened = stats.emailsOpened + 1;
                     var modified = {
@@ -784,6 +786,13 @@ module.exports = {
                 var steps = flow.get('steps');
                 var i = flow.get('lastStep');
                 var nextStep = steps[i];
+                while(nextStep && nextStep.executed) {
+                    i++;
+                    nextStep = steps[i];
+                }
+                if(!nextStep) {
+                    callback(null, null, i);
+                }
                 if(nextStep.trigger === trigger) {
                     nextStep.triggered = new Date();
                     campaignDao.saveOrUpdate(flow, function(err, updatedFlow){
@@ -801,6 +810,10 @@ module.exports = {
                 }
             },
             function(flow, stepNumber, callback) {
+                if(!flow) {
+                    self.log.debug('No step to handle. Exiting');
+                    callback(null);
+                }
                 self.handleStep(flow, stepNumber, function(err, value){
                     if(err) {
                         callback(err);
