@@ -141,6 +141,6 @@
     "font-awesome": "4.4.0",
     "masonry": "~3.3.0",
     "angular-bootstrap": "0.13.0",
-    "outlayer": "1.4.0"
+    "outlayer": "1.3.x"
   }
 }
