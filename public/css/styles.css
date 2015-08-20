@@ -2213,9 +2213,6 @@ div[data-type="feature-block"] .component-inner {
   max-width: 100%;
 }
 @-moz-document url-prefix() {
-  img {
-    width: 100%;
-  }
 }
 .editing .testimonials-v2 .testimonials {
   padding: 25px;
