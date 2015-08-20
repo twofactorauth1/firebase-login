@@ -186,7 +186,7 @@ _.extend(api.prototype, baseApi.prototype, {
                             if (type === 'send') {
                                 obj.activityType = $$.m.ContactActivity.types.EMAIL_DELIVERED;
                                 objArray.push(obj);
-                                if(value.msg.metadata.campaignId) {
+                                if(value.msg.metadata && value.msg.metadata.campaignId) {
                                     var metadata = value.msg.metadata;
                                     campaignManager.handleCampaignEmailSentEvent(metadata.accountId, metadata.campaignId, metadata.contactId, function(err, value){
                                         if(err) {
@@ -202,7 +202,7 @@ _.extend(api.prototype, baseApi.prototype, {
                                 obj.activityType = $$.m.ContactActivity.types.EMAIL_OPENED;
                                 objArray.push(obj);
                                 //if value.msg.metadata.campaignId, trigger campaignStep
-                                if(value.msg.metadata.campaignId) {
+                                if(value.msg.metadata && value.msg.metadata.campaignId) {
                                     self.log.debug('triggering campaign step');
                                     var metadata = value.msg.metadata;
                                     campaignManager.handleCampaignEmailOpenEvent(metadata.accountId, metadata.campaignId, metadata.contactId, function(err, value){
@@ -218,7 +218,7 @@ _.extend(api.prototype, baseApi.prototype, {
                             } else if (type === 'click') {
                                 obj.activityType = $$.m.ContactActivity.types.EMAIL_CLICKED;
                                 objArray.push(obj);
-                                if(value.msg.metadata.campaignId) {
+                                if(value.msg.metadata && value.msg.metadata.campaignId) {
                                     var metadata = value.msg.metadata;
                                     campaignManager.handleCampaignEmailClickEvent(metadata.accountId, metadata.campaignId, metadata.contactId, function(err, value){
                                         if(err) {
