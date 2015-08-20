@@ -403,15 +403,6 @@ module.exports = {
                                 return fn(err, null);
                             }
                             self.log.debug('Added contact to campaign flow.');
-                            self.handleStep(flow, 1, function(err, value){
-                                if(err) {
-                                    self.log.error('Error handling initial step of campaign: ' + err);
-                                    callback(err);
-                                } else {
-                                    self.log.debug('added contact.');
-                                    callback();
-                                }
-                            });
                         });
                     }
                     self.log.debug('Added contact to campaign flow.');
