@@ -675,7 +675,7 @@ module.exports = {
         self.log.debug('>> handleCampaignEmailOpenEvent');
         self._handleSpecificCampaignEvent(accountId, campaignId, contactId, 'EMAIL_OPENED', fn);
         self.getCampaign(campaignId, function(err, campaign){
-            if(err) {
+            if(err || !campaign) {
                 self.log.error('Error fetching campaign', err);
                 return fn(err, null);
             } else {
@@ -702,7 +702,7 @@ module.exports = {
         var self = this;
         self.log.debug('>> handleCampaignEmailSentEvent');
         self.getCampaign(campaignId, function(err, campaign){
-            if(err) {
+            if(err || !campaign) {
                 self.log.error('Error fetching campaign', err);
                 return fn(err, null);
             } else {
@@ -729,7 +729,7 @@ module.exports = {
         var self = this;
         self.log.debug('>> handleCampaignEmailClickEvent');
         self.getCampaign(campaignId, function(err, campaign){
-            if(err) {
+            if(err || !campaign) {
                 self.log.error('Error fetching campaign', err);
                 return fn(err, null);
             } else {

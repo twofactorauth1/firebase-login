@@ -188,6 +188,7 @@ _.extend(api.prototype, baseApi.prototype, {
                                 objArray.push(obj);
                                 if(value.msg.metadata && value.msg.metadata.campaignId) {
                                     var metadata = value.msg.metadata;
+                                    self.log.debug('Using metadata', metadata);
                                     campaignManager.handleCampaignEmailSentEvent(metadata.accountId, metadata.campaignId, metadata.contactId, function(err, value){
                                         if(err) {
                                             self.log.error('Error handling email send event:' + err);
@@ -203,8 +204,8 @@ _.extend(api.prototype, baseApi.prototype, {
                                 objArray.push(obj);
                                 //if value.msg.metadata.campaignId, trigger campaignStep
                                 if(value.msg.metadata && value.msg.metadata.campaignId) {
-                                    self.log.debug('triggering campaign step');
                                     var metadata = value.msg.metadata;
+                                    self.log.debug('triggering campaign step for metadata ', metadata);
                                     campaignManager.handleCampaignEmailOpenEvent(metadata.accountId, metadata.campaignId, metadata.contactId, function(err, value){
                                         if(err) {
                                             self.log.error('Error handling email open event:' + err);
@@ -220,6 +221,7 @@ _.extend(api.prototype, baseApi.prototype, {
                                 objArray.push(obj);
                                 if(value.msg.metadata && value.msg.metadata.campaignId) {
                                     var metadata = value.msg.metadata;
+                                    self.log.debug('Using metadata', metadata);
                                     campaignManager.handleCampaignEmailClickEvent(metadata.accountId, metadata.campaignId, metadata.contactId, function(err, value){
                                         if(err) {
                                             self.log.error('Error handling email click event:' + err);
