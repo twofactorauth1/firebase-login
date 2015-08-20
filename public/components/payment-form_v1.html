@@ -1,28 +1,14 @@
 <link href='//fonts.googleapis.com/css?family=Raleway:700,300' rel='stylesheet' type='text/css'>
 <div ng-show="!isFormValid">
     <div ng-class="component.type+'-v'+component.version">
-        <div class="top-signup">
-            <div class="inner-page">
-                <img src="https://s3.amazonaws.com/indigenous-account-websites/acct_6/logo.png" width="276" height="57" class="center" style="display: block;">
-                <div class="clearfix mb20"></div>
-                <h1 class="center hidden-xs">Are you ready to...?</h1>
-                <h2 class="center visible-xs">Are you ready to...?</h2>
-                <div class="clearfix mb30"></div>
-                <div>
-                    <div class="mb10">
-                        <h3 class="center"><i class="fa fa-check"></i> Build a sophisticated website</h3>
-                    </div>
-                    <div class="mb10">
-                        <h3 class="center"><i class="fa fa-check"></i> Save time and money</h3>
-                    </div>
-                    <div class="mb10">
-                        <h3 class="center"><i class="fa fa-check"></i> Grow your client base</h3>
-                    </div>
-                </div>
-                <div class="clearfix"></div>
+        <div style="height: 90px;padding: 15px 0;background-color: #fafafa;border-bottom: 1px solid rgba(0,0,0,0.1);">
+            <div style="max-width:1024px!important;margin:0 auto;">
+                <img src="https://s3.amazonaws.com/indigenous-account-websites/acct_6/logo.png" width="276" height="57" class="pull-left" style="display: block;">
+                <p class="pull-right" style="line-height: 65px;">Already have an account? <a href="/login">Log In</a></p>
             </div>
+            <div class="clearfix"></div>
         </div>
-        <div class="social-signup">
+        <div class="social-signup hidden">
             <div class="inner-page">
                 <h2 class="center" ng-if="subscriptionPlans[0].trial_period_days">SIGN UP FOR A {{subscriptionPlans[0].trial_period_days}} DAY FREE TRIAL*</h2>
                 <div class="clearfix mb20"></div>
@@ -58,33 +44,57 @@
                 <p class="center" ng-if="!tmpAccount.tempUser || tmpAccount.tempUser.created.strategy === 'lo'">or use your email address in a form below</p>
             </div>
         </div>
-        <div class="account-info-signup">
+        <div class="top-signup">
             <div class="inner-page">
-                <h4>Account Info</h4>
-                <!-- Business Name -->
-                <div id="business-name" class="form-group col-xs-12 has-feedback">
-                    <input class="form-control input-lg" type="text" ng-model="newAccount.businessName" placeholder="Business Name" ng-blur="checkDomainExists(newAccount)" />
-                    <span class="glyphicon form-control-feedback"></span>
-                    <span class="error help-block" />
-                    <span class="help-block" ng-show="newAccount.businessName">Your Indigenous URL will be <strong>{{newAccount.businessName | urlFilter}}.indigenous.io</strong> and will be changed once your site is ready to publish.</span>
-                </div>
-                <!-- EMAIL AND PASSOWORD -->
-                <div id="email" class="form-group col-sm-6 has-feedback" ng-hide="tmpAccount.tempUser">
-                    <input class="form-control input-lg" type="email" ng-model="newAccount.email" ng-pattern="emailValidation" placeholder="Email" ng-change="checkEmailExists(newAccount)" ng-model-options="{ debounce: 800 }" />
-                    <span class="glyphicon form-control-feedback"></span>
-                    <span class="error help-block" />
-                </div>
-                <div id="password" class="form-group col-sm-6 has-feedback" ng-hide="newAccount.hidePassword">
-                    <input class="form-control input-lg" type="password" ng-model="newAccount.password" placeholder="Password" ng-change="checkPasswordLength(newAccount)" ng-model-options="{ debounce: 800 }" />
-                    <span class="glyphicon form-control-feedback"></span>
-                    <span class="error help-block" />
+                <h2 class="center text-bold margin-bottom-5">Start Your Free 14-day Trial</h2>
+                <h3 class="center">No credit card required.</h3>
+                <div class="margin-top-30"></div>
+                <div class="well">
+                    <!-- First Name -->
+                    <div id="first" class="form-group col-sm-6">
+                        <label>First Name</label>
+                        <input class="form-control input-lg" type="text" ng-model="newAccount.first" />
+                    </div>
+                    <!-- Last Name -->
+                    <div id="last" class="form-group col-sm-6">
+                        <label>Last Name</label>
+                        <input class="form-control input-lg" type="text" ng-model="newAccount.last" />
+                    </div>
+                    <!-- Business Name -->
+                    <div id="business-name" class="form-group col-xs-12 has-feedback">
+                        <label>Business Name</label>
+                        <input class="form-control input-lg" type="text" ng-model="newAccount.businessName" ng-blur="checkDomainExists(newAccount)" />
+                        <span class="glyphicon form-control-feedback"></span>
+                        <span class="error help-block" />
+                        <span class="help-block" ng-show="newAccount.businessName">Your Indigenous URL will be <strong>{{newAccount.businessName | urlFilter}}.indigenous.io</strong> and will be changed once your site is ready to publish.</span>
+                    </div>
+                    <!-- EMAIL AND PASSOWORD -->
+                    <div id="email" class="form-group col-sm-12 has-feedback" ng-hide="tmpAccount.tempUser">
+                        <label>Email</label>
+                        <input class="form-control input-lg" type="email" ng-model="newAccount.email" ng-pattern="emailValidation" ng-change="checkEmailExists(newAccount)" ng-model-options="{ debounce: 800 }" />
+                        <span class="help-block">Your email address will become your username.</span>
+                        <span class="glyphicon form-control-feedback"></span>
+                        <span class="error help-block" />
+                    </div>
+                    <div id="password" class="form-group col-sm-12 has-feedback" ng-hide="newAccount.hidePassword">
+                        <label>Password</label>
+                        <input class="form-control input-lg" type="password" ng-model="newAccount.password" ng-change="checkPasswordLength(newAccount)" ng-model-options="{ debounce: 800 }" />
+                        <span class="help-block">Your password must be at least 6 characters.</span>
+                        <span class="glyphicon form-control-feedback"></span>
+                        <span class="error help-block" />
+                    </div>
+                    <div class="clearfix margin-bottom-10"></div>
+                    <!-- BUY -->
+                    <div class="submit-signup center">
+                        <a type="button" class="btn btn-wide btn-lg btn-primary" ng-click="createAccount(newAccount)"> JOIN NOW</a>
+                    </div>
+                    <p class="center margin-top-10">By clicking this button you agree to our <a href="" type="button" data-toggle="modal" data-target="#terms-of-service">Terms of Service</a>.</p>
                 </div>
             </div>
-            <div class="clearfix mb40"></div>
         </div>
-        <div class="price-signup">
+        <div class="price-signup hidden">
             <div class="inner-page">
-            <div class="clearfix mb20"></div>
+                <div class="clearfix mb20"></div>
                 <div ng-repeat="plan in subscriptionPlans" ng-class="{ 'notSelected': newAccount.membership != plan.id , 'selected': newAccount.membership == plan.id  }">
                     <h4 class="center">{{plan.name}}</h4>
                     <h2 class="center"><i class="fa fa-usd fa-1"></i>{{(plan.amount/100).toFixed(2)}} <span>/ {{plan.interval}}</span></h2>
@@ -98,7 +108,7 @@
                 </div>
             </div>
         </div>
-        <div class="payment-signup">
+        <div class="payment-signup hidden">
             <div class="inner-page">
                 <div class="clearfix mb20"></div>
                 <div class="card-wrapper mb20"></div>
@@ -132,7 +142,7 @@
                 </form>
                 <!-- Coupon DETAILS -->
                 <div class="form-group col-xs-12 has-feedback" ng-class="{'has-error': !couponIsValid && couponChecked && !checkingCoupon, 'has-success': couponIsValid && !checkingCoupon}">
-                    <input class="form-control input-lg" type="text" ng-change="checkCoupon()" ng-model="newAccount.coupon" placeholder="Coupon Code" ng-model-options="{ debounce: 800 }"/>
+                    <input class="form-control input-lg" type="text" ng-change="checkCoupon()" ng-model="newAccount.coupon" placeholder="Coupon Code" ng-model-options="{ debounce: 800 }" />
                     <span class="form-control-feedback" ng-class="{'glyphicon glyphicon-remove': !couponIsValid && couponChecked && !checkingCoupon, 'glyphicon glyphicon-ok': couponIsValid, 'fa fa-spinner fa-spin':checkingCoupon}"></span>
                     <span class="error help-block" ng-if="!couponIsValid && couponChecked && !checkingCoupon">Invalid Coupon</span>
                     <span class="success help-block" ng-if="couponIsValid && couponChecked && !checkingCoupon">Coupon Accepted</span>
@@ -148,11 +158,13 @@
                 </div>
                 <p class="center margin-top-10">By clicking this button you agree to our <a href="" type="button" data-toggle="modal" data-target="#terms-of-service">Terms of Service</a>.</p>
                 <br>
-                <p class="center">* <span ng-if="subscriptionPlans[0].trial_period_days">{{subscriptionPlans[0].trial_period_days}}-day free trial</span> <span ng-if="currentCoupon.created == 1437591986"> with sign-up fee waived, </span> <span ng-if="!currentCoupon.created && paymentFormProduct.product_attributes.stripePlans[0].signup_fee">then a one time charge for $546.95 ($497 + $49.95), then</span> $49.95/month. <br> Once payment is processed, there are no refunds and there is no proration. <br> For cancellations, please contact our support via chat.</p>
+                <p class="center">* <span ng-if="subscriptionPlans[0].trial_period_days">{{subscriptionPlans[0].trial_period_days}}-day free trial</span> <span ng-if="currentCoupon.created == 1437591986"> with sign-up fee waived, </span> <span ng-if="!currentCoupon.created && paymentFormProduct.product_attributes.stripePlans[0].signup_fee">then a one time charge for $546.95 ($497 + $49.95), then</span> $49.95/month.
+                    <br> Once payment is processed, there are no refunds and there is no proration.
+                    <br> For cancellations, please contact our support via chat.</p>
                 <div class="clearfix margin-bottom-10"></div>
             </div>
         </div>
-        <div class="assertions-wrap">
+        <div class="assertions-wrap hidden">
             <div class="inner-page">
                 <div class="assertions">
                     <div class="clearfix mb20"></div>
@@ -332,10 +344,14 @@
 <div ng-show="isFormValid" id="overlay">
     <div id="loading">
         <div class="msg col-sm-12"><img style="margin: 0 auto;width: 100px;display: block;" src="https://s3.amazonaws.com/indigenous-digital-assets/account_6/smaller_1430710720590.png"></div>
-        <div class="msg col-sm-12"><h1 class="text-center">We’re honored to have you.</h1>
+        <div class="msg col-sm-12">
+            <h1 class="text-center">We’re honored to have you.</h1>
         </div>
-        <div class="msg col-sm-12"><div class="text-center"><i class="fa fa-spinner fa-spin"></i></div></div>
-        <div class="msg col-sm-12"><h4 class="text-center">We’re building your account now.</h4></div>
+        <div class="msg col-sm-12">
+            <div class="text-center"><i class="fa fa-spinner fa-spin"></i></div>
+        </div>
+        <div class="msg col-sm-12">
+            <h4 class="text-center">We’re building your account now.</h4></div>
     </div>
 </div>
 <script type="text/javascript">
