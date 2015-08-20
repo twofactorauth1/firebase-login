@@ -674,23 +674,25 @@ module.exports = {
      */
     handleCampaignEmailOpenEvent: function(accountId, campaignId, contactId, fn) {
         var self = this;
-        self.log.debug('>> handleCampaignEmailOpenEvent');
-        self._handleSpecificCampaignEvent(accountId, campaignId, contactId, 'EMAIL_OPENED', fn);
-        self.getCampaign(campaignId, function(err, campaign){
-            if(err || !campaign) {
-                self.log.error('Error fetching campaign', err);
-                return fn(err, null);
-            } else {
-                var stats = campaign.get('statistics');
-                stats.emailsOpened = stats.emailsOpened + 1;
-                var modified = {
-                    date: new Date(),
-                    by: 'ADMIN'
-                };
-                campaign.set('modified', modified);
-                campaignDao.saveOrUpdate(campaign, function(err, value){});
-            }
+        self.log.debug('>> handleCampaignEmailOpenEvent', campaignId);
+        self._handleSpecificCampaignEvent(accountId, campaignId, contactId, 'EMAIL_OPENED', function(err, value){
+            self.getCampaign(campaignId, function(err, campaign){
+                if(err || !campaign) {
+                    self.log.error('Error fetching campaign', err);
+                    return fn(err, null);
+                } else {
+                    var stats = campaign.get('statistics');
+                    stats.emailsOpened = stats.emailsOpened + 1;
+                    var modified = {
+                        date: new Date(),
+                        by: 'ADMIN'
+                    };
+                    campaign.set('modified', modified);
+                    campaignDao.saveOrUpdate(campaign, fn);
+                }
+            });
         });
+
     },
 
     /**
