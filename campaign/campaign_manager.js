@@ -434,10 +434,12 @@ module.exports = {
                     return fn(err, null);
                 } else {
                     //check if we need to update the status
-                    self.updateCampaignStatus(accountId, campaignId, function(err, value){});
-                    self.updateCampaignParticipants(accountId, campaignId, function(err, value){});
-                    self.log.debug('<< bulkAddContactToCampaign');
-                    return fn(null, 'OK');
+                    self.updateCampaignStatus(accountId, campaignId, function(err, value){
+                        self.updateCampaignParticipants(accountId, campaignId, function(err, value){
+                            self.log.debug('<< bulkAddContactToCampaign');
+                            return fn(null, 'OK');
+                        });
+                    });
                 }
             });
 
