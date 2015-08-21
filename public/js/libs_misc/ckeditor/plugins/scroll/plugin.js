@@ -2,10 +2,10 @@ CKEDITOR.plugins.add( "scroll", {
     init: function( editor ) {
         editor.on( 'contentDom', function() {
             var attr = $("#editor-toolbar").parent().attr("sticky");
-            var setComponentPosition = function()
+            var setComponentPosition = function(is_clicked)
             {
                 var element = $(".cke_panel.cke_panel");
-                if(element && element.is(":visible"))
+                if(element && element.is(":visible") || is_clicked)
                 {
                     setTimeout(function(){
                         var offset = 50;
@@ -14,6 +14,7 @@ CKEDITOR.plugins.add( "scroll", {
                     },0)
                 }
             }
+            
             if (typeof attr !== typeof undefined && attr !== false) {
                 $(window).scroll(function(){
                     setComponentPosition();
@@ -22,7 +23,7 @@ CKEDITOR.plugins.add( "scroll", {
             {
                 var element = $(".cke_combo_button, .cke_button__textcolor, .cke_button__table" );
                 element.on('click', function() {
-                    setComponentPosition();
+                    setComponentPosition(true);
                 }); 
             }
         });
