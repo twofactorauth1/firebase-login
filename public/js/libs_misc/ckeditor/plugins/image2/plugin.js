@@ -56,6 +56,9 @@
 				'left:-5px;' +
 				'cursor:sw-resize;' +
 			'}' +
+			'.cke_widget_wrapper.cke_widget_inline.cke_image_nocaption{' +
+				'display:block' +
+			'}' +
 			'.cke_widget_wrapper:hover .cke_image_resizer,' +
 			'.cke_image_resizer.cke_image_resizing{' +
 				'display:block' +
