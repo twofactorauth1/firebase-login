@@ -24,6 +24,7 @@ CKEDITOR.plugins.add( "scroll", {
                 var element = $(".cke_combo_button, .cke_button__textcolor, .cke_button__table" );
                 element.on('click', function() {
                     setTimeout(function(){
+                        console.log($(".cke_panel.cke_panel"));
                         $(".cke_panel.cke_panel").css({ top: 50 });
                     },100)
                 }); 
