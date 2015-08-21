@@ -11,7 +11,7 @@ CKEDITOR.plugins.add( "scroll", {
                         var offset = 50;
                         var setPos = $("#editor-toolbar").position().top + offset + "px";
                         element.css({ top: offset });
-                    },0)
+                    },100)
                 }
             }
             
