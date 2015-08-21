@@ -19,8 +19,10 @@ app.directive('errSrc', function () {
           element.hide();
           var contentTr = angular.element('<div class="animated bounce two-letter-label ' + _.sample(colors) + '">' + scope.getContactLetters() + '</div>');
           contentTr.insertAfter(element);
-        } else {
-          element.attr('src', scope.errSrc);
+        } 
+        else if(!value)
+        {
+           element.attr('src', scope.errSrc);
         }
       });
 
@@ -40,7 +42,9 @@ app.directive('errSrc', function () {
         var letters = '';
         var contact = scope.errContact;
         //get first letter of email
-        if (scope.errContact && scope.errContact.details && scope.errContact.details.length > 0 && scope.errContact.details[0].emails[0].email) {
+        if (scope.errContact && scope.errContact.details && scope.errContact.details.length > 0
+            && scope.errContact.details[0].emails && scope.errContact.details[0].emails.length > 0
+            && scope.errContact.details[0].emails[0].email) {
           letters = scope.errContact.details[0].emails[0].email.charAt(0);
         }
         //get initials

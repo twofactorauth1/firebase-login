@@ -2213,9 +2213,6 @@ div[data-type="feature-block"] .component-inner {
   max-width: 100%;
 }
 @-moz-document url-prefix() {
-  img {
-    width: 100%;
-  }
 }
 .editing .testimonials-v2 .testimonials {
   padding: 25px;
@@ -2810,6 +2807,7 @@ div[data-type="feature-block"] .component-inner {
   margin-top: 130px;
   border-top-right-radius: 0px;
   border-bottom-right-radius: 0px;
+  z-index: 999;
 }
 .products-v1 .btnLaunchCart:focus {
   outline: none;

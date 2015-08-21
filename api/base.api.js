@@ -296,7 +296,7 @@ _.extend(apiBase.prototype, {
     },
 
     send200: function(res) {
-        res.send({});
+        res.send({ok:true});
     },
 
     send403: function(res) {

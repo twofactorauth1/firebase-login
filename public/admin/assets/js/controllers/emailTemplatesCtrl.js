@@ -36,6 +36,28 @@
         $scope.newEmail.replyTo = _account.business.emails[0].email;
       }
     });
+    $scope.order = "reverse";
+    $scope.default_image_url = "/admin/assets/images/default-page.jpg";
+
+    $scope.filterTemplateScreenShots = function (emails) {
+      _.each(emails, function (email) {
+        if (email) {
+          email.hasScreenshot = false;
+          if (email.previewUrl) {
+            if ($("#template_screenshot_" + email._id).attr("src") === $scope.default_image_url) {
+              email.hasScreenshot = false;
+            } else {
+              email.hasScreenshot = true;
+            }
+          }
+        }
+      });
+    };
+
+    $scope.filterTemplates = function () {
+      $scope.showFilter = !$scope.showFilter;
+      $scope.filterTemplateScreenShots($scope.emails);
+    };
 
     $scope.createNewEmail = function (_newEmail) {
       //temporarily add a single email obj

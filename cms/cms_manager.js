@@ -1722,7 +1722,11 @@ module.exports = {
     createEmail: function(email, fn) {
         log.debug('>> createEmail');
         //validate
-        var nameCheckQuery = {'title': email.get('title')};
+        if(!email.get('title') || email.get('title').length < 1) {
+            log.error('No title on email.');
+            return fn('No title provided for email');
+        }
+        var nameCheckQuery = {'title': email.get('title'), 'accountId': email.get('accountId')};
         emailDao.exists(nameCheckQuery, $$.m.cms.Email, function(err, value){
             if(err) {
                 log.error('Exception thrown checking for uniqueness: ' + err);
@@ -1731,6 +1735,10 @@ module.exports = {
                 log.warn('Attempted to create an email with a title that already exists.');
                 fn('Title already exists', null);
             } else {
+                if(!email.get('handle')){
+                    var handle = email.get('title').toLowerCase().replace(/\s+/g, '-');
+                    email.set('handle', handle);
+                }
                 emailDao.saveOrUpdate(email, function(err, savedEmail){
                     log.debug('<< createEmail');
                     fn(null, savedEmail);
@@ -2258,6 +2266,7 @@ module.exports = {
 
         var query = {
             accountId: accountId,
+            handle: email_type,
             latest:true
         };
 

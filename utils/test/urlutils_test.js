@@ -42,6 +42,13 @@ exports.urlutils_test = {
             isMainApp: false,
             subDomain: 'stuff'
         };
+        /*
+        self.testUrls[7] = {
+            host: 'www.kyle-miller.com',
+            isMainApp: false,
+            subdomain: 'kylemiller'
+        };
+        */
         var tldtools = require('tldtools');
         tldtools.init(function() {
             cb();

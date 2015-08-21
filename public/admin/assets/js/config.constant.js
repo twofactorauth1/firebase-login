@@ -504,7 +504,7 @@ app.constant('JS_REQUIRES', {
     'ladda': ['../js/libs/ladda/dist/ladda.min.js', '../js/libs/ladda/dist/ladda-themeless.min.css'],
     'chartjs': '../js/libs/chartjs/Chart.min.js',
     'jquery-sparkline': '../js/libs/jquery.sparkline.build/dist/jquery.sparkline.min.js',
-    'jsVideoUrlParser': '../js/libs/jsVideoUrlParser/dist/jsVideoUrlParser.min.js',
+    'jsVideoUrlParser': '../js/libs//js-video-url-parser/dist/jsVideoUrlParser.min.js',
     'jquery-nestable-plugin': ['../js/libs_misc/jquery-nestable/jquery.nestable.js'],
     'touchspin-plugin': ['../js/libs/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.js', '../js/libs/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.css'],
     // 'bootstrap': '../js/libs/bootstrap/dist/js/bootstrap.min.js',
@@ -733,7 +733,7 @@ app.constant('JS_REQUIRES', {
     files: ['../js/libs/angular-bootstrap-datetimepicker/src/js/datetimepicker.js', '../js/libs/angular-bootstrap-datetimepicker/src/css/datetimepicker.css']
   }, {
     name: 'angularCircularNavigation',
-    files: ['../js/libs/angular-circular-navigation/angular-circular-navigation.js', '../js/libs/angular-circular-navigation/angular-circular-navigation.css']
+    files: ['../js/libs_misc/angular-circular-navigation/angular-circular-navigation.js', '../js/libs_misc/angular-circular-navigation/angular-circular-navigation.css']
   }, {
     name: 'bootstrap-icon-picker',
     files: ['../js/libs/bootstrap-icon-picker/bootstrap-iconpicker/js/iconset/iconset-fontawesome-4.2.0.min.js', '../js/libs/bootstrap-icon-picker/bootstrap-iconpicker/js/bootstrap-iconpicker.min.js', '../js/libs/bootstrap-icon-picker/bootstrap-iconpicker/css/bootstrap-iconpicker.min.css']
