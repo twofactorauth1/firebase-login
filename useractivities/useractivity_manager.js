@@ -106,7 +106,7 @@ module.exports = {
 
         dao.findAllWithFieldsAndLimit({
                 'accountId': accountId
-            }, skip, limit, null, null, $$.m.UserActivity,
+            }, skip, limit, 'start', null, $$.m.UserActivity,
             function(err, list) {
                 if (err) {
                     log.error('Error listing activities: ' + err);

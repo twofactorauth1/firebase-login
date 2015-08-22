@@ -1,0 +1,204 @@
+var _ = require('underscore');
+var async = require('async');
+var fs = require('fs');
+var moment = require('moment');
+var ns = require('../utils/namespaces'),
+    BlogPost = require('../cms/model/blogpost'),
+    app = require('../app'),
+    async = require('async'),
+    cmsManager = require('../cms/cms_manager'),
+    accountDao = require('../dao/account.dao'),
+    socialConfigManager = require('../socialconfig/socialconfig_manager'),
+    productManager = require('../products/product_manager'),
+    orderManager = require('../orders/order_manager'),
+    contactDao = require('../dao/contact.dao'),
+    campaignManager = require('../campaign/campaign_manager'),
+    userActivityManager = require('../useractivities/useractivity_manager');
+
+var accountActivity = {
+
+    log: $$.g.getLogger("accountActivity"),
+
+    runReport: function(callback) {
+        var self = this;
+        var reportAry = [109, 45, 97, 79, 21, 37, 38, 12, 15];
+        var activityAry = [];
+        async.each(reportAry, function(accountId, cb){
+            self.getActivityForAccount(accountId, function(err, activity){
+                if(activity) {
+                    activityAry.push(activity);
+                }
+                cb();
+            });
+        }, function done(err){
+            self.log.debug('Last Activity,Pointed Domain,Pages Created,Posts Created,Social Integrations,Stripe Integration,' +
+                'Products,Orders,Contacts,Campaigns');
+            _.each(activityAry, function(activity){
+                self.log.debug(activity.accountId + ',' + activity.lastActivity + ',Y,' + activity.pages + ',' + activity.posts +',' +
+                    activity.socialIntegrations + ',' +activity.stripeIntegrated + ',' + activity.products +',' +
+                    activity.orders + ',' + activity.contacts + ',' + activity.campaigns);
+            });
+            callback();
+        });
+        //self.getActivityForAccount(109, callback);
+    },
+
+    getActivityForAccount: function(accountId, fn) {
+        var self = this;
+        self.log.debug('>> getActivity');
+
+        var activity = {
+            accountId: accountId
+        };
+
+        async.waterfall([
+            function getAccount(cb){
+                accountDao.getAccountByID(accountId, function(err, account){
+                    if(err) {
+                        self.log.error('Error getting account', err);
+                        cb(err);
+                    } else {
+                        cb(null, account);
+                    }
+                });
+            },
+            function getPages(account, cb){
+                var defaultPageHandles = ['coming-soon', 'single-post', 'order-processing-email',
+                'new-order-email', 'order-cancelled-email', 'order-completed-email', 'blog', 'customer-invoice-email',
+                    'welcome-aboard'];
+                var websiteId = account.get('website').websiteId;
+                cmsManager.getPagesByWebsiteId(websiteId, accountId, function(err, pages){
+                    if(err) {
+                        self.log.error('Error getting pages', err);
+                        cb(err);
+                    } else {
+                        var countedPages = [];//modified defaults or new pages
+                        _.each(pages, function(page){
+                            if(!_.contains(defaultPageHandles, page.get('handle'))){
+                                countedPages.push(page);
+                            }
+                        });
+                        activity.pages = countedPages.length;
+                        cb(null, account);
+                    }
+                });
+            },
+            function getPosts(account, cb){
+                cmsManager.listBlogPosts(accountId, 0, $$.m.BlogPost.allStatus, function(err, posts){
+                    if(err) {
+                        self.log.error('Error getting posts', err);
+                        cb(err);
+                    } else {
+                        activity.posts = posts.length;
+                        cb(null, account);
+                    }
+                });
+            },
+            function getSocialIntegrations(account, cb){
+                socialConfigManager.getSocialConfig(accountId, null, function(err, config){
+                    if(err) {
+                        self.log.error('Error getting socialconfig', err);
+                        cb(err);
+                    } else {
+                        if(config && config.get('socialAccounts') && config.get('socialAccounts').length>0) {
+                            _.each(config.get('socialAccounts'), function(socialAccount){
+
+                            });
+                            var types = _.pluck(config.get('socialAccounts'), 'type');
+                            var typeString = _.reduce(types, function(memo, type){return memo + ',' + type});
+                            activity.socialIntegrations = typeString;
+                        } else {
+                            activity.socialIntegrations = 'NONE';
+                        }
+                        cb(null, account);
+                    }
+                });
+            },
+            function getStripeIntegration(account, cb){
+                var accountCredentials = account.get('credentials');
+                var stripeIntegrated = 'N';
+                if(accountCredentials && accountCredentials.length >0) {
+
+                    _.each(accountCredentials, function(cred){
+                        if(cred.type === 'stripe') {
+                            stripeIntegrated = 'Y';
+                        }
+                    });
+                }
+                activity.stripeIntegrated = stripeIntegrated;
+                cb(null, account);
+            },
+            function getProducts(account, cb){
+                productManager.listProducts(accountId, 0,0, function(err, products){
+                    if(err) {
+                        self.log.error('Error fetching products', err);
+                        cb(err);
+                    } else {
+                        products = products || [];
+                        activity.products = products.length;
+                        cb(null, account);
+                    }
+                });
+            },
+            function getOrders(account, cb){
+                orderManager.listOrdersByAccount(accountId, function(err, orders){
+                    if(err) {
+                        self.log.error('Error fetching orders', err);
+                        cb(err);
+                    } else {
+                        orders = orders || [];
+                        activity.orders = orders.length;
+                        cb(null, account);
+                    }
+                });
+            },
+            function getContacts(account, cb){
+                contactDao.getContactsAll(accountId, 0, 0, function(err, contacts){
+                    if(err) {
+                        self.log.error('Error fetching contacts', err);
+                        cb(err);
+                    } else {
+                        contacts = contacts || [];
+                        activity.contacts = contacts.length;
+                        cb(null, account);
+                    }
+                });
+            },
+            function getCampaigns(account, cb){
+                campaignManager.findCampaigns({accountId:accountId}, function(err, campaigns){
+                    if(err) {
+                        self.log.error('Error fetching campaigns', err);
+                        cb(err);
+                    } else {
+                        campaigns = campaigns || [];
+                        activity.campaigns = campaigns.length;
+                        cb(null, account);
+                    }
+                });
+            },
+            function getLastActivity(account, cb) {
+                userActivityManager.listActivities(accountId, 0, 0, function(err, activities){
+                    if(err) {
+                        self.log.error('Error fetching user activities', err);
+                        cb(err);
+                    } else {
+                        var activityTimestamp = _.last(activities).get('start');
+                        activity.lastActivity = moment(activityTimestamp).format('MM/DD/YYYY HH:mm:ss');
+                        cb(null);
+                    }
+                });
+            }
+        ], function done(err){
+            self.log.info('Activity:', activity);
+            fn(err, activity);
+        });
+
+
+
+    }
+
+
+
+};
+
+module.exports = accountActivity;
