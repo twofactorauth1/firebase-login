@@ -429,6 +429,9 @@
   color: #007bb6;
   background-color: #ffffff;
 }
+#componentloader .vertical-top td {
+  vertical-align: top;
+}
 #componentloader .accordion-v1 .title {
   text-align: center;
   margin-bottom: 20px;
@@ -572,7 +575,6 @@
 }
 #componentloader .inner-page {
   padding: 50px 0;
-  max-width: 1000px;
   margin: 0 auto;
   display: block;
 }
@@ -2309,7 +2311,6 @@
   font-size: 18px;
 }
 #componentloader .image-text {
-  padding: 0 20px;
   display: inline-block;
 }
 #componentloader .image-text .img-responsive {
