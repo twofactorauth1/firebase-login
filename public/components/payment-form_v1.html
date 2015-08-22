@@ -68,6 +68,11 @@
                         <span class="error help-block" />
                         <span class="help-block" ng-show="newAccount.businessName">Your Indigenous URL will be <strong>{{newAccount.businessName | urlFilter}}.indigenous.io</strong> and will be changed once your site is ready to publish.</span>
                     </div>
+                    <!-- Phone Number -->
+                    <div id="phone" class="form-group col-sm-12">
+                        <label>Phone Number</label>
+                        <input class="form-control input-lg" type="text" ng-model="newAccount.phone" />
+                    </div>
                     <!-- EMAIL AND PASSOWORD -->
                     <div id="email" class="form-group col-sm-12 has-feedback" ng-hide="tmpAccount.tempUser">
                         <label>Email</label>
@@ -86,7 +91,7 @@
                     <div class="clearfix margin-bottom-10"></div>
                     <!-- BUY -->
                     <div class="submit-signup center">
-                        <a type="button" class="btn btn-wide btn-lg btn-primary" ng-click="createAccount(newAccount)"> JOIN NOW</a>
+                        <a type="button" class="btn btn-wide btn-lg btn-primary" ng-click="createAccount(newAccount)"> START FREE TRIAL</a>
                     </div>
                     <p class="center margin-top-10">By clicking this button you agree to our <a href="" type="button" data-toggle="modal" data-target="#terms-of-service">Terms of Service</a>.</p>
                 </div>
