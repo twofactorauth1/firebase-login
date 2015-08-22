@@ -34,51 +34,51 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                 }
             });
 
-            scope.planStatus = {};
-            scope.emailValidation = formValidations.email;
-            var productId = scope.component.productId;
-            console.log('productId ', productId);
-            ProductService.getProduct(productId, function(product) {
-                console.log('product ', product);
-                scope.paymentFormProduct = product;
-                var promises = [];
-                scope.subscriptionPlans = [];
-                var attributes = scope.paymentFormProduct.product_attributes;
-                if (attributes.hasOwnProperty('stripePlans')) {
-                    scope.paymentFormProduct.product_attributes.stripePlans.forEach(function(value) {
-                        if (value.active) {
-                            scope.planStatus[value.id] = value;
-                        }
-                        promises.push(PaymentService.getPlanPromise(value.id));
-                    });
-                    $q.all(promises)
-                        .then(function(data) {
-                            data.forEach(function(value) {
-                                scope.subscriptionPlans.push(value.data);
-                                if (scope.subscriptionPlans.length === 1) {
-                                    var plan = scope.subscriptionPlans[0];
-                                    scope.selectSubscriptionPlanFn(plan.id, plan.amount, plan.interval, scope.planStatus[plan.id].signup_fee);
-                                }
-                            });
-                        })
-                        .catch(function(err) {
-                            console.error(err);
-                        });
-                }
-            });
+            // scope.planStatus = {};
+            // scope.emailValidation = formValidations.email;
+            // var productId = scope.component.productId;
+            // console.log('productId ', productId);
+            // ProductService.getProduct(productId, function(product) {
+            //     console.log('product ', product);
+            //     scope.paymentFormProduct = product;
+            //     var promises = [];
+            //     scope.subscriptionPlans = [];
+            //     var attributes = scope.paymentFormProduct.product_attributes;
+            //     if (attributes.hasOwnProperty('stripePlans')) {
+            //         scope.paymentFormProduct.product_attributes.stripePlans.forEach(function(value) {
+            //             if (value.active) {
+            //                 scope.planStatus[value.id] = value;
+            //             }
+            //             promises.push(PaymentService.getPlanPromise(value.id));
+            //         });
+            //         $q.all(promises)
+            //             .then(function(data) {
+            //                 data.forEach(function(value) {
+            //                     scope.subscriptionPlans.push(value.data);
+            //                     if (scope.subscriptionPlans.length === 1) {
+            //                         var plan = scope.subscriptionPlans[0];
+            //                         scope.selectSubscriptionPlanFn(plan.id, plan.amount, plan.interval, scope.planStatus[plan.id].signup_fee);
+            //                     }
+            //                 });
+            //             })
+            //             .catch(function(err) {
+            //                 console.error(err);
+            //             });
+            //     }
+            // });
 
             scope.isAdmin = function() {
                 return scope.isAdmin;
             };
-            scope.selectSubscriptionPlanFn = function(planId, amount, interval, cost) {
-                scope.newAccount.membership = planId;
-                scope.subscriptionPlanAmount = amount;
-                scope.subscriptionPlanInterval = interval;
-                scope.subscriptionPlanOneTimeFee = parseInt(cost, 10);
-            };
-            scope.monthly_sub_cost = 49.95;
-            scope.yearly_sub_cost = 32.91;
-            scope.selected_sub_cost = scope.monthly_sub_cost;
+            // scope.selectSubscriptionPlanFn = function(planId, amount, interval, cost) {
+            //     scope.newAccount.membership = planId;
+            //     scope.subscriptionPlanAmount = amount;
+            //     scope.subscriptionPlanInterval = interval;
+            //     scope.subscriptionPlanOneTimeFee = parseInt(cost, 10);
+            // };
+            // scope.monthly_sub_cost = 49.95;
+            // scope.yearly_sub_cost = 32.91;
+            // scope.selected_sub_cost = scope.monthly_sub_cost;
 
 
             scope.removeAccount = function(type) {
@@ -134,30 +134,169 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                 }
 
                 //membership selection
-                if (!scope.newAccount.membership) {
-                    scope.checkMembership(newAccount);
-                    return;
-                }
+                // if (!scope.newAccount.membership) {
+                //     scope.checkMembership(newAccount);
+                //     return;
+                // }
 
                 //credit card
 
-                newAccount.card = {
-                    number: angular.element('#number').val(),
-                    cvc: angular.element('#cvc').val(),
-                    exp_month: parseInt(angular.element('#expiry').val().split('/')[0]),
-                    exp_year: parseInt(angular.element('#expiry').val().split('/')[1])
-                };
+                // newAccount.card = {
+                //     number: angular.element('#number').val(),
+                //     cvc: angular.element('#cvc').val(),
+                //     exp_month: parseInt(angular.element('#expiry').val().split('/')[0]),
+                //     exp_year: parseInt(angular.element('#expiry').val().split('/')[1])
+                // };
+
+                // var cc_name = angular.element('#name').val();
+
+                // if (!newAccount.card.number || !newAccount.card.cvc || !newAccount.card.exp_month || !newAccount.card.exp_year) {
+                //     //|| !cc_name
+                //     //hightlight card in red
+                //     scope.checkCardNumber();
+                //     scope.checkCardExpiry();
+                //     scope.checkCardCvv();
+                //     return;
+                // }
+                // scope.checkCoupon();
+                // if (!scope.couponIsValid) {
+                //     return;
+                // }
+                //end validate
+                scope.isFormValid = true;
+                scope.showFooter(false);
+                var tmpAccount = scope.tmpAccount;
+                tmpAccount.subdomain = $.trim(newAccount.businessName).replace(" ", "").replace(".", "_").replace("@", "");
+                tmpAccount.business = tmpAccount.business || {};
+                tmpAccount.business.name = newAccount.businessName;
+                UserService.saveOrUpdateTmpAccount(tmpAccount, function(data) {
+                    var newUser = {
+                        username: newAccount.email,
+                        password: newAccount.password,
+                        email: newAccount.email,
+                        accountToken: data.token,
+                        coupon: newAccount.coupon
+                    };
+                    //get the token
+                    // PaymentService.getStripeCardToken(newAccount.card, function(token, error) {
+                    //     if (error) {
+                    //         console.info(error);
+                    //         scope.$apply(function() {
+                    //             scope.isFormValid = false;
+                    //             scope.showFooter(true);
+                    //         })
+                    //         switch (error.param) {
+                    //             case "number":
+                    //                 angular.element("#card_number .error").html(error.message);
+                    //                 angular.element("#card_number").addClass('has-error');
+                    //                 angular.element("#card_number .glyphicon").addClass('glyphicon-remove');
+                    //                 break;
+                    //             case "exp_year":
+                    //                 angular.element("#card_expiry .error").html(error.message);
+                    //                 angular.element("#card_expiry").addClass('has-error');
+                    //                 angular.element("#card_expiry .glyphicon").addClass('glyphicon-remove');
+                    //                 break;
+                    //             case "cvc":
+                    //                 angular.element("#card_cvc .error").html(error.message);
+                    //                 angular.element("#card_cvc").addClass('has-error');
+                    //                 angular.element("#card_cvc .glyphicon").addClass('glyphicon-remove');
+                    //                 break;
+                    //         }
+                    //     } else {
+                            // newUser.cardToken = token;
+                            // newUser.plan = scope.newAccount.membership;
+                            newUser.anonymousId = window.analytics.user().anonymousId();
+                            newUser.permanent_cookie = ipCookie("permanent_cookie");
+                            newUser.fingerprint = new Fingerprint().get();
+
+                            // if (scope.subscriptionPlanOneTimeFee) {
+                            //     newUser.setupFee = scope.subscriptionPlanOneTimeFee * 100;
+                            // }
+
+
+                            UserService.initializeUser(newUser, function(err, data) {
+                                if (data && data.accountUrl) {
+                                    console.log('$location ', $location);
+                                    console.log('data.accountUrl ', data.accountUrl);
+                                    if ($location.host() === 'indigenous.io') {
+                                        var hash = CryptoJS.HmacSHA256(newUser.email, "vZ7kG_bS_S-jnsNq4M2Vxjsa5mZCxOCJM9nezRUQ");
+                                        //send data to intercom
+                                        window.intercomSettings = {
+                                            name: newUser.username,
+                                            email: newUser.email,
+                                            user_hash: hash.toString(CryptoJS.enc.Hex),
+                                            created_at: Math.floor(Date.now() / 1000),
+                                            app_id: "b3st2skm"
+                                        };
+                                        //send affiliate purchase info
+                                        LeadDyno.key = "b2a1f6ba361b15f4ce8ad5c36758de951af61a50";
+                                        LeadDyno.recordPurchase();
+                                    }
+                                    window.location = data.accountUrl;
+                                } else {
+                                    scope.isFormValid = false;
+                                    // if (err.message === 'card_declined') {
+                                    //     angular.element("#card_number .error").html('There was an error charging your card.');
+                                    //     angular.element("#card_number").addClass('has-error');
+                                    //     angular.element("#card_number .glyphicon").addClass('glyphicon-remove');
+                                    // }
+                                    scope.showFooter(true);
+                                }
+                            });
+                    //     }
+
+                    // });
+
+                });
+            };
+
+            scope.createAccountWithoutCC = function(newAccount) {
+                //validate
+                //email
+                scope.isFormValid = false;
+                scope.showFooter(true);
+                if (!scope.newAccount.email) {
+                    scope.checkEmailExists(newAccount);
+                    return;
+                }
+
+                //pass
+                if (!scope.newAccount.password && !scope.newAccount.tempUserId && !scope.newAccount.hidePassword) {
+                    scope.checkPasswordLength(newAccount);
+                    return;
+                }
+
+                //url
+                if (!scope.newAccount.businessName) {
+                    console.log('business name does not exist');
+                    scope.checkDomainExists(newAccount);
+                    return;
+                }
+
+                if (!scope.newAccount.first) {
+                    scope.checkFirstName(newAccount);
+                    return;
+                }
+
+                if (!scope.newAccount.last) {
+                    scope.checkLastName(newAccount);
+                    return;
+                }
+
+                if (!scope.newAccount.phone) {
+                    scope.checkPhone(newAccount);
+                    return;
+                }
+
+                //membership selection
+                // if (!scope.newAccount.membership) {
+                //     scope.checkMembership(newAccount);
+                //     return;
+                // }
 
                 var cc_name = angular.element('#name').val();
 
-                if (!newAccount.card.number || !newAccount.card.cvc || !newAccount.card.exp_month || !newAccount.card.exp_year) {
-                    //|| !cc_name
-                    //hightlight card in red
-                    scope.checkCardNumber();
-                    scope.checkCardExpiry();
-                    scope.checkCardCvv();
-                    return;
-                }
+
                 scope.checkCoupon();
                 if (!scope.couponIsValid) {
                     return;
@@ -177,70 +316,50 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                         accountToken: data.token,
                         coupon: newAccount.coupon
                     };
-                    //get the token
-                    PaymentService.getStripeCardToken(newAccount.card, function(token, error) {
-                        if (error) {
-                            console.info(error);
-                            scope.$apply(function() {
-                                scope.isFormValid = false;
-                                scope.showFooter(true);
-                            })
-                            switch (error.param) {
-                                case "number":
-                                    angular.element("#card_number .error").html(error.message);
-                                    angular.element("#card_number").addClass('has-error');
-                                    angular.element("#card_number .glyphicon").addClass('glyphicon-remove');
-                                    break;
-                                case "exp_year":
-                                    angular.element("#card_expiry .error").html(error.message);
-                                    angular.element("#card_expiry").addClass('has-error');
-                                    angular.element("#card_expiry .glyphicon").addClass('glyphicon-remove');
-                                    break;
-                                case "cvc":
-                                    angular.element("#card_cvc .error").html(error.message);
-                                    angular.element("#card_cvc").addClass('has-error');
-                                    angular.element("#card_cvc .glyphicon").addClass('glyphicon-remove');
-                                    break;
-                            }
-                        } else {
-                            newUser.cardToken = token;
-                            newUser.plan = scope.newAccount.membership;
-                            newUser.anonymousId = window.analytics.user().anonymousId();
-                            newUser.permanent_cookie = ipCookie("permanent_cookie");
-                            newUser.fingerprint = new Fingerprint().get();
-                            if (scope.subscriptionPlanOneTimeFee) {
-                                newUser.setupFee = scope.subscriptionPlanOneTimeFee * 100;
-                            }
-                            UserService.initializeUser(newUser, function(err, data) {
-                                if (data && data.accountUrl) {
-                                    console.log('$location ', $location);
-                                    if ($location.host() === 'indigenous.io') {
-                                        var hash = CryptoJS.HmacSHA256(newUser.email, "vZ7kG_bS_S-jnsNq4M2Vxjsa5mZCxOCJM9nezRUQ");
-                                        //send data to intercom
-                                        window.intercomSettings = {
-                                            name: newUser.username,
-                                            email: newUser.email,
-                                            user_hash: hash.toString(CryptoJS.enc.Hex),
-                                            created_at: Math.floor(Date.now() / 1000),
-                                            app_id: "b3st2skm"
-                                        };
-                                        //send affiliate purchase info
-                                        LeadDyno.key = "b2a1f6ba361b15f4ce8ad5c36758de951af61a50";
-                                        LeadDyno.recordPurchase();
-                                    }
-                                    window.location = data.accountUrl;
-                                } else {
-                                    scope.isFormValid = false;
-                                    if (err.message === 'card_declined') {
-                                        angular.element("#card_number .error").html('There was an error charging your card.');
-                                        angular.element("#card_number").addClass('has-error');
-                                        angular.element("#card_number .glyphicon").addClass('glyphicon-remove');
-                                    }
-                                    scope.showFooter(true);
-                                }
-                            });
-                        }
 
+                    newUser.plan = '';
+                    newUser.anonymousId = window.analytics.user().anonymousId();
+                    newUser.permanent_cookie = ipCookie("permanent_cookie");
+                    newUser.fingerprint = new Fingerprint().get();
+
+                    // Add name
+                    var name = $('#card_name #name').val();
+                    if(name) {
+                        var nameAry = name.split(' ');
+                        if(nameAry.length===3) {
+                            newUser.first = nameAry[0];
+                            newUser.middle = nameAry[1];
+                            newUser.last = nameAry[2];
+                        } else if(nameAry.length === 2) {
+                            newUser.first = nameAry[0];
+                            newUser.last = nameAry[1];
+                        } else if(nameAry.length === 1) {
+                            newUser.last = nameAry[0];
+                        }
+                    }
+                    UserService.initializeUser(newUser, function(err, data) {
+                        if (data && data.accountUrl) {
+                            console.log('$location ', $location);
+                            if ($location.host() === 'indigenous.io') {
+                                var hash = CryptoJS.HmacSHA256(newUser.email, "vZ7kG_bS_S-jnsNq4M2Vxjsa5mZCxOCJM9nezRUQ");
+                                //send data to intercom
+                                window.intercomSettings = {
+                                    name: newUser.username,
+                                    email: newUser.email,
+                                    user_hash: hash.toString(CryptoJS.enc.Hex),
+                                    created_at: Math.floor(Date.now() / 1000),
+                                    app_id: "b3st2skm"
+                                };
+                                //send affiliate purchase info
+                                LeadDyno.key = "b2a1f6ba361b15f4ce8ad5c36758de951af61a50";
+                                LeadDyno.recordPurchase();
+                            }
+                            window.location = data.accountUrl;
+                        } else {
+                            scope.isFormValid = false;
+
+                            scope.showFooter(true);
+                        }
                     });
 
                 });
@@ -248,7 +367,7 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
 
             scope.checkDomainExists = function(newAccount) {
                 if (!newAccount.businessName) {
-                    angular.element("#business-name .error").html("Url Required");
+                    angular.element("#business-name .error").html("Business Name Required");
                     angular.element("#business-name").addClass('has-error');
                     angular.element("#business-name .glyphicon").addClass('glyphicon-remove');
                 } else {
@@ -285,6 +404,46 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                             angular.element("#email .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
                         }
                     });
+                }
+            };
+
+            scope.checkFirstName = function(newAccount) {
+                scope.newAccount.first = newAccount.first;
+                console.log('newAccount.first ', newAccount.first);
+                if (!newAccount.first) {
+                    angular.element("#first .error").html("First Name Required");
+                    angular.element("#first").addClass('has-error');
+                    angular.element("#first .glyphicon").addClass('glyphicon-remove');
+                } else {
+                    angular.element("#first .error").html("");
+                    angular.element("#first").removeClass('has-error').addClass('has-success');
+                    angular.element("#first .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
+                }
+            };
+
+            scope.checkLastName = function(newAccount) {
+                scope.newAccount.last = newAccount.last;
+                if (!newAccount.last) {
+                    angular.element("#last .error").html("First Name Required");
+                    angular.element("#last").addClass('has-error');
+                    angular.element("#last .glyphicon").addClass('glyphicon-remove');
+                } else {
+                    angular.element("#last .error").html("");
+                    angular.element("#last").removeClass('has-error').addClass('has-success');
+                    angular.element("#last .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
+                }
+            };
+
+            scope.checkPhone = function(newAccount) {
+                scope.newAccount.phone = newAccount.phone;
+                if (!newAccount.phone) {
+                    angular.element("#phone .error").html("Phone Required");
+                    angular.element("#phone").addClass('has-error');
+                    angular.element("#phone .glyphicon").addClass('glyphicon-remove');
+                } else {
+                    angular.element("#phone .error").html("");
+                    angular.element("#phone").removeClass('has-error').addClass('has-success');
+                    angular.element("#phone .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
                 }
             };
 
