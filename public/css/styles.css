@@ -2487,6 +2487,10 @@ div[data-type="feature-block"] .component-inner {
   font-weight: bold;
   text-shadow: none;
 }
+.masthead-v1 .home-text {
+  padding: 50px 30px;
+  text-align: center;
+}
 @media (max-width: 625px) {
   .masthead-v1 .masthead-subtitle {
     max-width: 100%;
