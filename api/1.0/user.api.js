@@ -282,6 +282,9 @@ _.extend(api.prototype, baseApi.prototype, {
         var coupon = req.body.coupon;
         var fingerprint = req.body.fingerprint;
         var setupFee = req.body.setupFee;
+        var firstName = req.body.first;
+        var lastName = req.body.last;
+        var middle = req.body.middle;
 
         var cardToken = req.body.cardToken;
         var plan = req.body.plan || 'NO_PLAN_ARGUMENT';//TODO: make sure this gets passed
@@ -308,6 +311,15 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> anonymousId', anonymousId);
         self.log.debug('>> coupon', coupon);
         self.log.debug('>> setupFee', setupFee);
+        self.log.debug('>> first', firstName);
+        self.log.debug('>> middle', middle);
+        self.log.debug('>> last', lastName);
+
+        var name = {
+            first:firstName,
+            middle:middle,
+            last:lastName
+        };
 
 
         async.waterfall([
@@ -322,7 +334,7 @@ _.extend(api.prototype, baseApi.prototype, {
                         callback(null, accountAndUser.user, accountAndUser.account);
                     });
                 } else {
-                    userManager.createAccountAndUser(username, password1, email, accountToken, anonymousId, fingerprint, sendWelcomeEmail, function (err, accountAndUser) {
+                    userManager.createAccountAndUser(username, password1, email, accountToken, anonymousId, fingerprint, sendWelcomeEmail, name, function (err, accountAndUser) {
                         if (err) {
                             self.log.error('Error creating account or user: ' + err);
                             return self.wrapError(res, 500, 'Error', 'Error creating account or user.');
@@ -363,22 +375,34 @@ _.extend(api.prototype, baseApi.prototype, {
             },
             function(stripeCustomer, user, account, callback){
                 self.log.debug('Created Stripe customer: ' +  stripeCustomer.id);
-                paymentsManager.createStripeSubscription(stripeCustomer.id, plan, account.id(), user.id(), coupon, setupFee, function(err, sub) {
-                    if (err) {
-                        self.log.error('Error creating Stripe subscription: ' + err);
-                        accountDao.deleteAccountAndArtifacts(account.id(), function(_err, value){
-                            return self.wrapError(res, 500, 'Error creating Stripe Subscription', err.code);
-                        });
-                    } else {
-                        userManager.sendWelcomeEmail(account.id(), account, user, email, username, function(){});
-                        callback(null, sub, stripeCustomer, user, account);
-                    }
+                if(plan) {
+                    paymentsManager.createStripeSubscription(stripeCustomer.id, plan, account.id(), user.id(), coupon, setupFee, function(err, sub) {
+                        if (err) {
+                            self.log.error('Error creating Stripe subscription: ' + err);
+                            accountDao.deleteAccountAndArtifacts(account.id(), function(_err, value){
+                                return self.wrapError(res, 500, 'Error creating Stripe Subscription', err.code);
+                            });
+                        } else {
+                            userManager.sendWelcomeEmail(account.id(), account, user, email, username, function(){});
+                            callback(null, sub, stripeCustomer, user, account);
+                        }
 
-                });
+                    });
+                } else {
+                    userManager.sendWelcomeEmail(account.id(), account, user, email, username, function(){});
+                    callback(null, null, stripeCustomer, user, account);
+                }
+
 
             },
-            function(sub, stripeCustomer, user, account, callback){
-                self.log.debug('Created subscription: ' + sub.id);
+            function(sub, stripeCustomer, user, account, callback) {
+                if(sub) {
+                    self.log.debug('Created subscription: ' + sub.id);
+                } else {
+                    self.log.debug('No subscription created.');
+                    sub = {id:'NOSUBSCRIPTION', plan:{amount:0,name:'NOSUBSCRIPTION'}};
+                }
+
                 accountDao.getAccountByID(account.id(), function(err, account) {
                     if (err || account === null) {
                         self.log.error('Error retrieving new account: ' + err);
@@ -457,19 +481,22 @@ _.extend(api.prototype, baseApi.prototype, {
                                 });
                                 contactActivityManager.createActivity(activity, function(err, value){});
                                 self.log.debug('creating Order for main account');
-                                paymentsManager.getInvoiceForSubscription(stripeCustomerId, subId, null, function(err, invoice){
-                                    if(err) {
-                                        self.log.error('Error getting invoice for subscription: ' + err);
-                                    } else {
-                                        orderManager.createOrderFromStripeInvoice(invoice, appConfig.mainAccountID, contact.id(), function(err, order){
-                                            if(err) {
-                                                self.log.error('Error creating order for invoice: ' + err);
-                                            } else {
-                                                self.log.debug('Order created.');
-                                            }
-                                        });
-                                    }
-                                });
+                                if(sub.id !=='NOSUBSCRIPTION') {
+                                    paymentsManager.getInvoiceForSubscription(stripeCustomerId, subId, null, function(err, invoice){
+                                        if(err) {
+                                            self.log.error('Error getting invoice for subscription: ' + err);
+                                        } else {
+                                            orderManager.createOrderFromStripeInvoice(invoice, appConfig.mainAccountID, contact.id(), function(err, order){
+                                                if(err) {
+                                                    self.log.error('Error creating order for invoice: ' + err);
+                                                } else {
+                                                    self.log.debug('Order created.');
+                                                }
+                                            });
+                                        }
+                                    });
+                                }
+
                                 self.log.debug('Adding the admin user to the new account');
                                 userManager.addUserToAccount(accountId, 1, ["super","admin","member"], 1, function(err, value){
                                     if(err) {
@@ -507,6 +534,10 @@ _.extend(api.prototype, baseApi.prototype, {
         var accountToken = req.body.accountToken;
         var anonymousId = req.body.anonymousId;
         var fingerprint = req.body.fingerprint;
+        var firstName = req.body.first;
+        var lastName = req.body.last;
+        var middle = req.body.middle;
+
 
         var sendWelcomeEmail = true;//this can be overridden in the request.
         if(req.body.sendWelcomeEmail && req.body.sendWelcomeEmail === false) {
@@ -542,9 +573,17 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> email', email);
         self.log.debug('>> accountToken', accountToken);
         self.log.debug('>> anonymousId', anonymousId);
+        self.log.debug('>> first', firstName);
+        self.log.debug('>> middle', middle);
+        self.log.debug('>> last', lastName);
 
+        var name = {
+            first:firstName,
+            middle:middle,
+            last:lastName
+        };
 
-        userManager.createAccountAndUser(username, password1, email, accountToken, anonymousId, fingerprint, sendWelcomeEmail, function (err, accountAndUser) {
+        userManager.createAccountAndUser(username, password1, email, accountToken, anonymousId, fingerprint, sendWelcomeEmail, name, function (err, accountAndUser) {
             var userObj = accountAndUser.user;
             self.log.debug('createUserFromUsernamePassword >>>');
                 if (!err) {
