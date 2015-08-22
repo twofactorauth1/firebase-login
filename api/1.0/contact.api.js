@@ -736,13 +736,13 @@ _.extend(api.prototype, baseApi.prototype, {
                                 }
 
                                 //create contact activity
-                                var activity = new $$.m.ContactActivity({
+                                var formSubmissionActivity = new $$.m.ContactActivity({
                                     accountId: query.accountId,
                                     contactId: savedContact.id(),
                                     activityType: $$.m.ContactActivity.types.FORM_SUBMISSION,
                                     start:new Date()
                                 });
-                                contactActivityManager.createActivity(activity, function(err, value){
+                                contactActivityManager.createActivity(formSubmissionActivity, function(err, value){
                                     if(err) {
                                         self.log.error('Error creating subscribe activity: ' + err);
                                         //if we can't create the activity... that's fine.  We have already created the contact.

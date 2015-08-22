@@ -26,7 +26,7 @@
                                     <td class="center" >
                                         <img ng-src="{{ customer.photo }}" id="customer_photo_{{customer._id}}" err-src="" err-contact="customer" class="img-thumbnail screenshot" alt="image">
                                     </td>
-                                    <td><strong>First Name: </strong> <span ng-text-truncate="customer.fullName" ng-tt-chars-threshold="15" ng-tt-no-toggling></span><span ng-if="!customer.first && customer.last">--</span></td>
+                                    <td><strong>First Name: </strong> <span ng-if="customer.first || customer.last" ng-text-truncate="customer.fullName" ng-tt-chars-threshold="15" ng-tt-no-toggling></span><span ng-if="!customer.first && !customer.last">--</span></td>
                                     <td><strong>Tags: </strong>{{contactTags(customer) || '--'}}</td>
                                     <td class="hidden-xs"><strong>Email: </strong> <span ng-if="customer.email"><span ng-text-truncate="customer.email" ng-tt-chars-threshold="15" ng-tt-no-toggling></span></a>
                                         </span><span ng-if="!customer.email">--</span></td>

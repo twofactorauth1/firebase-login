@@ -82,7 +82,7 @@
                                     <div class="clearfix"></div>
                                     <div class="form-group has-feedback">
                                         <label>
-                                            Campaign Name *
+                                            Campaign Name <span class="symbol required"></span>
                                         </label>
                                         <span class="help-block text-small text-muted">Enter a campaign name that will help you remember what the campaign is about. Will only be visible to you.</span>
                                         <div class="well well-sm">
@@ -146,13 +146,13 @@
                                         <div class="clearfix"></div>
                                         <div class="well well-sm">
                                             <div class="radio clip-radio radio-primary radio-inline" style="margin-bottom:0px!important;margin-top:0px">
-                                                <input type="radio" id="newEmail" name="emailtype" value="new" ng-model="selectedEmail.type">
+                                                <input type="radio" id="newEmail" ng-click="clearEmail()" name="emailtype" value="new" ng-model="selectedEmail.type">
                                                 <label for="newEmail" style="margin-bottom:0px!important">
                                                     New Email
                                                 </label>
                                             </div>
                                             <div class="radio clip-radio radio-primary radio-inline" style="margin-bottom:0px!important;margin-top:0px">
-                                                <input type="radio" id="emailTemplate" name="emailtype" value="template" ng-model="selectedEmail.type">
+                                                <input type="radio" id="emailTemplate" name="emailtype" value="template" ng-model="selectedEmail.type" ng-click="clearEmail()">
                                                 <label for="emailTemplate" style="margin-bottom:0px!important">
                                                     Email Template
                                                 </label>
@@ -164,12 +164,15 @@
                                             Email Title <span class="symbol required"></span>
                                         </label>
                                         <div class="well well-sm">
-                                            <input type="text" class="form-control input" name="name" ng-model="emailToSend.title" />
+                                             <input type="text" class="form-control input" name="name" ng-model="emailToSend.title" ng-change="checkEmailTitle(emailToSend.title)" ng-model-options="{ debounce: 800 }" />
+                                            <span class="form-control-feedback" ng-class="{'glyphicon glyphicon-remove text-danger': emailTitleExists && emailTitleChecked && !checkingEmailTitle, 'glyphicon glyphicon-ok text-nephritis': !emailTitleExists && emailTitleChecked && emailToSend.title, 'fa fa-spinner fa-spin':checkingEmailTitle}"></span>
+                                            <p class="error text-danger margin-top-5 margin-bottom-0" ng-if="emailTitleExists && emailTitleChecked && !checkingEmailTitle">Email Title Already Used. Please Choose Another</p>
+                                            <p class="success text-nephritis margin-top-5 margin-bottom-0" ng-if="!emailTitleExists && emailTitleChecked && !checkingEmailTitle && emailToSend.title">Great Email Title!</p>
                                         </div>
                                     </div>
                                     <div ng-if="selectedEmail.type === 'template'">
                                         <label>
-                                            Email Template
+                                            Email Template <span class="symbol required"></span>
                                         </label>
                                         <div class="well well-sm">
                                             <div class="row">                              
@@ -289,7 +292,7 @@
                                     </div>
                                     <div class="clearfix"></div>
                                     <label>
-                                        Select Contacts<span class="symbol required"></span>
+                                        Select Contacts <span class="symbol required"></span>
                                     </label>
                                     <div class="panel panel-white">
                                         <div class="panel-body no-padding">
@@ -337,9 +340,12 @@
                                                 <img ng-src="{{ contact.photo }}" id="customer_photo_{{contact._id}}" err-src="" err-contact="contact" class="img-thumbnail img-circle screenshot animated bounce" alt="image" width="35" height="35">
                                             </li>
                                         </ul>
+
                                         <button ng-click="openModal('customers-list-modal')" ng-if="recipients.length > 0" class="btn btn-primary btn-wide btn-o margin-bottom-15">View Full Contact List</button>
                                     </div>
                                     <div class="margin-bottom-30 center">
+                                        <span ng-if="recipients.length > 100" class="text-muted">(Showing 100 / {{recipients.length}} contacts. To view all contacts, Click "View Full Contact List" button.)</span>
+                                        <div class="clearfix"></div>
                                         <span class="text-muted">{{recipients.length}} / {{customers.length}} contacts selected</span>
                                         <div class="clearfix"></div>
                                         <span class="text-muted" ng-if="selectedCustomers.newEmails.length">{{selectedCustomers.newEmails.length}} 
@@ -374,7 +380,7 @@
                                         </div>
                                     </div>
                                     <div ng-if="newCampaignObj.type != 'autoresponder'">
-                                        <label>Delivery Date & Time *</label>
+                                        <label>Delivery Date & Time <span class="symbol required"></span></label>
                                         <p class="text-muted">Send now or choose a date & time in the future</p>
                                         <div class="well well-sm margin-bottom-30">
                                             <div class="col-xs-12 margin-bottom-30 margin-top-15">
@@ -437,7 +443,7 @@
                                         <a class="list-group-item" href="#">
                                             <h5 class="list-group-item-heading">Contacts</h5>
                                             <p class="list-group-item-text">
-                                                Sending to <span class="text-bold">{{recipients.length}}</span> contacts.
+                                                Sending to <span class="text-bold">{{recipients.length + selectedCustomers.newEmails.length}}</span> contacts.
                                             </p>
                                         </a>
                                         <a class="list-group-item" href="#">
@@ -484,9 +490,14 @@
                                                         To
                                                     </label>
                                                     <span> <ng-pluralize count="recipients.length"
-                                                      when="{'0': 'No contacts selected',
+                                                      when="{'0': '0 existing contacts',
                                                              '1': '{{recipients[0].details[0].emails[0].email}}',
-                                                             'other': '{{recipients.length}} contacts'}">
+                                                             'other': '{{recipients.length}} existing contacts'}">
+                                                            </ng-pluralize>
+                                                    </span>
+                                                    <span> <ng-pluralize count="selectedCustomers.newEmails.length"
+                                                      when="{'1': ' and 1 new contact',
+                                                             'other': ' and {{selectedCustomers.newEmails.length}} new contacts'}">
                                                             </ng-pluralize>
                                                     </span>
                                                 </div>

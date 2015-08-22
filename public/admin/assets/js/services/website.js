@@ -639,5 +639,20 @@
       });
     };
 
+    this.checkEmailTitleExists = function (_name, fn) {
+      var self = this;
+      self.getEmails(function(emails) {
+        console.log('emails ', emails);
+        var _matchingEmail = _.find(emails, function(email) {
+          return email.title === _name;
+        });
+        if (_matchingEmail) {
+          fn(true);
+        } else {
+          fn(false);
+        }
+      });
+    };
+
   });
 }(angular));

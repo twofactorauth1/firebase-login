@@ -171,7 +171,9 @@ var mandrillHelper =  {
                     "google_analytics_campaign": null,
                     "metadata": {
                         "accountId": accountId,
-                        "emailId": emailId
+                        "emailId": emailId,
+                        "campaignId": campaignId,
+                        "contactId": contactId
                     },
                     "recipient_metadata": [
                         {

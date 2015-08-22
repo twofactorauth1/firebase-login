@@ -46,6 +46,8 @@ _.extend(api.prototype, baseApi.prototype, {
 
         app.post(this.url('stripe/event'), this.sendStripeEventToKeen.bind(this));
 
+        app.post(this.url('intercom/event'), this.handleIntercomEvent.bind(this));
+
         //visit
         app.post(this.url('session/:id/sessionStart'), this.setup.bind(this), this.storeSessionInfo.bind(this));
         app.post(this.url('session/:id/pageStart'), this.storePageInfo.bind(this));
@@ -184,13 +186,26 @@ _.extend(api.prototype, baseApi.prototype, {
                             if (type === 'send') {
                                 obj.activityType = $$.m.ContactActivity.types.EMAIL_DELIVERED;
                                 objArray.push(obj);
+                                if(value.msg.metadata && value.msg.metadata.campaignId) {
+                                    var metadata = value.msg.metadata;
+                                    self.log.debug('Using metadata', metadata);
+                                    campaignManager.handleCampaignEmailSentEvent(metadata.accountId, metadata.campaignId, metadata.contactId, function(err, value){
+                                        if(err) {
+                                            self.log.error('Error handling email send event:' + err);
+                                            return;
+                                        } else {
+                                            self.log.debug('Handled email sent event.');
+                                            return;
+                                        }
+                                    });
+                                }
                             } else if (type === 'open') {
                                 obj.activityType = $$.m.ContactActivity.types.EMAIL_OPENED;
                                 objArray.push(obj);
                                 //if value.msg.metadata.campaignId, trigger campaignStep
-                                if(value.msg.metadata.campaignId) {
-                                    self.log.debug('triggering campaign step');
+                                if(value.msg.metadata && value.msg.metadata.campaignId) {
                                     var metadata = value.msg.metadata;
+                                    self.log.debug('triggering campaign step for metadata ', metadata);
                                     campaignManager.handleCampaignEmailOpenEvent(metadata.accountId, metadata.campaignId, metadata.contactId, function(err, value){
                                         if(err) {
                                             self.log.error('Error handling email open event:' + err);
@@ -204,6 +219,19 @@ _.extend(api.prototype, baseApi.prototype, {
                             } else if (type === 'click') {
                                 obj.activityType = $$.m.ContactActivity.types.EMAIL_CLICKED;
                                 objArray.push(obj);
+                                if(value.msg.metadata && value.msg.metadata.campaignId) {
+                                    var metadata = value.msg.metadata;
+                                    self.log.debug('Using metadata', metadata);
+                                    campaignManager.handleCampaignEmailClickEvent(metadata.accountId, metadata.campaignId, metadata.contactId, function(err, value){
+                                        if(err) {
+                                            self.log.error('Error handling email click event:' + err);
+                                            return;
+                                        } else {
+                                            self.log.debug('Handled email click event.');
+                                            return;
+                                        }
+                                    });
+                                }
                             } else if (type === 'unsub') {
                                 obj.activityType = $$.m.ContactActivity.types.EMAIL_UNSUB;
                                 objArray.push(obj);
@@ -453,6 +481,137 @@ _.extend(api.prototype, baseApi.prototype, {
             }
         });
 
+    },
+
+    handleIntercomEvent: function(req, resp) {
+        var self = this;
+        /*
+         {
+         "type" : "notification_event",
+         "app_id" : "b3st2skm",
+         "data" : {
+         "type" : "notification_event_data",
+         "item" : {
+         "type" : "conversation",
+         "id" : "1105161660",
+         "created_at" : "2015-08-19T02:56:20.000Z",
+         "updated_at" : "2015-08-19T02:56:54.000Z",
+         "user" : {
+         "type" : "user",
+         "id" : "55cba220201cd791040018f0",
+         "name" : null,
+         "email" : "kyle@kyle-miller.com"
+         },
+         "assignee" : {
+         "type" : "admin",
+         "id" : "99797",
+         "name" : "Kyle Miller",
+         "email" : "kyle@indigenous.io"
+         },
+         "conversation_message" : {
+         "type" : "conversation_message",
+         "id" : "10908581",
+         "subject" : "",
+         "body" : "<p>This is Kyle.  Testing a new conversation.</p>",
+         "author" : {
+         "_type" : "External::User",
+         "anonymous" : false,
+         "app_id" : 118120,
+         "browser_locale" : "en",
+         "company_ids" : [ ],
+         "control_group_message_ids" : [ ],
+         "created_at" : "2015-08-12T19:44:32.589Z",
+         "custom_data" : { },
+         "email" : "kyle@kyle-miller.com",
+         "email_domain" : "kyle-miller.com",
+         "events" : [ ],
+         "follow_ids" : [ ],
+         "geoip_data" : {
+         "city_name" : "Sioux City",
+         "continent_code" : "NA",
+         "country_code2" : "US",
+         "country_code3" : "USA",
+         "country_name" : "United States",
+         "id" : "55d3f0442b30b7e21b0047c1",
+         "latitude" : 42.4632,
+         "longitude" : -96.322,
+         "postal_code" : "51106",
+         "region_code" : "IA",
+         "region_name" : "Iowa",
+         "timezone" : "America/Chicago"
+         },
+         "id" : "55cba220201cd791040018f0",
+         "ios_device_filter_values" : [ ],
+         "ip" : "96.19.5.247",
+         "last_heard_from_at" : "2015-08-19T02:56:20.537Z",
+         "last_request_at" : "2015-08-19T02:56:04.829Z",
+         "last_session_start" : "2015-08-19T02:56:04.829Z",
+         "last_visited_domain" : "",
+         "last_visited_page" : "",
+         "last_visited_url" : "",
+         "manual_tag_ids" : [ ],
+         "nexus_config" : {
+         "endpoints" : [ "https://nexus-websocket-a.intercom.io/pubsub/uc-69af6231-1193-4dba-9282-4e9d5e216a92", "https://nexus-websocket-b.intercom.io/pubsub/uc-69af6231-1193-4dba-9282-4e9d5e216a92" ],
+         "retrieved_at" : 1439952964
+         },
+         "remote_created_at" : "2015-08-19T02:56:02.000Z",
+         "role" : "user_role",
+         "session_count" : 11,
+         "session_count_android" : 0,
+         "session_count_ios" : 0,
+         "social_accounts" : { },
+         "tag_ids" : [ "54d84a8e1312d3132c0009eb", "54d84a8d1312d3132c0009ea" ],
+         "tracked_android_user" : false,
+         "tracked_ios_user" : false,
+         "ua" : "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.155 Safari/537.36",
+         "unsubscribed_from_emails" : false,
+         "updated_at" : "2015-08-19T02:56:46.890Z",
+         "user_agent_data" : {
+         "id" : "55d17059ab7439f22f0195f4",
+         "mobile" : false,
+         "name" : "chrome",
+         "os" : "OS X 10.10.4",
+         "platform" : "Macintosh",
+         "source" : "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.155 Safari/537.36",
+         "version" : "44.0.2403.155"
+         },
+         "user_event_summaries" : [ ],
+         "user_events" : [ ],
+         "user_id_or_email_uniqueness_constraint" : "118120_kyle@kyle-miller.com"
+         },
+         "attachments" : [ ]
+         },
+         "conversation_parts" : {
+         "type" : "conversation_part.list",
+         "conversation_parts" : [ ]
+         },
+         "open" : null,
+         "read" : true,
+         "links" : {
+         "conversation_web" : "https://app.intercom.io/a/apps/b3st2skm/inbox/all/conversations/1105161660"
+         }
+         }
+         },
+         "links" : { },
+         "id" : "notif_8c7fc630-4620-11e5-a239-abb6bfc89a02",
+         "topic" : "conversation.user.created",
+         "delivery_status" : null,
+         "delivery_attempts" : 1,
+         "delivered_at" : 0,
+         "first_sent_at" : 1439954131,
+         "created_at" : 1439954131,
+         "self" : null,
+         "metadata" : { }
+         }
+         */
+        self.log.debug('>> handleIntercomEvent');
+        var msg = null;
+        if(req.body) {
+            msg = JSON.stringify(req.body);
+        }
+        self.log.debug('msg:', msg);
+        self.log.debug('<< handleIntercomEvent');
+        self.send200(resp);
     },
 
     storeSessionInfo: function(req, res) {

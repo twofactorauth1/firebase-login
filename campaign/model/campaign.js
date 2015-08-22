@@ -15,7 +15,7 @@ var campaign = $$.m.ModelBase.extend({
             accountId: 0,
             name: "",
             type: "",
-            status: "active",
+            status: "draft",//draft, running, completed
             visibility: 1,
             startDate: null,
             /*
@@ -45,6 +45,13 @@ var campaign = $$.m.ModelBase.extend({
              * }
              */
             steps: [],
+
+            statistics: {
+                emailsSent: 0,
+                emailsOpened: 0,
+                emailsClicked: 0,
+                participants: 0
+            },
 
             "created": {
                 "date": new Date(),

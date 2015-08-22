@@ -410,6 +410,9 @@ fieldset[disabled] .btn-linked-in.active {
   color: #007bb6;
   background-color: #ffffff;
 }
+.vertical-top td {
+  vertical-align: top;
+}
 .accordion-v1 .title {
   text-align: center;
   margin-bottom: 20px;
@@ -553,7 +556,6 @@ div[data-type='campaign'] .inner-page .overlay {
 }
 .inner-page {
   padding: 50px 0;
-  max-width: 1000px;
   margin: 0 auto;
   display: block;
 }
@@ -2213,9 +2215,6 @@ div[data-type="feature-block"] .component-inner {
   max-width: 100%;
 }
 @-moz-document url-prefix() {
-  img {
-    width: 100%;
-  }
 }
 .editing .testimonials-v2 .testimonials {
   padding: 25px;
@@ -2307,7 +2306,6 @@ div[data-type="feature-block"] .component-inner {
   font-size: 18px;
 }
 .image-text {
-  padding: 0 20px;
   display: inline-block;
 }
 .image-text .img-responsive {
@@ -2810,6 +2808,7 @@ div[data-type="feature-block"] .component-inner {
   margin-top: 130px;
   border-top-right-radius: 0px;
   border-bottom-right-radius: 0px;
+  z-index: 999;
 }
 .products-v1 .btnLaunchCart:focus {
   outline: none;

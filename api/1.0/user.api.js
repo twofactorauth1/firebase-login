@@ -408,11 +408,11 @@ _.extend(api.prototype, baseApi.prototype, {
                         //req.session.locked = true;//TODO: change this eventually
                         self.log.debug('Just set session accountId to: ' + req.session.accountId);
                        
-                        callback(null, account.id(), sub.id, user, stripeCustomer.id);
+                        callback(null, account.id(), sub.id, user, stripeCustomer.id, sub);
                     });
                 });
             },
-            function(accountId, subId, user, stripeCustomerId, callback) {
+            function(accountId, subId, user, stripeCustomerId, sub, callback) {
                 self.log.debug('Updated account billing.');
                 self.sm.addSubscriptionToAccount(accountId, subId, plan, user.id(), function(err, value){
                     authenticationDao.getAuthenticatedUrlForAccount(accountId, user.id(), "admin", function (err, value) {
@@ -450,7 +450,9 @@ _.extend(api.prototype, baseApi.prototype, {
                                     extraFields: {
                                         plan: plan,
                                         setupFee: setupFee,
-                                        coupon: coupon
+                                        coupon: coupon,
+                                        amount: (sub.plan.amount / 100),
+                                        plan_name: sub.plan.name
                                     }
                                 });
                                 contactActivityManager.createActivity(activity, function(err, value){});
@@ -466,6 +468,14 @@ _.extend(api.prototype, baseApi.prototype, {
                                                 self.log.debug('Order created.');
                                             }
                                         });
+                                    }
+                                });
+                                self.log.debug('Adding the admin user to the new account');
+                                userManager.addUserToAccount(accountId, 1, ["super","admin","member"], 1, function(err, value){
+                                    if(err) {
+                                        self.log.error('Error adding admin user to account:', err);
+                                    } else {
+                                        self.log.debug('Admin user added to account ' + accountId);
                                     }
                                 });
                             }

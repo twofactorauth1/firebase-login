@@ -44,6 +44,15 @@ var email = $$.m.ModelBase.extend({
       title: null,
 
       /**
+       * The unique-per-account reference to an email.
+       *
+       * @property handle
+       * @type {String}
+       * @default ""
+       */
+      handle: null,
+
+      /**
        * The subject that appears the email
        *
        * @property subject

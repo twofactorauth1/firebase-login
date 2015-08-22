@@ -75,6 +75,15 @@ module.exports = {
         $$.dao.CampaignMessageDao.findMany(query, fn);
     },
 
+    getCampaignFlowsByCampaign: function(accountId, campaignId, fn) {
+        var query = {
+            accountId:accountId,
+            campaignId:campaignId
+        };
+
+        campaignDao.findMany(query, $$.m.CampaignFlow, fn);
+    },
+
     createCampaign: function(campaignObj, fn) {
         var self = this;
         self.log.debug('>> createCampaign');
@@ -156,11 +165,13 @@ module.exports = {
                                         return fn(err, null);
                                     }
                                     self.log.debug('Added contact to campaign flow.');
+                                    self.updateCampaignParticipants(accountId, campaignId, function(err, value){});
                                     self.handleStep(flow, 0, function(err, value){
                                         if(err) {
                                             self.log.error('Error handling initial step of campaign: ' + err);
                                             return fn(err, null);
                                         } else {
+                                            self.updateCampaignStatus(accountId, campaignId, function(err, value){});
                                             self.log.debug('<< addContactToCampaign');
                                             return fn(err, savedFlow);
                                         }
@@ -191,13 +202,13 @@ module.exports = {
         var step = campaignFlow.get('steps')[stepNumber];
         self.log.debug('>> getSteps ', campaignFlow.get('steps'));
         self.log.debug('>> step ', step);
-        if(step === null || typeof step == "undefined") {
+        if(step === null) {
             var errorString = 'Error getting steps';
             self.log.error(errorString);
             return fn(errorString, null);
         }
 
-        if(step.type === 'email' && (step.trigger === null || step.trigger === 'WAIT' ||
+        if(step && step.type === 'email' && (step.trigger === null || step.trigger === 'WAIT' ||
             (step.trigger === 'SIGNUP' && step.triggered) || (step.trigger === 'EMAIL_OPENED' && step.triggered))) {
             /*
              * Schedule the email.
@@ -281,7 +292,7 @@ module.exports = {
                 }
             });
 
-        } else if(step.type === 'landing'){
+        } else if(step && step.type === 'landing'){
             //there is nothing to do here.
             campaignFlow.set('lastStep', stepNumber);
             step.executed = new Date();
@@ -309,7 +320,7 @@ module.exports = {
                     }
                 }
             });
-        } else if(step.type === 'webinar'){
+        } else if(step && step.type === 'webinar'){
 
             contactDao.getById(campaignFlow.get('contactId'), $$.m.Contact, function(err, contact) {
                 if (err) {
@@ -367,10 +378,8 @@ module.exports = {
             });
 
         } else {
-            self.log.warn('Unknown step type: ' + step.type);
             return fn(null, null);
         }
-
     },
 
     bulkAddContactToCampaign: function(contactIdAry, campaignId, accountId, fn) {
@@ -405,15 +414,6 @@ module.exports = {
                                 return fn(err, null);
                             }
                             self.log.debug('Added contact to campaign flow.');
-                            self.handleStep(flow, 1, function(err, value){
-                                if(err) {
-                                    self.log.error('Error handling initial step of campaign: ' + err);
-                                    callback(err);
-                                } else {
-                                    self.log.debug('added contact.');
-                                    callback();
-                                }
-                            });
                         });
                     }
                     self.log.debug('Added contact to campaign flow.');
@@ -423,7 +423,7 @@ module.exports = {
                             callback(err);
                         } else {
                             self.log.debug('added contact.');
-                            //callback();
+                            callback();
                         }
                     });
                 });
@@ -433,13 +433,92 @@ module.exports = {
                     self.log.error('Error adding contacts to campaign: ' + err);
                     return fn(err, null);
                 } else {
-                    self.log.debug('<< bulkAddContactToCampaign');
-                    return fn(null, 'OK');
+                    //check if we need to update the status
+                    self.updateCampaignStatus(accountId, campaignId, function(err, value){
+                        self.updateCampaignParticipants(accountId, campaignId, function(err, value){
+                            self.log.debug('<< bulkAddContactToCampaign');
+                            return fn(null, 'OK');
+                        });
+                    });
                 }
             });
 
         });
 
+    },
+
+    /**
+     * Updates the number of participants in the campaign statistics
+     * @param accountId
+     * @param campaignId
+     * @param fn
+     */
+    updateCampaignParticipants: function(accountId, campaignId, fn) {
+        var self = this;
+        self.log.debug('>> updateCampaignParticipants');
+        self.getCampaignFlowsByCampaign(accountId, campaignId, function(err, flows){
+            if(err) {
+                self.log.error('Error getting campaign flows: ', err);
+                return fn(err, null);
+            }
+            var numParticipants = 0;
+            if(flows) {
+                numParticipants = flows.length;
+            }
+            self.getCampaign(campaignId, function(err, campaign){
+                if(err) {
+                    self.log.error('Error getting campaign: ', err);
+                    return fn(err, null);
+                }
+                var stats = campaign.get('statistics');
+                stats.participants = numParticipants;
+                campaignDao.saveOrUpdate(campaign, fn);
+            });
+
+        });
+    },
+
+    /**
+     * Check if this campaign should be 'running' or 'completed'
+     * @param campaignId
+     * @param accountId
+     * @param fn
+     */
+    updateCampaignStatus: function(accountId, campaignId, fn) {
+        var self = this;
+        /*
+         * Get all the flows for the campaign.
+         * If each flow has executed the final step, the status of the campaign should be 'completed'
+         */
+        self.log.debug('>> updateCampaignStatus');
+        self.getCampaignFlowsByCampaign(accountId, campaignId, function(err, flows){
+            var isDone = true;
+            _.each(flows, function(flow){
+                var flowSteps = flow.get('steps');
+                if(!flowSteps[flowSteps.length-1].executed) {
+                    isDone = false;
+                }
+            });
+
+            if(isDone === true) {
+                campaignDao.getById(campaignId, $$.m.Campaign, function(err, campaign){
+                    if(err) {
+                        self.log.error('Error updating campaign status:', err);
+                        return fn(err, null);
+                    } else {
+                        campaign.set('status', 'completed');
+                        var modified = {
+                            date: new Date(),
+                            by: 'Admin'
+                        };
+                        campaign.set('modified', modified);
+                        return campaignDao.saveOrUpdate(campaign, fn);
+                    }
+                });
+            } else {
+                return fn(null, null);
+            }
+        });
     },
 
     /**
@@ -595,7 +674,81 @@ module.exports = {
      */
     handleCampaignEmailOpenEvent: function(accountId, campaignId, contactId, fn) {
         var self = this;
-        return self._handleSpecificCampaignEvent(accountId, campaignId, contactId, 'EMAIL_OPENED', fn);
+        self.log.debug('>> handleCampaignEmailOpenEvent', campaignId);
+        self._handleSpecificCampaignEvent(accountId, campaignId, contactId, 'EMAIL_OPENED', function(err, value){
+            self.log.debug('marking email opened.');
+            self.getCampaign(campaignId, function(err, campaign){
+                if(err || !campaign) {
+                    self.log.error('Error fetching campaign', err);
+                    return fn(err, null);
+                } else {
+                    self.log.debug('got campaign');
+                    var stats = campaign.get('statistics');
+                    stats.emailsOpened = stats.emailsOpened + 1;
+                    var modified = {
+                        date: new Date(),
+                        by: 'ADMIN'
+                    };
+                    campaign.set('modified', modified);
+                    campaignDao.saveOrUpdate(campaign, fn);
+                }
+            });
+        });
+
+    },
+
+    /**
+     * This method will update the campaign statistics
+     * @param accountId
+     * @param campaignId
+     * @param contactId
+     * @param fn
+     */
+    handleCampaignEmailSentEvent: function(accountId, campaignId, contactId, fn) {
+        var self = this;
+        self.log.debug('>> handleCampaignEmailSentEvent');
+        self.getCampaign(campaignId, function(err, campaign){
+            if(err || !campaign) {
+                self.log.error('Error fetching campaign', err);
+                return fn(err, null);
+            } else {
+                var stats = campaign.get('statistics');
+                stats.emailsSent = stats.emailsSent + 1;
+                var modified = {
+                    date: new Date(),
+                    by: 'ADMIN'
+                };
+                campaign.set('modified', modified);
+                campaignDao.saveOrUpdate(campaign, fn);
+            }
+        });
+    },
+
+    /**
+     * This method will update the campaign statistics
+     * @param accountId
+     * @param campaignId
+     * @param contactId
+     * @param fn
+     */
+    handleCampaignEmailClickEvent: function(accountId, campaignId, contactId, fn) {
+        var self = this;
+        self.log.debug('>> handleCampaignEmailClickEvent');
+        self.getCampaign(campaignId, function(err, campaign){
+            if(err || !campaign) {
+                self.log.error('Error fetching campaign', err);
+                return fn(err, null);
+            } else {
+                var stats = campaign.get('statistics');
+                stats.emailsClicked = stats.emailsClicked + 1;
+                var modified = {
+                    date: new Date(),
+                    by: 'ADMIN'
+                };
+                campaign.set('modified', modified);
+                campaignDao.saveOrUpdate(campaign, fn);
+            }
+        });
     },
 
     _handleSpecificCampaignEvent: function(accountId, campaignId, contactId, trigger, fn) {
@@ -633,6 +786,13 @@ module.exports = {
                 var steps = flow.get('steps');
                 var i = flow.get('lastStep');
                 var nextStep = steps[i];
+                while(nextStep && nextStep.executed) {
+                    i++;
+                    nextStep = steps[i];
+                }
+                if(!nextStep) {
+                    callback(null, null, i);
+                }
                 if(nextStep.trigger === trigger) {
                     nextStep.triggered = new Date();
                     campaignDao.saveOrUpdate(flow, function(err, updatedFlow){
@@ -650,6 +810,10 @@ module.exports = {
                 }
             },
             function(flow, stepNumber, callback) {
+                if(!flow) {
+                    self.log.debug('No step to handle. Exiting');
+                    callback(null);
+                }
                 self.handleStep(flow, stepNumber, function(err, value){
                     if(err) {
                         callback(err);
