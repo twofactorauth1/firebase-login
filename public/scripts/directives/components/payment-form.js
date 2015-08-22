@@ -217,6 +217,7 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                             UserService.initializeUser(newUser, function(err, data) {
                                 if (data && data.accountUrl) {
                                     console.log('$location ', $location);
+                                    console.log('data.accountUrl ', data.accountUrl);
                                     if ($location.host() === 'indigenous.io') {
                                         var hash = CryptoJS.HmacSHA256(newUser.email, "vZ7kG_bS_S-jnsNq4M2Vxjsa5mZCxOCJM9nezRUQ");
                                         //send data to intercom
@@ -267,15 +268,31 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
 
                 //url
                 if (!scope.newAccount.businessName) {
+                    console.log('business name does not exist');
                     scope.checkDomainExists(newAccount);
                     return;
                 }
 
-                //membership selection
-                if (!scope.newAccount.membership) {
-                    scope.checkMembership(newAccount);
+                if (!scope.newAccount.first) {
+                    scope.checkFirstName(newAccount);
                     return;
                 }
+
+                if (!scope.newAccount.last) {
+                    scope.checkLastName(newAccount);
+                    return;
+                }
+
+                if (!scope.newAccount.phone) {
+                    scope.checkPhone(newAccount);
+                    return;
+                }
+
+                //membership selection
+                // if (!scope.newAccount.membership) {
+                //     scope.checkMembership(newAccount);
+                //     return;
+                // }
 
                 var cc_name = angular.element('#name').val();
 
@@ -300,7 +317,7 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                         coupon: newAccount.coupon
                     };
 
-                    newUser.plan = scope.newAccount.membership;
+                    newUser.plan = '';
                     newUser.anonymousId = window.analytics.user().anonymousId();
                     newUser.permanent_cookie = ipCookie("permanent_cookie");
                     newUser.fingerprint = new Fingerprint().get();
@@ -350,7 +367,7 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
 
             scope.checkDomainExists = function(newAccount) {
                 if (!newAccount.businessName) {
-                    angular.element("#business-name .error").html("Url Required");
+                    angular.element("#business-name .error").html("Business Name Required");
                     angular.element("#business-name").addClass('has-error');
                     angular.element("#business-name .glyphicon").addClass('glyphicon-remove');
                 } else {
@@ -387,6 +404,46 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                             angular.element("#email .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
                         }
                     });
+                }
+            };
+
+            scope.checkFirstName = function(newAccount) {
+                scope.newAccount.first = newAccount.first;
+                console.log('newAccount.first ', newAccount.first);
+                if (!newAccount.first) {
+                    angular.element("#first .error").html("First Name Required");
+                    angular.element("#first").addClass('has-error');
+                    angular.element("#first .glyphicon").addClass('glyphicon-remove');
+                } else {
+                    angular.element("#first .error").html("");
+                    angular.element("#first").removeClass('has-error').addClass('has-success');
+                    angular.element("#first .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
+                }
+            };
+
+            scope.checkLastName = function(newAccount) {
+                scope.newAccount.last = newAccount.last;
+                if (!newAccount.last) {
+                    angular.element("#last .error").html("First Name Required");
+                    angular.element("#last").addClass('has-error');
+                    angular.element("#last .glyphicon").addClass('glyphicon-remove');
+                } else {
+                    angular.element("#last .error").html("");
+                    angular.element("#last").removeClass('has-error').addClass('has-success');
+                    angular.element("#last .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
+                }
+            };
+
+            scope.checkPhone = function(newAccount) {
+                scope.newAccount.phone = newAccount.phone;
+                if (!newAccount.phone) {
+                    angular.element("#phone .error").html("Phone Required");
+                    angular.element("#phone").addClass('has-error');
+                    angular.element("#phone .glyphicon").addClass('glyphicon-remove');
+                } else {
+                    angular.element("#phone .error").html("");
+                    angular.element("#phone").removeClass('has-error').addClass('has-success');
+                    angular.element("#phone .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
                 }
             };
 

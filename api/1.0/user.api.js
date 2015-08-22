@@ -288,6 +288,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         var cardToken = req.body.cardToken;
         var plan = req.body.plan || 'NO_PLAN_ARGUMENT';//TODO: make sure this gets passed
+        self.log.debug('>> plan ', plan);
 
         var sendWelcomeEmail = true;//this can be overridden in the request.
         if(req.body.sendWelcomeEmail && req.body.sendWelcomeEmail === false) {
@@ -375,7 +376,7 @@ _.extend(api.prototype, baseApi.prototype, {
             },
             function(stripeCustomer, user, account, callback){
                 self.log.debug('Created Stripe customer: ' +  stripeCustomer.id);
-                if(plan) {
+                if(plan != 'NO_PLAN_ARGUMENT') {
                     paymentsManager.createStripeSubscription(stripeCustomer.id, plan, account.id(), user.id(), coupon, setupFee, function(err, sub) {
                         if (err) {
                             self.log.error('Error creating Stripe subscription: ' + err);

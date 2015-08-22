@@ -44,21 +44,25 @@
                 <p class="center" ng-if="!tmpAccount.tempUser || tmpAccount.tempUser.created.strategy === 'lo'">or use your email address in a form below</p>
             </div>
         </div>
-        <div class="top-signup">
+        <div class="top-signup account-info-signup">
             <div class="inner-page">
                 <h2 class="center text-bold margin-bottom-5">Start Your Free 14-day Trial</h2>
                 <h3 class="center">No credit card required.</h3>
                 <div class="margin-top-30"></div>
                 <div class="well">
                     <!-- First Name -->
-                    <div id="first" class="form-group col-sm-6">
+                    <div id="first" class="form-group col-sm-6 has-feedback" >
                         <label>First Name</label>
                         <input class="form-control input-lg" type="text" ng-model="newAccount.first" />
+                        <span class="glyphicon form-control-feedback"></span>
+                        <span class="error help-block" />
                     </div>
                     <!-- Last Name -->
-                    <div id="last" class="form-group col-sm-6">
+                    <div id="last" class="form-group col-sm-6 has-feedback">
                         <label>Last Name</label>
                         <input class="form-control input-lg" type="text" ng-model="newAccount.last" />
+                        <span class="glyphicon form-control-feedback"></span>
+                        <span class="error help-block" />
                     </div>
                     <!-- Business Name -->
                     <div id="business-name" class="form-group col-xs-12 has-feedback">
@@ -69,9 +73,11 @@
                         <span class="help-block" ng-show="newAccount.businessName">Your Indigenous URL will be <strong>{{newAccount.businessName | urlFilter}}.indigenous.io</strong> and will be changed once your site is ready to publish.</span>
                     </div>
                     <!-- Phone Number -->
-                    <div id="phone" class="form-group col-sm-12">
+                    <div id="phone" class="form-group col-sm-12 has-feedback">
                         <label>Phone Number</label>
-                        <input class="form-control input-lg" type="text" ng-model="newAccount.phone" />
+                        <input class="form-control input-lg" type="text" ng-model="newAccount.phone" mask="(999) 999-9999" clean="true" mask-restrict='reject'/>
+                        <span class="glyphicon form-control-feedback"></span>
+                        <span class="error help-block" />
                     </div>
                     <!-- EMAIL AND PASSOWORD -->
                     <div id="email" class="form-group col-sm-12 has-feedback" ng-hide="tmpAccount.tempUser">
@@ -91,7 +97,7 @@
                     <div class="clearfix margin-bottom-10"></div>
                     <!-- BUY -->
                     <div class="submit-signup center">
-                        <a type="button" class="btn btn-wide btn-lg btn-primary" ng-click="createAccount(newAccount)"> START FREE TRIAL</a>
+                        <a type="button" class="btn btn-wide btn-lg btn-primary" ng-click="createAccountWithoutCC(newAccount)"> START FREE TRIAL</a>
                     </div>
                     <p class="center margin-top-10">By clicking this button you agree to our <a href="" type="button" data-toggle="modal" data-target="#terms-of-service">Terms of Service</a>.</p>
                 </div>
