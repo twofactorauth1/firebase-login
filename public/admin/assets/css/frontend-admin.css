@@ -4255,7 +4255,8 @@
 #componentloader .payment-form-v1 .account-info-signup .has-feedback .form-control-feedback,
 #componentloader .payment-form-v1 .payment-signup .has-feedback .form-control-feedback {
   position: absolute;
-  right: 8px;
+  right: 15px;
+  top: 30px;
 }
 #componentloader .payment-form-v1 .price-signup {
   background: #4bafca;
