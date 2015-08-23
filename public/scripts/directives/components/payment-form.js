@@ -231,6 +231,10 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                                         //send affiliate purchase info
                                         LeadDyno.key = "b2a1f6ba361b15f4ce8ad5c36758de951af61a50";
                                         LeadDyno.recordPurchase();
+
+                                        //send facebook tracking info
+                                        window._fbq = window._fbq || [];
+                                        window._fbq.push(['track', '6032779610613', {'value':'0.00','currency':'USD'}]);
                                     }
                                     window.location = data.accountUrl;
                                 } else {
