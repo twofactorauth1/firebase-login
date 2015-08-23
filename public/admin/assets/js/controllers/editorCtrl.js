@@ -31,37 +31,37 @@
         content: '<span class="fa fa-paint-brush"></span> Design',
         cssClass: "",
         onclick: function (options, item, val, i) {
-          $scope.openModal('component-settings-modal', 'ComponentSettingsModalCtrl', i);
+          $scope.openModal('component-settings-modal', 'ComponentSettingsModalCtrl', parseInt(i, 10));
         }
       }, {
         content: '<span class="fa fa-clone"></span> Clone',
         cssClass: "",
         onclick: function (options, item, val, i) {
-          $scope.duplicateComponent(i);
+          $scope.duplicateComponent(parseInt(i, 10));
         }
       }, {
         content: '<span class="fa fa-chevron-up"></span> Up',
         cssClass: "",
         onclick: function (options, item, val, i) {
-          $scope.singleReorder('up', val, i);
+          $scope.singleReorder('up', val, parseInt(i, 10));
         }
       }, {
         content: '<span class="fa fa-chevron-down"></span> Down',
         cssClass: "",
         onclick: function (options, item, val, i) {
-          $scope.singleReorder('down', val, i);
+          $scope.singleReorder('down', val, parseInt(i, 10));
         }
       }, {
         content: '<span class="fa fa-plus"></span> Add',
         cssClass: "",
         onclick: function (options, item, val, i) {
-          $scope.openModal('add-component-modal', 'AddComponentModalCtrl', i)
+          $scope.openModal('add-component-modal', 'AddComponentModalCtrl', parseInt(i, 10))
         }
       }, {
         content: '<span class="fa fa-times"></span> Delete',
         cssClass: "",
         onclick: function (options, item, val, i) {
-          $scope.deleteComponent(i);
+          $scope.deleteComponent(parseInt(i, 10));
         }
       }, {
         empty: true
