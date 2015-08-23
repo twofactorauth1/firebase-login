@@ -556,10 +556,7 @@ app.directive('productsComponent', ['paymentService', 'productService', 'account
               _id: Math.uuid(10),
               email: scope.newContact.details[0].emails[0].email
             }],
-            phones: [{
-              _id: Math.uuid(10),
-              number: scope.newContact.details[0].phones[0].number
-            }],
+            phones: [],
             addresses: [{
               _id: Math.uuid(10),
               address: scope.newContact.details[0].addresses[0].address,
@@ -574,6 +571,13 @@ app.directive('productsComponent', ['paymentService', 'productService', 'account
               displayName: ""
             }],
           }];
+          if(scope.newContact.details[0].phones && scope.newContact.details[0].phones[0] && scope.newContact.details[0].phones[0].number)
+          {
+            _formattedDetails.phones.push({
+              _id: Math.uuid(10),
+              number: scope.newContact.details[0].phones[0].number
+            })
+          }
           console.log('scope.newContact ', scope.newContact);
           scope.newContact.details = _formattedDetails;
           console.log('scope.newContact ', scope.newContact);
