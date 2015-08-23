@@ -138,7 +138,9 @@
     };
 
     $scope.sendTestEmail = function (_email) {
+      $scope.sendingEmail = true;
       WebsiteService.sendTestEmail(_email, $scope.emailToSend, function (data) {
+       $scope.sendingEmail = false;
         if(data && data[0] && data[0]._id)
         {
           $scope.closeModal();

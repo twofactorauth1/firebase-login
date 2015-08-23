@@ -94,11 +94,18 @@
       if ($scope.account.business.logo) {
         emailToSend.components[0].logo = '<img src="' + $scope.account.business.logo + '"/>';
       }
-      WebsiteService.createEmail(emailToSend, function (newemail) {
-        toaster.pop('success', 'Email Created', 'The ' + newemail.title + ' email was created successfully.');
-        $scope.emails.unshift(newemail);
-        $scope.displayedEmails.unshift(newemail);
-        $scope.closeModal();
+      WebsiteService.createEmail(emailToSend, function (newemail, err) {
+        if(newemail && !err)
+        {
+          toaster.pop('success', 'Email Created', 'The ' + newemail.title + ' email was created successfully.');
+          $scope.emails.unshift(newemail);
+          $scope.displayedEmails.unshift(newemail);
+          $scope.closeModal();
+        }
+        else if(err)
+        {
+          toaster.pop('error', "Error creating Email", err.message);
+        }
       });
     };
 

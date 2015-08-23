@@ -28,40 +28,46 @@
         size: "big"
       },
       items: [{
+        type: 'design',
         content: '<span class="fa fa-paint-brush"></span> Design',
         cssClass: "",
         onclick: function (options, item, val, i) {
-          $scope.openModal('component-settings-modal', 'ComponentSettingsModalCtrl', i);
+          $scope.openModal('component-settings-modal', 'ComponentSettingsModalCtrl', parseInt(i, 10));
         }
       }, {
+        type: 'clone',
         content: '<span class="fa fa-clone"></span> Clone',
         cssClass: "",
         onclick: function (options, item, val, i) {
-          $scope.duplicateComponent(i);
+          $scope.duplicateComponent(parseInt(i, 10));
         }
       }, {
+        type: 'up',
         content: '<span class="fa fa-chevron-up"></span> Up',
         cssClass: "",
         onclick: function (options, item, val, i) {
-          $scope.singleReorder('up', val, i);
+          $scope.singleReorder('up', val, parseInt(i, 10));
         }
       }, {
+        type: 'down',
         content: '<span class="fa fa-chevron-down"></span> Down',
         cssClass: "",
         onclick: function (options, item, val, i) {
-          $scope.singleReorder('down', val, i);
+          $scope.singleReorder('down', val, parseInt(i, 10));
         }
       }, {
+        type: 'add',
         content: '<span class="fa fa-plus"></span> Add',
         cssClass: "",
         onclick: function (options, item, val, i) {
-          $scope.openModal('add-component-modal', 'AddComponentModalCtrl', i)
+          $scope.openModal('add-component-modal', 'AddComponentModalCtrl', parseInt(i, 10))
         }
       }, {
         content: '<span class="fa fa-times"></span> Delete',
+        type: 'delete',
         cssClass: "",
         onclick: function (options, item, val, i) {
-          $scope.deleteComponent(i);
+          $scope.deleteComponent(parseInt(i, 10));
         }
       }, {
         empty: true
@@ -1007,6 +1013,7 @@
       WebsiteService.updateEmail($scope.page, function (data, error) {
         if (data && !error) {
           toaster.pop('success', "Settings saved successfully");
+          $scope.checkForSaveBeforeLeave('/admin/#/editor?email=' + data._id, true);
         } else if (!data && error && error.message) {
           toaster.pop('error', error.message);
         }
