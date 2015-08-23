@@ -1007,6 +1007,7 @@
       WebsiteService.updateEmail($scope.page, function (data, error) {
         if (data && !error) {
           toaster.pop('success', "Settings saved successfully");
+          $scope.checkForSaveBeforeLeave('/admin/#/editor?email=' + data._id, true);
         } else if (!data && error && error.message) {
           toaster.pop('error', error.message);
         }
