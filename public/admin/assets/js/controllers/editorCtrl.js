@@ -28,30 +28,35 @@
         size: "big"
       },
       items: [{
+        type: 'design',
         content: '<span class="fa fa-paint-brush"></span> Design',
         cssClass: "",
         onclick: function (options, item, val, i) {
           $scope.openModal('component-settings-modal', 'ComponentSettingsModalCtrl', parseInt(i, 10));
         }
       }, {
+        type: 'clone',
         content: '<span class="fa fa-clone"></span> Clone',
         cssClass: "",
         onclick: function (options, item, val, i) {
           $scope.duplicateComponent(parseInt(i, 10));
         }
       }, {
+        type: 'up',
         content: '<span class="fa fa-chevron-up"></span> Up',
         cssClass: "",
         onclick: function (options, item, val, i) {
           $scope.singleReorder('up', val, parseInt(i, 10));
         }
       }, {
+        type: 'down',
         content: '<span class="fa fa-chevron-down"></span> Down',
         cssClass: "",
         onclick: function (options, item, val, i) {
           $scope.singleReorder('down', val, parseInt(i, 10));
         }
       }, {
+        type: 'add',
         content: '<span class="fa fa-plus"></span> Add',
         cssClass: "",
         onclick: function (options, item, val, i) {
@@ -59,6 +64,7 @@
         }
       }, {
         content: '<span class="fa fa-times"></span> Delete',
+        type: 'delete',
         cssClass: "",
         onclick: function (options, item, val, i) {
           $scope.deleteComponent(parseInt(i, 10));
