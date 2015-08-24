@@ -292,10 +292,17 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                     return;
                 }
 
-                if (!scope.newAccount.phone) {
-                    scope.checkPhone(newAccount);
-                    return;
+                if(!scope.newAccount.hidePassword) {
+                    scope.checkPasswordLength(newAccount);
+                    if(!scope.passwordIsValid) {
+                        return;
+                    }
                 }
+
+                //if (!scope.newAccount.phone) {
+                //    scope.checkPhone(newAccount);
+                //    return;
+                //}
 
                 //membership selection
                 // if (!scope.newAccount.membership) {
@@ -323,7 +330,10 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                         password: newAccount.password,
                         email: newAccount.email,
                         accountToken: data.token,
-                        coupon: newAccount.coupon
+                        coupon: newAccount.coupon,
+                        first: newAccount.first,
+                        middle: newAccount.middle,
+                        last: newAccount.last
                     };
 
                     newUser.plan = '';
@@ -466,14 +476,16 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
             };
 
             scope.checkPasswordLength = function(newAccount) {
-                if (!newAccount.password) {
-                    angular.element("#password .error").html("Password must contain at least 5 characters");
+                if (!newAccount.password || newAccount.password.length < 6) {
+                    //angular.element("#password .error").html("Password must contain at least 6 characters");
                     angular.element("#password").addClass('has-error');
                     angular.element("#password .glyphicon").addClass('glyphicon-remove');
+                    scope.passwordIsValid = false;
                 } else {
                     angular.element("#password .error").html("");
                     angular.element("#password").removeClass('has-error').addClass('has-success');
                     angular.element("#password .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
+                    scope.passwordIsValid = true;
                 }
             };
 
