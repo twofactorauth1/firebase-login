@@ -20,7 +20,7 @@
      * @openMediaModal
      * -
      */
-
+   
     $scope.openMediaModal = function () {
       $scope.showInsert = true;
       $scope.modalInstance = $modal.open({
