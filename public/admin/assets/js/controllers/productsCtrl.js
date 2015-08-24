@@ -7,7 +7,7 @@
     $scope.itemPerPage = 100;
     $scope.showPages = 15;
     $scope.newProduct = {
-      status: 'auto_inactive'
+      status: 'inactive'
     };
 
     console.log('ProductConstant.product_types.dp ', ProductConstant.product_types.dp);
