@@ -19,22 +19,6 @@ CKEDITOR.plugins.add( "scroll", {
                 $(window).scroll(function(){
                     setComponentPosition();
                 })
-            }else
-            {
-                var element = $(".cke_combo_button, .cke_button__textcolor, .cke_button__table" );                
-                element.on('click', function() {                    
-                    {
-                    setTimeout(function(){
-                        console.log($(".cke_panel.cke_panel"));
-                        var element = $(".cke_panel.cke_panel");
-                        if(element && element.is(":visible"))
-                        {
-                            $(".cke_panel.cke_panel").css({ top: 50 });
-                        }                       
-                    },10) 
-                    }
-                    
-                }); 
             }
         });
     }
