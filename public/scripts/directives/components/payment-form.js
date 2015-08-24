@@ -218,7 +218,8 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                                 if (data && data.accountUrl) {
                                     console.log('$location ', $location);
                                     console.log('data.accountUrl ', data.accountUrl);
-                                    if ($location.host() === 'indigenous.io') {
+                                    //we don't want to record purchases in non-prod environments
+                                    if ($location.host() === 'indigenous.io' || $location.host() === 'www.indigenous.io') {
                                         var hash = CryptoJS.HmacSHA256(newUser.email, "vZ7kG_bS_S-jnsNq4M2Vxjsa5mZCxOCJM9nezRUQ");
                                         //send data to intercom
                                         window.intercomSettings = {
