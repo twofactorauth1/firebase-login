@@ -21,7 +21,8 @@
       return moment(date).format("dddd, MMMM Do YYYY, h:mm A");
     };
 
-    $scope.updateSendNow = function () {
+    $scope.updateSendNow = function (value) {
+      $scope.whenToSend = value;
       $scope.delivery.date = moment();
       $scope.delivery.time = moment();
     };
@@ -99,6 +100,10 @@
       var minute = time.get('minute');
       var formatted = date.set('hour', hour).set('minute', minute);
       $scope.delivery.date = formatted;
+      if($scope.delivery.date.diff && $scope.delivery.date.diff(moment(), "minutes" ) < 0)
+        $scope.invalidDate = true;
+       else
+        $scope.invalidDate = false;
     };
 
     $scope.togglePreview = function () {
@@ -688,6 +693,17 @@
           valid = false;
         else if(i === 4 && !$scope.recipients.length && !$scope.checkNewRecipients())
           valid = false;
+        else if(i === 5)
+        {
+           if($scope.whenToSend === 'later' && $scope.delivery.date.diff && $scope.delivery.date.diff(moment(), "minutes" ) < 0)
+           {
+            $scope.invalidDate = true;
+            valid = false;
+           }
+           else{
+            $scope.invalidDate = false;
+           }          
+        }
       }
       return valid;
     }
