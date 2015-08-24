@@ -588,6 +588,7 @@
 
     $scope.completeNewCampaign = function () {
       //add new email if exists
+      $scope.saveLoading = true;
       $scope.changesConfirmed = true;
       var stepSettings = $scope.newCampaignObj.steps[0].settings;
 
@@ -646,6 +647,7 @@
             //bulk add contacts to campaign
             CampaignService.bulkAddContactsToCampaign(contactsArr, _nemCampaign._id, function (success) {
               //show success
+              $scope.saveLoading = false;
               toaster.pop('success', 'Campaigns created successfully');
               $location.path('/marketing/campaigns');
             });

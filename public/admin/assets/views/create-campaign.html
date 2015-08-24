@@ -526,7 +526,7 @@
                             </button>
                         </div>
                         <div ng-if="currentStep == 5">
-                            <button class="btn btn-success btn-wide pull-right" ng-click="completeNewCampaign()">
+                            <button ng-disabled="saveLoading" class="btn btn-success btn-wide pull-right" ng-click="completeNewCampaign()">
                                 <span> Activate Campaign </span> <i class="fa fa-clock-o"></i>
                             </button>
                             <button class="btn btn-info btn-wide pull-right margin-right-5" ng-click="openModal('send-test-email-modal')">
