@@ -1,5 +1,5 @@
 /*global app, Fingerprint*/
-app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'paymentService', 'userService', 'ipCookie', 'formValidations', '$location', function($filter, $q, ProductService, PaymentService, UserService, ipCookie, formValidations, $location) {
+app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'paymentService', 'userService', 'commonService', 'ipCookie', 'formValidations', '$location', function($filter, $q, ProductService, PaymentService, UserService, CommonService, ipCookie, formValidations, $location) {
     return {
         require: [],
         scope: {
@@ -324,6 +324,15 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                 tmpAccount.subdomain = $.trim(newAccount.businessName).replace(" ", "").replace(".", "_").replace("@", "");
                 tmpAccount.business = tmpAccount.business || {};
                 tmpAccount.business.name = newAccount.businessName;
+
+                if(scope.newAccount.phone) {
+                    tmpAccount.business.phones = [];
+                    tmpAccount.business.phones[0] = {
+                        _id: CommonService.generateUniqueAlphaNumericShort(),
+                        number: scope.newAccount.phone,
+                        default: true
+                    };
+                }
                 UserService.saveOrUpdateTmpAccount(tmpAccount, function(data) {
                     var newUser = {
                         username: newAccount.email,
