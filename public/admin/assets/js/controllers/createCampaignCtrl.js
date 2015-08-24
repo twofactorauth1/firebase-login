@@ -99,10 +99,14 @@
       var hour = time.get('hour');
       var minute = time.get('minute');
       var formatted = date.set('hour', hour).set('minute', minute);
-      $scope.delivery.date = formatted;
+      if(formatted && formatted._d.toString() === "Invalid Date")
+        $scope.invalidDate = true;
+      else
+        $scope.delivery.date = formatted;
+
       if($scope.delivery.date.diff && $scope.delivery.date.diff(moment(), "minutes" ) < 0)
         $scope.invalidDate = true;
-       else
+      else
         $scope.invalidDate = false;
     };
 
@@ -693,16 +697,11 @@
           valid = false;
         else if(i === 4 && !$scope.recipients.length && !$scope.checkNewRecipients())
           valid = false;
-        else if(i === 5)
+        else if(i === 5 && $scope.whenToSend === 'later')
         {
-           if($scope.whenToSend === 'later' && $scope.delivery.date.diff && $scope.delivery.date.diff(moment(), "minutes" ) < 0)
-           {
-            $scope.invalidDate = true;
+          $scope.updateTime();
+          if($scope.invalidDate)
             valid = false;
-           }
-           else{
-            $scope.invalidDate = false;
-           }          
         }
       }
       return valid;
