@@ -72,16 +72,6 @@ module.exports = {
                     }
 
                 });
-
-                log.debug('Creating customer contact for main account.');
-                contactDao.createCustomerContact(user, appConfig.mainAccountID, fingerprint, function(err, contact){
-                    if(err) {
-                        log.error('Error creating customer for user: ' + user.id());
-                    } else {
-                        log.debug('Created customer for user:' + user.id());
-                    }
-                    callback(null, account, user);
-                });
             },
             function setupSecurity(account, user, callback){
                 log.debug('Initializing user security.');
