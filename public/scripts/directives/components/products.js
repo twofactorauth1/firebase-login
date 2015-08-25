@@ -256,8 +256,8 @@ app.directive('productsComponent', ['paymentService', 'productService', 'account
         scope.emptyCity = false;
         scope.invalidZipCode = false;
         scope.emptyZipCode = false;
-        scope.inValidEmail = false;
-        scope.inValidPhone = false;
+        scope.invalidEmail = false;
+        scope.invalidPhone = false;
         var first, last, address, state, city, zip;
         if (scope.newContact) {
           first = scope.newContact.first;
@@ -279,7 +279,7 @@ app.directive('productsComponent', ['paymentService', 'productService', 'account
         scope.checkBillingPhone(phone);
         scope.shippingPostCodeChanged(zip);
 
-        if (scope.emptyFirstName || scope.emptyLastName || scope.emptyEmail || scope.emptyAddress || scope.emptyState || scope.emptyCity || scope.invalidZipCode || scope.emptyZipCode || scope.inValidEmail || scope.inValidPhone) {
+        if (scope.emptyFirstName || scope.emptyLastName || scope.emptyEmail || scope.emptyAddress || scope.emptyState || scope.emptyCity || scope.invalidZipCode || scope.emptyZipCode || scope.invalidEmail || scope.invalidPhone) {
           return;
         }
         scope.checkoutModalState = 3;
