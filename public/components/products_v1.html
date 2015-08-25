@@ -129,7 +129,7 @@
                         </div>
                     </div>
                     <div class="row billing-shipping" ng-if="checkoutModalState == 2">
-                        <div class="col-sm-8 information">
+                        <div class="col-sm-8 col-xs-12 information">
                             <ul class="nav nav-tabs hidden">
                                 <li class="active">
                                     <a href="#billing" data-toggle="tab">
@@ -277,12 +277,12 @@
                                 <small ng-if="settings.taxbased === 'customer_shipping' || settings.taxbased === 'customer_billing'">Note: Shipping and taxes are estimated and will be updated during checkout based on your billing and shipping information.</small>
                             </div>
                         </div>
-                        <div class="col-sm-4 gray-bg order-summary">
+                        <div class="col-sm-4 col-xs-12 gray-bg order-summary">
                             <div data-ng-include=" '../views/partials/order-summary.html' "></div>
                         </div>
                     </div>
                     <div class="row payment" ng-show="checkoutModalState == 3">
-                        <div class="col-sm-8 information">
+                        <div class="col-sm-8 col-xs-12 information">
                             <div class="clearfix margin-bottom-30"></div>
                             <div class="card-wrapper"></div>
                             <div class="clearfix margin-bottom-30"></div>
@@ -318,7 +318,7 @@
                                 </form>
                             </div>
                         </div>
-                        <div class="col-sm-4 gray-bg order-summary">
+                        <div class="col-sm-4 col-xs-12 gray-bg order-summary">
                             <div data-ng-include=" '../views/partials/order-summary.html' "></div>
                         </div>
                     </div>

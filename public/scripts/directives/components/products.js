@@ -578,10 +578,10 @@ app.directive('productsComponent', ['paymentService', 'productService', 'account
           }];
           if(scope.newContact.details[0].phones && scope.newContact.details[0].phones[0] && scope.newContact.details[0].phones[0].number)
           {
-            _formattedDetails.phones.push({
-              _id: Math.uuid(10),
-              number: scope.newContact.details[0].phones[0].number
-            })
+              _formattedDetails[0].phones.push({
+                _id: Math.uuid(10),
+                number: scope.newContact.details[0].phones[0].number
+              });
           }
           console.log('scope.newContact ', scope.newContact);
           scope.newContact.details = _formattedDetails;
