@@ -490,11 +490,7 @@ app.directive('productsComponent', ['paymentService', 'productService', 'account
         scope.total = _subTotal + _totalTax;
       };
 
-      /*
-       * @makeCartPayment
-       * - make the final payment for checkout
-       */
-
+     
       function isEmpty(str) {
         return (!str || 0 === str.length);
       }
@@ -678,14 +674,16 @@ app.directive('productsComponent', ['paymentService', 'productService', 'account
        * @
        * -
        */
-
-      angular.element('#cart-checkout-modal').on('hidden.bs.modal', function () {
-        if (scope.checkoutModalState === 5) {
-          scope.checkoutModalState = 1;
-        }
+       angular.element(document).ready(function () {
+        setTimeout(function () {
+          angular.element('#cart-checkout-modal').on('hidden.bs.modal', function () {
+            if (scope.checkoutModalState === 5) {
+              scope.checkoutModalState = 1;
+            }
+          });
+        }, 0)
       });
-
-
+      
       /*
        * @pageChanged
        * - when a page is changes splice the array to show offset products
