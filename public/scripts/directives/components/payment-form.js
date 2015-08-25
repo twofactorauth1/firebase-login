@@ -380,10 +380,19 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                                 };
 
                                 //send affiliate purchase info
+                                var leadData = {
+                                    first_name: newAccount.first,
+                                    last_name: newAccount.last,
+                                    company: newAccount.businessName,
+                                    custom_status: 'trialing'
+                                };
                                 LeadDyno.key = "b2a1f6ba361b15f4ce8ad5c36758de951af61a50";
-                                LeadDyno.recordPurchase(newUser.email, null, function(){
-                                    window.location = data.accountUrl;
+                                LeadDyno.recordLead(newUser.email, leadData, function(){
+                                    LeadDyno.recordPurchase(newUser.email, null, function(){
+                                        window.location = data.accountUrl;
+                                    });
                                 });
+
 
                                 //send facebook tracking info
                                 window._fbq = window._fbq || [];
