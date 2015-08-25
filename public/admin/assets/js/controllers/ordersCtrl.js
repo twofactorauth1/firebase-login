@@ -141,6 +141,9 @@
       },
       modified: function (value) {
         return value.modified.date;
+      },
+      order_status: function (value) {
+        return value;
       }
     };
 
