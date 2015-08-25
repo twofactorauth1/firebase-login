@@ -88,6 +88,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var order = new $$.m.Order(req.body.order);
         var orderId = req.params.id;
         order.set('_id', orderId);
+        order.attributes.modified.date = new Date();
         self.log.debug('>> Order', order);
         
         self.checkPermission(req, self.sc.privs.VIEW_ORDER, function(err, isAllowed) {
