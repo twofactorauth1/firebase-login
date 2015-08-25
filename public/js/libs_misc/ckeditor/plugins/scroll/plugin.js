@@ -16,9 +16,9 @@ CKEDITOR.plugins.add( "scroll", {
             }
             
             if (typeof attr !== typeof undefined && attr !== false) {
-                $(window).scroll(function(){
-                    setComponentPosition();
-                })
+               // $(window).scroll(function(){
+                   // setComponentPosition();
+               // })
             }
         });
     }
