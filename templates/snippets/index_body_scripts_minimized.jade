@@ -41,6 +41,8 @@ if account._id == 6 && account.accountUrl == 'https://main.indigenous.io'
           var s = document.getElementsByTagName('script')[0];
           s.parentNode.insertBefore(fbds, s);
           _fbq.loaded = true;
+          _fbq('init', '1477395922560651');
+          _fbq('track', 'PageView');
         }
       })();
 
