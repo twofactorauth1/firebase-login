@@ -823,6 +823,10 @@
         _modal.resolve.blogImage = function () {
           return $scope.blogImage;
         };
+
+        _modal.resolve.accountShowHide = function () {
+          return $scope.$parent.account.showhide;
+        };
       }
 
       if (angular.isDefined(index) && index !== null && index >= 0) {
