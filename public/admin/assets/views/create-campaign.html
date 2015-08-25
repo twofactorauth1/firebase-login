@@ -240,7 +240,7 @@
                                             </div>
                                             <div style="transform: translate3d(0,0,0);" ng-controller="EditorCtrl" ng-init="retrieveEmail(null, emailToSend); activateCKeditor();">
                                                 <div>
-                                                    <div id="editor-toolbar"></div>
+                                                    <div id="editor-toolbar" class="no-top-required"></div>
                                                 </div>
                                                 <div class="clearfix"></div>
                                                 <div ng-hide="!ckeditorLoaded">
@@ -388,13 +388,13 @@
                                             </div>
                                             <div class="col-sm-5">
                                                 <div class="radio clip-radio radio-primary" style="margin-top:0px!important">
-                                                    <input type="radio" ng-change="updateSendNow()" id="radio3" name="vertical" value="now" ng-model="whenToSend">
+                                                    <input type="radio" ng-change="updateSendNow('now')" id="radio3" name="vertical" value="now" ng-model="whenToSend">
                                                     <label for="radio3">
                                                         Send Now
                                                     </label>
                                                 </div>
                                                 <div class="radio clip-radio radio-primary">
-                                                    <input type="radio" id="radio4" name="vertical" value="later" ng-model="whenToSend">
+                                                    <input ng-change="updateSendNow('later')"  type="radio" id="radio4" name="vertical" value="later" ng-model="whenToSend">
                                                     <label for="radio4">
                                                         Send Later
                                                     </label>
@@ -411,6 +411,9 @@
                                                     <datepicker ng-model="delivery.date" min-date="delivery.minDate" show-weeks="true" class="margin-bottom-10" custom-class="selectedDay"></datepicker>
                                                     <div class="clearfix"></div>
                                                     <timepicker ng-model="delivery.time" ng-change="updateTime()" hour-step="hstep" minute-step="mstep" min="delivery.minDate" class="center"></timepicker>
+                                                </div>
+                                                <div ng-if="invalidDate && whenToSend === 'later'" class="col-xs-12">
+                                                <span style="font-weight: bold;color: #E6674A;">Invalid time</span>
                                                 </div>
                                                 <div class="clearfix"></div>
                                             </div>
@@ -526,7 +529,7 @@
                             </button>
                         </div>
                         <div ng-if="currentStep == 5">
-                            <button class="btn btn-success btn-wide pull-right" ng-click="completeNewCampaign()">
+                            <button ng-disabled="saveLoading" class="btn btn-success btn-wide pull-right" ng-click="completeNewCampaign()">
                                 <span> Activate Campaign </span> <i class="fa fa-clock-o"></i>
                             </button>
                             <button class="btn btn-info btn-wide pull-right margin-right-5" ng-click="openModal('send-test-email-modal')">

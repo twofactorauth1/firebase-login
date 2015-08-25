@@ -21,7 +21,8 @@
       return moment(date).format("dddd, MMMM Do YYYY, h:mm A");
     };
 
-    $scope.updateSendNow = function () {
+    $scope.updateSendNow = function (value) {
+      $scope.whenToSend = value;
       $scope.delivery.date = moment();
       $scope.delivery.time = moment();
     };
@@ -98,7 +99,15 @@
       var hour = time.get('hour');
       var minute = time.get('minute');
       var formatted = date.set('hour', hour).set('minute', minute);
-      $scope.delivery.date = formatted;
+      if(formatted && formatted._d.toString() === "Invalid Date")
+        $scope.invalidDate = true;
+      else
+        $scope.delivery.date = formatted;
+
+      if($scope.delivery.date.diff && $scope.delivery.date.diff(moment(), "minutes" ) < 0)
+        $scope.invalidDate = true;
+      else
+        $scope.invalidDate = false;
     };
 
     $scope.togglePreview = function () {
@@ -588,6 +597,7 @@
 
     $scope.completeNewCampaign = function () {
       //add new email if exists
+      $scope.saveLoading = true;
       $scope.changesConfirmed = true;
       var stepSettings = $scope.newCampaignObj.steps[0].settings;
 
@@ -646,6 +656,7 @@
             //bulk add contacts to campaign
             CampaignService.bulkAddContactsToCampaign(contactsArr, _nemCampaign._id, function (success) {
               //show success
+              $scope.saveLoading = false;
               toaster.pop('success', 'Campaigns created successfully');
               $location.path('/marketing/campaigns');
             });
@@ -686,6 +697,12 @@
           valid = false;
         else if(i === 4 && !$scope.recipients.length && !$scope.checkNewRecipients())
           valid = false;
+        else if(i === 5 && $scope.whenToSend === 'later')
+        {
+          $scope.updateTime();
+          if($scope.invalidDate)
+            valid = false;
+        }
       }
       return valid;
     }

@@ -63,8 +63,8 @@
           $scope.openModal('add-component-modal', 'AddComponentModalCtrl', parseInt(i, 10))
         }
       }, {
-        content: '<span class="fa fa-times"></span> Delete',
         type: 'delete',
+        content: '<span class="fa fa-times"></span> Delete',        
         cssClass: "",
         onclick: function (options, item, val, i) {
           $scope.deleteComponent(parseInt(i, 10));

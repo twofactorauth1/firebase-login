@@ -461,7 +461,7 @@ _.extend(api.prototype, baseApi.prototype, {
                         contactActivityManager.createActivity(activity, function(err, value){});
 
                         self.log.debug('Creating customer contact for main account.');
-                        contactDao.createCustomerContact(user, appConfig.mainAccountID, fingerprint, function(err, contact){
+                        contactDao.createCustomerContact(user, appConfig.mainAccountID, fingerprint, self.ip(req), function(err, contact){
                             if(err) {
                                 self.log.error('Error creating customer for user: ' + user.id());
                             } else {

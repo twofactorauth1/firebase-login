@@ -1,5 +1,5 @@
 /*global app, Fingerprint*/
-app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'paymentService', 'userService', 'ipCookie', 'formValidations', '$location', function($filter, $q, ProductService, PaymentService, UserService, ipCookie, formValidations, $location) {
+app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'paymentService', 'userService', 'commonService', 'ipCookie', 'formValidations', '$location', function($filter, $q, ProductService, PaymentService, UserService, CommonService, ipCookie, formValidations, $location) {
     return {
         require: [],
         scope: {
@@ -231,13 +231,17 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                                         };
                                         //send affiliate purchase info
                                         LeadDyno.key = "b2a1f6ba361b15f4ce8ad5c36758de951af61a50";
-                                        LeadDyno.recordPurchase();
+                                        LeadDyno.recordPurchase(newUser.email, null, function(){
+                                            window.location = data.accountUrl;
+                                        });
 
                                         //send facebook tracking info
                                         window._fbq = window._fbq || [];
                                         window._fbq.push(['track', '6032779610613', {'value':'0.00','currency':'USD'}]);
+                                    } else {
+                                        window.location = data.accountUrl;
                                     }
-                                    window.location = data.accountUrl;
+
                                 } else {
                                     scope.isFormValid = false;
                                     // if (err.message === 'card_declined') {
@@ -288,10 +292,17 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                     return;
                 }
 
-                if (!scope.newAccount.phone) {
-                    scope.checkPhone(newAccount);
-                    return;
+                if(!scope.newAccount.hidePassword) {
+                    scope.checkPasswordLength(newAccount);
+                    if(!scope.passwordIsValid) {
+                        return;
+                    }
                 }
+
+                //if (!scope.newAccount.phone) {
+                //    scope.checkPhone(newAccount);
+                //    return;
+                //}
 
                 //membership selection
                 // if (!scope.newAccount.membership) {
@@ -313,13 +324,25 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                 tmpAccount.subdomain = $.trim(newAccount.businessName).replace(" ", "").replace(".", "_").replace("@", "");
                 tmpAccount.business = tmpAccount.business || {};
                 tmpAccount.business.name = newAccount.businessName;
+
+                if(scope.newAccount.phone) {
+                    tmpAccount.business.phones = [];
+                    tmpAccount.business.phones[0] = {
+                        _id: CommonService.generateUniqueAlphaNumericShort(),
+                        number: scope.newAccount.phone,
+                        default: true
+                    };
+                }
                 UserService.saveOrUpdateTmpAccount(tmpAccount, function(data) {
                     var newUser = {
                         username: newAccount.email,
                         password: newAccount.password,
                         email: newAccount.email,
                         accountToken: data.token,
-                        coupon: newAccount.coupon
+                        coupon: newAccount.coupon,
+                        first: newAccount.first,
+                        middle: newAccount.middle,
+                        last: newAccount.last
                     };
 
                     newUser.plan = '';
@@ -355,11 +378,20 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                                     created_at: Math.floor(Date.now() / 1000),
                                     app_id: "b3st2skm"
                                 };
+
                                 //send affiliate purchase info
                                 LeadDyno.key = "b2a1f6ba361b15f4ce8ad5c36758de951af61a50";
-                                LeadDyno.recordPurchase();
+                                LeadDyno.recordPurchase(newUser.email, null, function(){
+                                    window.location = data.accountUrl;
+                                });
+
+                                //send facebook tracking info
+                                window._fbq = window._fbq || [];
+                                window._fbq.push(['track', '6032779610613', {'value':'0.00','currency':'USD'}]);
+                            } else {
+                                window.location = data.accountUrl;
                             }
-                            window.location = data.accountUrl;
+
                         } else {
                             scope.isFormValid = false;
 
@@ -453,14 +485,16 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
             };
 
             scope.checkPasswordLength = function(newAccount) {
-                if (!newAccount.password) {
-                    angular.element("#password .error").html("Password must contain at least 5 characters");
+                if (!newAccount.password || newAccount.password.length < 6) {
+                    //angular.element("#password .error").html("Password must contain at least 6 characters");
                     angular.element("#password").addClass('has-error');
                     angular.element("#password .glyphicon").addClass('glyphicon-remove');
+                    scope.passwordIsValid = false;
                 } else {
                     angular.element("#password .error").html("");
                     angular.element("#password").removeClass('has-error').addClass('has-success');
                     angular.element("#password .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
+                    scope.passwordIsValid = true;
                 }
             };
 

@@ -637,7 +637,7 @@ _.extend(api.prototype, baseApi.prototype, {
                                                             var vars = [];
                                                             mandrillHelper.sendAccountWelcomeEmail(fromEmail,
                                                                 notificationConfig.WELCOME_FROM_NAME, contactEmail.email, contactName, notificationConfig.WELCOME_EMAIL_SUBJECT,
-                                                                '<h1>hey</h1>', ip, savedContact.id(), vars, emailPage.get('_id'), function(err, result){});
+                                                                htmlContent, ip, savedContact.id(), vars, null, function(err, result){});
                                                         }
 
                                                     });

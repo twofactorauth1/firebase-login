@@ -14,6 +14,7 @@ requirejs('constants/constants');
 require('../models/contact');
 var async = require('async');
 var appConfig = require('../configs/app.config');
+var geoIPUtil = require('../utils/geoiputil');
 
 var dao = {
 
@@ -446,9 +447,10 @@ var dao = {
         });
     },
 
-    createCustomerContact: function(user, accountId, fingerprint, fn) {
+    createCustomerContact: function(user, accountId, fingerprint, ip, fn) {
         var self = this;
         self.log.debug('>> createCustomerContact');
+
         self.getContactByEmailAndAccount(user.get('email'), accountId, function(err, existingContact){
             if (err) {
                 self.log.error('Error searching for contact by email: ' + err);
@@ -482,16 +484,48 @@ var dao = {
                     tags: ['cu']
 
                 });
+
                 newContact.createOrUpdateDetails('emails', null, null, null, null, null, user.get('email'), null);
-                self.saveOrUpdate(newContact, function(err, savedContact){
-                    if(err) {
-                        self.log.error('Error saving contact: ' + err);
-                        p1.reject(err);
-                    } else {
-                        self.log.debug('created new contact');
-                        p1.resolve(savedContact);
-                    }
-                });
+                if(ip) {
+                    geoIPUtil.getGeoForIP(ip, function(err, value){
+                        if(value) {
+                            var city = value['city'] || '';
+                            var state = value['region'] || '';
+                            var zip = value['postal'] || '';
+                            var country = value['country'] || '';
+                            var countryCode = value['country'] || '';
+                            var displayName = 'GEOIP';
+                            var lat = '';
+                            var lon = '';
+                            if(value.loc) {
+                                lat = value['loc'].split(',')[0];
+                                lon = value['loc'].split(',')[1];
+                            }
+                            self.log.debug('creating address from ' + city + ', ' + state + ', ' + zip + ', ' + country);
+                            newContact.createAddress(null, null, null, null, city, state, zip, country, countryCode, displayName, lat, lon, true, true);
+                        }
+                        self.saveOrUpdate(newContact, function(err, savedContact){
+                            if(err) {
+                                self.log.error('Error saving contact: ' + err);
+                                p1.reject(err);
+                            } else {
+                                self.log.debug('created new contact');
+                                p1.resolve(savedContact);
+                            }
+                        });
+                    });
+                } else {
+                    self.saveOrUpdate(newContact, function(err, savedContact){
+                        if(err) {
+                            self.log.error('Error saving contact: ' + err);
+                            p1.reject(err);
+                        } else {
+                            self.log.debug('created new contact');
+                            p1.resolve(savedContact);
+                        }
+                    });
+                }
+
             }
             $.when(p1).fail(function(err){
                 return fn(err, null);

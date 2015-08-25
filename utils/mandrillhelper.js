@@ -125,7 +125,7 @@ var mandrillHelper =  {
         console.log('sendCampaignEmail >>>');
         self._checkForUnsubscribe(accountId, toAddress, function(err, isUnsubscribed) {
             if (isUnsubscribed == true) {
-                fn('skipping email for user on unsubscribed list');
+                fn(null, 'skipping email for user on unsubscribed list');
             } else {
                 vars.push({
                     "name": "SENDDATE",
