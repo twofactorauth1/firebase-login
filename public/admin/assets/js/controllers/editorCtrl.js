@@ -385,6 +385,12 @@
         $scope.activePage = true;
         $scope.activateCKeditor();
         $rootScope.breadcrumbTitle = $scope.page.title;
+        if($scope.page.templateId)
+          WebsiteService.getTemplates(function (templates) {
+            $scope.pageTemplate = _.findWhere(templates, {
+              _id: $scope.page.templateId
+            });
+          })
       });
     };
 
