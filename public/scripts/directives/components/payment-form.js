@@ -368,7 +368,7 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                     UserService.initializeUser(newUser, function(err, data) {
                         if (data && data.accountUrl) {
                             console.log('$location ', $location);
-                            if ($location.host() === 'indigenous.io') {
+                            if ($location.host() === 'indigenous.io' || $location.host() === 'www.indigenous.io') {
                                 var hash = CryptoJS.HmacSHA256(newUser.email, "vZ7kG_bS_S-jnsNq4M2Vxjsa5mZCxOCJM9nezRUQ");
                                 //send data to intercom
                                 window.intercomSettings = {
@@ -392,7 +392,7 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                                 LeadDyno.key = "b2a1f6ba361b15f4ce8ad5c36758de951af61a50";
                                 LeadDyno.recordLead(newUser.email, leadData, function(){
                                     console.log('recorded lead');
-                                    LeadDyno.recordPurchase(newUser.email, null, function(){
+                                    LeadDyno.recordPurchase(newUser.email, {}, function(){
                                         console.log('recorded purchase');
                                         window.location = data.accountUrl;
                                     });
