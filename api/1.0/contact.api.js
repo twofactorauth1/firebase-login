@@ -635,9 +635,12 @@ _.extend(api.prototype, baseApi.prototype, {
                                                             self.log.debug('sending email from: ', fromContactEmail);
 
                                                             var vars = [];
-                                                            mandrillHelper.sendAccountWelcomeEmail(fromEmail,
-                                                                notificationConfig.WELCOME_FROM_NAME, contactEmail.email, contactName, notificationConfig.WELCOME_EMAIL_SUBJECT,
-                                                                htmlContent, ip, savedContact.id(), vars, null, function(err, result){});
+
+                                                            //skipping welcome email for now
+                                                            self.log.warn("No email content.  Skipping");
+                                                            //mandrillHelper.sendAccountWelcomeEmail(fromEmail,
+                                                            //    notificationConfig.WELCOME_FROM_NAME, contactEmail.email, contactName, notificationConfig.WELCOME_EMAIL_SUBJECT,
+                                                            //    htmlContent, ip, savedContact.id(), vars, null, function(err, result){});
                                                         }
 
                                                     });
