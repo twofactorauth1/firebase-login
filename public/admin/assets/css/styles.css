@@ -14160,7 +14160,7 @@ tags-input.ti-input-sm .tags .input,
   z-index: 999;
 }
 .create-campaign #componentloader {
-  min-height: auto!important;
+  min-height: 100% !important;
 }
 .create-campaign .swMain > ul li > a:before {
   width: 96%!important;
