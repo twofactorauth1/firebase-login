@@ -575,6 +575,29 @@ fieldset[disabled] .btn-vimeo-square.active {
     z-index: 1088;
 }
 
+#editor-toolbar.email-toolbar {
+    .cke_top {
+        overflow: auto;
+        .cke_toolbox {
+            height: 56px;
+            display: block;
+            width: 1130px;
+        }
+    }
+}
+
+#editor-toolbar.common-toolbar
+{
+    &::-webkit-scrollbar {
+        display: none;
+    }
+    #cke_1_top {
+        &::-webkit-scrollbar {
+            display: none;
+        }
+    }
+}
+
 #editor-toolbar {
     z-index: 100;
     display: block;
@@ -582,9 +605,6 @@ fieldset[disabled] .btn-vimeo-square.active {
     height: 54px;
     overflow-x: inherit;
     overflow-y: hidden;
-    &::-webkit-scrollbar {
-        display: none;
-    }
     &.controls-fixed {
         top: 128px;
     }
@@ -594,9 +614,6 @@ fieldset[disabled] .btn-vimeo-square.active {
             height: 56px;
             display: block;
             width: 1130px;
-        }
-        &::-webkit-scrollbar {
-            display: none;
         }
     }
     .cke_chrome {
