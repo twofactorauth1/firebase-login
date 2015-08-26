@@ -644,7 +644,6 @@ _.extend(api.prototype, baseApi.prototype, {
                                                                 htmlContent, ip, savedContact.id(), vars, null, function(err, result){});
                                                                 */
                                                         }
-
                                                     });
                                                 } else {
                                                     var component = emailPage.get('components')[0];
