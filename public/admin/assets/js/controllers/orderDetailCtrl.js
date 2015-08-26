@@ -202,23 +202,21 @@
      * match users to the order notes
      */
 
-    $scope.matchUsers = function (order) {
-      var notes = order.notes;
-      if (notes.length > 0) {
-        var i = 0;
-        var j = 0;
-        for (i; i < notes.length; i++) {
-          if($scope.users)
-            for (j; j < $scope.users.length; j++) {
-              if (notes[i].user_id === $scope.users[j]._id) {
-                notes[i].user = $scope.users[j];
-              }
+      $scope.matchUsers = function (order) {
+        var notes = order.notes;
+        if (notes.length > 0 && $scope.users) {
+          _.each(notes, function (_note) {
+            var matchingUser = _.find($scope.users, function (_user) {
+              return _user._id === _note.user_id;
+            });
+            if (matchingUser) {
+              _note.user = matchingUser;
             }
+          });
         }
-      }
-
-      return notes;
-    };
+        return notes;
+      };
+   
 
     /*
      * @matchProducts
@@ -256,7 +254,16 @@
       }
       else if($scope.order)
       {
-        $scope.order.notes.push({note:$scope.newNote})
+        if (!$scope.order.notes)
+          $scope.order.notes = [];
+        var date = moment();
+        var _noteToPush = {
+          note: $scope.newNote,
+          user_id: $scope.currentUser._id,
+          date: date.toISOString()
+        };
+        $scope.order.notes.push(_noteToPush);
+        $scope.pushLocalNote($scope.order, true);
         $scope.newNote = '';
       }
       
@@ -267,10 +274,13 @@
      * push a recently created note to the ui
      */
 
-    $scope.pushLocalNote = function (order) {
+    $scope.pushLocalNote = function (order, new_order) {
       order.notes = $scope.matchUsers(order);
-      var noteToPush = order.notes[order.notes.length - 1];
-      $scope.order.notes.push(noteToPush);
+      if(!new_order)
+      {
+        var noteToPush = order.notes[order.notes.length - 1];
+        $scope.order.notes.push(noteToPush);
+      }     
     };
 
     /*
