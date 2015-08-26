@@ -23,6 +23,7 @@ var account = $$.m.ModelBase.extend({
 
             subdomain:"",
             domain:"",
+            customDomain:"",
             token:"",
 
             website: {
