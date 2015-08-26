@@ -20,6 +20,7 @@ var jsincludeGenerator = require('./utils/jsincludegenerator');
 var srcfiles = [];
 
 var bowerLockdown = require('./utils/bowerlockdown');
+var accountActivity = require('./utils/accountActivity');
 
 module.exports = function(grunt) {
 
@@ -508,6 +509,11 @@ module.exports = function(grunt) {
         var done = this.async();
         bowerLockdown.lockVersions(done);
 
+    });
+
+    grunt.registerTask('activity-report', 'Account Activity Report', function(){
+        var done = this.async();
+        accountActivity.runReport(done);
     });
 
     grunt.loadNpmTasks('grunt-contrib-watch');

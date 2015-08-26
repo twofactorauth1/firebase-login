@@ -11,6 +11,7 @@ var notificaitonToEmail = 'test_operations@indigenous.io';
 var welcomeFromEmail = process.env.WELCOME_FROM_EMAIL || 'hello@indigenous.io';
 var welcomeFromName =  process.env.WELCOME_FROM_NAME || 'Indigenous';
 var welcomeHTML = process.env.WELCOME_HTML || 'public/templates/emails/welcome-aboard.html';
+var thanksForInterest = process.env.INTEREST_HTML || 'public/templates/emails/thanks-for-interest.html';
 var welcomeEmailSubject = process.env.WELCOME_EMAIL_SUBJECT || 'Welcome to Indigenous!';
 var newCustomerEmailSubject = process.env.NEW_CUSTOMER_EMAIL_SUBJECT || 'New customer created';
 
@@ -37,5 +38,6 @@ module.exports = {
     WELCOME_FROM_NAME: welcomeFromName,
     WELCOME_HTML: welcomeHTML,
     WELCOME_EMAIL_SUBJECT: welcomeEmailSubject,
-    NEW_CUSTOMER_EMAIL_SUBJECT: newCustomerEmailSubject
+    NEW_CUSTOMER_EMAIL_SUBJECT: newCustomerEmailSubject,
+    THANKS_HTML: thanksForInterest
 };

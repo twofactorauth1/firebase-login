@@ -1,7 +1,7 @@
 'use strict';
 /*global app, angular, moment*/
 (function (angular) {
-  app.controller('CreateCampaignCtrl', ["$scope", "$modal", "$location", "toaster", "$timeout", "CampaignService", "CustomerService", "CommonService", "editableOptions", "AccountService", "userConstant", "WebsiteService", "$q", "formValidations", function ($scope, $modal, $location, toaster, $timeout, CampaignService, CustomerService, CommonService, editableOptions, AccountService, userConstant, WebsiteService, $q, formValidations) {
+  app.controller('CreateCampaignCtrl', ["$scope", "$rootScope", "$modal", "$location", "toaster", "$timeout", "CampaignService", "CustomerService", "CommonService", "editableOptions", "AccountService", "userConstant", "WebsiteService", "$q", "formValidations", function ($scope, $rootScope, $modal, $location, toaster, $timeout, CampaignService, CustomerService, CommonService, editableOptions, AccountService, userConstant, WebsiteService, $q, formValidations) {
 
     editableOptions.theme = 'bs3';
 
@@ -21,7 +21,8 @@
       return moment(date).format("dddd, MMMM Do YYYY, h:mm A");
     };
 
-    $scope.updateSendNow = function () {
+    $scope.updateSendNow = function (value) {
+      $scope.whenToSend = value;
       $scope.delivery.date = moment();
       $scope.delivery.time = moment();
     };
@@ -98,7 +99,15 @@
       var hour = time.get('hour');
       var minute = time.get('minute');
       var formatted = date.set('hour', hour).set('minute', minute);
-      $scope.delivery.date = formatted;
+      if(formatted && formatted._d.toString() === "Invalid Date")
+        $scope.invalidDate = true;
+      else
+        $scope.delivery.date = formatted;
+
+      if($scope.delivery.date.diff && $scope.delivery.date.diff(moment(), "minutes" ) < 0)
+        $scope.invalidDate = true;
+      else
+        $scope.invalidDate = false;
     };
 
     $scope.togglePreview = function () {
@@ -138,7 +147,9 @@
     };
 
     $scope.sendTestEmail = function (_email) {
+      $scope.sendingEmail = true;
       WebsiteService.sendTestEmail(_email, $scope.emailToSend, function (data) {
+       $scope.sendingEmail = false;
         if(data && data[0] && data[0]._id)
         {
           $scope.closeModal();
@@ -314,7 +325,7 @@
         $scope.checkingCampaignName = false;
         $scope.campaignNameExists = exists;
         $scope.emailToSend.title = _name + ' Email Template';
-        $scope.emailToSend.subject = _name;
+        $scope.emailToSend.subject = "Test - " +_name;
         $scope.checkEmailTitle($scope.emailToSend.title);
       });
     };
@@ -586,7 +597,8 @@
 
     $scope.completeNewCampaign = function () {
       //add new email if exists
-
+      $scope.saveLoading = true;
+      $scope.changesConfirmed = true;
       var stepSettings = $scope.newCampaignObj.steps[0].settings;
 
       if (!stepSettings.emailId) {
@@ -644,6 +656,7 @@
             //bulk add contacts to campaign
             CampaignService.bulkAddContactsToCampaign(contactsArr, _nemCampaign._id, function (success) {
               //show success
+              $scope.saveLoading = false;
               toaster.pop('success', 'Campaigns created successfully');
               $location.path('/marketing/campaigns');
             });
@@ -684,6 +697,12 @@
           valid = false;
         else if(i === 4 && !$scope.recipients.length && !$scope.checkNewRecipients())
           valid = false;
+        else if(i === 5 && $scope.whenToSend === 'later')
+        {
+          $scope.updateTime();
+          if($scope.invalidDate)
+            valid = false;
+        }
       }
       return valid;
     }
@@ -759,6 +778,64 @@
         console.log('reset');
       }
     };
+
+    $scope.saveCampaignOnLeave = function(_url){    
+      if($scope.newCampaignObj.name){
+        CampaignService.checkCampaignNameExists($scope.newCampaignObj.name, function (exists) {
+        if(!exists){
+          $scope.changesConfirmed = true;
+          var stepSettings = $scope.newCampaignObj.steps[0].settings;
+          stepSettings.emailId = newEmail._id;
+          stepSettings.fromEmail = newEmail.fromEmail;
+          stepSettings.fromName = newEmail.fromName;
+          stepSettings.replyTo = newEmail.replyTo;
+          stepSettings.subject = newEmail.subject;
+
+          //set delivery date
+          var sendAt = $scope.newCampaignObj.steps[0].settings.sendAt;
+          var delivery = moment($scope.delivery.date);
+          sendAt.year = moment.utc(delivery).get('year');
+          sendAt.month = moment.utc(delivery).get('month') + 1;
+          sendAt.day = moment.utc(delivery).get('date');
+          sendAt.hour = moment.utc(delivery).get('hour');
+          sendAt.minute = moment.utc(delivery).get('minute');
+          var temp_recip = [];
+          var temp_manual_recip = [];
+            _.each($scope.recipients, function (recipient) {
+              if (recipient._id) {
+                temp_recip.push(recipient._id);
+              }
+            });
+          $scope.newCampaignObj.temp_recip = temp_recip;
+          var _emails = $scope.selectedCustomers.newEmails;
+            _.each(_emails, function (email) {
+              var contact = _.findWhere($scope.customers, {
+                email: email.text
+              });
+              if (!contact) {
+               temp_manual_recip.push(email.text);
+              }
+            });
+          }
+          $scope.newCampaignObj.temp_manual_recip = temp_manual_recip;
+
+          //add campaign
+          CampaignService.createCampaign($scope.newCampaignObj, function (_nemCampaign) {            
+            window.location = _url;
+          });
+        })
+      }
+    };
+
+    /*
+     * @locationChangeStart
+     * - Before user leaves editor, ask if they want to save changes
+     */
+    $scope.changesConfirmed = false;
+    var offFn = $rootScope.$on('$locationChangeStart', function (event, newUrl, oldUrl) {
+      if(!$scope.changesConfirmed)
+        $scope.saveCampaignOnLeave(newUrl);
+    });
 
   }]);
   app.filter('propsFilter', function () {

@@ -20,7 +20,7 @@
      * @openMediaModal
      * -
      */
-
+   
     $scope.openMediaModal = function () {
       $scope.showInsert = true;
       $scope.modalInstance = $modal.open({
@@ -81,9 +81,16 @@
 
     ProductService.getProduct($stateParams.productId, function (product) {
       console.log(product);
+      var startDate = product.sale_date_from;
+      var endDate = product.sale_date_to;
+      if(!startDate && !endDate)
+      {
+        startDate = moment();
+        endDate = moment().add(6, 'days');
+      }
       $scope.selectedDate.range = {
-        startDate: new Date(product.sale_date_from),
-        endDate: new Date(product.sale_date_to)
+        startDate: new Date(startDate),
+        endDate: new Date(endDate)
       };
       product.regular_price = parseFloat(product.regular_price);
       $scope.product = product;

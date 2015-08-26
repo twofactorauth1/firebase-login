@@ -20,22 +20,27 @@
                         <label>URL:</label>
                         <input id="edit-page-url" ng-blur="checkForDuplicatePage()" class="form-control input-lg" type="text" ng-model="page.handle" ng-disabled="page.handle == 'index' && !duplicateUrl">
                     </div>
+                    <div ng-if="pageTemplate.name" class="form-group">
+                            <label>Template:</label>
+                            <input ng-disabled="true" class="form-control input-lg" type="text" ng-model="pageTemplate.name">
+                    </div>
                     <div class="padding-right-0">
                         <div class="form-group" ng-hide="page.handle == 'index' && !duplicateUrl">
                             <label>Show Page:</label>
                             <switch ng-model="page.visible.visibility" class="pull-right"></switch>
                             <span class="help-block"><i class="ti-info-alt text-primary"></i> Visitors will only see your page when 'Show Page' is on.</span>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group hidden">
                             <label>Secure:</label>
                             <switch ng-model="page.secure" class="pull-right"></switch>
                             <span class="help-block"><i class="ti-info-alt text-primary"></i> Make this page secure and allow only logged in users.</span>
                         </div>
+                       
                     </div>
                     <div class="clearfix margin-bottom-"></div>
                     <div class="well margin-bottom-0">
                         <p>Danger Zone</p>
-                        <button class="btn btn-block btn-danger mb10" data-ng-disabled="page.handle==='index'" ng-click="deletePage()"><i class="fa fa-trash"></i> Delete Page</button>
+                        <button class="btn btn-block btn-danger mb10" ng-click="deletePage()"><i class="fa fa-trash"></i> Delete Page</button>
                     </div>
                 </div>
             </tab>

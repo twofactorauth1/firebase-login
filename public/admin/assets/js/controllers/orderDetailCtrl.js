@@ -716,15 +716,17 @@
         toaster.pop('error', 'Orders must contain a customer.');
         return;
       }
-
-      if ($stateParams.orderId) {
+      $scope.saveLoading = true;
+      if ($stateParams.orderId) {        
         OrderService.updateOrder($scope.order, function (updatedOrder) {
+          $scope.saveLoading = false;
           console.log('updatedOrder ', updatedOrder);
           toaster.pop('success', 'Order updated successfully.');
         });
       } else {
         OrderService.createOrder($scope.order, function (updatedOrder) {
           console.log('order updated');
+          $scope.saveLoading = false;
           toaster.pop('success', 'Order updated successfully.');
         });
       }

@@ -410,6 +410,9 @@ fieldset[disabled] .btn-linked-in.active {
   color: #007bb6;
   background-color: #ffffff;
 }
+.vertical-top td {
+  vertical-align: top;
+}
 .accordion-v1 .title {
   text-align: center;
   margin-bottom: 20px;
@@ -553,7 +556,6 @@ div[data-type='campaign'] .inner-page .overlay {
 }
 .inner-page {
   padding: 50px 0;
-  max-width: 1000px;
   margin: 0 auto;
   display: block;
 }
@@ -2304,7 +2306,6 @@ div[data-type="feature-block"] .component-inner {
   font-size: 18px;
 }
 .image-text {
-  padding: 0 20px;
   display: inline-block;
 }
 .image-text .img-responsive {
@@ -3593,11 +3594,6 @@ div[data-type=blog] .container {
   font-family: "Quicksand", sans-serif;
   font-size: 60px;
 }
-.pricing-tables-v1 .pricing-table-title {
-  font-weight: bold;
-  text-align: center;
-  text-transform: uppercase;
-}
 .pricing-tables-v1 #home-box > h2 {
   font-family: "Quicksand", sans-serif;
   font-weight: 400;
@@ -4260,7 +4256,8 @@ div[data-type=blog] .container {
 .payment-form-v1 .account-info-signup .has-feedback .form-control-feedback,
 .payment-form-v1 .payment-signup .has-feedback .form-control-feedback {
   position: absolute;
-  right: 8px;
+  right: 15px;
+  top: 30px;
 }
 .payment-form-v1 .price-signup {
   background: #4bafca;

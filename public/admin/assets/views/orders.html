@@ -117,7 +117,7 @@
                             </tr>
                             <tr ng-if="showFilter">
                                 <th>
-                                    <input st-search="status" placeholder="Status" class="form-control hidden" type="search" id="searchStatus" ng-model="filterorder.selected.name" />
+                                    <input st-search="status" placeholder="Status" class="form-control hidden" type="search" id="searchStatus" ng-model="filterorder.selected.value" />
                                     <ui-select ng-model="filterorder.selected" on-select="triggerInput('#searchStatus')" theme="bootstrap">
                                         <ui-select-match placeholder="Select Status">
                                             <!-- <span class="fa" ng-class="{'fa-facebook': $select.selected.type == 'fb'}"></span> -->

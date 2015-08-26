@@ -3,10 +3,15 @@
 (function (angular) {
   app.controller('EmailTemplatesCtrl', ["$scope", "$timeout", "$location", "toaster", "$modal", "WebsiteService", "CommonService", "AccountService", function ($scope, $timeout, $location, toaster, $modal, WebsiteService, CommonService, AccountService) {
 
-    $scope.newEmail = {
-      title:'New Email Title',
-      subject: 'New Email Subject'
-    };
+    $scope.setDefaults = function()
+    {
+      $scope.newEmail = {
+        title:'New Email Title',
+        subject: 'New Email Subject'
+      };
+    };    
+
+    $scope.setDefaults();
 
     /*
      * @getCustomers
@@ -35,6 +40,7 @@
         $scope.newEmail.fromEmail = _account.business.emails[0].email;
         $scope.newEmail.replyTo = _account.business.emails[0].email;
       }
+      $scope.newEmailOriginal = angular.copy($scope.newEmail);
     });
     $scope.order = "reverse";
     $scope.default_image_url = "/admin/assets/images/default-page.jpg";
@@ -94,11 +100,19 @@
       if ($scope.account.business.logo) {
         emailToSend.components[0].logo = '<img src="' + $scope.account.business.logo + '"/>';
       }
-      WebsiteService.createEmail(emailToSend, function (newemail) {
-        toaster.pop('success', 'Email Created', 'The ' + newemail.title + ' email was created successfully.');
-        $scope.emails.unshift(newemail);
-        $scope.displayedEmails.unshift(newemail);
-        $scope.closeModal();
+      WebsiteService.createEmail(emailToSend, function (newemail, err) {
+        if(newemail && !err)
+        {
+          toaster.pop('success', 'Email Created', 'The ' + newemail.title + ' email was created successfully.');
+          $scope.emails.unshift(newemail);
+          $scope.displayedEmails.unshift(newemail);
+          angular.copy($scope.newEmailOriginal, $scope.newEmail);
+          $scope.closeModal();
+        }
+        else if(err)
+        {
+          toaster.pop('error', "Error creating Email", err.message);
+        }
       });
     };
 

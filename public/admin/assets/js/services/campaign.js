@@ -89,27 +89,12 @@
       self.getCampaigns(function(campaigns) {
         console.log('campaigns ', campaigns);
         var _matchingCampaign = _.find(campaigns, function(campaign) {
-          return campaign.name === _name;
+          return angular.lowercase(campaign.name) === angular.lowercase(_name);
         });
         if (_matchingCampaign) {
           fn(true);
         } else {
           fn(false);
-        }
-      });
-    };
-
-    this.checkDuplicateCampaign = function (_name) {
-      var self = this;
-      self.getCampaigns(function(campaigns) {
-        console.log('campaigns ', campaigns);
-        var _matchingCampaign = _.find(campaigns, function(campaign) {
-          return campaign.name === _name;
-        });
-        if (_matchingCampaign) {
-          return true;
-        } else {
-          return false;
         }
       });
     };

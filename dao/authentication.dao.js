@@ -605,11 +605,12 @@ var dao = {
 
     getAuthenticatedUrlForAccount: function(accountId, userId, path, expirationSeconds, fn) {
         var self = this;
-        self.log.debug('>> getAuthenticatedUrlForAccount(' + accountId +',' + userId + ',' + path + ',' + expirationSeconds + ',fn)');
         if (_.isFunction(expirationSeconds)) {
             fn = expirationSeconds;
             expirationSeconds = null;
         }
+        self.log.debug('>> getAuthenticatedUrlForAccount(' + accountId +',' + userId + ',' + path + ',' + expirationSeconds + ',fn)');
+
 
         this.setAuthenticationToken(userId, expirationSeconds, function(err, value) {
             if (err) {

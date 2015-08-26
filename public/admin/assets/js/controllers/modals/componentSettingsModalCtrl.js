@@ -1,7 +1,7 @@
 'use strict';
 /*global app, moment, angular*/
 /*jslint unparam:true*/
-app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalInstance', '$http', '$timeout', '$q', '$compile', '$filter', 'WebsiteService', 'CustomerService', 'ProductService', 'GeocodeService', 'toaster', 'hoursConstant', 'components', 'clickedIndex', 'contactMap', 'website', 'blog', 'isDirty', 'isSinglePost', 'openParentModal', 'showInsert', 'underNav', 'blogImage', function ($scope, $rootScope, $modalInstance, $http, $timeout, $q, $compile, $filter, WebsiteService, CustomerService, ProductService, GeocodeService, toaster, hoursConstant, components, clickedIndex, contactMap, website, blog, isDirty, isSinglePost, openParentModal, showInsert, underNav, blogImage) {
+app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalInstance', '$http', '$timeout', '$q', '$compile', '$filter', 'WebsiteService', 'CustomerService', 'ProductService', 'GeocodeService', 'toaster', 'hoursConstant', 'components', 'clickedIndex', 'contactMap', 'website', 'blog', 'isDirty', 'isSinglePost', 'openParentModal', 'showInsert', 'underNav', 'blogImage', 'accountShowHide', function ($scope, $rootScope, $modalInstance, $http, $timeout, $q, $compile, $filter, WebsiteService, CustomerService, ProductService, GeocodeService, toaster, hoursConstant, components, clickedIndex, contactMap, website, blog, isDirty, isSinglePost, openParentModal, showInsert, underNav, blogImage, accountShowHide) {
   $scope.blog = {};
   $scope.components = components;
   $scope.openParentModal = openParentModal;
@@ -868,11 +868,21 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
       arr.push(page);
     });
     $scope.allPages = arr;
+    if(!accountShowHide.blog)
+    {
+      var _blogPage = _.findWhere($scope.allPages, {
+        handle: 'blog'
+      });
+      if(_blogPage)
+      {
+        var _index = _.indexOf($scope.allPages, _blogPage);
+        $scope.allPages.splice(_index, 1);
+      }
+    }
     $scope.filterdedPages = $filter('orderBy')($scope.allPages, "title", false);
   });
 
   WebsiteService.getEmails(function (emails) {
-
     $scope.emails = emails;
 
     //select the default email for simple form as welcome-aboard

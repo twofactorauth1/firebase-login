@@ -1,6 +1,6 @@
 CKEDITOR.plugins.add( "scroll", {
     init: function( editor ) {
-        editor.on( 'contentDom', function() {
+        editor.on( 'instanceReady', function() {
             var attr = $("#editor-toolbar").parent().attr("sticky");
             var setComponentPosition = function()
             {
@@ -14,16 +14,11 @@ CKEDITOR.plugins.add( "scroll", {
                     },0)
                 }
             }
+            
             if (typeof attr !== typeof undefined && attr !== false) {
-                $(window).scroll(function(){
-                    setComponentPosition();
-                })
-            }else
-            {
-                var element = $(".cke_combo_button, .cke_button__textcolor, .cke_button__table" );
-                element.on('click', function() {
-                    setComponentPosition();
-                }); 
+               // $(window).scroll(function(){
+                   // setComponentPosition();
+               // })
             }
         });
     }

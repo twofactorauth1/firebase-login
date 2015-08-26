@@ -6,6 +6,7 @@
  */
 
 var BaseView = require('./base.server.view');
+var appConfig = require('../configs/app.config');
 
 var view = function(req,resp,options) {
     this.init.apply(this, arguments);
@@ -26,6 +27,7 @@ _.extend(view.prototype, BaseView.prototype, {
                 data.account = value.toJSON()
             }
             data.message = self.req.session.errorMsg;
+            data.wwwUrl = appConfig.www_url;
             self.resp.render('login', data);
             self.cleanUp();
             data = self = null;

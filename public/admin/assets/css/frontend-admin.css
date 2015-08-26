@@ -429,6 +429,9 @@
   color: #007bb6;
   background-color: #ffffff;
 }
+#componentloader .vertical-top td {
+  vertical-align: top;
+}
 #componentloader .accordion-v1 .title {
   text-align: center;
   margin-bottom: 20px;
@@ -572,7 +575,6 @@
 }
 #componentloader .inner-page {
   padding: 50px 0;
-  max-width: 1000px;
   margin: 0 auto;
   display: block;
 }
@@ -2309,7 +2311,6 @@
   font-size: 18px;
 }
 #componentloader .image-text {
-  padding: 0 20px;
   display: inline-block;
 }
 #componentloader .image-text .img-responsive {
@@ -3587,11 +3588,6 @@
   font-family: "Quicksand", sans-serif;
   font-size: 60px;
 }
-#componentloader .pricing-tables-v1 .pricing-table-title {
-  font-weight: bold;
-  text-align: center;
-  text-transform: uppercase;
-}
 #componentloader .pricing-tables-v1 #home-box > h2 {
   font-family: "Quicksand", sans-serif;
   font-weight: 400;
@@ -4254,7 +4250,8 @@
 #componentloader .payment-form-v1 .account-info-signup .has-feedback .form-control-feedback,
 #componentloader .payment-form-v1 .payment-signup .has-feedback .form-control-feedback {
   position: absolute;
-  right: 8px;
+  right: 15px;
+  top: 30px;
 }
 #componentloader .payment-form-v1 .price-signup {
   background: #4bafca;
