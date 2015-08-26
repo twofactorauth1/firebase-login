@@ -727,9 +727,10 @@
         });
       } else {
         OrderService.createOrder($scope.order, function (updatedOrder) {
-          console.log('order updated');
+          console.log('order created'); 
+          toaster.pop('success', 'Order created successfully.');       
+          $location.path('/commerce/orders');
           $scope.saveLoading = false;
-          toaster.pop('success', 'Order updated successfully.');
         });
       }
     };
