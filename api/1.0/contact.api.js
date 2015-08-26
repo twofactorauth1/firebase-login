@@ -620,10 +620,10 @@ _.extend(api.prototype, baseApi.prototype, {
                                             self.log.error('Error getting account: ' + err);
                                             self.log.error('No email will be sent.');
                                         } else {
-                                            cmsDao.getPageById(emailId, function(err, emailPage){
+                                            cmsDao.getEmailById(emailId, function(err, emailPage){
                                                 if(err || emailPage === null) {
                                                     self.log.debug('Could not get email page.  Using default.');
-                                                    fs.readFile(notificationConfig.WELCOME_HTML, 'utf-8', function(err, htmlContent){
+                                                    fs.readFile(notificationConfig.THANKS_HTML, 'utf-8', function(err, htmlContent){
                                                         if(err) {
                                                             self.log.error('Error getting welcome email file.  Welcome email not sent for accountId ' + value.id());
                                                         } else {
@@ -635,9 +635,14 @@ _.extend(api.prototype, baseApi.prototype, {
                                                             self.log.debug('sending email from: ', fromContactEmail);
 
                                                             var vars = [];
+
+                                                            //skipping welcome email for now
+                                                            self.log.warn("No email content.  Skipping");
+                                                            /*
                                                             mandrillHelper.sendAccountWelcomeEmail(fromEmail,
                                                                 notificationConfig.WELCOME_FROM_NAME, contactEmail.email, contactName, notificationConfig.WELCOME_EMAIL_SUBJECT,
                                                                 htmlContent, ip, savedContact.id(), vars, null, function(err, result){});
+                                                                */
                                                         }
 
                                                     });
