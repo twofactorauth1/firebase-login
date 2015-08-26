@@ -677,6 +677,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
        angular.element(document).ready(function () {
         $timeout(function () {
           angular.element('#cart-checkout-modal').on('hidden.bs.modal', function () {            
+            console.log("modal closed");
             $timeout(function () {
               scope.$apply(function () {
                 if (scope.checkoutModalState === 5) {
