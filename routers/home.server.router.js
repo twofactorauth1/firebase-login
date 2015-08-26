@@ -66,7 +66,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
 
         app.get('/redirect', this.setup.bind(this), this.externalRedirect.bind(this));
 
-        app.get('/main/:page', this.setup.bind(this), this.serveMainHtml.bind(this));
+        app.get('/main/:page', [sitemigration_middleware.checkForRedirect, this.setup.bind(this)], this.serveMainHtml.bind(this));
         app.get('/interim*', this.setup.bind(this), this.serveInterim.bind(this));
         //app.get("/*", this.setup.bind(this), this.index.bind(this));
 
@@ -325,6 +325,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
             resp.render('404.html', {title: '404: File Not Found'});
             return;
         } else {
+
             var pageName = req.params.page;
             if(pageName.indexOf('.html') === -1) {
                 pageName +=".html";
@@ -341,6 +342,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
                 }
 
             });
+            
         }
     }
 });
