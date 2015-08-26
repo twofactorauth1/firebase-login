@@ -698,7 +698,7 @@
      */
 
     $scope.saveOrder = function () {
-
+      $scope.saveLoading = true;
       // Set order customer Id
       if($scope.selectedCustomer)
         $scope.order.customer_id = $scope.selectedCustomer._id;
@@ -709,14 +709,16 @@
 
       if (!$scope.order) {
         toaster.pop('error', 'Orders can not be blank.');
+        $scope.saveLoading = false;
         return;
       }
 
       if (!$scope.order.customer_id) {
         toaster.pop('error', 'Orders must contain a customer.');
+        $scope.saveLoading = false;
         return;
       }
-      $scope.saveLoading = true;
+      
       if ($stateParams.orderId) {        
         OrderService.updateOrder($scope.order, function (updatedOrder) {
           $scope.saveLoading = false;
