@@ -14210,3 +14210,10 @@ tags-input.ti-input-sm .tags .input,
   -ms-animation: fadeInLeft 1.5s;
   animation: fadeInLeft 1.5s;
 }
+/* ---------------------------------------------------------------------- */
+/*  Campaigns
+/* ---------------------------------------------------------------------- */
+.campaigns table.grid thead th {
+  width: 14.28%;
+  float: left;
+}
