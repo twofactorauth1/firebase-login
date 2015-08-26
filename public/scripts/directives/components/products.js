@@ -1,6 +1,6 @@
 'use strict';
 /*global app*/
-app.directive('productsComponent', ['paymentService', 'productService', 'accountService', 'cartService', 'userService', 'orderService', 'formValidations', function (PaymentService, ProductService, AccountService, cartService, UserService, OrderService, formValidations) {
+app.directive('productsComponent', ['$timeout', 'paymentService', 'productService', 'accountService', 'cartService', 'userService', 'orderService', 'formValidations', function ($timeout, PaymentService, ProductService, AccountService, cartService, UserService, OrderService, formValidations) {
   return {
     require: [],
     scope: {
@@ -675,13 +675,17 @@ app.directive('productsComponent', ['paymentService', 'productService', 'account
        * -
        */
        angular.element(document).ready(function () {
-        setTimeout(function () {
-          angular.element('#cart-checkout-modal').on('hidden.bs.modal', function () {
-            if (scope.checkoutModalState === 5) {
-              scope.checkoutModalState = 1;
-            }
+        $timeout(function () {
+          angular.element('#cart-checkout-modal').on('hidden.bs.modal', function () {            
+            $timeout(function () {
+              scope.$apply(function () {
+                if (scope.checkoutModalState === 5) {
+                  scope.checkoutModalState = 1;
+                }
+              });
+            },0);
           });
-        }, 0)
+        }, 1000)
       });
       
       /*
