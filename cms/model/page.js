@@ -100,6 +100,11 @@ var page = $$.m.ModelBase.extend({
             screenshot:null,
 
             /**
+             * Which template the page is created from.
+             */
+            templateId : null,
+
+            /**
              * Check if the page is secure OR not.
              */
             secure:false,

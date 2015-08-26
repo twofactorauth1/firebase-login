@@ -40,7 +40,7 @@
                     </li>
                 </ul>
             </div>
-            <button ng-disabled="order.status === FailedStatus" type="button" class="btn btn-wide btn-o btn-primary" ng-click="saveOrder()">
+            <button ng-disabled="order.status === FailedStatus || saveLoading" type="button" class="btn btn-wide btn-o btn-primary" ng-click="saveOrder()">
                 Save
             </button>
             <!-- <div class="btn-group" dropdown is-open="email.isopen">

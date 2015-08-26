@@ -13,69 +13,69 @@
         </div>
     </section>
     <!-- end: PAGE TITLE -->
-    <div id="page-actions" class="container-fluid container-fullw bg-white padding-top-0 padding-bottom-0">
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="panel panel-transparent row margin-bottom-0">
-                    <div class="panel-body">
-                        <div>
-                            <div class="col-sm-2 col-xs-6 center">
-                                <button type="button" ng-disabled="!ckeditorLoaded" ng-click="openSettingsModal()" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-settings btn-o">
-                                    <span>Settings</span>
-                                </button>
-                                <div class="hidden-lg margin-bottom-10"></div>
-                            </div>
-                            <div ng-if="!isEmail" class="col-sm-2 col-xs-6 center">
-                                <div ng-if="!isSinglePost">
-                                    <a ng-disabled="!ckeditorLoaded" type="button" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-eye btn-o" ng-click="getUrl(page.handle, false)" target="_blank">
-                                        <span>View</span>
-                                    </a>
+    <div sticky offset="65" sticky-class="editor-toolbar-wrap">
+        <div id="page-actions" class="container-fluid container-fullw bg-white padding-top-0 padding-bottom-0">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="panel panel-transparent row margin-bottom-0">
+                        <div class="panel-body">
+                            <div>
+                                <div class="col-sm-2 col-xs-6 center">
+                                    <button type="button" ng-disabled="!ckeditorLoaded" ng-click="openSettingsModal()" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-settings btn-o">
+                                        <span>Settings</span>
+                                    </button>
+                                    <div class="hidden-lg margin-bottom-10"></div>
                                 </div>
-                                <div ng-if="isSinglePost">
-                                    <a ng-disabled="!ckeditorLoaded" type="button" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-eye btn-o" ng-click="getUrl(originalPost.post_url, true)" target="_blank">
-                                        <span>View</span>
-                                    </a>
+                                <div ng-if="!isEmail" class="col-sm-2 col-xs-6 center">
+                                    <div ng-if="!isSinglePost">
+                                        <a ng-disabled="!ckeditorLoaded" type="button" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-eye btn-o" ng-click="getUrl(page.handle, false)" target="_blank">
+                                            <span>View</span>
+                                        </a>
+                                    </div>
+                                    <div ng-if="isSinglePost">
+                                        <a ng-disabled="!ckeditorLoaded" type="button" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-eye btn-o" ng-click="getUrl(originalPost.post_url, true)" target="_blank">
+                                            <span>View</span>
+                                        </a>
+                                    </div>
+                                    <div class="hidden-lg margin-bottom-10"></div>
                                 </div>
-                                <div class="hidden-lg margin-bottom-10"></div>
-                            </div>
-                            <div class="col-sm-2 col-xs-6 center">
-                                <button type="button" ng-disabled="!ckeditorLoaded" ng-click="openDuplicateModal()" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-layout-media-overlay-alt btn-o">
-                                    <span>Duplicate</span>
-                                </button>
-                                <div class="hidden-lg margin-bottom-10"></div>
-                            </div>
-                            <div class="col-sm-2 col-xs-6 center">
-                                <button type="button" ng-disabled="!ckeditorLoaded" ng-click="clickImageButton(activeEditor, false)" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-layout-media-overlay-alt btn-o">
-                                    <span>Media</span>
-                                </button>
-                                <div class="hidden-lg margin-bottom-10"></div>
-                            </div>
-                            <div class="col-sm-2 col-xs-6 center">
-                                <button type="button" ng-disabled="saveLoading || !ckeditorLoaded" ng-click="savePage()" class="btn btn-primary btn-wide btn-scroll btn-scroll-top btn-o ti-save">
-                                    <span ng-if="saveLoading">
-                                        <span class="fa fa-spinner fa-spin"></span>
-                                    </span>
-                                    <span>
-                                        <div ng-if="!saveLoading">
-                                        Save
-                                        </div>
-                                    </span>
-                                </button>
-                                <div class="hidden-lg margin-bottom-10"></div>
-                            </div>
-                            <div class="col-sm-2 col-xs-6 center">
-                                <button type="button" ng-disabled="!ckeditorLoaded" ng-click="cancelPage()" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-close btn-o">
-                                    <span>Close</span>
-                                </button>
-                                <div class="hidden-lg margin-bottom-10"></div>
+                                <div class="col-sm-2 col-xs-6 center">
+                                    <button type="button" ng-disabled="!ckeditorLoaded" ng-click="openDuplicateModal()" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-layout-media-overlay-alt btn-o">
+                                        <span>Duplicate</span>
+                                    </button>
+                                    <div class="hidden-lg margin-bottom-10"></div>
+                                </div>
+                                <div class="col-sm-2 col-xs-6 center">
+                                    <button type="button" ng-disabled="!ckeditorLoaded" ng-click="clickImageButton(activeEditor, false)" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-layout-media-overlay-alt btn-o">
+                                        <span>Media</span>
+                                    </button>
+                                    <div class="hidden-lg margin-bottom-10"></div>
+                                </div>
+                                <div class="col-sm-2 col-xs-6 center">
+                                    <button type="button" ng-disabled="saveLoading || !ckeditorLoaded" ng-click="savePage()" class="btn btn-primary btn-wide btn-scroll btn-scroll-top btn-o ti-save">
+                                        <span ng-if="saveLoading">
+                                            <span class="fa fa-spinner fa-spin"></span>
+                                        </span>
+                                        <span>
+                                            <div ng-if="!saveLoading">
+                                            Save
+                                            </div>
+                                        </span>
+                                    </button>
+                                    <div class="hidden-lg margin-bottom-10"></div>
+                                </div>
+                                <div class="col-sm-2 col-xs-6 center">
+                                    <button type="button" ng-disabled="!ckeditorLoaded" ng-click="cancelPage()" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-close btn-o">
+                                        <span>Close</span>
+                                    </button>
+                                    <div class="hidden-lg margin-bottom-10"></div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div sticky offset="65" sticky-class="editor-toolbar-wrap">
         <div id="editor-toolbar" perfect-scrollbar suppress-scroll-y="true"></div>
     </div>
     <div class="clearfix"></div>

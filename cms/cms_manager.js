@@ -312,6 +312,7 @@ module.exports = {
                 'title': title,
                 'websiteId': websiteId,
                 'components': componentAry,
+                'templateId': templateId,
                 'created': {
                     'by': userId,
                     'date': new Date()

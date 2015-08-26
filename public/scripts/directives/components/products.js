@@ -256,8 +256,8 @@ app.directive('productsComponent', ['paymentService', 'productService', 'account
         scope.emptyCity = false;
         scope.invalidZipCode = false;
         scope.emptyZipCode = false;
-        scope.inValidEmail = false;
-        scope.inValidPhone = false;
+        scope.invalidEmail = false;
+        scope.invalidPhone = false;
         var first, last, address, state, city, zip;
         if (scope.newContact) {
           first = scope.newContact.first;
@@ -279,7 +279,7 @@ app.directive('productsComponent', ['paymentService', 'productService', 'account
         scope.checkBillingPhone(phone);
         scope.shippingPostCodeChanged(zip);
 
-        if (scope.emptyFirstName || scope.emptyLastName || scope.emptyEmail || scope.emptyAddress || scope.emptyState || scope.emptyCity || scope.invalidZipCode || scope.emptyZipCode || scope.inValidEmail || scope.inValidPhone) {
+        if (scope.emptyFirstName || scope.emptyLastName || scope.emptyEmail || scope.emptyAddress || scope.emptyState || scope.emptyCity || scope.invalidZipCode || scope.emptyZipCode || scope.invalidEmail || scope.invalidPhone) {
           return;
         }
         scope.checkoutModalState = 3;
@@ -490,11 +490,7 @@ app.directive('productsComponent', ['paymentService', 'productService', 'account
         scope.total = _subTotal + _totalTax;
       };
 
-      /*
-       * @makeCartPayment
-       * - make the final payment for checkout
-       */
-
+     
       function isEmpty(str) {
         return (!str || 0 === str.length);
       }
@@ -578,10 +574,10 @@ app.directive('productsComponent', ['paymentService', 'productService', 'account
           }];
           if(scope.newContact.details[0].phones && scope.newContact.details[0].phones[0] && scope.newContact.details[0].phones[0].number)
           {
-            _formattedDetails.phones.push({
-              _id: Math.uuid(10),
-              number: scope.newContact.details[0].phones[0].number
-            })
+              _formattedDetails[0].phones.push({
+                _id: Math.uuid(10),
+                number: scope.newContact.details[0].phones[0].number
+              });
           }
           console.log('scope.newContact ', scope.newContact);
           scope.newContact.details = _formattedDetails;
@@ -678,14 +674,16 @@ app.directive('productsComponent', ['paymentService', 'productService', 'account
        * @
        * -
        */
-
-      angular.element('#cart-checkout-modal').on('hidden.bs.modal', function () {
-        if (scope.checkoutModalState === 5) {
-          scope.checkoutModalState = 1;
-        }
+       angular.element(document).ready(function () {
+        setTimeout(function () {
+          angular.element('#cart-checkout-modal').on('hidden.bs.modal', function () {
+            if (scope.checkoutModalState === 5) {
+              scope.checkoutModalState = 1;
+            }
+          });
+        }, 0)
       });
-
-
+      
       /*
        * @pageChanged
        * - when a page is changes splice the array to show offset products
