@@ -686,7 +686,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
               });
             },0);
           });
-        }, 1000)
+        },500)
       });
       
       /*

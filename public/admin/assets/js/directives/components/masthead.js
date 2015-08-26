@@ -22,6 +22,7 @@ app.directive('mastheadComponent',["$window", function ($window) {
       });
 
       angular.element($window).bind('resize', function () {
+        console.log("resize");
         scope.setUnderbnavMargin();        
       });
       scope.setUnderbnavMargin = function () {

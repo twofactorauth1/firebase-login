@@ -1320,7 +1320,8 @@
       $scope.components.splice(index, 1);
       toaster.pop('success', "Component Deleted", "The " + _type + " component was deleted successfully.");
       $timeout(function () {
-        $scope.scrollToComponent(index)
+        $scope.scrollToComponent(index);
+        $(window).trigger('resize');
       }, 1000)
     };
 
