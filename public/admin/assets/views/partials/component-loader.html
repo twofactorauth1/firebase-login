@@ -1,6 +1,6 @@
 <div id="componentloader">
     <ul class="component-sortable margin-bottom-0">
-        <li ng-repeat="value in components" class="fragment show-settings {{value.type}}" >
+        <li ng-repeat="value in components" class="fragment show-settings {{value.type}}" style="position:relative;">
             <circular passed-options="circleOptions" passed-index="{{$index}}" passed-component="value" passed-component-length="{{components.length}}" style="z-index:999999" class="circular"> </circular>
             <div ng-include=" '../components/component-switch.html' "></div>
             <div ng-class="{'zee-blur': !value.visibility}"></div>
