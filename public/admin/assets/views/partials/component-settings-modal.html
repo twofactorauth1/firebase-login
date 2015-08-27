@@ -732,7 +732,7 @@
                         </div>
                         <div class="clearfix"></div>
                     </div>
-                    <div class="well">
+                    <div class="well hidden">
                         <div class="form-group" ng-class="{'margin-bottom-0': !componentEditing.sendEmail}">
                             <label for="sendEmail"><strong>Send Email:</strong></label>
                             <span tooltip-placement="top" tooltip-html-unsafe="Send email after submission"><i class="fa fa-info-circle" /></span>
@@ -769,6 +769,32 @@
                                 </div>
                                 <div ng-if="!emails">
                                     <h4><span class="fa fa-spinner fa-spin"></span> Loading Emails...</h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="well">
+                        <div class="form-group" ng-class="{'margin-bottom-0': !componentEditing.addCampaign}">
+                            <label for="addCampaign"><strong>Add Campaign:</strong></label>
+                            <span tooltip-placement="top" tooltip-html-unsafe="Add contact to campaign after submission"><i class="fa fa-info-circle" /></span>
+                            <switch name="addCampaign" ng-model="componentEditing.addCampaign" class="pull-right"></switch>
+                        </div>
+                        <div ng-if="componentEditing.addCampaign">
+                            <div class="form-group margin-bottom-0">
+                                <label for="link-page">Select Campaign</label>
+                                <span tooltip-placement="top" tooltip-html-unsafe="Campaign Selection"><i class="fa fa-info-circle" /></span>
+                                <div ng-if="emails">
+                                    <ui-select ng-model="componentEditing.campaignId" theme="bootstrap">
+                                        <ui-select-match placeholder="Select a campaign">
+                                            <small ng-bind-html="$select.selected.title"></small>
+                                        </ui-select-match>
+                                        <ui-select-choices repeat="campaign._id as campaign in campaigns | filter: $select.search track by $index">
+                                            <small ng-bind-html="campaign.title | highlight: $select.search"></small>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </div>
+                                <div ng-if="!emails">
+                                    <h4><span class="fa fa-spinner fa-spin"></span> Loading Campaigns...</h4>
                                 </div>
                             </div>
                         </div>
