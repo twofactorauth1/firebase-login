@@ -674,11 +674,11 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
        * @
        * -
        */
-       angular.element(document).ready(function () {
-        setTimeout(function () {
-          angular.element('#cart-checkout-modal').on('hidden.bs.modal', function () {            
+       scope.initializeModalEvents = function()
+       {
+          angular.element('#cart-checkout-modal').off('hidden.bs.modal').on('hidden.bs.modal', function () {            
             console.log("modal closed");
-            setTimeout(function () {
+            $timeout(function () {
               scope.$apply(function () {
                 if (scope.checkoutModalState === 5) {
                   scope.checkoutModalState = 1;
@@ -686,9 +686,8 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
               });
             },0);
           });
-        },500)
-      });
-      
+       }
+             
       /*
        * @pageChanged
        * - when a page is changes splice the array to show offset products
