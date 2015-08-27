@@ -1,7 +1,7 @@
 'use strict';
 /*global app, window*/
 (function (angular) {
-  app.controller('EmailTemplatesCtrl', ["$scope", "$timeout", "$location", "toaster", "$modal", "WebsiteService", "CommonService", "AccountService", function ($scope, $timeout, $location, toaster, $modal, WebsiteService, CommonService, AccountService) {
+  app.controller('EmailsCtrl', ["$scope", "$timeout", "$location", "toaster", "$modal", "WebsiteService", "CommonService", "AccountService", function ($scope, $timeout, $location, toaster, $modal, WebsiteService, CommonService, AccountService) {
 
     $scope.setDefaults = function()
     {

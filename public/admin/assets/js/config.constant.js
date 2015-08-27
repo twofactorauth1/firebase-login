@@ -538,7 +538,7 @@ app.constant('JS_REQUIRES', {
     'integrationsCtrl': 'assets/js/controllers/integrationsCtrl.js',
     'orderDetailCtrl': 'assets/js/controllers/orderDetailCtrl.js',
     'settingsCtrl': 'assets/js/controllers/settingsCtrl.js',
-    'emailTemplatesCtrl': 'assets/js/controllers/emailTemplatesCtrl.js',
+    'emailsCtrl': 'assets/js/controllers/emailsCtrl.js',
     'campaignsCtrl': 'assets/js/controllers/campaignsCtrl.js',
     'createCampaignCtrl': 'assets/js/controllers/createCampaignCtrl.js',
     'addComponentModalCtrl': 'assets/js/controllers/modals/addComponentModalCtrl.js',
