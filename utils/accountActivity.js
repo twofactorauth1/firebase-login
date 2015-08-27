@@ -21,7 +21,7 @@ var accountActivity = {
 
     runReport: function(callback) {
         var self = this;
-        var reportAry = [109, 45, 97, 79, 21, 37, 38, 12, 15, 126];
+        var reportAry = [109, 45, 97, 79, 21, 37, 38, 12, 15, 126, 129, 130];
         var activityAry = [];
         async.each(reportAry, function(accountId, cb){
             self.getActivityForAccount(accountId, function(err, activity){
