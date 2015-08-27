@@ -52,8 +52,7 @@ app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userSe
           skipWelcomeEmail: skipWelcomeEmail,
           fromEmail: scope.component.fromEmail,
           fromName: scope.component.fromName,
-          emailId: scope.component.emailId,
-          emailSubject: scope.component.emailSubject,
+          campaignId: scope.component.campaignId,
           activity: {
             activityType: 'CONTACT_FORM',
             note: scope.user.message || "Contact form data.",

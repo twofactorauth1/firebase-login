@@ -517,15 +517,13 @@ _.extend(api.prototype, baseApi.prototype, {
                 query['details.emails.email'] = req.body.details[0].emails[0].email;
                 var skipWelcomeEmail = req.body.skipWelcomeEmail;
                 var fromContactEmail = req.body.fromEmail;
-                var emailId = req.body.emailId;
-                var emailSubject = req.body.emailSubject;
+                var campaignId = req.body.campaignId;
                 var fromContactName = req.body.fromName;
                 var activity = req.body.activity;
                 delete req.body.skipWelcomeEmail;
                 delete req.body.fromEmail;
                 delete req.body.fromName;
-                delete req.body.emailId;
-                delete req.body.emailSubject;
+                delete req.body.campaignId;
                 delete req.body.activity;
 
                 contactDao.findMany(query, $$.m.Contact, function(err, list){
@@ -581,13 +579,9 @@ _.extend(api.prototype, baseApi.prototype, {
                                 /*
                                  * If there is a campaign associated with this signup, update it async.
                                  */
-                                if(req.query.campaignId || req.body.campaignId) {
-                                    var campaignId = req.query.campaignId;
-                                    if(req.body.campaignId) {
-                                        campaignId = req.body.campaignId;
-                                    }
+                                if(campaignId) {
                                     self.log.debug('Updating campaign with id: ' + campaignId);
-                                    campaignManager.handleCampaignSignupEvent(value.id(), campaignId, savedContact.id(), function(err, value){
+                                    campaignManager.handleCampaignSignupEvent(query.accountId, campaignId, savedContact.id(), function(err, value){
                                         if(err) {
                                             self.log.error('Error handling campaign signup: ' + err);
                                             return;
@@ -598,129 +592,129 @@ _.extend(api.prototype, baseApi.prototype, {
                                     });
                                 }
                                 //TODO: add a param to not send the welcome.
-                                if(skipWelcomeEmail !== 'true' && skipWelcomeEmail !== true) {
-                                    /*
-                                     * Send welcome email.  This is done asynchronously.
-                                     *
-                                     * Here are the steps... maybe this should go somewhere else?
-                                     *
-                                     * 1. Get the account from session
-                                     * 2. Get Page with page_type:email (if it does not exist, goto: 8)
-                                     * 3. Get the HTML from the email component
-                                     * 4. Set it as data.content
-                                     * 5. Call app.render('email/base_email', data...
-                                     * 6. Pass it to mandrillHelper
-                                     * 7. RETURN
-                                     * 8. Get the default welcome html if no page exists
-                                     * 9. Call mandrillHelper
-                                     */
+                                // if(skipWelcomeEmail !== 'true' && skipWelcomeEmail !== true) {
+                                //     /*
+                                //      * Send welcome email.  This is done asynchronously.
+                                //      *
+                                //      * Here are the steps... maybe this should go somewhere else?
+                                //      *
+                                //      * 1. Get the account from session
+                                //      * 2. Get Page with page_type:email (if it does not exist, goto: 8)
+                                //      * 3. Get the HTML from the email component
+                                //      * 4. Set it as data.content
+                                //      * 5. Call app.render('email/base_email', data...
+                                //      * 6. Pass it to mandrillHelper
+                                //      * 7. RETURN
+                                //      * 8. Get the default welcome html if no page exists
+                                //      * 9. Call mandrillHelper
+                                //      */
 
-                                    accountDao.getAccountByID(query.accountId, function(err, account){
-                                        if(err) {
-                                            self.log.error('Error getting account: ' + err);
-                                            self.log.error('No email will be sent.');
-                                        } else {
-                                            cmsDao.getEmailById(emailId, function(err, emailPage){
-                                                if(err || emailPage === null) {
-                                                    self.log.debug('Could not get email page.  Using default.');
-                                                    fs.readFile(notificationConfig.THANKS_HTML, 'utf-8', function(err, htmlContent){
-                                                        if(err) {
-                                                            self.log.error('Error getting welcome email file.  Welcome email not sent for accountId ' + value.id());
-                                                        } else {
-                                                            self.log.debug('value ', value);
-                                                            var contactEmail = savedContact.getEmails()[0];
-                                                            var contactName = savedContact.get('first') + ' ' + savedContact.get('last');
-                                                            var fromEmail = fromContactEmail || notificationConfig.WELCOME_FROM_EMAIL;
-                                                            self.log.debug('sending email to: ', contactEmail);
-                                                            self.log.debug('sending email from: ', fromContactEmail);
+                                //     accountDao.getAccountByID(query.accountId, function(err, account){
+                                //         if(err) {
+                                //             self.log.error('Error getting account: ' + err);
+                                //             self.log.error('No email will be sent.');
+                                //         } else {
+                                //             cmsDao.getEmailById(emailId, function(err, emailPage){
+                                //                 if(err || emailPage === null) {
+                                //                     self.log.debug('Could not get email page.  Using default.');
+                                //                     fs.readFile(notificationConfig.THANKS_HTML, 'utf-8', function(err, htmlContent){
+                                //                         if(err) {
+                                //                             self.log.error('Error getting welcome email file.  Welcome email not sent for accountId ' + value.id());
+                                //                         } else {
+                                //                             self.log.debug('value ', value);
+                                //                             var contactEmail = savedContact.getEmails()[0];
+                                //                             var contactName = savedContact.get('first') + ' ' + savedContact.get('last');
+                                //                             var fromEmail = fromContactEmail || notificationConfig.WELCOME_FROM_EMAIL;
+                                //                             self.log.debug('sending email to: ', contactEmail);
+                                //                             self.log.debug('sending email from: ', fromContactEmail);
 
-                                                            var vars = [];
+                                //                             var vars = [];
 
-                                                            //skipping welcome email for now
-                                                            self.log.warn("No email content.  Skipping");
-                                                            /*
-                                                            mandrillHelper.sendAccountWelcomeEmail(fromEmail,
-                                                                notificationConfig.WELCOME_FROM_NAME, contactEmail.email, contactName, notificationConfig.WELCOME_EMAIL_SUBJECT,
-                                                                htmlContent, ip, savedContact.id(), vars, null, function(err, result){});
-                                                                */
-                                                        }
+                                //                             //skipping welcome email for now
+                                //                             self.log.warn("No email content.  Skipping");
+                                //                             /*
+                                //                             mandrillHelper.sendAccountWelcomeEmail(fromEmail,
+                                //                                 notificationConfig.WELCOME_FROM_NAME, contactEmail.email, contactName, notificationConfig.WELCOME_EMAIL_SUBJECT,
+                                //                                 htmlContent, ip, savedContact.id(), vars, null, function(err, result){});
+                                //                                 */
+                                //                         }
 
-                                                    });
-                                                } else {
-                                                    var component = emailPage.get('components')[0];
-                                                    self.log.debug('Using this for data', emailPage.get('_id'));
-                                                    self.log.debug('Using this account for data', account);
-                                                    self.log.debug('This component:', component);
-                                                    if(!component.logourl && account && account.attributes.business) {
-                                                        component.logourl = account.attributes.business.logo;
-                                                    }
+                                //                     });
+                                //                 } else {
+                                //                     var component = emailPage.get('components')[0];
+                                //                     self.log.debug('Using this for data', emailPage.get('_id'));
+                                //                     self.log.debug('Using this account for data', account);
+                                //                     self.log.debug('This component:', component);
+                                //                     if(!component.logourl && account && account.attributes.business) {
+                                //                         component.logourl = account.attributes.business.logo;
+                                //                     }
 
-                                                    component.logo.replace('"//', '"http://');
-                                                    component.text = component.text.replace('"//', '"http://').replace(new RegExp('FHEMAIL', 'g'), savedContact.getEmails()[0].email);
-                                                    component.title = component.title.replace('"//', '"http://').replace(new RegExp('FHEMAIL', 'g'), savedContact.getEmails()[0].email);
-                                                    app.render('emails/base_email', component, function(err, html){
-                                                        if(err) {
-                                                            self.log.error('error rendering html: ' + err);
-                                                            self.log.warn('email will not be sent.');
-                                                        } else {
-                                                            console.log('savedContact ', savedContact);
-                                                            var contactEmail = savedContact.getEmails()[0].email;
-                                                            var contactName = savedContact.get('first') + ' ' + savedContact.get('last');
-                                                            self.log.debug('sending email to: ',contactEmail);
+                                //                     component.logo.replace('"//', '"http://');
+                                //                     component.text = component.text.replace('"//', '"http://').replace(new RegExp('FHEMAIL', 'g'), savedContact.getEmails()[0].email);
+                                //                     component.title = component.title.replace('"//', '"http://').replace(new RegExp('FHEMAIL', 'g'), savedContact.getEmails()[0].email);
+                                //                     app.render('emails/base_email', component, function(err, html){
+                                //                         if(err) {
+                                //                             self.log.error('error rendering html: ' + err);
+                                //                             self.log.warn('email will not be sent.');
+                                //                         } else {
+                                //                             console.log('savedContact ', savedContact);
+                                //                             var contactEmail = savedContact.getEmails()[0].email;
+                                //                             var contactName = savedContact.get('first') + ' ' + savedContact.get('last');
+                                //                             self.log.debug('sending email to: ',contactEmail);
 
 
-                                                            var fromEmail = fromContactEmail || component.from_email || notificationConfig.WELCOME_FROM_EMAIL;
-                                                            // var fromName = component.fromName || notificationConfig.WELCOME_FROM_NAME;
-                                                            // var emailSubject = emailSubject || notificationConfig.WELCOME_EMAIL_SUBJECT;
-                                                            var vars = [];
+                                //                             var fromEmail = fromContactEmail || component.from_email || notificationConfig.WELCOME_FROM_EMAIL;
+                                //                             // var fromName = component.fromName || notificationConfig.WELCOME_FROM_NAME;
+                                //                             // var emailSubject = emailSubject || notificationConfig.WELCOME_EMAIL_SUBJECT;
+                                //                             var vars = [];
 
-                                                            self.log.debug('notificationConfig.WELCOME_FROM_EMAIL ', notificationConfig.WELCOME_FROM_EMAIL);
-                                                            self.log.debug('notificationConfig.WELCOME_FROM_NAME ', notificationConfig.WELCOME_FROM_NAME);
-                                                            self.log.debug('contactEmail.email ', contactEmail);
-                                                            self.log.debug('contactName ', contactName);
-                                                            self.log.debug('emailSubject ', emailSubject);
-                                                            self.log.debug('fromContactName ', fromContactName);
-                                                            self.log.debug('notificationConfig.WELCOME_EMAIL_SUBJECT ', notificationConfig.WELCOME_EMAIL_SUBJECT);
-                                                            //self.log.debug('value.id() ', value.id());
-                                                            self.log.debug('savedContact.id() ', savedContact.id());
-                                                            self.log.debug('vars ', vars);
-                                                            self.log.debug('notificationConfig.WELCOME_FROM_EMAIL ', notificationConfig.WELCOME_FROM_EMAIL);
+                                //                             self.log.debug('notificationConfig.WELCOME_FROM_EMAIL ', notificationConfig.WELCOME_FROM_EMAIL);
+                                //                             self.log.debug('notificationConfig.WELCOME_FROM_NAME ', notificationConfig.WELCOME_FROM_NAME);
+                                //                             self.log.debug('contactEmail.email ', contactEmail);
+                                //                             self.log.debug('contactName ', contactName);
+                                //                             self.log.debug('emailSubject ', emailSubject);
+                                //                             self.log.debug('fromContactName ', fromContactName);
+                                //                             self.log.debug('notificationConfig.WELCOME_EMAIL_SUBJECT ', notificationConfig.WELCOME_EMAIL_SUBJECT);
+                                //                             //self.log.debug('value.id() ', value.id());
+                                //                             self.log.debug('savedContact.id() ', savedContact.id());
+                                //                             self.log.debug('vars ', vars);
+                                //                             self.log.debug('notificationConfig.WELCOME_FROM_EMAIL ', notificationConfig.WELCOME_FROM_EMAIL);
 
-                                                            try{
-                                                                mandrillHelper.sendAccountWelcomeEmail(fromEmail, fromContactName, contactEmail, contactName, emailSubject, html, query.accountId, savedContact.id(), vars, emailPage.get('_id'), function(err, result){
-                                                                    self.log.debug('result: ', result);
-                                                                });
-                                                            } catch(exception) {
-                                                                self.log.error(exception);
-                                                            }
+                                //                             try{
+                                //                                 mandrillHelper.sendAccountWelcomeEmail(fromEmail, fromContactName, contactEmail, contactName, emailSubject, html, query.accountId, savedContact.id(), vars, emailPage.get('_id'), function(err, result){
+                                //                                     self.log.debug('result: ', result);
+                                //                                 });
+                                //                             } catch(exception) {
+                                //                                 self.log.error(exception);
+                                //                             }
 
-                                                            if(activity){
-                                                                var accountEmail = null;
-                                                                if(account && account.attributes.business && account.attributes.business.emails && account.attributes.business.emails[0] && account.attributes.business.emails[0].email)
-                                                                {
-                                                                    self.log.debug('user email: ', account.attributes.business.emails[0].email);
-                                                                    accountEmail = account.attributes.business.emails[0].email;
-                                                                    self._sendEmailOnCreateAccount(req, resp, accountEmail, activity.contact, account._id, component)
-                                                                }
-                                                                else{
-                                                                    userDao.getUserAccount(query.accountId, function(err, user){
-                                                                        self.log.debug('user: ', user);
-                                                                        self.log.debug('user email: ', user.attributes.email);
-                                                                        accountEmail = user.attributes.email;
-                                                                        self._sendEmailOnCreateAccount(req, resp, accountEmail, activity.contact, account._id, component);
-                                                                    })
-                                                                }
+                                //                             if(activity){
+                                //                                 var accountEmail = null;
+                                //                                 if(account && account.attributes.business && account.attributes.business.emails && account.attributes.business.emails[0] && account.attributes.business.emails[0].email)
+                                //                                 {
+                                //                                     self.log.debug('user email: ', account.attributes.business.emails[0].email);
+                                //                                     accountEmail = account.attributes.business.emails[0].email;
+                                //                                     self._sendEmailOnCreateAccount(req, resp, accountEmail, activity.contact, account._id, component)
+                                //                                 }
+                                //                                 else{
+                                //                                     userDao.getUserAccount(query.accountId, function(err, user){
+                                //                                         self.log.debug('user: ', user);
+                                //                                         self.log.debug('user email: ', user.attributes.email);
+                                //                                         accountEmail = user.attributes.email;
+                                //                                         self._sendEmailOnCreateAccount(req, resp, accountEmail, activity.contact, account._id, component);
+                                //                                     })
+                                //                                 }
 
-                                                            }
-                                                        }
-                                                    });
-                                                }
-                                            });
-                                        }
-                                    });
-                                } else {
-                                    self.log.debug('Skipping email.');
-                                }
+                                //                             }
+                                //                         }
+                                //                     });
+                                //                 }
+                                //             });
+                                //         }
+                                //     });
+                                // } else {
+                                //     self.log.debug('Skipping email.');
+                                // }
                                 //create contact_form activity
                                 if(activity){
                                     var contactActivity = new $$.m.ContactActivity({
