@@ -288,8 +288,7 @@ circular,
 }
 
 .cn-wrapper li a.linkDisabled {
-  cursor: not-allowed;
-  pointer-events: none;
+  cursor: default;
   background: #ccc !important;
   opacity: 0.6;
 }
