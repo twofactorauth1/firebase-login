@@ -1,7 +1,7 @@
 'use strict';
-/*global app, moment, angular*/
+/*global app, moment, angular, window*/
 /*jslint unparam:true*/
-app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalInstance', '$http', '$timeout', '$q', '$compile', '$filter', 'WebsiteService', 'CustomerService', 'ProductService', 'GeocodeService', 'toaster', 'hoursConstant', 'components', 'clickedIndex', 'contactMap', 'website', 'blog', 'isDirty', 'isSinglePost', 'openParentModal', 'showInsert', 'underNav', 'blogImage', 'accountShowHide', function ($scope, $rootScope, $modalInstance, $http, $timeout, $q, $compile, $filter, WebsiteService, CustomerService, ProductService, GeocodeService, toaster, hoursConstant, components, clickedIndex, contactMap, website, blog, isDirty, isSinglePost, openParentModal, showInsert, underNav, blogImage, accountShowHide) {
+app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalInstance', '$http', '$timeout', '$q', '$compile', '$filter', 'WebsiteService', 'CustomerService', 'ProductService', 'GeocodeService', 'toaster', 'hoursConstant', 'components', 'clickedIndex', 'contactMap', 'website', 'blog', 'isDirty', 'isSinglePost', 'openParentModal', 'showInsert', 'underNav', 'blogImage', 'accountShowHide', 'CampaignService', function ($scope, $rootScope, $modalInstance, $http, $timeout, $q, $compile, $filter, WebsiteService, CustomerService, ProductService, GeocodeService, toaster, hoursConstant, components, clickedIndex, contactMap, website, blog, isDirty, isSinglePost, openParentModal, showInsert, underNav, blogImage, accountShowHide, CampaignService) {
   $scope.blog = {};
   $scope.components = components;
   $scope.openParentModal = openParentModal;
@@ -88,7 +88,7 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
     $scope.components[clickedIndex] = $scope.originalComponent;
     $timeout(function () {
       $(window).trigger('resize');
-    }, 0)
+    }, 0);
     $scope.closeModal();
   };
 
@@ -356,25 +356,21 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
   $scope.closeModal = function () {
     $timeout(function () {
       $scope.$apply(function () {
-        if($scope.componentEditing.type === "contact-us")
-        {
+        if ($scope.componentEditing.type === "contact-us") {
           $scope.validateGeoAddress(function () {
-            if($scope.errorMapData)
-            {
+            if ($scope.errorMapData) {
               $scope.componentEditing.location = $scope.originalComponent.location;
             }
-            if($scope.contactHoursInvalid)
-            {
+            if ($scope.contactHoursInvalid) {
               $scope.componentEditing.hours = $scope.originalComponent.hours;
             }
             $modalInstance.close();
             angular.element('.modal-backdrop').remove();
-          })
-        }
-        else{
+          });
+        } else {
           $modalInstance.close();
           angular.element('.modal-backdrop').remove();
-        }        
+        }
       });
     });
   };
@@ -634,46 +630,42 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
     });
   };
 
-  $scope.setLatLon = function(lat, lon)
-  {
-      $scope.componentEditing.location.lat = lat;
-      $scope.componentEditing.location.lon = lon;
-  }
+  $scope.setLatLon = function (lat, lon) {
+    $scope.componentEditing.location.lat = lat;
+    $scope.componentEditing.location.lon = lon;
+  };
 
   $scope.updateContactUsAddress = function () {
     if (!angular.equals($scope.originalContactMap, $scope.componentEditing.location)) {
-      {        
-        $scope.validateGeoAddress();
-      }      
+      $scope.validateGeoAddress();
     }
   };
 
   $scope.validateGeoAddress = function (fn) {
-    $scope.setLatLon();  
+    $scope.setLatLon();
     GeocodeService.validateAddress($scope.componentEditing.location, function (data, results) {
-      if(data && results.length === 1)
-      {
-        $timeout(function() {
+      if (data && results.length === 1) {
+        $timeout(function () {
           $scope.$apply(function () {
             $scope.setLatLon(results[0].geometry.location.G, results[0].geometry.location.K);
             $scope.errorMapData = false;
             angular.copy($scope.componentEditing.location, $scope.originalContactMap);
             $scope.contactMap.refreshMap();
-          })
-        }, 0);        
-      }
-      else{
-        $timeout(function() {
+          });
+        }, 0);
+      } else {
+        $timeout(function () {
           $scope.$apply(function () {
             $scope.errorMapData = true;
             angular.copy($scope.componentEditing.location, $scope.originalContactMap);
-          })
+          });
         }, 0);
       }
-      if(fn)
-        fn()
+      if (fn) {
+        fn();
+      }
     });
-  }
+  };
 
   $scope.saveComponent = function () {
     $scope.isDirty.dirty = true;
@@ -868,13 +860,11 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
       arr.push(page);
     });
     $scope.allPages = arr;
-    if(!accountShowHide.blog)
-    {
+    if (!accountShowHide.blog) {
       var _blogPage = _.findWhere($scope.allPages, {
         handle: 'blog'
       });
-      if(_blogPage)
-      {
+      if (_blogPage) {
         var _index = _.indexOf($scope.allPages, _blogPage);
         $scope.allPages.splice(_index, 1);
       }
@@ -887,15 +877,20 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
 
     //select the default email for simple form as welcome-aboard
     if ($scope.componentEditing.type === 'simple-form' && !$scope.componentEditing.emailId) {
-      var _welcomeEmail = _.find(emails, function(_email) {
+      var _welcomeEmail = _.find(emails, function (_email) {
         return _email.handle === 'welcome-aboard';
       });
 
-      if(_welcomeEmail) {
+      if (_welcomeEmail) {
         $scope.componentEditing.emailId = _welcomeEmail._id;
       }
     }
 
+  });
+
+  CampaignService.getCampaigns(function (campaigns) {
+    console.log('campaigns >>> ', campaigns);
+    $scope.campaigns = campaigns;
   });
 
   $scope.editComponent();
@@ -914,15 +909,17 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
     $scope.componentEditing.location.state = "";
     $scope.componentEditing.location.zip = "";
     $scope.componentEditing.location.country = "";
-  }
+  };
   $scope.fillInAddress = function (place) {
     // Get each component of the address from the place details
     // and fill the corresponding field on the form. 
     $scope.setDefaultAddress();
-    for (var i = 0; i < place.address_components.length; i++) {
-      var addressType = place.address_components[i].types[0];
+    var i = 0;
+    var addressType, val;
+    for (i; i < place.address_components.length; i++) {
+      addressType = place.address_components[i].types[0];
       if (componentForm[addressType]) {
-        var val = place.address_components[i][componentForm[addressType]];
+        val = place.address_components[i][componentForm[addressType]];
         if (addressType === 'street_number') {
           $scope.componentEditing.location.address = val;
         } else if (addressType === 'route') {
@@ -940,7 +937,7 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
     }
     $scope.componentEditing.location.lat = place.geometry.location.lat();
     $scope.componentEditing.location.lon = place.geometry.location.lng();
-  }
+  };
   $scope.$watch('place.address', function (newValue) {
     if (newValue) {
       if (angular.isObject(newValue)) {
@@ -950,10 +947,10 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
     }
   });
 
-    /*
-     * @validateHours
-     * 
-     */
+  /*
+   * @validateHours
+   * 
+   */
 
   $scope.validateHours = function (hours, index) {
     $scope.contactHours[index].valid = true;
@@ -961,10 +958,10 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
       var startTime = hours.start;
       var endTime = hours.end;
       if (startTime && endTime) {
-        startTime = startTime.split(" ")[1] == 'pm' && startTime.split(":")[0] != '12' ? parseInt(startTime.split(":")[0]) + 12 : parseInt(startTime.split(":")[0])
-        endTime = endTime.split(" ")[1] == 'pm' && endTime.split(":")[0] != '12' ? parseInt(endTime.split(":")[0]) + 12 : parseInt(endTime.split(":")[0])
-        startTime = parseInt(hours.start.split(":")[1]) == 30 ? startTime + 0.5 : startTime;
-        endTime = parseInt(hours.end.split(":")[1]) == 30 ? endTime + 0.5 : endTime;
+        startTime = startTime.split(" ")[1] === 'pm' && startTime.split(":")[0] !== '12' ? parseInt(startTime.split(":")[0], 10) + 12 : parseInt(startTime.split(":")[0], 10);
+        endTime = endTime.split(" ")[1] === 'pm' && endTime.split(":")[0] !== '12' ? parseInt(endTime.split(":")[0], 10) + 12 : parseInt(endTime.split(":")[0], 10);
+        startTime = parseInt(hours.start.split(":")[1], 10) === 30 ? startTime + 0.5 : startTime;
+        endTime = parseInt(hours.end.split(":")[1], 10) === 30 ? endTime + 0.5 : endTime;
       }
       if (hours.split && $scope.componentEditing.splitHours) {
         angular.element("#business_hours_start_" + index).removeClass('has-error');
@@ -973,10 +970,10 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
         var startTime2 = hours.start2;
         var endTime2 = hours.end2;
         if (startTime2 && endTime2) {
-          startTime2 = startTime2.split(" ")[1] == 'pm' && startTime2.split(":")[0] != '12' ? parseInt(startTime2.split(":")[0]) + 12 : parseInt(startTime2.split(":")[0])
-          endTime2 = endTime2.split(" ")[1] == 'pm' && endTime2.split(":")[0] != '12' ? parseInt(endTime2.split(":")[0]) + 12 : parseInt(endTime2.split(":")[0])
-          startTime2 = parseInt(hours.start2.split(":")[1]) == 30 ? startTime2 + 0.5 : startTime2;
-          endTime2 = parseInt(hours.end2.split(":")[1]) == 30 ? endTime2 + 0.5 : endTime2;
+          startTime2 = startTime2.split(" ")[1] === 'pm' && startTime2.split(":")[0] !== '12' ? parseInt(startTime2.split(":")[0], 10) + 12 : parseInt(startTime2.split(":")[0], 10);
+          endTime2 = endTime2.split(" ")[1] === 'pm' && endTime2.split(":")[0] !== '12' ? parseInt(endTime2.split(":")[0], 10) + 12 : parseInt(endTime2.split(":")[0], 10);
+          startTime2 = parseInt(hours.start2.split(":")[1], 10) === 30 ? startTime2 + 0.5 : startTime2;
+          endTime2 = parseInt(hours.end2.split(":")[1], 10) === 30 ? endTime2 + 0.5 : endTime2;
         }
         if (startTime > endTime || startTime > startTime2 || startTime > endTime2) {
           if (startTime > endTime) {
@@ -1012,11 +1009,12 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
     var validate = _.where($scope.contactHours, {
       valid: false
     });
-    if (validate && validate.length)
+    if (validate && validate.length) {
       $scope.contactHoursInvalid = true;
-    else
+    } else {
       $scope.contactHoursInvalid = false;
+    }
 
-  }
+  };
 
 }]);
