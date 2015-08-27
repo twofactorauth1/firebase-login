@@ -20,7 +20,7 @@
      * @openMediaModal
      * -
      */
-   
+
     $scope.openMediaModal = function () {
       $scope.showInsert = true;
       $scope.modalInstance = $modal.open({
@@ -83,8 +83,7 @@
       console.log(product);
       var startDate = product.sale_date_from;
       var endDate = product.sale_date_to;
-      if(!startDate && !endDate)
-      {
+      if (!startDate && !endDate) {
         startDate = moment();
         endDate = moment().add(6, 'days');
       }

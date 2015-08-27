@@ -12,7 +12,7 @@
     // 4. get Order
 
     $scope.FailedStatus = orderConstant.order_status.FAILED;
-    
+
     /*
      * @closeModal
      * -
@@ -46,7 +46,7 @@
     CustomerService.getCustomers(function (customers) {
       console.log('customers >>> ', customers);
       $scope.customers = customers;
-      $scope.getUsers();      
+      $scope.getUsers();
     });
 
     /*
@@ -85,13 +85,11 @@
      * compare order shipping and billing address
      */
 
-    $scope.compareAddress = function()
-    {
-      if($scope.order.shipping_address && $scope.order.billing_address && $scope.order.billing_address.hasOwnProperty("address_1") && angular.equals($scope.order.shipping_address, $scope.order.billing_address))
-      {
+    $scope.compareAddress = function () {
+      if ($scope.order.shipping_address && $scope.order.billing_address && $scope.order.billing_address.hasOwnProperty("address_1") && angular.equals($scope.order.shipping_address, $scope.order.billing_address)) {
         $scope.sameAsBilling = true;
-      }    
-    }
+      }
+    };
 
     $scope.getOrder = function () {
       OrderService.getOrders(function (orders) {
@@ -105,7 +103,7 @@
           order.line_items = $scope.matchProducts(order);
           $scope.currentStatus = order.status;
 
-          order.locked = true;  // TODO: remove this when server sends 'locked' property
+          order.locked = true; // TODO: remove this when server sends 'locked' property
           $scope.order = order;
           $scope.selectedCustomer = _.find($scope.customers, function (customer) {
             return customer._id === $scope.order.customer_id;
@@ -123,7 +121,7 @@
             notes: []
           };
           console.log('$scope.order ', $scope.order);
-          
+
         }
       });
     };
@@ -151,8 +149,9 @@
         _subtotal += parseFloat(line_item.regular_price) * parseFloat(line_item.quantity);
         _total += parseFloat(line_item.regular_price) * parseFloat(line_item.quantity);
       });
-      $scope.calculatedSubTotal = _subtotal;
-      $scope.calculatedDiscount = _discount;
+      $scope.order.total = _total;
+      $scope.order.subtotal = _subtotal;
+      $scope.order.total_discount = _discount;
       if (_discount) {
         $scope.calculatedDiscountPercent = ((parseFloat(_discount) * 100) / parseFloat(_subtotal)).toFixed(2);
       } else {
@@ -173,9 +172,11 @@
     /*
      * @navToCustomer
      */
-    $scope.navToCustomer = function(cust) {
+    $scope.navToCustomer = function (cust) {
       var cust_url = '/customers/' + cust._id;
-      $location.url(cust_url).search({order: "true"});
+      $location.url(cust_url).search({
+        order: "true"
+      });
     };
 
 
@@ -202,21 +203,21 @@
      * match users to the order notes
      */
 
-      $scope.matchUsers = function (order) {
-        var notes = order.notes;
-        if (notes.length > 0 && $scope.users) {
-          _.each(notes, function (_note) {
-            var matchingUser = _.find($scope.users, function (_user) {
-              return _user._id === _note.user_id;
-            });
-            if (matchingUser) {
-              _note.user = matchingUser;
-            }
+    $scope.matchUsers = function (order) {
+      var notes = order.notes;
+      if (notes.length > 0 && $scope.users) {
+        _.each(notes, function (_note) {
+          var matchingUser = _.find($scope.users, function (_user) {
+            return _user._id === _note.user_id;
           });
-        }
-        return notes;
-      };
-   
+          if (matchingUser) {
+            _note.user = matchingUser;
+          }
+        });
+      }
+      return notes;
+    };
+
 
     /*
      * @matchProducts
@@ -244,18 +245,16 @@
      */
 
     $scope.addNote = function () {
-      if($scope.order && $scope.order._id)
-      {
-          OrderService.completeOrder($scope.order._id, $scope.newNote, function (updatedOrder) {
+      if ($scope.order && $scope.order._id) {
+        OrderService.completeOrder($scope.order._id, $scope.newNote, function (updatedOrder) {
           toaster.pop('success', 'Note added to order.');
           $scope.newNote = '';
           $scope.pushLocalNote(updatedOrder);
         });
-      }
-      else if($scope.order)
-      {
-        if (!$scope.order.notes)
+      } else if ($scope.order) {
+        if (!$scope.order.notes) {
           $scope.order.notes = [];
+        }
         var date = moment();
         var _noteToPush = {
           note: $scope.newNote,
@@ -266,7 +265,7 @@
         $scope.pushLocalNote($scope.order, true);
         $scope.newNote = '';
       }
-      
+
     };
 
     /*
@@ -276,11 +275,10 @@
 
     $scope.pushLocalNote = function (order, new_order) {
       order.notes = $scope.matchUsers(order);
-      if(!new_order)
-      {
+      if (!new_order) {
         var noteToPush = order.notes[order.notes.length - 1];
         $scope.order.notes.push(noteToPush);
-      }     
+      }
     };
 
     /*
@@ -346,41 +344,6 @@
         }
 
         return model.first + ' ' + model.last + ' (#' + model._id + ' ' + email + ') ';
-      }
-
-      return '';
-    };
-
-    /*
-     * @formatProductInput
-     * -
-     */
-
-    $scope.formatProductInput = function (model) {
-      if (model) {
-
-        var email = 'No Email';
-        if (model.email) {
-          email = model.email;
-        }
-
-        var _sku = '';
-        if (model.sku) {
-          _sku = '#'+model.sku
-        }
-
-        var _name = '';
-        if (model.name) {
-          _name = model.name;
-        }
-
-        var _price = '';
-        if (model.regular_price) {
-          _price = ' ($' + model.regular_price + ') ';
-        }
-
-        return _sku + ' ' + _name + _price;
-
       }
 
       return '';
@@ -598,9 +561,10 @@
      * the order status has been updated
      */
 
-    $scope.statusUpdated = function (newStatus) {     
-      if ($scope.order.status == newStatus)
+    $scope.statusUpdated = function (newStatus) {
+      if ($scope.order.status === newStatus) {
         return;
+      }
       var toasterMsg = 'Status has been updated to ';
       var note = 'Order status changed from ' + $scope.order.status + ' to ' + newStatus;
       if (newStatus === 'processing') {
@@ -648,17 +612,14 @@
             };
 
             OrderService.refundOrder($scope.order._id, $scope.reasonData, function (data, error) {
-              if(error)
-              {
+              if (error) {
                 SweetAlert.swal(error.status, error.message, "error");
-              }
-              else
-              {
+              } else {
                 console.log('data ', data);
                 SweetAlert.swal("Refunded", "Order has been refunded.", "success");
                 $scope.order.status = newStatus;
                 $scope.currentStatus = newStatus;
-              }                
+              }
             });
           } else {
             SweetAlert.swal("Cancelled", "Order refund cancelled.", "error");
@@ -669,12 +630,11 @@
       if (newStatus === 'failed') {
         toaster.pop('success', toasterMsg + '"Failed"');
       }
-      if (newStatus !== 'refunded')
-      {
+      if (newStatus !== 'refunded') {
         $scope.order.status = newStatus;
         $scope.currentStatus = newStatus;
       }
-      
+
     };
 
     /*
@@ -710,10 +670,11 @@
     $scope.saveOrder = function () {
       $scope.saveLoading = true;
       // Set order customer Id
-      if($scope.selectedCustomer)
+      if ($scope.selectedCustomer) {
         $scope.order.customer_id = $scope.selectedCustomer._id;
-      else        
+      } else {
         $scope.order.customer_id = null;
+      }
 
       //validate
 
@@ -728,8 +689,8 @@
         $scope.saveLoading = false;
         return;
       }
-      
-      if ($stateParams.orderId) {        
+
+      if ($stateParams.orderId) {
         OrderService.updateOrder($scope.order, function (updatedOrder) {
           $scope.saveLoading = false;
           console.log('updatedOrder ', updatedOrder);
@@ -737,8 +698,8 @@
         });
       } else {
         OrderService.createOrder($scope.order, function (updatedOrder) {
-          console.log('order created'); 
-          toaster.pop('success', 'Order created successfully.');       
+          console.log('order created');
+          toaster.pop('success', 'Order created successfully.');
           $location.path('/commerce/orders');
           $scope.saveLoading = false;
         });
