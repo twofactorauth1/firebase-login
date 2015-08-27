@@ -22,7 +22,7 @@
           '<div class="cn-wrapper {{options.size}} items-{{options.items.length}}" ng-class="{\'opened-nav\': options.isOpen}"><ul>' +
           '<li ng-repeat="item in options.items">' +
           '<a ng-hide="item.empty || hideItem(item)" ng-click="perform(options, item)" ng-class="{\'is-active\': item.isActive}" class="{{item.cssClass}}" ng-style="{background: item.background ? \'{{item.background}}\' : \'{{options.background}}\', color: item.color ? \'{{item.color}}\' : \'{{options.color}}\'}">' +
-          '<span ng-bind-html="item.content"></span></div>' +
+          '<span ng-bind-html="item.content"></span>' +
           '</a></li></ul></div>',
         link: function (scope, $element, $attrs) {
           
