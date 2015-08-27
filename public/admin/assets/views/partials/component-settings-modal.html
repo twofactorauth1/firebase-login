@@ -786,10 +786,10 @@
                                 <div ng-if="emails">
                                     <ui-select ng-model="componentEditing.campaignId" theme="bootstrap">
                                         <ui-select-match placeholder="Select a campaign">
-                                            <small ng-bind-html="$select.selected.title"></small>
+                                            <small ng-bind-html="$select.selected.name"></small>
                                         </ui-select-match>
                                         <ui-select-choices repeat="campaign._id as campaign in campaigns | filter: $select.search track by $index">
-                                            <small ng-bind-html="campaign.title | highlight: $select.search"></small>
+                                            <small ng-bind-html="campaign.name | highlight: $select.search"></small>
                                         </ui-select-choices>
                                     </ui-select>
                                 </div>
