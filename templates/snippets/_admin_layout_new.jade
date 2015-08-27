@@ -41,6 +41,8 @@ html(lang='en', data-ng-app='clipApp')
     link(rel='stylesheet', href='../js/libs/allmighty-autocomplete/style/autocomplete.css')
     // EDITOR
     link(rel='stylesheet', href='/js/libs/slick-carousel/slick/slick.css')
+
+
   body(ng-controller='AppCtrl')
     #app(ui-view='', ng-class="{'app-mobile' : app.isMobile, 'app-navbar-fixed' : app.layout.isNavbarFixed, 'app-sidebar-fixed' : app.layout.isSidebarFixed, 'app-sidebar-closed':app.layout.isSidebarClosed, 'app-footer-fixed':app.layout.isFooterFixed}")
 

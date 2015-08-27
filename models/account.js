@@ -71,7 +71,9 @@ var account = $$.m.ModelBase.extend({
             "billing" : {
                 "userId" : '', //logged in user that added Stripe details
                 "customerId": '', //Stripe customerId... also stored on User
-                "cardToken": '' //optional. Not sure if we need this if we have the customer reference
+                "cardToken": '', //optional. Not sure if we need this if we have the customer reference
+                "signupDate": new Date(),
+                "trialLength": 14
             },
 
             'credentials': [],
