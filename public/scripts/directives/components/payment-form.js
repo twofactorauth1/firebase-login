@@ -451,7 +451,7 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                     angular.element("#email .glyphicon").addClass('glyphicon-remove');
                 } else {
                     UserService.checkEmailExists(newAccount.email, function(data) {
-                        if (data === 'true') {
+                        if (data === true) {
                             angular.element("#email .error").html("Email Already Exists");
                             angular.element("#email").addClass('has-error');
                             angular.element("#email .glyphicon").addClass('glyphicon-remove');
