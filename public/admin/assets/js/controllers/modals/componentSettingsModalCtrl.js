@@ -20,6 +20,52 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
   $scope.showAddress = false;
   $scope.checkIfAddess = false;
   $scope.blogImage = blogImage;
+
+  /*
+   * @getPages
+   * -
+   */
+
+  WebsiteService.getPages(function (pages) {
+    var parsed = angular.fromJson(pages);
+    var arr = [];
+    _.each(parsed, function (page) {
+      arr.push(page);
+    });
+    $scope.allPages = arr;
+    if (!accountShowHide.blog) {
+      var _blogPage = _.findWhere($scope.allPages, {
+        handle: 'blog'
+      });
+      if (_blogPage) {
+        var _index = _.indexOf($scope.allPages, _blogPage);
+        $scope.allPages.splice(_index, 1);
+      }
+    }
+    $scope.filterdedPages = $filter('orderBy')($scope.allPages, "title", false);
+  });
+
+  WebsiteService.getEmails(function (emails) {
+    $scope.emails = emails;
+
+    //select the default email for simple form as welcome-aboard
+    if ($scope.componentEditing.type === 'simple-form' && !$scope.componentEditing.emailId) {
+      var _welcomeEmail = _.find(emails, function (_email) {
+        return _email.handle === 'welcome-aboard';
+      });
+
+      if (_welcomeEmail) {
+        $scope.componentEditing.emailId = _welcomeEmail._id;
+      }
+    }
+
+  });
+
+  CampaignService.getCampaigns(function (campaigns) {
+    console.log('campaigns >>> ', campaigns);
+    $scope.campaigns = campaigns;
+  });
+
   /*
    * @getAllProducts
    * - get products for products and pricing table components
@@ -868,50 +914,6 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
     });
   };
 
-  /*
-   * @getPages
-   * -
-   */
-
-  WebsiteService.getPages(function (pages) {
-    var parsed = angular.fromJson(pages);
-    var arr = [];
-    _.each(parsed, function (page) {
-      arr.push(page);
-    });
-    $scope.allPages = arr;
-    if (!accountShowHide.blog) {
-      var _blogPage = _.findWhere($scope.allPages, {
-        handle: 'blog'
-      });
-      if (_blogPage) {
-        var _index = _.indexOf($scope.allPages, _blogPage);
-        $scope.allPages.splice(_index, 1);
-      }
-    }
-    $scope.filterdedPages = $filter('orderBy')($scope.allPages, "title", false);
-  });
-
-  WebsiteService.getEmails(function (emails) {
-    $scope.emails = emails;
-
-    //select the default email for simple form as welcome-aboard
-    if ($scope.componentEditing.type === 'simple-form' && !$scope.componentEditing.emailId) {
-      var _welcomeEmail = _.find(emails, function (_email) {
-        return _email.handle === 'welcome-aboard';
-      });
-
-      if (_welcomeEmail) {
-        $scope.componentEditing.emailId = _welcomeEmail._id;
-      }
-    }
-
-  });
-
-  CampaignService.getCampaigns(function (campaigns) {
-    console.log('campaigns >>> ', campaigns);
-    $scope.campaigns = campaigns;
-  });
 
   $scope.editComponent();
   var componentForm = {
