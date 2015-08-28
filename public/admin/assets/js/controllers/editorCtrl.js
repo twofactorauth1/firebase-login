@@ -665,7 +665,6 @@
      */
     $scope.thumbnailSlider = {};
     $scope.contactMap = {};
-    $scope.underNav = {};
     $scope.blogControl = {};
 
     $scope.insertMedia = function (asset) {
@@ -820,10 +819,6 @@
 
         _modal.resolve.openParentModal = function () {
           return $scope.openModal;
-        };
-
-        _modal.resolve.underNav = function () {
-          return $scope.underNav;
         };
 
         _modal.resolve.blogImage = function () {
