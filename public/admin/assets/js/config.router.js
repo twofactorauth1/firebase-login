@@ -124,15 +124,6 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
          $rootScope.breadcrumbTitle = undefined;
         },
         resolve: loadSequence('editorCtrl', 'userService', 'htmlToPlaintext', 'spectrum', 'ui.sortable', 'angular-slider', 'assetsService', 'toasterService', 'geocodeService', 'productService', 'paymentService', 'accountService', 'toTrusted', 'generateURLforLinks', 'truncate', 'ckeditor', 'ngSticky', 'slick', 'offset', 'jqcloud', 'jsVideoUrlParser', 'selectedTags', 'addComponentModalCtrl', 'componentSettingsModalCtrl', 'templateSettingsModalCtrl', 'googlePlaces', 'ngMap', 'angularCircularNavigation', 'campaignService')
-    }).state('app.emails', {
-        url: '/emails',
-        templateUrl: "assets/views/emails.html",
-        title: 'Emails',
-        icon: 'ti-layout-media-left-alt',
-        ncyBreadcrumb: {
-            label: 'Emails'
-        },
-        resolve: loadSequence('emailsCtrl', 'chartEmailService')
     }).state('app.editor', {
         url: '/editor',
         templateUrl: "assets/views/editor.html",
@@ -223,7 +214,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
             label: 'Social Feed'
         },
         resolve: loadSequence('socialFeedCtrl', 'socialConfigService', 'wu.masonry','orderByArrayLength')
-    }).state('app.marketing.emails', {
+    }).state('app.emails', {
         url: '/emails',
         templateUrl: "assets/views/emails.html",
         title: 'Emails',

@@ -69,6 +69,7 @@
       //temporarily add a single email obj
       var emailToSend = {
         "title": _newEmail.title,
+        "type": 'email',
         "subject": _newEmail.subject,
         "fromName": _newEmail.fromName,
         "fromEmail": _newEmail.fromEmail,

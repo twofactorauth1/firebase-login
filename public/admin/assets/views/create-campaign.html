@@ -164,7 +164,7 @@
                                             Email Title <span class="symbol required"></span>
                                         </label>
                                         <div class="well well-sm">
-                                             <input type="text" class="form-control input" name="name" ng-model="emailToSend.title" ng-change="checkEmailTitle(emailToSend.title)" ng-model-options="{ debounce: 800 }" />
+                                            <input type="text" class="form-control input" name="name" ng-model="emailToSend.title" ng-change="checkEmailTitle(emailToSend.title)" ng-model-options="{ debounce: 800 }" />
                                             <span class="form-control-feedback" ng-class="{'glyphicon glyphicon-remove text-danger': emailTitleExists && emailTitleChecked && !checkingEmailTitle, 'glyphicon glyphicon-ok text-nephritis': !emailTitleExists && emailTitleChecked && emailToSend.title, 'fa fa-spinner fa-spin':checkingEmailTitle}"></span>
                                             <p class="error text-danger margin-top-5 margin-bottom-0" ng-if="emailTitleExists && emailTitleChecked && !checkingEmailTitle">Email Title Already Used. Please Choose Another</p>
                                             <p class="success text-nephritis margin-top-5 margin-bottom-0" ng-if="!emailTitleExists && emailTitleChecked && !checkingEmailTitle && emailToSend.title">Great Email Title!</p>
@@ -175,7 +175,7 @@
                                             Email Template <span class="symbol required"></span>
                                         </label>
                                         <div class="well well-sm">
-                                            <div class="row">                              
+                                            <div class="row">
                                                 <div class="col-xs-12">
                                                     <ui-select ng-model="newCampaignObj.steps[0].settings.emailId" theme="bootstrap" ng-disabled="disabled" on-select="changeCurrentEmail($select.selected)" style="min-width:100%">
                                                         <ui-select-match placeholder="Select an email template">{{$select.selected.title}} (subject:{{$select.selected.subject}})</ui-select-match>
@@ -340,7 +340,6 @@
                                                 <img ng-src="{{ contact.photo }}" id="customer_photo_{{contact._id}}" err-src="" err-contact="contact" class="img-thumbnail img-circle screenshot animated bounce" alt="image" width="35" height="35">
                                             </li>
                                         </ul>
-
                                         <button ng-click="openModal('customers-list-modal')" ng-if="recipients.length > 0" class="btn btn-primary btn-wide btn-o margin-bottom-15">View Full Contact List</button>
                                     </div>
                                     <div class="margin-bottom-30 center">
@@ -374,7 +373,7 @@
                                         <div class="padding-15 center" ng-if="newCampaignObj.type == 'autoresponder'">
                                             <h2 class="StepTitle text-white text-bold"><i class="fa fa-paper-plane fa-2x fa-inverse block margin-bottom-10"></i> Trigger</h2>
                                             <p class="text-large margin-bottom-0">
-                                                Check a trigger that will
+                                                Select a trigger that will
                                                 <br> determine when the email gets sent.
                                             </p>
                                         </div>
@@ -394,7 +393,7 @@
                                                     </label>
                                                 </div>
                                                 <div class="radio clip-radio radio-primary">
-                                                    <input ng-change="updateSendNow('later')"  type="radio" id="radio4" name="vertical" value="later" ng-model="whenToSend">
+                                                    <input ng-change="updateSendNow('later')" type="radio" id="radio4" name="vertical" value="later" ng-model="whenToSend">
                                                     <label for="radio4">
                                                         Send Later
                                                     </label>
@@ -413,12 +412,25 @@
                                                     <timepicker ng-model="delivery.time" ng-change="updateTime()" hour-step="hstep" minute-step="mstep" min="delivery.minDate" class="center"></timepicker>
                                                 </div>
                                                 <div ng-if="invalidDate && whenToSend === 'later'" class="col-xs-12">
-                                                <span style="font-weight: bold;color: #E6674A;">Invalid time</span>
+                                                    <span style="font-weight: bold;color: #E6674A;">Invalid time</span>
                                                 </div>
                                                 <div class="clearfix"></div>
                                             </div>
                                             <div class="clearfix"></div>
                                         </div>
+                                    </div>
+                                    <div ng-if="newCampaignObj.type == 'autoresponder'">
+                                    <div class="row margin-bottom-30">
+                                        <div class="col-xs-4" ng-repeat="trigger in triggers">
+                                             <div class="panel animated no-radius text-center margin-bottom-0 cursor-pointer" ng-class="{true:'panel-light-grey pulse',false:'panel-white'}[trigger == newCampaignObj.steps[0].trigger]">
+                                            <div class="panel-body" ng-class="{'bg-light-grey': hover1}" ng-mouseenter="hover1 = true" ng-mouseleave="hover1 = false" ng-click="newCampaignObj.steps[0].trigger = 'SIGNUP'">
+                                                <span ng-class="{'text-nephritis': newCampaignObj.steps[0].trigger == 'SIGNUP', 'text-muted': newCampaignObj.steps[0].trigger != trigger.value }" class="fa fa-check text-nephritis fa-2x" style="position:absolute; top:o;right:0;margin-right:5px;margin-top:-10px;"></span>
+                                                <span class="fa-stack fa-2x"> <i class="fa fa-square fa-stack-2x text-primary"></i> <i class="fa fa-envelope fa-stack-1x fa-inverse"></i> </span>
+                                                <h3 class="StepTitle margin-top-10">{{trigger.name}}</h3>
+                                            </div>
+                                        </div>
+                                        </div>
+                                    </div>
                                     </div>
                                 </div>
                             </div>
@@ -489,21 +501,21 @@
                                                 <span>{{emailToSend.subject}}</span>
                                             </div>
                                             <div class="form-group margin-bottom-0">
-                                                    <label class="control-label text-bold">
-                                                        To
-                                                    </label>
-                                                    <span> <ng-pluralize count="recipients.length"
+                                                <label class="control-label text-bold">
+                                                    To
+                                                </label>
+                                                <span> <ng-pluralize count="recipients.length"
                                                       when="{'0': '0 existing contacts',
                                                              '1': '{{recipients[0].details[0].emails[0].email}}',
                                                              'other': '{{recipients.length}} existing contacts'}">
                                                             </ng-pluralize>
                                                     </span>
-                                                    <span> <ng-pluralize count="selectedCustomers.newEmails.length"
+                                                <span> <ng-pluralize count="selectedCustomers.newEmails.length"
                                                       when="{'1': ' and 1 new contact',
                                                              'other': ' and {{selectedCustomers.newEmails.length}} new contacts'}">
                                                             </ng-pluralize>
                                                     </span>
-                                                </div>
+                                            </div>
                                             <div style="max-height:300px;overflow:hidden" class="border-around border-light hidden">
                                                 <img src="http://indigenous-screenshots.s3.amazonaws.com/account_536/1432017910483.png" class="img-responsive" />
                                             </div>

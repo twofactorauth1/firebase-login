@@ -3,7 +3,7 @@
     <section id="page-title" class="padding-top-15 padding-bottom-15">
         <div class="row">
             <div class="col-sm-8">
-                <h1 class="mainTitle" translate="sidebar.nav.marketing.EMAILS"></h1>
+                <h1 class="mainTitle" translate="sidebar.nav.emails.MAIN"></h1>
                 <span ng-if="emails" class="mainDescription">There are currently {{emails.length}} emails.</span>
                 <span ng-if="!emails" class="mainDescription">Loading emails...</span>
             </div>
@@ -62,6 +62,7 @@
                             <tr>
                                 <th class="center">Screenshot</th>
                                 <th st-sort="title">Title</th>
+                                <th st-sort="type">Type</th>
                                 <th st-sort="open">Sent</th>
                                 <th st-sort="open">Clicks</th>
                                 <th class="hidden-xs" st-sort="getters.created" ng-class="{'center': tableView != 'grid'}">Created</th>
@@ -88,6 +89,9 @@
                                     <!-- <input st-search="created" placeholder="Created" class="form-control" type="search" /> -->
                                 </th>
                                 <th>
+                                    <!-- <input st-search="created" placeholder="Created" class="form-control" type="search" /> -->
+                                </th>
+                                <th>
                                     <!-- <input st-search="modified" placeholder="Modified" class="form-control" type="search" /> -->
                                 </th>
                             </tr>
@@ -98,6 +102,7 @@
                                     <img id="template_screenshot_{{template._id}}" ng-src="{{ template.previewUrl }}" err-src="/admin/assets/images/default-page.jpg" class="img-thumbnail screenshot" alt="image">
                                 </td>
                                 <td><strong>Title: </strong>{{template.title | limitTo: 20 }}{{template.title.length > 20 ? '...' : ''}}</td>
+                                <td><strong>Type: </strong>{{template.type | limitTo: 20 }}{{template.type.length > 20 ? '...' : ''}}</td>
                                 <td><strong>Sent: </strong><span class="text-large text-bold">{{template.openRate || '--'}}</span><span ng-if="template.openRate" class="text-small muted"> ({{template.sent}})</span></td>
                                 <td><strong>Clicks: </strong><span class="text-large text-bold">{{template.clickRate || '--'}}</span><span ng-if="template.clickRate" class="text-small muted"> ({{template.clicks}})</span></td>
                                 <td class="hidden-xs" ng-class="{'center': tableView != 'grid'}"><strong>Created: </strong> {{template.created.date | date:'MMM d yy'}}</td>

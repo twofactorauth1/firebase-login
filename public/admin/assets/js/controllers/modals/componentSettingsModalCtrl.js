@@ -41,6 +41,32 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
     $scope.availableProductTagsString = $scope.availableProductTags.join(",");
   });
 
+  $scope.customerTags = [{
+    label: "Customer",
+    data: "cu"
+  }, {
+    label: "Colleague",
+    data: "co"
+  }, {
+    label: "Friend",
+    data: "fr"
+  }, {
+    label: "Member",
+    data: "mb"
+  }, {
+    label: "Family",
+    data: "fa"
+  }, {
+    label: "Admin",
+    data: "ad"
+  }, {
+    label: 'Lead',
+    data: 'ld'
+  }, {
+    label: "Other",
+    data: "ot"
+  }];
+
   $scope.testOptions = {
     min: 5,
     max: 100,

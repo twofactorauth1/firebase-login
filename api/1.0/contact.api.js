@@ -520,6 +520,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 var campaignId = req.body.campaignId;
                 var fromContactName = req.body.fromName;
                 var activity = req.body.activity;
+                var contact_type = req.body.contact_type;
                 delete req.body.skipWelcomeEmail;
                 delete req.body.fromEmail;
                 delete req.body.fromName;
@@ -536,8 +537,14 @@ _.extend(api.prototype, baseApi.prototype, {
                     }
                     var contact = new $$.m.Contact(req.body);
                     contact.set('accountId', value.id());
-                    contact.set('type', 'ld');
-                    contact.set('tags', ['ld']);
+                    self.log.debug('contact_type ', contact_type);
+                    if (!contact_type) {
+                        contact.set('type', 'ld');
+                        contact.set('tags', ['ld']);
+                    } else {
+                        contact.set('type', contact_type);
+                        contact.set('tags', [contact_type]);
+                    }
                     if(contact.get('fingerprint')) {
                         contact.set('fingerprint', ''+contact.get('fingerprint'));
                     }
