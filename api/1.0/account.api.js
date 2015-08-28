@@ -64,6 +64,8 @@ _.extend(api.prototype, baseApi.prototype, {
                     return resp.send({});
                 } else {
                     self.log.debug('<< getCurrentAccount');
+                    self._addTrialDaysToAccount(value);
+
                     //no security for now.  Currently can be called without authentication.
                     //return self.checkPermissionAndSendResponse(req, self.sc.privs.VIEW_ACCOUNT, resp, value.toJSON('public'));
                     return resp.send(value.toJSON('public'));
@@ -267,6 +269,7 @@ _.extend(api.prototype, baseApi.prototype, {
             } else {
                 accountDao.getById(accountId, function(err, value) {
                     if (!err && value != null) {
+                        self._addTrialDaysToAccount(value);
                         resp.send(value.toJSON("public"));
                     } else {
                         self.wrapError(resp, 500, null, err, value);
@@ -606,6 +609,18 @@ _.extend(api.prototype, baseApi.prototype, {
                 res.send({isDuplicate: true, candidateDomain: subdomain});
             }
         });
+    },
+
+    _addTrialDaysToAccount: function(account) {
+        var billing = account.get('billing') || {};
+        var trialDays = billing.trialLength || 14;
+        var endDate = moment(billing.signupDate).add(trialDays, 'days');
+
+        var trialDaysRemaining = endDate.diff(moment(), 'days');
+        if(trialDaysRemaining < 0) {
+            trialDaysRemaining = 0;
+        }
+        account.set('trialDaysRemaining', trialDaysRemaining);
     }
 });
 

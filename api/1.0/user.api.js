@@ -287,7 +287,8 @@ _.extend(api.prototype, baseApi.prototype, {
         var middle = req.body.middle;
 
         var cardToken = req.body.cardToken;
-        var plan = req.body.plan || 'NO_PLAN_ARGUMENT';//TODO: make sure this gets passed
+        var plan = req.body.plan || 'NO_PLAN';
+        var trialLength = req.body.trialLength || 14;
         self.log.debug('>> plan ', plan);
 
         var sendWelcomeEmail = true;//this can be overridden in the request.
@@ -350,6 +351,8 @@ _.extend(api.prototype, baseApi.prototype, {
                 billingObj.plan = plan;
                 billingObj.coupon = coupon;
                 billingObj.setupFee = setupFee;
+                billingObj.signupDate = new Date();
+                billingObj.trialLength = trialLength;
                 accountDao.saveOrUpdate(account, function (err, updatedAccount) {
                     if(err || updatedAccount === null) {
                         self.log.error('Error creating Stripe customer: ' + err);
