@@ -628,11 +628,17 @@ module.exports = {
             }
 
             var chargeId = paymentDetails.charge.id;
+            log.debug('>> chargeId ', chargeId);
+            if(!chargeId) {
+                log.error('Error creating refund.  No charge found.');
+                return fn('No charge found', null);
+            }
             var refundAmount = paymentDetails.charge.amount;
             if(amount) {
                 refundAmount = amount;
             }
             var metadata = null;
+            
             stripeDao.createRefund(chargeId, refundAmount, false, reason, metadata, accessToken, function(err, refund){
                 if(err) {
                     log.error('Error creating refund: ' + err);
