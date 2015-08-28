@@ -1265,6 +1265,18 @@ var dao = {
                         },
                         "color" : ""
                     },
+                    "spacing" : {
+                        "pt" : 0,
+                        "pb" : 0,
+                        "pl" : 0,
+                        "pr" : 0,
+                        "mt" : 0,
+                        "mb" : 0,
+                        "mr" : "auto",
+                        "ml" : "auto",
+                        "mw" : "100%",
+                        "usePage" : false
+                    },
                     "btn" : {
                         "text" : "",
                         "url" : "",
@@ -1648,6 +1660,18 @@ var dao = {
                         },
                         "color" : ""
                     },
+                    "spacing" : {
+                        "pt" : 0,
+                        "pb" : 0,
+                        "pl" : 0,
+                        "pr" : 0,
+                        "mt" : 0,
+                        "mb" : 0,
+                        "mr" : "auto",
+                        "ml" : "auto",
+                        "mw" : "100%",
+                        "usePage" : false
+                    },
                     "title" : null
                 }
             ],
@@ -1742,6 +1766,18 @@ var dao = {
                         "blur" : false
                     },
                     "color" : ""
+                },
+                "spacing" : {
+                    "pt" : 0,
+                    "pb" : 0,
+                    "pl" : 0,
+                    "pr" : 0,
+                    "mt" : 0,
+                    "mb" : 0,
+                    "mr" : "auto",
+                    "ml" : "auto",
+                    "mw" : "100%",
+                    "usePage" : false
                 },
                 "title" : null
             }],
