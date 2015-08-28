@@ -11,7 +11,7 @@
             <div ng-if="!uploadingCsv && csvResults.length <= 0">
                 <p class="help-block">Import your contacts from one of the options below.</p>
                 <div class="row">
-                    <div class="col-xs-6">
+                    <div class="col-xs-4">
                         <div class="list-group-item center list-group-item-warning" ng-if="!googlePlusActive">
                             <span class="fa-stack fa-2x">
                                     <i class="fa fa-square fa-stack-2x google-plus"></i>
@@ -26,7 +26,14 @@
                             <p>Import contacts from Google.</p>
                         </a>
                     </div>
-                    <div class="col-xs-6">
+                    <div class="col-xs-4">
+                        <a class="list-group-item center" href="https://www.linkedin.com/settings/data-export-page" target="_blank">
+                            <span class="fa-stack fa-2x"> <i class="fa fa-square fa-stack-2x text-primary"></i> <i class="fa fa-linkedin fa-stack-1x fa-inverse"></i> </span>
+                            <h2 class="StepTitle">LinkedIn</h2>
+                            <p>Import contacts from LinkedIn.</p>
+                        </a>
+                    </div>
+                    <div class="col-xs-4">
                         <a class="list-group-item center" ng-click="showSocialAccountSelect('csv')" ng-class="{'list-group-item-info': showCSVUpload}">
                             <span class="fa-stack fa-2x"> <i class="fa fa-square fa-stack-2x text-primary"></i> <i class="fa fa-file-text-o fa-stack-1x fa-inverse"></i> </span>
                             <h2 class="StepTitle">CSV</h2>
