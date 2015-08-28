@@ -335,10 +335,11 @@ var dao = {
         return this.getById(emailId, $$.m.cms.Email, fn);
     },
 
-    getLatestPageForWebsite: function(websiteId, pageName, fn) {
+    getLatestPageForWebsite: function(websiteId, pageName, accountId, fn) {
         var query = {
             websiteId: websiteId,
             handle: pageName,
+            accountId: accountId,
             latest: true
         };
 
