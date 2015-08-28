@@ -33,7 +33,7 @@ _.extend(view.prototype, BaseView.prototype, {
                 data.account = value.toJSON();
                 //determine trial days remaining
                 data.account.billing = data.account.billing || {};
-                var trialDays = data.account.billing.trialLength || 14;
+                var trialDays = data.account.billing.trialLength || 15;//using 15 instead of 14 to give 14 FULL days
                 var endDate = moment(data.account.billing.signupDate).add(trialDays, 'days');
                 data.account.trialDaysRemaining = endDate.diff(moment(), 'days');
                 if(data.account.trialDaysRemaining < 0) {

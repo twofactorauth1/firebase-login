@@ -613,7 +613,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
     _addTrialDaysToAccount: function(account) {
         var billing = account.get('billing') || {};
-        var trialDays = billing.trialLength || 14;
+        var trialDays = billing.trialLength || 15;//using 15 instead of 14 to give 14 FULL days
         var endDate = moment(billing.signupDate).add(trialDays, 'days');
 
         var trialDaysRemaining = endDate.diff(moment(), 'days');
