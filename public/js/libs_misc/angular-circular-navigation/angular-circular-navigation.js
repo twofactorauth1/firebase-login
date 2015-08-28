@@ -8,7 +8,7 @@
   var angular = window.angular ? window.angular : 'undefined' !== typeof require ? require('angular') : undefined;
 
   var circular = angular.module('angularCircularNavigation', [])
-    .directive('circular', ['$compile', '$timeout', function ($compile, $timeout) {
+    .directive('circular', ['$compile', '$timeout', '$location', function ($compile, $timeout, $location) {
 
       return {
         restrict: 'E',
@@ -22,8 +22,12 @@
         link: function (scope, $element, $attrs) {
           
           scope.options = angular.copy(scope.passedOptions);
+          // Check if single post 
           scope.component = angular.copy(scope.passedComponent);
-          
+          if ($location.search().posthandle) {
+            scope.posthandle = true;
+          };
+
           var timer;
 
           scope.toggleMenu = function () {
@@ -46,7 +50,7 @@
             if (scope.options.toggleOnClick) {
               scope.toggleMenu();
             }
-          };
+          };        
 
           scope.hideItem = function(item)
           {
@@ -65,6 +69,16 @@
           if(scope.passedIndex == 0 && item.type === "up")
           {
             _hide = true;
+          }
+          if(scope.posthandle)
+          {
+            if(item.type==="design" && scope.component.type === 'single-post')
+            {
+              _hide = false;
+            }
+            else{
+              _hide = true; 
+            }
           }
           return _hide;
           };          
