@@ -656,7 +656,9 @@ _.extend(api.prototype, baseApi.prototype, {
 
                                                     });
                                                 } else {
+                                                    self.log.debug('emailPage ', emailPage);
                                                     var component = emailPage.get('components')[0];
+                                                    self.log.debug('emailPage 1st component ', component.logo);
                                                     self.log.debug('Using this for data', emailPage.get('_id'));
                                                     self.log.debug('Using this account for data', account);
                                                     self.log.debug('This component:', component);
@@ -664,9 +666,10 @@ _.extend(api.prototype, baseApi.prototype, {
                                                         component.logourl = account.attributes.business.logo;
                                                     }
 
-                                                    component.logo.replace('"//', '"http://');
-                                                    component.text = component.text.replace('"//', '"http://').replace(new RegExp('FHEMAIL', 'g'), savedContact.getEmails()[0].email);
-                                                    component.title = component.title.replace('"//', '"http://').replace(new RegExp('FHEMAIL', 'g'), savedContact.getEmails()[0].email);
+                                                    component.logo = component.logo.replace('src="//', 'src="http://');
+
+                                                    component.text = component.text.replace('src="//', 'src="http://').replace(new RegExp('FHEMAIL', 'g'), savedContact.getEmails()[0].email);
+                                                    component.title = component.title.replace('src="//', 'src="http://').replace(new RegExp('FHEMAIL', 'g'), savedContact.getEmails()[0].email);
                                                     app.render('emails/base_email', component, function(err, html){
                                                         if(err) {
                                                             self.log.error('error rendering html: ' + err);
@@ -675,6 +678,7 @@ _.extend(api.prototype, baseApi.prototype, {
                                                             console.log('savedContact ', savedContact);
                                                             var contactEmail = savedContact.getEmails()[0].email;
                                                             var contactName = savedContact.get('first') + ' ' + savedContact.get('last');
+                                                            var emailSubject = emailPage.get('subject');
                                                             self.log.debug('sending email to: ',contactEmail);
 
 
@@ -709,14 +713,14 @@ _.extend(api.prototype, baseApi.prototype, {
                                                                 {
                                                                     self.log.debug('user email: ', account.attributes.business.emails[0].email);
                                                                     accountEmail = account.attributes.business.emails[0].email;
-                                                                    self._sendEmailOnCreateAccount(req, resp, accountEmail, activity.contact, account._id, component)
+                                                                    self._sendEmailOnCreateAccount(req, resp, accountEmail, activity.contact, account._id, component, emailPage.get('_id'), savedContact)
                                                                 }
                                                                 else{
                                                                     userDao.getUserAccount(query.accountId, function(err, user){
                                                                         self.log.debug('user: ', user);
                                                                         self.log.debug('user email: ', user.attributes.email);
                                                                         accountEmail = user.attributes.email;
-                                                                        self._sendEmailOnCreateAccount(req, resp, accountEmail, activity.contact, account._id, component);
+                                                                        self._sendEmailOnCreateAccount(req, resp, accountEmail, activity.contact, account._id, component, emailPage.get('_id'), savedContact);
                                                                     })
                                                                 }
 
@@ -1116,16 +1120,18 @@ _.extend(api.prototype, baseApi.prototype, {
         });
 
     },
-    _sendEmailOnCreateAccount: function(req, resp, accountEmail, fields, accountId, comp) {
+    _sendEmailOnCreateAccount: function(req, resp, accountEmail, fields, accountId, comp, emailId, savedContact) {
+        console.log('savedContact ', savedContact);
         var self = this;
         var component = {};
-        component.logourl = comp.logourl;
+        component.logourl = 'https://s3.amazonaws.com/indigenous-account-websites/acct_6/logo.png';
         var text = [];
          for(var attributename in fields){
             text.push("<b>"+attributename+"</b>: "+fields[attributename]);
         }
         self.log.debug(fields);
-        component.title = "New customer created";
+        self.log.debug('accountEmail ', accountEmail);
+        component.title = "You have a new contact!";
         component.text = text;
         app.render('emails/new_customer_created', component, function(err, html){
             if(err) {
@@ -1140,7 +1146,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 var vars = [];
 
                 
-                mandrillHelper.sendBasicEmail(fromEmail, fromName, accountEmail, null, emailSubject, html, accountId, vars, emailPage.get('_id'), function(err, result){
+                mandrillHelper.sendBasicEmail(fromEmail, fromName, accountEmail, null, emailSubject, html, accountId, vars, emailId, function(err, result){
                     self.log.debug('result: ', result);
                 });
             }
