@@ -569,12 +569,12 @@
             <label>Selected Product</label>
             <div class="well margin-bottom-0">
                 <div class="col-xs-3">
-                    <img ng-if="product.icon && product.is_image" ng-src="{{product.icon ? product.icon : '/admin/assets/images/default-product.png'}}" width="100" height="100" class="screenshot img-circle">
-                    <div class="img-thumbnail img-circle" ng-if="!product.icon">
+                    <img ng-if="selectedProduct.icon && selectedProduct.is_image" ng-src="{{selectedProduct.icon ? selectedProduct.icon : '/admin/assets/images/default-product.png'}}" width="100" height="100" class="screenshot img-circle">
+                    <div class="img-thumbnail img-circle" ng-if="!selectedProduct.icon">
                         <span class="fa fa-cube fa-4x text-primary"></span>
                     </div>
-                    <div class="img-thumbnail img-circle" ng-if="!product.is_image && product.icon">
-                        <span class="fa {{product.icon}} fa-4x text-primary"></span>
+                    <div class="img-thumbnail img-circle" ng-if="!selectedProduct.is_image && selectedProduct.icon">
+                        <span class="fa {{selectedProduct.icon}} fa-4x text-primary"></span>
                     </div>
                 </div>
                 <div class="col-xs-9">
