@@ -70,10 +70,26 @@
     $scope.getProducts = function () {
       ProductService.getProducts(function (products) {
         console.log('products >>> ', products);
-        $scope.products = products;
+        $scope.products = products;        
         $scope.getOrder();
       });
     };
+
+    $scope.eliminateUsedProducts = function()
+    {
+      $scope.filterProducts = angular.copy($scope.products);
+      _.each($scope.order.line_items, function (line_item) {
+          var matchProduct = _.find($scope.filterProducts, function (product) {
+            return product._id === line_item.product_id;
+          });
+          if(matchProduct)
+          {
+            var index = _.indexOf($scope.filterProducts, matchProduct);
+            if(index > -1)         
+              $scope.filterProducts.splice(index, 1);
+          }
+        })
+    }
 
     /*
      * @getOrder
@@ -105,6 +121,7 @@
 
           order.locked = true; // TODO: remove this when server sends 'locked' property
           $scope.order = order;
+          $scope.eliminateUsedProducts();
           $scope.selectedCustomer = _.find($scope.customers, function (customer) {
             return customer._id === $scope.order.customer_id;
           });
@@ -120,6 +137,7 @@
             line_items: [],
             notes: []
           };
+          $scope.eliminateUsedProducts();
           console.log('$scope.order ', $scope.order);
 
         }
@@ -301,6 +319,7 @@
       $scope.order.line_items.push(_line_item);
       $scope.calculateTotals();
       $scope.clearProduct();
+      $scope.eliminateUsedProducts();
       $scope.closeModal();
     };
 
@@ -318,6 +337,7 @@
         }
       });
       $scope.order.line_items = filteredLineItems;
+      $scope.eliminateUsedProducts();
       $scope.calculateTotals();
     };
 

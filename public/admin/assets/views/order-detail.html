@@ -551,7 +551,7 @@
                 <ui-select-match placeholder="Select a Product">
                     <small ng-bind-html="$select.selected.name"></small>
                 </ui-select-match>
-                <ui-select-choices repeat="product in products | filter: $select.search track by $index">
+                <ui-select-choices repeat="product in filterProducts | filter: $select.search track by $index">
                     <img ng-if="product.icon && product.is_image" ng-src="{{product.icon ? product.icon : '/admin/assets/images/default-product.png'}}" width="40" height="40" class="screenshot img-circle">
                     <div class="img-thumbnail img-circle" ng-if="!product.icon">
                         <span class="fa fa-cube fa-2x text-primary"></span>
