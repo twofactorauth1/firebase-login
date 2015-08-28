@@ -747,16 +747,20 @@
                     <div class="well">
                         <div class="row">
                             <div class="col-sm-12">
-                                <div class="radio radio-inline clip-radio radio-primary" style="margin-top:0px!important">
+                                <label class="block">
+                                    <strong>After Signup Event </strong>
+                                    <span tooltip-placement="top" tooltip-html-unsafe="Select the communication you would like intitiated"><i class="fa fa-info-circle" /></span>
+                                </label>
+                                <div class="radio radio-inline clip-radio radio-primary">
                                     <input type="radio" id="radio3" name="vertical" value="true" ng-model="componentEditing.sendEmail">
                                     <label for="radio3">
-                                        Send Email
+                                        Email
                                     </label>
                                 </div>
                                 <div class="radio radio-inline clip-radio radio-primary">
                                     <input type="radio" id="radio4" name="vertical" value="false" ng-model="componentEditing.sendEmail">
                                     <label for="radio4">
-                                        Add to Campaign
+                                        Campaign
                                     </label>
                                 </div>
                             </div>
@@ -796,7 +800,6 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="well margin-bottom-0">
                         <div class="form-group" ng-class="{'margin-bottom-0': !componentEditing.redirect}">
                             <label for="redirect"><strong>Redirect:</strong></label>

@@ -523,10 +523,12 @@ _.extend(api.prototype, baseApi.prototype, {
                 var fromContactName = req.body.fromName;
                 var activity = req.body.activity;
                 var contact_type = req.body.contact_type;
+
+                console.log('req.body ', req.body);
+
                 delete req.body.skipWelcomeEmail;
                 delete req.body.fromEmail;
                 delete req.body.fromName;
-                delete req.body.campaignId;
                 delete req.body.activity;
 
                 contactDao.findMany(query, $$.m.Contact, function(err, list){
@@ -585,6 +587,9 @@ _.extend(api.prototype, baseApi.prototype, {
                                 req.flash("error", 'There was a problem signing up.  Please try again later.');
                                 return self.wrapError(resp, 500, "There was a problem signing up.  Please try again later.", err, value);
                             } else {
+                                self.log.debug('campaignId: ', campaignId);
+                                self.log.debug('emailId: ', emailId);
+                                self.log.debug('sendEmail: ', sendEmail);
                                 /*
                                  * If there is a campaign associated with this signup, update it async.
                                  */
@@ -600,8 +605,9 @@ _.extend(api.prototype, baseApi.prototype, {
                                         }
                                     });
                                 }
-                                //TODO: add a param to not send the welcome.
-                                if(skipWelcomeEmail !== 'true' && skipWelcomeEmail !== true && emailId && sendEmail) {
+                                //TODO: add a param to not send the welcome. 
+                                //skipWelcomeEmail !== 'true' && skipWelcomeEmail !== true &&
+                                if(emailId && sendEmail) {
                                     /*
                                      * Send welcome email.  This is done asynchronously.
                                      *
