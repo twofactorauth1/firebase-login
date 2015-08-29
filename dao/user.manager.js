@@ -339,10 +339,12 @@ module.exports = {
                         if (value != null) {
                             //return fn(true, "An account with this username already exists");
                             user = value;
+                            user.set('fingerprint', fingerprint);
                         } else {
                             user = new $$.m.User({
                                 username:username,
                                 email:email,
+                                fingerprint: fingerprint,
                                 created: {
                                     date: new Date().getTime(),
                                     strategy: $$.constants.user.credential_types.LOCAL,
