@@ -263,41 +263,45 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                 //validate
                 //email
                 scope.isFormValid = false;
+                scope.validateForm = true;
                 scope.showFooter(true);
                 if (!scope.newAccount.email) {
                     scope.checkEmailExists(newAccount);
-                    return;
+                    scope.validateForm = false;
                 }
 
                 //pass
                 if (!scope.newAccount.password && !scope.newAccount.tempUserId && !scope.newAccount.hidePassword) {
                     scope.checkPasswordLength(newAccount);
-                    return;
+                    scope.validateForm = false;
                 }
 
                 //url
                 if (!scope.newAccount.businessName) {
                     console.log('business name does not exist');
                     scope.checkDomainExists(newAccount);
-                    return;
+                    scope.validateForm = false;
                 }
 
                 if (!scope.newAccount.first) {
                     scope.checkFirstName(newAccount);
-                    return;
+                    scope.validateForm = false;
                 }
 
                 if (!scope.newAccount.last) {
                     scope.checkLastName(newAccount);
-                    return;
+                    scope.validateForm = false;
                 }
 
                 if(!scope.newAccount.hidePassword) {
                     scope.checkPasswordLength(newAccount);
                     if(!scope.passwordIsValid) {
-                        return;
+                        scope.validateForm = false;
                     }
                 }
+
+                if(!scope.validateForm)
+                    return;
 
                 //if (!scope.newAccount.phone) {
                 //    scope.checkPhone(newAccount);
@@ -415,8 +419,9 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                 });
             };
 
-            scope.checkDomainExists = function(newAccount) {
+            scope.checkDomainExists = function(newAccount) {                
                 if (!newAccount.businessName) {
+                    scope.validBusinessName = false;
                     angular.element("#business-name .error").html("Business Name Required");
                     angular.element("#business-name").addClass('has-error');
                     angular.element("#business-name .glyphicon").addClass('glyphicon-remove');
@@ -424,10 +429,12 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                     var name = $.trim(newAccount.businessName).replace(" ", "").replace(".", "_").replace("@", "");
                     UserService.checkDomainExists(name, function(data) {
                         if (data !== 'true') {
+                            scope.validBusinessName = false;
                             angular.element("#business-name .error").html("Domain Already Exists");
                             angular.element("#business-name").addClass('has-error');
                             angular.element("#business-name .glyphicon").addClass('glyphicon-remove');
                         } else {
+                            scope.validBusinessName = true;
                             angular.element("#business-name .error").html("");
                             angular.element("#business-name").removeClass('has-error').addClass('has-success');
                             angular.element("#business-name .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
@@ -444,7 +451,7 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                     angular.element("#email .glyphicon").addClass('glyphicon-remove');
                 } else {
                     UserService.checkEmailExists(newAccount.email, function(data) {
-                        if (data === 'true') {
+                        if (data === true) {
                             angular.element("#email .error").html("Email Already Exists");
                             angular.element("#email").addClass('has-error');
                             angular.element("#email .glyphicon").addClass('glyphicon-remove');
@@ -474,7 +481,7 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
             scope.checkLastName = function(newAccount) {
                 scope.newAccount.last = newAccount.last;
                 if (!newAccount.last) {
-                    angular.element("#last .error").html("First Name Required");
+                    angular.element("#last .error").html("Last Name Required");
                     angular.element("#last").addClass('has-error');
                     angular.element("#last .glyphicon").addClass('glyphicon-remove');
                 } else {

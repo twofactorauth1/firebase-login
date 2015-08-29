@@ -4,14 +4,13 @@
 app.directive('mastheadComponent',["$window", function ($window) {
   return {
     scope: {
-      component: '=',
-      control: '='
+      component: '='
     },
     templateUrl: '/components/component-wrap.html',
     link: function (scope, element, attrs) {
       scope.addUndernavImages = function()
       {
-        if(scope.component.bg && scope.component.bg.img && scope.component.bg.img.undernav)
+        if(scope.component.bg && scope.component.bg.img && scope.component.bg.img.show && scope.component.bg.img.undernav)
           scope.addUndernavClasses = true;
         else
           scope.addUndernavClasses = false;
@@ -22,6 +21,7 @@ app.directive('mastheadComponent',["$window", function ($window) {
       });
 
       angular.element($window).bind('resize', function () {
+        console.log("resize");
         scope.setUnderbnavMargin();        
       });
       scope.setUnderbnavMargin = function () {
@@ -60,20 +60,17 @@ app.directive('mastheadComponent',["$window", function ($window) {
             angular.element(".undernav200").removeClass("masthead-undernav");
             angular.element(".undernav").closest('li.fragment').removeClass("li-nav-undernav");
           }
-
+          $(window).trigger('scroll');
         }, 300);
       };
-      angular.element(document).ready(function () {
-        setTimeout(function () {
+      
+      scope.$watch('component.bg.img', function (newValue, oldValue) {
+        if (angular.isDefined(newValue)){
+          console.log("Watch performed");
           scope.setUnderbnavMargin();
-        }, 500)
-      })
+        }
+      }, true);
       scope.isEditing = true;
-      scope.control.setUnderNav = function()
-      {
-        scope.setUnderbnavMargin();
-      }
-
     }
   };
 }]);

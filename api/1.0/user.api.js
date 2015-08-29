@@ -287,7 +287,8 @@ _.extend(api.prototype, baseApi.prototype, {
         var middle = req.body.middle;
 
         var cardToken = req.body.cardToken;
-        var plan = req.body.plan || 'NO_PLAN_ARGUMENT';//TODO: make sure this gets passed
+        var plan = req.body.plan || 'NO_PLAN';
+        var trialLength = req.body.trialLength || 15;//using 15 instead of 14 to give 14 FULL days
         self.log.debug('>> plan ', plan);
 
         var sendWelcomeEmail = true;//this can be overridden in the request.
@@ -350,6 +351,8 @@ _.extend(api.prototype, baseApi.prototype, {
                 billingObj.plan = plan;
                 billingObj.coupon = coupon;
                 billingObj.setupFee = setupFee;
+                billingObj.signupDate = new Date();
+                billingObj.trialLength = trialLength;
                 accountDao.saveOrUpdate(account, function (err, updatedAccount) {
                     if(err || updatedAccount === null) {
                         self.log.error('Error creating Stripe customer: ' + err);
@@ -362,7 +365,7 @@ _.extend(api.prototype, baseApi.prototype, {
             },
             function(user, account, callback){
                 self.log.debug('Created user[' + user.id() + '] and account[' + account.id() + '] objects.');
-                paymentsManager.createStripeCustomerForUser(cardToken, user, account.id(), function(err, stripeCustomer) {
+                paymentsManager.createStripeCustomerForUser(cardToken, user, appConfig.mainAccountID, function(err, stripeCustomer) {
                     if (err) {
                         self.log.error('Error creating Stripe customer: ' + err);
                         accountDao.deleteAccountAndArtifacts(account.id(), function(_err, value){

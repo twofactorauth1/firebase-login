@@ -8,7 +8,7 @@
   var angular = window.angular ? window.angular : 'undefined' !== typeof require ? require('angular') : undefined;
 
   var circular = angular.module('angularCircularNavigation', [])
-    .directive('circular', ['$compile', '$timeout', function ($compile, $timeout) {
+    .directive('circular', ['$compile', '$timeout', '$location', function ($compile, $timeout, $location) {
 
       return {
         restrict: 'E',
@@ -18,17 +18,16 @@
           passedComponent: '=',
           passedComponentLength: '@'
         },
-        template: '<div ng-mouseenter="toggleMenu()" ng-mouseleave="hideIt()"><button class="cn-button {{options.button.size}}" ng-style="{background: options.button.background ? \'{{options.button.background}}\' : \'{{options.background}}\', color: options.button.color ? \'{{options.button.color}}\' : \'{{options.color}}\'}"><span ng-class="options.button.cssClass"></span><div class="clearfix"></div><p class="text-small" ng-text-truncate="passedComponent.type" ng-tt-chars-threshold="10" ng-tt-no-toggling></p></button>' +
-          '<div class="cn-wrapper {{options.size}} items-{{options.items.length}}" ng-class="{\'opened-nav\': options.isOpen}"><ul>' +
-          '<li ng-repeat="item in options.items">' +
-          '<a ng-hide="item.empty || hideItem(item)" ng-click="perform(options, item)" ng-class="{\'is-active\': item.isActive}" class="{{item.cssClass}}" ng-style="{background: item.background ? \'{{item.background}}\' : \'{{options.background}}\', color: item.color ? \'{{item.color}}\' : \'{{options.color}}\'}">' +
-          '<span ng-bind-html="item.content"></span></div>' +
-          '</a></li></ul></div>',
+        templateUrl: '/js/libs_misc/angular-circular-navigation/angular-circular-navigation.html',
         link: function (scope, $element, $attrs) {
           
           scope.options = angular.copy(scope.passedOptions);
+          // Check if single post 
           scope.component = angular.copy(scope.passedComponent);
-          
+          if ($location.search().posthandle) {
+            scope.posthandle = true;
+          };
+
           var timer;
 
           scope.toggleMenu = function () {
@@ -51,7 +50,7 @@
             if (scope.options.toggleOnClick) {
               scope.toggleMenu();
             }
-          };
+          };        
 
           scope.hideItem = function(item)
           {
@@ -70,6 +69,16 @@
           if(scope.passedIndex == 0 && item.type === "up")
           {
             _hide = true;
+          }
+          if(scope.posthandle)
+          {
+            if(item.type==="design" && scope.component.type === 'single-post')
+            {
+              _hide = false;
+            }
+            else{
+              _hide = true; 
+            }
           }
           return _hide;
           };          

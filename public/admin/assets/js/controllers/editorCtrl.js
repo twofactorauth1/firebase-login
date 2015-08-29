@@ -665,7 +665,6 @@
      */
     $scope.thumbnailSlider = {};
     $scope.contactMap = {};
-    $scope.underNav = {};
     $scope.blogControl = {};
 
     $scope.insertMedia = function (asset) {
@@ -820,10 +819,6 @@
 
         _modal.resolve.openParentModal = function () {
           return $scope.openModal;
-        };
-
-        _modal.resolve.underNav = function () {
-          return $scope.underNav;
         };
 
         _modal.resolve.blogImage = function () {
@@ -1315,13 +1310,29 @@
      * -
      */
 
-    $scope.deleteComponent = function (index) {
-      var _type = $scope.components[index].type;
-      $scope.components.splice(index, 1);
-      toaster.pop('success', "Component Deleted", "The " + _type + " component was deleted successfully.");
-      $timeout(function () {
-        $scope.scrollToComponent(index)
-      }, 1000)
+    $scope.deleteComponent = function (index) {      
+        SweetAlert.swal({
+          title: "Are you sure?",
+          text: "Do you want to delete this component?",
+          type: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#DD6B55",
+          confirmButtonText: "Yes, delete it!",
+          cancelButtonText: "No, do not delete it!",
+          closeOnConfirm: true,
+          closeOnCancel: true
+        },
+        function (isConfirm) {
+          if (isConfirm) {
+            var _type = $scope.components[index].type;
+            $scope.components.splice(index, 1);
+            toaster.pop('success', "Component Deleted", "The " + _type + " component was deleted successfully.");
+            $timeout(function () {
+              $scope.scrollToComponent(index);
+              $(window).trigger('resize');
+            }, 1000);
+          };
+        });
     };
 
     /*

@@ -287,6 +287,12 @@ circular,
     opacity: 1;
 }
 
+.cn-wrapper li a.linkDisabled {
+  cursor: default;
+  background: #ccc !important;
+  opacity: 0.6;
+}
+
 
 /* line 230, scss/angular-circular-navigation.scss */
 

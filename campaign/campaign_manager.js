@@ -786,27 +786,29 @@ module.exports = {
                 var steps = flow.get('steps');
                 var i = flow.get('lastStep');
                 var nextStep = steps[i];
-                while(nextStep && nextStep.executed) {
-                    i++;
-                    nextStep = steps[i];
-                }
-                if(!nextStep) {
-                    callback(null, null, i);
-                }
-                if(nextStep.trigger === trigger) {
-                    nextStep.triggered = new Date();
-                    campaignDao.saveOrUpdate(flow, function(err, updatedFlow){
-                        if(err) {
-                            callback(err);
-                        } else {
-                            self.log.debug('set step as triggered');
-                            callback(null, flow, i);
-                        }
-                    });
+                if (nextStep) {
+                    while(nextStep && nextStep.executed) {
+                        i++;
+                        nextStep = steps[i];
+                    }
+                    if(!nextStep) {
+                        callback(null, null, i);
+                    }
+                    if(nextStep.trigger === trigger) {
+                        nextStep.triggered = new Date();
+                        campaignDao.saveOrUpdate(flow, function(err, updatedFlow){
+                            if(err) {
+                                callback(err);
+                            } else {
+                                self.log.debug('set step as triggered');
+                                callback(null, flow, i);
+                            }
+                        });
 
-                } else {
-                    self.log.warn('Next step has a trigger of ' + nextStep.trigger + ' but was expected to have type ' + trigger);
-                    callback('Unexpected trigger type');
+                    } else {
+                        self.log.warn('Next step has a trigger of ' + nextStep.trigger + ' but was expected to have type ' + trigger);
+                        callback('Unexpected trigger type');
+                    }
                 }
             },
             function(flow, stepNumber, callback) {

@@ -121,7 +121,7 @@ mainApp.service('analyticsService', ['$http', '$location', 'ipCookie', function 
                 device: device
             },
             ip_address : "${keen.ip}",
-            fingerprint: fingerprint,
+            fingerprint: fingerprint.toString(),
             session_start: start,
             session_length: 0,
             timezone: timezone.name(),
@@ -129,6 +129,8 @@ mainApp.service('analyticsService', ['$http', '$location', 'ipCookie', function 
             entrance: parsedEntranceUrl.attr("path"),
             fullEntrance: $location.absUrl(),
         };
+
+        console.log('sessionProperties ', sessionProperties);
 
         var campaign = {};
         var hasUtm = false;

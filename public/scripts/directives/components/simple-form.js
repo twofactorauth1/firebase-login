@@ -7,6 +7,7 @@ app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userSe
     },
     templateUrl: '/components/component-wrap.html',
     link: function (scope) {
+      console.log('scope.component ', scope.component);
 
       scope.fieldsLength = function () {
         return _.filter(scope.component.fields, function (_field) {
@@ -49,11 +50,12 @@ app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userSe
             phones: []
           }],
           campaignId: scope.component.campaignId,
+          emailId: scope.component.emailId,
+          sendEmail: scope.component.sendEmail,
           skipWelcomeEmail: skipWelcomeEmail,
           fromEmail: scope.component.fromEmail,
           fromName: scope.component.fromName,
-          emailId: scope.component.emailId,
-          emailSubject: scope.component.emailSubject,
+          campaignId: scope.component.campaignId,
           activity: {
             activityType: 'CONTACT_FORM',
             note: scope.user.message || "Contact form data.",

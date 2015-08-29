@@ -375,6 +375,19 @@
                 var apiUrl = baseUrl + ['contact'].join('/');
                 return $http.post(apiUrl, customer);
             };
+            this.checkDuplicateEmail = function(email, check, fn) {
+                if(check && email)
+                {
+                   var apiUrl = baseUrl + ['contact', 'search', 'email', email].join('/');
+                    $http.get(apiUrl)
+                        .success(function(data, status, headers, config) {
+                            fn(data);
+                        }); 
+                }
+                else
+                    fn(null);
+                
+            };
 
         }
     ]);

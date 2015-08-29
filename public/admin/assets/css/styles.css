@@ -12920,6 +12920,7 @@ fieldset[disabled] .btn-vimeo-square.active {
 }
 #componentloader .fragment.email .cn-wrapper li:first-child {
   display: block!important;
+  -webkit-transform: rotate(75deg) skew(60deg) !important;
   transform: rotate(75deg) skew(60deg) !important;
 }
 #componentloader .fragment:hover .component-inner,
@@ -13040,6 +13041,20 @@ fieldset[disabled] .btn-vimeo-square.active {
 .editor-toolbar-wrap {
   z-index: 1088;
 }
+#editor-toolbar.email-toolbar .cke_top {
+  overflow: auto;
+}
+#editor-toolbar.email-toolbar .cke_top .cke_toolbox {
+  height: 56px;
+  display: block;
+  width: 1130px;
+}
+#editor-toolbar.common-toolbar::-webkit-scrollbar {
+  display: none;
+}
+#editor-toolbar.common-toolbar #cke_1_top::-webkit-scrollbar {
+  display: none;
+}
 #editor-toolbar {
   z-index: 100;
   display: block;
@@ -13047,9 +13062,6 @@ fieldset[disabled] .btn-vimeo-square.active {
   height: 54px;
   overflow-x: inherit;
   overflow-y: hidden;
-}
-#editor-toolbar::-webkit-scrollbar {
-  display: none;
 }
 #editor-toolbar.controls-fixed {
   top: 128px;
@@ -13061,9 +13073,6 @@ fieldset[disabled] .btn-vimeo-square.active {
   height: 56px;
   display: block;
   width: 1130px;
-}
-#editor-toolbar #cke_1_top::-webkit-scrollbar {
-  display: none;
 }
 #editor-toolbar .cke_chrome {
   border: none;
@@ -14159,7 +14168,7 @@ tags-input.ti-input-sm .tags .input,
   z-index: 999;
 }
 .create-campaign #componentloader {
-  min-height: auto!important;
+  min-height: 100% !important;
 }
 .create-campaign .swMain > ul li > a:before {
   width: 96%!important;
@@ -14208,4 +14217,11 @@ tags-input.ti-input-sm .tags .input,
   -moz-animation: fadeInLeft 1.5s;
   -ms-animation: fadeInLeft 1.5s;
   animation: fadeInLeft 1.5s;
+}
+/* ---------------------------------------------------------------------- */
+/*  Campaigns
+/* ---------------------------------------------------------------------- */
+.campaigns table.grid thead th {
+  width: 14.28%;
+  float: left;
 }

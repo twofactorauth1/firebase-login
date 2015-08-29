@@ -498,7 +498,7 @@
                         <ul class="order-notes height-330 panel-scroll" perfect-scrollbar wheel-propagation="false" suppress-scroll-x="true">
                             <li ng-repeat="note in order.notes" class="row">
                                 <div class="col-xs-2">
-                                    <img src="{{note.user.photo ? note.user.photo : '/admin/assets/images/default-user.png'}}" class="img-circle pull-left" width="32">
+                                    <img src="{{note.user.profilePhotos[0] ? note.user.profilePhotos[0] : '/admin/assets/images/default-user.png'}}" class="img-circle pull-left" width="32">
                                 </div>
                                 <div class="col-xs-10">
                                     <span class="text-small block text-light">{{note.user.first}} {{note.user.last}} <span class="pull-right">{{note.date | date:'dd MMM yy'}}</span></span>
@@ -551,7 +551,7 @@
                 <ui-select-match placeholder="Select a Product">
                     <small ng-bind-html="$select.selected.name"></small>
                 </ui-select-match>
-                <ui-select-choices repeat="product in products | filter: $select.search track by $index">
+                <ui-select-choices repeat="product in filterProducts | filter: $select.search track by $index">
                     <img ng-if="product.icon && product.is_image" ng-src="{{product.icon ? product.icon : '/admin/assets/images/default-product.png'}}" width="40" height="40" class="screenshot img-circle">
                     <div class="img-thumbnail img-circle" ng-if="!product.icon">
                         <span class="fa fa-cube fa-2x text-primary"></span>
@@ -569,12 +569,12 @@
             <label>Selected Product</label>
             <div class="well margin-bottom-0">
                 <div class="col-xs-3">
-                    <img ng-if="product.icon && product.is_image" ng-src="{{product.icon ? product.icon : '/admin/assets/images/default-product.png'}}" width="100" height="100" class="screenshot img-circle">
-                    <div class="img-thumbnail img-circle" ng-if="!product.icon">
+                    <img ng-if="selectedProduct.icon && selectedProduct.is_image" ng-src="{{selectedProduct.icon ? selectedProduct.icon : '/admin/assets/images/default-product.png'}}" width="100" height="100" class="screenshot img-circle">
+                    <div class="img-thumbnail img-circle" ng-if="!selectedProduct.icon">
                         <span class="fa fa-cube fa-4x text-primary"></span>
                     </div>
-                    <div class="img-thumbnail img-circle" ng-if="!product.is_image && product.icon">
-                        <span class="fa {{product.icon}} fa-4x text-primary"></span>
+                    <div class="img-thumbnail img-circle" ng-if="!selectedProduct.is_image && selectedProduct.icon">
+                        <span class="fa {{selectedProduct.icon}} fa-4x text-primary"></span>
                     </div>
                 </div>
                 <div class="col-xs-9">

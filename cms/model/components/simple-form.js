@@ -92,7 +92,25 @@ var component = $$.m.ModelBase.extend({
              *
              *
              */
-            contact_type : "Lead",
+            contact_type : "ld",
+
+            /**
+             *
+             *
+             */
+            sendEmail : "true",
+
+            /**
+             *
+             *
+             */
+            emailId : "",
+
+            /**
+             *
+             *
+             */
+            campaignId : "",
 
             /**
              *
@@ -115,17 +133,6 @@ var component = $$.m.ModelBase.extend({
                     show: false
                 },
                 color : "#4bb0cb"
-            },
-
-            /**
-             *
-             *
-             */
-            btn : {
-                visibility: true,
-                text : "Learn More",
-                url : "#features",
-                icon : "fa fa-rocket"
             },
 
             visibility: true,

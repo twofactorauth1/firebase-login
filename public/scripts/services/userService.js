@@ -3,6 +3,7 @@
 mainApp.service('userService', ['$http', 'ipCookie', function ($http, ipCookie) {
   var baseUrl = '/api/1.0/';
   this.addContact = function (user, fn) {
+    console.log('user >>> ', user);
     var apiUrl = baseUrl + ['contact', 'signupnews'].join('/');
     $http({
       url: apiUrl,

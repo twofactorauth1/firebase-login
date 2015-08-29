@@ -31,6 +31,15 @@ _.extend(view.prototype, BaseView.prototype, {
         this.getAccountByHost(_req, function(err, value) {
             if (!err && value != null) {
                 data.account = value.toJSON();
+                //determine trial days remaining
+                data.account.billing = data.account.billing || {};
+                var trialDays = data.account.billing.trialLength || 15;//using 15 instead of 14 to give 14 FULL days
+                var endDate = moment(data.account.billing.signupDate).add(trialDays, 'days');
+                data.account.trialDaysRemaining = endDate.diff(moment(), 'days');
+                if(data.account.trialDaysRemaining < 0) {
+                    data.account.trialDaysRemaining = 0;
+                }
+
                 //logger.debug('getAccountByHost', data.account);
             } else {
                 logger.warn('Error or null in getAccount');

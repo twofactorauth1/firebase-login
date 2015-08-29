@@ -65,6 +65,9 @@
       "dashboard": {
         "MAIN": "Dashboard"
       },
+      "emails": {
+        "MAIN": "Emails"
+      },
       "website": {
         "MAIN": "Website",
         "ANALYTICS": "Site Analytics",
@@ -88,8 +91,7 @@
         "MAIN": "Marketing",
         "SOCIALFEED": "Social Feed",
         "CAMPAIGNS": "Campaigns",
-        "NEWCAMPAIGN": "New Campaign",
-        "EMAILS": "Email Templates"
+        "NEWCAMPAIGN": "New Campaign"
       },
       "account": {
         "MAIN": "Account",

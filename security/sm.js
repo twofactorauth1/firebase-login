@@ -199,6 +199,11 @@ var securityManager = {
                 return cb(null, false);
             }
             var billing = account.get('billing');
+            if(self._isWithinTrial(billing)) {
+                req.session.subprivs = defaultSubscriptionPrivs;
+                log.debug('<< verifySubscription(freetrial: ' + req.session.accountId + ')');
+                return cb(null, true);
+            }
             if(!billing.subscriptionId) {
                 log.debug('No subscription found for account: ' + req.session.accountId);
                 return cb(null, false);
@@ -323,6 +328,14 @@ var securityManager = {
                 }
             });
         });
+    },
+
+    _isWithinTrial: function(billing) {
+        var trialDays = billing.trialLength || 15;//using 15 instead of 14 to give 14 FULL days
+        var endDate = moment(billing.signupDate).add(trialDays, 'days');
+
+        var trialDaysRemaining = endDate.diff(moment(), 'days');
+        return trialDaysRemaining > 0;
     }
 
 
@@ -336,4 +349,4 @@ module.exports = function(isDisabled){
         disabled = false;
     }
     return securityManager;
-}
+};

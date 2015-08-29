@@ -12,7 +12,12 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', '$window', '$locatio
   pagesService($scope.websiteId, function (err, data) {
     if (err) {
       console.warn('no page found');
-      $window.location.href = '/404';
+      if ($location.$$path.indexOf('login')) {
+        $window.location.href =  $location.$$path;
+      } else {
+        $window.location.href = '/404';
+      }
+
     } else {
       $scope.page = data;
       $scope.components = data.components;
