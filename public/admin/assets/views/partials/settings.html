@@ -84,6 +84,23 @@
                     </div>
                 </div>
             </div>
+            <div class="col-sm-3">
+                <div class="panel panel-transparent margin-bottom-0">
+                    <div class="panel-heading padding-bottom-0 padding-top-0" style="min-height: inherit">
+                        <div class="panel-title text-azure text-large">
+                            <i class="ti-email"></i> Emails
+                        </div>
+                        <hr class="margin-top-5 margin-bottom-5">
+                    </div>
+                    <div class="panel-body padding-top-0 padding-bottom-0">
+                        <ul class="list-unstyled cl-effect-1" style="line-height:25px">
+                            <li>
+                                <a ng-click="viewSettings('emails', 'Notifications')">Notifications</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
             <div class="clearfix"></div>
         </div>
         <div ng-show="settingsView == 'website'">
@@ -153,8 +170,8 @@
                                     <span class="input-icon input-icon-right" ng-class="{'has-error': domainError}">
                                         <input class="form-control" type="text" ng-model="account.subdomain" ng-change="checkDomainExists(account)" ng-model-options="{ debounce: 800 }" />
                                         <span ng-if="checkingSubdomain"><i class="fa fa-spinner fa-spin"></i></span>
-                                        <span ng-if="hasCheckedSubdomain && domainError && !checkingSubdomain"><i class="fa fa-times text-danger"></i></span>
-                                        <span ng-if="hasCheckedSubdomain && !domainError && !checkingSubdomain"><i class="fa fa-check text-success"></i></span>
+                                    <span ng-if="hasCheckedSubdomain && domainError && !checkingSubdomain"><i class="fa fa-times text-danger"></i></span>
+                                    <span ng-if="hasCheckedSubdomain && !domainError && !checkingSubdomain"><i class="fa fa-check text-success"></i></span>
                                     </span>
                                     <span class="help-block" ng-hide="hasCheckedSubdomain && !domainError && !checkingSubdomain || domainError"><i class="ti-info-alt text-primary"></i> Enter the new desired subdomain and we will check to see if its avaliable.</span>
                                     <span class="help-block text-success" ng-if="hasCheckedSubdomain && !domainError && !checkingSubdomain"><i class="ti-info-alt text-primary"></i> Save the settings for this to take effect.</span>
@@ -209,6 +226,43 @@
                 </tab>
             </tabset>
         </div>
+        <div ng-show="settingsView == 'emails'">
+            <tabset class="tabbable tabs-left margin-bottom-0">
+                <tab heading="Notifications">
+                    <form class="col-sm-6 form-horizontal">
+                        <div class="form-group">
+                            <label>Send me notifications for:</label>
+                            <div class="checkbox clip-check check-primary">
+                                <input type="checkbox" id="allNewContacts" ng-click="clearNoNotifications()" ng-model="account.notifications.new_contacts">
+                                <label for="allNewContacts">
+                                    New Contacts that sign up on your website
+                                </label>
+                            </div>
+                            <div class="checkbox clip-check check-primary">
+                                <input type="checkbox" id="allNewOrders" ng-click="clearNoNotifications()" ng-model="account.notifications.new_orders">
+                                <label for="allNewOrders">
+                                    New orders created by an online sale
+                                </label>
+                            </div>
+                            <div class="checkbox clip-check check-primary">
+                                <input type="checkbox" id="helpfulTips" ng-click="clearNoNotifications()" ng-model="account.notifications.helpful_tips">
+                                <label for="helpfulTips">
+                                    Helpful Tips and Insights from Indigenous
+                                </label>
+                            </div>
+                            <div class="checkbox clip-check check-primary">
+                                <input type="checkbox" id="noNotifications" ng-click="clearAllNotifications()" ng-model="account.notifications.no_notifications">
+                                <label for="noNotifications">
+                                    Don't Send Any Notifications
+                                </label>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </form>
+                    <div class="clearfix"></div>
+                </tab>
+            </tabset>
+        </div>
     </div>
     <div class="clearfix"></div>
     <div class="modal-footer">
@@ -216,7 +270,7 @@
             <button class="btn btn-primary pull-left" ng-click="viewSettings('all')">Show All</button>
         </div>
         <div class="pull-right">
-            <button class="btn btn-primary" ng-click="cancel($event)">Cancel</button>
+            <button class="btn btn-primary" ng-click="cancel($event)">Close</button>
         </div>
         <div ng-if="settingsView != 'all'" class="pull-right margin-right-5">
             <button class="btn btn-primary" ng-click="saveSettings()">Save </button>

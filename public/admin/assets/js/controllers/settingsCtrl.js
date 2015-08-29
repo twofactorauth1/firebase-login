@@ -15,7 +15,23 @@
       "website": "Website Settings",
       "commerce": "Commerce Settings",
       "customers": "Customers Settings",
+      "emails": "Email Settings",
       "all": "Settings"
+    };
+
+    /*
+     * @clearAllNotifications
+     * clear all notification checkboxes
+     */
+
+    $scope.clearAllNotifications = function () {
+      $scope.account.notifications.new_contacts = false;
+      $scope.account.notifications.new_orders = false;
+      $scope.account.notifications.helpful_tips = false;
+    };
+
+    $scope.clearNoNotifications = function () {
+      $scope.account.notifications.no_notifications = false;
     };
 
     /*
