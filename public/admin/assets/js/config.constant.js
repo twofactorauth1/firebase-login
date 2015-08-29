@@ -465,7 +465,11 @@ app.constant('userConstant', {
   activity_types: {
     PHONE: "p",
     EMAIL: "e"
-  }  
+  },
+
+  personal_profile: {
+    PASSWORD_PLACEHOLDER: "profile_password",
+  },
 });
 
 /*
