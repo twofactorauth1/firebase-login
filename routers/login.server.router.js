@@ -20,6 +20,8 @@ var urlUtils = require('../utils/urlutils');
 var userManager = require('../dao/user.manager');
 var userActivityManager = require('../useractivities/useractivity_manager');
 var appConfig = require('../configs/app.config');
+var UAParser = require('ua-parser-js');
+var parser = new UAParser();
 
 
 var router = function () {
@@ -117,6 +119,30 @@ _.extend(router.prototype, BaseRouter.prototype, {
             self.log.warn('cookie never expires!!!')
             req.session.cookie.expires = false;
         }
+
+        var ua = self.req.headers['user-agent'];
+        var result = parser.setUA(ua).getResult();
+        console.dir(result);
+        /*
+         * Need to pull in the following data:
+         * Date: December 12, 2014 10:28 AM
+         * Browser: Safari
+         * Operating System: OS X
+         * IP Address: 00.00.00.00
+         * Approximate Location: La Jolla, California, United States
+         */
+        var ip = self.ip(self.req);
+        var date = moment().format('MMMM DD, YYYY hh:mm A');
+        var browser = result.browser.name;
+        var os = result.os.name;
+
+        var requestorProps = {
+            ip: ip,
+            date: date,
+            browser: browser,
+            os: os
+        };
+
         /*
          * set the session accountId
          */
@@ -147,7 +173,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
 
                             resp.redirect(redirectUrl);
 
-                            userActivityManager.createUserLoginActivity(self.accountId(req), self.userId(req), function(){});
+                            userActivityManager.createUserLoginActivity(self.accountId(req), self.userId(req), requestorProps, function(){});
 
                             return;
                         });
@@ -180,7 +206,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
                                 self.log.debug('redirecting to /home');
                                 req.session.accountId = -1;
                                 resp.redirect("/home");
-                                userActivityManager.createUserLoginActivity(0, self.userId(req), function(){});
+                                userActivityManager.createUserLoginActivity(0, self.userId(req), requestorProps, function(){});
                                 self = req = resp = null;
                                 return;
                             } else if((subObject.subdomain === null || subObject.subdomain === '') && _.contains(accountIds, appConfig.mainAccountID)) {
@@ -195,7 +221,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
 
                                     self.log.debug('redirecting to ' + value);
                                     resp.redirect(value);
-                                    userActivityManager.createUserLoginActivity(appConfig.mainAccountID, self.userId(req), function(){});
+                                    userActivityManager.createUserLoginActivity(appConfig.mainAccountID, self.userId(req), requestorProps, function(){});
                                     self = null;
                                     return;
                                 });
@@ -225,7 +251,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
                                             self.log.debug('redirecting to ' + value);
 
                                             resp.redirect(value);
-                                            userActivityManager.createUserLoginActivity(self.accountId(req), self.userId(req), function(){});
+                                            userActivityManager.createUserLoginActivity(self.accountId(req), self.userId(req), requestorProps, function(){});
                                             self = null;
                                             return;
                                         }
@@ -265,7 +291,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
                                         }
                                         self.log.debug('redirecting to ' + authUrl);
                                         resp.redirect(authUrl);
-                                        userActivityManager.createUserLoginActivity(value.id(), self.userId(req), function(){});
+                                        userActivityManager.createUserLoginActivity(value.id(), self.userId(req), requestorProps, function(){});
 
                                         self = null;
                                     });
