@@ -287,7 +287,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var middle = req.body.middle;
 
         var cardToken = req.body.cardToken;
-        var plan = req.body.plan || 'NO_PLAN';
+        var plan = req.body.plan || 'NO_PLAN_ARGUMENT';
         var trialLength = req.body.trialLength || 15;//using 15 instead of 14 to give 14 FULL days
         self.log.debug('>> plan ', plan);
 
