@@ -499,8 +499,9 @@ _.extend(api.prototype, baseApi.prototype, {
                 console.dir(req.body);
                 self.log.debug('signing up contact with account: ' + value.get('token'));
                 var emailPreferences = value.get('email_preferences');
-                if(emailPreferences.new_customer === true && !req.body.activity) {
-
+                self.log.debug('emailPreferences: ' + emailPreferences);
+                if(emailPreferences.new_contacts === true && !req.body.activity) {
+                    self.log.debug('emailPreferences.new_contacts: ' + emailPreferences.new_contacts);
                     var accountId = value.id();
                     var vars = [];
 
@@ -709,19 +710,19 @@ _.extend(api.prototype, baseApi.prototype, {
 
                                                             if(activity){
                                                                 var accountEmail = null;
-                                                                if(account && account.attributes.business && account.attributes.business.emails && account.attributes.business.emails[0] && account.attributes.business.emails[0].email)
-                                                                {
-                                                                    self.log.debug('user email: ', account.attributes.business.emails[0].email);
-                                                                    accountEmail = account.attributes.business.emails[0].email;
-                                                                    self._sendEmailOnCreateAccount(req, resp, accountEmail, activity.contact, account._id, component, emailPage.get('_id'), savedContact)
-                                                                }
-                                                                else{
-                                                                    userDao.getUserAccount(query.accountId, function(err, user){
-                                                                        self.log.debug('user: ', user);
-                                                                        self.log.debug('user email: ', user.attributes.email);
-                                                                        accountEmail = user.attributes.email;
-                                                                        self._sendEmailOnCreateAccount(req, resp, accountEmail, activity.contact, account._id, component, emailPage.get('_id'), savedContact);
-                                                                    })
+                                                                if(emailPreferences.new_contacts === true) {
+                                                                    if(account && account.attributes.business && account.attributes.business.emails && account.attributes.business.emails[0] && account.attributes.business.emails[0].email) {
+                                                                        self.log.debug('user email: ', account.attributes.business.emails[0].email);
+                                                                        accountEmail = account.attributes.business.emails[0].email;
+                                                                        self._sendEmailOnCreateAccount(req, resp, accountEmail, activity.contact, account._id, component, emailPage.get('_id'), savedContact)
+                                                                    } else{
+                                                                        userDao.getUserAccount(query.accountId, function(err, user){
+                                                                            self.log.debug('user: ', user);
+                                                                            self.log.debug('user email: ', user.attributes.email);
+                                                                            accountEmail = user.attributes.email;
+                                                                            self._sendEmailOnCreateAccount(req, resp, accountEmail, activity.contact, account._id, component, emailPage.get('_id'), savedContact);
+                                                                        })
+                                                                    }
                                                                 }
 
                                                             }

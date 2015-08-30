@@ -483,7 +483,7 @@ module.exports = {
                                         callback(null, updatedOrder);
                                     });
 
-                                    if(emailPreferences.new_order === true) {
+                                    if(emailPreferences.new_orders === true) {
                                         //Send additional details
                                         mandrillHelper.sendOrderEmail(fromAddress, fromName, fromAddress, fromName, subject, html, accountId, orderId, vars, email._id, function(){
                                             log.debug('Admin Notification Sent');

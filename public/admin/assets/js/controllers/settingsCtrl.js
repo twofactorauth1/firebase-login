@@ -25,13 +25,13 @@
      */
 
     $scope.clearAllNotifications = function () {
-      $scope.account.notifications.new_contacts = false;
-      $scope.account.notifications.new_orders = false;
-      $scope.account.notifications.helpful_tips = false;
+      $scope.account.email_preferences.new_contacts = false;
+      $scope.account.email_preferences.new_orders = false;
+      $scope.account.email_preferences.helpful_tips = false;
     };
 
     $scope.clearNoNotifications = function () {
-      $scope.account.notifications.no_notifications = false;
+      $scope.account.email_preferences.no_notifications = false;
     };
 
     /*
