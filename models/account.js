@@ -84,8 +84,10 @@ var account = $$.m.ModelBase.extend({
                 "blog": false
             },
             "email_preferences": {
-                new_customer: true,
-                new_order: true
+                new_contacts: true,
+                new_orders: true,
+                helpful_tips: true,
+                no_notifications: false
             },
             commerceSettings : {
                 taxes : true,
