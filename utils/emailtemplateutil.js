@@ -129,7 +129,7 @@ var emailTemplateUtil = {
                 }
 
                 var emailStr = tokenizable.value();
-                mandrillHelper.sendBasicEmail(appConfig.support_email, 'Indigenous Support', to, null, subject, emailStr, 0, [], function(err, value){
+                mandrillHelper.sendBasicEmail(appConfig.support_email, 'Indigenous Support', to, null, subject, emailStr, 0, [], null, function(err, value){
                     if (!err) {
                         fn(null, "ok");
                     } else {
