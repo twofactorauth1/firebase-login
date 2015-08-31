@@ -19,6 +19,7 @@ app.directive('testimonialsComponent', ['$timeout', function ($timeout) {
       });
       scope.deleteTestimonial = function (index) {
         scope.dataLoaded = false;
+        console.log(index);
         scope.component.testimonials.splice(index, 1);
         $timeout(function () {
           scope.dataLoaded = true;
