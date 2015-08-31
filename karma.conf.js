@@ -26,9 +26,13 @@ module.exports = function(config) {
 
       // add source files here
       //'public/admin/assets/js/services/customer.js',
+      {pattern: 'public/admin/assets/js/**/*.js', included: false},
+
+      // 'public/admin/assets/js/services/account.js',
 
       // add test files here
       'public_tests/admin/customers/customerservice_spec.js',
+      'public_tests/admin/account/accountservice_spec.js',
 
       // this should be last
       'public_tests/test-main.js'
@@ -53,7 +57,7 @@ module.exports = function(config) {
 
 
     // web server port
-    port: 9876,
+    port: 3000,
 
 
     // enable / disable colors in the output (reporters and logs)
@@ -71,7 +75,7 @@ module.exports = function(config) {
 
     // start these browsers
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-    browsers: ['Chrome'],
+    browsers: ['Chrome', 'Firefox', 'Safari', 'Opera'],
 
 
     // Continuous Integration mode
