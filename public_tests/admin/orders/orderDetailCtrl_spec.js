@@ -27,7 +27,10 @@ describe('test orderDetailCtrl', function () {
     });
   }));
 
-  it('$scope.number', function () {
-    expect($scope.totalWithDiscount(1, 1)).toEqual(10);
+  describe('$scope.totalWithDiscount', function() {
+    it('should equal 2', function () {
+      expect($scope.totalWithDiscount(1, 1)).toEqual(2);
+    });
   });
+
 });
