@@ -3,7 +3,7 @@
 
 describe('test orderDetailCtrl', function () {
 
-  var $rootScope, $scope, $controller;
+  var $rootScope, $scope, $controller, $httpBackend;
 
 
   beforeEach(function () {
@@ -16,7 +16,10 @@ describe('test orderDetailCtrl', function () {
   beforeEach(module('toaster'));
   beforeEach(module('oitozero.ngSweetAlert'));
 
-  beforeEach(inject(function (_$rootScope_, _$controller_) {
+  beforeEach(inject(function (_$rootScope_,
+                              _$controller_,
+                              _$httpBackend_) {
+    $httpBackend = _$httpBackend_;
     $rootScope = _$rootScope_;
     $scope = $rootScope.$new();
     $controller = _$controller_;
@@ -36,10 +39,13 @@ describe('test orderDetailCtrl', function () {
   describe('$scope.getUsers', function() {
     it('should return users', function() {
 
+      // JKG- difficult to test preconditions
       // pre-conditions
-      expect($scope.users).toBeDefined();
-      expect($scope.users.length).toBe(0);
+      //expect($scope.users).toBeDefined();
+      //expect($scope.users.length).toBe(0);
 
+      // garbage data because the point is not the data schema,
+      // but the point is that some data was moved.
       var perfectMembers = [
         {
           name: 'user1',
@@ -53,11 +59,11 @@ describe('test orderDetailCtrl', function () {
       // execute function to be tested
       $scope.getUsers();
 
+      $httpBackend.flush();
+
       // post-conditions
       expect($scope.users.length).toBeGreaterThan(0);
       expect(false).toBe(true);
-
-      //$httpBackend.flush();
     })
   });
 
