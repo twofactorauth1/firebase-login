@@ -1,19 +1,20 @@
 'use strict';
+/*global describe, beforeEach, it, inject, expect*/
 
 describe('test orderDetailCtrl', function () {
 
   var $rootScope, $scope, $controller;
 
 
-  beforeEach(function() {
-    module('clipApp', function($provide) {
+  beforeEach(function () {
+    module('clipApp', function ($provide) {
       $provide.constant('orderConstant');
       $provide.constant('contactConstant');
       $provide.constant('userConstant');
     });
   });
-  beforeEach( module('toaster') );
-  beforeEach( module('oitozero.ngSweetAlert') );
+  beforeEach(module('toaster'));
+  beforeEach(module('oitozero.ngSweetAlert'));
 
   beforeEach(inject(function (_$rootScope_, _$controller_) {
     $rootScope = _$rootScope_;

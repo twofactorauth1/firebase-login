@@ -86,11 +86,12 @@
         });
         if (matchProduct) {
           var index = _.indexOf($scope.filterProducts, matchProduct);
-          if (index > -1)
+          if (index > -1) {
             $scope.filterProducts.splice(index, 1);
+          }
         }
-      })
-    }
+      });
+    };
 
     /*
      * @getOrder
