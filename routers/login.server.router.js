@@ -21,6 +21,7 @@ var userManager = require('../dao/user.manager');
 var userActivityManager = require('../useractivities/useractivity_manager');
 var appConfig = require('../configs/app.config');
 var UAParser = require('ua-parser-js');
+
 var parser = new UAParser();
 
 
@@ -76,6 +77,25 @@ _.extend(router.prototype, BaseRouter.prototype, {
         return this;
     },
 
+    ip: function(req) {
+        try {
+            var ip = req.headers['x-forwarded-for'] ||
+                req.connection.remoteAddress ||
+                req.socket.remoteAddress ||
+                req.connection.socket.remoteAddress;
+
+            if(Array.isArray(ip)) {
+                return ip[0];
+            } else if(ip.indexOf(',') !== -1){
+                return ip.split(',')[0].trim();
+            } else{
+                return ip;
+            }
+        } catch(exception) {
+            return null;
+        }
+
+    },
 
     //region LOGIN / LOGOUT
     showLogin: function (req, resp) {
@@ -120,7 +140,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
             req.session.cookie.expires = false;
         }
 
-        var ua = self.req.headers['user-agent'];
+        var ua = req.headers['user-agent'];
         var result = parser.setUA(ua).getResult();
         console.dir(result);
         /*
@@ -131,7 +151,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
          * IP Address: 00.00.00.00
          * Approximate Location: La Jolla, California, United States
          */
-        var ip = self.ip(self.req);
+        var ip = self.ip(req);
         var date = moment().format('MMMM DD, YYYY hh:mm A');
         var browser = result.browser.name;
         var os = result.os.name;
