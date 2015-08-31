@@ -343,7 +343,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         var _args = arguments;
         return {
             deps: ['$ocLazyLoad', '$q',
-            function ($ocLL, $q) {
+            function ($ocLazyLoad, $q) {
                 var promise = $q.when(1);
                 for (var i = 0, len = _args.length; i < len; i++) {
                     promise = promiseThen(_args[i]);
@@ -358,7 +358,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
                             var nowLoad = requiredData(_arg);
                             if (!nowLoad)
                                 return $.error('Route resolve: Bad resource name [' + _arg + ']');
-                            return $ocLL.load(nowLoad);
+                            return $ocLazyLoad.load(nowLoad);
                         });
                 }
 
