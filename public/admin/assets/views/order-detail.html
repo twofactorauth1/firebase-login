@@ -457,8 +457,8 @@
                         <div class="totals bg-gray col-sm-4 col-sm-offset-8 col-xs-6 col-xs-offset-6">
                             <div class="panel panel-default panel-transparent">
                                 <div class="panel-body">
-                                    <p><span class="text-bold">Subtotal:</span> <span class="pull-right">{{calculatedSubTotal | currency}}</span></p>
-                                    <p><span class="text-bold">Discount ({{calculatedDiscountPercent}}%):</span> <span class="pull-right">{{calculatedDiscount| currency}}</span></p>
+                                    <p><span class="text-bold">Subtotal:</span> <span class="pull-right">{{order.subtotal | currency}}</span></p>
+                                    <p><span class="text-bold">Discount ({{calculatedDiscountPercent}}%):</span> <span class="pull-right">{{order.total_discount| currency}}</span></p>
                                     <p ng-if="order.total_shipping"><span class="text-bold">Shipping:</span> <span class="pull-right">{{order.total_shipping}}</span></p>
                                     <p ng-if="order.total_tax"><span class="text-bold">Tax ({{order.tax_rate * 100| number :1}}%):</span> <span class="pull-right">{{order.total_tax | currency}}</span></p>
                                     <p><span class="text-bold">Total:</span> <span class="pull-right">{{order.total | currency}}</span></p>
