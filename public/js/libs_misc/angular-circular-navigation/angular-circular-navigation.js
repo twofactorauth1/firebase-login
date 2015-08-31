@@ -44,7 +44,7 @@
 
           scope.perform = function (options, item) {
             if (typeof item.onclick === 'function') {
-              item.onclick(options, item, scope.component, scope.passedIndex);
+              item.onclick(options, item, scope.passedComponent, scope.passedIndex);
             }
 
             if (scope.options.toggleOnClick) {
