@@ -6,8 +6,8 @@
 
     $scope.number = 1;
 
-    $scope.plus = function () {
-      $scope.number++;
+    $scope.multiplyBy10 = function () {
+      $scope.number = $scope.number * 10;
     };
 
     $scope.panes = [];

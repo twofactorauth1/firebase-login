@@ -47,28 +47,35 @@ module.exports = function (config) {
       'public/admin/assets/js/directives/angularparallax.js',
       'public/js/libs/angular-google-places-autocomplete/dist/autocomplete.min.js',
       'public/js/libs/AngularJS-Toaster/toaster.min.js',
+      'public/js/libs/angular-sweetalert-promised/SweetAlert.min.js',
+      'public/js/libs/sweetalert/lib/sweet-alert.min.js',
 
       'public/js/scripts/config.js',
+      '/public/admin/assets/js/config.constant.js',
 
       'public/admin/assets/js/app.js',
       'public/admin/assets/js/main.js',
-      'public/admin/assets/js/services/toaster.js',
       'public/admin/assets/js/controllers/toasterCtrl.js',
+      'public/admin/assets/js/controllers/sweetAlertCtrl.js',
+      'public/admin/assets/js/services/toaster.js',
 
       'public/admin/assets/js/services/product.js',
       'public/admin/assets/js/services/payment.js',
       'public/admin/assets/js/services/user.js',
-
-      '/public/admin/assets/js/config.constant.js',
+      'public/admin/assets/js/services/order.js',
+      'public/admin/assets/js/services/customer.js',
+      'public/admin/assets/js/services/import_contacts.js',
 
       // add module here
       // 'public/admin/assets/js/**/*.js',
       'public/admin/assets/js/controllers/gettingStartedCtrl.js',
+      'public/admin/assets/js/controllers/orderDetailCtrl.js',
 
       // add test files here
       // 'public_tests/admin/customers/customerservice_spec.js',
       // 'public_tests/admin/billing/billingctrl_spec.js',
-      'public_tests/admin/support/gettingStartedCtrl_spec.js'
+      'public_tests/admin/support/gettingStartedCtrl_spec.js',
+      'public_tests/admin/orders/orderDetailCtrl_spec.js'
     ],
 
 
