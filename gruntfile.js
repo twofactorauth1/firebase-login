@@ -354,6 +354,15 @@ module.exports = function(grunt) {
             leads: ['test/pullLeadDynoData.js']
         },
 
+        // Running Karma from Grunt, with documentation from here:
+        // https://github.com/karma-runner/grunt-karma
+        karma: {
+            unit: {
+                configFile: 'karma.conf.js',
+                singleRun: true,
+            }
+        },
+
         //NG-Constant for angular constants
         /*
          * Add environment specific constants in each section.  Use config files as necessary.
@@ -531,6 +540,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-prompt');
     grunt.loadNpmTasks('grunt-csssplit');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
+    grunt.loadNpmTasks('grunt-karma');
     grunt.loadTasks('deploy/grunt/compile-handlebars-templates/tasks');
 
     grunt.registerTask('copyroot', ['clean:release','copy:main']);
