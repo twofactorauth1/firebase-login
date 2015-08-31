@@ -28,6 +28,6 @@ describe('test orderDetailCtrl', function () {
   }));
 
   it('$scope.number', function () {
-    expect($scope.totalWithDiscount(1, 1)).toEqual(2);
+    expect($scope.totalWithDiscount(1, 1)).toEqual(10);
   });
 });
