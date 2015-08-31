@@ -583,6 +583,7 @@ app.constant('JS_REQUIRES', {
     'orderService': 'assets/js/services/order.js',
     'assetsService': 'assets/js/services/assets.js',
     'geocodeService': 'assets/js/services/geocode.js',
+    'toasterService': 'assets/js/services/toaster.js',
     //*** Filters
     'htmlToPlaintext': 'assets/js/filters/htmlToPlaintext.js',
     'secTotime': 'assets/js/filters/secTotime.js',
@@ -731,7 +732,7 @@ app.constant('JS_REQUIRES', {
     files: ['../js/libs/blueimp-gallery/js/jquery.blueimp-gallery.min.js', '../js/libs/blueimp-gallery/css/blueimp-gallery.min.css']
   }, {
     name: 'googlePlaces',
-    files: ['../js/libs/angular-google-places-autocomplete/dist/autocomplete.min.css']
+    files: ['../js/libs/angular-google-places-autocomplete/dist/autocomplete.min.js', '../js/libs/angular-google-places-autocomplete/dist/autocomplete.min.css']
   }, {
     name: 'angular-bootstrap-datetimepicker',
     files: ['../js/libs/angular-bootstrap-datetimepicker/src/js/datetimepicker.js', '../js/libs/angular-bootstrap-datetimepicker/src/css/datetimepicker.css']

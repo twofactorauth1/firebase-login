@@ -1,25 +1,6 @@
-var app = angular.module('clipApp', [
-  'ngAnimate',
-  'ngCookies',
-  'ngStorage',
-  'ngSanitize',
-  'ngTouch',
-  'ui.router',
-  'ngJoyRide',
-  'ui.bootstrap',
-  'angular.filter',
-  'oc.lazyLoad',
-  'cfp.loadingBar',
-  'ncy-angular-breadcrumb',
-  'duScroll',
-  'pascalprecht.translate',
-  'autocomplete',
-  'config',
-  'angular-parallax',
-  'google.places'
-]);
+var app = angular.module('clipApp', ['clip-two']);
 app.run(['$rootScope', '$state', '$stateParams',
-  function ($rootScope, $state, $stateParams) {
+function ($rootScope, $state, $stateParams) {
 
     // Attach Fastclick for eliminating the 300ms delay between a physical tap and the firing of a click event on mobile browsers
     FastClick.attach(document.body);
@@ -31,45 +12,44 @@ app.run(['$rootScope', '$state', '$stateParams',
     // GLOBAL APP SCOPE
     // set below basic information
     $rootScope.app = {
-      name: 'Indigenous', // name of your project
-      author: 'Indigenous Software, INC', // author's name or company name
-      description: 'A all in one solution for small to medium sized businesses.', // brief description
-      version: '1.0', // current version
-      year: ((new Date()).getFullYear()), // automatic current year (for copyright information)
-      isMobile: (function () { // true if the browser is a mobile device
-        var check = false;
-        if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-          check = true;
-        } else {
-          check = false;
-        };
-        return check;
-      })(),
-      layout: {
-        isNavbarFixed: true, //true if you want to initialize the template with fixed header
-        isSidebarFixed: true, // true if you want to initialize the template with fixed sidebar
-        isSidebarClosed: false, // true if you want to initialize the template with closed sidebar
-        isFooterFixed: false, // true if you want to initialize the template with fixed footer
-        theme: 'theme-6', // indicate the theme chosen for your project
-        logo: 'assets/images/logo.png', // relative path of the project logo
-      }
+        name: 'Indigenous', // name of your project
+        author: 'Indigenous Software, INC', // author's name or company name
+        description: 'A all in one solution for small to medium sized businesses.', // brief description
+        version: '1.0', // current version
+        year: ((new Date()).getFullYear()), // automatic current year (for copyright information)
+        isMobile: (function () {// true if the browser is a mobile device
+            var check = false;
+            if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+                check = true;
+            } else {
+                check = false;
+            };
+            return check;
+        })(),
+        layout: {
+            isNavbarFixed: true, //true if you want to initialize the template with fixed header
+            isSidebarFixed: true, // true if you want to initialize the template with fixed sidebar
+            isSidebarClosed: false, // true if you want to initialize the template with closed sidebar
+            isFooterFixed: false, // true if you want to initialize the template with fixed footer
+            theme: 'theme-6', // indicate the theme chosen for your project
+            logo: 'assets/images/logo.png', // relative path of the project logo
+        }
     };
     $rootScope.user = {
-      name: 'Peter',
-      job: 'ng-Dev',
-      picture: 'app/img/user/02.jpg'
+        name: 'Peter',
+        job: 'ng-Dev',
+        picture: 'app/img/user/02.jpg'
     };
-  }
-]);
+}]);
 // translate config
 app.config(['$translateProvider',
-  function ($translateProvider) {
+function ($translateProvider) {
 
     // prefix and suffix information  is required to specify a pattern
     // You can simply use the static-files loader with this pattern:
     $translateProvider.useStaticFilesLoader({
-      prefix: 'assets/i18n/',
-      suffix: '.json'
+        prefix: 'assets/i18n/',
+        suffix: '.json'
     });
 
     // Since you've now registered more then one translation table, angular-translate has to know which one to use.
@@ -79,14 +59,12 @@ app.config(['$translateProvider',
     // Store the language in the local storage
     $translateProvider.useLocalStorage();
 
-  }
-]);
+}]);
 // Angular-Loading-Bar
 // configuration
 app.config(['cfpLoadingBarProvider',
-  function (cfpLoadingBarProvider) {
+function (cfpLoadingBarProvider) {
     cfpLoadingBarProvider.includeBar = true;
     cfpLoadingBarProvider.includeSpinner = false;
 
-  }
-]);
+}]);
