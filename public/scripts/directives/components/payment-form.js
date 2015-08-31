@@ -264,11 +264,11 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                 //email
                 scope.isFormValid = false;
                 scope.validateForm = true;
+                scope.promises = [];
+               
                 scope.showFooter(true);
-                if (!scope.newAccount.email) {
-                    scope.checkEmailExists(newAccount);
-                    scope.validateForm = false;
-                }
+               
+                scope.checkEmailExists(newAccount, true);
 
                 //pass
                 if (!scope.newAccount.password && !scope.newAccount.tempUserId && !scope.newAccount.hidePassword) {
@@ -277,11 +277,7 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                 }
 
                 //url
-                if (!scope.newAccount.businessName) {
-                    console.log('business name does not exist');
-                    scope.checkDomainExists(newAccount);
-                    scope.validateForm = false;
-                }
+                scope.checkDomainExists(newAccount, true);
 
                 if (!scope.newAccount.first) {
                     scope.checkFirstName(newAccount);
@@ -321,105 +317,147 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                 if (!scope.couponIsValid) {
                     return;
                 }
-                //end validate
-                scope.isFormValid = true;
-                scope.showFooter(false);
-                var tmpAccount = scope.tmpAccount;
-                tmpAccount.subdomain = $.trim(newAccount.businessName).replace(" ", "").replace(".", "_").replace("@", "");
-                tmpAccount.business = tmpAccount.business || {};
-                tmpAccount.business.name = newAccount.businessName;
-
-                if(scope.newAccount.phone) {
-                    tmpAccount.business.phones = [];
-                    tmpAccount.business.phones[0] = {
-                        _id: CommonService.generateUniqueAlphaNumericShort(),
-                        number: scope.newAccount.phone,
-                        default: true
-                    };
-                }
-                UserService.saveOrUpdateTmpAccount(tmpAccount, function(data) {
-                    var newUser = {
-                        username: newAccount.email,
-                        password: newAccount.password,
-                        email: newAccount.email,
-                        accountToken: data.token,
-                        coupon: newAccount.coupon,
-                        first: newAccount.first,
-                        middle: newAccount.middle,
-                        last: newAccount.last
-                    };
-
-                    newUser.plan = '';
-                    newUser.anonymousId = window.analytics.user().anonymousId();
-                    newUser.permanent_cookie = ipCookie("permanent_cookie");
-                    newUser.fingerprint = new Fingerprint().get();
-
-                    // Add name
-                    var name = $('#card_name #name').val();
-                    if(name) {
-                        var nameAry = name.split(' ');
-                        if(nameAry.length===3) {
-                            newUser.first = nameAry[0];
-                            newUser.middle = nameAry[1];
-                            newUser.last = nameAry[2];
-                        } else if(nameAry.length === 2) {
-                            newUser.first = nameAry[0];
-                            newUser.last = nameAry[1];
-                        } else if(nameAry.length === 1) {
-                            newUser.last = nameAry[0];
-                        }
-                    }
-                    UserService.initializeUser(newUser, function(err, data) {
-                        if (data && data.accountUrl) {
-                            console.log('$location ', $location);
-                            if ($location.host() === 'indigenous.io' || $location.host() === 'www.indigenous.io') {
-                                var hash = CryptoJS.HmacSHA256(newUser.email, "vZ7kG_bS_S-jnsNq4M2Vxjsa5mZCxOCJM9nezRUQ");
-                                //send data to intercom
-                                window.intercomSettings = {
-                                    name: newUser.username,
-                                    email: newUser.email,
-                                    user_hash: hash.toString(CryptoJS.enc.Hex),
-                                    created_at: Math.floor(Date.now() / 1000),
-                                    app_id: "b3st2skm"
-                                };
-                                //send facebook tracking info
-                                window._fbq = window._fbq || [];
-                                window._fbq.push(['track', '6032779610613', {'value':'0.00','currency':'USD'}]);
-
-                                console.log('sent facebook message');
-                                //send affiliate purchase info
-                                var leadData = {
-                                    first_name: newAccount.first,
-                                    last_name: newAccount.last,
-                                    company: newAccount.businessName,
-                                    custom_status: 'trialing'
-                                };
-                                LeadDyno.key = "b2a1f6ba361b15f4ce8ad5c36758de951af61a50";
-                                LeadDyno.recordLead(newUser.email, leadData, function(){
-                                    console.log('recorded lead');
-                                    LeadDyno.recordPurchase(newUser.email, {}, function(){
-                                        console.log('recorded purchase');
-                                        window.location = data.accountUrl;
-                                    });
-                                });
-
-
-
-                            } else {
-                                window.location = data.accountUrl;
-                            }
-
-                        } else {
-                            scope.isFormValid = false;
-
-                            scope.showFooter(true);
-                        }
+               
+                if (scope.promises.length) {
+                $q.all(scope.promises)
+                  .then(function (data) {
+                    _.each(data, function (value, index) {
+                      if(index === 0)
+                        scope.validateEmail(value.data);
+                      else if(scope.validateForm)
+                        scope.validateBusinessName(value.data);
                     });
+                    if(!scope.validateForm)
+                        return;                    
+                    scope.isFormValid = true;
+                    scope.showFooter(false);
+                    var tmpAccount = scope.tmpAccount;
+                    tmpAccount.subdomain = $.trim(newAccount.businessName).replace(" ", "").replace(".", "_").replace("@", "");
+                    tmpAccount.business = tmpAccount.business || {};
+                    tmpAccount.business.name = newAccount.businessName;
 
-                });
+                    if(scope.newAccount.phone) {
+                        tmpAccount.business.phones = [];
+                        tmpAccount.business.phones[0] = {
+                            _id: CommonService.generateUniqueAlphaNumericShort(),
+                            number: scope.newAccount.phone,
+                            default: true
+                        };
+                    }
+                    UserService.saveOrUpdateTmpAccount(tmpAccount, function(data) {
+                        var newUser = {
+                            username: newAccount.email,
+                            password: newAccount.password,
+                            email: newAccount.email,
+                            accountToken: data.token,
+                            coupon: newAccount.coupon,
+                            first: newAccount.first,
+                            middle: newAccount.middle,
+                            last: newAccount.last
+                        };
+
+                        newUser.plan = '';
+                        newUser.anonymousId = window.analytics.user().anonymousId();
+                        newUser.permanent_cookie = ipCookie("permanent_cookie");
+                        newUser.fingerprint = new Fingerprint().get();
+
+                        // Add name
+                        var name = $('#card_name #name').val();
+                        if(name) {
+                            var nameAry = name.split(' ');
+                            if(nameAry.length===3) {
+                                newUser.first = nameAry[0];
+                                newUser.middle = nameAry[1];
+                                newUser.last = nameAry[2];
+                            } else if(nameAry.length === 2) {
+                                newUser.first = nameAry[0];
+                                newUser.last = nameAry[1];
+                            } else if(nameAry.length === 1) {
+                                newUser.last = nameAry[0];
+                            }
+                        }
+                        UserService.initializeUser(newUser, function(err, data) {
+                            if (data && data.accountUrl) {
+                                console.log('$location ', $location);
+                                if ($location.host() === 'indigenous.io' || $location.host() === 'www.indigenous.io') {
+                                    var hash = CryptoJS.HmacSHA256(newUser.email, "vZ7kG_bS_S-jnsNq4M2Vxjsa5mZCxOCJM9nezRUQ");
+                                    //send data to intercom
+                                    window.intercomSettings = {
+                                        name: newUser.username,
+                                        email: newUser.email,
+                                        user_hash: hash.toString(CryptoJS.enc.Hex),
+                                        created_at: Math.floor(Date.now() / 1000),
+                                        app_id: "b3st2skm"
+                                    };
+                                    //send facebook tracking info
+                                    window._fbq = window._fbq || [];
+                                    window._fbq.push(['track', '6032779610613', {'value':'0.00','currency':'USD'}]);
+
+                                    console.log('sent facebook message');
+                                    //send affiliate purchase info
+                                    var leadData = {
+                                        first_name: newAccount.first,
+                                        last_name: newAccount.last,
+                                        company: newAccount.businessName,
+                                        custom_status: 'trialing'
+                                    };
+                                    LeadDyno.key = "b2a1f6ba361b15f4ce8ad5c36758de951af61a50";
+                                    LeadDyno.recordLead(newUser.email, leadData, function(){
+                                        console.log('recorded lead');
+                                        LeadDyno.recordPurchase(newUser.email, {}, function(){
+                                            console.log('recorded purchase');
+                                            window.location = data.accountUrl;
+                                        });
+                                    });
+                                } else {
+                                    window.location = data.accountUrl;
+                                }
+                            } else {
+                                scope.isFormValid = false;
+
+                                scope.showFooter(true);
+                            }
+                        });
+
+                    });                   
+                  })
+                  .catch(function (err) {
+                    console.error(err);
+                  });
+              }
             };
 
-            scope.checkDomainExists = function(newAccount) {                
+            scope.validateBusinessName = function(data)
+            {
+                if (data !== 'true') {
+                    scope.validateForm = false;
+                    angular.element("#business-name .error").html("Domain Already Exists");
+                    angular.element("#business-name").addClass('has-error');
+                    angular.element("#business-name .glyphicon").addClass('glyphicon-remove');
+                } else {
+                    scope.validateForm = true;
+                    angular.element("#business-name .error").html("");
+                    angular.element("#business-name").removeClass('has-error').addClass('has-success');
+                    angular.element("#business-name .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
+                }
+            }
+
+            scope.validateEmail = function(data)
+            {
+                if (data === true) {
+                    scope.validateForm = false;
+                    angular.element("#email .error").html("Email Already Exists");
+                    angular.element("#email").addClass('has-error');
+                    angular.element("#email .glyphicon").addClass('glyphicon-remove');
+                } else {
+                    scope.validateForm = true;
+                    angular.element("#email .error").html("");
+                    angular.element("#email").removeClass('has-error').addClass('has-success');
+                    angular.element("#email .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
+                }
+            }
+
+            scope.checkDomainExists = function(newAccount, skip) {                
                 if (!newAccount.businessName) {
                     scope.validBusinessName = false;
                     angular.element("#business-name .error").html("Business Name Required");
@@ -427,40 +465,29 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                     angular.element("#business-name .glyphicon").addClass('glyphicon-remove');
                 } else {
                     var name = $.trim(newAccount.businessName).replace(" ", "").replace(".", "_").replace("@", "");
-                    UserService.checkDomainExists(name, function(data) {
-                        if (data !== 'true') {
-                            scope.validBusinessName = false;
-                            angular.element("#business-name .error").html("Domain Already Exists");
-                            angular.element("#business-name").addClass('has-error');
-                            angular.element("#business-name .glyphicon").addClass('glyphicon-remove');
-                        } else {
-                            scope.validBusinessName = true;
-                            angular.element("#business-name .error").html("");
-                            angular.element("#business-name").removeClass('has-error').addClass('has-success');
-                            angular.element("#business-name .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
-                        }
-                    });
+                    if(skip)
+                        scope.promises.push(UserService.checkDuplicateDomain(name));
+                    else    
+                        UserService.checkDomainExists(name, function(data) {
+                            scope.validateBusinessName(data);
+                        });
                 }
             };
 
-            scope.checkEmailExists = function(newAccount) {
+            scope.checkEmailExists = function(newAccount, skip) {
                 scope.newAccount.email = newAccount.email;
                 if (!newAccount.email) {
                     angular.element("#email .error").html("Valid Email Required");
                     angular.element("#email").addClass('has-error');
                     angular.element("#email .glyphicon").addClass('glyphicon-remove');
+                    scope.validateForm = false;
                 } else {
-                    UserService.checkEmailExists(newAccount.email, function(data) {
-                        if (data === true) {
-                            angular.element("#email .error").html("Email Already Exists");
-                            angular.element("#email").addClass('has-error');
-                            angular.element("#email .glyphicon").addClass('glyphicon-remove');
-                        } else {
-                            angular.element("#email .error").html("");
-                            angular.element("#email").removeClass('has-error').addClass('has-success');
-                            angular.element("#email .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
-                        }
-                    });
+                    if(skip)
+                        scope.promises.push(UserService.checkDuplicateEmail(newAccount.email));
+                    else
+                        UserService.checkEmailExists(newAccount.email, function(data) {
+                            scope.validateEmail(data);
+                        });
                 }
             };
 

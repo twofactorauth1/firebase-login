@@ -84,6 +84,8 @@ mainApp.service('userService', ['$http', 'ipCookie', function ($http, ipCookie) 
     });
   };
 
+
+
   this.checkEmailExists = function (email, fn) {
     var apiUrl = baseUrl + ['user', 'exists', email].join('/');
     console.log('api url >>> ', apiUrl);
@@ -95,6 +97,18 @@ mainApp.service('userService', ['$http', 'ipCookie', function ($http, ipCookie) 
     }).error(function (err) {
       console.log('END:checkEmailExisits with ERROR', err);
     });
+  };
+
+  this.checkDuplicateEmail = function(email, fn)
+  {
+      var apiUrl = baseUrl + ['user', 'exists', email].join('/');
+      return $http.get(apiUrl);
+  };
+
+  this.checkDuplicateDomain = function(businessName, fn)
+  {
+      var apiUrl = baseUrl + ['account', businessName, 'available'].join('/');
+      return $http.get(apiUrl);
   };
 
   this.getTmpAccount = function (fn) {
