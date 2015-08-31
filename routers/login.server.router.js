@@ -100,7 +100,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
     //region LOGIN / LOGOUT
     showLogin: function (req, resp) {
         var self = this;
-        self.log.debug('>> showLogin')
+        self.log.debug('>> showLogin');
 
         if (req.isAuthenticated()) {
             self.log.debug('req.isAuthenticated is true.');
@@ -136,7 +136,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
         var self = this;
         self.log.debug('>> onLogin');
         if (req.body.remembermepresent != null && req.body.rememberme == null) {
-            self.log.warn('cookie never expires!!!')
+            self.log.warn('cookie never expires!!!');
             req.session.cookie.expires = false;
         }
 
@@ -174,16 +174,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
                     req.session.accountId = 0;
                 } else {
                     self.log.debug("host: " + req.get("host") + " -> accountId:" + value.id());
-                    /*
-                     * no longer setting these values here.  They are set in the authentication dao.
-                     */
-                    //self.log.debug('right now: ' + req.session.accountId + ' and ' + req.session.unAuthAccountId);
-                    //req.session.accountId = value.id();
-                    //req.session.unAuthAccountId = value.id();
-                    //req.session.subdomain = value.get('subdomain');
-                    //req.session.domain = value.get('domain');
-                    //self.log.debug('after: ' + req.session.accountId + ' and ' + req.session.unAuthAccountId);
-                    //req.session.locked = value.get('locked');
+
                     var redirectUrl = cookies.getRedirectUrl(req, resp, null, true);
                     self.log.debug('onLogin redirectUrl from cookie: ' + redirectUrl);
                     if (redirectUrl != null) {
@@ -202,125 +193,108 @@ _.extend(router.prototype, BaseRouter.prototype, {
 
                     self.log.debug('AccountId: ' + self.accountId(req));
 
-                    /*
-                    self.setup(req, resp, function (err, value) {
-                        if (self.accountId(value) > 0) {
-                            self.log.debug('redirecting to /admin');
 
-                            if(req.session.locked === 'true') {
-                                self.log.debug('locked is true');
-                                resp.redirect("/interim.html");
-                            } else {
-                                resp.redirect("/admin");
+                    /*
+                     * Get account from url.  If main app, check for multi-users
+                     */
+                    var accountIds = req.user.getAllAccountIds();
+                    var subObject = urlUtils.getSubdomainFromRequest(req);
+                    if(subObject.isMainApp && accountIds.length > 1) {
+                        self.log.debug('redirecting to /home');
+                        req.session.accountId = -1;
+                        resp.redirect("/home");
+                        userActivityManager.createUserLoginActivity(0, self.userId(req), requestorProps, function(){});
+                        self = req = resp = null;
+                        return;
+                    } else if((subObject.subdomain === null || subObject.subdomain === '') && _.contains(accountIds, appConfig.mainAccountID)) {
+                        self.log.debug('redirecting to main application');
+                        authenticationDao.getAuthenticatedUrlForAccount(appConfig.mainAccountID, self.userId(req), "admin", function (err, value) {
+                            if (err) {
+                                self.log.debug('redirecting to /home');
+                                resp.redirect("/home");
+                                self = null;
+                                return;
                             }
 
-                            self = req = resp = null;
-                        } else {
-                        */
-                            /*
-                             * Get account from url.  If main app, check for multi-users
-                             */
-                            var accountIds = req.user.getAllAccountIds();
-                            var subObject = urlUtils.getSubdomainFromRequest(req);
-                            if(subObject.isMainApp && accountIds.length > 1) {
-                                self.log.debug('redirecting to /home');
-                                req.session.accountId = -1;
-                                resp.redirect("/home");
-                                userActivityManager.createUserLoginActivity(0, self.userId(req), requestorProps, function(){});
-                                self = req = resp = null;
-                                return;
-                            } else if((subObject.subdomain === null || subObject.subdomain === '') && _.contains(accountIds, appConfig.mainAccountID)) {
-                                self.log.debug('redirecting to main application');
-                                authenticationDao.getAuthenticatedUrlForAccount(appConfig.mainAccountID, self.userId(req), "admin", function (err, value) {
-                                    if (err) {
-                                        self.log.debug('redirecting to /home');
-                                        resp.redirect("/home");
-                                        self = null;
-                                        return;
-                                    }
+                            self.log.debug('redirecting to ' + value);
+                            resp.redirect(value);
+                            userActivityManager.createUserLoginActivity(appConfig.mainAccountID, self.userId(req), requestorProps, function(){});
+                            self = null;
+                            return;
+                        });
+                    } else if(subObject.subdomain === null || subObject.subdomain === ''){
+                        var accountId = self.accountId(req);
+                        self.log.debug('logged into main... redirecting to custom subdomain (' + accountId + ')');
 
-                                    self.log.debug('redirecting to ' + value);
-                                    resp.redirect(value);
-                                    userActivityManager.createUserLoginActivity(appConfig.mainAccountID, self.userId(req), requestorProps, function(){});
+                        authenticationDao.getAuthenticatedUrlForAccount(parseInt(accountId), self.userId(req), "admin", function (err, value) {
+                            if (err) {
+                                self.log.debug('redirecting to /home');
+                                resp.redirect("/home");
+                                self = null;
+                                return;
+                            }
+                            accountDao.getAccountByID(parseInt(self.accountId(req)), function(err, account){
+                                if (err) {
+                                    self.log.debug('redirecting to /home');
+                                    resp.redirect("/home");
                                     self = null;
                                     return;
-                                });
-                            } else if(subObject.subdomain === null || subObject.subdomain === ''){
-                                var accountId = self.accountId(req);
-                                self.log.debug('logged into main... redirecting to custom subdomain (' + accountId + ')');
+                                } else {
+                                    self.log.debug('Setting subdomain to: ' + account.get('subdomain'));
+                                    req.session.subdomain = account.get('subdomain');
+                                    req.session.domain = account.get('domain');
+                                    req.session.accountId = account.id();
+                                    req.session.unAuthAccountId = account.id();
+                                    self.log.debug('redirecting to ' + value);
 
-                                authenticationDao.getAuthenticatedUrlForAccount(parseInt(accountId), self.userId(req), "admin", function (err, value) {
-                                    if (err) {
-                                        self.log.debug('redirecting to /home');
-                                        resp.redirect("/home");
-                                        self = null;
-                                        return;
-                                    }
-                                    accountDao.getAccountByID(parseInt(self.accountId(req)), function(err, account){
-                                        if (err) {
-                                            self.log.debug('redirecting to /home');
-                                            resp.redirect("/home");
-                                            self = null;
-                                            return;
-                                        } else {
-                                            self.log.debug('Setting subdomain to: ' + account.get('subdomain'));
-                                            req.session.subdomain = account.get('subdomain');
-                                            req.session.domain = account.get('domain');
-                                            req.session.accountId = account.id();
-                                            req.session.unAuthAccountId = account.id();
-                                            self.log.debug('redirecting to ' + value);
+                                    resp.redirect(value);
+                                    userActivityManager.createUserLoginActivity(self.accountId(req), self.userId(req), requestorProps, function(){});
+                                    self = null;
+                                    return;
+                                }
+                            });
 
-                                            resp.redirect(value);
-                                            userActivityManager.createUserLoginActivity(self.accountId(req), self.userId(req), requestorProps, function(){});
-                                            self = null;
-                                            return;
-                                        }
-                                    });
-
-                                });
-                            } else {
-                                self.log.debug('redirecting to account by subdomain');
-                                accountDao.getAccountBySubdomain(subObject.subdomain, function(err, value){
-                                    if(err) {
-                                        self.log.error('Error finding account:' + err);
-                                        self.log.debug('redirecting to /home');
-                                        resp.redirect("/home");
-                                        self = req = resp = null;
-                                        return;
-                                    }
-                                    authenticationDao.getAuthenticatedUrlForAccount(value.id(), self.userId(req), "admin", function (err, authUrl) {
-                                        if (err) {
-                                            self.log.debug('redirecting to /home');
-                                            resp.redirect("/home");
-                                            self = null;
-                                            return;
-                                        }
-                                        if(req.session.locked === true) {
-                                            self.log.debug('locked is true');
-                                            /*
-
-
-                                             if(value.indexOf('?') != -1) {
-                                             var valueAry = value.split('?');
-                                             value = valueAry[0] + '#/almost-there?' + valueAry[1];
-                                             } else {
-                                             value= value + '#/almost-there';
-                                             }
-                                             */
-                                            authUrl = "/interim.html";
-                                        }
-                                        self.log.debug('redirecting to ' + authUrl);
-                                        resp.redirect(authUrl);
-                                        userActivityManager.createUserLoginActivity(value.id(), self.userId(req), requestorProps, function(){});
-
-                                        self = null;
-                                    });
-                                });
+                        });
+                    } else {
+                        self.log.debug('redirecting to account by subdomain');
+                        accountDao.getAccountBySubdomain(subObject.subdomain, function(err, value){
+                            if(err) {
+                                self.log.error('Error finding account:' + err);
+                                self.log.debug('redirecting to /home');
+                                resp.redirect("/home");
+                                self = req = resp = null;
+                                return;
                             }
+                            authenticationDao.getAuthenticatedUrlForAccount(value.id(), self.userId(req), "admin", function (err, authUrl) {
+                                if (err) {
+                                    self.log.debug('redirecting to /home');
+                                    resp.redirect("/home");
+                                    self = null;
+                                    return;
+                                }
+                                if(req.session.locked === true) {
+                                    self.log.debug('locked is true');
+                                    /*
 
-                        /*
-                        }
-                    });*/
+
+                                     if(value.indexOf('?') != -1) {
+                                     var valueAry = value.split('?');
+                                     value = valueAry[0] + '#/almost-there?' + valueAry[1];
+                                     } else {
+                                     value= value + '#/almost-there';
+                                     }
+                                     */
+                                    authUrl = "/interim.html";
+                                }
+                                self.log.debug('redirecting to ' + authUrl);
+                                resp.redirect(authUrl);
+                                userActivityManager.createUserLoginActivity(value.id(), self.userId(req), requestorProps, function(){});
+
+                                self = null;
+                            });
+                        });
+                    }
+
                 }
             } else {
                 self.log.warn("No account found from getAccountByHost");
@@ -438,7 +412,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
     },
 
     handleSignup: function (req, resp) {
-        var self = this, user, accountToken, deferred;
+        var self = this, user, deferred;
         self.log.debug('>> handleSignup');
 
         var username = req.body.username;
