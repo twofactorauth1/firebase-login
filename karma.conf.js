@@ -1,7 +1,7 @@
 // Karma configuration
 // Generated on Sun Aug 09 2015 00:26:10 GMT-0700 (Pacific Daylight Time)
 
-module.exports = function(config) {
+module.exports = function (config) {
   config.set({
 
     // base path that will be used to resolve all patterns (eg. files, exclude)
@@ -10,7 +10,7 @@ module.exports = function(config) {
 
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ['jasmine', 'requirejs'],
+    frameworks: ['jasmine'],
 
 
     // list of files / patterns to load in the browser
@@ -21,33 +21,30 @@ module.exports = function(config) {
       // add mocks after real angular dependencies
       'public/js/libs/angular-mocks/angular-mocks.js',
 
+      'public/js/libs/angular-route/angular-route.min.js',
+
       // add module here
       'public/admin/assets/js/main.js',
+      'public/admin/assets/js/controllers/billingCtrl.js',
 
-      // add source files here
-      //'public/admin/assets/js/services/customer.js',
-      {pattern: 'public/admin/assets/js/**/*.js', included: false},
-
-      // 'public/admin/assets/js/services/account.js',
+      // {
+      //   pattern: 'public/admin/assets/js/**/*.js',
+      //   included: false
+      // },
 
       // add test files here
-      'public_tests/admin/customers/customerservice_spec.js',
-      'public_tests/admin/account/accountservice_spec.js',
-
-      // this should be last
-      'public_tests/test-main.js'
+      // 'public_tests/admin/customers/customerservice_spec.js',
+      'public_tests/admin/billing/billingctrl_spec.js'
     ],
 
 
     // list of files to exclude
-    exclude: [
-    ],
+    exclude: [],
 
 
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
-    preprocessors: {
-    },
+    preprocessors: {},
 
 
     // test results reporter to use
@@ -57,7 +54,7 @@ module.exports = function(config) {
 
 
     // web server port
-    port: 3000,
+    port: 9876,
 
 
     // enable / disable colors in the output (reporters and logs)
@@ -75,7 +72,7 @@ module.exports = function(config) {
 
     // start these browsers
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-    browsers: ['Chrome', 'Firefox', 'Safari', 'Opera'],
+    browsers: ['Chrome'],
 
 
     // Continuous Integration mode
@@ -83,3 +80,5 @@ module.exports = function(config) {
     singleRun: false
   });
 };
+
+
