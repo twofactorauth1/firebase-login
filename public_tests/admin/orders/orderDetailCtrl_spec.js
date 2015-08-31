@@ -33,4 +33,32 @@ describe('test orderDetailCtrl', function () {
     });
   });
 
+  describe('$scope.getUsers', function() {
+    it('should return users', function() {
+
+      // pre-conditions
+      expect($scope.users).toBeDefined();
+      expect($scope.users.length).toBe(0);
+
+      var perfectMembers = [
+        {
+          name: 'user1',
+        },
+        {
+          name: 'user2',
+        },
+      ];
+      $httpBackend.whenGET('/api/1.0/user/members').respond(perfectMembers);
+
+      // execute function to be tested
+      $scope.getUsers();
+
+      // post-conditions
+      expect($scope.users.length).toBeGreaterThan(0);
+      expect(false).toBe(true);
+
+      //$httpBackend.flush();
+    })
+  });
+
 });
