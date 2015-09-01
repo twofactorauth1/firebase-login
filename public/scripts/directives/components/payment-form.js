@@ -229,15 +229,16 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                                             created_at: Math.floor(Date.now() / 1000),
                                             app_id: "b3st2skm"
                                         };
+                                        //send facebook tracking info
+                                        window._fbq = window._fbq || [];
+                                        window._fbq.push(['track', '6032779610613', {'value':'0.00','currency':'USD'}]);
                                         //send affiliate purchase info
                                         LeadDyno.key = "b2a1f6ba361b15f4ce8ad5c36758de951af61a50";
                                         LeadDyno.recordPurchase(newUser.email, null, function(){
                                             window.location = data.accountUrl;
                                         });
 
-                                        //send facebook tracking info
-                                        window._fbq = window._fbq || [];
-                                        window._fbq.push(['track', '6032779610613', {'value':'0.00','currency':'USD'}]);
+
                                     } else {
                                         window.location = data.accountUrl;
                                     }
