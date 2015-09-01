@@ -134,7 +134,7 @@
                                 <label class="control-label">
                                     Email Address <span class="symbol required">
                                 </label>
-                                <div class="form-group" ng-class="{ 'has-error' : form.email_{{$index}}.$invalid }" ng-repeat="email in account.business.emails">
+                                <div class="form-group" ng-class="{ 'has-error' : form.email_{{$index}}.$invalid && !form.email_{{$index}}.$pristine }" ng-repeat="email in account.business.emails">
                                     <span class="input-icon input-icon-right">
                                         <input type="email" ng-pattern="formValidations.email" placeholder="email address" class="form-control" name="email_{{$index}}" ng-model="account.business.emails[$index].email">
                                         <p ng-show="form.email_{{$index}}.$invalid && !form.email_{{$index}}.$pristine" class="help-block">Enter a valid email.</p>
@@ -147,7 +147,7 @@
                                 <label class="control-label">
                                     Phone Number
                                 </label>
-                                <div class="form-group" ng-class="{ 'has-error' : form.phone_{{$index}}.$invalid }" ng-repeat="phone in account.business.phones">
+                                <div class="form-group" ng-class="{ 'has-error' : form.phone_{{$index}}.$invalid  && !form.phone_{{$index}}.$pristine}" ng-repeat="phone in account.business.phones">
                                     <span class="input-icon input-icon-right">
                                         <input type="text" placeholder="phone number" class="form-control" ng-pattern="formValidations.phone" name="phone_{{$index}}" ng-model="account.business.phones[$index].number">
                                         <p ng-show="form.phone_{{$index}}.$invalid && !form.phone_{{$index}}.$pristine" class="help-block">Enter a valid phone number.</p>
@@ -203,7 +203,7 @@
                                         </div>
                                     </div>
                                     <div class="col-md-8">
-                                        <div class="form-group" ng-class="{ 'has-error' : form.zip_{{$index}}.$invalid }">
+                                        <div class="form-group" ng-class="{ 'has-error' : form.zip_{{$index}}.$invalid && !form.zip_{{$index}}.$pristine}">
                                             <label class="control-label">
                                                 Zip Code
                                             </label>
