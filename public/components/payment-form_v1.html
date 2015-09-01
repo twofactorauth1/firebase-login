@@ -52,21 +52,21 @@
                 <div class="margin-top-30"></div>
                 <div class="well">
                     <!-- First Name -->
-                    <div id="first" class="form-group col-sm-6 has-feedback" >
+                    <div id="first" class="form-group col-xs-12 col-sm-6 has-feedback" >
                         <label>First Name</label>
                         <input class="form-control input-lg" type="text" ng-change="checkFirstName(newAccount)" ng-model-options="{ debounce: 800 }" ng-model="newAccount.first" />
                         <span class="glyphicon form-control-feedback"></span>
                         <span class="error help-block" />
                     </div>
                     <!-- Last Name -->
-                    <div id="last" class="form-group col-sm-6 has-feedback">
+                    <div id="last" class="form-group col-xs-12 col-sm-6 has-feedback">
                         <label>Last Name</label>
                         <input class="form-control input-lg" type="text" ng-change="checkLastName(newAccount)" ng-model-options="{ debounce: 800 }" ng-model="newAccount.last" />
                         <span class="glyphicon form-control-feedback"></span>
                         <span class="error help-block" />
                     </div>
                     <!-- Business Name -->
-                    <div id="business-name" class="form-group col-xs-12 has-feedback">
+                    <div id="business-name" class="form-group col-xs-12 col-sm-6 has-feedback">
                         <label>Business Name</label>
                         <input class="form-control input-lg" type="text" ng-model="newAccount.businessName" ng-change="checkDomainExists(newAccount)" ng-model-options="{ debounce: 800 }" />
                         <div class="clearfix"></div>
@@ -75,21 +75,21 @@
                         <span class="help-block" ng-show="newAccount.businessName && validBusinessName">Your Indigenous URL will be <strong>{{newAccount.businessName | urlFilter}}.indigenous.io</strong> and will be changed once your site is ready to publish.</span>
                     </div>
                     <!-- Phone Number -->
-                    <div id="phone" class="form-group col-sm-12 has-feedback">
+                    <div id="phone" class="form-group col-xs-12 col-sm-6 has-feedback">
                         <label>Phone Number</label>
                         <input class="form-control input-lg" type="text" ng-model="newAccount.phone" mask="(999) 999-9999" clean="true" mask-restrict='reject'/>
                         <span class="glyphicon form-control-feedback"></span>
                         <span class="error help-block" />
                     </div>
                     <!-- EMAIL AND PASSOWORD -->
-                    <div id="email" class="form-group col-sm-12 has-feedback" ng-hide="tmpAccount.tempUser">
+                    <div id="email" class="form-group col-xs-12 col-sm-6 has-feedback" ng-hide="tmpAccount.tempUser">
                         <label>Email</label>
                         <input class="form-control input-lg" type="email" ng-model="newAccount.email" ng-pattern="emailValidation" ng-change="checkEmailExists(newAccount)" ng-model-options="{ debounce: 800 }" />
                         <span class="help-block">Your email address will become your username.</span>
                         <span class="glyphicon form-control-feedback"></span>
                         <span class="error help-block" />
                     </div>
-                    <div id="password" class="form-group col-sm-12 has-feedback" ng-hide="newAccount.hidePassword">
+                    <div id="password" class="form-group col-xs-12 col-sm-6 has-feedback" ng-hide="newAccount.hidePassword">
                         <label>Password</label>
                         <input class="form-control input-lg" type="password" ng-model="newAccount.password" ng-change="checkPasswordLength(newAccount)" ng-model-options="{ debounce: 800 }" />
                         <span class="help-block">Your password must be at least 6 characters.</span>
