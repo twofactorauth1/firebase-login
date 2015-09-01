@@ -9,41 +9,42 @@
             <div ncy-breadcrumb></div>
         </div>
     </section>
-    <!-- end: PAGE TITLE -->
-    <div class="container-fluid container-fullw bg-white margin-bottom-15 padding-top-15 padding-bottom-15">
-        <div class="pull-right">
-            <div class="btn-group" dropdown is-open="status.isopen">
-                <button type="button" class="btn btn-wide btn-primary dropdown-toggle" dropdown-toggle ng-disabled="disabled">
-                    Status <span class="caret"></span>
+    <div ng-class="{'load1 csspinner': !dataLoaded}">
+        <!-- end: PAGE TITLE -->
+        <div class="container-fluid container-fullw bg-white margin-bottom-15 padding-top-15 padding-bottom-15">
+            <div class="pull-right">
+                <div class="btn-group" dropdown is-open="status.isopen">
+                    <button type="button" class="btn btn-wide btn-primary dropdown-toggle" dropdown-toggle ng-disabled="disabled">
+                        Status <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu">
+                        <li ng-class="{'active': currentStatus == 'pending_payment'}">
+                            <a href="#" ng-click="statusUpdated('pending_payment')">Pending Payment</a>
+                        </li>
+                        <li ng-class="{'active': currentStatus == 'processing'}">
+                            <a href="#" ng-click="statusUpdated('processing')">Processing</a>
+                        </li>
+                        <li ng-class="{'active': currentStatus == 'on_hold'}">
+                            <a href="#" ng-click="statusUpdated('on_hold')">On Hold</a>
+                        </li>
+                        <li ng-class="{'active': currentStatus == 'completed'}">
+                            <a href="#" ng-click="statusUpdated('completed')">Completed</a>
+                        </li>
+                        <li ng-class="{'active': currentStatus == 'cancelled'}">
+                            <a href="#" ng-click="statusUpdated('cancelled')">Cancelled</a>
+                        </li>
+                        <li ng-if="order._id" ng-class="{'active': currentStatus == 'refunded'}">
+                            <a href="#" ng-click="statusUpdated('refunded')">Refunded</a>
+                        </li>
+                        <li ng-class="{'active': currentStatus == 'failed'}">
+                            <a href="#" ng-click="statusUpdated('failed')">Falied</a>
+                        </li>
+                    </ul>
+                </div>
+                <button ng-disabled="order.status === FailedStatus || saveLoading" type="button" class="btn btn-wide btn-o btn-primary" ng-click="saveOrder()">
+                    Save
                 </button>
-                <ul class="dropdown-menu" role="menu">
-                    <li ng-class="{'active': currentStatus == 'pending_payment'}">
-                        <a href="#" ng-click="statusUpdated('pending_payment')">Pending Payment</a>
-                    </li>
-                    <li ng-class="{'active': currentStatus == 'processing'}">
-                        <a href="#" ng-click="statusUpdated('processing')">Processing</a>
-                    </li>
-                    <li ng-class="{'active': currentStatus == 'on_hold'}">
-                        <a href="#" ng-click="statusUpdated('on_hold')">On Hold</a>
-                    </li>
-                    <li ng-class="{'active': currentStatus == 'completed'}">
-                        <a href="#" ng-click="statusUpdated('completed')">Completed</a>
-                    </li>
-                    <li ng-class="{'active': currentStatus == 'cancelled'}">
-                        <a href="#" ng-click="statusUpdated('cancelled')">Cancelled</a>
-                    </li>
-                    <li ng-if="order._id" ng-class="{'active': currentStatus == 'refunded'}">
-                        <a href="#" ng-click="statusUpdated('refunded')">Refunded</a>
-                    </li>
-                    <li ng-class="{'active': currentStatus == 'failed'}">
-                        <a href="#" ng-click="statusUpdated('failed')">Falied</a>
-                    </li>
-                </ul>
-            </div>
-            <button ng-disabled="order.status === FailedStatus || saveLoading" type="button" class="btn btn-wide btn-o btn-primary" ng-click="saveOrder()">
-                Save
-            </button>
-            <!-- <div class="btn-group" dropdown is-open="email.isopen">
+                <!-- <div class="btn-group" dropdown is-open="email.isopen">
                 <button type="button" class="btn btn-wide btn-primary dropdown-toggle" dropdown-toggle ng-disabled="disabled">
                     Send Email <span class="caret"></span>
                 </button>
@@ -79,447 +80,448 @@
                     <li>
                 </ul>
             </div> -->
+            </div>
         </div>
-    </div>
-    <!-- start: YOUR CONTENT HERE -->
-    <div class="row">
-        <div class="col-sm-8">
-            <div class="panel panel-white" id="orderDetails">
-                <div class="panel-heading border-light">
-                    <h4 class="panel-title">Order <span class="text-bold">Details</span></h4>
-                    <ct-paneltool class="panel-tools" tool-collapse="tool-collapse"></ct-paneltool>
-                </div>
-                <div class="panel-body" collapse="orderDetails" ng-init="orderDetails=false">
-                    <div class="form-group">
-                        <label>
-                            Order Date
-                        </label>
-                        <p class="input-group">
-                            <input type="text" class="form-control" datepicker-popup="dd-MMMM-yyyy" ng-model="order.created.date" is-open="opened" min-date="minDate" max-date="'2015-06-22'" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
-                            <span class="input-group-btn">
+        <!-- start: YOUR CONTENT HERE -->
+        <div class="row">
+            <div class="col-sm-8">
+                <div class="panel panel-white" id="orderDetails">
+                    <div class="panel-heading border-light">
+                        <h4 class="panel-title">Order <span class="text-bold">Details</span></h4>
+                        <ct-paneltool class="panel-tools" tool-collapse="tool-collapse"></ct-paneltool>
+                    </div>
+                    <div class="panel-body" collapse="orderDetails" ng-init="orderDetails=false">
+                        <div class="form-group">
+                            <label>
+                                Order Date
+                            </label>
+                            <p class="input-group order-date">
+                                <input type="text" class="form-control" datepicker-popup="dd-MMMM-yyyy" ng-model="order.created.date" is-open="opened" min-date="minDate" max-date="'2015-06-22'" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
+                                <span class="input-group-btn">
                                         <button type="button" class="btn btn-default" ng-click="open($event)">
                                             <i class="glyphicon glyphicon-calendar"></i>
                                         </button> </span></p>
-                    </div>
-                    <div class="form-group typeahead">
-                        <label for="form-field-select-1">
-                            Customer
-                        </label>
-                        <span ng-if="selectedCustomer" ng-click="navToCustomer(selectedCustomer)" class="pull-right customer-info">View Profile</span>
-                        <span class="input-icon input-icon-right">
+                        </div>
+                        <div class="form-group typeahead">
+                            <label for="form-field-select-1">
+                                Customer
+                            </label>
+                            <span ng-if="selectedCustomer" ng-click="navToCustomer(selectedCustomer)" class="pull-right customer-info">View Profile</span>
+                            <span class="input-icon input-icon-right">
                         <input type="text" ng-disabled="order.locked" ng-model="selectedCustomer" typeahead="customer as customer for customer in customers | filter:$viewValue" typeahead-min-length="3" typeahead-loading="true" typeahead-template-url="customTemplate.html" typeahead-input-formatter="formatInput($model)" class="form-control">
                         <i ng-hide="order.locked" class="ti-close" style="color: #a94442" ng-if="selectedCustomer" ng-click="clearCustomer()"></i></span>
-                    </div>
-                    <div class="form-group row margin-bottom-0">
-                        <div class="col-sm-6 col-xs-12">
-                            <fieldset class="padding-15 margin-bottom-0">
-                                <legend>
-                                    Billing Details <span class="fa" ng-init="billingEdit = false" ng-click="billingEdit = !billingEdit" ng-class="{'fa-edit': !billingEdit, 'fa-times': billingEdit}"></span>
-                                </legend>
-                                <div class="row margin-top-5" ng-if="billingEdit">
-                                    <div class="col-xs-12">
-                                        <div class="form-group">
-                                            <button class="btn btn-info btn-o btn-wide" ng-click="customerSync('billing')" ng-if="selectedCustomer">Customer Sync</button>
+                        </div>
+                        <div class="form-group row margin-bottom-0">
+                            <div class="col-sm-6 col-xs-12">
+                                <fieldset class="padding-15 margin-bottom-0">
+                                    <legend>
+                                        Billing Details <span class="fa" ng-init="billingEdit = false" ng-click="billingEdit = !billingEdit" ng-class="{'fa-edit': !billingEdit, 'fa-times': billingEdit}"></span>
+                                    </legend>
+                                    <div class="row margin-top-5" ng-if="billingEdit">
+                                        <div class="col-xs-12">
+                                            <div class="form-group">
+                                                <button class="btn btn-info btn-o btn-wide" ng-click="customerSync('billing')" ng-if="selectedCustomer">Customer Sync</button>
+                                            </div>
+                                        </div>
+                                        <div class="form-group col-sm-6">
+                                            <label for="billing-first-name">
+                                                First
+                                            </label>
+                                            <input type="text" class="form-control" id="billing-first-name" placeholder="First" ng-model="order.billing_address.first_name">
+                                        </div>
+                                        <div class="form-group col-sm-6">
+                                            <label for="billing-last-name">
+                                                Last
+                                            </label>
+                                            <input type="text" class="form-control" id="billing-last-name" placeholder="Last" ng-model="order.billing_address.last_name">
+                                        </div>
+                                        <div class="form-group col-sm-12">
+                                            <label for="billing-company">
+                                                Company
+                                            </label>
+                                            <input type="text" class="form-control" id="billing-company" placeholder="Company" ng-model="order.billing_address.company">
+                                        </div>
+                                        <div class="form-group col-sm-6">
+                                            <label for="billing-address-1">
+                                                Address 1
+                                            </label>
+                                            <input type="text" class="form-control" id="billing-address-1" placeholder="Address 1" ng-model="order.billing_address.address_1">
+                                        </div>
+                                        <div class="form-group col-sm-6">
+                                            <label for="billing-address-2">
+                                                Address 2
+                                            </label>
+                                            <input type="text" class="form-control" id="billing-address-2" placeholder="Address 2" ng-model="order.billing_address.address_2">
+                                        </div>
+                                        <div class="form-group col-sm-6">
+                                            <label for="billing-city">
+                                                City
+                                            </label>
+                                            <input type="text" class="form-control" id="billing-city" placeholder="City" ng-model="order.billing_address.city">
+                                        </div>
+                                        <div class="form-group col-sm-6">
+                                            <label for="billing-postcode">
+                                                Postcode
+                                            </label>
+                                            <input type="text" class="form-control" id="billing-postcode" placeholder="Postcode" ng-model="order.billing_address.postcode">
+                                        </div>
+                                        <div class="form-group col-sm-6">
+                                            <label for="billing-state">
+                                                State
+                                            </label>
+                                            <input type="text" class="form-control" id="billing-state" placeholder="State" ng-model="order.billing_address.state">
+                                        </div>
+                                        <div class="form-group col-sm-6">
+                                            <label for="billing-country">
+                                                Country
+                                            </label>
+                                            <input type="text" class="form-control" id="billing-country" placeholder="Country" ng-model="order.billing_address.country">
+                                        </div>
+                                        <div class="form-group col-sm-6">
+                                            <label for="billing-email">
+                                                Email
+                                            </label>
+                                            <input type="text" class="form-control" id="billing-email" placeholder="Email" ng-model="order.billing_address.email">
+                                        </div>
+                                        <div class="form-group col-sm-6">
+                                            <label for="billing-phone">
+                                                Phone
+                                            </label>
+                                            <input type="text" class="form-control" id="billing-phone" placeholder="Phone" ng-model="order.billing_address.phone">
                                         </div>
                                     </div>
-                                    <div class="form-group col-sm-6">
-                                        <label for="billing-first-name">
-                                            First
-                                        </label>
-                                        <input type="text" class="form-control" id="billing-first-name" placeholder="First" ng-model="order.billing_address.first_name">
-                                    </div>
-                                    <div class="form-group col-sm-6">
-                                        <label for="billing-last-name">
-                                            Last
-                                        </label>
-                                        <input type="text" class="form-control" id="billing-last-name" placeholder="Last" ng-model="order.billing_address.last_name">
-                                    </div>
-                                    <div class="form-group col-sm-12">
-                                        <label for="billing-company">
-                                            Company
-                                        </label>
-                                        <input type="text" class="form-control" id="billing-company" placeholder="Company" ng-model="order.billing_address.company">
-                                    </div>
-                                    <div class="form-group col-sm-6">
-                                        <label for="billing-address-1">
-                                            Address 1
-                                        </label>
-                                        <input type="text" class="form-control" id="billing-address-1" placeholder="Address 1" ng-model="order.billing_address.address_1">
-                                    </div>
-                                    <div class="form-group col-sm-6">
-                                        <label for="billing-address-2">
-                                            Address 2
-                                        </label>
-                                        <input type="text" class="form-control" id="billing-address-2" placeholder="Address 2" ng-model="order.billing_address.address_2">
-                                    </div>
-                                    <div class="form-group col-sm-6">
-                                        <label for="billing-city">
-                                            City
-                                        </label>
-                                        <input type="text" class="form-control" id="billing-city" placeholder="City" ng-model="order.billing_address.city">
-                                    </div>
-                                    <div class="form-group col-sm-6">
-                                        <label for="billing-postcode">
-                                            Postcode
-                                        </label>
-                                        <input type="text" class="form-control" id="billing-postcode" placeholder="Postcode" ng-model="order.billing_address.postcode">
-                                    </div>
-                                    <div class="form-group col-sm-6">
-                                        <label for="billing-state">
-                                            State
-                                        </label>
-                                        <input type="text" class="form-control" id="billing-state" placeholder="State" ng-model="order.billing_address.state">
-                                    </div>
-                                    <div class="form-group col-sm-6">
-                                        <label for="billing-country">
-                                            Country
-                                        </label>
-                                        <input type="text" class="form-control" id="billing-country" placeholder="Country" ng-model="order.billing_address.country">
-                                    </div>
-                                    <div class="form-group col-sm-6">
-                                        <label for="billing-email">
-                                            Email
-                                        </label>
-                                        <input type="text" class="form-control" id="billing-email" placeholder="Email" ng-model="order.billing_address.email">
-                                    </div>
-                                    <div class="form-group col-sm-6">
-                                        <label for="billing-phone">
-                                            Phone
-                                        </label>
-                                        <input type="text" class="form-control" id="billing-phone" placeholder="Phone" ng-model="order.billing_address.phone">
-                                    </div>
-                                </div>
-                                <div class="margin-top-5" ng-if="!billingEdit">
-                                    <address>
-                                        <strong>{{order.billing_address.company}}</strong>
-                                        <br> {{order.billing_address.address_1}}<span ng-if='order.billing_address.address_2'>,</span> {{order.billing_address.address_2}}
-                                        <br> {{order.billing_address.city}} <span ng-if='order.billing_address.city'>,</span> {{order.billing_address.state}} {{order.billing_address.postcode}}
-                                        <br>
-                                        <span ng-if="order.billing_address.phone"><span class="fa fa-phone"></span> {{order.billing_address.phone}}</span>
-                                    </address>
-                                    <address class="margin-bottom-0">
-                                        <strong>{{order.billing_address.first_name}} {{order.billing_address.last_name}}</strong>
-                                        <br>
-                                        <span ng-if="order.billing_address.email">
+                                    <div class="margin-top-5" ng-if="!billingEdit">
+                                        <address>
+                                            <strong>{{order.billing_address.company}}</strong>
+                                            <br> {{order.billing_address.address_1}}<span ng-if='order.billing_address.address_2'>,</span> {{order.billing_address.address_2}}
+                                            <br> {{order.billing_address.city}} <span ng-if='order.billing_address.city'>,</span> {{order.billing_address.state}} {{order.billing_address.postcode}}
+                                            <br>
+                                            <span ng-if="order.billing_address.phone"><span class="fa fa-phone"></span> {{order.billing_address.phone}}</span>
+                                        </address>
+                                        <address class="margin-bottom-0">
+                                            <strong>{{order.billing_address.first_name}} {{order.billing_address.last_name}}</strong>
+                                            <br>
+                                            <span ng-if="order.billing_address.email">
                                             <span class="fa fa-envelope-o"></span>
-                                        <a href="mailto:#{{order.billing_address.email}}">
+                                            <a href="mailto:#{{order.billing_address.email}}">
                                                 {{order.billing_address.email}}
                                             </a>
-                                        </span>
-                                    </address>
-                                </div>
-                            </fieldset>
-                        </div>
-                        <div class="col-sm-6 col-xs-12">
-                            <fieldset class="padding-15 margin-bottom-0">
-                                <legend>
-                                    Shipping Details <span class="fa" ng-init="shippingEdit = false" ng-click="shippingEdit = !shippingEdit" ng-class="{'fa-edit': !shippingEdit, 'fa-times': shippingEdit}"></span>
-                                </legend>
-                                <div class="row margin-top-5" ng-if="shippingEdit">
-                                    <div class="form-group col-sm-12">
-                                        <div class="checkbox clip-check check-primary col-sm-6 col-xs-12">
-                                            <input type="checkbox" id="sameAsBilling" ng-model="sameAsBilling">
-                                            <label for="sameAsBilling" class="text-bold">
-                                                Same As Billing
-                                            </label>
-                                        </div>
-                                        <div class="col-sm-6 col-xs-12 padding-left-0 margin-bottom-15">
-                                            <button class="btn btn-info btn-o btn-wide pull-left" ng-click="customerSync('shipping')" ng-if="selectedCustomer">Customer Sync</button>
-                                        </div>
+                                            </span>
+                                        </address>
                                     </div>
-                                    <div ng-if="!sameAsBilling">
-                                        <div class="form-group col-sm-6">
-                                            <label for="shipping-first-name">
-                                                First
-                                            </label>
-                                            <input type="text" class="form-control" id="shipping-first-name" placeholder="First" ng-model="order.shipping_address.first_name">
-                                        </div>
-                                        <div class="form-group col-sm-6">
-                                            <label for="shipping-last-name">
-                                                Last
-                                            </label>
-                                            <input type="text" class="form-control" id="shipping-last-name" placeholder="Last" ng-model="order.shipping_address.last_name">
-                                        </div>
+                                </fieldset>
+                            </div>
+                            <div class="col-sm-6 col-xs-12">
+                                <fieldset class="padding-15 margin-bottom-0">
+                                    <legend>
+                                        Shipping Details <span class="fa" ng-init="shippingEdit = false" ng-click="shippingEdit = !shippingEdit" ng-class="{'fa-edit': !shippingEdit, 'fa-times': shippingEdit}"></span>
+                                    </legend>
+                                    <div class="row margin-top-5" ng-if="shippingEdit">
                                         <div class="form-group col-sm-12">
-                                            <label for="shipping-company">
-                                                Company
-                                            </label>
-                                            <input type="text" class="form-control" id="shipping-company" placeholder="Company" ng-model="order.shipping_address.company">
+                                            <div class="checkbox clip-check check-primary col-sm-6 col-xs-12">
+                                                <input type="checkbox" id="sameAsBilling" ng-model="sameAsBilling">
+                                                <label for="sameAsBilling" class="text-bold">
+                                                    Same As Billing
+                                                </label>
+                                            </div>
+                                            <div class="col-sm-6 col-xs-12 padding-left-0 margin-bottom-15">
+                                                <button class="btn btn-info btn-o btn-wide pull-left" ng-click="customerSync('shipping')" ng-if="selectedCustomer">Customer Sync</button>
+                                            </div>
                                         </div>
-                                        <div class="form-group col-sm-6">
-                                            <label for="shipping-email">
-                                                Email
-                                            </label>
-                                            <input type="text" class="form-control" id="shipping-email" placeholder="Email" ng-model="order.shipping_address.email">
+                                        <div ng-if="!sameAsBilling">
+                                            <div class="form-group col-sm-6">
+                                                <label for="shipping-first-name">
+                                                    First
+                                                </label>
+                                                <input type="text" class="form-control" id="shipping-first-name" placeholder="First" ng-model="order.shipping_address.first_name">
+                                            </div>
+                                            <div class="form-group col-sm-6">
+                                                <label for="shipping-last-name">
+                                                    Last
+                                                </label>
+                                                <input type="text" class="form-control" id="shipping-last-name" placeholder="Last" ng-model="order.shipping_address.last_name">
+                                            </div>
+                                            <div class="form-group col-sm-12">
+                                                <label for="shipping-company">
+                                                    Company
+                                                </label>
+                                                <input type="text" class="form-control" id="shipping-company" placeholder="Company" ng-model="order.shipping_address.company">
+                                            </div>
+                                            <div class="form-group col-sm-6">
+                                                <label for="shipping-email">
+                                                    Email
+                                                </label>
+                                                <input type="text" class="form-control" id="shipping-email" placeholder="Email" ng-model="order.shipping_address.email">
+                                            </div>
+                                            <div class="form-group col-sm-6">
+                                                <label for="shipping-phone">
+                                                    Phone
+                                                </label>
+                                                <input type="text" class="form-control" id="shipping-phone" placeholder="Phone" ng-model="order.shipping_address.phone">
+                                            </div>
+                                            <div class="form-group col-sm-6">
+                                                <label for="shipping-address-1">
+                                                    Address 1
+                                                </label>
+                                                <input type="text" class="form-control" id="shipping-address-1" placeholder="Address 1" ng-model="order.shipping_address.address_1">
+                                            </div>
+                                            <div class="form-group col-sm-6">
+                                                <label for="shipping-address-2">
+                                                    Address 2
+                                                </label>
+                                                <input type="text" class="form-control" id="shipping-address-2" placeholder="Address 2" ng-model="order.shipping_address.address_2">
+                                            </div>
+                                            <div class="form-group col-sm-6">
+                                                <label for="shipping-city">
+                                                    City
+                                                </label>
+                                                <input type="text" class="form-control" id="shipping-city" placeholder="City" ng-model="order.shipping_address.city">
+                                            </div>
+                                            <div class="form-group col-sm-6">
+                                                <label for="shipping-postcode">
+                                                    Postcode
+                                                </label>
+                                                <input type="text" class="form-control" id="shipping-postcode" placeholder="Postcode" ng-model="order.shipping_address.postcode">
+                                            </div>
+                                            <div class="form-group col-sm-6">
+                                                <label for="shipping-state">
+                                                    State
+                                                </label>
+                                                <input type="text" class="form-control" id="shipping-state" placeholder="State" ng-model="order.shipping_address.state">
+                                            </div>
+                                            <div class="form-group col-sm-6">
+                                                <label for="shipping-country">
+                                                    Country
+                                                </label>
+                                                <input type="text" class="form-control" id="shipping-country" placeholder="Country" ng-model="order.shipping_address.country">
+                                            </div>
                                         </div>
-                                        <div class="form-group col-sm-6">
-                                            <label for="shipping-phone">
-                                                Phone
-                                            </label>
-                                            <input type="text" class="form-control" id="shipping-phone" placeholder="Phone" ng-model="order.shipping_address.phone">
-                                        </div>
-                                        <div class="form-group col-sm-6">
-                                            <label for="shipping-address-1">
-                                                Address 1
-                                            </label>
-                                            <input type="text" class="form-control" id="shipping-address-1" placeholder="Address 1" ng-model="order.shipping_address.address_1">
-                                        </div>
-                                        <div class="form-group col-sm-6">
-                                            <label for="shipping-address-2">
-                                                Address 2
-                                            </label>
-                                            <input type="text" class="form-control" id="shipping-address-2" placeholder="Address 2" ng-model="order.shipping_address.address_2">
-                                        </div>
-                                        <div class="form-group col-sm-6">
-                                            <label for="shipping-city">
-                                                City
-                                            </label>
-                                            <input type="text" class="form-control" id="shipping-city" placeholder="City" ng-model="order.shipping_address.city">
-                                        </div>
-                                        <div class="form-group col-sm-6">
-                                            <label for="shipping-postcode">
-                                                Postcode
-                                            </label>
-                                            <input type="text" class="form-control" id="shipping-postcode" placeholder="Postcode" ng-model="order.shipping_address.postcode">
-                                        </div>
-                                        <div class="form-group col-sm-6">
-                                            <label for="shipping-state">
-                                                State
-                                            </label>
-                                            <input type="text" class="form-control" id="shipping-state" placeholder="State" ng-model="order.shipping_address.state">
-                                        </div>
-                                        <div class="form-group col-sm-6">
-                                            <label for="shipping-country">
-                                                Country
-                                            </label>
-                                            <input type="text" class="form-control" id="shipping-country" placeholder="Country" ng-model="order.shipping_address.country">
+                                        <div ng-if="sameAsBilling">
+                                            <div class="form-group col-sm-6">
+                                                <label for="shipping-first-name">
+                                                    First
+                                                </label>
+                                                <input type="text" class="form-control" id="shipping-first-name" placeholder="First" disabled="true" ng-model="order.billing_address.first_name">
+                                            </div>
+                                            <div class="form-group col-sm-6">
+                                                <label for="shipping-last-name">
+                                                    Last
+                                                </label>
+                                                <input type="text" class="form-control" id="shipping-last-name" placeholder="Last" disabled="true" ng-model="order.billing_address.last_name">
+                                            </div>
+                                            <div class="form-group col-sm-12">
+                                                <label for="shipping-company">
+                                                    Company
+                                                </label>
+                                                <input type="text" class="form-control" id="shipping-company" placeholder="Company" disabled="true" ng-model="order.billing_address.company">
+                                            </div>
+                                            <div class="form-group col-sm-6">
+                                                <label for="shipping-email">
+                                                    Email
+                                                </label>
+                                                <input type="text" class="form-control" id="shipping-email" placeholder="Email" disabled="true" ng-model="order.billing_address.email">
+                                            </div>
+                                            <div class="form-group col-sm-6">
+                                                <label for="shipping-phone">
+                                                    Phone
+                                                </label>
+                                                <input type="text" class="form-control" id="shipping-phone" placeholder="Phone" disabled="true" ng-model="order.billing_address.phone">
+                                            </div>
+                                            <div class="form-group col-sm-6">
+                                                <label for="shipping-address-1">
+                                                    Address 1
+                                                </label>
+                                                <input type="text" class="form-control" id="shipping-address-1" placeholder="Address 1" disabled="true" ng-model="order.billing_address.address_1">
+                                            </div>
+                                            <div class="form-group col-sm-6">
+                                                <label for="shipping-address-2">
+                                                    Address 2
+                                                </label>
+                                                <input type="text" class="form-control" id="shipping-address-2" placeholder="Address 2" disabled="true" ng-model="order.billing_address.address_2">
+                                            </div>
+                                            <div class="form-group col-sm-6">
+                                                <label for="shipping-city">
+                                                    City
+                                                </label>
+                                                <input type="text" class="form-control" id="shipping-city" placeholder="City" disabled="true" ng-model="order.billing_address.city">
+                                            </div>
+                                            <div class="form-group col-sm-6">
+                                                <label for="shipping-postcode">
+                                                    Postcode
+                                                </label>
+                                                <input type="text" class="form-control" id="shipping-postcode" placeholder="Postcode" disabled="true" ng-model="order.billing_address.postcode">
+                                            </div>
+                                            <div class="form-group col-sm-6">
+                                                <label for="shipping-state">
+                                                    State
+                                                </label>
+                                                <input type="text" class="form-control" id="shipping-state" placeholder="State" disabled="true" ng-model="order.billing_address.state">
+                                            </div>
+                                            <div class="form-group col-sm-6">
+                                                <label for="shipping-country">
+                                                    Country
+                                                </label>
+                                                <input type="text" class="form-control" id="shipping-country" placeholder="Country" disabled="true" ng-model="order.billing_address.country">
+                                            </div>
                                         </div>
                                     </div>
-                                    <div ng-if="sameAsBilling">
-                                        <div class="form-group col-sm-6">
-                                            <label for="shipping-first-name">
-                                                First
-                                            </label>
-                                            <input type="text" class="form-control" id="shipping-first-name" placeholder="First" disabled="true" ng-model="order.billing_address.first_name">
-                                        </div>
-                                        <div class="form-group col-sm-6">
-                                            <label for="shipping-last-name">
-                                                Last
-                                            </label>
-                                            <input type="text" class="form-control" id="shipping-last-name" placeholder="Last" disabled="true" ng-model="order.billing_address.last_name">
-                                        </div>
-                                        <div class="form-group col-sm-12">
-                                            <label for="shipping-company">
-                                                Company
-                                            </label>
-                                            <input type="text" class="form-control" id="shipping-company" placeholder="Company" disabled="true" ng-model="order.billing_address.company">
-                                        </div>
-                                        <div class="form-group col-sm-6">
-                                            <label for="shipping-email">
-                                                Email
-                                            </label>
-                                            <input type="text" class="form-control" id="shipping-email" placeholder="Email" disabled="true" ng-model="order.billing_address.email">
-                                        </div>
-                                        <div class="form-group col-sm-6">
-                                            <label for="shipping-phone">
-                                                Phone
-                                            </label>
-                                            <input type="text" class="form-control" id="shipping-phone" placeholder="Phone" disabled="true" ng-model="order.billing_address.phone">
-                                        </div>
-                                        <div class="form-group col-sm-6">
-                                            <label for="shipping-address-1">
-                                                Address 1
-                                            </label>
-                                            <input type="text" class="form-control" id="shipping-address-1" placeholder="Address 1" disabled="true" ng-model="order.billing_address.address_1">
-                                        </div>
-                                        <div class="form-group col-sm-6">
-                                            <label for="shipping-address-2">
-                                                Address 2
-                                            </label>
-                                            <input type="text" class="form-control" id="shipping-address-2" placeholder="Address 2" disabled="true" ng-model="order.billing_address.address_2">
-                                        </div>
-                                        <div class="form-group col-sm-6">
-                                            <label for="shipping-city">
-                                                City
-                                            </label>
-                                            <input type="text" class="form-control" id="shipping-city" placeholder="City" disabled="true" ng-model="order.billing_address.city">
-                                        </div>
-                                        <div class="form-group col-sm-6">
-                                            <label for="shipping-postcode">
-                                                Postcode
-                                            </label>
-                                            <input type="text" class="form-control" id="shipping-postcode" placeholder="Postcode" disabled="true" ng-model="order.billing_address.postcode">
-                                        </div>
-                                        <div class="form-group col-sm-6">
-                                            <label for="shipping-state">
-                                                State
-                                            </label>
-                                            <input type="text" class="form-control" id="shipping-state" placeholder="State" disabled="true" ng-model="order.billing_address.state">
-                                        </div>
-                                        <div class="form-group col-sm-6">
-                                            <label for="shipping-country">
-                                                Country
-                                            </label>
-                                            <input type="text" class="form-control" id="shipping-country" placeholder="Country" disabled="true" ng-model="order.billing_address.country">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="margin-top-5" ng-if="!shippingEdit">
-                                    <address>
-                                        <strong>{{order.shipping_address.company}}</strong>
-                                        <br> {{order.shipping_address.address_1}}<span ng-if='order.shipping_address.address_2'>,</span> {{order.shipping_address.address_2}}
-                                        <br> {{order.shipping_address.city}}<span ng-if='order.shipping_address.state'>,</span> {{order.shipping_address.state}} {{order.shipping_address.postcode}}
-                                        <br>
-                                        <span ng-if="order.shipping_address.phone"><span class="fa fa-phone"></span> {{order.shipping_address.phone}}</span>
-                                    </address>
-                                    <address class="margin-bottom-0">
-                                        <strong>{{order.shipping_address.first_name}} {{order.shipping_address.last_name}}</strong>
-                                        <br>
-                                        <span ng-if="order.shipping_address.email">
+                                    <div class="margin-top-5" ng-if="!shippingEdit">
+                                        <address>
+                                            <strong>{{order.shipping_address.company}}</strong>
+                                            <br> {{order.shipping_address.address_1}}<span ng-if='order.shipping_address.address_2'>,</span> {{order.shipping_address.address_2}}
+                                            <br> {{order.shipping_address.city}}<span ng-if='order.shipping_address.state'>,</span> {{order.shipping_address.state}} {{order.shipping_address.postcode}}
+                                            <br>
+                                            <span ng-if="order.shipping_address.phone"><span class="fa fa-phone"></span> {{order.shipping_address.phone}}</span>
+                                        </address>
+                                        <address class="margin-bottom-0">
+                                            <strong>{{order.shipping_address.first_name}} {{order.shipping_address.last_name}}</strong>
+                                            <br>
+                                            <span ng-if="order.shipping_address.email">
                                             <span class="fa fa-envelope-o"></span>
-                                        <a href="mailto:#{{order.shipping_address.email}}">
+                                            <a href="mailto:#{{order.shipping_address.email}}">
                                                 {{order.shipping_address.email}}
                                             </a>
-                                        </span>
-                                    </address>
-                                </div>
-                            </fieldset>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="panel panel-white" id="orderItems">
-                <div class="panel-heading border-light">
-                    <h4 class="panel-title">Order <span class="text-bold">Items</span></h4>
-                    <ct-paneltool class="panel-tools" tool-collapse="tool-collapse"></ct-paneltool>
-                </div>
-                <div class="panel-wrapper" collapse="orderItems" ng-init="orderItems=false">
-                    <div class="panel-body no-padding">
-                        <table st-table="displayedItems" class="table margin-bottom-0">
-                            <thead>
-                                <tr>
-                                    <th></th>
-                                    <th>Sku</th>
-                                    <th>Item</th>
-                                    <th class="center">Price</th>
-                                    <th class="center">Qty</th>
-                                    <th class="center">Total</th>
-                                    <th class="center">Discount</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr ng-repeat="item in order.line_items">
-                                    <td width="40">
-                                        <img ng-if="item.product.is_image && item.product.icon" src="{{item.product.icon}}" class="img-circle" style="width:35px;height:35px" popover-template="'productImage.html'" popover-title="{{item.product.name}}" popover-trigger="mouseenter" popover-placement="right" />
-                                        <span ng-if="!item.product.is_image && item.product.icon" class="fa {{item.product.icon}}" popover-template="'productIcon.html'" popover-title="{{item.product.name}}" popover-trigger="mouseenter" popover-placement="right"></span>
-                                        <span popover-template="'productIcon.html'" popover-title="{{item.product.name}}" popover-trigger="mouseenter" popover-placement="right" ng-if="!item.product.icon" class="fa fa-cube"></span>
-                                    </td>
-                                    <td>
-                                        {{item.product.sku}}
-                                    </td>
-                                    <td>
-                                        <span ng-if="!item[$index].editing">{{item.name}}</span>
-                                        <div ng-if="item[$index].editing">
-                                            <label>Name</label>
-                                            <input type="text" class="form-control" ng-model="item.name" />
-                                        </div>
-                                    </td>
-                                    <td class="center">
-                                        <span>{{item.regular_price | currency}}</span>
-                                    </td>
-                                    <td class="center">
-                                        <span ng-if="!item[$index].editing">{{item.quantity}}</span>
-                                        <div ng-if="item[$index].editing">
-                                            <label>Quantity</label>
-                                            <input type="text" numbers-only="numbers-only" class="form-control" ng-model="item.quantity" ng-change="calculateTotals()" />
-                                        </div>
-                                    </td>
-                                    <td class="center">
-                                        <span ng-if="!item.discount || item.discount <= 0">{{item.total | currency}}</span>
-                                        <span ng-if="item.discount && item.discount > 0"><s>{{totalWithDiscount(item.total, item.discount) | currency}}</s> {{item.total | currency}}</span>
-                                    </td>
-                                    <td class="center">
-                                        <span ng-if="!item[$index].editing">{{item.discount | currency}}</span>
-                                        <div ng-if="item[$index].editing">
-                                            <label>Discount</label>
-                                            <input type="text" numbers-only="numbers-only" class="form-control" ng-model="item.discount" ng-change="calculateTotals()" />
-                                        </div>
-                                    </td>
-                                    <td class="center" width="100">
-                                        <span class="fa fa-edit fa-lg margin-right-5" ng-click="item[$index].editing = true" ng-show="!item[$index].editing"></span>
-                                        <span class="fa fa-times-circle-o fa-lg text-danger" ng-click="removeLineItem($index)" ng-show="!item[$index].editing"></span>
-                                        <span class="fa fa-check-circle-o fa-lg text-success" ng-click="item[$index].editing = false" ng-show="item[$index].editing"></span>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <div class="totals bg-gray col-sm-4 col-sm-offset-8 col-xs-6 col-xs-offset-6">
-                            <div class="panel panel-default panel-transparent">
-                                <div class="panel-body">
-                                    <p><span class="text-bold">Subtotal:</span> <span class="pull-right">{{order.subtotal | currency}}</span></p>
-                                    <p><span class="text-bold">Discount ({{calculatedDiscountPercent}}%):</span> <span class="pull-right">{{order.total_discount| currency}}</span></p>
-                                    <p ng-if="order.total_shipping"><span class="text-bold">Shipping:</span> <span class="pull-right">{{order.total_shipping}}</span></p>
-                                    <p ng-if="order.total_tax"><span class="text-bold">Tax ({{order.tax_rate * 100| number :1}}%):</span> <span class="pull-right">{{order.total_tax | currency}}</span></p>
-                                    <p><span class="text-bold">Total:</span> <span class="pull-right">{{order.total | currency}}</span></p>
-                                    <p class="text-danger" ng-if="order.status == 'refunded'">
-                                        <span class="text-bold">Refunded:</span>
-                                        <span class="pull-right">-$0.00</span>
-                                    </p>
-                                </div>
+                                            </span>
+                                        </address>
+                                    </div>
+                                </fieldset>
                             </div>
                         </div>
                     </div>
-                    <div class="panel-footer border-light">
-                        <div class="pull-right">
-                            <button ng-disabled="order.status === FailedStatus" type="button" class="btn btn-info btn-o btn-wide btn-scroll btn-scroll-top ti-plus" ng-click="openProductLineItemModal()">
-                                <span>Add Product</span>
-                            </button>
-                            <!-- <button type="button" class="btn btn-info btn-o btn-wide btn-scroll btn-scroll-top ti-plus" ng-click="addFee()">
+                </div>
+                <div class="panel panel-white" id="orderItems">
+                    <div class="panel-heading border-light">
+                        <h4 class="panel-title">Order <span class="text-bold">Items</span></h4>
+                        <ct-paneltool class="panel-tools" tool-collapse="tool-collapse"></ct-paneltool>
+                    </div>
+                    <div class="panel-wrapper" collapse="orderItems" ng-init="orderItems=false">
+                        <div class="panel-body no-padding">
+                            <table st-table="displayedItems" class="table margin-bottom-0">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>Sku</th>
+                                        <th>Item</th>
+                                        <th class="center">Price</th>
+                                        <th class="center">Qty</th>
+                                        <th class="center">Total</th>
+                                        <th class="center">Discount</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="item in order.line_items">
+                                        <td width="40">
+                                            <img ng-if="item.product.is_image && item.product.icon" src="{{item.product.icon}}" class="img-circle" style="width:35px;height:35px" popover-template="'productImage.html'" popover-title="{{item.product.name}}" popover-trigger="mouseenter" popover-placement="right" />
+                                            <span ng-if="!item.product.is_image && item.product.icon" class="fa {{item.product.icon}}" popover-template="'productIcon.html'" popover-title="{{item.product.name}}" popover-trigger="mouseenter" popover-placement="right"></span>
+                                            <span popover-template="'productIcon.html'" popover-title="{{item.product.name}}" popover-trigger="mouseenter" popover-placement="right" ng-if="!item.product.icon" class="fa fa-cube"></span>
+                                        </td>
+                                        <td>
+                                            {{item.product.sku}}
+                                        </td>
+                                        <td>
+                                            <span ng-if="!item[$index].editing">{{item.name}}</span>
+                                            <div ng-if="item[$index].editing">
+                                                <label>Name</label>
+                                                <input type="text" class="form-control" ng-model="item.name" />
+                                            </div>
+                                        </td>
+                                        <td class="center">
+                                            <span>{{item.regular_price | currency}}</span>
+                                        </td>
+                                        <td class="center">
+                                            <span ng-if="!item[$index].editing">{{item.quantity}}</span>
+                                            <div ng-if="item[$index].editing">
+                                                <label>Quantity</label>
+                                                <input type="text" numbers-only="numbers-only" class="form-control" ng-model="item.quantity" ng-change="calculateTotals()" />
+                                            </div>
+                                        </td>
+                                        <td class="center">
+                                            <span ng-if="!item.discount || item.discount <= 0">{{item.total | currency}}</span>
+                                            <span ng-if="item.discount && item.discount > 0"><s>{{totalWithDiscount(item.total, item.discount) | currency}}</s> {{item.total | currency}}</span>
+                                        </td>
+                                        <td class="center">
+                                            <span ng-if="!item[$index].editing">{{item.discount | currency}}</span>
+                                            <div ng-if="item[$index].editing">
+                                                <label>Discount</label>
+                                                <input type="text" numbers-only="numbers-only" class="form-control" ng-model="item.discount" ng-change="calculateTotals()" />
+                                            </div>
+                                        </td>
+                                        <td class="center" width="100">
+                                            <span class="fa fa-edit fa-lg margin-right-5" ng-click="item[$index].editing = true" ng-show="!item[$index].editing"></span>
+                                            <span class="fa fa-times-circle-o fa-lg text-danger" ng-click="removeLineItem($index)" ng-show="!item[$index].editing"></span>
+                                            <span class="fa fa-check-circle-o fa-lg text-success" ng-click="item[$index].editing = false" ng-show="item[$index].editing"></span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="totals bg-gray col-sm-4 col-sm-offset-8 col-xs-6 col-xs-offset-6">
+                                <div class="panel panel-default panel-transparent">
+                                    <div class="panel-body">
+                                        <p><span class="text-bold">Subtotal:</span> <span class="pull-right">{{order.subtotal | currency}}</span></p>
+                                        <p><span class="text-bold">Discount ({{calculatedDiscountPercent}}%):</span> <span class="pull-right">{{order.total_discount| currency}}</span></p>
+                                        <p ng-if="order.total_shipping"><span class="text-bold">Shipping:</span> <span class="pull-right">{{order.total_shipping}}</span></p>
+                                        <p ng-if="order.total_tax"><span class="text-bold">Tax ({{order.tax_rate * 100| number :1}}%):</span> <span class="pull-right">{{order.total_tax | currency}}</span></p>
+                                        <p><span class="text-bold">Total:</span> <span class="pull-right">{{order.total | currency}}</span></p>
+                                        <p class="text-danger" ng-if="order.status == 'refunded'">
+                                            <span class="text-bold">Refunded:</span>
+                                            <span class="pull-right">-$0.00</span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-footer border-light">
+                            <div class="pull-right">
+                                <button ng-disabled="order.status === FailedStatus" type="button" class="btn btn-info btn-o btn-wide btn-scroll btn-scroll-top ti-plus" ng-click="openProductLineItemModal()">
+                                    <span>Add Product</span>
+                                </button>
+                                <!-- <button type="button" class="btn btn-info btn-o btn-wide btn-scroll btn-scroll-top ti-plus" ng-click="addFee()">
                                 <span>Add Fee</span>
                             </button>
                             <button type="button" class="btn btn-info btn-o btn-wide btn-scroll btn-scroll-top ti-plus" ng-click="addShipping()">
                                 <span>Add Shipping</span>
                             </button> -->
+                            </div>
+                            <div class="clearfix"></div>
                         </div>
-                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="panel panel-white" id="orderNotes">
+                    <div class="panel-heading border-light">
+                        <h4 class="panel-title">Order <span class="text-bold">Notes</span></h4>
+                        <ct-paneltool class="panel-tools" tool-collapse="tool-collapse"></ct-paneltool>
+                    </div>
+                    <div class="panel-wrapper" collapse="orderNotes" ng-init="orderNotes=false">
+                        <div class="panel-body no-padding">
+                            <ul class="order-notes height-330 panel-scroll" perfect-scrollbar wheel-propagation="false" suppress-scroll-x="true">
+                                <li ng-repeat="note in order.notes" class="row">
+                                    <div class="col-xs-2">
+                                        <img src="{{note.user.profilePhotos[0] ? note.user.profilePhotos[0] : '/admin/assets/images/default-user.png'}}" class="img-circle pull-left" width="32">
+                                    </div>
+                                    <div class="col-xs-10">
+                                        <span class="text-small block text-light">{{note.user.first}} {{note.user.last}} <span class="pull-right">{{note.date | date:'dd MMM yy'}}</span></span>
+                                        <span>{{note.note}}</span>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="panel-footer border-light">
+                            <label for="newNote"> New Note </label>
+                            <textarea id="newNote" class="form-control margin-bottom-15 autosize area-animated msd-elastic: \n;" ng-model="newNote"></textarea>
+                            <button type="button" ng-disabled="!(newNote)" class="btn btn-info btn-block btn-o btn-wide btn-scroll btn-scroll-top ti-plus" ng-click="addNote()">
+                                <span>Add</span>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-sm-4">
-            <div class="panel panel-white" id="orderNotes">
-                <div class="panel-heading border-light">
-                    <h4 class="panel-title">Order <span class="text-bold">Notes</span></h4>
-                    <ct-paneltool class="panel-tools" tool-collapse="tool-collapse"></ct-paneltool>
-                </div>
-                <div class="panel-wrapper" collapse="orderNotes" ng-init="orderNotes=false">
-                    <div class="panel-body no-padding">
-                        <ul class="order-notes height-330 panel-scroll" perfect-scrollbar wheel-propagation="false" suppress-scroll-x="true">
-                            <li ng-repeat="note in order.notes" class="row">
-                                <div class="col-xs-2">
-                                    <img src="{{note.user.profilePhotos[0] ? note.user.profilePhotos[0] : '/admin/assets/images/default-user.png'}}" class="img-circle pull-left" width="32">
-                                </div>
-                                <div class="col-xs-10">
-                                    <span class="text-small block text-light">{{note.user.first}} {{note.user.last}} <span class="pull-right">{{note.date | date:'dd MMM yy'}}</span></span>
-                                    <span>{{note.note}}</span>
-                                </div>
-                                <div class="clearfix"></div>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="panel-footer border-light">
-                        <label for="newNote"> New Note </label>
-                        <textarea id="newNote" class="form-control margin-bottom-15 autosize area-animated msd-elastic: \n;" ng-model="newNote"></textarea>
-                        <button type="button" ng-disabled="!(newNote)" class="btn btn-info btn-block btn-o btn-wide btn-scroll btn-scroll-top ti-plus" ng-click="addNote()">
-                            <span>Add</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <!-- end: YOUR CONTENT HERE -->
     </div>
-    <!-- end: YOUR CONTENT HERE -->
 </div>
 <script type="text/ng-template" id="productImage.html">
     <img src="{{item.product.icon}}" width="150" />

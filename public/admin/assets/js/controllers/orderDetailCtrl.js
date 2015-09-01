@@ -4,6 +4,7 @@
 (function (angular) {
   app.controller('OrderDetailCtrl', ["$scope", "toaster", "$modal", "$filter", "$stateParams", "$location", "OrderService", "CustomerService", "UserService", "ProductService", "SweetAlert", "orderConstant", function ($scope, toaster, $modal, $filter, $stateParams, $location, OrderService, CustomerService, UserService, ProductService, SweetAlert, orderConstant) {
 
+    $scope.dataLoaded = false;
     //TODO
     // - $q all api calls
     // 1. getCustomers
@@ -143,6 +144,7 @@
           console.log('$scope.order ', $scope.order);
 
         }
+        $scope.dataLoaded = true;
       });
     };
 
@@ -704,6 +706,10 @@
         toaster.pop('error', 'Orders can not be blank.');
         $scope.saveLoading = false;
         return;
+      }
+
+      if (!$scope.order.created.date) {
+        $scope.order.created.date = new Date().toISOString();
       }
 
       if (!$scope.order.customer_id) {

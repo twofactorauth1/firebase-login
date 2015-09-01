@@ -69,6 +69,7 @@
                     <div id="business-name" class="form-group col-xs-12 has-feedback">
                         <label>Business Name</label>
                         <input class="form-control input-lg" type="text" ng-model="newAccount.businessName" ng-change="checkDomainExists(newAccount)" ng-model-options="{ debounce: 800 }" />
+                        <div class="clearfix"></div>
                         <span class="glyphicon form-control-feedback"></span>
                         <span class="error help-block" />
                         <span class="help-block" ng-show="newAccount.businessName && validBusinessName">Your Indigenous URL will be <strong>{{newAccount.businessName | urlFilter}}.indigenous.io</strong> and will be changed once your site is ready to publish.</span>
