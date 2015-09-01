@@ -35,6 +35,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url(''), this.isAuthApi.bind(this), this.getLoggedInUser.bind(this));
         app.get(this.url('accounts'), this.isAuthApi.bind(this), this.getUserAccounts.bind(this));
         app.post(this.url('accounts/:id'), this.isAuthApi.bind(this), this.setActiveAccount.bind(this));
+        app.post(this.url('password'), this.isAuthApi.bind(this), this.setPassword.bind(this));
 
         app.get(this.url('social'), this.isAuthApi.bind(this), this.getLoggedInUserSocialCredentials.bind(this));
         app.delete(this.url('social/:type'), this.isAuthApi.bind(this), this.removeSocialCredentials.bind(this));
@@ -887,6 +888,25 @@ _.extend(api.prototype, baseApi.prototype, {
         }
         self.log.debug('<< isAuthenticatedSession');
         return resp.send(respObj);
+    },
+
+    setPassword: function(req, resp) {
+        var self = this;
+        self.log.debug('>> setPassword');
+        self.checkPermission(req, self.sc.privs.MODIFY_USER, function (err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                var userId = self.userId(req);
+                var newPassword = req.body.password;
+                userManager.setUserPassword(userId, newPassword, userId, function(err, value){
+                    self.log.debug('<< setPassword');
+                    self.sendResultOrError(resp, err, value, 'Error setting user password');
+                    self.createUserActivity(req, 'SET_PASSWORD', null, {id: userId}, function(){});
+                    return;
+                });
+            }
+        });
     }
 });
 
