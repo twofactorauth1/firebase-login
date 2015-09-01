@@ -106,7 +106,7 @@ app.directive('productsComponent', ['ProductService', '$location', function (Pro
        * - get products for products and pricing table components
        */
 
-      ProductService.getProducts(function (data) {
+      ProductService.getActiveProducts(function (data) {
         scope.originalProducts = angular.copy(data);
         filterProducts(data, function () {
           scope.pageChanged(1);
