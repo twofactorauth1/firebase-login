@@ -54,7 +54,13 @@ describe('test orderDetailCtrl', function () {
           name: 'user2',
         },
       ];
+
+      // JKG - why all the extra api hits? should just be /members, right?
+      $httpBackend.whenGET('assets/i18n/en.json').respond(perfectMembers);
+      $httpBackend.whenGET('/api/1.0/contact').respond(perfectMembers);
       $httpBackend.whenGET('/api/1.0/user/members').respond(perfectMembers);
+      $httpBackend.whenGET('/api/1.0/products').respond(perfectMembers);
+      $httpBackend.whenGET('/api/1.0/orders/').respond(perfectMembers);
 
       // execute function to be tested
       $scope.getUsers();
@@ -63,7 +69,6 @@ describe('test orderDetailCtrl', function () {
 
       // post-conditions
       expect($scope.users.length).toBeGreaterThan(0);
-      expect(false).toBe(true);
     })
   });
 
