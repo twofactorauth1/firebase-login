@@ -583,7 +583,6 @@ app.constant('JS_REQUIRES', {
     'orderService': 'assets/js/services/order.js',
     'assetsService': 'assets/js/services/assets.js',
     'geocodeService': 'assets/js/services/geocode.js',
-    'toasterService': 'assets/js/services/toaster.js',
     //*** Filters
     'htmlToPlaintext': 'assets/js/filters/htmlToPlaintext.js',
     'secTotime': 'assets/js/filters/secTotime.js',
