@@ -808,6 +808,7 @@
           $scope.newCampaignObj.temp_manual_recip = temp_manual_recip;
 
           //add campaign
+          console.log('$scope.newCampaignObj ', $scope.newCampaignObj);
           CampaignService.createCampaign($scope.newCampaignObj, function (_nemCampaign) {
             window.location = _url;
           });
