@@ -253,11 +253,14 @@ var dao = {
           callback(err);
         } else {
           var obj = {};
-          obj.id = _id;
-          obj.subdomain = val.get('subdomain');
-          obj.domain = val.get('domain');
-          obj.logo = val.get('business').logo;
-          data.push(obj);
+            if(val) {
+                obj.id = _id;
+                obj.subdomain = val.get('subdomain');
+                obj.domain = val.get('domain');
+                obj.logo = val.get('business').logo;
+                data.push(obj);
+            }
+
           callback();
         }
       });
