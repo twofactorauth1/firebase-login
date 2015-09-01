@@ -1,6 +1,6 @@
 'use strict';
 /*global app, moment*/
-app.directive('productsComponent', ['ProductService', function (ProductService) {
+app.directive('productsComponent', ['ProductService', '$location', function (ProductService, $location) {
   return {
     scope: {
       component: '='
@@ -106,7 +106,7 @@ app.directive('productsComponent', ['ProductService', function (ProductService) 
        * - get products for products and pricing table components
        */
 
-      ProductService.getProducts(function (data) {
+      ProductService.getActiveProducts(function (data) {
         scope.originalProducts = angular.copy(data);
         filterProducts(data, function () {
           scope.pageChanged(1);
@@ -131,6 +131,11 @@ app.directive('productsComponent', ['ProductService', function (ProductService) 
           scope.filteredProducts = scope.products.slice(begin, end);
         }
       };
+
+      scope.addProducts = function()
+      {
+        $location.path('/commerce/products');
+      }
     }
   };
 }]);

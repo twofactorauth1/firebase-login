@@ -49,9 +49,10 @@ module.exports = function (config) {
       'public/js/libs/AngularJS-Toaster/toaster.min.js',
       'public/js/libs/angular-sweetalert-promised/SweetAlert.min.js',
       'public/js/libs/sweetalert/lib/sweet-alert.min.js',
+      'public/js/libs/underscore/underscore.js',
 
       'public/js/scripts/config.js',
-      '/public/admin/assets/js/config.constant.js',
+      'public/admin/assets/js/config.constant.js',
 
       'public/admin/assets/js/app.js',
       'public/admin/assets/js/main.js',

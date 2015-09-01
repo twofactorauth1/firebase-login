@@ -6,7 +6,8 @@ app.directive('meetTeamComponent',["$window", function ($window) {
     templateUrl: '/components/component-wrap.html',
     link: function (scope, element, attrs, ctrl) {
 		scope.resizeTeamTiles = function (argument) {
-		    var element = angular.element("#"+scope.component._id + " div.meet-team-height")
+			var parent_id = scope.component.anchor || scope.component._id;
+		    var element = angular.element("#"+parent_id + " div.meet-team-height")
 		    if (element && element.length) {
 		      var maxTeamHeight = Math.max.apply(null, element.map(function () {
 		        return this.offsetHeight;

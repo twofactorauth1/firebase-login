@@ -35,6 +35,7 @@ angular.module('angular-parallax', [
     scope: {
       parallaxRatio: '@',
       parallaxVerticalOffset: '@',
+      parallaxXPosition: '@'
     },
     link: function($scope, elem, attrs) {
       var setPosition = function () {
@@ -50,7 +51,23 @@ angular.module('angular-parallax', [
         }
         var calcValY = (pos(elem[0]) - $window.pageYOffset) * ($scope.parallaxRatio ? $scope.parallaxRatio : 1.1 );
         calcValY = calcValY - yoffset;
-        elem.css('background-position-y', calcValY + "px");
+        var calcValX = "50%";
+        if($scope.parallaxXPosition)
+        {
+          if($scope.parallaxXPosition == 'left')
+          {
+            calcValX = "0%";
+          }
+          if($scope.parallaxXPosition == 'center')
+          {
+            calcValX = "50%";
+          }
+          if($scope.parallaxXPosition == 'right')
+          {
+            calcValX = "100%";
+          }
+        }
+        elem.css('background-position', calcValX + " " + calcValY + "px");
       };
 
       var pos = function(obj){

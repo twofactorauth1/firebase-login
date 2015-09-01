@@ -62,6 +62,14 @@
               _hide = true;
             }
           }
+          else if(scope.component.type && (scope.component.type === 'blog' ||  scope.component.type === 'blog-teaser'))
+          {
+            if(item.type==="clone")
+            {
+              _hide = true;
+            }
+          }
+          
           if(scope.passedIndex == scope.passedComponentLength - 1 && item.type === "down")
           {
             _hide = true;
