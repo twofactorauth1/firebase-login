@@ -148,9 +148,10 @@ module.exports = {
 
     storeSessionEvent: function(sessionEvent, fn) {
         var self = this;
-        _log.debug('>> storeSessionEvent');
+        _log.debug('>> storeSessionEvent ', sessionEvent.get('fingerprint'), sessionEvent.get('session_id'));
         //check if we have one already....
         dao.findOne({session_id: sessionEvent.get('session_id')}, $$.m.SessionEvent, function(err, value){
+            _log.debug('>> found session event ', value);
             if(err) {
                 _log.error('Error looking for duplicate sessionEvents: ' + err);
                 fn(err, null);
@@ -158,18 +159,25 @@ module.exports = {
 
 
                 var fingerprint = sessionEvent.get('fingerprint');
+                _log.debug('>> searching for contacts that have fingerprint ', fingerprint);
 
                 $$.dao.ContactDao.findMany({fingerprint:fingerprint}, $$.m.Contact, function(err, list){
                     if(err) {
                         _log.error('error creating contact activity for session event: ' + err);
                     } else {
+                        _log.debug('>> found contacts with matching fingerprint ', list);
                         async.each(list, function(contact, cb){
                             var contactActivity = new $$.m.ContactActivity({
                                 accountId: contact.get('accountId'),
                                 contactId: contact.id(),
                                 activityType: $$.m.ContactActivity.types.PAGE_VIEW,
-                                start: new Date()
+                                start: new Date(),
+                                extraFields: {
+                                    page: sessionEvent.fullEntrance,
+                                    timespent: sessionEvent.session_length
+                                }
                             });
+                            _log.debug('>> createActivity2 ', contactActivity);
                             contactActivityManager.createActivity(contactActivity, function(err, val){
                                 if(err) {
                                     _log.error('error creating contact activity for session event: ' + err);
