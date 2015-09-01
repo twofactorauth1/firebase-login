@@ -14,7 +14,7 @@ function ($rootScope, $state, $stateParams) {
     $rootScope.app = {
         name: 'Indigenous', // name of your project
         author: 'Indigenous Software, INC', // author's name or company name
-        description: 'A all in one solution for small to medium sized businesses.', // brief description
+        description: 'An all in one solution for small to medium sized businesses.', // brief description
         version: '1.0', // current version
         year: ((new Date()).getFullYear()), // automatic current year (for copyright information)
         isMobile: (function () {// true if the browser is a mobile device
