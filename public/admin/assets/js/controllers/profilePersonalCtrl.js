@@ -4,15 +4,15 @@
  */
 (function (angular) {
   app.controller('ProfilePersonalCtrl',
-      ["$scope", "$modal", "$timeout", "toaster", "$stateParams", "UserService", "CommonService", "userConstant",
-        function ($scope, $modal, $timeout, toaster, $stateParams, UserService, CommonService, userConstant) {
+      ["$scope", "$modal", "$timeout", "toaster", "$stateParams", "UserService", "CommonService", "userConstant", "formValidations",
+        function ($scope, $modal, $timeout, toaster, $stateParams, UserService, CommonService, userConstant, formValidations) {
     console.log('profile personal >>> ');
 
     //account API call for object population
     //account API call for object population
     // Add remove photo
 
-
+    $scope.formValidations = formValidations;
     
     $scope.profileUser = {};
     UserService.getUserActivity(function (activities) {
@@ -95,8 +95,8 @@
     };
 
     $scope.profileSaveFn = function () {
-      //$scope.currentUser = $scope.profileUser;
-     
+      //$scope.currentUser = $scope.profileUser;    
+     // simpleForm.$setPristine(true);
       if (!$scope.profileUser.email) {
         toaster.pop("error", "Email is required.");
         return;

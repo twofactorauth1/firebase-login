@@ -2,10 +2,11 @@
 /*global app, moment, angular, window, CKEDITOR*/
 /*jslint unparam:true*/
 (function (angular) {
-  app.controller('ProfileBusinessCtrl', ["$scope", "$modal", "$timeout", "toaster", "$stateParams", "UserService", "CommonService", "hoursConstant", "AccountService", function ($scope, $modal, $timeout, toaster, $stateParams, UserService, CommonService, hoursConstant, AccountService) {
+  app.controller('ProfileBusinessCtrl', ["$scope", "$modal", "$timeout", "toaster", "$stateParams", "UserService", "CommonService", "hoursConstant", "AccountService", "formValidations", function ($scope, $modal, $timeout, toaster, $stateParams, UserService, CommonService, hoursConstant, AccountService, formValidations) {
 
     $scope.isValid = true;
     $scope.hours = hoursConstant;
+    $scope.formValidations = formValidations;
     //account API call for object population
     //account API call for object population
     AccountService.getAccount(function (account) {
