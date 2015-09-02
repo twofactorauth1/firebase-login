@@ -17,7 +17,7 @@
                 </div>
                 <div class="well">
                     <!-- First Name -->
-                    <div id="first" class="form-group col-xs-12 col-sm-6 has-feedback">
+                    <div id="first" class="form-group col-xs-12 col-sm-6 has-feedback" >
                         <label>First Name</label>
                         <input class="form-control input-lg" type="text" ng-change="checkFirstName(newAccount)" ng-model-options="{ debounce: 800 }" ng-model="newAccount.first" />
                         <span class="glyphicon form-control-feedback"></span>
@@ -35,6 +35,7 @@
                          class="form-group col-xs-12 has-feedback"
                          ng-class="{'has-error': !validBusinessName,
                           'has-success': domainExistsAlready!==undefined && !domainExistsAlready}">
+
                         <label>Business Name</label>
                         <input class="form-control input-lg"
                                type="text"
