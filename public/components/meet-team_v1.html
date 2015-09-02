@@ -3,7 +3,7 @@
         <div elem ng-model="component.title"></div>
     </div>
     <div class="row team-member-wrap {{isEditing ? 'editing' : ''}}">
-        <div class="col-xs-12 col-sm-4 col-md-3 profilepic meet-team-height pull-left" data-ng-repeat="teamMember in component.teamMembers track by $index">
+        <div class="col-xs-12 col-sm-4 col-md-3 profilepic meet-team-height pull-left" data-ng-repeat="teamMember in component.teamMembers">
             <div class="{{teamMember.becomeMember?'become-member':''}} team-member team-member-{{$index}} {{isEditing ? 'edit-mode' : ''}}">
                 <div ng-if="component.teamSettings.profilepic" ng-click="addImageFromMedia(component._id, $index, true)" class="profile-img meet-team-image">
                     <div class="profilepic-hover">
