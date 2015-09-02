@@ -3993,6 +3993,12 @@
 #componentloader .payment-form-v1 .fa-check {
   color: #27ae60;
 }
+#componentloader .payment-form-v1 .payment-form-header {
+  height: 90px;
+  padding: 15px;
+  background-color: #fafafa;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
 #componentloader .payment-form-v1 #terms-of-service p.p1 {
   margin: 0.0px 0.0px 14.4px 0.0px;
   line-height: 19.2px;
