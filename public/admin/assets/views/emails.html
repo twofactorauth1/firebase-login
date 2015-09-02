@@ -101,8 +101,8 @@
                                 <td class="center">
                                     <img id="template_screenshot_{{template._id}}" ng-src="{{ template.previewUrl }}" err-src="/admin/assets/images/default-page.jpg" class="img-thumbnail screenshot" alt="image">
                                 </td>
-                                <td><strong>Title: </strong>{{template.title | limitTo: 20 }}{{template.title.length > 20 ? '...' : ''}}</td>
-                                <td><strong>Type: </strong>{{template.type | limitTo: 20 }}{{template.type.length > 20 ? '...' : ''}}</td>
+                                <td><strong>Title: </strong><span ng-text-truncate="template.title" ng-tt-chars-threshold="20" ng-tt-no-toggling></span></td>
+                                <td><strong>Type: </strong><span ng-text-truncate="template.type" ng-tt-chars-threshold="20" ng-tt-no-toggling></span></td>
                                 <td><strong>Sent: </strong><span class="text-large text-bold">{{template.openRate || '--'}}</span><span ng-if="template.openRate" class="text-small muted"> ({{template.sent}})</span></td>
                                 <td><strong>Clicks: </strong><span class="text-large text-bold">{{template.clickRate || '--'}}</span><span ng-if="template.clickRate" class="text-small muted"> ({{template.clicks}})</span></td>
                                 <td class="hidden-xs" ng-class="{'center': tableView != 'grid'}"><strong>Created: </strong> {{template.created.date | date:'MMM d yy'}}</td>

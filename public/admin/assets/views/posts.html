@@ -128,7 +128,7 @@
                                     <img src="{{ post.featured_image ? post.featured_image : '/admin/assets/images/default-media.jpg' }}" class="img-thumbnail screenshot" alt="image">
                                 </td>
                                 <td><strong>Title: </strong>{{post.post_title | htmlToPlaintext | limitTo: 20 }}{{post.post_title.length > 20 ? '...' : ''}}</td>
-                                <td class="hidden-xs"><strong>Url: </strong>{{post.post_url | limitTo: 20 }}{{post.post_url.length > 20 ? '...' : ''}}</td>
+                                <td class="hidden-xs"><strong>Url: </strong><span ng-text-truncate="post.post_url" ng-tt-chars-threshold="25" ng-tt-no-toggling></span></td>
                                 <td class="hidden-xs"><strong>Status: </strong>{{post.post_status.trim()}}</td>
                                 <td class="hidden-xs"><strong>Created: </strong> {{post.created.date | date:'MMM d yy'}}</td>
                                 <td class="hidden-xs"><strong>Modified: </strong>{{post.modified.date | date:'MMM d yy'}}</td>
