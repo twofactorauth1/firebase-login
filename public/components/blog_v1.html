@@ -18,8 +18,7 @@
                                 <h2 class="blog-title">
                                     <a data-ng-if="blogpost.post_url" href="/page/blog/{{blogpost.post_url}}">
                                         <div class="editable post_title" data-class="post_title"
-                                             data-ng-if="blogpost.post_title" >
-                                            {{blogpost.post_title}}
+                                             data-ng-if="blogpost.post_title" ng-bind-html="blogpost.post_title | unsafe">
                                         </div>
                                     </a>
                                     <a ng-if="isEditing" class="btn btn-warning pull-right btn-delete-post pull-right" type="button" ng-click="deleteBlogPost(blogpost._id, blogpost)" style="margin-right:10px">
@@ -95,7 +94,7 @@
                         <ul data-ng-repeat="blogPost in blog.blogposts  | filter: blogpost.publish_date || blogpost.created.date | orderBy : sortBlogFn(component): customSortOrder(component) |limitTo: 3 track by $index">
                             <li>
                                 <a href="/page/blog/{{blogPost.post_url}}">
-                                    <span data-ng-if="blogPost.post_title">{{blogPost.post_title}}</span>
+                                    <span data-ng-if="blogPost.post_title" ng-bind-html="blogpost.post_title | unsafe"></span>
                                 </a>
                                 <span data-ng-if="blogPost.post_author"> by <a
                                         href="/author/{{blogPost.post_author}}">{{blogPost.post_author}}</a></span>
