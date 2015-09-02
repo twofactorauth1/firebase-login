@@ -9,6 +9,10 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
         link: function(scope, element, attrs, ctrl) {
             scope.newAccount = {};
 
+            //scope.domainExistsAlready = false;  // needs to be undefined to begin with
+            scope.emptyBusinessName = false;
+            scope.validBusinessName = true;
+
             UserService.getTmpAccount(function(data) {
                 scope.tmpAccount = data;
                 var tmpAccount = data;
@@ -278,7 +282,10 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                 }
 
                 //url
-                scope.checkDomainExists(newAccount, true);
+                scope.checkDomainExists(newAccount);
+                if(!scope.validBusinessName) {
+                    scope.validateForm = false;
+                }
 
                 if (!scope.newAccount.first) {
                     scope.checkFirstName(newAccount);
@@ -325,8 +332,6 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                     _.each(data, function (value, index) {
                       if(index === 0)
                         scope.validateEmail(value.data);
-                      else if(scope.validateForm)
-                        scope.validateBusinessName(value.data);
                     });
                     if(!scope.validateForm)
                         return;                    
@@ -428,20 +433,17 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
               }
             };
 
-            scope.validateBusinessName = function(data)
+            scope.validateBusinessName = function(domainExists)
             {
-                if (data !== 'true') {
+                if (domainExists) {
                     scope.validateForm = false;
-                    angular.element("#business-name .error").html("Domain Already Exists");
-                    angular.element("#business-name").addClass('has-error');
-                    angular.element("#business-name .glyphicon").addClass('glyphicon-remove');
-                } else {
-                    scope.validateForm = true;
-                    angular.element("#business-name .error").html("");
-                    angular.element("#business-name").removeClass('has-error').addClass('has-success');
-                    angular.element("#business-name .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
+                    scope.validBusinessName = false;
                 }
-            }
+                else {
+                    scope.validBusinessName = true;
+                    scope.validateForm = true;
+                }
+            };
 
             scope.validateEmail = function(data)
             {
@@ -456,22 +458,23 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                     angular.element("#email").removeClass('has-error').addClass('has-success');
                     angular.element("#email .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
                 }
-            }
+            };
 
-            scope.checkDomainExists = function(newAccount, skip) {                
+            scope.checkDomainExists = function(newAccount) {
+
                 if (!newAccount.businessName) {
                     scope.validBusinessName = false;
-                    angular.element("#business-name .error").html("Business Name Required");
-                    angular.element("#business-name").addClass('has-error');
-                    angular.element("#business-name .glyphicon").addClass('glyphicon-remove');
-                } else {
+                    scope.emptyBusinessName = true;
+                }
+                else {
+                    scope.emptyBusinessName = false;
+
                     var name = $.trim(newAccount.businessName).replace(" ", "").replace(".", "_").replace("@", "");
-                    if(skip)
-                        scope.promises.push(UserService.checkDuplicateDomain(name));
-                    else    
-                        UserService.checkDomainExists(name, function(data) {
-                            scope.validateBusinessName(data);
-                        });
+                    UserService.checkDomainExists(name, function(domainAvailable) {
+                        scope.domainExistsAlready = domainAvailable==='false';
+
+                        scope.validateBusinessName(scope.domainExistsAlready);
+                    });
                 }
             };
 
@@ -649,7 +652,6 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
             if ($location.search().coupon) {
                 scope.poulateCoupon = angular.copy($location.search().coupon);
                 // $location.search('coupon', null);
-                scope.poulateCoupon = scope.poulateCoupon;
                 scope.newAccount.coupon = scope.poulateCoupon;
                 scope.checkCoupon();
             }

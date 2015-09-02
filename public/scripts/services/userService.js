@@ -72,6 +72,7 @@ mainApp.service('userService', ['$http', 'ipCookie', function ($http, ipCookie) 
     });
   };
 
+  // TODO: this is poorly named, should be checkDomainAvailable. -jkg
   this.checkDomainExists = function (businessName, fn) {
     var apiUrl = baseUrl + ['account', businessName, 'available'].join('/');
     $http({
@@ -102,12 +103,6 @@ mainApp.service('userService', ['$http', 'ipCookie', function ($http, ipCookie) 
   this.checkDuplicateEmail = function(email, fn)
   {
       var apiUrl = baseUrl + ['user', 'exists', email].join('/');
-      return $http.get(apiUrl);
-  };
-
-  this.checkDuplicateDomain = function(businessName, fn)
-  {
-      var apiUrl = baseUrl + ['account', businessName, 'available'].join('/');
       return $http.get(apiUrl);
   };
 
