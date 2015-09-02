@@ -11,8 +11,12 @@ app.directive('footerComponent', ['websiteService', function (WebsiteService) {
           console.log('Controller:LayoutCtrl -> Method:websiteService Error: ' + err);
         } else {
           scope.website = data;
+          scope.copyright = {
+            year: new Date().getFullYear()
+          }
         }
       });
     }
   }
 }]);
+  
