@@ -107,7 +107,7 @@
 			</li>
 		</ul>
 	</li>
-	<li ui-sref-active="active">
+	<li ng-class="{'active open':$state.includes('app.emails')}">
 		<a ui-sref="app.emails">
 			<div class="item-content">
 				<div class="item-media">

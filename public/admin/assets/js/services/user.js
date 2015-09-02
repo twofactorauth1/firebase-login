@@ -32,12 +32,12 @@
       });
     };
 
-    this.setPassword = function(user, fn) {
-      var apiUrl = baseUrl + ['admin', 'user', $$.server.accountId, 'password'].join('/');
+    this.setPassword = function(password, fn) {
+      var apiUrl = baseUrl + ['user', 'password'].join('/');
       console.log('---- UserService.setPassword.api = ', apiUrl);
 
       var payload = {
-        'password': user.password,
+        'password': password,
       };
 
       console.log('---- UserService.setPassword.payload = ', payload);

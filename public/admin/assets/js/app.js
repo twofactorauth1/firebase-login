@@ -1,8 +1,5 @@
-/**
- * declare 'clip-two' module with dependencies
- */
 'use strict';
-angular.module("clip-two", [
+angular.module("indigenous", [
     'ngAnimate',
     'ngCookies',
     'ngStorage',

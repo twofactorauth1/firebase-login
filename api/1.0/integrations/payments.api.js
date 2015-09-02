@@ -13,6 +13,10 @@ var stripeEventHandler = require('../../../payments/stripe.event.handler.js');
 var appConfig = require('../../../configs/app.config');
 var accountDao = require('../../../dao/account.dao');
 var paymentsManager = require('../../../payments/payments_manager');
+var contactActivityManager = require('../../../contactactivities/contactactivity_manager');
+var orderManager = require('../../../orders/order_manager');
+var contactDao = require('../../../dao/contact.dao');
+var async = require('async');
 
 var api = function () {
     this.init.apply(this, arguments);
@@ -147,82 +151,193 @@ _.extend(api.prototype, baseApi.prototype, {
     subscribeToIndigenous: function(req, resp) {
         var self = this;
         self.log.debug('>> subscribeToIndigenous');
+        /*
 
-        var customerId = req.body.customerId; //REQUIRED
+         - createStripeSubscription
+         - update billingObj (plan, coupon, setupFee, subscriptionId)
+         - sendWelcomeEmail (conversion)
+         - remove account lock
+         - create contact activity
+         - create order
+         - create user activity
+         */
+
+
         var planId = req.params.planId;//REQUIRED
         var coupon = req.body.coupon;
+        var accountId = parseInt(req.body.accountId) || parseInt(self.accountId(req));//REQUIRED
+        var userId = self.userId(req);
+
+        //these may be unused
         var trial_end = req.body.trial_end;
         var card = req.body.card;//this will overwrite customer default card if specified
-        var quantity = req.body.quanity;
+        var quantity = req.body.quantity;
         var application_fee_percent = req.body.application_fee_percent;
         var metadata = req.body.metadata;
-        var accountId = parseInt(req.body.accountId) || parseInt(self.accountId(req));//REQUIRED
-        var contactId = req.body.contactId;
-        var userId = req.userId;
+
+
         var setupFee = 0;
         if(req.body.setupFee) {
             setupFee = parseInt(req.body.setupFee);
         }
 
-        self.log.debug('>> setupFee ', setupFee);
-
         if(!planId || planId.length < 1) {
             return self.wrapError(resp, 400, null, "Invalid planId parameter.");
-        }
-
-        if(!customerId || customerId.length < 1) {
-            return self.wrapError(resp, 400, null, "Invalid customerId parameter.");
         }
 
         if(!accountId || accountId===0) {
             return self.wrapError(resp, 400, null, 'Invalid accountId parameter');
         }
 
-        if(setupFee > 0) {
-            stripeDao.createInvoiceItem(customerId, setupFee, 'usd', null, null, 'Signup Fee',
-                null, null, function(err, value){
-                    if(err) {
-                        self.log.error('Error creating signup fee as invoice item: ' + err);
+        var stripeSubscription = null;
+        var account = null;
+        var customerId = null;
+        async.waterfall([
+            function getAccount(cb) {
+                accountDao.getAccountByID(accountId, function(err, _account) {
+                    if (err) {
+                        self.log.error('Error fetching account:', err);
+                        cb(err);
                     } else {
-                        self.log.debug('Created signup fee as invoice item.');
-                        stripeDao.createStripeSubscription(customerId, planId, coupon, trial_end, card, quantity,
-                            application_fee_percent, metadata, accountId, contactId, userId, null, function(err, value){
-                                if(err) {
-                                    self.log.error('Error subscribing to Indigenous: ' + err);
-                                    return self.sendResultOrError(resp, err, value, 'Error creating subscription');
-                                } else {
-                                    self.sm.addBillingInfoToAccount(accountId, customerId, value.id, planId, userId, function(err, subPrivs){
-                                        if(err) {
-                                            self.log.error('Error adding billing info to account: ' + err);
-                                            return self.sendResultOrError(resp, err, value, 'Error creating subscription');
-                                        }
-                                        self.log.debug('<< subscribeToIndigenous');
-                                        return self.sendResultOrError(resp, err, value, "Error creating subscription");
-                                    });
-                                }
-
-                            });
+                        account = _account;
+                        customerId = _account.get('billing').stripeCustomerId;
+                        cb(null);
                     }
                 });
-        } else {
-            stripeDao.createStripeSubscription(customerId, planId, coupon, trial_end, card, quantity,
-                application_fee_percent, metadata, accountId, contactId, userId, null, function(err, value){
+            },
+            function handleSetupFee(cb){
+                if(setupFee > 0) {
+                    stripeDao.createInvoiceItem(customerId, setupFee, 'usd', null, null, 'Signup Fee',
+                        null, null, function(err, value){
+                            if(err) {
+                                self.log.error('Error creating signup fee as invoice item:', err);
+                                cb(err);
+                            } else {
+                                cb();
+                            }
+                        });
+                } else {
+                    cb();
+                }
+            },
+            function createSubscription(cb){
+                paymentsManager.createStripeSubscription(customerId, planId, accountId, userId, coupon, setupFee, function(err, sub) {
                     if(err) {
                         self.log.error('Error subscribing to Indigenous: ' + err);
-                        return self.sendResultOrError(resp, err, value, 'Error creating subscription');
+                        cb(err);
                     } else {
-                        self.sm.addBillingInfoToAccount(accountId, customerId, value.id, planId, userId, function(err, subPrivs){
+                        self.sm.addBillingInfoToAccount(accountId, customerId, sub.id, planId, userId, function(err, subPrivs){
                             if(err) {
                                 self.log.error('Error adding billing info to account: ' + err);
-                                return self.sendResultOrError(resp, err, value, 'Error creating subscription');
+                                cb(err);
                             }
-                            self.log.debug('<< subscribeToIndigenous');
-                            return self.sendResultOrError(resp, err, value, "Error creating subscription");
+                            stripeSubscription = sub;
+                            cb(null, sub.id);
                         });
+                    }
+                });
+
+            },
+            function updateAccount(subscriptionId, cb){
+                var billingObj = account.get('billing');
+                billingObj.plan = planId;
+                billingObj.coupon = coupon;
+                billingObj.setupFee = setupFee;
+                billingObj.conversionDate = new Date();
+                billingObj.subscriptionId = subscriptionId;
+                account.set('locked_sub', false);
+                req.session.locked_sub = false;
+                accountDao.saveOrUpdate(account, function(err, savedAccount){
+                    if(err) {
+                        self.log.error('Error saving account:', err);
+                        cb(err);
+                    } else {
+                        cb(null, savedAccount);
                     }
 
                 });
-        }
+            },
+            function sendConversionEmail(account, cb){
+                //TODO: if we need a conversion email, add it here
+                cb(null, account);
+            },
+            function findContactForUser(account, cb){
+                var email = null;
+                userDao.getById(userId, $$.m.User, function(err, user){
+                    if(err) {
+                        self.log.error('Error fetching user:', err);
+                        cb(err);
+                    } else {
+                        email = user.get('username');
+                        contactDao.findContactsByEmail(appConfig.mainAccountID, email, function(err, contacts){
+                            if(err) {
+                                self.log.error('Error finding contact for user:', err);
+                                cb(err);
+                            } else if (!contacts || contacts.length < 1) {
+                                self.log.error('Error finding contact for user (null)');
+                                cb('Error finding contact for user (null)');
+                            } else {
+                                var contact = contacts[0];
+                                cb(null, account, contact);
+                            }
+                        });
+                    }
+                });
+
+            },
+            function createContactActivity(account, contact, cb){
+                var subdomain = account.get('subdomain');
+                var activity = new $$.m.ContactActivity({
+                    accountId: accountId,
+                    contactId: contact.id(),
+                    activityType: "TRIAL_CONVERSION",
+                    detail : "Account for "+ subdomain + ' [' + accountId + '] has converted to paying customer.',
+                    start: new Date(),
+                    extraFields: [
+                        {accountId:accountId}
+                    ]
+                });
+                contactActivityManager.createActivity(activity, function(err, value){
+                    if(err) {
+                        self.log.error('Error creating contactActivity:', err);
+                        cb(err);
+                    } else {
+                        cb(null, account, contact);
+                    }
+                });
+            },
+            function createUserActivity(account, contact, cb){
+                self.createUserActivityWithParams(accountId, userId, 'SUBSCRIBE', null,
+                    "Congratulations, your subscription was successfully created.", function(){
+                        cb(null, account, contact);
+                    });
+            },
+            function createOrder(account, contact, cb){
+                var stripeCustomerId = account.get('billing').stripeCustomerId;
+                var subscriptionId = account.get('billing').subscriptionId;
+                var contactId = contact.id();
+
+                paymentsManager.getInvoiceForSubscription(stripeCustomerId, subscriptionId, null, function(err, invoice){
+                    if(err) {
+                        self.log.error('Error getting invoice for subscription: ' + err);
+                        cb(err);
+                    } else {
+                        orderManager.createOrderFromStripeInvoice(invoice, appConfig.mainAccountID, contactId, function(err, order){
+                            if(err) {
+                                self.log.error('Error creating order for invoice: ' + err);
+                                cb(err);
+                            } else {
+                                self.log.debug('Order created.');
+                                cb(null);
+                            }
+                        });
+                    }
+                });
+            }
+        ], function done(err){
+            self.log.debug('<< subscribeToIndigenous');
+            return self.sendResultOrError(resp, err, stripeSubscription, "Error creating subscription");
+        });
 
     },
 
@@ -791,7 +906,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         var self = this;
         self.log.debug('>> createSubscription');
-
+        var accountId = parseInt(self.accountId(req));
         self.checkPermission(req, self.sc.privs.MODIFY_PAYMENTS, function(err, isAllowed) {
             if (isAllowed !== true) {
                 return self.send403(resp);
@@ -808,7 +923,7 @@ _.extend(api.prototype, baseApi.prototype, {
                     var quantity = req.body.quantity;
                     var application_fee_percent = req.body.application_fee_percent;
                     var metadata = req.body.metadata;
-                    var accountId = parseInt(self.accountId(req));
+
                     var contactId = req.body.contactId;
                     var userId = req.userId;
 

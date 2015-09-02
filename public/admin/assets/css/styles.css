@@ -12343,6 +12343,10 @@ table.grid thead tr {
 /* ---------------------------------------------------------------------- */
 /*  Order Detail
 /* ---------------------------------------------------------------------- */
+.order-detail .order-date input,
+.order-detail .order-date .input-group-btn {
+  z-index: 0;
+}
 .order-detail .dropdown-menu.ng-valid-date li table:focus {
   outline: none!important;
 }

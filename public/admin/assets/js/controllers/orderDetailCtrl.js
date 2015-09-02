@@ -4,14 +4,18 @@
 (function (angular) {
   app.controller('OrderDetailCtrl', ["$scope", "toaster", "$modal", "$filter", "$stateParams", "$location", "OrderService", "CustomerService", "UserService", "ProductService", "SweetAlert", "orderConstant", function ($scope, toaster, $modal, $filter, $stateParams, $location, OrderService, CustomerService, UserService, ProductService, SweetAlert, orderConstant) {
 
+    $scope.dataLoaded = false;
     //TODO
     // - $q all api calls
     // 1. getCustomers
     // 2. getUsers
     // 3. getProducts
     // 4. get Order
-
-    $scope.FailedStatus = orderConstant.order_status.FAILED;
+    var _orderConstant = {};
+    _orderConstant = orderConstant;
+    if (_orderConstant) {
+      $scope.FailedStatus = _orderConstant.order_status.FAILED;
+    }
 
     /*
      * @closeModal
@@ -70,26 +74,25 @@
     $scope.getProducts = function () {
       ProductService.getProducts(function (products) {
         console.log('products >>> ', products);
-        $scope.products = products;        
+        $scope.products = products;
         $scope.getOrder();
       });
     };
 
-    $scope.eliminateUsedProducts = function()
-    {
+    $scope.eliminateUsedProducts = function () {
       $scope.filterProducts = angular.copy($scope.products);
       _.each($scope.order.line_items, function (line_item) {
-          var matchProduct = _.find($scope.filterProducts, function (product) {
-            return product._id === line_item.product_id;
-          });
-          if(matchProduct)
-          {
-            var index = _.indexOf($scope.filterProducts, matchProduct);
-            if(index > -1)         
-              $scope.filterProducts.splice(index, 1);
+        var matchProduct = _.find($scope.filterProducts, function (product) {
+          return product._id === line_item.product_id;
+        });
+        if (matchProduct) {
+          var index = _.indexOf($scope.filterProducts, matchProduct);
+          if (index > -1) {
+            $scope.filterProducts.splice(index, 1);
           }
-        })
-    }
+        }
+      });
+    };
 
     /*
      * @getOrder
@@ -141,6 +144,7 @@
           console.log('$scope.order ', $scope.order);
 
         }
+        $scope.dataLoaded = true;
       });
     };
 
@@ -702,6 +706,10 @@
         toaster.pop('error', 'Orders can not be blank.');
         $scope.saveLoading = false;
         return;
+      }
+
+      if (!$scope.order.created.date) {
+        $scope.order.created.date = new Date().toISOString();
       }
 
       if (!$scope.order.customer_id) {

@@ -74,6 +74,16 @@
             });
         };
 
+
+        this.getActiveProducts = function (fn) {            
+            var apiUrl = baseUrl + ['products', 'active'].join('/');
+            console.log(apiUrl);
+            $http.get(apiUrl)
+            .success(function(data, status, headers, config) {
+                fn(data);
+            });
+        };
+
         // this.postCustomer = function (customer, fn) {
         //     var apiUrl = baseUrl + ['contact'].join('/');
         //     $http.post(apiUrl, customer)

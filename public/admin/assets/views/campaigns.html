@@ -23,7 +23,7 @@
                                     <div class="form-group">
                                         <div class="col-xs-7 col-sm-9">
                                             <span class="input-icon">
-                                                <input type="text" st-search placeholder="Search by title, handle, date..." id="form-field-14" class="form-control">
+                                                <input type="text" st-search placeholder="Search by name, type, date..." id="form-field-14" class="form-control">
                                                 <i class="ti-search"></i>
                                             </span>
                                         </div>
@@ -110,7 +110,7 @@
                                                 }">
                                                 </span>
                                             </span>
-                                            <h4 class="panel-title text-white">{{campaign.title | limitTo: 20 }}{{campaign.title.length > 20 ? '...' : ''}}</h4>
+                                            <h4 class="panel-title text-white" ng-text-truncate="campaign.name" ng-tt-chars-threshold="20" ng-tt-no-toggling></h4>
                                             <ul class="hidden panel-heading-tabs border-light">
                                                 <li>
                                                     <div class="pull-right">
@@ -174,7 +174,7 @@
                                         </span>
                                     </span>
                                 </td>
-                                <td ng-if="tableView != 'grid'" class="text-large"><strong>Title: </strong>{{campaign.name || '--' | limitTo: 20 }}{{campaign.title.length > 20 ? '...' : ''}}</td>
+                                <td ng-if="tableView != 'grid'" class="text-large"><strong>Title: </strong> <span ng-text-truncate="campaign.name" ng-tt-chars-threshold="20" ng-tt-no-toggling></span></td>
                                 <td ng-if="tableView != 'grid'"><strong>Type: </strong> <span>{{campaign.type | titleCase}}</span></td>
                                 <td ng-if="tableView != 'grid'"><strong>Sent: </strong><span class="text-large text-bold">{{campaign.statistics.emailsSent || 0}}</span><span ng-if="campaign.statistics.participants" class="text-small muted"> ({{campaign.statistics.participants}})</span></td>
                                 <td ng-if="tableView != 'grid'"><strong>Opened: </strong><span class="text-large text-bold">{{campaign.statistics.emailsOpened || 0}}</span><span ng-if="campaign.statistics.participants" class="text-small muted"> ({{campaign.statistics.participants}})</span></td>

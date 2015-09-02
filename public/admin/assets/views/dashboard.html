@@ -140,15 +140,15 @@
                         </div>
                     </div>
                     <div class="panel-body no-padding">
-                        <div ng-if="!activities.length">
-                            <div class="panel panel-transparent">
-                                <div class="panel-body">
-                                    <h4 class="center"><span class="fa fa-comment fa-2x"></span> <br><br> No Activity Availiable</h4>
+                        <div class="panel-scroll height-370" id="chatBox" perfect-scrollbar wheel-propagation="false" suppress-scroll-x="true">
+                            <div ng-if="!activities.length">
+                                <div class="panel panel-transparent">
+                                    <div class="panel-body">
+                                        <h4 class="center"><span class="fa fa-comment fa-2x"></span> <br><br> No Activity Availiable</h4>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="panel-scroll">
-                            <ul class="timeline-xs padding-left-15 padding-right-15" style="height:375px!important" perfect-scrollbar wheel-propagation="false" suppress-scroll-x="true">
+                            <ul class="timeline-xs padding-left-15 padding-right-15">
                                 <li class="timeline-item success" ng-if="activity.activityType !== 'PAGE_VIEW'" ng-repeat="activity in activities | orderBy:'start':true">
                                     <div class="margin-left-15">
                                         <div class="text-muted text-small">
@@ -167,7 +167,7 @@
                                                     <!-- <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-reply"></i> Send Welcome Email</a> -->
                                                 </div>
                                                 <div ng-switch-when="ACCOUNT_CREATED">
-                                                     <p>
+                                                    <p>
                                                         <span class="label label-default">ACCOUNT CREATED</span> {{activity.detail}}
                                                     </p>
                                                 </div>
@@ -263,17 +263,16 @@
                                                     </p>
                                                     <!-- <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-file"></i> Read the Email</a> -->
                                                 </div>
-                                                 <div ng-switch-when="OTHER">
+                                                <div ng-switch-when="OTHER">
                                                     <p>
                                                         <span class="label label-default">OTHER</span> {{activity.detail}}
                                                     </p>
                                                 </div>
-                                                 <div  ng-switch-default>
+                                                <div ng-switch-default>
                                                     <p>
                                                         <span class="label label-default">{{activity.activityType}}</span> {{activity.detail}}
                                                     </p>
                                                 </div>
-
                                             </div>
                                         </p>
                                     </div>
@@ -296,7 +295,7 @@
             <div class="form-group" id="activity_type">
                 <label for="exampleInputEmail1">Type</label>
                 <autocomplete ng-model="selectedActivityType" data="activityTypes" on-select="updateActivityTypeFn"></autocomplete>
-               <span class="error help-block" />
+                <span class="error help-block" />
             </div>
             <div class="form-group" id="customer">
                 <label for="customerLookup">Customer Name</label>

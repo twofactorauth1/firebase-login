@@ -23,6 +23,7 @@ var dao = {
     },
 
     authenticateByUsernamePassword: function (req, username, password, fn) {
+        var self = this;
         var log = this.log;
         log.info("Authenticating by username & password: " + username);
         var host = req.get("host");
@@ -64,20 +65,48 @@ var dao = {
                                     if(user.getAllAccountIds().length > 1) {
                                         req.session.accounts = user.getAllAccountIds();
                                         req.session.accountId = -1;//this is a bogus accountId.  It means that account has not yet been set.
+                                        log.info("Login successful. AccountId is now " + req.session.accountId);
+                                        log.info('UnAuthAccountId is ' + req.session.unAuthAccountId);
+                                        accountDao.getPreviewData(req.session.accounts, function(err, data){
+                                            log.debug('got preview data');
+                                            req.session.accounts = data;
+                                            return fn(null, user);
+                                        });
                                     } else {
                                         req.session.accounts = user.getAllAccountIds();
                                         req.session.accountId = user.getAllAccountIds()[0];
                                         req.session.unAuthAccountId = user.getAllAccountIds()[0];
                                         req.session.subdomain = account.get('subdomain');
                                         req.session.domain = account.get('domain');
+
+                                        accountDao.getAccountByID(req.session.accountId, function(err, authAccount){
+                                            if(!self._verifyActiveTrialOrSub(authAccount) ) {
+                                                log.debug('locking session for account ' + req.session.accountId);
+                                                req.session.locked_sub = true;
+                                                authAccount.set('locked_sub', true);
+                                                accountDao.saveOrUpdate(authAccount, function(err, savedAccount){
+                                                    log.info("Login successful. AccountId is now " + req.session.accountId);
+                                                    log.info('UnAuthAccountId is ' + req.session.unAuthAccountId);
+                                                    accountDao.getPreviewData(req.session.accounts, function(err, data){
+                                                        log.debug('got preview data');
+                                                        req.session.accounts = data;
+                                                        return fn(null, user);
+                                                    });
+                                                });
+                                            } else {
+                                                log.info("Login successful. AccountId is now " + req.session.accountId);
+                                                log.info('UnAuthAccountId is ' + req.session.unAuthAccountId);
+                                                accountDao.getPreviewData(req.session.accounts, function(err, data){
+                                                    log.debug('got preview data');
+                                                    req.session.accounts = data;
+                                                    return fn(null, user);
+                                                });
+                                            }
+
+                                        });
+
                                     }
-                                    log.info("Login successful. AccountId is now " + req.session.accountId);
-                                    log.info('UnAuthAccountId is ' + req.session.unAuthAccountId);
-                                    accountDao.getPreviewData(req.session.accounts, function(err, data){
-                                        log.debug('got preview data');
-                                        req.session.accounts = data;
-                                        return fn(null, user);
-                                    });
+
 
                                 }
                             } else {
@@ -113,7 +142,17 @@ var dao = {
                                         req.session.accountId = account.id();
                                         req.session.subdomain = account.get('subdomain');
                                         req.session.domain = account.get('domain');
-                                        return fn(null, user);
+                                        if(!self._verifyActiveTrialOrSub(account) ) {
+                                            log.debug('locking session for account ' + req.session.accountId);
+                                            req.session.locked_sub = true;
+                                            account.set('locked_sub', true);
+                                            accountDao.saveOrUpdate(account, function(err, savedAccount){
+                                                return fn(null, user);
+                                            });
+                                        } else {
+                                            return fn(null, user);
+                                        }
+
                                     }
                                 } else {
                                     log.info("An error occurred verifying password", err);
@@ -184,6 +223,14 @@ var dao = {
                                             req.session.unAuthAccountId = value.getAllAccountIds()[0];
                                             req.session.subdomain = account.get('subdomain');
                                             req.session.domain = account.get('domain');
+                                            if(!self._verifyActiveTrialOrSub(account) ) {
+                                                log.debug('locking session for account ' + req.session.accountId);
+                                                req.session.locked_sub = true;
+                                                account.set('locked_sub', true);
+                                                accountDao.saveOrUpdate(account, function(err, savedAccount){
+                                                    self.log.debug('locked account ' + savedAccount.id());
+                                                });
+                                            }
                                         }
                                         self.log.info("Login successful. AccountId is now " + req.session.accountId);
                                         accountDao.getPreviewData(req.session.accounts, function(err, data){
@@ -227,6 +274,14 @@ var dao = {
                                 req.session.subdomain = account.get('subdomain');
                                 req.session.domain = account.get('domain');
                                 self.log.info("Login successful. AccountId is now " + req.session.accountId);
+                                if(!self._verifyActiveTrialOrSub(account) ) {
+                                    log.debug('locking session for account ' + req.session.accountId);
+                                    req.session.locked_sub = true;
+                                    account.set('locked_sub', true);
+                                    accountDao.saveOrUpdate(account, function(err, savedAccount){
+                                        self.log.debug('locked account ' + savedAccount.id());
+                                    });
+                                }
                                 accountDao.getPreviewData(req.session.accounts, function(err, data){
                                     self.log.debug('got preview data');
                                     req.session.accounts = data;
@@ -244,6 +299,14 @@ var dao = {
                 req.session.unAuthAccountId = account.id();
                 req.session.subdomain = account.get('subdomain');
                 req.session.domain = account.get('domain');
+                if(!self._verifyActiveTrialOrSub(account) ) {
+                    log.debug('locking session for account ' + req.session.accountId);
+                    req.session.locked_sub = true;
+                    account.set('locked_sub', true);
+                    accountDao.saveOrUpdate(account, function(err, savedAccount){
+                        self.log.debug('locked account ' + savedAccount.id());
+                    });
+                }
                 userDao.getUserForAccountBySocialProfile(account.id(), socialType, socialId, function (err, value) {
                     if (err) {
                         fn(err, "An error occurred retrieving user for account by social profile");
@@ -686,8 +749,36 @@ var dao = {
 
             fn(null, serverUrl);
         });
-    }
+    },
     //endregion
+
+    /**
+     * Returns true is trial days remaining or valid subscription
+     * @param account
+     * @private
+     */
+    _verifyActiveTrialOrSub: function(account) {
+        /*
+         * If subscriptionId startsWith 'sub_' or trialDaysRemaining > 0, return true;
+         */
+        console.log('verifying:', account);
+        var billing = account.get('billing');
+        if(billing.subscriptionId.indexOf('sub_') ===0) {
+            console.log('\n\n subId\n\n');
+            return true;
+        }
+        var trialDays = billing.trialLength || 15;//using 15 instead of 14 to give 14 FULL days
+        var endDate = moment(billing.signupDate).add(trialDays, 'days');
+
+        var trialDaysRemaining = endDate.diff(moment(), 'days');
+        if(trialDaysRemaining > 0) {
+            console.log('\n\n trialdays:' + trialDaysRemaining + '\n\n');
+            return true;
+        } else{
+            console.log('\n\n returning false: ' + trialDaysRemaining + '\n\n');
+        }
+        return false;
+    }
 };
 
 dao = _.extend(dao, $$.dao.BaseDao.prototype, dao.options).init();

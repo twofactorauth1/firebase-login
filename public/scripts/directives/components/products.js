@@ -146,7 +146,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
 
       //TODO: Add country check
       function isValidUSZip(sZip) {
-        var regex = /(^\d{5}$)|(^\d{5}-\d{4}$)/;
+        var regex = formValidations.zip;
         return regex.test(sZip);
       }
 

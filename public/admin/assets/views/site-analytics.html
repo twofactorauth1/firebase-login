@@ -191,7 +191,7 @@
                                 </thead>
                                 <tbody>
                                     <tr ng-repeat="trafficSource in trafficSourceData | orderBy:'-result'">
-                                        <td>{{trafficSource['referrer.domain']}}</td>
+                                        <td><span ng-text-truncate="trafficSource['referrer.domain']" ng-tt-chars-threshold="25" ng-tt-no-toggling></span></td>
                                         <td>{{trafficSource.result}}</td>
                                     </tr>
                                 </tbody>

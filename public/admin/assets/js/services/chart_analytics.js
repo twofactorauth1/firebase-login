@@ -1,6 +1,6 @@
 'use strict';
-/*global app, moment, angular, window, Keen, Highcharts*/
-/*jslint unparam:true*/
+/*global app, moment, angular, window, Keen, Highcharts, $$*/
+/*jslint unparam: true*/
 (function (angular) {
   app.service('ChartAnalyticsService', ['KeenService', function (KeenService) {
 
@@ -569,10 +569,10 @@
           "property_value": $$.server.accountId
         }]
       }, {
-          "property_name": "fingerprint",
-          "operator": "ne",
-          "property_value": 0
-        });
+        "property_name": "fingerprint",
+        "operator": "ne",
+        "property_value": 0
+      });
 
       return queryData;
     };

@@ -17,8 +17,7 @@
                         <h4>
                             <strong>
                                 <a data-ng-href="/blog/{{post['post_url']}}">
-                                    <div class="editable" data-class="post_title">
-                                        {{post.post_title}}
+                                    <div class="editable" data-class="post_title" ng-bind-html="post.post_title | unsafe">
                                     </div>
                                 </a>
                             </strong>

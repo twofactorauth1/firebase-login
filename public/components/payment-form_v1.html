@@ -1,55 +1,20 @@
 <link href='//fonts.googleapis.com/css?family=Raleway:700,300' rel='stylesheet' type='text/css'>
 <div ng-show="!isFormValid">
     <div ng-class="component.type+'-v'+component.version">
-        <div style="height: 90px;padding: 15px 0;background-color: #fafafa;border-bottom: 1px solid rgba(0,0,0,0.1);">
+        <div class="payment-form-header">
             <div style="max-width:1024px!important;margin:0 auto;">
-                <img src="https://s3.amazonaws.com/indigenous-account-websites/acct_6/logo.png" width="276" height="57" class="pull-left" style="display: block;">
+                <img src="https://s3.amazonaws.com/indigenous-account-websites/acct_6/logo.png" width="276" height="57" class="pull-left hidden-xs" style="display: block;">
+                <img src="https://s3-us-west-2.amazonaws.com/indigenous-admin/logo-mark.png" width="57" height="57" class="pull-left visible-xs" style="display: block;">
                 <p class="pull-right" style="line-height: 65px;">Already have an account? <a href="/login">Log In</a></p>
             </div>
             <div class="clearfix"></div>
         </div>
-        
-        <div class="social-signup hidden">
-            <div class="inner-page">
-                <h2 class="center" ng-if="subscriptionPlans[0].trial_period_days">SIGN UP FOR A {{subscriptionPlans[0].trial_period_days}} DAY FREE TRIAL*</h2>
-                <div class="clearfix mb20"></div>
-                <div class="social btn-toolbar">
-                    <p class="pull-left">Sign in with: </p>
-                    <div class="signup-social-toolbar pull-left">
-                        <a ng-if="!tmpAccount.tempUser || tmpAccount.tempUser.created.strategy === 'lo'" ng-click="makeSocailAccount('facebook')" class="btn btn-large btn-default facebook"><i class="fa fa-facebook"></i></a>
-                        <div ng-if="tmpAccount.tempUser.created.strategy === 'fb'">
-                            <img style="width: 50px;height: 50px; display: inline-block; margin-right: 10px;" ng-src="{{newAccount.profilePhoto.url || '/images/default-user.png'}}" class="img-responsive profilePhoto img-circle">
-                            <span>{{tmpAccount.tempUser.username}}</span>
-                            <i class="fa fa-close" ng-click="removeAccount('fb')"></i>
-                        </div>
-                        <a ng-if="!tmpAccount.tempUser || tmpAccount.tempUser.created.strategy === 'lo'" ng-click="makeSocailAccount('twitter')" class="btn btn-large btn-default twitter"><i class="fa fa-twitter"></i></a>
-                        <div ng-if="tmpAccount.tempUser.created.strategy === 'tw'">
-                            <img style="width: 50px;height: 50px; display: inline-block; margin-right: 10px;" ng-src="{{newAccount.profilePhoto.url || '/images/default-user.png'}}" class="img-responsive profilePhoto img-circle">
-                            <span>{{tmpAccount.tempUser.username}}</span>
-                            <i class="fa fa-close" ng-click="removeAccount('tw')"></i>
-                        </div>
-                        <a ng-if="!tmpAccount.tempUser || tmpAccount.tempUser.created.strategy === 'lo'" class="btn btn-large btn-default google-plus" ng-click="makeSocailAccount('google')"><i class="fa fa-google-plus"></i></a>
-                        <div ng-if="tmpAccount.tempUser.created.strategy === 'go'">
-                            <img style="width: 50px;height: 50px; display: inline-block; margin-right: 10px;" ng-src="{{newAccount.profilePhoto.url || '/images/default-user.png'}}" class="img-responsive profilePhoto img-circle">
-                            <span>{{tmpAccount.tempUser.username}}</span>
-                            <i class="fa fa-close" ng-click="removeAccount('go')"></i>
-                        </div>
-                        <a ng-if="!tmpAccount.tempUser || tmpAccount.tempUser.created.strategy === 'lo'" class="btn btn-large btn-default linkedin hidden" ng-click="makeSocailAccount('linkedin')"><i class="fa fa-linkedin"></i></a>
-                        <div ng-if="tmpAccount.tempUser.created.strategy === 'li'">
-                            <img style="width: 50px;height: 50px; display: inline-block; margin-right: 10px;" ng-src="{{newAccount.profilePhoto.url || '/images/default-user.png'}}" class="img-responsive profilePhoto img-circle">
-                            <span>{{tmpAccount.tempUser.username}}</span>
-                            <i class="fa fa-close" ng-click="removeAccount('li')"></i>
-                        </div>
-                    </div>
-                </div>
-                <p class="center" ng-if="!tmpAccount.tempUser || tmpAccount.tempUser.created.strategy === 'lo'">or use your email address in a form below</p>
-            </div>
-        </div>
         <div class="top-signup account-info-signup">
             <div class="inner-page">
-                <h2 class="center text-bold margin-bottom-5">Start Your Free 14-day Trial</h2>
-                <h3 class="center">No credit card required.</h3>
-                <div class="margin-top-30"></div>
+                <div class="padding-10 margin-bottom-30">
+                    <h2 class="center text-bold margin-bottom-5">Start Your Free <br class="visible-xs">14-day Trial</h2>
+                    <h3 class="center">No credit card required.</h3>
+                </div>
                 <div class="well">
                     <!-- First Name -->
                     <div id="first" class="form-group col-xs-12 col-sm-6 has-feedback" >
@@ -66,29 +31,41 @@
                         <span class="error help-block" />
                     </div>
                     <!-- Business Name -->
-                    <div id="business-name" class="form-group col-xs-12 col-sm-6 has-feedback">
+                    <div id="business-name"
+                         class="form-group col-xs-12 has-feedback"
+                         ng-class="{'has-error': !validBusinessName,
+                          'has-success': domainExistsAlready!==undefined && !domainExistsAlready}">
+
                         <label>Business Name</label>
-                        <input class="form-control input-lg" type="text" ng-model="newAccount.businessName" ng-change="checkDomainExists(newAccount)" ng-model-options="{ debounce: 800 }" />
-                        <span class="glyphicon form-control-feedback"></span>
-                        <span class="error help-block" />
+                        <input class="form-control input-lg"
+                               type="text"
+                               ng-model="newAccount.businessName"
+                               ng-change="checkDomainExists(newAccount)"
+                               ng-model-options="{ debounce: 800 }" />
+                        <div class="clearfix"></div>
+                        <span class="glyphicon form-control-feedback"
+                              ng-class="{'glyphicon-remove': !validBusinessName,
+                                'glyphicon-ok': domainExistsAlready!==undefined && !domainExistsAlready}"></span>
+                        <span class="error help-block" ng-if="domainExistsAlready">Domain Already Exists</span>
+                        <span class="error help-block" ng-if="emptyBusinessName">Business Name Required</span>
                         <span class="help-block" ng-show="newAccount.businessName && validBusinessName">Your Indigenous URL will be <strong>{{newAccount.businessName | urlFilter}}.indigenous.io</strong> and will be changed once your site is ready to publish.</span>
                     </div>
                     <!-- Phone Number -->
-                    <div id="phone" class="form-group col-xs-12 col-sm-6 has-feedback">
+                    <div id="phone" class="form-group col-xs-12 has-feedback">
                         <label>Phone Number</label>
-                        <input class="form-control input-lg" type="text" ng-model="newAccount.phone" mask="(999) 999-9999" clean="true" mask-restrict='reject'/>
+                        <input class="form-control input-lg" type="text" ng-model="newAccount.phone" mask="(999) 999-9999" clean="true" mask-restrict='reject' />
                         <span class="glyphicon form-control-feedback"></span>
                         <span class="error help-block" />
                     </div>
                     <!-- EMAIL AND PASSOWORD -->
-                    <div id="email" class="form-group col-xs-12 col-sm-6 has-feedback" ng-hide="tmpAccount.tempUser">
+                    <div id="email" class="form-group col-xs-12 has-feedback" ng-hide="tmpAccount.tempUser">
                         <label>Email</label>
                         <input class="form-control input-lg" type="email" ng-model="newAccount.email" ng-pattern="emailValidation" ng-change="checkEmailExists(newAccount)" ng-model-options="{ debounce: 800 }" />
                         <span class="help-block">Your email address will become your username.</span>
                         <span class="glyphicon form-control-feedback"></span>
                         <span class="error help-block" />
                     </div>
-                    <div id="password" class="form-group col-xs-12 col-sm-6 has-feedback" ng-hide="newAccount.hidePassword">
+                    <div id="password" class="form-group col-xs-12 has-feedback" ng-hide="newAccount.hidePassword">
                         <label>Password</label>
                         <input class="form-control input-lg" type="password" ng-model="newAccount.password" ng-change="checkPasswordLength(newAccount)" ng-model-options="{ debounce: 800 }" />
                         <span class="help-block">Your password must be at least 6 characters.</span>

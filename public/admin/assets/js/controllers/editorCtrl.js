@@ -2,7 +2,7 @@
 /*global app, moment, angular, window, CKEDITOR*/
 /*jslint unparam:true*/
 (function (angular) {
-  app.controller('EditorCtrl', ["$scope", "$document", "$rootScope", "$interval", "$timeout", "toaster", "$modal", "$filter", "$location", "WebsiteService", "SweetAlert", "hoursConstant", "GeocodeService", "ProductService", "AccountService", "postConstant", function ($scope, $document, $rootScope, $interval, $timeout, toaster, $modal, $filter, $location, WebsiteService, SweetAlert, hoursConstant, GeocodeService, ProductService, AccountService, postConstant) {
+  app.controller('EditorCtrl', ["$scope", "$document", "$rootScope", "$interval", "$timeout", "toaster", "$modal", "$filter", "$location", "WebsiteService", "SweetAlert", "hoursConstant", "GeocodeService", "ProductService", "AccountService", "postConstant", "formValidations", function ($scope, $document, $rootScope, $interval, $timeout, toaster, $modal, $filter, $location, WebsiteService, SweetAlert, hoursConstant, GeocodeService, ProductService, AccountService, postConstant, formValidations) {
 
     /*
      * @circleOptions
@@ -14,6 +14,8 @@
       $scope.ckeditorLoaded = false;
       $scope.retrieveEmail(null, newValue);
     });
+
+    $scope.formValidations = formValidations;
 
     $scope.circleOptions = {
       isOpen: false,
@@ -1018,7 +1020,11 @@
       WebsiteService.updateEmail($scope.page, function (data, error) {
         if (data && !error) {
           toaster.pop('success', "Settings saved successfully");
-          $scope.checkForSaveBeforeLeave('/admin/#/editor?email=' + data._id, true);
+          $scope.closeModal();
+          $timeout(function () {
+            $scope.checkForSaveBeforeLeave();
+          }, 100);
+          
         } else if (!data && error && error.message) {
           toaster.pop('error', error.message);
         }
@@ -1152,12 +1158,11 @@
         }
       }
       var redirectUrl = url;
+      
       if (!redirectUrl) {
-        redirectUrl = $location.search().posthandle ? "/admin/#/website/posts" : "/admin/#/website/pages";
+        redirectUrl = $location.search().posthandle ? "/admin/#/website/posts" : $scope.isEmail ? "/admin/#/emails" : "/admin/#/website/pages";
       }
-      if ($scope.isEmail) {
-        redirectUrl = "/admin/#/marketing/email-templates";
-      }
+      
       if ($scope.isDirty.dirty) {
         SweetAlert.swal({
           title: "Are you sure?",
@@ -1257,7 +1262,7 @@
             toaster.pop('success', "Email Deleted", "The " + title + " email was deleted successfully.");
             $scope.closeModal();
             $timeout(function () {
-              window.location = '/admin/#/marketing/email-templates';
+              window.location = '/admin/#/emails';
             }, 500);
           });
         } else {
