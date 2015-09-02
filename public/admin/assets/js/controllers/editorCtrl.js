@@ -14,6 +14,8 @@
       $scope.ckeditorLoaded = false;
       $scope.retrieveEmail(null, newValue);
     });
+    
+    $scope.formValidations = formValidations;
 
     $scope.circleOptions = {
       isOpen: false,

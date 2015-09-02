@@ -1,7 +1,7 @@
 'use strict';
 /*global app, window*/
 (function (angular) {
-  app.controller('EmailsCtrl', ["$scope", "$timeout", "$location", "toaster", "$modal", "WebsiteService", "CommonService", "AccountService", function ($scope, $timeout, $location, toaster, $modal, WebsiteService, CommonService, AccountService) {
+  app.controller('EmailsCtrl', ["$scope", "$timeout", "$location", "toaster", "$modal", "WebsiteService", "CommonService", "AccountService", "formValidations", function ($scope, $timeout, $location, toaster, $modal, WebsiteService, CommonService, AccountService, formValidations) {
 
     $scope.setDefaults = function()
     {
@@ -10,7 +10,7 @@
         subject: 'New Email Subject'
       };
     };    
-
+    $scope.formValidations = formValidations;
     $scope.setDefaults();
 
     /*
