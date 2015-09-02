@@ -1018,7 +1018,11 @@
       WebsiteService.updateEmail($scope.page, function (data, error) {
         if (data && !error) {
           toaster.pop('success', "Settings saved successfully");
-          $scope.checkForSaveBeforeLeave('/admin/#/editor?email=' + data._id, true);
+          $scope.closeModal();
+          $timeout(function () {
+            $scope.checkForSaveBeforeLeave();
+          }, 100);
+          
         } else if (!data && error && error.message) {
           toaster.pop('error', error.message);
         }
@@ -1152,12 +1156,11 @@
         }
       }
       var redirectUrl = url;
+      
       if (!redirectUrl) {
-        redirectUrl = $location.search().posthandle ? "/admin/#/website/posts" : "/admin/#/website/pages";
+        redirectUrl = $location.search().posthandle ? "/admin/#/website/posts" : $scope.isEmail ? "/admin/#/emails" : "/admin/#/website/pages";
       }
-      if ($scope.isEmail) {
-        redirectUrl = "/admin/#/marketing/email-templates";
-      }
+      
       if ($scope.isDirty.dirty) {
         SweetAlert.swal({
           title: "Are you sure?",
@@ -1257,7 +1260,7 @@
             toaster.pop('success', "Email Deleted", "The " + title + " email was deleted successfully.");
             $scope.closeModal();
             $timeout(function () {
-              window.location = '/admin/#/marketing/email-templates';
+              window.location = '/admin/#/emails';
             }, 500);
           });
         } else {
