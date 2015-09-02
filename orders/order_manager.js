@@ -483,7 +483,7 @@ module.exports = {
                                         callback(null, updatedOrder);
                                     });
 
-                                    if(emailPreferences.new_order === true) {
+                                    if(emailPreferences.new_orders === true) {
                                         //Send additional details
                                         mandrillHelper.sendOrderEmail(fromAddress, fromName, fromAddress, fromName, subject, html, accountId, orderId, vars, email._id, function(){
                                             log.debug('Admin Notification Sent');
@@ -628,11 +628,17 @@ module.exports = {
             }
 
             var chargeId = paymentDetails.charge.id;
+            log.debug('>> chargeId ', chargeId);
+            if(!chargeId) {
+                log.error('Error creating refund.  No charge found.');
+                return fn('No charge found', null);
+            }
             var refundAmount = paymentDetails.charge.amount;
             if(amount) {
                 refundAmount = amount;
             }
             var metadata = null;
+            
             stripeDao.createRefund(chargeId, refundAmount, false, reason, metadata, accessToken, function(err, refund){
                 if(err) {
                     log.error('Error creating refund: ' + err);

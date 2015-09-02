@@ -4,13 +4,19 @@
 (function (angular) {
   app.controller('GettingStartedCtrl', ["$scope", '$state', 'UserService', 'ONBOARDINGCONSTANT', function ($scope, $state, UserService, ONBOARDINGCONSTANT) {
 
+    $scope.number = 1;
+
+    $scope.multiplyBy10 = function () {
+      $scope.number = $scope.number * 10;
+    };
+
     $scope.panes = [];
     UserService.getUserPreferences(function (preferences) {
       //format tasks to match model
       var _formattedTasks = {};
       var needsUpdate = false;
-      _.each(ONBOARDINGCONSTANT.tasks, function(stepmap) {
-        var _matchingTask = _.find(preferences.tasks , function(v, k) {
+      _.each(ONBOARDINGCONSTANT.tasks, function (stepmap) {
+        var _matchingTask = _.find(preferences.tasks, function (v, k) {
           return k === stepmap.pane.taskKey;
         });
 
@@ -41,8 +47,8 @@
       }
     });
 
-    $scope.pushPanes = function() {
-       _.each(ONBOARDINGCONSTANT.tasks, function (task) {
+    $scope.pushPanes = function () {
+      _.each(ONBOARDINGCONSTANT.tasks, function (task) {
         var matchedTask = _.find($scope.preferences.tasks, function (v, k) {
           return k === task.pane.taskKey;
         });
@@ -53,7 +59,7 @@
 
         $scope.panes.push(task.pane);
       });
-     };
+    };
 
     $scope.startOnboardFn = function (pane) {
       var url = $state.href(pane.state, {}, {

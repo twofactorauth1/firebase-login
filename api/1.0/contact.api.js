@@ -499,8 +499,9 @@ _.extend(api.prototype, baseApi.prototype, {
                 console.dir(req.body);
                 self.log.debug('signing up contact with account: ' + value.get('token'));
                 var emailPreferences = value.get('email_preferences');
-                if(emailPreferences.new_customer === true && !req.body.activity) {
-
+                self.log.debug('emailPreferences: ' + emailPreferences);
+                if(emailPreferences.new_contacts === true && !req.body.activity) {
+                    self.log.debug('emailPreferences.new_contacts: ' + emailPreferences.new_contacts);
                     var accountId = value.id();
                     var vars = [];
 
@@ -517,15 +518,18 @@ _.extend(api.prototype, baseApi.prototype, {
                 query['details.emails.email'] = req.body.details[0].emails[0].email;
                 var skipWelcomeEmail = req.body.skipWelcomeEmail;
                 var fromContactEmail = req.body.fromEmail;
+                var campaignId = req.body.campaignId;
                 var emailId = req.body.emailId;
-                var emailSubject = req.body.emailSubject;
+                var sendEmail = req.body.sendEmail;
                 var fromContactName = req.body.fromName;
                 var activity = req.body.activity;
+                var contact_type = req.body.contact_type;
+
+                console.log('req.body ', req.body);
+
                 delete req.body.skipWelcomeEmail;
                 delete req.body.fromEmail;
                 delete req.body.fromName;
-                delete req.body.emailId;
-                delete req.body.emailSubject;
                 delete req.body.activity;
 
                 contactDao.findMany(query, $$.m.Contact, function(err, list){
@@ -538,8 +542,14 @@ _.extend(api.prototype, baseApi.prototype, {
                     }
                     var contact = new $$.m.Contact(req.body);
                     contact.set('accountId', value.id());
-                    contact.set('type', 'ld');
-                    contact.set('tags', ['ld']);
+                    self.log.debug('contact_type ', contact_type);
+                    if (!contact_type) {
+                        contact.set('type', 'ld');
+                        contact.set('tags', ['ld']);
+                    } else {
+                        contact.set('type', contact_type);
+                        contact.set('tags', [contact_type]);
+                    }
                     if(contact.get('fingerprint')) {
                         contact.set('fingerprint', ''+contact.get('fingerprint'));
                     }
@@ -578,16 +588,15 @@ _.extend(api.prototype, baseApi.prototype, {
                                 req.flash("error", 'There was a problem signing up.  Please try again later.');
                                 return self.wrapError(resp, 500, "There was a problem signing up.  Please try again later.", err, value);
                             } else {
+                                self.log.debug('campaignId: ', campaignId);
+                                self.log.debug('emailId: ', emailId);
+                                self.log.debug('sendEmail: ', sendEmail);
                                 /*
                                  * If there is a campaign associated with this signup, update it async.
                                  */
-                                if(req.query.campaignId || req.body.campaignId) {
-                                    var campaignId = req.query.campaignId;
-                                    if(req.body.campaignId) {
-                                        campaignId = req.body.campaignId;
-                                    }
+                                if(campaignId && !sendEmail) {
                                     self.log.debug('Updating campaign with id: ' + campaignId);
-                                    campaignManager.handleCampaignSignupEvent(value.id(), campaignId, savedContact.id(), function(err, value){
+                                    campaignManager.handleCampaignSignupEvent(query.accountId, campaignId, savedContact.id(), function(err, value){
                                         if(err) {
                                             self.log.error('Error handling campaign signup: ' + err);
                                             return;
@@ -597,8 +606,9 @@ _.extend(api.prototype, baseApi.prototype, {
                                         }
                                     });
                                 }
-                                //TODO: add a param to not send the welcome.
-                                if(skipWelcomeEmail !== 'true' && skipWelcomeEmail !== true) {
+                                //TODO: add a param to not send the welcome. 
+                                //skipWelcomeEmail !== 'true' && skipWelcomeEmail !== true &&
+                                if(emailId && sendEmail) {
                                     /*
                                      * Send welcome email.  This is done asynchronously.
                                      *
@@ -646,7 +656,9 @@ _.extend(api.prototype, baseApi.prototype, {
                                                         }
                                                     });
                                                 } else {
+                                                    self.log.debug('emailPage ', emailPage);
                                                     var component = emailPage.get('components')[0];
+                                                    self.log.debug('emailPage 1st component ', component.logo);
                                                     self.log.debug('Using this for data', emailPage.get('_id'));
                                                     self.log.debug('Using this account for data', account);
                                                     self.log.debug('This component:', component);
@@ -654,9 +666,10 @@ _.extend(api.prototype, baseApi.prototype, {
                                                         component.logourl = account.attributes.business.logo;
                                                     }
 
-                                                    component.logo.replace('"//', '"http://');
-                                                    component.text = component.text.replace('"//', '"http://').replace(new RegExp('FHEMAIL', 'g'), savedContact.getEmails()[0].email);
-                                                    component.title = component.title.replace('"//', '"http://').replace(new RegExp('FHEMAIL', 'g'), savedContact.getEmails()[0].email);
+                                                    component.logo = component.logo.replace('src="//', 'src="http://');
+
+                                                    component.text = component.text.replace('src="//', 'src="http://').replace(new RegExp('FHEMAIL', 'g'), savedContact.getEmails()[0].email);
+                                                    component.title = component.title.replace('src="//', 'src="http://').replace(new RegExp('FHEMAIL', 'g'), savedContact.getEmails()[0].email);
                                                     app.render('emails/base_email', component, function(err, html){
                                                         if(err) {
                                                             self.log.error('error rendering html: ' + err);
@@ -665,6 +678,7 @@ _.extend(api.prototype, baseApi.prototype, {
                                                             console.log('savedContact ', savedContact);
                                                             var contactEmail = savedContact.getEmails()[0].email;
                                                             var contactName = savedContact.get('first') + ' ' + savedContact.get('last');
+                                                            var emailSubject = emailPage.get('subject');
                                                             self.log.debug('sending email to: ',contactEmail);
 
 
@@ -695,19 +709,19 @@ _.extend(api.prototype, baseApi.prototype, {
 
                                                             if(activity){
                                                                 var accountEmail = null;
-                                                                if(account && account.attributes.business && account.attributes.business.emails && account.attributes.business.emails[0] && account.attributes.business.emails[0].email)
-                                                                {
-                                                                    self.log.debug('user email: ', account.attributes.business.emails[0].email);
-                                                                    accountEmail = account.attributes.business.emails[0].email;
-                                                                    self._sendEmailOnCreateAccount(req, resp, accountEmail, activity.contact, account._id, component)
-                                                                }
-                                                                else{
-                                                                    userDao.getUserAccount(query.accountId, function(err, user){
-                                                                        self.log.debug('user: ', user);
-                                                                        self.log.debug('user email: ', user.attributes.email);
-                                                                        accountEmail = user.attributes.email;
-                                                                        self._sendEmailOnCreateAccount(req, resp, accountEmail, activity.contact, account._id, component);
-                                                                    })
+                                                                if(emailPreferences.new_contacts === true) {
+                                                                    if(account && account.attributes.business && account.attributes.business.emails && account.attributes.business.emails[0] && account.attributes.business.emails[0].email) {
+                                                                        self.log.debug('user email: ', account.attributes.business.emails[0].email);
+                                                                        accountEmail = account.attributes.business.emails[0].email;
+                                                                        self._sendEmailOnCreateAccount(req, resp, accountEmail, activity.contact, account._id, component, emailPage.get('_id'), savedContact)
+                                                                    } else{
+                                                                        userDao.getUserAccount(query.accountId, function(err, user){
+                                                                            self.log.debug('user: ', user);
+                                                                            self.log.debug('user email: ', user.attributes.email);
+                                                                            accountEmail = user.attributes.email;
+                                                                            self._sendEmailOnCreateAccount(req, resp, accountEmail, activity.contact, account._id, component, emailPage.get('_id'), savedContact);
+                                                                        })
+                                                                    }
                                                                 }
 
                                                             }
@@ -1106,16 +1120,18 @@ _.extend(api.prototype, baseApi.prototype, {
         });
 
     },
-    _sendEmailOnCreateAccount: function(req, resp, accountEmail, fields, accountId, comp) {
+    _sendEmailOnCreateAccount: function(req, resp, accountEmail, fields, accountId, comp, emailId, savedContact) {
+        console.log('savedContact ', savedContact);
         var self = this;
         var component = {};
-        component.logourl = comp.logourl;
+        component.logourl = 'https://s3.amazonaws.com/indigenous-account-websites/acct_6/logo.png';
         var text = [];
          for(var attributename in fields){
             text.push("<b>"+attributename+"</b>: "+fields[attributename]);
         }
         self.log.debug(fields);
-        component.title = "New customer created";
+        self.log.debug('accountEmail ', accountEmail);
+        component.title = "You have a new contact!";
         component.text = text;
         app.render('emails/new_customer_created', component, function(err, html){
             if(err) {
@@ -1130,7 +1146,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 var vars = [];
 
                 
-                mandrillHelper.sendBasicEmail(fromEmail, fromName, accountEmail, null, emailSubject, html, accountId, vars, emailPage.get('_id'), function(err, result){
+                mandrillHelper.sendBasicEmail(fromEmail, fromName, accountEmail, null, emailSubject, html, accountId, vars, emailId, function(err, result){
                     self.log.debug('result: ', result);
                 });
             }

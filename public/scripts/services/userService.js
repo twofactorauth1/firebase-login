@@ -3,6 +3,7 @@
 mainApp.service('userService', ['$http', 'ipCookie', function ($http, ipCookie) {
   var baseUrl = '/api/1.0/';
   this.addContact = function (user, fn) {
+    console.log('user >>> ', user);
     var apiUrl = baseUrl + ['contact', 'signupnews'].join('/');
     $http({
       url: apiUrl,
@@ -71,6 +72,7 @@ mainApp.service('userService', ['$http', 'ipCookie', function ($http, ipCookie) 
     });
   };
 
+  // TODO: this is poorly named, should be checkDomainAvailable. -jkg
   this.checkDomainExists = function (businessName, fn) {
     var apiUrl = baseUrl + ['account', businessName, 'available'].join('/');
     $http({
@@ -83,6 +85,8 @@ mainApp.service('userService', ['$http', 'ipCookie', function ($http, ipCookie) 
     });
   };
 
+
+
   this.checkEmailExists = function (email, fn) {
     var apiUrl = baseUrl + ['user', 'exists', email].join('/');
     console.log('api url >>> ', apiUrl);
@@ -94,6 +98,12 @@ mainApp.service('userService', ['$http', 'ipCookie', function ($http, ipCookie) 
     }).error(function (err) {
       console.log('END:checkEmailExisits with ERROR', err);
     });
+  };
+
+  this.checkDuplicateEmail = function(email, fn)
+  {
+      var apiUrl = baseUrl + ['user', 'exists', email].join('/');
+      return $http.get(apiUrl);
   };
 
   this.getTmpAccount = function (fn) {

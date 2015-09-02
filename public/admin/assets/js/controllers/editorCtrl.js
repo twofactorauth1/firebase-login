@@ -2,7 +2,7 @@
 /*global app, moment, angular, window, CKEDITOR*/
 /*jslint unparam:true*/
 (function (angular) {
-  app.controller('EditorCtrl', ["$scope", "$document", "$rootScope", "$interval", "$timeout", "toaster", "$modal", "$filter", "$location", "WebsiteService", "SweetAlert", "hoursConstant", "GeocodeService", "ProductService", "AccountService", "postConstant", function ($scope, $document, $rootScope, $interval, $timeout, toaster, $modal, $filter, $location, WebsiteService, SweetAlert, hoursConstant, GeocodeService, ProductService, AccountService, postConstant) {
+  app.controller('EditorCtrl', ["$scope", "$document", "$rootScope", "$interval", "$timeout", "toaster", "$modal", "$filter", "$location", "WebsiteService", "SweetAlert", "hoursConstant", "GeocodeService", "ProductService", "AccountService", "postConstant", "formValidations", function ($scope, $document, $rootScope, $interval, $timeout, toaster, $modal, $filter, $location, WebsiteService, SweetAlert, hoursConstant, GeocodeService, ProductService, AccountService, postConstant, formValidations) {
 
     /*
      * @circleOptions
@@ -14,6 +14,8 @@
       $scope.ckeditorLoaded = false;
       $scope.retrieveEmail(null, newValue);
     });
+
+    $scope.formValidations = formValidations;
 
     $scope.circleOptions = {
       isOpen: false,
@@ -665,7 +667,6 @@
      */
     $scope.thumbnailSlider = {};
     $scope.contactMap = {};
-    $scope.underNav = {};
     $scope.blogControl = {};
 
     $scope.insertMedia = function (asset) {
@@ -820,10 +821,6 @@
 
         _modal.resolve.openParentModal = function () {
           return $scope.openModal;
-        };
-
-        _modal.resolve.underNav = function () {
-          return $scope.underNav;
         };
 
         _modal.resolve.blogImage = function () {
@@ -1023,7 +1020,11 @@
       WebsiteService.updateEmail($scope.page, function (data, error) {
         if (data && !error) {
           toaster.pop('success', "Settings saved successfully");
-          $scope.checkForSaveBeforeLeave('/admin/#/editor?email=' + data._id, true);
+          $scope.closeModal();
+          $timeout(function () {
+            $scope.checkForSaveBeforeLeave();
+          }, 100);
+          
         } else if (!data && error && error.message) {
           toaster.pop('error', error.message);
         }
@@ -1157,12 +1158,11 @@
         }
       }
       var redirectUrl = url;
+      
       if (!redirectUrl) {
-        redirectUrl = $location.search().posthandle ? "/admin/#/website/posts" : "/admin/#/website/pages";
+        redirectUrl = $location.search().posthandle ? "/admin/#/website/posts" : $scope.isEmail ? "/admin/#/emails" : "/admin/#/website/pages";
       }
-      if ($scope.isEmail) {
-        redirectUrl = "/admin/#/marketing/email-templates";
-      }
+      
       if ($scope.isDirty.dirty) {
         SweetAlert.swal({
           title: "Are you sure?",
@@ -1262,7 +1262,7 @@
             toaster.pop('success', "Email Deleted", "The " + title + " email was deleted successfully.");
             $scope.closeModal();
             $timeout(function () {
-              window.location = '/admin/#/marketing/email-templates';
+              window.location = '/admin/#/emails';
             }, 500);
           });
         } else {
@@ -1315,13 +1315,29 @@
      * -
      */
 
-    $scope.deleteComponent = function (index) {
-      var _type = $scope.components[index].type;
-      $scope.components.splice(index, 1);
-      toaster.pop('success', "Component Deleted", "The " + _type + " component was deleted successfully.");
-      $timeout(function () {
-        $scope.scrollToComponent(index)
-      }, 1000)
+    $scope.deleteComponent = function (index) {      
+        SweetAlert.swal({
+          title: "Are you sure?",
+          text: "Do you want to delete this component?",
+          type: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#DD6B55",
+          confirmButtonText: "Yes, delete it!",
+          cancelButtonText: "No, do not delete it!",
+          closeOnConfirm: true,
+          closeOnCancel: true
+        },
+        function (isConfirm) {
+          if (isConfirm) {
+            var _type = $scope.components[index].type;
+            $scope.components.splice(index, 1);
+            toaster.pop('success', "Component Deleted", "The " + _type + " component was deleted successfully.");
+            $timeout(function () {
+              $scope.scrollToComponent(index);
+              $(window).trigger('resize');
+            }, 1000);
+          };
+        });
     };
 
     /*

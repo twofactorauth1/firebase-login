@@ -17,7 +17,7 @@ var userActivityManager = require('../useractivities/useractivity_manager');
 var accountDao = require("../dao/account.dao");
 
 //this flag instructs the securitymanager to verify the subscription.
-var verifySubscription = false;
+var verifySubscription = true;
 
 var apiBase = function(options) {
 

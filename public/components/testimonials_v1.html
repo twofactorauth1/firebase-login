@@ -4,7 +4,7 @@
     </div>
     <div class="clearfix mb15"></div>
     <div class="row testimonial-wrap">
-        <div class="col-xs-12 testimonials" ng-repeat="testimonial in component.testimonials track by $index">
+        <div class="col-xs-12 testimonials" ng-repeat="testimonial in component.testimonials">
             <div class="single-testimonial {{isEditing ? 'edit-mode' : ''}}">
                 <div class="row">
                     <div class="img col-sm-3 {{$index % 2 == 0 ? 'pull-left' : 'pull-right'}}">

@@ -7,6 +7,7 @@ app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userSe
     },
     templateUrl: '/components/component-wrap.html',
     link: function (scope) {
+      console.log('scope.component ', scope.component);
 
       scope.fieldsLength = function () {
         return _.filter(scope.component.fields, function (_field) {
@@ -39,6 +40,13 @@ app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userSe
           skipWelcomeEmail = true;
         }
 
+        var _campaignId;
+        if (!scope.component.campaignId) {
+          scope.component.campaignId = '';
+        } else {
+          _campaignId = scope.component.campaignId;
+        }
+
         var formatted = {
           fingerprint: fingerprint,
           sessionId: sessionId,
@@ -48,12 +56,12 @@ app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userSe
             emails: [],
             phones: []
           }],
-          campaignId: scope.component.campaignId,
+          campaignId: _campaignId,
+          emailId: scope.component.emailId,
+          sendEmail: scope.component.sendEmail,
           skipWelcomeEmail: skipWelcomeEmail,
           fromEmail: scope.component.fromEmail,
           fromName: scope.component.fromName,
-          emailId: scope.component.emailId,
-          emailSubject: scope.component.emailSubject,
           activity: {
             activityType: 'CONTACT_FORM',
             note: scope.user.message || "Contact form data.",

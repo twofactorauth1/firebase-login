@@ -118,8 +118,7 @@
                                     </div>
                                 </div>
                                 <h5 class="fm-title">
-                                    <a href="" indigeweb-truncate truncate-list=" [asset.filename]"
-                                    truncate-limit=25 truncate-symbol="'...'" ></a>
+                                    <a href="#"><span ng-text-truncate="asset.filename" ng-tt-chars-threshold="25" ng-tt-no-toggling></span></a>
                                 </h5>
                                 <small class="text-muted">{{asset.created.date | timeAgoFilter}}</small>
                             </div>

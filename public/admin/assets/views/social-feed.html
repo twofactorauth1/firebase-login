@@ -245,7 +245,7 @@
 <script type="text/ng-template" id="follow-modal">
     <div class="modal-header">
         <button type="button" class="close" ng-click="closeModal()" aria-hidden="true">&times;</button>
-        <h4 class="modal-title">Manage Likes</h4>
+        <h4 class="modal-title">Manage Follows</h4>
     </div>
     <div class="modal-body manage-feed nopadding bg-white">
         <ul class="fb-admin-pages">
@@ -256,8 +256,8 @@
                         <span class="fa fa-{{account.type}}"></span>
                         <!--<span ng-if="(followModalCheckmarks.indexOf(account)==-1)" class="fa fa-square-o pull-right" ng-click="followTwitterUser(account, tempPost.sourceId)"></span>-->
                         <!--<span ng-if="(followModalCheckmarks.indexOf(account)!=-1)" class="fa fa-check-square-o pull-right" ng-click="unfollowTwitterUser(account, tempPost.sourceId)"></span>-->
-                        <span ng-if="!followModalCheckmarks[account]" class="fa fa-square-o pull-right" ng-click="followTwitterUser(account, tempPost.sourceId)"></span>
-                        <span ng-if="followModalCheckmarks[account]" class="fa fa-check-square-o pull-right" ng-click="unfollowTwitterUser(account, tempPost.sourceId)"></span>
+                        <span ng-if="!followModalCheckmarks[account.socialId]" class="fa fa-square-o pull-right" ng-click="followTwitterUser(account, tempPost.sourceId)"></span>
+                        <span ng-if="followModalCheckmarks[account.socialId]" class="fa fa-check-square-o pull-right" ng-click="unfollowTwitterUser(account, tempPost.sourceId)"></span>
                     </div>
                 </div>
             </li>

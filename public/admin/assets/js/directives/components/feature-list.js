@@ -26,7 +26,8 @@ app.directive('featureListComponent',["$window", function ($window) {
       };
 
       scope.resizeFeatureTiles = function (argument) {
-        var element = angular.element("#"+scope.component._id + " div.feature-height")
+        var parent_id = scope.component.anchor || scope.component._id;
+        var element = angular.element("#"+parent_id + " div.feature-height")
         if (element && element.length) {
           var maxFeatureHeight = Math.max.apply(null, element.map(function () {
             return this.offsetHeight;

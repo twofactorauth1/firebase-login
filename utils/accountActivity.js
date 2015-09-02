@@ -21,7 +21,8 @@ var accountActivity = {
 
     runReport: function(callback) {
         var self = this;
-        var reportAry = [109, 45, 97, 79, 21, 37, 38, 12, 15];
+        var reportAry = [109, 45, 97, 79, 21, 37, 38, 12, 15, 126, 129, 130, 132, 133, 134, 135, 136, 137,
+                            138, 139, 140, 141, 142, 158];
         var activityAry = [];
         async.each(reportAry, function(accountId, cb){
             self.getActivityForAccount(accountId, function(err, activity){
@@ -31,10 +32,13 @@ var accountActivity = {
                 cb();
             });
         }, function done(err){
-            self.log.debug('Last Activity,Pointed Domain,Pages Created,Posts Created,Social Integrations,Stripe Integration,' +
+            self.log.debug('AccountId,Name,Custom Domain,Signup Date,Trial Days Remaining,Last Activity,Pointed Domain,Pages Created,Posts Created,Social Integrations,Stripe Integration,' +
                 'Products,Orders,Contacts,Campaigns');
-            _.each(activityAry, function(activity){
-                self.log.debug(activity.accountId + ',' + activity.lastActivity + ',Y,' + activity.pages + ',' + activity.posts +',' +
+
+            var sortedAry = _.sortBy(activityAry, 'accountId');
+            _.each(sortedAry, function(activity){
+                self.log.debug(activity.accountId + ',' + activity.name + ',' + activity.customDomain + ',' + activity.signupDate + ',' +
+                    activity.trialDaysRemaining + ',' + activity.lastActivity + ',' + activity.pointedDomain +',' + activity.pages + ',' + activity.posts +',' +
                     activity.socialIntegrations + ',' +activity.stripeIntegrated + ',' + activity.products +',' +
                     activity.orders + ',' + activity.contacts + ',' + activity.campaigns);
             });
@@ -105,7 +109,7 @@ var accountActivity = {
 
                             });
                             var types = _.pluck(config.get('socialAccounts'), 'type');
-                            var typeString = _.reduce(types, function(memo, type){return memo + ',' + type});
+                            var typeString ='"' +  _.reduce(types, function(memo, type){return memo + ',' + type}) + '"';
                             activity.socialIntegrations = typeString;
                         } else {
                             activity.socialIntegrations = 'NONE';
@@ -183,10 +187,26 @@ var accountActivity = {
                         cb(err);
                     } else {
                         var activityTimestamp = _.last(activities).get('start');
-                        activity.lastActivity = moment(activityTimestamp).format('MM/DD/YYYY HH:mm:ss');
-                        cb(null);
+                        activity.lastActivity = moment(activityTimestamp).format('MM/DD/YYYY HH:mm');
+                        cb(null, account);
                     }
                 });
+            },
+            function getAccountAttributes(account, cb) {
+                activity.name = account.get('subdomain');
+                activity.customDomain = account.get('customDomain');
+                activity.signupDate = moment(account.get('created').date).format('MM/DD/YYYY HH:mm');
+                var endDate = moment(activity.signupDate).add(14, 'days');
+                activity.trialDaysRemaining = endDate.diff(moment(), 'days');
+                if(activity.trialDaysRemaining < 0) {
+                    activity.trialDaysRemaining = 0;
+                }
+                if(account.get('customDomain') !== '') {
+                    activity.pointedDomain = 'Y';
+                } else {
+                    activity.pointedDomain = 'N';
+                }
+                cb(null);
             }
         ], function done(err){
             self.log.info('Activity:', activity);

@@ -17,6 +17,7 @@ var segmentioConfig = require('../../configs/segmentio.config.js');
 
 var Website = require('../model/website');
 var Page = require('../model/page');
+var Email = require('../model/email');
 var BlogPost = require('../model/blogpost');
 
 var dao = {
@@ -335,10 +336,11 @@ var dao = {
         return this.getById(emailId, $$.m.cms.Email, fn);
     },
 
-    getLatestPageForWebsite: function(websiteId, pageName, fn) {
+    getLatestPageForWebsite: function(websiteId, pageName, accountId, fn) {
         var query = {
             websiteId: websiteId,
             handle: pageName,
+            accountId: accountId,
             latest: true
         };
 
@@ -1265,6 +1267,18 @@ var dao = {
                         },
                         "color" : ""
                     },
+                    "spacing" : {
+                        "pt" : 0,
+                        "pb" : 0,
+                        "pl" : 0,
+                        "pr" : 0,
+                        "mt" : 0,
+                        "mb" : 0,
+                        "mr" : "auto",
+                        "ml" : "auto",
+                        "mw" : "100%",
+                        "usePage" : false
+                    },
                     "btn" : {
                         "text" : "",
                         "url" : "",
@@ -1284,10 +1298,11 @@ var dao = {
 
         });
         var componentId = $$.u.idutils.generateUUID();
-        var welcomeEmailPage = new $$.m.cms.Page({
+        var welcomeEmailPage = new $$.m.cms.Email({
 
             "accountId" : accountId,
             "title" : "Welcome Aboard",
+            "type" : "notification",
             "components" : [
                 {
                     "_id" : componentId,
@@ -1320,14 +1335,14 @@ var dao = {
             "modified" : {
                 "date" : new Date(),
                 "by" : null
-            },
-            'email_type': 'welcome'
+            }
         });
 
-        var newOrderEmailPage = new $$.m.cms.Page({
+        var newOrderEmailPage = new $$.m.cms.Email({
 
             "accountId" : accountId,
             "title" : "New Order",
+            "type" : "notification",
             "components" : [
                 {
                     "_id" : componentId,
@@ -1360,13 +1375,13 @@ var dao = {
             "modified" : {
                 "date" : new Date(),
                 "by" : null
-            },
-            'email_type': 'new_order'
+            }
         });
-        var orderProcessingEmailPage = new $$.m.cms.Page({
+        var orderProcessingEmailPage = new $$.m.cms.Email({
 
             "accountId" : accountId,
             "title" : "Order Processing",
+            "type" : "notification",
             "components" : [
                 {
                     "_id" : componentId,
@@ -1399,13 +1414,13 @@ var dao = {
             "modified" : {
                 "date" : new Date(),
                 "by" : null
-            },
-            'email_type': 'order_processing'
+            }
         });
-        var orderCompletedEmailPage = new $$.m.cms.Page({
+        var orderCompletedEmailPage = new $$.m.cms.Email({
 
             "accountId" : accountId,
             "title" : "Order Completed",
+            "type" : "notification",
             "components" : [
                 {
                     "_id" : componentId,
@@ -1438,13 +1453,13 @@ var dao = {
             "modified" : {
                 "date" : new Date(),
                 "by" : null
-            },
-            'email_type': 'order_completed'
+            }
         });
-        var orderCancelledEmailPage = new $$.m.cms.Page({
+        var orderCancelledEmailPage = new $$.m.cms.Email({
 
             "accountId" : accountId,
             "title" : "Order Cancelled",
+            "type" : "notification",
             "components" : [
                 {
                     "_id" : componentId,
@@ -1477,13 +1492,13 @@ var dao = {
             "modified" : {
                 "date" : new Date(),
                 "by" : null
-            },
-            'email_type': 'order_cancelled'
+            }
         });
-        var customerInvoiceEmailPage = new $$.m.cms.Page({
+        var customerInvoiceEmailPage = new $$.m.cms.Email({
 
             "accountId" : accountId,
             "title" : "Customer Invoice",
+            "type" : "notification",
             "components" : [
                 {
                     "_id" : componentId,
@@ -1516,8 +1531,7 @@ var dao = {
             "modified" : {
                 "date" : new Date(),
                 "by" : null
-            },
-            'email_type': 'customerInvoice'
+            }
         });
 
         var customerAccountPage = new $$.m.cms.Page({
@@ -1648,6 +1662,18 @@ var dao = {
                         },
                         "color" : ""
                     },
+                    "spacing" : {
+                        "pt" : 0,
+                        "pb" : 0,
+                        "pl" : 0,
+                        "pr" : 0,
+                        "mt" : 0,
+                        "mb" : 0,
+                        "mr" : "auto",
+                        "ml" : "auto",
+                        "mw" : "100%",
+                        "usePage" : false
+                    },
                     "title" : null
                 }
             ],
@@ -1742,6 +1768,18 @@ var dao = {
                         "blur" : false
                     },
                     "color" : ""
+                },
+                "spacing" : {
+                    "pt" : 0,
+                    "pb" : 0,
+                    "pl" : 0,
+                    "pr" : 0,
+                    "mt" : 0,
+                    "mb" : 0,
+                    "mr" : "auto",
+                    "ml" : "auto",
+                    "mw" : "100%",
+                    "usePage" : false
                 },
                 "title" : null
             }],

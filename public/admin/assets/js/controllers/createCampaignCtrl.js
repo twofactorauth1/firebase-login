@@ -17,6 +17,12 @@
       minDate: new Date()
     };
 
+    $scope.triggers = [{
+      name: 'Sign Up',
+      icon: 'fa-paper-plane',
+      value: 'SIGNUP'
+    }];
+
     $scope.formatDate = function (date) {
       return moment(date).format("dddd, MMMM Do YYYY, h:mm A");
     };
@@ -99,12 +105,12 @@
       var hour = time.get('hour');
       var minute = time.get('minute');
       var formatted = date.set('hour', hour).set('minute', minute);
-      if(formatted && formatted._d.toString() === "Invalid Date")
+      if (formatted && formatted._d.toString() === "Invalid Date")
         $scope.invalidDate = true;
       else
         $scope.delivery.date = formatted;
 
-      if($scope.delivery.date.diff && $scope.delivery.date.diff(moment(), "minutes" ) < 0)
+      if ($scope.delivery.date.diff && $scope.delivery.date.diff(moment(), "minutes") < 0)
         $scope.invalidDate = true;
       else
         $scope.invalidDate = false;
@@ -149,9 +155,8 @@
     $scope.sendTestEmail = function (_email) {
       $scope.sendingEmail = true;
       WebsiteService.sendTestEmail(_email, $scope.emailToSend, function (data) {
-       $scope.sendingEmail = false;
-        if(data && data[0] && data[0]._id)
-        {
+        $scope.sendingEmail = false;
+        if (data && data[0] && data[0]._id) {
           $scope.closeModal();
           toaster.pop('success', 'Test Email sent successfully');
         }
@@ -325,29 +330,26 @@
         $scope.checkingCampaignName = false;
         $scope.campaignNameExists = exists;
         $scope.emailToSend.title = _name + ' Email Template';
-        $scope.emailToSend.subject = "Test - " +_name;
+        $scope.emailToSend.subject = "Test - " + _name;
         $scope.checkEmailTitle($scope.emailToSend.title);
       });
     };
 
     $scope.checkEmailTitle = function (_name) {
-      if($scope.selectedEmail.type === 'new')
-      {
+      if ($scope.selectedEmail.type === 'new') {
         $scope.checkingEmailTitle = true;
         var exists = _.findWhere($scope.originalEmails, {
           title: _name
         });
         $scope.emailTitleExists = exists ? true : false;
-      }
-      else
+      } else
         $scope.emailTitleExists = false;
-      
+
       $scope.emailTitleChecked = true;
       $scope.checkingEmailTitle = false;
     };
 
-    $scope.clearEmail = function()
-    {
+    $scope.clearEmail = function () {
       $scope.checkingEmailTitle = false;
       $scope.emailToSend.title = "";
     }
@@ -370,7 +372,7 @@
       var contact = _.findWhere($scope.recipients, {
         _id: selected._id
       });
-      if(contact)
+      if (contact)
         existingContactIndex = _.indexOf($scope.recipients, contact);
 
       if (existingContactIndex > -1) {
@@ -380,7 +382,7 @@
         if (tagExists.length === 0) {
           $scope.recipients.splice(existingContactIndex, 1);
         }
-        
+
       }
       // clear search text
       select.search = '';
@@ -414,11 +416,9 @@
       $scope.currentStep = i;
     };
     var errorMessage = function (i) {
-      if($scope.currentStep < i && (i - $scope.currentStep > 1 ))
-      {
-        toaster.pop('error', 'Error', 'Please complete the previous steps before proceeding');  
-      }
-      else
+      if ($scope.currentStep < i && (i - $scope.currentStep > 1)) {
+        toaster.pop('error', 'Error', 'Please complete the previous steps before proceeding');
+      } else
         toaster.pop('error', 'Error', 'Please complete the form in this step before proceeding');
     };
 
@@ -473,23 +473,21 @@
     $scope.tagSelection = [];
     $scope.recipients = [];
 
-    $scope.eliminateDuplicates = function(customer)
-    {          
+    $scope.eliminateDuplicates = function (customer) {
       return $scope.selectedCustomers.individuals.indexOf(customer._id) > -1;
     }
 
-    $scope.getSelectedTags = function()
-    {
-        var tags = [];
-        _.each($scope.tagSelection, function (fullTag) {
-            var matchingTag = _.find(customerTags, function (matchTag) {
-              return matchTag.label === fullTag;
-            });
-            if (matchingTag) {
-              tags.push(matchingTag.data);
-            }
+    $scope.getSelectedTags = function () {
+      var tags = [];
+      _.each($scope.tagSelection, function (fullTag) {
+        var matchingTag = _.find(customerTags, function (matchTag) {
+          return matchTag.label === fullTag;
         });
-        return tags;
+        if (matchingTag) {
+          tags.push(matchingTag.data);
+        }
+      });
+      return tags;
     }
 
     $scope.getRecipients = function () {
@@ -505,20 +503,20 @@
         if (customer.tags && customer.tags.length > 0) {
           var tagExists = _.intersection(customer.tags, tags);
           if (tagExists.length > 0) {
-            if(!$scope.eliminateDuplicates(customer))
+            if (!$scope.eliminateDuplicates(customer))
               fullContacts.push(customer);
           }
         } else {
           if (tags.indexOf('nt') > -1) {
-            if(!$scope.eliminateDuplicates(customer))
+            if (!$scope.eliminateDuplicates(customer))
               fullContacts.push(customer);
           }
         }
 
         //add customers from individual
-        
-        if ($scope.selectedCustomers.individuals.indexOf(customer._id) > -1) {          
-              fullContacts.push(customer);
+
+        if ($scope.selectedCustomers.individuals.indexOf(customer._id) > -1) {
+          fullContacts.push(customer);
         }
       });
 
@@ -612,121 +610,112 @@
 
     $scope.createCampaign = function (newEmail) {
       var stepSettings = $scope.newCampaignObj.steps[0].settings;
-        stepSettings.emailId = newEmail._id;
-        stepSettings.fromEmail = newEmail.fromEmail;
-        stepSettings.fromName = newEmail.fromName;
-        stepSettings.replyTo = newEmail.replyTo;
-        stepSettings.subject = newEmail.subject;
+      stepSettings.emailId = newEmail._id;
+      stepSettings.fromEmail = newEmail.fromEmail;
+      stepSettings.fromName = newEmail.fromName;
+      stepSettings.replyTo = newEmail.replyTo;
+      stepSettings.subject = newEmail.subject;
 
-        //set delivery date
-        var sendAt = $scope.newCampaignObj.steps[0].settings.sendAt;
-        var delivery = moment($scope.delivery.date);
-        sendAt.year = moment.utc(delivery).get('year');
-        sendAt.month = moment.utc(delivery).get('month') + 1;
-        sendAt.day = moment.utc(delivery).get('date');
-        sendAt.hour = moment.utc(delivery).get('hour');
-        sendAt.minute = moment.utc(delivery).get('minute');
+      //set delivery date
+      var sendAt = $scope.newCampaignObj.steps[0].settings.sendAt;
+      var delivery = moment($scope.delivery.date);
+      sendAt.year = moment.utc(delivery).get('year');
+      sendAt.month = moment.utc(delivery).get('month') + 1;
+      sendAt.day = moment.utc(delivery).get('date');
+      sendAt.hour = moment.utc(delivery).get('hour');
+      sendAt.minute = moment.utc(delivery).get('minute');
 
-        //add campaign
-        CampaignService.createCampaign($scope.newCampaignObj, function (_nemCampaign) {
+      //add campaign
+      CampaignService.createCampaign($scope.newCampaignObj, function (_nemCampaign) {
 
-          //add contacts if new
-          $scope.checkAndCreateCustomer(function (createdContactsArr) {
+        //add contacts if new
+        $scope.checkAndCreateCustomer(function (createdContactsArr) {
 
-            //get an array of contact Ids from recipients
-            var recipientsIdArr = [];
+          //get an array of contact Ids from recipients
+          var recipientsIdArr = [];
 
-            _.each($scope.recipients, function (recipient) {
-              if (recipient._id) {
-                recipientsIdArr.push(recipient._id);
+          _.each($scope.recipients, function (recipient) {
+            if (recipient._id) {
+              recipientsIdArr.push(recipient._id);
+            }
+          });
+
+          //add created contacts to recipeints array
+          if (createdContactsArr.length > 0) {
+            _.each(createdContactsArr, function (createdContactId) {
+              if (recipientsIdArr.indexOf(createdContactId) < 0) {
+                recipientsIdArr.push(createdContactId);
               }
             });
+          }
 
-            //add created contacts to recipeints array
-            if (createdContactsArr.length > 0) {
-              _.each(createdContactsArr, function (createdContactId) {
-                if (recipientsIdArr.indexOf(createdContactId) < 0) {
-                  recipientsIdArr.push(createdContactId);
-                }
-              });
-            }
+          var contactsArr = recipientsIdArr;
 
-            var contactsArr = recipientsIdArr;
-
-            //bulk add contacts to campaign
-            CampaignService.bulkAddContactsToCampaign(contactsArr, _nemCampaign._id, function (success) {
-              //show success
-              $scope.saveLoading = false;
-              toaster.pop('success', 'Campaigns created successfully');
-              $location.path('/marketing/campaigns');
-            });
-
+          //bulk add contacts to campaign
+          CampaignService.bulkAddContactsToCampaign(contactsArr, _nemCampaign._id, function (success) {
+            //show success
+            $scope.saveLoading = false;
+            toaster.pop('success', 'Campaigns created successfully');
+            $location.path('/marketing/campaigns');
           });
 
         });
+
+      });
     };
     $scope.checkCampaignNameExists = function () {
       var exists = false;
-      if($scope.checkingCampaignName)
-      {
+      if ($scope.checkingCampaignName) {
         exists = true;
       }
-      if($scope.campaignNameExists)
-      {
+      if ($scope.campaignNameExists) {
         exists = true;
       }
       return exists;
     };
-   
 
-    $scope.checkNewRecipients = function()
-    {
+
+    $scope.checkNewRecipients = function () {
       var returnValue = false;
-      if($scope.selectedCustomers.newEmails && $scope.selectedCustomers.newEmails.length)
-          returnValue = true;
+      if ($scope.selectedCustomers.newEmails && $scope.selectedCustomers.newEmails.length)
+        returnValue = true;
       return returnValue;
     };
 
-    $scope.validateStep = function(i, valid)
-    {
-      if(valid)
-      {
+    $scope.validateStep = function (i, valid) {
+      if (valid) {
         if (i === 2 && (!$scope.newCampaignObj.name || $scope.checkCampaignNameExists()))
-        valid = false;
-        else if(i === 3 && (!$scope.emailToSend.title || $scope.emailTitleExists))
           valid = false;
-        else if(i === 4 && !$scope.recipients.length && !$scope.checkNewRecipients())
+        else if (i === 3 && (!$scope.emailToSend.title || $scope.emailTitleExists))
           valid = false;
-        else if(i === 5 && $scope.whenToSend === 'later')
-        {
+        else if (i === 4 && !$scope.recipients.length && !$scope.checkNewRecipients())
+          valid = false;
+        else if (i === 5 && $scope.whenToSend === 'later') {
           $scope.updateTime();
-          if($scope.invalidDate)
+          if ($scope.invalidDate)
             valid = false;
         }
       }
       return valid;
     }
 
-    $scope.ValidateBeforeProceed = function(i)
-    {
+    $scope.ValidateBeforeProceed = function (i) {
       var index = 2;
       var valid = true;
-      if(i >= 2 )
-        { 
-          while (index <= i && index >= 2)
-            {  
-              valid = $scope.validateStep(index, valid);
-              if(valid)
-                index ++ ;
-              else
-                index = 0;
-            }
+      if (i >= 2) {
+        while (index <= i && index >= 2) {
+          valid = $scope.validateStep(index, valid);
+          if (valid)
+            index++;
+          else
+            index = 0;
         }
-        if (!valid) {
-          errorMessage(i);
-          valid = false;
-        } 
-        return valid;
+      }
+      if (!valid) {
+        errorMessage(i);
+        valid = false;
+      }
+      return valid;
     }
 
     // toggle selection
@@ -748,12 +737,11 @@
       next: function () {
         var i = $scope.currentStep + 1;
         var valid = $scope.ValidateBeforeProceed(i);
-        if(valid)
-        {
+        if (valid) {
           $scope.goingTo = 'next';
           $scope.toTheTop();
           nextStep();
-        }        
+        }
       },
       prev: function () {
         $scope.goingTo = 'prev';
@@ -769,7 +757,7 @@
         if (valid) {
           $scope.toTheTop();
           goToStep(i);
-        } 
+        }
       },
       submit: function () {
         console.log('submit');
@@ -779,48 +767,49 @@
       }
     };
 
-    $scope.saveCampaignOnLeave = function(_url){    
-      if($scope.newCampaignObj.name){
+    $scope.saveCampaignOnLeave = function (_url) {
+      if ($scope.newCampaignObj.name) {
         CampaignService.checkCampaignNameExists($scope.newCampaignObj.name, function (exists) {
-        if(!exists){
-          $scope.changesConfirmed = true;
-          var stepSettings = $scope.newCampaignObj.steps[0].settings;
-          stepSettings.emailId = newEmail._id;
-          stepSettings.fromEmail = newEmail.fromEmail;
-          stepSettings.fromName = newEmail.fromName;
-          stepSettings.replyTo = newEmail.replyTo;
-          stepSettings.subject = newEmail.subject;
+          if (!exists) {
+            $scope.changesConfirmed = true;
+            var stepSettings = $scope.newCampaignObj.steps[0].settings;
+            stepSettings.emailId = newEmail._id;
+            stepSettings.fromEmail = newEmail.fromEmail;
+            stepSettings.fromName = newEmail.fromName;
+            stepSettings.replyTo = newEmail.replyTo;
+            stepSettings.subject = newEmail.subject;
 
-          //set delivery date
-          var sendAt = $scope.newCampaignObj.steps[0].settings.sendAt;
-          var delivery = moment($scope.delivery.date);
-          sendAt.year = moment.utc(delivery).get('year');
-          sendAt.month = moment.utc(delivery).get('month') + 1;
-          sendAt.day = moment.utc(delivery).get('date');
-          sendAt.hour = moment.utc(delivery).get('hour');
-          sendAt.minute = moment.utc(delivery).get('minute');
-          var temp_recip = [];
-          var temp_manual_recip = [];
+            //set delivery date
+            var sendAt = $scope.newCampaignObj.steps[0].settings.sendAt;
+            var delivery = moment($scope.delivery.date);
+            sendAt.year = moment.utc(delivery).get('year');
+            sendAt.month = moment.utc(delivery).get('month') + 1;
+            sendAt.day = moment.utc(delivery).get('date');
+            sendAt.hour = moment.utc(delivery).get('hour');
+            sendAt.minute = moment.utc(delivery).get('minute');
+            var temp_recip = [];
+            var temp_manual_recip = [];
             _.each($scope.recipients, function (recipient) {
               if (recipient._id) {
                 temp_recip.push(recipient._id);
               }
             });
-          $scope.newCampaignObj.temp_recip = temp_recip;
-          var _emails = $scope.selectedCustomers.newEmails;
+            $scope.newCampaignObj.temp_recip = temp_recip;
+            var _emails = $scope.selectedCustomers.newEmails;
             _.each(_emails, function (email) {
               var contact = _.findWhere($scope.customers, {
                 email: email.text
               });
               if (!contact) {
-               temp_manual_recip.push(email.text);
+                temp_manual_recip.push(email.text);
               }
             });
           }
           $scope.newCampaignObj.temp_manual_recip = temp_manual_recip;
 
           //add campaign
-          CampaignService.createCampaign($scope.newCampaignObj, function (_nemCampaign) {            
+          console.log('$scope.newCampaignObj ', $scope.newCampaignObj);
+          CampaignService.createCampaign($scope.newCampaignObj, function (_nemCampaign) {
             window.location = _url;
           });
         })
@@ -833,7 +822,7 @@
      */
     $scope.changesConfirmed = false;
     var offFn = $rootScope.$on('$locationChangeStart', function (event, newUrl, oldUrl) {
-      if(!$scope.changesConfirmed)
+      if (!$scope.changesConfirmed)
         $scope.saveCampaignOnLeave(newUrl);
     });
 

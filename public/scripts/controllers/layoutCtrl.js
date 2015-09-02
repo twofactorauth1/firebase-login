@@ -2,7 +2,7 @@
 /*global mainApp*/
 mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', '$window', '$location', '$document', '$timeout', function ($scope, pagesService, $window, $location, $document, $timeout) {
   $scope.isEditing = false;
-
+  console.log('layout crtl');
   function checkIntercom(data) {
     if (data.hideIntercom) {
       $scope.$parent.hideIntercom = true;
@@ -10,16 +10,21 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', '$window', '$locatio
   }
 
   pagesService($scope.websiteId, function (err, data) {
+    console.log('pagesService ', data);
     if (err) {
       console.warn('no page found');
-      $window.location.href = '/404';
+      if ($location.$$path.indexOf('login')) {
+        $window.location.href =  $location.$$path;
+      } else {
+        $window.location.href = '/404';
+      }
     } else {
       $scope.page = data;
       $scope.components = data.components;
       $scope.components.forEach(function (value, index) {
         if (value && value.type === 'masthead') {
           if (index != 0 && $scope.components[index - 1].type == "navigation") {
-            $scope.allowUndernav = true;              
+            $scope.allowUndernav = true;
           } else
             $scope.allowUndernav = false;
         }

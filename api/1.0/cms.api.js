@@ -329,7 +329,7 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> getPageByHandle Website Id: '+websiteId+' Handle: '+pageHandle);
         var accountId = parseInt(self.currentAccountId(req));
 
-        cmsDao.getLatestPageForWebsite(websiteId, pageHandle, function (err, value) {
+        cmsDao.getLatestPageForWebsite(websiteId, pageHandle, accountId, function (err, value) {
             self.sendResultOrError(resp, err, value, "Error Retrieving Page for Website");
             self = null;
         });

@@ -5,7 +5,8 @@ app.directive('mastheadComponent', ['$window', function ($window) {
     },
     templateUrl: '/components/component-wrap.html',
     link: function (scope, element, attrs) {
-      if(scope.component.bg && scope.component.bg.img && scope.component.bg.img.undernav)
+      console.log('mastheadComponent ');
+      if(scope.component.bg && scope.component.bg.img && scope.component.bg.img.show && scope.component.bg.img.undernav)
         scope.addUndernavClasses = true;
       angular.element('body').on("click", ".navbar-toggle", function (e) {
         scope.setUnderbnavMargin();

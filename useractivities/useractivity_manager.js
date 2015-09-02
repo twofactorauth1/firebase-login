@@ -24,14 +24,14 @@ module.exports = {
         });
     },
 
-    createUserLoginActivity: function(accountId, userId, fn) {
+    createUserLoginActivity: function(accountId, userId, requestorProps, fn) {
         var self = this;
         log.debug('>> createUserLoginActivity');
-        var activity = new $$.m.UserActivity({
-            accountId: accountId,
-            userId: userId,
-            activityType: $$.m.UserActivity.types.LOGIN
-        });
+        var data = requestorProps || {};
+        data.accountId = accountId;
+        data.userId = userId;
+        data.activityType = $$.m.UserActivity.types.LOGIN;
+        var activity = new $$.m.UserActivity(data);
 
         dao.saveOrUpdate(activity, function(err, value){
             if(err) {

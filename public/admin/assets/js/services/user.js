@@ -32,6 +32,25 @@
       });
     };
 
+    this.setPassword = function(password, fn) {
+      var apiUrl = baseUrl + ['user', 'password'].join('/');
+      console.log('---- UserService.setPassword.api = ', apiUrl);
+
+      var payload = {
+        'password': password,
+      };
+
+      console.log('---- UserService.setPassword.payload = ', payload);
+
+      $http.post(apiUrl, payload)
+          .then(function(response){
+            fn(response.data);
+          },
+          function(error){
+            console.error('An error occurred in UserService.setPassword.', error);
+          });
+    };
+
     this.getSingleAccount = function(accountId, fn) {
       var apiUrl = baseUrl + ['account', accountId].join('/');
       $http.get(apiUrl)

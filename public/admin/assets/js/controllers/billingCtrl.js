@@ -4,6 +4,12 @@
 (function (angular) {
   app.controller('BillingCtrl', ["$scope", "$rootScope", "toaster", "$modal", "$location", "ProductService", "PaymentService", "UserService", "$q", "ToasterService", "ipCookie", function ($scope, $rootScope, toaster, $modal, $location, ProductService, PaymentService, UserService, $q, ToasterService, ipCookie) {
 
+    $scope.number = 1;
+
+    $scope.plus = function () {
+      $scope.number++;
+    };
+
     /*
      * @closeModal
      * close the modal instance

@@ -20,7 +20,7 @@
             </div>
             <div class="form-group" ng-class="{ 'has-error' : emailSettingForm.fromEmail.$invalid && !emailSettingForm.fromEmail.$pristine }">
                 <label>From Email*</label>
-                <input name="fromEmail" class="form-control" type="email" ng-model="page.fromEmail" required>
+                <input name="fromEmail" ng-pattern="formValidations.email" class="form-control" type="email" ng-model="page.fromEmail" required>
             </div>
             <div class="form-group margin-bottom-0" ng-class="{ 'has-error' : emailSettingForm.replyTo.$invalid && !emailSettingForm.replyTo.$pristine }">
                 <label>Reply To:</label>

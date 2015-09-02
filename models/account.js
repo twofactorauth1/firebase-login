@@ -23,6 +23,7 @@ var account = $$.m.ModelBase.extend({
 
             subdomain:"",
             domain:"",
+            customDomain:"",
             token:"",
 
             website: {
@@ -70,7 +71,9 @@ var account = $$.m.ModelBase.extend({
             "billing" : {
                 "userId" : '', //logged in user that added Stripe details
                 "customerId": '', //Stripe customerId... also stored on User
-                "cardToken": '' //optional. Not sure if we need this if we have the customer reference
+                "cardToken": '', //optional. Not sure if we need this if we have the customer reference
+                "signupDate": new Date(),
+                "trialLength": 14
             },
 
             'credentials': [],
@@ -81,8 +84,10 @@ var account = $$.m.ModelBase.extend({
                 "blog": false
             },
             "email_preferences": {
-                new_customer: true,
-                new_order: true
+                new_contacts: true,
+                new_orders: true,
+                helpful_tips: true,
+                no_notifications: false
             },
             commerceSettings : {
                 taxes : true,

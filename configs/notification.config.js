@@ -13,7 +13,7 @@ var welcomeFromName =  process.env.WELCOME_FROM_NAME || 'Indigenous';
 var welcomeHTML = process.env.WELCOME_HTML || 'public/templates/emails/welcome-aboard.html';
 var thanksForInterest = process.env.INTEREST_HTML || 'public/templates/emails/thanks-for-interest.html';
 var welcomeEmailSubject = process.env.WELCOME_EMAIL_SUBJECT || 'Welcome to Indigenous!';
-var newCustomerEmailSubject = process.env.NEW_CUSTOMER_EMAIL_SUBJECT || 'New customer created';
+var newCustomerEmailSubject = process.env.NEW_CUSTOMER_EMAIL_SUBJECT || 'New contact created';
 
 /*
  * Override the connection string with an environment variable

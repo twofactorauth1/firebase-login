@@ -19,6 +19,7 @@ app.directive('testimonialsComponent', ['$timeout', function ($timeout) {
       });
       scope.deleteTestimonial = function (index) {
         scope.dataLoaded = false;
+        console.log(index);
         scope.component.testimonials.splice(index, 1);
         $timeout(function () {
           scope.dataLoaded = true;
@@ -27,10 +28,10 @@ app.directive('testimonialsComponent', ['$timeout', function ($timeout) {
       scope.addTestimonial = function (index) {
         scope.dataLoaded = false;
         var newTestimonial = {
-          "img": "",
-          "name": "Name",
-          "site": "Site",
-          "text": "Description"
+          "img": "<img src='https://s3-us-west-2.amazonaws.com/indigenous-admin/default-user.png'/>",
+          "name": "First Last",
+          "site": "www.examplesite.com",
+          "text": "This is the testimonial."
         };
         scope.component.testimonials.splice(index + 1, 0, newTestimonial);
         $timeout(function () {

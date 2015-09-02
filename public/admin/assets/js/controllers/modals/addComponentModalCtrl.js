@@ -38,6 +38,7 @@ app.controller('AddComponentModalCtrl', ['$scope', '$document', '$modalInstance'
             var element = document.getElementById(newComponent._id);
             if (element) {
               $document.scrollToElementAnimated(element, 175, 1000);
+              $(window).trigger('resize');
             }
           }, 500);
           toaster.pop('success', "Component Added", "The " + newComponent.type + " component was added successfully.");

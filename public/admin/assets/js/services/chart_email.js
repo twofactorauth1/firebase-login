@@ -1,5 +1,6 @@
 'use strict';
 /*global app, Keen, $$*/
+/*jslint unparam: true*/
 (function (angular) {
   app.service('ChartEmailService', ['KeenService', '$q', function (KeenService, $q) {
 

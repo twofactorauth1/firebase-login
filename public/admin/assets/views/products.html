@@ -132,7 +132,7 @@
                             <h3 ng-if="!product.is_image && product.icon"><span class="fa {{product.icon}}"></span></h3>
                         </td>
                         <td class="hidden-xs">{{formatStatus(product.status)}}</td>
-                        <td>{{product.name||product.title | limitTo: 20 }}{{product.name.length||product.title.length > 20 ? '...' : ''}}</td>
+                        <td><span ng-text-truncate="product.name" ng-tt-chars-threshold="25" ng-tt-no-toggling></span></td>
                         <td class="hidden-xs">{{product.type}}</td>
                         <td class="hidden-xs">{{product.modified.date | date:'MMM d yy'}}</td>
                     </tr>

@@ -5,7 +5,7 @@
     * Please contact info@indigenous.io for approval or questions.
 
 doctype html
-html(lang='en', data-ng-app='clipApp')
+html(lang='en', data-ng-app='indigenousApp')
   head
     meta(charset='utf-8')
     meta(name='viewport', content='width=device-width, initial-scale=1, maximum-scale=1')
@@ -29,18 +29,20 @@ html(lang='en', data-ng-app='clipApp')
     link(rel='stylesheet', href='../js/libs/angular-loading-bar/build/loading-bar.min.css')
     // Animate Css
     link(rel='stylesheet', href='../js/libs/animate.css/animate.min.css')
-    // Clip-Two CSS
+    // CSS
     link(rel='stylesheet', href='assets/css/styles.css')
     link(rel='stylesheet', href='assets/css/frontend-admin.css')
     link(rel='stylesheet', href='assets/css/plugins.css')
-    // Clip-Two Theme
-    link(rel='stylesheet', data-ng-href='assets/css/themes/{{ app.layout.theme }}.css')
+    // Theme
+    link(rel='stylesheet', data-ng-href='assets/css/theme.css')
     // Social Links
     link(rel='stylesheet', href='/js/libs/bootstrap-social/bootstrap-social.css')
     link(rel='stylesheet', href='../js/libs_misc/ng-joyride/ng-joyride.css')
     link(rel='stylesheet', href='../js/libs/allmighty-autocomplete/style/autocomplete.css')
     // EDITOR
     link(rel='stylesheet', href='/js/libs/slick-carousel/slick/slick.css')
+
+
   body(ng-controller='AppCtrl')
     #app(ui-view='', ng-class="{'app-mobile' : app.isMobile, 'app-navbar-fixed' : app.layout.isNavbarFixed, 'app-sidebar-fixed' : app.layout.isSidebarFixed, 'app-sidebar-closed':app.layout.isSidebarClosed, 'app-footer-fixed':app.layout.isFooterFixed}")
 

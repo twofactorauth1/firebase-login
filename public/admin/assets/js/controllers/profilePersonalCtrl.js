@@ -3,15 +3,20 @@
  * controller for personal business page
  */
 (function (angular) {
-  app.controller('ProfilePersonalCtrl', ["$scope", "$modal", "$timeout", "toaster", "$stateParams", "UserService", "CommonService", "$state", function ($scope, $modal, $timeout, toaster, $stateParams, UserService, CommonService) {
+  app.controller('ProfilePersonalCtrl',
+      ["$scope", "$modal", "$timeout", "toaster", "$stateParams", "UserService", "CommonService", "userConstant", "formValidations",
+        function ($scope, $modal, $timeout, toaster, $stateParams, UserService, CommonService, userConstant, formValidations) {
     console.log('profile personal >>> ');
-
 
     //account API call for object population
     //account API call for object population
     // Add remove photo
 
-
+    $scope.formValidations = formValidations;
+    $scope.auth = {
+      password: '',
+      confirm: '',
+    };
     
     $scope.profileUser = {};
     UserService.getUserActivity(function (activities) {
@@ -50,6 +55,11 @@
 
     $scope.setProfileUser = function(user) {
       $scope.profileUser= angular.copy(user);
+
+      // we don't show a real password since we don't respond with password data
+      $scope.auth.password = userConstant.personal_profile.PASSWORD_PLACEHOLDER;
+      $scope.auth.confirm = userConstant.personal_profile.PASSWORD_PLACEHOLDER;
+      $scope.passwordNotSame = false; // useful for HTML display
     };
 
     $scope.refreshUser = function() {
@@ -58,9 +68,39 @@
 
     $scope.setProfileUser($scope.currentUser);
 
+    $scope.passwordChanged = function() {
+      console.log('------ checking for password change --------');
+      var changed = false;
+
+      // check to see if the user messed with either form input
+      if(($scope.auth.password !== userConstant.personal_profile.PASSWORD_PLACEHOLDER)
+      || ($scope.auth.confirm !== userConstant.personal_profile.PASSWORD_PLACEHOLDER)) {
+        console.log('------ detected password change --------');
+        changed = true;
+      }
+
+      return changed;
+    };
+
+    $scope.validatePasswords = function() {
+      console.log('------- validating password --------------');
+
+      // make sure they are the same, else flip the passwordNotSame flag
+      if($scope.auth.password === $scope.auth.confirm) {
+        $scope.passwordNotSame = false;
+      }
+      else {
+        $scope.passwordNotSame = true;
+      }
+
+      // return true when validated
+      // return false when INvalidated
+      return !$scope.passwordNotSame;
+    };
+
     $scope.profileSaveFn = function () {
-      //$scope.currentUser = $scope.profileUser;
-     
+      //$scope.currentUser = $scope.profileUser;    
+     // simpleForm.$setPristine(true);
       if (!$scope.profileUser.email) {
         toaster.pop("error", "Email is required.");
         return;
@@ -69,7 +109,21 @@
         $scope.refreshUser();
         toaster.pop('success', 'Profile Saved.');
       });
+
+      // check if password needs to be changed
+      if($scope.passwordChanged()) {
+        if( $scope.validatePasswords() ) {
+          UserService.setPassword($scope.auth.password, function(user) {
+            console.log('---- changed password successfully -----');
+            toaster.pop('success', 'Password changed.');
+          });
+        }
+        else {
+          console.log('passwords are not valid');
+        }
+      }
     };
+
     /**********PAGINATION RELATED **********/
     $scope.curPage = 0;
     $scope.pageSize = 100;

@@ -35,6 +35,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url(''), this.isAuthApi.bind(this), this.getLoggedInUser.bind(this));
         app.get(this.url('accounts'), this.isAuthApi.bind(this), this.getUserAccounts.bind(this));
         app.post(this.url('accounts/:id'), this.isAuthApi.bind(this), this.setActiveAccount.bind(this));
+        app.post(this.url('password'), this.isAuthApi.bind(this), this.setPassword.bind(this));
 
         app.get(this.url('social'), this.isAuthApi.bind(this), this.getLoggedInUserSocialCredentials.bind(this));
         app.delete(this.url('social/:type'), this.isAuthApi.bind(this), this.removeSocialCredentials.bind(this));
@@ -287,7 +288,8 @@ _.extend(api.prototype, baseApi.prototype, {
         var middle = req.body.middle;
 
         var cardToken = req.body.cardToken;
-        var plan = req.body.plan || 'NO_PLAN_ARGUMENT';//TODO: make sure this gets passed
+        var plan = req.body.plan || 'NO_PLAN_ARGUMENT';
+        var trialLength = req.body.trialLength || 15;//using 15 instead of 14 to give 14 FULL days
         self.log.debug('>> plan ', plan);
 
         var sendWelcomeEmail = true;//this can be overridden in the request.
@@ -350,6 +352,8 @@ _.extend(api.prototype, baseApi.prototype, {
                 billingObj.plan = plan;
                 billingObj.coupon = coupon;
                 billingObj.setupFee = setupFee;
+                billingObj.signupDate = new Date();
+                billingObj.trialLength = trialLength;
                 accountDao.saveOrUpdate(account, function (err, updatedAccount) {
                     if(err || updatedAccount === null) {
                         self.log.error('Error creating Stripe customer: ' + err);
@@ -362,7 +366,7 @@ _.extend(api.prototype, baseApi.prototype, {
             },
             function(user, account, callback){
                 self.log.debug('Created user[' + user.id() + '] and account[' + account.id() + '] objects.');
-                paymentsManager.createStripeCustomerForUser(cardToken, user, account.id(), function(err, stripeCustomer) {
+                paymentsManager.createStripeCustomerForUser(cardToken, user, appConfig.mainAccountID, function(err, stripeCustomer) {
                     if (err) {
                         self.log.error('Error creating Stripe customer: ' + err);
                         accountDao.deleteAccountAndArtifacts(account.id(), function(_err, value){
@@ -884,6 +888,25 @@ _.extend(api.prototype, baseApi.prototype, {
         }
         self.log.debug('<< isAuthenticatedSession');
         return resp.send(respObj);
+    },
+
+    setPassword: function(req, resp) {
+        var self = this;
+        self.log.debug('>> setPassword');
+        self.checkPermission(req, self.sc.privs.MODIFY_USER, function (err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                var userId = self.userId(req);
+                var newPassword = req.body.password;
+                userManager.setUserPassword(userId, newPassword, userId, function(err, value){
+                    self.log.debug('<< setPassword');
+                    self.sendResultOrError(resp, err, value, 'Error setting user password');
+                    self.createUserActivity(req, 'SET_PASSWORD', null, {id: userId}, function(){});
+                    return;
+                });
+            }
+        });
     }
 });
 
