@@ -9,7 +9,7 @@
      */
 
     $scope.init = function() {
-      $scope.followModalCheckmarks = [];
+      $scope.followModalCheckmarks = {};
       $scope.trackedAccounts = [];
       $scope.feed = [];
       $scope.feedLengths = {};
@@ -373,8 +373,8 @@
         //$log.debug('account: ' + JSON.stringify(tempAccount));
         //$scope.tempTrackedAccounts[index].favorited = $scope.checkFavExistFn(tempAccount);
         //$scope.followModalCheckmarks.push(false); // TODO: call API
-        $scope.followModalCheckmarks[tempAccount] = false; // TODO: call API
-      });
+        $scope.followModalCheckmarks[tempAccount.socialId] = false; // TODO: call API
+        });
     };
 
     /*
@@ -663,7 +663,7 @@
           //$scope.followModalCheckmarks[follower] = true;
           //$scope.followModalCheckmarks.push(account);
 
-          $scope.followModalCheckmarks[account] = true;
+          $scope.followModalCheckmarks[account.socialId] = true;
         }
         else {
           // TODO: is postReturn.following useful here?
@@ -673,7 +673,7 @@
           //if(index > -1) {
           //  $scope.followModalCheckmarks.splice(index,1);
           //}
-          $scope.followModalCheckmarks[account] = false;
+          $scope.followModalCheckmarks[account.socialId] = false;
         }
       }
       //else {
@@ -690,7 +690,7 @@
      * followTwitterUser(account, follower)
      */
     $scope.followTwitterUser = function(account, follower) {
-      $log.debug('---followTwitterUser, sourceID=' + follower);
+      $log.debug('---followTwitterUser, sourceID=', follower, account.id);
       SocialConfigService.followTwitterUser(account.id, follower, function(postReturn) {
         $log.debug('returned from followTwitterUser(' + JSON.stringify(postReturn) + ')');
         $scope.followTwitterCheck(follower, postReturn, account);
