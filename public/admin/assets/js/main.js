@@ -1,4 +1,4 @@
-var app = angular.module('clipApp', ['clip-two']);
+var app = angular.module('indigenousApp', ['indigenous']);
 app.run(['$rootScope', '$state', '$stateParams',
 function ($rootScope, $state, $stateParams) {
 
