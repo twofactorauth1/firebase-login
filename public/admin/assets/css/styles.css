@@ -429,7 +429,7 @@ h5.over-title {
 }
 @media (min-width: 768px) {
   #topnav.navbar .navbar-header {
-    width: 300px;
+    width: 200px;
   }
 }
 @media (min-width: 992px) {
