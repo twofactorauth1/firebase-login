@@ -16,6 +16,8 @@
      * get the social accounts
      */
 
+
+
     $scope.getAccount = function () {
       AccountService.getAccount(function (account) {
         $scope.account = account;
@@ -37,32 +39,38 @@
               });
             }
           });
-
           $scope.socialAccounts = data.socialAccounts;
+          $scope.checkForIntegration();
           console.log();
         });
       });
     };
 
-    var completedIntegration = ipCookie("socialAccount");
-    if (completedIntegration) {
-      if (ipCookie("socialAccount").redirectTo !== '/account/integrations') {
-        var redirectUrl = ipCookie("socialAccount").redirectTo;
-        ipCookie.remove("socialAccount", {
-          path: "/"
-        });
-        $location.path(redirectUrl);
-      } else {
-        $scope.minRequirements = true;
-        toaster.pop('success', "Integrated Successfully", ipCookie("socialAccount").socialAccount + ' has been added.');
-        ipCookie.remove("socialAccount", {
-          path: "/"
-        });
-        $scope.getAccount();
+    $scope.checkForIntegration = function()
+    {
+      var completedIntegration = ipCookie("socialAccount");
+      if (completedIntegration) {
+        if (completedIntegration.redirectTo !== '/account/integrations') {
+          var redirectUrl = completedIntegration.redirectTo;
+          $location.path(redirectUrl);
+        } else {
+          var _filteredAccount = _.where($scope.socialAccounts, {
+            type: completedIntegration.type
+          });
+          var _count = _filteredAccount.length;
+          if(completedIntegration.accountsCount != _filteredAccount.length)
+          {
+           $scope.minRequirements = true;
+           toaster.pop('success', "Integrated Successfully", completedIntegration.socialAccount + ' has been added.');            
+          }
+        }
       }
-    } else {
-      $scope.getAccount();
-    }
+      ipCookie.remove("socialAccount", {
+        path: "/"
+      });
+    };
+
+    $scope.getAccount();
 
     /*
      * @socialFilter
@@ -121,7 +129,14 @@
     $scope.currentHost = window.location.host;
     $scope.redirectUrl = '/admin/account/integrations';
 
-    $scope.socailRedirect = function (socialAccount) {
+    $scope.socailRedirect = function (socialAccount, type) {
+      //var _count =  $scope.socialAccounts[0].type
+      var _filteredAccount = _.where($scope.socialAccounts, {
+        type: type
+      });
+
+      var _count = _filteredAccount.length;
+
       var account_cookie = ipCookie("socialAccount");
       //Set the amount of time a socialAccount should last.
       var expireTime = new Date();
@@ -130,6 +145,8 @@
         var cookieValue = {
           "socialAccount": socialAccount,
           "redirectTo": '/account/integrations',
+          "accountsCount": _count,
+          "type": type
         };
         ipCookie("socialAccount", cookieValue, {
           expires: expireTime,
@@ -143,6 +160,8 @@
         var cookieValue = {
           "socialAccount": socialAccount,
           "redirectTo": '/account/integrations',
+          "accountsCount": _count,
+          "type": type
         };
         ipCookie("socialAccount", cookieValue, {
           expires: expireTime,
