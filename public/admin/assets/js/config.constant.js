@@ -339,6 +339,12 @@ app.constant('productConstant', {
   }
 });
 
+app.constant('accountConstant', {
+  plan_types: {
+    TRIAL: 'NO_PLAN_ARGUMENT',
+  },
+});
+
 app.constant('userConstant', {
 
   social_types: {
