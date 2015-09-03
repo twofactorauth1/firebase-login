@@ -3246,6 +3246,9 @@
     color: #7f8c8d;
     text-decoration: none;
   }
+  #componentloader .footer-after .container {
+    max-width: 100%;
+  }
   #componentloader .footer-logo {
     margin: -35px 5px 0 0;
     float: right;
