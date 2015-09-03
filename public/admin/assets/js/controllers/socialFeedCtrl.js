@@ -267,8 +267,10 @@
           var matchingPost = _.findWhere(posts, {
             sourceId: data
           });
-          if(matchingPost)
+          if(matchingPost){
             $scope.displayFeed.push(matchingPost);
+            $scope.feedLengths[socialAccountId] = posts.length;
+          }
           $scope.afterPosting();
          })
       });
@@ -285,8 +287,10 @@
           var matchingPost = _.findWhere(posts, {
             sourceId: data.id_str
           });
-          if(matchingPost)
-            $scope.displayFeed.push(matchingPost);
+          if(matchingPost){
+              $scope.displayFeed.push(matchingPost);
+              $scope.feedLengths[socialAccountId] = posts.length;
+            }
           $scope.afterPosting();
          })         
       });
