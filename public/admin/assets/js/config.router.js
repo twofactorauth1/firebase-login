@@ -175,7 +175,8 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         title: 'Products',
         icon: 'ti-layout-media-left-alt',
         ncyBreadcrumb: {
-            label: 'Single Product'
+            label: 'Single Product',
+            parent: 'app.commerce.products'
         },
         resolve: loadSequence('productsDetailCtrl', 'productService', 'assetsService', 'dateRangePicker', 'ngCurrency', 'bootstrap-icon-picker')
     }).state('app.commerce.orders', {
