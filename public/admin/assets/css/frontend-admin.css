@@ -3262,7 +3262,6 @@
     text-align: center;
     padding: 20px 20px 0 20px;
     font-size: 12px;
-    height: 55px;
     display: block;
   }
   #componentloader .footer-after a {
@@ -3272,11 +3271,16 @@
     margin: 0 auto;
     display: block;
   }
-  #componentloader .footer-container {
-    margin-top: 40px;
+  #componentloader .text-right {
+    text-align: center!important;
+  }
+}
+@media only screen and (min-width: 700px) and (max-width: 768px) {
+  #componentloader .copyright {
+    width: 50%;
   }
   #componentloader .powered-by {
-    margin-top: -52px;
+    width: 50%;
   }
 }
 #componentloader div[data-type=single-post] .container {
@@ -6203,4 +6207,9 @@
 }
 #componentloader .cursor-pointer {
   cursor: pointer;
+}
+#componentloader .modal-overflow-content {
+  /* <- this could be deprecated when modal layout is more flexible */
+  max-height: 400px;
+  overflow: auto;
 }

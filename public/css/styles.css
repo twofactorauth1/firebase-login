@@ -3266,7 +3266,6 @@ div[data-type="feature-block"] .component-inner {
     text-align: center;
     padding: 20px 20px 0 20px;
     font-size: 12px;
-    height: 55px;
     display: block;
   }
   .footer-after a {
@@ -3276,11 +3275,16 @@ div[data-type="feature-block"] .component-inner {
     margin: 0 auto;
     display: block;
   }
-  .footer-container {
-    margin-top: 40px;
+  .text-right {
+    text-align: center!important;
+  }
+}
+@media only screen and (min-width: 700px) and (max-width: 768px) {
+  .copyright {
+    width: 50%;
   }
   .powered-by {
-    margin-top: -52px;
+    width: 50%;
   }
 }
 /********** Single Blog ***********/
@@ -6220,4 +6224,9 @@ a.text-light:hover {
 }
 .cursor-pointer {
   cursor: pointer;
+}
+.modal-overflow-content {
+  /* <- this could be deprecated when modal layout is more flexible */
+  max-height: 400px;
+  overflow: auto;
 }
