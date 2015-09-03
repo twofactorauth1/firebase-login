@@ -3230,7 +3230,7 @@ div[data-type="feature-block"] .component-inner {
   color: white;
   height: 53px;
 }
-@media only screen and (min-width: 700px) and (max-width: 1920px) {
+@media only screen and (min-width: 700px) {
   .footer-after {
     background: #292929;
     padding: 20px 0 0 0;
