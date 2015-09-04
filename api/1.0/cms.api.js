@@ -361,6 +361,10 @@ _.extend(api.prototype, baseApi.prototype, {
         if (!component.bg.color) {
             component.bg.color = '#eaeaea';
         }
+
+        if (!component.emailBg) {
+            component.emailBg = '#ffffff';
+        }
         
         self.log.debug('component >>> ', component);
         app.render('emails/base_email', component, function(err, html){

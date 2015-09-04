@@ -9,34 +9,36 @@
                                 <table class="device-width" align="center" width="680" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse;">
                                     <tr>
                                         <td class="wrapper" width="100%" style="padding-left: 20px; padding-right: 20px; padding-top: 45px; padding-bottom: 45px;">
-                                            <table class="device-width" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse;">
-                                                <tr>
-                                                    <td class="device-width" width="100%" style="padding-top: 30px; background-color: #ffffff;">
-                                                        <table class="device-width" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse;">
-                                                            <tr>
-                                                                <td class="device-width" width="100%" style="text-align: center; padding-bottom: 15px; padding-left:20px;padding-right:20px">
-                                                                    <div elem ng-model="component.logo"></div>
-                                                                    <hr>
-                                                                </td>
-                                                            </tr>
-                                                        </table>
-                                                    </td>
-                                                </tr>
-                                            </table>
-                                            <table width="100%" align="center" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse;" ng-if="component.title">
-                                                <tr>
-                                                    <td align="center" width="100%" style="background-color: #eaeaea;">
-                                                        <table class="device-width" align="center" width="680" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse;">
-                                                            <tr>
-                                                                <td class="wrapper" width="640" style="padding-left: 20px; padding-right: 20px; padding-top: 45px; padding-bottom: 45px;">
-                                                                    <div elem ng-model="component.title"></div>
-                                                                </td>
-                                                            </tr>
-                                                        </table>
-                                                    </td>
-                                                </tr>
-                                            </table>
-                                            <div elem ng-model="component.text"></div>
+                                            <div style="background-color: {{component.emailBg || '#ffffff'}};">
+                                                <table class="device-width" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse;">
+                                                    <tr>
+                                                        <td class="device-width" width="100%" style="padding-top: 30px;">
+                                                            <table class="device-width" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse;">
+                                                                <tr>
+                                                                    <td class="device-width" width="100%" style="text-align: center; padding-bottom: 15px; padding-left:20px;padding-right:20px">
+                                                                        <div elem ng-model="component.logo"></div>
+                                                                        <hr>
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                                <table width="100%" align="center" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse;" ng-if="component.title">
+                                                    <tr>
+                                                        <td align="center" width="100%">
+                                                            <table class="device-width" align="center" width="680" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse;">
+                                                                <tr>
+                                                                    <td class="wrapper" width="640" style="padding-left: 20px; padding-right: 20px; padding-top: 45px; padding-bottom: 45px;">
+                                                                        <div elem ng-model="component.title"></div>
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                                <div elem ng-model="component.text"></div>
+                                            </div>
                                         </td>
                                     </tr>
                                 </table>
