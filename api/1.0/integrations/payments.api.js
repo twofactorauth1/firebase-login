@@ -1703,8 +1703,9 @@ _.extend(api.prototype, baseApi.prototype, {
                     var subscriptionId = req.body.subscriptionId;
 
                     stripeDao.getUpcomingInvoice(customerId, subscriptionId, accessToken, function(err, value){
+
                         self.log.debug('<< getUpcomingInvoice');
-                        return self.sendResultOrError(resp, err, value, "Error retrieving upcoming invoice.");
+                        return self.sendResultOrError(resp, err, value, "Error retrieving upcoming invoice.", 404);
                     });
                 });
 
@@ -1720,7 +1721,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var subscriptionId = req.body.subscriptionId;
         stripeDao.getUpcomingInvoice(customerId, subscriptionId, null, function(err, value){
             self.log.debug('<< getMyUpcomingInvoice');
-            return self.sendResultOrError(resp, err, value, "Error retrieving upcoming invoice.");
+            return self.sendResultOrError(resp, err, value, "Error retrieving upcoming invoice.", 404);
         });
     },
 
