@@ -958,10 +958,9 @@
       }
     };
 
-    $scope.slugifyPostHandle = function (title) {
-      if (title) {
-        $scope.newPost.post_url = $filter('slugify')(title);
-      }
+    $scope.slugifyPostHandle = function (title, post) {
+      if (title && post)
+        post.post_url = $filter('slugify')(title);
     };
 
     $scope.newPage = {};
