@@ -358,6 +358,9 @@ _.extend(api.prototype, baseApi.prototype, {
         if(component.text) {
             component.text = component.text.replace('src="//s3.amazonaws', 'src="http://s3.amazonaws');
         }
+        if (!component.bg.color) {
+            component.bg.color = '#eaeaea';
+        }
         
         self.log.debug('component >>> ', component);
         app.render('emails/base_email', component, function(err, html){

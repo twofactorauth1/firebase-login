@@ -594,219 +594,122 @@
     padding: 50px 15px;
   }
 }
-#componentloader .email-v1 #outlook a {
-  padding: 0;
+#componentloader .email-v1 {
+  /* Forces Outlook to display email at 100% width */
+  /* Corrects line-height issues on Outlook */
+  /* Removes unwanted gap with left/right aligned tables */
+  /* Mobile Responsive Styles */
+  /* Using attribute selectors due to media queries issues with Yahoo! Mail */
 }
-#componentloader .email-v1 body {
-  width: 100% !important;
+#componentloader .email-v1 img {
+  border: 0;
+  outline: none;
+  -ms-interpolation-mode: bicubic;
 }
-#componentloader .email-v1 .ReadMsgBody {
-  width: 100%;
+#componentloader .email-v1 a img {
+  border: 0;
 }
 #componentloader .email-v1 .ExternalClass {
   width: 100%;
 }
-#componentloader .email-v1 body {
-  -webkit-text-size-adjust: none;
-}
-#componentloader .email-v1 body {
-  margin: 0;
-  padding: 0;
-}
-#componentloader .email-v1 img {
-  border: 0;
-  height: auto;
+#componentloader .email-v1 .ExternalClass,
+#componentloader .email-v1 .ExternalClass p,
+#componentloader .email-v1 .ExternalClass span,
+#componentloader .email-v1 .ExternalClass font,
+#componentloader .email-v1 .ExternalClass td,
+#componentloader .email-v1 .ExternalClass div {
   line-height: 100%;
-  outline: none;
-  text-decoration: none;
 }
-#componentloader .email-v1 table td {
+#componentloader .email-v1 table,
+#componentloader .email-v1 td {
+  mso-table-lspace: 0pt;
+  mso-table-rspace: 0pt;
   border-collapse: collapse;
 }
-#componentloader .email-v1 .center {
-  text-align: center!important;
-  margin: 0 auto;
-}
-#componentloader .email-v1 #backgroundTable {
-  height: 100% !important;
-  margin: 0;
-  padding: 0;
-  width: 100% !important;
-}
-#componentloader .email-v1 body,
-#componentloader .email-v1 #backgroundTable {
-  background-color: #FAFAFA;
-}
-#componentloader .email-v1 #templateContainer {
-  border: 1px solid #DDDDDD;
-}
-#componentloader .email-v1 h1,
-#componentloader .email-v1 .h1 {
-  color: #202020;
-  display: block;
-  font-family: Arial;
-  font-size: 34px;
-  font-weight: bold;
-  line-height: 100%;
-  margin-top: 0;
-  margin-right: 0;
-  margin-bottom: 10px;
-  margin-left: 0;
-  text-align: left;
-}
-#componentloader .email-v1 h2,
-#componentloader .email-v1 .h2 {
-  color: #202020;
-  display: block;
-  font-family: Arial;
-  font-size: 30px;
-  font-weight: bold;
-  line-height: 100%;
-  margin-top: 0;
-  margin-right: 0;
-  margin-bottom: 10px;
-  margin-left: 0;
-  text-align: left;
-}
-#componentloader .email-v1 h3,
-#componentloader .email-v1 .h3 {
-  color: #202020;
-  display: block;
-  font-family: Arial;
-  font-size: 26px;
-  font-weight: bold;
-  line-height: 100%;
-  margin-top: 0;
-  margin-right: 0;
-  margin-bottom: 10px;
-  margin-left: 0;
-  text-align: left;
-}
-#componentloader .email-v1 h4,
-#componentloader .email-v1 .h4 {
-  color: #202020;
-  display: block;
-  font-family: Arial;
-  font-size: 22px;
-  font-weight: bold;
-  line-height: 100%;
-  margin-top: 0;
-  margin-right: 0;
-  margin-bottom: 10px;
-  margin-left: 0;
-  text-align: left;
-}
-#componentloader .email-v1 .btn {
-  color: white!important;
-  background: #336699;
-  padding: 10px;
-  border-radius: 5px;
-  text-decoration: none!important;
-  margin: 15px auto;
-  max-width: 150px;
-  display: block;
-  text-align: center;
-}
-#componentloader .email-v1 #templateHeader {
-  background-color: #FFFFFF;
-  border-bottom: 0;
-}
-#componentloader .email-v1 .headerContent {
-  line-height: 100%;
-  padding: 15px;
-  background-color: #cfecf5;
-}
-#componentloader .email-v1 .headerContent a:link,
-#componentloader .email-v1 .headerContent a:visited,
-#componentloader .email-v1 .headerContent a .yshortcuts {
-  color: #336699;
-  font-weight: normal;
-  text-decoration: underline;
-}
-#componentloader .email-v1 #headerImage {
-  height: auto;
-  max-width: 600px !important;
-}
-#componentloader .email-v1 #templateContainer,
-#componentloader .email-v1 .bodyContent {
-  background-color: #FFFFFF;
-}
-#componentloader .email-v1 .bodyContent div {
-  color: #505050;
-  font-family: Arial;
-  font-size: 14px;
-  line-height: 150%;
-  text-align: left;
-}
-#componentloader .email-v1 .bodyContent div a:link,
-#componentloader .email-v1 .bodyContent div a:visited,
-#componentloader .email-v1 .bodyContent div a .yshortcuts {
-  color: #336699;
-  font-weight: normal;
-  text-decoration: underline;
-}
-#componentloader .email-v1 .templateButton {
-  -moz-border-radius: 3px;
-  -webkit-border-radius: 3px;
-  background-color: #336699;
-  border: 0;
-  border-collapse: separate !important;
-  border-radius: 3px;
-}
-#componentloader .email-v1 .templateButton,
-#componentloader .email-v1 .templateButton a:link,
-#componentloader .email-v1 .templateButton a:visited,
-#componentloader .email-v1 .templateButton a .yshortcuts {
-  color: #FFFFFF;
-  font-family: Arial;
-  font-size: 15px;
-  font-weight: bold;
-  letter-spacing: -0.5px;
-  line-height: 100%;
-  text-align: center;
-  text-decoration: none;
-}
-#componentloader .email-v1 .bodyContent {
-  padding: 25px;
-}
-#componentloader .email-v1 .bodyContent img {
-  display: inline;
-  height: auto;
-}
-#componentloader .email-v1 #templateFooter {
-  background-color: #FFFFFF;
-  border-top: 0;
-}
-#componentloader .email-v1 .footerContent div {
-  color: #707070;
-  font-family: Arial;
-  font-size: 12px;
-  line-height: 125%;
-  text-align: center;
-}
-#componentloader .email-v1 .footerContent div a:link,
-#componentloader .email-v1 .footerContent div a:visited,
-#componentloader .email-v1 .footerContent div a .yshortcuts {
-  color: #336699;
-  font-weight: normal;
-  text-decoration: underline;
-}
-#componentloader .email-v1 .footerContent img {
-  display: inline;
-}
-#componentloader .email-v1 #utility {
-  background-color: #FFFFFF;
-  border: 0;
-}
-#componentloader .email-v1 #utility div {
-  text-align: center;
-}
-#componentloader .email-v1 #monkeyRewards img {
-  max-width: 190px;
-}
-#componentloader .email-v1 .date {
-  color: #4bafca;
-  text-shadow: 1px 1px 1px #ffffff;
+@media only screen and (max-width: 480px) {
+  #componentloader .email-v1 table[class=device-width],
+  #componentloader .email-v1 td[class=device-width],
+  #componentloader .email-v1 img[class=device-width] {
+    width: 320px !important;
+    height: auto !important;
+  }
+  #componentloader .email-v1 table[class=inner-width],
+  #componentloader .email-v1 td[class=inner-width],
+  #componentloader .email-v1 img[class=inner-width] {
+    width: 240px !important;
+    height: auto !important;
+  }
+  #componentloader .email-v1 table[class=medium-width],
+  #componentloader .email-v1 td[class=medium-width],
+  #componentloader .email-v1 img[class=medium-width] {
+    width: 280px !important;
+    height: auto !important;
+  }
+  #componentloader .email-v1 td[class=hero-1] {
+    width: 320px !important;
+    height: auto !important;
+    background-image: url(img/hero-bg-1.jpg) !important;
+    background-position: center !important;
+    background-size: cover !important;
+    padding-top: 60px !important;
+    padding-bottom: 60px !important;
+  }
+  #componentloader .email-v1 td[class=hero-2] {
+    width: 320px !important;
+    height: auto !important;
+    background-image: url(img/hero-bg-2.jpg) !important;
+    background-position: center !important;
+    background-size: cover !important;
+    padding-top: 60px !important;
+    padding-bottom: 60px !important;
+  }
+  #componentloader .email-v1 td[class=hero-3] {
+    width: 320px !important;
+    height: auto !important;
+    padding-top: 60px !important;
+    padding-bottom: 60px !important;
+  }
+  #componentloader .email-v1 td[class=hero-feature] {
+    padding-bottom: 30px !important;
+  }
+  #componentloader .email-v1 td[class=stack] {
+    display: block !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+  #componentloader .email-v1 td[class=small-push] {
+    padding-top: 30px !important;
+  }
+  #componentloader .email-v1 td[class=wrapper] {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+  #componentloader .email-v1 td[class=logo] {
+    width: 320px !important;
+    height: auto !important;
+    text-align: center !important;
+    padding-bottom: 20px !important;
+  }
+  #componentloader .email-v1 td[class=logo] img {
+    display: inline !important;
+  }
+  #componentloader .email-v1 td[class=center] {
+    width: 240px !important;
+    height: auto !important;
+    text-align: center !important;
+  }
+  #componentloader .email-v1 td[class=head] {
+    display: table-header-group !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+  #componentloader .email-v1 td[class=foot] {
+    display: table-footer-group !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
 }
 #componentloader .editing .features-wrap .feature {
   border: 4px solid rgba(0, 0, 0, 0);
