@@ -85,6 +85,12 @@
 
     $scope.saveSettings = function () {
       $scope.saveLoading = true;
+      if(!$scope.account.subdomain && !$scope.account.domain)
+      {
+        $scope.saveLoading = false;
+        toaster.pop('error', "Subdomain can't be blank");
+        return;
+      }
       AccountService.updateAccount($scope.account, function (data, error) {
         if (error) {
           $scope.saveLoading = false;
