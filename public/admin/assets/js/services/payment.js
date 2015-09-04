@@ -177,6 +177,14 @@
                     });
             };
 
+            this.getStripeSubscription = function(stripeId, subscriptionId, fn) {
+                var apiUrl = baseUrl + ['integrations', 'payments', 'customers', stripeId, 'subscriptions', subscriptionId].join('/');
+                $http.get(apiUrl)
+                  .success(function(data, status, headers, config) {
+                      fn(data);
+                  });
+            };
+
             this.postCreateStripeSubscription = function(stripeId, planId, fn) {
                 var apiUrl = baseUrl + ['integrations', 'payments', 'customers', stripeId, 'subscriptions'].join('/');
                 $http.post(apiUrl, {

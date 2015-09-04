@@ -1,0 +1,59 @@
+<div class="row">
+    <div class="row">
+        <div class="col-xs-6">
+            <div class="mb40"></div>
+            <h4 class="center">Amount Due</h4>
+            <h1 class="center total">${{(upcomingInvoice.amount_due/100).toFixed( 2 )}}</h1>
+        </div>
+        <div class="col-xs-6">
+            <h4>Current Payment:</h4>
+            <span>due {{upcomingInvoice.period_end*1000 | date : 'longDate'}}</span>
+            <!--<h4>Last Payment:</h4>-->
+            <!--<span>recieved 01AUG14</span>-->
+        </div>
+        <div class="col-xs-6">
+            {{subscription.plan.name}} Plan
+        </div>
+    </div>
+    <div class="mb30"></div>
+    <div class="table-responsive summary">
+        <table class="table mb30">
+            <thead>
+            <tr class="info">
+                <th>Item</th>
+                <th>Price</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="item in upcomingInvoice.lines.data">
+                <td>{{item.plan.statement_description}}</td>
+                <td>${{(item.amount/100).toFixed( 2 )}}</td>
+            </tr>
+            <tr>
+                <td>
+                                    <span class="pull-right">
+                                                <h4>Sub-Total</h4>
+                                            </span>
+                </td>
+                <td>
+                    <h4>${{(upcomingInvoice.subtotal/100).toFixed( 2 )}}</h4>
+                </td>
+            </tr>
+            <!--<tr>-->
+            <!--<td><span class="pull-right"><h4>Taxes</h4></span></td>-->
+            <!--<td><h4>3.86</h4></td>-->
+            <!--</tr>-->
+            <tr>
+                <td>
+                                    <span class="pull-right">
+                                                <h4>TOTAL</h4>
+                                            </span>
+                </td>
+                <td>
+                    <h4>${{(upcomingInvoice.total/100).toFixed( 2 )}}</h4>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

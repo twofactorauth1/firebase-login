@@ -1,0 +1,25 @@
+<div class="pricing-table pricing-blue" ng-show="subscription">
+    <ul class="plan plan2">
+        <li class="plan-name">
+            {{::subscription.plan.name || 'All Inclusive' }}
+        </li>
+
+        <li class="plan-price">
+            <h3 class="center">
+                <i class="fa fa-usd fa-1"></i>
+                <span>{{::subscription.plan.amount ? (subscription.plan.amount/100).toFixed(2) : 49}}</span>
+                <span class="price-cents"></span>
+                <span> /{{subscription.plan.interval || 'Month'}}</span>
+            </h3>
+        </li>
+        <li>
+            <strong>Customer</strong> Relationship Manager
+        </li>
+        <li>
+            <strong>Product & Order</strong> Manager
+        </li>
+        <li>
+            <strong>Social</strong> Manager
+        </li>
+    </ul>
+</div>

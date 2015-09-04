@@ -13324,6 +13324,14 @@ div[class^="spacing-"] {
 /* ---------------------------------------------------------------------- */
 /*  Billing
 /* ---------------------------------------------------------------------- */
+.billing .no-pad-lr {
+  padding-left: 0px;
+  padding-right: 0px;
+}
+.billing .vert-center {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
 .view-transaction-modal .paid {
   margin: 0 auto 15px;
   display: block;
