@@ -124,29 +124,30 @@ html
       table(width='100%', align='center', cellpadding='0', cellspacing='0', border='0', style='border-collapse: collapse;')
         tr
           td
-            table(width='100%', align='center', cellpadding='0', cellspacing='0', border='0', style='border-collapse: collapse;')
+            table(width='100%', align='center', cellpadding='0', cellspacing='0', border='0', style='border-collapse: collapse;background-color:'+bg.color+';')
               tr
-                td(align='center', width='100%', style="background-color:"+bg.color+";")
-                  table.device-width(align='center', width='640', cellpadding='0', cellspacing='0', border='0', style='border-collapse: collapse;background-color:'+emailBg+';')
+                td(align='center', width='100%')
+                  table.device-width(align='center', width='640', cellpadding='0', cellspacing='0', border='0', style='border-collapse: collapse;')
                     tr
                       td.wrapper(width='100%', style='padding-left: 20px; padding-right: 20px; padding-top: 45px; padding-bottom: 45px;')
-                        table.device-width(width='640', cellpadding='0', cellspacing='0', border='0', style='border-collapse: collapse;')
-                          tr
-                            td.device-width(width='100%', style='padding-top: 30px;')
-                              table.device-width(width='100%', cellpadding='0', cellspacing='0', border='0', style='border-collapse: collapse;')
-                                tr
-                                  td.device-width(width='100%', style='text-align: center; padding-bottom: 15px; padding-left:20px;padding-right:20px')
-                                    div !{logo}
-                              hr
-                        if title
-                          table.device-width(width='640', align='center', cellpadding='0', cellspacing='0', border='0', style='border-collapse: collapse;', ng-if='component.title')
+                        div(style="background-color:"+emailBg+";")
+                          table.device-width(width='640', cellpadding='0', cellspacing='0', border='0', style='border-collapse: collapse;')
                             tr
-                              td(align='center', width='100%')
-                                table.device-width(align='center', width='100%', cellpadding='0', cellspacing='0', border='0', style='border-collapse: collapse;')
+                              td.device-width(width='100%', style='padding-top: 30px;')
+                                table.device-width(width='100%', cellpadding='0', cellspacing='0', border='0', style='border-collapse: collapse;')
                                   tr
-                                    td.wrapper(width='100%', style='padding-left: 20px; padding-right: 20px; padding-top: 45px; padding-bottom: 45px;')
-                                      div !{title}
-                        !{text}
+                                    td.device-width(width='100%', style='text-align: center; padding-bottom: 15px; padding-left:20px;padding-right:20px')
+                                      div !{logo}
+                                hr
+                          if title
+                            table.device-width(width='640', align='center', cellpadding='0', cellspacing='0', border='0', style='border-collapse: collapse;', ng-if='component.title')
+                              tr
+                                td(align='center', width='100%')
+                                  table.device-width(align='center', width='100%', cellpadding='0', cellspacing='0', border='0', style='border-collapse: collapse;')
+                                    tr
+                                      td.wrapper(width='100%', style='padding-left: 20px; padding-right: 20px; padding-top: 45px; padding-bottom: 45px;')
+                                        div !{title}
+                          !{text}
 
   //- body(leftmargin='0', marginwidth='0', topmargin='0', marginheight='0', offset='0')
   //-   center

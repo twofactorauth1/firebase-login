@@ -240,6 +240,14 @@ module.exports = {
                             return fn(err, null);
                         }
                         var component = email.get('components')[0];
+                        if (!component.bg.color) {
+                            component.bg.color = '#eaeaea';
+                        }
+
+                        if (!component.emailBg) {
+                            component.emailBg = '#ffffff';
+                        }
+
                         component.logo = component.logo.replace('src="//s3.amazonaws', 'src="http://s3.amazonaws');
                         component.text = component.text.replace('src="//s3.amazonaws', 'src="http://s3.amazonaws');
                         component.title = component.title.replace('src="//s3.amazonaws', 'src="http://s3.amazonaws');
