@@ -223,8 +223,8 @@
             toaster.pop('error', "Post URL " + post_data.post_url, "Already exists");
           } else {
             WebsiteService.updatePost($scope.page._id, post_data._id, post_data, function (data) {
-              if (post_data.post_url !== $scope.originalPost.post_url) {
-                angular.copy(post_data, $scope.originalPost);
+              angular.copy(post_data, $scope.originalPost);
+              if (post_data.post_url !== $scope.originalPost.post_url) {               
                 $location.search('posthandle', post_data.post_url);
               }
               $scope.saveLoading = false;
@@ -1153,7 +1153,13 @@
         $scope.isDirty.dirty = true;
       }
       if ($scope.isSinglePost) {
-        if ($scope.blog.post && !angular.equals($scope.originalPost, $scope.blog.post)) {
+        var post_data = angular.copy($scope.blog.post);
+        post_data.post_tags.forEach(function (v, i) {
+          if (v.text) {
+            post_data.post_tags[i] = v.text;
+          }
+        });
+        if (post_data && !angular.equals($scope.originalPost, post_data)) {
           $scope.isDirty.dirty = true;
         }
       }
