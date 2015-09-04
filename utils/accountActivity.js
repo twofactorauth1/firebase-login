@@ -13,7 +13,11 @@ var ns = require('../utils/namespaces'),
     orderManager = require('../orders/order_manager'),
     contactDao = require('../dao/contact.dao'),
     campaignManager = require('../campaign/campaign_manager'),
-    userActivityManager = require('../useractivities/useractivity_manager');
+    userActivityManager = require('../useractivities/useractivity_manager'),
+    userManager = require('../dao/user.manager'),
+    contactDao = require('../dao/contact.dao'),
+    appConfig = require('../configs/app.config');
+
 
 var accountActivity = {
 
@@ -22,7 +26,7 @@ var accountActivity = {
     runReport: function(callback) {
         var self = this;
         var reportAry = [109, 45, 97, 79, 21, 37, 38, 12, 15, 126, 129, 130, 132, 133, 134, 135, 136, 137,
-                            138, 139, 140, 141, 142, 158];
+                            138, 139, 140, 141, 142, 158, 161,169,170,171];
         var activityAry = [];
         async.each(reportAry, function(accountId, cb){
             self.getActivityForAccount(accountId, function(err, activity){
@@ -32,16 +36,38 @@ var accountActivity = {
                 cb();
             });
         }, function done(err){
-            self.log.debug('AccountId,Name,Custom Domain,Signup Date,Trial Days Remaining,Last Activity,Pointed Domain,Pages Created,Posts Created,Social Integrations,Stripe Integration,' +
+            //first, last, email, city, state, country, Day 11, Day 14
+            self.log.debug('AccountId,first,last,email,city,state,country,Name,Custom Domain,Signup Date,Trial Days Remaining,day11,day14,Last Activity,Pointed Domain,Pages Created,Posts Created,Social Integrations,Stripe Integration,' +
                 'Products,Orders,Contacts,Campaigns');
 
             var sortedAry = _.sortBy(activityAry, 'accountId');
+            var csv = "";
             _.each(sortedAry, function(activity){
-                self.log.debug(activity.accountId + ',' + activity.name + ',' + activity.customDomain + ',' + activity.signupDate + ',' +
-                    activity.trialDaysRemaining + ',' + activity.lastActivity + ',' + activity.pointedDomain +',' + activity.pages + ',' + activity.posts +',' +
-                    activity.socialIntegrations + ',' +activity.stripeIntegrated + ',' + activity.products +',' +
-                    activity.orders + ',' + activity.contacts + ',' + activity.campaigns);
+                csv += '\n' + activity.accountId + ',' +
+                    activity.firstName + ',' +
+                    activity.lastName + ',' +
+                    activity.email + ',' +
+                    activity.city + ',' +
+                    activity.state + ',' +
+                    activity.country + ',' +
+                    activity.name + ',' +
+                    activity.customDomain + ',' +
+                    activity.signupDate + ',' +
+                    activity.trialDaysRemaining + ',' +
+                    activity.day11 + ',' +
+                    activity.day14 + ',' +
+                    activity.lastActivity + ',' +
+                    activity.pointedDomain +',' +
+                    activity.pages + ',' +
+                    activity.posts +',' +
+                    activity.socialIntegrations + ',' +
+                    activity.stripeIntegrated + ',' +
+                    activity.products +',' +
+                    activity.orders + ',' +
+                    activity.contacts + ',' +
+                    activity.campaigns;
             });
+            self.log.debug(csv);
             callback();
         });
         //self.getActivityForAccount(109, callback);
@@ -206,7 +232,55 @@ var accountActivity = {
                 } else {
                     activity.pointedDomain = 'N';
                 }
-                cb(null);
+
+                activity.day11 = moment(activity.signupDate).add(11, 'days').format('MM/DD/YYYY');
+                activity.day14 = endDate.format('MM/DD/YYYY');
+                cb(null, account);
+            },
+            function getUserForAccount(account, cb) {
+                userManager.getUserAccounts(account.id(), function(err, users){
+                    if(err) {
+                        self.log.error('Error fetching user accounts:', err);
+                        cb(err);
+                    } else {
+                        //find the non-admin user
+                        var sortedUsers = _.sortBy(users, function(user){return user.id();});
+                        var targetUser = _.last(sortedUsers);
+                        self.log.debug('The target user for account [' + account.id() + '] is [' + targetUser.get('username') + ']' );
+                        cb(null, account, targetUser);
+                    }
+                });
+            },
+            function getContactForAccount(account, user, cb) {
+                contactDao.getContactByEmailAndAccount(user.get('username'), appConfig.mainAccountID, function(err, contact){
+                    if(err) {
+                        self.log.error('Error fetching contacts: ', err);
+                        cb(err);
+                    } else {
+                        self.log.debug('Found this contact', contact);
+                        if(contact) {
+                            self.log.debug('contact name: ' + contact.get('first') + ' ' + contact.get('last'));
+                            activity.firstName = contact.get('first');
+                            activity.lastName = contact.get('last');
+                            try {
+                                var address = contact.get('details')[0].addresses[0];
+                            } catch(exception) {
+                                //whatever
+                            }
+
+                            if(address) {
+                                activity.city = address.city;
+                                activity.state = address.state;
+                                activity.zip = address.zip;
+                                activity.country = address.country;
+                            }
+                        }
+                        self.log.debug('user name: ' + user.get('first') + ' ' + user.get('last'));
+                        activity.email = user.get('username');
+
+                        cb();
+                    }
+                });
             }
         ], function done(err){
             self.log.info('Activity:', activity);

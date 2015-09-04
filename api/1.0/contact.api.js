@@ -666,6 +666,14 @@ _.extend(api.prototype, baseApi.prototype, {
                                                         component.logourl = account.attributes.business.logo;
                                                     }
 
+                                                    if (!component.bg.color) {
+                                                        component.bg.color = '#eaeaea';
+                                                    }
+
+                                                    if (!component.emailBg) {
+                                                        component.emailBg = '#ffffff';
+                                                    }
+
                                                     component.logo = component.logo.replace('src="//', 'src="http://');
 
                                                     component.text = component.text.replace('src="//', 'src="http://').replace(new RegExp('FHEMAIL', 'g'), savedContact.getEmails()[0].email);
