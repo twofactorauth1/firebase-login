@@ -95,6 +95,11 @@
     $scope.activeEditor = null;
     $scope.activateCKeditor = function () {
       CKEDITOR.on("instanceReady", function (ev) {
+
+        if ($scope.isEmail) {
+          //unable to access plugin from ckeditor api
+          angular.element('.cke_button__doksoft_font_awesome').hide();
+        }
         ev.editor.on('key', function () {
           $scope.isDirty.dirty = true;
         });
