@@ -13,7 +13,7 @@
     </div>
     <div class="row  {{isEditing ? 'editing' : ''}} team-member-wrap">
         <div class="col-md-8 col-md-offset-2">
-            <div class="col-md-6 text-center team-member meet-team-height {{isEditing ? 'edit-mode' : ''}}" ng-repeat="teamMember in component.teamMembers">
+            <div ng-class="{'col-md-12':component.teamMembers.length === 1, 'col-md-6':component.teamMembers.length > 1 }" class="text-center team-member meet-team-height {{isEditing ? 'edit-mode' : ''}}" ng-repeat="teamMember in component.teamMembers">
                 <div ng-if="component.teamSettings.profilepic" class="row">
                     <div class="col-md-12 text-center">
                         <img ng-src="{{teamMember.profilepic}}" height="250px" width="250px" class="{{component.imagestyle}} meet-team-image" ng-click="addImageFromMedia(component._id, $index, true)" />

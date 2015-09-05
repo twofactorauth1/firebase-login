@@ -14,7 +14,7 @@
     </div>
     <div class="mb30"></div>
     <div class="row text-center team-member-wrap {{isEditing ? 'editing' : ''}}">
-        <div class="col-sm-6 text-center teamMember meet-team-height" ng-repeat="teamMember in component.teamMembers">
+        <div ng-class="{'col-sm-12':component.teamMembers.length === 1, 'col-sm-6':component.teamMembers.length > 1 }" class="text-center teamMember meet-team-height" ng-repeat="teamMember in component.teamMembers">
             <div class="team-member {{isEditing ? 'edit-mode' : ''}}">
                 <div ng-if="component.teamSettings.profilepic" class="row">
                     <div class="col-md-12 text-center">
