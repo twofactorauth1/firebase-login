@@ -80,9 +80,11 @@
             this.getUpcomingInvoice = function(stripeId, fn) {
                 var apiUrl = baseUrl + ['integrations', 'payments', 'upcomingInvoice'].join('/');
                 $http.get(apiUrl)
-                    .success(function(data, status, headers, config) {
-                        fn(data);
-                    });
+                  .then(function(response){
+                      fn(response.data);
+                  }, function(error) {
+                      console.warn('PaymentsService.getUpcomingInvoice received an error:\n', error);
+                  })
             };
 
             this.getUpcomingInvoiceForCustomer = function(stripeId, fn) {
@@ -179,9 +181,13 @@
 
             this.getStripeSubscription = function(stripeId, subscriptionId, fn) {
                 var apiUrl = baseUrl + ['integrations', 'payments', 'customers', stripeId, 'subscriptions', subscriptionId].join('/');
+
+                console.warn('PaymentService.getStripeSubscription, apiUrl:\n', apiUrl);
                 $http.get(apiUrl)
-                  .success(function(data, status, headers, config) {
-                      fn(data);
+                  .then(function(response) {
+                      fn(response.data);
+                  }, function(err) {
+                      console.warn('An error occurred in PaymentService.getStripeSubscription:\n', err);
                   });
             };
 

@@ -626,9 +626,12 @@ app.constant('JS_REQUIRES', {
     name: 'skeuocard',
     files: ['../js/libs/skeuocard/lib/js/jquery.card.js']
   }, {
-    name: 'angularBootstrapNavTree',
-    files: ['../js/libs/angular-bootstrap-nav-tree/dist/abn_tree_directive.js', '../js/libs/angular-bootstrap-nav-tree/dist/abn_tree.css']
+      name: 'angular-card',
+      files: ['../js/libs/angular-card/src/card.js']
   }, {
+      name: 'angularBootstrapNavTree',
+      files: ['../js/libs/angular-bootstrap-nav-tree/dist/abn_tree_directive.js', '../js/libs/angular-bootstrap-nav-tree/dist/abn_tree.css']
+    }, {
     name: 'angular-ladda',
     files: ['../js/libs/angular-ladda/dist/angular-ladda.min.js']
   }, {

@@ -54,7 +54,8 @@
       "NAVIGATION": "Main Navigation",
       "FEATURES": "Core Features",
       "DOCUMENTATION": "Documentation",
-      "TRIAL_REMAINING": "days left"
+      "TRIAL_REMAINING": "days left",
+      "TRIAL_ENDING": "Trial ending in"
     },
     "search": {
       "PLACEHOLDER": "Search..."

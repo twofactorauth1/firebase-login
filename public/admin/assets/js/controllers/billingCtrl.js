@@ -56,6 +56,7 @@
      */
 
     $scope.updateStripeIdFn = function (billing) {
+      console.log('updateStripeIdFn >>>');
       $scope.currentUser.stripeId = billing.billing.stripeCustomerId;
       $scope.selectPlanView = 'plan';
     };
@@ -143,6 +144,8 @@
      */
 
     $scope.savePlanFn = function (planId) {
+      console.log('savePlanFn >>');
+
       if ($scope.currentUser.stripeId) {
         PaymentService.postSubscribeToIndigenous($scope.currentUser.stripeId, planId, null, $scope.planStatus[planId], function (subscription) {
           $scope.cancelOldSubscriptionsFn();
@@ -192,9 +195,9 @@
           $scope.subscription = subscriptions.data[0];
         });
 
-        PaymentService.getUpcomingInvoice(newValue, function (upcomingInvoice) {
-          $scope.upcomingInvoice = upcomingInvoice;
-        });
+        //PaymentService.getUpcomingInvoice(newValue, function (upcomingInvoice) {
+        //  $scope.upcomingInvoice = upcomingInvoice;
+        //});
 
         var account_cookie = ipCookie("socialAccount");
         if (account_cookie !== undefined) {
@@ -243,6 +246,18 @@
       ToasterService.processPending();
       ToasterService.processHtmlPending();
       $scope.account = account;
+
+      console.warn('BillingCtrl, received account:\n', account);
+
+      PaymentService.getStripeSubscription(
+        account.billing.stripeCustomerId,
+        account.billing.subscriptionId,
+        function(subscription) {
+        $scope.subscription = subscription;
+
+          console.warn('BillingCtrl, received subscription:\n', subscription);
+      });
+
       $scope.currentAccount.membership = account.billing.subscriptionId;
       /*
        * If the account is locked, do not allow state changes away from account.
