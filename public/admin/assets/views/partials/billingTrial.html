@@ -1,6 +1,6 @@
 <div class="row">
     <div class="row">
-        <h1 class="col-xs-12">
+        <h1 class="col-xs-12 text-center">
             <span translate="sidebar.heading.TRIAL_ENDING" class="ng-scope"></span>
             <span> {{::account.trialDaysRemaining}} days</span>
         </h1>
@@ -10,22 +10,19 @@
             <billing-subscription class="row" subscription="subscription"></billing-subscription>
         </div>
         <div class="col-md-6">
-            <!--&lt;!&ndash;<div class="row">&ndash;&gt;-->
-                <!--&lt;!&ndash;<div class="card-wrapper-change"></div>&ndash;&gt;-->
-                <!--&lt;!&ndash;<div class="indigeweb-skeuocard" user='user' update='actionUpdateStripeId' auto-close=true wrapper-div="'card-wrapper-change'"></div>&ndash;&gt;-->
-            <!--&lt;!&ndash;</div>&ndash;&gt;-->
-            <billing-credit-card
-                card="credit.card"
+
+            <!--change-card="credit.onChange"-->
+            <!--clear="credit.onClear"-->
+            <billing-credit-card class="row"
+                card-info="credit.card"
                 card-values="credit.values"
                 card-options="credit.options"
                 card-messages="credit.messages"
-                change-card="credit.onChange"
-                clear="credit.onClear"
                     >
             </billing-credit-card>
-            <!--<div class="row">-->
-                <!--<span class="col-xs-4 col-xs-offset-4 btn btn-warning" ng-click="actionSavePlan()">PAY NOW</span>-->
-            <!--</div>-->
+            <div class="row">
+                <span class="col-xs-4 col-xs-offset-4 btn btn-warning" ng-click="submitPayment()">PAY NOW</span>
+            </div>
         </div>
     </div>
 </div>

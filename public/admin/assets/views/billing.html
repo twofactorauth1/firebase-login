@@ -14,10 +14,10 @@
     <!-- start: YOUR CONTENT HERE -->
     <div ng-if="account.billing.plan==='NO_PLAN_ARGUMENT'">
         <!--action-update-stripe-id="updateStripeIdFn"-->
-        <!--action-save-plan="savePlanFn{plan: plan}"-->
         <billing-trial
                 account="account"
                 subscription="subscription"
+                action-save-plan="savePlanFn"
                 >
         </billing-trial>
     </div>

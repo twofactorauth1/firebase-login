@@ -1,102 +1,38 @@
-<!--<div class="row">-->
-    <!--<div class="col-xs-12">-->
-        <!--<label for="cc_number">Card Number</label>-->
-        <!--<input type="text" name="cc_number" id="cc_number" placeholder="XXXX XXXX XXXX XXXX" maxlength="19" size="19">-->
-    <!--</div>-->
-    <!--<div class="col-xs-12">-->
-        <!--<label for="cc_exp_month">Expiration Month</label>-->
-        <!--<input type="text" name="cc_exp_month" id="cc_exp_month" placeholder="00">-->
-    <!--</div>-->
-    <!--<div class="col-xs-12">-->
-        <!--<label for="cc_exp_year">Expiration Year</label>-->
-        <!--<input type="text" name="cc_exp_year" id="cc_exp_year" placeholder="00">-->
-    <!--</div>-->
-    <!--<div class="col-xs-12">-->
-        <!--<label for="cc_name">Cardholder's Name</label>-->
-        <!--<input type="text" name="cc_name" id="cc_name" placeholder="John Doe">-->
-    <!--</div>-->
-    <!--<div class="col-xs-12">-->
-        <!--<label for="cc_cvc">Card Validation Code</label>-->
-        <!--<input type="text" name="cc_cvc" id="cc_cvc" placeholder="123" maxlength="3" size="3">-->
-    <!--</div>-->
-<!--</div>-->
 
+<div class="row">
+    <form
+        action="#"
+        data-card
+        data-width="500"
+        data-card-container="#card-container"
+        data-values="cardValues"
+        data-options="cardOptions"
+        data-messages="cardMessages"
+            >
 
-<form action="#"
-      data-card
-      data-width="500"
-      data-card-container="#card-container"
-      data-values="cardValues"
-      data-options="cardOptions"
-      data-messages="cardMessages">
-
-    <div>
-        <input placeholder="Card number" type="text" name="CardNumber" card-number data-ng-model="card.number" />
-        <input placeholder="Full name" type="text" name="CardName" card-name data-ng-model="card.name" />
-    </div>
-    <div>
-        <input placeholder="MM / YYYY" type="text" name="CardExpiry" card-expiry data-ng-model="card.expiry" />
-        <input placeholder="CVC" type="text" name="CardCvc" card-cvc data-ng-model="card.cvc" />
-        <input type="button" value="Change card" data-ng-click="changeCard()" />
-        <input type="button" value="Clear" data-ng-click="clear()" />
-    </div>
-
-</form>
-
-
-<!--<div class="payment-signup hidden">-->
-    <!--<div class="inner-page">-->
-        <!--<div class="clearfix mb20"></div>-->
-        <!--<div class="card-wrapper mb20"></div>-->
-        <!--<h4>Payment Info</h4>-->
-        <!--<form name="card-details" action="" class="form-group col-xs-12 mb0 has-feedback">-->
-            <!--<div class="row">-->
-                <!--<div id="card_number" class="form-group small-6 columns col-sm-6">-->
-                    <!--<input placeholder="Card number" type="text" name="number" id="number" ng-blur="" class="form-control input-lg">-->
-                    <!--<span class="glyphicon form-control-feedback"></span>-->
-                    <!--<span class="error help-block" />-->
-                <!--</div>-->
-                <!--<div class="visible-xs mb20"></div>-->
-                <!--<div id="card_name" class="form-group small-6 columns col-sm-6 has-feedback">-->
-                    <!--<input placeholder="Full name" type="text" id="name" name="name" ng-blur="checkCardName()" class="form-control input-lg">-->
-                    <!--<span class="glyphicon form-control-feedback"></span>-->
-                    <!--<span class="error help-block" />-->
-                <!--</div>-->
-            <!--</div>-->
-            <!--<div class="row">-->
-                <!--<div id="card_expiry" class="form-group small-3 columns col-xs-6 has-feedback">-->
-                    <!--<input placeholder="MM/YY" ng-blur="" type="text" id="expiry" name="expiry" class="form-control input-lg">-->
-                    <!--<span class="glyphicon form-control-feedback"></span>-->
-                    <!--<span class="error help-block" />-->
-                <!--</div>-->
-                <!--<div id="card_cvc" class="form-group small-3 columns col-xs-6 has-feedback">-->
-                    <!--<input placeholder="CVC" ng-blur="" type="text" id="cvc" name="cvc" class="form-control input-lg">-->
-                    <!--<span class="glyphicon form-control-feedback"></span>-->
-                    <!--<span class="error help-block" />-->
-                <!--</div>-->
-            <!--</div>-->
-        <!--</form>-->
-        <!--&lt;!&ndash; Coupon DETAILS &ndash;&gt;-->
-        <!--<div class="form-group col-xs-12 has-feedback" ng-class="{'has-error': !couponIsValid && couponChecked && !checkingCoupon, 'has-success': couponIsValid && !checkingCoupon}">-->
-            <!--<input class="form-control input-lg" type="text" ng-change="checkCoupon()" ng-model="newAccount.coupon" placeholder="Coupon Code" ng-model-options="{ debounce: 800 }" />-->
-            <!--<span class="form-control-feedback" ng-class="{'glyphicon glyphicon-remove': !couponIsValid && couponChecked && !checkingCoupon, 'glyphicon glyphicon-ok': couponIsValid, 'fa fa-spinner fa-spin':checkingCoupon}"></span>-->
-            <!--<span class="error help-block" ng-if="!couponIsValid && couponChecked && !checkingCoupon">Invalid Coupon</span>-->
-            <!--<span class="success help-block" ng-if="couponIsValid && couponChecked && !checkingCoupon">Coupon Accepted</span>-->
-        <!--</div>-->
-        <!--<div class="clearfix mb15"></div>-->
+        <div class="form-group">
+            <input class="form-control" placeholder="Card number" type="text" name="CardNumber" card-number data-ng-model="cardInfo.number" />
+        </div>
+        <div class="form-group">
+            <input class="form-control" placeholder="Full name" type="text" name="CardName" card-name data-ng-model="cardInfo.name" />
+        </div>
+        <div class="form-group">
+            <input class="form-control" placeholder="MM / YYYY" type="text" name="CardExpiry" card-expiry data-ng-model="cardInfo.expiry" />
+        </div>
+        <div class="form-group">
+            <input class="form-control" placeholder="CVC" type="text" name="CardCvc" card-cvc data-ng-model="cardInfo.cvc" />
+        </div>
         <!--<div>-->
-            <!--<img class="center" style="display: block;" src="https://s3-us-west-2.amazonaws.com/indigenous-admin/trust-seals-stripe.png">-->
+            <!--<input type="button" value="Change card" data-ng-click="changeCard()" />-->
         <!--</div>-->
-        <!--<div class="clearfix mb30"></div>-->
-        <!--&lt;!&ndash; BUY &ndash;&gt;-->
-        <!--<div class="submit-signup mb10 center">-->
-            <!--<a type="button" style="background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #fb8823), color-stop(1, #f86807));background:-moz-linear-gradient(top, #fb8823 5%, #f86807 100%);background:-webkit-linear-gradient(top, #fb8823 5%, #f86807 100%);background:-o-linear-gradient(top, #fb8823 5%, #f86807 100%);background:-ms-linear-gradient(top, #fb8823 5%, #f86807 100%);background:linear-gradient(to bottom, #fb8823 5%, #f86807 100%);filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#fb8823', endColorstr='#f86807',GradientType=0);background-color:#fbb450;-moz-border-radius:7px;-webkit-border-radius:7px;border-radius:7px;border:1px solid #c97e1c;display:inline-block;color:#ffffff;font-family:arial;font-size:18px;font-weight:normal;font-style:%1;padding:14px 45px;text-decoration:none;text-shadow:1px 1px 0px #cc4b14;" ng-click="createAccountWithoutCC(newAccount)"> BECOME AN INDIGENOUS MEMBER NOW</a>-->
+        <!--<div>-->
+            <!--<input type="button" value="Clear" data-ng-click="clear()" />-->
         <!--</div>-->
-        <!--<p class="center margin-top-10">By clicking this button you agree to our <a href="" type="button" data-toggle="modal" data-target="#terms-of-service">Terms of Service</a>.</p>-->
-        <!--<br>-->
-        <!--<p class="center">* <span ng-if="subscriptionPlans[0].trial_period_days">{{subscriptionPlans[0].trial_period_days}}-day free trial</span> <span ng-if="currentCoupon.created == 1437591986"> with sign-up fee waived, </span> <span ng-if="!currentCoupon.created && paymentFormProduct.product_attributes.stripePlans[0].signup_fee">then a one time charge for $546.95 ($497 + $49.95), then</span> $49.95/month.-->
-            <!--<br> Once payment is processed, there are no refunds and there is no proration.-->
-            <!--<br> For cancellations, please contact our support via chat.</p>-->
-        <!--<div class="clearfix margin-bottom-10"></div>-->
-    <!--</div>-->
-<!--</div>-->
+    </form>
+    <div class="row">
+        <!--HELP! THIS STYLE IS CRAZY!-->
+        <div id="card-container"
+             style="width: 400px; height: 300px; padding-left: 110px; padding-top: 80px; margin-bottom: 50px;"
+                ></div>
+    </div>
+</div>
