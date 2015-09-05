@@ -663,6 +663,99 @@ _.extend(api.prototype, baseApi.prototype, {
                                                     self.log.debug('Using this for data', emailPage.get('_id'));
                                                     self.log.debug('Using this account for data', account);
                                                     self.log.debug('This component:', component);
+
+                                                    //list of possible merge vars and the matching data
+                                                    var mergeTagMap = [
+                                                        {
+                                                            mergeTag: '[URL]',
+                                                            data: account.get('subdomain')+'.indigenous.io'
+                                                        },
+                                                        {
+                                                            mergeTag: '[SUBDOMAIN]',
+                                                            data: account.get('subdomain')
+                                                        },
+                                                        {
+                                                            mergeTag: '[CUSTOMDOMAIN]',
+                                                            data: account.get('customDomain')
+                                                        },
+                                                        {
+                                                            mergeTag: '[BUSINESSNAME]',
+                                                            data: account.get('business').name
+                                                        },
+                                                        {
+                                                            mergeTag: '[BUSINESSLOGO]',
+                                                            data: account.get('business').logo
+                                                        },
+                                                        {
+                                                            mergeTag: '[BUSINESSDESCRIPTION]',
+                                                            data: account.get('business').description
+                                                        },
+                                                        {
+                                                            mergeTag: '[BUSINESSPHONE]',
+                                                            data: account.get('business').phones[0].number
+                                                        },
+                                                        {
+                                                            mergeTag: '[BUSINESSEMAIL]',
+                                                            data: account.get('business').emails[0].email
+                                                        },
+                                                        {
+                                                            mergeTag: '[BUSINESSFULLADDRESS]',
+                                                            data: account.get('business').addresses[0].address + ' ' + account.get('business').addresses[0].address2 + ' ' + account.get('business').addresses[0].city + ' ' + account.get('business').addresses[0].state + ' ' + account.get('business').addresses[0].zip
+                                                        },
+                                                        {
+                                                            mergeTag: '[BUSINESSADDRESS]',
+                                                            data: account.get('business').addresses[0].address
+                                                        },
+                                                        {
+                                                            mergeTag: '[BUSINESSCITY]',
+                                                            data: account.get('business').addresses[0].city
+                                                        },
+                                                        {
+                                                            mergeTag: '[BUSINESSSTATE]',
+                                                            data: account.get('business').addresses[0].state
+                                                        },
+                                                        {
+                                                            mergeTag: '[BUSINESSZIP]',
+                                                            data: account.get('business').addresses[0].zip
+                                                        },
+                                                        {
+                                                            mergeTag: '[TRIALDAYS]',
+                                                            data: account.get('trialDaysRemaining')
+                                                        },
+                                                        {
+                                                            mergeTag: '[FULLNAME]',
+                                                            data: savedContact.get('first') + ' ' + savedContact.get('last')
+                                                        },
+                                                        {
+                                                            mergeTag: '[FIRST]',
+                                                            data: savedContact.get('first')
+                                                        },
+                                                        {
+                                                            mergeTag: '[LAST]',
+                                                            data: savedContact.getEmails()[0].email
+                                                        },
+                                                        {
+                                                            mergeTag: '[EMAIL]',
+                                                            data: savedContact.getEmails()[0].email
+                                                        }
+                                                    ];
+
+                                                    //text regions you want to find mergevars in
+                                                    var textRegions = ['text', 'logo', 'title'];
+
+                                                    var regex;
+                                                    //find each mergevar in editable regions
+                                                    _.each(textRegions, function(region) {
+                                                        _.each(mergeTagMap, function(map) {
+                                                            if (component[region].indexOf(map.mergeTag) > -1) {
+                                                                //replace merge vars with relevant data
+                                                                regex = new RegExp(map.mergeTag.replace('[', '\\[').replace(']', '\\]'), 'g');
+                                                                component[region] = component[region].replace(regex, map.data);
+
+                                                            }
+                                                        });
+                                                    });
+
                                                     if(!component.logourl && account && account.attributes.business) {
                                                         component.logourl = account.attributes.business.logo;
                                                     }
