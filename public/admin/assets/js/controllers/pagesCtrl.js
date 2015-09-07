@@ -153,9 +153,9 @@
         return false;
       }
 
-      if ($scope.createpage.showhomepage) {
-        page.handle = 'index';
-      }
+      // if ($scope.createpage.showhomepage) {
+      //   page.handle = 'index';
+      // }
 
       var pageData = {
         title: page.title,
@@ -185,16 +185,12 @@
             newpage.components = 0;
           }
 
-          if (page.handle === "index") {
-            $scope.createpage.homepage = false;
-            $scope.createpage.showhomepage = false;
-          }
 
           $scope.pages.unshift(newpage);
           $scope.displayedPages.unshift(newpage);
           page.title = "";
           page.handle = "";
-
+          $scope.checkAndSetIndexPage($scope.pages);
           $scope.resetTemplateDetails();
         });
       } else {
@@ -240,22 +236,27 @@
     var repeater;
     $scope.pages = [];
 
+    $scope.checkAndSetIndexPage = function(pages)
+    {
+        var indexExists = _.find(pages, function (page) {
+          return page.handle === 'index';
+        });
+        if (!indexExists) {
+          $scope.createpage.showhomepage = true;
+          $scope.createpage.homepage = true;
+          $scope.createpage.title = 'Home';
+          $scope.createpage.handle = 'index';
+        } else {
+          $scope.createpage.homepage = false;
+        }
+    }
+
     $scope.getPages = function () {
       // $timeout.cancel(repeater);
       WebsiteService.getPages(function (returnedPages) {
         var pages = angular.copy(returnedPages);
         if ($scope.pages.length === 0) {
-          var indexExists = _.find(pages, function (page) {
-            return page.handle === 'index';
-          });
-          if (!indexExists) {
-            $scope.createpage.showhomepage = true;
-            $scope.createpage.homepage = true;
-            $scope.createpage.title = 'Home';
-            $scope.createpage.handle = 'index';
-          } else {
-            $scope.createpage.homepage = false;
-          }
+          $scope.checkAndSetIndexPage(pages);
           $scope.formatPages(pages, function (pagesArr) {
             $scope.pages = pagesArr;
             $scope.orderByFn();
