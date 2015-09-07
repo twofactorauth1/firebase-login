@@ -100,6 +100,8 @@
           //unable to access plugin from ckeditor api
           angular.element('.cke_button__doksoft_font_awesome').hide();
         }
+        else
+          angular.element('.cke_button__doksoft_font_awesome').show();
         ev.editor.on('key', function () {
           $scope.isDirty.dirty = true;
         });
@@ -422,6 +424,7 @@
       }
 
       if (_email) {
+        $scope.isEmail = true;
         $scope.page = _email;
         $scope.components = _email.components;
         $scope.originalComponents = angular.copy($scope.components);
@@ -1217,9 +1220,14 @@
 
     $scope.deletePage = function () {
       angular.element('.modal.in').hide();
+      var _deleteText = "Do you want to delete this page";
+      if($scope.page.handle === 'index')
+      {
+        var _deleteText = "This is home page of the website. Do you want to delete this page";
+      }
       SweetAlert.swal({
         title: "Are you sure?",
-        text: "Do you want to delete this page",
+        text: _deleteText,
         type: "warning",
         showCancelButton: true,
         confirmButtonColor: "#DD6B55",

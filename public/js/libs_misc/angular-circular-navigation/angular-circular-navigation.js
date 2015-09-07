@@ -62,7 +62,7 @@
               _hide = true;
             }
           }
-          else if(scope.component.type && (scope.component.type === 'blog' ||  scope.component.type === 'blog-teaser'))
+          else if(scope.component.type && (scope.component.type === 'navigation' || scope.component.type === 'blog' ||  scope.component.type === 'blog-teaser'))
           {
             if(item.type==="clone")
             {

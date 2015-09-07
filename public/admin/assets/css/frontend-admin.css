@@ -2163,6 +2163,13 @@
   width: inherit;
   bottom: -15px !important;
 }
+#componentloader .testimonials-v2 .slick-dots {
+  width: inherit;
+  bottom: -15px !important;
+}
+#componentloader .testimonials-v2 .testimonial-wrap.editing .slick-dots {
+  margin-bottom: 25px;
+}
 #componentloader .testimonials-v2 .carousel-indicators {
   bottom: 60px;
 }
@@ -3129,7 +3136,7 @@
   color: white;
   height: 53px;
 }
-@media only screen and (min-width: 700px) and (max-width: 1920px) {
+@media only screen and (min-width: 700px) {
   #componentloader .footer-after {
     background: #292929;
     padding: 20px 0 0 0;
@@ -3148,6 +3155,9 @@
   #componentloader .footer-after a:hover {
     color: #7f8c8d;
     text-decoration: none;
+  }
+  #componentloader .footer-after .container {
+    max-width: 100%;
   }
   #componentloader .footer-logo {
     margin: -35px 5px 0 0;
