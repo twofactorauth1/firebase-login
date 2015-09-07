@@ -100,6 +100,8 @@
           //unable to access plugin from ckeditor api
           angular.element('.cke_button__doksoft_font_awesome').hide();
         }
+        else
+          angular.element('.cke_button__doksoft_font_awesome').show();
         ev.editor.on('key', function () {
           $scope.isDirty.dirty = true;
         });
@@ -422,6 +424,7 @@
       }
 
       if (_email) {
+        $scope.isEmail = true;
         $scope.page = _email;
         $scope.components = _email.components;
         $scope.originalComponents = angular.copy($scope.components);
