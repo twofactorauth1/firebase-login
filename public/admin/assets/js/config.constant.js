@@ -601,7 +601,6 @@ app.constant('JS_REQUIRES', {
     'toTrusted': 'assets/js/filters/to_trusted.js',
     'generateURLforLinks': 'assets/js/filters/generateURLforLinks.js',
     'selectedTags': 'assets/js/filters/productTags.js',
-    'slugifyUrl': 'assets/js/filters/slugify.js',
 
     //*** Directives
     'mediaModal': 'assets/js/directives/mediadirective.js',
