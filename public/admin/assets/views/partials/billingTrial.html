@@ -1,5 +1,5 @@
 <div class="row">
-    <div class="row">
+    <div class="row container-fullw bg-white">
         <h1 class="col-xs-12 text-center">
             <span translate="sidebar.heading.TRIAL_ENDING" class="ng-scope"></span>
             <span> {{::account.trialDaysRemaining}} days</span>
@@ -7,21 +7,29 @@
     </div>
     <div class="row">
         <div class="col-md-6">
-            <billing-subscription class="row" subscription="subscription"></billing-subscription>
+            <div class="row container-fullw">
+                <div class="col-xs-12">
+                    <billing-subscription subscription="subscription"></billing-subscription>
+                </div>
+            </div>
         </div>
         <div class="col-md-6">
+            <div class="row container-fullw">
+                <div class="col-xs-12">
 
-            <!--change-card="credit.onChange"-->
-            <!--clear="credit.onClear"-->
-            <billing-credit-card class="row"
-                card-info="credit.card"
-                card-values="credit.values"
-                card-options="credit.options"
-                card-messages="credit.messages"
-                    >
-            </billing-credit-card>
-            <div class="row">
-                <span class="col-xs-4 col-xs-offset-4 btn btn-warning" ng-click="submitPayment()">PAY NOW</span>
+                    <!--change-card="credit.onChange"-->
+                    <!--clear="credit.onClear"-->
+                    <billing-credit-card
+                        card-info="credit.card"
+                        card-values="credit.values"
+                        card-options="credit.options"
+                        card-messages="credit.messages"
+                            >
+                    </billing-credit-card>
+                    <div class="row">
+                        <span class="col-xs-4 col-xs-offset-4 btn btn-lg btn-warning" ng-click="submitPayment()">PAY NOW</span>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

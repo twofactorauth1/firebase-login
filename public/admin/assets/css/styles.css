@@ -13324,6 +13324,12 @@ div[class^="spacing-"] {
 /* ---------------------------------------------------------------------- */
 /*  Billing
 /* ---------------------------------------------------------------------- */
+.billing #card-container {
+  margin-bottom: 30px;
+}
+.billing #card-container .jp-card-container {
+  transform: scale(1) !important;
+}
 .billing .no-pad-lr {
   padding-left: 0px;
   padding-right: 0px;
@@ -13331,6 +13337,9 @@ div[class^="spacing-"] {
 .billing .vert-center {
   padding-top: 10px;
   padding-bottom: 10px;
+}
+.billing .pricing-table {
+  background-color: white;
 }
 .view-transaction-modal .paid {
   margin: 0 auto 15px;
