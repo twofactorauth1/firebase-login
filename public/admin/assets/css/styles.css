@@ -14081,7 +14081,7 @@ tags-input.ti-input-sm .tags .input,
   background-size: cover;
   margin-bottom: 15px;
   max-width: 575px;
-  /* <- image alignment with icons gets distorted at greater width */
+  /* <- image alignment with favicons gets distorted at greater width */
 }
 .sitesettings .favicon-image .pagetitle {
   margin-left: 94px;

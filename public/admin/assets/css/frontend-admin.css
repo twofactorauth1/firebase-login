@@ -2163,6 +2163,13 @@
   width: inherit;
   bottom: -15px !important;
 }
+#componentloader .testimonials-v2 .slick-dots {
+  width: inherit;
+  bottom: -15px !important;
+}
+#componentloader .testimonials-v2 .testimonial-wrap.editing .slick-dots {
+  margin-bottom: 25px;
+}
 #componentloader .testimonials-v2 .carousel-indicators {
   bottom: 60px;
 }

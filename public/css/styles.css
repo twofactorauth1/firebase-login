@@ -2157,6 +2157,13 @@ div[data-type="feature-block"] .component-inner {
   width: inherit;
   bottom: -15px !important;
 }
+.testimonials-v2 .slick-dots {
+  width: inherit;
+  bottom: -15px !important;
+}
+.testimonials-v2 .testimonial-wrap.editing .slick-dots {
+  margin-bottom: 25px;
+}
 .testimonials-v2 .carousel-indicators {
   bottom: 60px;
 }
