@@ -8,6 +8,7 @@
         $scope.itemPerPage = 40;
         $scope.showPages = 15;
         $scope.post_statuses = postConstant.post_status.dp;
+        $scope.post = {};
         $scope.filterpost = {};
         WebsiteService.getPosts(function(posts) {
             var postsArr = [];
