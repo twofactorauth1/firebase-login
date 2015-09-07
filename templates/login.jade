@@ -44,11 +44,17 @@ block content
                 span.input-icon
                   input.form-control.password(type="password", name="password", placeholder="Password")
                   i.fa.fa-lock
-                  a.forgot(href="/forgotpassword")
+                  a.forgot.hidden-xs(href="/forgotpassword")
                     | I forgot my password
               .error #{message}
               .form-actions
-                button.btn.btn-primary.btn-o.btn-wide.pull-right(type="submit", value="Login")
+                p.text-center.visible-xs
+                  a(href="/forgotpassword")
+                    | I forgot my password
+                button.btn.btn-primary.btn-o.btn-wide.pull-right.hidden-xs(type="submit", value="Login")
+                  | Login 
+                  i.fa.fa-arrow-circle-right
+                button.btn.btn-primary.btn-o.btn-block.visible-xs(type="submit", value="Login")
                   | Login 
                   i.fa.fa-arrow-circle-right
               .new-account

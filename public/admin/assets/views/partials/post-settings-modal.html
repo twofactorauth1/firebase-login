@@ -10,7 +10,7 @@
                     </div>
                     <div class="form-group">
                         <label>URL:</label>
-                        <input id="edit-post-url" ng-blur="validateEditPost(blog.post, true)" class="form-control input-lg" type="text" ng-model="blog.post.post_url">
+                        <input id="edit-post-url" ng-change="slugifyPostHandle(blog.post.post_url, blog.post)" ng-blur="validateEditPost(blog.post, true)" class="form-control input-lg" type="text" ng-model="blog.post.post_url">
                     </div>
                     
                     <div class="form-group">

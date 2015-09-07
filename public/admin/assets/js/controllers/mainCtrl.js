@@ -2,8 +2,8 @@
 /**
  * Indigenous Main Controller
  */
-app.controller('AppCtrl', ['$rootScope', '$scope', '$state', '$translate', '$localStorage', '$window', '$document', '$timeout', '$modal', 'cfpLoadingBar', 'UserService', 'AccountService',
-  function ($rootScope, $scope, $state, $translate, $localStorage, $window, $document, $timeout, $modal, cfpLoadingBar, UserService, AccountService) {
+app.controller('AppCtrl', ['$rootScope', '$scope', '$state', '$translate', '$localStorage', '$window', '$document', '$timeout', '$modal', 'cfpLoadingBar', 'UserService', 'AccountService', 'accountConstant',
+  function ($rootScope, $scope, $state, $translate, $localStorage, $window, $document, $timeout, $modal, cfpLoadingBar, UserService, AccountService, accountConstant) {
 
     AccountService.getAccount(function (account) {
       $scope.account = account;

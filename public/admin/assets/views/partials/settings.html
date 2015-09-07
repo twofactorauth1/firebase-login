@@ -124,8 +124,9 @@
                                 <tags-input ng-model="keywords"></tags-input>
                             </div>
                             <div class="form-group">
-                                <label>Footer Link</label>
-                                <span id="helpBlock" class="help-block">Remove the Indigenous Logo from the footer component.</span>
+                                <!-- <label>Footer Link</label> -->
+                                <!-- <span id="helpBlock" class="help-block">Remove the Indigenous Logo from the footer component.</span> -->
+                                <span id="helpBlock" class="help-block">Custom Footer Link</span>
                                 <label class="radio-inline">
                                     <input type="radio" name="footerLink" id="footerLink1" ng-value="false" ng-model="website.settings.footerlink"> Yes
                                 </label>
@@ -133,12 +134,12 @@
                                     <input type="radio" name="footerLink" id="footerLink2" ng-value="true" ng-model="website.settings.footerlink"> No
                                 </label>
                             </div>
-                            <div class="form-group">
-                                <label>Footer Link Text</label>
+                            <div class="form-group" ng-if="!website.settings.footerlink">
+                                <label>Link Text</label>
                                 <input type="text" class="form-control" ng-model="website.settings.footerLinkText" />
                             </div>
-                            <div class="form-group">
-                                <label>Footer Link URL</label>
+                            <div class="form-group" ng-if="!website.settings.footerlink">
+                                <label>Link URL</label>
                                 <input type="text" class="form-control" ng-model="website.settings.footerLinkURL" />
                             </div>
                         </div>

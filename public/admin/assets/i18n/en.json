@@ -53,7 +53,8 @@
     "heading": {
       "NAVIGATION": "Main Navigation",
       "FEATURES": "Core Features",
-      "DOCUMENTATION": "Documentation"
+      "DOCUMENTATION": "Documentation",
+      "TRIAL_REMAINING": "days left"
     },
     "search": {
       "PLACEHOLDER": "Search..."

@@ -489,7 +489,7 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> signUpNews');
         self.log.debug('>> host', req.get("host"));
         //req.get("host")
-
+        
         accountDao.getAccountByHost(req.get("host"), function(err, value) {
             if(err) {
                 self.log.error('Error signing up: ' + err);
@@ -531,6 +531,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 delete req.body.fromEmail;
                 delete req.body.fromName;
                 delete req.body.activity;
+                delete req.body.contact_type;
 
                 contactDao.findMany(query, $$.m.Contact, function(err, list){
                     if(err) {
@@ -665,6 +666,14 @@ _.extend(api.prototype, baseApi.prototype, {
                                                     self.log.debug('This component:', component);
                                                     if(!component.logourl && account && account.attributes.business) {
                                                         component.logourl = account.attributes.business.logo;
+                                                    }
+
+                                                    if (!component.bg.color) {
+                                                        component.bg.color = '#eaeaea';
+                                                    }
+
+                                                    if (!component.emailBg) {
+                                                        component.emailBg = '#ffffff';
                                                     }
 
                                                     component.logo = component.logo.replace('src="//', 'src="http://');

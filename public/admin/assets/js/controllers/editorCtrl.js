@@ -95,6 +95,13 @@
     $scope.activeEditor = null;
     $scope.activateCKeditor = function () {
       CKEDITOR.on("instanceReady", function (ev) {
+
+        if ($scope.isEmail) {
+          //unable to access plugin from ckeditor api
+          angular.element('.cke_button__doksoft_font_awesome').hide();
+        }
+        else
+          angular.element('.cke_button__doksoft_font_awesome').show();
         ev.editor.on('key', function () {
           $scope.isDirty.dirty = true;
         });
@@ -223,8 +230,8 @@
             toaster.pop('error', "Post URL " + post_data.post_url, "Already exists");
           } else {
             WebsiteService.updatePost($scope.page._id, post_data._id, post_data, function (data) {
-              if (post_data.post_url !== $scope.originalPost.post_url) {
-                angular.copy(post_data, $scope.originalPost);
+              angular.copy(post_data, $scope.originalPost);
+              if (post_data.post_url !== $scope.originalPost.post_url) {               
                 $location.search('posthandle', post_data.post_url);
               }
               $scope.saveLoading = false;
@@ -417,6 +424,7 @@
       }
 
       if (_email) {
+        $scope.isEmail = true;
         $scope.page = _email;
         $scope.components = _email.components;
         $scope.originalComponents = angular.copy($scope.components);
@@ -953,10 +961,9 @@
       }
     };
 
-    $scope.slugifyPostHandle = function (title) {
-      if (title) {
-        $scope.newPost.post_url = $filter('slugify')(title);
-      }
+    $scope.slugifyPostHandle = function (title, post) {
+      if (title && post)
+        post.post_url = $filter('slugify')(title);
     };
 
     $scope.newPage = {};
@@ -1153,7 +1160,13 @@
         $scope.isDirty.dirty = true;
       }
       if ($scope.isSinglePost) {
-        if ($scope.blog.post && !angular.equals($scope.originalPost, $scope.blog.post)) {
+        var post_data = angular.copy($scope.blog.post);
+        post_data.post_tags.forEach(function (v, i) {
+          if (v.text) {
+            post_data.post_tags[i] = v.text;
+          }
+        });
+        if (post_data && !angular.equals($scope.originalPost, post_data)) {
           $scope.isDirty.dirty = true;
         }
       }
@@ -1207,9 +1220,14 @@
 
     $scope.deletePage = function () {
       angular.element('.modal.in').hide();
+      var _deleteText = "Do you want to delete this page";
+      if($scope.page.handle === 'index')
+      {
+        var _deleteText = "This is home page of the website. Do you want to delete this page";
+      }
       SweetAlert.swal({
         title: "Are you sure?",
-        text: "Do you want to delete this page",
+        text: _deleteText,
         type: "warning",
         showCancelButton: true,
         confirmButtonColor: "#DD6B55",

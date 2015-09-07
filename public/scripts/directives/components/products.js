@@ -682,6 +682,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
               scope.$apply(function () {
                 if (scope.checkoutModalState === 5) {
                   scope.checkoutModalState = 1;
+                  scope.newContact = {};
                 }
               });
             },0);
