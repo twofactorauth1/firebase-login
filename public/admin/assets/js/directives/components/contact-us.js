@@ -56,7 +56,7 @@ app.directive('contactUsComponent', ['AccountService', 'GeocodeService', '$timeo
 
       scope.checkBusinessAddress = function (fn) {
         AccountService.getAccount(function (account) {
-          if (account.business.addresses.length > -1) {
+          if (account.business.addresses && account.business.addresses.length > -1) {
             scope.component.location = account.business.addresses[0];
             if (fn) {
               fn();
