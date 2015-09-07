@@ -153,9 +153,9 @@
         return false;
       }
 
-      // if ($scope.createpage.showhomepage) {
-      //   page.handle = 'index';
-      // }
+       if ($scope.createpage.homepage) {
+         page.handle = 'index';
+       }
 
       var pageData = {
         title: page.title,
