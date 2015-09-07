@@ -239,177 +239,66 @@ module.exports = {
                             var vars = step.settings.vars || [];
 
                             var emailId = step.settings.emailId;
-                            userDao.getUserByUsername(contact.getEmails()[0].email, function(err, user){
-                                if (user) {
-                                    accountDao.getAccountByID(user.get('accounts')[0].accountId, function(err, userAccount){
-                                        //do something
-                                    });
+                            
+                            emailDao.getEmailById(emailId, function(err, email){
+                                if(err) {
+                                    self.log.error('Error getting email to render: ' + err);
+                                    return fn(err, null);
                                 }
-                            });
-                                emailDao.getEmailById(emailId, function(err, email){
-                                    if(err) {
-                                        self.log.error('Error getting email to render: ' + err);
-                                        return fn(err, null);
-                                    }
-                                    var component = email.get('components')[0];
-                                    if (!component.bg.color) {
-                                        component.bg.color = '#eaeaea';
-                                    }
+                                var component = email.get('components')[0];
+                                if (!component.bg.color) {
+                                    component.bg.color = '#eaeaea';
+                                }
 
-                                    if (!component.emailBg) {
-                                        component.emailBg = '#ffffff';
-                                    }
+                                if (!component.emailBg) {
+                                    component.emailBg = '#ffffff';
+                                }
 
-
-                                    //list of possible merge vars and the matching data
-                                    var mergeTagMap = [
-                                        {
-                                            mergeTag: '[URL]',
-                                            data: account.get('subdomain')+'.indigenous.io'
-                                        },
-                                        {
-                                            mergeTag: '[SUBDOMAIN]',
-                                            data: account.get('subdomain')
-                                        },
-                                        {
-                                            mergeTag: '[CUSTOMDOMAIN]',
-                                            data: account.get('customDomain')
-                                        },
-                                        {
-                                            mergeTag: '[BUSINESSNAME]',
-                                            data: account.get('business').name
-                                        },
-                                        {
-                                            mergeTag: '[BUSINESSLOGO]',
-                                            data: account.get('business').logo
-                                        },
-                                        {
-                                            mergeTag: '[BUSINESSDESCRIPTION]',
-                                            data: account.get('business').description
-                                        },
-                                        {
-                                            mergeTag: '[BUSINESSPHONE]',
-                                            data: account.get('business').phones[0].number
-                                        },
-                                        {
-                                            mergeTag: '[BUSINESSEMAIL]',
-                                            data: account.get('business').emails[0].email
-                                        },
-                                        {
-                                            mergeTag: '[BUSINESSFULLADDRESS]',
-                                            data: account.get('business').addresses[0].address + ' ' + account.get('business').addresses[0].address2 + ' ' + account.get('business').addresses[0].city + ' ' + account.get('business').addresses[0].state + ' ' + account.get('business').addresses[0].zip
-                                        },
-                                        {
-                                            mergeTag: '[BUSINESSADDRESS]',
-                                            data: account.get('business').addresses[0].address
-                                        },
-                                        {
-                                            mergeTag: '[BUSINESSCITY]',
-                                            data: account.get('business').addresses[0].city
-                                        },
-                                        {
-                                            mergeTag: '[BUSINESSSTATE]',
-                                            data: account.get('business').addresses[0].state
-                                        },
-                                        {
-                                            mergeTag: '[BUSINESSZIP]',
-                                            data: account.get('business').addresses[0].zip
-                                        },
-                                        {
-                                            mergeTag: '[TRIALDAYS]',
-                                            data: account.get('trialDaysRemaining')
-                                        },
-                                        {
-                                            mergeTag: '[FULLNAME]',
-                                            data: contact.get('first') + ' ' + contact.get('last')
-                                        },
-                                        {
-                                            mergeTag: '[FIRST]',
-                                            data: contact.get('first')
-                                        },
-                                        {
-                                            mergeTag: '[LAST]',
-                                            data: contact.getEmails()[0].email
-                                        },
-                                        {
-                                            mergeTag: '[EMAIL]',
-                                            data: contact.getEmails()[0].email
-                                        }
-                                    ];
-
-                                    var adminMergeTagMap = [
-                                        {
-                                            mergeTag: '[USERACCOUNTURL]',
-                                            data: userAccount.get('subdomain')+'.indigenous.io'
-                                        }
-                                    ];
-
-                                    //text regions you want to find mergevars in
-                                    var textRegions = ['text', 'logo', 'title'];
-
-                                    var regex;
-                                    //find each mergevar in editable regions
-                                    _.each(textRegions, function(region) {
-                                        _.each(mergeTagMap, function(map) {
-                                            if (component[region].indexOf(map.mergeTag) > -1) {
-                                                //replace merge vars with relevant data
-                                                regex = new RegExp(map.mergeTag.replace('[', '\\[').replace(']', '\\]'), 'g');
-                                                component[region] = component[region].replace(regex, map.data);
-
-                                            }
-                                        });
-                                    });
-
-                                    component.logo = component.logo.replace('src="//s3.amazonaws', 'src="http://s3.amazonaws');
-                                    component.text = component.text.replace('src="//s3.amazonaws', 'src="http://s3.amazonaws');
-                                    component.title = component.title.replace('src="//s3.amazonaws', 'src="http://s3.amazonaws');
-                                    app.render('emails/base_email', component, function(err, html) {
-                                        if (err) {
-                                            self.log.error('error rendering html: ' + err);
-                                            self.log.warn('email will not be sent.');
-                                        } else {
-                                            var campaignId = campaignFlow.get('campaignId');
-                                            var contactId = campaignFlow.get('contactId');
-                                            mandrillHelper.sendCampaignEmail(fromAddress, fromName, toAddress, toName, subject, html, accountId, campaignId, contactId, vars, step.settings, emailId, function(err, value){
+                                component.logo = component.logo.replace('src="//s3.amazonaws', 'src="http://s3.amazonaws');
+                                component.text = component.text.replace('src="//s3.amazonaws', 'src="http://s3.amazonaws');
+                                component.title = component.title.replace('src="//s3.amazonaws', 'src="http://s3.amazonaws');
+                                app.render('emails/base_email', component, function(err, html) {
+                                    if (err) {
+                                        self.log.error('error rendering html: ' + err);
+                                        self.log.warn('email will not be sent.');
+                                    } else {
+                                        var campaignId = campaignFlow.get('campaignId');
+                                        var contactId = campaignFlow.get('contactId');
+                                        mandrillHelper.sendCampaignEmail(fromAddress, fromName, toAddress, toName, subject, html, accountId, campaignId, contactId, vars, step.settings, emailId, function(err, value){
+                                                if(err) {
+                                                    self.log.error('Error sending email: ', err);
+                                                    return fn(err, null);
+                                                }
+                                                campaignFlow.set('lastStep', stepNumber);
+                                                step.executed = new Date();
+                                                campaignDao.saveOrUpdate(campaignFlow, function(err, updatedFlow){
                                                     if(err) {
-                                                        self.log.error('Error sending email: ', err);
+                                                        self.log.error('Error saving campaign flow: ' + err);
                                                         return fn(err, null);
-                                                    }
-                                                    campaignFlow.set('lastStep', stepNumber);
-                                                    step.executed = new Date();
-                                                    campaignDao.saveOrUpdate(campaignFlow, function(err, updatedFlow){
-                                                        if(err) {
-                                                            self.log.error('Error saving campaign flow: ' + err);
-                                                            return fn(err, null);
+                                                    } else {
+                                                        //try to handle the next step:
+                                                        var steps = campaignFlow.get('steps');
+                                                        if(steps.length -1 > stepNumber) {
+                                                            self.handleStep(campaignFlow, stepNumber+1, function(err, value){
+                                                                if(err) {
+                                                                    self.log.error('Error handling campaign step: ' + stepNumber+1 + ": " + err);
+                                                                    self.log.warn('Future step handling issue.  There will be problems with this campaign_flow: ', campaignFlow);
+                                                                    return fn(null, updatedFlow);
+                                                                } else {
+                                                                    self.log.debug('<< handleStep');
+                                                                    return fn(null, updatedFlow);
+                                                                }
+                                                            });
                                                         } else {
-                                                            //try to handle the next step:
-                                                            var steps = campaignFlow.get('steps');
-                                                            if(steps.length -1 > stepNumber) {
-                                                                self.handleStep(campaignFlow, stepNumber+1, function(err, value){
-                                                                    if(err) {
-                                                                        self.log.error('Error handling campaign step: ' + stepNumber+1 + ": " + err);
-                                                                        self.log.warn('Future step handling issue.  There will be problems with this campaign_flow: ', campaignFlow);
-                                                                        return fn(null, updatedFlow);
-                                                                    } else {
-                                                                        self.log.debug('<< handleStep');
-                                                                        return fn(null, updatedFlow);
-                                                                    }
-                                                                });
-                                                            } else {
-                                                                self.log.debug('<< handleStep (no more steps)');
-                                                                return fn(null, updatedFlow);
-                                                            }
+                                                            self.log.debug('<< handleStep (no more steps)');
+                                                            return fn(null, updatedFlow);
                                                         }
-                                                    });
+                                                    }
                                                 });
-                                        }
-                                    });
+                                            });
+                                    }
                                 });
                             });
-
-
-
-
                         }
                     });
                 }
