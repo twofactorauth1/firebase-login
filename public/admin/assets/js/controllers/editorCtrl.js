@@ -1220,9 +1220,14 @@
 
     $scope.deletePage = function () {
       angular.element('.modal.in').hide();
+      var _deleteText = "Do you want to delete this page";
+      if($scope.page.handle === 'index')
+      {
+        var _deleteText = "This is home page of the website. Do you want to delete this page";
+      }
       SweetAlert.swal({
         title: "Are you sure?",
-        text: "Do you want to delete this page",
+        text: _deleteText,
         type: "warning",
         showCancelButton: true,
         confirmButtonColor: "#DD6B55",
