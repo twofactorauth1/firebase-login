@@ -83,6 +83,14 @@ app.directive('contactUsComponent', ['AccountService', 'GeocodeService', '$timeo
               scope.component.location.lon = data.lon;
               scope.reloadMap();
             }
+            else
+              GeocodeService.validateAddress(scope.component.location, function (data, results) {
+                if (data && results.length === 1) {
+                  scope.component.location.lat = results[0].geometry.location.G;
+                  scope.component.location.lon = results[0].geometry.location.K;
+                  scope.reloadMap();
+                } 
+              });
           });
         }
       };
