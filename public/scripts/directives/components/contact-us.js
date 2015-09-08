@@ -1,6 +1,6 @@
 /*global app, moment, angular, window, L*/
 /*jslint unparam:true*/
-app.directive('contactUsComponent', ['customerService', '$timeout', function (customerService, $timeout) {
+app.directive('contactUsComponent', ['geocodeService', '$timeout', function (geocodeService, $timeout) {
   return {
     scope: {
       component: '='
@@ -50,7 +50,7 @@ app.directive('contactUsComponent', ['customerService', '$timeout', function (cu
               scope.reloadMap();
           }, 500);
         } else {
-          customerService.getGeoSearchAddress(scope.contactAddress, function (data) {
+          geocodeService.getGeoSearchAddress(scope.contactAddress, function (data) {
             if (data.lat && data.lon) {
               scope.component.location.lat = data.lat;
               scope.component.location.lon = data.lon;
@@ -58,6 +58,14 @@ app.directive('contactUsComponent', ['customerService', '$timeout', function (cu
                 scope.reloadMap();
               }, 3000);
             }
+            else
+              geocodeService.validateAddress(scope.component.location, function (data, results) {
+                if (data && results.length === 1) {
+                  scope.component.location.lat = results[0].geometry.location.G;
+                  scope.component.location.lon = results[0].geometry.location.K;
+                  scope.reloadMap();
+                } 
+              });
           });
         }
       };
