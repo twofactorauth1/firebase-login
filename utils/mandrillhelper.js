@@ -762,7 +762,7 @@ var mandrillHelper =  {
                             self.log.error('Error user account: ' + err);
                             return fn(err, null);
                         } else if(userAccount === null) {
-                            //cool
+                            _userAccount = null;
                             callback(null);
                         } else {
                             _userAccount = userAccount;
@@ -850,9 +850,6 @@ var mandrillHelper =  {
                 });
 
                 if (fn) {
-                    _account = null;
-                    _contact = null;
-                    _userAccount = null;
                   fn(htmlContent);
                 }
             }
