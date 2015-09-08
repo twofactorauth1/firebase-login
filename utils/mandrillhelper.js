@@ -678,114 +678,133 @@ var mandrillHelper =  {
         });
     },
 
+
+    /**
+     * [_findReplaceMergeTags takes the rendered html from an email, locates any merge tags and replaces with actual data]
+     * @param  {number}   accountId   account id of the user sending the email
+     * @param  {number}   contactId   contact id of the recipient
+     * @param  {string}   htmlContent raw html content being sent
+     * @param  {Function} fn          return function
+     * @return {string}               html merge tags replaced with actual data
+     */
+
     _findReplaceMergeTags : function(accountId, contactId, htmlContent, fn) {
         var self = this;
         //if accountId is 6 then match contactId to user
         accountDao.getAccountByID(accountId, function(err, account){
             contactDao.getById(contactId, $$.m.Contact, function(err, contact){
                 self.log.debug('contact >>> ', contact);
-                self.log.debug('contact.get(details).emails[0].email >>> ', contact.get('details')[0].emails[0].email);
-                userDao.getUserByUsername(contact.get('details')[0].emails[0].email, function(user) {
-                    self.log.debug('user >>> ', user);
-                    //list of possible merge vars and the matching data
-                    var mergeTagMap = [
-                        {
-                            mergeTag: '[URL]',
-                            data: account.get('subdomain')+'.indigenous.io'
-                        },
-                        {
-                            mergeTag: '[SUBDOMAIN]',
-                            data: account.get('subdomain')
-                        },
-                        {
-                            mergeTag: '[CUSTOMDOMAIN]',
-                            data: account.get('customDomain')
-                        },
-                        {
-                            mergeTag: '[BUSINESSNAME]',
-                            data: account.get('business').name
-                        },
-                        {
-                            mergeTag: '[BUSINESSLOGO]',
-                            data: account.get('business').logo
-                        },
-                        {
-                            mergeTag: '[BUSINESSDESCRIPTION]',
-                            data: account.get('business').description
-                        },
-                        {
-                            mergeTag: '[BUSINESSPHONE]',
-                            data: account.get('business').phones[0].number
-                        },
-                        {
-                            mergeTag: '[BUSINESSEMAIL]',
-                            data: account.get('business').emails[0].email
-                        },
-                        {
-                            mergeTag: '[BUSINESSFULLADDRESS]',
-                            data: account.get('business').addresses[0].address + ' ' + account.get('business').addresses[0].address2 + ' ' + account.get('business').addresses[0].city + ' ' + account.get('business').addresses[0].state + ' ' + account.get('business').addresses[0].zip
-                        },
-                        {
-                            mergeTag: '[BUSINESSADDRESS]',
-                            data: account.get('business').addresses[0].address
-                        },
-                        {
-                            mergeTag: '[BUSINESSCITY]',
-                            data: account.get('business').addresses[0].city
-                        },
-                        {
-                            mergeTag: '[BUSINESSSTATE]',
-                            data: account.get('business').addresses[0].state
-                        },
-                        {
-                            mergeTag: '[BUSINESSZIP]',
-                            data: account.get('business').addresses[0].zip
-                        },
-                        {
-                            mergeTag: '[TRIALDAYS]',
-                            data: account.get('trialDaysRemaining')
-                        },
-                        {
-                            mergeTag: '[FULLNAME]',
-                            data: contact.get('first') + ' ' + contact.get('last')
-                        },
-                        {
-                            mergeTag: '[FIRST]',
-                            data: contact.get('first')
-                        },
-                        {
-                            mergeTag: '[LAST]',
-                            data: contact.getEmails()[0].email
-                        },
-                        {
-                            mergeTag: '[EMAIL]',
-                            data: contact.getEmails()[0].email
-                        }
-                    ];
-
+                self.log.debug('(details).emails[0].email >>> ', JSON.stringify(contact.get('details')[0].emails[0].email));
+                userDao.getUserByUsername(contact.get('details')[0].emails[0].email, function(err, user) {
+                    var existingUser;
+                    var existingUserId;
                     if (user) {
-                        var adminMergeTagMap = [
+                        existingUser = user;
+                        existingUserId = existingUser.get('accounts')[0].accountId;
+                    }
+                    accountDao.getAccountByID(existingUserId, function(err, userAccount){
+                        self.log.debug('userAccount >>> ', userAccount);
+
+                        //list of possible merge vars and the matching data
+                        var mergeTagMap = [
                             {
-                                mergeTag: '[USERACCOUNTURL]',
-                                data: user.get('subdomain')+'.indigenous.io'
+                                mergeTag: '[URL]',
+                                data: account.get('subdomain')+'.indigenous.io'
+                            },
+                            {
+                                mergeTag: '[SUBDOMAIN]',
+                                data: account.get('subdomain')
+                            },
+                            {
+                                mergeTag: '[CUSTOMDOMAIN]',
+                                data: account.get('customDomain')
+                            },
+                            {
+                                mergeTag: '[BUSINESSNAME]',
+                                data: account.get('business').name
+                            },
+                            {
+                                mergeTag: '[BUSINESSLOGO]',
+                                data: account.get('business').logo
+                            },
+                            {
+                                mergeTag: '[BUSINESSDESCRIPTION]',
+                                data: account.get('business').description
+                            },
+                            {
+                                mergeTag: '[BUSINESSPHONE]',
+                                data: account.get('business').phones[0].number
+                            },
+                            {
+                                mergeTag: '[BUSINESSEMAIL]',
+                                data: account.get('business').emails[0].email
+                            },
+                            {
+                                mergeTag: '[BUSINESSFULLADDRESS]',
+                                data: account.get('business').addresses[0].address + ' ' + account.get('business').addresses[0].address2 + ' ' + account.get('business').addresses[0].city + ' ' + account.get('business').addresses[0].state + ' ' + account.get('business').addresses[0].zip
+                            },
+                            {
+                                mergeTag: '[BUSINESSADDRESS]',
+                                data: account.get('business').addresses[0].address
+                            },
+                            {
+                                mergeTag: '[BUSINESSCITY]',
+                                data: account.get('business').addresses[0].city
+                            },
+                            {
+                                mergeTag: '[BUSINESSSTATE]',
+                                data: account.get('business').addresses[0].state
+                            },
+                            {
+                                mergeTag: '[BUSINESSZIP]',
+                                data: account.get('business').addresses[0].zip
+                            },
+                            {
+                                mergeTag: '[TRIALDAYS]',
+                                data: account.get('trialDaysRemaining')
+                            },
+                            {
+                                mergeTag: '[FULLNAME]',
+                                data: contact.get('first') + ' ' + contact.get('last')
+                            },
+                            {
+                                mergeTag: '[FIRST]',
+                                data: contact.get('first')
+                            },
+                            {
+                                mergeTag: '[LAST]',
+                                data: contact.getEmails()[0].email
+                            },
+                            {
+                                mergeTag: '[EMAIL]',
+                                data: contact.getEmails()[0].email
                             }
                         ];
-                        mergeTagMap = _.union(mergeTagMap, adminMergeTagMap);
-                    }
 
-                    var regex;
-                    _.each(mergeTagMap, function(map) {
-                        if (htmlContent.indexOf(map.mergeTag) > -1) {
-                            //replace merge vars with relevant data
-                            regex = new RegExp(map.mergeTag.replace('[', '\\[').replace(']', '\\]'), 'g');
-                            htmlContent = htmlContent.replace(regex, map.data);
+                        if (user && userAccount && accountId === 6) {
+                            var adminMergeTagMap = [
+                                {
+                                    mergeTag: '[USERACCOUNTURL]',
+                                    data: userAccount.get('subdomain')+'.indigenous.io'
+                                }
+                            ];
+                            mergeTagMap = _.union(mergeTagMap, adminMergeTagMap);
+                        }
 
+                        var regex;
+                        _.each(mergeTagMap, function(map) {
+                            if (htmlContent.indexOf(map.mergeTag) > -1) {
+                                //replace merge vars with relevant data
+                                regex = new RegExp(map.mergeTag.replace('[', '\\[').replace(']', '\\]'), 'g');
+                                htmlContent = htmlContent.replace(regex, map.data);
+
+                            }
+                        });
+
+                        if (fn) {
+                            fn(htmlContent);
                         }
                     });
-
-                    if (fn) {
-                        fn(htmlContent);
-                    }
                 });
             });
         });

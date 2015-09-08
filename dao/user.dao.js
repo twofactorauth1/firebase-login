@@ -35,7 +35,7 @@ var dao = {
             return fn(null, null);
         }
         var query = { username:username };
-        return this.findOne( query, fn);
+        this.findOne( query, fn);
     },
 
 
