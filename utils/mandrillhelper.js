@@ -16,6 +16,7 @@ var fs = require('fs');
 var contactDao = require('../dao/contact.dao');
 var accountDao = require('../dao/account.dao');
 var userDao = require('../dao/user.dao');
+var async = require('async');
 
 var mandrillHelper =  {
 
@@ -587,6 +588,7 @@ var mandrillHelper =  {
         });
     },
 
+    
     sendMailReplacement : function(from, to, cc, subject, htmlText, text, fn) {
         var self = this;
         self.log = log;
@@ -690,123 +692,177 @@ var mandrillHelper =  {
 
     _findReplaceMergeTags : function(accountId, contactId, htmlContent, fn) {
         var self = this;
-        //if accountId is 6 then match contactId to user
-        accountDao.getAccountByID(accountId, function(err, account){
-            contactDao.getById(contactId, $$.m.Contact, function(err, contact){
-                self.log.debug('contact >>> ', contact);
-                self.log.debug('(details).emails[0].email >>> ', JSON.stringify(contact.get('details')[0].emails[0].email));
-                userDao.getUserByUsername(contact.get('details')[0].emails[0].email, function(err, user) {
-                    var existingUser;
-                    var existingUserId;
-                    if (user) {
-                        existingUser = user;
-                        existingUserId = existingUser.get('accounts')[0].accountId;
-                    }
-                    accountDao.getAccountByID(existingUserId, function(err, userAccount){
-                        self.log.debug('userAccount >>> ', userAccount);
 
-                        //list of possible merge vars and the matching data
-                        var mergeTagMap = [
-                            {
-                                mergeTag: '[URL]',
-                                data: account.get('subdomain')+'.indigenous.io'
-                            },
-                            {
-                                mergeTag: '[SUBDOMAIN]',
-                                data: account.get('subdomain')
-                            },
-                            {
-                                mergeTag: '[CUSTOMDOMAIN]',
-                                data: account.get('customDomain')
-                            },
-                            {
-                                mergeTag: '[BUSINESSNAME]',
-                                data: account.get('business').name
-                            },
-                            {
-                                mergeTag: '[BUSINESSLOGO]',
-                                data: account.get('business').logo
-                            },
-                            {
-                                mergeTag: '[BUSINESSDESCRIPTION]',
-                                data: account.get('business').description
-                            },
-                            {
-                                mergeTag: '[BUSINESSPHONE]',
-                                data: account.get('business').phones[0].number
-                            },
-                            {
-                                mergeTag: '[BUSINESSEMAIL]',
-                                data: account.get('business').emails[0].email
-                            },
-                            {
-                                mergeTag: '[BUSINESSFULLADDRESS]',
-                                data: account.get('business').addresses[0].address + ' ' + account.get('business').addresses[0].address2 + ' ' + account.get('business').addresses[0].city + ' ' + account.get('business').addresses[0].state + ' ' + account.get('business').addresses[0].zip
-                            },
-                            {
-                                mergeTag: '[BUSINESSADDRESS]',
-                                data: account.get('business').addresses[0].address
-                            },
-                            {
-                                mergeTag: '[BUSINESSCITY]',
-                                data: account.get('business').addresses[0].city
-                            },
-                            {
-                                mergeTag: '[BUSINESSSTATE]',
-                                data: account.get('business').addresses[0].state
-                            },
-                            {
-                                mergeTag: '[BUSINESSZIP]',
-                                data: account.get('business').addresses[0].zip
-                            },
-                            {
-                                mergeTag: '[TRIALDAYS]',
-                                data: account.get('trialDaysRemaining')
-                            },
-                            {
-                                mergeTag: '[FULLNAME]',
-                                data: contact.get('first') + ' ' + contact.get('last')
-                            },
-                            {
-                                mergeTag: '[FIRST]',
-                                data: contact.get('first')
-                            },
-                            {
-                                mergeTag: '[LAST]',
-                                data: contact.getEmails()[0].email
-                            },
-                            {
-                                mergeTag: '[EMAIL]',
-                                data: contact.getEmails()[0].email
-                            }
-                        ];
+        var _account = null;
+        var _contact = null;
+        var _userAccount = null;
 
-                        if (user && userAccount && accountId === 6) {
-                            var adminMergeTagMap = [
-                                {
-                                    mergeTag: '[USERACCOUNTURL]',
-                                    data: userAccount.get('subdomain')+'.indigenous.io'
-                                }
-                            ];
-                            mergeTagMap = _.union(mergeTagMap, adminMergeTagMap);
-                        }
-
-                        var regex;
-                        _.each(mergeTagMap, function(map) {
-                            if (htmlContent.indexOf(map.mergeTag) > -1) {
-                                //replace merge vars with relevant data
-                                regex = new RegExp(map.mergeTag.replace('[', '\\[').replace(']', '\\]'), 'g');
-                                htmlContent = htmlContent.replace(regex, map.data);
-
-                            }
-                        });
-
-                        if (fn) {
-                            fn(htmlContent);
+        //validation
+        async.waterfall([
+            function getSendingAccount(callback) {
+                if(accountId) {
+                    accountDao.getAccountByID(accountId, function (err, account) {
+                        if(err) {
+                            self.log.error('Error retrieving account: ' + err);
+                            return fn(err, null);
+                        } else if(account === null) {
+                            _account = null;
+                            callback(null);
+                        } else {
+                            _account = account;
+                            return callback(null);
                         }
                     });
+                } else {
+                    callback(null);
+                }
+            },
+            function getContact(callback) {
+                if(contactId) {
+                    contactDao.getById(contactId, $$.m.Contact, function (err, contact) {
+                        if(err) {
+                            self.log.error('Error retrieving contact: ' + err);
+                            return fn(err, null);
+                        } else if(contact === null) {
+                            _contact = null;
+                            callback(null);
+                        } else {
+                            _contact = contact;
+                            return callback(null);
+                        }
+                    });
+                } else {
+                    callback(null);
+                }
+            },
+            function getUser(callback) {
+                if(accountId === 6 && _contact) {
+                    var primaryEmail = _contact.getPrimaryEmail();
+                    userDao.getUserByUsername(primaryEmail, function (err, user) {
+                        if(err) {
+                            self.log.error('Error retrieving contact: ' + err);
+                            return fn(err, null);
+                        } else if(user === null) {
+                            _user = null;
+                            callback(null);
+                        } else {
+                            _user = user;
+                            return callback(null);
+                        }
+                    });
+                } else {
+                    callback(null);
+                }
+            },
+            function getUserAccount(callback) {
+                if(_user) {
+                    var existingUserId = _user.get('accounts')[0].accountId;
+                    accountDao.getAccountByID(existingUserId, function (err, userAccount) {
+                        if(err) {
+                            self.log.error('Error user account: ' + err);
+                            return fn(err, null);
+                        } else if(userAccount === null) {
+                            //cool
+                            callback(null);
+                        } else {
+                            _userAccount = userAccount;
+                            return callback(null);
+                        }
+                    });
+                } else {
+                    callback(null);
+                }
+            },
+            function mergeTags(callback) {
+                //list of possible merge vars and the matching data
+                var mergeTagMap = [{
+                  mergeTag: '[URL]',
+                  data: _account.get('subdomain') + '.indigenous.io'
+                }, {
+                  mergeTag: '[SUBDOMAIN]',
+                  data: _account.get('subdomain')
+                }, {
+                  mergeTag: '[CUSTOMDOMAIN]',
+                  data: _account.get('customDomain')
+                }, {
+                  mergeTag: '[BUSINESSNAME]',
+                  data: _account.get('business').name
+                }, {
+                  mergeTag: '[BUSINESSLOGO]',
+                  data: _account.get('business').logo
+                }, {
+                  mergeTag: '[BUSINESSDESCRIPTION]',
+                  data: _account.get('business').description
+                }, {
+                  mergeTag: '[BUSINESSPHONE]',
+                  data: _account.get('business').phones[0].number
+                }, {
+                  mergeTag: '[BUSINESSEMAIL]',
+                  data: _account.get('business').emails[0].email
+                }, {
+                  mergeTag: '[BUSINESSFULLADDRESS]',
+                  data: _account.get('business').addresses[0].address + ' ' + _account.get('business').addresses[0].address2 + ' ' + _account.get('business').addresses[0].city + ' ' + _account.get('business').addresses[0].state + ' ' + _account.get('business').addresses[0].zip
+                }, {
+                  mergeTag: '[BUSINESSADDRESS]',
+                  data: _account.get('business').addresses[0].address
+                }, {
+                  mergeTag: '[BUSINESSCITY]',
+                  data: _account.get('business').addresses[0].city
+                }, {
+                  mergeTag: '[BUSINESSSTATE]',
+                  data: _account.get('business').addresses[0].state
+                }, {
+                  mergeTag: '[BUSINESSZIP]',
+                  data: _account.get('business').addresses[0].zip
+                }, {
+                  mergeTag: '[TRIALDAYS]',
+                  data: _account.get('trialDaysRemaining')
+                }, {
+                  mergeTag: '[FULLNAME]',
+                  data: _contact.get('first') + ' ' + _contact.get('last')
+                }, {
+                  mergeTag: '[FIRST]',
+                  data: _contact.get('first')
+                }, {
+                  mergeTag: '[LAST]',
+                  data: _contact.getEmails()[0].email
+                }, {
+                  mergeTag: '[EMAIL]',
+                  data: _contact.getEmails()[0].email
+                }];
+
+                if (_user && _userAccount && accountId === 6) {
+                  var adminMergeTagMap = [{
+                    mergeTag: '[USERACCOUNTURL]',
+                    data: _userAccount.get('subdomain') + '.indigenous.io'
+                  }];
+                  mergeTagMap = _.union(mergeTagMap, adminMergeTagMap);
+                }
+
+                var regex;
+                _.each(mergeTagMap, function (map) {
+                  if (htmlContent.indexOf(map.mergeTag) > -1) {
+                    //replace merge vars with relevant data
+                    regex = new RegExp(map.mergeTag.replace('[', '\\[').replace(']', '\\]'), 'g');
+                    htmlContent = htmlContent.replace(regex, map.data);
+
+                  }
                 });
-            });
+
+                if (fn) {
+                    _account = null;
+                    _contact = null;
+                    _userAccount = null;
+                  fn(htmlContent);
+                }
+            }
+        ], function(err){
+            if(err) {
+                return fn(err);
+            } else {
+                self.log.warn('Unexpected method call');
+                return;
+            }
         });
     }
 
