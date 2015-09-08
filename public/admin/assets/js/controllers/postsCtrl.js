@@ -9,6 +9,7 @@
         $scope.showPages = 15;
         $scope.post_statuses = postConstant.post_status.dp;
         $scope.filterpost = {};
+        $scope.post = {};
         WebsiteService.getPosts(function(posts) {
             var postsArr = [];
             for (var key in posts) {
@@ -85,9 +86,7 @@
             console.log('post ', post);
             if (!post || !post.post_title || post.post_title == '') {
               $scope.postTitleError = true
-            } else {
-              if(!restrict)  
-                post.post_url = $filter('slugify')(post.post_title);
+            } else {              
               $scope.postTitleError = false
             }
             if (!post || !post.post_author || post.post_author == '') {
