@@ -16,6 +16,20 @@ app.controller('DashboardCtrl', ["$scope", "OrderService", "CustomerService", "C
     }
   };
 
+
+  /**********PAGINATION RELATED **********/
+    $scope.curPage = 0;
+    $scope.pageSize = 1000;
+    $scope.numberOfPages = function () {
+      if ($scope.activities)
+        return Math.ceil($scope.activities.length / $scope.pageSize);
+      else
+        return 0;
+    };
+    $scope.changePage = function (page) {
+      $scope.curPage = $scope.curPage + page;
+    }
+
   /*
    * @isSameDateAs
    * - determine if two dates are identical and return boolean

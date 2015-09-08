@@ -1753,7 +1753,7 @@ module.exports = {
         log.debug('>> EmailId', emailId);
         log.debug('>> Title', email.get('title'));
         //validate
-        var nameCheckQuery = {'title': email.get('title'), _id : { $ne: emailId }};
+        var nameCheckQuery = {'title': email.get('title'), _id : { $ne: emailId }, 'accountId': email.get('accountId')};
         emailDao.exists(nameCheckQuery, $$.m.cms.Email, function(err, value){
             if(err) {
                 log.error('Exception thrown checking for uniqueness: ' + err);
