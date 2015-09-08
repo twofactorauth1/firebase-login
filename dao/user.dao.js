@@ -29,10 +29,13 @@ var dao = {
 
 
     getUserByUsername: function(username, fn) {
+        var self = this;
+        self.log.debug('getUserByUsername >>> ', username);
         if (username == null) {
             return fn(null, null);
         }
-        this.findOne( {'_username':username}, fn);
+        var query = { username:username };
+        return this.findOne( query, $$.m.User, fn);
     },
 
 
