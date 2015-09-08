@@ -453,7 +453,7 @@
                     <div class="clearfix"></div>
                     <div ng-if="!componentEditing.customnav" id="reorderNavBarContainer" class="form-group">
                         <ul ng-hide="" ng-sortable="barConfig" class="component-sortable" ng-class="{'dragging': dragging}" ng-model="mainMenu.links" class="nav-bar" data-ng-repeat="mainMenu in website.linkLists track by $index" data-ng-if="mainMenu.handle=='head-menu' ">
-                            <li ng-if="!componentEditing.customnav" data-ng-repeat="link in mainMenu.links" class="margin-bottom-10 fragment">
+                            <li data-ng-repeat="link in mainMenu.links track by $index" class="margin-bottom-10 fragment">
                                 <div class="head-menu-links" data-label="{{link.label}}">
                                     <div class="container-fluid">
                                         <div>
@@ -525,7 +525,7 @@
                         </div>
                         <div ng-if="componentEditing.customnav" id="reorderNavBarContainer" class="form-group">
                             <ul ng-sortable="barConfig" class="component-sortable" ng-model="customMenu.links" ng-class="{'dragging': dragging}" class="nav-bar" data-ng-repeat="customMenu in componentEditing.linkLists track by $index" data-ng-if="customMenu.handle=='head-menu' ">
-                                <li ng-if="componentEditing.customnav" data-ng-repeat="link in customMenu.links" class="margin-bottom-10 fragment">
+                                <li data-ng-repeat="link in customMenu.links track by $index" class="margin-bottom-10 fragment">
                                     <div class="head-menu-links" data-label="{{link.label}}">
                                         <div class="container-fluid">
                                             <div class="col-xs-1">
