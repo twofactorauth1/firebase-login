@@ -1302,6 +1302,7 @@ var dao = {
 
             "accountId" : accountId,
             "title" : "Welcome Aboard",
+            "handle" : "welcome-aboard",
             "type" : "notification",
             "components" : [
                 {
