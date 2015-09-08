@@ -1342,6 +1342,7 @@ var dao = {
 
             "accountId" : accountId,
             "title" : "New Order",
+            "handle" : "new-order",
             "type" : "notification",
             "components" : [
                 {
@@ -1381,6 +1382,7 @@ var dao = {
 
             "accountId" : accountId,
             "title" : "Order Processing",
+            "handle" : "order-processing",
             "type" : "notification",
             "components" : [
                 {
@@ -1420,6 +1422,7 @@ var dao = {
 
             "accountId" : accountId,
             "title" : "Order Completed",
+            "handle" : "order-completed",
             "type" : "notification",
             "components" : [
                 {
@@ -1459,6 +1462,7 @@ var dao = {
 
             "accountId" : accountId,
             "title" : "Order Cancelled",
+            "handle" : "order-cancelled",
             "type" : "notification",
             "components" : [
                 {
@@ -1498,6 +1502,7 @@ var dao = {
 
             "accountId" : accountId,
             "title" : "Customer Invoice",
+            "handle" : "customer-invoice",
             "type" : "notification",
             "components" : [
                 {

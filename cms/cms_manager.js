@@ -379,7 +379,7 @@ module.exports = {
             fn(null, pageAry[0]);
             log.debug('creating screenshots for default pages');
             _.each(pageAry, function(page){
-                if(page.get('handle')) {
+                if(page.get('handle') && page.get('type') != 'notification') {
                     self.updatePageScreenshot(page.id(), function(err, value){
                         if(err) {
                             log.error('Error updating screenshot: ' + err);
