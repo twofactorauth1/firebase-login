@@ -696,6 +696,7 @@ var mandrillHelper =  {
         var _account = null;
         var _contact = null;
         var _userAccount = null;
+        var _user = null;
 
         //validation
         async.waterfall([
@@ -775,6 +776,7 @@ var mandrillHelper =  {
             },
             function mergeTags(callback) {
                 //list of possible merge vars and the matching data
+                var _address = _account.get('business').addresses && _address ? _address : null;
                 var mergeTagMap = [{
                   mergeTag: '[URL]',
                   data: _account.get('subdomain') + '.indigenous.io'
@@ -795,25 +797,25 @@ var mandrillHelper =  {
                   data: _account.get('business').description
                 }, {
                   mergeTag: '[BUSINESSPHONE]',
-                  data: _account.get('business').phones[0].number
+                  data: _account.get('business').phones && _account.get('business').phones[0] ? _account.get('business').phones[0].number : null
                 }, {
                   mergeTag: '[BUSINESSEMAIL]',
-                  data: _account.get('business').emails[0].email
+                  data: _account.get('business').emails && _account.get('business').emails[0] ? _account.get('business').emails[0].email : null
                 }, {
                   mergeTag: '[BUSINESSFULLADDRESS]',
-                  data: _account.get('business').addresses[0].address + ' ' + _account.get('business').addresses[0].address2 + ' ' + _account.get('business').addresses[0].city + ' ' + _account.get('business').addresses[0].state + ' ' + _account.get('business').addresses[0].zip
+                  data: _address ? _address.address + ' ' + _address.address2 + ' ' + _address.city + ' ' + _address.state + ' ' + _address.zip : null
                 }, {
                   mergeTag: '[BUSINESSADDRESS]',
-                  data: _account.get('business').addresses[0].address
+                  data: _address ? _address.address : null 
                 }, {
                   mergeTag: '[BUSINESSCITY]',
-                  data: _account.get('business').addresses[0].city
+                  data: _address ? _address.city : null
                 }, {
                   mergeTag: '[BUSINESSSTATE]',
-                  data: _account.get('business').addresses[0].state
+                  data: _address ? _address.state : null
                 }, {
                   mergeTag: '[BUSINESSZIP]',
-                  data: _account.get('business').addresses[0].zip
+                  data: _address ? _address.zip : null
                 }, {
                   mergeTag: '[TRIALDAYS]',
                   data: _account.get('trialDaysRemaining')
@@ -825,10 +827,10 @@ var mandrillHelper =  {
                   data: _contact.get('first')
                 }, {
                   mergeTag: '[LAST]',
-                  data: _contact.getEmails()[0].email
+                  data: _contact.get('last')
                 }, {
                   mergeTag: '[EMAIL]',
-                  data: _contact.getEmails()[0].email
+                  data: _contact.getEmails() && _contact.getEmails()[0] ? _contact.getEmails()[0].email : null
                 }];
 
                 if (_user && _userAccount && accountId === 6) {
