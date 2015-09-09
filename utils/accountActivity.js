@@ -55,6 +55,7 @@ var accountActivity = {
                     activity.customDomain + ',' +
                     activity.signupDate + ',' +
                     activity.trialDaysRemaining + ',' +
+                    activity.conversionDate + ',' +
                     activity.day11 + ',' +
                     activity.day14 + ',' +
                     activity.lastActivity + ',' +
@@ -236,6 +237,12 @@ var accountActivity = {
 
                 activity.day11 = moment(activity.signupDate).add(11, 'days').format('MM/DD/YYYY');
                 activity.day14 = endDate.format('MM/DD/YYYY');
+                var billing = account.get('billing');
+                if(billing.conversionDate) {
+                    activity.conversionDate = moment(billing.conversionDate).format('MM/DD/YYYY HH:mm');
+                } else {
+                    activity.conversionDate = '';
+                }
                 cb(null, account);
             },
             function getUserForAccount(account, cb) {
