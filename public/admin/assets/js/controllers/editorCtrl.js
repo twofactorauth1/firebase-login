@@ -1221,12 +1221,13 @@
          $scope.setDirty(true);
       }
       if ($scope.isSinglePost) {
-        var post_data = angular.copy($scope.blog.post);
-        post_data.post_tags.forEach(function (v, i) {
-          if (v.text) {
-            post_data.post_tags[i] = v.text;
-          }
-        });
+          var post_data = angular.copy($scope.blog.post);
+          if($scope.originalPost.post_tags && $scope.originalPost.post_tags.length && !angular.isObject($scope.originalPost.post_tags[0]))
+            post_data.post_tags.forEach(function (v, i) {
+              if (v.text) {
+                post_data.post_tags[i] = v.text;
+              }
+            });
         if (post_data && !angular.equals($scope.originalPost, post_data)) {
           $scope.setDirty(true);
         }
