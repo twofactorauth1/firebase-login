@@ -9,13 +9,18 @@ app.directive('contactUsComponent', ['AccountService', 'GeocodeService', '$timeo
     },
     templateUrl: '/components/component-wrap.html',
     link: function (scope, element, attrs) {
-      scope.showInfo = false;
       scope.isEditing = true;
       if (!scope.component.map) {
         scope.component.map = {};
         if (!scope.component.map.zoom) {
           scope.component.map.zoom = 10;
         }
+      }
+      if(!scope.component.custom)
+      {
+        scope.component.custom = {
+          hours: true, address: true
+        };
       }
       function hexToRgb(hex, opacity) {      
         var c;
@@ -54,16 +59,20 @@ app.directive('contactUsComponent', ['AccountService', 'GeocodeService', '$timeo
         }
       };
 
-      scope.checkBusinessAddress = function (fn) {
-        AccountService.getAccount(function (account) {
-          if (account.business.addresses && account.business.addresses.length > -1) {
-            scope.component.location = account.business.addresses[0];
-            if (fn) {
-              fn();
-            }
+      scope.setBusinessDetails = function(is_address, fn)
+      {
+        if(is_address){
+          if (scope.account.business.addresses && scope.account.business.addresses.length > -1) {
+           angular.copy(scope.account.business.addresses[0], scope.component.location);
           }
-        });
-      };
+        }
+        else if (scope.account.business.hours) {
+          angular.copy(scope.account.business.hours, scope.component.hours);
+          var _splitHours = scope.account.business.splitHours;
+          scope.component.splitHours = _splitHours;
+        }
+        fn();
+      }
 
       scope.reloadMap = function()
       {
@@ -100,8 +109,8 @@ app.directive('contactUsComponent', ['AccountService', 'GeocodeService', '$timeo
         scope.map.setCenter(new google.maps.LatLng(51, 0));
       });
       scope.control.refreshMap = function () {
-        if (!scope.component.location.address && !scope.component.location.address2 && !scope.component.location.city && !scope.component.location.state && !scope.component.location.zip) {
-          scope.checkBusinessAddress(function () {
+        if ((!scope.component.location.address && !scope.component.location.address2 && !scope.component.location.city && !scope.component.location.state && !scope.component.location.zip) || !scope.component.custom.address) {
+          scope.setBusinessDetails(true, function () {
               scope.updateContactUsAddress();
           });
         } else {
@@ -109,27 +118,38 @@ app.directive('contactUsComponent', ['AccountService', 'GeocodeService', '$timeo
         }
       };
 
-      scope.control.updateAddressString = function () {
-        scope.contactAddress = scope.stringifyAddress(scope.component.location);
+      scope.control.refreshHours = function () {
+        if (!scope.component.custom.hours)
+          scope.setBusinessDetails(false, function () {
+            console.log("hours refreshed");
+          });
       };
 
       scope.$parent.$watch('ckeditorLoaded', function (newValue, oldValue) {
         if(newValue)
         {
-          if (!scope.component.location.address && !scope.component.location.address2 && !scope.component.location.city && !scope.component.location.state && !scope.component.location.zip) {
-            scope.checkBusinessAddress(function () {
+          AccountService.getAccount(function (account) {
+            scope.account = account;
+            if(!scope.component.custom.hours)
+            {
+              scope.setBusinessDetails(false, function () {
+                console.log("hours refreshed");
+              });
+            }
+            if ((!scope.component.location.address && !scope.component.location.address2 && !scope.component.location.city && !scope.component.location.state && !scope.component.location.zip) || !scope.component.custom.address) {
+            scope.setBusinessDetails(true, function () {
               $timeout(function () {
                 scope.updateContactUsAddress();
               },500);
             });
-        } else {
-          $timeout(function () {
-            scope.updateContactUsAddress();
-          },500);
-        }
+            } else {
+              $timeout(function () {
+                scope.updateContactUsAddress();
+              },500);
+            }
+          });
         }
       })
-
     }
   };
 }]);

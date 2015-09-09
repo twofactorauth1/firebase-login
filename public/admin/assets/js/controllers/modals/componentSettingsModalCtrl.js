@@ -17,7 +17,6 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
   $scope.place = {};
   $scope.place.address = null;
   $scope.errorMapData = false;
-  $scope.showAddress = false;
   $scope.checkIfAddess = false;
   $scope.blogImage = blogImage;
 
@@ -742,6 +741,17 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
     $scope.isDirty.dirty = true;
   };
 
+  $scope.saveContactComponent = function (is_address) {
+    if(is_address){
+      $scope.contactMap.refreshMap();
+      $scope.place.address = GeocodeService.stringifyAddress($scope.componentEditing.location);
+    }
+    else{
+      $scope.contactMap.refreshHours();
+    }
+    $scope.isDirty.dirty = true;
+  };
+
   $scope.spacingArr = [{
     name: 'Top',
     category: 'padding',
@@ -854,6 +864,7 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
 
     if ($scope.componentEditing.type === "contact-us") {
       $scope.hours = hoursConstant;
+
       $scope.place.address = GeocodeService.stringifyAddress($scope.componentEditing.location);
       $scope.originalContactMap = angular.copy($scope.componentEditing.location);
       if ($scope.componentEditing.hours) {

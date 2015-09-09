@@ -135,6 +135,10 @@ var account = $$.m.ModelBase.extend({
         }
     },
 
+    transients: {
+        db: ['trialDaysRemaining']
+    },
+
 
     initialize: function(options) {
         if ($$.u.stringutils.isNullOrEmpty(this.get("token"))) {

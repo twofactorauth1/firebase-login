@@ -37,7 +37,7 @@ script(src='../js/libs/angular-loading-bar/build/loading-bar.min.js')
 // Angular Scroll
 script(src='../js/libs/angular-scroll/angular-scroll.min.js')
 // Angular Scrollify
-script(src='../js/libs/angular-slugify/angular-slugify.js')
+//script(src='../js/libs/angular-slugify/angular-slugify.js')
 // Underscore
 script(src='../js/libs/underscore/underscore-min.js')
 script(src='../js/libs/allmighty-autocomplete/script/autocomplete.js')
@@ -147,8 +147,7 @@ script(type="text/javascript").
 script(src="../js/libs_misc/crypto/hmac-sha256.js")
 script(src="../js/libs_misc/crypto/enc-base64-min.js")
 
-if account._id == 6 && account.accountUrl != 'https://main.indigenous.io'
-
+if environment === 'local' || environment === 'test'
       script(type="text/javascript").
         var hash = CryptoJS.HmacSHA256('#{user.email}', "vZ7kG_bS_S-jnsNq4M2Vxjsa5mZCxOCJM9nezRUQ");
         window.intercomSettings = {
@@ -162,42 +161,39 @@ if account._id == 6 && account.accountUrl != 'https://main.indigenous.io'
 
       script.
           (function(){var w=window;var ic=w.Intercom;if(typeof ic==="function"){ic('reattach_activator');ic('update',intercomSettings);}else{var d=document;var i=function(){i.c(arguments)};i.q=[];i.c=function(args){i.q.push(args)};w.Intercom=i;function l(){var s=d.createElement('script');s.type='text/javascript';s.async=true;s.src='https://widget.intercom.io/widget/';var x=d.getElementsByTagName('script')[0];x.parentNode.insertBefore(s,x);}if(w.attachEvent){w.attachEvent('onload',l);}else{w.addEventListener('load',l,false);}}})()
-
-
-if account._id == 6 && account.accountUrl == 'https://main.indigenous.io'
-
-      script(type="text/javascript").
-          var hash = CryptoJS.HmacSHA256('#{user.email}', "vZ7kG_bS_S-jnsNq4M2Vxjsa5mZCxOCJM9nezRUQ");
-          window.intercomSettings = {
+else
+    script(type="text/javascript").
+        var hash = CryptoJS.HmacSHA256('#{user.email}', "vZ7kG_bS_S-jnsNq4M2Vxjsa5mZCxOCJM9nezRUQ");
+        window.intercomSettings = {
             name: '#{user.first} #{user.last}',
             email: '#{user.email}',
             user_hash: hash.toString(CryptoJS.enc.Hex),
             app_id: "b3st2skm",
             'accountId':#{account._id},
             'userId':#{user._id}
-          };
+        };
 
-      script.
-          (function(){var w=window;var ic=w.Intercom;if(typeof ic==="function"){ic('reattach_activator');ic('update',intercomSettings);}else{var d=document;var i=function(){i.c(arguments)};i.q=[];i.c=function(args){i.q.push(args)};w.Intercom=i;function l(){var s=d.createElement('script');s.type='text/javascript';s.async=true;s.src='https://widget.intercom.io/widget/';var x=d.getElementsByTagName('script')[0];x.parentNode.insertBefore(s,x);}if(w.attachEvent){w.attachEvent('onload',l);}else{w.addEventListener('load',l,false);}}})()
+    script.
+        (function(){var w=window;var ic=w.Intercom;if(typeof ic==="function"){ic('reattach_activator');ic('update',intercomSettings);}else{var d=document;var i=function(){i.c(arguments)};i.q=[];i.c=function(args){i.q.push(args)};w.Intercom=i;function l(){var s=d.createElement('script');s.type='text/javascript';s.async=true;s.src='https://widget.intercom.io/widget/';var x=d.getElementsByTagName('script')[0];x.parentNode.insertBefore(s,x);}if(w.attachEvent){w.attachEvent('onload',l);}else{w.addEventListener('load',l,false);}}})()
 
 
-      // Facebook Conversion Code for Free Trial Sign-ups
-      script.
-          (function() {
-          var _fbq = window._fbq || (window._fbq = []);
-          if (!_fbq.loaded) {
-          var fbds = document.createElement('script');
-          fbds.async = true;
-          fbds.src = '//connect.facebook.net/en_US/fbds.js';
-          var s = document.getElementsByTagName('script')[0];
-          s.parentNode.insertBefore(fbds, s);
-          _fbq.loaded = true;
-          }
-          })();
-          window._fbq = window._fbq || [];
-          window._fbq.push(['track', '6032779610613', {'value':'0.00','currency':'USD'}]);
-      noscript
-          img(height='1', width='1', alt='', style='display:none', src='https://www.facebook.com/tr?ev=6032779610613&cd[value]=0.00&cd[currency]=USD&noscript=1')
+    // Facebook Conversion Code for Free Trial Sign-ups
+    script.
+        (function() {
+            var _fbq = window._fbq || (window._fbq = []);
+            if (!_fbq.loaded) {
+                var fbds = document.createElement('script');
+                fbds.async = true;
+                fbds.src = '//connect.facebook.net/en_US/fbds.js';
+                var s = document.getElementsByTagName('script')[0];
+                s.parentNode.insertBefore(fbds, s);
+                _fbq.loaded = true;
+            }
+        })();
+        window._fbq = window._fbq || [];
+        window._fbq.push(['track', '6032779610613', {'value':'0.00','currency':'USD'}]);
+        noscript
+            img(height='1', width='1', alt='', style='display:none', src='https://www.facebook.com/tr?ev=6032779610613&cd[value]=0.00&cd[currency]=USD&noscript=1')
 
 script(type="text/javascript").
     window.analytics = window.analytics || [], window.analytics.methods = ["identify", "group", "track", "page", "pageview", "alias", "ready", "on", "once", "off", "trackLink", "trackForm", "trackClick", "trackSubmit"], window.analytics.factory = function (t) {

@@ -80,8 +80,8 @@
             <pagination total-items="products.length" items-per-page="component.numtodisplay" ng-model="currentProductPage" ng-change="pageChanged(currentProductPage)"></pagination>
         </div>
         <div ng-if="isEditing && originalProducts && originalProducts.length === 0" class="col-xs-12 center">
-        <span>No product to display.</span>
-            <a ng-click="addProducts()" class="pull-right btn btn-primary btn-lg btn-wide btn-o add-feature"> <i class="fa fa-plus"></i> Add Products</a>
+        <h2 class="margin-bottom-30">No product to display.</h2>
+            <a ng-click="addProducts()" class=" btn btn-primary btn-lg btn-wide btn-o add-feature"> <i class="fa fa-plus"></i> Add Products</a>
         </div>
     </div>
     <button class="btn btn-primary btn-lg btnLaunchCart" ng-click="initializeModalEvents()" data-toggle="modal" data-target="#cart-checkout-modal">

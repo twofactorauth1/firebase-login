@@ -101,7 +101,7 @@
                                                     <td>phone:</td>
                                                     <td>
                                                         <div ng-repeat="phone in customer.details[0].phones  track by $index">
-                                                            {{phone.number}}
+                                                            <a href="tel:{{phone.number}}">{{phone.number}}</a>
                                                             <br>
                                                         </div>
                                                     </td>
