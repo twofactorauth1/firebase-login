@@ -143,6 +143,14 @@ var component = $$.m.ModelBase.extend({
                     show: false
                 },
                 color : "#FFFFFF"
+            },
+
+             /**
+             * Custom fields Hours and Address(If not custom then business details)
+             */
+            custom:{
+                hours: false,
+                address: false
             }
         }
     },
