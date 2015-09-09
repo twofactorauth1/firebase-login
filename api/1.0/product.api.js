@@ -148,7 +148,7 @@ _.extend(api.prototype, baseApi.prototype, {
         if(req.query.limit) {
             limit = parseInt(req.query.limit);
         }
-        productManager.listProducts(accountId, limit, skip, function(err, list){
+        productManager.listActivePublicProducts(accountId, limit, skip, function(err, list){
             self.log.debug('<< listIndigenousProducts');
             self.sendResultOrError(res, err, list, 'Error listing Indigenous products');
         });

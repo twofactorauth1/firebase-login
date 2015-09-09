@@ -276,6 +276,15 @@
       });
     };
 
+    this.cancelPage = function (page, fn) {     
+        var _pages = pagecache.get('pages');
+        if (_pages) {
+          _pages[page.handle] = page;
+          pagecache.put('pages', _pages);
+        }
+        fn(page);
+    }
+
     //page/:id/components/all
     this.updateComponentOrder = function (pageId, componentId, newOrder, fn) {
       var apiUrl = baseUrl + ['cms', 'page', pageId, 'components', componentId, 'order', newOrder].join('/');

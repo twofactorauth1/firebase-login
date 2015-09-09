@@ -453,7 +453,7 @@
                     <div class="clearfix"></div>
                     <div ng-if="!componentEditing.customnav" id="reorderNavBarContainer" class="form-group">
                         <ul ng-hide="" ng-sortable="barConfig" class="component-sortable" ng-class="{'dragging': dragging}" ng-model="mainMenu.links" class="nav-bar" data-ng-repeat="mainMenu in website.linkLists track by $index" data-ng-if="mainMenu.handle=='head-menu' ">
-                            <li ng-if="!componentEditing.customnav" data-ng-repeat="link in mainMenu.links" class="margin-bottom-10 fragment">
+                            <li data-ng-repeat="link in mainMenu.links track by $index" class="margin-bottom-10 fragment">
                                 <div class="head-menu-links" data-label="{{link.label}}">
                                     <div class="container-fluid">
                                         <div>
@@ -525,7 +525,7 @@
                         </div>
                         <div ng-if="componentEditing.customnav" id="reorderNavBarContainer" class="form-group">
                             <ul ng-sortable="barConfig" class="component-sortable" ng-model="customMenu.links" ng-class="{'dragging': dragging}" class="nav-bar" data-ng-repeat="customMenu in componentEditing.linkLists track by $index" data-ng-if="customMenu.handle=='head-menu' ">
-                                <li ng-if="componentEditing.customnav" data-ng-repeat="link in customMenu.links" class="margin-bottom-10 fragment">
+                                <li data-ng-repeat="link in customMenu.links track by $index" class="margin-bottom-10 fragment">
                                     <div class="head-menu-links" data-label="{{link.label}}">
                                         <div class="container-fluid">
                                             <div class="col-xs-1">
@@ -592,7 +592,12 @@
                         <span tooltip-placement="top" tooltip-html-unsafe="Show/hide business hours to contact us component."><i class="fa fa-info-circle" /></span>
                         <switch id="show-hours" ng-model="componentEditing.showHours" class="pull-right" ng-change="saveComponent()"></switch>
                     </div>
-                    <div class="form-group" ng-if="componentEditing.showHours">
+                    <div class="form-group">
+                        <label for="custom-hours">Custom</label>
+                        <span tooltip-placement="top" tooltip-html-unsafe="Show/hide custom hours."><i class="fa fa-info-circle" /></span>
+                        <switch id="custom-hours" ng-model="componentEditing.custom.hours" class="pull-right" ng-change="saveContactComponent(false)"></switch>
+                    </div>
+                    <div class="form-group" ng-if="componentEditing.showHours && componentEditing.custom.hours">
                         <label for="split-hours">Id like to enter two sets of hours for a single day</label>
                         <span tooltip-placement="top" tooltip-html-unsafe="Are your hours split during a single day such as 9-11am and 7-10pm?"><i class="fa fa-info-circle" /></span>
                         <switch id="splitHours" ng-model="componentEditing.splitHours" class="pull-right" ng-change="saveComponent()"></switch>
@@ -606,31 +611,31 @@
                                 <label for="val.day">{{val.day}}:</label>
                             </div>
                             <div class="col-xs-2" id="business_hours_start_{{$index}}">
-                                <select ng-change="validateHours(val, $index)" ng-hide="val.closed" class="chosen-select hour-start-select form-control" ng-model="val.start" ng-options="item for item in hours.HOURS">
+                                <select ng-disabled="!componentEditing.custom.hours" ng-change="validateHours(val, $index)" ng-hide="val.closed" class="chosen-select hour-start-select form-control" ng-model="val.start" ng-options="item for item in hours.HOURS">
                                 </select>
                             </div>
                             <div class="col-xs-2" id="business_hours_end_{{$index}}">
-                                <select ng-hide="val.closed" ng-change="validateHours(val, $index)" class="chosen-select hour-start-select form-control" ng-model="val.end" ng-options="item for item in hours.HOURS">
+                                <select ng-disabled="!componentEditing.custom.hours" ng-hide="val.closed" ng-change="validateHours(val, $index)" class="chosen-select hour-start-select form-control" ng-model="val.end" ng-options="item for item in hours.HOURS">
                                 </select>
                             </div>
                             <label class="pull-left" ng-hide="val.closed" ng-if="val.split" style="margin:10px"> & </label>
                             <div class="col-xs-2" id="business_hours_start2_{{$index}}">
-                                <select ng-change="validateHours(val, $index)" ng-hide="val.closed" ng-if="val.split" class="chosen-select hour-start-select form-control" ng-model="val.start2" ng-options="item for item in hours.HOURS">
+                                <select ng-disabled="!componentEditing.custom.hours" ng-change="validateHours(val, $index)" ng-hide="val.closed" ng-if="val.split" class="chosen-select hour-start-select form-control" ng-model="val.start2" ng-options="item for item in hours.HOURS">
                                 </select>
                             </div>
                             <div class="col-xs-2">
-                                <select ng-change="validateHours(val, $index)" ng-if="val.split" ng-hide="val.closed" class="chosen-select hour-start-select form-control" ng-model="val.end2" ng-options="item for item in hours.HOURS">
+                                <select ng-disabled="!componentEditing.custom.hours" ng-change="validateHours(val, $index)" ng-if="val.split" ng-hide="val.closed" class="chosen-select hour-start-select form-control" ng-model="val.end2" ng-options="item for item in hours.HOURS">
                                 </select>
                             </div>
                             <div class="col-xs-5 margin-left-5">
                                 <div class="checkbox clip-check check-primary checkbox-inline">
-                                    <input type="checkbox" id="closed-{{$index}}" ng-change="validateHours(val, $index)" ng-model="val.closed">
+                                    <input ng-disabled="!componentEditing.custom.hours" type="checkbox" id="closed-{{$index}}" ng-change="validateHours(val, $index)" ng-model="val.closed">
                                     <label for="closed-{{$index}}">
                                         Closed
                                     </label>
                                 </div>
                                 <div class="checkbox clip-check check-primary checkbox-inline" ng-hide="val.closed">
-                                    <input type="checkbox" id="split-{{$index}}" ng-change="validateHours(val, $index)" ng-model="val.split">
+                                    <input ng-disabled="!componentEditing.custom.hours" type="checkbox" id="split-{{$index}}" ng-change="validateHours(val, $index)" ng-model="val.split">
                                     <label for="split-{{$index}}">
                                         Split
                                     </label>
@@ -642,16 +647,16 @@
                                 <label for="val.day">{{val.day}}:</label>
                             </div>
                             <div class="col-xs-3" id="business_hours_start_{{$index}}">
-                                <select ng-change="validateHours(val, $index)" ng-hide="val.closed || val.wholeday" class="chosen-select hour-start-select form-control" ng-model="val.start" ng-options="item for item in hours.HOURS">
+                                <select ng-disabled="!componentEditing.custom.hours" ng-change="validateHours(val, $index)" ng-hide="val.closed || val.wholeday" class="chosen-select hour-start-select form-control" ng-model="val.start" ng-options="item for item in hours.HOURS">
                                 </select>
                             </div>
                             <div class="col-xs-3">
-                                <select ng-change="validateHours(val, $index)" ng-hide="val.closed || val.wholeday" class="chosen-select hour-start-select form-control" ng-model="val.end" ng-options="item for item in hours.HOURS">
+                                <select ng-disabled="!componentEditing.custom.hours" ng-change="validateHours(val, $index)" ng-hide="val.closed || val.wholeday" class="chosen-select hour-start-select form-control" ng-model="val.end" ng-options="item for item in hours.HOURS">
                                 </select>
                             </div>
                             <div class="col-xs-3">
                                 <div ng-hide="val.closed" class="checkbox clip-check check-primary checkbox-inline">
-                                    <input type="checkbox" ng-change="val.closed = false;validateHours(val, $index)" id="wholeday-{{$index}}" ng-model="val.wholeday">
+                                    <input ng-disabled="!componentEditing.custom.hours" type="checkbox" ng-change="val.closed = false;validateHours(val, $index)" id="wholeday-{{$index}}" ng-model="val.wholeday">
                                     <label for="wholeday-{{$index}}">
                                         Open 24 hours
                                     </label>
@@ -659,7 +664,7 @@
                             </div>
                             <div class="col-xs-2">
                                 <div class="checkbox clip-check check-primary checkbox-inline">
-                                    <input type="checkbox" id="closed-{{$index}}" ng-change="val.wholeday = false;validateHours(val, $index)" ng-model="val.closed">
+                                    <input ng-disabled="!componentEditing.custom.hours" type="checkbox" id="closed-{{$index}}" ng-change="val.wholeday = false;validateHours(val, $index)" ng-model="val.closed">
                                     <label for="closed-{{$index}}">
                                         Closed
                                     </label>
@@ -674,11 +679,16 @@
                         <span>Address</span>
                     </tab-heading>
                     <div class="form-group">
+                        <label for="custom-address">Custom</label>
+                        <span tooltip-placement="top" tooltip-html-unsafe="Show/hide custom address."><i class="fa fa-info-circle" /></span>
+                        <switch id="custom-address" ng-model="componentEditing.custom.address" class="pull-right" ng-change="showAddress = !componentEditing.custom.address; saveContactComponent(true)"></switch>
+                    </div>
+                    <div ng-if="componentEditing.custom.address" class="form-group">
                         <label for="location-address">Add Address</label>
                         <span tooltip-placement="top" tooltip-html-unsafe="Address Suggestions"><i class="fa fa-info-circle" /></span>
-                        <input id="autocomplete-place" class="form-control" g-places-autocomplete ng-model="place.address">
+                        <input id="autocomplete-place" ng-disabled="!componentEditing.custom.address" class="form-control" g-places-autocomplete ng-model="place.address">
                     </div>
-                    <p>Edit address
+                    <p ng-show="componentEditing.custom.address">Edit address
                         <span class="links cl-effect-1">
                                 <a href="" ng-click="showAddress = true" ng-show="!showAddress">Modify</a>
                             </span>
@@ -690,31 +700,31 @@
                         <div class="form-group col-sm-6" ng-class="{'has-error':errorMapData}">
                             <label for="location-address">Address </label>
                             <span tooltip-placement="top" tooltip-html-unsafe="Contact Us address line 1."><i class="fa fa-info-circle" /></span>
-                            <input id="location-address" ng-blur="updateContactUsAddress()" class="form-control" ng-model="componentEditing.location.address">
+                            <input id="location-address" ng-disabled="!componentEditing.custom.address" ng-blur="updateContactUsAddress()" class="form-control" ng-model="componentEditing.location.address">
                         </div>
                         <div class="form-group col-sm-6" ng-class="{'has-error':errorMapData}">
                             <label for="location-address2">Address2 </label>
                             <span tooltip-placement="top" tooltip-html-unsafe="Contact Us address line 2."><i class="fa fa-info-circle" /></span>
-                            <input id="location-address2" ng-change="checkIfAddess(true)" ng-blur="updateContactUsAddress()" class="form-control" type="text" ng-model="componentEditing.location.address2">
+                            <input id="location-address2" ng-disabled="!componentEditing.custom.address" ng-change="checkIfAddess(true)" ng-blur="updateContactUsAddress()" class="form-control" type="text" ng-model="componentEditing.location.address2">
                         </div>
                     </div>
                     <div ng-if="showAddress" class="row">
                         <div class="form-group col-sm-4" ng-class="{'has-error':errorMapData}">
                             <label for="location-city">City </label>
                             <span tooltip-placement="top" tooltip-html-unsafe="Contact Us City."><i class="fa fa-info-circle" /></span>
-                            <input id="location-city" ng-change="checkIfAddess(true)" ng-blur="updateContactUsAddress()" class="form-control" type="text" ng-model="componentEditing.location.city">
+                            <input id="location-city" ng-disabled="!componentEditing.custom.address" ng-change="checkIfAddess(true)" ng-blur="updateContactUsAddress()" class="form-control" type="text" ng-model="componentEditing.location.city">
                             <div class="error"></div>
                         </div>
                         <div class="form-group col-sm-4" ng-class="{'has-error':errorMapData}">
                             <label for="location-state">State </label>
                             <span tooltip-placement="top" tooltip-html-unsafe="Contact Us State."><i class="fa fa-info-circle" /></span>
-                            <input id="location-state" ng-change="checkIfAddess(true)" ng-blur="updateContactUsAddress()" class="form-control" type="text" ng-model="componentEditing.location.state">
+                            <input id="location-state" ng-disabled="!componentEditing.custom.address" ng-change="checkIfAddess(true)" ng-blur="updateContactUsAddress()" class="form-control" type="text" ng-model="componentEditing.location.state">
                             <div class="error"></div>
                         </div>
                         <div class="form-group col-sm-4" ng-class="{'has-error':errorMapData}">
                             <label for="location-zip">Zip Code </label>
                             <span tooltip-placement="top" tooltip-html-unsafe="Contact Us zip code."><i class="fa fa-info-circle" /></span>
-                            <input id="location-zip" ng-change="checkIfAddess(true)" ng-blur="updateContactUsAddress()" validation-type="zip" indigeweb-validate-form-fields class="form-control" type="text" ng-model="componentEditing.location.zip">
+                            <input id="location-zip" ng-disabled="!componentEditing.custom.address" ng-change="checkIfAddess(true)" ng-blur="updateContactUsAddress()" validation-type="zip" indigeweb-validate-form-fields class="form-control" type="text" ng-model="componentEditing.location.zip">
                         </div>
                     </div>
                     <div class="form-group">

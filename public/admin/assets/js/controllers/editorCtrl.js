@@ -86,6 +86,11 @@
       }]
     };
 
+    $scope.setDirty = function(is_dirty){
+      $scope.isDirty.dirty = is_dirty;
+    }
+
+
     /*
      * @ckeditor:instanceReady
      * -
@@ -103,7 +108,7 @@
         else
           angular.element('.cke_button__doksoft_font_awesome').show();
         ev.editor.on('key', function () {
-          $scope.isDirty.dirty = true;
+          $scope.setDirty(true);
         });
         if (!$scope.activeEditor)
           $scope.activeEditor = ev.editor;
@@ -197,6 +202,59 @@
       });
     }
 
+
+
+    /*
+     * @resetOriginals
+     * -
+     */
+
+    $scope.resetOriginals = function (reverted) {
+      $scope.setDirty(false);
+      if(reverted){         
+          if ($scope.isSinglePost) {            
+            $scope.blog.post = $scope.originalPost;
+          }
+          else {
+            $scope.components = $scope.originalComponents;
+            $scope.page = $scope.originalPage;
+          }
+      }
+      else{
+        if ($scope.isSinglePost) {            
+          $scope.originalPost = $scope.blog.post;
+        }
+        else {
+          $scope.originalComponents = $scope.components;
+          $scope.originalPage = $scope.page;
+        }
+      }        
+    }; 
+
+    $scope.redirectAfterSave = function(redirect_url){
+    if(redirect_url){
+        SweetAlert.swal("Saved!", "Your edits were saved to the page.", "success");
+        window.location = redirect_url;
+      }
+    }
+
+    $scope.redirectWithoutSave = function(redirect_url){
+    $scope.resetOriginals(true);
+    if(redirect_url){
+        if($scope.activePage)
+        {
+          WebsiteService.cancelPage($scope.page, function (data) {
+            SweetAlert.swal("Cancelled", "Your edits were NOT saved.", "error");
+            window.location = redirect_url;
+          });
+        }
+        else{
+          SweetAlert.swal("Cancelled", "Your edits were NOT saved.", "error");
+          window.location = redirect_url;
+        }        
+      }
+    }
+
     /*
      * @savePage
      * -
@@ -207,10 +265,9 @@
     $scope.isDirty = {};
     $scope.blogImage = {};
     $scope.blogImage.featured_image = false;
-    $scope.savePage = function () {
+    $scope.savePage = function (redirect_url) {
       $scope.saveLoading = true;
-      $scope.isDirty.dirty = false;
-
+      $scope.setDirty(false);
       if ($scope.isSinglePost) {
         $scope.validateEditPost($scope.blog.post);
         if (!$scope.editPostValidated) {
@@ -230,12 +287,13 @@
             toaster.pop('error', "Post URL " + post_data.post_url, "Already exists");
           } else {
             WebsiteService.updatePost($scope.page._id, post_data._id, post_data, function (data) {
-              angular.copy(post_data, $scope.originalPost);
               if (post_data.post_url !== $scope.originalPost.post_url) {               
                 $location.search('posthandle', post_data.post_url);
               }
               $scope.saveLoading = false;
+              $scope.resetOriginals(false);
               toaster.pop('success', "Post Saved", "The " + $filter('htmlToPlaintext')($scope.blog.post.post_title) + " post was saved successfully.");
+              $scope.redirectAfterSave(redirect_url);
             });
           }
         })
@@ -244,7 +302,9 @@
         WebsiteService.updateTemplate($scope.page._id, $scope.page, function () {
           console.log('success');
           $scope.saveLoading = false;
+          $scope.resetOriginals(false);
           toaster.pop('success', "Template Saved", "The " + $scope.page.handle + " template was saved successfully.");
+          $scope.redirectAfterSave(redirect_url);
         });
       } else {
         //$scope.validateEditPage($scope.page);
@@ -268,6 +328,7 @@
                   console.log($scope.page.handle, $scope.originalPage.handle);
                   $scope.saveLoading = false;
                   toaster.pop('success', "Page Saved", "The " + $scope.page.handle + " page was saved successfully.");
+                  $scope.redirectAfterSave(redirect_url);
                   //Update linked list
                   $scope.website.linkLists.forEach(function (value, index) {
                     if (value.handle === "head-menu") {
@@ -275,8 +336,8 @@
                         $location.search('pagehandle', $scope.page.handle);
                         $scope.refreshLinkList(value, $scope.originalPage.handle);
                       }
-                      WebsiteService.updateLinkList($scope.website.linkLists[index], $scope.website._id, 'head-menu', function (data) {
-                        $scope.originalPage.handle = $scope.page.handle;
+                      WebsiteService.updateLinkList($scope.website.linkLists[index], $scope.website._id, 'head-menu', function (data) {                        
+                        $scope.resetOriginals(false);
                         console.log('Updated linked list');
                       });
                       if ($scope.page.handle === 'blog' && $scope.blogControl.saveBlogData)
@@ -496,7 +557,7 @@
 
         $scope.components = $scope.page.config.components;
         $scope.originalComponents = angular.copy($scope.components);
-        $scope.originalPage = angular.copy($scope.template);
+        $scope.originalPage = angular.copy($scope.page);
         $scope.activateCKeditor();
         $rootScope.breadcrumbTitle = $scope.page.title || $scope.page.handle;
       });
@@ -1157,17 +1218,18 @@
     $scope.checkForSaveBeforeLeave = function (url, reload) {
       $scope.changesConfirmed = true;
       if ($scope.originalComponents && $scope.components && $scope.originalComponents.length !== $scope.components.length) {
-        $scope.isDirty.dirty = true;
+         $scope.setDirty(true);
       }
       if ($scope.isSinglePost) {
-        var post_data = angular.copy($scope.blog.post);
-        post_data.post_tags.forEach(function (v, i) {
-          if (v.text) {
-            post_data.post_tags[i] = v.text;
-          }
-        });
+          var post_data = angular.copy($scope.blog.post);
+          if($scope.originalPost.post_tags && $scope.originalPost.post_tags.length && !angular.isObject($scope.originalPost.post_tags[0]))
+            post_data.post_tags.forEach(function (v, i) {
+              if (v.text) {
+                post_data.post_tags[i] = v.text;
+              }
+            });
         if (post_data && !angular.equals($scope.originalPost, post_data)) {
-          $scope.isDirty.dirty = true;
+          $scope.setDirty(true);
         }
       }
       var redirectUrl = url;
@@ -1188,18 +1250,17 @@
           closeOnConfirm: false,
           closeOnCancel: false
         }, function (isConfirm) {
-          if (isConfirm) {
-            SweetAlert.swal("Saved!", "Your edits were saved to the page.", "success");
+          if (isConfirm) {            
+            //SweetAlert.swal("Saved!", "Your edits were saved to the page.", "success");
             $scope.redirect = true;
-            $scope.savePage();
-            window.location = redirectUrl;
+            $scope.savePage(redirectUrl);
+            //window.location = redirectUrl;
             if (reload) {
               window.location.reload();
             }
 
           } else {
-            SweetAlert.swal("Cancelled", "Your edits were NOT saved.", "error");
-            window.location = redirectUrl;
+            $scope.redirectWithoutSave(redirectUrl);
             if (reload) {
               window.location.reload();
             }

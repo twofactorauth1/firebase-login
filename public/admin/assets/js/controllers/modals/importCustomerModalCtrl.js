@@ -305,7 +305,7 @@ app.controller('ImportCustomerModalCtrl', ['$scope', '$location', '$timeout', '$
 
   /*
    * @guessHeaders
-   * - on upload match fileds automatically based on known variations
+   * - on upload match fields automatically based on known variations
    */
 
   $scope.guessHeaders = function (fn) {
@@ -543,7 +543,7 @@ app.controller('ImportCustomerModalCtrl', ['$scope', '$location', '$timeout', '$
 
   /*
    * @uploadMatchedCSV
-   * - import the formtted CSV and create customers
+   * - import the formatted CSV and create customers
    */
 
   $scope.uploadMatchedCSV = function () {
@@ -679,15 +679,58 @@ app.controller('ImportCustomerModalCtrl', ['$scope', '$location', '$timeout', '$
 
   /*
    * @csvUploaded
-   * - begin the CSV upload with uploader config
+   * - if file is in accepted types, begin the CSV upload with uploader config
+   * - else if file is unknown type, attempt quick parse to check that file could probably be parsed as csv
+   * - quick check checks first 5 rows, if they all have same # of columns, probably good data
+   * 
    */
 
-   var acceptedFiletypes = ['text/csv', 'application/vnd.ms-excel', 'application/msexcel', 'application/x-msexcel', 'application/x-ms-excel', 'application/x-excel', 'application/x-dos_ms_excel', 'application/xls', 'application/x-xls', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'];
+  var acceptedFiletypes = ['text/csv', 'application/vnd.ms-excel', 'application/msexcel', 'application/x-msexcel', 'application/x-ms-excel', 'application/x-excel', 'application/x-dos_ms_excel', 'application/xls', 'application/x-xls', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'];
 
   $scope.csvUploaded = function (files) {
+    var numColumnsArray = [];
+    var filteredNumColumnsArray = [];
+    var parsedLikeCSV = false;
+
     $scope.incorrectFileType = false;
+    
     console.log('file type >>> ', files);
+
     if (acceptedFiletypes.indexOf(files[0].type) > -1) {
+      parseUploadedFile();
+    } else {
+      //quick check
+      Papa.parse(files[0], {
+        step: function (results, parser) {
+          numColumnsArray.push(results.data[0].length)
+
+          if (numColumnsArray.length === 5) {
+            filteredNumColumnsArray = numColumnsArray.filter(function(value){ return value === numColumnsArray[0] });
+            parsedLikeCSV = numColumnsArray[0] > 1 && (numColumnsArray.length === filteredNumColumnsArray.length);
+            if (!parsedLikeCSV) {
+              parseError();
+            } else {
+              parseUploadedFile();
+            }
+            parser.abort();
+            $scope.$apply();
+          }
+
+        },
+        error: function (error) {
+          parseError(error);
+        },
+        fastMode: true
+      });
+    }
+
+    function parseError(error) {
+      $scope.incorrectFileType = true;
+      $scope.incorrectFile = files[0];
+      $scope.$apply();
+    }
+    
+    function parseUploadedFile() {
       startUpload = new Date();
       $scope.fileName = files[0].name;
       $scope.uploadingCsv = true;
@@ -715,7 +758,7 @@ app.controller('ImportCustomerModalCtrl', ['$scope', '$location', '$timeout', '$
             });
           }
         },
-        error: undefined,
+        error: parseError,
         download: false,
         skipEmptyLines: true,
         keepEmptyRows: false,
@@ -726,9 +769,7 @@ app.controller('ImportCustomerModalCtrl', ['$scope', '$location', '$timeout', '$
       $timeout(function () {
         Papa.parse(files[0], config);
       }, 1000);
-    } else {
-      $scope.incorrectFileType = true;
-      $scope.incorrectFile = files[0];
     }
+
   };
 }]);
