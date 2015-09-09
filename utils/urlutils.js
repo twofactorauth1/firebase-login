@@ -16,6 +16,11 @@ var urlutils = {
         return this.getSubdomainFromHost(host);
     },
 
+    getEnvironmentFromRequest: function(req) {
+        var host = req.get('host');
+        return this.getSubdomainFromHost(host).environment;
+    },
+
     getSubdomainFromHost: function(host) {
         _log.debug('>> getSubdomainFromHost(' + host + ')');
         var self = this
@@ -26,6 +31,7 @@ var urlutils = {
             , subdomain
             , domain
             , tld
+            , environment = 'PROD'
             , isMainApp = false;
 
         globalSubdomains = globalSubdomains.split(",");
@@ -56,9 +62,10 @@ var urlutils = {
 
                 var matchedEnvironment = _.filter(globalEnvironments.split(','), function(_env){return modifier === _env});
                 if(matchedEnvironment && matchedEnvironment.length > 0) {
-                    _log.debug('environment: ' + matchedEnvironment);
+                    //_log.debug('environment: ' + matchedEnvironment);
                     var regexp = new RegExp('\.?' + matchedEnvironment[0] + '\$', 'i');
                     subdomain = subdomain.replace(regexp, '');
+                    environment = matchedEnvironment;
                 }
                 /*
                  * After checking for environment... check for empty subdomain again.
@@ -67,6 +74,9 @@ var urlutils = {
                     subdomain = null;
                     isMainApp = true;
                 }
+            }
+            if(obj.tld === 'local') {
+                environment = 'local';
             }
 
             domain = obj.domain;
@@ -83,7 +93,8 @@ var urlutils = {
         var returnObj = {
             'isMainApp': isMainApp,
             'subdomain': subdomain,
-            'domain': domain
+            'domain': domain,
+            'environment': environment
         };
         _log.debug('isMainApp:' + returnObj.isMainApp + ', subdomain:' + returnObj.subdomain + ', domain:' + returnObj.domain );
         return returnObj;
