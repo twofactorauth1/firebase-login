@@ -970,7 +970,12 @@ _.extend(api.prototype, baseApi.prototype, {
                 } else {
                     stripeDao.getStripeSubscription(customerId, subscriptionId, accessToken, function(err, value){
                         self.log.debug('<< getSubscription');
-                        return self.sendResultOrError(resp, err, value, "Error retrieving subscription");
+                        if(err && err.toString().indexOf('does not have a subscription with ID') != -1) {
+                            return self.sendResultOrError(resp, err, value, "Error retrieving subscription", 404);
+                        } else {
+                            return self.sendResultOrError(resp, err, value, "Error retrieving subscription");
+                        }
+
                     });
                 }
             });
