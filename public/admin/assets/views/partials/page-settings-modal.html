@@ -14,11 +14,11 @@
                     <div class="mb10"></div>
                     <div class="form-group">
                         <label>Title:</label>
-                        <input id="edit-page-title" class="form-control input-lg" type="text" ng-model="page.title">
+                        <input id="edit-page-title" ng-change="setDirty(true)" class="form-control input-lg" type="text" ng-model="page.title">
                     </div>
                     <div class="form-group" ng-class="{'has-error': duplicateUrl}">
                         <label>URL:</label>
-                        <input id="edit-page-url" ng-blur="checkForDuplicatePage()" class="form-control input-lg" type="text" ng-model="page.handle" ng-disabled="page.handle == 'index' && !duplicateUrl">
+                        <input id="edit-page-url" ng-change="setDirty(true)" ng-blur="checkForDuplicatePage()" class="form-control input-lg" type="text" ng-model="page.handle" ng-disabled="page.handle == 'index' && !duplicateUrl">
                     </div>
                     <div ng-if="pageTemplate.name" class="form-group">
                             <label>Template:</label>
@@ -27,12 +27,12 @@
                     <div class="padding-right-0">
                         <div class="form-group" ng-hide="page.handle == 'index' && !duplicateUrl">
                             <label>Show Page:</label>
-                            <switch ng-model="page.visible.visibility" class="pull-right"></switch>
+                            <switch ng-model="page.visible.visibility" ng-change="setDirty(true)" class="pull-right"></switch>
                             <span class="help-block"><i class="ti-info-alt text-primary"></i> Visitors will only see your page when 'Show Page' is on.</span>
                         </div>
                         <div class="form-group hidden">
                             <label>Secure:</label>
-                            <switch ng-model="page.secure" class="pull-right"></switch>
+                            <switch ng-model="page.secure" ng-change="setDirty(true)" class="pull-right"></switch>
                             <span class="help-block"><i class="ti-info-alt text-primary"></i> Make this page secure and allow only logged in users.</span>
                         </div>
                        
