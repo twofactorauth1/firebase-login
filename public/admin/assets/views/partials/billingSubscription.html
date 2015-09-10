@@ -1,25 +1,39 @@
-<div class="pricing-table pricing-blue">
+<div class="pricing-table pricing-blue" ng-class="{ selected: selectedPlan.plan.id == plan.stripePlanFullData.id }">
+<!--     selectedPlan.plan.id: {{selectedPlan.plan.id}}
+    this plan.id: {{plan.stripePlanFullData.id}} -->
     <ul class="plan plan2 margin-top-0">
-        <li class="plan-name">
-            {{::subscription.plan.name || 'All Inclusive' }}
+        <li class="plan-name" ng-if="!billingSubscriptionUnavailable">
+            {{plan.name || 'All Inclusive' }}
+        </li>
+        
+        <li class="plan-unavailable" ng-if="billingSubscriptionUnavailable">
+            Current plan data is unavailable.
         </li>
 
-        <li class="plan-price">
+        <li class="plan-price" ng-if="!billingSubscriptionUnavailable">
             <h3 class="center">
                 <i class="fa fa-usd fa-1"></i>
-                <span>{{::subscription.plan.amount ? (subscription.plan.amount/100).toFixed(2) : 49}}</span>
-                <span class="price-cents"></span>
-                <span> /{{subscription.plan.interval || 'Month'}}</span>
+                <span class="price-dollars">{{priceDollars}}</span>
+                <span class="price-cents">{{priceCents}}</span>
+                <span>/{{plan.stripePlanFullData.interval || 'month'}}</span>
             </h3>
         </li>
-        <li>
+        <li ng-if="!billingSubscriptionUnavailable">
             <strong>Customer</strong> Relationship Manager
         </li>
-        <li>
+        <li ng-if="!billingSubscriptionUnavailable">
             <strong>Product & Order</strong> Manager
         </li>
-        <li>
+        <li ng-if="!billingSubscriptionUnavailable">
             <strong>Social</strong> Manager
+        </li>
+        <li ng-if="(planlist.list.length > 1)" ng-hide="billingSubscriptionUnavailable">
+            <a
+                type="button" 
+                class="btn btn-success btn-block center" 
+                ng-click="switchSubscriptionPlanFn(plan.stripePlanFullData.id)">
+                Select Plan
+            </a>
         </li>
     </ul>
 </div>

@@ -13,13 +13,7 @@
     <!-- end: PAGE TITLE -->
     <!-- start: YOUR CONTENT HERE -->
     <div ng-if="account.billing.plan==='NO_PLAN_ARGUMENT'">
-        <!--action-update-stripe-id="updateStripeIdFn"-->
-        <billing-trial
-                account="account"
-                subscription="subscription"
-                action-save-plan="savePlanFn"
-                >
-        </billing-trial>
+        <billing-trial></billing-trial>
     </div>
     <div class="row" ng-if="account.billing.plan!=='NO_PLAN_ARGUMENT'">
         <div class="row container-fullw bg-white">
@@ -47,7 +41,7 @@
                         </div>
                     </div>
                     <div class="panel-body">
-                        <billing-subscription class="row" subscription="subscription"></billing-subscription>
+                        <billing-subscription></billing-subscription>
                     </div>
                 </div>
             </div>
