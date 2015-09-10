@@ -253,6 +253,9 @@ module.exports = {
                                 if (!component.emailBg) {
                                     component.emailBg = '#ffffff';
                                 }
+                                if (component.bg.img && component.bg.img.show && component.bg.img.url) {
+                                    component.emailBgImage = component.bg.img.url.replace('//s3.amazonaws', 'http://s3.amazonaws');
+                                }
 
                                 component.logo = component.logo.replace('src="//s3.amazonaws', 'src="http://s3.amazonaws');
                                 component.text = component.text.replace('src="//s3.amazonaws', 'src="http://s3.amazonaws');
