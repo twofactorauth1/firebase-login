@@ -1,4 +1,4 @@
-<div class="pricing-table pricing-blue" ng-class="{ selected: selectedPlan.plan.id == plan.stripePlanFullData.id }">
+<div class="pricing-table pricing-blue" ng-class="{ selected: selectedPlan.plan.id == plan.id }">
 <!--     selectedPlan.plan.id: {{selectedPlan.plan.id}}
     this plan.id: {{plan.stripePlanFullData.id}} -->
     <ul class="plan plan2 margin-top-0">
@@ -18,20 +18,24 @@
                 <span>/{{plan.stripePlanFullData.interval || 'month'}}</span>
             </h3>
         </li>
+        
         <li ng-if="!billingSubscriptionUnavailable">
             <strong>Customer</strong> Relationship Manager
         </li>
+        
         <li ng-if="!billingSubscriptionUnavailable">
             <strong>Product & Order</strong> Manager
         </li>
+        
         <li ng-if="!billingSubscriptionUnavailable">
             <strong>Social</strong> Manager
         </li>
-        <li ng-if="(planlist.list.length > 1)" ng-hide="billingSubscriptionUnavailable">
+
+        <li ng-if="showSelectBtn">
             <a
                 type="button" 
                 class="btn btn-success btn-block center" 
-                ng-click="switchSubscriptionPlanFn(plan.stripePlanFullData.id)">
+                ng-click="switchSubscriptionPlanFn(plan.id)">
                 Select Plan
             </a>
         </li>

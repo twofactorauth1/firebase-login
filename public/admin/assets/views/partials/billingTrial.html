@@ -10,8 +10,8 @@
             <div class="row container-fullw">
                 <div class="col-xs-12">
                     <ul class="unstyled-list padding-left-0">
-                        <li ng-repeat="plan in planlist.list track by plan._id">
-                            <billing-subscription></billing-subscription>
+                        <li ng-repeat="plan in planlist.list track by plan.id">
+                            <billing-subscription showSelectBtn="{{true}}"></billing-subscription>
                         </li>
                     </ul>
                 </div>

@@ -104,7 +104,7 @@
             PaymentService.getIndigenousPlan(value.id, function(plan){
               console.log(plan);
               product.stripePlanFullData = plan;
-              $scope.planlist.list.push(product);
+              $scope.planlist.list.push(plan);
             });
             // promises.push(PaymentService.getIndigenousPlanPromise(value.id));
             console.log(value.id);
@@ -128,7 +128,7 @@
 
     /*
      * @switchSubscriptionPlanFn
-     * -
+     * -  
      */
 
     $scope.switchSubscriptionPlanFn = function (planId) {
@@ -244,6 +244,7 @@
             }
           });
 
+          //TODO: need this?
           // if ($scope.firstTime) {
           //   $scope.savePlanFn($scope.selectedPlan.plan.id);
           //   $scope.firstTime = false;
@@ -275,7 +276,7 @@
           account.billing.stripeCustomerId,
           account.billing.subscriptionId,
           function(subscription) {
-            debugger;
+            // $scope.subscription = subscription; 
             $scope.selectedPlan = subscription;
             console.warn('BillingCtrl, received subscription:\n', subscription);
         });

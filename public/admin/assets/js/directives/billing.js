@@ -19,17 +19,29 @@ app.directive("billingSubscription", ['PaymentService', function (PaymentService
     //   selectedPlan: "="
     // },
     link: function(scope, element, attrs) {
+
       scope.$watch('plan', function() {
-        if (scope.plan) {
-          var priceNum = scope.plan.amount || scope.plan.product_attributes.stripePlans[0].price;
-          var priceString = priceNum.toString();
+        var plan = scope.plan;
+        if (plan && plan.amount) {
+          var priceString = plan.amount.toString();
           var priceStringLength = priceString.length;
           scope.priceDollars = priceString.slice(0, priceStringLength - 2);
           scope.priceCents = priceString.slice(priceStringLength - 2, priceStringLength);
+          scope.billingSubscriptionUnavailable = false;
         } else {
           scope.billingSubscriptionUnavailable = true;
         }
+      }, true);
+
+      scope.$watch('selectedPlan', function() {
+        if (scope.selectedPlan.plan.amount) {
+          scope.plan = scope.selectedPlan.plan;
+        }
       });
+
+      if (attrs.showselectbtn) {
+        scope.showSelectBtn = attrs.showselectbtn;
+      }
     }
   }
 }]);
