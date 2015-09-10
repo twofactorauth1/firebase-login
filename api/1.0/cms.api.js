@@ -365,8 +365,13 @@ _.extend(api.prototype, baseApi.prototype, {
         if (!component.emailBg) {
             component.emailBg = '#ffffff';
         }
+
+        if (component.bg.img && component.bg.img.show && component.bg.img.url) {
+            component.emailBgImage = component.bg.img.url.replace('//s3.amazonaws', 'http://s3.amazonaws');
+        }
         
         self.log.debug('component >>> ', component);
+       
         app.render('emails/base_email', component, function(err, html){
             if(err) {
                 self.log.error('error rendering html: ' + err);
