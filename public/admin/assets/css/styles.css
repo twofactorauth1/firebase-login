@@ -11900,6 +11900,10 @@ table.grid thead tr {
   font-weight: 600;
   color: #ffffff;
 }
+.pricing-table .plan li.plan-price h3 .fa,
+.pricing-table .plan li.plan-price h3 span {
+  display: inline-block;
+}
 .pricing-table .plan li.plan-price h3 .price-cents {
   font-size: 50%;
   vertical-align: super;

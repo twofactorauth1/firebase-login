@@ -142,6 +142,14 @@
                 return $http.get(apiUrl);
             };
 
+            this.getIndigenousPlan = function(planId, fn) {
+                var apiUrl = baseUrl + ['integrations', 'payments', 'indigenous', 'plans', planId].join('/');
+                $http.get(apiUrl)
+                    .success(function(data, status, headers, config) {
+                        fn(data);
+                    });
+            };
+
             this.getPlan = function(planId, fn) {
                 var apiUrl = baseUrl + ['integrations', 'payments', 'plans', planId].join('/');
                 $http.get(apiUrl)
@@ -203,15 +211,20 @@
             };
 
             this.postSubscribeToIndigenous = function(stripeCustomerId, planId, accountId, setupFee, fn) {
-                console.log('setup fee ', setupFee.signup_fee);
                 var apiUrl = baseUrl + ['integrations', 'payments', 'indigenous', 'plans', planId, 'subscribe'].join('/');
                 var params = {
                     customerId: stripeCustomerId,
-                    setupFee: setupFee.signup_fee * 100
+                    // setupFee: setupFee.signup_fee * 100
                 };
+                
                 if (accountId) {
                     params.accountId = accountId;
                 }
+
+                if (setupFee) {
+                    params.setupFee = setupFee;
+                }
+
                 $http.post(apiUrl, params)
                     .success(function(data, status, headers, config) {
                         fn(data);

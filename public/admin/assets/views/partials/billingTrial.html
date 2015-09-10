@@ -9,7 +9,11 @@
         <div class="col-md-6">
             <div class="row container-fullw">
                 <div class="col-xs-12">
-                    <billing-subscription subscription="subscription"></billing-subscription>
+                    <ul class="unstyled-list padding-left-0">
+                        <li ng-repeat="plan in planlist.list track by plan.id">
+                            <billing-subscription showSelectBtn="{{true}}"></billing-subscription>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>
@@ -24,10 +28,10 @@
                         card-values="credit.values"
                         card-options="credit.options"
                         card-messages="credit.messages"
-                            >
+                        ng-class="{ active: subscriptionSelected }">
                     </billing-credit-card>
                     <div class="row">
-                        <span class="col-xs-4 col-xs-offset-4 btn btn-lg btn-warning" ng-click="submitPayment()">PAY NOW</span>
+                        <span class="col-xs-4 col-xs-offset-4 btn btn-lg btn-warning {{subscriptionSelected ? '' : 'disabled'}}" ng-click="submitPayment()">PAY NOW</span>
                     </div>
                 </div>
             </div>
