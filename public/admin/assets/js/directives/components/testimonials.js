@@ -12,10 +12,10 @@ app.directive('testimonialsComponent', ['$timeout', function ($timeout) {
       scope.draggable = false;
       scope.autoplay = false;
       scope.isEditing = true;
-      $(document).ready(function () {
-        $timeout(function () {
+      
+      scope.$parent.$watch('ckeditorLoaded', function (newValue, oldValue) {
+        if(newValue)
           scope.dataLoaded = true;
-        },1000);
       });
       scope.deleteTestimonial = function (index) {
         scope.dataLoaded = false;
