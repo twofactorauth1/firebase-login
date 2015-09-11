@@ -12,44 +12,51 @@
     </section>
     <!-- end: PAGE TITLE -->
     <!-- start: YOUR CONTENT HERE -->
-    <div class="row container-fullw bg-white">
-        <div class="col-sm-12">
-            <div class="col-sm-6">
-                <button type="button" class="btn btn-o btn-lg btn-info btn-wide btn-block btn-scroll btn-scroll-top ti ti-receipt" ng-click="openModal('bill-summary-modal')">
-                    <span>Bill Summary</span>
-                </button>
-                <div class="margin-bottom-15 visible-xs"></div>
-            </div>
-            <div class="col-sm-6">
-                <button type="button" class="btn btn-o btn-lg btn-info btn-wide btn-block btn-scroll btn-scroll-top ti ti-credit-card" ng-click="openModal('change-card-modal')">
-                    <span>Payment Method</span>
-                </button>
-                <div class="margin-bottom-15 visible-xs"></div>
-            </div>
-        </div>
+    <div ng-if="account.billing.plan==='NO_PLAN_ARGUMENT'">
+        <billing-trial></billing-trial>
     </div>
-    <div class="row">
-        <div class="col-sm-4 no-pad-lr">
-            <div class="panel panel-info">
-                <div class="panel-heading">
-                    <div class="panel-title">
-                        <span>Current Plan</span>
-                    </div>
+    <div class="row" ng-if="account.billing.plan!=='NO_PLAN_ARGUMENT'">
+        <div class="row container-fullw bg-white">
+            <div class="col-sm-12">
+                <div class="col-sm-6">
+                    <button type="button" class="btn btn-o btn-lg btn-info btn-wide btn-block btn-scroll btn-scroll-top ti ti-receipt" ng-click="openModal('bill-summary-modal')">
+                        <span>Bill Summary</span>
+                    </button>
+                    <div class="margin-bottom-15 visible-xs"></div>
                 </div>
-                <div class="panel-body">
-                    <billing-subscription class="row" stripe-id="" sub-id="account.billing.subscriptionId"></billing-subscription>
+                <div class="col-sm-6">
+                    <button type="button" class="btn btn-o btn-lg btn-info btn-wide btn-block btn-scroll btn-scroll-top ti ti-credit-card" ng-click="openModal('change-card-modal')">
+                        <span>Payment Method</span>
+                    </button>
+                    <div class="margin-bottom-15 visible-xs"></div>
                 </div>
             </div>
         </div>
-        <div class="col-sm-8 no-pad-lr">
-            <div class="panel panel-info">
-                <div class="panel-heading">
-                    <div class="panel-title">
-                        <span>Invoices</span>
+        <div class="row">
+            <div class="col-sm-4 no-pad-lr">
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <div class="panel-title">
+                            <span>Current Plan</span>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <billing-subscription 
+                            ng-show="!billingSubscriptionUnavailable || priceDollars">
+                        </billing-subscription>
                     </div>
                 </div>
-                <div class="panel-body">
-                    <billing-invoice-table paged-invoices="pagedInvoices"></billing-invoice-table>
+            </div>
+            <div class="col-sm-8 no-pad-lr">
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <div class="panel-title">
+                            <span>Invoices</span>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <billing-invoice-table paged-invoices="pagedInvoices"></billing-invoice-table>
+                    </div>
                 </div>
             </div>
         </div>

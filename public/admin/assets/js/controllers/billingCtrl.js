@@ -56,6 +56,7 @@
      */
 
     $scope.updateStripeIdFn = function (billing) {
+      console.log('updateStripeIdFn >>>');
       $scope.currentUser.stripeId = billing.billing.stripeCustomerId;
       $scope.selectPlanView = 'plan';
     };
@@ -78,75 +79,80 @@
 
     $scope.currentAccount = {};
     $scope.planStatus = {};
+    $scope.planlist = {
+      list: []
+    };
+    $scope.selectedPlan = {};
 
     //get plans
-    var productId = "3d6df0de-02b8-4156-b5ca-f242ab18a3a7";
     ProductService.getIndigenousProducts(function (products) {
-      var product = _.findWhere(products, {
-        _id: productId
+      products.forEach(function (product){
+        var productAttrs = product.product_attributes;
+        var hasStripePlans = productAttrs.hasOwnProperty('stripePlans') && productAttrs.stripePlans.length;
+        // var promises = [];
+
+        if (hasStripePlans && productAttrs.stripePlans[0].active) {
+          PaymentService.getIndigenousStripePlan(productAttrs.stripePlans[0].id, function(plan){
+            console.log(plan);
+            productAttrs.stripePlans[0] = plan; //populate full plan data
+            $scope.planlist.list.push(product);
+          });
+        }
+
       });
 
-      $scope.paymentFormProduct = product;
-      var promises = [];
-      $scope.subscriptionPlans = [];
-      if ($scope.paymentFormProduct.product_attributes.hasOwnProperty('stripePlans')) {
-        $scope.paymentFormProduct.product_attributes.stripePlans.forEach(function (value) {
-          if (value.active) {
-            $scope.planStatus[value.id] = value;
-          }
-          promises.push(PaymentService.getIndigenousPlanPromise(value.id));
-        });
-        $q.all(promises)
-          .then(function (data) {
-            data.forEach(function (value) {
-              $scope.subscriptionPlans.push(value.data);
-            });
-          })
-          .catch(function (err) {
-            console.error(err);
-          });
-      }
+      $scope.getAccountData();
+
     });
+
 
     $scope.subscriptionSelected = false;
 
     /*
      * @switchSubscriptionPlanFn
-     * -
+     * -  
      */
 
     $scope.switchSubscriptionPlanFn = function (planId) {
-      $scope.subscription = {
-        plan: {
-          id: null
-        }
-      };
-      $scope.subscriptionSelected = true;
-      $scope.subscription.plan.id = planId;
-      $scope.savePlanFn($scope.subscription.plan.id);
+      $scope.selectedPlan = $scope.planlist.list.filter(function(plan) {
+        return plan.product_attributes.stripePlans[0].id === planId;
+      })[0];
+      $scope.subscriptionSelected = planId !== null ? true : false;
+      // $scope.selectedPlan.plan.id = planId;
+      // $scope.savePlanFn($scope.subscription.plan.id);
     };
+
+    $scope.$watch('selectedPlan', function(){
+      console.warn('$scope.selectedPlan changed: ');
+      console.warn($scope.selectedPlan);
+    });
 
     /*
      * @chooseFirstTime
      * -
      */
 
-    $scope.chooseFirstTime = function () {
-      $('#changeCardModal').modal('show');
-      $scope.firstTime = true;
-      //set trigger on success of add card service
-    };
+    // $scope.chooseFirstTime = function () {
+    //   $('#changeCardModal').modal('show');
+    //   $scope.firstTime = true;
+    //   //set trigger on success of add card service
+    // };
 
     /*
      * @savePlanFn
-     * -
+     * - set new active plan for user
+     * - TODO: setup fee?
      */
 
     $scope.savePlanFn = function (planId) {
+      console.log('savePlanFn >>');
+
       if ($scope.currentUser.stripeId) {
         PaymentService.postSubscribeToIndigenous($scope.currentUser.stripeId, planId, null, $scope.planStatus[planId], function (subscription) {
           $scope.cancelOldSubscriptionsFn();
-          $scope.subscription = subscription;
+          $scope.selectedPlan = subscription;
+          console.log('$scope.selectedPlan:');
+          console.log($scope.selectedPlan);
           PaymentService.getUpcomingInvoice($scope.currentUser.stripeId, function (upcomingInvoice) {
             $scope.upcomingInvoice = upcomingInvoice;
           });
@@ -155,7 +161,7 @@
             $scope.pagedInvoices = $scope.invoices.data.slice(0, $scope.invoicePageLimit);
           });
           ToasterService.setPending('success', 'Subscribed to new plan.');
-
+          $scope.getAccountData();
         });
       } else {
         ToasterService.setPending('error', 'No Stripe customer ID.');
@@ -166,11 +172,11 @@
 
     /*
      * @cancelOldSubscriptionsFn
-     * -
+     * - cancel all other subscriptions for this user
      */
 
     $scope.cancelOldSubscriptionsFn = function () {
-      $scope.subscriptions.data.forEach(function (value) {
+      $scope.subscriptionsCompleteList.data.forEach(function (value) {
         PaymentService.deleteStripeSubscription(value.customer, value.id, function (subscription) {
           console.log('subscription ', subscription);
         });
@@ -188,13 +194,13 @@
       console.log('currentUser.stripeId >>> ', newValue);
       if (newValue) {
         PaymentService.getListStripeSubscriptions(newValue, function (subscriptions) {
-          $scope.subscriptions = subscriptions;
-          $scope.subscription = subscriptions.data[0];
+          $scope.subscriptionsCompleteList = subscriptions;
+          // $scope.selectedPlan = subscriptions.data[0];
         });
 
-        PaymentService.getUpcomingInvoice(newValue, function (upcomingInvoice) {
-          $scope.upcomingInvoice = upcomingInvoice;
-        });
+        //PaymentService.getUpcomingInvoice(newValue, function (upcomingInvoice) {
+        //  $scope.upcomingInvoice = upcomingInvoice;
+        //});
 
         var account_cookie = ipCookie("socialAccount");
         if (account_cookie !== undefined) {
@@ -220,10 +226,11 @@
             }
           });
 
-          if ($scope.firstTime) {
-            $scope.savePlanFn($scope.subscription.plan.id);
-            $scope.firstTime = false;
-          }
+          //TODO: need this?
+          // if ($scope.firstTime) {
+          //   $scope.savePlanFn($scope.selectedPlan.plan.id);
+          //   $scope.firstTime = false;
+          // }
         }
       }
     });
@@ -236,29 +243,49 @@
      * -
      */
 
-    UserService.getAccount(function (account) {
-      if (account.locked_sub === undefined || account.locked_sub === true) {
-        ToasterService.show('warning', "No Subscription");
-      }
-      ToasterService.processPending();
-      ToasterService.processHtmlPending();
-      $scope.account = account;
-      $scope.currentAccount.membership = account.billing.subscriptionId;
-      /*
-       * If the account is locked, do not allow state changes away from account.
-       * Commenting this out until we know for sure that we should allow logins from locked accounts.
-       */
-      if (account.locked_sub === true) {
-        ToasterService.show('error', 'No Indigenous Subscription found.  Please update your billing information.');
-        $rootScope.$on('$stateChangeStart',
-          function (event) {
-            event.preventDefault();
-            ToasterService.show('error', 'No Indigenous Subscription found.  Please update your billing information.');
-            // transitionTo() promise will be rejected with
-            // a 'transition prevented' error
+    $scope.getAccountData = function (){
+      UserService.getAccount(function (account) {
+        if (account.locked_sub === undefined || account.locked_sub === true) {
+          ToasterService.show('warning', "No Subscription");
+        }
+        ToasterService.processPending();
+        ToasterService.processHtmlPending();
+        $scope.account = account;
+        
+        $scope.selectedPlan.paymentProcessing = false;
+
+        console.warn('BillingCtrl, received account:\n', account);
+        
+        if (account.billing.subscriptionId) {
+          PaymentService.getStripeSubscription(
+            account.billing.stripeCustomerId,
+            account.billing.subscriptionId,
+            function(subscription) {
+              // $scope.subscription = subscription; 
+              $scope.selectedPlan = $scope.planlist.list.filter(function(plan) {
+                return plan.product_attributes.stripePlans[0].id === subscription.plan.id;
+              })[0];
+              console.warn('BillingCtrl, received subscription:\n', subscription);
           });
-      }
-    });
+        }
+
+        // $scope.currentAccount.membership = account.billing.subscriptionId;
+        /*
+         * If the account is locked, do not allow state changes away from account.
+         * Commenting this out until we know for sure that we should allow logins from locked accounts.
+         */
+        if (account.locked_sub === true) {
+          ToasterService.show('error', 'No Indigenous Subscription found.  Please update your billing information.');
+          $rootScope.$on('$stateChangeStart',
+            function (event) {
+              event.preventDefault();
+              ToasterService.show('error', 'No Indigenous Subscription found.  Please update your billing information.');
+              // transitionTo() promise will be rejected with
+              // a 'transition prevented' error
+            });
+        }
+      });
+    };
 
   }]);
 }(angular));
