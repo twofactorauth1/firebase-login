@@ -81,7 +81,7 @@
     $scope.planStatus = {};
     $scope.planlist = {
       list: []
-    }
+    };
     $scope.selectedPlan = {
       plan: {
         id: null
