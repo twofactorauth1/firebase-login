@@ -959,28 +959,29 @@ _.extend(api.prototype, baseApi.prototype, {
         var self = this;
         self.log.debug('>> getSubscription');
         var accountId = parseInt(self.accountId(req));
-        self.getStripeTokenFromAccount(req, function(err, accessToken){
-            if(accessToken === null && accountId != appConfig.mainAccountID) {
-                return self.wrapError(resp, 403, 'Unauthenticated', 'Stripe Account has not been connected', 'Connect the Stripe account and retry this operation.');
-            }
-            var customerId = req.params.id;
-            var subscriptionId = req.params.subId;
-            self.checkPermission(req, self.sc.privs.VIEW_PAYMENTS, function(err, isAllowed) {
-                if (isAllowed !== true) {
-                    return self.send403(resp);
-                } else {
-                    stripeDao.getStripeSubscription(customerId, subscriptionId, accessToken, function(err, value){
-                        self.log.debug('<< getSubscription');
-                        if(err && err.toString().indexOf('does not have a subscription with ID') != -1) {
-                            return self.sendResultOrError(resp, err, value, "Error retrieving subscription", 404);
-                        } else {
-                            return self.sendResultOrError(resp, err, value, "Error retrieving subscription");
-                        }
 
-                    });
-                }
-            });
+        /*
+         * subscriptions are on the customer which belong to the main account.
+         * No delegation is needed.
+         */
+        var customerId = req.params.id;
+        var subscriptionId = req.params.subId;
+        self.checkPermission(req, self.sc.privs.VIEW_PAYMENTS, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                stripeDao.getStripeSubscription(customerId, subscriptionId, null, function(err, value){
+                    self.log.debug('<< getSubscription');
+                    if(err && err.toString().indexOf('does not have a subscription with ID') != -1) {
+                        return self.sendResultOrError(resp, err, value, "Error retrieving subscription", 404);
+                    } else {
+                        return self.sendResultOrError(resp, err, value, "Error retrieving subscription");
+                    }
+
+                });
+            }
         });
+
     },
 
     updateSubscription: function(req, resp) {
