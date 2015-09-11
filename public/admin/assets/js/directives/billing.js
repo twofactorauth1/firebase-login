@@ -22,8 +22,8 @@ app.directive("billingSubscription", ['PaymentService', function (PaymentService
 
       scope.$watch('plan', function() {
         var plan = scope.plan;
-        if (plan && plan.amount) {
-          var priceString = plan.amount.toString();
+        if (plan && plan.product_attributes.stripePlans.length) {
+          var priceString = plan.product_attributes.stripePlans[0].amount.toString();
           var priceStringLength = priceString.length;
           scope.priceDollars = priceString.slice(0, priceStringLength - 2);
           scope.priceCents = priceString.slice(priceStringLength - 2, priceStringLength);
@@ -33,15 +33,14 @@ app.directive("billingSubscription", ['PaymentService', function (PaymentService
         }
       }, true);
 
-      scope.$watch('selectedPlan', function() {
-        if (scope.selectedPlan.plan.amount) {
-          scope.plan = scope.selectedPlan.plan;
-        }
-      });
-
-      scope.focusInput = function() {
-        element[0]
-      };
+      if (scope.account.billing.plan !== 'NO_PLAN_ARGUMENT') {
+        var selectedPlanWatcher = scope.$watch('selectedPlan', function() {
+          if (scope.selectedPlan && scope.selectedPlan.product_attributes && scope.selectedPlan.product_attributes.stripePlans[0].id) {
+            scope.plan = scope.selectedPlan;
+            selectedPlanWatcher(); //unbind after set
+          }
+        });
+      }
 
       if (attrs.showselectbtn) {
         scope.showSelectBtn = attrs.showselectbtn;
@@ -84,7 +83,7 @@ app.directive("billingTrial", ['PaymentService', 'ToasterService', function (Pay
 
             PaymentService.getStripeCardToken(cardObj, function(stripeToken) {
               if (stripeToken) {
-                scope.savePlanFn(scope.selectedPlan.plan.id);
+                scope.savePlanFn(scope.selectedPlan.product_attributes.stripePlans[0].id);
               } else {
                 ToasterService.show('error', 'Oops. The purchase was unsuccessful.');
               }
@@ -127,7 +126,7 @@ app.directive('billingCreditCard', ['$timeout', function($timeout) {
 
     link: function(scope, el, attrs) {
       scope.$watch('plan', function(value) {
-        if (value && value.id != null) {
+        if (value && value._id != null) {
           // $(el[0]).find('input:last').focus();
           $timeout(function() {
             $(el[0]).find('input:first').focus();  

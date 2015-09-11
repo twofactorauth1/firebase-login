@@ -1,6 +1,4 @@
-<div class="pricing-table pricing-blue" ng-class="{ selected: selectedPlan.plan.id == plan.id && account.billing.plan == 'NO_PLAN_ARGUMENT' }">
-<!--     selectedPlan.plan.id: {{selectedPlan.plan.id}}
-    this plan.id: {{plan.stripePlanFullData.id}} -->
+<div class="pricing-table pricing-blue" ng-class="{ selected: selectedPlan._id == plan._id && account.billing.plan == 'NO_PLAN_ARGUMENT' }">
     <ul class="plan plan2 margin-top-0">
         <li class="plan-name" ng-if="!billingSubscriptionUnavailable">
             {{plan.name || 'All Inclusive' }}
@@ -9,13 +7,13 @@
         <li class="plan-unavailable" ng-if="billingSubscriptionUnavailable">
             Current plan data is unavailable.
         </li>
-
+        
         <li class="plan-price" ng-if="!billingSubscriptionUnavailable">
             <h3 class="center">
                 <i class="fa fa-usd fa-1"></i>
                 <span class="price-dollars">{{priceDollars}}</span>
                 <span class="price-cents">{{priceCents}}</span>
-                <span>/{{plan.stripePlanFullData.interval || 'month'}}</span>
+                <span>/{{plan.product_attributes.stripePlans[0].interval || 'month'}}</span>
             </h3>
         </li>
         
@@ -30,12 +28,12 @@
         <li ng-if="!billingSubscriptionUnavailable">
             <strong>Social</strong> Manager
         </li>
-
+        
         <li ng-if="showSelectBtn">
             <a
                 type="button" 
                 class="select-plan btn btn-success btn-block center" 
-                ng-click="switchSubscriptionPlanFn(plan.id);">
+                ng-click="switchSubscriptionPlanFn(plan.product_attributes.stripePlans[0].id)">
                 Select Plan
             </a>
             <a
