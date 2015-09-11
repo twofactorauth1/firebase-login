@@ -11900,6 +11900,10 @@ table.grid thead tr {
   font-weight: 600;
   color: #ffffff;
 }
+.pricing-table .plan li.plan-price h3 .fa,
+.pricing-table .plan li.plan-price h3 span {
+  display: inline-block;
+}
 .pricing-table .plan li.plan-price h3 .price-cents {
   font-size: 50%;
   vertical-align: super;
@@ -11916,6 +11920,10 @@ table.grid thead tr {
   margin-top: 10px;
   border-top: 0;
 }
+.pricing-table .plan .btn.deselect-plan {
+  display: none;
+  margin-top: 0;
+}
 .pricing-table .plan.featured {
   -webkit-transform: scale(1.05);
   -ms-transform: scale(1.05);
@@ -11924,6 +11932,20 @@ table.grid thead tr {
 }
 .pricing-table .plan.featured .plan-name {
   background: #94929b;
+}
+.pricing-table.selected {
+  box-shadow: 0 0 1px 3px #46b8da;
+}
+.pricing-table.selected .btn.select-plan {
+  display: none;
+}
+.pricing-table.selected .btn.deselect-plan {
+  display: inline-block;
+  background-color: #ddd;
+  border-color: #ddd;
+}
+.pricing-table.selected .btn.deselect-plan:hover {
+  background-color: #ddd!important;
 }
 .pricing-green .plan li strong {
   color: #c82e29;
@@ -13324,6 +13346,9 @@ div[class^="spacing-"] {
 /* ---------------------------------------------------------------------- */
 /*  Billing
 /* ---------------------------------------------------------------------- */
+.billing .btn.paynow {
+  text-align: center;
+}
 .billing .no-pad-lr {
   padding-left: 0px;
   padding-right: 0px;
@@ -13331,6 +13356,31 @@ div[class^="spacing-"] {
 .billing .vert-center {
   padding-top: 10px;
   padding-bottom: 10px;
+}
+.billing .pricing-table {
+  background-color: white;
+}
+.billing .fa-spinner {
+  font-size: 3em;
+}
+#card-container {
+  margin-bottom: 30px;
+}
+#card-container .jp-card-container {
+  transform: scale(1) !important;
+}
+@media (max-width: 480px) {
+  #card-container .jp-card-container {
+    transform: scale(0.75) translateX(-6%) !important;
+  }
+}
+@media (max-width: 480px) {
+  #card-container {
+    margin-bottom: 0;
+  }
+  .billing-credit-card > .row:last-child {
+    margin-bottom: 100px;
+  }
 }
 .view-transaction-modal .paid {
   margin: 0 auto 15px;

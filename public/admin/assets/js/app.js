@@ -10,6 +10,7 @@ angular.module("indigenous", [
     'ui.bootstrap',
     'angular.filter',
     'oc.lazyLoad',
+    'gavruk.card',
     'cfp.loadingBar',
     'ncy-angular-breadcrumb',
     'duScroll',
