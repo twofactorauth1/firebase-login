@@ -137,7 +137,7 @@
           id: null
         }
       };
-      $scope.subscriptionSelected = true;
+      $scope.subscriptionSelected = planId !== null ? true : false;
       $scope.selectedPlan.plan.id = planId;
       // $scope.savePlanFn($scope.subscription.plan.id);
     };
@@ -179,7 +179,7 @@
             $scope.pagedInvoices = $scope.invoices.data.slice(0, $scope.invoicePageLimit);
           });
           ToasterService.setPending('success', 'Subscribed to new plan.');
-
+          $scope.getAccountData();
         });
       } else {
         ToasterService.setPending('error', 'No Stripe customer ID.');
@@ -261,43 +261,49 @@
      * -
      */
 
-    UserService.getAccount(function (account) {
-      if (account.locked_sub === undefined || account.locked_sub === true) {
-        ToasterService.show('warning', "No Subscription");
-      }
-      ToasterService.processPending();
-      ToasterService.processHtmlPending();
-      $scope.account = account;
+    $scope.getAccountData = function (){
+      UserService.getAccount(function (account) {
+        if (account.locked_sub === undefined || account.locked_sub === true) {
+          ToasterService.show('warning', "No Subscription");
+        }
+        ToasterService.processPending();
+        ToasterService.processHtmlPending();
+        $scope.account = account;
+        
+        $scope.selectedPlan.paymentProcessing = false;
 
-      console.warn('BillingCtrl, received account:\n', account);
-      
-      if (account.billing.subscriptionId) {
-        PaymentService.getStripeSubscription(
-          account.billing.stripeCustomerId,
-          account.billing.subscriptionId,
-          function(subscription) {
-            // $scope.subscription = subscription; 
-            $scope.selectedPlan = subscription;
-            console.warn('BillingCtrl, received subscription:\n', subscription);
-        });
-      }
-
-      // $scope.currentAccount.membership = account.billing.subscriptionId;
-      /*
-       * If the account is locked, do not allow state changes away from account.
-       * Commenting this out until we know for sure that we should allow logins from locked accounts.
-       */
-      if (account.locked_sub === true) {
-        ToasterService.show('error', 'No Indigenous Subscription found.  Please update your billing information.');
-        $rootScope.$on('$stateChangeStart',
-          function (event) {
-            event.preventDefault();
-            ToasterService.show('error', 'No Indigenous Subscription found.  Please update your billing information.');
-            // transitionTo() promise will be rejected with
-            // a 'transition prevented' error
+        console.warn('BillingCtrl, received account:\n', account);
+        
+        if (account.billing.subscriptionId) {
+          PaymentService.getStripeSubscription(
+            account.billing.stripeCustomerId,
+            account.billing.subscriptionId,
+            function(subscription) {
+              // $scope.subscription = subscription; 
+              $scope.selectedPlan = subscription;
+              console.warn('BillingCtrl, received subscription:\n', subscription);
           });
-      }
-    });
+        }
+
+        // $scope.currentAccount.membership = account.billing.subscriptionId;
+        /*
+         * If the account is locked, do not allow state changes away from account.
+         * Commenting this out until we know for sure that we should allow logins from locked accounts.
+         */
+        if (account.locked_sub === true) {
+          ToasterService.show('error', 'No Indigenous Subscription found.  Please update your billing information.');
+          $rootScope.$on('$stateChangeStart',
+            function (event) {
+              event.preventDefault();
+              ToasterService.show('error', 'No Indigenous Subscription found.  Please update your billing information.');
+              // transitionTo() promise will be rejected with
+              // a 'transition prevented' error
+            });
+        }
+      });
+    };
+
+    $scope.getAccountData();
 
   }]);
 }(angular));

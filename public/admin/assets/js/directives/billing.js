@@ -39,6 +39,10 @@ app.directive("billingSubscription", ['PaymentService', function (PaymentService
         }
       });
 
+      scope.focusInput = function() {
+        element[0]
+      };
+
       if (attrs.showselectbtn) {
         scope.showSelectBtn = attrs.showselectbtn;
       }
@@ -56,7 +60,7 @@ app.directive("billingInvoiceTable", [function () {
   }
 }]);
 
-app.directive("billingTrial", ['PaymentService', function (PaymentService) {
+app.directive("billingTrial", ['PaymentService', 'ToasterService', function (PaymentService, ToasterService) {
   return {
     restrict: 'E',
     templateUrl: '/admin/assets/views/partials/billingTrial.html',
@@ -76,14 +80,15 @@ app.directive("billingTrial", ['PaymentService', function (PaymentService) {
             cardObj.exp_month = cardObj.expiry.split('/')[0].trim();
             cardObj.exp_year = cardObj.expiry.split('/')[1].trim();
             
+            scope.selectedPlan.paymentProcessing = true;
+
             PaymentService.getStripeCardToken(cardObj, function(stripeToken) {
               if (stripeToken) {
                 scope.savePlanFn(scope.selectedPlan.plan.id);
               } else {
-                //TODO: show error
-                console.log('error');
+                ToasterService.show('error', 'Oops. The purchase was unsuccessful.');
               }
-            });
+            }, true);
           }
       };
 
@@ -105,7 +110,7 @@ app.directive("billingTrial", ['PaymentService', function (PaymentService) {
 
 // uses angular-card, https://github.com/gavruk/angular-card
 // TODO: convert this to a general-use directive, not tied to billing.
-app.directive('billingCreditCard', [function() {
+app.directive('billingCreditCard', ['$timeout', function($timeout) {
   return {
     restrict: 'E',
     templateUrl: '/admin/assets/views/partials/billingCC.html',
@@ -116,11 +121,19 @@ app.directive('billingCreditCard', [function() {
       cardValues: '=',
       cardOptions: '=',
       cardMessages: '=',
-      //changeCard: '&',
+      plan: '='
       //clear: '&',
     },
 
     link: function(scope, el, attrs) {
+      scope.$watch('plan', function(value) {
+        if (value && value.id != null) {
+          // $(el[0]).find('input:last').focus();
+          $timeout(function() {
+            $(el[0]).find('input:first').focus();  
+          }, 0);
+        }
+      });
     },
   };
 }]);

@@ -41,7 +41,10 @@
                         </div>
                     </div>
                     <div class="panel-body">
-                        <billing-subscription ng-show="!billingSubscriptionUnavailable || priceDollars" plan="selectedPlan"></billing-subscription>
+                        <billing-subscription 
+                            ng-show="!billingSubscriptionUnavailable || priceDollars" 
+                            plan="selectedPlan">
+                        </billing-subscription>
                     </div>
                 </div>
             </div>

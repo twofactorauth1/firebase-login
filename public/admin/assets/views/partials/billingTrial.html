@@ -11,7 +11,7 @@
                 <div class="col-xs-12">
                     <ul class="unstyled-list padding-left-0">
                         <li ng-repeat="plan in planlist.list track by plan.id">
-                            <billing-subscription></billing-subscription>
+                            <billing-subscription showselectbtn="{{true}}"></billing-subscription>
                         </li>
                     </ul>
                 </div>
@@ -19,7 +19,7 @@
         </div>
         <div class="col-md-6">
             <div class="row container-fullw">
-                <div class="col-xs-12">
+                <div class="col-xs-12 billing-credit-card">
 
                     <!--change-card="credit.onChange"-->
                     <!--clear="credit.onClear"-->
@@ -28,10 +28,19 @@
                         card-values="credit.values"
                         card-options="credit.options"
                         card-messages="credit.messages"
-                        ng-class="{ active: subscriptionSelected }">
+                        ng-class="{ active: subscriptionSelected }"
+                        plan="selectedPlan.plan">
                     </billing-credit-card>
                     <div class="row">
-                        <span class="col-xs-4 col-xs-offset-4 btn btn-lg btn-warning {{subscriptionSelected ? '' : 'disabled'}}" ng-click="submitPayment()">PAY NOW</span>
+                        <div 
+                            ng-if="!selectedPlan.paymentProcessing" 
+                            ng-click="submitPayment()"
+                            class="paynow col-xs-8 col-xs-offset-2 col-md-4 col-md-offset-4 btn btn-lg btn-warning {{selectedPlan.plan.id ? '' : 'disabled'}}" >
+                            PAY NOW
+                        </div>
+                        <div ng-if="selectedPlan.paymentProcessing" class="paynow btn col-xs-8 col-xs-offset-2 col-md-4 col-md-offset-4">
+                            <span class="fa fa-spinner fa-spin"></span>
+                        </div>
                     </div>
                 </div>
             </div>

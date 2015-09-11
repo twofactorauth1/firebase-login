@@ -9,11 +9,8 @@
     //    padding-left: 0px;
     //    padding-right: 0px;
     //}
-    #card-container {
-        margin-bottom: 30px;
-        .jp-card-container {
-            transform: scale(1)!important;
-        }
+    .btn.paynow {
+        text-align: center;
     }
     .no-pad-lr {
         padding-left: 0px;
@@ -25,6 +22,31 @@
     }
     .pricing-table {
         background-color: white;
+    }
+    .fa-spinner {
+        font-size: 3em;
+    }
+}
+
+#card-container {
+    margin-bottom: 30px;
+    .jp-card-container {
+        transform: scale(1)!important;
+    }
+    @media (max-width: @screen-xs-min) {
+        .jp-card-container {
+            transform: scale(0.75) translateX(-25%) !important;
+            position: relative;
+            left: 20%;
+        }
+    }
+}
+@media (max-width: @screen-xs-min) {
+    #card-container {
+        margin-bottom: 0;
+    }
+    .billing-credit-card > .row:last-child {
+        margin-bottom: 100px;
     }
 }
 

@@ -1,4 +1,4 @@
-<div class="pricing-table pricing-blue" ng-class="{ selected: selectedPlan.plan.id == plan.id }">
+<div class="pricing-table pricing-blue" ng-class="{ selected: selectedPlan.plan.id == plan.id && account.billing.plan == 'NO_PLAN_ARGUMENT' }">
 <!--     selectedPlan.plan.id: {{selectedPlan.plan.id}}
     this plan.id: {{plan.stripePlanFullData.id}} -->
     <ul class="plan plan2 margin-top-0">
@@ -34,9 +34,15 @@
         <li ng-if="showSelectBtn">
             <a
                 type="button" 
-                class="btn btn-success btn-block center" 
-                ng-click="switchSubscriptionPlanFn(plan.id)">
+                class="select-plan btn btn-success btn-block center" 
+                ng-click="switchSubscriptionPlanFn(plan.id);">
                 Select Plan
+            </a>
+            <a
+                type="button" 
+                class="deselect-plan btn btn-success btn-block center" 
+                ng-click="switchSubscriptionPlanFn(null)">
+                Cancel
             </a>
         </li>
     </ul>

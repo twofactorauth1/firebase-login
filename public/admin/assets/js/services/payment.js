@@ -8,12 +8,14 @@
             var baseUrl = '/api/1.0/';
             Stripe.setPublishableKey(ENV.stripeKey);
 
-            this.getStripeCardToken = function(cardInput, fn) {
+            this.getStripeCardToken = function(cardInput, fn, suppressToastSuccessMessage) {
                 Stripe.card.createToken(cardInput, function(status, response) {
                     if (status !== 200) {
                         ToasterService.show('error', response.error.message);
                     } else {
-                        ToasterService.show('success', 'Card added successfully.');
+                        if (!suppressToastSuccessMessage) {
+                            ToasterService.show('success', 'Card added successfully.');
+                        }
                     }
                     fn(response.id);
                 });
