@@ -60,6 +60,28 @@
       }
     };
 
+    //website/:websiteid/page/:handle
+    this.checkDuplicatePage = function (handle, fn) {
+      var _pages = pagecache.get('pages');
+      var _matchingPages = _.filter(_pages, function (_page) {
+        return (_page.handle === handle)
+      });
+
+      if (_matchingPages) {
+        fn(_matchingPages);
+      } else {
+        var apiUrl = baseUrl + ['cms', 'website', $$.server.websiteId, 'page', handle].join('/');
+        $http.get(apiUrl)
+          .success(function (data, status, headers, config) {
+            fn(data);
+          })
+          .error(function (err) {
+            console.warn('END:getSinglePage with ERROR');
+            fn(err, null);
+          });
+      }
+    };
+
     //website/:websiteid/email/:id
     this.getSingleEmail = function (_emailId, fn) {
       var _emails = emailcache.get('emails');

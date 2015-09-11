@@ -238,18 +238,20 @@
       }
     }
 
-    $scope.redirectWithoutSave = function(redirect_url){
+    $scope.redirectWithoutSave = function(redirect_url, show_alert){
     $scope.resetOriginals(true);
     if(redirect_url){
         if($scope.activePage)
         {
           WebsiteService.cancelPage($scope.page, function (data) {
-            SweetAlert.swal("Cancelled", "Your edits were NOT saved.", "error");
+            if(show_alert)
+              SweetAlert.swal("Cancelled", "Your edits were NOT saved.", "error");
             window.location = redirect_url;
           });
         }
         else{
-          SweetAlert.swal("Cancelled", "Your edits were NOT saved.", "error");
+          if(show_alert)
+              SweetAlert.swal("Cancelled", "Your edits were NOT saved.", "error");
           window.location = redirect_url;
         }        
       }
@@ -965,14 +967,12 @@
     $scope.checkForDuplicatePage = function (fn) {
       $scope.validateEditPage($scope.page);
       if ($scope.editPageValidated)
-        WebsiteService.getSinglePage($scope.page.handle, function (data) {
-          if (data && data._id) {
-            if (data._id !== $scope.page._id) {
-              $scope.duplicateUrl = true;
-              toaster.pop('error', "Page URL " + $scope.page.handle, "Already exists");
-            } else {
-              $scope.duplicateUrl = false;
-            }
+        WebsiteService.checkDuplicatePage($scope.page.handle, function (data) {
+          if (data && data.length > 1) {
+            $scope.duplicateUrl = true;
+            toaster.pop('error', "Page URL " + $scope.page.handle, "Already exists");
+          } else {
+            $scope.duplicateUrl = false;
           }
           if (fn)
             fn();
@@ -1051,8 +1051,8 @@
         toaster.pop('error', "Page Title or URL can not be blank.");
         return false;
       }
-      WebsiteService.getSinglePage(newPage.handle, function (data) {
-        if (data && data._id) {
+      WebsiteService.checkDuplicatePage(newPage.handle, function (data) {
+        if (data && data.length > 1) {
           toaster.pop('error', "Page URL " + newPage.handle, "Already exists");
           return false;
         }
@@ -1260,14 +1260,14 @@
             }
 
           } else {
-            $scope.redirectWithoutSave(redirectUrl);
+            $scope.redirectWithoutSave(redirectUrl, true);
             if (reload) {
               window.location.reload();
             }
           }
         });
       } else {
-        window.location = redirectUrl;
+        $scope.redirectWithoutSave(redirectUrl, false);
         if (reload) {
           window.location.reload();
         }
