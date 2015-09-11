@@ -593,7 +593,7 @@
                         <switch id="show-hours" ng-model="componentEditing.showHours" class="pull-right" ng-change="saveComponent()"></switch>
                     </div>
                     <div class="form-group">
-                        <label for="custom-hours">Custom</label>
+                        <label for="custom-hours">Custom hours</label>
                         <span tooltip-placement="top" tooltip-html-unsafe="Show/hide custom hours."><i class="fa fa-info-circle" /></span>
                         <switch id="custom-hours" ng-model="componentEditing.custom.hours" class="pull-right" ng-change="saveContactComponent(false)"></switch>
                     </div>
@@ -679,9 +679,9 @@
                         <span>Address</span>
                     </tab-heading>
                     <div class="form-group">
-                        <label for="custom-address">Custom</label>
+                        <label for="custom-address">Custom Address</label>
                         <span tooltip-placement="top" tooltip-html-unsafe="Show/hide custom address."><i class="fa fa-info-circle" /></span>
-                        <switch id="custom-address" ng-model="componentEditing.custom.address" class="pull-right" ng-change="showAddress = !componentEditing.custom.address; saveContactComponent(true)"></switch>
+                        <switch id="custom-address" ng-model="componentEditing.custom.address" class="pull-right" ng-change="saveContactComponent(true)"></switch>
                     </div>
                     <div ng-if="componentEditing.custom.address" class="form-group">
                         <label for="location-address">Add Address</label>
@@ -696,7 +696,7 @@
                             <a href="" ng-click="showAddress = false" ng-show="showAddress">Cancel</a>
                         </span>
                     </p>
-                    <div ng-if="showAddress" class="row">
+                    <div ng-if="showAddress || !componentEditing.custom.address" class="row">
                         <div class="form-group col-sm-6" ng-class="{'has-error':errorMapData}">
                             <label for="location-address">Address </label>
                             <span tooltip-placement="top" tooltip-html-unsafe="Contact Us address line 1."><i class="fa fa-info-circle" /></span>
@@ -708,7 +708,7 @@
                             <input id="location-address2" ng-disabled="!componentEditing.custom.address" ng-change="checkIfAddess(true)" ng-blur="updateContactUsAddress()" class="form-control" type="text" ng-model="componentEditing.location.address2">
                         </div>
                     </div>
-                    <div ng-if="showAddress" class="row">
+                    <div ng-if="showAddress || !componentEditing.custom.address" class="row">
                         <div class="form-group col-sm-4" ng-class="{'has-error':errorMapData}">
                             <label for="location-city">City </label>
                             <span tooltip-placement="top" tooltip-html-unsafe="Contact Us City."><i class="fa fa-info-circle" /></span>
