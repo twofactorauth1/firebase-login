@@ -765,7 +765,8 @@ _.extend(api.prototype, baseApi.prototype, {
 
                     //validate params
                     if(!planId || planId.length < 1) {
-                        return self.wrapError(resp, 400, null, "Invalid parameter for planId.");
+                        planId = $$.u.idutils.generateUniqueAlphaNumericShort();
+                        //return self.wrapError(resp, 400, null, "Invalid parameter for planId.");
                     }
                     if(!amount) {
                         return self.wrapError(resp, 400, null, "Invalid parameter for amount.");
