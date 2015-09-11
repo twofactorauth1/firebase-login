@@ -82,45 +82,27 @@
     $scope.planlist = {
       list: []
     };
-    $scope.selectedPlan = {
-      plan: {
-        id: null
-      }
-    };
+    $scope.selectedPlan = {};
 
     //get plans
     ProductService.getIndigenousProducts(function (products) {
       products.forEach(function (product){
         var productAttrs = product.product_attributes;
-        var hasStripePlans = productAttrs.hasOwnProperty('stripePlans');
-        var promises = [];
+        var hasStripePlans = productAttrs.hasOwnProperty('stripePlans') && productAttrs.stripePlans.length;
+        // var promises = [];
 
-        if (hasStripePlans) {
-          productAttrs.stripePlans.forEach(function (value) {
-            if (value.active) {
-              $scope.planStatus[product._id] = {};
-              $scope.planStatus[product._id][value.id] = value;
-            }
-            PaymentService.getIndigenousPlan(value.id, function(plan){
-              console.log(plan);
-              product.stripePlanFullData = plan;
-              $scope.planlist.list.push(plan);
-            });
-            // promises.push(PaymentService.getIndigenousPlanPromise(value.id));
-            console.log(value.id);
+        if (hasStripePlans && productAttrs.stripePlans[0].active) {
+          PaymentService.getIndigenousStripePlan(productAttrs.stripePlans[0].id, function(plan){
+            console.log(plan);
+            productAttrs.stripePlans[0] = plan; //populate full plan data
+            $scope.planlist.list.push(product);
           });
-          // $q.all(promises)
-          //   .then(function (data) {
-          //     data.forEach(function (value) {
-          //       $scope.subscriptionPlans.push(value.data);
-          //     });
-          //   })
-          //   .catch(function (err) {
-          //     console.error(err);
-          //   });
         }
 
       });
+
+      $scope.getAccountData();
+
     });
 
 
@@ -132,13 +114,11 @@
      */
 
     $scope.switchSubscriptionPlanFn = function (planId) {
-      $scope.selectedPlan = {
-        plan: {
-          id: null
-        }
-      };
+      $scope.selectedPlan = $scope.planlist.list.filter(function(plan) {
+        return plan.product_attributes.stripePlans[0].id === planId;
+      })[0];
       $scope.subscriptionSelected = planId !== null ? true : false;
-      $scope.selectedPlan.plan.id = planId;
+      // $scope.selectedPlan.plan.id = planId;
       // $scope.savePlanFn($scope.subscription.plan.id);
     };
 
@@ -152,11 +132,11 @@
      * -
      */
 
-    $scope.chooseFirstTime = function () {
-      $('#changeCardModal').modal('show');
-      $scope.firstTime = true;
-      //set trigger on success of add card service
-    };
+    // $scope.chooseFirstTime = function () {
+    //   $('#changeCardModal').modal('show');
+    //   $scope.firstTime = true;
+    //   //set trigger on success of add card service
+    // };
 
     /*
      * @savePlanFn
@@ -171,6 +151,8 @@
         PaymentService.postSubscribeToIndigenous($scope.currentUser.stripeId, planId, null, $scope.planStatus[planId], function (subscription) {
           $scope.cancelOldSubscriptionsFn();
           $scope.selectedPlan = subscription;
+          console.log('$scope.selectedPlan:');
+          console.log($scope.selectedPlan);
           PaymentService.getUpcomingInvoice($scope.currentUser.stripeId, function (upcomingInvoice) {
             $scope.upcomingInvoice = upcomingInvoice;
           });
@@ -280,7 +262,9 @@
             account.billing.subscriptionId,
             function(subscription) {
               // $scope.subscription = subscription; 
-              $scope.selectedPlan = subscription;
+              $scope.selectedPlan = $scope.planlist.list.filter(function(plan) {
+                return plan.product_attributes.stripePlans[0].id === subscription.plan.id;
+              })[0];
               console.warn('BillingCtrl, received subscription:\n', subscription);
           });
         }
@@ -302,8 +286,6 @@
         }
       });
     };
-
-    $scope.getAccountData();
 
   }]);
 }(angular));

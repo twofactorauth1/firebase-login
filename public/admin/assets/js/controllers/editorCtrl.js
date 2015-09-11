@@ -202,35 +202,6 @@
       });
     }
 
-
-
-    /*
-     * @resetOriginals
-     * -
-     */
-
-    $scope.resetOriginals = function (reverted) {
-      $scope.setDirty(false);
-      if(reverted){         
-          if ($scope.isSinglePost) {            
-            $scope.blog.post = $scope.originalPost;
-          }
-          else {
-            $scope.components = $scope.originalComponents;
-            $scope.page = $scope.originalPage;
-          }
-      }
-      else{
-        if ($scope.isSinglePost) {            
-          $scope.originalPost = $scope.blog.post;
-        }
-        else {
-          $scope.originalComponents = $scope.components;
-          $scope.originalPage = $scope.page;
-        }
-      }        
-    }; 
-
     $scope.redirectAfterSave = function(redirect_url){
     if(redirect_url){
         SweetAlert.swal("Saved!", "Your edits were saved to the page.", "success");
@@ -239,21 +210,10 @@
     }
 
     $scope.redirectWithoutSave = function(redirect_url, show_alert){
-    $scope.resetOriginals(true);
-    if(redirect_url){
-        if($scope.activePage)
-        {
-          WebsiteService.cancelPage($scope.page, function (data) {
-            if(show_alert)
-              SweetAlert.swal("Cancelled", "Your edits were NOT saved.", "error");
-            window.location = redirect_url;
-          });
-        }
-        else{
+    if(redirect_url){       
           if(show_alert)
               SweetAlert.swal("Cancelled", "Your edits were NOT saved.", "error");
           window.location = redirect_url;
-        }        
       }
     }
 
@@ -293,7 +253,6 @@
                 $location.search('posthandle', post_data.post_url);
               }
               $scope.saveLoading = false;
-              $scope.resetOriginals(false);
               toaster.pop('success', "Post Saved", "The " + $filter('htmlToPlaintext')($scope.blog.post.post_title) + " post was saved successfully.");
               $scope.redirectAfterSave(redirect_url);
             });
@@ -304,7 +263,6 @@
         WebsiteService.updateTemplate($scope.page._id, $scope.page, function () {
           console.log('success');
           $scope.saveLoading = false;
-          $scope.resetOriginals(false);
           toaster.pop('success', "Template Saved", "The " + $scope.page.handle + " template was saved successfully.");
           $scope.redirectAfterSave(redirect_url);
         });
@@ -338,8 +296,7 @@
                         $location.search('pagehandle', $scope.page.handle);
                         $scope.refreshLinkList(value, $scope.originalPage.handle);
                       }
-                      WebsiteService.updateLinkList($scope.website.linkLists[index], $scope.website._id, 'head-menu', function (data) {                        
-                        $scope.resetOriginals(false);
+                      WebsiteService.updateLinkList($scope.website.linkLists[index], $scope.website._id, 'head-menu', function (data) {                                               
                         console.log('Updated linked list');
                       });
                       if ($scope.page.handle === 'blog' && $scope.blogControl.saveBlogData)
@@ -450,7 +407,7 @@
       if (_handle === 'blog' || _handle === 'single-post')
         $scope.post_blog_page = true;
       WebsiteService.getSinglePage(_handle, function (data) {
-        $scope.page = data;
+        $scope.page  = angular.copy(data);
         $scope.components = $scope.page.components;
         $scope.originalComponents = angular.copy($scope.components);
         $scope.originalPage = angular.copy(data);
@@ -967,8 +924,8 @@
     $scope.checkForDuplicatePage = function (fn) {
       $scope.validateEditPage($scope.page);
       if ($scope.editPageValidated)
-        WebsiteService.checkDuplicatePage($scope.page.handle, function (data) {
-          if (data && data.length > 1) {
+        WebsiteService.checkDuplicatePage($scope.page.handle, $scope.page._id, function (data) {
+          if (data) {
             $scope.duplicateUrl = true;
             toaster.pop('error', "Page URL " + $scope.page.handle, "Already exists");
           } else {
@@ -1051,8 +1008,8 @@
         toaster.pop('error', "Page Title or URL can not be blank.");
         return false;
       }
-      WebsiteService.checkDuplicatePage(newPage.handle, function (data) {
-        if (data && data.length > 1) {
+      WebsiteService.checkDuplicatePage(newPage.handle, newPage._id, function (data) {
+        if (data) {
           toaster.pop('error', "Page URL " + newPage.handle, "Already exists");
           return false;
         }

@@ -13348,6 +13348,10 @@ div[class^="spacing-"] {
 /* ---------------------------------------------------------------------- */
 .billing .btn.paynow {
   text-align: center;
+  display: none;
+}
+.billing .btn.paynow.active {
+  display: block;
 }
 .billing .no-pad-lr {
   padding-left: 0px;
@@ -13371,7 +13375,9 @@ div[class^="spacing-"] {
 }
 @media (max-width: 480px) {
   #card-container .jp-card-container {
-    transform: scale(0.75) translateX(-6%) !important;
+    transform: scale(0.75) translateX(-25%) !important;
+    position: relative;
+    left: 20%;
   }
 }
 @media (max-width: 480px) {

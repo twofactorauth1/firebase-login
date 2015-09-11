@@ -61,22 +61,34 @@
     };
 
     //website/:websiteid/page/:handle
-    this.checkDuplicatePage = function (handle, fn) {
+    this.checkDuplicatePage = function (handle, pageId, fn) {
       var _pages = pagecache.get('pages');
+      var duplicate = false;
       var _matchingPages = _.filter(_pages, function (_page) {
         return (_page.handle === handle)
       });
-
-      if (_matchingPages) {
-        fn(_matchingPages);
+      if (_matchingPages.length) {
+        if(_matchingPages.length > 1)
+        {
+          duplicate = true;
+        }
+        else if(_matchingPages.length === 1)
+        {
+          duplicate = _matchingPages[0]._id !== pageId;
+        }
+        fn(duplicate);
       } else {
         var apiUrl = baseUrl + ['cms', 'website', $$.server.websiteId, 'page', handle].join('/');
         $http.get(apiUrl)
           .success(function (data, status, headers, config) {
-            fn(data);
+            if(data && data._id)
+            {
+              duplicate = data._id !== pageId;
+            }
+            fn(duplicate);
           })
           .error(function (err) {
-            console.warn('END:getSinglePage with ERROR');
+            console.warn('END:checkDuplicatePage with ERROR');
             fn(err, null);
           });
       }
@@ -302,16 +314,7 @@
         fn(err, null);
       });
     };
-
-    this.cancelPage = function (page, fn) {     
-        var _pages = pagecache.get('pages');
-        if (_pages && _pages[page.handle]) {
-          _pages[page.handle] = page;
-          pagecache.put('pages', _pages);
-        }
-        fn(page);
-    }
-
+    
     //page/:id/components/all
     this.updateComponentOrder = function (pageId, componentId, newOrder, fn) {
       var apiUrl = baseUrl + ['cms', 'page', pageId, 'components', componentId, 'order', newOrder].join('/');

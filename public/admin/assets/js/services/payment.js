@@ -144,7 +144,7 @@
                 return $http.get(apiUrl);
             };
 
-            this.getIndigenousPlan = function(planId, fn) {
+            this.getIndigenousStripePlan = function(planId, fn) {
                 var apiUrl = baseUrl + ['integrations', 'payments', 'indigenous', 'plans', planId].join('/');
                 $http.get(apiUrl)
                     .success(function(data, status, headers, config) {
