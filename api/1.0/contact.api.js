@@ -676,6 +676,9 @@ _.extend(api.prototype, baseApi.prototype, {
                                                     if (!component.emailBg) {
                                                         component.emailBg = '#ffffff';
                                                     }
+                                                    if (component.bg.img && component.bg.img.show & component.bg.img.url) {
+                                                        component.emailBgImage = component.bg.img.url.replace('//s3.amazonaws', 'http://s3.amazonaws');
+                                                    }
 
                                                     component.logo = component.logo.replace('src="//', 'src="http://');
 
