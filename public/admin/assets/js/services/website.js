@@ -251,7 +251,7 @@
     };
 
     // website/:websiteId/page/:id
-    this.updatePage = function (page, fn) {
+    this.updatePage = function (page, handle, fn) {
       if (!page.modified) {
         page.modified = {};
       }
@@ -264,10 +264,15 @@
       }).success(function (data, status, headers, config) {
         if (page.type === 'page') {
           var _pages = pagecache.get('pages');
-          if (_pages && _pages[data.handle]) {
+          if (_pages) {
+            if(data.handle !== handle)
+            {
+              delete _pages[handle];
+            }
             _pages[data.handle] = data;
             pagecache.put('pages', _pages);
           }
+          
         }
         fn(data);
       }).error(function (err) {

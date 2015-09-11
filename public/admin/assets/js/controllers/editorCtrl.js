@@ -324,7 +324,7 @@
           if (!$scope.duplicateUrl)
             $scope.validateContactAddress(function (data) {
               if (data && !$scope.isEmail) {
-                WebsiteService.updatePage($scope.page, function (data) {
+                WebsiteService.updatePage($scope.page, $scope.originalPage.handle, function (data) {
                   console.log($scope.page.handle, $scope.originalPage.handle);
                   $scope.saveLoading = false;
                   toaster.pop('success', "Page Saved", "The " + $scope.page.handle + " page was saved successfully.");
