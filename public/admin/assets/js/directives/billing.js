@@ -59,8 +59,8 @@ app.directive("billingInvoiceTable", [function () {
   }
 }]);
 
-app.directive("billingTrial", ['PaymentService', 'ToasterService', 'UserService',
-  function (PaymentService, ToasterService, UserService) {
+app.directive("billingTrial", ['PaymentService', 'ToasterService', 'UserService', '$window',
+  function (PaymentService, ToasterService, UserService, $window) {
   return {
     restrict: 'E',
     templateUrl: '/admin/assets/views/partials/billingTrial.html',
@@ -92,6 +92,9 @@ app.directive("billingTrial", ['PaymentService', 'ToasterService', 'UserService'
                   scope.account = accBillingUpdate;
 
                   scope.savePlanFn(scope.selectedPlan.product_attributes.stripePlans[0].id);
+
+                  // TODO: remove this window refresh HACK when we know what is the problem refreshing data on the billingCtrl.
+                  $window.location.reload(true);
                 });
                 //scope.cards.data.forEach(function(value, index) {
                 //  PaymentService.deleteCustomerCard(value.customer, value.id, false, function(card) {});
