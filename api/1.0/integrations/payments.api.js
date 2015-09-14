@@ -296,9 +296,7 @@ _.extend(api.prototype, baseApi.prototype, {
                     activityType: "TRIAL_CONVERSION",
                     detail : "Account for "+ subdomain + ' [' + accountId + '] has converted to paying customer.',
                     start: new Date(),
-                    extraFields: [
-                        {accountId:accountId, plan_name:stripeSubscription.plan.name, amount:(stripeSubscription.plan.amount / 100)}
-                    ]
+                    extraFields: {accountId:accountId, plan_name:stripeSubscription.plan.name, amount:(stripeSubscription.plan.amount / 100)}
                 });
                 contactActivityManager.createActivity(activity, function(err, value){
                     if(err) {
