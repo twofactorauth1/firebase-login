@@ -1,6 +1,6 @@
 /*global app, moment, angular, window, L*/
 /*jslint unparam:true*/
-app.directive('contactUsComponent', ['geocodeService', '$timeout', function (geocodeService, $timeout) {
+app.directive('contactUsComponent', ['geocodeService', 'accountService', '$timeout', function (geocodeService, accountService, $timeout) {
   return {
     scope: {
       component: '='
@@ -76,7 +76,39 @@ app.directive('contactUsComponent', ['geocodeService', '$timeout', function (geo
         scope.map.setCenter(new google.maps.LatLng(51, 0));
       });
 
-      scope.updateContactUsAddress();
+
+      if(!scope.component.custom){
+        scope.component.custom = {
+          hours: true, address: true
+        };
+      };
+
+      scope.setBusinessDetails = function(is_address, account, fn){
+        if(is_address){
+          if (account.business.addresses && account.business.addresses.length > -1) {
+            scope.component.location = account.business.addresses[0];
+          }
+        }
+        else if(account.business.hours){        
+          scope.component.hours = account.business.hours;
+          scope.component.splitHours = account.business.splitHours;
+        }
+        fn();
+      };
+
+      accountService(function (err, account) {
+        if(!scope.component.custom.hours)
+        {
+          scope.setBusinessDetails(false, account, function () {});
+        }
+        if ((!scope.component.location.address && !scope.component.location.address2 && !scope.component.location.city && !scope.component.location.state && !scope.component.location.zip) || !scope.component.custom.address) {
+          scope.setBusinessDetails(true, account, function () {
+            scope.updateContactUsAddress();
+          });
+        } else {
+           scope.updateContactUsAddress();
+        }
+      });
     }
   };
 }]);

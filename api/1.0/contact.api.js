@@ -520,7 +520,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 var fromContactEmail = req.body.fromEmail;
                 var campaignId = req.body.campaignId;
                 var emailId = req.body.emailId;
-                var sendEmail = req.body.sendEmail;
+                var sendEmail = JSON.parse(req.body.sendEmail);
                 var fromContactName = req.body.fromName;
                 var activity = req.body.activity;
                 var contact_type = req.body.contact_type;
@@ -663,6 +663,7 @@ _.extend(api.prototype, baseApi.prototype, {
                                                     self.log.debug('Using this for data', emailPage.get('_id'));
                                                     self.log.debug('Using this account for data', account);
                                                     self.log.debug('This component:', component);
+
                                                     if(!component.logourl && account && account.attributes.business) {
                                                         component.logourl = account.attributes.business.logo;
                                                     }
@@ -673,6 +674,9 @@ _.extend(api.prototype, baseApi.prototype, {
 
                                                     if (!component.emailBg) {
                                                         component.emailBg = '#ffffff';
+                                                    }
+                                                    if (component.bg.img && component.bg.img.show & component.bg.img.url) {
+                                                        component.emailBgImage = component.bg.img.url.replace('//s3.amazonaws', 'http://s3.amazonaws');
                                                     }
 
                                                     component.logo = component.logo.replace('src="//', 'src="http://');

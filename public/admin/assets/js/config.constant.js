@@ -626,9 +626,9 @@ app.constant('JS_REQUIRES', {
     name: 'skeuocard',
     files: ['../js/libs/skeuocard/lib/js/jquery.card.js']
   }, {
-    name: 'angularBootstrapNavTree',
-    files: ['../js/libs/angular-bootstrap-nav-tree/dist/abn_tree_directive.js', '../js/libs/angular-bootstrap-nav-tree/dist/abn_tree.css']
-  }, {
+      name: 'angularBootstrapNavTree',
+      files: ['../js/libs/angular-bootstrap-nav-tree/dist/abn_tree_directive.js', '../js/libs/angular-bootstrap-nav-tree/dist/abn_tree.css']
+    }, {
     name: 'angular-ladda',
     files: ['../js/libs/angular-ladda/dist/angular-ladda.min.js']
   }, {
@@ -702,7 +702,7 @@ app.constant('JS_REQUIRES', {
     files: ['../js/libs/angular-daterangepicker/js/angular-daterangepicker.min.js', '../js/libs/bootstrap-daterangepicker/daterangepicker.js', '../js/libs/bootstrap-daterangepicker/daterangepicker-bs3.css']
   }, {
     name: 'ui.sortable',
-    files: ['../js/libs/Sortable/Sortable.min.js', '../js/libs/Sortable/ng-sortable.js', '../js/libs_misc/ng-sortable/dist/ng-sortable.min.css']
+    files: ['../js/libs/Sortable/Sortable.min.js', '../js/libs/Sortable/ng-sortable.js']
   }, {
     name: 'angular-slider',
     files: ['../js/libs/angularjs-slider/dist/rzslider.min.js', '../js/libs/angularjs-slider/dist/rzslider.min.css']

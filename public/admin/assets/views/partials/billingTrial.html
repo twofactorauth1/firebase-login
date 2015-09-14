@@ -1,0 +1,49 @@
+<div class="row">
+    <div class="row container-fullw bg-white">
+        <h1 class="col-xs-12 text-center">
+            <span translate="sidebar.heading.TRIAL_ENDING" class="ng-scope"></span>
+            <span> {{::account.trialDaysRemaining}} days</span>
+        </h1>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="row container-fullw">
+                <div class="col-xs-12">
+                    <ul class="unstyled-list padding-left-0">
+                        <li ng-repeat="plan in planlist.list track by plan._id">
+                            <billing-subscription showselectbtn="{{true}}"></billing-subscription>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="row container-fullw">
+                <div class="col-xs-12 billing-credit-card">
+
+                    <!--change-card="credit.onChange"-->
+                    <!--clear="credit.onClear"-->
+                    <billing-credit-card
+                        card-info="credit.card"
+                        card-values="credit.values"
+                        card-options="credit.options"
+                        card-messages="credit.messages"
+                        ng-class="{ active: subscriptionSelected }"
+                        plan="selectedPlan">
+                    </billing-credit-card>
+                    <div class="row">
+                        <div 
+                            ng-if="!selectedPlan.paymentProcessing" 
+                            ng-click="submitPayment()"
+                            class="paynow col-xs-8 col-xs-offset-2 col-md-4 col-md-offset-4 btn btn-lg btn-warning {{subscriptionSelected ? '' : 'disabled'}} {{selectedPlan.paymentProcessing ? '' : 'active' }}" >
+                            PAY NOW
+                        </div>
+                        <div class="paynow btn col-xs-8 col-xs-offset-2 col-md-4 col-md-offset-4 {{selectedPlan.paymentProcessing ? 'active' : '' }}">
+                            <span class="fa fa-spinner fa-spin"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

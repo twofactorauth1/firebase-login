@@ -42,6 +42,10 @@
                     font-weight: 600;
                     color: @white;
 
+                    .fa, span {
+                        display: inline-block;
+                    }
+
                     .price-cents {
                         font-size: 50%;
                         vertical-align: super;
@@ -64,6 +68,11 @@
             }
         }
 
+        .btn.deselect-plan {
+            display: none;
+            margin-top: 0;
+        }
+
         &.featured {
             -webkit-transform: scale(1.05);
             -ms-transform: scale(1.05);
@@ -72,6 +81,24 @@
 
             .plan-name {
                 background: darken(@grey, 20%);
+            }
+        }
+    }
+
+    &.selected {
+        box-shadow: 0 0 1px 3px @info;//@warning;
+
+        .btn.select-plan {
+            display: none;
+        }
+
+        .btn.deselect-plan {
+            display: inline-block;
+            background-color: #ddd;
+            border-color: #ddd;
+
+            &:hover {
+                background-color: #ddd!important;
             }
         }
     }

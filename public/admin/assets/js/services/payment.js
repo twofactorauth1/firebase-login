@@ -8,12 +8,14 @@
             var baseUrl = '/api/1.0/';
             Stripe.setPublishableKey(ENV.stripeKey);
 
-            this.getStripeCardToken = function(cardInput, fn) {
+            this.getStripeCardToken = function(cardInput, fn, suppressToastSuccessMessage) {
                 Stripe.card.createToken(cardInput, function(status, response) {
                     if (status !== 200) {
                         ToasterService.show('error', response.error.message);
                     } else {
-                        ToasterService.show('success', 'Card added successfully.');
+                        if (!suppressToastSuccessMessage) {
+                            ToasterService.show('success', 'Card added successfully.');
+                        }
                     }
                     fn(response.id);
                 });
@@ -80,9 +82,11 @@
             this.getUpcomingInvoice = function(stripeId, fn) {
                 var apiUrl = baseUrl + ['integrations', 'payments', 'upcomingInvoice'].join('/');
                 $http.get(apiUrl)
-                    .success(function(data, status, headers, config) {
-                        fn(data);
-                    });
+                  .then(function(response){
+                      fn(response.data);
+                  }, function(error) {
+                      console.warn('PaymentsService.getUpcomingInvoice received an error:\n', error);
+                  })
             };
 
             this.getUpcomingInvoiceForCustomer = function(stripeId, fn) {
@@ -140,6 +144,14 @@
                 return $http.get(apiUrl);
             };
 
+            this.getIndigenousStripePlan = function(planId, fn) {
+                var apiUrl = baseUrl + ['integrations', 'payments', 'indigenous', 'plans', planId].join('/');
+                $http.get(apiUrl)
+                    .success(function(data, status, headers, config) {
+                        fn(data);
+                    });
+            };
+
             this.getPlan = function(planId, fn) {
                 var apiUrl = baseUrl + ['integrations', 'payments', 'plans', planId].join('/');
                 $http.get(apiUrl)
@@ -179,9 +191,13 @@
 
             this.getStripeSubscription = function(stripeId, subscriptionId, fn) {
                 var apiUrl = baseUrl + ['integrations', 'payments', 'customers', stripeId, 'subscriptions', subscriptionId].join('/');
+
+                console.warn('PaymentService.getStripeSubscription, apiUrl:\n', apiUrl);
                 $http.get(apiUrl)
-                  .success(function(data, status, headers, config) {
-                      fn(data);
+                  .then(function(response) {
+                      fn(response.data);
+                  }, function(err) {
+                      console.warn('An error occurred in PaymentService.getStripeSubscription:\n', err);
                   });
             };
 
@@ -196,19 +212,27 @@
                     });
             };
 
-            this.postSubscribeToIndigenous = function(stripeCustomerId, planId, accountId, setupFee, fn) {
-                console.log('setup fee ', setupFee.signup_fee);
+            this.postSubscribeToIndigenous = function(stripeCustomerId, planId, accountId, setupFee, fn, errFn) {
                 var apiUrl = baseUrl + ['integrations', 'payments', 'indigenous', 'plans', planId, 'subscribe'].join('/');
                 var params = {
                     customerId: stripeCustomerId,
-                    setupFee: setupFee.signup_fee * 100
+                    // setupFee: setupFee.signup_fee * 100
                 };
+                
                 if (accountId) {
                     params.accountId = accountId;
                 }
+
+                if (setupFee) {
+                    params.setupFee = setupFee;
+                }
+
                 $http.post(apiUrl, params)
                     .success(function(data, status, headers, config) {
                         fn(data);
+                    })
+                    .error(function(err) {
+                        if (errFn) errFn(err);
                     });
             };
 

@@ -86,6 +86,11 @@
       }]
     };
 
+    $scope.setDirty = function(is_dirty){
+      $scope.isDirty.dirty = is_dirty;
+    }
+
+
     /*
      * @ckeditor:instanceReady
      * -
@@ -103,7 +108,7 @@
         else
           angular.element('.cke_button__doksoft_font_awesome').show();
         ev.editor.on('key', function () {
-          $scope.isDirty.dirty = true;
+          $scope.setDirty(true);
         });
         if (!$scope.activeEditor)
           $scope.activeEditor = ev.editor;
@@ -197,6 +202,21 @@
       });
     }
 
+    $scope.redirectAfterSave = function(redirect_url){
+    if(redirect_url){
+        SweetAlert.swal("Saved!", "Your edits were saved to the page.", "success");
+        window.location = redirect_url;
+      }
+    }
+
+    $scope.redirectWithoutSave = function(redirect_url, show_alert){
+    if(redirect_url){       
+          if(show_alert)
+              SweetAlert.swal("Cancelled", "Your edits were NOT saved.", "error");
+          window.location = redirect_url;
+      }
+    }
+
     /*
      * @savePage
      * -
@@ -207,10 +227,9 @@
     $scope.isDirty = {};
     $scope.blogImage = {};
     $scope.blogImage.featured_image = false;
-    $scope.savePage = function () {
+    $scope.savePage = function (redirect_url) {
       $scope.saveLoading = true;
-      $scope.isDirty.dirty = false;
-
+      $scope.setDirty(false);
       if ($scope.isSinglePost) {
         $scope.validateEditPost($scope.blog.post);
         if (!$scope.editPostValidated) {
@@ -230,12 +249,12 @@
             toaster.pop('error', "Post URL " + post_data.post_url, "Already exists");
           } else {
             WebsiteService.updatePost($scope.page._id, post_data._id, post_data, function (data) {
-              angular.copy(post_data, $scope.originalPost);
               if (post_data.post_url !== $scope.originalPost.post_url) {               
                 $location.search('posthandle', post_data.post_url);
               }
               $scope.saveLoading = false;
               toaster.pop('success', "Post Saved", "The " + $filter('htmlToPlaintext')($scope.blog.post.post_title) + " post was saved successfully.");
+              $scope.redirectAfterSave(redirect_url);
             });
           }
         })
@@ -245,6 +264,7 @@
           console.log('success');
           $scope.saveLoading = false;
           toaster.pop('success', "Template Saved", "The " + $scope.page.handle + " template was saved successfully.");
+          $scope.redirectAfterSave(redirect_url);
         });
       } else {
         //$scope.validateEditPage($scope.page);
@@ -264,10 +284,11 @@
           if (!$scope.duplicateUrl)
             $scope.validateContactAddress(function (data) {
               if (data && !$scope.isEmail) {
-                WebsiteService.updatePage($scope.page, function (data) {
+                WebsiteService.updatePage($scope.page, $scope.originalPage.handle, function (data) {
                   console.log($scope.page.handle, $scope.originalPage.handle);
                   $scope.saveLoading = false;
                   toaster.pop('success', "Page Saved", "The " + $scope.page.handle + " page was saved successfully.");
+                  $scope.redirectAfterSave(redirect_url);
                   //Update linked list
                   $scope.website.linkLists.forEach(function (value, index) {
                     if (value.handle === "head-menu") {
@@ -275,8 +296,7 @@
                         $location.search('pagehandle', $scope.page.handle);
                         $scope.refreshLinkList(value, $scope.originalPage.handle);
                       }
-                      WebsiteService.updateLinkList($scope.website.linkLists[index], $scope.website._id, 'head-menu', function (data) {
-                        $scope.originalPage.handle = $scope.page.handle;
+                      WebsiteService.updateLinkList($scope.website.linkLists[index], $scope.website._id, 'head-menu', function (data) {                                               
                         console.log('Updated linked list');
                       });
                       if ($scope.page.handle === 'blog' && $scope.blogControl.saveBlogData)
@@ -387,7 +407,7 @@
       if (_handle === 'blog' || _handle === 'single-post')
         $scope.post_blog_page = true;
       WebsiteService.getSinglePage(_handle, function (data) {
-        $scope.page = data;
+        $scope.page  = angular.copy(data);
         $scope.components = $scope.page.components;
         $scope.originalComponents = angular.copy($scope.components);
         $scope.originalPage = angular.copy(data);
@@ -496,7 +516,7 @@
 
         $scope.components = $scope.page.config.components;
         $scope.originalComponents = angular.copy($scope.components);
-        $scope.originalPage = angular.copy($scope.template);
+        $scope.originalPage = angular.copy($scope.page);
         $scope.activateCKeditor();
         $rootScope.breadcrumbTitle = $scope.page.title || $scope.page.handle;
       });
@@ -904,14 +924,12 @@
     $scope.checkForDuplicatePage = function (fn) {
       $scope.validateEditPage($scope.page);
       if ($scope.editPageValidated)
-        WebsiteService.getSinglePage($scope.page.handle, function (data) {
-          if (data && data._id) {
-            if (data._id !== $scope.page._id) {
-              $scope.duplicateUrl = true;
-              toaster.pop('error', "Page URL " + $scope.page.handle, "Already exists");
-            } else {
-              $scope.duplicateUrl = false;
-            }
+        WebsiteService.checkDuplicatePage($scope.page.handle, $scope.page._id, function (data) {
+          if (data) {
+            $scope.duplicateUrl = true;
+            toaster.pop('error', "Page URL " + $scope.page.handle, "Already exists");
+          } else {
+            $scope.duplicateUrl = false;
           }
           if (fn)
             fn();
@@ -990,8 +1008,8 @@
         toaster.pop('error', "Page Title or URL can not be blank.");
         return false;
       }
-      WebsiteService.getSinglePage(newPage.handle, function (data) {
-        if (data && data._id) {
+      WebsiteService.checkDuplicatePage(newPage.handle, newPage._id, function (data) {
+        if (data) {
           toaster.pop('error', "Page URL " + newPage.handle, "Already exists");
           return false;
         }
@@ -1157,17 +1175,18 @@
     $scope.checkForSaveBeforeLeave = function (url, reload) {
       $scope.changesConfirmed = true;
       if ($scope.originalComponents && $scope.components && $scope.originalComponents.length !== $scope.components.length) {
-        $scope.isDirty.dirty = true;
+         $scope.setDirty(true);
       }
       if ($scope.isSinglePost) {
-        var post_data = angular.copy($scope.blog.post);
-        post_data.post_tags.forEach(function (v, i) {
-          if (v.text) {
-            post_data.post_tags[i] = v.text;
-          }
-        });
+          var post_data = angular.copy($scope.blog.post);
+          if($scope.originalPost.post_tags && $scope.originalPost.post_tags.length && !angular.isObject($scope.originalPost.post_tags[0]))
+            post_data.post_tags.forEach(function (v, i) {
+              if (v.text) {
+                post_data.post_tags[i] = v.text;
+              }
+            });
         if (post_data && !angular.equals($scope.originalPost, post_data)) {
-          $scope.isDirty.dirty = true;
+          $scope.setDirty(true);
         }
       }
       var redirectUrl = url;
@@ -1188,25 +1207,24 @@
           closeOnConfirm: false,
           closeOnCancel: false
         }, function (isConfirm) {
-          if (isConfirm) {
-            SweetAlert.swal("Saved!", "Your edits were saved to the page.", "success");
+          if (isConfirm) {            
+            //SweetAlert.swal("Saved!", "Your edits were saved to the page.", "success");
             $scope.redirect = true;
-            $scope.savePage();
-            window.location = redirectUrl;
+            $scope.savePage(redirectUrl);
+            //window.location = redirectUrl;
             if (reload) {
               window.location.reload();
             }
 
           } else {
-            SweetAlert.swal("Cancelled", "Your edits were NOT saved.", "error");
-            window.location = redirectUrl;
+            $scope.redirectWithoutSave(redirectUrl, true);
             if (reload) {
               window.location.reload();
             }
           }
         });
       } else {
-        window.location = redirectUrl;
+        $scope.redirectWithoutSave(redirectUrl, false);
         if (reload) {
           window.location.reload();
         }

@@ -761,10 +761,9 @@ var dao = {
         /*
          * If subscriptionId startsWith 'sub_' or trialDaysRemaining > 0, return true;
          */
-        console.log('verifying:', account);
+        //console.log('verifying:', account);
         var billing = account.get('billing');
-        if(billing.subscriptionId.indexOf('sub_') ===0) {
-            console.log('\n\n subId\n\n');
+        if(!billing.subscriptionId || billing.subscriptionId.indexOf('sub_') ===0) {
             return true;
         }
         var trialDays = billing.trialLength || 15;//using 15 instead of 14 to give 14 FULL days

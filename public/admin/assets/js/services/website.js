@@ -60,6 +60,40 @@
       }
     };
 
+    //website/:websiteid/page/:handle
+    this.checkDuplicatePage = function (handle, pageId, fn) {
+      var _pages = pagecache.get('pages');
+      var duplicate = false;
+      var _matchingPages = _.filter(_pages, function (_page) {
+        return (_page.handle === handle)
+      });
+      if (_matchingPages.length) {
+        if(_matchingPages.length > 1)
+        {
+          duplicate = true;
+        }
+        else if(_matchingPages.length === 1)
+        {
+          duplicate = _matchingPages[0]._id !== pageId;
+        }
+        fn(duplicate);
+      } else {
+        var apiUrl = baseUrl + ['cms', 'website', $$.server.websiteId, 'page', handle].join('/');
+        $http.get(apiUrl)
+          .success(function (data, status, headers, config) {
+            if(data && data._id)
+            {
+              duplicate = data._id !== pageId;
+            }
+            fn(duplicate);
+          })
+          .error(function (err) {
+            console.warn('END:checkDuplicatePage with ERROR');
+            fn(err, null);
+          });
+      }
+    };
+
     //website/:websiteid/email/:id
     this.getSingleEmail = function (_emailId, fn) {
       var _emails = emailcache.get('emails');
@@ -251,7 +285,7 @@
     };
 
     // website/:websiteId/page/:id
-    this.updatePage = function (page, fn) {
+    this.updatePage = function (page, handle, fn) {
       if (!page.modified) {
         page.modified = {};
       }
@@ -265,9 +299,14 @@
         if (page.type === 'page') {
           var _pages = pagecache.get('pages');
           if (_pages) {
+            if(data.handle !== handle)
+            {
+              delete _pages[handle];
+            }
             _pages[data.handle] = data;
             pagecache.put('pages', _pages);
           }
+          
         }
         fn(data);
       }).error(function (err) {
@@ -275,7 +314,7 @@
         fn(err, null);
       });
     };
-
+    
     //page/:id/components/all
     this.updateComponentOrder = function (pageId, componentId, newOrder, fn) {
       var apiUrl = baseUrl + ['cms', 'page', pageId, 'components', componentId, 'order', newOrder].join('/');
