@@ -91,6 +91,7 @@
     "karma-jasmine": "^0.3.6",
     "karma-opera-launcher": "^0.3.0",
     "karma-safari-launcher": "^0.1.1",
+    "stripe-debug": "^2.0.0",
     "superagent": "0.18.1",
     "supertest": "0.13.0"
   },

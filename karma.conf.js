@@ -52,6 +52,8 @@ module.exports = function (config) {
       'public/js/libs/angular-sweetalert-promised/SweetAlert.min.js',
       'public/js/libs/sweetalert/lib/sweet-alert.min.js',
       'public/js/libs/underscore/underscore.js',
+      'node_modules/stripe-debug/stripe-debug.js',
+      'public/js/libs/angular-cookie/angular-cookie.min.js',
 
       'public/js/scripts/config.js',
       'public/admin/assets/js/config.constant.js',
@@ -73,10 +75,11 @@ module.exports = function (config) {
       // 'public/admin/assets/js/**/*.js',
       'public/admin/assets/js/controllers/gettingStartedCtrl.js',
       'public/admin/assets/js/controllers/orderDetailCtrl.js',
+      'public/admin/assets/js/controllers/billingCtrl.js',
 
       // add test files here
       // 'public_tests/admin/customers/customerservice_spec.js',
-      // 'public_tests/admin/billing/billingctrl_spec.js',
+      'public_tests/admin/billing/billingctrl_spec.js',
       'public_tests/admin/support/gettingStartedCtrl_spec.js',
       'public_tests/admin/orders/orderDetailCtrl_spec.js'
     ],
