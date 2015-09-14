@@ -20,7 +20,7 @@ var async = require('async');
 
 var mandrillHelper =  {
 
-    sendAccountWelcomeEmail: function(fromAddress, fromName, toAddress, toName, subject, htmlContent, accountId, userId, vars, emailId, fn) {
+    sendAccountWelcomeEmail: function(fromAddress, fromName, toAddress, toName, subject, htmlContent, accountId, userId, vars, emailId, contactId, fn) {
         var self = this;
         //console.log('Sending mail from ' + fromName + ' with address ' + fromAddress);
         //console.dir(htmlContent);
@@ -29,7 +29,7 @@ var mandrillHelper =  {
             if(isUnsubscribed ==true) {
                 fn('skipping email for user on unsubscribed list');
             } else {
-                self._findReplaceMergeTags(accountId, userId, htmlContent, function(mergedHtml) {
+                self._findReplaceMergeTags(accountId, contactId, htmlContent, function(mergedHtml) {
                     vars.push({
                         "name": "SENDDATE",
                         "content": moment().format('MMM Do, YYYY')
@@ -777,24 +777,25 @@ var mandrillHelper =  {
             function mergeTags(callback) {
                 //list of possible merge vars and the matching data
                 var _address = _account.get('business').addresses && _address ? _address : null;
+
                 var mergeTagMap = [{
                   mergeTag: '[URL]',
-                  data: _account.get('subdomain') + '.indigenous.io'
+                  data: _account ? _account.get('subdomain') + '.indigenous.io': null
                 }, {
                   mergeTag: '[SUBDOMAIN]',
-                  data: _account.get('subdomain')
+                  data: _account ? _account.get('subdomain') : null
                 }, {
                   mergeTag: '[CUSTOMDOMAIN]',
-                  data: _account.get('customDomain')
+                  data: _account ? _account.get('customDomain'): null
                 }, {
                   mergeTag: '[BUSINESSNAME]',
-                  data: _account.get('business').name
+                  data: _account ? _account.get('business').name: null
                 }, {
                   mergeTag: '[BUSINESSLOGO]',
-                  data: _account.get('business').logo
+                  data: _account ? _account.get('business').logo: null
                 }, {
                   mergeTag: '[BUSINESSDESCRIPTION]',
-                  data: _account.get('business').description
+                  data: _account ? _account.get('business').description: null
                 }, {
                   mergeTag: '[BUSINESSPHONE]',
                   data: _account.get('business').phones && _account.get('business').phones[0] ? _account.get('business').phones[0].number : null
@@ -818,19 +819,19 @@ var mandrillHelper =  {
                   data: _address ? _address.zip : null
                 }, {
                   mergeTag: '[TRIALDAYS]',
-                  data: _account.get('trialDaysRemaining')
+                  data: _account ? _account.get('trialDaysRemaining'): null
                 }, {
                   mergeTag: '[FULLNAME]',
-                  data: _contact.get('first') + ' ' + _contact.get('last')
+                  data: _contact ? _contact.get('first') + ' ' + _contact.get('last'): null
                 }, {
                   mergeTag: '[FIRST]',
-                  data: _contact.get('first')
+                  data: _contact ? _contact.get('first') : null
                 }, {
                   mergeTag: '[LAST]',
-                  data: _contact.get('last')
+                  data: _contact ? _contact.get('last') : null
                 }, {
                   mergeTag: '[EMAIL]',
-                  data: _contact.getEmails() && _contact.getEmails()[0] ? _contact.getEmails()[0].email : null
+                  data: _contact && _contact.getEmails() && _contact.getEmails()[0] ? _contact.getEmails()[0].email : null
                 }];
 
                 if (_user && _userAccount && accountId === 6) {

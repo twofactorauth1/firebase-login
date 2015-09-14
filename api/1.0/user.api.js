@@ -388,13 +388,10 @@ _.extend(api.prototype, baseApi.prototype, {
                                 return self.wrapError(res, 500, 'Error creating Stripe Subscription', err.code);
                             });
                         } else {
-                            userManager.sendWelcomeEmail(account.id(), account, user, email, username, function(){});
                             callback(null, sub, stripeCustomer, user, account);
                         }
-
                     });
                 } else {
-                    userManager.sendWelcomeEmail(account.id(), account, user, email, username, function(){});
                     callback(null, null, stripeCustomer, user, account);
                 }
 
@@ -437,11 +434,11 @@ _.extend(api.prototype, baseApi.prototype, {
                         //req.session.locked = true;//TODO: change this eventually
                         self.log.debug('Just set session accountId to: ' + req.session.accountId);
                        
-                        callback(null, account.id(), sub.id, user, stripeCustomer.id, sub);
+                        callback(null, account.id(), sub.id, user, stripeCustomer.id, sub, updatedAccount);
                     });
                 });
             },
-            function(accountId, subId, user, stripeCustomerId, sub, callback) {
+            function(accountId, subId, user, stripeCustomerId, sub, account, callback) {
                 self.log.debug('Updated account billing.');
                 self.sm.addSubscriptionToAccount(accountId, subId, plan, user.id(), function(err, value){
                     authenticationDao.getAuthenticatedUrlForAccount(accountId, user.id(), "admin", function (err, value) {
@@ -470,6 +467,11 @@ _.extend(api.prototype, baseApi.prototype, {
                                 self.log.error('Error creating customer for user: ' + user.id());
                             } else {
                                 self.log.debug('Created customer for user:' + user.id());
+
+                                userManager.sendWelcomeEmail(accountId, account, user, email, username, contact.id(), function(){
+                                    self.log.debug('Sent welcome email');
+                                });
+
                                 var activity = new $$.m.ContactActivity({
                                     accountId: appConfig.mainAccountID,
                                     contactId: contact.id(),
