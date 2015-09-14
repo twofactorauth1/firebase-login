@@ -179,6 +179,14 @@
                                                         <span ng-if="!activity.customer.first">{{activity.customer.details[0].emails[0].email}}</span> subscribed to <a href="">{{activity.extraFields.plan_name}}</a> for ${{activity.extraFields.amount}}.
                                                     </p>
                                                 </div>
+                                                <div ng-switch-when="TRIAL_CONVERSION">
+                                                    <p>
+                                                        <span class="label label-success">Trial Conversion</span>
+                                                        <span ng-if="!activity.customer">[deleted]</span>
+                                                        <span ng-if="activity.customer.first">{{activity.customer.first.toString()+' '+activity.customer.last.toString()}}</span>
+                                                        <span ng-if="!activity.customer.first">{{activity.customer.details[0].emails[0].email}}</span> subscribed to <a href="">{{activity.extraFields.plan_name}}</a> for ${{activity.extraFields.amount}}.
+                                                    </p>
+                                                </div>
                                                 <div ng-switch-when="SUBSCRIBE_CANCEL">
                                                     <p>
                                                         <span class="label label-danger">SUBSCRIPTION CANCELED</span> for

@@ -288,7 +288,7 @@ _.extend(api.prototype, baseApi.prototype, {
             function createContactActivity(account, contact, cb){
                 var subdomain = account.get('subdomain');
                 var activity = new $$.m.ContactActivity({
-                    accountId: accountId,
+                    accountId: appConfig.mainAccountID,
                     contactId: contact.id(),
                     activityType: "TRIAL_CONVERSION",
                     detail : "Account for "+ subdomain + ' [' + accountId + '] has converted to paying customer.',
