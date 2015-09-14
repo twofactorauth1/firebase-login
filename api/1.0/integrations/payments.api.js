@@ -245,6 +245,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 billingObj.setupFee = setupFee;
                 billingObj.conversionDate = new Date();
                 billingObj.subscriptionId = subscriptionId;
+
                 account.set('locked_sub', false);
                 req.session.locked_sub = false;
                 accountDao.saveOrUpdate(account, function(err, savedAccount){
@@ -287,6 +288,8 @@ _.extend(api.prototype, baseApi.prototype, {
             },
             function createContactActivity(account, contact, cb){
                 var subdomain = account.get('subdomain');
+                //amount: (sub.plan.amount / 100),
+                //plan_name: sub.plan.name
                 var activity = new $$.m.ContactActivity({
                     accountId: appConfig.mainAccountID,
                     contactId: contact.id(),
@@ -294,7 +297,7 @@ _.extend(api.prototype, baseApi.prototype, {
                     detail : "Account for "+ subdomain + ' [' + accountId + '] has converted to paying customer.',
                     start: new Date(),
                     extraFields: [
-                        {accountId:accountId}
+                        {accountId:accountId, plan_name:stripeSubscription.plan.name, amount:(stripeSubscription.plan.amount / 100)}
                     ]
                 });
                 contactActivityManager.createActivity(activity, function(err, value){
