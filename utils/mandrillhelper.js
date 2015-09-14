@@ -207,7 +207,11 @@ var mandrillHelper =  {
                     //stepSettings.scheduled.minute, stepSettings.scheduled.hour, stepSettings.scheduled.day
                     //var sendMoment = moment().hours(stepSettings.scheduled.hour).minutes(stepSettings.scheduled.minute).add(stepSettings.scheduled.day , 'days');
                     var send_at = null;
-                    if(stepSettings.scheduled) {
+                    if(stepSettings.offset) {
+                        //the offset is the number of mintues from now to send it at.
+                        send_at = moment().utc().add('minutes', stepSettings.offset).toISOString();;
+                        console.log('send_at ' + send_at);
+                    } else if(stepSettings.scheduled) {
                         send_at = self._getScheduleUtcDateTimeIsoString(stepSettings.scheduled.day, stepSettings.scheduled.hour,
                             stepSettings.scheduled.minute, stepSettings.offset||0);
                     } else if(stepSettings.sendAt) {
