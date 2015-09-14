@@ -163,6 +163,10 @@
           ToasterService.setPending('success', 'Subscribed to new plan.');
           $scope.getAccountData();
           $window.location.reload(true);
+        }, function (err) {
+          ToasterService.clearAll();
+          ToasterService.show('error', err.status);
+          $scope.selectedPlan.paymentProcessing = false;
         });
       } else {
         ToasterService.setPending('error', 'No Stripe customer ID.');
@@ -269,7 +273,7 @@
               console.warn('BillingCtrl, received subscription:\n', subscription);
           });
         }
-        
+
         if (account.billing.stripeCustomerId) {
           PaymentService.getUpcomingInvoice(account.billing.stripeCustomerId, function (upcomingInvoice) {
             $scope.upcomingInvoice = upcomingInvoice;

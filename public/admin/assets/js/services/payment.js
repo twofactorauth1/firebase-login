@@ -212,7 +212,7 @@
                     });
             };
 
-            this.postSubscribeToIndigenous = function(stripeCustomerId, planId, accountId, setupFee, fn) {
+            this.postSubscribeToIndigenous = function(stripeCustomerId, planId, accountId, setupFee, fn, errFn) {
                 var apiUrl = baseUrl + ['integrations', 'payments', 'indigenous', 'plans', planId, 'subscribe'].join('/');
                 var params = {
                     customerId: stripeCustomerId,
@@ -230,6 +230,9 @@
                 $http.post(apiUrl, params)
                     .success(function(data, status, headers, config) {
                         fn(data);
+                    })
+                    .error(function(err) {
+                        if (errFn) errFn(err);
                     });
             };
 
