@@ -2,7 +2,7 @@
 /*global app, moment, angular*/
 /*jslint unparam:true*/
 (function (angular) {
-  app.controller('BillingCtrl', ["$scope", "$rootScope", "toaster", "$modal", "$location", "ProductService", "PaymentService", "UserService", "$q", "ToasterService", "ipCookie", function ($scope, $rootScope, toaster, $modal, $location, ProductService, PaymentService, UserService, $q, ToasterService, ipCookie) {
+  app.controller('BillingCtrl', ["$scope", "$rootScope", "toaster", "$modal", "$location", "$window", "ProductService", "PaymentService", "UserService", "$q", "ToasterService", "ipCookie", function ($scope, $rootScope, toaster, $modal, $location, $window, ProductService, PaymentService, UserService, $q, ToasterService, ipCookie) {
 
     $scope.number = 1;
 
@@ -162,6 +162,7 @@
           });
           ToasterService.setPending('success', 'Subscribed to new plan.');
           $scope.getAccountData();
+          $window.location.reload(true);
         });
       } else {
         ToasterService.setPending('error', 'No Stripe customer ID.');
