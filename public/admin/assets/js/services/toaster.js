@@ -12,6 +12,10 @@
       toaster.pop(status, msg);
     };
 
+    this.clearAll = function() {
+      toaster.clear('*');
+    };
+
     this.setPending = function(status, msg) {
       queue.push([status, msg]);
     };
