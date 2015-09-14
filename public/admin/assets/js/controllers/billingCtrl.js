@@ -269,6 +269,12 @@
               console.warn('BillingCtrl, received subscription:\n', subscription);
           });
         }
+        
+        if (account.billing.stripeCustomerId) {
+          PaymentService.getUpcomingInvoice(account.billing.stripeCustomerId, function (upcomingInvoice) {
+            $scope.upcomingInvoice = upcomingInvoice;
+          });
+        }
 
         // $scope.currentAccount.membership = account.billing.subscriptionId;
         /*
