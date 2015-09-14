@@ -85,7 +85,7 @@ app.directive("billingTrial", ['PaymentService', 'ToasterService', 'UserService'
             PaymentService.getStripeCardToken(cardObj, function(token) {
 
               // update the billing data
-              if (scope.currentUser && scope.currentUser.stripeId) {
+              if (scope.currentUser && scope.currentUser.stripeId && token) {
                 UserService.postAccountBilling(scope.currentUser.stripeId, token, function(accBillingUpdate) {
                   //console.log('account.billing before update:\n', scope.account.billing);
                   scope.updateStripeIdFn(accBillingUpdate);
@@ -106,15 +106,20 @@ app.directive("billingTrial", ['PaymentService', 'ToasterService', 'UserService'
                   PaymentService.postStripeCustomer(token, function(stripeUser) {
 
                     // TODO: this makes no sense. we only got here if the user was bad
-                    if (scope.currentUser)
+                    if (scope.currentUser) {
                       scope.currentUser.stripeId = stripeUser.id;
-                    UserService.postAccountBilling(stripeUser.id, token, function(billing) {
-                      scope.updateStripeIdFn(billing);
-                    });
+                      UserService.postAccountBilling(stripeUser.id, token, function(billing) {
+                        scope.updateStripeIdFn(billing);
+                      });
+                    }
+
                   });
                 }
                 else {
+                  ToasterService.clearAll();
+                  ToasterService.show('error', 'The purchase was unsuccessful. Please check your card information.');
                   console.warn('no valid stripe token.');
+                  scope.selectedPlan.paymentProcessing = false;
                 }
               }
 
