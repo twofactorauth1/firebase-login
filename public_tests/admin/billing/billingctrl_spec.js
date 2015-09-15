@@ -4,7 +4,9 @@ describe('test billingctrl', function () {
 
   var $rootScope, $scope, $controller;
 
-  beforeEach(module('clipApp'));
+  beforeEach(module('indigenousApp'));
+  beforeEach(module('toaster'));
+  beforeEach(module('ipCookie'));
 
   beforeEach(inject(function (_$rootScope_, _$controller_) {
     $rootScope = _$rootScope_;

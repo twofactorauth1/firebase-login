@@ -7,7 +7,7 @@ describe('test orderDetailCtrl', function () {
 
 
   beforeEach(function () {
-    module('clipApp', function ($provide) {
+    module('indigenousApp', function ($provide) {
       $provide.constant('orderConstant');
       $provide.constant('contactConstant');
       $provide.constant('userConstant');

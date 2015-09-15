@@ -282,6 +282,9 @@ var dao = {
     //delete contactactivities by accountId
     //delete assets by accountId
 
+      //delete emails
+      //delete campaigns
+
 
 
     //find users by accountId.  If user has other accounts, remove this one.  Otherwise, delete user courses and then user.
