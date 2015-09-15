@@ -20,6 +20,7 @@ var parser = new UAParser();
 var contactDao = require('../../dao/contact.dao');
 var appConfig = require('../../configs/app.config');
 var orderManager = require('../../orders/order_manager');
+var campaignManager = require('../../campaign/campaign_manager');
 
 var api = function() {
     this.init.apply(this, arguments);
@@ -479,7 +480,7 @@ _.extend(api.prototype, baseApi.prototype, {
                                  */
                                 if(campaignId) {
                                     self.log.debug('Updating campaign with id: ' + campaignId);
-                                    campaignManager.handleCampaignSignupEvent(accountId, campaignId, contact.id(), function(err, value){
+                                    campaignManager.handleCampaignSignupEvent(appConfig.mainAccountID, campaignId, contact.id(), function(err, value){
                                         if(err) {
                                             self.log.error('Error handling campaign signup: ' + err);
                                         } else {
