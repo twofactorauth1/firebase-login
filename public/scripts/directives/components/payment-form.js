@@ -270,9 +270,9 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                 scope.isFormValid = false;
                 scope.validateForm = true;
                 scope.promises = [];
-               
+
                 scope.showFooter(true);
-               
+
                 scope.checkEmailExists(newAccount, true);
 
                 //pass
@@ -325,7 +325,7 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                 if (!scope.couponIsValid) {
                     return;
                 }
-               
+
                 if (scope.promises.length) {
                 $q.all(scope.promises)
                   .then(function (data) {
@@ -334,7 +334,7 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                         scope.validateEmail(value.data);
                     });
                     if(!scope.validateForm)
-                        return;                    
+                        return;
                     scope.isFormValid = true;
                     scope.showFooter(false);
                     var tmpAccount = scope.tmpAccount;
@@ -359,7 +359,8 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                             coupon: newAccount.coupon,
                             first: newAccount.first,
                             middle: newAccount.middle,
-                            last: newAccount.last
+                            last: newAccount.last,
+                            campaignId: scope.component.campaignId
                         };
 
                         newUser.plan = '';

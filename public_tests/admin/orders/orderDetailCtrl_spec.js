@@ -8,9 +8,13 @@ describe('test orderDetailCtrl', function () {
 
   beforeEach(function () {
     module('indigenousApp', function ($provide) {
-      $provide.constant('orderConstant');
-      $provide.constant('contactConstant');
-      $provide.constant('userConstant');
+      // Example of injecting constants
+      // http://stackoverflow.com/questions/23056089/unknow-providers-error-throw-when-injecting-constant
+      $provide.constant('orderConstant', {
+        order_status: {
+          FAILED: 'foo'
+        }
+      });
     });
   });
   beforeEach(module('toaster'));
@@ -55,7 +59,8 @@ describe('test orderDetailCtrl', function () {
         },
       ];
 
-      // JKG - why all the extra api hits? should just be /members, right?
+      // TODO: so many API calls make it difficult to test.
+      // back-end might be better suited to give us what we want.
       $httpBackend.whenGET('assets/i18n/en.json').respond(perfectMembers);
       $httpBackend.whenGET('/api/1.0/contact').respond(perfectMembers);
       $httpBackend.whenGET('/api/1.0/user/members').respond(perfectMembers);
@@ -70,6 +75,14 @@ describe('test orderDetailCtrl', function () {
       // post-conditions
       expect($scope.users.length).toBeGreaterThan(0);
     })
+  });
+
+  describe('constants should be initialized', function() {
+    it('should have FailedStatus defined', function() {
+      expect($scope.FailedStatus).toBeDefined();
+      expect($scope.FailedStatus).toBe('foo');
+      expect($scope.dateOptions).toBeDefined();
+    });
   });
 
 });
