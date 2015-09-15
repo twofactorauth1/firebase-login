@@ -751,5 +751,8 @@ app.constant('JS_REQUIRES', {
   }, {
     name: 'spectrum',
     files: ['../js/libs/spectrum/spectrum.js', '../js/libs/angular-spectrum-colorpicker/dist/angular-spectrum-colorpicker.min.js', '../js/libs/spectrum/spectrum.css'],
+  }, {
+    name: 'angular-resizable',
+    files: ['../js/libs/angular-resizable/angular-resizable.min.js', '../js/libs/angular-resizable/angular-resizable.min.css'],
   }]
 });

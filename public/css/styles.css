@@ -460,9 +460,9 @@ div[data-type='campaign'] .inner-page .overlay {
   height: 230px;
   text-align: center;
   vertical-align: middle;
-  display: table-cell;
+  display: table;
   float: none;
-  min-width: 260px;
+  width: 260px;
 }
 .contact-us-v1 .widget-weather .temp span {
   padding-bottom: 5px;

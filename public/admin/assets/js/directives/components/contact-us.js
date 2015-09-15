@@ -22,6 +22,11 @@ app.directive('contactUsComponent', ['AccountService', 'GeocodeService', '$timeo
           hours: true, address: true
         };
       }
+      if(!scope.component.boxProperties)
+      {
+        scope.component.boxProperties = {};
+      }
+      
       function hexToRgb(hex, opacity) {      
         var c;
         opacity = opacity || 1;
@@ -148,6 +153,18 @@ app.directive('contactUsComponent', ['AccountService', 'GeocodeService', '$timeo
               },500);
             }
           });
+        }
+      })
+
+      scope.$on("angular-resizable.resizeEnd", function (event, args) {
+        var calculated_size = args;
+        if(calculated_size.width === false)
+        {
+          scope.component.boxProperties.height = calculated_size.height;
+        }
+        else if(calculated_size.height === false)
+        {
+          scope.component.boxProperties.width = calculated_size.width;
         }
       })
     }
