@@ -11,8 +11,8 @@
                 <div class="panel-body">
                     <div class="row" >
                         <div class="col-xs-12 temp  settings" ng-style="{
-                        'width': component.boxProperties.width ? '{{component.boxProperties.width}}' : '',
-                        'height': component.boxProperties.height ? '{{component.boxProperties.height}}' : '', 'background' : '{{boxColor}}'
+                        'width': component.boxProperties.width ? component.boxProperties.width : '',
+                        'height': component.boxProperties.height ? component.boxProperties.height : '', 'background' : boxColor
                         }" tab-active="address" data-id="{{component._id}}" resizable r-directions="['bottom', 'right']">
                             <div>
                             <span class="blocked" ng-bind-html="contactAddress"></span>
