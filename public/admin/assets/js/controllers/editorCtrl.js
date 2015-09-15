@@ -288,9 +288,9 @@
                   $scope.saveLoading = false;
                   toaster.pop('success', "Page Saved", "The " + $scope.page.handle + " page was saved successfully.");
                   $scope.redirectAfterSave(redirect_url);
-                  $scope.page = data;
+                  //$scope.page = data;
                   var originalPageHandle = angular.copy($scope.originalPage.handle);
-                  angular.copy($scope.page, $scope.originalPage);
+                  //angular.copy($scope.page, $scope.originalPage);
                   
                   //Update linked list
                   $scope.website.linkLists.forEach(function (value, index) {
