@@ -286,6 +286,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var firstName = req.body.first;
         var lastName = req.body.last;
         var middle = req.body.middle;
+        var campaignId = req.body.campaignId;
 
         var cardToken = req.body.cardToken;
         var plan = req.body.plan || 'NO_PLAN_ARGUMENT';
@@ -317,6 +318,7 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> first', firstName);
         self.log.debug('>> middle', middle);
         self.log.debug('>> last', lastName);
+        self.log.debug('>> campaignId', campaignId);
 
         var name = {
             first:firstName,
@@ -471,6 +473,20 @@ _.extend(api.prototype, baseApi.prototype, {
                                 userManager.sendWelcomeEmail(accountId, account, user, email, username, contact.id(), function(){
                                     self.log.debug('Sent welcome email');
                                 });
+
+                                 /*
+                                 * If there is a campaign associated with this new user, update it async.
+                                 */
+                                if(campaignId) {
+                                    self.log.debug('Updating campaign with id: ' + campaignId);
+                                    campaignManager.handleCampaignSignupEvent(accountId, campaignId, contact.id(), function(err, value){
+                                        if(err) {
+                                            self.log.error('Error handling campaign signup: ' + err);
+                                        } else {
+                                            self.log.debug('Handled signup.');
+                                        }
+                                    });
+                                }
 
                                 var activity = new $$.m.ContactActivity({
                                     accountId: appConfig.mainAccountID,
