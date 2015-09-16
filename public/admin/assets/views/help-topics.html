@@ -13,13 +13,33 @@
 <div ng-controller="HelpTopicsCtrl">
     <div class="container-fluid container-fullw bg-white">
         <div class="row">
-            <div class="col-lg-12 margin-bottom-15" ng-repeat="(key, value) in panes | groupBy: 'category'">
-                <h5 class="over-title margin-bottom-15"><span class="text-bold">{{key}}</span></h5>
-                <accordion close-others="oneAtATime" class="accordion">
-                    <accordion-group heading="{{pane.header}}" ng-repeat="pane in value">
-                        {{pane.content}}
-                    </accordion-group>
-                </accordion>
+            <div class="col-sm-8 col-sm-offset-2 margin-bottom-15">
+                <label>Search</label>
+                <input type="search" class="form-control input-lg" placeholder="Enter your topic, question, or keyword" ng-model="searchTextValue"/>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid container-fullw bg-white">
+        <div class="row">
+            <div class="col-sm-8 col-sm-offset-2">
+                <div class="col-sm-6">
+                    <div class="margin-bottom-30" ng-repeat="catPane in panesByCat" ng-hide="(catPane|filter:searchTextValue).length == 0" ng-if="catPane[$index].category != 'Marketing' && catPane[$index].category != 'Website'">
+                        <h5 class="over-title margin-bottom-5 text-bold"><span class="text-bold">{{catPane[0].category}}</span></h5>
+                        <hr class="margin-top-0">
+                        <ul class="unstyled-list padding-left-0">
+                            <li ng-repeat="pane in catPane | filter:searchTextValue" class="margin-bottom-5"><a href="">{{pane.header}}</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="margin-bottom-30" ng-repeat="catPane in panesByCat" ng-hide="(catPane|filter:searchTextValue).length == 0" ng-if="catPane[$index].category == 'Marketing' || catPane[$index].category == 'Website'">
+                        <h5 class="over-title margin-bottom-5 text-bold"><span class="text-bold">{{catPane[0].category}}</span></h5>
+                        <hr class="margin-top-0">
+                        <ul class="unstyled-list padding-left-0">
+                            <li ng-repeat="pane in catPane | filter:searchTextValue" class="margin-bottom-5"><a href="">{{pane.header}}</a></li>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

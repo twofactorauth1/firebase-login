@@ -12,6 +12,8 @@
         console.log('collapsed:', collapsedPaneIndex);
       }
     };
+
+
     $scope.panes = [{
       header: "Can I use my own domain name?",
       content: "Yes! No need to go changing all of those business cards! Please send a request via chat or email to info@indigenous.io.",
@@ -181,5 +183,19 @@
       content: "We provide 24/7 live chat support. You can also schedule a one-on-one demo with one of our team members.",
       category: "Account"
     }];
+
+    $scope.panesByCat = {
+      account: [],
+      customers: [],
+      commerce: [],
+      dashboard: [],
+      marketing: [],
+      website: [],
+    };
+
+    _.each($scope.panes, function(pane) {
+      $scope.panesByCat[pane.category.toLowerCase()].push(pane);
+    });
+
   }]);
 })(angular);
