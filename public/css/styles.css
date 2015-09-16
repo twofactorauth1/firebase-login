@@ -442,7 +442,7 @@ div[data-type='campaign'] .inner-page .overlay {
   }
 }
 .contact-us-v1 .widget-weather {
-  margin-top: -280px;
+  margin-top: -300px;
   margin-left: 100px;
   margin-bottom: 0;
   border: none;
@@ -463,6 +463,8 @@ div[data-type='campaign'] .inner-page .overlay {
   display: table;
   float: none;
   width: 260px;
+  max-height: 280px;
+  min-width: 150px;
 }
 .contact-us-v1 .widget-weather .temp span {
   padding-bottom: 5px;
