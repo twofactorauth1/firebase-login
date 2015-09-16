@@ -366,7 +366,7 @@
                     <div class="form-group" ng-if="componentEditing.type != 'navigation'">
                         <label for="component-title" tooltip-placement="top" tooltip="The anchor of the component">Anchor</label>
                         <span tooltip-placement="top" tooltip-html-unsafe="The anchor of the component."><i class="fa fa-info-circle" /></span>
-                        <input class="form-control" type="text" ng-model="componentEditing.anchor" ng-change="saveComponent()">
+                        <input class="form-control" type="text" ng-model="componentEditing.anchor" ng-change="slugifyAnchor(componentEditing.anchor);">
                     </div>
                     <hr></hr>
                     <div class="form-group">
