@@ -3073,6 +3073,9 @@ div[data-type="feature-block"] .component-inner {
 .blog-teaser-v1 .posts .featured-image {
   padding-top: 15px;
 }
+.blog-teaser-v1 .title {
+  position: relative;
+}
 .blog-teaser-v1 .component-inner {
   padding: 15px;
 }

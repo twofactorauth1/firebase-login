@@ -3069,6 +3069,9 @@
 #componentloader .blog-teaser-v1 .posts .featured-image {
   padding-top: 15px;
 }
+#componentloader .blog-teaser-v1 .title {
+  position: relative;
+}
 #componentloader .blog-teaser-v1 .component-inner {
   padding: 15px;
 }
