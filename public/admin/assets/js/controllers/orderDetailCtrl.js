@@ -11,11 +11,19 @@
     // 2. getUsers
     // 3. getProducts
     // 4. get Order
-    var _orderConstant = {};
-    _orderConstant = orderConstant;
-    if (_orderConstant) {
-      $scope.FailedStatus = _orderConstant.order_status.FAILED;
+    if (orderConstant) {
+      $scope.FailedStatus = orderConstant.order_status.FAILED;
     }
+
+    /*
+     * @dateOptions
+     * -
+     */
+
+    $scope.dateOptions = {
+      formatYear: 'yy',
+      startingDay: 1
+    };
 
     /*
      * @closeModal
@@ -371,16 +379,6 @@
       }
 
       return '';
-    };
-
-    /*
-     * @dateOptions
-     * -
-     */
-
-    $scope.dateOptions = {
-      formatYear: 'yy',
-      startingDay: 1
     };
 
     /*

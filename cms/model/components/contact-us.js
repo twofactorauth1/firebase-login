@@ -151,7 +151,9 @@ var component = $$.m.ModelBase.extend({
             custom:{
                 hours: false,
                 address: false
-            }
+            },
+
+            boxProperties: {}
         }
     },
 
