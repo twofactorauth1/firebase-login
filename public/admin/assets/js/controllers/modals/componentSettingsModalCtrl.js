@@ -708,17 +708,18 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
 
   $scope.updateContactUsAddress = function () {
     if (!angular.equals($scope.originalContactMap, $scope.componentEditing.location)) {
+      $scope.locationAddress = null;
+       $scope.setLatLon();
       $scope.validateGeoAddress();
     }
   };
 
-  $scope.validateGeoAddress = function (fn) {
-    $scope.setLatLon();
-    GeocodeService.validateAddress($scope.componentEditing.location, function (data, results) {
+  $scope.validateGeoAddress = function (fn) {   
+    GeocodeService.validateAddress($scope.componentEditing.location, $scope.locationAddress, function (data, results) {
       if (data && results.length === 1) {
         $timeout(function () {
           $scope.$apply(function () {
-            $scope.setLatLon(results[0].geometry.location.G, results[0].geometry.location.K);
+            $scope.setLatLon(results[0].geometry.location.G || results[0].geometry.location.H, results[0].geometry.location.K || results[0].geometry.location.L);
             $scope.errorMapData = false;
             angular.copy($scope.componentEditing.location, $scope.originalContactMap);
             $scope.contactMap.refreshMap();
@@ -976,6 +977,8 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
     if (newValue) {
       if (angular.isObject(newValue)) {
         $scope.fillInAddress(newValue);
+        $scope.locationAddress = newValue;
+        $scope.setLatLon();
         $scope.validateGeoAddress();
       }
     }
