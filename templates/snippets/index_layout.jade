@@ -16,6 +16,8 @@ html(class="no-js", lang="en" ng-app="mainApp" ng-controller="MainCtrl as main",
     // <![endif]
     head
         block head
+            if account._id == 6 && 'https://main.indigenous.io'
+                script(src='//cdn.optimizely.com/js/3536810180.js')
             //- override this to include a different head section (e.g. requirehead.jade)
             block headattributes
                 include index_head_styles
