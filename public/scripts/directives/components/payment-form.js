@@ -399,7 +399,11 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                                     //send facebook tracking info
                                     window._fbq = window._fbq || [];
                                     window._fbq.push(['track', '6032779610613', {'value':'0.00','currency':'USD'}]);
+                                    // ensures the optimizely object is defined globally using
+                                    window['optimizely'] = window['optimizely'] || [];
 
+                                    // sends a tracking call to Optimizely for the given event name.
+                                    window.optimizely.push(["trackEvent", "freeTrialSignup"]);
                                     console.log('sent facebook message');
                                     //send affiliate purchase info
                                     var leadData = {
