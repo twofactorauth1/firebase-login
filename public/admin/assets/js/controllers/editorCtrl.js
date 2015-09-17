@@ -1465,7 +1465,7 @@
             event.preventDefault();
             SweetAlert.swal({
               title: "Are you sure?",
-              text: "You have unsaved data that will be lost Sanjeev",
+              text: "You have unsaved data that will be lost",
               type: "warning",
               showCancelButton: true,
               confirmButtonColor: "#DD6B55",
