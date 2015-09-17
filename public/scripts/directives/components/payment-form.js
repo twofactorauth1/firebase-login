@@ -415,7 +415,7 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                                     LeadDyno.key = "b2a1f6ba361b15f4ce8ad5c36758de951af61a50";
                                     LeadDyno.recordLead(newUser.email, leadData, function(){
                                         console.log('recorded lead');
-                                        LeadDyno.recordPurchase(newUser.email, {}, function(){
+                                        LeadDyno.recordPurchase(newUser.email, leadData, function(){
                                             console.log('recorded purchase');
                                             window.location = data.accountUrl;
                                         });
