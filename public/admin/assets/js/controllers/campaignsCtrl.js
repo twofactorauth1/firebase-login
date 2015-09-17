@@ -21,5 +21,11 @@
 
     $scope.tableView = 'list';
 
+    $scope.viewSingle = function (campaign) {
+      // var tableState = $scope.getSortOrder();
+      // $state.current.sort = tableState.sort;
+      window.location = '/admin/#/marketing/campaigns/' + campaign._id;
+    };
+
   }]);
 })(angular);
