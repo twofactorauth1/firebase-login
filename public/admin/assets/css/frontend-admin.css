@@ -453,7 +453,7 @@
 }
 @media (max-width: 767px) {
   #componentloader .contact-us-v1 .widget-weather {
-    margin: 0!important;
+    margin-top: -280px !important;
     padding: 0!important;
   }
   #componentloader .contact-us-v1 .widget-weather .panel-body {
