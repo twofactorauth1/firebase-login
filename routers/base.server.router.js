@@ -229,7 +229,7 @@ _.extend(baseRouter.prototype, {
                             logger.debug('<< isAuth.  Redirecting to: ' + redirectUrl);
                             return resp.redirect(redirectUrl);
                         } else {
-                            logger.error('Error in checkAuthToken: ' + err);
+                            logger.error('Error in checkAuthToken(1): ' + err);
                             cookies.setRedirectUrl(req, resp);
                             logger.debug('Redirecting to /login');
                             return resp.redirect("/login");
@@ -244,7 +244,7 @@ _.extend(baseRouter.prototype, {
                         logger.debug('<< isAuth.  Redirecting to: ' + redirectUrl);
                         return resp.redirect(redirectUrl);
                     } else {
-                        logger.error('Error in checkAuthToken: ' + err);
+                        logger.error('Error in checkAuthToken(2): ' + err);
                         cookies.setRedirectUrl(req, resp);
                         logger.debug('Redirecting to /login');
                         return resp.redirect("/login");
@@ -263,6 +263,8 @@ _.extend(baseRouter.prototype, {
         logger.debug('>> isAuth (' + req.originalUrl + ')');
         logger.debug('session accountId: ' + req.session.accountId + ' session sub: ' + req.session.subdomain);
         var path = req.url;
+        logger.debug('path:', path);
+        var redirectParam = req.query.redirectTo;
         //logger.debug('req.session.locked: ' + req.session.locked);
         // if(req.session.locked === 'true' || req.session.locked === true) {
         //     return resp.redirect('/interim.html');
@@ -322,7 +324,8 @@ _.extend(baseRouter.prototype, {
         } else if(req.isAuthenticated() && (self.matchHostToSession(req) === false || req.session.midSignup === true)){
             logger.debug('authenticated to the wrong session.  logging out.');
             req.logout();
-            resp.redirect('/login');
+            //cookies.setRedirectUrl(req, resp, path);
+            resp.redirect('/login?redirectTo=' + path.replace('/#', ''));
         } else {
             logger.debug('Not authenticated');
             var checkAuthToken = function(req, fn) {
@@ -367,10 +370,10 @@ _.extend(baseRouter.prototype, {
                             logger.debug('<< isAuth.  Redirecting to: ' + redirectUrl);
                             return resp.redirect(redirectUrl);
                         } else {
-                            logger.error('Error in checkAuthToken: ' + err);
-                            cookies.setRedirectUrl(req, resp);
-                            logger.debug('Redirecting to /login');
-                            return resp.redirect("/login");
+                            logger.error('Error in checkAuthToken(3): ' + err);
+                            //cookies.setRedirectUrl(req, resp, redirectParam);
+                            logger.debug('Redirecting to /login?redirectTo=' + path.replace('/#', ''));
+                            return resp.redirect("/login?redirectTo=" + path.replace('/#', ''));
                         }
                     });
                 });
@@ -382,10 +385,10 @@ _.extend(baseRouter.prototype, {
                         logger.debug('<< isAuth.  Redirecting to: ' + redirectUrl);
                         return resp.redirect(redirectUrl);
                     } else {
-                        logger.error('Error in checkAuthToken: ' + err);
-                        cookies.setRedirectUrl(req, resp);
-                        logger.debug('Redirecting to /login');
-                        return resp.redirect("/login");
+                        logger.error('Error in checkAuthToken(4): ' + err);
+                        //cookies.setRedirectUrl(req, resp, path);
+                        logger.debug('Redirecting to /login?redirectTo=' + path.replace('/#', ''));
+                        return resp.redirect("/login?redirectTo=" + path.replace('/#', ''));
                     }
                 });
             }
