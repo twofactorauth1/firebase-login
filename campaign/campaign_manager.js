@@ -809,7 +809,7 @@ module.exports = {
                     if(!nextStep) {
                         callback(null, null, i);
                     }
-                    if(nextStep.trigger === trigger) {
+                    if(nextStep && nextStep.trigger === trigger) {
                         nextStep.triggered = new Date();
                         campaignDao.saveOrUpdate(flow, function(err, updatedFlow){
                             if(err) {
@@ -821,24 +821,28 @@ module.exports = {
                         });
 
                     } else {
-                        self.log.warn('Next step has a trigger of ' + nextStep.trigger + ' but was expected to have type ' + trigger);
+                        //self.log.warn('Next step has a trigger of ' + nextStep.trigger + ' but was expected to have type ' + trigger);
                         callback('Unexpected trigger type');
                     }
+                } else {
+                    callback(null, null, i);
                 }
             },
             function(flow, stepNumber, callback) {
                 if(!flow) {
                     self.log.debug('No step to handle. Exiting');
                     callback(null);
+                } else {
+                    self.handleStep(flow, stepNumber, function(err, value){
+                        if(err) {
+                            callback(err);
+                        } else {
+                            self.log.debug('handled step ' + stepNumber);
+                            callback(null);
+                        }
+                    });
                 }
-                self.handleStep(flow, stepNumber, function(err, value){
-                    if(err) {
-                        callback(err);
-                    } else {
-                        self.log.debug('handled step ' + stepNumber);
-                        callback(null);
-                    }
-                });
+
             }
         ], function(err){
             if(err) {

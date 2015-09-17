@@ -31,6 +31,9 @@ app.directive("elem", function ($timeout) {
             editor.on('change', function (e) {
               scope.update(e);
             });
+            editor.on('key', function (e) {
+              scope.update(e);
+            });
           }
         },
         sharedSpaces: {
