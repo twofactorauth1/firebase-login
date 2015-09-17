@@ -110,6 +110,9 @@
         ev.editor.on('key', function () {
           $scope.setDirty(true);
         });
+        ev.editor.on('change', function () {
+          $scope.setDirty(true);
+        });
         if (!$scope.activeEditor)
           $scope.activeEditor = ev.editor;
         ev.editor.on('focus', function () {
@@ -231,6 +234,7 @@
     $scope.savePage = function (redirect_url) {
       $scope.saveLoading = true;
       $scope.setDirty(false);
+      $scope.changesConfirmed = true;
       if ($scope.isSinglePost) {
         $scope.validateEditPost($scope.blog.post);
         if (!$scope.editPostValidated) {
