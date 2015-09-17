@@ -5,6 +5,11 @@
  * Please contact info@indigenous.io for approval or questions.
  */
 
+/**
+  * Note:
+  * - the base URL for this API endpoint is 'campaign' which makes API URLs look like '/campaign/campaign/something' etc.
+  */
+
 var baseApi = require('../base.api');
 var campaignManager = require('../../campaign/campaign_manager');
 var accountDao = require('../../dao/account.dao');

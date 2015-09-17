@@ -23,12 +23,9 @@
       }
     };
 
-    this.getCampaign = function (orderId, fn) {
-      var apiUrl = baseUrl + orderId;
-      $http.get(apiUrl)
-        .success(function (data) {
-          fn(data);
-        });
+    this.getCampaign = function (id, fn) {
+      var apiUrl = baseUrl + 'campaign/' + id;
+      return $http.get(apiUrl);
     };
 
     this.createCampaign = function (campaign, fn) {

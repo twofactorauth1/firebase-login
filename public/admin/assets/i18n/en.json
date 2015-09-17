@@ -139,6 +139,7 @@
     "OPENRATE": "Opens",
     "SENTRATE": "Sent",
     "CLICKRATE": "Clicks",
-    "DESCRIPTION": "Create a new campaign to reach a group of contacts"
+    "DESCRIPTION": "Create a new campaign to reach a group of contacts",
+    "EDIT_DESCRIPTION": "Edit this campaign before kicking it off"
   }
 }

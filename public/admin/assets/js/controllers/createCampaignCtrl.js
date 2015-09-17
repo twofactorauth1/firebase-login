@@ -1,7 +1,7 @@
 'use strict';
 /*global app, angular, moment*/
 (function (angular) {
-  app.controller('CreateCampaignCtrl', ["$scope", "$rootScope", "$modal", "$location", "toaster", "$timeout", "CampaignService", "CustomerService", "CommonService", "editableOptions", "AccountService", "userConstant", "WebsiteService", "$q", "formValidations", function ($scope, $rootScope, $modal, $location, toaster, $timeout, CampaignService, CustomerService, CommonService, editableOptions, AccountService, userConstant, WebsiteService, $q, formValidations) {
+  app.controller('CreateCampaignCtrl', ["$scope", "$rootScope", "$modal", "$location", "$stateParams", "toaster", "$timeout", "CampaignService", "CustomerService", "CommonService", "editableOptions", "AccountService", "userConstant", "WebsiteService", "$q", "formValidations", function ($scope, $rootScope, $modal, $location, $stateParams, toaster, $timeout, CampaignService, CustomerService, CommonService, editableOptions, AccountService, userConstant, WebsiteService, $q, formValidations) {
 
     editableOptions.theme = 'bs3';
 
@@ -825,6 +825,25 @@
       if (!$scope.changesConfirmed)
         $scope.saveCampaignOnLeave(newUrl);
     });
+
+    /*
+     * @init
+     * - Set page context (if creating or loading existing campaign).
+     */
+    $scope.init = (function(){
+      if($stateParams.campaignId) {
+        CampaignService.getCampaign($stateParams.campaignId)
+          .success(function (data) {
+            $scope.newCampaignObj = data;
+            $scope.selectedEmail = 'new'; //TODO: need some way to get email type from id: 4c24bedd-5133-4312-a072-b6c7a507830e
+            // $scope.campaign = $scope.newCampaignObj;
+          })
+          .error(function (err) {
+            console.error('Failed to load campaign data.');
+            //TODO: could redirect to list page here
+          });
+      }
+    })();
 
   }]);
   app.filter('propsFilter', function () {
