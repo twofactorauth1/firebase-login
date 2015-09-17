@@ -46,6 +46,8 @@ block content
                   i.fa.fa-lock
                   a.forgot.hidden-xs(href="/forgotpassword")
                     | I forgot my password
+              script.
+                document.write('<input type="hidden" name="from" value="'+document.location.href+'"/>');
               .error #{message}
               .form-actions
                 p.text-center.visible-xs
