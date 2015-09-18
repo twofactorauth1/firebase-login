@@ -312,7 +312,16 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         ncyBreadcrumb: {
             label: 'Help Topics'
         },
-        resolve: loadSequence('helpTopicsCtrl', 'websiteService', 'toTrusted', 'ckeditor', 'jsVideoUrlParser')
+        resolve: loadSequence('helpTopicsCtrl')
+    }).state('app.support.newhelptopics', {
+        url: '/new-help-topics',
+        templateUrl: "assets/views/new-help-topics.html",
+        title: 'Help Topics',
+        icon: 'ti-layout-media-left-alt',
+        ncyBreadcrumb: {
+            label: 'Help Topics'
+        },
+        resolve: loadSequence('newHelpTopicsCtrl', 'toTrusted', 'ckeditor', 'jsVideoUrlParser')
     }).state('app.support.managetopics', {
         url: '/manage-topics',
         templateUrl: "assets/views/manage-topics.html",

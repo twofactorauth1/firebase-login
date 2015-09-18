@@ -528,6 +528,7 @@ app.constant('JS_REQUIRES', {
     //*** Controllers
     'dashboardCtrl': 'assets/js/controllers/dashboardCtrl.js',
     'helpTopicsCtrl': 'assets/js/controllers/helpTopicsCtrl.js',
+    'newHelpTopicsCtrl': 'assets/js/controllers/newHelpTopicsCtrl.js',
     'gettingStartedCtrl': 'assets/js/controllers/gettingStartedCtrl.js',
     'pagesCtrl': 'assets/js/controllers/pagesCtrl.js',
     'siteAnalyticsCtrl': 'assets/js/controllers/siteAnalyticsCtrl.js',
