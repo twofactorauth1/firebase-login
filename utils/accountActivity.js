@@ -25,9 +25,11 @@ var accountActivity = {
 
     runReport: function(callback) {
         var self = this;
-        var reportAry = [109, 45, 97, 79, 21, 37, 38, 12, 15, 126, 129, 130, 132, 133, 134, 135, 136, 137,
+        var reportAry = [109, 45, 97, 79, 21, 80, 37, 38, 12, 15, 126, 129, 130, 132, 133, 134, 135, 136, 137,
                             138, 139, 140, 141, 142, 158, 161,169,170,171,172,173,174, 175,176,177,178,179,
-                            181,182,183,184,185,186,187,188,189,190];
+                            181,182,183,184,185,186,187,188,189,190,191,192,193,194,195,196,197,198,199,
+                            200,201,202,203,204,205,206,207,208,209,210,211,212,213,217,218,219,220,221,222,
+                            223,224,225,226,227,229,232,233,234,235,236,237,238,239,241];
         var activityAry = [];
         async.each(reportAry, function(accountId, cb){
             self.getActivityForAccount(accountId, function(err, activity){
@@ -38,8 +40,9 @@ var accountActivity = {
             });
         }, function done(err){
             //first, last, email, city, state, country, Day 11, Day 14
-            self.log.debug('AccountId,first,last,email,city,state,country,Name,Custom Domain,Signup Date,Trial Days Remaining,day11,day14,Last Activity,Pointed Domain,Pages Created,Posts Created,Social Integrations,Stripe Integration,' +
-                'Products,Orders,Contacts,Campaigns');
+            self.log.debug('AccountId,First,Last,email,City,State,Country,Phone,Name,Custom Domain,Signup Date,' +
+                'Trial Days Remaining,Day11,Day14,Last Activity,Pointed Domain,Pages Created,Posts Created,' +
+                'Social Integrations,Stripe Integration,Products,Orders,Contacts,Campaigns');
 
             var sortedAry = _.sortBy(activityAry, 'accountId');
             var csv = "";
@@ -51,6 +54,7 @@ var accountActivity = {
                     activity.city + ',' +
                     activity.state + ',' +
                     activity.country + ',' +
+                    activity.phone + ',' +
                     activity.name + ',' +
                     activity.customDomain + ',' +
                     activity.signupDate + ',' +
@@ -233,6 +237,16 @@ var accountActivity = {
                     activity.pointedDomain = 'Y';
                 } else {
                     activity.pointedDomain = 'N';
+                }
+
+                if(account.get('business.phones') !== '') {
+                    var business = account.get('business');
+                    var phoneAry = business.phones;
+                    activity.phone = '';
+
+                    if(phoneAry && phoneAry.length > 0) {
+                        activity.phone = phoneAry[0].number;
+                    }
                 }
 
                 activity.day11 = moment(activity.signupDate).add(11, 'days').format('MM/DD/YYYY');
