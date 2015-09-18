@@ -20,9 +20,7 @@ passport.use(new LocalStrategy({
     },
     function(req, username, password, done) {
         var self = this;
-        if(req.body.from !== '/login') {
-
-        }
+        
         var redirectTo = req.body.from.toString().replace(/.*\?/gi, '').replace('/#', '').replace('redirectTo=', '');
         if(redirectTo !== '/login' && redirectTo !== '/admin/') {
             req.query.redirectTo = redirectTo;
