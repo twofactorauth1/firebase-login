@@ -20,8 +20,12 @@ passport.use(new LocalStrategy({
     },
     function(req, username, password, done) {
         var self = this;
+        
         var redirectTo = req.body.from.toString().replace(/.*\?/gi, '').replace('/#', '').replace('redirectTo=', '');
-        req.query.redirectTo = redirectTo;
+        if(redirectTo !== '/login' && redirectTo !== '/admin/') {
+            req.query.redirectTo = redirectTo;
+        }
+
         //console.log('in passport: ' + req.query.redirectTo);
         authenticationDao.authenticateByUsernamePassword(req, username.toLowerCase(), password, function(err, value) {
             if (err) {
