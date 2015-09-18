@@ -275,8 +275,8 @@ _.extend(router.prototype, BaseRouter.prototype, {
             resp.redirect('/home');
         } else {
             self.log.debug('AccountId is ' + req.session.accountId);
-
-            authenticationDao.getAuthenticatedUrlForAccount(req.session.accountId, req.user.attributes._id, '/admin', 30, function(err, value){
+            var _path = cookies.getRedirectUrl(req, resp, '/admin', true);
+            authenticationDao.getAuthenticatedUrlForAccount(req.session.accountId, req.user.attributes._id, _path, 30, function(err, value){
                 if(err) {
                     self.log.error('Error getting authenticated url for redirect: ' + err);
                     resp.redirect('/login');
