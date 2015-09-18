@@ -1,7 +1,7 @@
 'use strict';
 /*global app, moment, angular, Intercom, urlParser*/
 (function (angular) {
-  app.controller('NewHelpTopicsCtrl', ["$scope", "WebsiteService", "$location", function ($scope, WebsiteService, $location) {
+  app.controller('NewHelpTopicsCtrl', ["$scope", "WebsiteService", "$location", "$sce", function ($scope, WebsiteService, $location, $sce) {
 
     $scope.panesByCat = {
       account: [],
