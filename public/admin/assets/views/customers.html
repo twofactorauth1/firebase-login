@@ -142,7 +142,7 @@
                                     <input st-search="{{last}}" placeholder="Last Name" class="form-control" type="search" />
                                 </th>
                                 <th class="column-width" ng-show="column.tags">
-                                    <input st-search="type" placeholder="Type" class="form-control hidden" type="search" id="searchType" ng-model="filterCustomer.type.selected.data" />
+                                    <input st-search="tags" placeholder="Type" class="form-control hidden" type="search" id="searchType" ng-model="filterCustomer.type.selected.data" />
                                     <ui-select ng-model="filterCustomer.type.selected" on-select="triggerInput('#searchType')" theme="bootstrap">
                                         <ui-select-match placeholder="Select Type">
                                             <small ng-bind-html="$select.selected.label"></small>

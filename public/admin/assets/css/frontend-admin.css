@@ -461,7 +461,7 @@
   }
 }
 #componentloader .contact-us-v1 .widget-weather {
-  margin-top: -280px;
+  margin-top: -300px;
   margin-left: 100px;
   margin-bottom: 0;
   border: none;
@@ -482,6 +482,9 @@
   display: table;
   float: none;
   width: 260px;
+  max-height: 275px;
+  min-width: 172px;
+  max-width: 500px;
 }
 #componentloader .contact-us-v1 .widget-weather .temp span {
   padding-bottom: 5px;
@@ -3068,6 +3071,9 @@
 }
 #componentloader .blog-teaser-v1 .posts .featured-image {
   padding-top: 15px;
+}
+#componentloader .blog-teaser-v1 .title {
+  position: relative;
 }
 #componentloader .blog-teaser-v1 .component-inner {
   padding: 15px;

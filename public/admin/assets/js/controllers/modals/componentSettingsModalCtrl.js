@@ -179,6 +179,7 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
       togglePaletteOnly: true,
       togglePaletteMoreText: 'more',
       togglePaletteLessText: 'less',
+      preferredFormat: 'rgb',
       appendTo: "body",
       palette: [
         ["#C91F37", "#DC3023", "#9D2933", "#CF000F", "#E68364", "#F22613", "#CF3A24", "#C3272B", "#8F1D21", "#D24D57"],
@@ -707,17 +708,18 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
 
   $scope.updateContactUsAddress = function () {
     if (!angular.equals($scope.originalContactMap, $scope.componentEditing.location)) {
+      $scope.locationAddress = null;
+       $scope.setLatLon();
       $scope.validateGeoAddress();
     }
   };
 
-  $scope.validateGeoAddress = function (fn) {
-    $scope.setLatLon();
-    GeocodeService.validateAddress($scope.componentEditing.location, function (data, results) {
+  $scope.validateGeoAddress = function (fn) {   
+    GeocodeService.validateAddress($scope.componentEditing.location, $scope.locationAddress, function (data, results) {
       if (data && results.length === 1) {
         $timeout(function () {
           $scope.$apply(function () {
-            $scope.setLatLon(results[0].geometry.location.G, results[0].geometry.location.K);
+            $scope.setLatLon(results[0].geometry.location.G || results[0].geometry.location.H, results[0].geometry.location.K || results[0].geometry.location.L);
             $scope.errorMapData = false;
             angular.copy($scope.componentEditing.location, $scope.originalContactMap);
             $scope.contactMap.refreshMap();
@@ -975,6 +977,8 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
     if (newValue) {
       if (angular.isObject(newValue)) {
         $scope.fillInAddress(newValue);
+        $scope.locationAddress = newValue;
+        $scope.setLatLon();
         $scope.validateGeoAddress();
       }
     }
@@ -1048,6 +1052,12 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
       $scope.contactHoursInvalid = false;
     }
 
+  };
+
+  $scope.slugifyAnchor = function (url) {
+    if (url) {
+      $scope.componentEditing.anchor = $filter('slugify')(url);
+    }
   };
 
 }]);
