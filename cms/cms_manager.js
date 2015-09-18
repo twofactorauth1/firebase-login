@@ -5,6 +5,7 @@ var cmsDao = require('./dao/cms.dao.js');
 var accountDao = require('../dao/account.dao.js');
 var themeDao = require('./dao/theme.dao.js');
 var templateDao = require('./dao/template.dao.js');
+var topicDao = require('./dao/topic.dao.js');
 var emailDao = require('./dao/email.dao.js');
 var urlboxhelper = require('../utils/urlboxhelper');
 var s3dao = require('../dao/integrations/s3.dao');
@@ -625,6 +626,8 @@ module.exports = {
             }
         });
     },
+
+
 
     _getOrCreateSinglePostPage: function(accountId, websiteId, fn) {
         var self = this;
@@ -1370,6 +1373,122 @@ module.exports = {
                 }
 
             ];
+
+        components : [ 
+        {
+            "_id" : "908a9f39-8f44-493b-a714-bb9db7e0fc4b",
+            "anchor" : "908a9f39-8f44-493b-a714-bb9db7e0fc4b",
+            "type" : "text-only",
+            "version" : "1",
+            "txtcolor" : "#000000",
+            "text" : "<p style=\"text-align: center;\"><span style=\"font-size:24px;\">How do I add a new Page?</span></p>",
+            "bg" : {
+                "img" : {
+                    "url" : "",
+                    "width" : null,
+                    "height" : null,
+                    "parallax" : false,
+                    "blur" : false,
+                    "overlay" : false,
+                    "show" : false
+                },
+                "color" : "#ffffff"
+            },
+            "visibility" : true,
+            "spacing" : {
+                "pt" : 50,
+                "pb" : "0",
+                "pl" : 0,
+                "pr" : 0,
+                "mt" : 0,
+                "mb" : 0,
+                "mr" : "auto",
+                "ml" : "auto",
+                "mw" : 1024,
+                "usePage" : false
+            },
+            "header_title" : "Text Block"
+        }, 
+        {
+            "_id" : "69355213-d9c4-467c-a501-f4e9910b0167",
+            "anchor" : "69355213-d9c4-467c-a501-f4e9910b0167",
+            "type" : "video",
+            "version" : "1",
+            "title" : "<h1>Video Title</h1>",
+            "videoType" : "youtube",
+            "video" : "",
+            "videoMp4" : "",
+            "videoWebm" : "",
+            "videoAutoPlay" : false,
+            "videoControls" : true,
+            "videoBranding" : true,
+            "videoWidth" : 780,
+            "videoHeight" : 320,
+            "videoImage" : "",
+            "txtcolor" : "#000000",
+            "bg" : {
+                "img" : {
+                    "url" : "",
+                    "width" : null,
+                    "height" : null,
+                    "parallax" : false,
+                    "blur" : false,
+                    "overlay" : false,
+                    "show" : false
+                },
+                "color" : "#ffffff"
+            },
+            "visibility" : true,
+            "spacing" : {
+                "pt" : "0",
+                "pb" : 50,
+                "pl" : 0,
+                "pr" : 0,
+                "mt" : 0,
+                "mb" : 0,
+                "mr" : "auto",
+                "ml" : "auto",
+                "mw" : 1024,
+                "usePage" : false
+            },
+            "icon" : "fa fa-video",
+            "header_title" : "Video"
+        }, 
+        {
+            "_id" : "bce88cd4-964a-49c3-95e9-94b8f04ef732",
+            "anchor" : "bce88cd4-964a-49c3-95e9-94b8f04ef732",
+            "type" : "text-only",
+            "version" : "1",
+            "txtcolor" : "#000000",
+            "text" : "<p><span style=\"font-size:24px;\">Some Text</span></p><p><span style=\"font-size:24px;\"></span>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nulla quae nesciunt, veritatis adipisci sit, consequatur accusamus in laboriosam amet repellendus ducimus mollitia ad labore quisquam voluptas porro esse. Dolore reiciendis, quos molestiae dolorum, officiis sapiente. Cumque vitae placeat aspernatur! Modi repellat, deleniti dolorum iste illum, esse excepturi magnam quibusdam, similique delectus est aliquam autem dolores possimus accusamus expedita nulla provident maxime eligendi ullam ad. Consequuntur ea officia nam quos, deserunt, nemo architecto repellat neque et ad natus! Asperiores pariatur distinctio amet repellendus aspernatur deleniti ipsa animi quis nesciunt quia quod eius, ex sapiente, neque quae quaerat labore. Debitis, quaerat, fugiat.<span style=\"font-size:18px;\"></span></p><p><span style=\"font-size: 24px;\">Some More Text</span></p><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nulla quae nesciunt, veritatis adipisci sit, consequatur accusamus in laboriosam amet repellendus ducimus mollitia ad labore quisquam voluptas porro esse. Dolore reiciendis, quos molestiae dolorum, officiis sapiente. Cumque vitae placeat aspernatur! Modi repellat, deleniti dolorum iste illum, esse excepturi magnam quibusdam, similique delectus est aliquam autem dolores possimus accusamus expedita nulla provident maxime eligendi ullam ad. Consequuntur ea officia nam quos, deserunt, nemo architecto repellat neque et ad natus! Asperiores pariatur distinctio amet repellendus aspernatur deleniti ipsa animi quis nesciunt quia quod eius, ex sapiente, neque quae quaerat labore. Debitis, quaerat, fugiat.</p>",
+            "bg" : {
+                "img" : {
+                    "url" : "",
+                    "width" : null,
+                    "height" : null,
+                    "parallax" : false,
+                    "blur" : false,
+                    "overlay" : false,
+                    "show" : false
+                },
+                "color" : "#ffffff"
+            },
+            "visibility" : true,
+            "spacing" : {
+                "pt" : 50,
+                "pb" : 50,
+                "pl" : "20",
+                "pr" : "20",
+                "mt" : 0,
+                "mb" : 0,
+                "mr" : "auto",
+                "ml" : "auto",
+                "mw" : 768,
+                "usePage" : false
+            },
+            "header_title" : "Text Block"
+        }
+    ]
 
 
         self.log.debug('>> createPage', page);
@@ -2280,5 +2399,181 @@ module.exports = {
                 return fn(null, email);
             }
         });
-    }
+    },
+
+    getAllTopics: function(accountId, fn) {
+        log.debug('>> getAllTopics');
+
+        var query = {
+            _id: { $exists : true, $ne : '__counter__'}
+        };
+
+        topicDao.findMany(query, $$.m.cms.Topic, function(err, list){
+            if(err) {
+                log.error('Exception thrown listing topics: ' + err);
+                fn(err, null);
+            } else {
+                log.debug('<< getAllTopics');
+                fn(null, list);
+            }
+        });
+    },
+
+    createTopic: function(topic, fn) {
+        var self = this;
+        self.log = log;
+
+        log.debug('topic ', topic);
+
+        topic.attributes.components = [
+            {
+                "_id" : $$.u.idutils.generateUUID(),
+                "anchor" : $$.u.idutils.generateUUID(),
+                "type" : "text-only",
+                "version" : 1,
+                "txtcolor" : "#000000",
+                "text" : "<p style=\"text-align: left;\"><span style=\"font-size:24px;\">"+topic.attributes.title+"</span></p>",
+                "bg" : {
+                    "img" : {
+                        "url" : "",
+                        "width" : null,
+                        "height" : null,
+                        "parallax" : false,
+                        "blur" : false,
+                        "overlay" : false,
+                        "show" : false
+                    },
+                    "color" : "#ffffff"
+                },
+                "visibility" : true,
+                "spacing" : {
+                    "pt" : 50,
+                    "pb" : 25,
+                    "pl" : 0,
+                    "pr" : 0,
+                    "mt" : 0,
+                    "mb" : 0,
+                    "mr" : "auto",
+                    "ml" : "auto",
+                    "mw" : 768,
+                    "usePage" : false
+                }
+            },
+            {
+                "_id" : $$.u.idutils.generateUUID(),
+                "anchor" : $$.u.idutils.generateUUID(),
+                "type" : "video",
+                "version" : "1",
+                "title" : "",
+                "videoType" : "youtube",
+                "video" : "",
+                "videoMp4" : "",
+                "videoWebm" : "",
+                "videoAutoPlay" : false,
+                "videoControls" : true,
+                "videoBranding" : true,
+                "videoWidth" : 780,
+                "videoHeight" : 320,
+                "videoImage" : "",
+                "txtcolor" : "#000000",
+                "bg" : {
+                    "img" : {
+                        "url" : "",
+                        "width" : null,
+                        "height" : null,
+                        "parallax" : false,
+                        "blur" : false,
+                        "overlay" : false,
+                        "show" : false
+                    },
+                    "color" : "#ffffff"
+                },
+                "visibility" : false,
+                "spacing" : {
+                    "pt" : 25,
+                    "pb" : 30,
+                    "pl" : 0,
+                    "pr" : 0,
+                    "mt" : 0,
+                    "mb" : 0,
+                    "mr" : "auto",
+                    "ml" : "auto",
+                    "mw" : 1024,
+                    "usePage" : false
+                },
+                "icon" : "fa fa-video",
+                "header_title" : "Video"
+            }, 
+            {
+                "_id" : $$.u.idutils.generateUUID(),
+                "anchor" : $$.u.idutils.generateUUID(),
+                "type" : "text-only",
+                "version" : 1,
+                "txtcolor" : "#000000",
+                "text" : "<span style=\"color:#7a7a7a;\"><span style=\"font-size:14px;\">This is the description of the overall purpose of whatever is being described.&nbsp;Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores quis mollitia nesciunt praesentium consequatur! Vero fugiat repellat, dolores natus maiores dolorem ipsam beatae, odit, quibusdam, laudantium earum. Iste, distinctio, quis!<br /><br />To check your <strong>SECTION</strong> select&nbsp;<strong>SECTION</strong> in the&nbsp;<strong>SECTION</strong> menu.<br /><br /><strong>1. Click this button</strong></span></span><br />&nbsp;<div style=\"text-align:center\"><img alt=\"\" width=\"800\" height=\"200\" class=\"img-thumbnail\" src=\"http://placehold.it/800x200\" /></div><span style=\"color:#7a7a7a;\"><span style=\"font-size:14px;\"></span></span><br /><span style=\"color:#7a7a7a;\"><span style=\"font-size:14px;\"><strong>2. Click this button</strong></span></span><br />&nbsp;<div style=\"text-align:center\"><img alt=\"\" width=\"800\" height=\"200\" class=\"img-thumbnail\" src=\"http://placehold.it/800x200\" /></div><span style=\"color:#7a7a7a;\"><span style=\"font-size:14px;\"><br /><strong>3. Click this button</strong></span></span><br />&nbsp;<div style=\"text-align:center\"><img alt=\"\" width=\"800\" height=\"200\" class=\"img-thumbnail\" src=\"http://placehold.it/800x200\" /></div><br />&nbsp;",
+                "bg" : {
+                    "img" : {
+                        "url" : "",
+                        "width" : null,
+                        "height" : null,
+                        "parallax" : false,
+                        "blur" : false,
+                        "overlay" : false,
+                        "show" : false
+                    },
+                    "color" : "#ffffff"
+                },
+                "visibility" : true,
+                "spacing" : {
+                    "pt" : 0,
+                    "pb" : 0,
+                    "pl" : 0,
+                    "pr" : 0,
+                    "mt" : 0,
+                    "mb" : 0,
+                    "mr" : "auto",
+                    "ml" : "auto",
+                    "mw" : 768,
+                    "usePage" : false
+                }
+            }
+        ];
+
+
+        self.log.debug('>> createTopic', topic);
+        topicDao.saveOrUpdate(topic, function(err, value){
+            if(err) {
+                log.error('Exception thrown updating topic: ' + err);
+                fn(err, null);
+            } else {
+                log.debug('<< createTopic');
+                fn(null, value);
+            }
+        });
+    },
+
+    updateTopic: function(topic, fn) {
+        log.debug('>> updateTopic ', topic);
+        topicDao.saveOrUpdate(topic, function(err, value){
+            if(err) {
+                log.error('Exception thrown updating topic: ' + err);
+                fn(err, null);
+            } else {
+                log.debug('<< updateTopic');
+                fn(null, value);
+            }
+        });
+    },
+
+    deleteTopic: function(topicId, fn) {
+        log.debug('>> deleteTopic');
+        topicDao.removeById(topicId, $$.m.cms.Topic, function(err, value){
+            if(err) {
+                log.error('Exception thrown while deleting topic: ' + err);
+            } else {
+                log.debug('<< deleteTopic');
+                fn(null, value);
+            }
+        });
+    },
 };

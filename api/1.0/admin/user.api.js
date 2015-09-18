@@ -78,7 +78,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var username = req.body.username;
         var password = req.body.password;
         var email = req.body.username;
-        var roleAry = [];
+        var roleAry = ['super','admin','member'];
         if(req.body.roleAry) {
             roleAry = req.body.roleAry.split(',');
         }
@@ -120,7 +120,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         var accountId = parseInt(req.params.id);
         var userId = parseInt(req.params.userId);
-        var roleAry = [];
+        var roleAry = ['super','admin','member'];
         if(req.body.roleAry) {
             roleAry = req.body.roleAry.split(',');
         }

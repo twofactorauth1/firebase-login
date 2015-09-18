@@ -143,6 +143,8 @@ _.extend(router.prototype, BaseRouter.prototype, {
         var ua = req.headers['user-agent'];
         var result = parser.setUA(ua).getResult();
         console.dir(result);
+        var redirectTo = req.query['redirectTo'];
+
         /*
          * Need to pull in the following data:
          * Date: December 12, 2014 10:28 AM
@@ -175,7 +177,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
                 } else {
                     self.log.debug("host: " + req.get("host") + " -> accountId:" + value.id());
 
-                    var redirectUrl = cookies.getRedirectUrl(req, resp, null, true);
+                    var redirectUrl = redirectTo ||cookies.getRedirectUrl(req, resp, null, true);
                     self.log.debug('onLogin redirectUrl from cookie: ' + redirectUrl);
                     if (redirectUrl != null) {
                         authenticationDao.getAuthenticatedUrl(req.user.id(), redirectUrl, null, function (err, value) {

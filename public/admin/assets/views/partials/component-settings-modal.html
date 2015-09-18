@@ -366,7 +366,7 @@
                     <div class="form-group" ng-if="componentEditing.type != 'navigation'">
                         <label for="component-title" tooltip-placement="top" tooltip="The anchor of the component">Anchor</label>
                         <span tooltip-placement="top" tooltip-html-unsafe="The anchor of the component."><i class="fa fa-info-circle" /></span>
-                        <input class="form-control" type="text" ng-model="componentEditing.anchor" ng-change="saveComponent()">
+                        <input class="form-control" type="text" ng-model="componentEditing.anchor" ng-change="slugifyAnchor(componentEditing.anchor);">
                     </div>
                     <hr></hr>
                     <div class="form-group">
@@ -433,7 +433,7 @@
                                 <label style="margin-top:10px" ng-if="newLink.linkType=='section'" for="link-url">Select Component</label>
                                 <select style="text-transform:capitalize" ng-if="newLink.linkType=='section'" placeholder="Select a component" ng-model="newLink.linkUrl" class="form-control margin-bottom-0">
                                     <option value="" disabled>Select a Component</option>
-                                    <option ng-repeat="component in currentPage.components track by $index" data-ng-if="component.anchor" value="{{component.anchor}}">{{setLinkTitle(component.type, $index)}}</option>
+                                    <option ng-repeat="component in currentPage.components track by $index" data-ng-if="component.anchor || component._id" value="{{component.anchor || component._id}}">{{setLinkTitle(component.type, $index)}}</option>
                                 </select>
                                 <label ng-if="newLink.linkType=='page'" for="link-url">Select Page</label>
                                 <label ng-if="newLink.linkType=='external'" for="link-url">Enter Url</label>
@@ -507,7 +507,7 @@
                                                         <label ng-if="linkType[$index]=='external'" for="link-url">Enter Url</label>
                                                         <select id="linkSection" style="text-transform:capitalize" ng-if="linkType[$index]=='section'" ng-model="link.linkTo.data" placeholder="Select a component" ng-change="updateLinkList()" class="form-control margin-bottom-0">
                                                             <option value="" disabled>Select a Component</option>
-                                                            <option ng-repeat="component in currentPage.components track by $index" data-ng-if="component.anchor" value="{{component.anchor}}" ng-selected="{{link.linkTo.data === component.anchor}}">{{setLinkTitle(component.type, $index)}}</option>
+                                                            <option ng-repeat="component in currentPage.components track by $index" data-ng-if="component.anchor || component._id" value="{{component.anchor || component._id}}" ng-selected="{{link.linkTo.data === (component.anchor || component._id)}}">{{setLinkTitle(component.type, $index)}}</option>
                                                         </select>
                                                         <select ng-if="linkType[$index]=='page'" placeholder="Select a page" ng-change="updateLinkList()" ng-model="link.linkTo.data" class="form-control margin-bottom-0">
                                                             <option value="" disabled>Select a Page</option>
@@ -566,7 +566,7 @@
                                                     <div class="col-xs-12">
                                                         <select id="linkSection" style="text-transform:capitalize" ng-if="linkType[$index]=='section'" ng-model="link.linkTo.data" ng-change="updateLinkList()" class="form-control margin-bottom-0">
                                                             <option value="" disabled>Select a Component</option>
-                                                            <option ng-repeat="component in currentPage.components track by $index" data-ng-if="component.anchor" value="{{component.anchor}}" ng-selected="{{link.linkTo.data === component.anchor}}">{{setLinkTitle(component.type, $index)}}</option>
+                                                            <option ng-repeat="component in currentPage.components track by $index" data-ng-if="component.anchor || component._id" value="{{component.anchor || component._id}}" ng-selected="{{link.linkTo.data === (component.anchor || component._id)}}">{{setLinkTitle(component.type, $index)}}</option>
                                                         </select>
                                                         <select ng-if="linkType[$index]=='page'" ng-change="updateLinkList()" ng-model="link.linkTo.data" class="form-control margin-bottom-0">
                                                             <option value="" disabled>Select a Page</option>

@@ -453,7 +453,7 @@
 }
 @media (max-width: 767px) {
   #componentloader .contact-us-v1 .widget-weather {
-    margin: 0!important;
+    margin-top: -280px !important;
     padding: 0!important;
   }
   #componentloader .contact-us-v1 .widget-weather .panel-body {
@@ -461,7 +461,7 @@
   }
 }
 #componentloader .contact-us-v1 .widget-weather {
-  margin-top: -280px;
+  margin-top: -300px;
   margin-left: 100px;
   margin-bottom: 0;
   border: none;
@@ -482,6 +482,9 @@
   display: table;
   float: none;
   width: 260px;
+  max-height: 275px;
+  min-width: 172px;
+  max-width: 500px;
 }
 #componentloader .contact-us-v1 .widget-weather .temp span {
   padding-bottom: 5px;
@@ -3069,6 +3072,9 @@
 #componentloader .blog-teaser-v1 .posts .featured-image {
   padding-top: 15px;
 }
+#componentloader .blog-teaser-v1 .title {
+  position: relative;
+}
 #componentloader .blog-teaser-v1 .component-inner {
   padding: 15px;
 }
@@ -5608,6 +5614,9 @@
 }
 #componentloader .min-height-350 {
   min-height: 350px !important;
+}
+#componentloader .height-50 {
+  height: 50px !important;
 }
 #componentloader .height-155 {
   height: 155px !important;

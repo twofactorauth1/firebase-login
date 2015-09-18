@@ -12,6 +12,7 @@ var baseApi = require('../base.api.js');
 var cmsDao = require('../../cms/dao/cms.dao.js');
 var mandrillHelper = require('../../utils/mandrillhelper');
 var Page = require('../../cms/model/page');
+var Topic = require('../../cms/model/topic');
 require('../../cms/model/email');
 //var Components = require('../../cms/model/components');
 
@@ -93,6 +94,11 @@ _.extend(api.prototype, baseApi.prototype, {
         app.post(this.url('template/:id/website/:websiteId/page'), this.isAuthAndSubscribedApi.bind(this), this.createPageFromTemplate.bind(this));
         // app.post(this.url('template/:themeId/website/:websiteId'), this.isAuthApi.bind(this), this.setTemplate.bind(this));
 
+        // TOPICS
+        app.get(this.url('topic'), this.isAuthApi.bind(this), this.listTopics.bind(this));
+        app.post(this.url('topic'), this.isAuthAndSubscribedApi.bind(this), this.createTopic.bind(this));
+        app.put(this.url('topic/:id'), this.isAuthAndSubscribedApi.bind(this), this.updateTopic.bind(this));
+        app.delete(this.url('topic/:id'), this.isAuthAndSubscribedApi.bind(this), this.deleteTopic.bind(this));
 
         // COMPONENTS
         app.get(this.url('page/:id/components'), this.isAuthAndSubscribedApi.bind(this), this.getComponentsByPage.bind(this));
@@ -1166,6 +1172,107 @@ _.extend(api.prototype, baseApi.prototype, {
     // },
 
     //endregion
+
+    //TOPICS
+    listTopics: function(req, res) {
+        var self = this;
+        var accountId = parseInt(self.accountId(req));
+        self.log.debug('>> listTopics accountId ', accountId);
+
+        self.checkPermissionForAccount(req, self.sc.privs.VIEW_THEME, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                cmsManager.getAllTopics(accountId, function(err, value){
+                    self.log.debug('<< listTopics');
+                    self.sendResultOrError(res, err, value, 'Error retrieving all topics.');
+                });
+            }
+        });
+
+    },
+
+    createTopic: function(req, res) {
+        var self = this;
+        self.log.debug('>> createTopic');
+
+        self.checkPermission(req, self.sc.privs.MODIFY_WEBSITE, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                var topicData = req.body;
+                var topic = require('../../cms/model/topic');
+                var temp = $$.u.idutils.generateUUID();
+                if (topic != null) {
+                    self.log.debug('>> topic not null');
+                    topic = new Topic({
+                        _id: temp,
+                        title: topicData.title,
+                        category: topicData.category
+                    });
+                    topic.attributes.modified.date = new Date();
+                    topic.attributes.created.date = new Date();
+                }
+                cmsManager.createTopic(topic, function(err, createdTopic){
+                    self.log.debug('<< createTopic');
+                    self.sendResultOrError(res, err, createdTopic, 'Error creating topic.');
+                });
+            }
+        });
+
+    },
+
+    updateTopic: function(req, res) {
+        var self = this;
+        self.log.debug('>> updateTopic');
+
+        self.checkPermission(req, self.sc.privs.MODIFY_WEBSITE, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                var topicId = req.params.id;
+                var topicObj = new $$.m.cms.Topic(req.body);
+                topicObj.attributes.modified.by = self.userId(req);
+                topicObj.attributes.modified.date = new Date();
+                topicObj.set('_id', topicId);
+
+                self.log.debug('topicObj ', topicObj);
+                cmsManager.updateTopic(topicObj, function(err, value){
+                    self.log.debug('<< updateTopic ', value.components);
+                    self.sendResultOrError(res, err, value, 'Error updating topic.');
+
+                });
+            }
+        });
+
+    },
+
+    deleteTopic: function(req, res) {
+
+        var self = this;
+        self.log.debug('>> deleteTopic');
+        var accountId = parseInt(self.accountId(req));
+
+        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                var topicId = req.params.id;
+
+                cmsManager.deleteTopic(topicId, function (err, value) {
+                    self.log.debug('<< deleteTopic');
+                    self.log.debug('err:', err);
+                    self.log.debug('value:', value);
+                    if(err) {
+                        self.wrapError(res, 500, err, "Error deleting topic");
+                    } else {
+                        self.send200(res);
+                    }
+                    self = null;
+                });
+            }
+        });
+    },
 
     //COMPONENTS
 

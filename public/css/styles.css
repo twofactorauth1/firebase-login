@@ -434,7 +434,7 @@ div[data-type='campaign'] .inner-page .overlay {
 }
 @media (max-width: 767px) {
   .contact-us-v1 .widget-weather {
-    margin: 0!important;
+    margin-top: -280px !important;
     padding: 0!important;
   }
   .contact-us-v1 .widget-weather .panel-body {
@@ -442,7 +442,7 @@ div[data-type='campaign'] .inner-page .overlay {
   }
 }
 .contact-us-v1 .widget-weather {
-  margin-top: -280px;
+  margin-top: -300px;
   margin-left: 100px;
   margin-bottom: 0;
   border: none;
@@ -463,6 +463,9 @@ div[data-type='campaign'] .inner-page .overlay {
   display: table;
   float: none;
   width: 260px;
+  max-height: 275px;
+  min-width: 172px;
+  max-width: 500px;
 }
 .contact-us-v1 .widget-weather .temp span {
   padding-bottom: 5px;
@@ -3073,6 +3076,9 @@ div[data-type="feature-block"] .component-inner {
 .blog-teaser-v1 .posts .featured-image {
   padding-top: 15px;
 }
+.blog-teaser-v1 .title {
+  position: relative;
+}
 .blog-teaser-v1 .component-inner {
   padding: 15px;
 }
@@ -5622,6 +5628,9 @@ fieldset[disabled] .btn-vimeo-square.active {
 }
 .min-height-350 {
   min-height: 350px !important;
+}
+.height-50 {
+  height: 50px !important;
 }
 .height-155 {
   height: 155px !important;
