@@ -404,31 +404,51 @@ app.constant('userConstant', {
     LEAD: 'ld',
     OTHER: "ot",
     NOTAG: "nt",
+    CANCELLED_CUSTOMER: "cc",
+    CANCELLED_TRIAL: "ct",
+    CHEATSHEET_LEAD: "cs",
+    EXPIRED_TRIAL: "ex",
+    TRIAL_CUSTOMER: "tc",
 
     dp: [{
-      label: "Customer",
-      data: "cu"
+      label: "Admin",
+      data: "ad"
+    }, {
+      label: "Cancelled Customer",
+      data: "cc"
+    }, {
+      label: "Cancelled Trial Customer",
+      data: "ct"
+    }, {
+      label: "Cheatsheet Lead",
+      data: "cs"
     }, {
       label: "Colleague",
       data: "co"
     }, {
-      label: "Friend",
-      data: "fr"
+      label: "Customer",
+      data: "cu"
     }, {
-      label: "Member",
-      data: "mb"
+      label: "Expired Trial Customer",
+      data: "ex"
     }, {
       label: "Family",
       data: "fa"
     }, {
-      label: "Admin",
-      data: "ad"
+      label: "Friend",
+      data: "fr"
     }, {
-      label: 'Lead',
-      data: 'ld'
+      label: "Lead",
+      data: "ld"
+    }, {
+      label: "Member",
+      data: "mb"
     }, {
       label: "Other",
       data: "ot"
+    }, {
+      label: "Trial Customer",
+      data: "tc"
     }, {
       label: "No Tag",
       data: "nt"
