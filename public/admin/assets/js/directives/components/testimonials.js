@@ -14,29 +14,37 @@ app.directive('testimonialsComponent', ['$timeout', function ($timeout) {
       scope.isEditing = true;
       
       scope.$parent.$watch('ckeditorLoaded', function (newValue, oldValue) {
-        if(newValue)
+        if(newValue){          
           scope.dataLoaded = true;
+        }
       });
-      scope.deleteTestimonial = function (index) {
-        scope.dataLoaded = false;
-        console.log(index);
-        scope.component.testimonials.splice(index, 1);
+      var addRemoveTestimonials = function(index, add){
+        var testimonials = angular.copy(scope.component.testimonials);
+        if(add){
+          var newTestimonial = {
+            "img": "<img src='https://s3-us-west-2.amazonaws.com/indigenous-admin/default-user.png'/>",
+            "name": "First Last",
+            "site": "www.examplesite.com",
+            "text": "This is the testimonial."
+          };
+          testimonials.splice(index + 1, 0, newTestimonial);  
+        }
+        else{
+          testimonials.splice(index, 1); 
+        }   
+        scope.component.testimonials = testimonials;      
         $timeout(function () {
-          scope.dataLoaded = true;
+          scope.dataLoaded = !scope.dataLoaded;
         });
       };
+
+      scope.deleteTestimonial = function (index) {
+        console.log(index);
+        addRemoveTestimonials(index, false);
+      };
       scope.addTestimonial = function (index) {
-        scope.dataLoaded = false;
-        var newTestimonial = {
-          "img": "<img src='https://s3-us-west-2.amazonaws.com/indigenous-admin/default-user.png'/>",
-          "name": "First Last",
-          "site": "www.examplesite.com",
-          "text": "This is the testimonial."
-        };
-        scope.component.testimonials.splice(index + 1, 0, newTestimonial);
-        $timeout(function () {
-          scope.dataLoaded = true;
-        });
+        console.log(index);
+        addRemoveTestimonials(index, true);
       };
     }
   };
