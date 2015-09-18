@@ -11,33 +11,116 @@
 <!-- end: PAGE TITLE -->
 <!-- start: CONTENT -->
 <div ng-controller="HelpTopicsCtrl">
-    <div class="container-fluid container-fullw bg-white">
-        <div class="row">
-            <div class="col-sm-8 col-sm-offset-2 margin-bottom-15">
-                <label>Search</label>
-                <input type="search" class="form-control input-lg" placeholder="Enter your topic, question, or keyword" ng-model="searchTextValue"/>
+    <div class="load1" ng-class="{'csspinner': !topicsLoaded}">
+        <div class="search-topics container-fluid container-fullw bg-white" ng-if="!showSingle">
+            <div class="row">
+                <div class="col-sm-8 col-sm-offset-2 margin-bottom-15 no-padding">
+                    <label>Search</label>
+                    <input type="search" class="form-control input-lg" placeholder="Enter a keyword to search the help topics" ng-model="searchTextValue" />
+                </div>
             </div>
         </div>
-    </div>
-    <div class="container-fluid container-fullw bg-white">
-        <div class="row">
-            <div class="col-sm-8 col-sm-offset-2">
-                <div class="col-sm-6">
-                    <div class="margin-bottom-30" ng-repeat="catPane in panesByCat" ng-hide="(catPane|filter:searchTextValue).length == 0" ng-if="catPane[$index].category != 'Marketing' && catPane[$index].category != 'Website'">
-                        <h5 class="over-title margin-bottom-5 text-bold"><span class="text-bold">{{catPane[0].category}}</span></h5>
-                        <hr class="margin-top-0">
-                        <ul class="unstyled-list padding-left-0">
-                            <li ng-repeat="pane in catPane | filter:searchTextValue" class="margin-bottom-5"><a href="">{{pane.header}}</a></li>
-                        </ul>
+        <div class="container-fluid container-fullw bg-white" ng-if="!showSingle">
+            <div ct-fullheight="window" data-ct-fullheight-exclusion="header, .search-topics, #page-title" class="bg-white row">
+                <div class="row">
+                    <div class="col-sm-8 col-sm-offset-2">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="margin-bottom-30" ng-repeat="catPane in panesByCat" ng-hide="(catPane|filter:searchTextValue).length == 0" ng-if="catPane[$index].category != 'Marketing' && catPane[$index].category != 'Website'">
+                                    <h5 class="over-title margin-bottom-5 text-bold"><span class="text-bold">{{catPane[0].category}}</span></h5>
+                                    <hr class="margin-top-0">
+                                    <ul class="unstyled-list padding-left-0 cl-effect-1">
+                                        <li ng-repeat="pane in catPane | filter:searchTextValue" class="margin-bottom-5"><a href="#" ng-click="viewSingle(pane)"><span class="fa fa-play-circle-o" ng-if="pane.components[1].visibility == true"></span> {{pane.title}}</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="margin-bottom-30" ng-repeat="catPane in panesByCat" ng-hide="(catPane|filter:searchTextValue).length == 0" ng-if="catPane[$index].category == 'Marketing' || catPane[$index].category == 'Website'">
+                                    <h5 class="over-title margin-bottom-5 text-bold"><span class="text-bold">{{catPane[0].category}}</span></h5>
+                                    <hr class="margin-top-0">
+                                    <ul class="unstyled-list padding-left-0 cl-effect-1">
+                                        <li ng-repeat="pane in catPane | filter:searchTextValue" class="margin-bottom-5"><a href="#" ng-click="viewSingle(pane)">{{pane.title}}</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row text-center">
+                            <span class="fa fa-comments fa-3x"></span>
+                            <h3>Need some addtional help?</h3>
+                            <p>We are always ready to assist on chat.</p>
+                            <button class="btn btn-primary btn-o" onclick="Intercom('showNewMessage', 'I need some additional assistance.');">Chat Now</button>
+                        </div>
                     </div>
                 </div>
-                <div class="col-sm-6">
-                    <div class="margin-bottom-30" ng-repeat="catPane in panesByCat" ng-hide="(catPane|filter:searchTextValue).length == 0" ng-if="catPane[$index].category == 'Marketing' || catPane[$index].category == 'Website'">
-                        <h5 class="over-title margin-bottom-5 text-bold"><span class="text-bold">{{catPane[0].category}}</span></h5>
-                        <hr class="margin-top-0">
-                        <ul class="unstyled-list padding-left-0">
-                            <li ng-repeat="pane in catPane | filter:searchTextValue" class="margin-bottom-5"><a href="">{{pane.header}}</a></li>
-                        </ul>
+            </div>
+        </div>
+        <div class="container-fluid container-fullw bg-white" ng-if="showSingle">
+            <div ct-fullheight="window" data-ct-fullheight-exclusion="header, #page-title" class="bg-white row">
+                <div class="row bg-white">
+                    <div class="col-sm-8 col-sm-offset-2">
+                        <div class="col-xs-12">
+                            <button class="btn btn-primary btn-o pull-left" ng-click="showTopics()"><span class="fa fa-chevron-left"></span> Back</button>
+                            <p class="pull-right" style="margin-bottom:0;line-height: 34px;"><strong>Category:</strong> {{singleTopic.category}}</p>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="row">
+                            <div ng-repeat="component in singleTopic.components" class="fragment">
+                                <div class="component-wrap" ng-if="component.visibility">
+                                    <div class="component {{component.type}}{{component._id}}">
+                                        <div id="{{component.anchor || component._id}}" ng-style="{'color':component.txtcolor||primaryTextColor}">
+                                            <div ng-style="{'background': component.bg.color, 'color':component.txtcolor||primaryTextColor}">
+                                                <div class="component-inner">
+                                                    <div ng-style="{'padding-top': component.spacing.pt, 'padding-bottom': component.spacing.pb, 'padding-left': component.spacing.pl, 'padding-right': component.spacing.pr, 'margin-top': component.spacing.mt, 'margin-bottom': component.spacing.mb, 'margin-left': component.spacing.ml, 'margin-right': component.spacing.mr, 'max-width': component.spacing.mw}">
+                                                        <div ng-switch="component.type">
+                                                            <div ng-switch-when="text-only">
+                                                                <div ng-class="component.type+'-v'+component.version">
+                                                                    <div class="col-xs-12">
+                                                                        <div ng-bind-html="component.text | unsafe"></div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div ng-switch-when="video">
+                                                                <div class="video-block">
+                                                                    <div class="row">
+                                                                        <div class="col-xs-12">
+                                                                            <div class="mb20"></div>
+                                                                            <div class="videoblock">
+                                                                                <div class="videogular-container">
+                                                                                    <iframe ng-if="component.videoType=='youtube'" ng-src="{{flvVideoUrl('//www.youtube.com/embed/', component.video)}}" frameborder="0" allowfullscreen style="width: 100%;height: 400px;"></iframe>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="clearfix"></div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12">
+                            <div class="row">
+                                <div class="col-xs-12" ng-if="!topicRated">
+                                    <p class="text-bold">Did this topic help you? <a href="#" class="text-success" ng-click="isHelpful(singleTopic)"><span class="fa fa-thumbs-up"></span> Yes</a> | <a href="#" class="text-danger" ng-click="notHelpful(singleTopic)"><span class="fa fa-thumbs-down"></span> No, contact support</a></p>
+                                </div>
+                                <div class="col-xs-12 text-bold">
+                                    <span ng-if="showThanks">
+                                        <p class="text-success">Awesome! We're glad we could help.</p>
+                                    </span>
+                                    <span ng-if="showSupport">
+                                        <p class="text-danger">Sorry about that. Chat is ready to Assist. --></p>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

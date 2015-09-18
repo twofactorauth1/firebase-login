@@ -3,8 +3,10 @@
     <section id="page-title" class="padding-top-15 padding-bottom-15">
         <div class="row">
             <div class="col-sm-8">
-                <h1 ng-if="isSinglePost" class="mainTitle">{{ blog.post.post_title || 'Single Post' | htmlToPlaintext}}</h1>
-                <h1 ng-if="!isSinglePost" class="mainTitle">{{ page.title || 'Title'}}</h1>
+                <h1 ng-if="isSinglePost && !isTopic" class="mainTitle">{{ blog.post.post_title || 'Single Post' | htmlToPlaintext}}</h1>
+                <h1 ng-if="!isSinglePost && !isTopic" class="mainTitle">{{ page.title || 'Title'}}</h1>
+                <h1 ng-if="isTopic" class="mainTitle">{{ topic.title || 'Title'}}</h1>
+                <span ng-if="isTopic" class="mainDescription">Listed under the {{topic.category}} category.</span>
                 <span ng-if="isSinglePost && blog.post.post_tags" class="mainDescription">There are currently {{blog.post.post_tags.length}} tags.</span>
                 <span ng-if="!isSinglePost && page.components" class="mainDescription">There are currently {{page.components.length}} components.</span>
                 <span ng-if="templateActive" class="mainDescription">There are currently {{page.config.components.length}} components.</span>
@@ -27,13 +29,18 @@
                                     <div class="hidden-lg margin-bottom-10"></div>
                                 </div>
                                 <div ng-if="!isEmail" class="col-sm-2 col-xs-6 center">
-                                    <div ng-if="!isSinglePost">
+                                    <div ng-if="!isSinglePost && !isTopic">
                                         <a ng-disabled="!ckeditorLoaded" type="button" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-eye btn-o" ng-click="getUrl(page.handle, false)" target="_blank">
                                             <span>View</span>
                                         </a>
                                     </div>
                                     <div ng-if="isSinglePost">
                                         <a ng-disabled="!ckeditorLoaded" type="button" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-eye btn-o" ng-click="getUrl(originalPost.post_url, true)" target="_blank">
+                                            <span>View</span>
+                                        </a>
+                                    </div>
+                                     <div ng-if="isTopic">
+                                        <a ng-disabled="!ckeditorLoaded" type="button" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-eye btn-o" ng-click="viewTopic(topic._id)" target="_blank">
                                             <span>View</span>
                                         </a>
                                     </div>
@@ -89,6 +96,7 @@
     </div>
     <div data-ng-include data-src=" 'assets/views/partials/add-component-modal.html' " ></div>
     <div data-ng-include data-src=" 'assets/views/partials/component-settings-modal.html' " ></div>
+    <div data-ng-include data-src=" 'assets/views/partials/topic-settings-modal.html' " ></div>
     <div data-ng-include data-src=" 'assets/views/partials/social-links-modal.html' " ></div>
     <div data-ng-include data-src=" 'assets/views/partials/page-settings-modal.html' " ></div>
     <div data-ng-include data-src=" 'assets/views/partials/post-settings-modal.html' " ></div>

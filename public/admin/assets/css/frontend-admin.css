@@ -5609,6 +5609,9 @@
 #componentloader .min-height-350 {
   min-height: 350px !important;
 }
+#componentloader .height-50 {
+  height: 50px !important;
+}
 #componentloader .height-155 {
   height: 155px !important;
 }
