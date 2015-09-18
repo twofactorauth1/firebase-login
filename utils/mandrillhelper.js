@@ -17,6 +17,7 @@ var contactDao = require('../dao/contact.dao');
 var accountDao = require('../dao/account.dao');
 var userDao = require('../dao/user.dao');
 var async = require('async');
+var juice = require('juice');
 
 var mandrillHelper =  {
 

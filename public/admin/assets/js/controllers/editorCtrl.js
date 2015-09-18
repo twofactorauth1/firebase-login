@@ -103,7 +103,9 @@
 
         if ($scope.isEmail) {
           //unable to access plugin from ckeditor api
-          angular.element('.cke_button__doksoft_font_awesome').hide();
+          //hide regular button and font awesome from email editor
+          angular.element('.cke_button__doksoft_button, .cke_button__doksoft_font_awesome').hide();
+          angular.element('.cke_button__doksoft_button_email').show();
         }
         else
           angular.element('.cke_button__doksoft_font_awesome').show();

@@ -13212,6 +13212,9 @@ fieldset[disabled] .btn-vimeo-square.active {
 #editor-toolbar .cke_chrome a.cke_button .cke_button__doksoft_button_icon:before {
   content: "\f0c8";
 }
+#editor-toolbar .cke_chrome a.cke_button .cke_button__doksoft_button_email_icon:before {
+  content: "\f0c8";
+}
 #editor-toolbar .cke_chrome a.cke_button .cke_button__doksoft_font_awesome_icon:before {
   content: "\f024";
 }
