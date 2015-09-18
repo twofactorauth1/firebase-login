@@ -528,6 +528,7 @@ app.constant('JS_REQUIRES', {
     //*** Controllers
     'dashboardCtrl': 'assets/js/controllers/dashboardCtrl.js',
     'helpTopicsCtrl': 'assets/js/controllers/helpTopicsCtrl.js',
+    'newHelpTopicsCtrl': 'assets/js/controllers/newHelpTopicsCtrl.js',
     'gettingStartedCtrl': 'assets/js/controllers/gettingStartedCtrl.js',
     'pagesCtrl': 'assets/js/controllers/pagesCtrl.js',
     'siteAnalyticsCtrl': 'assets/js/controllers/siteAnalyticsCtrl.js',
@@ -546,6 +547,7 @@ app.constant('JS_REQUIRES', {
     'profileBusinessCtrl': 'assets/js/controllers/profileBusinessCtrl.js',
     'profilePersonalCtrl': 'assets/js/controllers/profilePersonalCtrl.js',
     'templatesCtrl': 'assets/js/controllers/templatesCtrl.js',
+    'manageTopicsCtrl': 'assets/js/controllers/manageTopicsCtrl.js',
     'integrationsCtrl': 'assets/js/controllers/integrationsCtrl.js',
     'orderDetailCtrl': 'assets/js/controllers/orderDetailCtrl.js',
     'settingsCtrl': 'assets/js/controllers/settingsCtrl.js',

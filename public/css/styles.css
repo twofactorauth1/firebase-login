@@ -5629,6 +5629,9 @@ fieldset[disabled] .btn-vimeo-square.active {
 .min-height-350 {
   min-height: 350px !important;
 }
+.height-50 {
+  height: 50px !important;
+}
 .height-155 {
   height: 155px !important;
 }
