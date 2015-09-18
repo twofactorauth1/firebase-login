@@ -177,7 +177,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
                 } else {
                     self.log.debug("host: " + req.get("host") + " -> accountId:" + value.id());
 
-                    var redirectUrl = redirectTo ||cookies.getRedirectUrl(req, resp, null, true);
+                    var redirectUrl = redirectTo || cookies.getRedirectUrl(req, resp, null, true);
                     self.log.debug('onLogin redirectUrl from cookie: ' + redirectUrl);
                     if (redirectUrl != null) {
                         authenticationDao.getAuthenticatedUrl(req.user.id(), redirectUrl, null, function (err, value) {
