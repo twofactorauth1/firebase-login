@@ -1,0 +1,34 @@
+<script type="text/ng-template" id="topic-settings-modal">
+    <div class="modal-header">
+        <button type="button" class="close" ng-click="closeModal()">&times;</button>
+        <h4 class="modal-title">Topic Settings</h4>
+    </div>
+    <div class="modal-body no-padding bg-white" style="max-height:500px;">
+        <div style="padding:10px">
+            <div class="form-group">
+                <label>Title:</label>
+                <input id="edit-topic-title" class="form-control input-lg" type="text" ng-model="topic.title">
+            </div>
+            <div class="form-group">
+                <label class="pull-left">Topic Category</label>
+                <select id="topic_category" ng-model="topic.category" class="form-control margin-bottom-0" ng-options="category for category in topicCategories">
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="colorpicker">Public:</label>
+                <span tooltip-placement="top" tooltip-html-unsafe="Show/hide topic."><i class="fa fa-info-circle" /></span>
+                <switch ng-model="topic.isPublic" class="pull-right"></switch>
+            </div>
+            <div class="mb20"></div>
+            <div class="well">
+                <p>Danger Zone</p>
+                <button class="btn btn-block btn-danger" ng-click="deleteTopic(topic)"><i class="fa fa-trash"></i> Delete Topic</button>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-info btn-wide btn-o" ng-click="closeModal()">
+            Done
+        </button>
+    </div>
+</script>

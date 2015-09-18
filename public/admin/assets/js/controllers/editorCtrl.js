@@ -273,6 +273,12 @@
           toaster.pop('success', "Template Saved", "The " + $scope.page.handle + " template was saved successfully.");
           $scope.redirectAfterSave(redirect_url);
         });
+      } else if ($scope.isTopic) {
+        console.log('saving topic');
+        WebsiteService.updateTopic($scope.topic, function (data) {
+          $scope.saveLoading = false;
+          toaster.pop('success', "Topic Saved", "The " + $scope.topic.title + " topic was saved successfully.");
+        });
       } else {
         $scope.checkForDuplicatePage(function () {
           console.log('$scope.duplicateUrl ', $scope.duplicateUrl);
@@ -326,6 +332,7 @@
             $scope.saveLoading = false;
         });
       }
+
     };
 
     /*
@@ -543,6 +550,24 @@
     };
 
     /*
+     * @retrieveTopic
+     * -
+     */
+
+    $scope.retrieveTopic = function (_id) {
+      $scope.topicActive = true;
+      WebsiteService.getTopics(function (topics) {
+        $scope.topic = _.find(topics, function (top) {
+          return top._id === _id;
+        });
+
+        $scope.components = $scope.topic.components;
+        $scope.activateCKeditor();
+        $rootScope.breadcrumbTitle = $scope.topic.title;
+      });
+    };
+
+    /*
      * @calculateWindowHeight
      * -
      */
@@ -590,6 +615,17 @@
 
     if ($location.search().templatehandle) {
       $scope.retrieveTemplate($location.search().templatehandle);
+    }
+
+    /*
+     * @location:email
+     * -
+     */
+
+
+    if ($location.search().topic) {
+      $scope.isTopic = true;
+      $scope.retrieveTopic($location.search().topic);
     }
 
     /*
@@ -903,6 +939,48 @@
       if ($scope.isEmail) {
         $scope.openSimpleModal("email-settings-modal");
       }
+
+      if ($scope.isTopic) {
+        $scope.openSimpleModal("topic-settings-modal");
+      }
+    };
+
+    /*
+     * @deleteTopic
+     * -
+     */
+    
+    $scope.topicCategories = ['Account', 'Billing', 'Contacts', 'Campaigns', 'Dashboard', 'Emails', 'Getting Started', 'Integrations', 'Orders', 'Pages', 'Posts', 'Products', 'Profile', 'Site Analytics', 'Social Feed'];
+
+
+    $scope.deleteTopic = function () {
+      angular.element('.modal.in').hide();
+      SweetAlert.swal({
+        title: "Are you sure?",
+        text: "Do you want to delete this topic",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: "Yes, delete topic!",
+        cancelButtonText: "No, do not delete topic!",
+        closeOnConfirm: false,
+        closeOnCancel: true
+      }, function (isConfirm) {
+        if (isConfirm) {
+          SweetAlert.swal("Saved!", "Topic is deleted.", "success");
+          var title = $scope.topic.title;
+          WebsiteService.deleteTopic($scope.topic, function (data) {
+            toaster.pop('success', "Topic Deleted", "The " + title + " topic was deleted successfully.");
+            $scope.closeModal();
+            $timeout(function () {
+              window.location = '/admin/#/support/manage-topics';
+            }, 500);
+          });
+        } else {
+          angular.element('.modal.in').show();
+        }
+
+      });
     };
 
     /*
@@ -1249,6 +1327,13 @@
     $scope.checkForSaveBeforeLeave = function (url, reload) {
       $scope.changesConfirmed = true;
       checkBeforeRedirect(url, reload);      
+    };
+
+    $scope.viewTopic = function(topicId) {
+      console.log('topicId ', topicId);
+      $location.path('/support/help-topics').search({
+        topic: topicId
+      });
     };
 
     /*

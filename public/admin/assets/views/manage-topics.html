@@ -1,0 +1,179 @@
+<div ng-controller="ManageTopicsCtrl" class="manage-topics">
+    <!-- start: PAGE TITLE -->
+    <section id="page-title" class="padding-top-15 padding-bottom-15">
+        <div class="row">
+            <div class="col-sm-8">
+                <h1 class="mainTitle" translate="sidebar.nav.support.MANAGETOPICS"></h1>
+                <span ng-if="topics" class="mainDescription">There are currently {{topics.length}} topics.</span>
+            </div>
+            <div ncy-breadcrumb></div>
+        </div>
+    </section>
+    <!-- end: PAGE TITLE -->
+    <!-- start: CONTENT -->
+    <div st-table="displayedTopics" st-safe-src="topics">
+        <div class="container-fluid container-fullw bg-white padding-top-0 padding-bottom-0">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="panel panel-transparent row margin-bottom-0">
+                        <div class="panel-body">
+                            <form role="form" class="ng-pristine ng-valid row">
+                                <div class="col-xs-12 col-sm-6 padding-left-0">
+                                    <div class="form-group">
+                                        <div class="col-xs-7 col-sm-9">
+                                            <span class="input-icon">
+                                                <input type="text" st-search placeholder="Search by title, category, date..." id="form-field-14" class="form-control">
+                                                <i class="ti-search"></i>
+                                            </span>
+                                        </div>
+                                        <div class="col-xs-5 col-sm-3 padding-right-0">
+                                            <button type="button" class="btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti-filter ng-click-active pull-right" ng-click="showFilter = !showFilter">
+                                                <span>Filter</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="visible-xs margin-bottom-15 clearfix"></div>
+                                <div class="col-xs-12 col-sm-6">
+                                    <div class="form-group margin-bottom-0 pull-right">
+                                        <button type="button" class="btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti ti-plus ng-click-active" ng-click="openModal('new-topic-modal')">
+                                            <span>New Topic</span>
+                                        </button>
+                                    </div>
+                                    <div class="form-group margin-bottom-0 pull-left">
+                                        <div class="btn-group tableView">
+                                            <button class="btn btn-info" ng-class="{'active': tableView == 'list'}" href="" ng-click="tableView = 'list'" tooltip-placement="top" tooltip="List"> <span class="fa fa-th-list"></span> </button>
+                                            <button class="btn btn-info" ng-class="{'active': tableView == 'grid'}" href="" ng-click="tableView = 'grid'" tooltip-placement="top" tooltip="Grid"> <span class="fa fa-th"></span> </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid container-fullw padding-top-0 padding-bottom-0">
+            <div class="panel panel-transparent row margin-bottom-0">
+                <div class="panel-body">
+                    <table class="table table-hover margin-bottom-0" ng-class="{'grid': tableView == 'grid', 'bg-white': tableView != 'grid'}" ng-show="displayedTopics">
+                        <thead>
+                            <tr>
+                                <th st-sort="title">Title</th>
+                                <th class="hidden-xs" st-sort="isPublic">Public</th>
+                                <th class="hidden-xs" st-sort="category">Category</th>
+                                <th class="hidden-xs text-center" st-sort="statistics.views">Views</th>
+                                <th class="hidden-xs text-center" st-sort="statistics.helpful">Helpful</th>
+                                <th class="hidden-xs text-center" st-sort="statistics.nothelpful">Not Helpful</th>
+                                <th class="hidden-xs" st-sort="getters.created" ng-class="{'center': tableView != 'grid'}">Created</th>
+                                <th class="hidden-xs" st-sort="getters.modified" ng-class="{'center': tableView != 'grid'}">Modified</th>
+                            </tr>
+                            <tr ng-if="showFilter">
+                                <th>
+                                    <input st-search="title" placeholder="Title" class="form-control" type="search" />
+                                </th>
+                                <th class="hidden-xs">
+                                    <input st-search="category" placeholder="Cateogry" class="form-control" type="search" />
+                                </th>
+                                <th>
+                                    <!-- <input st-search="created" placeholder="Created" class="form-control" type="search" /> -->
+                                </th>
+                                <th>
+                                    <!-- <input st-search="created" placeholder="Created" class="form-control" type="search" /> -->
+                                </th>
+                                <th>
+                                    <!-- <input st-search="created" placeholder="Created" class="form-control" type="search" /> -->
+                                </th>
+                                <th>
+                                    <!-- <input st-search="created" placeholder="Created" class="form-control" type="search" /> -->
+                                </th>
+                                <th>
+                                    <!-- <input st-search="created" placeholder="Created" class="form-control" type="search" /> -->
+                                </th>
+                                <th>
+                                    <!-- <input st-search="modified" placeholder="Modified" class="form-control" type="search" /> -->
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="topic in displayedTopics" ng-click="viewSingle(topic)" ng-class="{'height-50': tableView != 'grid'}">
+                                <td><strong>Title: </strong><span ng-text-truncate="topic.title" ng-tt-chars-threshold="50" ng-tt-no-toggling></span></td>
+                                <td class="hidden-xs"><strong>Public: </strong><span>{{topic.isPublic}}</span></td>
+                                <td class="hidden-xs"><strong>Category: </strong><span ng-text-truncate="topic.category" ng-tt-chars-threshold="25" ng-tt-no-toggling></span></td>
+                                <td class="text-center"><strong>Views: </strong><span class="text-bold"><span class="fa fa-eye"></span> {{topic.statistics.views}} </span></td>
+                                <td class="text-center"><strong>Helpful: </strong><span class="text-success text-bold"><span class="fa fa-thumbs-up"></span> {{topic.statistics.helpful}} </span></td>
+                                <td class="text-center"><strong>Not Helpful: </strong><span class="text-danger text-bold"><span class="fa fa-thumbs-down"></span> {{topic.statistics.nothelpful}}</span></td>
+                                <td class="hidden-xs" ng-class="{'center': tableView != 'grid'}"><strong>Created: </strong> {{topic.created.date | date:'MMM d yy'}}</td>
+                                <td class="hidden-xs" ng-class="{'center': tableView != 'grid'}"><strong>Modified: </strong>{{topic.modified.date | date:'MMM d yy'}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="clearfix"></div>
+                    <div class="load1 csspinner height-400" ng-show="!displayedTopics"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end: CONTENT -->
+    <!-- start: NEW PAGE MODAL -->
+    <script type="text/ng-template" id="new-topic-modal">
+        <div class="modal-header">
+            <button type="button" class="close" ng-click="closeModal()">
+                <span aria-hidden="true">&times;</span>
+                <span class="sr-only">Close</span>
+            </button>
+            <h3 class="modal-title">New Topic</h3>
+        </div>
+        <div class="modal-body bg-white">
+            <div id="new_topic">
+                <div class="form-group" ng-class="{ 'has-error': postTitleError}">
+                    <label for="post-title" tooltip-placement="bottom" tooltip="Provide the title of the post you want to create">Topic Title</label>
+                    <input id="post-title" class="form-control input-lg" type="text" placeholder="Topic Title" ng-model="newtopic.title" ng-change="validateCreateTopic(topic)">
+                </div>
+                <div class="for-group">
+                    <label class="pull-left">Topic Category</label>
+                    <select id="topic_category" ng-model="newtopic.category" class="form-control margin-bottom-0">
+                        <option ng-repeat="category in topicCategories track by $index" value="{{category}}">{{category}}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary btn-o" ng-click="createTopic(newtopic, $event)">Create Topic</button>
+        </div>
+    </script>
+    <div id="blueimp-gallery" class="blueimp-gallery">
+        <!-- The container for the modal slides -->
+        <div class="slides">
+        </div>
+        <!-- Controls for the borderless lightbox -->
+        <h3 class="title"></h3>
+        <a class="prev">‹</a>
+        <a class="next">›</a>
+        <a class="close">×</a>
+        <a class="play-pause"></a>
+        <!-- The modal dialog, which will be used to wrap the lightbox content -->
+        <div class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title"></h4>
+                    </div>
+                    <div class="modal-body next"></div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default pull-left prev">
+                            <i class="glyphicon glyphicon-chevron-left"></i> Previous
+                        </button>
+                        <button type="button" class="btn btn-primary next">
+                            Next
+                            <i class="glyphicon glyphicon-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end:  NEW PAGE MODAL -->
+</div>
