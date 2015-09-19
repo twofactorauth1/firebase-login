@@ -409,10 +409,14 @@ app.constant('userConstant', {
     CHEATSHEET_LEAD: "cs",
     EXPIRED_TRIAL: "ex",
     TRIAL_CUSTOMER: "tc",
+    AFFILIATE: "af",
 
     dp: [{
       label: "Admin",
       data: "ad"
+    }, {
+      label: "Affiliate",
+      data: "af"
     }, {
       label: "Cancelled Customer",
       data: "cc"
