@@ -1,0 +1,21 @@
+/**
+ * COPYRIGHT INDIGENOUS SOFTWARE, INC., LLC 2015
+ *
+ * All use or reproduction of any or all of this content must be approved.
+ * Please contact info@indigenous.io for approval or questions.
+ */
+
+
+var ssldotcomAccountKey = process.env.SSLDOTCOM_ACCOUNT_KEY || '';
+var ssldotcomSecretKey = process.env.SSLDOTCOM_SECRET_KEY || '';
+
+var ssldotcomTestEndpoint = 'https://sws-test.sslpki.com';
+var ssldotcomMockEndpoint = 'https://private-anon-365f22217-sslcomapi.apiary-mock.com';
+
+module.exports = {
+
+    SSLDOTCOM_ACCOUNT_KEY: ssldotcomAccountKey,
+    SSLDOTCOM_SECRET_KEY: ssldotcomSecretKey,
+    SSLDOTCOM_TEST_ENDPOINT: ssldotcomTestEndpoint,
+    SSLDOTCOM_MOCK_ENDPOINT: ssldotcomMockEndpoint
+}
