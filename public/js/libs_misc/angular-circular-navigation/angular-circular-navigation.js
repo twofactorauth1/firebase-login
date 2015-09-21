@@ -79,13 +79,25 @@
             _hide = true;
           }
           if(scope.posthandle)
-          {
+          {           
             if(item.type==="design" && scope.component.type === 'single-post')
             {
               _hide = false;
             }
             else{
-              _hide = true; 
+              var _postComponents = scope.$parent.postComponents;
+              if(_postComponents && _postComponents.length)
+              {
+                var exists = _.findWhere(_postComponents, {
+                  type: scope.component.type
+                });
+                if(exists)  
+                  _hide = true;
+                  else
+                    _hide = false; 
+              }
+              else
+                _hide = true; 
             }
           }
           return _hide;

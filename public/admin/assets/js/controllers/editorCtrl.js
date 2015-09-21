@@ -482,6 +482,7 @@
 
       WebsiteService.getSinglePage('single-post', function (data) {
         $scope.page = data;
+        $scope.postComponents = data.components;
         WebsiteService.getSinglePost($scope.handle, function (data) {
           $scope.blog.post = data;
           $scope.single_post = true;
