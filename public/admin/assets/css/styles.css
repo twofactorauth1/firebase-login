@@ -13538,6 +13538,9 @@ div[class^="spacing-"] {
   width: 11.1%;
   float: left;
 }
+.customers .two-letter-label {
+  display: inline-block;
+}
 .ui-select-multiple.ui-select-bootstrap input.ui-select-search:not([placeholder='']) {
   max-width: 100% !important;
 }
@@ -13831,6 +13834,7 @@ a.editable-error:focus {
   position: relative;
   top: 0;
   left: 0;
+  z-index: 1;
 }
 #media-manager-modal .filemanager-options hr {
   margin: 10px 0;
