@@ -215,7 +215,7 @@
       }
     }
 
-    $scope.redirectWithoutSave = function(redirect_url, show_alert){
+    $scope.redirectWithoutSave = function(redirect_url, show_alert, reload){
     $scope.changesConfirmed = true;
     if(redirect_url){       
           if(show_alert)
