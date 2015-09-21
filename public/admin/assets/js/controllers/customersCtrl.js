@@ -244,32 +244,74 @@
       window.location = '/admin/#/customers/' + customer._id;
     };
 
+    /* 18-Sep Unioned set of tags in system with those needed by Indigenous
+    *
+    * Retained (part of Ind. flow)
+    *   - Lead (ld)
+    *   - Customer (cu)
+    *
+    * New:
+    *   - Cheatsheet Lead (cs)
+    *   - Trial Customer (tc)
+    *   - Expired Trial Customer (ex)
+    *   - Cancelled Trial Customer (ct)
+    *   - Cancelled Customer (cc)
+    *
+    * - Old. Keeping for our clients:
+        *   - Colleague (co)
+    *   - Friend (fr)
+    *   - Member (mb)
+    *   - Family (fa)
+    *   - Admin (ad)
+    *   - Other (ot)
+    *
+    * - Dumb: This list an that in customerDetailCtrl should be managed centrally (see case 4395)
+    */
+
     $scope.customer = {};
     $scope.customer.tags = {};
     $scope.customerTags = [{
-      label: "Customer",
-      data: "cu"
+      label: "Admin",
+      data: "ad"
+    }, {
+      label: "Affiliate",
+      data: "af"
+    }, {
+      label: "Cancelled Customer",
+      data: "cc"
+    }, {
+      label: "Cancelled Trial Customer",
+      data: "ct"
+    }, {
+      label: "Cheatsheet Lead",
+      data: "cs"
     }, {
       label: "Colleague",
       data: "co"
     }, {
-      label: "Friend",
-      data: "fr"
+      label: "Customer",
+      data: "cu"
     }, {
-      label: "Member",
-      data: "mb"
+      label: "Expired Trial Customer",
+      data: "ex"
     }, {
       label: "Family",
       data: "fa"
     }, {
-      label: "Admin",
-      data: "ad"
+      label: "Friend",
+      data: "fr"
     }, {
-      label: 'Lead',
-      data: 'ld'
+      label: "Lead",
+      data: "ld"
+    }, {
+      label: "Member",
+      data: "mb"
     }, {
       label: "Other",
       data: "ot"
+    }, {
+      label: "Trial Customer",
+      data: "tc"
     }];
 
     $scope.customerPhotoOptions = [{

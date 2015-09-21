@@ -84,7 +84,10 @@
             <a ng-click="addProducts()" class=" btn btn-primary btn-lg btn-wide btn-o add-feature"> <i class="fa fa-plus"></i> Add Products</a>
         </div>
     </div>
-    <button class="btn btn-primary btn-lg btnLaunchCart" ng-click="initializeModalEvents()" data-toggle="modal" data-target="#cart-checkout-modal">
+    <button ng-if="!isEditing" class="btn btn-primary btn-lg btnLaunchCart" ng-click="initializeModalEvents()" data-toggle="modal" data-target="#cart-checkout-modal">
+        <span class="fa fa-shopping-cart"></span> <span ng-if="cartDetails.length > 0">({{cartDetails.length}})</span>
+    </button>
+    <button ng-if="isEditing" tooltip-placement="bottom" tooltip="This button is functional only on front end" class="btn btn-primary btn-lg btnLaunchCart">
         <span class="fa fa-shopping-cart"></span> <span ng-if="cartDetails.length > 0">({{cartDetails.length}})</span>
     </button>
     <div class="modal fade" id="cart-checkout-modal">

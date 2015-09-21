@@ -177,7 +177,10 @@ _.extend(router.prototype, BaseRouter.prototype, {
                 } else {
                     self.log.debug("host: " + req.get("host") + " -> accountId:" + value.id());
 
-                    var redirectUrl = redirectTo ||cookies.getRedirectUrl(req, resp, null, true);
+                    /*
+                     * use the redirect from the cookie here.
+                     */
+                    var redirectUrl = cookies.getRedirectUrl(req, resp, null, true);
                     self.log.debug('onLogin redirectUrl from cookie: ' + redirectUrl);
                     if (redirectUrl != null) {
                         authenticationDao.getAuthenticatedUrl(req.user.id(), redirectUrl, null, function (err, value) {
@@ -194,8 +197,8 @@ _.extend(router.prototype, BaseRouter.prototype, {
                     }
 
                     self.log.debug('AccountId: ' + self.accountId(req));
-
-
+                    var _path = redirectTo || 'admin';
+                    self.log.debug('_path is ', _path);
                     /*
                      * Get account from url.  If main app, check for multi-users
                      */
@@ -204,13 +207,15 @@ _.extend(router.prototype, BaseRouter.prototype, {
                     if(subObject.isMainApp && accountIds.length > 1) {
                         self.log.debug('redirecting to /home');
                         req.session.accountId = -1;
+                        self.log.debug('setting the redirect in cookies to ', _path);
+                        cookies.setRedirectUrl(req, resp, _path);
                         resp.redirect("/home");
                         userActivityManager.createUserLoginActivity(0, self.userId(req), requestorProps, function(){});
                         self = req = resp = null;
                         return;
                     } else if((subObject.subdomain === null || subObject.subdomain === '') && _.contains(accountIds, appConfig.mainAccountID)) {
                         self.log.debug('redirecting to main application');
-                        authenticationDao.getAuthenticatedUrlForAccount(appConfig.mainAccountID, self.userId(req), "admin", function (err, value) {
+                        authenticationDao.getAuthenticatedUrlForAccount(appConfig.mainAccountID, self.userId(req), _path, function (err, value) {
                             if (err) {
                                 self.log.debug('redirecting to /home');
                                 resp.redirect("/home");
@@ -228,7 +233,9 @@ _.extend(router.prototype, BaseRouter.prototype, {
                         var accountId = self.accountId(req);
                         self.log.debug('logged into main... redirecting to custom subdomain (' + accountId + ')');
 
-                        authenticationDao.getAuthenticatedUrlForAccount(parseInt(accountId), self.userId(req), "admin", function (err, value) {
+
+
+                        authenticationDao.getAuthenticatedUrlForAccount(parseInt(accountId), self.userId(req), _path, function (err, value) {
                             if (err) {
                                 self.log.debug('redirecting to /home');
                                 resp.redirect("/home");
@@ -267,7 +274,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
                                 self = req = resp = null;
                                 return;
                             }
-                            authenticationDao.getAuthenticatedUrlForAccount(value.id(), self.userId(req), "admin", function (err, authUrl) {
+                            authenticationDao.getAuthenticatedUrlForAccount(value.id(), self.userId(req), _path, function (err, authUrl) {
                                 if (err) {
                                     self.log.debug('redirecting to /home');
                                     resp.redirect("/home");

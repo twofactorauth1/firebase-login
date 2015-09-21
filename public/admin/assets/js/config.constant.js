@@ -404,31 +404,55 @@ app.constant('userConstant', {
     LEAD: 'ld',
     OTHER: "ot",
     NOTAG: "nt",
+    CANCELLED_CUSTOMER: "cc",
+    CANCELLED_TRIAL: "ct",
+    CHEATSHEET_LEAD: "cs",
+    EXPIRED_TRIAL: "ex",
+    TRIAL_CUSTOMER: "tc",
+    AFFILIATE: "af",
 
     dp: [{
-      label: "Customer",
-      data: "cu"
+      label: "Admin",
+      data: "ad"
+    }, {
+      label: "Affiliate",
+      data: "af"
+    }, {
+      label: "Cancelled Customer",
+      data: "cc"
+    }, {
+      label: "Cancelled Trial Customer",
+      data: "ct"
+    }, {
+      label: "Cheatsheet Lead",
+      data: "cs"
     }, {
       label: "Colleague",
       data: "co"
     }, {
-      label: "Friend",
-      data: "fr"
+      label: "Customer",
+      data: "cu"
     }, {
-      label: "Member",
-      data: "mb"
+      label: "Expired Trial Customer",
+      data: "ex"
     }, {
       label: "Family",
       data: "fa"
     }, {
-      label: "Admin",
-      data: "ad"
+      label: "Friend",
+      data: "fr"
     }, {
-      label: 'Lead',
-      data: 'ld'
+      label: "Lead",
+      data: "ld"
+    }, {
+      label: "Member",
+      data: "mb"
     }, {
       label: "Other",
       data: "ot"
+    }, {
+      label: "Trial Customer",
+      data: "tc"
     }, {
       label: "No Tag",
       data: "nt"
@@ -528,6 +552,7 @@ app.constant('JS_REQUIRES', {
     //*** Controllers
     'dashboardCtrl': 'assets/js/controllers/dashboardCtrl.js',
     'helpTopicsCtrl': 'assets/js/controllers/helpTopicsCtrl.js',
+    'newHelpTopicsCtrl': 'assets/js/controllers/newHelpTopicsCtrl.js',
     'gettingStartedCtrl': 'assets/js/controllers/gettingStartedCtrl.js',
     'pagesCtrl': 'assets/js/controllers/pagesCtrl.js',
     'siteAnalyticsCtrl': 'assets/js/controllers/siteAnalyticsCtrl.js',
@@ -546,6 +571,7 @@ app.constant('JS_REQUIRES', {
     'profileBusinessCtrl': 'assets/js/controllers/profileBusinessCtrl.js',
     'profilePersonalCtrl': 'assets/js/controllers/profilePersonalCtrl.js',
     'templatesCtrl': 'assets/js/controllers/templatesCtrl.js',
+    'manageTopicsCtrl': 'assets/js/controllers/manageTopicsCtrl.js',
     'integrationsCtrl': 'assets/js/controllers/integrationsCtrl.js',
     'orderDetailCtrl': 'assets/js/controllers/orderDetailCtrl.js',
     'settingsCtrl': 'assets/js/controllers/settingsCtrl.js',

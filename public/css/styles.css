@@ -3168,6 +3168,7 @@ div[data-type="feature-block"] .component-inner {
   }
   .footer-after .container {
     max-width: 100%;
+    width: 100%;
   }
   .footer-logo {
     margin: -35px 5px 0 0;
@@ -5628,6 +5629,9 @@ fieldset[disabled] .btn-vimeo-square.active {
 }
 .min-height-350 {
   min-height: 350px !important;
+}
+.height-50 {
+  height: 50px !important;
 }
 .height-155 {
   height: 155px !important;

@@ -50,11 +50,11 @@
                 <div class="media margin-top-0" id="assets" ng-style="{'max-height':bodyHeight}">
                     <div ng-repeat="asset in assets | orderBy:'-created.date'" class="col-xs-12 col-sm-4" ng-show="assets.length">
                         <div class="thmb checked">
-                            <div class="checkbox clip-check check-primary ckbox ckbox-default" style="display: block;">
+                            <div class="checkbox clip-check check-primary ckbox ckbox-default" style="display: block;z-index:1;">
                                 <input type="checkbox" id="{{asset._id}}" name="{{asset._id}}" ng-model="asset.checked" ng-click="m.singleSelect(asset)">
                                 <label for="{{asset._id}}"></label>
                             </div>
-                            <div class="btn-group fm-group" style="display: block;">
+                            <div class="btn-group fm-group" style="display: block;z-index:1;">
                                 <button type="button" class="btn btn-default dropdown-toggle fm-toggle" data-toggle="dropdown"><span class="caret"></span>
                                 </button>
                                 <ul class="dropdown-menu fm-menu" role="menu">
