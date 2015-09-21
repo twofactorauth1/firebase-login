@@ -5,9 +5,8 @@
  * Please contact info@indigenous.io for approval or questions.
  */
 
-
-var ssldotcomAccountKey = process.env.SSLDOTCOM_ACCOUNT_KEY || '';
-var ssldotcomSecretKey = process.env.SSLDOTCOM_SECRET_KEY || '';
+var ssldotcomAccountKey = process.env.SSLDOTCOM_ACCOUNT_KEY || '68caf7c6f8ba';
+var ssldotcomSecretKey = process.env.SSLDOTCOM_SECRET_KEY || '3+c2RaonM03XcQ==';
 
 var ssldotcomTestEndpoint = 'https://sws-test.sslpki.com';
 var ssldotcomMockEndpoint = 'https://private-anon-365f22217-sslcomapi.apiary-mock.com';

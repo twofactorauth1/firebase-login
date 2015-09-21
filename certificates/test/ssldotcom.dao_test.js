@@ -23,6 +23,22 @@ module.exports.group = {
         cb();
     },
 
+    testListCert: function(test) {
+        var self = this;
+        var account_key = '4980a361';
+        var secret_key = 'csr/ceZvPQ==';
+        var start = null;
+        var end = null;
+        var filter = null;
+        var endpoint = config.SSLDOTCOM_MOCK_ENDPOINT;
+
+
+        dao.listCertificates(account_key, secret_key, start, end, filter, endpoint, function(err, value){
+            log.debug('err:', err);
+            log.debug('value:', value);
+            test.done();
+        });
+    },
 
     testCreateCert: function (test) {
         var self = this;

@@ -141,7 +141,7 @@ var dao = {
         };
         request.post(options, function(err, response, _body){
             self.log.debug('err: ', err);
-            self.log.debug('response:', response);
+            //self.log.debug('response:', response);
             self.log.debug('_body:', _body);
             self.log.debug('<< createCertificate');
             fn(err, _body);
@@ -192,7 +192,7 @@ var dao = {
 
         request.get(options, function(err, response, _body){
             self.log.debug('err: ', err);
-            self.log.debug('response:', response);
+            //self.log.debug('response:', response);
             self.log.debug('_body:', _body);
             self.log.debug('<< getCertificate');
             fn(err, _body);
@@ -238,7 +238,7 @@ var dao = {
 
         request.get(options, function(err, response, _body){
             self.log.debug('err: ', err);
-            self.log.debug('response:', response);
+            //self.log.debug('response:', response);
             self.log.debug('_body:', _body);
             self.log.debug('<< listCertificates');
             fn(err, _body);
@@ -392,7 +392,7 @@ var dao = {
         };
         request.put(options, function(err, response, _body){
             self.log.debug('err: ', err);
-            self.log.debug('response:', response);
+            //self.log.debug('response:', response);
             self.log.debug('_body:', _body);
             self.log.debug('<< updateCertificate');
             fn(err, _body);
