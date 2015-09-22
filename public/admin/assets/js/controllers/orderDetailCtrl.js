@@ -26,6 +26,17 @@
     };
 
     /*
+     * @getCustomers
+     * get all customers to for customer select
+     */
+
+    CustomerService.getCustomers(function (customers) {
+      console.log('customers >>> ', customers);
+      $scope.customers = customers;
+      $scope.getUsers();
+    });
+
+    /*
      * @closeModal
      * -
      */
@@ -49,17 +60,6 @@
     $scope.formatOrderStatus = function (status) {
       return OrderService.formatOrderStatus(status);
     };
-
-    /*
-     * @getCustomers
-     * get all customers to for customer select
-     */
-
-    CustomerService.getCustomers(function (customers) {
-      console.log('customers >>> ', customers);
-      $scope.customers = customers;
-      $scope.getUsers();
-    });
 
     /*
      * @getUsers
