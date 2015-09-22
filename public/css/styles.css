@@ -2681,6 +2681,9 @@ div[data-type="feature-block"] .component-inner {
 .products-v1 .product .img-wrap .product-img {
   display: block;
 }
+.products-v1 .product .img-wrap i.fa {
+  color: #5b5b60;
+}
 .products-v1 .tab-content .col-sm-3 {
   padding-top: 0px;
 }
