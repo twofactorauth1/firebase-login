@@ -400,7 +400,7 @@
         if(!hideToaster && $scope.inValidateTags())
         {
           $scope.saveLoading = false;
-          toaster.pop('warning', 'Please add atleast one tag.');
+          toaster.pop('warning', 'Please add at least one tag.');
           return;
         }
 
