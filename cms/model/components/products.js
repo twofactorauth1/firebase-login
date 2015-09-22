@@ -45,6 +45,8 @@ var component = $$.m.ModelBase.extend({
              */
             type: "products",
 
+            iconColor: "#5b5b60"
+
         }
     },
 

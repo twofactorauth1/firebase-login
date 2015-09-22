@@ -113,6 +113,13 @@ app.controller('AddComponentModalCtrl', ['$scope', '$document', '$modalInstance'
     filter: 'features',
     description: 'Use this component to show one important feature or maybe a quote.',
     enabled: true
+  },{
+    title: 'Footer',
+    type: 'footer',
+    preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/footer.png',
+    filter: 'misc',
+    description: 'Use this component to show footer on your page.',
+    enabled: false
   }, {
     title: 'Image Gallery',
     type: 'image-gallery',
@@ -237,6 +244,18 @@ app.controller('AddComponentModalCtrl', ['$scope', '$document', '$modalInstance'
     enabled: true
   }];
 
+  // Add footer component only if this is not present on current page(Case when user add a blank page using blank template)
+  var checkIfFoooterExists = _.findWhere($scope.components, {
+    type: 'footer'
+  });
+  if(!checkIfFoooterExists)
+  {
+    var footerComponent = _.findWhere($scope.componentTypes, {
+      type: 'footer'
+    });
+    footerComponent.enabled = true;
+  }
+
   //component label placeholder
   var componentLabel;
 
@@ -245,6 +264,8 @@ app.controller('AddComponentModalCtrl', ['$scope', '$document', '$modalInstance'
     enabled: true
   });
 
+
+  
   /************************************************************************************************************
    * Takes the componentTypes object and gets the value for the filter property from any that are enabled.
    * It then makes that list unique, sorts the results alphabetically, and and removes the misc value if

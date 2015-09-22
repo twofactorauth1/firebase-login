@@ -18,31 +18,39 @@ var dao = {
 
 
     searchAddressString: function(addressString, fn) {
+        var self = this;
         var url = geoConfig.openStreetMaps.constructSearchForAddress(addressString);
 
         request(url, function(err, resp, body) {
             if (!err) {
                 var address = null;
-                var json = JSON.parse(body);
-                if (json != null && _.isArray(json) && json.length > 0 && json[0].address != null) {
-                    var _address = json[0].address;
-                    if (_address != null) {
-                        address = {
-                            address:_address.house_number + " " + _address.road,
-                            address2:"",
-                            city:_address.hamlet,
-                            state:_address.state,
-                            zip:_address.postcode,
-                            country:_address.country,
-                            countryCode:_address.country_code,
-                            displayName: json[0].display_name,
-                            lat:json[0].lat,
-                            lon:json[0].lon
-                        };
+
+                try {
+                    var json = JSON.parse(body);
+                    if (json != null && _.isArray(json) && json.length > 0 && json[0].address != null) {
+                        var _address = json[0].address;
+                        if (_address != null) {
+                            address = {
+                                address:_address.house_number + " " + _address.road,
+                                address2:"",
+                                city:_address.hamlet,
+                                state:_address.state,
+                                zip:_address.postcode,
+                                country:_address.country,
+                                countryCode:_address.country_code,
+                                displayName: json[0].display_name,
+                                lat:json[0].lat,
+                                lon:json[0].lon
+                            };
+                        }
                     }
+                } catch (exception) {
+                    self.log.error('exception searching for address: ', exception);
                 }
 
-                    if (address == null) {
+
+
+                if (address == null) {
 
                     var address = {
                         error:"No address found",

@@ -205,19 +205,25 @@
       });
     }
 
-    $scope.redirectAfterSave = function(redirect_url){    
+    $scope.redirectAfterSave = function(redirect_url, reload){    
     if(redirect_url){
         SweetAlert.swal("Saved!", "Your edits were saved to the page.", "success");
         window.location = redirect_url;
+        if (reload) {
+          window.location.reload();
+        }
       }
     }
 
-    $scope.redirectWithoutSave = function(redirect_url, show_alert){
+    $scope.redirectWithoutSave = function(redirect_url, show_alert, reload){
     $scope.changesConfirmed = true;
     if(redirect_url){       
           if(show_alert)
               SweetAlert.swal("Cancelled", "Your edits were NOT saved.", "error");
           window.location = redirect_url;
+          if (reload) {
+            window.location.reload();
+          }
       }
     }
 
@@ -231,7 +237,7 @@
     $scope.isDirty = {};
     $scope.blogImage = {};
     $scope.blogImage.featured_image = false;
-    $scope.savePage = function (redirect_url) {
+    $scope.savePage = function (redirect_url, reload) {
       $scope.saveLoading = true;
       $scope.setDirty(false);
       $scope.changesConfirmed = true;
@@ -261,7 +267,7 @@
               $scope.blog.post = data;
               angular.copy($scope.blog.post, $scope.originalPost);
               toaster.pop('success', "Post Saved", "The " + $filter('htmlToPlaintext')($scope.blog.post.post_title) + " post was saved successfully.");              
-              $scope.redirectAfterSave(redirect_url);
+              $scope.redirectAfterSave(redirect_url, reload);
             });
           }
         })
@@ -271,7 +277,7 @@
           console.log('success');
           $scope.saveLoading = false;
           toaster.pop('success', "Template Saved", "The " + $scope.page.handle + " template was saved successfully.");
-          $scope.redirectAfterSave(redirect_url);
+          $scope.redirectAfterSave(redirect_url, reload);
         });
       } else if ($scope.isTopic) {
         console.log('saving topic');
@@ -297,7 +303,7 @@
                   console.log($scope.page.handle, $scope.originalPage.handle);
                   $scope.saveLoading = false;
                   toaster.pop('success', "Page Saved", "The " + $scope.page.handle + " page was saved successfully.");
-                  $scope.redirectAfterSave(redirect_url);
+                  $scope.redirectAfterSave(redirect_url, reload);
                   //$scope.page = data;
                   var originalPageHandle = angular.copy($scope.originalPage.handle);
                   //angular.copy($scope.page, $scope.originalPage);
@@ -482,6 +488,7 @@
 
       WebsiteService.getSinglePage('single-post', function (data) {
         $scope.page = data;
+        $scope.postComponents = data.components;
         WebsiteService.getSinglePost($scope.handle, function (data) {
           $scope.blog.post = data;
           $scope.single_post = true;
@@ -736,6 +743,7 @@
      * - TODO: change to switch case and stop using if else
      */
     $scope.thumbnailSlider = {};
+    $scope.testimonialSlider = {};
     $scope.contactMap = {};
     $scope.blogControl = {};
 
@@ -899,6 +907,10 @@
 
         _modal.resolve.accountShowHide = function () {
           return $scope.$parent.account.showhide;
+        };
+
+        _modal.resolve.testimonialSlider = function () {
+          return $scope.testimonialSlider;
         };
       }
 
@@ -1298,23 +1310,14 @@
             if (isConfirm) {            
               //SweetAlert.swal("Saved!", "Your edits were saved to the page.", "success");
               $scope.redirect = true;
-              $scope.savePage(redirectUrl);
-              $scope.setDirty(false);
-              if (reload) {
-                window.location.reload();
-              }
+              $scope.savePage(redirectUrl, reload);
+              $scope.setDirty(false);              
             } else {
-              $scope.redirectWithoutSave(redirectUrl, true);
-              if (reload) {
-                window.location.reload();
-              }
+              $scope.redirectWithoutSave(redirectUrl, true, reload);
             }
           });
         } else {
-          $scope.redirectWithoutSave(redirectUrl, false);
-          if (reload) {
-            window.location.reload();
-          }
+          $scope.redirectWithoutSave(redirectUrl, false, reload);         
         }
     }) 
      

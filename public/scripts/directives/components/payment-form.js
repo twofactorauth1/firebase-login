@@ -173,6 +173,7 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                 tmpAccount.subdomain = $.trim(newAccount.businessName).replace(" ", "").replace(".", "_").replace("@", "");
                 tmpAccount.business = tmpAccount.business || {};
                 tmpAccount.business.name = newAccount.businessName;
+
                 UserService.saveOrUpdateTmpAccount(tmpAccount, function(data) {
                     var newUser = {
                         username: newAccount.email,
@@ -341,7 +342,7 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                     tmpAccount.subdomain = $.trim(newAccount.businessName).replace(" ", "").replace(".", "_").replace("@", "");
                     tmpAccount.business = tmpAccount.business || {};
                     tmpAccount.business.name = newAccount.businessName;
-
+                    tmpAccount.signupPage = $location.path();
                     if(scope.newAccount.phone) {
                         tmpAccount.business.phones = [];
                         tmpAccount.business.phones[0] = {

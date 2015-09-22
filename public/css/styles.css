@@ -2293,7 +2293,7 @@ div[data-type="feature-block"] .component-inner {
   margin: 30px 0;
 }
 .products {
-  padding: 15px;
+  padding: 2px;
 }
 #cart-checkout-modal .modal-footer {
   margin-top: 0;
@@ -2680,6 +2680,9 @@ div[data-type="feature-block"] .component-inner {
 }
 .products-v1 .product .img-wrap .product-img {
   display: block;
+}
+.products-v1 .product .img-wrap i.fa {
+  color: #5b5b60;
 }
 .products-v1 .tab-content .col-sm-3 {
   padding-top: 0px;
@@ -3168,6 +3171,7 @@ div[data-type="feature-block"] .component-inner {
   }
   .footer-after .container {
     max-width: 100%;
+    width: 100%;
   }
   .footer-logo {
     margin: -35px 5px 0 0;

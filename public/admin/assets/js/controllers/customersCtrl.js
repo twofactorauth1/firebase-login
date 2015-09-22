@@ -274,6 +274,9 @@
       label: "Admin",
       data: "ad"
     }, {
+      label: "Affiliate",
+      data: "af"
+    }, {
       label: "Cancelled Customer",
       data: "cc"
     }, {
