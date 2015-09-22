@@ -3,13 +3,12 @@
 (function (angular) {
   app.controller('EmailsCtrl', ["$scope", "$timeout", "$location", "toaster", "$modal", "WebsiteService", "CommonService", "AccountService", "formValidations", function ($scope, $timeout, $location, toaster, $modal, WebsiteService, CommonService, AccountService, formValidations) {
 
-    $scope.setDefaults = function()
-    {
+    $scope.setDefaults = function () {
       $scope.newEmail = {
-        title:'New Email Title',
+        title: 'New Email Title',
         subject: 'New Email Subject'
       };
-    };    
+    };
     $scope.formValidations = formValidations;
     $scope.setDefaults();
 
@@ -77,13 +76,84 @@
         "components": [{
           "_id": CommonService.generateUniqueAlphaNumericShort(),
           "anchor": CommonService.generateUniqueAlphaNumericShort(),
-          "type": "email",
+          "type": "email-header",
           "version": 1,
           "txtcolor": "#888888",
           "logo": "<h2>Logo Here</h2>",
-          "title": "<h2 class='center'>New Email</h2>",
-          "subtitle": "subtitle",
+          // "title": "<h2 class='center'>New Email</h2>",
+          // "subtitle": "subtitle",
+          // "text": "This is your new email",
+          "from_email": "info@indigenous.io",
+          "bg": {
+            "img": {
+              "url": "",
+              "width": null,
+              "height": null,
+              "parallax": false,
+              "blur": false
+            },
+            "color": ""
+          },
+          "visibility": true
+        },
+        {
+          "_id": CommonService.generateUniqueAlphaNumericShort(),
+          "anchor": CommonService.generateUniqueAlphaNumericShort(),
+          "type": "email-1-col",
+          "version": 1,
+          "txtcolor": "#888888",
+          // "logo": "<h2>Logo Here</h2>",
+          "title": "<h2 class='center'>Single Column Layout Title</h2>",
+          // "subtitle": "subtitle",
           "text": "This is your new email",
+          "from_email": "info@indigenous.io",
+          "bg": {
+            "img": {
+              "url": "",
+              "width": null,
+              "height": null,
+              "parallax": false,
+              "blur": false
+            },
+            "color": ""
+          },
+          "visibility": true
+        },
+        {
+          "_id": CommonService.generateUniqueAlphaNumericShort(),
+          "anchor": CommonService.generateUniqueAlphaNumericShort(),
+          "type": "email-3-col",
+          "version": 1,
+          "txtcolor": "#888888",
+          // "logo": "<h2>Logo Here</h2>",
+          "title": "<h2 class='center'>3 Column Layout Title</h2>",
+          // "subtitle": "subtitle",
+          "text1": "This is column 1.",
+          "text2": "This is column 2.",
+          "text3": "This is column 3.",
+          "from_email": "info@indigenous.io",
+          "bg": {
+            "img": {
+              "url": "",
+              "width": null,
+              "height": null,
+              "parallax": false,
+              "blur": false
+            },
+            "color": ""
+          },
+          "visibility": true
+        },
+        {
+          "_id": CommonService.generateUniqueAlphaNumericShort(),
+          "anchor": CommonService.generateUniqueAlphaNumericShort(),
+          "type": "email-footer",
+          "version": 1,
+          "txtcolor": "#888888",
+          // "logo": "<h2>Logo Here</h2>",
+          // "title": "<h2 class='center'>New Email</h2>",
+          // "subtitle": "subtitle",
+          "text": "This is an email footer.",
           "from_email": "info@indigenous.io",
           "bg": {
             "img": {
@@ -98,23 +168,23 @@
           "visibility": true
         }]
       };
+
       if ($scope.account.business.logo) {
         emailToSend.components[0].logo = '<img src="' + $scope.account.business.logo + '"/>';
       }
+
       WebsiteService.createEmail(emailToSend, function (newemail, err) {
-        if(newemail && !err)
-        {
+        if(newemail && !err) {
           toaster.pop('success', 'Email Created', 'The ' + newemail.title + ' email was created successfully.');
           $scope.emails.unshift(newemail);
           $scope.displayedEmails.unshift(newemail);
           angular.copy($scope.newEmailOriginal, $scope.newEmail);
           $scope.closeModal();
-        }
-        else if(err)
-        {
+        } else if(err) {
           toaster.pop('error', "Error creating Email", err.message);
         }
       });
+
     };
 
 

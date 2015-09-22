@@ -1,6 +1,6 @@
 'use strict';
 /*global app*/
-app.controller('AddComponentModalCtrl', ['$scope', '$document', '$modalInstance', '$timeout', 'WebsiteService', 'toaster', 'components', 'clickedIndex', function ($scope, $document, $modalInstance, $timeout, WebsiteService, toaster, components, clickedIndex) {
+app.controller('AddComponentModalCtrl', ['$scope', '$document', '$modalInstance', '$timeout', 'WebsiteService', 'toaster', 'components', 'clickedIndex', 'isEmail', function ($scope, $document, $modalInstance, $timeout, WebsiteService, toaster, components, clickedIndex, isEmail) {
 
   //passed in components from parent ctrl
   $scope.components = components;
@@ -8,6 +8,8 @@ app.controller('AddComponentModalCtrl', ['$scope', '$document', '$modalInstance'
   $scope.clickedIndex = clickedIndex;
   //save loading var to
   $scope.saveLoading = false;
+  //set email specific componentFilters etc.
+  $scope.isEmail = isEmail;
 
   /*
    * @addComponent
@@ -244,16 +246,53 @@ app.controller('AddComponentModalCtrl', ['$scope', '$document', '$modalInstance'
     enabled: true
   }];
 
-  // Add footer component only if this is not present on current page(Case when user add a blank page using blank template)
-  var checkIfFoooterExists = _.findWhere($scope.components, {
-    type: 'footer'
-  });
-  if(!checkIfFoooterExists)
-  {
-    var footerComponent = _.findWhere($scope.componentTypes, {
+  if ($scope.isEmail) {
+    $scope.componentTypes = [{
+      title: 'Header',
+      type: 'email-header',
+      preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/blog.png',
+      filter: 'email',
+      description: 'Use this component for email header section.',
+      enabled: true
+    }, {
+      title: 'Content 1 Column',
+      type: 'email-1-col',
+      preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/blog.png',
+      filter: 'email',
+      description: 'Use this component for single column content.',
+      enabled: true
+    }, {      title: 'Content 2 Column',
+      type: 'email-2-col',
+      preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/blog.png',
+      filter: 'email',
+      description: 'Use this component for 2 column content.',
+      enabled: true
+    }, {      title: 'Content 3 Column',
+      type: 'email-3-col',
+      preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/blog.png',
+      filter: 'email',
+      description: 'Use this component for 3 column content.',
+      enabled: true
+    }, {
+      title: 'Footer',
+      type: 'email-footer',
+      preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/blog-teaser.png',
+      filter: 'email',
+      description: 'A footer for your email.',
+      enabled: true
+    }]
+  } else {
+    // Add footer component only if this is not present on current page(Case when user add a blank page using blank template)
+    var checkIfFooterExists = _.findWhere($scope.components, {
       type: 'footer'
     });
-    footerComponent.enabled = true;
+    if(!checkIfFooterExists)
+    {
+      var footerComponent = _.findWhere($scope.componentTypes, {
+        type: 'footer'
+      });
+      footerComponent.enabled = true;
+    }
   }
 
   //component label placeholder
@@ -263,6 +302,8 @@ app.controller('AddComponentModalCtrl', ['$scope', '$document', '$modalInstance'
   $scope.enabledComponentTypes = _.where($scope.componentTypes, {
     enabled: true
   });
+
+
 
 
   

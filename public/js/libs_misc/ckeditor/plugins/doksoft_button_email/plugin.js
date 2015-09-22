@@ -10,16 +10,21 @@ CKEDITOR.plugins.add("doksoft_button_email", {
                     text: "Download",
                     link: "http://"
                 };
-                console.log('setting style info from obj t:')
-                console.log(t);
-                console.log('---')
-                console.log('style=',t.getAttribute("style"))
-                console.log('href=',t.getAttribute("href"))
-                console.log('t.getHtml()=',t.getHtml())
-                return o.style = t.getAttribute("style"), o.link = t.getAttribute("href"), o.text = t.getHtml(), o
+                //get the td instead
+                var buttonWrapperEl = t.getParents().filter(function(ckEl) {
+                	return ckEl.$.className.indexOf('ckeditor-button-wrap') !== -1;
+                })[0];
+                var button = buttonWrapperEl.find('.myButton');
+                var link = buttonWrapperEl.find('a');
+                
+                o.style = button.$[0].getAttribute('style');
+                o.link = link.$[0].getAttribute('href')
+                o.text = button.$[0].innerText;
+                console.log('o: ');
+                console.log(o);
+                return o;
             },
             e = function(t) {
-            	debugger;
                 var o = $(t.element.$).find("div.ckeditor-button-wrap");
                 if (o.length > 0) {
                     for (var e = 0; e < o.length; e++) {
@@ -66,12 +71,30 @@ CKEDITOR.plugins.add("doksoft_button_email", {
                     window.currentDialog = this;
                     var e = this.getParentEditor().getSelection().getStartElement(),
                         n = !1;
-                        debugger;
-                    n = e && e.is("div.ckeditor-button-wrap") ? e : !1, n ? (this.parts.title.$.innerHTML = "Edit Button", currentData = o(n)) : (this.parts.title.$.innerHTML = "Insert Button", currentData = {
-                        style: t.config.doksoft_default_style ? t.config.doksoft_default_style : "-moz-box-shadow: 0px 1px 0px 0px #ffe0b5;-webkit-box-shadow: 0px 1px 0px 0px #ffe0b5;box-shadow: 0px 1px 0px 0px #ffe0b5;background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #fbb450), color-stop(1, #f89306));background:-moz-linear-gradient(top, #fbb450 5%, #f89306 100%);background:-webkit-linear-gradient(top, #fbb450 5%, #f89306 100%);background:-o-linear-gradient(top, #fbb450 5%, #f89306 100%);background:-ms-linear-gradient(top, #fbb450 5%, #f89306 100%);background:linear-gradient(to bottom, #fbb450 5%, #f89306 100%);filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#fbb450', endColorstr='#f89306',GradientType=0);background-color:#fbb450;-moz-border-radius:7px;-webkit-border-radius:7px;border-radius:7px;border:1px solid #c97e1c;display:inline-block;color:#ffffff;font-family:trebuchet ms;font-size:17px;font-weight:normal;padding:6px 11px;text-decoration:none;text-shadow:0px 1px 0px #8f7f24;",
-                        link: t.config.doksoft_default_link ? t.config.doksoft_default_link : "http://",
-                        text: t.config.doksoft_default_text ? t.config.doksoft_default_text : "Download"
-                    }), window.doksoft_restore && window.doksoft_restore(currentData);
+                    
+                    var buttonWrapperEl = e.getParents().filter(function(ckEl) {
+                    	return ckEl.$.className.indexOf('ckeditor-button-wrap') !== -1;
+                    })[0];
+
+                    n = e && buttonWrapperEl !== undefined ? e : !1;
+                    
+                    if (n) { 
+                    	this.parts.title.$.innerHTML = "Edit Button";
+                    	currentData = o(n);
+                    } else {
+                    	console.log('insert button called');
+                    	this.parts.title.$.innerHTML = "Insert Button";
+                    	currentData = {
+	                        style: t.config.doksoft_default_style ? t.config.doksoft_default_style : "-moz-box-shadow: 0px 1px 0px 0px #ffe0b5;-webkit-box-shadow: 0px 1px 0px 0px #ffe0b5;box-shadow: 0px 1px 0px 0px #ffe0b5;background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #fbb450), color-stop(1, #f89306));background:-moz-linear-gradient(top, #fbb450 5%, #f89306 100%);background:-webkit-linear-gradient(top, #fbb450 5%, #f89306 100%);background:-o-linear-gradient(top, #fbb450 5%, #f89306 100%);background:-ms-linear-gradient(top, #fbb450 5%, #f89306 100%);background:linear-gradient(to bottom, #fbb450 5%, #f89306 100%);filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#fbb450', endColorstr='#f89306',GradientType=0);background-color:#fbb450;-moz-border-radius:7px;-webkit-border-radius:7px;border-radius:7px;border:1px solid #c97e1c;display:inline-block;color:#ffffff;font-family:trebuchet ms;font-size:17px;font-weight:normal;padding:6px 11px;text-decoration:none;text-shadow:0px 1px 0px #8f7f24;",
+	                        link: t.config.doksoft_default_link ? t.config.doksoft_default_link : "http://",
+	                        text: t.config.doksoft_default_text ? t.config.doksoft_default_text : "Download"
+						};
+						console.log('set current data to:');
+						console.log(currentData);
+                    }
+
+                    window.doksoft_restore && window.doksoft_restore(currentData);
+
                     for (var i = document.getElementsByClassName("cke_dialog_tab_disabled"), a = i.length - 1; a >= 0; a--) {
                         var d = i[a],
                             r = new RegExp("(\\s|^)cke_dialog_tab_disabled(\\s|$)");
@@ -82,11 +105,12 @@ CKEDITOR.plugins.add("doksoft_button_email", {
                     var o = this.getParentEditor().getSelection().getStartElement(),
                         n = !1;
                     if (n = o && o.is("a") ? o : !1) {
-                    	debugger;
                         var i = CKEDITOR.dom.element.createFromHtml(getResultButton());
-                        i.replace(n)
+                        var buttonWrapperEl = n.getParents().filter(function(ckEl) {
+	                    	return ckEl.$.className.indexOf('ckeditor-button-wrap') !== -1;
+	                    })[0];
+                        i.replace(buttonWrapperEl);
                     } else {
-                    	debugger;
                     	t.insertHtml(getResultButton());
                     }
                     e(this.getParentEditor())

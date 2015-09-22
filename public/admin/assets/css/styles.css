@@ -12949,14 +12949,14 @@ fieldset[disabled] .btn-vimeo-square.active {
   display: none;
   visibility: none;
 }
-#componentloader .fragment.email .cn-wrapper li {
+/*#componentloader .fragment.email .cn-wrapper li {
   display: none;
 }
 #componentloader .fragment.email .cn-wrapper li:first-child {
   display: block!important;
   -webkit-transform: rotate(75deg) skew(60deg) !important;
   transform: rotate(75deg) skew(60deg) !important;
-}
+}*/
 #componentloader .fragment:hover .component-inner,
 #componentloader .fragment:hover .bg.cover {
   -webkit-box-shadow: inset 0px 0px 0px 2px #ffa500;

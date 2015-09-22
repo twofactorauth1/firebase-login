@@ -92,6 +92,7 @@ _parent.doksoft_exampleButton = 0;
 _parent.doksoft_preview = 0;
 var fg = 0;
 _parent.doksoft_recalc = function(a) {
+	console.log(Object.keys(a));
     _parent.doksoft_currentButtonStyles.innerHTML = ".myButton{\n" + _parent.doksoft_remix(a, "\n") + "\n}";
     clearTimeout(fg);
     fg = setTimeout(function() {
@@ -179,9 +180,9 @@ _parent.doksoft_parse = function(a) {
 };
 _parent.getResultButton = function() {
     return 	'<div class="ckeditor-button-wrap" data-href="' + _("button-href").value + '" data-text-value="' + _("button-text").value + '" style="margin: 0; font-size: inherit;">' +
-	    		'<table align="center" style="width: 100%;">' +
-	    			'<tr>' +
-		    			'<td style="' + _parent.doksoft_remix(_parent._theme) + '">' + 
+	    		'<table align="center" style="width: 100%;" unselectable="on" contendeditable="false">' +
+	    			'<tr unselectable="on" contendeditable="false">' +
+		    			'<td style="' + _parent.doksoft_remix(_parent._theme) + '" class="myButton" unselectable="on" contendeditable="false">' + 
 		    				'<a style="color: inherit;" href="' + _("button-href").value + '">' + 
 		    					_("button-text").value + 
 		    				'</a>' +

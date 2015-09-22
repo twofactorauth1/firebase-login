@@ -68,7 +68,7 @@
       "components": [{
         "_id": CommonService.generateUniqueAlphaNumericShort(),
         "anchor": CommonService.generateUniqueAlphaNumericShort(),
-        "type": "email",
+        "type": "email", //TODO: is this where we specify the email components?
         "version": 1,
         "txtcolor": "#888888",
         "logo": "<h2>Logo Here</h2>",

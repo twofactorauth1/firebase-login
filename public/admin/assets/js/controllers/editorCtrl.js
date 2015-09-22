@@ -92,6 +92,22 @@
 
 
     /*
+     * email specific settings
+     */
+    $scope.isEmail = false;
+    $scope.setIsEmail = function(on) {
+      if (on) {
+        $scope.isEmail = true;
+        CKEDITOR.config.resize_enabled = false;
+        CKEDITOR.config.removePlugins = "doksoft_button, tableresize";
+        $scope.componentFilters = "";
+      } else {
+        $scope.isEmail = false;
+      }
+    }
+
+
+    /*
      * @ckeditor:instanceReady
      * -
      */
@@ -467,7 +483,7 @@
       }
 
       if (_email) {
-        $scope.isEmail = true;
+        $scope.setIsEmail(true);
         $scope.page = _email;
         $scope.components = _email.components;        
         $scope.originalPage = angular.copy(_email);
@@ -604,7 +620,7 @@
 
 
     if ($location.search().email) {
-      $scope.isEmail = true;
+      $scope.setIsEmail(true);
       $scope.retrieveEmail($location.search().email);
     }
 
@@ -909,6 +925,11 @@
         _modal.resolve.accountShowHide = function () {
           return $scope.$parent.account.showhide;
         };
+
+        _modal.resolve.isEmail = function () {
+          return $scope.isEmail;
+        }
+        
       }
 
       if (angular.isDefined(index) && index !== null && index >= 0) {
