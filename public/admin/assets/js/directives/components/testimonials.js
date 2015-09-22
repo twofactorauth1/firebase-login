@@ -4,7 +4,8 @@
 app.directive('testimonialsComponent', ['$timeout', function ($timeout) {
   return {
     scope: {
-      component: '='
+      component: '=',
+      control: '='
     },
     templateUrl: '/components/component-wrap.html',
     link: function (scope, element, attrs) {
@@ -12,12 +13,21 @@ app.directive('testimonialsComponent', ['$timeout', function ($timeout) {
       scope.draggable = false;
       scope.autoplay = false;
       scope.isEditing = true;
-      
+
+      if(!scope.component.slider)
+      {
+        scope.component.slider = {
+          speed: 300, autoPlay: true, autoPlayInterval: 5000
+        };
+      }
+      scope.autoplay = false;
+
       scope.$parent.$watch('ckeditorLoaded', function (newValue, oldValue) {
         if(newValue){          
           scope.dataLoaded = true;
         }
       });
+
       var addRemoveTestimonials = function(index, add){
         var testimonials = angular.copy(scope.component.testimonials);
         if(add){
@@ -45,6 +55,11 @@ app.directive('testimonialsComponent', ['$timeout', function ($timeout) {
       scope.addTestimonial = function (index) {
         console.log(index);
         addRemoveTestimonials(index, true);
+      };
+      scope.control.refreshSlider = function () {
+        $timeout(function () {
+          scope.dataLoaded = !scope.dataLoaded;
+        });
       };
     }
   };

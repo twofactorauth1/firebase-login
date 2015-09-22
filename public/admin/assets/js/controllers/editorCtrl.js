@@ -743,6 +743,7 @@
      * - TODO: change to switch case and stop using if else
      */
     $scope.thumbnailSlider = {};
+    $scope.testimonialSlider = {};
     $scope.contactMap = {};
     $scope.blogControl = {};
 
@@ -906,6 +907,10 @@
 
         _modal.resolve.accountShowHide = function () {
           return $scope.$parent.account.showhide;
+        };
+
+        _modal.resolve.testimonialSlider = function () {
+          return $scope.testimonialSlider;
         };
       }
 

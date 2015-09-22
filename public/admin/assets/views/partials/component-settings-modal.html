@@ -881,6 +881,44 @@
                         <div class="clearfix"></div>
                     </div>
                 </tab>
+                <tab ng-if="componentEditing.type === 'testimonials'">
+                    <tab-heading>
+                        <span>Slider Settings</span>
+                    </tab-heading>
+                    <div class="form-group">
+                        <label for="slider-autoplay">Auto Play:</label>
+                        <span tooltip-placement="top" tooltip-html-unsafe="Set slider auto play."><i class="fa fa-info-circle" /></span>
+                        <switch id="slider-autoplay" ng-model="componentEditing.slider.autoPlay" class="pull-right"></switch>
+                    </div>
+                    <div class="form-group">
+                        <label for="slider-speed">Transition Speed:</label>
+                        <span tooltip-placement="top" tooltip-html-unsafe="Speed at which slider scrolls through the testimonials."><i class="fa fa-info-circle" /></span>
+                        <select id="slider-speed" class="form-control" ng-change="saveTestimonialComponent()" ng-model="componentEditing.slider.speed">
+                            <option value="1000">Slow</option>
+                            <option value="500">Medium</option>
+                            <option value="300">High</option>
+                        </select>
+                    </div>
+                    <div class="form-group hidden">
+                        <label for="slider-direction">Slide Vertically:</label>
+                        <span tooltip-placement="top" tooltip-html-unsafe="Slide direction ( horizontal or veritcal)."><i class="fa fa-info-circle" /></span>
+                        <switch id="slider-direction" ng-change="saveTestimonialComponent()" ng-model="componentEditing.slider.vertical" class="pull-right"></switch>                        
+                    </div>                    
+                    <div class="form-group">
+                        <label for="slider-autoplayinterval">Auto Play Interval:</label>
+                        <span tooltip-placement="top" tooltip-html-unsafe="Set slider auto play interval."><i class="fa fa-info-circle" /></span>
+                        <select id="slider-autoplayinterval" class="form-control"  ng-change="saveComponent()" ng-model="componentEditing.slider.autoPlayInterval">
+                            <option value="5000">5 Seconds</option>
+                            <option value="10000">10 Seconds</option>
+                            <option value="15000">15 Seconds</option>
+                            <option value="30000">30 Seconds</option>                            
+                            <option value="45000">45 Seconds</option>
+                            <option value="60000">1 Minute</option>
+                            <option value="120000">2 Minutes</option>
+                            <option value="300000">5 Minutes</option>
+                        </select>
+                    </div>
+                </tab>
                 <tab ng-if="componentEditing.type === 'video'">
                     <tab-heading>
                         <span>Video</span>
@@ -891,7 +929,6 @@
                         <select id="member-name" class="form-control" ng-model="componentEditing.videoType">
                             <option value="youtube">YouTube</option>
                             <option value="vimeo">Vimeo</option>
-                            //
                             <option value="html5">Html4 Video</option>
                         </select>
                     </div>
