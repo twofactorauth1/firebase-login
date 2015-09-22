@@ -741,12 +741,14 @@
           $scope.goingTo = 'next';
           $scope.toTheTop();
           nextStep();
+          $scope.updateSendNow($scope.whenToSend);
         }
       },
       prev: function () {
         $scope.goingTo = 'prev';
         $scope.toTheTop();
         prevStep();
+        $scope.updateSendNow($scope.whenToSend);
       },
       goTo: function (i) {
         var valid = true;
@@ -757,6 +759,7 @@
         if (valid) {
           $scope.toTheTop();
           goToStep(i);
+          $scope.updateSendNow($scope.whenToSend);
         }
       },
       submit: function () {
