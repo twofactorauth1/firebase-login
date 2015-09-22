@@ -16,7 +16,7 @@
                         }" tab-active="address" data-id="{{component._id}}" resizable r-directions="['bottom', 'right']">
                             <div>
                             <span class="blocked" ng-bind-html="contactAddress"></span>
-                            <a href="tel:{{component.contact.phone}}"><span class="blocked" ng-bind-html="component.contact.phone"></span></a>
+                            <a class="contact-tel" href="tel:{{component.contact.phone}}"><span class="blocked" ng-bind-html="component.contact.phone"></span></a>
                             <!-- <span ng-if="!component.hours.length">Enter Business hours here</span> -->
                             <div ng-if="component.showHours && !component.splitHours" ng-repeat="val in component.hours" ng-class="(currentDate | date:'EEE') === val.day ? 'current-day' : ''"><span>{{val.day}} </span>: <span ng-hide="val.closed || val.wholeday">{{val.start}} - {{val.end}}</span><span ng-show="val.closed && !val.wholeday">Closed</span><span ng-show="!val.closed && val.wholeday">Opened 24 hours</span></div>
                             <div ng-if="component.showHours && component.splitHours" ng-repeat="val in component.hours" ng-class="(currentDate | date:'EEE') === val.day ? 'current-day' : ''"><span>{{val.day}} </span>: <span ng-hide="val.closed" ng-if="val.split">{{val.start}}-{{val.end}} and {{val.start2}}-{{val.end2}}</span><span ng-hide="val.closed" ng-if="!val.split">{{val.start}}-{{val.end}}</span><span ng-show="val.closed">Closed</span></div></div>
@@ -27,3 +27,8 @@
         </div>
     </div>
 </div>
+<style type="text/css">
+.contact-us-v1 a.contact-tel {
+    color: {{component.txtcolor || primaryTextColor}} !important;    
+};
+</style>
