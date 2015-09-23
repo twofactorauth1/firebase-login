@@ -398,6 +398,50 @@ var dao = {
             fn(err, _body);
         });
 
+    },
+
+    getCertificateValidationMethods: function(ref, account_key, secret_key, endpoint, fn){
+        var self = this;
+        self.log.debug('>> getCertificateValidationMethods');
+
+        //minimal validation
+        if(!ref) {
+            return fn('ref must be specified');
+        }
+        if(!account_key) {
+            return fn('account_key must be specified');
+        }
+        if(!secret_key) {
+            return fn('secret_key must be specified');
+        }
+        ///certificate/{ref}/validations/methods{?account_key,secret_key}
+        var path = '/certificate/' + ref + '/validations/methods?account_key=' + account_key + '&secret_key=' + secret_key;
+        var _endpoint = endpoint;
+        if(!_endpoint) {
+            //figure out endpoint
+            if (process.env.NODE_ENV === "testing") {
+                _endpoint = sslDotComConfig.SSLDOTCOM_TEST_ENDPOINT;
+            } else {
+                //TODO: this needs to be the PROD endpoint
+                _endpoint = sslDotComConfig.SSLDOTCOM_TEST_ENDPOINT;
+            }
+        }
+
+        var options = {
+            url: _endpoint+path,
+            json:true,
+            headers: {
+                'Content-Type':'application/json'
+            }
+        };
+        request.get(options, function(err, response, _body){
+            self.log.debug('err: ', err);
+            //self.log.debug('response:', response);
+            self.log.debug('_body:', _body);
+            self.log.debug('<< getCertificateValidationMethods');
+            fn(err, _body);
+        });
+
     }
 
 };
