@@ -546,6 +546,9 @@
   display: block;
   position: relative;
 }
+#componentloader .component-wrap div.element-wrap {
+  word-wrap: break-word;
+}
 #componentloader .component-wrap .component > [id] .bg {
   position: absolute;
   top: 0;
@@ -1163,8 +1166,14 @@
     width: 90%;
   }
 }
+#componentloader .navigation-v1 .nav-logo div.tooltip.bottom {
+  margin-top: -30px;
+}
 #componentloader .navigation-v2 #header .navbar.navbar-default {
   border: none!important;
+}
+#componentloader .navigation-v2 .nav-logo div.tooltip.bottom {
+  margin-top: -30px;
 }
 #componentloader .navigation-v2 .navbar {
   border: none!important;
@@ -1252,6 +1261,9 @@
 }
 #componentloader .navigation-v3 .nav {
   margin-top: 0px!important;
+}
+#componentloader .navigation-v3 .nav-logo div.tooltip.bottom {
+  margin-top: -30px;
 }
 #componentloader .navigation-v3 .navbar-brand {
   min-width: 200px;

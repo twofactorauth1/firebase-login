@@ -118,7 +118,7 @@
                         <tbody>
                             <tr ng-repeat="item in uploader.queue">
                                 <td>
-                                    <span class="word-wrap pull-left">{{ item.file.name }}</span>
+                                    <span ng-text-truncate="item.file.name" ng-tt-chars-threshold="50" ng-tt-no-toggling class="word-wrap pull-left"></span>
                                 </td>
                                 <td ng-show="uploader.isHTML5" nowrap>
                                     <span ng-switch on="(item.file.size == 1024*1024) || (item.file.size > 1024*1024)">
