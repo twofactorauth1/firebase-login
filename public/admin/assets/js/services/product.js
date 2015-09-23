@@ -3,7 +3,7 @@
  * service for products
  */
 (function(angular) {
-    app.service('ProductService', ['$http', function($http) {
+    app.service('ProductService',  ['$http', 'productConstant', function($http, productConstant) {
         var baseUrl = '/api/1.0/';
 
         this.getProducts = function(fn) {
@@ -82,6 +82,12 @@
             .success(function(data, status, headers, config) {
                 fn(data);
             });
+        };
+
+        
+        this.productStatusTypes = function (fn) {
+          var productStatusTypes = productConstant.product_status_types.dp;
+          fn(productStatusTypes);
         };
 
         // this.postCustomer = function (customer, fn) {
