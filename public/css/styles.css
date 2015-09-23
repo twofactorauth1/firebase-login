@@ -1153,8 +1153,14 @@ ul.nav {
     width: 90%;
   }
 }
+.navigation-v1 .nav-logo div.tooltip.bottom {
+  margin-top: -30px;
+}
 .navigation-v2 #header .navbar.navbar-default {
   border: none!important;
+}
+.navigation-v2 .nav-logo div.tooltip.bottom {
+  margin-top: -30px;
 }
 .navigation-v2 .navbar {
   border: none!important;
@@ -1243,6 +1249,9 @@ ul.nav {
 /********** Navbar v3 **********/
 .navigation-v3 .nav {
   margin-top: 0px!important;
+}
+.navigation-v3 .nav-logo div.tooltip.bottom {
+  margin-top: -30px;
 }
 .navigation-v3 .navbar-brand {
   min-width: 200px;
