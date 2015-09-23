@@ -541,11 +541,32 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
         }
 
 
-        PaymentService.getStripeCardToken(cardInput, function (token) {
+        PaymentService.getStripeCardToken(cardInput, function (token, error) {
           // PaymentService.saveCartDetails(token, parseInt(scope.total * 100), function (data) {
           //     console.log('card details ', data);
           // });
           // Is this checking to see if the customer already exists
+          if (error) {
+            switch (error.param) {
+              case "number":
+                angular.element("#card_number .error").html(error.message);
+                angular.element("#card_number").addClass('has-error');
+                angular.element("#card_number .glyphicon").addClass('glyphicon-remove');
+                break;
+              case "exp_year":
+                angular.element("#card_expiry .error").html(error.message);
+                angular.element("#card_expiry").addClass('has-error');
+                angular.element("#card_expiry .glyphicon").addClass('glyphicon-remove');
+                break;
+              case "cvc":
+                angular.element("#card_cvc .error").html(error.message);
+                angular.element("#card_cvc").addClass('has-error');
+                angular.element("#card_cvc .glyphicon").addClass('glyphicon-remove');
+                break;
+            }
+            scope.checkoutModalState = 3;
+            return;
+          }
           var phone_number = '';
           if(scope.newContact.details[0].phones && scope.newContact.details[0].phones[0] && scope.newContact.details[0].phones[0].number)
           {
