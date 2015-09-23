@@ -336,6 +336,27 @@ app.constant('productConstant', {
         data: "VIRTUAL"
       }
     ]
+  },
+  product_status_types:{
+    BACKORDER: 'backorder',
+    INACTIVE: 'inactive',
+    ACTIVE: 'active',
+    AUTOINACTIVE: 'auto_inactive',
+
+    dp: [{
+        label: "Backorder",
+        data: "backorder"
+      }, {
+        label: "Inactive",
+        data: "inactive"
+      }, {
+        label: "Active",
+        data: "active"
+      }, {
+        label: "Auto Inactive",
+        data: "auto_inactive"
+      }
+    ]
   }
 });
 

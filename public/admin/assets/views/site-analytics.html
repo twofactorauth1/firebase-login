@@ -214,16 +214,13 @@
                         <thead>
                             <tr>
                                 <th>Page</th>
-                                <th ng-click="changeSorting('pageviews')" class="center">Page Views</th>
-                                <th ng-click="changeSorting('uniquePageviews')" class="center">Unique Page Views</th>
-                                <th ng-click="changeSorting('avgTime')" class="center">Avg. Time on Page</th>
-                                <!-- <th ng-click="changeSorting('entrances')">Entrances</th>
-                                                <th ng-click="changeSorting('bounceRate')">Bounce Rate</th>
-                                                <th ng-click="changeSorting('exitRate')">Exit</th> -->
+                                <th class="center">Page Views</th>
+                                <th class="center">Unique Page Views</th>
+                                <th class="center">Avg. Time on Page</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr ng-repeat="topPage in pagedformattedTopPages|orderBy:sort.column:sort.descending">
+                            <tr ng-repeat="topPage in pagedformattedTopPages|orderBy:'-pageviews'">
                                 <td>
                                     {{topPage.page}}
                                     <a href="#/dashboard/single-page?pageurl={{topPage.page}}" class="truncate hidden">{{topPage.page}}</a>

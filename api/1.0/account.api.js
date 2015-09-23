@@ -122,49 +122,11 @@ _.extend(api.prototype, baseApi.prototype, {
                                             self.log.error('Error updating Stripe');
                                             res.send(updatedAccount);
                                         } else {
-                                            //check if we need to update the subscription
-                                            if(!billingObj.subscriptionId) {
-                                                self.log.debug('Attempting to resubscribe');
-                                                var stripeCustomerId = billingObj.stripeCustomerId;
-                                                var plan = billingObj.plan;
-                                                var userId = self.userId(req);
-                                                var coupon = billingObj.coupon;
-                                                var setupFee = billingObj.setupFee;
-                                                paymentManager.createStripeSubscription(stripeCustomerId, plan,
-                                                    account.id(), userId, coupon, setupFee, function(err, sub) {
-                                                        if(err) {
-                                                            self.log.error('Error subscribing: ', err);
-                                                            res.send(updatedAccount);
-                                                        } else {
-                                                            delete billingObj.setupFee;
-                                                            billingObj.subscriptionId = sub.id;
-                                                            account.set('billing', billingObj);
-                                                            account.set('locked_sub', false);
-                                                            accountDao.saveOrUpdate(account, function(err, newUpdatedAccount) {
-                                                                if (err) {
-                                                                    self.log.error('Error updating account with sub: ' + err);
-                                                                    res.send(updatedAccount);
-                                                                } else {
-                                                                    self.sm.addSubscriptionToAccount(accountId, sub.id, plan, userId, function(err, value){
-                                                                        //TODO: fix session
-                                                                        self.log.debug('<< updateCurrentAccountBilling');
-                                                                        res.send(newUpdatedAccount);
-                                                                        self.createUserActivity(req, 'MODIFY_ACCOUNT_BILLING', null, null, function(){});
-                                                                        return;
-                                                                    });
-
-                                                                }
-                                                            });
-                                                        }
-                                                    });
-                                            } else {
-                                                self.log.debug('<< updateCurrentAccountBilling');
-                                                res.send(updatedAccount);
-                                                self.createUserActivity(req, 'MODIFY_ACCOUNT_BILLING', null, null, function(){});
-                                                return;
-                                            }
+                                            self.log.debug('<< updateCurrentAccountBilling');
+                                            res.send(updatedAccount);
+                                            self.createUserActivity(req, 'MODIFY_ACCOUNT_BILLING', null, null, function(){});
+                                            return;
                                         }
-
                                     });
                                 } else {
                                     //we're done here.
@@ -173,8 +135,6 @@ _.extend(api.prototype, baseApi.prototype, {
                                     self.createUserActivity(req, 'MODIFY_ACCOUNT_BILLING', null, null, function(){});
                                     return;
                                 }
-
-
                             }
                         });
                     }

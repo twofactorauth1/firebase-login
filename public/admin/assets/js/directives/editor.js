@@ -10,7 +10,7 @@ app.directive("elem", function ($timeout) {
       title: '@ngModel',
       className: '@className'
     },
-    template: '<div class="edit-wrap"><span class="editable-title">{{title | formatText}}</span><div class="editable {{className}}" ng-bind-html="ngModel | unsafe"></div></div>',
+    template: '<div class="edit-wrap"><span class="editable-title">{{title | formatText}}</span><div class="editable element-wrap {{className}}" ng-bind-html="ngModel | unsafe"></div></div>',
     link: function (scope, element, attrs, ngModel) {
 
       scope.update = function (e) {

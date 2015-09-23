@@ -17,6 +17,7 @@ var contactActivityManager = require('../../../contactactivities/contactactivity
 var orderManager = require('../../../orders/order_manager');
 var contactDao = require('../../../dao/contact.dao');
 var async = require('async');
+var affiliates_manager = require('../../../affiliates/affiliate_manager');
 
 var api = function () {
     this.init.apply(this, arguments);
@@ -192,6 +193,9 @@ _.extend(api.prototype, baseApi.prototype, {
         var stripeSubscription = null;
         var account = null;
         var customerId = null;
+        var userEmail = null;
+        var purchaseAmount = null;
+
         async.waterfall([
             function getAccount(cb) {
                 accountDao.getAccountByID(accountId, function(err, _account) {
@@ -270,6 +274,7 @@ _.extend(api.prototype, baseApi.prototype, {
                         cb(err);
                     } else {
                         email = user.get('username');
+                        userEmail = email;
                         contactDao.findContactsByEmail(appConfig.mainAccountID, email, function(err, contacts){
                             if(err) {
                                 self.log.error('Error finding contact for user:', err);
@@ -290,13 +295,14 @@ _.extend(api.prototype, baseApi.prototype, {
                 var subdomain = account.get('subdomain');
                 //amount: (sub.plan.amount / 100),
                 //plan_name: sub.plan.name
+                purchaseAmount = (stripeSubscription.plan.amount / 100);
                 var activity = new $$.m.ContactActivity({
                     accountId: appConfig.mainAccountID,
                     contactId: contact.id(),
                     activityType: "TRIAL_CONVERSION",
                     detail : "Account for "+ subdomain + ' [' + accountId + '] has converted to paying customer.',
                     start: new Date(),
-                    extraFields: {accountId:accountId, plan_name:stripeSubscription.plan.name, amount:(stripeSubscription.plan.amount / 100)}
+                    extraFields: {accountId:accountId, plan_name:stripeSubscription.plan.name, amount:purchaseAmount}
                 });
                 contactActivityManager.createActivity(activity, function(err, value){
                     if(err) {
@@ -329,9 +335,21 @@ _.extend(api.prototype, baseApi.prototype, {
                                 cb(err);
                             } else {
                                 self.log.debug('Order created.');
-                                cb(null);
+                                cb(null, userEmail, purchaseAmount);
                             }
                         });
+                    }
+                });
+            },
+            function recordAffiliatePurchase(email, amount, cb) {
+                affiliates_manager.recordPurchase(email, amount, function(err, value){
+                    if(err) {
+                        self.log.error('Error recording affiliate purchase:', err);
+                        //return anyway
+                        cb(null);
+                    } else {
+                        self.log.debug('Recorded affiliate purchase:', value);
+                        cb(null);
                     }
                 });
             }

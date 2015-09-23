@@ -761,6 +761,7 @@
      * - TODO: change to switch case and stop using if else
      */
     $scope.thumbnailSlider = {};
+    $scope.testimonialSlider = {};
     $scope.contactMap = {};
     $scope.blogControl = {};
 
@@ -925,11 +926,12 @@
         _modal.resolve.accountShowHide = function () {
           return $scope.$parent.account.showhide;
         };
-
         _modal.resolve.isEmail = function () {
           return $scope.isEmail;
-        }
-        
+        };
+        _modal.resolve.testimonialSlider = function () {
+          return $scope.testimonialSlider;
+        };
       }
 
       if (angular.isDefined(index) && index !== null && index >= 0) {
