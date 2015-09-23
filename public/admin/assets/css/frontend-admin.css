@@ -546,6 +546,9 @@
   display: block;
   position: relative;
 }
+#componentloader .component-wrap div.element-wrap {
+  word-wrap: break-word;
+}
 #componentloader .component-wrap .component > [id] .bg {
   position: absolute;
   top: 0;

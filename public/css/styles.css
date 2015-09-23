@@ -527,6 +527,9 @@ div[data-type='campaign'] .inner-page .overlay {
   display: block;
   position: relative;
 }
+.component-wrap div.element-wrap {
+  word-wrap: break-word;
+}
 .component-wrap .component > [id] .bg {
   position: absolute;
   top: 0;
