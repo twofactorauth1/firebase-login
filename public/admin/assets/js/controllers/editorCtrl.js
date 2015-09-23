@@ -1174,6 +1174,18 @@
       });
     };
 
+    $scope.sendTestEmail = function (_email) {
+      $scope.sendingEmail = true;
+      WebsiteService.sendTestEmail(_email, $scope.page, function (data) {
+        $scope.sendingEmail = false;
+        if (data && data[0] && data[0]._id) {
+          $scope.closeModal();
+          toaster.pop('success', 'Test Email sent successfully');
+        }
+        console.log('test send status ', data);
+      });
+    };
+
     /*
      * @validateNewPage
      * -

@@ -17,9 +17,12 @@ CKEDITOR.plugins.add("doksoft_button_email", {
                 var button = buttonWrapperEl.find('.myButton');
                 var link = buttonWrapperEl.find('a');
                 
-                o.style = button.$[0].getAttribute('style');
-                o.link = link.$[0].getAttribute('href')
-                o.text = button.$[0].innerText;
+                if (button.$[0]) {
+                    o.style = button.$[0].getAttribute('style');
+                    o.link = link.$[0].getAttribute('href')
+                    o.text = button.$[0].innerText;
+                }
+                
                 console.log('o: ');
                 console.log(o);
                 return o;
@@ -85,7 +88,22 @@ CKEDITOR.plugins.add("doksoft_button_email", {
                     	console.log('insert button called');
                     	this.parts.title.$.innerHTML = "Insert Button";
                     	currentData = {
-	                        style: t.config.doksoft_default_style ? t.config.doksoft_default_style : "-moz-box-shadow: 0px 1px 0px 0px #ffe0b5;-webkit-box-shadow: 0px 1px 0px 0px #ffe0b5;box-shadow: 0px 1px 0px 0px #ffe0b5;background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #fbb450), color-stop(1, #f89306));background:-moz-linear-gradient(top, #fbb450 5%, #f89306 100%);background:-webkit-linear-gradient(top, #fbb450 5%, #f89306 100%);background:-o-linear-gradient(top, #fbb450 5%, #f89306 100%);background:-ms-linear-gradient(top, #fbb450 5%, #f89306 100%);background:linear-gradient(to bottom, #fbb450 5%, #f89306 100%);filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#fbb450', endColorstr='#f89306',GradientType=0);background-color:#fbb450;-moz-border-radius:7px;-webkit-border-radius:7px;border-radius:7px;border:1px solid #c97e1c;display:inline-block;color:#ffffff;font-family:trebuchet ms;font-size:17px;font-weight:normal;padding:6px 11px;text-decoration:none;text-shadow:0px 1px 0px #8f7f24;",
+	                        style: t.config.doksoft_default_style ? t.config.doksoft_default_style : "-moz-box-shadow: 0px 1px 0px 0px #ffe0b5;" +
+                                                                                                     "-webkit-box-shadow: 0px 1px 0px 0px #ffe0b5;" +
+                                                                                                     "box-shadow: 0px 1px 0px 0px #ffe0b5;" +
+                                                                                                     "background-color:#fbb450;" +
+                                                                                                     "-moz-border-radius:7px;" +
+                                                                                                     "-webkit-border-radius:7px;" +
+                                                                                                     "border-radius:7px;" +
+                                                                                                     "border:1px solid #c97e1c;" +
+                                                                                                     "display:inline-block;" +
+                                                                                                     "color:#ffffff;" +
+                                                                                                     "font-family:trebuchet ms;" +
+                                                                                                     "font-size:17px;" +
+                                                                                                     "font-weight:normal;" +
+                                                                                                     "padding:6px 11px;" +
+                                                                                                     "text-decoration:none;" +
+                                                                                                     "text-shadow:0px 1px 0px #8f7f24;",
 	                        link: t.config.doksoft_default_link ? t.config.doksoft_default_link : "http://",
 	                        text: t.config.doksoft_default_text ? t.config.doksoft_default_text : "Download"
 						};

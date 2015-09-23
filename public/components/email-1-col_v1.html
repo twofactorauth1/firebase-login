@@ -1,30 +1,31 @@
-<div ng-class="component.type+'-v'+component.version">
-    <div style="width: 100%; -webkit-text-size-adjust: 100% !important; -ms-text-size-adjust: 100% !important; margin: 0; padding: 0;">
-        <table width="100%" align="center" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse;">
-            <tr>
-                <td>
-                    <table width="100%" align="center" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse;">
-                        <tr>
-                            <td class="device-width" width="100%" style="text-align: center; padding-bottom: 15px; padding-left:20px;padding-right:20px">
-                                <div elem ng-model="component.title"></div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td align="center" width="100%" style="background: url('{{component.bg.img.url && component.bg.img.show ? component.bg.img.url : 'none'}}');background-size: cover; background-repeat: no-repeat;background-color: {{component.bg.color || '#eaeaea'}};">
-                                <table class="device-width" align="center" width="680" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse;">
-                                    <tr>
-                                        <td class="wrapper" width="100%" style="padding-left: 20px; padding-right: 20px; padding-top: 45px; padding-bottom: 45px;">
-                                            <div style="padding:20px;">
-                                                <div elem ng-model="component.text"></div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-        </table>
-    </div>
-</div>
+<table class="email-component-container {{component.type}}-v{{component.version}}" align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
+    <tr>
+        <td>
+            <table align="center" border="0" cellpadding="0" cellspacing="0" width="640" id="templateColumns">
+                <tr>
+                    <td align="center" valign="top" width="100%" class="templateColumnContainer">
+                        <table border="0" cellpadding="10" cellspacing="0" width="100%">
+                            <tr>
+                                <td valign="top" class="leftColumnContent">
+                                   <div elem ng-model="component.title"></div>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="center" width="100%" class="templateColumnContainer">
+                        <table border="0" cellpadding="10" cellspacing="0" width="100%">
+                            <tr>
+                                <td valign="top" class="leftColumnContent">
+                                   <div elem ng-model="component.text"></div>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+            <hr>
+        </td>
+    </tr>
+</table>

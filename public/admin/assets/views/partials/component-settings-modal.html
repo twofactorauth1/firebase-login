@@ -18,7 +18,7 @@
                     </tab-heading>
                     <div class="righstpanelinner">
                         <div class="form-group">
-                            <label for="colorpicker">{{isEmail}}-Text Color:</label>
+                            <label for="colorpicker">Text Color:</label>
                             <span tooltip-placement="top" tooltip-html-unsafe="Text color of component."><i class="fa fa-info-circle" /></span>
                             <div class="pull-right">
                                 <h4 class="pull-left"><i class="fa fa-eyedropper" /></h4>
@@ -115,7 +115,7 @@
                                 <spectrum-colorpicker format="'hex'" options="spectrum.options" class="pull-right" ng-model="componentEditing.tagCloud.bgcolor" ng-change="saveComponent()"></spectrum-colorpicker>
                             </div>
                         </div>
-                        <form class="form-horizontal" ng-show="!componentEditing.bg.img.show">
+                        <form class="form-horizontal" ng-show="!componentEditing.bg.img.show" ng-hide="isEmail">
                             <div class="row">
                                 <div class="col-sm-10">
                                     <label class="pull-left">Add BG Opacity</label>
@@ -157,7 +157,7 @@
                             </div>
                         </div>
                         <hr/>
-                        <div class="form-group" ng-if="componentEditing.type != 'navigation' && componentEditing.type != 'top-bar' && componentEditing.type != 'blog'">
+                        <div class="form-group" ng-if="componentEditing.type != 'navigation' && componentEditing.type != 'top-bar' && componentEditing.type != 'blog'" ng-hide="isEmail">
                             <label for="bg_hide" class="margin-bottom-0">Show Background Image</label>
                             <span tooltip-placement="top" tooltip-html-unsafe="show/hide background image of component."><i class="fa fa-info-circle" /></span>
                             <switch ng-model="componentEditing.bg.img.show" class="pull-right" ng-change="saveComponent()"></switch>

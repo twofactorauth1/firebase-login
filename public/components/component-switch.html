@@ -68,10 +68,16 @@
     <div ng-switch-when="video">
         <div video-component component="value"></div>
     </div>
-    <!-- deprecated 09/2015 -->
+    
+    <!--
+    generic email type deprecated 09/2015 in favor
+    of using individual email components.
+    -->
     <div ng-switch-when="email">
         <div email-component component="value"></div>
     </div>
+
+    <!-- email-specific components -->
     <div ng-switch-when="email-header">
         <div email-component component="value"></div>
     </div>

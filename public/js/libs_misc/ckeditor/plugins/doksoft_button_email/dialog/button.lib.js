@@ -21,7 +21,7 @@ var __ = function(c, a) {
 };
 var default_template = {
         boxShadow: "-moz-box-shadow:%1 %2px %3px %4px %5px #%6;-webkit-box-shadow:%1 %2px %3px %4px %5px #%6;box-shadow:%1 %2px %3px %4px %5px #%6;",
-        gradient: "background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #%1), color-stop(1, #%2));background:-moz-linear-gradient(top, #%1 5%, #%2 100%);background:-webkit-linear-gradient(top, #%1 5%, #%2 100%);background:-o-linear-gradient(top, #%1 5%, #%2 100%);background:-ms-linear-gradient(top, #%1 5%, #%2 100%);background:linear-gradient(to bottom, #%1 5%, #%2 100%);filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#%1', endColorstr='#%2',GradientType=0);",
+        // gradient: "background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #%1), color-stop(1, #%2));background:-moz-linear-gradient(top, #%1 5%, #%2 100%);background:-webkit-linear-gradient(top, #%1 5%, #%2 100%);background:-o-linear-gradient(top, #%1 5%, #%2 100%);background:-ms-linear-gradient(top, #%1 5%, #%2 100%);background:linear-gradient(to bottom, #%1 5%, #%2 100%);filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#%1', endColorstr='#%2',GradientType=0);",
         background: "background-color:#%1;",
         borderRadius: "-moz-border-radius:%1px;-webkit-border-radius:%1px;border-radius:%1px;",
         border: "border:%1px solid #%2;",
@@ -37,7 +37,7 @@ var default_template = {
     },
     default_theme = {
         boxShadow: ["", 0, 1, 0, 0, "ffe0b5"],
-        gradient: ["fbb450", "f89306", ],
+        // gradient: ["fbb450", "f89306", ],
         background: ["fbb450"],
         borderRadius: [7],
         border: [1, "c97e1c"],
@@ -46,13 +46,13 @@ var default_template = {
         fontFamily: ["Trebuchet MS"],
         fontSize: [17],
         fontWeight: [],
-        fontStyle: [],
+        fontStyle: ["normal"],
         padding: [6, 11],
         textDecoration: [],
         textShadow: [0, 1, 0, "8f7f24"],
     },
     null_theme = {
-        gradient: [],
+        // gradient: [],
         background: [],
         borderRadius: [0],
         border: [0, "ffffff"],
@@ -79,7 +79,7 @@ _parent.doksoft_remix = function(f, e) {
                     gradient: "1",
                     boxShadow: "1",
                     fontWeight: "1",
-                    fontStyle: ""
+                    fontStyle: "1"
                 }[d]) {
                 a[b] = default_template[d];
             }
@@ -111,7 +111,7 @@ _parent.setValueToInputs = function(d) {
                     }
                     e.value = (d[c][b] + "").toLowerCase();
                     if (c == "background") {
-                        _("setting-gradient-1").value = e.value;
+                        //_("setting-gradient-1").value = e.value;
                     }
                     __(e);
                     $(e).change();
@@ -181,9 +181,9 @@ _parent.doksoft_parse = function(a) {
 _parent.getResultButton = function() {
     return 	'<div class="ckeditor-button-wrap" data-href="' + _("button-href").value + '" data-text-value="' + _("button-text").value + '" style="margin: 0; font-size: inherit;">' +
 	    		'<table align="center" style="width: 100%;" unselectable="on" contendeditable="false">' +
-	    			'<tr unselectable="on" contendeditable="false">' +
+	    			'<tr align="center" unselectable="on" contendeditable="false">' +
 		    			'<td style="' + _parent.doksoft_remix(_parent._theme) + '" class="myButton" unselectable="on" contendeditable="false">' + 
-		    				'<a style="color: inherit;" href="' + _("button-href").value + '">' + 
+		    				'<a style="text-decoration:none;color: inherit;" href="' + _("button-href").value + '">' + 
 		    					_("button-text").value + 
 		    				'</a>' +
 		    			'</td>' +
@@ -207,10 +207,10 @@ _parent.getResultButton = function() {
         if (a[b].id && a[b].id.match(/setting-/)) {
             a[b].addEventListener("change", function() {
                 var c = /setting-([a-zA-Z]+)-([0-9]+)/.exec(this.id);
-                if (c[1] == "gradient" && _("setting-gradient-1").value == _("setting-gradient-2").value) {
-                    c[1] = "background";
-                    delete _parent._theme["gradient"];
-                }
+                // if (c[1] == "gradient" && _("setting-gradient-1").value == _("setting-gradient-2").value) {
+                //     c[1] = "background";
+                //     delete _parent._theme["gradient"];
+                // }
                 if (c[1] && default_theme[c[1]]) {
                     if (!_parent._theme[c[1]]) {
                         _parent._theme[c[1]] = _parent.doksoft_extend([], default_theme[c[1]]);

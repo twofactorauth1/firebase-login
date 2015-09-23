@@ -103,9 +103,32 @@
           "version": 1,
           "txtcolor": "#888888",
           // "logo": "<h2>Logo Here</h2>",
-          "title": "<h2 class='center'>Single Column Layout Title</h2>",
+          "title": '<h2 style="text-align:center;">One Column Layout Section</h2>',
           // "subtitle": "subtitle",
-          "text": "This is your new email",
+          "text": '<p style="text-align:center;">This is a single column content section.</p>',
+          "from_email": "info@indigenous.io",
+          "bg": {
+            "img": {
+              "url": "",
+              "width": null,
+              "height": null,
+              "parallax": false,
+              "blur": false
+            },
+            "color": ""
+          },
+          "visibility": true
+        },
+        {
+          "_id": CommonService.generateUniqueAlphaNumericShort(),
+          "anchor": CommonService.generateUniqueAlphaNumericShort(),
+          "type": "email-2-col",
+          "version": 1,
+          "txtcolor": "#888888",
+          "title": '<h2 style="text-align:center;">Two Column Layout Section</h2>',
+          // "subtitle": "subtitle",
+          "text1": '<p style="text-align:center;">This is column 1.</p>',
+          "text2": '<p style="text-align:center;">This is column 2.</p>',
           "from_email": "info@indigenous.io",
           "bg": {
             "img": {
@@ -125,12 +148,11 @@
           "type": "email-3-col",
           "version": 1,
           "txtcolor": "#888888",
-          // "logo": "<h2>Logo Here</h2>",
-          "title": "<h2 class='center'>3 Column Layout Title</h2>",
+          "title": '<h2 style="text-align:center;">Three Column Layout Section</h2>',
           // "subtitle": "subtitle",
-          "text1": "This is column 1.",
-          "text2": "This is column 2.",
-          "text3": "This is column 3.",
+          "text1": '<p style="text-align:center;">This is column 1.</p>',
+          "text2": '<p style="text-align:center;">This is column 2.</p>',
+          "text3": '<p style="text-align:center;">This is column 3.</p>',
           "from_email": "info@indigenous.io",
           "bg": {
             "img": {
