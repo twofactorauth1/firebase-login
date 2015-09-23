@@ -614,28 +614,32 @@
                         <label for="location-hours">Business Hours </label>
                         <span tooltip-placement="top" tooltip-html-unsafe="Contact Us business hours."><i class="fa fa-info-circle" /></span>
                         <span ng-if="contactHoursInvalid" id="contact-err-msg" class="error help-block">Start date(s) should not be greater than end date(s)</span>
-                        <div ng-if="componentEditing.splitHours" class="col-xs-12 multiple-hours" ng-repeat="val in componentEditing.hours">
+                        <div ng-if="componentEditing.splitHours" class="multiple-hours col-xs-12" ng-repeat="val in componentEditing.hours">
                             <div class="col-xs-1">
                                 <label for="val.day">{{val.day}}:</label>
                             </div>
-                            <div class="col-xs-2" id="business_hours_start_{{$index}}">
+                            <div class="col-xs-5">
+                                <div id="business_hours_start_{{$index}}" class="inline-table-cell">
                                 <select ng-disabled="!componentEditing.custom.hours" ng-change="validateHours(val, $index)" ng-hide="val.closed" class="chosen-select hour-start-select form-control" ng-model="val.start" ng-options="item for item in hours.HOURS">
                                 </select>
-                            </div>
-                            <div class="col-xs-2" id="business_hours_end_{{$index}}">
-                                <select ng-disabled="!componentEditing.custom.hours" ng-hide="val.closed" ng-change="validateHours(val, $index)" class="chosen-select hour-start-select form-control" ng-model="val.end" ng-options="item for item in hours.HOURS">
-                                </select>
-                            </div>
+                                </div>
+                                <div id="business_hours_end_{{$index}}" class="inline-table-cell">
+                                    <select ng-disabled="!componentEditing.custom.hours" ng-hide="val.closed" ng-change="validateHours(val, $index)" class="chosen-select hour-start-select form-control" ng-model="val.end" ng-options="item for item in hours.HOURS">
+                                    </select>
+                                </div>
+                            </div>                            
                             <label class="pull-left" ng-hide="val.closed" ng-if="val.split" style="margin:10px"> & </label>
-                            <div class="col-xs-2" id="business_hours_start2_{{$index}}">
-                                <select ng-disabled="!componentEditing.custom.hours" ng-change="validateHours(val, $index)" ng-hide="val.closed" ng-if="val.split" class="chosen-select hour-start-select form-control" ng-model="val.start2" ng-options="item for item in hours.HOURS">
-                                </select>
-                            </div>
-                            <div class="col-xs-2">
-                                <select ng-disabled="!componentEditing.custom.hours" ng-change="validateHours(val, $index)" ng-if="val.split" ng-hide="val.closed" class="chosen-select hour-start-select form-control" ng-model="val.end2" ng-options="item for item in hours.HOURS">
-                                </select>
-                            </div>
-                            <div class="col-xs-5 margin-left-5">
+                            <div class="col-xs-5">
+                                <div id="business_hours_start2_{{$index}}" class="inline-table-cell">
+                                    <select ng-disabled="!componentEditing.custom.hours" ng-change="validateHours(val, $index)" ng-hide="val.closed" ng-if="val.split" class="chosen-select hour-start-select form-control" ng-model="val.start2" ng-options="item for item in hours.HOURS">
+                                    </select>
+                                </div>
+                                <div class="inline-table-cell">
+                                    <select ng-disabled="!componentEditing.custom.hours" ng-change="validateHours(val, $index)" ng-if="val.split" ng-hide="val.closed" class="chosen-select hour-start-select form-control" ng-model="val.end2" ng-options="item for item in hours.HOURS">
+                                    </select>
+                                </div>
+                            </div>                            
+                            <div class="col-xs-5 margin-left-5" class="inline-table-cell">
                                 <div class="checkbox clip-check check-primary checkbox-inline">
                                     <input ng-disabled="!componentEditing.custom.hours" type="checkbox" id="closed-{{$index}}" ng-change="validateHours(val, $index)" ng-model="val.closed">
                                     <label for="closed-{{$index}}">
@@ -648,7 +652,7 @@
                                         Split
                                     </label>
                                 </div>
-                            </div>
+                            </div>                                                       
                         </div>
                         <div ng-if="!componentEditing.splitHours" class="col-xs-12" ng-repeat="val in componentEditing.hours">
                             <div class="col-xs-1">
