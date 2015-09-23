@@ -670,6 +670,18 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
         //});
       };
 
+      var clearCardDetails = function(){
+        angular.element("#product-card-details").trigger("reset");
+        angular.element("#card_number").removeClass('has-error has-success');
+        angular.element("#card_number .glyphicon").removeClass('glyphicon-remove glyphicon-ok')
+        angular.element("#card_name").removeClass('has-error has-success');
+        angular.element("#card_name .glyphicon").removeClass('glyphicon-remove glyphicon-ok')
+        angular.element("#card_expiry").removeClass('has-error has-success');
+        angular.element("#card_expiry .glyphicon").removeClass('glyphicon-remove glyphicon-ok')
+        angular.element("#card_cvc").removeClass('has-error has-success');
+        angular.element("#card_cvc .glyphicon").removeClass('glyphicon-remove glyphicon-ok')
+      }
+
       /*
        * @
        * -
@@ -683,6 +695,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 if (scope.checkoutModalState === 5) {
                   scope.checkoutModalState = 1;
                   scope.newContact = {};
+                  clearCardDetails();
                 }
               });
             },0);
