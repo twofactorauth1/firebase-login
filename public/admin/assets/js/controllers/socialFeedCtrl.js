@@ -132,7 +132,9 @@
       });
       //wait a few seconds to ensure everything is loaded
       setTimeout(function () {
-        $scope.isLoaded = true;
+        $scope.$apply(function(){
+          $scope.isLoaded = true;
+        });        
       }, 1500);
       //push the feed into the display
       $scope.displayFeed = $scope.feed;
