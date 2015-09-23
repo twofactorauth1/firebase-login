@@ -16,5 +16,7 @@ module.exports = {
     SSLDOTCOM_ACCOUNT_KEY: ssldotcomAccountKey,
     SSLDOTCOM_SECRET_KEY: ssldotcomSecretKey,
     SSLDOTCOM_TEST_ENDPOINT: ssldotcomTestEndpoint,
-    SSLDOTCOM_MOCK_ENDPOINT: ssldotcomMockEndpoint
+    SSLDOTCOM_MOCK_ENDPOINT: ssldotcomMockEndpoint,
+    SSLDOTCOM_CSR: '',
+    SSLDOTCOM_SERVER_SOFTWARE: 39 //constant for Amazon LB
 }
