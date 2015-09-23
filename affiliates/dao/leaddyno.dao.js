@@ -13,7 +13,7 @@ var dao = {
     recordPurchase: function(email, plan_code, purchase_amount, fn){
         var self = this;
         self.log.debug('>> recordPurchase');
-        if(config.LEAD_DYNO_ENABLED === true){
+        if(config.LEAD_DYNO_ENABLED === true || config.LEAD_DYNO_ENABLED === 'true'){
             var _body = {
                 key: config.LEAD_DYNO_PRIVATE_KEY,
                 email: email,
