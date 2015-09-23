@@ -382,7 +382,7 @@ _.extend(api.prototype, baseApi.prototype, {
         
         self.log.debug('components >>> ', components);
         
-        app.render('emails/base_email', { components: components }, function(err, html){
+        app.render('emails/base_email_v2', { components: components }, function(err, html){
             if(err) {
                 self.log.error('error rendering html: ' + err);
                 self.log.warn('email will not be sent.');
