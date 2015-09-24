@@ -123,8 +123,10 @@
           angular.element('.cke_button__doksoft_button, .cke_button__doksoft_font_awesome').hide();
           angular.element('.cke_button__doksoft_button_email').show();
         }
-        else
-          angular.element('.cke_button__doksoft_font_awesome').show();
+        else{
+          angular.element('.cke_button__doksoft_button, .cke_button__doksoft_font_awesome').show();
+          angular.element('.cke_button__doksoft_button_email').hide();
+        }
         ev.editor.on('key', function () {
           $scope.setDirty(true);
         });
