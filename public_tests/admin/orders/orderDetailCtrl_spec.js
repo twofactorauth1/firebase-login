@@ -34,9 +34,13 @@ describe('test orderDetailCtrl', function () {
     $scope = $rootScope.$new();
     $controller = _$controller_;
 
+    // example of mocking $stateParams
+    // http://stackoverflow.com/questions/21317377/injected-stateparams-and-state-into-jasmine-angular-js-test-getting-undefined
+
     $controller('OrderDetailCtrl', {
       '$rootScope': $rootScope,
-      '$scope': $scope
+      '$scope': $scope,
+      '$stateParams' : {},
     });
   }));
 
@@ -163,6 +167,64 @@ describe('test orderDetailCtrl', function () {
       // evaluate results
       console.log('------\n', $scope.filterProducts);
       //expect($scope.filterProducts.length).toBeLessThan($scope.products.length);
+    });
+  });
+
+  describe('$scope.getOrder', function() {
+    it('should populate a new order', function() {
+      // mock API responses
+      // so many API hits makes testing more challenging
+      $httpBackend.whenGET('/api/1.0/orders/').respond(perfectMembers);
+      $httpBackend.whenGET('/api/1.0/products').respond(perfectMembers);
+      $httpBackend.whenGET('/api/1.0/user/members').respond(perfectMembers);
+      $httpBackend.whenGET('/api/1.0/contact').respond(perfectMembers);
+      $httpBackend.whenGET('assets/i18n/en.json').respond(perfectMembers);
+
+      // test pre-conditions
+      // --- for NEW ORDER
+      expect($scope.order).not.toBeDefined();  // it is not wrong to already be defined
+      expect($scope.dataLoaded).toBe(false);
+
+      // execute function to be tested
+      $scope.getOrder();
+
+      // force execution of promises
+      $httpBackend.flush();
+
+      // test post-conditions
+      expect($scope.order.created).toBeDefined();
+      expect($scope.order.order_id).toBeDefined();  // TODO: does the value really need to be the length of the response?
+      expect($scope.order.status).toBeDefined();
+      expect($scope.order.status).toBe('pending_payment');  // TODO: this should be a constant
+      expect($scope.order.line_items).toBeDefined();
+      expect($scope.order.line_items.length).toBe(0);
+      expect($scope.dataLoaded).toBe(true);
+    });
+
+    it('should retrieve an existing order', function() {
+      //// TODO: mock router state
+      //$stateParams = { orderId: 123 };
+
+      // mock API responses
+      // so many API hits makes testing more challenging
+      var orderResponse = [
+        {
+          _id: 123,  // TODO: use value of $stateParams.orderId
+          locked: true,
+        },
+      ];
+      $httpBackend.whenGET('/api/1.0/orders/').respond(orderResponse);
+      $httpBackend.whenGET('/api/1.0/products').respond(perfectMembers);
+      $httpBackend.whenGET('/api/1.0/user/members').respond(perfectMembers);
+      $httpBackend.whenGET('/api/1.0/contact').respond(perfectMembers);
+      $httpBackend.whenGET('assets/i18n/en.json').respond(perfectMembers);
+      // execute function to be tested
+      $scope.getOrder();
+
+      // force execution of promises
+      $httpBackend.flush();
+
+      expect($scope.order.locked).toBe(orderResponse.locked);
     });
   });
 });
