@@ -4022,7 +4022,7 @@
   color: #1e497d;
 }
 #componentloader .payment-form-v1 .top-signup {
-  background: url('https://s3-us-west-2.amazonaws.com/indigenous-admin/background-pattern-v1.png') repeat;
+  background: url('//s3-us-west-2.amazonaws.com/indigenous-admin/background-pattern-v1.png') repeat;
 }
 #componentloader .payment-form-v1 .top-signup h1 {
   font-size: 55px;
@@ -4850,7 +4850,7 @@
   text-align: center;
 }
 #componentloader .customer-signup-v1 .certificates li {
-  background: url('https://s3-us-west-2.amazonaws.com/indigenous-components/badge.png') no-repeat;
+  background: url('//s3-us-west-2.amazonaws.com/indigenous-components/badge.png') no-repeat;
   width: 132px;
   height: 131px;
   padding: 10px;
