@@ -11,9 +11,6 @@
     <div ng-switch-when="coming-soon">
         <div coming-soon-component component="value"></div>
     </div>
-    <div ng-switch-when="email">
-        <div email-component component="value"></div>
-    </div>
     <div ng-switch-when="feature-block">
         <div feature-block-component component="value"></div>
     </div>
@@ -71,6 +68,32 @@
     <div ng-switch-when="video">
         <div video-component component="value"></div>
     </div>
+    
+    <!--
+    generic email type deprecated 09/2015 in favor
+    of using individual email components.
+    -->
+    <div ng-switch-when="email">
+        <div email-component component="value"></div>
+    </div>
+
+    <!-- email-specific components -->
+    <div ng-switch-when="email-header">
+        <div email-component component="value"></div>
+    </div>
+    <div ng-switch-when="email-1-col">
+        <div email-component component="value"></div>
+    </div>
+    <div ng-switch-when="email-2-col">
+        <div email-component component="value"></div>
+    </div>
+    <div ng-switch-when="email-3-col">
+        <div email-component component="value"></div>
+    </div>
+    <div ng-switch-when="email-footer">
+        <div email-component component="value"></div>
+    </div>
+
     <div ng-switch-default style="color: red; outline-color: red; padding: 10px">
         ERROR: could not find matching directive for component.type = {{value.type}}
     </div>

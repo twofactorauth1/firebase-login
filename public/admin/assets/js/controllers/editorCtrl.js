@@ -92,6 +92,22 @@
 
 
     /*
+     * email specific settings
+     */
+    $scope.isEmail = false;
+    $scope.setIsEmail = function(on) {
+      if (on) {
+        $scope.isEmail = true;
+        CKEDITOR.config.resize_enabled = false;
+        CKEDITOR.config.removePlugins = "doksoft_button, tableresize";
+        $scope.componentFilters = "";
+      } else {
+        $scope.isEmail = false;
+      }
+    }
+
+
+    /*
      * @ckeditor:instanceReady
      * -
      */
@@ -103,7 +119,9 @@
 
         if ($scope.isEmail) {
           //unable to access plugin from ckeditor api
-          angular.element('.cke_button__doksoft_font_awesome').hide();
+          //hide regular button and font awesome from email editor
+          angular.element('.cke_button__doksoft_button, .cke_button__doksoft_font_awesome').hide();
+          angular.element('.cke_button__doksoft_button_email').show();
         }
         else
           angular.element('.cke_button__doksoft_font_awesome').show();
@@ -465,7 +483,7 @@
       }
 
       if (_email) {
-        $scope.isEmail = true;
+        $scope.setIsEmail(true);
         $scope.page = _email;
         $scope.components = _email.components;        
         $scope.originalPage = angular.copy(_email);
@@ -602,7 +620,7 @@
 
 
     if ($location.search().email) {
-      $scope.isEmail = true;
+      $scope.setIsEmail(true);
       $scope.retrieveEmail($location.search().email);
     }
 
@@ -908,7 +926,9 @@
         _modal.resolve.accountShowHide = function () {
           return $scope.$parent.account.showhide;
         };
-
+        _modal.resolve.isEmail = function () {
+          return $scope.isEmail;
+        };
         _modal.resolve.testimonialSlider = function () {
           return $scope.testimonialSlider;
         };
@@ -1153,6 +1173,18 @@
         } else if (!data && error && error.message) {
           toaster.pop('error', error.message);
         }
+      });
+    };
+
+    $scope.sendTestEmail = function (_email) {
+      $scope.sendingEmail = true;
+      WebsiteService.sendTestEmail(_email, $scope.page, function (data) {
+        $scope.sendingEmail = false;
+        if (data && data[0] && data[0]._id) {
+          $scope.closeModal();
+          toaster.pop('success', 'Test Email sent successfully');
+        }
+        console.log('test send status ', data);
       });
     };
 

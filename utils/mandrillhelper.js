@@ -17,6 +17,7 @@ var contactDao = require('../dao/contact.dao');
 var accountDao = require('../dao/account.dao');
 var userDao = require('../dao/user.dao');
 var async = require('async');
+var juice = require('juice');
 
 var mandrillHelper =  {
 
@@ -233,16 +234,25 @@ var mandrillHelper =  {
                     self.log.debug('async: ' + async);
                     self.log.debug('ip_pool: ' + ip_pool);
                     self.log.debug('send_at: ' + send_at);
-
-
-                    mandrill_client.messages.send({"message": message, "async": async, "ip_pool": ip_pool, "send_at": send_at}, function(result) {
-                        self.log.debug('result >>> ', result);
-                        fn(null, result);
-                    }, function(e) {
-                        // Mandrill returns the error as an object with name and message keys
-                        self.log.error('A mandrill error occurred: ' + e.name + ' - ' + e.message);
-                        // A mandrill error occurred: Unknown_Subaccount - No subaccount exists with the id 'customer-123'
-                        fn(e, null);
+                    
+                    juice.juiceResources(message.html, {}, function(err, html){
+                        debugger;
+                        console.log('i am in you!')
+                        if (err) {
+                            self.log.error('A juice error occurred. Failed to set styles inline.')
+                            self.log.error(err);
+                            fn(err, null);
+                        }
+                        message.html = html;
+                        mandrill_client.messages.send({"message": message, "async": async, "ip_pool": ip_pool, "send_at": send_at}, function(result) {
+                            self.log.debug('result >>> ', result);
+                            fn(null, result);
+                        }, function(e) {
+                            // Mandrill returns the error as an object with name and message keys
+                            self.log.error('A mandrill error occurred: ' + e.name + ' - ' + e.message);
+                            // A mandrill error occurred: Unknown_Subaccount - No subaccount exists with the id 'customer-123'
+                            fn(e, null);
+                        });
                     });
                 });
             }
@@ -460,6 +470,7 @@ var mandrillHelper =  {
     },
 
     sendBasicEmail: function(fromAddress, fromName, toAddress, toName, subject, htmlContent, accountId, vars, emailId, fn) {
+        debugger;
         var self = this;
         self.log = log;
         self.log.debug('>> sendBasicEmail');
@@ -540,15 +551,26 @@ var mandrillHelper =  {
                 self.log.debug('ip_pool: ' + ip_pool);
                 self.log.debug('send_at: ' + send_at);
 
+                juice.juiceResources(message.html, {}, function(err, html){
 
-                mandrill_client.messages.send({"message": message, "async": async, "ip_pool": ip_pool, "send_at": send_at}, function(result) {
-                    self.log.debug('result >>> ', result);
-                    fn(null, result);
-                }, function(e) {
-                    // Mandrill returns the error as an object with name and message keys
-                    self.log.error('A mandrill error occurred: ' + e.name + ' - ' + e.message);
-                    // A mandrill error occurred: Unknown_Subaccount - No subaccount exists with the id 'customer-123'
-                    fn(e, null);
+                    // debugger;
+                    
+                    if (err) {
+                        self.log.error('A juice error occurred. Failed to set styles inline.')
+                        self.log.error(err);
+                        fn(err, null);
+                    }
+                    message.html = html;
+
+                    mandrill_client.messages.send({"message": message, "async": async, "ip_pool": ip_pool, "send_at": send_at}, function(result) {
+                        self.log.debug('result >>> ', result);
+                        fn(null, result);
+                    }, function(e) {
+                        // Mandrill returns the error as an object with name and message keys
+                        self.log.error('A mandrill error occurred: ' + e.name + ' - ' + e.message);
+                        // A mandrill error occurred: Unknown_Subaccount - No subaccount exists with the id 'customer-123'
+                        fn(e, null);
+                    });
                 });
             }
         });
