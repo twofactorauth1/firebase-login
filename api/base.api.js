@@ -417,14 +417,19 @@ _.extend(apiBase.prototype, {
             return fn(null, req.session.stripeAccessToken);
         } else {
             var accountId = parseInt(self.accountId(req));
-            accountDao.getStripeTokensFromAccount(accountId, function(err, creds){
-                if(creds && creds.accessToken) {
-                    req.session.stripeAccessToken = creds.accessToken;
-                    return fn(null, req.session.stripeAccessToken);
-                } else {
-                    return fn(null, null);
-                }
-            });
+            if(accountId !== appConfig.mainAccountID) {
+                accountDao.getStripeTokensFromAccount(accountId, function(err, creds){
+                    if(creds && creds.accessToken) {
+                        req.session.stripeAccessToken = creds.accessToken;
+                        return fn(null, req.session.stripeAccessToken);
+                    } else {
+                        return fn(null, null);
+                    }
+                });
+            } else {
+                return fn(null, null);
+            }
+
         }
     },
 

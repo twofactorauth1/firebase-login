@@ -4,7 +4,8 @@
 app.directive('testimonialsComponent', ['$timeout', function ($timeout) {
   return {
     scope: {
-      component: '='
+      component: '=',
+      control: '='
     },
     templateUrl: '/components/component-wrap.html',
     link: function (scope, element, attrs) {
@@ -12,30 +13,52 @@ app.directive('testimonialsComponent', ['$timeout', function ($timeout) {
       scope.draggable = false;
       scope.autoplay = false;
       scope.isEditing = true;
-      $(document).ready(function () {
-        $timeout(function () {
+
+      if(!scope.component.slider)
+      {
+        scope.component.slider = {
+          speed: 300, autoPlay: true, autoPlayInterval: 5000
+        };
+      }
+      scope.autoplay = false;
+
+      scope.$parent.$watch('ckeditorLoaded', function (newValue, oldValue) {
+        if(newValue){          
           scope.dataLoaded = true;
-        },1000);
+        }
       });
-      scope.deleteTestimonial = function (index) {
-        scope.dataLoaded = false;
-        console.log(index);
-        scope.component.testimonials.splice(index, 1);
+
+      var addRemoveTestimonials = function(index, add){
+        var testimonials = angular.copy(scope.component.testimonials);
+        if(add){
+          var newTestimonial = {
+            "img": "<img src='https://s3-us-west-2.amazonaws.com/indigenous-admin/default-user.png'/>",
+            "name": "First Last",
+            "site": "www.examplesite.com",
+            "text": "This is the testimonial."
+          };
+          testimonials.splice(index + 1, 0, newTestimonial);  
+        }
+        else{
+          testimonials.splice(index, 1); 
+        }   
+        scope.component.testimonials = testimonials;      
         $timeout(function () {
-          scope.dataLoaded = true;
+          scope.dataLoaded = !scope.dataLoaded;
         });
       };
+
+      scope.deleteTestimonial = function (index) {
+        console.log(index);
+        addRemoveTestimonials(index, false);
+      };
       scope.addTestimonial = function (index) {
-        scope.dataLoaded = false;
-        var newTestimonial = {
-          "img": "<img src='https://s3-us-west-2.amazonaws.com/indigenous-admin/default-user.png'/>",
-          "name": "First Last",
-          "site": "www.examplesite.com",
-          "text": "This is the testimonial."
-        };
-        scope.component.testimonials.splice(index + 1, 0, newTestimonial);
+        console.log(index);
+        addRemoveTestimonials(index, true);
+      };
+      scope.control.refreshSlider = function () {
         $timeout(function () {
-          scope.dataLoaded = true;
+          scope.dataLoaded = !scope.dataLoaded;
         });
       };
     }

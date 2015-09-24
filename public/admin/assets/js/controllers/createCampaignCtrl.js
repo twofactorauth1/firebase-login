@@ -68,7 +68,53 @@
       "components": [{
         "_id": CommonService.generateUniqueAlphaNumericShort(),
         "anchor": CommonService.generateUniqueAlphaNumericShort(),
-        "type": "email",
+        "type": "email-header",
+        "version": 1,
+        "txtcolor": "#888888",
+        "logo": "<h2>Logo Here</h2>",
+        "title": "<h2 class='center'>New Email</h2>",
+        "subtitle": "subtitle",
+        "text": "This is your new email",
+        "from_email": "info@indigenous.io",
+        "bg": {
+          "img": {
+            "url": "",
+            "width": null,
+            "height": null,
+            "parallax": false,
+            "blur": false
+          },
+          "color": ""
+        },
+        "visibility": true
+      },
+      {
+        "_id": CommonService.generateUniqueAlphaNumericShort(),
+        "anchor": CommonService.generateUniqueAlphaNumericShort(),
+        "type": "email-1-col",
+        "version": 1,
+        "txtcolor": "#888888",
+        "logo": "<h2>Logo Here</h2>",
+        "title": "<h2 class='center'>New Email</h2>",
+        "subtitle": "subtitle",
+        "text": "This is your new email",
+        "from_email": "info@indigenous.io",
+        "bg": {
+          "img": {
+            "url": "",
+            "width": null,
+            "height": null,
+            "parallax": false,
+            "blur": false
+          },
+          "color": ""
+        },
+        "visibility": true
+      },
+      {
+        "_id": CommonService.generateUniqueAlphaNumericShort(),
+        "anchor": CommonService.generateUniqueAlphaNumericShort(),
+        "type": "email-footer",
         "version": 1,
         "txtcolor": "#888888",
         "logo": "<h2>Logo Here</h2>",
@@ -163,6 +209,13 @@
         console.log('test send status ', data);
       });
     };
+
+    // $scope.setComponentsHTML = function (email) {
+    //   email.components = email.components.map(function (component) {
+    //     component.html = angular.element('#' + $scope.emailToSend.components[0]._id);
+    //     return component;
+    //   });
+    // };
 
     $scope.openModal = function (template) {
       $scope.modalInstance = $modal.open({
@@ -741,12 +794,14 @@
           $scope.goingTo = 'next';
           $scope.toTheTop();
           nextStep();
+          $scope.updateSendNow($scope.whenToSend);
         }
       },
       prev: function () {
         $scope.goingTo = 'prev';
         $scope.toTheTop();
         prevStep();
+        $scope.updateSendNow($scope.whenToSend);
       },
       goTo: function (i) {
         var valid = true;
@@ -757,6 +812,7 @@
         if (valid) {
           $scope.toTheTop();
           goToStep(i);
+          $scope.updateSendNow($scope.whenToSend);
         }
       },
       submit: function () {
@@ -804,14 +860,13 @@
                 temp_manual_recip.push(email.text);
               }
             });
-          }
-          $scope.newCampaignObj.temp_manual_recip = temp_manual_recip;
-
-          //add campaign
-          console.log('$scope.newCampaignObj ', $scope.newCampaignObj);
-          CampaignService.createCampaign($scope.newCampaignObj, function (_nemCampaign) {
-            window.location = _url;
-          });
+            $scope.newCampaignObj.temp_manual_recip = temp_manual_recip;
+            //add campaign
+            console.log('$scope.newCampaignObj ', $scope.newCampaignObj);
+            CampaignService.createCampaign($scope.newCampaignObj, function (_nemCampaign) {
+              window.location = _url;
+            });
+          }          
         })
       }
     };

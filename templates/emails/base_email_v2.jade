@@ -1,0 +1,248 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+html
+  head
+      meta(http-equiv='Content-Type', content='text/html; charset=UTF-8')
+      meta(property='og:title', content='*|MC:SUBJECT|*')
+      meta(name="viewport", content="width=device-width, initial-scale=1.0")
+      meta(name="viewport", content="width=device-width, initial-scale=1.0")
+      title *|MC:SUBJECT|*
+      meta(http-equiv="X-UA-Compatible",content="IE=edge")
+      //- link(rel='stylesheet', href='/public/admin/assets/css/styles.css')
+      //- link(rel='stylesheet', href='/public/admin/assets/css/frontend-admin.css')
+      link(rel='stylesheet', href='/public/admin/assets/css/email.css')
+      style(type="text/css").
+        body, div.body {
+          -webkit-text-size-adjust: 100% !important;
+          -ms-text-size-adjust: 100% !important;
+          background: #fff;
+          height:100% !important;
+          margin:0;
+          padding:0;
+          width:100% !important;
+        }
+
+        img {
+          -ms-interpolation-mode: bicubic;
+          max-width: 100%;
+          border:0 none;
+          height:auto;
+          line-height:100%;
+          outline:none;
+          text-decoration:none;
+        }
+
+        a img {
+          border: 0;
+        }
+
+        /* Removes unwanted gap with left/right aligned tables */
+        table, td {
+          mso-table-lspace: 0pt;
+          mso-table-rspace: 0pt;
+          border-collapse: collapse;
+        }
+
+        table {
+          /*display: table;*/
+        }
+
+        td {
+          /*display: table-cell;*/
+        }
+  body
+    div(class="body", style='width: 100%; -webkit-text-size-adjust: 100% !important; -ms-text-size-adjust: 100% !important; margin: 0; padding: 0;')
+      table(width='100%', align='center', cellpadding='0', cellspacing='0', border='0', style='border-collapse: collapse;')
+        tr
+          td
+            each component in components
+              if component.type === 'email' || component.type === 'email-header'
+                table(width='100%', align='center', cellpadding='0', cellspacing='0', border='0', style="border-collapse: collapse; background-image: url('"+component.emailBgImage+"');")
+                  tr
+                    td(align='center', width='100%')
+                      if component.logo
+                        table.device-width(align='center', width='640', cellpadding='0', cellspacing='0', border='0', style='border-collapse: collapse;background-color:'+component.bg.color+';margin-top: 45px;')
+                          tr
+                            td.wrapper(width='100%')
+                                table.device-width(width='640', cellpadding='0', cellspacing='0', border='0', style='border-collapse: collapse;')
+                                  tr
+                                    td.device-width(width='100%', style='padding-top: 30px;')
+                                      table.device-width(width='100%', cellpadding='0', cellspacing='0', border='0', style='border-collapse: collapse;')
+                                        tr
+                                          td.device-width(width='100%', style='text-align: center; padding-bottom: 15px; padding-left:20px;padding-right:20px')
+                                            div !{component.logo}
+                                      hr
+                      if component.title
+                        table.device-width(width='640', align='center', cellpadding='0', cellspacing='0', border='0', style='border-collapse: collapse;')
+                          tr
+                            td(align='center', width='100%')
+                              table.device-width(align='center', width='100%', cellpadding='0', cellspacing='0', border='0', style='border-collapse: collapse;')
+                                tr
+                                  td.wrapper(width='100%', style='padding-left: 20px; padding-right: 20px; padding-top: 45px; padding-bottom: 45px;')
+                                    div !{component.title}
+
+              if component.type === 'email-1-col'
+                | <table class="email-component-container {{component.type}}-v{{component.version}}" align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
+                |     <tr>
+                |         <td>
+                |             <table align="center" border="0" cellpadding="0" cellspacing="0" width="640" id="templateColumns" style="background-color: !{component.bg.color};">
+                |                 <tr>
+                |                     <td align="center" valign="top" width="100%" class="templateColumnContainer">
+                |                         <table border="0" cellpadding="10" cellspacing="0" width="100%">
+                |                             <tr>
+                |                                 <td valign="top" class="leftColumnContent">
+                |                                     !{component.title}
+                |                                 </td>
+                |                             </tr>
+                |                         </table>
+                |                     </td>
+                |                 </tr>
+                |             </table>
+                |         </td>
+                |     </tr>
+                |    <tr>
+                |        <td>
+                |            <table align="center" border="0" cellpadding="0" cellspacing="0" width="640" id="templateColumns" style="background-color: !{component.bg.color};">              
+                |                <tr>
+                |                    <td align="center" width="100%" class="templateColumnContainer">
+                |                        <table border="0" cellpadding="10" cellspacing="0" width="100%">
+                |                            <tr>
+                |                                <td valign="top" class="leftColumnContent">
+                |                                   !{component.text}
+                |                                </td>
+                |                            </tr>
+                |                        </table>
+                |                    </td>
+                |                </tr>
+                |            </table>
+                |             <hr>
+                |        </td>
+                |    </tr>
+                | </table>
+
+              if component.type === 'email-2-col'
+                | <table class="email-component-container {{component.type}}-v{{component.version}}" align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
+                |     <tr>
+                |         <td>
+                |             <table align="center" border="0" cellpadding="0" cellspacing="0" width="640" id="templateColumns" style="background-color: !{component.bg.color};">
+                |                 <tr>
+                |                     <td align="center" valign="top" width="100%" class="templateColumnContainer">
+                |                         <table border="0" cellpadding="10" cellspacing="0" width="100%">
+                |                             <tr>
+                |                                 <td valign="top" class="leftColumnContent">
+                |                                     !{component.title}
+                |                                 </td>
+                |                             </tr>
+                |                         </table>
+                |                     </td>
+                |                 </tr>
+                |             </table>
+                |         </td>
+                |     </tr>
+                |     <tr>
+                |         <td>
+                |             <table align="center" border="0" cellpadding="0" cellspacing="0" width="640" id="templateColumns" style="background-color: !{component.bg.color};">
+                |                 <tr>
+                |                     <td align="center" valign="top" width="50%" class="templateColumnContainer">
+                |                         <table border="0" cellpadding="10" cellspacing="0" width="100%">
+                |                             <tr>
+                |                                 <td valign="top" class="leftColumnContent">
+                |                                     !{component.text1}
+                |                                 </td>
+                |                             </tr>
+                |                         </table>
+                |                     </td>
+                |                     <td align="center" valign="top" width="50%" class="templateColumnContainer">
+                |                         <table border="0" cellpadding="10" cellspacing="0" width="100%">
+                |                             <tr>
+                |                                 <td valign="top" class="rightColumnContent">
+                |                                     !{component.text2}
+                |                                 </td>
+                |                             </tr>
+                |                         </table>
+                |                     </td>
+                |                 </tr>
+                |             </table>
+                |             <hr>
+                |         </td>
+                |     </tr>
+                | </table>
+
+              if component.type === 'email-3-col'
+                | <table class="email-component-container {{component.type}}-v{{component.version}}" align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
+                |     <tr>
+                |         <td>
+                |             <table align="center" border="0" cellpadding="0" cellspacing="0" width="640" id="templateColumns" style="background-color: !{component.bg.color};">
+                |                 <tr>
+                |                     <td align="center" valign="top" width="100%" class="templateColumnContainer">
+                |                         <table border="0" cellpadding="10" cellspacing="0" width="100%">
+                |                             <tr>
+                |                                 <td valign="top" class="leftColumnContent">
+                |                                     !{component.title}
+                |                                 </td>
+                |                             </tr>
+                |                         </table>
+                |                     </td>
+                |                 </tr>
+                |             </table>
+                |         </td>
+                |     </tr>
+                |     <tr>
+                |         <td>
+                |             <table align="center" border="0" cellpadding="0" cellspacing="0" width="640" id="templateColumns" style="background-color: !{component.bg.color};">
+                |                 <tr>
+                |                     <td align="center" valign="top" width="33%" class="templateColumnContainer">
+                |                         <table border="0" cellpadding="10" cellspacing="0" width="100%">
+                |                             <tr>
+                |                                 <td valign="top" class="leftColumnContent">
+                |                                     !{component.text1}
+                |                                 </td>
+                |                             </tr>
+                |                         </table>
+                |                     </td>
+                |                     <td align="center" valign="top" width="33%" class="templateColumnContainer">
+                |                         <table border="0" cellpadding="10" cellspacing="0" width="100%">
+                |                             <tr>
+                |                                 <td valign="top" class="centerColumnContent">
+                |                                     !{component.text2}
+                |                                 </td>
+                |                             </tr>
+                |                         </table>
+                |                     </td>
+                |                     <td align="center" valign="top" width="33%" class="templateColumnContainer">
+                |                         <table border="0" cellpadding="10" cellspacing="0" width="100%">
+                |                             <tr>
+                |                                 <td valign="top" class="rightColumnContent">
+                |                                     !{component.text3}
+                |                                 </td>
+                |                             </tr>
+                |                         </table>
+                |                     </td>
+                |                 </tr>
+                |             </table>
+                |             <hr>
+                |         </td>
+                |     </tr>
+                | </table>
+
+              if component.type === 'email-footer'
+                | <table class="email-component-container {{component.type}}-v{{component.version}}" align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
+                |     <tr>
+                |         <td>
+                |             <table align="center" border="0" cellpadding="0" cellspacing="0" width="640" id="templateColumns" style="background-color: !{component.bg.color};">
+                |                 <tr>
+                |                     <td align="center" width="100%" class="templateColumnContainer">
+                |                         <table border="0" cellpadding="10" cellspacing="0" width="100%">
+                |                             <tr>
+                |                                 <td valign="top" class="leftColumnContent">
+                |                                    !{component.text}
+                |                                 </td>
+                |                             </tr>
+                |                         </table>
+                |                     </td>
+                |                 </tr>
+                |             </table>
+                |         </td>
+                |     </tr>
+                | </table>
+
+

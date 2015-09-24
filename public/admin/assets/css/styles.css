@@ -2408,6 +2408,9 @@ ul.sub-menu li ul.sub-menu li ul.sub-menu li a {
 .min-height-350 {
   min-height: 350px !important;
 }
+.height-50 {
+  height: 50px !important;
+}
 .height-155 {
   height: 155px !important;
 }
@@ -2922,6 +2925,11 @@ a.text-light:hover {
 }
 .cursor-pointer {
   cursor: pointer;
+}
+.modal-overflow-content {
+  /* <- this could be deprecated when modal layout is more flexible */
+  max-height: 400px;
+  overflow: auto;
 }
 /* ---------------------------------------------------------------------- */
 /* Dropdown Menu
@@ -11895,6 +11903,10 @@ table.grid thead tr {
   font-weight: 600;
   color: #ffffff;
 }
+.pricing-table .plan li.plan-price h3 .fa,
+.pricing-table .plan li.plan-price h3 span {
+  display: inline-block;
+}
 .pricing-table .plan li.plan-price h3 .price-cents {
   font-size: 50%;
   vertical-align: super;
@@ -11911,6 +11923,10 @@ table.grid thead tr {
   margin-top: 10px;
   border-top: 0;
 }
+.pricing-table .plan .btn.deselect-plan {
+  display: none;
+  margin-top: 0;
+}
 .pricing-table .plan.featured {
   -webkit-transform: scale(1.05);
   -ms-transform: scale(1.05);
@@ -11919,6 +11935,20 @@ table.grid thead tr {
 }
 .pricing-table .plan.featured .plan-name {
   background: #94929b;
+}
+.pricing-table.selected {
+  box-shadow: 0 0 1px 3px #46b8da;
+}
+.pricing-table.selected .btn.select-plan {
+  display: none;
+}
+.pricing-table.selected .btn.deselect-plan {
+  display: inline-block;
+  background-color: #ddd;
+  border-color: #ddd;
+}
+.pricing-table.selected .btn.deselect-plan:hover {
+  background-color: #ddd!important;
 }
 .pricing-green .plan li strong {
   color: #c82e29;
@@ -12919,14 +12949,14 @@ fieldset[disabled] .btn-vimeo-square.active {
   display: none;
   visibility: none;
 }
-#componentloader .fragment.email .cn-wrapper li {
+/*#componentloader .fragment.email .cn-wrapper li {
   display: none;
 }
 #componentloader .fragment.email .cn-wrapper li:first-child {
   display: block!important;
   -webkit-transform: rotate(75deg) skew(60deg) !important;
   transform: rotate(75deg) skew(60deg) !important;
-}
+}*/
 #componentloader .fragment:hover .component-inner,
 #componentloader .fragment:hover .bg.cover {
   -webkit-box-shadow: inset 0px 0px 0px 2px #ffa500;
@@ -13185,6 +13215,9 @@ fieldset[disabled] .btn-vimeo-square.active {
 #editor-toolbar .cke_chrome a.cke_button .cke_button__doksoft_button_icon:before {
   content: "\f0c8";
 }
+#editor-toolbar .cke_chrome a.cke_button .cke_button__doksoft_button_email_icon:before {
+  content: "\f0c8";
+}
 #editor-toolbar .cke_chrome a.cke_button .cke_button__doksoft_font_awesome_icon:before {
   content: "\f024";
 }
@@ -13316,9 +13349,54 @@ div[class^="spacing-"] {
   position: relative;
   z-index: 11 !important;
 }
+.inline-table-cell {
+  display: table-cell;
+}
 /* ---------------------------------------------------------------------- */
 /*  Billing
 /* ---------------------------------------------------------------------- */
+.billing .btn.paynow {
+  text-align: center;
+  display: none;
+}
+.billing .btn.paynow.active {
+  display: block;
+}
+.billing .no-pad-lr {
+  padding-left: 0px;
+  padding-right: 0px;
+}
+.billing .vert-center {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+.billing .pricing-table {
+  background-color: white;
+}
+.billing .fa-spinner {
+  font-size: 3em;
+}
+#card-container {
+  margin-bottom: 30px;
+}
+#card-container .jp-card-container {
+  transform: scale(1) !important;
+}
+@media (max-width: 480px) {
+  #card-container .jp-card-container {
+    transform: scale(0.75) translateX(-25%) !important;
+    position: relative;
+    left: 20%;
+  }
+}
+@media (max-width: 480px) {
+  #card-container {
+    margin-bottom: 0;
+  }
+  .billing-credit-card > .row:last-child {
+    margin-bottom: 100px;
+  }
+}
 .view-transaction-modal .paid {
   margin: 0 auto 15px;
   display: block;
@@ -13465,6 +13543,9 @@ div[class^="spacing-"] {
 .customers table.grid thead th {
   width: 11.1%;
   float: left;
+}
+.customers .two-letter-label {
+  display: inline-block;
 }
 .ui-select-multiple.ui-select-bootstrap input.ui-select-search:not([placeholder='']) {
   max-width: 100% !important;
@@ -13759,6 +13840,7 @@ a.editable-error:focus {
   position: relative;
   top: 0;
   left: 0;
+  z-index: 1;
 }
 #media-manager-modal .filemanager-options hr {
   margin: 10px 0;
@@ -13782,17 +13864,18 @@ a.editable-error:focus {
   display: table;
   width: 100%;
   height: 150px;
-}
-#media-manager-modal .filemanager .thmb-prev > div {
-  display: table-cell;
-  vertical-align: middle;
-  text-align: center;
-  width: 100%;
+  position: relative;
 }
 #media-manager-modal .filemanager .thmb-prev img {
   max-height: 150px;
   width: auto;
   max-width: 100%;
+  bottom: 0;
+  left: 0;
+  margin: auto;
+  position: absolute;
+  right: 0;
+  top: 0;
 }
 #media-manager-modal label[for="upload_image"] {
   margin-bottom: 0 !important;
@@ -14067,6 +14150,8 @@ tags-input.ti-input-sm .tags .input,
   height: 60px;
   background-size: cover;
   margin-bottom: 15px;
+  max-width: 575px;
+  /* <- image alignment with favicons gets distorted at greater width */
 }
 .sitesettings .favicon-image .pagetitle {
   margin-left: 94px;

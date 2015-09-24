@@ -8,6 +8,6 @@ angular.module('mainApp').directive("elem", function ($timeout) {
     scope: {
       ngModel: '=',
     },
-    template: '<div ng-bind-html="ngModel | unsafe"></div>'
+    template: '<div class="element-wrap" ng-bind-html="ngModel | unsafe"></div>'
   };
 });

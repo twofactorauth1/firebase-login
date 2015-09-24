@@ -13,7 +13,11 @@ var ns = require('../utils/namespaces'),
     orderManager = require('../orders/order_manager'),
     contactDao = require('../dao/contact.dao'),
     campaignManager = require('../campaign/campaign_manager'),
-    userActivityManager = require('../useractivities/useractivity_manager');
+    userActivityManager = require('../useractivities/useractivity_manager'),
+    userManager = require('../dao/user.manager'),
+    contactDao = require('../dao/contact.dao'),
+    appConfig = require('../configs/app.config');
+
 
 var accountActivity = {
 
@@ -21,8 +25,13 @@ var accountActivity = {
 
     runReport: function(callback) {
         var self = this;
-        var reportAry = [109, 45, 97, 79, 21, 37, 38, 12, 15, 126, 129, 130, 132, 133, 134, 135, 136, 137,
-                            138, 139, 140, 141, 142, 158];
+        var reportAry = [109, 45, 97, 79, 21, 80, 37, 38, 12, 15, 126, 129, 130, 132, 133, 134, 135, 136, 137,
+                            138, 139, 140, 141, 142, 158, 161,169,170,171,172,173,174, 175,176,177,178,179,
+                            181,182,183,184,185,186,187,188,189,190,191,192,193,194,195,196,197,198,199,
+                            200,201,202,203,204,205,206,207,208,209,210,211,212,213,217,218,219,220,221,222,
+                            223,224,225,226,227,229,232,233,234,235,236,237,238,239,241,242,243,244,245,246,
+                            247,248,249,250,251,252,253,254,255,256,257,258,259,260,261,262,263,264,265,266,
+                            267,268,269,270,271,272,273,274,275,276,277,278,279,280,281,282,283,284,285,286];
         var activityAry = [];
         async.each(reportAry, function(accountId, cb){
             self.getActivityForAccount(accountId, function(err, activity){
@@ -32,16 +41,41 @@ var accountActivity = {
                 cb();
             });
         }, function done(err){
-            self.log.debug('AccountId,Name,Custom Domain,Signup Date,Trial Days Remaining,Last Activity,Pointed Domain,Pages Created,Posts Created,Social Integrations,Stripe Integration,' +
-                'Products,Orders,Contacts,Campaigns');
+            //first, last, email, city, state, country, Day 11, Day 14
+            self.log.debug('AccountId,First,Last,email,City,State,Country,Phone,Name,Custom Domain,Signup Date,' +
+                'Trial Days Remaining,Day11,Day14,Last Activity,Pointed Domain,Pages Created,Posts Created,' +
+                'Social Integrations,Stripe Integration,Products,Orders,Contacts,Campaigns');
 
             var sortedAry = _.sortBy(activityAry, 'accountId');
+            var csv = "";
             _.each(sortedAry, function(activity){
-                self.log.debug(activity.accountId + ',' + activity.name + ',' + activity.customDomain + ',' + activity.signupDate + ',' +
-                    activity.trialDaysRemaining + ',' + activity.lastActivity + ',' + activity.pointedDomain +',' + activity.pages + ',' + activity.posts +',' +
-                    activity.socialIntegrations + ',' +activity.stripeIntegrated + ',' + activity.products +',' +
-                    activity.orders + ',' + activity.contacts + ',' + activity.campaigns);
+                csv += '\n' + activity.accountId + ',' +
+                    activity.firstName + ',' +
+                    activity.lastName + ',' +
+                    activity.email + ',' +
+                    activity.city + ',' +
+                    activity.state + ',' +
+                    activity.country + ',' +
+                    activity.phone + ',' +
+                    activity.name + ',' +
+                    activity.customDomain + ',' +
+                    activity.signupDate + ',' +
+                    activity.trialDaysRemaining + ',' +
+                    activity.conversionDate + ',' +
+                    activity.day11 + ',' +
+                    activity.day14 + ',' +
+                    activity.lastActivity + ',' +
+                    activity.pointedDomain +',' +
+                    activity.pages + ',' +
+                    activity.posts +',' +
+                    activity.socialIntegrations + ',' +
+                    activity.stripeIntegrated + ',' +
+                    activity.products +',' +
+                    activity.orders + ',' +
+                    activity.contacts + ',' +
+                    activity.campaigns;
             });
+            self.log.debug(csv);
             callback();
         });
         //self.getActivityForAccount(109, callback);
@@ -206,7 +240,71 @@ var accountActivity = {
                 } else {
                     activity.pointedDomain = 'N';
                 }
-                cb(null);
+
+                if(account.get('business.phones') !== '') {
+                    var business = account.get('business');
+                    var phoneAry = business.phones;
+                    activity.phone = '';
+
+                    if(phoneAry && phoneAry.length > 0) {
+                        activity.phone = phoneAry[0].number;
+                    }
+                }
+
+                activity.day11 = moment(activity.signupDate).add(11, 'days').format('MM/DD/YYYY');
+                activity.day14 = endDate.format('MM/DD/YYYY');
+                var billing = account.get('billing');
+                if(billing.conversionDate) {
+                    activity.conversionDate = moment(billing.conversionDate).format('MM/DD/YYYY HH:mm');
+                } else {
+                    activity.conversionDate = '';
+                }
+                cb(null, account);
+            },
+            function getUserForAccount(account, cb) {
+                userManager.getUserAccounts(account.id(), function(err, users){
+                    if(err) {
+                        self.log.error('Error fetching user accounts:', err);
+                        cb(err);
+                    } else {
+                        //find the non-admin user
+                        var sortedUsers = _.sortBy(users, function(user){return user.id();});
+                        var targetUser = _.last(sortedUsers);
+                        self.log.debug('The target user for account [' + account.id() + '] is [' + targetUser.get('username') + ']' );
+                        cb(null, account, targetUser);
+                    }
+                });
+            },
+            function getContactForAccount(account, user, cb) {
+                contactDao.getContactByEmailAndAccount(user.get('username'), appConfig.mainAccountID, function(err, contact){
+                    if(err) {
+                        self.log.error('Error fetching contacts: ', err);
+                        cb(err);
+                    } else {
+                        self.log.debug('Found this contact', contact);
+                        if(contact) {
+                            self.log.debug('contact name: ' + contact.get('first') + ' ' + contact.get('last'));
+                            activity.firstName = contact.get('first');
+                            activity.lastName = contact.get('last');
+                            try {
+                                var address = contact.get('details')[0].addresses[0];
+                            } catch(exception) {
+                                //whatever
+                            }
+
+                            if(address) {
+                                activity.city = address.city;
+                                activity.state = address.state;
+                                activity.zip = address.zip;
+                                activity.country = address.country;
+                            }
+                        }
+                        self.log.debug('user name: ' + user.get('first') + ' ' + user.get('last'));
+                        activity.email = user.get('username');
+
+                        cb();
+                    }
+                });
             }
         ], function done(err){
             self.log.info('Activity:', activity);

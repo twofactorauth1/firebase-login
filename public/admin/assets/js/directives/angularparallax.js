@@ -40,18 +40,7 @@ angular.module('angular-parallax', [
     link: function($scope, elem, attrs) {
       var setPosition = function () {
          // Fix for smaller resolutions
-        var win_width = $(window).width();
-        var iOS = ( navigator.userAgent.match(/(iPad|iPhone|iPod)/g) ? true : false );
-
-        if(win_width < 750 || iOS)
-          $scope.parallaxRatio = 0.02;
-        var yoffset = 0;
-        if ($window.pageYOffset == 0){
-          yoffset = 10;
-        }
-        var calcValY = (pos(elem[0]) - $window.pageYOffset) * ($scope.parallaxRatio ? $scope.parallaxRatio : 1.1 );
-        calcValY = calcValY - yoffset;
-        //elem.css('background-position-y', calcValY + "px");
+        var calcValY = 0;
         var calcValX = "50%";
         if($scope.parallaxXPosition)
         {
@@ -68,7 +57,26 @@ angular.module('angular-parallax', [
             calcValX = "100%";
           }
         }
-        elem.css('background-position', calcValX + " " + calcValY + "px");
+        if(elem.hasClass("parallax")){
+          var win_width = $(window).width();
+          var iOS = ( navigator.userAgent.match(/(iPad|iPhone|iPod)/g) ? true : false );
+
+          if(win_width < 750 || iOS)
+            $scope.parallaxRatio = 0.02;
+          var yoffset = 0;
+          if ($window.pageYOffset == 0){
+            yoffset = 10;
+          }
+          calcValY = (pos(elem[0]) - $window.pageYOffset) * ($scope.parallaxRatio ? $scope.parallaxRatio : 1.1 );
+          calcValY = calcValY - yoffset;          
+          elem.css('background-position', calcValX + " " + calcValY + "px"); 
+          elem.css('background-attachment', "fixed");         
+        }
+        else
+        {
+          elem.css('background-position', calcValX + " " + calcValY + "px"); 
+          elem.css('background-attachment', "inherit");
+        }
       };
 
       var pos = function(obj){

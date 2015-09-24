@@ -11,11 +11,30 @@
     // 2. getUsers
     // 3. getProducts
     // 4. get Order
-    var _orderConstant = {};
-    _orderConstant = orderConstant;
-    if (_orderConstant) {
-      $scope.FailedStatus = _orderConstant.order_status.FAILED;
+    if (orderConstant) {
+      $scope.FailedStatus = orderConstant.order_status.FAILED;
     }
+
+    /*
+     * @dateOptions
+     * -
+     */
+
+    $scope.dateOptions = {
+      formatYear: 'yy',
+      startingDay: 1
+    };
+
+    /*
+     * @getCustomers
+     * get all customers to for customer select
+     */
+
+    CustomerService.getCustomers(function (customers) {
+      console.log('customers >>> ', customers);
+      $scope.customers = customers;
+      $scope.getUsers();
+    });
 
     /*
      * @closeModal
@@ -41,17 +60,6 @@
     $scope.formatOrderStatus = function (status) {
       return OrderService.formatOrderStatus(status);
     };
-
-    /*
-     * @getCustomers
-     * get all customers to for customer select
-     */
-
-    CustomerService.getCustomers(function (customers) {
-      console.log('customers >>> ', customers);
-      $scope.customers = customers;
-      $scope.getUsers();
-    });
 
     /*
      * @getUsers
@@ -371,16 +379,6 @@
       }
 
       return '';
-    };
-
-    /*
-     * @dateOptions
-     * -
-     */
-
-    $scope.dateOptions = {
-      formatYear: 'yy',
-      startingDay: 1
     };
 
     /*

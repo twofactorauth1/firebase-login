@@ -336,7 +336,34 @@ app.constant('productConstant', {
         data: "VIRTUAL"
       }
     ]
+  },
+  product_status_types:{
+    BACKORDER: 'backorder',
+    INACTIVE: 'inactive',
+    ACTIVE: 'active',
+    AUTOINACTIVE: 'auto_inactive',
+
+    dp: [{
+        label: "Backorder",
+        data: "backorder"
+      }, {
+        label: "Inactive",
+        data: "inactive"
+      }, {
+        label: "Active",
+        data: "active"
+      }, {
+        label: "Auto Inactive",
+        data: "auto_inactive"
+      }
+    ]
   }
+});
+
+app.constant('accountConstant', {
+  plan_types: {
+    TRIAL: 'NO_PLAN_ARGUMENT',
+  },
 });
 
 app.constant('userConstant', {
@@ -398,31 +425,55 @@ app.constant('userConstant', {
     LEAD: 'ld',
     OTHER: "ot",
     NOTAG: "nt",
+    CANCELLED_CUSTOMER: "cc",
+    CANCELLED_TRIAL: "ct",
+    CHEATSHEET_LEAD: "cs",
+    EXPIRED_TRIAL: "ex",
+    TRIAL_CUSTOMER: "tc",
+    AFFILIATE: "af",
 
     dp: [{
-      label: "Customer",
-      data: "cu"
+      label: "Admin",
+      data: "ad"
+    }, {
+      label: "Affiliate",
+      data: "af"
+    }, {
+      label: "Cancelled Customer",
+      data: "cc"
+    }, {
+      label: "Cancelled Trial Customer",
+      data: "ct"
+    }, {
+      label: "Cheatsheet Lead",
+      data: "cs"
     }, {
       label: "Colleague",
       data: "co"
     }, {
-      label: "Friend",
-      data: "fr"
+      label: "Customer",
+      data: "cu"
     }, {
-      label: "Member",
-      data: "mb"
+      label: "Expired Trial Customer",
+      data: "ex"
     }, {
       label: "Family",
       data: "fa"
     }, {
-      label: "Admin",
-      data: "ad"
+      label: "Friend",
+      data: "fr"
     }, {
-      label: 'Lead',
-      data: 'ld'
+      label: "Lead",
+      data: "ld"
+    }, {
+      label: "Member",
+      data: "mb"
     }, {
       label: "Other",
       data: "ot"
+    }, {
+      label: "Trial Customer",
+      data: "tc"
     }, {
       label: "No Tag",
       data: "nt"
@@ -522,6 +573,7 @@ app.constant('JS_REQUIRES', {
     //*** Controllers
     'dashboardCtrl': 'assets/js/controllers/dashboardCtrl.js',
     'helpTopicsCtrl': 'assets/js/controllers/helpTopicsCtrl.js',
+    'newHelpTopicsCtrl': 'assets/js/controllers/newHelpTopicsCtrl.js',
     'gettingStartedCtrl': 'assets/js/controllers/gettingStartedCtrl.js',
     'pagesCtrl': 'assets/js/controllers/pagesCtrl.js',
     'siteAnalyticsCtrl': 'assets/js/controllers/siteAnalyticsCtrl.js',
@@ -540,6 +592,7 @@ app.constant('JS_REQUIRES', {
     'profileBusinessCtrl': 'assets/js/controllers/profileBusinessCtrl.js',
     'profilePersonalCtrl': 'assets/js/controllers/profilePersonalCtrl.js',
     'templatesCtrl': 'assets/js/controllers/templatesCtrl.js',
+    'manageTopicsCtrl': 'assets/js/controllers/manageTopicsCtrl.js',
     'integrationsCtrl': 'assets/js/controllers/integrationsCtrl.js',
     'orderDetailCtrl': 'assets/js/controllers/orderDetailCtrl.js',
     'settingsCtrl': 'assets/js/controllers/settingsCtrl.js',
@@ -620,9 +673,9 @@ app.constant('JS_REQUIRES', {
     name: 'skeuocard',
     files: ['../js/libs/skeuocard/lib/js/jquery.card.js']
   }, {
-    name: 'angularBootstrapNavTree',
-    files: ['../js/libs/angular-bootstrap-nav-tree/dist/abn_tree_directive.js', '../js/libs/angular-bootstrap-nav-tree/dist/abn_tree.css']
-  }, {
+      name: 'angularBootstrapNavTree',
+      files: ['../js/libs/angular-bootstrap-nav-tree/dist/abn_tree_directive.js', '../js/libs/angular-bootstrap-nav-tree/dist/abn_tree.css']
+    }, {
     name: 'angular-ladda',
     files: ['../js/libs/angular-ladda/dist/angular-ladda.min.js']
   }, {
@@ -696,7 +749,7 @@ app.constant('JS_REQUIRES', {
     files: ['../js/libs/angular-daterangepicker/js/angular-daterangepicker.min.js', '../js/libs/bootstrap-daterangepicker/daterangepicker.js', '../js/libs/bootstrap-daterangepicker/daterangepicker-bs3.css']
   }, {
     name: 'ui.sortable',
-    files: ['../js/libs/Sortable/Sortable.min.js', '../js/libs/Sortable/ng-sortable.js', '../js/libs_misc/ng-sortable/dist/ng-sortable.min.css']
+    files: ['../js/libs/Sortable/Sortable.min.js', '../js/libs/Sortable/ng-sortable.js']
   }, {
     name: 'angular-slider',
     files: ['../js/libs/angularjs-slider/dist/rzslider.min.js', '../js/libs/angularjs-slider/dist/rzslider.min.css']
@@ -745,5 +798,8 @@ app.constant('JS_REQUIRES', {
   }, {
     name: 'spectrum',
     files: ['../js/libs/spectrum/spectrum.js', '../js/libs/angular-spectrum-colorpicker/dist/angular-spectrum-colorpicker.min.js', '../js/libs/spectrum/spectrum.css'],
+  }, {
+    name: 'angular-resizable',
+    files: ['../js/libs/angular-resizable/angular-resizable.min.js', '../js/libs/angular-resizable/angular-resizable.min.css'],
   }]
 });

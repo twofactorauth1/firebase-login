@@ -86,6 +86,27 @@
       }]
     };
 
+    $scope.setDirty = function(is_dirty){
+      $scope.isDirty.dirty = is_dirty;      
+    }
+
+
+    /*
+     * email specific settings
+     */
+    $scope.isEmail = false;
+    $scope.setIsEmail = function(on) {
+      if (on) {
+        $scope.isEmail = true;
+        CKEDITOR.config.resize_enabled = false;
+        CKEDITOR.config.removePlugins = "doksoft_button, tableresize";
+        $scope.componentFilters = "";
+      } else {
+        $scope.isEmail = false;
+      }
+    }
+
+
     /*
      * @ckeditor:instanceReady
      * -
@@ -95,8 +116,20 @@
     $scope.activeEditor = null;
     $scope.activateCKeditor = function () {
       CKEDITOR.on("instanceReady", function (ev) {
+
+        if ($scope.isEmail) {
+          //unable to access plugin from ckeditor api
+          //hide regular button and font awesome from email editor
+          angular.element('.cke_button__doksoft_button, .cke_button__doksoft_font_awesome').hide();
+          angular.element('.cke_button__doksoft_button_email').show();
+        }
+        else
+          angular.element('.cke_button__doksoft_font_awesome').show();
         ev.editor.on('key', function () {
-          $scope.isDirty.dirty = true;
+          $scope.setDirty(true);
+        });
+        ev.editor.on('change', function () {
+          $scope.setDirty(true);
         });
         if (!$scope.activeEditor)
           $scope.activeEditor = ev.editor;
@@ -163,7 +196,7 @@
         type: 'contact-us'
       });
       if ($scope.contactComponentType) {
-        GeocodeService.validateAddress($scope.contactComponentType.location, function (data) {
+        GeocodeService.validateAddress($scope.contactComponentType.location, null, function (data) {
           if (!data) {
             toaster.pop('warning', 'Address could not be found for contact component. Please enter valid address');
             $scope.saveLoading = false;
@@ -190,6 +223,28 @@
       });
     }
 
+    $scope.redirectAfterSave = function(redirect_url, reload){    
+    if(redirect_url){
+        SweetAlert.swal("Saved!", "Your edits were saved to the page.", "success");
+        window.location = redirect_url;
+        if (reload) {
+          window.location.reload();
+        }
+      }
+    }
+
+    $scope.redirectWithoutSave = function(redirect_url, show_alert, reload){
+    $scope.changesConfirmed = true;
+    if(redirect_url){       
+          if(show_alert)
+              SweetAlert.swal("Cancelled", "Your edits were NOT saved.", "error");
+          window.location = redirect_url;
+          if (reload) {
+            window.location.reload();
+          }
+      }
+    }
+
     /*
      * @savePage
      * -
@@ -200,10 +255,10 @@
     $scope.isDirty = {};
     $scope.blogImage = {};
     $scope.blogImage.featured_image = false;
-    $scope.savePage = function () {
+    $scope.savePage = function (redirect_url, reload) {
       $scope.saveLoading = true;
-      $scope.isDirty.dirty = false;
-
+      $scope.setDirty(false);
+      $scope.changesConfirmed = true;
       if ($scope.isSinglePost) {
         $scope.validateEditPost($scope.blog.post);
         if (!$scope.editPostValidated) {
@@ -223,12 +278,14 @@
             toaster.pop('error', "Post URL " + post_data.post_url, "Already exists");
           } else {
             WebsiteService.updatePost($scope.page._id, post_data._id, post_data, function (data) {
-              if (post_data.post_url !== $scope.originalPost.post_url) {
-                angular.copy(post_data, $scope.originalPost);
+              if (post_data.post_url !== $scope.originalPost.post_url) {               
                 $location.search('posthandle', post_data.post_url);
               }
               $scope.saveLoading = false;
-              toaster.pop('success', "Post Saved", "The " + $filter('htmlToPlaintext')($scope.blog.post.post_title) + " post was saved successfully.");
+              $scope.blog.post = data;
+              angular.copy($scope.blog.post, $scope.originalPost);
+              toaster.pop('success', "Post Saved", "The " + $filter('htmlToPlaintext')($scope.blog.post.post_title) + " post was saved successfully.");              
+              $scope.redirectAfterSave(redirect_url, reload);
             });
           }
         })
@@ -238,13 +295,16 @@
           console.log('success');
           $scope.saveLoading = false;
           toaster.pop('success', "Template Saved", "The " + $scope.page.handle + " template was saved successfully.");
+          $scope.redirectAfterSave(redirect_url, reload);
+        });
+      } else if ($scope.isTopic) {
+        console.log('saving topic');
+        WebsiteService.updateTopic($scope.topic, function (data) {
+          $scope.saveLoading = false;
+          toaster.pop('success', "Topic Saved", "The " + $scope.topic.title + " topic was saved successfully.");
         });
       } else {
-        //$scope.validateEditPage($scope.page);
-
-
         $scope.checkForDuplicatePage(function () {
-
           console.log('$scope.duplicateUrl ', $scope.duplicateUrl);
           if ($scope.isEmail) {
             $scope.editPageValidated = true;
@@ -257,20 +317,25 @@
           if (!$scope.duplicateUrl)
             $scope.validateContactAddress(function (data) {
               if (data && !$scope.isEmail) {
-                WebsiteService.updatePage($scope.page, function (data) {
+                WebsiteService.updatePage($scope.page, $scope.originalPage.handle, function (data) {
                   console.log($scope.page.handle, $scope.originalPage.handle);
                   $scope.saveLoading = false;
                   toaster.pop('success', "Page Saved", "The " + $scope.page.handle + " page was saved successfully.");
+                  $scope.redirectAfterSave(redirect_url, reload);
+                  //$scope.page = data;
+                  var originalPageHandle = angular.copy($scope.originalPage.handle);
+                  //angular.copy($scope.page, $scope.originalPage);
+                  
                   //Update linked list
                   $scope.website.linkLists.forEach(function (value, index) {
                     if (value.handle === "head-menu") {
-                      if ($scope.page.handle !== $scope.originalPage.handle) {
+                      if ($scope.page.handle !== originalPageHandle) {
                         $location.search('pagehandle', $scope.page.handle);
-                        $scope.refreshLinkList(value, $scope.originalPage.handle);
+                        $scope.refreshLinkList(value, originalPageHandle);
                       }
-                      WebsiteService.updateLinkList($scope.website.linkLists[index], $scope.website._id, 'head-menu', function (data) {
-                        $scope.originalPage.handle = $scope.page.handle;
+                      WebsiteService.updateLinkList($scope.website.linkLists[index], $scope.website._id, 'head-menu', function (data) {                                               
                         console.log('Updated linked list');
+
                       });
                       if ($scope.page.handle === 'blog' && $scope.blogControl.saveBlogData)
                         $scope.blogControl.saveBlogData();
@@ -291,6 +356,7 @@
             $scope.saveLoading = false;
         });
       }
+
     };
 
     /*
@@ -380,9 +446,9 @@
       if (_handle === 'blog' || _handle === 'single-post')
         $scope.post_blog_page = true;
       WebsiteService.getSinglePage(_handle, function (data) {
-        $scope.page = data;
+        $scope.page  = angular.copy(data);
         $scope.components = $scope.page.components;
-        $scope.originalComponents = angular.copy($scope.components);
+        
         $scope.originalPage = angular.copy(data);
         $scope.activePage = true;
         $scope.activateCKeditor();
@@ -408,7 +474,7 @@
           console.log('data ', data);
           $scope.page = data;
           $scope.components = $scope.page.components;
-          $scope.originalComponents = angular.copy($scope.components);
+          
           $scope.originalPage = angular.copy(data);
           $scope.activePage = true;
           $scope.activateCKeditor();
@@ -417,9 +483,9 @@
       }
 
       if (_email) {
+        $scope.setIsEmail(true);
         $scope.page = _email;
-        $scope.components = _email.components;
-        $scope.originalComponents = angular.copy($scope.components);
+        $scope.components = _email.components;        
         $scope.originalPage = angular.copy(_email);
         $scope.activePage = true;
         $scope.activateCKeditor();
@@ -440,6 +506,7 @@
 
       WebsiteService.getSinglePage('single-post', function (data) {
         $scope.page = data;
+        $scope.postComponents = data.components;
         WebsiteService.getSinglePost($scope.handle, function (data) {
           $scope.blog.post = data;
           $scope.single_post = true;
@@ -487,8 +554,7 @@
         });
 
         $scope.components = $scope.page.config.components;
-        $scope.originalComponents = angular.copy($scope.components);
-        $scope.originalPage = angular.copy($scope.template);
+        $scope.originalPage = angular.copy($scope.page);
         $scope.activateCKeditor();
         $rootScope.breadcrumbTitle = $scope.page.title || $scope.page.handle;
       });
@@ -506,6 +572,24 @@
     $scope.removeTemplateImage = function () {
       console.log('remove template image');
       $scope.page.previewUrl = null;
+    };
+
+    /*
+     * @retrieveTopic
+     * -
+     */
+
+    $scope.retrieveTopic = function (_id) {
+      $scope.topicActive = true;
+      WebsiteService.getTopics(function (topics) {
+        $scope.topic = _.find(topics, function (top) {
+          return top._id === _id;
+        });
+
+        $scope.components = $scope.topic.components;
+        $scope.activateCKeditor();
+        $rootScope.breadcrumbTitle = $scope.topic.title;
+      });
     };
 
     /*
@@ -536,7 +620,7 @@
 
 
     if ($location.search().email) {
-      $scope.isEmail = true;
+      $scope.setIsEmail(true);
       $scope.retrieveEmail($location.search().email);
     }
 
@@ -556,6 +640,17 @@
 
     if ($location.search().templatehandle) {
       $scope.retrieveTemplate($location.search().templatehandle);
+    }
+
+    /*
+     * @location:email
+     * -
+     */
+
+
+    if ($location.search().topic) {
+      $scope.isTopic = true;
+      $scope.retrieveTopic($location.search().topic);
     }
 
     /*
@@ -666,6 +761,7 @@
      * - TODO: change to switch case and stop using if else
      */
     $scope.thumbnailSlider = {};
+    $scope.testimonialSlider = {};
     $scope.contactMap = {};
     $scope.blogControl = {};
 
@@ -830,6 +926,12 @@
         _modal.resolve.accountShowHide = function () {
           return $scope.$parent.account.showhide;
         };
+        _modal.resolve.isEmail = function () {
+          return $scope.isEmail;
+        };
+        _modal.resolve.testimonialSlider = function () {
+          return $scope.testimonialSlider;
+        };
       }
 
       if (angular.isDefined(index) && index !== null && index >= 0) {
@@ -869,6 +971,48 @@
       if ($scope.isEmail) {
         $scope.openSimpleModal("email-settings-modal");
       }
+
+      if ($scope.isTopic) {
+        $scope.openSimpleModal("topic-settings-modal");
+      }
+    };
+
+    /*
+     * @deleteTopic
+     * -
+     */
+    
+    $scope.topicCategories = ['Account', 'Billing', 'Contacts', 'Campaigns', 'Dashboard', 'Emails', 'Getting Started', 'Integrations', 'Orders', 'Pages', 'Posts', 'Products', 'Profile', 'Site Analytics', 'Social Feed'];
+
+
+    $scope.deleteTopic = function () {
+      angular.element('.modal.in').hide();
+      SweetAlert.swal({
+        title: "Are you sure?",
+        text: "Do you want to delete this topic",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: "Yes, delete topic!",
+        cancelButtonText: "No, do not delete topic!",
+        closeOnConfirm: false,
+        closeOnCancel: true
+      }, function (isConfirm) {
+        if (isConfirm) {
+          SweetAlert.swal("Saved!", "Topic is deleted.", "success");
+          var title = $scope.topic.title;
+          WebsiteService.deleteTopic($scope.topic, function (data) {
+            toaster.pop('success', "Topic Deleted", "The " + title + " topic was deleted successfully.");
+            $scope.closeModal();
+            $timeout(function () {
+              window.location = '/admin/#/support/manage-topics';
+            }, 500);
+          });
+        } else {
+          angular.element('.modal.in').show();
+        }
+
+      });
     };
 
     /*
@@ -896,14 +1040,12 @@
     $scope.checkForDuplicatePage = function (fn) {
       $scope.validateEditPage($scope.page);
       if ($scope.editPageValidated)
-        WebsiteService.getSinglePage($scope.page.handle, function (data) {
-          if (data && data._id) {
-            if (data._id !== $scope.page._id) {
-              $scope.duplicateUrl = true;
-              toaster.pop('error', "Page URL " + $scope.page.handle, "Already exists");
-            } else {
-              $scope.duplicateUrl = false;
-            }
+        WebsiteService.checkDuplicatePage($scope.page.handle, $scope.page._id, function (data) {
+          if (data) {
+            $scope.duplicateUrl = true;
+            toaster.pop('error', "Page URL " + $scope.page.handle, "Already exists");
+          } else {
+            $scope.duplicateUrl = false;
           }
           if (fn)
             fn();
@@ -953,10 +1095,9 @@
       }
     };
 
-    $scope.slugifyPostHandle = function (title) {
-      if (title) {
-        $scope.newPost.post_url = $filter('slugify')(title);
-      }
+    $scope.slugifyPostHandle = function (title, post) {
+      if (title && post)
+        post.post_url = $filter('slugify')(title);
     };
 
     $scope.newPage = {};
@@ -972,6 +1113,10 @@
       }
     });
 
+    $scope.$watch('isDirty.confirmed', function (newValue, oldValue) {      
+      console.log(newValue);
+    });
+
     $scope.createDuplicatePage = function (newPage) {
 
       if ($scope.isPage) {
@@ -983,8 +1128,8 @@
         toaster.pop('error', "Page Title or URL can not be blank.");
         return false;
       }
-      WebsiteService.getSinglePage(newPage.handle, function (data) {
-        if (data && data._id) {
+      WebsiteService.checkDuplicatePage(newPage.handle, newPage._id, function (data) {
+        if (data) {
           toaster.pop('error', "Page URL " + newPage.handle, "Already exists");
           return false;
         }
@@ -1028,6 +1173,18 @@
         } else if (!data && error && error.message) {
           toaster.pop('error', error.message);
         }
+      });
+    };
+
+    $scope.sendTestEmail = function (_email) {
+      $scope.sendingEmail = true;
+      WebsiteService.sendTestEmail(_email, $scope.page, function (data) {
+        $scope.sendingEmail = false;
+        if (data && data[0] && data[0]._id) {
+          $scope.closeModal();
+          toaster.pop('success', 'Test Email sent successfully');
+        }
+        console.log('test send status ', data);
       });
     };
 
@@ -1142,19 +1299,20 @@
       }
     };
 
-    /*
-     * @checkForSaveBeforeLeave
-     * -
-     */
-
-    $scope.checkForSaveBeforeLeave = function (url, reload) {
-      $scope.changesConfirmed = true;
-      if ($scope.originalComponents && $scope.components && $scope.originalComponents.length !== $scope.components.length) {
-        $scope.isDirty.dirty = true;
+    var checkIfPageDirty = function(url, fn){
+      if ($scope.originalPage && $scope.originalPage.components && $scope.components && $scope.originalPage.components.length !== $scope.components.length) {
+         $scope.setDirty(true);
       }
       if ($scope.isSinglePost) {
-        if ($scope.blog.post && !angular.equals($scope.originalPost, $scope.blog.post)) {
-          $scope.isDirty.dirty = true;
+          var post_data = angular.copy($scope.blog.post);
+          if($scope.originalPost.post_tags && $scope.originalPost.post_tags.length && !angular.isObject($scope.originalPost.post_tags[0]))
+            post_data.post_tags.forEach(function (v, i) {
+              if (v.text) {
+                post_data.post_tags[i] = v.text;
+              }
+            });
+        if (post_data && !angular.equals($scope.originalPost, post_data)) {
+          $scope.setDirty(true);
         }
       }
       var redirectUrl = url;
@@ -1162,42 +1320,55 @@
       if (!redirectUrl) {
         redirectUrl = $location.search().posthandle ? "/admin/#/website/posts" : $scope.isEmail ? "/admin/#/emails" : "/admin/#/website/pages";
       }
-      
-      if ($scope.isDirty.dirty) {
-        SweetAlert.swal({
-          title: "Are you sure?",
-          text: "You have unsaved data that will be lost",
-          type: "warning",
-          showCancelButton: true,
-          confirmButtonColor: "#DD6B55",
-          confirmButtonText: "Yes, save changes!",
-          cancelButtonText: "No, do not save changes!",
-          closeOnConfirm: false,
-          closeOnCancel: false
-        }, function (isConfirm) {
-          if (isConfirm) {
-            SweetAlert.swal("Saved!", "Your edits were saved to the page.", "success");
-            $scope.redirect = true;
-            $scope.savePage();
-            window.location = redirectUrl;
-            if (reload) {
-              window.location.reload();
-            }
+      fn(redirectUrl);
+    }
 
-          } else {
-            SweetAlert.swal("Cancelled", "Your edits were NOT saved.", "error");
-            window.location = redirectUrl;
-            if (reload) {
-              window.location.reload();
+    var checkBeforeRedirect = function(url, reload)
+    {   
+      checkIfPageDirty(url, function (redirectUrl) {  
+        var condition = $scope.isDirty.dirty;
+        if (condition) {
+          SweetAlert.swal({
+            title: "Are you sure?",
+            text: "You have unsaved data that will be lost",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "Yes, save changes!",
+            cancelButtonText: "No, do not save changes!",
+            closeOnConfirm: false,
+            closeOnCancel: false
+          }, function (isConfirm) {
+            if (isConfirm) {            
+              //SweetAlert.swal("Saved!", "Your edits were saved to the page.", "success");
+              $scope.redirect = true;
+              $scope.savePage(redirectUrl, reload);
+              $scope.setDirty(false);              
+            } else {
+              $scope.redirectWithoutSave(redirectUrl, true, reload);
             }
-          }
-        });
-      } else {
-        window.location = redirectUrl;
-        if (reload) {
-          window.location.reload();
+          });
+        } else {
+          $scope.redirectWithoutSave(redirectUrl, false, reload);         
         }
-      }
+    }) 
+     
+    };
+    /*
+     * @checkForSaveBeforeLeave
+     * -
+     */
+
+    $scope.checkForSaveBeforeLeave = function (url, reload) {
+      $scope.changesConfirmed = true;
+      checkBeforeRedirect(url, reload);      
+    };
+
+    $scope.viewTopic = function(topicId) {
+      console.log('topicId ', topicId);
+      $location.path('/support/help-topics').search({
+        topic: topicId
+      });
     };
 
     /*
@@ -1207,9 +1378,14 @@
 
     $scope.deletePage = function () {
       angular.element('.modal.in').hide();
+      var _deleteText = "Do you want to delete this page";
+      if($scope.page.handle === 'index')
+      {
+        var _deleteText = "This is home page of the website. Do you want to delete this page";
+      }
       SweetAlert.swal({
         title: "Are you sure?",
-        text: "Do you want to delete this page",
+        text: _deleteText,
         type: "warning",
         showCancelButton: true,
         confirmButtonColor: "#DD6B55",
@@ -1401,32 +1577,41 @@
       }
     };
 
-    // $scope.sortableOptions = {
-    //   parentElement: "#componentloader",
-    //   containerPositioning: 'relative',
-    //   dragStart: function (e, ui) {
-    //     $scope.dragging = true;
-    //     $scope.first = false;
-    //     clearTimeout($scope.wait);
-    //   },
-    //   dragMove: function (e, ui) {
-    //     console.log('sorting update');
-    //   },
-    //   dragEnd: function (e, ui) {
-    //     $scope.first = true;
-    //     $scope.dragging = false;
-    //     $scope.wait = setTimeout(function () {
-    //       // e.dest.sortableScope.element.removeClass("active");
-    //       $timeout(function () {
-    //         var anchor = $scope.components[e.dest.index].anchor || $scope.components[e.dest.index]._id;
-    //         var element = document.getElementById(anchor);
-    //         if (element) {
-    //           $document.scrollToElementAnimated(element, 175, 1000);
-    //         }
-    //       }, 500);
-    //     }, 500);
-    //   }
-    // };
+    /*
+     * @locationChangeStart
+     * - Before user leaves editor, ask if they want to save changes
+     */
+    $scope.changesConfirmed = false;
+    var offFn = $rootScope.$on('$locationChangeStart', function (event, newUrl, oldUrl) {
+        checkIfPageDirty(newUrl, function (redirectUrl) {  
+          var condition = $scope.isDirty.dirty && !$scope.changesConfirmed;
+          if (condition) {
+            event.preventDefault();
+            SweetAlert.swal({
+              title: "Are you sure?",
+              text: "You have unsaved data that will be lost",
+              type: "warning",
+              showCancelButton: true,
+              confirmButtonColor: "#DD6B55",
+              confirmButtonText: "Yes, save changes!",
+              cancelButtonText: "No, do not save changes!",
+              closeOnConfirm: false,
+              closeOnCancel: false
+            }, function (isConfirm) {
+              if (isConfirm) {
+                $scope.redirect = true;
+                $scope.savePage(redirectUrl);
+                $scope.setDirty(false);
+              } else {
+                $scope.redirectWithoutSave(newUrl, true);  
+              }
+              offFn();
+            });
+          } else {
+            $scope.redirectWithoutSave(newUrl, false);
+        }
+      }) 
+    });
 
   }]);
 }(angular));

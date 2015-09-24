@@ -1,6 +1,6 @@
 /*global app, moment, angular, window, L*/
 /*jslint unparam:true*/
-app.directive('contactUsComponent', ['customerService', '$timeout', function (customerService, $timeout) {
+app.directive('contactUsComponent', ['geocodeService', 'accountService', '$timeout', function (geocodeService, accountService, $timeout) {
   return {
     scope: {
       component: '='
@@ -50,7 +50,7 @@ app.directive('contactUsComponent', ['customerService', '$timeout', function (cu
               scope.reloadMap();
           }, 500);
         } else {
-          customerService.getGeoSearchAddress(scope.contactAddress, function (data) {
+          geocodeService.getGeoSearchAddress(scope.contactAddress, function (data) {
             if (data.lat && data.lon) {
               scope.component.location.lat = data.lat;
               scope.component.location.lon = data.lon;
@@ -58,6 +58,14 @@ app.directive('contactUsComponent', ['customerService', '$timeout', function (cu
                 scope.reloadMap();
               }, 3000);
             }
+            else
+              geocodeService.validateAddress(scope.component.location, function (data, results) {
+                if (data && results.length === 1) {
+                  scope.component.location.lat = results[0].geometry.location.G || results[0].geometry.location.H;
+                  scope.component.location.lon = results[0].geometry.location.K || results[0].geometry.location.L;
+                  scope.reloadMap();
+                } 
+              });
           });
         }
       };
@@ -68,7 +76,39 @@ app.directive('contactUsComponent', ['customerService', '$timeout', function (cu
         scope.map.setCenter(new google.maps.LatLng(51, 0));
       });
 
-      scope.updateContactUsAddress();
+
+      if(!scope.component.custom){
+        scope.component.custom = {
+          hours: true, address: true
+        };
+      };
+
+      scope.setBusinessDetails = function(is_address, account, fn){
+        if(is_address){
+          if (account.business.addresses && account.business.addresses.length > -1) {
+            scope.component.location = account.business.addresses[0];
+          }
+        }
+        else if(account.business.hours){        
+          scope.component.hours = account.business.hours;
+          scope.component.splitHours = account.business.splitHours;
+        }
+        fn();
+      };
+
+      accountService(function (err, account) {
+        if(!scope.component.custom.hours)
+        {
+          scope.setBusinessDetails(false, account, function () {});
+        }
+        if ((!scope.component.location.address && !scope.component.location.address2 && !scope.component.location.city && !scope.component.location.state && !scope.component.location.zip) || !scope.component.custom.address) {
+          scope.setBusinessDetails(true, account, function () {
+            scope.updateContactUsAddress();
+          });
+        } else {
+           scope.updateContactUsAddress();
+        }
+      });
     }
   };
 }]);

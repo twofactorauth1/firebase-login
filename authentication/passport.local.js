@@ -12,14 +12,25 @@ var passport = require('passport')
     , authenticationDao = require('../dao/authentication.dao')
     , crypto = require('../utils/security/crypto')
     , os = require('os')
-    , constants = requirejs("constants/constants");
+    , constants = requirejs("constants/constants")
+    , cookies = require("../utils/cookieutil");
 
 passport.use(new LocalStrategy({
         passReqToCallback:true
     },
     function(req, username, password, done) {
         var self = this;
+        //console.log('req.body.from:', req.body.from);
+        var redirectTo = '';
+        if(req.body.from) {
+            redirectTo = req.body.from.toString().replace(/.*\?redirectTo=/gi, '').replace('/#', '');
+        }
+        //this abomination of a check is to ensure we won't redirect to /login
+        if(redirectTo !== '/login' && redirectTo !== '/admin/' && redirectTo.indexOf('/login', redirectTo.length - '/login'.length) ===-1) {
+            req.query.redirectTo = redirectTo;
+        }
 
+        //console.log('in passport: ' + req.query.redirectTo);
         authenticationDao.authenticateByUsernamePassword(req, username.toLowerCase(), password, function(err, value) {
             if (err) {
                 return done(null, false, {message:value});

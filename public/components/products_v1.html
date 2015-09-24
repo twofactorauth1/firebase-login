@@ -1,6 +1,6 @@
 <div class="products-v1" data-class="products" data-id="{{component._id}}">
     <div class="products">
-        <header class="jumbotron hero-spacer col-xs-12d">
+        <header class="jumbotron hero-spacer col-xs-12d" ng-style="{'background-color': component.boxColor}">
             <div class="title">
                 <div elem ng-model="component.title"></div>
             </div>
@@ -26,7 +26,7 @@
                                 </div>
                             </div>
                             <div ng-if="!product.is_image && product.icon" class="img-wrap icon">
-                                <i class="fa {{::product.icon}}"></i>
+                                <i ng-style="{'color':component.iconColor}" class="fa {{::product.icon}}"></i>
                             </div>
                         </div>
                         <div ng-if="!product.is_image && !product.icon" class="no-product-img">
@@ -35,9 +35,9 @@
                             </div>
                             <div class="clearfix"></div>
                         </div>
-                        <div class="caption">
+                        <div class="caption" ng-style="{'color':component.txtcolor}">
                             <h4 class="pull-right"><span ng-class="{'strikethrough text-small': product.onSaleToday}">{{product.regular_price | currency}}</span><span ng-if="product.onSaleToday">{{product.sale_price | currency}}</span></h4>
-                            <h4 class="title"><a href="#">{{product.name | characters:18 :true}}</a></h4>
+                            <h4 class="title"><a ng-style="{'color':component.txtcolor}" href="#">{{product.name | characters:18 :true}}</a></h4>
                             <div class="clearfix"></div>
                             <p class="description product-description">{{product.description}}</p>
                         </div>
@@ -80,11 +80,14 @@
             <pagination total-items="products.length" items-per-page="component.numtodisplay" ng-model="currentProductPage" ng-change="pageChanged(currentProductPage)"></pagination>
         </div>
         <div ng-if="isEditing && originalProducts && originalProducts.length === 0" class="col-xs-12 center">
-        <span>No product to display.</span>
-            <a ng-click="addProducts()" class="pull-right btn btn-primary btn-lg btn-wide btn-o add-feature"> <i class="fa fa-plus"></i> Add Products</a>
+        <h2 class="margin-bottom-30">No product to display.</h2>
+            <a ng-click="addProducts()" class=" btn btn-primary btn-lg btn-wide btn-o add-feature"> <i class="fa fa-plus"></i> Add Products</a>
         </div>
     </div>
-    <button class="btn btn-primary btn-lg btnLaunchCart" ng-click="initializeModalEvents()" data-toggle="modal" data-target="#cart-checkout-modal">
+    <button ng-if="!isEditing" class="btn btn-primary btn-lg btnLaunchCart" ng-click="initializeModalEvents()" data-toggle="modal" data-target="#cart-checkout-modal">
+        <span class="fa fa-shopping-cart"></span> <span ng-if="cartDetails.length > 0">({{cartDetails.length}})</span>
+    </button>
+    <button ng-if="isEditing" tooltip-placement="bottom" tooltip="This button is functional only at front end" class="btn btn-primary btn-lg btnLaunchCart">
         <span class="fa fa-shopping-cart"></span> <span ng-if="cartDetails.length > 0">({{cartDetails.length}})</span>
     </button>
     <div class="modal fade" id="cart-checkout-modal">
@@ -293,7 +296,7 @@
                             <div class="card-wrapper"></div>
                             <div class="clearfix margin-bottom-30"></div>
                             <div class="active col-xs-12">
-                                <form name="product-card-details" action="">
+                                <form id="product-card-details" name="product-card-details" action="">
                                     <div class="row">
                                         <div id="card_number" class="form-group small-6 columns col-sm-6 has-feedback">
                                             <input placeholder="Card number" ng-blur="checkCardNumber()" type="text" name="number" id="number" class="form-control">

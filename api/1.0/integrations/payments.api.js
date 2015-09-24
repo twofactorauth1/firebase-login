@@ -17,6 +17,7 @@ var contactActivityManager = require('../../../contactactivities/contactactivity
 var orderManager = require('../../../orders/order_manager');
 var contactDao = require('../../../dao/contact.dao');
 var async = require('async');
+var affiliates_manager = require('../../../affiliates/affiliate_manager');
 
 var api = function () {
     this.init.apply(this, arguments);
@@ -192,6 +193,9 @@ _.extend(api.prototype, baseApi.prototype, {
         var stripeSubscription = null;
         var account = null;
         var customerId = null;
+        var userEmail = null;
+        var purchaseAmount = null;
+
         async.waterfall([
             function getAccount(cb) {
                 accountDao.getAccountByID(accountId, function(err, _account) {
@@ -245,6 +249,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 billingObj.setupFee = setupFee;
                 billingObj.conversionDate = new Date();
                 billingObj.subscriptionId = subscriptionId;
+
                 account.set('locked_sub', false);
                 req.session.locked_sub = false;
                 accountDao.saveOrUpdate(account, function(err, savedAccount){
@@ -269,6 +274,7 @@ _.extend(api.prototype, baseApi.prototype, {
                         cb(err);
                     } else {
                         email = user.get('username');
+                        userEmail = email;
                         contactDao.findContactsByEmail(appConfig.mainAccountID, email, function(err, contacts){
                             if(err) {
                                 self.log.error('Error finding contact for user:', err);
@@ -287,15 +293,16 @@ _.extend(api.prototype, baseApi.prototype, {
             },
             function createContactActivity(account, contact, cb){
                 var subdomain = account.get('subdomain');
+                //amount: (sub.plan.amount / 100),
+                //plan_name: sub.plan.name
+                purchaseAmount = (stripeSubscription.plan.amount / 100);
                 var activity = new $$.m.ContactActivity({
-                    accountId: accountId,
+                    accountId: appConfig.mainAccountID,
                     contactId: contact.id(),
                     activityType: "TRIAL_CONVERSION",
                     detail : "Account for "+ subdomain + ' [' + accountId + '] has converted to paying customer.',
                     start: new Date(),
-                    extraFields: [
-                        {accountId:accountId}
-                    ]
+                    extraFields: {accountId:accountId, plan_name:stripeSubscription.plan.name, amount:purchaseAmount}
                 });
                 contactActivityManager.createActivity(activity, function(err, value){
                     if(err) {
@@ -328,9 +335,21 @@ _.extend(api.prototype, baseApi.prototype, {
                                 cb(err);
                             } else {
                                 self.log.debug('Order created.');
-                                cb(null);
+                                cb(null, userEmail, purchaseAmount);
                             }
                         });
+                    }
+                });
+            },
+            function recordAffiliatePurchase(email, amount, cb) {
+                affiliates_manager.recordPurchase(email, amount, function(err, value){
+                    if(err) {
+                        self.log.error('Error recording affiliate purchase:', err);
+                        //return anyway
+                        cb(null);
+                    } else {
+                        self.log.debug('Recorded affiliate purchase:', value);
+                        cb(null);
                     }
                 });
             }
@@ -765,7 +784,8 @@ _.extend(api.prototype, baseApi.prototype, {
 
                     //validate params
                     if(!planId || planId.length < 1) {
-                        return self.wrapError(resp, 400, null, "Invalid parameter for planId.");
+                        planId = $$.u.idutils.generateUniqueAlphaNumericShort();
+                        //return self.wrapError(resp, 400, null, "Invalid parameter for planId.");
                     }
                     if(!amount) {
                         return self.wrapError(resp, 400, null, "Invalid parameter for amount.");
@@ -958,23 +978,29 @@ _.extend(api.prototype, baseApi.prototype, {
         var self = this;
         self.log.debug('>> getSubscription');
         var accountId = parseInt(self.accountId(req));
-        self.getStripeTokenFromAccount(req, function(err, accessToken){
-            if(accessToken === null && accountId != appConfig.mainAccountID) {
-                return self.wrapError(resp, 403, 'Unauthenticated', 'Stripe Account has not been connected', 'Connect the Stripe account and retry this operation.');
-            }
-            var customerId = req.params.id;
-            var subscriptionId = req.params.subId;
-            self.checkPermission(req, self.sc.privs.VIEW_PAYMENTS, function(err, isAllowed) {
-                if (isAllowed !== true) {
-                    return self.send403(resp);
-                } else {
-                    stripeDao.getStripeSubscription(customerId, subscriptionId, accessToken, function(err, value){
-                        self.log.debug('<< getSubscription');
+
+        /*
+         * subscriptions are on the customer which belong to the main account.
+         * No delegation is needed.
+         */
+        var customerId = req.params.id;
+        var subscriptionId = req.params.subId;
+        self.checkPermission(req, self.sc.privs.VIEW_PAYMENTS, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                stripeDao.getStripeSubscription(customerId, subscriptionId, null, function(err, value){
+                    self.log.debug('<< getSubscription');
+                    if(err && err.toString().indexOf('does not have a subscription with ID') != -1) {
+                        return self.sendResultOrError(resp, err, value, "Error retrieving subscription", 404);
+                    } else {
                         return self.sendResultOrError(resp, err, value, "Error retrieving subscription");
-                    });
-                }
-            });
+                    }
+
+                });
+            }
         });
+
     },
 
     updateSubscription: function(req, resp) {
@@ -1703,8 +1729,9 @@ _.extend(api.prototype, baseApi.prototype, {
                     var subscriptionId = req.body.subscriptionId;
 
                     stripeDao.getUpcomingInvoice(customerId, subscriptionId, accessToken, function(err, value){
+
                         self.log.debug('<< getUpcomingInvoice');
-                        return self.sendResultOrError(resp, err, value, "Error retrieving upcoming invoice.");
+                        return self.sendResultOrError(resp, err, value, "Error retrieving upcoming invoice.", 404);
                     });
                 });
 
@@ -1720,7 +1747,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var subscriptionId = req.body.subscriptionId;
         stripeDao.getUpcomingInvoice(customerId, subscriptionId, null, function(err, value){
             self.log.debug('<< getMyUpcomingInvoice');
-            return self.sendResultOrError(resp, err, value, "Error retrieving upcoming invoice.");
+            return self.sendResultOrError(resp, err, value, "Error retrieving upcoming invoice.", 404);
         });
     },
 

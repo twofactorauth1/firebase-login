@@ -173,6 +173,7 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                 tmpAccount.subdomain = $.trim(newAccount.businessName).replace(" ", "").replace(".", "_").replace("@", "");
                 tmpAccount.business = tmpAccount.business || {};
                 tmpAccount.business.name = newAccount.businessName;
+
                 UserService.saveOrUpdateTmpAccount(tmpAccount, function(data) {
                     var newUser = {
                         username: newAccount.email,
@@ -270,9 +271,9 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                 scope.isFormValid = false;
                 scope.validateForm = true;
                 scope.promises = [];
-               
+
                 scope.showFooter(true);
-               
+
                 scope.checkEmailExists(newAccount, true);
 
                 //pass
@@ -325,7 +326,7 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                 if (!scope.couponIsValid) {
                     return;
                 }
-               
+
                 if (scope.promises.length) {
                 $q.all(scope.promises)
                   .then(function (data) {
@@ -334,14 +335,14 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                         scope.validateEmail(value.data);
                     });
                     if(!scope.validateForm)
-                        return;                    
+                        return;
                     scope.isFormValid = true;
                     scope.showFooter(false);
                     var tmpAccount = scope.tmpAccount;
                     tmpAccount.subdomain = $.trim(newAccount.businessName).replace(" ", "").replace(".", "_").replace("@", "");
                     tmpAccount.business = tmpAccount.business || {};
                     tmpAccount.business.name = newAccount.businessName;
-
+                    tmpAccount.signupPage = $location.path();
                     if(scope.newAccount.phone) {
                         tmpAccount.business.phones = [];
                         tmpAccount.business.phones[0] = {
@@ -359,7 +360,8 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                             coupon: newAccount.coupon,
                             first: newAccount.first,
                             middle: newAccount.middle,
-                            last: newAccount.last
+                            last: newAccount.last,
+                            campaignId: scope.component.campaignId
                         };
 
                         newUser.plan = '';
@@ -398,7 +400,11 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                                     //send facebook tracking info
                                     window._fbq = window._fbq || [];
                                     window._fbq.push(['track', '6032779610613', {'value':'0.00','currency':'USD'}]);
+                                    // ensures the optimizely object is defined globally using
+                                    window['optimizely'] = window['optimizely'] || [];
 
+                                    // sends a tracking call to Optimizely for the given event name.
+                                    window.optimizely.push(["trackEvent", "freeTrialSignup"]);
                                     console.log('sent facebook message');
                                     //send affiliate purchase info
                                     var leadData = {
@@ -410,7 +416,11 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                                     LeadDyno.key = "b2a1f6ba361b15f4ce8ad5c36758de951af61a50";
                                     LeadDyno.recordLead(newUser.email, leadData, function(){
                                         console.log('recorded lead');
-                                        LeadDyno.recordPurchase(newUser.email, {}, function(){
+                                        var customerData = {
+                                            plan_code:'zero',
+                                            purchase_amount:0
+                                        };
+                                        LeadDyno.recordPurchase(newUser.email, customerData, function(){
                                             console.log('recorded purchase');
                                             window.location = data.accountUrl;
                                         });

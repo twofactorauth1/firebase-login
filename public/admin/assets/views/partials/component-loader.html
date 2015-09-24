@@ -1,7 +1,7 @@
-<div id="componentloader">
+<div id="componentloader" ng-if="!isEmail">
     <ul class="component-sortable margin-bottom-0">
         <li ng-repeat="value in components" class="fragment show-settings {{value.type}}" style="position:relative;">
-            <circular passed-options="circleOptions" passed-index="{{$index}}" passed-component="value" passed-component-length="{{components.length}}" style="z-index:999999" class="circular"> </circular>
+            <circular passed-options="circleOptions" passed-index="{{$index}}" passed-component="value" passed-component-length="{{components.length}}" style="z-index:1087" class="circular"> </circular>
             <div ng-include=" '../components/component-switch.html' "></div>
             <div ng-class="{'zee-blur': !value.visibility}"></div>
         </li>
@@ -15,3 +15,24 @@
         </li>
     </ul>
 </div>
+
+<table ng-if="isEmail" class="device-width" align="center" width="680" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse;">
+
+    <tr ng-repeat="value in components" class="fragment show-settings {{value.type}}" style="position:relative;">
+        <td style="position:relative;background:#ffffff;">
+            <circular passed-options="circleOptions" passed-index="{{$index}}" passed-component="value" passed-component-length="{{components.length}}" style="z-index:1087" class="circular"> </circular>
+            <div ng-include=" '../components/component-switch.html' "></div>
+            <div ng-class="{'zee-blur': !value.visibility}"></div>
+        </td>
+    </tr>
+
+    <!-- <tr ng-if="!components.length">
+        <div class="well empty-page center">
+            <h1 >This Email is Empty.</h1>
+            <h4>Add some components and start editing!</h4>
+            <button class="btn btn-info margin-top-15" ng-click="openModal('add-component-modal', 'AddComponentModalCtrl', 0)">Add Component</button>
+        </div>
+        <div class="clearfix mb15"></div>
+    </tr> -->
+
+</table>

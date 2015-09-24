@@ -1,8 +1,59 @@
 /* ---------------------------------------------------------------------- */
+
+
 /*  Billing
 /* ---------------------------------------------------------------------- */
 
-.billing {}
+.billing {
+    //.container-fluid {
+    //    padding-left: 0px;
+    //    padding-right: 0px;
+    //}
+    .btn.paynow {
+        text-align: center;
+        display: none;
+
+        &.active {
+            display: block;
+        }
+    }
+    .no-pad-lr {
+        padding-left: 0px;
+        padding-right: 0px;
+    }
+    .vert-center {
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+    .pricing-table {
+        background-color: white;
+    }
+    .fa-spinner {
+        font-size: 3em;
+    }
+}
+
+#card-container {
+    margin-bottom: 30px;
+    .jp-card-container {
+        transform: scale(1)!important;
+    }
+    @media (max-width: @screen-xs-min) {
+        .jp-card-container {
+            transform: scale(0.75) translateX(-25%) !important;
+            position: relative;
+            left: 20%;
+        }
+    }
+}
+@media (max-width: @screen-xs-min) {
+    #card-container {
+        margin-bottom: 0;
+    }
+    .billing-credit-card > .row:last-child {
+        margin-bottom: 100px;
+    }
+}
 
 .view-transaction-modal {
     .paid {
@@ -10,4 +61,3 @@
         display: block;
     }
 }
-

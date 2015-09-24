@@ -165,9 +165,22 @@
 					<span class="title" translate="sidebar.nav.support.HELPTOPICS"> Help Topics </span>
 				</a>
 			</li>
+			<li ui-sref-active="active" ng-if="account._id == 6">
+				<a ui-sref="app.support.managetopics">
+					<span class="title" translate="sidebar.nav.support.MANAGETOPICS"> Manage Topics</span>
+				</a>
+			</li>
 		</ul>
 	</li>
 </ul>
+<div class="wrapper ng-scope" ng-if="account.billing.plan==='NO_PLAN_ARGUMENT'">
+    <!--accountConstant.plan_types.TRIAL-->
+    <a class="button-o" href="#/account/billing" style="text-overflow: initial!important;">
+        <i class="ti-alarm-clock" ng-if="!app.layout.isSidebarClosed"></i>
+        <span>{{::account.trialDaysRemaining}} </span>
+        <span translate="sidebar.heading.TRIAL_REMAINING" ng-if="!app.layout.isSidebarClosed"></span>
+    </a>
+</div>
 <!-- end: MAIN NAVIGATION MENU -->
 <!-- start: DOCUMENTATION BUTTON -->
 <!-- <div class="wrapper">

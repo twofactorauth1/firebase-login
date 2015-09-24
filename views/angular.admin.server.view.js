@@ -9,6 +9,7 @@ var BaseView = require('./base.server.view');
 var logger = $$.g.getLogger('angular.admin.server.veiw');
 var segmentioConfig = require('../configs/segmentio.config.js');
 var _req = null;
+var urlUtils = require('../utils/urlutils');
 
 var view = function(req,resp,options) {
     this.init.apply(this, arguments);
@@ -59,6 +60,7 @@ _.extend(view.prototype, BaseView.prototype, {
             //data.user.user_preferences.welcome_alert.initial
             data.user.user_preferences = data.user.user_preferences || {};
             data.user.user_preferences.welcome_alert = data.user.user_preferences.welcome_alert || {};
+            data.environment = urlUtils.getEnvironmentFromRequest(_req);
             logger.debug('<< show');
             //console.dir(data);
             self.resp.render('admin', data);

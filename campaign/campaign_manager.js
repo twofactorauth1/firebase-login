@@ -213,82 +213,122 @@ module.exports = {
             /*
              * Schedule the email.
              */
-            contactDao.getById(campaignFlow.get('contactId'), $$.m.Contact, function(err, contact){
+             accountDao.getAccountByID(campaignFlow.get('accountId'), function(err, account){
                 if(err) {
-                    self.log.error('Error getting contact for step: ' + err);
-                    return fn(err, null);
-                } else if(contact === null) {
-                    self.log.debug('>> campaignFlow ', campaignFlow);
-                    self.log.error('Could not find contact for contactId: ' + campaignFlow.get('contactId'));
-                    return fn('Could not find contact for contactId: ' + campaignFlow.get('contactId'), null);
+                    self.log.error('Error getting account: ' + err);
+                    self.log.error('No email will be sent.');
                 } else {
-                    var fromAddress = step.settings.fromEmail;
-                    var fromName = step.settings.fromName;
-                    var toAddress = contact.getEmails()[0].email;
-                    self.log.debug('contact.getEmails: ', contact.getEmails());
-                    self.log.debug('contact:', contact);
-                    var toName = contact.get('first') + ' ' + contact.get('last');
-                    var subject = step.settings.subject;
-
-                    var accountId = campaignFlow.get('accountId');
-                    var vars = step.settings.vars || [];
-
-                    var emailId = step.settings.emailId;
-                    emailDao.getEmailById(emailId, function(err, email){
+                    contactDao.getById(campaignFlow.get('contactId'), $$.m.Contact, function(err, contact){
                         if(err) {
-                            self.log.error('Error getting email to render: ' + err);
+                            self.log.error('Error getting contact for step: ' + err);
                             return fn(err, null);
-                        }
-                        var component = email.get('components')[0];
-                        component.logo = component.logo.replace('src="//s3.amazonaws', 'src="http://s3.amazonaws');
-                        component.text = component.text.replace('src="//s3.amazonaws', 'src="http://s3.amazonaws');
-                        component.title = component.title.replace('src="//s3.amazonaws', 'src="http://s3.amazonaws');
-                        app.render('emails/base_email', component, function(err, html) {
-                            if (err) {
-                                self.log.error('error rendering html: ' + err);
-                                self.log.warn('email will not be sent.');
-                            } else {
-                                var campaignId = campaignFlow.get('campaignId');
-                                var contactId = campaignFlow.get('contactId');
-                                mandrillHelper.sendCampaignEmail(fromAddress, fromName, toAddress, toName, subject, html, accountId, campaignId, contactId, vars, step.settings, emailId, function(err, value){
-                                        if(err) {
-                                            self.log.error('Error sending email: ', err);
-                                            return fn(err, null);
+                        } else if(contact === null) {
+                            self.log.debug('>> campaignFlow ', campaignFlow);
+                            self.log.error('Could not find contact for contactId: ' + campaignFlow.get('contactId'));
+                            return fn('Could not find contact for contactId: ' + campaignFlow.get('contactId'), null);
+                        } else {
+                            var fromAddress = step.settings.fromEmail;
+                            var fromName = step.settings.fromName;
+                            var toAddress = contact.getEmails()[0].email;
+                            self.log.debug('contact.getEmails: ', contact.getEmails());
+                            self.log.debug('contact:', contact);
+                            var toName = contact.get('first') + ' ' + contact.get('last');
+                            var subject = step.settings.subject;
+
+                            var accountId = campaignFlow.get('accountId');
+                            var vars = step.settings.vars || [];
+
+                            var emailId = step.settings.emailId;
+                            
+                            emailDao.getEmailById(emailId, function(err, email){
+                                if(err || !email) {
+                                    self.log.error('Error getting email to render: ' + err);
+                                    return fn(err, null);
+                                }
+                                // var component = email.get('components')[0];
+                                // if (!component.bg.color) {
+                                //     component.bg.color = '#eaeaea';
+                                // }
+
+                                // if (!component.emailBg) {
+                                //     component.emailBg = '#ffffff';
+                                // }
+                                // if (component.bg.img && component.bg.img.show && component.bg.img.url) {
+                                //     component.emailBgImage = component.bg.img.url.replace('//s3.amazonaws', 'http://s3.amazonaws');
+                                // }
+
+                                // component.logo = component.logo.replace('src="//s3.amazonaws', 'src="http://s3.amazonaws');
+                                // component.text = component.text.replace('src="//s3.amazonaws', 'src="http://s3.amazonaws');
+                                // component.title = component.title.replace('src="//s3.amazonaws', 'src="http://s3.amazonaws');
+                                var components = [];
+                                var keys = ['logo','title','text','text1','text2','text3'];
+                                var regex = new RegExp('src="//s3.amazonaws', "g");
+
+                                email.get('components').forEach(function(component){
+                                    for (var i = 0; i < keys.length; i++) {
+                                        if (component[keys[i]]) {
+                                            component[keys[i]] = component[keys[i]].replace(regex, 'src="http://s3.amazonaws');
                                         }
-                                        campaignFlow.set('lastStep', stepNumber);
-                                        step.executed = new Date();
-                                        campaignDao.saveOrUpdate(campaignFlow, function(err, updatedFlow){
-                                            if(err) {
-                                                self.log.error('Error saving campaign flow: ' + err);
-                                                return fn(err, null);
-                                            } else {
-                                                //try to handle the next step:
-                                                var steps = campaignFlow.get('steps');
-                                                if(steps.length -1 > stepNumber) {
-                                                    self.handleStep(campaignFlow, stepNumber+1, function(err, value){
-                                                        if(err) {
-                                                            self.log.error('Error handling campaign step: ' + stepNumber+1 + ": " + err);
-                                                            self.log.warn('Future step handling issue.  There will be problems with this campaign_flow: ', campaignFlow);
-                                                            return fn(null, updatedFlow);
+                                    }
+
+                                    if (!component.bg.color) {
+                                        component.bg.color = '#ffffff';
+                                    }
+
+                                    if (!component.emailBg) {
+                                        component.emailBg = '#ffffff';
+                                    }
+
+                                    if (component.bg.img && component.bg.img.show && component.bg.img.url) {
+                                        component.emailBgImage = component.bg.img.url.replace('//s3.amazonaws', 'http://s3.amazonaws');
+                                    }
+                                    components.push(component);
+                                });
+                                
+                                app.render('emails/base_email_v2', { components: components }, function(err, html) {
+                                    if (err) {
+                                        self.log.error('error rendering html: ' + err);
+                                        self.log.warn('email will not be sent.');
+                                    } else {
+                                        var campaignId = campaignFlow.get('campaignId');
+                                        var contactId = campaignFlow.get('contactId');
+                                        mandrillHelper.sendCampaignEmail(fromAddress, fromName, toAddress, toName, subject, html, accountId, campaignId, contactId, vars, step.settings, emailId, function(err, value){
+                                                if(err) {
+                                                    self.log.error('Error sending email: ', err);
+                                                    return fn(err, null);
+                                                }
+                                                campaignFlow.set('lastStep', stepNumber);
+                                                step.executed = new Date();
+                                                campaignDao.saveOrUpdate(campaignFlow, function(err, updatedFlow){
+                                                    if(err) {
+                                                        self.log.error('Error saving campaign flow: ' + err);
+                                                        return fn(err, null);
+                                                    } else {
+                                                        //try to handle the next step:
+                                                        var steps = campaignFlow.get('steps');
+                                                        if(steps.length -1 > stepNumber) {
+                                                            self.handleStep(campaignFlow, stepNumber+1, function(err, value){
+                                                                if(err) {
+                                                                    self.log.error('Error handling campaign step: ' + stepNumber+1 + ": " + err);
+                                                                    self.log.warn('Future step handling issue.  There will be problems with this campaign_flow: ', campaignFlow);
+                                                                    return fn(null, updatedFlow);
+                                                                } else {
+                                                                    self.log.debug('<< handleStep');
+                                                                    return fn(null, updatedFlow);
+                                                                }
+                                                            });
                                                         } else {
-                                                            self.log.debug('<< handleStep');
+                                                            self.log.debug('<< handleStep (no more steps)');
                                                             return fn(null, updatedFlow);
                                                         }
-                                                    });
-                                                } else {
-                                                    self.log.debug('<< handleStep (no more steps)');
-                                                    return fn(null, updatedFlow);
-                                                }
-                                            }
-                                        });
-                                    });
-                            }
-                        });
+                                                    }
+                                                });
+                                            });
+                                    }
+                                });
+                            });
+                        }
                     });
-
-
-
-
                 }
             });
 
@@ -794,7 +834,7 @@ module.exports = {
                     if(!nextStep) {
                         callback(null, null, i);
                     }
-                    if(nextStep.trigger === trigger) {
+                    if(nextStep && nextStep.trigger === trigger) {
                         nextStep.triggered = new Date();
                         campaignDao.saveOrUpdate(flow, function(err, updatedFlow){
                             if(err) {
@@ -806,24 +846,28 @@ module.exports = {
                         });
 
                     } else {
-                        self.log.warn('Next step has a trigger of ' + nextStep.trigger + ' but was expected to have type ' + trigger);
+                        //self.log.warn('Next step has a trigger of ' + nextStep.trigger + ' but was expected to have type ' + trigger);
                         callback('Unexpected trigger type');
                     }
+                } else {
+                    callback(null, null, i);
                 }
             },
             function(flow, stepNumber, callback) {
                 if(!flow) {
                     self.log.debug('No step to handle. Exiting');
                     callback(null);
+                } else {
+                    self.handleStep(flow, stepNumber, function(err, value){
+                        if(err) {
+                            callback(err);
+                        } else {
+                            self.log.debug('handled step ' + stepNumber);
+                            callback(null);
+                        }
+                    });
                 }
-                self.handleStep(flow, stepNumber, function(err, value){
-                    if(err) {
-                        callback(err);
-                    } else {
-                        self.log.debug('handled step ' + stepNumber);
-                        callback(null);
-                    }
-                });
+
             }
         ], function(err){
             if(err) {

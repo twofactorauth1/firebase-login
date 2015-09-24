@@ -136,7 +136,7 @@ module.exports = {
         });
     },
 
-    sendWelcomeEmail: function(accountId, account, user, email, username, callback){
+    sendWelcomeEmail: function(accountId, account, user, email, username, contactId, callback){
         /*
          * Send welcome email.  This is done asynchronously.
          * But only do this if we are not running unit tests.
@@ -161,7 +161,7 @@ module.exports = {
                     ];
                     mandrillHelper.sendAccountWelcomeEmail(notificationConfig.WELCOME_FROM_EMAIL,
                         notificationConfig.WELCOME_FROM_NAME, email, username, notificationConfig.WELCOME_EMAIL_SUBJECT,
-                        htmlContent, accountId, user.id(), vars, null, function (err, result) {
+                        htmlContent, accountId, user.id(), vars, null, contactId, function (err, result) {
                         });
                 }
 

@@ -1,19 +1,22 @@
-<div ng-controller="BillingCtrl" class="billing">
+<div ng-controller="BillingCtrl" class="billing container-fluid no-pad-lr">
     <indig-onboarding min-requirements="minRequirements"></indig-onboarding>
     <!-- start: PAGE TITLE -->
     <section id="page-title" class="padding-top-15 padding-bottom-15">
         <div class="row">
             <div class="col-sm-8">
                 <h1 class="mainTitle" translate="sidebar.nav.account.BILLING"></h1>
-                <span class="mainDescription">View and Manage Indigenous Software account.</span>
+                <span class="mainDescription">View and manage your account.</span>
             </div>
             <div ncy-breadcrumb></div>
         </div>
     </section>
     <!-- end: PAGE TITLE -->
     <!-- start: YOUR CONTENT HERE -->
-    <div class="container-fluid container-fullw bg-white">
-        <div class="row">
+    <div ng-if="account.billing.plan==='NO_PLAN_ARGUMENT'">
+        <billing-trial></billing-trial>
+    </div>
+    <div class="row" ng-if="account.billing.plan!=='NO_PLAN_ARGUMENT'">
+        <div class="row container-fullw bg-white">
             <div class="col-sm-12">
                 <div class="col-sm-6">
                     <button type="button" class="btn btn-o btn-lg btn-info btn-wide btn-block btn-scroll btn-scroll-top ti ti-receipt" ng-click="openModal('bill-summary-modal')">
@@ -29,72 +32,32 @@
                 </div>
             </div>
         </div>
-    </div>
-    <div class="col-sm-4">
-        <div class="panel panel-transparent">
-            <div class="panel-heading">
-                <div class="panel-title">
-                    Current Plan
+        <div class="row">
+            <div class="col-sm-4 no-pad-lr">
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <div class="panel-title">
+                            <span>Current Plan</span>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <billing-subscription 
+                            ng-show="!billingSubscriptionUnavailable || priceDollars">
+                        </billing-subscription>
+                    </div>
                 </div>
             </div>
-            <div class="panel-body">
-                <div class="pricing-table pricing-blue" ng-show="subscription">
-                    <ul class="plan plan2">
-                        <li class="plan-name">
-                            {{subscription.plan.name || 'All Inclusive' }}
-                        </li>
-
-                        <li class="plan-price">
-                            <h3 class="center"> <i class="fa fa-usd fa-1"></i>{{subscription.plan.amount ? (subscription.plan.amount/100).toFixed(2) : 49}}<span class="price-cents"></span><span> /{{subscription.plan.interval || 'Month'}}</span></h3>
-                        </li>
-                        <li>
-                            <strong>Customer</strong> Relationship Manager
-                        </li>
-                        <li>
-                            <strong>Product & Order</strong> Manager
-                        </li>
-                        <li>
-                            <strong>Social</strong> Manager
-                        </li>
-                    </ul>
+            <div class="col-sm-8 no-pad-lr">
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <div class="panel-title">
+                            <span>Invoices</span>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <billing-invoice-table paged-invoices="pagedInvoices"></billing-invoice-table>
+                    </div>
                 </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-sm-8">
-        <div class="panel panel-transparent">
-            <div class="panel-heading">
-                <div class="panel-title">
-                    Invoices
-                </div>
-            </div>
-            <div class="panel-body">
-                <table class="table table-hover margin-bottom-30">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Date</th>
-                            <th>Amount</th>
-                            <!--<th>Card</th>-->
-                            <th>Status</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr ng-repeat="invoice in pagedInvoices">
-                            <td>{{$index + 1}}</td>
-                            <td>{{invoice.date * 1000 | date : 'longDate'}}</td>
-                            <td>${{(invoice.total/100).toFixed( 2 )}}</td>
-                            <!--<td>Visa - 8943</td>-->
-                            <td ng-show="invoice.paid && invoice.total/100 <= 0">NO CHARGE</td>
-                            <td ng-show="invoice.paid && invoice.total/100 > 0">PAID</td>
-                            <td ng-hide="invoice.paid">NOT PAID</td>
-                            <td class="table-action">
-                                <a href="" ng-click="changeInvoice(invoice, $index); openModal('view-transaction-modal')"><i class="fa fa-eye"></i>
-                                            </a>
-                            </td>
-                        </tr>
-                </table>
             </div>
         </div>
     </div>
@@ -130,69 +93,13 @@
                 <span aria-hidden="true">×</span>
                 <span class="sr-only">Close</span>
             </button>
-            <h4 class="modal-tsitle" id="myModalLabel">Bill Summary</h4>
+            <h4 class="modal-title" id="myModalLabel">Bill Summary</h4>
         </div>
         <div ng-if="!upcomingInvoice" class="modal-body">
             No upcoming invoices found
         </div>
         <div ng-if="upcomingInvoice" class="modal-body">
-            <div class="row">
-                <div class="col-xs-6">
-                    <div class="mb40"></div>
-                    <h4 class="center">Amount Due</h4>
-                    <h1 class="center total">${{(upcomingInvoice.amount_due/100).toFixed( 2 )}}</h1>
-                </div>
-                <div class="col-xs-6">
-                    <h4>Current Payment:</h4>
-                    <span>due {{upcomingInvoice.period_end*1000 | date : 'longDate'}}</span>
-                    <!--<h4>Last Payment:</h4>-->
-                    <!--<span>recieved 01AUG14</span>-->
-                </div>
-                <div class="col-xs-6">
-                    {{subscription.plan.name}} Plan
-                </div>
-            </div>
-            <div class="mb30"></div>
-            <div class="table-responsive summary">
-                <table class="table mb30">
-                    <thead>
-                        <tr class="info">
-                            <th>Item</th>
-                            <th>Price</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr ng-repeat="item in upcomingInvoice.lines.data">
-                            <td>{{item.plan.statement_description}}</td>
-                            <td>${{(item.amount/100).toFixed( 2 )}}</td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <span class="pull-right">
-                                            <h4>Sub-Total</h4>
-                                        </span>
-                            </td>
-                            <td>
-                                <h4>${{(upcomingInvoice.subtotal/100).toFixed( 2 )}}</h4>
-                            </td>
-                        </tr>
-                        <!--<tr>-->
-                        <!--<td><span class="pull-right"><h4>Taxes</h4></span></td>-->
-                        <!--<td><h4>3.86</h4></td>-->
-                        <!--</tr>-->
-                        <tr>
-                            <td>
-                                <span class="pull-right">
-                                            <h4>TOTAL</h4>
-                                        </span>
-                            </td>
-                            <td>
-                                <h4>${{(upcomingInvoice.total/100).toFixed( 2 )}}</h4>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+            <billing-invoice upcoming-invoice="upcomingInvoice"></billing-invoice>
         </div>
     </script>
     <script type="text/ng-template" id="change-card-modal">

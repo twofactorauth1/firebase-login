@@ -52,43 +52,46 @@
             }
           };        
 
-          scope.hideItem = function(item)
-          {
-          var _hide = false;
-          if(scope.component.type && scope.component.type === 'footer')
-          {
-            if(item.type==="delete" || item.type==="clone")
-            {
+          scope.hideItem = function(item) {
+            var _hide = false;
+            if(scope.component.type && scope.component.type === 'footer') {
+              if(item.type==="delete" || item.type==="clone") {
+                _hide = true;
+              }
+            } else if(scope.component.type && (scope.component.type === 'navigation' || scope.component.type === 'blog' ||  scope.component.type === 'blog-teaser')) {
+              if(item.type==="clone") {
+                _hide = true;
+              }
+            }
+            
+            if(scope.passedIndex == scope.passedComponentLength - 1 && item.type === "down") {
               _hide = true;
             }
-          }
-          else if(scope.component.type && (scope.component.type === 'blog' ||  scope.component.type === 'blog-teaser'))
-          {
-            if(item.type==="clone")
-            {
+
+            if(scope.passedIndex == 0 && item.type === "up") {
               _hide = true;
             }
-          }
-          
-          if(scope.passedIndex == scope.passedComponentLength - 1 && item.type === "down")
-          {
-            _hide = true;
-          }
-          if(scope.passedIndex == 0 && item.type === "up")
-          {
-            _hide = true;
-          }
-          if(scope.posthandle)
-          {
-            if(item.type==="design" && scope.component.type === 'single-post')
-            {
-              _hide = false;
+
+            if(scope.posthandle) {
+              if(item.type==="design" && scope.component.type === 'single-post') {
+                _hide = false;
+              } else {
+                var _postComponents = scope.$parent.postComponents;
+                if(_postComponents && _postComponents.length) {
+                  var exists = _.findWhere(_postComponents, {
+                    type: scope.component.type
+                  });
+                  if(exists) {
+                    _hide = true;
+                  } else {
+                      _hide = false; 
+                  }
+                } else {
+                  _hide = true; 
+                }
+              }
             }
-            else{
-              _hide = true; 
-            }
-          }
-          return _hide;
+            return _hide;
           };          
         }
       };

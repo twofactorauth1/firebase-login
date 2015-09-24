@@ -1,0 +1,185 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+html
+  head
+      meta(http-equiv='Content-Type', content='text/html; charset=UTF-8')
+      meta(property='og:title', content='*|MC:SUBJECT|*')
+      meta(name="viewport", content="width=device-width, initial-scale=1.0")
+      meta(name="viewport", content="width=device-width, initial-scale=1.0")
+      title *|MC:SUBJECT|*
+      meta(http-equiv="X-UA-Compatible",content="IE=edge")
+      style(type='text/css').
+          body {
+          width: 100%;
+          /* Prevent auto resizing of font size */
+          -webkit-text-size-adjust: 100% !important;
+          -ms-text-size-adjust: 100% !important;
+          margin: 0;
+          padding: 0;
+          }
+          img {
+          border: 0;
+          outline: none;
+          -ms-interpolation-mode: bicubic;
+          }
+          a img {
+          border: 0;
+          }
+          /* Forces Outlook to display email at 100% width */
+          .ExternalClass {
+          width: 100%;
+          }
+          /* Corrects line-height issues on Outlook */
+          .ExternalClass, .ExternalClass p, .ExternalClass span, .ExternalClass font, .ExternalClass td, .ExternalClass div {
+          line-height: 100%;
+          }
+          /* Removes unwanted gap with left/right aligned tables */
+          table, td {
+          mso-table-lspace: 0pt;
+          mso-table-rspace: 0pt;
+          border-collapse: collapse;
+          }
+          /* Mobile Responsive Styles */
+          /* Using attribute selectors due to media queries issues with Yahoo! Mail */
+          @media only screen and (max-width: 480px) {
+          table[class=device-width], td[class=device-width], img[class=device-width] {
+          width: 320px !important;
+          height: auto !important;
+          }
+          table[class=inner-width], td[class=inner-width], img[class=inner-width] {
+          width: 240px !important;
+          height: auto !important;
+          }
+          table[class=medium-width], td[class=medium-width], img[class=medium-width] {
+          width: 280px !important;
+          height: auto !important;
+          }
+          td[class=hero-1] {
+          width: 320px !important;
+          height: auto !important;
+          background-image: url(img/hero-bg-1.jpg) !important;
+          background-position: center !important;
+          background-size: cover !important;
+          padding-top: 60px !important;
+          padding-bottom: 60px !important;
+          }
+          td[class=hero-2] {
+          width: 320px !important;
+          height: auto !important;
+          background-image: url(img/hero-bg-2.jpg) !important;
+          background-position: center !important;
+          background-size: cover !important;
+          padding-top: 60px !important;
+          padding-bottom: 60px !important;
+          }
+          td[class=hero-3] {
+          width: 320px !important;
+          height: auto !important;
+          padding-top: 60px !important;
+          padding-bottom: 60px !important;
+          }
+          td[class=hero-feature] {
+          padding-bottom: 30px !important;
+          }
+          td[class=stack] {
+          display: block !important;
+          padding-left: 0 !important;
+          padding-right: 0 !important;
+          }
+          td[class=small-push] {
+          padding-top: 30px !important;
+          }
+          td[class=wrapper] {
+          padding-top: 0 !important;
+          padding-bottom: 0 !important;
+          padding-left: 0 !important;
+          padding-right: 0 !important;
+          }
+          td[class=logo] {
+          width: 320px !important;
+          height: auto !important;
+          text-align: center !important;
+          padding-bottom: 20px !important;
+          }
+          td[class=logo] img {
+          display: inline !important;
+          }
+          td[class=center] {
+          width: 240px !important;
+          height: auto !important;
+          text-align: center !important;
+          }
+          td[class=head] {
+          display: table-header-group !important;
+          padding-left: 0 !important;
+          padding-right: 0 !important;
+          }
+          td[class=foot] {
+          display: table-footer-group !important;
+          padding-left: 0 !important;
+          padding-right: 0 !important;
+          }
+          }
+  body
+    div(style='width: 100%; -webkit-text-size-adjust: 100% !important; -ms-text-size-adjust: 100% !important; margin: 0; padding: 0;')
+      table(width='100%', align='center', cellpadding='0', cellspacing='0', border='0', style='border-collapse: collapse;')
+        tr
+          td
+            table(width='100%', align='center', cellpadding='0', cellspacing='0', border='0', style="border-collapse: collapse;background-color:"+components[0].bg.color+"; background-image: url('"+components[0].emailBgImage+"');")
+              tr
+                td(align='center', width='100%')
+                  table.device-width(align='center', width='640', cellpadding='0', cellspacing='0', border='0', style='border-collapse: collapse;background-color:'+components[0].emailBg+';margin-top: 45px; margin-bottom: 45px;')
+                    tr
+                      td.wrapper(width='100%', style='padding-left: 20px; padding-right: 20px;')
+                          
+                          each component in components
+                            if component.logo
+                              table.device-width(id=component.type, width='640', cellpadding='0', cellspacing='0', border='0', style='border-collapse: collapse;')
+                                tr
+                                  td.device-width(width='100%', style='padding-top: 30px;')
+                                    table.device-width(width='100%', cellpadding='0', cellspacing='0', border='0', style='border-collapse: collapse;')
+                                      tr
+                                        td.device-width(width='100%', style='text-align: center; padding-bottom: 15px; padding-left:20px;padding-right:20px')
+                                          div !{component.logo}
+                                    hr
+                            if component.title
+                              table.device-width(width='640', align='center', cellpadding='0', cellspacing='0', border='0', style='border-collapse: collapse;', ng-if='component.title')
+                                tr
+                                  td(align='center', width='100%')
+                                    table.device-width(align='center', width='100%', cellpadding='0', cellspacing='0', border='0', style='border-collapse: collapse;')
+                                      tr
+                                        td.wrapper(width='100%', style='padding-left: 20px; padding-right: 20px; padding-top: 45px; padding-bottom: 45px;')
+                                          div !{component.title}
+                            if component.text
+                              table.device-width(width='640', align='center', cellpadding='0', cellspacing='0', border='0', style='border-collapse: collapse;', ng-if='component.title')
+                                tr
+                                  td(align='center', width='100%')
+                                    table.device-width(align='center', width='100%', cellpadding='0', cellspacing='0', border='0', style='border-collapse: collapse;')
+                                      tr
+                                        td.wrapper(width='100%', style='padding-left: 20px; padding-right: 20px; padding-top: 45px; padding-bottom: 45px;')
+                                          div !{component.text}
+                            if component.text1
+                              table.device-width(width='640', align='center', cellpadding='0', cellspacing='0', border='0', style='border-collapse: collapse;', ng-if='component.title')
+                                tr
+                                  td(align='center', width='100%')
+                                    table.device-width(align='center', width='100%', cellpadding='0', cellspacing='0', border='0', style='border-collapse: collapse;')
+                                      tr
+                                        td.wrapper(width='100%', style='padding-left: 20px; padding-right: 20px; padding-top: 45px; padding-bottom: 45px;')
+                                          div !{component.text1}
+                            if component.text2
+                              table.device-width(width='640', align='center', cellpadding='0', cellspacing='0', border='0', style='border-collapse: collapse;', ng-if='component.title')
+                                tr
+                                  td(align='center', width='100%')
+                                    table.device-width(align='center', width='100%', cellpadding='0', cellspacing='0', border='0', style='border-collapse: collapse;')
+                                      tr
+                                        td.wrapper(width='100%', style='padding-left: 20px; padding-right: 20px; padding-top: 45px; padding-bottom: 45px;')
+                                          div !{component.text2}
+                            if component.text3
+                              table.device-width(width='640', align='center', cellpadding='0', cellspacing='0', border='0', style='border-collapse: collapse;', ng-if='component.title')
+                                tr
+                                  td(align='center', width='100%')
+                                    table.device-width(align='center', width='100%', cellpadding='0', cellspacing='0', border='0', style='border-collapse: collapse;')
+                                      tr
+                                        td.wrapper(width='100%', style='padding-left: 20px; padding-right: 20px; padding-top: 45px; padding-bottom: 45px;')
+                                          div !{component.text3}
+
+

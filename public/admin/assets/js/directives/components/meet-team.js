@@ -27,6 +27,7 @@ app.directive('meetTeamComponent',["$window", function ($window) {
       scope.deleteTeamMember = function (index) {
         console.log('index', index);
         scope.component.teamMembers.splice(index, 1);
+        scope.resizeTeamTiles();
       };
 
       scope.addTeamMember = function (index) {
@@ -45,6 +46,7 @@ app.directive('meetTeamComponent',["$window", function ($window) {
           }]
         };
         scope.component.teamMembers.splice(index + 1, 0, newTeam);
+        scope.resizeTeamTiles();
       };
 
       scope.resizeTeamTiles = function (argument) {

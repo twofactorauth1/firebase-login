@@ -20,6 +20,7 @@ module.exports = function (config) {
       'public/js/libs/angular-mocks/angular-mocks.js',
 
       // add mocks after real angular dependencies
+      // TODO: shouldn't jquery be before angular?
       'public/js/libs/fastclick/lib/fastclick.js',
       'public/js/libs/jquery/dist/jquery.min.js',
       'public/js/libs/angular-route/angular-route.min.js',
@@ -35,6 +36,7 @@ module.exports = function (config) {
       'public/js/libs/angular-bootstrap/ui-bootstrap-tpls.min.js',
       'public/js/libs/angular-filter/dist/angular-filter.min.js',
       'public/js/libs/oclazyload/dist/ocLazyLoad.min.js',
+      'public/js/libs/angular-card/src/card.js',
       'public/js/libs/angular-loading-bar/build/loading-bar.min.js',
       'public/js/libs/angular-breadcrumb/dist/angular-breadcrumb.min.js',
       'public/js/libs/angular-scroll/angular-scroll.min.js',
@@ -50,6 +52,8 @@ module.exports = function (config) {
       'public/js/libs/angular-sweetalert-promised/SweetAlert.min.js',
       'public/js/libs/sweetalert/lib/sweet-alert.min.js',
       'public/js/libs/underscore/underscore.js',
+      'node_modules/stripe-debug/stripe-debug.js',
+      'public/js/libs/angular-cookie/angular-cookie.min.js',
 
       'public/js/scripts/config.js',
       'public/admin/assets/js/config.constant.js',
@@ -71,10 +75,11 @@ module.exports = function (config) {
       // 'public/admin/assets/js/**/*.js',
       'public/admin/assets/js/controllers/gettingStartedCtrl.js',
       'public/admin/assets/js/controllers/orderDetailCtrl.js',
+      'public/admin/assets/js/controllers/billingCtrl.js',
 
       // add test files here
       // 'public_tests/admin/customers/customerservice_spec.js',
-      // 'public_tests/admin/billing/billingctrl_spec.js',
+      'public_tests/admin/billing/billingctrl_spec.js',
       'public_tests/admin/support/gettingStartedCtrl_spec.js',
       'public_tests/admin/orders/orderDetailCtrl_spec.js'
     ],

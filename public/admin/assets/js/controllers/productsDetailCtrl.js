@@ -347,16 +347,10 @@
       console.log('removeVariation');
     };
 
-    $scope.productStatusOptions = [{
-      name: 'Active',
-      value: 'active'
-    }, {
-      name: 'Backorder',
-      value: 'backorder'
-    }, {
-      name: 'Inactive',
-      value: 'inactive'
-    }];
+   
+    ProductService.productStatusTypes(function(types) {
+        $scope.productStatusOptions = types;
+    });
 
     $scope.productTypes = ProductConstant.product_types;
 

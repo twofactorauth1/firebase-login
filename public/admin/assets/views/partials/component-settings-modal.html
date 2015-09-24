@@ -42,6 +42,14 @@
                                 <spectrum-colorpicker format="hex" options="spectrum.options" class="pull-right" ng-model="componentEditing.nav.bg" ng-change="saveComponent()"></spectrum-colorpicker>
                             </div>
                         </div>
+                        <div class="form-group" ng-if="componentEditing.type === 'email'">
+                            <label>Email BG Color:</label>
+                            <span tooltip-placement="top" tooltip-html-unsafe="Background color of email."><i class="fa fa-info-circle" /></span>
+                            <div class="pull-right">
+                                <h4 class="pull-left"><i class="fa fa-eyedropper" /></h4>
+                                <spectrum-colorpicker format="hex" options="spectrum.options" class="pull-right" ng-model="componentEditing.emailBg" ng-change="saveComponent()"></spectrum-colorpicker>
+                            </div>
+                        </div>
                         <div class="form-group" ng-show="componentEditing.type == 'navigation'">
                             <label for="colorpicker">Nav Hover Color:</label>
                             <span tooltip-placement="top" tooltip-html-unsafe="Nav bar menu hover color."><i class="fa fa-info-circle" /></span>
@@ -107,7 +115,7 @@
                                 <spectrum-colorpicker format="'hex'" options="spectrum.options" class="pull-right" ng-model="componentEditing.tagCloud.bgcolor" ng-change="saveComponent()"></spectrum-colorpicker>
                             </div>
                         </div>
-                        <form class="form-horizontal" ng-show="!componentEditing.bg.img.show">
+                        <form class="form-horizontal" ng-show="!componentEditing.bg.img.show" ng-hide="isEmail">
                             <div class="row">
                                 <div class="col-sm-10">
                                     <label class="pull-left">Add BG Opacity</label>
@@ -129,6 +137,22 @@
                                 <spectrum-colorpicker format="'hex'" options="spectrum.options" class="pull-right" ng-model="componentEditing.boxColor" ng-change="saveComponent()"></spectrum-colorpicker>
                             </div>
                         </div>
+                        <div class="form-group" ng-if="componentEditing.type == 'products'">
+                            <label for="colorpicker">Title Box Background Color:</label>
+                            <span tooltip-placement="top" tooltip-html-unsafe="Set Background color of title and description box."><i class="fa fa-info-circle" /></span>
+                            <div class="pull-right">
+                                <h4 class="pull-left"><i class="fa fa-eyedropper" /></h4>
+                                <spectrum-colorpicker format="'hex'" options="spectrum.options" class="pull-right" ng-model="componentEditing.boxColor" ng-change="saveComponent()"></spectrum-colorpicker>
+                            </div>
+                        </div>
+                        <div class="form-group" ng-if="componentEditing.type == 'products'">
+                            <label for="colorpicker">Icon Color:</label>
+                            <span tooltip-placement="top" tooltip-html-unsafe="Set color of product icons."><i class="fa fa-info-circle" /></span>
+                            <div class="pull-right">
+                                <h4 class="pull-left"><i class="fa fa-eyedropper" /></h4>
+                                <spectrum-colorpicker format="'hex'" options="spectrum.options" class="pull-right" ng-model="componentEditing.iconColor" ng-change="saveComponent()"></spectrum-colorpicker>
+                            </div>
+                        </div>
                         <div class="row" ng-if="componentEditing.type == 'contact-us'">
                             <div class="col-sm-10">
                                 <label class="pull-left">Box Opacity</label>
@@ -141,7 +165,7 @@
                             </div>
                         </div>
                         <hr/>
-                        <div class="form-group" ng-if="componentEditing.type != 'navigation' && componentEditing.type != 'top-bar' && componentEditing.type != 'blog'">
+                        <div class="form-group" ng-if="componentEditing.type != 'navigation' && componentEditing.type != 'top-bar' && componentEditing.type != 'blog'" ng-hide="isEmail">
                             <label for="bg_hide" class="margin-bottom-0">Show Background Image</label>
                             <span tooltip-placement="top" tooltip-html-unsafe="show/hide background image of component."><i class="fa fa-info-circle" /></span>
                             <switch ng-model="componentEditing.bg.img.show" class="pull-right" ng-change="saveComponent()"></switch>
@@ -350,7 +374,7 @@
                     <div class="form-group" ng-if="componentEditing.type != 'navigation'">
                         <label for="component-title" tooltip-placement="top" tooltip="The anchor of the component">Anchor</label>
                         <span tooltip-placement="top" tooltip-html-unsafe="The anchor of the component."><i class="fa fa-info-circle" /></span>
-                        <input class="form-control" type="text" ng-model="componentEditing.anchor" ng-change="saveComponent()">
+                        <input class="form-control" type="text" ng-model="componentEditing.anchor" ng-change="slugifyAnchor(componentEditing.anchor);">
                     </div>
                     <hr></hr>
                     <div class="form-group">
@@ -417,7 +441,7 @@
                                 <label style="margin-top:10px" ng-if="newLink.linkType=='section'" for="link-url">Select Component</label>
                                 <select style="text-transform:capitalize" ng-if="newLink.linkType=='section'" placeholder="Select a component" ng-model="newLink.linkUrl" class="form-control margin-bottom-0">
                                     <option value="" disabled>Select a Component</option>
-                                    <option ng-repeat="component in currentPage.components track by $index" data-ng-if="component.anchor" value="{{component.anchor}}">{{setLinkTitle(component.type, $index)}}</option>
+                                    <option ng-repeat="component in currentPage.components track by $index" data-ng-if="component.anchor || component._id" value="{{component.anchor || component._id}}">{{setLinkTitle(component.type, $index)}}</option>
                                 </select>
                                 <label ng-if="newLink.linkType=='page'" for="link-url">Select Page</label>
                                 <label ng-if="newLink.linkType=='external'" for="link-url">Enter Url</label>
@@ -437,7 +461,7 @@
                     <div class="clearfix"></div>
                     <div ng-if="!componentEditing.customnav" id="reorderNavBarContainer" class="form-group">
                         <ul ng-hide="" ng-sortable="barConfig" class="component-sortable" ng-class="{'dragging': dragging}" ng-model="mainMenu.links" class="nav-bar" data-ng-repeat="mainMenu in website.linkLists track by $index" data-ng-if="mainMenu.handle=='head-menu' ">
-                            <li ng-if="!componentEditing.customnav" data-ng-repeat="link in mainMenu.links" class="margin-bottom-10 fragment">
+                            <li data-ng-repeat="link in mainMenu.links track by $index" class="margin-bottom-10 fragment">
                                 <div class="head-menu-links" data-label="{{link.label}}">
                                     <div class="container-fluid">
                                         <div>
@@ -491,7 +515,7 @@
                                                         <label ng-if="linkType[$index]=='external'" for="link-url">Enter Url</label>
                                                         <select id="linkSection" style="text-transform:capitalize" ng-if="linkType[$index]=='section'" ng-model="link.linkTo.data" placeholder="Select a component" ng-change="updateLinkList()" class="form-control margin-bottom-0">
                                                             <option value="" disabled>Select a Component</option>
-                                                            <option ng-repeat="component in currentPage.components track by $index" data-ng-if="component.anchor" value="{{component.anchor}}" ng-selected="{{link.linkTo.data === component.anchor}}">{{setLinkTitle(component.type, $index)}}</option>
+                                                            <option ng-repeat="component in currentPage.components track by $index" data-ng-if="component.anchor || component._id" value="{{component.anchor || component._id}}" ng-selected="{{link.linkTo.data === (component.anchor || component._id)}}">{{setLinkTitle(component.type, $index)}}</option>
                                                         </select>
                                                         <select ng-if="linkType[$index]=='page'" placeholder="Select a page" ng-change="updateLinkList()" ng-model="link.linkTo.data" class="form-control margin-bottom-0">
                                                             <option value="" disabled>Select a Page</option>
@@ -509,7 +533,7 @@
                         </div>
                         <div ng-if="componentEditing.customnav" id="reorderNavBarContainer" class="form-group">
                             <ul ng-sortable="barConfig" class="component-sortable" ng-model="customMenu.links" ng-class="{'dragging': dragging}" class="nav-bar" data-ng-repeat="customMenu in componentEditing.linkLists track by $index" data-ng-if="customMenu.handle=='head-menu' ">
-                                <li ng-if="componentEditing.customnav" data-ng-repeat="link in customMenu.links" class="margin-bottom-10 fragment">
+                                <li data-ng-repeat="link in customMenu.links track by $index" class="margin-bottom-10 fragment">
                                     <div class="head-menu-links" data-label="{{link.label}}">
                                         <div class="container-fluid">
                                             <div class="col-xs-1">
@@ -550,7 +574,7 @@
                                                     <div class="col-xs-12">
                                                         <select id="linkSection" style="text-transform:capitalize" ng-if="linkType[$index]=='section'" ng-model="link.linkTo.data" ng-change="updateLinkList()" class="form-control margin-bottom-0">
                                                             <option value="" disabled>Select a Component</option>
-                                                            <option ng-repeat="component in currentPage.components track by $index" data-ng-if="component.anchor" value="{{component.anchor}}" ng-selected="{{link.linkTo.data === component.anchor}}">{{setLinkTitle(component.type, $index)}}</option>
+                                                            <option ng-repeat="component in currentPage.components track by $index" data-ng-if="component.anchor || component._id" value="{{component.anchor || component._id}}" ng-selected="{{link.linkTo.data === (component.anchor || component._id)}}">{{setLinkTitle(component.type, $index)}}</option>
                                                         </select>
                                                         <select ng-if="linkType[$index]=='page'" ng-change="updateLinkList()" ng-model="link.linkTo.data" class="form-control margin-bottom-0">
                                                             <option value="" disabled>Select a Page</option>
@@ -576,7 +600,12 @@
                         <span tooltip-placement="top" tooltip-html-unsafe="Show/hide business hours to contact us component."><i class="fa fa-info-circle" /></span>
                         <switch id="show-hours" ng-model="componentEditing.showHours" class="pull-right" ng-change="saveComponent()"></switch>
                     </div>
-                    <div class="form-group" ng-if="componentEditing.showHours">
+                    <div class="form-group">
+                        <label for="custom-hours">Custom hours</label>
+                        <span tooltip-placement="top" tooltip-html-unsafe="Show/hide custom hours."><i class="fa fa-info-circle" /></span>
+                        <switch id="custom-hours" ng-model="componentEditing.custom.hours" class="pull-right" ng-change="saveContactComponent(false)"></switch>
+                    </div>
+                    <div class="form-group" ng-if="componentEditing.showHours && componentEditing.custom.hours">
                         <label for="split-hours">Id like to enter two sets of hours for a single day</label>
                         <span tooltip-placement="top" tooltip-html-unsafe="Are your hours split during a single day such as 9-11am and 7-10pm?"><i class="fa fa-info-circle" /></span>
                         <switch id="splitHours" ng-model="componentEditing.splitHours" class="pull-right" ng-change="saveComponent()"></switch>
@@ -585,57 +614,61 @@
                         <label for="location-hours">Business Hours </label>
                         <span tooltip-placement="top" tooltip-html-unsafe="Contact Us business hours."><i class="fa fa-info-circle" /></span>
                         <span ng-if="contactHoursInvalid" id="contact-err-msg" class="error help-block">Start date(s) should not be greater than end date(s)</span>
-                        <div ng-if="componentEditing.splitHours" class="col-xs-12 multiple-hours" ng-repeat="val in componentEditing.hours">
+                        <div ng-if="componentEditing.splitHours" class="multiple-hours col-xs-12" ng-repeat="val in componentEditing.hours">
                             <div class="col-xs-1">
                                 <label for="val.day">{{val.day}}:</label>
                             </div>
-                            <div class="col-xs-2" id="business_hours_start_{{$index}}">
-                                <select ng-change="validateHours(val, $index)" ng-hide="val.closed" class="chosen-select hour-start-select form-control" ng-model="val.start" ng-options="item for item in hours.HOURS">
+                            <div class="col-xs-5">
+                                <div id="business_hours_start_{{$index}}" class="inline-table-cell">
+                                <select ng-disabled="!componentEditing.custom.hours" ng-change="validateHours(val, $index)" ng-hide="val.closed" class="chosen-select hour-start-select form-control" ng-model="val.start" ng-options="item for item in hours.HOURS">
                                 </select>
-                            </div>
-                            <div class="col-xs-2" id="business_hours_end_{{$index}}">
-                                <select ng-hide="val.closed" ng-change="validateHours(val, $index)" class="chosen-select hour-start-select form-control" ng-model="val.end" ng-options="item for item in hours.HOURS">
-                                </select>
-                            </div>
+                                </div>
+                                <div id="business_hours_end_{{$index}}" class="inline-table-cell">
+                                    <select ng-disabled="!componentEditing.custom.hours" ng-hide="val.closed" ng-change="validateHours(val, $index)" class="chosen-select hour-start-select form-control" ng-model="val.end" ng-options="item for item in hours.HOURS">
+                                    </select>
+                                </div>
+                            </div>                            
                             <label class="pull-left" ng-hide="val.closed" ng-if="val.split" style="margin:10px"> & </label>
-                            <div class="col-xs-2" id="business_hours_start2_{{$index}}">
-                                <select ng-change="validateHours(val, $index)" ng-hide="val.closed" ng-if="val.split" class="chosen-select hour-start-select form-control" ng-model="val.start2" ng-options="item for item in hours.HOURS">
-                                </select>
-                            </div>
-                            <div class="col-xs-2">
-                                <select ng-change="validateHours(val, $index)" ng-if="val.split" ng-hide="val.closed" class="chosen-select hour-start-select form-control" ng-model="val.end2" ng-options="item for item in hours.HOURS">
-                                </select>
-                            </div>
-                            <div class="col-xs-5 margin-left-5">
+                            <div class="col-xs-5">
+                                <div id="business_hours_start2_{{$index}}" class="inline-table-cell">
+                                    <select ng-disabled="!componentEditing.custom.hours" ng-change="validateHours(val, $index)" ng-hide="val.closed" ng-if="val.split" class="chosen-select hour-start-select form-control" ng-model="val.start2" ng-options="item for item in hours.HOURS">
+                                    </select>
+                                </div>
+                                <div class="inline-table-cell">
+                                    <select ng-disabled="!componentEditing.custom.hours" ng-change="validateHours(val, $index)" ng-if="val.split" ng-hide="val.closed" class="chosen-select hour-start-select form-control" ng-model="val.end2" ng-options="item for item in hours.HOURS">
+                                    </select>
+                                </div>
+                            </div>                            
+                            <div class="col-xs-5 margin-left-5" class="inline-table-cell">
                                 <div class="checkbox clip-check check-primary checkbox-inline">
-                                    <input type="checkbox" id="closed-{{$index}}" ng-change="validateHours(val, $index)" ng-model="val.closed">
+                                    <input ng-disabled="!componentEditing.custom.hours" type="checkbox" id="closed-{{$index}}" ng-change="validateHours(val, $index)" ng-model="val.closed">
                                     <label for="closed-{{$index}}">
                                         Closed
                                     </label>
                                 </div>
                                 <div class="checkbox clip-check check-primary checkbox-inline" ng-hide="val.closed">
-                                    <input type="checkbox" id="split-{{$index}}" ng-change="validateHours(val, $index)" ng-model="val.split">
+                                    <input ng-disabled="!componentEditing.custom.hours" type="checkbox" id="split-{{$index}}" ng-change="validateHours(val, $index)" ng-model="val.split">
                                     <label for="split-{{$index}}">
                                         Split
                                     </label>
                                 </div>
-                            </div>
+                            </div>                                                       
                         </div>
                         <div ng-if="!componentEditing.splitHours" class="col-xs-12" ng-repeat="val in componentEditing.hours">
                             <div class="col-xs-1">
                                 <label for="val.day">{{val.day}}:</label>
                             </div>
                             <div class="col-xs-3" id="business_hours_start_{{$index}}">
-                                <select ng-change="validateHours(val, $index)" ng-hide="val.closed || val.wholeday" class="chosen-select hour-start-select form-control" ng-model="val.start" ng-options="item for item in hours.HOURS">
+                                <select ng-disabled="!componentEditing.custom.hours" ng-change="validateHours(val, $index)" ng-hide="val.closed || val.wholeday" class="chosen-select hour-start-select form-control" ng-model="val.start" ng-options="item for item in hours.HOURS">
                                 </select>
                             </div>
                             <div class="col-xs-3">
-                                <select ng-change="validateHours(val, $index)" ng-hide="val.closed || val.wholeday" class="chosen-select hour-start-select form-control" ng-model="val.end" ng-options="item for item in hours.HOURS">
+                                <select ng-disabled="!componentEditing.custom.hours" ng-change="validateHours(val, $index)" ng-hide="val.closed || val.wholeday" class="chosen-select hour-start-select form-control" ng-model="val.end" ng-options="item for item in hours.HOURS">
                                 </select>
                             </div>
                             <div class="col-xs-3">
                                 <div ng-hide="val.closed" class="checkbox clip-check check-primary checkbox-inline">
-                                    <input type="checkbox" ng-change="val.closed = false;validateHours(val, $index)" id="wholeday-{{$index}}" ng-model="val.wholeday">
+                                    <input ng-disabled="!componentEditing.custom.hours" type="checkbox" ng-change="val.closed = false;validateHours(val, $index)" id="wholeday-{{$index}}" ng-model="val.wholeday">
                                     <label for="wholeday-{{$index}}">
                                         Open 24 hours
                                     </label>
@@ -643,7 +676,7 @@
                             </div>
                             <div class="col-xs-2">
                                 <div class="checkbox clip-check check-primary checkbox-inline">
-                                    <input type="checkbox" id="closed-{{$index}}" ng-change="val.wholeday = false;validateHours(val, $index)" ng-model="val.closed">
+                                    <input ng-disabled="!componentEditing.custom.hours" type="checkbox" id="closed-{{$index}}" ng-change="val.wholeday = false;validateHours(val, $index)" ng-model="val.closed">
                                     <label for="closed-{{$index}}">
                                         Closed
                                     </label>
@@ -658,11 +691,16 @@
                         <span>Address</span>
                     </tab-heading>
                     <div class="form-group">
+                        <label for="custom-address">Custom Address</label>
+                        <span tooltip-placement="top" tooltip-html-unsafe="Show/hide custom address."><i class="fa fa-info-circle" /></span>
+                        <switch id="custom-address" ng-model="componentEditing.custom.address" class="pull-right" ng-change="saveContactComponent(true)"></switch>
+                    </div>
+                    <div ng-if="componentEditing.custom.address" class="form-group">
                         <label for="location-address">Add Address</label>
                         <span tooltip-placement="top" tooltip-html-unsafe="Address Suggestions"><i class="fa fa-info-circle" /></span>
-                        <input id="autocomplete-place" class="form-control" g-places-autocomplete ng-model="place.address">
+                        <input id="autocomplete-place" ng-disabled="!componentEditing.custom.address" class="form-control" g-places-autocomplete ng-model="place.address">
                     </div>
-                    <p>Edit address
+                    <p ng-show="componentEditing.custom.address">Edit address
                         <span class="links cl-effect-1">
                                 <a href="" ng-click="showAddress = true" ng-show="!showAddress">Modify</a>
                             </span>
@@ -670,35 +708,35 @@
                             <a href="" ng-click="showAddress = false" ng-show="showAddress">Cancel</a>
                         </span>
                     </p>
-                    <div ng-if="showAddress" class="row">
+                    <div ng-if="showAddress || !componentEditing.custom.address" class="row">
                         <div class="form-group col-sm-6" ng-class="{'has-error':errorMapData}">
                             <label for="location-address">Address </label>
                             <span tooltip-placement="top" tooltip-html-unsafe="Contact Us address line 1."><i class="fa fa-info-circle" /></span>
-                            <input id="location-address" ng-blur="updateContactUsAddress()" class="form-control" ng-model="componentEditing.location.address">
+                            <input id="location-address" ng-disabled="!componentEditing.custom.address" ng-blur="updateContactUsAddress()" class="form-control" ng-model="componentEditing.location.address">
                         </div>
                         <div class="form-group col-sm-6" ng-class="{'has-error':errorMapData}">
                             <label for="location-address2">Address2 </label>
                             <span tooltip-placement="top" tooltip-html-unsafe="Contact Us address line 2."><i class="fa fa-info-circle" /></span>
-                            <input id="location-address2" ng-change="checkIfAddess(true)" ng-blur="updateContactUsAddress()" class="form-control" type="text" ng-model="componentEditing.location.address2">
+                            <input id="location-address2" ng-disabled="!componentEditing.custom.address" ng-change="checkIfAddess(true)" ng-blur="updateContactUsAddress()" class="form-control" type="text" ng-model="componentEditing.location.address2">
                         </div>
                     </div>
-                    <div ng-if="showAddress" class="row">
+                    <div ng-if="showAddress || !componentEditing.custom.address" class="row">
                         <div class="form-group col-sm-4" ng-class="{'has-error':errorMapData}">
                             <label for="location-city">City </label>
                             <span tooltip-placement="top" tooltip-html-unsafe="Contact Us City."><i class="fa fa-info-circle" /></span>
-                            <input id="location-city" ng-change="checkIfAddess(true)" ng-blur="updateContactUsAddress()" class="form-control" type="text" ng-model="componentEditing.location.city">
+                            <input id="location-city" ng-disabled="!componentEditing.custom.address" ng-change="checkIfAddess(true)" ng-blur="updateContactUsAddress()" class="form-control" type="text" ng-model="componentEditing.location.city">
                             <div class="error"></div>
                         </div>
                         <div class="form-group col-sm-4" ng-class="{'has-error':errorMapData}">
                             <label for="location-state">State </label>
                             <span tooltip-placement="top" tooltip-html-unsafe="Contact Us State."><i class="fa fa-info-circle" /></span>
-                            <input id="location-state" ng-change="checkIfAddess(true)" ng-blur="updateContactUsAddress()" class="form-control" type="text" ng-model="componentEditing.location.state">
+                            <input id="location-state" ng-disabled="!componentEditing.custom.address" ng-change="checkIfAddess(true)" ng-blur="updateContactUsAddress()" class="form-control" type="text" ng-model="componentEditing.location.state">
                             <div class="error"></div>
                         </div>
                         <div class="form-group col-sm-4" ng-class="{'has-error':errorMapData}">
                             <label for="location-zip">Zip Code </label>
                             <span tooltip-placement="top" tooltip-html-unsafe="Contact Us zip code."><i class="fa fa-info-circle" /></span>
-                            <input id="location-zip" ng-change="checkIfAddess(true)" ng-blur="updateContactUsAddress()" validation-type="zip" indigeweb-validate-form-fields class="form-control" type="text" ng-model="componentEditing.location.zip">
+                            <input id="location-zip" ng-disabled="!componentEditing.custom.address" ng-change="checkIfAddess(true)" ng-blur="updateContactUsAddress()" validation-type="zip" indigeweb-validate-form-fields class="form-control" type="text" ng-model="componentEditing.location.zip">
                         </div>
                     </div>
                     <div class="form-group">
@@ -713,8 +751,8 @@
                     </tab-heading>
                     <div class="form-group">
                         <label for="mapZoom">Map Zoom:</label>
-                        <rzslider name="mapZoom" rz-slider-model="componentEditing.map.zoom" rz-slider-floor="0" rz-slider-ceil="19"></rzslider>
-                        <div class="help-block">Zoom level on map 0 (World) - 19 (Street) </div>
+                        <rzslider name="mapZoom" rz-slider-model="componentEditing.map.zoom" rz-slider-floor="1" rz-slider-ceil="19"></rzslider>
+                        <div class="help-block">Zoom level on map 1 (World) - 19 (Street) </div>
                     </div>
                 </tab>
                 <tab ng-if="componentEditing.type === 'simple-form'">
@@ -847,6 +885,44 @@
                         <div class="clearfix"></div>
                     </div>
                 </tab>
+                <tab ng-if="componentEditing.type === 'testimonials'">
+                    <tab-heading>
+                        <span>Slider Settings</span>
+                    </tab-heading>
+                    <div class="form-group">
+                        <label for="slider-autoplay">Auto Play:</label>
+                        <span tooltip-placement="top" tooltip-html-unsafe="Set slider auto play."><i class="fa fa-info-circle" /></span>
+                        <switch id="slider-autoplay" ng-model="componentEditing.slider.autoPlay" class="pull-right"></switch>
+                    </div>
+                    <div class="form-group">
+                        <label for="slider-speed">Transition Speed:</label>
+                        <span tooltip-placement="top" tooltip-html-unsafe="Speed at which slider scrolls through the testimonials."><i class="fa fa-info-circle" /></span>
+                        <select id="slider-speed" class="form-control" ng-change="saveTestimonialComponent()" ng-model="componentEditing.slider.speed">
+                            <option value="1000">Slow</option>
+                            <option value="500">Medium</option>
+                            <option value="300">High</option>
+                        </select>
+                    </div>
+                    <div class="form-group hidden">
+                        <label for="slider-direction">Slide Vertically:</label>
+                        <span tooltip-placement="top" tooltip-html-unsafe="Slide direction ( horizontal or veritcal)."><i class="fa fa-info-circle" /></span>
+                        <switch id="slider-direction" ng-change="saveTestimonialComponent()" ng-model="componentEditing.slider.vertical" class="pull-right"></switch>                        
+                    </div>                    
+                    <div class="form-group">
+                        <label for="slider-autoplayinterval">Auto Play Interval:</label>
+                        <span tooltip-placement="top" tooltip-html-unsafe="Set slider auto play interval."><i class="fa fa-info-circle" /></span>
+                        <select id="slider-autoplayinterval" class="form-control"  ng-change="saveComponent()" ng-model="componentEditing.slider.autoPlayInterval">
+                            <option value="5000">5 Seconds</option>
+                            <option value="10000">10 Seconds</option>
+                            <option value="15000">15 Seconds</option>
+                            <option value="30000">30 Seconds</option>                            
+                            <option value="45000">45 Seconds</option>
+                            <option value="60000">1 Minute</option>
+                            <option value="120000">2 Minutes</option>
+                            <option value="300000">5 Minutes</option>
+                        </select>
+                    </div>
+                </tab>
                 <tab ng-if="componentEditing.type === 'video'">
                     <tab-heading>
                         <span>Video</span>
@@ -857,7 +933,6 @@
                         <select id="member-name" class="form-control" ng-model="componentEditing.videoType">
                             <option value="youtube">YouTube</option>
                             <option value="vimeo">Vimeo</option>
-                            //
                             <option value="html5">Html4 Video</option>
                         </select>
                     </div>

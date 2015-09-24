@@ -1,47 +1,55 @@
 <div ng-class="component.type+'-v'+component.version">
-    <center>
-        <table border="0" cellpadding="0" cellspacing="0" height="100%" width="100%" id="backgroundTable">
+    <div style="width: 100%; -webkit-text-size-adjust: 100% !important; -ms-text-size-adjust: 100% !important; margin: 0; padding: 0;">
+        <table width="100%" align="center" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse;">
             <tr>
-                <td align="center" valign="top" style="padding-top:20px;">
-                    <table border="0" cellpadding="0" cellspacing="0" width="600" id="templateContainer">
+                <td>
+                    <table width="100%" align="center" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse;">
                         <tr>
-                            <td align="center" valign="top">
-                                <table border="0" cellpadding="0" cellspacing="0" width="600" id="templateHeader">
+                            <!-- <td align="center" width="100%" style="background: url('{{component.bg.img.url && component.bg.img.show ? component.bg.img.url : 'none'}}');background-size: cover; background-repeat: no-repeat;background-color: {{component.bg.color || '#eaeaea'}};"> -->
+                            <td>
+                                <table class="device-width" align="center" width="680" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse;">
                                     <tr>
-                                        <td class="headerContent">
-                                            <div mc:edit="std_content00">
-                                                <div elem ng-model="component.logo"></div>
+                                        <td class="wrapper" width="100%" style="padding-left: 20px; padding-right: 20px; padding-top: 45px; padding-bottom: 45px;">
+                                            <div style="background-color: {{component.emailBg || '#ffffff'}};">
+                                                <table class="device-width" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse;">
+                                                    <tr>
+                                                        <td class="device-width" width="100%" style="padding-top: 30px;">
+                                                            <table class="device-width" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse;">
+                                                                <tr>
+                                                                    <td class="device-width" width="100%" style="text-align: center; padding-bottom: 15px; padding-left:20px;padding-right:20px">
+                                                                        <div elem ng-model="component.logo"></div>
+                                                                        <hr>
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                                <table width="100%" align="center" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse;" ng-if="component.title">
+                                                    <tr>
+                                                        <td align="center" width="100%">
+                                                            <table class="device-width" align="center" width="680" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse;">
+                                                                <tr>
+                                                                    <td class="wrapper" width="640" style="padding-left: 20px; padding-right: 20px; padding-top: 45px; padding-bottom: 45px;">
+                                                                        <div elem ng-model="component.title"></div>
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                                <div style="padding:20px;">
+                                                    <div elem ng-model="component.text"></div>
+                                                </div>
                                             </div>
                                         </td>
                                     </tr>
                                 </table>
                             </td>
                         </tr>
-                        <tr>
-                            <td align="center" valign="top">
-                                <table border="0" cellpadding="0" cellspacing="0" width="600" id="templateBody">
-                                    <tr>
-                                        <td valign="top">
-                                            <table border="0" cellpadding="20" cellspacing="0" width="100%">
-                                                <tr>
-                                                    <td valign="top" class="bodyContent">
-                                                        <div mc:edit="std_content00">
-                                                            <div elem ng-model="component.title"></div>
-                                                            </br>
-                                                            <div elem ng-model="component.text"></div>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            </table>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </td>
-                        </tr>
                     </table>
-                    <br />
                 </td>
             </tr>
         </table>
-    </center>
+    </div>
 </div>

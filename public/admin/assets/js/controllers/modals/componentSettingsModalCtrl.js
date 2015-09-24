@@ -1,7 +1,9 @@
 'use strict';
 /*global app, moment, angular, window*/
 /*jslint unparam:true*/
-app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalInstance', '$http', '$timeout', '$q', '$compile', '$filter', 'WebsiteService', 'CustomerService', 'ProductService', 'GeocodeService', 'toaster', 'hoursConstant', 'components', 'clickedIndex', 'contactMap', 'website', 'blog', 'isDirty', 'isSinglePost', 'openParentModal', 'showInsert', 'blogImage', 'accountShowHide', 'CampaignService', function ($scope, $rootScope, $modalInstance, $http, $timeout, $q, $compile, $filter, WebsiteService, CustomerService, ProductService, GeocodeService, toaster, hoursConstant, components, clickedIndex, contactMap, website, blog, isDirty, isSinglePost, openParentModal, showInsert, blogImage, accountShowHide, CampaignService) {
+
+app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalInstance', '$http', '$timeout', '$q', '$compile', '$filter', 'WebsiteService', 'CustomerService', 'ProductService', 'GeocodeService', 'toaster', 'hoursConstant', 'components', 'clickedIndex', 'contactMap', 'website', 'blog', 'isDirty', 'isSinglePost', 'openParentModal', 'showInsert', 'blogImage', 'accountShowHide', 'CampaignService', 'testimonialSlider', 'isEmail', function ($scope, $rootScope, $modalInstance, $http, $timeout, $q, $compile, $filter, WebsiteService, CustomerService, ProductService, GeocodeService, toaster, hoursConstant, components, clickedIndex, contactMap, website, blog, isDirty, isSinglePost, openParentModal, showInsert, blogImage, accountShowHide, CampaignService, testimonialSlider, isEmail) {
+
   $scope.blog = {};
   $scope.components = components;
   $scope.openParentModal = openParentModal;
@@ -17,9 +19,10 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
   $scope.place = {};
   $scope.place.address = null;
   $scope.errorMapData = false;
-  $scope.showAddress = false;
   $scope.checkIfAddess = false;
   $scope.blogImage = blogImage;
+  $scope.isEmail = isEmail;
+  $scope.testimonialSlider = testimonialSlider;
 
   /*
    * @getPages
@@ -180,7 +183,8 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
       togglePaletteOnly: true,
       togglePaletteMoreText: 'more',
       togglePaletteLessText: 'less',
-      appendTo: angular.element("#component-setting-modal"),
+      preferredFormat: 'hex',
+      appendTo: "body",
       palette: [
         ["#C91F37", "#DC3023", "#9D2933", "#CF000F", "#E68364", "#F22613", "#CF3A24", "#C3272B", "#8F1D21", "#D24D57"],
         ["#F08F907", "#F47983", "#DB5A6B", "#C93756", "#FCC9B9", "#FFB3A7", "#F62459", "#F58F84", "#875F9A", "#5D3F6A"],
@@ -708,17 +712,18 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
 
   $scope.updateContactUsAddress = function () {
     if (!angular.equals($scope.originalContactMap, $scope.componentEditing.location)) {
+      $scope.locationAddress = null;
+       $scope.setLatLon();
       $scope.validateGeoAddress();
     }
   };
 
-  $scope.validateGeoAddress = function (fn) {
-    $scope.setLatLon();
-    GeocodeService.validateAddress($scope.componentEditing.location, function (data, results) {
+  $scope.validateGeoAddress = function (fn) {   
+    GeocodeService.validateAddress($scope.componentEditing.location, $scope.locationAddress, function (data, results) {
       if (data && results.length === 1) {
         $timeout(function () {
           $scope.$apply(function () {
-            $scope.setLatLon(results[0].geometry.location.G, results[0].geometry.location.K);
+            $scope.setLatLon(results[0].geometry.location.G || results[0].geometry.location.H, results[0].geometry.location.K || results[0].geometry.location.L);
             $scope.errorMapData = false;
             angular.copy($scope.componentEditing.location, $scope.originalContactMap);
             $scope.contactMap.refreshMap();
@@ -740,6 +745,22 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
 
   $scope.saveComponent = function () {
     $scope.isDirty.dirty = true;
+  };
+
+  $scope.saveContactComponent = function (is_address) {
+    if(is_address){
+      $scope.contactMap.refreshMap();
+      $scope.place.address = GeocodeService.stringifyAddress($scope.componentEditing.location);
+    }
+    else{
+      $scope.contactMap.refreshHours();
+    }
+    $scope.isDirty.dirty = true;
+  };
+
+  $scope.saveTestimonialComponent = function () {
+    $scope.isDirty.dirty = true;
+    $scope.testimonialSlider.refreshSlider();
   };
 
   $scope.spacingArr = [{
@@ -854,6 +875,7 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
 
     if ($scope.componentEditing.type === "contact-us") {
       $scope.hours = hoursConstant;
+
       $scope.place.address = GeocodeService.stringifyAddress($scope.componentEditing.location);
       $scope.originalContactMap = angular.copy($scope.componentEditing.location);
       if ($scope.componentEditing.hours) {
@@ -964,6 +986,8 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
     if (newValue) {
       if (angular.isObject(newValue)) {
         $scope.fillInAddress(newValue);
+        $scope.locationAddress = newValue;
+        $scope.setLatLon();
         $scope.validateGeoAddress();
       }
     }
@@ -1037,6 +1061,12 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
       $scope.contactHoursInvalid = false;
     }
 
+  };
+
+  $scope.slugifyAnchor = function (url) {
+    if (url) {
+      $scope.componentEditing.anchor = $filter('slugify')(url);
+    }
   };
 
 }]);

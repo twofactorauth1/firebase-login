@@ -12,6 +12,7 @@ var baseApi = require('../base.api.js');
 var cmsDao = require('../../cms/dao/cms.dao.js');
 var mandrillHelper = require('../../utils/mandrillhelper');
 var Page = require('../../cms/model/page');
+var Topic = require('../../cms/model/topic');
 require('../../cms/model/email');
 //var Components = require('../../cms/model/components');
 
@@ -93,6 +94,11 @@ _.extend(api.prototype, baseApi.prototype, {
         app.post(this.url('template/:id/website/:websiteId/page'), this.isAuthAndSubscribedApi.bind(this), this.createPageFromTemplate.bind(this));
         // app.post(this.url('template/:themeId/website/:websiteId'), this.isAuthApi.bind(this), this.setTemplate.bind(this));
 
+        // TOPICS
+        app.get(this.url('topic'), this.isAuthApi.bind(this), this.listTopics.bind(this));
+        app.post(this.url('topic'), this.isAuthAndSubscribedApi.bind(this), this.createTopic.bind(this));
+        app.put(this.url('topic/:id'), this.isAuthAndSubscribedApi.bind(this), this.updateTopic.bind(this));
+        app.delete(this.url('topic/:id'), this.isAuthAndSubscribedApi.bind(this), this.deleteTopic.bind(this));
 
         // COMPONENTS
         app.get(this.url('page/:id/components'), this.isAuthAndSubscribedApi.bind(this), this.getComponentsByPage.bind(this));
@@ -348,23 +354,40 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('emailContent.replyTo >>> ', emailDataObj.content.replyTo);
         self.log.debug('emailContent.subject >>> ', emailDataObj.content.subject);
         var accountId = parseInt(self.currentAccountId(req));
-        var component = emailDataObj.content.components[0];
-        if(component.logo) {
-            component.logo = component.logo.replace('src="//s3.amazonaws', 'src="http://s3.amazonaws');
-        }
-        if(component.title) {
-            component.title = component.title.replace('src="//s3.amazonaws', 'src="http://s3.amazonaws');
-        }
-        if(component.text) {
-            component.text = component.text.replace('src="//s3.amazonaws', 'src="http://s3.amazonaws');
-        }
         
-        self.log.debug('component >>> ', component);
-        app.render('emails/base_email', component, function(err, html){
+        var components = [];
+        var keys = ['logo','title','text','text1','text2','text3'];
+        var regex = new RegExp('src="//s3.amazonaws', "g");
+
+        emailDataObj.content.components.forEach(function(component){
+            for (var i = 0; i < keys.length; i++) {
+                if (component[keys[i]]) {
+                    component[keys[i]] = component[keys[i]].replace(regex, 'src="http://s3.amazonaws');
+                }
+            }
+
+            if (!component.bg.color) {
+                component.bg.color = '#ffffff';
+            }
+
+            if (!component.emailBg) {
+                component.emailBg = '#ffffff';
+            }
+
+            if (component.bg.img && component.bg.img.show && component.bg.img.url) {
+                component.emailBgImage = component.bg.img.url.replace('//s3.amazonaws', 'http://s3.amazonaws');
+            }
+            components.push(component);
+        });
+        
+        self.log.debug('components >>> ', components);
+        
+        app.render('emails/base_email_v2', { components: components }, function(err, html){
             if(err) {
                 self.log.error('error rendering html: ' + err);
                 self.log.warn('email will not be sent.');
             } else {
+                debugger;
                 //fromAddress, fromName, toAddress, toName, subject, html, accountId, vars, emailId, fn)
                 mandrillHelper.sendBasicEmail(
                     emailDataObj.content.fromEmail,
@@ -372,6 +395,7 @@ _.extend(api.prototype, baseApi.prototype, {
                     emailDataObj.address.email,
                     emailDataObj.address.name || "tester's name",
                     emailDataObj.content.subject,
+                    // '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/><meta property="og:title" content="*|MC:SUBJECT|*"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>*|MC:SUBJECT|*</title><meta http-equiv="X-UA-Compatible" content="IE=edge"/></head><body><div style="width: 100%; -webkit-text-size-adjust: 100% !important; -ms-text-size-adjust: 100% !important; margin: 0; padding: 0;"><table width="100%" align="center" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse;"><tr><td><table width="100%" align="center" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse;background-color:#eaeaea;"><tr><td align="center" width="100%"><table align="center" width="640" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse;background-color:#ffffff;margin-top: 45px; margin-bottom: 45px;" class="device-width"><tr><td width="100%" style="padding-left: 20px; padding-right: 20px;" class="wrapper"><table width="640" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse;" class="device-width"><tr><td width="100%" style="padding-top: 30px;" class="device-width"><table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse;" class="device-width"><tr><td width="100%" style="text-align: center; padding-bottom: 15px; padding-left:20px;padding-right:20px" class="device-width"><div><img alt="" src="http://s3.amazonaws.com/indigenous-digital-assets/account_1047/unnamed (1)_1442509762427.png"/></div></td></tr></table><hr/></td></tr></table><table width="640" align="center" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse;" ng-if="component.title" class="device-width"><tr><td align="center" width="100%"><table align="center" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse;" class="device-width"><tr><td width="100%" style="padding-left: 20px; padding-right: 20px; padding-top: 45px; padding-bottom: 45px;" class="wrapper"><div><span style="color:#333333;"><span style="font-size:48px;"><span style="font-family:arial,helvetica,sans-serif;">Hero Title</span></span></span></div></td></tr></table></td></tr></table><table width="640" align="center" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse;" ng-if="component.title" class="device-width"><tr><td align="center" width="100%"><table align="center" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse;" class="device-width"><tr><td width="100%" style="padding-left: 20px; padding-right: 20px; padding-top: 45px; padding-bottom: 45px;" class="wrapper"><div><div style="text-align: center;"><img alt="" src="http://s3.amazonaws.com/indigenous-digital-assets/account_1047/design-your-website_1442510188642.png"/></div><br/><br/><br/><span style="line-height:1.5;"><span style="font-size:16px;"><span style="font-family:arial,helvetica,sans-serif;">A afas dfa dsf asddddd adsf dsafd fasd.&nbsp;A afas dfa dsf asddddd adsf dsafd fasd. &nbsp; A afas dfa dsf asddddd adsf asd dddddddd d sf ss df dsfd dsafd fasd. A afas dfa dsf asddddd adsf dsafd fasd.&nbsp;&nbsp;A afas dfa dsf asddddd adsf dsafd fasd.&nbsp;&nbsp;&nbsp;A afas dfa dsf asddddd adsf asd dddddddd d sf ss df dsfd dsafd fasd.&nbsp; A afas dfa dsf asddddd adsf dsafd fasd.&nbsp;&nbsp;&nbsp;A afas dfa dsf asddddd adsf asd dddddddd d sf ss df dsfd dsafd fasd. A afas dfa dsf asddddd adsf dsafd fasd.</span></span></span></div></td></tr></table></td></tr></table><table width="640" align="center" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse;" ng-if="component.title" class="device-width"><tr><td align="center" width="100%"><table align="center" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse;" class="device-width"><tr><td width="100%" style="padding-left: 20px; padding-right: 20px; padding-top: 45px; padding-bottom: 45px;" class="wrapper"><div><span style="color:#333333;"><span style="font-size:48px;"><span style="font-family:arial,helvetica,sans-serif;">Hero Title</span></span></span></div></td></tr></table></td></tr></table><table width="640" align="center" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse;" ng-if="component.title" class="device-width"><tr><td align="center" width="100%"><table align="center" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse;" class="device-width"><tr><td width="100%" style="padding-left: 20px; padding-right: 20px; padding-top: 45px; padding-bottom: 45px;" class="wrapper"><div><div style="text-align:center"><img alt="" src="http://s3.amazonaws.com/indigenous-digital-assets/account_1047/design-your-website_1442510188642.png"/></div><br/><br/><br/><span style="line-height:1.5;"><span style="font-size:16px;"><span style="font-family:arial,helvetica,sans-serif;">A afas dfa dsf asddddd adsf dsafd fasd.&nbsp;A afas dfa dsf asddddd adsf dsafd fasd. &nbsp; A afas dfa dsf asddddd< adsf asd dddddddd d sf ss df dsfd dsafd fasd. A afas dfa dsf asddddd adsf dsafd fasd.&nbsp;&nbsp;A afas dfa dsf asddddd adsf dsafd fasd.&nbsp;&nbsp;&nbsp;A afas dfa dsf asddddd adsf asd dddddddd d sf ss df dsfd dsafd fasd.&nbsp; A afas dfa dsf asddddd adsf dsafd fasd.&nbsp;&nbsp;&nbsp;A afas dfa dsf asddddd adsf asd dddddddd d sf ss df dsfd dsafd fasd. A afas dfa dsf asddddd adsf dsafd fasd.dfsgfds gs dfgdfs gfsd gfdsg sdfg fdsg fdsg sfdg fdsgfsdgfsdgfdsg sfdgsdfg.<br/><br/><br/>&nbsp;sdfgsdgdfsgsfdg.</span></span></span><br/><br/>&nbsp;<div class="ckeditor-button-wrap" data-href="http://yahoo.com" data-text-value="Download123" style="margin: 0; font-size: inherit;"><table align="center" style="width: 100%;" unselectable="on" contendeditable="false"><tbody><tr unselectable="on" contendeditable="false"><td style="-moz-box-shadow: 0px 1px 0px 0px #ffe0b5;-webkit-box-shadow: 0px 1px 0px 0px #ffe0b5;box-shadow: 0px 1px 0px 0px #ffe0b5;background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #fbb450), color-stop(1, #f89306));background:-moz-linear-gradient(top, #fbb450 5%, #f89306 100%);background:-webkit-linear-gradient(top, #fbb450 5%, #f89306 100%);background:-o-linear-gradient(top, #fbb450 5%, #f89306 100%);background:-ms-linear-gradient(top, #fbb450 5%, #f89306 100%);background:linear-gradient(to bottom, #fbb450 5%, #f89306 100%);filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=\'#fbb450\', endColorstr=\'#f89306\',GradientType=0);background-color:#fbb450;-moz-border-radius:7px;-webkit-border-radius:7px;border-radius:7px;border:1px solid #c97e1c;display:inline-block;color:#ffffff;font-family:trebuchet ms;font-size:17px;font-weight:normal;font-style:%1;padding:6px 11px;text-decoration:none;text-shadow:0px 1px 0px #8f7f24;" class="myButton" unselectable="on" contendeditable="false"><a style="color: inherit;" href="http://yahoo.com">DEFAULT - Download123</a></td></tr></tbody></table></div><div class="ckeditor-button-wrap" data-href="http://yahoo.com" data-text-value="Download123" style="margin: 0; font-size: inherit;"><table align="center" style="width: 100%;" unselectable="on" contendeditable="false"><tbody><tr unselectable="on" contendeditable="false"><td style="-moz-box-shadow: 0px 1px 0px 0px #ffe0b5;-webkit-box-shadow: 0px 1px 0px 0px #ffe0b5;box-shadow: 0px 1px 0px 0px #ffe0b5;background-color:#fbb450;-moz-border-radius:7px;-webkit-border-radius:7px;border-radius:7px;border:1px solid #c97e1c;display:inline-block;color:#ffffff;font-family:trebuchet ms;font-size:17px;font-weight:normal;padding:6px 11px;text-decoration:none;text-shadow:0px 1px 0px #8f7f24;" class="myButton" unselectable="on" contendeditable="false"><a style="color: inherit;" href="http://yahoo.com">NO GRADIENT - Download123</a></td></tr></tbody></table></div><div class="ckeditor-button-wrap" data-href="http://yahoo.com" data-text-value="Download123" style="margin: 0; font-size: inherit;"><table align="center" style="width: 100%;" unselectable="on" contendeditable="false"><tbody><tr unselectable="on" contendeditable="false"><td style="background-color:#fbb450;-moz-border-radius:7px;-webkit-border-radius:7px;border-radius:7px;border:1px solid #c97e1c;display:inline-block;color:#ffffff;font-family:trebuchet ms;font-size:17px;font-weight:normal;padding:6px 11px;text-decoration:none;text-shadow:0px 1px 0px #8f7f24;" class="myButton" unselectable="on" contendeditable="false"><a style="color: inherit;" href="http://yahoo.com">NO GRADIENT OR BOX SHADOW - Download123</a></td></tr></tbody></table></div><div class="ckeditor-button-wrap" data-href="http://yahoo.com" data-text-value="Download123" style="margin: 0; font-size: inherit;"><table align="center" style="width: 100%;" unselectable="on" contendeditable="false"><tbody><tr unselectable="on" contendeditable="false"><td style="background-color:#fbb450;border:1px solid #c97e1c;display:inline-block;color:#ffffff;font-family:trebuchet ms;font-size:17px;font-weight:normal;padding:6px 11px;text-decoration:none;text-shadow:0px 1px 0px #8f7f24;" class="myButton" unselectable="on" contendeditable="false"><a style="color: inherit;" href="http://yahoo.com">NO CSS3 except text-shadow - Download123</a></td></tr></tbody></table></div><div class="ckeditor-button-wrap" data-href="http://yahoo.com" data-text-value="Download123" style="margin: 0; font-size: inherit;"><table align="center" style="width: 100%;" unselectable="on" contendeditable="false"><tbody><tr unselectable="on" contendeditable="false"><td style="background-color:#fbb450;"><a style="color: inherit;" href="http://yahoo.com">JUST BG=Download123</a></td></tr></tbody></table></div><span style="line-height:1.5;"><span style="font-size:16px;"><span style="font-family:arial,helvetica,sans-serif;"></span></span></span><br/>&nbsp;</div></td></tr></table></td></tr></table><table width="640" align="center" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse;" ng-if="component.title" class="device-width"><tr><td align="center" width="100%"><table align="center" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse;" class="device-width"><tr><td width="100%" style="padding-left: 20px; padding-right: 20px; padding-top: 45px; padding-bottom: 45px;" class="wrapper"><div>1 column Title</div></td></tr></table></td></tr></table><table width="640" align="center" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse;" ng-if="component.title" class="device-width"><tr><td align="center" width="100%"><table align="center" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse;" class="device-width"><tr><td width="100%" style="padding-left: 20px; padding-right: 20px; padding-top: 45px; padding-bottom: 45px;" class="wrapper"><div>text1</div></td></tr></table></td></tr></table><table width="640" align="center" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse;" ng-if="component.title" class="device-width"><tr><td align="center" width="100%"><table align="center" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse;" class="device-width"><tr><td width="100%" style="padding-left: 20px; padding-right: 20px; padding-top: 45px; padding-bottom: 45px;" class="wrapper"><div>text2</div></td></tr></table></td></tr></table><table width="640" align="center" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse;" ng-if="component.title" class="device-width"><tr><td align="center" width="100%"><table align="center" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse;" class="device-width"><tr><td width="100%" style="padding-left: 20px; padding-right: 20px; padding-top: 45px; padding-bottom: 45px;" class="wrapper"><div>EMAIL FOOTER</div></td></tr></table></td></tr></table><table width="640" align="center" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse;" ng-if="component.title" class="device-width"><tr><td align="center" width="100%"><table align="center" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse;" class="device-width"><tr><td width="100%" style="padding-left: 20px; padding-right: 20px; padding-top: 45px; padding-bottom: 45px;" class="wrapper"><div>3-col-text1</div></td></tr></table></td></tr></table><table width="640" align="center" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse;" ng-if="component.title" class="device-width"><tr><td align="center" width="100%"><table align="center" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse;" class="device-width"><tr><td width="100%" style="padding-left: 20px; padding-right: 20px; padding-top: 45px; padding-bottom: 45px;" class="wrapper"><div>3-col-text2</div></td></tr></table></td></tr></table><table width="640" align="center" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse;" ng-if="component.title" class="device-width"><tr><td align="center" width="100%"><table align="center" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse;" class="device-width"><tr><td width="100%" style="padding-left: 20px; padding-right: 20px; padding-top: 45px; padding-bottom: 45px;" class="wrapper"><div>3-col-text3</div></td></tr></table></td></tr></table></td></tr></table></td></tr></table></td></tr></table></div></body></html>',
                     html,
                     accountId,
                     [],
@@ -1154,6 +1178,107 @@ _.extend(api.prototype, baseApi.prototype, {
     // },
 
     //endregion
+
+    //TOPICS
+    listTopics: function(req, res) {
+        var self = this;
+        var accountId = parseInt(self.accountId(req));
+        self.log.debug('>> listTopics accountId ', accountId);
+
+        self.checkPermissionForAccount(req, self.sc.privs.VIEW_THEME, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                cmsManager.getAllTopics(accountId, function(err, value){
+                    self.log.debug('<< listTopics');
+                    self.sendResultOrError(res, err, value, 'Error retrieving all topics.');
+                });
+            }
+        });
+
+    },
+
+    createTopic: function(req, res) {
+        var self = this;
+        self.log.debug('>> createTopic');
+
+        self.checkPermission(req, self.sc.privs.MODIFY_WEBSITE, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                var topicData = req.body;
+                var topic = require('../../cms/model/topic');
+                var temp = $$.u.idutils.generateUUID();
+                if (topic != null) {
+                    self.log.debug('>> topic not null');
+                    topic = new Topic({
+                        _id: temp,
+                        title: topicData.title,
+                        category: topicData.category
+                    });
+                    topic.attributes.modified.date = new Date();
+                    topic.attributes.created.date = new Date();
+                }
+                cmsManager.createTopic(topic, function(err, createdTopic){
+                    self.log.debug('<< createTopic');
+                    self.sendResultOrError(res, err, createdTopic, 'Error creating topic.');
+                });
+            }
+        });
+
+    },
+
+    updateTopic: function(req, res) {
+        var self = this;
+        self.log.debug('>> updateTopic');
+
+        self.checkPermission(req, self.sc.privs.MODIFY_WEBSITE, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                var topicId = req.params.id;
+                var topicObj = new $$.m.cms.Topic(req.body);
+                topicObj.attributes.modified.by = self.userId(req);
+                topicObj.attributes.modified.date = new Date();
+                topicObj.set('_id', topicId);
+
+                self.log.debug('topicObj ', topicObj);
+                cmsManager.updateTopic(topicObj, function(err, value){
+                    self.log.debug('<< updateTopic ', value.components);
+                    self.sendResultOrError(res, err, value, 'Error updating topic.');
+
+                });
+            }
+        });
+
+    },
+
+    deleteTopic: function(req, res) {
+
+        var self = this;
+        self.log.debug('>> deleteTopic');
+        var accountId = parseInt(self.accountId(req));
+
+        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                var topicId = req.params.id;
+
+                cmsManager.deleteTopic(topicId, function (err, value) {
+                    self.log.debug('<< deleteTopic');
+                    self.log.debug('err:', err);
+                    self.log.debug('value:', value);
+                    if(err) {
+                        self.wrapError(res, 500, err, "Error deleting topic");
+                    } else {
+                        self.send200(res);
+                    }
+                    self = null;
+                });
+            }
+        });
+    },
 
     //COMPONENTS
 

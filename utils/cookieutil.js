@@ -70,6 +70,7 @@ var cookieUtil =  {
     setRedirectUrl: function(req, resp, urlOverride) {
         var url;
         if (urlOverride == null) {
+            //console.log('\n\nNo urlOverride\n\n');
             if (req.url == "" || req.url == "/" || req.url == "/home" || req.url == "/admin") {
                 return;
             }
@@ -84,6 +85,7 @@ var cookieUtil =  {
         }
 
         this.setCookie(resp, "ind-redirect", url, false, 600);
+        //console.log('\n\nsetting cookie to ' + url + '\n\n');
     },
 
     getRedirectUrl: function(req, resp, defaultValue, remove) {

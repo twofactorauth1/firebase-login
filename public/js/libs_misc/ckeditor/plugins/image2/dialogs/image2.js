@@ -342,6 +342,35 @@ CKEDITOR.dialog.add( 'image2', function( editor ) {
 		heightField[ method ]();
 	}
 
+	function setImageStyles(widget, _instance)
+	{
+		if(widget.hasClass("img-rounded") || widget.parts.image.hasClass("img-rounded"))
+		{
+			_instance.setValue("img-rounded");
+		}
+		else if(widget.hasClass("img-thumbnail") || widget.parts.image.hasClass("img-thumbnail"))
+		{
+			_instance.setValue("img-thumbnail");
+		}
+		else if(widget.hasClass("img-circle") || widget.parts.image.hasClass("img-circle"))
+		{
+			_instance.setValue("img-circle");	
+		}
+		selectedImageStyle = _instance.getValue();
+	}
+
+	function setWidgetData(widget, _instance)
+	{
+		widget.removeClass("img-rounded");
+		widget.removeClass("img-thumbnail");
+		widget.removeClass("img-circle");
+		widget.parts.image.removeClass("img-rounded");
+		widget.parts.image.removeClass("img-thumbnail");
+		widget.parts.image.removeClass("img-circle");
+		widget.addClass(_instance.getValue());
+		widget.parts.image.addClass(_instance.getValue());
+	}
+
 	var hasFileBrowser = !!( config.filebrowserImageBrowseUrl || config.filebrowserBrowseUrl ),
 		srcBoxChildren = [
 			{
@@ -537,30 +566,16 @@ CKEDITOR.dialog.add( 'image2', function( editor ) {
 									[ "Rounded Square", 'img-rounded' ],
 									[ "Square with Border", 'img-thumbnail' ],	
 									[ "Circle", 'img-circle' ], ],									
-								label: "Image Style",
-								
+								label: "Image Style",								
 								setup: function( widget ) {
-									if(widget.hasClass("img-rounded"))
-									{
-										this.setValue("img-rounded");
-									}
-									else if(widget.hasClass("img-thumbnail"))
-									{
-										this.setValue("img-thumbnail");
-									}
-									else if(widget.hasClass("img-circle"))
-									{
-										this.setValue("img-circle");	
-									}
-									selectedImageStyle = this.getValue();
-
+									setImageStyles(widget, this);
 								},
 								commit: function( widget ) {
-									widget.removeClass("img-rounded");
-									widget.removeClass("img-thumbnail");
-									widget.removeClass("img-circle");
-									widget.addClass(this.getValue());
-									widget.setData("class", this.getValue())
+									var _this = this;
+									setTimeout(function(){
+										setWidgetData(widget, _this);
+										widget.setData("class", _this.getValue());
+									},0);
 								}
 							}
 						]

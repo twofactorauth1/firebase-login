@@ -50,7 +50,7 @@
                         </div>
                         <div class="single-post-tags" ng-show="blog.post.post_tags">
                             <div ng-if="isEditing">ADD TAGS</div>
-                            <tags-input ng-if="isEditing" ng-model="blog.post.post_tags"></tags-input>
+                            <tags-input min-length="1" ng-if="isEditing" ng-model="blog.post.post_tags"></tags-input>
                             <ul ng-if="!isEditing" class="post_tags">
                                 <li ng-repeat="tag in blog.post.post_tags track by $index">
                                     <a href="/tag/{{tag.text ? tag.text : tag}}">{{tag.text ? tag.text:tag}}</a>

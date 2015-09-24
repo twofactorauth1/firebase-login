@@ -142,7 +142,7 @@
                                     <input st-search="{{last}}" placeholder="Last Name" class="form-control" type="search" />
                                 </th>
                                 <th class="column-width" ng-show="column.tags">
-                                    <input st-search="type" placeholder="Type" class="form-control hidden" type="search" id="searchType" ng-model="filterCustomer.type.selected.data" />
+                                    <input st-search="tags" placeholder="Type" class="form-control hidden" type="search" id="searchType" ng-model="filterCustomer.type.selected.data" />
                                     <ui-select ng-model="filterCustomer.type.selected" on-select="triggerInput('#searchType')" theme="bootstrap">
                                         <ui-select-match placeholder="Select Type">
                                             <small ng-bind-html="$select.selected.label"></small>
@@ -183,7 +183,7 @@
                                     <span ng-if="customer.details[0].addresses[0].address && !customer.details[0].addresses[0].city">{{customer.details[0].addresses[0].address}}</span>
                                     <span ng-if="!customer.details[0].addresses[0]">--</span>
                                 </td>
-                                <td ng-show="column.phone" class="hidden-xs" ng-class="{'center': tableView != 'grid'}"><strong>Phone: </strong> {{customer.details[0].phones[0].number || '--'}}</td>
+                                <td ng-show="column.phone" class="hidden-xs" ng-class="{'center': tableView != 'grid'}"><strong>Phone: </strong> <a href="tel:{{customer.details[0].phones[0].number || '--'}}">{{customer.details[0].phones[0].number || '--'}}</a></td>
                                 <td ng-show="column.social" class="hidden-xs"><strong>Social: </strong>
                                     <ul class="social">
                                         <li ng-if="customer.hasFacebookId"><i class="fa fa-facebook-square"></i>

@@ -19,10 +19,16 @@
       return _topline;
     };
 
-    this.validateAddress = function (location, fn) {
+    this.validateAddress = function (location, locationObj, fn) {
       var geocoder = new google.maps.Geocoder();
-      var myLatLng = new google.maps.LatLng(location.lat, location.lon);
-      var address = this.stringifyAddress(location);
+      var myLatLng = null;
+      if(locationObj)
+        myLatLng = new google.maps.LatLng(locationObj.geometry.location.H, locationObj.geometry.location.L);
+      else
+        myLatLng = new google.maps.LatLng(location.lat, location.lon);
+
+      var address = locationObj ? locationObj.formatted_address : this.stringifyAddress(location);
+
       if (!((location.city && location.state) || location.zip)) {
         fn(false, null);
       } else {

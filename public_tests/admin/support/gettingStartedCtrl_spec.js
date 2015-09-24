@@ -5,7 +5,7 @@ describe('test gettingStartedCtrl', function () {
   var $rootScope, $scope, $controller;
 
   beforeEach(function() {
-    module('clipApp', function($provide) {
+    module('indigenousApp', function($provide) {
       $provide.constant('ONBOARDINGCONSTANT'); // <= mock your constant
     });
   });

@@ -489,7 +489,7 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> signUpNews');
         self.log.debug('>> host', req.get("host"));
         //req.get("host")
-
+        
         accountDao.getAccountByHost(req.get("host"), function(err, value) {
             if(err) {
                 self.log.error('Error signing up: ' + err);
@@ -520,7 +520,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 var fromContactEmail = req.body.fromEmail;
                 var campaignId = req.body.campaignId;
                 var emailId = req.body.emailId;
-                var sendEmail = req.body.sendEmail;
+                var sendEmail = JSON.parse(req.body.sendEmail);
                 var fromContactName = req.body.fromName;
                 var activity = req.body.activity;
                 var contact_type = req.body.contact_type;
@@ -531,6 +531,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 delete req.body.fromEmail;
                 delete req.body.fromName;
                 delete req.body.activity;
+                delete req.body.contact_type;
 
                 contactDao.findMany(query, $$.m.Contact, function(err, list){
                     if(err) {
@@ -662,8 +663,20 @@ _.extend(api.prototype, baseApi.prototype, {
                                                     self.log.debug('Using this for data', emailPage.get('_id'));
                                                     self.log.debug('Using this account for data', account);
                                                     self.log.debug('This component:', component);
+
                                                     if(!component.logourl && account && account.attributes.business) {
                                                         component.logourl = account.attributes.business.logo;
+                                                    }
+
+                                                    if (!component.bg.color) {
+                                                        component.bg.color = '#eaeaea';
+                                                    }
+
+                                                    if (!component.emailBg) {
+                                                        component.emailBg = '#ffffff';
+                                                    }
+                                                    if (component.bg.img && component.bg.img.show & component.bg.img.url) {
+                                                        component.emailBgImage = component.bg.img.url.replace('//s3.amazonaws', 'http://s3.amazonaws');
                                                     }
 
                                                     component.logo = component.logo.replace('src="//', 'src="http://');
@@ -700,7 +713,7 @@ _.extend(api.prototype, baseApi.prototype, {
                                                             self.log.debug('notificationConfig.WELCOME_FROM_EMAIL ', notificationConfig.WELCOME_FROM_EMAIL);
 
                                                             try{
-                                                                mandrillHelper.sendAccountWelcomeEmail(fromEmail, fromContactName, contactEmail, contactName, emailSubject, html, query.accountId, savedContact.id(), vars, emailPage.get('_id'), function(err, result){
+                                                                mandrillHelper.sendAccountWelcomeEmail(fromEmail, fromContactName, contactEmail, contactName, emailSubject, html, query.accountId, null, vars, emailPage.get('_id'), savedContact.id(), function(err, result){
                                                                     self.log.debug('result: ', result);
                                                                 });
                                                             } catch(exception) {

@@ -20,6 +20,7 @@ var parser = new UAParser();
 var contactDao = require('../../dao/contact.dao');
 var appConfig = require('../../configs/app.config');
 var orderManager = require('../../orders/order_manager');
+var campaignManager = require('../../campaign/campaign_manager');
 
 var api = function() {
     this.init.apply(this, arguments);
@@ -286,6 +287,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var firstName = req.body.first;
         var lastName = req.body.last;
         var middle = req.body.middle;
+        var campaignId = req.body.campaignId;
 
         var cardToken = req.body.cardToken;
         var plan = req.body.plan || 'NO_PLAN_ARGUMENT';
@@ -317,6 +319,7 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> first', firstName);
         self.log.debug('>> middle', middle);
         self.log.debug('>> last', lastName);
+        self.log.debug('>> campaignId', campaignId);
 
         var name = {
             first:firstName,
@@ -388,13 +391,10 @@ _.extend(api.prototype, baseApi.prototype, {
                                 return self.wrapError(res, 500, 'Error creating Stripe Subscription', err.code);
                             });
                         } else {
-                            userManager.sendWelcomeEmail(account.id(), account, user, email, username, function(){});
                             callback(null, sub, stripeCustomer, user, account);
                         }
-
                     });
                 } else {
-                    userManager.sendWelcomeEmail(account.id(), account, user, email, username, function(){});
                     callback(null, null, stripeCustomer, user, account);
                 }
 
@@ -437,11 +437,11 @@ _.extend(api.prototype, baseApi.prototype, {
                         //req.session.locked = true;//TODO: change this eventually
                         self.log.debug('Just set session accountId to: ' + req.session.accountId);
                        
-                        callback(null, account.id(), sub.id, user, stripeCustomer.id, sub);
+                        callback(null, account.id(), sub.id, user, stripeCustomer.id, sub, updatedAccount);
                     });
                 });
             },
-            function(accountId, subId, user, stripeCustomerId, sub, callback) {
+            function(accountId, subId, user, stripeCustomerId, sub, account, callback) {
                 self.log.debug('Updated account billing.');
                 self.sm.addSubscriptionToAccount(accountId, subId, plan, user.id(), function(err, value){
                     authenticationDao.getAuthenticatedUrlForAccount(accountId, user.id(), "admin", function (err, value) {
@@ -470,6 +470,25 @@ _.extend(api.prototype, baseApi.prototype, {
                                 self.log.error('Error creating customer for user: ' + user.id());
                             } else {
                                 self.log.debug('Created customer for user:' + user.id());
+
+                                userManager.sendWelcomeEmail(accountId, account, user, email, username, contact.id(), function(){
+                                    self.log.debug('Sent welcome email');
+                                });
+
+                                 /*
+                                 * If there is a campaign associated with this new user, update it async.
+                                 */
+                                if(campaignId) {
+                                    self.log.debug('Updating campaign with id: ' + campaignId);
+                                    campaignManager.handleCampaignSignupEvent(appConfig.mainAccountID, campaignId, contact.id(), function(err, value){
+                                        if(err) {
+                                            self.log.error('Error handling campaign signup: ' + err);
+                                        } else {
+                                            self.log.debug('Handled signup.');
+                                        }
+                                    });
+                                }
+
                                 var activity = new $$.m.ContactActivity({
                                     accountId: appConfig.mainAccountID,
                                     contactId: contact.id(),
