@@ -400,7 +400,7 @@
         if(!hideToaster && $scope.inValidateTags())
         {
           $scope.saveLoading = false;
-          toaster.pop('warning', 'Please add atleast one tag.');
+          toaster.pop('warning', 'Please add at least one tag.');
           return;
         }
 
@@ -416,40 +416,40 @@
           if (!validMapData) {
             if (!hideToaster) {
               $scope.errorMapData = true;
-              $scope.saveLoading = false;
+              // $scope.saveLoading = false;
               toaster.pop('warning', 'Address could not be found.');
             }
-          } else {
-            $scope.errorMapData = false;
-            CustomerService.checkDuplicateEmail($scope.customer_data.details[0].emails[0].email, !hideToaster, function (data) {
-              if(data && data.length && (data.length > 1 || data[0]._id != $scope.customer_data._id))
-              {
-                console.log("duplicate email");
-                if(!hideToaster)
-                {
-                  $scope.saveLoading = false;
-                  toaster.pop('warning', 'Email already exists.');
-                }
-              }
-              else
-              {
-                CustomerService.saveCustomer($scope.customer_data, function (customer) {
-                $scope.customer = customer;
-                $scope.setDefaults();
-                $scope.setTags();
-                $scope.saveLoading = false;
-                $scope.originalCustomer = angular.copy($scope.customer);
-                if (!hideToaster) {
-                  if ($scope.currentState === 'customerAdd') {
-                    toaster.pop('success', 'Contact Created.');
-                  } else {
-                    toaster.pop('success', 'Contact Saved.');
-                  }
-                }
-              });
-              }
-            })
           }
+
+          $scope.errorMapData = false;
+          CustomerService.checkDuplicateEmail($scope.customer_data.details[0].emails[0].email, !hideToaster, function (data) {
+            if(data && data.length && (data.length > 1 || data[0]._id != $scope.customer_data._id))
+            {
+              console.log("duplicate email");
+              if(!hideToaster)
+              {
+                $scope.saveLoading = false;
+                toaster.pop('warning', 'Email already exists.');
+              }
+            }
+            else
+            {
+              CustomerService.saveCustomer($scope.customer_data, function (customer) {
+              $scope.customer = customer;
+              $scope.setDefaults();
+              $scope.setTags();
+              $scope.saveLoading = false;
+              $scope.originalCustomer = angular.copy($scope.customer);
+              if (!hideToaster) {
+                if ($scope.currentState === 'customerAdd') {
+                  toaster.pop('success', 'Contact Created.');
+                } else {
+                  toaster.pop('success', 'Contact Saved.');
+                }
+              }
+            });
+            }
+          })
         });
       } else {
         $scope.saveLoading = false;
@@ -880,6 +880,9 @@
     $scope.customerTags = [{
       label: "Admin",
       data: "ad"
+    }, {
+      label: "Affiliate",
+      data: "af"
     }, {
       label: "Cancelled Customer",
       data: "cc"

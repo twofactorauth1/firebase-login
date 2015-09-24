@@ -12949,14 +12949,14 @@ fieldset[disabled] .btn-vimeo-square.active {
   display: none;
   visibility: none;
 }
-#componentloader .fragment.email .cn-wrapper li {
+/*#componentloader .fragment.email .cn-wrapper li {
   display: none;
 }
 #componentloader .fragment.email .cn-wrapper li:first-child {
   display: block!important;
   -webkit-transform: rotate(75deg) skew(60deg) !important;
   transform: rotate(75deg) skew(60deg) !important;
-}
+}*/
 #componentloader .fragment:hover .component-inner,
 #componentloader .fragment:hover .bg.cover {
   -webkit-box-shadow: inset 0px 0px 0px 2px #ffa500;
@@ -13215,6 +13215,9 @@ fieldset[disabled] .btn-vimeo-square.active {
 #editor-toolbar .cke_chrome a.cke_button .cke_button__doksoft_button_icon:before {
   content: "\f0c8";
 }
+#editor-toolbar .cke_chrome a.cke_button .cke_button__doksoft_button_email_icon:before {
+  content: "\f0c8";
+}
 #editor-toolbar .cke_chrome a.cke_button .cke_button__doksoft_font_awesome_icon:before {
   content: "\f024";
 }
@@ -13345,6 +13348,9 @@ div[class^="spacing-"] {
 .li-nav-undernav {
   position: relative;
   z-index: 11 !important;
+}
+.inline-table-cell {
+  display: table-cell;
 }
 /* ---------------------------------------------------------------------- */
 /*  Billing
@@ -13537,6 +13543,9 @@ div[class^="spacing-"] {
 .customers table.grid thead th {
   width: 11.1%;
   float: left;
+}
+.customers .two-letter-label {
+  display: inline-block;
 }
 .ui-select-multiple.ui-select-bootstrap input.ui-select-search:not([placeholder='']) {
   max-width: 100% !important;
@@ -13831,6 +13840,7 @@ a.editable-error:focus {
   position: relative;
   top: 0;
   left: 0;
+  z-index: 1;
 }
 #media-manager-modal .filemanager-options hr {
   margin: 10px 0;
@@ -13854,17 +13864,18 @@ a.editable-error:focus {
   display: table;
   width: 100%;
   height: 150px;
-}
-#media-manager-modal .filemanager .thmb-prev > div {
-  display: table-cell;
-  vertical-align: middle;
-  text-align: center;
-  width: 100%;
+  position: relative;
 }
 #media-manager-modal .filemanager .thmb-prev img {
   max-height: 150px;
   width: auto;
   max-width: 100%;
+  bottom: 0;
+  left: 0;
+  margin: auto;
+  position: absolute;
+  right: 0;
+  top: 0;
 }
 #media-manager-modal label[for="upload_image"] {
   margin-bottom: 0 !important;

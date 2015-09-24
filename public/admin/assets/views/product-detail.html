@@ -111,7 +111,7 @@
                                             <label for="form-field-select-1">
                                                 Status
                                             </label>
-                                            <select ng-model="product.status" class="form-control" ng-options="status.value as status.name for status in productStatusOptions">
+                                            <select ng-model="product.status" class="form-control" ng-options="status.data as status.label for status in productStatusOptions">
                                                 <option value="">-- choose status --</option>
                                             </select>
                                         </div>

@@ -21,6 +21,13 @@ var dao = {
         var self = this;
         var url = geoConfig.openStreetMaps.constructSearchForAddress(addressString);
 
+        var options = {
+            url: url,
+            headers: {
+                'User-Agent': 'indigenous_io',
+                'Referer': 'https://www.indigenous.io'
+            }
+        };
         request(url, function(err, resp, body) {
             if (!err) {
                 var address = null;
@@ -45,6 +52,7 @@ var dao = {
                         }
                     }
                 } catch (exception) {
+
                     self.log.error('exception searching for address: ', exception);
                 }
 

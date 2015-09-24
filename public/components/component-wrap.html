@@ -34,7 +34,7 @@
                                 background-position: {{component.bg.img.position}};'>
                         </div>
                         <div ng-if="component.bg.img.show && component.type != 'masthead'" class="bg" ng-class="{parallax:component.bg.img.parallax,'blur-image':component.bg.img.blur}" {{component.bg.img.parallax ? parallax-background : ""}} ng-attr-parallax-ratio="{{component.bg.img.parallax ? '0.4' : '1'}}" style='
-                                background: url("{{component.bg.img.url}}") no-repeat;
+                                background: url("{{component.bg.img.url}}") repeat-y;
                                 background-size: cover;
                                 background: {{component.bg.img.url}};'
                                 >

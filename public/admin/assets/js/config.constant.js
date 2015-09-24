@@ -336,6 +336,27 @@ app.constant('productConstant', {
         data: "VIRTUAL"
       }
     ]
+  },
+  product_status_types:{
+    BACKORDER: 'backorder',
+    INACTIVE: 'inactive',
+    ACTIVE: 'active',
+    AUTOINACTIVE: 'auto_inactive',
+
+    dp: [{
+        label: "Backorder",
+        data: "backorder"
+      }, {
+        label: "Inactive",
+        data: "inactive"
+      }, {
+        label: "Active",
+        data: "active"
+      }, {
+        label: "Auto Inactive",
+        data: "auto_inactive"
+      }
+    ]
   }
 });
 
@@ -409,10 +430,14 @@ app.constant('userConstant', {
     CHEATSHEET_LEAD: "cs",
     EXPIRED_TRIAL: "ex",
     TRIAL_CUSTOMER: "tc",
+    AFFILIATE: "af",
 
     dp: [{
       label: "Admin",
       data: "ad"
+    }, {
+      label: "Affiliate",
+      data: "af"
     }, {
       label: "Cancelled Customer",
       data: "cc"
