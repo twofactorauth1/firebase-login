@@ -302,6 +302,7 @@
         WebsiteService.updateTopic($scope.topic, function (data) {
           $scope.saveLoading = false;
           toaster.pop('success', "Topic Saved", "The " + $scope.topic.title + " topic was saved successfully.");
+          $scope.redirectAfterSave(redirect_url, reload);
         });
       } else {
         $scope.checkForDuplicatePage(function () {
@@ -1318,7 +1319,12 @@
       var redirectUrl = url;
       
       if (!redirectUrl) {
-        redirectUrl = $location.search().posthandle ? "/admin/#/website/posts" : $scope.isEmail ? "/admin/#/emails" : "/admin/#/website/pages";
+        if($scope.isEmail)
+          redirectUrl = "/admin/#/emails";
+        else if($scope.isTopic)
+          redirectUrl = "/admin/#/support/manage-topics";
+        else
+          redirectUrl = "/admin/#/website/pages";
       }
       fn(redirectUrl);
     }
