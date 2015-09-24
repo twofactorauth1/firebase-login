@@ -155,6 +155,7 @@
 
        if ($scope.createpage.homepage) {
          page.handle = 'index';
+         $scope.createpage.showhomepage = false;
        }
 
       var pageData = {
@@ -177,6 +178,9 @@
           toaster.pop('success', 'Page Created', 'The ' + newpage.title + ' page was created successfully.');
           $scope.minRequirements = true;
           $scope.saveLoading = false;
+          if(newpage.handle = 'index'){
+            $scope.createpage.showhomepage = false;
+          }
           $scope.closeModal();
 
           if (newpage.components) {
