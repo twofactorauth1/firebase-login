@@ -352,6 +352,7 @@
                 WebsiteService.updateEmail($scope.page, function(data) {
                   $scope.saveLoading = false;
                   toaster.pop('success', "Email Saved", "The " + $scope.page.title + " email was saved successfully.");
+                  $scope.redirectAfterSave(redirect_url, reload);
                 });
               }
             })
@@ -1351,7 +1352,7 @@
               //SweetAlert.swal("Saved!", "Your edits were saved to the page.", "success");
               $scope.redirect = true;
               $scope.savePage(redirectUrl, reload);
-              $scope.setDirty(false);              
+              $scope.setDirty(false);
             } else {
               $scope.redirectWithoutSave(redirectUrl, true, reload);
             }
