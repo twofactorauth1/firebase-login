@@ -241,7 +241,7 @@ module.exports = {
                             var emailId = step.settings.emailId;
                             
                             emailDao.getEmailById(emailId, function(err, email){
-                                if(err) {
+                                if(err || !email) {
                                     self.log.error('Error getting email to render: ' + err);
                                     return fn(err, null);
                                 }
