@@ -236,8 +236,8 @@ var mandrillHelper =  {
                     self.log.debug('send_at: ' + send_at);
                     
                     juice.juiceResources(message.html, {}, function(err, html){
-                        debugger;
-                        console.log('i am in you!')
+                        //debugger;
+                        //console.log('i am in you!')
                         if (err) {
                             self.log.error('A juice error occurred. Failed to set styles inline.')
                             self.log.error(err);
@@ -470,7 +470,7 @@ var mandrillHelper =  {
     },
 
     sendBasicEmail: function(fromAddress, fromName, toAddress, toName, subject, htmlContent, accountId, vars, emailId, fn) {
-        debugger;
+        //debugger;
         var self = this;
         self.log = log;
         self.log.debug('>> sendBasicEmail');
