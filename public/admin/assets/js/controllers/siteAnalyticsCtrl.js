@@ -80,8 +80,8 @@
     $scope.runAnalyticsReports = function () {
 
       ChartAnalyticsService.runPagedReports($scope.date, $scope.analyticsAccount, function (data) {
-        $scope.formattedTopPages = data.formattedTopPages;
-        $scope.pagedformattedTopPages = data.pagedformattedTopPages;
+        $scope.formattedTopPages = _.reject(data.formattedTopPages, function(analytics){ return !angular.isDefined(analytics.page)});        
+        $scope.pagedformattedTopPages = _.reject(data.pagedformattedTopPages, function(analytics){ return !angular.isDefined(analytics.page)});
       });
 
       ChartAnalyticsService.runReports($scope.date, $scope.analyticsAccount, function (data) {
