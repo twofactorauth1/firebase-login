@@ -250,8 +250,8 @@
      * .utc().format("YYYY-MM-DDTHH:mm:ss") + "Z"
      * moment().subtract(29, 'days'), moment()
      */
-    var timeframePreviousStart = moment().subtract(60, 'days').utc().format("YYYY-MM-DDTHH:mm:ss") + "Z"; //TODO: 60d ago
-    var timeframePreviousEnd = moment().subtract(30, 'days').utc().format("YYYY-MM-DDTHH:mm:ss") + "Z"; //TODO: 30d ago
+    var timeframePreviousStart = moment().subtract(60, 'days').format(); //TODO: 60d ago
+    var timeframePreviousEnd = moment().subtract(30, 'days').format(); //TODO: 30d ago
     var interval = "daily";
 
     //reports
@@ -578,10 +578,10 @@
     };
 
     this.runReports = function (date, account, fn) {
-
       var self = this;
       var hostname = this.getHostName(account);
       console.log('hostname ', hostname);
+      console.log('date range ', date);
 
       KeenService.keenClient(function (client) {
         var queryData = self.queryReports(date, hostname);
@@ -605,6 +605,7 @@
           queryData.sessionPreviousAvgLengthReport
         ], function (results) {
           fn(results);
+          console.log(results[2]);
         });
       });
     };
@@ -829,7 +830,8 @@
           plotOptions: {
             series: {
               marker: {
-                enabled: false
+                enabled: true,
+                radius: 3
               }
             }
           }
@@ -896,7 +898,8 @@
           plotOptions: {
             series: {
               marker: {
-                enabled: false
+                enabled: true,
+                radius: 3
               }
             }
           }

@@ -22,14 +22,14 @@
     $scope.visitors = null;
 
     $scope.date = {
-      startDate: moment().subtract(29, 'days').utc().format("YYYY-MM-DDTHH:mm:ss") + "Z",
-      endDate: moment().utc().format("YYYY-MM-DDTHH:mm:ss") + "Z"
+      startDate: moment().subtract(29, 'days').format(),
+      endDate: moment().format()
     };
 
     var dateSwitch = false;
     $scope.$watch('selectedDate', function () {
-      $scope.date.startDate = moment($scope.selectedDate.startDate).utc().format("YYYY-MM-DDTHH:mm:ss") + "Z";
-      $scope.date.endDate = moment($scope.selectedDate.endDate).utc().format("YYYY-MM-DDTHH:mm:ss") + "Z";
+      $scope.date.startDate = moment($scope.selectedDate.startDate).format();
+      $scope.date.endDate = moment($scope.selectedDate.endDate).format();
       //update user preferences
       if (dateSwitch) {
         $scope.analyticsOverviewConfig = {};
@@ -53,20 +53,20 @@
     });
 
     $scope.selectedDate = {
-      startDate: moment().subtract(29, 'days').toDate(),
-      endDate: new Date()
+      startDate: moment().subtract(29, 'days').startOf('day'),
+      endDate: moment()
     };
 
     $scope.pickerOptions = {
       startDate: moment().subtract(29, 'days').toDate(),
-      endDate: new Date(),
+      endDate: moment().toDate(),
       format: 'YYYY-MM-DD',
       opens: 'left',
       ranges: {
-        'Today': [moment(), moment()],
-        'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-        'Last 7 Days': [moment().subtract(6, 'days'), moment()],
-        'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+        'Today': [moment().startOf('day'), moment()],
+        'Yesterday': [moment().subtract(1, 'days').startOf('day'), moment().subtract(1, 'days').endOf('day')],
+        'Last 7 Days': [moment().subtract(6, 'days').startOf('day'), moment().endOf('day')],
+        'Last 30 Days': [moment().subtract(29, 'days').startOf('day'), moment().endOf('day')],
         'This Month': [moment().startOf('month'), moment().endOf('month')],
         'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
       }
@@ -78,7 +78,6 @@
     });
 
     $scope.runAnalyticsReports = function () {
-
       ChartAnalyticsService.runPagedReports($scope.date, $scope.analyticsAccount, function (data) {
         $scope.formattedTopPages = _.reject(data.formattedTopPages, function(analytics){ return !angular.isDefined(analytics.page)});        
         $scope.pagedformattedTopPages = _.reject(data.pagedformattedTopPages, function(analytics){ return !angular.isDefined(analytics.page)});
@@ -87,7 +86,6 @@
       ChartAnalyticsService.runReports($scope.date, $scope.analyticsAccount, function (data) {
         $scope.setReportData(data);
       });
-
     };
 
     $scope.visitorDataReport = function (result2, result3) {
@@ -103,7 +101,6 @@
       });
 
       $scope.visitorsData = visitorsData;
-
 
       var vistorsPreviousData = 0;
       _.each(result3, function (previousVisitor) {
@@ -123,7 +120,6 @@
       // ======================================
       // Visitor Locations
       // ======================================
-
 
       var locationData = [];
       if (result0) {
