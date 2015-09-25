@@ -11,7 +11,6 @@
                 <span ng-if="!isSinglePost && page.components" class="mainDescription">There are currently {{page.components.length}} components.</span>
                 <span ng-if="templateActive" class="mainDescription">There are currently {{page.config.components.length}} components.</span>
             </div>
-            <spectrum-colorpicker format="'hex'" options="spectrum.options" class="pull-right" ng-model="componentEditing.emailBg" ng-change="saveComponent()"></spectrum-colorpicker>
             <div ncy-breadcrumb></div>
         </div>
     </section>
