@@ -183,7 +183,7 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
       togglePaletteOnly: true,
       togglePaletteMoreText: 'more',
       togglePaletteLessText: 'less',
-      //preferredFormat: true,
+      preferredFormat: true,
       appendTo: "body",
       palette: [
         ["#C91F37", "#DC3023", "#9D2933", "#CF000F", "#E68364", "#F22613", "#CF3A24", "#C3272B", "#8F1D21", "#D24D57"],
