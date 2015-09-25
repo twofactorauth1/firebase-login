@@ -123,8 +123,10 @@
           angular.element('.cke_button__doksoft_button, .cke_button__doksoft_font_awesome').hide();
           angular.element('.cke_button__doksoft_button_email').show();
         }
-        else
-          angular.element('.cke_button__doksoft_font_awesome').show();
+        else{
+          angular.element('.cke_button__doksoft_button, .cke_button__doksoft_font_awesome').show();
+          angular.element('.cke_button__doksoft_button_email').hide();
+        }
         ev.editor.on('key', function () {
           $scope.setDirty(true);
         });
@@ -302,6 +304,7 @@
         WebsiteService.updateTopic($scope.topic, function (data) {
           $scope.saveLoading = false;
           toaster.pop('success', "Topic Saved", "The " + $scope.topic.title + " topic was saved successfully.");
+          $scope.redirectAfterSave(redirect_url, reload);
         });
       } else {
         $scope.checkForDuplicatePage(function () {
@@ -349,6 +352,7 @@
                 WebsiteService.updateEmail($scope.page, function(data) {
                   $scope.saveLoading = false;
                   toaster.pop('success', "Email Saved", "The " + $scope.page.title + " email was saved successfully.");
+                  $scope.redirectAfterSave(redirect_url, reload);
                 });
               }
             })
@@ -448,7 +452,14 @@
       WebsiteService.getSinglePage(_handle, function (data) {
         $scope.page  = angular.copy(data);
         $scope.components = $scope.page.components;
-        
+        if(_handle === 'single-post'){
+          var post_component = _.findWhere($scope.page.components, {
+            type: 'single-post'
+          });
+          if(post_component){
+            $scope.blog.post = post_component;
+          }
+        }
         $scope.originalPage = angular.copy(data);
         $scope.activePage = true;
         $scope.activateCKeditor();
@@ -764,6 +775,7 @@
     $scope.testimonialSlider = {};
     $scope.contactMap = {};
     $scope.blogControl = {};
+
 
     $scope.insertMedia = function (asset) {
       console.log('$scope.componentEditing ', $scope.componentEditing);
@@ -1318,7 +1330,12 @@
       var redirectUrl = url;
       
       if (!redirectUrl) {
-        redirectUrl = $location.search().posthandle ? "/admin/#/website/posts" : $scope.isEmail ? "/admin/#/emails" : "/admin/#/website/pages";
+        if($scope.isEmail)
+          redirectUrl = "/admin/#/emails";
+        else if($scope.isTopic)
+          redirectUrl = "/admin/#/support/manage-topics";
+        else
+          redirectUrl = "/admin/#/website/pages";
       }
       fn(redirectUrl);
     }
@@ -1343,7 +1360,7 @@
               //SweetAlert.swal("Saved!", "Your edits were saved to the page.", "success");
               $scope.redirect = true;
               $scope.savePage(redirectUrl, reload);
-              $scope.setDirty(false);              
+              $scope.setDirty(false);
             } else {
               $scope.redirectWithoutSave(redirectUrl, true, reload);
             }

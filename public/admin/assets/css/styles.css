@@ -12949,14 +12949,14 @@ fieldset[disabled] .btn-vimeo-square.active {
   display: none;
   visibility: none;
 }
-/*#componentloader .fragment.email .cn-wrapper li {
+#componentloader .fragment.email .cn-wrapper li {
   display: none;
 }
 #componentloader .fragment.email .cn-wrapper li:first-child {
   display: block!important;
   -webkit-transform: rotate(75deg) skew(60deg) !important;
   transform: rotate(75deg) skew(60deg) !important;
-}*/
+}
 #componentloader .fragment:hover .component-inner,
 #componentloader .fragment:hover .bg.cover {
   -webkit-box-shadow: inset 0px 0px 0px 2px #ffa500;
@@ -13216,7 +13216,7 @@ fieldset[disabled] .btn-vimeo-square.active {
   content: "\f0c8";
 }
 #editor-toolbar .cke_chrome a.cke_button .cke_button__doksoft_button_email_icon:before {
-  content: "\f0c8";
+  content: "\f1a5";
 }
 #editor-toolbar .cke_chrome a.cke_button .cke_button__doksoft_font_awesome_icon:before {
   content: "\f024";
@@ -14146,7 +14146,7 @@ tags-input.ti-input-sm .tags .input,
 /*   Settings
 /* ---------------------------------------------------------------------- */
 .sitesettings .favicon-image {
-  background: url('https://s3-us-west-2.amazonaws.com/indigenous-admin/Browser-Mockup.png') no-repeat;
+  background: url('//s3-us-west-2.amazonaws.com/indigenous-admin/Browser-Mockup.png') no-repeat;
   height: 60px;
   background-size: cover;
   margin-bottom: 15px;
@@ -14190,14 +14190,14 @@ tags-input.ti-input-sm .tags .input,
   border: 1px solid rgba(0, 0, 0, 0.07);
 }
 .create-campaign .mobile-bg {
-  background: url('https://s3-us-west-2.amazonaws.com/indigenous-admin/mobile-template.png');
+  background: url('//s3-us-west-2.amazonaws.com/indigenous-admin/mobile-template.png');
   background-repeat: no-repeat;
   background-position-x: 50%;
   height: 495px;
   margin: 30px 0;
 }
 .create-campaign .desktop-bg {
-  background: url('https://s3-us-west-2.amazonaws.com/indigenous-admin/desktop-template.png');
+  background: url('//s3-us-west-2.amazonaws.com/indigenous-admin/desktop-template.png');
   background-repeat: no-repeat;
   background-position-x: 50%;
   height: 495px;

@@ -797,7 +797,7 @@ app.constant('JS_REQUIRES', {
     files: ['../js/libs/bootstrap-icon-picker/bootstrap-iconpicker/js/iconset/iconset-fontawesome-4.2.0.min.js', '../js/libs/bootstrap-icon-picker/bootstrap-iconpicker/js/bootstrap-iconpicker.min.js', '../js/libs/bootstrap-icon-picker/bootstrap-iconpicker/css/bootstrap-iconpicker.min.css']
   }, {
     name: 'spectrum',
-    files: ['../js/libs/spectrum/spectrum.js', '../js/libs/angular-spectrum-colorpicker/dist/angular-spectrum-colorpicker.min.js', '../js/libs/spectrum/spectrum.css'],
+    files: ['../js/libs/spectrum/spectrum.css','../js/libs/spectrum/spectrum.js','../js/libs/angular-spectrum-colorpicker/dist/angular-spectrum-colorpicker.min.js'],
   }, {
     name: 'angular-resizable',
     files: ['../js/libs/angular-resizable/angular-resizable.min.js', '../js/libs/angular-resizable/angular-resizable.min.css'],

@@ -3239,6 +3239,10 @@ div[data-type=single-post] .container {
 .single-post-v1 #main-area {
   padding-top: 80px;
 }
+.single-post-v1 #main-area .entry,
+.single-post-v1 #main-area .social-links {
+  position: relative;
+}
 .single-post-v1 .container.row-fluid {
   max-width: 1100px;
   margin: 0 auto;
@@ -4024,7 +4028,7 @@ div[data-type=blog] .container {
   color: #1e497d;
 }
 .payment-form-v1 .top-signup {
-  background: url('https://s3-us-west-2.amazonaws.com/indigenous-admin/background-pattern-v1.png') repeat;
+  background: url('//s3-us-west-2.amazonaws.com/indigenous-admin/background-pattern-v1.png') repeat;
 }
 .payment-form-v1 .top-signup h1 {
   font-size: 55px;
@@ -4855,7 +4859,7 @@ fieldset[disabled] .btn-vimeo-square.active {
   text-align: center;
 }
 .customer-signup-v1 .certificates li {
-  background: url('https://s3-us-west-2.amazonaws.com/indigenous-components/badge.png') no-repeat;
+  background: url('//s3-us-west-2.amazonaws.com/indigenous-components/badge.png') no-repeat;
   width: 132px;
   height: 131px;
   padding: 10px;

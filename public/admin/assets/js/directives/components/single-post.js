@@ -57,7 +57,7 @@ app.directive('singlePostComponent', ['$location', "WebsiteService", "$timeout",
       };
       if (scope.$parent.blog) {
         scope.blog.post = scope.$parent.blog.post;
-      }
+      };
     }
   };
 }]);

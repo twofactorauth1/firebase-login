@@ -505,7 +505,7 @@ _.extend(api.prototype, baseApi.prototype, {
                     var accountId = value.id();
                     var vars = [];
 
-                    var toAddress = value.get('business').email;
+                    var toAddress = value.get('business').emails[0].email;
                     var toName = '';
                     mandrillHelper.sendNewCustomerEmail(toAddress, toName, accountId, vars, function(err, value){
                         self.log.debug('email sent');
