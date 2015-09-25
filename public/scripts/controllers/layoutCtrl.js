@@ -2,6 +2,7 @@
 /*global mainApp*/
 mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', '$window', '$location', '$document', '$timeout', function ($scope, pagesService, $window, $location, $document, $timeout) {
   $scope.isEditing = false;
+  $scope.blog_post = null;
   console.log('layout crtl');
   function checkIntercom(data) {
     if (data.hideIntercom) {
@@ -19,8 +20,17 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', '$window', '$locatio
         $window.location.href = '/404';
       }
     } else {
+
       $scope.page = data;
       $scope.components = data.components;
+      if(data.handle=== 'single-post'){
+        var post_component = _.findWhere($scope.page.components, {
+          type: 'single-post'
+        });
+        if(post_component){
+          $scope.blog_post = post_component;
+        }
+      }
       $scope.components.forEach(function (value, index) {
         if (value && value.type === 'masthead') {
           if (index != 0 && $scope.components[index - 1].type == "navigation") {

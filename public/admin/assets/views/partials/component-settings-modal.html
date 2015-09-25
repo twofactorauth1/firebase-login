@@ -39,7 +39,7 @@
                             <span tooltip-placement="top" tooltip-html-unsafe="Background color of navigation bar."><i class="fa fa-info-circle" /></span>
                             <div class="pull-right">
                                 <h4 class="pull-left"><i class="fa fa-eyedropper" /></h4>
-                                <spectrum-colorpicker format="hex" options="spectrum.options" class="pull-right" ng-model="componentEditing.nav.bg" ng-change="saveComponent()"></spectrum-colorpicker>
+                                <spectrum-colorpicker format="'hex'" options="spectrum.options" class="pull-right" ng-model="componentEditing.nav.bg" ng-change="saveComponent()"></spectrum-colorpicker>
                             </div>
                         </div>
                         <div class="form-group" ng-if="componentEditing.type === 'email'">
@@ -47,7 +47,7 @@
                             <span tooltip-placement="top" tooltip-html-unsafe="Background color of email."><i class="fa fa-info-circle" /></span>
                             <div class="pull-right">
                                 <h4 class="pull-left"><i class="fa fa-eyedropper" /></h4>
-                                <spectrum-colorpicker format="hex" options="spectrum.options" class="pull-right" ng-model="componentEditing.emailBg" ng-change="saveComponent()"></spectrum-colorpicker>
+                                <spectrum-colorpicker format="'hex'" options="spectrum.options" class="pull-right" ng-model="componentEditing.emailBg" ng-change="saveComponent()"></spectrum-colorpicker>
                             </div>
                         </div>
                         <div class="form-group" ng-show="componentEditing.type == 'navigation'">
@@ -71,7 +71,7 @@
                             <span tooltip-placement="top" tooltip-html-unsafe="Background color of Pricing table."><i class="fa fa-info-circle" /></span>
                             <div class="pull-right">
                                 <h4 class="pull-left"><i class="fa fa-eyedropper" /></h4>
-                                <spectrum-colorpicker format="hex" options="spectrum.options" class="pull-right" ng-model="componentEditing.tblbgcolor" ng-change="saveComponent()"></spectrum-colorpicker>
+                                <spectrum-colorpicker format="'hex'" options="spectrum.options" class="pull-right" ng-model="componentEditing.tblbgcolor" ng-change="saveComponent()"></spectrum-colorpicker>
                             </div>
                         </div>
                         <div class="form-group" ng-if="componentEditing.type === 'feature-list'">
@@ -79,7 +79,7 @@
                             <span tooltip-placement="top" tooltip-html-unsafe="Background color of Feature Block."><i class="fa fa-info-circle" /></span>
                             <div class="pull-right">
                                 <h4 class="pull-left"><i class="fa fa-eyedropper" /></h4>
-                                <spectrum-colorpicker format="hex" options="spectrum.options" class="pull-right" ng-model="componentEditing.blockbgcolor" ng-change="saveComponent()"></spectrum-colorpicker>
+                                <spectrum-colorpicker format="'hex'" options="spectrum.options" class="pull-right" ng-model="componentEditing.blockbgcolor" ng-change="saveComponent()"></spectrum-colorpicker>
                             </div>
                         </div>
                         <hr ng-show="componentEditing.type == 'navigation'" />
@@ -1111,12 +1111,12 @@
             </div>
             <div class="modal-footer" ng-class="{hidden: hover}">
                 <div class="form-group margin-bottom-0">
-                    <button type="button" ng-click="revertComponent()" class="btn btn-warning btn-o btn-wide">
+                    <a type="button" ng-click="revertComponent()" class="btn btn-warning btn-o btn-wide">
                         Revert
-                    </button>
-                    <button type="button" class="btn btn-info btn-wide btn-o" ng-click="closeModal()">
+                    </a>
+                    <a type="button" class="btn btn-info btn-wide btn-o" ng-click="closeModal()">
                         Done
-                    </button>
+                    </a>
                 </div>
             </div>
             <a class="btn btn-outline pull-right media-modal hidden" on-insert-mediacb="insertMedia" user='user' data-main='true'>
