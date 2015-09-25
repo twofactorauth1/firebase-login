@@ -452,7 +452,14 @@
       WebsiteService.getSinglePage(_handle, function (data) {
         $scope.page  = angular.copy(data);
         $scope.components = $scope.page.components;
-        
+        if(_handle === 'single-post'){
+          var post_component = _.findWhere($scope.page.components, {
+            type: 'single-post'
+          });
+          if(post_component){
+            $scope.blog.post = post_component;
+          }
+        }
         $scope.originalPage = angular.copy(data);
         $scope.activePage = true;
         $scope.activateCKeditor();
@@ -768,6 +775,7 @@
     $scope.testimonialSlider = {};
     $scope.contactMap = {};
     $scope.blogControl = {};
+
 
     $scope.insertMedia = function (asset) {
       console.log('$scope.componentEditing ', $scope.componentEditing);
