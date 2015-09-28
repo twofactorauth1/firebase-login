@@ -1451,6 +1451,7 @@
       }, function (isConfirm) {
         if (isConfirm) {
           SweetAlert.swal("Saved!", "Email is deleted.", "success");
+          $scope.changesConfirmed = true;
           var title = $scope.page.title;
           WebsiteService.deleteEmail($scope.page, function (data) {
             toaster.pop('success', "Email Deleted", "The " + title + " email was deleted successfully.");
@@ -1488,6 +1489,7 @@
           if (isConfirm) {
             var title = $scope.blog.post.post_title;
             SweetAlert.swal("Saved!", "Post is deleted.", "success");
+            $scope.changesConfirmed = true;
             WebsiteService.deletePost($scope.page._id, $scope.blog.post._id, function (data) {
               toaster.pop('success', "Post Deleted", "The " + title + " post was deleted successfully.");
               $scope.closeModal();
