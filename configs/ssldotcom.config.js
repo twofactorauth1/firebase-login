@@ -18,5 +18,5 @@ module.exports = {
     SSLDOTCOM_TEST_ENDPOINT: ssldotcomTestEndpoint,
     SSLDOTCOM_MOCK_ENDPOINT: ssldotcomMockEndpoint,
     SSLDOTCOM_CSR: '',
-    SSLDOTCOM_SERVER_SOFTWARE: 39 //constant for Amazon LB
+    SSLDOTCOM_SERVER_SOFTWARE: '39' //constant for Amazon LB
 }
