@@ -655,7 +655,6 @@ _.extend(api.prototype, baseApi.prototype, {
                                                                 htmlContent, ip, savedContact.id(), vars, null, function(err, result){});
                                                                 */
                                                         }
-
                                                     });
                                                 } else {
                                                     self.log.debug('emailPage ', emailPage);

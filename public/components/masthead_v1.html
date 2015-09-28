@@ -1,5 +1,5 @@
 <div ng-class="component.type+'-v'+component.version" style="background-image: url({{componentEditing.bg.img.url}})">
-    <div ng-if="addUndernavClasses" class="mastHeadUndernav" style="height:200px" ></div>
+    <div ng-if="addUndernavClasses && allowUndernav" class="masthead_{{component._id}} mastHeadUndernav" style="height:200px" ></div>
     <div class="home-text">
         <div class="masthead-text">
             <div elem ng-model="component.text"></div>

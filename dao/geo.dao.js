@@ -52,7 +52,7 @@ var dao = {
                         }
                     }
                 } catch (exception) {
-                    self.log.debug(body);
+
                     self.log.error('exception searching for address: ', exception);
                 }
 

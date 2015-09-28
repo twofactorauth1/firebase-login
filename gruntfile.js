@@ -102,7 +102,7 @@ module.exports = function(grunt) {
                     // '../indigeweb/public/css/angular-admin.css': [ 'public/less/angular-admin.less' ]
                     '../indigeweb/public/admin/assets/css/frontend-admin.css': [ 'public/less/frontend-admin.less' ],
                     '../indigeweb/public/css/styles.css': [ 'public/less/frontend.less' ],
-                    '../indigeweb/public/admin/assets/css/styles.css': [ 'public/less/styles.less' ],
+                    '../indigeweb/public/admin/assets/css/styles.css': [ 'public/less/styles.less' ]
                 }
             }
         },
@@ -302,7 +302,7 @@ module.exports = function(grunt) {
             },
             frontend: {
                 files: {
-                    'public/js/ng-indigenous.js': jsincludeGenerator.includeDirectory('public/scripts'),
+                    'public/js/ng-indigenous.js': jsincludeGenerator.includeDirectory('public/scripts')
                 }
             }
         },
@@ -547,7 +547,9 @@ module.exports = function(grunt) {
 
     grunt.registerTask('copyroot', ['clean:release','copy:main']);
     grunt.registerTask('compiletemplates', ['compilehbs', 'handlebars','clean:hbs']);
+
     grunt.registerTask('production',['clean:prebuild', 'less', 'csssplit', 'concat', 'ngAnnotate', 'uglify', 'cssmin', 'clean:postbuild']);
+
 
     /*
      * This task is run by CI.

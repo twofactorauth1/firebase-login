@@ -432,6 +432,11 @@
 #componentloader .vertical-top td {
   vertical-align: top;
 }
+@media (max-width: 767px) {
+  #componentloader .row {
+    margin-right: 0px !important;
+  }
+}
 #componentloader .accordion-v1 .title {
   text-align: center;
   margin-bottom: 20px;
@@ -454,6 +459,7 @@
 @media (max-width: 767px) {
   #componentloader .contact-us-v1 .widget-weather {
     margin-top: -280px !important;
+    margin-left: 20px !important;
     padding: 0!important;
   }
   #componentloader .contact-us-v1 .widget-weather .panel-body {
@@ -4022,7 +4028,7 @@
   color: #1e497d;
 }
 #componentloader .payment-form-v1 .top-signup {
-  background: url('//s3-us-west-2.amazonaws.com/indigenous-admin/background-pattern-v1.png') repeat;
+  background: url('https://s3-us-west-2.amazonaws.com/indigenous-admin/background-pattern-v1.png') repeat;
 }
 #componentloader .payment-form-v1 .top-signup h1 {
   font-size: 55px;
@@ -4850,7 +4856,7 @@
   text-align: center;
 }
 #componentloader .customer-signup-v1 .certificates li {
-  background: url('//s3-us-west-2.amazonaws.com/indigenous-components/badge.png') no-repeat;
+  background: url('https://s3-us-west-2.amazonaws.com/indigenous-components/badge.png') no-repeat;
   width: 132px;
   height: 131px;
   padding: 10px;
