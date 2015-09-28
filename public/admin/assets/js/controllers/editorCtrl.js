@@ -1413,6 +1413,7 @@
       }, function (isConfirm) {
         if (isConfirm) {
           SweetAlert.swal("Saved!", "Page is deleted.", "success");
+          $scope.changesConfirmed = true;
           var websiteId = $scope.page.websiteId;
           var title = $scope.page.title;
 
