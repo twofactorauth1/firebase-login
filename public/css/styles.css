@@ -435,6 +435,7 @@ div[data-type='campaign'] .inner-page .overlay {
 @media (max-width: 767px) {
   .contact-us-v1 .widget-weather {
     margin-top: -280px !important;
+    margin-left: 20px !important;
     padding: 0!important;
   }
   .contact-us-v1 .widget-weather .panel-body {
