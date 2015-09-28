@@ -893,7 +893,7 @@
           var keys = Object.keys(props);
           var i = 0;
           for (i; i < keys.length; i++) {
-            if (item[keys[i]].toString().toLowerCase().indexOf(props[keys[i]].toLowerCase()) !== -1) {
+            if (item[keys[i]] && item[keys[i]].toString().toLowerCase().indexOf(props[keys[i]].toLowerCase()) !== -1) {
               itemMatches = true;
               break;
             }
