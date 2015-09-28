@@ -1556,10 +1556,10 @@
       toaster.pop('success', "Component Added", "The " + newComponent.type + " component was added successfully.");
     };
 
-    $scope.addUnderNavSetting = function (fn) {
+    $scope.addUnderNavSetting = function (masthead_id, fn) {
       $scope.allowUndernav = false;
       $scope.components.forEach(function (value, index) {
-        if (value && value.type === 'masthead') {
+        if (value && value.type === 'masthead' && value._id == masthead_id) {
           if (index != 0 && $scope.components[index - 1].type == "navigation") {
             $scope.allowUndernav = true;
           } else
