@@ -1328,7 +1328,8 @@
         }
       }
       var redirectUrl = url;
-      
+      if($scope.post_blog_page)
+        redirectUrl = "/admin/#/website/posts";
       if (!redirectUrl) {
         if($scope.isEmail)
           redirectUrl = "/admin/#/emails";
