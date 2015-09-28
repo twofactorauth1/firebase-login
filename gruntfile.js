@@ -351,7 +351,9 @@ module.exports = function(grunt) {
             runkeeperpoll:['biometrics/runkeeper/adapter/test/runkeeper_test_poll.js'],
             utils:['utils/test/*_test.js'],
             tzTests: ['test/tztest.js'],
-            leads: ['test/pullLeadDynoData.js']
+            leads: ['test/pullLeadDynoData.js'],
+            ssl: ['certificates/test/ssldotcom.dao_test.js'],
+            ssl_manager: ['certificates/test/manager_test.js']
         },
 
         // Running Karma from Grunt, with documentation from here:
@@ -583,4 +585,6 @@ module.exports = function(grunt) {
     grunt.registerTask('testTz', ['nodeunit:tzTests']);
     grunt.registerTask('testGtm', ['nodeunit:gtm']);
     grunt.registerTask('leads', ['nodeunit:leads']);
+    grunt.registerTask('ssl', ['nodeunit:ssl']);
+    grunt.registerTask('ssl_manager', ['nodeunit:ssl_manager']);
 };
