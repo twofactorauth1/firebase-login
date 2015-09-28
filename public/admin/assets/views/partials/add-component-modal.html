@@ -4,7 +4,7 @@
     <h4 class="modal-title">Add New Component</h4>
 </div>
 <div class="modal-body no-padding add-component-modal">
-    <tabset class="tabbable tabs-left margin-bottom-0">
+    <tabset class="tabbable tabs-left margin-bottom-0" ng-class="{'email-components' : isEmail}">
         <tab ng-repeat="componentFilter in componentFilters">
             <tab-heading>
                 {{componentFilter.capitalized}}
