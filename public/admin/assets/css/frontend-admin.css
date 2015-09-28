@@ -432,6 +432,11 @@
 #componentloader .vertical-top td {
   vertical-align: top;
 }
+@media (max-width: 767px) {
+  #componentloader .row {
+    margin-right: 0px !important;
+  }
+}
 #componentloader .accordion-v1 .title {
   text-align: center;
   margin-bottom: 20px;

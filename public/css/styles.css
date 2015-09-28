@@ -413,6 +413,11 @@ fieldset[disabled] .btn-linked-in.active {
 .vertical-top td {
   vertical-align: top;
 }
+@media (max-width: 767px) {
+  .row {
+    margin-right: 0px !important;
+  }
+}
 .accordion-v1 .title {
   text-align: center;
   margin-bottom: 20px;
