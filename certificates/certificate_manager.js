@@ -11,13 +11,13 @@ var config = require('../configs/ssldotcom.config');
 var endpoint = config.SSLDOTCOM_TEST_ENDPOINT;
 
 var async = require('async');
-var csr = '-----BEGIN CERTIFICATE REQUEST-----\nMIIC3jCCAcYCAQAwgZgxCzAJBgNVBAYTAnVzMRMwEQYDVQQIDApDYWxpZm9ybmlh\nMRIwEAYDVQQHDAlTYW4gRGllZ28xIjAgBgNVBAoMGUluZGlnZW5vdXMgU29mdHdh\ncmUsIEluYy4xGDAWBgNVBAMMDyouaW5kaWdlbm91cy5pbzEiMCAGCSqGSIb3DQEJ\nARYTYWRtaW5AaW5kaWdlbm91cy5pbzCCASIwDQYJKoZIhvcNAQEBBQADggEPADCC\nAQoCggEBAMiYTvVG3Je7k4nY5IYvwv0FuslrEcARckSiTGZ9vddYox57pgQB5emc\ndxqpk73phfB1+gUM9jK2uAZzbgLhVDRR8TSYgqtFO1pHycEzfzy8eTtTJjY0arZ1\nnZy/FNDnlaAFzkfex0nxP28sQXeZhpVQqqGKOzrTxksrYjMsDfSoEae9Am65jbV+\nxjcotRmBynmfbt3fk+8n4528ZbCnAK1kU/kgeqW34jY1c3Qtld/Q7AX/1Kd0C53Q\nRlkLNFPzthXVDPkcko54+rOjIA430+sLmDYIm06CNCjVEnAyRYTTFpsrqPsW+Prf\nSscO7opGxHqqtqRccUsFHO2ZqnOmyQ0CAwEAAaAAMA0GCSqGSIb3DQEBCwUAA4IB\nAQChMpsT6El+KWOpdWybwsZ/25Q7sZwq1otg/FZRd0UrGWyNlM6dzM/mRmPEF9Jb\n1TW8rI43gRluP4Qn976+Ewsn1ZCZTld/ChmEeq8kABYKA2juSy1wcliyBC1PFAZq\nJIp0Ip+BNZA1SExmB2GkKhMS7u23KpPYSMOE5p2FpWfnN1eCa1JIGjP+av/62DsZ\nJhgbU8B+b8XTOar0NToR0X7Q9OMuZil2rvHSzW1LnfDhJyPxZ0EWr07Ro73Tpe2r\nTX0wjwEwpA0m4WRmju738XAAK8pbVGnCGzulx0L3slmOWhew+EzjVmTB6Exkiu9Z\neayMZ8yObDVtrM8eoTXdxdId\n-----END CERTIFICATE REQUEST-----';
+//var csr = '-----BEGIN CERTIFICATE REQUEST-----\nMIIC3jCCAcYCAQAwgZgxCzAJBgNVBAYTAnVzMRMwEQYDVQQIDApDYWxpZm9ybmlh\nMRIwEAYDVQQHDAlTYW4gRGllZ28xIjAgBgNVBAoMGUluZGlnZW5vdXMgU29mdHdh\ncmUsIEluYy4xGDAWBgNVBAMMDyouaW5kaWdlbm91cy5pbzEiMCAGCSqGSIb3DQEJ\nARYTYWRtaW5AaW5kaWdlbm91cy5pbzCCASIwDQYJKoZIhvcNAQEBBQADggEPADCC\nAQoCggEBAMiYTvVG3Je7k4nY5IYvwv0FuslrEcARckSiTGZ9vddYox57pgQB5emc\ndxqpk73phfB1+gUM9jK2uAZzbgLhVDRR8TSYgqtFO1pHycEzfzy8eTtTJjY0arZ1\nnZy/FNDnlaAFzkfex0nxP28sQXeZhpVQqqGKOzrTxksrYjMsDfSoEae9Am65jbV+\nxjcotRmBynmfbt3fk+8n4528ZbCnAK1kU/kgeqW34jY1c3Qtld/Q7AX/1Kd0C53Q\nRlkLNFPzthXVDPkcko54+rOjIA430+sLmDYIm06CNCjVEnAyRYTTFpsrqPsW+Prf\nSscO7opGxHqqtqRccUsFHO2ZqnOmyQ0CAwEAAaAAMA0GCSqGSIb3DQEBCwUAA4IB\nAQChMpsT6El+KWOpdWybwsZ/25Q7sZwq1otg/FZRd0UrGWyNlM6dzM/mRmPEF9Jb\n1TW8rI43gRluP4Qn976+Ewsn1ZCZTld/ChmEeq8kABYKA2juSy1wcliyBC1PFAZq\nJIp0Ip+BNZA1SExmB2GkKhMS7u23KpPYSMOE5p2FpWfnN1eCa1JIGjP+av/62DsZ\nJhgbU8B+b8XTOar0NToR0X7Q9OMuZil2rvHSzW1LnfDhJyPxZ0EWr07Ro73Tpe2r\nTX0wjwEwpA0m4WRmju738XAAK8pbVGnCGzulx0L3slmOWhew+EzjVmTB6Exkiu9Z\neayMZ8yObDVtrM8eoTXdxdId\n-----END CERTIFICATE REQUEST-----';
 
 module.exports = {
 
     log: global.getLogger('certificate_manager'),
 
-    addDomainToCert: function(domain, certRef, fn) {
+    addDomainToCert: function(domain, certRef, csr, fn) {
         var self = this;
         /*
          * Do these steps:
