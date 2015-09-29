@@ -36,13 +36,14 @@ app.directive('mastheadComponent', ['$window', function ($window) {
             if (angular.element(".masthead-actions"))
               angular.element(".masthead-actions").css("margin-top", margin - 4);
 
+            $(window).trigger('scroll');
           } else {
             if (mastheadElement)
               mastheadElement.css("margin-top", 0);
             if (angular.element(".masthead-actions"))
               angular.element(".masthead-actions").css("margin-top", 0);
           }
-          $(window).trigger('scroll');
+          
         }, 300);
       };
     }
