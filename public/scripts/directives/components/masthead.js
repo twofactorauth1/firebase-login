@@ -31,8 +31,8 @@ app.directive('mastheadComponent', ['$window', function ($window) {
           var mastheadElement = angular.element(".component_wrap_"+scope.component._id+".undernav200");
           var mastheadUnderNavElement = angular.element(".masthead_"+scope.component._id+".mastHeadUndernav");
           if (scope.addUndernavClasses && scope.allowUndernav) {
-            var navHeight = angular.element("#bs-example-navbar-collapse-1").height();
-            var margin = 200 + navHeight;
+            var navHeight = angular.element(".undernav").height();
+            var margin = 15 + navHeight;
             if (mastheadElement) {
               mastheadElement.css("margin-top", -margin);
               if (scope.allowFullScreen)
