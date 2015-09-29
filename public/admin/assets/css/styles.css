@@ -14323,3 +14323,10 @@ tags-input.ti-input-sm .tags .input,
   width: 12.5%;
   float: left;
 }
+/* ---------------------------------------------------------------------- */
+/*  Emails
+/* ---------------------------------------------------------------------- */
+.email-templates table.grid thead th {
+  width: 14.28%;
+  float: left;
+}
