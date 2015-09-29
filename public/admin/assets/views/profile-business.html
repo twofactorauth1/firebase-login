@@ -142,19 +142,31 @@
                                         <i ng-if="!showAddEmail(email)" ng-click="removeEmail($index)" class="ti-minus"></i>
                                     </span>
                                 </div>
-                            </div>
-                            <div>
-                                <label class="control-label">
-                                    Phone Number
-                                </label>
-                                <div class="form-group" ng-class="{ 'has-error' : form.phone_{{$index}}.$invalid  && !form.phone_{{$index}}.$pristine}" ng-repeat="phone in account.business.phones">
-                                    <span class="input-icon input-icon-right">
-                                        <input type="text" placeholder="phone number" class="form-control" ng-pattern="formValidations.phone" name="phone_{{$index}}" ng-model="account.business.phones[$index].number">
-                                        <p ng-show="form.phone_{{$index}}.$invalid && !form.phone_{{$index}}.$pristine" class="help-block">Enter a valid phone number.</p>
-                                        <i ng-if="showAddPhone(phone)" ng-click="accountAddPhoneFn()" class="ti-plus"></i>
-                                        <i ng-if="!showAddPhone(phone)" ng-click="removePhone($index)" class="ti-minus"></i>
-                                    </span>
+                            </div>                          
+                            <div ng-repeat="phone in account.business.phones">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group" ng-class="{ 'has-error' : form.extension_{{$index}}.$invalid && !form.extension_{{$index}}.$pristine}">
+                                            <label class="control-label">
+                                                Phone Extension
+                                            </label>
+                                            <input type="text" placeholder="phone extension" class="form-control" ng-pattern="formValidations.extension" name="extension_{{$index}}" ng-model="account.business.phones[$index].extension">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <div class="form-group" ng-class="{ 'has-error' : form.phone_{{$index}}.$invalid && !form.phone_{{$index}}.$pristine}">
+                                            <label class="control-label">
+                                               Phone Number
+                                            </label>
+                                            <input type="text" placeholder="phone number" class="form-control" ng-pattern="formValidations.phone" name="phone_{{$index}}" ng-model="account.business.phones[$index].number">
+                                        </div>
+                                    </div>
                                 </div>
+                                <div>
+                                    <div ng-if="showAddPhone(phone)" class="btn btn-wide btn-o btn-primary pull-right" ng-click="accountAddPhoneFn()">Add another phone</div>
+                                    <div ng-if="!showAddPhone(phone)" class="btn btn-wide btn-o btn-warning pull-right" ng-click="removePhone($index)">Remove phone</div>
+                                </div>
+                                <div class="clearfix"></div>
                             </div>
                             <div ng-repeat="address in account.business.addresses">
                                 <div class="row">

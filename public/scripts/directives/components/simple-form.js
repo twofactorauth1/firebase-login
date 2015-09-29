@@ -26,8 +26,7 @@ app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userSe
           }
         }
       };
-      scope.emailValidation = formValidations.email;
-      scope.phoneNumberPattern = formValidations.phone;
+      scope.formValidations = formValidations;
       scope.user = {};
       scope.createUser = function (simpleForm) {
         scope.userExists = false;
