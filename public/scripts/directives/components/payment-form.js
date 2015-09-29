@@ -8,7 +8,7 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
         templateUrl: '/components/component-wrap.html',
         link: function(scope, element, attrs, ctrl) {
             scope.newAccount = {};
-
+            
             //scope.domainExistsAlready = false;  // needs to be undefined to begin with
             scope.emptyBusinessName = false;
             scope.validBusinessName = true;
@@ -37,7 +37,7 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                     UserService.saveOrUpdateTmpAccount(tmpAccount, function(data) {});
                 }
             });
-
+    
             // scope.planStatus = {};
             // scope.emailValidation = formValidations.email;
             // var productId = scope.component.productId;
@@ -276,6 +276,8 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
 
                 scope.checkEmailExists(newAccount, true);
 
+                scope.checkPhoneExtension(newAccount);
+
                 //pass
                 if (!scope.newAccount.password && !scope.newAccount.tempUserId && !scope.newAccount.hidePassword) {
                     scope.checkPasswordLength(newAccount);
@@ -304,7 +306,7 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                         scope.validateForm = false;
                     }
                 }
-
+                
                 if(!scope.validateForm)
                     return;
 
@@ -348,6 +350,7 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                         tmpAccount.business.phones[0] = {
                             _id: CommonService.generateUniqueAlphaNumericShort(),
                             number: scope.newAccount.phone,
+                            extension: scope.newAccount.extension,
                             default: true
                         };
                     }
@@ -556,6 +559,22 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                     angular.element("#password").removeClass('has-error').addClass('has-success');
                     angular.element("#password .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
                     scope.passwordIsValid = true;
+                }
+            };
+
+            scope.checkPhoneExtension = function(newAccount) {
+                scope.newAccount.extension = newAccount.extension;
+                console.log('newAccount.extension ', newAccount.extension);
+                var regex = formValidations.extension;
+                var result =  regex.test(newAccount.extension);
+                if (result || !newAccount.extension) {                                        
+                    angular.element("#extension .error").html("");
+                    angular.element("#extension").removeClass('has-error').addClass('has-success');
+                    angular.element("#extension .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');                    
+                } else {
+                    angular.element("#extension .error").html("Enter a valid extension");
+                    angular.element("#extension").addClass('has-error');
+                    angular.element("#extension .glyphicon").addClass('glyphicon-remove');
                 }
             };
 

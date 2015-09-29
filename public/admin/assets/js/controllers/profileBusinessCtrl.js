@@ -79,7 +79,8 @@
     $scope.accountAddPhoneFn = function () {
       $scope.account.business.phones.push({
         _id: CommonService.generateUniqueAlphaNumericShort(),
-        number: ''
+        number: '',
+        extension: ''
       });
     };
     $scope.removePhone = function (index) {
@@ -90,7 +91,7 @@
       return phone._id === $scope.account.business.phones[0]._id;
     };
 
-    // Add/Remove phone numbers
+    // Add/Remove address
     $scope.removeAddress = function (index) {
       $scope.account.business.addresses.splice(index, 1);
     };

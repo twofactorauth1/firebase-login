@@ -88,8 +88,14 @@
             fn(duplicate);
           })
           .error(function (err) {
-            console.warn('END:checkDuplicatePage with ERROR');
-            fn(err, null);
+            //console.warn('END:checkDuplicatePage with ERROR', err);
+            if(err.code && err.code ===404) {
+                //no dupe
+                fn(false);
+            } else {
+                fn(err, null);
+            }
+
           });
       }
     };

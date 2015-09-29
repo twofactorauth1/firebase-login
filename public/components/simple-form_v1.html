@@ -26,24 +26,29 @@
                     <div class="clearfix mb15"></div>
                     <form name="simpleForm" ng-submit="createUser(simpleForm)">
                         <!-- FIRST -->
-                        <div class="form-group" ng-class="{'col-sm-4': fieldsLength() == 3, 'col-sm-6': fieldsLength() == 2, 'col-sm-12': fieldsLength() == 1}" ng-if="fieldShow('first')" ng-class="{ 'has-error' : simpleForm.first.$invalid && !simpleForm.first.$pristine }">
+                        <div class="form-group" ng-class="{'col-sm-3': fieldsLength() == 4, 'col-sm-4': fieldsLength() == 3, 'col-sm-6': fieldsLength() == 2, 'col-sm-12': fieldsLength() == 1}" ng-if="fieldShow('first')" ng-class="{ 'has-error' : simpleForm.first.$invalid && !simpleForm.first.$pristine }">
                             <input type="text" name="first" ng-model="user.first" class="form-control" placeholder="First" required>
                             <p ng-show="simpleForm.first.$invalid && !simpleForm.first.$pristine" class="help-block">Enter a valid first name.</p>
                         </div>
                         <!-- LAST -->
-                        <div class="form-group" ng-class="{'col-sm-4': fieldsLength() == 3, 'col-sm-6': fieldsLength() == 2, 'col-sm-12': fieldsLength() == 1}" ng-if="fieldShow('last')" ng-class="{ 'has-error' : simpleForm.last.$invalid && !simpleForm.last.$pristine }">
+                        <div class="form-group" ng-class="{'col-sm-3': fieldsLength() == 4, 'col-sm-4': fieldsLength() == 3, 'col-sm-6': fieldsLength() == 2, 'col-sm-12': fieldsLength() == 1}" ng-if="fieldShow('last')" ng-class="{ 'has-error' : simpleForm.last.$invalid && !simpleForm.last.$pristine }">
                             <input type="text" name="last" ng-model="user.last" class="form-control" placeholder="Last" required>
                             <p ng-show="simpleForm.last.$invalid && !simpleForm.last.$pristine" class="help-block">Enter a valid last name.</p>
                         </div>
+                        <!-- EXTENSION -->
+                        <div class="form-group" ng-class="{'col-sm-3': fieldsLength() == 4, 'col-sm-4': fieldsLength() == 3, 'col-sm-6': fieldsLength() == 2, 'col-sm-12': fieldsLength() == 1}" ng-if="fieldShow('extension')" ng-class="{ 'has-error' : simpleForm.phone.$invalid && !simpleForm.extension.$pristine }">
+                            <input type="text" name="extension" ng-model="user.extension" ng-pattern="formValidations.extension" class="form-control" placeholder="Extension">
+                            <p ng-show="simpleForm.extension.$invalid && !simpleForm.extension.$pristine" class="help-block">Enter a valid extension.</p>
+                        </div>
                         <!-- PHONE -->
-                        <div class="form-group" ng-class="{'col-sm-4': fieldsLength() == 3, 'col-sm-6': fieldsLength() == 2, 'col-sm-12': fieldsLength() == 1}" ng-if="fieldShow('phone')" ng-class="{ 'has-error' : simpleForm.phone.$invalid && !simpleForm.phone.$pristine }">
-                            <input type="text" name="phone" ng-model="user.phone" ng-pattern="phoneNumberPattern" class="form-control" placeholder="Phone" required>
+                        <div class="form-group" ng-class="{'col-sm-3': fieldsLength() == 4, 'col-sm-4': fieldsLength() == 3, 'col-sm-6': fieldsLength() == 2, 'col-sm-12': fieldsLength() == 1}" ng-if="fieldShow('phone')" ng-class="{ 'has-error' : simpleForm.phone.$invalid && !simpleForm.phone.$pristine }">
+                            <input type="text" name="phone" ng-model="user.phone" ng-pattern="formValidations.phone" class="form-control" placeholder="Phone" required>
                             <p ng-show="simpleForm.phone.$invalid && !simpleForm.phone.$pristine" class="help-block">Enter a valid phone number.</p>
                         </div>
                         <div class="clearfix mb15"></div>
                         <!-- EMAIL -->
                         <div class="form-group col-sm-9" ng-class="{ 'has-error' : userExists || simpleForm.email.$invalid && !simpleForm.email.$pristine }">
-                            <input type="email" name="email" ng-model="user.email" class="form-control" ng-pattern="emailValidation" ng-model-options="{ debounce: 800 }" placeholder="Email" required>
+                            <input type="email" name="email" ng-model="user.email" class="form-control" ng-pattern="formValidations.email" ng-model-options="{ debounce: 800 }" placeholder="Email" required>
                             <p ng-if="simpleForm.email.$invalid && !simpleForm.email.$pristine && !userExists" class="help-block">Enter a valid email.</p>
                             <p ng-if="userExists" class="help-block">Email already exists.</p>
                         </div>
@@ -74,24 +79,29 @@
                             <div elem ng-model="component.text"></div>
                             <form name="simpleForm" ng-submit="createUser(simpleForm)">
                                 <!-- FIRST -->
-                                <div class="form-group" ng-class="{'col-sm-4': fieldsLength() == 3, 'col-sm-6': fieldsLength() == 2, 'col-sm-12': fieldsLength() == 1}" ng-if="fieldShow('first')" ng-class="{ 'has-error' : simpleForm.first.$invalid && !simpleForm.first.$pristine }">
+                                <div class="form-group" ng-class="{'col-sm-3': fieldsLength() == 4, 'col-sm-4': fieldsLength() == 3, 'col-sm-6': fieldsLength() == 2, 'col-sm-12': fieldsLength() == 1}" ng-if="fieldShow('first')" ng-class="{ 'has-error' : simpleForm.first.$invalid && !simpleForm.first.$pristine }">
                                     <input type="text" name="first" ng-model="user.first" class="form-control" placeholder="First" required>
                                     <p ng-show="simpleForm.first.$invalid && !simpleForm.first.$pristine" class="help-block">Enter a valid first name.</p>
                                 </div>
                                 <!-- LAST -->
-                                <div class="form-group" ng-class="{'col-sm-4': fieldsLength() == 3, 'col-sm-6': fieldsLength() == 2, 'col-sm-12': fieldsLength() == 1}" ng-if="fieldShow('last')" ng-class="{ 'has-error' : simpleForm.last.$invalid && !simpleForm.last.$pristine }">
+                                <div class="form-group" ng-class="{'col-sm-3': fieldsLength() == 4, 'col-sm-4': fieldsLength() == 3, 'col-sm-6': fieldsLength() == 2, 'col-sm-12': fieldsLength() == 1}" ng-if="fieldShow('last')" ng-class="{ 'has-error' : simpleForm.last.$invalid && !simpleForm.last.$pristine }">
                                     <input type="text" name="last" ng-model="user.last" class="form-control" placeholder="Last" required>
                                     <p ng-show="simpleForm.last.$invalid && !simpleForm.last.$pristine" class="help-block">Enter a valid last name.</p>
                                 </div>
+                                <!-- EXTENSION -->
+                                <div class="form-group" ng-class="{'col-sm-3': fieldsLength() == 4, 'col-sm-4': fieldsLength() == 3, 'col-sm-6': fieldsLength() == 2, 'col-sm-12': fieldsLength() == 1}" ng-if="fieldShow('phone')" ng-class="{ 'has-error' : simpleForm.extension.$invalid && !simpleForm.extension.$pristine }">
+                                    <input type="text" name="extension" ng-model="user.extension" ng-pattern="formValidations.extension" ng-model-options="{ debounce: 800 }" class="form-control" placeholder="Extension" required>
+                                    <p ng-show="simpleForm.extension.$invalid && !simpleForm.phone.$pristine" class="help-block">Enter a valid extension.</p>
+                                </div>
                                 <!-- PHONE -->
-                                <div class="form-group" ng-class="{'col-sm-4': fieldsLength() == 3, 'col-sm-6': fieldsLength() == 2, 'col-sm-12': fieldsLength() == 1}" ng-if="fieldShow('phone')" ng-class="{ 'has-error' : simpleForm.phone.$invalid && !simpleForm.phone.$pristine }">
-                                    <input type="text" name="phone" ng-model="user.phone" ng-pattern="phoneNumberPattern" ng-model-options="{ debounce: 800 }" class="form-control" placeholder="Phone" required>
+                                <div class="form-group" ng-class="{'col-sm-3': fieldsLength() == 4, 'col-sm-4': fieldsLength() == 3, 'col-sm-6': fieldsLength() == 2, 'col-sm-12': fieldsLength() == 1}" ng-if="fieldShow('phone')" ng-class="{ 'has-error' : simpleForm.phone.$invalid && !simpleForm.phone.$pristine }">
+                                    <input type="text" name="phone" ng-model="user.phone" ng-pattern="formValidations.phone" ng-model-options="{ debounce: 800 }" class="form-control" placeholder="Phone" required>
                                     <p ng-show="simpleForm.phone.$invalid && !simpleForm.phone.$pristine" class="help-block">Enter a valid phone number.</p>
                                 </div>
                                 <div class="clearfix mb15"></div>
                                 <!-- EMAIL -->
                                 <div class="form-group col-xs-12" ng-class="{ 'has-error' : userExists || simpleForm.email.$invalid && !simpleForm.email.$pristine }">
-                                    <input type="email" name="email" ng-model="user.email" class="form-control" ng-pattern="emailValidation" placeholder="Email" required>
+                                    <input type="email" name="email" ng-model="user.email" class="form-control" ng-pattern="formValidations.email" placeholder="Email" required>
                                     <p ng-if="simpleForm.email.$invalid && !simpleForm.email.$pristine && !userExists" class="help-block">Enter a valid email.</p>
                                     <p ng-if="userExists" class="help-block">Email already exists.</p>
                                 </div>

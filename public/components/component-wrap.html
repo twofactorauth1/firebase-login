@@ -7,7 +7,7 @@
        opacity: {{component.bg.opacity || 1}};
     }
 </style>
-<div class="component-wrap" ng-if="component.visibility" ng-class="{'editing': isEditing,'undernav200':component.type == 'masthead','undernav':component.type == 'navigation','component-wrap-post':isSinglePost}">
+<div class="component-wrap component_wrap_{{component._id}}" ng-if="component.visibility" ng-class="{'editing': isEditing,'undernav200':component.type == 'masthead','undernav':component.type == 'navigation','component-wrap-post':isSinglePost}">
     <div class="component {{component.type}}{{component._id}}">
         <div id="{{component.anchor || component._id}}" ng-style="{'color':component.txtcolor||primaryTextColor}">
             <div ng-if="!component.bg.img.url && component.type != 'email'" ng-style="{'background': component.bg.color, 'color':component.txtcolor||primaryTextColor}">

@@ -12,7 +12,7 @@ var config = require('./app.config');
  */
 var localString = "mongodb://localhost/bioindigenous";
 var testString = "mongodb://indiweb-test:testing123@c303.lighthouse.1.mongolayer.com:10303/test_indigenous";
-var prodString = "mongodb://indiweb:anime1@lighthouse.0.mongolayer.com:10188,lighthouse.1.mongolayer.com:10188/prod_indigenous";
+var prodString = "mongodb://indiweb:anime1@lighthouse.1.mongolayer.com:10188/prod_indigenous";
 
 //LOCAL
 //var connectionString = localString;

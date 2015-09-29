@@ -166,7 +166,7 @@ var dao = {
             return fn('secret_key must be specified');
         }
 
-        var path = '/certificate/' + ref + '/?account_key=' + account_key + '&secret_key=' + secret_key;
+        var path = '/certificate/' + ref + '/?account_key=' + account_key + '&secret_key=' + encodeURIComponent(secret_key);
         var _endpoint = endpoint;
         if(!_endpoint) {
             //figure out endpoint
@@ -179,6 +179,8 @@ var dao = {
         }
         if(query_type) {
             path += '&query_type=' + query_type;
+        } else {
+            path += '&query_type=end_certificate';
         }
         if(response_type) {
             path += '&response_type=' + response_type;
@@ -189,7 +191,7 @@ var dao = {
         var options = {
             url: _endpoint+path
         };
-
+        self.log.debug('using url:', options.url);
         request.get(options, function(err, response, _body){
             self.log.debug('err: ', err);
             //self.log.debug('response:', response);
@@ -393,7 +395,14 @@ var dao = {
         request.put(options, function(err, response, _body){
             self.log.debug('err: ', err);
             //self.log.debug('response:', response);
+            try {
+                _body = JSON.parse(_body);
+            } catch(exception) {
+                self.log.debug('Could not parse body:', exception);
+            }
             self.log.debug('_body:', _body);
+            var actualErrors = _body.errors;
+            self.log.error(actualErrors);
             self.log.debug('<< updateCertificate');
             fn(err, _body);
         });
@@ -415,7 +424,7 @@ var dao = {
             return fn('secret_key must be specified');
         }
         ///certificate/{ref}/validations/methods{?account_key,secret_key}
-        var path = '/certificate/' + ref + '/validations/methods?account_key=' + account_key + '&secret_key=' + secret_key;
+        var path = '/certificate/' + ref + '/validations/methods?account_key=' + account_key + '&secret_key=' + encodeURIComponent(secret_key);
         var _endpoint = endpoint;
         if(!_endpoint) {
             //figure out endpoint

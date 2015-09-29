@@ -9,18 +9,25 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', '$window', '$locatio
       $scope.$parent.hideIntercom = true;
     }
   }
-
+  $scope.addUnderNavSetting = function (masthead_id, fn) {
+    $scope.allowUndernav = false;
+    $scope.components.forEach(function (value, index) {
+      if (value && value.type === 'masthead' && value._id == masthead_id) {
+        if (index != 0 && $scope.components[index - 1].type == "navigation") {
+          $scope.allowUndernav = true;
+        } else
+          $scope.allowUndernav = false;
+      }
+    })
+    fn($scope.allowUndernav);
+  };
+  
   pagesService($scope.websiteId, function (err, data) {
     console.log('pagesService ', data);
     if (err) {
       console.warn('no page found');
-      if ($location.$$path.indexOf('login')) {
-        $window.location.href =  $location.$$path;
-      } else {
-        $window.location.href = '/404';
-      }
+      $window.location.href = '/404';
     } else {
-
       $scope.page = data;
       $scope.components = data.components;
       if(data.handle=== 'single-post'){
@@ -31,14 +38,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', '$window', '$locatio
           $scope.blog_post = post_component;
         }
       }
-      $scope.components.forEach(function (value, index) {
-        if (value && value.type === 'masthead') {
-          if (index != 0 && $scope.components[index - 1].type == "navigation") {
-            $scope.allowUndernav = true;
-          } else
-            $scope.allowUndernav = false;
-        }
-      })
+      
       checkIntercom(data);
       angular.element(document).ready(function () {
         setTimeout(function () {

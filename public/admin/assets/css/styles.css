@@ -12553,6 +12553,9 @@ table.grid tbody td strong {
   height: 100%;
   overflow: auto;
 }
+.add-component-modal .tabbable.tabs-left.email-components .nav-tabs {
+  overflow-y: hidden !important;
+}
 .btn-comment-o {
   color: #fff;
   background-color: #F0E301;
@@ -12922,7 +12925,6 @@ fieldset[disabled] .btn-vimeo-square.active {
 }
 #componentloader .component-wrap {
   background: #f1f1f1;
-  z-index: 10;
 }
 #componentloader .component-wrap-post {
   margin-bottom: 0px!important;
@@ -14146,7 +14148,7 @@ tags-input.ti-input-sm .tags .input,
 /*   Settings
 /* ---------------------------------------------------------------------- */
 .sitesettings .favicon-image {
-  background: url('//s3-us-west-2.amazonaws.com/indigenous-admin/Browser-Mockup.png') no-repeat;
+  background: url('https://s3-us-west-2.amazonaws.com/indigenous-admin/Browser-Mockup.png') no-repeat;
   height: 60px;
   background-size: cover;
   margin-bottom: 15px;
@@ -14190,14 +14192,14 @@ tags-input.ti-input-sm .tags .input,
   border: 1px solid rgba(0, 0, 0, 0.07);
 }
 .create-campaign .mobile-bg {
-  background: url('//s3-us-west-2.amazonaws.com/indigenous-admin/mobile-template.png');
+  background: url('https://s3-us-west-2.amazonaws.com/indigenous-admin/mobile-template.png');
   background-repeat: no-repeat;
   background-position-x: 50%;
   height: 495px;
   margin: 30px 0;
 }
 .create-campaign .desktop-bg {
-  background: url('//s3-us-west-2.amazonaws.com/indigenous-admin/desktop-template.png');
+  background: url('https://s3-us-west-2.amazonaws.com/indigenous-admin/desktop-template.png');
   background-repeat: no-repeat;
   background-position-x: 50%;
   height: 495px;
@@ -14311,6 +14313,20 @@ tags-input.ti-input-sm .tags .input,
 /*  Campaigns
 /* ---------------------------------------------------------------------- */
 .campaigns table.grid thead th {
+  width: 14.28%;
+  float: left;
+}
+/* ---------------------------------------------------------------------- */
+/*  Topics
+/* ---------------------------------------------------------------------- */
+.manage-topics table.grid thead th {
+  width: 12.5%;
+  float: left;
+}
+/* ---------------------------------------------------------------------- */
+/*  Emails
+/* ---------------------------------------------------------------------- */
+.email-templates table.grid thead th {
   width: 14.28%;
   float: left;
 }

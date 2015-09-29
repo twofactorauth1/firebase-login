@@ -54,8 +54,26 @@ mainApp.factory('pagesService', ['$http', '$location', function ($http, $locatio
         callback("page not found", null);
       }
     }).error(function (err) {
-      // console.log("PageService >> DB-Hit >> ERROR");
-      callback(err, null);
+        if(path === 'index') {
+            //we have no index page... look for a coming-soon page.
+            $http.get('/api/1.0/cms/website/' + websiteId + '/page/coming-soon', {
+                cache: true
+            }).success(function (page) {
+                if (page !== null) {
+                    pages[page.handle] = page;
+                    callback(null, page);
+                } else {
+                    callback("page not found", null);
+                }
+            }).error(function (err) {
+                // console.log("PageService >> DB-Hit >> ERROR");
+                callback(err, null);
+            });
+        } else {
+            // console.log("PageService >> DB-Hit >> ERROR");
+            callback(err, null);
+        }
+
     });
   };
 }]);
