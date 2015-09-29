@@ -26,13 +26,8 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', '$window', '$locatio
     console.log('pagesService ', data);
     if (err) {
       console.warn('no page found');
-      if ($location.$$path.indexOf('login')) {
-        $window.location.href =  $location.$$path;
-      } else {
-        $window.location.href = '/404';
-      }
+      $window.location.href = '/404';
     } else {
-
       $scope.page = data;
       $scope.components = data.components;
       if(data.handle=== 'single-post'){
