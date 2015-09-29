@@ -14,14 +14,6 @@ app.directive('mastheadComponent', ['$window', function ($window) {
 
       angular.element($window).bind('resize', function () {
         scope.setUnderbnavMargin();
-        for (var i = 0; i <= 3; i++) {
-          if ($("div.feature-height-" + i).length) {
-            var maxFeatureHeight = Math.max.apply(null, $("div.feature-height-" + i).map(function () {
-              return $(this).height();
-            }).get());
-            $("div.feature-height-" + i + " .feature-single").css("min-height", maxFeatureHeight - 20);
-          }
-        }
       });
       scope.setUnderbnavMargin = function () {
         scope.$parent.addUnderNavSetting(scope.component._id, function (data) {
@@ -31,8 +23,8 @@ app.directive('mastheadComponent', ['$window', function ($window) {
           var mastheadElement = angular.element(".component_wrap_"+scope.component._id+".undernav200");
           var mastheadUnderNavElement = angular.element(".masthead_"+scope.component._id+".mastHeadUndernav");
           if (scope.addUndernavClasses && scope.allowUndernav) {
-            var navHeight = angular.element("#bs-example-navbar-collapse-1").height();
-            var margin = 200 + navHeight;
+            var navHeight = angular.element(".undernav").height();
+            var margin = navHeight;
             if (mastheadElement) {
               mastheadElement.css("margin-top", -margin);
               if (scope.allowFullScreen)
@@ -44,20 +36,16 @@ app.directive('mastheadComponent', ['$window', function ($window) {
             if (angular.element(".masthead-actions"))
               angular.element(".masthead-actions").css("margin-top", margin - 4);
 
+            $(window).trigger('scroll');
           } else {
             if (mastheadElement)
               mastheadElement.css("margin-top", 0);
             if (angular.element(".masthead-actions"))
               angular.element(".masthead-actions").css("margin-top", 0);
           }
-
+          
         }, 300);
       };
-      angular.element(document).ready(function () {
-        setTimeout(function () {
-          scope.setUnderbnavMargin();
-        }, 500)
-      })
     }
   }
 }]);

@@ -679,10 +679,10 @@ _.extend(api.prototype, baseApi.prototype, {
                                                         component.emailBgImage = component.bg.img.url.replace('//s3.amazonaws', 'http://s3.amazonaws');
                                                     }
 
-                                                    component.logo = component.logo.replace('src="//', 'src="http://');
+                                                    component.logo = component.logo ? component.logo.replace('src="//', 'src="http://') : '';
 
-                                                    component.text = component.text.replace('src="//', 'src="http://').replace(new RegExp('FHEMAIL', 'g'), savedContact.getEmails()[0].email);
-                                                    component.title = component.title.replace('src="//', 'src="http://').replace(new RegExp('FHEMAIL', 'g'), savedContact.getEmails()[0].email);
+                                                    component.text = component.text ? component.text.replace('src="//', 'src="http://').replace(new RegExp('FHEMAIL', 'g'), savedContact.getEmails()[0].email) : '';
+                                                    component.title = component.title ? component.title.replace('src="//', 'src="http://').replace(new RegExp('FHEMAIL', 'g'), savedContact.getEmails()[0].email) : '';
                                                     app.render('emails/base_email', component, function(err, html){
                                                         if(err) {
                                                             self.log.error('error rendering html: ' + err);

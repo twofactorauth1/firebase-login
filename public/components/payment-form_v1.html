@@ -49,12 +49,20 @@
                         <span class="error help-block" ng-if="domainExistsAlready">Domain Already Exists</span>
                         <span class="error help-block" ng-if="emptyBusinessName">Business Name Required</span>
                         <span class="help-block" ng-show="newAccount.businessName && validBusinessName">Your Indigenous URL will be <strong>{{newAccount.businessName | urlFilter}}.indigenous.io</strong> and will be changed once your site is ready to publish.</span>
-                    </div>
+                    </div>                    
                     <!-- Phone Number -->
                     <div id="phone" class="form-group col-xs-12 has-feedback">
                         <label>Phone Number</label>
                         <input class="form-control input-lg" type="text" ng-model="newAccount.phone" mask="(999) 999-9999" clean="true" mask-restrict='reject' />
                         <span class="help-block">Provide your number so a trial coach can help get you started.</span>
+                        <span class="glyphicon form-control-feedback"></span>
+                        <span class="error help-block" />
+                    </div>
+                    <!-- Phone Extension -->
+                    <div id="extension" class="form-group col-xs-12 has-feedback">
+                        <label>Phone Extension</label>
+                        <input class="form-control input-lg" type="text" ng-model="newAccount.extension" ng-change="checkPhoneExtension(newAccount)" ng-model-options="{ debounce: 800 }"/>
+                        <span class="help-block">Provide your phone extension (If any).</span>
                         <span class="glyphicon form-control-feedback"></span>
                         <span class="error help-block" />
                     </div>

@@ -336,7 +336,10 @@ _.extend(api.prototype, baseApi.prototype, {
         var accountId = parseInt(self.currentAccountId(req));
 
         cmsDao.getLatestPageForWebsite(websiteId, pageHandle, accountId, function (err, value) {
-            self.sendResultOrError(resp, err, value, "Error Retrieving Page for Website");
+            if (!value) {
+                err = $$.u.errors._404_PAGE_NOT_FOUND;
+            }
+            self.sendResultOrError(resp, err, value, "Error Retrieving Page for Website", err);
             self = null;
         });
     },

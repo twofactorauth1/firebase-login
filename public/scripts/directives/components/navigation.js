@@ -1,4 +1,4 @@
-app.directive('navigationComponent', ['websiteService', 'accountService', function (websiteService, accountService) {
+app.directive('navigationComponent', ['websiteService', 'accountService', '$timeout', function (websiteService, accountService, $timeout) {
   return {
     scope: {
       component: '='
@@ -7,8 +7,10 @@ app.directive('navigationComponent', ['websiteService', 'accountService', functi
     controller: function ($scope, websiteService, accountService, $compile) {
       websiteService(function (err, website) {
         $scope.website = website;
+        $timeout(function () {
+          $(window).trigger('resize');
+        }, 0);
       });
-
       accountService(function (err, account) {
         $scope.account = account;
       });

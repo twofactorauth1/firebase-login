@@ -718,6 +718,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                   scope.checkoutModalState = 1;
                   scope.newContact = {};
                   clearCardDetails();
+                  scope.showTax = false;                  
                 }
               });
             },0);

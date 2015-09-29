@@ -743,6 +743,13 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
     });
   };
 
+  $scope.saveComponentVersion = function () {
+    $scope.isDirty.dirty = true;
+    $timeout(function () {
+      $(window).trigger('resize');
+    }, 0);
+  };
+
   $scope.saveComponent = function () {
     $scope.isDirty.dirty = true;
   };

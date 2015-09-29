@@ -347,6 +347,7 @@
           _id: CommonService.generateUniqueAlphaNumericShort(),
           type: 'm',
           number: '',
+          extension: '',
           default: false
         }],
         addresses: [{
@@ -753,7 +754,8 @@
     $scope.addCustomerContactFn = function () {
       $scope.customer.details[0].phones.push({
         _id: CommonService.generateUniqueAlphaNumericShort(),
-        number: ''
+        number: '',
+        extension: ''
       });
     };
 
