@@ -83,6 +83,11 @@ var component = $$.m.ModelBase.extend({
                     "display" : "Phone Number",
                     "value" : false,
                     "name" : "phone"
+                },
+                {
+                    "display" : "Phone Extension",
+                    "value" : false,
+                    "name" : "extension"
                 }
             ],
 

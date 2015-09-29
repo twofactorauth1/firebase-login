@@ -18,7 +18,7 @@
                     </div>
                     <div class="form-group" ng-class="{'has-error': duplicateUrl}">
                         <label>URL:</label>
-                        <input id="edit-page-url" ng-change="setDirty(true)" ng-blur="checkForDuplicatePage()" class="form-control input-lg" type="text" ng-model="page.handle" ng-disabled="page.handle == 'index' && !duplicateUrl">
+                        <input id="edit-page-url" ng-change="setDirty(true)" ng-blur="checkForDuplicatePage()" class="form-control input-lg" type="text" ng-model="page.handle" ng-disabled="(page.handle == 'index' || post_blog_page) && !duplicateUrl">
                     </div>
                     <div ng-if="pageTemplate.name" class="form-group">
                             <label>Template:</label>

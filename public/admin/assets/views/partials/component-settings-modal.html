@@ -39,7 +39,7 @@
                             <span tooltip-placement="top" tooltip-html-unsafe="Background color of navigation bar."><i class="fa fa-info-circle" /></span>
                             <div class="pull-right">
                                 <h4 class="pull-left"><i class="fa fa-eyedropper" /></h4>
-                                <spectrum-colorpicker format="hex" options="spectrum.options" class="pull-right" ng-model="componentEditing.nav.bg" ng-change="saveComponent()"></spectrum-colorpicker>
+                                <spectrum-colorpicker format="'hex'" options="spectrum.options" class="pull-right" ng-model="componentEditing.nav.bg" ng-change="saveComponent()"></spectrum-colorpicker>
                             </div>
                         </div>
                         <div class="form-group" ng-if="componentEditing.type === 'email'">
@@ -47,7 +47,7 @@
                             <span tooltip-placement="top" tooltip-html-unsafe="Background color of email."><i class="fa fa-info-circle" /></span>
                             <div class="pull-right">
                                 <h4 class="pull-left"><i class="fa fa-eyedropper" /></h4>
-                                <spectrum-colorpicker format="hex" options="spectrum.options" class="pull-right" ng-model="componentEditing.emailBg" ng-change="saveComponent()"></spectrum-colorpicker>
+                                <spectrum-colorpicker format="'hex'" options="spectrum.options" class="pull-right" ng-model="componentEditing.emailBg" ng-change="saveComponent()"></spectrum-colorpicker>
                             </div>
                         </div>
                         <div class="form-group" ng-show="componentEditing.type == 'navigation'">
@@ -71,7 +71,7 @@
                             <span tooltip-placement="top" tooltip-html-unsafe="Background color of Pricing table."><i class="fa fa-info-circle" /></span>
                             <div class="pull-right">
                                 <h4 class="pull-left"><i class="fa fa-eyedropper" /></h4>
-                                <spectrum-colorpicker format="hex" options="spectrum.options" class="pull-right" ng-model="componentEditing.tblbgcolor" ng-change="saveComponent()"></spectrum-colorpicker>
+                                <spectrum-colorpicker format="'hex'" options="spectrum.options" class="pull-right" ng-model="componentEditing.tblbgcolor" ng-change="saveComponent()"></spectrum-colorpicker>
                             </div>
                         </div>
                         <div class="form-group" ng-if="componentEditing.type === 'feature-list'">
@@ -79,7 +79,7 @@
                             <span tooltip-placement="top" tooltip-html-unsafe="Background color of Feature Block."><i class="fa fa-info-circle" /></span>
                             <div class="pull-right">
                                 <h4 class="pull-left"><i class="fa fa-eyedropper" /></h4>
-                                <spectrum-colorpicker format="hex" options="spectrum.options" class="pull-right" ng-model="componentEditing.blockbgcolor" ng-change="saveComponent()"></spectrum-colorpicker>
+                                <spectrum-colorpicker format="'hex'" options="spectrum.options" class="pull-right" ng-model="componentEditing.blockbgcolor" ng-change="saveComponent()"></spectrum-colorpicker>
                             </div>
                         </div>
                         <hr ng-show="componentEditing.type == 'navigation'" />
@@ -115,7 +115,7 @@
                                 <spectrum-colorpicker format="'hex'" options="spectrum.options" class="pull-right" ng-model="componentEditing.tagCloud.bgcolor" ng-change="saveComponent()"></spectrum-colorpicker>
                             </div>
                         </div>
-                        <form class="form-horizontal" ng-show="!componentEditing.bg.img.show">
+                        <form class="form-horizontal" ng-show="!componentEditing.bg.img.show" ng-hide="isEmail">
                             <div class="row">
                                 <div class="col-sm-10">
                                     <label class="pull-left">Add BG Opacity</label>
@@ -145,6 +145,14 @@
                                 <spectrum-colorpicker format="'hex'" options="spectrum.options" class="pull-right" ng-model="componentEditing.boxColor" ng-change="saveComponent()"></spectrum-colorpicker>
                             </div>
                         </div>
+                        <div class="form-group" ng-if="componentEditing.type == 'products'">
+                            <label for="colorpicker">Icon Color:</label>
+                            <span tooltip-placement="top" tooltip-html-unsafe="Set color of product icons."><i class="fa fa-info-circle" /></span>
+                            <div class="pull-right">
+                                <h4 class="pull-left"><i class="fa fa-eyedropper" /></h4>
+                                <spectrum-colorpicker format="'hex'" options="spectrum.options" class="pull-right" ng-model="componentEditing.iconColor" ng-change="saveComponent()"></spectrum-colorpicker>
+                            </div>
+                        </div>
                         <div class="row" ng-if="componentEditing.type == 'contact-us'">
                             <div class="col-sm-10">
                                 <label class="pull-left">Box Opacity</label>
@@ -157,7 +165,7 @@
                             </div>
                         </div>
                         <hr/>
-                        <div class="form-group" ng-if="componentEditing.type != 'navigation' && componentEditing.type != 'top-bar' && componentEditing.type != 'blog'">
+                        <div class="form-group" ng-if="componentEditing.type != 'navigation' && componentEditing.type != 'top-bar' && componentEditing.type != 'blog'" ng-hide="isEmail">
                             <label for="bg_hide" class="margin-bottom-0">Show Background Image</label>
                             <span tooltip-placement="top" tooltip-html-unsafe="show/hide background image of component."><i class="fa fa-info-circle" /></span>
                             <switch ng-model="componentEditing.bg.img.show" class="pull-right" ng-change="saveComponent()"></switch>
@@ -372,7 +380,7 @@
                     <div class="form-group">
                         <label for="component-title">Version</label>
                         <span tooltip-placement="top" tooltip-html-unsafe="The version of the component."><i class="fa fa-info-circle" /></span>
-                        <select ng-model="componentEditing.version" ng-change="saveComponent()" class="form-control margin-bottom-0">
+                        <select ng-model="componentEditing.version" ng-change="saveComponentVersion()" class="form-control margin-bottom-0">
                             <option ng-repeat="version in componentEditingVersions track by $index" value="{{version}}" ng-selected="{{version == componentEditing.version}}">{{version}}</option>
                         </select>
                     </div>
@@ -606,28 +614,32 @@
                         <label for="location-hours">Business Hours </label>
                         <span tooltip-placement="top" tooltip-html-unsafe="Contact Us business hours."><i class="fa fa-info-circle" /></span>
                         <span ng-if="contactHoursInvalid" id="contact-err-msg" class="error help-block">Start date(s) should not be greater than end date(s)</span>
-                        <div ng-if="componentEditing.splitHours" class="col-xs-12 multiple-hours" ng-repeat="val in componentEditing.hours">
+                        <div ng-if="componentEditing.splitHours" class="multiple-hours col-xs-12" ng-repeat="val in componentEditing.hours">
                             <div class="col-xs-1">
                                 <label for="val.day">{{val.day}}:</label>
                             </div>
-                            <div class="col-xs-2" id="business_hours_start_{{$index}}">
+                            <div class="col-xs-5">
+                                <div id="business_hours_start_{{$index}}" class="inline-table-cell">
                                 <select ng-disabled="!componentEditing.custom.hours" ng-change="validateHours(val, $index)" ng-hide="val.closed" class="chosen-select hour-start-select form-control" ng-model="val.start" ng-options="item for item in hours.HOURS">
                                 </select>
-                            </div>
-                            <div class="col-xs-2" id="business_hours_end_{{$index}}">
-                                <select ng-disabled="!componentEditing.custom.hours" ng-hide="val.closed" ng-change="validateHours(val, $index)" class="chosen-select hour-start-select form-control" ng-model="val.end" ng-options="item for item in hours.HOURS">
-                                </select>
-                            </div>
+                                </div>
+                                <div id="business_hours_end_{{$index}}" class="inline-table-cell">
+                                    <select ng-disabled="!componentEditing.custom.hours" ng-hide="val.closed" ng-change="validateHours(val, $index)" class="chosen-select hour-start-select form-control" ng-model="val.end" ng-options="item for item in hours.HOURS">
+                                    </select>
+                                </div>
+                            </div>                            
                             <label class="pull-left" ng-hide="val.closed" ng-if="val.split" style="margin:10px"> & </label>
-                            <div class="col-xs-2" id="business_hours_start2_{{$index}}">
-                                <select ng-disabled="!componentEditing.custom.hours" ng-change="validateHours(val, $index)" ng-hide="val.closed" ng-if="val.split" class="chosen-select hour-start-select form-control" ng-model="val.start2" ng-options="item for item in hours.HOURS">
-                                </select>
-                            </div>
-                            <div class="col-xs-2">
-                                <select ng-disabled="!componentEditing.custom.hours" ng-change="validateHours(val, $index)" ng-if="val.split" ng-hide="val.closed" class="chosen-select hour-start-select form-control" ng-model="val.end2" ng-options="item for item in hours.HOURS">
-                                </select>
-                            </div>
-                            <div class="col-xs-5 margin-left-5">
+                            <div class="col-xs-5">
+                                <div id="business_hours_start2_{{$index}}" class="inline-table-cell">
+                                    <select ng-disabled="!componentEditing.custom.hours" ng-change="validateHours(val, $index)" ng-hide="val.closed" ng-if="val.split" class="chosen-select hour-start-select form-control" ng-model="val.start2" ng-options="item for item in hours.HOURS">
+                                    </select>
+                                </div>
+                                <div class="inline-table-cell">
+                                    <select ng-disabled="!componentEditing.custom.hours" ng-change="validateHours(val, $index)" ng-if="val.split" ng-hide="val.closed" class="chosen-select hour-start-select form-control" ng-model="val.end2" ng-options="item for item in hours.HOURS">
+                                    </select>
+                                </div>
+                            </div>                            
+                            <div class="col-xs-5 margin-left-5" class="inline-table-cell">
                                 <div class="checkbox clip-check check-primary checkbox-inline">
                                     <input ng-disabled="!componentEditing.custom.hours" type="checkbox" id="closed-{{$index}}" ng-change="validateHours(val, $index)" ng-model="val.closed">
                                     <label for="closed-{{$index}}">
@@ -640,7 +652,7 @@
                                         Split
                                     </label>
                                 </div>
-                            </div>
+                            </div>                                                       
                         </div>
                         <div ng-if="!componentEditing.splitHours" class="col-xs-12" ng-repeat="val in componentEditing.hours">
                             <div class="col-xs-1">
@@ -739,8 +751,8 @@
                     </tab-heading>
                     <div class="form-group">
                         <label for="mapZoom">Map Zoom:</label>
-                        <rzslider name="mapZoom" rz-slider-model="componentEditing.map.zoom" rz-slider-floor="0" rz-slider-ceil="19"></rzslider>
-                        <div class="help-block">Zoom level on map 0 (World) - 19 (Street) </div>
+                        <rzslider name="mapZoom" rz-slider-model="componentEditing.map.zoom" rz-slider-floor="1" rz-slider-ceil="19"></rzslider>
+                        <div class="help-block">Zoom level on map 1 (World) - 19 (Street) </div>
                     </div>
                 </tab>
                 <tab ng-if="componentEditing.type === 'simple-form'">
@@ -873,6 +885,44 @@
                         <div class="clearfix"></div>
                     </div>
                 </tab>
+                <tab ng-if="componentEditing.type === 'testimonials'">
+                    <tab-heading>
+                        <span>Slider Settings</span>
+                    </tab-heading>
+                    <div class="form-group">
+                        <label for="slider-autoplay">Auto Play:</label>
+                        <span tooltip-placement="top" tooltip-html-unsafe="Set slider auto play."><i class="fa fa-info-circle" /></span>
+                        <switch id="slider-autoplay" ng-model="componentEditing.slider.autoPlay" class="pull-right"></switch>
+                    </div>
+                    <div class="form-group">
+                        <label for="slider-speed">Transition Speed:</label>
+                        <span tooltip-placement="top" tooltip-html-unsafe="Speed at which slider scrolls through the testimonials."><i class="fa fa-info-circle" /></span>
+                        <select id="slider-speed" class="form-control" ng-change="saveTestimonialComponent()" ng-model="componentEditing.slider.speed">
+                            <option value="1000">Slow</option>
+                            <option value="500">Medium</option>
+                            <option value="300">High</option>
+                        </select>
+                    </div>
+                    <div class="form-group hidden">
+                        <label for="slider-direction">Slide Vertically:</label>
+                        <span tooltip-placement="top" tooltip-html-unsafe="Slide direction ( horizontal or veritcal)."><i class="fa fa-info-circle" /></span>
+                        <switch id="slider-direction" ng-change="saveTestimonialComponent()" ng-model="componentEditing.slider.vertical" class="pull-right"></switch>                        
+                    </div>                    
+                    <div class="form-group">
+                        <label for="slider-autoplayinterval">Auto Play Interval:</label>
+                        <span tooltip-placement="top" tooltip-html-unsafe="Set slider auto play interval."><i class="fa fa-info-circle" /></span>
+                        <select id="slider-autoplayinterval" class="form-control"  ng-change="saveComponent()" ng-model="componentEditing.slider.autoPlayInterval">
+                            <option value="5000">5 Seconds</option>
+                            <option value="10000">10 Seconds</option>
+                            <option value="15000">15 Seconds</option>
+                            <option value="30000">30 Seconds</option>                            
+                            <option value="45000">45 Seconds</option>
+                            <option value="60000">1 Minute</option>
+                            <option value="120000">2 Minutes</option>
+                            <option value="300000">5 Minutes</option>
+                        </select>
+                    </div>
+                </tab>
                 <tab ng-if="componentEditing.type === 'video'">
                     <tab-heading>
                         <span>Video</span>
@@ -883,7 +933,6 @@
                         <select id="member-name" class="form-control" ng-model="componentEditing.videoType">
                             <option value="youtube">YouTube</option>
                             <option value="vimeo">Vimeo</option>
-                            //
                             <option value="html5">Html4 Video</option>
                         </select>
                     </div>
@@ -1062,12 +1111,12 @@
             </div>
             <div class="modal-footer" ng-class="{hidden: hover}">
                 <div class="form-group margin-bottom-0">
-                    <button type="button" ng-click="revertComponent()" class="btn btn-warning btn-o btn-wide">
+                    <a type="button" ng-click="revertComponent()" class="btn btn-warning btn-o btn-wide">
                         Revert
-                    </button>
-                    <button type="button" class="btn btn-info btn-wide btn-o" ng-click="closeModal()">
+                    </a>
+                    <a type="button" class="btn btn-info btn-wide btn-o" ng-click="closeModal()">
                         Done
-                    </button>
+                    </a>
                 </div>
             </div>
             <a class="btn btn-outline pull-right media-modal hidden" on-insert-mediacb="insertMedia" user='user' data-main='true'>

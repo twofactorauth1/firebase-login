@@ -323,6 +323,37 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
             label: 'Help Topics'
         },
         resolve: loadSequence('helpTopicsCtrl')
+    }).state('app.support.newhelptopics', {
+        url: '/new-help-topics',
+        templateUrl: "assets/views/new-help-topics.html",
+        title: 'Help Topics',
+        icon: 'ti-layout-media-left-alt',
+        ncyBreadcrumb: {
+            label: 'Help Topics'
+        },
+        resolve: loadSequence('newHelpTopicsCtrl', 'toTrusted', 'ckeditor', 'jsVideoUrlParser')
+    }).state('app.support.managetopics', {
+        url: '/manage-topics',
+        templateUrl: "assets/views/manage-topics.html",
+        title: 'Manage Topics',
+        icon: 'ti-layout-media-left-alt',
+        ncyBreadcrumb: {
+            label: 'Manage Topics'
+        },
+        resolve: loadSequence('manageTopicsCtrl', 'userService')
+    }).state('app.support.singletopic', {
+        url: '/manage-topics/:id',
+        templateUrl: "assets/views/editor.html",
+        title: 'Topic Single',
+        icon: 'ti-layout-media-left-alt',
+        ncyBreadcrumb: {
+            label: '{{breadcrumbTitle}}',
+            parent: 'app.support.managetopics'
+        },
+        onExit: function($rootScope) {
+         $rootScope.breadcrumbTitle = undefined;
+        },
+        resolve: loadSequence('editorCtrl', 'userService', 'htmlToPlaintext', 'spectrum', 'ui.sortable', 'angular-slider', 'assetsService', 'toasterService', 'geocodeService', 'productService', 'paymentService', 'accountService', 'toTrusted', 'generateURLforLinks', 'truncate', 'ckeditor', 'ngSticky', 'slick', 'offset', 'jqcloud', 'jsVideoUrlParser', 'selectedTags', 'addComponentModalCtrl', 'componentSettingsModalCtrl', 'templateSettingsModalCtrl', 'googlePlaces', 'ngMap', 'campaignService', 'angularCircularNavigation')
     })
 
     // Login routes

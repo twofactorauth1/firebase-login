@@ -105,7 +105,8 @@
       "support": {
         "MAIN": "Support",
         "GETTINGSTARTED": "Getting Started",
-        "HELPTOPICS": "Help Topics"
+        "HELPTOPICS": "Help Topics",
+        "MANAGETOPICS": "Manage Topics"
       },
       "logout": {
         "MAIN": "Logout"

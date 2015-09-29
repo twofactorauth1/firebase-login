@@ -9,8 +9,15 @@ app.directive('simpleFormComponent',["formValidations", function (formValidation
     templateUrl: '/components/component-wrap.html',
     link: function (scope, element, attrs) {
       scope.isEditing = true;
-      scope.emailValidation = formValidations.email;
-      scope.phoneNumberPattern = formValidations.phone;
+      scope.formValidations = formValidations;
+      var nameExists = _.find(scope.component.fields, function (_field) {
+        return _field.name === 'extension';
+      });
+      if(!nameExists)
+      {
+        scope.component.fields.push({"display" : "Phone Extension", "value" : false,"name" : "extension"})
+      }
+
       scope.fieldsLength = function () {
         return _.filter(scope.component.fields, function (_field) {
           return _field.value === true;

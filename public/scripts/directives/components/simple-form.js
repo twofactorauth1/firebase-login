@@ -26,8 +26,7 @@ app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userSe
           }
         }
       };
-      scope.emailValidation = formValidations.email;
-      scope.phoneNumberPattern = formValidations.phone;
+      scope.formValidations = formValidations;
       scope.user = {};
       scope.createUser = function (simpleForm) {
         scope.userExists = false;
@@ -76,6 +75,7 @@ app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userSe
         if (scope.user.phone) {
           formatted.details[0].phones.push({
             number: scope.user.phone,
+            extension: scope.user.extension,
             type: 'm'
           });
         }

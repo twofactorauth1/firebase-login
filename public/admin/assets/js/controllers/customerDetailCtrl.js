@@ -347,6 +347,7 @@
           _id: CommonService.generateUniqueAlphaNumericShort(),
           type: 'm',
           number: '',
+          extension: '',
           default: false
         }],
         addresses: [{
@@ -400,7 +401,7 @@
         if(!hideToaster && $scope.inValidateTags())
         {
           $scope.saveLoading = false;
-          toaster.pop('warning', 'Please add atleast one tag.');
+          toaster.pop('warning', 'Please add at least one tag.');
           return;
         }
 
@@ -416,40 +417,40 @@
           if (!validMapData) {
             if (!hideToaster) {
               $scope.errorMapData = true;
-              $scope.saveLoading = false;
+              // $scope.saveLoading = false;
               toaster.pop('warning', 'Address could not be found.');
             }
-          } else {
-            $scope.errorMapData = false;
-            CustomerService.checkDuplicateEmail($scope.customer_data.details[0].emails[0].email, !hideToaster, function (data) {
-              if(data && data.length && (data.length > 1 || data[0]._id != $scope.customer_data._id))
-              {
-                console.log("duplicate email");
-                if(!hideToaster)
-                {
-                  $scope.saveLoading = false;
-                  toaster.pop('warning', 'Email already exists.');
-                }
-              }
-              else
-              {
-                CustomerService.saveCustomer($scope.customer_data, function (customer) {
-                $scope.customer = customer;
-                $scope.setDefaults();
-                $scope.setTags();
-                $scope.saveLoading = false;
-                $scope.originalCustomer = angular.copy($scope.customer);
-                if (!hideToaster) {
-                  if ($scope.currentState === 'customerAdd') {
-                    toaster.pop('success', 'Contact Created.');
-                  } else {
-                    toaster.pop('success', 'Contact Saved.');
-                  }
-                }
-              });
-              }
-            })
           }
+
+          $scope.errorMapData = false;
+          CustomerService.checkDuplicateEmail($scope.customer_data.details[0].emails[0].email, !hideToaster, function (data) {
+            if(data && data.length && (data.length > 1 || data[0]._id != $scope.customer_data._id))
+            {
+              console.log("duplicate email");
+              if(!hideToaster)
+              {
+                $scope.saveLoading = false;
+                toaster.pop('warning', 'Email already exists.');
+              }
+            }
+            else
+            {
+              CustomerService.saveCustomer($scope.customer_data, function (customer) {
+              $scope.customer = customer;
+              $scope.setDefaults();
+              $scope.setTags();
+              $scope.saveLoading = false;
+              $scope.originalCustomer = angular.copy($scope.customer);
+              if (!hideToaster) {
+                if ($scope.currentState === 'customerAdd') {
+                  toaster.pop('success', 'Contact Created.');
+                } else {
+                  toaster.pop('success', 'Contact Saved.');
+                }
+              }
+            });
+            }
+          })
         });
       } else {
         $scope.saveLoading = false;
@@ -753,7 +754,8 @@
     $scope.addCustomerContactFn = function () {
       $scope.customer.details[0].phones.push({
         _id: CommonService.generateUniqueAlphaNumericShort(),
-        number: ''
+        number: '',
+        extension: ''
       });
     };
 
@@ -852,36 +854,73 @@
 
     /*
      * @customerTags
-     * -
+     * 18-Sep Unioned set of tags in system with those needed by Indigenous
+     *
+     * Retained (part of Ind. flow)
+     *   - Lead (ld)
+     *   - Customer (cu)
+     *
+     * New:
+     *   - Cheatsheet Lead (cs)
+     *   - Trial Customer (tc)
+     *   - Expired Trial Customer (ex)
+     *   - Cancelled Trial Customer (ct)
+     *   - Cancelled Customer (cc)
+     *
+     * - Old. Keeping for our clients:
+     *   - Colleague (co)
+     *   - Friend (fr)
+     *   - Member (mb)
+     *   - Family (fa)
+     *   - Admin (ad)
+     *   - Other (ot)
      */
 
     if (!$scope.customer.tags) {
       $scope.customer.tags = {};
     }
     $scope.customerTags = [{
-      label: "Customer",
-      data: "cu"
+      label: "Admin",
+      data: "ad"
+    }, {
+      label: "Affiliate",
+      data: "af"
+    }, {
+      label: "Cancelled Customer",
+      data: "cc"
+    }, {
+      label: "Cancelled Trial Customer",
+      data: "ct"
+    }, {
+      label: "Cheatsheet Lead",
+      data: "cs"
     }, {
       label: "Colleague",
       data: "co"
     }, {
-      label: "Friend",
-      data: "fr"
+      label: "Customer",
+      data: "cu"
     }, {
-      label: "Member",
-      data: "mb"
+      label: "Expired Trial Customer",
+      data: "ex"
     }, {
       label: "Family",
       data: "fa"
     }, {
-      label: "Admin",
-      data: "ad"
+      label: "Friend",
+      data: "fr"
     }, {
-      label: 'Lead',
-      data: 'ld'
+      label: "Lead",
+      data: "ld"
+    }, {
+      label: "Member",
+      data: "mb"
     }, {
       label: "Other",
       data: "ot"
+    }, {
+      label: "Trial Customer",
+      data: "tc"
     }];
 
     /*

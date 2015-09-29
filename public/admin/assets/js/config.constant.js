@@ -19,7 +19,8 @@ app.constant('hoursConstant', {
 app.constant('formValidations', {
    'email': /^[-a-z0-9~!$%^&*_=+}{\'?]+(\.[-a-z0-9~!$%^&*_=+}{\'?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+)*\.(aero|arpa|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|mobi|[a-z][a-z])|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$/i,
    'phone': /^\(?(\d{3})\)?[ .-]?(\d{3})[ .-]?(\d{4})$/,
-   'zip': /(^\d{5}$)|(^\d{5}-\d{4}$)/
+   'zip': /(^\d{5}$)|(^\d{5}-\d{4}$)/,
+   'extension': /^[0-9]*$/
   });
 
 /*
@@ -336,6 +337,27 @@ app.constant('productConstant', {
         data: "VIRTUAL"
       }
     ]
+  },
+  product_status_types:{
+    BACKORDER: 'backorder',
+    INACTIVE: 'inactive',
+    ACTIVE: 'active',
+    AUTOINACTIVE: 'auto_inactive',
+
+    dp: [{
+        label: "Backorder",
+        data: "backorder"
+      }, {
+        label: "Inactive",
+        data: "inactive"
+      }, {
+        label: "Active",
+        data: "active"
+      }, {
+        label: "Auto Inactive",
+        data: "auto_inactive"
+      }
+    ]
   }
 });
 
@@ -404,31 +426,55 @@ app.constant('userConstant', {
     LEAD: 'ld',
     OTHER: "ot",
     NOTAG: "nt",
+    CANCELLED_CUSTOMER: "cc",
+    CANCELLED_TRIAL: "ct",
+    CHEATSHEET_LEAD: "cs",
+    EXPIRED_TRIAL: "ex",
+    TRIAL_CUSTOMER: "tc",
+    AFFILIATE: "af",
 
     dp: [{
-      label: "Customer",
-      data: "cu"
+      label: "Admin",
+      data: "ad"
+    }, {
+      label: "Affiliate",
+      data: "af"
+    }, {
+      label: "Cancelled Customer",
+      data: "cc"
+    }, {
+      label: "Cancelled Trial Customer",
+      data: "ct"
+    }, {
+      label: "Cheatsheet Lead",
+      data: "cs"
     }, {
       label: "Colleague",
       data: "co"
     }, {
-      label: "Friend",
-      data: "fr"
+      label: "Customer",
+      data: "cu"
     }, {
-      label: "Member",
-      data: "mb"
+      label: "Expired Trial Customer",
+      data: "ex"
     }, {
       label: "Family",
       data: "fa"
     }, {
-      label: "Admin",
-      data: "ad"
+      label: "Friend",
+      data: "fr"
     }, {
-      label: 'Lead',
-      data: 'ld'
+      label: "Lead",
+      data: "ld"
+    }, {
+      label: "Member",
+      data: "mb"
     }, {
       label: "Other",
       data: "ot"
+    }, {
+      label: "Trial Customer",
+      data: "tc"
     }, {
       label: "No Tag",
       data: "nt"
@@ -528,6 +574,7 @@ app.constant('JS_REQUIRES', {
     //*** Controllers
     'dashboardCtrl': 'assets/js/controllers/dashboardCtrl.js',
     'helpTopicsCtrl': 'assets/js/controllers/helpTopicsCtrl.js',
+    'newHelpTopicsCtrl': 'assets/js/controllers/newHelpTopicsCtrl.js',
     'gettingStartedCtrl': 'assets/js/controllers/gettingStartedCtrl.js',
     'pagesCtrl': 'assets/js/controllers/pagesCtrl.js',
     'siteAnalyticsCtrl': 'assets/js/controllers/siteAnalyticsCtrl.js',
@@ -546,6 +593,7 @@ app.constant('JS_REQUIRES', {
     'profileBusinessCtrl': 'assets/js/controllers/profileBusinessCtrl.js',
     'profilePersonalCtrl': 'assets/js/controllers/profilePersonalCtrl.js',
     'templatesCtrl': 'assets/js/controllers/templatesCtrl.js',
+    'manageTopicsCtrl': 'assets/js/controllers/manageTopicsCtrl.js',
     'integrationsCtrl': 'assets/js/controllers/integrationsCtrl.js',
     'orderDetailCtrl': 'assets/js/controllers/orderDetailCtrl.js',
     'settingsCtrl': 'assets/js/controllers/settingsCtrl.js',
@@ -750,7 +798,7 @@ app.constant('JS_REQUIRES', {
     files: ['../js/libs/bootstrap-icon-picker/bootstrap-iconpicker/js/iconset/iconset-fontawesome-4.2.0.min.js', '../js/libs/bootstrap-icon-picker/bootstrap-iconpicker/js/bootstrap-iconpicker.min.js', '../js/libs/bootstrap-icon-picker/bootstrap-iconpicker/css/bootstrap-iconpicker.min.css']
   }, {
     name: 'spectrum',
-    files: ['../js/libs/spectrum/spectrum.js', '../js/libs/angular-spectrum-colorpicker/dist/angular-spectrum-colorpicker.min.js', '../js/libs/spectrum/spectrum.css'],
+    files: ['../js/libs/spectrum/spectrum.css','../js/libs/spectrum/spectrum.js','../js/libs/angular-spectrum-colorpicker/dist/angular-spectrum-colorpicker.min.js'],
   }, {
     name: 'angular-resizable',
     files: ['../js/libs/angular-resizable/angular-resizable.min.js', '../js/libs/angular-resizable/angular-resizable.min.css'],

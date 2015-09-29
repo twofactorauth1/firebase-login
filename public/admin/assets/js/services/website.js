@@ -88,8 +88,14 @@
             fn(duplicate);
           })
           .error(function (err) {
-            console.warn('END:checkDuplicatePage with ERROR');
-            fn(err, null);
+            //console.warn('END:checkDuplicatePage with ERROR', err);
+            if(err.code && err.code ===404) {
+                //no dupe
+                fn(false);
+            } else {
+                fn(err, null);
+            }
+
           });
       }
     };
@@ -585,6 +591,51 @@
       }).error(function (err) {
         console.warn('END:Update Template with ERROR', err);
       });
+    };
+
+    this.getTopics = function (fn) {
+      var apiUrl = baseUrl + ['cms', 'topic'].join('/');
+      $http.get(apiUrl)
+        .success(function (data, status, headers, config) {
+          fn(data);
+        });
+    };
+
+    this.createTopic = function (topic, fn) {
+      var apiUrl = baseUrl + ['cms', 'topic'].join('/');
+      $http({
+        url: apiUrl,
+        method: "POST",
+        data: angular.toJson(topic)
+      }).success(function (data, status, headers, config) {
+        fn(data);
+      }).error(function (err) {
+        console.warn('END:Update Topic with ERROR', err);
+      });
+    };
+
+    this.updateTopic = function (topic, fn) {
+      var apiUrl = baseUrl + ['cms', 'topic', topic._id].join('/');
+      $http({
+        url: apiUrl,
+        method: "PUT",
+        data: angular.toJson(topic)
+      }).success(function (data, status, headers, config) {
+        fn(data);
+      }).error(function (err) {
+        console.warn('END:Update Topic with ERROR', err);
+      });
+    };
+
+    this.deleteTopic = function (topic, fn) {
+      var apiUrl = baseUrl + ['cms', 'topic', topic._id].join('/');
+      $http.delete(apiUrl)
+        .success(function (data, status, headers, config) {
+          fn(data);
+        }).error(function (err) {
+          console.warn('END:Delete Topic with ERROR', err);
+          fn(err);
+        });
     };
 
     this.getPageComponents = function (pageId, fn) {

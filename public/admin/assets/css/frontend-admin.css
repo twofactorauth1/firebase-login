@@ -432,6 +432,11 @@
 #componentloader .vertical-top td {
   vertical-align: top;
 }
+@media (max-width: 767px) {
+  #componentloader .row {
+    margin-right: 0px !important;
+  }
+}
 #componentloader .accordion-v1 .title {
   text-align: center;
   margin-bottom: 20px;
@@ -454,6 +459,7 @@
 @media (max-width: 767px) {
   #componentloader .contact-us-v1 .widget-weather {
     margin-top: -280px !important;
+    margin-left: 20px !important;
     padding: 0!important;
   }
   #componentloader .contact-us-v1 .widget-weather .panel-body {
@@ -545,6 +551,9 @@
 #componentloader .component-wrap {
   display: block;
   position: relative;
+}
+#componentloader .component-wrap div.element-wrap {
+  word-wrap: break-word;
 }
 #componentloader .component-wrap .component > [id] .bg {
   position: absolute;
@@ -1163,8 +1172,14 @@
     width: 90%;
   }
 }
+#componentloader .navigation-v1 .nav-logo div.tooltip.bottom {
+  margin-top: -30px;
+}
 #componentloader .navigation-v2 #header .navbar.navbar-default {
   border: none!important;
+}
+#componentloader .navigation-v2 .nav-logo div.tooltip.bottom {
+  margin-top: -30px;
 }
 #componentloader .navigation-v2 .navbar {
   border: none!important;
@@ -1252,6 +1267,9 @@
 }
 #componentloader .navigation-v3 .nav {
   margin-top: 0px!important;
+}
+#componentloader .navigation-v3 .nav-logo div.tooltip.bottom {
+  margin-top: -30px;
 }
 #componentloader .navigation-v3 .navbar-brand {
   min-width: 200px;
@@ -2297,7 +2315,7 @@
   margin: 30px 0;
 }
 #componentloader .products {
-  padding: 15px;
+  padding: 2px;
 }
 #componentloader #cart-checkout-modal .modal-footer {
   margin-top: 0;
@@ -2680,6 +2698,9 @@
 }
 #componentloader .products-v1 .product .img-wrap .product-img {
   display: block;
+}
+#componentloader .products-v1 .product .img-wrap i.fa {
+  color: #5b5b60;
 }
 #componentloader .products-v1 .tab-content .col-sm-3 {
   padding-top: 0px;
@@ -3164,6 +3185,7 @@
   }
   #componentloader .footer-after .container {
     max-width: 100%;
+    width: 100%;
   }
   #componentloader .footer-logo {
     margin: -35px 5px 0 0;
@@ -3217,6 +3239,10 @@
 }
 #componentloader .single-post-v1 #main-area {
   padding-top: 80px;
+}
+#componentloader .single-post-v1 #main-area .entry,
+#componentloader .single-post-v1 #main-area .social-links {
+  position: relative;
 }
 #componentloader .single-post-v1 .container.row-fluid {
   max-width: 1100px;
@@ -5614,6 +5640,9 @@
 }
 #componentloader .min-height-350 {
   min-height: 350px !important;
+}
+#componentloader .height-50 {
+  height: 50px !important;
 }
 #componentloader .height-155 {
   height: 155px !important;

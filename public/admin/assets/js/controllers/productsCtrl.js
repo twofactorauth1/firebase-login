@@ -121,20 +121,10 @@
       data: "external_link"
     }];
 
-    $scope.productStatusTypes = [{
-      label: "Backorder",
-      data: "backorder"
-    }, {
-      label: "Inactive",
-      data: "inactive"
-    }, {
-      label: "Active",
-      data: "active"
-    }, {
-      label: "Auto Inactive",
-      data: "auto_inactive"
-    }];
-
+    
+    ProductService.productStatusTypes(function(types) {
+      $scope.productStatusTypes = types;
+    });
     /*
      * @triggerInput
      * - trigger the hidden input to trick smart table into activating filter

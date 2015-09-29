@@ -357,6 +357,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 billingObj.setupFee = setupFee;
                 billingObj.signupDate = new Date();
                 billingObj.trialLength = trialLength;
+                account.set('ownerUser', user.id());
                 accountDao.saveOrUpdate(account, function (err, updatedAccount) {
                     if(err || updatedAccount === null) {
                         self.log.error('Error creating Stripe customer: ' + err);

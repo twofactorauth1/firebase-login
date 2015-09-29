@@ -55,7 +55,13 @@ var component = $$.m.ModelBase.extend({
                     "text" : "This is the testimonial.",
                     "active" : true
                 }
-            ]
+            ],
+
+            slider : {
+                speed: 300,
+                autoPlay: true, 
+                autoPlayInterval: 5000
+            },
 
         }
     },

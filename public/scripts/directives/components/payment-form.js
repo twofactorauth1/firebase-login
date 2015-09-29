@@ -8,7 +8,7 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
         templateUrl: '/components/component-wrap.html',
         link: function(scope, element, attrs, ctrl) {
             scope.newAccount = {};
-
+            
             //scope.domainExistsAlready = false;  // needs to be undefined to begin with
             scope.emptyBusinessName = false;
             scope.validBusinessName = true;
@@ -37,7 +37,7 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                     UserService.saveOrUpdateTmpAccount(tmpAccount, function(data) {});
                 }
             });
-
+    
             // scope.planStatus = {};
             // scope.emailValidation = formValidations.email;
             // var productId = scope.component.productId;
@@ -173,6 +173,7 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                 tmpAccount.subdomain = $.trim(newAccount.businessName).replace(" ", "").replace(".", "_").replace("@", "");
                 tmpAccount.business = tmpAccount.business || {};
                 tmpAccount.business.name = newAccount.businessName;
+
                 UserService.saveOrUpdateTmpAccount(tmpAccount, function(data) {
                     var newUser = {
                         username: newAccount.email,
@@ -275,6 +276,8 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
 
                 scope.checkEmailExists(newAccount, true);
 
+                scope.checkPhoneExtension(newAccount);
+
                 //pass
                 if (!scope.newAccount.password && !scope.newAccount.tempUserId && !scope.newAccount.hidePassword) {
                     scope.checkPasswordLength(newAccount);
@@ -303,7 +306,7 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                         scope.validateForm = false;
                     }
                 }
-
+                
                 if(!scope.validateForm)
                     return;
 
@@ -341,12 +344,13 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                     tmpAccount.subdomain = $.trim(newAccount.businessName).replace(" ", "").replace(".", "_").replace("@", "");
                     tmpAccount.business = tmpAccount.business || {};
                     tmpAccount.business.name = newAccount.businessName;
-
+                    tmpAccount.signupPage = $location.path();
                     if(scope.newAccount.phone) {
                         tmpAccount.business.phones = [];
                         tmpAccount.business.phones[0] = {
                             _id: CommonService.generateUniqueAlphaNumericShort(),
                             number: scope.newAccount.phone,
+                            extension: scope.newAccount.extension,
                             default: true
                         };
                     }
@@ -399,7 +403,11 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                                     //send facebook tracking info
                                     window._fbq = window._fbq || [];
                                     window._fbq.push(['track', '6032779610613', {'value':'0.00','currency':'USD'}]);
+                                    // ensures the optimizely object is defined globally using
+                                    window['optimizely'] = window['optimizely'] || [];
 
+                                    // sends a tracking call to Optimizely for the given event name.
+                                    window.optimizely.push(["trackEvent", "freeTrialSignup"]);
                                     console.log('sent facebook message');
                                     //send affiliate purchase info
                                     var leadData = {
@@ -411,7 +419,11 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                                     LeadDyno.key = "b2a1f6ba361b15f4ce8ad5c36758de951af61a50";
                                     LeadDyno.recordLead(newUser.email, leadData, function(){
                                         console.log('recorded lead');
-                                        LeadDyno.recordPurchase(newUser.email, {}, function(){
+                                        var customerData = {
+                                            plan_code:'zero',
+                                            purchase_amount:0
+                                        };
+                                        LeadDyno.recordPurchase(newUser.email, customerData, function(){
                                             console.log('recorded purchase');
                                             window.location = data.accountUrl;
                                         });
@@ -547,6 +559,22 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                     angular.element("#password").removeClass('has-error').addClass('has-success');
                     angular.element("#password .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
                     scope.passwordIsValid = true;
+                }
+            };
+
+            scope.checkPhoneExtension = function(newAccount) {
+                scope.newAccount.extension = newAccount.extension;
+                console.log('newAccount.extension ', newAccount.extension);
+                var regex = formValidations.extension;
+                var result =  regex.test(newAccount.extension);
+                if (result || !newAccount.extension) {                                        
+                    angular.element("#extension .error").html("");
+                    angular.element("#extension").removeClass('has-error').addClass('has-success');
+                    angular.element("#extension .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');                    
+                } else {
+                    angular.element("#extension .error").html("Enter a valid extension");
+                    angular.element("#extension").addClass('has-error');
+                    angular.element("#extension .glyphicon").addClass('glyphicon-remove');
                 }
             };
 

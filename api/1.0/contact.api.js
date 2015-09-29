@@ -505,7 +505,7 @@ _.extend(api.prototype, baseApi.prototype, {
                     var accountId = value.id();
                     var vars = [];
 
-                    var toAddress = value.get('business').email;
+                    var toAddress = value.get('business').emails[0].email;
                     var toName = '';
                     mandrillHelper.sendNewCustomerEmail(toAddress, toName, accountId, vars, function(err, value){
                         self.log.debug('email sent');
@@ -655,7 +655,6 @@ _.extend(api.prototype, baseApi.prototype, {
                                                                 htmlContent, ip, savedContact.id(), vars, null, function(err, result){});
                                                                 */
                                                         }
-
                                                     });
                                                 } else {
                                                     self.log.debug('emailPage ', emailPage);
@@ -680,10 +679,10 @@ _.extend(api.prototype, baseApi.prototype, {
                                                         component.emailBgImage = component.bg.img.url.replace('//s3.amazonaws', 'http://s3.amazonaws');
                                                     }
 
-                                                    component.logo = component.logo.replace('src="//', 'src="http://');
+                                                    component.logo = component.logo ? component.logo.replace('src="//', 'src="http://') : '';
 
-                                                    component.text = component.text.replace('src="//', 'src="http://').replace(new RegExp('FHEMAIL', 'g'), savedContact.getEmails()[0].email);
-                                                    component.title = component.title.replace('src="//', 'src="http://').replace(new RegExp('FHEMAIL', 'g'), savedContact.getEmails()[0].email);
+                                                    component.text = component.text ? component.text.replace('src="//', 'src="http://').replace(new RegExp('FHEMAIL', 'g'), savedContact.getEmails()[0].email) : '';
+                                                    component.title = component.title ? component.title.replace('src="//', 'src="http://').replace(new RegExp('FHEMAIL', 'g'), savedContact.getEmails()[0].email) : '';
                                                     app.render('emails/base_email', component, function(err, html){
                                                         if(err) {
                                                             self.log.error('error rendering html: ' + err);

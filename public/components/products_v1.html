@@ -26,7 +26,7 @@
                                 </div>
                             </div>
                             <div ng-if="!product.is_image && product.icon" class="img-wrap icon">
-                                <i class="fa {{::product.icon}}"></i>
+                                <i ng-style="{'color':component.iconColor}" class="fa {{::product.icon}}"></i>
                             </div>
                         </div>
                         <div ng-if="!product.is_image && !product.icon" class="no-product-img">
@@ -35,9 +35,9 @@
                             </div>
                             <div class="clearfix"></div>
                         </div>
-                        <div class="caption">
+                        <div class="caption" ng-style="{'color':component.txtcolor}">
                             <h4 class="pull-right"><span ng-class="{'strikethrough text-small': product.onSaleToday}">{{product.regular_price | currency}}</span><span ng-if="product.onSaleToday">{{product.sale_price | currency}}</span></h4>
-                            <h4 class="title"><a href="#">{{product.name | characters:18 :true}}</a></h4>
+                            <h4 class="title"><a ng-style="{'color':component.txtcolor}" href="#">{{product.name | characters:18 :true}}</a></h4>
                             <div class="clearfix"></div>
                             <p class="description product-description">{{product.description}}</p>
                         </div>
@@ -84,9 +84,12 @@
             <a ng-click="addProducts()" class=" btn btn-primary btn-lg btn-wide btn-o add-feature"> <i class="fa fa-plus"></i> Add Products</a>
         </div>
     </div>
-    <button class="btn btn-primary btn-lg btnLaunchCart" ng-click="initializeModalEvents()" data-toggle="modal" data-target="#cart-checkout-modal">
+    <a ng-show="!isEditing" href="#" class="btn btn-primary btn-lg btnLaunchCart" data-toggle="modal" data-target="#cart-checkout-modal">
         <span class="fa fa-shopping-cart"></span> <span ng-if="cartDetails.length > 0">({{cartDetails.length}})</span>
-    </button>
+    </a>
+    <a ng-show="isEditing" href="#" tooltip-placement="bottom" tooltip="This button is functional only at front end" class="btn btn-primary btn-lg btnLaunchCart">
+        <span class="fa fa-shopping-cart"></span> <span ng-if="cartDetails.length > 0">({{cartDetails.length}})</span>
+    </a>
     <div class="modal fade" id="cart-checkout-modal">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">

@@ -241,26 +241,51 @@ module.exports = {
                             var emailId = step.settings.emailId;
                             
                             emailDao.getEmailById(emailId, function(err, email){
-                                if(err) {
+                                if(err || !email) {
                                     self.log.error('Error getting email to render: ' + err);
                                     return fn(err, null);
                                 }
-                                var component = email.get('components')[0];
-                                if (!component.bg.color) {
-                                    component.bg.color = '#eaeaea';
-                                }
+                                // var component = email.get('components')[0];
+                                // if (!component.bg.color) {
+                                //     component.bg.color = '#eaeaea';
+                                // }
 
-                                if (!component.emailBg) {
-                                    component.emailBg = '#ffffff';
-                                }
-                                if (component.bg.img && component.bg.img.show && component.bg.img.url) {
-                                    component.emailBgImage = component.bg.img.url.replace('//s3.amazonaws', 'http://s3.amazonaws');
-                                }
+                                // if (!component.emailBg) {
+                                //     component.emailBg = '#ffffff';
+                                // }
+                                // if (component.bg.img && component.bg.img.show && component.bg.img.url) {
+                                //     component.emailBgImage = component.bg.img.url.replace('//s3.amazonaws', 'http://s3.amazonaws');
+                                // }
 
-                                component.logo = component.logo.replace('src="//s3.amazonaws', 'src="http://s3.amazonaws');
-                                component.text = component.text.replace('src="//s3.amazonaws', 'src="http://s3.amazonaws');
-                                component.title = component.title.replace('src="//s3.amazonaws', 'src="http://s3.amazonaws');
-                                app.render('emails/base_email', component, function(err, html) {
+                                // component.logo = component.logo.replace('src="//s3.amazonaws', 'src="http://s3.amazonaws');
+                                // component.text = component.text.replace('src="//s3.amazonaws', 'src="http://s3.amazonaws');
+                                // component.title = component.title.replace('src="//s3.amazonaws', 'src="http://s3.amazonaws');
+                                var components = [];
+                                var keys = ['logo','title','text','text1','text2','text3'];
+                                var regex = new RegExp('src="//s3.amazonaws', "g");
+
+                                email.get('components').forEach(function(component){
+                                    for (var i = 0; i < keys.length; i++) {
+                                        if (component[keys[i]]) {
+                                            component[keys[i]] = component[keys[i]].replace(regex, 'src="http://s3.amazonaws');
+                                        }
+                                    }
+
+                                    if (!component.bg.color) {
+                                        component.bg.color = '#ffffff';
+                                    }
+
+                                    if (!component.emailBg) {
+                                        component.emailBg = '#ffffff';
+                                    }
+
+                                    if (component.bg.img && component.bg.img.show && component.bg.img.url) {
+                                        component.emailBgImage = component.bg.img.url.replace('//s3.amazonaws', 'http://s3.amazonaws');
+                                    }
+                                    components.push(component);
+                                });
+                                
+                                app.render('emails/base_email_v2', { components: components }, function(err, html) {
                                     if (err) {
                                         self.log.error('error rendering html: ' + err);
                                         self.log.warn('email will not be sent.');

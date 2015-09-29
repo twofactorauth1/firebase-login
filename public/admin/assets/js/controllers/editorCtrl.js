@@ -92,6 +92,22 @@
 
 
     /*
+     * email specific settings
+     */
+    $scope.isEmail = false;
+    $scope.setIsEmail = function(on) {
+      if (on) {
+        $scope.isEmail = true;
+        CKEDITOR.config.resize_enabled = false;
+        CKEDITOR.config.removePlugins = "doksoft_button, tableresize";
+        $scope.componentFilters = "";
+      } else {
+        $scope.isEmail = false;
+      }
+    }
+
+
+    /*
      * @ckeditor:instanceReady
      * -
      */
@@ -103,10 +119,14 @@
 
         if ($scope.isEmail) {
           //unable to access plugin from ckeditor api
-          angular.element('.cke_button__doksoft_font_awesome').hide();
+          //hide regular button and font awesome from email editor
+          angular.element('.cke_button__doksoft_button, .cke_button__doksoft_font_awesome').hide();
+          angular.element('.cke_button__doksoft_button_email').show();
         }
-        else
-          angular.element('.cke_button__doksoft_font_awesome').show();
+        else{
+          angular.element('.cke_button__doksoft_button, .cke_button__doksoft_font_awesome').show();
+          angular.element('.cke_button__doksoft_button_email').hide();
+        }
         ev.editor.on('key', function () {
           $scope.setDirty(true);
         });
@@ -205,19 +225,25 @@
       });
     }
 
-    $scope.redirectAfterSave = function(redirect_url){    
+    $scope.redirectAfterSave = function(redirect_url, reload){    
     if(redirect_url){
         SweetAlert.swal("Saved!", "Your edits were saved to the page.", "success");
         window.location = redirect_url;
+        if (reload) {
+          window.location.reload();
+        }
       }
     }
 
-    $scope.redirectWithoutSave = function(redirect_url, show_alert){
+    $scope.redirectWithoutSave = function(redirect_url, show_alert, reload){
     $scope.changesConfirmed = true;
     if(redirect_url){       
           if(show_alert)
               SweetAlert.swal("Cancelled", "Your edits were NOT saved.", "error");
           window.location = redirect_url;
+          if (reload) {
+            window.location.reload();
+          }
       }
     }
 
@@ -231,7 +257,7 @@
     $scope.isDirty = {};
     $scope.blogImage = {};
     $scope.blogImage.featured_image = false;
-    $scope.savePage = function (redirect_url) {
+    $scope.savePage = function (redirect_url, reload) {
       $scope.saveLoading = true;
       $scope.setDirty(false);
       $scope.changesConfirmed = true;
@@ -261,7 +287,7 @@
               $scope.blog.post = data;
               angular.copy($scope.blog.post, $scope.originalPost);
               toaster.pop('success', "Post Saved", "The " + $filter('htmlToPlaintext')($scope.blog.post.post_title) + " post was saved successfully.");              
-              $scope.redirectAfterSave(redirect_url);
+              $scope.redirectAfterSave(redirect_url, reload);
             });
           }
         })
@@ -271,7 +297,14 @@
           console.log('success');
           $scope.saveLoading = false;
           toaster.pop('success', "Template Saved", "The " + $scope.page.handle + " template was saved successfully.");
-          $scope.redirectAfterSave(redirect_url);
+          $scope.redirectAfterSave(redirect_url, reload);
+        });
+      } else if ($scope.isTopic) {
+        console.log('saving topic');
+        WebsiteService.updateTopic($scope.topic, function (data) {
+          $scope.saveLoading = false;
+          toaster.pop('success', "Topic Saved", "The " + $scope.topic.title + " topic was saved successfully.");
+          $scope.redirectAfterSave(redirect_url, reload);
         });
       } else {
         $scope.checkForDuplicatePage(function () {
@@ -291,7 +324,7 @@
                   console.log($scope.page.handle, $scope.originalPage.handle);
                   $scope.saveLoading = false;
                   toaster.pop('success', "Page Saved", "The " + $scope.page.handle + " page was saved successfully.");
-                  $scope.redirectAfterSave(redirect_url);
+                  $scope.redirectAfterSave(redirect_url, reload);
                   //$scope.page = data;
                   var originalPageHandle = angular.copy($scope.originalPage.handle);
                   //angular.copy($scope.page, $scope.originalPage);
@@ -319,6 +352,7 @@
                 WebsiteService.updateEmail($scope.page, function(data) {
                   $scope.saveLoading = false;
                   toaster.pop('success', "Email Saved", "The " + $scope.page.title + " email was saved successfully.");
+                  $scope.redirectAfterSave(redirect_url, reload);
                 });
               }
             })
@@ -326,6 +360,7 @@
             $scope.saveLoading = false;
         });
       }
+
     };
 
     /*
@@ -417,7 +452,14 @@
       WebsiteService.getSinglePage(_handle, function (data) {
         $scope.page  = angular.copy(data);
         $scope.components = $scope.page.components;
-        
+        if(_handle === 'single-post'){
+          var post_component = _.findWhere($scope.page.components, {
+            type: 'single-post'
+          });
+          if(post_component){
+            $scope.blog.post = post_component;
+          }
+        }
         $scope.originalPage = angular.copy(data);
         $scope.activePage = true;
         $scope.activateCKeditor();
@@ -452,7 +494,7 @@
       }
 
       if (_email) {
-        $scope.isEmail = true;
+        $scope.setIsEmail(true);
         $scope.page = _email;
         $scope.components = _email.components;        
         $scope.originalPage = angular.copy(_email);
@@ -475,6 +517,7 @@
 
       WebsiteService.getSinglePage('single-post', function (data) {
         $scope.page = data;
+        $scope.postComponents = data.components;
         WebsiteService.getSinglePost($scope.handle, function (data) {
           $scope.blog.post = data;
           $scope.single_post = true;
@@ -543,6 +586,24 @@
     };
 
     /*
+     * @retrieveTopic
+     * -
+     */
+
+    $scope.retrieveTopic = function (_id) {
+      $scope.topicActive = true;
+      WebsiteService.getTopics(function (topics) {
+        $scope.topic = _.find(topics, function (top) {
+          return top._id === _id;
+        });
+
+        $scope.components = $scope.topic.components;
+        $scope.activateCKeditor();
+        $rootScope.breadcrumbTitle = $scope.topic.title;
+      });
+    };
+
+    /*
      * @calculateWindowHeight
      * -
      */
@@ -570,7 +631,7 @@
 
 
     if ($location.search().email) {
-      $scope.isEmail = true;
+      $scope.setIsEmail(true);
       $scope.retrieveEmail($location.search().email);
     }
 
@@ -590,6 +651,17 @@
 
     if ($location.search().templatehandle) {
       $scope.retrieveTemplate($location.search().templatehandle);
+    }
+
+    /*
+     * @location:email
+     * -
+     */
+
+
+    if ($location.search().topic) {
+      $scope.isTopic = true;
+      $scope.retrieveTopic($location.search().topic);
     }
 
     /*
@@ -700,8 +772,10 @@
      * - TODO: change to switch case and stop using if else
      */
     $scope.thumbnailSlider = {};
+    $scope.testimonialSlider = {};
     $scope.contactMap = {};
     $scope.blogControl = {};
+
 
     $scope.insertMedia = function (asset) {
       console.log('$scope.componentEditing ', $scope.componentEditing);
@@ -864,6 +938,12 @@
         _modal.resolve.accountShowHide = function () {
           return $scope.$parent.account.showhide;
         };
+        _modal.resolve.isEmail = function () {
+          return $scope.isEmail;
+        };
+        _modal.resolve.testimonialSlider = function () {
+          return $scope.testimonialSlider;
+        };
       }
 
       if (angular.isDefined(index) && index !== null && index >= 0) {
@@ -903,6 +983,48 @@
       if ($scope.isEmail) {
         $scope.openSimpleModal("email-settings-modal");
       }
+
+      if ($scope.isTopic) {
+        $scope.openSimpleModal("topic-settings-modal");
+      }
+    };
+
+    /*
+     * @deleteTopic
+     * -
+     */
+    
+    $scope.topicCategories = ['Account', 'Billing', 'Contacts', 'Campaigns', 'Dashboard', 'Emails', 'Getting Started', 'Integrations', 'Orders', 'Pages', 'Posts', 'Products', 'Profile', 'Site Analytics', 'Social Feed'];
+
+
+    $scope.deleteTopic = function () {
+      angular.element('.modal.in').hide();
+      SweetAlert.swal({
+        title: "Are you sure?",
+        text: "Do you want to delete this topic",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: "Yes, delete topic!",
+        cancelButtonText: "No, do not delete topic!",
+        closeOnConfirm: false,
+        closeOnCancel: true
+      }, function (isConfirm) {
+        if (isConfirm) {
+          SweetAlert.swal("Saved!", "Topic is deleted.", "success");
+          var title = $scope.topic.title;
+          WebsiteService.deleteTopic($scope.topic, function (data) {
+            toaster.pop('success', "Topic Deleted", "The " + title + " topic was deleted successfully.");
+            $scope.closeModal();
+            $timeout(function () {
+              window.location = '/admin/#/support/manage-topics';
+            }, 500);
+          });
+        } else {
+          angular.element('.modal.in').show();
+        }
+
+      });
     };
 
     /*
@@ -1066,6 +1188,18 @@
       });
     };
 
+    $scope.sendTestEmail = function (_email) {
+      $scope.sendingEmail = true;
+      WebsiteService.sendTestEmail(_email, $scope.page, function (data) {
+        $scope.sendingEmail = false;
+        if (data && data[0] && data[0]._id) {
+          $scope.closeModal();
+          toaster.pop('success', 'Test Email sent successfully');
+        }
+        console.log('test send status ', data);
+      });
+    };
+
     /*
      * @validateNewPage
      * -
@@ -1194,9 +1328,15 @@
         }
       }
       var redirectUrl = url;
-      
+      if($scope.post_blog_page)
+        redirectUrl = "/admin/#/website/posts";
       if (!redirectUrl) {
-        redirectUrl = $location.search().posthandle ? "/admin/#/website/posts" : $scope.isEmail ? "/admin/#/emails" : "/admin/#/website/pages";
+        if($scope.isEmail)
+          redirectUrl = "/admin/#/emails";
+        else if($scope.isTopic)
+          redirectUrl = "/admin/#/support/manage-topics";
+        else
+          redirectUrl = "/admin/#/website/pages";
       }
       fn(redirectUrl);
     }
@@ -1220,23 +1360,14 @@
             if (isConfirm) {            
               //SweetAlert.swal("Saved!", "Your edits were saved to the page.", "success");
               $scope.redirect = true;
-              $scope.savePage(redirectUrl);
+              $scope.savePage(redirectUrl, reload);
               $scope.setDirty(false);
-              if (reload) {
-                window.location.reload();
-              }
             } else {
-              $scope.redirectWithoutSave(redirectUrl, true);
-              if (reload) {
-                window.location.reload();
-              }
+              $scope.redirectWithoutSave(redirectUrl, true, reload);
             }
           });
         } else {
-          $scope.redirectWithoutSave(redirectUrl, false);
-          if (reload) {
-            window.location.reload();
-          }
+          $scope.redirectWithoutSave(redirectUrl, false, reload);         
         }
     }) 
      
@@ -1249,6 +1380,13 @@
     $scope.checkForSaveBeforeLeave = function (url, reload) {
       $scope.changesConfirmed = true;
       checkBeforeRedirect(url, reload);      
+    };
+
+    $scope.viewTopic = function(topicId) {
+      console.log('topicId ', topicId);
+      $location.path('/support/help-topics').search({
+        topic: topicId
+      });
     };
 
     /*
@@ -1276,6 +1414,7 @@
       }, function (isConfirm) {
         if (isConfirm) {
           SweetAlert.swal("Saved!", "Page is deleted.", "success");
+          $scope.changesConfirmed = true;
           var websiteId = $scope.page.websiteId;
           var title = $scope.page.title;
 
@@ -1313,6 +1452,7 @@
       }, function (isConfirm) {
         if (isConfirm) {
           SweetAlert.swal("Saved!", "Email is deleted.", "success");
+          $scope.changesConfirmed = true;
           var title = $scope.page.title;
           WebsiteService.deleteEmail($scope.page, function (data) {
             toaster.pop('success', "Email Deleted", "The " + title + " email was deleted successfully.");
@@ -1350,6 +1490,7 @@
           if (isConfirm) {
             var title = $scope.blog.post.post_title;
             SweetAlert.swal("Saved!", "Post is deleted.", "success");
+            $scope.changesConfirmed = true;
             WebsiteService.deletePost($scope.page._id, $scope.blog.post._id, function (data) {
               toaster.pop('success', "Post Deleted", "The " + title + " post was deleted successfully.");
               $scope.closeModal();
@@ -1415,10 +1556,10 @@
       toaster.pop('success', "Component Added", "The " + newComponent.type + " component was added successfully.");
     };
 
-    $scope.addUnderNavSetting = function (fn) {
+    $scope.addUnderNavSetting = function (masthead_id, fn) {
       $scope.allowUndernav = false;
       $scope.components.forEach(function (value, index) {
-        if (value && value.type === 'masthead') {
+        if (value && value.type === 'masthead' && value._id == masthead_id) {
           if (index != 0 && $scope.components[index - 1].type == "navigation") {
             $scope.allowUndernav = true;
           } else

@@ -329,11 +329,10 @@
       if ($scope.selectedDate.range) {
         $scope.product.sale_date_from = new Date($scope.selectedDate.range.startDate).toISOString();
         $scope.product.sale_date_to = new Date($scope.selectedDate.range.endDate).toISOString();
-      }
-
-      $scope.saveLoading = true;
+      }    
       $scope.setProductTags();
       if ($scope.validateProduct()) {
+        $scope.saveLoading = true;
         ProductService.saveProduct($scope.product, function (product) {
           //format variation attributes
           $scope.saveLoading = false;
@@ -347,16 +346,10 @@
       console.log('removeVariation');
     };
 
-    $scope.productStatusOptions = [{
-      name: 'Active',
-      value: 'active'
-    }, {
-      name: 'Backorder',
-      value: 'backorder'
-    }, {
-      name: 'Inactive',
-      value: 'inactive'
-    }];
+   
+    ProductService.productStatusTypes(function(types) {
+        $scope.productStatusOptions = types;
+    });
 
     $scope.productTypes = ProductConstant.product_types;
 

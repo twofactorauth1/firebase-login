@@ -9,7 +9,7 @@
     };
 
     this.generateUniqueAlphaNumeric = function (length, lettersOnly, lowerOnly) {
-      if (length === null || length === 0) {
+      if (!angular.isDefined(length) || length === null || length === 0) {
         length = 10;
       }
       var val;
@@ -17,7 +17,7 @@
       if (length <= 10 && lettersOnly !== true) {
         if (length <= 10) {
           val = ((new Date().getTime() * parseInt(Math.random() + 1, 10) * 1000)) + new Date().getTime().toString(36);
-          if (val.isNan() || val === undefined) {
+          if (val == NaN || val === undefined) {
             return this.generateUniqueAlphaNumeric();
           }
         }

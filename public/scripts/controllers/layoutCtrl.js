@@ -2,33 +2,48 @@
 /*global mainApp*/
 mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', '$window', '$location', '$document', '$timeout', function ($scope, pagesService, $window, $location, $document, $timeout) {
   $scope.isEditing = false;
+  $scope.blog_post = null;
   console.log('layout crtl');
   function checkIntercom(data) {
     if (data.hideIntercom) {
       $scope.$parent.hideIntercom = true;
     }
   }
-
+  $scope.addUnderNavSetting = function (masthead_id, fn) {
+    $scope.allowUndernav = false;
+    $scope.components.forEach(function (value, index) {
+      if (value && value.type === 'masthead' && value._id == masthead_id) {
+        if (index != 0 && $scope.components[index - 1].type == "navigation") {
+          $scope.allowUndernav = true;
+        } else
+          $scope.allowUndernav = false;
+      }
+    })
+    fn($scope.allowUndernav);
+  };
+  
   pagesService($scope.websiteId, function (err, data) {
     console.log('pagesService ', data);
     if (err) {
-      console.warn('no page found');
-      if ($location.$$path.indexOf('login')) {
-        $window.location.href =  $location.$$path;
+      console.warn('no page found', $location.$$path);
+      if($location.$$path === '/login') {
+          $window.location.href = '/login';
       } else {
-        $window.location.href = '/404';
+          $window.location.href = '/404';
       }
+
     } else {
       $scope.page = data;
       $scope.components = data.components;
-      $scope.components.forEach(function (value, index) {
-        if (value && value.type === 'masthead') {
-          if (index != 0 && $scope.components[index - 1].type == "navigation") {
-            $scope.allowUndernav = true;
-          } else
-            $scope.allowUndernav = false;
+      if(data.handle=== 'single-post'){
+        var post_component = _.findWhere($scope.page.components, {
+          type: 'single-post'
+        });
+        if(post_component){
+          $scope.blog_post = post_component;
         }
-      })
+      }
+      
       checkIntercom(data);
       angular.element(document).ready(function () {
         setTimeout(function () {
