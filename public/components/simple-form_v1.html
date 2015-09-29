@@ -37,7 +37,7 @@
                         </div>
                         <!-- EXTENSION -->
                         <div class="form-group" ng-class="{'col-sm-3': fieldsLength() == 4, 'col-sm-4': fieldsLength() == 3, 'col-sm-6': fieldsLength() == 2, 'col-sm-12': fieldsLength() == 1}" ng-if="fieldShow('extension')" ng-class="{ 'has-error' : simpleForm.phone.$invalid && !simpleForm.extension.$pristine }">
-                            <input type="text" name="extension" ng-model="user.extenstion" ng-pattern="formValidations.extension" class="form-control" placeholder="Extension">
+                            <input type="text" name="extension" ng-model="user.extension" ng-pattern="formValidations.extension" class="form-control" placeholder="Extension">
                             <p ng-show="simpleForm.extension.$invalid && !simpleForm.extension.$pristine" class="help-block">Enter a valid extension.</p>
                         </div>
                         <!-- PHONE -->
