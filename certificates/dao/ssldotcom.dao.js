@@ -248,6 +248,69 @@ var dao = {
 
     },
 
+    requestValidation: function(ref, account_key, secret_key, domains, endpoint, fn) {
+        var self = this;
+        self.log.debug('>> requestValidation');
+        //minimal validation
+        if(!ref) {
+            return fn('ref must be specified');
+        }
+        if(!account_key) {
+            return fn('account_key must be specified');
+        }
+        if(!secret_key) {
+            return fn('secret_key must be specified');
+        }
+        if(!domains) {
+            return fn('domains must be specified');
+        }
+
+        var path = '/certificate/' + ref;
+        var _endpoint = endpoint;
+        if(!_endpoint) {
+            //figure out endpoint
+            if (process.env.NODE_ENV === "testing") {
+                _endpoint = sslDotComConfig.SSLDOTCOM_TEST_ENDPOINT;
+            } else {
+                //TODO: this needs to be the PROD endpoint
+                _endpoint = sslDotComConfig.SSLDOTCOM_TEST_ENDPOINT;
+            }
+        }
+        var body = {
+            account_key:account_key,
+            secret_key:secret_key,
+            domains:domains,
+            commit:'Validate'
+        };
+
+        var options = {
+            url: _endpoint+path,
+            json:true,
+            body:body,
+            headers: {
+                'Content-Type':'application/json'
+            }
+        };
+        request.put(options, function(err, response, _body){
+            if(err) {
+                self.log.debug('err: ', err);
+            }
+
+            //self.log.debug('response:', response);
+            try {
+                _body = JSON.parse(_body);
+            } catch(exception) {
+                self.log.debug('Could not parse body:', exception);
+            }
+            self.log.debug('_body:', _body);
+            var actualErrors = _body.errors;
+            self.log.error(actualErrors);
+            self.log.debug('<< requestValidation');
+            fn(err, _body);
+        });
+
+    },
+
     updateCertificate: function(ref, account_key, secret_key, csr, server_software, domains, organization,
         organization_unit, post_office_box, street_address_1, street_address_2, street_address_3, locality, state_or_province,
         postal_code, country, duns_number, company_number, joi, ca_certificate_id, external_order_number, hide_certificate_reference,

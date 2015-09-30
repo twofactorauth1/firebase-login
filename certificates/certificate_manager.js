@@ -32,10 +32,11 @@ module.exports = {
         var ref = certRef || mainCertRef;
         var cert = null;
         var domains = [];
+        var domainsWithValidationMethod = {};
 
         async.waterfall([
             function getCert(cb){
-                return cb();
+                //return cb();
                 self.log.debug('fetching cert');
                 dao.getCertificate(ref, config.SSLDOTCOM_ACCOUNT_KEY, config.SSLDOTCOM_SECRET_KEY, null, null, null,
                     endpoint, function(err, _cert){
@@ -61,7 +62,7 @@ module.exports = {
                     });
             },
             function generateCSR(cb) {
-                return cb(null, null);
+                //return cb(null, null);
                 self.log.debug('generating new csr');
                 domains.push(domain);
 
@@ -89,11 +90,10 @@ module.exports = {
                 });
             },
             function updateCert(csr, cb) {
-                return cb();
+                //return cb();
                 self.log.debug('updating certificate');
                 cert.domains = domains;
 
-                var domainsWithValidationMethod = {};
                 _.each(domains, function(domain){
                     domainsWithValidationMethod[domain] = {'dcv':'CNAME_CSR_HASH'};
                 });
@@ -141,7 +141,8 @@ module.exports = {
                 );
             },
             function getValidationMethods(cb){
-                return cb(null, 'md5', 'sha1', 'dcv');
+                //9A4040DA79FC43E321070B600219957C.enduragive.org -> 46191A26150AE7B99C8FE983D434CCB746B1FB91.comodoca.com
+                //return cb(null, '9A4040DA79FC43E321070B600219957C', '46191A26150AE7B99C8FE983D434CCB746B1FB91', 'dcv');
                 self.log.debug('Getting validation requirements');
 
                 dao.getCertificateValidationMethods(ref, config.SSLDOTCOM_ACCOUNT_KEY, config.SSLDOTCOM_SECRET_KEY, endpoint, function(err, value){
@@ -161,16 +162,57 @@ module.exports = {
             },
             function updateRoute53(md5, sha1, dcv, cb) {
                 self.log.debug('calling route53');
+                //return cb();
                 route53dao.addCNAMERecord(domain, md5+'.'+domain, sha1+'.comodoca.com', function(err, value){
                     cb();
                 });
 
+            },
+            function getCertAgain(cb) {
+                self.log.debug('requesting validation');
+                dao.requestValidation(ref, config.SSLDOTCOM_ACCOUNT_KEY, config.SSLDOTCOM_SECRET_KEY,
+                    domainsWithValidationMethod, endpoint, function(err, value){
+                    self.log.debug('cert:', value);
+                        cb();
+                });
+
+            },
+            function delayAndThenGetCert(cb) {
+                self.log.debug('waiting 20 seconds for validation to complete.')
+                setTimeout(function(){
+                    self.log.debug('Attempting to get the cert');
+                    dao.getCertificate(ref, config.SSLDOTCOM_ACCOUNT_KEY, config.SSLDOTCOM_SECRET_KEY, null, null, null,
+                        endpoint,
+                        function(err, _cert){
+                            self.log.debug('cert:', _cert);
+                            cb();
+                        }
+                    );
+                }, 20000);
             }
         ], function done(err){
             self.log.debug('done');
             fn(err, 'Done');
         });
 
+
+    },
+
+    validateDomain: function(domain, certRef,  fn) {
+        var self = this;
+        self.log.debug('>> validateDomain');
+        var domainsWithValidationMethod = {};
+        domainsWithValidationMethod[domain] = {'dcv':'CNAME_CSR_HASH'};
+        dao.requestValidation(certRef, config.SSLDOTCOM_ACCOUNT_KEY, config.SSLDOTCOM_SECRET_KEY, domainsWithValidationMethod,
+            endpoint, function(err, value){
+                self.log.debug('response:', value);
+                self.log.debug('<< validateDomain');
+                fn(err, value);
+            }
+        );
+    },
+
+    _waitForValidation: function(certRef, maxTries, fn) {
 
     },
 
