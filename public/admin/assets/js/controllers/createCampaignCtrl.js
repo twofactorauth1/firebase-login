@@ -349,29 +349,6 @@
 
     };
 
-    /*
-     * @getAccount
-     * - get account and autofill new email details
-     */
-
-    AccountService.getAccount(function (_account) {
-      if (_account.business.logo) {
-        $scope.emailToSend.components[0].logo = '<img src="' + _account.business.logo + '"/>';
-      }
-      if (_account.business.name) {
-        $scope.emailToSend.fromName = _account.business.name;
-      }
-      if (_account.business.emails[0].email) {
-        $scope.emailToSend.fromEmail = _account.business.emails[0].email;
-        $scope.emailToSend.replyTo = _account.business.emails[0].email;
-      }
-    });
-
-    WebsiteService.getEmails(function (_emails) {
-      $scope.emails = _emails;
-      $scope.originalEmails = angular.copy(_emails);
-    });
-
     $scope.changeCurrentEmail = function (selectedEmail) {
       $scope.emailToSend = selectedEmail;
     };
@@ -881,23 +858,84 @@
         $scope.saveCampaignOnLeave(newUrl);
     });
 
+
+    /*
+     * @getAccount
+     * - get account and autofill new email details
+     */
+
+    $scope.getAccount = function() {
+      var promise = AccountService.getAccount(function (_account) {
+        if (_account.business.logo) {
+          $scope.emailToSend.components[0].logo = '<img src="' + _account.business.logo + '"/>';
+        }
+        if (_account.business.name) {
+          $scope.emailToSend.fromName = _account.business.name;
+        }
+        if (_account.business.emails[0].email) {
+          $scope.emailToSend.fromEmail = _account.business.emails[0].email;
+          $scope.emailToSend.replyTo = _account.business.emails[0].email;
+        }
+      });
+      return promise;
+    };
+
+    $scope.getEmails = function() {
+      var promise = WebsiteService.getEmails(function (_emails) {
+        $scope.emails = _emails;
+        $scope.originalEmails = angular.copy(_emails);
+      });
+      return promise;
+    };
+
+    $scope.getCampaign = function() {
+      var promise = CampaignService.getCampaign($stateParams.campaignId, function (data) {
+          var emailMatch = function(email) {
+            return email._id === data.steps[0].settings.emailId;
+          };
+          $scope.newCampaignObj = data;
+          $scope.selectedEmail = {
+            type: 'template'
+          };
+          $scope.emailToSend = $scope.emails.filter(emailMatch)[0];
+          // $scope.changeCurrentEmail($scope.emailToSend);
+
+          //TODO: need some way to get email type from id: 4c24bedd-5133-4312-a072-b6c7a507830e
+          // $scope.campaign = $scope.newCampaignObj;
+        // })
+        // .error(function (err) {
+        //   console.error('Failed to load campaign data.');
+        //   //TODO: could redirect to list page here
+        // });
+      });
+      return promise;
+    };
+
+    $scope.getContacts = function() {
+      var promise = CampaignService.getCampaignContacts($stateParams.campaignId, function (data) {
+          
+      });
+      return promise;
+    };
+
     /*
      * @init
      * - Set page context (if creating or loading existing campaign).
      */
     $scope.init = (function(){
-      if($stateParams.campaignId) {
-        CampaignService.getCampaign($stateParams.campaignId)
-          .success(function (data) {
-            $scope.newCampaignObj = data;
-            $scope.selectedEmail = 'new'; //TODO: need some way to get email type from id: 4c24bedd-5133-4312-a072-b6c7a507830e
-            // $scope.campaign = $scope.newCampaignObj;
-          })
-          .error(function (err) {
-            console.error('Failed to load campaign data.');
-            //TODO: could redirect to list page here
-          });
-      }
+
+      $scope.getAccount().then(function(data) {
+        return $scope.getEmails();
+      }).then(function(data) {
+        return $scope.getCampaign();
+      }).then(function(data) {
+        console.log('loaded campaign, now get contacts');
+        // 'campaign/:id/contacts'
+        return $scope.getContacts();
+      }).then(function(data) {
+        console.log(data);
+      });
+
     })();
 
   }]);

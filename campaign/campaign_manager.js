@@ -613,6 +613,10 @@ module.exports = {
         });
     },
 
+    getContactsForCampaign: function(campaignId) {
+        //TODO: best way to follow DAO convention?
+    },
+
     getRunningCampaign: function(accountId, runningCampaignId, fn) {
         var self = this;
         self.log.debug('>> getRunningCampaign');

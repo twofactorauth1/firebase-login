@@ -2,7 +2,7 @@
 /*jslint unparam: true*/
 'use strict';
 (function (angular) {
-  app.service('CampaignService', function ($http, $cacheFactory) {
+  app.service('CampaignService', function ($http, $cacheFactory, $q) {
     var baseUrl = '/api/1.0/campaign/';
 
     var campaigncache = $cacheFactory('campaigns');
@@ -25,7 +25,21 @@
 
     this.getCampaign = function (id, fn) {
       var apiUrl = baseUrl + 'campaign/' + id;
-      return $http.get(apiUrl);
+      var deferred = $q.defer();
+      
+      $http.get(apiUrl)
+        .success(function (data) {
+          if (fn) {
+            console.log('resolve >>> ');
+            deferred.resolve(fn(data));
+          }
+        })
+        .error(function (err) {
+          console.warn('END:Campaign Service with ERROR');
+          fn(err, null);
+        });
+
+      return deferred.promise;
     };
 
     this.createCampaign = function (campaign, fn) {
