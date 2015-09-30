@@ -151,6 +151,7 @@
                                                 Phone Extension
                                             </label>
                                             <input type="text" placeholder="phone extension" class="form-control" ng-pattern="formValidations.extension" name="extension_{{$index}}" ng-model="account.business.phones[$index].extension">
+                                            <p ng-show="form.extension_{{$index}}.$invalid && !form.extension_{{$index}}.$pristine" class="help-block">Enter a valid extension.</p>
                                         </div>
                                     </div>
                                     <div class="col-md-8">
@@ -159,6 +160,7 @@
                                                Phone Number
                                             </label>
                                             <input type="text" placeholder="phone number" class="form-control" ng-pattern="formValidations.phone" name="phone_{{$index}}" ng-model="account.business.phones[$index].number">
+                                            <p ng-show="form.phone_{{$index}}.$invalid && !form.phone_{{$index}}.$pristine" class="help-block">Enter a valid phone number.</p>
                                         </div>
                                     </div>
                                 </div>

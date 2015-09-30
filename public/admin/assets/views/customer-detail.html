@@ -223,10 +223,10 @@
                         </tab>
                         <tab heading="Edit Customer" active="editActive">
                             <div class="col-xs-12">
-                                <button class="btn btn-info btn-o pull-right" ng-click="customerSaveFn()" ng-disabled="saveLoading"><span ng-class="{'fa fa-spin fa-spinner': saveLoading}"></span> Save</button>
+                                <button class="btn btn-info btn-o pull-right" ng-click="customerSaveFn()" ng-disabled="saveLoading || form.$invalid"><span ng-class="{'fa fa-spin fa-spinner': saveLoading}"></span> Save</button>
                             </div>
                             <div class="clearfix"></div>
-                            <form action="#" role="form" id="form">
+                            <form action="#" name="form" role="form" id="form">
                                 <fieldset>
                                     <legend>
                                         Account Info
@@ -244,9 +244,10 @@
                                                         <i ng-if="!showAddEmail(email)" ng-click="removeEmail($index)" class="ti-minus"></i>
                                                     </span>
                                                 </div>
-                                                <div class="form-group" ng-repeat="email in customer.details[0].emails  track by $index">
+                                                <div class="form-group" ng-class="{ 'has-error' : form.email_{{$index}}.$invalid && !form.email_{{$index}}.$pristine }" ng-repeat="email in customer.details[0].emails  track by $index">
                                                     <span class="input-icon input-icon-right">
-                                                        <input type="email" placeholder="email address" class="form-control" name="email" ng-model="customer.details[0].emails[$index].email" ng-blur="updateCustomer()">
+                                                        <input type="email"  ng-pattern="formValidations.email" placeholder="email address" class="form-control" name="email_{{$index}}" ng-model="customer.details[0].emails[$index].email" ng-blur="updateCustomer()">
+                                                        <p ng-show="form.email_{{$index}}.$invalid && !form.email_{{$index}}.$pristine" class="help-block">Enter a valid email.</p>
                                                         <i ng-if="showAddEmail(email)" ng-click="customerAddEmailFn()" class="ti-plus"></i>
                                                         <i ng-if="!showAddEmail(email)" ng-click="removeEmail($index)" class="ti-minus"></i>
                                                     </span>
@@ -255,19 +256,21 @@
                                             <div ng-repeat="phone in customer.details[0].phones  track by $index">
                                                 <div class="row">
                                                     <div class="col-md-4">
-                                                        <div class="form-group">
+                                                        <div class="form-group" ng-class="{ 'has-error' : form.extension_{{$index}}.$invalid && !form.extension_{{$index}}.$pristine}">
                                                             <label class="control-label">
                                                                 Phone Extension
                                                             </label>
-                                                            <input type="text" placeholder="phone extension" class="form-control" name="extension" ng-model="customer.details[0].phones[$index].extension" ng-blur="updateCustomer()">
+                                                            <input type="text" placeholder="phone extension" class="form-control" ng-pattern="formValidations.extension" name="extension_{{$index}}" ng-model="customer.details[0].phones[$index].extension" ng-blur="updateCustomer()">
+                                                            <p ng-show="form.extension_{{$index}}.$invalid && !form.extension_{{$index}}.$pristine" class="help-block">Enter a valid extension.</p>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-8">
-                                                        <div class="form-group" ng-class="{'has-error':errorMapData}">
+                                                        <div class="form-group" ng-class="{ 'has-error' : form.phone_{{$index}}.$invalid && !form.phone_{{$index}}.$pristine}">
                                                             <label class="control-label">
                                                                 Phone Number
                                                             </label>
-                                                           <input type="text" placeholder="phone number" class="form-control" name="phone" ng-model="customer.details[0].phones[$index].number" ng-blur="updateCustomer()">
+                                                           <input type="text" placeholder="phone number" class="form-control" ng-pattern="formValidations.phone" name="phone_{{$index}}" ng-model="customer.details[0].phones[$index].number" ng-blur="updateCustomer()">
+                                                           <p ng-show="form.phone_{{$index}}.$invalid && !form.phone_{{$index}}.$pristine" class="help-block">Enter a valid phone number.</p>
                                                         </div>
                                                     </div>
                                                 </div>
