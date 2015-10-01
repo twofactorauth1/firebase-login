@@ -10,6 +10,8 @@ app.directive('navigationComponent', ['WebsiteService', 'AccountService', functi
     templateUrl: '/components/component-wrap.html',
     link: function (scope, element, attrs) {
       scope.isEditing = true;
+      if(!angular.isDefined(scope.component.shownavbox))
+        scope.component.shownavbox = true;
     },
     controller: function ($scope, WebsiteService, AccountService, $compile) {
       $scope.isSinglePost = $scope.$parent.isSinglePost;
