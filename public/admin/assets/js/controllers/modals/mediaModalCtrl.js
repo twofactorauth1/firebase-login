@@ -1,7 +1,7 @@
 'use strict';
 /*global app, moment, angular*/
 /*jslint unparam:true*/
-app.controller('MediaModalCtrl', ['$scope', '$modalInstance', '$http', '$timeout', 'FileUploader', 'AssetsService', 'ToasterService', 'showInsert', 'insertMedia', function ($scope, $modalInstance, $http, $timeout, FileUploader, AssetsService, ToasterService, showInsert, insertMedia) {
+app.controller('MediaModalCtrl', ['$scope', '$modalInstance', '$http', '$timeout', 'FileUploader', 'AssetsService', 'ToasterService', 'showInsert', 'insertMedia', 'SweetAlert', function ($scope, $modalInstance, $http, $timeout, FileUploader, AssetsService, ToasterService, showInsert, insertMedia, SweetAlert) {
   var uploader, footerElement, headerElement, contentElement, mediaElement, mediaModalElement;
 
   $scope.showInsert = showInsert;
@@ -244,31 +244,61 @@ app.controller('MediaModalCtrl', ['$scope', '$modalInstance', '$http', '$timeout
   };
 
   $scope.m.deleteAsset = function (asset) {
-    if (asset) {
-      $scope.batch.push(asset);
-    }
-    AssetsService.deleteAssets($scope.batch, function (resp, status) {
-      if (status === 200) {
-        $scope.originalAssets.forEach(function (v, i) {
-          if (v._id === $scope.batch[0]['_id']) {
-            $scope.originalAssets.splice(i, 1);
-          }
-        });
-        $scope.assets.forEach(function (v, i) {
-          if (v._id === $scope.batch[0]['_id']) {
-            $scope.assets.splice(i, 1);
-          }
-        });
-        $scope.batch.forEach(function (v, i) {
-          if (v._id === $scope.batch[0]['_id']) {
-            $scope.batch.splice(i, 1);
-          }
-        });
-        ToasterService.show('success', 'Image(s) deleted');
+
+  angular.element('.modal.in').hide();
+   var _deleteText = "Do you want to delete";
+   SweetAlert.swal({
+      title: "Are you sure?",
+      text: _deleteText,
+      type: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#DD6B55",
+      confirmButtonText: "Yes, delete!",
+      cancelButtonText: "No, do not delete!",
+      closeOnConfirm: false,
+      closeOnCancel: true
+    }, function (isConfirm) {
+      if (isConfirm) {
+        if (asset) 
+          $scope.batch.push(asset);
+        if($scope.batch && $scope.batch.length)          
+          AssetsService.deleteAssets($scope.batch, function (resp, status) {
+            if (status === 200) {
+              $scope.originalAssets.forEach(function (v, i) {
+                  if (v._id === $scope.batch[0]['_id']) {
+                    $scope.originalAssets.splice(i, 1);
+                  }
+                });
+                $scope.assets.forEach(function (v, i) {
+                  if (v._id === $scope.batch[0]['_id']) {
+                    $scope.assets.splice(i, 1);
+                  }
+                });
+                $scope.batch.forEach(function (v, i) {
+                  if (v._id === $scope.batch[0]['_id']) {
+                    $scope.batch.splice(i, 1);
+                  }
+              });
+              SweetAlert.swal("Saved!", "deleted.", "success");
+              angular.element('.modal.in').show();
+            }
+            else
+            {
+              SweetAlert.swal("Error!", "error deleting files.", "error");
+              angular.element('.modal.in').show();
+            }
+            $scope.selectModel.select_all = false;
+            $scope.singleSelected = false;
+          });
+        else
+        {
+          SweetAlert.swal("Error!", "No file found for deletion.", "error");
+          angular.element('.modal.in').show();
+        }
+      } else {
+        angular.element('.modal.in').show();
       }
-      $scope.selectModel.select_all = false;
-      $scope.singleSelected = false;
-    });
+    });    
   };
 
   $scope.m.editImage = function (asset) {

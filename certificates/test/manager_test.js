@@ -29,11 +29,12 @@ module.exports.group = {
         var self = this;
         self.log = log;
 
-        var domain = 'enduragive.org';
-        var certRef = 'co-e81b0b5cu';
+        var domain = 'pipeshift.com';
+        var certRef = 'co-191b0lj3d';
 
 
-        manager.addDomainToCert(domain, certRef, global_CSR, function(err, value){
+        manager.addDomainToCert(domain, certRef, function(err, value){
+        //manager.validateDomain(domain, certRef, function(err, value) {
             self.log.debug('err:', err);
             self.log.debug('value:', value);
             test.ok(value);
