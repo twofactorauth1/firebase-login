@@ -1,4 +1,4 @@
-.email-body, .email-body p, .email-body td > span, .email-body td > div > span, .email-body a {
+.email-body, .email-body td > span, .email-body td > div > span, .email-body a {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   color: #939597;
 }
