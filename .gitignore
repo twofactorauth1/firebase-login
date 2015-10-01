@@ -34,7 +34,8 @@ public/css/style.default.css
 
 configs/mongodb.config.js
 .kateproject*
-*.min.css
+public/css/**/*.min.css
+public/admin/assets/css/**/*.min.css
 
 
 tmp/1432022004448.png

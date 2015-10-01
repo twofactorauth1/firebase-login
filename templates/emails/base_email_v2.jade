@@ -9,6 +9,7 @@ html
       meta(http-equiv="X-UA-Compatible",content="IE=edge")
       //- link(rel='stylesheet', href='/public/admin/assets/css/styles.css')
       //- link(rel='stylesheet', href='/public/admin/assets/css/frontend-admin.css')
+      //- link(rel='stylesheet', href="//fonts.googleapis.com/css?family=Lato:300,400,400italic,600,700|Raleway:300,400,500,600,700|Crete+Round:400italic", type="text/css")
       link(rel='stylesheet', href='/public/admin/assets/css/email.css')
       style(type="text/css").
         body, div.body {
@@ -49,8 +50,16 @@ html
         td {
           /*display: table-cell;*/
         }
+
+      //- <!--[if gte mso 9]><!-->
+      //- | <style>
+      //- |   img {
+      //- |     border: 2px solid red;
+      //- |   }
+      //- | </style>
+      //- <!--<![endif]-->
   body
-    div(class="body", style='width: 100%; -webkit-text-size-adjust: 100% !important; -ms-text-size-adjust: 100% !important; margin: 0; padding: 0;')
+    div(class="body email-body", style='width: 100%; -webkit-text-size-adjust: 100% !important; -ms-text-size-adjust: 100% !important; margin: 0; padding: 0;')
       table(width='100%', align='center', cellpadding='0', cellspacing='0', border='0', style='border-collapse: collapse;')
         tr
           td
@@ -240,5 +249,33 @@ html
                 |         </td>
                 |     </tr>
                 | </table>
+              
+              if component.type === 'email-hr'
+                | <table class="email-component-container {{component.type}}-v{{component.version}}" align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
+                |     <tr>
+                |         <td>
+                |             <div class="hr"></div>
+                |         </td>
+                |     </tr>
+                | </table>
 
-
+              if component.type === 'email-social'
+                | <table class="email-component-container {{component.type}}-v{{component.version}}" align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
+                |     <tr>
+                |         <td>
+                |             <table align="center" border="0" cellpadding="0" cellspacing="0" width="640" id="templateColumns">
+                |                 <tr>
+                |                     <td align="center" width="100%" class="templateColumnContainer">
+                |                         <table border="0" cellpadding="10" cellspacing="0" width="100%">
+                |                             <tr>
+                |                                 <td valign="top" class="leftColumnContent">
+                |                                    !{component.text}
+                |                                 </td>
+                |                             </tr>
+                |                         </table>
+                |                     </td>
+                |                 </tr>
+                |             </table>
+                |         </td>
+                |     </tr>
+                | </table>
