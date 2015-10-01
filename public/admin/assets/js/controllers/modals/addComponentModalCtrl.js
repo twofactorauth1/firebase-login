@@ -258,20 +258,36 @@ app.controller('AddComponentModalCtrl', ['$scope', '$document', '$modalInstance'
       title: 'Content 1 Column',
       type: 'email-1-col',
       preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/blog.png',
-      filter: 'email',
+      filter: 'layout',
       description: 'Use this component for single column content.',
       enabled: true
-    }, {      title: 'Content 2 Column',
+    }, {
+      title: 'Content 2 Column',
       type: 'email-2-col',
       preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/blog.png',
-      filter: 'email',
+      filter: 'layout',
       description: 'Use this component for 2 column content.',
       enabled: true
-    }, {      title: 'Content 3 Column',
+    }, {
+      title: 'Content 3 Column',
       type: 'email-3-col',
       preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/blog.png',
-      filter: 'email',
+      filter: 'layout',
       description: 'Use this component for 3 column content.',
+      enabled: true
+    }, {
+      title: 'Social Links',
+      type: 'email-social',
+      preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/blog.png',
+      filter: 'social',
+      description: 'Use this component for social links.',
+      enabled: true
+    }, {
+      title: 'Horizontal Rule',
+      type: 'email-hr',
+      preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/blog.png',
+      filter: 'layout',
+      description: 'Use this component to insert a horizontal rule between components.',
       enabled: true
     }, {
       title: 'Footer',

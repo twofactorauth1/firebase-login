@@ -64,7 +64,9 @@ var component = $$.m.ModelBase.extend({
                     show: false
                 },
                 color : ""
-            }
+            },
+
+            spacing: {"pt":0,"pb":0,"pl":0,"pr":0,"mt":0,"mb":"0","mr":"auto","ml":"auto","mw":1024,"usePage":false}
 
         }
     },
@@ -84,6 +86,6 @@ var component = $$.m.ModelBase.extend({
 
 $$.m.cms = $$.m.cms || {};
 $$.m.cms.modules = $$.m.cms.modules || {};
-$$.m.cms.modules.Footer = component;
+$$.m.cms.modules.EmailHeader = component;
 
 module.exports = component;

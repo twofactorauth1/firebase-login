@@ -34,7 +34,7 @@ var component = $$.m.ModelBase.extend({
             /**
              * The type of component this is
              */
-            type: "email-1-col",
+            type: "email-social",
 
 
             /**
@@ -66,7 +66,9 @@ var component = $$.m.ModelBase.extend({
                 color : ""
             },
 
-            spacing: {"pt":0,"pb":0,"pl":0,"pr":0,"mt":0,"mb":"0","mr":"auto","ml":"auto","mw":1024,"usePage":false}
+            spacing: {"pt":0,"pb":0,"pl":0,"pr":0,"mt":0,"mb":"0","mr":"auto","ml":"auto","mw":1024,"usePage":false},
+
+            text: '<div style="text-align: center;"><br /><br /><span tabindex="-1" contenteditable="false" class="img-spanclass"><a href="http://twitter.com"><img data-widget="image" alt="" width="40" height="40" src="http://s3.amazonaws.com/indigenous-digital-assets/account_6/twitter_1443645294628.png" /></a><span title="Click and drag to resize">​</span></span>&nbsp;&nbsp;<span tabindex="-1" contenteditable="false" class="img-spanclass"><a href="http://plus.google.com"><img data-widget="image" alt="" width="40" height="40" src="//s3.amazonaws.com/indigenous-digital-assets/account_6/googleplus_1443645291540.png" /></a><span title="Click and drag to resize">​</span></span>&nbsp;&nbsp;<span tabindex="-1" contenteditable="false" class="img-spanclass"><a href="http://linkedin.com"><img data-widget="image" alt="" width="40" height="40" src="//s3.amazonaws.com/indigenous-digital-assets/account_6/linkedin_1443645293120.png" /></a><span title="Click and drag to resize">​</span></span>&nbsp;&nbsp;<span tabindex="-1" contenteditable="false" class="img-spanclass"><a href="http://facebook.com"><img data-widget="image" alt="" width="40" height="40" src="//s3.amazonaws.com/indigenous-digital-assets/account_6/facebook_1443645290644.png" /></a> <span title="Click and drag to resize">​</span></span></div><br /><br /><br />&nbsp;'
 
         }
     },
@@ -86,6 +88,6 @@ var component = $$.m.ModelBase.extend({
 
 $$.m.cms = $$.m.cms || {};
 $$.m.cms.modules = $$.m.cms.modules || {};
-$$.m.cms.modules.Email1Col = component;
+$$.m.cms.modules.EmailSocial = component;
 
 module.exports = component;
