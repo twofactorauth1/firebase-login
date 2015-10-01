@@ -7,7 +7,7 @@ app.directive('blogComponent', ['postsService', '$filter', '$location', '$timeou
     controller: function ($scope, postsService) {
       $scope.blog = {};
       $scope.showCloud = false;
-
+      $scope.component.spacing = $scope.$parent.defaultSpacings;
       var path = $location.$$path.replace('/page/', '');
 
       /*
