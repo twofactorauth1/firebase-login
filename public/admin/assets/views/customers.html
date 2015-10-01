@@ -111,6 +111,7 @@
                         <thead ng-class="{'bg-white': tableView == 'grid'}">
                             <tr>
                                 <th class="center" st-sort="photo" ng-show="column.photo" ng-class="{'column-width': tableView == 'grid'}">Photo</th>
+                                <th st-sort="_id" ng-show="column.name" ng-class="{'column-width': tableView == 'grid'}">ID</th>
                                 <th st-sort="first" ng-show="column.name" ng-class="{'column-width': tableView == 'grid'}">First Name</th>
                                 <th st-sort="last" ng-show="column.name" ng-class="{'column-width': tableView == 'grid'}">Last Name</th>
                                 <th st-sort="getters.tags" ng-show="column.tags" ng-class="{'column-width': tableView == 'grid'}">Tags</th>
@@ -134,6 +135,9 @@
                                             <small ng-bind-html="option.name | highlight: $select.search"></small>
                                         </ui-select-choices>
                                     </ui-select>
+                                </th>
+                                <th class="column-width" ng-show="column.name">
+                                    <input st-search="{{_id}}" placeholder="ID" class="form-control" type="search" />
                                 </th>
                                 <th class="column-width" ng-show="column.name">
                                     <input st-search="{{first}}" placeholder="First Name" class="form-control" type="search" />
@@ -173,6 +177,7 @@
                                 <td class="center" ng-show="column.photo">
                                     <img ng-src="{{ customer.photo }}" id="customer_photo_{{customer._id}}" err-src="" err-contact="customer" class="img-thumbnail screenshot" alt="image">
                                 </td>
+                                <td ng-show="column.name"><strong>ID: </strong>{{customer._id}}</td>
                                 <td ng-show="column.name"><strong>First Name: </strong> <span ng-text-truncate="customer.first" ng-tt-chars-threshold="15" ng-tt-no-toggling></span><span ng-if="!customer.first">--</span></td>
                                 <td ng-show="column.name"><strong>Last Name: </strong> <span ng-text-truncate="customer.last" ng-tt-chars-threshold="15" ng-tt-no-toggling></span><span ng-if="!customer.last">--</span></td>
                                 <td ng-show="column.tags"><strong>Tags: </strong>{{contactTags(customer) || '--'}}</td>
