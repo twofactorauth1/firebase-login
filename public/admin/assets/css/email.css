@@ -1,3 +1,7 @@
+.email-body, .email-body p, .email-body td > span, .email-body td > div > span {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
 .email-body .templateColumns {
   line-height: 100%;
 }
