@@ -1,5 +1,15 @@
-.email-body, .email-body p, .email-body td > span, .email-body td > div > span {
+.email-body, .email-body p, .email-body td > span, .email-body td > div > span, .email-body a {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color: #939597;
+}
+
+.email-body a, .email-body a:visited {
+  color: #fff;
+  text-decoration: none;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin-bottom: 0;
 }
 
 .email-body .templateColumns {
