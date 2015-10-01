@@ -16,7 +16,7 @@
     </ul>
 </div>
 
-<table ng-if="isEmail" class="device-width" align="center" width="680" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse;">
+<table ng-if="isEmail" class="device-width email-body" align="center" width="680" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse;">
 
     <tr ng-repeat="value in components" class="fragment show-settings {{value.type}}" style="position:relative;">
         <td style="position:relative;background:#ffffff;">
@@ -26,13 +26,15 @@
         </td>
     </tr>
 
-    <!-- <tr ng-if="!components.length">
-        <div class="well empty-page center">
-            <h1 >This Email is Empty.</h1>
-            <h4>Add some components and start editing!</h4>
-            <button class="btn btn-info margin-top-15" ng-click="openModal('add-component-modal', 'AddComponentModalCtrl', 0)">Add Component</button>
-        </div>
-        <div class="clearfix mb15"></div>
-    </tr> -->
+    <tr ng-if="!components.length">
+        <td>
+            <div class="well empty-page center">
+                <h1>This Email is Empty.</h1>
+                <h4>Add some components and start editing!</h4>
+                <button class="btn btn-info margin-top-15" ng-click="openModal('add-component-modal', 'AddComponentModalCtrl', 0)">Add Component</button>
+            </div>
+            <div class="clearfix mb15"></div>
+        </td>
+    </tr>
 
 </table>

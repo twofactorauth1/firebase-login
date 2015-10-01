@@ -34,7 +34,7 @@ var component = $$.m.ModelBase.extend({
             /**
              * The type of component this is
              */
-            type: "email-1-col",
+            type: "email-hr",
 
 
             /**
@@ -86,6 +86,6 @@ var component = $$.m.ModelBase.extend({
 
 $$.m.cms = $$.m.cms || {};
 $$.m.cms.modules = $$.m.cms.modules || {};
-$$.m.cms.modules.Email1Col = component;
+$$.m.cms.modules.EmailHr = component;
 
 module.exports = component;
