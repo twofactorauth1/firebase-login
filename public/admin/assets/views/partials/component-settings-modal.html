@@ -284,7 +284,7 @@
                         </div>
                     </div>
                 </tab>
-                <tab ng-if="!isEmail">
+                <tab ng-if="!isEmail" ng-hide="componentEditing.type === 'footer' || componentEditing.type === 'blog' || componentEditing.type === 'single-post'">
                     <tab-heading>
                         <span>Spacing</span>
                     </tab-heading>
