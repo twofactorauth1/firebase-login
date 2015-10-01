@@ -110,6 +110,7 @@ _.extend(api.prototype, baseApi.prototype, {
                     } else {
                         billingObj = _.extend(account.get('billing'), billingObj);
                         account.set('billing', billingObj);
+                        account.set('modified', {date:new Date(), by:userId});
                         accountDao.saveOrUpdate(account, function(err, updatedAccount){
                             if(err) {
                                 self.log.error('Exception updating billing object on account: ' + err);
