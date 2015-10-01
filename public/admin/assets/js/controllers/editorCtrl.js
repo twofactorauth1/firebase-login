@@ -17,6 +17,19 @@
 
     $scope.formValidations = formValidations;
 
+    $scope.defaultSpacings = {
+      'pt': 0,
+      'pb': 0,
+      'pl': 0,
+      'pr': 0,
+      'mt': 0,
+      'mb': 0,
+      'mr': 'auto',
+      'ml': 'auto',
+      'mw': '100%',
+      'usePage': false
+    };
+
     $scope.circleOptions = {
       isOpen: false,
       toggleOnClick: true,

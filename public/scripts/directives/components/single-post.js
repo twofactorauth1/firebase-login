@@ -5,6 +5,7 @@ app.directive('singlePostComponent', ['$location', 'accountService', 'postServic
     },
     templateUrl: '/components/component-wrap.html',
     link: function (scope, element, attrs) {
+      scope.component.spacing = scope.$parent.defaultSpacings;
       var _handle = $location.$$path.replace('/page', '').replace('/blog/', '');
       scope.blog = {};
       // If single-post page

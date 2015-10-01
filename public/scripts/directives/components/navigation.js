@@ -5,6 +5,8 @@ app.directive('navigationComponent', ['websiteService', 'accountService', '$time
     },
     templateUrl: '/components/component-wrap.html',
     controller: function ($scope, websiteService, accountService, $compile) {
+      if(!angular.isDefined($scope.component.shownavbox))
+        $scope.component.shownavbox = true;
       websiteService(function (err, website) {
         $scope.website = website;
         $timeout(function () {

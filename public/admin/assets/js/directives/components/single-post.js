@@ -8,6 +8,7 @@ app.directive('singlePostComponent', ['$location', "WebsiteService", "$timeout",
     },
     templateUrl: '/components/component-wrap.html',
     link: function (scope, element, attrs) {
+      scope.component.spacing = scope.$parent.defaultSpacings;
       scope.isEditing = true;
       scope.blog = {};
       scope.datePicker = {};
