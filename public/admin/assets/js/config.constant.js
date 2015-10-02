@@ -605,6 +605,7 @@ app.constant('JS_REQUIRES', {
     'mediaModalCtrl': 'assets/js/controllers/modals/mediaModalCtrl.js',
     'templateSettingsModalCtrl': 'assets/js/controllers/modals/templateSettingsModalCtrl.js',
     'importCustomerModalCtrl': 'assets/js/controllers/modals/importCustomerModalCtrl.js',
+    'onboardingCtrl': 'assets/js/controllers/onboardingCtrl.js',
 
     'asideCtrl': 'assets/js/controllers/asideCtrl.js',
     'toasterCtrl': 'assets/js/controllers/toasterCtrl.js',
