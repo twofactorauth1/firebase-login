@@ -8,7 +8,7 @@
   text-decoration: none;
 }
 
-h1, h2, h3, h4, h5, h6 {
+.email-body h1, .email-body h2, .email-body h3, .email-body h4, .email-body h5, .email-body h6 {
   margin-bottom: 0;
 }
 
@@ -39,13 +39,17 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 
+/*@media screen and (max-width: 400px) {
+  .templateColumnContainer {
+    display: block;
+    width: 100%;
+  }
+}*/
+
+
 /*
  * editor specific styles
  */
-/*[email-component] .container.inner-page {
-  margin-top: 50px;
-  padding-bottom: 45px;
-}*/
 .circular {
   display: none;
   visibility: none;
