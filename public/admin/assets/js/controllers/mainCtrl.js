@@ -24,6 +24,14 @@ app.controller('AppCtrl', ['$rootScope', '$scope', '$state', '$translate', '$loc
 
     var fullWidthPages = ['app.onboarding'];
 
+    $rootScope.$on('$stateChangeSuccess', function(e, current, pre) {
+      if (fullWidthPages.indexOf($state.current.name) > -1) {
+        $scope.hideSidebar = true;
+      } else {
+        $scope.hideSidebar = false;
+      }
+    });
+
     // Loading bar transition
     // -----------------------------------
     var $win = $($window);
