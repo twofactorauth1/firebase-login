@@ -344,6 +344,15 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
          $rootScope.breadcrumbTitle = undefined;
         },
         resolve: loadSequence('editorCtrl', 'userService', 'htmlToPlaintext', 'spectrum', 'ui.sortable', 'angular-slider', 'assetsService', 'toasterService', 'geocodeService', 'productService', 'paymentService', 'accountService', 'toTrusted', 'generateURLforLinks', 'truncate', 'ckeditor', 'ngSticky', 'slick', 'offset', 'jqcloud', 'jsVideoUrlParser', 'selectedTags', 'addComponentModalCtrl', 'componentSettingsModalCtrl', 'templateSettingsModalCtrl', 'googlePlaces', 'ngMap', 'campaignService', 'angularCircularNavigation')
+    }).state('app.onboarding', {
+        url: '/onboarding',
+        templateUrl: "assets/views/onboarding.html",
+        title: 'Onboarding',
+        icon: 'ti-layout-media-left-alt',
+        ncyBreadcrumb: {
+            label: 'Onboarding'
+        },
+        resolve: loadSequence('onboardingCtrl')
     })
 
     // Login routes
