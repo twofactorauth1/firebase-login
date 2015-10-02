@@ -1,21 +1,35 @@
-.templateColumns {
+.email-body, .email-body td > span, .email-body td > div > span, .email-body a {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color: #939597;
+}
+
+.email-body a, .email-body a:visited {
+  color: #fff;
+  text-decoration: none;
+}
+
+.email-body h1, .email-body h2, .email-body h3, .email-body h4, .email-body h5, .email-body h6 {
+  margin-bottom: 0;
+}
+
+.email-body .templateColumns {
   line-height: 100%;
 }
 
-.templateColumnContainer {
+.email-body .templateColumnContainer {
   /*display: block;*/
 }
 
-.email-component-container {
-  min-height: 150px
-  padding-bottom: 50px;
+.email-body .email-component-container {
+  min-height: 25px;
+  /*padding-bottom: 50px;*/
 }
 
-.ckeditor-button-wrap {
+.email-body .ckeditor-button-wrap {
   text-align: center;
 }
 
-hr {
+.email-body .hr {
   max-width: 600px;
   border: 0;
   height: 0;
@@ -25,10 +39,22 @@ hr {
 }
 
 
+/*@media screen and (max-width: 400px) {
+  .templateColumnContainer {
+    display: block;
+    width: 100%;
+  }
+}*/
+
+
 /*
  * editor specific styles
  */
-[email-component] .container.inner-page {
-  margin-top: 50px;
-  padding-bottom: 45px;
+.circular {
+  display: none;
+  visibility: none;
+}
+.fragment:hover .circular {
+  display: block;
+  visibility: visible;
 }

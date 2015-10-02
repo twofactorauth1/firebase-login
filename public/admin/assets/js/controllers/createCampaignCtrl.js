@@ -65,6 +65,11 @@
 
     $scope.emailToSend = {
       "title": "",
+      "type": "email",
+      "subject": "",
+      "fromName": "",
+      "fromEmail": "",
+      "replyTo": "",
       "components": [{
         "_id": CommonService.generateUniqueAlphaNumericShort(),
         "anchor": CommonService.generateUniqueAlphaNumericShort(),
@@ -72,9 +77,9 @@
         "version": 1,
         "txtcolor": "#888888",
         "logo": "<h2>Logo Here</h2>",
-        "title": "<h2 class='center'>New Email</h2>",
-        "subtitle": "subtitle",
-        "text": "This is your new email",
+        // "title": "<h2 class='center'>New Email</h2>",
+        // "subtitle": "subtitle",
+        // "text": "This is your new email",
         "from_email": "info@indigenous.io",
         "bg": {
           "img": {
@@ -94,10 +99,57 @@
         "type": "email-1-col",
         "version": 1,
         "txtcolor": "#888888",
-        "logo": "<h2>Logo Here</h2>",
-        "title": "<h2 class='center'>New Email</h2>",
-        "subtitle": "subtitle",
-        "text": "This is your new email",
+        // "logo": "<h2>Logo Here</h2>",
+        "title": '<h2 style="text-align:center;">One Column Layout Section</h2>',
+        // "subtitle": "subtitle",
+        "text": '<p style="text-align:center;">This is a single column content section.</p>',
+        "from_email": "info@indigenous.io",
+        "bg": {
+          "img": {
+            "url": "",
+            "width": null,
+            "height": null,
+            "parallax": false,
+            "blur": false
+          },
+          "color": ""
+        },
+        "visibility": true
+      },
+      {
+        "_id": CommonService.generateUniqueAlphaNumericShort(),
+        "anchor": CommonService.generateUniqueAlphaNumericShort(),
+        "type": "email-2-col",
+        "version": 1,
+        "txtcolor": "#888888",
+        "title": '<h2 style="text-align:center;">Two Column Layout Section</h2>',
+        // "subtitle": "subtitle",
+        "text1": '<p style="text-align:center;">This is column 1.</p>',
+        "text2": '<p style="text-align:center;">This is column 2.</p>',
+        "from_email": "info@indigenous.io",
+        "bg": {
+          "img": {
+            "url": "",
+            "width": null,
+            "height": null,
+            "parallax": false,
+            "blur": false
+          },
+          "color": ""
+        },
+        "visibility": true
+      },
+      {
+        "_id": CommonService.generateUniqueAlphaNumericShort(),
+        "anchor": CommonService.generateUniqueAlphaNumericShort(),
+        "type": "email-3-col",
+        "version": 1,
+        "txtcolor": "#888888",
+        "title": '<h2 style="text-align:center;">Three Column Layout Section</h2>',
+        // "subtitle": "subtitle",
+        "text1": '<p style="text-align:center;">This is column 1.</p>',
+        "text2": '<p style="text-align:center;">This is column 2.</p>',
+        "text3": '<p style="text-align:center;">This is column 3.</p>',
         "from_email": "info@indigenous.io",
         "bg": {
           "img": {
@@ -117,10 +169,10 @@
         "type": "email-footer",
         "version": 1,
         "txtcolor": "#888888",
-        "logo": "<h2>Logo Here</h2>",
-        "title": "<h2 class='center'>New Email</h2>",
-        "subtitle": "subtitle",
-        "text": "This is your new email",
+        // "logo": "<h2>Logo Here</h2>",
+        // "title": "<h2 class='center'>New Email</h2>",
+        // "subtitle": "subtitle",
+        "text": "This is an email footer.",
         "from_email": "info@indigenous.io",
         "bg": {
           "img": {
@@ -133,14 +185,7 @@
           "color": ""
         },
         "visibility": true
-      }],
-      "screenshot": "//indigenous-screenshots.s3.amazonaws.com/account_536/1432017910483.png",
-      "version": 0,
-      "latest": true,
-      "subject": "New Email",
-      "fromName": "",
-      "fromEmail": "",
-      "replyTo": ""
+      }]
     };
 
     $scope.component = $scope.emailToSend.components[0];

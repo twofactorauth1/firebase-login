@@ -42,6 +42,66 @@ var dao = {
                 fn(null, data);
             }
         });
+    },
+
+    addCNAMERecord: function(domain, name, value, fn) {
+        var self = this;
+        self.log.debug('>> addCNAMERecord');
+        var route53 = new AWS.Route53({
+            accessKeyId: awsConfigs.accessKeyId,
+            secretAccessKey: awsConfigs.secretAccessKey
+            //endpoint: awsConfigs.route53ZonesEndpoint,
+            //region: awsConfigs.route53Region
+        });
+        //get the hosted zone
+
+        self.log.debug('Route53:', route53);
+        route53.listHostedZones({}, function(err, data) {
+            if (err){
+                console.log(err, err.stack);
+                fn();
+            } else {
+
+                self.log.debug('Got this from the amazon:', data);
+                //data = JSON.parse(data);
+                self.log.debug('0', data.HostedZones[0]);
+                self.log.debug('0.name', data.HostedZones[0].Name);
+                var zone = _.find(data.HostedZones, function(zone){return zone.Name === domain+'.'});
+                self.log.debug('Is this your card?', zone);
+                if(zone) {
+                    var params = {
+                        "HostedZoneId": zone.Id, // our Id from the first call
+                        "ChangeBatch": {
+                            "Changes": [
+                                {
+                                    "Action": "CREATE",
+                                    "ResourceRecordSet": {
+                                        "Name": name,
+                                        "Type": "CNAME",
+                                        "TTL": 300,
+                                        "ResourceRecords": [
+                                            {
+                                                "Value": value
+                                            }
+                                        ]
+                                    }
+                                }
+                            ]
+                        }
+                    };
+
+                    route53.changeResourceRecordSets(params, function(err,data) {
+                        console.log(err,data);
+                        fn();
+                    });
+                } else {
+                    self.log.debug('No zone found');
+                    fn();
+                }
+
+            }
+
+        });
     }
 
 };

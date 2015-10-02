@@ -248,6 +248,69 @@ var dao = {
 
     },
 
+    requestValidation: function(ref, account_key, secret_key, domains, endpoint, fn) {
+        var self = this;
+        self.log.debug('>> requestValidation');
+        //minimal validation
+        if(!ref) {
+            return fn('ref must be specified');
+        }
+        if(!account_key) {
+            return fn('account_key must be specified');
+        }
+        if(!secret_key) {
+            return fn('secret_key must be specified');
+        }
+        if(!domains) {
+            return fn('domains must be specified');
+        }
+
+        var path = '/certificate/' + ref;
+        var _endpoint = endpoint;
+        if(!_endpoint) {
+            //figure out endpoint
+            if (process.env.NODE_ENV === "testing") {
+                _endpoint = sslDotComConfig.SSLDOTCOM_TEST_ENDPOINT;
+            } else {
+                //TODO: this needs to be the PROD endpoint
+                _endpoint = sslDotComConfig.SSLDOTCOM_TEST_ENDPOINT;
+            }
+        }
+        var body = {
+            account_key:account_key,
+            secret_key:secret_key,
+            domains:domains,
+            commit:'Validate'
+        };
+
+        var options = {
+            url: _endpoint+path,
+            json:true,
+            body:body,
+            headers: {
+                'Content-Type':'application/json'
+            }
+        };
+        request.put(options, function(err, response, _body){
+            if(err) {
+                self.log.debug('err: ', err);
+            }
+
+            //self.log.debug('response:', response);
+            try {
+                _body = JSON.parse(_body);
+            } catch(exception) {
+                self.log.debug('Could not parse body:', exception);
+            }
+            self.log.debug('_body:', _body);
+            var actualErrors = _body.errors;
+            self.log.error(actualErrors);
+            self.log.debug('<< requestValidation');
+            fn(err, _body);
+        });
+
+    },
+
     updateCertificate: function(ref, account_key, secret_key, csr, server_software, domains, organization,
         organization_unit, post_office_box, street_address_1, street_address_2, street_address_3, locality, state_or_province,
         postal_code, country, duns_number, company_number, joi, ca_certificate_id, external_order_number, hide_certificate_reference,
@@ -327,6 +390,8 @@ var dao = {
         }
         if(street_address_3) {
             body.street_address_3 = street_address_3;
+        } else {
+            body.street_address_3 = '';
         }
         if(locality) {
             body.locality = locality;
@@ -354,21 +419,17 @@ var dao = {
         }
 
         //adding dumb stuff for validation
-        //body.organization_name = 'organization_name';
-        //body.organization_unit_name = 'organization_unit_name';
-        //body.post_office_box = 'post_office_box';
-        //body.street_address_2 = 'street_address_2';
-        body.street_address_3 = 'street_address_3';
+
         body.locality_name = locality;
         body.state_or_province_name = state_or_province;
         body.country_name = country;
-        body.contacts.all.po_box = 'po_box';
-        body.contacts.all.address1 = 'address1';
-        body.contacts.all.address2 = 'address2';
-        body.contacts.all.address3 = 'address3';
-        body.contacts.all.city = 'city';
-        body.contacts.all.state = 'state';
-        body.contacts.all.postal_code = 'postal_code';
+        body.contacts.all.po_box = '';
+        body.contacts.all.address1 = '';
+        body.contacts.all.address2 = '';
+        body.contacts.all.address3 = '';
+        body.contacts.all.city = '';
+        body.contacts.all.state = '';
+        body.contacts.all.postal_code = '';
         body.contacts.all.ext = '';
         body.contacts.all.fax = '';
 
@@ -393,7 +454,10 @@ var dao = {
             }
         };
         request.put(options, function(err, response, _body){
-            self.log.debug('err: ', err);
+            if(err) {
+                self.log.debug('err: ', err);
+            }
+
             //self.log.debug('response:', response);
             try {
                 _body = JSON.parse(_body);
@@ -446,6 +510,11 @@ var dao = {
         request.get(options, function(err, response, _body){
             self.log.debug('err: ', err);
             //self.log.debug('response:', response);
+            try {
+                _body = JSON.parse(_body);
+            }catch(exception) {
+                self.log.warn('Error parsing body', exception);
+            }
             self.log.debug('_body:', _body);
             self.log.debug('<< getCertificateValidationMethods');
             fn(err, _body);

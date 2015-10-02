@@ -42,4 +42,7 @@
             </div>
         </div>
     </div>
+    <div ng-if="isEditing && component.teamMembers.length === 0" class="col-xs-12 text-center">
+        <a ng-click="addTeamMember(0)" class="btn btn-primary btn-lg btn-wide btn-o add-team-member"> <i class="fa fa-plus"></i> Add New Team Member</a>
+    </div>
 </div>

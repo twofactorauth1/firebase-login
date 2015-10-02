@@ -1091,9 +1091,6 @@ div[data-type="feature-list"] .inner-page {
   box-shadow: none;
   margin-bottom: 0px;
   min-height: 85px;
-  -webkit-box-shadow: 0px 1px 10px 0px rgba(0, 0, 0, 0.25);
-  -moz-box-shadow: 0px 1px 10px 0px rgba(0, 0, 0, 0.25);
-  box-shadow: 0px 1px 10px 0px rgba(0, 0, 0, 0.25);
   z-index: 999;
 }
 .navbar .navigation-logo.edit-wrap {
@@ -1102,6 +1099,11 @@ div[data-type="feature-list"] .inner-page {
 }
 .navbar .navigation-logo.edit-wrap div.editable {
   min-height: 100px;
+}
+.navbar-box {
+  -webkit-box-shadow: 0px 1px 10px 0px rgba(0, 0, 0, 0.25);
+  -moz-box-shadow: 0px 1px 10px 0px rgba(0, 0, 0, 0.25);
+  box-shadow: 0px 1px 10px 0px rgba(0, 0, 0, 0.25);
 }
 .navbar-brand {
   max-width: 100%!important;
@@ -1806,7 +1808,6 @@ div[data-type="feature-block"] .component-inner {
 }
 .meet-team-v3 .team-member .team-member-meta {
   background: #434951;
-  color: #fff;
   padding: 5px 10px;
   border-bottom-right-radius: 5px;
   border-bottom-left-radius: 5px;

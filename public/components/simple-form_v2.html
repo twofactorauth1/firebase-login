@@ -28,14 +28,19 @@
                 <input type="text" name="last" ng-model="user.last" class="form-control input-lg" placeholder="Last" required>
                 <p ng-show="simpleForm.last.$invalid && !simpleForm.last.$pristine" class="help-block">Enter a valid last name.</p>
             </div>
+             <!-- EXTENSION -->
+            <div class="form-group" ng-if="fieldShow('extension')" ng-class="{ 'has-error' : simpleForm.extension.$invalid && !simpleForm.extension.$pristine }">
+                <input type="text" ng-model-options="{ debounce: 800 }" name="extension" ng-model="user.extension" ng-pattern="formValidations.extension" class="form-control input-lg" placeholder="Extension" required>
+                <p ng-show="simpleForm.extension.$invalid && !simpleForm.extension.$pristine" class="help-block">Enter a valid extension.</p>
+            </div>
             <!-- PHONE -->
             <div class="form-group" ng-if="fieldShow('phone')" ng-class="{ 'has-error' : simpleForm.phone.$invalid && !simpleForm.phone.$pristine }">
-                <input type="text" ng-model-options="{ debounce: 800 }" name="phone" ng-model="user.phone" ng-pattern="phoneNumberPattern" class="form-control input-lg" placeholder="Phone" required>
+                <input type="text" ng-model-options="{ debounce: 800 }" name="phone" ng-model="user.phone" ng-pattern="formValidations.phone" class="form-control input-lg" placeholder="Phone" required>
                 <p ng-show="simpleForm.phone.$invalid && !simpleForm.phone.$pristine" class="help-block">Enter a valid phone number.</p>
             </div>
             <!-- EMAIL -->
             <div class="form-group" ng-class="{ 'has-error' : userExists || simpleForm.email.$invalid && !simpleForm.email.$pristine }">
-                <input type="email" ng-pattern="emailValidation" name="email" ng-model="user.email" class="form-control input-lg" placeholder="Email" ng-model-options="{ debounce: 800 }" required>
+                <input type="email" ng-pattern="formValidations.email" name="email" ng-model="user.email" class="form-control input-lg" placeholder="Email" ng-model-options="{ debounce: 800 }" required>
                 <p ng-if="simpleForm.email.$invalid && !simpleForm.email.$pristine && !userExists" class="help-block">Enter a valid email.</p>
                 <p ng-if="userExists" class="help-block">Email already exists.</p>
             </div>
@@ -44,7 +49,7 @@
                 <textarea class="form-control input-lg" name="message" placeholder="Message" rows="5" ng-model='user.message'></textarea>
             </div>
             <div class="form-group">
-                <button type="submit" class="btn btn-o btn-default btn-block" ng-disabled="simpleForm.$invalid">
+                <button type="submit" class="btn btn-default btn-block" ng-disabled="simpleForm.$invalid">
                     <span elem ng-model="component.submitBtn"></span>
                 </button>
             </div>

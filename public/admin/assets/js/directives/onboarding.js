@@ -129,7 +129,8 @@ app.directive('indigOnboarding', function ($rootScope, $location, $sce, $state, 
        */
 
       $scope.checkTaskStatus = function () {
-
+        //clear any toasters from previous page
+        toaster.clear('*');
         var _matchingTask = _.find($scope.onboardingStepMap, function (task) {
           return task.pane.state === $state.current.name;
         });
@@ -265,8 +266,8 @@ app.directive('indigOnboarding', function ($rootScope, $location, $sce, $state, 
        * - when the the location is changed on the same view
        */
 
-      $scope.$on("$locationChangeSuccess", function (event, current, previous) {
-        if (current.split('?')[0] === previous) {
+      var unbindChangeSuccess = $scope.$on("$locationChangeSuccess", function (event, current, previous) {        
+        if (current.split('?')[0] === previous && current !== previous) {
           $scope.stateOrLocationChanged();
         }
       });

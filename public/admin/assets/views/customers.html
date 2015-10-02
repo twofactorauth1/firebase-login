@@ -110,7 +110,8 @@
                     <table class="table table-hover bg-white" ng-class="{'grid': tableView == 'grid', 'bg-white': tableView == 'list'}" ng-show="displayedCustomers">
                         <thead ng-class="{'bg-white': tableView == 'grid'}">
                             <tr>
-                                <th class="center" st-sort="photo" ng-show="column.photo" ng-class="{'column-width': tableView == 'grid'}">Photo</th>
+                                <th st-sort="_id" ng-show="column.name" ng-class="{'column-width': tableView == 'grid'}">ID</th>
+                                <th><strong>Photo</strong></th>
                                 <th st-sort="first" ng-show="column.name" ng-class="{'column-width': tableView == 'grid'}">First Name</th>
                                 <th st-sort="last" ng-show="column.name" ng-class="{'column-width': tableView == 'grid'}">Last Name</th>
                                 <th st-sort="getters.tags" ng-show="column.tags" ng-class="{'column-width': tableView == 'grid'}">Tags</th>
@@ -122,6 +123,9 @@
                                 <!-- <th class="hidden-xs" st-sort="getters.modified" ng-show="column.modified">Modified</th> -->
                             </tr>
                             <tr ng-if="showFilter">
+                                <th class="column-width" ng-show="column.name">
+                                    <input st-search="{{_id}}" placeholder="ID" class="form-control" type="search" />
+                                </th>
                                 <th class="column-width" ng-show="column.photo">
                                     <input st-search="{{'hasPhoto'}}" placeholder="Select Photo" class="form-control hidden" type="search" id="searchPicture" ng-model="filterCustomer.photo.selected.value" />
                                     <ui-select ng-model="filterCustomer.photo.selected" on-select="triggerInput('#searchPicture')" theme="bootstrap">
@@ -170,6 +174,7 @@
                         </thead>
                         <tbody>
                             <tr ng-repeat="customer in displayedCustomers" ng-click="viewSingle(customer)">
+                                <td ng-show="column.name"><strong>ID: </strong>{{customer._id}}</td>
                                 <td class="center" ng-show="column.photo">
                                     <img ng-src="{{ customer.photo }}" id="customer_photo_{{customer._id}}" err-src="" err-contact="customer" class="img-thumbnail screenshot" alt="image">
                                 </td>

@@ -56,6 +56,10 @@
                                         <ul class="dropdown-menu">
                                             <li>
                                                 <span class="small">
+                                                <input type="checkbox" ng-model="column.order_id" ng-click="preventClick($event)" /> ID</span>
+                                            </li>
+                                            <li>
+                                                <span class="small">
                                                 <input type="checkbox" ng-model="column.photo" ng-click="preventClick($event)" /> Photo</span>
                                             </li>
                                             <li>
@@ -108,6 +112,7 @@
                     <table class="table table-hover bg-white margin-bottom-0" ng-class="{'grid': tableView == 'grid', 'bg-white': tableView == 'list'}" ng-show="orders">
                         <thead ng-class="{'bg-white': tableView == 'grid'}">
                             <tr>
+                                <th class="hidden-xs" ng-class="{'column-width': tableView == 'grid'}" st-sort="order_id">ID</th>
                                 <th class="center" ng-class="{'column-width': tableView == 'grid'}" st-sort="status">Status</th>
                                 <th ng-class="{'column-width': tableView == 'grid'}" st-sort="getters.customerName">Customer</th>
                                 <th class="hidden-xs center" ng-class="{'column-width': tableView == 'grid'}" st-sort="getters.line_items">Items</th>
@@ -116,6 +121,11 @@
                                 <th class="hidden-xs" ng-class="{'column-width': tableView == 'grid'}" st-sort="getters.modified">Modified</th>
                             </tr>
                             <tr ng-if="showFilter">
+                                <th class="column-width">
+                                    <div class="input-group">
+                                        <input st-search="order_id" placeholder="ID" class="form-control" type="search" />
+                                    </div>
+                                </th>
                                 <th class="column-width">
                                     <input st-search="status" placeholder="Status" class="form-control hidden" type="search" id="searchStatus" ng-model="filterorder.selected.value" />
                                     <ui-select ng-model="filterorder.selected" on-select="triggerInput('#searchStatus')" theme="bootstrap">
@@ -155,6 +165,7 @@
                         </thead>
                         <tbody>
                             <tr ng-repeat="order in displayedOrders" ng-click="viewSingle(order)">
+                                <td class="hidden-xs"><strong>ID: </strong> {{order.order_id}}</td>
                                 <td class="center"><strong>Status: </strong>
                                     <span class="fa-stack fa-lg">
                                         <span class="fa fa-circle-thin fa-stack-2x"

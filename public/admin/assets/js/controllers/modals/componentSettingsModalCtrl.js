@@ -812,7 +812,7 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
     icon: 'long-arrow-left'
   }];
 
-  $scope.resolutions = [320, 360, 480, 720, 768, 1024, 1280, 1360, 1366, 1440, 1600, 1680, 1920];
+  $scope.resolutions = [320, 360, 480, 720, 768, 1024, 1280, 1360, 1366, 1440, 1600, 1680, 1920, '100%'];
 
   /*
    * @editComponent
@@ -826,16 +826,22 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
       console.log('$scope.componentEditing.spacing', $scope.componentEditing.spacing);
       if (!$scope.componentEditing.spacing) {
         console.log('component editing doesnt have spacing');
+        var pt, pb = 50;
+        var mw = 1024;
+        if($scope.componentEditing.type === "contact-us" || $scope.componentEditing.type === "navigation"){
+          pt = pb = 0;
+          mw = "100%";
+        }
         $scope.componentEditing.spacing = {
-          'pt': 50,
-          'pb': 50,
+          'pt': pt,
+          'pb': pb,
           'pl': 0,
           'pr': 0,
           'mt': 0,
           'mb': 0,
           'mr': 'auto',
           'ml': 'auto',
-          'mw': 1024,
+          'mw': mw,
           'usePage': false
         };
       }

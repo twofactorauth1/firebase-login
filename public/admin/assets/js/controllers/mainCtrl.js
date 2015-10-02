@@ -22,6 +22,8 @@ app.controller('AppCtrl', ['$rootScope', '$scope', '$state', '$translate', '$loc
 
     });
 
+    var fullWidthPages = ['app.onboarding'];
+
     // Loading bar transition
     // -----------------------------------
     var $win = $($window);

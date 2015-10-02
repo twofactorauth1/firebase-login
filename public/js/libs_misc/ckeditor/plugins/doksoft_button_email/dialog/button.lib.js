@@ -43,7 +43,7 @@ var default_template = {
         border: [1, "c97e1c"],
         display: [],
         color: ["ffffff"],
-        fontFamily: ["Trebuchet MS"],
+        fontFamily: ["Arial"],
         fontSize: [17],
         fontWeight: [],
         fontStyle: ["normal"],
@@ -58,7 +58,7 @@ var default_template = {
         border: [0, "ffffff"],
         display: [],
         color: ["000000"],
-        fontFamily: ["Trebuchet MS"],
+        fontFamily: ["Arial"],
         fontSize: [17],
         padding: [0, 0],
         textDecoration: [],
@@ -92,8 +92,10 @@ _parent.doksoft_exampleButton = 0;
 _parent.doksoft_preview = 0;
 var fg = 0;
 _parent.doksoft_recalc = function(a) {
-	console.log(Object.keys(a));
-    _parent.doksoft_currentButtonStyles.innerHTML = ".myButton{\n" + _parent.doksoft_remix(a, "\n") + "\n}";
+    var colorRuleMatch = _parent.doksoft_remix(a).match(/\;color:[^;]*/g);
+    var colorStyle = colorRuleMatch.length ? colorRuleMatch[0] : '';
+	var cssRulesFormatted = _parent.doksoft_remix(a, "\n");
+    _parent.doksoft_currentButtonStyles.innerHTML = ".myButton{\n" + cssRulesFormatted + "\n}\n.myButton a {\n" + colorStyle + "\n}";
     clearTimeout(fg);
     fg = setTimeout(function() {
         _parent.doksoft_exampleButton.style.marginTop = (_parent.doksoft_preview.offsetHeight / 2 - _parent.doksoft_exampleButton.offsetHeight / 2) + "px";
@@ -179,11 +181,13 @@ _parent.doksoft_parse = function(a) {
     return f;
 };
 _parent.getResultButton = function() {
+    var colorRuleMatch = _parent.doksoft_remix(_parent._theme).match(/\;color:[^;]*/g);
+    var colorStyle = colorRuleMatch.length ? colorRuleMatch[0] : '';
     return 	'<div class="ckeditor-button-wrap" data-href="' + _("button-href").value + '" data-text-value="' + _("button-text").value + '" style="margin: 0; font-size: inherit;">' +
 	    		'<table align="center" style="width: 100%;" unselectable="on" contendeditable="false">' +
 	    			'<tr align="center" unselectable="on" contendeditable="false">' +
 		    			'<td style="' + _parent.doksoft_remix(_parent._theme) + '" class="myButton" unselectable="on" contendeditable="false">' + 
-		    				'<a style="text-decoration:none;color: inherit;" href="' + _("button-href").value + '">' + 
+		    				'<a style="text-decoration:none;' + colorStyle + ';" href="' + _("button-href").value + '">' + 
 		    					_("button-text").value + 
 		    				'</a>' +
 		    			'</td>' +
@@ -198,7 +202,7 @@ _parent.getResultButton = function() {
     var a = document.getElementsByTagName("input");
     a[a.length] = _("setting-fontFamily-1");
     _("button-text").onkeyup = _("button-text").onchange = function() {
-        _parent.doksoft_exampleButton.innerHTML = this.value;
+        _parent.doksoft_exampleButton.innerHTML = '<a href="javascript:void(0)" style="text-decoration:none;">'+this.value+'</a>';
     };
     _("button-href").onkeyup = _("button-href").onchange = function() {
         _parent.doksoft_exampleButton.setAttribute("href", this.value);

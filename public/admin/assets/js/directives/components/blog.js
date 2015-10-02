@@ -16,8 +16,8 @@ app.directive('blogComponent', ['$filter', '$timeout', 'WebsiteService', 'toaste
           blog: blog,
           index: index
         });
-      };
-
+    };
+    scope.component.spacing = scope.$parent.defaultSpacings; 
     scope.control.saveBlogData = function () {
       _.each(scope.blog.blogposts, function (value, index) {
           var matching_post = _.find(scope.originalBlogPosts, function (item) {
