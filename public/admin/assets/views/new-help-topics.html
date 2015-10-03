@@ -16,7 +16,7 @@
             <div class="row">
                 <div class="col-sm-8 col-sm-offset-2 margin-bottom-15 no-padding">
                     <label>Search</label>
-                    <input type="search" class="form-control input-lg" placeholder="Enter a keyword to search the help topics" ng-model="searchTextValue" />
+                    <input type="search" class="form-control input-lg" placeholder="Enter a keyword to search the help topics" ng-model="searchTextValue[searchTextValueBy]" />
                 </div>
             </div>
         </div>
@@ -26,7 +26,7 @@
                     <div class="col-sm-8 col-sm-offset-2">
                         <div class="row">
                             <div class="col-sm-6">
-                                <div class="margin-bottom-30" ng-repeat="catPane in panesByCat" ng-hide="(catPane|filter:searchTextValue).length == 0" ng-if="catPane[$index].category != 'Marketing' && catPane[$index].category != 'Website'">
+                                <div class="margin-bottom-30" ng-repeat="catPane in panesByCat | filter:searchTextValue" ng-hide="(catPane|filter:searchTextValue).length == 0" ng-if="catPane[$index].category != 'Marketing' && catPane[$index].category != 'Website'">
                                     <h5 class="over-title margin-bottom-5 text-bold"><span class="text-bold">{{catPane[0].category}}</span></h5>
                                     <hr class="margin-top-0">
                                     <ul class="unstyled-list padding-left-0 cl-effect-1">

@@ -3,6 +3,9 @@
 (function (angular) {
   app.controller('NewHelpTopicsCtrl', ["$scope", "WebsiteService", "$location", "$sce", function ($scope, WebsiteService, $location, $sce) {
 
+    $scope.searchTextValue = {};
+    $scope.searchTextValueBy = '$';
+
     $scope.panesByCat = {
       account: [],
       billing: [],
