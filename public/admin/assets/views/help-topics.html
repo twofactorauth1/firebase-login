@@ -30,7 +30,7 @@
                                     <h5 class="over-title margin-bottom-5 text-bold"><span class="text-bold">{{catPane[0].category}}</span></h5>
                                     <hr class="margin-top-0">
                                     <ul class="unstyled-list padding-left-0 cl-effect-1">
-                                        <li ng-repeat="pane in catPane | filter:searchTextValue" class="margin-bottom-5"><a href="#" ng-click="viewSingle(pane)"><span class="fa fa-play-circle-o" ng-if="pane.components[1].visibility == true"></span> {{pane.title}}</a></li>
+                                        <li ng-repeat="pane in catPane | filter:searchTextValue" class="margin-bottom-5"><a href="#" ng-click="viewSingle(pane)" tooltip-placement="top" tooltip="{{pane.title}}" tooltip-enable="isMoreThan50Char(pane.title)"><span ng-text-truncate="pane.title" ng-tt-chars-threshold="50" ng-tt-no-toggling></span></a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -40,7 +40,7 @@
                                     <h5 class="over-title margin-bottom-5 text-bold"><span class="text-bold">{{catPane[0].category}}</span></h5>
                                     <hr class="margin-top-0">
                                     <ul class="unstyled-list padding-left-0 cl-effect-1">
-                                        <li ng-repeat="pane in catPane | filter:searchTextValue" class="margin-bottom-5"><a href="#" ng-click="viewSingle(pane)">{{pane.title}}</a></li>
+                                        <li ng-repeat="pane in catPane | filter:searchTextValue" class="margin-bottom-5"><a href="#" ng-click="viewSingle(pane)" tooltip-placement="top" tooltip="{{pane.title}}" tooltip-enable="isMoreThan50Char(pane.title)"><span ng-text-truncate="pane.title" ng-tt-chars-threshold="50" ng-tt-no-toggling></span></a></li>
                                     </ul>
                                 </div>
                             </div>

@@ -25,6 +25,12 @@
       'social-feed': []
     };
 
+    $scope.isMoreThan50Char = function (word) {
+      if (word.length > 50) {
+        return true;
+      }
+    };
+
     WebsiteService.getTopics(function (topics) {
       console.log('topics ', topics);
       $scope.topics = topics;
