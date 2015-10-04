@@ -26,7 +26,7 @@
                     <div class="col-sm-8 col-sm-offset-2">
                         <div class="row">
                             <div class="col-sm-6">
-                                <div class="margin-bottom-30" ng-repeat="catPane in panesByCat | filter:searchTextValue" ng-hide="(catPane|filter:searchTextValue).length == 0" ng-if="catPane[0].category != 'Marketing' && catPane[0].category != 'Website'">
+                                <div class="margin-bottom-30" ng-repeat="catPane in panesByCat | filter:searchTextValue" ng-hide="(catPane|filter:searchTextValue).length == 0" ng-if="catPane[0].category != 'Account' && catPane[0].category != 'Billing' && catPane[0].category != 'Contacts', && catPane[0].category != 'Emails'">
                                     <h5 class="over-title margin-bottom-5 text-bold"><span class="text-bold">{{catPane[0].category}}</span></h5>
                                     <hr class="margin-top-0">
                                     <ul class="unstyled-list padding-left-0 cl-effect-1">
@@ -36,7 +36,7 @@
                             </div>
 
                             <div class="col-sm-6">
-                                <div class="margin-bottom-30" ng-repeat="catPane in panesByCat | filter:searchTextValue" ng-hide="(catPane|filter:searchTextValue).length == 0" ng-if="catPane[0].category == 'Marketing' || catPane[0].category == 'Website'">
+                                <div class="margin-bottom-30" ng-repeat="catPane in panesByCat | filter:searchTextValue" ng-hide="(catPane|filter:searchTextValue).length == 0" ng-if="catPane[0].category == 'Account' || catPane[0].category == 'Billing' || catPane[0].category == 'Contacts' || catPane[0].category == 'Emails'">
                                     <h5 class="over-title margin-bottom-5 text-bold"><span class="text-bold">{{catPane[0].category}}</span></h5>
                                     <hr class="margin-top-0">
                                     <ul class="unstyled-list padding-left-0 cl-effect-1">
