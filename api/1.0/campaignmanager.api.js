@@ -24,10 +24,12 @@ _.extend(api.prototype, baseApi.prototype, {
         app.post(this.url('campaign/:id/contact/:contactid'), this.addContactToCampaign.bind(this));
         app.delete(this.url('campaign/:id'), this.cancelCampaign.bind(this));
         app.delete(this.url('campaign/:id/contact/:contactid'), this.cancelContactCampaign.bind(this));
+        app.get(this.url('campaign/:id/contacts'), this.getContactsForCampaign.bind(this));
         app.get(this.url('campaigns'), this.findCampaigns.bind(this));
         app.get(this.url('campaign/:id/messages'), this.findCampaignMessages.bind(this));
         app.get(this.url('campaign/:id'), this.getCampaign.bind(this));
         app.get(this.url('campaigns/:id/pages'), this.setup.bind(this), this.getPagesWithCampaign.bind(this));
+
         //pipeshift
         app.post(this.url('pipeshift/courses/:courseId/subscribe'), this.subscribeToVARCourse.bind(this));
         app.post(this.url('courses/:id/subscribe'), this.subscribeToVARCourse.bind(this));//better URL
@@ -188,6 +190,18 @@ _.extend(api.prototype, baseApi.prototype, {
                     self.sendResult(resp, value);
                 }
             })
+    },
+
+    getContactsForCampaign: function(req, resp) {
+        var self = this;
+        self.log.debug('>> getContactsForCampaign');
+
+        var campaignId = req.params.id;
+                
+        campaignManager.getContactsForCampaign(campaignId, function(err, pages){
+            self.log.debug('<< getContactsForCampaign');
+            self.sendResultOrError(resp, err, pages, 'Error getting pages');
+        });
     },
 
     getPagesWithCampaign: function(req, resp) {

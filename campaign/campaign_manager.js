@@ -613,8 +613,55 @@ module.exports = {
         });
     },
 
-    getContactsForCampaign: function(campaignId) {
-        //TODO: best way to follow DAO convention?
+    getContactsForCampaign: function(campaignId, fn) {
+        var self = this;
+        var query = { 
+            campaignId: campaignId
+        };
+
+        self.log.debug('>> getContactsForCampaign');
+        
+        async.waterfall([
+            function(callback){
+                campaignDao.findMany(query, $$.m.CampaignFlow, function(err, value){
+                    if(err) {
+                        self.log.error('Error finding campaign flow: ' + err);
+                        return callback(err, null);
+                    } else {
+                        return callback(null, value)
+                    }
+                })
+            },
+            function(flows, callback){
+                var query = { accountId: accountId, "details.type": socialType, "details.socialId": { $in: socialIds} };
+                this.findMany(query, fn);
+            },
+
+        // campaignDao.findMany(query, $$.m.CampaignFlow, function(err, value){
+        //     if(err) {
+        //         self.log.error('Error finding campaign flow: ' + err);
+        //         return fn(err, null);
+        //     } else {
+        //         var flows = value;
+                flows.forEach(function (flow) {
+                    var contactId = flow.get('contactId');
+                    contactDao.getById(contactId, $$.m.Contact, function(err, contact){
+                        if(err) {
+                            self.log.error('Error getting contact from flow: ' + err);
+                            // return fn(err, null);
+                        } else if(contact === null) {
+                            self.log.debug('>> contact === null ', contact);
+                            self.log.error('Could not find contact for contactId: ' + contactId);
+                            //return fn('Could not find contact for contactId: ' + campaignFlow.get('contactId'), null);
+                        } else {
+                            //return fn(null, contact)
+                            contacts.push(contact);
+                        }
+                    });
+                });
+                return fn(null, contacts);
+            }
+        });
     },
 
     getRunningCampaign: function(accountId, runningCampaignId, fn) {
