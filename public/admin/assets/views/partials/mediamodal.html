@@ -68,6 +68,9 @@
                                         <a href="#" ng-click="m.editImage(asset)"><i class="fa fa-pencil"></i> Edit</a>
                                     </li>
                                     <li>
+                                        <a clipboard text="'https:' + asset.url" on-copied="successCopy()"><i class="fa fa-link"></i> Copy Link</a>
+                                    </li>
+                                    <li>
                                         <a href="{{asset.url}}" download><i class="fa fa-download"></i> Download</a>
                                     </li>
                                     <li>

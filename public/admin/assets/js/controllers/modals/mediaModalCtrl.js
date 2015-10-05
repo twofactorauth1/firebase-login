@@ -20,6 +20,10 @@ app.controller('MediaModalCtrl', ['$scope', '$modalInstance', '$http', '$timeout
     }
   });
 
+  $scope.successCopy = function () {
+      ToasterService.show('success', 'Successfully copied text to your clipboard! Now just paste it wherever you would like.');
+  };
+
   /*
    * @closeModal
    * -

@@ -803,5 +803,8 @@ app.constant('JS_REQUIRES', {
   }, {
     name: 'angular-resizable',
     files: ['../js/libs/angular-resizable/angular-resizable.min.js', '../js/libs/angular-resizable/angular-resizable.min.css'],
+  }, {
+    name: 'angular-clipboard',
+    files: ['../js/libs/angular-clipboard/angular-clipboard.js'],
   }]
 });
