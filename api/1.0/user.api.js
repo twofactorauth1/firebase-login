@@ -21,6 +21,9 @@ var contactDao = require('../../dao/contact.dao');
 var appConfig = require('../../configs/app.config');
 var orderManager = require('../../orders/order_manager');
 var campaignManager = require('../../campaign/campaign_manager');
+var Closeio = require('close.io');
+
+var closeio = new Closeio("e349a7ec2fcc8370231d85455f21ea3b405e9220d926e2dccfc0e34f");
 
 var api = function() {
     this.init.apply(this, arguments);
@@ -270,6 +273,43 @@ _.extend(api.prototype, baseApi.prototype, {
 
     },
 
+    updateCloseIo: function(type, contact, account) {
+        if (type === 'create') {
+            var newuser = {
+                "name": contact.get('first')+contact.get('last'),
+                "url": account.get('accountUrl'),
+                "description": "",
+                "contacts": [
+                    {
+                        "name": contact.get('first')+contact.get('last'),
+                        "title": "",
+                        "emails": [
+                            {
+                                "type": "office",
+                                "email": contact.get('email')
+                            }
+                        ],
+                        "phones": [
+                            {
+                                "type": "office",
+                                "phone": contact.get('phone')
+                            }
+                        ]
+                    }
+                ]
+                // "custom": {
+                //     "Source": "Website contact form",
+                //     "Transportation": "Segway",
+                //     "lcf_v6S011I6MqcbVvB2FA5Nk8dr5MkL8sWuCiG8cUleO9c": "Real Estate"
+                // }
+            };
+            closeio.lead.create(newuser).then(function(lead){
+              // return closeio.lead.read(lead.id);
+            });
+        }
+
+    },
+
     initializeUserAndAccount: function(req, res) {
         var self = this, user, accountToken, deferred;
         self.log.debug('>> initializeUserAndAccount');
@@ -472,6 +512,8 @@ _.extend(api.prototype, baseApi.prototype, {
                             } else {
                                 self.log.debug('Created customer for user:' + user.id());
 
+                                self.updateCloseIo('create', user, account);
+
                                 userManager.sendWelcomeEmail(accountId, account, user, email, username, contact.id(), function(){
                                     self.log.debug('Sent welcome email');
                                 });
@@ -530,6 +572,7 @@ _.extend(api.prototype, baseApi.prototype, {
                                         self.log.debug('Admin user added to account ' + accountId);
                                     }
                                 });
+
                             }
                         });
                         self.log.debug('<< initalizeUserAndAccount: ', json);
