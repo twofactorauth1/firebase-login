@@ -832,7 +832,7 @@ module.exports = {
                         nextStep = steps[i];
                     }
                     if(!nextStep) {
-                        callback(null, null, i);
+                        return callback(null, null, i);
                     }
                     if(nextStep && nextStep.trigger === trigger) {
                         nextStep.triggered = new Date();
