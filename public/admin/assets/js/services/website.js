@@ -465,7 +465,16 @@
         data: angular.toJson(emaildata)
       }).success(function (data, status, headers, config) {
         var _emails = emailcache.get('emails');
-        emailcache.put('emails', _emails);
+          if (_emails) {
+              var updatedEmail = _.find(_emails, function (_email) {
+                return _email._id === data._id;
+              });
+              if(updatedEmail) {
+                var _emailIndex  = _.indexOf(_emails, updatedEmail);
+                _emails[_emailIndex] = data;
+              } 
+            emailcache.put('emails', _emails);
+          }
         fn(data, null);
       }).error(function (err) {
         console.warn('END:Create Email with ERROR');
