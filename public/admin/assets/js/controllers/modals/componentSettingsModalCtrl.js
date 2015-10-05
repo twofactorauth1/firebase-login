@@ -959,9 +959,12 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
       }
     });
 
-    $timeout(function () {
-      $rootScope.$broadcast('rzSliderForceRender');
-    }, 1000);
+
+    $modalInstance.opened.then(function(){     
+      $timeout(function () {
+        $rootScope.$broadcast('rzSliderForceRender');
+      }, 1000);
+    });
   };
 
 
