@@ -84,6 +84,7 @@
     $scope.closeModal = function () {
       $scope.modalInstance.close();
       $scope.resetTemplateDetails();
+      $scope.createpage = {};
     };
 
 
