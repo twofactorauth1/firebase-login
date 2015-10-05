@@ -21,9 +21,16 @@ var contactDao = require('../../dao/contact.dao');
 var appConfig = require('../../configs/app.config');
 var orderManager = require('../../orders/order_manager');
 var campaignManager = require('../../campaign/campaign_manager');
-var Closeio = require('close.io');
+var moment = require('moment');
 
+var Closeio = require('close.io');
 var closeio = new Closeio("e349a7ec2fcc8370231d85455f21ea3b405e9220d926e2dccfc0e34f");
+
+var Intercom = require('intercom.io');
+var intercom = new Intercom({
+  apiKey: "7eabdca2faff0115dcf9cf316078617cf707b0ad",
+  appId: "b3st2skm"
+});
 
 var api = function() {
     this.init.apply(this, arguments);
@@ -273,38 +280,57 @@ _.extend(api.prototype, baseApi.prototype, {
 
     },
 
-    updateCloseIo: function(type, contact, account) {
+    updateLead: function(type, contact, account, fn) {
+        var self = this;
         if (type === 'create') {
-            var newuser = {
-                "name": contact.get('first')+contact.get('last'),
-                "url": account.get('accountUrl'),
-                "description": "",
-                "contacts": [
-                    {
-                        "name": contact.get('first')+contact.get('last'),
-                        "title": "",
-                        "emails": [
-                            {
-                                "type": "office",
-                                "email": contact.get('email')
-                            }
-                        ],
-                        "phones": [
-                            {
-                                "type": "office",
-                                "phone": contact.get('phone')
-                            }
-                        ]
+            intercom.getUser({
+              "email" : contact.attributes.email
+            }, function(err, intercomData) {
+            
+                var newuser = {
+                    "name": contact.attributes.first+' '+contact.attributes.last,
+                    "url": account.attributes.subdomain+'.indigenous.io',
+                    "contacts": [
+                        {
+                            "name": contact.attributes.first+' '+contact.attributes.last,
+                            "title": "",
+                            "emails": [
+                                {
+                                    "type": "office",
+                                    "email": contact.attributes.email
+                                }
+                            ]
+                        }
+                    ],
+                    "custom": {
+                        "Intercom Chat": "https://app.intercom.io/a/apps/b3st2skm/users/"+intercomData.id,
+                        "Account URL": account.attributes.subdomain+'.indigenous.io',
+                        "Account ID": account.attributes._id,
+                        "User ID": contact.attributes._id,
+                        "Signup Date": account.attributes.billing.signupDate
                     }
-                ]
-                // "custom": {
-                //     "Source": "Website contact form",
-                //     "Transportation": "Segway",
-                //     "lcf_v6S011I6MqcbVvB2FA5Nk8dr5MkL8sWuCiG8cUleO9c": "Real Estate"
-                // }
-            };
-            closeio.lead.create(newuser).then(function(lead){
-              // return closeio.lead.read(lead.id);
+                };
+                closeio.lead.create(newuser).then(function(lead){
+                    var newop = {
+                        "note": "",
+                        "confidence": 50,
+                        "lead_id": lead.id,
+                        "status_id": "stat_qfQbJm5FjlvX6S6tnVSmmbmyg2bQklS9JW4XzF53N2j",
+                        "value": 4995,
+                        "date_won": moment(new Date()).add(14, 'days').format('YYYY-M-D'),
+                        "value_period": "monthly"
+                    };
+                    closeio.opportunity.create(newop).then(function(lead){
+                        intercom.updateUser({
+                          "email" : contact.attributes.email,
+                          "custom_attributes" : {
+                            "close_lead_id" : lead.id
+                          }
+                        }, function(err, res) {
+                            fn();
+                        });
+                    });
+                });
             });
         }
 
@@ -512,65 +538,66 @@ _.extend(api.prototype, baseApi.prototype, {
                             } else {
                                 self.log.debug('Created customer for user:' + user.id());
 
-                                self.updateCloseIo('create', user, account);
+                                self.updateLead('create', user, account, function() {
 
-                                userManager.sendWelcomeEmail(accountId, account, user, email, username, contact.id(), function(){
-                                    self.log.debug('Sent welcome email');
-                                });
+                                    userManager.sendWelcomeEmail(accountId, account, user, email, username, contact.id(), function(){
+                                        self.log.debug('Sent welcome email');
+                                    });
 
-                                 /*
-                                 * If there is a campaign associated with this new user, update it async.
-                                 */
-                                if(campaignId) {
-                                    self.log.debug('Updating campaign with id: ' + campaignId);
-                                    campaignManager.handleCampaignSignupEvent(appConfig.mainAccountID, campaignId, contact.id(), function(err, value){
-                                        if(err) {
-                                            self.log.error('Error handling campaign signup: ' + err);
-                                        } else {
-                                            self.log.debug('Handled signup.');
+                                     /*
+                                     * If there is a campaign associated with this new user, update it async.
+                                     */
+                                    if(campaignId) {
+                                        self.log.debug('Updating campaign with id: ' + campaignId);
+                                        campaignManager.handleCampaignSignupEvent(appConfig.mainAccountID, campaignId, contact.id(), function(err, value){
+                                            if(err) {
+                                                self.log.error('Error handling campaign signup: ' + err);
+                                            } else {
+                                                self.log.debug('Handled signup.');
+                                            }
+                                        });
+                                    }
+
+                                    var activity = new $$.m.ContactActivity({
+                                        accountId: appConfig.mainAccountID,
+                                        contactId: contact.id(),
+                                        activityType: $$.m.ContactActivity.types.SUBSCRIBE,
+                                        detail : "Subscribed to Indigenous",
+                                        start: new Date(),
+                                        extraFields: {
+                                            plan: plan,
+                                            setupFee: setupFee,
+                                            coupon: coupon,
+                                            amount: (sub.plan.amount / 100),
+                                            plan_name: sub.plan.name
                                         }
                                     });
-                                }
-
-                                var activity = new $$.m.ContactActivity({
-                                    accountId: appConfig.mainAccountID,
-                                    contactId: contact.id(),
-                                    activityType: $$.m.ContactActivity.types.SUBSCRIBE,
-                                    detail : "Subscribed to Indigenous",
-                                    start: new Date(),
-                                    extraFields: {
-                                        plan: plan,
-                                        setupFee: setupFee,
-                                        coupon: coupon,
-                                        amount: (sub.plan.amount / 100),
-                                        plan_name: sub.plan.name
+                                    contactActivityManager.createActivity(activity, function(err, value){});
+                                    self.log.debug('creating Order for main account');
+                                    if(sub.id !=='NOSUBSCRIPTION') {
+                                        paymentsManager.getInvoiceForSubscription(stripeCustomerId, subId, null, function(err, invoice){
+                                            if(err) {
+                                                self.log.error('Error getting invoice for subscription: ' + err);
+                                            } else {
+                                                orderManager.createOrderFromStripeInvoice(invoice, appConfig.mainAccountID, contact.id(), function(err, order){
+                                                    if(err) {
+                                                        self.log.error('Error creating order for invoice: ' + err);
+                                                    } else {
+                                                        self.log.debug('Order created.');
+                                                    }
+                                                });
+                                            }
+                                        });
                                     }
-                                });
-                                contactActivityManager.createActivity(activity, function(err, value){});
-                                self.log.debug('creating Order for main account');
-                                if(sub.id !=='NOSUBSCRIPTION') {
-                                    paymentsManager.getInvoiceForSubscription(stripeCustomerId, subId, null, function(err, invoice){
+
+                                    self.log.debug('Adding the admin user to the new account');
+                                    userManager.addUserToAccount(accountId, 1, ["super","admin","member"], 1, function(err, value){
                                         if(err) {
-                                            self.log.error('Error getting invoice for subscription: ' + err);
+                                            self.log.error('Error adding admin user to account:', err);
                                         } else {
-                                            orderManager.createOrderFromStripeInvoice(invoice, appConfig.mainAccountID, contact.id(), function(err, order){
-                                                if(err) {
-                                                    self.log.error('Error creating order for invoice: ' + err);
-                                                } else {
-                                                    self.log.debug('Order created.');
-                                                }
-                                            });
+                                            self.log.debug('Admin user added to account ' + accountId);
                                         }
                                     });
-                                }
-
-                                self.log.debug('Adding the admin user to the new account');
-                                userManager.addUserToAccount(accountId, 1, ["super","admin","member"], 1, function(err, value){
-                                    if(err) {
-                                        self.log.error('Error adding admin user to account:', err);
-                                    } else {
-                                        self.log.debug('Admin user added to account ' + accountId);
-                                    }
                                 });
 
                             }
