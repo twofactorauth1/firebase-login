@@ -822,6 +822,7 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
   $scope.editComponent = function () {
 
     if ($scope.componentEditing) {
+
       var componentType;
       console.log('$scope.componentEditing.spacing', $scope.componentEditing.spacing);
       if (!$scope.componentEditing.spacing) {
@@ -845,6 +846,13 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
           'usePage': false
         };
       }
+
+      if($scope.componentEditing.bg && !angular.isDefined($scope.componentEditing.bg.opacity))
+        $scope.componentEditing.bg.opacity = 1;
+
+      if($scope.componentEditing.bg && $scope.componentEditing.bg.img && !angular.isDefined($scope.componentEditing.bg.img.overlayopacity))
+        $scope.componentEditing.bg.img.overlayopacity = 1;
+
 
       if ($scope.componentEditing.type === 'navigation') {
         componentType = _.findWhere($scope.componentTypes, {
@@ -888,6 +896,9 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
 
     if ($scope.componentEditing.type === "contact-us") {
       $scope.hours = hoursConstant;
+      if(!angular.isDefined($scope.componentEditing.boxOpacity)){
+        $scope.componentEditing.boxOpacity = 1;
+      }     
 
       $scope.place.address = GeocodeService.stringifyAddress($scope.componentEditing.location);
       $scope.originalContactMap = angular.copy($scope.componentEditing.location);
@@ -947,6 +958,9 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
         $scope.featureIcon.icon = e.icon;
       }
     });
+    setTimeout(function () {
+        $scope.refreshSlider();
+    }, 0);
   };
 
 
