@@ -1341,7 +1341,7 @@
         }
       }
       var redirectUrl = url;
-      if($scope.post_blog_page)
+      if($scope.post_blog_page && !$scope.isSinglePost)
         redirectUrl = "/admin/#/website/posts";
       if (!redirectUrl) {
         if($scope.isEmail)
