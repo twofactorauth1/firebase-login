@@ -605,6 +605,7 @@ app.constant('JS_REQUIRES', {
     'mediaModalCtrl': 'assets/js/controllers/modals/mediaModalCtrl.js',
     'templateSettingsModalCtrl': 'assets/js/controllers/modals/templateSettingsModalCtrl.js',
     'importCustomerModalCtrl': 'assets/js/controllers/modals/importCustomerModalCtrl.js',
+    'onboardingCtrl': 'assets/js/controllers/onboardingCtrl.js',
 
     'asideCtrl': 'assets/js/controllers/asideCtrl.js',
     'toasterCtrl': 'assets/js/controllers/toasterCtrl.js',
@@ -802,5 +803,8 @@ app.constant('JS_REQUIRES', {
   }, {
     name: 'angular-resizable',
     files: ['../js/libs/angular-resizable/angular-resizable.min.js', '../js/libs/angular-resizable/angular-resizable.min.css'],
+  }, {
+    name: 'angular-clipboard',
+    files: ['../js/libs/angular-clipboard/angular-clipboard.js'],
   }]
 });

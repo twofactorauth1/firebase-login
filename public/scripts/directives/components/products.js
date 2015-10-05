@@ -25,7 +25,15 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
        */
 
       function filterTags(_product) {
+        var regex = new RegExp("[\\?&]tags=([^&#]*)");
         var _tags = scope.component.productTags;
+
+        // If additional tags were passed on the URI ('-' delimited), parse and union w/ _product.tags
+        var _dynamicTag = regex.exec(location.search);
+        if (_dynamicTag && _dynamicTag.length > 1) {
+          _tags = _.union(_tags, _dynamicTag[1].split("-"));
+        }
+
         if (_tags && _tags.length > 0) {
           if (_product.tags) {
             if (_.intersection(_tags, _product.tags).length > 0) {

@@ -31,7 +31,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
     $stateProvider.state('app', {
         url: "",
         templateUrl: "assets/views/app.html",
-        resolve: loadSequence('modernizr', 'underscore', 'moment', 'angularMoment', 'uiSwitch', 'perfect-scrollbar-plugin', 'toaster', 'ngAside', 'vAccordion', 'chartjs', 'tc.chartjs', 'oitozero.ngSweetAlert', 'chatCtrl', 'smart-table', 'touchspin-plugin', 'slugifier', 'commonService', 'timeAgoFilter','angularFileUpload', 'ngTextTruncate', 'infinite-scroll', 'ui.select', 'blueimp', 'ngTagsInput', 'titleCase', 'bootstrap-confirmation', 'ladda', 'angular-ladda', 'uuid', 'formatText', 'asideCtrl', 'settingsCtrl', 'assetsService', 'mediaModalCtrl', 'xeditable', 'angular-percentage-filter'),
+        resolve: loadSequence('modernizr', 'underscore', 'moment', 'angularMoment', 'uiSwitch', 'perfect-scrollbar-plugin', 'toaster', 'ngAside', 'vAccordion', 'chartjs', 'tc.chartjs', 'oitozero.ngSweetAlert', 'chatCtrl', 'smart-table', 'touchspin-plugin', 'slugifier', 'commonService', 'timeAgoFilter','angularFileUpload', 'ngTextTruncate', 'infinite-scroll', 'ui.select', 'blueimp', 'ngTagsInput', 'titleCase', 'bootstrap-confirmation', 'ladda', 'angular-ladda', 'uuid', 'formatText', 'asideCtrl', 'settingsCtrl', 'assetsService', 'mediaModalCtrl', 'xeditable', 'angular-percentage-filter', 'angular-clipboard'),
         abstract: true
     }).state('app.dashboard', {
         url: "/dashboard",
@@ -312,16 +312,16 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         ncyBreadcrumb: {
             label: 'Help Topics'
         },
-        resolve: loadSequence('helpTopicsCtrl')
-    }).state('app.support.newhelptopics', {
-        url: '/new-help-topics',
-        templateUrl: "assets/views/new-help-topics.html",
-        title: 'Help Topics',
+        resolve: loadSequence('helpTopicsCtrl', 'toTrusted', 'ckeditor', 'jsVideoUrlParser')
+    }).state('app.support.oldhelptopics', {
+        url: '/old-help-topics',
+        templateUrl: "assets/views/old-help-topics.html",
+        title: 'Old Help Topics',
         icon: 'ti-layout-media-left-alt',
         ncyBreadcrumb: {
-            label: 'Help Topics'
+            label: 'Old Help Topics'
         },
-        resolve: loadSequence('newHelpTopicsCtrl', 'toTrusted', 'ckeditor', 'jsVideoUrlParser')
+        resolve: loadSequence('oldHelpTopicsCtrl')
     }).state('app.support.managetopics', {
         url: '/manage-topics',
         templateUrl: "assets/views/manage-topics.html",
@@ -344,6 +344,15 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
          $rootScope.breadcrumbTitle = undefined;
         },
         resolve: loadSequence('editorCtrl', 'userService', 'htmlToPlaintext', 'spectrum', 'ui.sortable', 'angular-slider', 'assetsService', 'toasterService', 'geocodeService', 'productService', 'paymentService', 'accountService', 'toTrusted', 'generateURLforLinks', 'truncate', 'ckeditor', 'ngSticky', 'slick', 'offset', 'jqcloud', 'jsVideoUrlParser', 'selectedTags', 'addComponentModalCtrl', 'componentSettingsModalCtrl', 'templateSettingsModalCtrl', 'googlePlaces', 'ngMap', 'campaignService', 'angularCircularNavigation')
+    }).state('app.onboarding', {
+        url: '/onboarding',
+        templateUrl: "assets/views/onboarding.html",
+        title: 'Onboarding',
+        icon: 'ti-layout-media-left-alt',
+        ncyBreadcrumb: {
+            label: 'Onboarding'
+        },
+        resolve: loadSequence('onboardingCtrl')
     })
 
     // Login routes

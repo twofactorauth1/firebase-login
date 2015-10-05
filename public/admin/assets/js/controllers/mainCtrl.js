@@ -13,13 +13,23 @@ app.controller('AppCtrl', ['$rootScope', '$scope', '$state', '$translate', '$loc
         $state.go('app.account.billing');
       }
       if (account.firstLogin) {
-        $state.go('app.support.gettingstarted');
+	$state.go('app.support.gettingstarted');
         account.firstLogin = false;
         AccountService.updateAccount(account, function () {
           console.log('account updated');
         });
       }
 
+    });
+
+    var fullWidthPages = ['app.onboarding'];
+
+    $rootScope.$on('$stateChangeSuccess', function(e, current, pre) {
+      if (fullWidthPages.indexOf($state.current.name) > -1) {
+        $scope.hideSidebar = true;
+      } else {
+        $scope.hideSidebar = false;
+      }
     });
 
     // Loading bar transition
