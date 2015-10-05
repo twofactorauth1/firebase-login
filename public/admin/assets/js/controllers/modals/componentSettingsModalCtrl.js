@@ -702,7 +702,7 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
     console.log('refresh slider');
     $timeout(function () {
       $rootScope.$broadcast('rzSliderForceRender');
-    });
+    }, 10);
   };
 
   $scope.setLatLon = function (lat, lon) {

@@ -125,11 +125,11 @@
                         <form class="form-horizontal" ng-show="!componentEditing.bg.img.show" ng-hide="isEmail">
                             <div class="row">
                                 <div class="col-sm-12">
-                                    <label class="pull-left">Add BG Opacity</label>
-                                    <span tooltip-placement="top" tooltip-html-unsafe="Set Background color of component."><i class="fa fa-info-circle" /></span>
+                                    <label for="bg_color_opacity">Add BG Opacity</label>
+                                    <span tooltip-placement="top" tooltip-html-unsafe="Set Background opacity of component."><i class="fa fa-info-circle" /></span>
                                 </div>
                                 <div class="col-sm-12">
-                                    <rzslider class="slider-opacity" rz-slider-precision="2" rz-slider-step="0.1" name="bg-opacity" rz-slider-model="componentEditing.bg.opacity" rz-slider-floor="0" rz-slider-ceil="1"></rzslider>
+                                    <rzslider name="bg_color_opacity" class="slider-opacity" rz-slider-precision="2" rz-slider-step="0.1" name="bg-opacity" rz-slider-model="componentEditing.bg.opacity" rz-slider-floor="0" rz-slider-ceil="1"></rzslider>
                                 </div>
                             </div>
                         </form>
