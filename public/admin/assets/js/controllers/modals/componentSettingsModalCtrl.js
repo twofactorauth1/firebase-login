@@ -961,7 +961,7 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
 
     $timeout(function () {
       $rootScope.$broadcast('rzSliderForceRender');
-    }, 100);
+    }, 1000);
   };
 
 
