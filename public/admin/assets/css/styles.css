@@ -13354,6 +13354,9 @@ div[class^="spacing-"] {
 .inline-table-cell {
   display: table-cell;
 }
+.slider-opacity .rz-bubble {
+  display: none;
+}
 /* ---------------------------------------------------------------------- */
 /*  Billing
 /* ---------------------------------------------------------------------- */

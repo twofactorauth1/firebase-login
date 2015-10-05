@@ -13,7 +13,7 @@ app.controller('AppCtrl', ['$rootScope', '$scope', '$state', '$translate', '$loc
         $state.go('app.account.billing');
       }
       if (account.firstLogin) {
-        $state.go('app.onboarding');
+	$state.go('app.support.gettingstarted');
         account.firstLogin = false;
         AccountService.updateAccount(account, function () {
           console.log('account updated');

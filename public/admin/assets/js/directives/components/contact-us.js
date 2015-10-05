@@ -29,7 +29,7 @@ app.directive('contactUsComponent', ['AccountService', 'GeocodeService', '$timeo
       
       function hexToRgb(hex, opacity) {      
         var c;
-        opacity = opacity || 1;
+        opacity = angular.isDefined(opacity) ? opacity : 1;
         c = hex.substring(1).split('');
         if(c.length== 3){
             c= [c[0], c[0], c[1], c[1], c[2], c[2]];
@@ -43,7 +43,7 @@ app.directive('contactUsComponent', ['AccountService', 'GeocodeService', '$timeo
         }
       });
       scope.$watch('component.boxOpacity', function (newValue, oldValue) {
-        if (newValue && scope.component.boxColor) {
+        if (angular.isDefined(newValue) && scope.component.boxColor) {
           scope.boxColor = hexToRgb(scope.component.boxColor, scope.component.boxOpacity);
         }
       });
