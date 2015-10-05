@@ -23,7 +23,7 @@
                             <div class="blog-meta single-post-publish-date">
                                 <div data-class="publish_date">
                                     <p class="input-group" ng-if="isEditing">
-                                        <input type="text" readonly class="form-control" datepicker-popup="dd-MMMM-yyyy" ng-model="blog.post.publish_date" is-open="datePicker.isOpen" min-date="minDate" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
+                                        <input type="text" readonly class="form-control" datepicker-popup="MM/dd/yyyy" ng-model="blog.post.publish_date" is-open="datePicker.isOpen" min-date="minDate" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" close-text="Close" />
                                         <span class="input-group-btn">
                                             <button type="button" class="btn btn-default" ng-click="open($event)">
                                                 <i class="glyphicon glyphicon-calendar"></i>
