@@ -702,7 +702,7 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
     console.log('refresh slider');
     $timeout(function () {
       $rootScope.$broadcast('rzSliderForceRender');
-    });
+    }, 0);
   };
 
   $scope.setLatLon = function (lat, lon) {
@@ -958,9 +958,13 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
         $scope.featureIcon.icon = e.icon;
       }
     });
-    setTimeout(function () {
-        $scope.refreshSlider();
-    }, 0);
+
+
+    $modalInstance.opened.then(function(){     
+      $timeout(function () {
+        $rootScope.$broadcast('rzSliderForceRender');
+      }, 1000);
+    });
   };
 
 
