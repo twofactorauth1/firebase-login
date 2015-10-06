@@ -18,6 +18,7 @@ module.exports = function (config) {
       // add dependencies here
       'public/js/libs/angular/angular.js',
       'public/js/libs/angular-mocks/angular-mocks.js',
+      'public/js/libs/moment/moment.js',
 
       // add mocks after real angular dependencies
       // TODO: shouldn't jquery be before angular?
