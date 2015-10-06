@@ -638,7 +638,8 @@ module.exports = {
             function(flows) {
                 //TODO: getting contactId from flows, but no contacts with these _id's exist?
                 var contactIds = flows.map(function(flow) { return flow.get('contactId') });
-                var query = { contactId: { $in: contactIds} };
+                var query = { _id: { $in: contactIds} };
+                self.log.debug('contactIds:', contactIds);
                 contactDao.findMany(query, $$.m.Contact, function(err, list){
                     if(err) {
                         self.log.error('Error getting contacts for campaign: ' + err);
