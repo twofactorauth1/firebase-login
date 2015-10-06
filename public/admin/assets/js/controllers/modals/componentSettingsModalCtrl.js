@@ -49,6 +49,7 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
   });
 
   WebsiteService.getEmails(function (emails) {
+    $scope.emailLoading = true;
     $scope.emails = emails;
 
     //select the default email for simple form as welcome-aboard
