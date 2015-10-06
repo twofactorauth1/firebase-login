@@ -23,6 +23,7 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
   $scope.blogImage = blogImage;
   $scope.isEmail = isEmail;
   $scope.testimonialSlider = testimonialSlider;
+  $scope.emailLoaded = false;
 
   /*
    * @getPages
@@ -49,7 +50,10 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
   });
 
   WebsiteService.getEmails(function (emails) {
-    $scope.emailLoading = true;
+    $timeout(function () {
+      $scope.emailLoaded = true;
+    }, 0);
+    console.log("Emails loaded");
     $scope.emails = emails;
 
     //select the default email for simple form as welcome-aboard
