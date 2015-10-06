@@ -73,6 +73,18 @@
       });
     };
 
+    this.duplicateCampaign = function(campaignId, fn) {
+        var apiUrl = baseUrl + '/' + campaignId + '/duplicate';
+        $http({
+            url: apiUrl,
+            method: "POST"
+        }).success(function (data) {
+            fn(data);
+        }).error(function (error) {
+            console.error('CampaignService: updateCampaign error >>> ', error);
+        });
+    };
+
     this.bulkAddContactsToCampaign = function (contactsArr, campaignId, fn) {
       var apiUrl = baseUrl + [campaignId, 'contacts'].join('/');
       $http({
