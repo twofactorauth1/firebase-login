@@ -102,7 +102,7 @@
     };
 
     this.getCampaignContacts = function (campaignId, fn) {
-      var apiUrl = baseUrl + ['campaignmanager', 'campaign', campaignId, 'contacts'].join('/');
+      var apiUrl = baseUrl + [campaignId, 'contacts'].join('/');
       var deferred = $q.defer();
       
       $http.get(apiUrl)
