@@ -277,6 +277,22 @@
       $scope.modalInstance.result.finally($scope.closeModal());
     };
 
+    /*
+     * @openSimpleModal
+     * -
+     */
+    $scope.openSimpleModal = function (modal, _size) {
+      var _modal = {
+        templateUrl: modal,
+        scope: $scope,
+        size: _size || 'md',
+      };
+      $scope.modalInstance = $modal.open(_modal);
+      $scope.modalInstance.result.then(null, function () {
+        angular.element('.sp-container').addClass('sp-hidden');
+      });
+    };
+
     $scope.closeModal = function () {
       $scope.modalInstance.close();
     };
@@ -782,6 +798,7 @@
     }
 
     $scope.ValidateBeforeProceed = function (i) {
+      debugger;
       var index = 2;
       var valid = true;
       if (i >= 2) {
@@ -852,10 +869,11 @@
       }
     };
 
-    $scope.saveCampaignOnLeave = function (_url) {
-      if ($scope.newCampaignObj.name) {
+    $scope.saveCampaign = function (_url) {
+      if ($scope.validateStep($scope.currentStep + 1, true)) {
+        $scope.saveLoading = true;
+        //TODO: check if had newCampaignObj has _id and update vs. create...
         CampaignService.checkCampaignNameExists($scope.newCampaignObj.name, function (exists) {
-          if (!exists) {
             $scope.changesConfirmed = true;
             var stepSettings = $scope.newCampaignObj.steps[0].settings;
             stepSettings.emailId = newEmail._id;
@@ -868,7 +886,7 @@
             var sendAt = $scope.newCampaignObj.steps[0].settings.sendAt;
             var delivery = moment($scope.delivery.date);
             sendAt.year = moment.utc(delivery).get('year');
-            sendAt.month = moment.utc(delivery).get('month') + 1;
+            sendAt.month = moment.utc(delivery).get('month');
             sendAt.day = moment.utc(delivery).get('date');
             sendAt.hour = moment.utc(delivery).get('hour');
             sendAt.minute = moment.utc(delivery).get('minute');
@@ -893,10 +911,17 @@
             //add campaign
             console.log('$scope.newCampaignObj ', $scope.newCampaignObj);
             CampaignService.createCampaign($scope.newCampaignObj, function (_nemCampaign) {
-              window.location = _url;
+              $scope.saveLoading = false;
+              if (_url) {
+                //TODO: angularize
+                window.location = _url;
+              } else {
+                toaster.pop('success', 'Campaign saved successfully');
+              }
             });
-          }          
         })
+      } else {
+        toaster.pop('error', 'Error', 'Please complete the form in this step before proceeding');
       }
     };
 
@@ -907,7 +932,7 @@
     $scope.changesConfirmed = false;
     var offFn = $rootScope.$on('$locationChangeStart', function (event, newUrl, oldUrl) {
       if (!$scope.changesConfirmed)
-        $scope.saveCampaignOnLeave(newUrl);
+        $scope.saveCampaign(newUrl);
     });
 
 
@@ -945,19 +970,27 @@
           var emailMatch = function(email) {
             return email._id === data.steps[0].settings.emailId;
           };
+          var sendAtDateObj = data.steps[0].settings.sendAt;
+
           $scope.newCampaignObj = data;
           $scope.selectedEmail = {
             type: 'template'
           };
           $scope.emailToSend = $scope.emails.filter(emailMatch)[0];
-          $scope.whenToSend = $scope.newCampaignObj
+          //moment(sendAtDateObj)
+          
+          if (moment(sendAtDateObj).isValid()) {
+            $scope.whenToSend = 'later';
+            $scope.delivery.time = moment(sendAtDateObj);
+            $scope.delivery.date = moment(sendAtDateObj);
+          }
       });
       return promise;
     };
 
     $scope.getContacts = function() {
       var promise = CampaignService.getCampaignContacts($stateParams.campaignId, function (data) {
-          //TODO: waiting on API update
+          $scope.recipients = data;
       });
       return promise;
     };
@@ -983,7 +1016,7 @@
           //TODO: get real data
           // data = {_id: 18727,accountId: 6,first: "Jimbo",middle: null,last: "Johnson",photo: "",photoSquare: "",birthday: null,starred: false,type: "cu",stripeId: "",isAuthenticated: false,gender: null,tags: ["cu"],_v: "0.1",created: {date: "2015-09-10T21:54:32.836Z",by: null,strategy: "",socialId: null},siteActivity: [ ],notes: [ ],details: [{_id: "pqnp2gd2zt",type: "emails",emails: [{email: "jack+jacksbiz9@indigenous.io"}],photos: { },phones: [ ],addresses: [{_id: "p13okpwm7z",type: "o",address: null,address2: null,city: "",state: "",zip: "",country: "",countryCode: "",displayName: "GEOIP",lat: "",lon: "",defaultShipping: true,defaultBilling: true}]}],fingerprint: 3041985187,unsubscribed: false};
           debugger;
-          $scope.recipients = [data];
+          
 
         });
       } else {

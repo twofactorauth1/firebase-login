@@ -13,6 +13,40 @@
             <div ncy-breadcrumb></div>
         </div>
     </section>
+
+    <div id="page-actions" class="container-fluid container-fullw bg-white padding-top-0 padding-bottom-0">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="panel panel-transparent row margin-bottom-0">
+                    <div class="panel-body">
+                        <div class="center-block text-center">
+                            <div class="col-sm-2 col-xs-6 center">
+                                <button type="button" ng-disabled="saveLoading" ng-click="openSimpleModal('campaign-duplicate-modal')" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-layout-media-overlay-alt btn-o">
+                                    <span>Duplicate</span>
+                                </button>
+                                <div class="hidden-lg margin-bottom-10"></div>
+                            </div>
+                            <div class="col-sm-2 col-xs-6 center">
+                                <button type="button" ng-disabled="saveLoading" ng-click="saveCampaign()" class="btn btn-primary btn-wide btn-scroll btn-scroll-top btn-o ti-save">
+                                    <span ng-if="saveLoading">
+                                        <span class="fa fa-spinner fa-spin"></span>
+                                    </span>
+                                    <span>
+                                        <div ng-if="!saveLoading">
+                                        Save
+                                        </div>
+                                    </span>
+                                </button>
+                                <div class="hidden-lg margin-bottom-10"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     <div class="row">
         <!-- start: WIZARD FORM -->
         <div name="CreateCampaign" id="form" novalidate>

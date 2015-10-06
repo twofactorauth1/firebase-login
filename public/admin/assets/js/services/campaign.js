@@ -24,7 +24,7 @@
     };
 
     this.getCampaign = function (id, fn) {
-      var apiUrl = baseUrl + '/' + id;
+      var apiUrl = baseUrl + id;
       var deferred = $q.defer();
       
       $http.get(apiUrl)
@@ -61,7 +61,7 @@
     };
 
     this.updateCampaign = function (campaign, fn) {
-      var apiUrl = baseUrl + '/' + campaign._id;
+      var apiUrl = baseUrl + campaign._id;
       $http({
         url: apiUrl,
         method: "POST",
@@ -74,7 +74,7 @@
     };
 
     this.duplicateCampaign = function(campaignId, fn) {
-        var apiUrl = baseUrl + '/' + campaignId + '/duplicate';
+        var apiUrl = baseUrl + [campaignId, 'duplicate'].join('/');
         $http({
             url: apiUrl,
             method: "POST"

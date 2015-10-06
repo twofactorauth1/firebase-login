@@ -1,0 +1,18 @@
+<script type="text/ng-template" id="campaign-duplicate-modal">
+    <div class="modal-header">
+        <button type="button" class="close" ng-click="closeModal()">&times;</button>
+        <h4 class="modal-title">Create Duplicate Campaign</h4>
+    </div>
+    <div class="modal-body no-padding" style="max-height:500px; margin:10px">
+        <div class="form-group">
+            <label>Name:</label>
+            <input id="new-post-title" ng-change="slugifyPostHandle(newCampaign.name, newCampaign)" class="form-control input-lg" type="text" ng-model="newCampaign.name">
+        </div>
+        <div class="mb20"></div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-info btn-wide btn-o" ng-click="createDuplicateCampaign(newCampaign)">
+            Done
+        </button>
+    </div>
+</script>
