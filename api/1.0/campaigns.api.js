@@ -405,11 +405,12 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> duplicateCampaign');
         var accountId = parseInt(self.accountId(req));
         var campaignId = req.params.id;
+        var userId = self.userId(req);
         self.checkPermission(req, self.sc.privs.MODIFY_CAMPAIGN, function(err, isAllowed) {
             if (isAllowed !== true) {
                 return self.send403(resp);
             } else {
-                campaignManager.duplicateCampaign(accountId, campaignId, function(err, campaign){
+                campaignManager.duplicateCampaign(accountId, campaignId, userId, function(err, campaign){
                     self.log.debug('<< duplicateCampaign');
                     self.sendResultOrError(resp, err, campaign, 'Error duplicating campaign');
                 });
