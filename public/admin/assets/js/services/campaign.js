@@ -103,5 +103,24 @@
       });
     };
 
+    this.getCampaignContacts = function (campaignId, fn) {
+      var apiUrl = baseUrl + ['campaignmanager', 'campaign', campaignId, 'contacts'].join('/');
+      var deferred = $q.defer();
+      
+      $http.get(apiUrl)
+        .success(function (data) {
+          if (fn) {
+            console.log('resolve >>> ');
+            deferred.resolve(fn(data));
+          }
+        })
+        .error(function (err) {
+          console.warn('END:Campaign Service with ERROR');
+          fn(err, null);
+        });
+
+      return deferred.promise;
+    };
+
   });
 }(angular));

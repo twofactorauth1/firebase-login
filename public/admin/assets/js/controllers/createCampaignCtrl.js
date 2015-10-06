@@ -29,13 +29,17 @@
 
     $scope.updateSendNow = function (value) {
       $scope.whenToSend = value;
-      $scope.delivery.date = moment();
-      $scope.delivery.time = moment();
+
+      if ($scope.whenToSend !== 'later') {
+        $scope.delivery.date = moment();
+        $scope.delivery.time = moment();
+      }
+
     };
 
 
     $scope.hstep = 1;
-    $scope.mstep = 15;
+    $scope.mstep = 1;
 
     $scope.options = {
       hstep: [1, 2, 3],
@@ -196,15 +200,18 @@
       var hour = time.get('hour');
       var minute = time.get('minute');
       var formatted = date.set('hour', hour).set('minute', minute);
-      if (formatted && formatted._d.toString() === "Invalid Date")
+      if (formatted && formatted._d.toString() === "Invalid Date") {
         $scope.invalidDate = true;
-      else
+      } else {
         $scope.delivery.date = formatted;
+      }
 
-      if ($scope.delivery.date.diff && $scope.delivery.date.diff(moment(), "minutes") < 0)
+      if ($scope.delivery.date.diff && $scope.delivery.date.diff(moment(), "minutes") < 0) {
         $scope.invalidDate = true;
-      else
+      } else {
         $scope.invalidDate = false;
+      }
+
     };
 
     $scope.togglePreview = function () {
@@ -943,22 +950,14 @@
             type: 'template'
           };
           $scope.emailToSend = $scope.emails.filter(emailMatch)[0];
-          // $scope.changeCurrentEmail($scope.emailToSend);
-
-          //TODO: need some way to get email type from id: 4c24bedd-5133-4312-a072-b6c7a507830e
-          // $scope.campaign = $scope.newCampaignObj;
-        // })
-        // .error(function (err) {
-        //   console.error('Failed to load campaign data.');
-        //   //TODO: could redirect to list page here
-        // });
+          $scope.whenToSend = $scope.newCampaignObj
       });
       return promise;
     };
 
     $scope.getContacts = function() {
       var promise = CampaignService.getCampaignContacts($stateParams.campaignId, function (data) {
-          
+          //TODO: waiting on API update
       });
       return promise;
     };
@@ -969,21 +968,33 @@
      */
     $scope.init = (function(){
 
-      $scope.getAccount().then(function(data) {
-        return $scope.getEmails();
-      }).then(function(data) {
-        return $scope.getCampaign();
-      }).then(function(data) {
-        console.log('loaded campaign, now get contacts');
-        // 'campaign/:id/contacts'
-        return $scope.getContacts();
-      }).then(function(data) {
-        console.log(data);
-      });
+      if($stateParams.campaignId) {
+        $scope.getAccount().then(function(data) {
+          return $scope.getEmails();
+        }).then(function(data) {
+          return $scope.getCampaign();
+        }).then(function(data) {
+          console.log('loaded campaign, now get contacts');
+          // 'campaign/:id/contacts'
+          return $scope.getContacts();
+        }).then(function(data) {
+          console.log(data);
+
+          //TODO: get real data
+          // data = {_id: 18727,accountId: 6,first: "Jimbo",middle: null,last: "Johnson",photo: "",photoSquare: "",birthday: null,starred: false,type: "cu",stripeId: "",isAuthenticated: false,gender: null,tags: ["cu"],_v: "0.1",created: {date: "2015-09-10T21:54:32.836Z",by: null,strategy: "",socialId: null},siteActivity: [ ],notes: [ ],details: [{_id: "pqnp2gd2zt",type: "emails",emails: [{email: "jack+jacksbiz9@indigenous.io"}],photos: { },phones: [ ],addresses: [{_id: "p13okpwm7z",type: "o",address: null,address2: null,city: "",state: "",zip: "",country: "",countryCode: "",displayName: "GEOIP",lat: "",lon: "",defaultShipping: true,defaultBilling: true}]}],fingerprint: 3041985187,unsubscribed: false};
+          debugger;
+          $scope.recipients = [data];
+
+        });
+      } else {
+        $scope.getEmails();
+        $scope.getAccount();
+      }
 
     })();
 
   }]);
+
   app.filter('propsFilter', function () {
     return function (items, props) {
       var out = [];
@@ -1013,4 +1024,5 @@
       return out;
     };
   });
+
 }(angular));
