@@ -7,7 +7,7 @@
 
 var dao = require('./dao/ssldotcom.dao');
 var config = require('../configs/ssldotcom.config');
-var endpoint = config.SSLDOTCOM_TEST_ENDPOINT;
+var endpoint = config.SSLDOTCOM_ENDPOINT;
 var route53dao = require('../dao/integrations/route53.dao');
 
 var async = require('async');
