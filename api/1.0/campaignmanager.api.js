@@ -197,8 +197,8 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> getContactsForCampaign');
 
         var campaignId = req.params.id;
-                
-        campaignManager.getContactsForCampaign(campaignId, function(err, pages){
+        var accountId = parseInt(self.accountId(req));
+        campaignManager.getContactsForCampaign(accountId, campaignId, function(err, pages){
             self.log.debug('<< getContactsForCampaign');
             self.sendResultOrError(resp, err, pages, 'Error getting pages');
         });

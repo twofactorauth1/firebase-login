@@ -3,7 +3,7 @@
 'use strict';
 (function (angular) {
   app.service('CampaignService', function ($http, $cacheFactory, $q) {
-    var baseUrl = '/api/1.0/campaign/';
+    var baseUrl = '/api/1.0/campaigns/';
 
     var campaigncache = $cacheFactory('campaigns');
 
@@ -24,7 +24,7 @@
     };
 
     this.getCampaign = function (id, fn) {
-      var apiUrl = baseUrl + 'campaign/' + id;
+      var apiUrl = baseUrl + '/' + id;
       var deferred = $q.defer();
       
       $http.get(apiUrl)
@@ -44,7 +44,7 @@
 
     this.createCampaign = function (campaign, fn) {
       var _campaigns = campaigncache.get('campaigns');
-      var apiUrl = baseUrl + ['campaign'].join('/');
+      var apiUrl = baseUrl;
       $http({
         url: apiUrl,
         method: "POST",
@@ -60,23 +60,21 @@
       });
     };
 
-    this.updateCampaign = function (order, fn) {
-      var apiUrl = baseUrl + [order._id, 'update'].join('/');
+    this.updateCampaign = function (campaign, fn) {
+      var apiUrl = baseUrl + '/' + campaign._id;
       $http({
         url: apiUrl,
         method: "POST",
-        data: {
-          order: order
-        }
+        data: campaign
       }).success(function (data) {
         fn(data);
       }).error(function (error) {
-        console.error('OrderService: updateOrder error >>> ', error);
+        console.error('CampaignServier: updateCampaign error >>> ', error);
       });
     };
 
     this.bulkAddContactsToCampaign = function (contactsArr, campaignId, fn) {
-      var apiUrl = baseUrl + ['campaign', campaignId, 'contacts'].join('/');
+      var apiUrl = baseUrl + [campaignId, 'contacts'].join('/');
       $http({
         url: apiUrl,
         method: "POST",

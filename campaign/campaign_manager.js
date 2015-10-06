@@ -112,6 +112,34 @@ module.exports = {
         });
     },
 
+    duplicateCampaign: function(accountId, campaignId, userId, fn) {
+        var self = this;
+        self.log.debug('>> duplicateCampaign');
+        campaignDao.findOne({accountId:accountId, _id:campaignId}, $$.m.Campaign, function(err, campaign){
+            if(err) {
+                self.log.error('Error finding campaign:', err);
+                return fn(err);
+            } else {
+                campaign.set('_id', null);
+                var createdObj = {
+                    'date':new Date(),
+                    'by':userId
+                };
+                campaign.set('created', createdObj);
+                campaign.set('modified', createdObj);
+                campaignDao.saveOrUpdate(campaign, function(err, savedCampaign){
+                    if(err) {
+                        self.log.error('Error saving campaign:', err);
+                        return fn(err);
+                    } else {
+                        self.log.debug('<< duplicateCampaign');
+                        return fn(null, savedCampaign);
+                    }
+                });
+            }
+        });
+    },
+
     addContactToCampaign: function(contactId, campaignId, accountId, fn) {
         var self = this;
         self.log.debug('>> addContactToCampaign');
@@ -374,7 +402,7 @@ module.exports = {
                         "firstName": contact.get('first'),
                         "lastName": contact.get('last'),
                         "email": contact.getEmails()[0].email
-                    }
+                    };
                     var organizerId = step.settings.organizerId;
                     var webinarId = step.settings.webinarId;
                     var resendConfirmation = true;
@@ -613,10 +641,11 @@ module.exports = {
         });
     },
 
-    getContactsForCampaign: function(campaignId, fn) {
+    getContactsForCampaign: function(accountId, campaignId, fn) {
         var self = this;
         
-        var campaignQuery = { 
+        var campaignQuery = {
+            accountId: accountId,
             campaignId: campaignId
         };
 
@@ -1387,7 +1416,7 @@ module.exports = {
             ],
             "attachments": null,
             "images": null
-        }
+        };
 
         self.log.debug("Sending to Mandrill => templateName: " + campaign.attributes.templateName +
             " on " + sendAt + " message: " + JSON.stringify(message, null, 2));
