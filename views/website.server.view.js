@@ -74,6 +74,7 @@ _.extend(view.prototype, BaseView.prototype, {
     self.log.debug('isEditor: ', isEditor);
     cmsDao.getDataForWebpage(accountId, 'index', function(err, value) {
       data.account = value;
+      value.website = value.website || {};
       data.title = value.website.title;
       data.author = 'Indigenous';
       data.segmentIOWriteKey = segmentioConfig.SEGMENT_WRITE_KEY;
