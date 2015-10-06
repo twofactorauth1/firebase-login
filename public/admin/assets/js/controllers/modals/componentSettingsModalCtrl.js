@@ -920,9 +920,7 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
           }
         });
       }
-    }
-
-    $scope.originalComponent = angular.copy($scope.componentEditing);
+    }    
     $scope.contactHoursInvalid = false;
     $scope.contactHours = [];
     var i = 0;
@@ -963,6 +961,7 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
     $modalInstance.opened.then(function(){     
       $timeout(function () {
         $rootScope.$broadcast('rzSliderForceRender');
+        $scope.originalComponent = angular.copy($scope.componentEditing);
       }, 1000);
     });
   };

@@ -275,6 +275,55 @@
                         </div>
                     </div>
                 </tab>
+                <tab ng-if="componentEditing.type === 'single-post'">
+                    <tab-heading>
+                        <span>Preview</span>
+                    </tab-heading>
+                    <section class="entry clearfix">
+                        <div class="single-blog responsive clearfix" data-postId="{{blog.post._id}}">
+                            <div class="blog-entry clearfix" data-id="{{blog.post._id}}">
+                                <h2 class="blog-title">
+                                    <a data-ng-if="blog.post.post_url" href="javascript:void(0)">
+                                        <div class="post_title"
+                                             data-ng-if="blog.post.post_title">
+                                            {{blog.post.post_title | htmlToPlaintext}}
+                                        </div>
+                                    </a>
+                                </h2>
+                                <div class="blog-meta">
+                                    <span data-ng-if="blog.post.publish_date || blog.post.created.date">
+                                     Posted Date: {{blog.post.publish_date || blog.post.created.date | date: 'MM/dd/yyyy'}}
+                                    </span>
+                                    <span data-ng-if="blog.post.post_author">
+                                       Posted by <a href="javascript:void(0)">{{blog.post.post_author}}</a>
+                                    </span>
+                                    <span data-ng-if="blog.post.post_category">
+                                      in <a href="javascript:void(0)">{{blog.post.post_category}}</a>
+                                    </span>
+                                </div>
+                                <ul class="post_tags" data-ng-if="blog.post.post_tags">
+                                    <li data-ng-repeat="tag in blog.post.post_tags track by $index"><a href="javascript:void(0)">{{tag.text ? tag.text:tag}}</a></li>
+                                </ul>
+                                <div class="blog-thumb alignleft" ng-if="blog.post.featured_image">
+                                    <img ng-src="{{blog.post.featured_image}}" />
+                                </div>
+                                <a class="btn btn-warning" type="button" blog-post-image="true" ng-click="addFeaturedPost()" type="button" class="pull-right btn btn-primary" style="margin-right:10px">
+                                    <span class="fa fa-edit"></span>
+                                    <span ng-if="blog.post.featured_image" class="hidden-xs">Change Image</span>
+                                    <span ng-if="!blog.post.featured_image" class="hidden-xs">Add Image</span>
+                                </a>
+                                <!-- end .thumb -->
+                                <div class="entry-excerpt">
+                                    <p>
+                                        <div elem ng-model="blog.post.post_excerpt"></div>
+                                    </p>
+                                </div>
+                            </div>
+                            <!-- end .et_pt_blogentry -->
+                        </div>
+                        <!-- end #et_pt_blog -->
+                    </section>
+                </tab>
                 <tab ng-if="!isEmail" ng-hide="componentEditing.type === 'footer' || componentEditing.type === 'blog' || componentEditing.type === 'single-post'">
                     <tab-heading>
                         <span>Spacing</span>
@@ -1048,56 +1097,7 @@
                         </div>
                     </div>
                     <div class="clearfix"></div>
-                </tab>
-                <tab ng-if="componentEditing.type === 'single-post'">
-                    <tab-heading>
-                        <span>Preview</span>
-                    </tab-heading>
-                    <section class="entry clearfix">
-                        <div class="single-blog responsive clearfix" data-postId="{{blog.post._id}}">
-                            <div class="blog-entry clearfix" data-id="{{blog.post._id}}">
-                                <h2 class="blog-title">
-                                    <a data-ng-if="blog.post.post_url" href="javascript:void(0)">
-                                        <div class="post_title"
-                                             data-ng-if="blog.post.post_title">
-                                            {{blog.post.post_title | htmlToPlaintext}}
-                                        </div>
-                                    </a>
-                                </h2>
-                                <div class="blog-meta">
-                                    <span data-ng-if="blog.post.publish_date || blog.post.created.date">
-                                     Posted Date: {{blog.post.publish_date || blog.post.created.date | date: 'MM/dd/yyyy'}}
-                                    </span>
-                                    <span data-ng-if="blog.post.post_author">
-                                       Posted by <a href="javascript:void(0)">{{blog.post.post_author}}</a>
-                                    </span>
-                                    <span data-ng-if="blog.post.post_category">
-                                      in <a href="javascript:void(0)">{{blog.post.post_category}}</a>
-                                    </span>
-                                </div>
-                                <ul class="post_tags" data-ng-if="blog.post.post_tags">
-                                    <li data-ng-repeat="tag in blog.post.post_tags track by $index"><a href="javascript:void(0)">{{tag.text ? tag.text:tag}}</a></li>
-                                </ul>
-                                <div class="blog-thumb alignleft" ng-if="blog.post.featured_image">
-                                    <img ng-src="{{blog.post.featured_image}}" />
-                                </div>
-                                <a class="btn btn-warning" type="button" blog-post-image="true" ng-click="addFeaturedPost()" type="button" class="pull-right btn btn-primary" style="margin-right:10px">
-                                    <span class="fa fa-edit"></span>
-                                    <span ng-if="blog.post.featured_image" class="hidden-xs">Change Image</span>
-                                    <span ng-if="!blog.post.featured_image" class="hidden-xs">Add Image</span>
-                                </a>
-                                <!-- end .thumb -->
-                                <div class="entry-excerpt">
-                                    <p>
-                                        <div elem ng-model="blog.post.post_excerpt"></div>
-                                    </p>
-                                </div>
-                            </div>
-                            <!-- end .et_pt_blogentry -->
-                        </div>
-                        <!-- end #et_pt_blog -->
-                    </section>
-                </tab>
+                </tab>                
             </tabset>
             </div>
             <div class="modal-footer" ng-class="{hidden: hover}">
