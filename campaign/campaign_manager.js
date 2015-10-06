@@ -613,10 +613,11 @@ module.exports = {
         });
     },
 
-    getContactsForCampaign: function(campaignId, fn) {
+    getContactsForCampaign: function(accountId, campaignId, fn) {
         var self = this;
         
-        var campaignQuery = { 
+        var campaignQuery = {
+            accountId: accountId,
             campaignId: campaignId
         };
 
