@@ -100,9 +100,9 @@
                                 <td><strong>Title: </strong><span ng-text-truncate="topic.title" ng-tt-chars-threshold="50" ng-tt-no-toggling></span></td>
                                 <td class="hidden-xs"><strong>Public: </strong><span>{{topic.isPublic}}</span></td>
                                 <td class="hidden-xs"><strong>Category: </strong><span ng-text-truncate="topic.category" ng-tt-chars-threshold="25" ng-tt-no-toggling></span></td>
-                                <td class="text-center"><strong>Views: </strong><span class="text-bold"><span class="fa fa-eye"></span> {{topic.statistics.views}} </span></td>
-                                <td class="text-center"><strong>Helpful: </strong><span class="text-success text-bold"><span class="fa fa-thumbs-up"></span> {{topic.statistics.helpful}} </span></td>
-                                <td class="text-center"><strong>Not Helpful: </strong><span class="text-danger text-bold"><span class="fa fa-thumbs-down"></span> {{topic.statistics.nothelpful}}</span></td>
+                                <td><strong>Views: </strong><span class="text-bold"><span class="fa fa-eye"></span> {{topic.statistics.views}} </span></td>
+                                <td><strong>Helpful: </strong><span class="text-success text-bold"><span class="fa fa-thumbs-up"></span> {{topic.statistics.helpful}} </span></td>
+                                <td><strong>Not Helpful: </strong><span class="text-danger text-bold"><span class="fa fa-thumbs-down"></span> {{topic.statistics.nothelpful}}</span></td>
                                 <td class="hidden-xs" ng-class="{'center': tableView != 'grid'}"><strong>Created: </strong> {{topic.created.date | date:'MMM d yy'}}</td>
                                 <td class="hidden-xs" ng-class="{'center': tableView != 'grid'}"><strong>Modified: </strong>{{topic.modified.date | date:'MMM d yy'}}</td>
                             </tr>
