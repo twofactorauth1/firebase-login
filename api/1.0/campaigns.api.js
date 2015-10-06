@@ -29,6 +29,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         app.post(this.url(''), this.isAuthAndSubscribedApi.bind(this), this.createCampaign.bind(this));
         app.post(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.updateCampaign.bind(this));
+        app.post(this.url(':id/duplicate'), this.isAuthAndSubscribedApi.bind(this), this.duplicateCampaign.bind(this));
         app.get(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.getCampaign.bind(this));
         app.get(this.url(''), this.isAuthAndSubscribedApi.bind(this), this.findCampaigns.bind(this));
         app.delete(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.deleteCampaign.bind(this));
@@ -397,6 +398,23 @@ _.extend(api.prototype, baseApi.prototype, {
             }
         });
 
+    },
+
+    duplicateCampaign: function(req, resp) {
+        var self = this;
+        self.log.debug('>> duplicateCampaign');
+        var accountId = parseInt(self.accountId(req));
+        var campaignId = req.params.id;
+        self.checkPermission(req, self.sc.privs.MODIFY_CAMPAIGN, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                campaignManager.duplicateCampaign(accountId, campaignId, function(err, campaign){
+                    self.log.debug('<< duplicateCampaign');
+                    self.sendResultOrError(resp, err, campaign, 'Error duplicating campaign');
+                });
+            }
+        });
     }
 
 
