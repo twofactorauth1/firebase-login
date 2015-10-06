@@ -176,7 +176,8 @@ app.constant('orderConstant', {
         data: "cancelled"
       }
     ]
-  }
+  },
+  MAX_ORDER_DAYS : 15
 });
 
 app.constant('social', {

@@ -25,6 +25,8 @@
       startingDay: 1
     };
 
+    $scope.maxOrderDate = moment();
+    $scope.maxOrderDate.add(orderConstant.MAX_ORDER_DAYS || 15, 'days');
     /*
      * @getCustomers
      * get all customers to for customer select
