@@ -29,7 +29,7 @@ module.exports = {
          * 5. Update the route53 validation
          */
 
-        var ref = certRef || mainCertRef;
+        var ref = certRef;
         var cert = null;
         var domains = [];
         var domainsWithValidationMethod = {};
@@ -48,7 +48,10 @@ module.exports = {
                             if(_cert.domains) {
                                 domains = _cert.domains;
                             } else {
-                                domains.concat(_cert.subject_alternative_names);
+                                self.log.debug('about to concat:', _cert.subject_alternative_names);
+                                domains = domains.concat(_cert.subject_alternative_names);
+                                self.log.debug('domains:', domains);
+
                             }
                             if(_.contains(domains, domain)){
                                 self.log.warn('The requested domain [' + domain + '] is already attached to this certificate.');
@@ -79,6 +82,7 @@ module.exports = {
                     altNames:domains,
                     emailAddress:'admin@indigenous.io'
                 };
+                self.log.debug('pem options:', options);
                 pem.createCSR(options, function(err, csrAndClientKey){
                     if(err) {
                         self.log.error('Error generating CSR', err);
@@ -168,17 +172,20 @@ module.exports = {
                 });
 
             },
-            function getCertAgain(cb) {
-                self.log.debug('requesting validation');
-                dao.requestValidation(ref, config.SSLDOTCOM_ACCOUNT_KEY, config.SSLDOTCOM_SECRET_KEY,
-                    domainsWithValidationMethod, endpoint, function(err, value){
-                    self.log.debug('cert:', value);
-                        cb();
-                });
+            function requestValidation(cb) {
+                self.log.debug('waiting 20 seconds for dns propagation');
+                setTimeout(function(){
+                    self.log.debug('requesting validation');
+                    dao.requestValidation(ref, config.SSLDOTCOM_ACCOUNT_KEY, config.SSLDOTCOM_SECRET_KEY,
+                        domainsWithValidationMethod, endpoint, function(err, value){
+                            self.log.debug('cert:', value);
+                            cb();
+                        });
+                }, 20000);
 
             },
             function delayAndThenGetCert(cb) {
-                self.log.debug('waiting 20 seconds for validation to complete.')
+                self.log.debug('waiting 120 seconds for validation to complete.')
                 setTimeout(function(){
                     self.log.debug('Attempting to get the cert');
                     dao.getCertificate(ref, config.SSLDOTCOM_ACCOUNT_KEY, config.SSLDOTCOM_SECRET_KEY, null, null, null,
@@ -188,7 +195,7 @@ module.exports = {
                             cb();
                         }
                     );
-                }, 20000);
+                }, 120000);
             }
         ], function done(err){
             self.log.debug('done');

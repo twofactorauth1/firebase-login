@@ -29,7 +29,7 @@ module.exports.group = {
         var self = this;
         self.log = log;
 
-        var domain = 'pipeshift.com';
+        var domain = 'kyletesting.test.indigenous.io';
         var certRef = 'co-191b0lj3d';
 
 
