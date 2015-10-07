@@ -15,7 +15,7 @@ var campaign = $$.m.ModelBase.extend({
             accountId: 0,
             name: "",
             type: "",
-            status: "draft",//draft, running, completed
+            status: "DRAFT",//DRAFT, PENDING, RUNNING, COMPLETED
             visibility: 1,
             startDate: null,
             /*
@@ -75,6 +75,12 @@ var campaign = $$.m.ModelBase.extend({
         storage: "mongo",
         table: "campaigns",
         idStrategy: "uuid"
+    },
+    status: {
+        DRAFT:'DRAFT',
+        PENDING:'PENDING',
+        RUNNING:'RUNNING',
+        COMPLETED:'COMPLETED'
     }
 });
 

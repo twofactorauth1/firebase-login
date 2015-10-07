@@ -87,6 +87,7 @@ module.exports = {
     createCampaign: function(campaignObj, fn) {
         var self = this;
         self.log.debug('>> createCampaign');
+        campaignObj.set('status', $$.m.Campaign.status.DRAFT);
         campaignDao.saveOrUpdate(campaignObj, function(err, value){
             if(err) {
                 self.log.error('Error creating campaign: ' + err);
@@ -101,15 +102,40 @@ module.exports = {
     updateCampaign: function(campaignObj, fn) {
         var self = this;
         self.log.debug('>> updateCampaign');
-        campaignDao.saveOrUpdate(campaignObj, function(err, value){
-            if(err) {
-                self.log.error('Error updating campaign: ' + err);
-                return fn(err, null);
+        /*
+         * Get the campaign.  If the status is RUNNING, return an error
+         * If the new status is RUNNING, kick off the steps
+         */
+        var query = {
+            _id: campaignObj.id(),
+            accountId: campaignObj.get('accountId')
+        };
+        campaignDao.findOne(query, $$.m.Campaign, function(err, campaign){
+            if(err || !campaign) {
+                self.log.error('Error finding campaign:', err);
+                return fn(err);
+            } else if(campaign.get('status') === $$.m.Campaign.status.RUNNING){
+                self.log.warn('Attempted to update a running campaign');
+                return fn('Attempted to update a running campaign');
             } else {
-                self.log.debug('<< updateCampaign');
-                return fn(null, value);
+                campaignDao.saveOrUpdate(campaignObj, function(err, updatedCampaign){
+                    if(err) {
+                        self.log.error('Error updating campaign: ' + err);
+                        return fn(err, null);
+                    } else {
+                        self.log.debug('<< updateCampaign');
+                        fn(null, updatedCampaign);
+                        if(updatedCampaign.get('status') === $$.m.Campaign.status.RUNNING) {
+                            //kick off the flows
+                            self._startCampaignFlows(updatedCampaign);
+                            return;
+                        }
+                    }
+                });
             }
         });
+
+
     },
 
     duplicateCampaign: function(accountId, campaignId, userId, fn) {
@@ -127,6 +153,7 @@ module.exports = {
                 };
                 campaign.set('created', createdObj);
                 campaign.set('modified', createdObj);
+                campaign.set('status', $$.m.Campaign.status.DRAFT);
                 campaignDao.saveOrUpdate(campaign, function(err, savedCampaign){
                     if(err) {
                         self.log.error('Error saving campaign:', err);
@@ -194,6 +221,13 @@ module.exports = {
                                     }
                                     self.log.debug('Added contact to campaign flow.');
                                     self.updateCampaignParticipants(accountId, campaignId, function(err, value){});
+                                    /*
+                                     * We no longer auto start the steps.  This happens when we "start" the campaign
+                                     */
+                                    self.log.debug('<< addContactToCampaign');
+                                    return fn(err, savedFlow);
+
+                                    /*
                                     self.handleStep(flow, 0, function(err, value){
                                         if(err) {
                                             self.log.error('Error handling initial step of campaign: ' + err);
@@ -204,6 +238,7 @@ module.exports = {
                                             return fn(err, savedFlow);
                                         }
                                     });
+                                    */
                                 });
                             });
 
@@ -485,6 +520,11 @@ module.exports = {
                         });
                     }
                     self.log.debug('Added contact to campaign flow.');
+                    /*
+                     * We no longer auto-start the campaign steps.  This is done after we "start" the campaign.
+                     */
+                    callback();
+                    /*
                     self.handleStep(flow, 0, function(err, value){
                         if(err) {
                             self.log.error('Error handling initial step of campaign: ' + err);
@@ -494,6 +534,7 @@ module.exports = {
                             callback();
                         }
                     });
+                    */
                 });
 
             }, function(err){
@@ -574,7 +615,7 @@ module.exports = {
                         self.log.error('Error updating campaign status:', err);
                         return fn(err, null);
                     } else {
-                        campaign.set('status', 'completed');
+                        campaign.set('status', $$.m.Campaign.status.COMPLETED);
                         var modified = {
                             date: new Date(),
                             by: 'Admin'
@@ -1730,6 +1771,40 @@ module.exports = {
         });
 
 
+    },
+
+    _startCampaignFlows: function(campaign) {
+        var self = this;
+        self.log.debug('>> _startCampaignFlows');
+        var accountId = campaign.get('accountId');
+        var campaignId = campaign.id();
+        var query = {
+            accountId:accountId,
+            campaignId:campaignId
+        };
+
+        campaignDao.findMany(query, $$.m.CampaignFlow, function(err, flows){
+            if(err || !flows) {
+                self.log.error('Error finding flows for campaign [' + campaign.id() + ']:', err);
+                return;
+            } else {
+                async.each(flows, function startFlow(flow, cb){
+                    self.handleStep(flow, 0, function(err, value){
+                        if(err) {
+                            self.log.error('Error handling step of campaign: ' + err);
+                            self.log.debug('This error was for the flow', flow);
+                        } else {
+                            self.updateCampaignStatus(accountId, campaignId, function(err, value){});
+                            self.log.debug('<< addContactToCampaign');
+                            cb();
+                        }
+                    });
+                }, function done(err){
+                    self.log.debug('<< _startCampaignFlows');
+                    return;
+                });
+            }
+        });
     }
 
 }
