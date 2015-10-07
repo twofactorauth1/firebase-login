@@ -335,7 +335,7 @@
 
 				this.parts.image.setAttributes( {
 					src: this.data.src,
-
+					class: 'img-responsive',
 					// This internal is required by the editor.
 					'data-cke-saved-src': this.data.src,
 

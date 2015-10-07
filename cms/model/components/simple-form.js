@@ -142,7 +142,12 @@ var component = $$.m.ModelBase.extend({
 
             visibility: true,
 
-            submitBtn: "I'm Interested"
+            submitBtn: "I'm Interested",
+
+            btn:{
+                color: "#333",
+                bgcolor: "#ccc"
+            }
         }
     },
 

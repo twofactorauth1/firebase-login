@@ -124,14 +124,12 @@
                         </div>
                         <form class="form-horizontal" ng-show="!componentEditing.bg.img.show" ng-hide="isEmail">
                             <div class="row">
-                                <div class="col-sm-10">
-                                    <label class="pull-left">Add BG Opacity</label>
+                                <div class="col-sm-12">
+                                    <label for="bg_color_opacity">Add BG Opacity</label>
+                                    <span tooltip-placement="top" tooltip-html-unsafe="Set Background opacity of component."><i class="fa fa-info-circle" /></span>
                                 </div>
-                                <div class="col-sm-2">
-                                    <select id="bg_opacity" ng-model="componentEditing.bg.opacity" ng-change="saveComponent()" class="pull-right form-control margin-bottom-0">
-                                        <option value="" disabled>%</option>
-                                        <option ng-repeat="opacity in componentOpacityValues track by $index" value="{{opacity.value}}" ng-selected="{{componentEditing.bg.opacity == opacity.value}}">{{opacity.label}}</option>
-                                    </select>
+                                <div class="col-sm-12">
+                                    <rzslider name="bg_color_opacity" class="slider-opacity" rz-slider-precision="2" rz-slider-step="0.1" name="bg-opacity" rz-slider-model="componentEditing.bg.opacity" rz-slider-floor="0" rz-slider-ceil="1"></rzslider>
                                 </div>
                             </div>
                         </form>
@@ -142,6 +140,22 @@
                             <div class="pull-right">
                                 <h4 class="pull-left"><i class="fa fa-eyedropper" /></h4>
                                 <spectrum-colorpicker format="'hex'" options="spectrum.options" class="pull-right" ng-model="componentEditing.boxColor" ng-change="saveComponent()"></spectrum-colorpicker>
+                            </div>
+                        </div>
+                        <div class="form-group" ng-if="componentEditing.type == 'simple-form'">
+                            <label for="colorpicker">Button Text Color:</label>
+                            <span tooltip-placement="top" tooltip-html-unsafe="Set text color of submit button."><i class="fa fa-info-circle" /></span>
+                            <div class="pull-right">
+                                <h4 class="pull-left"><i class="fa fa-eyedropper" /></h4>
+                                <spectrum-colorpicker format="'hex'" options="spectrum.options" class="pull-right" ng-model="componentEditing.btn.color" ng-change="saveComponent()"></spectrum-colorpicker>
+                            </div>
+                        </div>
+                        <div class="form-group" ng-if="componentEditing.type == 'simple-form'">
+                            <label for="colorpicker">Button Color:</label>
+                            <span tooltip-placement="top" tooltip-html-unsafe="Set color of submit button."><i class="fa fa-info-circle" /></span>
+                            <div class="pull-right">
+                                <h4 class="pull-left"><i class="fa fa-eyedropper" /></h4>
+                                <spectrum-colorpicker format="'hex'" options="spectrum.options" class="pull-right" ng-model="componentEditing.btn.bgcolor" ng-change="saveComponent()"></spectrum-colorpicker>
                             </div>
                         </div>
                         <div class="form-group" ng-if="componentEditing.type == 'products'">
@@ -161,14 +175,11 @@
                             </div>
                         </div>
                         <div class="row" ng-if="componentEditing.type == 'contact-us'">
-                            <div class="col-sm-10">
+                            <div class="col-sm-12">
                                 <label class="pull-left">Box Opacity</label>
                             </div>
-                            <div class="col-sm-2">
-                                <select id="infoBox_opacity" ng-model="componentEditing.boxOpacity" ng-change="saveComponent()" class="pull-right form-control margin-bottom-0">
-                                    <option value="" disabled>%</option>
-                                    <option ng-repeat="opacity in componentOpacityValues track by $index" value="{{opacity.value}}" ng-selected="{{componentEditing.boxOpacity == opacity.value}}">{{opacity.label}}</option>
-                                </select>
+                            <div class="col-sm-12">
+                            <rzslider class="slider-opacity" name="box-opacity" rz-slider-precision="2" rz-slider-step="0.1" rz-slider-model="componentEditing.boxOpacity" rz-slider-floor="0" rz-slider-ceil="1"></rzslider>
                             </div>
                         </div>
                         <hr/>
@@ -267,29 +278,67 @@
                                 </div>
                                 <div ng-if="componentEditing.type != 'navigation'" ng-show="componentEditing.bg.img.overlay && componentEditing.bg.img.show">
                                     <div class="row">
-                                        <div class="col-xs-8">
+                                        <div class="col-xs-12">
                                             <label for="bg_overlay_opacity">Overlay Opacity</label>
                                             <span tooltip-placement="top" tooltip-html-unsafe="Set Overlay opacity."><i class="fa fa-info-circle" /></span>
                                         </div>
-                                        <div class="col-xs-4">
-                                            <select id="bg_overlay_opacity" ng-model="componentEditing.bg.img.overlayopacity" ng-change="saveComponent()" class="pull-right form-control margin-bottom-0">
-                                                <option value="10">10</option>
-                                                <option value="20">20</option>
-                                                <option value="30">30</option>
-                                                <option value="40">40</option>
-                                                <option value="50">50</option>
-                                                <option value="60">60</option>
-                                                <option value="70">70</option>
-                                                <option value="80">80</option>
-                                                <option value="90">90</option>
-                                                <option value="100">100</option>
-                                            </select>
+                                        <div class="col-xs-12">
+                                         <rzslider class="slider-opacity" rz-slider-step="10"  name="bg-opacity" rz-slider-model="componentEditing.bg.img.overlayopacity" rz-slider-floor="0" rz-slider-ceil="100"></rzslider>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                </tab>
+                <tab ng-if="componentEditing.type === 'single-post'">
+                    <tab-heading>
+                        <span>Preview</span>
+                    </tab-heading>
+                    <section class="entry clearfix">
+                        <div class="single-blog responsive clearfix" data-postId="{{blog.post._id}}">
+                            <div class="blog-entry clearfix" data-id="{{blog.post._id}}">
+                                <h2 class="blog-title">
+                                    <a data-ng-if="blog.post.post_url" href="javascript:void(0)">
+                                        <div class="post_title"
+                                             data-ng-if="blog.post.post_title">
+                                            {{blog.post.post_title | htmlToPlaintext}}
+                                        </div>
+                                    </a>
+                                </h2>
+                                <div class="blog-meta">
+                                    <span data-ng-if="blog.post.publish_date || blog.post.created.date">
+                                     Posted Date: {{blog.post.publish_date || blog.post.created.date | date: 'MM/dd/yyyy'}}
+                                    </span>
+                                    <span data-ng-if="blog.post.post_author">
+                                       Posted by <a href="javascript:void(0)">{{blog.post.post_author}}</a>
+                                    </span>
+                                    <span data-ng-if="blog.post.post_category">
+                                      in <a href="javascript:void(0)">{{blog.post.post_category}}</a>
+                                    </span>
+                                </div>
+                                <ul class="post_tags" data-ng-if="blog.post.post_tags">
+                                    <li data-ng-repeat="tag in blog.post.post_tags track by $index"><a href="javascript:void(0)">{{tag.text ? tag.text:tag}}</a></li>
+                                </ul>
+                                <div class="blog-thumb alignleft" ng-if="blog.post.featured_image">
+                                    <img ng-src="{{blog.post.featured_image}}" />
+                                </div>
+                                <a class="btn btn-warning" type="button" blog-post-image="true" ng-click="addFeaturedPost()" type="button" class="pull-right btn btn-primary" style="margin-right:10px">
+                                    <span class="fa fa-edit"></span>
+                                    <span ng-if="blog.post.featured_image" class="hidden-xs">Change Image</span>
+                                    <span ng-if="!blog.post.featured_image" class="hidden-xs">Add Image</span>
+                                </a>
+                                <!-- end .thumb -->
+                                <div class="entry-excerpt">
+                                    <p>
+                                        <div elem ng-model="blog.post.post_excerpt"></div>
+                                    </p>
+                                </div>
+                            </div>
+                            <!-- end .et_pt_blogentry -->
+                        </div>
+                        <!-- end #et_pt_blog -->
+                    </section>
                 </tab>
                 <tab ng-if="!isEmail" ng-hide="componentEditing.type === 'footer' || componentEditing.type === 'blog' || componentEditing.type === 'single-post'">
                     <tab-heading>
@@ -823,7 +872,7 @@
                                     </ui-select-choices>
                                 </ui-select>
                             </div>
-                            <div ng-if="!emails">
+                            <div ng-if="!emailLoaded">
                                 <h4><span class="fa fa-spinner fa-spin"></span> Loading Emails...</h4>
                             </div>
                         </div>
@@ -1052,8 +1101,8 @@
                     </div>
                     <div class="form-group">
                         <label>Show Products by Tags</label>
-                        <div class="col-sm-6 pull-right">
-                            <ui-select multiple ng-model="componentEditing.productTags" theme="bootstrap" ng-disabled="disabled" on-remove="saveComponent()" on-select="saveComponent()" close-on-select="false">
+                        <div class="col-sm-6 pull-right product-ui-select">
+                            <ui-select multiple ng-model="componentEditing.productTags" theme="bootstrap" ng-disabled="disabled" on-remove="saveComponent()" on-select="saveComponent()">
                                 <ui-select-match placeholder="Select tags...">
                                     {{$item}}
                                 </ui-select-match>
@@ -1064,56 +1113,7 @@
                         </div>
                     </div>
                     <div class="clearfix"></div>
-                </tab>
-                <tab ng-if="componentEditing.type === 'single-post'">
-                    <tab-heading>
-                        <span>Preview</span>
-                    </tab-heading>
-                    <section class="entry clearfix">
-                        <div class="single-blog responsive clearfix" data-postId="{{blog.post._id}}">
-                            <div class="blog-entry clearfix" data-id="{{blog.post._id}}">
-                                <h2 class="blog-title">
-                                    <a data-ng-if="blog.post.post_url" href="javascript:void(0)">
-                                        <div class="post_title"
-                                             data-ng-if="blog.post.post_title">
-                                            {{blog.post.post_title | htmlToPlaintext}}
-                                        </div>
-                                    </a>
-                                </h2>
-                                <div class="blog-meta">
-                                    <span data-ng-if="blog.post.publish_date || blog.post.created.date">
-                                     Posted Date: {{blog.post.publish_date || blog.post.created.date | date: 'MM/dd/yyyy'}}
-                                    </span>
-                                    <span data-ng-if="blog.post.post_author">
-                                       Posted by <a href="javascript:void(0)">{{blog.post.post_author}}</a>
-                                    </span>
-                                    <span data-ng-if="blog.post.post_category">
-                                      in <a href="javascript:void(0)">{{blog.post.post_category}}</a>
-                                    </span>
-                                </div>
-                                <ul class="post_tags" data-ng-if="blog.post.post_tags">
-                                    <li data-ng-repeat="tag in blog.post.post_tags track by $index"><a href="javascript:void(0)">{{tag.text ? tag.text:tag}}</a></li>
-                                </ul>
-                                <div class="blog-thumb alignleft" ng-if="blog.post.featured_image">
-                                    <img ng-src="{{blog.post.featured_image}}" />
-                                </div>
-                                <a class="btn btn-warning" type="button" blog-post-image="true" ng-click="addFeaturedPost()" type="button" class="pull-right btn btn-primary" style="margin-right:10px">
-                                    <span class="fa fa-edit"></span>
-                                    <span ng-if="blog.post.featured_image" class="hidden-xs">Change Image</span>
-                                    <span ng-if="!blog.post.featured_image" class="hidden-xs">Add Image</span>
-                                </a>
-                                <!-- end .thumb -->
-                                <div class="entry-excerpt">
-                                    <p>
-                                        <div elem ng-model="blog.post.post_excerpt"></div>
-                                    </p>
-                                </div>
-                            </div>
-                            <!-- end .et_pt_blogentry -->
-                        </div>
-                        <!-- end #et_pt_blog -->
-                    </section>
-                </tab>
+                </tab>                
             </tabset>
             </div>
             <div class="modal-footer" ng-class="{hidden: hover}">

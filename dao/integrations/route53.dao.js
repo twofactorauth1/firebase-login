@@ -10,6 +10,7 @@ var awsConfigs = require('../../configs/aws.config.js');
 var crypto = require('crypto');
 var appConfig = require('../../configs/app.config');
 var AWS = require('aws-sdk');
+var tldtools = require('tldtools').init();
 
 var dao = {
 
@@ -61,12 +62,13 @@ var dao = {
                 console.log(err, err.stack);
                 fn();
             } else {
-
+                var obj = tldtools.extract('http://' + domain);
+                var nakedDomain = obj.domain + '.' + obj.tld;
                 self.log.debug('Got this from the amazon:', data);
                 //data = JSON.parse(data);
                 self.log.debug('0', data.HostedZones[0]);
                 self.log.debug('0.name', data.HostedZones[0].Name);
-                var zone = _.find(data.HostedZones, function(zone){return zone.Name === domain+'.'});
+                var zone = _.find(data.HostedZones, function(zone){return zone.Name === nakedDomain+'.'});
                 self.log.debug('Is this your card?', zone);
                 if(zone) {
                     var params = {

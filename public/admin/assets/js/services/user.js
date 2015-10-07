@@ -84,7 +84,7 @@
       });
     };
 
-    this.postAccountBilling = function(stripeCustomerId, cardToken, fn) {
+    this.postAccountBilling = function(stripeCustomerId, cardToken, fn, errFn) {
       var apiUrl = baseUrl + ['account', 'billing'].join('/');
       $http.post(apiUrl, {
         stripeCustomerId: stripeCustomerId,
@@ -92,6 +92,9 @@
       })
       .success(function(data, status, headers, config) {
         fn(data);
+      })
+      .error(function(err){
+        if (errFn) {errFn(err);}
       });
     };
 

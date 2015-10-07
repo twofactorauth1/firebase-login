@@ -23,6 +23,7 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
   $scope.blogImage = blogImage;
   $scope.isEmail = isEmail;
   $scope.testimonialSlider = testimonialSlider;
+  $scope.emailLoaded = false;
 
   /*
    * @getPages
@@ -49,6 +50,10 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
   });
 
   WebsiteService.getEmails(function (emails) {
+    $timeout(function () {
+      $scope.emailLoaded = true;
+    }, 0);
+    console.log("Emails loaded");
     $scope.emails = emails;
 
     //select the default email for simple form as welcome-aboard
@@ -702,7 +707,7 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
     console.log('refresh slider');
     $timeout(function () {
       $rootScope.$broadcast('rzSliderForceRender');
-    });
+    }, 0);
   };
 
   $scope.setLatLon = function (lat, lon) {
@@ -822,6 +827,7 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
   $scope.editComponent = function () {
 
     if ($scope.componentEditing) {
+
       var componentType;
       console.log('$scope.componentEditing.spacing', $scope.componentEditing.spacing);
       if (!$scope.componentEditing.spacing) {
@@ -845,6 +851,13 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
           'usePage': false
         };
       }
+
+      if($scope.componentEditing.bg && !angular.isDefined($scope.componentEditing.bg.opacity))
+        $scope.componentEditing.bg.opacity = 1;
+
+      if($scope.componentEditing.bg && $scope.componentEditing.bg.img && !angular.isDefined($scope.componentEditing.bg.img.overlayopacity))
+        $scope.componentEditing.bg.img.overlayopacity = 1;
+
 
       if ($scope.componentEditing.type === 'navigation') {
         componentType = _.findWhere($scope.componentTypes, {
@@ -888,6 +901,9 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
 
     if ($scope.componentEditing.type === "contact-us") {
       $scope.hours = hoursConstant;
+      if(!angular.isDefined($scope.componentEditing.boxOpacity)){
+        $scope.componentEditing.boxOpacity = 1;
+      }     
 
       $scope.place.address = GeocodeService.stringifyAddress($scope.componentEditing.location);
       $scope.originalContactMap = angular.copy($scope.componentEditing.location);
@@ -909,9 +925,7 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
           }
         });
       }
-    }
-
-    $scope.originalComponent = angular.copy($scope.componentEditing);
+    }    
     $scope.contactHoursInvalid = false;
     $scope.contactHours = [];
     var i = 0;
@@ -946,6 +960,14 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
       if ($scope.featureIcon) {
         $scope.featureIcon.icon = e.icon;
       }
+    });
+
+
+    $modalInstance.opened.then(function(){     
+      $timeout(function () {
+        $rootScope.$broadcast('rzSliderForceRender');
+        $scope.originalComponent = angular.copy($scope.componentEditing);
+      }, 1000);
     });
   };
 

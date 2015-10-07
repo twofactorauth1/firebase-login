@@ -176,7 +176,8 @@ app.constant('orderConstant', {
         data: "cancelled"
       }
     ]
-  }
+  },
+  MAX_ORDER_DAYS : 15
 });
 
 app.constant('social', {
@@ -750,9 +751,6 @@ app.constant('JS_REQUIRES', {
     name: 'dateRangePicker',
     files: ['../js/libs/angular-daterangepicker/js/angular-daterangepicker.min.js', '../js/libs/bootstrap-daterangepicker/daterangepicker.js', '../js/libs/bootstrap-daterangepicker/daterangepicker-bs3.css']
   }, {
-    name: 'ui.sortable',
-    files: ['../js/libs/Sortable/Sortable.min.js', '../js/libs/Sortable/ng-sortable.js']
-  }, {
     name: 'angular-slider',
     files: ['../js/libs/angularjs-slider/dist/rzslider.min.js', '../js/libs/angularjs-slider/dist/rzslider.min.css']
   }, {
@@ -796,12 +794,15 @@ app.constant('JS_REQUIRES', {
     files: ['../js/libs_misc/angular-circular-navigation/angular-circular-navigation.js', '../js/libs_misc/angular-circular-navigation/angular-circular-navigation.css']
   }, {
     name: 'bootstrap-icon-picker',
-    files: ['../js/libs/bootstrap-icon-picker/bootstrap-iconpicker/js/iconset/iconset-fontawesome-4.2.0.min.js', '../js/libs/bootstrap-icon-picker/bootstrap-iconpicker/js/bootstrap-iconpicker.min.js', '../js/libs/bootstrap-icon-picker/bootstrap-iconpicker/css/bootstrap-iconpicker.min.css']
+    files: ['../js/libs/bootstrap-icon-picker/bootstrap-iconpicker/css/bootstrap-iconpicker.min.css']
   }, {
     name: 'spectrum',
     files: ['../js/libs/spectrum/spectrum.css','../js/libs/spectrum/spectrum.js','../js/libs/angular-spectrum-colorpicker/dist/angular-spectrum-colorpicker.min.js'],
   }, {
     name: 'angular-resizable',
     files: ['../js/libs/angular-resizable/angular-resizable.min.js', '../js/libs/angular-resizable/angular-resizable.min.css'],
+  }, {
+    name: 'angular-clipboard',
+    files: ['../js/libs/angular-clipboard/angular-clipboard.js'],
   }]
 });

@@ -32,7 +32,7 @@
 
     $scope.circleOptions = {
       isOpen: false,
-      toggleOnClick: true,
+      toggleOnClick: false,
       background: '#FDB94E',
       size: "big",
       button: {
@@ -362,8 +362,12 @@
               }
 
               if ($scope.isEmail) {
-                WebsiteService.updateEmail($scope.page, function(data) {
+                WebsiteService.updateEmail($scope.page, function(data, error) {
                   $scope.saveLoading = false;
+                  if (!data && error && error.message) {
+                    toaster.pop('error', error.message);
+                    return;
+                  }
                   toaster.pop('success', "Email Saved", "The " + $scope.page.title + " email was saved successfully.");
                   $scope.redirectAfterSave(redirect_url, reload);
                 });
@@ -496,7 +500,7 @@
       if (_emailId) {
         WebsiteService.getSingleEmail(_emailId, function (data) {
           console.log('data ', data);
-          $scope.page = data;
+          $scope.page = angular.copy(data);
           $scope.components = $scope.page.components;
           
           $scope.originalPage = angular.copy(data);
@@ -1064,7 +1068,7 @@
 
     $scope.checkForDuplicatePage = function (fn) {
       $scope.validateEditPage($scope.page);
-      if ($scope.editPageValidated)
+      if ($scope.editPageValidated && !$scope.isEmail)
         WebsiteService.checkDuplicatePage($scope.page.handle, $scope.page._id, function (data) {
           if (data) {
             $scope.duplicateUrl = true;
@@ -1341,7 +1345,7 @@
         }
       }
       var redirectUrl = url;
-      if($scope.post_blog_page)
+      if($scope.post_blog_page || $scope.isSinglePost)
         redirectUrl = "/admin/#/website/posts";
       if (!redirectUrl) {
         if($scope.isEmail)

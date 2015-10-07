@@ -215,7 +215,7 @@
             this.postSubscribeToIndigenous = function(stripeCustomerId, planId, accountId, setupFee, fn, errFn) {
                 var apiUrl = baseUrl + ['integrations', 'payments', 'indigenous', 'plans', planId, 'subscribe'].join('/');
                 var params = {
-                    customerId: stripeCustomerId,
+                    customerId: stripeCustomerId
                     // setupFee: setupFee.signup_fee * 100
                 };
                 
@@ -226,6 +226,7 @@
                 if (setupFee) {
                     params.setupFee = setupFee;
                 }
+
 
                 $http.post(apiUrl, params)
                     .success(function(data, status, headers, config) {

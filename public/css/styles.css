@@ -522,8 +522,7 @@ div[data-type='campaign'] .inner-page .overlay {
   position: relative !important;
   right: 0;
   top: 0;
-  border-left: none;
-  border-bottom: none;
+  border: none !important;
   width: 100%;
 }
 .contact-us-v1 .leaflet-popup-pane {
@@ -535,6 +534,9 @@ div[data-type='campaign'] .inner-page .overlay {
 }
 .component-wrap div.element-wrap {
   word-wrap: break-word;
+}
+.component-wrap div.element-wrap img.img-responsive {
+  display: inline-block;
 }
 .component-wrap .component > [id] .bg {
   position: absolute;
@@ -1654,7 +1656,6 @@ div[data-type="feature-block"] .component-inner {
 .meet-team-v2 .title {
   font-weight: bold;
   text-align: center;
-  text-transform: uppercase;
 }
 .meet-team-v2 .profile-img {
   width: 250px;
@@ -2601,7 +2602,7 @@ div[data-type="feature-block"] .component-inner {
   margin: 0;
   padding: 0;
   text-transform: uppercase;
-  background-color: #ffffff !important;
+  background-color: #ffffff;
 }
 .simple-form-v2 .has-success .form-control {
   border-color: #2ecc71;
@@ -3813,6 +3814,9 @@ div[data-type=blog] .container {
   overflow: hidden;
   min-height: 150px;
   margin: 10px 0 20px 0;
+}
+.image-gallery-v1 .image-gallery-title {
+  position: relative;
 }
 .header-image-text-v1 {
   background-color: #F7F7F7;

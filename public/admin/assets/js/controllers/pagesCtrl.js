@@ -84,6 +84,14 @@
     $scope.closeModal = function () {
       $scope.modalInstance.close();
       $scope.resetTemplateDetails();
+      if(!$scope.createpage.showhomepage){
+        $scope.createpage = {};
+      }
+      else{
+        $scope.createpage.homepage = true;
+        $scope.createpage.title = 'Home';
+        $scope.createpage.handle = 'index';
+      }
     };
 
 

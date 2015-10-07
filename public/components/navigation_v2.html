@@ -1,8 +1,4 @@
 <style>
-    .navigation-v2 .navbar-default .navbar-nav > li > a:hover, .navigation-v2 .navbar-default .navbar-nav > li > a:focus{
-        background-color: {{component.nav.hoverbg || 'transparent'}};
-        color: {{component.nav.hover}};
-    }
     .navbar-collapse {
         background: {{component.nav.bg || 'transparent'}}!important;
     }
@@ -10,7 +6,11 @@
         border-bottom: 4px solid {{component.nav.hover}}!important;
     }
     .navigation-v2 .navbar ul.navbar-nav li a.active {
-         color: {{component.activetxtcolor || '#4bb0cb'}};
+         color: {{component.activetxtcolor || '#4bb0cb'}}!important;
+    }
+    .navigation-v2 .navbar-default .navbar-nav > li > a:hover, .navigation-v2 .navbar-default .navbar-nav > li > a:focus{
+        background-color: {{component.nav.hoverbg || 'transparent'}};
+        color: {{component.nav.hover}};
     }
 </style>
 <div ng-class="component.type+'-v'+component.version">

@@ -48,6 +48,10 @@
           customer.hasGoogleId = $scope.checkGoogleId(customer);
         });
         $scope.customers = customers;
+        // In case customer is created from simple form component.
+        if($scope.customers.length > 0){          
+          $scope.minRequirements = true;
+        }
         if ($state.current.sort) {
           $scope.setSortOrder($state.current.sort);
         }
