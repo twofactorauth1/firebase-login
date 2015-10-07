@@ -121,7 +121,7 @@ _.extend(api.prototype, baseApi.prototype, {
                                     paymentManager.addCardToCustomer(billingObj.cardToken, billingObj.stripeCustomerId, function(err, value){
                                         if(err) {
                                             self.log.error('Error updating Stripe');
-                                            return self.wrapError(res, 500, null, err, err);
+                                            return self.wrapError(res, 500, null, err.message, err.message);
                                         } else {
                                             self.log.debug('<< updateCurrentAccountBilling');
                                             res.send(updatedAccount);

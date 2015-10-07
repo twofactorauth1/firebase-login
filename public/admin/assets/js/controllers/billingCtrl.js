@@ -141,7 +141,7 @@
     /*
      * @savePlanFn
      * - set new active plan for user
-     * - TODO: setup fee?
+     * - TODO: setup fee, coupon
      */
 
     $scope.savePlanFn = function (planId) {
