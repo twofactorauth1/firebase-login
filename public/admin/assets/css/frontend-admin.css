@@ -555,6 +555,9 @@
 #componentloader .component-wrap div.element-wrap {
   word-wrap: break-word;
 }
+#componentloader .component-wrap div.element-wrap img.responsive {
+  display: inline-block;
+}
 #componentloader .component-wrap .component > [id] .bg {
   position: absolute;
   top: 0;
