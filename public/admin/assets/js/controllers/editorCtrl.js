@@ -32,7 +32,7 @@
 
     $scope.circleOptions = {
       isOpen: false,
-      toggleOnClick: true,
+      toggleOnClick: false,
       background: '#FDB94E',
       size: "big",
       button: {

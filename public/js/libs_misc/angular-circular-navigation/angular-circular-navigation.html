@@ -14,7 +14,7 @@
             <li ng-repeat="item in options.items">
                 <a
                     ng-hide="item.empty || hideItem(item)"
-                    ng-click="perform(options, item); setTimeout(hideIt(),100)"
+                    ng-click="perform(options, item);"
                     ng-class="{'is-active': item.isActive}"
                     class="{{item.cssClass}}"
                     ng-style="{
