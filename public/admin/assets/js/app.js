@@ -18,5 +18,6 @@ angular.module("indigenous", [
     'autocomplete',
     'config',
     'angular-parallax',
-    'google.places'
+    'google.places',
+    'ng-sortable'
 ]);
