@@ -45,7 +45,7 @@ var component = $$.m.ModelBase.extend({
              *
              *
              */
-            text : "<h1>Masthead Title</h1><h4>A Great place for a subtitle. </h4><p>This is where you describe something about your business or product that get the user to scroll or press a button.</p>",
+            text : "<span style=\"font-size:36px;font-weight:normal;display:block;text-align:center;line-height:1.1;\">Masthead Title</span><h4>A Great place for a subtitle. </h4><p>This is where you describe something about your business or product that get the user to scroll or press a button.</p>",
 
             /**
              *
