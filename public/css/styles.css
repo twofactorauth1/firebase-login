@@ -536,7 +536,7 @@ div[data-type='campaign'] .inner-page .overlay {
 .component-wrap div.element-wrap {
   word-wrap: break-word;
 }
-.component-wrap div.element-wrap img.responsive {
+.component-wrap div.element-wrap img.img-responsive {
   display: inline-block;
 }
 .component-wrap .component > [id] .bg {
