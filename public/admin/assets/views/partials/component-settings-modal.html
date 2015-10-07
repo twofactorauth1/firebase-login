@@ -1101,8 +1101,8 @@
                     </div>
                     <div class="form-group">
                         <label>Show Products by Tags</label>
-                        <div class="col-sm-6 pull-right">
-                            <ui-select multiple ng-model="componentEditing.productTags" theme="bootstrap" ng-disabled="disabled" on-remove="saveComponent()" on-select="saveComponent()" close-on-select="false">
+                        <div class="col-sm-6 pull-right product-ui-select">
+                            <ui-select multiple ng-model="componentEditing.productTags" theme="bootstrap" ng-disabled="disabled" on-remove="saveComponent()" on-select="saveComponent()">
                                 <ui-select-match placeholder="Select tags...">
                                     {{$item}}
                                 </ui-select-match>
