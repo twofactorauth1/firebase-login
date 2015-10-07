@@ -215,7 +215,8 @@
                                         <div class="well well-sm">
                                             <div class="row">
                                                 <div class="col-xs-12">
-                                                    <ui-select ng-model="newCampaignObj.steps[0].settings.emailId" theme="bootstrap" ng-disabled="disabled" on-select="changeCurrentEmail($select.selected)" style="min-width:100%">
+                                                    <span ng-if="!emails.length">Loading... <b class="fa fa-spinner fa-spin"/></span>
+                                                    <ui-select ng-if="emails.length" ng-model="newCampaignObj.steps[0].settings.emailId" theme="bootstrap" ng-disabled="disabled" on-select="changeCurrentEmail($select.selected)" style="min-width:100%">
                                                         <ui-select-match placeholder="Select an email template">{{$select.selected.title}} (subject:{{$select.selected.subject}})</ui-select-match>
                                                         <ui-select-choices repeat="email._id as email in emails | propsFilter: {title: $select.search}">
                                                             <div ng-bind-html="email.title | highlight: $select.search"></div>
@@ -566,8 +567,8 @@
                         <!-- end: WIZARD STEP 5 -->
                     </div>
                 </div>
-                <div class="col-md-12 bg-light-grey padding-30">
-                    <div class="form-group">
+                <div class="col-md-12 bg-light-grey padding-30 margin-bottom-20">
+                    <div class="form-group overflow-auto">
                         <div ng-if="currentStep > 1">
                             <button class="btn btn-primary btn-o back-step btn-wide pull-left" ng-click="form.prev(Form)">
                                 <i class="fa fa-chevron-left"></i> Back
@@ -579,7 +580,7 @@
                             </button>
                         </div>
                         <div ng-if="currentStep == 5">
-                            <button ng-disabled="saveLoading" class="btn btn-success btn-wide pull-right" ng-click="completeNewCampaign()">
+                            <button ng-disabled="saveLoading" class="btn btn-success btn-wide pull-right" ng-click="activateCampaign()">
                                 <span> Activate Campaign </span> <i class="fa fa-clock-o"></i>
                             </button>
                             <button class="btn btn-info btn-wide pull-right margin-right-5" ng-click="openModal('send-test-email-modal')">
