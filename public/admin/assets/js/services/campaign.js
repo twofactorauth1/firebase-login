@@ -69,7 +69,20 @@
       }).success(function (data) {
         fn(data);
       }).error(function (error) {
-        console.error('CampaignServier: updateCampaign error >>> ', error);
+        console.error('CampaignService: updateCampaign error >>> ', error);
+      });
+    };
+
+    this.cancelCampaignForContact = function (campaignId, contactId, fn) {
+      var apiUrl = baseUrl + [campaign._id, 'contact', contactId].join('/');
+      $http({
+        url: apiUrl,
+        method: "DELETE",
+        data: campaign
+      }).success(function (data) {
+        fn(data);
+      }).error(function (error) {
+        console.error('CampaignService: cancelCampaignForContact error >>> ', error);
       });
     };
 

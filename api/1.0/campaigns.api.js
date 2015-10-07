@@ -131,6 +131,31 @@ _.extend(api.prototype, baseApi.prototype, {
 
     },
 
+
+    removeContactFromCampaign: function(req, resp) {
+        var self = this;
+        self.log.debug('>> removeContactFromCampaign');
+        var campaignId = req.params.id;
+        var contactId = parseInt(req.params.contactid);
+        var accountId = parseInt(self.accountId(req));
+        if(!contactId || contactId ===0) {
+            return self.wrapError(resp, 400, 'Bad Request', 'Parameter contactId required.');
+        }
+
+        self.checkPermission(req, self.sc.privs.MODIFY_CAMPAIGN, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                campaignManager.cancelCampaignForContact(accountId, campaignId, contactId, function(err, value){
+                    self.log.debug('<< removeContactFromCampaign');
+                    self.sendResultOrError(resp, err, value, "Error removing contact from campaign");
+                    self.createUserActivity(req, 'UPDATE_CAMPAIGN', null, null, function(){});
+                });
+            }
+        });
+
+    },
+
     /**
      * This method expects an array called "ids" in the body of the request.
      * @param req

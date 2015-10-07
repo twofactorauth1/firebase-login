@@ -53,6 +53,17 @@
 
     $scope.ismeridian = true;
 
+    $scope.selectedCustomers = {
+      individuals: []
+    };
+
+    // selected tags
+    $scope.tagSelection = [];
+    $scope.recipients = [];
+
+    $scope.recipientsToRemove = [];
+
+
     $scope.getProgressType = function (value) {
       var type;
       if (value < 25) {
@@ -461,15 +472,22 @@
 
     $scope.customerSelected = function (select) {
       var selected = select.selected[select.selected.length - 1];
-
+      var removalIndex = _.indexOf($scope.recipientsToRemove, selected._id);
       var existingContact = _.find($scope.recipients, function (recipient) {
         return recipient._id === selected._id;
       });
+      
       if (!existingContact) {
         $scope.recipients.push(selected);
       }
+
       // clear search text
       select.search = '';
+
+      //remove from removal array
+      if (removalIndex !== -1) {
+        $scope.recipientsToRemove.splice(removalIndex, 1);
+      }
     };
 
     $scope.customerRemoved = function (select, selected) {
@@ -477,24 +495,24 @@
       var contact = _.findWhere($scope.recipients, {
         _id: selected._id
       });
-      if (contact)
+      if (contact) {
         existingContactIndex = _.indexOf($scope.recipients, contact);
+      }
 
       if (existingContactIndex > -1) {
         //get the tags that have been selected
-        var tags = $scope.getSelectedTags();
-        var tagExists = _.intersection(contact.tags || ['nt'], tags);
-        if (tagExists.length === 0) {
+        // var tags = $scope.getSelectedTags();
+        // var tagExists = _.intersection(contact.tags || ['nt'], tags);
+        // if (tagExists.length === 0) {
           $scope.recipients.splice(existingContactIndex, 1);
-        }
+        // }
 
       }
       // clear search text
       select.search = '';
-    };
 
-    $scope.selectedCustomers = {
-      individuals: []
+      //add to removal array
+      $scope.recipientsToRemove.push(selected._id);
     };
 
     $scope.manualEmailsEntered = function () {
@@ -572,11 +590,6 @@
       });
       $scope.customerCounts = x;
     });
-
-
-    // selected tags
-    $scope.tagSelection = [];
-    $scope.recipients = [];
 
     $scope.eliminateDuplicates = function (customer) {
       return $scope.selectedCustomers.individuals.indexOf(customer._id) > -1;
@@ -755,6 +768,9 @@
           $scope.addNewContacts(createdContactsArr, _newCampaign, 'Campaign updated successfully');
         });
 
+        //remove any contacts previously added
+        $scope.removeCustomersFromCampaign();
+
       });
     };
 
@@ -787,6 +803,12 @@
         $scope.navigateOnSave();
       });
     };
+
+    $scope.removeCustomersFromCampaign = function() {
+      //TODO: http://stackoverflow.com/questions/28983424/make-angular-foreach-wait-for-promise-after-going-to-next-object
+      angular.forEach
+        CampaignService.cancelCampaignForContact(_newCampaign, contactId);
+    }
 
     $scope.setEmail = function(newEmail) {
       var stepSettings = $scope.newCampaignObj.steps[0].settings;
@@ -1038,13 +1060,19 @@
 
     $scope.getContacts = function() {
       var promise = CampaignService.getCampaignContacts($stateParams.campaignId, function (data) {
+          $scope.originalRecipients = angular.copy(data);
           $scope.recipients = data;
+          $scope.selectedCustomers.individuals = data;
       });
       return promise;
     };
 
     $scope.pendingChanges =  function() {
-      return !angular.equals($scope.originalCampaignObj, $scope.newCampaignObj);
+      return (
+        (!angular.equals($scope.originalCampaignObj, $scope.newCampaignObj)) ||
+        (!angular.equals($scope.originalRecipients, $scope.recipients))
+      )
+
     };
 
     /*
@@ -1059,8 +1087,6 @@
         }).then(function(data) {
           return $scope.getAccount();
         }).then(function(data) {
-          console.log('loaded campaign, now get contacts');
-          // 'campaign/:id/contacts'
           return $scope.getContacts();
         }).then(function(data) {
           console.log(data);
