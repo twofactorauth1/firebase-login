@@ -142,6 +142,22 @@
                                 <spectrum-colorpicker format="'hex'" options="spectrum.options" class="pull-right" ng-model="componentEditing.boxColor" ng-change="saveComponent()"></spectrum-colorpicker>
                             </div>
                         </div>
+                        <div class="form-group" ng-if="componentEditing.type == 'simple-form'">
+                            <label for="colorpicker">Button Color:</label>
+                            <span tooltip-placement="top" tooltip-html-unsafe="Set color of submit button."><i class="fa fa-info-circle" /></span>
+                            <div class="pull-right">
+                                <h4 class="pull-left"><i class="fa fa-eyedropper" /></h4>
+                                <spectrum-colorpicker format="'hex'" options="spectrum.options" class="pull-right" ng-model="componentEditing.btn.color" ng-change="saveComponent()"></spectrum-colorpicker>
+                            </div>
+                        </div>
+                        <div class="form-group" ng-if="componentEditing.type == 'simple-form'">
+                            <label for="colorpicker">Button BG Color:</label>
+                            <span tooltip-placement="top" tooltip-html-unsafe="Set background color of submit button."><i class="fa fa-info-circle" /></span>
+                            <div class="pull-right">
+                                <h4 class="pull-left"><i class="fa fa-eyedropper" /></h4>
+                                <spectrum-colorpicker format="'hex'" options="spectrum.options" class="pull-right" ng-model="componentEditing.btn.bgcolor" ng-change="saveComponent()"></spectrum-colorpicker>
+                            </div>
+                        </div>
                         <div class="form-group" ng-if="componentEditing.type == 'products'">
                             <label for="colorpicker">Title Box Background Color:</label>
                             <span tooltip-placement="top" tooltip-html-unsafe="Set Background color of title and description box."><i class="fa fa-info-circle" /></span>

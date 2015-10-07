@@ -2601,7 +2601,7 @@
   margin: 0;
   padding: 0;
   text-transform: uppercase;
-  background-color: #ffffff !important;
+  background-color: #ffffff;
 }
 #componentloader .simple-form-v2 .has-success .form-control {
   border-color: #2ecc71;
