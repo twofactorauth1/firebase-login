@@ -3813,6 +3813,9 @@ div[data-type=blog] .container {
   min-height: 150px;
   margin: 10px 0 20px 0;
 }
+.image-gallery-v1 .image-gallery-title {
+  position: relative;
+}
 .header-image-text-v1 {
   background-color: #F7F7F7;
   /* fix firefox responsive images */

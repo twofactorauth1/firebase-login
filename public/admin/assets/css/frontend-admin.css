@@ -3807,6 +3807,9 @@
   min-height: 150px;
   margin: 10px 0 20px 0;
 }
+#componentloader .image-gallery-v1 .image-gallery-title {
+  position: relative;
+}
 #componentloader .header-image-text-v1 {
   background-color: #F7F7F7;
   /* fix firefox responsive images */
