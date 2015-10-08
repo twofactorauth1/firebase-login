@@ -538,6 +538,9 @@ div[data-type='campaign'] .inner-page .overlay {
 .component-wrap div.element-wrap img.img-responsive {
   display: inline-block;
 }
+.component-wrap div.element-wrap span.cke_image_resizer_wrapper {
+  max-width: 100%;
+}
 .component-wrap .component > [id] .bg {
   position: absolute;
   top: 0;

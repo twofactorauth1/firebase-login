@@ -557,6 +557,9 @@
 #componentloader .component-wrap div.element-wrap img.img-responsive {
   display: inline-block;
 }
+#componentloader .component-wrap div.element-wrap span.cke_image_resizer_wrapper {
+  max-width: 100%;
+}
 #componentloader .component-wrap .component > [id] .bg {
   position: absolute;
   top: 0;
