@@ -589,7 +589,7 @@ module.exports = {
                     //check if we need to update the status
                     self.updateCampaignParticipants(accountId, campaignId, function(err, value){
                         self.log.debug('<< bulkAddContactToCampaign');
-                        return fn(null, 'OK');
+                        return fn(null, campaign);
                     });
                 }
             });
