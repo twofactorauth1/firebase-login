@@ -66,7 +66,7 @@ _.extend(api.prototype, baseApi.prototype, {
             } else {
                 var campaignObj = new $$.m.Campaign(req.body);
                 campaignObj.set('accountId', accountId);
-                var createdObj = campaignObj.get('created');
+                var createdObj = campaignObj.get('created') || {};
                 createdObj.by = req.user.id();
                 campaignObj.set('created', createdObj);
                 campaignManager.createCampaign(campaignObj, function(err, value){
