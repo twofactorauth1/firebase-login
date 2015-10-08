@@ -1,600 +1,636 @@
 <div ng-controller="CreateCampaignCtrl" class="create-campaign">
-    <!-- start: PAGE TITLE -->
-    <section id="page-title" class="padding-top-15 padding-bottom-15">
-        <div class="row">
-            <div class="col-sm-8" ng-if="!newCampaignObj._id">
-                <h1 class="mainTitle" translate="campaign.NEWCAMPAIGN"></h1>
-                <span class="mainDescription" translate="campaign.DESCRIPTION">Create a new campaign to reach a group of contacts</span>
-            </div>
-            <div class="col-sm-8" ng-if="newCampaignObj._id">
-                <h1 class="mainTitle">{{campaign.name}}</h1>
-                <span class="mainDescription" translate="campaign.EDIT_DESCRIPTION">Edit this campaign before kicking it off</span>
-            </div>
-            <div ncy-breadcrumb></div>
-        </div>
-    </section>
+    <span ng-hide="emails.length > 0" class="fa fa-spinner fa-spin create-campaign-spinner"></span>
+    <div ng-hide="!emails.length">
+        <!-- start: PAGE TITLE -->
+        <section id="page-title" class="padding-top-15 padding-bottom-15">
+            <div class="row">
+                <div class="col-sm-8" ng-if="!newCampaignObj._id">
+                    <h1 class="mainTitle" translate="campaign.NEWCAMPAIGN"></h1>
+                    <span class="mainDescription" translate="campaign.DESCRIPTION">Create a new campaign to reach a group of contacts</span>
+                </div>
+                <div class="col-sm-8" ng-if="newCampaignObj._id">
+                    <h1 class="mainTitle">
+                        <span class="inline-block">{{newCampaignObj.name}}</span>
+                    </h1>
 
-    <div id="page-actions" class="container-fluid container-fullw bg-white padding-top-0 padding-bottom-0">
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="panel panel-transparent row margin-bottom-0">
-                    <div class="panel-body">
-                        <div class="center-block text-center">
-                            <div class="col-sm-2 col-xs-6 center">
-                                <button type="button" ng-disabled="saveLoading" ng-click="openSimpleModal('campaign-duplicate-modal')" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-layout-media-overlay-alt btn-o">
-                                    <span>Duplicate</span>
-                                </button>
-                                <div class="hidden-lg margin-bottom-10"></div>
-                            </div>
-                            <div class="col-sm-2 col-xs-6 center">
-                                <button type="button" ng-disabled="saveLoading" ng-click="saveCampaign()" class="btn btn-primary btn-wide btn-scroll btn-scroll-top btn-o ti-save">
-                                    <span ng-if="saveLoading">
-                                        <span class="fa fa-spinner fa-spin"></span>
-                                    </span>
-                                    <span>
-                                        <div ng-if="!saveLoading">
-                                        Save
-                                        </div>
-                                    </span>
-                                </button>
-                                <div class="hidden-lg margin-bottom-10"></div>
+                    <div class="mainDescription">
+                        <span ng-if="isEditable">Edit this <b>{{newCampaignObj.status.toLowerCase()}}</b> campaign before activating it</span>
+                        <span ng-if="!isEditable">This <b>{{newCampaignObj.status.toLowerCase()}}</b> campaign was activated on {{_moment(newCampaignObj.steps[0].
+                    settings.sendAt)}}</span>
+                        <span class="fa-stack fa-lg inline text-large margin-left-5">
+                            <span class="fa fa-circle-thin fa-stack-2x"
+                                ng-class="{
+                                    'text-muted': newCampaignObj.status.toLowerCase() == 'draft',
+                                    'text-orange': newCampaignObj.status.toLowerCase() == 'running',
+                                    'text-green': newCampaignObj.status.toLowerCase() == 'completed'
+                                }">
+                            </span>
+                            <span class="fa fa-stack-1x" tooltip-placement="top" tooltip="{{newCampaignObj.status | titleCase}} " ng-class="{
+                                  'fa-pencil text-muted': newCampaignObj.status.toLowerCase() == 'draft',
+                                  'fa-clock-o text-orange': newCampaignObj.status.toLowerCase() == 'running',
+                                  'fa-check text-green': newCampaignObj.status.toLowerCase() == 'completed'
+                                }">
+                            </span>
+                        </span>
+                    </div>
+                    
+                <!-- <span>{{newCampaignObj.status}}</span> -->
+                </div>
+                <div ncy-breadcrumb></div>
+            </div>
+        </section>
+
+        <div id="page-actions" class="container-fluid container-fullw bg-white padding-top-0 padding-bottom-0">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="panel panel-transparent row margin-bottom-0">
+                        <div class="panel-body">
+                            <div class="center-block text-center">
+                                <div class="col-sm-2 col-xs-6 center">
+                                    <button type="button" ng-disabled="saveLoading || checkingCampaignName" ng-click="openModal('campaign-duplicate-modal')" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-layout-media-overlay-alt btn-o">
+                                        <span>Duplicate</span>
+                                    </button>
+                                    <div class="hidden-lg margin-bottom-10"></div>
+                                </div>
+                                <!-- <div class="col-sm-2 col-xs-6 center">
+                                    <button type="button" ng-disabled="saveLoading" ng-click="deleteCampaign()" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-layout-media-overlay-alt btn-o">
+                                        <span>Delete</span>
+                                    </button>
+                                    <div class="hidden-lg margin-bottom-10"></div>
+                                </div> -->
+                                <div class="col-sm-2 col-xs-6 center">
+                                    <button type="button" ng-disabled="saveLoading || !isEditable || checkingCampaignName" ng-click="saveCampaign()" class="btn btn-primary btn-wide btn-scroll btn-scroll-top btn-o ti-save">
+                                        <span ng-if="saveLoading">
+                                            <span class="fa fa-spinner fa-spin"></span>
+                                        </span>
+                                        <span>
+                                            <div ng-if="!saveLoading">
+                                            Save
+                                            </div>
+                                        </span>
+                                    </button>
+                                    <div class="hidden-lg margin-bottom-10"></div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
 
-    <div class="row">
-        <!-- start: WIZARD FORM -->
-        <div name="CreateCampaign" id="form" novalidate>
-            <div id="wizard" class="swMain">
-                <!-- start: WIZARD SEPS -->
-                <ul class="margin-bottom-0">
-                    <li ng-click="form.goTo(1)">
-                        <a href ng-class="{'selected' : currentStep >= 1, 'done' : currentStep > 1}" tooltip-placement="bottom" tooltip-html-unsafe="Enter a campaign name and select type">
-                            <div class="stepNumber">
-                                1
-                            </div>
-                            <span class="stepDesc text-small"> Details  </span>
-                        </a>
-                    </li>
-                    <li ng-click="form.goTo(2)">
-                        <a href ng-class="{'selected' : currentStep >= 2, 'done' : currentStep > 2}" tooltip-placement="bottom" tooltip-html-unsafe="Customize the email content">
-                            <div class="stepNumber">
-                                2
-                            </div>
-                            <span class="stepDesc text-small"> Content </span>
-                        </a>
-                    </li>
-                    <li ng-click="form.goTo(3)">
-                        <a href ng-class="{'selected' : currentStep >= 3, 'done' : currentStep > 3}" tooltip-placement="bottom" tooltip-html-unsafe="Add contacts to the campaign">
-                            <div class="stepNumber">
-                                3
-                            </div>
-                            <span class="stepDesc text-small"> Contacts </span>
-                        </a>
-                    </li>
-                    <li ng-click="form.goTo(4)">
-                        <a href ng-class="{'selected' : currentStep >= 4, 'done' : currentStep > 4}" tooltip-placement="bottom" tooltip-html-unsafe="Select a trigger to send" ng-if="newCampaignObj.type == 'autoresponder'">
-                            <div class="stepNumber">
-                                4
-                            </div>
-                            <span class="stepDesc text-small"> Trigger </span>
-                        </a>
-                        <a href ng-class="{'selected' : currentStep >= 4, 'done' : currentStep > 4}" tooltip-placement="bottom" tooltip-html-unsafe="Select a date/time and review" ng-if="newCampaignObj.type != 'autoresponder'">
-                            <div class="stepNumber">
-                                4
-                            </div>
-                            <span class="stepDesc text-small"> Delivery </span>
-                        </a>
-                    </li>
-                    <li ng-click="form.goTo(5)">
-                        <a href ng-class="{'selected' : currentStep >= 5, 'done' : currentStep > 5}" tooltip-placement="bottom" tooltip-html-unsafe="Review, Test, and Launch">
-                            <div class="stepNumber">
-                                5
-                            </div>
-                            <span class="stepDesc text-small"> Review </span>
-                        </a>
-                    </li>
-                </ul>
-                <!-- end: WIZARD SEPS -->
-                <!-- start: WIZARD STEP 1 -->
-                <div class="container-fluid container-fullw bg-white padding-top-0 padding-bottom-0 campaign-step-wrap">
-                    <div class="col-sm-12">
-                        <div id="step-1" ng-show="currentStep == 1" class="campaign-step" ng-class="{'next': goingTo == 'next', 'prev': goingTo == 'prev'}">
-                            <div class="row">
-                                <div class="col-sm-8 col-sm-offset-2">
-                                    <div class="well bg-primary margin-top-30">
-                                        <div class="padding-15 center">
-                                            <h2 class="StepTitle text-white text-bold"><i class="fa fa-file-text-o fa-2x fa-inverse block margin-bottom-10"></i>Details</h2>
-                                            <p class="text-large margin-bottom-0">
-                                                We need to know a few things about your campaign like
-                                                <br> what you want to name it and what kind of campaign you want to create.
-                                            </p>
-                                        </div>
-                                        <div class="clearfix"></div>
-                                    </div>
-                                    <div class="clearfix"></div>
-                                    <div class="form-group has-feedback">
-                                        <label>
-                                            Campaign Name <span class="symbol required"></span>
-                                        </label>
-                                        <span class="help-block text-small text-muted">Enter a campaign name that will help you remember what the campaign is about. Will only be visible to you.</span>
-                                        <div class="well well-sm">
-                                            <input type="text" class="form-control input" name="name" ng-model="newCampaignObj.name" ng-change="checkCampaignName(newCampaignObj.name)" ng-required="currentStep == 1" ng-model-options="{ debounce: 800 }" />
-                                            <span class="form-control-feedback" ng-class="{'glyphicon glyphicon-remove text-danger': campaignNameExists && campaignNameChecked && !checkingCampaignName, 'glyphicon glyphicon-ok text-nephritis': !campaignNameExists && campaignNameChecked && newCampaignObj.name, 'fa fa-spinner fa-spin':checkingCampaignName}"></span>
-                                            <p class="error text-danger margin-top-5 margin-bottom-0" ng-if="campaignNameExists && campaignNameChecked && !checkingCampaignName">Campaign Name Already Used. Please Choose Another</p>
-                                            <p class="success text-nephritis margin-top-5 margin-bottom-0" ng-if="!campaignNameExists && campaignNameChecked && !checkingCampaignName && newCampaignObj.name">Great Campaign Name!</p>
-                                            <p class="error text-small text-danger margin-top-5 margin-bottom-0" ng-if="CreateCampaign.name.$dirty && CreateCampaign.name.$invalid">Campaign Name is required</p>
-                                        </div>
-                                    </div>
-                                    <div class="form-group margin-bottom-30">
-                                        <label>
-                                            Campaign Type <span class="symbol required"></span>
-                                        </label>
-                                        <span class="help-block text-small text-muted">Choose the type of campaign you want to create. Default is One Time.</span>
-                                        <div class="row">
-                                            <div class="col-sm-6">
-                                                <div class="panel animated no-radius text-center margin-bottom-0 cursor-pointer" ng-class="{true:'panel-light-grey pulse',false:'panel-white'}[newCampaignObj.type == 'onetime']">
-                                                    <div class="panel-body" ng-class="{'bg-light-grey': hover1}" ng-mouseenter="hover1 = true" ng-mouseleave="hover1 = false" ng-click="newCampaignObj.type = 'onetime'">
-                                                        <span ng-class="{'text-nephritis': newCampaignObj.type == 'onetime', 'text-muted': newCampaignObj.type != 'onetime' }" class="fa fa-check text-nephritis fa-2x" style="position:absolute; top:o;right:0;margin-right:5px;margin-top:-10px;"></span>
-                                                        <span class="fa-stack fa-2x"> <i class="fa fa-square fa-stack-2x text-primary"></i> <i class="fa fa-envelope fa-stack-1x fa-inverse"></i> </span>
-                                                        <h3 class="StepTitle margin-top-10">One Time</h3>
-                                                        <p class="text-small">
-                                                            Send a standard one time email to a group of contacts.
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-6">
-                                                <div class="panel animated no-radius text-center margin-bottom-0 cursor-pointer" ng-class="{true:'panel-light-grey pulse',false:'panel-white'}[newCampaignObj.type == 'autoresponder']">
-                                                    <div class="panel-body" ng-class="{'bg-light-grey': hover2}" ng-mouseenter="hover2 = true" ng-mouseleave="hover2 = false" ng-click="newCampaignObj.type = 'autoresponder'">
-                                                        <span ng-class="{'text-nephritis': newCampaignObj.type == 'autoresponder', 'text-muted': newCampaignObj.type != 'autoresponder' }" class="fa fa-check fa-2x" style="position:absolute; top:o;right:0;margin-right:5px;margin-top:-10px;"></span>
-                                                        <span class="fa-stack fa-2x"> <i class="fa fa-square fa-stack-2x text-primary"></i> <i class="fa fa-bullhorn fa-stack-1x fa-inverse"></i> </span>
-                                                        <h3 class="StepTitle margin-top-10">AutoResponder</h3>
-                                                        <p class="text-small">
-                                                            Auomatically send an email after a contact subscribes
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+        <div class="row">
+            <!-- start: WIZARD FORM -->
+            <div name="CreateCampaign" id="form" novalidate>
+                <div id="wizard" class="swMain">
+                    <!-- start: WIZARD SEPS -->
+                    <ul class="margin-bottom-0">
+                        <li ng-click="form.goTo(1)">
+                            <a href ng-class="{'selected' : currentStep >= 1, 'done' : currentStep > 1}" tooltip-placement="bottom" tooltip-html-unsafe="Enter a campaign name and select type">
+                                <div class="stepNumber">
+                                    1
                                 </div>
-                            </div>
-                        </div>
-                        <!-- end: WIZARD STEP 1 -->
-                        <!-- start: WIZARD STEP 2 -->
-                        <div id="step-2" ng-show="currentStep == 2" class="campaign-step" ng-class="{'next': goingTo == 'next', 'prev': goingTo == 'prev'}">
-                            <div class="row">
-                                <div class="col-sm-8 col-sm-offset-2">
-                                    <div class="well bg-primary margin-top-30">
-                                        <div class="padding-15 center">
-                                            <h2 class="StepTitle text-white text-bold"><i class="fa fa-envelope fa-2x fa-inverse block margin-bottom-10"></i> Content</h2>
-                                            <p class="margin-bottom-0 text-large">
-                                                Design a custom email or select an email from email templates.
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Email Type</label>
-                                        <div class="clearfix"></div>
-                                        <div class="well well-sm">
-                                            <div class="radio clip-radio radio-primary radio-inline" style="margin-bottom:0px!important;margin-top:0px">
-                                                <input type="radio" id="newEmail" ng-click="clearEmail()" name="emailtype" value="new" ng-model="selectedEmail.type">
-                                                <label for="newEmail" style="margin-bottom:0px!important">
-                                                    New Email
-                                                </label>
-                                            </div>
-                                            <div class="radio clip-radio radio-primary radio-inline" style="margin-bottom:0px!important;margin-top:0px">
-                                                <input type="radio" id="emailTemplate" name="emailtype" value="template" ng-model="selectedEmail.type" ng-click="clearEmail()">
-                                                <label for="emailTemplate" style="margin-bottom:0px!important">
-                                                    Email Template
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group" ng-if="selectedEmail.type === 'new'">
-                                        <label>
-                                            Email Title <span class="symbol required"></span>
-                                        </label>
-                                        <div class="well well-sm">
-                                            <input type="text" class="form-control input" name="name" ng-model="emailToSend.title" ng-change="checkEmailTitle(emailToSend.title)" ng-model-options="{ debounce: 800 }" />
-                                            <span class="form-control-feedback" ng-class="{'glyphicon glyphicon-remove text-danger': emailTitleExists && emailTitleChecked && !checkingEmailTitle, 'glyphicon glyphicon-ok text-nephritis': !emailTitleExists && emailTitleChecked && emailToSend.title, 'fa fa-spinner fa-spin':checkingEmailTitle}"></span>
-                                            <p class="error text-danger margin-top-5 margin-bottom-0" ng-if="emailTitleExists && emailTitleChecked && !checkingEmailTitle">Email Title Already Used. Please Choose Another</p>
-                                            <p class="success text-nephritis margin-top-5 margin-bottom-0" ng-if="!emailTitleExists && emailTitleChecked && !checkingEmailTitle && emailToSend.title">Great Email Title!</p>
-                                        </div>
-                                    </div>
-                                    <div ng-if="selectedEmail.type === 'template'">
-                                        <label>
-                                            Email Template <span class="symbol required"></span>
-                                        </label>
-                                        <div class="well well-sm">
-                                            <div class="row">
-                                                <div class="col-xs-12">
-                                                    <span ng-if="!emails.length">Loading... <b class="fa fa-spinner fa-spin"/></span>
-                                                    <ui-select ng-if="emails.length" ng-model="newCampaignObj.steps[0].settings.emailId" theme="bootstrap" ng-disabled="disabled" on-select="changeCurrentEmail($select.selected)" style="min-width:100%">
-                                                        <ui-select-match placeholder="Select an email template">{{$select.selected.title}} (subject:{{$select.selected.subject}})</ui-select-match>
-                                                        <ui-select-choices repeat="email._id as email in emails | propsFilter: {title: $select.search}">
-                                                            <div ng-bind-html="email.title | highlight: $select.search"></div>
-                                                            <small>
-                                                            subject: <span ng-bind-html="''+email.subject | highlight: $select.search"></span>
-                                                          </small>
-                                                        </ui-select-choices>
-                                                    </ui-select>
-                                                </div>
+                                <span class="stepDesc text-small"> Details  </span>
+                            </a>
+                        </li>
+                        <li ng-click="form.goTo(2)">
+                            <a href ng-class="{'selected' : currentStep >= 2, 'done' : currentStep > 2}" tooltip-placement="bottom" tooltip-html-unsafe="Customize the email content">
+                                <div class="stepNumber">
+                                    2
+                                </div>
+                                <span class="stepDesc text-small"> Content </span>
+                            </a>
+                        </li>
+                        <li ng-click="form.goTo(3)">
+                            <a href ng-class="{'selected' : currentStep >= 3, 'done' : currentStep > 3}" tooltip-placement="bottom" tooltip-html-unsafe="Add contacts to the campaign">
+                                <div class="stepNumber">
+                                    3
+                                </div>
+                                <span class="stepDesc text-small"> Contacts </span>
+                            </a>
+                        </li>
+                        <li ng-click="form.goTo(4)">
+                            <a href ng-class="{'selected' : currentStep >= 4, 'done' : currentStep > 4}" tooltip-placement="bottom" tooltip-html-unsafe="Select a trigger to send" ng-if="newCampaignObj.type == 'autoresponder'">
+                                <div class="stepNumber">
+                                    4
+                                </div>
+                                <span class="stepDesc text-small"> Trigger </span>
+                            </a>
+                            <a href ng-class="{'selected' : currentStep >= 4, 'done' : currentStep > 4}" tooltip-placement="bottom" tooltip-html-unsafe="Select a date/time and review" ng-if="newCampaignObj.type != 'autoresponder'">
+                                <div class="stepNumber">
+                                    4
+                                </div>
+                                <span class="stepDesc text-small"> Delivery </span>
+                            </a>
+                        </li>
+                        <li ng-click="form.goTo(5)">
+                            <a href ng-class="{'selected' : currentStep >= 5, 'done' : currentStep > 5}" tooltip-placement="bottom" tooltip-html-unsafe="Review, Test, and Launch">
+                                <div class="stepNumber">
+                                    5
+                                </div>
+                                <span class="stepDesc text-small"> Review </span>
+                            </a>
+                        </li>
+                    </ul>
+                    <!-- end: WIZARD SEPS -->
+                    <!-- start: WIZARD STEP 1 -->
+                    <div class="container-fluid container-fullw bg-white padding-top-0 padding-bottom-0 campaign-step-wrap">
+                        <div class="col-sm-12">
+                            <div id="step-1" ng-show="currentStep == 1" class="campaign-step" ng-class="{'next': goingTo == 'next', 'prev': goingTo == 'prev'}">
+                                <div class="row">
+                                    <div class="col-sm-8 col-sm-offset-2">
+                                        <div class="well bg-primary margin-top-30">
+                                            <div class="padding-15 center">
+                                                <h2 class="StepTitle text-white text-bold"><i class="fa fa-file-text-o fa-2x fa-inverse block margin-bottom-10"></i>Details</h2>
+                                                <p class="text-large margin-bottom-0">
+                                                    We need to know a few things about your campaign like
+                                                    <br> what you want to name it and what kind of campaign you want to create.
+                                                </p>
                                             </div>
                                             <div class="clearfix"></div>
                                         </div>
+                                        <div class="clearfix"></div>
+                                        <div class="form-group has-feedback">
+                                            <label>
+                                                Campaign Name <span class="symbol required"></span>
+                                            </label>
+                                            <span class="help-block text-small text-muted">Enter a campaign name that will help you remember what the campaign is about. Will only be visible to you.</span>
+                                            <div class="well well-sm">
+                                                <input type="text" class="form-control input" name="name" ng-model="newCampaignObj.name" ng-change="checkCampaignName(newCampaignObj.name)" ng-required="currentStep == 1" ng-model-options="{ debounce: 800 }" ng-disabled="!isEditable"/>
+                                                <span class="form-control-feedback" ng-class="{'glyphicon glyphicon-remove text-danger': campaignNameExists && campaignNameChecked && !checkingCampaignName, 'glyphicon glyphicon-ok text-nephritis': !campaignNameExists && campaignNameChecked && newCampaignObj.name, 'fa fa-spinner fa-spin':checkingCampaignName}"></span>
+                                                <p class="error text-danger margin-top-5 margin-bottom-0" ng-if="campaignNameExists && campaignNameChecked && !checkingCampaignName">Campaign Name Already Used. Please Choose Another</p>
+                                                <p class="success text-nephritis margin-top-5 margin-bottom-0" ng-if="!campaignNameExists && campaignNameChecked && !checkingCampaignName && newCampaignObj.name">Great Campaign Name!</p>
+                                                <p class="error text-small text-danger margin-top-5 margin-bottom-0" ng-if="CreateCampaign.name.$dirty && CreateCampaign.name.$invalid">Campaign Name is required</p>
+                                            </div>
+                                        </div>
+                                        <div class="form-group margin-bottom-30">
+                                            <label>
+                                                Campaign Type <span class="symbol required"></span>
+                                            </label>
+                                            <span class="help-block text-small text-muted">Choose the type of campaign you want to create. Default is One Time.</span>
+                                            <div class="row" ng-class="{'disabled': !isEditable}">
+                                                <div class="col-sm-6">
+                                                    <div class="panel animated no-radius text-center margin-bottom-0 cursor-pointer" ng-class="{true:'panel-light-grey pulse',false:'panel-white'}[newCampaignObj.type == 'onetime']">
+                                                        <div class="panel-body" ng-class="{'bg-light-grey': hover1}" ng-mouseenter="hover1 = true" ng-mouseleave="hover1 = false" ng-click="newCampaignObj.type = 'onetime'">
+                                                            <span ng-class="{'text-nephritis': newCampaignObj.type == 'onetime', 'text-muted': newCampaignObj.type != 'onetime' }" class="fa fa-check text-nephritis fa-2x" style="position:absolute; top:o;right:0;margin-right:5px;margin-top:-10px;"></span>
+                                                            <span class="fa-stack fa-2x"> <i class="fa fa-square fa-stack-2x text-primary"></i> <i class="fa fa-envelope fa-stack-1x fa-inverse"></i> </span>
+                                                            <h3 class="StepTitle margin-top-10">One Time</h3>
+                                                            <p class="text-small">
+                                                                Send a standard one time email to a group of contacts.
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <div class="panel animated no-radius text-center margin-bottom-0 cursor-pointer" ng-class="{true:'panel-light-grey pulse',false:'panel-white'}[newCampaignObj.type == 'autoresponder']">
+                                                        <div class="panel-body" ng-class="{'bg-light-grey': hover2}" ng-mouseenter="hover2 = true" ng-mouseleave="hover2 = false" ng-click="newCampaignObj.type = 'autoresponder'">
+                                                            <span ng-class="{'text-nephritis': newCampaignObj.type == 'autoresponder', 'text-muted': newCampaignObj.type != 'autoresponder' }" class="fa fa-check fa-2x" style="position:absolute; top:o;right:0;margin-right:5px;margin-top:-10px;"></span>
+                                                            <span class="fa-stack fa-2x"> <i class="fa fa-square fa-stack-2x text-primary"></i> <i class="fa fa-bullhorn fa-stack-1x fa-inverse"></i> </span>
+                                                            <h3 class="StepTitle margin-top-10">AutoResponder</h3>
+                                                            <p class="text-small">
+                                                                Auomatically send an email after a contact subscribes
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="mini-editor" ng-class="{'col-sm-8 col-sm-offset-2': !fullscreen, 'col-xs-12': fullscreen}">
-                                    <div class="panel panel-white margin-top-5 margin-bottom-30" ng-if="!showPreview">
-                                        <div class="panel-body no-padding">
-                                            <div class="padding-15">
-                                                <div ng-show="!fullscreen" class="hidden show-fullscreen">
-                                                    <button class="btn btn-o btn-primary" ng-click="togglePreview()">Preview</button>
-                                                    <button class="btn btn-o btn-primary" ng-click="toggleFullscreen()"><span class="fa fa-expand"></span></button>
+                            </div>
+                            <!-- end: WIZARD STEP 1 -->
+                            <!-- start: WIZARD STEP 2 -->
+                            <div id="step-2" ng-show="currentStep == 2" class="campaign-step" ng-class="{'next': goingTo == 'next', 'prev': goingTo == 'prev'}">
+                                <div class="row">
+                                    <div class="col-sm-8 col-sm-offset-2">
+                                        <div class="well bg-primary margin-top-30">
+                                            <div class="padding-15 center">
+                                                <h2 class="StepTitle text-white text-bold"><i class="fa fa-envelope fa-2x fa-inverse block margin-bottom-10"></i> Content</h2>
+                                                <p class="margin-bottom-0 text-large">
+                                                    Design a custom email or select an email from email templates.
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Email Type</label>
+                                            <div class="clearfix"></div>
+                                            <div class="well well-sm">
+                                                <div class="radio clip-radio radio-primary radio-inline" style="margin-bottom:0px!important;margin-top:0px">
+                                                    <input type="radio" id="newEmail" ng-click="clearEmail(true)" name="emailtype" value="new" ng-model="selectedEmail.type" ng-disabled="!isEditable">
+                                                    <label for="newEmail" style="margin-bottom:0px!important">
+                                                        New Email
+                                                    </label>
                                                 </div>
-                                                <div ng-show="fullscreen">
-                                                    <button class="btn btn-o btn-primary show-fullscreen" ng-click="toggleFullscreen()"><span class="fa fa-compress"></span></button>
+                                                <div class="radio clip-radio radio-primary radio-inline" style="margin-bottom:0px!important;margin-top:0px">
+                                                    <input type="radio" id="emailTemplate" name="emailtype" value="template" ng-model="selectedEmail.type" ng-click="clearEmail()" ng-disabled="!isEditable">
+                                                    <label for="emailTemplate" style="margin-bottom:0px!important">
+                                                        Email Template
+                                                    </label>
                                                 </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group" ng-if="selectedEmail.type === 'new'">
+                                            <label>
+                                                Email Title <span class="symbol required"></span>
+                                            </label>
+                                            <div class="well well-sm">
+                                                <input type="text" class="form-control input" name="name" ng-model="emailToSend.title" ng-change="checkEmailTitle(emailToSend.title)" ng-model-options="{ debounce: 800 }" ng-disabled="!isEditable"/>
+                                                <span class="form-control-feedback" ng-class="{'glyphicon glyphicon-remove text-danger': emailTitleExists && emailTitleChecked && !checkingEmailTitle, 'glyphicon glyphicon-ok text-nephritis': !emailTitleExists && emailTitleChecked && emailToSend.title, 'fa fa-spinner fa-spin':checkingEmailTitle}"></span>
+                                                <p class="error text-danger margin-top-5 margin-bottom-0" ng-if="emailTitleExists && emailTitleChecked && !checkingEmailTitle">Email Title Already Used. Please Choose Another</p>
+                                                <p class="success text-nephritis margin-top-5 margin-bottom-0" ng-if="!emailTitleExists && emailTitleChecked && !checkingEmailTitle && emailToSend.title">Great Email Title!</p>
+                                            </div>
+                                        </div>
+                                        <div ng-if="selectedEmail.type === 'template'" ng-class="{'disabled': !isEditable}">
+                                            <label>
+                                                Email Template <span class="symbol required"></span>
+                                            </label>
+                                            <div class="well well-sm">
+                                                <div class="row">
+                                                    <div class="col-xs-12">
+                                                        <span ng-if="!emails.length">Loading... <b class="fa fa-spinner fa-spin"/></span>
+                                                        <ui-select ng-if="emails.length" ng-model="newCampaignObj.steps[0].settings.emailId" theme="bootstrap" ng-disabled="disabled" on-select="changeCurrentEmail($select.selected)" style="min-width:100%">
+                                                            <ui-select-match placeholder="Select an email template">{{$select.selected.title}} (subject:{{$select.selected.subject}})</ui-select-match>
+                                                            <ui-select-choices repeat="email._id as email in emails | propsFilter: {title: $select.search}">
+                                                                <div ng-bind-html="email.title | highlight: $select.search"></div>
+                                                                <small>
+                                                                subject: <span ng-bind-html="''+email.subject | highlight: $select.search"></span>
+                                                              </small>
+                                                            </ui-select-choices>
+                                                        </ui-select>
+                                                    </div>
+                                                </div>
+                                                <div class="clearfix"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mini-editor" ng-class="{'col-sm-8 col-sm-offset-2': !fullscreen, 'col-xs-12': fullscreen, 'disabled': !isEditable}">
+                                        <div class="panel panel-white margin-top-5 margin-bottom-30" ng-if="!showPreview">
+                                            <div class="panel-body no-padding">
+                                                <div class="padding-15">
+                                                    <div ng-show="!fullscreen" class="hidden show-fullscreen">
+                                                        <button class="btn btn-o btn-primary" ng-click="togglePreview()">Preview</button>
+                                                        <button class="btn btn-o btn-primary" ng-click="toggleFullscreen()"><span class="fa fa-expand"></span></button>
+                                                    </div>
+                                                    <div ng-show="fullscreen">
+                                                        <button class="btn btn-o btn-primary show-fullscreen" ng-click="toggleFullscreen()"><span class="fa fa-compress"></span></button>
+                                                    </div>
+                                                    <div class="form-group margin-bottom-0">
+                                                        <label class="control-label text-bold">
+                                                            From Name
+                                                        </label>
+                                                        <span editable-text="emailToSend.fromName">{{emailToSend.fromName}}</span>
+                                                    </div>
+                                                    <div class="form-group margin-bottom-0">
+                                                        <label class="control-label text-bold">
+                                                            From Email
+                                                        </label>
+                                                        <span editable-email="emailToSend.fromEmail">{{emailToSend.fromEmail}}</span>
+                                                    </div>
+                                                    <div class="form-group margin-bottom-0">
+                                                        <label class="control-label text-bold">
+                                                            Reply To
+                                                        </label>
+                                                        <span editable-email="emailToSend.replyTo">{{emailToSend.replyTo}}</span>
+                                                    </div>
+                                                    <div class="form-group margin-bottom-0">
+                                                        <label class="control-label text-bold">
+                                                            Subject
+                                                        </label>
+                                                        <span editable-text="emailToSend.subject" onbeforesave="analyzeSubject($data)">{{emailToSend.subject}}</span>
+                                                        <div class="clearfix"></div>
+                                                    </div>
+                                                    <div class="form-group margin-bottom-10" ng-show="subjectScore">
+                                                        <label> <a href="#" style="color:#858585" ng-click="openModal('subject-score-modal')">Subject Strength <span class="fa fa-info-circle"></span></a></label>
+                                                        <label class="pull-right text-bold" ng-class="{'text-danger': subjectScore<25, 'text-warning': subjectScore>=25 && subjectScore<50, 'text-info': subjectScore>=50 && subjectScore<75, 'text-nephritis': subjectScore>=75}">
+                                                            <span ng-if="subjectScore<30">Weak</span>
+                                                            <span ng-if="subjectScore>=30 && subjectScore<=50">Fair</span>
+                                                            <span ng-if="subjectScore>50 && subjectScore<80">Good</span>
+                                                            <span ng-if="subjectScore>=80">Strong</span> {{subjectScore}}%</label>
+                                                        <progressbar value="subjectScore" animate="true" type="{{getProgressType(subjectScore)}}" class="progress-xs margin-bottom-0"></progressbar>
+                                                    </div>
+                                                </div>
+                                                <div style="transform: translate3d(0,0,0);" ng-controller="EditorCtrl" ng-init="retrieveEmail(null, emailToSend); activateCKeditor();">
+                                                    <div>
+                                                        <div id="editor-toolbar" class="no-top-required email-toolbar"></div>
+                                                    </div>
+                                                    <div class="clearfix"></div>
+                                                    <div ng-hide="!ckeditorLoaded">
+                                                        <div data-ng-include data-src=" 'assets/views/partials/component-loader.html' "></div>
+                                                    </div>
+                                                    <div class="loading-editor" ct-fullheight="window" data-ct-fullheight-exclusion="header" ng-hide="ckeditorLoaded">
+                                                        <div class="col-xs-12">
+                                                            <h1 class="center"><span class="fa fa-spinner fa-spin"></span><br> Loading Editor...</h1>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row margin-top-30" ng-if="showPreview">
+                                    <div class="col-xs-12">
+                                        <div ng-show="!fullscreen" class="hidden-xs show-fullscreen">
+                                            <button class="btn btn-o btn-primary" ng-click="togglePreview()">Hide Preview</button>
+                                        </div>
+                                        <div class="col-sm-5">
+                                            <h4 class="center">Mobile</h4>
+                                            <div id="componentloader" class="mobile-bg">
+                                                <div data-ng-include data-src="'/components/email_v1.html'" style="margin: 70px auto 0;width: 202px;overflow: hidden;"></div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-7">
+                                            <h4 class="center">Desktop</h4>
+                                            <div id="componentloader" class="desktop-bg">
+                                                <div data-ng-include data-src="'/components/email_v1.html'" style="margin: 25px auto 0;width: 562px;overflow: hidden;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- end: WIZARD STEP 2 -->
+                            <!-- start: WIZARD STEP 3 -->
+                            <div id="step-3" ng-show="currentStep == 3" class="campaign-step" ng-class="{'next': goingTo == 'next', 'prev': goingTo == 'prev'}">
+                                <div class="row">
+                                    <div class="col-sm-8 col-sm-offset-2">
+                                        <div class="well bg-primary margin-top-30">
+                                            <div class="padding-15 center">
+                                                <h2 class="StepTitle text-white text-bold"><i class="fa fa-users fa-2x fa-inverse block margin-bottom-10"></i> Contacts</h2>
+                                                <p class="text-large margin-bottom-0">
+                                                    Who do you want to recieve this campaign?
+                                                    <br> Select the contacts grouped by tags or individual contacts.
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                        <div ng-hide="!isEditable">
+                                            <label>
+                                                Select Contacts <span class="symbol required"></span>
+                                            </label>
+                                            <div class="panel panel-white">
+                                                <div class="panel-body no-padding">
+                                                    <tabset>
+                                                        <tab heading="by Tag">
+                                                            <div class="checkbox clip-check check-primary" ng-repeat="count in customerCounts track by $index">
+                                                                <input type="checkbox" id="checkbox{{count.uniqueTag}}" value="{{count.matchingTag}}" ng-click="toggleSelection(count.matchingTag)" ng-checked="tagSelection.indexOf(count.matchingTag) > -1">
+                                                                <label for="checkbox{{count.uniqueTag}}">
+                                                                    <span class="badge">{{count.numberOfTags}}</span> {{count.matchingTag}}
+                                                                </label>
+                                                            </div>
+                                                        </tab>
+                                                        <tab heading="by Contact">
+                                                            <label class="text-muted">Select individuals from your contact list</label>
+                                                            <div class="well well-sm">
+                                                                <ui-select multiple ng-model="selectedCustomers.individuals" on-select="customerSelected($select)" on-remove="customerRemoved($select, $item)" theme="bootstrap" ng-disabled="disabled" close-on-select="false" style="min-width:100%" search-enabled="true">
+                                                                    <ui-select-match placeholder="Select Contacts...">{{$item.first}} {{$item.last}} ({{$item.details[0].emails[0].email}})</ui-select-match>
+                                                                    <ui-select-choices repeat="customer._id as customer in customers | filter:$select.search">
+                                                                        <span class="pull-left">
+                                                                            <img ng-src="customer.photo" width="35" height="35" class="screenshot img-circle" err-src="" err-contact="customer">
+                                                                        </span>
+                                                                        <span class="pull-left" style="line-height: 16px;margin-top: 3px;">
+                                                                            {{customer.first}} {{customer.last}}
+                                                                            <div class="clearfix"></div>
+                                                                            <small ng-if="customer.details[0].emails[0].email.length > 0">{{customer.details[0].emails[0].email}}</small>
+                                                                        </span>
+                                                                        <div class="clearfix"></div>
+                                                                    </ui-select-choices>
+                                                                </ui-select>
+                                                            </div>
+                                                        </tab>
+                                                        <tab heading="by Emails">
+                                                            <label class="text-muted">Enter emails manually or paste a comma seperated list. Emails already in contacts will be ignored.</label>
+                                                            <div class="well well-sm">
+                                                                <tags-input ng-model="selectedCustomers.newEmails" add-on-paste="true" placeholder="Add a email" add-on-comma="true" allowed-tags-pattern="^[-a-z0-9~!$%^&*_=+}{\'?]+(\.[-a-z0-9~!$%^&*_=+}{\'?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+)*\.(aero|arpa|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|mobi|[a-z][a-z])|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$" on-tag-adding="checkContactExists($tag)">
+                                                                </tags-input>
+                                                            </div>
+                                                        </tab>
+                                                    </tabset>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="avatars center">
+                                            <ul class="unstyled-list inline-list padding-left-0">
+                                                <li tooltip-placement="top" tooltip-html-unsafe="{{contact.first}} {{contact.last}} <br> {{checkBestEmail(contact)}}" ng-repeat="contact in recipients | limitTo:100">
+                                                    <img ng-src="{{ contact.photo }}" id="customer_photo_{{contact._id}}" err-src="" err-contact="contact" class="img-thumbnail img-circle screenshot animated bounce" alt="image" width="35" height="35">
+                                                </li>
+                                            </ul>
+                                            <button ng-click="openModal('customers-list-modal')" ng-if="recipients.length > 0" class="btn btn-primary btn-wide btn-o margin-bottom-15">View Full Contact List</button>
+                                        </div>
+                                        <div class="margin-bottom-30 center">
+                                            <span ng-if="recipients.length > 100" class="text-muted">(Showing 100 / {{recipients.length}} contacts. To view all contacts, Click "View Full Contact List" button.)</span>
+                                            <div class="clearfix"></div>
+                                            <span class="text-muted">{{recipients.length}} / {{customers.length}} contacts selected</span>
+                                            <div class="clearfix"></div>
+                                            <span class="text-muted" ng-if="selectedCustomers.newEmails.length">{{selectedCustomers.newEmails.length}} 
+                                            <ng-pluralize count="selectedCustomers.newEmails.length"
+                                                              when="{'0': 'new contacts will be created',
+                                                                     '1': 'new contact will be created',
+                                                                     'other': 'new contacts will be created'}">
+                                                </ng-pluralize></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- end: WIZARD STEP 3 -->
+                            <!-- start: WIZARD STEP 4 -->
+                            <div id="step-4" ng-show="currentStep == 4" class="campaign-step" ng-class="{'next': goingTo == 'next', 'prev': goingTo == 'prev'}">
+                                <div class="row margin-top-30">
+                                    <div class="col-sm-8 col-sm-offset-2">
+                                        <div class="well bg-primary">
+                                            <div class="padding-15 center" ng-if="newCampaignObj.type != 'autoresponder'">
+                                                <h2 class="StepTitle text-white text-bold"><i class="fa fa-paper-plane fa-2x fa-inverse block margin-bottom-10"></i> Delivery</h2>
+                                                <p class="text-large margin-bottom-0">
+                                                    Review the campaign details, select a time
+                                                    <br> to start the campaign and launch.
+                                                </p>
+                                            </div>
+                                            <div class="padding-15 center" ng-if="newCampaignObj.type == 'autoresponder'">
+                                                <h2 class="StepTitle text-white text-bold"><i class="fa fa-paper-plane fa-2x fa-inverse block margin-bottom-10"></i> Trigger</h2>
+                                                <p class="text-large margin-bottom-0">
+                                                    Select a trigger that will
+                                                    <br> determine when the email gets sent.
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div ng-if="newCampaignObj.type != 'autoresponder'">
+                                            <label>Delivery Date & Time <span class="symbol required"></span></label>
+                                            <p class="text-muted">Send now or choose a date & time in the future</p>
+                                            <div class="well well-sm margin-bottom-30">
+                                                <div class="col-xs-12 margin-bottom-30 margin-top-15">
+                                                    <h4 class="center text-bold">{{formatDate(delivery.date)}}</h4>
+                                                </div>
+                                                <div class="col-sm-5">
+                                                    <div class="radio clip-radio radio-primary" style="margin-top:0px!important">
+                                                        <input type="radio" ng-change="updateSendNow('now')" id="radio3" name="vertical" value="now" ng-model="whenToSend" ng-disabled="!isEditable">
+                                                        <label for="radio3">
+                                                            Send Now
+                                                        </label>
+                                                    </div>
+                                                    <div class="radio clip-radio radio-primary">
+                                                        <input ng-change="updateSendNow('later')" type="radio" id="radio4" name="vertical" value="later" ng-model="whenToSend" ng-disabled="!isEditable">
+                                                        <label for="radio4">
+                                                            Send Later
+                                                        </label>
+                                                    </div>
+                                                    <div class="radio clip-radio radio-primary hidden" style="margin-bottom:0px!important">
+                                                        <input type="radio" id="radio5" name="vertical" value="best" ng-model="whenToSend" ng-disabled="!isEditable">
+                                                        <label for="radio5">
+                                                            Send Best Time
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-7">
+                                                    <div class="well bg-white pull-left margin-bottom-20 delivery-selector" ng-class="{'csspinner': whenToSend === 'now', 'disabled': !isEditable}">
+                                                        <datepicker ng-model="delivery.date" min-date="delivery.minDate" show-weeks="true" class="margin-bottom-10" custom-class="selectedDay"></datepicker>
+                                                        <div class="clearfix"></div>
+                                                        <timepicker ng-model="delivery.time" ng-change="updateTime()" hour-step="hstep" minute-step="mstep" min="delivery.minDate" class="center"></timepicker>
+                                                    </div>
+                                                    <div ng-if="invalidDate && whenToSend === 'later'" class="col-xs-12">
+                                                        <span style="font-weight: bold;color: #E6674A;">Invalid time</span>
+                                                    </div>
+                                                    <div class="clearfix"></div>
+                                                </div>
+                                                <div class="clearfix"></div>
+                                            </div>
+                                        </div>
+                                        <div ng-if="newCampaignObj.type == 'autoresponder'">
+                                        <div class="row margin-bottom-30">
+                                            <div class="col-xs-4" ng-repeat="trigger in triggers">
+                                                 <div class="panel animated no-radius text-center margin-bottom-0 cursor-pointer" ng-class="{true:'panel-light-grey pulse',false:'panel-white'}[trigger == newCampaignObj.steps[0].trigger]">
+                                                <div class="panel-body" ng-class="{'bg-light-grey': hover1}" ng-mouseenter="hover1 = true" ng-mouseleave="hover1 = false" ng-click="newCampaignObj.steps[0].trigger = 'SIGNUP'">
+                                                    <span ng-class="{'text-nephritis': newCampaignObj.steps[0].trigger == 'SIGNUP', 'text-muted': newCampaignObj.steps[0].trigger != trigger.value }" class="fa fa-check text-nephritis fa-2x" style="position:absolute; top:o;right:0;margin-right:5px;margin-top:-10px;"></span>
+                                                    <span class="fa-stack fa-2x"> <i class="fa fa-square fa-stack-2x text-primary"></i> <i class="fa fa-envelope fa-stack-1x fa-inverse"></i> </span>
+                                                    <h3 class="StepTitle margin-top-10">{{trigger.name}}</h3>
+                                                </div>
+                                            </div>
+                                            </div>
+                                        </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- end: WIZARD STEP 4 -->
+                            <!-- start: WIZARD STEP 5 -->
+                            <div id="step-5" ng-show="currentStep == 5" class="campaign-step" ng-class="{'next': goingTo == 'next', 'prev': goingTo == 'prev'}">
+                                <div class="row margin-top-30">
+                                    <div class="col-sm-8 col-sm-offset-2">
+                                        <div class="well bg-primary">
+                                            <div class="padding-15 center">
+                                                <h2 class="StepTitle text-white text-bold"><i class="fa fa-clipboard fa-2x fa-inverse block margin-bottom-10"></i> Review</h2>
+                                                <p class="text-large margin-bottom-0">
+                                                    Review the campaign details, test and launch.
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="list-group">
+                                            <a class="list-group-item" href="#">
+                                                <h5 class="list-group-item-heading">Details</h5>
+                                                <p class="list-group-item-text">
+                                                    Adding a new <span class="text-bold">{{newCampaignObj.type}}</span> campaign titled <span class="text-bold">{{newCampaignObj.name}}</span>.
+                                                </p>
+                                            </a>
+                                            <a class="list-group-item" href="#">
+                                                <h5 class="list-group-item-heading">Contacts</h5>
+                                                <p class="list-group-item-text">
+                                                    Sending to <span class="text-bold">{{recipients.length + selectedCustomers.newEmails.length}}</span> contacts.
+                                                </p>
+                                            </a>
+                                            <a class="list-group-item" href="#">
+                                                <h5 class="list-group-item-heading">Content</h5>
+                                                <p class="list-group-item-text">
+                                                    Using {{selectedEmail.type === 'new' ? 'a new email': 'an existing email'}} template.
+                                                </p>
+                                            </a>
+                                            <a class="list-group-item" href="#">
+                                                <h5 class="list-group-item-heading">Delivery</h5>
+                                                <p class="list-group-item-text">
+                                                    Sending email at {{formatDate(delivery.date)}}
+                                                </p>
+                                            </a>
+                                        </div>
+                                        <div class="panel panel-white">
+                                            <div class="panel-body">
                                                 <div class="form-group margin-bottom-0">
                                                     <label class="control-label text-bold">
                                                         From Name
                                                     </label>
-                                                    <span editable-text="emailToSend.fromName">{{emailToSend.fromName}}</span>
+                                                    <span>{{emailToSend.fromName}}</span>
                                                 </div>
                                                 <div class="form-group margin-bottom-0">
                                                     <label class="control-label text-bold">
                                                         From Email
                                                     </label>
-                                                    <span editable-email="emailToSend.fromEmail">{{emailToSend.fromEmail}}</span>
+                                                    <span>{{emailToSend.fromEmail}}</span>
                                                 </div>
                                                 <div class="form-group margin-bottom-0">
                                                     <label class="control-label text-bold">
                                                         Reply To
                                                     </label>
-                                                    <span editable-email="emailToSend.replyTo">{{emailToSend.replyTo}}</span>
+                                                    <span>{{emailToSend.replyTo}}</span>
                                                 </div>
                                                 <div class="form-group margin-bottom-0">
                                                     <label class="control-label text-bold">
                                                         Subject
                                                     </label>
-                                                    <span editable-text="emailToSend.subject" onbeforesave="analyzeSubject($data)">{{emailToSend.subject}}</span>
-                                                    <div class="clearfix"></div>
+                                                    <span>{{emailToSend.subject}}</span>
                                                 </div>
-                                                <div class="form-group margin-bottom-10" ng-show="subjectScore">
-                                                    <label> <a href="#" style="color:#858585" ng-click="openModal('subject-score-modal')">Subject Strength <span class="fa fa-info-circle"></span></a></label>
-                                                    <label class="pull-right text-bold" ng-class="{'text-danger': subjectScore<25, 'text-warning': subjectScore>=25 && subjectScore<50, 'text-info': subjectScore>=50 && subjectScore<75, 'text-nephritis': subjectScore>=75}">
-                                                        <span ng-if="subjectScore<30">Weak</span>
-                                                        <span ng-if="subjectScore>=30 && subjectScore<=50">Fair</span>
-                                                        <span ng-if="subjectScore>50 && subjectScore<80">Good</span>
-                                                        <span ng-if="subjectScore>=80">Strong</span> {{subjectScore}}%</label>
-                                                    <progressbar value="subjectScore" animate="true" type="{{getProgressType(subjectScore)}}" class="progress-xs margin-bottom-0"></progressbar>
-                                                </div>
-                                            </div>
-                                            <div style="transform: translate3d(0,0,0);" ng-controller="EditorCtrl" ng-init="retrieveEmail(null, emailToSend); activateCKeditor();">
-                                                <div>
-                                                    <div id="editor-toolbar" class="no-top-required email-toolbar"></div>
-                                                </div>
-                                                <div class="clearfix"></div>
-                                                <div ng-hide="!ckeditorLoaded">
-                                                    <div data-ng-include data-src=" 'assets/views/partials/component-loader.html' "></div>
-                                                </div>
-                                                <div class="loading-editor" ct-fullheight="window" data-ct-fullheight-exclusion="header" ng-hide="ckeditorLoaded">
-                                                    <div class="col-xs-12">
-                                                        <h1 class="center"><span class="fa fa-spinner fa-spin"></span><br> Loading Editor...</h1>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row margin-top-30" ng-if="showPreview">
-                                <div class="col-xs-12">
-                                    <div ng-show="!fullscreen" class="hidden-xs show-fullscreen">
-                                        <button class="btn btn-o btn-primary" ng-click="togglePreview()">Hide Preview</button>
-                                    </div>
-                                    <div class="col-sm-5">
-                                        <h4 class="center">Mobile</h4>
-                                        <div id="componentloader" class="mobile-bg">
-                                            <div data-ng-include data-src="'/components/email_v1.html'" style="margin: 70px auto 0;width: 202px;overflow: hidden;"></div>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-7">
-                                        <h4 class="center">Desktop</h4>
-                                        <div id="componentloader" class="desktop-bg">
-                                            <div data-ng-include data-src="'/components/email_v1.html'" style="margin: 25px auto 0;width: 562px;overflow: hidden;"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- end: WIZARD STEP 2 -->
-                        <!-- start: WIZARD STEP 3 -->
-                        <div id="step-3" ng-show="currentStep == 3" class="campaign-step" ng-class="{'next': goingTo == 'next', 'prev': goingTo == 'prev'}">
-                            <div class="row">
-                                <div class="col-sm-8 col-sm-offset-2">
-                                    <div class="well bg-primary margin-top-30">
-                                        <div class="padding-15 center">
-                                            <h2 class="StepTitle text-white text-bold"><i class="fa fa-users fa-2x fa-inverse block margin-bottom-10"></i> Contacts</h2>
-                                            <p class="text-large margin-bottom-0">
-                                                Who do you want to recieve this campaign?
-                                                <br> Select the contacts grouped by tags or individual contacts.
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <div class="clearfix"></div>
-                                    <label>
-                                        Select Contacts <span class="symbol required"></span>
-                                    </label>
-                                    <div class="panel panel-white">
-                                        <div class="panel-body no-padding">
-                                            <tabset>
-                                                <tab heading="by Tag">
-                                                    <div class="checkbox clip-check check-primary" ng-repeat="count in customerCounts track by $index">
-                                                        <input type="checkbox" id="checkbox{{count.uniqueTag}}" value="{{count.matchingTag}}" ng-click="toggleSelection(count.matchingTag)" ng-checked="tagSelection.indexOf(count.matchingTag) > -1">
-                                                        <label for="checkbox{{count.uniqueTag}}">
-                                                            <span class="badge">{{count.numberOfTags}}</span> {{count.matchingTag}}
-                                                        </label>
-                                                    </div>
-                                                </tab>
-                                                <tab heading="by Contact">
-                                                    <label class="text-muted">Select individuals from your contact list</label>
-                                                    <div class="well well-sm">
-                                                        <ui-select multiple ng-model="selectedCustomers.individuals" on-select="customerSelected($select)" on-remove="customerRemoved($select, $item)" theme="bootstrap" ng-disabled="disabled" close-on-select="false" style="min-width:100%" search-enabled="true">
-                                                            <ui-select-match placeholder="Select Contacts...">{{$item.first}} {{$item.last}} ({{$item.details[0].emails[0].email}})</ui-select-match>
-                                                            <ui-select-choices repeat="customer._id as customer in customers | filter:$select.search">
-                                                                <span class="pull-left">
-                                                                    <img ng-src="customer.photo" width="35" height="35" class="screenshot img-circle" err-src="" err-contact="customer">
-                                                                </span>
-                                                                <span class="pull-left" style="line-height: 16px;margin-top: 3px;">
-                                                                    {{customer.first}} {{customer.last}}
-                                                                    <div class="clearfix"></div>
-                                                                    <small ng-if="customer.details[0].emails[0].email.length > 0">{{customer.details[0].emails[0].email}}</small>
-                                                                </span>
-                                                                <div class="clearfix"></div>
-                                                            </ui-select-choices>
-                                                        </ui-select>
-                                                    </div>
-                                                </tab>
-                                                <tab heading="by Emails">
-                                                    <label class="text-muted">Enter emails manually or paste a comma seperated list. Emails already in contacts will be ignored.</label>
-                                                    <div class="well well-sm">
-                                                        <tags-input ng-model="selectedCustomers.newEmails" add-on-paste="true" placeholder="Add a email" add-on-comma="true" allowed-tags-pattern="^[-a-z0-9~!$%^&*_=+}{\'?]+(\.[-a-z0-9~!$%^&*_=+}{\'?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+)*\.(aero|arpa|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|mobi|[a-z][a-z])|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$" on-tag-adding="checkContactExists($tag)">
-                                                        </tags-input>
-                                                    </div>
-                                                </tab>
-                                            </tabset>
-                                        </div>
-                                    </div>
-                                    <div class="avatars center">
-                                        <ul class="unstyled-list inline-list padding-left-0">
-                                            <li tooltip-placement="top" tooltip-html-unsafe="{{contact.first}} {{contact.last}} <br> {{checkBestEmail(contact)}}" ng-repeat="contact in recipients | limitTo:100">
-                                                <img ng-src="{{ contact.photo }}" id="customer_photo_{{contact._id}}" err-src="" err-contact="contact" class="img-thumbnail img-circle screenshot animated bounce" alt="image" width="35" height="35">
-                                            </li>
-                                        </ul>
-                                        <button ng-click="openModal('customers-list-modal')" ng-if="recipients.length > 0" class="btn btn-primary btn-wide btn-o margin-bottom-15">View Full Contact List</button>
-                                    </div>
-                                    <div class="margin-bottom-30 center">
-                                        <span ng-if="recipients.length > 100" class="text-muted">(Showing 100 / {{recipients.length}} contacts. To view all contacts, Click "View Full Contact List" button.)</span>
-                                        <div class="clearfix"></div>
-                                        <span class="text-muted">{{recipients.length}} / {{customers.length}} contacts selected</span>
-                                        <div class="clearfix"></div>
-                                        <span class="text-muted" ng-if="selectedCustomers.newEmails.length">{{selectedCustomers.newEmails.length}} 
-                                        <ng-pluralize count="selectedCustomers.newEmails.length"
-                                                          when="{'0': 'new contacts will be created',
-                                                                 '1': 'new contact will be created',
-                                                                 'other': 'new contacts will be created'}">
-                                            </ng-pluralize></span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- end: WIZARD STEP 3 -->
-                        <!-- start: WIZARD STEP 4 -->
-                        <div id="step-4" ng-show="currentStep == 4" class="campaign-step" ng-class="{'next': goingTo == 'next', 'prev': goingTo == 'prev'}">
-                            <div class="row margin-top-30">
-                                <div class="col-sm-8 col-sm-offset-2">
-                                    <div class="well bg-primary">
-                                        <div class="padding-15 center" ng-if="newCampaignObj.type != 'autoresponder'">
-                                            <h2 class="StepTitle text-white text-bold"><i class="fa fa-paper-plane fa-2x fa-inverse block margin-bottom-10"></i> Delivery</h2>
-                                            <p class="text-large margin-bottom-0">
-                                                Review the campaign details, select a time
-                                                <br> to start the campaign and launch.
-                                            </p>
-                                        </div>
-                                        <div class="padding-15 center" ng-if="newCampaignObj.type == 'autoresponder'">
-                                            <h2 class="StepTitle text-white text-bold"><i class="fa fa-paper-plane fa-2x fa-inverse block margin-bottom-10"></i> Trigger</h2>
-                                            <p class="text-large margin-bottom-0">
-                                                Select a trigger that will
-                                                <br> determine when the email gets sent.
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <div ng-if="newCampaignObj.type != 'autoresponder'">
-                                        <label>Delivery Date & Time <span class="symbol required"></span></label>
-                                        <p class="text-muted">Send now or choose a date & time in the future</p>
-                                        <div class="well well-sm margin-bottom-30">
-                                            <div class="col-xs-12 margin-bottom-30 margin-top-15">
-                                                <h4 class="center text-bold">{{formatDate(delivery.date)}}</h4>
-                                            </div>
-                                            <div class="col-sm-5">
-                                                <div class="radio clip-radio radio-primary" style="margin-top:0px!important">
-                                                    <input type="radio" ng-change="updateSendNow('now')" id="radio3" name="vertical" value="now" ng-model="whenToSend">
-                                                    <label for="radio3">
-                                                        Send Now
+                                                <div class="form-group margin-bottom-0">
+                                                    <label class="control-label text-bold">
+                                                        To
                                                     </label>
+                                                    <span> <ng-pluralize count="recipients.length"
+                                                          when="{'0': '0 existing contacts',
+                                                                 '1': '{{recipients[0].details[0].emails[0].email}}',
+                                                                 'other': '{{recipients.length}} existing contacts'}">
+                                                                </ng-pluralize>
+                                                        </span>
+                                                    <span> <ng-pluralize count="selectedCustomers.newEmails.length"
+                                                          when="{'1': ' and 1 new contact',
+                                                                 'other': ' and {{selectedCustomers.newEmails.length}} new contacts'}">
+                                                                </ng-pluralize>
+                                                        </span>
                                                 </div>
-                                                <div class="radio clip-radio radio-primary">
-                                                    <input ng-change="updateSendNow('later')" type="radio" id="radio4" name="vertical" value="later" ng-model="whenToSend">
-                                                    <label for="radio4">
-                                                        Send Later
-                                                    </label>
-                                                </div>
-                                                <div class="radio clip-radio radio-primary hidden" style="margin-bottom:0px!important">
-                                                    <input type="radio" id="radio5" name="vertical" value="best" ng-model="whenToSend">
-                                                    <label for="radio5">
-                                                        Send Best Time
-                                                    </label>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-7">
-                                                <div class="well bg-white pull-left margin-bottom-20 delivery-selector" ng-class="{'csspinner': whenToSend === 'now'}">
-                                                    <datepicker ng-model="delivery.date" min-date="delivery.minDate" show-weeks="true" class="margin-bottom-10" custom-class="selectedDay"></datepicker>
-                                                    <div class="clearfix"></div>
-                                                    <timepicker ng-model="delivery.time" ng-change="updateTime()" hour-step="hstep" minute-step="mstep" min="delivery.minDate" class="center"></timepicker>
-                                                </div>
-                                                <div ng-if="invalidDate && whenToSend === 'later'" class="col-xs-12">
-                                                    <span style="font-weight: bold;color: #E6674A;">Invalid time</span>
+                                                <div style="max-height:300px;overflow:hidden" class="border-around border-light hidden">
+                                                    <img src="//indigenous-screenshots.s3.amazonaws.com/account_536/1432017910483.png" class="img-responsive" />
                                                 </div>
                                                 <div class="clearfix"></div>
                                             </div>
-                                            <div class="clearfix"></div>
-                                        </div>
-                                    </div>
-                                    <div ng-if="newCampaignObj.type == 'autoresponder'">
-                                    <div class="row margin-bottom-30">
-                                        <div class="col-xs-4" ng-repeat="trigger in triggers">
-                                             <div class="panel animated no-radius text-center margin-bottom-0 cursor-pointer" ng-class="{true:'panel-light-grey pulse',false:'panel-white'}[trigger == newCampaignObj.steps[0].trigger]">
-                                            <div class="panel-body" ng-class="{'bg-light-grey': hover1}" ng-mouseenter="hover1 = true" ng-mouseleave="hover1 = false" ng-click="newCampaignObj.steps[0].trigger = 'SIGNUP'">
-                                                <span ng-class="{'text-nephritis': newCampaignObj.steps[0].trigger == 'SIGNUP', 'text-muted': newCampaignObj.steps[0].trigger != trigger.value }" class="fa fa-check text-nephritis fa-2x" style="position:absolute; top:o;right:0;margin-right:5px;margin-top:-10px;"></span>
-                                                <span class="fa-stack fa-2x"> <i class="fa fa-square fa-stack-2x text-primary"></i> <i class="fa fa-envelope fa-stack-1x fa-inverse"></i> </span>
-                                                <h3 class="StepTitle margin-top-10">{{trigger.name}}</h3>
-                                            </div>
-                                        </div>
-                                        </div>
-                                    </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- end: WIZARD STEP 4 -->
-                        <!-- start: WIZARD STEP 5 -->
-                        <div id="step-5" ng-show="currentStep == 5" class="campaign-step" ng-class="{'next': goingTo == 'next', 'prev': goingTo == 'prev'}">
-                            <div class="row margin-top-30">
-                                <div class="col-sm-8 col-sm-offset-2">
-                                    <div class="well bg-primary">
-                                        <div class="padding-15 center">
-                                            <h2 class="StepTitle text-white text-bold"><i class="fa fa-clipboard fa-2x fa-inverse block margin-bottom-10"></i> Review</h2>
-                                            <p class="text-large margin-bottom-0">
-                                                Review the campaign details, test and launch.
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <div class="list-group">
-                                        <a class="list-group-item" href="#">
-                                            <h5 class="list-group-item-heading">Details</h5>
-                                            <p class="list-group-item-text">
-                                                Adding a new <span class="text-bold">{{newCampaignObj.type}}</span> campaign titled <span class="text-bold">{{newCampaignObj.name}}</span>.
-                                            </p>
-                                        </a>
-                                        <a class="list-group-item" href="#">
-                                            <h5 class="list-group-item-heading">Contacts</h5>
-                                            <p class="list-group-item-text">
-                                                Sending to <span class="text-bold">{{recipients.length + selectedCustomers.newEmails.length}}</span> contacts.
-                                            </p>
-                                        </a>
-                                        <a class="list-group-item" href="#">
-                                            <h5 class="list-group-item-heading">Content</h5>
-                                            <p class="list-group-item-text">
-                                                Using {{selectedEmail.type === 'new' ? 'a new email': 'an existing email'}} template.
-                                            </p>
-                                        </a>
-                                        <a class="list-group-item" href="#">
-                                            <h5 class="list-group-item-heading">Delivery</h5>
-                                            <p class="list-group-item-text">
-                                                Sending email at {{formatDate(delivery.date)}}
-                                            </p>
-                                        </a>
-                                    </div>
-                                    <div class="panel panel-white">
-                                        <div class="panel-body">
-                                            <div class="form-group margin-bottom-0">
-                                                <label class="control-label text-bold">
-                                                    From Name
-                                                </label>
-                                                <span>{{emailToSend.fromName}}</span>
-                                            </div>
-                                            <div class="form-group margin-bottom-0">
-                                                <label class="control-label text-bold">
-                                                    From Email
-                                                </label>
-                                                <span>{{emailToSend.fromEmail}}</span>
-                                            </div>
-                                            <div class="form-group margin-bottom-0">
-                                                <label class="control-label text-bold">
-                                                    Reply To
-                                                </label>
-                                                <span>{{emailToSend.replyTo}}</span>
-                                            </div>
-                                            <div class="form-group margin-bottom-0">
-                                                <label class="control-label text-bold">
-                                                    Subject
-                                                </label>
-                                                <span>{{emailToSend.subject}}</span>
-                                            </div>
-                                            <div class="form-group margin-bottom-0">
-                                                <label class="control-label text-bold">
-                                                    To
-                                                </label>
-                                                <span> <ng-pluralize count="recipients.length"
-                                                      when="{'0': '0 existing contacts',
-                                                             '1': '{{recipients[0].details[0].emails[0].email}}',
-                                                             'other': '{{recipients.length}} existing contacts'}">
-                                                            </ng-pluralize>
-                                                    </span>
-                                                <span> <ng-pluralize count="selectedCustomers.newEmails.length"
-                                                      when="{'1': ' and 1 new contact',
-                                                             'other': ' and {{selectedCustomers.newEmails.length}} new contacts'}">
-                                                            </ng-pluralize>
-                                                    </span>
-                                            </div>
-                                            <div style="max-height:300px;overflow:hidden" class="border-around border-light hidden">
-                                                <img src="//indigenous-screenshots.s3.amazonaws.com/account_536/1432017910483.png" class="img-responsive" />
-                                            </div>
-                                            <div class="clearfix"></div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                            <!-- end: WIZARD STEP 5 -->
                         </div>
-                        <!-- end: WIZARD STEP 5 -->
                     </div>
-                </div>
-                <div class="col-md-12 bg-light-grey padding-30 margin-bottom-20">
-                    <div class="form-group overflow-auto">
-                        <div ng-if="currentStep > 1">
-                            <button class="btn btn-primary btn-o back-step btn-wide pull-left" ng-click="form.prev(Form)">
-                                <i class="fa fa-chevron-left"></i> Back
-                            </button>
-                        </div>
-                        <div ng-if="currentStep < 5">
-                            <button class="btn btn-primary btn-o next-step btn-wide pull-right" ng-click="form.next(Form)">
-                                <span> Next </span> <i class="fa fa-chevron-right"></i>
-                            </button>
-                        </div>
-                        <div ng-if="currentStep == 5">
-                            <button ng-disabled="saveLoading" class="btn btn-success btn-wide pull-right" ng-click="activateCampaign()">
-                                <span> Activate Campaign </span> <i class="fa fa-clock-o"></i>
-                            </button>
-                            <button class="btn btn-info btn-wide pull-right margin-right-5" ng-click="openModal('send-test-email-modal')">
-                                <span> Send Test </span> <i class="fa fa-paper-plane"></i>
-                            </button>
+                    <div class="col-md-12 bg-light-grey padding-30 margin-bottom-20">
+                        <div class="form-group overflow-auto">
+                            <div ng-if="currentStep > 1">
+                                <button class="btn btn-primary btn-o back-step btn-wide pull-left" ng-click="form.prev(Form)">
+                                    <i class="fa fa-chevron-left"></i> Back
+                                </button>
+                            </div>
+                            <div ng-if="currentStep < 5">
+                                <button class="btn btn-primary btn-o next-step btn-wide pull-right" ng-click="form.next(Form)">
+                                    <span> Next </span> <i class="fa fa-chevron-right"></i>
+                                </button>
+                            </div>
+                            <div ng-if="currentStep == 5">
+                                <button ng-disabled="saveLoading || !isEditable" class="btn btn-success btn-wide pull-right" ng-click="activateCampaign()">
+                                    <span> Activate Campaign </span> <i class="fa fa-clock-o"></i>
+                                </button>
+                                <button class="btn btn-info btn-wide pull-right margin-right-5" ng-click="openModal('send-test-email-modal')">
+                                    <span> Send Test </span> <i class="fa fa-paper-plane"></i>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        <!-- end: WIZARD FORM -->
+        <div data-ng-include data-src=" 'assets/views/partials/campaign-duplicate-modal.html' "></div>
+        <div data-ng-include data-src=" 'assets/views/partials/send-test-email-modal.html' "></div>
+        <div data-ng-include data-src=" 'assets/views/partials/customers-list-modal.html' "></div>
+        <div data-ng-include data-src=" 'assets/views/partials/subject-score-modal.html' "></div>
+        <div data-ng-include data-src=" 'assets/views/partials/component-settings-modal.html' "></div>
     </div>
-    <!-- end: WIZARD FORM -->
-    <div data-ng-include data-src=" 'assets/views/partials/send-test-email-modal.html' "></div>
-    <div data-ng-include data-src=" 'assets/views/partials/customers-list-modal.html' "></div>
-    <div data-ng-include data-src=" 'assets/views/partials/subject-score-modal.html' "></div>
-    <div data-ng-include data-src=" 'assets/views/partials/component-settings-modal.html' "></div>
 </div>

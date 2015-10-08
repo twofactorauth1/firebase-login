@@ -138,7 +138,7 @@ module.exports = {
 
     },
 
-    duplicateCampaign: function(accountId, campaignId, userId, fn) {
+    duplicateCampaign: function(accountId, campaignId, campaignName, userId, fn) {
         var self = this;
         self.log.debug('>> duplicateCampaign');
         campaignDao.findOne({accountId:accountId, _id:campaignId}, $$.m.Campaign, function(err, campaign){
@@ -154,6 +154,13 @@ module.exports = {
                 campaign.set('created', createdObj);
                 campaign.set('modified', createdObj);
                 campaign.set('status', $$.m.Campaign.status.DRAFT);
+                campaign.set('name', campaignName);
+                campaign.set('statistics', {
+                    emailsClicked: 0,
+                    emailsOpened: 0,
+                    emailsSent: 0,
+                    participants: 0
+                });
                 campaignDao.saveOrUpdate(campaign, function(err, savedCampaign){
                     if(err) {
                         self.log.error('Error saving campaign:', err);

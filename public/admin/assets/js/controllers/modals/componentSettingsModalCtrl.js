@@ -48,7 +48,7 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
     $scope.filterdedPages = $filter('orderBy')($scope.allPages, "title", false);
   });
 
-  WebsiteService.getEmails(function (emails) {
+  WebsiteService.getEmails(true, function (emails) {
     $scope.emails = emails;
 
     //select the default email for simple form as welcome-aboard

@@ -3,21 +3,27 @@
  * controller for products
  */
 (function (angular) {
-  app.controller('CampaignsCtrl', ["$scope", "$timeout", "$location", "toaster", "$filter", "$modal", "CampaignService", function ($scope, $timeout, $location, toaster, $filter, $modal, CampaignService) {
+  app.controller('CampaignsCtrl', ["$scope", "$timeout", "$location", "toaster", "$filter", "$modal", "CampaignService", function ($scope, $timeout, $location, toaster, $filter, $modal,   CampaignService) {
+
+    // $route.reload();
 
     /*
      * @getCampaigns
      * get all campaigns
      */
-
-    CampaignService.getCampaigns(function (campaigns) {
-      console.log('campaigns >>> ', campaigns);
-      $timeout(function() {
-        $scope.$apply(function() {
-          $scope.campaigns = campaigns;
+    var fetchCampaigns = function() {
+      CampaignService.getCampaigns(function (campaigns) {
+        console.log('campaigns >>> ', campaigns);
+        $timeout(function() {
+          $scope.$apply(function() {
+            $scope.campaigns = campaigns;
+            $timeout(fetchCampaigns, 10000);
+          });
         });
       });
-    });
+    }
+
+    fetchCampaigns();
 
     $scope.tableView = 'list';
 

@@ -8,19 +8,19 @@
     var campaigncache = $cacheFactory('campaigns');
 
     this.getCampaigns = function (fn) {
-      var data = campaigncache.get('campaigns');
-      if (data) {
-        if (fn) {
-          fn(data);
-        }
-      } else {
+      // var data = campaigncache.get('campaigns');
+      // if (data) {
+      //   if (fn) {
+      //     fn(data);
+      //   }
+      // } else {
         var apiUrl = baseUrl;
         $http.get(apiUrl)
           .success(function (data) {
             campaigncache.put('campaigns', data);
             fn(data);
           });
-      }
+      // }
     };
 
     this.getCampaign = function (id, fn) {
@@ -73,7 +73,7 @@
       });
     };
 
-    this.cancelCampaignForContact = function (campaignId, contactId, fn) {
+    this.cancelCampaignForContact = function (campaign, contactId, fn) {
       var apiUrl = baseUrl + [campaign._id, 'contact', contactId].join('/');
       $http({
         url: apiUrl,
@@ -82,19 +82,24 @@
       }).success(function (data) {
         fn(data);
       }).error(function (error) {
-        console.error('CampaignService: cancelCampaignForContact error >>> ', error);
+        if (error) {
+          console.error('CampaignService: cancelCampaignForContact error >>> ', error);
+        }
       });
     };
 
-    this.duplicateCampaign = function(campaignId, fn) {
+    this.duplicateCampaign = function(campaignId, campaign, fn) {
         var apiUrl = baseUrl + [campaignId, 'duplicate'].join('/');
         $http({
             url: apiUrl,
-            method: "POST"
+            method: "POST",
+            data: campaign
         }).success(function (data) {
             fn(data);
         }).error(function (error) {
-            console.error('CampaignService: updateCampaign error >>> ', error);
+            if (error) {
+              console.error('CampaignService: duplicateCampaign error >>> ', error);
+            }
         });
     };
 
