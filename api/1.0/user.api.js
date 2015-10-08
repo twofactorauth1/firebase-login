@@ -24,12 +24,14 @@ var campaignManager = require('../../campaign/campaign_manager');
 var moment = require('moment');
 
 var Closeio = require('close.io');
-var closeio = new Closeio("e349a7ec2fcc8370231d85455f21ea3b405e9220d926e2dccfc0e34f");
+var closeioConfig = require('../../configs/closeio.config');
+var closeio = new Closeio(closeioConfig.CLOSEIO_API_KEY);
 
 var Intercom = require('intercom.io');
+var intercomConfig = require('../../configs/intercom.config');
 var intercom = new Intercom({
-  apiKey: "7eabdca2faff0115dcf9cf316078617cf707b0ad",
-  appId: "b3st2skm"
+  apiKey: intercomConfig.INTERSOM_API_KEY,
+  appId: intercomConfig.INTERSOM_APP_ID
 });
 
 var api = function() {
@@ -280,13 +282,15 @@ _.extend(api.prototype, baseApi.prototype, {
 
     },
 
-    updateLead: function(type, contact, account, fn) {
+    updateLead: function(type, contact, account, sub, fn) {
         var self = this;
         if (type === 'create') {
             intercom.getUser({
-              "email" : contact.attributes.email
+              "email" : contact.getPrimaryEmail()
             }, function(err, intercomData) {
-            
+                if (err) {
+                    self.log.error('Error retrieving Intercom Data: ' + err);
+                }
                 var newuser = {
                     "name": contact.attributes.first+' '+contact.attributes.last,
                     "url": account.attributes.subdomain+'.indigenous.io',
@@ -297,13 +301,13 @@ _.extend(api.prototype, baseApi.prototype, {
                             "emails": [
                                 {
                                     "type": "office",
-                                    "email": contact.attributes.email
+                                    "email": contact.getPrimaryEmail()
                                 }
                             ]
                         }
                     ],
                     "custom": {
-                        "Intercom Chat": "https://app.intercom.io/a/apps/b3st2skm/users/"+intercomData.id,
+                        "Intercom Chat": intercomConfig.INTERCOM_USERS_LINK+intercomData.id,
                         "Account URL": account.attributes.subdomain+'.indigenous.io',
                         "Account ID": account.attributes._id,
                         "User ID": contact.attributes._id,
@@ -315,14 +319,14 @@ _.extend(api.prototype, baseApi.prototype, {
                         "note": "",
                         "confidence": 50,
                         "lead_id": lead.id,
-                        "status_id": "stat_qfQbJm5FjlvX6S6tnVSmmbmyg2bQklS9JW4XzF53N2j",
-                        "value": 4995,
-                        "date_won": moment(new Date()).add(14, 'days').format('YYYY-M-D'),
+                        "status_id": closeioConfig.CLOSEIO_ACTIVE_STATUS_ID,
+                        "value": sub.plan.amount,
+                        "date_won": moment(new Date()).add(account.get('billing').trialLength, 'days').format('YYYY-M-D'),
                         "value_period": "monthly"
                     };
                     closeio.opportunity.create(newop).then(function(lead){
                         intercom.updateUser({
-                          "email" : contact.attributes.email,
+                          "email" : contact.getPrimaryEmail(),
                           "custom_attributes" : {
                             "close_lead_id" : lead.id
                           }
@@ -538,7 +542,7 @@ _.extend(api.prototype, baseApi.prototype, {
                             } else {
                                 self.log.debug('Created customer for user:' + user.id());
 
-                                self.updateLead('create', user, account, function() {
+                                self.updateLead('create', user, account, sub, function() {
 
                                     userManager.sendWelcomeEmail(accountId, account, user, email, username, contact.id(), function(){
                                         self.log.debug('Sent welcome email');

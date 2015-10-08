@@ -13,7 +13,8 @@ var userDao = require('../../dao/user.dao');
 var appConfig = require('../../configs/app.config');
 var paymentManager = require('../../payments/payments_manager');
 var Closeio = require('close.io');
-var closeio = new Closeio("e349a7ec2fcc8370231d85455f21ea3b405e9220d926e2dccfc0e34f");
+var closeioConfig = require('../../configs/closeio.config');
+var closeio = new Closeio(closeioConfig.CLOSEIO_API_KEY);
 var moment = require('moment');
 
 var api = function() {
@@ -99,8 +100,8 @@ _.extend(api.prototype, baseApi.prototype, {
         var self = this;
         //update category
         var updatedLead = {
-            "status_id": "stat_rxJ0q0eTtPzgo1a1HjrzWxdrnjHT9XQs8NvK6bm6GJY",
-            "status_label": "Customer"
+            "status_id": CLOSEIO_CUSTOMER_STATUS_ID,
+            "status_label": CLOSEIO_CUSTOMER_STATUS_LABEL
         };
         closeio.lead.update(updatedLead).then(function(lead){
             fn();
