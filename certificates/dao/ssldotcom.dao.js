@@ -291,6 +291,7 @@ var dao = {
                 'Content-Type':'application/json'
             }
         };
+        self.log.debug('requesting validation with body:', body);
         request.put(options, function(err, response, _body){
             if(err) {
                 self.log.debug('err: ', err);

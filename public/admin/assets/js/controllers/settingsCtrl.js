@@ -243,6 +243,22 @@
       $scope.modalInstance.close();
     };
 
+    // Add/Remove Meta tags
+    $scope.accountAddMetaFn = function () {
+      $scope.website.metatags = $scope.website.metatags || [];
+      $scope.website.metatags.push({
+        name:'',
+        value:''
+      });
+    };
+    $scope.removeMeta = function (index) {
+      $scope.website.metatags.splice(index, 1);
+    };
+
+    $scope.showAddMeta = function (index) {
+      return index === 0;
+    };
+
 
   }]);
 }(angular));

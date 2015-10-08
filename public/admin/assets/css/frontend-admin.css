@@ -541,8 +541,7 @@
   position: relative !important;
   right: 0;
   top: 0;
-  border-left: none;
-  border-bottom: none;
+  border: none !important;
   width: 100%;
 }
 #componentloader .contact-us-v1 .leaflet-popup-pane {
@@ -554,6 +553,15 @@
 }
 #componentloader .component-wrap div.element-wrap {
   word-wrap: break-word;
+}
+#componentloader .component-wrap div.element-wrap img.img-responsive {
+  display: inline-block;
+}
+#componentloader .component-wrap div.element-wrap span.cke_widget_wrapper.img-spanclass {
+  max-width: 100%;
+}
+#componentloader .component-wrap div.element-wrap span.cke_image_resizer_wrapper {
+  max-width: 100%;
 }
 #componentloader .component-wrap .component > [id] .bg {
   position: absolute;
@@ -1662,7 +1670,6 @@
 #componentloader .meet-team-v2 .title {
   font-weight: bold;
   text-align: center;
-  text-transform: uppercase;
 }
 #componentloader .meet-team-v2 .profile-img {
   width: 250px;
@@ -2602,7 +2609,7 @@
   margin: 0;
   padding: 0;
   text-transform: uppercase;
-  background-color: #ffffff !important;
+  background-color: #ffffff;
 }
 #componentloader .simple-form-v2 .has-success .form-control {
   border-color: #2ecc71;
@@ -3807,6 +3814,9 @@
   overflow: hidden;
   min-height: 150px;
   margin: 10px 0 20px 0;
+}
+#componentloader .image-gallery-v1 .image-gallery-title {
+  position: relative;
 }
 #componentloader .header-image-text-v1 {
   background-color: #F7F7F7;

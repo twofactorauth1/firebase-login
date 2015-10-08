@@ -23,6 +23,7 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
   $scope.blogImage = blogImage;
   $scope.isEmail = isEmail;
   $scope.testimonialSlider = testimonialSlider;
+  $scope.emailLoaded = false;
 
   /*
    * @getPages
@@ -49,6 +50,10 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
   });
 
   WebsiteService.getEmails(function (emails) {
+    $timeout(function () {
+      $scope.emailLoaded = true;
+    }, 0);
+    console.log("Emails loaded");
     $scope.emails = emails;
 
     //select the default email for simple form as welcome-aboard
@@ -79,7 +84,7 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
   ProductService.getProducts(function (data) {
     $scope.products = data;
     _.each(data, function (product) {
-      if (product.tags && product.tags.length > 0) {
+      if (product.status === 'active' && product.tags && product.tags.length > 0) {
         _.each(product.tags, function (tag) {
           if ($scope.availableProductTags.indexOf(tag) === -1) {
             $scope.availableProductTags.push(tag);
@@ -90,31 +95,9 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
     $scope.availableProductTagsString = $scope.availableProductTags.join(",");
   });
 
-  $scope.customerTags = [{
-    label: "Customer",
-    data: "cu"
-  }, {
-    label: "Colleague",
-    data: "co"
-  }, {
-    label: "Friend",
-    data: "fr"
-  }, {
-    label: "Member",
-    data: "mb"
-  }, {
-    label: "Family",
-    data: "fa"
-  }, {
-    label: "Admin",
-    data: "ad"
-  }, {
-    label: 'Lead',
-    data: 'ld'
-  }, {
-    label: "Other",
-    data: "ot"
-  }];
+  CustomerService.getCustomerTags(function(tags){
+    $scope.customerTags = tags;
+  });
 
   $scope.testOptions = {
     min: 5,
@@ -770,6 +753,13 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
     $scope.testimonialSlider.refreshSlider();
   };
 
+  $scope.saveComponentChanges = function () {
+    $scope.isDirty.dirty = true;
+    $timeout(function () {
+      $(window).trigger('resize');
+    }, 0);
+  };
+
   $scope.spacingArr = [{
     name: 'Top',
     category: 'padding',
@@ -920,9 +910,7 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
           }
         });
       }
-    }
-
-    $scope.originalComponent = angular.copy($scope.componentEditing);
+    }    
     $scope.contactHoursInvalid = false;
     $scope.contactHours = [];
     var i = 0;
@@ -963,6 +951,7 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
     $modalInstance.opened.then(function(){     
       $timeout(function () {
         $rootScope.$broadcast('rzSliderForceRender');
+        $scope.originalComponent = angular.copy($scope.componentEditing);
       }, 1000);
     });
   };

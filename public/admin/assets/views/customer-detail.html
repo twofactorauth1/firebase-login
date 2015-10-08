@@ -25,7 +25,7 @@
                                         <div class="center">
                                             <h4>{{customer.first}} {{customer.last}}</h4>
                                             <div class="user-image">
-                                                <img src="{{ customer.photo }}" err-src="/admin/assets/images/default-user.png" alt="" class="thumbnail img-circle">
+                                                <img ng-src="{{ customer.photo }}" err-src="/admin/assets/images/default-user.png" alt="" class="thumbnail img-circle">
                                             </div>
                                             <div class="social-icons block" ng-if="checkTwitterId(customer) || checkFacebookId(customer) || checkGoogleId(customer) || checkLinkedInId(customer)">
                                                 <ul>
@@ -375,7 +375,7 @@
                                                     <div flow-init flow-object="obj.flow">
                                                         <div class="user-image">
                                                             <div class="thumbnail margin-bottom-5">
-                                                                <img src="{{ customer.photo }}" err-src="/admin/assets/images/default-user.png">
+                                                                <img ng-src="{{ customer.photo }}" err-src="/admin/assets/images/default-user.png">
                                                             </div>
                                                         </div>
                                                         <div class="user-image-buttons-edit">

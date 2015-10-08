@@ -10,7 +10,7 @@ app.directive('mastheadComponent',["$window", function ($window) {
     link: function (scope, element, attrs) {
       scope.addUndernavImages = function()
       {
-        if(scope.component.bg && scope.component.bg.img && scope.component.bg.img.show && scope.component.bg.img.undernav)
+        if(scope.component.bg && scope.component.bg.img && scope.component.bg.img.url && scope.component.bg.img.show && scope.component.bg.img.undernav)
           scope.addUndernavClasses = true;
         else
           scope.addUndernavClasses = false;

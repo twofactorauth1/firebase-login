@@ -337,14 +337,19 @@ module.exports = {
                         var query = {
                             account_id: savedOrder.get('account_id')
                         };
-
-                        dao.findMany(query, $$.m.Order, function(err, orders){
-                            savedOrder.set('order_id', orders.length);
-                            dao.saveOrUpdate(savedOrder, function(err, updatedOrder){
-                                callback(err, updatedOrder, contact);
-                            });
-                            //callback(null, savedOrder, contact);
+                        dao.getMaxValue(query, 'order_id', $$.m.Order, function(err, value){
+                            if(err || !value) {
+                                log.warn('Could not find order_id:', err);
+                                callback(err);
+                            } else {
+                                var max = parseInt(value) + 1;
+                                savedOrder.set('order_id', max);
+                                dao.saveOrUpdate(savedOrder, function(err, updatedOrder){
+                                    callback(err, updatedOrder, contact);
+                                });
+                            }
                         });
+
                     }
                 });
             },

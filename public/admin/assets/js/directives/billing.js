@@ -95,6 +95,12 @@ app.directive("billingTrial", ['PaymentService', 'ToasterService', 'UserService'
 
                   // TODO: remove this window refresh HACK when we know what is the problem refreshing data on the billingCtrl.
                   // $window.location.reload(true);
+                },
+                function(err){
+                    ToasterService.clearAll();
+                    ToasterService.show('error', 'The purchase was unsuccessful. Please check your card information.');
+                    console.warn('no valid stripe token.');
+                    scope.selectedPlan.paymentProcessing = false;
                 });
                 //scope.cards.data.forEach(function(value, index) {
                 //  PaymentService.deleteCustomerCard(value.customer, value.id, false, function(card) {});
