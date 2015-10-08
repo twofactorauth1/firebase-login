@@ -1094,7 +1094,7 @@
         $scope.emails = _emails;
         $scope.originalEmails = angular.copy(_emails);
         
-        if (emailId) {
+        if (emailId && $scope.emails.filter(emailMatch)[0]) {
           $scope.emailToSend = $scope.emails.filter(emailMatch)[0];
         } else {
           console.log('email not found');
