@@ -282,26 +282,27 @@ _.extend(api.prototype, baseApi.prototype, {
 
     },
 
-    updateLead: function(type, contact, account, sub, fn) {
+    updateLead: function(type, user, account, sub, fn) {
+        self.log.debug('sub: ' + sub);
         var self = this;
         if (type === 'create') {
             intercom.getUser({
-              "email" : contact.getPrimaryEmail()
+              "email" : user.attributes.email
             }, function(err, intercomData) {
                 if (err) {
                     self.log.error('Error retrieving Intercom Data: ' + err);
                 }
                 var newuser = {
-                    "name": contact.attributes.first+' '+contact.attributes.last,
+                    "name": user.attributes.first+' '+user.attributes.last,
                     "url": account.attributes.subdomain+'.indigenous.io',
                     "contacts": [
                         {
-                            "name": contact.attributes.first+' '+contact.attributes.last,
+                            "name": user.attributes.first+' '+user.attributes.last,
                             "title": "",
                             "emails": [
                                 {
                                     "type": "office",
-                                    "email": contact.getPrimaryEmail()
+                                    "email": user.attributes.email
                                 }
                             ]
                         }
@@ -310,7 +311,7 @@ _.extend(api.prototype, baseApi.prototype, {
                         "Intercom Chat": intercomConfig.INTERCOM_USERS_LINK+intercomData.id,
                         "Account URL": account.attributes.subdomain+'.indigenous.io',
                         "Account ID": account.attributes._id,
-                        "User ID": contact.attributes._id,
+                        "User ID": user.attributes._id,
                         "Signup Date": account.attributes.billing.signupDate
                     }
                 };
@@ -326,7 +327,7 @@ _.extend(api.prototype, baseApi.prototype, {
                     };
                     closeio.opportunity.create(newop).then(function(lead){
                         intercom.updateUser({
-                          "email" : contact.getPrimaryEmail(),
+                          "email" : user.attributes.email,
                           "custom_attributes" : {
                             "close_lead_id" : lead.id
                           }
