@@ -775,6 +775,13 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
     $scope.testimonialSlider.refreshSlider();
   };
 
+  $scope.saveComponentChanges = function () {
+    $scope.isDirty.dirty = true;
+    $timeout(function () {
+      $(window).trigger('resize');
+    }, 0);
+  };
+
   $scope.spacingArr = [{
     name: 'Top',
     category: 'padding',
