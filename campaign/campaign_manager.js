@@ -550,11 +550,9 @@ module.exports = {
                     return fn(err, null);
                 } else {
                     //check if we need to update the status
-                    self.updateCampaignStatus(accountId, campaignId, function(err, value){
-                        self.updateCampaignParticipants(accountId, campaignId, function(err, value){
-                            self.log.debug('<< bulkAddContactToCampaign');
-                            return fn(null, 'OK');
-                        });
+                    self.updateCampaignParticipants(accountId, campaignId, function(err, value){
+                        self.log.debug('<< bulkAddContactToCampaign');
+                        return fn(null, 'OK');
                     });
                 }
             });
@@ -1801,14 +1799,16 @@ module.exports = {
                             self.log.error('Error handling step of campaign: ' + err);
                             self.log.debug('This error was for the flow', flow);
                         } else {
-                            self.updateCampaignStatus(accountId, campaignId, function(err, value){});
                             self.log.debug('<< addContactToCampaign');
                             cb();
                         }
                     });
                 }, function done(err){
-                    self.log.debug('<< _startCampaignFlows');
-                    return;
+                    self.updateCampaignStatus(accountId, campaignId, function(err, value){
+                        self.log.debug('<< _startCampaignFlows');
+                        return;
+                    });
+
                 });
             }
         });
