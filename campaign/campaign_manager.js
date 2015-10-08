@@ -87,16 +87,53 @@ module.exports = {
     createCampaign: function(campaignObj, fn) {
         var self = this;
         self.log.debug('>> createCampaign');
+        var contactIdAry = [];
+        var initialStatus = $$.m.Campaign.status.DRAFT;
+        if(campaignObj.get('contacts')) {
+            /*
+             * We need to create the campaign in draft status, add the contacts, and then set the status to its initial value.
+             *
+             */
+            contactIdAry = campaignObj.get('contacts');
+            delete campaignObj.attributes.contacts;
+            initialStatus = campaignObj.get('status');
+        }
         campaignObj.set('status', $$.m.Campaign.status.DRAFT);
         campaignDao.saveOrUpdate(campaignObj, function(err, value){
             if(err) {
                 self.log.error('Error creating campaign: ' + err);
                 return fn(err, null);
             } else {
-                self.log.debug('<< createCampaign');
-                return fn(null, value);
+                if(contactIdAry.length > 0) {
+                    self.bulkAddContactToCampaign(contactIdAry, value.id(), value.get('accountId'), function(err, campaign){
+                        if(err) {
+                            self.log.error('Error adding contacts to campaign:', err);
+                            return fn(err);
+                        }
+                        if(campaign.get('status') !== initialStatus) {
+                            campaign.set('status', initialStatus);
+                            self.updateCampaign(campaign, function(err, updatedCampaign){
+                                if(err) {
+                                    self.log.error('Error updating campaign status:', err);
+                                    return fn(err);
+                                } else {
+                                    self.log.debug('<< createCampaign');
+                                    return fn(null, updatedCampaign);
+                                }
+
+                            });
+                        } else {
+                            self.log.debug('<< createCampaign');
+                            return fn(null, campaign);
+                        }
+                    });
+                } else {
+                    self.log.debug('<< createCampaign');
+                    return fn(null, value);
+                }
             }
         });
+
     },
 
     updateCampaign: function(campaignObj, fn) {
