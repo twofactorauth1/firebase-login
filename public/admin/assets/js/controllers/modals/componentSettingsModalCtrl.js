@@ -84,7 +84,7 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
   ProductService.getProducts(function (data) {
     $scope.products = data;
     _.each(data, function (product) {
-      if (product.tags && product.tags.length > 0) {
+      if (product.status === 'active' && product.tags && product.tags.length > 0) {
         _.each(product.tags, function (tag) {
           if ($scope.availableProductTags.indexOf(tag) === -1) {
             $scope.availableProductTags.push(tag);
@@ -95,31 +95,9 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
     $scope.availableProductTagsString = $scope.availableProductTags.join(",");
   });
 
-  $scope.customerTags = [{
-    label: "Customer",
-    data: "cu"
-  }, {
-    label: "Colleague",
-    data: "co"
-  }, {
-    label: "Friend",
-    data: "fr"
-  }, {
-    label: "Member",
-    data: "mb"
-  }, {
-    label: "Family",
-    data: "fa"
-  }, {
-    label: "Admin",
-    data: "ad"
-  }, {
-    label: 'Lead',
-    data: 'ld'
-  }, {
-    label: "Other",
-    data: "ot"
-  }];
+  CustomerService.getCustomerTags(function(tags){
+    $scope.customerTags = tags;
+  });
 
   $scope.testOptions = {
     min: 5,
@@ -773,6 +751,13 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
   $scope.saveTestimonialComponent = function () {
     $scope.isDirty.dirty = true;
     $scope.testimonialSlider.refreshSlider();
+  };
+
+  $scope.saveComponentChanges = function () {
+    $scope.isDirty.dirty = true;
+    $timeout(function () {
+      $(window).trigger('resize');
+    }, 0);
   };
 
   $scope.spacingArr = [{

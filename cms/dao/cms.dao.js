@@ -866,6 +866,8 @@ var dao = {
             var title = websiteObj.title;
             value.set('title', title);
 
+            value.set('metatags', websiteObj.metatags);
+
             self.saveOrUpdate(value, function(err, saved) {
                 console.log('saved');
                 return fn(null, saved);

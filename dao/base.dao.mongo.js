@@ -535,7 +535,9 @@ var mongodao = {
         var self = this;
         var collection = this.getTable(type);
         console.dir(query);
-        this.mongo(collection).find(query).sort({fieldName: -1}).limit(1).toArray(function (err, values) {
+        var sort = {};
+        sort[fieldName] = -1;
+        this.mongo(collection).find(query).sort(sort).limit(1).toArray(function (err, values) {
             if (err) {
                 self.log.error('An error occurred: #getMaxValueMongo. ', err);
                 fn(err, null);

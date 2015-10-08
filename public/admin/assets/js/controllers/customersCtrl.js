@@ -274,49 +274,10 @@
 
     $scope.customer = {};
     $scope.customer.tags = {};
-    $scope.customerTags = [{
-      label: "Admin",
-      data: "ad"
-    }, {
-      label: "Affiliate",
-      data: "af"
-    }, {
-      label: "Cancelled Customer",
-      data: "cc"
-    }, {
-      label: "Cancelled Trial Customer",
-      data: "ct"
-    }, {
-      label: "Cheatsheet Lead",
-      data: "cs"
-    }, {
-      label: "Colleague",
-      data: "co"
-    }, {
-      label: "Customer",
-      data: "cu"
-    }, {
-      label: "Expired Trial Customer",
-      data: "ex"
-    }, {
-      label: "Family",
-      data: "fa"
-    }, {
-      label: "Friend",
-      data: "fr"
-    }, {
-      label: "Lead",
-      data: "ld"
-    }, {
-      label: "Member",
-      data: "mb"
-    }, {
-      label: "Other",
-      data: "ot"
-    }, {
-      label: "Trial Customer",
-      data: "tc"
-    }];
+
+    CustomerService.getCustomerTags(function(tags){
+      $scope.customerTags = tags;
+    });
 
     $scope.customerPhotoOptions = [{
       name: 'Photo',

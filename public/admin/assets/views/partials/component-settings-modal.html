@@ -424,7 +424,7 @@
                     <div class="form-group">
                         <label for="colorpicker">Visibility:</label>
                         <span tooltip-placement="top" tooltip-html-unsafe="Show/hide component."><i class="fa fa-info-circle" /></span>
-                        <switch ng-model="componentEditing.visibility" class="pull-right" ng-change="saveComponent()"></switch>
+                        <switch ng-model="componentEditing.visibility" class="pull-right" ng-change="saveComponentChanges()"></switch>
                     </div>
                     <hr ng-if="componentEditing.type != 'navigation'"></hr>
                     <div class="form-group" ng-if="componentEditing.type != 'navigation'">
@@ -436,7 +436,7 @@
                     <div class="form-group">
                         <label for="component-title">Version</label>
                         <span tooltip-placement="top" tooltip-html-unsafe="The version of the component."><i class="fa fa-info-circle" /></span>
-                        <select ng-model="componentEditing.version" ng-change="saveComponentVersion()" class="form-control margin-bottom-0">
+                        <select ng-model="componentEditing.version" ng-change="saveComponentChanges()" class="form-control margin-bottom-0">
                             <option ng-repeat="version in componentEditingVersions track by $index" value="{{version}}" ng-selected="{{version == componentEditing.version}}">{{version}}</option>
                         </select>
                     </div>
@@ -971,7 +971,7 @@
                             <option value="5000">5 Seconds</option>
                             <option value="10000">10 Seconds</option>
                             <option value="15000">15 Seconds</option>
-                            <option value="30000">30 Seconds</option>                            
+                            <option value="30000">30 Seconds</option>
                             <option value="45000">45 Seconds</option>
                             <option value="60000">1 Minute</option>
                             <option value="120000">2 Minutes</option>
