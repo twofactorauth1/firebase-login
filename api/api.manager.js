@@ -34,8 +34,6 @@ var twonetAdapterApi = require('./1.0/twonetadapter.api');
 var runkeeperApi = require('./1.0/runkeeperadapter.api');
 
 // Campaigns
-var campaignManager = require('./1.0/campaignmanager.api');
-var campaignAPI = require('./1.0/campaign.api');
 var campaignsAPI = require('./1.0/campaigns.api');
 
 // Products
