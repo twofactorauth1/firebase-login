@@ -56,7 +56,7 @@
                                         <ul class="dropdown-menu">
                                             <li>
                                                 <span class="small">
-                                                <input type="checkbox" ng-model="column.order_id" ng-click="preventClick($event)" /> ID</span>
+                                                <input type="checkbox" ng-model="column.order_id" ng-click="preventClick($event)" /> Order ID</span>
                                             </li>
                                             <li>
                                                 <span class="small">
@@ -112,7 +112,7 @@
                     <table class="table table-hover bg-white margin-bottom-0" ng-class="{'grid': tableView == 'grid', 'bg-white': tableView == 'list'}" ng-show="orders">
                         <thead ng-class="{'bg-white': tableView == 'grid'}">
                             <tr>
-                                <th class="hidden-xs" ng-class="{'column-width': tableView == 'grid'}" st-sort="order_id">ID</th>
+                                <th class="hidden-xs" ng-class="{'column-width': tableView == 'grid'}" st-sort="order_id">Order ID</th>
                                 <th class="center" ng-class="{'column-width': tableView == 'grid'}" st-sort="status">Status</th>
                                 <th ng-class="{'column-width': tableView == 'grid'}" st-sort="getters.customerName">Customer</th>
                                 <th class="hidden-xs center" ng-class="{'column-width': tableView == 'grid'}" st-sort="getters.line_items">Items</th>
@@ -123,7 +123,7 @@
                             <tr ng-if="showFilter">
                                 <th class="column-width">
                                     <div class="input-group">
-                                        <input st-search="order_id" placeholder="ID" class="form-control" type="search" />
+                                        <input st-search="order_id" placeholder="Order ID" class="form-control" type="search" />
                                     </div>
                                 </th>
                                 <th class="column-width">
@@ -165,7 +165,7 @@
                         </thead>
                         <tbody>
                             <tr ng-repeat="order in displayedOrders" ng-click="viewSingle(order)">
-                                <td class="hidden-xs"><strong>ID: </strong> {{order.order_id}}</td>
+                                <td class="hidden-xs"><strong>Order ID: </strong> {{order.order_id}}</td>
                                 <td class="center"><strong>Status: </strong>
                                     <span class="fa-stack fa-lg">
                                         <span class="fa fa-circle-thin fa-stack-2x"
@@ -195,7 +195,7 @@
                                         <img ng-src="status.customer.photo" err-src="" err-contact="order.customer" class="img-thumbnail screenshot" alt="image">
                                     </span>
                                     <span class="pull-left" style="line-height: 34px;margin-left: 5px;">
-                                        {{order.customer.first}} {{order.customer.last}}
+                                        {{order.customer.first}} {{order.customer.last}} ({{order.customer._id}})
                                     </span>
                                 </td>
                                 <td class="hidden-xs center"><strong>Items: </strong>{{order.line_items.length}}</td>

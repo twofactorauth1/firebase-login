@@ -10,6 +10,8 @@ var ssldotcomSecretKey = process.env.SSLDOTCOM_SECRET_KEY || '3+c2RaonM03XcQ==';
 
 var ssldotcomTestEndpoint = 'https://sws-test.sslpki.com';
 var ssldotcomMockEndpoint = 'https://private-anon-365f22217-sslcomapi.apiary-mock.com';
+var ssldotcomProdEndpoint = 'https://sws.sslpki.com/certificates/1.3/';
+var ssldotcomEndpoint = process.env.SSLDOTCOM_ENDPOINT || ssldotcomTestEndpoint;
 
 module.exports = {
 
@@ -17,6 +19,7 @@ module.exports = {
     SSLDOTCOM_SECRET_KEY: ssldotcomSecretKey,
     SSLDOTCOM_TEST_ENDPOINT: ssldotcomTestEndpoint,
     SSLDOTCOM_MOCK_ENDPOINT: ssldotcomMockEndpoint,
+    SSLDOTCOM_ENDPOINT: ssldotcomEndpoint,
     SSLDOTCOM_CSR: '',
     SSLDOTCOM_SERVER_SOFTWARE: '39', //constant for Amazon LB
     /*

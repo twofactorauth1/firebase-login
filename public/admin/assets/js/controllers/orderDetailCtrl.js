@@ -25,6 +25,8 @@
       startingDay: 1
     };
 
+    $scope.maxOrderDate = moment();
+    $scope.maxOrderDate.add(orderConstant.MAX_ORDER_DAYS || 15, 'days');
     /*
      * @getCustomers
      * get all customers to for customer select
@@ -374,8 +376,7 @@
         if (model.details[0] && model.details[0].emails.length > 0) {
           email = model.details[0].emails[0].email;
         }
-
-        return model.first + ' ' + model.last + ' (#' + model._id + ' ' + email + ') ';
+        return (model.first || '') + ' ' + (model.last || '') + ' (#' + model._id + ' ' + email + ') ';
       }
 
       return '';

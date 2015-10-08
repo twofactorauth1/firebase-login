@@ -26,6 +26,7 @@ app.directive('navigationComponent', ['WebsiteService', 'AccountService', functi
           $scope.account = account;
         });
       }
+      $scope.currentpage = $scope.$parent.page;
     }
   };
 }]);

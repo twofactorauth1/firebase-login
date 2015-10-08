@@ -18,6 +18,8 @@ module.exports = function (config) {
       // add dependencies here
       'public/js/libs/angular/angular.js',
       'public/js/libs/angular-mocks/angular-mocks.js',
+      'public/js/libs/moment/moment.js',
+      
 
       // add mocks after real angular dependencies
       // TODO: shouldn't jquery be before angular?
@@ -48,12 +50,15 @@ module.exports = function (config) {
       'public/js/libs/allmighty-autocomplete/script/autocomplete.js',
       'public/admin/assets/js/directives/angularparallax.js',
       'public/js/libs/angular-google-places-autocomplete/dist/autocomplete.min.js',
+      'public/js/libs/Sortable/Sortable.min.js',
+      'public/js/libs/Sortable/ng-sortable.js',
       'public/js/libs/AngularJS-Toaster/toaster.min.js',
       'public/js/libs/angular-sweetalert-promised/SweetAlert.min.js',
       'public/js/libs/sweetalert/lib/sweet-alert.min.js',
       'public/js/libs/underscore/underscore.js',
       'node_modules/stripe-debug/stripe-debug.js',
       'public/js/libs/angular-cookie/angular-cookie.min.js',
+
 
       'public/js/scripts/config.js',
       'public/admin/assets/js/config.constant.js',

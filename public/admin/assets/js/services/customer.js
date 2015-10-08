@@ -347,6 +347,12 @@
     };
 
 
+    this.getCustomerTags = function (fn) {
+      var customerTags = contactConstant.customer_tags.dp;
+      fn(customerTags);
+    };
+
+
 
     //region IMPORT
 

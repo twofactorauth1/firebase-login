@@ -303,17 +303,27 @@
      */
 
     $scope.validateProduct = function () {
+      var _isValid = true;
       if (!$scope.product.name) {
-        toaster.pop('error', 'Product name is required to save.');
+        _isValid = false;        
         $scope.productNameError = true;
-        return false;
       }
-      return true;
+      if (!$scope.product.type) {
+        _isValid = false;
+        $scope.productTypeError = true;
+      }
+      return _isValid;
     };
 
     $scope.$watch('product.name', function (newValue) {
       if (newValue && newValue.length > 0) {
         $scope.productNameError = false;
+      }
+    });
+
+    $scope.$watch('product.type', function (newValue) {
+      if (newValue && newValue.length > 0) {
+        $scope.productTypeError = false;
       }
     });
 

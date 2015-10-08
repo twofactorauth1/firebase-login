@@ -46,10 +46,11 @@
             if (typeof item.onclick === 'function') {
               item.onclick(options, item, scope.passedComponent, scope.passedIndex);
             }
-
             if (scope.options.toggleOnClick) {
               scope.toggleMenu();
             }
+            
+            scope.hideIt();
           };        
 
           scope.hideItem = function(item) {

@@ -58,6 +58,12 @@
                                 </td>
                             </tr>
                             <tr>
+                                <td>phone extension:</td>
+                                <td>
+                                    <span>{{profileUser.extension}}<br></span>
+                                </td>
+                            </tr>
+                            <tr>
                                 <td>phone:</td>
                                 <td>
                                     <span>{{profileUser.phone}}<br></span>
@@ -284,6 +290,13 @@
                             </label>
                             <input type="email" placeholder="Email Address" class="form-control" name="emailaddress" ng-pattern="formValidations.email" ng-model="profileUser.email" required>
                              <p ng-show="form.emailaddress.$invalid && !form.emailaddress.$pristine" class="help-block">Enter a valid email.</p>
+                        </div>
+                        <div class="form-group" ng-class="{ 'has-error' : form.extension.$invalid && !form.extension.$pristine }">
+                            <label class="control-label">
+                                Phone Extension
+                            </label>
+                            <input type="text" placeholder="Phone Extension" class="form-control" name="extension" ng-pattern="formValidations.extension" ng-model="profileUser.extension">
+                            <p ng-show="form.extension.$invalid && !form.extension.$pristine" class="help-block">Enter a valid phone extension.</p>
                         </div>
                         <div class="form-group" ng-class="{ 'has-error' : form.phonenumber.$invalid && !form.phonenumber.$pristine }">
                             <label class="control-label">

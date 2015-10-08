@@ -99,6 +99,7 @@
                                             Name
                                         </label>
                                         <input type="text" placeholder="Name" ng-model="product.name" class="form-control">
+                                        <p ng-show="productNameError" class="help-block">Product name is required.</p>
                                     </div>
                                     <div class="form-group">
                                         <label for="form-field-select-1">
@@ -115,13 +116,14 @@
                                                 <option value="">-- choose status --</option>
                                             </select>
                                         </div>
-                                        <div class="form-group">
+                                        <div class="form-group" ng-class="{'has-error': productTypeError}">
                                             <label for="form-field-select-1">
                                                 Type
                                             </label>
                                             <select ng-model="product.type" class="form-control" ng-options="type.data as type.label for type in productTypes.dp">
                                                 <option value="">-- choose type --</option>
                                             </select>
+                                            <p ng-show="productTypeError" class="help-block">Product type is required.</p>
                                         </div>
                                         <div class="form-group">
                                             <label for="form-field-select-1">
