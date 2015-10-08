@@ -753,14 +753,17 @@
       var actionFn = update ? 'updateCampaign' : 'createCampaign';
       var stepSettings = $scope.newCampaignObj.steps[0].settings;
 
-
-      if (!stepSettings.emailId) {
-        WebsiteService.createEmail($scope.emailToSend, function (newEmail) {
-          $scope[actionFn](newEmail);
-        });
-      } else {
-        $scope[actionFn]($scope.emailToSend);
-      }
+      //add contacts if new
+      $scope.checkAndCreateCustomer(function (createdContactsArr) {
+        $scope.addContacts(createdContactsArr);
+        if (!stepSettings.emailId) {
+          WebsiteService.createEmail($scope.emailToSend, function (newEmail) {
+            $scope[actionFn](newEmail);
+          });
+        } else {
+          $scope[actionFn]($scope.emailToSend);
+        }
+      });
     };
 
     $scope.createCampaign = function (newEmail) {
@@ -770,14 +773,8 @@
       $scope.setDate();
 
       //add campaign
-      CampaignService.createCampaign($scope.newCampaignObj, function (_newCampaign) {
+      CampaignService.createCampaign($scope.newCampaignObj, $scope.savedSuccess);
 
-        //add contacts if new
-        $scope.checkAndCreateCustomer(function (createdContactsArr) {
-          $scope.addNewContacts(createdContactsArr, _newCampaign, 'Campaign created successfully');
-        });
-
-      });
     };
 
     $scope.updateCampaign = function (newEmail) {
@@ -787,20 +784,21 @@
       $scope.setDate();
 
       //update campaign
-      CampaignService.updateCampaign($scope.newCampaignObj, function (_newCampaign) {
-
-        //add contacts if new
-        $scope.checkAndCreateCustomer(function (createdContactsArr) {
-          $scope.addNewContacts(createdContactsArr, _newCampaign, 'Campaign updated successfully');
-        });
-
-        //remove any contacts previously added
-        $scope.removeContactsFromCampaign();
-
-      });
+      CampaignService.updateCampaign($scope.newCampaignObj, $scope.savedSuccess);
     };
 
-    $scope.addNewContacts = function(createdContactsArr, _newCampaign, msg) {
+    $scope.savedSuccess = function(_newCampaign) {
+      //remove any contacts marked there were marked for removal
+      $scope.removeContactsFromCampaign();
+
+      $scope.saveLoading = false;
+      toaster.pop('success', 'Campaign updated successfully');
+      $scope.originalCampaignObj = _newCampaign;
+      $scope.newCampaignObj = _newCampaign;
+      $scope.navigateOnSave();
+    };
+
+    $scope.addContacts = function(createdContactsArr, fn) {
       //get an array of contact Ids from recipients
       var recipientsIdArr = [];
 
@@ -821,15 +819,7 @@
 
       var contactsArr = recipientsIdArr;
 
-      //bulk add contacts to campaign
-      CampaignService.bulkAddContactsToCampaign(contactsArr, _newCampaign._id, function (success) {
-        //show success
-        $scope.saveLoading = false;
-        toaster.pop('success', msg);
-        $scope.originalCampaignObj = _newCampaign;
-        $scope.newCampaignObj = _newCampaign;
-        $scope.navigateOnSave();
-      });
+      $scope.newCampaignObj.contacts = contactsArr;
     };
 
     $scope.removeContactsFromCampaign = function() {
