@@ -28,7 +28,7 @@
     </div>
     <div class="clearfix"></div>
     <div class="testimonial-wrap {{isEditing ? 'editing' : ''}}" style="position: relative;">
-        <slick init-onload="false" data="dataLoaded" slides-to-show='1' touch-move={{touchMove}} draggable={{draggable}} speed={{component.slider.speed}} slides-to-scroll='1' autoplay={{autoplay}} autoplay-speed={{component.slider.autoPlayInterval}} class="carousel-caption" dots="true" arrows="false">
+        <slick init-onload="false" data="dataLoaded" slides-to-show='1' touch-move="{{touchMove}}" draggable="{{draggable}}" speed="{{component.slider.speed}}" slides-to-scroll='1' autoplay="{{autoplay}}" autoplay-speed="{{component.slider.autoPlayInterval}}" class="carousel-caption" dots="true" arrows="false">
             <div ng-repeat="testimonial in component.testimonials" active="testimonial.active" class="col-sm-12 testimonials single-testimonial">
                 <div class="img">
                     <div elem ng-model="testimonial.img"></div>
