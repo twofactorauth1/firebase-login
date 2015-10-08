@@ -8,7 +8,8 @@ mainApp.service('campaignService', function ($http) {
 
     //campaign/:id/contact/:contactid
     this.addContactToCampaign = function (campaignId, contactId, fn) {
-        var apiUrl = baseUrl + ['campaign', 'campaign', campaignId, 'contact', contactId].join('/');
+        //TODO this is frontend code that WILL fail.
+        var apiUrl = baseUrl + ['campaigns', campaignId, 'contact', contactId].join('/');
         $http({
             url: apiUrl,
             method: "POST"

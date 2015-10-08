@@ -163,7 +163,7 @@
 
     var resetEmailCache = false;
 
-    this.getEmails = function (fn) {
+    this.getEmails = function (getStats, fn) {
       console.log('getEmails >>> ');
       var self = this;
       var data = emailcache.get('emails');
@@ -180,13 +180,17 @@
             resetEmailCache = false;
             emailcache.put('emails', data);
             console.log('emailcache ', emailcache);
-            ChartEmailService.queryMandrillData(data, function (_data) {
-              console.log('_data >>> ', _data);
-              if (fn) {
-                console.log('resolve >>> ');
-                deferred.resolve(fn(_data));
-              }
-            });
+            if (getStats) {
+              ChartEmailService.queryMandrillData(data, function (_data) {
+                console.log('_data >>> ', _data);
+                if (fn) {
+                  console.log('resolve >>> ');
+                  deferred.resolve(fn(_data));
+                }
+              });
+            } else {
+              deferred.resolve(fn(data));
+            }
           })
           .error(function (err) {
             console.warn('END:Website Service with ERROR');

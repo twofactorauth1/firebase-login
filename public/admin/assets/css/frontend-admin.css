@@ -6167,6 +6167,9 @@
 #componentloader .cursor-pointer {
   cursor: pointer;
 }
+#componentloader .overflow-auto {
+  overflow: auto;
+}
 #componentloader .modal-overflow-content {
   /* <- this could be deprecated when modal layout is more flexible */
   max-height: 400px;

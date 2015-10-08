@@ -427,14 +427,10 @@ h5.over-title {
   position: relative;
   height: 65px;
 }
-@media (min-width: 768px) {
-  #topnav.navbar .navbar-header {
-    width: 200px;
-  }
-}
 @media (min-width: 992px) {
   #topnav.navbar .navbar-header {
     border-right: 1px solid #eeeeee;
+    width: 200px;
   }
 }
 #topnav.navbar .navbar-header a {
@@ -2925,6 +2921,9 @@ a.text-light:hover {
 }
 .cursor-pointer {
   cursor: pointer;
+}
+.overflow-auto {
+  overflow: auto;
 }
 .modal-overflow-content {
   /* <- this could be deprecated when modal layout is more flexible */
@@ -14260,6 +14259,7 @@ tags-input.ti-input-sm .tags .input,
   -moz-transition: all 1s;
   -ms-transition: all 1s;
   -o-transition: all 1s;
+  overflow: auto;
 }
 .create-campaign .show-fullscreen {
   position: absolute;
@@ -14324,6 +14324,17 @@ tags-input.ti-input-sm .tags .input,
 .campaigns table.grid thead th {
   width: 14.28%;
   float: left;
+}
+.disabled {
+  pointer-events: none;
+}
+.create-campaign-spinner {
+  position: absolute;
+  font-size: 50px!important;
+  left: 50%;
+  z-index: 1;
+  margin-top: 40%;
+  top: 0;
 }
 /* ---------------------------------------------------------------------- */
 /*  Topics

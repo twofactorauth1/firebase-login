@@ -5,6 +5,11 @@
  * Please contact info@indigenous.io for approval or questions.
  */
 
+/**
+ * Note:
+ * - the base URL for this API endpoint is 'campaign' which makes API URLs look like '/campaign/campaign/something' etc.
+ */
+
 var baseApi = require('../base.api');
 var campaignManager = require('../../campaign/campaign_manager');
 var accountDao = require('../../dao/account.dao');
@@ -16,25 +21,37 @@ var api = function () {
 
 _.extend(api.prototype, baseApi.prototype, {
 
-    base: "campaign",
+    base: "campaigns",
 
-    log: $$.g.getLogger("campaign.api"),
+    log: $$.g.getLogger("campaigns.api"),
 
     initialize: function () {
-        app.post(this.url('campaign'), this.isAuthAndSubscribedApi.bind(this), this.createCampaign.bind(this));
-        app.post(this.url('campaign/:id'), this.isAuthAndSubscribedApi.bind(this), this.updateCampaign.bind(this));
-        app.post(this.url('campaign/:id/contact/:contactid'), this.isAuthAndSubscribedApi.bind(this), this.addContactToCampaign.bind(this));
-        app.post(this.url('campaign/:id/contacts'), this.isAuthAndSubscribedApi.bind(this), this.bulkAddContactToCampaign.bind(this));
-        app.delete(this.url('campaign/:id'), this.isAuthAndSubscribedApi.bind(this), this.cancelRunningCampaign.bind(this));
-        app.delete(this.url('campaign/:id/contact/:contactid'), this.isAuthAndSubscribedApi.bind(this), this.cancelContactCampaign.bind(this));
-        app.get(this.url('campaign/:id'), this.isAuthAndSubscribedApi.bind(this), this.getCampaign.bind(this));
 
+        app.post(this.url(''), this.isAuthAndSubscribedApi.bind(this), this.createCampaign.bind(this));
+        app.post(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.updateCampaign.bind(this));
+        app.post(this.url(':id/duplicate'), this.isAuthAndSubscribedApi.bind(this), this.duplicateCampaign.bind(this));
+        app.get(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.getCampaign.bind(this));
         app.get(this.url(''), this.isAuthAndSubscribedApi.bind(this), this.findCampaigns.bind(this));
-        app.get(this.url('campaigns/:id/pages'), this.isAuthAndSubscribedApi.bind(this), this.getPagesWithCampaign.bind(this));
-        app.get(this.url('campaigns/:id/running'), this.isAuthAndSubscribedApi.bind(this), this.getRunningCampaign.bind(this));
-        app.get(this.url('campaigns/running'), this.isAuthAndSubscribedApi.bind(this), this.getRunningCampaigns.bind(this));
-        app.get(this.url('campaigns/running/contact/:id'), this.isAuthAndSubscribedApi.bind(this), this.getRunningCampaignsForContact.bind(this));
-        app.post(this.url('campaigns/:id/running/contact/:contactid/steps/:stepNumber'), this.setup.bind(this), this.triggerCampaignStep.bind(this));
+        app.delete(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.deleteCampaign.bind(this));
+
+        app.post(this.url(':id/contact/:contactid'), this.isAuthAndSubscribedApi.bind(this), this.addContactToCampaign.bind(this));
+        app.post(this.url(':id/contacts'), this.isAuthAndSubscribedApi.bind(this), this.bulkAddContactToCampaign.bind(this));
+        app.post(this.url(':id/running/contact/:contactid/steps/:stepNumber'), this.setup.bind(this), this.triggerCampaignStep.bind(this));
+
+        app.get(this.url(':id/contacts'), this.isAuthAndSubscribedApi.bind(this), this.getContactsForCampaign.bind(this));
+
+
+        /*
+         * Not sure if these are needed
+         */
+
+        app.delete(this.url(':id/contact/:contactid'), this.isAuthAndSubscribedApi.bind(this), this.cancelContactCampaign.bind(this));
+        app.get(this.url(':id/pages'), this.isAuthAndSubscribedApi.bind(this), this.getPagesWithCampaign.bind(this));
+        app.get(this.url(':id/running'), this.isAuthAndSubscribedApi.bind(this), this.getRunningCampaign.bind(this));
+        //app.get(this.url('campaigns/running'), this.isAuthAndSubscribedApi.bind(this), this.getRunningCampaigns.bind(this));
+        app.get(this.url('running/contact/:id'), this.isAuthAndSubscribedApi.bind(this), this.getRunningCampaignsForContact.bind(this));
+
+
     },
 
     createCampaign: function (req, resp) {
@@ -49,7 +66,7 @@ _.extend(api.prototype, baseApi.prototype, {
             } else {
                 var campaignObj = new $$.m.Campaign(req.body);
                 campaignObj.set('accountId', accountId);
-                var createdObj = campaignObj.get('created');
+                var createdObj = campaignObj.get('created') || {};
                 createdObj.by = req.user.id();
                 campaignObj.set('created', createdObj);
                 campaignManager.createCampaign(campaignObj, function(err, value){
@@ -146,7 +163,7 @@ _.extend(api.prototype, baseApi.prototype, {
      * @param req
      * @param resp
      */
-    cancelRunningCampaign: function(req, resp) {
+    deleteCampaign: function(req, resp) {
         var self = this;
         self.log.debug('>> cancelRunningCampaign');
         var campaignId = req.params.id;
@@ -358,10 +375,51 @@ _.extend(api.prototype, baseApi.prototype, {
         });
 
 
+    },
+
+    /**
+     *
+     * @param req
+     * @param resp
+     */
+    getContactsForCampaign: function(req, resp) {
+        var self = this;
+        self.log.debug('>> getContactsForCampaign');
+        var accountId = parseInt(self.accountId(req));
+        var campaignId = req.params.id;
+        self.checkPermission(req, self.sc.privs.VIEW_CAMPAIGN, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                campaignManager.getContactsForCampaign(accountId, campaignId, function(err, contacts){
+                    self.log.debug('<< getContactsForCampaign');
+                    self.sendResultOrError(resp, err, contacts, 'Error getting contacts');
+                });
+            }
+        });
+
+    },
+
+    duplicateCampaign: function(req, resp) {
+        var self = this;
+        self.log.debug('>> duplicateCampaign');
+        var accountId = parseInt(self.accountId(req));
+        var campaignId = req.params.id;
+        var campaignName = req.body['name'];
+        var userId = self.userId(req);
+        self.checkPermission(req, self.sc.privs.MODIFY_CAMPAIGN, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                campaignManager.duplicateCampaign(accountId, campaignId, campaignName, userId, function(err, campaign){
+                    self.log.debug('<< duplicateCampaign');
+                    self.sendResultOrError(resp, err, campaign, 'Error duplicating campaign');
+                });
+            }
+        });
     }
 
 
 });
 
 module.exports = new api();
-

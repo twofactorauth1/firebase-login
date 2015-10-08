@@ -1,0 +1,24 @@
+Searching 8503 files for "createDuplicatePost"
+
+/Users/jack/Projects/indigeweb/public/admin/assets/js/controllers/_editorCtrl.js:
+ 3047      }
+ 3048  
+ 3049:     $scope.createDuplicatePost = function (newPost) {
+ 3050        $scope.validateNewPost(newPost);
+ 3051        if (!$scope.newPostValidated) {
+
+/Users/jack/Projects/indigeweb/public/admin/assets/js/controllers/editorCtrl.js:
+ 1239      };
+ 1240  
+ 1241:     $scope.createDuplicatePost = function (newPost) {
+ 1242        $scope.validateNewPost(newPost);
+ 1243        if (!$scope.newPostValidated) {
+
+/Users/jack/Projects/indigeweb/public/admin/assets/views/partials/post-duplicate-modal.html:
+   16      </div>
+   17      <div class="modal-footer">
+   18:         <button type="button" class="btn btn-info btn-wide btn-o" ng-click="createDuplicatePost(newPost)">
+   19              Done
+   20          </button>
+
+3 matches across 3 files

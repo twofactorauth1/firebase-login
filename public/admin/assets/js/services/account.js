@@ -2,7 +2,7 @@
 /*jslint unparam: true*/
 'use strict';
 (function (angular) {
-  app.service('AccountService', ['$http', function ($http) {
+  app.service('AccountService', ['$http', '$q', function ($http, $q) {
     var baseUrl = '/api/1.0/account/';
 
     this.mainAccount = null;
@@ -16,10 +16,21 @@
 
     this.getAccount = function (fn) {
       var apiUrl = baseUrl;
+      var deferred = $q.defer();
       $http.get(apiUrl)
         .success(function (data) {
-          fn(data);
+          if (fn) {
+            console.log('resolve >>> ');
+            deferred.resolve(fn(data));
+          }
+          // fn(data);
+        })
+        .error(function (err) {
+          console.warn('END:Account Service with ERROR');
+          fn(err, null);
         });
+
+      return deferred.promise;
     };
 
     //:id/setting
