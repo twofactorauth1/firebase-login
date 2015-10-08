@@ -427,14 +427,10 @@ h5.over-title {
   position: relative;
   height: 65px;
 }
-@media (min-width: 768px) {
-  #topnav.navbar .navbar-header {
-    width: 200px;
-  }
-}
 @media (min-width: 992px) {
   #topnav.navbar .navbar-header {
     border-right: 1px solid #eeeeee;
+    width: 200px;
   }
 }
 #topnav.navbar .navbar-header a {

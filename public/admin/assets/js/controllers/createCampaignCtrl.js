@@ -761,7 +761,6 @@
 
       if (!stepSettings.emailId) {
         WebsiteService.createEmail($scope.emailToSend, function (newEmail) {
-          debugger;
           $scope[actionFn](newEmail);
         });
       } else {
@@ -978,7 +977,6 @@
       if ($scope.newCampaignObj._id) {
         CampaignService.duplicateCampaign($scope.newCampaignObj._id, newCampaign,function(data) {
           $scope.closeModal();
-          $parent.closeModal();
           if (data._id) {
             window.location = '/admin/#/marketing/campaigns/' + data._id;
           }
@@ -1054,15 +1052,17 @@
 
     $scope.getAccount = function() {
       var promise = AccountService.getAccount(function (_account) {
-        if (_account.business.logo) {
-          $scope.emailToSend.components[0].logo = '<img src="' + _account.business.logo + '"/>';
-        }
-        if (_account.business.name) {
-          $scope.emailToSend.fromName = _account.business.name;
-        }
-        if (_account.business.emails[0].email) {
-          $scope.emailToSend.fromEmail = _account.business.emails[0].email;
-          $scope.emailToSend.replyTo = _account.business.emails[0].email;
+        if ($scope.emailToSend && !$scope.emailToSend._id) {
+          if (_account.business.logo) {
+            $scope.emailToSend.components[0].logo = '<img src="' + _account.business.logo + '"/>';
+          }
+          if (_account.business.name) {
+            $scope.emailToSend.fromName = _account.business.name;
+          }
+          if (_account.business.emails[0].email) {
+            $scope.emailToSend.fromEmail = _account.business.emails[0].email;
+            $scope.emailToSend.replyTo = _account.business.emails[0].email;
+          }
         }
       });
       return promise;
