@@ -38,6 +38,9 @@ html(class="no-js", lang="en" ng-app="mainApp" ng-controller="MainCtrl as main",
                 link(rel="shortcut icon", href=account.website.settings.favicon)
             else
                 link(rel="shortcut icon", href='https://s3.amazonaws.com/indigenous-account-websites/acct_6/favicon.ico')
+            if account.website.metatags
+                each meta in account.website.metatags
+                    meta(name=meta.name content=meta.value)
 
     body(class='theme-main navbar-v#{ account.website.nav_version } ng-cloak', ng-cloak)
         block body_content
