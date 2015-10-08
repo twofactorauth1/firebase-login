@@ -30,8 +30,8 @@ var closeio = new Closeio(closeioConfig.CLOSEIO_API_KEY);
 var Intercom = require('intercom.io');
 var intercomConfig = require('../../configs/intercom.config');
 var intercom = new Intercom({
-  apiKey: intercomConfig.INTERSOM_API_KEY,
-  appId: intercomConfig.INTERSOM_APP_ID
+  apiKey: intercomConfig.INTERCOM_API_KEY,
+  appId: intercomConfig.INTERCOM_APP_ID
 });
 
 var api = function() {
@@ -283,8 +283,8 @@ _.extend(api.prototype, baseApi.prototype, {
     },
 
     updateLead: function(type, user, account, sub, fn) {
-        self.log.debug('sub: ' + sub);
         var self = this;
+        self.log.debug('sub: ', sub);
         if (type === 'create') {
             intercom.getUser({
               "email" : user.attributes.email
@@ -321,11 +321,11 @@ _.extend(api.prototype, baseApi.prototype, {
                         "confidence": 50,
                         "lead_id": lead.id,
                         "status_id": closeioConfig.CLOSEIO_ACTIVE_STATUS_ID,
-                        "value": sub.plan.amount,
+                        "value": 4995,
                         "date_won": moment(new Date()).add(account.get('billing').trialLength, 'days').format('YYYY-M-D'),
                         "value_period": "monthly"
                     };
-                    closeio.opportunity.create(newop).then(function(lead){
+                    closeio.opportunity.create(newop).then(function(opp){
                         intercom.updateUser({
                           "email" : user.attributes.email,
                           "custom_attributes" : {

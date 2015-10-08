@@ -100,8 +100,8 @@ _.extend(api.prototype, baseApi.prototype, {
         var self = this;
         //update category
         var updatedLead = {
-            "status_id": CLOSEIO_CUSTOMER_STATUS_ID,
-            "status_label": CLOSEIO_CUSTOMER_STATUS_LABEL
+            "status_id": closeioConfig.CLOSEIO_CUSTOMER_STATUS_ID,
+            "status_label": closeioConfig.CLOSEIO_CUSTOMER_STATUS_LABEL
         };
         closeio.lead.update(updatedLead).then(function(lead){
             fn();
