@@ -84,7 +84,7 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
   ProductService.getProducts(function (data) {
     $scope.products = data;
     _.each(data, function (product) {
-      if (product.tags && product.tags.length > 0) {
+      if (product.status === 'active' && product.tags && product.tags.length > 0) {
         _.each(product.tags, function (tag) {
           if ($scope.availableProductTags.indexOf(tag) === -1) {
             $scope.availableProductTags.push(tag);
