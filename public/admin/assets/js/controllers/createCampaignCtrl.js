@@ -738,7 +738,11 @@
 
     $scope.activateCampaign = function () {
       $scope.newCampaignObj.status = 'RUNNING';
-      $scope.navigateOnSave = function() { window.location = '/admin/#/marketing/campaigns' };
+      $scope.navigateOnSave = function() { 
+        $timeout(function() {
+          window.location = '/admin/#/marketing/campaigns';
+        }, 750);
+      };
       if ($scope.newCampaignObj._id) {
         $scope.saveOrUpdateCampaign(true);
       } else {
@@ -998,7 +1002,11 @@
         //preserve intended navigation
         if (_url) {
           $scope.navigateURL = _url;
-          $scope.navigateOnSave = function() { $window.location.href = $scope.navigateURL };
+          $scope.navigateOnSave = function() { 
+            $timeout(function() {
+              $window.location = $scope.navigateURL 
+            }, 750);
+          };
           
           SweetAlert.swal({
             title: "You have unsaved changes.",
@@ -1017,7 +1025,11 @@
             }
           });
         } else {
-          $scope.navigateOnSave = function() { window.location = '/admin/#/marketing/campaigns' };
+          $scope.navigateOnSave = function() { 
+            $timeout(function() {
+              window.location = '/admin/#/marketing/campaigns';
+            }, 750);
+          };
           if ($scope.validateStep($scope.currentStep + 1, true)) {
             save();
           } else {
@@ -1034,6 +1046,7 @@
      */
     var offFn = $rootScope.$on('$locationChangeStart', function (event, newUrl, oldUrl) {
       if (!$scope.changesConfirmed) {
+        debugger;
         $scope.saveCampaign(newUrl);
       }
     });
