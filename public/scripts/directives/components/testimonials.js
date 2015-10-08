@@ -1,4 +1,4 @@
-app.directive('testimonialsComponent', function () {
+app.directive('testimonialsComponent', ['$timeout', function ($timeout) {
   return {
     scope: {
       component: '='
@@ -17,8 +17,13 @@ app.directive('testimonialsComponent', function () {
       scope.autoplay = scope.component.slider.autoPlay;
 
     	$(document).ready(function () {
-          scope.dataLoaded = true;
+          $timeout(function () {
+            scope.$apply(function () {
+              scope.dataLoaded = true;
+            });
+          },0);
       });
     }
   }
-});
+}]);
+  
