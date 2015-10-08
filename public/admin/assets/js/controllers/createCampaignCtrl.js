@@ -5,6 +5,7 @@
 
     editableOptions.theme = 'bs3';
 
+    $scope.changesConfirmed = true;
     $scope.navigateOnSave = null;
     $scope.whenToSend = 'now';
     $scope.selectedEmail = {
@@ -109,7 +110,7 @@
      */
 
     $scope.emailToSend = {
-      "title": "",
+      "title": "default",
       "type": "email",
       "subject": "",
       "fromName": "",
@@ -282,13 +283,7 @@
           "replyTo": '',
           "subject": '',
           "vars": [],
-          "sendAt": {
-            "year": 2015,
-            "month": 8,
-            "day": 13,
-            "hour": 5,
-            "minute": 35
-          },
+          "sendAt": {},
         }
       }]
     };
@@ -976,10 +971,19 @@
     $scope.createDuplicateCampaign = function (newCampaign) {
       if ($scope.newCampaignObj._id) {
         CampaignService.duplicateCampaign($scope.newCampaignObj._id, newCampaign,function(data) {
-          $scope.closeModal();
+          
+          $timeout(function() {
+            $scope.closeModal();
+          }, 0);
+          
           if (data._id) {
-            window.location = '/admin/#/marketing/campaigns/' + data._id;
+
+            $timeout(function() {
+              window.location = '/admin/#/marketing/campaigns/' + data._id;
+            }, 1000);
+          
           }
+
         });
       } else {
         toaster.pop('error', 'Error', 'Please save this campaign before duplicating');
@@ -987,6 +991,7 @@
     };
 
     $scope.saveCampaign = function (_url) {
+      $scope.changesConfirmed = true;
       if ($scope.pendingChanges()) {
         var save = function() {
           if (!$scope.newCampaignObj._id) {
@@ -1037,13 +1042,33 @@
      * @locationChangeStart
      * - Before user leaves editor, ask if they want to save changes
      */
-    $scope.changesConfirmed = false;
     var offFn = $rootScope.$on('$locationChangeStart', function (event, newUrl, oldUrl) {
       if (!$scope.changesConfirmed) {
         $scope.saveCampaign(newUrl);
       }
     });
 
+    $scope.setBusinessDetails = function() {
+      var account = $scope.account;
+      var logo = account.business.logo || '<h2>Logo Here</h2>';
+      var businessName = account.business.name || 'Edit name';
+      var fromEmail = account.business.emails[0].email || 'Edit email';
+
+      if ($scope.emailToSend) {
+        if (logo.indexOf('http') != -1 && $scope.emailToSend.components[0].logo == '<h2>Logo Here</h2>') {
+          $scope.emailToSend.components[0].logo = '<img src="' + account.business.logo + '"/>';
+        }
+        if (businessName && $scope.emailToSend.fromName == '') {
+          $scope.emailToSend.fromName = account.business.name;
+        }
+        if (fromEmail && $scope.emailToSend.fromEmail == '') {
+          $scope.emailToSend.fromEmail = account.business.emails[0].email;
+        }
+        if (fromEmail && $scope.emailToSend.replyTo == '') {
+          $scope.emailToSend.replyTo = account.business.emails[0].email;
+        }
+      }
+    };
 
     /*
      * @getAccount
@@ -1052,18 +1077,8 @@
 
     $scope.getAccount = function() {
       var promise = AccountService.getAccount(function (_account) {
-        if ($scope.emailToSend && !$scope.emailToSend._id) {
-          if (_account.business.logo) {
-            $scope.emailToSend.components[0].logo = '<img src="' + _account.business.logo + '"/>';
-          }
-          if (_account.business.name) {
-            $scope.emailToSend.fromName = _account.business.name;
-          }
-          if (_account.business.emails[0].email) {
-            $scope.emailToSend.fromEmail = _account.business.emails[0].email;
-            $scope.emailToSend.replyTo = _account.business.emails[0].email;
-          }
-        }
+        $scope.account = _account;
+        $scope.setBusinessDetails();
       });
       return promise;
     };
@@ -1081,6 +1096,8 @@
         
         if (emailId) {
           $scope.emailToSend = $scope.emails.filter(emailMatch)[0];
+        } else {
+          console.log('email not found');
         }
 
       });
@@ -1100,7 +1117,8 @@
             type: 'template'
           };
 
-          if (moment(sendAtDateObj).isValid()) {
+          //if valid date and in future, set 'later'
+          if (moment(sendAtDateObj).isValid() && moment(sendAtDateObj).isAfter(moment())) {
             $scope.whenToSend = 'later';
             $scope.delivery.time = moment(sendAtDateObj);
             $scope.delivery.date = moment(sendAtDateObj).subtract('months', 1);
