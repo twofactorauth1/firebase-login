@@ -40,6 +40,18 @@ app.directive('contactUsComponent', ['geocodeService', 'accountService', '$timeo
         c= '0x'+c.join('');
         return 'rgba('+[(c>>16)&255, (c>>8)&255, c&255].join(',')+','+ opacity +')';
       };
+
+      // Set bg image show always false for contact component
+
+      if(!angular.isDefined(scope.component.bg))
+        scope.component.bg = {};
+      if(!angular.isDefined(scope.component.bg.img))
+        scope.component.bg.img = {};   
+      if(!angular.isDefined(scope.component.bg.img.show))
+        scope.component.bg.img.show = false;   
+           
+      scope.component.bg.img.show = false;
+      
       if(scope.component.boxColor)
         scope.boxColor = hexToRgb(scope.component.boxColor, scope.component.boxOpacity);
 
@@ -61,8 +73,8 @@ app.directive('contactUsComponent', ['geocodeService', 'accountService', '$timeo
             else
               geocodeService.validateAddress(scope.component.location, function (data, results) {
                 if (data && results.length === 1) {
-                  scope.component.location.lat = results[0].geometry.location.G || results[0].geometry.location.H;
-                  scope.component.location.lon = results[0].geometry.location.K || results[0].geometry.location.L;
+                  scope.component.location.lat = results[0].geometry.location.lat();
+                  scope.component.location.lon = results[0].geometry.location.lng();
                   scope.reloadMap();
                 } 
               });

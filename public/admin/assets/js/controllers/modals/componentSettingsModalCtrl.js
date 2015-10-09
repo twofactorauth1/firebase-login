@@ -707,7 +707,7 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
       if (data && results.length === 1) {
         $timeout(function () {
           $scope.$apply(function () {
-            $scope.setLatLon(results[0].geometry.location.G || results[0].geometry.location.H, results[0].geometry.location.K || results[0].geometry.location.L);
+            $scope.setLatLon(results[0].geometry.location.lat(), results[0].geometry.location.lng());
             $scope.errorMapData = false;
             angular.copy($scope.componentEditing.location, $scope.originalContactMap);
             $scope.contactMap.refreshMap();
@@ -838,6 +838,8 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
         };
       }
 
+      if(!$scope.componentEditing.bg)
+        $scope.componentEditing.bg = {};
       if($scope.componentEditing.bg && !angular.isDefined($scope.componentEditing.bg.opacity))
         $scope.componentEditing.bg.opacity = 1;
 

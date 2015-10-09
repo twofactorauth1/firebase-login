@@ -113,10 +113,10 @@
                         <thead ng-class="{'bg-white': tableView == 'grid'}">
                             <tr>
                                 <th class="hidden-xs" ng-class="{'column-width': tableView == 'grid'}" st-sort="order_id">Order ID</th>
-                                <th class="center" ng-class="{'column-width': tableView == 'grid'}" st-sort="status">Status</th>
+                                <th ng-class="{'column-width': tableView == 'grid', 'center': tableView == 'list'}" st-sort="status">Status</th>
                                 <th ng-class="{'column-width': tableView == 'grid'}" st-sort="getters.customerName">Customer</th>
-                                <th class="hidden-xs center" ng-class="{'column-width': tableView == 'grid'}" st-sort="getters.line_items">Items</th>
-                                <th class="hidden-xs center" ng-class="{'column-width': tableView == 'grid'}" st-sort="total">Total</th>
+                                <th class="hidden-xs" ng-class="{'column-width': tableView == 'grid', 'center': tableView == 'list'}" st-sort="getters.line_items">Items</th>
+                                <th class="hidden-xs" ng-class="{'column-width': tableView == 'grid', 'center': tableView == 'list'}" st-sort="total">Total</th>
                                 <th class="hidden-xs" ng-class="{'column-width': tableView == 'grid'}" st-sort="getters.created" st-sort-default="reverse">Order Date</th>
                                 <th class="hidden-xs" ng-class="{'column-width': tableView == 'grid'}" st-sort="getters.modified">Modified</th>
                             </tr>
@@ -166,8 +166,8 @@
                         <tbody>
                             <tr ng-repeat="order in displayedOrders" ng-click="viewSingle(order)">
                                 <td class="hidden-xs"><strong>Order ID: </strong> {{order.order_id}}</td>
-                                <td class="center"><strong>Status: </strong>
-                                    <span class="fa-stack fa-lg">
+                                <td ng-class="{'center': tableView == 'list'}"><strong>Status: </strong>
+                                    <span ng-if="tableView == 'list'" class="fa-stack fa-lg">
                                         <span class="fa fa-circle-thin fa-stack-2x"
                                         ng-class="{'text-warning': order.status == orderConstant.order_status.PENDING_PAYMENT,
                                                       'text-muted': order.status == orderConstant.order_status.ON_HOLD,
@@ -189,17 +189,19 @@
                                                       }">
                                         </span>
                                     </span>
+                                    <span ng-if="tableView == 'grid'" class="pull-left">{{formatOrderStatus(order.status)}}</span>
                                 </td>
                                 <td>
-                                    <span class="pull-left">
+                                    <strong ng-if="tableView == 'grid'">Customer: </strong>
+                                    <span ng-if="tableView == 'list'" class="pull-left">
                                         <img ng-src="status.customer.photo" err-src="" err-contact="order.customer" class="img-thumbnail screenshot" alt="image">
                                     </span>
-                                    <span class="pull-left" style="line-height: 34px;margin-left: 5px;">
+                                    <span class="pull-left" ng-class="{'col-style': tableView == 'list'}">
                                         {{order.customer.first}} {{order.customer.last}} ({{order.customer._id}})
                                     </span>
                                 </td>
-                                <td class="hidden-xs center"><strong>Items: </strong>{{order.line_items.length}}</td>
-                                <td class="hidden-xs center"><strong>Total: </strong> {{order.total | currency}}</td>
+                                <td class="hidden-xs" ng-class="{'center': tableView == 'list'}"><strong>Items: </strong>{{order.line_items.length}}</td>
+                                <td class="hidden-xs" ng-class="{'center': tableView == 'list'}"><strong>Total: </strong> {{order.total | currency}}</td>
                                 <td class="hidden-xs"><strong>Created: </strong> {{order.created.date | date:'MMM d yy'}}</td>
                                 <td class="hidden-xs"><strong>Modified: </strong>{{order.modified.date | date:'MMM d yy'}}</td>
                             </tr>

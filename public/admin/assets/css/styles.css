@@ -13545,10 +13545,10 @@ div[class^="spacing-"] {
   margin-bottom: 0;
 }
 .customers .column-width {
-  width: 12.5%;
+  width: 10%;
 }
 .customers table.grid thead th {
-  width: 11.1%;
+  width: 10%;
   float: left;
 }
 .customers .two-letter-label {
@@ -13594,10 +13594,14 @@ a.editable-error:focus {
 /*  Orders
 /* ---------------------------------------------------------------------- */
 .orders .column-width {
-  width: 16.66666666666667%;
+  width: 14.28571428571429%;
 }
 .orders table.grid thead th {
   float: left;
+}
+.orders .col-style {
+  line-height: 34px;
+  margin-left: 5px;
 }
 .choose-account ul {
   margin-bottom: 0;
