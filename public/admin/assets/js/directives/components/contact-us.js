@@ -26,7 +26,13 @@ app.directive('contactUsComponent', ['AccountService', 'GeocodeService', '$timeo
       {
         scope.component.boxProperties = {};
       }
-      
+      if(!scope.component.bg)
+        scope.component.bg = {
+          img: 
+          {
+            show : false
+          }
+      };      
       function hexToRgb(hex, opacity) {      
         var c;
         opacity = angular.isDefined(opacity) ? opacity : 1;
