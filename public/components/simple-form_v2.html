@@ -30,7 +30,7 @@
             </div>
              <!-- EXTENSION -->
             <div class="form-group" ng-if="fieldShow('extension')" ng-class="{ 'has-error' : simpleForm.extension.$invalid && !simpleForm.extension.$pristine }">
-                <input type="text" ng-model-options="{ debounce: 800 }" name="extension" ng-model="user.extension" ng-pattern="formValidations.extension" class="form-control input-lg" placeholder="Extension" required>
+                <input type="text" ng-model-options="{ debounce: 800 }" name="extension" ng-model="user.extension" ng-pattern="formValidations.extension" class="form-control input-lg" placeholder="Extension">
                 <p ng-show="simpleForm.extension.$invalid && !simpleForm.extension.$pristine" class="help-block">Enter a valid extension.</p>
             </div>
             <!-- PHONE -->
