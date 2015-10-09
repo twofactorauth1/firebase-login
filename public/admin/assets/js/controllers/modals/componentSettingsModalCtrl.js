@@ -838,6 +838,8 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
         };
       }
 
+      if(!$scope.componentEditing.bg)
+        $scope.componentEditing.bg = {};
       if($scope.componentEditing.bg && !angular.isDefined($scope.componentEditing.bg.opacity))
         $scope.componentEditing.bg.opacity = 1;
 
