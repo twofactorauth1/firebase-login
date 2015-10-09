@@ -429,8 +429,8 @@
 								this.setValue( selectedTable.getAttribute( 'cellSpacing' ) || '' );
 							},
 							commit: function( data, selectedTable ) {
-								if ( this.getValue() ){
-									var self = this;
+								var self = this;
+								if ( this.getValue() ){									
 									selectedTable.setAttribute( 'cellSpacing', this.getValue() );
 									setTimeout( function() {
 										selectedTable.setStyle('borderSpacing', self.getValue() + "px");
@@ -438,6 +438,9 @@
 								}
 								else{
 									selectedTable.removeAttribute( 'cellSpacing' );
+									setTimeout( function() {
+										selectedTable.setStyle('borderSpacing', 0);
+									},0);
 								}
 							}
 						},
@@ -457,8 +460,10 @@
 									selectedTable.setAttribute( 'cellPadding', this.getValue() );
 									$(selectedTable.$).find("td").css("padding", this.getValue() + "px");
 								}
-								else
+								else{
 									selectedTable.removeAttribute( 'cellPadding' );
+									$(selectedTable.$).find("td").css("padding", 0);
+								}
 							}
 						} ]
 					} ]
