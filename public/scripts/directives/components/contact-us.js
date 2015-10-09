@@ -40,6 +40,18 @@ app.directive('contactUsComponent', ['geocodeService', 'accountService', '$timeo
         c= '0x'+c.join('');
         return 'rgba('+[(c>>16)&255, (c>>8)&255, c&255].join(',')+','+ opacity +')';
       };
+
+      // Set bg image show always false for contact component
+
+      if(!angular.isDefined(scope.component.bg))
+        scope.component.bg = {};
+      if(!angular.isDefined(scope.component.bg.img))
+        scope.component.bg.img = {};   
+      if(!angular.isDefined(scope.component.bg.img.show))
+        scope.component.bg.img.show = false;   
+           
+      scope.component.bg.img.show = false;
+      
       if(scope.component.boxColor)
         scope.boxColor = hexToRgb(scope.component.boxColor, scope.component.boxOpacity);
 

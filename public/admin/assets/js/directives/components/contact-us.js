@@ -26,13 +26,18 @@ app.directive('contactUsComponent', ['AccountService', 'GeocodeService', '$timeo
       {
         scope.component.boxProperties = {};
       }
-      if(!scope.component.bg)
-        scope.component.bg = {
-          img: 
-          {
-            show : false
-          }
-      };      
+      
+      // Set bg image show always false for contact component
+
+      if(!angular.isDefined(scope.component.bg))
+        scope.component.bg = {};
+      if(!angular.isDefined(scope.component.bg.img))
+        scope.component.bg.img = {};   
+      if(!angular.isDefined(scope.component.bg.img.show))
+        scope.component.bg.img.show = false;   
+           
+      scope.component.bg.img.show = false;
+
       function hexToRgb(hex, opacity) {      
         var c;
         opacity = angular.isDefined(opacity) ? opacity : 1;
