@@ -82,8 +82,9 @@
 
       $scope.newNote.text = '';
 
+      $scope.customer_data = $scope.customer_data || {};
       $scope.customer_data.tags = $scope.unsetTags();
-
+      console.log('customer_data:', $scope.customer_data);
       CustomerService.saveCustomer($scope.customer_data, function (customer) {
         $scope.customer = customer;
         $scope.setTags();
@@ -106,7 +107,6 @@
      * @matchUsers
      * match users to the order notes
      */
-
     $scope.matchUsers = function (customer) {
       var notes = customer.notes;
       if (notes.length > 0) {
@@ -115,9 +115,12 @@
           var matchingUser = _.find($scope.users, function (_user) {
             return _user._id === _note.user_id;
           });
+          /*
+          * I'm not sure why we are doing this.  removing for now.
           if (matchingUser) {
             _note.user = matchingUser;
           }
+          */
         });
 
         return notes;
