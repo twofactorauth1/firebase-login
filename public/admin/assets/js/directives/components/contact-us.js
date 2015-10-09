@@ -111,8 +111,8 @@ app.directive('contactUsComponent', ['AccountService', 'GeocodeService', '$timeo
             else
               GeocodeService.validateAddress(scope.component.location, null, function (data, results) {
                 if (data && results.length === 1) {
-                  scope.component.location.lat = results[0].geometry.location.G || results[0].geometry.location.H;
-                  scope.component.location.lon = results[0].geometry.location.K || results[0].geometry.location.L;
+                  scope.component.location.lat = results[0].geometry.location.lat();
+                  scope.component.location.lon = results[0].geometry.location.lng();
                   scope.reloadMap();
                 } 
               });
