@@ -40,7 +40,7 @@
             </div>
             <!-- EMAIL -->
             <div class="form-group" ng-class="{ 'has-error' : userExists || simpleForm.email.$invalid && !simpleForm.email.$pristine }">
-                <input type="email" ng-pattern="formValidations.email" name="email" ng-model="user.email" class="form-control input-lg" placeholder="Email" ng-model-options="{ debounce: 800 }" required>
+                <input type="email" ng-pattern="formValidations.email" name="email" ng-model="user.email" class="form-control input-lg" placeholder="Email" ng-model-options="{ debounce: 800 }" ng-change="clearValidations()" required>
                 <p ng-if="simpleForm.email.$invalid && !simpleForm.email.$pristine && !userExists" class="help-block">Enter a valid email.</p>
                 <p ng-if="userExists" class="help-block">Email already exists.</p>
             </div>
