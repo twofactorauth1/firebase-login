@@ -111,7 +111,7 @@
                         <thead ng-class="{'bg-white': tableView == 'grid'}">
                             <tr>
                                 <th st-sort="_id" ng-show="column.name" ng-class="{'column-width': tableView == 'grid'}">Customer ID</th>
-                                <th><strong>Photo</strong></th>
+                                <th ng-show="column.name" style="margin-top: 1px;" ng-class="{'column-width': tableView == 'grid'}">Photo</th>
                                 <th st-sort="first" ng-show="column.name" ng-class="{'column-width': tableView == 'grid'}">First Name</th>
                                 <th st-sort="last" ng-show="column.name" ng-class="{'column-width': tableView == 'grid'}">Last Name</th>
                                 <th st-sort="getters.tags" ng-show="column.tags" ng-class="{'column-width': tableView == 'grid'}">Tags</th>
@@ -175,7 +175,7 @@
                         <tbody>
                             <tr ng-repeat="customer in displayedCustomers" ng-click="viewSingle(customer)">
                                 <td ng-show="column.name"><strong>Customer ID: </strong>{{customer._id}}</td>
-                                <td class="center" ng-show="column.photo">
+                                <td class="center" ng-show="column.photo && tableView == 'list'">
                                     <img ng-src="{{ customer.photo }}" id="customer_photo_{{customer._id}}" err-src="" err-contact="customer" class="img-thumbnail screenshot" alt="image">
                                 </td>
                                 <td ng-show="column.name"><strong>First Name: </strong> <span ng-text-truncate="customer.first" ng-tt-chars-threshold="15" ng-tt-no-toggling></span><span ng-if="!customer.first">--</span></td>
