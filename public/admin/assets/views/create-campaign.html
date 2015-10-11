@@ -543,6 +543,9 @@
                                             <a class="list-group-item" href="#">
                                                 <h5 class="list-group-item-heading">Delivery</h5>
                                                 <p class="list-group-item-text">
+                                                delivery.date: {{delivery.date}}<br>
+                                                moment(delivery.date): {{moment(delivery.date)}}<br>
+
                                                     Sending email at {{formatDate(delivery.date)}}
                                                 </p>
                                             </a>
@@ -609,7 +612,7 @@
                                 </button>
                             </div>
                             <div ng-if="currentStep < 5">
-                                <button class="btn btn-primary btn-o next-step btn-wide pull-right" ng-click="form.next(Form)">
+                                <button class="btn btn-primary btn-o next-step btn-wide pull-right" ng-click="form.next(Form)" ng-disabled="checkingCampaignName">
                                     <span> Next </span> <i class="fa fa-chevron-right"></i>
                                 </button>
                             </div>

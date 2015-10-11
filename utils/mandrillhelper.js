@@ -218,8 +218,11 @@ var mandrillHelper =  {
                             stepSettings.scheduled.minute, stepSettings.offset||0);
                     } else if(stepSettings.sendAt) {
                         console.log('send details >>> ', stepSettings.sendAt);
-                        send_at = self._getUtcDateTimeIsoString(stepSettings.sendAt.year, stepSettings.sendAt.month-1, stepSettings.sendAt.day, stepSettings.sendAt.hour, stepSettings.sendAt.minute, stepSettings.offset||0);
-                        now_at = self._getUtcDateTimeIsoString(moment().year(), moment().month(), moment().date(), moment().hour(), moment().minute(), 0);
+                        // send_at = self._getUtcDateTimeIsoString(stepSettings.sendAt.year, stepSettings.sendAt.month-1, stepSettings.sendAt.day, stepSettings.sendAt.hour, stepSettings.sendAt.minute, stepSettings.offset||0);
+                        // now_at = self._getUtcDateTimeIsoString(moment().year(), moment().month(), moment().date(), moment().hour(), moment().minute(), 0);
+                        stepSettings.sendAt.month = stepSettings.sendAt.month-1;
+                        send_at = moment.utc(stepSettings.sendAt);
+                        now_at = moment.utc();
                         console.log('send_at formatted >>> ', send_at);
                         console.log('now_at formatted >>> ', now_at);
                         if(moment(send_at).isBefore(now_at)) {
