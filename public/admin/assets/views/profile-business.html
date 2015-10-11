@@ -5,7 +5,7 @@
         <div class="row">
             <div class="col-sm-8">
                 <h1 class="mainTitle" translate="sidebar.nav.account.PROFILEBUSINESS"></h1>
-                <span class="mainDescription">Manage your business profile</span>
+                <span class="mainDescription">Manage Your Business Profile</span>
             </div>
             <div ncy-breadcrumb></div>
         </div>
@@ -68,7 +68,11 @@
                                 <tr>
                                     <td>phone:</td>
                                     <td>
-                                        <span ng-repeat="phone in account.business.phones">{{phone.number}}<br></span>
+                                        <div ng-repeat="phone in account.business.phones">
+                                            <a href="tel:{{phone.number}}">{{phone.number}}</a>
+                                            <span ng-if="phone.extension"> x{{phone.extension}}</span>
+                                            <br>
+                                        </div>
                                     </td>
                                 </tr>
                                 <tr>
@@ -87,12 +91,12 @@
                         <table class="table table-condensed">
                             <thead>
                                 <tr>
-                                    <th colspan="3">Additional information</th>
+                                    <th colspan="3">Additional Information</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>Description</td>
+                                    <td>description</td>
                                     <td>{{account.business.description}}</td>
                                 </tr>
                             </tbody>
@@ -109,7 +113,7 @@
                             <div class="panel-body">
                                 <div ng-if="!account.business.splitHours" ng-repeat="val in account.business.hours" ng-class="(currentDate | date:'EEE') === val.day ? 'current-day' : ''"><span class="text-bold">{{val.day}} </span> : <span ng-hide="val.closed || val.wholeday">{{val.start}} - {{val.end}}</span><span ng-show="val.closed && !val.wholeday">Closed</span><span ng-show="!val.closed && val.wholeday">Opened 24 hours</span></div>
                                 <div ng-if="account.business.splitHours" ng-repeat="val in account.business.hours"><span class="text-bold">{{val.day}} </span> : <span ng-hide="val.closed || val.wholeday" ng-if="val.split">{{val.start}} - {{val.end}} and {{val.start2}} - {{val.end2}}</span><span ng-hide="val.closed || val.wholeday" ng-if="!val.split">{{val.start}} - {{val.end}}</span><span ng-show="val.closed && !val.wholeday">Closed</span>
-                                <span ng-show="!val.closed && val.wholeday">Opened 24 hours</span></div>
+                                <span ng-show="!val.closed && val.wholeday">Open 24 hours</span></div>
                             </div>
                         </div>
                     </div>
@@ -145,15 +149,6 @@
                             </div>                          
                             <div ng-repeat="phone in account.business.phones">
                                 <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="form-group" ng-class="{ 'has-error' : form.extension_{{$index}}.$invalid && !form.extension_{{$index}}.$pristine}">
-                                            <label class="control-label">
-                                                Phone Extension
-                                            </label>
-                                            <input type="text" placeholder="phone extension" class="form-control" ng-pattern="formValidations.extension" name="extension_{{$index}}" ng-model="account.business.phones[$index].extension">
-                                            <p ng-show="form.extension_{{$index}}.$invalid && !form.extension_{{$index}}.$pristine" class="help-block">Enter a valid extension.</p>
-                                        </div>
-                                    </div>
                                     <div class="col-md-8">
                                         <div class="form-group" ng-class="{ 'has-error' : form.phone_{{$index}}.$invalid && !form.phone_{{$index}}.$pristine}">
                                             <label class="control-label">
@@ -161,6 +156,15 @@
                                             </label>
                                             <input type="text" placeholder="phone number" class="form-control" ng-pattern="formValidations.phone" name="phone_{{$index}}" ng-model="account.business.phones[$index].number">
                                             <p ng-show="form.phone_{{$index}}.$invalid && !form.phone_{{$index}}.$pristine" class="help-block">Enter a valid phone number.</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group" ng-class="{ 'has-error' : form.extension_{{$index}}.$invalid && !form.extension_{{$index}}.$pristine}">
+                                            <label class="control-label">
+                                                Phone Extension
+                                            </label>
+                                            <input type="text" placeholder="phone extension" class="form-control" ng-pattern="formValidations.extension" name="extension_{{$index}}" ng-model="account.business.phones[$index].extension">
+                                            <p ng-show="form.extension_{{$index}}.$invalid && !form.extension_{{$index}}.$pristine" class="help-block">Enter a valid extension.</p>
                                         </div>
                                     </div>
                                 </div>

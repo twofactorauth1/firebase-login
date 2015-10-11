@@ -106,18 +106,20 @@
                                                     <td>
                                                         <div ng-repeat="phone in customer.details[0].phones  track by $index">
                                                             <a href="tel:{{phone.number}}">{{phone.number}}</a>
+                                                            <span ng-if="phone.extension"> x{{phone.extension}}</span>
                                                             <br>
                                                         </div>
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <td>address:</td>
+                                                    <td>address(es):</td>
                                                     <td>
-                                                        <div ng-repeat="address in customer.details[0].addresses  track by $index">
+                                                        <div ng-repeat="address in customer.details[0].addresses track by $index">
                                                             <a href>
-                                                                {{address.address}} {{address.address2}}<br>{{address.city}} {{address.state}} {{address.country}} {{address.zip}}
-                                                            </a>
-                                                            <br>
+                                                                <span ng-if="address.address">{{address.address}}<br></span>
+                                                                <span ng-if="address.address2">{{address.address2}}<br></span>
+                                                                {{address.city}} {{address.state}} {{address.country}} {{address.zip}}</a>
+                                                            <br/><br ng-if="($index+1 < customer.details[0].addresses.length)"/>
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -259,15 +261,6 @@
                                             </div>
                                             <div ng-repeat="phone in customer.details[0].phones  track by $index">
                                                 <div class="row">
-                                                    <div class="col-md-4">
-                                                        <div class="form-group" ng-class="{ 'has-error' : form.extension_{{$index}}.$invalid && !form.extension_{{$index}}.$pristine}">
-                                                            <label class="control-label">
-                                                                Phone Extension
-                                                            </label>
-                                                            <input type="text" placeholder="phone extension" class="form-control" ng-pattern="formValidations.extension" name="extension_{{$index}}" ng-model="customer.details[0].phones[$index].extension" ng-blur="updateCustomer()">
-                                                            <p ng-show="form.extension_{{$index}}.$invalid && !form.extension_{{$index}}.$pristine" class="help-block">Enter a valid extension.</p>
-                                                        </div>
-                                                    </div>
                                                     <div class="col-md-8">
                                                         <div class="form-group" ng-class="{ 'has-error' : form.phone_{{$index}}.$invalid && !form.phone_{{$index}}.$pristine}">
                                                             <label class="control-label">
@@ -275,6 +268,15 @@
                                                             </label>
                                                            <input type="text" placeholder="phone number" class="form-control" ng-pattern="formValidations.phone" name="phone_{{$index}}" ng-model="customer.details[0].phones[$index].number" ng-blur="updateCustomer()">
                                                            <p ng-show="form.phone_{{$index}}.$invalid && !form.phone_{{$index}}.$pristine" class="help-block">Enter a valid phone number.</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <div class="form-group" ng-class="{ 'has-error' : form.extension_{{$index}}.$invalid && !form.extension_{{$index}}.$pristine}">
+                                                            <label class="control-label">
+                                                                Extension
+                                                            </label>
+                                                            <input type="text" placeholder="phone extension" class="form-control" ng-pattern="formValidations.extension" name="extension_{{$index}}" ng-model="customer.details[0].phones[$index].extension" ng-blur="updateCustomer()">
+                                                            <p ng-show="form.extension_{{$index}}.$invalid && !form.extension_{{$index}}.$pristine" class="help-block">Enter a valid extension.</p>
                                                         </div>
                                                     </div>
                                                 </div>
