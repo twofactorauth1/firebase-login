@@ -1,6 +1,6 @@
 'use strict';
 
-app.directive('indigewebSkeuocard',['PaymentService', 'UserService', function(PaymentService, UserService) {
+app.directive('indigewebSkeuocard',['PaymentService', 'UserService', 'ToasterService', function(PaymentService, UserService, ToasterService) {
         return {
             require: [],
             restrict: 'C',
@@ -201,6 +201,11 @@ app.directive('indigewebSkeuocard',['PaymentService', 'UserService', function(Pa
                             if (scope.user && scope.user.stripeId) {
                                 UserService.postAccountBilling(scope.user.stripeId, token, function(billing) {
                                     scope.updateFn(billing);
+                                },
+                                function(err){
+                                    ToasterService.clearAll();
+                                    ToasterService.show('error', 'The purchase was unsuccessful. Please check your card information.');
+                                    scope.$parent.openModal('change-card-modal');
                                 });
                                 scope.cards.data.forEach(function(value, index) {
                                     PaymentService.deleteCustomerCard(value.customer, value.id, false, function(card) {});
