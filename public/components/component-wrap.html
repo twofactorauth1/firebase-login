@@ -7,48 +7,128 @@
        opacity: {{component.bg.opacity === 0 ? 0 : component.bg.opacity || 1}};
     }
 </style>
-<div class="component-wrap component_wrap_{{component._id}}" ng-if="component.visibility" ng-class="{'editing': isEditing,'undernav200':component.type == 'masthead','undernav':component.type == 'navigation','component-wrap-post':isSinglePost}">
+<div class="component-wrap component_wrap_{{component._id}}"
+     ng-if="component.visibility"
+     ng-class="{'editing': isEditing,
+        'undernav200':component.type == 'masthead',
+        'undernav':component.type == 'navigation',
+        'component-wrap-post':isSinglePost}">
     <div class="component {{component.type}}{{component._id}}">
-        <div id="{{component.anchor || component._id}}" ng-style="{'color':component.txtcolor||primaryTextColor}">
-            <div ng-if="!component.bg.img.url && component.type != 'email'" ng-style="{'background': component.bg.color, 'color':component.txtcolor||primaryTextColor}">
+        <div id="{{component.anchor || component._id}}"
+             ng-style="{'color':component.txtcolor||primaryTextColor}">
+            <div ng-if="!component.bg.img.url && component.type != 'email'"
+                 ng-style="{'background': component.bg.color,
+                    'color':component.txtcolor||primaryTextColor}">
                 <div ng-class="{'component-inner': component.type != 'footer'}">
-                    <div class="container inner-page" ng-if="component.type != 'single-post' && component.type != 'blog' && component.type != 'navigation' && component.type != 'footer' && component.type != 'contact-us'  && component.type != 'top-bar' && component.type != 'payment-form' && component.type.indexOf('email-') === -1" ng-style="{'padding-top': component.spacing.pt + 'px', 'padding-bottom': component.spacing.pb + 'px', 'padding-left': component.spacing.pl + 'px', 'padding-right': component.spacing.pr + 'px', 'margin-top': component.spacing.mt + 'px', 'margin-bottom': component.spacing.mb + 'px', 'margin-left': component.spacing.ml == 'auto' ? component.spacing.ml: component.spacing.ml + 'px', 'margin-right': component.spacing.mr == 'auto' ? component.spacing.mr : component.spacing.mr + 'px', 'max-width': component.spacing.mw == '100%' ? component.spacing.mw : component.spacing.mw  + 'px'}">
-                        <div data-ng-include data-src="'/components/'+component.type+'_v'+component.version+'.html'"></div>
+                    <div class="container inner-page"
+                         ng-if="component.type != 'single-post'
+                             && component.type != 'blog'
+                             && component.type != 'navigation'
+                             && component.type != 'footer'
+                             && component.type != 'contact-us'
+                             && component.type != 'top-bar'
+                             && component.type != 'payment-form'
+                             && component.type.indexOf('email-') === -1"
+                         ng-style="{'padding-top': component.spacing.pt + 'px',
+                            'padding-bottom': component.spacing.pb + 'px',
+                            'padding-left': component.spacing.pl + 'px',
+                            'padding-right': component.spacing.pr + 'px',
+                            'margin-top': component.spacing.mt + 'px',
+                            'margin-bottom': component.spacing.mb + 'px',
+                            'margin-left': component.spacing.ml == 'auto' ? component.spacing.ml: component.spacing.ml + 'px',
+                            'margin-right': component.spacing.mr == 'auto' ? component.spacing.mr : component.spacing.mr + 'px',
+                            'max-width': component.spacing.mw == '100%' ? component.spacing.mw : component.spacing.mw  + 'px'}">
+                        <div data-ng-include
+                             data-src="'/components/'+component.type+'_v'+component.version+'.html'"></div>
                     </div>
-                    <div ng-if="component.type == 'single-post' || component.type == 'blog' || component.type == 'navigation' || component.type == 'footer' || component.type == 'contact-us' || component.type == 'top-bar' || component.type == 'payment-form' && component.type.indexOf('email-') === -1" ng-style="{'padding-top': component.spacing.pt + 'px', 'padding-bottom': component.spacing.pb + 'px', 'padding-left': component.spacing.pl + 'px', 'padding-right': component.spacing.pr + 'px', 'margin-top': component.spacing.mt + 'px', 'margin-bottom': component.spacing.mb + 'px', 'margin-left': component.spacing.ml == 'auto' ? component.spacing.ml: component.spacing.ml + 'px', 'margin-right': component.spacing.mr == 'auto' ? component.spacing.mr : component.spacing.mr + 'px', 'max-width': component.spacing.mw == '100%' ? component.spacing.mw : component.spacing.mw  + 'px'}">
-                        <div data-ng-include data-src="'/components/'+component.type+'_v'+component.version+'.html'"></div>
+                    <div ng-if="component.type == 'single-post'
+                            || component.type == 'blog'
+                            || component.type == 'navigation'
+                            || component.type == 'footer'
+                            || component.type == 'contact-us'
+                            || component.type == 'top-bar'
+                            || component.type == 'payment-form'
+                            && component.type.indexOf('email-') === -1"
+                        ng-style="{'padding-top': component.spacing.pt + 'px',
+                            'padding-bottom': component.spacing.pb + 'px',
+                            'padding-left': component.spacing.pl + 'px',
+                            'padding-right': component.spacing.pr + 'px',
+                            'margin-top': component.spacing.mt + 'px',
+                            'margin-bottom': component.spacing.mb + 'px',
+                            'margin-left': component.spacing.ml == 'auto' ? component.spacing.ml: component.spacing.ml + 'px',
+                            'margin-right': component.spacing.mr == 'auto' ? component.spacing.mr : component.spacing.mr + 'px',
+                            'max-width': component.spacing.mw == '100%' ? component.spacing.mw : component.spacing.mw  + 'px'}">
+                        <div data-ng-include
+                             data-src="'/components/'+component.type+'_v'+component.version+'.html'"></div>
                     </div>
                     <div ng-if="component.type.indexOf('email-') !== -1">
-                        <div data-ng-include data-src="'/components/'+component.type+'_v'+component.version+'.html'"></div>
+                        <div data-ng-include
+                             data-src="'/components/'+component.type+'_v'+component.version+'.html'"></div>
                     </div>
                 </div>
             </div>
             <div ng-if="component.type == 'email'" style="clear:both">
-                <div data-ng-include data-src="'/components/'+component.type+'_v'+component.version+'.html'"></div>
+                <div data-ng-include
+                     data-src="'/components/'+component.type+'_v'+component.version+'.html'"></div>
             </div>
             <div ng-if="component.bg.img.url && component.type != 'email' " class="ipad-bg">
                 <div>
                     <div class="component-inner">
-                        <div ng-if="component.bg.color" class="bg" ng-style="{'background': component.bg.color}"></div>
-                        <div ng-if="component.bg.img.show && component.type == 'masthead'" class="bg cover" ng-class="{parallax:component.bg.img.parallax,'blur-image':component.bg.img.blur,'full-screen':component.bg.img.fullscreen}" {{component.bg.img.parallax ? parallax-background : ""}} ng-attr-parallax-ratio="{{component.bg.img.parallax ? '0.4' : '1'}}" ng-attr-parallax-x-position="{{component.bg.img.position}}" style='
-                                background: url("{{component.bg.img.url}}");
+                        <div ng-if="component.bg.color"
+                             class="bg"
+                             ng-style="{'background': component.bg.color}"></div>
+                        <div ng-if="component.bg.img.show && component.type == 'masthead'"
+                             class="bg cover"
+                             ng-class="{parallax:component.bg.img.parallax,
+                                'blur-image':component.bg.img.blur,
+                                'full-screen':component.bg.img.fullscreen}"
+                             {{component.bg.img.parallax ? parallax-background : ""}}
+                             ng-attr-parallax-ratio="{{component.bg.img.parallax ? '0.4' : '1'}}"
+                             ng-attr-parallax-x-position="{{component.bg.img.position}}"
+                             style='background: url("{{component.bg.img.url}}");
                                 background-size: cover;
                                 background-repeat: no-repeat;
                                 background-position: {{component.bg.img.position}};'>
                         </div>
-                        <div ng-if="component.bg.img.show && component.type != 'masthead'" class="bg" ng-class="{parallax:component.bg.img.parallax,'blur-image':component.bg.img.blur}" {{component.bg.img.parallax ? parallax-background : ""}} ng-attr-parallax-ratio="{{component.bg.img.parallax ? '0.4' : '1'}}" style='
+                        <div ng-if="component.bg.img.show && component.type != 'masthead'"
+                             class="bg"
+                             ng-class="{parallax:component.bg.img.parallax,
+                                'blur-image':component.bg.img.blur}"
+                             {{component.bg.img.parallax ? parallax-background : ""}}
+                             ng-attr-parallax-ratio="{{component.bg.img.parallax ? '0.4' : '1'}}"
+                             style='
                                 background: url("{{component.bg.img.url}}") repeat-y;
                                 background-size: cover;
                                 background: {{component.bg.img.url}};'
                                 >
                         </div>
-                        <div ng-if="component.bg.img.show && component.bg.img.overlay" class="bg" ng-class="{'bg-overlay':component.bg.img.overlay }">
+                        <div ng-if="component.bg.img.show && component.bg.img.overlay"
+                             class="bg"
+                             ng-class="{'bg-overlay':component.bg.img.overlay }">
                         </div>
-                        <div class="container inner-page" ng-style="{'padding-top': component.spacing.pt + 'px', 'padding-bottom': component.spacing.pb + 'px', 'padding-left': component.spacing.pl + 'px', 'padding-right': component.spacing.pr + 'px', 'margin-top': component.spacing.mt + 'px', 'margin-bottom': component.spacing.mb + 'px', 'margin-left': component.spacing.ml == 'auto' ? component.spacing.ml: component.spacing.ml + 'px', 'margin-right': component.spacing.mr == 'auto' ? component.spacing.mr : component.spacing.mr + 'px', 'max-width': component.spacing.mw == '100%' ? component.spacing.mw : component.spacing.mw  + 'px'}" ng-if="component.type != 'single-post' && component.type != 'blog' && component.type != 'footer' && component.type != 'payment-form'">
-                            <div data-ng-include data-src="'/components/'+component.type+'_v'+component.version+'.html'"></div>
+                        <div class="container inner-page"
+                             ng-style="{'padding-top': component.spacing.pt + 'px',
+                                'padding-bottom': component.spacing.pb + 'px',
+                                'padding-left': component.spacing.pl + 'px',
+                                'padding-right': component.spacing.pr + 'px',
+                                'margin-top': component.spacing.mt + 'px',
+                                'margin-bottom': component.spacing.mb + 'px',
+                                'margin-left': component.spacing.ml == 'auto' ? component.spacing.ml: component.spacing.ml + 'px',
+                                'margin-right': component.spacing.mr == 'auto' ? component.spacing.mr : component.spacing.mr + 'px',
+                                'max-width': component.spacing.mw == '100%' ? component.spacing.mw : component.spacing.mw  + 'px'}"
+                             ng-if="component.type != 'single-post'
+                               && component.type != 'blog'
+                               && component.type != 'footer'
+                               && component.type != 'payment-form'">
+                            <div data-ng-include
+                                 data-src="'/components/'+component.type+'_v'+component.version+'.html'"></div>
                         </div>
-                        <div ng-if="component.type == 'single-post' || component.type == 'blog' || component.type == 'footer' || component.type == 'payment-form' ">
-                            <div data-ng-include data-src="'/components/'+component.type+'_v'+component.version+'.html'"></div>
+                        <div ng-if="component.type == 'single-post'
+                                || component.type == 'blog'
+                                || component.type == 'footer'
+                                || component.type == 'payment-form' ">
+                            <div data-ng-include
+                                 data-src="'/components/'+component.type+'_v'+component.version+'.html'"></div>
                         </div>
                     </div>
                 </div>
@@ -56,7 +136,11 @@
         </div>
     </div>
 </div>
-<div class="component-hidden component-wrap" ng-show="isEditing" ng-style="{&#39;background&#39;: component.bg.color, &#39;color&#39;:component.txtcolor||primaryTextColor}" ng-if="!component.visibility">
+<div class="component-hidden component-wrap"
+     ng-show="isEditing"
+     ng-style="{&#39;background&#39;: component.bg.color,
+        &#39;color&#39;:component.txtcolor||primaryTextColor}"
+     ng-if="!component.visibility">
     <div class="component">
         <div class="component-inner">
             <h3 class="hidden-component">Hidden</h3>
