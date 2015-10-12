@@ -34,7 +34,6 @@
      */
 
     CustomerService.getCustomers(function (customers) {
-      console.log('customers >>> ', customers);
       $scope.customers = customers;
     });
 
@@ -71,7 +70,6 @@
      */
 
     OrderService.getOrders(function (orders) {
-      console.log('orders >>> ', orders);
       _.each(orders, function (order) {
         if (order.line_items) {
           order.line_items_total = order.line_items.length;
@@ -113,7 +111,7 @@
       name: 'Refunded',
       value: 'refunded'
     }, {
-      name: 'Falied',
+      name: 'Failed',
       value: 'failed'
     }];
 
