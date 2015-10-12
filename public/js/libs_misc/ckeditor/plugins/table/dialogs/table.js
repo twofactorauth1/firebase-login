@@ -429,10 +429,19 @@
 								this.setValue( selectedTable.getAttribute( 'cellSpacing' ) || '' );
 							},
 							commit: function( data, selectedTable ) {
-								if ( this.getValue() )
+								var self = this;
+								if ( this.getValue() ){									
 									selectedTable.setAttribute( 'cellSpacing', this.getValue() );
-								else
+									setTimeout( function() {
+										selectedTable.setStyle('borderSpacing', self.getValue() + "px");
+									},0);
+								}
+								else{
 									selectedTable.removeAttribute( 'cellSpacing' );
+									setTimeout( function() {
+										selectedTable.setStyle('borderSpacing', 0);
+									},0);
+								}
 							}
 						},
 						{
@@ -447,10 +456,14 @@
 								this.setValue( selectedTable.getAttribute( 'cellPadding' ) || '' );
 							},
 							commit: function( data, selectedTable ) {
-								if ( this.getValue() )
+								if ( this.getValue() ){
 									selectedTable.setAttribute( 'cellPadding', this.getValue() );
-								else
+									$(selectedTable.$).find("td").css("padding", this.getValue() + "px");
+								}
+								else{
 									selectedTable.removeAttribute( 'cellPadding' );
+									$(selectedTable.$).find("td").css("padding", 0);
+								}
 							}
 						} ]
 					} ]

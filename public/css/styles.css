@@ -6184,6 +6184,9 @@ a.text-light:hover {
 .cursor-pointer {
   cursor: pointer;
 }
+.overflow-auto {
+  overflow: auto;
+}
 .modal-overflow-content {
   /* <- this could be deprecated when modal layout is more flexible */
   max-height: 400px;

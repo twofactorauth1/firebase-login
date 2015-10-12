@@ -335,12 +335,13 @@
 
 				this.parts.image.setAttributes( {
 					src: this.data.src,
-					class: 'img-responsive',
 					// This internal is required by the editor.
 					'data-cke-saved-src': this.data.src,
 
 					alt: this.data.alt
 				} );
+				if(!this.parts.image.hasClass("img-responsive"))
+					this.parts.image.addClass("img-responsive");
 
 				// If shifting non-captioned -> captioned, remove classes
 				// related to styles from <img/>.
@@ -811,9 +812,9 @@
 				if ( align == 'none' )
 					wrapper.removeStyle( 'float' );
 				else
-					wrapper.setStyle( 'float', align );
+					wrapper && wrapper.setStyle( 'float', align );
 
-				wrapper.removeStyle( 'text-align' );
+				wrapper && wrapper.removeStyle( 'text-align' );
 			}
 		}
 	}

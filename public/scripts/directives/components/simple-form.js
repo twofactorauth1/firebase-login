@@ -15,6 +15,10 @@ app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userSe
         }).length;
       };
 
+      scope.clearValidations= function(){
+        scope.userExists = false;
+      };
+
       scope.fieldShow = function (name) {
         var field = _.find(scope.component.fields, function (_field) {
           return _field.name === name;

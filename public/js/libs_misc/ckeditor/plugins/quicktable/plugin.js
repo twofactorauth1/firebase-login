@@ -37,6 +37,9 @@
 			table.setAttribute( 'class', quickClass );
 			table.setStyles( quickStyle );
 			table.setStyle( 'width', quickWidth );
+			table.setStyle('borderSpacing', quickCellSpacing + "px");
+			table.setStyle('borderCollapse', 'separate');
+			$(table.$).find("td").css("padding", quickCellPadding + "px");
 			editor.insertElement( table );
 			
 			// Fire event for showborders plugin (so hidden borders are visible)

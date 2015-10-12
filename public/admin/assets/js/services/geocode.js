@@ -23,7 +23,7 @@
       var geocoder = new google.maps.Geocoder();
       var myLatLng = null;
       if(locationObj)
-        myLatLng = new google.maps.LatLng(locationObj.geometry.location.H, locationObj.geometry.location.L);
+        myLatLng = new google.maps.LatLng(locationObj.geometry.location.lat(), locationObj.geometry.location.lng());
       else
         myLatLng = new google.maps.LatLng(location.lat, location.lon);
 

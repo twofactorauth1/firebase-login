@@ -33,7 +33,6 @@
      */
 
     CustomerService.getCustomers(function (customers) {
-      console.log('customers >>> ', customers);
       $scope.customers = customers;
       $scope.getUsers();
     });
@@ -70,7 +69,6 @@
 
     $scope.getUsers = function () {
       UserService.getUsers(function (users) {
-        console.log('users >>> ', users);
         $scope.users = users;
         $scope.getProducts();
       });
@@ -83,7 +81,6 @@
 
     $scope.getProducts = function () {
       ProductService.getProducts(function (products) {
-        console.log('products >>> ', products);
         $scope.products = products;
         $scope.getOrder();
       });

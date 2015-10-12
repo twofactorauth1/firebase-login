@@ -92,21 +92,21 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr ng-repeat="campaign in displayedCampaigns" ng-click="viewSingle(campaign)">
+                            <tr ng-repeat="campaign in displayedCampaigns" ng-click="viewSingle(campaign)" class="cursor-pointer">
                                 <td colspan="7" ng-if="tableView == 'grid'" class="no-padding">
                                     <div class="panel panel-white margin-bottom-0">
                                         <div class="panel-heading" ng-class="{
-                                            'bg-grey': campaign.status == 'draft',
-                                            'bg-light-yellow': campaign.status == 'running',
-                                            'bg-green': campaign.status == 'completed'
+                                            'bg-grey': campaign.status.toLowerCase() == 'draft',
+                                            'bg-light-yellow': campaign.status.toLowerCase() == 'running',
+                                            'bg-green': campaign.status.toLowerCase() == 'completed'
                                         }">
                                             <span class="fa-stack fa-lg fa-inverse pull-left" style="margin: -8px 5px 0 -7px;">
                                                 <span class="fa fa-circle-thin fa-stack-2x">
                                                 </span>
                                             <span class="fa fa-stack-1x" tooltip-placement="top" tooltip="{{campaign.status | titleCase}} " ng-class="{
-                                                  'fa-pencil': campaign.status == 'draft',
-                                                  'fa-clock-o': campaign.status == 'running',
-                                                  'fa-check': campaign.status == 'completed'
+                                                  'fa-pencil': campaign.status.toLowerCase() == 'draft',
+                                                  'fa-clock-o': campaign.status.toLowerCase() == 'running',
+                                                  'fa-check': campaign.status.toLowerCase() == 'completed'
                                                 }">
                                                 </span>
                                             </span>
@@ -136,19 +136,19 @@
                                             <p><strong>Created: </strong> <span class="pull-right">{{campaign.created.date | date:'MMM d yy'}}</span></p>
                                         </div>
                                         <div class="panel-footer border-light no-padding">
-                                            <div class="col-xs-6 text-center border-right">
+                                            <div class="col-xs-4 text-center border-right">
                                                 <div class="rate">
-                                                    <i class="fa fa-caret-up text-green"></i> <span class="text-large text-bold">{{ccampaign.statistics.emailsSent || 0 }}<span><span ng-if="campaign.statistics.participants" class="text-small muted"> ({{campaign.statistics.participants}})</span>
+                                                    <i class="fa fa-caret-up text-green"></i> <span class="text-large text-bold">{{campaign.statistics.emailsSent || 0 }}<span><span ng-if="campaign.statistics.participants" class="text-small muted"> ({{campaign.statistics.participants}})</span>
                                                 </div>
                                                 Sent
                                             </div>
-                                            <div class="col-xs-6 text-center border-right">
+                                            <div class="col-xs-4 text-center border-right">
                                                 <div class="rate">
-                                                    <i class="fa fa-caret-up text-green"></i> <span class="text-large text-bold">{{ccampaign.statistics.emailsOpened || 0 }}<span><span ng-if="campaign.statistics.participants" class="text-small muted"> ({{campaign.statistics.participants}})</span>
+                                                    <i class="fa fa-caret-up text-green"></i> <span class="text-large text-bold">{{campaign.statistics.emailsOpened || 0 }}<span><span ng-if="campaign.statistics.participants" class="text-small muted"> ({{campaign.statistics.participants}})</span>
                                                 </div>
                                                 Opened
                                             </div>
-                                            <div class="col-xs-6 text-center">
+                                            <div class="col-xs-4 text-center">
                                                 <div class="rate">
                                                     <i class="fa fa-caret-up text-green"></i> <span class="text-large text-bold">{{campaign.statistics.emailsClicked || 0}}</span><span ng-if="campaign.statistics.participants" class="text-small muted"> ({{campaign.statistics.participants}})</span>
                                                 </div>
@@ -161,15 +161,15 @@
                                     <span class="fa-stack fa-lg">
                                         <span class="fa fa-circle-thin fa-stack-2x"
                                         ng-class="{
-                                            'text-muted': campaign.status == 'draft',
-                                            'text-orange': campaign.status == 'running',
-                                            'text-green': campaign.status == 'completed'
+                                            'text-muted': campaign.status.toLowerCase() == 'draft',
+                                            'text-orange': campaign.status.toLowerCase() == 'running',
+                                            'text-green': campaign.status.toLowerCase() == 'completed'
                                         }">
                                         </span>
                                     <span class="fa fa-stack-1x" tooltip-placement="top" tooltip="{{campaign.status | titleCase}} " ng-class="{
-                                          'fa-pencil text-muted': campaign.status == 'draft',
-                                          'fa-clock-o text-orange': campaign.status == 'running',
-                                          'fa-check text-green': campaign.status == 'completed'
+                                          'fa-pencil text-muted': campaign.status.toLowerCase() == 'draft',
+                                          'fa-clock-o text-orange': campaign.status.toLowerCase() == 'running',
+                                          'fa-check text-green': campaign.status.toLowerCase() == 'completed'
                                         }">
                                         </span>
                                     </span>

@@ -335,9 +335,20 @@ _.extend(api.prototype, baseApi.prototype, {
                                 cb(err);
                             } else {
                                 self.log.debug('Order created.');
-                                cb(null, userEmail, purchaseAmount);
+                                cb(null, account, order, userEmail, purchaseAmount);
                             }
                         });
+                    }
+                });
+            },
+            function addOrderNote(account, order, email, amount, cb){
+                var note = 'order for new account id:' + account.id();
+                orderManager.addOrderNote(appConfig.mainAccountID, order.id(), note, 'admin', function(err, order){
+                    if(err) {
+                        self.log.error('Error adding order note: ', err);
+                        cb(err);
+                    } else {
+                        cb(null, email, amount);
                     }
                 });
             },
