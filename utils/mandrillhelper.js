@@ -208,6 +208,7 @@ var mandrillHelper =  {
                     //stepSettings.scheduled.minute, stepSettings.scheduled.hour, stepSettings.scheduled.day
                     //var sendMoment = moment().hours(stepSettings.scheduled.hour).minutes(stepSettings.scheduled.minute).add(stepSettings.scheduled.day , 'days');
                     var send_at = null;
+                    var now_at = null;
                     if(stepSettings.offset) {
                         //the offset is the number of mintues from now to send it at.
                         send_at = moment().utc().add('minutes', stepSettings.offset).toISOString();;
@@ -217,10 +218,14 @@ var mandrillHelper =  {
                             stepSettings.scheduled.minute, stepSettings.offset||0);
                     } else if(stepSettings.sendAt) {
                         console.log('send details >>> ', stepSettings.sendAt);
-                        send_at = self._getUtcDateTimeIsoString(stepSettings.sendAt.year, stepSettings.sendAt.month-1,
-                            stepSettings.sendAt.day, stepSettings.sendAt.hour, stepSettings.sendAt.minute, stepSettings.offset||0);
+                        // send_at = self._getUtcDateTimeIsoString(stepSettings.sendAt.year, stepSettings.sendAt.month-1, stepSettings.sendAt.day, stepSettings.sendAt.hour, stepSettings.sendAt.minute, stepSettings.offset||0);
+                        // now_at = self._getUtcDateTimeIsoString(moment().year(), moment().month(), moment().date(), moment().hour(), moment().minute(), 0);
+                        stepSettings.sendAt.month = stepSettings.sendAt.month-1;
+                        send_at = moment.utc(stepSettings.sendAt);
+                        now_at = moment.utc();
                         console.log('send_at formatted >>> ', send_at);
-                        if(moment(send_at).isBefore()) {
+                        console.log('now_at formatted >>> ', now_at);
+                        if(moment(send_at).isBefore(now_at)) {
                             self.log.debug('Sending email now because ' + send_at + ' is in the past.');
                             send_at = moment().utc().toISOString();
                         }

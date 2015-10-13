@@ -17,7 +17,7 @@
      * get all customers to for customer select
      */
 
-    WebsiteService.getEmails(function (emails) {
+    WebsiteService.getEmails(true, function (emails) {
       $timeout(function () {
         $scope.$apply(function () {
           $scope.emails = emails;

@@ -5,7 +5,7 @@
         <div class="row">
             <div class="col-sm-7">
                 <h1 class="mainTitle" translate="dashboard.WELCOME" translate-values="{ appName: app.name }"></h1>
-                <span class="mainDescription">Overview &amp; activity</span>
+                <span class="mainDescription">Overview &amp; Activity</span>
             </div>
             <div class="col-sm-5">
             </div>
@@ -21,7 +21,7 @@
                         <span class="fa-stack fa-2x"> <i class="fa fa-square fa-stack-2x text-primary"></i> <i class="fa fa-user fa-stack-1x fa-inverse"></i> </span>
                         <h3 class="StepTitle">Customers</h3>
                         <p class="text-small">
-                            Import or create them manually
+                            Import or Create Customers Manually
                         </p>
                     </div>
                 </div>
@@ -32,7 +32,7 @@
                         <span class="fa-stack fa-2x"> <i class="fa fa-square fa-stack-2x text-primary"></i> <i class="fa fa-bullhorn fa-stack-1x fa-inverse"></i> </span>
                         <h3 class="StepTitle">Social Feed</h3>
                         <p class="text-small">
-                            View and post to social networks
+                            View and Post to Social Networks
                         </p>
                     </div>
                 </div>
@@ -43,7 +43,7 @@
                         <span class="fa-stack fa-2x"> <i class="fa fa-square fa-stack-2x text-primary"></i> <i class="fa fa-laptop fa-stack-1x fa-inverse"></i> </span>
                         <h3 class="StepTitle">Pages</h3>
                         <p class="text-small">
-                            Pages for your site
+                            Pages for Your Site
                         </p>
                     </div>
                 </div>
@@ -54,7 +54,7 @@
                         <span class="fa-stack fa-2x"> <i class="fa fa-square fa-stack-2x text-primary"></i> <i class="fa fa-shopping-cart fa-stack-1x fa-inverse"></i> </span>
                         <h3 class="StepTitle">Orders</h3>
                         <p class="text-small">
-                            Track products sold
+                            Track Products Sold
                         </p>
                     </div>
                 </div>
@@ -162,7 +162,7 @@
                                                 <div ng-switch-when="CONTACT_CREATED">
                                                     <p class="cl-effect-13">
                                                         <a href="/admin/#/customers/{{activity.customer._id}}"><span ng-if="activity.customer.first">{{activity.customer.first.toString()+' '+activity.customer.last.toString()}}</span>
-                                                    <span ng-if="!activity.customer.first">{{activity.customer.details[0].emails[0].email}}</span></a> was added.
+                                                    <span ng-if="!activity.customer.first">{{activity.customer.details[0].emails[0].email}}</span></a> Was added.
                                                     </p>
                                                     <!-- <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-reply"></i> Send Welcome Email</a> -->
                                                 </div>

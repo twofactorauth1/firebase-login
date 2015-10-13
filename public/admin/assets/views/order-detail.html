@@ -37,7 +37,7 @@
                             <a href="#" ng-click="statusUpdated('refunded')">Refunded</a>
                         </li>
                         <li ng-class="{'active': currentStatus == 'failed'}">
-                            <a href="#" ng-click="statusUpdated('failed')">Falied</a>
+                            <a href="#" ng-click="statusUpdated('failed')">Failed</a>
                         </li>
                     </ul>
                 </div>
@@ -102,12 +102,10 @@
                         </div>
                         <div class="form-group typeahead">
                             <label for="form-field-select-1">
-                                Customer
+                                Customer <span ng-hide="order.locked" ng-if="selectedCustomer" class="customer-info" ng-click="clearCustomer()">(Clear)</span> <span ng-if="selectedCustomer" ng-click="navToCustomer(selectedCustomer)" ng-show="!item[$index].editing" class="customer-info">(View Profile)</span>
                             </label>
-                            <span ng-if="selectedCustomer" ng-click="navToCustomer(selectedCustomer)" class="pull-right customer-info">View Profile</span>
-                            <span class="input-icon input-icon-right">
-                        <input type="text" ng-disabled="order.locked" ng-model="selectedCustomer" typeahead="customer as customer for customer in customers | filter:$viewValue" typeahead-min-length="3" typeahead-loading="true" typeahead-template-url="customTemplate.html" typeahead-input-formatter="formatInput($model)" class="form-control">
-                        <i ng-hide="order.locked" class="ti-close" style="color: #a94442" ng-if="selectedCustomer" ng-click="clearCustomer()"></i></span>
+                            <input type="text" ng-disabled="order.locked" ng-model="selectedCustomer" typeahead="customer as customer for customer in customers | filter:$viewValue" typeahead-min-length="3" typeahead-loading="true" typeahead-template-url="customTemplate.html" typeahead-input-formatter="formatInput($model)" class="form-control">
+
                         </div>
                         <div class="form-group row margin-bottom-0">
                             <div class="col-sm-6 col-xs-12">

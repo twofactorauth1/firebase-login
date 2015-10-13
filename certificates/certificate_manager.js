@@ -216,6 +216,33 @@ module.exports = {
 
     _waitForValidation: function(certRef, maxTries, fn) {
 
+    },
+
+    generateCSR: function(privateKey, domains, fn) {
+        var self = this;
+        var options = {
+            clientKey:privateKey,
+            keyBitSize: 2048,
+            hash:'sha256',
+            country:'US',
+            state:'California',
+            locality:'La Jolla',
+            organization:'Indigenous Software, Inc',
+            organizationUnit:'',
+            commonName: '*.indigenous.io',
+            altNames:domains,
+            emailAddress:'admin@indigenous.io'
+        };
+        self.log.debug('pem options:', options);
+        pem.createCSR(options, function(err, csrAndClientKey){
+            if(err) {
+                self.log.error('Error generating CSR', err);
+                fn(err);
+            } else {
+                self.log.debug('Generated the following:', csrAndClientKey);
+                fn(null, csrAndClientKey.csr);
+            }
+        });
     }
 
 };

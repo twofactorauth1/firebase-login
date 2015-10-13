@@ -49,11 +49,12 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
     $scope.filterdedPages = $filter('orderBy')($scope.allPages, "title", false);
   });
 
-  WebsiteService.getEmails(function (emails) {
+  WebsiteService.getEmails(true, function (emails) {
     $timeout(function () {
       $scope.emailLoaded = true;
     }, 0);
     console.log("Emails loaded");
+    
     $scope.emails = emails;
 
     //select the default email for simple form as welcome-aboard
@@ -358,6 +359,14 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
     filter: 'text',
     description: 'A component to showcase your testimonials.',
     enabled: true
+  },
+  {
+    title: 'Footer',
+    type: 'footer',
+    preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/footer.png',
+    filter: 'misc',
+    description: 'Use this component to show footer on your page.',
+    enabled: false
   }];
 
   $scope.componentOpacityValues = [{
@@ -706,7 +715,7 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
       if (data && results.length === 1) {
         $timeout(function () {
           $scope.$apply(function () {
-            $scope.setLatLon(results[0].geometry.location.G || results[0].geometry.location.H, results[0].geometry.location.K || results[0].geometry.location.L);
+            $scope.setLatLon(results[0].geometry.location.lat(), results[0].geometry.location.lng());
             $scope.errorMapData = false;
             angular.copy($scope.componentEditing.location, $scope.originalContactMap);
             $scope.contactMap.refreshMap();
@@ -837,6 +846,8 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
         };
       }
 
+      if(!$scope.componentEditing.bg)
+        $scope.componentEditing.bg = {};
       if($scope.componentEditing.bg && !angular.isDefined($scope.componentEditing.bg.opacity))
         $scope.componentEditing.bg.opacity = 1;
 

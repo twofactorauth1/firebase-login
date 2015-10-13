@@ -1,0 +1,37 @@
+<script type="text/ng-template" id="campaign-duplicate-modal">
+    <!-- Duplicate Campaign Modal -->
+    <div class="modal-header">
+        <button type="button" class="close" ng-click="$parent.closeModal()">&times;</button>
+        <h4 class="modal-title">Create Duplicate Campaign</h4>
+    </div>
+    <div class="modal-body no-padding create-campaign" style="max-height:500px;">
+        <tabset>
+            <tab>
+                <tab-heading>
+                    Settings
+                </tab-heading>
+                <div>
+                    <div class="mb10"></div>
+                    <div class="form-group has-feedback">
+                        <!-- 
+                        <label>Name:</label>
+                        <input id="new-campaign-title" class="form-control input-lg" type="text" ng-model="newCampaign.name">
+                        -->
+                        <div class="well well-sm">
+                            <input type="text" class="form-control input" name="name" ng-model="duplicateCampaign.name" ng-change="checkDuplicateCampaignName(duplicateCampaign.name)" ng-required="currentStep == 1" ng-model-options="{ debounce: 800 }"/>
+                            <span class="form-control-feedback" ng-class="{'glyphicon glyphicon-remove text-danger': campaignDuplicateNameExists && campaignDuplicateNameChecked && !checkingDuplicateCampaignName, 'glyphicon glyphicon-ok text-nephritis': !campaignDuplicateNameExists && campaignDuplicateNameChecked && duplicateCampaign.name, 'fa fa-spinner fa-spin':checkingDuplicateCampaignName}"></span>
+                            <p class="error text-danger margin-top-5 margin-bottom-0" ng-if="campaignDuplicateNameExists && campaignDuplicateNameChecked && !checkingDuplicateCampaignName">Campaign Name Already Used. Please Choose Another</p>
+                            <p class="success text-nephritis margin-top-5 margin-bottom-0" ng-if="!campaignDuplicateNameExists && campaignDuplicateNameChecked && !checkingDuplicateCampaignName && duplicateCampaign.name">Great Campaign Name!</p>
+                        </div>
+                    </div>
+                    <div class="clearfix margin-bottom-"></div>
+                </div>
+            </tab>
+        </tabset>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-info btn-wide btn-o" ng-disabled="!duplicateCampaign.name || (campaignDuplicateNameExists && campaignDuplicateNameChecked && !checkingDuplicateCampaignName)" ng-click="createDuplicateCampaign(duplicateCampaign)">
+            Create
+        </button>
+    </div>
+</script>

@@ -2,38 +2,49 @@
 /*jslint unparam: true*/
 'use strict';
 (function (angular) {
-  app.service('CampaignService', function ($http, $cacheFactory) {
-    var baseUrl = '/api/1.0/campaign/';
+  app.service('CampaignService', function ($http, $cacheFactory, $q) {
+    var baseUrl = '/api/1.0/campaigns/';
 
     var campaigncache = $cacheFactory('campaigns');
 
     this.getCampaigns = function (fn) {
-      var data = campaigncache.get('campaigns');
-      if (data) {
-        if (fn) {
-          fn(data);
-        }
-      } else {
+      // var data = campaigncache.get('campaigns');
+      // if (data) {
+      //   if (fn) {
+      //     fn(data);
+      //   }
+      // } else {
         var apiUrl = baseUrl;
         $http.get(apiUrl)
           .success(function (data) {
             campaigncache.put('campaigns', data);
             fn(data);
           });
-      }
+      // }
     };
 
-    this.getCampaign = function (orderId, fn) {
-      var apiUrl = baseUrl + orderId;
+    this.getCampaign = function (id, fn) {
+      var apiUrl = baseUrl + id;
+      var deferred = $q.defer();
+      
       $http.get(apiUrl)
         .success(function (data) {
-          fn(data);
+          if (fn) {
+            console.log('resolve >>> ');
+            deferred.resolve(fn(data));
+          }
+        })
+        .error(function (err) {
+          console.warn('END:Campaign Service with ERROR');
+          fn(err, null);
         });
+
+      return deferred.promise;
     };
 
     this.createCampaign = function (campaign, fn) {
       var _campaigns = campaigncache.get('campaigns');
-      var apiUrl = baseUrl + ['campaign'].join('/');
+      var apiUrl = baseUrl;
       $http({
         url: apiUrl,
         method: "POST",
@@ -49,23 +60,68 @@
       });
     };
 
-    this.updateCampaign = function (order, fn) {
-      var apiUrl = baseUrl + [order._id, 'update'].join('/');
+    this.updateCampaign = function (campaign, fn) {
+      var apiUrl = baseUrl + campaign._id;
       $http({
         url: apiUrl,
         method: "POST",
-        data: {
-          order: order
-        }
+        data: campaign
       }).success(function (data) {
         fn(data);
       }).error(function (error) {
-        console.error('OrderService: updateOrder error >>> ', error);
+        console.error('CampaignService: updateCampaign error >>> ', error);
       });
     };
 
+    this.cancelCampaignForContact = function (campaign, contactId, fn) {
+      var apiUrl = baseUrl + [campaign._id, 'contact', contactId].join('/');
+      $http({
+        url: apiUrl,
+        method: "DELETE",
+        data: campaign
+      }).success(function (data) {
+        fn(data);
+      }).error(function (error) {
+        if (error) {
+          console.error('CampaignService: cancelCampaignForContact error >>> ', error);
+        }
+      });
+    };
+
+    this.duplicateCampaign = function(campaignId, campaign, fn) {
+        var apiUrl = baseUrl + [campaignId, 'duplicate'].join('/');
+        $http({
+            url: apiUrl,
+            method: "POST",
+            data: campaign
+        }).success(function (data) {
+            fn(data);
+        }).error(function (error) {
+            if (error) {
+              console.error('CampaignService: duplicateCampaign error >>> ', error);
+            }
+        });
+    };
+
+    this.deleteCampaign = function(campaignId, fn) {
+        var apiUrl = baseUrl + [campaignId].join('/');
+        $http({
+            url: apiUrl,
+            method: "DELETE"
+        }).success(function (data) {
+            var campaigns = campaigncache.get('campaigns');
+            campaigns = _.without(campaigns, _.findWhere(campaigns, { _id: campaignId }));
+            campaigncache.put('campaigns', campaigns);
+            fn(data);
+        }).error(function (error) {
+            if (error) {
+              console.error('CampaignService: deleteCampaign error >>> ', error);
+            }
+        });
+    };
+
     this.bulkAddContactsToCampaign = function (contactsArr, campaignId, fn) {
-      var apiUrl = baseUrl + ['campaign', campaignId, 'contacts'].join('/');
+      var apiUrl = baseUrl + [campaignId, 'contacts'].join('/');
       $http({
         url: apiUrl,
         method: "POST",
@@ -90,6 +146,25 @@
           fn(false);
         }
       });
+    };
+
+    this.getCampaignContacts = function (campaignId, fn) {
+      var apiUrl = baseUrl + [campaignId, 'contacts'].join('/');
+      var deferred = $q.defer();
+      
+      $http.get(apiUrl)
+        .success(function (data) {
+          if (fn) {
+            console.log('resolve >>> ');
+            deferred.resolve(fn(data));
+          }
+        })
+        .error(function (err) {
+          console.warn('END:Campaign Service with ERROR');
+          fn(err, null);
+        });
+
+      return deferred.promise;
     };
 
   });
