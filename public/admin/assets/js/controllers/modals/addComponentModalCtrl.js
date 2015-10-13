@@ -71,14 +71,14 @@ app.controller('AddComponentModalCtrl', ['$scope', '$document', '$modalInstance'
     type: 'blog',
     preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/blog.png',
     filter: 'blog',
-    description: 'Use this component for your main blog pages which displays all your posts with a sidebar of categories, tags, recent posts, and posts by author.',
+    description: 'Use this component for your main blog page which displays all your posts with a sidebar of categories, tags, recent posts, and posts by author.',
     enabled: true
   }, {
     title: 'Blog Teaser',
     type: 'blog-teaser',
     preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/blog-teaser.png',
     filter: 'blog',
-    description: 'The Blog Teaser is perfect to showcase a few of your posts with a link to you full blog page.',
+    description: 'The Blog Teaser is perfect to showcase a few of your posts with a link to your full blog page.',
     enabled: true
   }, {
     title: 'Masthead',
