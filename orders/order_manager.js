@@ -338,11 +338,15 @@ module.exports = {
                             account_id: savedOrder.get('account_id')
                         };
                         dao.getMaxValue(query, 'order_id', $$.m.Order, function(err, value){
-                            if(err || !value) {
+                            if(err ) {
                                 log.warn('Could not find order_id:', err);
                                 callback(err);
                             } else {
-                                var max = parseInt(value) + 1;
+                                var max = 1;
+                                if(value) {
+                                    max = parseInt(value) + 1;
+                                }
+
                                 savedOrder.set('order_id', max);
                                 dao.saveOrUpdate(savedOrder, function(err, updatedOrder){
                                     callback(err, updatedOrder, contact);
