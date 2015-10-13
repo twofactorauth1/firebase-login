@@ -314,7 +314,7 @@
 					this.data.align = 'none';
 
 				// Convert the internal form of the widget from the old state to the new one.
-				this.shiftState( {
+				this.shiftState && this.shiftState( {
 					widget: this,
 					element: this.element,
 					oldData: this.oldData,
@@ -333,14 +333,14 @@
 						this.parts.link = this.parts.image.getParent();
 				}
 
-				this.parts.image.setAttributes( {
+				this.parts.image && this.parts.image.setAttributes( {
 					src: this.data.src,
 					// This internal is required by the editor.
 					'data-cke-saved-src': this.data.src,
 
 					alt: this.data.alt
 				} );
-				if(!this.parts.image.hasClass("img-responsive"))
+				if(this.parts.image && !this.parts.image.hasClass("img-responsive"))
 					this.parts.image.addClass("img-responsive");
 
 				// If shifting non-captioned -> captioned, remove classes
@@ -364,10 +364,10 @@
 					image = this.parts.image,
 					data = {
 						hasCaption: !!this.parts.caption,
-						src: image.getAttribute( 'src' ),
-						alt: image.getAttribute( 'alt' ) || '',
-						width: image.getAttribute( 'width' ) || '',
-						height: image.getAttribute( 'height' ) || '',
+						src: image ? image.getAttribute( 'src' ) : '',
+						alt: image ? image.getAttribute( 'alt' ) || '' : '',
+						width: image ? image.getAttribute( 'width' ) || '' : '',
+						height: image ?  image.getAttribute( 'height' ) || '' : '',
 
 						// Lock ratio is on by default (#10833).
 						lock: this.ready ? helpers.checkHasNaturalRatio( image ) : true
@@ -376,16 +376,17 @@
 				// If we used 'a' in widget#parts definition, it could happen that
 				// selected element is a child of widget.parts#caption. Since there's no clever
 				// way to solve it with CSS selectors, it's done like that. (#11783).
-				var link = image.getAscendant( 'a' );
+				if(image){
+					var link = image.getAscendant( 'a' );
 
-				if ( link && this.wrapper.contains( link ) )
+					if ( link && this.wrapper.contains( link ) )
 					this.parts.link = link;
 
-				// Depending on configuration, read style/class from element and
-				// then remove it. Removed style/class will be set on wrapper in #data listener.
-				// Note: Center alignment is detected during upcast, so only left/right cases
-				// are checked below.
-				if ( !data.align ) {
+					// Depending on configuration, read style/class from element and
+					// then remove it. Removed style/class will be set on wrapper in #data listener.
+					// Note: Center alignment is detected during upcast, so only left/right cases
+					// are checked below.
+					if ( !data.align ) {
 					// Read the initial left/right alignment from the class set on element.
 					if ( alignClasses ) {
 						if ( this.element.hasClass( alignClasses[ 0 ] ) )
@@ -404,10 +405,10 @@
 						this.element.removeStyle( 'float' );
 						image.removeStyle( 'float' );
 					}
-				}
+					}
 
-				// Update data.link object with attributes if the link has been discovered.
-				if ( editor.plugins.link && this.parts.link ) {
+					// Update data.link object with attributes if the link has been discovered.
+					if ( editor.plugins.link && this.parts.link ) {
 					data.link = CKEDITOR.plugins.link.parseLinkAttributes( editor, this.parts.link );
 
 					// Get rid of cke_widget_* classes in data. Otherwise
@@ -415,23 +416,23 @@
 					var advanced = data.link.advanced;
 					if ( advanced && advanced.advCSSClasses )
 						advanced.advCSSClasses = CKEDITOR.tools.trim( advanced.advCSSClasses.replace( /cke_\S+/, '' ) );
-				}
+					}
 
-				// Get rid of extra vertical space when there's no caption.
-				// It will improve the look of the resizer.
-				this.wrapper[ ( data.hasCaption ? 'remove' : 'add' ) + 'Class' ]( 'cke_image_nocaption' );
+					// Get rid of extra vertical space when there's no caption.
+					// It will improve the look of the resizer.
+					this.wrapper[ ( data.hasCaption ? 'remove' : 'add' ) + 'Class' ]( 'cke_image_nocaption' );
 
-				this.setData( data );
+					this.setData( data );
 
-				// Setup dynamic image resizing with mouse.
-				// Don't initialize resizer when dimensions are disallowed (#11004).
-				if ( editor.filter.checkFeature( this.features.dimension ) )
+					// Setup dynamic image resizing with mouse.
+					// Don't initialize resizer when dimensions are disallowed (#11004).
+					if ( editor.filter.checkFeature( this.features.dimension ) )
 					setupResizer( this );
 
-				this.shiftState = helpers.stateShifter( this.editor );
+					this.shiftState = helpers.stateShifter( this.editor );
 
-				// Add widget editing option to its context menu.
-				this.on( 'contextMenu', function( evt ) {
+					// Add widget editing option to its context menu.
+					this.on( 'contextMenu', function( evt ) {
 					evt.data.image = CKEDITOR.TRISTATE_OFF;
 
 					// Integrate context menu items for link.
@@ -439,12 +440,14 @@
 					// does not belong to that widget (#11814).
 					if ( this.parts.link || this.wrapper.getAscendant( 'a' ) )
 						evt.data.link = evt.data.unlink = CKEDITOR.TRISTATE_OFF;
-				} );
+					} );
 
-				// Pass the reference to this widget to the dialog.
-				this.on( 'dialog', function( evt ) {
+					// Pass the reference to this widget to the dialog.
+					this.on( 'dialog', function( evt ) {
 					evt.data.widget = this;
-				}, this );
+					}, this );
+				}
+				
 			},
 
 			// Overrides default method to handle internal mutability of Image2.
@@ -478,7 +481,10 @@
 				var classRegex = new RegExp( '^(' + [].concat( captionedClass, alignClasses ).join( '|' ) + ')$' );
 
 				return function() {
-					var classes = this.repository.parseElementClasses( getStyleableElement( this ).getAttribute( 'class' ) );
+					var parsed_element = getStyleableElement( this );
+					var classes;
+					if(parsed_element)
+					 classes = this.repository.parseElementClasses( getStyleableElement( this ).getAttribute( 'class' ) );
 
 					// Neither config.image2_captionedClass nor config.image2_alignClasses
 					// do not belong to style classes.
@@ -1046,7 +1052,7 @@
 			if ( dimensions[ d ] )
 				image.setAttribute( d, dimensions[ d ] );
 			else
-				image.removeAttribute( d );
+				image && image.removeAttribute( d );
 		}
 	}
 
