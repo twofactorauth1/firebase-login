@@ -518,7 +518,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
        */
 
       scope.makeCartPayment = function () {
-
+        scope.failedOrderMessage = "";
         scope.checkoutModalState = 4;
         var expiry = angular.element('#expiry').val().split("/");
         var exp_month = expiry[0].trim();
@@ -551,6 +551,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
 
 
         PaymentService.getStripeCardToken(cardInput, function (token, error) {
+
           // PaymentService.saveCartDetails(token, parseInt(scope.total * 100), function (data) {
           //     console.log('card details ', data);
           // });
@@ -684,7 +685,16 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
             };
             order.line_items.push(_item);
           });
-          OrderService.createOrder(order, function () {
+          OrderService.createOrder(order, function (data) {
+            if(data && !data._id){
+                var failedOrderMessage = "Error in order processing";
+                console.log(failedOrderMessage);
+                if(data.message)
+                  failedOrderMessage = data.message;
+                scope.checkoutModalState = 3;
+                scope.failedOrderMessage = failedOrderMessage;
+                return;
+              }
             console.log('order, ', order);            
             scope.checkoutModalState = 5;
             scope.cartDetails = [];
@@ -772,6 +782,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
       };
 
       scope.checkCardNumber = function () {
+        scope.failedOrderMessage = "";
         var card_number = angular.element('#number').val();
         if (!card_number) {
           angular.element("#card_number .error").html("Card Number Required");
@@ -785,6 +796,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
       };
 
       scope.checkCardExpiry = function () {
+        scope.failedOrderMessage = "";
         var expiry = angular.element('#expiry').val();
         var card_expiry = expiry.split("/");
         var exp_month = card_expiry[0].trim();
@@ -811,6 +823,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
       };
 
       scope.checkCardCvv = function () {
+        scope.failedOrderMessage = "";
         var card_cvc = angular.element('#cvc').val();
         if (!card_cvc) {
           angular.element("#card_cvc .error").html("CVC Required");
@@ -853,6 +866,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
       };
 
       scope.checkCardName = function () {
+        scope.failedOrderMessage = "";
         var name = $('#card_name #name').val();
         if (name) {
           $("#card_name .error").html("");

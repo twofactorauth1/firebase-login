@@ -8,8 +8,8 @@
                 <div elem ng-model="component.text"></div>
             </div>
         </header>
-        <div class="tab-pane active row" id="{{productSection['product-section-id']}}">
-            <div data-class="product-section-id"
+        <div masonry load-images="false" reload-on-show class="tab-pane active row" id="{{productSection['product-section-id']}}">
+            <div class="masonry-brick" data-class="product-section-id"
                  ng-class="{
                     'col-xs-4 col-xs-offset-4': filteredProducts.length == 1,
                     'col-xs-12 col-sm-6': filteredProducts.length == 2,
@@ -324,6 +324,7 @@
                                         </div>
                                     </div>
                                     <div class="clearfix mb20"></div>
+                                    <h4 ng-if="failedOrderMessage.length" class="center" style="color: #a94442;">{{failedOrderMessage}}</h4>
                                 </form>
                             </div>
                         </div>
