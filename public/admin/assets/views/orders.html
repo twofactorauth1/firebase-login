@@ -115,8 +115,8 @@
                                 <th class="hidden-xs" ng-class="{'column-width': tableView == 'grid'}" st-sort="order_id">Order ID</th>
                                 <th ng-class="{'column-width': tableView == 'grid', 'center': tableView == 'list'}" st-sort="status">Status</th>
                                 <th ng-class="{'column-width': tableView == 'grid'}" st-sort="getters.customerName">Customer</th>
-                                <th ng-class="{'column-width': tableView == 'grid'}" class="hidden-xs">(Qty) Items</th>
-                                <th class="hidden-xs" ng-class="{'column-width': tableView == 'grid', 'center': tableView == 'list'}" st-sort="getters.line_items">SKU Count</th>
+                                <th class="hidden-xs" ng-class="{'column-width': tableView == 'grid'}" >(Qty) Items</th>
+                                <th class="hidden-xs" ng-class="{'column-width': tableView == 'grid', 'center': tableView == 'list'}">SKUs</th>
                                 <th class="hidden-xs" ng-class="{'column-width': tableView == 'grid', 'center': tableView == 'list'}" st-sort="total">$ Total</th>
                                 <th class="hidden-xs" ng-class="{'column-width': tableView == 'grid'}" st-sort="getters.created" st-sort-default="reverse">Order Date</th>
                                 <th class="hidden-xs" ng-class="{'column-width': tableView == 'grid'}" st-sort="getters.modified">Modified</th>
@@ -149,8 +149,7 @@
                                     <input st-search="line_items.name" placeholder="Item Names" class="form-control" type="search" />
                                 </th>
                                 <th class="column-width">
-                                    <input st-search="line_items_total" ng-model="line_items" id="order_line_items" class="form-control hidden" type="search" />
-                                    <input type="text" value="0" placeholder="Total" ng-model="line_items" name="line_items" touchspin data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down" ng-change="triggerInput('#order_line_items')">
+                                    <input st-search="line_items.sku" placeholder="SKU" class="form-control" type="search" />
                                 </th>
                                 <th class="column-width">
                                     <div class="input-group">
@@ -197,20 +196,22 @@
                                 </td>
                                 <td>
                                     <strong ng-if="tableView == 'grid'">Customer: </strong>
-                                    <span ng-if="tableView == 'list'" class="pull-left">
-                                        <img ng-src="status.customer.photo" err-src="" err-contact="order.customer" class="img-thumbnail screenshot" alt="image">
-                                    </span>
                                     <span class="pull-left" ng-class="{'col-style': tableView == 'list'}">
                                         {{order.customer.first}} {{order.customer.last}} {{order.customer._id ? '('+order.customer._id+')' : ''}}
                                     </span>
                                 </td>
-                                <td class="hidden-xs"><strong>(Qty) Items</strong>
+                                <td class="hidden-xs"><strong>(Qty) Items: </strong>
                                     <span ng-repeat="item in order.line_items track by $index"> 
                                         <span>{{item.quantity ? '('+item.quantity+')' : '(1)'}}</span>
-                                        {{item.name}}<br ng-if="($index+1 < order.line_items.length)"/>
+                                        {{item.name}}<br ng-if="($index+1 < order.line_items.length)" />
                                     </span>
                                 </td>
-                                <td class="hidden-xs" ng-class="{'center': tableView == 'list'}"><strong>SKU Count: </strong>{{order.line_items.length}}</td>
+                                <td class="hidden-xs" ng-class="{'center': tableView == 'list'}"><strong>SKUs: </strong>
+                                    <span ng-repeat="item in order.line_items track by $index">
+                                        <span>{{item.sku ? item.sku : ' '}}</span>
+                                        <br ng-if="($index+1 < order.line_items.length)" />
+                                    </span>
+                                </td>
                                 <td class="hidden-xs" ng-class="{'center': tableView == 'list'}"><strong>Total: </strong> {{order.total | currency}}</td>
                                 <td class="hidden-xs"><strong>Created: </strong> {{order.created.date | date:'MMM d yy'}}</td>
                                 <td class="hidden-xs"><strong>Modified: </strong>{{order.modified.date | date:'MMM d yy'}}</td>
@@ -218,7 +219,7 @@
                         </tbody>
                         <tfoot>
                         <tr>
-                            <td class="text-center" st-pagination="" st-displayed-pages="showPages" st-items-by-page="itemPerPage" colspan="6">
+                            <td class="text-center" st-pagination="" st-displayed-pages="showPages" st-items-by-page="itemPerPage" colspan="8">
                             </td>
                         </tr>
                         </tfoot>
