@@ -143,10 +143,14 @@ module.exports = {
          * Get the campaign.  If the status is RUNNING, return an error
          * If the new status is RUNNING, kick off the steps
          */
+        // need this
+        var campaignId = campaignObj.id();
+        var accountId = campaignObj.get('accountId');
         var query = {
-            _id: campaignObj.id(),
-            accountId: campaignObj.get('accountId')
+            _id: campaignId,
+            accountId: accountId
         };
+
         campaignDao.findOne(query, $$.m.Campaign, function(err, campaign){
             if(err || !campaign) {
                 self.log.error('Error finding campaign:', err);
@@ -155,58 +159,78 @@ module.exports = {
                 self.log.warn('Attempted to update a running campaign');
                 return fn('Attempted to update a running campaign');
             } else {
+                var contactIdAry = [];
+                if(campaignObj.get('contacts')) {
+                    /*
+                     * If there is a 'contacts' field on the input object, we need to create new flows.
+                     */
+                    contactIdAry = campaignObj.get('contacts');
+                    delete campaignObj.attributes.contacts;
+
+                }
                 campaignDao.saveOrUpdate(campaignObj, function(err, updatedCampaign){
                     if(err) {
                         self.log.error('Error updating campaign: ' + err);
                         return fn(err, null);
                     } else {
-
-                        self.log.debug('<< updateCampaign');
-                        fn(null, updatedCampaign);
-                        /*
-                         * check if we need to update flows.
-                         *
-                         */
-                        var updateNeeded = false;
-                        var initialSteps = campaignObj.get('steps');
-                        var updatedSteps = updatedCampaign.get('steps');
-                        if(initialSteps.length !== updatedSteps.length) {
-                            updateNeeded = true;
-                        }
-                        _.each(updatedSteps, function(step, i){
-                            if(!initialSteps[i] || _.isEqual(step, initialSteps[i]) !== true ) {
-                                updateNeeded = true;
-                            }
-                        });
-
-                        if(updateNeeded === true) {
-                            campaignDao.findMany({campaignId:campaignObj.id(), accountId: campaignObj.get('accountId')}, $$.m.CampaignFlow, function(err, flows){
-                                if(err) {
-                                    self.log.error('Error updating flows.  Campaign steps will NOT start.', err);
-                                    return;
+                        if(contactIdAry.length > 0) {
+                            self.bulkReplaceContactsInCampaign(contactIdAry, campaignId, accountId, function (err, campaign) {
+                                if (err) {
+                                    self.log.error('Error adding contacts to campaign:', err);
+                                    return fn(err);
                                 } else {
-                                    async.each(flows, function(flow, cb){
-                                        flow.set('steps', updatedSteps);
-                                        campaignDao.saveOrUpdate(flow, function(err, value){
-                                            cb(err);
-                                        });
-                                    }, function done(err){
-                                        if(err) {
-                                            self.log.error('Error updating flow steps.  Campaign steps will NOT start.', err);
-                                        } else {
-                                            self._startCampaignFlows(updatedCampaign);
-                                        }
-                                    });
+                                    //we can return here.  We have deleted existing flows and created new (correct) ones.
+                                    self.log.debug('<< updateCampaign');
+                                    return fn(null, updatedCampaign);
                                 }
                             });
                         } else {
-                            if(updatedCampaign.get('status') === $$.m.Campaign.status.RUNNING) {
-                                //kick off the flows
-                                self._startCampaignFlows(updatedCampaign);
-                                return;
+                            self.log.debug('<< updateCampaign');
+                            fn(null, updatedCampaign);
+                            /*
+                             * check if we need to update flows.
+                             *
+                             */
+                            var updateNeeded = false;
+                            var initialSteps = campaignObj.get('steps');
+                            var updatedSteps = updatedCampaign.get('steps');
+                            if(initialSteps.length !== updatedSteps.length) {
+                                updateNeeded = true;
+                            }
+                            _.each(updatedSteps, function(step, i){
+                                if(!initialSteps[i] || _.isEqual(step, initialSteps[i]) !== true ) {
+                                    updateNeeded = true;
+                                }
+                            });
+
+                            if(updateNeeded === true) {
+                                campaignDao.findMany({campaignId:campaignId, accountId: accountId}, $$.m.CampaignFlow, function(err, flows){
+                                    if(err) {
+                                        self.log.error('Error updating flows.  Campaign steps will NOT start.', err);
+                                        return;
+                                    } else {
+                                        async.each(flows, function(flow, cb){
+                                            flow.set('steps', updatedSteps);
+                                            campaignDao.saveOrUpdate(flow, function(err, value){
+                                                cb(err);
+                                            });
+                                        }, function done(err){
+                                            if(err) {
+                                                self.log.error('Error updating flow steps.  Campaign steps will NOT start.', err);
+                                            } else {
+                                                self._startCampaignFlows(updatedCampaign);
+                                            }
+                                        });
+                                    }
+                                });
+                            } else {
+                                if(updatedCampaign.get('status') === $$.m.Campaign.status.RUNNING) {
+                                    //kick off the flows
+                                    self._startCampaignFlows(updatedCampaign);
+                                    return;
+                                }
                             }
                         }
-
                     }
                 });
             }
@@ -567,6 +591,21 @@ module.exports = {
         } else {
             return fn(null, null);
         }
+    },
+
+    bulkReplaceContactsInCampaign: function(contactIdAry, campaignId, accountId, fn) {
+        var self = this;
+        self.log.debug('>> bulkReplaceContactsInCampaign');
+        var query = {accountId:accountId, campaignId:campaignId};
+        campaignDao.removeByQuery(query, $$.m.CampaignFlow, function(err, value){
+            if(err) {
+                self.log.error('Error removing campaign flows:', err);
+                return fn(err);
+            } else {
+                self.log.debug('<< bulkReplaceContactsInCampaign');
+                return self.bulkAddContactToCampaign(contactIdAry, campaignId, accountId, fn);
+            }
+        });
     },
 
     bulkAddContactToCampaign: function(contactIdAry, campaignId, accountId, fn) {
