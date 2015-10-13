@@ -451,7 +451,8 @@
       }).success(function (data, status, headers, config) {
         var _emails = emailcache.get('emails');
         if (_emails) {
-          _emails[data.title] = data;
+          // _emails[data.title] = data;
+          _emails.push(data);
           emailcache.put('emails', _emails);
         }
         fn(data, null);

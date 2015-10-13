@@ -103,6 +103,23 @@
         });
     };
 
+    this.deleteCampaign = function(campaignId, fn) {
+        var apiUrl = baseUrl + [campaignId].join('/');
+        $http({
+            url: apiUrl,
+            method: "DELETE"
+        }).success(function (data) {
+            var campaigns = campaigncache.get('campaigns');
+            campaigns = _.without(campaigns, _.findWhere(campaigns, { _id: campaignId }));
+            campaigncache.put('campaigns', campaigns);
+            fn(data);
+        }).error(function (error) {
+            if (error) {
+              console.error('CampaignService: deleteCampaign error >>> ', error);
+            }
+        });
+    };
+
     this.bulkAddContactsToCampaign = function (contactsArr, campaignId, fn) {
       var apiUrl = baseUrl + [campaignId, 'contacts'].join('/');
       $http({

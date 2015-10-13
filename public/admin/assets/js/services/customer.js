@@ -15,7 +15,7 @@
 
     this.getCustomers = function (fn) {
       var apiUrl = baseUrl + ['contact'].join('/');
-      $http.get(apiUrl)
+      return $http.get(apiUrl)
         .success(function (data) {
           fn(data);
         });

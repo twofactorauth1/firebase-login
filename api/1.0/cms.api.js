@@ -390,7 +390,6 @@ _.extend(api.prototype, baseApi.prototype, {
                 self.log.error('error rendering html: ' + err);
                 self.log.warn('email will not be sent.');
             } else {
-                debugger;
                 //fromAddress, fromName, toAddress, toName, subject, html, accountId, vars, emailId, fn)
                 mandrillHelper.sendBasicEmail(
                     emailDataObj.content.fromEmail,

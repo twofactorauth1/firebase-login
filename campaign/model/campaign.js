@@ -53,6 +53,10 @@ var campaign = $$.m.ModelBase.extend({
                 participants: 0
             },
 
+            contacts: [],
+
+            contactTags: [],
+
             "created": {
                 "date": new Date(),
                 "by": null

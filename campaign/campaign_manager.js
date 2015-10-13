@@ -748,7 +748,6 @@ module.exports = {
                 })
             },
             function(flows) {
-                //TODO: getting contactId from flows, but no contacts with these _id's exist?
                 var contactIds = flows.map(function(flow) { return flow.get('contactId') });
                 var query = { _id: { $in: contactIds} };
                 self.log.debug('contactIds:', contactIds);

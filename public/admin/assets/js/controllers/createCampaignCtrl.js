@@ -3,7 +3,30 @@
 (function (angular) {
   app.controller('CreateCampaignCtrl', ["$scope", "$rootScope", "$modal", "$location", "$window", "$stateParams", "toaster", "$timeout", "CampaignService", "CustomerService", "CommonService", "editableOptions", "AccountService", "userConstant", "WebsiteService", "$q", "formValidations", "SweetAlert", function ($scope, $rootScope, $modal, $location, $window, $stateParams, toaster, $timeout, CampaignService, CustomerService, CommonService, editableOptions, AccountService, userConstant, WebsiteService, $q, formValidations, SweetAlert) {
 
+    /*
+     * set editor theme
+     */
     editableOptions.theme = 'bs3';
+
+    /*
+     * Setup some initial wizard state
+     */
+    var customerTags = userConstant.contact_types.dp;
+    var nextStep = function () {
+      $scope.currentStep++;
+    };
+    var prevStep = function () {
+      $scope.currentStep--;
+    };
+    var goToStep = function (i) {
+      $scope.currentStep = i;
+    };
+    var errorMessage = function (i) {
+      if ($scope.currentStep < i && (i - $scope.currentStep > 1)) {
+        toaster.pop('error', 'Error', 'Please complete the previous steps before proceeding');
+      } else
+        toaster.pop('error', 'Error', 'Please complete the form in this step before proceeding');
+    };
 
     $scope.changesConfirmed = true;
     $scope.navigateOnSave = null;
@@ -15,7 +38,7 @@
     $scope.emailValidation = formValidations.email;
     $scope.delivery = {
       date: moment(),
-      time: moment(),
+      // time: moment(),
       minDate: new Date()
     };
 
@@ -27,18 +50,20 @@
 
     $scope.emails = [];
 
-    if ($scope.isEditable && $scope.watchDeliveryDate) {
-      $scope.$watch('delivery.date', function() {
-        if ($scope.emails.length) {
-          $scope.setDate();
-        }
-      });
-    }
+    // if ($scope.isEditable && $scope.watchDeliveryDate) {
+    //   $scope.$watch('delivery.date', function() {
+    //     if ($scope.emails.length) {
+    //       console.log('should set date?')
+    //       // $scope.setDate();
+    //     }
+    //   });
+    // }
 
     $scope.formatDate = function (date) {
-      // var localTime  = moment.utc(date).toDate();
-      // return localTime = moment(localTime).format('dddd, MMMM Do YYYY, h:mm A');
-      return moment(date).format("dddd, MMMM Do YYYY, h:mm A");
+      var localDate = moment(date);
+      // var offset = moment().utcOffset();
+      // localDate.add(offset, 'minutes')
+      return localDate.format("dddd, MMMM Do YYYY, h:mm A");
     };
 
     $scope.updateSendNow = function (value) {
@@ -46,11 +71,10 @@
       $scope.watchDeliveryDate = true;
       if ($scope.whenToSend !== 'later') {
         $scope.delivery.date = moment();
-        $scope.delivery.time = moment();
+        // $scope.delivery.time = moment();
       }
 
     };
-
 
     $scope.hstep = 1;
     $scope.mstep = 1;
@@ -70,10 +94,16 @@
     $scope.tagSelection = [];
     
     $scope.recipients = [];
-    $scope.originalRecipients = 
+    $scope.originalRecipients = [];
     $scope.recipientsToRemove = [];
 
     $scope.newCampaign = {};
+
+    $scope.duplicateCampaign = {
+      name: ''
+    };
+
+    $scope.selectedCustomers.newEmails = [];
 
     $scope.isEditable = false;
 
@@ -110,7 +140,6 @@
      * @defaultNewEmail
      * - default new email to show for initial design unless user selects template
      */
-
     $scope.emailToSend = {
       "title": "",
       "type": "email",
@@ -241,22 +270,22 @@
     $scope.component = $scope.emailToSend.components[0];
 
     $scope.updateTime = function () {
-      var time = moment($scope.delivery.time);
-      var date = moment($scope.delivery.date);
-      var hour = time.get('hour');
-      var minute = time.get('minute');
-      var formatted = date.set('hour', hour).set('minute', minute);
-      if (formatted && formatted._d.toString() === "Invalid Date") {
-        $scope.invalidDate = true;
-      } else {
-        $scope.delivery.date = formatted;
-      }
+      // var time = moment.utc($scope.delivery.time).subtract(1, 'months') //.add(moment().utcOffset(), 'minutes');
+      // var date = moment.utc($scope.delivery.date) //.add(moment().utcOffset(), 'minutes');
+      // var hour = time.get('hour');
+      // var minute = time.get('minute');
+      // var formatted = date.set('hour', hour).set('minute', minute);
+      // if (formatted && formatted._d.toString() === "Invalid Date") {
+      //   $scope.invalidDate = true;
+      // } else {
+      //   $scope.delivery.date = formatted;
+      // }
 
-      if ($scope.delivery.date.diff && $scope.delivery.date.diff(moment(), "minutes") < 0) {
-        $scope.invalidDate = true;
-      } else {
-        $scope.invalidDate = false;
-      }
+      // if ($scope.delivery.date.diff && $scope.delivery.date.diff(moment(), "minutes") < 0) {
+      //   $scope.invalidDate = true;
+      // } else {
+      //   $scope.invalidDate = false;
+      // }
 
     };
 
@@ -290,8 +319,16 @@
       }]
     };
 
+    /*
+     * @originalCampaignObj
+     * - save for later comparison
+     */
     $scope.originalCampaignObj = angular.copy($scope.newCampaignObj);
 
+    /*
+     * @sendTestEmail
+     * - send email based on current email template
+     */
     $scope.sendTestEmail = function (_email) {
       $scope.sendingEmail = true;
       WebsiteService.sendTestEmail(_email, $scope.emailToSend, function (data) {
@@ -341,6 +378,10 @@
 
     $scope.fullscreen = false;
 
+    /*
+     * @toggleFullscreen
+     * - 
+     */
     $scope.toggleFullscreen = function () {
       $scope.transitionDone = false;
       if (!$scope.fullscreen) {
@@ -356,6 +397,10 @@
       }
     };
 
+    /*
+     * @analyzeSubject
+     * - email subject quality feedback
+     */
     $scope.analyzeSubject = function (subject) {
       var subjectWords = subject.split(' ');
       var lowercaseSubjectWords = subject.toLowerCase().split(' ');
@@ -459,10 +504,18 @@
 
     };
 
+    /*
+     * @changeCurrentEmail
+     * - set selected email
+     */
     $scope.changeCurrentEmail = function (selectedEmail) {
       $scope.emailToSend = selectedEmail;
     };
 
+    /*
+     * @checkCampaignName
+     * - check for existing campaign name
+     */
     $scope.checkCampaignName = function (_name) {
       $scope.checkingCampaignName = true;
       CampaignService.checkCampaignNameExists(_name, function (exists) {
@@ -475,6 +528,23 @@
       });
     };
 
+    /*
+     * @checkCampaignName
+     * - check for existing campaign name
+     */
+    $scope.checkDuplicateCampaignName = function (_name) {
+      $scope.checkingDuplicateCampaignName = true;
+      CampaignService.checkCampaignNameExists(_name, function (exists) {
+        $scope.campaignDuplicateNameChecked = true;
+        $scope.checkingDuplicateCampaignName = false;
+        $scope.campaignDuplicateNameExists = exists;
+      });
+    };
+
+    /*
+     * @checkEmailTitle
+     * - check email title doesnt exist already
+     */
     $scope.checkEmailTitle = function (_name) {
       if ($scope.selectedEmail.type === 'new') {
         $scope.checkingEmailTitle = true;
@@ -490,19 +560,30 @@
       $scope.checkingEmailTitle = false;
     };
 
+    /*
+     * @clearEmail
+     * - callback for toggle on radio input "New Email" vs. "Template"
+     */
     $scope.clearEmail = function (newEmail) {
       $scope.checkingEmailTitle = false;
       // $scope.emailToSend.title = "";
       $scope.setBusinessDetails();
       if (newEmail) {
-        $scope.emailToSend.title = $scope.newCampaignObj.name + ' Email Template';
         $scope.emailToSendPrevious = angular.copy($scope.emailToSend);
         $scope.emailToSend = $scope.emailToSendCopy;
+        $scope.emailToSend.title = $scope.newCampaignObj.name + ' Email Template';
+        $scope.emailToSend.fromName = $scope.emailToSendPrevious.fromName;
+        $scope.emailToSend.fromEmail = $scope.emailToSendPrevious.fromEmail;
+        $scope.emailToSend.replyTo = $scope.emailToSendPrevious.replyTo;
       } else {
         $scope.emailToSend = $scope.emailToSendPrevious;
       }
     }
 
+    /*
+     * @customerSelected
+     * - callback for contact tag click added from dropdown list
+     */
     $scope.customerSelected = function (select) {
       var selected = select.selected[select.selected.length - 1];
       var removalIndex = _.indexOf($scope.recipientsToRemove, selected._id);
@@ -523,6 +604,10 @@
       }
     };
 
+    /*
+     * @customerRemoved
+     * - callback for contact tag click on [X] button
+     */
     $scope.customerRemoved = function (select, selected) {
       var existingContactIndex;
       var contact = _.findWhere($scope.recipients, {
@@ -548,86 +633,44 @@
       $scope.recipientsToRemove.push(selected._id);
     };
 
-    $scope.manualEmailsEntered = function () {
-      var splits = $scope.selectedCustomers.newEmails.split(',');
-      var validatedEmails = [];
-      _.each(splits, function (split) {
-        var nospaces = split.replace(' ', '');
-        if (nospaces.length > 0 && $scope.validateEmail(split)) {
-          validatedEmails.push(split);
-        }
-      });
-      $scope.newContactsLength = validatedEmails.length;
-    };
-
-    var customerTags = userConstant.contact_types.dp;
-
-    var nextStep = function () {
-      $scope.currentStep++;
-    };
-    var prevStep = function () {
-      $scope.currentStep--;
-    };
-    var goToStep = function (i) {
-      $scope.currentStep = i;
-    };
-    var errorMessage = function (i) {
-      if ($scope.currentStep < i && (i - $scope.currentStep > 1)) {
-        toaster.pop('error', 'Error', 'Please complete the previous steps before proceeding');
-      } else
-        toaster.pop('error', 'Error', 'Please complete the form in this step before proceeding');
-    };
+    /*
+     * DEPRECATED: @manualEmailsEntered
+     * - check for valid email addresses entered
+     */
+    // $scope.manualEmailsEntered = function () {
+    //   var splits = $scope.selectedCustomers.newEmails.split(',');
+    //   var validatedEmails = [];
+    //   _.each(splits, function (split) {
+    //     var nospaces = split.replace(' ', '');
+    //     if (nospaces.length > 0 && $scope.validateEmail(split)) {
+    //       validatedEmails.push(split);
+    //     }
+    //   });
+    //   $scope.newContactsLength = validatedEmails.length;
+    // };
 
     /*
      * @checkBestEmail
      * -
      */
-
     $scope.checkBestEmail = function (contact) {
       var returnVal = CustomerService.checkBestEmail(contact);
       this.email = contact.email;
       return returnVal;
     };
 
-    CustomerService.getCustomers(function (customers) {
-      _.each(customers, function (customer, index) {
-
-        if (!$scope.checkBestEmail(customer)) {
-          customers.splice(index, 1);
-        }
-      });
-      $scope.customers = customers;
-      var _tags = [];
-      _.each(customers, function (customer) {
-        customer.fullName = customer.first + " " + customer.last || '';
-        if (customer.tags && customer.tags.length > 0) {
-          _.each(customer.tags, function (tag) {
-            _tags.push(tag);
-          });
-        } else {
-          _tags.push('nt');
-        }
-      });
-      var d = _.groupBy(_tags, function (tag) {
-        return tag;
-      });
-
-      var x = _.map(d, function (tag) {
-        return {
-          uniqueTag: tag[0],
-          matchingTag: _.find(customerTags, function (matchTag) {
-            return matchTag.data === tag[0];
-          }).label,
-          numberOfTags: tag.length
-        };
-      });
-      $scope.customerCounts = x;
-    });
-
-    $scope.eliminateDuplicates = function (customer) {
+    /*
+     * @eliminateDuplicate
+     * - 
+     */
+    $scope.eliminateDuplicate = function (customer) {
       return $scope.selectedCustomers.individuals.indexOf(customer._id) > -1;
-    }
+    };
 
+    /*
+     * @getSelectedTags
+     * - loop through tags, return selected
+     */
     $scope.getSelectedTags = function () {
       var tags = [];
       _.each($scope.tagSelection, function (fullTag) {
@@ -639,8 +682,12 @@
         }
       });
       return tags;
-    }
+    };
 
+    /*
+     * @getRecipients
+     * - compile recipients to save to campaign
+     */
     $scope.getRecipients = function () {
 
       var fullContacts = [];
@@ -654,12 +701,12 @@
         if (customer.tags && customer.tags.length > 0) {
           var tagExists = _.intersection(customer.tags, tags);
           if (tagExists.length > 0) {
-            if (!$scope.eliminateDuplicates(customer))
+            if (!$scope.eliminateDuplicate(customer))
               fullContacts.push(customer);
           }
         } else {
           if (tags.indexOf('nt') > -1) {
-            if (!$scope.eliminateDuplicates(customer))
+            if (!$scope.eliminateDuplicate(customer))
               fullContacts.push(customer);
           }
         }
@@ -674,10 +721,14 @@
       return fullContacts;
     };
 
-    $scope.contactTags = function (customer) {
-      return CustomerService.contactTags(customer);
-    };
+    // $scope.contactTags = function (customer) {
+    //   return CustomerService.contactTags(customer);
+    // };
 
+    /*
+     * @checkContactExists
+     * - 
+     */
     $scope.checkContactExists = function (email) {
       var matchingRecipient = _.find($scope.recipients, function (recipient) {
         if (recipient.details && recipient.details[0] && recipient.details[0].emails && recipient.details[0].emails[0] && recipient.details[0].emails[0].email) {
@@ -696,6 +747,10 @@
       return true;
     };
 
+    /*
+     * @createCustomerData
+     * - stub out customer data
+     */
     $scope.createCustomerData = function (email) {
       // New customer
       var customer = {
@@ -710,6 +765,10 @@
       return customer;
     };
 
+    /*
+     * @checkAndCreateCustomer
+     * - check email addresses entered and create new customer/contact
+     */
     $scope.checkAndCreateCustomer = function (fn) {
       var contactsArr = [];
       var promises = [];
@@ -744,6 +803,11 @@
       }
     };
 
+    /*
+     * @activateCampaign
+     * - set campaign to 'RUNNING' then call saveOrUpdateCampaign
+     * - update navigation function
+     */
     $scope.activateCampaign = function () {
       $scope.newCampaignObj.status = 'RUNNING';
       $scope.navigateOnSave = function() { 
@@ -758,6 +822,10 @@
       }
     };
 
+    /*
+     * @saveOrUpdateCampaign
+     * - save or update campaign based on new campaign or existing
+     */
     $scope.saveOrUpdateCampaign = function (update) {
       //add new email if exists
       $scope.saveLoading = true;
@@ -778,6 +846,10 @@
       });
     };
 
+    /*
+     * @createCampaign
+     * - 
+     */
     $scope.createCampaign = function (newEmail) {
 
       //set/format email and send date
@@ -790,11 +862,16 @@
 
     };
 
+    /*
+     * @updateCampaign
+     * - 
+     */
     $scope.updateCampaign = function (newEmail) {
       
       //set/format email and send date
       $scope.setEmail(newEmail);
       $scope.setDate();
+      $scope.setTagsOnCampaign();
 
       //remove any contacts that were marked for removal
       $scope.removeContactsFromCampaign();
@@ -803,18 +880,32 @@
       CampaignService.updateCampaign($scope.newCampaignObj, $scope.savedSuccess);
     };
 
+    /*
+     * @savedSuccess
+     * - callback on create or update success
+     * - navigate to next page
+     */
     $scope.savedSuccess = function(_newCampaign) {
       $scope.saveLoading = false;
       toaster.pop('success', 'Campaign updated successfully');
       $scope.originalCampaignObj = _newCampaign;
       $scope.newCampaignObj = _newCampaign;
+      $scope.emails = [];
       $scope.navigateOnSave();
     };
 
+    /*
+     * @setTagsOnCampaign
+     * - set selected tags on 'contacts' property of campaign obj
+     */
     $scope.setTagsOnCampaign = function() {
-      console.log('TODO: setTagsOnCampaign');
+      $scope.newCampaignObj.contactTags = $scope.getSelectedTags();
     };
-    
+
+    /*
+     * @addContacts
+     * - 
+     */
     $scope.addContacts = function(createdContactsArr, fn) {
       //get an array of contact Ids from recipients
       var recipientsIdArr = [];
@@ -825,7 +916,7 @@
         }
       });
 
-      //add created contacts to recipeints array
+      //add created contacts to recipients array
       if (createdContactsArr.length > 0) {
         _.each(createdContactsArr, function (createdContactId) {
           if (recipientsIdArr.indexOf(createdContactId) < 0) {
@@ -839,6 +930,10 @@
       $scope.newCampaignObj.contacts = contactsArr;
     };
 
+    /*
+     * @removeContactsFromCampaign
+     * - cancel campaign for contacts marked for removal
+     */
     $scope.removeContactsFromCampaign = function() {
       angular.forEach($scope.recipientsToRemove, function(contactId) {
         CampaignService.cancelCampaignForContact($scope.newCampaignObj, contactId, function() {
@@ -851,6 +946,10 @@
       });
     };
 
+    /*
+     * @setEmail
+     * - set email-related data
+     */
     $scope.setEmail = function(newEmail) {
       if (newEmail) {
         var stepSettings = $scope.newCampaignObj.steps[0].settings;
@@ -862,16 +961,24 @@
       }
     };
 
+    /*
+     * @setDate
+     * - set date data
+     */
     $scope.setDate = function() {
       var sendAt = $scope.newCampaignObj.steps[0].settings.sendAt;
-      var delivery = moment($scope.delivery.date);
-      sendAt.year = moment(delivery).get('year');
-      sendAt.month = moment(delivery).get('month') + 1;
-      sendAt.day = moment(delivery).get('date');
-      sendAt.hour = moment(delivery).get('hour');
-      sendAt.minute = moment(delivery).get('minute');
+      var delivery = moment.utc($scope.delivery.date)//.add(moment().utcOffset(), 'minutes');
+      sendAt.year = moment.utc(delivery).get('year');
+      sendAt.month = moment.utc(delivery).get('month') + 1;
+      sendAt.day = moment.utc(delivery).get('date');
+      sendAt.hour = moment.utc(delivery).get('hour');
+      sendAt.minute = moment.utc(delivery).get('minute');
+      console.log(sendAt);
     };
 
+    /*
+     * @checkCampaignNameExists
+     */
     $scope.checkCampaignNameExists = function () {
       var exists = false;
       if ($scope.checkingCampaignName) {
@@ -883,7 +990,10 @@
       return exists;
     };
 
-
+    /*
+     * @checkNewRecipients
+     * - check for recipients added
+     */
     $scope.checkNewRecipients = function () {
       var returnValue = false;
       if ($scope.selectedCustomers.newEmails && $scope.selectedCustomers.newEmails.length)
@@ -891,6 +1001,10 @@
       return returnValue;
     };
 
+    /*
+     * @validateStep
+     * - check for required fields
+     */
     $scope.validateStep = function (i, valid) {
       if (valid) {
         if (i === 2 && (!$scope.newCampaignObj.name || $scope.checkCampaignNameExists()))
@@ -899,7 +1013,7 @@
           valid = false;
         else if (i === 4 && !$scope.recipients.length && !$scope.checkNewRecipients())
           valid = false;
-        else if (i === 5 && $scope.whenToSend === 'later') {
+        else if (i === 5 && $scope.whenToSend === 'later' && $scope.newCampaignObj.type === 'onetime') {
           $scope.updateTime();
           if ($scope.invalidDate)
             valid = false;
@@ -908,6 +1022,10 @@
       return valid;
     }
 
+    /*
+     * @ValidateBeforeProceed
+     * - check for valid current step
+     */
     $scope.ValidateBeforeProceed = function (i) {
       var index = 2;
       var valid = true;
@@ -927,7 +1045,10 @@
       return valid;
     }
 
-    // toggle selection
+    /*
+     * @toggleSelection
+     * - toggle selected contact tags
+     */
     $scope.toggleSelection = function (tagName) {
       var idx = $scope.tagSelection.indexOf(tagName);
 
@@ -941,7 +1062,11 @@
     };
 
     $scope.currentStep = 1;
-    // Initial Value
+    
+    /*
+     * @form
+     * - Initial Value
+     */
     $scope.form = {
       next: function () {
         var i = $scope.currentStep + 1;
@@ -979,6 +1104,10 @@
       }
     };
 
+    /*
+     * @createDuplicateCampaign
+     * - TODO: check name exists
+     */
     $scope.createDuplicateCampaign = function (newCampaign) {
       if ($scope.newCampaignObj._id) {
         CampaignService.duplicateCampaign($scope.newCampaignObj._id, newCampaign,function(data) {
@@ -1001,6 +1130,12 @@
       }
     };
 
+    /*
+     * @saveCampaign
+     * - if pending changes, kick off save flow
+     * - if navigating to new url, show alert
+     * - validate/check and call saveOrUpdateCampaign
+     */
     $scope.saveCampaign = function (_url) {
       $scope.changesConfirmed = true;
       if ($scope.pendingChanges()) {
@@ -1058,8 +1193,36 @@
       
     };
 
+    /*
+     * @deleteCampaign
+     * - TODO: API updates to support deleting campaign
+     */
     $scope.deleteCampaign = function() {
-      console.log('TODO: deleteCampaign');
+      SweetAlert.swal({
+        title: "Are you sure?",
+        text: "Do you want to delete this campaign?",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: "Yes, delete campaign!",
+        cancelButtonText: "No, do not delete campaign!",
+        closeOnConfirm: false,
+        closeOnCancel: false
+      },
+      function (isConfirm) {
+        if (isConfirm) {
+          SweetAlert.swal("Saved!", "Campaign is deleted.", "success");
+          CampaignService.deleteCampaign($scope.newCampaignObj._id, function(data) {
+            toaster.pop('success', "Campaign Deleted", "The " + $scope.newCampaignObj.name + " campaign was deleted successfully.");
+            $scope.closeModal();
+            $timeout(function () {
+              window.location = '/admin/#/marketing/campaigns';
+            }, 500)
+          });
+        } else {
+          SweetAlert.swal("Cancelled", "Campaign not deleted.", "error");
+        }
+      });
     };
 
     /*
@@ -1068,11 +1231,14 @@
      */
     var offFn = $rootScope.$on('$locationChangeStart', function (event, newUrl, oldUrl) {
       if (!$scope.changesConfirmed) {
-        debugger;
         $scope.saveCampaign(newUrl);
       }
     });
 
+    /*
+     * @setBusinessDetails
+     * - set any filled out info from business data
+     */
     $scope.setBusinessDetails = function() {
       var account = $scope.account;
       var logo = account.business.logo || '<h2>Logo Here</h2>';
@@ -1112,6 +1278,11 @@
       return promise;
     };
 
+    /*
+     * @getEmails
+     * - get all emails for this user, then...
+     * - find selected email for this campaign by id
+     */
     $scope.getEmails = function() {
       
       var promise = WebsiteService.getEmails(false, function (_emails) {
@@ -1127,7 +1298,7 @@
         matchedEmail = $scope.emails.filter(emailMatch)[0];
         if (emailId && matchedEmail) {
           $scope.emailToSend = matchedEmail;
-          $scope.newCampaignObj.steps[0].settings.emailId = $scope.emails[0]._id;
+          $scope.originalEmailToSend = angular.copy($scope.emailToSend);
         } else {
           console.log('email not found');
         }
@@ -1139,23 +1310,34 @@
       return promise;
     };
 
+    /*
+     * @getCampaign
+     * - get saved campaign data, then...
+     * - set selected email to template since we've saved the email already
+     * - if onetime campaign, set send-date data
+     * - set editable mode
+     */
     $scope.getCampaign = function() {
       
       var promise = CampaignService.getCampaign($stateParams.campaignId, function (data) {
           
-          var sendAtDateObj = data.steps[0].settings.sendAt;
-          
+          var sendAtDateISOString = moment.utc(data.steps[0].settings.sendAt).subtract('months', 1).toISOString();
+          var localMoment = moment(sendAtDateISOString);
+
           $scope.originalCampaignObj = angular.copy(data);
           $scope.newCampaignObj = data;
           $scope.selectedEmail = {
             type: 'template'
           };
 
-          //if valid date and in future, set 'later'
-          if (moment(sendAtDateObj).isValid() && moment(sendAtDateObj).isAfter(moment())) {
-            $scope.whenToSend = 'later';
-            $scope.delivery.time = moment(sendAtDateObj);
-            $scope.delivery.date = moment(sendAtDateObj).subtract('months', 1);
+          if ($scope.newCampaignObj.type === 'onetime') {
+            //if valid date and in future, set 'later'
+            if (localMoment.isValid() && localMoment.isAfter(moment()) || !$scope.isEditable) {
+              $scope.whenToSend = 'later';
+              // $scope.delivery.time = moment.utc(sendAtDateObj).add(moment().utcOffset(), 'minutes');
+              $scope.delivery.date = localMoment;
+              $scope.delivery.originalDate = angular.copy(localMoment);
+            }
           }
 
           $scope.setEditable();
@@ -1164,6 +1346,10 @@
       return promise;
     };
 
+    /*
+     * @getContacts
+     * - get saved customers attached to this campaign
+     */
     $scope.getContacts = function() {
       var promise = CampaignService.getCampaignContacts($stateParams.campaignId, function (data) {
           $scope.originalRecipients = angular.copy(data);
@@ -1173,13 +1359,78 @@
       return promise;
     };
 
+    /*
+     * @getCustomers
+     * - get all customers for this user
+     */
+    $scope.getCustomers = function() {
+      var promise = CustomerService.getCustomers(function (customers) {
+        _.each(customers, function (customer, index) {
+
+          if (!$scope.checkBestEmail(customer)) {
+            customers.splice(index, 1);
+          }
+        });
+        $scope.customers = customers;
+        var _tags = [];
+        _.each(customers, function (customer) {
+          customer.fullName = customer.first + " " + customer.last || '';
+          if (customer.tags && customer.tags.length > 0) {
+            _.each(customer.tags, function (tag) {
+              _tags.push(tag);
+            });
+          } else {
+            _tags.push('nt');
+          }
+        });
+        var d = _.groupBy(_tags, function (tag) {
+          return tag;
+        });
+
+        var x = _.map(d, function (tag) {
+          return {
+            uniqueTag: tag[0],
+            matchingTag: _.find(customerTags, function (matchTag) {
+              return matchTag.data === tag[0];
+            }).label,
+            numberOfTags: tag.length
+          };
+        });
+        $scope.customerCounts = x;
+      });
+
+      return promise;
+    };
+
+    /*
+     * @loadSavedTags
+     * - loop through saved tags and apply to data that drives the tag checkbox
+     */
+    $scope.loadSavedTags = function() {
+      _.each($scope.newCampaignObj.contactTags, function(tag) {
+        var tag = _.findWhere($scope.customerCounts, { uniqueTag: tag });
+        $scope.toggleSelection(tag.matchingTag);
+      });
+    };
+
+    /*
+     * @pendingChanges
+     * - check for changes in the data
+     */
     $scope.pendingChanges =  function() {
       return (
         (!angular.equals($scope.originalCampaignObj, $scope.newCampaignObj)) ||
-        (!angular.equals($scope.originalRecipients, $scope.recipients))
+        (!angular.equals($scope.originalRecipients, $scope.recipients)) ||
+        (!angular.equals([], $scope.selectedCustomers.newEmails)) ||
+        (!angular.equals($scope.originalEmailToSend, $scope.emailToSend)) ||
+        (!angular.equals($scope.delivery.originalDate, $scope.delivery.date))
       )
     };
 
+    /*
+     * @setEditable
+     * - set mode based on campaign status
+     */
     $scope.setEditable = function() {
       if ($scope.newCampaignObj.status.toLowerCase() === 'draft' || $scope.newCampaignObj.status.toLowerCase() === 'pending') {
         $scope.isEditable = true;
@@ -1200,12 +1451,15 @@
         }).then(function(data) {
           return $scope.getContacts();
         }).then(function(data) {
-          console.log(data);
+          return $scope.getCustomers();
+        }).then(function(data) {
+          $scope.loadSavedTags();
         });
       } else {
         $scope.setEditable();
         $scope.getEmails();
         $scope.getAccount();
+        $scope.getCustomers();
       }
 
     })();
