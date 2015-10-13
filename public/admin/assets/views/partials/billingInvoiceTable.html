@@ -4,23 +4,20 @@
         <th>#</th>
         <th>Date</th>
         <th>Amount</th>
-        <!--<th>Card</th>-->
         <th>Status</th>
         <th></th>
     </tr>
     </thead>
     <tbody>
-    <tr ng-repeat="invoice in ::pagedInvoices">
+    <tr ng-repeat="invoice in ::pagedInvoices track by $index">
         <td>{{::$index + 1}}</td>
         <td>{{::invoice.date * 1000 | date : 'longDate'}}</td>
         <td>${{::(invoice.total/100).toFixed( 2 )}}</td>
-        <!--<td>Visa - 8943</td>-->
         <td ng-show="invoice.paid && invoice.total/100 <= 0">NO CHARGE</td>
         <td ng-show="invoice.paid && invoice.total/100 > 0">PAID</td>
         <td ng-hide="invoice.paid">NOT PAID</td>
         <td class="table-action">
-            <a href="" ng-click="changeInvoice(invoice, $index); openModal('view-transaction-modal')"><i class="fa fa-eye"></i>
-            </a>
+            <a ng-click="changeInvoice(invoice, $index); openModal('view-transaction-modal')" href="" ><i class="fa fa-eye"></i></a>
         </td>
     </tr>
 </table>
