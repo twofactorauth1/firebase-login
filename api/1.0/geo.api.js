@@ -22,8 +22,8 @@ _.extend(api.prototype, baseApi.prototype, {
 
     initialize: function() {
         //GET
-        app.get(this.url('search/address/:address'), this.isAuthApi.bind(this), this.searchAddress.bind(this));
-        app.get(this.url('address/verify'), this.isAuthApi.bind(this), this.verifyAddress.bind(this));
+        app.get(this.url('search/address/:address'), this.setup.bind(this), this.searchAddress.bind(this));
+        app.get(this.url('address/verify'), this.setup.bind(this), this.verifyAddress.bind(this));
     },
 
 

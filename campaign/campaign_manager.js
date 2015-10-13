@@ -160,13 +160,53 @@ module.exports = {
                         self.log.error('Error updating campaign: ' + err);
                         return fn(err, null);
                     } else {
+
                         self.log.debug('<< updateCampaign');
                         fn(null, updatedCampaign);
-                        if(updatedCampaign.get('status') === $$.m.Campaign.status.RUNNING) {
-                            //kick off the flows
-                            self._startCampaignFlows(updatedCampaign);
-                            return;
+                        /*
+                         * check if we need to update flows.
+                         *
+                         */
+                        var updateNeeded = false;
+                        var initialSteps = campaignObj.get('steps');
+                        var updatedSteps = updatedCampaign.get('steps');
+                        if(initialSteps.length !== updatedSteps.length) {
+                            updateNeeded = true;
                         }
+                        _.each(updatedSteps, function(step, i){
+                            if(!initialSteps[i] || _.isEqual(step, initialSteps[i]) !== true ) {
+                                updateNeeded = true;
+                            }
+                        });
+
+                        if(updateNeeded === true) {
+                            campaignDao.findMany({campaignId:campaignObj.id(), accountId: campaignObj.get('accountId')}, $$.m.CampaignFlow, function(err, flows){
+                                if(err) {
+                                    self.log.error('Error updating flows.  Campaign steps will NOT start.', err);
+                                    return;
+                                } else {
+                                    async.each(flows, function(flow, cb){
+                                        flow.set('steps', updatedSteps);
+                                        campaignDao.saveOrUpdate(flow, function(err, value){
+                                            cb(err);
+                                        });
+                                    }, function done(err){
+                                        if(err) {
+                                            self.log.error('Error updating flow steps.  Campaign steps will NOT start.', err);
+                                        } else {
+                                            self._startCampaignFlows(updatedCampaign);
+                                        }
+                                    });
+                                }
+                            });
+                        } else {
+                            if(updatedCampaign.get('status') === $$.m.Campaign.status.RUNNING) {
+                                //kick off the flows
+                                self._startCampaignFlows(updatedCampaign);
+                                return;
+                            }
+                        }
+
                     }
                 });
             }

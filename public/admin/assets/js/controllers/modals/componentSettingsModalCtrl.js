@@ -359,6 +359,14 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
     filter: 'text',
     description: 'A component to showcase your testimonials.',
     enabled: true
+  },
+  {
+    title: 'Footer',
+    type: 'footer',
+    preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/footer.png',
+    filter: 'misc',
+    description: 'Use this component to show footer on your page.',
+    enabled: false
   }];
 
   $scope.componentOpacityValues = [{

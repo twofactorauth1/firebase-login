@@ -95,6 +95,9 @@
       $scope.product = product;
       console.log('product ', product);
       var p_icon = $scope.product.icon;
+      if(!p_icon.startsWith("fa-"))
+        p_icon = "fa-cube";
+
 
       angular.element('#convert').iconpicker({
         iconset: 'fontawesome',
@@ -536,6 +539,11 @@
         }
       });
     };
+
+    $scope.setDefault = function(){
+      $scope.product.icon = 'fa-cube';
+      angular.element('#convert').iconpicker('setIcon', 'fa-cube');
+    }
 
 
   }]);

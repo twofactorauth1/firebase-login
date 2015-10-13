@@ -11,7 +11,7 @@
     </section>
     <!-- end: PAGE TITLE -->
     <!-- start: YOUR CONTENT HERE -->
-    <div st-table="displayedOrders" st-safe-src="orders">
+    <div st-table="displayedOrders" st-sort-table st-safe-src="orders">
         <div class="container-fluid container-fullw bg-white padding-top-0 padding-bottom-0">
             <div class="row">
                 <div class="col-sm-12">
@@ -33,7 +33,7 @@
                                             <button type="button" class="btn btn-o btn-info ti-filter ng-click-activ pull-right visible-xs-block" ng-click="showFilter = !showFilter">
                                             </button>
                                             <button type="button" class="hidden btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti-times ng-click-active pull-right" ng-click="clearFilters()">
-                                                <span>Clear Fliter</span>
+                                                <span>Clear Filter</span>
                                             </button>
                                         </div>
                                     </div>
@@ -115,8 +115,9 @@
                                 <th class="hidden-xs" ng-class="{'column-width': tableView == 'grid'}" st-sort="order_id">Order ID</th>
                                 <th ng-class="{'column-width': tableView == 'grid', 'center': tableView == 'list'}" st-sort="status">Status</th>
                                 <th ng-class="{'column-width': tableView == 'grid'}" st-sort="getters.customerName">Customer</th>
-                                <th class="hidden-xs" ng-class="{'column-width': tableView == 'grid', 'center': tableView == 'list'}" st-sort="getters.line_items">Items</th>
-                                <th class="hidden-xs" ng-class="{'column-width': tableView == 'grid', 'center': tableView == 'list'}" st-sort="total">Total</th>
+                                <th ng-class="{'column-width': tableView == 'grid'}" class="hidden-xs">(Qty) Items</th>
+                                <th class="hidden-xs" ng-class="{'column-width': tableView == 'grid', 'center': tableView == 'list'}" st-sort="getters.line_items">SKU Count</th>
+                                <th class="hidden-xs" ng-class="{'column-width': tableView == 'grid', 'center': tableView == 'list'}" st-sort="total">$ Total</th>
                                 <th class="hidden-xs" ng-class="{'column-width': tableView == 'grid'}" st-sort="getters.created" st-sort-default="reverse">Order Date</th>
                                 <th class="hidden-xs" ng-class="{'column-width': tableView == 'grid'}" st-sort="getters.modified">Modified</th>
                             </tr>
@@ -142,7 +143,10 @@
                                     </ui-select>
                                 </th>
                                 <th class="column-width"> 
-                                    <input st-search="{{order.customer._full}}" placeholder="Customer" class="form-control" type="search" />
+                                    <input st-search="" placeholder="Customer" class="form-control" type="search" />
+                                </th>
+                                <th class="column-width">
+                                    <input st-search="line_items.name" placeholder="Item Names" class="form-control" type="search" />
                                 </th>
                                 <th class="column-width">
                                     <input st-search="line_items_total" ng-model="line_items" id="order_line_items" class="form-control hidden" type="search" />
@@ -197,10 +201,16 @@
                                         <img ng-src="status.customer.photo" err-src="" err-contact="order.customer" class="img-thumbnail screenshot" alt="image">
                                     </span>
                                     <span class="pull-left" ng-class="{'col-style': tableView == 'list'}">
-                                        {{order.customer.first}} {{order.customer.last}} ({{order.customer._id}})
+                                        {{order.customer.first}} {{order.customer.last}} {{order.customer._id ? '('+order.customer._id+')' : ''}}
                                     </span>
                                 </td>
-                                <td class="hidden-xs" ng-class="{'center': tableView == 'list'}"><strong>Items: </strong>{{order.line_items.length}}</td>
+                                <td class="hidden-xs"><strong>(Qty) Items</strong>
+                                    <span ng-repeat="item in order.line_items track by $index"> 
+                                        <span>{{item.quantity ? '('+item.quantity+')' : '(1)'}}</span>
+                                        {{item.name}}<br ng-if="($index+1 < order.line_items.length)"/>
+                                    </span>
+                                </td>
+                                <td class="hidden-xs" ng-class="{'center': tableView == 'list'}"><strong>SKU Count: </strong>{{order.line_items.length}}</td>
                                 <td class="hidden-xs" ng-class="{'center': tableView == 'list'}"><strong>Total: </strong> {{order.total | currency}}</td>
                                 <td class="hidden-xs"><strong>Created: </strong> {{order.created.date | date:'MMM d yy'}}</td>
                                 <td class="hidden-xs"><strong>Modified: </strong>{{order.modified.date | date:'MMM d yy'}}</td>

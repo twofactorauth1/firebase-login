@@ -41,6 +41,11 @@ html(class="no-js", lang="en" ng-app="mainApp" ng-controller="MainCtrl as main",
             if account.website.metatags
                 each meta in account.website.metatags
                     meta(name=meta.name content=meta.value)
+            if account.website.settings.https == true
+                script(type="text/javascript").
+                    if(window.location.protocol != 'https:') {
+                      location.href = location.href.replace("http://", "https://");
+                    }
 
     body(class='theme-main navbar-v#{ account.website.nav_version } ng-cloak', ng-cloak)
         block body_content

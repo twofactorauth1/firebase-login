@@ -13594,7 +13594,7 @@ a.editable-error:focus {
 /*  Orders
 /* ---------------------------------------------------------------------- */
 .orders .column-width {
-  width: 14.28571428571429%;
+  width: 12.5%;
 }
 .orders table.grid thead th {
   float: left;
