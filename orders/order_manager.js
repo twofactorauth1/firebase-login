@@ -165,6 +165,8 @@ module.exports = {
                             cb(err);
                         } else {
                             productAry.push(product);
+                            item.sku = product.get('sku');
+                            item.name = product.get('name');
                             cb();
                         }
                     });
