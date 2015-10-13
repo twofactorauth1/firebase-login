@@ -540,5 +540,11 @@
       });
     };
 
+    $scope.setDefault = function(){
+      $scope.product.icon = 'fa-cube';
+      angular.element('#convert').iconpicker('setIcon', 'fa-cube');
+    }
+
+
   }]);
 }(angular));
