@@ -53,9 +53,9 @@ app.directive("billingInvoiceTable", [function () {
   return {
     restrict: 'E',
     templateUrl: '/admin/assets/views/partials/billingInvoiceTable.html',
-    scope: {
-      pagedInvoices: '=',
-    },
+    //scope: {
+    //  pagedInvoices: '=',
+    //},
   }
 }]);
 

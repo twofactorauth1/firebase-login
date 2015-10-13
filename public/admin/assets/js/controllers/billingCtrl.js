@@ -46,6 +46,7 @@
     };
 
     $scope.changeInvoice = function (invoice, index) {
+      console.log('changeInvoice >>> ' + invoice);
       $scope.selectedInvoice = invoice;
       $scope.selectedItemIndex = index;
     };
