@@ -518,7 +518,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
        */
 
       scope.makeCartPayment = function () {
-
+        scope.failedOrderMessage = "";
         scope.checkoutModalState = 4;
         var expiry = angular.element('#expiry').val().split("/");
         var exp_month = expiry[0].trim();
@@ -551,6 +551,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
 
 
         PaymentService.getStripeCardToken(cardInput, function (token, error) {
+
           // PaymentService.saveCartDetails(token, parseInt(scope.total * 100), function (data) {
           //     console.log('card details ', data);
           // });
