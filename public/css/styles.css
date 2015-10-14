@@ -1513,6 +1513,9 @@ div[data-type="feature-block"] .component-inner {
 .meet-team-v1 {
   overflow: hidden;
 }
+.meet-team-v1 .title {
+  position: relative;
+}
 .meet-team-v1 .name {
   padding-bottom: 5px;
   text-align: center;
@@ -1660,6 +1663,7 @@ div[data-type="feature-block"] .component-inner {
   /* Small devices (tablets, 768px and up) */
 }
 .meet-team-v2 .title {
+  position: relative;
   font-weight: bold;
   text-align: center;
 }
@@ -1755,6 +1759,7 @@ div[data-type="feature-block"] .component-inner {
   /* Small devices (tablets, 768px and up) */
 }
 .meet-team-v3 .title {
+  position: relative;
   text-align: center;
   margin-bottom: 20px;
 }
@@ -1904,6 +1909,7 @@ div[data-type="feature-block"] .component-inner {
   /* Small devices (tablets, 768px and up) */
 }
 .meet-team-v4 .title {
+  position: relative;
   text-align: center;
 }
 .meet-team-v4 .name {
@@ -1989,6 +1995,9 @@ div[data-type="feature-block"] .component-inner {
 }
 .meet-team-v5 {
   /* Small devices (tablets, 768px and up) */
+}
+.meet-team-v5 .title {
+  position: relative;
 }
 .meet-team-v5 .para h4 {
   text-align: center;
