@@ -1325,8 +1325,15 @@
         $scope.editPostValidated = true;
       } else {
         $scope.editPostValidated = false;
-      }
+      }      
     };
+
+    $scope.updatePostData = function(){
+      for (var instance in CKEDITOR.instances )
+      {
+          CKEDITOR.instances[instance].fire('customUpdate');
+      }
+    }
 
     var checkIfPageDirty = function(url, fn){
       if ($scope.originalPage && $scope.originalPage.components && $scope.components && $scope.originalPage.components.length !== $scope.components.length) {
