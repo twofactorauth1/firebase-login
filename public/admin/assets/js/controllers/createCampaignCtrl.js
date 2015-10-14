@@ -1015,7 +1015,7 @@
           valid = false;
         else if (i === 3 && (!$scope.emailToSend.title || $scope.emailTitleExists))
           valid = false;
-        else if (i === 4 && !$scope.recipients.length && !$scope.checkNewRecipients())
+        else if (i === 4 && (scope.newCampaignObj.type == 'onetime' && !$scope.recipients.length && !$scope.checkNewRecipients()))
           valid = false;
         else if (i === 5 && $scope.whenToSend === 'later' && $scope.newCampaignObj.type === 'onetime') {
           $scope.updateTime();
