@@ -935,7 +935,7 @@
           return $scope.website;
         };
         _modal.resolve.blog = function () {
-          return $scope.postControl.getSinglePost();
+          return $scope.blog.post;
         };
         _modal.resolve.isDirty = function () {
           return $scope.isDirty;
