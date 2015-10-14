@@ -275,6 +275,7 @@
       $scope.setDirty(false);
       $scope.changesConfirmed = true;
       if ($scope.isSinglePost) {
+        $scope.blog.post = $scope.postControl.getSinglePost();
         $scope.validateEditPost($scope.blog.post);
         if (!$scope.editPostValidated) {
           $scope.saveLoading = false;
@@ -560,10 +561,12 @@
         WebsiteService.publishPost($scope.page._id, $scope.blog.post._id, function (data) {
           toaster.pop('success', "Status updated successfully");
           $scope.blog.post.post_status = newStatus;
+          $scope.postControl.setSinglePost();
         });
       } else {
         toaster.pop('success', "Status updated successfully");
         $scope.blog.post.post_status = newStatus;
+        $scope.postControl.setSinglePost();
       }
 
 
@@ -792,6 +795,7 @@
     $scope.testimonialSlider = {};
     $scope.contactMap = {};
     $scope.blogControl = {};
+    $scope.postControl = {};
 
 
     $scope.insertMedia = function (asset) {
@@ -931,7 +935,7 @@
           return $scope.website;
         };
         _modal.resolve.blog = function () {
-          return $scope.blog.post;
+          return $scope.postControl.getSinglePost();
         };
         _modal.resolve.isDirty = function () {
           return $scope.isDirty;
@@ -1130,7 +1134,8 @@
 
     $scope.slugifyPostHandle = function (title, post) {
       if (title && post)
-        post.post_url = $filter('slugify')(title);
+        post.post_url = $filter('slugify')(title);      
+      $scope.updatePostData();
     };
 
     $scope.newPage = {};
@@ -1333,6 +1338,7 @@
     };
 
     $scope.updatePostData = function(){
+      $scope.postControl.setSinglePost();
       for (var instance in CKEDITOR.instances )
       {
           CKEDITOR.instances[instance].fire('customUpdate');

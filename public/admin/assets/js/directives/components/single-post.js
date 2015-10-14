@@ -4,7 +4,8 @@
 app.directive('singlePostComponent', ['$location', "WebsiteService", "$timeout", function ($location, WebsiteService, $timeout) {
   return {
     scope: {
-      component: '='
+      component: '=',
+      control: '='
     },
     templateUrl: '/components/component-wrap.html',
     link: function (scope, element, attrs) {
@@ -58,6 +59,12 @@ app.directive('singlePostComponent', ['$location', "WebsiteService", "$timeout",
       };
       if (scope.$parent.blog) {
         scope.blog.post = scope.$parent.blog.post;
+      };
+      scope.control.getSinglePost = function () {
+        return scope.blog.post;
+      };
+      scope.control.setSinglePost = function () {
+        return scope.blog.post = scope.$parent.blog.post;;
       };
     }
   };
