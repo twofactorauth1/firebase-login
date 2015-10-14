@@ -109,6 +109,8 @@
             $scope.modalInstance = $modal.open({
                 templateUrl: 'new-post-modal',
                 size: size,
+                keyboard: false,
+                backdrop: 'static',
                 scope: $scope
             });
         };

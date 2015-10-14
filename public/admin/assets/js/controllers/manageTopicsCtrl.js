@@ -13,6 +13,8 @@
     $scope.openModal = function (url) {
       $scope.modalInstance = $modal.open({
         templateUrl: url,
+        keyboard: false,
+        backdrop: 'static',
         scope: $scope
       });
     };

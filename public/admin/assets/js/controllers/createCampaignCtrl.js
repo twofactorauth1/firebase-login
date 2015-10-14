@@ -351,6 +351,8 @@
     $scope.openModal = function (template) {
       $scope.modalInstance = $modal.open({
         templateUrl: template,
+        keyboard: false,
+        backdrop: 'static',
         scope: $scope
       });
       $scope.modalInstance.result.finally($scope.closeModal());
@@ -364,7 +366,9 @@
       var _modal = {
         templateUrl: modal,
         scope: $scope,
-        size: _size || 'md',
+        keyboard: false,
+        backdrop: 'static',
+        size: _size || 'md'
       };
       $scope.modalInstance = $modal.open(_modal);
       $scope.modalInstance.result.then(null, function () {
