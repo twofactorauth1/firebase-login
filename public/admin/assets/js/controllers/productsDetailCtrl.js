@@ -12,6 +12,8 @@
     $scope.openModal = function (modal) {
       $scope.modalInstance = $modal.open({
         templateUrl: modal,
+        keyboard: false,
+        backdrop: 'static',
         scope: $scope
       });
     };
@@ -27,6 +29,8 @@
         templateUrl: 'media-modal',
         controller: 'MediaModalCtrl',
         size: 'lg',
+        keyboard: false,
+        backdrop: 'static',
         resolve: {
           showInsert: function () {
             return $scope.showInsert;

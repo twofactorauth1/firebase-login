@@ -42,6 +42,8 @@
       $scope.modalInstance = $modal.open({
         templateUrl: 'new-product-modal',
         size: size,
+        keyboard: false,
+        backdrop: 'static',
         scope: $scope
       });
     };
@@ -50,6 +52,8 @@
       $scope.modalInstance = $modal.open({
         templateUrl: 'import-product-modal',
         size: size,
+        keyboard: false,
+        backdrop: 'static',
         scope: $scope
       });
     };

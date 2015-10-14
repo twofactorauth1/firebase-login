@@ -223,6 +223,8 @@
         templateUrl: 'media-modal',
         controller: 'MediaModalCtrl',
         size: 'lg',
+        keyboard: false,
+        backdrop: 'static',
         resolve: {
           showInsert: function () {
             return $scope.showInsert;

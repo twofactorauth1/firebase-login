@@ -369,6 +369,7 @@ CKEDITOR.dialog.add( 'image2', function( editor ) {
 		widget.parts.image.removeClass("img-circle");
 		widget.addClass(_instance.getValue());
 		widget.parts.image.addClass(_instance.getValue());
+		widget.editor.fire( 'change' );
 	}
 
 	var hasFileBrowser = !!( config.filebrowserImageBrowseUrl || config.filebrowserBrowseUrl ),
