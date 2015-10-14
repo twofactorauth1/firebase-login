@@ -1522,6 +1522,9 @@
 #componentloader .meet-team-v1 {
   overflow: hidden;
 }
+#componentloader .meet-team-v1 .title {
+  position: relative;
+}
 #componentloader .meet-team-v1 .name {
   padding-bottom: 5px;
   text-align: center;
@@ -1668,6 +1671,7 @@
   /* Small devices (tablets, 768px and up) */
 }
 #componentloader .meet-team-v2 .title {
+  position: relative;
   font-weight: bold;
   text-align: center;
 }
@@ -1762,6 +1766,7 @@
   /* Small devices (tablets, 768px and up) */
 }
 #componentloader .meet-team-v3 .title {
+  position: relative;
   text-align: center;
   margin-bottom: 20px;
 }
@@ -1911,6 +1916,7 @@
   /* Small devices (tablets, 768px and up) */
 }
 #componentloader .meet-team-v4 .title {
+  position: relative;
   text-align: center;
 }
 #componentloader .meet-team-v4 .name {
@@ -1996,6 +2002,9 @@
 }
 #componentloader .meet-team-v5 {
   /* Small devices (tablets, 768px and up) */
+}
+#componentloader .meet-team-v5 .title {
+  position: relative;
 }
 #componentloader .meet-team-v5 .para h4 {
   text-align: center;

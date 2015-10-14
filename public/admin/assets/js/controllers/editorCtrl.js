@@ -275,6 +275,7 @@
       $scope.setDirty(false);
       $scope.changesConfirmed = true;
       if ($scope.isSinglePost) {
+        $scope.blog.post = $scope.postControl.getSinglePost();
         $scope.validateEditPost($scope.blog.post);
         if (!$scope.editPostValidated) {
           $scope.saveLoading = false;
@@ -560,10 +561,12 @@
         WebsiteService.publishPost($scope.page._id, $scope.blog.post._id, function (data) {
           toaster.pop('success', "Status updated successfully");
           $scope.blog.post.post_status = newStatus;
+          $scope.postControl.setSinglePost();
         });
       } else {
         toaster.pop('success', "Status updated successfully");
         $scope.blog.post.post_status = newStatus;
+        $scope.postControl.setSinglePost();
       }
 
 
@@ -792,6 +795,7 @@
     $scope.testimonialSlider = {};
     $scope.contactMap = {};
     $scope.blogControl = {};
+    $scope.postControl = {};
 
 
     $scope.insertMedia = function (asset) {
@@ -889,6 +893,8 @@
     $scope.openSimpleModal = function (modal, _size) {
       var _modal = {
         templateUrl: modal,
+        keyboard: false,
+        backdrop: 'static',
         scope: $scope,
         size: _size || 'md',
       };
@@ -907,6 +913,8 @@
       console.log('openModal >>> ', modal, controller, index);
       var _modal = {
         templateUrl: modal,
+        keyboard: false,
+        backdrop: 'static',
         size: 'md',
         resolve: {
           components: function () {
@@ -927,7 +935,10 @@
           return $scope.website;
         };
         _modal.resolve.blog = function () {
-          return $scope.blog.post;
+          if($scope.postControl && $scope.postControl.getSinglePost)
+            return $scope.postControl.getSinglePost();
+          else
+            return $scope.blog.post;
         };
         _modal.resolve.isDirty = function () {
           return $scope.isDirty;
@@ -1126,7 +1137,8 @@
 
     $scope.slugifyPostHandle = function (title, post) {
       if (title && post)
-        post.post_url = $filter('slugify')(title);
+        post.post_url = $filter('slugify')(title);      
+      $scope.updatePostData();
     };
 
     $scope.newPage = {};
@@ -1325,8 +1337,16 @@
         $scope.editPostValidated = true;
       } else {
         $scope.editPostValidated = false;
-      }
+      }      
     };
+
+    $scope.updatePostData = function(){
+      $scope.postControl.setSinglePost();
+      for (var instance in CKEDITOR.instances )
+      {
+          CKEDITOR.instances[instance].fire('customUpdate');
+      }
+    }
 
     var checkIfPageDirty = function(url, fn){
       if ($scope.originalPage && $scope.originalPage.components && $scope.components && $scope.originalPage.components.length !== $scope.components.length) {

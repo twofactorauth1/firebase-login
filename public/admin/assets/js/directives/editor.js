@@ -21,6 +21,14 @@ app.directive("elem", function ($timeout) {
         },0);
       };
 
+      scope.setContent = function (e) {
+        $timeout(function () {
+          scope.$apply(function () {
+            e.editor.setData(ngModel.$viewValue);
+          });
+        },0);
+      };
+
       var elem = angular.element(element[0].querySelector('.editable'))[0];
       CKEDITOR.inline(elem, {
         on: {
@@ -33,6 +41,9 @@ app.directive("elem", function ($timeout) {
             });
             editor.on('key', function (e) {
               scope.update(e);
+            });
+            editor.on('customUpdate', function (e) {
+              scope.setContent(e);
             });
           }
         },

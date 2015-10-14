@@ -131,6 +131,8 @@
       console.log('openModal >>> ', template, controller, _size);
       var _modal = {
         templateUrl: template,
+        keyboard: false,
+        backdrop: 'static',
         size: 'md',
         resolve: {
           getCustomers: function () {
@@ -156,7 +158,9 @@
     $scope.openSimpleModal = function (modal) {
       var _modal = {
         templateUrl: modal,
-        scope: $scope
+        scope: $scope,
+        keyboard: false,
+        backdrop: 'static'
       };
       $scope.modalInstance = $modal.open(_modal);
       $scope.modalInstance.result.then(null, function () {
