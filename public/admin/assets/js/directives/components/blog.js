@@ -137,21 +137,24 @@ app.directive('blogComponent', ['$filter', '$timeout', 'WebsiteService', 'toaste
             link: '/tag/' + tag
           });
         });
+        $scope.rendered = false;
         $scope.tagCloud = _tagCloud;
-        angular.element(document).ready(function () {        
+        $timeout(function () {
           $(".jqcloud").jQCloud($scope.tagCloud, {
             autoResize: true,
             width: 230,
             height: 300,
             afterCloudRender: function () {
-              $timeout(function () {
+              if (!$scope.rendered) {
+                $scope.rendered = true;
                 angular.element('.jqcloud').css({
                   'width': '100%'
                 });
-              }, 100);
+                angular.element('.jqcloud').jQCloud('update', $scope.tagCloud);
+              }
             }
           });
-        });
+        }, 1000);
       };
 
       /********** BLOG PAGE PAGINATION RELATED **********/
