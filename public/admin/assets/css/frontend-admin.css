@@ -2660,6 +2660,9 @@
     float: none;
   }
 }
+#componentloader .products-v1 .products .jumbotron {
+  position: relative;
+}
 #componentloader .products-v1 .strikethrough {
   font-size: 14px;
   text-decoration: line-through;

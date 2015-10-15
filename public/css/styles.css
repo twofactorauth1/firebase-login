@@ -2660,6 +2660,9 @@ div[data-type="feature-block"] .component-inner {
     float: none;
   }
 }
+.products-v1 .products .jumbotron {
+  position: relative;
+}
 .products-v1 .strikethrough {
   font-size: 14px;
   text-decoration: line-through;
