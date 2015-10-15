@@ -34,5 +34,5 @@ module.exports = {
     CLOSEIO_ACTIVE_STATUS_LABEL: oppurtunityStatuses.active.label,
     CLOSEIO_ACTIVE_STATUS_ID: oppurtunityStatuses.active.id,
 
-    CLOSIO_ENABLED: closeEnabled
+    CLOSEIO_ENABLED: closeEnabled
 }

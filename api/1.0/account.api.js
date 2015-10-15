@@ -103,7 +103,7 @@ _.extend(api.prototype, baseApi.prototype, {
             "status_id": closeioConfig.CLOSEIO_CUSTOMER_STATUS_ID,
             "status_label": closeioConfig.CLOSEIO_CUSTOMER_STATUS_LABEL
         };
-        if(closeioConfig.CLOSIO_ENABLED) {
+        if(closeioConfig.CLOSEIO_ENABLED === 'true' || closeioConfig.CLOSEIO_ENABLED === true) {
             closeio.lead.update(updatedLead).then(function(lead){
                 fn();
             });

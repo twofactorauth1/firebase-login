@@ -316,7 +316,7 @@ _.extend(api.prototype, baseApi.prototype, {
                         "Signup Date": account.attributes.billing.signupDate
                     }
                 };
-                if(closeioConfig.CLOSIO_ENABLED === 'true' || closeioConfig.CLOSIO_ENABLED === true) {
+                if(closeioConfig.CLOSEIO_ENABLED === 'true' || closeioConfig.CLOSEIO_ENABLED === true) {
                     closeio.lead.create(newuser).then(function(lead){
                         var newop = {
                             "note": "",
