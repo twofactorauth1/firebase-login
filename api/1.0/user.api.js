@@ -305,6 +305,12 @@ _.extend(api.prototype, baseApi.prototype, {
                                     "type": "office",
                                     "email": user.attributes.email
                                 }
+                            ],
+                            "phones":[
+                                {
+                                    "type":"mobile",
+                                    "phone": account.get('business').phones[0].number
+                                }
                             ]
                         }
                     ],

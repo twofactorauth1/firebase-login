@@ -20,7 +20,7 @@ var async = require('async');
 var affiliates_manager = require('../../../affiliates/affiliate_manager');
 
 var Closeio = require('close.io');
-var closeioConfig = require('../../configs/closeio.config');
+var closeioConfig = require('../../../configs/closeio.config');
 var closeio = new Closeio(closeioConfig.CLOSEIO_API_KEY);
 
 var api = function () {
