@@ -2400,6 +2400,7 @@ div[data-type="feature-block"] .component-inner {
   padding: 0;
   height: 100%;
   width: 100%;
+  clear: both;
   overflow: hidden;
   background-size: cover!important;
   position: relative;
