@@ -9,7 +9,7 @@
 var appConfig =  require('./app.config');
 
 var closeIOApiKey = process.env.CLOSEIO_API_KEY || 'e349a7ec2fcc8370231d85455f21ea3b405e9220d926e2dccfc0e34f';
-var closeEnabled = process.env.CLOSEIO_ENABLED || 'false';
+var closeEnabled = process.env.CLOSEIO_ENABLED || 'true';
 
 var leadStatuses = {
 customer: {
