@@ -103,9 +103,15 @@ _.extend(api.prototype, baseApi.prototype, {
             "status_id": closeioConfig.CLOSEIO_CUSTOMER_STATUS_ID,
             "status_label": closeioConfig.CLOSEIO_CUSTOMER_STATUS_LABEL
         };
-        closeio.lead.update(updatedLead).then(function(lead){
-            fn();
-        });
+        if(closeioConfig.CLOSIO_ENABLED) {
+            closeio.lead.update(updatedLead).then(function(lead){
+                fn();
+            });
+        } else {
+            self.log.debug('Skipping call to close.io');
+            return fn();
+        }
+
     },
 
     updateCurrentAccountBilling: function(req, res) {

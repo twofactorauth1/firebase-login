@@ -9,6 +9,7 @@
 var appConfig =  require('./app.config');
 
 var closeIOApiKey = process.env.CLOSEIO_API_KEY || 'e349a7ec2fcc8370231d85455f21ea3b405e9220d926e2dccfc0e34f';
+var closeEnabled = process.env.CLOSEIO_ENABLED || 'false';
 
 var leadStatuses = {
 customer: {
@@ -31,5 +32,7 @@ module.exports = {
     CLOSEIO_CUSTOMER_STATUS_ID: leadStatuses.customer.id,
 
     CLOSEIO_ACTIVE_STATUS_LABEL: oppurtunityStatuses.active.label,
-    CLOSEIO_ACTIVE_STATUS_ID: oppurtunityStatuses.active.id
+    CLOSEIO_ACTIVE_STATUS_ID: oppurtunityStatuses.active.id,
+
+    CLOSIO_ENABLED: closeEnabled
 }
