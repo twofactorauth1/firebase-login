@@ -1185,6 +1185,10 @@
 #componentloader .navigation-v1 .nav-logo div.tooltip.bottom {
   margin-top: -30px;
 }
+#componentloader .nav-undernav .component {
+  position: relative;
+  z-index: 1;
+}
 #componentloader .navigation-v2 #header .navbar.navbar-default {
   border: none!important;
 }
@@ -2403,6 +2407,7 @@
   padding: 0;
   height: 100%;
   width: 100%;
+  clear: both;
   overflow: hidden;
   background-size: cover!important;
   position: relative;
@@ -2659,6 +2664,9 @@
   #componentloader .products-v1 .nav-tabs li {
     float: none;
   }
+}
+#componentloader .products-v1 .products .jumbotron {
+  position: relative;
 }
 #componentloader .products-v1 .strikethrough {
   font-size: 14px;

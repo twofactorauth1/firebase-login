@@ -935,7 +935,10 @@
           return $scope.website;
         };
         _modal.resolve.blog = function () {
-          return $scope.blog.post;
+          if($scope.postControl && $scope.postControl.getSinglePost)
+            return $scope.postControl.getSinglePost();
+          else
+            return $scope.blog.post;
         };
         _modal.resolve.isDirty = function () {
           return $scope.isDirty;

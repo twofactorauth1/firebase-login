@@ -1172,6 +1172,10 @@ ul.nav {
 .navigation-v1 .nav-logo div.tooltip.bottom {
   margin-top: -30px;
 }
+.nav-undernav .component {
+  position: relative;
+  z-index: 1;
+}
 .navigation-v2 #header .navbar.navbar-default {
   border: none!important;
 }
@@ -2400,6 +2404,7 @@ div[data-type="feature-block"] .component-inner {
   padding: 0;
   height: 100%;
   width: 100%;
+  clear: both;
   overflow: hidden;
   background-size: cover!important;
   position: relative;
@@ -2659,6 +2664,9 @@ div[data-type="feature-block"] .component-inner {
   .products-v1 .nav-tabs li {
     float: none;
   }
+}
+.products-v1 .products .jumbotron {
+  position: relative;
 }
 .products-v1 .strikethrough {
   font-size: 14px;

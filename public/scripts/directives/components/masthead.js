@@ -30,12 +30,11 @@ app.directive('mastheadComponent', ['$window', function ($window) {
               if (scope.allowFullScreen)
                 mastheadElement.css("height", $window.innerHeight + navHeight);
             }
-
+            angular.element(".undernav").addClass("nav-undernav");
             if (mastheadUnderNavElement)
               mastheadUnderNavElement.css("height", margin);
             if (angular.element(".masthead-actions"))
               angular.element(".masthead-actions").css("margin-top", margin - 4);
-
             $(window).trigger('scroll');
           } else {
             if (mastheadElement)
@@ -43,8 +42,7 @@ app.directive('mastheadComponent', ['$window', function ($window) {
             if (angular.element(".masthead-actions"))
               angular.element(".masthead-actions").css("margin-top", 0);
           }
-          
-        }, 300);
+        }, 0);
       };
     }
   }
