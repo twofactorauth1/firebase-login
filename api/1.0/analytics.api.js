@@ -18,6 +18,7 @@ var campaignManager = require('../../campaign/campaign_manager');
 var appConfig = require('../../configs/app.config');
 var accountDao = require('../../dao/account.dao');
 
+
 var api = function() {
     this.init.apply(this, arguments);
 };
@@ -120,18 +121,21 @@ _.extend(api.prototype, baseApi.prototype, {
     sendStripeEventToKeen: function(req, resp) {
         var self = this;
         self.log.debug('>> sendStripeEventToKeen', req.body);
+        var request = require('superagent');
 
         var msg = null;
         if(req.body) {
-            msg = JSON.stringify(req.body);
+            msg = req.body;
             self.log.debug('got message', msg);
             if(msg.data && msg.data.object && msg.data.object.customer) {
                 var customerId = msg.data.object.customer;
                 accountDao.getAccountByBillingCustomerId(customerId, function(err, account){
                     if(err) {
                         self.log.error('Error getting account by customerId', err);
-                    } else {
+                    } else if(account){
                         msg.accountId = account.id();
+                    } else {
+                        self.log.debug('could not find account for customerId:' + customerId);
                     }
                     //https://api.keen.io/3.0/projects/547edcea46f9a776b6579e2c/events/Stripe_Events?api_key=98f22da64681d5b81e2abb7323493526d8d258f0d355e95f742335b4ff1b75af2709baa51d16b60f168158fe7cfd8d1de89d637ddf8a9ca721859b009c4b004d443728df52346307e456f0511b3e82be4a96efaa9f6dcb7f847053e97eee2b796fc3e2d1a57bb1a86fb07d2e00894966
                     var url = "https://api.keen.io/3.0/projects/"+keenConfig.KEEN_PROJECT_ID+"/events/Stripe_Events";
@@ -150,6 +154,9 @@ _.extend(api.prototype, baseApi.prototype, {
                     );
                 });
             } else {
+                //self.log.debug('msg.data', msg.data);
+                //self.log.debug('msg.data.object', msg.data.object);
+                //self.log.debug('msg.data.object.customer', msg.data.object.customer);
                 self.log.debug('<< sendStripeEventToKeen (no customer)');
                 self.send200(resp);
             }
