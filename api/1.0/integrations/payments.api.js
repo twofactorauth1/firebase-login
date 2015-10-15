@@ -20,7 +20,7 @@ var async = require('async');
 var affiliates_manager = require('../../../affiliates/affiliate_manager');
 
 var Closeio = require('close.io');
-var closeioConfig = require('../../configs/closeio.config');
+var closeioConfig = require('../../../configs/closeio.config');
 var closeio = new Closeio(closeioConfig.CLOSEIO_API_KEY);
 
 var api = function () {
@@ -155,7 +155,7 @@ _.extend(api.prototype, baseApi.prototype, {
             "status_id": closeioConfig.CLOSEIO_CUSTOMER_STATUS_ID,
             "status_label": closeioConfig.CLOSEIO_CUSTOMER_STATUS_LABEL
         };
-        if(closeioConfig.CLOSIO_ENABLED) {
+        if(closeioConfig.CLOSEIO_ENABLED) {
             closeio.lead.update(updatedLead).then(function(lead){
                 fn();
             });
