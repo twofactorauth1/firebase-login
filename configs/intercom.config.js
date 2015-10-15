@@ -26,7 +26,7 @@ var intercomAppId = process.env.INTERCOM_APP_ID || 'ozyfh8ff';
 module.exports = {
     INTERCOM_API_KEY: intercomApiKey,
     INTERCOM_APP_ID: intercomAppId,
-    INTERCOM_USERS_LINK: "https://app.intercom.io/a/apps/ozyfh8ff/users/",
+    INTERCOM_USERS_LINK: "https://app.intercom.io/a/apps/" + intercomAppId + "/users/",
 
     //Production
     INTERCOM_PROD_API_KEY: '7eabdca2faff0115dcf9cf316078617cf707b0ad',

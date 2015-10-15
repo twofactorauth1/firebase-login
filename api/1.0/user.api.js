@@ -285,11 +285,12 @@ _.extend(api.prototype, baseApi.prototype, {
     updateLead: function(type, user, account, sub, fn) {
         var self = this;
         self.log.debug('sub: ', sub);
-        if (type === 'create') {
+        if (type === 'create') {//TODO: handle if type is not create
             intercom.getUser({
               "email" : user.attributes.email
             }, function(err, intercomData) {
                 if (err) {
+                    //TODO: return here.  intercomData is null anyway.
                     self.log.error('Error retrieving Intercom Data: ' + err);
                 }
                 var newuser = {
@@ -318,10 +319,10 @@ _.extend(api.prototype, baseApi.prototype, {
                 closeio.lead.create(newuser).then(function(lead){
                     var newop = {
                         "note": "",
-                        "confidence": 50,
+                        "confidence": 50,//TODO: put this in the config
                         "lead_id": lead.id,
                         "status_id": closeioConfig.CLOSEIO_ACTIVE_STATUS_ID,
-                        "value": 4995,
+                        "value": 4995, //TODO: put this in the config or get it from somewhere
                         "date_won": moment(new Date()).add(account.get('billing').trialLength, 'days').format('YYYY-M-D'),
                         "value_period": "monthly"
                     };
@@ -332,6 +333,7 @@ _.extend(api.prototype, baseApi.prototype, {
                             "close_lead_id" : lead.id
                           }
                         }, function(err, res) {
+                            //TODO: log an error
                             fn();
                         });
                     });
