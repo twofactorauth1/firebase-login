@@ -1172,6 +1172,10 @@ ul.nav {
 .navigation-v1 .nav-logo div.tooltip.bottom {
   margin-top: -30px;
 }
+.nav-undernav .component {
+  position: relative;
+  z-index: 1;
+}
 .navigation-v2 #header .navbar.navbar-default {
   border: none!important;
 }
