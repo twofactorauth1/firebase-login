@@ -371,7 +371,7 @@
                                             <div class="padding-15 center">
                                                 <h2 class="StepTitle text-white text-bold"><i class="fa fa-users fa-2x fa-inverse block margin-bottom-10"></i> Contacts</h2>
                                                 <p class="text-large margin-bottom-0">
-                                                    Who do you want to recieve this campaign?
+                                                    Who do you want to receive this campaign?
                                                     <br> Select the contacts grouped by tags or individual contacts.
                                                 </p>
                                             </div>
@@ -412,7 +412,7 @@
                                                             </div>
                                                         </tab>
                                                         <tab heading="by Email Address">
-                                                            <label class="text-muted">Enter emails manually or paste a comma seperated list. Emails already in contacts will be ignored.</label>
+                                                            <label class="text-muted">Enter emails manually or paste a comma-separated list. Emails already in contacts will be ignored.</label>
                                                             <div class="well well-sm">
                                                                 <tags-input ng-model="selectedCustomers.newEmails" add-on-paste="true" placeholder="Add a email" add-on-comma="true" allowed-tags-pattern="^[-a-z0-9~!$%^&*_=+}{\'?]+(\.[-a-z0-9~!$%^&*_=+}{\'?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+)*\.(aero|arpa|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|mobi|[a-z][a-z])|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$" on-tag-adding="checkContactExists($tag)">
                                                                 </tags-input>
@@ -431,7 +431,7 @@
                                             <button ng-click="openModal('customers-list-modal')" ng-if="recipients.length > 0" class="btn btn-primary btn-wide btn-o margin-bottom-15">View Full Contact List</button>
                                         </div>
                                         <div class="margin-bottom-30 center">
-                                            <span ng-if="recipients.length > 100" class="text-muted">(Showing 100 / {{recipients.length}} contacts. To view all contacts, Click "View Full Contact List" button.)</span>
+                                            <span ng-if="recipients.length > 100" class="text-muted">(Showing 100 / {{recipients.length}} contacts. To view all contacts, click "View Full Contact List" button.)</span>
                                             <div class="clearfix"></div>
                                             <span class="text-muted" ng-if="newCampaignObj.type != 'autoresponder'">{{recipients.length}} / {{customers.length}} contacts selected</span>
                                             <span class="text-muted" ng-if="newCampaignObj.type == 'autoresponder'">{{recipients.length}} contacts created</span>
