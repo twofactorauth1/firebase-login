@@ -9,7 +9,7 @@ app.directive('stExport', ['$http', '$timeout', 'OrderService', function($http, 
 		})
 	    function JSONToCSVConvertor(JSONData, ReportTitle, ShowLabel) {
 		    //If JSONData is not an object then JSON.parse will parse the JSON string in an Object
-		    var arrData = typeof JSONData != 'object' ? JSON.parse(JSONData) : JSONData;
+		    var arrData = !angular.isObject(JSONData) ? JSON.parse(JSONData) : JSONData;
 		    
 		    var CSV = '';    
 		    //Set Report title in first row or line
@@ -21,60 +21,59 @@ app.directive('stExport', ['$http', '$timeout', 'OrderService', function($http, 
 		    if (ShowLabel) {
 		        var row = "";		        
 		        //This loop will extract the label from 1st index of on array
-		        for (var index in arrData[0]) {
-		            if(showColumns.indexOf(index) !== -1)
+		        _.each(arrData[0], function (value, index) {
+		        	if(showColumns.indexOf(index) !== -1)
 		            //Now convert each value to string and comma-seprated
 		            	row += index + ',';
-		        }
+		        });
 		        row = row.slice(0, -1);		        
 		        //append Label row with line break
 		        CSV += row + '\r\n';
 		    }		    
 		    //1st loop is to extract each row
-		    for (var i = 0; i < arrData.length; i++) {
+		    _.each(arrData, function (value, i) {
 		        var row = "";
-		        //2nd loop will extract each column and convert it in string comma-seprated
-		        for (var index in arrData[i]) {	
+		        _.each(value, function (val, index) {
 		        	if(showColumns.indexOf(index) !== -1){
 		        		if(index == "line_items"){
 		        			var li_name = "";  
-		        			for (var li in arrData[i][index]) {
-		        				if(arrData[i][index].length - 1 == li){
-		        					li_name +=  arrData[i][index][li].name;
+		        			for (var li in val) {
+		        				if(val.length - 1 == li){
+		        					li_name +=  val[li].name;
 		        				}
 		        				else
-		        					li_name +=  arrData[i][index][li].name + '\r\n';
+		        					li_name +=  val[li].name + '\r\n';
 		        			}
 		        			row += '"' + li_name + '",';			
 		        		}
 		        		else if(index == "customer"){
-		        			row += '"' + (arrData[i][index] ? arrData[i][index]._full : '') + '",';			
+		        			row += '"' + (val ? val._full : '') + '",';			
 		        		}
 		        		else if(index == "notes"){
 		        			var notes = "";  
-		        			for (var nt in arrData[i][index]) {
-		        				if(arrData[i][index].length - 1 == nt){
-		        					notes +=  arrData[i][index][nt].note;
+		        			for (var nt in val) {
+		        				if(val.length - 1 == nt){
+		        					notes +=  val[nt].note;
 		        				}
 		        				else
-		        					notes +=  arrData[i][index][nt].note + '\r\n';
+		        					notes +=  val[nt].note + '\r\n';
 		        			}
 		        			row += '"' + notes + '",';			
 		        		}
 		        		else
-		        			row += '"' + arrData[i][index] + '",';
+		        			row += '"' + val + '",';
 		        	} 	
-		        }
+		        });
 		        row.slice(0, row.length - 1);		        
 		        //add a line break after each row
 		        CSV += row + '\r\n';
-		    }
+		    });
 		    if (CSV == '') {        
 		        alert("Invalid data");
 		        return;
 		    } 
 		    //Generate a file name
-		    var fileName = "OrderReport";
+		    var fileName = "Orders";
 		    //this will remove the blank-spaces from the title and replace it with an underscore
 		    fileName += ReportTitle.replace(/ /g,"_");   
 		    
