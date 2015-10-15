@@ -93,6 +93,26 @@ _.extend(api.prototype, baseApi.prototype, {
         });
     },
 
+
+    updateLead: function(account, fn) {
+        var self = this;
+        //update category
+        var updatedLead = {
+            "status_id": closeioConfig.CLOSEIO_CUSTOMER_STATUS_ID,
+            "status_label": closeioConfig.CLOSEIO_CUSTOMER_STATUS_LABEL
+        };
+        if(closeioConfig.CLOSEIO_ENABLED === 'true' || closeioConfig.CLOSEIO_ENABLED === true) {
+            closeio.lead.update(updatedLead).then(function(lead){
+                fn();
+            });
+        } else {
+            self.log.debug('Skipping call to close.io');
+            return fn();
+        }
+
+    },
+
+
     updateCurrentAccountBilling: function(req, res) {
         var self = this;
         self.log.debug('>> updateCurrentAccountBilling');
