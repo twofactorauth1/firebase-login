@@ -155,7 +155,7 @@ _.extend(api.prototype, baseApi.prototype, {
             "status_id": closeioConfig.CLOSEIO_CUSTOMER_STATUS_ID,
             "status_label": closeioConfig.CLOSEIO_CUSTOMER_STATUS_LABEL
         };
-        if(closeioConfig.CLOSIO_ENABLED) {
+        if(closeioConfig.CLOSEIO_ENABLED) {
             closeio.lead.update(updatedLead).then(function(lead){
                 fn();
             });
