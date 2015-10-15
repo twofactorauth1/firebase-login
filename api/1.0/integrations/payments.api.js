@@ -19,6 +19,10 @@ var contactDao = require('../../../dao/contact.dao');
 var async = require('async');
 var affiliates_manager = require('../../../affiliates/affiliate_manager');
 
+var Closeio = require('close.io');
+var closeioConfig = require('../../configs/closeio.config');
+var closeio = new Closeio(closeioConfig.CLOSEIO_API_KEY);
+
 var api = function () {
     this.init.apply(this, arguments);
 };
@@ -144,6 +148,24 @@ _.extend(api.prototype, baseApi.prototype, {
         });
     },
 
+    updateLead: function(account, fn) {
+        var self = this;
+        //update category
+        var updatedLead = {
+            "status_id": closeioConfig.CLOSEIO_CUSTOMER_STATUS_ID,
+            "status_label": closeioConfig.CLOSEIO_CUSTOMER_STATUS_LABEL
+        };
+        if(closeioConfig.CLOSIO_ENABLED) {
+            closeio.lead.update(updatedLead).then(function(lead){
+                fn();
+            });
+        } else {
+            self.log.debug('Skipping call to close.io');
+            return fn();
+        }
+
+    },
+
     /**
      * This method creates a subscription to an indigenous plan, and then updates the account billing information
      * @param req
@@ -236,7 +258,10 @@ _.extend(api.prototype, baseApi.prototype, {
                                 cb(err);
                             }
                             stripeSubscription = sub;
-                            cb(null, sub.id);
+                            //update close.io
+                            self.updateLead(account, function() {
+                                cb(null, sub.id);
+                            });
                         });
                     }
                 });
