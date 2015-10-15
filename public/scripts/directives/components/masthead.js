@@ -42,7 +42,7 @@ app.directive('mastheadComponent', ['$window', function ($window) {
             if (angular.element(".masthead-actions"))
               angular.element(".masthead-actions").css("margin-top", 0);
           }
-        }, 0);
+        }, 300);
       };
     }
   }
