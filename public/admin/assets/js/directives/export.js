@@ -3,11 +3,11 @@ app.directive('stExport', ['$http', '$timeout', 'OrderService', function($http, 
   return {
     require:'^stTable',
     link:function(scope, element, attr,ctrl){
-      element.bind('click',function(){
-        //OrderService.exportToCSV();
-        JSONToCSVConvertor(ctrl.getFilteredCollection(), "", true);
-      })
-        function JSONToCSVConvertor(JSONData, ReportTitle, ShowLabel) {
+		element.bind('click',function(){
+		    //OrderService.exportToCSV();
+		    JSONToCSVConvertor(ctrl.getFilteredCollection(), "", true);
+		})
+	    function JSONToCSVConvertor(JSONData, ReportTitle, ShowLabel) {
 		    //If JSONData is not an object then JSON.parse will parse the JSON string in an Object
 		    var arrData = typeof JSONData != 'object' ? JSON.parse(JSONData) : JSONData;
 		    
@@ -83,9 +83,9 @@ app.directive('stExport', ['$http', '$timeout', 'OrderService', function($http, 
 				type: "text/csv;charset="+ charset + ";"
 			});
 			if (window.navigator.msSaveOrOpenBlob) 
-            	window.navigator.msSaveBlob(blob, fileName + ".csv");
-            else{
-            	//Initialize file format you want csv or xls
+	        	window.navigator.msSaveBlob(blob, fileName + ".csv");
+	        else{
+	        	//Initialize file format you want csv or xls
 			    var uri = 'data:text/csv;charset=utf-8,' + escape(CSV);			    
 			    var link = document.createElement("a");    
 			    link.href = uri;
@@ -98,7 +98,7 @@ app.directive('stExport', ['$http', '$timeout', 'OrderService', function($http, 
 			    document.body.appendChild(link);
 			    link.click();
 			    document.body.removeChild(link);
-            }
+	        }
 		}
     }
   }  
