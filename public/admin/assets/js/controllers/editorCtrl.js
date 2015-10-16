@@ -1229,6 +1229,12 @@
       });
     };
 
+    $scope.goToCampaignsPage = function() {
+      $location.path('/marketing/campaigns');
+      $location.search('email', null);
+      $scope.closeModal();
+    };
+
     /*
      * @validateNewPage
      * -

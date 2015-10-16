@@ -5,7 +5,7 @@
     </div>
     <form name="testEmailForm" novalidate>
         <div class="modal-body bg-white" style="max-height:500px;overflow:auto">
-            <span class="help-block">Enter an email to send the test.</span>
+            <span class="help-block">Enter recipient email. For more send options, create a <a ng-click="goToCampaignsPage()" href="/admin/#/marketing/campaigns">campaign</a>.</span>
             <div class="form-group" ng-class="{ 'has-error' : testEmailForm.email.$invalid && !testEmailForm.email.$pristine }">
                 <label>Email*</label>
                 <input name="email" ng-model-options="{ debounce: 800 }" ng-pattern="emailValidation" class="form-control" type="email" ng-model="testemail.email" required>
