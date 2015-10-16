@@ -43,6 +43,11 @@ app.directive('thumbnailSliderComponent', ['$window', function ($window) {
         }
         return newArr;
       };
+      angular.element(document).ready(function () {
+        setTimeout(function () {
+          $('.carousel-control.right').trigger('click');
+        }, 2000)
+      });
     }
   }
 }]);
