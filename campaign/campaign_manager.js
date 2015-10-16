@@ -181,7 +181,12 @@ module.exports = {
                                 } else {
                                     //we can return here.  We have deleted existing flows and created new (correct) ones.
                                     self.log.debug('<< updateCampaign');
-                                    return fn(null, updatedCampaign);
+                                    fn(null, updatedCampaign);
+                                    if(updatedCampaign.get('status') === $$.m.Campaign.status.RUNNING) {
+                                        //kick off the flows
+                                        self._startCampaignFlows(updatedCampaign);
+                                    }
+                                    return;
                                 }
                             });
                         } else {
@@ -218,7 +223,11 @@ module.exports = {
                                             if(err) {
                                                 self.log.error('Error updating flow steps.  Campaign steps will NOT start.', err);
                                             } else {
-                                                self._startCampaignFlows(updatedCampaign);
+                                                if(updatedCampaign.get('status') === $$.m.Campaign.status.RUNNING) {
+                                                    //kick off the flows
+                                                    self._startCampaignFlows(updatedCampaign);
+                                                }
+                                                return;
                                             }
                                         });
                                     }
@@ -227,8 +236,8 @@ module.exports = {
                                 if(updatedCampaign.get('status') === $$.m.Campaign.status.RUNNING) {
                                     //kick off the flows
                                     self._startCampaignFlows(updatedCampaign);
-                                    return;
                                 }
+                                return;
                             }
                         }
                     }
