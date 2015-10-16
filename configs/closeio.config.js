@@ -12,16 +12,18 @@ var closeIOApiKey = process.env.CLOSEIO_API_KEY || 'e349a7ec2fcc8370231d85455f21
 var closeEnabled = process.env.CLOSEIO_ENABLED || 'true';
 
 var leadStatuses = {
-customer: {
-	label: "Customer",
-	id: "stat_rxJ0q0eTtPzgo1a1HjrzWxdrnjHT9XQs8NvK6bm6GJY"
-}};
+    customer: {
+	    label: "Customer",
+	    id: "stat_rxJ0q0eTtPzgo1a1HjrzWxdrnjHT9XQs8NvK6bm6GJY"
+    }
+};
 
 var oppurtunityStatuses = {
-active: {
-	label: "Active",
-	id: "stat_qfQbJm5FjlvX6S6tnVSmmbmyg2bQklS9JW4XzF53N2j"
-}};
+    active: {
+	    label: "Active",
+	    id: "stat_qfQbJm5FjlvX6S6tnVSmmbmyg2bQklS9JW4XzF53N2j"
+    }
+};
 
 module.exports = {
     CLOSEIO_API_KEY: closeIOApiKey,
