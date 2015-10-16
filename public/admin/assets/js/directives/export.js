@@ -15,7 +15,7 @@ app.directive('stExport', ['$http', '$timeout', 'OrderService', function($http, 
 		    //Set Report title in first row or line
 		    if(ReportTitle.length)
 		    	CSV += ReportTitle + '\r\n\n';
-		    var showColumns = ["customer","order_id","completed_at","updated_at","created_at","status","total","total_discount","tax_rate","total_tax","subtotal","shipping_tax","cart_tax","currency","line_items","total_line_items_quantity","notes"];  
+		    var showColumns = ["customer","order_id","completed_at","updated_at","created_at","status","total","total_discount","tax_rate","total_tax","subtotal","shipping_tax","cart_tax","currency","line_sku","line_items","line_quantity","total_line_items_quantity","notes"];
 
 		    //This condition will generate the Label/Header
 		    if (ShowLabel) {
@@ -36,15 +36,31 @@ app.directive('stExport', ['$http', '$timeout', 'OrderService', function($http, 
 		        _.each(value, function (val, index) {
 		        	if(showColumns.indexOf(index) !== -1){
 		        		if(index == "line_items"){
-		        			var li_name = "";  
+		        			var li_name = "";
+							var li_sku = "";
+							var li_qty = "";
+							row += '"';
+
 		        			for (var li in val) {
-		        				if(val.length - 1 == li){
-		        					li_name +=  val[li].name;
-		        				}
-		        				else
-		        					li_name +=  val[li].name + '\r\n';
-		        			}
-		        			row += '"' + li_name + '",';			
+								li_name += val[li].name;
+								li_sku += val[li].sku;
+								li_qty += val[li].quantity;
+
+								if (li_qty) {
+									row += li_qty + ' ea. ';
+								}
+
+								row += li_name;
+
+								if (li_sku && (li_sku != 'null')) {
+									row += ' (' + li_sku + ')';
+								}
+
+								if (val.length - 1 != li) {
+									row += '\r\n';
+								}
+							}
+							row += '",';
 		        		}
 		        		else if(index == "customer"){
 		        			row += '"' + (val ? val._full : '') + '",';			
