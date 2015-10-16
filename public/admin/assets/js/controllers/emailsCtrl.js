@@ -20,7 +20,7 @@
     WebsiteService.getEmails(true, function (emails) {
       $timeout(function () {
         $scope.$apply(function () {
-          $scope.emails = emails;
+          $scope.emails = angular.copy(emails);
         });
       });
     });
@@ -200,7 +200,7 @@
           toaster.pop('success', 'Email Created', 'The ' + newemail.title + ' email was created successfully.');
           $scope.emails.unshift(newemail);
           $scope.displayedEmails.unshift(newemail);
-          angular.copy($scope.newEmailOriginal, $scope.newEmail);
+          $scope.newEmailOriginal = angular.copy($scope.newEmail);
           $scope.closeModal();
         } else if(err) {
           toaster.pop('error', "Error creating Email", err.message);
