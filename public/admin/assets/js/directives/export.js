@@ -42,9 +42,9 @@ app.directive('stExport', ['$http', '$timeout', 'OrderService', function($http, 
 							row += '"';
 
 		        			for (var li in val) {
-								li_name += val[li].name;
-								li_sku += val[li].sku;
-								li_qty += val[li].quantity;
+								li_name = val[li].name;
+								li_sku = val[li].sku;
+								li_qty = val[li].quantity;
 
 								if (li_qty) {
 									row += li_qty + ' ea. ';
@@ -57,7 +57,7 @@ app.directive('stExport', ['$http', '$timeout', 'OrderService', function($http, 
 								}
 
 								if (val.length - 1 != li) {
-									row += '\r\n';
+									row += '\r';
 								}
 							}
 							row += '",';
