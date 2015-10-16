@@ -30,8 +30,15 @@ var geoiputil = {
              }
              */
             log.debug('<< getGeoForIP', body);
-            var json = JSON.parse(body);
-            return fn(null, json);
+            try {
+                var json = JSON.parse(body);
+                return fn(null, json);
+            } catch(exception) {
+                log.warn('Exception parsing geoIP return:', exception);
+                return fn(null, null);
+            }
+
+
         });
     }
 
