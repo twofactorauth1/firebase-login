@@ -391,15 +391,19 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                             if (data && data.accountUrl) {
                                 console.log('$location ', $location);
                                 if ($location.host() === 'indigenous.io' || $location.host() === 'www.indigenous.io') {
-                                    var hash = CryptoJS.HmacSHA256(newUser.email, "vZ7kG_bS_S-jnsNq4M2Vxjsa5mZCxOCJM9nezRUQ");
-                                    //send data to intercom
-                                    window.intercomSettings = {
-                                        name: newUser.username,
-                                        email: newUser.email,
-                                        user_hash: hash.toString(CryptoJS.enc.Hex),
-                                        created_at: Math.floor(Date.now() / 1000),
-                                        app_id: "b3st2skm"
-                                    };
+                                    /*
+                                     * We will now create the intercom user in the admin
+                                     * var hash = CryptoJS.HmacSHA256(newUser.email, "vZ7kG_bS_S-jnsNq4M2Vxjsa5mZCxOCJM9nezRUQ");
+                                     //send data to intercom
+                                     window.intercomSettings = {
+                                     name: newUser.username,
+                                     email: newUser.email,
+                                     user_hash: hash.toString(CryptoJS.enc.Hex),
+                                     created_at: Math.floor(Date.now() / 1000),
+                                     app_id: "b3st2skm"
+                                     };
+                                     */
+
                                     //send facebook tracking info
                                     window._fbq = window._fbq || [];
                                     window._fbq.push(['track', '6032779610613', {'value':'0.00','currency':'USD'}]);
