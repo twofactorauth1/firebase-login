@@ -22,6 +22,7 @@ var appConfig = require('../../configs/app.config');
 var orderManager = require('../../orders/order_manager');
 var campaignManager = require('../../campaign/campaign_manager');
 var moment = require('moment');
+var CryptoJS = require('crypto-js');
 
 var Closeio = require('close.io');
 var closeioConfig = require('../../configs/closeio.config');
@@ -29,10 +30,7 @@ var closeio = new Closeio(closeioConfig.CLOSEIO_API_KEY);
 
 var Intercom = require('intercom.io');
 var intercomConfig = require('../../configs/intercom.config');
-var intercom = new Intercom({
-  apiKey: intercomConfig.INTERCOM_API_KEY,
-  appId: intercomConfig.INTERCOM_APP_ID
-});
+var intercom = new Intercom(intercomConfig.INTERCOM_APP_ID, intercomConfig.INTERCOM_API_KEY);
 
 var api = function() {
     this.init.apply(this, arguments);
@@ -89,7 +87,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var result = {
             activeAccount: req.session.accountId,
             accounts: req.session.accounts
-        }
+        };
         self.log.debug('<< getUserAccounts');
         self.sendResult(resp, result);
     },
@@ -217,7 +215,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 }
                 var accountId = parseInt(self.accountId(req));
                 if(_.contains(value.getAllAccountIds(), accountId)) {
-                    var responseObj =  value.toJSON("public", {accountId:self.accountId(req)})
+                    var responseObj =  value.toJSON("public", {accountId:self.accountId(req)});
                     self.log.debug('<< getUserById');
                     self.checkPermissionAndSendResponse(req, self.sc.privs.VIEW_USER, resp, responseObj);
                 } else {
@@ -282,17 +280,34 @@ _.extend(api.prototype, baseApi.prototype, {
 
     },
 
-    updateLead: function(type, user, account, sub, fn) {
+    createLead: function(user, account, sub, fn) {
         var self = this;
         self.log.debug('sub: ', sub);
-        if (type === 'create') {
-            intercom.getUser({
-              "email" : user.attributes.email
-            }, function(err, intercomData) {
+
+
+        var hash = CryptoJS.HmacSHA256(user.get('email'), intercomConfig.INTERCOM_SECRET_KEY);
+        self.log.debug('calculated hash:', hash.toString(CryptoJS.enc.Hex));
+        self.log.debug('APP_ID:' + intercomConfig.INTERCOM_APP_ID);
+        self.log.debug("API_KEY:" + intercomConfig.INTERCOM_API_KEY);
+        intercom.createUser({
+                name: user.get('first') + ' ' + user.get('last'),
+                email: user.get('email'),
+                //user_hash: hash.toString(CryptoJS.enc.Hex),
+                created_at: Math.floor(Date.now() / 1000)
+            },
+            function(err, intercomData){
                 if (err) {
-                    self.log.error('Error retrieving Intercom Data: ' + err);
+                    self.log.error('Error retrieving Intercom Data: ', err);
                     return fn();
                 }
+                user.set('intercomHash', hash.toString());
+                userDao.saveOrUpdate(user, function(err, updatedUser){
+                    if(err) {
+                        self.log.warn('intercom hash not stored on user:', err);
+                        //not throwing an error.  We should not stop the flow for this.
+                    }
+                });
+
                 var newuser = {
                     "name": user.attributes.first+' '+user.attributes.last,
                     "url": account.attributes.subdomain+'.indigenous.io',
@@ -305,12 +320,6 @@ _.extend(api.prototype, baseApi.prototype, {
                                     "type": "office",
                                     "email": user.attributes.email
                                 }
-                            ],
-                            "phones":[
-                                {
-                                    "type":"mobile",
-                                    "phone": account.get('business').phones[0].number
-                                }
                             ]
                         }
                     ],
@@ -322,8 +331,16 @@ _.extend(api.prototype, baseApi.prototype, {
                         "Signup Date": account.attributes.billing.signupDate
                     }
                 };
+                if(account.get('business').phones && account.get('business').phones[0]) {
+                    var phone = account.get('business').phones[0].number;
+                    newuser.contacts[0].phones = [];
+                    newuser.contacts[0].phones.push({type:'mobile', phone:phone});
+                }
+
                 if(closeioConfig.CLOSEIO_ENABLED === 'true' || closeioConfig.CLOSEIO_ENABLED === true) {
+                    self.log.debug('calling close');
                     closeio.lead.create(newuser).then(function(lead){
+                        self.log.debug('returned from close:', lead);
                         var newop = {
                             "note": "",
                             "confidence": 50,//TODO: put this in the config
@@ -343,25 +360,24 @@ _.extend(api.prototype, baseApi.prototype, {
                                 if(err) {
                                     self.log.error('Error updating close.io:', err);
                                 }
-                                fn();
+                                fn(null, lead.id);
                             });
                         });
                     });
                 } else {
                     self.log.debug('skipping call to closeio');
-                    return fn();
+                    return fn(null, null);
                 }
+            }
+        );
 
-            });
-        } else {
-            self.log.warn('unknown type [' + type + ']');
-            return fn();
-        }
+
+
 
     },
 
     initializeUserAndAccount: function(req, res) {
-        var self = this, user, accountToken, deferred;
+        var self = this, user, deferred;
         self.log.debug('>> initializeUserAndAccount');
         console.dir(req.body);
 
@@ -562,12 +578,17 @@ _.extend(api.prototype, baseApi.prototype, {
                             } else {
                                 self.log.debug('Created customer for user:' + user.id());
 
-                                self.updateLead('create', user, account, sub, function() {
+                                self.createLead(user, account, sub, function(err, leadId) {
 
                                     userManager.sendWelcomeEmail(accountId, account, user, email, username, contact.id(), function(){
                                         self.log.debug('Sent welcome email');
                                     });
-
+                                    if(leadId) {
+                                        //set the close.io leadId in the account billing section.
+                                        var billing = account.get('billing');
+                                        billing.closeLeadID = leadId;
+                                        accountDao.saveOrUpdate(account, function(){});
+                                    }
                                      /*
                                      * If there is a campaign associated with this new user, update it async.
                                      */
@@ -643,7 +664,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
 
     createUser: function(req,resp) {
-        var self = this, user, accountToken, deferred;
+        var self = this, user, deferred;
         self.log.debug('>> createUser');
 
         var username = req.body.username;
@@ -685,7 +706,7 @@ _.extend(api.prototype, baseApi.prototype, {
         // }
 
         //ensure we don't have another user with this username;
-        var accountToken = cookies.getAccountToken(req);
+        accountToken = cookies.getAccountToken(req);
 
         self.log.debug('>> username', username);
         self.log.debug('>> password1', password1);
@@ -729,7 +750,7 @@ _.extend(api.prototype, baseApi.prototype, {
                     });
                 } else {
                     self.log.debug('createUserFromUsernamePassword >>> ERROR');
-                    req.flash("error", value.toString());
+
                     return resp.redirect("/page/signup");//TODO: Fix this
                 }
         });
@@ -770,7 +791,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
                     self.sendResultOrError(resp, err, responseObj, 'Error creating user');
                     self.createUserActivity(req, 'CREATE_USER', null, {username: user.username}, function(){});
-                    return;;
+                    return;
                 });
             }
         });

@@ -187,7 +187,8 @@ var user = $$.m.ModelBase.extend({
         account: {
           default_tab: "account_information"
         }
-      }
+      },
+      intercomHash:""
     };
   },
 

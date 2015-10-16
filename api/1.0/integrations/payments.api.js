@@ -150,13 +150,15 @@ _.extend(api.prototype, baseApi.prototype, {
 
     updateLead: function(account, fn) {
         var self = this;
+        self.log.debug('updating lead');
         //update category
         var updatedLead = {
             "status_id": closeioConfig.CLOSEIO_CUSTOMER_STATUS_ID,
             "status_label": closeioConfig.CLOSEIO_CUSTOMER_STATUS_LABEL
         };
         if(closeioConfig.CLOSEIO_ENABLED) {
-            closeio.lead.update(updatedLead).then(function(lead){
+            var leadId = account.get('billing').closeLeadID;
+            closeio.lead.update(leadId, updatedLead).then(function(lead){
                 fn();
             });
         } else {
@@ -287,7 +289,9 @@ _.extend(api.prototype, baseApi.prototype, {
             function sendConversionEmail(account, cb){
                 //TODO: if we need a conversion email, add it here
                 //update close.io
+                self.log.debug('About to call close');
                 self.updateLead(account, function() {
+                    self.log.debug('Back from call');
                     cb(null, account);
                 });
             },
