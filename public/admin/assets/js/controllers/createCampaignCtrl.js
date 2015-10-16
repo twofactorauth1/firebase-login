@@ -50,15 +50,6 @@
 
     $scope.emails = [];
 
-    // if ($scope.isEditable && $scope.watchDeliveryDate) {
-    //   $scope.$watch('delivery.date', function() {
-    //     if ($scope.emails.length) {
-    //       console.log('should set date?')
-    //       // $scope.setDate();
-    //     }
-    //   });
-    // }
-
     $scope.formatDate = function (date) {
       var localDate = moment(date);
       // var offset = moment().utcOffset();
@@ -1015,7 +1006,7 @@
           valid = false;
         else if (i === 3 && (!$scope.emailToSend.title || $scope.emailTitleExists))
           valid = false;
-        else if (i === 4 && (scope.newCampaignObj.type == 'onetime' && !$scope.recipients.length && !$scope.checkNewRecipients()))
+        else if (i === 4 && ($scope.newCampaignObj.type == 'onetime' && !$scope.recipients.length && !$scope.checkNewRecipients()))
           valid = false;
         else if (i === 5 && $scope.whenToSend === 'later' && $scope.newCampaignObj.type === 'onetime') {
           $scope.updateTime();
