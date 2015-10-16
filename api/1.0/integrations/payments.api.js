@@ -258,10 +258,7 @@ _.extend(api.prototype, baseApi.prototype, {
                                 cb(err);
                             }
                             stripeSubscription = sub;
-                            //update close.io
-                            self.updateLead(account, function() {
-                                cb(null, sub.id);
-                            });
+                            cb(null, sub.id);
                         });
                     }
                 });
@@ -289,7 +286,10 @@ _.extend(api.prototype, baseApi.prototype, {
             },
             function sendConversionEmail(account, cb){
                 //TODO: if we need a conversion email, add it here
-                cb(null, account);
+                //update close.io
+                self.updateLead(account, function() {
+                    cb(null, account);
+                });
             },
             function findContactForUser(account, cb){
                 var email = null;
