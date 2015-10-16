@@ -40,7 +40,6 @@
 
     $scope.getCustomers = function () {
       CustomerService.getCustomers(function (customers) {
-          debugger;
         _.each(customers, function (customer) {
           customer.bestEmail = $scope.checkBestEmail(customer);
           customer.hasFacebookId = $scope.checkFacebookId(customer);
