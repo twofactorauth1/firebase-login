@@ -519,7 +519,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 var fromContactEmail = req.body.fromEmail;
                 var campaignId = req.body.campaignId;
                 var emailId = req.body.emailId;
-                var sendEmail = JSON.parse(req.body.sendEmail);
+                var sendEmail = req.body.sendEmail;
                 var fromContactName = req.body.fromName;
                 var activity = req.body.activity;
                 var contact_type = req.body.contact_type;
