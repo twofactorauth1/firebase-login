@@ -276,24 +276,29 @@
      */
 
     $scope.addNote = function () {
+      
+      if (!$scope.order.notes) {
+        $scope.order.notes = [];
+      }
+
+      var date = moment();
+      var _noteToPush = {
+        note: $scope.newNote,
+        user_id: $scope.currentUser._id,
+        date: date.toISOString()
+      };
+
+      $scope.order.notes.push(_noteToPush);
+
+      $scope.pushLocalNote($scope.order, true);
+
       if ($scope.order && $scope.order._id) {
-        OrderService.completeOrder($scope.order._id, $scope.newNote, function (updatedOrder) {
+        OrderService.updateOrder($scope.order, function (updatedOrder) {
           toaster.pop('success', 'Note added to order.');
           $scope.newNote = '';
-          $scope.pushLocalNote(updatedOrder);
+          $scope.order = updatedOrder;
         });
       } else if ($scope.order) {
-        if (!$scope.order.notes) {
-          $scope.order.notes = [];
-        }
-        var date = moment();
-        var _noteToPush = {
-          note: $scope.newNote,
-          user_id: $scope.currentUser._id,
-          date: date.toISOString()
-        };
-        $scope.order.notes.push(_noteToPush);
-        $scope.pushLocalNote($scope.order, true);
         $scope.newNote = '';
       }
 
