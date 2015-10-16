@@ -202,6 +202,7 @@
           $scope.displayedEmails.unshift(newemail);
           $scope.newEmailOriginal = angular.copy($scope.newEmail);
           $scope.closeModal();
+          $scope.viewSingle(newemail);
         } else if(err) {
           toaster.pop('error', "Error creating Email", err.message);
         }
