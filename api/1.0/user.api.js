@@ -350,19 +350,25 @@ _.extend(api.prototype, baseApi.prototype, {
                             "date_won": moment(new Date()).add(account.get('billing').trialLength, 'days').format('YYYY-M-D'),
                             "value_period": "monthly"
                         };
-                        closeio.opportunity.create(newop).then(function(opp){
-                            intercom.updateUser({
-                                "email" : user.attributes.email,
-                                "custom_attributes" : {
-                                    "close_lead_id" : lead.id
-                                }
-                            }, function(err, res) {
-                                if(err) {
-                                    self.log.error('Error updating close.io:', err);
-                                }
-                                fn(null, lead.id);
+                        try {
+                            closeio.opportunity.create(newop).then(function(opp){
+                                intercom.updateUser({
+                                    "email" : user.attributes.email,
+                                    "custom_attributes" : {
+                                        "close_lead_id" : lead.id
+                                    }
+                                }, function(err, res) {
+                                    if(err) {
+                                        self.log.error('Error updating close.io:', err);
+                                    }
+                                    fn(null, lead.id);
+                                });
                             });
-                        });
+                        } catch(exception) {
+                            self.log.error('Exception calling close:', exception);
+                            fn(null, lead.id);
+                        }
+
                     });
                 } else {
                     self.log.debug('skipping call to closeio');
