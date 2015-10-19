@@ -21,6 +21,16 @@ var contactDao = require('../../dao/contact.dao');
 var appConfig = require('../../configs/app.config');
 var orderManager = require('../../orders/order_manager');
 var campaignManager = require('../../campaign/campaign_manager');
+var moment = require('moment');
+var CryptoJS = require('crypto-js');
+
+var Closeio = require('close.io');
+var closeioConfig = require('../../configs/closeio.config');
+var closeio = new Closeio(closeioConfig.CLOSEIO_API_KEY);
+
+var Intercom = require('intercom.io');
+var intercomConfig = require('../../configs/intercom.config');
+var intercom = new Intercom(intercomConfig.INTERCOM_APP_ID, intercomConfig.INTERCOM_API_KEY);
 
 var api = function() {
     this.init.apply(this, arguments);
@@ -77,7 +87,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var result = {
             activeAccount: req.session.accountId,
             accounts: req.session.accounts
-        }
+        };
         self.log.debug('<< getUserAccounts');
         self.sendResult(resp, result);
     },
@@ -205,7 +215,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 }
                 var accountId = parseInt(self.accountId(req));
                 if(_.contains(value.getAllAccountIds(), accountId)) {
-                    var responseObj =  value.toJSON("public", {accountId:self.accountId(req)})
+                    var responseObj =  value.toJSON("public", {accountId:self.accountId(req)});
                     self.log.debug('<< getUserById');
                     self.checkPermissionAndSendResponse(req, self.sc.privs.VIEW_USER, resp, responseObj);
                 } else {
@@ -270,8 +280,104 @@ _.extend(api.prototype, baseApi.prototype, {
 
     },
 
+    createLead: function(user, account, sub, fn) {
+        var self = this;
+        self.log.debug('sub: ', sub);
+
+
+        var hash = CryptoJS.HmacSHA256(user.get('email'), intercomConfig.INTERCOM_SECRET_KEY);
+        self.log.debug('calculated hash:', hash.toString(CryptoJS.enc.Hex));
+        self.log.debug('APP_ID:' + intercomConfig.INTERCOM_APP_ID);
+        self.log.debug("API_KEY:" + intercomConfig.INTERCOM_API_KEY);
+        intercom.createUser({
+                name: user.get('first') + ' ' + user.get('last'),
+                email: user.get('email'),
+                //user_hash: hash.toString(CryptoJS.enc.Hex),
+                created_at: Math.floor(Date.now() / 1000)
+            },
+            function(err, intercomData){
+                if (err) {
+                    self.log.error('Error retrieving Intercom Data: ', err);
+                    return fn();
+                }
+                user.set('intercomHash', hash.toString());
+                userDao.saveOrUpdate(user, function(err, updatedUser){
+                    if(err) {
+                        self.log.warn('intercom hash not stored on user:', err);
+                        //not throwing an error.  We should not stop the flow for this.
+                    }
+                });
+
+                var newuser = {
+                    "name": user.attributes.first+' '+user.attributes.last,
+                    "url": account.attributes.subdomain+'.indigenous.io',
+                    "contacts": [
+                        {
+                            "name": user.attributes.first+' '+user.attributes.last,
+                            "title": "",
+                            "emails": [
+                                {
+                                    "type": "office",
+                                    "email": user.attributes.email
+                                }
+                            ]
+                        }
+                    ],
+                    "custom": {
+                        "Intercom Chat": intercomConfig.INTERCOM_USERS_LINK+intercomData.id,
+                        "Account URL": account.attributes.subdomain+'.indigenous.io',
+                        "Account ID": account.attributes._id,
+                        "User ID": user.attributes._id,
+                        "Signup Date": account.attributes.billing.signupDate
+                    }
+                };
+                if(account.get('business').phones && account.get('business').phones[0]) {
+                    var phone = account.get('business').phones[0].number;
+                    newuser.contacts[0].phones = [];
+                    newuser.contacts[0].phones.push({type:'mobile', phone:phone});
+                }
+
+                if(closeioConfig.CLOSEIO_ENABLED === 'true' || closeioConfig.CLOSEIO_ENABLED === true) {
+                    self.log.debug('calling close');
+                    closeio.lead.create(newuser).then(function(lead){
+                        self.log.debug('returned from close:', lead);
+                        var newop = {
+                            "note": "",
+                            "confidence": 50,//TODO: put this in the config
+                            "lead_id": lead.id,
+                            "status_id": closeioConfig.CLOSEIO_ACTIVE_STATUS_ID,
+                            "value": 4995, //TODO: put this in the config or get it from somewhere
+                            "date_won": moment(new Date()).add(account.get('billing').trialLength, 'days').format('YYYY-M-D'),
+                            "value_period": "monthly"
+                        };
+                        closeio.opportunity.create(newop).then(function(opp){
+                            intercom.updateUser({
+                                "email" : user.attributes.email,
+                                "custom_attributes" : {
+                                    "close_lead_id" : lead.id
+                                }
+                            }, function(err, res) {
+                                if(err) {
+                                    self.log.error('Error updating close.io:', err);
+                                }
+                                fn(null, lead.id);
+                            });
+                        });
+                    });
+                } else {
+                    self.log.debug('skipping call to closeio');
+                    return fn(null, null);
+                }
+            }
+        );
+
+
+
+
+    },
+
     initializeUserAndAccount: function(req, res) {
-        var self = this, user, accountToken, deferred;
+        var self = this, user, deferred;
         self.log.debug('>> initializeUserAndAccount');
         console.dir(req.body);
 
@@ -472,64 +578,73 @@ _.extend(api.prototype, baseApi.prototype, {
                             } else {
                                 self.log.debug('Created customer for user:' + user.id());
 
-                                userManager.sendWelcomeEmail(accountId, account, user, email, username, contact.id(), function(){
-                                    self.log.debug('Sent welcome email');
-                                });
+                                self.createLead(user, account, sub, function(err, leadId) {
 
-                                 /*
-                                 * If there is a campaign associated with this new user, update it async.
-                                 */
-                                if(campaignId) {
-                                    self.log.debug('Updating campaign with id: ' + campaignId);
-                                    campaignManager.handleCampaignSignupEvent(appConfig.mainAccountID, campaignId, contact.id(), function(err, value){
-                                        if(err) {
-                                            self.log.error('Error handling campaign signup: ' + err);
-                                        } else {
-                                            self.log.debug('Handled signup.');
+                                    userManager.sendWelcomeEmail(accountId, account, user, email, username, contact.id(), function(){
+                                        self.log.debug('Sent welcome email');
+                                    });
+                                    if(leadId) {
+                                        //set the close.io leadId in the account billing section.
+                                        var billing = account.get('billing');
+                                        billing.closeLeadID = leadId;
+                                        accountDao.saveOrUpdate(account, function(){});
+                                    }
+                                     /*
+                                     * If there is a campaign associated with this new user, update it async.
+                                     */
+                                    if(campaignId) {
+                                        self.log.debug('Updating campaign with id: ' + campaignId);
+                                        campaignManager.handleCampaignSignupEvent(appConfig.mainAccountID, campaignId, contact.id(), function(err, value){
+                                            if(err) {
+                                                self.log.error('Error handling campaign signup: ' + err);
+                                            } else {
+                                                self.log.debug('Handled signup.');
+                                            }
+                                        });
+                                    }
+
+                                    var activity = new $$.m.ContactActivity({
+                                        accountId: appConfig.mainAccountID,
+                                        contactId: contact.id(),
+                                        activityType: $$.m.ContactActivity.types.SUBSCRIBE,
+                                        detail : "Subscribed to Indigenous",
+                                        start: new Date(),
+                                        extraFields: {
+                                            plan: plan,
+                                            setupFee: setupFee,
+                                            coupon: coupon,
+                                            amount: (sub.plan.amount / 100),
+                                            plan_name: sub.plan.name
                                         }
                                     });
-                                }
-
-                                var activity = new $$.m.ContactActivity({
-                                    accountId: appConfig.mainAccountID,
-                                    contactId: contact.id(),
-                                    activityType: $$.m.ContactActivity.types.SUBSCRIBE,
-                                    detail : "Subscribed to Indigenous",
-                                    start: new Date(),
-                                    extraFields: {
-                                        plan: plan,
-                                        setupFee: setupFee,
-                                        coupon: coupon,
-                                        amount: (sub.plan.amount / 100),
-                                        plan_name: sub.plan.name
+                                    contactActivityManager.createActivity(activity, function(err, value){});
+                                    self.log.debug('creating Order for main account');
+                                    if(sub.id !=='NOSUBSCRIPTION') {
+                                        paymentsManager.getInvoiceForSubscription(stripeCustomerId, subId, null, function(err, invoice){
+                                            if(err) {
+                                                self.log.error('Error getting invoice for subscription: ' + err);
+                                            } else {
+                                                orderManager.createOrderFromStripeInvoice(invoice, appConfig.mainAccountID, contact.id(), function(err, order){
+                                                    if(err) {
+                                                        self.log.error('Error creating order for invoice: ' + err);
+                                                    } else {
+                                                        self.log.debug('Order created.');
+                                                    }
+                                                });
+                                            }
+                                        });
                                     }
-                                });
-                                contactActivityManager.createActivity(activity, function(err, value){});
-                                self.log.debug('creating Order for main account');
-                                if(sub.id !=='NOSUBSCRIPTION') {
-                                    paymentsManager.getInvoiceForSubscription(stripeCustomerId, subId, null, function(err, invoice){
+
+                                    self.log.debug('Adding the admin user to the new account');
+                                    userManager.addUserToAccount(accountId, 1, ["super","admin","member"], 1, function(err, value){
                                         if(err) {
-                                            self.log.error('Error getting invoice for subscription: ' + err);
+                                            self.log.error('Error adding admin user to account:', err);
                                         } else {
-                                            orderManager.createOrderFromStripeInvoice(invoice, appConfig.mainAccountID, contact.id(), function(err, order){
-                                                if(err) {
-                                                    self.log.error('Error creating order for invoice: ' + err);
-                                                } else {
-                                                    self.log.debug('Order created.');
-                                                }
-                                            });
+                                            self.log.debug('Admin user added to account ' + accountId);
                                         }
                                     });
-                                }
-
-                                self.log.debug('Adding the admin user to the new account');
-                                userManager.addUserToAccount(accountId, 1, ["super","admin","member"], 1, function(err, value){
-                                    if(err) {
-                                        self.log.error('Error adding admin user to account:', err);
-                                    } else {
-                                        self.log.debug('Admin user added to account ' + accountId);
-                                    }
                                 });
+
                             }
                         });
                         self.log.debug('<< initalizeUserAndAccount: ', json);
@@ -549,7 +664,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
 
     createUser: function(req,resp) {
-        var self = this, user, accountToken, deferred;
+        var self = this, user, deferred;
         self.log.debug('>> createUser');
 
         var username = req.body.username;
@@ -591,7 +706,7 @@ _.extend(api.prototype, baseApi.prototype, {
         // }
 
         //ensure we don't have another user with this username;
-        var accountToken = cookies.getAccountToken(req);
+        accountToken = cookies.getAccountToken(req);
 
         self.log.debug('>> username', username);
         self.log.debug('>> password1', password1);
@@ -635,7 +750,7 @@ _.extend(api.prototype, baseApi.prototype, {
                     });
                 } else {
                     self.log.debug('createUserFromUsernamePassword >>> ERROR');
-                    req.flash("error", value.toString());
+
                     return resp.redirect("/page/signup");//TODO: Fix this
                 }
         });
@@ -676,7 +791,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
                     self.sendResultOrError(resp, err, responseObj, 'Error creating user');
                     self.createUserActivity(req, 'CREATE_USER', null, {username: user.username}, function(){});
-                    return;;
+                    return;
                 });
             }
         });

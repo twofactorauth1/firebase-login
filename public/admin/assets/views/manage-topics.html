@@ -66,14 +66,14 @@
                                 <th class="hidden-xs text-center" st-sort="statistics.helpful">Helpful</th>
                                 <th class="hidden-xs text-center" st-sort="statistics.nothelpful">Not Helpful</th>
                                 <th class="hidden-xs" st-sort="getters.created" ng-class="{'center': tableView != 'grid'}">Created</th>
-                                <th class="hidden-xs" st-sort="getters.modified" ng-class="{'center': tableView != 'grid'}">Modified</th>
+                                <th class="hidden-xs" st-sort-default="reverse" st-sort="getters.modified" ng-class="{'center': tableView != 'grid'}">Modified</th>
                             </tr>
                             <tr ng-if="showFilter">
                                 <th>
                                     <input st-search="title" placeholder="Title" class="form-control" type="search" />
                                 </th>
                                 <th class="hidden-xs">
-                                    <input st-search="category" placeholder="Cateogry" class="form-control" type="search" />
+                                    <input st-search="isPublic" placeholder="Cateogry" class="form-control" type="search" />
                                 </th>
                                 <th>
                                     <!-- <input st-search="created" placeholder="Created" class="form-control" type="search" /> -->

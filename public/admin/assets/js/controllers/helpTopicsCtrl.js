@@ -1,7 +1,7 @@
 'use strict';
 /*global app, moment, angular, Intercom, urlParser*/
 (function (angular) {
-  app.controller('HelpTopicsCtrl', ["$scope", "WebsiteService", "$location", "$sce", function ($scope, WebsiteService, $location, $sce) {
+  app.controller('HelpTopicsCtrl', ["$rootScope", "$scope", "WebsiteService", "$location", "$sce", function ($rootScope, $scope, WebsiteService, $location, $sce) {
 
     $scope.searchTextValue = {};
     $scope.searchTextValueBy = '$';
@@ -25,6 +25,18 @@
       'social-feed': []
     };
 
+    $rootScope.$on('$locationChangeSuccess', function (event, newUrl, oldUrl) {
+      if ($location.search().topic) {
+        var _topic = _.find($scope.topics, function (top) {
+          return top._id === $location.search().topic;
+        });
+        $scope.viewSingle(_topic);
+        //$location.search('topic', null);
+      } else {
+        $scope.showTopics();
+      }
+    });
+
     $scope.isMoreThan50Char = function (word) {
       if (word.length > 50) {
         return true;
@@ -39,14 +51,6 @@
           $scope.panesByCat[topic.category.toLowerCase().replace(' ', '-')].push(topic);
         }
       });
-
-      if ($location.search().topic) {
-        var _topic = _.find($scope.topics, function (top) {
-          return top._id === $location.search().topic;
-        });
-        $scope.viewSingle(_topic);
-        $location.search('topic', null);
-      }
       $scope.topicsLoaded = true;
     });
 
@@ -87,6 +91,9 @@
       $scope.isViewed(topic);
       $scope.singleTopic = topic;
       $scope.showSingle = true;
+      $location.path('/support/help-topics').search({
+        topic: topic._id
+      });
     };
 
     $scope.flvVideoUrl = function (iframeUrl, url) {
@@ -101,6 +108,7 @@
     };
 
     $scope.showTopics = function () {
+      $location.search('topic', null);
       $scope.showSingle = false;
       $scope.singleTopic = '';
       $scope.topicRated = false;

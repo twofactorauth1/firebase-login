@@ -124,10 +124,10 @@
                             </tr>
                             <tr ng-if="showFilter">
                                 <th class="column-width" ng-show="column.name">
-                                    <input st-search="{{_id}}" placeholder="Customer ID" class="form-control" type="search" />
+                                    <input st-search="_id" placeholder="Customer ID" class="form-control" type="search" />
                                 </th>
                                 <th class="column-width" ng-show="column.photo">
-                                    <input st-search="{{'hasPhoto'}}" placeholder="Select Photo" class="form-control hidden" type="search" id="searchPicture" ng-model="filterCustomer.photo.selected.value" />
+                                    <input st-search="hasPhoto" placeholder="Select Photo" class="form-control hidden" type="search" id="searchPicture" ng-model="filterCustomer.photo.selected.value" />
                                     <ui-select ng-model="filterCustomer.photo.selected" on-select="triggerInput('#searchPicture')" theme="bootstrap">
                                         <ui-select-match placeholder="Select Photo">
                                             <small ng-bind-html="$select.selected.name"></small>
@@ -140,10 +140,10 @@
                                     </ui-select>
                                 </th>
                                 <th class="column-width" ng-show="column.name">
-                                    <input st-search="{{first}}" placeholder="First Name" class="form-control" type="search" />
+                                    <input st-search="first" placeholder="First Name" class="form-control" type="search" />
                                 </th>
                                 <th class="column-width" ng-show="column.name">
-                                    <input st-search="{{last}}" placeholder="Last Name" class="form-control" type="search" />
+                                    <input st-search="last" placeholder="Last Name" class="form-control" type="search" />
                                 </th>
                                 <th class="column-width" ng-show="column.tags">
                                     <input st-search="tags" placeholder="Type" class="form-control hidden" type="search" id="searchType" ng-model="filterCustomer.type.selected.data" />
@@ -160,11 +160,12 @@
                                 <th class="column-width" ng-show="column.email">
                                     <input st-search="email" placeholder="Email" class="form-control" type="search" />
                                 </th>
+                                <!-- Need to add custom filter -->
                                 <th class="column-width" ng-show="column.address">
-                                    <input st-search="{{details[0].addresses[0].city + details[0].addresses[0].state}}" placeholder="Address" class="form-control" type="search" />
+                                    <input st-search="address" placeholder="Address" class="form-control hidden" type="search" />
                                 </th>
                                 <th class="column-width" ng-show="column.phone">
-                                    <input st-search="{{details[0].phones[0].number}}" placeholder="Phone" class="form-control" type="search" />
+                                    <input st-search="phone" placeholder="Phone" class="form-control hidden" type="search" />
                                 </th>
                                 <th ng-show="column.social">
                                 </th>

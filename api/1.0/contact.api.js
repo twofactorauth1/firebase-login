@@ -132,7 +132,6 @@ _.extend(api.prototype, baseApi.prototype, {
                 return self.send403(resp);
             } else {
                 self._saveOrUpdateContact(req, resp, true);
-
             }
         });
 

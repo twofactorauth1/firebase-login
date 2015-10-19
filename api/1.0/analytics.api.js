@@ -17,6 +17,7 @@ var urlUtils = require('../../utils/urlutils');
 var campaignManager = require('../../campaign/campaign_manager');
 var appConfig = require('../../configs/app.config');
 var accountDao = require('../../dao/account.dao');
+var moment = require('moment');
 
 
 var api = function() {

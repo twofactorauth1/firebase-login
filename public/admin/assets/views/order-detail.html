@@ -416,11 +416,7 @@
                                             {{item.product.sku}}
                                         </td>
                                         <td>
-                                            <span ng-if="!item[$index].editing">{{item.name}}</span>
-                                            <div ng-if="item[$index].editing">
-                                                <label>Name</label>
-                                                <input type="text" class="form-control" ng-model="item.name" />
-                                            </div>
+                                            <span>{{item.name}}</span>
                                         </td>
                                         <td class="center">
                                             <span>{{item.regular_price | currency}}</span>

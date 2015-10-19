@@ -12,6 +12,7 @@ var Account = require('../../models/account');
 var userDao = require('../../dao/user.dao');
 var appConfig = require('../../configs/app.config');
 var paymentManager = require('../../payments/payments_manager');
+var moment = require('moment');
 
 var api = function() {
     this.init.apply(this, arguments);
@@ -92,6 +93,26 @@ _.extend(api.prototype, baseApi.prototype, {
         });
     },
 
+
+    updateLead: function(account, fn) {
+        var self = this;
+        //update category
+        var updatedLead = {
+            "status_id": closeioConfig.CLOSEIO_CUSTOMER_STATUS_ID,
+            "status_label": closeioConfig.CLOSEIO_CUSTOMER_STATUS_LABEL
+        };
+        if(closeioConfig.CLOSEIO_ENABLED === 'true' || closeioConfig.CLOSEIO_ENABLED === true) {
+            closeio.lead.update(updatedLead).then(function(lead){
+                fn();
+            });
+        } else {
+            self.log.debug('Skipping call to close.io');
+            return fn();
+        }
+
+    },
+
+
     updateCurrentAccountBilling: function(req, res) {
         var self = this;
         self.log.debug('>> updateCurrentAccountBilling');
@@ -124,9 +145,9 @@ _.extend(api.prototype, baseApi.prototype, {
                                             return self.wrapError(res, 500, null, err.message, err.message);
                                         } else {
                                             self.log.debug('<< updateCurrentAccountBilling');
-                                            res.send(updatedAccount);
-                                            self.createUserActivity(req, 'MODIFY_ACCOUNT_BILLING', null, null, function(){});
-                                            return;
+                                                res.send(updatedAccount);
+                                                self.createUserActivity(req, 'MODIFY_ACCOUNT_BILLING', null, null, function(){});
+                                                return;
                                         }
                                     });
                                 } else {

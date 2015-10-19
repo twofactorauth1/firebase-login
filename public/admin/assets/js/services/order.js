@@ -113,6 +113,14 @@
         });
     };
 
+    this.exportToCSV = function () {
+      var apiUrl = baseUrl + ['order', 'export'].join('/');
+      $http({
+          url: apiUrl,
+          method: "POST"
+        })
+    };
+
     this.formatOrderStatus = function (_status) {
       var orderStatuses = orderConstant.order_status.dp;
       if (_status) {

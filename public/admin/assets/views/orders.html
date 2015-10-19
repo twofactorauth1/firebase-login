@@ -20,13 +20,18 @@
                             <form role="form" class="ng-pristine ng-valid row">
                                 <div class="col-xs-6">
                                     <div class="form-group">
-                                        <div class="col-xs-8 padding-left-0">
+                                        <div class="col-xs-6 padding-left-0">
                                             <span class="input-icon">
                                         <input type="text" st-search placeholder="Search by customers, items, total..." id="form-field-14" class="form-control">
                                         <i class="ti-search"></i>
                                     </span>
                                         </div>
-                                        <div class="col-xs-4">
+                                        <div class="col-xs-6">
+                                             <button st-export style="min-width:100px;" type="button" class="btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti-export margin-left-5 ng-click-active pull-right hidden-xs">
+                                                <span>Export</span>
+                                            </button>
+                                            <button st-export type="button" style="min-width:100px;" class="btn btn-o btn-info ti-export margin-left-5 ng-click-activ pull-right visible-xs-block">
+                                            </button>
                                             <button type="button" class="btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti-filter ng-click-active pull-right hidden-xs" ng-click="showFilter = !showFilter">
                                                 <span>Filter</span>
                                             </button>
@@ -143,7 +148,7 @@
                                     </ui-select>
                                 </th>
                                 <th class="column-width"> 
-                                    <input st-search="" placeholder="Customer" class="form-control" type="search" />
+                                    <input st-search="customer._full" placeholder="Customer" class="form-control" type="search" />
                                 </th>
                                 <th class="column-width">
                                     <input st-search="line_items.name" placeholder="Item Names" class="form-control" type="search" />
