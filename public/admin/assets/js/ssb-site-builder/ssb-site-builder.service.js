@@ -6,7 +6,7 @@
 	app.factory('SimpleSiteBuilderService', SimpleSiteBuilderService);
 
 	SimpleSiteBuilderService.$inject = ['$http', 'AccountService'];
-
+	/* @ngInject */
 	function SimpleSiteBuilderService($http, AccountService) {
 		var ssbService = {};
 		var baseUrl = '/api/1.0/cms/website/'; //TODO: upgrade to api/2.0 when ready

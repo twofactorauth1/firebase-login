@@ -1,7 +1,7 @@
 app.directive('ssbSiteBuilder', ssbSiteBuilder);
 
 ssbSiteBuilder.$inject = ['$filter', 'SimpleSiteBuilderService'];
-
+/* @ngInject */
 function ssbSiteBuilder($filter, SimpleSiteBuilderService) {
 
     return {
