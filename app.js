@@ -361,7 +361,7 @@ if (process.env.NODE_ENV != "testing") {//disables the collator for unit tests
 //-----------------------------------------------------
 process.on('uncaughtException', function (err) {
     log.error("Stack trace: " + err.stack);
-    log.error('Caught exception: ' + err);
+    log.error('Caught exception: ', err);
 
     //$$.g.mailer.sendMail("errors@indigenous.io", "{ENTER YOUR EMAIL ADDRESS HERE}", null, "Uncaught Error occurred - " + process.env.NODE_ENV, null, err + ":  " + err.stack, function(err, value) {
     process.exit(1);

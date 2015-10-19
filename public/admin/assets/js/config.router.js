@@ -40,7 +40,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         ncyBreadcrumb: {
             label: 'Dashboard'
         },
-         resolve: loadSequence('dashboardCtrl', 'orderService', 'customerService', 'jquery-sparkline', 'chartAnalyticsService', 'userService', 'chartCommerceService' , 'offset')
+        resolve: loadSequence('dashboardCtrl', 'orderService', 'customerService', 'jquery-sparkline', 'chartAnalyticsService', 'userService', 'chartCommerceService' , 'offset')
     }).state('app.website', {
         url: '/website',
         template: '<div ui-view class="fade-in-up"></div>',
@@ -48,6 +48,13 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         ncyBreadcrumb: {
             label: 'Website',
             skip: true
+        }
+    }).state('app.website.ssb-site-builder', {
+        url: '/ssb-site-builder',
+        template: '<ssb-site-builder class="ssb-site-builder"></ssb-site-builder>',
+        title: 'Simple Site Builder',
+        ncyBreadcrumb: {
+            label: 'Simple Site Builder'
         }
     }).state('app.website.analytics', {
         url: '/site-analytics',
