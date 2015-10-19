@@ -62,6 +62,11 @@
 					<span class="title" translate="sidebar.nav.website.TEMPLATES"> Templates </span>
 				</a>
 			</li> -->
+			<li ui-sref-active="active" ng-if="account.showhide.ssbSiteBuilder">
+				<a ui-sref="app.website.ssb-site-builder">
+					<span class="title"> Simple Site Builder </span>
+				</a>
+			</li>
 		</ul>
 	</li>
 	<li ng-class="{'active open':$state.includes('app.customers')}">

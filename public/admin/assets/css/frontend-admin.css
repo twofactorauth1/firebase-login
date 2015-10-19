@@ -6193,3 +6193,18 @@
   max-height: 400px;
   overflow: auto;
 }
+.ssb-site-builder-container {
+  height: 100%;
+}
+.ssb-site-builder {
+  margin: 0 -15px 0 -15px;
+  padding: 0;
+  height: 100%;
+}
+.ssb-sidebar {
+  width: 20%;
+  height: 100%;
+  overflow: hidden;
+  overflow-y: auto;
+  background-color: #5bc0de;
+}
