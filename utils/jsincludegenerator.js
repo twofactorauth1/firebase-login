@@ -1,5 +1,6 @@
 var fs = require('fs');
 var _ = require('underscore');
+var path = require('path');
 
 var jsincludegenerator = {
 
@@ -76,7 +77,7 @@ var jsincludegenerator = {
             if(fs.statSync(dir + '/' + _file).isDirectory()) {
                 //concat
                 fileAry = fileAry.concat(self.includeDirectory(dir + '/' + _file));
-            } else if(fs.statSync(dir + '/' + _file).isFile()) {
+            } else if(fs.statSync(dir + '/' + _file).isFile() && path.extname(dir + '/' + _file) === '.js') {
                 fileAry.push(dir + '/' + _file);
             }
         });
