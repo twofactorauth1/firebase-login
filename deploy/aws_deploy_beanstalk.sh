@@ -112,3 +112,6 @@ main(){
 
 	[ $timeout > 0 ] && aws elasticbeanstalk update-environment --environment-name "${ENV_NAME}" --version-label "${APP_VERSION}" || exit 0
 }
+
+env_check $*
+main $*
