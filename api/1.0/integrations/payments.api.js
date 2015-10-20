@@ -157,10 +157,15 @@ _.extend(api.prototype, baseApi.prototype, {
             "status_label": closeioConfig.CLOSEIO_CUSTOMER_STATUS_LABEL
         };
         if(closeioConfig.CLOSEIO_ENABLED) {
-            var leadId = account.get('billing').closeLeadID;
-            closeio.lead.update(leadId, updatedLead).then(function(lead){
+            try {
+                var leadId = account.get('billing').closeLeadID;
+                closeio.lead.update(leadId, updatedLead).then(function (lead) {
+                    fn();
+                });
+            } catch(exception) {
+                self.log.error('Exception updating close:', exception);
                 fn();
-            });
+            }
         } else {
             self.log.debug('Skipping call to close.io');
             return fn();
