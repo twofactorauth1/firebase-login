@@ -1433,6 +1433,20 @@
     };
 
     /*
+     * @setCampaignType
+     * - set 'onetime' or 'autoresponder'
+     * - TODO: when we have more triggers, should set selected triggers
+     */
+    $scope.setCampaignType = function(type) {
+      $scope.newCampaignObj.type = type;
+      if (type === 'autoresponder') {
+        $scope.newCampaignObj.steps[0].trigger = 'SIGNUP';
+      } else {
+        $scope.newCampaignObj.steps[0].trigger = null;
+      }
+    };
+
+    /*
      * @init
      * - Set page context (if creating or loading existing campaign).
      */

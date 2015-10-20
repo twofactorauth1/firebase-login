@@ -591,6 +591,11 @@ _.extend(api.prototype, baseApi.prototype, {
                                 self.log.debug('campaignId: ', campaignId);
                                 self.log.debug('emailId: ', emailId);
                                 self.log.debug('sendEmail: ', sendEmail);
+
+                                //sendEmail is string, convert to boolean
+                                var sendEmailBoolean = (sendEmail.toLowerCase() === 'true');
+                                sendEmail = sendEmailBoolean;
+
                                 /*
                                  * If there is a campaign associated with this signup, update it async.
                                  */
