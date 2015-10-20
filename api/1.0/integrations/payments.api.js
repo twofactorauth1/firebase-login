@@ -159,9 +159,15 @@ _.extend(api.prototype, baseApi.prototype, {
         if(closeioConfig.CLOSEIO_ENABLED) {
             try {
                 var leadId = account.get('billing').closeLeadID;
-                closeio.lead.update(leadId, updatedLead).then(function (lead) {
+                if(leadId) {
+                    closeio.lead.update(leadId, updatedLead).then(function (lead) {
+                        fn();
+                    });
+                } else {
+                    self.log.debug('No leadId. Skipping close.');
                     fn();
-                });
+                }
+
             } catch(exception) {
                 self.log.error('Exception updating close:', exception);
                 fn();
