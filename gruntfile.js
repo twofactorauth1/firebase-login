@@ -353,7 +353,8 @@ module.exports = function(grunt) {
             tzTests: ['test/tztest.js'],
             leads: ['test/pullLeadDynoData.js'],
             ssl: ['certificates/test/ssldotcom.dao_test.js'],
-            ssl_manager: ['certificates/test/manager_test.js']
+            ssl_manager: ['certificates/test/manager_test.js'],
+            stripe_cleanup: ['payments/tests/stripe_cleanup.js']
         },
 
         // Running Karma from Grunt, with documentation from here:
@@ -556,7 +557,7 @@ module.exports = function(grunt) {
      */
     grunt.registerTask('tests', ['nodeunit:biometricsPlatform', 'nodeunit:contacts', 'nodeunit:utils',
             'nodeunit:products', 'nodeunit:cms', 'nodeunit:assets', 'nodeunit:contactActivities', 'nodeunit:payments',
-            'nodeunit:analyticsCollater']);
+            'nodeunit:analyticsCollater', 'nodeunit:stripe_cleanup']);
 
     grunt.registerTask('testContextio', ['nodeunit:contextio']);
     grunt.registerTask('testBiometricsPlatform', ['nodeunit:biometricsPlatform']);
@@ -589,4 +590,5 @@ module.exports = function(grunt) {
     grunt.registerTask('leads', ['nodeunit:leads']);
     grunt.registerTask('ssl', ['nodeunit:ssl']);
     grunt.registerTask('ssl_manager', ['nodeunit:ssl_manager']);
+    grunt.registerTask('stripe_cleanup', ['nodeunit:stripe_cleanup']);
 };
