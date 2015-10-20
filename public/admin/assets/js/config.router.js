@@ -50,7 +50,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
             skip: true
         }
     }).state('app.website.ssb-site-builder', {
-        url: '/ssb-site-builder',
+        url: '/site-builder',
         template: '<ssb-site-builder class="ssb-site-builder"></ssb-site-builder>',
         title: 'Simple Site Builder',
         ncyBreadcrumb: {
