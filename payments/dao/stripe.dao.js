@@ -1449,7 +1449,7 @@ var dao = {
         stripe.events.list(params, apiToken, function(err, events) {
             if(err) {
                 self.log.error('error: ' + err);
-                return fn(err, charges);
+                return fn(err, events);
             }
             self.log.debug('<< listEvents');
             return fn(err, events);
