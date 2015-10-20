@@ -175,7 +175,7 @@
                                             <div class="row" ng-class="{'disabled': !isEditable}">
                                                 <div class="col-sm-6">
                                                     <div class="panel animated no-radius text-center margin-bottom-0 cursor-pointer" ng-class="{true:'panel-light-grey pulse',false:'panel-white'}[newCampaignObj.type == 'onetime']">
-                                                        <div class="panel-body" ng-class="{'bg-light-grey': hover1}" ng-mouseenter="hover1 = true" ng-mouseleave="hover1 = false" ng-click="newCampaignObj.type = 'onetime'">
+                                                        <div class="panel-body" ng-class="{'bg-light-grey': hover1}" ng-mouseenter="hover1 = true" ng-mouseleave="hover1 = false" ng-click="setCampaignType('onetime')">
                                                             <span ng-class="{'text-nephritis': newCampaignObj.type == 'onetime', 'text-muted': newCampaignObj.type != 'onetime' }" class="fa fa-check text-nephritis fa-2x" style="position:absolute; top:o;right:0;margin-right:5px;margin-top:-10px;"></span>
                                                             <span class="fa-stack fa-2x"> <i class="fa fa-square fa-stack-2x text-primary"></i> <i class="fa fa-envelope fa-stack-1x fa-inverse"></i> </span>
                                                             <h3 class="StepTitle margin-top-10">One Time</h3>
@@ -187,7 +187,7 @@
                                                 </div>
                                                 <div class="col-sm-6">
                                                     <div class="panel animated no-radius text-center margin-bottom-0 cursor-pointer" ng-class="{true:'panel-light-grey pulse',false:'panel-white'}[newCampaignObj.type == 'autoresponder']">
-                                                        <div class="panel-body" ng-class="{'bg-light-grey': hover2}" ng-mouseenter="hover2 = true" ng-mouseleave="hover2 = false" ng-click="newCampaignObj.type = 'autoresponder'">
+                                                        <div class="panel-body" ng-class="{'bg-light-grey': hover2}" ng-mouseenter="hover2 = true" ng-mouseleave="hover2 = false" ng-click="setCampaignType('autoresponder')">
                                                             <span ng-class="{'text-nephritis': newCampaignObj.type == 'autoresponder', 'text-muted': newCampaignObj.type != 'autoresponder' }" class="fa fa-check fa-2x" style="position:absolute; top:o;right:0;margin-right:5px;margin-top:-10px;"></span>
                                                             <span class="fa-stack fa-2x"> <i class="fa fa-square fa-stack-2x text-primary"></i> <i class="fa fa-bullhorn fa-stack-1x fa-inverse"></i> </span>
                                                             <h3 class="StepTitle margin-top-10">AutoResponder</h3>
