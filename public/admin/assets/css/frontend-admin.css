@@ -1260,8 +1260,7 @@
 }
 @media (max-width: 625px) {
   #componentloader .navigation-v2 .navbar .navbar-brand img {
-    height: 100px;
-    width: 250px;
+    max-width: 250px;
   }
 }
 @media (max-width: 796px) {
