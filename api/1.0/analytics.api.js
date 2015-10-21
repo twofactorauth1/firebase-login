@@ -134,7 +134,8 @@ _.extend(api.prototype, baseApi.prototype, {
                     if(err) {
                         self.log.error('Error getting account by customerId', err);
                     } else if(account){
-                        msg.accountId = account.id();
+                        msg.customerAccountId = account.id();
+                        msg.accountId = appConfig.mainAccountID;
                     } else {
                         self.log.debug('could not find account for customerId:' + customerId);
                     }
