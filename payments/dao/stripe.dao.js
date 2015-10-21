@@ -171,8 +171,8 @@ var dao = {
     listStripeCustomers: function(accountId, limit, fn) {
         var self = this;
         self.log.debug('>> listStripeCustomers');
-        var _limit = limit || 0;
-        stripe.customers.list(function(err, customers) {
+        var _limit = limit || 100;
+        stripe.customers.list({limit: _limit}, function(err, customers) {
             // asynchronously called
             if (err) {
                 fn(err, customers);
