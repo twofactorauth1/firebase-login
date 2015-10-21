@@ -479,8 +479,8 @@ module.exports = {
                                             }
                                             campaignFlow.set('lastStep', stepNumber);
                                             step.executed = new Date();
-                                            if(value) {
-                                                step.mandrillId = value._id;
+                                            if(value && value[0]) {
+                                                step.mandrillId = value[0]._id;
                                             }
                                             campaignDao.saveOrUpdate(campaignFlow, function(err, updatedFlow){
                                                 if(err) {
