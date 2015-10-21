@@ -71,6 +71,9 @@ var mandrillHelper =  {
                                 "vars": vars
                             }
                         ],
+                        "tags": [
+                            "welcome"
+                        ],
                         "subaccount": null,
                         "google_analytics_domains": [
                             "indigenous.io" //TODO: This should be dynamic
@@ -165,12 +168,15 @@ var mandrillHelper =  {
                         "tracking_domain": null,
                         "signing_domain": null,
                         "return_path_domain": null,
-                        "merge": false,
+                        "merge": true,
                         "merge_vars": [
                             {
                                 "rcpt": toAddress,
                                 "vars": vars
                             }
+                        ],
+                        "tags": [
+                            "campaign"
                         ],
                         "subaccount": null,
                         "google_analytics_domains": [
