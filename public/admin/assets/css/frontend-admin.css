@@ -6194,6 +6194,8 @@
 }
 .ssb-site-builder-container {
   height: 100%;
+  height: calc(100vh - 65px);
+  overflow: auto;
 }
 .ssb-site-builder {
   margin: 0 -15px 0 -15px;
@@ -6204,21 +6206,22 @@
 }
 @media screen and (min-width: 768px) {
   .ssb-site-builder .ssb-main {
-    float: left;
     height: 100%;
-    width: 75%;
+    width: 70%;
+    position: relative;
+    top: 0;
+    left: 30%;
   }
 }
 .ssb-sidebar {
   overflow: auto;
   overflow-x: hidden;
-  background-color: #5bc0de;
   display: block;
   height: 200px;
 }
 @media (min-width: 768px) {
   .ssb-sidebar {
-    float: left;
+    position: fixed;
     width: 25%;
     height: 100%;
   }

@@ -68,17 +68,27 @@
 			</ul>
         </accordion-group>
         <accordion-group heading="Components">
-			<ul class="list-unstyled center">
+			<ul class="list-unstyled">
 				<li ng-repeat="component in vm.page.components">
 
 					<ul class="list-unstyled">
 						<li><h3>{{component.type}}</h3></li>
-						<li>_id: {{component._id}}</li>
-						<li>version: {{component.version}}</li>
+						<!-- <li>_id: {{component._id}}</li>
+						<li>version: {{component.version}}</li> -->
+						<li>
+							<accordion close-others="oneAtATime" class="accodion">
+								<accordion-group heading="Basic">
+									<div ng-include=" 'assets/js/ssb-site-builder/ssb-sidebar/views/basic.html' "></div>
+								</accordion-group>
+							</accordion>
+						</li>
 					</ul>
 
 				</li>
 			</ul>
 		</accordion-group>
 	</accordion>
+
+	<ssb-action-buttons save-action="vm.savePage()" cancel-action="vm.cancelPendingEdits()"></ssb-action-buttons>
+
 </div>

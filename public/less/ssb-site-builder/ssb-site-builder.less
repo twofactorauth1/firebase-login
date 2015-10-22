@@ -1,5 +1,7 @@
 .ssb-site-builder-container {
 	height: 100%;
+	height: calc(~"100vh - 65px");
+    overflow: auto;
 }
 
 .ssb-site-builder {
@@ -11,9 +13,12 @@
 
 	.ssb-main {
 		@media screen and (min-width: 768px) {
-			float: left;
-			height: 100%;
-			width: 75%;
+			// float: left;
+		    height: 100%;
+		    width: 70%;
+		    position: relative;
+		    top: 0;
+		    left: 30%;
 		}
 	}
 
