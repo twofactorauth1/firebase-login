@@ -49,12 +49,34 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
             label: 'Website',
             skip: true
         }
-    }).state('app.website.ssb-site-builder', {
+    }).state('app.website.ssbSiteBuilder', {
         url: '/site-builder',
-        template: '<ssb-site-builder class="ssb-site-builder"></ssb-site-builder>',
+        template: '<div ui-view class="fade-in-up"></div>',
         title: 'Simple Site Builder',
         ncyBreadcrumb: {
-            label: 'Simple Site Builder'
+            label: 'Simple Site Builder',
+            skip: true
+        }
+    }).state('app.website.ssbSiteBuilder.pages', {
+        url: '/pages/',
+        templateUrl: "assets/js/ssb-site-builder/ssb-site-builder.pages.component.html",
+        title: 'Simple Site Builder Pages',
+        icon: 'ti-layout-media-left-alt',
+        ncyBreadcrumb: {
+            label: 'Simple Site Builder Pages'
+        },
+        resolve: loadSequence('pagesCtrl', 'userService')
+    }).state('app.website.ssbSiteBuilder.editor', {
+        url: '/pages/:pageId',
+        template: '<ssb-site-builder class="ssb-site-builder"></ssb-site-builder>',
+        title: 'Simple Site Builder Page Editor',
+        ncyBreadcrumb: {
+            label: 'Simple Site Builder Page Editor'
+        },
+        resolve: {
+            init: function($stateParams, SimpleSiteBuilderService) {
+                return SimpleSiteBuilderService.getPage($stateParams.pageId);
+            }
         }
     }).state('app.website.analytics', {
         url: '/site-analytics',

@@ -1,14 +1,25 @@
 <div>
 
-	<ssb-sidebar class="ssb-sidebar">
+	<ssb-sidebar page="vm.page" class="ssb-sidebar">
 		Loading...
 	</ssb-sidebar>
 
 	<div class="ssb-main">
 		<h2>{{vm.website.title}}</h2>
+		<h2>{{vm.page.title}}</h2>
+
+		<h3>Components:</h3>
+		
+		<div onload="components = vm.page.components" data-ng-include data-src=" 'assets/views/partials/component-loader.html' "></div>
+		
+		<!-- <div ng-repeat="component in vm.page.components">
+		</div> -->
+
+		<!-- <ssb-component-loader components="vm.page.components"></ssb-component-loader> -->
+
 	</div>
 
-	<ssb-flyover class="ssb-flyover">
+	<ssb-flyover page="vm.page" class="ssb-flyover">
 		Loading...
 	</ssb-flyover>
 

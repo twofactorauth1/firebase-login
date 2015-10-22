@@ -9,10 +9,12 @@
 	/* @ngInject */
 	function SimpleSiteBuilderService($http, AccountService) {
 		var ssbService = {};
-		var baseUrl = '/api/1.0/cms/website/'; //TODO: upgrade to api/2.0 when ready
+		var baseWebsiteAPIUrl = '/api/1.0/cms/website/'; //TODO: upgrade to api/2.0 when ready
+		var basePageAPIUrl = '/api/1.0/cms/page/'; //TODO: upgrade to api/2.0 when ready
 
 
 		ssbService.getSite = getSite;
+		ssbService.getPage = getPage;
 		ssbService.getActiveSection = getActiveSection;
 
 
@@ -37,10 +39,23 @@
 			}
 
 			function error(error) {
-				console.error('SimpleSiteBuilderService getSite error');
+				console.error('SimpleSiteBuilderService getSite error: ' + error);
 			}
 
-			return $http.get(baseUrl + id).success(success).error(error);
+			return $http.get(baseWebsiteAPIUrl + id).success(success).error(error);
+		}
+
+		function getPage(id) {
+			
+			function success(data) {
+				ssbService.page = data;
+			}
+
+			function error(error) {
+				console.error('SimpleSiteBuilderService getPage error: ' + error);
+			}
+
+			return $http.get(basePageAPIUrl + id).success(success).error(error);
 		}
 
 

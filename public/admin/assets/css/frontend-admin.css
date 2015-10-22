@@ -1260,8 +1260,7 @@
 }
 @media (max-width: 625px) {
   #componentloader .navigation-v2 .navbar .navbar-brand img {
-    height: 100px;
-    width: 250px;
+    max-width: 250px;
   }
 }
 @media (max-width: 796px) {
@@ -6200,11 +6199,34 @@
   margin: 0 -15px 0 -15px;
   padding: 0;
   height: 100%;
+  width: 100%;
+  display: block;
+}
+@media screen and (min-width: 768px) {
+  .ssb-site-builder .ssb-main {
+    float: left;
+    height: 100%;
+    width: 75%;
+  }
 }
 .ssb-sidebar {
-  width: 20%;
-  height: 100%;
-  overflow: hidden;
-  overflow-y: auto;
+  overflow: auto;
+  overflow-x: hidden;
   background-color: #5bc0de;
+  display: block;
+  height: 200px;
+}
+@media (min-width: 768px) {
+  .ssb-sidebar {
+    float: left;
+    width: 25%;
+    height: 100%;
+  }
+}
+.ssb-flyover {
+  position: absolute;
+  top: 200px;
+  right: 25%;
+  background: grey;
+  display: none;
 }

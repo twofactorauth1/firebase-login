@@ -1,3 +1,14 @@
 <div>
-ssb-sidebar content
+	<ul class="list-unstyled">
+		<li ng-repeat="component in vm.page.components">
+
+			<ul class="list-unstyled">
+				<li>_id: {{component._id}}</li>
+				<li>source: {{component.source}}</li>
+				<li>type: {{component.type}}</li>
+				<li>version: {{component.version}}</li>
+			</ul>
+
+		</li>
+	</ul>
 </div>

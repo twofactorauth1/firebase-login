@@ -1,9 +1,13 @@
-
 .ssb-sidebar {
-	width: 20%;
-	height: 100%;
-	overflow: hidden;
-	overflow-y: auto;
+	overflow: auto;
+	overflow-x: hidden;
 	background-color: #5bc0de;
+	display: block;
+	height: 200px;
 
+	@media (min-width: 768px) {
+    	float: left;
+    	width: 25%;
+		height: 100%;
+    }
 }
