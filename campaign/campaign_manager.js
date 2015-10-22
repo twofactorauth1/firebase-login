@@ -473,37 +473,40 @@ module.exports = {
                                         var campaignId = campaignFlow.get('campaignId');
                                         var contactId = campaignFlow.get('contactId');
                                         mandrillHelper.sendCampaignEmail(fromAddress, fromName, toAddress, toName, subject, html, accountId, campaignId, contactId, vars, step.settings, emailId, function(err, value){
+                                            if(err) {
+                                                self.log.error('Error sending email: ', err);
+                                                return fn(err, null);
+                                            }
+                                            campaignFlow.set('lastStep', stepNumber);
+                                            step.executed = new Date();
+                                            if(value && value[0]) {
+                                                step.mandrillId = value[0]._id;
+                                            }
+                                            campaignDao.saveOrUpdate(campaignFlow, function(err, updatedFlow){
                                                 if(err) {
-                                                    self.log.error('Error sending email: ', err);
+                                                    self.log.error('Error saving campaign flow: ' + err);
                                                     return fn(err, null);
-                                                }
-                                                campaignFlow.set('lastStep', stepNumber);
-                                                step.executed = new Date();
-                                                campaignDao.saveOrUpdate(campaignFlow, function(err, updatedFlow){
-                                                    if(err) {
-                                                        self.log.error('Error saving campaign flow: ' + err);
-                                                        return fn(err, null);
+                                                } else {
+                                                    //try to handle the next step:
+                                                    var steps = campaignFlow.get('steps');
+                                                    if(steps.length -1 > stepNumber) {
+                                                        self.handleStep(campaignFlow, stepNumber+1, function(err, value){
+                                                            if(err) {
+                                                                self.log.error('Error handling campaign step: ' + stepNumber+1 + ": " + err);
+                                                                self.log.warn('Future step handling issue.  There will be problems with this campaign_flow: ', campaignFlow);
+                                                                return fn(null, updatedFlow);
+                                                            } else {
+                                                                self.log.debug('<< handleStep');
+                                                                return fn(null, updatedFlow);
+                                                            }
+                                                        });
                                                     } else {
-                                                        //try to handle the next step:
-                                                        var steps = campaignFlow.get('steps');
-                                                        if(steps.length -1 > stepNumber) {
-                                                            self.handleStep(campaignFlow, stepNumber+1, function(err, value){
-                                                                if(err) {
-                                                                    self.log.error('Error handling campaign step: ' + stepNumber+1 + ": " + err);
-                                                                    self.log.warn('Future step handling issue.  There will be problems with this campaign_flow: ', campaignFlow);
-                                                                    return fn(null, updatedFlow);
-                                                                } else {
-                                                                    self.log.debug('<< handleStep');
-                                                                    return fn(null, updatedFlow);
-                                                                }
-                                                            });
-                                                        } else {
-                                                            self.log.debug('<< handleStep (no more steps)');
-                                                            return fn(null, updatedFlow);
-                                                        }
+                                                        self.log.debug('<< handleStep (no more steps)');
+                                                        return fn(null, updatedFlow);
                                                     }
-                                                });
+                                                }
                                             });
+                                        });
                                     }
                                 });
                             });

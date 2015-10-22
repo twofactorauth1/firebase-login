@@ -61,6 +61,7 @@ _.extend(baseRouter.prototype, {
                 }
             } else {
                 logger.warn("No account found from getAccountByHost");
+                return resp.redirect(appConfig.www_url + "/404");
             }
             return next();
 
