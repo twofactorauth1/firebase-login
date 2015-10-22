@@ -1,8 +1,8 @@
 app.controller('SiteBuilderController', ssbSiteBuilderController);
 
-ssbSiteBuilderController.$inject = ['$scope', '$attrs', '$filter', 'SimpleSiteBuilderService', '$stateParams'];
+ssbSiteBuilderController.$inject = ['$scope', '$rootScope', '$attrs', '$filter', 'SimpleSiteBuilderService', '$stateParams'];
 /* @ngInject */
-function ssbSiteBuilderController($scope, $attrs, $filter, SimpleSiteBuilderService, $stateParams) {
+function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSiteBuilderService, $stateParams) {
 
     console.info('site-build directive init...')
 
@@ -20,6 +20,7 @@ function ssbSiteBuilderController($scope, $attrs, $filter, SimpleSiteBuilderServ
 
     function init(element) {
     	vm.element = element;
+        $rootScope.app.layout.isSidebarClosed = true;
     }
 
 }
