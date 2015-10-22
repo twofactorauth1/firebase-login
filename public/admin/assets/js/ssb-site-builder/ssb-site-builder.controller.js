@@ -9,6 +9,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     var vm = this;
 
     vm.init = init;
+    vm.uiState = {};
 
     $scope.$watch(function() { return SimpleSiteBuilderService.website; }, function(website){
         vm.website = website;
@@ -18,8 +19,15 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         vm.page = page;
     }, true);
 
+    $rootScope.$on('$stateChangeStart',
+        function (event) {
+            $rootScope.app.layout.isSidebarClosed = vm.uiState.isSidebarClosed;
+        }
+    );
+
     function init(element) {
     	vm.element = element;
+        vm.uiState.isSidebarClosed = $rootScope.app.layout.isSidebarClosed;
         $rootScope.app.layout.isSidebarClosed = true;
     }
 
