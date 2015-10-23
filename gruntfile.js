@@ -8,7 +8,6 @@ var STRIPE_CONFIG = require('./configs/stripe.config.js');
 var SEGMENTIO_CONFIG = require('./configs/segmentio.config.js');
 var KEEN_CONFIG = require('./configs/keen.config');
 var GOOGLE_CONFIG = require('./configs/google.config');
-var TWONET_CONFIG = require('./configs/twonet.config');
 var LEADDYNO_CONFIG = require('./configs/leaddyno.config');
 
 //var wiredepJSAry = require('wiredep')().js;
@@ -326,7 +325,6 @@ module.exports = function(grunt) {
             analyticsCollater: ['analytics/tests/analytics_collater_test.js'],
             api:['api/test/*_test.js'],
             assets:['assets/test/*_test.js'],
-            biometricsPlatform:['biometrics/platform/test/**/*_test.js'],
             campaign:['campaign/test/*_test.js'],
             cms: ['cms/test/cms_manager_test.js'],
             contacts: ['test/contact.dao_test.js'],
