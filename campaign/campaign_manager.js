@@ -1939,6 +1939,12 @@ module.exports = {
                 });
             }
         });
+    },
+
+    getCampaignEmailData: function(emailId, fn) {
+        var self = this;
+        self.log.debug('>> getCampaignEmailData');
+        mandrillHelper.getMessageInfo(emailId, fn);
     }
 
 }
