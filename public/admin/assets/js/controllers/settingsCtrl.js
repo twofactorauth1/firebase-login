@@ -119,7 +119,7 @@
      */
 
     $scope.insertFavicon = function (asset) {
-      $scope.website.settings.favicon = asset.url;
+      $scope.website.settings.favicon = asset.url.replace(/^(http|https):/i, "");
     };
 
     /*
