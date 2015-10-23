@@ -1,3 +1,5 @@
+(function(){
+
 app.controller('SiteBuilderComponentLoaderController', ssbComponentLoaderController);
 
 ssbComponentLoaderController.$inject = ['$scope', '$attrs', '$filter', 'SimpleSiteBuilderService', '$stateParams'];
@@ -15,3 +17,5 @@ function ssbComponentLoaderController($scope, $attrs, $filter, SimpleSiteBuilder
     }
 
 }
+
+})();

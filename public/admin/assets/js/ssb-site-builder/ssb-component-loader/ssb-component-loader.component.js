@@ -1,3 +1,5 @@
+(function(){
+
 app.directive('ssbComponentLoader', ssbComponentLoader);
 
 function ssbComponentLoader($compile) {
@@ -18,13 +20,4 @@ function ssbComponentLoader($compile) {
 
 }
 
-// scope: {
-//     page: '='
-// },
-// templateUrl: 'assets/js/ssb-site-builder/ssb-flyover/ssb-flyover.component.html',
-// controller: 'SiteBuilderFlyoverController',
-// controllerAs: 'vm',
-// bindToController: true,
-// link: function(scope, element, attrs, ctrl) {
-//     ctrl.init(element);
-// }
+})();

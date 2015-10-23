@@ -1,3 +1,5 @@
+(function(){
+
 app.controller('SiteBuilderController', ssbSiteBuilderController);
 
 ssbSiteBuilderController.$inject = ['$scope', '$rootScope', '$attrs', '$filter', 'SimpleSiteBuilderService', '$stateParams'];
@@ -32,3 +34,5 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     }
 
 }
+
+})();

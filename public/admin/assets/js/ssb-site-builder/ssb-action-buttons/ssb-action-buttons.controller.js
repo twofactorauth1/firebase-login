@@ -1,3 +1,5 @@
+(function(){
+
 app.controller('SiteBuilderActionButtonsController', ssbSiteBuilderActionButtonsController);
 
 ssbSiteBuilderActionButtonsController.$inject = ['$scope', '$attrs', '$filter', 'SimpleSiteBuilderService'];
@@ -26,3 +28,5 @@ function ssbSiteBuilderActionButtonsController($scope, $attrs, $filter, SimpleSi
     }
 
 }
+
+})();

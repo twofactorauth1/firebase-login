@@ -10,7 +10,7 @@
 	function SimpleSiteBuilderService($http, AccountService, WebsiteService) {
 		var ssbService = {};
 		var baseWebsiteAPIUrl = '/api/1.0/cms/website/'; //TODO: upgrade to api/2.0 when ready
-		var basePageAPIUrl = '/api/1.0/cms/page/'; //TODO: upgrade to api/2.0 when ready
+		var basePageAPIUrl = '/api/1.0/cms/page/';
 
 
 		ssbService.getSite = getSite;
@@ -47,38 +47,30 @@
 		}
 
 		function getPage(id) {
-			
-			function success(data) {
-				ssbService.page = data;
-			}
 
-			function error(error) {
-				console.error('SimpleSiteBuilderService getPage error: ' + error);
-			}
+			return $http.get(basePageAPIUrl + id).success(successPage).error(errorPage);
 
-			return $http.get(basePageAPIUrl + id).success(success).error(error);
 		}
 
 		function savePage(page) {
 
-			function success(data) {
-				ssbService.page = data;
-			}
-
-			function error(error) {
-				console.error('SimpleSiteBuilderService savePage error: ' + error);
-			}
-			
 			return (
 				$http({
 					url: baseWebsiteAPIUrl + ssbService.website._id + '/page/' + page._id,
 					method: 'POST',
 					data: angular.toJson(page)
-				}).success(success).error(error)
+				}).success(successPage).error(errorPage)
 			)
 
 		}
 
+		function successPage(data) {
+			ssbService.page = data;
+		}
+
+		function errorPage(error) {
+			console.error('SimpleSiteBuilderService page error: ' + error);
+		}
 
 		return ssbService;
 	}

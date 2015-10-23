@@ -1,3 +1,5 @@
+(function(){
+
 app.controller('SiteBuilderSidebarController', ssbSiteBuilderSidebarController);
 
 ssbSiteBuilderSidebarController.$inject = ['$scope', '$attrs', '$filter', 'SimpleSiteBuilderService'];
@@ -60,3 +62,5 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, SimpleSiteBuil
     }
 
 }
+
+})();
