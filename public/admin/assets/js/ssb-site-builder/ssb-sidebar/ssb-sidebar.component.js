@@ -5,7 +5,7 @@ app.directive('ssbSidebar', ssbSidebar);
 function ssbSidebar() {
 
     return {
-        // require: '^ssbSiteBuilder',
+        restrict: 'E',
         scope: {
             page: '='
         },

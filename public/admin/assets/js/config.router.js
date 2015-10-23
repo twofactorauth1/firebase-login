@@ -74,9 +74,9 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
             label: 'Simple Site Builder Page Editor'
         },
         resolve: angular.extend({
-            init: function($stateParams, SimpleSiteBuilderService) {
+            init: ['$stateParams', 'SimpleSiteBuilderService', function($stateParams, SimpleSiteBuilderService) {
                 return SimpleSiteBuilderService.getPage($stateParams.pageId);
-            }
+            }]
         }, loadSequence('editorCtrl', 'userService', 'htmlToPlaintext', 'spectrum', 'angular-slider', 'assetsService', 'toasterService', 'geocodeService', 'productService', 'paymentService', 'accountService', 'toTrusted', 'generateURLforLinks', 'truncate', 'ckeditor', 'ngSticky', 'slick', 'offset', 'jqcloud', 'jsVideoUrlParser', 'selectedTags', 'addComponentModalCtrl', 'componentSettingsModalCtrl', 'googlePlaces', 'ngMap', 'angularCircularNavigation', 'campaignService', 'angular-resizable', 'wu.masonry'))
     }).state('app.website.analytics', {
         url: '/site-analytics',
