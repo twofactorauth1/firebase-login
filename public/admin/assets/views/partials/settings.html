@@ -123,6 +123,39 @@
                                 <span tooltip-placement="right" tooltip-html-unsafe="Use a comma to separate keywords for search engines indexing."><i class="fa fa-info-circle" /></span>
                                 <tags-input ng-model="website.seo.keywords"></tags-input>
                             </div>
+                        </div>
+                    </form>
+                    <div class="clearfix"></div>
+                </tab>
+                <tab heading="Domain">
+                    <form>
+                        <div class="col-xs-6">
+                            <div class="form-group margin-bottom-10">
+                                <label>Indigenous Domain</label>
+                                <p class="margin-top-10">You current subdomain is <span class="text-bold">{{originalAccount.subdomain}}.indigenous.io</span>
+                                    <span class="cl-effect-1">
+                                        <a ng-click="modifysub.show=true" ng-hide="modifysub.show">Modify</a>
+                                        <a ng-click="revertSubdomain()" ng-show="modifysub.show">Cancel</a>
+                                    </span>
+                                </p>
+                                <div ng-if="modifysub.show">
+                                    <span class="input-icon input-icon-right" ng-class="{'has-error': domainError}">
+                                        <input class="form-control" type="text" ng-model="account.subdomain" ng-change="checkDomainExists(account)" ng-model-options="{ debounce: 800 }" />
+                                        <span ng-if="checkingSubdomain"><i class="fa fa-spinner fa-spin"></i></span>
+                                    <span ng-if="hasCheckedSubdomain && domainError && !checkingSubdomain"><i class="fa fa-times text-danger"></i></span>
+                                    <span ng-if="hasCheckedSubdomain && !domainError && !checkingSubdomain"><i class="fa fa-check text-success"></i></span>
+                                    </span>
+                                    <span class="help-block" ng-hide="hasCheckedSubdomain && !domainError && !checkingSubdomain || domainError"><i class="ti-info-alt text-primary"></i> Enter the new desired subdomain and we will check to see if its avaliable.</span>
+                                    <span class="help-block text-success" ng-if="hasCheckedSubdomain && !domainError && !checkingSubdomain"><i class="ti-info-alt text-primary"></i> Save the settings for this to take effect.</span>
+                                    <span class="help-block text-success" ng-if="checkingSubdomain"><i class="ti-info-alt text-primary"></i> Save the settings for this to take effect.</span>
+                                    <span class="error-block text-danger" ng-show="domainError">Domain already taken, please choose another one.</span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Custom Domain</label>
+                                <input type="text" class="form-control" ng-model="account.domain" readonly />
+                                <span class="help-block"><a href="#" onclick="Intercom('showNewMessage', 'Support for Custom Domain:')">Chat with us about your custom domain</a></span>
+                            </div>
                             <div class="form-group">
                                 <!-- <label>Footer Link</label> -->
                                 <!-- <span id="helpBlock" class="help-block">Remove the Indigenous Logo from the footer component.</span> -->
@@ -142,7 +175,6 @@
                                 <label>Link URL</label>
                                 <input type="text" class="form-control" ng-model="website.settings.footerLinkURL" />
                             </div>
-
                         </div>
                         <div class="col-xs-6">
                             <div class="form-group">
@@ -191,39 +223,6 @@
                                     <div class="clearfix"></div>
                                 </div>
                                 <div ng-if="!website.metatags" class="btn btn-wide btn-o btn-primary pull-right" ng-click="accountAddMetaFn()">Add Meta Tag</div>
-                            </div>
-                        </div>
-                    </form>
-                    <div class="clearfix"></div>
-                </tab>
-                <tab heading="Domain">
-                    <form>
-                        <div class="col-xs-6">
-                            <div class="form-group margin-bottom-10">
-                                <label>Indigenous Domain</label>
-                                <p class="margin-top-10">You current subdomain is <span class="text-bold">{{originalAccount.subdomain}}.indigenous.io</span>
-                                    <span class="cl-effect-1">
-                                        <a ng-click="modifysub.show=true" ng-hide="modifysub.show">Modify</a>
-                                        <a ng-click="revertSubdomain()" ng-show="modifysub.show">Cancel</a>
-                                    </span>
-                                </p>
-                                <div ng-if="modifysub.show">
-                                    <span class="input-icon input-icon-right" ng-class="{'has-error': domainError}">
-                                        <input class="form-control" type="text" ng-model="account.subdomain" ng-change="checkDomainExists(account)" ng-model-options="{ debounce: 800 }" />
-                                        <span ng-if="checkingSubdomain"><i class="fa fa-spinner fa-spin"></i></span>
-                                    <span ng-if="hasCheckedSubdomain && domainError && !checkingSubdomain"><i class="fa fa-times text-danger"></i></span>
-                                    <span ng-if="hasCheckedSubdomain && !domainError && !checkingSubdomain"><i class="fa fa-check text-success"></i></span>
-                                    </span>
-                                    <span class="help-block" ng-hide="hasCheckedSubdomain && !domainError && !checkingSubdomain || domainError"><i class="ti-info-alt text-primary"></i> Enter the new desired subdomain and we will check to see if its avaliable.</span>
-                                    <span class="help-block text-success" ng-if="hasCheckedSubdomain && !domainError && !checkingSubdomain"><i class="ti-info-alt text-primary"></i> Save the settings for this to take effect.</span>
-                                    <span class="help-block text-success" ng-if="checkingSubdomain"><i class="ti-info-alt text-primary"></i> Save the settings for this to take effect.</span>
-                                    <span class="error-block text-danger" ng-show="domainError">Domain already taken, please choose another one.</span>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label>Custom Domain</label>
-                                <input type="text" class="form-control" ng-model="account.domain" readonly />
-                                <span class="help-block"><a href="#" onclick="Intercom('showNewMessage', 'Support for Custom Domain:')">Chat with us about your custom domain</a></span>
                             </div>
                         </div>
                     </form>
