@@ -1,3 +1,5 @@
+(function(){
+
 app.directive('ssbSidebar', ssbSidebar);
 
 function ssbSidebar() {
@@ -17,3 +19,5 @@ function ssbSidebar() {
     };
 
 }
+
+})();

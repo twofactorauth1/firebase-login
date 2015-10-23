@@ -1,3 +1,5 @@
+(function(){
+
 app.directive('ssbFlyover', ssbFlyover);
 
 function ssbFlyover() {
@@ -16,3 +18,5 @@ function ssbFlyover() {
     };
 
 }
+
+})();

@@ -1,3 +1,5 @@
+(function(){
+
 app.directive('ssbActionButtons', ssbActionButtons);
 
 function ssbActionButtons() {
@@ -18,3 +20,5 @@ function ssbActionButtons() {
     };
 
 }
+
+})();

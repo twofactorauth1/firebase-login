@@ -1,3 +1,5 @@
+(function(){
+
 app.controller('SiteBuilderFlyoverController', ssbSiteBuilderFlyoverController);
 
 ssbSiteBuilderFlyoverController.$inject = ['$scope', '$attrs', '$filter', 'SimpleSiteBuilderService'];
@@ -18,3 +20,5 @@ function ssbSiteBuilderFlyoverController($scope, $attrs, $filter, SimpleSiteBuil
     }
 
 }
+
+})();

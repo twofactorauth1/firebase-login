@@ -1,3 +1,5 @@
+(function(){
+
 app.directive('ssbSiteBuilder', ssbSiteBuilder);
 
 function ssbSiteBuilder() {
@@ -14,3 +16,5 @@ function ssbSiteBuilder() {
     };
 
 }
+
+})();
