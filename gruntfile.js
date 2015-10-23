@@ -385,10 +385,6 @@ module.exports = function(grunt) {
                         googleClientId: GOOGLE_CONFIG.CLIENT_ID,
                         googleClientSecret: GOOGLE_CONFIG.CLIENT_SECRET,
                         googleServerKey: GOOGLE_CONFIG.SERVER_KEY,
-                        twonetKey: TWONET_CONFIG.TWONET_KEY,
-                        twonetSecret: TWONET_CONFIG.TWONET_SECRET,
-                        twonetUserGuid: TWONET_CONFIG.TWONET_USERGUID,
-                        twonetTrackGuid: TWONET_CONFIG.TWONET_TRACKGUID,
                         leaddyno: LEADDYNO_CONFIG.LEAD_DYNO_KEY
                     }
                 }
@@ -410,10 +406,6 @@ module.exports = function(grunt) {
                         googleClientId: GOOGLE_CONFIG.PROD_CLIENT_ID,
                         googleClientSecret: GOOGLE_CONFIG.PROD_CLIENT_SECRET,
                         googleServerKey: GOOGLE_CONFIG.SERVER_KEY,
-                        twonetKey: TWONET_CONFIG.TWONET_KEY,
-                        twonetSecret: TWONET_CONFIG.TWONET_SECRET,
-                        twonetUserGuid: TWONET_CONFIG.TWONET_USERGUID,
-                        twonetTrackGuid: TWONET_CONFIG.TWONET_TRACKGUID,
                         leaddyno: LEADDYNO_CONFIG.LEAD_DYNO_KEY
                     }
                 }
