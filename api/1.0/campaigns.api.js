@@ -50,7 +50,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url(':id/running'), this.isAuthAndSubscribedApi.bind(this), this.getRunningCampaign.bind(this));
         //app.get(this.url('campaigns/running'), this.isAuthAndSubscribedApi.bind(this), this.getRunningCampaigns.bind(this));
         app.get(this.url('running/contact/:id'), this.isAuthAndSubscribedApi.bind(this), this.getRunningCampaignsForContact.bind(this));
-
+        app.get(this.url('emails/:id'), this.isAuthAndSubscribedApi.bind(this), this.getEmailData.bind(this));
 
     },
 
@@ -414,6 +414,23 @@ _.extend(api.prototype, baseApi.prototype, {
                 campaignManager.duplicateCampaign(accountId, campaignId, campaignName, userId, function(err, campaign){
                     self.log.debug('<< duplicateCampaign');
                     self.sendResultOrError(resp, err, campaign, 'Error duplicating campaign');
+                });
+            }
+        });
+    },
+
+    getEmailData: function(req, resp) {
+        var self = this;
+        self.log.debug('>> getEmailData');
+        var accountId = parseInt(self.accountId(req));
+        var emailId = req.params.id;
+        self.checkPermission(req, self.sc.privs.MODIFY_CAMPAIGN, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                campaignManager.getCampaignEmailData(emailId, function(err, data){
+                    self.log.debug('<< getEmailData');
+                    self.sendResultOrError(resp, err, data, 'Error getting email data');
                 });
             }
         });
