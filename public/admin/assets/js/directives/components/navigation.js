@@ -18,7 +18,7 @@ app.directive('navigationComponent', ['WebsiteService', 'AccountService', functi
       if ($scope.$parent.website) {
         $scope.website = $scope.$parent.website;
       } else {
-        $scope.$parent.getWebsite(function (website) {
+        WebsiteService.getWebsite(function (website) {
           $scope.website = website;
         });
 

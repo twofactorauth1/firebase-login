@@ -1,25 +1,16 @@
 app.directive('ssbSiteBuilder', ssbSiteBuilder);
 
-ssbSiteBuilder.$inject = ['$filter', 'SimpleSiteBuilderService'];
-/* @ngInject */
-function ssbSiteBuilder($filter, SimpleSiteBuilderService) {
+function ssbSiteBuilder() {
 
     return {
         scope: {},
         templateUrl: 'assets/js/ssb-site-builder/ssb-site-builder.component.html',
-        controller: function($scope) {
-            
-            console.info('site-build directive init...')
-
-            var vm = this;
-            
-            $scope.$watch(function() { return SimpleSiteBuilderService.website; }, function(website){
-                vm.website = website;
-            }, true);
-
-        },
+        controller: 'SiteBuilderController',
         controllerAs: 'vm',
-        bindToController: true
+        bindToController: true,
+        link: function(scope, element, attrs, ctrl) {
+            ctrl.init(element);
+        }
     };
 
 }

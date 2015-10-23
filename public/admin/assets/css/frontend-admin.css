@@ -6194,16 +6194,42 @@
 }
 .ssb-site-builder-container {
   height: 100%;
+  height: calc(100vh - 65px);
+  overflow: auto;
 }
 .ssb-site-builder {
   margin: 0 -15px 0 -15px;
   padding: 0;
   height: 100%;
+  width: 100%;
+  display: block;
+}
+@media screen and (min-width: 768px) {
+  .ssb-site-builder .ssb-main {
+    height: 100%;
+    width: 70%;
+    position: relative;
+    top: 0;
+    left: 30%;
+  }
 }
 .ssb-sidebar {
-  width: 20%;
-  height: 100%;
-  overflow: hidden;
-  overflow-y: auto;
-  background-color: #5bc0de;
+  overflow: auto;
+  overflow-x: hidden;
+  display: block;
+  height: 200px;
+}
+@media (min-width: 768px) {
+  .ssb-sidebar {
+    position: fixed;
+    width: 25%;
+    height: 100%;
+  }
+}
+.ssb-flyover {
+  position: absolute;
+  top: 200px;
+  right: 25%;
+  background: grey;
+  display: none;
 }

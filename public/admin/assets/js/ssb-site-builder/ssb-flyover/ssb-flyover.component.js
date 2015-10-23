@@ -1,15 +1,18 @@
-app.directive('ssbFlyover', ['$filter', function($filter) {
+app.directive('ssbFlyover', ssbFlyover);
+
+function ssbFlyover() {
 
     return {
-        scope: {},
-        templateUrl: 'assets/js/ssb-site-builder/ssb-flyover/ssb-flyover.component.html',
-        controller: function() {
-            var vm = this;
-            console.info('site-build flyover directive init...')
-            vm.somethingFlyover = 'something flyover';
+        scope: {
+            page: '='
         },
+        templateUrl: 'assets/js/ssb-site-builder/ssb-flyover/ssb-flyover.component.html',
+        controller: 'SiteBuilderFlyoverController',
         controllerAs: 'vm',
-        // bindToController: true
+        bindToController: true,
+        link: function(scope, element, attrs, ctrl) {
+            ctrl.init(element);
+        }
     };
 
-}]);
+}

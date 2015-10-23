@@ -217,6 +217,10 @@
       $location.path('/website/pages/').search({pagehandle: page.handle});
     };
 
+    $scope.viewSimpleSiteBuilderSingle = function (page) {
+      $location.path('/website/site-builder/pages/' + page._id);
+    };
+
     $scope.filterScreenshot = {};
 
     $scope.pageScreenshotOptions = [{

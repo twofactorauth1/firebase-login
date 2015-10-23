@@ -341,14 +341,6 @@ module.exports = function(grunt) {
             paymentEvents: ['payments/tests/stripe_event_handler_test.js'],
             products: ['products/tests/*_test.js'],
             twitter: ['test/twitter_test.js'],
-            twonet:['biometrics/twonet/adapter/test/**/*_test.js', 'biometrics/twonet/client/test/**/*_test.js',
-                'biometrics/twonet/adapter/test/twonet_test_poll.js'],
-            twonetadapter:['biometrics/twonet/adapter/test/**/*_test.js'],
-            twonetclient:['biometrics/twonet/client/test/**/*_test.js'],
-            twonetpoll:['biometrics/twonet/adapter/test/twonet_test_poll.js'],
-            runkeeper:['biometrics/runkeeper/adapter/test/**/*_test.js', 'biometrics/runkeeper/adapter/test/runkeeper_test_poll.js'],
-            runkeeperadapter:['biometrics/runkeeper/adapter/test/**/*_test.js'],
-            runkeeperpoll:['biometrics/runkeeper/adapter/test/runkeeper_test_poll.js'],
             utils:['utils/test/*_test.js'],
             tzTests: ['test/tztest.js'],
             leads: ['test/pullLeadDynoData.js'],
@@ -555,18 +547,11 @@ module.exports = function(grunt) {
     /*
      * This task is run by CI.
      */
-    grunt.registerTask('tests', ['nodeunit:biometricsPlatform', 'nodeunit:contacts', 'nodeunit:utils',
+    grunt.registerTask('tests', ['nodeunit:contacts', 'nodeunit:utils',
             'nodeunit:products', 'nodeunit:cms', 'nodeunit:assets', 'nodeunit:contactActivities', 'nodeunit:payments',
             'nodeunit:analyticsCollater', 'nodeunit:stripe_cleanup']);
 
     grunt.registerTask('testContextio', ['nodeunit:contextio']);
-    grunt.registerTask('testBiometricsPlatform', ['nodeunit:biometricsPlatform']);
-    grunt.registerTask('testTwonetclient', ['nodeunit:twonetclient']);
-    grunt.registerTask('testTwonetadapter', ['nodeunit:twonetadapter']);
-    grunt.registerTask('testTwonetpoll', ['nodeunit:twonetpoll']);
-    grunt.registerTask('testRunkeeperadapter', ['nodeunit:runkeeperadapter']);
-    grunt.registerTask('testRunkeeperpoll', ['nodeunit:runkeeperpoll']);
-    grunt.registerTask('testBiometrics', ['nodeunit:twonetclient','nodeunit:biometricsPlatform','nodeunit:twonetadapter','nodeunit:twonetpoll','nodeunit:runkeeperadapter','nodeunit:runkeeperpoll']);
     grunt.registerTask('testUtils', ['nodeunit:utils']);
     grunt.registerTask('testApi', ['nodeunit:api']);
     grunt.registerTask('testFacebook', ['nodeunit:facebook']);

@@ -378,17 +378,6 @@
       }],
     };
 
-    /*
-     * @twoNetSubscribeFn
-     * -
-     */
-
-    $scope.twoNetSubscribeFn = function () {
-      CustomerService.postTwoNetSubscribe($scope.customer._id, function (data) {
-        console.log('data ', data);
-      });
-    };
-
     $scope.inValidateTags = function()
     {
       var status = false;
