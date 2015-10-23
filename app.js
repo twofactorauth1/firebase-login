@@ -296,57 +296,12 @@ require('./api/api.manager');
 require('./routers/router.manager');
 require('./routers/page.server.router');
 
-
-
-
-
 //-----------------------------------------------------
 //  SETUP RENDER HELPERS
 //-----------------------------------------------------
 Handlebars = require('handlebars');
 requirejs('libs_misc/handlebars/handlebarshelpers');
 requirejs('libs_misc/handlebars/indigenoushelpers');
-
-//-----------------------------------------------------
-//  SETUP BIOMETRICS POLLING
-//-----------------------------------------------------
-if (process.env.NODE_ENV != "testing") {
-
-    ValueTypes = require('./biometrics/platform/bio_value_types.js');
-    TwonetDeviceTypes = require('./biometrics/twonet/adapter/twonet_device_types.js');
-    TwonetAdapter = require('./biometrics/twonet/adapter/twonet_adapter.js');
-    RunkeeperDeviceTypes = require('./biometrics/runkeeper/adapter/runkeeper_device_types.js');
-    RunkeeperAdapter = require('./biometrics/runkeeper/adapter/runkeeper_adapter.js');
-
-    log.info("Initializing Biometrics Value Types...");
-    ValueTypes.initDB(function (err) {
-        if (err) {
-            log.error("Failed to initialize biometrics reading types: " + err.message);
-        }
-        log.info("Initializing 2net Reading Types...");
-        TwonetDeviceTypes.initDB(function (err) {
-            if (err) {
-                log.error("Failed to initialize 2net device types: " + err.message);
-            }
-            log.info("Biometrics 2net adapter will poll for readings every 45 minutes");
-            setInterval(function () {
-                TwonetAdapter.pollForReadings(function (err) {
-                })
-            }, 2700000);
-            log.info("Initializing Runkeeper Reading Types...");
-            RunkeeperDeviceTypes.initDB(function (err) {
-                if (err) {
-                    log.error("Failed to initialize runkeeper device types: " + err.message);
-                }
-                log.info("Biometrics RunKeeper adapter will poll for readings every 60 minutes");
-                setInterval(function () {
-                    RunkeeperAdapter.pollForReadings(function (err) {
-                    })
-                }, 3600000);
-            })
-        })
-    })
-}
 
 //-----------------------------------------------------
 //  SETUP ANALYTICS PROCESSING JOB
