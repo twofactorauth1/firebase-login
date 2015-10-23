@@ -296,8 +296,30 @@ require('./api/api.manager');
 require('./routers/router.manager');
 require('./routers/page.server.router');
 
-
-
+//-----------------------------------------------------
+//  SETUP Persistent Scheduling
+//-----------------------------------------------------
+if (process.env.NODE_ENV != "testing") {
+    var drone = require('schedule-drone');
+    drone.setConfig(
+        {
+            persistence:{
+                type:'mongodb',
+                connectionString:mongoConfig.MONGODB_CONNECT,
+                eventsCollection: 'scheduled_events',
+                options:{}
+            }
+        }
+    );
+    var scheduler = drone.daemon();
+    $$.u = $$.u || {};
+    $$.u.scheduler = scheduler;
+    log.debug('Started scheduler');
+    //scheduler.scheduleAndStore( '*/5 * * * * *', 'my-cron-event', {param1:'value1'}, function(){log.debug('callback')});
+    //scheduler.on('my-cron-event', function(params){
+    //    log.debug('got these params:', params);
+    //});
+}
 
 
 //-----------------------------------------------------
