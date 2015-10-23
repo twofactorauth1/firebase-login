@@ -5,6 +5,7 @@ app.directive('ssbSiteBuilder', ssbSiteBuilder);
 function ssbSiteBuilder() {
 
     return {
+        restrict: 'E',
         scope: {},
         templateUrl: 'assets/js/ssb-site-builder/ssb-site-builder.component.html',
         controller: 'SiteBuilderController',

@@ -5,6 +5,7 @@ app.directive('ssbActionButtons', ssbActionButtons);
 function ssbActionButtons() {
 
     return {
+        restrict: 'E',
         scope: {
             page: '=',
             saveAction: '&',

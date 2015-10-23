@@ -5,6 +5,7 @@ app.directive('ssbFlyover', ssbFlyover);
 function ssbFlyover() {
 
     return {
+        restrict: 'E',
         scope: {
             page: '='
         },
