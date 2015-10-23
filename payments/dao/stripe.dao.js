@@ -180,7 +180,7 @@ var dao = {
                 return;
             }
 
-            self.log.debug('<< listStripeCustomers', customers);
+            self.log.debug('<< listStripeCustomers');
             return fn(err, customers);
         });
     },

@@ -143,15 +143,6 @@
       });
     };
 
-    this.postTwoNetSubscribe = function (customerId, fn) {
-      var apiUrl = baseUrl + ['twonetadapter', 'subscription'].join('/');
-      $http.post(apiUrl, {
-        contactId: customerId
-      }).success(function (data) {
-        fn(data);
-      });
-    };
-
     this.getGeoSearchAddress = function (addressStr, fn) {
       var apiUrl = baseUrl + ['geo', 'search', 'address', addressStr].join('/');
       $http.get(apiUrl)

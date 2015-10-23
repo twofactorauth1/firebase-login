@@ -16,7 +16,7 @@
 
 
         .footer-inner {
-            padding: 0 20px;
+            padding: 0 10px;
             line-height: @footer-height;
         }
     }
@@ -46,6 +46,13 @@
             }
         }
     }
+
+    @media (max-width: @screen-xs-min) {
+        .go-top {
+            display: none;
+        }
+    }
+
 }
 
 .go-top {

@@ -1561,7 +1561,7 @@ ul.sub-menu li ul.sub-menu li ul.sub-menu li a {
   z-index: 1088;
 }
 #app > footer .footer-inner {
-  padding: 0 20px;
+  padding: 0 10px;
   line-height: 50px;
 }
 @media (min-width: 992px) {
@@ -1578,6 +1578,11 @@ ul.sub-menu li ul.sub-menu li ul.sub-menu li a {
 @media (max-width: 991px) {
   #app.app-slide-off > footer,
   #app.app-offsidebar-open > footer {
+    display: none;
+  }
+}
+@media (max-width: 480px) {
+  #app .go-top {
     display: none;
   }
 }
