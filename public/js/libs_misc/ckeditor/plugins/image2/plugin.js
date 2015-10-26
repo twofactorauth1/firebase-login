@@ -455,7 +455,7 @@
 			addClass: function( className ) {
 				if(getStyleableElement( this ).hasClass("img-rounded") || 
 					getStyleableElement( this ).hasClass("img-thumbnail") || 
-					getStyleableElement( this ).hasClass("mg-circle"))
+					getStyleableElement( this ).hasClass("img-circle"))
 					{
 						// do nothing
 					}
