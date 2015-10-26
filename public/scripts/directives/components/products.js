@@ -81,6 +81,10 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
           }
         });
         scope.products = _filteredProducts;
+        $timeout(function () {
+          $(window).trigger('resize');
+          console.log("Products loaded");
+        }, 500);
         if (fn) {
           fn();
         }

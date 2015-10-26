@@ -1,6 +1,6 @@
 'use strict';
 /*global app, moment*/
-app.directive('productsComponent', ['ProductService', '$location', function (ProductService, $location) {
+app.directive('productsComponent', ['ProductService', '$location', '$timeout', function (ProductService, $location, $timeout) {
   return {
     scope: {
       component: '='
@@ -68,6 +68,10 @@ app.directive('productsComponent', ['ProductService', '$location', function (Pro
           }
         });
         scope.products = _filteredProducts;
+        $timeout(function () {
+          $(window).trigger('resize');
+          console.log("Products loaded");
+        }, 500);
         if (fn) {
           fn();
         }
