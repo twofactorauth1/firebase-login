@@ -1002,6 +1002,10 @@
         _modal.resolve.testimonialSlider = function () {
           return $scope.testimonialSlider;
         };
+        _modal.resolve.testimonialSlider = function () {
+          return $scope.testimonialSlider;
+        };
+        
       }
 
       if (angular.isDefined(index) && index !== null && index >= 0) {
@@ -1009,6 +1013,10 @@
         _modal.resolve.clickedIndex = function () {
           return index;
         };
+        if($scope.page)
+          _modal.resolve.pageHandle = function () {
+            return $scope.page.handle;
+          };
       }
 
       if (size) {

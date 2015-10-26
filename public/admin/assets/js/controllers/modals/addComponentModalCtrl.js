@@ -1,6 +1,6 @@
 'use strict';
 /*global app*/
-app.controller('AddComponentModalCtrl', ['$scope', '$document', '$modalInstance', '$timeout', 'WebsiteService', 'toaster', 'components', 'clickedIndex', 'isEmail', function ($scope, $document, $modalInstance, $timeout, WebsiteService, toaster, components, clickedIndex, isEmail) {
+app.controller('AddComponentModalCtrl', ['$scope', '$document', '$modalInstance', '$timeout', 'WebsiteService', 'toaster', 'components', 'clickedIndex', 'isEmail', 'pageHandle', function ($scope, $document, $modalInstance, $timeout, WebsiteService, toaster, components, clickedIndex, isEmail, pageHandle) {
 
   //passed in components from parent ctrl
   $scope.components = components;
@@ -10,6 +10,8 @@ app.controller('AddComponentModalCtrl', ['$scope', '$document', '$modalInstance'
   $scope.saveLoading = false;
   //set email specific componentFilters etc.
   $scope.isEmail = isEmail;
+
+  $scope.pageHandle = pageHandle;
 
   /*
    * @addComponent
@@ -309,6 +311,19 @@ app.controller('AddComponentModalCtrl', ['$scope', '$document', '$modalInstance'
       });
       footerComponent.enabled = true;
     }
+    if($scope.pageHandle == 'single-post')
+    {
+      var checkIfPostExists = _.findWhere($scope.components, {
+        type: 'single-post'
+      });
+      if(!checkIfPostExists)
+      {
+        var postComponent = _.findWhere($scope.componentTypes, {
+          type: 'single-post'
+        });
+        postComponent.enabled = true;
+      }
+    }    
   }
 
   //component label placeholder
