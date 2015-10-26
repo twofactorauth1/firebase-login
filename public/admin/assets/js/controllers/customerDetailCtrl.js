@@ -400,7 +400,7 @@
         {
           $scope.saveLoading = false;          
           if(showAlert)            
-            SweetAlert.swal("Cancelled", "Your edits were NOT saved.", "error");
+            SweetAlert.swal("Warning", "Your edits were NOT saved.", "error");
           toaster.pop('warning', 'Please add at least one tag.');
           return;
         }
@@ -432,7 +432,7 @@
                 $scope.saveLoading = false;
                 toaster.pop('warning', 'Email already exists.');
                 if(showAlert)                    
-                    SweetAlert.swal("Cancelled", "Your edits were NOT saved.", "error");
+                    SweetAlert.swal("Warning", "Your edits were NOT saved.", "error");
               }
             }
             else
@@ -464,7 +464,7 @@
           toaster.pop('warning', 'Contact Name OR Email is required');
         }
         if(showAlert)
-          SweetAlert.swal("Cancelled", "Your edits were NOT saved.", "error");
+          SweetAlert.swal("warning", "Your edits were NOT saved.", "error");
       }
 
     };
