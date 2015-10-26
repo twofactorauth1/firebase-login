@@ -44,9 +44,7 @@ app.directive('testimonialsComponent', ['$timeout', function ($timeout) {
         }   
         scope.component.testimonials = testimonials;      
         $timeout(function () {
-          scope.$apply(function(){
-            scope.dataLoaded = !scope.dataLoaded;
-          })
+          scope.dataLoaded = !scope.dataLoaded;
         });
       };
 
