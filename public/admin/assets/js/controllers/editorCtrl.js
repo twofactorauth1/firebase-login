@@ -293,11 +293,19 @@
             $scope.saveLoading = false;
             toaster.pop('error', "Post URL " + post_data.post_url, "Already exists");
           } else {
-            WebsiteService.updatePost($scope.page._id, post_data._id, post_data, function (data) {
+            WebsiteService.updatePost($scope.page._id, post_data._id, post_data, function (data, error) {
+              $scope.saveLoading = false;
+              if (error) {
+                if(error.message)
+                  toaster.pop('error', error.message);   
+                else
+                    toaster.pop('error', "Error while updating post");               
+                return;
+              }
               if (post_data.post_url !== $scope.originalPost.post_url) {               
                 $location.search('posthandle', post_data.post_url);
               }
-              $scope.saveLoading = false;
+             
               $scope.blog.post = data;
               angular.copy($scope.blog.post, $scope.originalPost);
               toaster.pop('success', "Post Saved", "The " + $filter('htmlToPlaintext')($scope.blog.post.post_title) + " post was saved successfully.");              
@@ -307,16 +315,30 @@
         })
 
       } else if ($scope.templateActive) {
-        WebsiteService.updateTemplate($scope.page._id, $scope.page, function () {
+        WebsiteService.updateTemplate($scope.page._id, $scope.page, function (data, error) {
           console.log('success');
           $scope.saveLoading = false;
+          if (error) {
+            if(error.message)
+              toaster.pop('error', error.message);   
+            else
+                toaster.pop('error', "Error while updating template");               
+            return;
+          }
           toaster.pop('success', "Template Saved", "The " + $scope.page.handle + " template was saved successfully.");
           $scope.redirectAfterSave(redirect_url, reload);
         });
       } else if ($scope.isTopic) {
         console.log('saving topic');
-        WebsiteService.updateTopic($scope.topic, function (data) {
+        WebsiteService.updateTopic($scope.topic, function (data, error) {
           $scope.saveLoading = false;
+          if (error) {
+            if(error.message)
+              toaster.pop('error', error.message);   
+            else
+                toaster.pop('error', "Error while updating topic");               
+            return;
+          }
           toaster.pop('success', "Topic Saved", "The " + $scope.topic.title + " topic was saved successfully.");
           $scope.redirectAfterSave(redirect_url, reload);
         });
@@ -334,9 +356,17 @@
           if (!$scope.duplicateUrl)
             $scope.validateContactAddress(function (data) {
               if (data && !$scope.isEmail) {
-                WebsiteService.updatePage($scope.page, $scope.originalPage.handle, function (data) {
-                  console.log($scope.page.handle, $scope.originalPage.handle);
+                WebsiteService.updatePage($scope.page, $scope.originalPage.handle, function (data, error) {
                   $scope.saveLoading = false;
+                  if (error) {
+                    if(error.message)
+                      toaster.pop('error', error.message);   
+                    else
+                      toaster.pop('error', "Error while updating page");               
+                    return;
+                  }
+                  console.log($scope.page.handle, $scope.originalPage.handle);
+                  
                   toaster.pop('success', "Page Saved", "The " + $scope.page.handle + " page was saved successfully.");
                   $scope.redirectAfterSave(redirect_url, reload);
                   //$scope.page = data;

@@ -321,7 +321,7 @@
         fn(data);
       }).error(function (err) {
         console.warn('END:Website Service updatePage with ERROR');
-        fn(err, null);
+        fn(null, err);
       });
     };
     
@@ -604,6 +604,7 @@
         fn(data);
       }).error(function (err) {
         console.warn('END:Update Template with ERROR', err);
+        fn(null, err);
       });
     };
 
@@ -638,6 +639,7 @@
         fn(data);
       }).error(function (err) {
         console.warn('END:Update Topic with ERROR', err);
+        fn(null, err);
       });
     };
 
@@ -725,7 +727,7 @@
         fn(data);
       }).error(function (err) {
         console.warn('END:Website Service updatePost with ERROR');
-        fn(err, null);
+        fn(null, err);
       });
     };
 
