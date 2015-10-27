@@ -14238,6 +14238,9 @@ tags-input.ti-input-sm .tags .input,
 .create-campaign tags-input .tags {
   background-color: white!important;
 }
+.create-campaign .customer-list .ui-select-dropdown.dropdown-menu {
+  top: inherit !important;
+}
 .create-campaign .ui-select-multiple.ui-select-bootstrap .ui-select-match-item {
   color: #fff!important;
   background: #47b1cc;
