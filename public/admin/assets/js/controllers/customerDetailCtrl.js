@@ -234,6 +234,7 @@
       } else {
         //customer has address and lat/lon
         if (_firstAddress.lat && _firstAddress.lon) {
+          $scope.originalCustomer = angular.copy($scope.customer);
           $scope.showMap(_firstAddress.lat, _firstAddress.lon);
         } else {
           //customer has address but no lat/lon
@@ -452,6 +453,7 @@
               }
               if(showAlert){
                 SweetAlert.swal("Saved!", "Your edits were saved to the page.", "success");
+                $scope.changesConfirmed = true;
                 window.location = newUrl;
               }
             });
@@ -1018,11 +1020,12 @@
             if (isConfirm) {              
               $scope.customerSaveFn(false, true, newUrl);
             } else {
+              $scope.changesConfirmed = true;
               SweetAlert.swal("Cancelled", "Your edits were NOT saved.", "error");
               window.location = newUrl;
             }
             $scope.isDirty = false;
-            $scope.changesConfirmed = true;
+            
             //set window location
             
             offFn();
