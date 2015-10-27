@@ -13552,6 +13552,11 @@ div[class^="spacing-"] {
 .customers .column-width {
   width: 10%;
 }
+@media (min-width: 992px) {
+  .customers .tag-width {
+    width: 15%;
+  }
+}
 .customers table.grid thead th {
   width: 10%;
   float: left;
