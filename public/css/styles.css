@@ -3621,6 +3621,9 @@ div[data-type=blog] .container {
   height: 5px;
   background-color: #00bff3;
 }
+.pricing-tables-v1 .pricing-table-title {
+  position: relative;
+}
 .coming-soon-v1 {
   height: 100%;
 }

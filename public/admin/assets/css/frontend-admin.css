@@ -3615,6 +3615,9 @@
   height: 5px;
   background-color: #00bff3;
 }
+#componentloader .pricing-tables-v1 .pricing-table-title {
+  position: relative;
+}
 #componentloader .coming-soon-v1 {
   height: 100%;
 }
