@@ -1179,6 +1179,11 @@
       $scope.updatePostData();
     };
 
+    $scope.slugifyDuplicatePostHandle = function (title, post) {
+      if (title && post)
+        post.post_url = $filter('slugify')(title); 
+    };
+
     $scope.newPage = {};
 
     /*
