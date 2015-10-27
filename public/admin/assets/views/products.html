@@ -131,10 +131,10 @@
                             <h3 ng-if="!product.icon"><span class="fa fa-cube"></span></h3>
                             <h3 ng-if="!product.is_image && product.icon"><span class="fa {{product.icon}}"></span></h3>
                         </td>
-                        <td class="hidden-xs">{{formatStatus(product.status)}}</td>
-                        <td><span ng-text-truncate="product.name" ng-tt-chars-threshold="25" ng-tt-no-toggling></span></td>
-                        <td class="hidden-xs">{{product.type}}</td>
-                        <td class="hidden-xs">{{product.modified.date | date:'MMM d yy'}}</td>
+                        <td class="hidden-xs"><strong>Status: </strong>{{formatStatus(product.status)}}</td>
+                        <td><strong>Name: </strong><span ng-text-truncate="product.name" ng-tt-chars-threshold="25" ng-tt-no-toggling></span></td>
+                        <td class="hidden-xs"><strong>Type: </strong>{{product.type}}</td>
+                        <td class="hidden-xs"><strong>Modified: </strong>{{product.modified.date | date:'MMM d yy'}}</td>
                     </tr>
                 </tbody>
                 <tfoot>
