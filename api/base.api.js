@@ -48,8 +48,8 @@ _.extend(apiBase.prototype, {
 
         app.get(this.url('ping'), this.ping.bind(this));
 
-        this.log = global.getLogger(this.base + ".api");
-
+        this.log = global.getLogger(this.base + '_v' + this.version + '_' + ".api");
+        //this.log.debug('Initializing...');
         if (this.initialize != null && this.initialize != 'undefined') {
             this.initialize();
         }
@@ -77,6 +77,7 @@ _.extend(apiBase.prototype, {
         if (route != null && route != "") {
             url = url + "/" + route;
         }
+
         return url;
     },
 
