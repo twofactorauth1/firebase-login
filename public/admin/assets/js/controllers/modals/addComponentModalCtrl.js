@@ -363,10 +363,12 @@ app.controller('AddComponentModalCtrl', ['$scope', '$document', '$modalInstance'
   });
 
   // Manually add the Misc section back on to the end of the list
-  $scope.componentFilters.push({
-    'capitalized': 'Misc',
-    'lowercase': 'misc'
-  });
+  // Exclude 'Misc' filter for emails
+  if (!$scope.isEmail)
+    $scope.componentFilters.push({
+      'capitalized': 'Misc',
+      'lowercase': 'misc'
+    });
 
   $scope.setFilterType = function (label) {
     $scope.typefilter = label;
