@@ -247,6 +247,10 @@ mainApp.service('analyticsService', ['$http', '$location', 'ipCookie', function 
         $http.post(apiUrl, pageProperties)
             .success(function(data, status, headers, config) {
                 //track mouse movement
+                /*
+                 * DISABLING for now.  No need to collect this yet.
+                 */
+                /*
                 document.body.onmousemove = function(ev) {
                       var now = new Date().getTime();
                       pageProperties.pageActions.push({
@@ -286,7 +290,7 @@ mainApp.service('analyticsService', ['$http', '$location', 'ipCookie', function 
                     y: event.layerY
                   });
                 };
-
+                */
                 fn(data);
             });
     };
