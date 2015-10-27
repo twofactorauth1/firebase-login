@@ -371,7 +371,7 @@
                   $scope.redirectAfterSave(redirect_url, reload);
                   //$scope.page = data;
                   var originalPageHandle = angular.copy($scope.originalPage.handle);
-                  //angular.copy($scope.page, $scope.originalPage);
+                  $scope.originalPage = angular.copy($scope.page);
                   
                   //Update linked list
                   $scope.website.linkLists.forEach(function (value, index) {
