@@ -716,9 +716,9 @@
       return fullContacts;
     };
 
-    // $scope.contactTags = function (customer) {
-    //   return CustomerService.contactTags(customer);
-    // };
+     $scope.contactTags = function (customer) {
+       return CustomerService.contactTags(customer);
+     };
 
     /*
      * @checkContactExists
