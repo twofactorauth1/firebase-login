@@ -15,11 +15,15 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
 
     $scope.$watch(function() { return SimpleSiteBuilderService.website; }, function(website){
         vm.website = website;
-    }, true);
+    });
 
     $scope.$watch(function() { return SimpleSiteBuilderService.page; }, function(page){
         vm.page = page;
-    }, true);
+    });
+
+    $scope.$watch(function() { return SimpleSiteBuilderService.activeSection; }, function(activeSection){
+        vm.activeSection = activeSection;
+    });
 
     $rootScope.$on('$stateChangeStart',
         function (event) {

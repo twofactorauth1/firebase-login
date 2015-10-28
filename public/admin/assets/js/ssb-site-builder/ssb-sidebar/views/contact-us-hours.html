@@ -1,0 +1,91 @@
+<h4>Hours</h4>
+<div class="form-group">
+    <label for="show-hours">Show Business Hours</label>
+    <span tooltip-placement="top" tooltip-html-unsafe="Show/hide business hours to contact us component."><i class="fa fa-info-circle" /></span>
+    <switch id="show-hours" ng-model="componentEditing.showHours" class="pull-right" ng-change="saveComponent()"></switch>
+</div>
+<div class="form-group">
+    <label for="custom-hours">Custom hours</label>
+    <span tooltip-placement="top" tooltip-html-unsafe="Show/hide custom hours."><i class="fa fa-info-circle" /></span>
+    <switch id="custom-hours" ng-model="componentEditing.custom.hours" class="pull-right" ng-change="saveContactComponent(false)"></switch>
+</div>
+<div class="form-group" ng-if="componentEditing.showHours && componentEditing.custom.hours">
+    <label for="split-hours">Id like to enter two sets of hours for a single day</label>
+    <span tooltip-placement="top" tooltip-html-unsafe="Are your hours split during a single day such as 9-11am and 7-10pm?"><i class="fa fa-info-circle" /></span>
+    <switch id="splitHours" ng-model="componentEditing.splitHours" class="pull-right" ng-change="saveComponent()"></switch>
+</div>
+<div class="form-group" ng-if="componentEditing.showHours">
+    <label for="location-hours">Business Hours </label>
+    <span tooltip-placement="top" tooltip-html-unsafe="Contact Us business hours."><i class="fa fa-info-circle" /></span>
+    <span ng-if="contactHoursInvalid" id="contact-err-msg" class="error help-block">Start date(s) should not be greater than end date(s)</span>
+    <div ng-if="componentEditing.splitHours" class="multiple-hours col-xs-12" ng-repeat="val in componentEditing.hours">
+        <div class="col-xs-1">
+            <label for="val.day">{{val.day}}:</label>
+        </div>
+        <div class="col-xs-5">
+            <div id="business_hours_start_{{$index}}" class="inline-table-cell">
+            <select ng-disabled="!componentEditing.custom.hours" ng-change="validateHours(val, $index)" ng-hide="val.closed" class="chosen-select hour-start-select form-control" ng-model="val.start" ng-options="item for item in hours.HOURS">
+            </select>
+            </div>
+            <div id="business_hours_end_{{$index}}" class="inline-table-cell">
+                <select ng-disabled="!componentEditing.custom.hours" ng-hide="val.closed" ng-change="validateHours(val, $index)" class="chosen-select hour-start-select form-control" ng-model="val.end" ng-options="item for item in hours.HOURS">
+                </select>
+            </div>
+        </div>                            
+        <label class="pull-left" ng-hide="val.closed" ng-if="val.split" style="margin:10px"> & </label>
+        <div class="col-xs-5">
+            <div id="business_hours_start2_{{$index}}" class="inline-table-cell">
+                <select ng-disabled="!componentEditing.custom.hours" ng-change="validateHours(val, $index)" ng-hide="val.closed" ng-if="val.split" class="chosen-select hour-start-select form-control" ng-model="val.start2" ng-options="item for item in hours.HOURS">
+                </select>
+            </div>
+            <div class="inline-table-cell">
+                <select ng-disabled="!componentEditing.custom.hours" ng-change="validateHours(val, $index)" ng-if="val.split" ng-hide="val.closed" class="chosen-select hour-start-select form-control" ng-model="val.end2" ng-options="item for item in hours.HOURS">
+                </select>
+            </div>
+        </div>                            
+        <div class="col-xs-5 margin-left-5" class="inline-table-cell">
+            <div class="checkbox clip-check check-primary checkbox-inline">
+                <input ng-disabled="!componentEditing.custom.hours" type="checkbox" id="closed-{{$index}}" ng-change="validateHours(val, $index)" ng-model="val.closed">
+                <label for="closed-{{$index}}">
+                    Closed
+                </label>
+            </div>
+            <div class="checkbox clip-check check-primary checkbox-inline" ng-hide="val.closed">
+                <input ng-disabled="!componentEditing.custom.hours" type="checkbox" id="split-{{$index}}" ng-change="validateHours(val, $index)" ng-model="val.split">
+                <label for="split-{{$index}}">
+                    Split
+                </label>
+            </div>
+        </div>                                                       
+    </div>
+    <div ng-if="!componentEditing.splitHours" class="col-xs-12" ng-repeat="val in componentEditing.hours">
+        <div class="col-xs-1">
+            <label for="val.day">{{val.day}}:</label>
+        </div>
+        <div class="col-xs-3" id="business_hours_start_{{$index}}">
+            <select ng-disabled="!componentEditing.custom.hours" ng-change="validateHours(val, $index)" ng-hide="val.closed || val.wholeday" class="chosen-select hour-start-select form-control" ng-model="val.start" ng-options="item for item in hours.HOURS">
+            </select>
+        </div>
+        <div class="col-xs-3">
+            <select ng-disabled="!componentEditing.custom.hours" ng-change="validateHours(val, $index)" ng-hide="val.closed || val.wholeday" class="chosen-select hour-start-select form-control" ng-model="val.end" ng-options="item for item in hours.HOURS">
+            </select>
+        </div>
+        <div class="col-xs-3">
+            <div ng-hide="val.closed" class="checkbox clip-check check-primary checkbox-inline">
+                <input ng-disabled="!componentEditing.custom.hours" type="checkbox" ng-change="val.closed = false;validateHours(val, $index)" id="wholeday-{{$index}}" ng-model="val.wholeday">
+                <label for="wholeday-{{$index}}">
+                    Open 24 hours
+                </label>
+            </div>
+        </div>
+        <div class="col-xs-2">
+            <div class="checkbox clip-check check-primary checkbox-inline">
+                <input ng-disabled="!componentEditing.custom.hours" type="checkbox" id="closed-{{$index}}" ng-change="val.wholeday = false;validateHours(val, $index)" ng-model="val.closed">
+                <label for="closed-{{$index}}">
+                    Closed
+                </label>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="clearfix"></div>

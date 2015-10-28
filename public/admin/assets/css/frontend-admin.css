@@ -6216,6 +6216,64 @@
     left: 30%;
   }
 }
+.ssb-site-builder .ssb-component-container {
+  position: relative;
+}
+.ssb-site-builder .ssb-edit-control {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 3em;
+  height: 40px;
+}
+.ssb-site-builder .ssb-edit-control > *,
+.ssb-site-builder .ssb-edit-control > * > * {
+  display: inline-block;
+  float: none;
+  position: static;
+  height: 40px;
+  line-height: 40px;
+  color: white;
+  background: black;
+  vertical-align: top;
+  opacity: 1;
+}
+.ssb-site-builder .ssb-edit-control .ssb-settings-btn {
+  color: white!important;
+  fill: currentColor;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 40px;
+  border-top: 40px solid black;
+  border-left: 40px solid transparent;
+  transform: rotate(-90deg);
+}
+.ssb-site-builder .ssb-edit-control .ssb-settings-btn .ti-settings {
+  position: absolute;
+  background: transparent;
+  font-size: 15px;
+  left: -21px;
+  top: -48px;
+}
+.ssb-site-builder .ssb-edit-control .ssb-edit-control-active {
+  display: none;
+}
+.ssb-site-builder .ssb-active-section .ssb-edit-control {
+  width: 100%;
+  z-index: 999;
+  padding-left: 3em;
+}
+.ssb-site-builder .ssb-active-section .ssb-edit-control .ssb-settings-btn {
+  background: black;
+}
+.ssb-site-builder .ssb-active-section .ssb-edit-control .ssb-edit-control-inactive {
+  display: none;
+}
+.ssb-site-builder .ssb-active-section .ssb-edit-control .ssb-edit-control-active {
+  display: inline-block;
+}
 .ssb-sidebar {
   overflow: auto;
   overflow-x: hidden;

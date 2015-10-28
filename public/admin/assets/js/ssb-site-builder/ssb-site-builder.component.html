@@ -1,23 +1,20 @@
 <div>
 
-	<ssb-sidebar page="vm.page" class="ssb-sidebar">
-		Loading...
-	</ssb-sidebar>
+	<ssb-sidebar page="vm.page" activeSection="vm.activeSection" class="ssb-sidebar"></ssb-sidebar>
 
 	<div class="ssb-main">
 		<h2>Site Name: {{vm.website.title}}</h2>
 		<h2>Page Name: {{vm.page.title}}</h2>
 
 		<div id="componentloader">
-			<div ng-repeat="component in vm.page.components">
+			<div ng-repeat="component in vm.page.components track by $index" ng-class="{ 'ssb-active-section': $index === vm.activeSection, 'ssb-component-container': true }">
 				<ssb-component-loader component="component"></ssb-component-loader>		
+				<ssb-edit-control class="ssb-edit-control" page="vm.page" activeSection="vm.activeSection" component="component"></ssb-edit-control>
 			</div>
 		</div>
 
 	</div>
 
-	<ssb-flyover page="vm.page" class="ssb-flyover">
-		Loading...
-	</ssb-flyover>
+	<ssb-flyover page="vm.page" activeSection="vm.activeSection" class="ssb-flyover"></ssb-flyover>
 
 </div>

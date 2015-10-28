@@ -16,21 +16,16 @@
 		ssbService.getSite = getSite;
 		ssbService.getPage = getPage;
 		ssbService.savePage = savePage;
-		ssbService.getActiveSection = getActiveSection;
+		ssbService.setActiveSection = setActiveSection;
+		ssbService.activeSection = 0;
 
 
 		AccountService.getAccount(function(data) {
 			ssbService.getSite(data.website.websiteId);
 		});
 
-
-		function getActiveSection() {
-
-			return {
-				_id: 1234,
-				name: 'SomeComponentName'
-			}
-
+		function setActiveSection(sectionIndex) {
+			ssbService.activeSection = sectionIndex;
 		}
 
 		function getSite(id) {
