@@ -49,8 +49,8 @@ _.extend(api.prototype, baseApi.prototype, {
             //No security
 
             orderManager.createOrder(order, accessToken, userId, function(err, order){
-                self.log.debug('<< createOrder');
-                self.sendResultOrError(res, err, order, 'Error creating order');
+                self.log.debug('<< createOrder', err);
+                self.sendResultOrError(res, err, order, 'Error creating order', 500);
                 if(userId && order) {
                     self.createUserActivity(req, 'CREATE_ORDER', null, {id: order.id()}, function(){});
                 }

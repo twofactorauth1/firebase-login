@@ -52,6 +52,9 @@ var userActivityApi = require('./1.0/useractivity.api');
 //Admin
 var adminUserApi = require('./1.0/admin/user.api');
 
+//2.0
+var cms2Api = require('./2.0/cms.api');
+
 module.exports = {
 
 };

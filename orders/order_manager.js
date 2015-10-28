@@ -514,7 +514,7 @@ module.exports = {
         ], function(err, result){
             if(err) {
                 log.error('Error creating order: ' + err);
-                return fn(err, null);
+                return fn(err.message, null);
             } else {
                 log.debug('<< createOrder');
                 return fn(null, result);
