@@ -28,11 +28,6 @@ var linkedInApi = require('./1.0/social/linkedin.api');
 var twitterApi = require('./1.0/social/twitter.api');
 var socialConfigApi = require('./1.0/social/socialconfig.api');
 
-//Biometrics
-var biometricsPlatform = require('./1.0/biometricsplatform.api');
-var twonetAdapterApi = require('./1.0/twonetadapter.api');
-var runkeeperApi = require('./1.0/runkeeperadapter.api');
-
 // Campaigns
 var campaignsAPI = require('./1.0/campaigns.api');
 
@@ -56,6 +51,9 @@ var userActivityApi = require('./1.0/useractivity.api');
 
 //Admin
 var adminUserApi = require('./1.0/admin/user.api');
+
+//2.0
+var cms2Api = require('./2.0/cms.api');
 
 module.exports = {
 

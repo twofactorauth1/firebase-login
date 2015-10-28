@@ -99,7 +99,7 @@
       $scope.product = product;
       console.log('product ', product);
       var p_icon = $scope.product.icon;
-      if(p_icon && !p_icon.startsWith("fa-"))
+      if(p_icon && !p_icon.indexOf("fa-") == 0)
         p_icon = "fa-cube";
 
       angular.element('#convert').iconpicker({

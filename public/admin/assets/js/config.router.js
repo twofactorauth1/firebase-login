@@ -49,13 +49,35 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
             label: 'Website',
             skip: true
         }
-    }).state('app.website.ssb-site-builder', {
+    }).state('app.website.ssbSiteBuilder', {
         url: '/site-builder',
-        template: '<ssb-site-builder class="ssb-site-builder"></ssb-site-builder>',
+        template: '<div ui-view class="fade-in-up"></div>',
         title: 'Simple Site Builder',
         ncyBreadcrumb: {
-            label: 'Simple Site Builder'
+            label: 'Simple Site Builder',
+            skip: true
         }
+    }).state('app.website.ssbSiteBuilder.pages', {
+        url: '/pages/',
+        templateUrl: "assets/js/ssb-site-builder/ssb-site-builder.pages.component.html",
+        title: 'Simple Site Builder Pages',
+        icon: 'ti-layout-media-left-alt',
+        ncyBreadcrumb: {
+            label: 'Simple Site Builder Pages'
+        },
+        resolve: loadSequence('pagesCtrl', 'userService')
+    }).state('app.website.ssbSiteBuilder.editor', {
+        url: '/pages/:pageId',
+        template: '<ssb-site-builder class="ssb-site-builder"></ssb-site-builder>',
+        title: 'Simple Site Builder Page Editor',
+        ncyBreadcrumb: {
+            label: 'Simple Site Builder Page Editor'
+        },
+        resolve: angular.extend({
+            init: ['$stateParams', 'SimpleSiteBuilderService', function($stateParams, SimpleSiteBuilderService) {
+                return SimpleSiteBuilderService.getPage($stateParams.pageId);
+            }]
+        }, loadSequence('editorCtrl', 'userService', 'htmlToPlaintext', 'spectrum', 'angular-slider', 'assetsService', 'toasterService', 'geocodeService', 'productService', 'paymentService', 'accountService', 'toTrusted', 'generateURLforLinks', 'truncate', 'ckeditor', 'ngSticky', 'slick', 'offset', 'jqcloud', 'jsVideoUrlParser', 'selectedTags', 'addComponentModalCtrl', 'componentSettingsModalCtrl', 'googlePlaces', 'ngMap', 'angularCircularNavigation', 'campaignService', 'angular-resizable', 'wu.masonry'))
     }).state('app.website.analytics', {
         url: '/site-analytics',
         templateUrl: "assets/views/site-analytics.html",

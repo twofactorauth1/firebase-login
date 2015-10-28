@@ -114,7 +114,7 @@
                                 <th ng-show="column.name" style="margin-top: 1px;" ng-class="{'column-width': tableView == 'grid'}">Photo</th>
                                 <th st-sort="first" ng-show="column.name" ng-class="{'column-width': tableView == 'grid'}">First Name</th>
                                 <th st-sort="last" ng-show="column.name" ng-class="{'column-width': tableView == 'grid'}">Last Name</th>
-                                <th st-sort="getters.tags" ng-show="column.tags" ng-class="{'column-width': tableView == 'grid'}">Tags</th>
+                                <th st-sort="getters.tags" ng-show="column.tags" ng-class="{'column-width': tableView == 'grid', 'tag-width': tableView == 'list'}">Tags</th>
                                 <th st-sort="bestEmail" ng-show="column.email" ng-class="{'column-width': tableView == 'grid'}">Email</th>
                                 <th class="hidden-xs" st-sort="getters.address" ng-show="column.address" ng-class="{'column-width': tableView == 'grid'}">Address</th>
                                 <th class="hidden-xs center" st-sort="getters.phone" ng-show="column.phone" ng-class="{'column-width': tableView == 'grid'}">Phone</th>

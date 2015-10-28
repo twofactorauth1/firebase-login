@@ -8,7 +8,6 @@ var STRIPE_CONFIG = require('./configs/stripe.config.js');
 var SEGMENTIO_CONFIG = require('./configs/segmentio.config.js');
 var KEEN_CONFIG = require('./configs/keen.config');
 var GOOGLE_CONFIG = require('./configs/google.config');
-var TWONET_CONFIG = require('./configs/twonet.config');
 var LEADDYNO_CONFIG = require('./configs/leaddyno.config');
 
 //var wiredepJSAry = require('wiredep')().js;
@@ -326,7 +325,6 @@ module.exports = function(grunt) {
             analyticsCollater: ['analytics/tests/analytics_collater_test.js'],
             api:['api/test/*_test.js'],
             assets:['assets/test/*_test.js'],
-            biometricsPlatform:['biometrics/platform/test/**/*_test.js'],
             campaign:['campaign/test/*_test.js'],
             cms: ['cms/test/cms_manager_test.js'],
             contacts: ['test/contact.dao_test.js'],
@@ -341,14 +339,6 @@ module.exports = function(grunt) {
             paymentEvents: ['payments/tests/stripe_event_handler_test.js'],
             products: ['products/tests/*_test.js'],
             twitter: ['test/twitter_test.js'],
-            twonet:['biometrics/twonet/adapter/test/**/*_test.js', 'biometrics/twonet/client/test/**/*_test.js',
-                'biometrics/twonet/adapter/test/twonet_test_poll.js'],
-            twonetadapter:['biometrics/twonet/adapter/test/**/*_test.js'],
-            twonetclient:['biometrics/twonet/client/test/**/*_test.js'],
-            twonetpoll:['biometrics/twonet/adapter/test/twonet_test_poll.js'],
-            runkeeper:['biometrics/runkeeper/adapter/test/**/*_test.js', 'biometrics/runkeeper/adapter/test/runkeeper_test_poll.js'],
-            runkeeperadapter:['biometrics/runkeeper/adapter/test/**/*_test.js'],
-            runkeeperpoll:['biometrics/runkeeper/adapter/test/runkeeper_test_poll.js'],
             utils:['utils/test/*_test.js'],
             tzTests: ['test/tztest.js'],
             leads: ['test/pullLeadDynoData.js'],
@@ -395,10 +385,6 @@ module.exports = function(grunt) {
                         googleClientId: GOOGLE_CONFIG.CLIENT_ID,
                         googleClientSecret: GOOGLE_CONFIG.CLIENT_SECRET,
                         googleServerKey: GOOGLE_CONFIG.SERVER_KEY,
-                        twonetKey: TWONET_CONFIG.TWONET_KEY,
-                        twonetSecret: TWONET_CONFIG.TWONET_SECRET,
-                        twonetUserGuid: TWONET_CONFIG.TWONET_USERGUID,
-                        twonetTrackGuid: TWONET_CONFIG.TWONET_TRACKGUID,
                         leaddyno: LEADDYNO_CONFIG.LEAD_DYNO_KEY
                     }
                 }
@@ -420,10 +406,6 @@ module.exports = function(grunt) {
                         googleClientId: GOOGLE_CONFIG.PROD_CLIENT_ID,
                         googleClientSecret: GOOGLE_CONFIG.PROD_CLIENT_SECRET,
                         googleServerKey: GOOGLE_CONFIG.SERVER_KEY,
-                        twonetKey: TWONET_CONFIG.TWONET_KEY,
-                        twonetSecret: TWONET_CONFIG.TWONET_SECRET,
-                        twonetUserGuid: TWONET_CONFIG.TWONET_USERGUID,
-                        twonetTrackGuid: TWONET_CONFIG.TWONET_TRACKGUID,
                         leaddyno: LEADDYNO_CONFIG.LEAD_DYNO_KEY
                     }
                 }
@@ -555,18 +537,11 @@ module.exports = function(grunt) {
     /*
      * This task is run by CI.
      */
-    grunt.registerTask('tests', ['nodeunit:biometricsPlatform', 'nodeunit:contacts', 'nodeunit:utils',
+    grunt.registerTask('tests', ['nodeunit:contacts', 'nodeunit:utils',
             'nodeunit:products', 'nodeunit:cms', 'nodeunit:assets', 'nodeunit:contactActivities', 'nodeunit:payments',
             'nodeunit:analyticsCollater', 'nodeunit:stripe_cleanup']);
 
     grunt.registerTask('testContextio', ['nodeunit:contextio']);
-    grunt.registerTask('testBiometricsPlatform', ['nodeunit:biometricsPlatform']);
-    grunt.registerTask('testTwonetclient', ['nodeunit:twonetclient']);
-    grunt.registerTask('testTwonetadapter', ['nodeunit:twonetadapter']);
-    grunt.registerTask('testTwonetpoll', ['nodeunit:twonetpoll']);
-    grunt.registerTask('testRunkeeperadapter', ['nodeunit:runkeeperadapter']);
-    grunt.registerTask('testRunkeeperpoll', ['nodeunit:runkeeperpoll']);
-    grunt.registerTask('testBiometrics', ['nodeunit:twonetclient','nodeunit:biometricsPlatform','nodeunit:twonetadapter','nodeunit:twonetpoll','nodeunit:runkeeperadapter','nodeunit:runkeeperpoll']);
     grunt.registerTask('testUtils', ['nodeunit:utils']);
     grunt.registerTask('testApi', ['nodeunit:api']);
     grunt.registerTask('testFacebook', ['nodeunit:facebook']);

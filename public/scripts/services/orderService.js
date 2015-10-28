@@ -13,6 +13,7 @@ mainApp.service('orderService', function ($http) {
       fn(data);
     }).error(function (err) {
       console.log('END:Create Order with ERROR');
+        fn(err);
     });
   };
 

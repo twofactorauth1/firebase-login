@@ -261,8 +261,8 @@ app.controller('DashboardCtrl', ["$scope", "OrderService", "CustomerService", "C
         var thisDaysRevenue = 0;
         _.each(revenue, function (rev) {
           if ($scope.isSameDateAs(new Date(rev.timeframe.start), new Date(day))) {
-            $scope.revenueThisMonth += rev.value;
-            thisDaysRevenue += rev.value;
+            $scope.revenueThisMonth += (rev.value / 100);
+            thisDaysRevenue += (rev.value/100);
           }
         });
 

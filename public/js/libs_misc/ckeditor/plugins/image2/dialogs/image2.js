@@ -564,6 +564,7 @@ CKEDITOR.dialog.add( 'image2', function( editor ) {
 								id: 'imageStyleSelect',
 								type: 'select',
 								items: [
+									[ "", '' ],
 									[ "Rounded Square", 'img-rounded' ],
 									[ "Square with Border", 'img-thumbnail' ],	
 									[ "Circle", 'img-circle' ], ],									

@@ -810,7 +810,7 @@ app.constant('JS_REQUIRES', {
     files: ['../js/libs/angular-cookie/angular-cookie.min.js']
   }, {
     name: 'slick',
-    files: ['../js/libs/slick-carousel/slick/slick.js', '../js/libs/angular-slick/dist/slick.js']
+    files: ['../js/libs/slick-carousel/slick/slick.min.js', '../js/libs/angular-slick/dist/slick.min.js']
   }, {
     name: 'jqcloud',
     files: ["../js/libs/jqcloud2/dist/jqcloud.min.js", "../js/libs/angular-jqcloud/angular-jqcloud.js", "../js/libs/jqcloud2/dist/jqcloud.min.css"]

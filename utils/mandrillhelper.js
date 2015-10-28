@@ -71,6 +71,9 @@ var mandrillHelper =  {
                                 "vars": vars
                             }
                         ],
+                        "tags": [
+                            "welcome"
+                        ],
                         "subaccount": null,
                         "google_analytics_domains": [
                             "indigenous.io" //TODO: This should be dynamic
@@ -165,12 +168,15 @@ var mandrillHelper =  {
                         "tracking_domain": null,
                         "signing_domain": null,
                         "return_path_domain": null,
-                        "merge": false,
+                        "merge": true,
                         "merge_vars": [
                             {
                                 "rcpt": toAddress,
                                 "vars": vars
                             }
+                        ],
+                        "tags": [
+                            "campaign"
                         ],
                         "subaccount": null,
                         "google_analytics_domains": [
@@ -711,6 +717,58 @@ var mandrillHelper =  {
         });
     },
 
+    getMessageInfo: function(messageId, fn) {
+        var self = this;
+        self.log = log;
+        self.log.debug('>> getMessageInfo');
+        mandrill_client.messages.info({"id": messageId}, function(result) {
+            self.log.debug("<< getMessageInfo", result);
+            return fn(null, result);
+            /*
+             {
+             "ts": 1365190000,
+             "_id": "abc123abc123abc123abc123",
+             "sender": "sender@example.com",
+             "template": "example-template",
+             "subject": "example subject",
+             "email": "recipient.email@example.com",
+             "tags": [
+             "password-reset"
+             ],
+             "opens": 42,
+             "opens_detail": [{
+             "ts": 1365190001,
+             "ip": "55.55.55.55",
+             "location": "Georgia, US",
+             "ua": "Linux/Ubuntu/Chrome/Chrome 28.0.1500.53"
+             }],
+             "clicks": 42,
+             "clicks_detail": [{
+             "ts": 1365190001,
+             "url": "http://www.example.com",
+             "ip": "55.55.55.55",
+             "location": "Georgia, US",
+             "ua": "Linux/Ubuntu/Chrome/Chrome 28.0.1500.53"
+             }],
+             "state": "sent",
+             "metadata": {
+             "user_id": "123",
+             "website": "www.example.com"
+             },
+             "smtp_events": [{
+             "ts": 1365190001,
+             "type": "sent",
+             "diag": "250 OK"
+             }]
+             }
+             */
+        }, function(e) {
+            // Mandrill returns the error as an object with name and message keys
+            self.log.error('A mandrill error occurred: ' + e.name + ' - ' + e.message);
+            return fn(e);
+            // A mandrill error occurred: Unknown_Message - No message exists with the id 'McyuzyCS5M3bubeGPP-XVA'
+        });
+    },
 
     /**
      * [_findReplaceMergeTags takes the rendered html from an email, locates any merge tags and replaces with actual data]

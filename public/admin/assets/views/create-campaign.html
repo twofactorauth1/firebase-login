@@ -395,7 +395,7 @@
                                                         <tab heading="by Contact">
                                                             <label class="text-muted">Select individuals from your contact list</label>
                                                             <div class="well well-sm">
-                                                                <ui-select multiple ng-model="selectedCustomers.individuals" on-select="customerSelected($select)" on-remove="customerRemoved($select, $item)" theme="bootstrap" ng-disabled="disabled" close-on-select="false" style="min-width:100%" search-enabled="true">
+                                                                <ui-select class="customer-list" multiple ng-model="selectedCustomers.individuals" on-select="customerSelected($select)" on-remove="customerRemoved($select, $item)" theme="bootstrap" ng-disabled="disabled" close-on-select="false" style="min-width:100%" search-enabled="true">
                                                                     <ui-select-match placeholder="Select Contacts...">{{$item.first}} {{$item.last}} ({{$item.details[0].emails[0].email}})</ui-select-match>
                                                                     <ui-select-choices repeat="customer._id as customer in customers | filter:$select.search">
                                                                         <span class="pull-left">

@@ -1,15 +1,23 @@
-app.directive('ssbSidebar', ['$filter', function($filter) {
+(function(){
+
+app.directive('ssbSidebar', ssbSidebar);
+
+function ssbSidebar() {
 
     return {
-        scope: {},
-        templateUrl: 'assets/js/ssb-site-builder/ssb-sidebar/ssb-sidebar.component.html',
-        controller: function() {
-            var vm = this;
-            console.info('site-build sidebar directive init...')
-            vm.somethingSidebar = 'something sidebar';
+        restrict: 'E',
+        scope: {
+            page: '='
         },
+        templateUrl: 'assets/js/ssb-site-builder/ssb-sidebar/ssb-sidebar.component.html',
+        controller: 'SiteBuilderSidebarController',
         controllerAs: 'vm',
-        // bindToController: true
+        bindToController: true,
+        link: function(scope, element, attrs, ctrl) {
+            ctrl.init(element);
+        }
     };
 
-}]);
+}
+
+})();

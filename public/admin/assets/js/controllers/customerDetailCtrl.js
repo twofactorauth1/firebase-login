@@ -234,6 +234,7 @@
       } else {
         //customer has address and lat/lon
         if (_firstAddress.lat && _firstAddress.lon) {
+          $scope.originalCustomer = angular.copy($scope.customer);
           $scope.showMap(_firstAddress.lat, _firstAddress.lon);
         } else {
           //customer has address but no lat/lon
@@ -378,17 +379,6 @@
       }],
     };
 
-    /*
-     * @twoNetSubscribeFn
-     * -
-     */
-
-    $scope.twoNetSubscribeFn = function () {
-      CustomerService.postTwoNetSubscribe($scope.customer._id, function (data) {
-        console.log('data ', data);
-      });
-    };
-
     $scope.inValidateTags = function()
     {
       var status = false;
@@ -399,7 +389,7 @@
       return status;
     }
 
-    $scope.customerSaveFn = function (hideToaster) {
+    $scope.customerSaveFn = function (hideToaster, showAlert, newUrl) {
 
       $scope.saveLoading = true;
 
@@ -409,7 +399,9 @@
 
         if(!hideToaster && $scope.inValidateTags())
         {
-          $scope.saveLoading = false;
+          $scope.saveLoading = false;          
+          if(showAlert)            
+            SweetAlert.swal("Warning", "Your edits were NOT saved.", "error");
           toaster.pop('warning', 'Please add at least one tag.');
           return;
         }
@@ -440,6 +432,8 @@
               {
                 $scope.saveLoading = false;
                 toaster.pop('warning', 'Email already exists.');
+                if(showAlert)                    
+                    SweetAlert.swal("Warning", "Your edits were NOT saved.", "error");
               }
             }
             else
@@ -457,6 +451,11 @@
                   toaster.pop('success', 'Contact Saved.');
                 }
               }
+              if(showAlert){
+                SweetAlert.swal("Saved!", "Your edits were saved to the page.", "success");
+                $scope.changesConfirmed = true;
+                window.location = newUrl;
+              }
             });
             }
           })
@@ -466,6 +465,8 @@
         if (!hideToaster) {
           toaster.pop('warning', 'Contact Name OR Email is required');
         }
+        if(showAlert)
+          SweetAlert.swal("warning", "Your edits were NOT saved.", "error");
       }
 
     };
@@ -1016,17 +1017,17 @@
             closeOnCancel: false
           },
           function (isConfirm) {
-            if (isConfirm) {
-              SweetAlert.swal("Saved!", "Your edits were saved to the page.", "success");
-              $scope.customerSaveFn();
-
+            if (isConfirm) {              
+              $scope.customerSaveFn(false, true, newUrl);
             } else {
+              $scope.changesConfirmed = true;
               SweetAlert.swal("Cancelled", "Your edits were NOT saved.", "error");
+              window.location = newUrl;
             }
             $scope.isDirty = false;
-            $scope.changesConfirmed = true;
+            
             //set window location
-            window.location = newUrl;
+            
             offFn();
           });
       }

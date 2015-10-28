@@ -1,0 +1,164 @@
+<div ng-controller="PagesCtrl" class="pages">
+    <indig-onboarding min-requirements="minRequirements"></indig-onboarding>
+    <!-- start: PAGE TITLE -->
+    <section id="page-title" class="padding-top-15 padding-bottom-15">
+        <div class="row">
+            <div class="col-sm-8">
+                <h1 class="mainTitle">Simple Site Builder Pages</h1>
+                <span ng-if="pages" class="mainDescription">There are currently {{pages.length}} pages.</span>
+            </div>
+            <div ncy-breadcrumb></div>
+        </div>
+    </section>
+    <!-- end: PAGE TITLE -->
+    <!-- start: CONTENT -->
+    <div st-table="displayedPages" st-safe-src="pages">
+        <div class="container-fluid container-fullw bg-white padding-top-0 padding-bottom-0">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="panel panel-transparent row margin-bottom-0">
+                        <div class="panel-body">
+                            <form role="form" class="ng-pristine ng-valid row">
+                                <div class="col-xs-12 col-sm-6 padding-left-0">
+                                    <div class="form-group">
+                                        <div class="col-xs-7 col-sm-9">
+                                            <span class="input-icon">
+                                                <input type="text" st-search placeholder="Search by title, handle, date..." id="form-field-14" class="form-control">
+                                                <i class="ti-search"></i>
+                                            </span>
+                                        </div>
+                                        <div class="col-xs-5 col-sm-3 padding-right-0">
+                                            <button type="button" class="btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti-filter ng-click-active pull-right" ng-click="filterPages()">
+                                                <span>Filter</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="visible-xs margin-bottom-15 clearfix"></div>
+                                <div class="col-xs-12 col-sm-6">
+                                    <div class="form-group margin-bottom-0 pull-right">
+                                        <button id="new-page" type="button" class="btn btn-warning btn-wide btn-scroll btn-scroll-top ti ti-plus ng-click-active" ng-click="openModal('new-page-modal')">
+                                            <span>New Page</span>
+                                        </button>
+                                    </div>
+                                    <div class="form-group margin-bottom-0 pull-left">
+                                        <div class="btn-group tableView">
+                                            <button class="btn btn-info" ng-class="{'active': tableView == 'list'}" href="" ng-click="tableView = 'list'" tooltip-placement="top" tooltip="List"> <span class="fa fa-th-list"></span> </button>
+                                            <button class="btn btn-info" ng-class="{'active': tableView == 'grid'}" href="" ng-click="tableView = 'grid'" tooltip-placement="top" tooltip="Grid"> <span class="fa fa-th"></span> </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid container-fullw padding-top-0 padding-bottom-0">
+            <div class="panel panel-transparent row margin-bottom-0">
+                <div class="panel-body">
+                    <table class="table table-hover margin-bottom-0" ng-class="{'grid': tableView == 'grid', 'bg-white': tableView == 'list'}" ng-show="displayedPages">
+                        <thead ng-class="{'bg-white': tableView == 'grid'}">
+                            <tr>
+                                <th class="center">Screenshot</th>
+                                <th st-sort="title">Title</th>
+                                <th class="hidden-xs" st-sort="handle">Page Url</th>
+                                <th class="hidden-xs" st-sort="components" ng-class="{'center': tableView != 'grid'}">Components</th>
+                                <th class="hidden-xs" st-sort="getters.created" ng-class="{'center': tableView != 'grid'}">Created</th>
+                                <th class="hidden-xs" st-sort="getters.modified" ng-class="{'center': tableView != 'grid'}">Modified</th>
+                            </tr>
+                            <tr ng-if="showFilter">
+                                <th>
+                                    <input st-search="{{'hasScreenshot'}}" placeholder="Screenshot" class="form-control hidden" type="search" id="searchScreenshot" ng-model="filterScreenshot.selected.value" />
+                                    <ui-select ng-model="filterScreenshot.selected" on-select="triggerInput('#searchScreenshot')" theme="bootstrap">
+                                        <ui-select-match placeholder="Screenshot">
+                                            <small ng-bind-html="$select.selected.name"></small>
+                                            <span class="fa fa-times text-danger" ng-click="clearFilter($event, '#searchScreenshot')"></span>
+                                        </ui-select-match>
+                                        <ui-select-choices repeat="option in pageScreenshotOptions">
+                                            <!-- <span class="fa" ng-class="{'fa-facebook': type.type == 'fb'}"></span> -->
+                                            <small ng-bind-html="option.name | highlight: $select.search"></small>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                </th>
+                                <th>
+                                    <input st-search="title" placeholder="Title" class="form-control" type="search" />
+                                </th>
+                                <th class="hidden-xs">
+                                    <input st-search="handle" placeholder="Page Url" class="form-control" type="search" />
+                                </th>
+                                <th class="hidden-xs">
+                                    <input st-search="components" placeholder="Components" class="form-control" type="search" />
+                                </th>
+                                <th>
+                                    <!-- <input st-search="created" placeholder="Created" class="form-control" type="search" /> -->
+                                </th>
+                                <th>
+                                    <!-- <input st-search="modified" placeholder="Modified" class="form-control" type="search" /> -->
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="page in displayedPages" ng-click="viewSimpleSiteBuilderSingle(page)">
+                                <td class="center">
+                                    <img ng-src="{{ page.screenshot }}" id="screenshot_{{page._id}}" err-src="{{default_image_url}}" class="img-thumbnail screenshot" alt="image">
+                                </td>
+                                <td><strong>Title: </strong><span ng-text-truncate="page.title" ng-tt-chars-threshold="20" ng-tt-no-toggling></span></td>
+                                <td class="hidden-xs"><strong>Page Url: </strong><span ng-text-truncate="page.handle" ng-tt-chars-threshold="20" ng-tt-no-toggling></span></td>
+                                <td class="hidden-xs" ng-class="{'center': tableView != 'grid'}"><strong>Components: </strong> {{page.components}}</td>
+                                <td class="hidden-xs" ng-class="{'center': tableView != 'grid'}"><strong>Created: </strong> {{page.created.date | date:'MMM d yy'}}</td>
+                                <td class="hidden-xs" ng-class="{'center': tableView != 'grid'}"><strong>Modified: </strong>{{page.modified.date | date:'MMM d yy'}}</td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                        <tr>
+                            <td class="text-center" st-pagination="" st-displayed-pages="showPages" st-items-by-page="itemPerPage" colspan="6">
+                            </td>
+                        </tr>
+                        </tfoot>
+                    </table>
+                    <div class="load1 csspinner height-400" ng-show="!displayPages"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end: CONTENT -->
+    <!-- start: NEW PAGE MODAL -->
+    <div data-ng-include data-src=" 'assets/views/partials/new-page-modal.html' " ></div>
+    <div id="blueimp-gallery" class="blueimp-gallery">
+            <!-- The container for the modal slides -->
+            <div class="slides">
+
+            </div>
+            <!-- Controls for the borderless lightbox -->
+            <h3 class="title"></h3>
+            <a class="prev">‹</a>
+            <a class="next">›</a>
+            <a class="close">×</a>
+            <a class="play-pause"></a>
+           
+            <!-- The modal dialog, which will be used to wrap the lightbox content -->
+            <div class="modal fade">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" aria-hidden="true">&times;</button>
+                            <h4 class="modal-title"></h4>
+                        </div>
+                        <div class="modal-body next"></div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default pull-left prev">
+                                <i class="glyphicon glyphicon-chevron-left"></i> Previous
+                            </button>
+                            <button type="button" class="btn btn-primary next">
+                                Next
+                                <i class="glyphicon glyphicon-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </div>
+
+    <!-- end:  NEW PAGE MODAL -->
+</div>

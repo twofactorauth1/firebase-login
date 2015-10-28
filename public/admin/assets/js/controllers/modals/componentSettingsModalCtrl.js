@@ -415,6 +415,8 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
         $scope.componentEditing.bg.img.blur = false;
         $scope.componentEditing.bg.img.parallax = false;
         $scope.componentEditing.bg.img.overlay = false;
+        $scope.componentEditing.bg.img.undernav = false;
+        $scope.componentEditing.bg.img.fullscreen = false;
       }
 
     }
