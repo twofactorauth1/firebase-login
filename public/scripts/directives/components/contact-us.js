@@ -75,7 +75,9 @@ app.directive('contactUsComponent', ['geocodeService', 'accountService', '$timeo
                 if (data && results.length === 1) {
                   scope.component.location.lat = results[0].geometry.location.lat();
                   scope.component.location.lon = results[0].geometry.location.lng();
-                  scope.reloadMap();
+                  $timeout(function () {
+                    scope.reloadMap();
+                  }, 500);
                 } 
               });
           });
