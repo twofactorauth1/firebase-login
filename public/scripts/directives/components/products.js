@@ -18,7 +18,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
       // initializations
       scope.showTax = true;
       scope.showNotTaxed = false; // Some items are not taxed when summing
-
+      
       /*
        * @filterTags
        * - if component has tags filter them or return the _product
@@ -80,11 +80,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
             _filteredProducts.push(product);
           }
         });
-        scope.products = _filteredProducts;
-        $timeout(function () {
-          $(window).trigger('resize');
-          console.log("Products loaded");
-        }, 500);
+        scope.products = _filteredProducts;        
         if (fn) {
           fn();
         }
@@ -729,6 +725,11 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
         angular.element("#card_expiry .glyphicon").removeClass('glyphicon-remove glyphicon-ok')
         angular.element("#card_cvc").removeClass('has-error has-success');
         angular.element("#card_cvc .glyphicon").removeClass('glyphicon-remove glyphicon-ok')
+        angular.element(".jp-card-number").text("•••• •••• •••• ••••");
+        angular.element(".jp-card-cvc").text("•••");
+        angular.element(".jp-card-name").text("Full Name");
+        angular.element(".jp-card-expiry").text("••/••");
+        angular.element(".jp-card").removeClass("jp-card-identified");
       }
 
       /*
@@ -883,6 +884,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
           $("#card_name .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
         }
       };
+     
     },
     controller: function ($scope) {
       $scope.setCheckoutState = function (state) {

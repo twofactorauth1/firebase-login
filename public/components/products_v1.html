@@ -8,7 +8,7 @@
                 <div elem ng-model="component.text"></div>
             </div>
         </header>
-        <div masonry reload-on-resize load-images="false" reload-on-show class="tab-pane active row" id="{{productSection['product-section-id']}}">
+        <div masonry reload-on-resize load-images="true" reload-on-show class="tab-pane active row" id="{{productSection['product-section-id']}}">
             <div class="masonry-brick" data-class="product-section-id"
                  ng-class="{
                     'col-xs-4 col-xs-offset-4': filteredProducts.length == 1,
