@@ -729,6 +729,11 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
         angular.element("#card_expiry .glyphicon").removeClass('glyphicon-remove glyphicon-ok')
         angular.element("#card_cvc").removeClass('has-error has-success');
         angular.element("#card_cvc .glyphicon").removeClass('glyphicon-remove glyphicon-ok')
+        angular.element(".jp-card-number").text("•••• •••• •••• ••••");
+        angular.element(".jp-card-cvc").text("•••");
+        angular.element(".jp-card-name").text("Full Name");
+        angular.element(".jp-card-expiry").text("••/••");
+        angular.element(".jp-card").removeClass("jp-card-identified");
       }
 
       /*
