@@ -5,10 +5,12 @@
 	<div class="ssb-main" ng-class="{ 'ssb-main-full-width': !vm.uiState.show.sidebar }">
 		<h2>Site Name: {{vm.state.website.title}}</h2>
 		<h2>Page Name: {{vm.state.page.title}}</h2>
+		
 		<button class="pull-right" ng-click="vm.toggleSidebarFlyover()">Toggle Sidebar/Flyover</button>
+		
 		<div id="componentloader">
 			<div ng-repeat="component in vm.state.page.components track by $index" ng-class="{ 'ssb-active-section': $index === vm.state.activeSection, 'ssb-component-container': true }">
-				<ssb-component-loader component="component"></ssb-component-loader>		
+				<ssb-component-loader component="component" state="vm.state"></ssb-component-loader>		
 				<ssb-edit-control ng-class="{ 'ssb-edit-control': true }" state="vm.state" component="component" index="$index"></ssb-edit-control>
 			</div>
 		</div>

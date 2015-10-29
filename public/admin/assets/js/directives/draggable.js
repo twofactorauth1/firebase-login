@@ -11,8 +11,15 @@ app.directive('draggable', ['$document', function($document) {
       });
 
       element.on('mousedown', function(event) {
-        // Prevent default dragging of selected content
-        event.preventDefault();
+        // Prevent default dragging of selected content (if not form element)
+        if (event.target.nodeName !== 'INPUT' && 
+            event.target.nodeName !== 'TEXTAREA' && 
+            event.target.nodeName !== 'SELECT') {
+        
+          event.preventDefault();
+        
+        }
+
         startX = event.pageX - x;
         startY = event.pageY - y;
         $document.on('mousemove', mousemove);
