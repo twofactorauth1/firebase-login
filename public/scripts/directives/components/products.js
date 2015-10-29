@@ -18,12 +18,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
       // initializations
       scope.showTax = true;
       scope.showNotTaxed = false; // Some items are not taxed when summing
-      $(document).ready(function () {        
-          $timeout(function () {
-            $(window).trigger('resize');
-            console.log("Products loaded");
-          }, 2000);
-      });
+      
       /*
        * @filterTags
        * - if component has tags filter them or return the _product
