@@ -18,7 +18,12 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
       // initializations
       scope.showTax = true;
       scope.showNotTaxed = false; // Some items are not taxed when summing
-
+      $(document).ready(function () {        
+          $timeout(function () {
+            $(window).trigger('resize');
+            console.log("Products loaded");
+          }, 2000);
+      });
       /*
        * @filterTags
        * - if component has tags filter them or return the _product
@@ -80,11 +85,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
             _filteredProducts.push(product);
           }
         });
-        scope.products = _filteredProducts;
-        $timeout(function () {
-          $(window).trigger('resize');
-          console.log("Products loaded");
-        }, 500);
+        scope.products = _filteredProducts;        
         if (fn) {
           fn();
         }
@@ -888,6 +889,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
           $("#card_name .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
         }
       };
+     
     },
     controller: function ($scope) {
       $scope.setCheckoutState = function (state) {
