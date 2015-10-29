@@ -7,7 +7,8 @@ function ssbEditControl() {
     return {
         restrict: 'E',
         scope: {
-            page: '='
+            state: '=',
+            index: '='
         },
         templateUrl: 'assets/js/ssb-site-builder/ssb-edit-control/ssb-edit-control.component.html',
         controller: 'SiteBuilderEditControlController',

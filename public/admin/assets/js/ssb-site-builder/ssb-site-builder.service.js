@@ -17,7 +17,7 @@
 		ssbService.getPage = getPage;
 		ssbService.savePage = savePage;
 		ssbService.setActiveSection = setActiveSection;
-		ssbService.activeSection = 0;
+		ssbService.activeSection = undefined;
 
 
 		AccountService.getAccount(function(data) {

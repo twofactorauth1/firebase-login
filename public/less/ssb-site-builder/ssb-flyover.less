@@ -1,8 +1,92 @@
 .ssb-flyover {
 	display: none;
-	position: absolute;
-	top: 200px;
-	right: 25%;
-	background: grey;
+	position: fixed;
+	top: 8em;
+    right: 4em;
+	// background: grey;
 	display: none;
+
+	label {
+		font-weight: 100;
+    	font-size: .85em;
+	}
+}
+
+.ssb-flyover.ssb-flyover-show {
+	display: block;
+}
+
+.ssb-flyover .draggable {
+	box-shadow: -4px 0px 7px -2px rgba(0,0,0,.3);
+}
+
+.ssb-flyover-list-container {
+	margin-top: -5px;
+}
+
+.ssb-flyover-title {
+	margin: 1.5em 0 0 0;
+	background-color: #FAFAFA;
+	padding: 1em;
+    border-radius: 5px 5px 0px 0px;
+    text-transform: capitalize;
+    cursor: move;
+    position: relative;
+    z-index: 1;
+}
+
+.ssb-flyover-card-container {
+	position: relative;
+	width: 320px;
+}
+
+.ssb-flyover-card-title {
+	margin-bottom: 2em;
+	text-transform: capitalize;
+}
+
+.ssb-flyover-card {
+	position: absolute;
+	top: 0;
+	left: 0;
+	background: white;
+	padding: 1em;
+    width: 100%;
+    // min-height: 640px;
+    box-shadow: -4px 0px 7px -2px rgba(0,0,0,.3);
+    border-radius: 0px 0px 5px 5px;
+    font-size: 18px;
+
+	.close {
+		position: absolute;
+		top: .5em;
+	    right: .5em;
+	    font-size: 1.5em;
+	}
+}
+
+.ssb-flyover-card-link {
+	padding: 1em 0;
+	cursor: pointer;
+
+	i {
+		vertical-align: middle;
+		font-size: 10px;
+    	margin-left: .5em;
+	}
+	
+}
+
+.ssb-flyover-card-level-0 {
+	z-index: 1;
+	top: 10px;
+	left: 10px;
+	border-radius: 5px 5px;
+}
+
+.ssb-flyover-card-level-1 {
+	z-index: 2;
+	top: 20px;
+	left: 20px;
+	border-radius: 5px 5px;
 }

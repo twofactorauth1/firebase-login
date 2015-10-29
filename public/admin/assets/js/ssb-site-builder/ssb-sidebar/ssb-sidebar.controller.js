@@ -12,8 +12,16 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, SimpleSiteBuil
 
     vm.somethingSidebar = 'something sidebar';
     vm.init = init;
+    vm.uiState = {
+    	accordion: {
+    		site: {},
+    		page: {},
+    		components: {},
+    	}
+    };
     vm.savePage = savePage;
     vm.cancelPendingEdits = cancelPendingEdits;
+    vm.setActiveSection = setActiveSection;
 
     //TODO: move into config services
     vm.spectrum = {
@@ -44,9 +52,17 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, SimpleSiteBuil
 	  }
 	};
 
+	$scope.$watch(function() { return SimpleSiteBuilderService.activeSection; }, function(activeSection){
+        vm.uiState.accordion.components = {};
+        if (activeSection !== undefined) {
+        	vm.uiState.accordion.components[activeSection] = true;
+        	vm.uiState.accordion.components.isOpen = true;
+        }
+    });
+
 	function savePage() {
 		return (
-			SimpleSiteBuilderService.savePage(vm.page).then(function(data){
+			SimpleSiteBuilderService.savePage(vm.state.page).then(function(data){
 				console.log('saved');
 			})
 		)
@@ -56,6 +72,11 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, SimpleSiteBuil
 		console.log('reset pending stuff');
 		return true;
 	}
+
+	function setActiveSection(index) {
+		var activeSection = vm.uiState.accordion[index] ? undefined : index;
+		SimpleSiteBuilderService.setActiveSection(activeSection);
+    }
 
     function init(element) {
     	vm.element = element;

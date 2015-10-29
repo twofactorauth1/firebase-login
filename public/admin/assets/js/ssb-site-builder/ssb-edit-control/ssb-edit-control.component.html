@@ -2,11 +2,11 @@
 <!-- <div class="ssb-edit-control-inactive"></div> -->
 <div class="ssb-edit-control-active">
 	
-	<div>Link1</div>
-	<div>Something1</div>
-	<div>Something2</div>
+	<a href ng-click="vm.setActiveSection(vm.index)">Edit</a>
+	<a href>ActionLink2</a>
+	<a href>ActionLink3</a>
 
-	<button type="button" class="close" ng-click="close()">
+	<button type="button" class="close" ng-click="vm.setActiveSection(undefined)">
 		<i class="ti-close"></i>
 	</button>
 

@@ -7,7 +7,7 @@ function ssbFlyover() {
     return {
         restrict: 'E',
         scope: {
-            page: '='
+            state: '='
         },
         templateUrl: 'assets/js/ssb-site-builder/ssb-flyover/ssb-flyover.component.html',
         controller: 'SiteBuilderFlyoverController',

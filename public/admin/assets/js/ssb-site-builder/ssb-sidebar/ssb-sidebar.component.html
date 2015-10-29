@@ -67,26 +67,25 @@
 				</li>
 			</ul>
         </accordion-group>
-        <accordion-group heading="Components">
+        <accordion-group heading="Components" is-open="vm.uiState.accordion.components.isOpen">
 			<ul class="list-unstyled">
-				<li ng-repeat="component in vm.page.components">
-
-					<ul class="list-unstyled">
-						<li><h3>{{component.type}}</h3></li>
-						<!-- <li>_id: {{component._id}}</li>
-						<li>version: {{component.version}}</li> -->
-						<li>
-							<accordion close-others="oneAtATime" class="accodion">
-								<accordion-group heading="Basic">
-									<div ng-include=" 'assets/js/ssb-site-builder/ssb-sidebar/views/basic.html' "></div>
-								</accordion-group>
-								<!-- <accordion-group heading="Spacing">
-									<div ng-include=" 'assets/js/ssb-site-builder/ssb-sidebar/views/spacing.html' "></div>
-								</accordion-group> -->
-							</accordion>
-						</li>
-					</ul>
-
+				<li ng-repeat="component in vm.state.page.components track by $index">
+					<accordion close-others="oneAtATime" class="accordion">
+						<accordion-group heading="{{component.type}}" is-open="vm.uiState.accordion.components[$index]" ng-click="vm.setActiveSection($index)">
+							<ul class="list-unstyled">
+								<li>
+									<accordion close-others="oneAtATime" class="accordion">
+										<accordion-group heading="Basic">
+											<div ng-include=" 'assets/js/ssb-site-builder/ssb-sidebar/views/basic.html' "></div>
+										</accordion-group>
+										<!-- <accordion-group heading="Spacing">
+											<div ng-include=" 'assets/js/ssb-site-builder/ssb-sidebar/views/spacing.html' "></div>
+										</accordion-group> -->
+									</accordion>
+								</li>
+							</ul>
+						</accordion-group>
+					</accordion>
 				</li>
 			</ul>
 		</accordion-group>

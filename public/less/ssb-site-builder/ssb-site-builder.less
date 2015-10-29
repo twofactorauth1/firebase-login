@@ -22,6 +22,11 @@
 		}
 	}
 
+	.ssb-main.ssb-main-full-width {
+		width: 100%;
+		left: 0;
+	}
+
 	.ssb-component-container {
 		position: relative;
 	}
@@ -32,6 +37,7 @@
 		left: 0;
 		width: 3em;
 		height: 40px;
+		z-index: 999;
 
 		& > *, 
 		& > * > * {
@@ -43,6 +49,7 @@
 			color: white;
 			vertical-align: top;
 			opacity: 1;
+			font-size: 1em;
 		}
 
 		.ssb-settings-btn {
@@ -55,7 +62,8 @@
 		    width: 40px;
 		    border-top: 40px solid black;
 		    border-left: 40px solid transparent;
-		    transform: rotate(-90deg);	
+		    transform: rotate(-90deg);
+		    cursor: pointer;
 
 		    .ti-settings {
 			    position: absolute;
@@ -65,7 +73,15 @@
 			    left: -21px;
     			top: -48px;
 		    }
+		
 		}
+
+		.ti-close {
+	    	position: relative;
+		    top: -.55em;
+		    left: -.25em;
+		    padding: 0 0 0 1em;
+	    }
 
 		.ssb-edit-control-inactive {
 			// width: 40px;
@@ -78,24 +94,26 @@
 		}
 	}
 
-	.ssb-active-section {
-		.ssb-edit-control {
-			width: 100%;
-			z-index: 999;
-			padding-left: 3em;
+	// .ssb-edit-control.ssb-edit-control-on {
+	.ssb-edit-control:hover {
+		width: 100%;
+		padding-left: 3em;
 
-			.ssb-settings-btn {
-				background: black;
-			}
-
-			.ssb-edit-control-inactive {
-				display: none;
-			}
-
-			.ssb-edit-control-active {
-				display: inline-block;
-			}
+		.ssb-settings-btn {
+			background: black;
 		}
+
+		.ssb-edit-control-inactive {
+			display: none;
+		}
+
+		.ssb-edit-control-active {
+			display: inline-block;
+		}
+	}
+
+	.ssb-active-section {
+		background: red;
 	}
 
 }
