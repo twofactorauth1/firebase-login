@@ -3573,6 +3573,7 @@
 }
 #componentloader .pricing-tables-v1 .btn-add {
   margin-top: 10px;
+  position: relative;
 }
 #componentloader .pricing-tables-v1 .pricing_header h1,
 #componentloader .pricing-tables-v1 .pricing_header h3,
