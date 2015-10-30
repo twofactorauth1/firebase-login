@@ -1228,12 +1228,8 @@
     $scope.newEmail = {};
 
     $scope.createDuplicateEmail = function () {
-      // $scope.validateNewPage(newPage);
-      // if (!$scope.newPageValidated) {
-      //   toaster.pop('error', "Page Title or URL can not be blank.");
-      //   return false;
-      // }
       $scope.newEmail.components = $scope.page.components;
+      $scope.newEmail.type = "email";
       WebsiteService.createEmail($scope.newEmail, function (data, error) {
         if (data && !error) {
           $scope.duplicate = true;
