@@ -2,13 +2,13 @@
 /*global app, moment, angular, window, CKEDITOR*/
 /*jslint unparam:true*/
 (function (angular) {
-  app.controller('PagesCtrl', ["$scope", "$location", "toaster", "$filter", "$modal", "WebsiteService", "$timeout", function ($scope, $location, toaster, $filter, $modal, WebsiteService, $timeout) {
+  app.controller('PagesCtrl', ["$scope", "$location", "toaster", "$filter", "$modal", "WebsiteService", "pageConstant", "$timeout", function ($scope, $location, toaster, $filter, $modal, WebsiteService, pageConstant, $timeout) {
     $scope.tableView = 'list';
     $scope.itemPerPage = 40;
     $scope.showPages = 15;
     $scope.showChangeURL = false;
     $scope.createpage = {};
-
+    $scope.pageConstant = pageConstant;
     $scope.setHomePage = function () {
       if ($scope.createpage.homepage) {
         $scope.createpage.title = 'Home';
@@ -172,13 +172,22 @@
         mainmenu: page.mainmenu
       };
 
+      
       var hasHandle = false;
       _.each($scope.pages, function (_page) {
         if (_page.handle === page.handle) {
           hasHandle = true;
         }
       });
-
+      // Need to check for the pages which are not listed in the list
+      // but need to check for duplicates like blog and post page templates..
+      if (!hasHandle) {
+        _.each($scope.pageConstant.page_handles, function (_page) {
+          if (_page === page.handle) {
+            hasHandle = true;
+          }
+        });
+      }
 
       if (!hasHandle) {
         WebsiteService.createPageFromTemplate($scope.selectedTemplate._id, pageData, function (_newPage) {

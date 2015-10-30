@@ -349,6 +349,13 @@ app.constant('postConstant', {
   }
 });
 
+app.constant('pageConstant', {
+  page_handles: {
+    BLOG: 'blog',
+    SINGLEPOST: 'single-post',
+  }
+});
+
 // {
 //   name: 'Digital',
 //   value: 'digital'
