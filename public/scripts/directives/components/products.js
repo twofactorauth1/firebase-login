@@ -531,6 +531,16 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
           cvc: angular.element('#cvc').val(),
           exp_month: exp_month,
           exp_year: exp_year
+            //TODO: add the following:
+            /*
+             * name:name,
+             * address_city:city,
+             * address_country:country,
+             * address_line1:line1,
+             * address_line2:line2,
+             * address_state:state,
+             * address_zip:zip
+             */
         };
         if (!cardInput.number || !cardInput.cvc || !cardInput.exp_month || !cardInput.exp_year) {
           scope.checkCardNumber();
@@ -548,7 +558,17 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
           scope.checkoutModalState = 2;
           return;
         }
-
+        if(contact) {
+            cardInput.name = contact.first + ' ' + contact.last;
+            cardInput.address_line1 = contact.details[0].addresses[0].address;
+            cardInput.address_city = contact.details[0].addresses[0].city;
+            cardInput.address_state = contact.details[0].addresses[0].state;
+            cardInput.address_zip = contact.details[0].addresses[0].zip;
+            cardInput.address_country = contact.details[0].addresses[0].country || 'US';
+            if(contact.details[0].addresses[0].address2) {
+                cardInput.address_line2 = contact.details[0].addresses[0].address2;
+            }
+        }
 
         PaymentService.getStripeCardToken(cardInput, function (token, error) {
 
@@ -607,7 +627,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
               city: scope.newContact.details[0].addresses[0].city,
               countryCode: "",
               displayName: ""
-            }],
+            }]
           }];
           if(scope.newContact.details[0].phones && scope.newContact.details[0].phones[0] && scope.newContact.details[0].phones[0].number)
           {
