@@ -185,7 +185,7 @@ module.exports = {
                     } else if(commerceSettings.taxbased === 'customer_billing') {
                         zip = order.get('billing_address').postcode;
                     } else if(commerceSettings.taxbased === 'business_location') {
-                        zip = account.get('business').addresses[0].zip;
+                        zip = account.get('business').addresses &&  account.get('business').addresses[0] ? account.get('business').addresses[0].zip : 0;
                     } else {
                         log.warn('Unable to determine tax rate based on ', commerceSettings);
                     }
