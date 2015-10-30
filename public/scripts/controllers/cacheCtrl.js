@@ -41,6 +41,7 @@ mainApp.controller('CacheCtrl', ['$scope', 'pagesService', '$window', '$location
         delete window.indigenous.precache.pages;
         $scope.page = page;
         $scope.components = page.components;
+        $scope.components_0 = page.components[0];
     }
 
     //$scope.page = data;
