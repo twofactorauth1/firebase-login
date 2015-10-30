@@ -52,6 +52,10 @@ var mainApp = angular
         templateUrl: '../views/404.html',
         controller: 'NotFoundCtrl as notfound'
       })
+        .when('/cached/:page', {
+            controller: 'CacheCtrl as cacheCtrl',
+            template: function(args) {console.log('cacheController:', args); return "<div>ok</div>";}
+        })
       .otherwise({
         templateUrl: '../views/main.html',
         controller: 'LayoutCtrl as layout'

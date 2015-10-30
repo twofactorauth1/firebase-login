@@ -30,50 +30,58 @@ mainApp.factory('pagesService', ['$http', '$location', function ($http, $locatio
       path = path.replace('/', '');
     }
 
-
-    $http.get('/api/1.0/cms/website/' + websiteId + '/page/' + path, {
-      cache: true
-    }).success(function (page) {
-      if (page !== null && page.accountId) {
-        callback(null, page);
-      } else if (page !== null && path === 'index') {
-        $http.get('/api/1.0/cms/website/' + websiteId + '/page/coming-soon', {
-          cache: true
-        }).success(function (page) {
-          if (page !== null) {
-            pages[page.handle] = page;
-            callback(null, page);
-          } else {
-            callback("page not found", null);
-          }
-        }).error(function (err) {
-          // console.log("PageService >> DB-Hit >> ERROR");
-          callback(err, null);
-        });
+    //take advantage of precache
+      if(window.indigenous && window.indigenous.precache && window.indigenous.precache.pages) {
+          var page = window.indigenous.precache.pages;
+          pages[page.handle] = page;
+          delete window.indigenous.precache.pages;
+          callback(null, page);
       } else {
-        callback("page not found", null);
-      }
-    }).error(function (err) {
-        if(path === 'index') {
-            //we have no index page... look for a coming-soon page.
-            $http.get('/api/1.0/cms/website/' + websiteId + '/page/coming-soon', {
-                cache: true
-            }).success(function (page) {
-                if (page !== null) {
-                    pages[page.handle] = page;
-                    callback(null, page);
-                } else {
-                    callback("page not found", null);
-                }
-            }).error(function (err) {
-                // console.log("PageService >> DB-Hit >> ERROR");
-                callback(err, null);
-            });
-        } else {
-            // console.log("PageService >> DB-Hit >> ERROR");
-            callback(err, null);
-        }
+          $http.get('/api/1.0/cms/website/' + websiteId + '/page/' + path, {
+              cache: true
+          }).success(function (page) {
+              if (page !== null && page.accountId) {
+                  callback(null, page);
+              } else if (page !== null && path === 'index') {
+                  $http.get('/api/1.0/cms/website/' + websiteId + '/page/coming-soon', {
+                      cache: true
+                  }).success(function (page) {
+                      if (page !== null) {
+                          pages[page.handle] = page;
+                          callback(null, page);
+                      } else {
+                          callback("page not found", null);
+                      }
+                  }).error(function (err) {
+                      // console.log("PageService >> DB-Hit >> ERROR");
+                      callback(err, null);
+                  });
+              } else {
+                  callback("page not found", null);
+              }
+          }).error(function (err) {
+              if(path === 'index') {
+                  //we have no index page... look for a coming-soon page.
+                  $http.get('/api/1.0/cms/website/' + websiteId + '/page/coming-soon', {
+                      cache: true
+                  }).success(function (page) {
+                      if (page !== null) {
+                          pages[page.handle] = page;
+                          callback(null, page);
+                      } else {
+                          callback("page not found", null);
+                      }
+                  }).error(function (err) {
+                      // console.log("PageService >> DB-Hit >> ERROR");
+                      callback(err, null);
+                  });
+              } else {
+                  // console.log("PageService >> DB-Hit >> ERROR");
+                  callback(err, null);
+              }
 
-    });
+          });
+      }
+
   };
 }]);
