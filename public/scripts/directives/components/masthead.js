@@ -11,7 +11,13 @@ app.directive('mastheadComponent', ['$window', function ($window) {
       angular.element('body').on("click", ".navbar-toggle", function (e) {
         scope.setUnderbnavMargin();
       });
-
+      
+      angular.element(document).ready(function () {
+        setTimeout(function () {
+          scope.setUnderbnavMargin();
+          console.log("masthead loaded");
+        }, 0);
+      });
       angular.element($window).bind('resize', function () {
         scope.setUnderbnavMargin();
       });
