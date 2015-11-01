@@ -661,33 +661,37 @@ _.extend(api.prototype, baseApi.prototype, {
                                                         }
                                                     });
                                                 } else {
-                                                    self.log.debug('emailPage ', emailPage);
-                                                    var component = emailPage.get('components')[0];
-                                                    self.log.debug('emailPage 1st component ', component.logo);
-                                                    self.log.debug('Using this for data', emailPage.get('_id'));
-                                                    self.log.debug('Using this account for data', account);
-                                                    self.log.debug('This component:', component);
+                                                    
+                                                    var components = [];
+                                                    var keys = ['logo','title','text','text1','text2','text3'];
+                                                    var regex = new RegExp('src="//s3.amazonaws', "g");
 
-                                                    if(!component.logourl && account && account.attributes.business) {
-                                                        component.logourl = account.attributes.business.logo;
-                                                    }
+                                                    emailPage.get('components').forEach(function(component){
+                                                        for (var i = 0; i < keys.length; i++) {
+                                                            if (component[keys[i]]) {
+                                                                component[keys[i]] = component[keys[i]].replace(regex, 'src="http://s3.amazonaws');
+                                                            }
+                                                        }
 
-                                                    if (!component.bg.color) {
-                                                        component.bg.color = '#eaeaea';
-                                                    }
+                                                        if (!component.bg.color) {
+                                                            component.bg.color = '#ffffff';
+                                                        }
 
-                                                    if (!component.emailBg) {
-                                                        component.emailBg = '#ffffff';
-                                                    }
-                                                    if (component.bg.img && component.bg.img.show & component.bg.img.url) {
-                                                        component.emailBgImage = component.bg.img.url.replace('//s3.amazonaws', 'http://s3.amazonaws');
-                                                    }
+                                                        if (!component.emailBg) {
+                                                            component.emailBg = '#ffffff';
+                                                        }
 
-                                                    component.logo = component.logo ? component.logo.replace('src="//', 'src="http://') : '';
+                                                        if (component.bg.img && component.bg.img.show && component.bg.img.url) {
+                                                            component.emailBgImage = component.bg.img.url.replace('//s3.amazonaws', 'http://s3.amazonaws');
+                                                        }
+                                                        components.push(component);
+                                                    });
+                                                    
+                                                    self.log.debug('components >>> ', components);
 
-                                                    component.text = component.text ? component.text.replace('src="//', 'src="http://').replace(new RegExp('FHEMAIL', 'g'), savedContact.getEmails()[0].email) : '';
-                                                    component.title = component.title ? component.title.replace('src="//', 'src="http://').replace(new RegExp('FHEMAIL', 'g'), savedContact.getEmails()[0].email) : '';
-                                                    app.render('emails/base_email', component, function(err, html){
+                                                    debugger;
+
+                                                    app.render('emails/base_email_v2', { components: components }, function(err, html){
                                                         if(err) {
                                                             self.log.error('error rendering html: ' + err);
                                                             self.log.warn('email will not be sent.');
@@ -696,10 +700,11 @@ _.extend(api.prototype, baseApi.prototype, {
                                                             var contactEmail = savedContact.getEmails()[0].email;
                                                             var contactName = savedContact.get('first') + ' ' + savedContact.get('last');
                                                             var emailSubject = emailPage.get('subject');
+                                                            var fromContactName = emailPage.get('fromName');
                                                             self.log.debug('sending email to: ',contactEmail);
 
 
-                                                            var fromEmail = fromContactEmail || component.from_email || notificationConfig.WELCOME_FROM_EMAIL;
+                                                            var fromEmail = emailPage.get('fromEmail') || fromContactEmail || components[0].from_email || notificationConfig.WELCOME_FROM_EMAIL;
                                                             // var fromName = component.fromName || notificationConfig.WELCOME_FROM_NAME;
                                                             // var emailSubject = emailSubject || notificationConfig.WELCOME_EMAIL_SUBJECT;
                                                             var vars = [];
@@ -730,13 +735,13 @@ _.extend(api.prototype, baseApi.prototype, {
                                                                     if(account && account.attributes.business && account.attributes.business.emails && account.attributes.business.emails[0] && account.attributes.business.emails[0].email) {
                                                                         self.log.debug('user email: ', account.attributes.business.emails[0].email);
                                                                         accountEmail = account.attributes.business.emails[0].email;
-                                                                        self._sendEmailOnCreateAccount(req, resp, accountEmail, activity.contact, account._id, component, emailPage.get('_id'), savedContact)
+                                                                        self._sendEmailOnCreateAccount(req, resp, accountEmail, activity.contact, account._id, components[0], emailPage.get('_id'), savedContact)
                                                                     } else{
                                                                         userDao.getUserAccount(query.accountId, function(err, user){
                                                                             self.log.debug('user: ', user);
                                                                             self.log.debug('user email: ', user.attributes.email);
                                                                             accountEmail = user.attributes.email;
-                                                                            self._sendEmailOnCreateAccount(req, resp, accountEmail, activity.contact, account._id, component, emailPage.get('_id'), savedContact);
+                                                                            self._sendEmailOnCreateAccount(req, resp, accountEmail, activity.contact, account._id, components[0], emailPage.get('_id'), savedContact);
                                                                         })
                                                                     }
                                                                 }

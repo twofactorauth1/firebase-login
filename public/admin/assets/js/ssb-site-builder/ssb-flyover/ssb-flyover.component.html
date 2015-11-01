@@ -1,3 +1,86 @@
-<div>
-ssb-flyover content
+<div draggable class="draggable">
+	<h4 class="ssb-flyover-title">Edit Control</h4>
+	<ul class="ssb-flyover-list-container list-unstyled">
+		<li class="ssb-flyover-card-container" ng-repeat="component in vm.state.page.components track by $index" ng-hide="!vm.uiState.components[$index]">
+			<section class="ssb-flyover-card ssb-flyover-card-initial">
+				<h4 class="ssb-flyover-card-title">{{component.type}}</h4>
+				<ul class="list-unstyled">
+					<li ng-click="vm.showCard(0, 'Basic', 'assets/js/ssb-site-builder/ssb-sidebar/views/basic.html')">
+						<h5 class="ssb-flyover-card-link">Basic <i class="ti-angle-right"></i></h5>
+					</li>
+					<li ng-click="vm.showCard(0, 'Spacing', 'assets/js/ssb-site-builder/ssb-sidebar/views/spacing.html')">
+						<h5 class="ssb-flyover-card-link">Spacing <i class="ti-angle-right"></i></h5>
+					</li>
+					<li ng-click="vm.showCard(0, 'Advanced', 'assets/js/ssb-site-builder/ssb-sidebar/views/advanced.html')">
+						<h5 class="ssb-flyover-card-link">Advanced <i class="ti-angle-right"></i></h5>
+					</li>
+					<li ng-if="component.type === 'single-post'" 
+						ng-click="vm.showCard(0, 'Preview', 'assets/js/ssb-site-builder/ssb-sidebar/views/blog.html')">
+						<h5 class="ssb-flyover-card-link">Preview <i class="ti-angle-right"></i></h5>
+					</li>
+					<li ng-if="component.type === 'navigation'" 
+						ng-click="vm.showCard(0, 'Links', 'assets/js/ssb-site-builder/ssb-sidebar/views/navigation.html')">
+						<h5 class="ssb-flyover-card-link">Links <i class="ti-angle-right"></i></h5>
+					</li>
+					<li ng-if="component.type === 'contact-us'" 
+						ng-click="vm.showCard(0, 'Hours', 'assets/js/ssb-site-builder/ssb-sidebar/views/contact-us-hours.html')">
+						<h5 class="ssb-flyover-card-link">Hours <i class="ti-angle-right"></i></h5>
+					</li>
+					<li ng-if="component.type === 'contact-us'" 
+						ng-click="vm.showCard(0, 'Address', 'assets/js/ssb-site-builder/ssb-sidebar/views/contact-us-address.html')">
+						<h5 class="ssb-flyover-card-link">Address <i class="ti-angle-right"></i></h5>
+					</li>
+					<li ng-if="component.type === 'contact-us'" 
+						ng-click="vm.showCard(0, 'Map', 'assets/js/ssb-site-builder/ssb-sidebar/views/map.html')">
+						<h5 class="ssb-flyover-card-link">Map <i class="ti-angle-right"></i></h5>
+					</li>
+					<li ng-if="component.type === 'simple-form'" 
+						ng-click="vm.showCard(0, 'Form', 'assets/js/ssb-site-builder/ssb-sidebar/views/simple-form.html')">
+						<h5 class="ssb-flyover-card-link">Form <i class="ti-angle-right"></i></h5>
+					</li>
+					<li ng-if="component.type === 'testimonials'" 
+						ng-click="vm.showCard(0, 'Testimonials', 'assets/js/ssb-site-builder/ssb-sidebar/views/testimonials.html')">
+						<h5 class="ssb-flyover-card-link">Testimonials <i class="ti-angle-right"></i></h5>
+					</li>
+					<li ng-if="component.type === 'video'" 
+						ng-click="vm.showCard(0, 'Video', 'assets/js/ssb-site-builder/ssb-sidebar/views/video.html')">
+						<h5 class="ssb-flyover-card-link">Video <i class="ti-angle-right"></i></h5>
+					</li>
+					<li ng-if="component.type === 'top-bar'" 
+						ng-click="vm.showCard(0, 'Top Bar Info', 'assets/js/ssb-site-builder/ssb-sidebar/views/top-bar.html')">
+						<h5 class="ssb-flyover-card-link">Top Bar Info <i class="ti-angle-right"></i></h5>
+					</li>
+					<li ng-if="component.type === 'meet-team'" 
+						ng-click="vm.showCard(0, 'Meet Team Options', 'assets/js/ssb-site-builder/ssb-sidebar/views/meet-team.html')">
+						<h5 class="ssb-flyover-card-link">Meet Team Options <i class="ti-angle-right"></i></h5>
+					</li>
+					<li ng-if="component.type === 'products'" 
+						ng-click="vm.showCard(0, 'Products', 'assets/js/ssb-site-builder/ssb-sidebar/views/products.html')">
+						<h5 class="ssb-flyover-card-link">Products <i class="ti-angle-right"></i></h5>
+					</li>
+				</ul>
+			</section>
+			<section ng-show="vm.uiState.cards[0].title !== undefined" class="ssb-flyover-card ssb-flyover-card-level-0">
+				<h4 class="ssb-flyover-card-title">{{vm.uiState.cards[0].title}}</h4>
+				<button type="button" class="close" ng-click="vm.hideCard(0)">
+					<i class="ti-close"></i>
+				</button>
+				<div ng-include="vm.uiState.cards[0].template"></div>
+				<ul class="list-unstyled">
+					<li ng-click="vm.showCard(1, 'Test', 'assets/js/ssb-site-builder/ssb-sidebar/views/basic.html')">
+						<h5 class="ssb-flyover-card-link">Test Link Further Card <i class="ti-angle-right"></i></h5>
+					</li>
+				</ul>
+				<ssb-action-buttons save-action="vm.savePage()" cancel-action="vm.cancelPendingEdits()" ng-show="vm.uiState.topCard == 0 && vm.state.pendingChanges"></ssb-action-buttons>
+			</section>
+			<section ng-show="vm.uiState.cards[1].title !== undefined" class="ssb-flyover-card ssb-flyover-card-level-1">
+				<h4 class="ssb-flyover-card-title">Another Card {{vm.uiState.cards[1].title}}</h4>
+				<button type="button" class="close" ng-click="vm.hideCard(1)">
+					<i class="ti-close"></i>
+				</button>
+				<div ng-include="vm.uiState.cards[1].template"></div>
+				<ssb-action-buttons save-action="vm.savePage()" cancel-action="vm.cancelPendingEdits()" ng-show="vm.uiState.topCard == 1 && vm.state.pendingChanges"></ssb-action-buttons>
+			</section>
+		</li>
+	</ul>
 </div>

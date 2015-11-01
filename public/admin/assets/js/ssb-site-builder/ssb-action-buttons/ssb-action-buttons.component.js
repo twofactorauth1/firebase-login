@@ -7,7 +7,7 @@ function ssbActionButtons() {
     return {
         restrict: 'E',
         scope: {
-            page: '=',
+            state: '=',
             saveAction: '&',
             cancelAction: '&'
         },

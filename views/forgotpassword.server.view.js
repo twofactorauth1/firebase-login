@@ -144,8 +144,8 @@ _.extend(view.prototype, BaseView.prototype, {
             } else {
                 var data = self.baseData({
                     reset:true,
-                    token:true,
-                    errorMsg: err
+                    token:token,
+                    errMsg: "Error on submission. Please verify link matches that in the 'Password Reset' email and below email address is entered correctly."
                 });
 
                 self.resp.render('forgotpassword', data);

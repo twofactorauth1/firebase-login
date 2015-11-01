@@ -160,22 +160,25 @@ module.exports = {
                 log.debug('fetching products');
                 var productAry = [];
                 async.each(order.get('line_items'), function iterator(item, cb){
-                    productManager.getProduct(item.product_id, function(err, product){
+                    productManager.getProduct(item.product_id, function(err, product){                        
                         if(err) {
                             cb(err);
                         } else {
                             productAry.push(product);
                             item.sku = product.get('sku');
                             item.name = product.get('name');
+                            log.debug('Product is', product);
                             cb();
                         }
                     });
                 }, function done(err){
+                    log.debug('Sanjjeeeee is');
                     callback(err, account, productAry);
                 });
             },
             //determine tax rate
             function(account, productAry, callback) {
+                log.debug('commerceSettings');
                 var commerceSettings = account.get('commerceSettings');
                 if(commerceSettings && commerceSettings.taxes === true) {
                     //figure out the rate
@@ -185,7 +188,7 @@ module.exports = {
                     } else if(commerceSettings.taxbased === 'customer_billing') {
                         zip = order.get('billing_address').postcode;
                     } else if(commerceSettings.taxbased === 'business_location') {
-                        zip = account.get('business').addresses[0].zip;
+                        zip = account.get('business').addresses && account.get('business').addresses[0] ? account.get('business').addresses[0].zip : 0;
                     } else {
                         log.warn('Unable to determine tax rate based on ', commerceSettings);
                     }
@@ -199,6 +202,8 @@ module.exports = {
                             }
                         });
                     }
+                    else
+                        callback(null, account, productAry, 0);
                 } else {
                     callback(null, account, productAry, 0);
                 }

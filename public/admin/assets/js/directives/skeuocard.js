@@ -178,7 +178,8 @@ app.directive('indigewebSkeuocard',['PaymentService', 'UserService', 'ToasterSer
                                 number: parent_div.find('#number').val(),
                                 cvc: parent_div.find('#cvc').val(),
                                 exp_month: exp_month,
-                                exp_year: exp_year
+                                exp_year: exp_year,
+                                name : parent_div.find('#name').val()
                             };
                         } else {
                             var expiry = $('#expiry').val().split("/")
@@ -191,7 +192,8 @@ app.directive('indigewebSkeuocard',['PaymentService', 'UserService', 'ToasterSer
                                 number: $('#number').val(),
                                 cvc: $('#cvc').val(),
                                 exp_month: exp_month,
-                                exp_year: exp_year
+                                exp_year: exp_year,
+                                name : $('#card_name #name').val()
                             };
                         }
 

@@ -22,4 +22,98 @@
 		}
 	}
 
+	.ssb-main.ssb-main-full-width {
+		width: 100%;
+		left: 0;
+	}
+
+	.ssb-component-container {
+		position: relative;
+	}
+
+	.ssb-edit-control {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 3em;
+		height: 40px;
+		z-index: 999;
+
+		& > *, 
+		& > * > * {
+			display: inline-block;
+			float: none;
+			position: static;
+			height: 40px;
+			line-height: 40px;
+			color: white;
+			vertical-align: top;
+			opacity: 1;
+			font-size: 1em;
+		}
+
+		.ssb-settings-btn {
+			color: white!important;
+		    fill: currentColor;
+		    position: absolute;
+		    top: 0;
+		    left: 0;
+		    height: 100%;
+		    width: 40px;
+		    border-top: 40px solid black;
+		    border-left: 40px solid transparent;
+		    transform: rotate(-90deg);
+		    cursor: pointer;
+
+		    .ti-settings {
+			    position: absolute;
+			    background: transparent;
+			    // transform: translate(.5em, .5em);
+			    font-size: 15px;
+			    left: -21px;
+    			top: -48px;
+		    }
+		
+		}
+
+		.ti-close {
+	    	position: relative;
+		    top: -.55em;
+		    left: -.25em;
+		    padding: 0 0 0 1em;
+	    }
+
+		.ssb-edit-control-inactive {
+			// width: 40px;
+			// height: 40px;
+		}
+		
+		.ssb-edit-control-active {		
+			display: none;
+			background: black;
+		}
+	}
+
+	// .ssb-edit-control.ssb-edit-control-on {
+	.ssb-edit-control:hover {
+		width: 100%;
+		padding-left: 3em;
+
+		.ssb-settings-btn {
+			background: black;
+		}
+
+		.ssb-edit-control-inactive {
+			display: none;
+		}
+
+		.ssb-edit-control-active {
+			display: inline-block;
+		}
+	}
+
+	.ssb-active-section {
+		background: red;
+	}
+
 }

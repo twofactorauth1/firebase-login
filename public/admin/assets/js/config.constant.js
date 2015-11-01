@@ -349,6 +349,13 @@ app.constant('postConstant', {
   }
 });
 
+app.constant('pageConstant', {
+  page_handles: {
+    BLOG: 'blog',
+    SINGLEPOST: 'single-post',
+  }
+});
+
 // {
 //   name: 'Digital',
 //   value: 'digital'
@@ -649,6 +656,7 @@ app.constant('JS_REQUIRES', {
     'createCampaignCtrl': 'assets/js/controllers/createCampaignCtrl.js',
     'addComponentModalCtrl': 'assets/js/controllers/modals/addComponentModalCtrl.js',
     'componentSettingsModalCtrl': 'assets/js/controllers/modals/componentSettingsModalCtrl.js',
+    'ssbComponentSettingsModalCtrl': 'assets/js/controllers/modals/ssbComponentSettingsModalCtrl.js',
     'mediaModalCtrl': 'assets/js/controllers/modals/mediaModalCtrl.js',
     'templateSettingsModalCtrl': 'assets/js/controllers/modals/templateSettingsModalCtrl.js',
     'importCustomerModalCtrl': 'assets/js/controllers/modals/importCustomerModalCtrl.js',
@@ -816,7 +824,7 @@ app.constant('JS_REQUIRES', {
     files: ["../js/libs/jqcloud2/dist/jqcloud.min.js", "../js/libs/angular-jqcloud/angular-jqcloud.js", "../js/libs/jqcloud2/dist/jqcloud.min.css"]
   }, {
     name: 'wu.masonry',
-    files: ['../js/libs/angular-masonry/angular-masonry.js', '../js/libs/masonry/dist/masonry.pkgd.min.js']
+    files: ['../js/libs/angular-masonry/angular-masonry.js', '../js/libs/masonry/dist/masonry.pkgd.min.js', '../js/libs/imagesloaded/imagesloaded.pkgd.min.js']
   }, {
     name: 'ngTextTruncate',
     files: ['../js/libs/ng-text-truncate/ng-text-truncate.js']
