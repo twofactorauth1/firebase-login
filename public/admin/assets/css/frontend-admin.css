@@ -6224,6 +6224,9 @@
 .ssb-site-builder .ssb-component-container {
   position: relative;
 }
+.ssb-site-builder .ssb-component-container:hover .ssb-settings-btn {
+  display: block;
+}
 .ssb-site-builder .ssb-edit-control {
   position: absolute;
   top: 0;
@@ -6245,6 +6248,7 @@
   font-size: 1em;
 }
 .ssb-site-builder .ssb-edit-control .ssb-settings-btn {
+  display: none;
   color: white!important;
   fill: currentColor;
   position: absolute;
@@ -6256,6 +6260,13 @@
   border-left: 40px solid transparent;
   transform: rotate(-90deg);
   cursor: pointer;
+  border: none;
+  transform: none;
+  top: 2px;
+  left: 2px;
+  background: #70c2d7;
+  border-radius: 5em;
+  box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.5);
 }
 .ssb-site-builder .ssb-edit-control .ssb-settings-btn .ti-settings {
   position: absolute;
@@ -6263,6 +6274,12 @@
   font-size: 15px;
   left: -21px;
   top: -48px;
+  font-size: 1.5em;
+  left: 50%;
+  top: 25%;
+  width: 100%;
+  height: 100%;
+  transform: translate(-25%, -25%);
 }
 .ssb-site-builder .ssb-edit-control .ti-close {
   position: relative;

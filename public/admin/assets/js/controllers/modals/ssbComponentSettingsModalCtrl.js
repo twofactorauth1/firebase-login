@@ -8,7 +8,8 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
   $scope.components = $scope.$parent.vm.state.page.components;
   // $scope.openParentModal = openParentModal;
   // $scope.clickedIndex = clickedIndex;
-  $scope.componentEditing = $scope.component;
+  $scope.componentEditing = $scope.$parent.vm.uiState.componentEditing;
+  $scope.component = $scope.componentEditing;
   // $scope.contactMap = contactMap;
   $scope.website = $scope.$parent.vm.state.website;
   // $scope.blog.post = blog;

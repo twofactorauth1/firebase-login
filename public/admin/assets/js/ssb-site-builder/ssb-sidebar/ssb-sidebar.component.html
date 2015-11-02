@@ -75,12 +75,8 @@
 							<ul class="list-unstyled">
 								<li>
 									<accordion close-others="oneAtATime" class="accordion">
-										<accordion-group heading="Basic">
-											<div ng-include=" 'assets/js/ssb-site-builder/ssb-sidebar/views/basic.html' "></div>
-										</accordion-group>
-										<!-- <accordion-group heading="Spacing">
-											<div ng-include=" 'assets/js/ssb-site-builder/ssb-sidebar/views/spacing.html' "></div>
-										</accordion-group> -->
+										<div ng-if="vm.uiState.componentEditing.type !== undefined" ng-include=" 'assets/js/ssb-site-builder/ssb-user-components/' + vm.uiState.componentEditing.type + '/sidebar.settings.html' "></div>
+										<ssb-action-buttons save-action="vm.savePage()" cancel-action="vm.cancelPendingEdits()" ng-show="vm.state.pendingChanges"></ssb-action-buttons>
 									</accordion>
 								</li>
 							</ul>
@@ -90,7 +86,5 @@
 			</ul>
 		</accordion-group>
 	</accordion>
-
-	<ssb-action-buttons save-action="vm.savePage()" cancel-action="vm.cancelPendingEdits()"></ssb-action-buttons>
 
 </div>

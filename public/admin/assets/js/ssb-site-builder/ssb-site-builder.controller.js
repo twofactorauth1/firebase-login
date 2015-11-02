@@ -15,12 +15,14 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     vm.uiState = {
         show: {
             flyover: true,
-            sidebar: false
+            sidebar: true
         }
     };
     vm.toggleSidebarFlyover = toggleSidebarFlyover;
 
     $scope.$watch(function() { return SimpleSiteBuilderService.website; }, function(website){
+        vm.state.originalWebsite = angular.copy(website);
+        vm.state.pendingChanges = false;
         vm.state.website = website;
     });
 
@@ -33,6 +35,22 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     $scope.$watch(function() { return SimpleSiteBuilderService.activeSection; }, function(activeSection){
         vm.state.activeSection = activeSection;
     });
+
+    $scope.$watch('vm.state.page', function(page) {
+        if (!angular.equals(page, vm.state.originalPage)) {
+            vm.state.pendingChanges = true;
+        } else {
+            vm.state.pendingChanges = false;
+        }
+    }, true);
+
+    $scope.$watch('vm.state.website', function(website) {
+        if (!angular.equals(website, vm.state.originalWebsite)) {
+            vm.state.pendingChanges = true;
+        } else {
+            vm.state.pendingChanges = false;
+        }
+    }, true);
 
     $rootScope.$on('$stateChangeStart',
         function (event) {

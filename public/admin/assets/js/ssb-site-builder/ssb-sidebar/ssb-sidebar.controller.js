@@ -13,6 +13,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, SimpleSiteBuil
     vm.somethingSidebar = 'something sidebar';
     vm.init = init;
     vm.uiState = {
+        componentEditing: undefined,
     	accordion: {
     		site: {},
     		page: {},
@@ -57,6 +58,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, SimpleSiteBuil
         if (activeSection !== undefined) {
         	vm.uiState.accordion.components[activeSection] = true;
         	vm.uiState.accordion.components.isOpen = true;
+        	vm.uiState.componentEditing = vm.state.page.components[vm.state.activeSection];
         }
     });
 

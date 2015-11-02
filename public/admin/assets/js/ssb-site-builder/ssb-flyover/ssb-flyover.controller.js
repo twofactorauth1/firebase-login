@@ -13,6 +13,7 @@ function ssbSiteBuilderFlyoverController($scope, $attrs, $filter, SimpleSiteBuil
     vm.somethingFlyover = 'something flyover';
     vm.init = init;
     vm.uiState = {
+        componentEditing: undefined,
     	components: {},
     	cards: [new Card(), new Card()]
     };
@@ -60,16 +61,17 @@ function ssbSiteBuilderFlyoverController($scope, $attrs, $filter, SimpleSiteBuil
         if (activeSection !== undefined) {
         	vm.uiState.components[activeSection] = true;
         	vm.uiState.components.isOpen = true;
+            vm.uiState.componentEditing = vm.state.page.components[vm.state.activeSection];
         }
     });
 
-    $scope.$watch('vm.state.page', function(page) {
-    	if (!angular.equals(page, vm.state.originalPage)) {
-    		vm.state.pendingChanges = true;
-    	} else {
-    		vm.state.pendingChanges = false;
-    	}
-	}, true);
+ //    $scope.$watch('vm.state.page', function(page) {
+ //    	if (!angular.equals(page, vm.state.originalPage)) {
+ //    		vm.state.pendingChanges = true;
+ //    	} else {
+ //    		vm.state.pendingChanges = false;
+ //    	}
+	// }, true);
 
 	function savePage() {
 		return (
