@@ -66,7 +66,7 @@ mainApp.controller('LayoutCtrl', ['$scope', 'pagesService', '$window', '$locatio
               $document.scrollToElementAnimated(element, 0, 1000);
             }
           }
-        }, 0);
+        }, 3000);
       })
     }
   });

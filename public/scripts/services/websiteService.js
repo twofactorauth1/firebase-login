@@ -27,7 +27,7 @@ mainApp.factory('websiteService', ['accountService','$http', function (accountSe
                 else {
                     //console.log('Not Historical ', data);
                     // API URL: http://yoursubdomain.indigenous.local/api/1.0/cms/website/yourid
-                    $http.get('/api/1.0/cms/website/' + data.website.websiteId)
+                    $http.get('/api/1.0/cms/website/' + data.website.websiteId, {cache : true})
                     .success(function (data) {
                         if (data) {
                             website = data;
