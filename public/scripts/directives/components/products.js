@@ -452,6 +452,21 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
         }
       };
 
+      /*scope.checkCardName = function() {
+                     var name = angular.element('#card_name #name').val();
+                     if (!name) {
+                         angular.element("#card_name .error").html("Card Name Required");
+                         angular.element("#card_name").addClass('has-error');
+                         angular.element("#card_name .glyphicon").addClass('glyphicon-remove');
+                     } else {
+                         angular.element("#card_name .error").html("");
+                         angular.element("#card_name").removeClass('has-error').addClass('has-success');
+                         angular.element("#card_name .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
+                     }
+                  
+                };*/
+
+
       /*
        * @validateBasicInfo
        * -
@@ -527,6 +542,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
           exp_year = expiry[1].trim();
         }
         var cardInput = {
+          name: angular.element('#card_name #name').val(),
           number: angular.element('#number').val(),
           cvc: angular.element('#cvc').val(),
           exp_month: exp_month,
@@ -542,7 +558,8 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
              * address_zip:zip
              */
         };
-        if (!cardInput.number || !cardInput.cvc || !cardInput.exp_month || !cardInput.exp_year) {
+        if (!cardInput.number || !cardInput.cvc || !cardInput.exp_month || !cardInput.exp_year || !cardInput.name) {
+          scope.checkCardName();
           scope.checkCardNumber();
           scope.checkCardExpiry();
           scope.checkCardCvv();
@@ -598,6 +615,11 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 angular.element("#card_cvc").addClass('has-error');
                 angular.element("#card_cvc .glyphicon").addClass('glyphicon-remove');
                 break;
+              case "name":
+                 angular.element("#card_name .error").html(error.message);
+                angular.element("#card_name").addClass('has-error');
+                angular.element("#card_name .glyphicon").addClass('glyphicon-remove');
+
             }
             scope.checkoutModalState = 3;
             return;
@@ -825,6 +847,22 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
         }
       };
 
+      scope.checkCardName = function() {
+        scope.failedOrderMessage = "";
+                     var name = angular.element('#card_name #name').val();
+                     if (!name) {
+                         angular.element("#card_name .error").html("Card Name Required");
+                         angular.element("#card_name").addClass('has-error');
+                         angular.element("#card_name .glyphicon").addClass('glyphicon-remove');
+                     } else {
+                         angular.element("#card_name .error").html("");
+                         angular.element("#card_name").removeClass('has-error').addClass('has-success');
+                         angular.element("#card_name .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
+                     }
+                  
+                };
+
+
       scope.checkCardExpiry = function () {
         scope.failedOrderMessage = "";
         var expiry = angular.element('#expiry').val();
@@ -895,7 +933,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
         }
       };
 
-      scope.checkCardName = function () {
+     /* scope.checkCardName = function () {
         scope.failedOrderMessage = "";
         var name = $('#card_name #name').val();
         if (name) {
@@ -903,7 +941,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
           $("#card_name").removeClass('has-error').addClass('has-success');
           $("#card_name .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
         }
-      };
+      };*/
      
     },
     controller: function ($scope) {

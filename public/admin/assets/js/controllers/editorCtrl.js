@@ -1247,7 +1247,7 @@
           toaster.pop('success', "Settings saved successfully");
           $scope.closeModal();
           $timeout(function () {
-            $scope.checkForSaveBeforeLeave();
+            //$scope.checkForSaveBeforeLeave();
           }, 100);
           
         } else if (!data && error && error.message) {
