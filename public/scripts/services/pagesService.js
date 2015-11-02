@@ -1,8 +1,8 @@
 'use strict';
 /*global mainApp*/
-mainApp.factory('pagesService', ['$http', '$location', function ($http, $location) {
+mainApp.factory('pagesService', ['$http', '$location', '$cacheFactory', function ($http, $location, $cacheFactory) {
   var pages = {};
-
+  var pagecache = $cacheFactory('pages');
   return function (websiteId, callback) {
     var path = $location.$$path.replace('/page/', '');
 
@@ -30,11 +30,29 @@ mainApp.factory('pagesService', ['$http', '$location', function ($http, $locatio
       path = path.replace('/', '');
     }
 
+    
+    var _pages = pagecache.get('pages');
+    if (_pages) {
+      var _path = path;
+       if (path.indexOf('/') !== -1) {
+          _path = path.replace('/', '');
+       }
+       var _matchingPage = _.find(_pages, function (_page) {
+          return _page.handle === _path;
+        });
+        if (_matchingPage) {
+          callback(null, _matchingPage);
+        }
+    }
 
     $http.get('/api/1.0/cms/website/' + websiteId + '/page/' + path, {
       cache: true
     }).success(function (page) {
       if (page !== null && page.accountId) {
+        $http.get('/api/1.0/cms/website/' + websiteId + '/pages')
+        .success(function (pages) {
+          pagecache.put('pages', pages);
+        })
         callback(null, page);
       } else if (page !== null && path === 'index') {
         $http.get('/api/1.0/cms/website/' + websiteId + '/page/coming-soon', {
