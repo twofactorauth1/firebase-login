@@ -29,6 +29,8 @@
       'mw': '100%',
       'usePage': false
     };
+    
+    $scope.duplicate = false;
 
     $scope.circleOptions = {
       isOpen: false,
@@ -241,7 +243,12 @@
     $scope.redirectAfterSave = function(redirect_url, reload){    
     if(redirect_url){
         SweetAlert.swal("Saved!", "Your edits were saved to the page.", "success");
-        window.location = redirect_url;
+            $timeout(function () {
+              if($scope.duplicate)
+                $location.path(redirect_url);
+              else
+                window.location = redirect_url;
+            }, 500);
         if (reload) {
           window.location.reload();
         }
