@@ -1187,6 +1187,10 @@
         post.post_url = $filter('slugify')(title); 
     };
 
+    $scope.plainTextTitle = function () {
+      $scope.blog.post.post_title = $filter('htmlToPlaintext')($scope.blog.post.post_title);
+    };
+
     $scope.newPage = {};
 
     /*
