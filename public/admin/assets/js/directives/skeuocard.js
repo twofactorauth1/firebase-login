@@ -105,7 +105,7 @@ app.directive('indigewebSkeuocard',['PaymentService', 'UserService', 'ToasterSer
                             $("#card_expiry .error").html("Card Year has Expired");
                             $("#card_expiry").addClass('has-error');
                             $("#card_expiry .glyphicon").addClass('glyphicon-remove');
-                        } else if (exp_month <= scope.currentMonth && parseInt(exp_year) <= scope.currentYear) {
+                        } else if (exp_month < scope.currentMonth && parseInt(exp_year) <= scope.currentYear) {
                             $("#card_expiry .error").html("Card Month has Expired");
                             $("#card_expiry").addClass('has-error');
                             $("#card_expiry .glyphicon").addClass('glyphicon-remove');
