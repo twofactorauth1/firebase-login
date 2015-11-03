@@ -19,7 +19,7 @@
             <div ng-if="!component.bg.img.url && component.type != 'email'"
                  ng-style="{'background': component.bg.color,
                     'color':component.txtcolor||primaryTextColor}">
-                <div ng-class="{'component-inner': component.type != 'footer'}">
+                <div ng-class="{'component-inner': component.type != 'footer' || component.type != 'navigation'}">
                     <div class="container inner-page"
                          ng-if="component.type != 'single-post'
                              && component.type != 'blog'

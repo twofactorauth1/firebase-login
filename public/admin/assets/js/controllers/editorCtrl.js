@@ -897,6 +897,9 @@
       } else {
         if ($scope.componentEditing.bg.img) {
           $scope.componentEditing.bg.img.url = asset.url;
+          $timeout(function () {
+            $(window).trigger('resize');
+          }, 0);
           return;
         }
       }

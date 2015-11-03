@@ -746,6 +746,9 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
 
   $scope.saveComponent = function () {
     $scope.isDirty.dirty = true;
+    $timeout(function () {
+      $(window).trigger('resize');
+    }, 0);
   };
 
   $scope.saveContactComponent = function (is_address) {

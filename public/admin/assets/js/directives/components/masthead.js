@@ -43,6 +43,7 @@ app.directive('mastheadComponent',["$window", function ($window) {
             }
             
             angular.element(".undernav").addClass("nav-undernav");
+            angular.element(".nav-undernav .bg").addClass("bg-nav-undernav");
             angular.element(".undernav").closest('li.fragment').addClass("li-nav-undernav");
 
             if (mastheadUnderNavElement)
@@ -57,7 +58,9 @@ app.directive('mastheadComponent',["$window", function ($window) {
               mastheadElement.attr('style',"margin-top:0px");
             if (angular.element(".masthead-actions"))
               angular.element(".masthead-actions").removeClass("hover-action");
+            angular.element(".nav-undernav .bg").removeClass("bg-nav-undernav");
             angular.element(".undernav").removeClass("nav-undernav");
+
             //mastheadElement.removeClass("masthead-undernav");
             angular.element(".undernav").closest('li.fragment').removeClass("li-nav-undernav");
           }
