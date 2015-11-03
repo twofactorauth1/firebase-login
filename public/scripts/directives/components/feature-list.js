@@ -23,7 +23,7 @@ app.directive('featureListComponent',['$window', function ($window) {
 		angular.element(document).ready(function () {
 			setTimeout(function () {
 			  scope.resizeFeatureTiles();
-			}, 500)
+			}, 2000)
 		});
     }
   };

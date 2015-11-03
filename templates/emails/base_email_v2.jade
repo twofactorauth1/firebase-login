@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 html
   head
       meta(http-equiv='Content-Type', content='text/html; charset=UTF-8')
@@ -23,7 +23,6 @@ html
         }
 
         img {
-          -ms-interpolation-mode: bicubic;
           max-width: 100%;
           border:0 none;
           height:auto;
@@ -68,8 +67,43 @@ html
         tr
           td
             each component in components
-              if component.type === 'email' || component.type === 'email-header'
-                table(width='100%', align='center', cellpadding='0', cellspacing='0', border='0', style="border-collapse: collapse; background-image: url('"+component.emailBgImage+"');")
+              if component.type === 'email'
+                table(width='100%', align='center', cellpadding='0', cellspacing='0', border='0', style="border-collapse: collapse;background-color:"+component.emailBg+";")
+                  tr
+                    td(align='center', width='100%')
+                      if component.logo
+                        table.device-width(align='center', width='640', cellpadding='0', cellspacing='0', border='0', style='border-collapse: collapse;margin-top: 45px;')
+                          tr
+                            td.wrapper(width='100%')
+                                table.device-width(width='640', cellpadding='0', cellspacing='0', border='0', style='border-collapse: collapse;')
+                                  tr
+                                    td.device-width(width='100%')
+                                      table.device-width(width='100%', cellpadding='0', cellspacing='0', border='0', style='border-collapse: collapse;')
+                                        tr
+                                          td.device-width(width='100%', style='text-align: center; padding-bottom: 15px; padding-left:20px;padding-right:20px')
+                                            div.logo-img
+                                              !{component.logo}
+                                            
+                      if component.title
+                        table.device-width(width='640', align='center', cellpadding='0', cellspacing='0', border='0', style='border-collapse: collapse;')
+                          tr
+                            td(align='center', width='100%')
+                              table.device-width(align='center', width='100%', cellpadding='0', cellspacing='0', border='0', style='border-collapse: collapse;')
+                                tr
+                                  td.wrapper(width='100%', style='padding-left: 20px; padding-right: 20px; padding-top: 45px; padding-bottom: 45px;')
+                                    div !{component.title}
+                      
+                      if component.text
+                        table.device-width(width='640', align='center', cellpadding='0', cellspacing='0', border='0', style='border-collapse: collapse;')
+                          tr
+                            td(align='center', width='100%')
+                              table.device-width(align='center', width='100%', cellpadding='0', cellspacing='0', border='0', style='border-collapse: collapse;')
+                                tr
+                                  td.wrapper(width='100%', style='padding-left: 20px; padding-right: 20px; padding-top: 45px; padding-bottom: 45px;')
+                                    div !{component.text}
+
+              if component.type === 'email-header'
+                table(width='100%', align='center', cellpadding='0', cellspacing='0', border='0', style="border-collapse: collapse;")
                   tr
                     td(align='center', width='100%')
                       if component.logo
@@ -82,7 +116,9 @@ html
                                       table.device-width(width='100%', cellpadding='0', cellspacing='0', border='0', style='border-collapse: collapse;')
                                         tr
                                           td.device-width(width='100%', style='text-align: center; padding-bottom: 15px; padding-left:20px;padding-right:20px')
-                                            div !{component.logo}
+                                            div.logo-img
+                                              !{component.logo}
+                                            
                       if component.title
                         table.device-width(width='640', align='center', cellpadding='0', cellspacing='0', border='0', style='border-collapse: collapse;')
                           tr

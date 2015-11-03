@@ -6,7 +6,7 @@
     <div class="modal-body no-padding" style="max-height:500px; margin:10px">
         <div class="form-group">
                         <label>Title:</label>
-                        <input id="edit-post-title" ng-change="updatePostData()" class="form-control input-lg" ng-blur="validateEditPost(blog.post, true)" type="text" ng-model="blog.post.post_title">
+                        <input id="edit-post-title" ng-init="plainTextTitle()" ng-change="updatePostData()" class="form-control input-lg" ng-blur="validateEditPost(blog.post, true)" type="text" ng-model="blog.post.post_title">
                     </div>
                     <div class="form-group">
                         <label>URL:</label>

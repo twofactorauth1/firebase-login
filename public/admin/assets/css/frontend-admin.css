@@ -1112,7 +1112,6 @@
   box-shadow: none;
   margin-bottom: 0px;
   min-height: 85px;
-  z-index: 999;
 }
 #componentloader .navbar .navigation-logo.edit-wrap {
   min-width: 200px;
@@ -1120,6 +1119,14 @@
 }
 #componentloader .navbar .navigation-logo.edit-wrap div.editable {
   min-height: 100px;
+}
+#componentloader .navbar .navbar-header {
+  z-index: 1000;
+  position: relative;
+}
+#componentloader .navbar #bs-example-navbar-collapse-1 {
+  z-index: 1000;
+  position: relative;
 }
 #componentloader .navbar-box {
   -webkit-box-shadow: 0px 1px 10px 0px rgba(0, 0, 0, 0.25);
@@ -1187,6 +1194,12 @@
 }
 #componentloader .nav-undernav .component {
   position: relative;
+  z-index: 1;
+}
+#componentloader .bg-nav-undernav {
+  position: relative !important;
+}
+#componentloader .nav-bg-image-index {
   z-index: 1;
 }
 #componentloader .navigation-v2 #header .navbar.navbar-default {

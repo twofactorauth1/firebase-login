@@ -496,7 +496,7 @@
                                                 </div>
                                                 <div class="col-sm-7">
                                                     <div class="well bg-white pull-left margin-bottom-20 delivery-selector" ng-class="{'csspinner': whenToSend === 'now', 'disabled': !isEditable}">
-                                                        <datepicker ng-model="delivery.date" min-date="delivery.minDate" show-weeks="true" class="margin-bottom-10" custom-class="selectedDay"></datepicker>
+                                                        <datepicker ng-model="delivery.date" min-date="delivery.minDate" ng-change="updateTime()" show-weeks="true" class="margin-bottom-10" custom-class="selectedDay"></datepicker>
                                                         <div class="clearfix"></div>
                                                         <timepicker ng-model="delivery.date" ng-change="updateTime()" hour-step="hstep" minute-step="mstep" min="delivery.minDate" class="center"></timepicker>
                                                     </div>

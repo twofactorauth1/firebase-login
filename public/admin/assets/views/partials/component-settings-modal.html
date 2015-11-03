@@ -183,7 +183,7 @@
                             </div>
                         </div>
                         <hr/>
-                        <div class="form-group" ng-if="componentEditing.type != 'contact-us' && componentEditing.type != 'navigation' && componentEditing.type != 'top-bar' && componentEditing.type != 'blog'" ng-hide="isEmail">
+                        <div class="form-group" ng-if="componentEditing.type != 'contact-us' && componentEditing.type != 'top-bar' && componentEditing.type != 'blog'" ng-hide="isEmail">
                             <label for="bg_hide" class="margin-bottom-0">Show Background Image</label>
                             <span tooltip-placement="top" tooltip-html-unsafe="show/hide background image of component."><i class="fa fa-info-circle" /></span>
                             <switch ng-model="componentEditing.bg.img.show" class="pull-right" ng-change="saveComponent()"></switch>
@@ -242,13 +242,13 @@
                                 </div>
                             </div>
                             <div class="col-xs-6">
-                                <div class="form-group" ng-show="componentEditing.bg.img.show" ng-if="componentEditing.type != 'navigation'">
+                                <div class="form-group" ng-show="componentEditing.bg.img.show">
                                     <label for="bg_blur">Blur BG</label>
                                     <span tooltip-placement="top" tooltip-html-unsafe="Add/remove blur effect to background image."><i class="fa fa-info-circle" /></span>
                                     <switch ng-model="componentEditing.bg.img.blur" class="pull-right" ng-change="saveComponent()"></switch>
                                 </div>
-                                <div class="form-group" ng-if="componentEditing.type != 'navigation'" ng-show="componentEditing.bg.img.show">
-                                    <label for="bg_parallax" ng-if="componentEditing.type != 'navigation'">Parallax:</label>
+                                <div class="form-group" ng-show="componentEditing.bg.img.show">
+                                    <label for="bg_parallax">Parallax:</label>
                                     <span tooltip-placement="top" tooltip-html-unsafe="Add/remove Parallax to background image."><i class="fa fa-info-circle" /></span>
                                     <switch ng-model="componentEditing.bg.img.parallax" class="pull-right" ng-change="saveComponent()"></switch>
                                 </div>
@@ -263,12 +263,12 @@
                                     <switch ng-model="componentEditing.bg.img.fullscreen" class="pull-right" ng-change="saveComponent()"></switch>
                                 </div>
                                 <hr ng-show="componentEditing.bg.img.show"></hr>
-                                <div class="form-group" ng-if="componentEditing.type != 'navigation'" ng-show="componentEditing.bg.img.show">
+                                <div class="form-group" ng-show="componentEditing.bg.img.show">
                                     <label for="bg_overlay">Add Overlay</label>
                                     <span tooltip-placement="top" tooltip-html-unsafe="Add/remove Overlay to background image."><i class="fa fa-info-circle" /></span>
                                     <switch ng-model="componentEditing.bg.img.overlay" class="pull-right" ng-change="saveComponent()"></switch>
                                 </div>
-                                <div class="form-group" ng-if="componentEditing.type != 'navigation'" ng-show="componentEditing.bg.img.show && componentEditing.bg.img.overlay">
+                                <div class="form-group"  ng-show="componentEditing.bg.img.show && componentEditing.bg.img.overlay">
                                     <label for="bg_overlay_color">Overlay Color</label>
                                     <span tooltip-placement="top" tooltip-html-unsafe="Add color to Overlay effect."><i class="fa fa-info-circle" /></span>
                                     <div class="pull-right">
@@ -276,7 +276,7 @@
                                         <spectrum-colorpicker format="rgba" options="spectrum.options" class="pull-right" ng-model="componentEditing.bg.img.overlaycolor" ng-change="saveComponent()"></spectrum-colorpicker>
                                     </div>
                                 </div>
-                                <div ng-if="componentEditing.type != 'navigation'" ng-show="componentEditing.bg.img.overlay && componentEditing.bg.img.show">
+                                <div ng-show="componentEditing.bg.img.overlay && componentEditing.bg.img.show">
                                     <div class="row">
                                         <div class="col-xs-12">
                                             <label for="bg_overlay_opacity">Overlay Opacity</label>
@@ -1045,17 +1045,17 @@
                     <div class="form-group">
                         <label for="top-bar-hours">Business Hours </label>
                         <span tooltip-placement="top" tooltip-html-unsafe="Add business hours to topbar."><i class="fa fa-info-circle" /></span>
-                        <input id="top-bar-hours" class="form-control" type="text" ng-model="componentEditing.businessHours">
+                        <input id="top-bar-hours" ng-change="componentEditing.businessHours = topbarInfo.hours" class="form-control" type="text" ng-model="topbarInfo.hours">
                     </div>
                     <div class="form-group">
                         <label for="top-bar-phone">Phone number </label>
                         <span tooltip-placement="top" tooltip-html-unsafe="Add Phone number to topbar."><i class="fa fa-info-circle" /></span>
-                        <input id="top-bar-phone" validation-type="phone" indigeweb-validate-form-fields class="form-control" type="text" ng-model="componentEditing.phone">
+                        <input id="top-bar-phone" validation-type="phone" indigeweb-validate-form-fields class="form-control" type="text" ng-change="componentEditing.phone = topbarInfo.phone" ng-model="topbarInfo.phone">
                     </div>
                     <div class="form-group">
                         <label for="top-bar-email">Email </label>
                         <span tooltip-placement="top" tooltip-html-unsafe="Add Email to topbar."><i class="fa fa-info-circle" /></span>
-                        <input id="top-bar-email" class="form-control" type="text" ng-model="componentEditing.email">
+                        <input id="top-bar-email" class="form-control" ng-change="componentEditing.email = topbarInfo.email" type="text" ng-model="topbarInfo.email">
                     </div>
                 </tab>
                 <tab ng-if="componentEditing.type === 'meet-team'">
