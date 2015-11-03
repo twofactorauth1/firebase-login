@@ -54,7 +54,7 @@ var mainApp = angular
       })
         .when('/cached/:page', {
             controller: 'CacheCtrl as cacheCtrl',
-            template: ' '
+            templateUrl: '../view/cache.html'
         })
       .otherwise({
         templateUrl: '../views/main.html',

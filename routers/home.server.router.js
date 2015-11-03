@@ -348,7 +348,8 @@ _.extend(router.prototype, BaseRouter.prototype, {
         if(pageName.indexOf('.html') === -1) {
             pageName +=".html";
         }
-        pagecacheManager.getCachedPage(accountId, pageName, resp);
+        pagecacheManager.getLocalCachedPageForTesting(accountId, pageName, resp);
+        //pagecacheManager.getCachedPage(accountId, pageName, resp);
     }
 });
 
