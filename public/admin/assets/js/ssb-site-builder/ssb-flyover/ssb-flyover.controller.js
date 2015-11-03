@@ -65,14 +65,6 @@ function ssbSiteBuilderFlyoverController($scope, $attrs, $filter, SimpleSiteBuil
         }
     });
 
- //    $scope.$watch('vm.state.page', function(page) {
- //    	if (!angular.equals(page, vm.state.originalPage)) {
- //    		vm.state.pendingChanges = true;
- //    	} else {
- //    		vm.state.pendingChanges = false;
- //    	}
-	// }, true);
-
 	function savePage() {
 		return (
 			SimpleSiteBuilderService.savePage(vm.state.page).then(function(data){

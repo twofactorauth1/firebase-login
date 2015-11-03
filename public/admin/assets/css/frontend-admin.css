@@ -6295,14 +6295,8 @@
   width: 100%;
   padding-left: 3em;
 }
-.ssb-site-builder .ssb-edit-control:hover .ssb-settings-btn {
-  background: black;
-}
 .ssb-site-builder .ssb-edit-control:hover .ssb-edit-control-inactive {
   display: none;
-}
-.ssb-site-builder .ssb-edit-control:hover .ssb-edit-control-active {
-  display: inline-block;
 }
 .ssb-site-builder .ssb-active-section {
   background: red;
@@ -6324,9 +6318,6 @@
   display: block;
 }
 .ssb-flyover {
-  position: fixed;
-  top: 8em;
-  right: 4em;
   display: none;
 }
 .ssb-flyover label {

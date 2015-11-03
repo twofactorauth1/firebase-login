@@ -26,84 +26,7 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
   // $scope.testimonialSlider = testimonialSlider;
   $scope.emailLoaded = false;
 
-  /*
-   * @getPages
-   * -
-   */
-
-  WebsiteService.getPages(function (pages) {
-    var parsed = angular.fromJson(pages);
-    var arr = [];
-    _.each(parsed, function (page) {
-      arr.push(page);
-    });
-    $scope.allPages = arr;
-    
-    AccountService.getAccount(function(data) {
-      if (!data.showhide.blog) {
-        var _blogPage = _.findWhere($scope.allPages, {
-          handle: 'blog'
-        });
-        if (_blogPage) {
-          var _index = _.indexOf($scope.allPages, _blogPage);
-          $scope.allPages.splice(_index, 1);
-        }
-      }
-      $scope.filterdedPages = $filter('orderBy')($scope.allPages, "title", false);
-    });
-
-  });
-
-  WebsiteService.getEmails(true, function (emails) {
-    $timeout(function () {
-      $scope.emailLoaded = true;
-    }, 0);
-    console.log("Emails loaded");
-    
-    $scope.emails = emails;
-
-    //select the default email for simple form as welcome-aboard
-    if ($scope.componentEditing.type === 'simple-form' && !$scope.componentEditing.emailId) {
-      var _welcomeEmail = _.find(emails, function (_email) {
-        return _email.handle === 'welcome-aboard';
-      });
-
-      if (_welcomeEmail) {
-        $scope.componentEditing.emailId = _welcomeEmail._id;
-      }
-    }
-
-  });
-
-  CampaignService.getCampaigns(function (campaigns) {
-    console.log('campaigns >>> ', campaigns);
-    $scope.campaigns = campaigns;
-  });
-
-  /*
-   * @getAllProducts
-   * - get products for products and pricing table components
-   */
-
   $scope.availableProductTags = [];
-
-  ProductService.getProducts(function (data) {
-    $scope.products = data;
-    _.each(data, function (product) {
-      if (product.status === 'active' && product.tags && product.tags.length > 0) {
-        _.each(product.tags, function (tag) {
-          if ($scope.availableProductTags.indexOf(tag) === -1) {
-            $scope.availableProductTags.push(tag);
-          }
-        });
-      }
-    });
-    $scope.availableProductTagsString = $scope.availableProductTags.join(",");
-  });
-
-  CustomerService.getCustomerTags(function(tags){
-    $scope.customerTags = tags;
-  });
 
   $scope.testOptions = {
     min: 5,
@@ -879,56 +802,58 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
       if (componentType && componentType.title) {
         $scope.componentEditing.header_title = componentType.title;
       }
+    
+      if ($scope.componentEditing.type === "simple-form") {
+        if (!$scope.componentEditing.fields.length) {
+          $scope.componentEditing.fields.push({
+            "display": "First Name",
+            "value": false,
+            "name": "first"
+          }, {
+            "display": "Last Name",
+            "value": false,
+            "name": "last"
+          }, {
+            "display": "Phone Number",
+            "value": false,
+            "name": "phone"
+          });
+        }
+
+        if (!$scope.componentEditing.redirectType) {
+          $scope.componentEditing.redirectType = 'page';
+        }
+      }
+
+      if ($scope.componentEditing.type === "contact-us") {
+        $scope.hours = hoursConstant;
+        if(!angular.isDefined($scope.componentEditing.boxOpacity)){
+          $scope.componentEditing.boxOpacity = 1;
+        }     
+
+        $scope.place.address = GeocodeService.stringifyAddress($scope.componentEditing.location);
+        $scope.originalContactMap = angular.copy($scope.componentEditing.location);
+        if ($scope.componentEditing.hours) {
+          _.each($scope.componentEditing.hours, function (element, index) {
+            if (element.day === "Sat" || element.day === "Sun") {
+              if (element.start === "") {
+                element.start = "9:00 am";
+              }
+              if (element.end === "") {
+                element.end = "5:00 pm";
+              }
+              if (!element.start2 || element.start2 === "") {
+                element.start2 = "9:00 am";
+              }
+              if (!element.end2 || element.end2 === "") {
+                element.end2 = "9:00 am";
+              }
+            }
+          });
+        }
+      }    
     }
-    if ($scope.componentEditing.type === "simple-form") {
-      if (!$scope.componentEditing.fields.length) {
-        $scope.componentEditing.fields.push({
-          "display": "First Name",
-          "value": false,
-          "name": "first"
-        }, {
-          "display": "Last Name",
-          "value": false,
-          "name": "last"
-        }, {
-          "display": "Phone Number",
-          "value": false,
-          "name": "phone"
-        });
-      }
-
-      if (!$scope.componentEditing.redirectType) {
-        $scope.componentEditing.redirectType = 'page';
-      }
-    }
-
-    if ($scope.componentEditing.type === "contact-us") {
-      $scope.hours = hoursConstant;
-      if(!angular.isDefined($scope.componentEditing.boxOpacity)){
-        $scope.componentEditing.boxOpacity = 1;
-      }     
-
-      $scope.place.address = GeocodeService.stringifyAddress($scope.componentEditing.location);
-      $scope.originalContactMap = angular.copy($scope.componentEditing.location);
-      if ($scope.componentEditing.hours) {
-        _.each($scope.componentEditing.hours, function (element, index) {
-          if (element.day === "Sat" || element.day === "Sun") {
-            if (element.start === "") {
-              element.start = "9:00 am";
-            }
-            if (element.end === "") {
-              element.end = "5:00 pm";
-            }
-            if (!element.start2 || element.start2 === "") {
-              element.start2 = "9:00 am";
-            }
-            if (!element.end2 || element.end2 === "") {
-              element.end2 = "9:00 am";
-            }
-          }
-        });
-      }
-    }    
+    
     $scope.contactHoursInvalid = false;
     $scope.contactHours = [];
     var i = 0;
@@ -974,8 +899,6 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
     // });
   };
 
-
-  $scope.editComponent();
   var componentForm = {
     street_number: 'short_name',
     route: 'long_name',
@@ -1106,5 +1029,91 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
       $scope.componentEditing.anchor = $filter('slugify')(url);
     }
   };
+
+  $scope.init = function() {
+
+      /*
+       * @getPages
+       * -
+       */
+
+      WebsiteService.getPages(function (pages) {
+        var parsed = angular.fromJson(pages);
+        var arr = [];
+        _.each(parsed, function (page) {
+          arr.push(page);
+        });
+        $scope.allPages = arr;
+        
+        AccountService.getAccount(function(data) {
+          if (!data.showhide.blog) {
+            var _blogPage = _.findWhere($scope.allPages, {
+              handle: 'blog'
+            });
+            if (_blogPage) {
+              var _index = _.indexOf($scope.allPages, _blogPage);
+              $scope.allPages.splice(_index, 1);
+            }
+          }
+          $scope.filterdedPages = $filter('orderBy')($scope.allPages, "title", false);
+        });
+
+      });
+
+      WebsiteService.getEmails(true, function (emails) {
+        $timeout(function () {
+          $scope.emailLoaded = true;
+        }, 0);
+        console.log("Emails loaded");
+        
+        $scope.emails = emails;
+
+        //select the default email for simple form as welcome-aboard
+        if ($scope.componentEditing.type === 'simple-form' && !$scope.componentEditing.emailId) {
+          var _welcomeEmail = _.find(emails, function (_email) {
+            return _email.handle === 'welcome-aboard';
+          });
+
+          if (_welcomeEmail) {
+            $scope.componentEditing.emailId = _welcomeEmail._id;
+          }
+        }
+
+      });
+
+      CampaignService.getCampaigns(function (campaigns) {
+        console.log('campaigns >>> ', campaigns);
+        $scope.campaigns = campaigns;
+      });
+
+      /*
+       * @getAllProducts
+       * - get products for products and pricing table components
+       */
+
+      ProductService.getProducts(function (data) {
+        $scope.products = data;
+        _.each(data, function (product) {
+          if (product.status === 'active' && product.tags && product.tags.length > 0) {
+            _.each(product.tags, function (tag) {
+              if ($scope.availableProductTags.indexOf(tag) === -1) {
+                $scope.availableProductTags.push(tag);
+              }
+            });
+          }
+        });
+        $scope.availableProductTagsString = $scope.availableProductTags.join(",");
+      });
+
+      CustomerService.getCustomerTags(function(tags){
+        $scope.customerTags = tags;
+      });
+
+      $scope.editComponent();
+
+
+  };
+
+  $timeout($scope.init, 500);
 
 }]);

@@ -75,7 +75,7 @@
 							<ul class="list-unstyled">
 								<li>
 									<accordion close-others="oneAtATime" class="accordion">
-										<div ng-if="vm.uiState.componentEditing.type !== undefined" ng-include=" 'assets/js/ssb-site-builder/ssb-user-components/' + vm.uiState.componentEditing.type + '/sidebar.settings.html' "></div>
+										<div ng-if="component.type !== undefined" ng-include=" 'assets/js/ssb-site-builder/ssb-user-components/' + component.type + '/sidebar.settings.html' "></div>
 										<ssb-action-buttons save-action="vm.savePage()" cancel-action="vm.cancelPendingEdits()" ng-show="vm.state.pendingChanges"></ssb-action-buttons>
 									</accordion>
 								</li>
