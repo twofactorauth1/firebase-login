@@ -512,6 +512,13 @@
         method: "POST",
         data: angular.toJson(pagedata)
       }).success(function (data, status, headers, config) {
+        if (pagedata.type === 'page') {
+          var _pages = pagecache.get('pages');
+          if (_pages) {
+            _pages[data.handle] = data;
+            pagecache.put('pages', _pages);
+          }          
+        }
         fn(data);
       }).error(function (err) {
         console.warn('END:Create Page with ERROR');

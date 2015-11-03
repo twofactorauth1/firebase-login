@@ -6,12 +6,8 @@ mainApp.filter('generateURLforLinks', function () {
         if(linkToObject)
         {
            switch (linkToObject.type) {
-            case "page":
-                //if (linkToObject.data != 'blog') {
+            case "page":                
                     _url = '/'+linkToObject.data;
-                // } else {
-                //     _url = '/'+linkToObject.data;
-                // }
                 return _url;
                 break;
             case "home":

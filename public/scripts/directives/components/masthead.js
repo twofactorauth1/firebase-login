@@ -37,6 +37,7 @@ app.directive('mastheadComponent', ['$window', function ($window) {
                 mastheadElement.css("height", $window.innerHeight + navHeight);
             }
             angular.element(".undernav").addClass("nav-undernav");
+            angular.element(".nav-undernav .bg").addClass("bg-nav-undernav");
             if (mastheadUnderNavElement)
               mastheadUnderNavElement.css("height", margin);
             if (angular.element(".masthead-actions"))

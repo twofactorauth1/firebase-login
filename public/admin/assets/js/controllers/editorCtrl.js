@@ -29,6 +29,8 @@
       'mw': '100%',
       'usePage': false
     };
+    
+    $scope.duplicate = false;
 
     $scope.circleOptions = {
       isOpen: false,
@@ -241,7 +243,12 @@
     $scope.redirectAfterSave = function(redirect_url, reload){    
     if(redirect_url){
         SweetAlert.swal("Saved!", "Your edits were saved to the page.", "success");
-        window.location = redirect_url;
+            $timeout(function () {
+              if($scope.duplicate)
+                $location.path(redirect_url);
+              else
+                window.location = redirect_url;
+            }, 500);
         if (reload) {
           window.location.reload();
         }
@@ -897,6 +904,9 @@
       } else {
         if ($scope.componentEditing.bg.img) {
           $scope.componentEditing.bg.img.url = asset.url;
+          $timeout(function () {
+            $(window).trigger('resize');
+          }, 0);
           return;
         }
       }
@@ -1184,6 +1194,10 @@
         post.post_url = $filter('slugify')(title); 
     };
 
+    $scope.plainTextTitle = function () {
+      $scope.blog.post.post_title = $filter('htmlToPlaintext')($scope.blog.post.post_title);
+    };
+
     $scope.newPage = {};
 
     /*
@@ -1247,7 +1261,7 @@
           toaster.pop('success', "Settings saved successfully");
           $scope.closeModal();
           $timeout(function () {
-            $scope.checkForSaveBeforeLeave();
+            //$scope.checkForSaveBeforeLeave();
           }, 100);
           
         } else if (!data && error && error.message) {

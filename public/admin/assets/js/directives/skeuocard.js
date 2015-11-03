@@ -66,9 +66,9 @@ app.directive('indigewebSkeuocard',['PaymentService', 'UserService', 'ToasterSer
                 scope.checkCardName = function() {
                      var name = $('#card_name #name').val();
                      if (!name) {
-                    //     $("#card_name .error").html("Card Name Required");
-                    //     $("#card_name").addClass('has-error');
-                    //     $("#card_name .glyphicon").addClass('glyphicon-remove');
+                         $("#card_name .error").html("Card Name Required");
+                         $("#card_name").addClass('has-error');
+                         $("#card_name .glyphicon").addClass('glyphicon-remove');
                      } else {
                          $("#card_name .error").html("");
                          $("#card_name").removeClass('has-error').addClass('has-success');
@@ -105,7 +105,7 @@ app.directive('indigewebSkeuocard',['PaymentService', 'UserService', 'ToasterSer
                             $("#card_expiry .error").html("Card Year has Expired");
                             $("#card_expiry").addClass('has-error');
                             $("#card_expiry .glyphicon").addClass('glyphicon-remove');
-                        } else if (exp_month <= scope.currentMonth && parseInt(exp_year) <= scope.currentYear) {
+                        } else if (exp_month < scope.currentMonth && parseInt(exp_year) <= scope.currentYear) {
                             $("#card_expiry .error").html("Card Month has Expired");
                             $("#card_expiry").addClass('has-error');
                             $("#card_expiry .glyphicon").addClass('glyphicon-remove');
