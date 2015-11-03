@@ -1045,17 +1045,17 @@
                     <div class="form-group">
                         <label for="top-bar-hours">Business Hours </label>
                         <span tooltip-placement="top" tooltip-html-unsafe="Add business hours to topbar."><i class="fa fa-info-circle" /></span>
-                        <input id="top-bar-hours" class="form-control" type="text" ng-model="componentEditing.businessHours">
+                        <input id="top-bar-hours" ng-change="componentEditing.businessHours = topbarInfo.hours" class="form-control" type="text" ng-model="topbarInfo.hours">
                     </div>
                     <div class="form-group">
                         <label for="top-bar-phone">Phone number </label>
                         <span tooltip-placement="top" tooltip-html-unsafe="Add Phone number to topbar."><i class="fa fa-info-circle" /></span>
-                        <input id="top-bar-phone" validation-type="phone" indigeweb-validate-form-fields class="form-control" type="text" ng-model="componentEditing.phone">
+                        <input id="top-bar-phone" validation-type="phone" indigeweb-validate-form-fields class="form-control" type="text" ng-change="componentEditing.phone = topbarInfo.phone" ng-model="topbarInfo.phone">
                     </div>
                     <div class="form-group">
                         <label for="top-bar-email">Email </label>
                         <span tooltip-placement="top" tooltip-html-unsafe="Add Email to topbar."><i class="fa fa-info-circle" /></span>
-                        <input id="top-bar-email" class="form-control" type="text" ng-model="componentEditing.email">
+                        <input id="top-bar-email" class="form-control" ng-change="componentEditing.email = topbarInfo.email" type="text" ng-model="topbarInfo.email">
                     </div>
                 </tab>
                 <tab ng-if="componentEditing.type === 'meet-team'">

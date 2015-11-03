@@ -818,6 +818,9 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
 
   $scope.resolutions = [320, 360, 480, 720, 768, 1024, 1280, 1360, 1366, 1440, 1600, 1680, 1920, '100%'];
 
+  function replaceHtmlTags(text){
+    return text ? String(text).replace(/<br \/>/gm, ' ').replace(/<[^>]+>/gm, '') : "";
+  }
   /*
    * @editComponent
    * -
@@ -934,6 +937,13 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
       $scope.contactHours.push({
         "valid": true
       });
+    }
+
+    if ($scope.componentEditing && $scope.componentEditing.type == "top-bar") {
+      $scope.topbarInfo = {};
+      $scope.topbarInfo.hours =  replaceHtmlTags($scope.componentEditing.businessHours);
+      $scope.topbarInfo.email =  replaceHtmlTags($scope.componentEditing.email);
+      $scope.topbarInfo.phone =  replaceHtmlTags($scope.componentEditing.phone);
     }
 
     if ($scope.componentEditing) {
