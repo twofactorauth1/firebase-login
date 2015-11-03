@@ -261,22 +261,20 @@
     $scope.component = $scope.emailToSend.components[0];
 
     $scope.updateTime = function () {
-      // var time = moment.utc($scope.delivery.time).subtract(1, 'months') //.add(moment().utcOffset(), 'minutes');
-      // var date = moment.utc($scope.delivery.date) //.add(moment().utcOffset(), 'minutes');
-      // var hour = time.get('hour');
-      // var minute = time.get('minute');
-      // var formatted = date.set('hour', hour).set('minute', minute);
-      // if (formatted && formatted._d.toString() === "Invalid Date") {
-      //   $scope.invalidDate = true;
-      // } else {
-      //   $scope.delivery.date = formatted;
-      // }
+     // var time = moment.utc($scope.delivery.time).subtract(1, 'months') //.add(moment().utcOffset(), 'minutes');
+      var date = moment.utc($scope.delivery.date) //.add(moment().utcOffset(), 'minutes');
+      
+      if (date && date._d && date._d.toString() === "Invalid Date") {
+        $scope.invalidDate = true;
+      } else {
+        $scope.delivery.date = date;
+      }
 
-      // if ($scope.delivery.date.diff && $scope.delivery.date.diff(moment(), "minutes") < 0) {
-      //   $scope.invalidDate = true;
-      // } else {
-      //   $scope.invalidDate = false;
-      // }
+      if ($scope.delivery.date.diff && $scope.delivery.date.diff(moment(), "minutes") < 0) {
+        $scope.invalidDate = true;
+      } else {
+        $scope.invalidDate = false;
+      }
 
     };
 
