@@ -1,4 +1,8 @@
 <div>
+	<div class="ssb-sidebar-heading">
+		<div class="ti-arrow-left"></div>
+		<h4>{{vm.state.page.title}}</h4>
+	</div>
 	<accordion close-others="oneAtATime" class="accordion">
 		<accordion-group heading="Site Settings">
 			<ul class="list-unstyled center">
@@ -67,7 +71,7 @@
 				</li>
 			</ul>
         </accordion-group>
-        <accordion-group heading="Components" is-open="vm.uiState.accordion.components.isOpen">
+        <accordion-group heading="Page Sections" is-open="vm.uiState.accordion.components.isOpen">
 			<ul class="list-unstyled">
 				<li ng-repeat="component in vm.state.page.components track by $index">
 					<accordion close-others="oneAtATime" class="accordion">

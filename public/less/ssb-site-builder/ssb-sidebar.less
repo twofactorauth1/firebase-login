@@ -18,3 +18,27 @@
 .ssb-sidebar.ssb-sidebar-show {
 	display: block;
 }
+
+.ssb-sidebar-heading {
+	position: relative;
+	color: white;
+    background: @indigenous-blue;
+    padding: 1em;
+    text-align: center;
+
+    h4, .ti-arrow-left {
+    	color: white;
+    }
+
+    h4 {
+    	margin: .75em auto;
+    }
+
+    .ti-arrow-left {
+        position: absolute;
+	    top: 50%;
+	    left: .5em;
+    	cursor: pointer;
+    	transform: translateY(-50%);
+    }
+}

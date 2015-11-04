@@ -1,3 +1,8 @@
+//vars
+
+@indigenous-blue: #47B8D9;
+
+
 .ssb-site-builder-container {
 	height: 100%;
 	height: calc(~"100vh - 65px");
@@ -27,7 +32,7 @@
 		left: 0;
 	}
 
-	.ssb-component-container {
+	.ssb-page-section {
 		position: relative;
 
 		&:hover .ssb-settings-btn {
@@ -56,6 +61,20 @@
 			font-size: 1em;
 		}
 
+		.ssb-settings-btn i {
+			display: inline-block;
+			float: none;
+			position: static;
+			height: 40px;
+			line-height: 40px;
+			color: white;
+			vertical-align: top;
+			opacity: 1;
+			font-size: 1em;
+			width: 100%;
+    		text-align: center;
+		}
+
 		.ssb-settings-btn {
 			display: none;
 
@@ -77,7 +96,7 @@
 		    transform: none;
 		    top: 2px;
 		    left: 2px;
-		    background: #70c2d7;
+		    background: @indigenous-blue;
 		    border-radius: 5em;
 		    box-shadow: 0px 1px 4px rgba(0,0,0,0.5);
 
@@ -139,6 +158,11 @@
 
 	.ssb-active-section {
 		background: red;
+	}
+
+	.edit-wrap:hover .editable-title {
+		left: auto;
+		right: 0;
 	}
 
 }

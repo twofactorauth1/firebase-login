@@ -1199,9 +1199,6 @@
 #componentloader .bg-nav-undernav {
   position: relative !important;
 }
-#componentloader .nav-bg-image-index {
-  z-index: 1;
-}
 #componentloader .navigation-v2 #header .navbar.navbar-default {
   border: none!important;
 }
@@ -6234,10 +6231,10 @@
   width: 100%;
   left: 0;
 }
-.ssb-site-builder .ssb-component-container {
+.ssb-site-builder .ssb-page-section {
   position: relative;
 }
-.ssb-site-builder .ssb-component-container:hover .ssb-settings-btn {
+.ssb-site-builder .ssb-page-section:hover .ssb-settings-btn {
   display: block;
 }
 .ssb-site-builder .ssb-edit-control {
@@ -6260,6 +6257,19 @@
   opacity: 1;
   font-size: 1em;
 }
+.ssb-site-builder .ssb-edit-control .ssb-settings-btn i {
+  display: inline-block;
+  float: none;
+  position: static;
+  height: 40px;
+  line-height: 40px;
+  color: white;
+  vertical-align: top;
+  opacity: 1;
+  font-size: 1em;
+  width: 100%;
+  text-align: center;
+}
 .ssb-site-builder .ssb-edit-control .ssb-settings-btn {
   display: none;
   color: white!important;
@@ -6277,7 +6287,7 @@
   transform: none;
   top: 2px;
   left: 2px;
-  background: #70c2d7;
+  background: #47b8d9;
   border-radius: 5em;
   box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.5);
 }
@@ -6314,6 +6324,10 @@
 .ssb-site-builder .ssb-active-section {
   background: red;
 }
+.ssb-site-builder .edit-wrap:hover .editable-title {
+  left: auto;
+  right: 0;
+}
 .ssb-sidebar {
   overflow: auto;
   overflow-x: hidden;
@@ -6330,15 +6344,36 @@
 .ssb-sidebar.ssb-sidebar-show {
   display: block;
 }
+.ssb-sidebar-heading {
+  position: relative;
+  color: white;
+  background: #47b8d9;
+  padding: 1em;
+  text-align: center;
+}
+.ssb-sidebar-heading h4,
+.ssb-sidebar-heading .ti-arrow-left {
+  color: white;
+}
+.ssb-sidebar-heading h4 {
+  margin: .75em auto;
+}
+.ssb-sidebar-heading .ti-arrow-left {
+  position: absolute;
+  top: 50%;
+  left: .5em;
+  cursor: pointer;
+  transform: translateY(-50%);
+}
 .ssb-flyover {
+  position: absolute;
+  top: 40px;
+  left: 30%;
   display: none;
 }
 .ssb-flyover label {
   font-weight: 100;
   font-size: .85em;
-}
-.ssb-flyover.ssb-flyover-show {
-  display: block;
 }
 .ssb-flyover .draggable {
   box-shadow: -4px 0px 7px -2px rgba(0, 0, 0, 0.3);
