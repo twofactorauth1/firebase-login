@@ -28,9 +28,10 @@ app.directive("billingSubscription", ['PaymentService', function (PaymentService
           scope.priceDollars = priceString.slice(0, priceStringLength - 2);
           scope.priceCents = priceString.slice(priceStringLength - 2, priceStringLength);
           setTimeout(function () {
-          $scope.$apply(function () {
-          scope.billingSubscriptionUnavailable = false;
-        }); },0);
+            $scope.$apply(function () {
+                scope.billingSubscriptionUnavailable = false;
+            }); 
+          },0);
         } else {
           scope.billingSubscriptionUnavailable = true;
         }
