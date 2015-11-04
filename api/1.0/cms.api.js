@@ -378,6 +378,9 @@ _.extend(api.prototype, baseApi.prototype, {
                 if (component.bg.img && component.bg.img.show && component.bg.img.url) {
                     component.emailBgImage = component.bg.img.url.replace('//s3.amazonaws', 'http://s3.amazonaws');
                 }
+                if (!component.txtcolor) {
+                    component.txtcolor = '#000000';
+                }
                 components.push(component);
             }
         });
