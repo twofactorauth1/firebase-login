@@ -167,7 +167,7 @@
       console.log('getEmails >>> ');
       var self = this;
       var data = emailcache.get('emails');
-      if (data && !resetEmailCache) {
+      if (data && data.length && !resetEmailCache) {
         if (fn) {
           fn(data);
         }
@@ -451,7 +451,6 @@
       }).success(function (data, status, headers, config) {
         var _emails = emailcache.get('emails');
         if (_emails) {
-          // _emails[data.title] = data;
           _emails.push(data);
           emailcache.put('emails', _emails);
         }
@@ -495,7 +494,6 @@
         _emails = _.reject(_emails, function (_email) {
           return _email._id === email._id;
         });
-
         emailcache.put('emails', _emails);
         fn(data);
       }).error(function (err) {
