@@ -667,24 +667,23 @@ _.extend(api.prototype, baseApi.prototype, {
                                                     var regex = new RegExp('src="//s3.amazonaws', "g");
 
                                                     emailPage.get('components').forEach(function(component){
-                                                        for (var i = 0; i < keys.length; i++) {
-                                                            if (component[keys[i]]) {
-                                                                component[keys[i]] = component[keys[i]].replace(regex, 'src="http://s3.amazonaws');
+                                                        if(component.visibility){
+                                                            for (var i = 0; i < keys.length; i++) {
+                                                                if (component[keys[i]]) {
+                                                                    component[keys[i]] = component[keys[i]].replace(regex, 'src="http://s3.amazonaws');
+                                                                }
                                                             }
-                                                        }
-
-                                                        if (!component.bg.color) {
-                                                            component.bg.color = '#ffffff';
-                                                        }
-
-                                                        if (!component.emailBg) {
-                                                            component.emailBg = '#ffffff';
-                                                        }
-
-                                                        if (component.bg.img && component.bg.img.show && component.bg.img.url) {
-                                                            component.emailBgImage = component.bg.img.url.replace('//s3.amazonaws', 'http://s3.amazonaws');
-                                                        }
-                                                        components.push(component);
+                                                            if (!component.bg.color) {
+                                                                component.bg.color = '#ffffff';
+                                                            }
+                                                            if (!component.emailBg) {
+                                                                component.emailBg = '#ffffff';
+                                                            }
+                                                            if (component.bg.img && component.bg.img.show && component.bg.img.url) {
+                                                                component.emailBgImage = component.bg.img.url.replace('//s3.amazonaws', 'http://s3.amazonaws');
+                                                            }
+                                                            components.push(component);
+                                                        }                                                        
                                                     });
                                                     
                                                     self.log.debug('components >>> ', components);
