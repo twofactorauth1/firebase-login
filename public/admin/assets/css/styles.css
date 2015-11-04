@@ -13294,7 +13294,7 @@ fieldset[disabled] .btn-vimeo-square.active {
   position: relative;
 }
 .edit-wrap .editable {
-  min-height: 5px;
+  min-height: 10px;
 }
 .edit-wrap .editable img {
   max-width: 100%;

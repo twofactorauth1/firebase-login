@@ -1186,9 +1186,6 @@ ul.nav {
 .bg-nav-undernav {
   position: relative !important;
 }
-.nav-bg-image-index {
-  z-index: 1;
-}
 .navigation-v2 #header .navbar.navbar-default {
   border: none!important;
 }

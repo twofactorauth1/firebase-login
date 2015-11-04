@@ -1199,9 +1199,6 @@
 #componentloader .bg-nav-undernav {
   position: relative !important;
 }
-#componentloader .nav-bg-image-index {
-  z-index: 1;
-}
 #componentloader .navigation-v2 #header .navbar.navbar-default {
   border: none!important;
 }
