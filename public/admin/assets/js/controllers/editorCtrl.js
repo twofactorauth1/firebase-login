@@ -1243,7 +1243,7 @@
 
     $scope.createDuplicateEmail = function () {
       $scope.newEmail.components = $scope.page.components;
-      $scope.newEmail.type = "email";
+      $scope.newEmail.type = $scope.page.type || "email";
       WebsiteService.createEmail($scope.newEmail, function (data, error) {
         if (data && !error) {
           $scope.duplicate = true;
