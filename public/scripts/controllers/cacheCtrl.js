@@ -44,6 +44,7 @@ mainApp.controller('CacheCtrl', ['$scope', 'pagesService', '$window', '$location
         _.each(page.components, function(cmp, index){
             $scope['components_' + index] = cmp;
         });
+        console.log('components_9:', $scope.components_9);
         //$scope.components_0 = page.components[0];
 
     }
