@@ -407,6 +407,7 @@
                     toaster.pop('error', error.message);
                     return;
                   }
+                  $scope.originalPage = angular.copy($scope.page);
                   toaster.pop('success', "Email Saved", "The " + $scope.page.title + " email was saved successfully.");
                   $scope.redirectAfterSave(redirect_url, reload);
                 });
