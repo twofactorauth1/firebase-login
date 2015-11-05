@@ -182,6 +182,7 @@
 
     $scope.singleReorder = function (value, component, index) {
       console.log('singleReorder >>> ', value);
+      $scope.setDirty(true);
       if (value === 'down') {
         $scope.components.splice(index, 1);
         $scope.components.splice(index + 1, 0, component);
@@ -406,6 +407,7 @@
                     toaster.pop('error', error.message);
                     return;
                   }
+                  $scope.originalPage = angular.copy($scope.page);
                   toaster.pop('success', "Email Saved", "The " + $scope.page.title + " email was saved successfully.");
                   $scope.redirectAfterSave(redirect_url, reload);
                 });
@@ -1216,7 +1218,8 @@
     });
 
     $scope.createDuplicatePage = function (newPage) {
-
+      $scope.single_post = false;
+      $scope.post_blog_page = false;
       if ($scope.isPage) {
         newPage.type = "page";
       }
@@ -1243,7 +1246,7 @@
 
     $scope.createDuplicateEmail = function () {
       $scope.newEmail.components = $scope.page.components;
-      $scope.newEmail.type = "email";
+      $scope.newEmail.type = $scope.page.type || "email";
       WebsiteService.createEmail($scope.newEmail, function (data, error) {
         if (data && !error) {
           $scope.duplicate = true;

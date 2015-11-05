@@ -1107,14 +1107,6 @@ div[data-type="feature-list"] .inner-page {
 .navbar .navigation-logo.edit-wrap div.editable {
   min-height: 100px;
 }
-.navbar .navbar-header {
-  z-index: 1000;
-  position: relative;
-}
-.navbar #bs-example-navbar-collapse-1 {
-  z-index: 1000;
-  position: relative;
-}
 .navbar-box {
   -webkit-box-shadow: 0px 1px 10px 0px rgba(0, 0, 0, 0.25);
   -moz-box-shadow: 0px 1px 10px 0px rgba(0, 0, 0, 0.25);
@@ -1185,9 +1177,6 @@ ul.nav {
 }
 .bg-nav-undernav {
   position: relative !important;
-}
-.nav-bg-image-index {
-  z-index: 1;
 }
 .navigation-v2 #header .navbar.navbar-default {
   border: none!important;

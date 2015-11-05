@@ -57,23 +57,7 @@ app.directive('contactUsComponent', ['AccountService', 'GeocodeService', '$timeo
         if (angular.isDefined(newValue) && scope.component.boxColor) {
           scope.boxColor = hexToRgb(scope.component.boxColor, scope.component.boxOpacity);
         }
-      });
-      scope.stringifyAddress = function (address) {
-        if (address) {
-          //var address = scope.htmlToPlaintext(address);
-          var _topline = _.filter([address.address, address.address2], function (str) {
-            return str !== "";
-          }).join(", ");
-          var _bottomline = _.filter([address.city, address.state, address.zip], function (str) {
-            return str !== "";
-          }).join(", ");
-          if (_topline) {
-            return _topline + ' <br> ' + _bottomline;
-          }
-
-          return _bottomline;
-        }
-      };
+      });     
 
       scope.setBusinessDetails = function(is_address, fn)
       {
@@ -97,8 +81,7 @@ app.directive('contactUsComponent', ['AccountService', 'GeocodeService', '$timeo
       }
 
       scope.updateContactUsAddress = function () {
-        scope.contactAddress = scope.stringifyAddress(scope.component.location);
-
+        scope.contactAddress = GeocodeService.stringifyAddress(scope.component.location, true);
         if (scope.component.location.lat && scope.component.location.lon) {
           scope.reloadMap();
         } else {

@@ -105,7 +105,8 @@
                                                     <td>phone:</td>
                                                     <td>
                                                         <div ng-repeat="phone in customer.details[0].phones  track by $index">
-                                                            <a href="tel:{{phone.number}}">{{phone.number}}</a>
+                                                            <a ng-if="phone.number" href="tel:{{phone.number}}">{{phone.number}}</a>
+                                                            <span ng-if="phone.extension && !phone.number"> N/A </span>
                                                             <span ng-if="phone.extension"> x{{phone.extension}}</span>
                                                             <br>
                                                         </div>
@@ -229,7 +230,7 @@
                         </tab>
                         <tab heading="Edit Customer" active="editActive">
                             <div class="col-xs-12">
-                                <button class="btn btn-info btn-o pull-right" ng-click="customerSaveFn()" ng-disabled="saveLoading || form.$invalid"><span ng-class="{'fa fa-spin fa-spinner': saveLoading}"></span> Save</button>
+                                <button class="btn btn-info btn-o pull-right" ng-click="customerSaveFn()" ng-disabled="saveLoading || (form.$invalid && !form.$pristine )"><span ng-class="{'fa fa-spin fa-spinner': saveLoading}"></span> Save</button>
                             </div>
                             <div class="clearfix"></div>
                             <form action="#" name="form" role="form" id="form">

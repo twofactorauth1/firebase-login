@@ -1846,7 +1846,7 @@ module.exports = {
             log.error('No title on email.');
             return fn('No title provided for email');
         }
-        var nameCheckQuery = {'title': email.get('title'), 'accountId': email.get('accountId')};
+        var nameCheckQuery = {'title': new RegExp('^'+email.get('title')+'$', "i"), 'accountId': email.get('accountId')};
         emailDao.exists(nameCheckQuery, $$.m.cms.Email, function(err, value){
             if(err) {
                 log.error('Exception thrown checking for uniqueness: ' + err);

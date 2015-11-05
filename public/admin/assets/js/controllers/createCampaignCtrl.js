@@ -407,7 +407,7 @@
 
       _.each(subjectWords, function (word) {
         //All Words Capitalized
-        if (word[0] !== word[0].toUpperCase()) {
+        if (word && word[0] !== word[0].toUpperCase()) {
           capitalized = false;
         }
 
@@ -492,6 +492,13 @@
       $scope.subjectScore = Math.round(percentRating);
 
     };
+
+
+    $scope.$watch('emailToSend.subject', function (newValue, oldValue) {
+      if (newValue) {
+        $scope.analyzeSubject(newValue);
+      }
+    });
 
     /*
      * @changeCurrentEmail

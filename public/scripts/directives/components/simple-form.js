@@ -76,7 +76,7 @@ app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userSe
         formatted.details[0].emails.push({
           email: scope.user.email
         });
-        if (scope.user.phone) {
+        if (scope.user.phone || scope.user.extension) {
           formatted.details[0].phones.push({
             number: scope.user.phone,
             extension: scope.user.extension,
