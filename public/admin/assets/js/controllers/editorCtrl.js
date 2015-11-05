@@ -182,6 +182,7 @@
 
     $scope.singleReorder = function (value, component, index) {
       console.log('singleReorder >>> ', value);
+      $scope.setDirty(true);
       if (value === 'down') {
         $scope.components.splice(index, 1);
         $scope.components.splice(index + 1, 0, component);
