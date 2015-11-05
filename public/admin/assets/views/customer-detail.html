@@ -229,7 +229,7 @@
                         </tab>
                         <tab heading="Edit Customer" active="editActive">
                             <div class="col-xs-12">
-                                <button class="btn btn-info btn-o pull-right" ng-click="customerSaveFn()" ng-disabled="saveLoading || form.$invalid"><span ng-class="{'fa fa-spin fa-spinner': saveLoading}"></span> Save</button>
+                                <button class="btn btn-info btn-o pull-right" ng-click="customerSaveFn()" ng-disabled="saveLoading || (form.$invalid && !form.$pristine )"><span ng-class="{'fa fa-spin fa-spinner': saveLoading}"></span> Save</button>
                             </div>
                             <div class="clearfix"></div>
                             <form action="#" name="form" role="form" id="form">
