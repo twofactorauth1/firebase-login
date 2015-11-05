@@ -1216,7 +1216,8 @@
     });
 
     $scope.createDuplicatePage = function (newPage) {
-
+      $scope.single_post = false;
+      $scope.post_blog_page = false;
       if ($scope.isPage) {
         newPage.type = "page";
       }
