@@ -22,6 +22,7 @@
 
 .email-body .email-component-container {
   min-height: 25px;
+  height: 25px;
   /*padding-bottom: 50px;*/
 }
 
