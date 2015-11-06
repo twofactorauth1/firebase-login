@@ -54,8 +54,8 @@
             fn(data);
           })
           .error(function (err) {
-            console.warn('END:getSinglePage with ERROR');
-            fn(err, null);
+            //console.warn('END:getSinglePage with ERROR');
+            fn(null, err);
           });
       }
     };

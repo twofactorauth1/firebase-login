@@ -23,19 +23,19 @@
                         <div class="panel-body">
                             <div>
                                 <div class="col-sm-2 col-xs-6 center">
-                                    <button type="button" ng-disabled="!ckeditorLoaded" ng-click="openSettingsModal()" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-settings btn-o">
+                                    <button type="button" ng-disabled="!ckeditorLoaded || pageNotFound" ng-click="openSettingsModal()" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-settings btn-o">
                                         <span>Settings</span>
                                     </button>
                                     <div class="hidden-lg margin-bottom-10"></div>
                                 </div>
                                 <div ng-if="!isEmail" class="col-sm-2 col-xs-6 center">
                                     <div ng-if="!isSinglePost && !isTopic">
-                                        <a ng-disabled="!ckeditorLoaded" type="button" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-eye btn-o" ng-click="getUrl(page.handle, false)" target="_blank">
+                                        <a ng-disabled="!ckeditorLoaded || pageNotFound" type="button" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-eye btn-o" ng-click="getUrl(page.handle, false)" target="_blank">
                                             <span>View</span>
                                         </a>
                                     </div>
                                     <div ng-if="isSinglePost">
-                                        <a ng-disabled="!ckeditorLoaded" type="button" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-eye btn-o" ng-click="getUrl(originalPost.post_url, true)" target="_blank">
+                                        <a ng-disabled="!ckeditorLoaded || pageNotFound" type="button" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-eye btn-o" ng-click="getUrl(originalPost.post_url, true)" target="_blank">
                                             <span>View</span>
                                         </a>
                                     </div>
@@ -47,19 +47,19 @@
                                     <div class="hidden-lg margin-bottom-10"></div>
                                 </div>
                                 <div class="col-sm-2 col-xs-6 center">
-                                    <button type="button" ng-disabled="!ckeditorLoaded" ng-click="openDuplicateModal()" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-layout-media-overlay-alt btn-o">
+                                    <button type="button" ng-disabled="!ckeditorLoaded || pageNotFound" ng-click="openDuplicateModal()" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-layout-media-overlay-alt btn-o">
                                         <span>Duplicate</span>
                                     </button>
                                     <div class="hidden-lg margin-bottom-10"></div>
                                 </div>
                                 <div class="col-sm-2 col-xs-6 center">
-                                    <button type="button" ng-disabled="!ckeditorLoaded" ng-click="clickImageButton(activeEditor, false)" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-layout-media-overlay-alt btn-o">
+                                    <button type="button" ng-disabled="!ckeditorLoaded || pageNotFound" ng-click="clickImageButton(activeEditor, false)" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-layout-media-overlay-alt btn-o">
                                         <span>Media</span>
                                     </button>
                                     <div class="hidden-lg margin-bottom-10"></div>
                                 </div>
                                 <div class="col-sm-2 col-xs-6 center">
-                                    <button type="button" ng-disabled="saveLoading || !ckeditorLoaded" ng-click="savePage()" class="btn btn-primary btn-wide btn-scroll btn-scroll-top btn-o ti-save">
+                                    <button type="button" ng-disabled="saveLoading || !ckeditorLoaded  || pageNotFound" ng-click="savePage()" class="btn btn-primary btn-wide btn-scroll btn-scroll-top btn-o ti-save">
                                         <span ng-if="saveLoading">
                                             <span class="fa fa-spinner fa-spin"></span>
                                         </span>
@@ -95,7 +95,7 @@
     <div ng-hide="!ckeditorLoaded">
         <div data-ng-include data-src=" 'assets/views/partials/component-loader.html' "></div>
     </div>
-    <div class="loading-editor" ct-fullheight="window" data-ct-fullheight-exclusion="header" ng-hide="ckeditorLoaded">
+    <div class="loading-editor" ct-fullheight="window" data-ct-fullheight-exclusion="header" ng-hide="ckeditorLoaded || pageNotFound">
         <div class="col-xs-12">
             <h1 class="center"><span class="fa fa-spinner fa-spin"></span><br> Loading Editor...</h1>
         </div>
