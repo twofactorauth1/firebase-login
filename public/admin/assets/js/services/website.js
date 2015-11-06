@@ -89,7 +89,7 @@
           })
           .error(function (err) {
             //console.warn('END:checkDuplicatePage with ERROR', err);
-            if(err.code && err.code ===404) {
+            if(err && err.code && err.code === 404) {
                 //no dupe
                 fn(false);
             } else {
@@ -515,6 +515,8 @@
           if (_pages) {
             _pages[data.handle] = data;
             pagecache.put('pages', _pages);
+            console.log("SSSSSSSSSSSS");
+            console.log(pagecache);
           }          
         }
         fn(data);
