@@ -37,7 +37,7 @@ app.directive("billingSubscription", ['PaymentService', function (PaymentService
         }
       }, true);
 
-      if (scope.account.billing.plan !== 'NO_PLAN_ARGUMENT') {
+      if (scope.account && scope.account.billing.plan !== 'NO_PLAN_ARGUMENT') {
         var selectedPlanWatcher = scope.$watch('selectedPlan', function() {
           if (scope.selectedPlan && scope.selectedPlan.product_attributes && scope.selectedPlan.product_attributes.stripePlans[0].id) {
             scope.plan = scope.selectedPlan;
