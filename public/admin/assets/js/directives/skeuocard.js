@@ -17,6 +17,7 @@ app.directive('indigewebSkeuocard',['PaymentService', 'UserService', 'ToasterSer
                     scope.user = user;
                 });
                 scope.$watch('user', function(newValue, oldValue) {
+                    var renderedcardFlag=0;
                     if (newValue && newValue.stripeId) {
                         PaymentService.getCustomerCards(newValue.stripeId, function(cards) {
                             scope.cards = cards;
@@ -31,20 +32,26 @@ app.directive('indigewebSkeuocard',['PaymentService', 'UserService', 'ToasterSer
                                     }
                                 });
                             } else {
-                                element.find('form').card({
-                                    container: '.' + scope.wrapper
-                                });
+                                if(renderedcardFlag != 0)
+                                {
+                                    element.find('form').card({
+                                        container: '.' + scope.wrapper
+                                    });
+                                }
                             }
                         }, function(data) {
-                            element.find('form').card({
+                            /*element.find('form').card({
                                 container: '.' + scope.wrapper
-                            });
+                            });*/
 
                         });
                     } else {
-                        element.find('form').card({
-                            container: '.' + scope.wrapper
-                        });
+                        if(renderedcardFlag == 0)
+                        {
+                            element.find('form').card({
+                                container: '.' + scope.wrapper
+                            });
+                        }
                     }
                 });
 
@@ -207,6 +214,8 @@ app.directive('indigewebSkeuocard',['PaymentService', 'UserService', 'ToasterSer
                                 function(err){
                                     ToasterService.clearAll();
                                     ToasterService.show('error', 'The purchase was unsuccessful. Please check your card information.');
+                                    //Closing the previous opened
+                                    scope.$parent.closeModal('change-card-modal');
                                     scope.$parent.openModal('change-card-modal');
                                 });
                                 scope.cards.data.forEach(function(value, index) {
