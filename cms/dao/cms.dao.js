@@ -377,6 +377,17 @@ var dao = {
         return this.findOne(query, Page, fn);
     },
 
+    getPageByHandle: function(accountId, websiteId, handle, fn) {
+        var self = this;
+        var query = {};
+        query.accountId = accountId;
+        query.websiteId = websiteId;
+        query.type = 'page';
+        query.handle = handle;
+        query.latest = true;
+        return this.findOne(query, Page, fn);
+    },
+
     getBlogPostForWebsite: function(accountId, blogPostUrl, fn) {
         console.log('Post ID (getBlogPostForWebsite): ' + blogPostUrl + ' Account ID: ' + accountId);
         var self = this;

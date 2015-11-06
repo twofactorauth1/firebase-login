@@ -538,7 +538,7 @@
         pagecache.put('pages', _pages);
         fn(data);
       }).error(function (err) {
-        console.warn('END:createPageFromTemplate with ERROR');
+        fn(null, err);
       });
     };
 

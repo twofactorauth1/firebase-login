@@ -178,19 +178,18 @@
         if (_page.handle === page.handle) {
           hasHandle = true;
         }
-      });
-      // Need to check for the pages which are not listed in the list
-      // but need to check for duplicates like blog and post page templates..
-      if (!hasHandle) {
-        _.each($scope.pageConstant.page_handles, function (_page) {
-          if (_page === page.handle) {
-            hasHandle = true;
-          }
-        });
-      }
+      });      
 
       if (!hasHandle) {
-        WebsiteService.createPageFromTemplate($scope.selectedTemplate._id, pageData, function (_newPage) {
+        WebsiteService.createPageFromTemplate($scope.selectedTemplate._id, pageData, function (_newPage, error) {
+          if(error && !_newPage)
+          {
+            toaster.pop('error', error.message);
+            $event.preventDefault();
+            $event.stopPropagation();
+            $scope.saveLoading = false;
+            return;
+          }
           var newpage = angular.copy(_newPage);
           toaster.pop('success', 'Page Created', 'The ' + newpage.title + ' page was created successfully.');
           $scope.minRequirements = true;
