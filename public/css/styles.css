@@ -1515,9 +1515,6 @@ div[data-type="feature-block"] .component-inner {
 .team-member-wrap .profile-social li {
   display: inline-block;
 }
-.meet-team-v1 {
-  overflow: hidden;
-}
 .meet-team-v1 .title {
   position: relative;
 }
