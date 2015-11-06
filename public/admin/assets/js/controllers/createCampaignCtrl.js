@@ -261,7 +261,7 @@
     $scope.component = $scope.emailToSend.components[0];
 
     $scope.updateTime = function () {
-      var date = moment.utc($scope.delivery.date);
+      var date = moment($scope.delivery.date);
       if (date && date._d && date._d.toString() === "Invalid Date") {
         $scope.invalidDate = true;
       } else {
