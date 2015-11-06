@@ -12,14 +12,11 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, SimpleSiteBuil
 
     vm.somethingSidebar = 'something sidebar';
     vm.init = init;
-    vm.uiState = {
-        componentEditing: undefined,
-    	accordion: {
-    		site: {},
-    		page: {},
-    		components: {},
-    	}
-    };
+  //   vm.uiState.accordion: {
+		// site: {},
+		// page: {},
+		// sections: {},
+  //   };
     vm.savePage = savePage;
     vm.cancelPendingEdits = cancelPendingEdits;
     vm.setActiveSection = setActiveSection;
@@ -53,14 +50,15 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, SimpleSiteBuil
 	  }
 	};
 
-	$scope.$watch(function() { return SimpleSiteBuilderService.activeSection; }, function(activeSection){
-        vm.uiState.accordion.components = {};
-        if (activeSection !== undefined) {
-        	vm.uiState.accordion.components[activeSection] = true;
-        	vm.uiState.accordion.components.isOpen = true;
-        	vm.uiState.componentEditing = vm.state.page.components[vm.state.activeSection];
-        }
-    });
+	// $scope.$watch(function() { return vm.uiState }, function(activeElements){
+ //        vm.uiState.accordion.sections = {};
+ //        if (activeElements.section !== undefined) {
+ //        	vm.uiState.accordion.sections[activeElements.section] = true;
+ //        	vm.uiState.accordion.sections.isOpen = true;
+ //        	vm.uiState.accordion.sections[activeElements.section].comonents[activeElements.component] = true;
+ //        	vm.uiState.accordion.sections[activeElements.section].components.isOpen = true;
+ //        }
+ //    });
 
 	function savePage() {
 		return (
@@ -76,8 +74,13 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, SimpleSiteBuil
 	}
 
 	function setActiveSection(index) {
-		var activeSection = vm.uiState.accordion[index] ? undefined : index;
+		var activeSection = vm.uiState.accordion.sections[index].isOpen ? undefined : index;
 		SimpleSiteBuilderService.setActiveSection(activeSection);
+    }
+
+    function setActiveComponent(index) {
+    	var activeComponent = vm.uiState.accordion.sections[vm.uiState.activeComponentIndex].components[index] ? undefined : index;
+		SimpleSiteBuilderService.setActiveComponent(activeComponent);
     }
 
     function init(element) {

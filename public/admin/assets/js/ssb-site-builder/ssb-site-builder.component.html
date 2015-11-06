@@ -1,33 +1,29 @@
 <div>
-
-	<ssb-sidebar state="vm.state" ng-class="{ 'ssb-sidebar-show': vm.uiState.show.sidebar, 'ssb-sidebar': true }"></ssb-sidebar>
-
+	<ssb-sidebar state="vm.state" ui-state="vm.uiState" ng-class="{ 'ssb-sidebar-show': vm.uiState.show.sidebar, 'ssb-sidebar': true }"></ssb-sidebar>
+	
 	<div class="ssb-main" ng-class="{ 'ssb-main-full-width': !vm.uiState.show.sidebar }">
 		
 		<div id="componentloader">
 			
-			<!-- Legacy components -->
-			<div ng-if="vm.state.page.components">
-					<ssb-page-section ng-repeat="component in ::vm.state.page.components track by $index" components="[component]" layout="1-col" ng-class="{ 'ssb-active-section': $index === vm.state.activeSection, 'ssb-page-section': true }">
-						<div ng-include=" 'assets/js/ssb-site-builder/ssb-component-loader/ssb-component-loader.component.html' "></div>
-					</ssb-page-section>
-			</div>
+			<div ng-if="vm.state.page.sections.length">
 			
-			<!-- SSB sections/components -->
-			<div ng-if="vm.state.page.sections">
-				<div ng-repeat="section in vm.state.page.sections track by $index" ng-class="{ 'ssb-active-section': $index === vm.state.activeSection, 'ssb-page-section': true }">
-					<ssb-page-section components="section.components" layout="1-col">
-						<div ng-repeat="component in section.components track by $index" ng-class="{ 'ssb-active-section-component': $index === vm.state.activeComponent }">
-							<div ng-include=" 'assets/js/ssb-site-builder/ssb-component-loader/ssb-component-loader.component.html' "></div>
-						</div>
-					</ssb-page-section>
-				</div>
+				<ssb-page-section ng-repeat="section in vm.state.page.sections track by $index" components="section.components" layout="section.layout" ng-class="{ 'ssb-active-section': $index === vm.uiState.activeSectionIndex, 'ssb-page-section': true }" state="vm.state" ui-state="vm.uiState">
+			
+					<ssb-edit-control ng-class="{ 'ssb-edit-control': true }" state="vm.state" ui-state="vm.uiState" component="component" index="$index"></ssb-edit-control>
+
+					<ssb-component-loader ng-if="section.components.length" ng-repeat="component in section.components track by $index" ng-class="{ 'ssb-component-index': $index }" component="component" state="vm.state" ui-state="vm.uiState"></ssb-component-loader>
+
+					<!-- legacy components act as 1-col section wrapping single child component -->
+					<!-- <ssb-component-loader ng-if="!section.components.length" component="section" state="vm.state"></ssb-component-loader> -->
+
+				</ssb-page-section>
+
 			</div>
 
 		</div>
 
 	</div>
 
-	<ssb-flyover state="vm.state" ng-class="{ 'ssb-flyover-show': vm.uiState.show.flyover && vm.state.activeSection !== undefined, 'ssb-flyover': true }"></ssb-flyover>
+	<!-- <ssb-flyover state="vm.state" ui-state="vm.uiState" ng-class="{ 'ssb-flyover-show': vm.uiState.show.flyover && vm.uiState.activeSectionIndex !== undefined, 'ssb-flyover': true }"></ssb-flyover> -->
 
 </div>

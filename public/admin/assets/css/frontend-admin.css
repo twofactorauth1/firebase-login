@@ -6338,7 +6338,7 @@
   .ssb-sidebar {
     position: fixed;
     width: 25%;
-    height: 100%;
+    height: calc(100% - 120px);
   }
 }
 .ssb-sidebar.ssb-sidebar-show {

@@ -9,7 +9,9 @@ function ssbComponentLoader($compile) {
 	controllerAs: 'vm',
 	bindToController: true,
     scope: { 
-    	component: "="
+    	component: "=",
+    	state: '=',
+    	uiState: '='
     },
     replace: true,
 	link: function (scope, element, attrs, ctrl) {

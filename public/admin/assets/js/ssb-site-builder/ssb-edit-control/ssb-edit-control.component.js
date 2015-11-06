@@ -8,6 +8,7 @@ function ssbEditControl() {
         restrict: 'E',
         scope: {
             state: '=',
+            uiState: '=',
             index: '='
         },
         templateUrl: 'assets/js/ssb-site-builder/ssb-edit-control/ssb-edit-control.component.html',

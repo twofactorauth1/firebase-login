@@ -71,16 +71,24 @@
 				</li>
 			</ul>
         </accordion-group>
-        <accordion-group heading="Page Sections" is-open="vm.uiState.accordion.components.isOpen">
+        <accordion-group heading="Page Sections" is-open="vm.uiState.accordion.sections.isOpen">
 			<ul class="list-unstyled">
-				<li ng-repeat="component in vm.state.page.components track by $index">
+				<li ng-repeat="section in vm.state.page.sections track by $index">
 					<accordion close-others="oneAtATime" class="accordion">
-						<accordion-group heading="{{component.type}}" is-open="vm.uiState.accordion.components[$index]" ng-click="vm.setActiveSection($index)">
+						<accordion-group heading="{{section.layout}}" is-open="vm.uiState.accordion.sections[$index].isOpen" ng-click="vm.setActiveSection($index)">
 							<ul class="list-unstyled">
-								<li>
+								<li ng-repeat="component in section.components track by $index">
 									<accordion close-others="oneAtATime" class="accordion">
-										<div ng-if="component.type !== undefined" ng-include=" 'assets/js/ssb-site-builder/ssb-user-components/' + component.type + '/sidebar.settings.html' "></div>
-										<ssb-action-buttons save-action="vm.savePage()" cancel-action="vm.cancelPendingEdits()" ng-show="vm.state.pendingChanges"></ssb-action-buttons>
+										<accordion-group heading="{{component.type}}" is-open="vm.uiState.accordion.sections[$parent.$index].components[$index].isOpen" ng-click="vm.setActiveComponent($index)">
+											<ul class="list-unstyled">
+												<li>
+													<accordion close-others="oneAtATime" class="accordion">
+														<div ng-if="component.type !== undefined" ng-include=" 'assets/js/ssb-site-builder/ssb-user-components/' + component.type + '/sidebar.settings.html' "></div>
+														<ssb-action-buttons save-action="vm.savePage()" cancel-action="vm.cancelPendingEdits()" ng-show="vm.state.pendingChanges"></ssb-action-buttons>
+													</accordion>
+												</li>
+											</ul>
+										</accordion-group>
 									</accordion>
 								</li>
 							</ul>

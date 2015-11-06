@@ -13,12 +13,21 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     vm.init = init;
     vm.state = {};
     vm.uiState = {
+        activeSectionIndex: undefined,
+        activeComponentIndex: undefined,
         show: {
             flyover: true,
             sidebar: true
+        },
+        accordion: {
+            site: {},
+            page: {},
+            sections: {}
         }
     };
     vm.toggleSidebarFlyover = toggleSidebarFlyover;
+    vm.updateActiveSection = updateActiveSection;
+    vm.updateActiveComponent = updateActiveComponent;
 
     $scope.$watch(function() { return SimpleSiteBuilderService.website; }, function(website){
         vm.state.originalWebsite = angular.copy(website);
@@ -32,9 +41,9 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         vm.state.page = page;
     });
 
-    $scope.$watch(function() { return SimpleSiteBuilderService.activeSection; }, function(activeSection){
-        vm.state.activeSection = activeSection;
-    });
+    $scope.$watch(function() { return SimpleSiteBuilderService.activeSectionIndex }, updateActiveSection);
+    
+    $scope.$watch(function() { return SimpleSiteBuilderService.activeComponentIndex }, updateActiveComponent);
 
     $scope.$watch('vm.state.page', function(page) {
         if (!angular.equals(page, vm.state.originalPage)) {
@@ -67,6 +76,30 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     function toggleSidebarFlyover() {
         vm.uiState.show.flyover = !vm.uiState.show.flyover;
     	vm.uiState.show.sidebar = !vm.uiState.show.sidebar;
+    }
+
+    function updateActiveSection(index) {
+        if (index !== undefined) {
+            vm.uiState.accordion.sections = {};
+            vm.uiState.activeSectionIndex = index;
+            // vm.uiState.activeSection = vm.state.page.sections[activeElements.section];
+            // vm.uiState.activeSection.components.isOpen = vm.state.activeComponent;
+            // vm.uiState.componentEditing = vm.uiState.sectionEditing[vm.state.activeComponent];
+            // vm.uiState.accordion.sections[activeElements.section] = true;
+            vm.uiState.accordion.sections.isOpen = true;
+            vm.uiState.accordion.sections[index].isOpen = true;
+            // vm.uiState.accordion.sections[activeElements.section].comonents[activeElements.component] = true;
+            // vm.uiState.accordion.sections[activeElements.section].components.isOpen = true;
+        }
+    }
+
+    function updateActiveComponent(index) {
+        if (index !== undefined) {
+            vm.uiState.accordion.sections = {};
+            vm.uiState.accordion.sections.isOpen = true;
+            vm.uiState.activeComponentIndex = index;
+            vm.uiState.accordion.sections[vm.uiState.activeSectionIndex].components[index].isOpen = true;
+        }
     }
 
 }
