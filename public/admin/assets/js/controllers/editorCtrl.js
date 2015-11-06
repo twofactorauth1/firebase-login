@@ -502,11 +502,17 @@
      * @retrievePage
      * -
      */
-
+    $scope.pageNotFound = false;
     $scope.retrievePage = function (_handle) {
       if (_handle === 'blog' || _handle === 'single-post')
         $scope.post_blog_page = true;
-      WebsiteService.getSinglePage(_handle, function (data) {
+      WebsiteService.getSinglePage(_handle, function (data, error) {
+        if(error)
+        {
+          $scope.ckeditorLoaded = true;
+          $scope.pageNotFound = true;
+          return;
+        }
         $scope.page  = angular.copy(data);
         $scope.components = $scope.page.components;
         if(_handle === 'single-post'){

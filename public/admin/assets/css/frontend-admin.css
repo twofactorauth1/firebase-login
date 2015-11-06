@@ -1524,9 +1524,6 @@
 #componentloader .team-member-wrap .profile-social li {
   display: inline-block;
 }
-#componentloader .meet-team-v1 {
-  overflow: hidden;
-}
 #componentloader .meet-team-v1 .title {
   position: relative;
 }

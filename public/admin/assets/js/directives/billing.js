@@ -28,7 +28,7 @@ app.directive("billingSubscription", ['PaymentService', function (PaymentService
           scope.priceDollars = priceString.slice(0, priceStringLength - 2);
           scope.priceCents = priceString.slice(priceStringLength - 2, priceStringLength);
           setTimeout(function () {
-            $scope.$apply(function () {
+            scope.$apply(function () {
                 scope.billingSubscriptionUnavailable = false;
             }); 
           },0);
@@ -37,7 +37,7 @@ app.directive("billingSubscription", ['PaymentService', function (PaymentService
         }
       }, true);
 
-      if (scope.account.billing.plan !== 'NO_PLAN_ARGUMENT') {
+      if (scope.account && scope.account.billing.plan !== 'NO_PLAN_ARGUMENT') {
         var selectedPlanWatcher = scope.$watch('selectedPlan', function() {
           if (scope.selectedPlan && scope.selectedPlan.product_attributes && scope.selectedPlan.product_attributes.stripePlans[0].id) {
             scope.plan = scope.selectedPlan;
