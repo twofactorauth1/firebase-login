@@ -515,8 +515,6 @@
           if (_pages) {
             _pages[data.handle] = data;
             pagecache.put('pages', _pages);
-            console.log("SSSSSSSSSSSS");
-            console.log(pagecache);
           }          
         }
         fn(data);
