@@ -734,7 +734,6 @@
     
     angular.element(".sidebar-toggler").click(function(){
       if($scope && $scope.$state && $scope.$state.current && $scope.$state.current.name === "app.marketing.socialfeed"){
-        console.log("masonary reloaded");
         setTimeout(function () {
           if($('#mcontainer'))
             $('#mcontainer').masonry();
