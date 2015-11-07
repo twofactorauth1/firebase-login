@@ -13099,6 +13099,7 @@ fieldset[disabled] .btn-vimeo-square.active {
   display: none;
 }
 #editor-toolbar {
+  position: relative;
   z-index: 100;
   display: block;
   width: 100%;
