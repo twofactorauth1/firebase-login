@@ -737,7 +737,7 @@
         setTimeout(function () {
           if($('#mcontainer'))
             $('#mcontainer').masonry();
-        }, 1000);
+        }, 500);
       }        
     })
 
