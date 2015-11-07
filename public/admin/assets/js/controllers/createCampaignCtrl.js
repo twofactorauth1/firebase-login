@@ -261,17 +261,17 @@
     $scope.component = $scope.emailToSend.components[0];
 
     $scope.updateTime = function () {
-      var date = moment($scope.delivery.date);
-      if (date && date._d && date._d.toString() === "Invalid Date") {
-        $scope.invalidDate = true;
-      } else {
-        $scope.delivery.date = date;
-      }
-      if ($scope.delivery.date.diff && $scope.delivery.date.diff(moment(), "minutes") < 0) {
-        $scope.invalidDate = true;
-      } else {
-        $scope.invalidDate = false;
-      }
+      // var date = moment($scope.delivery.date);
+      // if (date && date._d && date._d.toString() === "Invalid Date") {
+      //   $scope.invalidDate = true;
+      // } else {
+      //   $scope.delivery.date = date;
+      // }
+      // if ($scope.delivery.date.diff && $scope.delivery.date.diff(moment(), "minutes") < 0) {
+      //   $scope.invalidDate = true;
+      // } else {
+      //   $scope.invalidDate = false;
+      // }
     };
 
     $scope.togglePreview = function () {
