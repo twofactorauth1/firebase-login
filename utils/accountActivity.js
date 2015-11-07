@@ -40,7 +40,8 @@ var accountActivity = {
                          444,445,446,448,449,450,451,452,453,454,455,456,457,458,459,460,461,462,463,464,465,466,
                          467,468,469,470,471,472,473,474,475,476,477,478,479,480,481,482,483,484,485,486,487,488,
                          489,490,491,492,493,494,495,496,497,498,499,500,501,502,503,504,505,506,507,508,509,510,
-                         511,512,513,514,515,516,517,518,519,520,521,522,523,524];
+                         511,512,513,514,515,516,517,518,519,520,521,522,523,524,525,526,527,528,529,530,531,532,
+                         533,535,537,538,539,540,544,545];
 
         var activityAry = [];
         async.each(reportAry, function(accountId, cb){
@@ -280,6 +281,7 @@ var accountActivity = {
                         //find the non-admin user
                         var sortedUsers = _.sortBy(users, function(user){return user.id();});
                         var targetUser = _.last(sortedUsers);
+                        self.log.debug('The target user for account [' + account.id() + ']...');
                         self.log.debug('The target user for account [' + account.id() + '] is [' + targetUser.get('username') + ']' );
                         cb(null, account, targetUser);
                     }
