@@ -5,7 +5,8 @@ app.directive('contactUsComponent', ['AccountService', 'GeocodeService', '$timeo
   return {
     scope: {
       component: '=',
-      control: '='
+      control: '=',
+      ssbEditor: '='
     },
     templateUrl: '/components/component-wrap.html',
     link: function (scope, element, attrs) {

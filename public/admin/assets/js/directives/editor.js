@@ -8,8 +8,7 @@ app.directive("elem", function ($timeout) {
     transclude: true,
     scope: {
       title: '@ngModel',
-      className: '@className',
-      ssbEditor: '@ssbEditor'
+      className: '@className'
     },
     template: '<div class="edit-wrap"><span class="editable-title">{{title | formatText}}</span><div class="editable element-wrap {{className}}" ng-bind-html="ngModel | unsafe"></div></div>',
     link: function (scope, element, attrs, ngModel) {
@@ -39,7 +38,7 @@ app.directive("elem", function ($timeout) {
       };
 
       var elem = angular.element(element[0].querySelector('.editable'))[0];
-      if(angular.isDefined($.FroalaEditor)){        
+      if(scope.$parent.ssbEditor){        
       $(function() {
          setTimeout(function() {         
             $(elem).on('froalaEditor.initialized', function (e, editor) {
