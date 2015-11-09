@@ -17,7 +17,7 @@ app.constant('hoursConstant', {
 });
 
 app.constant('formValidations', {
-   'email': /^[-a-z0-9~!$%^&*_=+}{\'?]+(\.[-a-z0-9~!$%^&*_=+}{\'?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+)*\.(aero|arpa|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|mobi|[a-z][a-z])|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$/i,
+   'email': /^[-a-z0-9~!$%^&*_=}{\'?](\.[-a-z0-9~!$%^&*_=}{\'?])*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_])*\.(aero|arpa|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|mobi|[a-z][a-z])|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$/i,
    'phone': /^\(?(\d{3})\)?[ .-]?(\d{3})[ .-]?(\d{4})$/,
    'zip': /(^\d{5}$)|(^\d{5}-\d{4}$)/,
    'extension': /^[0-9]*$/
@@ -202,7 +202,7 @@ app.constant('social', {
         label: "LinkedIn",
         data: "li"
       }, {
-        label: "Google+",
+        label: "Google",
         data: "go"
       }
       //{label:"Full Contacnt", data:"fc"}
@@ -444,7 +444,7 @@ app.constant('userConstant', {
         label: "LinkedIn",
         data: "li"
       }, {
-        label: "Google+",
+        label: "Google",
         data: "go"
       }
       //{label:"Full Contacnt", data:"fc"}
@@ -858,5 +858,41 @@ app.constant('JS_REQUIRES', {
   }, {
     name: 'angular-clipboard',
     files: ['../js/libs/angular-clipboard/angular-clipboard.js'],
+  },
+  {
+    name: 'froala-wysiwyg-editor',
+    files: ['../js/libs_misc/froala-wysiwyg-editor/css/froala_editor.css',
+      '../js/libs/froala-wysiwyg-editor/css/froala_style.min.css',
+      '../js/libs/froala-wysiwyg-editor/js/froala_editor.min.js']
+  },
+  {
+    name: 'froala-wysiwyg-editor-plugins',
+    files: [          
+      "../js/libs/froala-wysiwyg-editor/js/plugins/align.min.js",
+      "../js/libs/froala-wysiwyg-editor/js/plugins/colors.min.js",
+      "../js/libs/froala-wysiwyg-editor/js/plugins/emoticons.min.js",
+      "../js/libs/froala-wysiwyg-editor/js/plugins/entities.min.js",
+      "../js/libs/froala-wysiwyg-editor/js/plugins/font_family.min.js",
+      "../js/libs/froala-wysiwyg-editor/js/plugins/font_size.min.js",
+      "../js/libs/froala-wysiwyg-editor/js/plugins/image.min.js",
+      "../js/libs/froala-wysiwyg-editor/js/plugins/image_manager.min.js",
+      "../js/libs/froala-wysiwyg-editor/js/plugins/inline_style.min.js",
+      "../js/libs/froala-wysiwyg-editor/js/plugins/line_breaker.min.js",
+      "../js/libs/froala-wysiwyg-editor/js/plugins/link.min.js",
+      "../js/libs/froala-wysiwyg-editor/js/plugins/lists.min.js",
+      "../js/libs/froala-wysiwyg-editor/js/plugins/paragraph_format.min.js",
+      "../js/libs/froala-wysiwyg-editor/js/plugins/paragraph_style.min.js",
+      "../js/libs/froala-wysiwyg-editor/js/plugins/quote.min.js",
+      "../js/libs/froala-wysiwyg-editor/js/plugins/save.min.js",
+      "../js/libs/froala-wysiwyg-editor/js/plugins/table.min.js",
+      "../js/libs/froala-wysiwyg-editor/js/plugins/url.min.js",
+      "../js/libs/froala-wysiwyg-editor/js/plugins/video.min.js",
+      "../js/libs/froala-wysiwyg-editor/css/plugins/colors.css",
+      "../js/libs/froala-wysiwyg-editor/css/plugins/emoticons.css",
+      "../js/libs/froala-wysiwyg-editor/css/plugins/image.css",
+      "../js/libs/froala-wysiwyg-editor/css/plugins/image_manager.css",
+      "../js/libs/froala-wysiwyg-editor/css/plugins/line_breaker.css",
+      "../js/libs/froala-wysiwyg-editor/css/plugins/table.css",
+      "../js/libs/froala-wysiwyg-editor/css/plugins/video.css"]
   }]
 });

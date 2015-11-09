@@ -28,29 +28,56 @@ app.directive("elem", function ($timeout) {
           });
         },0);
       };
-
       var elem = angular.element(element[0].querySelector('.editable'))[0];
-      CKEDITOR.inline(elem, {
-        on: {
-          instanceReady: function (ev) {
-            var editor = ev.editor;
-            editor.setReadOnly(false);
-            editor.setData(ngModel.$viewValue);
-            editor.on('change', function (e) {
-              scope.update(e);
+      if(angular.isDefined($.FroalaEditor)){        
+      $(function() {
+         setTimeout(function() {         
+            $(elem).on('froalaEditor.initialized', function (e, editor) {
+              editor.html.set(ngModel.$viewValue);
+            }).froalaEditor({
+                enter: $.FroalaEditor.ENTER_BR,
+                 toolbarInline: true,
+                 toolbarVisibleWithoutSelection: true,
+                 toolbarButtons: ['bold', 'italic', 'underline', 'strikeThrough', 'fontFamily', 'fontSize', '|', 'color', 'emoticons', 'inlineStyle', 'paragraphStyle', '|', 'paragraphFormat', 'align', 'formatOL', 'formatUL', 'outdent', 'indent', '-', 'insertLink', 'insertImage', 'insertVideo', 'insertFile', 'insertTable', '|', 'insertHR', 'undo', 'redo', 'clearFormatting', 'selectAll'],
+                 imageStyles: {
+                    'img-rounded': 'Rounded Square',
+                    'img-thumbnail': 'Square with Border',
+                    'img-circle': 'Circle'
+                 }
+            })
+            .on('froalaEditor.contentChanged', function (e, editor) {
+             // scope.update(editor);
+            })
+            .on('froalaEditor.image.resizeEnd', function (e, editor, $img) {
+             //scope.update(editor);
             });
-            editor.on('key', function (e) {
-              scope.update(e);
-            });
-            editor.on('customUpdate', function (e) {
-              scope.setContent(e);
-            });
-          }
-        },
-        sharedSpaces: {
-          top: 'editor-toolbar'
-        }
+          }, 1000);
       });
+      }
+      else{      
+      CKEDITOR.inline(elem, {
+          on: {
+            instanceReady: function (ev) {
+              var editor = ev.editor;
+              editor.setReadOnly(false);
+              editor.setData(ngModel.$viewValue);
+              editor.on('change', function (e) {
+                scope.update(e);
+              });
+              editor.on('key', function (e) {
+                scope.update(e);
+              });
+              editor.on('customUpdate', function (e) {
+                scope.setContent(e);
+              });
+            }
+          },
+          sharedSpaces: {
+            top: 'editor-toolbar'
+          }
+        });
+      }
+      
     }
-  };
+  }
 });
