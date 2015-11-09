@@ -87,6 +87,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
             // vm.uiState.componentEditing = vm.uiState.sectionEditing[vm.state.activeComponent];
             // vm.uiState.accordion.sections[activeElements.section] = true;
             vm.uiState.accordion.sections.isOpen = true;
+            vm.uiState.accordion.sections[index] = {};
             vm.uiState.accordion.sections[index].isOpen = true;
             // vm.uiState.accordion.sections[activeElements.section].comonents[activeElements.component] = true;
             // vm.uiState.accordion.sections[activeElements.section].components.isOpen = true;

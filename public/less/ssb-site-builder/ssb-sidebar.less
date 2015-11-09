@@ -5,6 +5,18 @@
 	display: none;
 	height: 200px;
 
+
+    .accordion .panel-heading .accordion-toggle {
+        background: #fff;
+    }
+
+    .accordion .ssb-sidebar-section-open > .panel-heading .accordion-toggle {
+        color: @indigenous-blue;
+        font-weight: 600;
+    }
+
+
+
 	@media (min-width: 768px) {
     	// float: left;
     	position: fixed;
@@ -17,6 +29,10 @@
 
 .ssb-sidebar.ssb-sidebar-show {
 	display: block;
+}
+
+.ssb-sidebar-section-open {
+
 }
 
 .ssb-sidebar-heading {
@@ -41,4 +57,44 @@
     	cursor: pointer;
     	transform: translateY(-50%);
     }
+
+}
+
+.ssb-sidebar-inner {
+    transition: all 500ms cubic-bezier(0.550, 0.085, 0.680, 0.530); /* easeInQuad */
+    position: relative;
+    width: 200%;
+
+    .editor-group {
+        float: left;
+        width: 50%;
+    }
+}
+
+.ssb-sidebar-position-0 {
+    left: 0;
+}
+
+.ssb-sidebar-position-1 {
+    left: -100%;
+}
+
+.ssb-sidebar-section-open {
+    background: #fff;
+}
+
+.ssb-sidebar-sub-heading {
+    padding: .5em;
+
+}
+
+.ssb-page-section-settings-item {
+    position: relative;
+}
+
+.ssb-sidebar-handle {
+    position: absolute;
+    top: 1em;
+    right: 1em;
+    z-index: 1;
 }

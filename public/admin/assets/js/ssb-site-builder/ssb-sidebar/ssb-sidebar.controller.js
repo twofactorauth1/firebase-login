@@ -1,5 +1,13 @@
 (function(){
 
+app.config(['$provide', function ($provide){
+	$provide.decorator('accordionDirective', function($delegate) { 
+		var directive = $delegate[0];
+		directive.replace = true;
+		return $delegate;
+	});
+}]);
+
 app.controller('SiteBuilderSidebarController', ssbSiteBuilderSidebarController);
 
 ssbSiteBuilderSidebarController.$inject = ['$scope', '$attrs', '$filter', 'SimpleSiteBuilderService'];
@@ -19,7 +27,36 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, SimpleSiteBuil
   //   };
     vm.savePage = savePage;
     vm.cancelPendingEdits = cancelPendingEdits;
-    vm.setActiveSection = setActiveSection;
+    vm.togglePageSectionAccordion = togglePageSectionAccordion;
+    
+    vm.navigation = {
+    	back: function() {
+    		// vm.navigation.slide = 'fade-out-left';
+    		vm.navigation.index = 0;
+    		vm.navigation.indexClass = 'ssb-sidebar-position-0';
+    	},
+    	loadPage: function(pageId) {
+    		//TODO: load new page if not currently editing that page
+    		vm.navigation.index = 1;
+    		vm.navigation.indexClass = 'ssb-sidebar-position-1';
+    	},
+    	// slide: 'fade-in-right',
+    	index: 0,
+    	indexClass: 'ssb-sidebar-position-1'
+    };
+
+    vm.sortableOptions = {
+    	handle: '.ssb-sidebar-handle',
+		onSort: function (evt) {
+			console.log(evt);
+		},
+		onStart: function (evt) {
+			vm.dragging = true;
+		},
+		onEnd: function (evt) {
+			vm.dragging = false;
+		}
+    };
 
     //TODO: move into config services
     vm.spectrum = {
@@ -73,9 +110,12 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, SimpleSiteBuil
 		return true;
 	}
 
-	function setActiveSection(index) {
-		var activeSection = vm.uiState.accordion.sections[index].isOpen ? undefined : index;
-		SimpleSiteBuilderService.setActiveSection(activeSection);
+	function togglePageSectionAccordion(index) {
+		// var activeSection = vm.uiState.accordion.sections[index].isOpen ? undefined : index;
+		// vm.uiState.accordion.sections[index].isOpen = !vm.uiState.accordion.sections[index].isOpen;
+		if (vm.uiState.accordion.sections[index].isOpen) {
+			SimpleSiteBuilderService.setActiveSection(index);
+		}
     }
 
     function setActiveComponent(index) {

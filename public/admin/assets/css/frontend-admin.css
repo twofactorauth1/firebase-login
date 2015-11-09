@@ -6233,6 +6233,10 @@
 }
 .ssb-site-builder .ssb-page-section {
   position: relative;
+  float: left;
+  width: 100%;
+  clear: both;
+  border: inset solid 1px transparent;
 }
 .ssb-site-builder .ssb-page-section:hover .ssb-settings-btn {
   display: block;
@@ -6322,7 +6326,8 @@
   display: none;
 }
 .ssb-site-builder .ssb-active-section {
-  background: red;
+  border: dashed 1px #47b8d9;
+  z-index: 1;
 }
 .ssb-site-builder .edit-wrap:hover .editable-title {
   left: auto;
@@ -6333,6 +6338,13 @@
   overflow-x: hidden;
   display: none;
   height: 200px;
+}
+.ssb-sidebar .accordion .panel-heading .accordion-toggle {
+  background: #fff;
+}
+.ssb-sidebar .accordion .ssb-sidebar-section-open > .panel-heading .accordion-toggle {
+  color: #47b8d9;
+  font-weight: 600;
 }
 @media (min-width: 768px) {
   .ssb-sidebar {
@@ -6364,6 +6376,37 @@
   left: .5em;
   cursor: pointer;
   transform: translateY(-50%);
+}
+.ssb-sidebar-inner {
+  transition: all 500ms cubic-bezier(0.55, 0.085, 0.68, 0.53);
+  /* easeInQuad */
+  position: relative;
+  width: 200%;
+}
+.ssb-sidebar-inner .editor-group {
+  float: left;
+  width: 50%;
+}
+.ssb-sidebar-position-0 {
+  left: 0;
+}
+.ssb-sidebar-position-1 {
+  left: -100%;
+}
+.ssb-sidebar-section-open {
+  background: #fff;
+}
+.ssb-sidebar-sub-heading {
+  padding: .5em;
+}
+.ssb-page-section-settings-item {
+  position: relative;
+}
+.ssb-sidebar-handle {
+  position: absolute;
+  top: 1em;
+  right: 1em;
+  z-index: 1;
 }
 .ssb-flyover {
   position: absolute;

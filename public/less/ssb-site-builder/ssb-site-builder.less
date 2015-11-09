@@ -34,6 +34,11 @@
 
 	.ssb-page-section {
 		position: relative;
+		float: left;
+	    width: 100%;
+	    clear: both;
+	    border: inset solid 1px transparent;
+	    // z-index: 1;
 
 		&:hover .ssb-settings-btn {
 			display: block;
@@ -157,7 +162,8 @@
 	}
 
 	.ssb-active-section {
-		background: red;
+		border: dashed 1px @indigenous-blue;
+	    z-index: 1;
 	}
 
 	.edit-wrap:hover .editable-title {
