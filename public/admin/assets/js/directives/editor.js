@@ -8,7 +8,8 @@ app.directive("elem", function ($timeout) {
     transclude: true,
     scope: {
       title: '@ngModel',
-      className: '@className'
+      className: '@className',
+      ssbEditor: '@ssbEditor'
     },
     template: '<div class="edit-wrap"><span class="editable-title">{{title | formatText}}</span><div class="editable element-wrap {{className}}" ng-bind-html="ngModel | unsafe"></div></div>',
     link: function (scope, element, attrs, ngModel) {
@@ -28,28 +29,27 @@ app.directive("elem", function ($timeout) {
           });
         },0);
       };
+
+      scope.updateFroalaContent = function (editor) {
+        $timeout(function () {
+          scope.$apply(function () {
+            ngModel.$setViewValue(editor.html.get());
+          });
+        },0);
+      };
+
       var elem = angular.element(element[0].querySelector('.editable'))[0];
       if(angular.isDefined($.FroalaEditor)){        
       $(function() {
          setTimeout(function() {         
             $(elem).on('froalaEditor.initialized', function (e, editor) {
               editor.html.set(ngModel.$viewValue);
-            }).froalaEditor({
-                enter: $.FroalaEditor.ENTER_BR,
-                 toolbarInline: true,
-                 toolbarVisibleWithoutSelection: true,
-                 toolbarButtons: ['bold', 'italic', 'underline', 'strikeThrough', 'fontFamily', 'fontSize', '|', 'color', 'emoticons', 'inlineStyle', 'paragraphStyle', '|', 'paragraphFormat', 'align', 'formatOL', 'formatUL', 'outdent', 'indent', '-', 'insertLink', 'insertImage', 'insertVideo', 'insertFile', 'insertTable', '|', 'insertHR', 'undo', 'redo', 'clearFormatting', 'selectAll'],
-                 imageStyles: {
-                    'img-rounded': 'Rounded Square',
-                    'img-thumbnail': 'Square with Border',
-                    'img-circle': 'Circle'
-                 }
-            })
+            }).froalaEditor($.FroalaEditor.config)
             .on('froalaEditor.contentChanged', function (e, editor) {
-             // scope.update(editor);
+              scope.updateFroalaContent(editor);
             })
             .on('froalaEditor.image.resizeEnd', function (e, editor, $img) {
-             //scope.update(editor);
+               scope.updateFroalaContent(editor);
             });
           }, 1000);
       });

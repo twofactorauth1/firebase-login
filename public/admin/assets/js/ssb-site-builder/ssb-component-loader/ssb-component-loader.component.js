@@ -15,7 +15,7 @@ function ssbComponentLoader($compile) {
     },
     replace: true,
 	link: function (scope, element, attrs, ctrl) {
-		var template = '<div ' + ctrl.component.type + '-component component="vm.component"></div>';
+		var template = '<div ' + ctrl.component.type + '-component component="vm.component" ssb-editor="true"></div>';
 		element.append($compile(template)(scope));
 	}
   }

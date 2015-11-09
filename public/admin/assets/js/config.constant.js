@@ -863,7 +863,8 @@ app.constant('JS_REQUIRES', {
     name: 'froala-wysiwyg-editor',
     files: ['../js/libs_misc/froala-wysiwyg-editor/css/froala_editor.css',
       '../js/libs/froala-wysiwyg-editor/css/froala_style.min.css',
-      '../js/libs/froala-wysiwyg-editor/js/froala_editor.min.js']
+      '../js/libs/froala-wysiwyg-editor/js/froala_editor.min.js'
+      ]
   },
   {
     name: 'froala-wysiwyg-editor-plugins',
@@ -893,6 +894,7 @@ app.constant('JS_REQUIRES', {
       "../js/libs/froala-wysiwyg-editor/css/plugins/image_manager.css",
       "../js/libs/froala-wysiwyg-editor/css/plugins/line_breaker.css",
       "../js/libs/froala-wysiwyg-editor/css/plugins/table.css",
-      "../js/libs/froala-wysiwyg-editor/css/plugins/video.css"]
+      "../js/libs/froala-wysiwyg-editor/css/plugins/video.css",
+      '../js/libs_misc/froala-wysiwyg-editor/config/config.js']
   }]
 });
