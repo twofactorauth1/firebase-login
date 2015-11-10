@@ -479,11 +479,6 @@ module.exports = function(grunt) {
         dbcopyutil.updateEmailCollection(done);
     });
 
-    grunt.registerTask('convertWordpress', 'Convert blog', function(){
-        var done = this.async();
-        wordpressConverter.convertBlog('', 15,'a4bf6965-7ddd-4f4c-9f22-6986f16315fc','e6d3a8a4-5a2f-44d6-a16e-d5cf0759916f', done);
-    });
-
     grunt.registerTask('copyAccount',  ['prompt', 'doCopyAccount']);
 
     grunt.registerTask('generateJS', 'Generate JS', function(){
