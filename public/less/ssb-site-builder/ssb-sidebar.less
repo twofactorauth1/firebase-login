@@ -4,10 +4,16 @@
 	// background-color: #5bc0de;
 	display: none;
 	height: 200px;
+    box-shadow: 0px -1px 3px 1px rgba(0, 0, 0, .5);
 
 
     .accordion .panel-heading .accordion-toggle {
         background: #fff;
+    }
+
+    .sortable-chosen .accordion .panel-heading .accordion-toggle {
+        background: #ddd;
+        color: #fff;
     }
 
     .accordion .ssb-sidebar-section-open > .panel-heading .accordion-toggle {
@@ -15,6 +21,17 @@
         font-weight: 600;
     }
 
+    .panel-title {
+        border-bottom: 1px solid #eee;
+    }
+
+    h5 {
+        margin: 1.75em 0 0;
+    }
+
+    img {
+        max-width: 100%;
+    }
 
 
 	@media (min-width: 768px) {
@@ -31,10 +48,6 @@
 	display: block;
 }
 
-.ssb-sidebar-section-open {
-
-}
-
 .ssb-sidebar-heading {
 	position: relative;
 	color: white;
@@ -48,6 +61,7 @@
 
     h4 {
     	margin: .75em auto;
+        font-weight: bold;
     }
 
     .ti-arrow-left {
@@ -84,8 +98,14 @@
 }
 
 .ssb-sidebar-sub-heading {
-    padding: .5em;
+    padding: 1em .5em 1em;
+    border-top: 1px solid #E7EAEA;
+    border-bottom: 1px solid #E7EAEA;
+    margin: 0;
+}
 
+.ssb-page-section-settings-item > .panel-group {
+    margin-bottom: 0;
 }
 
 .ssb-page-section-settings-item {
@@ -97,4 +117,11 @@
     top: 1em;
     right: 1em;
     z-index: 1;
+    cursor: move;
+}
+
+.ssb-settings-list {
+    li {
+        padding: 1em 1em 0;
+    }
 }

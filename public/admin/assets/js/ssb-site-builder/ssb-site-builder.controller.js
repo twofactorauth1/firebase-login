@@ -28,16 +28,20 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     vm.toggleSidebarFlyover = toggleSidebarFlyover;
     vm.updateActiveSection = updateActiveSection;
     vm.updateActiveComponent = updateActiveComponent;
+    vm.savePage = savePage;
+    vm.cancelPendingEdits = cancelPendingEdits;
 
     $scope.$watch(function() { return SimpleSiteBuilderService.website; }, function(website){
         vm.state.originalWebsite = angular.copy(website);
         vm.state.pendingChanges = false;
+        // vm.uiState = vm.uiStateOriginal;
         vm.state.website = website;
     });
 
     $scope.$watch(function() { return SimpleSiteBuilderService.page; }, function(page){
         vm.state.originalPage = angular.copy(page);
         vm.state.pendingChanges = false;
+        // vm.uiState = vm.uiStateOriginal;
         vm.state.page = page;
     });
 
@@ -71,6 +75,23 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         vm.element = element;
         vm.uiState.isSidebarClosed = $rootScope.app.layout.isSidebarClosed;
         $rootScope.app.layout.isSidebarClosed = true;
+
+        vm.uiStateOriginal = angular.copy(vm.uiState);
+    }
+
+    function savePage() {
+        vm.state.pendingChanges = false; //can remove once save implemented
+        return (
+            SimpleSiteBuilderService.savePage(vm.state.page).then(function(data){
+                console.log('saved');
+            })
+        )
+    }
+
+    function cancelPendingEdits() {
+        alert('TODO: reset pending changes.');
+        vm.state.pendingChanges = false;
+        return true;
     }
 
     function toggleSidebarFlyover() {

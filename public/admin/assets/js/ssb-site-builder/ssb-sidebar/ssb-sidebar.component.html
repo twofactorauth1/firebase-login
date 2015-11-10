@@ -7,7 +7,7 @@
 		<section>
 	        <h4 class="ssb-sidebar-sub-heading">Template</h4>
 	        <p>
-	        	<h5 class="ssb-sidebar-sub-heading">DEFAULT</h5>
+	        	DEFAULT
 	        </p>
 	        <ul>
 	        	<li>Theme</li>
@@ -17,7 +17,7 @@
 		<section>
 	        <h4 class="ssb-sidebar-sub-heading">Main Menu</h4>
 	        <ul>
-	        	<li><button page-id="123456" ng-click="vm.navigation.loadPage(this.pageId)">{{vm.state.page.title}}</button></li>
+	        	<li><button page-id="123456" ng-click="vm.navigation.loadPage(this.pageId)">{{vm.state.page.title}} -> </button></li>
 	        	<li>page2</li>
 	        	<li>page3</li>
 	        	<li>page4</li>
@@ -41,15 +41,15 @@
 		
 		<section>
 	        <h4 class="ssb-sidebar-sub-heading">Page Settings</h4>
-	        <ul class="list-unstyled center">
+	        <ul class="list-unstyled ssb-settings-list">
 				<li>
-					<a href>Thing1</a>
+					<a href>Setting1</a>
 				</li>
 				<li>
-					<a href>Thing2</a>
+					<a href>Setting2</a>
 				</li>
 				<li>
-					<a href>Thing3</a>
+					<a href>Setting3</a>
 				</li>
 			</ul>
 		</section>
@@ -65,49 +65,66 @@
 							ng-click="vm.togglePageSectionAccordion($index)" 
 							ng-class="{ 'ssb-sidebar-section-open': vm.uiState.accordion.sections[$index].isOpen }">
 
-							<h5>Layout</h5>
+							<div class="form-group">
+								<h5>Layout</h5>
 
-							<div class="radio">
-								<label>
-									<input type="radio" ng-model="section.layout" value="1-col"/> 1 Column
-								</label>
+								<div class="radio">
+									<label>
+										<input type="radio" ng-model="section.layout" value="1-col"/> 1 Column
+									</label>
+								</div>
+								<div class="radio">
+									<label>
+										<input type="radio" ng-model="section.layout" value="2-col"/> 2 Column
+									</label>
+								</div>
+								<div class="radio">
+									<label>
+										<input type="radio" ng-model="section.layout" value="3-col"/> 3 Column
+									</label>
+								</div>
 							</div>
-							<div class="radio">
-								<label>
-									<input type="radio" ng-model="section.layout" value="2-col"/> 2 Column
-								</label>
-							</div>
-							<div class="radio">
-								<label>
-									<input type="radio" ng-model="section.layout" value="3-col"/> 3 Column
-								</label>
+							
+							<div class="form-group">
+								<h5>Components</h5>
+
+								<ul class="list-unstyled">
+									<li ng-repeat="component in section.components track by $index">
+										<accordion close-others="oneAtATime" class="accordion">
+											<accordion-group heading="{{component.type}}">
+												<ul class="list-unstyled">
+													<li>
+														<accordion close-others="oneAtATime" class="accordion">
+															<div ng-if="component.type !== undefined" ng-include=" 'assets/js/ssb-site-builder/ssb-user-components/' + component.type + '/sidebar.settings.html' "></div>
+															<ssb-action-buttons save-action="vm.savePage()" cancel-action="vm.cancelPendingEdits()" ng-show="vm.state.pendingChanges"></ssb-action-buttons>
+														</accordion>
+													</li>
+												</ul>
+											</accordion-group>
+										</accordion>
+									</li>
+									<li>
+										<accordion close-others="oneAtATime" class="accordion" ng-click="vm.getSystemComponents()">
+											<accordion-group heading="Add + ">
+												<ul class="list-unstyled">
+													<li ng-repeat="component in vm.systemComponents track by $index" ng-click="vm.addComponentToSection(component, $parent.$index)" class="center">
+														<img src="{{component.preview}}" alt="{{component.type}}" />
+														{{component.type}}
+													</li>
+												</ul>
+											</accordion-group>
+										</accordion>
+									</li>
+								</ul>
 							</div>
 
-							<h5>Components</h5>
-
-							<ul class="list-unstyled">
-								<li ng-repeat="component in section.components track by $index">
-									<accordion close-others="oneAtATime" class="accordion">
-										<accordion-group heading="{{component.type}}">
-											<ul class="list-unstyled">
-												<li>
-													<accordion close-others="oneAtATime" class="accordion">
-														<div ng-if="component.type !== undefined" ng-include=" 'assets/js/ssb-site-builder/ssb-user-components/' + component.type + '/sidebar.settings.html' "></div>
-														<ssb-action-buttons save-action="vm.savePage()" cancel-action="vm.cancelPendingEdits()" ng-show="vm.state.pendingChanges"></ssb-action-buttons>
-													</accordion>
-												</li>
-											</ul>
-										</accordion-group>
-									</accordion>
-								</li>
-							</ul>
 						</accordion-group>
 
 					</accordion>
 				</li>
 			</ul>
 			<!-- Old structure of page -->
-			<h4 ng-if="!vm.state.page.sections && vm.state.page.components" class="ssb-sidebar-sub-heading">Page Components</h4>
+			<!-- <h4 ng-if="!vm.state.page.sections && vm.state.page.components" class="ssb-sidebar-sub-heading">Page Components</h4>
 			<ul class="list-unstyled" ng-if="!vm.state.page.sections && vm.state.page.components">
 				<li ng-repeat="component in vm.state.page.components track by $index">
 					<accordion close-others="oneAtATime" class="accordion">
@@ -124,7 +141,7 @@
 					</accordion>
 				</li>
 			</ul>
-			<ssb-action-buttons save-action="vm.savePage()" cancel-action="vm.cancelPendingEdits()" ng-show="vm.state.pendingChanges"></ssb-action-buttons>
+			<ssb-action-buttons save-action="vm.savePage()" cancel-action="vm.cancelPendingEdits()" ng-show="vm.state.pendingChanges"></ssb-action-buttons> -->
 		</section>
 
 	</div>

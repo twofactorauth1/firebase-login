@@ -28,6 +28,8 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, SimpleSiteBuil
     vm.savePage = savePage;
     vm.cancelPendingEdits = cancelPendingEdits;
     vm.togglePageSectionAccordion = togglePageSectionAccordion;
+    vm.getSystemComponents = getSystemComponents;
+    vm.addComponentToSection = addComponentToSection;
     
     vm.navigation = {
     	back: function() {
@@ -87,26 +89,31 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, SimpleSiteBuil
 	  }
 	};
 
-	// $scope.$watch(function() { return vm.uiState }, function(activeElements){
- //        vm.uiState.accordion.sections = {};
- //        if (activeElements.section !== undefined) {
- //        	vm.uiState.accordion.sections[activeElements.section] = true;
- //        	vm.uiState.accordion.sections.isOpen = true;
- //        	vm.uiState.accordion.sections[activeElements.section].comonents[activeElements.component] = true;
- //        	vm.uiState.accordion.sections[activeElements.section].components.isOpen = true;
- //        }
- //    });
+	function getSystemComponents() {
+		vm.systemComponents = SimpleSiteBuilderService.getSystemComponents();
+	}
+
+	//TODO: handle versions
+	function addComponentToSection(component, sectionIndex) {
+		return (
+			SimpleSiteBuilderService.getComponent(component, 1).then(function(response) {
+				vm.state.page.sections[sectionIndex].components.push(response.data);
+			})
+		)
+	}
 
 	function savePage() {
+		vm.state.pendingChanges = false;
 		return (
-			SimpleSiteBuilderService.savePage(vm.state.page).then(function(data){
+			SimpleSiteBuilderService.savePage(vm.state.page).then(function(response){
 				console.log('saved');
 			})
 		)
 	}
 
 	function cancelPendingEdits() {
-		console.log('reset pending stuff');
+		alert('TODO: reset pending changes.');
+		vm.state.pendingChanges = false;
 		return true;
 	}
 

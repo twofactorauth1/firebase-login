@@ -48,6 +48,7 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
   $scope.sliderValue = 1;
 
   $scope.addBackground = function () {
+    debugger;
     $scope.$parent.showInsert = true;
     $scope.openParentModal('media-modal', 'MediaModalCtrl', null, 'lg');
   };

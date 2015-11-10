@@ -3,24 +3,22 @@
 	
 	<div class="ssb-main" ng-class="{ 'ssb-main-full-width': !vm.uiState.show.sidebar }">
 		
+		<ssb-action-buttons save-action="vm.savePage()" cancel-action="vm.cancelPendingEdits()" ng-show="vm.state.pendingChanges"></ssb-action-buttons>
+
 		<div id="componentloader">
 			
 			<div ng-if="vm.state.page.sections.length">
 			
-				<ssb-page-section ng-repeat="section in vm.state.page.sections track by $index" components="section.components" layout="section.layout" ng-class="{ 'ssb-active-section': $index === vm.uiState.activeSectionIndex, 'ssb-page-section': true, 'row': true }" state="vm.state" ui-state="vm.uiState">
-			
-					<ssb-edit-control ng-class="{ 'ssb-edit-control': true }" state="vm.state" ui-state="vm.uiState" component="component" index="$index"></ssb-edit-control>
-
-					<ssb-component-loader ng-if="section.components.length" ng-repeat="component in section.components track by $index" ng-class="{ 'ssb-component-index': $index, 'ssb-section-layout': true }" component="component" state="vm.state" ui-state="vm.uiState"></ssb-component-loader>
-
-					<!-- legacy components act as 1-col section wrapping single child component -->
-					<!-- <ssb-component-loader ng-if="!section.components.length" component="section" state="vm.state"></ssb-component-loader> -->
-
+				<ssb-page-section 
+					ng-repeat="section in vm.state.page.sections track by $index" 
+					section="section" 
+					index="$index"
+					ng-class="{ 'ssb-active-section': $index === vm.uiState.activeSectionIndex }" 
+					class="ssb-page-section" 
+					state="vm.state" 
+					ui-state="vm.uiState">
 				</ssb-page-section>
 
-			</div>
-			<div ng-if="vm.state.page.components.length && !vm.state.page.sections" >		
-					<ssb-component-loader ng-if="vm.state.page.components.length" ng-repeat="component in vm.state.page.components track by $index" ng-class="{ 'ssb-component-index': $index, 'ssb-section-layout': true }" component="component" state="vm.state" ui-state="vm.uiState"></ssb-component-loader>
 			</div>
 
 		</div>
