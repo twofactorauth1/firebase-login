@@ -314,7 +314,7 @@
                 $location.search('posthandle', post_data.post_url);
               }
              
-              $scope.blog.post = data;
+              $scope.blog.post = $scope.postControl.getSinglePost();
               angular.copy($scope.blog.post, $scope.originalPost);
               toaster.pop('success', "Post Saved", "The " + $filter('htmlToPlaintext')($scope.blog.post.post_title) + " post was saved successfully.");              
               $scope.redirectAfterSave(redirect_url, reload);
