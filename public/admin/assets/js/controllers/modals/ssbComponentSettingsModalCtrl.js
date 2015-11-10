@@ -1069,7 +1069,7 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
         $scope.emails = emails;
 
         //select the default email for simple form as welcome-aboard
-        if ($scope.componentEditing.type === 'simple-form' && !$scope.componentEditing.emailId) {
+        if ($scope.componentEditing && $scope.componentEditing.type === 'simple-form' && !$scope.componentEditing.emailId) {
           var _welcomeEmail = _.find(emails, function (_email) {
             return _email.handle === 'welcome-aboard';
           });

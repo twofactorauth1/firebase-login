@@ -27,7 +27,7 @@ app.directive('mastheadComponent',["$window", function ($window) {
       });
       scope.setUnderbnavMargin = function () {
         scope.allowUndernav = false;
-        scope.$parent.addUnderNavSetting(scope.component._id, function (data) {
+        scope.$parent.addUnderNavSetting && scope.$parent.addUnderNavSetting(scope.component._id, function (data) {
           scope.allowUndernav = data;
         });
         scope.addUndernavImages();

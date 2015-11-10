@@ -19,6 +19,9 @@
 				</ssb-page-section>
 
 			</div>
+			<div ng-if="vm.state.page.components.length && !vm.state.page.sections" >		
+					<ssb-component-loader ng-if="vm.state.page.components.length" ng-repeat="component in vm.state.page.components track by $index" ng-class="{ 'ssb-component-index': $index, 'ssb-section-layout': true }" component="component" state="vm.state" ui-state="vm.uiState"></ssb-component-loader>
+			</div>
 
 		</div>
 
