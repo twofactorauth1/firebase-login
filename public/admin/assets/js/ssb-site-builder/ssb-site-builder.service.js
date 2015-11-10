@@ -330,7 +330,8 @@
 			    },
 			    "mainmenu" : null
 			}
-			ssbService.page = testSectionsComponent;
+			//ssbService.page = testSectionsComponent;
+			ssbService.page = data;
 		}
 
 		function errorPage(error) {
