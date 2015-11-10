@@ -15,6 +15,13 @@
                         </li>
                     </ul>
                 </div>
+                <div class="col-xs-12">
+                    <ul class="unstyled-list padding-left-0">
+                        <li ng-repeat="addOn in addOns.list track by addOn._id">
+                            <billing-addon showselectbtn="{{true}}"></billing-addon>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
         <div class="col-md-6">

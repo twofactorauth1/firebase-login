@@ -346,7 +346,7 @@ _.extend(api.prototype, baseApi.prototype, {
                         self.log.debug('leadId:', leadId);
                         var billingDays = account.get('billing').trialLength;
                         self.log.debug('billingDays:', billingDays);
-                        var date_won = moment(new Date()).add(billingDays, 'days').toISOString()
+                        var date_won = moment(new Date()).add(billingDays, 'days').toISOString();
                         self.log.debug('date_won:', date_won);
                         var newop = {
                             "note": "",
@@ -377,7 +377,10 @@ _.extend(api.prototype, baseApi.prototype, {
                             fn(null, lead.id);
                         }
 
-                    });
+                    }), function(err){
+                        self.log.error('Exception creating lead in close:', err);
+                        fn(null, null);
+                    };
                 } else {
                     self.log.debug('skipping call to closeio');
                     return fn(null, null);

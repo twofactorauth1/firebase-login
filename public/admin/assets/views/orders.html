@@ -135,13 +135,13 @@
                                 <th class="column-width">
                                     <input st-search="status" placeholder="Status" class="form-control hidden" type="search" id="searchStatus" ng-model="filterorder.selected.value" />
                                     <ui-select ng-model="filterorder.selected" on-select="triggerInput('#searchStatus')" theme="bootstrap">
-                                        <ui-select-match placeholder="Select Status">
+                                        <ui-select-match placeholder="Select Status">{{$select.selected.name}}</ui-select-match>
                                             <!-- <span class="fa" ng-class="{'fa-facebook': $select.selected.type == 'fb'}"></span> -->
                                             <small ng-bind-html="$select.selected.name"></small>
                                             <button class="clear" ng-click="clear($event, '#searchStatus')">X</button>
-                                        </ui-select-match>
+                                        
                                         <ui-select-null-choice>No Status</ui-select-null-choice>
-                                        <ui-select-choices repeat="status in orderStatusOptions">
+                                        <ui-select-choices repeat="status in orderStatusOptions | filter: $select.search">
                                             <!-- <span class="fa" ng-class="{'fa-facebook': type.type == 'fb'}"></span> -->
                                             <small ng-bind-html="status.name | highlight: $select.search"></small>
                                         </ui-select-choices>
@@ -172,7 +172,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr ng-repeat="order in displayedOrders" ng-click="viewSingle(order)">
+                            <tr ng-repeat="order in displayedOrders" ng-click="viewSingle(order)" ng-style="tableView == 'grid' ? {'min-height':'420px'} : {'min-height' : '20px;'}">
                                 <td class="hidden-xs"><strong>Order ID: </strong> {{order.order_id}}</td>
                                 <td ng-class="{'center': tableView == 'list'}"><strong>Status: </strong>
                                     <span ng-if="tableView == 'list'" class="fa-stack fa-lg">

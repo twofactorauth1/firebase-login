@@ -1,0 +1,49 @@
+<div class="pricing-table pricing-blue" ng-class="{ selected: isSelectedAddon(addOn._id) }">
+    <ul class="plan plan2 margin-top-0">
+        <li class="plan-name">
+            {{addOn.name}}
+        </li>
+        
+        <li class="plan-price" ng-if="!billingSubscriptionUnavailable">
+            <h3 class="center">
+                <i class="fa fa-usd fa-1"></i>
+                <span class="price-dollars">{{priceDollars}}</span>
+                <span class="price-cents">{{priceCents}}</span>
+                <span> - One Time Fee</span>
+            </h3>
+        </li>
+
+        <li>
+            <i class="fa fa-check" style="color:#5cb85c"></i> <strong>Concierge Call</strong>
+        </li>
+
+        <li>
+            <i class="fa fa-check" style="color:#5cb85c"></i> <strong>Designer Built</strong>
+        </li>
+
+        <li>
+            <i class="fa fa-check" style="color:#5cb85c"></i> <strong>2 rounds of changes</strong>
+        </li>
+
+        <li>
+            <i class="fa fa-check" style="color:#5cb85c"></i> <strong>Existing content imported</strong>
+        </li>
+        
+
+        
+        <li ng-if="showSelectBtn">
+            <a
+                type="button" 
+                class="select-plan btn btn-success btn-block center" 
+                ng-click="addInvoiceItem(addOn._id)">
+                Add
+            </a>
+            <a
+                type="button" 
+                class="deselect-plan btn btn-success btn-block center" 
+                ng-click="removeInvoiceItem(addOn._id)">
+                Remove
+            </a>
+        </li>
+    </ul>
+</div>

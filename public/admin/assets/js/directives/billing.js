@@ -53,6 +53,23 @@ app.directive("billingSubscription", ['PaymentService', function (PaymentService
   }
 }]);
 
+app.directive("billingAddon", [ 'PaymentService', function(PaymentService){
+    return {
+        restrict: 'E',
+        templateUrl: '/admin/assets/views/partials/billingAddon.html',
+        link: function(scope, element, attrs) {
+            if (attrs.showselectbtn) {
+                scope.showSelectBtn = attrs.showselectbtn;
+            }
+            scope.priceDollars = ("" + scope.addOn.regular_price).split(".")[0];
+            scope.priceCents = ("" + scope.addOn.regular_price).split(".")[1] || "00";
+
+        }
+    };
+}
+
+]);
+
 app.directive("billingInvoiceTable", [function () {
   return {
     restrict: 'E',
