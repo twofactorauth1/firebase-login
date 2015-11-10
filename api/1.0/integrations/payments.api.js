@@ -15,6 +15,7 @@ var accountDao = require('../../../dao/account.dao');
 var paymentsManager = require('../../../payments/payments_manager');
 var contactActivityManager = require('../../../contactactivities/contactactivity_manager');
 var orderManager = require('../../../orders/order_manager');
+var productManager = require('../../../products/product_manager');
 var contactDao = require('../../../dao/contact.dao');
 var async = require('async');
 var affiliates_manager = require('../../../affiliates/affiliate_manager');
@@ -210,6 +211,8 @@ _.extend(api.prototype, baseApi.prototype, {
         var quantity = req.body.quantity;
         var application_fee_percent = req.body.application_fee_percent;
         var metadata = req.body.metadata;
+        var addOnArray = req.body.addOns;
+        self.log.debug('Received arguments coupon [' + coupon + '] and addOnArray:', addOnArray);
 
 
         var setupFee = 0;
@@ -255,6 +258,42 @@ _.extend(api.prototype, baseApi.prototype, {
                                 cb();
                             }
                         });
+                } else {
+                    cb();
+                }
+            },
+            function handleAddons(cb) {
+                if(addOnArray && addOnArray.length > 0) {
+                    /*
+                     * fetch the product, add an invoice item
+                     */
+                    async.each(addOnArray, function(addOn, done){
+                        productManager.getProduct(addOn, function(err, product){
+                            if(err) {
+                                self.log.error('Error fetching products:', err);
+                                done(err);
+                            } else {
+                                //TODO: handle sales
+                                var price = product.get('regular_price')*100;
+                                var description = product.get('name');
+                                stripeDao.createInvoiceItem(customerId, price, 'usd', null, null, description, null, null, function(err, value){
+                                    if(err) {
+                                        self.log.error('Error creating Stripe Invoice Item:', err);
+                                        done(err);
+                                    } else {
+                                        done();
+                                    }
+                                });
+                            }
+                        });
+                    }, function (err){
+                        if(err) {
+                            self.log.error('Error handling the addOns:', err);
+                            cb(err);
+                        } else {
+                            cb();
+                        }
+                    });
                 } else {
                     cb();
                 }
