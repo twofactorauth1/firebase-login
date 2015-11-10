@@ -51,8 +51,11 @@
     };
 
     $scope.changeInvoice = function (invoice, index) {
-      console.log('changeInvoice >>> ' + invoice.toJSON());
-      $scope.selectedInvoice = invoice;
+      if(invoice)
+      {
+        console.log('changeInvoice >>> ' + invoice.toJSON());
+        $scope.selectedInvoice = invoice;
+      }
       $scope.selectedItemIndex = index;
     };
 
