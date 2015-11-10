@@ -303,7 +303,7 @@
                                                         <span editable-text="emailToSend.subject" onbeforesave="analyzeSubject($data)">{{emailToSend.subject}}</span>
                                                         <div class="clearfix"></div>
                                                     </div>
-                                                    <div class="form-group margin-bottom-10" ng-show="subjectScore">
+                                                    <div class="form-group margin-bottom-10" ng-if="emailToSend.subject" ng-show="subjectScore">
                                                         <label> <a href="#" style="color:#858585" ng-click="openModal('subject-score-modal')">Subject Strength <span class="fa fa-info-circle"></span></a></label>
                                                         <label class="pull-right text-bold" ng-class="{'text-danger': subjectScore<25, 'text-warning': subjectScore>=25 && subjectScore<50, 'text-info': subjectScore>=50 && subjectScore<75, 'text-nephritis': subjectScore>=75}">
                                                             <span ng-if="subjectScore<30">Weak</span>
