@@ -157,7 +157,7 @@
       console.log('savePlanFn >>');
 
       if ($scope.currentUser.stripeId) {
-        PaymentService.postSubscribeToIndigenous($scope.currentUser.stripeId, planId, null, $scope.planStatus[planId], function (subscription) {
+        PaymentService.postSubscribeToIndigenous($scope.currentUser.stripeId, planId, null, $scope.planStatus[planId], $scope.selectedAddOns, $scope.Coupon, function (subscription) {
           $scope.cancelOldSubscriptionsFn();
           $scope.selectedPlan = subscription;
           console.log('$scope.selectedPlan:');
