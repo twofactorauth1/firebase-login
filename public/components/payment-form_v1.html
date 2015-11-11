@@ -23,14 +23,14 @@
                         <span class="error help-block" />
                     </div>
                     <!-- First Name -->
-                    <div id="first" class="hidden form-group col-xs-12 col-sm-6 has-feedback" >
+                    <div id="first" class="form-group col-xs-12 col-sm-6 has-feedback" >
                         <label>First Name</label>
                         <input class="form-control input-lg" type="text" ng-change="checkFirstName(newAccount)" ng-model-options="{ debounce: 800 }" ng-model="newAccount.first" placeholder="{{newAccount.first}}" />
                         <span class="glyphicon form-control-feedback"></span>
                         <span class="error help-block" />
                     </div>
                     <!-- Last Name -->
-                    <div id="last" class="hidden form-group col-xs-12 col-sm-6 has-feedback">
+                    <div id="last" class="form-group col-xs-12 col-sm-6 has-feedback">
                         <label>Last Name</label>
                         <input class="form-control input-lg" type="text" ng-change="checkLastName(newAccount)" ng-model-options="{ debounce: 800 }" ng-model="newAccount.last" />
                         <span class="glyphicon form-control-feedback"></span>
