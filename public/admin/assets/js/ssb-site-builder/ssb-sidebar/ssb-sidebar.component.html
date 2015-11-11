@@ -91,7 +91,9 @@
 								<ul class="list-unstyled">
 									<li ng-repeat="component in section.components track by $index">
 										<accordion close-others="oneAtATime" class="accordion">
-											<accordion-group heading="{{component.type}}">
+											<accordion-group heading="{{component.type}}"
+												is-open="vm.uiState.accordion.sections[$parent.$index].components[$index].isOpen" 
+												ng-click="vm.togglePageSectionComponentAccordion($index)">
 												<ul class="list-unstyled">
 													<li>
 														<accordion close-others="oneAtATime" class="accordion">
@@ -123,25 +125,6 @@
 					</accordion>
 				</li>
 			</ul>
-			<!-- Old structure of page -->
-			<!-- <h4 ng-if="!vm.state.page.sections && vm.state.page.components" class="ssb-sidebar-sub-heading">Page Components</h4>
-			<ul class="list-unstyled" ng-if="!vm.state.page.sections && vm.state.page.components">
-				<li ng-repeat="component in vm.state.page.components track by $index">
-					<accordion close-others="oneAtATime" class="accordion">
-						<accordion-group heading="{{component.type}}">
-							<ul class="list-unstyled">
-								<li>
-									<accordion close-others="oneAtATime" class="accordion">
-										<div ng-if="component.type" ng-include=" 'assets/js/ssb-site-builder/ssb-user-components/' + component.type + '/sidebar.settings.html' "></div>
-										<ssb-action-buttons save-action="vm.savePage()" cancel-action="vm.cancelPendingEdits()" ng-show="vm.state.pendingChanges"></ssb-action-buttons>
-									</accordion>
-								</li>
-							</ul>
-						</accordion-group>
-					</accordion>
-				</li>
-			</ul>
-			<ssb-action-buttons save-action="vm.savePage()" cancel-action="vm.cancelPendingEdits()" ng-show="vm.state.pendingChanges"></ssb-action-buttons> -->
 		</section>
 
 	</div>

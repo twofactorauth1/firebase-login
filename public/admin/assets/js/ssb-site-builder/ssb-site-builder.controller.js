@@ -2,11 +2,11 @@
 
 app.controller('SiteBuilderController', ssbSiteBuilderController);
 
-ssbSiteBuilderController.$inject = ['$scope', '$rootScope', '$attrs', '$filter', 'SimpleSiteBuilderService', '$stateParams'];
+ssbSiteBuilderController.$inject = ['$scope', '$rootScope', '$attrs', '$filter', 'SimpleSiteBuilderService', '$stateParams', '$modal'];
 /* @ngInject */
-function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSiteBuilderService, $stateParams) {
+function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSiteBuilderService, $stateParams, $modal) {
 
-    console.info('site-build directive init...')
+    console.info('site-builder directive init...')
 
     var vm = this;
 
@@ -77,6 +77,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         $rootScope.app.layout.isSidebarClosed = true;
 
         vm.uiStateOriginal = angular.copy(vm.uiState);
+
     }
 
     function savePage() {
@@ -103,26 +104,20 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         if (index !== undefined) {
             vm.uiState.accordion.sections = {};
             vm.uiState.activeSectionIndex = index;
-            // vm.uiState.activeSection = vm.state.page.sections[activeElements.section];
-            // vm.uiState.activeSection.components.isOpen = vm.state.activeComponent;
-            // vm.uiState.componentEditing = vm.uiState.sectionEditing[vm.state.activeComponent];
-            // vm.uiState.accordion.sections[activeElements.section] = true;
             vm.uiState.accordion.sections.isOpen = true;
             vm.uiState.accordion.sections[index] = {};
             vm.uiState.accordion.sections[index].isOpen = true;
-            // vm.uiState.accordion.sections[activeElements.section].comonents[activeElements.component] = true;
-            // vm.uiState.accordion.sections[activeElements.section].components.isOpen = true;
         }
     }
 
     function updateActiveComponent(index) {
         if (index !== undefined) {
-            vm.uiState.accordion.sections = {};
-            vm.uiState.accordion.sections.isOpen = true;
             vm.uiState.activeComponentIndex = index;
             vm.uiState.accordion.sections[vm.uiState.activeSectionIndex].components[index].isOpen = true;
         }
     }
+
+    
 
 }
 

@@ -2,12 +2,12 @@
 <div class="form-group hidden">
     <label>Custom Spacing:</label>
     <span tooltip-placement="top" tooltip-html-unsafe="Use Page Settings for Spacing Settings"><i class="fa fa-info-circle" /></span>
-    <switch ng-model="componentEditing.spacing.usePage" class="pull-right"></switch>
+    <switch ng-model="component.spacing.usePage" class="pull-right"></switch>
     <span class="help-block">Spacing will inherit page spacing unless switched on.</span>
 </div>
 <div class="form-group">
     <label>Max Width</label>
-    <ui-select ng-model="componentEditing.spacing.mw" theme="bootstrap" ng-disabled="componentEditing.spacing.usePage">
+    <ui-select ng-model="component.spacing.mw" theme="bootstrap" ng-disabled="component.spacing.usePage">
         <ui-select-match placeholder="Select a Resolution">
             <small ng-bind-html="$select.selected"></small>
         </ui-select-match>
@@ -19,13 +19,13 @@
 <div class="well margin-bottom-0 partition-light-primary">
     <label class="text-white lead">Margin</label>
     <div class="spacing-mt">
-        <input type="text" ng-model="componentEditing.spacing.mt" touchspin data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down" ng-disabled="componentEditing.spacing.usePage">
+        <input type="text" ng-model="component.spacing.mt" touchspin data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down" ng-disabled="component.spacing.usePage">
     </div>
     <div class="col-xs-2">
         <div class="spacing-ml">
-            <input type="text" ng-model="componentEditing.spacing.ml" touchspin data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down" ng-disabled="componentEditing.spacing.usePage">
+            <input type="text" ng-model="component.spacing.ml" touchspin data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down" ng-disabled="component.spacing.usePage">
             <div class="checkbox clip-check check-primary checkbox-inline">
-                <input type="checkbox" id="margin-left" ng-model="componentEditing.spacing.ml" ng-true-value="'auto'" ng-false-value="'0'" ng-disabled="componentEditing.spacing.usePage">
+                <input type="checkbox" id="margin-left" ng-model="component.spacing.ml" ng-true-value="'auto'" ng-false-value="'0'" ng-disabled="component.spacing.usePage">
                 <label for="margin-left" class="text-white">
                     Auto
                 </label>
@@ -36,29 +36,29 @@
         <div class="well partition-dark-primary">
             <label class="text-white lead">Padding</label>
             <div class="spacing-pt">
-                <input type="text" ng-model="componentEditing.spacing.pt" touchspin data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down" ng-disabled="componentEditing.spacing.usePage">
+                <input type="text" ng-model="component.spacing.pt" touchspin data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down" ng-disabled="component.spacing.usePage">
             </div>
             <div class="col-xs-6">
                 <div class="spacing-pl">
-                    <input type="text" ng-model="componentEditing.spacing.pl" touchspin data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down" ng-disabled="componentEditing.spacing.usePage">
+                    <input type="text" ng-model="component.spacing.pl" touchspin data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down" ng-disabled="component.spacing.usePage">
                 </div>
             </div>
             <div class="col-xs-6">
                 <div class="spacing-pr">
-                    <input type="text" ng-model="componentEditing.spacing.pr" touchspin data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down" ng-disabled="componentEditing.spacing.usePage">
+                    <input type="text" ng-model="component.spacing.pr" touchspin data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down" ng-disabled="component.spacing.usePage">
                 </div>
             </div>
             <div class="clearfix margin-bottom-15"></div>
             <div class="spacing-pb">
-                <input type="text" ng-model="componentEditing.spacing.pb" touchspin data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down" ng-disabled="componentEditing.spacing.usePage">
+                <input type="text" ng-model="component.spacing.pb" touchspin data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down" ng-disabled="component.spacing.usePage">
             </div>
         </div>
     </div>
     <div class="col-xs-2">
         <div class="spacing-mr">
-            <input type="text" ng-model="componentEditing.spacing.mr" touchspin data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down" ng-disabled="componentEditing.spacing.usePage">
+            <input type="text" ng-model="component.spacing.mr" touchspin data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down" ng-disabled="component.spacing.usePage">
             <div class="checkbox clip-check check-primary checkbox-inline">
-                <input type="checkbox" id="margin-right" ng-model="componentEditing.spacing.mr" ng-true-value="'auto'" ng-false-value="'0'" ng-disabled="componentEditing.spacing.usePage">
+                <input type="checkbox" id="margin-right" ng-model="component.spacing.mr" ng-true-value="'auto'" ng-false-value="'0'" ng-disabled="component.spacing.usePage">
                 <label class="text-white" for="margin-right">
                     Auto
                 </label>
@@ -67,7 +67,7 @@
     </div>
     <div class="clearfix"></div>
     <div class="spacing-mb">
-        <input type="text" ng-model="componentEditing.spacing.mb" touchspin data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down" ng-disabled="componentEditing.spacing.usePage">
+        <input type="text" ng-model="component.spacing.mb" touchspin data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down" ng-disabled="component.spacing.usePage">
     </div>
 </div>
 <div class="clearfix"></div>

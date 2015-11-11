@@ -6372,6 +6372,7 @@ a[href="https://froala.com/wysiwyg-editor"] {
 }
 .ssb-sidebar .accordion .panel-heading .accordion-toggle {
   background: #fff;
+  text-transform: capitalize;
 }
 .ssb-sidebar .sortable-chosen .accordion .panel-heading .accordion-toggle {
   background: #ddd;
