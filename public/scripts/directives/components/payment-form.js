@@ -84,6 +84,39 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
             // scope.yearly_sub_cost = 32.91;
             // scope.selected_sub_cost = scope.monthly_sub_cost;
 
+            scope.showExtension = '';
+            scope.$watch('newAccount.phone', function (newValue){
+                if (newValue !== undefined && newValue != '') {
+                    scope.showExtension = true;
+                } else {
+                    scope.showExtension = false;
+                }
+            });
+
+            scope.$watch('newAccount.fullName', function (newValue) {
+                if (newValue !== undefined) {
+                    var nameSplit = newValue.match(/\S+/g);
+                    if (nameSplit) {
+                        if (nameSplit.length >= 3) {
+                            scope.newAccount.first = nameSplit[0];
+                            scope.newAccount.middle = nameSplit[1];
+                            scope.newAccount.last = nameSplit[2];
+                        } else if (nameSplit.length === 2) {
+                            scope.newAccount.first = nameSplit[0];
+                            scope.newAccount.middle = '';
+                            scope.newAccount.last = nameSplit[1];
+                        } else if (nameSplit.length === 1) {
+                            scope.newAccount.first = nameSplit[0];
+                            scope.newAccount.middle = '';
+                            scope.newAccount.last = '';
+                        }
+                    } else {
+                        scope.newAccount.first = '';
+                        scope.newAccount.middle = '';
+                        scope.newAccount.last = '';
+                    }
+                }
+            }, true);
 
             scope.removeAccount = function(type) {
                 scope.newAccount.businessName = null;

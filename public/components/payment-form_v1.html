@@ -16,15 +16,21 @@
                     <h3 class="center">No credit card required.</h3>
                 </div>
                 <div class="well">
+                    <div id="fullName" class="form-group col-xs-12 has-feedback">
+                        <label>Full Name</label>
+                        <input class="form-control input-lg" type="text" ng-model="newAccount.fullName" />
+                        <span class="glyphicon form-control-feedback"></span>
+                        <span class="error help-block" />
+                    </div>
                     <!-- First Name -->
-                    <div id="first" class="form-group col-xs-12 col-sm-6 has-feedback" >
+                    <div id="first" class="hidden form-group col-xs-12 col-sm-6 has-feedback" >
                         <label>First Name</label>
-                        <input class="form-control input-lg" type="text" ng-change="checkFirstName(newAccount)" ng-model-options="{ debounce: 800 }" ng-model="newAccount.first" />
+                        <input class="form-control input-lg" type="text" ng-change="checkFirstName(newAccount)" ng-model-options="{ debounce: 800 }" ng-model="newAccount.first" placeholder="{{newAccount.first}}" />
                         <span class="glyphicon form-control-feedback"></span>
                         <span class="error help-block" />
                     </div>
                     <!-- Last Name -->
-                    <div id="last" class="form-group col-xs-12 col-sm-6 has-feedback">
+                    <div id="last" class="hidden form-group col-xs-12 col-sm-6 has-feedback">
                         <label>Last Name</label>
                         <input class="form-control input-lg" type="text" ng-change="checkLastName(newAccount)" ng-model-options="{ debounce: 800 }" ng-model="newAccount.last" />
                         <span class="glyphicon form-control-feedback"></span>
@@ -48,31 +54,31 @@
                                 'glyphicon-ok': domainExistsAlready!==undefined && !domainExistsAlready}"></span>
                         <span class="error help-block" ng-if="domainExistsAlready">Domain Already Exists</span>
                         <span class="error help-block" ng-if="emptyBusinessName">Business Name Required</span>
-                        <span class="help-block" ng-show="newAccount.businessName && validBusinessName">Your Indigenous URL will be <strong>{{newAccount.businessName | urlFilter}}.indigenous.io</strong> and will be changed once your site is ready to publish.</span>
+                        <span class="help-block" ng-show="newAccount.businessName && validBusinessName">Your Indigenous URL will be <strong>{{newAccount.businessName | urlFilter}}.indigenous.io</strong> and can be changed once your site is ready to publish.</span>
                     </div>                    
                     <!-- Phone Number -->
-                    <div id="phone" class="form-group col-xs-12 has-feedback">
-                        <label>Phone Number</label>
+                    <div id="phone" class="form-group col-xs-6 has-feedback">
+                        <label>Phone Number (Optional)</label>
                         <input class="form-control input-lg" type="text" ng-model="newAccount.phone" mask="(999) 999-9999" clean="true" mask-restrict='reject' />
-                        <span class="help-block">Provide your number so a trial coach can help get you started.</span>
                         <span class="glyphicon form-control-feedback"></span>
                         <span class="error help-block" />
                     </div>
                     <!-- Phone Extension -->
-                    <div id="extension" class="form-group col-xs-12 has-feedback">
+                    <div ng-if="showExtension" id="extension" class="form-group col-xs-6 has-feedback">
                         <label>Phone Extension</label>
                         <input class="form-control input-lg" type="text" ng-model="newAccount.extension" ng-change="checkPhoneExtension(newAccount)" ng-model-options="{ debounce: 800 }"/>
-                        <span class="help-block">Provide your phone extension (If any).</span>
                         <span class="glyphicon form-control-feedback"></span>
                         <span class="error help-block" />
+                    </div>
+                    <div ng-if="!showExtension" class="form-group col-xs-6">
+                        <span class="help-block"><br />Provide your phone number so a trial coach can help get you started.</span>
                     </div>
                     <!-- EMAIL AND PASSOWORD -->
                     <div id="email" class="form-group col-xs-12 has-feedback" ng-hide="tmpAccount.tempUser">
                         <label>Email</label>
                         <input class="form-control input-lg" type="email" ng-model="newAccount.email" ng-pattern="emailValidation" ng-change="checkEmailExists(newAccount)" ng-model-options="{ debounce: 800 }" />
                         <span class="help-block">Your email address will become your username.</span>
-                        <span class="glyphicon form-control-feedback"></span>
-                        <span class="error help-block" />
+                        <span class="glyphicon form-control-feedback"></span><span class="error help-block" />
                     </div>
                     <div id="password" class="form-group col-xs-12 has-feedback" ng-hide="newAccount.hidePassword">
                         <label>Password</label>
