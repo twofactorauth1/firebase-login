@@ -6,7 +6,8 @@ app.directive('blogComponent', ['$filter', '$timeout', 'WebsiteService', 'toaste
     scope: {
       component: '=',
       media: '&',
-      control: '='
+      control: '=',
+      ssbEditor: '='
     },
     templateUrl: '/components/component-wrap.html',
     link: function (scope, element, attrs) {
