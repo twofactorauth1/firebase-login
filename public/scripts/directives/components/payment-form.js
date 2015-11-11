@@ -319,15 +319,15 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                     scope.validateForm = false;
                 }
 
-                if (!scope.newAccount.first) {
-                    scope.checkFirstName(newAccount);
-                    scope.validateForm = false;
-                }
+                //if (!scope.newAccount.first) {
+                //    scope.checkFirstName(newAccount);
+                //    scope.validateForm = false;
+                //}
 
-                if (!scope.newAccount.last) {
-                    scope.checkLastName(newAccount);
-                    scope.validateForm = false;
-                }
+                //if (!scope.newAccount.last) {
+                //    scope.checkLastName(newAccount);
+                //    scope.validateForm = false;
+                //}
 
                 if(!scope.newAccount.hidePassword) {
                     scope.checkPasswordLength(newAccount);
