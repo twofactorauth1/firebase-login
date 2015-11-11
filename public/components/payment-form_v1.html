@@ -19,7 +19,7 @@
                     <!-- EMAIL AND PASSOWORD -->
                     <div id="email" class="form-group col-xs-12 has-feedback" ng-hide="tmpAccount.tempUser">
                         <label>Email</label>
-                        <input class="form-control input-lg" type="email" ng-model="newAccount.email" ng-pattern="emailValidation" ng-change="checkEmailExists(newAccount)" ng-model-options="{ debounce: 800 }" />
+                        <input class="form-control input-lg" type="email" ng-model="newAccount.email" ng-pattern="emailValidation" ng-change="checkEmailExists(newAccount)" ng-model-options="{ debounce: 800 }" name="email" />
                         <span class="help-block">Your email address will be your username.</span>
                         <span class="glyphicon form-control-feedback"></span><span class="error help-block" />
                     </div>
