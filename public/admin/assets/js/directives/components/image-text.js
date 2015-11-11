@@ -4,7 +4,8 @@
 app.directive('imageTextComponent', function () {
   return {
     scope: {
-      component: '='
+      component: '=',
+      ssbEditor: '='
     },
     templateUrl: '/components/component-wrap.html',
     link: function (scope, element, attrs) {

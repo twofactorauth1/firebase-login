@@ -5,7 +5,8 @@ app.directive('navigationComponent', ['WebsiteService', 'AccountService', functi
   return {
     scope: {
       component: '=',
-      version: '='
+      version: '=',
+      ssbEditor: '='
     },
     templateUrl: '/components/component-wrap.html',
     link: function (scope, element, attrs) {

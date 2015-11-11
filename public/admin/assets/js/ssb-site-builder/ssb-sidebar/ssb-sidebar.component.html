@@ -1,96 +1,132 @@
-<div>
-	<accordion close-others="oneAtATime" class="accordion">
-		<accordion-group heading="Site Settings">
-			<ul class="list-unstyled center">
-					<accordion close-others="oneAtATime" class="accordion">
-				        <accordion-group heading="Page 1">
-				            <ul class="list-unstyled center">
-								<li>
-									<a href>Thing1</a>
-								</li>
-								<li>
-									<a href>Thing2</a>
-								</li>
-								<li>
-									<a href>Thing3</a>
-								</li>
-							</ul>
-				        </accordion-group>
-				    </accordion>
+<div class="ssb-sidebar-inner" ng-class="vm.navigation.indexClass">
+	
+	<div class="site-editor-group editor-group">
+		<div class="ssb-sidebar-heading">
+			<h4>Site Settings</h4>
+		</div>
+		<section>
+	        <h4 class="ssb-sidebar-sub-heading">Template</h4>
+	        <p>
+	        	DEFAULT
+	        </p>
+	        <ul>
+	        	<li>Theme</li>
+	        	<li>page2</li>
+	        </ul>
+	    </section>
+		<section>
+	        <h4 class="ssb-sidebar-sub-heading">Main Menu</h4>
+	        <ul>
+	        	<li><button page-id="123456" ng-click="vm.navigation.loadPage(this.pageId)">{{vm.state.page.title}} -> </button></li>
+	        	<li>page2</li>
+	        	<li>page3</li>
+	        	<li>page4</li>
+	        </ul>
+	    </section>
+	    <section>
+	        <h4 class="ssb-sidebar-sub-heading">Other Pages</h4>
+	        <ul>
+	        	<li>page1</li>
+	        	<li>page2</li>
+	        </ul>
+	    </section>
+	</div>
+	
+	<div class="page-editor-group editor-group">
+		
+		<div class="ssb-sidebar-heading">
+			<div class="ti-arrow-left" ng-click="vm.navigation.back()"></div>
+			<h4>{{vm.state.page.title}}</h4>
+		</div>
+		
+		<section>
+	        <h4 class="ssb-sidebar-sub-heading">Page Settings</h4>
+	        <ul class="list-unstyled ssb-settings-list">
+				<li>
+					<a href>Setting1</a>
 				</li>
 				<li>
-					<accordion close-others="oneAtATime" class="accordion">
-				        <accordion-group heading="Page 2">
-				            <ul class="list-unstyled center">
-								<li>
-									<a href>Thing1</a>
-								</li>
-								<li>
-									<a href>Thing2</a>
-								</li>
-								<li>
-									<a href>Thing3</a>
-								</li>
-							</ul>
-				        </accordion-group>
-				    </accordion>
+					<a href>Setting2</a>
 				</li>
 				<li>
-					<accordion close-others="oneAtATime" class="accordion">
-				        <accordion-group heading="Page 3">
-				            <ul class="list-unstyled center">
-								<li>
-									<a href>Thing1</a>
-								</li>
-								<li>
-									<a href>Thing2</a>
-								</li>
-								<li>
-									<a href>Thing3</a>
-								</li>
-							</ul>
-				        </accordion-group>
-				    </accordion>
+					<a href>Setting3</a>
 				</li>
 			</ul>
-		</accordion-group>
-        <accordion-group heading="Page Settings">
-            <ul class="list-unstyled center">
-				<li>
-					<a href>Thing1</a>
-				</li>
-				<li>
-					<a href>Thing2</a>
-				</li>
-				<li>
-					<a href>Thing3</a>
-				</li>
-			</ul>
-        </accordion-group>
-        <accordion-group heading="Components" is-open="vm.uiState.accordion.components.isOpen">
-			<ul class="list-unstyled">
-				<li ng-repeat="component in vm.state.page.components track by $index">
+		</section>
+		
+		<section>
+	        <h4 ng-if="vm.state.page.sections" class="ssb-sidebar-sub-heading">Page Sections</h4>
+			<ul ng-if="vm.state.page.sections" class="list-unstyled" ng-sortable="vm.sortableOptions" ng-model="vm.state.page.sections">
+				<li ng-repeat="section in vm.state.page.sections track by $index" class="ssb-page-section-settings-item">
+					<div class="ssb-sidebar-handle ti-move display-ib"></div>
 					<accordion close-others="oneAtATime" class="accordion">
-						<accordion-group heading="{{component.type}}" is-open="vm.uiState.accordion.components[$index]" ng-click="vm.setActiveSection($index)">
-							<ul class="list-unstyled">
-								<li>
-									<accordion close-others="oneAtATime" class="accordion">
-										<accordion-group heading="Basic">
-											<div ng-include=" 'assets/js/ssb-site-builder/ssb-sidebar/views/basic.html' "></div>
-										</accordion-group>
-										<!-- <accordion-group heading="Spacing">
-											<div ng-include=" 'assets/js/ssb-site-builder/ssb-sidebar/views/spacing.html' "></div>
-										</accordion-group> -->
-									</accordion>
-								</li>
-							</ul>
+						<accordion-group heading="{{section.layout}} Section"
+							is-open="vm.uiState.accordion.sections[$index].isOpen" 
+							ng-click="vm.togglePageSectionAccordion($index)" 
+							ng-class="{ 'ssb-sidebar-section-open': vm.uiState.accordion.sections[$index].isOpen }">
+
+							<div class="form-group">
+								<h5>Layout</h5>
+
+								<div class="radio">
+									<label>
+										<input type="radio" ng-model="section.layout" value="1-col"/> 1 Column
+									</label>
+								</div>
+								<div class="radio">
+									<label>
+										<input type="radio" ng-model="section.layout" value="2-col"/> 2 Column
+									</label>
+								</div>
+								<div class="radio">
+									<label>
+										<input type="radio" ng-model="section.layout" value="3-col"/> 3 Column
+									</label>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<h5>Components</h5>
+
+								<ul class="list-unstyled">
+									<li ng-repeat="component in section.components track by $index">
+										<accordion close-others="oneAtATime" class="accordion">
+											<accordion-group heading="{{component.type}}"
+												is-open="vm.uiState.accordion.sections[$parent.$index].components[$index].isOpen" 
+												ng-click="vm.togglePageSectionComponentAccordion($index)">
+												<ul class="list-unstyled">
+													<li>
+														<accordion close-others="oneAtATime" class="accordion">
+															<div ng-if="component.type !== undefined" ng-include=" 'assets/js/ssb-site-builder/ssb-user-components/' + component.type + '/sidebar.settings.html' "></div>
+															<ssb-action-buttons save-action="vm.savePage()" cancel-action="vm.cancelPendingEdits()" ng-show="vm.state.pendingChanges"></ssb-action-buttons>
+														</accordion>
+													</li>
+												</ul>
+											</accordion-group>
+										</accordion>
+									</li>
+									<li>
+										<accordion close-others="oneAtATime" class="accordion" ng-click="vm.getSystemComponents()">
+											<accordion-group heading="Add + ">
+												<ul class="list-unstyled">
+													<li ng-repeat="component in vm.systemComponents track by $index" ng-click="vm.addComponentToSection(component, $parent.$index)" class="center">
+														<img src="{{component.preview}}" alt="{{component.type}}" />
+														{{component.type}}
+													</li>
+												</ul>
+											</accordion-group>
+										</accordion>
+									</li>
+								</ul>
+							</div>
+
 						</accordion-group>
+
 					</accordion>
 				</li>
 			</ul>
-		</accordion-group>
-	</accordion>
+		</section>
 
-	<ssb-action-buttons save-action="vm.savePage()" cancel-action="vm.cancelPendingEdits()"></ssb-action-buttons>
+	</div>
 
 </div>

@@ -1,22 +1,30 @@
 <div>
-
-	<ssb-sidebar state="vm.state" ng-class="{ 'ssb-sidebar-show': vm.uiState.show.sidebar, 'ssb-sidebar': true }"></ssb-sidebar>
-
+	<ssb-sidebar state="vm.state" ui-state="vm.uiState" ng-class="{ 'ssb-sidebar-show': vm.uiState.show.sidebar, 'ssb-sidebar': true }"></ssb-sidebar>
+	
 	<div class="ssb-main" ng-class="{ 'ssb-main-full-width': !vm.uiState.show.sidebar }">
-		<h2>Site Name: {{vm.state.website.title}}</h2>
-		<h2>Page Name: {{vm.state.page.title}}</h2>
 		
-		<button class="pull-right" ng-click="vm.toggleSidebarFlyover()">Toggle Sidebar/Flyover</button>
-		
+		<ssb-action-buttons save-action="vm.savePage()" cancel-action="vm.cancelPendingEdits()" ng-show="vm.state.pendingChanges"></ssb-action-buttons>
+
 		<div id="componentloader">
-			<div ng-repeat="component in vm.state.page.components track by $index" ng-class="{ 'ssb-active-section': $index === vm.state.activeSection, 'ssb-component-container': true }">
-				<ssb-component-loader component="component" state="vm.state"></ssb-component-loader>		
-				<ssb-edit-control ng-class="{ 'ssb-edit-control': true }" state="vm.state" component="component" index="$index"></ssb-edit-control>
+			
+			<div ng-if="vm.state.page.sections.length">
+			
+				<ssb-page-section 
+					ng-repeat="section in vm.state.page.sections track by $index" 
+					section="section" 
+					index="$index"
+					ng-class="{ 'ssb-active-section': $index === vm.uiState.activeSectionIndex }" 
+					class="ssb-page-section" 
+					state="vm.state" 
+					ui-state="vm.uiState">
+				</ssb-page-section>
+
 			</div>
+
 		</div>
 
 	</div>
 
-	<ssb-flyover state="vm.state" ng-class="{ 'ssb-flyover-show': vm.uiState.show.flyover && vm.state.activeSection !== undefined, 'ssb-flyover': true }"></ssb-flyover>
+	<!-- <ssb-flyover state="vm.state" ui-state="vm.uiState" ng-class="{ 'ssb-flyover-show': vm.uiState.show.flyover && vm.uiState.activeSectionIndex !== undefined, 'ssb-flyover': true }"></ssb-flyover> -->
 
 </div>

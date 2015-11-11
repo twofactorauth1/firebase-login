@@ -6,7 +6,8 @@ app.directive('thumbnailSliderComponent', ['$window', '$timeout', function ($win
     scope: {
       component: '=',
       media: '&',
-      control: '='
+      control: '=',
+      ssbEditor: '='
     },
     templateUrl: '/components/component-wrap.html',
     link: function (scope, element, attrs) {

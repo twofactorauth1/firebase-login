@@ -3,7 +3,8 @@
 app.directive('productsComponent', ['ProductService', '$location', '$timeout', function (ProductService, $location, $timeout) {
   return {
     scope: {
-      component: '='
+      component: '=',
+      ssbEditor: '='
     },
     templateUrl: '/components/component-wrap.html',
     link: function (scope) {

@@ -13,7 +13,7 @@ function ssbSiteBuilderEditControlController($scope, $attrs, $filter, SimpleSite
     vm.somethingEditControl = 'something edit control';
     vm.init = init;
     vm.setActiveSection = setActiveSection;
-    vm.uiState = {};
+    // vm.uiState = {};
 
     function setActiveSection(index) {
     	SimpleSiteBuilderService.setActiveSection(index);

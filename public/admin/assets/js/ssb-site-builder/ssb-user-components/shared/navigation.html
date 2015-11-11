@@ -2,7 +2,7 @@
     <div class="form-group">
         <label for="component-title">Custom Nav</label>
         <span tooltip-placement="top" tooltip-html-unsafe="Allows the user to create a custom nav for this page only."><i class="fa fa-info-circle" /></span>
-        <switch ng-model="componentEditing.customnav" class="pull-right" ng-change="saveComponent()"></switch>
+        <switch ng-model="vm.uiState.componentEditing.customnav" class="pull-right" ng-change="saveComponent()"></switch>
     </div>
     <hr />
     <div>
@@ -60,7 +60,7 @@
         </div>
     </div>
     <div class="clearfix"></div>
-    <div ng-if="!componentEditing.customnav" id="reorderNavBarContainer" class="form-group">
+    <div ng-if="!vm.uiState.componentEditing.customnav" id="reorderNavBarContainer" class="form-group">
         <ul ng-hide="" ng-sortable="barConfig" class="component-sortable" ng-class="{'dragging': dragging}" ng-model="mainMenu.links" class="nav-bar" data-ng-repeat="mainMenu in website.linkLists track by $index" data-ng-if="mainMenu.handle=='head-menu' ">
             <li data-ng-repeat="link in mainMenu.links track by $index" class="margin-bottom-10 fragment">
                 <div class="head-menu-links" data-label="{{link.label}}">
@@ -133,8 +133,8 @@
             </li>
         </ul>
     </div>
-    <div ng-if="componentEditing.customnav" id="reorderNavBarContainer" class="form-group">
-        <ul ng-sortable="barConfig" class="component-sortable" ng-model="customMenu.links" ng-class="{'dragging': dragging}" class="nav-bar" data-ng-repeat="customMenu in componentEditing.linkLists track by $index" data-ng-if="customMenu.handle=='head-menu' ">
+    <div ng-if="vm.uiState.componentEditing.customnav" id="reorderNavBarContainer" class="form-group">
+        <ul ng-sortable="barConfig" class="component-sortable" ng-model="customMenu.links" ng-class="{'dragging': dragging}" class="nav-bar" data-ng-repeat="customMenu in vm.uiState.componentEditing.linkLists track by $index" data-ng-if="customMenu.handle=='head-menu' ">
             <li data-ng-repeat="link in customMenu.links track by $index" class="margin-bottom-10 fragment">
                 <div class="head-menu-links" data-label="{{link.label}}">
                     <div class="container-fluid">
