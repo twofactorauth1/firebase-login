@@ -1,3 +1,12 @@
+
+@indigenous-blue: #47B8D9;
+
+//TODO: pay for froala
+a[href="https://froala.com/wysiwyg-editor"] {
+    display: none!important;
+}
+
+
 .ssb-site-builder-container {
 	height: 100%;
 	height: calc(~"100vh - 65px");
@@ -12,6 +21,17 @@
 	display: block;
 
 	.ssb-main {
+
+		& > ssb-action-buttons {
+			position: fixed;
+			left: 60%;
+			top: 60px;
+			z-index: 1;
+			// background: @indigenous-blue;	
+			background: rgba(71,184,217, 0.75);
+			padding: .25em 1em 1.15em;
+		}
+
 		@media screen and (min-width: 768px) {
 			// float: left;
 		    height: 100%;
@@ -19,7 +39,13 @@
 		    position: relative;
 		    top: 0;
 		    left: 30%;
+		    box-shadow: 0px -1px 3px 1px rgba(0, 0, 0, .5);
+    		float: left;
 		}
+	}
+
+	#componentloader {
+		overflow: visible;
 	}
 
 	.ssb-main.ssb-main-full-width {
@@ -27,8 +53,26 @@
 		left: 0;
 	}
 
-	.ssb-component-container {
+	.ssb-page-section {
 		position: relative;
+		float: left;
+	    width: 100%;
+	    clear: both;
+	    border: inset solid 1px transparent;
+	    // z-index: 1;
+
+		&:hover .ssb-settings-btn {
+			display: block;
+		}
+
+		//TODO: make setting
+		.row {
+			margin: 0 !important;
+			[class*="col-"] {
+				padding-left: 0 !important;
+				padding-right: 0 !important;
+			}
+		}
 	}
 
 	.ssb-edit-control {
@@ -52,7 +96,24 @@
 			font-size: 1em;
 		}
 
+		.ssb-settings-btn i {
+			display: inline-block;
+			float: none;
+			position: static;
+			height: 40px;
+			line-height: 40px;
+			color: white;
+			vertical-align: top;
+			opacity: 1;
+			font-size: 1em;
+			width: 100%;
+    		text-align: center;
+		}
+
 		.ssb-settings-btn {
+			display: none;
+
+			//triangle
 			color: white!important;
 		    fill: currentColor;
 		    position: absolute;
@@ -65,13 +126,31 @@
 		    transform: rotate(-90deg);
 		    cursor: pointer;
 
+		    //circle-ify
+		    border: none;
+		    transform: none;
+		    top: 2px;
+		    left: 2px;
+		    background: @indigenous-blue;
+		    border-radius: 5em;
+		    box-shadow: 0px 1px 4px rgba(0,0,0,0.5);
+
 		    .ti-settings {
+		    	//triangle
 			    position: absolute;
 			    background: transparent;
 			    // transform: translate(.5em, .5em);
 			    font-size: 15px;
 			    left: -21px;
     			top: -48px;
+
+    			//circle-ify
+    			font-size: 1.5em;
+			    left: 50%;
+			    top: 25%;
+			    width: 100%;
+			    height: 100%;
+			    transform: translate(-25%,-25%);
 		    }
 		
 		}
@@ -100,7 +179,7 @@
 		padding-left: 3em;
 
 		.ssb-settings-btn {
-			background: black;
+			// background: black;
 		}
 
 		.ssb-edit-control-inactive {
@@ -108,12 +187,27 @@
 		}
 
 		.ssb-edit-control-active {
-			display: inline-block;
+			// display: inline-block;
 		}
 	}
 
 	.ssb-active-section {
-		background: red;
+		&:before {
+			z-index: 1;
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			content: '';
+			display: block;
+			box-shadow: 0px 0px 0px 8px rgba(71,184,217, 0.75);
+		}
+	}
+
+	.edit-wrap:hover .editable-title {
+		left: auto;
+		right: 0;
 	}
 
 }

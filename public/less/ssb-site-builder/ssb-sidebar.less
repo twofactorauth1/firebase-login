@@ -4,12 +4,42 @@
 	// background-color: #5bc0de;
 	display: none;
 	height: 200px;
+    box-shadow: 0px -1px 3px 1px rgba(0, 0, 0, .5);
+
+
+    .accordion .panel-heading .accordion-toggle {
+        background: #fff;
+        text-transform: capitalize;
+    }
+
+    .sortable-chosen .accordion .panel-heading .accordion-toggle {
+        background: #ddd;
+        color: #fff;
+    }
+
+    .accordion .ssb-sidebar-section-open > .panel-heading .accordion-toggle {
+        color: @indigenous-blue;
+        font-weight: 600;
+    }
+
+    .panel-title {
+        border-bottom: 1px solid #eee;
+    }
+
+    h5 {
+        margin: 1.75em 0 0;
+    }
+
+    img {
+        max-width: 100%;
+    }
+
 
 	@media (min-width: 768px) {
     	// float: left;
     	position: fixed;
     	width: 25%;
-		height: 100%;
+        height: ~"calc(100% - 120px)";
     }
 
 
@@ -17,4 +47,82 @@
 
 .ssb-sidebar.ssb-sidebar-show {
 	display: block;
+}
+
+.ssb-sidebar-heading {
+	position: relative;
+	color: white;
+    background: @indigenous-blue;
+    padding: 1em;
+    text-align: center;
+
+    h4, .ti-arrow-left {
+    	color: white;
+    }
+
+    h4 {
+    	margin: .75em auto;
+        font-weight: bold;
+    }
+
+    .ti-arrow-left {
+        position: absolute;
+	    top: 50%;
+	    left: .5em;
+    	cursor: pointer;
+    	transform: translateY(-50%);
+    }
+
+}
+
+.ssb-sidebar-inner {
+    transition: all 500ms cubic-bezier(0.550, 0.085, 0.680, 0.530); /* easeInQuad */
+    position: relative;
+    width: 200%;
+
+    .editor-group {
+        float: left;
+        width: 50%;
+    }
+}
+
+.ssb-sidebar-position-0 {
+    left: 0;
+}
+
+.ssb-sidebar-position-1 {
+    left: -100%;
+}
+
+.ssb-sidebar-section-open {
+    background: #fff;
+}
+
+.ssb-sidebar-sub-heading {
+    padding: 1em .5em 1em;
+    border-top: 1px solid #E7EAEA;
+    border-bottom: 1px solid #E7EAEA;
+    margin: 0;
+}
+
+.ssb-page-section-settings-item > .panel-group {
+    margin-bottom: 0;
+}
+
+.ssb-page-section-settings-item {
+    position: relative;
+}
+
+.ssb-sidebar-handle {
+    position: absolute;
+    top: 1em;
+    right: 1em;
+    z-index: 1;
+    cursor: move;
+}
+
+.ssb-settings-list {
+    li {
+        padding: 1em 1em 0;
+    }
 }

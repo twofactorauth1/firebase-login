@@ -80,7 +80,7 @@
                         <span class="pull-right">{{_moment(selectedInvoice.date)}}</span>
                     </h4>
             <h4>Period:
-                        <span class="pull-right">{{_moment(selectedInvoice.lines.data[0].period.start, {subtractNum: 30, subtractType: 'days'})}} - {{_moment(selectedInvoice.lines.data[0].period.start)}}</span>
+                        <span class="pull-right">{{_moment(selectedInvoice.lines.data[0].period.start)}} - {{_moment(selectedInvoice.lines.data[0].period.start, {addNum: 30, addType: 'days'})}}</span>
                     </h4>
             <h4>Amount Paid:
                         <span class="pull-right">${{(selectedInvoice.total/100).toFixed( 2 )}}</span>

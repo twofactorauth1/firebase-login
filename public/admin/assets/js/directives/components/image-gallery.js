@@ -6,7 +6,8 @@ app.directive('imageGalleryComponent', ['$timeout', function ($timeout) {
   return {
     scope: {
       component: '=',
-      media: '&'
+      media: '&',
+      ssbEditor: '='
     },
     templateUrl: '/components/component-wrap.html',
     link: function (scope, element, attrs, ctrl) {

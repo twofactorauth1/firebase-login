@@ -104,7 +104,7 @@
 
     $scope.viewSingle = function (topic) {
       $location.path('/support/manage-topics/').search({
-        topic: topic._id
+        topic_id: topic._id
       });
     };
 

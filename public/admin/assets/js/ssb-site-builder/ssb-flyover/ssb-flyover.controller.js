@@ -12,18 +12,19 @@ function ssbSiteBuilderFlyoverController($scope, $attrs, $filter, SimpleSiteBuil
 
     vm.somethingFlyover = 'something flyover';
     vm.init = init;
-    vm.uiState = {
-    	components: {},
-    	cards: [new Card(), new Card()]
-    };
-    vm.savePage = savePage;
-    vm.cancelPendingEdits = cancelPendingEdits;
-    vm.setActiveSection = setActiveSection;
-    vm.showCard = showCard;
-    vm.hideCard = hideCard;
-    vm.getTopCardIndex = getTopCardIndex;
-    vm.uiState.topCard = 1;
-    vm.uiState.showCardActionButtons = false;
+    // vm.uiState = {
+    //     componentEditing: undefined,
+    // 	components: {},
+    // 	cards: [new Card(), new Card()]
+    // };
+    // vm.savePage = savePage;
+    // vm.cancelPendingEdits = cancelPendingEdits;
+    // vm.setActiveSection = setActiveSection;
+    // vm.showCard = showCard;
+    // vm.hideCard = hideCard;
+    // vm.getTopCardIndex = getTopCardIndex;
+    // vm.uiState.topCard = 1;
+    // vm.uiState.showCardActionButtons = false;
 
 
     //TODO: move into config services
@@ -56,20 +57,13 @@ function ssbSiteBuilderFlyoverController($scope, $attrs, $filter, SimpleSiteBuil
 	};
 
 	$scope.$watch(function() { return SimpleSiteBuilderService.activeSection; }, function(activeSection){
-        vm.uiState.components = {};
-        if (activeSection !== undefined) {
-        	vm.uiState.components[activeSection] = true;
-        	vm.uiState.components.isOpen = true;
-        }
+        // vm.uiState.components = {};
+        // if (activeSection !== undefined) {
+        // 	vm.uiState.components[activeSection] = true;
+        // 	vm.uiState.components.isOpen = true;
+        //     vm.uiState.componentEditing = vm.state.page.components[vm.state.activeSection];
+        // }
     });
-
-    $scope.$watch('vm.state.page', function(page) {
-    	if (!angular.equals(page, vm.state.originalPage)) {
-    		vm.state.pendingChanges = true;
-    	} else {
-    		vm.state.pendingChanges = false;
-    	}
-	}, true);
 
 	function savePage() {
 		return (

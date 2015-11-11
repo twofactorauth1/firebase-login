@@ -43,13 +43,19 @@
         if (options.subtractNum && options.subtractType) {
           formattedDate = formattedDate.subtract(options.subtractNum, options.subtractType);
         }
+        if (options.addNum && options.addType) {
+          formattedDate = formattedDate.add(options.addNum, options.addType);
+        }
       }
       return formattedDate.format("MMMM Do, YYYY");
     };
 
     $scope.changeInvoice = function (invoice, index) {
-      console.log('changeInvoice >>> ' + invoice);
-      $scope.selectedInvoice = invoice;
+      if(invoice)
+      {
+        //console.log('changeInvoice >>> ' + invoice.toJSON());
+        $scope.selectedInvoice = invoice;
+      }
       $scope.selectedItemIndex = index;
     };
 
