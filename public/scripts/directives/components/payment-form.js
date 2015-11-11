@@ -99,20 +99,16 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                     if (nameSplit) {
                         if (nameSplit.length >= 3) {
                             scope.newAccount.first = nameSplit[0];
-                            scope.newAccount.middle = nameSplit[1];
                             scope.newAccount.last = nameSplit[2];
                         } else if (nameSplit.length === 2) {
                             scope.newAccount.first = nameSplit[0];
-                            scope.newAccount.middle = '';
                             scope.newAccount.last = nameSplit[1];
                         } else if (nameSplit.length === 1) {
                             scope.newAccount.first = nameSplit[0];
-                            scope.newAccount.middle = '';
                             scope.newAccount.last = '';
                         }
                     } else {
                         scope.newAccount.first = '';
-                        scope.newAccount.middle = '';
                         scope.newAccount.last = '';
                     }
                 }

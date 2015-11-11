@@ -16,20 +16,36 @@
                     <h3 class="center">No credit card required.</h3>
                 </div>
                 <div class="well">
+                    <!-- EMAIL AND PASSOWORD -->
+                    <div id="email" class="form-group col-xs-12 has-feedback" ng-hide="tmpAccount.tempUser">
+                        <label>Email</label>
+                        <input class="form-control input-lg" type="email" ng-model="newAccount.email" ng-pattern="emailValidation" ng-change="checkEmailExists(newAccount)" ng-model-options="{ debounce: 800 }" />
+                        <span class="help-block">Your email address will be your username.</span>
+                        <span class="glyphicon form-control-feedback"></span><span class="error help-block" />
+                    </div>
+                    <div id="password" class="form-group col-xs-12 has-feedback" ng-hide="newAccount.hidePassword">
+                        <label>Password</label>
+                        <input class="form-control input-lg" type="password" ng-model="newAccount.password" ng-change="checkPasswordLength(newAccount)" ng-model-options="{ debounce: 800 }" />
+                        <span class="help-block">Your password must be at least 6 characters.</span>
+                        <span class="glyphicon form-control-feedback"></span>
+                        <span class="error help-block" />
+                    </div>
+
+                    <!-- NAME -->
                     <div id="fullName" class="form-group col-xs-12 has-feedback">
                         <label>Full Name</label>
                         <input class="form-control input-lg" type="text" ng-model="newAccount.fullName" />
                         <span class="glyphicon form-control-feedback"></span>
                         <span class="error help-block" />
                     </div>
-                    <!-- First Name -->
+                    <!-- First -->
                     <div id="first" class="hidden form-group col-xs-12 col-sm-6 has-feedback" >
                         <label>First Name</label>
                         <input class="form-control input-lg" type="text" ng-change="checkFirstName(newAccount)" ng-model-options="{ debounce: 800 }" ng-model="newAccount.first" placeholder="{{newAccount.first}}" />
                         <span class="glyphicon form-control-feedback"></span>
                         <span class="error help-block" />
                     </div>
-                    <!-- Last Name -->
+                    <!-- Last -->
                     <div id="last" class="hidden form-group col-xs-12 col-sm-6 has-feedback">
                         <label>Last Name</label>
                         <input class="form-control input-lg" type="text" ng-change="checkLastName(newAccount)" ng-model-options="{ debounce: 800 }" ng-model="newAccount.last" />
@@ -54,38 +70,24 @@
                                 'glyphicon-ok': domainExistsAlready!==undefined && !domainExistsAlready}"></span>
                         <span class="error help-block" ng-if="domainExistsAlready">Domain Already Exists</span>
                         <span class="error help-block" ng-if="emptyBusinessName">Business Name Required</span>
-                        <span class="help-block" ng-show="newAccount.businessName && validBusinessName">Your Indigenous URL will be <strong>{{newAccount.businessName | urlFilter}}.indigenous.io</strong> and can be changed once your site is ready to publish.</span>
+                        <span class="help-block" ng-show="newAccount.businessName && validBusinessName">Your domain will be <strong>{{newAccount.businessName | urlFilter}}.indigenous.io</strong>. You can change it at any time.</span>
                     </div>                    
                     <!-- Phone Number -->
-                    <div id="phone" class="form-group col-xs-6 has-feedback">
+                    <div id="phone" class="hidden form-group col-xs-6 has-feedback">
                         <label>Phone Number (Optional)</label>
                         <input class="form-control input-lg" type="text" ng-model="newAccount.phone" mask="(999) 999-9999" clean="true" mask-restrict='reject' />
                         <span class="glyphicon form-control-feedback"></span>
                         <span class="error help-block" />
                     </div>
                     <!-- Phone Extension -->
-                    <div ng-if="showExtension" id="extension" class="form-group col-xs-6 has-feedback">
+                    <div ng-if="showExtension" id="extension" class="hidden form-group col-xs-6 has-feedback">
                         <label>Phone Extension</label>
                         <input class="form-control input-lg" type="text" ng-model="newAccount.extension" ng-change="checkPhoneExtension(newAccount)" ng-model-options="{ debounce: 800 }"/>
                         <span class="glyphicon form-control-feedback"></span>
                         <span class="error help-block" />
                     </div>
-                    <div ng-if="!showExtension" class="form-group col-xs-6">
+                    <div ng-if="!showExtension" class="hidden form-group col-xs-6">
                         <span class="help-block"><br />Provide your phone number so a trial coach can help get you started.</span>
-                    </div>
-                    <!-- EMAIL AND PASSOWORD -->
-                    <div id="email" class="form-group col-xs-12 has-feedback" ng-hide="tmpAccount.tempUser">
-                        <label>Email</label>
-                        <input class="form-control input-lg" type="email" ng-model="newAccount.email" ng-pattern="emailValidation" ng-change="checkEmailExists(newAccount)" ng-model-options="{ debounce: 800 }" />
-                        <span class="help-block">Your email address will become your username.</span>
-                        <span class="glyphicon form-control-feedback"></span><span class="error help-block" />
-                    </div>
-                    <div id="password" class="form-group col-xs-12 has-feedback" ng-hide="newAccount.hidePassword">
-                        <label>Password</label>
-                        <input class="form-control input-lg" type="password" ng-model="newAccount.password" ng-change="checkPasswordLength(newAccount)" ng-model-options="{ debounce: 800 }" />
-                        <span class="help-block">Your password must be at least 6 characters.</span>
-                        <span class="glyphicon form-control-feedback"></span>
-                        <span class="error help-block" />
                     </div>
                     <div class="clearfix margin-bottom-10"></div>
                     <!-- BUY -->
@@ -93,7 +95,7 @@
                         <a type="button" style="cursor:pointer;background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #53b868), color-stop(1, #4ea660));background:-moz-linear-gradient(top, #53b868 5%, #4ea660 100%);background:-webkit-linear-gradient(top, #53b868 5%, #4ea660 100%);background:-o-linear-gradient(top, #53b868 5%, #4ea660 100%);background:-ms-linear-gradient(top, #53b868 5%, #4ea660 100%);background:linear-gradient(to bottom, #53b868 5%, #4ea660 100%);filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#53b868', endColorstr='#4ea660',GradientType=0);background-color:#%1;-moz-border-radius:6px;-webkit-border-radius:6px;border-radius:6px;border:1px solid #4ea660;display:inline-block;color:#ffffff;font-family:;font-size:16px;font-weight:bold;font-style:%1;padding:10px 30px;text-decoration:none;text-shadow:0px 1px 1px #4ea660;" ng-click="createAccountWithoutCC(newAccount)"> CREATE ACCOUNT</a>
                     </div>
                     <p class="center margin-top-10">By clicking this button you agree to our <a href="" type="button" data-toggle="modal" data-target="#terms-of-service">Terms of Service</a>.</p>
-                    <p class="center margin-top-10"><a href="" type="button" data-toggle="modal" data-target="//indigenous.io/legal#privacy-policy">Privacy Policy</a>: We hate SPAM and promise to keep your information safe.</p>
+                    <p class="center margin-top-10"><a href="//indigenous.io/legal#privacy-policy">Privacy Policy</a>: We hate SPAM and promise to keep your information safe.</p>
                 </div>
             </div>
         </div>
