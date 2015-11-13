@@ -15,7 +15,7 @@
 
                     <div class="mainDescription">
                         <span ng-if="isEditable">Edit this <b>{{newCampaignObj.status.toLowerCase()}}</b> campaign before activating it</span>
-                        <span ng-if="!isEditable">This <b>{{newCampaignObj.status.toLowerCase()}}</b> campaign was activated on {{formatDate(newCampaignObj.steps[0].
+                        <span ng-if="!isEditable">This <b>{{newCampaignObj.status.toLowerCase()}}</b> campaign was activated on {{::formatDate(newCampaignObj.steps[0].
                     settings.sendAt)}}</span>
                         <span class="fa-stack fa-lg inline text-large margin-left-5">
                             <span class="fa fa-circle-thin fa-stack-2x"

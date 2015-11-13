@@ -51,9 +51,14 @@
     $scope.emails = [];
 
     $scope.formatDate = function (date) {
-      var localDate = moment(date);
-      // var offset = moment().utcOffset();
-      // localDate.add(offset, 'minutes')
+      if (!date._d) {
+        var date = { year: date.year, month: date.month - 1, day: date.day, hour: date.hour, minute: date.minute };
+        var localDate = moment.utc(date);
+        var localDate = localDate.local();
+      } else {
+        var localDate = moment(date);
+      }
+      
       return localDate.format("dddd, MMMM Do YYYY, h:mm A");
     };
 
