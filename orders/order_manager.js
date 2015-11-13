@@ -497,7 +497,20 @@ module.exports = {
 
                         cmsManager.getEmailPage(accountId, 'new-order', function(err, email){
                             if(err || !email) {
-                                log.warn('No NEW_ORDER email sent: ' + err);
+                                log.warn('No NEW_ORDER email receipt sent: ' + err);
+                                if(emailPreferences.new_orders === true) {
+                                    //Send additional details
+                                    subject = "New order created!";
+                                    var component = {};
+                                    component.order = updatedOrder.attributes;
+                                    component.text = "The following order was created:";
+                                    component.orderurl = "https://" + account.get('subdomain') + ".indigenous.io/admin/#/commerce/orders/" + updatedOrder.attributes._id;
+                                    app.render('emails/base_email_order_admin_notification', component, function(err, html){
+                                        mandrillHelper.sendOrderEmail(fromAddress, fromName, fromAddress, fromName, subject, html, accountId, orderId, vars, '0', function(){
+                                            log.debug('Admin Notification Sent');
+                                        });
+                                    });
+                                }
                                 callback(null, updatedOrder);
                             } else {
                                 var component = email.get('components')[0];
