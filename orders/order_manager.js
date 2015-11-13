@@ -510,9 +510,15 @@ module.exports = {
 
                                     if(emailPreferences.new_orders === true) {
                                         //Send additional details
-                                        mandrillHelper.sendOrderEmail(fromAddress, fromName, fromAddress, fromName, subject, html, accountId, orderId, vars, email._id, function(){
-                                            log.debug('Admin Notification Sent');
+                                        subject = "New order created!";
+                                        component.text = "The following order was created:";
+                                        component.orderurl = "https://" + account.get('subdomain') + ".indigenous.io/admin/#/commerce/orders/" + updatedOrder.attributes._id;
+                                        app.render('emails/base_email_order_admin_notification', component, function(err, html){
+                                            mandrillHelper.sendOrderEmail(fromAddress, fromName, fromAddress, fromName, subject, html, accountId, orderId, vars, email._id, function(){
+                                                log.debug('Admin Notification Sent');
+                                            });
                                         });
+
                                     }
 
                                 });

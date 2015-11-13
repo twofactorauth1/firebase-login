@@ -691,7 +691,7 @@ _.extend(api.prototype, baseApi.prototype, {
                                                     
                                                     self.log.debug('components >>> ', components);
 
-                                                    debugger;
+                                                    //debugger;
 
                                                     app.render('emails/base_email_v2', { components: components }, function(err, html){
                                                         if(err) {
