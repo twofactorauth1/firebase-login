@@ -289,8 +289,15 @@ html
                           tr
                             td.bodyContent(valign='top')
                               div(mc:edit='std_content00')
-                                h4 Order # !{order.order_id}
+                                h4 Order #
+                                  a(href='#{orderurl}') !{order.order_id}
                                 div.orderTableWrap
+                                  !{order.billing_address.first_name} !{order.billing_address.last_name}
+                                  br
+                                  !{order.billing_address.address_1}
+                                  br
+                                  !{order.billing_address.city}, !{order.billing_address.state}, !{order.billing_address.postcode}
+                                  br
                                   table.orderTable(border='0', cellpadding='0', cellspacing='0', width='580')
                                     thead
                                       tr
