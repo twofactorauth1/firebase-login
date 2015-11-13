@@ -18,7 +18,7 @@ var component = $$.m.ModelBase.extend({
         return {
 
             /**
-             * The ID of this copmonent
+             * The ID of this component
              */
             _id: null,
 
@@ -116,6 +116,12 @@ var component = $$.m.ModelBase.extend({
              *
              */
             campaignId : "",
+
+            /**
+             *
+             *
+             */
+            facebookConversionCode : "",
 
             /**
              *
