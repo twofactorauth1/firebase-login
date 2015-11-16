@@ -6,4 +6,7 @@
 extends snippets/index_layout
 block content
     div(id="body", class="content", back-animation, style="height: {{contentHeight}}px;")
+        if templates
+            script(type="text/ng-template" id="cachedTemplate")
+                !{templates}
         div(ng-view, class="page")

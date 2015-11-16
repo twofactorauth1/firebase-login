@@ -18,7 +18,7 @@ var authenticationDao = require('../dao/authentication.dao');
 var fs = require('fs');
 var userActivityManager = require('../useractivities/useractivity_manager');
 var sitemigration_middleware = require('../sitemigration/middleware/sitemigration_middleware');
-var pagecacheManager = require('../cms/pagecache_manager');
+//var pagecacheManager = require('../cms/pagecache_manager');
 
 var router = function() {
     this.init.apply(this, arguments);
@@ -64,7 +64,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
         /*
          * This is a POC route for page caching.
          */
-        app.get('/cached/:page', this.frontendSetup.bind(this), this.serveCachedPage.bind(this));
+        app.get('/cached/:page', this.frontendSetup.bind(this), this.serveCachedIndex.bind(this));
         return this;
     },
 
@@ -341,6 +341,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
         }
     },
 
+    /*
     serveCachedPage: function(req, resp) {
         var self = this;
         var accountId = self.unAuthAccountId(req);
@@ -350,6 +351,17 @@ _.extend(router.prototype, BaseRouter.prototype, {
         }
         pagecacheManager.getLocalCachedPageForTesting(accountId, pageName, resp);
         //pagecacheManager.getCachedPage(accountId, pageName, resp);
+    },
+    */
+
+    serveCachedIndex: function(req,resp) {
+        var self = this;
+        var accountId = self.unAuthAccountId(req);
+        var pageName = req.params.page;
+        self.log.debug('>> serveCachedIndex ' + accountId);
+        new WebsiteView(req, resp).renderCachedPage(accountId, pageName);
+
+        self.log.debug('<< serveCachedIndex');
     }
 });
 
