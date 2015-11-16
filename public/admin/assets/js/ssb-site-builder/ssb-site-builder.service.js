@@ -16,6 +16,7 @@
 
 		ssbService.getSite = getSite;
 		ssbService.getPage = getPage;
+		ssbService.getPages = getPages;
 		ssbService.savePage = savePage;
 		ssbService.setActiveSection = setActiveSection;
 		ssbService.setActiveComponent = setActiveComponent;
@@ -23,6 +24,7 @@
 		ssbService.activeComponentIndex = undefined;
 		ssbService.getSystemComponents = getSystemComponents;
 		ssbService.getComponent = getComponent;
+		ssbService.checkForDuplicatePage = checkForDuplicatePage;
 
 
 		AccountService.getAccount(function(data) {
@@ -50,6 +52,19 @@
 			return $http.get(baseWebsiteAPIUrl + id).success(success).error(error);
 		}
 
+		function getPages(id) {
+
+			function success(data) {
+				ssbService.pages = data;
+			}
+
+			function error(error) {
+				console.error('SimpleSiteBuilderService getPages error: ' + error);
+			}
+
+			return $http.get(baseWebsiteAPIUrl + ssbService.website._id + '/pages').success(success).error(error);
+		}
+
 		function getPage(id) {
 
 			return $http.get(basePageAPIUrl + id).success(successPage).error(errorPage);
@@ -57,11 +72,10 @@
 		}
 
 		function savePage(page) {
-			alert('TODO: save page.');
+
 			return (
 				$http({
-					url: baseWebsiteAPIUrl + ssbService.website._id + '/page/' + 'BOGUS_ID',
-					// url: baseWebsiteAPIUrl + ssbService.website._id + '/page/' + page._id,
+					url: baseWebsiteAPIUrl + ssbService.website._id + '/page/' + page._id,
 					method: 'POST',
 					data: angular.toJson(page)
 				}).success(successPage).error(errorPage)
@@ -97,6 +111,25 @@
 			console.error('SimpleSiteBuilderService page error: ' + error);
 		}
 
+		function saveWebsite(page) {
+			
+			function success(data) {
+				ssbService.website = data;
+			}
+
+			function error(error) {
+				console.error('SimpleSiteBuilderService saveWebsite error: ' + error);
+			}
+
+			return (
+				$http({
+					url: baseWebsiteAPIUrl + ssbService.website._id,
+					method: 'POST',
+					data: angular.toJson(website)
+				}).success(success).error(error)
+			)
+
+		}
 
 		//TODO: make actual API call
 		function getSystemComponents() {
@@ -113,7 +146,15 @@
 		}
 
 		function getComponent(component, version) {
-			
+
+			function success(data) {
+				console.log('SimpleSiteBuilderService requested component: ' + data);
+			}
+
+			function error(error) {
+				console.error('SimpleSiteBuilderService component error: ' + error);
+			}
+
 			return (
 				$http({
 					url: baseComponentAPIUrl + component.type,
@@ -121,17 +162,28 @@
 					data: angular.toJson({
 						version: version
 					})
-				}).success(successComponent).error(errorComponent)
+				}).success(success).error(error)
 			)
 
 		}
+		
+		function checkForDuplicatePage(pageHandle) {
+			
+			function success(data) {
+				console.log('SimpleSiteBuilderService checkForDuplicatePage: ' + data);
+			}
 
-		function successComponent(data) {
-			console.log('SimpleSiteBuilderService requested component: ' + data);
-		}
+			function error(error) {
+				console.error('SimpleSiteBuilderService checkForDuplicatePage error: ' + error);
+			}
 
-		function errorComponent(error) {
-			console.error('SimpleSiteBuilderService component error: ' + error);
+			return (
+          		$http({
+					url: baseWebsiteAPIUrl + ssbService.website._id + '/page/' + pageHandle,
+					method: 'GET',
+				}).success(success).error(error)
+			)
+
 		}
 
 		function getUserSections() {

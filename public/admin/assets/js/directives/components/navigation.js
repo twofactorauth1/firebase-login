@@ -6,7 +6,8 @@ app.directive('navigationComponent', ['WebsiteService', 'AccountService', functi
     scope: {
       component: '=',
       version: '=',
-      ssbEditor: '='
+      ssbEditor: '=',
+      website: '=?'
     },
     templateUrl: '/components/component-wrap.html',
     link: function (scope, element, attrs) {
@@ -16,16 +17,18 @@ app.directive('navigationComponent', ['WebsiteService', 'AccountService', functi
     },
     controller: function ($scope, WebsiteService, AccountService, $compile) {
       $scope.isSinglePost = $scope.$parent.isSinglePost;
-      if ($scope.$parent.website) {
-        $scope.website = $scope.$parent.website;
-      } else {
-        WebsiteService.getWebsite(function (website) {
-          $scope.website = website;
-        });
+      if (!$scope.website) {
+        if ($scope.$parent.website) {
+          $scope.website = $scope.$parent.website;
+        } else {
+          WebsiteService.getWebsite(function (website) {
+            $scope.website = website;
+          });
 
-        AccountService.getAccount(function (account) {
-          $scope.account = account;
-        });
+          AccountService.getAccount(function (account) {
+            $scope.account = account;
+          });
+        }
       }
       $scope.currentpage = $scope.$parent.page;
     }

@@ -29,6 +29,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     vm.updateActiveSection = updateActiveSection;
     vm.updateActiveComponent = updateActiveComponent;
     vm.savePage = savePage;
+    vm.saveWebsite = saveWebsite;
     vm.cancelPendingEdits = cancelPendingEdits;
 
     $scope.$watch(function() { return SimpleSiteBuilderService.website; }, function(website){
@@ -36,6 +37,10 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         vm.state.pendingChanges = false;
         // vm.uiState = vm.uiStateOriginal;
         vm.state.website = website;
+    });
+
+    $scope.$watch(function() { return SimpleSiteBuilderService.pages; }, function(pages){
+        vm.state.pages = pages;
     });
 
     $scope.$watch(function() { return SimpleSiteBuilderService.page; }, function(page){
@@ -71,20 +76,23 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         }
     );
 
-    function init(element) {
-        vm.element = element;
-        vm.uiState.isSidebarClosed = $rootScope.app.layout.isSidebarClosed;
-        $rootScope.app.layout.isSidebarClosed = true;
-
-        vm.uiStateOriginal = angular.copy(vm.uiState);
-
+    function saveWebsite() {
+        vm.state.pendingChanges = false;
+        return (
+            SimpleSiteBuilderService.saveWebsite(vm.state.website).then(function(response){
+                console.log('website saved');
+            })
+        )
     }
 
     function savePage() {
-        vm.state.pendingChanges = false; //can remove once save implemented
+        vm.state.pendingChanges = false;
+
+        saveWebsite();
+
         return (
-            SimpleSiteBuilderService.savePage(vm.state.page).then(function(data){
-                console.log('saved');
+            SimpleSiteBuilderService.savePage(vm.state.page).then(function(response){
+                console.log('page saved');
             })
         )
     }
@@ -105,19 +113,32 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
             vm.uiState.accordion.sections = {};
             vm.uiState.activeSectionIndex = index;
             vm.uiState.accordion.sections.isOpen = true;
-            vm.uiState.accordion.sections[index] = {};
+            vm.uiState.accordion.sections[index] = { components: {} };
             vm.uiState.accordion.sections[index].isOpen = true;
+            // updateActiveComponent(0);
         }
     }
 
     function updateActiveComponent(index) {
         if (index !== undefined) {
             vm.uiState.activeComponentIndex = index;
+            if (!vm.uiState.accordion.sections[vm.uiState.activeSectionIndex].components[index]) {
+                vm.uiState.accordion.sections[vm.uiState.activeSectionIndex].components[index] = {};
+            }
             vm.uiState.accordion.sections[vm.uiState.activeSectionIndex].components[index].isOpen = true;
         }
     }
 
-    
+    function init(element) {
+        vm.element = element;
+        vm.uiState.isSidebarClosed = $rootScope.app.layout.isSidebarClosed;
+        $rootScope.app.layout.isSidebarClosed = true;
+
+        vm.uiStateOriginal = angular.copy(vm.uiState);
+
+        SimpleSiteBuilderService.getPages();
+
+    }
 
 }
 

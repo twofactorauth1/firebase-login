@@ -3,7 +3,7 @@
 <ssb-edit-control class="ssb-edit-control" state="vm.state" ui-state="vm.uiState" index="vm.index"></ssb-edit-control>
 
 <section class="ssb-section-layout row" ng-class="vm.sectionClass(vm.section.layout)">
-	<ssb-component-loader ng-if="vm.section.components.length" ng-repeat="component in vm.section.components track by $index" ng-class="vm.componentClass($index)" class="" component="component" state="vm.state" ui-state="vm.uiState"></ssb-component-loader>
+	<ssb-component-loader ng-if="vm.section.components.length" ng-repeat="component in vm.section.components track by $index" ng-class="vm.componentClass($index)" class="" component="component" website="vm.state.website" state="vm.state" ui-state="vm.uiState"></ssb-component-loader>
 </section>
 
 </div>
