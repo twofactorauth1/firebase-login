@@ -293,12 +293,15 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
 
                 });
             };
-
+            scope.loading = false;
             scope.createAccountWithoutCC = function(newAccount) {
                 //validate
                 //email
+                if(scope.loading)
+                    return;
                 scope.isFormValid = false;
                 scope.validateForm = true;
+                scope.loading = true;
                 scope.promises = [];
 
                 scope.showFooter(true);
@@ -311,12 +314,14 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                 if (!scope.newAccount.password && !scope.newAccount.tempUserId && !scope.newAccount.hidePassword) {
                     scope.checkPasswordLength(newAccount);
                     scope.validateForm = false;
+                    scope.loading = false;
                 }
 
                 //url
                 scope.checkDomainExists(newAccount);
                 if(!scope.validBusinessName) {
                     scope.validateForm = false;
+                    scope.loading = false;
                 }
 
                 //if (!scope.newAccount.first) {
@@ -333,6 +338,7 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                     scope.checkPasswordLength(newAccount);
                     if(!scope.passwordIsValid) {
                         scope.validateForm = false;
+                        scope.loading = false;
                     }
                 }
                 
@@ -368,6 +374,7 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                     if(!scope.validateForm)
                         return;
                     scope.isFormValid = true;
+                    scope.loading = false;
                     scope.showFooter(false);
                     var tmpAccount = scope.tmpAccount;
                     tmpAccount.subdomain = $.trim(newAccount.businessName).replace(" ", "").replace(".", "_").replace("@", "");
@@ -474,6 +481,7 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                     });                   
                   })
                   .catch(function (err) {
+                    scope.loading = false;
                     console.error(err);
                   });
               }
@@ -483,6 +491,7 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
             {
                 if (domainExists) {
                     scope.validateForm = false;
+                    scope.loading = false;
                     scope.validBusinessName = false;
                 }
                 else {
@@ -495,6 +504,7 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
             {
                 if (data === true) {
                     scope.validateForm = false;
+                    scope.loading = false;
                     angular.element("#email .error").html("Email Already Exists");
                     angular.element("#email").addClass('has-error');
                     angular.element("#email .glyphicon").addClass('glyphicon-remove');
@@ -531,6 +541,7 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                     angular.element("#email").addClass('has-error');
                     angular.element("#email .glyphicon").addClass('glyphicon-remove');
                     scope.validateForm = false;
+                    scope.loading = false;
                 } else {
                     if(skip)
                         scope.promises.push(UserService.checkDuplicateEmail(newAccount.email));

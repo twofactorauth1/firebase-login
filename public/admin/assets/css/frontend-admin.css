@@ -6359,26 +6359,14 @@ a[href="https://froala.com/wysiwyg-editor"] {
   height: 200px;
   box-shadow: 0px -1px 3px 1px rgba(0, 0, 0, 0.5);
 }
-.ssb-sidebar .accordion .panel-heading .accordion-toggle {
-  background: #fff;
-  text-transform: capitalize;
-}
-.ssb-sidebar .sortable-chosen .accordion .panel-heading .accordion-toggle {
-  background: #ddd;
-  color: #fff;
-}
-.ssb-sidebar .accordion .ssb-sidebar-section-open > .panel-heading .accordion-toggle {
-  color: #47b8d9;
-  font-weight: 600;
-}
-.ssb-sidebar .panel-title {
-  border-bottom: 1px solid #eee;
-}
-.ssb-sidebar h5 {
-  margin: 1.75em 0 0;
-}
 .ssb-sidebar img {
   max-width: 100%;
+}
+.ssb-sidebar .list-unstyled {
+  margin-bottom: 0;
+}
+.ssb-sidebar .tooltip {
+  z-index: 99999;
 }
 @media (min-width: 768px) {
   .ssb-sidebar {
@@ -6405,12 +6393,17 @@ a[href="https://froala.com/wysiwyg-editor"] {
   margin: .75em auto;
   font-weight: bold;
 }
-.ssb-sidebar-heading .ti-arrow-left {
+.ssb-sidebar-heading .ti-arrow-left,
+.ssb-sidebar-heading .ti-arrow-right {
   position: absolute;
   top: 50%;
   left: .5em;
   cursor: pointer;
   transform: translateY(-50%);
+}
+.ssb-sidebar-heading .ti-arrow-right {
+  left: auto;
+  right: .5em;
 }
 .ssb-sidebar-inner {
   transition: all 500ms cubic-bezier(0.55, 0.085, 0.68, 0.53);
@@ -6432,6 +6425,7 @@ a[href="https://froala.com/wysiwyg-editor"] {
   background: #fff;
 }
 .ssb-sidebar-sub-heading {
+  position: relative;
   padding: 1em .5em 1em;
   border-top: 1px solid #E7EAEA;
   border-bottom: 1px solid #E7EAEA;
@@ -6443,15 +6437,65 @@ a[href="https://froala.com/wysiwyg-editor"] {
 .ssb-page-section-settings-item {
   position: relative;
 }
-.ssb-sidebar-handle {
+.ssb-sidebar-move-handle {
   position: absolute;
   top: 1em;
   right: 1em;
   z-index: 1;
   cursor: move;
 }
+.ssb-sidebar-item-icon {
+  position: absolute;
+  top: 1em;
+  right: 1em;
+  z-index: 1;
+  cursor: pointer;
+}
+.ssb-sidebar-item-icon-offset-1 {
+  right: 3em;
+}
+.ssb-sidebar-item-icon-offset-2 {
+  right: 5em;
+}
 .ssb-settings-list li {
   padding: 1em 1em 0;
+}
+.ssb-sidebar-sortable-item .panel-title {
+  font-family: "Helvetica Neue", Helvetica, sans-serif;
+  border-bottom: 1px solid #eee;
+}
+.ssb-sidebar-sortable-item .panel-heading {
+  padding: 0;
+  background-image: none;
+  height: auto;
+  min-height: 0;
+  -webkit-box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+  -moz-box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+  box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
+  -moz-background-clip: padding;
+  -webkit-background-clip: padding-box;
+  background-clip: padding-box;
+}
+.ssb-sidebar-sortable-item .panel-heading .panel-title a {
+  background: #fff;
+  text-transform: capitalize;
+  color: #5b5b60;
+  display: block;
+  font-size: 13px;
+  line-height: 20px;
+  padding: 10px;
+  position: relative;
+}
+.ssb-sidebar-sortable-item.ssb-sidebar-section-open > .panel-heading .panel-title a {
+  color: #47b8d9;
+  font-weight: 600;
+}
+.sortable-chosen .panel-heading .panel-title a {
+  background: #ddd;
+  color: #fff;
 }
 .ssb-flyover {
   position: absolute;

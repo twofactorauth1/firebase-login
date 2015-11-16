@@ -13,9 +13,9 @@ app.config(['$provide', function ($provide){
 
 app.controller('SiteBuilderSidebarController', ssbSiteBuilderSidebarController);
 
-ssbSiteBuilderSidebarController.$inject = ['$scope', '$attrs', '$filter', 'SimpleSiteBuilderService', '$modal'];
+ssbSiteBuilderSidebarController.$inject = ['$scope', '$attrs', '$filter', 'SimpleSiteBuilderService', '$modal', 'editableOptions', '$location'];
 /* @ngInject */
-function ssbSiteBuilderSidebarController($scope, $attrs, $filter, SimpleSiteBuilderService, $modal) {
+function ssbSiteBuilderSidebarController($scope, $attrs, $filter, SimpleSiteBuilderService, $modal, editableOptions, $location) {
 	
     console.info('site-build sidebar directive init...')
 
@@ -24,16 +24,22 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, SimpleSiteBuil
     vm.somethingSidebar = 'something sidebar';
     vm.init = init;
     vm.savePage = savePage;
+    vm.saveWebsite = saveWebsite;
     vm.cancelPendingEdits = cancelPendingEdits;
     vm.togglePageSectionAccordion = togglePageSectionAccordion;
     vm.togglePageSectionComponentAccordion = togglePageSectionComponentAccordion;
     vm.getSystemComponents = getSystemComponents;
+    vm.addSectionToPage = addSectionToPage;
     vm.addComponentToSection = addComponentToSection;
     vm.addBackground = addBackground;
+    vm.openSectionModal = openSectionModal;
     vm.openMediaModal = openMediaModal;
     vm.insertMedia = insertMedia;
+    vm.addToMainMenu = addToMainMenu;
     vm.showInsert = true;
-    
+    vm.sectionName = sectionName;
+	
+	editableOptions.theme = 'bs3';
 
     vm.navigation = {
     	back: function() {
@@ -46,13 +52,16 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, SimpleSiteBuil
     		vm.navigation.index = 1;
     		vm.navigation.indexClass = 'ssb-sidebar-position-1';
     	},
+    	goToPagesListPage: function() {
+    		$location.url('/website/site-builder/pages/');
+    	},
     	// slide: 'fade-in-right',
     	index: 0,
     	indexClass: 'ssb-sidebar-position-1'
     };
 
     vm.sortableOptions = {
-    	handle: '.ssb-sidebar-handle',
+    	handle: '.ssb-sidebar-move-handle',
 		onSort: function (evt) {
 			console.log(evt);
 		},
@@ -104,6 +113,14 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, SimpleSiteBuil
 		vm.systemComponents = SimpleSiteBuilderService.getSystemComponents();
 	}
 
+    function addSectionToPage(section, sectionIndex) {
+        vm.openSectionModal('ssb-section-modal', null, null, 'lg');
+        // vm.state.page.sections.push({
+        //     'layout': '1-col',
+        //     'components': []
+        // });
+    }
+
 	//TODO: handle versions
 	function addComponentToSection(component, sectionIndex) {
 		return (
@@ -113,11 +130,23 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, SimpleSiteBuil
 		)
 	}
 
-	function savePage() {
+	function saveWebsite() {
 		vm.state.pendingChanges = false;
 		return (
+			SimpleSiteBuilderService.saveWebsite(vm.state.website).then(function(response){
+				console.log('website saved');
+			})
+		)
+	}
+
+	function savePage() {
+		vm.state.pendingChanges = false;
+
+		saveWebsite();
+
+		return (
 			SimpleSiteBuilderService.savePage(vm.state.page).then(function(response){
-				console.log('saved');
+				console.log('page saved');
 			})
 		)
 	}
@@ -135,14 +164,36 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, SimpleSiteBuil
     }
 
     function togglePageSectionComponentAccordion(index) {
-		if (vm.uiState.accordion.sections[vm.uiState.activeSectionIndex].components &&
-			vm.uiState.accordion.sections[vm.uiState.activeSectionIndex].components[index].isOpen) {
-			SimpleSiteBuilderService.setActiveComponent(index);
-		}
+		//TODO: this fires on all clicks anywhere within the component panel... so all settings, etc.
+		SimpleSiteBuilderService.setActiveComponent(index);
     }
 
     function addBackground() {
     	vm.openMediaModal('media-modal', 'MediaModalCtrl', null, 'lg');
+    }
+
+    function openSectionModal(modal, controller, index, size) {
+        console.log('openModal >>> ', modal, controller, index);
+        var _modal = {
+            templateUrl: modal,
+            keyboard: false,
+            backdrop: 'static',
+            size: 'md',
+            resolve: {}
+        };
+
+        _modal.resolve.vm = vm;
+
+        if (size) {
+            _modal.size = 'lg';
+        }
+
+        $scope.modalInstance = $modal.open(_modal);
+        
+        $scope.modalInstance.result.then(null, function () {
+            angular.element('.sp-container').addClass('sp-hidden');
+        });
+
     }
 
     function openMediaModal(modal, controller, index, size) {
@@ -188,6 +239,34 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, SimpleSiteBuil
         $scope.modalInstance.result.then(null, function () {
             angular.element('.sp-container').addClass('sp-hidden');
         });
+
+    }
+
+    function checkForDuplicatePage(pageHandle) {
+		SimpleSiteBuilderService.checkForDuplicatePage(pageHandle).then(function(dup) {
+			vm.uiState.duplicateUrl = dup;
+		})
+    }
+
+    function addToMainMenu(id) {
+		console.log('add page to main menu: ' + id);
+		// SimpleSiteBuilderService.checkForDuplicatePage(pageHandle).then(function(dup) {
+		// 	vm.uiState.duplicateUrl = dup;
+		// })
+    }
+
+    function sectionName(section) {
+    	var sectionName = section.layout;
+
+    	if (section.components) {
+    		if (section.components.length === 1 && section.components[0].header_title) {
+    			sectionName = section.components[0].header_title;
+    		} else {
+    			sectionName = section.components[0].type;
+    		}
+    	}
+
+    	return sectionName;
 
     }
 

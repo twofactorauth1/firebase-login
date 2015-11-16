@@ -657,6 +657,7 @@ app.constant('JS_REQUIRES', {
     'addComponentModalCtrl': 'assets/js/controllers/modals/addComponentModalCtrl.js',
     'componentSettingsModalCtrl': 'assets/js/controllers/modals/componentSettingsModalCtrl.js',
     'ssbComponentSettingsModalCtrl': 'assets/js/controllers/modals/ssbComponentSettingsModalCtrl.js',
+    'SiteBuilderSidebarController': 'assets/js/ssb-site-builder/ssb-sidebar/ssb-sidebar.controller.js',
     'mediaModalCtrl': 'assets/js/controllers/modals/mediaModalCtrl.js',
     'templateSettingsModalCtrl': 'assets/js/controllers/modals/templateSettingsModalCtrl.js',
     'importCustomerModalCtrl': 'assets/js/controllers/modals/importCustomerModalCtrl.js',
@@ -875,8 +876,7 @@ app.constant('JS_REQUIRES', {
       "../js/libs/froala-wysiwyg-editor/js/plugins/entities.min.js",
       "../js/libs/froala-wysiwyg-editor/js/plugins/font_family.min.js",
       "../js/libs/froala-wysiwyg-editor/js/plugins/font_size.min.js",
-      "../js/libs/froala-wysiwyg-editor/js/plugins/image.min.js",
-      "../js/libs/froala-wysiwyg-editor/js/plugins/image_manager.min.js",
+      "../js/libs/froala-wysiwyg-editor/js/plugins/image.min.js",      
       "../js/libs/froala-wysiwyg-editor/js/plugins/inline_style.min.js",
       "../js/libs/froala-wysiwyg-editor/js/plugins/line_breaker.min.js",
       "../js/libs/froala-wysiwyg-editor/js/plugins/link.min.js",
@@ -895,6 +895,12 @@ app.constant('JS_REQUIRES', {
       "../js/libs/froala-wysiwyg-editor/css/plugins/line_breaker.css",
       "../js/libs/froala-wysiwyg-editor/css/plugins/table.css",
       "../js/libs/froala-wysiwyg-editor/css/plugins/video.css",
+      ]
+  },
+  {
+    name: 'custom-froala-wysiwyg-editor',
+    files: [ 
+      "../js/libs_misc/froala-wysiwyg-editor/js/plugins/media_manager.min.js",
       '../js/libs_misc/froala-wysiwyg-editor/config/config.js']
   }]
 });
