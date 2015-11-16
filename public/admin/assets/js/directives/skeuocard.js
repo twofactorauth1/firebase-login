@@ -85,6 +85,7 @@ app.directive('indigewebSkeuocard',['PaymentService', 'UserService', 'ToasterSer
                 };
 
                 scope.currentYear = new Date().getYear() - 100;
+                scope.fullCurrentYear = new Date().getFullYear();
                 scope.currentMonth = new Date().getMonth() + 1;
 
                 scope.checkCardExpiry = function() {
@@ -107,12 +108,28 @@ app.directive('indigewebSkeuocard',['PaymentService', 'UserService', 'ToasterSer
                         $("#card_expiry").addClass('has-error');
                         $("#card_expiry .glyphicon").addClass('glyphicon-remove');
                     } else {
-                        console.log('year ', parseInt(exp_year));                        
-                        if (parseInt(exp_year) < parseInt(scope.currentYear)) {
+                        console.log('year ', parseInt(exp_year));   
+                        scope.yearLength = exp_year.length;
+                        if(scope.yearLength == 2)
+                        {
+                            if (parseInt(exp_year) < parseInt(scope.currentYear)) {
+                                $("#card_expiry .error").html("Card Year has Expired");
+                                $("#card_expiry").addClass('has-error');
+                                $("#card_expiry .glyphicon").addClass('glyphicon-remove');
+                                return;
+                            }
+
+                        }
+                        else if(scope.yearLength == 4)
+                        {
+                            if(parseInt(exp_year) < parseInt(scope.fullCurrentYear)){
                             $("#card_expiry .error").html("Card Year has Expired");
-                            $("#card_expiry").addClass('has-error');
-                            $("#card_expiry .glyphicon").addClass('glyphicon-remove');
-                        } else if (exp_month < scope.currentMonth && parseInt(exp_year) <= scope.currentYear) {
+                                $("#card_expiry").addClass('has-error');
+                                $("#card_expiry .glyphicon").addClass('glyphicon-remove');
+                                return;
+                            }
+                        }
+                         if (exp_month < scope.currentMonth && parseInt(exp_year) <= scope.currentYear) {
                             $("#card_expiry .error").html("Card Month has Expired");
                             $("#card_expiry").addClass('has-error');
                             $("#card_expiry .glyphicon").addClass('glyphicon-remove');
