@@ -127,6 +127,22 @@ _.extend(baseRouter.prototype, {
         }
     },
 
+    frontendSetup: function(req, resp, next) {
+        var self = this;
+        accountDao.getAccountByHost(req.get("host"), function(err, value) {
+            if (!err && value != null) {
+                logger.debug("host: " + req.get("host") + " -> accountId:" + value.id());
+                req.session.unAuthAccountId = value.id();
+                req.session.unAuthSubdomain = value.get('subdomain');
+                req.session.unAuthDomain = value.get('domain');
+            } else {
+                logger.warn("No account found from getAccountByHost");
+                return resp.redirect(appConfig.www_url + "/404");
+            }
+            return next();
+        });
+    },
+
     matchHostToSession: function(req) {
         var subObj = urlUtils.getSubdomainFromHost(req.host);
         var sSub = req.session.subdomain;
@@ -427,6 +443,17 @@ _.extend(baseRouter.prototype, {
         try {
             return (req.session.unAuthAccountId === null) ? 0 : req.session.unAuthAccountId;
             //return (req.session.accountId == null || req.session.accountId == 0) ? 0 : req.session.accountId;
+        }catch(exception) {
+            return null;
+        }
+    },
+
+    /*
+     * This method is used on frontend only calls.  It returns the _unauthenticated_ accountId.
+     */
+    unAuthAccountId: function(req) {
+        try {
+            return (req.session.unAuthAccountId === null) ? 0 : req.session.unAuthAccountId;
         }catch(exception) {
             return null;
         }
