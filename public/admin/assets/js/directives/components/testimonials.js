@@ -5,7 +5,8 @@ app.directive('testimonialsComponent', ['$timeout', function ($timeout) {
   return {
     scope: {
       component: '=',
-      control: '='
+      control: '=',
+      ssbEditor: '='
     },
     templateUrl: '/components/component-wrap.html',
     link: function (scope, element, attrs) {
@@ -56,11 +57,15 @@ app.directive('testimonialsComponent', ['$timeout', function ($timeout) {
         console.log(index);
         addRemoveTestimonials(index, true);
       };
-      scope.control.refreshSlider = function () {
-        $timeout(function () {
-          scope.dataLoaded = !scope.dataLoaded;
-        });
-      };
+
+      if(!scope.ssbEditor){
+        scope.control.refreshSlider = function () {
+          $timeout(function () {
+            scope.dataLoaded = !scope.dataLoaded;
+          });
+        };
+      }
+      
     }
   };
 }]);

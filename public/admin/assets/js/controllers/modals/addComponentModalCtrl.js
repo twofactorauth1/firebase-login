@@ -12,7 +12,8 @@ app.controller('AddComponentModalCtrl', ['$scope', '$document', '$modalInstance'
   $scope.isEmail = isEmail;
 
   $scope.pageHandle = pageHandle;
-
+  
+  $scope.saveLoading = false;
   /*
    * @addComponent
    * - add the component to the page by retrieving the component and animating the entry
@@ -34,11 +35,10 @@ app.controller('AddComponentModalCtrl', ['$scope', '$document', '$modalInstance'
       }
 
       WebsiteService.getComponent(addedType, addedType.version || 1, function (newComponent) {
-        if (newComponent) {
-          $scope.saveLoading = false;
+        if (newComponent) {          
           $scope.closeModal();
           $scope.components.splice($scope.clickedIndex + 1, 0, newComponent);
-          $timeout(function () {
+          $timeout(function () {          
             var element = document.getElementById(newComponent._id);
             if (element) {
               $document.scrollToElementAnimated(element, 175, 1000);

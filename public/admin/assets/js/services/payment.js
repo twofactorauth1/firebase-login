@@ -212,11 +212,10 @@
                     });
             };
 
-            this.postSubscribeToIndigenous = function(stripeCustomerId, planId, accountId, setupFee, fn, errFn) {
+            this.postSubscribeToIndigenous = function(stripeCustomerId, planId, accountId, setupFee, addOns, coupon, fn, errFn) {
                 var apiUrl = baseUrl + ['integrations', 'payments', 'indigenous', 'plans', planId, 'subscribe'].join('/');
                 var params = {
                     customerId: stripeCustomerId
-                    // setupFee: setupFee.signup_fee * 100
                 };
                 
                 if (accountId) {
@@ -225,6 +224,14 @@
 
                 if (setupFee) {
                     params.setupFee = setupFee;
+                }
+
+                if(addOns) {
+                    params.addOns = addOns;
+                }
+
+                if(coupon) {
+                    params.coupon = coupon;
                 }
 
 

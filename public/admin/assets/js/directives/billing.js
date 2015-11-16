@@ -27,13 +27,17 @@ app.directive("billingSubscription", ['PaymentService', function (PaymentService
           var priceStringLength = priceString.length;
           scope.priceDollars = priceString.slice(0, priceStringLength - 2);
           scope.priceCents = priceString.slice(priceStringLength - 2, priceStringLength);
-          scope.billingSubscriptionUnavailable = false;
+          setTimeout(function () {
+            scope.$apply(function () {
+                scope.billingSubscriptionUnavailable = false;
+            }); 
+          },0);
         } else {
           scope.billingSubscriptionUnavailable = true;
         }
       }, true);
 
-      if (scope.account.billing.plan !== 'NO_PLAN_ARGUMENT') {
+      if (scope.account && scope.account.billing.plan !== 'NO_PLAN_ARGUMENT') {
         var selectedPlanWatcher = scope.$watch('selectedPlan', function() {
           if (scope.selectedPlan && scope.selectedPlan.product_attributes && scope.selectedPlan.product_attributes.stripePlans[0].id) {
             scope.plan = scope.selectedPlan;
@@ -48,6 +52,23 @@ app.directive("billingSubscription", ['PaymentService', function (PaymentService
     }
   }
 }]);
+
+app.directive("billingAddon", [ 'PaymentService', function(PaymentService){
+    return {
+        restrict: 'E',
+        templateUrl: '/admin/assets/views/partials/billingAddon.html',
+        link: function(scope, element, attrs) {
+            if (attrs.showselectbtn) {
+                scope.showSelectBtn = attrs.showselectbtn;
+            }
+            scope.priceDollars = ("" + scope.addOn.regular_price).split(".")[0];
+            scope.priceCents = ("" + scope.addOn.regular_price).split(".")[1] || "00";
+
+        }
+    };
+}
+
+]);
 
 app.directive("billingInvoiceTable", [function () {
   return {

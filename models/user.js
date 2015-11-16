@@ -571,12 +571,12 @@ var user = $$.m.ModelBase.extend({
     var photo = this.getPhoto(socialType);
 
     if (photo != null) {
-      photo.url = url;
+      photo.url = url.replace(/^https?:/,'');
       photo.default = isDefault;
     } else {
       photo = {
         type: socialType,
-        url: url,
+        url: url.replace(/^https?:/,''),
         default: isDefault
       };
     }

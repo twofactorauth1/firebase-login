@@ -107,6 +107,8 @@
         toaster.pop("error", "Email is required.");
         return;
       }
+      if($scope.profileUser.email)
+        $scope.profileUser.username = $scope.profileUser.email;
       UserService.putUser($scope.profileUser, function (user) {        
         $scope.refreshUser();
         toaster.pop('success', 'Profile Saved.');

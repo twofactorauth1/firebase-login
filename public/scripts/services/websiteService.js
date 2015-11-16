@@ -25,27 +25,19 @@ mainApp.factory('websiteService', ['accountService','$http', function (accountSe
                 	callback("data is null", null);
                 }
                 else {
-                    //take advantage of precache
-                    if(window.indigenous.precache.website) {
-                        website = window.indigenous.precache.website;
-                        delete window.indigenous.precache.website;
-                        callback(null, website);
-                    } else {
-                        //console.log('Not Historical ', data);
-                        // API URL: http://yoursubdomain.indigenous.local/api/1.0/cms/website/yourid
-                        $http.get('/api/1.0/cms/website/' + data.website.websiteId)
-                            .success(function (data) {
-                                if (data) {
-                                    website = data;
-                                }
-                                callback(null, data)
-                            })
-                            .error(function (err) {
-                                console.log('END:Website Service with ERROR');
-                                callback(err, null);
-                            });
-                    }
-
+                    //console.log('Not Historical ', data);
+                    // API URL: http://yoursubdomain.indigenous.local/api/1.0/cms/website/yourid
+                    $http.get('/api/1.0/cms/website/' + data.website.websiteId, {cache : true})
+                    .success(function (data) {
+                        if (data) {
+                            website = data;
+                        }
+                        callback(null, data)
+                    })
+                    .error(function (err) {
+                        console.log('END:Website Service with ERROR');
+                        callback(err, null);
+                    });
                 }
 
             });

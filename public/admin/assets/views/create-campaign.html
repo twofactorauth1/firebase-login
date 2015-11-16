@@ -15,7 +15,7 @@
 
                     <div class="mainDescription">
                         <span ng-if="isEditable">Edit this <b>{{newCampaignObj.status.toLowerCase()}}</b> campaign before activating it</span>
-                        <span ng-if="!isEditable">This <b>{{newCampaignObj.status.toLowerCase()}}</b> campaign was activated on {{formatDate(newCampaignObj.steps[0].
+                        <span ng-if="!isEditable">This <b>{{newCampaignObj.status.toLowerCase()}}</b> campaign was activated on {{::formatDate(newCampaignObj.steps[0].
                     settings.sendAt)}}</span>
                         <span class="fa-stack fa-lg inline text-large margin-left-5">
                             <span class="fa fa-circle-thin fa-stack-2x"
@@ -303,7 +303,7 @@
                                                         <span editable-text="emailToSend.subject" onbeforesave="analyzeSubject($data)">{{emailToSend.subject}}</span>
                                                         <div class="clearfix"></div>
                                                     </div>
-                                                    <div class="form-group margin-bottom-10" ng-show="subjectScore">
+                                                    <div class="form-group margin-bottom-10" ng-if="emailToSend.subject" ng-show="subjectScore">
                                                         <label> <a href="#" style="color:#858585" ng-click="openModal('subject-score-modal')">Subject Strength <span class="fa fa-info-circle"></span></a></label>
                                                         <label class="pull-right text-bold" ng-class="{'text-danger': subjectScore<25, 'text-warning': subjectScore>=25 && subjectScore<50, 'text-info': subjectScore>=50 && subjectScore<75, 'text-nephritis': subjectScore>=75}">
                                                             <span ng-if="subjectScore<30">Weak</span>
@@ -496,7 +496,7 @@
                                                 </div>
                                                 <div class="col-sm-7">
                                                     <div class="well bg-white pull-left margin-bottom-20 delivery-selector" ng-class="{'csspinner': whenToSend === 'now', 'disabled': !isEditable}">
-                                                        <datepicker ng-model="delivery.date" min-date="delivery.minDate" show-weeks="true" class="margin-bottom-10" custom-class="selectedDay"></datepicker>
+                                                        <datepicker ng-model="delivery.date" min-date="delivery.minDate" ng-change="updateTime()" show-weeks="true" class="margin-bottom-10" custom-class="selectedDay"></datepicker>
                                                         <div class="clearfix"></div>
                                                         <timepicker ng-model="delivery.date" ng-change="updateTime()" hour-step="hstep" minute-step="mstep" min="delivery.minDate" class="center"></timepicker>
                                                     </div>

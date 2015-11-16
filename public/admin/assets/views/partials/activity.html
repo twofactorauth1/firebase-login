@@ -322,7 +322,10 @@
                                         <span class="label label-info">CONTACT CREATED</span> for
                                         <span ng-if="!activity.customer">[deleted]</span>
                                         <span ng-if="activity.customer.first">{{activity.customer.first.toString()+' '+activity.customer.last.toString()}}</span>
-                                        <span ng-if="!activity.customer.first">{{activity.customer.details[0].emails[0].email}}</span>.
+                                        <span ng-if="!activity.customer.first">{{activity.customer.details[0].emails[0].email}}</span>.                                        
+                                    </p>
+                                    <p ng-if="activity.detail">
+                                        {{activity.detail}}
                                     </p>
                                     <!-- <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-reply"></i> Send Welcome Email</a> -->
                                 </div>
@@ -333,6 +336,9 @@
                                         <span ng-if="activity.customer.first">{{activity.customer.first.toString()+' '+activity.customer.last.toString()}}</span>
                                         <span ng-if="!activity.customer.first">{{activity.customer.details[0].emails[0].email}}</span>.
                                     </p>
+                                    <p ng-if="activity.detail">
+                                        {{activity.detail}}
+                                    </p>
                                     <!-- <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-reply"></i> Send Welcome Email</a> -->
                                 </div>
                                 <div ng-switch-when="SUBSCRIBE">
@@ -342,6 +348,9 @@
                                         <span ng-if="activity.customer.first">{{activity.customer.first.toString()+' '+activity.customer.last.toString()}}</span>
                                         <span ng-if="!activity.customer.first">{{activity.customer.details[0].emails[0].email}}</span>subscribed to <a href="">{{activity.extraFields.plan_name}}</a> for ${{activity.extraFields.amount}}.
                                     </p>
+                                    <p ng-if="activity.detail">
+                                        {{activity.detail}}
+                                    </p>
                                 </div>
                                 <div ng-switch-when="TRIAL_CONVERSION">
                                     <p>
@@ -350,6 +359,9 @@
                                         <span ng-if="activity.customer.first">{{activity.customer.first.toString()+' '+activity.customer.last.toString()}}</span>
                                         <span ng-if="!activity.customer.first">{{activity.customer.details[0].emails[0].email}}</span> subscribed to <a href="">{{activity.extraFields.plan_name}}</a> for ${{activity.extraFields.amount}}.
                                     </p>
+                                    <p ng-if="activity.detail">
+                                        {{activity.detail}}
+                                    </p>
                                 </div>
                                 <div ng-switch-when="SUBSCRIBE_CANCEL">
                                     <p>
@@ -357,6 +369,9 @@
                                         <span ng-if="!activity.customer">[deleted]</span>
                                         <span ng-if="activity.customer.first">{{activity.customer.first.toString()+' '+activity.customer.last.toString()}}</span>
                                         <span ng-if="!activity.customer.first">{{activity.customer.details[0].emails[0].email}}</span>.
+                                    </p>
+                                    <p ng-if="activity.detail">
+                                        {{activity.detail}}
                                     </p>
                                 </div>
                                 <div ng-switch-when="PAGE_VIEW">
@@ -370,6 +385,9 @@
                                         {{activity.customer.details[0].emails[0].email}} viewed {{activity.attributes.page}} for {{activity.attributes.timespent}}.</p>
                                     <p ng-if="activity.customer && !activity.customer.first && !activity.customer.details[0].emails[0]">
                                         Unknown viewed {{activity.attributes.page}} for {{activity.attributes.timespent}}.</p>
+                                    <p ng-if="activity.detail">
+                                        {{activity.detail}}
+                                    </p>
                                     <!-- <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-reply"></i> Send Welcome Email</a> -->
                                 </div>
                                 <div ng-switch-when="CONTACT_FORM">
@@ -381,6 +399,9 @@
                                             </li>
                                         </ul>
                                     </p>
+                                    <p ng-if="activity.detail">
+                                        {{activity.detail}}
+                                    </p>
                                 </div>
                                 <div ng-switch-when="FORM_SUBMISSION">
                                     <p>
@@ -388,6 +409,9 @@
                                         <span ng-if="!activity.customer">[deleted]</span>
                                         <span ng-if="activity.customer.first">{{activity.customer.first.toString()+' '+activity.customer.last.toString()}}</span>
                                         <span ng-if="!activity.customer.first">{{activity.customer.details[0].emails[0].email}}</span>.
+                                    </p>
+                                    <p ng-if="activity.detail">
+                                        {{activity.detail}}
                                     </p>
                                     <!-- <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-file"></i> Read the Email</a> -->
                                 </div>
@@ -398,6 +422,9 @@
                                         <span ng-if="activity.customer.first">{{activity.customer.first.toString()+' '+activity.customer.last.toString()}}</span>
                                         <span ng-if="!activity.customer.first">{{activity.customer.details[0].emails[0].email}}</span>.
                                     </p>
+                                    <p ng-if="activity.detail">
+                                        {{activity.detail}}
+                                    </p>
                                     <!-- <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-file"></i> Read the Email</a> -->
                                 </div>
                                 <div ng-switch-when="EMAIL_OPENED">
@@ -406,6 +433,9 @@
                                         <span ng-if="!activity.customer">[deleted]</span>
                                         <span ng-if="activity.customer.first">{{activity.customer.first.toString()+' '+activity.customer.last.toString()}}</span>
                                         <span ng-if="!activity.customer.first">{{activity.customer.details[0].emails[0].email}}</span>.
+                                    </p>
+                                    <p ng-if="activity.detail">
+                                        {{activity.detail}}
                                     </p>
                                     <!-- <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-file"></i> Read the Email</a> -->
                                 </div>
@@ -416,6 +446,9 @@
                                         <span ng-if="activity.customer.first">{{activity.customer.first.toString()+' '+activity.customer.last.toString()}}</span>
                                         <span ng-if="!activity.customer.first">{{activity.customer.details[0].emails[0].email}}</span>.
                                     </p>
+                                    <p ng-if="activity.detail">
+                                        {{activity.detail}}
+                                    </p>
                                     <!-- <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-file"></i> Read the Email</a> -->
                                 </div>
                                 <div ng-switch-when="EMAIL_UNSUB">
@@ -425,6 +458,9 @@
                                         <span ng-if="activity.customer.first">{{activity.customer.first.toString()+' '+activity.customer.last.toString()}}</span>
                                         <span ng-if="!activity.customer.first">{{activity.customer.details[0].emails[0].email}}</span>.
                                     </p>
+                                    <p ng-if="activity.detail">
+                                        {{activity.detail}}
+                                    </p>
                                     <!-- <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-file"></i> Read the Email</a> -->
                                 </div>
                                 <div ng-switch-when="SUBSCRIPTION_PAID">
@@ -433,6 +469,9 @@
                                         <span ng-if="!activity.customer">[deleted]</span>
                                         <span ng-if="activity.customer.first">{{activity.customer.first.toString()+' '+activity.customer.last.toString()}}</span>
                                         <span ng-if="!activity.customer.first">{{activity.customer.details[0].emails[0].email}}</span>.
+                                    </p>
+                                    <p ng-if="activity.detail">
+                                        {{activity.detail}}
                                     </p>
                                     <!-- <a href="javascript:void(0);" class="btn btn-xs btn-green"><i class="fa fa-file"></i> Read the Email</a> -->
                                 </div>

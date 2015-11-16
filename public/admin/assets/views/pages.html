@@ -103,8 +103,8 @@
                                 <td class="center">
                                     <img ng-src="{{ page.screenshot }}" id="screenshot_{{page._id}}" err-src="{{default_image_url}}" class="img-thumbnail screenshot" alt="image">
                                 </td>
-                                <td><strong>Title: </strong><span ng-text-truncate="page.title" ng-tt-chars-threshold="20" ng-tt-no-toggling></span></td>
-                                <td class="hidden-xs"><strong>Page Url: </strong><span ng-text-truncate="page.handle" ng-tt-chars-threshold="20" ng-tt-no-toggling></span></td>
+                                <td><strong>Title: </strong><span tooltip-placement="top" tooltip="{{page.title}}" ng-text-truncate="page.title" ng-tt-chars-threshold="20" ng-tt-no-toggling></span></td>
+                                <td class="hidden-xs"><strong>Page Url: </strong><span tooltip-placement="top" tooltip="{{page.handle}}" ng-text-truncate="page.handle" ng-tt-chars-threshold="20" ng-tt-no-toggling></span></td>
                                 <td class="hidden-xs" ng-class="{'center': tableView != 'grid'}"><strong>Components: </strong> {{page.components}}</td>
                                 <td class="hidden-xs" ng-class="{'center': tableView != 'grid'}"><strong>Created: </strong> {{page.created.date | date:'MMM d yy'}}</td>
                                 <td class="hidden-xs" ng-class="{'center': tableView != 'grid'}"><strong>Modified: </strong>{{page.modified.date | date:'MMM d yy'}}</td>

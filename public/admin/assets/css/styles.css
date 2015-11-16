@@ -13293,6 +13293,9 @@ fieldset[disabled] .btn-vimeo-square.active {
   margin: -1px;
   position: relative;
 }
+.edit-wrap .editable {
+  min-height: 10px;
+}
 .edit-wrap .editable img {
   max-width: 100%;
 }
@@ -13363,6 +13366,10 @@ div[class^="spacing-"] {
 }
 .slider-opacity .rz-bubble {
   display: none;
+}
+select.hour-start-select {
+  padding-left: 5px;
+  padding-right: 5px;
 }
 /* ---------------------------------------------------------------------- */
 /*  Billing

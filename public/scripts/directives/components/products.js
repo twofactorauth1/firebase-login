@@ -18,7 +18,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
       // initializations
       scope.showTax = true;
       scope.showNotTaxed = false; // Some items are not taxed when summing
-
+      
       /*
        * @filterTags
        * - if component has tags filter them or return the _product
@@ -80,11 +80,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
             _filteredProducts.push(product);
           }
         });
-        scope.products = _filteredProducts;
-        $timeout(function () {
-          $(window).trigger('resize');
-          console.log("Products loaded");
-        }, 500);
+        scope.products = _filteredProducts;        
         if (fn) {
           fn();
         }
@@ -456,6 +452,21 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
         }
       };
 
+      /*scope.checkCardName = function() {
+                     var name = angular.element('#card_name #name').val();
+                     if (!name) {
+                         angular.element("#card_name .error").html("Card Name Required");
+                         angular.element("#card_name").addClass('has-error');
+                         angular.element("#card_name .glyphicon").addClass('glyphicon-remove');
+                     } else {
+                         angular.element("#card_name .error").html("");
+                         angular.element("#card_name").removeClass('has-error').addClass('has-success');
+                         angular.element("#card_name .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
+                     }
+                  
+                };*/
+
+
       /*
        * @validateBasicInfo
        * -
@@ -531,12 +542,24 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
           exp_year = expiry[1].trim();
         }
         var cardInput = {
+          name: angular.element('#card_name #name').val(),
           number: angular.element('#number').val(),
           cvc: angular.element('#cvc').val(),
           exp_month: exp_month,
           exp_year: exp_year
+            //TODO: add the following:
+            /*
+             * name:name,
+             * address_city:city,
+             * address_country:country,
+             * address_line1:line1,
+             * address_line2:line2,
+             * address_state:state,
+             * address_zip:zip
+             */
         };
-        if (!cardInput.number || !cardInput.cvc || !cardInput.exp_month || !cardInput.exp_year) {
+        if (!cardInput.number || !cardInput.cvc || !cardInput.exp_month || !cardInput.exp_year || !cardInput.name) {
+          scope.checkCardName();
           scope.checkCardNumber();
           scope.checkCardExpiry();
           scope.checkCardCvv();
@@ -552,7 +575,17 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
           scope.checkoutModalState = 2;
           return;
         }
-
+        if(contact) {
+            cardInput.name = contact.first + ' ' + contact.last;
+            cardInput.address_line1 = contact.details[0].addresses[0].address;
+            cardInput.address_city = contact.details[0].addresses[0].city;
+            cardInput.address_state = contact.details[0].addresses[0].state;
+            cardInput.address_zip = contact.details[0].addresses[0].zip;
+            cardInput.address_country = contact.details[0].addresses[0].country || 'US';
+            if(contact.details[0].addresses[0].address2) {
+                cardInput.address_line2 = contact.details[0].addresses[0].address2;
+            }
+        }
 
         PaymentService.getStripeCardToken(cardInput, function (token, error) {
 
@@ -582,6 +615,11 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 angular.element("#card_cvc").addClass('has-error');
                 angular.element("#card_cvc .glyphicon").addClass('glyphicon-remove');
                 break;
+              case "name":
+                 angular.element("#card_name .error").html(error.message);
+                angular.element("#card_name").addClass('has-error');
+                angular.element("#card_name .glyphicon").addClass('glyphicon-remove');
+
             }
             scope.checkoutModalState = 3;
             return;
@@ -611,7 +649,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
               city: scope.newContact.details[0].addresses[0].city,
               countryCode: "",
               displayName: ""
-            }],
+            }]
           }];
           if(scope.newContact.details[0].phones && scope.newContact.details[0].phones[0] && scope.newContact.details[0].phones[0].number)
           {
@@ -729,6 +767,11 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
         angular.element("#card_expiry .glyphicon").removeClass('glyphicon-remove glyphicon-ok')
         angular.element("#card_cvc").removeClass('has-error has-success');
         angular.element("#card_cvc .glyphicon").removeClass('glyphicon-remove glyphicon-ok')
+        angular.element(".jp-card-number").text("•••• •••• •••• ••••");
+        angular.element(".jp-card-cvc").text("•••");
+        angular.element(".jp-card-name").text("Full Name");
+        angular.element(".jp-card-expiry").text("••/••");
+        angular.element(".jp-card").removeClass("jp-card-identified");
       }
 
       /*
@@ -804,6 +847,22 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
         }
       };
 
+      scope.checkCardName = function() {
+        scope.failedOrderMessage = "";
+                     var name = angular.element('#card_name #name').val();
+                     if (!name) {
+                         angular.element("#card_name .error").html("Card Name Required");
+                         angular.element("#card_name").addClass('has-error');
+                         angular.element("#card_name .glyphicon").addClass('glyphicon-remove');
+                     } else {
+                         angular.element("#card_name .error").html("");
+                         angular.element("#card_name").removeClass('has-error').addClass('has-success');
+                         angular.element("#card_name .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
+                     }
+                  
+                };
+
+
       scope.checkCardExpiry = function () {
         scope.failedOrderMessage = "";
         var expiry = angular.element('#expiry').val();
@@ -874,7 +933,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
         }
       };
 
-      scope.checkCardName = function () {
+     /* scope.checkCardName = function () {
         scope.failedOrderMessage = "";
         var name = $('#card_name #name').val();
         if (name) {
@@ -882,7 +941,8 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
           $("#card_name").removeClass('has-error').addClass('has-success');
           $("#card_name .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
         }
-      };
+      };*/
+     
     },
     controller: function ($scope) {
       $scope.setCheckoutState = function (state) {

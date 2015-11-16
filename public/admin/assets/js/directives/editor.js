@@ -29,28 +29,54 @@ app.directive("elem", function ($timeout) {
         },0);
       };
 
+      scope.updateFroalaContent = function (editor) {
+        $timeout(function () {
+          scope.$apply(function () {
+            ngModel.$setViewValue(editor.html.get());
+          });
+        },0);
+      };
+
       var elem = angular.element(element[0].querySelector('.editable'))[0];
-      CKEDITOR.inline(elem, {
-        on: {
-          instanceReady: function (ev) {
-            var editor = ev.editor;
-            editor.setReadOnly(false);
-            editor.setData(ngModel.$viewValue);
-            editor.on('change', function (e) {
-              scope.update(e);
+      if(scope.$parent.ssbEditor){        
+      $(function() {
+         setTimeout(function() {         
+            $(elem).on('froalaEditor.initialized', function (e, editor) {
+              editor.html.set(ngModel.$viewValue);
+            }).froalaEditor($.FroalaEditor.config)
+            .on('froalaEditor.contentChanged', function (e, editor) {
+              scope.updateFroalaContent(editor);
+            })
+            .on('froalaEditor.image.resizeEnd', function (e, editor, $img) {
+               scope.updateFroalaContent(editor);
             });
-            editor.on('key', function (e) {
-              scope.update(e);
-            });
-            editor.on('customUpdate', function (e) {
-              scope.setContent(e);
-            });
-          }
-        },
-        sharedSpaces: {
-          top: 'editor-toolbar'
-        }
+          }, 1000);
       });
+      }
+      else{      
+      CKEDITOR.inline(elem, {
+          on: {
+            instanceReady: function (ev) {
+              var editor = ev.editor;
+              editor.setReadOnly(false);
+              editor.setData(ngModel.$viewValue);
+              editor.on('change', function (e) {
+                scope.update(e);
+              });
+              editor.on('key', function (e) {
+                scope.update(e);
+              });
+              editor.on('customUpdate', function (e) {
+                scope.setContent(e);
+              });
+            }
+          },
+          sharedSpaces: {
+            top: 'editor-toolbar'
+          }
+        });
+      }
+      
     }
-  };
+  }
 });

@@ -43,13 +43,19 @@
         if (options.subtractNum && options.subtractType) {
           formattedDate = formattedDate.subtract(options.subtractNum, options.subtractType);
         }
+        if (options.addNum && options.addType) {
+          formattedDate = formattedDate.add(options.addNum, options.addType);
+        }
       }
       return formattedDate.format("MMMM Do, YYYY");
     };
 
     $scope.changeInvoice = function (invoice, index) {
-      console.log('changeInvoice >>> ' + invoice);
-      $scope.selectedInvoice = invoice;
+      if(invoice)
+      {
+        //console.log('changeInvoice >>> ' + invoice.toJSON());
+        $scope.selectedInvoice = invoice;
+      }
       $scope.selectedItemIndex = index;
     };
 
@@ -85,7 +91,11 @@
     $scope.planlist = {
       list: []
     };
+    $scope.addOns = {
+        list: []
+    };
     $scope.selectedPlan = {};
+    $scope.selectedAddOns = [];
 
     //get plans
     ProductService.getIndigenousProducts(function (products) {
@@ -100,6 +110,8 @@
             productAttrs.stripePlans[0] = plan; //populate full plan data
             $scope.planlist.list.push(product);
           });
+        } else {
+            $scope.addOns.list.push(product);
         }
 
       });
@@ -130,6 +142,21 @@
       console.warn($scope.selectedPlan);
     });
 
+    $scope.addInvoiceItem = function(productId) {
+        console.log('added: ' + productId);
+       $scope.selectedAddOns.push(productId);
+    };
+
+    $scope.removeInvoiceItem = function(productId) {
+        console.log('removed: ' + productId);
+        $scope.selectedAddOns = _.without($scope.selectedAddOns, productId);
+    };
+
+    $scope.isSelectedAddon = function(productId) {
+        return _.contains($scope.selectedAddOns, productId);
+        //return false;
+    };
+
     /*
      * @chooseFirstTime
      * -
@@ -151,7 +178,7 @@
       console.log('savePlanFn >>');
 
       if ($scope.currentUser.stripeId) {
-        PaymentService.postSubscribeToIndigenous($scope.currentUser.stripeId, planId, null, $scope.planStatus[planId], function (subscription) {
+        PaymentService.postSubscribeToIndigenous($scope.currentUser.stripeId, planId, null, $scope.planStatus[planId], $scope.selectedAddOns, $scope.Coupon, function (subscription) {
           $scope.cancelOldSubscriptionsFn();
           $scope.selectedPlan = subscription;
           console.log('$scope.selectedPlan:');

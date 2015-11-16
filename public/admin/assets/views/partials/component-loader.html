@@ -5,11 +5,17 @@
             <div ng-include=" '../components/component-switch.html' "></div>
             <div ng-class="{'zee-blur': !value.visibility}"></div>
         </li>
-        <li ng-if="!components.length">
+        <li ng-if="!components.length && !pageNotFound">
             <div class="well empty-page center">
                 <h1 >This Page is Empty.</h1>
                 <h4>Add some components and start editing!</h4>
                 <button class="btn btn-info margin-top-15" ng-click="openModal('add-component-modal', 'AddComponentModalCtrl', 0)">Add Component</button>
+            </div>
+            <div class="clearfix mb15"></div>
+        </li>
+        <li ng-if="pageNotFound">
+            <div class="well empty-page center">
+                <h1>Page not found.</h1>
             </div>
             <div class="clearfix mb15"></div>
         </li>

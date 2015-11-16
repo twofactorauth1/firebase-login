@@ -76,7 +76,7 @@ app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userSe
         formatted.details[0].emails.push({
           email: scope.user.email
         });
-        if (scope.user.phone) {
+        if (scope.user.phone || scope.user.extension) {
           formatted.details[0].phones.push({
             number: scope.user.phone,
             extension: scope.user.extension,
@@ -95,6 +95,22 @@ app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userSe
               name = scope.user.first + ' ' + scope.user.last;
             } else {
               name = '';
+            }
+
+            // This variant of the FB Tracking pixel is going away in late 2016
+            // Ref: https://www.facebook.com/business/help/373979379354234
+            if (scope.component.facebookConversionCode) {
+              var _fbq = window._fbq || (window._fbq = []);
+              if (!_fbq.loaded) {
+                var fbds = document.createElement('script');
+                fbds.async = true;
+                fbds.src = '//connect.facebook.net/en_US/fbds.js';
+                var s = document.getElementsByTagName('script')[0];
+                s.parentNode.insertBefore(fbds, s);
+                _fbq.loaded = true;
+              }
+              window._fbq = window._fbq || [];
+              window._fbq.push(['track', scope.component.facebookConversionCode, {'value':'0.00','currency':'USD'}]);
             }
 
             // var hash = CryptoJS.HmacSHA256(scope.user.email, "vZ7kG_bS_S-jnsNq4M2Vxjsa5mZCxOCJM9nezRUQ");

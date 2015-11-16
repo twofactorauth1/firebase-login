@@ -4,7 +4,8 @@
 app.directive('featureListComponent',["$window", function ($window) {
   return {
     scope: {
-      component: '='
+      component: '=',
+      ssbEditor: '='
     },
     templateUrl: '/components/component-wrap.html',
     link: function (scope, element, attrs, ctrl) {
@@ -43,7 +44,7 @@ app.directive('featureListComponent',["$window", function ($window) {
       angular.element(document).ready(function () {
         setTimeout(function () {
           scope.resizeFeatureTiles();
-        }, 500)
+        }, 1000)
       });
     }
   };

@@ -5,7 +5,8 @@ app.directive('singlePostComponent', ['$location', "WebsiteService", "$timeout",
   return {
     scope: {
       component: '=',
-      control: '='
+      control: '=',
+      ssbEditor: '='
     },
     templateUrl: '/components/component-wrap.html',
     link: function (scope, element, attrs) {

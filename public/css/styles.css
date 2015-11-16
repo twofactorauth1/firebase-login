@@ -1099,7 +1099,6 @@ div[data-type="feature-list"] .inner-page {
   box-shadow: none;
   margin-bottom: 0px;
   min-height: 85px;
-  z-index: 999;
 }
 .navbar .navigation-logo.edit-wrap {
   min-width: 200px;
@@ -1175,6 +1174,9 @@ ul.nav {
 .nav-undernav .component {
   position: relative;
   z-index: 1;
+}
+.bg-nav-undernav {
+  position: relative !important;
 }
 .navigation-v2 #header .navbar.navbar-default {
   border: none!important;
@@ -1512,9 +1514,6 @@ div[data-type="feature-block"] .component-inner {
 }
 .team-member-wrap .profile-social li {
   display: inline-block;
-}
-.meet-team-v1 {
-  overflow: hidden;
 }
 .meet-team-v1 .title {
   position: relative;
@@ -3579,6 +3578,7 @@ div[data-type=blog] .container {
 }
 .pricing-tables-v1 .btn-add {
   margin-top: 10px;
+  position: relative;
 }
 .pricing-tables-v1 .pricing_header h1,
 .pricing-tables-v1 .pricing_header h3,

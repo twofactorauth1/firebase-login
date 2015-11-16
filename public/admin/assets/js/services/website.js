@@ -54,8 +54,8 @@
             fn(data);
           })
           .error(function (err) {
-            console.warn('END:getSinglePage with ERROR');
-            fn(err, null);
+            //console.warn('END:getSinglePage with ERROR');
+            fn(null, err);
           });
       }
     };
@@ -89,7 +89,7 @@
           })
           .error(function (err) {
             //console.warn('END:checkDuplicatePage with ERROR', err);
-            if(err.code && err.code ===404) {
+            if(err && err.code && err.code === 404) {
                 //no dupe
                 fn(false);
             } else {
@@ -167,7 +167,7 @@
       console.log('getEmails >>> ');
       var self = this;
       var data = emailcache.get('emails');
-      if (data && !resetEmailCache) {
+      if (data && data.length && !resetEmailCache) {
         if (fn) {
           fn(data);
         }
@@ -451,7 +451,6 @@
       }).success(function (data, status, headers, config) {
         var _emails = emailcache.get('emails');
         if (_emails) {
-          // _emails[data.title] = data;
           _emails.push(data);
           emailcache.put('emails', _emails);
         }
@@ -495,7 +494,6 @@
         _emails = _.reject(_emails, function (_email) {
           return _email._id === email._id;
         });
-
         emailcache.put('emails', _emails);
         fn(data);
       }).error(function (err) {
@@ -512,6 +510,13 @@
         method: "POST",
         data: angular.toJson(pagedata)
       }).success(function (data, status, headers, config) {
+        if (pagedata.type === 'page') {
+          var _pages = pagecache.get('pages');
+          if (_pages) {
+            _pages[data.handle] = data;
+            pagecache.put('pages', _pages);
+          }          
+        }
         fn(data);
       }).error(function (err) {
         console.warn('END:Create Page with ERROR');
@@ -531,7 +536,7 @@
         pagecache.put('pages', _pages);
         fn(data);
       }).error(function (err) {
-        console.warn('END:createPageFromTemplate with ERROR');
+        fn(null, err);
       });
     };
 

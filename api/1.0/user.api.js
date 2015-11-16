@@ -280,7 +280,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
     },
 
-    createLead: function(user, account, sub, fn) {
+    createLead: function(user, account, sub, ipAddress, fn) {
         var self = this;
         self.log.debug('sub: ', sub);
 
@@ -293,7 +293,8 @@ _.extend(api.prototype, baseApi.prototype, {
                 name: user.get('first') + ' ' + user.get('last'),
                 email: user.get('email'),
                 //user_hash: hash.toString(CryptoJS.enc.Hex),
-                created_at: Math.floor(Date.now() / 1000)
+                created_at: Math.floor(Date.now() / 1000),
+                last_seen_ip: ipAddress
             },
             function(err, intercomData){
                 if (err) {
@@ -345,7 +346,7 @@ _.extend(api.prototype, baseApi.prototype, {
                         self.log.debug('leadId:', leadId);
                         var billingDays = account.get('billing').trialLength;
                         self.log.debug('billingDays:', billingDays);
-                        var date_won = moment(new Date()).add(billingDays, 'days').toISOString()
+                        var date_won = moment(new Date()).add(billingDays, 'days').toISOString();
                         self.log.debug('date_won:', date_won);
                         var newop = {
                             "note": "",
@@ -376,7 +377,10 @@ _.extend(api.prototype, baseApi.prototype, {
                             fn(null, lead.id);
                         }
 
-                    });
+                    }), function(err){
+                        self.log.error('Exception creating lead in close:', err);
+                        fn(null, null);
+                    };
                 } else {
                     self.log.debug('skipping call to closeio');
                     return fn(null, null);
@@ -445,7 +449,7 @@ _.extend(api.prototype, baseApi.prototype, {
             middle:middle,
             last:lastName
         };
-
+        var ipAddress = self.ip(req);
 
         async.waterfall([
             function(callback){
@@ -591,8 +595,7 @@ _.extend(api.prototype, baseApi.prototype, {
                             } else {
                                 self.log.debug('Created customer for user:' + user.id());
 
-                                self.createLead(user, account, sub, function(err, leadId) {
-
+                                self.createLead(user, account, sub, ipAddress, function(err, leadId) {
                                     userManager.sendWelcomeEmail(accountId, account, user, email, username, contact.id(), function(){
                                         self.log.debug('Sent welcome email');
                                     });

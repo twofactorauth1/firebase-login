@@ -17,7 +17,7 @@
 </style>
 <div ng-class="component.type+'-v'+component.version" data-color="component.txtcolor">
     <div id="header">
-        <nav class="navbar navbar-default" ng-class="{'navbar-box':component.shownavbox}" role="navigation" ng-style="{'background': component.bg.color}">
+        <nav class="navbar navbar-default" ng-class="{'navbar-box':component.shownavbox}" role="navigation">
             <div class="container">
                 <!-- Brand and toggle get grouped for better mobile display -->
                 <div class="navbar-header">
@@ -27,7 +27,17 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="/" data-name="{{account.company.name}}" style="margin:{{component.logo.margin.t}} {{component.logo.margin.r}} {{component.logo.margin.b}} {{component.logo.margin.l}}!important;padding:{{component.logo.padding}};">
+                    <div ng-if="isEditing" class="navbar-brand" data-name="{{account.company.name}}" style="margin:{{component.logo.margin.t}} {{component.logo.margin.r}} {{component.logo.margin.b}} {{component.logo.margin.l}}!important;padding:{{component.logo.padding}};">
+                        <span class="logo-1">
+                                <div class="nav-logo">
+                                    <div ng-if="!isSinglePost" elem ng-model="component.logo" class="navigation-logo"></div>
+                                    <div ng-if="isSinglePost" class="navigation-logo" tooltip-placement="bottom" tooltip="This component is only editable on the single-post page" ng-bind-html="component.logo | unsafe"></div>
+                                </div>
+                                <span data-ng-show="layout && !account.business.logo" ><convert-html contents="{{account.business.name}}">  </convert-html> </span>
+                        <span data-ng-show="blog && !account.business.logo"><convert-html contents="{{account.business.name}}">  </convert-html> </span>
+                        </span>
+                    </div>
+                    <a ng-if="!isEditing" class="navbar-brand" href="/" data-name="{{account.company.name}}" style="margin:{{component.logo.margin.t}} {{component.logo.margin.r}} {{component.logo.margin.b}} {{component.logo.margin.l}}!important;padding:{{component.logo.padding}};">
                         <span class="logo-1">
                                 <div class="nav-logo">
                                     <div ng-if="!isSinglePost" elem ng-model="component.logo" class="navigation-logo"></div>

@@ -234,46 +234,66 @@ module.exports = {
 
         var template, website, page, account;
 
-        var p1 = $.Deferred();
-        templateDao.getById(templateId, $$.m.cms.Template, function(err, _template) {
-            if (err) {
-                log.error('Exception getting template: ' + err);
-                p1.reject();
-            } else {
-                log.debug('Got Template.');
-                template = _template;
+        var p0 = $.Deferred();
 
-                if(websiteId === null) {
-                    log.debug('creating template');
-                    //create it
-                    var settings = template.get('config')['settings'];
-                    website = new $$.m.cms.Website({
-                        'accountId': accountId,
-                        'settings': settings,
-                        'created': {
-                            'by': userId,
-                            'date': new Date()
-                        }
-                    });
-                    cmsDao.saveOrUpdate(website, function(err, savedWebsite) {
-                        if (err) {
-                            log.error('Exception saving new website: ' + err);
-                            p1.reject();
-                        } else {
-                            log.debug('Created website.');
-                            websiteId = savedWebsite.id();
-                            website = savedWebsite;
-                            p1.resolve();
-                        }
-                    });
-                } else {
-                    //don't need to do anything.
-                    log.debug('Skip website creation.');
-                    p1.resolve();
-                }
+        cmsDao.getPageByHandle(accountId, websiteId, pageHandle, function(err, value){
+            if (err) {
+                log.error('Exception getting page: ' + err);
+                p0.reject();
+                return fn(err, null);
+            } else if(value) {
+                log.warn('Attempted to create an page with a handle that already exists.');
+                p0.reject();
+                fn('Page already exists', null);
+            }
+            else
+            {
+                log.debug('Good handle to create page.');
+                p0.resolve();
             }
         });
 
+        var p1 = $.Deferred();
+        $.when(p0).done(function(){
+            templateDao.getById(templateId, $$.m.cms.Template, function(err, _template) {
+                if (err) {
+                    log.error('Exception getting template: ' + err);
+                    p1.reject();
+                } else {
+                    log.debug('Got Template.');
+                    template = _template;
+
+                    if(websiteId === null) {
+                        log.debug('creating template');
+                        //create it
+                        var settings = template.get('config')['settings'];
+                        website = new $$.m.cms.Website({
+                            'accountId': accountId,
+                            'settings': settings,
+                            'created': {
+                                'by': userId,
+                                'date': new Date()
+                            }
+                        });
+                        cmsDao.saveOrUpdate(website, function(err, savedWebsite) {
+                            if (err) {
+                                log.error('Exception saving new website: ' + err);
+                                p1.reject();
+                            } else {
+                                log.debug('Created website.');
+                                websiteId = savedWebsite.id();
+                                website = savedWebsite;
+                                p1.resolve();
+                            }
+                        });
+                    } else {
+                        //don't need to do anything.
+                        log.debug('Skip website creation.');
+                        p1.resolve();
+                    }
+                }
+            });
+        });
         var p2 = $.Deferred();
         $.when(p1).done(function(){
 
@@ -1846,7 +1866,7 @@ module.exports = {
             log.error('No title on email.');
             return fn('No title provided for email');
         }
-        var nameCheckQuery = {'title': email.get('title'), 'accountId': email.get('accountId')};
+        var nameCheckQuery = {'title': new RegExp('^'+email.get('title')+'$', "i"), 'accountId': email.get('accountId')};
         emailDao.exists(nameCheckQuery, $$.m.cms.Email, function(err, value){
             if(err) {
                 log.error('Exception thrown checking for uniqueness: ' + err);

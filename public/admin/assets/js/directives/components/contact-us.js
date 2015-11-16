@@ -5,7 +5,8 @@ app.directive('contactUsComponent', ['AccountService', 'GeocodeService', '$timeo
   return {
     scope: {
       component: '=',
-      control: '='
+      control: '=',
+      ssbEditor: '='
     },
     templateUrl: '/components/component-wrap.html',
     link: function (scope, element, attrs) {
@@ -57,23 +58,7 @@ app.directive('contactUsComponent', ['AccountService', 'GeocodeService', '$timeo
         if (angular.isDefined(newValue) && scope.component.boxColor) {
           scope.boxColor = hexToRgb(scope.component.boxColor, scope.component.boxOpacity);
         }
-      });
-      scope.stringifyAddress = function (address) {
-        if (address) {
-          //var address = scope.htmlToPlaintext(address);
-          var _topline = _.filter([address.address, address.address2], function (str) {
-            return str !== "";
-          }).join(", ");
-          var _bottomline = _.filter([address.city, address.state, address.zip], function (str) {
-            return str !== "";
-          }).join(", ");
-          if (_topline) {
-            return _topline + ' <br> ' + _bottomline;
-          }
-
-          return _bottomline;
-        }
-      };
+      });     
 
       scope.setBusinessDetails = function(is_address, fn)
       {
@@ -97,8 +82,7 @@ app.directive('contactUsComponent', ['AccountService', 'GeocodeService', '$timeo
       }
 
       scope.updateContactUsAddress = function () {
-        scope.contactAddress = scope.stringifyAddress(scope.component.location);
-
+        scope.contactAddress = GeocodeService.stringifyAddress(scope.component.location, true);
         if (scope.component.location.lat && scope.component.location.lon) {
           scope.reloadMap();
         } else {
@@ -124,22 +108,25 @@ app.directive('contactUsComponent', ['AccountService', 'GeocodeService', '$timeo
         google.maps.event.trigger(scope.map, 'resize');
         scope.map.setCenter(new google.maps.LatLng(51, 0));
       });
-      scope.control.refreshMap = function () {
-        if ((!scope.component.location.address && !scope.component.location.address2 && !scope.component.location.city && !scope.component.location.state && !scope.component.location.zip) || !scope.component.custom.address) {
-          scope.setBusinessDetails(true, function () {
-              scope.updateContactUsAddress();
-          });
-        } else {
-          scope.updateContactUsAddress();
-        }
-      };
+      if(!scope.ssbEditor){
+        scope.control.refreshMap = function () {
+          if ((!scope.component.location.address && !scope.component.location.address2 && !scope.component.location.city && !scope.component.location.state && !scope.component.location.zip) || !scope.component.custom.address) {
+            scope.setBusinessDetails(true, function () {
+                scope.updateContactUsAddress();
+            });
+          } else {
+            scope.updateContactUsAddress();
+          }
+        };
 
-      scope.control.refreshHours = function () {
-        if (!scope.component.custom.hours)
-          scope.setBusinessDetails(false, function () {
-            console.log("hours refreshed");
-          });
-      };
+        scope.control.refreshHours = function () {
+          if (!scope.component.custom.hours)
+            scope.setBusinessDetails(false, function () {
+              console.log("hours refreshed");
+            });
+        };
+      }
+      
 
       scope.$parent.$watch('ckeditorLoaded', function (newValue, oldValue) {
         if(newValue)

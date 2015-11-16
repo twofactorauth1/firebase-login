@@ -29,6 +29,8 @@
       'mw': '100%',
       'usePage': false
     };
+    
+    $scope.duplicate = false;
 
     $scope.circleOptions = {
       isOpen: false,
@@ -180,6 +182,7 @@
 
     $scope.singleReorder = function (value, component, index) {
       console.log('singleReorder >>> ', value);
+      $scope.setDirty(true);
       if (value === 'down') {
         $scope.components.splice(index, 1);
         $scope.components.splice(index + 1, 0, component);
@@ -241,7 +244,12 @@
     $scope.redirectAfterSave = function(redirect_url, reload){    
     if(redirect_url){
         SweetAlert.swal("Saved!", "Your edits were saved to the page.", "success");
-        window.location = redirect_url;
+            $timeout(function () {
+              if($scope.duplicate)
+                $location.path(redirect_url);
+              else
+                window.location = redirect_url;
+            }, 500);
         if (reload) {
           window.location.reload();
         }
@@ -306,7 +314,7 @@
                 $location.search('posthandle', post_data.post_url);
               }
              
-              $scope.blog.post = data;
+              $scope.blog.post = $scope.postControl.getSinglePost();
               angular.copy($scope.blog.post, $scope.originalPost);
               toaster.pop('success', "Post Saved", "The " + $filter('htmlToPlaintext')($scope.blog.post.post_title) + " post was saved successfully.");              
               $scope.redirectAfterSave(redirect_url, reload);
@@ -399,6 +407,7 @@
                     toaster.pop('error', error.message);
                     return;
                   }
+                  $scope.originalPage = angular.copy($scope.page);
                   toaster.pop('success', "Email Saved", "The " + $scope.page.title + " email was saved successfully.");
                   $scope.redirectAfterSave(redirect_url, reload);
                 });
@@ -493,11 +502,17 @@
      * @retrievePage
      * -
      */
-
+    $scope.pageNotFound = false;
     $scope.retrievePage = function (_handle) {
       if (_handle === 'blog' || _handle === 'single-post')
         $scope.post_blog_page = true;
-      WebsiteService.getSinglePage(_handle, function (data) {
+      WebsiteService.getSinglePage(_handle, function (data, error) {
+        if(error)
+        {
+          $scope.ckeditorLoaded = true;
+          $scope.pageNotFound = true;
+          return;
+        }
         $scope.page  = angular.copy(data);
         $scope.components = $scope.page.components;
         if(_handle === 'single-post'){
@@ -709,9 +724,9 @@
      */
 
 
-    if ($location.search().topic) {
+    if ($location.search().topic_id) {
       $scope.isTopic = true;
-      $scope.retrieveTopic($location.search().topic);
+      $scope.retrieveTopic($location.search().topic_id);
     }
 
     /*
@@ -897,6 +912,9 @@
       } else {
         if ($scope.componentEditing.bg.img) {
           $scope.componentEditing.bg.img.url = asset.url;
+          $timeout(function () {
+            $(window).trigger('resize');
+          }, 0);
           return;
         }
       }
@@ -1184,6 +1202,10 @@
         post.post_url = $filter('slugify')(title); 
     };
 
+    $scope.plainTextTitle = function () {
+      $scope.blog.post.post_title = $filter('htmlToPlaintext')($scope.blog.post.post_title);
+    };
+
     $scope.newPage = {};
 
     /*
@@ -1202,7 +1224,8 @@
     });
 
     $scope.createDuplicatePage = function (newPage) {
-
+      $scope.single_post = false;
+      $scope.post_blog_page = false;
       if ($scope.isPage) {
         newPage.type = "page";
       }
@@ -1228,12 +1251,8 @@
     $scope.newEmail = {};
 
     $scope.createDuplicateEmail = function () {
-      // $scope.validateNewPage(newPage);
-      // if (!$scope.newPageValidated) {
-      //   toaster.pop('error', "Page Title or URL can not be blank.");
-      //   return false;
-      // }
       $scope.newEmail.components = $scope.page.components;
+      $scope.newEmail.type = $scope.page.type || "email";
       WebsiteService.createEmail($scope.newEmail, function (data, error) {
         if (data && !error) {
           $scope.duplicate = true;
@@ -1251,7 +1270,7 @@
           toaster.pop('success', "Settings saved successfully");
           $scope.closeModal();
           $timeout(function () {
-            $scope.checkForSaveBeforeLeave();
+            //$scope.checkForSaveBeforeLeave();
           }, 100);
           
         } else if (!data && error && error.message) {

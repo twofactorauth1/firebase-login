@@ -202,7 +202,7 @@ app.constant('social', {
         label: "LinkedIn",
         data: "li"
       }, {
-        label: "Google+",
+        label: "Google",
         data: "go"
       }
       //{label:"Full Contacnt", data:"fc"}
@@ -349,6 +349,13 @@ app.constant('postConstant', {
   }
 });
 
+app.constant('pageConstant', {
+  page_handles: {
+    BLOG: 'blog',
+    SINGLEPOST: 'single-post',
+  }
+});
+
 // {
 //   name: 'Digital',
 //   value: 'digital'
@@ -437,7 +444,7 @@ app.constant('userConstant', {
         label: "LinkedIn",
         data: "li"
       }, {
-        label: "Google+",
+        label: "Google",
         data: "go"
       }
       //{label:"Full Contacnt", data:"fc"}
@@ -649,6 +656,8 @@ app.constant('JS_REQUIRES', {
     'createCampaignCtrl': 'assets/js/controllers/createCampaignCtrl.js',
     'addComponentModalCtrl': 'assets/js/controllers/modals/addComponentModalCtrl.js',
     'componentSettingsModalCtrl': 'assets/js/controllers/modals/componentSettingsModalCtrl.js',
+    'ssbComponentSettingsModalCtrl': 'assets/js/controllers/modals/ssbComponentSettingsModalCtrl.js',
+    'SiteBuilderSidebarController': 'assets/js/ssb-site-builder/ssb-sidebar/ssb-sidebar.controller.js',
     'mediaModalCtrl': 'assets/js/controllers/modals/mediaModalCtrl.js',
     'templateSettingsModalCtrl': 'assets/js/controllers/modals/templateSettingsModalCtrl.js',
     'importCustomerModalCtrl': 'assets/js/controllers/modals/importCustomerModalCtrl.js',
@@ -816,7 +825,7 @@ app.constant('JS_REQUIRES', {
     files: ["../js/libs/jqcloud2/dist/jqcloud.min.js", "../js/libs/angular-jqcloud/angular-jqcloud.js", "../js/libs/jqcloud2/dist/jqcloud.min.css"]
   }, {
     name: 'wu.masonry',
-    files: ['../js/libs/angular-masonry/angular-masonry.js', '../js/libs/masonry/dist/masonry.pkgd.min.js']
+    files: ['../js/libs/angular-masonry/angular-masonry.js', '../js/libs/masonry/dist/masonry.pkgd.min.js', '../js/libs/imagesloaded/imagesloaded.pkgd.min.js']
   }, {
     name: 'ngTextTruncate',
     files: ['../js/libs/ng-text-truncate/ng-text-truncate.js']
@@ -850,5 +859,48 @@ app.constant('JS_REQUIRES', {
   }, {
     name: 'angular-clipboard',
     files: ['../js/libs/angular-clipboard/angular-clipboard.js'],
+  },
+  {
+    name: 'froala-wysiwyg-editor',
+    files: ['../js/libs_misc/froala-wysiwyg-editor/css/froala_editor.css',
+      '../js/libs/froala-wysiwyg-editor/css/froala_style.min.css',
+      '../js/libs/froala-wysiwyg-editor/js/froala_editor.min.js'
+      ]
+  },
+  {
+    name: 'froala-wysiwyg-editor-plugins',
+    files: [          
+      "../js/libs/froala-wysiwyg-editor/js/plugins/align.min.js",
+      "../js/libs/froala-wysiwyg-editor/js/plugins/colors.min.js",
+      "../js/libs/froala-wysiwyg-editor/js/plugins/emoticons.min.js",
+      "../js/libs/froala-wysiwyg-editor/js/plugins/entities.min.js",
+      "../js/libs/froala-wysiwyg-editor/js/plugins/font_family.min.js",
+      "../js/libs/froala-wysiwyg-editor/js/plugins/font_size.min.js",
+      "../js/libs/froala-wysiwyg-editor/js/plugins/image.min.js",      
+      "../js/libs/froala-wysiwyg-editor/js/plugins/inline_style.min.js",
+      "../js/libs/froala-wysiwyg-editor/js/plugins/line_breaker.min.js",
+      "../js/libs/froala-wysiwyg-editor/js/plugins/link.min.js",
+      "../js/libs/froala-wysiwyg-editor/js/plugins/lists.min.js",
+      "../js/libs/froala-wysiwyg-editor/js/plugins/paragraph_format.min.js",
+      "../js/libs/froala-wysiwyg-editor/js/plugins/paragraph_style.min.js",
+      "../js/libs/froala-wysiwyg-editor/js/plugins/quote.min.js",
+      "../js/libs/froala-wysiwyg-editor/js/plugins/save.min.js",
+      "../js/libs/froala-wysiwyg-editor/js/plugins/table.min.js",
+      "../js/libs/froala-wysiwyg-editor/js/plugins/url.min.js",
+      "../js/libs/froala-wysiwyg-editor/js/plugins/video.min.js",
+      "../js/libs/froala-wysiwyg-editor/css/plugins/colors.css",
+      "../js/libs/froala-wysiwyg-editor/css/plugins/emoticons.css",
+      "../js/libs/froala-wysiwyg-editor/css/plugins/image.css",
+      "../js/libs/froala-wysiwyg-editor/css/plugins/image_manager.css",
+      "../js/libs/froala-wysiwyg-editor/css/plugins/line_breaker.css",
+      "../js/libs/froala-wysiwyg-editor/css/plugins/table.css",
+      "../js/libs/froala-wysiwyg-editor/css/plugins/video.css",
+      ]
+  },
+  {
+    name: 'custom-froala-wysiwyg-editor',
+    files: [ 
+      "../js/libs_misc/froala-wysiwyg-editor/js/plugins/media_manager.min.js",
+      '../js/libs_misc/froala-wysiwyg-editor/config/config.js']
   }]
 });

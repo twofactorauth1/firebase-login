@@ -17,6 +17,7 @@ app.directive('indigewebSkeuocard',['PaymentService', 'UserService', 'ToasterSer
                     scope.user = user;
                 });
                 scope.$watch('user', function(newValue, oldValue) {
+                    var renderedcardFlag=0;
                     if (newValue && newValue.stripeId) {
                         PaymentService.getCustomerCards(newValue.stripeId, function(cards) {
                             scope.cards = cards;
@@ -31,20 +32,26 @@ app.directive('indigewebSkeuocard',['PaymentService', 'UserService', 'ToasterSer
                                     }
                                 });
                             } else {
-                                element.find('form').card({
-                                    container: '.' + scope.wrapper
-                                });
+                                if(renderedcardFlag != 0)
+                                {
+                                    element.find('form').card({
+                                        container: '.' + scope.wrapper
+                                    });
+                                }
                             }
                         }, function(data) {
-                            element.find('form').card({
+                            /*element.find('form').card({
                                 container: '.' + scope.wrapper
-                            });
+                            });*/
 
                         });
                     } else {
-                        element.find('form').card({
-                            container: '.' + scope.wrapper
-                        });
+                        if(renderedcardFlag == 0)
+                        {
+                            element.find('form').card({
+                                container: '.' + scope.wrapper
+                            });
+                        }
                     }
                 });
 
@@ -66,9 +73,9 @@ app.directive('indigewebSkeuocard',['PaymentService', 'UserService', 'ToasterSer
                 scope.checkCardName = function() {
                      var name = $('#card_name #name').val();
                      if (!name) {
-                    //     $("#card_name .error").html("Card Name Required");
-                    //     $("#card_name").addClass('has-error');
-                    //     $("#card_name .glyphicon").addClass('glyphicon-remove');
+                         $("#card_name .error").html("Card Name Required");
+                         $("#card_name").addClass('has-error');
+                         $("#card_name .glyphicon").addClass('glyphicon-remove');
                      } else {
                          $("#card_name .error").html("");
                          $("#card_name").removeClass('has-error').addClass('has-success');
@@ -78,6 +85,7 @@ app.directive('indigewebSkeuocard',['PaymentService', 'UserService', 'ToasterSer
                 };
 
                 scope.currentYear = new Date().getYear() - 100;
+                scope.fullCurrentYear = new Date().getFullYear();
                 scope.currentMonth = new Date().getMonth() + 1;
 
                 scope.checkCardExpiry = function() {
@@ -100,12 +108,28 @@ app.directive('indigewebSkeuocard',['PaymentService', 'UserService', 'ToasterSer
                         $("#card_expiry").addClass('has-error');
                         $("#card_expiry .glyphicon").addClass('glyphicon-remove');
                     } else {
-                        console.log('year ', parseInt(exp_year));                        
-                        if (parseInt(exp_year) < parseInt(scope.currentYear)) {
+                        console.log('year ', parseInt(exp_year));   
+                        scope.yearLength = exp_year.length;
+                        if(scope.yearLength == 2)
+                        {
+                            if (parseInt(exp_year) < parseInt(scope.currentYear)) {
+                                $("#card_expiry .error").html("Card Year has Expired");
+                                $("#card_expiry").addClass('has-error');
+                                $("#card_expiry .glyphicon").addClass('glyphicon-remove');
+                                return;
+                            }
+
+                        }
+                        else if(scope.yearLength == 4)
+                        {
+                            if(parseInt(exp_year) < parseInt(scope.fullCurrentYear)){
                             $("#card_expiry .error").html("Card Year has Expired");
-                            $("#card_expiry").addClass('has-error');
-                            $("#card_expiry .glyphicon").addClass('glyphicon-remove');
-                        } else if (exp_month <= scope.currentMonth && parseInt(exp_year) <= scope.currentYear) {
+                                $("#card_expiry").addClass('has-error');
+                                $("#card_expiry .glyphicon").addClass('glyphicon-remove');
+                                return;
+                            }
+                        }
+                         if (exp_month < scope.currentMonth && parseInt(exp_year) <= scope.currentYear) {
                             $("#card_expiry .error").html("Card Month has Expired");
                             $("#card_expiry").addClass('has-error');
                             $("#card_expiry .glyphicon").addClass('glyphicon-remove');
@@ -178,7 +202,8 @@ app.directive('indigewebSkeuocard',['PaymentService', 'UserService', 'ToasterSer
                                 number: parent_div.find('#number').val(),
                                 cvc: parent_div.find('#cvc').val(),
                                 exp_month: exp_month,
-                                exp_year: exp_year
+                                exp_year: exp_year,
+                                name : parent_div.find('#name').val()
                             };
                         } else {
                             var expiry = $('#expiry').val().split("/")
@@ -191,7 +216,8 @@ app.directive('indigewebSkeuocard',['PaymentService', 'UserService', 'ToasterSer
                                 number: $('#number').val(),
                                 cvc: $('#cvc').val(),
                                 exp_month: exp_month,
-                                exp_year: exp_year
+                                exp_year: exp_year,
+                                name : $('#card_name #name').val()
                             };
                         }
 
@@ -205,6 +231,8 @@ app.directive('indigewebSkeuocard',['PaymentService', 'UserService', 'ToasterSer
                                 function(err){
                                     ToasterService.clearAll();
                                     ToasterService.show('error', 'The purchase was unsuccessful. Please check your card information.');
+                                    //Closing the previous opened
+                                    scope.$parent.closeModal('change-card-modal');
                                     scope.$parent.openModal('change-card-modal');
                                 });
                                 scope.cards.data.forEach(function(value, index) {

@@ -144,7 +144,7 @@
             created: {
               date: new Date().toISOString()
             },
-            order_id: orders.length,
+            order_id: orders.length + 1,
             status: 'pending_payment',
             line_items: [],
             notes: []

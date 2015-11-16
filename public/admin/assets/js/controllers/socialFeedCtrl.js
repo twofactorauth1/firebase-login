@@ -731,6 +731,15 @@
       }, 1000);
     };
 
+    
+    angular.element(".sidebar-toggler").click(function(){
+      if($scope && $scope.$state && $scope.$state.current && $scope.$state.current.name === "app.marketing.socialfeed"){
+        setTimeout(function () {
+          if($('#mcontainer'))
+            $('#mcontainer').masonry();
+        }, 500);
+      }        
+    })
 
   }]);
 }(angular));

@@ -2,13 +2,13 @@
 /*global app, moment, angular, window, CKEDITOR*/
 /*jslint unparam:true*/
 (function (angular) {
-  app.controller('PagesCtrl', ["$scope", "$location", "toaster", "$filter", "$modal", "WebsiteService", "$timeout", function ($scope, $location, toaster, $filter, $modal, WebsiteService, $timeout) {
+  app.controller('PagesCtrl', ["$scope", "$location", "toaster", "$filter", "$modal", "WebsiteService", "pageConstant", "$timeout", function ($scope, $location, toaster, $filter, $modal, WebsiteService, pageConstant, $timeout) {
     $scope.tableView = 'list';
     $scope.itemPerPage = 40;
     $scope.showPages = 15;
     $scope.showChangeURL = false;
     $scope.createpage = {};
-
+    $scope.pageConstant = pageConstant;
     $scope.setHomePage = function () {
       if ($scope.createpage.homepage) {
         $scope.createpage.title = 'Home';
@@ -172,16 +172,24 @@
         mainmenu: page.mainmenu
       };
 
+      
       var hasHandle = false;
       _.each($scope.pages, function (_page) {
         if (_page.handle === page.handle) {
           hasHandle = true;
         }
-      });
-
+      });      
 
       if (!hasHandle) {
-        WebsiteService.createPageFromTemplate($scope.selectedTemplate._id, pageData, function (_newPage) {
+        WebsiteService.createPageFromTemplate($scope.selectedTemplate._id, pageData, function (_newPage, error) {
+          if(error && !_newPage)
+          {
+            toaster.pop('error', error.message);
+            $event.preventDefault();
+            $event.stopPropagation();
+            $scope.saveLoading = false;
+            return;
+          }
           var newpage = angular.copy(_newPage);
           toaster.pop('success', 'Page Created', 'The ' + newpage.title + ' page was created successfully.');
           $scope.minRequirements = true;

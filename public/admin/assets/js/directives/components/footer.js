@@ -4,7 +4,8 @@
 app.directive('footerComponent', ['WebsiteService', function (WebsiteService) {
   return {
     scope: {
-      component: '='
+      component: '=',
+      ssbEditor: '='
     },
     templateUrl: '/components/component-wrap.html',
     link: function (scope, element, attrs, ctrl) {

@@ -5,7 +5,8 @@ app.directive('meetTeamComponent',["$window", function ($window) {
   return {
     scope: {
       component: '=',
-      media: '&'
+      media: '&',
+      ssbEditor: '='
     },
     templateUrl: '/components/component-wrap.html',
     link: function (scope, element, attrs, ctrl) {

@@ -51,9 +51,14 @@
     $scope.emails = [];
 
     $scope.formatDate = function (date) {
-      var localDate = moment(date);
-      // var offset = moment().utcOffset();
-      // localDate.add(offset, 'minutes')
+      if (!date._d) {
+        var date = { year: date.year, month: date.month - 1, day: date.day, hour: date.hour, minute: date.minute };
+        var localDate = moment.utc(date);
+        var localDate = localDate.local();
+      } else {
+        var localDate = moment(date);
+      }
+      
       return localDate.format("dddd, MMMM Do YYYY, h:mm A");
     };
 
@@ -261,23 +266,17 @@
     $scope.component = $scope.emailToSend.components[0];
 
     $scope.updateTime = function () {
-      // var time = moment.utc($scope.delivery.time).subtract(1, 'months') //.add(moment().utcOffset(), 'minutes');
-      // var date = moment.utc($scope.delivery.date) //.add(moment().utcOffset(), 'minutes');
-      // var hour = time.get('hour');
-      // var minute = time.get('minute');
-      // var formatted = date.set('hour', hour).set('minute', minute);
-      // if (formatted && formatted._d.toString() === "Invalid Date") {
+      // var date = moment($scope.delivery.date);
+      // if (date && date._d && date._d.toString() === "Invalid Date") {
       //   $scope.invalidDate = true;
       // } else {
-      //   $scope.delivery.date = formatted;
+      //   $scope.delivery.date = date;
       // }
-
       // if ($scope.delivery.date.diff && $scope.delivery.date.diff(moment(), "minutes") < 0) {
       //   $scope.invalidDate = true;
       // } else {
       //   $scope.invalidDate = false;
       // }
-
     };
 
     $scope.togglePreview = function () {
@@ -413,7 +412,7 @@
 
       _.each(subjectWords, function (word) {
         //All Words Capitalized
-        if (word[0] !== word[0].toUpperCase()) {
+        if (word && word[0] !== word[0].toUpperCase()) {
           capitalized = false;
         }
 
@@ -498,6 +497,13 @@
       $scope.subjectScore = Math.round(percentRating);
 
     };
+
+
+    $scope.$watch('emailToSend.subject', function (newValue, oldValue) {
+      if (newValue) {
+        $scope.analyzeSubject(newValue);
+      }
+    });
 
     /*
      * @changeCurrentEmail

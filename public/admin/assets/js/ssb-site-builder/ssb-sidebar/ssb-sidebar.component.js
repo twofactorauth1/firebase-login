@@ -7,7 +7,8 @@ function ssbSidebar() {
     return {
         restrict: 'E',
         scope: {
-            page: '='
+            state: '=',
+            uiState: '='
         },
         templateUrl: 'assets/js/ssb-site-builder/ssb-sidebar/ssb-sidebar.component.html',
         controller: 'SiteBuilderSidebarController',

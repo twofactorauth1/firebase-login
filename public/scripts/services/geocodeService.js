@@ -15,18 +15,23 @@ mainApp.service('geocodeService', ['$http', function ($http) {
         });
     };
 
-    this.stringifyAddress = function (address) {
-      var _bottomline = "";
-      var _topline = "";
+    this.stringifyAddress = function (address, breakLine) {
       if (address) {
-        _bottomline = _.filter([address.city, address.state], function (str) {
-          return str !== "";
-        }).join(", ");
-        _topline = _.filter([address.address, _bottomline, address.zip], function (str) {
-          return str !== "";
-        }).join(" ");
-      }
-      return _topline;
+          //var address = scope.htmlToPlaintext(address);
+          var separator = ' ';
+          var _topline = _.filter([address.address, address.address2], function (str) {
+            return str !== "";
+          }).join(", ");
+          var _bottomline = _.filter([address.city, address.state, address.zip], function (str) {
+            return str !== "";
+          }).join(", ");
+          if (_topline) {
+            if(breakLine)
+              separator = ' <br> '
+            return _topline + separator + _bottomline;
+          }
+          return _bottomline;
+        }
     };
 
     this.validateAddress = function (location, fn) {

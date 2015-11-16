@@ -11,7 +11,13 @@ app.directive('mastheadComponent', ['$window', function ($window) {
       angular.element('body').on("click", ".navbar-toggle", function (e) {
         scope.setUnderbnavMargin();
       });
-
+      
+      angular.element(document).ready(function () {
+        setTimeout(function () {
+          scope.setUnderbnavMargin();
+          console.log("masthead loaded");
+        }, 0);
+      });
       angular.element($window).bind('resize', function () {
         scope.setUnderbnavMargin();
       });
@@ -31,6 +37,7 @@ app.directive('mastheadComponent', ['$window', function ($window) {
                 mastheadElement.css("height", $window.innerHeight + navHeight);
             }
             angular.element(".undernav").addClass("nav-undernav");
+            angular.element(".nav-undernav .bg").addClass("bg-nav-undernav");
             if (mastheadUnderNavElement)
               mastheadUnderNavElement.css("height", margin);
             if (angular.element(".masthead-actions"))

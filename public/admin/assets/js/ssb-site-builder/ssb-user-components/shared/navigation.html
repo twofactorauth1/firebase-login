@@ -1,0 +1,195 @@
+<div ng-controller="SSBComponentSettingsModalCtrl">
+    <div class="form-group">
+        <label for="component-title">Custom Nav</label>
+        <span tooltip-placement="top" tooltip-html-unsafe="Allows the user to create a custom nav for this page only."><i class="fa fa-info-circle" /></span>
+        <switch ng-model="vm.uiState.componentEditing.customnav" class="pull-right" ng-change="saveComponent()"></switch>
+    </div>
+    <hr />
+    <div>
+        <p class="col-xs-9" style="padding-left:0;">Drag and Drop your links to rearrange them.</p>
+        <a href="" class="col-xs-3" ng-click="initializeLinks(true)" style="text-align: right;padding: 0;"><span class="fa fa-plus"></span> Add Link</a>
+    </div>
+    <div class="clearfix"></div>
+    <div class="container-fluid add-navlinks" ng-if="addLink" style="border: 1px solid #cccccc!important;border-radius: 5px;">
+        <div class="row">
+            <div class="clearfix margin-bottom-5"></div>
+            <div class="col-xs-12">
+                <label for="link-title">Title</label>
+                <input type="text" ng-model="newLink.linkTitle" placeholder="Enter link title" class="form-control margin-bottom-10">
+            </div>
+            <div class="col-xs-12">
+                <label for="link-title">Link To:</label>
+                <br>
+                <div class="radio-inline">
+                    <label for="addRadioOptions-1" class="pull-right">Page</label>
+                    <input type="radio" name="addRadioOptions-1" id="addRadio1" ng-model="newLink.linkType" ng-click="newLink.linkType='page'" value="page">
+                </div>
+                <div class="radio-inline">
+                    <label for="inlineRadioOptions-2" class="pull-right">Component</label>
+                    <input type="radio" name="addRadioOptions-2" id="addRadio2" ng-model="newLink.linkType" ng-click="newLink.linkType='section'" value="section">
+                </div>
+                <div class="radio-inline">
+                    <label for="inlineRadioOptions-3" class="pull-right">External</label>
+                    <input type="radio" name="addRadioOptions-3" id="addRadio3" ng-model="newLink.linkType" ng-click="newLink.linkType='external'" value="external">
+                </div>
+            </div>
+            <div class="col-xs-12">
+                <label ng-if="newLink.linkType=='section'" for="link-page">Select Page</label>
+                <select ng-if="newLink.linkType=='section'" placeholder="Select a page" ng-model="newLink.linkPage" class="form-control margin-bottom-0">
+                    <option value="" disabled>Select a Page</option>
+                    <option ng-repeat="page in filterdedPages track by $index" data-ng-if="page.title && page.handle" value="{{page.handle}}">{{page.title}}</option>
+                </select>
+                <label style="margin-top:10px" ng-if="newLink.linkType=='section'" for="link-url">Select Component</label>
+                <select style="text-transform:capitalize" ng-if="newLink.linkType=='section'" placeholder="Select a component" ng-model="newLink.linkUrl" class="form-control margin-bottom-0">
+                    <option value="" disabled>Select a Component</option>
+                    <option ng-repeat="component in currentPage.components track by $index" data-ng-if="component.anchor || component._id" value="{{component.anchor || component._id}}">{{setLinkTitle(component.type, $index)}}</option>
+                </select>
+                <label ng-if="newLink.linkType=='page'" for="link-url">Select Page</label>
+                <label ng-if="newLink.linkType=='external'" for="link-url">Enter Url</label>
+                <select ng-if="newLink.linkType=='page'" placeholder="Select a page" ng-model="newLink.linkUrl" class="form-control margin-bottom-0">
+                    <option value="" disabled>Select a Page</option>
+                    <option ng-repeat="page in filterdedPages track by $index" data-ng-if="page.title && page.handle" value="{{page.handle}}" ng-selected="{{link.label == page.title}}">{{page.title}}</option>
+                </select>
+                <input class="form-control" type="text" ng-if="newLink.linkType=='external'" ng-model="newLink.linkUrl" placeholder="Enter External URL">
+            </div>
+            <div class="clearfix margin-bottom-10"></div>
+            <div>
+                <button type="button" ng-click="initializeLinks(false)" style="margin-bottom: 10px;" class="btn btn-primary pull-right">Cancel</button>
+                <button type="button" style="margin-right: 5px;" ng-if="newLink.linkType && newLink.linkUrl && newLink.linkTitle" ng-click="addLinkToNav();" class="btn btn-primary pull-right">Add</button>
+            </div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    <div ng-if="!vm.uiState.componentEditing.customnav" id="reorderNavBarContainer" class="form-group">
+        <ul ng-hide="" ng-sortable="barConfig" class="component-sortable" ng-class="{'dragging': dragging}" ng-model="mainMenu.links" class="nav-bar" data-ng-repeat="mainMenu in website.linkLists track by $index" data-ng-if="mainMenu.handle=='head-menu' ">
+            <li data-ng-repeat="link in mainMenu.links track by $index" class="margin-bottom-10 fragment">
+                <div class="head-menu-links" data-label="{{link.label}}">
+                    <div class="container-fluid">
+                        <div>
+                            <div class="col-xs-1">
+                                <h4>
+                                    <span class="reorder fa fa-arrows"></span>
+                                </h4>
+                            </div>
+                            <div class="col-xs-8">
+                                <h4 ng-show="!edit[$index]">
+                                    {{link.label}}
+                                </h4>
+                            </div>
+                            <div class="col-xs-3">
+                                <h4>
+                                    <i class="fa fa-trash-o pull-right" ng-hide="edit[$index]" ng-click="deleteLinkFromNav($index);" style="margin-top: 3px;"></i>
+                                    <i ng-show="!edit[$index]" class="fa fa-pencil-square-o pull-right" ng-click="edit[$index]=true; linkType[$index]=link.linkTo.type;initializeEditLinks(link.linkTo, false)" style="margin-top: 3px;"></i>
+                                    <i ng-show="edit[$index]" class="fa fa-times pull-right" ng-click="edit[$index]= false" style="margin-top: 3px;"></i>
+                                </h4>
+                            </div>
+                            <div ng-show="edit[$index]" class="col-xs-12">
+                                <label ng-show="edit[$index]" for="edit[$index]">Title</label>
+                                <input ng-blur="updateLinkList()" placeholder="Enter link title" ng-show="edit[$index]" type="text" ng-model="link.label" class="form-control" style="margin-bottom: 10px;">
+                            </div>
+                            <div class="col-xs-12" ng-show="edit[$index]">
+                                <div class="clearfix margin-bottom-5"></div>
+                                <label for="link-title">Link To:</label>
+                                <br>
+                                <div class="radio-inline">
+                                    <label for="inlineRadioOptions-{{$index}}" class="pull-right">Page</label>
+                                    <input type="radio" name="inlineRadioOptions-{{$index}}" id="inlineRadio1" ng-model="link.linkTo.type" ng-click="linkType[$index] = 'page'" value="page" ng-checked="{{link.linkTo.type == 'page'}}">
+                                </div>
+                                <div class="radio-inline">
+                                    <label for="inlineRadioOptions-{{$index}}" class="pull-right">Component</label>
+                                    <input type="radio" name="inlineRadioOptions-{{$index}}" id="inlineRadio2" ng-click="linkType[$index] = 'section'" ng-model="link.linkTo.type" value="section" ng-checked="{{link.linkTo.type == 'section'}}">
+                                </div>
+                                <div class="radio-inline">
+                                    <label for="inlineRadioOptions-{{$index}}" class="pull-right">External</label>
+                                    <input type="radio" name="inlineRadioOptions-{{$index}}" id="inlineRadio3" ng-click="linkType[$index] = 'external'" ng-model="link.linkTo.type" value="external" ng-checked="{{link.linkTo.type == 'external'}}">
+                                </div>
+                                <div class="clearfix margin-bottom-10"></div>
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <label ng-if="linkType[$index]=='section'" for="link-page">Select Page</label>
+                                        <select ng-if="linkType[$index]=='section'" placeholder="Select a page" ng-model="link.linkTo.page" ng-change="initializeEditLinks(link.linkTo, true)" class="form-control margin-bottom-0">
+                                            <option value="" disabled>Select a Page</option>
+                                            <option ng-repeat="page in filterdedPages track by $index" data-ng-if="page.title && page.handle" value="{{page.handle}}" ng-selected="{{link.linkTo.page == page.handle}}">{{page.title}}</option>
+                                        </select>
+                                        <label style="margin-top:10px" ng-if="linkType[$index]=='section'" for="link-url">Select Component</label>
+                                        <label ng-if="linkType[$index]=='page'" for="link-url">Select Page</label>
+                                        <label ng-if="linkType[$index]=='external'" for="link-url">Enter Url</label>
+                                        <select id="linkSection" style="text-transform:capitalize" ng-if="linkType[$index]=='section'" ng-model="link.linkTo.data" placeholder="Select a component" ng-change="updateLinkList()" class="form-control margin-bottom-0">
+                                            <option value="" disabled>Select a Component</option>
+                                            <option ng-repeat="component in currentPage.components track by $index" data-ng-if="component.anchor || component._id" value="{{component.anchor || component._id}}" ng-selected="{{link.linkTo.data === (component.anchor || component._id)}}">{{setLinkTitle(component.type, $index)}}</option>
+                                        </select>
+                                        <select ng-if="linkType[$index]=='page'" placeholder="Select a page" ng-change="updateLinkList()" ng-model="link.linkTo.data" class="form-control margin-bottom-0">
+                                            <option value="" disabled>Select a Page</option>
+                                            <option ng-repeat="page in filterdedPages track by $index" data-ng-if="page.title && page.handle" value="{{page.handle}}" ng-selected="{{link.linkTo.data == page.handle}}">{{page.title}}</option>
+                                        </select>
+                                        <input class="form-control" type="text" ng-if="linkType[$index]=='external'" ng-change="updateLinkList()" ng-model="link.linkTo.data" placeholder="Enter External URL">
+                                    </div>
+                                </div>
+                                <div class="clearfix margin-bottom-10"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <div ng-if="vm.uiState.componentEditing.customnav" id="reorderNavBarContainer" class="form-group">
+        <ul ng-sortable="barConfig" class="component-sortable" ng-model="customMenu.links" ng-class="{'dragging': dragging}" class="nav-bar" data-ng-repeat="customMenu in vm.uiState.componentEditing.linkLists track by $index" data-ng-if="customMenu.handle=='head-menu' ">
+            <li data-ng-repeat="link in customMenu.links track by $index" class="margin-bottom-10 fragment">
+                <div class="head-menu-links" data-label="{{link.label}}">
+                    <div class="container-fluid">
+                        <div class="col-xs-1">
+                            <h4>
+                                        <span class="fa fa-arrows reorder"></span>
+                                    </h4>
+                        </div>
+                        <div class="col-xs-8" style="padding-left:0;">
+                            <h4 ng-show="!edit[$index]">
+                                        {{link.label}}
+                                    </h4>
+                            <input ng-blur="updateLinkList()" ng-show="edit[$index]" type="text" ng-model="link.label" class="form-control" style="margin-top: 10px;">
+                        </div>
+                        <div class="col-xs-3">
+                            <h4>
+                                        <i class="fa fa-trash-o pull-right" ng-hide="edit[$index]" ng-click="deleteLinkFromNav($index);" style="margin-top: 3px;"></i>
+                                        <i ng-show="!edit[$index]" class="fa fa-pencil-square-o pull-right" ng-click="edit[$index]=true; linkType[$index]=link.linkTo.type;initializeEditLinks(link.linkTo, false)" style="margin-top: 3px;"></i>
+                                        <i ng-show="edit[$index]" class="fa fa-times pull-right" ng-click="edit[$index]= false" style="margin-top: 3px;"></i>
+                                    </h4>
+                        </div>
+                        <div class="col-xs-12" ng-show="edit[$index]">
+                            <div class="clearfix margin-bottom-5"></div>
+                            <p class="margin-bottom-0">Link To:</p>
+                            <div class="radio-inline">
+                                <label for="inlineRadioOptions-{{$index}}" class="pull-right">Page</label>
+                                <input type="radio" name="inlineRadioOptions-{{$index}}" id="inlineRadio1" ng-model="link.linkTo.type" ng-click="linkType[$index] = 'page'" value="page" ng-checked="{{link.linkTo.type == 'page'}}">
+                            </div>
+                            <div class="radio-inline">
+                                <label for="inlineRadioOptions-{{$index}}" class="pull-right">Component</label>
+                                <input type="radio" name="inlineRadioOptions-{{$index}}" id="inlineRadio2" ng-click="linkType[$index] = 'section'" ng-model="link.linkTo.type" value="section" ng-checked="{{link.linkTo.type == 'section'}}">
+                            </div>
+                            <div class="radio-inline">
+                                <label for="inlineRadioOptions-{{$index}}" class="pull-right">External</label>
+                                <input type="radio" name="inlineRadioOptions-{{$index}}" id="inlineRadio3" ng-click="linkType[$index] = 'external'" ng-model="link.linkTo.type" value="external" ng-checked="{{link.linkTo.type == 'external'}}">
+                            </div>
+                            <div class="clearfix margin-bottom-10"></div>
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <select id="linkSection" style="text-transform:capitalize" ng-if="linkType[$index]=='section'" ng-model="link.linkTo.data" ng-change="updateLinkList()" class="form-control margin-bottom-0">
+                                        <option value="" disabled>Select a Component</option>
+                                        <option ng-repeat="component in currentPage.components track by $index" data-ng-if="component.anchor || component._id" value="{{component.anchor || component._id}}" ng-selected="{{link.linkTo.data === (component.anchor || component._id)}}">{{setLinkTitle(component.type, $index)}}</option>
+                                    </select>
+                                    <select ng-if="linkType[$index]=='page'" ng-change="updateLinkList()" ng-model="link.linkTo.data" class="form-control margin-bottom-0">
+                                        <option value="" disabled>Select a Page</option>
+                                        <option ng-repeat="page in allPages track by $index" data-ng-if="page.title && page.handle" value="{{page.handle}}" ng-selected="{{link.linkTo.data == page.handle}}">{{page.title}}</option>
+                                    </select>
+                                    <input class="form-control" type="text" ng-if="linkType[$index]=='external'" ng-change="updateLinkList()" ng-model="link.linkTo.data" placeholder="Enter External URL">
+                                </div>
+                            </div>
+                            <div class="clearfix margin-bottom-10"></div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>

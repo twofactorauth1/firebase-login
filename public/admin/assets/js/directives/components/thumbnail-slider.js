@@ -6,7 +6,8 @@ app.directive('thumbnailSliderComponent', ['$window', '$timeout', function ($win
     scope: {
       component: '=',
       media: '&',
-      control: '='
+      control: '=',
+      ssbEditor: '='
     },
     templateUrl: '/components/component-wrap.html',
     link: function (scope, element, attrs) {
@@ -66,11 +67,11 @@ app.directive('thumbnailSliderComponent', ['$window', '$timeout', function ($win
         return newArr;
       }
 
-
-
-      scope.control.refreshSlider = function () {
-        scope.bindThumbnailSlider(winWidth, check_if_mobile);
-      };
+      if(!scope.ssbEditor){
+        scope.control.refreshSlider = function () {
+          scope.bindThumbnailSlider(winWidth, check_if_mobile);
+        };
+      }
 
       /*
        * @addImageFromMedia

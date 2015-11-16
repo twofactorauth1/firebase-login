@@ -51,88 +51,97 @@ module.exports = {
         var query = {
             account_id: accountId
         };
-
-        dao.findMany(query, $$.m.Order, function(err, orders){
-            var orderId = orders.length;
-            var total = invoice.total / 100;
-            var subtotal = invoice.subtotal / 100;
-            var discount = subtotal - total;
-            var order = new $$.m.Order({
-                "account_id": accountId,
-                "customer_id" : contactId,
-                "session_id" : null,
-                "order_id" : orderId,
-                "completed_at" : new Date(),
-                "updated_at" : null,
-                "created_at" : new Date(),
-                "status" : "completed",
-                "total" : total,
-                "cart_discount" : 0.0,
-                "total_discount" : discount,
-                "total_shipping" : 0.0,
-                "total_tax" : 0.0,
-                "subtotal" : subtotal,
-                "shipping_tax" : 0.0,
-                "cart_tax" : 0.0,
-                "currency" : "usd",
-                "line_items" : [
-
-                ],
-                "total_line_items_quantity" : 0,
-                "payment_details" : {
-                    "method_title" : 'Credit Card Payment',//Check Payment, Credit Card Payment
-                    "method_id" : 'cc',//check, cc
-                    "card_token": null,//Stripe card token if applicable
-                    "charge_description": null, //description of charge if applicable
-                    "statement_description": null,//22char string for cc statement if applicable
-                    "paid" : true
-                },
-
-                "notes" : [
-                    /*
-                     {
-                     "note" : "Order status changed from processing to completed",
-                     "user_id" : 1,
-                     "date" : ISODate("2015-04-13T12:02:18.055Z")
-                     }
-                     */
-                ],
-                created: {
-                    date: new Date(),
-                    by: null
-                },
-                modified: {
-                    date: null,
-                    by: null
+        dao.getMaxValue(query, 'order_id', $$.m.Order, function(err, value){
+            if(err ) {
+                log.warn('Could not find order_id:', err);
+                fn(err);
+            } else {
+                var max = 1;
+                if(value) {
+                    max = parseInt(value) + 1;
                 }
-            });
+                var total = invoice.total / 100;
+                var subtotal = invoice.subtotal / 100;
+                var discount = subtotal - total;
+                var order = new $$.m.Order({
+                    "account_id": accountId,
+                    "customer_id" : contactId,
+                    "session_id" : null,
+                    "order_id" : max,
+                    "completed_at" : new Date(),
+                    "updated_at" : null,
+                    "created_at" : new Date(),
+                    "status" : "completed",
+                    "total" : total,
+                    "cart_discount" : 0.0,
+                    "total_discount" : discount,
+                    "total_shipping" : 0.0,
+                    "total_tax" : 0.0,
+                    "subtotal" : subtotal,
+                    "shipping_tax" : 0.0,
+                    "cart_tax" : 0.0,
+                    "currency" : "usd",
+                    "line_items" : [
 
-            var line_items = [];
-            _.each(invoice.lines.data, function(invoiceItem){
-                var total = invoiceItem.amount /100;
-                var name = invoiceItem.description;
-                if(invoiceItem.plan !== null) {
-                    name = invoiceItem.plan.name;
-                }
-                var obj = {
-                    name: name,
-                    total:total
-                };
-                line_items.push(obj);
-            });
-            order.set('line_items', line_items);
-            order.set('total_line_items_quantity', line_items.length);
+                    ],
+                    "total_line_items_quantity" : 0,
+                    "payment_details" : {
+                        "method_title" : 'Credit Card Payment',//Check Payment, Credit Card Payment
+                        "method_id" : 'cc',//check, cc
+                        "card_token": null,//Stripe card token if applicable
+                        "charge_description": null, //description of charge if applicable
+                        "statement_description": null,//22char string for cc statement if applicable
+                        "paid" : true
+                    },
 
-            dao.saveOrUpdate(order, function(err, savedOrder){
-                if(err) {
-                    log.error('Error saving order: ' + err);
-                    return fn(err, null);
-                } else {
-                    log.debug('<< createOrderFromStripeInvoice');
-                    return fn(null, savedOrder);
-                }
-            });
+                    "notes" : [
+                        /*
+                         {
+                         "note" : "Order status changed from processing to completed",
+                         "user_id" : 1,
+                         "date" : ISODate("2015-04-13T12:02:18.055Z")
+                         }
+                         */
+                    ],
+                    created: {
+                        date: new Date(),
+                        by: null
+                    },
+                    modified: {
+                        date: null,
+                        by: null
+                    }
+                });
+
+                var line_items = [];
+                _.each(invoice.lines.data, function(invoiceItem){
+                    var total = invoiceItem.amount /100;
+                    var name = invoiceItem.description;
+                    if(invoiceItem.plan !== null) {
+                        name = invoiceItem.plan.name;
+                    }
+                    var obj = {
+                        name: name,
+                        total:total
+                    };
+                    line_items.push(obj);
+                });
+                order.set('line_items', line_items);
+                order.set('total_line_items_quantity', line_items.length);
+
+                dao.saveOrUpdate(order, function(err, savedOrder){
+                    if(err) {
+                        log.error('Error saving order: ' + err);
+                        return fn(err, null);
+                    } else {
+                        log.debug('<< createOrderFromStripeInvoice');
+                        return fn(null, savedOrder);
+                    }
+                });
+
+            }
         });
+
 
     },
 
@@ -160,22 +169,25 @@ module.exports = {
                 log.debug('fetching products');
                 var productAry = [];
                 async.each(order.get('line_items'), function iterator(item, cb){
-                    productManager.getProduct(item.product_id, function(err, product){
+                    productManager.getProduct(item.product_id, function(err, product){                        
                         if(err) {
                             cb(err);
                         } else {
                             productAry.push(product);
                             item.sku = product.get('sku');
                             item.name = product.get('name');
+                            log.debug('Product is', product);
                             cb();
                         }
                     });
                 }, function done(err){
+                    log.debug('Sanjjeeeee is');
                     callback(err, account, productAry);
                 });
             },
             //determine tax rate
             function(account, productAry, callback) {
+                log.debug('commerceSettings');
                 var commerceSettings = account.get('commerceSettings');
                 if(commerceSettings && commerceSettings.taxes === true) {
                     //figure out the rate
@@ -185,7 +197,7 @@ module.exports = {
                     } else if(commerceSettings.taxbased === 'customer_billing') {
                         zip = order.get('billing_address').postcode;
                     } else if(commerceSettings.taxbased === 'business_location') {
-                        zip = account.get('business').addresses[0].zip;
+                        zip = account.get('business').addresses && account.get('business').addresses[0] ? account.get('business').addresses[0].zip : 0;
                     } else {
                         log.warn('Unable to determine tax rate based on ', commerceSettings);
                     }
@@ -199,6 +211,8 @@ module.exports = {
                             }
                         });
                     }
+                    else
+                        callback(null, account, productAry, 0);
                 } else {
                     callback(null, account, productAry, 0);
                 }
@@ -483,7 +497,20 @@ module.exports = {
 
                         cmsManager.getEmailPage(accountId, 'new-order', function(err, email){
                             if(err || !email) {
-                                log.warn('No NEW_ORDER email sent: ' + err);
+                                log.warn('No NEW_ORDER email receipt sent: ' + err);
+                                if(emailPreferences.new_orders === true) {
+                                    //Send additional details
+                                    subject = "New order created!";
+                                    var component = {};
+                                    component.order = updatedOrder.attributes;
+                                    component.text = "The following order was created:";
+                                    component.orderurl = "https://" + account.get('subdomain') + ".indigenous.io/admin/#/commerce/orders/" + updatedOrder.attributes._id;
+                                    app.render('emails/base_email_order_admin_notification', component, function(err, html){
+                                        mandrillHelper.sendOrderEmail(fromAddress, fromName, fromAddress, fromName, subject, html, accountId, orderId, vars, '0', function(){
+                                            log.debug('Admin Notification Sent');
+                                        });
+                                    });
+                                }
                                 callback(null, updatedOrder);
                             } else {
                                 var component = email.get('components')[0];
@@ -496,9 +523,15 @@ module.exports = {
 
                                     if(emailPreferences.new_orders === true) {
                                         //Send additional details
-                                        mandrillHelper.sendOrderEmail(fromAddress, fromName, fromAddress, fromName, subject, html, accountId, orderId, vars, email._id, function(){
-                                            log.debug('Admin Notification Sent');
+                                        subject = "New order created!";
+                                        component.text = "The following order was created:";
+                                        component.orderurl = "https://" + account.get('subdomain') + ".indigenous.io/admin/#/commerce/orders/" + updatedOrder.attributes._id;
+                                        app.render('emails/base_email_order_admin_notification', component, function(err, html){
+                                            mandrillHelper.sendOrderEmail(fromAddress, fromName, fromAddress, fromName, subject, html, accountId, orderId, vars, email._id, function(){
+                                                log.debug('Admin Notification Sent');
+                                            });
                                         });
+
                                     }
 
                                 });

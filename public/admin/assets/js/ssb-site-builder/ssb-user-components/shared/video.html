@@ -1,0 +1,55 @@
+
+<div class="form-group">
+    <label for="member-name">Video Type:</label>
+    <span tooltip-placement="top" tooltip-html-unsafe="Select video type."><i class="fa fa-info-circle" /></span>
+    <select id="member-name" class="form-control" ng-model="componentEditing.videoType">
+        <option value="youtube">YouTube</option>
+        <option value="vimeo">Vimeo</option>
+        <option value="html5">Html4 Video</option>
+    </select>
+</div>
+<div class="form-group" ng-hide="componentEditing.videoType == 'html5'">
+    <label for="member-name">Video URL:</label>
+    <span tooltip-placement="top" tooltip-html-unsafe="Add video URL."><i class="fa fa-info-circle" /></span>
+    <input id="member-name" class="form-control" type="text" ng-model="componentEditing.video">
+</div>
+<div class="form-group" ng-show="componentEditing.videoType == 'html5'">
+    <label for="member-name">Mp4 Url:</label>
+    <span tooltip-placement="top" tooltip-html-unsafe="Add Mp4 video URL."><i class="fa fa-info-circle" /></span>
+    <input id="member-name" class="form-control" type="text" ng-model="componentEditing.videoMp4">
+</div>
+<div class="form-group" ng-show="componentEditing.videoType == 'html5'">
+    <label for="member-name">Webm Url:</label>
+    <span tooltip-placement="top" tooltip-html-unsafe="Add Webm video URL."><i class="fa fa-info-circle" /></span>
+    <input id="member-name" class="form-control" type="text" ng-model="componentEditing.videoWebm">
+</div>
+<div class="form-group" ng-hide="componentEditing.videoType == 'html5'">
+    <label for="colorpicker">Auto Play:</label>
+    <span tooltip-placement="top" tooltip-html-unsafe="Set auto play video"><i class="fa fa-info-circle" /></span>
+    <switch id="splitd" ng-model="componentEditing.videoAutoPlay" class="pull-right"></switch>
+</div>
+<div class="form-group" ng-show="componentEditing.videoType == 'youtube'">
+    <label for="colorpicker">Controls:</label>
+    <span tooltip-placement="top" tooltip-html-unsafe="Show/hide video player controls."><i class="fa fa-info-circle" /></span>
+    <switch id="splitHours" ng-model="componentEditing.videoControls" class="pull-right"></switch>
+</div>
+<div class="form-group" ng-show="componentEditing.videoType == 'youtube'">
+    <label for="colorpicker">Branding:</label>
+    <span tooltip-placement="top" tooltip-html-unsafe="Youtube video branding."><i class="fa fa-info-circle" /></span>
+    <switch id="splitHours" ng-model="componentEditing.videoBranding" class="pull-right"></switch>
+</div>
+<div class="form-group" ng-hide="componentEditing.videoType == 'html5'">
+    <label for="member-name">Optional Width:</label>
+    <span tooltip-placement="top" tooltip-html-unsafe="Set video width."><i class="fa fa-info-circle" /></span>
+    <input id="member-name" class="form-control" type="text" ng-model="componentEditing.videoWidth">
+</div>
+<div class="form-group" ng-hide="componentEditing.videoType == 'html5'">
+    <label for="member-name">Optional Height:</label>
+    <span tooltip-placement="top" tooltip-html-unsafe="Set video height."><i class="fa fa-info-circle" /></span>
+    <input id="member-name" class="form-control" type="text" ng-model="componentEditing.videoHeight">
+</div>
+<div class="form-group" ng-show="componentEditing.videoType == 'html5'">
+    <label for="member-name">Start Video Image Url:</label>
+    <span tooltip-placement="top" tooltip-html-unsafe="Set start video image URL."><i class="fa fa-info-circle" /></span>
+    <input id="member-name" class="form-control" type="text" ng-model="componentEditing.videoImage">
+</div>

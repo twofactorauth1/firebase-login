@@ -363,24 +363,26 @@ _.extend(api.prototype, baseApi.prototype, {
         var regex = new RegExp('src="//s3.amazonaws', "g");
 
         emailDataObj.content.components.forEach(function(component){
-            for (var i = 0; i < keys.length; i++) {
-                if (component[keys[i]]) {
-                    component[keys[i]] = component[keys[i]].replace(regex, 'src="http://s3.amazonaws');
+            if(component.visibility){
+                for (var i = 0; i < keys.length; i++) {
+                    if (component[keys[i]]) {
+                        component[keys[i]] = component[keys[i]].replace(regex, 'src="http://s3.amazonaws');
+                    }
                 }
+                if (!component.bg.color) {
+                    component.bg.color = '#ffffff';
+                }
+                if (!component.emailBg) {
+                    component.emailBg = '#ffffff';
+                }
+                if (component.bg.img && component.bg.img.show && component.bg.img.url) {
+                    component.emailBgImage = component.bg.img.url.replace('//s3.amazonaws', 'http://s3.amazonaws');
+                }
+                if (!component.txtcolor) {
+                    component.txtcolor = '#000000';
+                }
+                components.push(component);
             }
-
-            if (!component.bg.color) {
-                component.bg.color = '#ffffff';
-            }
-
-            if (!component.emailBg) {
-                component.emailBg = '#ffffff';
-            }
-
-            if (component.bg.img && component.bg.img.show && component.bg.img.url) {
-                component.emailBgImage = component.bg.img.url.replace('//s3.amazonaws', 'http://s3.amazonaws');
-            }
-            components.push(component);
         });
         
         self.log.debug('components >>> ', components);
@@ -1146,11 +1148,12 @@ _.extend(api.prototype, baseApi.prototype, {
                 self.log.debug('>> Page Data: ' + pageData);
                 cmsManager.createWebsiteAndPageFromTemplate(accountId, templateId, self.userId(req), websiteId, title, handle, mainmenu, function(err, websiteAndPage){
                     self.log.debug('<< createPageFromTemplate');
-                    self.sendResultOrError(res, err, websiteAndPage.page, 'Error creating page from template.');
-                    cmsManager.updatePageScreenshot(websiteAndPage.page.id(), function(err, value){
-                        if(err) {self.log.warn('Error updating screenshot for pageId ' + websiteAndPage.page.id() + ': ' + err);}
-                        self = null;
-                    });
+                    self.sendResultOrError(res, err, websiteAndPage ? websiteAndPage.page : null, 'Error creating page from template.');
+                    if(websiteAndPage)
+                        cmsManager.updatePageScreenshot(websiteAndPage.page.id(), function(err, value){
+                            if(err) {self.log.warn('Error updating screenshot for pageId ' + websiteAndPage.page.id() + ': ' + err);}
+                            self = null;
+                        });
                 });
             }
         });

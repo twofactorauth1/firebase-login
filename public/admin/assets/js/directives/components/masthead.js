@@ -4,7 +4,8 @@
 app.directive('mastheadComponent',["$window", function ($window) {
   return {
     scope: {
-      component: '='
+      component: '=',
+      ssbEditor: '='
     },
     templateUrl: '/components/component-wrap.html',
     link: function (scope, element, attrs) {
@@ -26,7 +27,7 @@ app.directive('mastheadComponent',["$window", function ($window) {
       });
       scope.setUnderbnavMargin = function () {
         scope.allowUndernav = false;
-        scope.$parent.addUnderNavSetting(scope.component._id, function (data) {
+        scope.$parent.addUnderNavSetting && scope.$parent.addUnderNavSetting(scope.component._id, function (data) {
           scope.allowUndernav = data;
         });
         scope.addUndernavImages();
@@ -43,6 +44,7 @@ app.directive('mastheadComponent',["$window", function ($window) {
             }
             
             angular.element(".undernav").addClass("nav-undernav");
+            angular.element(".nav-undernav .bg").addClass("bg-nav-undernav");
             angular.element(".undernav").closest('li.fragment').addClass("li-nav-undernav");
 
             if (mastheadUnderNavElement)
@@ -57,7 +59,9 @@ app.directive('mastheadComponent',["$window", function ($window) {
               mastheadElement.attr('style',"margin-top:0px");
             if (angular.element(".masthead-actions"))
               angular.element(".masthead-actions").removeClass("hover-action");
+            angular.element(".nav-undernav .bg").removeClass("bg-nav-undernav");
             angular.element(".undernav").removeClass("nav-undernav");
+
             //mastheadElement.removeClass("masthead-undernav");
             angular.element(".undernav").closest('li.fragment').removeClass("li-nav-undernav");
           }

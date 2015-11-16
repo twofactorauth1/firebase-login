@@ -1,10 +1,21 @@
 (function(){
 
+/*
+ * this allows us to use sortable + accordion
+ */
+app.config(['$provide', function ($provide){
+	$provide.decorator('accordionDirective', function($delegate) { 
+		var directive = $delegate[0];
+		directive.replace = true;
+		return $delegate;
+	});
+}]);
+
 app.controller('SiteBuilderSidebarController', ssbSiteBuilderSidebarController);
 
-ssbSiteBuilderSidebarController.$inject = ['$scope', '$attrs', '$filter', 'SimpleSiteBuilderService'];
+ssbSiteBuilderSidebarController.$inject = ['$scope', '$attrs', '$filter', 'SimpleSiteBuilderService', '$modal', 'editableOptions', '$location'];
 /* @ngInject */
-function ssbSiteBuilderSidebarController($scope, $attrs, $filter, SimpleSiteBuilderService) {
+function ssbSiteBuilderSidebarController($scope, $attrs, $filter, SimpleSiteBuilderService, $modal, editableOptions, $location) {
 	
     console.info('site-build sidebar directive init...')
 
@@ -13,7 +24,54 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, SimpleSiteBuil
     vm.somethingSidebar = 'something sidebar';
     vm.init = init;
     vm.savePage = savePage;
+    vm.saveWebsite = saveWebsite;
     vm.cancelPendingEdits = cancelPendingEdits;
+    vm.togglePageSectionAccordion = togglePageSectionAccordion;
+    vm.togglePageSectionComponentAccordion = togglePageSectionComponentAccordion;
+    vm.getSystemComponents = getSystemComponents;
+    vm.addSectionToPage = addSectionToPage;
+    vm.addComponentToSection = addComponentToSection;
+    vm.addBackground = addBackground;
+    vm.openSectionModal = openSectionModal;
+    vm.openMediaModal = openMediaModal;
+    vm.insertMedia = insertMedia;
+    vm.addToMainMenu = addToMainMenu;
+    vm.showInsert = true;
+    vm.sectionName = sectionName;
+	
+	editableOptions.theme = 'bs3';
+
+    vm.navigation = {
+    	back: function() {
+    		// vm.navigation.slide = 'fade-out-left';
+    		vm.navigation.index = 0;
+    		vm.navigation.indexClass = 'ssb-sidebar-position-0';
+    	},
+    	loadPage: function(pageId) {
+    		//TODO: load new page if not currently editing that page
+    		vm.navigation.index = 1;
+    		vm.navigation.indexClass = 'ssb-sidebar-position-1';
+    	},
+    	goToPagesListPage: function() {
+    		$location.url('/website/site-builder/pages/');
+    	},
+    	// slide: 'fade-in-right',
+    	index: 0,
+    	indexClass: 'ssb-sidebar-position-1'
+    };
+
+    vm.sortableOptions = {
+    	handle: '.ssb-sidebar-move-handle',
+		onSort: function (evt) {
+			console.log(evt);
+		},
+		onStart: function (evt) {
+			vm.dragging = true;
+		},
+		onEnd: function (evt) {
+			vm.dragging = false;
+		}
+    };
 
     //TODO: move into config services
     vm.spectrum = {
@@ -44,18 +102,173 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, SimpleSiteBuil
 	  }
 	};
 
-	function savePage() {
+
+	function insertMedia(asset) {
+		var component = vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex];
+		component.bg.img.url = asset.url;
+		return true;
+	};
+
+	function getSystemComponents() {
+		vm.systemComponents = SimpleSiteBuilderService.getSystemComponents();
+	}
+
+    function addSectionToPage(section, sectionIndex) {
+        vm.openSectionModal('ssb-section-modal', null, null, 'lg');
+        // vm.state.page.sections.push({
+        //     'layout': '1-col',
+        //     'components': []
+        // });
+    }
+
+	//TODO: handle versions
+	function addComponentToSection(component, sectionIndex) {
 		return (
-			SimpleSiteBuilderService.savePage(vm.page).then(function(data){
-				console.log('saved');
+			SimpleSiteBuilderService.getComponent(component, 1).then(function(response) {
+				vm.state.page.sections[sectionIndex].components.push(response.data);
+			})
+		)
+	}
+
+	function saveWebsite() {
+		vm.state.pendingChanges = false;
+		return (
+			SimpleSiteBuilderService.saveWebsite(vm.state.website).then(function(response){
+				console.log('website saved');
+			})
+		)
+	}
+
+	function savePage() {
+		vm.state.pendingChanges = false;
+
+		saveWebsite();
+
+		return (
+			SimpleSiteBuilderService.savePage(vm.state.page).then(function(response){
+				console.log('page saved');
 			})
 		)
 	}
 
 	function cancelPendingEdits() {
-		console.log('reset pending stuff');
+		alert('TODO: reset pending changes.');
+		vm.state.pendingChanges = false;
 		return true;
 	}
+
+	function togglePageSectionAccordion(index) {
+		if (vm.uiState.accordion.sections[index].isOpen) {
+			SimpleSiteBuilderService.setActiveSection(index);
+		}
+    }
+
+    function togglePageSectionComponentAccordion(index) {
+		//TODO: this fires on all clicks anywhere within the component panel... so all settings, etc.
+		SimpleSiteBuilderService.setActiveComponent(index);
+    }
+
+    function addBackground() {
+    	vm.openMediaModal('media-modal', 'MediaModalCtrl', null, 'lg');
+    }
+
+    function openSectionModal(modal, controller, index, size) {
+        console.log('openModal >>> ', modal, controller, index);
+        var _modal = {
+            templateUrl: modal,
+            keyboard: false,
+            backdrop: 'static',
+            size: 'md',
+            resolve: {}
+        };
+
+        _modal.resolve.vm = vm;
+
+        if (size) {
+            _modal.size = 'lg';
+        }
+
+        $scope.modalInstance = $modal.open(_modal);
+        
+        $scope.modalInstance.result.then(null, function () {
+            angular.element('.sp-container').addClass('sp-hidden');
+        });
+
+    }
+
+    function openMediaModal(modal, controller, index, size) {
+        console.log('openModal >>> ', modal, controller, index);
+        var _modal = {
+            templateUrl: modal,
+            keyboard: false,
+            backdrop: 'static',
+            size: 'md',
+            resolve: {}
+        };
+
+        if (controller) {
+            _modal.controller = controller;
+
+            _modal.resolve.showInsert = function () {
+              return vm.showInsert;
+            };
+
+            _modal.resolve.insertMedia = function () {
+              return vm.insertMedia;
+            };
+        }
+
+        if (angular.isDefined(index) && index !== null && index >= 0) {
+            $scope.setEditingComponent(index);
+            _modal.resolve.clickedIndex = function () {
+              return index;
+            };
+            if ($scope.page) {
+              _modal.resolve.pageHandle = function () {
+                return $scope.page.handle;
+              };
+            }
+        }
+
+        if (size) {
+            _modal.size = 'lg';
+        }
+
+        $scope.modalInstance = $modal.open(_modal);
+        
+        $scope.modalInstance.result.then(null, function () {
+            angular.element('.sp-container').addClass('sp-hidden');
+        });
+
+    }
+
+    function checkForDuplicatePage(pageHandle) {
+		SimpleSiteBuilderService.checkForDuplicatePage(pageHandle).then(function(dup) {
+			vm.uiState.duplicateUrl = dup;
+		})
+    }
+
+    function addToMainMenu(id) {
+		console.log('add page to main menu: ' + id);
+		// SimpleSiteBuilderService.checkForDuplicatePage(pageHandle).then(function(dup) {
+		// 	vm.uiState.duplicateUrl = dup;
+		// })
+    }
+
+    function sectionName(section) {
+    	var sectionName = section.layout;
+
+    	if (section.components) {
+    		if (section.components.length === 1 && section.components[0].header_title) {
+    			sectionName = section.components[0].header_title;
+    		} else {
+    			sectionName = section.components[0].type;
+    		}
+    	}
+
+    	return sectionName;
+
+    }
 
     function init(element) {
     	vm.element = element;

@@ -1,0 +1,22 @@
+
+<div class="form-group">
+    <label># of Products per Page</label>
+    <div class="col-sm-6 pull-right">
+        <select class="form-control" ng-model="componentEditing.numtodisplay" ng-change="saveComponent()" ng-options="status.value as status.name for status in numberOfProductOptions">
+        </select>
+    </div>
+</div>
+<div class="form-group">
+    <label>Show Products by Tags</label>
+    <div class="col-sm-6 pull-right product-ui-select">
+        <ui-select multiple ng-model="componentEditing.productTags" theme="bootstrap" ng-disabled="disabled" on-remove="saveComponent()" on-select="saveComponent()">
+            <ui-select-match placeholder="Select tags...">
+                {{$item}}
+            </ui-select-match>
+            <ui-select-choices repeat="tag in availableProductTags | filter:$select.search">
+                {{tag}}
+            </ui-select-choices>
+        </ui-select>
+    </div>
+</div>
+<div class="clearfix"></div>
