@@ -72,7 +72,7 @@
                                     <div class="space10">
                                         <h5 class="text-dark no-margin">Customers this Month</h5>
                                         <h2 class="no-margin">{{customersThisMonth.length}}</h2>
-                                        <span class="badge badge-success margin-top-10" ng-class="{'badge-danger': customersThisMonth.length == 0, 'badge-success': customersThisMonth.length > 0}">{{getCustomerLeads()}} Leads</span>
+                                        <a ng-href="/admin/#/customers"><span class="badge badge-success margin-top-10" ng-class="{'badge-danger': customersThisMonth.length == 0, 'badge-success': customersThisMonth.length > 0}">{{getCustomerLeads()}} Leads</span></a>
                                     </div>
                                     <div class="sparkline space10">
                                         <span jq-sparkline ng-model="analyticsCustomers" type="line" width="80%" height="47px" line-color="#8e8e93" highlight-line-color="#c2c2c5" highlight-spot-color="#CE4641" max-spot-color="#5CB85C" min-spot-color="#D9534F" spot-radius="4" fill-color="transparent" resize="true"></span>
@@ -87,7 +87,7 @@
                                     <div class="space10">
                                         <h5 class="text-dark no-margin">Orders this Month</h5>
                                         <h2 class="no-margin">{{ordersThisMonth.length}}</h2>
-                                        <span class="badge margin-top-10" ng-class="{'badge-danger': ordersThisMonth.length == 0, 'badge-success': ordersThisMonth.length > 0}">{{getCompletedOrders()}} Complete</span>
+                                        <a ng-href="/admin/#/commerce/orders"><span class="badge margin-top-10" ng-class="{'badge-danger': ordersThisMonth.length == 0, 'badge-success': ordersThisMonth.length > 0}">{{getCompletedOrders()}} Complete</span></a>
                                     </div>
                                     <div class="sparkline space10">
                                         <span jq-sparkline ng-model="analyticsOrders" type="line" width="80%" height="47px" line-color="#8e8e93" highlight-line-color="#c2c2c5" highlight-spot-color="#CE4641" max-spot-color="#5CB85C" min-spot-color="#D9534F" spot-radius="4" fill-color="transparent" resize="true"></span>
@@ -102,7 +102,7 @@
                                     <div class="space10">
                                         <h5 class="text-dark no-margin">Visitors this Month</h5>
                                         <h2 class="no-margin">{{visitorsThisMonth}}</h2>
-                                        <span class="badge margin-top-10" ng-class="{'badge-danger': visitorsThisMonth.length == 0, 'badge-success': visitorsThisMonth.length > 0}">{{totalNewVisitors}} New Visitors</span>
+                                        <a ng-href="/admin/#/website/site-analytics"><span class="badge margin-top-10" ng-class="{'badge-danger': visitorsThisMonth.length == 0, 'badge-success': visitorsThisMonth.length > 0}">{{totalNewVisitors}} New Visitors</span></a>
                                     </div>
                                     <div class="sparkline space10">
                                         <span jq-sparkline ng-model="analyticsVisitors" type="line" width="80%" height="47px" line-color="#8e8e93" highlight-line-color="#c2c2c5" highlight-spot-color="#CE4641" max-spot-color="#5CB85C" min-spot-color="#D9534F" spot-radius="4" fill-color="transparent" resize="true"></span>
@@ -117,7 +117,7 @@
                                     <div class="space10">
                                         <h5 class="text-dark no-margin">Net Revenue this Month</h5>
                                         <h2 class="no-margin">{{revenueThisMonth | currency}}</h2>
-                                        <span class="badge margin-top-10" ng-class="{'badge-danger': revenueThisMonth.length == 0, 'badge-success': revenueThisMonth.length > 0}">{{charges}} Charges</span>
+                                        <a ng-href="/admin/#/commerce/orders"><span class="badge margin-top-10" ng-class="{'badge-danger': revenueThisMonth.length == 0, 'badge-success': revenueThisMonth.length > 0}">{{charges}} Charges</span></a>
                                     </div>
                                     <div class="sparkline space10" ng-if="analyticsRevenue">
                                         <span jq-sparkline ng-model="analyticsRevenue" type="line" width="80%" height="47px" line-color="#8e8e93" highlight-line-color="#c2c2c5" highlight-spot-color="#CE4641" max-spot-color="#5CB85C" min-spot-color="#D9534F" spot-radius="4" fill-color="transparent" resize="true"></span>
