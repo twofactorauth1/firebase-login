@@ -28,6 +28,7 @@
 
 
 		AccountService.getAccount(function(data) {
+			ssbService.websiteId = data.website.websiteId;
 			ssbService.getSite(data.website.websiteId);
 		});
 
@@ -62,7 +63,7 @@
 				console.error('SimpleSiteBuilderService getPages error: ' + error);
 			}
 
-			return $http.get(baseWebsiteAPIUrl + ssbService.website._id + '/pages').success(success).error(error);
+			return $http.get(baseWebsiteAPIUrl + ssbService.websiteId + '/pages').success(success).error(error);
 		}
 
 		function getPage(id) {
