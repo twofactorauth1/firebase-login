@@ -481,6 +481,7 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                     });                   
                   })
                   .catch(function (err) {
+                    scope.loading = false;
                     console.error(err);
                   });
               }
