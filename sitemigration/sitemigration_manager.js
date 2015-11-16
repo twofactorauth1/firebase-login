@@ -34,7 +34,7 @@ module.exports = {
                 return fn(err, null);
             }
             _.each(migration.get('redirects'), function(redirect){
-                if(redirect.path === path) {
+                if(redirect.path.toLowerCase() === path.toLowerCase()) {
                     redirect.accessCount +=1;
                     redirect.lastAccessed = new Date();
                 }
