@@ -67,11 +67,11 @@ app.directive('thumbnailSliderComponent', ['$window', '$timeout', function ($win
         return newArr;
       }
 
-
-
-      scope.control.refreshSlider = function () {
-        scope.bindThumbnailSlider(winWidth, check_if_mobile);
-      };
+      if(!scope.ssbEditor){
+        scope.control.refreshSlider = function () {
+          scope.bindThumbnailSlider(winWidth, check_if_mobile);
+        };
+      }
 
       /*
        * @addImageFromMedia

@@ -18,6 +18,7 @@ var authenticationDao = require('../dao/authentication.dao');
 var fs = require('fs');
 var userActivityManager = require('../useractivities/useractivity_manager');
 var sitemigration_middleware = require('../sitemigration/middleware/sitemigration_middleware');
+//var pagecacheManager = require('../cms/pagecache_manager');
 
 var router = function() {
     this.init.apply(this, arguments);
@@ -42,15 +43,6 @@ _.extend(router.prototype, BaseRouter.prototype, {
         app.get("/post", this.setup.bind(this), this.index.bind(this));
 
         app.get("/index_temp_page", this.setup.bind(this), this.indexTempPage.bind(this));
-        // app.get("/page/blog", this.setup, this.showMainBlog.bind(this));
-        // app.get("/page/:page", this.setup, this.showWebsitePage.bind(this));
-
-        // app.get("/page/blog/:posturl", this.setup, this.showBlogPage.bind(this));
-        // app.get("/page/tag/:tag", this.setup, this.showTagPage.bind(this));
-        // app.get("/page/author/:author", this.setup, this.showAuthorPage.bind(this));
-        // app.get("/page/category/:category", this.setup, this.showCategoryPage.bind(this));
-
-//        app.post("/signupnews", this.signUpNews.bind(this));
 
         app.get("/home", this.isHomeAuth.bind(this), this.showHome.bind(this));
         app.get("/home/*", this.isHomeAuth.bind(this), this.showHome.bind(this));
@@ -68,8 +60,11 @@ _.extend(router.prototype, BaseRouter.prototype, {
 
         app.get('/main/:page', [sitemigration_middleware.checkForRedirect, this.setup.bind(this)], this.serveMainHtml.bind(this));
         app.get('/interim*', this.setup.bind(this), this.serveInterim.bind(this));
-        //app.get("/*", this.setup.bind(this), this.index.bind(this));
 
+        /*
+         * This is a POC route for page caching.
+         */
+        app.get('/cached/:page', this.frontendSetup.bind(this), this.serveCachedIndex.bind(this));
         return this;
     },
 
@@ -344,6 +339,29 @@ _.extend(router.prototype, BaseRouter.prototype, {
             });
             
         }
+    },
+
+    /*
+    serveCachedPage: function(req, resp) {
+        var self = this;
+        var accountId = self.unAuthAccountId(req);
+        var pageName = req.params.page;
+        if(pageName.indexOf('.html') === -1) {
+            pageName +=".html";
+        }
+        pagecacheManager.getLocalCachedPageForTesting(accountId, pageName, resp);
+        //pagecacheManager.getCachedPage(accountId, pageName, resp);
+    },
+    */
+
+    serveCachedIndex: function(req,resp) {
+        var self = this;
+        var accountId = self.unAuthAccountId(req);
+        var pageName = req.params.page;
+        self.log.debug('>> serveCachedIndex ' + accountId);
+        new WebsiteView(req, resp).renderCachedPage(accountId, pageName);
+
+        self.log.debug('<< serveCachedIndex');
     }
 });
 
