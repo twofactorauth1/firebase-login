@@ -31,7 +31,10 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     vm.savePage = savePage;
     vm.saveWebsite = saveWebsite;
     vm.cancelPendingEdits = cancelPendingEdits;
-
+    vm.openMediaModal = openMediaModal;
+    vm.insertMedia = insertMedia;
+    vm.addFroalaImage = addFroalaImage;
+    vm.imageEditor = {};
     $scope.$watch(function() { return SimpleSiteBuilderService.website; }, function(website){
         vm.state.originalWebsite = angular.copy(website);
         vm.state.pendingChanges = false;
@@ -129,6 +132,52 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         }
     }
 
+    function openMediaModal(modal, controller, index, size) {
+        console.log('openModal >>> ', modal, controller, index);
+        var _modal = {
+            templateUrl: modal,
+            keyboard: false,
+            backdrop: 'static',
+            size: 'md',
+            resolve: {}
+        };
+
+        if (controller) {
+            _modal.controller = controller;
+
+            _modal.resolve.showInsert = function () {
+              return vm.showInsert;
+            };
+
+            _modal.resolve.insertMedia = function () {
+              return vm.insertMedia;
+            };
+        }
+
+        if (angular.isDefined(index) && index !== null && index >= 0) {
+            $scope.setEditingComponent(index);
+            _modal.resolve.clickedIndex = function () {
+              return index;
+            };
+            if ($scope.page) {
+              _modal.resolve.pageHandle = function () {
+                return $scope.page.handle;
+              };
+            }
+        }
+
+        if (size) {
+            _modal.size = 'lg';
+        }
+
+        $scope.modalInstance = $modal.open(_modal);
+        
+        $scope.modalInstance.result.then(null, function () {
+            angular.element('.sp-container').addClass('sp-hidden');
+        });
+
+    }
+
     function init(element) {
         vm.element = element;
         vm.uiState.isSidebarClosed = $rootScope.app.layout.isSidebarClosed;
@@ -139,6 +188,24 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         SimpleSiteBuilderService.getPages();
 
     }
+
+    function insertMedia(asset) {
+        vm.addFroalaImage(asset);
+    };
+
+    function addFroalaImage(asset) {      
+      vm.imageEditor.editor.image.insert(asset.url, !1, null, vm.imageEditor.img);
+    };
+
+    // Hook froala insert up to our Media Manager
+    window.clickandInsertImageButton = function (editor) {
+      console.log('clickandInsertImageButton >>> ');
+      vm.showInsert = true;
+      vm.imageEditor.editor = editor;
+      vm.imageEditor.img = editor.image.get();
+      vm.openMediaModal('media-modal', 'MediaModalCtrl', null, 'lg');
+    };
+
 
 }
 

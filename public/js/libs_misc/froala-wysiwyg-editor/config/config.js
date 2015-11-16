@@ -7,5 +7,7 @@ $.FroalaEditor.config = {
         'img-rounded': 'Rounded Square',
         'img-thumbnail': 'Square with Border',
         'img-circle': 'Circle'
-     }
+     },
+     imageInsertButtons: ['imageBack', 'imageByURL', 'mediaManager']
+
 }
