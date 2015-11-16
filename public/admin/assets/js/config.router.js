@@ -77,7 +77,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
             init: ['$stateParams', 'SimpleSiteBuilderService', function($stateParams, SimpleSiteBuilderService) {
                 return SimpleSiteBuilderService.getPage($stateParams.pageId);
             }]
-        }, loadSequence('editorCtrl', 'userService', 'htmlToPlaintext', 'spectrum', 'angular-slider', 'assetsService', 'toasterService', 'geocodeService', 'productService', 'paymentService', 'accountService', 'toTrusted', 'generateURLforLinks', 'truncate', 'ngSticky', 'slick', 'offset', 'jqcloud', 'jsVideoUrlParser', 'selectedTags', 'addComponentModalCtrl', 'componentSettingsModalCtrl', 'ssbComponentSettingsModalCtrl', 'googlePlaces', 'ngMap', 'angularCircularNavigation', 'campaignService', 'angular-resizable', 'wu.masonry', 'froala-wysiwyg-editor', 'froala-wysiwyg-editor-plugins'))
+        }, loadSequence('editorCtrl', 'userService', 'htmlToPlaintext', 'spectrum', 'angular-slider', 'assetsService', 'toasterService', 'geocodeService', 'productService', 'paymentService', 'accountService', 'toTrusted', 'generateURLforLinks', 'truncate', 'ngSticky', 'slick', 'offset', 'jqcloud', 'jsVideoUrlParser', 'selectedTags', 'addComponentModalCtrl', 'componentSettingsModalCtrl', 'ssbComponentSettingsModalCtrl', 'googlePlaces', 'ngMap', 'angularCircularNavigation', 'campaignService', 'angular-resizable', 'wu.masonry', 'froala-wysiwyg-editor', 'froala-wysiwyg-editor-plugins', 'custom-froala-wysiwyg-editor'))
     }).state('app.website.analytics', {
         url: '/site-analytics',
         templateUrl: "assets/views/site-analytics.html",

@@ -895,6 +895,11 @@ app.constant('JS_REQUIRES', {
       "../js/libs/froala-wysiwyg-editor/css/plugins/line_breaker.css",
       "../js/libs/froala-wysiwyg-editor/css/plugins/table.css",
       "../js/libs/froala-wysiwyg-editor/css/plugins/video.css",
+      ]
+  },
+  {
+    name: 'custom-froala-wysiwyg-editor',
+    files: [ 
       "../js/libs_misc/froala-wysiwyg-editor/js/plugins/media_manager.min.js",
       '../js/libs_misc/froala-wysiwyg-editor/config/config.js']
   }]
