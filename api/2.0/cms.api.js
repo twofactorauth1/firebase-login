@@ -13,6 +13,8 @@ var cmsDao = require('../../cms/dao/cms.dao');
 var preRenderConfig = require('../../configs/prerender.config');
 var request = require('request');
 
+var ssbManager = require('../../ssb/ssb_manager');
+
 var api = function () {
     this.init.apply(this, arguments);
 };
@@ -28,15 +30,19 @@ _.extend(api.prototype, baseApi.prototype, {
     initialize: function () {
 
         // THEME - work with theme objects
+        /*
+         * We may not need theme objects after all.
         app.get(this.url('themes'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//list
         app.get(this.url('theme/:id'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//get
         app.post(this.url('themes'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//create
         app.post(this.url('theme/:id'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//update
         app.delete(this.url('theme/:id'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//delete
+        *
+        */
 
         // TEMPLATE - work with template objects
-        app.get(this.url('templates'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//list
-        app.get(this.url('template/:id'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//get
+        app.get(this.url('templates'), this.isAuthAndSubscribedApi.bind(this), this.listTemplates.bind(this));//list
+        app.get(this.url('template/:id'), this.isAuthAndSubscribedApi.bind(this), this.getTemplate.bind(this));//get
         app.post(this.url('templates'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//create
         app.post(this.url('template/:id'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//update
         app.delete(this.url('template/:id'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//delete
@@ -76,8 +82,44 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> noop');
         var accountId = parseInt(self.accountId(req));
         self.log.debug('<< noop');
-        self.sendResult(resp, {ok:true});
+        self.sendResult(resp, {msg:'method not implemented'});
+    },
+
+    listTemplates: function(req, resp) {
+        var self = this;
+        self.log.debug('>> listTemplates');
+        var accountId = parseInt(self.accountId(req));
+
+        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed){
+            if(isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                ssbManager.listTemplates(accountId, function(err, list){
+                    self.log.debug('<< listTemplates');
+                    return self.sendResultOrError(resp, err, list, "Error listing templates");
+                });
+            }
+        });
+
+    },
+
+    getTemplate: function(req, resp) {
+        var self = this;
+        self.log.debug('>> getTemplate');
+        var accountId = parseInt(self.accountId(req));
+        var templateId = req.params.id;
+        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed){
+            if(isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                ssbManager.getTemplate(templateId, function(err, template){
+                    self.log.debug('<< getTemplate');
+                    return self.sendResultOrError(resp, err, template, "Error getting template");
+                });
+            }
+        });
     }
+
 
 
 });
