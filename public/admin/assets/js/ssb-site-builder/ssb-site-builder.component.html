@@ -3,6 +3,9 @@
 	
 	<div class="ssb-main" ng-class="{ 'ssb-main-full-width': !vm.uiState.show.sidebar }">
 		
+		<div class="csspinner center"></div>
+		<!-- <div class="csspinner center" ng-if="vm.uiState.loading > 0"></div> -->
+		
 		<ssb-action-buttons save-action="vm.savePage()" cancel-action="vm.cancelPendingEdits()" ng-show="vm.state.pendingChanges"></ssb-action-buttons>
 
 		<div id="componentloader">

@@ -1,79 +1,45 @@
 <script type="text/ng-template" id="ssb-section-modal">
-    <div id="media-manager-modal">
+    <div class="ssb-section-modal">
         <div class="modal-header">
-            <button type="button" class="close" ng-click="closeModal()" aria-hidden="true">&times;</button>
+            <button type="button" class="close" ng-click="vm.closeModal()" aria-hidden="true">&times;</button>
             <h4 class="modal-title">
-                <span class="fa fa-image"></span> Add Section
+                <span class="fa fa-plus"></span> Add a page section
             </h4>
         </div>
         <div class="modal-body bg-white">
             <div class="row">
-                <div class="media margin-top-0" id="assets" ng-style="{'max-height':bodyHeight}">
-                    <div ng-repeat="asset in assets | orderBy:'-created.date'" class="col-xs-12 col-sm-4" ng-show="assets.length">
-                        <div class="thmb checked">
-                            <div class="checkbox clip-check check-primary ckbox ckbox-default" style="display: block;z-index:1;">
-                                <input type="checkbox" id="{{asset._id}}" name="{{asset._id}}" ng-model="asset.checked" ng-click="m.singleSelect(asset)">
-                                <label for="{{asset._id}}"></label>
-                            </div>
-                            <div class="btn-group fm-group" style="display: block;z-index:1;">
-                                <button type="button" class="btn btn-default dropdown-toggle fm-toggle" data-toggle="dropdown"><span class="caret"></span>
-                                </button>
-                                <ul class="dropdown-menu fm-menu" role="menu">
-                                    <li class="hidden">
-                                        <a href="#"><i class="fa fa-share"></i> Share</a>
-                                    </li>
-                                    <li class="hidden">
-                                        <a href="#"><i class="fa fa-envelope-o"></i> Email</a>
-                                    </li>
-                                    <li class="hidden">
-                                        <a href="#" ng-click="m.editImage(asset)"><i class="fa fa-pencil"></i> Edit</a>
-                                    </li>
-                                    <li>
-                                        <a clipboard text="'https:' + asset.url" on-copied="successCopy()"><i class="fa fa-link"></i> Copy Link</a>
-                                    </li>
-                                    <li>
-                                        <a href="{{asset.url}}" download><i class="fa fa-download"></i> Download</a>
-                                    </li>
-                                    <li>
-                                        <a href="" ng-click="m.deleteAsset(asset)"><i class="fa fa-trash-o"></i> Delete</a>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="thmb-prev">
-                                <div ng-switch="asset.mimeType">
-                                    <span ng-switch-when="application/pdf" class="fa fa-file-pdf-o" style="font-size: 96px;"></span>
-                                    <span ng-switch-when="application/octet-stream" class="fa fa-file-text-o" style="font-size: 96px;"></span>
-                                    <img ng-switch-default ng-src="{{asset.url}}" alt="">
-                                </div>
-                            </div>
-                            <h5 class="fm-title">
-                                    <a href="#"><span ng-text-truncate="asset.filename" ng-tt-chars-threshold="25" ng-tt-no-toggling></span></a>
-                                </h5>
-                            <small class="text-muted">{{asset.created.date | timeAgoFilter}}</small>
-                        </div>
-                    </div>
-                    <div id="warning-box" ng-hide="assets.length || loadingAssets" ng-if="showType != 'all'"> No {{showType}} uploaded.</div>
-                    <div id="warning-box" ng-hide="assets.length || loadingAssets" ng-if="showType == 'all'"> No media uploaded.</div>
+                <div class="col-md-12 media margin-top-0">
+                    <h3>Your Sections</h3>
+                    <ul class="col-md-12 list-unstyled">
+                        <li 
+                            ng-repeat="section in vm.platformSections track by $index" 
+                            ng-click="vm.setSectionToAdd(section, $index)" 
+                            class="col-md-5 col-md-offset-1 ssb-page-section-settings-item ssb-section-modal-list-item"
+                            ng-class="{ 'active': vm.uiState.activeSectionToAdd.index === $index }">
+                            {{vm.sectionName(section)}}
+                        </li>
+                    </ul>
                 </div>
             </div>
-            <div class="editimage" ng-show="editingImage" style="height:{{bodyHeight}};">
-                <div class="col-xs-6 imgedit-wrap">
-                    <img ng-src="{{singleAsset.url}}" class="img-responsive img-thumbnail" id="targetEditImage">
-                    <!-- <img ng-src="{{singleAsset.url}}" id="originalSource" class="hidden"> -->
-                    <canvas id="targetCanvas"></canvas>
-                </div>
-                <div class="col-xs-6">
-                    Image Editing Buttons
+            <div class="row">
+                <div class="col-md-12 media margin-top-0">
+                    <h3>Pre-configured Sections</h3>
+                    <ul class="col-md-12 list-unstyled">
+                        <li 
+                            ng-repeat="section in vm.state.page.sections track by $index" 
+                            ng-click="vm.setSectionToAdd(section, $index)" 
+                            class="col-md-5 col-md-offset-1 ssb-page-section-settings-item ssb-section-modal-list-item"
+                            ng-class="{ 'active': vm.uiState.activeSectionToAdd.index === $index }">
+                            {{vm.sectionName(section)}}
+                        </li>
+                    </ul>
                 </div>
             </div>
-            
-            <div class="clearfix"></div>
         </div>
         <div class="modal-footer">
-            <div class="row" ng-if="editingImage">
-                <button class="btn btn-primary"><i class="fa fa-save"></i> Save Image</button>
+            <div class="row">
+                <button ng-click="vm.addSectionToPage();" class="btn btn-primary margin-right-10"><i class="fa fa-plus"></i> Add Section</button>
             </div>
-            <div class="clearfix"></div>
         </div>
     </div>
 </script>

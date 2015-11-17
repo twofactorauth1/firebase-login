@@ -96,6 +96,10 @@
     border-top: 1px solid #E7EAEA;
     border-bottom: 1px solid #E7EAEA;
     margin: 0;
+
+    .ssb-sidebar-item-icon {
+        right: .5em;
+    }
 }
 
 .ssb-page-section-settings-item > .panel-group {
@@ -131,6 +135,11 @@
 }
 
 .ssb-settings-list {
+
+    background: white;
+    margin: 0;
+    padding: 1em 0 1.5em;
+
     li {
         padding: 1em 1em 0;
     }
@@ -168,6 +177,11 @@
         line-height: 20px;
         padding: 10px;
         position: relative;
+
+        .ssb-sidebar-component-open {
+            color: orange;
+            font-weight: 600;
+        }
     }
 
     &.ssb-sidebar-section-open > .panel-heading .panel-title a {
@@ -177,7 +191,23 @@
 
 }
 
+.ssb-sidebar-sortable-item-component {
+    border: 1px solid #ddd!important;
+    border-width: 1px 1px 0 1px!important;
+}
+
 .sortable-chosen .panel-heading .panel-title a {
     background: #ddd;
     color: #fff;
+}
+
+.ssb-sidebar-component-list {
+    .panel-body {
+        cursor: pointer;
+    }
+}
+
+.btn-ssb-remove-component {
+    width: auto;
+    margin: 1em auto;
 }
