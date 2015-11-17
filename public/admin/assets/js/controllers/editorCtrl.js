@@ -841,7 +841,7 @@
     $scope.contactMap = {};
     $scope.blogControl = {};
     $scope.postControl = {};
-
+    $scope.websiteLinks = {};
 
     $scope.insertMedia = function (asset) {
       console.log('$scope.componentEditing ', $scope.componentEditing);
@@ -1023,7 +1023,9 @@
         _modal.resolve.testimonialSlider = function () {
           return $scope.testimonialSlider;
         };
-        
+        _modal.resolve.websiteLinks = function () {
+          return $scope.websiteLinks;
+        };
       }
 
       if (angular.isDefined(index) && index !== null && index >= 0) {

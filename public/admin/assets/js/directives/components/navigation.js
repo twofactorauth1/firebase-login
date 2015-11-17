@@ -7,13 +7,19 @@ app.directive('navigationComponent', ['WebsiteService', 'AccountService', functi
       component: '=',
       version: '=',
       ssbEditor: '=',
-      website: '=?'
+      website: '=?',
+      control: '='
     },
     templateUrl: '/components/component-wrap.html',
     link: function (scope, element, attrs) {
       scope.isEditing = true;
       if(!angular.isDefined(scope.component.shownavbox))
         scope.component.shownavbox = true;
+      if(!scope.ssbEditor){
+        scope.control.refreshWebsiteLinks = function (lnklist) {
+          scope.website.linkLists = lnklist;
+        };
+      }
     },
     controller: function ($scope, WebsiteService, AccountService, $compile) {
       $scope.isSinglePost = $scope.$parent.isSinglePost;
