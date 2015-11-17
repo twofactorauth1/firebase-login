@@ -2,7 +2,7 @@
 /*global app, moment, angular, window*/
 /*jslint unparam:true*/
 
-app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalInstance', '$http', '$timeout', '$q', '$compile', '$filter', 'WebsiteService', 'CustomerService', 'ProductService', 'GeocodeService', 'toaster', 'hoursConstant', 'components', 'clickedIndex', 'contactMap', 'website', 'blog', 'isDirty', 'isSinglePost', 'openParentModal', 'showInsert', 'blogImage', 'accountShowHide', 'CampaignService', 'testimonialSlider', 'isEmail', function ($scope, $rootScope, $modalInstance, $http, $timeout, $q, $compile, $filter, WebsiteService, CustomerService, ProductService, GeocodeService, toaster, hoursConstant, components, clickedIndex, contactMap, website, blog, isDirty, isSinglePost, openParentModal, showInsert, blogImage, accountShowHide, CampaignService, testimonialSlider, isEmail) {
+app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalInstance', '$http', '$timeout', '$q', '$compile', '$filter', 'WebsiteService', 'CustomerService', 'ProductService', 'GeocodeService', 'toaster', 'hoursConstant', 'components', 'clickedIndex', 'contactMap', 'website', 'blog', 'isDirty', 'isSinglePost', 'openParentModal', 'showInsert', 'blogImage', 'accountShowHide', 'CampaignService', 'testimonialSlider', 'websiteLinks', 'isEmail', function ($scope, $rootScope, $modalInstance, $http, $timeout, $q, $compile, $filter, WebsiteService, CustomerService, ProductService, GeocodeService, toaster, hoursConstant, components, clickedIndex, contactMap, website, blog, isDirty, isSinglePost, openParentModal, showInsert, blogImage, accountShowHide, CampaignService, testimonialSlider, websiteLinks, isEmail) {
 
   $scope.blog = {};
   $scope.components = components;
@@ -24,6 +24,7 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
   $scope.isEmail = isEmail;
   $scope.testimonialSlider = testimonialSlider;
   $scope.emailLoaded = false;
+  $scope.websiteLinks = websiteLinks;
 
   /*
    * @getPages
@@ -549,8 +550,10 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
         if (value.handle === "head-menu") {
           value.links.splice(index, 1);
           setTimeout(function () {
-            $scope.updateLinkList();
-          }, 1000);
+              $scope.$apply(function () {
+                $scope.updateLinkList();
+              })            
+          }, 500);
         }
       });
     } else {
@@ -558,8 +561,10 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
         if (value.handle === "head-menu") {
           value.links.splice(index, 1);
           setTimeout(function () {
-            $scope.updateLinkList();
-          }, 1000);
+              $scope.$apply(function () {
+                $scope.updateLinkList();
+              })            
+          }, 500);
         }
       });
     }
@@ -615,8 +620,10 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
 
     }
     setTimeout(function () {
-      $scope.updateLinkList();
-    }, 1000);
+        $scope.$apply(function () {
+          $scope.updateLinkList();
+        })            
+    }, 500);
   };
 
   /*
@@ -665,6 +672,8 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
             });
             if (newLinkListOrder.length) {
               $scope.website.linkLists[index].links = newLinkListOrder;
+              if($scope.websiteLinks && $scope.websiteLinks.refreshWebsiteLinks)
+                $scope.websiteLinks.refreshWebsiteLinks($scope.website.linkLists);
             }
 
           }

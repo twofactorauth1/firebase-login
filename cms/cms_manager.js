@@ -637,14 +637,26 @@ module.exports = {
                 "by" : null
             }
         };
-
-        cmsDao.saveOrUpdate(new $$.m.cms.Page(blogPage), function(err, value){
-            if(err) {
-                return fn(err, null);
-            } else {
-                return fn(null, value);
+        var self = this;
+        cmsDao.getPageForWebsite(websiteId, 'blog', function(err, value){
+        if(err) {
+            self.log.error('Error getting BLOG page: ' + err);
+            return fn(err, null);
+        } else if(value !== null) {
+            self.log.debug('<< blog page already created');
+            return fn(null, value);
+        } else {
+            self.log.debug('<< blog page needs to be created');
+            cmsDao.saveOrUpdate(new $$.m.cms.Page(blogPage), function(err, value){
+                if(err) {
+                    return fn(err, null);
+                } else {
+                    return fn(null, value);
+                }
+            });
             }
         });
+       
     },
 
 
@@ -1252,65 +1264,65 @@ module.exports = {
     },
 
     deletePage: function(pageId, fn) {
-		var self = this;
-		self.log = log;
+        var self = this;
+        self.log = log;
 
-		self.log.debug('>> deletePage');
+        self.log.debug('>> deletePage');
 
-		cmsDao.getPageById(pageId, function(err, page) {
+        cmsDao.getPageById(pageId, function(err, page) {
 
-			if (page && page.get('mainmenu') == true) {
-				self.getWebsiteLinklistsByHandle(page.get('websiteId'), "head-menu", function(err, list) {
-					if (err) {
-						self.log.error('Error getting website linklists by handle: ' + err);
-						fn(err, value);
-					} else {
-						var link = {
-							label : page.get('title'),
-							type : "link",
-							linkTo : {
-								type : "page",
-								data : page.get('handle')
-							}
-						};
-						list.links.pop(link);
-						self.updateWebsiteLinklists(page.get('websiteId'), "head-menu", list, function(err, linkLists) {
-							if (err) {
-								self.log.error('Error updating website linklists by handle: ' + err);
-								fn(err, page);
-							} else {
+            if (page && page.get('mainmenu') == true) {
+                self.getWebsiteLinklistsByHandle(page.get('websiteId'), "head-menu", function(err, list) {
+                    if (err) {
+                        self.log.error('Error getting website linklists by handle: ' + err);
+                        fn(err, value);
+                    } else {
+                        var link = {
+                            label : page.get('title'),
+                            type : "link",
+                            linkTo : {
+                                type : "page",
+                                data : page.get('handle')
+                            }
+                        };
+                        list.links.pop(link);
+                        self.updateWebsiteLinklists(page.get('websiteId'), "head-menu", list, function(err, linkLists) {
+                            if (err) {
+                                self.log.error('Error updating website linklists by handle: ' + err);
+                                fn(err, page);
+                            } else {
                                 var query = {};
                                 query._id = new RegExp('' + pageId + '(_.*)*');
                                 cmsDao.removeByQuery(query, $$.m.cms.Page, function(err, value){
-								//cmsDao.removeById(pageId, $$.m.cms.Page, function(err, value) {
-									if (err) {
-										self.log.error('Error deleting page with id [' + pageId + ']: ' + err);
-										fn(err, null);
-									} else {
-										self.log.debug('<< deletePage');
-										fn(null, value);
-									}
-								});
-							}
-						});
-					}
-				});
-			} else {
+                                //cmsDao.removeById(pageId, $$.m.cms.Page, function(err, value) {
+                                    if (err) {
+                                        self.log.error('Error deleting page with id [' + pageId + ']: ' + err);
+                                        fn(err, null);
+                                    } else {
+                                        self.log.debug('<< deletePage');
+                                        fn(null, value);
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
+            } else {
                 var query = {};
                 query._id = new RegExp('' + pageId + '(_.*)*');
                 cmsDao.removeByQuery(query, $$.m.cms.Page, function(err, value){
                 //cmsDao.removeById(pageId, $$.m.cms.Page, function(err, value) {
-					if (err) {
-						self.log.error('Error deleting page with id [' + pageId + ']: ' + err);
-						fn(err, null);
-					} else {
-						self.log.debug('<< deletePage');
-						fn(null, value);
-					}
-				});
-			}
-		})
-	},
+                    if (err) {
+                        self.log.error('Error deleting page with id [' + pageId + ']: ' + err);
+                        fn(err, null);
+                    } else {
+                        self.log.debug('<< deletePage');
+                        fn(null, value);
+                    }
+                });
+            }
+        })
+    },
 
     createPage: function(page, fn) {
         var self = this;

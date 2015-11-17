@@ -604,8 +604,10 @@
       var toasterMsg = 'Status has been updated to ';
       if (newStatus === postConstant.post_status.PUBLISHED) {
         WebsiteService.publishPost($scope.page._id, $scope.blog.post._id, function (data) {
+
           toaster.pop('success', "Status updated successfully");
           $scope.blog.post.post_status = newStatus;
+          $scope.originalPost = angular.copy($scope.blog.post);
           $scope.postControl.setSinglePost();
         });
       } else {
@@ -841,7 +843,7 @@
     $scope.contactMap = {};
     $scope.blogControl = {};
     $scope.postControl = {};
-
+    $scope.websiteLinks = {};
 
     $scope.insertMedia = function (asset) {
       console.log('$scope.componentEditing ', $scope.componentEditing);
@@ -1023,7 +1025,9 @@
         _modal.resolve.testimonialSlider = function () {
           return $scope.testimonialSlider;
         };
-        
+        _modal.resolve.websiteLinks = function () {
+          return $scope.websiteLinks;
+        };
       }
 
       if (angular.isDefined(index) && index !== null && index >= 0) {
