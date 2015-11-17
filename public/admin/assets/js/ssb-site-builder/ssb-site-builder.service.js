@@ -100,7 +100,7 @@
 			 *
 			 * Transform legacy pages to new section/component model format
 			 */
-			if (data.components.length) {
+			if (data.components.length && !data.sections.length) {
 				data.sections = angular.copy(data.components);
 				for (var i = 0; i < data.sections.length; i++) {
 					var component = angular.copy(data.sections[i]);
