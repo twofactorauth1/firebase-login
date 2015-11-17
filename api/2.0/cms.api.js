@@ -41,9 +41,9 @@ _.extend(api.prototype, baseApi.prototype, {
         */
 
         // TEMPLATE - work with template objects
-        app.get(this.url('templates'), this.isAuthAndSubscribedApi.bind(this), this.listTemplates.bind(this));//list
+        app.get(this.url('template'), this.isAuthAndSubscribedApi.bind(this), this.listTemplates.bind(this));//list
         app.get(this.url('template/:id'), this.isAuthAndSubscribedApi.bind(this), this.getTemplate.bind(this));//get
-        app.post(this.url('templates'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//create
+        app.post(this.url('template'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//create
         app.post(this.url('template/:id'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//update
         app.delete(this.url('template/:id'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//delete
 
@@ -72,7 +72,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
 
         // COMPONENTS
-        app.get(this.url('components'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this)); //get components
+        app.get(this.url('component'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this)); //get components
 
 
     },
