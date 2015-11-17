@@ -1,7 +1,7 @@
 'use strict';
 /*global app, moment, angular, window*/
 /*jslint unparam:true*/
-app.directive('blogComponent', ['$filter', '$timeout', 'WebsiteService', 'toaster', function ($filter, $timeout, WebsiteService, toaster) {
+app.directive('blogComponent', ['$filter', '$timeout', 'WebsiteService', 'toaster', 'SweetAlert', function ($filter, $timeout, WebsiteService, toaster, SweetAlert) {
   return {
     scope: {
       component: '=',
@@ -18,6 +18,7 @@ app.directive('blogComponent', ['$filter', '$timeout', 'WebsiteService', 'toaste
           index: index
         });
     };
+    scope.deletedPosts = [];
     scope.component.spacing = scope.$parent.defaultSpacings; 
     scope.control.saveBlogData = function () {
       _.each(scope.blog.blogposts, function (value, index) {
@@ -27,7 +28,14 @@ app.directive('blogComponent', ['$filter', '$timeout', 'WebsiteService', 'toaste
           if (!angular.equals(matching_post, value))
             WebsiteService.updatePost(scope.$parent.page._id, value._id, value, function (data) {});
         })
+      if(scope.deletedPosts.length){
+        WebsiteService.bulkDeletePosts(scope.$parent.page._id, scope.deletedPosts, function (data) {});
+        scope.deletedPosts = [];
+      }
+
       };
+      
+
     },
     controller: function ($scope, WebsiteService, $compile, $filter, $timeout) {
       $scope.blog = {};
@@ -199,12 +207,29 @@ app.directive('blogComponent', ['$filter', '$timeout', 'WebsiteService', 'toaste
       };
 
       $scope.deleteBlogPost = function (postId, blogpost) {
+        SweetAlert.swal({
+        title: "Are you sure?",
+        text: "Do you want to delete this post",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: "Yes, delete post!",
+        cancelButtonText: "No, do not delete post!",
+        closeOnConfirm: false,
+        closeOnCancel: true
+      }, function (isConfirm) {
+        if (isConfirm) {
+          //WebsiteService.deletePost($scope.$parent.page._id, postId, function (data) {
+            var index = $scope.blog.blogposts.indexOf(blogpost);
+            $scope.blog.blogposts.splice(index, 1);
+            toaster.pop('success', 'Post deleted successfully');
+            SweetAlert.swal("Saved!", "Post deleted.", "success");
+            $scope.deletedPosts.push(postId);
+         // });
+        }
+      });
       console.log('delete post');
-        WebsiteService.deletePost($scope.$parent.page._id, postId, function (data) {
-          var index = $scope.blog.blogposts.indexOf(blogpost);
-          $scope.blog.blogposts.splice(index, 1);
-          toaster.pop('success', 'Post deleted successfully');
-        });
+        
       };
     }
   };

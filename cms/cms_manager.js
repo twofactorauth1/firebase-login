@@ -886,6 +886,42 @@ module.exports = {
         });
     },
 
+    bulkDeleteBlogPost: function(accountId, pageId, postIds, fn) {
+        var self = this;
+        self.log = log;
+        self.log.debug('>> bulkDeleteBlogPost');        
+        var query = {
+            _id: {'$in': postIds}
+        };                               
+        blogPostDao.removeByQuery(query, $$.m.BlogPost, function(err, value){
+            cmsDao.getPageById(pageId,function(err, page) {
+                if(err) {
+                    self.log.error('Error getting page for post: ' + err);
+                    fn(err, null);
+                } else if(!page){
+                    var msg = 'Referenced page [' + pageId + '] does not exist:';
+                    self.log.error(msg);
+                    fn(msg, null);
+                } else {
+                    //remove postId from page
+                    _.each(postIds, function(pid){
+                        self.log.debug('post with id: ' + pid);
+                        self._removePostIdFromBlogComponentPage(pid, page);
+                    });                    
+                    cmsDao.saveOrUpdate(page, function(err, page){
+                        if(err) {
+                            self.log.error('Error updating page for post: ' + err);
+                            fn(err, null);
+                        } else {
+                            self.log.debug('<< deleteBlogPost');
+                            fn(null, value);
+                        }
+                    });
+                }
+            });
+        });
+    },
+
     modifyPostOrder: function(accountId, postId, pageId, newOrderNumber, fn) {
         var self = this;
         self.log = log;
