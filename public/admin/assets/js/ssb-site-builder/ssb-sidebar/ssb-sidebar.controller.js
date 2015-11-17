@@ -11,11 +11,15 @@ app.config(['$provide', function ($provide){
 	});
 }]);
 
+// app.config(function ($httpProvider) {
+//   $httpProvider.useApplyAsync(true);
+// });
+
 app.controller('SiteBuilderSidebarController', ssbSiteBuilderSidebarController);
 
-ssbSiteBuilderSidebarController.$inject = ['$scope', '$attrs', '$filter', 'SimpleSiteBuilderService', '$modal', 'editableOptions', '$location'];
+ssbSiteBuilderSidebarController.$inject = ['$scope', '$attrs', '$filter', 'SimpleSiteBuilderService', '$modal', 'editableOptions', '$location', 'SweetAlert'];
 /* @ngInject */
-function ssbSiteBuilderSidebarController($scope, $attrs, $filter, SimpleSiteBuilderService, $modal, editableOptions, $location) {
+function ssbSiteBuilderSidebarController($scope, $attrs, $filter, SimpleSiteBuilderService, $modal, editableOptions, $location, SweetAlert) {
 	
     console.info('site-build sidebar directive init...')
 
@@ -29,10 +33,14 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, SimpleSiteBuil
     vm.togglePageSectionAccordion = togglePageSectionAccordion;
     vm.togglePageSectionComponentAccordion = togglePageSectionComponentAccordion;
     vm.getSystemComponents = getSystemComponents;
+    vm.setSectionToAdd = setSectionToAdd;
     vm.addSectionToPage = addSectionToPage;
+    vm.removeSectionFromPage = removeSectionFromPage;
+    vm.removeComponentFromSection = removeComponentFromSection;
     vm.addComponentToSection = addComponentToSection;
     vm.addBackground = addBackground;
-    vm.openSectionModal = openSectionModal;
+    vm.openModal = openModal;
+    vm.closeModal = closeModal;
     vm.openMediaModal = openMediaModal;
     vm.insertMedia = insertMedia;
     vm.addToMainMenu = addToMainMenu;
@@ -113,14 +121,6 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, SimpleSiteBuil
 		vm.systemComponents = SimpleSiteBuilderService.getSystemComponents();
 	}
 
-    function addSectionToPage(section, sectionIndex) {
-        vm.openSectionModal('ssb-section-modal', null, null, 'lg');
-        // vm.state.page.sections.push({
-        //     'layout': '1-col',
-        //     'components': []
-        // });
-    }
-
 	//TODO: handle versions
 	function addComponentToSection(component, sectionIndex) {
 		return (
@@ -129,6 +129,62 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, SimpleSiteBuil
 			})
 		)
 	}
+
+    function setSectionToAdd(section, index) {
+        vm.uiState.activeSectionToAdd = { index: index, section: section };
+    }
+
+    function addSectionToPage() {
+        if (vm.uiState.activeSectionToAdd.section) {
+            return (
+                SimpleSiteBuilderService.getSection(vm.uiState.activeSectionToAdd.section, 1).then(function(response) {
+                    vm.state.page.sections.push(response);
+                    vm.closeModal();
+                })
+            )
+        }
+    }
+
+    function removeSectionFromPage(index) {
+        SweetAlert.swal({
+          title: "Are you sure?",
+          text: "Do you want to delete this section?",
+          type: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#DD6B55",
+          confirmButtonText: "Yes, delete it!",
+          cancelButtonText: "No, do not delete it!",
+          closeOnConfirm: true,
+          closeOnCancel: true
+        },
+        function (isConfirm) {
+            if (isConfirm) {
+                vm.state.page.sections.splice(index, 1);
+                vm.uiState.activeSectionIndex = undefined;
+                vm.uiState.activeComponentIndex = undefined;
+            }
+        });
+    }
+
+    function removeComponentFromSection(index) {
+        SweetAlert.swal({
+          title: "Are you sure?",
+          text: "Do you want to delete this component?",
+          type: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#DD6B55",
+          confirmButtonText: "Yes, delete it!",
+          cancelButtonText: "No, do not delete it!",
+          closeOnConfirm: true,
+          closeOnCancel: true
+        },
+        function (isConfirm) {
+            if (isConfirm) {
+                vm.state.page.sections[vm.uiState.activeSectionIndex].components.splice(index, 1);
+                vm.uiState.activeComponentIndex = undefined;
+            }
+        });
+    }
 
 	function saveWebsite() {
 		vm.state.pendingChanges = false;
@@ -140,22 +196,39 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, SimpleSiteBuil
 	}
 
 	function savePage() {
-		vm.state.pendingChanges = false;
+		SweetAlert.swal({
+          title: "Are you sure?",
+          text: "Pages saved from Simple Site Builder will not be editable within the legacy editor.",
+          type: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#DD6B55",
+          confirmButtonText: "Yes — I'll use Simple Site Builder going forward.",
+          cancelButtonText: "No — I will use the legacy editor for now.",
+          closeOnConfirm: true,
+          closeOnCancel: true
+        },
+        function (isConfirm) {
+            if (isConfirm) {
+                
+                vm.state.pendingChanges = false;
 
-		saveWebsite();
+                saveWebsite();
 
-		return (
-			SimpleSiteBuilderService.savePage(vm.state.page).then(function(response){
-				console.log('page saved');
-			})
-		)
+                return (
+                    SimpleSiteBuilderService.savePage(vm.state.page).then(function(response){
+                        console.log('page saved');
+                    })
+                )
+
+            }
+        });
 	}
 
 	function cancelPendingEdits() {
-		alert('TODO: reset pending changes.');
-		vm.state.pendingChanges = false;
-		return true;
-	}
+        vm.state.pendingChanges = false;
+        vm.state.website = vm.state.originalWebsite;
+        vm.state.page = vm.state.originalPage;
+    }
 
 	function togglePageSectionAccordion(index) {
 		if (vm.uiState.accordion.sections[index].isOpen) {
@@ -172,25 +245,32 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, SimpleSiteBuil
     	vm.openMediaModal('media-modal', 'MediaModalCtrl', null, 'lg');
     }
 
-    function openSectionModal(modal, controller, index, size) {
+    function closeModal() {
+        vm.modalInstance.close();
+    }
+
+    function openModal(modal, controller, index, size) {
         console.log('openModal >>> ', modal, controller, index);
         var _modal = {
             templateUrl: modal,
             keyboard: false,
             backdrop: 'static',
             size: 'md',
-            resolve: {}
+            scope: $scope,
+            resolve: {
+                vm: function () {
+                    return vm;
+                }
+            }
         };
-
-        _modal.resolve.vm = vm;
 
         if (size) {
             _modal.size = 'lg';
         }
 
-        $scope.modalInstance = $modal.open(_modal);
+        vm.modalInstance = $modal.open(_modal);
         
-        $scope.modalInstance.result.then(null, function () {
+        vm.modalInstance.result.then(null, function () {
             angular.element('.sp-container').addClass('sp-hidden');
         });
 
@@ -203,7 +283,11 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, SimpleSiteBuil
             keyboard: false,
             backdrop: 'static',
             size: 'md',
-            resolve: {}
+            resolve: {
+                vm: function() {
+                    return vm;
+                }
+            }
         };
 
         if (controller) {
@@ -218,25 +302,25 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, SimpleSiteBuil
             };
         }
 
-        if (angular.isDefined(index) && index !== null && index >= 0) {
-            $scope.setEditingComponent(index);
-            _modal.resolve.clickedIndex = function () {
-              return index;
-            };
-            if ($scope.page) {
-              _modal.resolve.pageHandle = function () {
-                return $scope.page.handle;
-              };
-            }
-        }
+        // if (angular.isDefined(index) && index !== null && index >= 0) {
+        //     $scope.setEditingComponent(index);
+        //     _modal.resolve.clickedIndex = function () {
+        //       return index;
+        //     };
+        //     if ($scope.page) {
+        //       _modal.resolve.pageHandle = function () {
+        //         return $scope.page.handle;
+        //       };
+        //     }
+        // }
 
         if (size) {
             _modal.size = 'lg';
         }
 
-        $scope.modalInstance = $modal.open(_modal);
+        vm.modalInstance = $modal.open(_modal);
         
-        $scope.modalInstance.result.then(null, function () {
+        vm.modalInstance.result.then(null, function () {
             angular.element('.sp-container').addClass('sp-hidden');
         });
 

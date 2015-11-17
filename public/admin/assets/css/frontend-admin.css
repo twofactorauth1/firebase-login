@@ -6337,7 +6337,8 @@ a[href="https://froala.com/wysiwyg-editor"] {
 .ssb-site-builder .ssb-edit-control:hover .ssb-edit-control-inactive {
   display: none;
 }
-.ssb-site-builder .ssb-active-section:before {
+.ssb-site-builder .ssb-active-section:before,
+.ssb-site-builder .ssb-active-section .ssb-active-component:before {
   z-index: 1;
   position: absolute;
   top: 0;
@@ -6348,9 +6349,23 @@ a[href="https://froala.com/wysiwyg-editor"] {
   display: block;
   box-shadow: 0px 0px 0px 8px rgba(71, 184, 217, 0.75);
 }
+.ssb-site-builder .ssb-active-section .ssb-active-component:before {
+  box-shadow: 0px 0px 0px 4px #ffa500;
+}
 .ssb-site-builder .edit-wrap:hover .editable-title {
   left: auto;
   right: 0;
+}
+.ssb-section-modal .ssb-section-modal-list-item {
+  padding: 1em;
+  background: #47b8d9;
+  cursor: pointer;
+  color: white;
+  margin-bottom: 1em;
+  opacity: .85;
+}
+.ssb-section-modal .ssb-section-modal-list-item.active {
+  opacity: 1;
 }
 .ssb-sidebar {
   overflow: auto;
@@ -6431,6 +6446,9 @@ a[href="https://froala.com/wysiwyg-editor"] {
   border-bottom: 1px solid #E7EAEA;
   margin: 0;
 }
+.ssb-sidebar-sub-heading .ssb-sidebar-item-icon {
+  right: .5em;
+}
 .ssb-page-section-settings-item > .panel-group {
   margin-bottom: 0;
 }
@@ -6456,6 +6474,11 @@ a[href="https://froala.com/wysiwyg-editor"] {
 }
 .ssb-sidebar-item-icon-offset-2 {
   right: 5em;
+}
+.ssb-settings-list {
+  background: white;
+  margin: 0;
+  padding: 1em 0 1.5em;
 }
 .ssb-settings-list li {
   padding: 1em 1em 0;
@@ -6489,13 +6512,28 @@ a[href="https://froala.com/wysiwyg-editor"] {
   padding: 10px;
   position: relative;
 }
+.ssb-sidebar-sortable-item .panel-heading .panel-title a .ssb-sidebar-component-open {
+  color: orange;
+  font-weight: 600;
+}
 .ssb-sidebar-sortable-item.ssb-sidebar-section-open > .panel-heading .panel-title a {
   color: #47b8d9;
   font-weight: 600;
 }
+.ssb-sidebar-sortable-item-component {
+  border: 1px solid #ddd!important;
+  border-width: 1px 1px 0 1px!important;
+}
 .sortable-chosen .panel-heading .panel-title a {
   background: #ddd;
   color: #fff;
+}
+.ssb-sidebar-component-list .panel-body {
+  cursor: pointer;
+}
+.btn-ssb-remove-component {
+  width: auto;
+  margin: 1em auto;
 }
 .ssb-flyover {
   position: absolute;

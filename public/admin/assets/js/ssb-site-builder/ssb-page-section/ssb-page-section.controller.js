@@ -24,7 +24,12 @@ function ssbPageSectionController($scope, $attrs, $filter, SimpleSiteBuilderServ
     }
 
     function componentClass(index) {
-        var ngClass = {};
+        // console.log('index: ' + index);
+        // console.log('vm.uiState.activeComponentIndex: ' + vm.uiState.activeComponentIndex);
+        var ngClass = {
+            'ssb-active-component': (index === vm.uiState.activeComponentIndex)
+            // 'ssb-active-component': (index === vm.page.sections[vm.uiState.activeComponentIndex].components[vm.uiState.activeComponentIndex])
+        };
 
         if (vm.section.layout === '1-col') {
             ngClass['col-md-12'] = true;

@@ -59,25 +59,6 @@
 	        	</li>
 	        </ul>
 	    </section>
-	    <!-- Full Page List -->
-		<!-- <section>
-	        <h4 class="ssb-sidebar-sub-heading">Main Menu</h4>
-	        <ul class="list-unstyled" ng-sortable="vm.sortableOptions" ng-model="vm.state.pages">
-	        	<li ng-repeat="page in vm.state.pages track by $index" class="ssb-page-section-settings-item">
-	        		<div class="ssb-sidebar-item-icon ssb-sidebar-move-handle ti-move display-ib"></div>
-	        		<div class="ssb-sidebar-item-icon ssb-sidebar-item-icon-offset-1 ti-close display-ib" tooltip-placement="left" tooltip-html-unsafe="Remove from Main Menu"></div>
-	        		<div class="panel-group">
-		        		<div class="ssb-sidebar-sortable-item panel panel-default">
-			        		<div class="panel-heading">
-				        		<h4 class="panel-title">
-				        			<a href page-id="page._id" ng-click="vm.navigation.loadPage(page._id)">{{page.title}}</a>
-				        		</h4>
-				        	</div>
-			        	</div>
-			        </div>
-	        	</li>
-	        </ul>
-	    </section> -->
 	    <section>
 	        <h4 class="ssb-sidebar-sub-heading">Pages</h4>
 	        <ul class="list-unstyled">
@@ -125,11 +106,14 @@
 		<section>
 	        <h4 ng-if="vm.state.page.sections" class="ssb-sidebar-sub-heading">
 	        	<span>Page Sections</span>
-	        	<div ng-click="vm.addSectionToPage()" class="ssb-sidebar-item-icon ti-plus display-ib" tooltip-placement="left" tooltip-html-unsafe="Add Section"></div>
+	        	<div ng-click="vm.openModal('ssb-section-modal', null, null, 'lg');" class="ssb-sidebar-item-icon ti-plus display-ib" tooltip-placement="left" tooltip-html-unsafe="Add Section"></div>
 	        </h4>
 			<ul ng-if="vm.state.page.sections" class="list-unstyled" ng-sortable="vm.sortableOptions" ng-model="vm.state.page.sections">
-				<li ng-repeat="section in vm.state.page.sections track by $index" class="ssb-page-section-settings-item">
+				<li ng-repeat="section in vm.state.page.sections track by $index" ng-init="sectionIndex = $index" class="ssb-page-section-settings-item">
 					<div class="ssb-sidebar-item-icon ssb-sidebar-move-handle ti-move display-ib"></div>
+					<div class="ssb-sidebar-item-icon ssb-sidebar-item-icon-offset-1 ti-close display-ib" ng-click="vm.removeSectionFromPage($index)" tooltip-placement="left" tooltip-html-unsafe="Remove section"></div>
+					<!-- <div ng-hide="!vm.uiState.accordion.sections[sectionIndex].isOpen" class="ssb-sidebar-item-icon ssb-sidebar-move-handle ti-angle-down display-ib"></div>
+					<div ng-hide="vm.uiState.accordion.sections[sectionIndex].isOpen" class="ssb-sidebar-item-icon ssb-sidebar-move-handle ti-angle-up display-ib"></div> -->
 					<accordion close-others="oneAtATime" class="accordion">
 						<accordion-group heading="{{vm.sectionName(section)}} Section"
 							is-open="vm.uiState.accordion.sections[$index].isOpen" 
@@ -138,15 +122,23 @@
 							class="ssb-sidebar-sortable-item">
 
 							<div class="form-group">
-								<!-- <h5>Components</h5> -->
 
 								<ul class="list-unstyled">
-									<li ng-repeat="component in section.components track by $index">
+									<li ng-repeat="component in section.components track by $index" ng-init="componentIndex = $index">
 										<accordion close-others="oneAtATime" class="accordion">
-											<accordion-group heading="{{($index + 1)}} - {{component.header_title || component.type}}"
-												is-open="vm.uiState.accordion.sections[$parent.$index].components[$index].isOpen" 
+											<accordion-group 
+												is-open="vm.uiState.accordion.sections[sectionIndex].components[componentIndex].isOpen" 
 												ng-click="vm.togglePageSectionComponentAccordion($index)"
-												class="ssb-sidebar-sortable-item">
+												class="ssb-sidebar-sortable-item ssb-sidebar-sortable-item-component">
+
+												<accordion-heading>
+													<div ng-class="{ 'ssb-sidebar-component-open': vm.uiState.accordion.sections[sectionIndex].components[componentIndex].isOpen }">
+														{{($index + 1)}} - {{component.header_title || component.type}}
+													</div>
+													<div class="ssb-sidebar-item-icon ssb-sidebar-move-handle ti-move display-ib"></div>
+													<!-- <div ng-hide="!vm.uiState.accordion.sections[sectionIndex].components[componentIndex].isOpen" class="ssb-sidebar-item-icon ssb-sidebar-move-handle ti-angle-down display-ib"></div>
+													<div ng-hide="vm.uiState.accordion.sections[sectionIndex].components[componentIndex].isOpen" class="ssb-sidebar-item-icon ssb-sidebar-move-handle ti-angle-up display-ib"></div> -->
+												</accordion-heading>
 
 												<div ng-include=" 'assets/js/ssb-site-builder/ssb-user-components/shared/basic.html' "></div>
 
@@ -158,16 +150,19 @@
 														</accordion>
 													</li>
 												</ul>
+												<div class="form-group">
+													<button class="btn btn-block btn-danger btn-ssb-remove-component" ng-disabled="vm.uiState.loading > 0" ng-click="vm.removeComponentFromSection($index)"><i class="fa fa-trash"></i> Remove</button>
+												</div>
 											</accordion-group>
 										</accordion>
 									</li>
-									<li>
+									<li class="ssb-sidebar-component-list">
 										<accordion close-others="oneAtATime" class="accordion" ng-click="vm.getSystemComponents()">
 											<accordion-group heading="Add + ">
 												<ul class="list-unstyled">
-													<li ng-repeat="component in vm.systemComponents track by $index" ng-click="vm.addComponentToSection(component, $parent.$index)" class="center">
+													<li ng-repeat="component in vm.systemComponents track by $index" ng-click="vm.addComponentToSection(component, sectionIndex)" class="center">
 														<img src="{{component.preview}}" alt="{{component.type}}" />
-														{{component.type}}
+														{{component.header_title || component.type}}
 													</li>
 												</ul>
 											</accordion-group>
@@ -195,7 +190,10 @@
 									</label>
 								</div>
 							</div>
-							
+
+							<!-- <div class="form-group">
+								<button class="btn btn-block btn-danger mb10" ng-disabled="vm.uiState.loading > 0" ng-click="vm.removeSectionFromPage($index)"><i class="fa fa-trash"></i> Remove</button>
+							</div> -->
 							
 
 						</accordion-group>
