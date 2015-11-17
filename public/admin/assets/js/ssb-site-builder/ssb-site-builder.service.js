@@ -191,6 +191,173 @@
 		//TODO: api implement
 		function getSection(section, version) {
 
+			// var tempSection = {
+			// 	"layout": "1-col",
+			// 	"txtcolor": "",
+			// 	"bg": {
+			// 		"color": "",
+			// 		"opacity": 0.5,
+			// 		"img": {
+			// 		"show": true,
+			// 		"overlay": true,
+			// 		"overlaycolor": "#26a65b",
+			// 		"overlayopacity": 40
+			// 	},
+			// 	"visibility": true,
+			// 	"spacing": {
+			// 		"mt": "0",
+			// 		"ml": "0",
+			// 		"mr": "0",
+			// 		"mb": "0",
+			// 		"pt": "10",
+			// 		"pb": "10",
+			// 		"pl": "10",
+			// 		"pr": "10"
+			// 	}
+			// }
+
+			function success(data) {
+				console.log('SimpleSiteBuilderService requested section: ' + data);
+			}
+
+			function error(error) {
+				console.error('SimpleSiteBuilderService section error: ' + error);
+			}
+
+			var deferred = $q.defer();
+			deferred.resolve(section);
+			return ssbRequest(deferred.promise);
+
+		}
+
+		//TODO: api implement
+		function getSections() {
+
+			var tempSection = {
+				"name": "3 Column Text",
+				"layout": "3-col",
+				"components": [{
+					"_id": "c72f4759-fcae-4fb6-a2a2-b0790a7b2742",
+					"anchor": "c72f4759-fcae-4fb6-a2a2-b0790a7b2742",
+					"type": "text",
+					"version": 1,
+					"txtcolor": "#000000",
+					"text": "<p><span style=\"\">Some Text</span></p><p><span style=\"\"></span>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nulla quae nesciunt, veritatis adipisci sit, consequatur accusamus in laboriosam amet repellendus ducimus mollitia ad labore quisquam voluptas porro esse. Dolore reiciendis, quos molestiae dolorum, officiis sapiente. Cumque vitae placeat aspernatur! Modi repellat, deleniti dolorum iste illum, esse excepturi magnam quibusdam, similique delectus est aliquam autem dolores possimus accusamus expedita nulla provident maxime eligendi ullam ad. Consequuntur ea officia nam quos, deserunt, nemo architecto repellat neque et ad natus! Asperiores pariatur distinctio amet repellendus aspernatur deleniti ipsa animi quis nesciunt quia quod eius, ex sapiente, neque quae quaerat labore. Debitis, quaerat, fugiat.</p>",
+					"bg": {
+						"img": {
+							"url": "",
+							"width": null,
+							"height": null,
+							"parallax": false,
+							"blur": false,
+							"overlay": false,
+							"show": false
+						},
+						"color": "#FFFFFF"
+					},
+					"visibility": true,
+					"spacing": {
+						"mt": "0",
+						"ml": "0",
+						"mr": "0",
+						"mb": "0",
+						"pt": "20",
+						"pb": "20",
+						"pl": "20",
+						"pr": "20"
+					}
+				},
+				{
+					"_id": "c72f4759-1234-4fb6-a2a2-b0790a7b2742",
+					"anchor": "c72f4759-1234-4fb6-a2a2-b0790a7b2742",
+					"type": "text",
+					"version": 1,
+					"txtcolor": "#000000",
+					"text": "<p><span style=\"\">Some Text</span></p><p><span style=\"\"></span>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nulla quae nesciunt, veritatis adipisci sit, consequatur accusamus in laboriosam amet repellendus ducimus mollitia ad labore quisquam voluptas porro esse. Dolore reiciendis, quos molestiae dolorum, officiis sapiente. Cumque vitae placeat aspernatur! Modi repellat, deleniti dolorum iste illum, esse excepturi magnam quibusdam, similique delectus est aliquam autem dolores possimus accusamus expedita nulla provident maxime eligendi ullam ad. Consequuntur ea officia nam quos, deserunt, nemo architecto repellat neque et ad natus! Asperiores pariatur distinctio amet repellendus aspernatur deleniti ipsa animi quis nesciunt quia quod eius, ex sapiente, neque quae quaerat labore. Debitis, quaerat, fugiat.</p>",
+					"bg": {
+						"color": "#FFFFFF",
+						"opacity": 1,
+						"img": {
+							"url": "",
+							"width": null,
+							"height": null,
+							"parallax": false,
+							"blur": false,
+							"overlay": false,
+							"show": false
+						},
+					},
+					"visibility": true,
+					"spacing": {
+						"mt": "0",
+						"ml": "0",
+						"mr": "0",
+						"mb": "0",
+						"pt": "20",
+						"pb": "20",
+						"pl": "20",
+						"pr": "20"
+					}
+				},
+				{
+					"_id": "5a9adc3a-027d-4e87-a114-946986478f45",
+					"anchor": "5a9adc3a-027d-4e87-a114-946986478f45",
+					"type": "text",
+					"version": 1,
+					"txtcolor": "#000000",
+					"text": "<p><span style=\"\">Some Text</span></p><p><span style=\"\"></span>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nulla quae nesciunt, veritatis adipisci sit, consequatur accusamus in laboriosam amet repellendus ducimus mollitia ad labore quisquam voluptas porro esse. Dolore reiciendis, quos molestiae dolorum, officiis sapiente. Cumque vitae placeat aspernatur! Modi repellat, deleniti dolorum iste illum, esse excepturi magnam quibusdam, similique delectus est aliquam autem dolores possimus accusamus expedita nulla provident maxime eligendi ullam ad. Consequuntur ea officia nam quos, deserunt, nemo architecto repellat neque et ad natus! Asperiores pariatur distinctio amet repellendus aspernatur deleniti ipsa animi quis nesciunt quia quod eius, ex sapiente, neque quae quaerat labore. Debitis, quaerat, fugiat.</p>",
+					"bg": {
+						"color": "#FFFFFF",
+						"opacity": 1,
+						"img": {
+							"url": "",
+							"width": null,
+							"height": null,
+							"parallax": false,
+							"blur": false,
+							"overlay": false,
+							"show": false
+						},
+					},
+					"visibility": true,
+					"spacing": {
+						"mt": "0",
+						"ml": "0",
+						"mr": "0",
+						"mb": "0",
+						"pt": "20",
+						"pb": "20",
+						"pl": "20",
+						"pr": "20"
+					}
+				}],
+				"txtcolor": "#000000",
+				"bg": {
+					"color": "#FFFFFF",
+					"opacity": 1,
+					"img": {
+						"url": "",
+						"width": null,
+						"height": null,
+						"parallax": false,
+						"blur": false,
+						"overlay": false,
+						"show": false
+					},
+				},
+				"visibility": true,
+				"spacing": {
+					"mt": "0",
+					"ml": "0",
+					"mr": "0",
+					"mb": "0",
+					"pb": "0",
+					"pl": "0",
+					"pr": "0",
+					"pt": "0"
+				}
+			}
+
 			function success(data) {
 				console.log('SimpleSiteBuilderService requested section: ' + data);
 			}
