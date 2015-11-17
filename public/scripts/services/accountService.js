@@ -14,7 +14,7 @@ mainApp.factory('accountService', ['$location', '$http', function ($location, $h
             callback(null,account);
         } else {
             //take advantage of precache
-            if(window.indigenous.precache.account) {
+            if(window.indigenous.precache && window.indigenous.precache.account) {
                 account = window.indigenous.precache.account;
                 delete window.indigenous.precache.account;
                 callback(null, account);
