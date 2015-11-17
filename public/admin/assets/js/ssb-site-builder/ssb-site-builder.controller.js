@@ -96,7 +96,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     function savePage() {
         SweetAlert.swal({
           title: "Are you sure?",
-          text: "Pages saved from Simple Site Builder will not be editable within the legacy editor.",
+          text: "CAUTION: For testing purposes only! Do not save your edits here unless you're OK with your pages breaking. This editor is under active development. Pages saved in Simple Site Builder will not render and will not be editable in the legacy editor.",
           type: "warning",
           showCancelButton: true,
           confirmButtonColor: "#DD6B55",
