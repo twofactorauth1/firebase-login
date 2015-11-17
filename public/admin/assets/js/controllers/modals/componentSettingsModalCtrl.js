@@ -553,7 +553,7 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
               $scope.$apply(function () {
                 $scope.updateLinkList();
               })            
-          }, 1000);
+          }, 500);
         }
       });
     } else {
@@ -564,7 +564,7 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
               $scope.$apply(function () {
                 $scope.updateLinkList();
               })            
-          }, 1000);
+          }, 500);
         }
       });
     }
@@ -623,7 +623,7 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
         $scope.$apply(function () {
           $scope.updateLinkList();
         })            
-    }, 1000);
+    }, 500);
   };
 
   /*
