@@ -28,6 +28,7 @@
 		ssbService.getSection = getSection;
 		ssbService.checkForDuplicatePage = checkForDuplicatePage;
 		ssbService.loading = { value: 0 };
+		ssbService.getTemplates = getTemplates;
 		
 
 		function ssbRequest(fn) {
@@ -200,6 +201,57 @@
 
 			var deferred = $q.defer();
 			deferred.resolve(section);
+			return ssbRequest(deferred.promise);
+
+		}
+
+		//TODO: api implement
+		function getTemplates() {
+			
+			var tempTemplates = [{
+				_id: '11032028',
+				name: 'Default',
+				styles: {
+					headerBackgroundColor: '#FFFFFF',
+					bodyBackgroundColor: '#FFFFFF',
+					primaryTextColor: '#000000',
+					primaryBtnColor: '#50c7e8',
+					headingSize: '16px',
+					paragraphSize: '12px'
+				},
+				headingFontStack: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+				paragraphFontStack: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+				defaultSections: [{
+					//
+				}]
+			},
+			{
+				_id: '96751783',
+				name: 'Music - Soft',
+				styles: {
+					headerBackgroundColor: '#99CCCC',
+					bodyBackgroundColor: '#E8E7E7',
+					primaryTextColor: '#000000',
+					primaryBtnColor: '#000000',
+					headingSize: '16px',
+					paragraphSize: '12px'
+				},
+				font: 'Roboto Regular',
+				defaultSections: [{
+					//
+				}]
+			}];
+
+			function success(data) {
+				console.log('SimpleSiteBuilderService requested templates: ' + data);
+			}
+
+			function error(error) {
+				console.error('SimpleSiteBuilderService templates error: ' + error);
+			}
+
+			var deferred = $q.defer();
+			deferred.resolve(tempTemplates);
 			return ssbRequest(deferred.promise);
 
 		}

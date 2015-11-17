@@ -17,23 +17,15 @@
 							class="ssb-sidebar-sortable-item">
 
 							<div class="form-group">
+								<h5>Template - {{vm.state.website.templateId}}</h5>
+
+								<div ng-repeat="template in vm.state.templates track by $index" class="checkbox clip-check check-primary checkbox-inline">
+									<input type="checkbox" id="template-{{$index}}" ng-change="vm.applyTemplateToPage(template)" value="{{template._id}}" ng-model="vm.state.website.templateId">
+									<label for="template-{{$index}}">{{template.name}}</label>
+								</div>
+
 								<h5>Template Settings</h5>
 
-								<!-- <div class="radio">
-									<label>
-										<input type="radio" ng-model="section.layout" value="1-col"/> 1 Column
-									</label>
-								</div>
-								<div class="radio">
-									<label>
-										<input type="radio" ng-model="section.layout" value="2-col"/> 2 Column
-									</label>
-								</div>
-								<div class="radio">
-									<label>
-										<input type="radio" ng-model="section.layout" value="3-col"/> 3 Column
-									</label>
-								</div> -->
 							</div>
 
 						</accordion-group>

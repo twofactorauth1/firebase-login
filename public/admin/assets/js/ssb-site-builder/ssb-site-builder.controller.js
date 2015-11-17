@@ -208,17 +208,6 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
 
     }
 
-    function init(element) {
-        vm.element = element;
-        vm.uiState.isSidebarClosed = $rootScope.app.layout.isSidebarClosed;
-        $rootScope.app.layout.isSidebarClosed = true;
-
-        vm.uiStateOriginal = angular.copy(vm.uiState);
-
-        SimpleSiteBuilderService.getPages();
-
-    }
-
     function insertMedia(asset) {
         vm.addFroalaImage(asset);
     };
@@ -235,6 +224,22 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
       vm.imageEditor.img = editor.image.get();
       vm.openMediaModal('media-modal', 'MediaModalCtrl', null, 'lg');
     };
+
+
+
+    function init(element) {
+        vm.element = element;
+        vm.uiState.isSidebarClosed = $rootScope.app.layout.isSidebarClosed;
+        $rootScope.app.layout.isSidebarClosed = true;
+
+        vm.uiStateOriginal = angular.copy(vm.uiState);
+
+        SimpleSiteBuilderService.getPages();
+        SimpleSiteBuilderService.getTemplates().then(function(data) {
+            vm.state.templates = data;
+        });
+
+    }
 
 
 }

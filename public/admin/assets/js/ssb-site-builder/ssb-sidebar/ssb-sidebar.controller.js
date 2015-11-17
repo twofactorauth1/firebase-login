@@ -46,6 +46,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, SimpleSiteBuil
     vm.addToMainMenu = addToMainMenu;
     vm.showInsert = true;
     vm.sectionName = sectionName;
+    vm.applyTemplateToPage = applyTemplateToPage;
 	
 	editableOptions.theme = 'bs3';
 
@@ -110,6 +111,10 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, SimpleSiteBuil
 	  }
 	};
 
+    //TODO
+    function applyTemplateToPage(template) {
+        console.log(template);
+    }
 
 	function insertMedia(asset) {
 		var component = vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex];
