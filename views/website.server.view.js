@@ -9,6 +9,8 @@ var BaseView = require('./base.server.view');
 
 var cmsDao = require('../cms/dao/cms.dao.js');
 var segmentioConfig = require('../configs/segmentio.config.js');
+var fs = require('fs');
+var async = require('async');
 
 var view = function (req, resp, options) {
     this.init.apply(this, arguments);
@@ -162,68 +164,90 @@ _.extend(view.prototype, BaseView.prototype, {
                     data.templates = data.templates + divName + ' component="components_' + index + '"></div>';
                 });
 
-                data.components = JSON.stringify(page.get('components'));
+                data.templateIncludes = [];
+                data.templateIncludes[0] = {id:'/components/component-wrap.html'};
+                fs.readFile('public/components/component-wrap.html', 'utf8', function(err, html){
+                    data.templateIncludes[0].data = html;
 
-                data.account = value;
-                value.website = value.website || {};
-                data.title = value.website.title;
-                data.author = 'Indigenous';
-                data.segmentIOWriteKey = segmentioConfig.SEGMENT_WRITE_KEY;
-                data.website = value.website || {};
-                data.seo = {
-                    description: '',
-                    keywords: ''
-                };
-                data.og = {
-                    type: 'website',
-                    title: value.website.title,
-                    image: value.website.settings.favicon
-                };
-                if (data.og.image && data.og.image.indexOf('//') === 0) {
-                    data.og.image = 'http:' + data.og.image;
-                }
-                data.includeEditor = false;
-
-                if (!data.account.website.settings) {
-                    self.log.warn('Website Settings is null for account ' + accountId);
-                    data.account.website.settings = {};
-                }
-
-                var blogUrlParts = [];
-                if (self.req.params.length) {
-                    blogUrlParts = self.req.params[0].split('/');
-                }
-                if (blogUrlParts.length == 2 && blogUrlParts[0] == 'blog') {
-                    cmsDao.getBlogPostForWebsite(accountId, blogUrlParts[1], function (err, post) {
-                        if (post) {
-                            data.og.type = 'article';
-                            data.og.title = post.attributes.post_title;
-                            data.og.image = post.attributes.featured_image;
-                            if (data.og.image && data.og.image.indexOf("//") === 0) {
-                                data.og.image = "http:" + data.og.image;
-                            }
-                        }
-                        app.render('index', data, function (err, html) {
-                            if (err) {
-                                self.log.error('Error during render: ' + err);
-                            }
-
-                            self.resp.send(html);
-                            self.cleanUp();
-                            self = data = value = null;
+                    async.each(page.get('components'), function(component, cb){
+                        // /components/'+component.type+'_v'+component.version+'.html
+                        var obj = {};
+                        obj.id = '/components/' + component.type + '_v' + component.version + '.html';
+                        fs.readFile('public' + obj.id, 'utf8', function(err, html){
+                            obj.data = html;
+                            data.templateIncludes.push(obj);
+                            cb();
                         });
-                    });
-                } else {
-                    app.render('index', data, function (err, html) {
-                        if (err) {
-                            self.log.error('Error during render: ' + err);
+                    }, function done(err){
+                        data.components = JSON.stringify(page.get('components'));
+
+                        data.account = value;
+                        value.website = value.website || {};
+                        data.title = value.website.title;
+                        data.author = 'Indigenous';
+                        data.segmentIOWriteKey = segmentioConfig.SEGMENT_WRITE_KEY;
+                        data.website = value.website || {};
+                        data.seo = {
+                            description: '',
+                            keywords: ''
+                        };
+                        data.og = {
+                            type: 'website',
+                            title: value.website.title,
+                            image: value.website.settings.favicon
+                        };
+                        if (data.og.image && data.og.image.indexOf('//') === 0) {
+                            data.og.image = 'http:' + data.og.image;
+                        }
+                        data.includeEditor = false;
+
+                        if (!data.account.website.settings) {
+                            self.log.warn('Website Settings is null for account ' + accountId);
+                            data.account.website.settings = {};
                         }
 
-                        self.resp.send(html);
-                        self.cleanUp();
-                        self = data = value = null;
+                        var blogUrlParts = [];
+                        if (self.req.params.length) {
+                            blogUrlParts = self.req.params[0].split('/');
+                        }
+                        if (blogUrlParts.length == 2 && blogUrlParts[0] == 'blog') {
+                            cmsDao.getBlogPostForWebsite(accountId, blogUrlParts[1], function (err, post) {
+                                if (post) {
+                                    data.og.type = 'article';
+                                    data.og.title = post.attributes.post_title;
+                                    data.og.image = post.attributes.featured_image;
+                                    if (data.og.image && data.og.image.indexOf("//") === 0) {
+                                        data.og.image = "http:" + data.og.image;
+                                    }
+                                }
+                                app.render('index', data, function (err, html) {
+                                    if (err) {
+                                        self.log.error('Error during render: ' + err);
+                                    }
+
+                                    self.resp.send(html);
+                                    self.cleanUp();
+                                    self = data = value = null;
+                                });
+                            });
+                        } else {
+                            app.render('index', data, function (err, html) {
+                                if (err) {
+                                    self.log.error('Error during render: ' + err);
+                                }
+
+                                self.resp.send(html);
+                                self.cleanUp();
+                                self = data = value = null;
+                            });
+                        }
                     });
-                }
+
+
+
+                });
+
+
             });
 
 

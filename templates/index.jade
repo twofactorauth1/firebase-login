@@ -7,6 +7,9 @@ extends snippets/index_layout
 block content
     div(id="body", class="content", back-animation, style="height: {{contentHeight}}px;")
         if templates
+            each tmpl in templateIncludes
+                script(type="text/ng-template" id="#{tmpl.id}")
+                    !{tmpl.data}
             script(type="text/ng-template" id="cachedTemplate")
                 !{templates}
         div(ng-view, class="page")
