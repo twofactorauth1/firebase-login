@@ -604,8 +604,10 @@
       var toasterMsg = 'Status has been updated to ';
       if (newStatus === postConstant.post_status.PUBLISHED) {
         WebsiteService.publishPost($scope.page._id, $scope.blog.post._id, function (data) {
+
           toaster.pop('success', "Status updated successfully");
           $scope.blog.post.post_status = newStatus;
+          $scope.originalPost = angular.copy($scope.blog.post);
           $scope.postControl.setSinglePost();
         });
       } else {
