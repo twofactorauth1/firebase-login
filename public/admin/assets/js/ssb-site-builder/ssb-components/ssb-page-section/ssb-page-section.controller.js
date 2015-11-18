@@ -13,13 +13,14 @@ function ssbPageSectionController($scope, $attrs, $filter, SimpleSiteBuilderServ
   vm.init = init;
   vm.componentClass = componentClass;
   vm.sectionClass = sectionClass;
+  vm.sectionStyle = sectionStyle;
 
   //TODO: use https://github.com/martinandert/react-inline to generate inline styles for sections/components
 
   function sectionClass(section) {
     var classString = '';
 
-    classString += 'ssb-page-section-layout-' + layout];
+    classString += 'ssb-page-section-layout-' + section.layout;
 
     return classString;
   }
@@ -27,15 +28,57 @@ function ssbPageSectionController($scope, $attrs, $filter, SimpleSiteBuilderServ
   function sectionStyle(section) {
     var styleString = '';
 
-    styleString += 'padding-top: ' + component.spacing.pt + 'px;';
-    styleString += 'padding-bottom: ' + component.spacing.pb + 'px;';
-    styleString += 'padding-left: ' + component.spacing.pl + 'px;';
-    styleString += 'padding-right: ' + component.spacing.pr + 'px;';
-    styleString += 'margin-top: ' + component.spacing.mt + 'px;';
-    styleString += 'margin-bottom: ' + component.spacing.mb + 'px;';
-    styleString += 'margin-left: ' + component.spacing.ml == 'auto' ? component.spacing.ml: component.spacing.ml + 'px;';
-    styleString += 'margin-right: ' + component.spacing.mr == 'auto' ? component.spacing.mr : component.spacing.mr + 'px;';
-    styleString += 'max-width: ' + component.spacing.mw == '100%' ? component.spacing.mw : component.spacing.mw  + 'px;';
+    if (section.spacing) {
+      if (section.spacing.pt) {
+        styleString += 'padding-top: ' + section.spacing.pt + 'px;';
+      }
+
+      if (section.spacing.pt) {
+        styleString += 'padding-bottom: ' + section.spacing.pb + 'px;';
+      }
+
+      if (section.spacing.pt) {
+        styleString += 'padding-left: ' + section.spacing.pl + 'px;';
+      }
+
+      if (section.spacing.pt) {
+        styleString += 'padding-right: ' + section.spacing.pr + 'px;';
+      }
+
+      if (section.spacing.pt) {
+        styleString += 'margin-top: ' + section.spacing.mt + 'px;';
+      }
+
+      if (section.spacing.pt) {
+        styleString += 'margin-bottom: ' + section.spacing.mb + 'px;';
+      }
+
+      if (section.spacing.pt) {
+        styleString += 'margin-left: ' + section.spacing.ml == 'auto' ? section.spacing.ml: section.spacing.ml + 'px;';
+      }
+
+      if (section.spacing.pt) {
+        styleString += 'margin-right: ' + section.spacing.mr == 'auto' ? section.spacing.mr : section.spacing.mr + 'px;';
+      }
+
+      if (section.spacing.pt) {
+        styleString += 'max-width: ' + section.spacing.mw == '100%' ? section.spacing.mw : section.spacing.mw  + 'px;';
+      }
+    }
+
+    if (section.txtcolor) {
+      styleString += 'color: ' + section.txtcolor + ';';
+    }
+
+    if (section.bg) {
+      if (section.bg.color) {
+        styleString += 'background-color: ' + section.bg.color + ';';
+      }
+
+      if (section.bg.img && section.bg.img.show) {
+        styleString += 'background-image: url("' + section.bg.img.url + '")';
+      }
+    }
 
     return styleString;
   }
