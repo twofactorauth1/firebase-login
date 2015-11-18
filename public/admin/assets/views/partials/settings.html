@@ -154,7 +154,7 @@
                             <div class="form-group">
                                 <label>Custom Domain</label>
                                 <input type="text" class="form-control" ng-model="account.domain" readonly />
-                                <span class="help-block"><a href="#" onclick="Intercom('showNewMessage', 'Support for Custom Domain:')">Chat with us about your custom domain</a></span>
+                                <span class="help-block"><a href="#" ng-click="cancel($event);" onclick="Intercom('showNewMessage', 'Support for Custom Domain:')">Chat with us about your custom domain</a></span>
                             </div>
                             <div class="form-group">
                                 <!-- <label>Footer Link</label> -->
