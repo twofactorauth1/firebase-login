@@ -24,16 +24,15 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, SimpleSiteBuil
     console.info('site-build sidebar directive init...')
 
     var vm = this;
-
-    vm.somethingSidebar = 'something sidebar';
+    
     vm.init = init;
     vm.savePage = savePage;
     vm.saveWebsite = saveWebsite;
     vm.cancelPendingEdits = cancelPendingEdits;
     vm.togglePageSectionAccordion = togglePageSectionAccordion;
     vm.togglePageSectionComponentAccordion = togglePageSectionComponentAccordion;
-    vm.getSystemComponents = getSystemComponents;
-    vm.setSectionToAdd = setSectionToAdd;
+    vm.getPlatformSections = getPlatformSections;
+    vm.getPlatformComponents = getPlatformComponents;
     vm.addSectionToPage = addSectionToPage;
     vm.removeSectionFromPage = removeSectionFromPage;
     vm.removeComponentFromSection = removeComponentFromSection;
@@ -113,18 +112,31 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, SimpleSiteBuil
 
     //TODO
     function applyTemplateToPage(template) {
-        console.log(template);
+        vm.state.selectedTemplate = template;
     }
 
 	function insertMedia(asset) {
-		var component = vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex];
-		component.bg.img.url = asset.url;
-		return true;
+		
+        if (vm.uiState.activeComponentIndex) {
+            vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex].bg.img.url = asset.url;
+        } else {
+            vm.state.page.sections[vm.uiState.activeSectionIndex].bg.img.url = asset.url;
+        }
+		
+        return true;
 	};
 
-	function getSystemComponents() {
-		vm.systemComponents = SimpleSiteBuilderService.getSystemComponents();
+	function getPlatformSections() {
+		SimpleSiteBuilderService.getPlatformSections().then(function(data) {
+            vm.platformSections = data;
+        });
 	}
+
+    function getPlatformComponents() {
+        SimpleSiteBuilderService.getPlatformComponents().then(function(data) {
+            vm.platformComponents = data;
+        });
+    }
 
 	//TODO: handle versions
 	function addComponentToSection(component, sectionIndex) {
@@ -135,19 +147,13 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, SimpleSiteBuil
 		)
 	}
 
-    function setSectionToAdd(section, index) {
-        vm.uiState.activeSectionToAdd = { index: index, section: section };
-    }
-
-    function addSectionToPage() {
-        if (vm.uiState.activeSectionToAdd.section) {
-            return (
-                SimpleSiteBuilderService.getSection(vm.uiState.activeSectionToAdd.section, 1).then(function(response) {
-                    vm.state.page.sections.push(response);
-                    vm.closeModal();
-                })
-            )
-        }
+    function addSectionToPage(section, version) {
+        return (
+            SimpleSiteBuilderService.getSection(section, version || 1).then(function(response) {
+                vm.state.page.sections.push(response);
+                vm.closeModal();
+            })
+        )
     }
 
     function removeSectionFromPage(index) {
@@ -246,8 +252,16 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, SimpleSiteBuil
 		SimpleSiteBuilderService.setActiveComponent(index);
     }
 
-    function addBackground() {
+    function addBackground(sectionIndex, componentIndex) {
     	vm.openMediaModal('media-modal', 'MediaModalCtrl', null, 'lg');
+        
+        if (sectionIndex) {
+            SimpleSiteBuilderService.setActiveSection(sectionIndex);
+            SimpleSiteBuilderService.setActiveComponent(undefined);
+        } else {
+            SimpleSiteBuilderService.setActiveSection(sectionIndex);
+            SimpleSiteBuilderService.setActiveComponent(componentIndex);
+        }
     }
 
     function closeModal() {
@@ -263,11 +277,15 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, SimpleSiteBuil
             size: 'md',
             scope: $scope,
             resolve: {
-                vm: function () {
+                parentVm: function () {
                     return vm;
                 }
             }
         };
+
+        if (controller) {
+            _modal.controller = controller + ' as vm';
+        }
 
         if (size) {
             _modal.size = 'lg';

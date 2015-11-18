@@ -12,19 +12,23 @@
 				<li class="ssb-page-section-settings-item">
 					<div class="ssb-sidebar-item-icon ti-settings display-ib"></div>
 					<accordion close-others="oneAtATime" class="accordion">
-						<accordion-group heading="Default"
+						<accordion-group heading="{{vm.state.selectedTemplate.name || 'Default'}}"
 							ng-class="{ 'ssb-sidebar-section-open': isOpen }"
 							class="ssb-sidebar-sortable-item">
 
 							<div class="form-group">
-								<h5>Template - {{vm.state.website.templateId}}</h5>
+								<h5 class="ssb-sidebar-settings-heading">Template - {{vm.state.website.templateId}}</h5>
 
-								<div ng-repeat="template in vm.state.templates track by $index" class="checkbox clip-check check-primary checkbox-inline">
-									<input type="checkbox" id="template-{{$index}}" ng-change="vm.applyTemplateToPage(template)" value="{{template._id}}" ng-model="vm.state.website.templateId">
+								<div ng-repeat="template in vm.state.templates track by $index" class="radio-inline">
+									<input type="radio" id="template-{{$index}}" ng-change="vm.applyTemplateToPage(template)" value="{{template._id}}" ng-model="vm.state.website.templateId">
 									<label for="template-{{$index}}">{{template.name}}</label>
 								</div>
 
-								<h5>Template Settings</h5>
+								<h5 class="ssb-sidebar-settings-heading">Template Settings</h5>
+
+								<ul class="list-unstyled">
+									<li>Font Stack: <pre>{{vm.state.selectedTemplate.defaultFontStack}}</pre></li>
+								</ul>
 
 							</div>
 
@@ -98,41 +102,46 @@
 		<section>
 	        <h4 ng-if="vm.state.page.sections" class="ssb-sidebar-sub-heading">
 	        	<span>Page Sections</span>
-	        	<div ng-click="vm.openModal('ssb-add-section-modal', null, null, 'lg');" class="ssb-sidebar-item-icon ti-plus display-ib" tooltip-placement="left" tooltip-html-unsafe="Add Section"></div>
+	        	<div ng-click="vm.openModal('ssb-add-section-modal', 'SiteBuilderAddSectionModalController', null, 'lg');" class="ssb-sidebar-item-icon ti-plus display-ib" tooltip-placement="left" tooltip-html-unsafe="Add Section"></div>
 	        </h4>
 			<ul ng-if="vm.state.page.sections" class="list-unstyled" ng-sortable="vm.sortableOptions" ng-model="vm.state.page.sections">
 				<li ng-repeat="section in vm.state.page.sections track by $index" ng-init="sectionIndex = $index" class="ssb-page-section-settings-item">
 					<div class="ssb-sidebar-item-icon ssb-sidebar-move-handle ti-move display-ib"></div>
-					<div class="ssb-sidebar-item-icon ssb-sidebar-item-icon-offset-1 ti-close display-ib" ng-click="vm.removeSectionFromPage($index)" tooltip-placement="left" tooltip-html-unsafe="Remove section"></div>
+					<div class="ssb-sidebar-item-icon ssb-sidebar-item-icon-offset-1 ti-close display-ib" ng-if="vm.uiState.accordion.sections[sectionIndex].isOpen" ng-click="vm.removeSectionFromPage(sectionIndex)" tooltip-placement="left" tooltip-html-unsafe="Remove section"></div>
 					<!-- <div ng-hide="!vm.uiState.accordion.sections[sectionIndex].isOpen" class="ssb-sidebar-item-icon ssb-sidebar-move-handle ti-angle-down display-ib"></div>
 					<div ng-hide="vm.uiState.accordion.sections[sectionIndex].isOpen" class="ssb-sidebar-item-icon ssb-sidebar-move-handle ti-angle-up display-ib"></div> -->
 					<accordion close-others="oneAtATime" class="accordion">
 						<accordion-group heading="{{vm.sectionName(section)}} Section"
-							is-open="vm.uiState.accordion.sections[$index].isOpen" 
-							ng-click="vm.togglePageSectionAccordion($index)" 
-							ng-class="{ 'ssb-sidebar-section-open': vm.uiState.accordion.sections[$index].isOpen }"
+							is-open="vm.uiState.accordion.sections[sectionIndex].isOpen" 
+							ng-click="vm.togglePageSectionAccordion(sectionIndex)" 
+							ng-class="{ 'ssb-sidebar-section-open': vm.uiState.accordion.sections[sectionIndex].isOpen }"
 							class="ssb-sidebar-sortable-item">
 
 							<div ng-include=" 'assets/js/ssb-site-builder/ssb-components/ssb-page-section/sidebar.settings.html' "></div>	
 
 
-							<div class="form-group">
-								<h4>Components</h4>
+							<div class="form-group padding-top-10">
+								<h5 class="ssb-sidebar-settings-heading">Components</h5>
 								<ul class="list-unstyled">
 									<li ng-repeat="component in section.components track by $index" ng-init="componentIndex = $index">
 										<accordion close-others="oneAtATime" class="accordion">
 											<accordion-group 
 												is-open="vm.uiState.accordion.sections[sectionIndex].components[componentIndex].isOpen" 
-												ng-click="vm.togglePageSectionComponentAccordion($index)"
+												ng-click="vm.togglePageSectionComponentAccordion(componentIndex)"
 												class="ssb-sidebar-sortable-item ssb-sidebar-sortable-item-component">
 
 												<accordion-heading>
 													<div ng-class="{ 'ssb-sidebar-component-open': vm.uiState.accordion.sections[sectionIndex].components[componentIndex].isOpen }">
-														{{($index + 1)}} - {{component.header_title || component.type}}
+														{{(componentIndex + 1)}} - {{component.header_title || component.type}}
 													</div>
 													<div class="ssb-sidebar-item-icon ssb-sidebar-move-handle ti-move display-ib"></div>
-													<!-- <div ng-hide="!vm.uiState.accordion.sections[sectionIndex].components[componentIndex].isOpen" class="ssb-sidebar-item-icon ssb-sidebar-move-handle ti-angle-down display-ib"></div>
-													<div ng-hide="vm.uiState.accordion.sections[sectionIndex].components[componentIndex].isOpen" class="ssb-sidebar-item-icon ssb-sidebar-move-handle ti-angle-up display-ib"></div> -->
+													<div 
+														class="ssb-sidebar-item-icon ssb-sidebar-item-icon-offset-1 ti-close display-ib" 
+														ng-if="vm.uiState.accordion.sections[sectionIndex].components[componentIndex].isOpen" 
+														ng-click="vm.removeComponentFromSection(componentIndex)" 
+														tooltip-placement="left" 
+														tooltip-html-unsafe="Remove component">
+													</div>
 												</accordion-heading>
 
 												<div ng-include=" 'assets/js/ssb-site-builder/ssb-components/shared/basic.html' "></div>
@@ -145,19 +154,19 @@
 														</accordion>
 													</li>
 												</ul>
-												<div class="form-group">
+												<!-- <div class="form-group">
 													<button class="btn btn-block btn-danger btn-ssb-remove-component" ng-disabled="vm.uiState.loading > 0" ng-click="vm.removeComponentFromSection($index)"><i class="fa fa-trash"></i> Remove</button>
-												</div>
+												</div> -->
 											</accordion-group>
 										</accordion>
 									</li>
 									<li class="ssb-sidebar-component-list">
-										<accordion close-others="oneAtATime" class="accordion" ng-click="vm.getSystemComponents()">
+										<accordion close-others="oneAtATime" class="accordion" ng-click="vm.getPlatformComponents()">
 											<accordion-group heading="Add + ">
 												<ul class="list-unstyled">
 													<li ng-repeat="component in vm.systemComponents track by $index" ng-click="vm.addComponentToSection(component, sectionIndex)" class="center">
 														<img src="{{component.preview}}" alt="{{component.type}}" />
-														{{component.header_title || component.type}}
+														{{component.header_title || component.title || component.type}}
 													</li>
 												</ul>
 											</accordion-group>

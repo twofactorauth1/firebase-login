@@ -20,6 +20,16 @@ function ssbPageSectionController($scope, $attrs, $filter, SimpleSiteBuilderServ
 
         ngClass['ssb-page-section-layout-' + layout] = true;
 
+        // {'padding-top': component.spacing.pt + 'px',
+        // 'padding-bottom': component.spacing.pb + 'px',
+        // 'padding-left': component.spacing.pl + 'px',
+        // 'padding-right': component.spacing.pr + 'px',
+        // 'margin-top': component.spacing.mt + 'px',
+        // 'margin-bottom': component.spacing.mb + 'px',
+        // 'margin-left': component.spacing.ml == 'auto' ? component.spacing.ml: component.spacing.ml + 'px',
+        // 'margin-right': component.spacing.mr == 'auto' ? component.spacing.mr : component.spacing.mr + 'px',
+        // 'max-width': component.spacing.mw == '100%' ? component.spacing.mw : component.spacing.mw  + 'px'}
+
         return ngClass;
     }
 

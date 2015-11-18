@@ -23,7 +23,8 @@
 		ssbService.setActiveComponent = setActiveComponent;
 		ssbService.activeSectionIndex = undefined;
 		ssbService.activeComponentIndex = undefined;
-		ssbService.getSystemComponents = getSystemComponents;
+		ssbService.getPlatformSections = getPlatformSections;
+		ssbService.getPlatformComponents = getPlatformComponents;
 		ssbService.getComponent = getComponent;
 		ssbService.getSection = getSection;
 		ssbService.checkForDuplicatePage = checkForDuplicatePage;
@@ -101,7 +102,7 @@
 			 *
 			 * Transform legacy pages to new section/component model format
 			 */
-			if (data.components.length && !data.sections.length) {
+			if (data.components.length && !data.sections) {
 				data.sections = angular.copy(data.components);
 				for (var i = 0; i < data.sections.length; i++) {
 					var component = angular.copy(data.sections[i]);
@@ -112,7 +113,7 @@
 					data.sections[i] = defaultSectionObj;
 
 				}
-				delete data.components;
+				// delete data.components;
 			}
 
 			ssbService.page = data;
@@ -142,29 +143,6 @@
 
 		}
 
-		function getSystemSections() {
-			return [
-				{
-				    layout: '1-col',
-				    componenents: []
-				}
-			 ];
-		}
-
-		//TODO: make actual API call
-		function getSystemComponents() {
-			return [
-				{
-				    title: 'Text Block',
-				    type: 'text-only',
-				    preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/text-block.jpg',
-				    filter: 'text',
-				    description: 'A full width component for a large volume of text. You can also add images within the text.',
-				    enabled: true
-				}
-			 ];
-		}
-
 		//TODO: component versions
 		function getComponent(component, version) {
 
@@ -191,30 +169,15 @@
 		//TODO: api implement
 		function getSection(section, version) {
 
-			// var tempSection = {
-			// 	"layout": "1-col",
-			// 	"txtcolor": "",
-			// 	"bg": {
-			// 		"color": "",
-			// 		"opacity": 0.5,
-			// 		"img": {
-			// 		"show": true,
-			// 		"overlay": true,
-			// 		"overlaycolor": "#26a65b",
-			// 		"overlayopacity": 40
-			// 	},
-			// 	"visibility": true,
-			// 	"spacing": {
-			// 		"mt": "0",
-			// 		"ml": "0",
-			// 		"mr": "0",
-			// 		"mb": "0",
-			// 		"pt": "10",
-			// 		"pb": "10",
-			// 		"pl": "10",
-			// 		"pr": "10"
-			// 	}
-			// }
+			var deferred = $q.defer();
+
+			if (!section.components) {
+				getLegacySection(section, version).then(function(wrappedLegacyComponent){
+					deferred.resolve(wrappedLegacyComponent);
+				});
+			} else {
+				alert('TODO: implement new sections');
+			}
 
 			function success(data) {
 				console.log('SimpleSiteBuilderService requested section: ' + data);
@@ -224,14 +187,48 @@
 				console.error('SimpleSiteBuilderService section error: ' + error);
 			}
 
-			var deferred = $q.defer();
-			deferred.resolve(section);
 			return ssbRequest(deferred.promise);
 
 		}
 
+		function getLegacySection(section, version) {
+			var sectionDefault = {
+				"layout": "1-col",
+				"txtcolor": undefined,
+				"bg": {
+					"img": {
+						"url": "",
+						"width": null,
+						"height": null,
+						"parallax": false,
+						"blur": false,
+						"overlay": false,
+						"show": false
+					},
+					"color": undefined
+				},
+				"visibility": true,
+				"spacing": {
+					"mt": "0",
+					"ml": "0",
+					"mr": "0",
+					"mb": "0",
+					"pt": "0",
+					"pb": "0",
+					"pl": "0",
+					"pr": "0"
+				}
+			}
+
+			return getComponent(section, version).then(function(component) {
+				sectionDefault.components = [component.data];
+
+				return sectionDefault;
+			});
+		}
+
 		//TODO: api implement
-		function getSections() {
+		function getPlatformSections() {
 
 			var tempSection = {
 				"name": "3 Column Text",
@@ -372,6 +369,18 @@
 
 		}
 
+		//TODO: make actual API call
+		function getPlatformComponents() {
+			return getComponent({
+			    title: 'Text Block',
+			    type: 'text-only',
+			    preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/text-block.jpg',
+			    filter: 'text',
+			    description: 'A full width component for a large volume of text. You can also add images within the text.',
+			    enabled: true
+			}, null)
+		}
+
 		//TODO: api implement
 		function getTemplates() {
 			
@@ -386,6 +395,7 @@
 					headingSize: '16px',
 					paragraphSize: '12px'
 				},
+				defaultFontStack: '"Helvetica Neue", Helvetica, Arial, sans-serif',
 				headingFontStack: '"Helvetica Neue", Helvetica, Arial, sans-serif',
 				paragraphFontStack: '"Helvetica Neue", Helvetica, Arial, sans-serif',
 				defaultSections: [{
@@ -403,7 +413,9 @@
 					headingSize: '16px',
 					paragraphSize: '12px'
 				},
-				font: 'Roboto Regular',
+				defaultFontStack: '"Roboto", Helvetica, Arial, sans-serif', //TODO: use correct google font stack names
+				headingFontStack: '"Roboto", Helvetica, Arial, sans-serif', //TODO: use correct google font stack names
+				paragraphFontStack: '"Roboto", Helvetica, Arial, sans-serif',
 				defaultSections: [{
 					//
 				}]
