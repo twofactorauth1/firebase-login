@@ -944,7 +944,7 @@
       var _modal = {
         templateUrl: modal,
         keyboard: false,
-        backdrop: 'static',
+       // backdrop: 'static',
         scope: $scope,
         size: _size || 'md',
       };

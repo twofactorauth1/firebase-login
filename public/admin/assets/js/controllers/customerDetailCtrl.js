@@ -62,9 +62,24 @@
     };
 
     if ($location.search().order) {
-      $scope.redirectToOrder = true;      
+      $scope.redirectToOrder = true;   
+      $scope.orderId=$location.search().id;
+      $stateParams.orderId=$scope.orderId;
+      //alert("orderId: "+$scope.orderId);   
     }
 
+    $scope.backToOrder = function()
+    {
+      if($stateParams.orderId)
+      {
+        window.location = '/admin/#/commerce/orders/' + $stateParams.orderId;
+      }
+      else
+      {
+        window.history.back();
+      }
+      
+    };
     /*
      * @addNote
      * add a note to an order
