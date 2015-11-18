@@ -199,15 +199,44 @@
       return parseFloat(total) + parseFloat(discount);
     };
 
+     var checkBeforeRedirect = function(cust)
+    {   
+        
+          	SweetAlert.swal({
+            	title: "Are you sure?",
+            	text: "You have unsaved data that will be lost",
+            	type: "warning",
+            	showCancelButton: true,
+            	confirmButtonColor: "#DD6B55",
+            	confirmButtonText: "Yes, save changes!",
+            	cancelButtonText: "No, do not save changes!",
+            	closeOnConfirm: true,
+            	closeOnCancel: true
+          	}, function (isConfirm) {
+            	if (isConfirm) {            
+              	$scope.saveOrder(1, cust);
+            	} else {
+              		 SweetAlert.swal("Cancelled", "Your edits were NOT saved.", "error");
+            		}
+          		});
+    	};
 
     /*
      * @navToCustomer
      */
     $scope.navToCustomer = function (cust) {
-      var cust_url = '/customers/' + cust._id;
-      $location.url(cust_url).search({
-        order: "true"
-      });
+    	if($stateParams.orderId)
+    	{
+    		var cust_url = '/customers/' + cust._id;
+      		$location.url(cust_url).search({
+        		order: "true"
+      		});
+    	}
+    	else
+    	{
+    		checkBeforeRedirect(cust);
+    	}
+      
     };
 
 
@@ -694,7 +723,7 @@
      * -
      */
 
-    $scope.saveOrder = function () {
+    $scope.saveOrder = function (flag, cust) {
       $scope.saveLoading = true;
       // Set order customer Id
       if ($scope.selectedCustomer) {
@@ -715,7 +744,7 @@
         $scope.order.created.date = new Date().toISOString();
       }
 
-      if (!$scope.order.customer_id) {
+      if (!$scope.order.customer_id) { 	
         toaster.pop('error', 'Orders must contain a customer.');
         $scope.saveLoading = false;
         return;
@@ -731,7 +760,19 @@
         OrderService.createOrder($scope.order, function (updatedOrder) {
           console.log('order created');
           toaster.pop('success', 'Order created successfully.');
-          $location.path('/commerce/orders');
+          if(flag==1)
+          {
+            SweetAlert.swal("Saved!", "Your edits were saved to the page.", "success");
+          	var cust_url = '/customers/' + cust._id;
+      		$location.url(cust_url).search({
+        		order: "true",
+        		id: updatedOrder._id,
+      		});
+          }
+          else
+          {
+          	$location.path('/commerce/orders');
+          }
           $scope.saveLoading = false;
         });
       }
