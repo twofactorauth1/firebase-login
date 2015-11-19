@@ -1,5 +1,5 @@
 <div class="ssb-sidebar-inner" ng-class="vm.navigation.indexClass">
-	
+
 	<div class="site-editor-group editor-group">
 		<div class="ssb-sidebar-heading">
 			<div class="ti-arrow-left" ng-click="vm.navigation.goToPagesListPage()"></div>
@@ -7,27 +7,68 @@
 			<div class="ti-arrow-right" ng-click="vm.navigation.loadPage(vm.state.page._id)"></div>
 		</div>
 		<section>
-	        <h4 class="ssb-sidebar-sub-heading">Template</h4>
+	        <h4 class="ssb-sidebar-sub-heading">Theme Settings</h4>
 	        <ul class="list-unstyled">
 				<li class="ssb-page-section-settings-item">
 					<div class="ssb-sidebar-item-icon ti-settings display-ib"></div>
 					<accordion close-others="oneAtATime" class="accordion">
-						<accordion-group heading="{{vm.state.selectedTemplate.name || 'Default'}}"
+						<accordion-group heading="{{vm.state.selectedTheme.name || 'Default'}}"
 							ng-class="{ 'ssb-sidebar-section-open': isOpen }"
 							class="ssb-sidebar-sortable-item">
 
 							<div class="form-group">
-								<h5 class="ssb-sidebar-settings-heading">Template - {{vm.state.website.templateId}}</h5>
+								<h5 class="ssb-sidebar-settings-heading">Theme - {{vm.state.website.themeId}}</h5>
 
-								<div ng-repeat="template in vm.state.templates track by $index" class="radio-inline">
-									<input type="radio" id="template-{{$index}}" ng-change="vm.applyTemplateToPage(template)" value="{{template._id}}" ng-model="vm.state.website.templateId">
-									<label for="template-{{$index}}">{{template.name}}</label>
-								</div>
+								<!-- <div ng-repeat="theme in vm.state.themes track by $index" class="radio-inline">
+									<input type="radio" id="theme-{{$index}}" value="{{theme._id}}" ng-model="vm.state.website.themeId">
+									<label for="theme-{{$index}}">{{theme.name}}</label>
+								</div> -->
 
-								<h5 class="ssb-sidebar-settings-heading">Template Settings</h5>
+                <ui-select ng-model="vm.state.website.themeId" ng-change="vm.applyThemeToPage($select.selected)" theme="bootstrap">
+                  <ui-select-match placeholder="Select a theme">
+                      <small ng-bind-html="$select.selected.name"></small>
+                  </ui-select-match>
+                  <ui-select-choices repeat="theme._id as theme in vm.state.themes | filter: $select.search track by $index">
+                      <small ng-bind-html="theme.name | highlight: $select.search"></small>
+                  </ui-select-choices>
+                </ui-select>
 
-								<ul class="list-unstyled">
-									<li>Font Stack: <pre>{{vm.state.selectedTemplate.defaultFontStack}}</pre></li>
+								<ul class="list-unstyled panel-body">
+                  <li class="clearfix">
+                    Header Background Color:
+                    <spectrum-colorpicker class="pull-right" format="'hex'" options="vm.spectrum.options" ng-model="vm.state.website.themeOverrides.styles.headerBackgroundColor"></spectrum-colorpicker>
+                  </li>
+                  <li class="clearfix">
+                    Body Background Color:
+                    <spectrum-colorpicker class="pull-right" format="'hex'" options="vm.spectrum.options" ng-model="vm.state.website.themeOverrides.styles.bodyBackgroundColor"></spectrum-colorpicker>
+                  </li>
+                  <li class="clearfix">
+                    Text Color (Primary):
+                    <spectrum-colorpicker class="pull-right" format="'hex'" options="vm.spectrum.options" ng-model="vm.state.website.themeOverrides.styles.primaryTextColor"></spectrum-colorpicker>
+                  </li>
+                  <li class="clearfix">
+                    Text Color (Buttons):
+                    <spectrum-colorpicker class="pull-right" format="'hex'" options="vm.spectrum.options" ng-model="vm.state.website.themeOverrides.styles.primaryBtnTextColor"></spectrum-colorpicker>
+                  </li>
+                  <li class="clearfix">
+                    Button Background Color:
+                    <spectrum-colorpicker class="pull-right" format="'hex'" options="vm.spectrum.options" ng-model="vm.state.website.themeOverrides.styles.primaryBtnBackgroundColor"></spectrum-colorpicker>
+                  </li>
+                  <li class="clearfix">
+                    Heading Size: <pre>{{vm.state.website.themeOverrides.styles.headingSize}}</pre>
+                  </li>
+                  <li class="clearfix">
+                    Paragraph Size: <pre>{{vm.state.website.themeOverrides.styles.paragraphSize}}</pre>
+                  </li>
+                  <li class="clearfix">
+                    Font Stack (Default): <pre>{{vm.state.website.themeOverrides.defaultFontStack}}</pre>
+                  </li>
+                  <li class="clearfix">
+                    Font Stack (Heading): <pre>{{vm.state.website.themeOverrides.headingFontStack}}</pre>
+                  </li>
+                  <li class="clearfix">
+                    Font Stack (Paragraph): <pre>{{vm.state.website.themeOverrides.paragraphFontStack}}</pre>
+                  </li>
 								</ul>
 
 							</div>
@@ -73,32 +114,38 @@
 	        </ul>
 	    </section>
 	</div>
-	
+
 	<div class="page-editor-group editor-group">
-		
+
 		<div class="ssb-sidebar-heading">
 			<div class="ti-arrow-left" ng-click="vm.navigation.back()"></div>
 			<h4>{{vm.state.page.title}}</h4>
 		</div>
-		
+
 		<section>
 	        <h4 class="ssb-sidebar-sub-heading">Page Settings</h4>
 	        <ul class="list-unstyled ssb-settings-list">
 				<li>
 					<label>
-						Title
+						Title:
 						<span editable-text="vm.state.page.title" onbeforesave="">{{vm.state.page.title}}</span>
 					</label>
 				</li>
 				<li>
+          <label>
+            URL:
+            <span editable-text="vm.state.page.handle" onbeforesave="">{{vm.state.page.handle}}</span>
+          </label>
+        </li>
+        <li>
 					<label>
-						URL
-						<span editable-text="vm.state.page.handle" onbeforesave="">{{vm.state.page.handle}}</span>
+						Page Template:
+						<span>{{vm.state.page.handle}}</span>
 					</label>
 				</li>
 			</ul>
 		</section>
-		
+
 		<section>
 	        <h4 ng-if="vm.state.page.sections" class="ssb-sidebar-sub-heading">
 	        	<span>Page Sections</span>
@@ -112,21 +159,21 @@
 					<div ng-hide="vm.uiState.accordion.sections[sectionIndex].isOpen" class="ssb-sidebar-item-icon ssb-sidebar-move-handle ti-angle-up display-ib"></div> -->
 					<accordion close-others="oneAtATime" class="accordion">
 						<accordion-group heading="{{vm.sectionName(section)}} Section"
-							is-open="vm.uiState.accordion.sections[sectionIndex].isOpen" 
-							ng-click="vm.togglePageSectionAccordion(sectionIndex)" 
+							is-open="vm.uiState.accordion.sections[sectionIndex].isOpen"
+							ng-click="vm.togglePageSectionAccordion(sectionIndex)"
 							ng-class="{ 'ssb-sidebar-section-open': vm.uiState.accordion.sections[sectionIndex].isOpen }"
 							class="ssb-sidebar-sortable-item">
 
-							<div ng-include=" 'assets/js/ssb-site-builder/ssb-components/ssb-page-section/sidebar.settings.html' "></div>	
+							<div ng-include=" 'assets/js/ssb-site-builder/ssb-components/ssb-page-section/sidebar.settings.html' "></div>
 
 
 							<div class="form-group padding-top-10">
-								<h5 class="ssb-sidebar-settings-heading">Components</h5>
+								<h5 class="ssb-sidebar-settings-heading">Components ({{section.components.length}})</h5>
 								<ul class="list-unstyled">
 									<li ng-repeat="component in section.components track by $index" ng-init="componentIndex = $index">
 										<accordion close-others="oneAtATime" class="accordion">
-											<accordion-group 
-												is-open="vm.uiState.accordion.sections[sectionIndex].components[componentIndex].isOpen" 
+											<accordion-group
+												is-open="vm.uiState.accordion.sections[sectionIndex].components[componentIndex].isOpen"
 												ng-click="vm.togglePageSectionComponentAccordion(componentIndex)"
 												class="ssb-sidebar-sortable-item ssb-sidebar-sortable-item-component">
 
@@ -135,11 +182,11 @@
 														{{(componentIndex + 1)}} - {{component.header_title || component.type}}
 													</div>
 													<div class="ssb-sidebar-item-icon ssb-sidebar-move-handle ti-move display-ib"></div>
-													<div 
-														class="ssb-sidebar-item-icon ssb-sidebar-item-icon-offset-1 ti-close display-ib" 
-														ng-if="vm.uiState.accordion.sections[sectionIndex].components[componentIndex].isOpen" 
-														ng-click="vm.removeComponentFromSection(componentIndex)" 
-														tooltip-placement="left" 
+													<div
+														class="ssb-sidebar-item-icon ssb-sidebar-item-icon-offset-1 ti-close display-ib"
+														ng-if="vm.uiState.accordion.sections[sectionIndex].components[componentIndex].isOpen"
+														ng-click="vm.removeComponentFromSection(componentIndex)"
+														tooltip-placement="left"
 														tooltip-html-unsafe="Remove component">
 													</div>
 												</accordion-heading>
@@ -164,7 +211,7 @@
 										<accordion close-others="oneAtATime" class="accordion" ng-click="vm.getPlatformComponents()">
 											<accordion-group heading="Add + ">
 												<ul class="list-unstyled">
-													<li ng-repeat="component in vm.systemComponents track by $index" ng-click="vm.addComponentToSection(component, sectionIndex)" class="center">
+													<li ng-repeat="component in vm.platformComponents track by $index" ng-click="vm.addComponentToSection(component, sectionIndex)" class="center">
 														<img src="{{component.preview}}" alt="{{component.type}}" />
 														{{component.header_title || component.title || component.type}}
 													</li>
@@ -175,30 +222,10 @@
 								</ul>
 							</div>
 
-							<div class="form-group">
-								<h5>Layout</h5>
-
-								<div class="radio">
-									<label>
-										<input type="radio" ng-model="section.layout" value="1-col"/> Stacked
-									</label>
-								</div>
-								<div class="radio">
-									<label>
-										<input type="radio" ng-model="section.layout" value="2-col"/> 2 Column Grid
-									</label>
-								</div>
-								<div class="radio">
-									<label>
-										<input type="radio" ng-model="section.layout" value="3-col"/> 3 Column Grid
-									</label>
-								</div>
-							</div>
-
 							<!-- <div class="form-group">
 								<button class="btn btn-block btn-danger mb10" ng-disabled="vm.uiState.loading > 0" ng-click="vm.removeSectionFromPage($index)"><i class="fa fa-trash"></i> Remove</button>
 							</div> -->
-							
+
 
 						</accordion-group>
 

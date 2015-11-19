@@ -26,7 +26,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
             sections: {}
         }
     };
-    
+
     vm.updateActiveSection = updateActiveSection;
     vm.updateActiveComponent = updateActiveComponent;
     vm.savePage = savePage;
@@ -57,9 +57,9 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     });
 
     $scope.$watch(function() { return SimpleSiteBuilderService.activeSectionIndex }, updateActiveSection, true);
-    
+
     $scope.$watch(function() { return SimpleSiteBuilderService.activeComponentIndex }, updateActiveComponent, true);
-    
+
     $scope.$watch(function() { return SimpleSiteBuilderService.loading }, updateLoading, true);
 
     $scope.$watch('vm.state.page', function(page) {
@@ -76,6 +76,16 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         } else {
             vm.state.pendingChanges = false;
         }
+    }, true);
+
+    //TODO: optimize this, we dont need to watch since this won't change
+    $scope.$watch(function() { return SimpleSiteBuilderService.pages }, function(pages) {
+      vm.state.pages = pages;
+    }, true);
+
+    //TODO: optimize this, we dont need to watch since this won't change
+    $scope.$watch(function() { return SimpleSiteBuilderService.themes }, function(themes) {
+      vm.state.themes = themes;
     }, true);
 
     $rootScope.$on('$stateChangeStart',
@@ -107,7 +117,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         },
         function (isConfirm) {
             if (isConfirm) {
-                
+
                 vm.state.pendingChanges = false;
 
                 saveWebsite();
@@ -153,7 +163,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         console.info('vm.uiState.loading', loadingObj );
         vm.uiState.loading = loadingObj.value;
     }
-    
+
     function closeModal() {
         vm.modalInstance.close();
     }
@@ -201,7 +211,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         }
 
         vm.modalInstance = $modal.open(_modal);
-        
+
         vm.modalInstance.result.then(null, function () {
             angular.element('.sp-container').addClass('sp-hidden');
         });
@@ -212,7 +222,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         vm.addFroalaImage(asset);
     };
 
-    function addFroalaImage(asset) {      
+    function addFroalaImage(asset) {
         vm.imageEditor.editor.image.insert(asset.url, !1, null, vm.imageEditor.img);
     };
 
@@ -228,16 +238,12 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
 
 
     function init(element) {
+
         vm.element = element;
         vm.uiState.isSidebarClosed = $rootScope.app.layout.isSidebarClosed;
         $rootScope.app.layout.isSidebarClosed = true;
 
         vm.uiStateOriginal = angular.copy(vm.uiState);
-
-        SimpleSiteBuilderService.getPages();
-        SimpleSiteBuilderService.getTemplates().then(function(data) {
-            vm.state.templates = data;
-        });
 
     }
 

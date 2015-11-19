@@ -123,10 +123,28 @@
 <accordion close-others="oneAtATime" class="accordion">
     <accordion-group class="ssb-sidebar-sortable-item ssb-sidebar-sortable-item-section">
         <accordion-heading>
-            Section Spacing
+            Section Layout
             <div ng-hide="!vm.uiState.accordion.sections[sectionIndex].isOpen" class="ssb-sidebar-item-icon ssb-sidebar-move-handle ti-angle-down display-ib"></div>
             <div ng-hide="vm.uiState.accordion.sections[sectionIndex].isOpen" class="ssb-sidebar-item-icon ssb-sidebar-move-handle ti-angle-up display-ib"></div>
         </accordion-heading>
+
+        <div class="form-group">
+          <div class="radio">
+            <label>
+              <input type="radio" ng-model="section.layout" value="1-col"/> Stacked
+            </label>
+          </div>
+          <div class="radio">
+            <label>
+              <input type="radio" ng-model="section.layout" value="2-col"/> 2 Column Grid
+            </label>
+          </div>
+          <div class="radio">
+            <label>
+              <input type="radio" ng-model="section.layout" value="3-col"/> 3 Column Grid
+            </label>
+          </div>
+        </div>
 
         <div class="form-group hidden">
             <label>Custom Spacing:</label>
@@ -202,6 +220,6 @@
         <div class="clearfix"></div>
         </tab>
 
-    
+
     </accordion-group>
 </accordion>

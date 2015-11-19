@@ -29,8 +29,8 @@
 		ssbService.getSection = getSection;
 		ssbService.checkForDuplicatePage = checkForDuplicatePage;
 		ssbService.loading = { value: 0 };
-		ssbService.getTemplates = getTemplates;
-		
+		ssbService.getThemes = getThemes;
+
 
 		function ssbRequest(fn) {
 			// return $timeout(function() {
@@ -55,6 +55,25 @@
 		function getSite(id) {
 
 			function success(data) {
+
+        //TODO: temp pending API impl
+        if (!data.themeId) {
+          data.themeId = '11032028';
+          data.themeOverrides = {
+            styles: {
+              headerBackgroundColor: '#FFFFFF',
+              bodyBackgroundColor: '#FFFFFF',
+              primaryTextColor: '#000000',
+              primaryBtnColor: '#50c7e8',
+              headingSize: '16px',
+              paragraphSize: '12px'
+            },
+            defaultFontStack: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+            headingFontStack: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+            paragraphFontStack: '"Helvetica Neue", Helvetica, Arial, sans-serif'
+          }
+        }
+
 				ssbService.website = data;
 			}
 
@@ -124,7 +143,7 @@
 		}
 
 		function saveWebsite(website) {
-			
+
 			function success(data) {
 				ssbService.website = data;
 			}
@@ -382,9 +401,9 @@
 		}
 
 		//TODO: api implement
-		function getTemplates() {
-			
-			var tempTemplates = [{
+		function getThemes() {
+
+			var tempThemes = [{
 				_id: '11032028',
 				name: 'Default',
 				styles: {
@@ -406,10 +425,11 @@
 				_id: '96751783',
 				name: 'Music - Soft',
 				styles: {
-					headerBackgroundColor: '#99CCCC',
+					headerBackgroundColor: '#9ACCCB',
 					bodyBackgroundColor: '#E8E7E7',
 					primaryTextColor: '#000000',
-					primaryBtnColor: '#000000',
+          primaryBtnTextColor: '#FFFFFF',
+					primaryBtnBackgroundColor: '#000000',
 					headingSize: '16px',
 					paragraphSize: '12px'
 				},
@@ -422,21 +442,23 @@
 			}];
 
 			function success(data) {
-				console.log('SimpleSiteBuilderService requested templates: ' + data);
+				console.log('SimpleSiteBuilderService requested themes: ' + data);
 			}
 
 			function error(error) {
-				console.error('SimpleSiteBuilderService templates error: ' + error);
+				console.error('SimpleSiteBuilderService themes error: ' + error);
 			}
 
+      ssbService.themes = tempThemes;
+
 			var deferred = $q.defer();
-			deferred.resolve(tempTemplates);
+			deferred.resolve(tempThemes);
 			return ssbRequest(deferred.promise);
 
 		}
-		
+
 		function checkForDuplicatePage(pageHandle) {
-			
+
 			function success(data) {
 				console.log('SimpleSiteBuilderService checkForDuplicatePage: ' + data);
 			}
@@ -463,7 +485,9 @@
 
 			AccountService.getAccount(function(data) {
 				ssbService.websiteId = data.website.websiteId;
-				ssbService.getSite(data.website.websiteId);
+        ssbService.getSite(data.website.websiteId);
+        ssbService.getPages();
+				ssbService.getThemes();
 			});
 
 		})();
