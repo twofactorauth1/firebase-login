@@ -11121,6 +11121,10 @@ table.grid thead th {
 table.grid thead tr {
   display: inline-block;
 }
+.table.grid > tbody > tr > td,
+.table.bg-white > tbody > tr > td {
+  cursor: pointer;
+}
 /* ---------------------------------------------------------------------- */
 /*  User profile
 /* ---------------------------------------------------------------------- */
