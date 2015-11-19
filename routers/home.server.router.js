@@ -29,18 +29,18 @@ _.extend(router.prototype, BaseRouter.prototype, {
     base: "home",
 
     initialize: function() {
-        app.get("/", this.setup.bind(this), this.index.bind(this));
+        app.get("/", this.setup.bind(this), this.optimizedIndex.bind(this));
 
-        //send all routes to index and let the app router to navigate to the appropiate view
-        app.get("/index", this.setup.bind(this), this.index.bind(this));
-        app.get("/blog", this.setup.bind(this), this.index.bind(this));
-        app.get("/blog/*", this.setup.bind(this), this.index.bind(this));
-        app.get("/tag/*", this.setup.bind(this), this.index.bind(this));
-        app.get("/category/*", this.setup.bind(this), this.index.bind(this));
-        app.get("/author/*", this.setup.bind(this), this.index.bind(this));
-        app.get("/page/*", [sitemigration_middleware.checkForRedirect, this.setup.bind(this)], this.index.bind(this));
-        app.get("/signup", this.setupForSocialSignup.bind(this), this.index.bind(this));
-        app.get("/post", this.setup.bind(this), this.index.bind(this));
+        //send all routes to index and let the app router to navigate to the appropriate view
+        app.get("/index", this.setup.bind(this), this.optimizedIndex.bind(this));
+        app.get("/blog", this.setup.bind(this), this.optimizedIndex.bind(this));
+        app.get("/blog/*", this.setup.bind(this), this.optimizedIndex.bind(this));
+        app.get("/tag/*", this.setup.bind(this), this.optimizedIndex.bind(this));
+        app.get("/category/*", this.setup.bind(this), this.optimizedIndex.bind(this));
+        app.get("/author/*", this.setup.bind(this), this.optimizedIndex.bind(this));
+        app.get("/page/*", [sitemigration_middleware.checkForRedirect, this.setup.bind(this)], this.optimizedIndex.bind(this));
+        app.get("/signup", this.setupForSocialSignup.bind(this), this.optimizedIndex.bind(this));
+        app.get("/post", this.setup.bind(this), this.optimizedIndex.bind(this));
 
         app.get("/index_temp_page", this.setup.bind(this), this.indexTempPage.bind(this));
 
@@ -64,7 +64,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
         /*
          * This is a POC route for page caching.
          */
-        app.get('/cached/:page', this.frontendSetup.bind(this), this.serveCachedIndex.bind(this));
+        app.get('/cached/:page', this.frontendSetup.bind(this), this.optimizedIndex.bind(this));
         return this;
     },
 
@@ -354,14 +354,14 @@ _.extend(router.prototype, BaseRouter.prototype, {
     },
     */
 
-    serveCachedIndex: function(req,resp) {
+    optimizedIndex: function(req,resp) {
         var self = this;
         var accountId = self.unAuthAccountId(req);
-        var pageName = req.params.page;
-        self.log.debug('>> serveCachedIndex ' + accountId);
+        var pageName = req.params.page || 'index';
+        self.log.debug('>> optimizedIndex ' + accountId + ', ' + pageName);
         new WebsiteView(req, resp).renderCachedPage(accountId, pageName);
 
-        self.log.debug('<< serveCachedIndex');
+        self.log.debug('<< optimizedIndex');
     }
 });
 
