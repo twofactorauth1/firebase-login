@@ -5,7 +5,7 @@
     .navigation-v1 .navbar ul.navbar-nav li a.active {
          color: {{component.activetxtcolor}}!important;
     }
-    .navigation-v1 .navbar {
+    .navigation-v1 .navbar.navbgcolor {
         background: {{component.nav.bg}}!important;
         border: none;
         border-radius: 0;
@@ -17,7 +17,7 @@
 </style>
 <div ng-class="component.type+'-v'+component.version" data-color="component.txtcolor">
     <div id="header">
-        <nav class="navbar navbar-default" ng-class="{'navbar-box':component.shownavbox}" role="navigation">
+        <nav class="navbar navbar-default" ng-class="{'navbar-box':component.shownavbox, 'navbgcolor' : !(component.bg.img.show && component.bg.img.url) }" role="navigation">
             <div class="container">
                 <!-- Brand and toggle get grouped for better mobile display -->
                 <div class="navbar-header">

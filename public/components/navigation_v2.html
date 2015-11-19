@@ -1,5 +1,5 @@
 <style>
-    .navbar-collapse {
+    .navbar-collapse.navbgcolor {
         background: {{component.nav.bg || 'transparent'}}!important;
     }
     .navigation-v2 .navbar ul.navbar-nav li:hover {
@@ -40,7 +40,7 @@
 
             </div>
             <!-- Collect the nav links, forms, and other content for toggling -->
-            <div ng-if="!component.customnav" class="collapse navbar-collapse" id="bs-example-navbar-collapse-1" ng-style="{'background' : component.nav.bg }">
+            <div ng-if="!component.customnav" class="collapse navbar-collapse" id="bs-example-navbar-collapse-1" ng-class="{'navbgcolor' : !(component.bg.img.show && component.bg.img.url) }" ng-style="{'background' : component.nav.bg }">
                 <ul  class="nav navbar-nav navbar-right" data-ng-repeat="mainMenu in website.linkLists track by $index" data-ng-if=" mainMenu.handle=='head-menu' ">
                     <li data-ng-repeat="link in mainMenu.links track by $index">
                         <a data-ng-show="link.linkTo.type == 'section'" data-ng-href="{{link.linkTo|generateURLforLinks}}" class="{{link.class}}" du-smooth-scroll ng-style="{'color' : component.txtcolor }">{{link.label || link.url}}</a>
