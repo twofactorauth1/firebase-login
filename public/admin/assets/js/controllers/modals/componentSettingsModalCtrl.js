@@ -746,13 +746,6 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
     });
   };
 
-  $scope.saveComponentVersion = function () {
-    $scope.isDirty.dirty = true;
-    $timeout(function () {
-      $(window).trigger('resize');
-    }, 0);
-  };
-
   $scope.saveComponent = function () {
     $scope.isDirty.dirty = true;
     $timeout(function () {
@@ -778,7 +771,7 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
 
   $scope.saveComponentChanges = function () {
     $scope.isDirty.dirty = true;
-    $timeout(function () {
+    $timeout(function () {      
       $(window).trigger('resize');
     }, 0);
   };
@@ -830,6 +823,16 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
   function replaceHtmlTags(text){
     return text ? String(text).replace(/<br \/>/gm, ' ').replace(/<[^>]+>/gm, '') : "";
   }
+  function setDefualts(){
+    if(!$scope.componentEditing.bg)
+      $scope.componentEditing.bg = {};
+    if($scope.componentEditing.bg && !angular.isDefined($scope.componentEditing.bg.opacity))
+      $scope.componentEditing.bg.opacity = 1;
+
+    if($scope.componentEditing.bg && $scope.componentEditing.bg.img && !angular.isDefined($scope.componentEditing.bg.img.overlayopacity))
+      $scope.componentEditing.bg.img.overlayopacity = 1;
+  }
+ 
   /*
    * @editComponent
    * -
@@ -861,16 +864,9 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
           'mw': mw,
           'usePage': false
         };
-      }
+      } 
 
-      if(!$scope.componentEditing.bg)
-        $scope.componentEditing.bg = {};
-      if($scope.componentEditing.bg && !angular.isDefined($scope.componentEditing.bg.opacity))
-        $scope.componentEditing.bg.opacity = 1;
-
-      if($scope.componentEditing.bg && $scope.componentEditing.bg.img && !angular.isDefined($scope.componentEditing.bg.img.overlayopacity))
-        $scope.componentEditing.bg.img.overlayopacity = 1;
-
+      setDefualts();
 
       if ($scope.componentEditing.type === 'navigation') {
         componentType = _.findWhere($scope.componentTypes, {

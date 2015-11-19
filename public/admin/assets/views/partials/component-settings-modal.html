@@ -12,7 +12,7 @@
         </div>
         <div class="modal-body no-padding" ng-class="{hidden: hover}">
             <tabset>
-                <tab ng-if="!isSinglePost" active="true">
+                <tab ng-if="!isSinglePost" active="true" ng-click="refreshSlider()">
                     <tab-heading>
                         <span>Basic</span>
                     </tab-heading>
