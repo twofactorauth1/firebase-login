@@ -428,7 +428,7 @@
 					headerBackgroundColor: '#9ACCCB',
 					bodyBackgroundColor: '#E8E7E7',
 					primaryTextColor: '#000000',
-          primaryBtnTextColor: '#FFFFFF',
+          			primaryBtnTextColor: '#FFFFFF',
 					primaryBtnBackgroundColor: '#000000',
 					headingSize: '16px',
 					paragraphSize: '12px'
@@ -436,6 +436,44 @@
 				defaultFontStack: '"Roboto", Helvetica, Arial, sans-serif', //TODO: use correct google font stack names
 				headingFontStack: '"Roboto", Helvetica, Arial, sans-serif', //TODO: use correct google font stack names
 				paragraphFontStack: '"Roboto", Helvetica, Arial, sans-serif',
+				defaultSections: [{
+					//
+				}]
+			},
+			{
+				_id: '123456',
+				name: 'Abril - Fatface',
+				styles: {
+					headerBackgroundColor: '#9ACCCB',
+					bodyBackgroundColor: '#E8E7E7',
+					primaryTextColor: '#000000',
+          			primaryBtnTextColor: '#FFFFFF',
+					primaryBtnBackgroundColor: '#000000',
+					headingSize: '16px',
+					paragraphSize: '12px'
+				},
+				defaultFontStack: '"Abril Fatface", fantasy', //TODO: use correct google font stack names
+				headingFontStack: '"Abril Fatface", fantasy', //TODO: use correct google font stack names
+				paragraphFontStack: '"Abril Fatface", fantasy',
+				defaultSections: [{
+					//
+				}]
+			},
+			{
+				_id: '112233',
+				name: 'Aguafina Script',
+				styles: {
+					headerBackgroundColor: '#9ACCCB',
+					bodyBackgroundColor: '#E8E7E7',
+					primaryTextColor: '#000000',
+          			primaryBtnTextColor: '#FFFFFF',
+					primaryBtnBackgroundColor: '#000000',
+					headingSize: '16px',
+					paragraphSize: '12px'
+				},
+				defaultFontStack: '"Aguafina Script", cursive', //TODO: use correct google font stack names
+				headingFontStack: '"Abril Fatface", fantasy', //TODO: use correct google font stack names
+				paragraphFontStack: '"Abril Fatface", fantasy',
 				defaultSections: [{
 					//
 				}]

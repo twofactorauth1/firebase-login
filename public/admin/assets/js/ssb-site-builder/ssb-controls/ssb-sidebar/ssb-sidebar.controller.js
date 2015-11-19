@@ -108,6 +108,20 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, SimpleSiteBuil
 
     //TODO:
     function applyThemeToPage(theme) {
+        // Load web font loader
+       if(theme.name !== 'Default')         
+       {
+          WebFont.load({
+            google: {
+              families: [theme.defaultFontStack.split(',')[0].replace(/"/g, '')]
+            }
+          });
+          WebFontConfig = {
+            active: function() {
+              sessionStorage.fonts = true;
+            }
+          }
+        }   
         vm.state.website.themeOverrides = theme;
     }
 
