@@ -1227,9 +1227,7 @@
       console.log(newValue);
     });
 
-    $scope.createDuplicatePage = function (newPage) {
-      $scope.single_post = false;
-      $scope.post_blog_page = false;
+    $scope.createDuplicatePage = function (newPage) {      
       if ($scope.isPage) {
         newPage.type = "page";
       }
@@ -1246,6 +1244,8 @@
         }
         newPage.components = $scope.page.components;
         WebsiteService.createDuplicatePage(newPage, function (data) {
+          $scope.single_post = false;
+          $scope.post_blog_page = false;
           $scope.duplicate = true;
           $scope.checkForSaveBeforeLeave('/admin/#/website/pages/?pagehandle=' + newPage.handle, true);
         });
