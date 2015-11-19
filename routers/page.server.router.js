@@ -30,7 +30,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
 
     initialize: function() {
 
-        app.get("/*", [sitemigration_middleware.checkForRedirect, this.setup.bind(this)], this.index.bind(this));
+        app.get("/*", [sitemigration_middleware.checkForRedirect, this.setup.bind(this)], this.optimizedIndex.bind(this));
 
         return this;
     },
@@ -48,6 +48,16 @@ _.extend(router.prototype, BaseRouter.prototype, {
             new WebsiteView(req, resp).renderNewIndex(appConfig.mainAccountID);
         }
         self.log.debug('<< index ... req.session.accountId:' + req.session.accountId);
+    },
+
+    optimizedIndex: function(req,resp) {
+        var self = this;
+        var accountId = self.unAuthAccountId(req);
+        var pageName = req.params.page || 'index';
+        self.log.debug('>> optimizedIndex ' + accountId + ', ' + pageName);
+        new WebsiteView(req, resp).renderCachedPage(accountId, pageName);
+
+        self.log.debug('<< optimizedIndex');
     },
 
     indexTempPage: function(req,resp) {
