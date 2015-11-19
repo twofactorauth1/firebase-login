@@ -95,6 +95,11 @@ var page = $$.m.ModelBase.extend({
             sections: [],
 
             /**
+             * This object will contain page-specific overrides to template styles
+             */
+            templateOverrides: {},
+
+            /**
              * Which template the page is created from.
              */
             templateId : null,
