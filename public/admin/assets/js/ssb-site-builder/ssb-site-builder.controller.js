@@ -152,10 +152,13 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     function updateActiveComponent(index) {
         if (index !== undefined) {
             vm.uiState.activeComponentIndex = index;
-            if (!vm.uiState.accordion.sections[vm.uiState.activeSectionIndex].components[index]) {
-                vm.uiState.accordion.sections[vm.uiState.activeSectionIndex].components[index] = {};
+
+            if (vm.uiState.accordion.sections[vm.uiState.activeSectionIndex]) {
+              if (!vm.uiState.accordion.sections[vm.uiState.activeSectionIndex].components[index]) {
+                  vm.uiState.accordion.sections[vm.uiState.activeSectionIndex].components[index] = {};
+              }
+              vm.uiState.accordion.sections[vm.uiState.activeSectionIndex].components[index].isOpen = true;
             }
-            vm.uiState.accordion.sections[vm.uiState.activeSectionIndex].components[index].isOpen = true;
         }
     }
 
@@ -240,6 +243,14 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     function init(element) {
 
         vm.element = element;
+
+        angular.element("body").on("click", ".ssb-page-section a", function (e) {
+          if (!angular.element(this).hasClass("clickable-link")) {
+            e.preventDefault();
+            e.stopPropagation();
+          }
+        });
+
         vm.uiState.isSidebarClosed = $rootScope.app.layout.isSidebarClosed;
         $rootScope.app.layout.isSidebarClosed = true;
 

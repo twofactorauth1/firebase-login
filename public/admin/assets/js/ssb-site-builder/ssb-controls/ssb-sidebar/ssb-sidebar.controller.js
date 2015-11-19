@@ -109,7 +109,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, SimpleSiteBuil
     //TODO:
     function applyThemeToPage(theme) {
         // Load web font loader
-       if(theme.name !== 'Default')         
+       if(theme.name !== 'Default')
        {
           WebFont.load({
             google: {
@@ -121,7 +121,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, SimpleSiteBuil
               sessionStorage.fonts = true;
             }
           }
-        }   
+        }
         vm.state.website.themeOverrides = theme;
     }
 
@@ -144,7 +144,9 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, SimpleSiteBuil
 
     function getPlatformComponents() {
       SimpleSiteBuilderService.getPlatformComponents().then(function(data) {
-          vm.platformComponents = data;
+        vm.platformComponents = data.map(function(component) {
+          return component.data;
+        });
       });
     }
 
@@ -158,9 +160,17 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, SimpleSiteBuil
     }
 
     function addSectionToPage(section, version) {
+
+      if (!vm.state.page.sections) {
+        vm.state.page.sections = [];
+      }
+
+      var numSections = vm.state.page.sections.length;
+
       return (
         SimpleSiteBuilderService.getSection(section, version || 1).then(function(response) {
           vm.state.page.sections.push(response);
+          vm.uiState.activeSectionIndex = numSections;
           vm.closeModal();
         })
       )
@@ -367,7 +377,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, SimpleSiteBuil
     	if (section.components) {
     		if (section.components.length === 1 && section.components[0].header_title) {
     			sectionName = section.components[0].header_title;
-    		} else {
+    		} else if (section.components[0]) {
     			sectionName = section.components[0].type;
     		}
     	}

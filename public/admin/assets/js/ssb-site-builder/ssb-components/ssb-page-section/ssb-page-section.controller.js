@@ -64,6 +64,10 @@ function ssbPageSectionController($scope, $attrs, $filter, SimpleSiteBuilderServ
       if (section.spacing.pt) {
         styleString += 'max-width: ' + section.spacing.mw == '100%' ? section.spacing.mw : section.spacing.mw  + 'px;';
       }
+
+      if (section.spacing.lineHeight) {
+        styleString += 'line-height: ' + section.spacing.lineHeight;
+      }
     }
 
     if (section.txtcolor) {

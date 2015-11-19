@@ -25,6 +25,7 @@ a[href="https://froala.com/wysiwyg-editor"] {
 	display: block;
 
 	.ssb-main {
+    top: 10px;
 
 		& > ssb-action-buttons {
 			position: fixed;
@@ -41,15 +42,27 @@ a[href="https://froala.com/wysiwyg-editor"] {
 		    height: 100%;
 		    width: 70%;
 		    position: relative;
-		    top: 0;
 		    left: 30%;
 		    box-shadow: 0px -1px 3px 1px rgba(0, 0, 0, .5);
     		float: left;
 		}
-	}
 
-	#componentloader {
-		overflow: visible;
+
+
+    /*
+     * OVERRIDES FOR LEGACY COMPONENT STYLES
+     */
+     #componentloader {
+      overflow: visible;
+      min-height: auto;
+    }
+
+    #componentloader .masthead-v1 .home-text {
+      padding: 0;
+      // padding: 50px 30px;
+    }
+
+
 	}
 
 	.ssb-main.ssb-main-full-width {
@@ -85,7 +98,7 @@ a[href="https://froala.com/wysiwyg-editor"] {
 		left: 0;
 		width: 3em;
 		height: 40px;
-		z-index: 999;
+		z-index: 9999;
 
 		& > *,
 		& > * > * {
@@ -195,8 +208,8 @@ a[href="https://froala.com/wysiwyg-editor"] {
 		}
 	}
 
-	.ssb-active-section,
-	.ssb-active-section .ssb-active-component {
+	&:hover .ssb-active-section,
+	&:hover .ssb-active-section .ssb-active-component {
 		&:before {
 			z-index: 1;
 			position: absolute;
@@ -210,7 +223,7 @@ a[href="https://froala.com/wysiwyg-editor"] {
 		}
 	}
 
-	.ssb-active-section .ssb-active-component {
+	&:hover .ssb-active-section .ssb-active-component {
 		&:before {
 			box-shadow: 0px 0px 0px 4px orange
 		}

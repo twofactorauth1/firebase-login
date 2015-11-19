@@ -5,25 +5,37 @@
 </style>
 <div>
 	<ssb-sidebar state="vm.state" ui-state="vm.uiState" ng-class="{ 'ssb-sidebar-show': vm.uiState.show.sidebar, 'ssb-sidebar': true }"></ssb-sidebar>
-	
+
 	<div class="ssb-main custom-fonts" ng-class="{ 'ssb-main-full-width': !vm.uiState.show.sidebar }">
-		
+
 		<div class="csspinner center"></div>
 		<!-- <div class="csspinner center" ng-if="vm.uiState.loading > 0"></div> -->
-		
+
 		<ssb-action-buttons save-action="vm.savePage()" cancel-action="vm.cancelPendingEdits()" ng-show="vm.state.pendingChanges"></ssb-action-buttons>
 
 		<div id="componentloader">
-			
+
+
+      <ul ng-if="!vm.state.page.sections.length" class="list-unstyled margin-bottom-0">
+        <li>
+            <div class="well empty-page center">
+                <h1 >This Page is Empty.</h1>
+                <h4>Add some sections and start editing!</h4>
+                <button class="btn btn-info margin-top-15" ng-click="vm.openModal('ssb-add-section-modal', 'SiteBuilderAddSectionModalController', null, 'lg');">Add Section</button>
+            </div>
+            <div class="clearfix mb15"></div>
+        </li>
+      </ul>
+
 			<div ng-if="vm.state.page.sections.length">
-			
-				<ssb-page-section 
-					ng-repeat="section in vm.state.page.sections track by $index" 
-					section="section" 
+
+				<ssb-page-section
+					ng-repeat="section in vm.state.page.sections track by $index"
+					section="section"
 					index="$index"
-					ng-class="{ 'ssb-active-section': $index === vm.uiState.activeSectionIndex }" 
-					class="ssb-page-section" 
-					state="vm.state" 
+					ng-class="{ 'ssb-active-section': $index === vm.uiState.activeSectionIndex }"
+					class="ssb-page-section"
+					state="vm.state"
 					ui-state="vm.uiState">
 				</ssb-page-section>
 

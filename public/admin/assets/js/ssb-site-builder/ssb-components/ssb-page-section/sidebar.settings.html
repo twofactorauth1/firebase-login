@@ -162,15 +162,17 @@
                     <small ng-bind-html="res | highlight: $select.search"></small>
                 </ui-select-choices>
             </ui-select>
+            <label for="ssb-page-section-line-height-input-{{sectionIndex}}">Line Height</label>
+            <input id="ssb-page-section-line-height-input-{{sectionIndex}}" type="number" string-to-number ng-model="section.spacing.lineHeight" data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down">
         </div>
         <div class="well margin-bottom-0 partition-light-primary">
             <label class="text-white lead">Margin</label>
             <div class="spacing-mt">
-                <input type="text" ng-model="section.spacing.mt" touchspin data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down" ng-disabled="section.spacing.usePage">
+                <input type="number" string-to-number ng-model="section.spacing.mt" min="-500" max="500" data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down" ng-disabled="section.spacing.usePage">
             </div>
             <div class="col-xs-2">
                 <div class="spacing-ml">
-                    <input type="text" ng-model="section.spacing.ml" touchspin data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down" ng-disabled="section.spacing.usePage">
+                    <input type="number" string-to-number ng-model="section.spacing.ml" min="-500" max="500" data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down" ng-disabled="section.spacing.usePage">
                     <div class="checkbox clip-check check-primary checkbox-inline">
                         <input type="checkbox" id="margin-left" ng-model="section.spacing.ml" ng-true-value="'auto'" ng-false-value="'0'" ng-disabled="section.spacing.usePage">
                         <label for="margin-left" class="text-white">
@@ -183,27 +185,27 @@
                 <div class="well partition-dark-primary">
                     <label class="text-white lead">Padding</label>
                     <div class="spacing-pt">
-                        <input type="text" ng-model="section.spacing.pt" touchspin data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down" ng-disabled="section.spacing.usePage">
+                        <input type="number" string-to-number ng-model="section.spacing.pt" min="-500" max="500" data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down" ng-disabled="section.spacing.usePage">
                     </div>
                     <div class="col-xs-6">
                         <div class="spacing-pl">
-                            <input type="text" ng-model="section.spacing.pl" touchspin data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down" ng-disabled="section.spacing.usePage">
+                            <input type="number" string-to-number ng-model="section.spacing.pl" min="-500" max="500" data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down" ng-disabled="section.spacing.usePage">
                         </div>
                     </div>
                     <div class="col-xs-6">
                         <div class="spacing-pr">
-                            <input type="text" ng-model="section.spacing.pr" touchspin data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down" ng-disabled="section.spacing.usePage">
+                            <input type="number" string-to-number ng-model="section.spacing.pr" min="-500" max="500" data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down" ng-disabled="section.spacing.usePage">
                         </div>
                     </div>
                     <div class="clearfix margin-bottom-15"></div>
                     <div class="spacing-pb">
-                        <input type="text" ng-model="section.spacing.pb" touchspin data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down" ng-disabled="section.spacing.usePage">
+                        <input type="number" string-to-number ng-model="section.spacing.pb" min="-500" max="500" data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down" ng-disabled="section.spacing.usePage">
                     </div>
                 </div>
             </div>
             <div class="col-xs-2">
                 <div class="spacing-mr">
-                    <input type="text" ng-model="section.spacing.mr" touchspin data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down" ng-disabled="section.spacing.usePage">
+                    <input type="number" string-to-number ng-model="section.spacing.mr" min="-500" max="500" data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down" ng-disabled="section.spacing.usePage">
                     <div class="checkbox clip-check check-primary checkbox-inline">
                         <input type="checkbox" id="margin-right" ng-model="section.spacing.mr" ng-true-value="'auto'" ng-false-value="'0'" ng-disabled="section.spacing.usePage">
                         <label class="text-white" for="margin-right">
@@ -214,7 +216,7 @@
             </div>
             <div class="clearfix"></div>
             <div class="spacing-mb">
-                <input type="text" ng-model="section.spacing.mb" touchspin data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down" ng-disabled="section.spacing.usePage">
+                <input type="number" string-to-number ng-model="section.spacing.mb" min="-500" max="500" data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down" ng-disabled="section.spacing.usePage">
             </div>
         </div>
         <div class="clearfix"></div>

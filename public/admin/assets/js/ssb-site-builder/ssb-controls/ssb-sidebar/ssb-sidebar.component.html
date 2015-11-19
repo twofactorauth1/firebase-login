@@ -147,8 +147,8 @@
 		</section>
 
 		<section>
-	        <h4 ng-if="vm.state.page.sections" class="ssb-sidebar-sub-heading">
-	        	<span>Page Sections</span>
+	        <h4 class="ssb-sidebar-sub-heading">
+	        	<span>Page Sections ({{vm.state.page.sections.length || 0}})</span>
 	        	<div ng-click="vm.openModal('ssb-add-section-modal', 'SiteBuilderAddSectionModalController', null, 'lg');" class="ssb-sidebar-item-icon ti-plus display-ib" tooltip-placement="left" tooltip-html-unsafe="Add Section"></div>
 	        </h4>
 			<ul ng-if="vm.state.page.sections" class="list-unstyled" ng-sortable="vm.sortableOptions" ng-model="vm.state.page.sections">

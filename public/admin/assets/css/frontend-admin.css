@@ -6212,6 +6212,12 @@ a[href="https://froala.com/wysiwyg-editor"] {
   width: 100%;
   display: block;
 }
+.ssb-site-builder .ssb-main {
+  top: 10px;
+  /*
+     * OVERRIDES FOR LEGACY COMPONENT STYLES
+     */
+}
 .ssb-site-builder .ssb-main > ssb-action-buttons {
   position: fixed;
   left: 60%;
@@ -6225,14 +6231,17 @@ a[href="https://froala.com/wysiwyg-editor"] {
     height: 100%;
     width: 70%;
     position: relative;
-    top: 0;
     left: 30%;
     box-shadow: 0px -1px 3px 1px rgba(0, 0, 0, 0.5);
     float: left;
   }
 }
-.ssb-site-builder #componentloader {
+.ssb-site-builder .ssb-main #componentloader {
   overflow: visible;
+  min-height: auto;
+}
+.ssb-site-builder .ssb-main #componentloader .masthead-v1 .home-text {
+  padding: 0;
 }
 .ssb-site-builder .ssb-main.ssb-main-full-width {
   width: 100%;
@@ -6261,7 +6270,7 @@ a[href="https://froala.com/wysiwyg-editor"] {
   left: 0;
   width: 3em;
   height: 40px;
-  z-index: 999;
+  z-index: 9999;
 }
 .ssb-site-builder .ssb-edit-control > *,
 .ssb-site-builder .ssb-edit-control > * > * {
@@ -6339,8 +6348,8 @@ a[href="https://froala.com/wysiwyg-editor"] {
 .ssb-site-builder .ssb-edit-control:hover .ssb-edit-control-inactive {
   display: none;
 }
-.ssb-site-builder .ssb-active-section:before,
-.ssb-site-builder .ssb-active-section .ssb-active-component:before {
+.ssb-site-builder:hover .ssb-active-section:before,
+.ssb-site-builder:hover .ssb-active-section .ssb-active-component:before {
   z-index: 1;
   position: absolute;
   top: 0;
@@ -6351,7 +6360,7 @@ a[href="https://froala.com/wysiwyg-editor"] {
   display: block;
   box-shadow: 0px 0px 0px 8px rgba(71, 184, 217, 0.75);
 }
-.ssb-site-builder .ssb-active-section .ssb-active-component:before {
+.ssb-site-builder:hover .ssb-active-section .ssb-active-component:before {
   box-shadow: 0px 0px 0px 4px #ffa500;
 }
 .ssb-site-builder .edit-wrap:hover .editable-title {
@@ -6391,6 +6400,9 @@ a[href="https://froala.com/wysiwyg-editor"] {
 }
 .ssb-sidebar .partition-light-primary .lead {
   font-size: 13px;
+}
+.ssb-sidebar .head-menu-links .container-fluid > div > div {
+  padding: 0 1em 0;
 }
 @media (min-width: 768px) {
   .ssb-sidebar {
