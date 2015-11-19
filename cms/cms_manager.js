@@ -1906,6 +1906,38 @@ module.exports = {
             }
         });
     },
+    updateEmailsByAccountId: function(accountId, useremail, business_name, fn) {
+        var self = this;
+        self.log = log;
+        self.log.debug('>> getEmailsByAccountId');
+        var query = {
+            accountId: accountId,
+            type: 'notification'
+        };
+        self.log.debug('start query');
+        emailDao.findMany(query, $$.m.cms.Email, function(err, list){
+            self.log.debug('end query');
+            if(err) {
+                self.log.error('Error getting emails by accountId: ' + err);
+                fn(err, null);
+            } else {
+                _.each(list, function(email){
+                    email.set("fromName", business_name);
+                    email.set("fromEmail", useremail);
+                    email.set("replyTo", useremail);
+                });
+                self.log.debug('end query');
+                emailDao.batchUpdate(list, $$.m.Email, function(err, value){
+                    if(err) {
+                        log.error('Error saving emails');
+                    } else {
+                        log.debug('finished saving emails');
+                        fn(null, value);
+                    }
+                });
+            }
+        });
+    },
 
     createEmail: function(email, fn) {
         log.debug('>> createEmail');

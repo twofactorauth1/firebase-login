@@ -1224,9 +1224,8 @@ var dao = {
     createDefaultPageForAccount: function(accountId, websiteId, fn) {
         var self = this;
         self.log.debug('>> createDefaultPageForAccount');
-
+        
         var page = new $$.m.cms.Page({
-
             "accountId" : accountId,
             "websiteId" : websiteId,
             "handle" : "coming-soon",
@@ -1315,6 +1314,7 @@ var dao = {
 
             "accountId" : accountId,
             "title" : "Welcome Aboard",
+            "subject" : "Welcome Aboard",
             "handle" : "welcome-aboard",
             "type" : "notification",
             "components" : [
@@ -1356,6 +1356,7 @@ var dao = {
 
             "accountId" : accountId,
             "title" : "New Order",
+            "subject" : "New Order",
             "handle" : "new-order",
             "type" : "notification",
             "components" : [
@@ -1396,6 +1397,7 @@ var dao = {
 
             "accountId" : accountId,
             "title" : "Order Processing",
+            "subject" : "Order Processing",
             "handle" : "order-processing",
             "type" : "notification",
             "components" : [
@@ -1436,6 +1438,7 @@ var dao = {
 
             "accountId" : accountId,
             "title" : "Order Completed",
+            "subject" : "Order Completed",
             "handle" : "order-completed",
             "type" : "notification",
             "components" : [
@@ -1476,6 +1479,7 @@ var dao = {
 
             "accountId" : accountId,
             "title" : "Order Cancelled",
+            "subject" : "Order Cancelled",
             "handle" : "order-cancelled",
             "type" : "notification",
             "components" : [
@@ -1516,6 +1520,7 @@ var dao = {
 
             "accountId" : accountId,
             "title" : "Customer Invoice",
+            "subject" : "Customer Invoice",
             "handle" : "customer-invoice",
             "type" : "notification",
             "components" : [
@@ -1837,10 +1842,7 @@ var dao = {
                 self.log.debug('<< createDefaultPageForAccount');
                 fn(null, defaultPageArray);
             }
-
         });
-
-
     },
 
     getRenderedWebsitePageForAccount: function(accountId, pageName, isEditor, tag, author, category, fn) {
