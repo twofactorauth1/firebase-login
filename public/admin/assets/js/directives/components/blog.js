@@ -67,7 +67,6 @@ app.directive('blogComponent', ['$filter', '$timeout', 'WebsiteService', 'toaste
 
         $scope.activateTagCloud($scope.blog.postTags);
 
-
         //if tagname is present, filter the cached posts with the tagname
         // if ($route.current.params.tagname != null) {
         //   var filterPosts = [];
@@ -205,6 +204,15 @@ app.directive('blogComponent', ['$filter', '$timeout', 'WebsiteService', 'toaste
 
         return true;
       };
+
+      $scope.$watch('component.version', function (newValue, oldValue) {
+        if(newValue && oldValue && newValue != oldValue){
+          $timeout(function () {
+            if(angular.element(".jqcloud").length)
+              $scope.activateTagCloud($scope.blog.postTags);
+          },1000)
+        }
+      })
 
       $scope.deleteBlogPost = function (postId, blogpost) {
         SweetAlert.swal({
