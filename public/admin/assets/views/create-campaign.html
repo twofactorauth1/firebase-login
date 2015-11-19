@@ -282,25 +282,25 @@
                                                         <label class="control-label text-bold">
                                                             From Name
                                                         </label>
-                                                        <span editable-text="emailToSend.fromName">{{emailToSend.fromName}}</span>
+                                                        <span editable-text="emailToSend.fromName">{{emailToSend.fromName || "From Name"}}</span>
                                                     </div>
                                                     <div class="form-group margin-bottom-0">
                                                         <label class="control-label text-bold">
                                                             From Email
                                                         </label>
-                                                        <span editable-email="emailToSend.fromEmail">{{emailToSend.fromEmail}}</span>
+                                                        <span editable-email="emailToSend.fromEmail">{{emailToSend.fromEmail || "From Email"}}</span>
                                                     </div>
                                                     <div class="form-group margin-bottom-0">
                                                         <label class="control-label text-bold">
                                                             Reply To
                                                         </label>
-                                                        <span editable-email="emailToSend.replyTo">{{emailToSend.replyTo}}</span>
+                                                        <span editable-email="emailToSend.replyTo">{{emailToSend.replyTo || "Reply To"}}</span>
                                                     </div>
                                                     <div class="form-group margin-bottom-0">
                                                         <label class="control-label text-bold">
                                                             Subject
                                                         </label>
-                                                        <span editable-text="emailToSend.subject" onbeforesave="analyzeSubject($data)">{{emailToSend.subject}}</span>
+                                                        <span editable-text="emailToSend.subject" onbeforesave="analyzeSubject($data)">{{emailToSend.subject || "Subject"}}</span>
                                                         <div class="clearfix"></div>
                                                     </div>
                                                     <div class="form-group margin-bottom-10" ng-if="emailToSend.subject" ng-show="subjectScore">
