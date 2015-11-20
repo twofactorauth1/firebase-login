@@ -265,7 +265,7 @@
 
     $scope.matchUsers = function (order) {
       var notes = order.notes;
-      if (notes.length > 0 && $scope.users) {
+      if (notes && notes.length > 0 && $scope.users) {
         _.each(notes, function (_note) {
           var matchingUser = _.find($scope.users, function (_user) {
             return _user._id === _note.user_id;

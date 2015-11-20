@@ -128,7 +128,7 @@
      */
     $scope.matchUsers = function (customer) {
       var notes = customer.notes;
-      if (notes.length > 0) {
+      if (notes && notes.length > 0) {
 
         _.each(notes, function (_note) {
           var matchingUser = _.find($scope.users, function (_user) {
