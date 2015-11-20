@@ -722,7 +722,11 @@
     }, {
       label: "Most commented",
       data: "comments"
-    }];
+    }, {
+      label: "Most Recent",
+      data: "date"
+    }
+    ];
 
     $scope.sortFeed = function (type) {
       $scope.orderByAttribute = type.data;
@@ -737,6 +741,7 @@
         setTimeout(function () {
           if($('#mcontainer'))
             $('#mcontainer').masonry();
+          $scope.sortFeed({label: "Most Recent", data: "date"});
         }, 500);
       }        
     })
