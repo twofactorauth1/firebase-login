@@ -603,20 +603,37 @@
         return;
       var toasterMsg = 'Status has been updated to ';
       if (newStatus === postConstant.post_status.PUBLISHED) {
-        WebsiteService.publishPost($scope.page._id, $scope.blog.post._id, function (data) {
-
-          toaster.pop('success', "Status updated successfully");
-          $scope.blog.post.post_status = newStatus;
-          $scope.originalPost = angular.copy($scope.blog.post);
-          $scope.postControl.setSinglePost();
+        angular.element('.modal.in').hide();
+        SweetAlert.swal({
+          title: "Are you sure?",
+          text: "Do you want to update status to published",
+          type: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#DD6B55",
+          confirmButtonText: "Yes, update status to published",
+          cancelButtonText: "No, do not update status to published!",
+          closeOnConfirm: false,
+          closeOnCancel: true
+        }, function (isConfirm) {
+        if (isConfirm) {          
+          WebsiteService.publishPost($scope.page._id, $scope.blog.post._id, function (data) {
+            $scope.blog.post.post_status = newStatus;
+            $scope.originalPost = angular.copy($scope.blog.post);
+            $scope.postControl.setSinglePost();
+            toaster.pop('success', "Post saved successfully");
+            SweetAlert.swal("Saved!", "Post status updated successfully.", "success");
+            angular.element('.modal.in').show();
+          });
+        } 
+        else 
+          angular.element('.modal.in').show();
         });
-      } else {
+      }
+      else {
         toaster.pop('success', "Status updated successfully");
         $scope.blog.post.post_status = newStatus;
         $scope.postControl.setSinglePost();
       }
-
-
     };
 
     /*
