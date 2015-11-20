@@ -127,6 +127,10 @@
                 post.trackedId = trackedAccount.id;
                 post.from.profile_pic = 'https://graph.facebook.com/' + post.from.sourceId + '/picture?width=32&height=32';
                 $scope.feed.push(post);
+                if($scope.trackedAccounts.length == 1)
+                {
+                 $scope.selectedSocial = $scope.trackedAccounts[0];
+                }
               });
             });
           }
