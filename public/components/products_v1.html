@@ -1,6 +1,6 @@
 <div class="products-v1" data-class="products" data-id="{{component._id}}">
     <div class="products">
-        <header class="jumbotron hero-spacer col-xs-12d" ng-style="{'background-color': component.boxColor}">
+        <header class="jumbotron hero-spacer col-xs-12d" ng-style="{'background-color': component.boxColor || 'transparent'}">
             <div class="title">
                 <div elem ng-model="component.title"></div>
             </div>
