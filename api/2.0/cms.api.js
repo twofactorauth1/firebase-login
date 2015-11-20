@@ -30,15 +30,13 @@ _.extend(api.prototype, baseApi.prototype, {
     initialize: function () {
 
         // THEME - work with theme objects
-        /*
-         * We may not need theme objects after all.
-        app.get(this.url('themes'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//list
+
+        app.get(this.url('theme'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//list
         app.get(this.url('theme/:id'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//get
-        app.post(this.url('themes'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//create
+        app.post(this.url('theme'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//create
         app.post(this.url('theme/:id'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//update
         app.delete(this.url('theme/:id'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//delete
-        *
-        */
+
 
         // TEMPLATE - work with template objects
         app.get(this.url('template'), this.isAuthAndSubscribedApi.bind(this), this.listTemplates.bind(this));//list
@@ -118,6 +116,48 @@ _.extend(api.prototype, baseApi.prototype, {
                 });
             }
         });
+    },
+
+    listThemes: function(req, resp) {
+        var self = this;
+        self.log.debug('>> listThemes');
+        var accountId = parseInt(self.accountId(req));
+        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed){
+            if(isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                ssbManager.listThemes(accountId, function(err, themes){
+                    self.log.debug('<< listThemes');
+                    return self.sendResultOrError(resp, err, themes, "Error listing themes");
+                });
+            }
+        });
+    },
+
+    getTheme: function(req, resp) {
+        var self = this;
+        self.log.debug('>> getTheme');
+        var accountId = parseInt(self.accountId(req));
+        var themeId = req.params.id;
+
+        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed){
+            if(isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                ssbManager.getTheme(themeId, function(err, theme){
+                    self.log.debug('<< getTheme');
+                    return self.sendResultOrError(resp, err, theme, "Error getting theme");
+                });
+            }
+        });
+    },
+
+    createWebsite: function(req, resp) {
+
+    },
+
+    createPage: function(req, resp) {
+
     }
 
 

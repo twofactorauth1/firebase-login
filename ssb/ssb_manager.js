@@ -3,6 +3,7 @@
 
 var logger = $$.g.getLogger("cms_manager");
 var templateDao = require('./dao/template.dao');
+var themeDao = require('./dao/theme.dao');
 
 module.exports = {
     log: logger,
@@ -37,5 +38,39 @@ module.exports = {
                 return fn(null, template);
             }
         });
+    },
+
+    listThemes: function(accountId, fn) {
+        var self = this;
+        self.log.debug('>> listThemes');
+        var query = {};
+        themeDao.findMany(query, $$.m.ssb.Theme, function(err, list){
+            if(err) {
+                self.log.error('Error listing templates:', err);
+                return fn(err, null);
+            } else {
+                self.log.debug('<< listThemes');
+                return fn(null, list);
+            }
+        });
+
+    },
+
+    getTheme: function(themeId, fn) {
+        var self = this;
+        self.log.debug('>> getTheme');
+        themeDao.getById(themeId, $$.m.ssb.Theme, function(err, theme){
+            if(err) {
+                self.log.error('Error getting theme:', err);
+                return fn(err, null);
+            } else {
+                self.log.debug('<< getTheme');
+                return fn(null, theme);
+            }
+        });
+    },
+
+    createPage: function() {
+
     }
 };
