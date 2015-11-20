@@ -127,6 +127,10 @@
                 post.trackedId = trackedAccount.id;
                 post.from.profile_pic = 'https://graph.facebook.com/' + post.from.sourceId + '/picture?width=32&height=32';
                 $scope.feed.push(post);
+                if($scope.trackedAccounts.length == 1)
+                {
+                 $scope.selectedSocial = $scope.trackedAccounts[0];
+                }
               });
             });
           }
@@ -722,7 +726,11 @@
     }, {
       label: "Most commented",
       data: "comments"
-    }];
+    }, {
+      label: "Most Recent",
+      data: "date"
+    }
+    ];
 
     $scope.sortFeed = function (type) {
       $scope.orderByAttribute = type.data;
@@ -737,6 +745,7 @@
         setTimeout(function () {
           if($('#mcontainer'))
             $('#mcontainer').masonry();
+          $scope.sortFeed({label: "Most Recent", data: "date"});
         }, 500);
       }        
     })
