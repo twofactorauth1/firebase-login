@@ -13,7 +13,16 @@ app.controller('SiteBuilderAddSectionModalController', ['$timeout', 'parentVm', 
 	* - TODO: move to service
 	*/
 
-	vm.platformSections = [{
+	vm.platformSections = [
+  {
+    title: 'Hero Image',
+    type: 'ssb-hero',
+    preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/masthead.jpg',
+    filter: 'misc',
+    description: 'Introduce your business with this section on the top of your home page.',
+    enabled: true
+  },
+  {
 		title: 'Blog',
 		type: 'blog',
 		preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/blog.png',

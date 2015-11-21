@@ -1,4 +1,4 @@
-/* ---------------------------------------------------------------------- 
+/* ----------------------------------------------------------------------
 >>> TABLE OF CONTENT
 -------------------------------------------------------------------------
 1 - All Components
@@ -6546,6 +6546,9 @@ a[href="https://froala.com/wysiwyg-editor"] {
   color: #47b8d9;
   font-weight: 600;
 }
+.ssb-sidebar-section-components-list > li:first-child .ssb-sidebar-sortable-item:first-of-type .panel-title:first-of-type {
+  border-bottom: 0 none;
+}
 .ssb-sidebar-sortable-item-component {
   border: 1px solid #ddd!important;
   border-width: 1px 1px 0 1px!important;
@@ -6632,4 +6635,13 @@ a[href="https://froala.com/wysiwyg-editor"] {
   top: 20px;
   left: 20px;
   border-radius: 5px 5px;
+}
+#componentloader .ssb-component:empty {
+  min-height: 400px;
+}
+.ssb-text {
+  background: green;
+}
+.ssb-image {
+  background: green;
 }

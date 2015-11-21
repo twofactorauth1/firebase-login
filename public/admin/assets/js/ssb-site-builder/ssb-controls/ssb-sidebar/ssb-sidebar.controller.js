@@ -40,7 +40,6 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, SimpleSiteBuil
     vm.insertMedia = insertMedia;
     vm.addToMainMenu = addToMainMenu;
     vm.showInsert = true;
-    vm.sectionName = sectionName;
     vm.applyThemeToPage = applyThemeToPage;
 
     editableOptions.theme = 'bs3';
@@ -125,6 +124,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, SimpleSiteBuil
         vm.state.website.themeOverrides = theme;
     }
 
+    //TODO: can we do some kind of promise resolved for specific props instead of hard-coded to bg.img.url?
     function insertMedia(asset) {
 
       if (vm.uiState.activeComponentIndex) {
@@ -371,20 +371,6 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, SimpleSiteBuil
   		// })
     }
 
-    function sectionName(section) {
-    	var sectionName = section.layout;
-
-    	if (section.components) {
-    		if (section.components.length === 1 && section.components[0].header_title) {
-    			sectionName = section.components[0].header_title;
-    		} else if (section.components[0]) {
-    			sectionName = section.components[0].type;
-    		}
-    	}
-
-    	return sectionName;
-
-    }
 
     function init(element) {
     	vm.element = element;

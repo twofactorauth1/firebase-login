@@ -19,8 +19,9 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
 
   // $scope.contactMap = contactMap;
   $scope.website = $scope.$parent.vm.state.website;
+  $scope.originalWebsite = angular.copy($scope.website);
   // $scope.blog.post = blog;
-  // $scope.isDirty = isDirty;
+  $scope.isDirty = {};
   // $scope.isSinglePost = isSinglePost;
   // $scope.showInsert = showInsert;
   // $scope.originalBlog = angular.copy($scope.blog.post);
@@ -44,7 +45,7 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
     scrollSensitivity: 200,
     scrollSpeed: 20, // px
     onSort: function (evt) {
-      $scope.scrollToComponent(evt.newIndex);
+      // $scope.scrollToComponent(evt.newIndex); TOOD: reimplement
     },
     onStart: function (evt) {
       $scope.dragging = true;
@@ -89,7 +90,7 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
    * @revertComponent
    * -
    */
-  $scope.originalWebsite = angular.copy($scope.website);
+
   $scope.revertComponent = function () {
     if ($scope.componentEditing.type === 'navigation') {
       $scope.website.linkLists = $scope.originalWebsite.linkLists;
@@ -493,6 +494,7 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
   }];
 
 
+
   /*
    * @deleteLinkFromNav
    * -
@@ -694,6 +696,7 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
 
   $scope.saveComponentVersion = function () {
     $scope.$parent.vm.pendingChanges = true;
+    $scope.isDirty.dirty = true;
     $timeout(function () {
       $(window).trigger('resize');
     }, 0);
@@ -701,6 +704,10 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
 
   $scope.saveComponent = function () {
     $scope.$parent.vm.pendingChanges = true;
+    $scope.isDirty.dirty = true;
+    $timeout(function () {
+      $(window).trigger('resize');
+    }, 0);
   };
 
   $scope.saveContactComponent = function (is_address) {
@@ -712,15 +719,18 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
       $scope.contactMap.refreshHours();
     }
     $scope.$parent.vm.pendingChanges = true;
+    $scope.isDirty.dirty = true;
   };
 
   $scope.saveTestimonialComponent = function () {
     $scope.$parent.vm.pendingChanges = true;
+    $scope.isDirty.dirty = true;
     $scope.testimonialSlider.refreshSlider();
   };
 
   $scope.saveComponentChanges = function () {
     $scope.$parent.vm.pendingChanges = true;
+    $scope.isDirty.dirty = true;
     $timeout(function () {
       $(window).trigger('resize');
     }, 0);
@@ -892,6 +902,7 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
 
     if ($scope.componentEditing) {
       WebsiteService.getComponentVersions($scope.componentEditing.type, function (versions) {
+        debugger; //versions arent being populated in the advanced tab?
         $scope.componentEditingVersions = versions;
         if ($scope.componentEditing && $scope.componentEditing.version) {
           $scope.componentEditing.version = $scope.componentEditing.version.toString();

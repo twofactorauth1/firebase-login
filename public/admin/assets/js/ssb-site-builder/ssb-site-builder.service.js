@@ -129,11 +129,24 @@
 						layout: '1-col',
 						components: [component]
 					};
+
+          defaultSection.name = sectionName(defaultSection) + ' Section';
+
 					data.sections[i] = defaultSectionObj;
 
 				}
 				// delete data.components;
 			}
+
+      /*
+       *
+       * Name sections without a name (can be edited in UI)
+       */
+      for (var i = 0; i < data.sections.length; i++) {
+        if (!data.sections[i].name) {
+          data.sections[i].name = sectionName(data.sections[i]) + ' Section';
+        }
+      }
 
 			ssbService.page = data;
 		}
@@ -190,12 +203,82 @@
 
 			var deferred = $q.defer();
 
-			if (!section.components) {
-				getLegacySection(section, version).then(function(wrappedLegacyComponent){
+			if (section.type.indexOf('ssb-') === -1) {
+				getLegacySection(section, section.version).then(function(wrappedLegacyComponent){
 					deferred.resolve(wrappedLegacyComponent);
 				});
 			} else {
-				alert('TODO: implement new sections');
+        if (section.type == 'ssb-hero') {
+				  deferred.resolve(
+            {
+              "_id": "76ef64ca-ed11-49db-8ebb-412343214123",
+              "anchor": "76ef64ca-ed11-49db-8ebb-412343214123",
+              "name": "Hero",
+              "type": "ssb-page-section",
+              "version": 1,
+              "txtcolor": "#FFFFFF",
+              "bg": {
+                "img": {
+                  "url": "",
+                  "width": null,
+                  "height": null,
+                  "parallax": false,
+                  "blur": false,
+                  "overlay": false,
+                  "show": true
+                },
+                "color": "#4bb0cb"
+              },
+              "visibility": true,
+              "components": [
+                {
+                  "_id": "31d45d75-e63c-40bf-8c83-10102edda912",
+                  "anchor":"31d45d75-e63c-40bf-8c83-10102edda912",
+                  "type":"ssb-text",
+                  "version":1,
+                  "txtcolor":"",
+                  "text":"<div style=\"text-align: center;\"><strong><span style=\"font-size: 96px;\">MONI KING</span></strong></div>",
+                  "bg":{
+                    "img":{
+                      "url":"",
+                      "width":null,
+                      "height":null,
+                      "parallax":false,
+                      "blur":false,
+                      "overlay":false,
+                      "show":false
+                    },
+                    "color":""
+                  },
+                  "visibility":true,
+                  "spacing":{"mt":0,"pt":0,"pl":0,"pr":0,"pb":0,"ml":0,"mr":0,"mb":0}
+                },
+                {
+                  "_id": "31d45d75-e63c-40bf-8c83-10102edda111",
+                  "anchor":"31d45d75-e63c-40bf-8c83-10102edda111",
+                  "type":"ssb-image",
+                  "version":1,
+                  "src": "",
+                  "alttext": "Hero",
+                  "bg":{
+                    "img":{
+                      "url":"",
+                      "width":null,
+                      "height":null,
+                      "parallax":false,
+                      "blur":false,
+                      "overlay":false,
+                      "show":false
+                    },
+                    "color":""
+                  },
+                  "visibility":true,
+                  "spacing":{"mt":0,"pt":0,"pl":0,"pr":0,"pb":0,"ml":0,"mr":0,"mb":0}
+                }
+              ],
+            }
+          );
+        }
 			}
 
 			function success(data) {
@@ -209,6 +292,21 @@
 			return ssbRequest(deferred.promise);
 
 		}
+
+    function sectionName(section) {
+      var sectionName = section.layout;
+
+      if (section.components) {
+        if (section.components.length === 1 && section.components[0].header_title) {
+          sectionName = section.components[0].header_title;
+        } else if (section.components[0]) {
+          sectionName = section.components[0].type;
+        }
+      }
+
+      return sectionName;
+
+    }
 
 		function getLegacySection(section, version) {
 			var sectionDefault = {
@@ -241,6 +339,8 @@
 
 			return getComponent(section, version).then(function(component) {
 				sectionDefault.components = [component.data];
+
+        sectionDefault.name = sectionName(sectionDefault);
 
 				return sectionDefault;
 			});

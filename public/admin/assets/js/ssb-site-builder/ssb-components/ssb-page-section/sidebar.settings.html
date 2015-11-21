@@ -1,5 +1,13 @@
 <div class="form-group">
     <h5 class="ssb-sidebar-settings-heading">Settings</h5>
+
+    <label class="padding-bottom-10">
+      Section Name:
+    </label>
+    <span editable-text="section.name" class="pull-right">{{section.name}}</span>
+
+    <br>
+
     <label for="colorpicker">Text Color:</label>
     <span tooltip-placement="top" tooltip-html-unsafe="Text color of section."><i class="fa fa-info-circle" /></span>
     <div class="pull-right">
@@ -27,7 +35,6 @@
     </div>
 </form>
 <hr/>
-<!-- <div class="form-group" ng-if="section.type != 'contact-us' && section.type != 'navigation' && section.type != 'top-bar' && section.type != 'blog'" ng-hide="isEmail"> -->
 <div class="form-group" ng-hide="isEmail">
     <label for="bg_hide" class="margin-bottom-0">Show Background Image</label>
     <span tooltip-placement="top" tooltip-html-unsafe="show/hide background image of section."><i class="fa fa-info-circle" /></span>
