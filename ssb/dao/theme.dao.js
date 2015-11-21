@@ -6,13 +6,13 @@
  */
 
 var baseDao = require('./../../dao/base.dao.js');
-var template = require('../model/theme.js');
+//var template = require('../model/theme.js');
 
 var dao = {
 
     options: {
         name: "ssb.theme.dao",
-        defaultModel: $$.m.ssb.Theme
+        //defaultModel: $$.m.ssb.Theme
     }
 
 };
