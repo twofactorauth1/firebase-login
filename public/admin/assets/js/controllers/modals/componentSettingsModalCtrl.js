@@ -1120,4 +1120,10 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
     }
   };
 
+  $scope.sortNavConfig = {
+      onEnd: function (evt) {
+        $scope.updateLinkList();
+      }
+    };
+
 }]);
