@@ -294,7 +294,13 @@ _.extend(api.prototype, baseApi.prototype, {
                 email: user.get('email'),
                 //user_hash: hash.toString(CryptoJS.enc.Hex),
                 created_at: Math.floor(Date.now() / 1000),
-                last_seen_ip: ipAddress
+                last_seen_ip: ipAddress,
+                custom_attributes: {
+                    "accountURL": account.attributes.subdomain + '.indigenous.io',
+                    "accountId" : account.attributes._id,
+                    "userId" : user.attributes._id,
+                    "signupDate": account.attributes.billing.signupDate
+                }
             },
             function(err, intercomData){
                 if (err) {
