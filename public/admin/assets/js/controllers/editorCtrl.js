@@ -167,6 +167,7 @@
       $timeout(function () {
         if (!$scope.ckeditorLoaded)
           $scope.ckeditorLoaded = true;
+          $scope.checkOgImage();
       }, 12000);
     };
 
@@ -592,7 +593,16 @@
 
       });
     };
-
+    $scope.checkOgImage = function(){
+        //alert("From Editor");
+        var ogImage = angular.element("meta[name=ogimg]").attr('content');
+        var spaces = ogImage.indexOf(' ');
+        if(spaces > 0)
+        {
+          ogImage = encodeURI(ogImage);
+          angular.element("meta[name=ogimg]").attr('content',ogImage);
+        }
+      }
     /*
      * @statusUpdated
      * the order status has been updated

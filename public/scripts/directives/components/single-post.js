@@ -27,6 +27,21 @@ app.directive('singlePostComponent', ['$location', 'accountService', 'postServic
       scope.$back = function () {
         window.history.back();
       };
+
+      scope.checkOgImage = function(){
+        var ogImage = angular.element("meta[name=ogimg]").attr('content');
+        var spaces = ogImage.indexOf(' ');
+        if(spaces > 0)
+        {
+          ogImage = encodeURI(ogImage);
+          angular.element("meta[name=ogimg]").attr('content',ogImage);
+        }
+      }
+
+      $timeout(function(){
+        scope.checkOgImage();
+      });
+      
     }
   }
 }]);
