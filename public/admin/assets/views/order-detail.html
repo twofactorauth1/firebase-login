@@ -525,7 +525,8 @@
 <script type="text/ng-template" id="customTemplate.html">
     <a>
         <img ng-src="{{match.model.photo ? match.model.photo : '/admin/assets/images/default-user.png'}}" width="35">
-        <span bind-html-unsafe="match.model.first+' '+match.model.last | typeaheadHighlight:query"></span>
+
+        <span bind-html-unsafe="((match.model.first || '') +' '+(match.model.last || '')).trim() || match.model.details[0].emails[0].email | typeaheadHighlight:query"></span>
     </a>
 </script>
 <script type="text/ng-template" id="add-product-lineitem-modal">
