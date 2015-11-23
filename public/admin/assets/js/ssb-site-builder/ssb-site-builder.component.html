@@ -6,7 +6,7 @@
 <div>
 	<ssb-sidebar state="vm.state" ui-state="vm.uiState" ng-class="{ 'ssb-sidebar-show': vm.uiState.show.sidebar, 'ssb-sidebar': true }"></ssb-sidebar>
 
-	<div class="ssb-main custom-fonts" ng-class="{ 'ssb-main-full-width': !vm.uiState.show.sidebar }">
+	<div class="ssb-main ssb-edit-mode custom-fonts" ng-class="{ 'ssb-main-full-width': !vm.uiState.show.sidebar }" data-eq-pts="small: 400, medium: 768, large: 1240">
 
 		<div class="csspinner center"></div>
 		<!-- <div class="csspinner center" ng-if="vm.uiState.loading > 0"></div> -->
@@ -47,6 +47,7 @@
 
 	<!-- <ssb-flyover state="vm.state" ui-state="vm.uiState" ng-class="{ 'ssb-flyover-show': vm.uiState.show.flyover && vm.uiState.activeSectionIndex !== undefined, 'ssb-flyover': true }"></ssb-flyover> -->
 
-	<div data-ng-include data-src=" 'assets/js/ssb-site-builder/ssb-controls/ssb-add-section-modal/ssb-add-section-modal.component.html' " ></div>
+  <div data-ng-include data-src=" 'assets/js/ssb-site-builder/ssb-controls/ssb-add-section-modal/ssb-add-section-modal.component.html' " ></div>
+	<div data-ng-include data-src=" 'assets/views/partials/social-links-modal.html' " ></div>
 
 </div>

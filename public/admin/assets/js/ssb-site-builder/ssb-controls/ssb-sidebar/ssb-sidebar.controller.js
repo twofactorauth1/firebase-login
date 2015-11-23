@@ -34,6 +34,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, SimpleSiteBuil
     vm.removeComponentFromSection = removeComponentFromSection;
     vm.addComponentToSection = addComponentToSection;
     vm.addBackground = addBackground;
+    vm.addImage = addImage;
     vm.openModal = openModal;
     vm.closeModal = closeModal;
     vm.openMediaModal = openMediaModal;
@@ -41,6 +42,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, SimpleSiteBuil
     vm.addToMainMenu = addToMainMenu;
     vm.showInsert = true;
     vm.applyThemeToPage = applyThemeToPage;
+    vm.insertMediaCallback = insertMediaCallback;
 
     editableOptions.theme = 'bs3';
 
@@ -105,7 +107,6 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, SimpleSiteBuil
   	  }
   	};
 
-    //TODO:
     function applyThemeToPage(theme) {
         // Load web font loader
        if(theme.name !== 'Default')
@@ -124,14 +125,10 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, SimpleSiteBuil
         vm.state.website.themeOverrides = theme;
     }
 
-    //TODO: can we do some kind of promise resolved for specific props instead of hard-coded to bg.img.url?
     function insertMedia(asset) {
+      vm.insertMediaCallback(asset);
 
-      if (vm.uiState.activeComponentIndex) {
-        vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex].bg.img.url = asset.url;
-      } else {
-        vm.state.page.sections[vm.uiState.activeSectionIndex].bg.img.url = asset.url;
-      }
+      vm.insertMediaCallback = function() {};
 
       return true;
     };
@@ -275,6 +272,14 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, SimpleSiteBuil
     function addBackground(sectionIndex, componentIndex) {
     	vm.openMediaModal('media-modal', 'MediaModalCtrl', null, 'lg');
 
+      vm.insertMediaCallback = function(asset) {
+        if (componentIndex) {
+          vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex].bg.img.url = asset.url;
+        } else {
+          vm.state.page.sections[vm.uiState.activeSectionIndex].bg.img.url = asset.url;
+        }
+      }
+
       if (sectionIndex) {
         SimpleSiteBuilderService.setActiveSection(sectionIndex);
         SimpleSiteBuilderService.setActiveComponent(undefined);
@@ -284,6 +289,29 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, SimpleSiteBuil
       }
 
     }
+
+    function addImage(sectionIndex, componentIndex) {
+      vm.openMediaModal('media-modal', 'MediaModalCtrl', null, 'lg');
+
+      vm.insertMediaCallback = function(asset) {
+        if (componentIndex) {
+          vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex].src = asset.url;
+        } else {
+          vm.state.page.sections[vm.uiState.activeSectionIndex].src = asset.url;
+        }
+      }
+
+      if (sectionIndex) {
+        SimpleSiteBuilderService.setActiveSection(sectionIndex);
+        SimpleSiteBuilderService.setActiveComponent(undefined);
+      } else {
+        SimpleSiteBuilderService.setActiveSection(sectionIndex);
+        SimpleSiteBuilderService.setActiveComponent(componentIndex);
+      }
+
+    }
+
+    function insertMediaCallback(asset) {}
 
     function closeModal() {
       vm.modalInstance.close();

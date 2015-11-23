@@ -80,7 +80,7 @@ function ssbPageSectionController($scope, $attrs, $filter, SimpleSiteBuilderServ
         styleString += 'background-color: ' + section.bg.color + ';';
       }
 
-      if (section.bg.img && section.bg.img.show) {
+      if (section.bg.img && section.bg.img.show && section.bg.img.url !== '') {
         styleString += 'background-image: url("' + section.bg.img.url + '")';
       }
     }
@@ -101,6 +101,10 @@ function ssbPageSectionController($scope, $attrs, $filter, SimpleSiteBuilderServ
 
     if (vm.section.layout === '3-col') {
       classString += 'col-md-4 ';
+    }
+
+    if (vm.section.layout === '4-col') {
+      classString += 'col-md-3';
     }
 
     if (index) {
@@ -169,7 +173,7 @@ function ssbPageSectionController($scope, $attrs, $filter, SimpleSiteBuilderServ
         styleString += 'background-color: ' + component.bg.color + ';';
       }
 
-      if (component.bg.img && component.bg.img.show) {
+      if (component.bg.img && component.bg.img.show && component.bg.img.url !== '') {
         styleString += 'background-image: url("' + component.bg.img.url + '")';
       }
     }

@@ -1,5 +1,12 @@
-<label for="ssb-component-image-settings-alt-text-{{sectionIndex}}">Alt Text</label>
-<input id="ssb-component-image-settings-alt-text-{{sectionIndex}}" type="url" ng-model="component.src">
+<div class="form-group add-image" ng-if="!component.src">
+  <div class="btn-wrap">
+    <input id="abi" ng-model="component.src" type="button" class="pull-right btn btn-primary" value="Add Image" ng-click="vm.addImage(sectionIndex, componentIndex)">
+  </div>
+</div>
+<div class="bgimg" id="bgimg" ng-if="component.src">
+  <i class="fa fa-close" ng-click="removeImage(false)"></i>
+  <img ng-src="{{component.src}}" ng-model="component.src" ng-click="vm.addImage(sectionIndex, componentIndex)" class="img-thumbnail">
+</div>
 
 <label for="ssb-component-image-settings-alt-text-{{sectionIndex}}">Alt Text</label>
 <input id="ssb-component-image-settings-alt-text-{{sectionIndex}}" type="text" ng-model="component.alttext">

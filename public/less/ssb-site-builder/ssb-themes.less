@@ -1,0 +1,28 @@
+.ssb-media-query-medium(@rules) {
+  &[data-eq-state$="medium"],
+  &[data-eq-state$="large"] {
+    @rules();
+  }
+  @media screen and (min-width: 768px) {
+    &:not([class*="ssb-edit-mode"]) {
+      @rules();
+    }
+  }
+}
+
+.ssb-media-query-large(@rules) {
+  &[data-eq-state$="large"] {
+    @rules();
+  }
+  @media screen and (min-width: 1240px) {
+    &:not([class*="ssb-edit-mode"]) {
+      @rules();
+    }
+  }
+}
+
+.ssb-theme {
+
+}
+
+@import "ssb-themes/ssb-theme-music-soft.less";

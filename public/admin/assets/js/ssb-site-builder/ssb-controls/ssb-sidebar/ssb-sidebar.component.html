@@ -201,7 +201,7 @@
 											</accordion-group>
 										</accordion>
 									</li>
-									<li class="ssb-sidebar-component-list">
+									<li ng-if="section.canAddComponents !== false" class="ssb-sidebar-component-list">
 										<accordion close-others="oneAtATime" class="accordion" ng-click="vm.getPlatformComponents()">
 											<accordion-group heading="Add + ">
 												<ul class="list-unstyled">

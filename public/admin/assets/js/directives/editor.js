@@ -39,11 +39,13 @@ app.directive("elem", function($timeout) {
 
       var elem = angular.element(element[0].querySelector('.editable'))[0];
 
-      if (scope.$parent.ssbEditor || scope.$parent.vm.ssbEditor) {
+      if (scope.$parent.ssbEditor || (scope.$parent.vm && scope.$parent.vm.ssbEditor)) {
         $(function() {
           setTimeout(function() {
             $(elem).on('froalaEditor.initialized', function(e, editor) {
-              editor.html.set(ngModel.$viewValue);
+              if (ngModel.$viewValue) {
+                editor.html.set(ngModel.$viewValue);
+              }
             }).froalaEditor($.FroalaEditor.config)
               .on('froalaEditor.contentChanged', function(e, editor) {
                 scope.updateFroalaContent(editor);

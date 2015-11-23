@@ -215,6 +215,9 @@
               "anchor": "76ef64ca-ed11-49db-8ebb-412343214123",
               "name": "Hero",
               "type": "ssb-page-section",
+              "subtype": "platform",
+              "layout": "hero",
+              "canAddComponents": false,
               "version": 1,
               "txtcolor": "#FFFFFF",
               "bg": {
@@ -225,7 +228,7 @@
                   "parallax": false,
                   "blur": false,
                   "overlay": false,
-                  "show": true
+                  "show": false
                 },
                 "color": "#4bb0cb"
               },
@@ -279,6 +282,148 @@
             }
           );
         }
+
+        if (section.type == 'ssb-header') {
+          deferred.resolve(
+            {
+              "_id": "76ef64ca-ed35-49db-8ebb-412343219999",
+              "anchor": "76ef64ca-ed35-49db-8ebb-412343219999",
+              "name": "Header",
+              "type": "ssb-page-section",
+              "subtype": "platform",
+              "layout": "header",
+              "canAddComponents": false,
+              "version": 1,
+              "txtcolor": "#FFFFFF",
+              "bg": {
+                "img": {
+                  "url": "",
+                  "width": null,
+                  "height": null,
+                  "parallax": false,
+                  "blur": false,
+                  "overlay": false,
+                  "show": false
+                },
+                "color": "#4bb0cb"
+              },
+              "visibility": true,
+              "components": [
+                {
+                  "_id":"c239d2be-ac45-4fd9-aed2-26196e870d5b",
+                  "anchor":"c239d2be-ac45-4fd9-aed2-26196e870d5b",
+                  "type":"navigation",
+                  "version":2,
+                  "txtcolor":null,
+                  "activetxtcolor":null,
+                  "logo":null,
+                  "nav":{
+                    "bg":"#017ebe",
+                    "hoverbg":null,
+                    "hover":null
+                  },
+                  "bg":{
+                    "img":{
+                      "url":"",
+                      "width":null,
+                      "height":null,
+                      "parallax":false,
+                      "blur":false,
+                      "overlay":false,
+                      "show":false
+                    },
+                    "color":"#89c4f4"
+                  },
+                  "customnav":true,
+                  "linkLists":[
+                    {
+                      "name":"Head Menu",
+                      "handle":"head-menu",
+                      "links":[
+                        {
+                          "label":"Home",
+                          "type":"link",
+                          "linkTo":{
+                            "data":"index",
+                            "type":"page",
+                            "page":null
+                          }
+                        },
+                        {
+                          "label":"About",
+                          "type":"link",
+                          "linkTo":{
+                            "data":"index",
+                            "type":"page",
+                            "page":null
+                          }
+                        },
+                        {
+                          "label":"Media",
+                          "type":"link",
+                          "linkTo":{
+                            "data":"index",
+                            "type":"page",
+                            "page":null
+                          }
+                        },
+                        {
+                          "label":"Contact",
+                          "type":"link",
+                          "linkTo":{
+                            "data":"index",
+                            "type":"page",
+                            "page":null
+                          }
+                        }
+                        ]
+                      }
+                  ],
+                  "visibility":true,
+                  "shownavbox":false
+                },
+                {
+                  "_id":"0207f7a8-680c-45f4-a9cc-011dbdc63e29",
+                  "anchor":"0207f7a8-680c-45f4-a9cc-011dbdc63e29",
+                  "type":"social-link",
+                  "version":1,
+                  "txtcolor":null,
+                  "networks":[
+                    {
+                      "name":"facebook",
+                      "url":"http://www.facebook.com",
+                      "icon":"facebook",
+                    },
+                    {
+                      "name":"twitter",
+                      "url":"http://www.twitter.com",
+                      "icon":"twitter",
+                    },
+                    {
+                      "name":"google-plus",
+                      "url":"http://plus.google.com",
+                      "icon":"google-plus",
+                    }
+                  ],
+                  "bg":{
+                    "img":{
+                      "url":"",
+                      "width":null,
+                      "height":null,
+                      "parallax":false,
+                      "blur":false,
+                      "overlay":false,
+                      "show":false
+                    },
+                    "color":""
+                  },
+                  "visibility":true
+                }
+              ],
+            }
+          );
+        }
+
 			}
 
 			function success(data) {

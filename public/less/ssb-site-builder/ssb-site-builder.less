@@ -6,7 +6,6 @@ a[href="https://froala.com/wysiwyg-editor"] {
     display: none!important;
 }
 
-
 .ssb-site-builder-container {
 	height: 100%;
 	height: calc(~"100vh - 65px");
@@ -47,21 +46,9 @@ a[href="https://froala.com/wysiwyg-editor"] {
     		float: left;
 		}
 
-
-
-    /*
-     * OVERRIDES FOR LEGACY COMPONENT STYLES
-     */
-     #componentloader {
-      overflow: visible;
-      min-height: auto;
+    .fr-toolbar {
+      z-index: 9999;
     }
-
-    #componentloader .masthead-v1 .home-text {
-      padding: 0;
-      // padding: 50px 30px;
-    }
-
 
 	}
 
@@ -73,10 +60,10 @@ a[href="https://froala.com/wysiwyg-editor"] {
 	.ssb-page-section {
 		position: relative;
 		float: left;
-	    width: 100%;
-	    clear: both;
-	    border: inset solid 1px transparent;
-	    // z-index: 1;
+    width: 100%;
+    clear: both;
+    border: inset solid 1px transparent;
+    // z-index: 1;
 
 		&:hover .ssb-settings-btn {
 			display: block;
@@ -232,7 +219,13 @@ a[href="https://froala.com/wysiwyg-editor"] {
 	.edit-wrap:hover .editable-title {
 		left: auto;
 		right: 0;
+    top: 0;
+    border-radius: 0;
 	}
+
+  .simple-form-v1 .btn .edit-wrap:hover .editable-title {
+    top: auto;
+  }
 
 }
 

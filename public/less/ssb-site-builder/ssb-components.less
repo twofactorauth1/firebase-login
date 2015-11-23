@@ -1,12 +1,18 @@
 #componentloader {
+  overflow: visible;
+  min-height: auto;
 
   .ssb-component {
+    z-index: 1;
+
     &:empty {
       min-height: 400px;
     }
   }
-
 }
 
+
+
+@import "ssb-components/ssb-legacy-component-overrides.less";
 @import "ssb-components/ssb-text.less";
 @import "ssb-components/ssb-image.less";

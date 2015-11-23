@@ -25,7 +25,7 @@ function ssbComponentLoader($compile) {
                         'ui-state="vm.uiState" ' +
                         'ssb-editor="true" ' +
                         'class="ssb-component ssb-{{vm.component.type}} {{vm.componentClass(vm.component)}}" ' +
-                        'ng-attr-style="{{vm.componentStyle(component)}}">' +
+                        'ng-attr-style="{{vm.componentStyle(vm.component)}}">' +
                       '</div>';
   		var compiled = $compile(template)(scope)
       element.replaceWith(compiled);
