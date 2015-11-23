@@ -71,6 +71,7 @@
                         <span class="error help-block" ng-if="domainExistsAlready">Domain Already Exists</span>
                         <span class="error help-block" ng-if="emptyBusinessName">Business Name Required</span>
                         <span class="help-block" ng-show="newAccount.businessName && validBusinessName">Your domain will be <strong>{{newAccount.businessName | urlFilter}}.indigenous.io</strong>. You can change it at any time.</span>
+                        <span class="help-block" ng-show="dotComExt">This field is for your Indigenous account subdomain. You may point the domain of your choosing to your site at any time.</span>
                     </div>                    
                     <!-- Phone Number -->
                     <div id="phone" class="hidden form-group col-xs-6 has-feedback">
