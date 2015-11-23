@@ -546,6 +546,7 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                     scope.emptyBusinessName = false;
 
                     var name = $.trim(newAccount.businessName).replace(" ", "").replace(".", "_").replace("@", "");
+                    newAccount.businessName = name;
                     UserService.checkDomainExists(name, function(domainAvailable) {
                         scope.domainExistsAlready = domainAvailable==='false';
 
