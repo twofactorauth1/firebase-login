@@ -2808,6 +2808,9 @@
   top: 0px;
   right: 13px;
 }
+#componentloader #cart-checkout-modal {
+  color: #444;
+}
 #componentloader .editing .products-v1 .btnLaunchCart {
   position: absolute;
   margin-top: 60px;
