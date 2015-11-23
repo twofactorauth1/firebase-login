@@ -7,7 +7,7 @@
 -->
 <meta property="og:type" content="article" />
 <meta property="og:title" content="{{blog.post.post_title}}" />
-<meta property="og:image" content="{{blog.post.featured_image}}" name="ogimg" />
+<meta property="og:image" content="{{blog.post.featured_image.indexOf(' ') > -1 ? getEncodedUrl(blog.post.featured_image) : blog.post.featured_image}}" />
 <div ng-class="component.type+'-v'+component.version">
     <div id="content-area">
         <div class="website clearfix row-fluid">

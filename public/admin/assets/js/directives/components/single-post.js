@@ -67,6 +67,9 @@ app.directive('singlePostComponent', ['$location', "WebsiteService", "$timeout",
       scope.control.setSinglePost = function () {
         return scope.blog.post = scope.$parent.blog.post;;
       };
+      scope.getEncodedUrl = function(url){
+        return encodeURI(url);
+      }
     }
   };
 }]);
