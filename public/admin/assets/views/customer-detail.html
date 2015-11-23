@@ -536,17 +536,25 @@
                                                     <td class="center"><strong>Status: </strong>
                                                         <span class="fa-stack">
                                                             <span class="fa fa-circle-thin fa-stack-2x"
-                                                            ng-class="{'text-warning': order.status == 'pending',
-                                                                          'text-muted': order.status == 'on-hold',
-                                                                          'text-blue': order.status == 'processing',
-                                                                          'text-green': order.status == 'completed',
-                                                                          'text-purple': order.status == 'refunded',
-                                                                          'text-orange': order.status == 'failed',
-                                                                          'text-red': order.status == 'cancelled',
-                                                                          }">
-                                                            </span>
-                                                        <span class="fa fa-stack-1x" tooltip-placement="top" tooltip="{{order.status | titleCase}} " ng-class="{'fa-ellipsis-h text-warning': order.status == 'pending','fa-minus text-muted': order.status == 'on-hold','fa-clock-o text-blue': order.status == 'processing','fa-check text-green': order.status == 'completed','fa-exchange text-purple': order.status == 'refunded','fa-exclamation text-orange': order.status == 'failed','fa-times text-red': order.status == 'cancelled'}">
-                                                            </span>
+                                        ng-class="{'text-warning': order.status == orderConstant.order_status.PENDING_PAYMENT,
+                                                      'text-muted': order.status == orderConstant.order_status.ON_HOLD,
+                                                      'text-blue': order.status == orderConstant.order_status.PROCESSING,
+                                                      'text-green': order.status == orderConstant.order_status.COMPLETED,
+                                                      'text-purple': order.status == orderConstant.order_status.REFUNDED,
+                                                      'text-orange': order.status == orderConstant.order_status.FAILED,
+                                                      'text-red': order.status == orderConstant.order_status.CANCELLED,
+                                                      }">
+                                        </span>
+                                        <span class="fa fa-stack-1x" tooltip-placement="top" tooltip="{{formatOrderStatus(order.status)}} "
+                                           ng-class="{'fa-ellipsis-h text-warning': order.status == orderConstant.order_status.PENDING_PAYMENT,
+                                                      'fa-minus text-muted': order.status == orderConstant.order_status.ON_HOLD,
+                                                      'fa-clock-o text-blue': order.status == orderConstant.order_status.PROCESSING,
+                                                      'fa-check text-green': order.status == orderConstant.order_status.COMPLETED,
+                                                      'fa-exchange text-purple': order.status == orderConstant.order_status.REFUNDED,
+                                                      'fa-exclamation text-orange': order.status == orderConstant.order_status.FAILED,
+                                                      'fa-times text-red': order.status == orderConstant.order_status.CANCELLED,
+                                                      }">
+                                        </span>
                                                         </span>
                                                     </td>
                                                     <td class="hidden-xs center"><strong>Items: </strong>{{order.line_items.length}}</td>

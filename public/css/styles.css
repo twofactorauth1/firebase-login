@@ -564,6 +564,9 @@ div[data-type='campaign'] .inner-page .overlay {
     background-attachment: scroll !important;
   }
 }
+.component-wrap .container.inner-page {
+  width: 100%;
+}
 .adminbar ul.nav {
   margin-top: 0!important;
 }
@@ -1164,6 +1167,9 @@ ul.nav {
   display: block;
   margin: 5px auto;
   text-align: left;
+}
+.navigation-v1 .container {
+  width: 100%;
 }
 @media (min-width: 1600px) {
   .navigation-v1 .container {
@@ -2805,6 +2811,9 @@ div[data-type="feature-block"] .component-inner {
   position: absolute;
   top: 0px;
   right: 13px;
+}
+#cart-checkout-modal {
+  color: #444;
 }
 .editing .products-v1 .btnLaunchCart {
   position: absolute;

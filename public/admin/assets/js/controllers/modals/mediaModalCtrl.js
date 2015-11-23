@@ -94,7 +94,9 @@ app.controller('MediaModalCtrl', ['$scope', '$modalInstance', '$http', '$timeout
   uploader.onSuccessItem = function (fileItem, response, status, headers) {
     $scope.uploadComplete = false;
     $scope.selectModel.select_all = false;
-    response.files[0].filename = fileItem.file.name;
+    var file_name = fileItem.file.name;
+    file_name = file_name.replace(/ /g, "_");
+    response.files[0].filename = file_name;
     response.files[0].mimeType = fileItem.file.type;
     $scope.originalAssets.push(response.files[0]);
     $scope.assets.push(response.files[0]);

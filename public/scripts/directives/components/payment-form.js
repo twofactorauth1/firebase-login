@@ -12,6 +12,7 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
             //scope.domainExistsAlready = false;  // needs to be undefined to begin with
             scope.emptyBusinessName = false;
             scope.validBusinessName = true;
+            scope.dotComExt = false;
 
             UserService.getTmpAccount(function(data) {
                 scope.tmpAccount = data;
@@ -545,7 +546,16 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                 else {
                     scope.emptyBusinessName = false;
 
-                    var name = $.trim(newAccount.businessName).replace(" ", "").replace(".", "_").replace("@", "");
+                    var name = $.trim(newAccount.businessName);
+
+                    var comExtension = ".com";
+                    if(new RegExp("\\b"+comExtension+"\\b").test(name))
+                    {
+                        scope.dotComExt = true;
+                    }
+                    name = name.replace(" ", "").replace(".", "_").replace("@", "");
+
+                    newAccount.businessName = name;
                     UserService.checkDomainExists(name, function(domainAvailable) {
                         scope.domainExistsAlready = domainAvailable==='false';
 

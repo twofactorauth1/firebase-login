@@ -583,6 +583,9 @@
     background-attachment: scroll !important;
   }
 }
+#componentloader .component-wrap .container.inner-page {
+  width: 100%;
+}
 #componentloader .adminbar ul.nav {
   margin-top: 0!important;
 }
@@ -1177,6 +1180,9 @@
   display: block;
   margin: 5px auto;
   text-align: left;
+}
+#componentloader .navigation-v1 .container {
+  width: 100%;
 }
 @media (min-width: 1600px) {
   #componentloader .navigation-v1 .container {
@@ -2805,6 +2811,9 @@
   position: absolute;
   top: 0px;
   right: 13px;
+}
+#componentloader #cart-checkout-modal {
+  color: #444;
 }
 #componentloader .editing .products-v1 .btnLaunchCart {
   position: absolute;

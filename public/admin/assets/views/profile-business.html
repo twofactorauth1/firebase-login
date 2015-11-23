@@ -96,8 +96,9 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>description</td>
-                                    <td>{{account.business.description}}</td>
+                                    <td>description:</td>
+                                    <td><pre class="business-description">{{account.business.description}}</pre></td>
+                                    <td>
                                 </tr>
                             </tbody>
                         </table>
@@ -111,7 +112,7 @@
                         </div>
                         <div collapse="businessHours" ng-init="businessHours=false" class="panel-wrapper">
                             <div class="panel-body">
-                                <div ng-if="!account.business.splitHours" ng-repeat="val in account.business.hours" ng-class="(currentDate | date:'EEE') === val.day ? 'current-day' : ''"><span class="text-bold">{{val.day}} </span> : <span ng-hide="val.closed || val.wholeday">{{val.start}} - {{val.end}}</span><span ng-show="val.closed && !val.wholeday">Closed</span><span ng-show="!val.closed && val.wholeday">Opened 24 hours</span></div>
+                                <div ng-if="!account.business.splitHours" ng-repeat="val in account.business.hours" ng-class="(currentDate | date:'EEE') === val.day ? 'current-day' : ''"><span class="text-bold">{{val.day}} </span> : <span ng-hide="val.closed || val.wholeday">{{val.start}} - {{val.end}}</span><span ng-show="val.closed && !val.wholeday">Closed</span></div>
                                 <div ng-if="account.business.splitHours" ng-repeat="val in account.business.hours"><span class="text-bold">{{val.day}} </span> : <span ng-hide="val.closed || val.wholeday" ng-if="val.split">{{val.start}} - {{val.end}} and {{val.start2}} - {{val.end2}}</span><span ng-hide="val.closed || val.wholeday" ng-if="!val.split">{{val.start}} - {{val.end}}</span><span ng-show="val.closed && !val.wholeday">Closed</span>
                                 <span ng-show="!val.closed && val.wholeday">Open 24 hours</span></div>
                             </div>
@@ -314,7 +315,7 @@
                                         </label>
                                     </div>
                                     <div ng-hide="val.closed || val.split" class="checkbox clip-check check-primary checkbox-inline">
-                                        <input type="checkbox" id="wholeday-{{$index}}" ng-change="val.closed = false" ng-model="val.wholeday">
+                                        <input type="checkbox" id="wholeday-{{$index}}" ng-change="val.closed = false;" ng-model="val.wholeday">
                                         <label for="wholeday-{{$index}}">
                                             Open 24 hours
                                         </label>
@@ -343,11 +344,21 @@
                                 </div>                                
                                 <div class="col-xs-3" ng-if="!val.closed && !val.wholeday">
                                     <div ng-hide="val.closed" class="checkbox clip-check check-primary checkbox-inline">
-                                        <input type="checkbox" id="wholeday-{{$index}}" ng-change="val.closed = false" ng-model="val.wholeday">
+                                        <input type="checkbox" id="wholeday-{{$index}}" ng-change="val.closed = false; val.wholeday=true" ng-model="val.wholeday">
                                         <label for="wholeday-{{$index}}">
                                             Open 24 hours
                                         </label>
                                     </div>
+
+                                </div>
+                                <div class="col-xs-3" ng-if="!val.closed && val.wholeday && !account.business.splitHours">
+                                    <div ng-hide="val.closed" class="checkbox clip-check check-primary checkbox-inline">
+                                        <input type="checkbox" id="wholeday-{{$index}}" ng-change="val.closed = false; val.wholeday=false" ng-model="val.wholeday">
+                                        <label for="wholeday-{{$index}}">
+                                            Opened 24 hours
+                                        </label>
+                                    </div>
+
                                 </div>
                                 <div class="col-xs-2">
                                     <div class="checkbox clip-check check-primary checkbox-inline">

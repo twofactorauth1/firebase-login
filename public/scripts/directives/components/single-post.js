@@ -27,6 +27,9 @@ app.directive('singlePostComponent', ['$location', 'accountService', 'postServic
       scope.$back = function () {
         window.history.back();
       };
+      scope.getEncodedUrl = function(url){
+        return encodeURI(url);
+      }
     }
   }
 }]);
