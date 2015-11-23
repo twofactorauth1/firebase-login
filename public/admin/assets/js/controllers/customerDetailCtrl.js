@@ -2,7 +2,7 @@
 /*global app, moment, angular, $$*/
 /*jslint unparam:true*/
 (function (angular) {
-  app.controller('CustomerDetailCtrl', ["$scope", "$rootScope", "$location", "$modal", "toaster", "$stateParams", "contactConstant", "CustomerService", "KeenService", "CommonService", "UserService", 'SweetAlert', '$state', 'OrderService', 'formValidations', function ($scope, $rootScope, $location, $modal, toaster, $stateParams, contactConstant, CustomerService, KeenService, CommonService, UserService, SweetAlert, $state, OrderService, formValidations) {
+  app.controller('CustomerDetailCtrl', ["$scope", "$rootScope", "$location", "$modal", "toaster", "$stateParams", "contactConstant", "CustomerService", "KeenService", "CommonService", "UserService", 'SweetAlert', '$state', 'OrderService', 'formValidations', 'orderConstant', function ($scope, $rootScope, $location, $modal, toaster, $stateParams, contactConstant, CustomerService, KeenService, CommonService, UserService, SweetAlert, $state, OrderService, formValidations, orderConstant) {
 
     /*
      * @openModal
@@ -52,6 +52,7 @@
     };
 
     $scope.formValidations = formValidations;
+    $scope.orderConstant = orderConstant;
 
     $scope.ip_geo_address = '';
     $scope.location = {};
@@ -1002,6 +1003,10 @@
 
     $scope.$back = function() {
         window.history.back();
+    };
+
+    $scope.formatOrderStatus = function (status) {
+      return OrderService.formatOrderStatus(status);
     };
 
 
