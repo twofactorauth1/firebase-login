@@ -52,7 +52,10 @@ _.extend(router.prototype, BaseRouter.prototype, {
 
     optimizedIndex: function(req,resp) {
         var self = this;
-        var accountId = self.unAuthAccountId(req);
+        var accountId = self.unAuthAccountId(req) || appConfig.mainAccountID;
+        if(accountId === 'new') {//we are on the signup page
+            accountId = appConfig.mainAccountID;
+        }
         var pageName = req.params.page || 'index';
         self.log.debug('>> optimizedIndex ' + accountId + ', ' + pageName);
         new WebsiteView(req, resp).renderCachedPage(accountId, pageName);
