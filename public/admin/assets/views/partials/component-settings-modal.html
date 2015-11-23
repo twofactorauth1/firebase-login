@@ -17,7 +17,7 @@
                         <span>Basic</span>
                     </tab-heading>
                     <div class="righstpanelinner">
-                        <div class="form-group">
+                        <div class="form-group" ng-hide="componentEditing.type == 'email-hr'">
                             <label for="colorpicker">Text Color:</label>
                             <span tooltip-placement="top" tooltip-html-unsafe="Text color of component."><i class="fa fa-info-circle" /></span>
                             <div class="pull-right">
@@ -40,7 +40,7 @@
                                 <switch ng-model="componentEditing.shownavbox" class="pull-right" ng-change="saveComponent()"></switch>
                             </div>
                         </div>
-                        <hr ng-show="!componentEditing.bg.img.show" />
+                        <hr ng-hide="componentEditing.type == 'email-hr'" ng-show="!componentEditing.bg.img.show" />
                         <div class="form-group" ng-if="componentEditing.type === 'navigation'">
                             <label>Nav BG Color:</label>
                             <span tooltip-placement="top" tooltip-html-unsafe="Background color of navigation bar."><i class="fa fa-info-circle" /></span>
