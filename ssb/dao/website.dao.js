@@ -6,13 +6,20 @@
  */
 
 var baseDao = require('./../../dao/base.dao.js');
-var theme = require('../model/theme.js');
+var website = require('../model/website.js');
 
 var dao = {
 
+
+    getWebsiteById: function(accountId, websiteId, fn) {
+        var self = this;
+        var query = {accountId:accountId, _id:websiteId};
+        self.findOne(query, $$.m.ssb.Website, fn);
+    },
+
     options: {
-        name: "ssb.theme.dao",
-        defaultModel: $$.m.ssb.Theme
+        name: "ssb.website.dao",
+        defaultModel: $$.m.ssb.Website
     }
 
 };
@@ -20,6 +27,6 @@ var dao = {
 
 dao = _.extend(dao, baseDao.prototype, dao.options).init();
 
-$$.dao.SSBThemeDao = dao;
+$$.dao.SSBWebsiteDao = dao;
 
 module.exports = dao;

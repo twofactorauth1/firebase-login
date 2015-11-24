@@ -57,7 +57,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         //PAGE
         app.get(this.url('website/:id/pages'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//get pages
-        app.post(this.url('website/:id/pages'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//create page
+        app.post(this.url('website/:id/pages'), this.isAuthAndSubscribedApi.bind(this), this.createPage.bind(this));//create page
         app.get(this.url('page/:id'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//get page
         app.post(this.url('page/:id'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//update page
         app.delete(this.url('page/:id'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//delete page
@@ -157,6 +157,25 @@ _.extend(api.prototype, baseApi.prototype, {
     },
 
     createPage: function(req, resp) {
+        var self = this;
+        self.log.debug('>> createPage');
+
+        var templateId = req.body.templateId;
+        var pageName = req.body.pageName;
+        var websiteId = req.params.id;
+        var accountId = parseInt(self.accountId(req));
+
+        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed){
+            if(isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                var created = {date: new Date(), by:self.userId(req)};
+                ssbManager.createPage(accountId, websiteId, templateId, pageName, created, function(err, page){
+                    self.log.debug('<< createPage');
+                    return self.sendResultOrError(resp, err, page, "Error creating page");
+                });
+            }
+        });
 
     }
 

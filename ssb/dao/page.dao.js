@@ -6,13 +6,13 @@
  */
 
 var baseDao = require('./../../dao/base.dao.js');
-var theme = require('../model/theme.js');
+var page = require('../model/page.js');
 
 var dao = {
 
     options: {
-        name: "ssb.theme.dao",
-        defaultModel: $$.m.ssb.Theme
+        name: "ssb.page.dao",
+        defaultModel: $$.m.ssb.Page
     }
 
 };
@@ -20,6 +20,6 @@ var dao = {
 
 dao = _.extend(dao, baseDao.prototype, dao.options).init();
 
-$$.dao.SSBThemeDao = dao;
+$$.dao.SSBPageDao = dao;
 
 module.exports = dao;
