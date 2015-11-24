@@ -298,10 +298,10 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
        * - when product details is clicked update selected product
        */
 
-      // scope.updateSelectedProduct = function (product) {
-      //   product.attributes = scope.selectedProductAttributes(product);
-      //   scope.selectedProduct = product;
-      // };
+      scope.updateSelectedProduct = function (product) {
+        product.attributes = scope.selectedProductAttributes(product);
+        scope.selectedProduct = product;
+      };
 
       /*
        * @selectChanged
@@ -331,34 +331,34 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
        * - get attributes availiable for the selected product
        */
 
-      // scope.selectedProductAttributes = function (product) {
-      //   var attributes;
-      //   if (product) {
-      //     var formattedAttributes = [];
-      //     _.each(product.variations, function (variation) {
-      //       _.each(variation.attributes, function (attribute) {
-      //         var foundAttr = _.find(formattedAttributes, function (formAttr) {
-      //           return formAttr.name === attribute.name;
-      //         });
-      //         if (foundAttr) {
-      //           if (foundAttr.values.indexOf(attribute.option) < 0) {
-      //             foundAttr.values.push(attribute.option);
-      //           }
-      //         } else {
-      //           var _attribute = {
-      //             name: attribute.name,
-      //             values: [attribute.option]
-      //           };
-      //           formattedAttributes.push(_attribute);
-      //         }
-      //       });
-      //     });
-      //     attributes = formattedAttributes;
-      //   } else {
-      //     attributes = [];
-      //   }
-      //   return attributes;
-      // };
+      scope.selectedProductAttributes = function (product) {
+        var attributes;
+        if (product) {
+          var formattedAttributes = [];
+          _.each(product.variations, function (variation) {
+            _.each(variation.attributes, function (attribute) {
+              var foundAttr = _.find(formattedAttributes, function (formAttr) {
+                return formAttr.name === attribute.name;
+              });
+              if (foundAttr) {
+                if (foundAttr.values.indexOf(attribute.option) < 0) {
+                  foundAttr.values.push(attribute.option);
+                }
+              } else {
+                var _attribute = {
+                  name: attribute.name,
+                  values: [attribute.option]
+                };
+                formattedAttributes.push(_attribute);
+              }
+            });
+          });
+          attributes = formattedAttributes;
+        } else {
+          attributes = [];
+        }
+        return attributes;
+      };
 
       /*
        * @updatePrice
