@@ -2260,6 +2260,12 @@
 #componentloader .image-text-v1 .btn {
   margin: 20px auto;
 }
+#componentloader .image-text-v1 .image-text-text {
+  margin: 15px;
+}
+#componentloader .image-text-v1 .image-text-image {
+  margin: 15px;
+}
 #componentloader .image-text-v1 .image-text-image img {
   margin: 15px auto;
 }
