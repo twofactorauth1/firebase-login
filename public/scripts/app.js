@@ -45,8 +45,8 @@ var mainApp = angular
     }
     $routeProvider
       .when('/', {
-        templateUrl: '../views/main.html',
-        controller: 'LayoutCtrl as layout'
+        templateUrl: '../views/cache.html',
+        controller: 'CacheCtrl as cacheCtrl'
       })
       .when('/404', {
         templateUrl: '../views/404.html',
@@ -56,13 +56,10 @@ var mainApp = angular
             controller: 'CacheCtrl as cacheCtrl',
             templateUrl: '../views/cache.html'
         })
-        .when('/bettercache', {
-            controller: 'CacheCtrl as cacheCtrl',
-            templateUrl: '../views/main2.html'
-        })
+
       .otherwise({
-        templateUrl: '../views/main.html',
-        controller: 'LayoutCtrl as layout'
+        templateUrl: '../views/cache.html',
+        controller: 'CacheCtrl as cacheCtrl'
       });
 
   }])
