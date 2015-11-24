@@ -11,14 +11,12 @@ app.directive("imgLazyLoad", function( $window, $document ) {
 
 		// render timer for lazy loading images so that DOM-querying (for offsets) is chunked in groups
 		var renderTimer = null;
-		var renderDelay = 0;
+		var renderDelay = 2000;
 		
 		// cache the document document height so that we can respond to changes in the height due to dynamic content
 		var doc = $document;
 		var documentHeight = doc.height();
-		var documentTimer = null;
-		var documentDelay = 100;
-
+		
 		// determine if window dimension events (ie. resize, scroll) are currenlty being monitored for changes
 		var isWatchingWindow = false;
 
@@ -50,27 +48,6 @@ app.directive("imgLazyLoad", function( $window, $document ) {
 				stopWatchingWindow();
 			}
 		}
-
-		// ---
-		// PRIVATE METHODS.
-		// ---
-
-		// I check the document height to see if it's changed.
-		function checkDocumentHeight() {
-			// If render time is currently active: don't bother getting the document height - it won't actually do anything
-			if ( renderTimer ) return;
-
-			var currentDocumentHeight = doc.height();
-
-			// Cancel if height has not changed - no more images could have come into view
-			if ( currentDocumentHeight === documentHeight ) return;
-
-			// Cache the new document height.
-			documentHeight = currentDocumentHeight;
-
-			startRenderTimer();
-		}
-
 		// I check the lazy-load images that have yet to be rendered.
 		function checkImages() {
 			// Log here so we can see how often this gets called during page activity.
@@ -95,6 +72,7 @@ app.directive("imgLazyLoad", function( $window, $document ) {
 				var image = images[ i ];
 				if ( image.isVisible( topFoldOffset, bottomFoldOffset ) ) {
 					visible.push( image );
+					console.log("Image loaded")
 				} else {
 					hidden.push( image );
 				}
@@ -138,10 +116,7 @@ app.directive("imgLazyLoad", function( $window, $document ) {
 			// Listen for window changes.
 			container.on( "resize.imgLazyLoad", windowChanged );
 			container.on( "scroll.imgLazyLoad", windowChanged );
-			
-
-			// Set up a timer to watch for document-height changes.
-			documentTimer = setInterval( checkDocumentHeight, documentDelay );
+			//startRenderTimer();
 		}
 
 		// I stop watching the window for changes in dimension.
@@ -153,7 +128,7 @@ app.directive("imgLazyLoad", function( $window, $document ) {
 			container.off( "scroll.imgLazyLoad" );
 
 			// Stop watching for document changes.
-			clearInterval( documentTimer );
+			//clearInterval( documentTimer );
 		}
 
 		// I start the render time if the window changes.
@@ -212,6 +187,7 @@ app.directive("imgLazyLoad", function( $window, $document ) {
 			// Update the dimensions of the element.
 			var elemTop = element.offset().top;
 			var parentTop = $('#assets').offset().top;
+			
 			var top = elemTop - parentTop;
 			var bottom = ( top + height );
 			addRemoveAttributes(false);
@@ -235,6 +211,11 @@ app.directive("imgLazyLoad", function( $window, $document ) {
 						( top <= topFoldOffset ) &&
 						( bottom >= bottomFoldOffset )
 					)
+				|| (
+						( top <= bottomFoldOffset ) &&
+						( bottom <= bottomFoldOffset ) &&
+						( top <= bottomFoldOffset || top <= topFoldOffset )
+					)		
 			);
 		}
 
@@ -256,7 +237,7 @@ app.directive("imgLazyLoad", function( $window, $document ) {
 
 		// load the lazy source value into the actual source value of the image element.
 		function renderSource() {
-			element[ 0 ].src = source;
+			element.attr('src', source);
 		}
 
 		// Return the public API
