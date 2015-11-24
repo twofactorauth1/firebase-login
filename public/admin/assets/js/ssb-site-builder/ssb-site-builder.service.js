@@ -12,7 +12,8 @@
 		var baseWebsiteAPIUrl = '/api/1.0/cms/website/'; //TODO: upgrade to api/2.0 when ready
 		var basePageAPIUrl = '/api/1.0/cms/page/';
 		var baseComponentAPIUrl = '/api/1.0/cms/component/';
-
+    var basePageAPIUrlv2 = '/api/2.0/cms/websites/'
+    var baseTemplateAPIUrlv2 = '/api/2.0/cms/templates/'
 
 		ssbService.getSite = getSite;
 		ssbService.getPage = getPage;
@@ -31,6 +32,8 @@
 		ssbService.loading = { value: 0 };
 		ssbService.getThemes = getThemes;
     ssbService.applyThemeToPage = applyThemeToPage;
+    ssbService.createPage = createPage;
+    ssbService.getTemplates = getTemplates;
 
 
 		function ssbRequest(fn) {
@@ -116,13 +119,25 @@
 
 		}
 
+    function createPage(templateId) {
+
+      return (
+        ssbRequest($http({
+          url: basePageAPIUrlv2 + ssbService.website._id + '/page/',
+          method: 'POST',
+          data: { templateId: templateId }
+        }).success(successPage).error(errorPage))
+      )
+
+    }
+
 		function successPage(data) {
 
 			/*
 			 *
 			 * Transform legacy pages to new section/component model format
 			 */
-			if (data.components.length && !data.sections) {
+			if (data.components && data.components.length && !data.sections) {
 				data.sections = angular.copy(data.components);
 				for (var i = 0; i < data.sections.length; i++) {
 					var component = angular.copy(data.sections[i]);
@@ -949,7 +964,7 @@
 			}
 
 			return (
-          		ssbRequest($http({
+        ssbRequest($http({
 					url: baseWebsiteAPIUrl + ssbService.website._id + '/page/' + pageHandle,
 					method: 'GET',
 				}).success(success).error(error))
@@ -960,6 +975,26 @@
 		function getUserSections() {
 			return [];
 		}
+
+    function getTemplates() {
+
+      function success(data) {
+        ssbService.templates = data;
+        console.log('SimpleSiteBuilderService getTemplates: ' + data);
+      }
+
+      function error(error) {
+        console.error('SimpleSiteBuilderService getTemplates error: ' + error);
+      }
+
+      return (
+        ssbRequest($http({
+          url: baseTemplateAPIUrlv2,
+          method: 'GET',
+        }).success(success).error(error))
+      )
+
+    }
 
     function applyThemeToPage(theme) {
         // Load web font loader
@@ -986,7 +1021,8 @@
 				ssbService.websiteId = data.website.websiteId;
         ssbService.getSite(data.website.websiteId);
         ssbService.getPages();
-				ssbService.getThemes();
+        ssbService.getThemes();
+				ssbService.getTemplates();
 			});
 
 		})();

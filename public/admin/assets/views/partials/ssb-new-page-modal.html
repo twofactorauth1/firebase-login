@@ -1,0 +1,56 @@
+<script type="text/ng-template" id="new-page-modal">
+    <div class="modal-header">
+        <button type="button" class="close" ng-click="closeModal()">
+            <span aria-hidden="true">&times;</span>
+            <span class="sr-only">Close</span>
+        </button>
+        <h3 class="modal-title"><span ng-if="!templateDetails">Select Template</span><span ng-if="templateDetails">Template Details</span></h3>
+    </div>
+    <div class="modal-body pages-modal bg-white" ng-class="{'no-padding pages-padding-top': !templateDetails }">
+        <div ng-hide="templateDetails">
+            <div ng-repeat="template in vm.state.templates | orderBy:'title'">
+                <div class="single-type margin-bottom-15" ng-click="createPageFromTemplate(template, $event)">
+                    <div class="col-sm-3 col-xs-12">
+                        <div class="img-wrap">
+                            <a ng-href="{{template.previewUrl}}" title="" data-gallery="">
+                                <span style="background: url('{{template.previewUrl}}');background-size: cover;height: 65px;background-position: center;border-radius: 5px;border: 1px solid #e7e7e7;display: block;"></span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-sm-8 col-xs-12">
+                        <h4>{{template.name}}</h4>
+                        <p>{{template.description}}</p>
+                    </div>
+                    <div class="col-sm-1 hidden-xs">
+                        <h1>
+                                        <span class="fa fa-chevron-right"></span>
+                                    </h1>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+            <div ng-repeat="template in legacyTemplates | orderBy:'title'">
+                <div class="single-type margin-bottom-15" ng-click="createPageFromTemplate(template, $event)">
+                    <div class="col-sm-3 col-xs-12">
+                        <div class="img-wrap">
+                            <a ng-href="{{template.previewUrl}}" title="" data-gallery="">
+                                <span style="background: url('{{template.previewUrl}}');background-size: cover;height: 65px;background-position: center;border-radius: 5px;border: 1px solid #e7e7e7;display: block;"></span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-sm-8 col-xs-12">
+                        <h4>{{template.name}}</h4>
+                        <p>{{template.description}}</p>
+                    </div>
+                    <div class="col-sm-1 hidden-xs">
+                        <h1>
+                                        <span class="fa fa-chevron-right"></span>
+                                    </h1>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+</script>
