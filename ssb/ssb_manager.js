@@ -73,7 +73,7 @@ module.exports = {
         });
     },
 
-    createPage: function(accountId, websiteId, templateId, pageName, created, fn) {
+    createPage: function(accountId, websiteId, templateId, created, fn) {
         var self = this;
         self.log.debug('>> createPage');
 
@@ -122,6 +122,8 @@ module.exports = {
                 });
             },
             function createPage(website, theme, template, cb){
+                var pageName = template.get('name') + '-' + $$.u.idutils.generateUniqueAlphaNumeric(5, true, true);
+
                 var page = new $$.m.ssb.Page({
                     accountId:accountId,
                     websiteId:websiteId,

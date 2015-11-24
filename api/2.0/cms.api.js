@@ -31,46 +31,46 @@ _.extend(api.prototype, baseApi.prototype, {
 
         // THEME - work with theme objects
 
-        app.get(this.url('theme'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//list
-        app.get(this.url('theme/:id'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//get
-        app.post(this.url('theme'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//create
-        app.post(this.url('theme/:id'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//update
-        app.delete(this.url('theme/:id'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//delete
+        app.get(this.url('themes'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//list
+        app.get(this.url('themes/:id'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//get
+        app.post(this.url('themes'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//create
+        app.post(this.url('themes/:id'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//update
+        app.delete(this.url('themes/:id'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//delete
 
 
         // TEMPLATE - work with template objects
-        app.get(this.url('template'), this.isAuthAndSubscribedApi.bind(this), this.listTemplates.bind(this));//list
-        app.get(this.url('template/:id'), this.isAuthAndSubscribedApi.bind(this), this.getTemplate.bind(this));//get
-        app.post(this.url('template'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//create
-        app.post(this.url('template/:id'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//update
-        app.delete(this.url('template/:id'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//delete
+        app.get(this.url('templates'), this.isAuthAndSubscribedApi.bind(this), this.listTemplates.bind(this));//list
+        app.get(this.url('templates/:id'), this.isAuthAndSubscribedApi.bind(this), this.getTemplate.bind(this));//get
+        app.post(this.url('templates'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//create
+        app.post(this.url('templates/:id'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//update
+        app.delete(this.url('templates/:id'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//delete
 
         // WEBSITE - work with website objects
-        app.get(this.url('website'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//get default (0th) website for current account
-        app.get(this.url('website/:id'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//get
+        app.get(this.url('websites'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//get default (0th) website for current account
+        app.get(this.url('websites/:id'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//get
         app.get(this.url('websites'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//list
         app.post(this.url('websites'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//create
-        app.post(this.url('website/:id'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//update
-        app.delete(this.url('website/:id'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//delete
+        app.post(this.url('websites/:id'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//update
+        app.delete(this.url('websites/:id'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//delete
 
-        app.get(this.url('website/:id/theme'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//get theme
+        app.get(this.url('websites/:id/theme'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//get theme
 
         //PAGE
-        app.get(this.url('website/:id/pages'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//get pages
-        app.post(this.url('website/:id/pages'), this.isAuthAndSubscribedApi.bind(this), this.createPage.bind(this));//create page
-        app.get(this.url('page/:id'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//get page
-        app.post(this.url('page/:id'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//update page
-        app.delete(this.url('page/:id'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//delete page
+        app.get(this.url('websites/:id/page'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//get pages
+        app.post(this.url('websites/:id/page'), this.isAuthAndSubscribedApi.bind(this), this.createPage.bind(this));//create page
+        app.get(this.url('pages/:id'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//get page
+        app.post(this.url('pages/:id'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//update page
+        app.delete(this.url('pages/:id'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//delete page
 
-        app.get(this.url('page/:id/template'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//get page template
-        app.post(this.url('page/:id/template/:templateId'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//set page template
+        app.get(this.url('pages/:id/template'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//get page template
+        app.post(this.url('pages/:id/template/:templateId'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//set page template
 
-        app.get(this.url('page/:id/versions'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//get page versions
-        app.post(this.url('page/:id/version/:versionId'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//revert page to version
+        app.get(this.url('pages/:id/versions'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//get page versions
+        app.post(this.url('pages/:id/version/:versionId'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//revert page to version
 
 
         // COMPONENTS
-        app.get(this.url('component'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this)); //get components
+        app.get(this.url('components'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this)); //get components
 
 
     },
@@ -161,7 +161,6 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> createPage');
 
         var templateId = req.body.templateId;
-        var pageName = req.body.pageName;
         var websiteId = req.params.id;
         var accountId = parseInt(self.accountId(req));
 
@@ -170,7 +169,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 return self.send403(resp);
             } else {
                 var created = {date: new Date(), by:self.userId(req)};
-                ssbManager.createPage(accountId, websiteId, templateId, pageName, created, function(err, page){
+                ssbManager.createPage(accountId, websiteId, templateId, created, function(err, page){
                     self.log.debug('<< createPage');
                     return self.sendResultOrError(resp, err, page, "Error creating page");
                 });
