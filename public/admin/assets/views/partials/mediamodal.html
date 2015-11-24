@@ -82,7 +82,7 @@
                                 <div ng-switch="asset.mimeType">
                                     <span ng-switch-when="application/pdf" class="fa fa-file-pdf-o" style="font-size: 96px;"></span>
                                     <span ng-switch-when="application/octet-stream" class="fa fa-file-text-o" style="font-size: 96px;"></span>
-                                    <img ng-switch-default ng-src="{{asset.url}}" alt="">
+                                    <img container="assets" img-lazy-load="{{ asset.url }}" ng-switch-default alt="">
                                 </div>
                             </div>
                             <h5 class="fm-title">
