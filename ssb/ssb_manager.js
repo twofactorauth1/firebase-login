@@ -4,6 +4,9 @@
 var logger = $$.g.getLogger("cms_manager");
 var templateDao = require('./dao/template.dao');
 var themeDao = require('./dao/theme.dao');
+var websiteDao = require('./dao/website.dao');
+var pageDao = require('./dao/page.dao');
+var async = require('async');
 
 module.exports = {
     log: logger,
@@ -70,7 +73,82 @@ module.exports = {
         });
     },
 
-    createPage: function() {
+    createPage: function(accountId, websiteId, templateId, pageName, created, fn) {
+        var self = this;
+        self.log.debug('>> createPage');
+
+        /*
+         * 1. Get the website
+         * 2. Get the theme from the website
+         * 3. Get the template
+         * 4. Create page from theme and template
+         *
+         */
+        async.waterfall([
+            function getWebsite(cb){
+                websiteDao.getWebsiteById(accountId, websiteId, function(err, website){
+                    if(err) {
+                        self.log.error('Error finding website:', err);
+                        cb(err);
+                    } else {
+                        cb(null, website);
+                    }
+                });
+            },
+            function getTheme(website, cb){
+                var themeId = website.get('themeId');
+                themeDao.getById(themeId, function(err, theme){
+                    if(err) {
+                        self.log.error('Error finding theme:', err);
+                        cb(err);
+                    } else {
+                        cb(null, website, theme);
+                    }
+                });
+            },
+            function getTemplate(website, theme, cb){
+                templateDao.getById(templateId, function(err, template){
+                    if(err) {
+                        self.log.error('Error getting template:', err);
+                        cb(err);
+                    } else {
+                        cb(null, website, theme, template);
+                    }
+                });
+            },
+            function createPage(website, theme, template, cb){
+                var page = new $$.m.ssb.Page({
+                    accountId:accountId,
+                    websiteId:websiteId,
+                    handle:pageName,
+                    visibility: {
+                        visible:false,
+                        asOf:null,
+                        displayOn:null
+                    },
+                    sections: template.get('defaultSections'),
+                    templateId: templateId,
+                    created: created,
+                    modified:created
+
+                });
+                pageDao.saveOrUpdate(page, function(err, value){
+                    if(err) {
+                        self.log.error('Error creating page:', err);
+                        cb(err);
+                    } else {
+                        cb(null, value);
+                    }
+                });
+            }
+        ], function done(err, page){
+            if(err) {
+                fn(err, null);
+            } else {
+                self.log.debug('<< createPage');
+                fn(null, page);
+            }
+        });
 
     }
 };
