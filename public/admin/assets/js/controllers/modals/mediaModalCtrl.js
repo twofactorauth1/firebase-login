@@ -6,7 +6,7 @@ app.controller('MediaModalCtrl', ['$scope', '$modalInstance', '$http', '$timeout
 
   $scope.showInsert = showInsert;
   $scope.loadingAssets = true;
-
+  
   AssetsService.getAssetsByAccount(function (data) {
     if (data instanceof Array) {
       $scope.originalAssets = data.slice(0);
