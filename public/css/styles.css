@@ -4397,7 +4397,7 @@ div[data-type=blog] .container {
 }
 .thumbnail-slider-v1 .carousel-control.right {
   background: none;
-  right: -20px;
+  right: -35px;
 }
 .thumbnail-slider-v1 .carousel-inner {
   max-height: 200px;
@@ -4409,7 +4409,7 @@ div[data-type=blog] .container {
   width: 2%;
 }
 .thumbnail-slider-v1 .carousel-control.left {
-  left: -22px;
+  left: -25px;
 }
 div[data-type="thumbnail-slider"] .inner-page {
   max-width: 100%;

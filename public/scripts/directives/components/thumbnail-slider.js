@@ -11,9 +11,6 @@ app.directive('thumbnailSliderComponent', ['$window', function ($window) {
       scope.showSlider = true;
       scope.bindThumbnailSlider = function (width, is_mobile) {
         var number_of_arr = 4;
-        if (width <= 750 || is_mobile) {
-          number_of_arr = 1;
-        }
         scope.imagesPerPage = number_of_arr;
           scope.slider = partition(scope.component.thumbnailCollection, number_of_arr);
         if (scope.slider.length > 1)
