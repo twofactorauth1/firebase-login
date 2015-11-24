@@ -30,7 +30,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
 
     initialize: function() {
 
-        app.get("/*", [sitemigration_middleware.checkForRedirect, this.setup.bind(this)], this.optimizedIndex.bind(this));
+        app.get("/:page", [sitemigration_middleware.checkForRedirect, this.setup.bind(this)], this.optimizedIndex.bind(this));
 
         return this;
     },

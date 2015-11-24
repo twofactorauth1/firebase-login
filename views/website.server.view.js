@@ -186,29 +186,34 @@ _.extend(view.prototype, BaseView.prototype, {
             },
             function readComponents(webpageData, page, cb) {
                 data.templates = '';
-                _.each(page.get('components'), function(component, index){
-                    var divName = self.getDirectiveNameDivByType(component.type);
-                    data.templates = data.templates + divName + ' component="components_' + index + '"></div>';
-                });
-
-                data.templateIncludes = [];
-                data.templateIncludes[0] = {id:'/components/component-wrap.html'};
-                fs.readFile('public/components/component-wrap.html', 'utf8', function(err, html){
-                    data.templateIncludes[0].data = html;
-
-                    async.each(page.get('components'), function(component, cb){
-                        // /components/'+component.type+'_v'+component.version+'.html
-                        var obj = {};
-                        obj.id = '/components/' + component.type + '_v' + component.version + '.html';
-                        fs.readFile('public' + obj.id, 'utf8', function(err, html){
-                            obj.data = html;
-                            data.templateIncludes.push(obj);
-                            cb();
-                        });
-                    }, function done(err){
-                        cb(null, webpageData, page);
+                if(page) {
+                    _.each(page.get('components'), function(component, index){
+                        var divName = self.getDirectiveNameDivByType(component.type);
+                        data.templates = data.templates + divName + ' component="components_' + index + '"></div>';
                     });
-                });
+
+                    data.templateIncludes = [];
+                    data.templateIncludes[0] = {id:'/components/component-wrap.html'};
+                    fs.readFile('public/components/component-wrap.html', 'utf8', function(err, html){
+                        data.templateIncludes[0].data = html;
+
+                        async.each(page.get('components'), function(component, cb){
+                            // /components/'+component.type+'_v'+component.version+'.html
+                            var obj = {};
+                            obj.id = '/components/' + component.type + '_v' + component.version + '.html';
+                            fs.readFile('public' + obj.id, 'utf8', function(err, html){
+                                obj.data = html;
+                                data.templateIncludes.push(obj);
+                                cb();
+                            });
+                        }, function done(err){
+                            cb(null, webpageData, page);
+                        });
+                    });
+                } else {
+                    cb('Could not find ' + handle);
+                }
+
             },
 
             function(value, page, cb) {
