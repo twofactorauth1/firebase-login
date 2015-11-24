@@ -1,13 +1,35 @@
+<div ng-controller="SiteBuilderController as vm" class="pages">
+  <section id="page-title" class="padding-top-15 padding-bottom-15">
+    <div class="row">
+        <div class="col-sm-8">
+            <h1 class="mainTitle">Simple Site Builder</h1>
+            <span ng-if="vm.state.website.themeId" class="mainDescription">You're currently using the {{vm.state.website.themeId}} theme.</span>
+            <span ng-if="!vm.state.website.themeId" class="mainDescription">You're currently using the <b><i>Default</i></b> theme. Customize the look and feel of your website by selecting a theme.</span>
+        </div>
+        <div ncy-breadcrumb></div>
+    </div>
+  </section>
+  <section>
+    <ui-select ng-model="vm.state.website.themeId" ng-change="vm.applyThemeToPage($select.selected)" theme="bootstrap">
+      <ui-select-match placeholder="Select a theme">
+          <small ng-bind-html="$select.selected.name"></small>
+      </ui-select-match>
+      <ui-select-choices repeat="theme._id as theme in vm.state.themes | filter: $select.search track by $index">
+          <small ng-bind-html="theme.name | highlight: $select.search"></small>
+      </ui-select-choices>
+    </ui-select>
+  </section>
+</div>
+
 <div ng-controller="PagesCtrl" class="pages">
-    <indig-onboarding min-requirements="minRequirements"></indig-onboarding>
+    <!-- <indig-onboarding min-requirements="minRequirements"></indig-onboarding> -->
     <!-- start: PAGE TITLE -->
     <section id="page-title" class="padding-top-15 padding-bottom-15">
         <div class="row">
             <div class="col-sm-8">
-                <h1 class="mainTitle">Simple Site Builder Pages</h1>
+                <h1 class="mainTitle">Pages</h1>
                 <span ng-if="pages" class="mainDescription">There are currently {{pages.length}} pages.</span>
             </div>
-            <div ncy-breadcrumb></div>
         </div>
     </section>
     <!-- end: PAGE TITLE -->
@@ -124,6 +146,7 @@
     </div>
     <!-- end: CONTENT -->
     <!-- start: NEW PAGE MODAL -->
+    <div data-ng-include data-src=" 'assets/views/partials/ssb-select-theme-modal.html' " ></div>
     <div data-ng-include data-src=" 'assets/views/partials/new-page-modal.html' " ></div>
     <div id="blueimp-gallery" class="blueimp-gallery">
             <!-- The container for the modal slides -->
@@ -136,7 +159,7 @@
             <a class="next">›</a>
             <a class="close">×</a>
             <a class="play-pause"></a>
-           
+
             <!-- The modal dialog, which will be used to wrap the lightbox content -->
             <div class="modal fade">
                 <div class="modal-dialog">

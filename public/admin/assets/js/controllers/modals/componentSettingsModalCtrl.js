@@ -2,7 +2,7 @@
 /*global app, moment, angular, window*/
 /*jslint unparam:true*/
 
-app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalInstance', '$http', '$timeout', '$q', '$compile', '$filter', 'WebsiteService', 'CustomerService', 'ProductService', 'GeocodeService', 'toaster', 'hoursConstant', 'components', 'clickedIndex', 'contactMap', 'website', 'blog', 'isDirty', 'isSinglePost', 'openParentModal', 'showInsert', 'blogImage', 'accountShowHide', 'CampaignService', 'testimonialSlider', 'isEmail', function ($scope, $rootScope, $modalInstance, $http, $timeout, $q, $compile, $filter, WebsiteService, CustomerService, ProductService, GeocodeService, toaster, hoursConstant, components, clickedIndex, contactMap, website, blog, isDirty, isSinglePost, openParentModal, showInsert, blogImage, accountShowHide, CampaignService, testimonialSlider, isEmail) {
+app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalInstance', '$http', '$timeout', '$q', '$compile', '$filter', 'WebsiteService', 'CustomerService', 'ProductService', 'GeocodeService', 'toaster', 'hoursConstant', 'components', 'clickedIndex', 'contactMap', 'website', 'blog', 'isDirty', 'isSinglePost', 'openParentModal', 'showInsert', 'blogImage', 'accountShowHide', 'CampaignService', 'testimonialSlider', 'websiteLinks', 'isEmail', function ($scope, $rootScope, $modalInstance, $http, $timeout, $q, $compile, $filter, WebsiteService, CustomerService, ProductService, GeocodeService, toaster, hoursConstant, components, clickedIndex, contactMap, website, blog, isDirty, isSinglePost, openParentModal, showInsert, blogImage, accountShowHide, CampaignService, testimonialSlider, websiteLinks, isEmail) {
 
   $scope.blog = {};
   $scope.components = components;
@@ -24,6 +24,7 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
   $scope.isEmail = isEmail;
   $scope.testimonialSlider = testimonialSlider;
   $scope.emailLoaded = false;
+  $scope.websiteLinks = websiteLinks;
 
   /*
    * @getPages
@@ -549,8 +550,10 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
         if (value.handle === "head-menu") {
           value.links.splice(index, 1);
           setTimeout(function () {
-            $scope.updateLinkList();
-          }, 1000);
+              $scope.$apply(function () {
+                $scope.updateLinkList();
+              })            
+          }, 500);
         }
       });
     } else {
@@ -558,8 +561,10 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
         if (value.handle === "head-menu") {
           value.links.splice(index, 1);
           setTimeout(function () {
-            $scope.updateLinkList();
-          }, 1000);
+              $scope.$apply(function () {
+                $scope.updateLinkList();
+              })            
+          }, 500);
         }
       });
     }
@@ -615,8 +620,10 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
 
     }
     setTimeout(function () {
-      $scope.updateLinkList();
-    }, 1000);
+        $scope.$apply(function () {
+          $scope.updateLinkList();
+        })            
+    }, 500);
   };
 
   /*
@@ -665,6 +672,8 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
             });
             if (newLinkListOrder.length) {
               $scope.website.linkLists[index].links = newLinkListOrder;
+              if($scope.websiteLinks && $scope.websiteLinks.refreshWebsiteLinks)
+                $scope.websiteLinks.refreshWebsiteLinks($scope.website.linkLists);
             }
 
           }
@@ -737,13 +746,6 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
     });
   };
 
-  $scope.saveComponentVersion = function () {
-    $scope.isDirty.dirty = true;
-    $timeout(function () {
-      $(window).trigger('resize');
-    }, 0);
-  };
-
   $scope.saveComponent = function () {
     $scope.isDirty.dirty = true;
     $timeout(function () {
@@ -769,7 +771,7 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
 
   $scope.saveComponentChanges = function () {
     $scope.isDirty.dirty = true;
-    $timeout(function () {
+    $timeout(function () {      
       $(window).trigger('resize');
     }, 0);
   };
@@ -821,6 +823,16 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
   function replaceHtmlTags(text){
     return text ? String(text).replace(/<br \/>/gm, ' ').replace(/<[^>]+>/gm, '') : "";
   }
+  function setDefualts(){
+    if(!$scope.componentEditing.bg)
+      $scope.componentEditing.bg = {};
+    if($scope.componentEditing.bg && !angular.isDefined($scope.componentEditing.bg.opacity))
+      $scope.componentEditing.bg.opacity = 1;
+
+    if($scope.componentEditing.bg && $scope.componentEditing.bg.img && !angular.isDefined($scope.componentEditing.bg.img.overlayopacity))
+      $scope.componentEditing.bg.img.overlayopacity = 1;
+  }
+ 
   /*
    * @editComponent
    * -
@@ -852,16 +864,9 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
           'mw': mw,
           'usePage': false
         };
-      }
+      } 
 
-      if(!$scope.componentEditing.bg)
-        $scope.componentEditing.bg = {};
-      if($scope.componentEditing.bg && !angular.isDefined($scope.componentEditing.bg.opacity))
-        $scope.componentEditing.bg.opacity = 1;
-
-      if($scope.componentEditing.bg && $scope.componentEditing.bg.img && !angular.isDefined($scope.componentEditing.bg.img.overlayopacity))
-        $scope.componentEditing.bg.img.overlayopacity = 1;
-
+      setDefualts();
 
       if ($scope.componentEditing.type === 'navigation') {
         componentType = _.findWhere($scope.componentTypes, {
@@ -1114,5 +1119,11 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
       $scope.componentEditing.anchor = $filter('slugify')(url);
     }
   };
+
+  $scope.sortNavConfig = {
+      onEnd: function (evt) {
+        $scope.updateLinkList();
+      }
+    };
 
 }]);

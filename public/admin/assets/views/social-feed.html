@@ -294,7 +294,7 @@
                         <!--<select class='form-control mb0' ng-model='twitterCommentProfile' ng-change='setAddCommentAdminPageFn(twitterCommentProfile)'>-->
                             <!--&lt;!&ndash;<option ng-repeat="type in feedTypes" ng-show="type.type=='tw'" value="{{type.socialId}}">{{type.name}}</option>&ndash;&gt;-->
                         <!--</select>-->
-                        <!--"account in tempTrackedAccounts | filter: {'type': 'tw'}-->
+                        <!--account in tempTrackedAccounts | filter: {'type': 'tw'}-->
                         <select class='form-control mb0'>
                             <option ng-repeat="account in tempTrackedAccounts | filter: {'type': 'tw'}" value="account.socialId">{{account.name}}</option>
                         </select>

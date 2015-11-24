@@ -610,6 +610,8 @@ app.constant('JS_REQUIRES', {
 
     'stripe': 'https://js.stripe.com/v2/?tmp',
 
+    'google-fonts': 'https://ajax.googleapis.com/ajax/libs/webfont/1.5.18/webfont.js',
+
     //*** jQuery Plugins
     'perfect-scrollbar-plugin': ['../js/libs/perfect-scrollbar/js/min/perfect-scrollbar.jquery.min.js', '../js/libs/perfect-scrollbar/css/perfect-scrollbar.min.css'],
     'ladda': ['../js/libs/ladda/dist/ladda.min.js', '../js/libs/ladda/dist/ladda-themeless.min.css'],
@@ -657,7 +659,6 @@ app.constant('JS_REQUIRES', {
     'addComponentModalCtrl': 'assets/js/controllers/modals/addComponentModalCtrl.js',
     'componentSettingsModalCtrl': 'assets/js/controllers/modals/componentSettingsModalCtrl.js',
     'ssbComponentSettingsModalCtrl': 'assets/js/controllers/modals/ssbComponentSettingsModalCtrl.js',
-    'SiteBuilderSidebarController': 'assets/js/ssb-site-builder/ssb-sidebar/ssb-sidebar.controller.js',
     'mediaModalCtrl': 'assets/js/controllers/modals/mediaModalCtrl.js',
     'templateSettingsModalCtrl': 'assets/js/controllers/modals/templateSettingsModalCtrl.js',
     'importCustomerModalCtrl': 'assets/js/controllers/modals/importCustomerModalCtrl.js',
@@ -709,6 +710,7 @@ app.constant('JS_REQUIRES', {
 
     //*** Directives
     'mediaModal': 'assets/js/directives/mediadirective.js',
+
 
 
   },

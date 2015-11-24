@@ -591,6 +591,21 @@
         });
     };
 
+    this.bulkDeletePosts = function (pageId, postIds, fn) {
+      var apiUrl = baseUrl + ['cms', 'page', pageId, 'blogposts'].join('/');
+      $http({
+        url: apiUrl,
+        method: "POST",
+        data: {id: postIds}, 
+      })
+      .success(function (data, status, headers, config) {
+        fn(data);
+      }).error(function (err) {
+        console.warn('END:Delete Page with ERROR', err);
+        fn(err);
+      });
+    };
+
     this.getTemplates = function (fn) {
       var apiUrl = baseUrl + ['cms', 'template'].join('/');
       $http.get(apiUrl)

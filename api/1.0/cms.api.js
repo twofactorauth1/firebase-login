@@ -125,6 +125,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.post(this.url('page/:id/blog/:postId'), this.isAuthAndSubscribedApi.bind(this), this.updateBlogPost.bind(this));
         app.put(this.url('page/:id/blog/:postId'), this.isAuthAndSubscribedApi.bind(this), this.updateBlogPost.bind(this));
         app.delete(this.url('page/:id/blog/:postId'), this.isAuthAndSubscribedApi.bind(this), this.deleteBlogPost.bind(this));
+        app.post(this.url('page/:id/blogposts'), this.isAuthAndSubscribedApi.bind(this), this.bulkDeleteBlogPost.bind(this));
         app.get(this.url('page/:id/blog/author/:author'), this.setup.bind(this), this.getPostsByAuthor.bind(this));
         app.get(this.url('page/:id/blog/title/:title'), this.setup.bind(this), this.getPostsByTitle.bind(this));
         app.get(this.url('page/:id/blog/content/:content'), this.setup.bind(this), this.getPostsByContent.bind(this));
@@ -1738,6 +1739,28 @@ _.extend(api.prototype, baseApi.prototype, {
                 cmsManager.deleteBlogPost(accountId, pageId, blogPostId, function (err, value) {
                     self.log.debug('<< deleteBlogPost');
                     self.sendResultOrError(res, err, {deleted:true}, "Error deleting Blog Post");
+                    self.createUserActivity(req, 'DELETE_BLOGPOST', null, null, function(){});
+                    self = null;
+                });
+            }
+        });
+
+    },
+
+    bulkDeleteBlogPost: function(req, res) {
+        var self = this;
+        self.log.debug('>> deleteBlogPost');
+        var accountId = parseInt(self.accountId(req));
+
+        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                var blogPostIds = req.body.id;
+                var pageId = req.params.id;                
+                cmsManager.bulkDeleteBlogPost(accountId, pageId, blogPostIds, function (err, value) {
+                    self.log.debug('<< bulkDeleteBlogPost');
+                    self.sendResultOrError(res, err, {deleted:true}, "Error deleting Blog Post(s)");
                     self.createUserActivity(req, 'DELETE_BLOGPOST', null, null, function(){});
                     self = null;
                 });

@@ -18,6 +18,7 @@ var authenticationDao = require('../dao/authentication.dao');
 var fs = require('fs');
 var userActivityManager = require('../useractivities/useractivity_manager');
 var sitemigration_middleware = require('../sitemigration/middleware/sitemigration_middleware');
+//var pagecacheManager = require('../cms/pagecache_manager');
 
 var router = function() {
     this.init.apply(this, arguments);
@@ -28,29 +29,20 @@ _.extend(router.prototype, BaseRouter.prototype, {
     base: "home",
 
     initialize: function() {
-        app.get("/", this.setup.bind(this), this.index.bind(this));
+        app.get("/", this.setup.bind(this), this.optimizedIndex.bind(this));
 
-        //send all routes to index and let the app router to navigate to the appropiate view
-        app.get("/index", this.setup.bind(this), this.index.bind(this));
-        app.get("/blog", this.setup.bind(this), this.index.bind(this));
-        app.get("/blog/*", this.setup.bind(this), this.index.bind(this));
-        app.get("/tag/*", this.setup.bind(this), this.index.bind(this));
-        app.get("/category/*", this.setup.bind(this), this.index.bind(this));
-        app.get("/author/*", this.setup.bind(this), this.index.bind(this));
-        app.get("/page/*", [sitemigration_middleware.checkForRedirect, this.setup.bind(this)], this.index.bind(this));
-        app.get("/signup", this.setupForSocialSignup.bind(this), this.index.bind(this));
-        app.get("/post", this.setup.bind(this), this.index.bind(this));
+        //send all routes to index and let the app router to navigate to the appropriate view
+        app.get("/index", this.setup.bind(this), this.optimizedIndex.bind(this));
+        app.get("/blog", this.setup.bind(this), this.optimizedIndex.bind(this));
+        app.get("/blog/*", this.setup.bind(this), this.optimizedIndex.bind(this));
+        app.get("/tag/*", this.setup.bind(this), this.optimizedIndex.bind(this));
+        app.get("/category/*", this.setup.bind(this), this.optimizedIndex.bind(this));
+        app.get("/author/*", this.setup.bind(this), this.optimizedIndex.bind(this));
+        app.get("/page/*", [sitemigration_middleware.checkForRedirect, this.setup.bind(this)], this.optimizedIndex.bind(this));
+        app.get("/signup", this.setupForSocialSignup.bind(this), this.optimizedIndex.bind(this));
+        app.get("/post", this.setup.bind(this), this.optimizedIndex.bind(this));
 
         app.get("/index_temp_page", this.setup.bind(this), this.indexTempPage.bind(this));
-        // app.get("/page/blog", this.setup, this.showMainBlog.bind(this));
-        // app.get("/page/:page", this.setup, this.showWebsitePage.bind(this));
-
-        // app.get("/page/blog/:posturl", this.setup, this.showBlogPage.bind(this));
-        // app.get("/page/tag/:tag", this.setup, this.showTagPage.bind(this));
-        // app.get("/page/author/:author", this.setup, this.showAuthorPage.bind(this));
-        // app.get("/page/category/:category", this.setup, this.showCategoryPage.bind(this));
-
-//        app.post("/signupnews", this.signUpNews.bind(this));
 
         app.get("/home", this.isHomeAuth.bind(this), this.showHome.bind(this));
         app.get("/home/*", this.isHomeAuth.bind(this), this.showHome.bind(this));
@@ -68,8 +60,11 @@ _.extend(router.prototype, BaseRouter.prototype, {
 
         app.get('/main/:page', [sitemigration_middleware.checkForRedirect, this.setup.bind(this)], this.serveMainHtml.bind(this));
         app.get('/interim*', this.setup.bind(this), this.serveInterim.bind(this));
-        //app.get("/*", this.setup.bind(this), this.index.bind(this));
 
+        /*
+         * This is a POC route for page caching.
+         */
+        app.get('/cached/:page', this.frontendSetup.bind(this), this.optimizedIndex.bind(this));
         return this;
     },
 
@@ -344,6 +339,33 @@ _.extend(router.prototype, BaseRouter.prototype, {
             });
             
         }
+    },
+
+    /*
+    serveCachedPage: function(req, resp) {
+        var self = this;
+        var accountId = self.unAuthAccountId(req);
+        var pageName = req.params.page;
+        if(pageName.indexOf('.html') === -1) {
+            pageName +=".html";
+        }
+        pagecacheManager.getLocalCachedPageForTesting(accountId, pageName, resp);
+        //pagecacheManager.getCachedPage(accountId, pageName, resp);
+    },
+    */
+
+    optimizedIndex: function(req,resp) {
+        var self = this;
+        var accountId = self.unAuthAccountId(req) || appConfig.mainAccountID;
+        if(accountId === 'new') {//we are on the signup page
+            accountId = appConfig.mainAccountID;
+        }
+        var pageName = req.params.page || 'index';
+        self.log.debug('>> optimizedIndex ' + accountId + ', ' + pageName);
+
+        new WebsiteView(req, resp).renderCachedPage(accountId, pageName);
+
+        self.log.debug('<< optimizedIndex');
     }
 });
 

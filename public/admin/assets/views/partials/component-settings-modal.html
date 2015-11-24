@@ -12,12 +12,12 @@
         </div>
         <div class="modal-body no-padding" ng-class="{hidden: hover}">
             <tabset>
-                <tab ng-if="!isSinglePost" active="true">
+                <tab ng-if="!isSinglePost" active="true" ng-click="refreshSlider()">
                     <tab-heading>
                         <span>Basic</span>
                     </tab-heading>
                     <div class="righstpanelinner">
-                        <div class="form-group">
+                        <div class="form-group" ng-hide="componentEditing.type == 'email-hr'">
                             <label for="colorpicker">Text Color:</label>
                             <span tooltip-placement="top" tooltip-html-unsafe="Text color of component."><i class="fa fa-info-circle" /></span>
                             <div class="pull-right">
@@ -40,7 +40,7 @@
                                 <switch ng-model="componentEditing.shownavbox" class="pull-right" ng-change="saveComponent()"></switch>
                             </div>
                         </div>
-                        <hr ng-show="!componentEditing.bg.img.show" />
+                        <hr ng-hide="componentEditing.type == 'email-hr'" ng-show="!componentEditing.bg.img.show" />
                         <div class="form-group" ng-if="componentEditing.type === 'navigation'">
                             <label>Nav BG Color:</label>
                             <span tooltip-placement="top" tooltip-html-unsafe="Background color of navigation bar."><i class="fa fa-info-circle" /></span>
@@ -516,7 +516,7 @@
                     </div>
                     <div class="clearfix"></div>
                     <div ng-if="!componentEditing.customnav" id="reorderNavBarContainer" class="form-group">
-                        <ul ng-hide="" ng-sortable="barConfig" class="component-sortable" ng-class="{'dragging': dragging}" ng-model="mainMenu.links" class="nav-bar" data-ng-repeat="mainMenu in website.linkLists track by $index" data-ng-if="mainMenu.handle=='head-menu' ">
+                        <ul ng-hide="" ng-sortable="sortNavConfig" class="component-sortable" ng-class="{'dragging': dragging}" ng-model="mainMenu.links" class="nav-bar" data-ng-repeat="mainMenu in website.linkLists track by $index" data-ng-if="mainMenu.handle=='head-menu' ">
                             <li data-ng-repeat="link in mainMenu.links track by $index" class="margin-bottom-10 fragment">
                                 <div class="head-menu-links" data-label="{{link.label}}">
                                     <div class="container-fluid">

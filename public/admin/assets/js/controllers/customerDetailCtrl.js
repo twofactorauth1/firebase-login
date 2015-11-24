@@ -2,7 +2,7 @@
 /*global app, moment, angular, $$*/
 /*jslint unparam:true*/
 (function (angular) {
-  app.controller('CustomerDetailCtrl', ["$scope", "$rootScope", "$location", "$modal", "toaster", "$stateParams", "contactConstant", "CustomerService", "KeenService", "CommonService", "UserService", 'SweetAlert', '$state', 'OrderService', 'formValidations', function ($scope, $rootScope, $location, $modal, toaster, $stateParams, contactConstant, CustomerService, KeenService, CommonService, UserService, SweetAlert, $state, OrderService, formValidations) {
+  app.controller('CustomerDetailCtrl', ["$scope", "$rootScope", "$location", "$modal", "toaster", "$stateParams", "contactConstant", "CustomerService", "KeenService", "CommonService", "UserService", 'SweetAlert', '$state', 'OrderService', 'formValidations', 'orderConstant', function ($scope, $rootScope, $location, $modal, toaster, $stateParams, contactConstant, CustomerService, KeenService, CommonService, UserService, SweetAlert, $state, OrderService, formValidations, orderConstant) {
 
     /*
      * @openModal
@@ -52,6 +52,7 @@
     };
 
     $scope.formValidations = formValidations;
+    $scope.orderConstant = orderConstant;
 
     $scope.ip_geo_address = '';
     $scope.location = {};
@@ -62,9 +63,24 @@
     };
 
     if ($location.search().order) {
-      $scope.redirectToOrder = true;      
+      $scope.redirectToOrder = true;   
+      $scope.orderId=$location.search().id;
+      $stateParams.orderId=$scope.orderId;
+      //alert("orderId: "+$scope.orderId);   
     }
 
+    $scope.backToOrder = function()
+    {
+      if($stateParams.orderId)
+      {
+        window.location = '/admin/#/commerce/orders/' + $stateParams.orderId;
+      }
+      else
+      {
+        window.history.back();
+      }
+      
+    };
     /*
      * @addNote
      * add a note to an order
@@ -113,7 +129,7 @@
      */
     $scope.matchUsers = function (customer) {
       var notes = customer.notes;
-      if (notes.length > 0) {
+      if (notes && notes.length > 0) {
 
         _.each(notes, function (_note) {
           var matchingUser = _.find($scope.users, function (_user) {
@@ -987,6 +1003,10 @@
 
     $scope.$back = function() {
         window.history.back();
+    };
+
+    $scope.formatOrderStatus = function (status) {
+      return OrderService.formatOrderStatus(status);
     };
 
 

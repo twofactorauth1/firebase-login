@@ -11121,6 +11121,10 @@ table.grid thead th {
 table.grid thead tr {
   display: inline-block;
 }
+.table.grid > tbody > tr > td,
+.table.bg-white > tbody > tr > td {
+  cursor: pointer;
+}
 /* ---------------------------------------------------------------------- */
 /*  User profile
 /* ---------------------------------------------------------------------- */
@@ -14172,6 +14176,16 @@ tags-input.ti-input-sm .tags .input,
 }
 .business .multiple-hours .checkbox {
   margin-right: 0px !important;
+}
+.business pre.business-description {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  border: none;
+  background: none;
+  margin: 5px;
+  padding: 0px;
+  table-layout: fixed;
+  width: 100%;
+  display: table;
 }
 /* ---------------------------------------------------------------------- */
 /*   Settings

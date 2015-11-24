@@ -591,8 +591,7 @@
         });
 
       });
-    };
-
+    };    
     /*
      * @statusUpdated
      * the order status has been updated
@@ -603,18 +602,37 @@
         return;
       var toasterMsg = 'Status has been updated to ';
       if (newStatus === postConstant.post_status.PUBLISHED) {
-        WebsiteService.publishPost($scope.page._id, $scope.blog.post._id, function (data) {
-          toaster.pop('success', "Status updated successfully");
-          $scope.blog.post.post_status = newStatus;
-          $scope.postControl.setSinglePost();
+        angular.element('.modal.in').hide();
+        SweetAlert.swal({
+          title: "Are you sure?",
+          text: "Do you want to update status to published",
+          type: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#DD6B55",
+          confirmButtonText: "Yes, update status to published",
+          cancelButtonText: "No, do not update status to published!",
+          closeOnConfirm: false,
+          closeOnCancel: true
+        }, function (isConfirm) {
+        if (isConfirm) {          
+          WebsiteService.publishPost($scope.page._id, $scope.blog.post._id, function (data) {
+            $scope.blog.post.post_status = newStatus;
+            $scope.originalPost = angular.copy($scope.blog.post);
+            $scope.postControl.setSinglePost();
+            toaster.pop('success', "Post saved successfully");
+            SweetAlert.swal("Saved!", "Post status updated successfully.", "success");
+            angular.element('.modal.in').show();
+          });
+        } 
+        else 
+          angular.element('.modal.in').show();
         });
-      } else {
+      }
+      else {
         toaster.pop('success', "Status updated successfully");
         $scope.blog.post.post_status = newStatus;
         $scope.postControl.setSinglePost();
       }
-
-
     };
 
     /*
@@ -841,7 +859,7 @@
     $scope.contactMap = {};
     $scope.blogControl = {};
     $scope.postControl = {};
-
+    $scope.websiteLinks = {};
 
     $scope.insertMedia = function (asset) {
       console.log('$scope.componentEditing ', $scope.componentEditing);
@@ -942,7 +960,7 @@
       var _modal = {
         templateUrl: modal,
         keyboard: false,
-        backdrop: 'static',
+       // backdrop: 'static',
         scope: $scope,
         size: _size || 'md',
       };
@@ -1023,7 +1041,9 @@
         _modal.resolve.testimonialSlider = function () {
           return $scope.testimonialSlider;
         };
-        
+        _modal.resolve.websiteLinks = function () {
+          return $scope.websiteLinks;
+        };
       }
 
       if (angular.isDefined(index) && index !== null && index >= 0) {
@@ -1223,9 +1243,7 @@
       console.log(newValue);
     });
 
-    $scope.createDuplicatePage = function (newPage) {
-      $scope.single_post = false;
-      $scope.post_blog_page = false;
+    $scope.createDuplicatePage = function (newPage) {      
       if ($scope.isPage) {
         newPage.type = "page";
       }
@@ -1242,6 +1260,8 @@
         }
         newPage.components = $scope.page.components;
         WebsiteService.createDuplicatePage(newPage, function (data) {
+          $scope.single_post = false;
+          $scope.post_blog_page = false;
           $scope.duplicate = true;
           $scope.checkForSaveBeforeLeave('/admin/#/website/pages/?pagehandle=' + newPage.handle, true);
         });

@@ -5,7 +5,7 @@
 
     $scope.searchTextValue = {};
     $scope.searchTextValueBy = '$';
-
+    $scope.loaded = false;
     $scope.panesByCat = {
       account: [],
       billing: [],
@@ -33,6 +33,7 @@
         $scope.viewSingle(_topic);
         //$location.search('topic', null);
       } else {
+        $scope.loaded = false;
         $scope.showTopics();
       }
     });
@@ -63,8 +64,8 @@
 
     $scope.isViewed = function (topic) {
       console.log('isViewed >>> ');
-      topic.statistics.views = topic.statistics.views + 1;
-      $scope.updateTopic(topic);
+          topic.statistics.views = topic.statistics.views + 1;
+          $scope.updateTopic(topic);
     };
 
     $scope.isHelpful = function (topic) {
@@ -88,7 +89,9 @@
 
     $scope.viewSingle = function (topic) {
       console.log('viewSingle >>> ', topic);
-      $scope.isViewed(topic);
+      if(!$scope.loaded)          
+        $scope.isViewed(topic);
+      $scope.loaded = true;
       $scope.singleTopic = topic;
       $scope.showSingle = true;
       $location.path('/support/help-topics').search({

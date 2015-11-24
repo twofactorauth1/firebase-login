@@ -1,0 +1,17 @@
+<div>
+
+<ssb-edit-control class="ssb-edit-control" state="vm.state" ui-state="vm.uiState" index="vm.index"></ssb-edit-control>
+
+<section class="ssb-section-layout row {{vm.sectionClass(vm.section)}}" ng-attr-style="{{vm.sectionStyle(vm.section)}}">
+  <ssb-component-loader
+		ng-if="vm.section.components.length"
+		ng-repeat="component in vm.section.components track by $index"
+		ng-class="vm.componentClass($index)"
+		component="component"
+		website="vm.state.website"
+		state="vm.state"
+		ui-state="vm.uiState">
+	</ssb-component-loader>
+</section>
+
+</div>

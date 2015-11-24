@@ -4,32 +4,39 @@
 	// background-color: #5bc0de;
 	display: none;
 	height: 200px;
-    box-shadow: 0px -1px 3px 1px rgba(0, 0, 0, .5);
+  box-shadow: 0px -1px 3px 1px rgba(0, 0, 0, .5);
 
-    // h5 {
-    //     margin: 1.75em 0 0;
-    // }
+  img {
+      max-width: 100%;
+  }
 
-    img {
-        max-width: 100%;
+  .list-unstyled {
+      margin-bottom: 0;
+  }
+
+  .tooltip {
+      z-index: 99999;
+  }
+
+  .partition-light-primary {
+
+    [class^="col-"],
+    [class*=" col-"] {
+      padding: 0;
     }
 
-    .list-unstyled {
-        margin-bottom: 0;
+    .lead {
+      font-size: 13px;
     }
 
-    .tooltip {
-        z-index: 99999;
-    }
+  }
 
 	@media (min-width: 768px) {
-    	// float: left;
-    	position: fixed;
-    	width: 25%;
-        height: ~"calc(100% - 120px)";
-    }
-
-
+  	// float: left;
+  	position: fixed;
+  	width: 25%;
+    height: ~"calc(100% - 120px)";
+  }
 }
 
 .ssb-sidebar.ssb-sidebar-show {
@@ -96,6 +103,16 @@
     border-top: 1px solid #E7EAEA;
     border-bottom: 1px solid #E7EAEA;
     margin: 0;
+
+    .ssb-sidebar-item-icon {
+        right: .5em;
+    }
+}
+
+.ssb-sidebar-settings-heading {
+    text-decoration: underline;
+    font-family: Helvetica, Arial, sans-serif;
+    margin: 1em 0;
 }
 
 .ssb-page-section-settings-item > .panel-group {
@@ -131,6 +148,11 @@
 }
 
 .ssb-settings-list {
+
+    background: white;
+    margin: 0;
+    padding: 1em 0 1.5em;
+
     li {
         padding: 1em 1em 0;
     }
@@ -168,6 +190,11 @@
         line-height: 20px;
         padding: 10px;
         position: relative;
+
+        .ssb-sidebar-component-open {
+            color: orange;
+            font-weight: 600;
+        }
     }
 
     &.ssb-sidebar-section-open > .panel-heading .panel-title a {
@@ -177,7 +204,23 @@
 
 }
 
+.ssb-sidebar-sortable-item-component {
+    border: 1px solid #ddd!important;
+    border-width: 1px 1px 0 1px!important;
+}
+
 .sortable-chosen .panel-heading .panel-title a {
     background: #ddd;
     color: #fff;
+}
+
+.ssb-sidebar-component-list {
+    .panel-body {
+        cursor: pointer;
+    }
+}
+
+.btn-ssb-remove-component {
+    width: auto;
+    margin: 1em auto;
 }

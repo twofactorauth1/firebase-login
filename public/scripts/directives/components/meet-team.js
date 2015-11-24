@@ -30,6 +30,14 @@ app.directive('meetTeamComponent',["$window", function ($window) {
 			  scope.resizeTeamTiles();
 			}, 2000)
 		});
+		
+		// Special case for our join our team page.
+		scope.gotoPage = function(team){
+			if(team.joinOurTeam){
+				var url = "https://indigenous.io/careers";
+				window.location = url;
+			}
+		}
     }
   }
 }]);

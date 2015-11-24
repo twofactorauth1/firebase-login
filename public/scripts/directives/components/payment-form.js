@@ -12,6 +12,7 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
             //scope.domainExistsAlready = false;  // needs to be undefined to begin with
             scope.emptyBusinessName = false;
             scope.validBusinessName = true;
+            scope.dotComExt = false;
 
             UserService.getTmpAccount(function(data) {
                 scope.tmpAccount = data;
@@ -272,7 +273,27 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                                             window.location = data.accountUrl;
                                         });
 
+                                        if (!_gaw.loaded) {
+                                            var adWordsInjectable =
+                                                'var google_conversion_id = 941009161;' +
+                                                'var google_conversion_language = "en";' +
+                                                'var google_conversion_format = "3";' +
+                                                'var google_conversion_color = "ffffff";' +
+                                                'var google_conversion_label = "eRTgCNSRo2EQidLawAM";' +
+                                                'var google_remarketing_only = false;';
 
+                                            var gaw_vars = document.createElement('script');
+                                            gaw_vars.type = 'text/javascript';
+                                            gaw_vars.innerText = adWordsInjectable;
+                                            document.getElementsByTagName('head')[0].appendChild(gaw_vars);
+
+                                            var gaw_scr = document.createElement('script');
+                                            gaw_scr.type = 'text/javascript';
+                                            gaw_scr.src = '//www.googleadservices.com/pagead/conversion.js';
+                                            document.getElementsByTagName('head')[0].appendChild(gaw_scr);
+
+                                            _gaw.loaded = true;
+                                        }
                                     } else {
                                         window.location = data.accountUrl;
                                     }
@@ -525,7 +546,16 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                 else {
                     scope.emptyBusinessName = false;
 
-                    var name = $.trim(newAccount.businessName).replace(" ", "").replace(".", "_").replace("@", "");
+                    var name = $.trim(newAccount.businessName);
+
+                    var comExtension = ".com";
+                    if(new RegExp("\\b"+comExtension+"\\b").test(name))
+                    {
+                        scope.dotComExt = true;
+                    }
+                    name = name.replace(" ", "").replace(".", "_").replace("@", "");
+
+                    newAccount.businessName = name;
                     UserService.checkDomainExists(name, function(domainAvailable) {
                         scope.domainExistsAlready = domainAvailable==='false';
 

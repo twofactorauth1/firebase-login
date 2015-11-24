@@ -816,7 +816,7 @@
 			}
 			else {
 				if ( align == 'none' )
-					wrapper.removeStyle( 'float' );
+					wrapper && wrapper.removeStyle( 'float' );
 				else
 					wrapper && wrapper.setStyle( 'float', align );
 

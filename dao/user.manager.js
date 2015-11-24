@@ -432,6 +432,19 @@ module.exports = {
                 });
             },
             function stepEight(accountId, user, callback){
+                log.debug('Updating email notifications');
+                accountDao.getAccountByID(accountId, function(err, updatedAccount){
+                    cmsManager.updateEmailsByAccountId(accountId, user.get("email"), updatedAccount.get("business").name, function(err, value) {
+                        if (err) {
+                            log.error('Error updating emails: ' + err);
+                            fn(err, null);
+                        } else {
+                            callback(null, accountId, user);
+                        }
+                    });
+                });
+            },
+            function stepNine(accountId, user, callback){
                 //pick up updated account
                 accountDao.getAccountByID(accountId, function(err, updatedAccount){
                     var businessObj = updatedAccount.get('business');

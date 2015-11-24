@@ -578,6 +578,8 @@
         $scope.emailToSend.replyTo = $scope.emailToSendPrevious.replyTo;
       } else {
         $scope.emailToSend = $scope.emailToSendPrevious;
+        if($scope.newCampaignObj.steps && $scope.newCampaignObj.steps[0] && $scope.newCampaignObj.steps[0].settings && !$scope.newCampaignObj.steps[0].settings.emailId && $scope.emailToSendPrevious)
+          $scope.newCampaignObj.steps[0].settings.emailId = $scope.emailToSendPrevious._id
       }
     }
 
