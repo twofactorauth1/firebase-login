@@ -122,6 +122,7 @@ module.exports = {
                 });
             },
             function createPage(website, theme, template, cb){
+                //TODO: make sure this name is unique
                 var pageName = template.get('name') + '-' + $$.u.idutils.generateUniqueAlphaNumeric(5, true, true);
 
                 var page = new $$.m.ssb.Page({
@@ -157,5 +158,25 @@ module.exports = {
             }
         });
 
+    },
+
+    getPage: function(accountId, pageId, fn) {
+        var self = this;
+        self.log.debug('>> getPage');
+
+        pageDao.getPageById(accountId, pageId, function(err, page){
+            if(err) {
+                self.log.error('Error getting page:', err);
+                return fn(err, null);
+            } else {
+                self.log.debug('<< getPage');
+                return fn(null, page);
+            }
+        });
+    },
+
+    updatePage: function(accountId, pageId, page, modified, fn) {
+        var self = this;
+        self.log.debug('>> updatePage');
     }
 };

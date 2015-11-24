@@ -58,8 +58,8 @@ _.extend(api.prototype, baseApi.prototype, {
         //PAGE
         app.get(this.url('websites/:id/page'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//get pages
         app.post(this.url('websites/:id/page'), this.isAuthAndSubscribedApi.bind(this), this.createPage.bind(this));//create page
-        app.get(this.url('pages/:id'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//get page
-        app.post(this.url('pages/:id'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//update page
+        app.get(this.url('pages/:id'), this.isAuthAndSubscribedApi.bind(this), this.getPage.bind(this));//get page
+        app.post(this.url('pages/:id'), this.isAuthAndSubscribedApi.bind(this), this.updatePage.bind(this));//update page
         app.delete(this.url('pages/:id'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//delete page
 
         app.get(this.url('pages/:id/template'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//get page template
@@ -176,6 +176,44 @@ _.extend(api.prototype, baseApi.prototype, {
             }
         });
 
+    },
+
+    getPage: function(req, resp) {
+        var self = this;
+        self.log.debug('>> getPage');
+        var accountId = parseInt(self.accountId(req));
+        var pageId = req.params.id;
+
+        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                ssbManager.getPage(accountId, pageId, function(err, page){
+                    self.log.debug('<< getPage');
+                    return self.sendResultOrError(resp, err, page, "Error fetching page");
+                });
+            }
+        });
+    },
+
+    updatePage: function(req, resp) {
+        var self = this;
+        self.log.debug('>> updatePage');
+        var accountId = parseInt(self.accountId(req));
+        var pageId = req.params.id;
+        var updatedPage = new $$.m.ssb.Page(req.body);
+
+        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                var modified = {date: new Date(), by:self.userId(req)};
+                ssbManager.updatePage(accountId, pageId, updatedPage, modified, function(err, page){
+                    self.log.debug('<< getPage');
+                    return self.sendResultOrError(resp, err, page, "Error fetching page");
+                });
+            }
+        });
     }
 
 
