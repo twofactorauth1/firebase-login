@@ -6,7 +6,9 @@ var templateDao = require('./dao/template.dao');
 var themeDao = require('./dao/theme.dao');
 var websiteDao = require('./dao/website.dao');
 var pageDao = require('./dao/page.dao');
+var sectionDao = require('./dao/section.dao');
 var async = require('async');
+var slug = require('slug');
 
 module.exports = {
     log: logger,
@@ -121,19 +123,50 @@ module.exports = {
                     }
                 });
             },
-            function createPage(website, theme, template, cb){
-                var pageName = template.get('name') + '-' + $$.u.idutils.generateUniqueAlphaNumeric(5, true, true);
+            function createSections(website, theme, template, cb) {
+                var sections = template.get('sections');
+
+                _.each(sections, function(section){
+                    var id = $$.u.idutils.generateUUID();
+                    section._id = id;
+                    section.anchor = id;
+                    section.accountId = accountId;
+                });
+                sectionDao.saveSections(sections, function(err, sectionAry){
+                    if(err) {
+                        self.log.error('Error saving default sections:', err);
+                        cb(err);
+                    } else {
+                        cb(null, website, theme, template, sectionAry);
+                    }
+                });
+            },
+            function createPage(website, theme, template, sections, cb){
+                //TODO: make sure this name is unique
+                //var pageName = slug(template.get('name') + '-' + $$.u.idutils.generateUniqueAlphaNumeric(5, true, true));
+
+                var pageHandle = slug(template.get('handle')) +  '-' + $$.u.idutils.generateUniqueAlphaNumeric(5, true, true);
+                var pageTitle = template.get('name');
+
+
+
+
+                var jsonSections = [];
+                _.each(sections, function(section){
+                    jsonSections.push(section.toReference());
+                });
 
                 var page = new $$.m.ssb.Page({
                     accountId:accountId,
                     websiteId:websiteId,
-                    handle:pageName,
+                    handle:pageHandle,
+                    title: pageTitle,
                     visibility: {
                         visible:false,
                         asOf:null,
                         displayOn:null
                     },
-                    sections: template.get('defaultSections'),
+                    sections: jsonSections,
                     templateId: templateId,
                     created: created,
                     modified:created
@@ -144,18 +177,48 @@ module.exports = {
                         self.log.error('Error creating page:', err);
                         cb(err);
                     } else {
-                        cb(null, value);
+                        cb(null, value, sections);
                     }
                 });
             }
-        ], function done(err, page){
+        ], function done(err, page, sections){
             if(err) {
                 fn(err, null);
             } else {
+
+                page.set('sections', sections);
+
                 self.log.debug('<< createPage');
                 fn(null, page);
             }
         });
+
+    },
+
+    getPage: function(accountId, pageId, fn) {
+        var self = this;
+        self.log.debug('>> getPage');
+
+        pageDao.getPageById(accountId, pageId, function(err, page){
+            if(err) {
+                self.log.error('Error getting page:', err);
+                return fn(err, null);
+            } else {
+                sectionDao.dereferenceSections(page.get('sections'), function(err, sectionAry){
+                    page.set('sections', sectionAry);
+                    self.log.debug('<< getPage');
+                    return fn(null, page);
+                });
+
+            }
+        });
+    },
+
+    updatePage: function(accountId, pageId, page, modified, fn) {
+        var self = this;
+        self.log.debug('>> updatePage');
+
+
 
     }
 };

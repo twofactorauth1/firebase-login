@@ -34,6 +34,10 @@ var section = $$.m.ModelBase.extend({
 
     initialize: function(options) {
 
+    },
+
+    toReference: function() {
+        return {_id: this.id()};
     }
 
 

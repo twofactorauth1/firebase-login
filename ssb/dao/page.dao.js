@@ -10,6 +10,12 @@ var page = require('../model/page.js');
 
 var dao = {
 
+    getPageById: function(accountId, pageId, fn) {
+        var self = this;
+        var query = {_id: pageId, accountId:accountId};
+        self.findOne(query, $$.m.ssb.Page, fn);
+    },
+
     options: {
         name: "ssb.page.dao",
         defaultModel: $$.m.ssb.Page
