@@ -6,7 +6,9 @@ var templateDao = require('./dao/template.dao');
 var themeDao = require('./dao/theme.dao');
 var websiteDao = require('./dao/website.dao');
 var pageDao = require('./dao/page.dao');
+var sectionDao = require('./dao/section.dao');
 var async = require('async');
+var slug = require('slug');
 
 module.exports = {
     log: logger,
@@ -121,20 +123,50 @@ module.exports = {
                     }
                 });
             },
-            function createPage(website, theme, template, cb){
+            function createSections(website, theme, template, cb) {
+                var sections = template.get('sections');
+
+                _.each(sections, function(section){
+                    var id = $$.u.idutils.generateUUID();
+                    section._id = id;
+                    section.anchor = id;
+                    section.accountId = accountId;
+                });
+                sectionDao.saveSections(sections, function(err, sectionAry){
+                    if(err) {
+                        self.log.error('Error saving default sections:', err);
+                        cb(err);
+                    } else {
+                        cb(null, website, theme, template, sectionAry);
+                    }
+                });
+            },
+            function createPage(website, theme, template, sections, cb){
                 //TODO: make sure this name is unique
-                var pageName = template.get('name') + '-' + $$.u.idutils.generateUniqueAlphaNumeric(5, true, true);
+                //var pageName = slug(template.get('name') + '-' + $$.u.idutils.generateUniqueAlphaNumeric(5, true, true));
+
+                var pageHandle = slug(template.get('handle')) +  '-' + $$.u.idutils.generateUniqueAlphaNumeric(5, true, true);
+                var pageTitle = template.get('name');
+
+
+
+
+                var jsonSections = [];
+                _.each(sections, function(section){
+                    jsonSections.push(section.toJSON());
+                });
 
                 var page = new $$.m.ssb.Page({
                     accountId:accountId,
                     websiteId:websiteId,
-                    handle:pageName,
+                    handle:pageHandle,
+                    title: pageTitle,
                     visibility: {
                         visible:false,
                         asOf:null,
                         displayOn:null
                     },
-                    sections: template.get('defaultSections'),
+                    sections: sections,
                     templateId: templateId,
                     created: created,
                     modified:created
@@ -178,5 +210,8 @@ module.exports = {
     updatePage: function(accountId, pageId, page, modified, fn) {
         var self = this;
         self.log.debug('>> updatePage');
+
+
+
     }
 };
