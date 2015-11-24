@@ -30,6 +30,23 @@ var dao = {
 
     },
 
+    dereferenceSections: function(sectionAry, fn) {
+        var self = this;
+        var deReffedAry = [];
+        async.each(sectionAry, function(section, cb){
+            self.getById(section._id, $$.m.ssb.Section, function(err, section){
+                if(err) {
+                    cb(err);
+                } else {
+                    deReffedAry.push(section);
+                    cb();
+                }
+            });
+        }, function done(err){
+            fn(err, deReffedAry);
+        });
+    },
+
     options: {
         name: "ssb.section.dao",
         defaultModel: $$.m.ssb.Section

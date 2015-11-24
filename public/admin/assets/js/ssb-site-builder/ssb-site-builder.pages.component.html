@@ -77,7 +77,7 @@
   </section>
 </div>
 
-<div ng-controller="SSBPagesCtrl" class="pages">
+<div ng-controller="SSBPagesCtrl as vm" class="pages">
     <!-- <indig-onboarding min-requirements="minRequirements"></indig-onboarding> -->
     <!-- start: PAGE TITLE -->
     <section id="page-title" class="padding-top-15 padding-bottom-15">
@@ -202,8 +202,8 @@
     </div>
     <!-- end: CONTENT -->
     <!-- start: NEW PAGE MODAL -->
-    <div data-ng-include data-src=" 'assets/views/partials/ssb-select-theme-modal.html' " ></div>
-    <div data-ng-include data-src=" 'assets/views/partials/new-page-modal.html' " ></div>
+    <!-- <div data-ng-include data-src=" 'assets/views/partials/ssb-select-theme-modal.html' " ></div> -->
+    <div data-ng-include data-src=" 'assets/views/partials/ssb-new-page-modal.html' " ></div>
     <div id="blueimp-gallery" class="blueimp-gallery">
             <!-- The container for the modal slides -->
             <div class="slides">

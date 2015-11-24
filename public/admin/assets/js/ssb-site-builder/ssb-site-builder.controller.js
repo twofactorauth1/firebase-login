@@ -91,6 +91,11 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
       vm.state.themes = themes;
     }, true);
 
+    //TODO: optimize this, we dont need to watch since this won't change
+    $scope.$watch(function() { return SimpleSiteBuilderService.templates }, function(templates) {
+      vm.state.templates = templates;
+    }, true);
+
     $rootScope.$on('$stateChangeStart',
         function (event) {
             $rootScope.app.layout.isSidebarClosed = vm.uiState.isSidebarClosed;

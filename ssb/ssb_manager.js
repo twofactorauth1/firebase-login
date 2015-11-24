@@ -153,7 +153,7 @@ module.exports = {
 
                 var jsonSections = [];
                 _.each(sections, function(section){
-                    jsonSections.push(section.toJSON());
+                    jsonSections.push(section.toReference());
                 });
 
                 var page = new $$.m.ssb.Page({
@@ -166,7 +166,7 @@ module.exports = {
                         asOf:null,
                         displayOn:null
                     },
-                    sections: sections,
+                    sections: jsonSections,
                     templateId: templateId,
                     created: created,
                     modified:created
@@ -177,14 +177,17 @@ module.exports = {
                         self.log.error('Error creating page:', err);
                         cb(err);
                     } else {
-                        cb(null, value);
+                        cb(null, value, sections);
                     }
                 });
             }
-        ], function done(err, page){
+        ], function done(err, page, sections){
             if(err) {
                 fn(err, null);
             } else {
+
+                page.set('sections', sections);
+
                 self.log.debug('<< createPage');
                 fn(null, page);
             }
@@ -201,8 +204,12 @@ module.exports = {
                 self.log.error('Error getting page:', err);
                 return fn(err, null);
             } else {
-                self.log.debug('<< getPage');
-                return fn(null, page);
+                sectionDao.dereferenceSections(page.get('sections'), function(err, sectionAry){
+                    page.set('sections', sectionAry);
+                    self.log.debug('<< getPage');
+                    return fn(null, page);
+                });
+
             }
         });
     },
