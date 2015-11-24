@@ -26,10 +26,16 @@ var bowerlockdown = {
 
                         //find the actual version
                         fs.readFile('public/js/libs/' + name + '/.bower.json', 'utf-8', function(err, bowerContent){
-                            var version = JSON.parse(bowerContent).version;
-                            //console.log('should be ' + version);
-                            contentObj.dependencies[name] = version;
-                            callback();
+                            try {
+                                var version = JSON.parse(bowerContent).version;
+                                //console.log('should be ' + version);
+                                contentObj.dependencies[name] = version;
+                                callback();
+                            } catch(exception) {
+                                console.log('Exception for ' + name + ': ' + exception);
+                                callback();
+                            }
+
                         });
                     } else {
                         callback();
