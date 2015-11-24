@@ -1,27 +1,83 @@
 <div ng-controller="SiteBuilderController as vm" class="pages">
   <section id="page-title" class="padding-top-15 padding-bottom-15">
     <div class="row">
-        <div class="col-sm-8">
-            <h1 class="mainTitle">Simple Site Builder</h1>
-            <span ng-if="vm.state.website.themeId" class="mainDescription">You're currently using the {{vm.state.website.themeId}} theme.</span>
-            <span ng-if="!vm.state.website.themeId" class="mainDescription">You're currently using the <b><i>Default</i></b> theme. Customize the look and feel of your website by selecting a theme.</span>
+        <div class="col-xs-12">
+            <h1 class="mainTitle">Site Builder</h1>
+            <span class="mainDescription">You're currently using the <b><i>{{vm.state.website.theme.name || 'Default'}}</i></b> theme. Customize the look and feel of your website by changing the theme.</span>
+
         </div>
         <div ncy-breadcrumb></div>
     </div>
   </section>
   <section>
-    <ui-select ng-model="vm.state.website.themeId" ng-change="vm.applyThemeToPage($select.selected)" theme="bootstrap">
-      <ui-select-match placeholder="Select a theme">
-          <small ng-bind-html="$select.selected.name"></small>
-      </ui-select-match>
-      <ui-select-choices repeat="theme._id as theme in vm.state.themes | filter: $select.search track by $index">
-          <small ng-bind-html="theme.name | highlight: $select.search"></small>
-      </ui-select-choices>
-    </ui-select>
+    <div class="row padding-top-10 margin-bottom-20">
+      <div class="col-xs-12">
+        <div class="col-md-6">
+          <ui-select ng-model="vm.state.website.themeId" ng-change="vm.applyThemeToPage($select.selected)" theme="bootstrap">
+            <ui-select-match placeholder="Select a theme">
+                <small ng-bind-html="$select.selected.name"></small>
+            </ui-select-match>
+            <ui-select-choices repeat="theme._id as theme in vm.state.themes | filter: $select.search track by $index">
+                <small ng-bind-html="theme.name | highlight: $select.search"></small>
+            </ui-select-choices>
+          </ui-select>
+
+          <ul class="list-unstyled panel-body ssb-theme-settings-list">
+            <li class="clearfix">
+              Header Background Color:
+              <div class="ssb-color-swatch" ng-attr-style="background-color: {{vm.state.website.themeOverrides.styles.headerBackgroundColor}};"></div>
+            </li>
+            <li class="clearfix">
+              Body Background Color:
+              <div class="ssb-color-swatch" ng-attr-style="background-color: {{vm.state.website.themeOverrides.styles.bodyBackgroundColor}};"></div>
+            </li>
+            <li class="clearfix">
+              Text Color (Primary):
+              <div class="ssb-color-swatch" ng-attr-style="background-color: {{vm.state.website.themeOverrides.styles.primaryTextColor}};"></div>
+            </li>
+            <li class="clearfix">
+              Text Color (Buttons):
+              <div class="ssb-color-swatch" ng-attr-style="background-color: {{vm.state.website.themeOverrides.styles.primaryBtnTextColor}};"></div>
+            </li>
+            <li class="clearfix">
+              Button Background Color:
+              <div class="ssb-color-swatch" ng-attr-style="background-color: {{vm.state.website.themeOverrides.styles.primaryBtnBackgroundColor}};"></div>
+            </li>
+            <li class="clearfix">
+              Font Stack (Default): <pre>{{vm.state.website.themeOverrides.defaultFontStack}}</pre>
+              <!--
+              <div ng-attr-style="font-family: {{vm.state.website.themeOverrides.defaultFontStack}};font-size: {vm.state.website.themeOverrides.styles.headingSize}};">
+                Young Soul font stack (default)
+              </div>
+              -->
+            </li>
+            <li class="clearfix">
+              Font Stack (Heading): <pre>{{vm.state.website.themeOverrides.headingFontStack}}</pre>
+            </li>
+            <li class="clearfix">
+              Font Stack (Paragraph): <pre>{{vm.state.website.themeOverrides.paragraphFontStack}}</pre>
+            </li>
+            <li class="clearfix">
+              Heading Size: <pre>{{vm.state.website.themeOverrides.styles.headingSize}}</pre>
+            </li>
+            <li class="clearfix">
+              Paragraph Size: <pre>{{vm.state.website.themeOverrides.styles.paragraphSize}}</pre>
+            </li>
+          </ul>
+
+        </div>
+        <div class="col-md-6">
+          <img
+            ng-src="{{vm.state.website.theme.previewImage || 'https://s3.amazonaws.com/indigenous-themes/indimain/ssb-indimain-preview.png'}}"
+            alt="{{vm.state.website.theme.name}}"
+            class="img-responsive ssb-theme-preview-img" />
+        </div>
+      </div>
+    </div>
   </section>
 </div>
 
-<div ng-controller="PagesCtrl" class="pages">
+<div ng-controller="SSBPagesCtrl" class="pages">
     <!-- <indig-onboarding min-requirements="minRequirements"></indig-onboarding> -->
     <!-- start: PAGE TITLE -->
     <section id="page-title" class="padding-top-15 padding-bottom-15">
@@ -59,7 +115,7 @@
                                 <div class="visible-xs margin-bottom-15 clearfix"></div>
                                 <div class="col-xs-12 col-sm-6">
                                     <div class="form-group margin-bottom-0 pull-right">
-                                        <button id="new-page" type="button" class="btn btn-warning btn-wide btn-scroll btn-scroll-top ti ti-plus ng-click-active" ng-click="openModal('new-page-modal')">
+                                        <button id="new-page" type="button" class="btn btn-warning btn-wide btn-scroll btn-scroll-top ti ti-plus ng-click-active" ng-click="openModal('new-page-modal', true)">
                                             <span>New Page</span>
                                         </button>
                                     </div>

@@ -41,7 +41,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, SimpleSiteBuil
     vm.insertMedia = insertMedia;
     vm.addToMainMenu = addToMainMenu;
     vm.showInsert = true;
-    vm.applyThemeToPage = applyThemeToPage;
+    vm.applyThemeToPage = SimpleSiteBuilderService.applyThemeToPage;
     vm.insertMediaCallback = insertMediaCallback;
 
     editableOptions.theme = 'bs3';
@@ -106,24 +106,6 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, SimpleSiteBuil
   	    ]
   	  }
   	};
-
-    function applyThemeToPage(theme) {
-        // Load web font loader
-       if(theme.name !== 'Default')
-       {
-          WebFont.load({
-            google: {
-              families: [theme.defaultFontStack.split(',')[0].replace(/"/g, '')]
-            }
-          });
-          WebFontConfig = {
-            active: function() {
-              sessionStorage.fonts = true;
-            }
-          }
-        }
-        vm.state.website.themeOverrides = theme;
-    }
 
     function insertMedia(asset) {
       vm.insertMediaCallback(asset);

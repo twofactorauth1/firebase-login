@@ -30,6 +30,7 @@
 		ssbService.checkForDuplicatePage = checkForDuplicatePage;
 		ssbService.loading = { value: 0 };
 		ssbService.getThemes = getThemes;
+    ssbService.applyThemeToPage = applyThemeToPage;
 
 
 		function ssbRequest(fn) {
@@ -130,7 +131,7 @@
 						components: [component]
 					};
 
-          defaultSection.name = sectionName(defaultSection) + ' Section';
+          defaultSectionObj.name = sectionName(defaultSectionObj) + ' Section';
 
 					data.sections[i] = defaultSectionObj;
 
@@ -844,6 +845,7 @@
 			var tempThemes = [{
 				_id: '11032028',
 				name: 'Default',
+        previewImage: 'https://s3.amazonaws.com/indigenous-themes/indimain/ssb-indimain-preview.png',
 				styles: {
 					headerBackgroundColor: '#FFFFFF',
 					bodyBackgroundColor: '#FFFFFF',
@@ -861,7 +863,8 @@
 			},
 			{
 				_id: '96751783',
-				name: 'Music - Soft',
+				name: 'Young Soul',
+        previewImage: 'https://s3.amazonaws.com/indigenous-themes/young-soul/young-soul-preview.png',
 				styles: {
 					headerBackgroundColor: '#9ACCCB',
 					bodyBackgroundColor: '#E8E7E7',
@@ -871,8 +874,8 @@
 					headingSize: '16px',
 					paragraphSize: '12px'
 				},
-				defaultFontStack: '"Roboto", Helvetica, Arial, sans-serif', //TODO: use correct google font stack names
-				headingFontStack: '"Roboto", Helvetica, Arial, sans-serif', //TODO: use correct google font stack names
+				defaultFontStack: '"Roboto", Helvetica, Arial, sans-serif',
+				headingFontStack: '"Roboto", Helvetica, Arial, sans-serif',
 				paragraphFontStack: '"Roboto", Helvetica, Arial, sans-serif',
 				defaultSections: [{
 					//
@@ -881,6 +884,7 @@
 			{
 				_id: '123456',
 				name: 'Abril - Fatface',
+        previewImage: 'https://s3.amazonaws.com/indigenous-themes/indimain/ssb-indimain-preview.png',
 				styles: {
 					headerBackgroundColor: '#9ACCCB',
 					bodyBackgroundColor: '#E8E7E7',
@@ -890,8 +894,8 @@
 					headingSize: '16px',
 					paragraphSize: '12px'
 				},
-				defaultFontStack: '"Abril Fatface", fantasy', //TODO: use correct google font stack names
-				headingFontStack: '"Abril Fatface", fantasy', //TODO: use correct google font stack names
+				defaultFontStack: '"Abril Fatface", fantasy',
+				headingFontStack: '"Abril Fatface", fantasy',
 				paragraphFontStack: '"Abril Fatface", fantasy',
 				defaultSections: [{
 					//
@@ -900,6 +904,7 @@
 			{
 				_id: '112233',
 				name: 'Aguafina Script',
+        previewImage: 'https://s3.amazonaws.com/indigenous-themes/indimain/ssb-indimain-preview.png',
 				styles: {
 					headerBackgroundColor: '#9ACCCB',
 					bodyBackgroundColor: '#E8E7E7',
@@ -909,8 +914,8 @@
 					headingSize: '16px',
 					paragraphSize: '12px'
 				},
-				defaultFontStack: '"Aguafina Script", cursive', //TODO: use correct google font stack names
-				headingFontStack: '"Abril Fatface", fantasy', //TODO: use correct google font stack names
+				defaultFontStack: '"Aguafina Script", cursive',
+				headingFontStack: '"Abril Fatface", fantasy',
 				paragraphFontStack: '"Abril Fatface", fantasy',
 				defaultSections: [{
 					//
@@ -955,6 +960,24 @@
 		function getUserSections() {
 			return [];
 		}
+
+    function applyThemeToPage(theme) {
+        // Load web font loader
+       if (theme.name !== 'Default') {
+          WebFont.load({
+            google: {
+              families: [theme.defaultFontStack.split(',')[0].replace(/"/g, '')]
+            }
+          });
+          window.WebFontConfig = {
+            active: function() {
+              sessionStorage.fonts = true;
+            }
+          }
+        }
+        ssbService.website.theme = theme;
+        ssbService.website.themeOverrides = theme;
+    }
 
 
 		(function init() {

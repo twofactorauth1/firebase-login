@@ -38,6 +38,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     vm.insertMedia = insertMedia;
     vm.addFroalaImage = addFroalaImage;
     vm.imageEditor = {};
+    vm.applyThemeToPage = SimpleSiteBuilderService.applyThemeToPage;
 
     $scope.$watch(function() { return SimpleSiteBuilderService.website; }, function(website){
         vm.state.originalWebsite = angular.copy(website);

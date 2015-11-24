@@ -8,6 +8,27 @@
     </div>
     <div class="modal-body pages-modal bg-white" ng-class="{'no-padding pages-padding-top': !templateDetails }">
         <div ng-hide="templateDetails">
+            <div>
+                <div class="single-type margin-bottom-15" ng-click="setTemplateDetails(mockSSBTemplate)">
+                    <div class="col-sm-3 col-xs-12">
+                        <div class="img-wrap">
+                            <a ng-href="https://s3-us-west-2.amazonaws.com/indigenous-admin/blank-temp.png" title="" data-gallery="">
+                                <span style="background: url('https://s3-us-west-2.amazonaws.com/indigenous-admin/blank-temp.png');background-size: cover;height: 65px;background-position: center;border-radius: 5px;border: 1px solid #e7e7e7;display: block;"></span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-sm-8 col-xs-12">
+                        <h4>{{mockSSBTemplate.name}}</h4>
+                        <p>{{mockSSBTemplate.description}}</p>
+                    </div>
+                    <div class="col-sm-1 hidden-xs">
+                        <h1>
+                                        <span class="fa fa-chevron-right"></span>
+                                    </h1>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+            </div>
             <div ng-repeat="template in templates | orderBy:'title'">
                 <div class="single-type margin-bottom-15" ng-click="setTemplateDetails(template)">
                     <div class="col-sm-3 col-xs-12">
