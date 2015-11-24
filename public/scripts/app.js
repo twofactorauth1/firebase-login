@@ -58,8 +58,8 @@ var mainApp = angular
         })
 
       .otherwise({
-        templateUrl: '../views/cache.html',
-        controller: 'CacheCtrl as cacheCtrl'
+            templateUrl: '../views/main.html',
+            controller: 'LayoutCtrl as layout'
       });
 
   }])
