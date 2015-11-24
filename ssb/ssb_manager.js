@@ -96,15 +96,20 @@ module.exports = {
                 });
             },
             function getTheme(website, cb){
-                var themeId = website.get('themeId');
-                themeDao.getById(themeId, function(err, theme){
-                    if(err) {
-                        self.log.error('Error finding theme:', err);
-                        cb(err);
-                    } else {
-                        cb(null, website, theme);
-                    }
-                });
+                if(website.get('themeId')) {
+                    var themeId = website.get('themeId');
+                    themeDao.getById(themeId, function(err, theme){
+                        if(err) {
+                            self.log.error('Error finding theme:', err);
+                            cb(err);
+                        } else {
+                            cb(null, website, theme);
+                        }
+                    });
+                } else {
+                    cb(null, website, null);
+                }
+
             },
             function getTemplate(website, theme, cb){
                 templateDao.getById(templateId, function(err, template){
