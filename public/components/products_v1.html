@@ -37,7 +37,7 @@
                         </div>
                         <div class="caption" ng-style="{'color':component.txtcolor}">
                             <h4 class="pull-right"><span ng-class="{'strikethrough text-small': product.onSaleToday}">{{product.regular_price | currency}}</span><span ng-if="product.onSaleToday">{{product.sale_price | currency}}</span></h4>
-                            <h4 class="title"><a ng-style="{'color':component.txtcolor}" href="#">{{product.name | characters:28 :true}}</a></h4>
+                            <h4 class="title"><a ng-style="{'color':component.txtcolor}" href="#" data-toggle="modal" data-target="#product-details-modal" ng-click="updateSelectedProduct(product)" >{{product.name | characters:28 :true}}</a></h4>
                             <div class="clearfix"></div>
                             <p class="description product-description">{{product.description}}</p>
                         </div>
@@ -382,7 +382,7 @@
                                 <img ng-src="{{selectedProduct.icon}}" class="img-responsive">
                             </div>
                             <div ng-if="!selectedProduct.is_image && selectedProduct.icon" class="img-wrap icon">
-                                <i class="fa {{selectedProduct.icon}}"></i>
+                                <i class="fa {{selectedProduct.icon}} fa-5x"></i>
                             </div>
                             <div ng-if="!selectedProduct.is_image && !selectedProduct.icon" class="img-wrap no-preview">
                                 <h3>No Preview <br> Available</h3>
@@ -396,7 +396,7 @@
                                     <h4 class="title">{{selectedProduct.name}}</h4>
                                     <h4 ng-if="!selectedProduct.hasVariations">{{selectedProduct.regular_price | currency}}</h4>
                                     <h4 ng-if="selectedProduct.hasVariations && matchedVariation">{{matchedVariation.regular_price | currency}}</h4>
-                                    <p class="description">{{selectedProduct.description}}</p>
+                                    
                                     <div class="clearfix"></div>
                                 </div>
                                 <div class="attributes form-horizontal">
@@ -430,22 +430,14 @@
                                 </div>
                             </tab>
                             <tab heading="Addtional Information">
-                                <h4>Static content</h4>
+                            <p class="description">{{selectedProduct.description}}</p>
+                                <!--<h4>Static content</h4>
                                 <p>
                                     Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent.
                                 </p>
                                 <p>
                                     Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua, retro synth master cleanse. Mustache cliche tempor, williamsburg carles vegan helvetica. Reprehenderit butcher retro keffiyeh dreamcatcher synth. Cosby sweater eu banh mi, qui irure terry richardson ex squid. Aliquip placeat salvia cillum iphone. Seitan aliquip quis cardigan american apparel, butcher voluptate nisi qui.
-                                </p>
-                            </tab>
-                            <tab heading="Reviews">
-                                <h4>Static content</h4>
-                                <p>
-                                    Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent.
-                                </p>
-                                <p>
-                                    Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua, retro synth master cleanse. Mustache cliche tempor, williamsburg carles vegan helvetica. Reprehenderit butcher retro keffiyeh dreamcatcher synth. Cosby sweater eu banh mi, qui irure terry richardson ex squid. Aliquip placeat salvia cillum iphone. Seitan aliquip quis cardigan american apparel, butcher voluptate nisi qui.
-                                </p>
+                                </p>-->
                             </tab>
                         </tabset>
                     </div>
