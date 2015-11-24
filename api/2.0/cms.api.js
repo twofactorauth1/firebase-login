@@ -202,6 +202,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var accountId = parseInt(self.accountId(req));
         var pageId = req.params.id;
         var updatedPage = new $$.m.ssb.Page(req.body);
+        updatedPage.set('_id', pageId);//make sure we don't change the ID
 
         self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed) {
             if (isAllowed !== true) {
