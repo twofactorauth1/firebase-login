@@ -76,12 +76,14 @@ app.directive('indigewebSkeuocard',['PaymentService', 'UserService', 'ToasterSer
                          $("#card_name .error").html("Card Name Required");
                          $("#card_name").addClass('has-error');
                          $("#card_name .glyphicon").addClass('glyphicon-remove');
+                         scope.cardNameValidated = false;
                      } else {
                          $("#card_name .error").html("");
                          $("#card_name").removeClass('has-error').addClass('has-success');
                          $("#card_name .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
+                         scope.cardNameValidated = true;
                      }
-                    scope.cardNameValidated = true;
+                    
                 };
 
                 scope.currentYear = new Date().getYear() - 100;

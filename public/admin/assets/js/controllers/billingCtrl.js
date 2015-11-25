@@ -79,6 +79,7 @@
       var begin = ((invoiceCurrentPage - 1) * $scope.invoicePageLimit);
       var end = begin + $scope.invoicePageLimit;
       $scope.pagedInvoices = $scope.invoices.data.slice(begin, end);
+
     };
 
     /*
@@ -96,6 +97,9 @@
     };
     $scope.selectedPlan = {};
     $scope.selectedAddOns = [];
+
+    $scope.customer_id=0;
+    $scope.paymentId=0;
 
     //get plans
     ProductService.getIndigenousProducts(function (products) {
@@ -156,7 +160,6 @@
         return _.contains($scope.selectedAddOns, productId);
         //return false;
     };
-
     /*
      * @chooseFirstTime
      * -
@@ -255,6 +258,7 @@
             ToasterService.processPending();
             ToasterService.processHtmlPending();
           });
+
           PaymentService.getCustomerCards($scope.currentUser.stripeId, function (cards) {
             if (cards.data.length) {
               $scope.hasCard = true;
@@ -286,7 +290,6 @@
         ToasterService.processPending();
         ToasterService.processHtmlPending();
         $scope.account = account;
-        
         $scope.selectedPlan.paymentProcessing = false;
 
         console.warn('BillingCtrl, received account:\n', account);
