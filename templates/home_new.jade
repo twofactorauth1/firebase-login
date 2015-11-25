@@ -9,7 +9,16 @@ block content
             img(src="#{account.business.logo}" style="max-width:300px; max-height:100px; margin: 15px auto; display: block;")
           else
             h1.center.company-title #{account.company.name}
-
+      // start: ADD ACCOUNT BOX
+      if isGroupAdmin
+        .box-login.choose-account
+          form.form-choose-account(action='/addaccount', method='POST')
+            fieldset
+              legend
+                | Add An Account
+              span Subdomain:
+              input(type='text', name='subdomain', id='subdomain')
+              input(type='submit' value='Add')
       // start: LOGIN BOX
       .box-login.choose-account
         form.form-login

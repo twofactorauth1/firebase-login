@@ -8,12 +8,20 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
   $scope.components = $scope.$parent.vm.state.page.components;
   // $scope.openParentModal = openParentModal;
   // $scope.clickedIndex = clickedIndex;
-  $scope.componentEditing = $scope.$parent.vm.uiState.componentEditing;
-  $scope.component = $scope.componentEditing;
+
+  $scope.$parent.$watchGroup(['vm.uiState.activeSectionIndex', 'vm.uiState.activeComponentIndex'], function() {
+    var section = $scope.$parent.vm.state.page.sections[$scope.$parent.vm.uiState.activeSectionIndex];
+    if (section && section.components && section.components[$scope.$parent.vm.uiState.activeComponentIndex]) {
+      $scope.componentEditing = section.components[$scope.$parent.vm.uiState.activeComponentIndex];
+      $scope.component = $scope.componentEditing;
+    }
+  }, true);
+
   // $scope.contactMap = contactMap;
   $scope.website = $scope.$parent.vm.state.website;
+  $scope.originalWebsite = angular.copy($scope.website);
   // $scope.blog.post = blog;
-  // $scope.isDirty = isDirty;
+  $scope.isDirty = {};
   // $scope.isSinglePost = isSinglePost;
   // $scope.showInsert = showInsert;
   // $scope.originalBlog = angular.copy($scope.blog.post);
@@ -27,6 +35,25 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
   $scope.emailLoaded = false;
 
   $scope.availableProductTags = [];
+
+  $scope.barConfig = {
+    animation: 0,
+    handle: '.reorder',
+    draggable: '.fragment',
+    ghostClass: "sortable-ghost",
+    scroll: true,
+    scrollSensitivity: 200,
+    scrollSpeed: 20, // px
+    onSort: function (evt) {
+      // $scope.scrollToComponent(evt.newIndex); TOOD: reimplement
+    },
+    onStart: function (evt) {
+      $scope.dragging = true;
+    },
+    onEnd: function (evt) {
+      $scope.dragging = false;
+    }
+  };
 
   $scope.testOptions = {
     min: 5,
@@ -63,7 +90,7 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
    * @revertComponent
    * -
    */
-  $scope.originalWebsite = angular.copy($scope.website);
+
   $scope.revertComponent = function () {
     if ($scope.componentEditing.type === 'navigation') {
       $scope.website.linkLists = $scope.originalWebsite.linkLists;
@@ -467,6 +494,7 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
   }];
 
 
+
   /*
    * @deleteLinkFromNav
    * -
@@ -641,7 +669,7 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
     }
   };
 
-  $scope.validateGeoAddress = function (fn) {   
+  $scope.validateGeoAddress = function (fn) {
     GeocodeService.validateAddress($scope.componentEditing.location, $scope.locationAddress, function (data, results) {
       if (data && results.length === 1) {
         $timeout(function () {
@@ -668,6 +696,7 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
 
   $scope.saveComponentVersion = function () {
     $scope.$parent.vm.pendingChanges = true;
+    $scope.isDirty.dirty = true;
     $timeout(function () {
       $(window).trigger('resize');
     }, 0);
@@ -675,6 +704,10 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
 
   $scope.saveComponent = function () {
     $scope.$parent.vm.pendingChanges = true;
+    $scope.isDirty.dirty = true;
+    $timeout(function () {
+      $(window).trigger('resize');
+    }, 0);
   };
 
   $scope.saveContactComponent = function (is_address) {
@@ -686,15 +719,18 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
       $scope.contactMap.refreshHours();
     }
     $scope.$parent.vm.pendingChanges = true;
+    $scope.isDirty.dirty = true;
   };
 
   $scope.saveTestimonialComponent = function () {
     $scope.$parent.vm.pendingChanges = true;
+    $scope.isDirty.dirty = true;
     $scope.testimonialSlider.refreshSlider();
   };
 
   $scope.saveComponentChanges = function () {
     $scope.$parent.vm.pendingChanges = true;
+    $scope.isDirty.dirty = true;
     $timeout(function () {
       $(window).trigger('resize');
     }, 0);
@@ -803,7 +839,7 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
       if (componentType && componentType.title) {
         $scope.componentEditing.header_title = componentType.title;
       }
-    
+
       if ($scope.componentEditing.type === "simple-form") {
         if (!$scope.componentEditing.fields.length) {
           $scope.componentEditing.fields.push({
@@ -830,7 +866,7 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
         $scope.hours = hoursConstant;
         if(!angular.isDefined($scope.componentEditing.boxOpacity)){
           $scope.componentEditing.boxOpacity = 1;
-        }     
+        }
 
         $scope.place.address = GeocodeService.stringifyAddress($scope.componentEditing.location);
         $scope.originalContactMap = angular.copy($scope.componentEditing.location);
@@ -852,9 +888,9 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
             }
           });
         }
-      }    
+      }
     }
-    
+
     $scope.contactHoursInvalid = false;
     $scope.contactHours = [];
     var i = 0;
@@ -866,6 +902,7 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
 
     if ($scope.componentEditing) {
       WebsiteService.getComponentVersions($scope.componentEditing.type, function (versions) {
+        debugger; //versions arent being populated in the advanced tab?
         $scope.componentEditingVersions = versions;
         if ($scope.componentEditing && $scope.componentEditing.version) {
           $scope.componentEditing.version = $scope.componentEditing.version.toString();
@@ -892,7 +929,7 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
     });
 
 
-    // $modalInstance.opened.then(function(){     
+    // $modalInstance.opened.then(function(){
       $timeout(function () {
         $rootScope.$broadcast('rzSliderForceRender');
         $scope.originalComponent = angular.copy($scope.componentEditing);
@@ -918,7 +955,7 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
   };
   $scope.fillInAddress = function (place) {
     // Get each component of the address from the place details
-    // and fill the corresponding field on the form. 
+    // and fill the corresponding field on the form.
     $scope.setDefaultAddress();
     var i = 0;
     var addressType, val;
@@ -957,7 +994,7 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
 
   /*
    * @validateHours
-   * 
+   *
    */
 
   $scope.validateHours = function (hours, index) {
@@ -1045,7 +1082,7 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
           arr.push(page);
         });
         $scope.allPages = arr;
-        
+
         AccountService.getAccount(function(data) {
           if (!data.showhide.blog) {
             var _blogPage = _.findWhere($scope.allPages, {
@@ -1066,7 +1103,7 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
           $scope.emailLoaded = true;
         }, 0);
         console.log("Emails loaded");
-        
+
         $scope.emails = emails;
 
         //select the default email for simple form as welcome-aboard

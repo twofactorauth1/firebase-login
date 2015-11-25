@@ -27,7 +27,7 @@ app.directive('videoComponent', ['$sce', function ($sce) {
         autoHide: true,
         autoPlay: false,
         autoHideTime: 1500,
-        responsive: false,
+        responsive: true,
         stretch: 'fit',
         theme: {
           url: "../../js/libs/videogular-themes-default/videogular.css",

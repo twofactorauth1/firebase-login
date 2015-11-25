@@ -12,23 +12,18 @@
 				<li class="ssb-page-section-settings-item">
 					<div class="ssb-sidebar-item-icon ti-settings display-ib"></div>
 					<accordion close-others="oneAtATime" class="accordion">
-						<accordion-group heading="{{vm.state.selectedTheme.name || 'Default'}}"
+						<accordion-group heading="{{vm.state.website.theme.name || 'Default'}}"
 							ng-class="{ 'ssb-sidebar-section-open': isOpen }"
 							class="ssb-sidebar-sortable-item">
 
 							<div class="form-group">
-								<h5 class="ssb-sidebar-settings-heading">Theme - {{vm.state.website.themeId}}</h5>
+								<h5 class="ssb-sidebar-settings-heading">Theme - {{vm.state.website.theme.name}}</h5>
 
-								<!-- <div ng-repeat="theme in vm.state.themes track by $index" class="radio-inline">
-									<input type="radio" id="theme-{{$index}}" value="{{theme._id}}" ng-model="vm.state.website.themeId">
-									<label for="theme-{{$index}}">{{theme.name}}</label>
-								</div> -->
-
-                <ui-select ng-model="vm.state.website.themeId" ng-change="vm.applyThemeToPage($select.selected)" theme="bootstrap">
+                <ui-select ng-model="vm.state.website.theme" ng-change="vm.applyThemeToPage($select.selected)" theme="bootstrap">
                   <ui-select-match placeholder="Select a theme">
                       <small ng-bind-html="$select.selected.name"></small>
                   </ui-select-match>
-                  <ui-select-choices repeat="theme._id as theme in vm.state.themes | filter: $select.search track by $index">
+                  <ui-select-choices repeat="theme in vm.state.themes | filter: $select.search track by $index">
                       <small ng-bind-html="theme.name | highlight: $select.search"></small>
                   </ui-select-choices>
                 </ui-select>
@@ -147,8 +142,8 @@
 		</section>
 
 		<section>
-	        <h4 ng-if="vm.state.page.sections" class="ssb-sidebar-sub-heading">
-	        	<span>Page Sections</span>
+	        <h4 class="ssb-sidebar-sub-heading">
+	        	<span>Page Sections ({{vm.state.page.sections.length || 0}})</span>
 	        	<div ng-click="vm.openModal('ssb-add-section-modal', 'SiteBuilderAddSectionModalController', null, 'lg');" class="ssb-sidebar-item-icon ti-plus display-ib" tooltip-placement="left" tooltip-html-unsafe="Add Section"></div>
 	        </h4>
 			<ul ng-if="vm.state.page.sections" class="list-unstyled" ng-sortable="vm.sortableOptions" ng-model="vm.state.page.sections">
@@ -158,7 +153,7 @@
 					<!-- <div ng-hide="!vm.uiState.accordion.sections[sectionIndex].isOpen" class="ssb-sidebar-item-icon ssb-sidebar-move-handle ti-angle-down display-ib"></div>
 					<div ng-hide="vm.uiState.accordion.sections[sectionIndex].isOpen" class="ssb-sidebar-item-icon ssb-sidebar-move-handle ti-angle-up display-ib"></div> -->
 					<accordion close-others="oneAtATime" class="accordion">
-						<accordion-group heading="{{vm.sectionName(section)}} Section"
+						<accordion-group heading="{{section.name}}"
 							is-open="vm.uiState.accordion.sections[sectionIndex].isOpen"
 							ng-click="vm.togglePageSectionAccordion(sectionIndex)"
 							ng-class="{ 'ssb-sidebar-section-open': vm.uiState.accordion.sections[sectionIndex].isOpen }"
@@ -166,10 +161,9 @@
 
 							<div ng-include=" 'assets/js/ssb-site-builder/ssb-components/ssb-page-section/sidebar.settings.html' "></div>
 
-
 							<div class="form-group padding-top-10">
 								<h5 class="ssb-sidebar-settings-heading">Components ({{section.components.length}})</h5>
-								<ul class="list-unstyled">
+								<ul class="list-unstyled ssb-sidebar-section-components-list">
 									<li ng-repeat="component in section.components track by $index" ng-init="componentIndex = $index">
 										<accordion close-others="oneAtATime" class="accordion">
 											<accordion-group
@@ -207,7 +201,7 @@
 											</accordion-group>
 										</accordion>
 									</li>
-									<li class="ssb-sidebar-component-list">
+									<li ng-if="section.canAddComponents !== false" class="ssb-sidebar-component-list">
 										<accordion close-others="oneAtATime" class="accordion" ng-click="vm.getPlatformComponents()">
 											<accordion-group heading="Add + ">
 												<ul class="list-unstyled">

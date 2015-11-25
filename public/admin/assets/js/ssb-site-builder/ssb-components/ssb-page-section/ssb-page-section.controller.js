@@ -11,9 +11,10 @@ function ssbPageSectionController($scope, $attrs, $filter, SimpleSiteBuilderServ
   var vm = this;
 
   vm.init = init;
-  vm.componentClass = componentClass;
   vm.sectionClass = sectionClass;
   vm.sectionStyle = sectionStyle;
+  vm.componentClass = componentClass;
+  vm.componentStyle = componentStyle;
 
   //TODO: use https://github.com/martinandert/react-inline to generate inline styles for sections/components
 
@@ -64,6 +65,10 @@ function ssbPageSectionController($scope, $attrs, $filter, SimpleSiteBuilderServ
       if (section.spacing.pt) {
         styleString += 'max-width: ' + section.spacing.mw == '100%' ? section.spacing.mw : section.spacing.mw  + 'px;';
       }
+
+      if (section.spacing.lineHeight) {
+        styleString += 'line-height: ' + section.spacing.lineHeight;
+      }
     }
 
     if (section.txtcolor) {
@@ -75,7 +80,7 @@ function ssbPageSectionController($scope, $attrs, $filter, SimpleSiteBuilderServ
         styleString += 'background-color: ' + section.bg.color + ';';
       }
 
-      if (section.bg.img && section.bg.img.show) {
+      if (section.bg.img && section.bg.img.show && section.bg.img.url !== '') {
         styleString += 'background-image: url("' + section.bg.img.url + '")';
       }
     }
@@ -83,29 +88,97 @@ function ssbPageSectionController($scope, $attrs, $filter, SimpleSiteBuilderServ
     return styleString;
   }
 
-  function componentClass(index) {
-    // console.log('index: ' + index);
-    // console.log('vm.uiState.activeComponentIndex: ' + vm.uiState.activeComponentIndex);
-    var classObj = {
-        'ssb-active-component': (index === vm.uiState.activeComponentIndex)
-        // 'ssb-active-component': (index === vm.page.sections[vm.uiState.activeComponentIndex].components[vm.uiState.activeComponentIndex])
-    };
+  function componentClass(component, index) {
+    var classString = '';
 
     if (vm.section.layout === '1-col') {
-        classObj['col-md-12'] = true;
+      classString += 'col-md-12 ';
     }
 
     if (vm.section.layout === '2-col') {
-        classObj['col-md-6'] = true;
+      classString += 'col-md-6 ';
     }
 
     if (vm.section.layout === '3-col') {
-        classObj['col-md-4'] = true;
+      classString += 'col-md-4 ';
     }
 
-    classObj['ssb-component-index-' + index] = true;
+    if (vm.section.layout === '4-col') {
+      classString += 'col-md-3';
+    }
 
-    return classObj;
+    if (index) {
+      classString += 'ssb-component-index-' + index + ' ';
+    }
+
+    if (index === vm.uiState.activeComponentIndex) {
+      classString += 'ssb-active-component ';
+    }
+
+    return classString;
+
+  }
+
+  function componentStyle(component) {
+    var styleString = '';
+
+    if (component.spacing) {
+      if (component.spacing.pt) {
+        styleString += 'padding-top: ' + component.spacing.pt + 'px;';
+      }
+
+      if (component.spacing.pt) {
+        styleString += 'padding-bottom: ' + component.spacing.pb + 'px;';
+      }
+
+      if (component.spacing.pt) {
+        styleString += 'padding-left: ' + component.spacing.pl + 'px;';
+      }
+
+      if (component.spacing.pt) {
+        styleString += 'padding-right: ' + component.spacing.pr + 'px;';
+      }
+
+      if (component.spacing.pt) {
+        styleString += 'margin-top: ' + component.spacing.mt + 'px;';
+      }
+
+      if (component.spacing.pt) {
+        styleString += 'margin-bottom: ' + component.spacing.mb + 'px;';
+      }
+
+      if (component.spacing.pt) {
+        styleString += 'margin-left: ' + component.spacing.ml == 'auto' ? component.spacing.ml: component.spacing.ml + 'px;';
+      }
+
+      if (component.spacing.pt) {
+        styleString += 'margin-right: ' + component.spacing.mr == 'auto' ? component.spacing.mr : component.spacing.mr + 'px;';
+      }
+
+      if (component.spacing.pt) {
+        styleString += 'max-width: ' + component.spacing.mw == '100%' ? component.spacing.mw : component.spacing.mw  + 'px;';
+      }
+
+      if (component.spacing.lineHeight) {
+        styleString += 'line-height: ' + component.spacing.lineHeight;
+      }
+    }
+
+    if (component.txtcolor) {
+      styleString += 'color: ' + component.txtcolor + ';';
+    }
+
+    if (component.bg) {
+      if (component.bg.color) {
+        styleString += 'background-color: ' + component.bg.color + ';';
+      }
+
+      if (component.bg.img && component.bg.img.show && component.bg.img.url !== '') {
+        styleString += 'background-image: url("' + component.bg.img.url + '")';
+      }
+    }
+
+    return styleString;
   }
 
   function init(element) {

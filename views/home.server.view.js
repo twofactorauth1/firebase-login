@@ -7,9 +7,13 @@
 
 var BaseView = require('./base.server.view');
 var _req = null;
+var isGroupAdmin = false;
 var view = function(req,resp,options) {
     this.init.apply(this, arguments);
     _req = req;
+    if(options.isGroupAdmin) {
+        isGroupAdmin = options.isGroupAdmin;
+    }
 };
 
 _.extend(view.prototype, BaseView.prototype, {
@@ -28,7 +32,7 @@ _.extend(view.prototype, BaseView.prototype, {
             if (!err && value != null) {
                 data.account = value.toJSON();
             }
-
+            data.isGroupAdmin = isGroupAdmin;
             data.includeJs = false;
             data = self.baseData(data);
             data.accounts = self.req.session.accounts;

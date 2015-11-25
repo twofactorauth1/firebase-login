@@ -98,6 +98,8 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('upcomingInvoice'), this.isAuthApi.bind(this), this.getMyUpcomingInvoice.bind(this));
         app.get(this.url('invoices'), this.isAuthApi.bind(this), this.getMyInvoices.bind(this));
         app.get(this.url('account/invoices'), this.isAuthApi.bind(this), this.getInvoicesForAccount.bind(this));
+        app.get(this.url('account/charges'), this.isAuthApi.bind(this), this.getChargesForAccount.bind(this));
+        app.get(this.url('account/charges/:chargeId'), this.isAuthApi.bind(this), this.getAccountCharge.bind(this));
         app.get(this.url('indigenous/plans'), this.listIndigenousPlans.bind(this));
         app.get(this.url('indigenous/plans/:planId'), this.getIndigenousPlan.bind(this));
         app.post(this.url('indigenous/plans/:planId/subscribe'), this.subscribeToIndigenous.bind(this));
@@ -1884,6 +1886,43 @@ _.extend(api.prototype, baseApi.prototype, {
                 });
         });
 
+    },
+
+    getChargesForAccount: function(req, resp) {
+        var self = this;
+        self.log.debug('>> getChargesForAccount');
+        accountDao.getAccountByHost(req.host, function(err, account) {
+            if (err || account == null) {
+                self.log.error('Error getting account: ' + err);
+                return self.wrapError(resp, 500, 'Could not find account.');
+            }
+            var customerId = account.get('billing').stripeCustomerId;
+            if (!customerId || customerId === '') {
+                self.log.error('No stripe customerId found for account: ' + account.id());
+                return self.wrapError(resp, 400, 'No Stripe CustomerId found for account.');
+            }
+
+            var created = req.query.created;
+            var ending_before = req.query.ending_before;
+            var limit = req.query.limit || 100;
+            var starting_after = req.query.starting_after;
+            stripeDao.listStripeCharges(created, customerId, ending_before, limit, starting_after, null, function(err, charges){
+                self.log.debug('<< getChargesForAccount');
+                return self.sendResultOrError(resp, err, charges, "Error listing charges.");
+            });
+        });
+    },
+
+    getAccountCharge: function(req, resp) {
+        var self = this;
+        self.log.debug('>> getAccountCharge');
+
+        var chargeId = req.params.chargeId;
+
+        stripeDao.getStripeCharge(chargeId, null, function(err, charge){
+            self.log.debug('<< getAccountCharge');
+            return self.sendResultOrError(resp, err, charge, "Error listing charges.");
+        });
     },
 
     updateInvoice: function(req, resp) {

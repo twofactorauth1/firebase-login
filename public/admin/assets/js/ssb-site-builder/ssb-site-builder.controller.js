@@ -2,9 +2,9 @@
 
 app.controller('SiteBuilderController', ssbSiteBuilderController);
 
-ssbSiteBuilderController.$inject = ['$scope', '$rootScope', '$attrs', '$filter', 'SimpleSiteBuilderService', '$stateParams', '$modal', 'SweetAlert'];
+ssbSiteBuilderController.$inject = ['$scope', '$rootScope', '$attrs', '$filter', 'SimpleSiteBuilderService', '$stateParams', '$modal', 'SweetAlert', '$window', '$timeout'];
 /* @ngInject */
-function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSiteBuilderService, $stateParams, $modal, SweetAlert) {
+function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSiteBuilderService, $stateParams, $modal, SweetAlert, $window, $timeout) {
 
     console.info('site-builder directive init...')
 
@@ -33,10 +33,12 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     vm.saveWebsite = saveWebsite;
     vm.cancelPendingEdits = cancelPendingEdits;
     vm.openMediaModal = openMediaModal;
+    vm.openModal = openModal;
     vm.closeModal = closeModal;
     vm.insertMedia = insertMedia;
     vm.addFroalaImage = addFroalaImage;
     vm.imageEditor = {};
+    vm.applyThemeToPage = SimpleSiteBuilderService.applyThemeToPage;
 
     $scope.$watch(function() { return SimpleSiteBuilderService.website; }, function(website){
         vm.state.originalWebsite = angular.copy(website);
@@ -65,6 +67,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     $scope.$watch('vm.state.page', function(page) {
         if (!angular.equals(page, vm.state.originalPage)) {
             vm.state.pendingChanges = true;
+            setupBreakpoints();
         } else {
             vm.state.pendingChanges = false;
         }
@@ -86,6 +89,11 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     //TODO: optimize this, we dont need to watch since this won't change
     $scope.$watch(function() { return SimpleSiteBuilderService.themes }, function(themes) {
       vm.state.themes = themes;
+    }, true);
+
+    //TODO: optimize this, we dont need to watch since this won't change
+    $scope.$watch(function() { return SimpleSiteBuilderService.templates }, function(templates) {
+      vm.state.templates = templates;
     }, true);
 
     $rootScope.$on('$stateChangeStart',
@@ -152,10 +160,13 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     function updateActiveComponent(index) {
         if (index !== undefined) {
             vm.uiState.activeComponentIndex = index;
-            if (!vm.uiState.accordion.sections[vm.uiState.activeSectionIndex].components[index]) {
-                vm.uiState.accordion.sections[vm.uiState.activeSectionIndex].components[index] = {};
+
+            if (vm.uiState.accordion.sections[vm.uiState.activeSectionIndex]) {
+              if (!vm.uiState.accordion.sections[vm.uiState.activeSectionIndex].components[index]) {
+                  vm.uiState.accordion.sections[vm.uiState.activeSectionIndex].components[index] = {};
+              }
+              vm.uiState.accordion.sections[vm.uiState.activeSectionIndex].components[index].isOpen = true;
             }
-            vm.uiState.accordion.sections[vm.uiState.activeSectionIndex].components[index].isOpen = true;
         }
     }
 
@@ -166,6 +177,37 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
 
     function closeModal() {
         vm.modalInstance.close();
+    }
+
+    function openModal(modal, controller, index, size) {
+      console.log('openModal >>> ', modal, controller, index);
+      var _modal = {
+        templateUrl: modal,
+        keyboard: false,
+        backdrop: 'static',
+        size: 'md',
+        scope: $scope,
+        resolve: {
+            parentVm: function () {
+                return vm;
+            }
+        }
+      };
+
+      if (controller) {
+        _modal.controller = controller + ' as vm';
+      }
+
+      if (size) {
+        _modal.size = 'lg';
+      }
+
+      vm.modalInstance = $modal.open(_modal);
+
+      vm.modalInstance.result.then(null, function () {
+        angular.element('.sp-container').addClass('sp-hidden');
+      });
+
     }
 
     function openMediaModal(modal, controller, index, size) {
@@ -226,6 +268,11 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         vm.imageEditor.editor.image.insert(asset.url, !1, null, vm.imageEditor.img);
     };
 
+    function setupBreakpoints() {
+      $window.eqjs.refreshNodes();
+      $window.eqjs.query();
+    };
+
     // Hook froala insert up to our Media Manager
     window.clickandInsertImageButton = function (editor) {
       console.log('clickandInsertImageButton >>> ');
@@ -240,6 +287,16 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     function init(element) {
 
         vm.element = element;
+
+        angular.element("body").on("click", ".ssb-page-section a", function (e) {
+          if (!angular.element(this).hasClass("clickable-link")) {
+            e.preventDefault();
+            e.stopPropagation();
+          }
+        });
+
+        setupBreakpoints();
+
         vm.uiState.isSidebarClosed = $rootScope.app.layout.isSidebarClosed;
         $rootScope.app.layout.isSidebarClosed = true;
 

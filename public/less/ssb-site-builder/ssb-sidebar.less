@@ -31,6 +31,14 @@
 
   }
 
+  .head-menu-links {
+    .container-fluid {
+      & > div > div {
+        padding: 0 1em 0;
+      }
+    }
+  }
+
 	@media (min-width: 768px) {
   	// float: left;
   	position: fixed;
@@ -202,6 +210,10 @@
         font-weight: 600;
     }
 
+}
+
+.ssb-sidebar-section-components-list > li:first-child .ssb-sidebar-sortable-item:first-of-type .panel-title:first-of-type {
+  border-bottom: 0 none;
 }
 
 .ssb-sidebar-sortable-item-component {

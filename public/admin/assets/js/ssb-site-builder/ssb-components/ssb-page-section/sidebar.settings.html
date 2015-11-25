@@ -1,5 +1,13 @@
 <div class="form-group">
     <h5 class="ssb-sidebar-settings-heading">Settings</h5>
+
+    <label class="padding-bottom-10">
+      Section Name:
+    </label>
+    <span editable-text="section.name" class="pull-right">{{section.name}}</span>
+
+    <br>
+
     <label for="colorpicker">Text Color:</label>
     <span tooltip-placement="top" tooltip-html-unsafe="Text color of section."><i class="fa fa-info-circle" /></span>
     <div class="pull-right">
@@ -27,7 +35,6 @@
     </div>
 </form>
 <hr/>
-<!-- <div class="form-group" ng-if="section.type != 'contact-us' && section.type != 'navigation' && section.type != 'top-bar' && section.type != 'blog'" ng-hide="isEmail"> -->
 <div class="form-group" ng-hide="isEmail">
     <label for="bg_hide" class="margin-bottom-0">Show Background Image</label>
     <span tooltip-placement="top" tooltip-html-unsafe="show/hide background image of section."><i class="fa fa-info-circle" /></span>
@@ -47,58 +54,20 @@
             <img ng-src="{{section.bg.img.url}}" ng-model="section.bg.img.url" ng-click="vm.addBackground(sectionIndex, null)" class="img-thumbnail">
         </div>
         <div class="clearfix margin-bottom-10"></div>
-        <div class="form-group" ng-if="section.type == 'masthead'" ng-show="section.bg.img.show">
-            <label for="bg_position">Background Position</label>
-            <span tooltip-placement="top" tooltip-html-unsafe="Set Background image position."><i class="fa fa-info-circle" /></span>
-            <div class="clearfix"></div>
-            <div class="radio clip-radio radio-primary radio-inline">
-                <input type="radio" id="leftPosition" name="inline" value="left" ng-model="section.bg.img.position">
-                <label for="leftPosition">
-                    Left
-                </label>
-            </div>
-            <div class="radio clip-radio radio-primary radio-inline">
-                <input type="radio" id="centerPosition" name="inline" value="center" ng-model="section.bg.img.position">
-                <label for="centerPosition">
-                    Center
-                </label>
-            </div>
-            <div class="radio clip-radio radio-primary radio-inline">
-                <input type="radio" id="rightPosition" name="inline" value="right" ng-model="section.bg.img.position">
-                <label for="rightPosition">
-                    Right
-                </label>
-            </div>
-        </div>
     </div>
     <div class="col-xs-6">
-        <div class="form-group" ng-show="section.bg.img.show" ng-if="section.type != 'navigation'">
+        <div class="form-group" ng-show="section.bg.img.show">
             <label for="bg_blur">Blur BG</label>
             <span tooltip-placement="top" tooltip-html-unsafe="Add/remove blur effect to background image."><i class="fa fa-info-circle" /></span>
             <switch ng-model="section.bg.img.blur" class="pull-right"></switch>
         </div>
-        <div class="form-group" ng-if="section.type != 'navigation'" ng-show="section.bg.img.show">
-            <label for="bg_parallax" ng-if="section.type != 'navigation'">Parallax:</label>
-            <span tooltip-placement="top" tooltip-html-unsafe="Add/remove Parallax to background image."><i class="fa fa-info-circle" /></span>
-            <switch ng-model="section.bg.img.parallax" class="pull-right"></switch>
-        </div>
-        <div class="form-group" ng-if="section.type == 'masthead'" ng-show="section.bg.img.show">
-            <label for="bg_overlay">Under Nav</label>
-            <span tooltip-placement="top" tooltip-html-unsafe="Make Masthead go underneath nav."><i class="fa fa-info-circle" /></span>
-            <switch ng-model="section.bg.img.undernav" class="pull-right"></switch>
-        </div>
-        <div class="form-group" ng-if="section.type == 'masthead' && section.bg.img.undernav" ng-show="section.bg.img.show">
-            <label for="bg_fullscreen">Full Screen</label>
-            <span tooltip-placement="top" tooltip-html-unsafe="Switch Masthead background to fullscreen."><i class="fa fa-info-circle" /></span>
-            <switch ng-model="section.bg.img.fullscreen" class="pull-right"></switch>
-        </div>
         <hr ng-show="section.bg.img.show"></hr>
-        <div class="form-group" ng-if="section.type != 'navigation'" ng-show="section.bg.img.show">
+        <div class="form-group" ng-show="section.bg.img.show">
             <label for="bg_overlay">Add Overlay</label>
             <span tooltip-placement="top" tooltip-html-unsafe="Add/remove Overlay to background image."><i class="fa fa-info-circle" /></span>
             <switch ng-model="section.bg.img.overlay" class="pull-right"></switch>
         </div>
-        <div class="form-group" ng-if="section.type != 'navigation'" ng-show="section.bg.img.show && section.bg.img.overlay">
+        <div class="form-group" ng-show="section.bg.img.show && section.bg.img.overlay">
             <label for="bg_overlay_color">Overlay Color</label>
             <span tooltip-placement="top" tooltip-html-unsafe="Add color to Overlay effect."><i class="fa fa-info-circle" /></span>
             <div class="pull-right">
@@ -106,7 +75,7 @@
                 <spectrum-colorpicker format="rgba" options="vm.spectrum.options" class="pull-right" ng-model="section.bg.img.overlaycolor"></spectrum-colorpicker>
             </div>
         </div>
-        <div ng-if="section.type != 'navigation'" ng-show="section.bg.img.overlay && section.bg.img.show">
+        <div ng-show="section.bg.img.overlay && section.bg.img.show">
             <div class="row">
                 <div class="col-xs-12">
                     <label for="bg_overlay_opacity">Overlay Opacity</label>
@@ -162,15 +131,17 @@
                     <small ng-bind-html="res | highlight: $select.search"></small>
                 </ui-select-choices>
             </ui-select>
+            <label for="ssb-page-section-line-height-input-{{sectionIndex}}">Line Height</label>
+            <input id="ssb-page-section-line-height-input-{{sectionIndex}}" type="number" string-to-number ng-model="section.spacing.lineHeight" data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down">
         </div>
         <div class="well margin-bottom-0 partition-light-primary">
             <label class="text-white lead">Margin</label>
             <div class="spacing-mt">
-                <input type="text" ng-model="section.spacing.mt" touchspin data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down" ng-disabled="section.spacing.usePage">
+                <input type="number" string-to-number ng-model="section.spacing.mt" min="-500" max="500" data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down" ng-disabled="section.spacing.usePage">
             </div>
             <div class="col-xs-2">
                 <div class="spacing-ml">
-                    <input type="text" ng-model="section.spacing.ml" touchspin data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down" ng-disabled="section.spacing.usePage">
+                    <input type="number" string-to-number ng-model="section.spacing.ml" min="-500" max="500" data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down" ng-disabled="section.spacing.usePage">
                     <div class="checkbox clip-check check-primary checkbox-inline">
                         <input type="checkbox" id="margin-left" ng-model="section.spacing.ml" ng-true-value="'auto'" ng-false-value="'0'" ng-disabled="section.spacing.usePage">
                         <label for="margin-left" class="text-white">
@@ -183,27 +154,27 @@
                 <div class="well partition-dark-primary">
                     <label class="text-white lead">Padding</label>
                     <div class="spacing-pt">
-                        <input type="text" ng-model="section.spacing.pt" touchspin data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down" ng-disabled="section.spacing.usePage">
+                        <input type="number" string-to-number ng-model="section.spacing.pt" min="-500" max="500" data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down" ng-disabled="section.spacing.usePage">
                     </div>
                     <div class="col-xs-6">
                         <div class="spacing-pl">
-                            <input type="text" ng-model="section.spacing.pl" touchspin data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down" ng-disabled="section.spacing.usePage">
+                            <input type="number" string-to-number ng-model="section.spacing.pl" min="-500" max="500" data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down" ng-disabled="section.spacing.usePage">
                         </div>
                     </div>
                     <div class="col-xs-6">
                         <div class="spacing-pr">
-                            <input type="text" ng-model="section.spacing.pr" touchspin data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down" ng-disabled="section.spacing.usePage">
+                            <input type="number" string-to-number ng-model="section.spacing.pr" min="-500" max="500" data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down" ng-disabled="section.spacing.usePage">
                         </div>
                     </div>
                     <div class="clearfix margin-bottom-15"></div>
                     <div class="spacing-pb">
-                        <input type="text" ng-model="section.spacing.pb" touchspin data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down" ng-disabled="section.spacing.usePage">
+                        <input type="number" string-to-number ng-model="section.spacing.pb" min="-500" max="500" data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down" ng-disabled="section.spacing.usePage">
                     </div>
                 </div>
             </div>
             <div class="col-xs-2">
                 <div class="spacing-mr">
-                    <input type="text" ng-model="section.spacing.mr" touchspin data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down" ng-disabled="section.spacing.usePage">
+                    <input type="number" string-to-number ng-model="section.spacing.mr" min="-500" max="500" data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down" ng-disabled="section.spacing.usePage">
                     <div class="checkbox clip-check check-primary checkbox-inline">
                         <input type="checkbox" id="margin-right" ng-model="section.spacing.mr" ng-true-value="'auto'" ng-false-value="'0'" ng-disabled="section.spacing.usePage">
                         <label class="text-white" for="margin-right">
@@ -214,7 +185,7 @@
             </div>
             <div class="clearfix"></div>
             <div class="spacing-mb">
-                <input type="text" ng-model="section.spacing.mb" touchspin data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down" ng-disabled="section.spacing.usePage">
+                <input type="number" string-to-number ng-model="section.spacing.mb" min="-500" max="500" data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down" ng-disabled="section.spacing.usePage">
             </div>
         </div>
         <div class="clearfix"></div>

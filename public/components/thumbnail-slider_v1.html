@@ -8,10 +8,10 @@
                 <ol class="carousel-indicators hidden" ng-hide="slider[0][0].detail">
                     <li data-target="#myCarousel" style="background-color: {{component.indicatorcolor}};" data-slide-to="{{$index}}" class="{{$index==0?'active':''}}" data-ng-repeat="collection in slider"></li>
                 </ol>
-                <div class="carousel-inner">
+                <div class="carousel-inner" style="overflow:hidden;">
                     <div class="item {{$first?'active':''}}" data-ng-repeat="collection in slider">
                         <div class="row">
-                            <div class="col-sm-3 hideText"  data-ng-repeat="image in collection track by $index"> 
+                            <div class="col-xs-3 hideText"  data-ng-repeat="image in collection track by $index">
                                 <div class="image-wrap {{isEditing ? 'editing' : ''}}">
                                     <div class="imgHeight single-image">
                                     <a href="" class="{{isFirst?'':'thumbnail '}}" style="text-align: center;border: 0;margin-top: 20px;background: none;">
@@ -37,7 +37,7 @@
                                             <i class="fa fa-plus" ></i>
                                     </a>
                     </div>
-               </div>
+                </div>
                 <div ng-show="displayThumbnailPaging" class="left carousel-control glyphicon glyphicon-chevron-left" href="#myCarousel-{{component.anchor}}" style="background: none;" data-slide="prev"></div>
                 <div ng-show="displayThumbnailPaging" class="right carousel-control glyphicon glyphicon-chevron-right" href="#myCarousel-{{component.anchor}}" data-slide="next"></div>
             </div>

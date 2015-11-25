@@ -18,7 +18,8 @@ var authenticationDao = require('../dao/authentication.dao');
 var fs = require('fs');
 var userActivityManager = require('../useractivities/useractivity_manager');
 var sitemigration_middleware = require('../sitemigration/middleware/sitemigration_middleware');
-//var pagecacheManager = require('../cms/pagecache_manager');
+var userManager = require('../dao/user.manager');
+var accountDao = require('../dao/account.dao');
 
 var router = function() {
     this.init.apply(this, arguments);
@@ -55,7 +56,9 @@ _.extend(router.prototype, BaseRouter.prototype, {
 
         app.get("/demo", this.setup.bind(this), this.demo.bind(this));
         app.get('/reauth/:id', this.setup.bind(this), this.handleReauth.bind(this));
-
+        //TODO: comment out the get
+        app.get('/addaccount/:subdomain', this.setup.bind(this), this.handleAddAccount.bind(this));
+        app.post('/addaccount', this.setup.bind(this), this.handleAddAccount.bind(this));
         app.get('/redirect', this.setup.bind(this), this.externalRedirect.bind(this));
 
         app.get('/main/:page', [sitemigration_middleware.checkForRedirect, this.setup.bind(this)], this.serveMainHtml.bind(this));
@@ -221,7 +224,16 @@ _.extend(router.prototype, BaseRouter.prototype, {
     },
 
     _showHome: function(req,resp) {
-        new HomeView(req,resp).show("home");
+        var self = this;
+        var userId = self.userId(req);
+        var isGroupAdmin = false;
+        userManager.getUserAccountPermissions(userId, appConfig.mainAccountID, function(err, perms){
+            if(perms && _.contains(perms, 'designer')){
+                isGroupAdmin = true;
+            }
+            new HomeView(req,resp,{isGroupAdmin:isGroupAdmin}).show("home");
+        });
+
     },
 
     signUpNews: function(req, resp) {
@@ -283,6 +295,61 @@ _.extend(router.prototype, BaseRouter.prototype, {
             });
 
         }
+
+    },
+
+    handleAddAccount: function(req, resp) {
+        var self = this;
+        self.log.debug('>> handleAddAccount');
+        var subdomain = req.params.subdomain || req.body.subdomain;
+        self.log.debug('subdomain:', subdomain);
+
+        var userId = self.userId(req);
+        var roleAry = ['super','admin','member'];
+
+        accountDao.getAccountBySubdomain(subdomain, function(err, account){
+            if(err || !account) {
+                self.log.error('Error finding account by subdomain:', err);
+                resp.redirect('/home');
+            } else {
+                var userActivity = new $$.m.UserActivity({
+                    accountId: account.id(),
+                    userId: userId,
+                    activityType:$$.m.UserActivity.types.ADD_USER_TO_ACCOUNT_OK
+                });
+                //check if user is in whitelist://TODO: switch to permissions for account
+                userManager.getUserAccountPermissions(userId, appConfig.mainAccountID, function(err, perms){
+                    if(err) {
+                        self.log.error('Error getting account permissions:', err);
+                        return resp.redirect('/home');
+                    }
+                    if(_.contains(perms, 'designer')) {
+
+                        userManager.addUserToAccount(account.id(), userId, roleAry, userId, function(err, user){
+                            req.session.accounts = user.getAllAccountIds();
+                            accountDao.getPreviewData(req.session.accounts, function(err, data) {
+                                self.log.debug('updated preview data');
+                                req.session.accounts = data;
+                                userActivityManager.createUserActivity(userActivity, function(err, value){
+                                    self.log.debug('<< handleAddAccount');
+                                    resp.redirect('/home');
+                                });
+                            });
+
+                        });
+                    } else {
+                        self.log.warn('userId:' + userId + ' does not have the role DESIGNER');
+                        userActivity.set('activityType', $$.m.UserActivity.types.ADD_USER_TO_ACCOUNT_NOK);
+                        userActivityManager.createUserActivity(userActivity, function(err, value){
+                            self.log.debug('<< handleAddAccount');
+                            resp.redirect('/home');
+                        });
+                    }
+                });
+
+
+            }
+        });
 
     },
 

@@ -12,7 +12,9 @@
 		var baseWebsiteAPIUrl = '/api/1.0/cms/website/'; //TODO: upgrade to api/2.0 when ready
 		var basePageAPIUrl = '/api/1.0/cms/page/';
 		var baseComponentAPIUrl = '/api/1.0/cms/component/';
-
+    var baseWebsiteAPIUrlv2 = '/api/2.0/cms/websites/'
+    var basePageAPIUrlv2 = '/api/2.0/cms/pages/';
+    var baseTemplateAPIUrlv2 = '/api/2.0/cms/templates/';
 
 		ssbService.getSite = getSite;
 		ssbService.getPage = getPage;
@@ -30,6 +32,9 @@
 		ssbService.checkForDuplicatePage = checkForDuplicatePage;
 		ssbService.loading = { value: 0 };
 		ssbService.getThemes = getThemes;
+    ssbService.applyThemeToPage = applyThemeToPage;
+    ssbService.createPage = createPage;
+    ssbService.getTemplates = getTemplates;
 
 
 		function ssbRequest(fn) {
@@ -57,9 +62,9 @@
 			function success(data) {
 
         //TODO: temp pending API impl
-        if (!data.themeId) {
-          data.themeId = '11032028';
-          data.themeOverrides = {
+        if (!data.theme) {
+          data.theme = {
+            _id: '11032028',
             styles: {
               headerBackgroundColor: '#FFFFFF',
               bodyBackgroundColor: '#FFFFFF',
@@ -72,6 +77,7 @@
             headingFontStack: '"Helvetica Neue", Helvetica, Arial, sans-serif',
             paragraphFontStack: '"Helvetica Neue", Helvetica, Arial, sans-serif'
           }
+          data.themeOverrides = data.theme;
         }
 
 				ssbService.website = data;
@@ -99,7 +105,7 @@
 
 		function getPage(id) {
 
-			return ssbRequest($http.get(basePageAPIUrl + id).success(successPage).error(errorPage));
+			return ssbRequest($http.get(basePageAPIUrlv2 + id).success(successPage).error(errorPage));
 
 		}
 
@@ -115,13 +121,25 @@
 
 		}
 
+    function createPage(templateId) {
+
+      return (
+        ssbRequest($http({
+          url: baseWebsiteAPIUrlv2 + ssbService.website._id + '/page/',
+          method: 'POST',
+          data: { templateId: templateId }
+        }).success(successPage).error(errorPage))
+      )
+
+    }
+
 		function successPage(data) {
 
 			/*
 			 *
 			 * Transform legacy pages to new section/component model format
 			 */
-			if (data.components.length && !data.sections) {
+			if (data.components && data.components.length && !data.sections) {
 				data.sections = angular.copy(data.components);
 				for (var i = 0; i < data.sections.length; i++) {
 					var component = angular.copy(data.sections[i]);
@@ -129,11 +147,24 @@
 						layout: '1-col',
 						components: [component]
 					};
+
+          defaultSectionObj.name = sectionName(defaultSectionObj) + ' Section';
+
 					data.sections[i] = defaultSectionObj;
 
 				}
 				// delete data.components;
 			}
+
+      /*
+       *
+       * Name sections without a name (can be edited in UI)
+       */
+      for (var i = 0; i < data.sections.length; i++) {
+        if (!data.sections[i].name) {
+          data.sections[i].name = sectionName(data.sections[i]) + ' Section';
+        }
+      }
 
 			ssbService.page = data;
 		}
@@ -190,12 +221,227 @@
 
 			var deferred = $q.defer();
 
-			if (!section.components) {
-				getLegacySection(section, version).then(function(wrappedLegacyComponent){
+			if (section.type.indexOf('ssb-') === -1) {
+				getLegacySection(section, section.version).then(function(wrappedLegacyComponent){
 					deferred.resolve(wrappedLegacyComponent);
 				});
 			} else {
-				alert('TODO: implement new sections');
+        if (section.type == 'ssb-hero') {
+				  deferred.resolve(
+            {
+              "_id": "76ef64ca-ed11-49db-8ebb-412343214123",
+              "anchor": "76ef64ca-ed11-49db-8ebb-412343214123",
+              "name": "Hero",
+              "type": "ssb-page-section",
+              "subtype": "platform",
+              "layout": "hero",
+              "canAddComponents": false,
+              "version": 1,
+              "txtcolor": "#FFFFFF",
+              "bg": {
+                "img": {
+                  "url": "",
+                  "width": null,
+                  "height": null,
+                  "parallax": false,
+                  "blur": false,
+                  "overlay": false,
+                  "show": false
+                },
+                "color": "#4bb0cb"
+              },
+              "visibility": true,
+              "components": [
+                {
+                  "_id": "31d45d75-e63c-40bf-8c83-10102edda912",
+                  "anchor":"31d45d75-e63c-40bf-8c83-10102edda912",
+                  "type":"ssb-text",
+                  "version":1,
+                  "txtcolor":"",
+                  "text":"<div style=\"text-align: center;\"><strong><span style=\"font-size: 96px;\">MONI KING</span></strong></div>",
+                  "bg":{
+                    "img":{
+                      "url":"",
+                      "width":null,
+                      "height":null,
+                      "parallax":false,
+                      "blur":false,
+                      "overlay":false,
+                      "show":false
+                    },
+                    "color":""
+                  },
+                  "visibility":true,
+                  "spacing":{"mt":0,"pt":0,"pl":0,"pr":0,"pb":0,"ml":0,"mr":0,"mb":0}
+                },
+                {
+                  "_id": "31d45d75-e63c-40bf-8c83-10102edda111",
+                  "anchor":"31d45d75-e63c-40bf-8c83-10102edda111",
+                  "type":"ssb-image",
+                  "version":1,
+                  "src": "",
+                  "alttext": "Hero",
+                  "bg":{
+                    "img":{
+                      "url":"",
+                      "width":null,
+                      "height":null,
+                      "parallax":false,
+                      "blur":false,
+                      "overlay":false,
+                      "show":false
+                    },
+                    "color":""
+                  },
+                  "visibility":true,
+                  "spacing":{"mt":0,"pt":0,"pl":0,"pr":0,"pb":0,"ml":0,"mr":0,"mb":0}
+                }
+              ],
+            }
+          );
+        }
+
+        if (section.type == 'ssb-header') {
+          deferred.resolve(
+            {
+              "_id": "76ef64ca-ed35-49db-8ebb-412343219999",
+              "anchor": "76ef64ca-ed35-49db-8ebb-412343219999",
+              "name": "Header",
+              "type": "ssb-page-section",
+              "subtype": "platform",
+              "layout": "header",
+              "canAddComponents": false,
+              "version": 1,
+              "txtcolor": "#FFFFFF",
+              "bg": {
+                "img": {
+                  "url": "",
+                  "width": null,
+                  "height": null,
+                  "parallax": false,
+                  "blur": false,
+                  "overlay": false,
+                  "show": false
+                },
+                "color": "#4bb0cb"
+              },
+              "visibility": true,
+              "components": [
+                {
+                  "_id":"c239d2be-ac45-4fd9-aed2-26196e870d5b",
+                  "anchor":"c239d2be-ac45-4fd9-aed2-26196e870d5b",
+                  "type":"navigation",
+                  "version":2,
+                  "txtcolor":null,
+                  "activetxtcolor":null,
+                  "logo":null,
+                  "nav":{
+                    "bg":"#017ebe",
+                    "hoverbg":null,
+                    "hover":null
+                  },
+                  "bg":{
+                    "img":{
+                      "url":"",
+                      "width":null,
+                      "height":null,
+                      "parallax":false,
+                      "blur":false,
+                      "overlay":false,
+                      "show":false
+                    },
+                    "color":"#89c4f4"
+                  },
+                  "customnav":true,
+                  "linkLists":[
+                    {
+                      "name":"Head Menu",
+                      "handle":"head-menu",
+                      "links":[
+                        {
+                          "label":"Home",
+                          "type":"link",
+                          "linkTo":{
+                            "data":"index",
+                            "type":"page",
+                            "page":null
+                          }
+                        },
+                        {
+                          "label":"About",
+                          "type":"link",
+                          "linkTo":{
+                            "data":"index",
+                            "type":"page",
+                            "page":null
+                          }
+                        },
+                        {
+                          "label":"Media",
+                          "type":"link",
+                          "linkTo":{
+                            "data":"index",
+                            "type":"page",
+                            "page":null
+                          }
+                        },
+                        {
+                          "label":"Contact",
+                          "type":"link",
+                          "linkTo":{
+                            "data":"index",
+                            "type":"page",
+                            "page":null
+                          }
+                        }
+                        ]
+                      }
+                  ],
+                  "visibility":true,
+                  "shownavbox":false
+                },
+                {
+                  "_id":"0207f7a8-680c-45f4-a9cc-011dbdc63e29",
+                  "anchor":"0207f7a8-680c-45f4-a9cc-011dbdc63e29",
+                  "type":"social-link",
+                  "version":1,
+                  "txtcolor":null,
+                  "networks":[
+                    {
+                      "name":"facebook",
+                      "url":"http://www.facebook.com",
+                      "icon":"facebook",
+                    },
+                    {
+                      "name":"twitter",
+                      "url":"http://www.twitter.com",
+                      "icon":"twitter",
+                    },
+                    {
+                      "name":"google-plus",
+                      "url":"http://plus.google.com",
+                      "icon":"google-plus",
+                    }
+                  ],
+                  "bg":{
+                    "img":{
+                      "url":"",
+                      "width":null,
+                      "height":null,
+                      "parallax":false,
+                      "blur":false,
+                      "overlay":false,
+                      "show":false
+                    },
+                    "color":""
+                  },
+                  "visibility":true
+                }
+              ],
+            }
+          );
+        }
+
 			}
 
 			function success(data) {
@@ -209,6 +455,21 @@
 			return ssbRequest(deferred.promise);
 
 		}
+
+    function sectionName(section) {
+      var sectionName = section.layout;
+
+      if (section.components) {
+        if (section.components.length === 1 && section.components[0].header_title) {
+          sectionName = section.components[0].header_title;
+        } else if (section.components[0]) {
+          sectionName = section.components[0].type;
+        }
+      }
+
+      return sectionName;
+
+    }
 
 		function getLegacySection(section, version) {
 			var sectionDefault = {
@@ -241,6 +502,8 @@
 
 			return getComponent(section, version).then(function(component) {
 				sectionDefault.components = [component.data];
+
+        sectionDefault.name = sectionName(sectionDefault);
 
 				return sectionDefault;
 			});
@@ -390,14 +653,207 @@
 
 		//TODO: make actual API call
 		function getPlatformComponents() {
-			return getComponent({
-			    title: 'Text Block',
-			    type: 'text-only',
-			    preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/text-block.jpg',
-			    filter: 'text',
-			    description: 'A full width component for a large volume of text. You can also add images within the text.',
-			    enabled: true
-			}, null)
+			var components = [
+        // {
+        //   title: 'Blog',
+        //   type: 'blog',
+        //   preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/blog.png',
+        //   filter: 'blog',
+        //   description: 'Use this section for your main blog page which displays all your posts with a sidebar of categories, tags, recent posts, and posts by author.',
+        //   enabled: true
+        // }, {
+        //   title: 'Blog Teaser',
+        //   type: 'blog-teaser',
+        //   preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/blog-teaser.png',
+        //   filter: 'blog',
+        //   description: 'The Blog Teaser is perfect to showcase a few of your posts with a link to your full blog page.',
+        //   enabled: true
+        // }, {
+        //   title: 'Masthead',
+        //   type: 'masthead',
+        //   preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/masthead.jpg',
+        //   filter: 'misc',
+        //   description: 'Introduce your business with this section on the top of your home page.',
+        //   enabled: true
+        // }, {
+        //   title: 'Feature List',
+        //   type: 'feature-list',
+        //   preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/feature-list.jpg',
+        //   filter: 'features',
+        //   description: 'Showcase what your business offers with a feature list.',
+        //   enabled: true
+        // }, {
+        //   title: 'Contact Us',
+        //   type: 'contact-us',
+        //   preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/contact-us.jpg',
+        //   filter: 'contact',
+        //   description: 'Let your visitors where your located, how to contact you, and what your business hours are.',
+        //   enabled: true
+        // }, {
+        //   title: 'Coming Soon',
+        //   type: 'coming-soon',
+        //   preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/coming-soon.jpg',
+        //   filter: 'misc',
+        //   description: 'Even if your site isn\'t ready you can use this section to let your visitors know you will be availiable soon.',
+        //   enabled: true
+        // }, {
+        //   title: 'Feature block',
+        //   type: 'feature-block',
+        //   preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/feature-block.jpg',
+        //   filter: 'features',
+        //   description: 'Use this section to show one important feature or maybe a quote.',
+        //   enabled: true
+        // },{
+        //   title: 'Footer',
+        //   type: 'footer',
+        //   preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/footer.png',
+        //   filter: 'misc',
+        //   description: 'Use this section to show footer on your page.',
+        //   enabled: false
+        // }, {
+        //   title: 'Image Gallery',
+        //   type: 'image-gallery',
+        //   preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/gallery.jpg',
+        //   filter: 'images',
+        //   description: 'Display your images in this image gallery section with fullscreen large view.',
+        //   enabled: true
+        // },
+        {
+          title: 'Image Text',
+          version: 1,
+          type: 'image-text',
+          preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/image-text.jpg',
+          filter: 'images',
+          description: 'Show an image next to a block of text on the right or the left.',
+          enabled: true
+        },
+        // {
+        //   title: 'Meet Team',
+        //   type: 'meet-team',
+        //   icon: 'fa fa-users',
+        //   preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/meet-team.png',
+        //   filter: 'team',
+        //   description: 'Let your visitors know about the team behind your business. Show profile image, position, bio, and social links for each member.',
+        //   enabled: true
+        // },
+        {
+          title: 'Navigation 1',
+          type: 'navigation',
+          preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/navbar-v1.jpg',
+          filter: 'navigation',
+          description: 'A simple navigation bar with the logo on the left and nav links on the right. Perfect for horizontal logos.',
+          version: 1,
+          enabled: true
+        }, {
+          title: 'Navigation 2',
+          type: 'navigation',
+          preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/nav-v2-preview.png',
+          filter: 'navigation',
+          description: 'If your logo is horizontal or square, this navigation will showcase your logo perfectly with addtional space for more links.',
+          version: 2,
+          enabled: true
+        }, {
+          title: 'Navigation 3',
+          type: 'navigation',
+          preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/nav-v3-preview.png',
+          filter: 'navigation',
+          description: 'This navigation features a large block navigation links for a modern feel.',
+          version: 3,
+          enabled: true
+        },
+        {
+          title: 'Products',
+          type: 'products',
+          icon: 'fa fa-money',
+          preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/products.png',
+          filter: 'products',
+          description: 'Use this as the main products page to start selling. It comes together with a cart and checkout built in.',
+          enabled: true
+        },
+        // {
+        //   title: 'Pricing Tables',
+        //   type: 'pricing-tables',
+        //   preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/pricing-tables.png',
+        //   filter: 'text',
+        //   description: 'Subscription product types with multiple options are best when shown in a pricing table to help the visitor decide which one is best for them.',
+        //   enabled: true
+        // },
+        {
+          title: 'Simple form',
+          type: 'simple-form',
+          preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/simple-form.jpg',
+          filter: 'forms',
+          description: 'Automatically create contacts in the backend when a visitor submits this form. Add first name, last name, email, or phone number fields.',
+          enabled: true
+        },
+        // {
+        //   title: 'Single Post',
+        //   type: 'single-post',
+        //   icon: 'custom single-post',
+        //   preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/45274f46-0a21-11e5-83dc-0aee4119203c.png',
+        //   filter: 'blog',
+        //   description: 'Used for single post design. This is a mandatory page used to show single posts. This will apply to all posts.',
+        //   enabled: false
+        // },
+        {
+          title: 'Social',
+          type: 'social-link',
+          preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/social-links.jpg',
+          filter: 'social',
+          description: 'Let your visitors know where else to find you on your social networks. Choose from 18 different networks.',
+          enabled: true
+        },
+        {
+          title: 'Video',
+          type: 'video',
+          icon: 'fa fa-video',
+          preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/video.png',
+          filter: 'video',
+          description: 'Showcase a video from Youtube, Vimeo, or an uploaded one. You can simply add the url your video is currently located.',
+          enabled: true
+        },
+        {
+          title: 'Text Block',
+          type: 'text-only',
+          preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/text-block.jpg',
+          filter: 'text',
+          description: 'A full width section for a large volume of text. You can also add images within the text.',
+          enabled: true
+        },
+        // {
+        //   title: 'Thumbnail Slider',
+        //   type: 'thumbnail-slider',
+        //   preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/thumbnail.png',
+        //   filter: 'images',
+        //   description: 'Perfect for sponsor or client logos you have worked with in the past. Works best with logos that have a transparent background. ',
+        //   enabled: true
+        // },
+        {
+          title: 'Top Bar',
+          type: 'top-bar',
+          icon: 'fa fa-info',
+          preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/top-bar.png',
+          filter: 'contact',
+          description: 'Show your social networks, phone number, business hours, or email right on top that provides visitors important info quickly.',
+          enabled: true
+        },
+        // {
+        //   title: 'Testimonials',
+        //   type: 'testimonials',
+        //   icon: 'fa fa-info',
+        //   preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/45263570-0a21-11e5-87dd-b37fd2717aeb.png',
+        //   filter: 'text',
+        //   description: 'A section to showcase your testimonials.',
+        //   enabled: true
+        // }
+        ];
+
+        var ret = [];
+        components.forEach(function(cmp) {
+          ret.push(getComponent(cmp));
+        })
+
+        return $q.all(ret)
 		}
 
 		//TODO: api implement
@@ -406,6 +862,7 @@
 			var tempThemes = [{
 				_id: '11032028',
 				name: 'Default',
+        previewImage: 'https://s3.amazonaws.com/indigenous-themes/indimain/ssb-indimain-preview.png',
 				styles: {
 					headerBackgroundColor: '#FFFFFF',
 					bodyBackgroundColor: '#FFFFFF',
@@ -423,7 +880,8 @@
 			},
 			{
 				_id: '96751783',
-				name: 'Music - Soft',
+				name: 'Young Soul',
+        previewImage: 'https://s3.amazonaws.com/indigenous-themes/young-soul/young-soul-preview.png',
 				styles: {
 					headerBackgroundColor: '#9ACCCB',
 					bodyBackgroundColor: '#E8E7E7',
@@ -433,8 +891,8 @@
 					headingSize: '16px',
 					paragraphSize: '12px'
 				},
-				defaultFontStack: '"Roboto", Helvetica, Arial, sans-serif', //TODO: use correct google font stack names
-				headingFontStack: '"Roboto", Helvetica, Arial, sans-serif', //TODO: use correct google font stack names
+				defaultFontStack: '"Roboto", Helvetica, Arial, sans-serif',
+				headingFontStack: '"Roboto", Helvetica, Arial, sans-serif',
 				paragraphFontStack: '"Roboto", Helvetica, Arial, sans-serif',
 				defaultSections: [{
 					//
@@ -443,6 +901,7 @@
 			{
 				_id: '123456',
 				name: 'Abril - Fatface',
+        previewImage: 'https://s3.amazonaws.com/indigenous-themes/indimain/ssb-indimain-preview.png',
 				styles: {
 					headerBackgroundColor: '#9ACCCB',
 					bodyBackgroundColor: '#E8E7E7',
@@ -452,8 +911,8 @@
 					headingSize: '16px',
 					paragraphSize: '12px'
 				},
-				defaultFontStack: '"Abril Fatface", fantasy', //TODO: use correct google font stack names
-				headingFontStack: '"Abril Fatface", fantasy', //TODO: use correct google font stack names
+				defaultFontStack: '"Abril Fatface", fantasy',
+				headingFontStack: '"Abril Fatface", fantasy',
 				paragraphFontStack: '"Abril Fatface", fantasy',
 				defaultSections: [{
 					//
@@ -462,6 +921,7 @@
 			{
 				_id: '112233',
 				name: 'Aguafina Script',
+        previewImage: 'https://s3.amazonaws.com/indigenous-themes/indimain/ssb-indimain-preview.png',
 				styles: {
 					headerBackgroundColor: '#9ACCCB',
 					bodyBackgroundColor: '#E8E7E7',
@@ -471,8 +931,8 @@
 					headingSize: '16px',
 					paragraphSize: '12px'
 				},
-				defaultFontStack: '"Aguafina Script", cursive', //TODO: use correct google font stack names
-				headingFontStack: '"Abril Fatface", fantasy', //TODO: use correct google font stack names
+				defaultFontStack: '"Aguafina Script", cursive',
+				headingFontStack: '"Abril Fatface", fantasy',
 				paragraphFontStack: '"Abril Fatface", fantasy',
 				defaultSections: [{
 					//
@@ -506,7 +966,7 @@
 			}
 
 			return (
-          		ssbRequest($http({
+        ssbRequest($http({
 					url: baseWebsiteAPIUrl + ssbService.website._id + '/page/' + pageHandle,
 					method: 'GET',
 				}).success(success).error(error))
@@ -518,6 +978,44 @@
 			return [];
 		}
 
+    function getTemplates() {
+
+      function success(data) {
+        ssbService.templates = data;
+        console.log('SimpleSiteBuilderService getTemplates: ' + data);
+      }
+
+      function error(error) {
+        console.error('SimpleSiteBuilderService getTemplates error: ' + error);
+      }
+
+      return (
+        ssbRequest($http({
+          url: baseTemplateAPIUrlv2,
+          method: 'GET',
+        }).success(success).error(error))
+      )
+
+    }
+
+    function applyThemeToPage(theme) {
+        // Load web font loader
+       if (theme.name !== 'Default') {
+          WebFont.load({
+            google: {
+              families: [theme.defaultFontStack.split(',')[0].replace(/"/g, '')]
+            }
+          });
+          window.WebFontConfig = {
+            active: function() {
+              sessionStorage.fonts = true;
+            }
+          }
+        }
+        ssbService.website.theme = theme;
+        ssbService.website.themeOverrides = theme;
+    }
+
 
 		(function init() {
 
@@ -525,7 +1023,8 @@
 				ssbService.websiteId = data.website.websiteId;
         ssbService.getSite(data.website.websiteId);
         ssbService.getPages();
-				ssbService.getThemes();
+        ssbService.getThemes();
+				ssbService.getTemplates();
 			});
 
 		})();

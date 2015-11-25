@@ -172,13 +172,13 @@
         mainmenu: page.mainmenu
       };
 
-      
+
       var hasHandle = false;
       _.each($scope.pages, function (_page) {
         if (_page.handle === page.handle) {
           hasHandle = true;
         }
-      });      
+      });
 
       if (!hasHandle) {
         WebsiteService.createPageFromTemplate($scope.selectedTemplate._id, pageData, function (_newPage, error) {
