@@ -172,6 +172,11 @@
     };
 
     $scope.createPageFromTemplate = function (page, $event) {
+
+      if ($scope.saveLoading) {
+        return
+      }
+
       $scope.saveLoading = true;
       $scope.validateCreatePage(page, true);
 
@@ -348,10 +353,11 @@
 
     (function init() {
 
-      $scope.getPages();
-      WebsiteService.getTemplates(function (templates) {
-        $scope.legacyTemplates = templates;
-      });
+        $scope.getPages();
+
+        WebsiteService.getTemplates(function (templates) {
+            $scope.legacyTemplates = templates;
+        });
 
     })();
 

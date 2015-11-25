@@ -33,7 +33,7 @@ var dao = {
     dereferenceSections: function(sectionAry, fn) {
         var self = this;
         var deReffedAry = [];
-        async.each(sectionAry, function(section, cb){
+        async.eachSeries(sectionAry, function(section, cb){
             self.getById(section._id, $$.m.ssb.Section, function(err, section){
                 if(err) {
                     cb(err);
