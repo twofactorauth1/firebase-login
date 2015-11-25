@@ -12,38 +12,42 @@
   <section>
     <div class="row padding-top-10 margin-bottom-20">
       <div class="col-xs-12">
-        <div class="col-md-6">
-          <ui-select ng-model="vm.state.website.themeId" ng-change="vm.applyThemeToPage($select.selected)" theme="bootstrap">
+        <div class="col-md-4">
+          <ui-select ng-model="vm.state.website.theme" ng-change="vm.applyThemeToPage($select.selected)" theme="bootstrap">
             <ui-select-match placeholder="Select a theme">
                 <small ng-bind-html="$select.selected.name"></small>
             </ui-select-match>
-            <ui-select-choices repeat="theme._id as theme in vm.state.themes | filter: $select.search track by $index">
+            <ui-select-choices repeat="theme in vm.state.themes | filter: $select.search track by $index">
                 <small ng-bind-html="theme.name | highlight: $select.search"></small>
             </ui-select-choices>
           </ui-select>
 
           <ul class="list-unstyled panel-body ssb-theme-settings-list">
-            <li class="clearfix">
-              Header Background Color:
-              <div class="ssb-color-swatch" ng-attr-style="background-color: {{vm.state.website.themeOverrides.styles.headerBackgroundColor}};"></div>
+            <li>
+              <ul class="list-unstyled">
+                <li>
+                  <!-- Header Background Color: -->
+                  <div class="ssb-color-swatch" ng-attr-style="background-color: {{vm.state.website.themeOverrides.styles.headerBackgroundColor}};"></div>
+                </li>
+                <li>
+                  <!-- Body Background Color: -->
+                  <div class="ssb-color-swatch" ng-attr-style="background-color: {{vm.state.website.themeOverrides.styles.bodyBackgroundColor}};"></div>
+                </li>
+                <li ng-if="vm.state.website.themeOverrides.styles.primaryTextColor">
+                  <!-- Text Color (Primary): -->
+                  <div class="ssb-color-swatch" ng-attr-style="background-color: {{vm.state.website.themeOverrides.styles.primaryTextColor}};"></div>
+                </li>
+                <li ng-if="vm.state.website.themeOverrides.styles.primaryBtnTextColor">
+                  <!-- Text Color (Buttons): -->
+                  <div class="ssb-color-swatch" ng-attr-style="background-color: {{vm.state.website.themeOverrides.styles.primaryBtnTextColor}};"></div>
+                </li>
+                <li ng-if="vm.state.website.themeOverrides.styles.primaryBtnBackgroundColor">
+                  <!-- Button Background Color: -->
+                  <div class="ssb-color-swatch" ng-attr-style="background-color: {{vm.state.website.themeOverrides.styles.primaryBtnBackgroundColor}};"></div>
+                </li>
+              </ul>
             </li>
-            <li class="clearfix">
-              Body Background Color:
-              <div class="ssb-color-swatch" ng-attr-style="background-color: {{vm.state.website.themeOverrides.styles.bodyBackgroundColor}};"></div>
-            </li>
-            <li class="clearfix">
-              Text Color (Primary):
-              <div class="ssb-color-swatch" ng-attr-style="background-color: {{vm.state.website.themeOverrides.styles.primaryTextColor}};"></div>
-            </li>
-            <li class="clearfix">
-              Text Color (Buttons):
-              <div class="ssb-color-swatch" ng-attr-style="background-color: {{vm.state.website.themeOverrides.styles.primaryBtnTextColor}};"></div>
-            </li>
-            <li class="clearfix">
-              Button Background Color:
-              <div class="ssb-color-swatch" ng-attr-style="background-color: {{vm.state.website.themeOverrides.styles.primaryBtnBackgroundColor}};"></div>
-            </li>
-            <li class="clearfix">
+            <li class="full-width">
               Font Stack (Default): <pre>{{vm.state.website.themeOverrides.defaultFontStack}}</pre>
               <!--
               <div ng-attr-style="font-family: {{vm.state.website.themeOverrides.defaultFontStack}};font-size: {vm.state.website.themeOverrides.styles.headingSize}};">
@@ -51,22 +55,22 @@
               </div>
               -->
             </li>
-            <li class="clearfix">
+            <li class="full-width">
               Font Stack (Heading): <pre>{{vm.state.website.themeOverrides.headingFontStack}}</pre>
             </li>
-            <li class="clearfix">
+            <li class="full-width">
               Font Stack (Paragraph): <pre>{{vm.state.website.themeOverrides.paragraphFontStack}}</pre>
             </li>
-            <li class="clearfix">
+            <li class="margin-right-10">
               Heading Size: <pre>{{vm.state.website.themeOverrides.styles.headingSize}}</pre>
             </li>
-            <li class="clearfix">
+            <li class="margin-right-10">
               Paragraph Size: <pre>{{vm.state.website.themeOverrides.styles.paragraphSize}}</pre>
             </li>
           </ul>
 
         </div>
-        <div class="col-md-6">
+        <div class="col-md-8">
           <img
             ng-src="{{vm.state.website.theme.previewImage || 'https://s3.amazonaws.com/indigenous-themes/indimain/ssb-indimain-preview.png'}}"
             alt="{{vm.state.website.theme.name}}"

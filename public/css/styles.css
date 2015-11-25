@@ -4397,7 +4397,7 @@ div[data-type=blog] .container {
 }
 .thumbnail-slider-v1 .carousel-control.right {
   background: none;
-  right: -35px;
+  right: -20px;
 }
 .thumbnail-slider-v1 .carousel-inner {
   max-height: 200px;
@@ -4409,7 +4409,7 @@ div[data-type=blog] .container {
   width: 2%;
 }
 .thumbnail-slider-v1 .carousel-control.left {
-  left: -25px;
+  left: -22px;
 }
 div[data-type="thumbnail-slider"] .inner-page {
   max-width: 100%;
@@ -5764,6 +5764,9 @@ fieldset[disabled] .btn-vimeo-square.active {
 }
 .width-200 {
   width: 200px !important;
+}
+.full-width {
+  width: 100%;
 }
 .vertical-align-bottom {
   vertical-align: bottom !important;

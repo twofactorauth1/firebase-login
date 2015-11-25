@@ -4391,7 +4391,7 @@
 }
 #componentloader .thumbnail-slider-v1 .carousel-control.right {
   background: none;
-  right: -35px;
+  right: -20px;
 }
 #componentloader .thumbnail-slider-v1 .carousel-inner {
   max-height: 200px;
@@ -4403,7 +4403,7 @@
   width: 2%;
 }
 #componentloader .thumbnail-slider-v1 .carousel-control.left {
-  left: -25px;
+  left: -22px;
 }
 #componentloader div[data-type="thumbnail-slider"] .inner-page {
   max-width: 100%;
@@ -5751,6 +5751,9 @@
 #componentloader .width-200 {
   width: 200px !important;
 }
+#componentloader .full-width {
+  width: 100%;
+}
 #componentloader .vertical-align-bottom {
   vertical-align: bottom !important;
 }
@@ -6396,14 +6399,23 @@ a[href="https://froala.com/wysiwyg-editor"] {
 .ssb-section-modal .ssb-section-modal-list-item.active {
   opacity: 1;
 }
+.ssb-theme-settings-list li {
+  display: inline-block;
+}
 .ssb-color-swatch {
   width: 50px;
   height: 50px;
+  float: left;
+  box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
+  margin: .5em;
 }
 .ssb-theme-preview-img {
   background: gray;
   vertical-align: middle;
   min-width: 300px;
+  box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
+  max-height: 585px;
+  margin: 0 auto;
 }
 .ssb-sidebar {
   overflow: auto;
