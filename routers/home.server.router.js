@@ -227,11 +227,13 @@ _.extend(router.prototype, BaseRouter.prototype, {
         var self = this;
         var userId = self.userId(req);
         var isGroupAdmin = false;
-        if(_.contains(appConfig.groupAdminUserIds, ''+userId)) {
-            isGroupAdmin = true;
-            self.log.debug('isGroupAdmin is true');
-        }
-        new HomeView(req,resp,{isGroupAdmin:isGroupAdmin}).show("home");
+        userManager.getUserAccountPermissions(userId, appConfig.mainAccountID, function(err, perms){
+            if(perms && _.contains(perms, 'designer')){
+                isGroupAdmin = true;
+            }
+            new HomeView(req,resp,{isGroupAdmin:isGroupAdmin}).show("home");
+        });
+
     },
 
     signUpNews: function(req, resp) {
@@ -315,29 +317,36 @@ _.extend(router.prototype, BaseRouter.prototype, {
                     userId: userId,
                     activityType:$$.m.UserActivity.types.ADD_USER_TO_ACCOUNT_OK
                 });
-                //check if user is in whitelist:
-                if(_.contains(appConfig.groupAdminUserIds, ''+userId)) {
+                //check if user is in whitelist://TODO: switch to permissions for account
+                userManager.getUserAccountPermissions(userId, appConfig.mainAccountID, function(err, perms){
+                    if(err) {
+                        self.log.error('Error getting account permissions:', err);
+                        return resp.redirect('/home');
+                    }
+                    if(_.contains(perms, 'designer')) {
 
-                    userManager.addUserToAccount(account.id(), userId, roleAry, userId, function(err, user){
-                        req.session.accounts = user.getAllAccountIds();
-                        accountDao.getPreviewData(req.session.accounts, function(err, data) {
-                            self.log.debug('updated preview data');
-                            req.session.accounts = data;
-                            userActivityManager.createUserActivity(userActivity, function(err, value){
-                                self.log.debug('<< handleAddAccount');
-                                resp.redirect('/home');
+                        userManager.addUserToAccount(account.id(), userId, roleAry, userId, function(err, user){
+                            req.session.accounts = user.getAllAccountIds();
+                            accountDao.getPreviewData(req.session.accounts, function(err, data) {
+                                self.log.debug('updated preview data');
+                                req.session.accounts = data;
+                                userActivityManager.createUserActivity(userActivity, function(err, value){
+                                    self.log.debug('<< handleAddAccount');
+                                    resp.redirect('/home');
+                                });
                             });
-                        });
 
-                    });
-                } else {
-                    self.log.warn('userId:' + userId + ' is not in ', appConfig.groupAdminUserIds);
-                    userActivity.set('activityType', $$.m.UserActivity.types.ADD_USER_TO_ACCOUNT_NOK);
-                    userActivityManager.createUserActivity(userActivity, function(err, value){
-                        self.log.debug('<< handleAddAccount');
-                        resp.redirect('/home');
-                    });
-                }
+                        });
+                    } else {
+                        self.log.warn('userId:' + userId + ' does not have the role DESIGNER');
+                        userActivity.set('activityType', $$.m.UserActivity.types.ADD_USER_TO_ACCOUNT_NOK);
+                        userActivityManager.createUserActivity(userActivity, function(err, value){
+                            self.log.debug('<< handleAddAccount');
+                            resp.redirect('/home');
+                        });
+                    }
+                });
+
 
             }
         });
