@@ -117,6 +117,11 @@ if( process.env.ROOT_HOST !== 'indigenous.io') {
 }
 
 //---------------------------------------------------------
+//  GROUP ADMIN USERS
+//---------------------------------------------------------
+var groupAdminUserIDs = process.env.GROUP_ADMIN_USERIDS || '1,4';
+groupAdminUserIDs = groupAdminUserIDs.split(',');
+//---------------------------------------------------------
 // EXPORTS
 //---------------------------------------------------------
 module.exports = {
@@ -135,6 +140,7 @@ module.exports = {
     SIGNATURE_SECRET: "ab#6938kxal39jg&*(#*K_Cd",
     cookie_subdomain: '.' + process.env.ROOT_HOST,
     cookie_name: cookieName,
+    groupAdminUserIds: groupAdminUserIDs,
 
     getServerUrl: function (subdomain, domain) {
         if (subdomain == null && domain == null) {

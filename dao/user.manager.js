@@ -683,5 +683,16 @@ module.exports = {
             }
         });
 
+    },
+
+    getUserAccountIds: function(userId, fn) {
+        dao.getById(userId, $$.m.User, function(err, user){
+            if(err) {
+                return fn(err, null);
+            } else {
+                return fn(null, user.getAllAccountIds());
+            }
+
+        });
     }
 };
