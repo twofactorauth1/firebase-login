@@ -1012,6 +1012,7 @@ var dao = {
     },
 
     _getAllStripeCharges: function(params, _charges, apiToken, deferred) {
+        var self = this;
         self.log.debug('>> _getAllStripeCharges ... adding more charges.');
         stripe.charges.list(params, apiToken, function(err, charges) {
             if (err) {
