@@ -12,8 +12,9 @@
 		var baseWebsiteAPIUrl = '/api/1.0/cms/website/'; //TODO: upgrade to api/2.0 when ready
 		var basePageAPIUrl = '/api/1.0/cms/page/';
 		var baseComponentAPIUrl = '/api/1.0/cms/component/';
-    var basePageAPIUrlv2 = '/api/2.0/cms/websites/'
-    var baseTemplateAPIUrlv2 = '/api/2.0/cms/templates/'
+    var baseWebsiteAPIUrlv2 = '/api/2.0/cms/websites/'
+    var basePageAPIUrlv2 = '/api/2.0/cms/pages/';
+    var baseTemplateAPIUrlv2 = '/api/2.0/cms/templates/';
 
 		ssbService.getSite = getSite;
 		ssbService.getPage = getPage;
@@ -61,9 +62,9 @@
 			function success(data) {
 
         //TODO: temp pending API impl
-        if (!data.themeId) {
-          data.themeId = '11032028';
-          data.themeOverrides = {
+        if (!data.theme) {
+          data.theme = {
+            _id: '11032028',
             styles: {
               headerBackgroundColor: '#FFFFFF',
               bodyBackgroundColor: '#FFFFFF',
@@ -76,6 +77,7 @@
             headingFontStack: '"Helvetica Neue", Helvetica, Arial, sans-serif',
             paragraphFontStack: '"Helvetica Neue", Helvetica, Arial, sans-serif'
           }
+          data.themeOverrides = data.theme;
         }
 
 				ssbService.website = data;
@@ -103,7 +105,7 @@
 
 		function getPage(id) {
 
-			return ssbRequest($http.get(basePageAPIUrl + id).success(successPage).error(errorPage));
+			return ssbRequest($http.get(basePageAPIUrlv2 + id).success(successPage).error(errorPage));
 
 		}
 
@@ -123,7 +125,7 @@
 
       return (
         ssbRequest($http({
-          url: basePageAPIUrlv2 + ssbService.website._id + '/page/',
+          url: baseWebsiteAPIUrlv2 + ssbService.website._id + '/page/',
           method: 'POST',
           data: { templateId: templateId }
         }).success(successPage).error(errorPage))

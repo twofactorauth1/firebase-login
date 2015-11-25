@@ -12,18 +12,18 @@
 				<li class="ssb-page-section-settings-item">
 					<div class="ssb-sidebar-item-icon ti-settings display-ib"></div>
 					<accordion close-others="oneAtATime" class="accordion">
-						<accordion-group heading="{{vm.state.selectedTheme.name || 'Default'}}"
+						<accordion-group heading="{{vm.state.website.theme.name || 'Default'}}"
 							ng-class="{ 'ssb-sidebar-section-open': isOpen }"
 							class="ssb-sidebar-sortable-item">
 
 							<div class="form-group">
-								<h5 class="ssb-sidebar-settings-heading">Theme - {{vm.state.website.themeId}}</h5>
+								<h5 class="ssb-sidebar-settings-heading">Theme - {{vm.state.website.theme.name}}</h5>
 
-                <ui-select ng-model="vm.state.website.themeId" ng-change="vm.applyThemeToPage($select.selected)" theme="bootstrap">
+                <ui-select ng-model="vm.state.website.theme" ng-change="vm.applyThemeToPage($select.selected)" theme="bootstrap">
                   <ui-select-match placeholder="Select a theme">
                       <small ng-bind-html="$select.selected.name"></small>
                   </ui-select-match>
-                  <ui-select-choices repeat="theme._id as theme in vm.state.themes | filter: $select.search track by $index">
+                  <ui-select-choices repeat="theme in vm.state.themes | filter: $select.search track by $index">
                       <small ng-bind-html="theme.name | highlight: $select.search"></small>
                   </ui-select-choices>
                 </ui-select>

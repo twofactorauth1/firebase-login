@@ -247,7 +247,7 @@
 
           if (!hasHandle) {
 
-            WebsiteService.createPageFromTemplate($scope.selectedTemplate._id, pageData, function (_newPage, error) {
+            WebsiteService.createPageFromTemplate(page._id, pageData, function (_newPage, error) {
               createPageCallback(_newPage, error);
             });
 
