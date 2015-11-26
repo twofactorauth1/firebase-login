@@ -1518,8 +1518,9 @@ ul.sub-menu li ul.sub-menu li ul.sub-menu li a {
   width: 100% !important;
   display: inline-block;
 }
-.main-content > .container {
+.main-content > div.container {
   padding-bottom: 50px;
+  display: block;
 }
 @media (min-width: 992px) {
   .main-content {
