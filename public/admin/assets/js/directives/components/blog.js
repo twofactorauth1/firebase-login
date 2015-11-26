@@ -128,7 +128,7 @@ app.directive('blogComponent', ['$filter', '$timeout', 'WebsiteService', 'toaste
         // }
       });
 
-      $scope.activateTagCloud = function (tags) {
+      $scope.activateTagCloud = function (tags, update) {
         var _tagCloud = [];
         _.each(tags, function (tag) {
           var default_size = 2;
@@ -162,6 +162,8 @@ app.directive('blogComponent', ['$filter', '$timeout', 'WebsiteService', 'toaste
             }
           });
         }, 1000);
+        if(update)
+          angular.element('.jqcloud').jQCloud('update', $scope.tagCloud);
       };
 
       /********** BLOG PAGE PAGINATION RELATED **********/
@@ -232,7 +234,18 @@ app.directive('blogComponent', ['$filter', '$timeout', 'WebsiteService', 'toaste
             toaster.pop('success', 'Post deleted successfully');
             SweetAlert.swal("Saved!", "Post deleted.", "success");
             $scope.deletedPosts.push(postId);
-         // });
+            //Refresh tags
+            $scope.blog.postTags = [];
+            _.each($scope.blog.blogposts, function (post) {
+              if (post.post_tags) {
+                _.each(post.post_tags, function (tag) {
+                  if ($scope.blog.postTags.indexOf(tag) <= -1) {
+                    $scope.blog.postTags.push(tag);
+                  }
+                });
+              }
+            });
+            $scope.activateTagCloud($scope.blog.postTags, true);
         }
       });
       console.log('delete post');
