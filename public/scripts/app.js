@@ -38,11 +38,16 @@ var mainApp = angular
     'ngMap',
     'wu.masonry'
   ])
-  .config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
+  .config(['$routeProvider', '$locationProvider', '$httpProvider', function ($routeProvider, $locationProvider, $httpProvider) {
     //$locationProvider.html5Mode(true);
     if (window.history && window.history.pushState) {
       $locationProvider.html5Mode(true).hashPrefix('!');
     }
+    if (!$httpProvider.defaults.headers.get) {
+      $httpProvider.defaults.headers.get = {};
+    }
+    // disable IE ajax request caching
+    $httpProvider.defaults.headers.get['If-Modified-Since'] = '0';
     $routeProvider
       .when('/', {
         templateUrl: '../views/cache.html',
