@@ -1368,12 +1368,13 @@
      */
     $scope.getCustomers = function() {
       var promise = CustomerService.getCustomers(function (customers) {
-        _.each(customers, function (customer, index) {
-
+        var customerWithoutEmails = [];
+        _.each(customers, function (customer) {
           if (!$scope.checkBestEmail(customer)) {
-            customers.splice(index, 1);
+            customerWithoutEmails.push(customer);
           }
         });
+        customers = _.difference(customers, customerWithoutEmails);
         $scope.customers = customers;
         var _tags = [];
         _.each(customers, function (customer) {
