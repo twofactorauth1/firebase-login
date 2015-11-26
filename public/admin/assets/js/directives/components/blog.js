@@ -20,23 +20,22 @@ app.directive('blogComponent', ['$filter', '$timeout', 'WebsiteService', 'toaste
     };
     scope.deletedPosts = [];
     scope.component.spacing = scope.$parent.defaultSpacings; 
-    scope.control.saveBlogData = function () {
-      _.each(scope.blog.blogposts, function (value, index) {
-          var matching_post = _.find(scope.originalBlogPosts, function (item) {
-            return item._id === value._id
+    if(!scope.ssbEditor)
+      scope.control.saveBlogData = function () {
+        _.each(scope.blog.blogposts, function (value, index) {
+            var matching_post = _.find(scope.originalBlogPosts, function (item) {
+              return item._id === value._id
+            })
+            if (!angular.equals(matching_post, value))
+              WebsiteService.updatePost(scope.$parent.page._id, value._id, value, function (data) {});
           })
-          if (!angular.equals(matching_post, value))
-            WebsiteService.updatePost(scope.$parent.page._id, value._id, value, function (data) {});
-        })
-      if(scope.deletedPosts.length){
-        WebsiteService.bulkDeletePosts(scope.$parent.page._id, scope.deletedPosts, function (data) {});
-        scope.deletedPosts = [];
-      }
+        if(scope.deletedPosts.length){
+          WebsiteService.bulkDeletePosts(scope.$parent.page._id, scope.deletedPosts, function (data) {});
+          scope.deletedPosts = [];
+        }
 
-      };
-      
-
-    },
+        };
+      },
     controller: function ($scope, WebsiteService, $compile, $filter, $timeout) {
       $scope.blog = {};
       $scope.showCloud = false;
