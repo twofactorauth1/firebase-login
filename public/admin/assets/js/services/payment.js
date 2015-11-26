@@ -106,15 +106,15 @@
                     });
             };
 
-            /*this.getInvoicesForAccount = function(fn) {
+            this.getInvoicesForAccount = function(fn) {
                 var apiUrl = baseUrl + ['integrations', 'payments', 'account', 'invoices'].join('/');
                 $http.get(apiUrl)
                     .success(function(data, status, headers, config) {
                         fn(data);
                     });
-            }*/
+            }
 
-            this.getInvoicesForAccount = function(fn) {
+            this.getTransactionsForAccount = function(fn) {
                 var apiUrl = baseUrl + ['integrations', 'payments', 'account', 'charges'].join('/');
                 $http.get(apiUrl)
                     .success(function(data, status, headers, config) {

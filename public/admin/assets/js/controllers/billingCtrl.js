@@ -44,7 +44,22 @@
           formattedDate = formattedDate.subtract(options.subtractNum, options.subtractType);
         }
         if (options.addNum && options.addType) {
-          formattedDate = formattedDate.add(options.addNum, options.addType);
+          if($scope.planInterval == 'week')
+          {
+            formattedDate = formattedDate.add(7, options.addType);
+          }
+          else if($scope.planInterval == 'month')
+          {
+            formattedDate = formattedDate.add(30, options.addType);
+          }
+          else if($scope.planInterval == 'year')
+          {
+            formattedDate = formattedDate.add(365, options.addType);
+          }
+          else
+          {
+            formattedDate = formattedDate.add(options.addNum, options.addType);
+          }
         }
       }
       return formattedDate.format("MMMM Do, YYYY");
@@ -55,6 +70,11 @@
       {
         //console.log('changeInvoice >>> ' + invoice.toJSON());
         $scope.selectedInvoice = invoice;
+        $scope.planInterval = invoice.lines.data[0]["plan"].interval;
+        if($scope.planInterval=='' || $scope.planInterval == null || $scope.planInterval === undefined)
+        {
+          $scope.planInterval = invoice.lines.data[1]["plan"].interval;
+        }
       }
       $scope.selectedItemIndex = index;
     };
@@ -96,6 +116,7 @@
         list: []
     };
     $scope.selectedPlan = {};
+    $scope.planInterval = "";
     $scope.selectedAddOns = [];
 
     $scope.customer_id=0;
@@ -254,6 +275,14 @@
           PaymentService.getInvoicesForAccount(function (invoices) {
             $scope.invoices = invoices;
             $scope.pagedInvoices = $scope.invoices.data.slice(0, $scope.invoicePageLimit);
+            $scope.showToaster = true;
+            ToasterService.processPending();
+            ToasterService.processHtmlPending();
+          });
+
+          PaymentService.getTransactionsForAccount(function (invoices) {
+            $scope.transactions = invoices;
+            $scope.pagedTransactions = $scope.transactions.data.slice(0, $scope.invoicePageLimit);
             $scope.showToaster = true;
             ToasterService.processPending();
             ToasterService.processHtmlPending();
