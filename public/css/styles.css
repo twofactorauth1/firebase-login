@@ -2270,9 +2270,6 @@ div[data-type="feature-block"] .component-inner {
 #paradata span h5 {
   font-size: 18px;
 }
-.image-text {
-  display: inline-block;
-}
 .image-text .img-responsive {
   margin: 0 auto;
 }

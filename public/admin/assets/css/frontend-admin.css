@@ -2275,9 +2275,6 @@
 #componentloader #paradata span h5 {
   font-size: 18px;
 }
-#componentloader .image-text {
-  display: inline-block;
-}
 #componentloader .image-text .img-responsive {
   margin: 0 auto;
 }
