@@ -69,7 +69,6 @@ function (cfpLoadingBarProvider) {
 
 }]);
 app.config(['$httpProvider', function($httpProvider) {
-    $httpProvider.defaults.cache = false;
     if (!$httpProvider.defaults.headers.get) {
       $httpProvider.defaults.headers.get = {};
     }
