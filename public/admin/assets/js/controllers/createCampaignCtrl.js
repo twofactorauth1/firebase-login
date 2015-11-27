@@ -1413,7 +1413,8 @@
     $scope.loadSavedTags = function() {
       _.each($scope.newCampaignObj.contactTags, function(tag) {
         var tag = _.findWhere($scope.customerCounts, { uniqueTag: tag });
-        $scope.toggleSelection(tag.matchingTag);
+        if(tag)
+          $scope.toggleSelection(tag.matchingTag);
       });
     };
 
