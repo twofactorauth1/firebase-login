@@ -120,15 +120,18 @@
         };
 
         $scope.createPost = function(postData) {
+            $scope.saveLoading = true;
             $scope.validateCreatePost(postData, true);
             console.log('$scope.createPostValidated ', $scope.createPostValidated);
             if (!$scope.createPostValidated) {
-              return false;
+                $scope.saveLoading = false;
+                return false;
             }
-
+           
             postData.websiteId = $scope.website._id;
             WebsiteService.getSinglePost(postData.post_url, function (data) {
                 if (data && data._id) {
+                    $scope.saveLoading = false;
                     toaster.pop('error', "Post URL " + postData.post_url, "Already exists");
                 }
                 else
@@ -138,6 +141,7 @@
                       $scope.cancel();
                       $scope.posts.unshift(data);
                       $scope.displayedPosts.unshift(data);
+                      $scope.saveLoading = false;
                     })
             })
         };
