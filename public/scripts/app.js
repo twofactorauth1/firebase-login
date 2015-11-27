@@ -43,11 +43,7 @@ var mainApp = angular
     if (window.history && window.history.pushState) {
       $locationProvider.html5Mode(true).hashPrefix('!');
     }
-    if (!$httpProvider.defaults.headers.get) {
-      $httpProvider.defaults.headers.get = {};
-    }
-    // disable IE ajax request caching
-    $httpProvider.defaults.headers.get['If-Modified-Since'] = '0';
+    $httpProvider.interceptors.push('noCacheInterceptor');
     $routeProvider
       .when('/', {
         templateUrl: '../views/cache.html',
@@ -67,8 +63,17 @@ var mainApp = angular
             controller: 'LayoutCtrl as layout'
       });
 
-  }])
-
+  }]).factory('noCacheInterceptor', function () {
+      return {
+        request: function (config) {
+            if(config.method=='GET' && config.url.indexOf('/api/') === 0 ){
+                var separator = config.url.indexOf('?') === -1 ? '?' : '&';
+                config.url = config.url+separator+'noCache=' + new Date().getTime();
+            }
+            return config;
+        }
+     };
+  })
 .run(function ($rootScope, $location, $anchorScroll, $routeParams, $document, $timeout, ipCookie, analyticsService) {
 
     var runningInterval;

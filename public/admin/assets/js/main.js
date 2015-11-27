@@ -69,9 +69,15 @@ function (cfpLoadingBarProvider) {
 
 }]);
 app.config(['$httpProvider', function($httpProvider) {
-    if (!$httpProvider.defaults.headers.get) {
-      $httpProvider.defaults.headers.get = {};
-    }
-    // disable IE ajax request caching
-    $httpProvider.defaults.headers.get['If-Modified-Since'] = '0';
-}]);
+ $httpProvider.interceptors.push('noCacheInterceptor');
+}]).factory('noCacheInterceptor', function () {
+    return {
+        request: function (config) {
+            if(config.method=='GET' && config.url && config.url.indexOf('/api/') === 0 ){
+                var separator = config.url.indexOf('?') === -1 ? '?' : '&';
+                config.url = config.url+separator+'noCache=' + new Date().getTime();
+            }
+            return config;
+       }
+   };
+});
