@@ -6,8 +6,10 @@
             <h1 class="center total">${{(upcomingInvoice.amount_due/100).toFixed( 2 )}}</h1>
         </div>
         <div class="col-xs-6">
-            <h4>Current Payment:</h4>
-            <span>due {{upcomingInvoice.period_end*1000 | date : 'longDate'}}</span>
+        <B>DATE : {{test}}</B>
+            <h4 ng-if="upcomingInvoice">Current Payment:</h4>
+            <!-- <span>due {{upcomingInvoice.lines.data[0].period.start*1000 | date : 'longDate'}}</span>-->
+            <span>due {{paymentDueDate}}</span>
             <!--<h4>Last Payment:</h4>-->
             <!--<span>recieved 01AUG14</span>-->
         </div>
