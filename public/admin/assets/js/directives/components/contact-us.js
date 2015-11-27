@@ -82,7 +82,11 @@ app.directive('contactUsComponent', ['AccountService', 'GeocodeService', '$timeo
       }
 
       scope.updateContactUsAddress = function () {
-        scope.contactAddress = GeocodeService.stringifyAddress(scope.component.location, true);
+        setTimeout(function () {
+          scope.$apply(function () {
+               scope.contactAddress = GeocodeService.stringifyAddress(scope.component.location, true);
+          });
+        }, 0);        
         if (scope.component.location.lat && scope.component.location.lon) {
           scope.reloadMap();
         } else {
