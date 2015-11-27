@@ -50,16 +50,18 @@
           }
           else if($scope.planInterval == 'month')
           {
-            formattedDate = formattedDate.add(30, options.addType);
+            formattedDate = formattedDate.add(1, 'months');
           }
           else if($scope.planInterval == 'year')
           {
-            formattedDate = formattedDate.add(365, options.addType);
+            formattedDate = formattedDate.add(1, 'years');
           }
           else
           {
             formattedDate = formattedDate.add(options.addNum, options.addType);
           }
+          console.log("Formatted date: ")
+          console.log(formattedDate);
         }
       }
       return formattedDate.format("MMMM Do, YYYY");
@@ -339,6 +341,9 @@
         if (account.billing.stripeCustomerId) {
           PaymentService.getUpcomingInvoice(account.billing.stripeCustomerId, function (upcomingInvoice) {
             $scope.upcomingInvoice = upcomingInvoice;
+            $scope.planInterval = upcomingInvoice.lines.data[0].plan.interval;
+            console.log("upcoming invoice");
+            console.log(upcomingInvoice);
           });
         }
 
