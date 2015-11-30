@@ -31,8 +31,8 @@ _.extend(api.prototype, baseApi.prototype, {
 
         // THEME - work with theme objects
 
-        app.get(this.url('themes'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//list
-        app.get(this.url('themes/:id'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//get
+        app.get(this.url('themes'), this.isAuthAndSubscribedApi.bind(this), this.listThemes.bind(this));//list
+        app.get(this.url('themes/:id'), this.isAuthAndSubscribedApi.bind(this), this.getTheme.bind(this));//get
         app.post(this.url('themes'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//create
         app.post(this.url('themes/:id'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//update
         app.delete(this.url('themes/:id'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//delete
