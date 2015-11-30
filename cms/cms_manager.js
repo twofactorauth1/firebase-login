@@ -52,7 +52,7 @@ module.exports = {
 
     getAllTemplates: function(accountId, fn) {
         log.debug('>> getAllTemplates');
-        templateDao.findMany({$or : [{'accountId': accountId}, {'isPublic': true}, {'isPublic': 'true'}]}, $$.m.cms.Template, function(err, list){
+        templateDao.findMany({$or : [{'accountId': accountId}, {'isPublic': true}, {'isPublic': 'true'}], 'ssb':{$ne:true}}, $$.m.cms.Template, function(err, list){
             if(err) {
                 log.error('Exception thrown listing templates: ' + err);
                 fn(err, null);
