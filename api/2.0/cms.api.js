@@ -56,14 +56,14 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('websites/:id/theme'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//get theme
 
         //PAGE
-        app.get(this.url('websites/:id/page'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//get pages
+        app.get(this.url('websites/:id/pages'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//get pages
         app.post(this.url('websites/:id/page'), this.isAuthAndSubscribedApi.bind(this), this.createPage.bind(this));//create page
         app.get(this.url('pages/:id'), this.isAuthAndSubscribedApi.bind(this), this.getPage.bind(this));//get page
         app.post(this.url('pages/:id'), this.isAuthAndSubscribedApi.bind(this), this.updatePage.bind(this));//update page
         app.delete(this.url('pages/:id'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//delete page
 
         app.get(this.url('pages/:id/template'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//get page template
-        app.post(this.url('pages/:id/template/:templateId'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//set page template
+        //app.post(this.url('pages/:id/template/:templateId'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//set page template
 
         app.get(this.url('pages/:id/versions'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//get page versions
         app.post(this.url('pages/:id/version/:versionId'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//revert page to version
@@ -73,8 +73,11 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('components'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this)); //get components
 
         // SECTIONS
-        app.get(this.url('sections'), this.isAuthAndSubscribedApi.bind(this), this.listSections.bind(this)); // list sections
-
+        app.get(this.url('sections'), this.isAuthAndSubscribedApi.bind(this), this.listAllSections.bind(this)); // list sections
+        app.get(this.url('sections/all'), this.isAuthAndSubscribedApi.bind(this), this.listAllSections.bind(this));
+        app.get(this.url('sections/platform'), this.isAuthAndSubscribedApi.bind(this), this.listPlatformSections.bind(this));
+        app.get(this.url('sections/user'), this.isAuthAndSubscribedApi.bind(this), this.listAccountSections.bind(this));
+        app.get(this.url('sections/:id'), this.isAuthAndSubscribedApi.bind(this), this.getSection.bind(this));
     },
 
     noop: function(req, resp) {
@@ -221,7 +224,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
 
 
-    listSections: function(req, resp) {
+    listAccountSections: function(req, resp) {
         var self = this;
         self.log.debug('>> listSections');
 
@@ -230,8 +233,60 @@ _.extend(api.prototype, baseApi.prototype, {
             if (isAllowed !== true) {
                 return self.send403(resp);
             } else {
-                ssbManager.listSections(accountId, function(err, sections){
+                ssbManager.listAccountSectionSummaries(accountId, function(err, sections){
                     self.log.debug('<< listSections');
+                    return self.sendResultOrError(resp, err, sections, "Error listing sections");
+                });
+            }
+        });
+    },
+
+    getSection: function(req, resp) {
+        var self = this;
+        self.log.debug('>> getSection');
+
+        var accountId = parseInt(self.accountId(req));
+        var sectionId = req.params.id;
+        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                ssbManager.getSection(accountId, sectionId, function(err, sections){
+                    self.log.debug('<< getSection');
+                    return self.sendResultOrError(resp, err, sections, "Error getting section");
+                });
+            }
+        });
+    },
+
+    listAllSections: function(req, resp) {
+        var self = this;
+        self.log.debug('>> listAllSections');
+
+        var accountId = parseInt(self.accountId(req));
+        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                ssbManager.listAllSectionSummaries(accountId, function(err, sections){
+                    self.log.debug('<< listAllSections');
+                    return self.sendResultOrError(resp, err, sections, "Error listing sections");
+                });
+            }
+        });
+    },
+
+    listPlatformSections: function(req, resp) {
+        var self = this;
+        self.log.debug('>> listPlatformSections');
+
+        var accountId = parseInt(self.accountId(req));
+        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                ssbManager.listPlatformSectionSummaries(accountId, function(err, sections){
+                    self.log.debug('<< listPlatformSections');
                     return self.sendResultOrError(resp, err, sections, "Error listing sections");
                 });
             }

@@ -10,6 +10,8 @@ var sectionDao = require('./dao/section.dao');
 var async = require('async');
 var slug = require('slug');
 
+var PLATFORM_ID = 0;
+
 module.exports = {
     log: logger,
 
@@ -296,19 +298,99 @@ module.exports = {
 
     },
 
-    listSections: function(accountId, fn) {
+    listAccountSectionSummaries: function(accountId, fn) {
         var self = this;
-        self.log.debug('>> listSections');
+        self.log.debug('>> listAccountSectionSummaries');
 
         var query = {accountId:accountId};
+        //var fields = ['_id', 'name', 'type', 'preview', 'filter', 'description', 'enabled'];
+        var fields = {
+            _id:1,
+            name:1,
+            type:1,
+            preview:1,
+            filter:1,
+            description:1,
+            enabled:1
+        };
 
-        sectionDao.findMany(query, $$.m.ssb.Section, function(err, list){
+        sectionDao.findManyWithFields(query, fields, $$.m.ssb.Section, function(err, list){
             if(err) {
                 self.log.error('Error listing sections:', err);
                 return fn(err);
             } else {
-                self.log.debug('<< listSections');
+                self.log.debug('<< listAccountSectionSummaries');
                 return fn(null, list);
+            }
+        });
+    },
+
+    listAllSectionSummaries: function(accountId, fn) {
+        var self = this;
+        self.log.debug('>> listAllSectionSummaries');
+
+        var query = {$or: [{accountId:accountId},{accountId:PLATFORM_ID}]};
+        //var fields = ['_id', 'name', 'type', 'preview', 'filter', 'description', 'enabled'];
+        var fields = {
+            _id:1,
+            name:1,
+            type:1,
+            preview:1,
+            filter:1,
+            description:1,
+            enabled:1
+        };
+
+        sectionDao.findManyWithFields(query, fields, $$.m.ssb.Section, function(err, list){
+            if(err) {
+                self.log.error('Error listing sections:', err);
+                return fn(err);
+            } else {
+                self.log.debug('<< listAllSectionSummaries');
+                return fn(null, list);
+            }
+        });
+    },
+
+    listPlatformSectionSummaries: function(fn) {
+        var self = this;
+        self.log.debug('>> listPlatformSectionSummaries');
+
+        var query = {accountId:PLATFORM_ID};
+        //var fields = ['_id', 'name', 'type', 'preview', 'filter', 'description', 'enabled'];
+        var fields = {
+            _id:1,
+            name:1,
+            type:1,
+            preview:1,
+            filter:1,
+            description:1,
+            enabled:1
+        };
+
+        sectionDao.findManyWithFields(query, fields, $$.m.ssb.Section, function(err, list){
+            if(err) {
+                self.log.error('Error listing sections:', err);
+                return fn(err);
+            } else {
+                self.log.debug('<< listPlatformSectionSummaries');
+                return fn(null, list);
+            }
+        });
+    },
+
+    getSection: function(accountId, sectionId, fn) {
+        var self = this;
+        self.log.debug('>> getSection');
+        var query = {_id: sectionId, accountId: {$in: [accountId, PLATFORM_ID]}};
+
+        sectionDao.findOne(query, $$.m.ssb.Section, function(err, section){
+            if(err) {
+                self.log.error('Error getting section:', err);
+                return fn(err);
+            } else {
+                self.log.debug('<< getSection');
+                return fn(null, section);
             }
         });
     }
