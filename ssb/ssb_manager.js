@@ -232,7 +232,18 @@ module.exports = {
                     }
                 });
             },
-            function updateThePage(existingPage, cb){
+            function updateSections(existingPage, cb) {
+                var sections = page.get('sections');
+                sectionDao.saveSections(sections, function(err, updatedSections){
+                    if(err) {
+                        self.log.error('Error saving sections:', err);
+                        cb(err);
+                    } else {
+                        cb(null, existingPage, updatedSections);
+                    }
+                });
+            },
+            function updateThePage(existingPage, updatedSections, cb){
                 var sections = page.get('sections');
                 page.set('modified', modified);
                 var jsonSections = [];
@@ -246,22 +257,9 @@ module.exports = {
                         self.log.error('Error updating page:', err);
                         cb(err);
                     } else {
-                        cb(null, existingPage, updatedPage);
-                    }
-                });
-            },
-            function updateSections(existingPage, updatedPage, cb){
-                var sections = page.get('sections');
-                //figure out if we need to delete any
-                sectionDao.saveSections(sections, function(err, updatedSections){
-                    if(err) {
-                        self.log.error('Error saving sections:', err);
-                        cb(err);
-                    } else {
                         cb(null, existingPage, updatedPage, updatedSections);
                     }
                 });
-
             },
             function deleteRemovedSections(existingPage, updatedPage, updatedSections, cb){
                 //var updatedSections = updatedPage.get('sections');
@@ -272,12 +270,12 @@ module.exports = {
                  * ID as the existing page's section, it must be deleted
                  */
                 _.each(existingPage.get('sections'), function(section){
-                    if(!_.contains(updatedSectionIDs, section.id())) {
+                    if(!_.contains(updatedSectionIDs, section._id)) {
                         sectionsToBeDeleted.push(section);
                     }
                 });
                 async.each(sectionsToBeDeleted, function(section, cb){
-                    sectionDao.removeById(section.id(), $$.m.ssb.Section, function(err, value){
+                    sectionDao.removeById(section._id, $$.m.ssb.Section, function(err, value){
                         cb(err);
                     });
                 }, function done(err){
