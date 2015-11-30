@@ -15,6 +15,7 @@
     var baseWebsiteAPIUrlv2 = '/api/2.0/cms/websites/'
     var basePageAPIUrlv2 = '/api/2.0/cms/pages/';
     var baseTemplateAPIUrlv2 = '/api/2.0/cms/templates/';
+    var baseSectionAPIUrlv2 = '/api/2.0/cms/sections';
 
 		ssbService.getSite = getSite;
 		ssbService.getPage = getPage;
@@ -29,6 +30,7 @@
 		ssbService.getPlatformComponents = getPlatformComponents;
 		ssbService.getComponent = getComponent;
 		ssbService.getSection = getSection;
+        ssbService.getSections = getUserSections;
 		ssbService.checkForDuplicatePage = checkForDuplicatePage;
 		ssbService.loading = { value: 0 };
 		ssbService.getThemes = getThemes;
@@ -455,6 +457,7 @@
 			return ssbRequest(deferred.promise);
 
 		}
+
 
     function sectionName(section) {
       var sectionName = section.layout;
@@ -975,7 +978,20 @@
 		}
 
 		function getUserSections() {
-			return [];
+
+            function success(data) {
+                console.log('SimpleSiteBuilderService getUserSections: ' + data);
+            }
+
+            function error (error) {
+                console.error('SimpleSiteBuilderService getUserSections error: ' + error);
+            }
+
+            return (ssbRequest($http({
+                url: baseSectionAPIUrlv2,
+                method: 'GET'
+            }).success(success).error(error)));
+			//return [];
 		}
 
     function getTemplates() {

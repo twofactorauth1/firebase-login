@@ -294,5 +294,22 @@ module.exports = {
         });
 
 
+    },
+
+    listSections: function(accountId, fn) {
+        var self = this;
+        self.log.debug('>> listSections');
+
+        var query = {accountId:accountId};
+
+        sectionDao.findMany(query, $$.m.ssb.Section, function(err, list){
+            if(err) {
+                self.log.error('Error listing sections:', err);
+                return fn(err);
+            } else {
+                self.log.debug('<< listSections');
+                return fn(null, list);
+            }
+        });
     }
 };

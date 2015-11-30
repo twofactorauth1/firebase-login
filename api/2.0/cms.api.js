@@ -72,6 +72,8 @@ _.extend(api.prototype, baseApi.prototype, {
         // COMPONENTS
         app.get(this.url('components'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this)); //get components
 
+        // SECTIONS
+        app.get(this.url('sections'), this.isAuthAndSubscribedApi.bind(this), this.listSections.bind(this)); // list sections
 
     },
 
@@ -212,6 +214,25 @@ _.extend(api.prototype, baseApi.prototype, {
                 ssbManager.updatePage(accountId, pageId, updatedPage, modified, function(err, page){
                     self.log.debug('<< getPage');
                     return self.sendResultOrError(resp, err, page, "Error fetching page");
+                });
+            }
+        });
+    },
+
+
+
+    listSections: function(req, resp) {
+        var self = this;
+        self.log.debug('>> listSections');
+
+        var accountId = parseInt(self.accountId(req));
+        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                ssbManager.listSections(accountId, function(err, sections){
+                    self.log.debug('<< listSections');
+                    return self.sendResultOrError(resp, err, sections, "Error listing sections");
                 });
             }
         });
