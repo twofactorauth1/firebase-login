@@ -288,7 +288,11 @@ module.exports = {
             }
         ], function done(err, updatedPage, updatedSections){
             if(updatedPage) {
-                updatedPage.set('sections', updatedSections);
+                var sectionArray = [];
+                _.each(updatedSections, function(section){
+                    sectionArray.push(section.toJSON());
+                });
+                updatedPage.set('sections', sectionArray);
             }
             self.log.debug('<< updatePage');
             return fn(err, updatedPage);
