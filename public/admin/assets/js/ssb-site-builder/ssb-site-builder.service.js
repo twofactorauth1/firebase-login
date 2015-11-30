@@ -16,6 +16,7 @@
     var basePageAPIUrlv2 = '/api/2.0/cms/pages/';
     var baseTemplateAPIUrlv2 = '/api/2.0/cms/templates/';
     var baseSectionAPIUrlv2 = '/api/2.0/cms/sections';
+    var baseComponentAPIUrlv2 = '/api/2.0/cms/components';
 
 		ssbService.getSite = getSite;
 		ssbService.getPage = getPage;
@@ -851,12 +852,29 @@
         // }
         ];
 
-        var ret = [];
-        components.forEach(function(cmp) {
-          ret.push(getComponent(cmp));
-        })
+            function success(data) {
+                console.log('Success from call to 2.0 get components', data);
+                var ret = [];
+                data.forEach(function(cmp) {
+                    ret.push(getComponent(cmp));
+                });
 
-        return $q.all(ret)
+                $q.all(ret).then(function(data){
+                    ssbService.platformComponents = data.map(function(component) {
+                        return component.data;
+                    });
+                });
+            }
+            function error(error) {
+                console.error('SimpleSiteBuilderService getPlatformComponents error: ' + error);
+            }
+
+            return (
+                    ssbRequest($http({
+                        url: baseComponentAPIUrlv2,
+                        method: 'GET'
+                    }).success(success).error(error))
+                );
 		}
 
 		//TODO: api implement

@@ -7,6 +7,7 @@ var themeDao = require('./dao/theme.dao');
 var websiteDao = require('./dao/website.dao');
 var pageDao = require('./dao/page.dao');
 var sectionDao = require('./dao/section.dao');
+var componentDao = require('./dao/component.dao');
 var async = require('async');
 var slug = require('slug');
 
@@ -236,7 +237,7 @@ module.exports = {
                 page.set('modified', modified);
                 var jsonSections = [];
                 _.each(sections, function(section){
-                    jsonSections.push(section.toReference());
+                    jsonSections.push(section._id);
                 });
                 page.set('sections', jsonSections);
                 page.set('created', existingPage.get('created'));
@@ -263,7 +264,7 @@ module.exports = {
 
             },
             function deleteRemovedSections(existingPage, updatedPage, updatedSections, cb){
-                var updatedSections = updatedPage.get('sections');
+                //var updatedSections = updatedPage.get('sections');
                 var updatedSectionIDs = _.pluck(updatedSections, '_id');
                 var sectionsToBeDeleted = [];
                 /*
@@ -391,6 +392,21 @@ module.exports = {
             } else {
                 self.log.debug('<< getSection');
                 return fn(null, section);
+            }
+        });
+    },
+
+    listComponents: function(accountId, fn) {
+        var self = this;
+        self.log.debug('>> listComponents');
+
+        componentDao.findMany({_id: {$ne:'__counter__'}}, $$.m.ssb.Component, function(err, components){
+            if(err) {
+                self.log.error('Error listing components:', err);
+                return fn(err);
+            } else {
+                self.log.debug('<< listComponents');
+                return fn(null, components);
             }
         });
     }
