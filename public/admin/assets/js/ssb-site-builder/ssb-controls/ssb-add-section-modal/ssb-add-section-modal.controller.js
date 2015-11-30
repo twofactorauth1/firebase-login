@@ -17,14 +17,14 @@ app.controller('SiteBuilderAddSectionModalController', ['$timeout', 'parentVm', 
   {
     title: 'Hero Image',
     type: 'ssb-hero',
-    preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/masthead.jpg',
+    preview: 'https://placeholdit.imgix.net/~text?txtsize=33&txt=SSB%20Hero%20Image&w=350&h=150',
     filter: 'misc',
     description: 'Introduce your business with this section on the top of your home page.',
     enabled: true
   },{
     title: 'Header',
     type: 'ssb-header',
-    preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/nav-v2-preview.jpg',
+    preview: 'https://placeholdit.imgix.net/~text?txtsize=33&txt=SSB%20Header&w=350&h=150',
     filter: 'navigation',
     description: 'Introduce your business with this section on the top of your home page.',
     enabled: true
