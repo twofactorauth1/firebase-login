@@ -220,7 +220,7 @@ module.exports = {
     updatePage: function(accountId, pageId, page, modified, fn) {
         var self = this;
         self.log.debug('>> updatePage');
-
+        //debugger;
         async.waterfall([
             function getExistingPage(cb){
                 pageDao.getPageById(accountId, pageId, function(err, existingPage){
@@ -239,6 +239,7 @@ module.exports = {
                         self.log.error('Error saving sections:', err);
                         cb(err);
                     } else {
+                        //debugger;
                         cb(null, existingPage, updatedSections);
                     }
                 });
@@ -248,7 +249,7 @@ module.exports = {
                 page.set('modified', modified);
                 var jsonSections = [];
                 _.each(sections, function(section){
-                    jsonSections.push(section._id);
+                    jsonSections.push({_id: section._id});
                 });
                 page.set('sections', jsonSections);
                 page.set('created', existingPage.get('created'));
@@ -263,7 +264,12 @@ module.exports = {
             },
             function deleteRemovedSections(existingPage, updatedPage, updatedSections, cb){
                 //var updatedSections = updatedPage.get('sections');
-                var updatedSectionIDs = _.pluck(updatedSections, '_id');
+                //TODO: updatedSections is an Array of Section Objects... the pluck will not work
+
+                var updatedSectionIDs =_.map(updatedSections, function(section){
+                    return section.id();
+                });
+                self.log.debug('updatedSectionIDs:', updatedSectionIDs);
                 var sectionsToBeDeleted = [];
                 /*
                  * If the updatedPage does not have a section with the same
