@@ -17,6 +17,12 @@ var dao = {
         self.findOne(query, $$.m.ssb.Website, fn);
     },
 
+    getWebsitesForAccount: function(accountId, fn) {
+        var self = this;
+        var query = {accountId:accountId};
+        self.findMany(query, $$.m.ssb.Website, fn);
+    },
+
     options: {
         name: "ssb.website.dao",
         defaultModel: $$.m.ssb.Website

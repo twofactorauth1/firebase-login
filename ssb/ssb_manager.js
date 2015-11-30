@@ -78,6 +78,56 @@ module.exports = {
         });
     },
 
+    listWebsites: function(accountId, fn) {
+        var self = this;
+        self.log.debug('>> listWebsites');
+        websiteDao.getWebsitesForAccount(accountId, function(err, list){
+            if(err) {
+                self.log.error('Error getting websites:', err);
+                return fn(err, null);
+            } else {
+                self.log.debug('<< listWebsites');
+                return fn(null, list);
+            }
+        });
+    },
+
+    getWebsite: function(accountId, websiteId, fn) {
+        var self = this;
+        self.log.debug('>> getWebsite');
+        websiteDao.getWebsiteById(accountId, websiteId, function(err, website){
+            if(err) {
+                self.log.error('Error getting website:', err);
+                return fn(err, null);
+            } else {
+                self.log.debug('<< getWebsite');
+                return fn(null, website);
+            }
+        });
+    },
+
+    updateWebsite: function(accountId, websiteId, modified, modifiedWebsite, fn) {
+        var self = this;
+        self.log.debug('>> updateWebsite');
+        websiteDao.getWebsiteById(accountId, websiteId, function(err, website){
+            if(err || !website) {
+                self.log.error('Error finding website:', err);
+                return fn(err, null);
+            } else {
+                modifiedWebsite.set('modified', modified);
+                websiteDao.saveOrUpdate(modifiedWebsite, function(err, updatedWebsite){
+                    if(err) {
+                        self.log.error('Error updating website:', err);
+                        return fn(err, null);
+                    } else {
+                        self.log.debg('<< updateWebsite');
+                        return fn(null, updatedWebsite);
+                    }
+                });
+            }
+        });
+    },
+
     createPage: function(accountId, websiteId, templateId, created, fn) {
         var self = this;
         self.log.debug('>> createPage');

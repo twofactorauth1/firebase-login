@@ -46,17 +46,16 @@ _.extend(api.prototype, baseApi.prototype, {
         app.delete(this.url('templates/:id'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//delete
 
         // WEBSITE - work with website objects
-        app.get(this.url('websites'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//get default (0th) website for current account
-        app.get(this.url('websites/:id'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//get
-        app.get(this.url('websites'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//list
-        app.post(this.url('websites'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//create
-        app.post(this.url('websites/:id'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//update
+        app.get(this.url('websites'), this.isAuthAndSubscribedApi.bind(this), this.listWebsites.bind(this));//get default (0th) website for current account
+        app.get(this.url('websites/:id'), this.isAuthAndSubscribedApi.bind(this), this.getWebsite.bind(this));//get
+        app.post(this.url('websites'), this.isAuthAndSubscribedApi.bind(this), this.createWebsite.bind(this));//create
+        app.post(this.url('websites/:id'), this.isAuthAndSubscribedApi.bind(this), this.updateWebsite.bind(this));//update
         app.delete(this.url('websites/:id'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//delete
 
         app.get(this.url('websites/:id/theme'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//get theme
 
         //PAGE
-        app.get(this.url('websites/:id/pages'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//get pages
+        app.get(this.url('websites/:id/pages'), this.isAuthAndSubscribedApi.bind(this), this.listPages.bind(this));//get pages
         app.post(this.url('websites/:id/page'), this.isAuthAndSubscribedApi.bind(this), this.createPage.bind(this));//create page
         app.get(this.url('pages/:id'), this.isAuthAndSubscribedApi.bind(this), this.getPage.bind(this));//get page
         app.post(this.url('pages/:id'), this.isAuthAndSubscribedApi.bind(this), this.updatePage.bind(this));//update page
@@ -158,6 +157,65 @@ _.extend(api.prototype, baseApi.prototype, {
     },
 
     createWebsite: function(req, resp) {
+
+    },
+
+    listWebsites: function(req, resp) {
+        var self = this;
+        self.log.debug('>> listWebsites');
+        var accountId = parseInt(self.accountId(req));
+
+        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed){
+            if(isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                ssbManager.listWebsites(accountId, function(err, websites){
+                    self.log.debug('<< listWebsites');
+                    return self.sendResultOrError(resp, err, websites, "Error getting websites");
+                });
+            }
+        });
+    },
+
+    getWebsite: function(req, resp) {
+        var self = this;
+        self.log.debug('>> getWebsite');
+        var accountId = parseInt(self.accountId(req));
+        var websiteId = req.params.id;
+
+        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed){
+            if(isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                ssbManager.getWebsite(accountId, websiteId, function(err, website){
+                    self.log.debug('<< getWebsite');
+                    return self.sendResultOrError(resp, err, website, "Error getting websites");
+                });
+            }
+        });
+    },
+
+    updateWebsite: function(req, resp) {
+        var self = this;
+        self.log.debug('>> updateWebsite');
+        var accountId = parseInt(self.accountId(req));
+        var websiteId = req.params.id;
+        var modifiedWebsite = req.body;
+        var modified = {date: new Date(), by: self.userId(req)};
+
+        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                ssbManager.updateWebsite(accountId, websiteId, modified, modifiedWebsite, function(err, website){
+                    self.log.debug('<< updateWebsite');
+                    return self.sendResultOrError(resp, err, website, "Error updating website");
+                });
+            }
+        });
+    },
+
+    listPages: function(req, resp) {
 
     },
 
