@@ -70,7 +70,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
 
         // COMPONENTS
-        app.get(this.url('components'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this)); //get components
+        app.get(this.url('components'), this.isAuthAndSubscribedApi.bind(this), this.listComponents.bind(this)); //get components
 
         // SECTIONS
         app.get(this.url('sections'), this.isAuthAndSubscribedApi.bind(this), this.listAllSections.bind(this)); // list sections
@@ -288,6 +288,23 @@ _.extend(api.prototype, baseApi.prototype, {
                 ssbManager.listPlatformSectionSummaries(accountId, function(err, sections){
                     self.log.debug('<< listPlatformSections');
                     return self.sendResultOrError(resp, err, sections, "Error listing sections");
+                });
+            }
+        });
+    },
+
+    listComponents: function(req, resp) {
+        var self = this;
+        self.log.debug('>> listComponents');
+
+        var accountId = parseInt(self.accountId(req));
+        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                ssbManager.listComponents(accountId, function(err, components){
+                    self.log.debug('<< listComponents');
+                    return self.sendResultOrError(resp, err, components, "Error listing components");
                 });
             }
         });
