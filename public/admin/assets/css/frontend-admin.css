@@ -6750,6 +6750,7 @@ a[href="https://froala.com/wysiwyg-editor"] {
   position: absolute!important;
   bottom: -3.5em !important;
   right: 1em!important;
+  z-index: 2;
 }
 .ssb-main[data-eq-state$="medium"] .social-link-v1 .social-link ul,
 .ssb-main[data-eq-state$="large"] .social-link-v1 .social-link ul {

@@ -115,7 +115,7 @@
 
 			return (
 				ssbRequest($http({
-					url: baseWebsiteAPIUrl + ssbService.website._id + '/page/' + page._id,
+					url: basePageAPIUrlv2 + page._id,
 					method: 'POST',
 					data: angular.toJson(page)
 				}).success(successPage).error(errorPage))
