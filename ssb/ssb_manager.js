@@ -248,6 +248,21 @@ module.exports = {
 
     },
 
+    listPages: function(accountId, websiteId, fn) {
+        var self = this;
+        self.log.debug('>> listPages');
+        var query = {accountId:accountId, websiteId:websiteId, latest:true};
+        pageDao.findMany(query, $$.m.ssb.Page, function(err, pages){
+            if(err) {
+                self.log.error('error getting pages:', err);
+                return fn(err);
+            } else {
+                self.log.debug('<< listPages');
+                return fn(null, pages);
+            }
+        });
+    },
+
     getPage: function(accountId, pageId, fn) {
         var self = this;
         self.log.debug('>> getPage');

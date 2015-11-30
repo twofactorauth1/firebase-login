@@ -216,7 +216,21 @@ _.extend(api.prototype, baseApi.prototype, {
     },
 
     listPages: function(req, resp) {
+        var self = this;
+        self.log.debug('>> listPages');
+        var accountId = parseInt(self.accountId(req));
+        var websiteId = req.params.id;
 
+        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                ssbManager.listPages(accountId, websiteId, function(err, pages){
+                    self.log.debug('<< listPages');
+                    return self.sendResultOrError(resp, err, pages, "Error listing pages");
+                });
+            }
+        });
     },
 
     createPage: function(req, resp) {
