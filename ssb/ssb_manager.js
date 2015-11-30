@@ -272,12 +272,12 @@ module.exports = {
                  * ID as the existing page's section, it must be deleted
                  */
                 _.each(existingPage.get('sections'), function(section){
-                    if(!_.contains(updatedSectionIDs, section.id())) {
+                    if(!_.contains(updatedSectionIDs, section._id)) {
                         sectionsToBeDeleted.push(section);
                     }
                 });
                 async.each(sectionsToBeDeleted, function(section, cb){
-                    sectionDao.removeById(section.id(), $$.m.ssb.Section, function(err, value){
+                    sectionDao.removeById(section._id, $$.m.ssb.Section, function(err, value){
                         cb(err);
                     });
                 }, function done(err){
