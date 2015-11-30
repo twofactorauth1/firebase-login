@@ -14,7 +14,7 @@ var dao = {
     saveSections: function(sectionAry, fn) {
         var self = this;
         var savedAry = [];
-        async.each(sectionAry, function(section, cb){
+        async.eachSeries(sectionAry, function(section, cb){
 
             self.saveOrUpdate(new $$.m.ssb.Section(section), function(err, savedSection){
                 if(err) {
