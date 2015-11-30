@@ -52,7 +52,9 @@ var accountActivity = {
                          718,719,720,721,722,723,724,725,726,727,728,729,730,731,732,733,734,735,736,737,738,739,
                          740,741,742,743,744,745,746,747,748,749,750,751,752,753,754,755,756,758,759,760,761,762,
                          763,764,765,766,767,768,769,770,771,772,773,774,775,776,777,778,779,780,781,782,783,784,
-                         785,786];
+                         785,786,787,788,789,790,791,792,793,794,795,796,797,798,799,800,801,802,803,804,805,806,
+                         807,808,809,810,811,812,813,814,815,816,817,818,819,820,821,822,823,824,825,826,827,828,
+                         829,830];
 
         var activityAry = [];
         async.each(reportAry, function(accountId, cb){
@@ -70,10 +72,39 @@ var accountActivity = {
 
             var sortedAry = _.sortBy(activityAry, 'accountId');
             var csv = "";
+
             _.each(sortedAry, function(activity){
+                /*
+                 * remove undefineds
+                 */
+                activity.firstName = activity.firstName ||'';
+                activity.lastName = activity.lastName ||'';
+                activity.email = activity.email ||'';
+                activity.city = activity.city ||'';
+                activity.state = activity.state ||'';
+                activity.country = activity.country ||'';
+                activity.phone = activity.phone ||'';
+                activity.name = activity.name ||'';
+                activity.customDomain = activity.customDomain ||'';
+                activity.signupDate = activity.signupDate ||'';
+                activity.trialDaysRemaining = activity.trialDaysRemaining ||'';
+                activity.conversionDate = activity.conversionDate ||'';
+                activity.day11 = activity.day11 ||'';
+                activity.day14 = activity.day14 ||'';
+                activity.lastActivity = activity.lastActivity ||'';
+                activity.pointedDomain = activity.pointedDomain ||'';
+                activity.pages = activity.pages ||'';
+                activity.posts = activity.posts ||'';
+                activity.socialIntegrations = activity.socialIntegrations ||'';
+                activity.stripeIntegrated = activity.stripeIntegrated ||'';
+                activity.products = activity.products ||'';
+                activity.orders = activity.orders ||'';
+                activity.contacts = activity.contacts ||'';
+                activity.campaigns = activity.campaigns ||'';
+
                 csv += '\n' + activity.accountId + ',' +
-                    activity.firstName + ',' +
-                    activity.lastName + ',' +
+                    '"' + activity.firstName + '",' +
+                    '"' + activity.lastName + '",' +
                     activity.email + ',' +
                     activity.city + ',' +
                     activity.state + ',' +
@@ -284,19 +315,32 @@ var accountActivity = {
                 cb(null, account);
             },
             function getUserForAccount(account, cb) {
-                userManager.getUserAccounts(account.id(), function(err, users){
-                    if(err) {
-                        self.log.error('Error fetching user accounts:', err);
-                        cb(err);
-                    } else {
-                        //find the non-admin user
-                        var sortedUsers = _.sortBy(users, function(user){return user.id();});
-                        var targetUser = _.last(sortedUsers);
-                        self.log.debug('The target user for account [' + account.id() + ']...');
-                        self.log.debug('The target user for account [' + account.id() + '] is [' + targetUser.get('username') + ']' );
-                        cb(null, account, targetUser);
-                    }
-                });
+                //account.ownerUser if available
+                if(account.get('ownerUser')) {
+                    userManager.getUserById(account.get('ownerUser'), function(err, user){
+                        if(err) {
+                            self.log.error('Error fetching owner User:', err);
+                            cb(err);
+                        } else {
+                            self.log.debug('The target user for account [' + account.id() + '] is [' + user.get('username') + ']' );
+                            cb(null, account, user);
+                        }
+                    });
+                } else {
+                    userManager.getUserAccounts(account.id(), function(err, users){
+                        if(err) {
+                            self.log.error('Error fetching user accounts:', err);
+                            cb(err);
+                        } else {
+                            //find the non-admin user
+                            var sortedUsers = _.sortBy(users, function(user){return user.id();});
+                            var targetUser = _.last(sortedUsers);
+                            //self.log.debug('The target user for account [' + account.id() + ']...');
+                            //self.log.debug('The target user for account [' + account.id() + '] is [' + targetUser.get('username') + ']' );
+                            cb(null, account, targetUser);
+                        }
+                    });
+                }
             },
             function getContactForAccount(account, user, cb) {
                 contactDao.getContactByEmailAndAccount(user.get('username'), appConfig.mainAccountID, function(err, contact){
@@ -304,9 +348,9 @@ var accountActivity = {
                         self.log.error('Error fetching contacts: ', err);
                         cb(err);
                     } else {
-                        self.log.debug('Found this contact', contact);
+                        //self.log.debug('Found this contact', contact);
                         if(contact) {
-                            self.log.debug('contact name: ' + contact.get('first') + ' ' + contact.get('last'));
+                            //self.log.debug('contact name: ' + contact.get('first') + ' ' + contact.get('last'));
                             activity.firstName = contact.get('first');
                             activity.lastName = contact.get('last');
                             try {
@@ -322,7 +366,7 @@ var accountActivity = {
                                 activity.country = address.country;
                             }
                         }
-                        self.log.debug('user name: ' + user.get('first') + ' ' + user.get('last'));
+                        //self.log.debug('user name: ' + user.get('first') + ' ' + user.get('last'));
                         activity.email = user.get('username');
 
                         cb();

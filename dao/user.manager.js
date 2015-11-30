@@ -612,6 +612,10 @@ module.exports = {
 
     },
 
+    getUserById: function(userId, fn) {
+        dao.getById(userId, $$.m.User, fn);
+    },
+
     deleteOrRemoveUserForAccount: function(accountId, userId, fn){
         var self = this;
         self.log = log;
