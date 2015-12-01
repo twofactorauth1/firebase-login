@@ -760,6 +760,7 @@
       else if($scope.order.line_items.length <= 0)
       {
         toaster.pop('error', 'Products cannot be blank');
+        $scope.saveLoading = false;
       } 
       else {
         OrderService.createOrder($scope.order, function (updatedOrder) {
@@ -780,6 +781,7 @@
           }
           $scope.saveLoading = false;
         });
+        $scope.saveLoading = false;
       }
     };
 
