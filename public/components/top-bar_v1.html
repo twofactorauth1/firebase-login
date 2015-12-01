@@ -19,7 +19,7 @@
     <nav class="navbar navbar-default navbar-static-top">
         <div class="container {{isEditing ? 'top-bar-wrap' : ''}}">
             <div class="main-block">
-                <ul ng-sortable class="nav left-navbar-nav left-block {{isEditing ? 'edit-mode' : ''}}">
+                <ul ng-sortable="sortableConfig" class="nav left-navbar-nav left-block {{isEditing ? 'edit-mode sortable' : ''}}">
                     <li ng-repeat="network in component.networks">
                         <a ng-if="!isEditing" href="{{getUrl(network.url)}}"><i class="fa fa-lg fa-{{network.icon}}"></i></a>
                         <a ng-if="isEditing" ng-click="openModal('social-links-modal', $index)" class="clickable-link social-links" href="" style="z-index:1033;"><i class="fa fa-lg fa-{{network.icon}}"></i></a>
