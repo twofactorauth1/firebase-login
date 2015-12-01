@@ -81,6 +81,7 @@ module.exports = {
 
     listWebsites: function(accountId, fn) {
         var self = this;
+        //TODO: materialize Theme
         self.log.debug('>> listWebsites');
         websiteDao.getWebsitesForAccount(accountId, function(err, list){
             if(err) {
@@ -95,20 +96,36 @@ module.exports = {
 
     getWebsite: function(accountId, websiteId, fn) {
         var self = this;
+
         self.log.debug('>> getWebsite');
         websiteDao.getWebsiteById(accountId, websiteId, function(err, website){
             if(err) {
                 self.log.error('Error getting website:', err);
                 return fn(err, null);
             } else {
-                self.log.debug('<< getWebsite');
-                return fn(null, website);
+                if(website.get('themeId')){
+                    themeDao.getThemeById(website.get('themeId'), function(err, theme){
+                        if(err) {
+                            self.log.error('Error getting theme:', err);
+                            return fn(err, null);
+                        } else {
+                            website.set('theme', theme);
+                            self.log.debug('<< getWebsite');
+                            return fn(null, website);
+                        }
+                    });
+                } else {
+                    self.log.debug('<< getWebsite');
+                    return fn(null, website);
+                }
+
             }
         });
     },
 
     updateWebsite: function(accountId, websiteId, modified, modifiedWebsite, fn) {
         var self = this;
+        //TODO: materialize Theme
         self.log.debug('>> updateWebsite');
         websiteDao.getWebsiteById(accountId, websiteId, function(err, website){
             if(err || !website) {

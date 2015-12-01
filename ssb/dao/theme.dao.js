@@ -10,6 +10,12 @@ var theme = require('../model/theme.js');
 
 var dao = {
 
+    getThemeById: function(themeId, fn) {
+        var self = this;
+        var query = {_id:themeId};
+        self.findOne(query, $$.m.ssb.Theme, fn);
+    },
+
     options: {
         name: "ssb.theme.dao",
         defaultModel: $$.m.ssb.Theme
