@@ -200,7 +200,7 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> updateWebsite');
         var accountId = parseInt(self.accountId(req));
         var websiteId = req.params.id;
-        var modifiedWebsite = req.body;
+        var modifiedWebsite = new $$.m.ssb.Website(req.body);
         var modified = {date: new Date(), by: self.userId(req)};
 
         self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed) {
