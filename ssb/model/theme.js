@@ -84,7 +84,7 @@ var theme = $$.m.ModelBase.extend({
 }, {
     db: {
         storage: "mongo",
-        table: "theme",
+        table: "themes",
         idStrategy: "uuid"
     }
 });

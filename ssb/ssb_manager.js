@@ -51,7 +51,7 @@ module.exports = {
     listThemes: function(accountId, fn) {
         var self = this;
         self.log.debug('>> listThemes');
-        var query = {};
+        var query = {'ssb':true};
         themeDao.findMany(query, $$.m.ssb.Theme, function(err, list){
             if(err) {
                 self.log.error('Error listing templates:', err);
