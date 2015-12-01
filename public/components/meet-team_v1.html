@@ -56,7 +56,7 @@
                     <div elem ng-model="teamMember.bio"></div>
                 </div>
                 <div ng-if="component.teamSettings.networks" class="social-link {{isEditing ? 'edit-mode' : ''}}">
-                    <ul ng-if="!teamMember.becomeMember" class="profile-social">
+                    <ul ng-sortable ng-if="!teamMember.becomeMember" class="profile-social">
                         <li ng-repeat="network in teamMember.networks">
                             <a ng-if="!isEditing" href="{{network.url}}" target="_blank">
                                 <span class="fa fa-{{network.icon}} btn-{{network.icon}}"></span>
