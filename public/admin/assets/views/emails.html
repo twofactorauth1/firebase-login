@@ -60,7 +60,7 @@
                     <table class="table table-hover margin-bottom-0" ng-class="{'grid': tableView == 'grid', 'bg-white': tableView != 'grid'}" ng-show="displayedEmails">
                         <thead>
                             <tr>
-                                <th class="center">Screenshot</th>
+                                <!--<th class="center">Screenshot</th>-->
                                 <th st-sort="title">Title</th>
                                 <th st-sort="type">Type</th>
                                 <th st-sort="open">Sent</th>
@@ -98,9 +98,9 @@
                         </thead>
                         <tbody>
                             <tr ng-repeat="template in displayedEmails" ng-click="viewSingle(template)">
-                                <td class="center">
+                               <!-- <td class="center">
                                     <img id="template_screenshot_{{template._id}}" ng-src="{{ template.previewUrl }}" err-src="/admin/assets/images/default-page.jpg" class="img-thumbnail screenshot" alt="image">
-                                </td>
+                                </td> -->
                                 <td><strong>Title: </strong><span ng-text-truncate="template.title" ng-tt-chars-threshold="20" ng-tt-no-toggling></span></td>
                                 <td><strong>Type: </strong><span ng-text-truncate="template.type" ng-tt-chars-threshold="20" ng-tt-no-toggling></span></td>
                                 <td><strong>Sent: </strong><span class="text-large text-bold">{{template.openRate || '--'}}</span><span ng-if="template.openRate" class="text-small muted"> ({{template.sent}})</span></td>

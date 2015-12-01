@@ -1255,9 +1255,6 @@
 #componentloader .navigation-v2 .navbar .container-fluid {
   padding: 0 0 0 0;
 }
-#componentloader .navigation-v2 .navbar .navbar-collapse {
-  background: rgba(0, 0, 0, 0.7);
-}
 #componentloader .navigation-v2 .navbar .navbar-brand {
   float: none;
   display: block;
@@ -4358,6 +4355,7 @@
 #componentloader .thumbnail-slider-v1 .editing.image-wrap:hover .add-addtional {
   display: block;
   font-size: 28px;
+  bottom: -28px;
 }
 #componentloader .thumbnail-slider-v1 .editing.image-wrap:hover .delete-single-image .btn-delete-single-image {
   background: rgba(0, 0, 0, 0.5);
@@ -4389,6 +4387,7 @@
 #componentloader .thumbnail-slider-v1 .carousel-control.right {
   background: none;
   right: -20px;
+  top: 44%;
 }
 #componentloader .thumbnail-slider-v1 .carousel-inner {
   max-height: 200px;
@@ -4401,6 +4400,10 @@
 }
 #componentloader .thumbnail-slider-v1 .carousel-control.left {
   left: -22px;
+  top: 44%;
+}
+#componentloader .thumbnail-slider-v1 .hide-scroll {
+  overflow: hidden !important;
 }
 #componentloader div[data-type="thumbnail-slider"] .inner-page {
   max-width: 100%;

@@ -349,6 +349,10 @@ app.controller('DashboardCtrl', ["$scope", "OrderService", "CustomerService", "C
     }
 
     CustomerService.postCustomerActivity($scope.newActivity, function (activity) {
+      var matchingCustomer = _.findWhere($scope.customers, {
+        _id: activity.contactId
+      });
+      activity.customer = matchingCustomer;
       $scope.activities.push(activity);
       $scope.activities = _.sortBy($scope.activities, function (o) {
         return o.start;

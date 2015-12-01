@@ -8,7 +8,7 @@
                 <ol class="carousel-indicators hidden" ng-hide="slider[0][0].detail">
                     <li data-target="#myCarousel" style="background-color: {{component.indicatorcolor}};" data-slide-to="{{$index}}" class="{{$index==0?'active':''}}" data-ng-repeat="collection in slider"></li>
                 </ol>
-                <div class="carousel-inner" style="overflow:hidden;">
+                <div class="carousel-inner" ng-class="{'hide-scroll': !isEditing}">
                     <div class="item {{$first?'active':''}}" data-ng-repeat="collection in slider">
                         <div class="row">
                             <div class="col-xs-3 hideText"  data-ng-repeat="image in collection track by $index">
