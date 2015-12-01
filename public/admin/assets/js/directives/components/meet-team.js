@@ -58,7 +58,7 @@ app.directive('meetTeamComponent',["$window", function ($window) {
         var parent_id = scope.component.anchor || scope.component._id;
         var element = angular.element("#"+parent_id + " div.meet-team-height")
         if (element && element.length) {
-
+          element.css("min-height", 0);
           var maxTeamHeight = Math.max.apply(null, element.map(function () {
             return this.offsetHeight;
           }).get());
