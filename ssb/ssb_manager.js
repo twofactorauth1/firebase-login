@@ -125,7 +125,7 @@ module.exports = {
 
     updateWebsite: function(accountId, websiteId, modified, modifiedWebsite, fn) {
         var self = this;
-        //TODO: materialize Theme
+        
         self.log.debug('>> updateWebsite');
         websiteDao.getWebsiteById(accountId, websiteId, function(err, website){
             if(err || !website) {
@@ -133,13 +133,30 @@ module.exports = {
                 return fn(err, null);
             } else {
                 modifiedWebsite.set('modified', modified);
+                if(modifiedWebsite.attributes.theme) {
+                    delete modifiedWebsite.attributes.theme;
+                }
                 websiteDao.saveOrUpdate(modifiedWebsite, function(err, updatedWebsite){
                     if(err) {
                         self.log.error('Error updating website:', err);
                         return fn(err, null);
                     } else {
-                        self.log.debg('<< updateWebsite');
-                        return fn(null, updatedWebsite);
+                        if(website.get('themeId')) {
+                            themeDao.getThemeById(website.get('themeId'), function (err, theme) {
+                                if (err) {
+                                    self.log.error('Error getting theme:', err);
+                                    return fn(err, null);
+                                } else {
+                                    website.set('theme', theme);
+                                    self.log.debug('<< getWebsite');
+                                    return fn(null, website);
+                                }
+                            });
+                        } else {
+                            self.log.debug('<< updateWebsite');
+                            return fn(null, updatedWebsite);
+                        }
+
                     }
                 });
             }
