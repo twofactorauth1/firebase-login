@@ -1,12 +1,12 @@
 <div ng-class="component.type+'-v'+component.version">
     <div class="social-link">
-        <ul>
+        <ul ng-sortable>
             <li ng-repeat="network in component.networks">
                 <div ng-if="!isEditing">
                     <a href="{{getUrl(network.url)}}" class="btn btn-social-icon btn-lg btn-{{network.name}}" target="_blank"><i class="fa fa-{{network.icon}}"></i></a>
                 </div>
                 <div ng-if="isEditing">
-                    <button ng-click="openModal('social-links-modal', $index)" style="z-index:1033;" class="btn social-links btn-social-icon btn-lg btn-{{network.name}}">
+                    <button tooltip-placement="bottom" tooltip="Drag to reorder" ng-click="openModal('social-links-modal', $index)" style="z-index:1033;" class="btn social-links btn-social-icon btn-lg btn-{{network.name}}">
                         <i class="fa fa-{{network.icon}}"></i>
                     </button>
                 </div>
