@@ -72,7 +72,10 @@
       {
         //console.log('changeInvoice >>> ' + invoice.toJSON());
         $scope.selectedInvoice = invoice;
-        $scope.planInterval = invoice.lines.data[0]["plan"].interval;
+        if(invoice.lines.data.length == 2)
+        {$scope.planInterval = invoice.lines.data[1]["plan"].interval;}
+        else
+        {$scope.planInterval = invoice.lines.data[0]["plan"].interval;}
         if($scope.planInterval=='' || $scope.planInterval == null || $scope.planInterval === undefined)
         {
           $scope.planInterval = invoice.lines.data[1]["plan"].interval;
