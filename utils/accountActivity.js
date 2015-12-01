@@ -54,10 +54,10 @@ var accountActivity = {
                          763,764,765,766,767,768,769,770,771,772,773,774,775,776,777,778,779,780,781,782,783,784,
                          785,786,787,788,789,790,791,792,793,794,795,796,797,798,799,800,801,802,803,804,805,806,
                          807,808,809,810,811,812,813,814,815,816,817,818,819,820,821,822,823,824,825,826,827,828,
-                         829,830];
+                         829,830,831,832,833,834,835,836,837,838,839,840,841];
 
         var activityAry = [];
-        async.each(reportAry, function(accountId, cb){
+        async.eachLimit(reportAry, 20, function(accountId, cb){
             self.getActivityForAccount(accountId, function(err, activity){
                 if(activity) {
                     activityAry.push(activity);
