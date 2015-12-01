@@ -1242,9 +1242,6 @@ ul.nav {
 .navigation-v2 .navbar .container-fluid {
   padding: 0 0 0 0;
 }
-.navigation-v2 .navbar .navbar-collapse {
-  background: rgba(0, 0, 0, 0.7);
-}
 .navigation-v2 .navbar .navbar-brand {
   float: none;
   display: block;
