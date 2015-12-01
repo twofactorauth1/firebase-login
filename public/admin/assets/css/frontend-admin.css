@@ -4390,6 +4390,7 @@
 #componentloader .thumbnail-slider-v1 .carousel-control.right {
   background: none;
   right: -20px;
+  top: 44%;
 }
 #componentloader .thumbnail-slider-v1 .carousel-inner {
   max-height: 200px;
@@ -4402,6 +4403,7 @@
 }
 #componentloader .thumbnail-slider-v1 .carousel-control.left {
   left: -22px;
+  top: 44%;
 }
 #componentloader .thumbnail-slider-v1 .hide-scroll {
   overflow: hidden !important;
