@@ -1242,9 +1242,6 @@ ul.nav {
 .navigation-v2 .navbar .container-fluid {
   padding: 0 0 0 0;
 }
-.navigation-v2 .navbar .navbar-collapse {
-  background: rgba(0, 0, 0, 0.7);
-}
 .navigation-v2 .navbar .navbar-brand {
   float: none;
   display: block;
@@ -2269,9 +2266,6 @@ div[data-type="feature-block"] .component-inner {
 }
 #paradata span h5 {
   font-size: 18px;
-}
-.image-text {
-  display: inline-block;
 }
 .image-text .img-responsive {
   margin: 0 auto;
@@ -4367,6 +4361,7 @@ div[data-type=blog] .container {
 .thumbnail-slider-v1 .editing.image-wrap:hover .add-addtional {
   display: block;
   font-size: 28px;
+  bottom: -28px;
 }
 .thumbnail-slider-v1 .editing.image-wrap:hover .delete-single-image .btn-delete-single-image {
   background: rgba(0, 0, 0, 0.5);
@@ -4398,6 +4393,7 @@ div[data-type=blog] .container {
 .thumbnail-slider-v1 .carousel-control.right {
   background: none;
   right: -20px;
+  top: 44%;
 }
 .thumbnail-slider-v1 .carousel-inner {
   max-height: 200px;
@@ -4410,6 +4406,10 @@ div[data-type=blog] .container {
 }
 .thumbnail-slider-v1 .carousel-control.left {
   left: -22px;
+  top: 44%;
+}
+.thumbnail-slider-v1 .hide-scroll {
+  overflow: hidden !important;
 }
 div[data-type="thumbnail-slider"] .inner-page {
   max-width: 100%;

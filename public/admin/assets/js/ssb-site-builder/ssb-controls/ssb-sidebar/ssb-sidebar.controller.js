@@ -122,11 +122,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, SimpleSiteBuil
   	}
 
     function getPlatformComponents() {
-      SimpleSiteBuilderService.getPlatformComponents().then(function(data) {
-        vm.platformComponents = data.map(function(component) {
-          return component.data;
-        });
-      });
+      SimpleSiteBuilderService.getPlatformComponents();
     }
 
     //TODO: handle versions

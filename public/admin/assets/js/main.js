@@ -68,3 +68,16 @@ function (cfpLoadingBarProvider) {
     cfpLoadingBarProvider.includeSpinner = false;
 
 }]);
+// app.config(['$httpProvider', function($httpProvider) {
+//  $httpProvider.interceptors.push('noCacheInterceptor');
+// }]).factory('noCacheInterceptor', function () {
+//     return {
+//         request: function (config) {
+//             if(config.method=='GET' && config.url && config.url.indexOf('/api/') === 0 ){
+//                 var separator = config.url.indexOf('?') === -1 ? '?' : '&';
+//                 config.url = config.url+separator+'noCache=' + new Date().getTime();
+//             }
+//             return config;
+//        }
+//    };
+// });

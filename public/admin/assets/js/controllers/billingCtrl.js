@@ -44,7 +44,24 @@
           formattedDate = formattedDate.subtract(options.subtractNum, options.subtractType);
         }
         if (options.addNum && options.addType) {
-          formattedDate = formattedDate.add(options.addNum, options.addType);
+          if($scope.planInterval == 'week')
+          {
+            formattedDate = formattedDate.add(7, options.addType);
+          }
+          else if($scope.planInterval == 'month')
+          {
+            formattedDate = formattedDate.add(1, 'months');
+          }
+          else if($scope.planInterval == 'year')
+          {
+            formattedDate = formattedDate.add(1, 'years');
+          }
+          else
+          {
+            formattedDate = formattedDate.add(options.addNum, options.addType);
+          }
+          console.log("Formatted date: ")
+          console.log(formattedDate);
         }
       }
       return formattedDate.format("MMMM Do, YYYY");
@@ -55,6 +72,14 @@
       {
         //console.log('changeInvoice >>> ' + invoice.toJSON());
         $scope.selectedInvoice = invoice;
+        if(invoice.lines.data.length == 2)
+        {$scope.planInterval = invoice.lines.data[1]["plan"].interval;}
+        else
+        {$scope.planInterval = invoice.lines.data[0]["plan"].interval;}
+        if($scope.planInterval=='' || $scope.planInterval == null || $scope.planInterval === undefined)
+        {
+          $scope.planInterval = invoice.lines.data[1]["plan"].interval;
+        }
       }
       $scope.selectedItemIndex = index;
     };
@@ -96,6 +121,7 @@
         list: []
     };
     $scope.selectedPlan = {};
+    $scope.planInterval = "";
     $scope.selectedAddOns = [];
 
     $scope.customer_id=0;
@@ -259,6 +285,14 @@
             ToasterService.processHtmlPending();
           });
 
+          PaymentService.getTransactionsForAccount(function (invoices) {
+            $scope.transactions = invoices;
+            $scope.pagedTransactions = $scope.transactions.data.slice(0, $scope.invoicePageLimit);
+            $scope.showToaster = true;
+            ToasterService.processPending();
+            ToasterService.processHtmlPending();
+          });
+
           PaymentService.getCustomerCards($scope.currentUser.stripeId, function (cards) {
             if (cards.data.length) {
               $scope.hasCard = true;
@@ -310,6 +344,9 @@
         if (account.billing.stripeCustomerId) {
           PaymentService.getUpcomingInvoice(account.billing.stripeCustomerId, function (upcomingInvoice) {
             $scope.upcomingInvoice = upcomingInvoice;
+            $scope.planInterval = upcomingInvoice.lines.data[0].plan.interval;
+            console.log("upcoming invoice");
+            console.log(upcomingInvoice);
           });
         }
 

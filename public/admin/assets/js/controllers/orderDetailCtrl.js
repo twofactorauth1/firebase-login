@@ -756,10 +756,16 @@
           console.log('updatedOrder ', updatedOrder);
           toaster.pop('success', 'Order updated successfully.');
         });
-      } else {
+      }
+      else if($scope.order.line_items.length <= 0)
+      {
+        toaster.pop('error', 'Products cannot be blank');
+        $scope.saveLoading = false;
+      } 
+      else {
         OrderService.createOrder($scope.order, function (updatedOrder) {
-          console.log('order created');
           toaster.pop('success', 'Order created successfully.');
+
           if(flag==1)
           {
             SweetAlert.swal("Saved!", "Your edits were saved to the page.", "success");
@@ -775,6 +781,7 @@
           }
           $scope.saveLoading = false;
         });
+        $scope.saveLoading = false;
       }
     };
 

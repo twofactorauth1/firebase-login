@@ -86,7 +86,7 @@ module.exports = function (config) {
       // 'public_tests/admin/customers/customerservice_spec.js',
       'public_tests/admin/billing/billingctrl_spec.js',
       'public_tests/admin/support/gettingStartedCtrl_spec.js',
-      'public_tests/admin/orders/orderDetailCtrl_spec.js'
+     // 'public_tests/admin/orders/orderDetailCtrl_spec.js'
     ],
 
 

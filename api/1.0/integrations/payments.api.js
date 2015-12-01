@@ -103,6 +103,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('indigenous/plans'), this.listIndigenousPlans.bind(this));
         app.get(this.url('indigenous/plans/:planId'), this.getIndigenousPlan.bind(this));
         app.post(this.url('indigenous/plans/:planId/subscribe'), this.subscribeToIndigenous.bind(this));
+        app.get(this.url('indigenous/coupons/:name/validate'), this.setup.bind(this), this.validateIndigenousCoupon.bind(this));
 
         //Coupons
         app.get(this.url('coupons'), this.isAuthApi.bind(this), this.listCoupons.bind(this));
@@ -545,6 +546,22 @@ _.extend(api.prototype, baseApi.prototype, {
                 }
 
             });
+        });
+    },
+
+    validateIndigenousCoupon: function(req, resp) {
+        var self = this;
+        self.log.debug('>> validateIndigenousCoupon');
+        var couponName = req.params.name;
+        var accessToken = null;
+        paymentsManager.getStripeCouponByName(couponName, accessToken, function(err, coupon){
+            self.log.debug('<< validateIndigenousCoupon');
+            if(err) {
+                self.sendResult(resp, {valid:false});
+            } else {
+                self.sendResult(resp, coupon);
+            }
+
         });
     },
 
@@ -1835,30 +1852,45 @@ _.extend(api.prototype, baseApi.prototype, {
     getMyUpcomingInvoice: function(req, resp) {
         var self = this;
         self.log.debug('>> getMyUpcomingInvoice');
-        var customerId = self.customerId(req);
-        var subscriptionId = req.body.subscriptionId;
-        stripeDao.getUpcomingInvoice(customerId, subscriptionId, null, function(err, value){
-            self.log.debug('<< getMyUpcomingInvoice');
-            return self.sendResultOrError(resp, err, value, "Error retrieving upcoming invoice.", 404);
+        var accountId = parseInt(self.accountId(req));
+        accountDao.getAccountByID(accountId, function(err, account){
+            if(err) {
+                self.log.error('Error getting account by ID:', err);
+                return self.wrapError(resp, 500, 'Error getting invoice', 'There was an error getting upcoming invoices', '');
+            } else {
+                var customerId = account.get('billing').stripeCustomerId;
+                var subscriptionId = req.body.subscriptionId;
+                stripeDao.getUpcomingInvoice(customerId, subscriptionId, null, function(err, value){
+                    self.log.debug('<< getMyUpcomingInvoice');
+                    return self.sendResultOrError(resp, err, value, "Error retrieving upcoming invoice.", 404);
+                });
+            }
         });
+
     },
 
     getMyInvoices: function(req, resp) {
         var self = this;
         self.log.debug('>> getMyInvoices');
-        var customerId = self.customerId(req);
+        var accountId = parseInt(self.accountId(req));
+        accountDao.getAccountByID(accountId, function(err, account) {
+            if (err) {
+                self.log.error('Error getting account by ID:', err);
+                return self.wrapError(resp, 500, 'Error getting invoice', 'There was an error getting upcoming invoices', '');
+            } else {
+                var customerId = account.get('billing').stripeCustomerId;
+                var dateFilter = req.body.dateFilter;
+                var ending_before = req.body.ending_before;
+                var limit = req.body.limit;
+                var starting_after = req.body.starting_after;
 
-        var dateFilter = req.body.dateFilter;
-        var ending_before = req.body.ending_before;
-        var limit = req.body.limit;
-        var starting_after = req.body.starting_after;
-
-        stripeDao.listInvoices(customerId, dateFilter, ending_before, limit, starting_after, null,
-            function(err, value){
-                self.log.debug('<< getMyInvoices');
-                return self.sendResultOrError(resp, err, value, "Error listing invoices.");
-            });
-
+                stripeDao.listInvoices(customerId, dateFilter, ending_before, limit, starting_after, null,
+                    function(err, value){
+                        self.log.debug('<< getMyInvoices');
+                        return self.sendResultOrError(resp, err, value, "Error listing invoices.");
+                    });
+            }
+        });
     },
 
     getInvoicesForAccount: function(req, resp) {

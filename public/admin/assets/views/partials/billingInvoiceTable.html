@@ -14,7 +14,7 @@
     </tr>
     </thead>
     <tbody>
-    <tr ng-repeat="invoice in ::pagedInvoices track by $index">
+    <tr ng-repeat="invoice in ::pagedTransactions track by $index">
         <td ng-class="{'refunded': invoice.refunded}">{{::$index + 1}}</td>
       <!--  <td>{{::invoice.date * 1000 | date : 'longDate'}}</td>
         <td>${{::(invoice.total/100).toFixed( 2 )}}</td>
@@ -27,8 +27,10 @@
         <td ng-show="invoice.paid && invoice.amount/100 > 0" ng-hide="invoice.refunded">PAID</td>
         <td ng-hide="invoice.paid">NOT PAID</td>
         <td ng-show="invoice.paid && invoice.refunded">REFUNDED</td>
+        <!--<td>{{pagedInvoices[$index].lines.data[0]["plan"].interval}}</td>-->
+        <!--<td>{{pagedInvoices.length}}</td>-->
         <td class="table-action" ng-class="{'refunded': invoice.refunded}">
-            <a ng-click="changeInvoice(invoice, $index); openModal('view-transaction-modal')" href="" ><i class="fa fa-eye" ng-class="{'refunded': invoice.refunded}"></i></a>
+            <a ng-click="changeInvoice(pagedInvoices[$index], $index); openModal('view-transaction-modal')" href="" ><i class="fa fa-eye" ng-class="{'refunded': invoice.refunded}"></i></a>
         </td>
     </tr>
 </table>

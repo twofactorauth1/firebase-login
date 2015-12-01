@@ -14,10 +14,13 @@ var dao = {
     saveSections: function(sectionAry, fn) {
         var self = this;
         var savedAry = [];
-        async.each(sectionAry, function(section, cb){
-
-            self.saveOrUpdate(new $$.m.ssb.Section(section), function(err, savedSection){
+        async.eachSeries(sectionAry, function(section, cb){
+            //self.log.debug('Creating a new section from ', section);
+            var sectionObj = new $$.m.ssb.Section(section);
+            //self.log.debug('New section:', sectionObj.toJSON());
+            self.saveOrUpdate(sectionObj, function(err, savedSection){
                 if(err) {
+                    self.log.error('Error saving section:',err);
                     cb(err);
                 } else {
                     savedAry.push(savedSection);
@@ -34,6 +37,7 @@ var dao = {
         var self = this;
         var deReffedAry = [];
         async.eachSeries(sectionAry, function(section, cb){
+            self.log.debug('Section:', section);
             self.getById(section._id, $$.m.ssb.Section, function(err, section){
                 if(err) {
                     cb(err);
@@ -43,6 +47,7 @@ var dao = {
                 }
             });
         }, function done(err){
+            self.log.debug('Array:', deReffedAry);
             fn(err, deReffedAry);
         });
     },

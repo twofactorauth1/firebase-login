@@ -1255,9 +1255,6 @@
 #componentloader .navigation-v2 .navbar .container-fluid {
   padding: 0 0 0 0;
 }
-#componentloader .navigation-v2 .navbar .navbar-collapse {
-  background: rgba(0, 0, 0, 0.7);
-}
 #componentloader .navigation-v2 .navbar .navbar-brand {
   float: none;
   display: block;
@@ -2274,9 +2271,6 @@
 }
 #componentloader #paradata span h5 {
   font-size: 18px;
-}
-#componentloader .image-text {
-  display: inline-block;
 }
 #componentloader .image-text .img-responsive {
   margin: 0 auto;
@@ -4361,6 +4355,7 @@
 #componentloader .thumbnail-slider-v1 .editing.image-wrap:hover .add-addtional {
   display: block;
   font-size: 28px;
+  bottom: -28px;
 }
 #componentloader .thumbnail-slider-v1 .editing.image-wrap:hover .delete-single-image .btn-delete-single-image {
   background: rgba(0, 0, 0, 0.5);
@@ -4392,6 +4387,7 @@
 #componentloader .thumbnail-slider-v1 .carousel-control.right {
   background: none;
   right: -20px;
+  top: 44%;
 }
 #componentloader .thumbnail-slider-v1 .carousel-inner {
   max-height: 200px;
@@ -4404,6 +4400,10 @@
 }
 #componentloader .thumbnail-slider-v1 .carousel-control.left {
   left: -22px;
+  top: 44%;
+}
+#componentloader .thumbnail-slider-v1 .hide-scroll {
+  overflow: hidden !important;
 }
 #componentloader div[data-type="thumbnail-slider"] .inner-page {
   max-width: 100%;
@@ -6753,6 +6753,7 @@ a[href="https://froala.com/wysiwyg-editor"] {
   position: absolute!important;
   bottom: -3.5em !important;
   right: 1em!important;
+  z-index: 2;
 }
 .ssb-main[data-eq-state$="medium"] .social-link-v1 .social-link ul,
 .ssb-main[data-eq-state$="large"] .social-link-v1 .social-link ul {

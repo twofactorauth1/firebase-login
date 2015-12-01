@@ -47,13 +47,18 @@ app.directive('meetTeamComponent',["$window", function ($window) {
           }]
         };
         scope.component.teamMembers.splice(index + 1, 0, newTeam);
-        scope.resizeTeamTiles();
+        setTimeout(function () {
+          scope.$apply(function () {
+            scope.resizeTeamTiles();
+          });
+        }, 0);
       };
 
       scope.resizeTeamTiles = function (argument) {
         var parent_id = scope.component.anchor || scope.component._id;
         var element = angular.element("#"+parent_id + " div.meet-team-height")
         if (element && element.length) {
+          element.css("min-height", 0);
           var maxTeamHeight = Math.max.apply(null, element.map(function () {
             return this.offsetHeight;
           }).get());

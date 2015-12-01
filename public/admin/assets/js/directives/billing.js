@@ -3,8 +3,43 @@ app.directive("billingInvoice", [function () {
     restrict: 'E',
     templateUrl: '/admin/assets/views/partials/billingInvoice.html',
     scope: {
-      upcomingInvoice: '=',
+      upcomingInvoice: '='
     },
+    link: function(scope, element, attrs) {
+      if(scope.upcomingInvoice && scope.upcomingInvoice.lines && scope.upcomingInvoice.lines.data.length)
+      {
+      var _date = scope.upcomingInvoice.period_start;
+      var interval = scope.upcomingInvoice.lines.data[0].plan.interval;
+      
+      if (_date.toString().length === 10) {
+        _date = _date * 1000;
+      }
+      var formattedDate = moment(_date);
+
+          if(interval == 'week')
+          {
+            formattedDate = formattedDate.add(7, 'days');
+          }
+          else if(interval == 'month')
+          {
+            formattedDate = formattedDate.add(1, 'months');
+          }
+          else if(interval == 'year')
+          {
+            formattedDate = formattedDate.add(1, 'years');
+          }
+          else
+          {
+            //formattedDate = formattedDate.add(options.addNum, options.addType);
+          console.log("Formatted date: ")  
+          }
+          console.log("Formatted date: ")
+          console.log(formattedDate);
+        
+      
+        scope.paymentDueDate = formattedDate.format("MMMM Do, YYYY");
+      }
+    }
   }
 }]);
 

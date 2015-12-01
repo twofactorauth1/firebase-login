@@ -182,12 +182,12 @@
         var details = _.findWhere(contact.details, {
           type: userConstant.social_types.GOOGLE
         });
-        if (details && details.emails.length > 0) {
+        if (details && details.emails.length > 0 && details.emails[0].email) {
           contact.email = details.emails[0].email;
           return contact.email;
         }
         var singleDetail = contact.details[0];
-        if (singleDetail && singleDetail.emails && singleDetail.emails.length > 0) {
+        if (singleDetail && singleDetail.emails && singleDetail.emails.length > 0 && singleDetail.emails[0].email) {
           contact.email = singleDetail.emails[0].email;
           return contact.email;
         }

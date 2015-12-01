@@ -15,6 +15,8 @@
     var baseWebsiteAPIUrlv2 = '/api/2.0/cms/websites/'
     var basePageAPIUrlv2 = '/api/2.0/cms/pages/';
     var baseTemplateAPIUrlv2 = '/api/2.0/cms/templates/';
+    var baseSectionAPIUrlv2 = '/api/2.0/cms/sections';
+    var baseComponentAPIUrlv2 = '/api/2.0/cms/components';
 
 		ssbService.getSite = getSite;
 		ssbService.getPage = getPage;
@@ -29,6 +31,7 @@
 		ssbService.getPlatformComponents = getPlatformComponents;
 		ssbService.getComponent = getComponent;
 		ssbService.getSection = getSection;
+        ssbService.getSections = getUserSections;
 		ssbService.checkForDuplicatePage = checkForDuplicatePage;
 		ssbService.loading = { value: 0 };
 		ssbService.getThemes = getThemes;
@@ -113,7 +116,7 @@
 
 			return (
 				ssbRequest($http({
-					url: baseWebsiteAPIUrl + ssbService.website._id + '/page/' + page._id,
+					url: basePageAPIUrlv2 + page._id,
 					method: 'POST',
 					data: angular.toJson(page)
 				}).success(successPage).error(errorPage))
@@ -455,6 +458,7 @@
 			return ssbRequest(deferred.promise);
 
 		}
+
 
     function sectionName(section) {
       var sectionName = section.layout;
@@ -848,12 +852,29 @@
         // }
         ];
 
-        var ret = [];
-        components.forEach(function(cmp) {
-          ret.push(getComponent(cmp));
-        })
+            function success(data) {
+                console.log('Success from call to 2.0 get components', data);
+                var ret = [];
+                data.forEach(function(cmp) {
+                    ret.push(getComponent(cmp));
+                });
 
-        return $q.all(ret)
+                $q.all(ret).then(function(data){
+                    ssbService.platformComponents = data.map(function(component) {
+                        return component.data;
+                    });
+                });
+            }
+            function error(error) {
+                console.error('SimpleSiteBuilderService getPlatformComponents error: ' + error);
+            }
+
+            return (
+                    ssbRequest($http({
+                        url: baseComponentAPIUrlv2,
+                        method: 'GET'
+                    }).success(success).error(error))
+                );
 		}
 
 		//TODO: api implement
@@ -975,7 +996,20 @@
 		}
 
 		function getUserSections() {
-			return [];
+
+            function success(data) {
+                console.log('SimpleSiteBuilderService getUserSections: ' + data);
+            }
+
+            function error (error) {
+                console.error('SimpleSiteBuilderService getUserSections error: ' + error);
+            }
+
+            return (ssbRequest($http({
+                url: baseSectionAPIUrlv2,
+                method: 'GET'
+            }).success(success).error(error)));
+			//return [];
 		}
 
     function getTemplates() {
