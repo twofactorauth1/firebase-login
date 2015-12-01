@@ -4358,6 +4358,7 @@
 #componentloader .thumbnail-slider-v1 .editing.image-wrap:hover .add-addtional {
   display: block;
   font-size: 28px;
+  bottom: -28px;
 }
 #componentloader .thumbnail-slider-v1 .editing.image-wrap:hover .delete-single-image .btn-delete-single-image {
   background: rgba(0, 0, 0, 0.5);
@@ -4401,6 +4402,9 @@
 }
 #componentloader .thumbnail-slider-v1 .carousel-control.left {
   left: -22px;
+}
+#componentloader .thumbnail-slider-v1 .hide-scroll {
+  overflow: hidden !important;
 }
 #componentloader div[data-type="thumbnail-slider"] .inner-page {
   max-width: 100%;

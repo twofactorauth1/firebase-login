@@ -4364,6 +4364,7 @@ div[data-type=blog] .container {
 .thumbnail-slider-v1 .editing.image-wrap:hover .add-addtional {
   display: block;
   font-size: 28px;
+  bottom: -28px;
 }
 .thumbnail-slider-v1 .editing.image-wrap:hover .delete-single-image .btn-delete-single-image {
   background: rgba(0, 0, 0, 0.5);
@@ -4407,6 +4408,9 @@ div[data-type=blog] .container {
 }
 .thumbnail-slider-v1 .carousel-control.left {
   left: -22px;
+}
+.thumbnail-slider-v1 .hide-scroll {
+  overflow: hidden !important;
 }
 div[data-type="thumbnail-slider"] .inner-page {
   max-width: 100%;
