@@ -103,6 +103,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('indigenous/plans'), this.listIndigenousPlans.bind(this));
         app.get(this.url('indigenous/plans/:planId'), this.getIndigenousPlan.bind(this));
         app.post(this.url('indigenous/plans/:planId/subscribe'), this.subscribeToIndigenous.bind(this));
+        app.get(this.url('indigenous/coupons/:name/validate'), this.setup.bind(this), this.validateIndigenousCoupon.bind(this));
 
         //Coupons
         app.get(this.url('coupons'), this.isAuthApi.bind(this), this.listCoupons.bind(this));
@@ -545,6 +546,22 @@ _.extend(api.prototype, baseApi.prototype, {
                 }
 
             });
+        });
+    },
+
+    validateIndigenousCoupon: function(req, resp) {
+        var self = this;
+        self.log.debug('>> validateIndigenousCoupon');
+        var couponName = req.params.name;
+        var accessToken = null;
+        paymentsManager.getStripeCouponByName(couponName, accessToken, function(err, coupon){
+            self.log.debug('<< validateIndigenousCoupon');
+            if(err) {
+                self.sendResult(resp, {valid:false});
+            } else {
+                self.sendResult(resp, coupon);
+            }
+
         });
     },
 
