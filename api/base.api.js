@@ -183,7 +183,7 @@ _.extend(apiBase.prototype, {
     },
 
     nocache: function(resp) {
-        resp.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
+        resp.header('Cache-Control', 'no-cache');
         resp.header('Expires', '-1');
         resp.header('Pragma', 'no-cache');
     },
