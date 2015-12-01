@@ -84,6 +84,7 @@ _.extend(apiBase.prototype, {
 
     setup: function(req,resp, next) {
         var self = this;
+        self.nocache(resp);
         accountDao.getAccountByHost(req.get("host"), function(err, value) {
             if (!err && value != null) {
                 if (value === true) {
@@ -122,6 +123,8 @@ _.extend(apiBase.prototype, {
 
 
     isAuthApi: function(req, resp, next) {
+        var self = this;
+        self.nocache(resp);
         if (req.isAuthenticated() && this.matchHostToSession(req)) {
             return next()
         }
@@ -144,7 +147,7 @@ _.extend(apiBase.prototype, {
      */
     isAuthAndSubscribedApi: function(req, resp, next) {
         var self = this;
-
+        self.nocache(resp);
         self.sm = securityManager;
         if(req.isAuthenticated() && this.matchHostToSession(req)) {
             //don't need to verify inidigenous main account
@@ -177,6 +180,12 @@ _.extend(apiBase.prototype, {
 
             resp.send(response.code, response);
         }
+    },
+
+    nocache: function(resp) {
+        resp.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
+        resp.header('Expires', '-1');
+        resp.header('Pragma', 'no-cache');
     },
 
 
