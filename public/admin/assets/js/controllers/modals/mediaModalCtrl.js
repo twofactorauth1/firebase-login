@@ -266,8 +266,9 @@ app.controller('MediaModalCtrl', ['$scope', '$modalInstance', '$http', '$timeout
     }, function (isConfirm) {
       if (isConfirm) {
         if (asset) 
-          $scope.batch.push(asset);
-        if($scope.batch && $scope.batch.length)          
+          $scope.batch.push(asset);        
+        if($scope.batch && $scope.batch.length){   
+          $scope.batch = _.uniq($scope.batch);       
           AssetsService.deleteAssets($scope.batch, function (resp, status) {
             if (status === 200) {
               $scope.originalAssets.forEach(function (v, i) {
@@ -296,6 +297,7 @@ app.controller('MediaModalCtrl', ['$scope', '$modalInstance', '$http', '$timeout
             $scope.selectModel.select_all = false;
             $scope.singleSelected = false;
           });
+        }
         else
         {
           SweetAlert.swal("Error!", "No file found for deletion.", "error");
