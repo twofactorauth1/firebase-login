@@ -143,7 +143,7 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> getTheme');
         var accountId = parseInt(self.accountId(req));
         var themeId = req.params.id;
-
+        self.log.debug('themeId:', themeId);
         self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed){
             if(isAllowed !== true) {
                 return self.send403(resp);

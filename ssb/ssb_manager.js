@@ -66,13 +66,14 @@ module.exports = {
 
     getTheme: function(themeId, fn) {
         var self = this;
-        self.log.debug('>> getTheme');
-        themeDao.getById(themeId, $$.m.ssb.Theme, function(err, theme){
+        self.log.debug('>> getTheme', themeId);
+        var query = {_id:themeId};
+        themeDao.findOne(query, $$.m.ssb.Theme, function(err, theme){
             if(err) {
                 self.log.error('Error getting theme:', err);
                 return fn(err, null);
             } else {
-                self.log.debug('<< getTheme');
+                self.log.debug('<< getTheme', theme);
                 return fn(null, theme);
             }
         });
