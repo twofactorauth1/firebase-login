@@ -418,7 +418,7 @@ module.exports = {
         var self = this;
         self.log.debug('>> listAccountSectionSummaries');
 
-        var query = {accountId:accountId};
+        var query = {accountId:accountId, reusable:true};
         //var fields = ['_id', 'name', 'type', 'preview', 'filter', 'description', 'enabled'];
         var fields = {
             _id:1,
