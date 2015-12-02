@@ -13,6 +13,8 @@
         var baseWorkstreamsAPIUrl = '/api/2.0/dashboard/workstreams';
 
         dashboardService.getWorkstreams = getWorkstreams;
+        dashboardService.getWorkstream = getWorkstream;
+        dashboardService.unlockWorkstream = unlockWorkstream;
         dashboardService.loading = {value:0};
 
 		function dashRequest(fn) {
@@ -36,6 +38,33 @@
             }
 
             return dashRequest($http.get(baseWorkstreamsAPIUrl).success(success).error(error));
+        }
+
+        function getWorkstream(id) {
+
+            function success(data) {
+                console.info('DashboardService getWorkstream:', data);
+            }
+
+            function error(error) {
+                console.error('DashboardService getWorkstream:', error);
+            }
+
+            return dashRequest($http.get(baseWorkstreamsAPIUrl + '/' + id).success(success).error(error));
+        }
+
+        function unlockWorkstream(id) {
+
+            function success(data) {
+                console.info('DashboardService unlockWorkstream:', data);
+            }
+
+            function error(error) {
+                console.error('DashboardService unlockWorkstream:', error);
+            }
+
+            return dashRequest($http.post(baseWorkstreamsAPIUrl + '/' + id + '/unlock').success(success).error(error));
+
         }
 
 

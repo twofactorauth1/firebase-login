@@ -20,7 +20,6 @@
 
     (function init() {
 
-        //DashboardService.getWorkstreams();
 
     })();
 
