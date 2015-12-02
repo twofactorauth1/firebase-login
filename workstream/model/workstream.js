@@ -18,10 +18,11 @@ var workstream = $$.m.ModelBase.extend({
             accountId:0,
             unlockVideoUrl:'',
             unlocked: false,
+            completed: false,
             blocks:[],
             deepDiveVideoUrls:[],
             analyticWidgets:[],
-
+            name: '',
             _v:"0.1",
             created: {
                 date: new Date(),

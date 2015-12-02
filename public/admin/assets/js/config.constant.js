@@ -663,6 +663,7 @@ app.constant('JS_REQUIRES', {
     'templateSettingsModalCtrl': 'assets/js/controllers/modals/templateSettingsModalCtrl.js',
     'importCustomerModalCtrl': 'assets/js/controllers/modals/importCustomerModalCtrl.js',
     'onboardingCtrl': 'assets/js/controllers/onboardingCtrl.js',
+    'DOHYCtrl': 'assets/js/dashboard/dashboard.controller.js',
 
     'asideCtrl': 'assets/js/controllers/asideCtrl.js',
     'toasterCtrl': 'assets/js/controllers/toasterCtrl.js',
@@ -696,6 +697,7 @@ app.constant('JS_REQUIRES', {
     'orderService': 'assets/js/services/order.js',
     'assetsService': 'assets/js/services/assets.js',
     'geocodeService': 'assets/js/services/geocode.js',
+    'dashboardService': 'assets/js/dashboard/dashboard.service.js',
     //*** Filters
     'htmlToPlaintext': 'assets/js/filters/htmlToPlaintext.js',
     'secTotime': 'assets/js/filters/secTotime.js',

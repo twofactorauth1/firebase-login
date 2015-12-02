@@ -10,6 +10,9 @@ var workstreamDao = require('./dao/workstream.dao');
 var blockDao = require('./dao/block.dao');
 var accountDao = require('../dao/account.dao');
 
+var blockManager = require('./block_manager');
+var async = require('async');
+
 module.exports = {
     log: logger,
 
@@ -33,7 +36,46 @@ module.exports = {
 
         var query = {accountId:accountId};
 
-        workstreamDao.findMany(query, $$.m.Workstream, function(err, workstreams){
+        async.waterfall([
+            function getWorkstreams(cb){
+                workstreamDao.findMany(query, $$.m.Workstream, function(err, workstreams){
+                    if(err) {
+                        self.log.error('Error listing workstreams:', err);
+                        cb(err);
+                    } else {
+                        cb(null, workstreams);
+                    }
+                });
+            },
+            function getCompletedBlocks(workstreams, cb){
+                self._getCompletedBlocks(accountId, function(err, completedBlocks){
+                    if(err) {
+                        self.log.error('Error getting completedBlocks:', err);
+                        cb(err);
+                    } else {
+                        cb(null, workstreams, completedBlocks);
+                    }
+                });
+            },
+            function markBlocksOnWorkstreams(workstreams, completedBlocks, cb){
+                //for each workstream, mark its block completed if it exists in completed blocks
+                var update = false;
+                var completedBlockIDs = _.map(completedBlocks, function(block){return block._id;});
+                _.each(workstreams, function(workstream){
+                    _.each(workstream.get('blocks'), function(block){
+                        if(_.contains(completedBlockIDs, block._id)) {
+                            block.complete = true;
+                            update = true;
+                        }
+                    });
+                });
+                if(update === true) {
+                    workstreamDao.saveWorkstreams(workstreams, cb);
+                } else {
+                    cb(null, workstreams);
+                }
+            }
+        ], function done(err, workstreams){
             if(err) {
                 self.log.error('Error listing workstreams:', err);
                 return fn(err);
@@ -88,8 +130,8 @@ module.exports = {
     },
 
 
-    _getCompletedBlocks: function(accountId, fn) {
-        //TODO: this
+    _getCompletedBlocks: function(accountId, fn){
+        blockManager.getCompletedBlocks(accountId, fn);
     }
 
 
