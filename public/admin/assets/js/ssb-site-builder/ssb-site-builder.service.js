@@ -146,7 +146,7 @@
                * Name sections without a name (can be edited in UI)
                */
               for (var i = 0; i < data.sections.length; i++) {
-                if (data.sections[0] && !data.sections[i].name) {
+                if (data.sections[i] && !data.sections[i].name) {
                   data.sections[i].name = sectionName(data.sections[i]) + ' Section';
                 }
               }
@@ -280,7 +280,7 @@
 				sectionDefault.components = [component.data];
 
                 sectionDefault.name = sectionName(sectionDefault);
-                debugger;
+
                 if (!sectionDefault.spacing) {
                     sectionDefault.spacing = {
                         "mt": "0",

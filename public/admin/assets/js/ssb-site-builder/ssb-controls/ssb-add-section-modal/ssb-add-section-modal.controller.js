@@ -1,6 +1,6 @@
 'use strict';
 /*global app*/
-app.controller('SiteBuilderAddSectionModalController', ['$timeout', 'parentVm', function ($timeout, parentVm) {
+app.controller('SiteBuilderAddSectionModalController', ['$timeout', 'parentVm', 'SimpleSiteBuilderService', function ($timeout, parentVm, SimpleSiteBuilderService) {
 
 	var sectionLabel;
 	var vm = this;
@@ -64,8 +64,9 @@ app.controller('SiteBuilderAddSectionModalController', ['$timeout', 'parentVm', 
 
     // type is 'enabledPlatformSections' or 'enabledUserSections'
 	vm.setSectionType = function (type) {
-		vm.sectionType = type;
+        vm.sectionType = type;
         vm.sections = vm[type];
+        SimpleSiteBuilderService.getUserSections();
 	};
 
 }]);
