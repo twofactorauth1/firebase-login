@@ -24,6 +24,7 @@ var section = $$.m.ModelBase.extend({
             filter:'',
             preview:'',
             enabled:true,
+            reusable:true,
             created: {
                 date: new Date(),
                 by: null
