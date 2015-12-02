@@ -352,11 +352,11 @@ module.exports = {
                 });
             },
             function updateThePage(existingPage, updatedSections, cb){
-                var sections = page.get('sections');
+                //var sections = page.get('sections');
                 page.set('modified', modified);
                 var jsonSections = [];
-                _.each(sections, function(section){
-                    jsonSections.push({_id: section._id});
+                _.each(updatedSections, function(section){
+                    jsonSections.push({_id: section.id()});
                 });
                 page.set('sections', jsonSections);
                 page.set('created', existingPage.get('created'));
