@@ -6,7 +6,7 @@
 <div>
 	<ssb-sidebar state="vm.state" ui-state="vm.uiState" ng-class="{ 'ssb-sidebar-show': vm.uiState.show.sidebar, 'ssb-sidebar': true }"></ssb-sidebar>
 
-	<div class="ssb-main ssb-edit-mode custom-fonts" ng-class="{ 'ssb-main-full-width': !vm.uiState.show.sidebar }" data-eq-pts="small: 400, medium: 768, large: 1240">
+	<div class="ssb-main ssb-edit-mode custom-fonts ssb-theme-{{vm.state.website.theme.name | slugify}}" ng-class="{ 'ssb-main-full-width': !vm.uiState.show.sidebar }" data-eq-pts="small: 400, medium: 768, large: 1240">
 
 		<div class="csspinner center"></div>
 		<!-- <div class="csspinner center" ng-if="vm.uiState.loading > 0"></div> -->

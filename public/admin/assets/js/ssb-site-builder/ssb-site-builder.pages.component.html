@@ -3,74 +3,92 @@
     <div class="row">
         <div class="col-xs-12">
             <h1 class="mainTitle">Site Builder</h1>
-            <span class="mainDescription">You're currently using the <b><i>{{vm.state.website.theme.name || 'Default'}}</i></b> theme. Customize the look and feel of your website by changing the theme.</span>
-
         </div>
-        <div ncy-breadcrumb></div>
     </div>
   </section>
   <section>
-    <div class="row padding-top-10 margin-bottom-20">
+    <div class="row padding-top-30 margin-bottom-30">
       <div class="col-xs-12">
         <div class="col-md-4">
-          <ui-select ng-model="vm.state.website.theme" ng-change="vm.applyThemeToPage($select.selected)" theme="bootstrap">
-            <ui-select-match placeholder="Select a theme">
-                <small ng-bind-html="$select.selected.name"></small>
-            </ui-select-match>
-            <ui-select-choices repeat="theme in vm.state.themes | filter: $select.search track by $index">
-                <small ng-bind-html="theme.name | highlight: $select.search"></small>
-            </ui-select-choices>
-          </ui-select>
+            <h3>You're currently using the <b><i>{{vm.state.website.theme.name || 'Default'}}</i></b> theme.</h3>
+            <p class="margin-top-20 margin-bottom-20">Customize the look and feel of your website by changing your site's theme. You can further customize any theme styles and colors in the editor.</p>
+            <ui-select ng-model="vm.state.website.theme" ng-change="vm.applyThemeToSite($select.selected)" theme="bootstrap">
+                <ui-select-match placeholder="Select a theme">
+                    <small ng-bind-html="$select.selected.name"></small>
+                </ui-select-match>
+                <ui-select-choices repeat="theme in vm.state.themes | filter: $select.search track by $index">
+                    <small ng-bind-html="theme.name | highlight: $select.search"></small>
+                </ui-select-choices>
+            </ui-select>
 
-          <ul class="list-unstyled panel-body ssb-theme-settings-list">
-            <li>
-              <ul class="list-unstyled">
+
+            <div class="ssb-theme-settings-preview-html">
+                <div class="col-xs-12 margin-top-20"  ng-attr-style="background-color: {{vm.state.website.themeOverrides.styles.bodyBackgroundColor}}; font-family: {{vm.state.website.themeOverrides.defaultFontStack}}; ">
+
+                    <div class="col-xs-12 padding-20 margin-bottom-20 ssb-theme-header" ng-attr-style="background-color: {{vm.state.website.themeOverrides.styles.headerBackgroundColor}}; font-size: {{vm.state.website.themeOverrides.styles.headingSize}}; color: {{vm.state.website.themeOverrides.styles.primaryTextColor}};" class="ssb-color-swatch">
+                        Header Example
+                    </div>
+
+                    <h3 class="row col-xs-12 padding-left-20 padding-right-20" ng-attr-style="font-family: {{vm.state.website.themeOverrides.headingFontStack}}; font-size: {{vm.state.website.themeOverrides.styles.headingSize}}; color: {{vm.state.website.themeOverrides.styles.primaryTextColor}};">
+                        Heading Text Example
+                    </h3>
+                    {{vm.state.website.themeOverrides.styles.paragraphFontStack}}
+                    <p class="row col-xs-12 padding-left-20 padding-right-20" ng-attr-style="font-family: {{vm.state.website.themeOverrides.paragraphFontStack}}; font-size: {{vm.state.website.themeOverrides.styles.paragraphSize}}; color: {{vm.state.website.themeOverrides.styles.primaryTextColor}};">
+                        This is how your body text will appear using the fonts
+                        <b><i>{{vm.state.website.themeOverrides.paragraphFontStack}}</i></b>
+                        and the primary text color
+                        <b><i>{{vm.state.website.themeOverrides.styles.primaryTextColor}}</i></b>.
+                        Below is an example button.
+                        <br>
+                        <button class="margin-top-10 btn btn-primary" ng-attr-style="background-color: {{vm.state.website.themeOverrides.styles.primaryBtnBackgroundColor}}; color: {{vm.state.website.themeOverrides.styles.primaryBtnTextColor}};">Button Example</button>
+                    </p>
+
+                </div>
+            </div>
+
+            <div ng-controller="SSBPagesCtrl as vm">
+                <button class="margin-top-20 btn btn-primary" ng-click="viewSimpleSiteBuilder()">Launch Site Builder <i class="ti-arrow-right"></i></button>
+            </div>
+
+            <!-- <ul class="list-unstyled panel-body ssb-theme-settings-list">
                 <li>
-                  <!-- Header Background Color: -->
-                  <div class="ssb-color-swatch" ng-attr-style="background-color: {{vm.state.website.themeOverrides.styles.headerBackgroundColor}};"></div>
+                  <ul class="list-unstyled">
+                    <li>
+                      <div class="ssb-color-swatch" ng-attr-style="background-color: {{vm.state.website.themeOverrides.styles.headerBackgroundColor}};"></div>
+                    </li>
+                    <li>
+                      <div class="ssb-color-swatch" ng-attr-style="background-color: {{vm.state.website.themeOverrides.styles.bodyBackgroundColor}};"></div>
+                    </li>
+                    <li ng-if="vm.state.website.themeOverrides.styles.primaryTextColor">
+                      <div class="ssb-color-swatch" ng-attr-style="background-color: {{vm.state.website.themeOverrides.styles.primaryTextColor}};"></div>
+                    </li>
+                    <li ng-if="vm.state.website.themeOverrides.styles.primaryBtnTextColor">
+                      <div class="ssb-color-swatch" ng-attr-style="background-color: {{vm.state.website.themeOverrides.styles.primaryBtnTextColor}};"></div>
+                    </li>
+                    <li ng-if="vm.state.website.themeOverrides.styles.primaryBtnBackgroundColor">
+                      <div class="ssb-color-swatch" ng-attr-style="background-color: {{vm.state.website.themeOverrides.styles.primaryBtnBackgroundColor}};"></div>
+                    </li>
+                  </ul>
                 </li>
-                <li>
-                  <!-- Body Background Color: -->
-                  <div class="ssb-color-swatch" ng-attr-style="background-color: {{vm.state.website.themeOverrides.styles.bodyBackgroundColor}};"></div>
+                <li class="full-width">
+                  Font Stack (Default): <pre>{{vm.state.website.themeOverrides.defaultFontStack}}</pre>
                 </li>
-                <li ng-if="vm.state.website.themeOverrides.styles.primaryTextColor">
-                  <!-- Text Color (Primary): -->
-                  <div class="ssb-color-swatch" ng-attr-style="background-color: {{vm.state.website.themeOverrides.styles.primaryTextColor}};"></div>
+                <li class="full-width">
+                  Font Stack (Heading): <pre>{{vm.state.website.themeOverrides.headingFontStack}}</pre>
                 </li>
-                <li ng-if="vm.state.website.themeOverrides.styles.primaryBtnTextColor">
-                  <!-- Text Color (Buttons): -->
-                  <div class="ssb-color-swatch" ng-attr-style="background-color: {{vm.state.website.themeOverrides.styles.primaryBtnTextColor}};"></div>
+                <li class="full-width">
+                  Font Stack (Paragraph): <pre>{{vm.state.website.themeOverrides.paragraphFontStack}}</pre>
                 </li>
-                <li ng-if="vm.state.website.themeOverrides.styles.primaryBtnBackgroundColor">
-                  <!-- Button Background Color: -->
-                  <div class="ssb-color-swatch" ng-attr-style="background-color: {{vm.state.website.themeOverrides.styles.primaryBtnBackgroundColor}};"></div>
+                <li class="margin-right-10">
+                  Heading Size: <pre>{{vm.state.website.themeOverrides.styles.headingSize}}</pre>
                 </li>
-              </ul>
-            </li>
-            <li class="full-width">
-              Font Stack (Default): <pre>{{vm.state.website.themeOverrides.defaultFontStack}}</pre>
-              <!--
-              <div ng-attr-style="font-family: {{vm.state.website.themeOverrides.defaultFontStack}};font-size: {vm.state.website.themeOverrides.styles.headingSize}};">
-                Young Soul font stack (default)
-              </div>
-              -->
-            </li>
-            <li class="full-width">
-              Font Stack (Heading): <pre>{{vm.state.website.themeOverrides.headingFontStack}}</pre>
-            </li>
-            <li class="full-width">
-              Font Stack (Paragraph): <pre>{{vm.state.website.themeOverrides.paragraphFontStack}}</pre>
-            </li>
-            <li class="margin-right-10">
-              Heading Size: <pre>{{vm.state.website.themeOverrides.styles.headingSize}}</pre>
-            </li>
-            <li class="margin-right-10">
-              Paragraph Size: <pre>{{vm.state.website.themeOverrides.styles.paragraphSize}}</pre>
-            </li>
-          </ul>
+                <li class="margin-right-10">
+                  Paragraph Size: <pre>{{vm.state.website.themeOverrides.styles.paragraphSize}}</pre>
+                </li>
+            </ul> -->
 
         </div>
-        <div class="col-md-8">
+        <div class="col-md-8 padding-top-30">
           <img
             ng-src="{{vm.state.website.theme.previewImage || 'https://s3.amazonaws.com/indigenous-themes/indimain/ssb-indimain-preview.png'}}"
             alt="{{vm.state.website.theme.name}}"
@@ -181,7 +199,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr ng-repeat="page in displayedPages" ng-click="viewSimpleSiteBuilderSingle(page)">
+                            <tr ng-repeat="page in displayedPages" ng-click="viewSimpleSiteBuilder(page)">
                                 <td class="center">
                                     <img ng-src="{{ page.screenshot }}" id="screenshot_{{page._id}}" err-src="{{default_image_url}}" class="img-thumbnail screenshot" alt="image">
                                 </td>

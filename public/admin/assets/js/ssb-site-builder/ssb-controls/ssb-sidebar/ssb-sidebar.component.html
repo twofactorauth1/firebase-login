@@ -6,6 +6,25 @@
 			<h4>Site Settings</h4>
 			<div class="ti-arrow-right" ng-click="vm.navigation.loadPage(vm.state.page._id)"></div>
 		</div>
+
+        <section>
+            <h4 class="ssb-sidebar-sub-heading">Pages</h4>
+            <ul class="list-unstyled">
+                <li ng-repeat="page in vm.state.pages track by $index" class="ssb-page-section-settings-item">
+                    <div class="ssb-sidebar-item-icon ti-plus display-ib" tooltip-placement="left" tooltip-html-unsafe="Add to Main Menu"></div>
+                    <div class="panel-group">
+                        <div class="ssb-sidebar-sortable-item panel panel-default">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a href page-id="page._id" ng-click="vm.navigation.loadPage(page._id)">{{page.title}}</a>
+                                </h4>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </section>
+
 		<section>
 	        <h4 class="ssb-sidebar-sub-heading">Theme Settings</h4>
 	        <ul class="list-unstyled">
@@ -19,7 +38,7 @@
 							<div class="form-group">
 								<h5 class="ssb-sidebar-settings-heading">Theme - {{vm.state.website.theme.name}}</h5>
 
-                <ui-select ng-model="vm.state.website.theme" ng-change="vm.applyThemeToPage($select.selected)" theme="bootstrap">
+                <ui-select ng-model="vm.state.website.theme" ng-change="vm.applyThemeToSite($select.selected)" theme="bootstrap">
                   <ui-select-match placeholder="Select a theme">
                       <small ng-bind-html="$select.selected.name"></small>
                   </ui-select-match>
@@ -73,6 +92,7 @@
 				</li>
 			</ul>
 	    </section>
+
 	    <section ng-repeat="linkList in vm.state.website.linkLists track by $index">
 	        <h4 class="ssb-sidebar-sub-heading">{{::linkList.name}}</h4>
 	        <ul class="list-unstyled" ng-sortable="vm.sortableOptions" ng-model="linkList.links">
@@ -91,23 +111,7 @@
 	        	</li>
 	        </ul>
 	    </section>
-	    <section>
-	        <h4 class="ssb-sidebar-sub-heading">Pages</h4>
-	        <ul class="list-unstyled">
-	        	<li ng-repeat="page in vm.state.pages track by $index" class="ssb-page-section-settings-item">
-	        		<div class="ssb-sidebar-item-icon ti-plus display-ib" tooltip-placement="left" tooltip-html-unsafe="Add to Main Menu"></div>
-	        		<div class="panel-group">
-		        		<div class="ssb-sidebar-sortable-item panel panel-default">
-			        		<div class="panel-heading">
-				        		<h4 class="panel-title">
-				        			<a href page-id="page._id" ng-click="vm.navigation.loadPage(page._id)">{{page.title}}</a>
-				        		</h4>
-				        	</div>
-			        	</div>
-			        </div>
-	        	</li>
-	        </ul>
-	    </section>
+
 	</div>
 
 	<div class="page-editor-group editor-group">
@@ -159,7 +163,7 @@
 							ng-class="{ 'ssb-sidebar-section-open': vm.uiState.accordion.sections[sectionIndex].isOpen }"
 							class="ssb-sidebar-sortable-item">
 
-							<div ng-include=" 'assets/js/ssb-site-builder/ssb-components/ssb-page-section/sidebar.settings.html' "></div>
+							<div class="clearfix overflow-auto" ng-include=" 'assets/js/ssb-site-builder/ssb-components/ssb-page-section/sidebar.settings.html' "></div>
 
 							<div class="form-group padding-top-10">
 								<h5 class="ssb-sidebar-settings-heading">Components ({{section.components.length}})</h5>

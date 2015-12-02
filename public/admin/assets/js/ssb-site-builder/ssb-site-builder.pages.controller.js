@@ -244,7 +244,7 @@
           WebsiteService.getWebsite(function(data) {
             SimpleSiteBuilderService.createPage(page._id).then(function(data) {
               $scope.closeModal();
-              $scope.viewSimpleSiteBuilderSingle(data.data);
+              $scope.viewSimpleSiteBuilder(data.data);
             });
           });
 
@@ -270,8 +270,22 @@
       $location.path('/website/pages/').search({pagehandle: page.handle});
     };
 
-    $scope.viewSimpleSiteBuilderSingle = function (page) {
-      $location.path('/website/site-builder/pages/' + page._id);
+    $scope.viewSimpleSiteBuilder = function (page) {
+
+        var id = $scope.pages.filter(function(page) {
+            return page.handle == 'index'
+        })[0]._id;
+
+        if (!id) {
+            id = pages[0]._id;
+        }
+
+        if (page) {
+            id = page._id;
+        }
+
+        $location.path('/website/site-builder/pages/' + id);
+
     };
 
     $scope.filterScreenshot = {};

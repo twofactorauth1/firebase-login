@@ -1,29 +1,31 @@
-<div class="form-group">
-    <h5 class="ssb-sidebar-settings-heading">Settings</h5>
+<div class="col-xs-12">
+    <div class="row">
+        <div class="form-group col-xs-6 ssb-spectrum-color-picker">
+            <!-- <h5 class="ssb-sidebar-settings-heading">Settings</h5>
 
-    <label class="padding-bottom-10">
-      Section Name:
-    </label>
-    <span editable-text="section.name" class="pull-right">{{section.name}}</span>
+            <label class="padding-bottom-10">
+              Section Name:
+            </label>
+            <span editable-text="section.name" class="pull-right">{{section.name}}</span> -->
 
-    <br>
+            <!-- <br> -->
 
-    <label for="colorpicker">Text Color:</label>
-    <span tooltip-placement="top" tooltip-html-unsafe="Text color of section."><i class="fa fa-info-circle" /></span>
-    <div class="pull-right">
-        <h4 class="pull-left"><i class="fa fa-eyedropper" /></h4>
-        <spectrum-colorpicker format="'hex'" options="vm.spectrum.options" ng-model="section.txtcolor"></spectrum-colorpicker>
+            <!-- <div class="pull-right">
+                <h4 class="pull-left"><i class="fa fa-eyedropper" /></h4> -->
+                <spectrum-colorpicker format="'hex'" options="vm.spectrum.options" ng-model="section.txtcolor"></spectrum-colorpicker>
+            <!-- </div> -->
+            <label for="colorpicker">Text <span tooltip-placement="top" tooltip-html-unsafe="Text color of section."><i class="fa fa-info-circle" /></span></label>
+        </div>
+        <div class="form-group col-xs-6 ssb-spectrum-color-picker">
+            <!-- <div class="pull-right"> -->
+                <!-- <h4 class="pull-left"><i class="fa fa-eyedropper" /></h4> -->
+                <spectrum-colorpicker format="'hex'" options="vm.spectrum.options" class="pull-right" ng-model="section.bg.color"></spectrum-colorpicker>
+            <!-- </div> -->
+            <label for="colorpicker">Background <span tooltip-placement="top" tooltip-html-unsafe="Background color of section."><i class="fa fa-info-circle" /></span></label>
+
+        </div>
     </div>
-</div>
-<div class="form-group" ng-hide="section.bg.img.show">
-    <label for="colorpicker">Background Color:</label>
-    <span tooltip-placement="top" tooltip-html-unsafe="Background color of section."><i class="fa fa-info-circle" /></span>
-    <div class="pull-right">
-        <h4 class="pull-left"><i class="fa fa-eyedropper" /></h4>
-        <spectrum-colorpicker format="'hex'" options="vm.spectrum.options" class="pull-right" ng-model="section.bg.color"></spectrum-colorpicker>
-    </div>
-</div>
-<form class="form-horizontal" ng-show="!section.bg.img.show" ng-hide="isEmail">
+<!-- <form class="form-horizontal" ng-show="!section.bg.img.show" ng-hide="isEmail">
     <div class="row">
         <div class="col-sm-12">
             <label for="bg_color_opacity">Add BG Opacity</label>
@@ -87,110 +89,111 @@
             </div>
         </div>
     </div>
-</div>
+</div> -->
+<div class="row">
+    <accordion close-others="oneAtATime" class="accordion">
+        <accordion-group class="">
+            <accordion-heading>
+                Section Layout
+                <div ng-hide="!vm.uiState.accordion.sections[sectionIndex].isOpen" class="ssb-sidebar-item-icon ssb-sidebar-move-handle ti-angle-down display-ib"></div>
+                <div ng-hide="vm.uiState.accordion.sections[sectionIndex].isOpen" class="ssb-sidebar-item-icon ssb-sidebar-move-handle ti-angle-up display-ib"></div>
+            </accordion-heading>
 
-<accordion close-others="oneAtATime" class="accordion">
-    <accordion-group class="ssb-sidebar-sortable-item ssb-sidebar-sortable-item-section">
-        <accordion-heading>
-            Section Layout
-            <div ng-hide="!vm.uiState.accordion.sections[sectionIndex].isOpen" class="ssb-sidebar-item-icon ssb-sidebar-move-handle ti-angle-down display-ib"></div>
-            <div ng-hide="vm.uiState.accordion.sections[sectionIndex].isOpen" class="ssb-sidebar-item-icon ssb-sidebar-move-handle ti-angle-up display-ib"></div>
-        </accordion-heading>
-
-        <div class="form-group">
-          <div class="radio">
-            <label>
-              <input type="radio" ng-model="section.layout" value="1-col"/> Stacked
-            </label>
-          </div>
-          <div class="radio">
-            <label>
-              <input type="radio" ng-model="section.layout" value="2-col"/> 2 Column Grid
-            </label>
-          </div>
-          <div class="radio">
-            <label>
-              <input type="radio" ng-model="section.layout" value="3-col"/> 3 Column Grid
-            </label>
-          </div>
-        </div>
-
-        <div class="form-group hidden">
-            <label>Custom Spacing:</label>
-            <span tooltip-placement="top" tooltip-html-unsafe="Use Page Settings for Spacing Settings"><i class="fa fa-info-circle" /></span>
-            <switch ng-model="section.spacing.usePage" class="pull-right"></switch>
-            <span class="help-block">Spacing will inherit page spacing unless switched on.</span>
-        </div>
-        <div class="form-group">
-            <label>Max Width</label>
-            <ui-select ng-model="section.spacing.mw" theme="bootstrap" ng-disabled="section.spacing.usePage">
-                <ui-select-match placeholder="Select a Resolution">
-                    <small ng-bind-html="$select.selected"></small>
-                </ui-select-match>
-                <ui-select-choices repeat="res in resolutions | filter: $select.search track by $index">
-                    <small ng-bind-html="res | highlight: $select.search"></small>
-                </ui-select-choices>
-            </ui-select>
-            <label for="ssb-page-section-line-height-input-{{sectionIndex}}">Line Height</label>
-            <input id="ssb-page-section-line-height-input-{{sectionIndex}}" type="number" string-to-number ng-model="section.spacing.lineHeight" data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down">
-        </div>
-        <div class="well margin-bottom-0 partition-light-primary">
-            <label class="text-white lead">Margin</label>
-            <div class="spacing-mt">
-                <input type="number" string-to-number ng-model="section.spacing.mt" min="-500" max="500" data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down" ng-disabled="section.spacing.usePage">
+            <div class="form-group">
+              <div class="radio">
+                <label>
+                  <input type="radio" ng-model="section.layout" value="1-col"/> Stacked
+                </label>
+              </div>
+              <div class="radio">
+                <label>
+                  <input type="radio" ng-model="section.layout" value="2-col"/> 2 Column Grid
+                </label>
+              </div>
+              <div class="radio">
+                <label>
+                  <input type="radio" ng-model="section.layout" value="3-col"/> 3 Column Grid
+                </label>
+              </div>
             </div>
-            <div class="col-xs-2">
-                <div class="spacing-ml">
-                    <input type="number" string-to-number ng-model="section.spacing.ml" min="-500" max="500" data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down" ng-disabled="section.spacing.usePage">
-                    <div class="checkbox clip-check check-primary checkbox-inline">
-                        <input type="checkbox" id="margin-left" ng-model="section.spacing.ml" ng-true-value="'auto'" ng-false-value="'0'" ng-disabled="section.spacing.usePage">
-                        <label for="margin-left" class="text-white">
-                            Auto
-                        </label>
-                    </div>
+
+            <div class="form-group hidden">
+                <label>Custom Spacing:</label>
+                <span tooltip-placement="top" tooltip-html-unsafe="Use Page Settings for Spacing Settings"><i class="fa fa-info-circle" /></span>
+                <switch ng-model="section.spacing.usePage" class="pull-right"></switch>
+                <span class="help-block">Spacing will inherit page spacing unless switched on.</span>
+            </div>
+            <div class="form-group">
+                <label>Max Width</label>
+                <ui-select ng-model="section.spacing.mw" theme="bootstrap" ng-disabled="section.spacing.usePage">
+                    <ui-select-match placeholder="Select a Resolution">
+                        <small ng-bind-html="$select.selected"></small>
+                    </ui-select-match>
+                    <ui-select-choices repeat="res in resolutions | filter: $select.search track by $index">
+                        <small ng-bind-html="res | highlight: $select.search"></small>
+                    </ui-select-choices>
+                </ui-select>
+                <label for="ssb-page-section-line-height-input-{{sectionIndex}}">Line Height</label>
+                <input id="ssb-page-section-line-height-input-{{sectionIndex}}" type="number" string-to-number ng-model="section.spacing.lineHeight" data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down">
+            </div>
+            <div class="well margin-bottom-0 partition-light-primary">
+                <label class="text-white lead">Margin</label>
+                <div class="spacing-mt">
+                    <input type="number" string-to-number ng-model="section.spacing.mt" min="-500" max="500" data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down" ng-disabled="section.spacing.usePage">
                 </div>
-            </div>
-            <div class="col-xs-8">
-                <div class="well partition-dark-primary">
-                    <label class="text-white lead">Padding</label>
-                    <div class="spacing-pt">
-                        <input type="number" string-to-number ng-model="section.spacing.pt" min="-500" max="500" data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down" ng-disabled="section.spacing.usePage">
-                    </div>
-                    <div class="col-xs-6">
-                        <div class="spacing-pl">
-                            <input type="number" string-to-number ng-model="section.spacing.pl" min="-500" max="500" data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down" ng-disabled="section.spacing.usePage">
+                <div class="col-xs-2">
+                    <div class="spacing-ml">
+                        <input type="number" string-to-number ng-model="section.spacing.ml" min="-500" max="500" data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down" ng-disabled="section.spacing.usePage">
+                        <div class="checkbox clip-check check-primary checkbox-inline">
+                            <input type="checkbox" id="margin-left" ng-model="section.spacing.ml" ng-true-value="'auto'" ng-false-value="'0'" ng-disabled="section.spacing.usePage">
+                            <label for="margin-left" class="text-white">
+                                Auto
+                            </label>
                         </div>
                     </div>
-                    <div class="col-xs-6">
-                        <div class="spacing-pr">
-                            <input type="number" string-to-number ng-model="section.spacing.pr" min="-500" max="500" data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down" ng-disabled="section.spacing.usePage">
+                </div>
+                <div class="col-xs-8">
+                    <div class="well partition-dark-primary">
+                        <label class="text-white lead">Padding</label>
+                        <div class="spacing-pt">
+                            <input type="number" string-to-number ng-model="section.spacing.pt" min="-500" max="500" data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down" ng-disabled="section.spacing.usePage">
+                        </div>
+                        <div class="col-xs-6">
+                            <div class="spacing-pl">
+                                <input type="number" string-to-number ng-model="section.spacing.pl" min="-500" max="500" data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down" ng-disabled="section.spacing.usePage">
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <div class="spacing-pr">
+                                <input type="number" string-to-number ng-model="section.spacing.pr" min="-500" max="500" data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down" ng-disabled="section.spacing.usePage">
+                            </div>
+                        </div>
+                        <div class="clearfix margin-bottom-15"></div>
+                        <div class="spacing-pb">
+                            <input type="number" string-to-number ng-model="section.spacing.pb" min="-500" max="500" data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down" ng-disabled="section.spacing.usePage">
                         </div>
                     </div>
-                    <div class="clearfix margin-bottom-15"></div>
-                    <div class="spacing-pb">
-                        <input type="number" string-to-number ng-model="section.spacing.pb" min="-500" max="500" data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down" ng-disabled="section.spacing.usePage">
+                </div>
+                <div class="col-xs-2">
+                    <div class="spacing-mr">
+                        <input type="number" string-to-number ng-model="section.spacing.mr" min="-500" max="500" data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down" ng-disabled="section.spacing.usePage">
+                        <div class="checkbox clip-check check-primary checkbox-inline">
+                            <input type="checkbox" id="margin-right" ng-model="section.spacing.mr" ng-true-value="'auto'" ng-false-value="'0'" ng-disabled="section.spacing.usePage">
+                            <label class="text-white" for="margin-right">
+                                Auto
+                            </label>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-xs-2">
-                <div class="spacing-mr">
-                    <input type="number" string-to-number ng-model="section.spacing.mr" min="-500" max="500" data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down" ng-disabled="section.spacing.usePage">
-                    <div class="checkbox clip-check check-primary checkbox-inline">
-                        <input type="checkbox" id="margin-right" ng-model="section.spacing.mr" ng-true-value="'auto'" ng-false-value="'0'" ng-disabled="section.spacing.usePage">
-                        <label class="text-white" for="margin-right">
-                            Auto
-                        </label>
-                    </div>
+                <div class="clearfix"></div>
+                <div class="spacing-mb">
+                    <input type="number" string-to-number ng-model="section.spacing.mb" min="-500" max="500" data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down" ng-disabled="section.spacing.usePage">
                 </div>
             </div>
             <div class="clearfix"></div>
-            <div class="spacing-mb">
-                <input type="number" string-to-number ng-model="section.spacing.mb" min="-500" max="500" data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down" ng-disabled="section.spacing.usePage">
-            </div>
-        </div>
-        <div class="clearfix"></div>
-        </tab>
+            </tab>
 
 
-    </accordion-group>
-</accordion>
+        </accordion-group>
+    </accordion>
+</div>

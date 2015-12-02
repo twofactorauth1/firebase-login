@@ -65,7 +65,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         ncyBreadcrumb: {
             label: 'Simple Site Builder Pages'
         },
-        resolve: loadSequence('pagesCtrl', 'userService')
+        resolve: loadSequence('pagesCtrl', 'userService', 'google-fonts')
     }).state('app.website.ssbSiteBuilder.editor', {
         url: '/pages/:pageId',
         template: '<ssb-site-builder class="ssb-site-builder"></ssb-site-builder>',
@@ -303,7 +303,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         url: '/profile-personal',
         templateUrl: "assets/views/profile-personal.html",
         title: 'Profile Personal',
-        icon: 'ti-layout-media-left-alt', 
+        icon: 'ti-layout-media-left-alt',
         ncyBreadcrumb: {
             label: 'Personal Profile'
         },

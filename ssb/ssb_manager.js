@@ -125,7 +125,7 @@ module.exports = {
 
     updateWebsite: function(accountId, websiteId, modified, modifiedWebsite, fn) {
         var self = this;
-        
+
         self.log.debug('>> updateWebsite');
         websiteDao.getWebsiteById(accountId, websiteId, function(err, website){
             if(err || !website) {
@@ -461,7 +461,7 @@ module.exports = {
         });
     },
 
-    listPlatformSectionSummaries: function(fn) {
+    listPlatformSectionSummaries: function(accountId, fn) {
         var self = this;
         self.log.debug('>> listPlatformSectionSummaries');
 
@@ -474,7 +474,8 @@ module.exports = {
             preview:1,
             filter:1,
             description:1,
-            enabled:1
+            enabled:1,
+            title: 1
         };
 
         sectionDao.findManyWithFields(query, fields, $$.m.ssb.Section, function(err, list){
