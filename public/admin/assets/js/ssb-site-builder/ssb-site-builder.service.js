@@ -441,7 +441,7 @@
 
         function applyThemeToSite(theme) {
             // Load web font loader
-            if (theme.name !== 'Default') {
+            if (theme.name && theme.name !== 'Default') {
                 WebFont.load({
                     google: {
                         families: [theme.defaultFontStack.split(',')[0].replace(/"/g, '')]
