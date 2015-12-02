@@ -5,7 +5,7 @@ app.controller('SiteBuilderEditControlController', ssbSiteBuilderEditControlCont
 ssbSiteBuilderEditControlController.$inject = ['$scope', '$attrs', '$filter', 'SimpleSiteBuilderService'];
 /* @ngInject */
 function ssbSiteBuilderEditControlController($scope, $attrs, $filter, SimpleSiteBuilderService) {
-	
+
     console.info('site-build edit control directive init...')
 
     var vm = this;

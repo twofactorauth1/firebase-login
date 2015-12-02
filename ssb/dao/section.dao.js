@@ -14,6 +14,7 @@ var dao = {
     saveSections: function(sectionAry, fn) {
         var self = this;
         var savedAry = [];
+
         async.eachSeries(sectionAry, function(section, cb){
             //self.log.debug('Creating a new section from ', section);
             var sectionObj = new $$.m.ssb.Section(section);

@@ -8,23 +8,17 @@
 require('../../models/base.model.js');
 
 /**
- * @class Section
+ * @class Block
  */
-var section = $$.m.ModelBase.extend({
+var block = $$.m.ModelBase.extend({
 
     defaults: function() {
         return {
-
             _id: null,
-            accountId:null,
-            layout: '',
-            components: [],//array of components, similar to what's on pages now
-            title:'',
-            description:'',
-            filter:'',
-            preview:'',
-            enabled:true,
-            reusable:true,
+            name:'',
+            link:'',
+            helpText:'',
+            _v:"0.1",
             created: {
                 date: new Date(),
                 by: null
@@ -39,22 +33,17 @@ var section = $$.m.ModelBase.extend({
 
     initialize: function(options) {
 
-    },
-
-    toReference: function() {
-        return {_id: this.id()};
     }
 
 
 }, {
     db: {
         storage: "mongo",
-        table: "sections",
+        table: "blocks",
         idStrategy: "uuid"
     }
 });
 
-$$.m.ssb = $$.m.ssb || {};
-$$.m.ssb.Section = section;
+$$.m.Block = block;
 
-module.exports = section;
+module.exports = block;

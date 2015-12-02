@@ -6,19 +6,19 @@
  */
 
 var baseDao = require('./../../dao/base.dao.js');
-var theme = require('../model/theme.js');
+var block = require('../model/block.js');
 
 var dao = {
 
-    getThemeById: function(themeId, fn) {
+    list: function(fn) {
         var self = this;
-        var query = {_id:themeId};
-        self.findOne(query, $$.m.ssb.Theme, fn);
+        var query = {_id: {$ne:'__counter__'}};
+        self.findMany(query, $$.m.Block, fn);
     },
 
     options: {
-        name: "ssb.theme.dao",
-        defaultModel: $$.m.ssb.Theme
+        name: "block.dao",
+        defaultModel: $$.m.Block
     }
 
 };
@@ -26,6 +26,6 @@ var dao = {
 
 dao = _.extend(dao, baseDao.prototype, dao.options).init();
 
-$$.dao.SSBThemeDao = dao;
+$$.dao.BlockDao = dao;
 
 module.exports = dao;

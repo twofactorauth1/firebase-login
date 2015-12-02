@@ -38,23 +38,18 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     vm.insertMedia = insertMedia;
     vm.addFroalaImage = addFroalaImage;
     vm.imageEditor = {};
-    vm.applyThemeToPage = SimpleSiteBuilderService.applyThemeToPage;
+    vm.applyThemeToSite = SimpleSiteBuilderService.applyThemeToSite;
+    vm.addSectionToPage = addSectionToPage;
 
     $scope.$watch(function() { return SimpleSiteBuilderService.website; }, function(website){
         vm.state.originalWebsite = angular.copy(website);
         vm.state.pendingChanges = false;
-        // vm.uiState = vm.uiStateOriginal;
         vm.state.website = website;
-    });
-
-    $scope.$watch(function() { return SimpleSiteBuilderService.pages; }, function(pages){
-        vm.state.pages = pages;
     });
 
     $scope.$watch(function() { return SimpleSiteBuilderService.page; }, function(page){
         vm.state.originalPage = angular.copy(page);
         vm.state.pendingChanges = false;
-        // vm.uiState = vm.uiStateOriginal;
         vm.state.page = page;
     });
 
@@ -81,7 +76,6 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         }
     }, true);
 
-    //TODO: optimize this, we dont need to watch since this won't change
     $scope.$watch(function() { return SimpleSiteBuilderService.pages }, function(pages) {
       vm.state.pages = pages;
     }, true);
@@ -94,6 +88,14 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     //TODO: optimize this, we dont need to watch since this won't change
     $scope.$watch(function() { return SimpleSiteBuilderService.templates }, function(templates) {
       vm.state.templates = templates;
+    }, true);
+
+    $scope.$watch(function() { return SimpleSiteBuilderService.platformSections }, function(sections) {
+      vm.state.platformSections = sections;
+    }, true);
+
+    $scope.$watch(function() { return SimpleSiteBuilderService.userSections }, function(sections) {
+      vm.state.userSections = sections;
     }, true);
 
     $rootScope.$on('$stateChangeStart',
@@ -258,6 +260,10 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
             angular.element('.sp-container').addClass('sp-hidden');
         });
 
+    }
+
+    function addSectionToPage(section, version) {
+      SimpleSiteBuilderService.addSectionToPage(section, version, vm.modalInstance);
     }
 
     function insertMedia(asset) {

@@ -2,7 +2,27 @@
 
     <div class="modal-header">
         <button type="button" class="close" ng-click="vm.parentVm.closeModal()">&times;</button>
-        <h4 class="modal-title">Add New page section</h4>
+        <h4 class="row modal-title">
+            <div class="col-xs-10 col-sm-4">
+                Add new page section
+            </div>
+
+            <div class="col-xs-12 col-sm-7">
+                <button
+                    class="ssb-add-section-sort-btn btn pull-right margin-right-20"
+                    ng-class="{ 'btn-primary disabled': vm.sectionType === 'enabledUserSections', 'btn-off': vm.sectionType !== 'enabledUserSections' }"
+                    ng-click="vm.setSectionType('enabledUserSections')">
+                    Browse Saved
+                </button>
+
+                <button
+                    class="ssb-add-section-sort-btn btn pull-right margin-right-20"
+                    ng-class="{ 'btn-primary disabled': vm.sectionType === 'enabledPlatformSections', 'btn-off': vm.sectionType !== 'enabledPlatformSections' }"
+                    ng-click="vm.setSectionType('enabledPlatformSections')">
+                    Browse Platform
+                </button>
+            </div>
+        </h4>
     </div>
     <div class="modal-body no-padding add-section-modal">
         <tabset class="tabbable tabs-left margin-bottom-0" ng-class="{'email-sections' : isEmail}">
@@ -11,7 +31,7 @@
                     {{sectionFilter.capitalized}}
                 </tab-heading>
 
-                <div ng-repeat="section in vm.platformSections| orderBy:'title' | filter:{ filter: sectionFilter.lowercase, enabled: true }" ng-if="sectionFilter.lowercase != 'all'" class="margin-bottom-15">
+                <div ng-repeat="section in vm.sections | orderBy:'title' | filter:{ filter: sectionFilter.lowercase, enabled: true }" ng-if="sectionFilter.lowercase != 'all'" class="margin-bottom-15">
                     <div class="col-xs-4">
                         <div class="img-wrap">
                             <a ng-href="{{section.preview}}" title="" data-gallery="">
@@ -28,7 +48,7 @@
                     </div>
                     <div class="clearfix"></div>
                 </div>
-                <div ng-repeat="section in vm.platformSections| orderBy:'title' | filter:{ enabled: true }" ng-if="sectionFilter.lowercase == 'all'" class="margin-bottom-15">
+                <div ng-repeat="section in vm.sections | orderBy:'title' | filter:{ enabled: true }" ng-if="sectionFilter.lowercase == 'all'" class="margin-bottom-15">
                     <div class="col-xs-4">
                         <div class="img-wrap">
                             <a ng-href="{{section.preview}}" title="" data-gallery="">

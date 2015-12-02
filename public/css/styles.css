@@ -418,6 +418,25 @@ fieldset[disabled] .btn-linked-in.active {
     margin-right: 0px !important;
   }
 }
+a.ssb-button {
+  background-color: #48b1cc;
+  border-color: #48b1cc;
+  color: #ffffff;
+  display: inline-block;
+  padding: 6px 12px;
+  margin-bottom: 0;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.42857143;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  touch-action: manipulation;
+  cursor: pointer;
+  -webkit-user-select: none;
+  border: 1px solid transparent;
+  border-radius: 4px;
+}
 .accordion-v1 .title {
   text-align: center;
   margin-bottom: 20px;

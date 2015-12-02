@@ -81,6 +81,7 @@ module.exports = {
 
     listWebsites: function(accountId, fn) {
         var self = this;
+        //TODO: materialize Theme
         self.log.debug('>> listWebsites');
         websiteDao.getWebsitesForAccount(accountId, function(err, list){
             if(err) {
@@ -95,20 +96,36 @@ module.exports = {
 
     getWebsite: function(accountId, websiteId, fn) {
         var self = this;
+
         self.log.debug('>> getWebsite');
         websiteDao.getWebsiteById(accountId, websiteId, function(err, website){
             if(err) {
                 self.log.error('Error getting website:', err);
                 return fn(err, null);
             } else {
-                self.log.debug('<< getWebsite');
-                return fn(null, website);
+                if(website.get('themeId')){
+                    themeDao.getThemeById(website.get('themeId'), function(err, theme){
+                        if(err) {
+                            self.log.error('Error getting theme:', err);
+                            return fn(err, null);
+                        } else {
+                            website.set('theme', theme);
+                            self.log.debug('<< getWebsite');
+                            return fn(null, website);
+                        }
+                    });
+                } else {
+                    self.log.debug('<< getWebsite');
+                    return fn(null, website);
+                }
+
             }
         });
     },
 
     updateWebsite: function(accountId, websiteId, modified, modifiedWebsite, fn) {
         var self = this;
+
         self.log.debug('>> updateWebsite');
         websiteDao.getWebsiteById(accountId, websiteId, function(err, website){
             if(err || !website) {
@@ -116,13 +133,30 @@ module.exports = {
                 return fn(err, null);
             } else {
                 modifiedWebsite.set('modified', modified);
+                if(modifiedWebsite.attributes.theme) {
+                    delete modifiedWebsite.attributes.theme;
+                }
                 websiteDao.saveOrUpdate(modifiedWebsite, function(err, updatedWebsite){
                     if(err) {
                         self.log.error('Error updating website:', err);
                         return fn(err, null);
                     } else {
-                        self.log.debg('<< updateWebsite');
-                        return fn(null, updatedWebsite);
+                        if(website.get('themeId')) {
+                            themeDao.getThemeById(website.get('themeId'), function (err, theme) {
+                                if (err) {
+                                    self.log.error('Error getting theme:', err);
+                                    return fn(err, null);
+                                } else {
+                                    website.set('theme', theme);
+                                    self.log.debug('<< getWebsite');
+                                    return fn(null, website);
+                                }
+                            });
+                        } else {
+                            self.log.debug('<< updateWebsite');
+                            return fn(null, updatedWebsite);
+                        }
+
                     }
                 });
             }
@@ -179,6 +213,10 @@ module.exports = {
             },
             function createSections(website, theme, template, cb) {
                 var sections = template.get('sections');
+
+                if (!template.get('ssb') && template.get('config').components.length) {
+                    sections = self.transformComponentsToSections(template.get('config').components);
+                }
 
                 _.each(sections, function(section){
                     var id = $$.u.idutils.generateUUID();
@@ -300,6 +338,14 @@ module.exports = {
             },
             function updateSections(existingPage, cb) {
                 var sections = page.get('sections');
+                _.each(sections, function(section){
+                    //if the accountId is 0, it is a platform section
+                    if(section.accountId === 0) {
+                        section._id = null;
+                    }
+                    section.accountId = accountId;
+                });
+
                 sectionDao.saveSections(sections, function(err, updatedSections){
                     if(err) {
                         self.log.error('Error saving sections:', err);
@@ -311,11 +357,11 @@ module.exports = {
                 });
             },
             function updateThePage(existingPage, updatedSections, cb){
-                var sections = page.get('sections');
+                //var sections = page.get('sections');
                 page.set('modified', modified);
                 var jsonSections = [];
-                _.each(sections, function(section){
-                    jsonSections.push({_id: section._id});
+                _.each(updatedSections, function(section){
+                    jsonSections.push({_id: section.id()});
                 });
                 page.set('sections', jsonSections);
                 page.set('created', existingPage.get('created'));
@@ -377,7 +423,7 @@ module.exports = {
         var self = this;
         self.log.debug('>> listAccountSectionSummaries');
 
-        var query = {accountId:accountId};
+        var query = {accountId:accountId, reusable:true};
         //var fields = ['_id', 'name', 'type', 'preview', 'filter', 'description', 'enabled'];
         var fields = {
             _id:1,
@@ -427,7 +473,7 @@ module.exports = {
         });
     },
 
-    listPlatformSectionSummaries: function(fn) {
+    listPlatformSectionSummaries: function(accountId, fn) {
         var self = this;
         self.log.debug('>> listPlatformSectionSummaries');
 
@@ -440,7 +486,8 @@ module.exports = {
             preview:1,
             filter:1,
             description:1,
-            enabled:1
+            enabled:1,
+            title: 1
         };
 
         sectionDao.findManyWithFields(query, fields, $$.m.ssb.Section, function(err, list){
@@ -483,5 +530,30 @@ module.exports = {
                 return fn(null, components);
             }
         });
+    },
+
+    /*
+     *
+     * Transform legacy template components to new section/component model format
+     */
+    transformComponentsToSections: function(components) {
+
+        var sections = [];
+
+        for (var i = 0; i < components.length; i++) {
+            var component = components[i];
+            var defaultSectionObj = {
+                layout: '1-col',
+                name: component.type + ' Section',
+                components: [component]
+            };
+
+            // defaultSectionObj.name = sectionName(defaultSectionObj) + ' Section';
+
+            sections[i] = defaultSectionObj;
+
+        }
+
+        return sections;
     }
 };

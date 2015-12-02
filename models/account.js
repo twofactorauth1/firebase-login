@@ -136,7 +136,8 @@ var account = $$.m.ModelBase.extend({
     },
 
     transients: {
-        db: ['trialDaysRemaining']
+        db: ['trialDaysRemaining'],
+        public: ['blocks']
     },
 
 

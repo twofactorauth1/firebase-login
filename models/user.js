@@ -194,40 +194,42 @@ var user = $$.m.ModelBase.extend({
 
 
   transients: {
-    deepCopy: true,
-    public: [function (json, options) {
-      if (json.credentials != null) {
-        json.credentials.forEach(function (creds) {
-          delete creds.password;
-          delete creds.accessToken;
-          delete creds.accessTokenSecret;
-          delete creds.refreshToken;
-        });
-      }
+      deepCopy: true,
+      public: [
+          function (json, options) {
+              if (json.credentials != null) {
+                  json.credentials.forEach(function (creds) {
+                      delete creds.password;
+                      delete creds.accessToken;
+                      delete creds.accessTokenSecret;
+                      delete creds.refreshToken;
+                  });
+              }
 
-      if (json.accounts != null) {
+              if (json.accounts != null) {
+                  if (options && options.accountId) {
+                      //Remove all but this account
+                      var account = _.findWhere(json.accounts, {
+                          accountId: options.accountId
+                      });
+                      json.accounts = account != null ? [account] : [];
+                  }
 
-        if (options && options.accountId) {
-          //Remove all but this account
-          var account = _.findWhere(json.accounts, {
-            accountId: options.accountId
-          });
-          json.accounts = account != null ? [account] : [];
-        }
+                  json.accounts.forEach(function (account) {
+                      delete account.permissions;
 
-        json.accounts.forEach(function (account) {
-          delete account.permissions;
+                      if (account.credentials != null) {
+                          account.credentials.forEach(function (creds) {
+                              delete creds.password;
+                              delete creds.accessToken;
+                              delete creds.accessTokenSecret;
+                          });
+                      }
+                  });
+              }
 
-          if (account.credentials != null) {
-            account.credentials.forEach(function (creds) {
-              delete creds.password;
-              delete creds.accessToken;
-              delete creds.accessTokenSecret;
-            });
           }
-        });
-      }
-        }],
+      ],
     manage: [function (json, options) {
       if (json.credentials != null) {
         json.credentials.forEach(function (creds) {

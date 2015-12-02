@@ -41,26 +41,34 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, SimpleSiteBuil
     vm.insertMedia = insertMedia;
     vm.addToMainMenu = addToMainMenu;
     vm.showInsert = true;
-    vm.applyThemeToPage = SimpleSiteBuilderService.applyThemeToPage;
+    vm.applyThemeToSite = SimpleSiteBuilderService.applyThemeToSite;
     vm.insertMediaCallback = insertMediaCallback;
+    vm.removeBackgroundImage = removeBackgroundImage;
+    vm.removeImage = removeImage;
 
     editableOptions.theme = 'bs3';
 
+    $scope.$watch('vm.uiState.activeSectionIndex', function(index) {
+        console.log('activeSectionIndex changed: ', index);
+        vm.navigation.loadPage();
+    }, true);
+
     vm.navigation = {
     	back: function() {
-    		// vm.navigation.slide = 'fade-out-left';
     		vm.navigation.index = 0;
     		vm.navigation.indexClass = 'ssb-sidebar-position-0';
     	},
     	loadPage: function(pageId) {
-    		//TODO: load new page if not currently editing that page
-    		vm.navigation.index = 1;
-    		vm.navigation.indexClass = 'ssb-sidebar-position-1';
+            if (pageId && pageId !== vm.state.page._id) {
+                $location.path('/website/site-builder/pages/' + pageId);
+            } else {
+                vm.navigation.index = 1;
+                vm.navigation.indexClass = 'ssb-sidebar-position-1';
+            }
     	},
     	goToPagesListPage: function() {
     		$location.url('/website/site-builder/pages/');
     	},
-    	// slide: 'fade-in-right',
     	index: 0,
     	indexClass: 'ssb-sidebar-position-1'
     };
@@ -115,10 +123,19 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, SimpleSiteBuil
       return true;
     };
 
+    function removeBackgroundImage(container) {
+        container.bg.img.url = null;
+    }
+
+    function removeImage(container) {
+        container.src = null;
+    }
+
   	function getPlatformSections() {
-  		SimpleSiteBuilderService.getPlatformSections().then(function(data) {
-        vm.platformSections = data;
-      });
+        alert('used!')
+  		// SimpleSiteBuilderService.getPlatformSections().then(function(data) {
+    //     vm.platformSections = data;
+      // });
   	}
 
     function getPlatformComponents() {
@@ -135,20 +152,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, SimpleSiteBuil
     }
 
     function addSectionToPage(section, version) {
-
-      if (!vm.state.page.sections) {
-        vm.state.page.sections = [];
-      }
-
-      var numSections = vm.state.page.sections.length;
-
-      return (
-        SimpleSiteBuilderService.getSection(section, version || 1).then(function(response) {
-          vm.state.page.sections.push(response);
-          vm.uiState.activeSectionIndex = numSections;
-          vm.closeModal();
-        })
-      )
+      SimpleSiteBuilderService.addSectionToPage(section, version, vm.modalInstance);
     }
 
     function removeSectionFromPage(index) {

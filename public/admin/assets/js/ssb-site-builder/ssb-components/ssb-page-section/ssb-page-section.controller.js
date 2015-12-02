@@ -21,7 +21,9 @@ function ssbPageSectionController($scope, $attrs, $filter, SimpleSiteBuilderServ
   function sectionClass(section) {
     var classString = '';
 
-    classString += 'ssb-page-section-layout-' + section.layout;
+    if (section.layout) {
+        classString += 'ssb-page-section-layout-' + section.layout;
+    }
 
     return classString;
   }

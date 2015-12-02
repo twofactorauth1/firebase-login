@@ -24,20 +24,13 @@ var template = $$.m.ModelBase.extend({
             "name" : "Default",
             "accountId" : 6,
             "public" : true,
-            "ssb" : true,
-            "styles" : {
-                "headerBackgroundColor" : "#FFFFFF",
-                "bodyBackgroundColor" : "#FFFFFF",
-                "primaryTextColor" : "#000000",
-                "primaryBtnColor" : "#50c7e8",
-                "headingSize" : "16px",
-                "paragraphSize" : "12px"
-            },
-            "headingFontStack" : "\"Helvetica Neue\", Helvetica, Arial, sans-serif",
-            "paragraphFontStack" : "\"Helvetica Neue\", Helvetica, Arial, sans-serif",
-            "defaultSections" : [
-                {}
-            ],
+            // "ssb" : true,
+            "description": "",
+
+            /**
+             * SSB default content container
+             */
+            "sections": [],
 
 
             /**
