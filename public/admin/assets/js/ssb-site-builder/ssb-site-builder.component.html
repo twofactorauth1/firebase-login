@@ -3,6 +3,10 @@
 		font-family:{{vm.state.website.themeOverrides.defaultFontStack}}
 	}
 </style>
+<link rel="stylesheet" ng-href="css/ssb-site-builder/ssb-themes/ssb-theme-{{ vm.state.website.theme.name | slugify}}.css">
+<style>
+    /* TODO: theme overrides */
+</style>
 <div>
 	<ssb-sidebar state="vm.state" ui-state="vm.uiState" ng-class="{ 'ssb-sidebar-show': vm.uiState.show.sidebar, 'ssb-sidebar': true }"></ssb-sidebar>
 

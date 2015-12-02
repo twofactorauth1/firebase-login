@@ -6254,6 +6254,7 @@ a[href="https://froala.com/wysiwyg-editor"] {
     left: 30%;
     box-shadow: 0px -1px 3px 1px rgba(0, 0, 0, 0.5);
     float: left;
+    margin: 40px 0 300px;
   }
 }
 .ssb-site-builder .ssb-main .fr-toolbar {
@@ -6626,9 +6627,27 @@ a[href="https://froala.com/wysiwyg-editor"] {
   width: auto;
   margin: 1em auto;
 }
+.ssb-spectrum-color-picker {
+  text-align: center;
+}
+.ssb-spectrum-color-picker .sp-replacer {
+  padding: 0;
+  border: none;
+  background: none;
+  border-radius: 10em;
+  width: 5em;
+  height: 5em;
+  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.2);
+  margin: 1px 0 1em 0;
+}
 .ssb-spectrum-color-picker .sp-preview {
   background: transparent;
   border: 0 none;
+  width: 100%;
+  height: 100%;
+}
+.ssb-spectrum-color-picker .sp-dd {
+  display: none;
 }
 .ssb-flyover {
   position: absolute;
@@ -6727,6 +6746,10 @@ a[href="https://froala.com/wysiwyg-editor"] {
 .ssb-main .navigation-v2 .navbar .nav > li > a {
   padding: 1em;
 }
+.ssb-main .navbar-default .navbar-brand,
+.ssb-main .navbar .nav > li > a {
+  color: inherit!important;
+}
 .ssb-main[data-eq-state$="medium"] .navigation-v2 .navbar .nav > li > a,
 .ssb-main[data-eq-state$="large"] .navigation-v2 .navbar .nav > li > a {
   padding: 10px 25px 10px;
@@ -6774,7 +6797,7 @@ a[href="https://froala.com/wysiwyg-editor"] {
 .ssb-main .social-link-v1 .social-link ul [class*="btn-"] {
   background: none!important;
   border: none!important;
-  color: black!important;
+  color: inherit!important;
 }
 .ssb-main .social-link-v1 .social-link > .btn.social-links {
   position: absolute!important;
