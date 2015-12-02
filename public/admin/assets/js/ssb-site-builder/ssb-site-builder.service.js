@@ -211,14 +211,19 @@
 					deferred.resolve(wrappedLegacyComponent);
 				});
 			} else {
-
+                ssbRequest($http({
+                    url: baseSectionAPIUrlv2 + section._id,
+                    method: 'GET'
+                }).success(success).error(error));
 			}
 
 			function success(data) {
+                deferred.resolve(data);
 				console.log('SimpleSiteBuilderService requested section: ' + data);
 			}
 
 			function error(error) {
+                deferred.reject(error);
 				console.error('SimpleSiteBuilderService section error: ' + error);
 			}
 
