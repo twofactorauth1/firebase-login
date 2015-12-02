@@ -8,6 +8,11 @@ $.FroalaEditor.config = {
         'img-thumbnail': 'Square with Border',
         'img-circle': 'Circle'
      },
+     linkStyles:{
+        'fr-green': 'Green',
+        'fr-strong': 'Thick',
+        'ssb-button': 'Button'
+     },
      imageInsertButtons: ['imageBack', 'imageByURL', 'mediaManager']
 
 }
