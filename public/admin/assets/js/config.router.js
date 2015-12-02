@@ -392,6 +392,15 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
             label: 'Onboarding'
         },
         resolve: loadSequence('onboardingCtrl')
+    }).state('app.dohy', {
+        url: '/dohy',
+        templateUrl: "assets/js/dashboard/dohy.html",
+        title: 'DOHY',
+        icon: 'ti-layout-media-left-alt',
+        ncyBreadcrumb: {
+            label: 'DOHY'
+        },
+        resolve: loadSequence('DOHYCtrl', 'dashboardService')
     })
 
     // Login routes

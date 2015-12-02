@@ -21,7 +21,7 @@ var workstream = $$.m.ModelBase.extend({
             blocks:[],
             deepDiveVideoUrls:[],
             analyticWidgets:[],
-
+            name: '',
             _v:"0.1",
             created: {
                 date: new Date(),
