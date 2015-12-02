@@ -7,8 +7,27 @@
 
 var baseDao = require('./../../dao/base.dao.js');
 var workstream = require('../model/workstream.js');
+var async = require('async');
 
 var dao = {
+
+    saveWorkstreams: function(workstreamAry, fn) {
+        var self = this;
+        var savedAry = [];
+        async.eachSeries(workstreamAry, function(workstream, cb){
+            self.saveOrUpdate(workstream, function(err, savedWorkstream){
+                if(err) {
+                    self.log.error('Error saving workstream:', err);
+                    cb(err);
+                } else {
+                    savedAry.push(savedWorkstream);
+                    cb();
+                }
+            });
+        }, function done(err){
+            fn(err, savedAry);
+        });
+    },
 
     options: {
         name: "workstream.dao",
