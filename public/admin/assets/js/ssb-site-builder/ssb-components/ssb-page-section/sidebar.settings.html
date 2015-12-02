@@ -56,7 +56,7 @@
                             <span tooltip-placement="top" tooltip-html-unsafe="show/hide background image of section."><i class="fa fa-info-circle" /></span>
                             <switch ng-model="section.bg.img.show" class="pull-right"></switch>
                             <br>
-                            <small>Please select an image of 1280 x 400px minimum to prevent blurriness</small>
+                            <!-- <small>Please select an image of 1280 x 400px minimum to prevent blurriness</small> -->
                         </div>
 
                         <div class="row">
@@ -67,7 +67,7 @@
                                     </div>
                                 </div>
                                 <div class="bgimg" id="bgimg" ng-if="section.bg.img.url" ng-show="section.bg.img.show">
-                                    <i class="fa fa-close" ng-click="removeImage(false)"></i>
+                                    <i class="fa fa-close" ng-click="vm.removeBackgroundImage(section)"></i>
                                     <img ng-src="{{section.bg.img.url}}" ng-model="section.bg.img.url" ng-click="vm.addBackground(sectionIndex, null)" class="img-thumbnail">
                                 </div>
                                 <div class="clearfix margin-bottom-10"></div>

@@ -4,7 +4,7 @@
   </div>
 </div>
 <div class="bgimg" id="bgimg" ng-if="component.src">
-  <i class="fa fa-close" ng-click="removeImage(false)"></i>
+  <i class="fa fa-close" ng-click="vm.removeImage(component)"></i>
   <img ng-src="{{component.src}}" ng-model="component.src" ng-click="vm.addImage(sectionIndex, componentIndex)" class="img-thumbnail">
 </div>
 

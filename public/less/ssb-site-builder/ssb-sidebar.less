@@ -1,24 +1,23 @@
 .ssb-sidebar {
 	overflow: auto;
 	overflow-x: hidden;
-	// background-color: #5bc0de;
 	display: none;
 	height: 200px;
-  box-shadow: 0px -1px 3px 1px rgba(0, 0, 0, .5);
+    box-shadow: 0px -1px 3px 1px rgba(0, 0, 0, .5);
 
-  img {
+    img {
       max-width: 100%;
-  }
+    }
 
-  .list-unstyled {
+    .list-unstyled {
       margin-bottom: 0;
-  }
+    }
 
-  .tooltip {
+    .tooltip {
       z-index: 99999;
-  }
+    }
 
-  .partition-light-primary {
+    .partition-light-primary {
 
     [class^="col-"],
     [class*=" col-"] {
@@ -29,22 +28,22 @@
       font-size: 13px;
     }
 
-  }
+    }
 
-  .head-menu-links {
+    .head-menu-links {
     .container-fluid {
       & > div > div {
         padding: 0 1em 0;
       }
     }
-  }
+    }
 
-	@media (min-width: 768px) {
-  	// float: left;
-  	position: fixed;
-  	width: 25%;
-    height: ~"calc(100% - 120px)";
-  }
+    @media (min-width: 768px) {
+        // float: left;
+        position: fixed;
+        width: 25%;
+        height: ~"calc(100% - 120px)";
+    }
 }
 
 .ssb-sidebar.ssb-sidebar-show {
@@ -240,6 +239,10 @@
 .ssb-spectrum-color-picker {
 
     text-align: center;
+
+    label {
+        width: 100%;
+    }
 
     .sp-replacer {
         // margin: 0;

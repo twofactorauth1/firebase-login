@@ -13,6 +13,10 @@ $.FroalaEditor.config = {
         'fr-strong': 'Thick',
         'ssb-button': 'Button'
      },
-     imageInsertButtons: ['imageBack', 'imageByURL', 'mediaManager']
+     imageInsertButtons: ['imageBack', 'imageByURL', 'mediaManager'],
+     // initOnClick: true,
+     // editInPopup: true,
+     // spellcheck: true,
+     // toolbarSticky: false
 
 }

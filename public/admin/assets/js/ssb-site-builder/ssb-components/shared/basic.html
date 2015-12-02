@@ -19,7 +19,7 @@
         </div>
     </div>
 
-    <hr ng-show="!component.bg.img.show" />
+    <!-- <hr ng-show="!component.bg.img.show" /> -->
 
     <div class="form-group col-xs-6 ssb-spectrum-color-picker" ng-if="component.type === 'navigation'">
         <spectrum-colorpicker format="'hex'" options="vm.spectrum.options" ng-model="component.nav.bg"></spectrum-colorpicker>
@@ -92,17 +92,7 @@
 
 
 
-    <form class="form-horizontal" ng-show="!component.bg.img.show" ng-hide="isEmail">
-        <div class="row">
-            <div class="col-sm-12">
-                <label for="bg_color_opacity">Add BG Opacity</label>
-                <span tooltip-placement="top" tooltip-html-unsafe="Set Background opacity of component."><i class="fa fa-info-circle" /></span>
-            </div>
-            <div class="col-sm-12">
-                <rzslider name="bg_color_opacity" class="slider-opacity" rz-slider-precision="2" rz-slider-step="0.1" name="bg-opacity" rz-slider-model="component.bg.opacity" rz-slider-floor="0" rz-slider-ceil="1"></rzslider>
-            </div>
-        </div>
-    </form>
+
     <hr/>
 
     <div class="form-group col-xs-6 ssb-spectrum-color-picker" ng-if="component.type == 'contact-us'">
@@ -111,70 +101,30 @@
         <label for="colorpicker">Box Background: <span tooltip-placement="top" tooltip-html-unsafe="Set Background color of Contact Box."><i class="fa fa-info-circle" /></span></label>
     </div>
 
-    <!-- <div class="form-group" ng-if="component.type == 'contact-us'">
-        <label for="colorpicker">Box Background Color:</label>
-        <span tooltip-placement="top" tooltip-html-unsafe="Set Background color of Contact Box."><i class="fa fa-info-circle" /></span>
-        <div class="pull-right">
-            <h4 class="pull-left"><i class="fa fa-eyedropper" /></h4>
-            <spectrum-colorpicker format="'hex'" options="vm.spectrum.options" class="pull-right" ng-model="component.boxColor"></spectrum-colorpicker>
-        </div>
-    </div> -->
-
     <div class="form-group col-xs-6 ssb-spectrum-color-picker" ng-if="component.type == 'simple-form'">
         <spectrum-colorpicker format="'hex'" options="vm.spectrum.options" ng-model="component.btn.color"></spectrum-colorpicker>
         <br />
         <label for="colorpicker">Button Text: <span tooltip-placement="top" tooltip-html-unsafe="Set text color of submit button."><i class="fa fa-info-circle" /></span></label>
     </div>
-    <!-- <div class="form-group" ng-if="component.type == 'simple-form'">
-        <label for="colorpicker">Button Text Color:</label>
-        <span tooltip-placement="top" tooltip-html-unsafe="Set text color of submit button."><i class="fa fa-info-circle" /></span>
-        <div class="pull-right">
-            <h4 class="pull-left"><i class="fa fa-eyedropper" /></h4>
-            <spectrum-colorpicker format="'hex'" options="vm.spectrum.options" class="pull-right" ng-model="component.btn.color"></spectrum-colorpicker>
-        </div>
-    </div> -->
 
     <div class="form-group col-xs-6 ssb-spectrum-color-picker" ng-if="component.type == 'simple-form'">
         <spectrum-colorpicker format="'hex'" options="vm.spectrum.options" ng-model="component.btn.bgcolor"></spectrum-colorpicker>
         <br />
         <label for="colorpicker">Button BG: <span tooltip-placement="top" tooltip-html-unsafe="Set color of submit button."><i class="fa fa-info-circle" /></span></label>
     </div>
-    <!-- <div class="form-group" ng-if="component.type == 'simple-form'">
-        <label for="colorpicker">Button Color:</label>
-        <span tooltip-placement="top" tooltip-html-unsafe="Set color of submit button."><i class="fa fa-info-circle" /></span>
-        <div class="pull-right">
-            <h4 class="pull-left"><i class="fa fa-eyedropper" /></h4>
-            <spectrum-colorpicker format="'hex'" options="vm.spectrum.options" class="pull-right" ng-model="component.btn.bgcolor"></spectrum-colorpicker>
-        </div>
-    </div> -->
 
     <div class="form-group col-xs-6 ssb-spectrum-color-picker" ng-if="component.type == 'products'">
         <spectrum-colorpicker format="'hex'" options="vm.spectrum.options" ng-model="component.boxColor"></spectrum-colorpicker>
         <br />
         <label for="colorpicker">Title Box BG: <span tooltip-placement="top" tooltip-html-unsafe="Set Background color of title and description box."><i class="fa fa-info-circle" /></span></label>
     </div>
-    <!-- <div class="form-group" ng-if="component.type == 'products'">
-        <label for="colorpicker">Title Box Background Color:</label>
-        <span tooltip-placement="top" tooltip-html-unsafe="Set Background color of title and description box."><i class="fa fa-info-circle" /></span>
-        <div class="pull-right">
-            <h4 class="pull-left"><i class="fa fa-eyedropper" /></h4>
-            <spectrum-colorpicker format="'hex'" options="vm.spectrum.options" class="pull-right" ng-model="component.boxColor"></spectrum-colorpicker>
-        </div>
-    </div> -->
 
     <div class="form-group col-xs-6 ssb-spectrum-color-picker" ng-if="component.type == 'products'">
         <spectrum-colorpicker format="'hex'" options="vm.spectrum.options" ng-model="component.iconColor"></spectrum-colorpicker>
         <br />
         <label for="colorpicker">Icon Color: <span tooltip-placement="top" tooltip-html-unsafe="Set color of product icons."><i class="fa fa-info-circle" /></span></label>
     </div>
-    <!-- <div class="form-group" ng-if="component.type == 'products'">
-        <label for="colorpicker">Icon Color:</label>
-        <span tooltip-placement="top" tooltip-html-unsafe="Set color of product icons."><i class="fa fa-info-circle" /></span>
-        <div class="pull-right">
-            <h4 class="pull-left"><i class="fa fa-eyedropper" /></h4>
-            <spectrum-colorpicker format="'hex'" options="vm.spectrum.options" class="pull-right" ng-model="component.iconColor"></spectrum-colorpicker>
-        </div>
-    </div> -->
+
     <div class="row" ng-if="component.type == 'contact-us'">
         <div class="col-sm-12">
             <label class="pull-left">Box Opacity</label>
@@ -189,7 +139,7 @@
         <span tooltip-placement="top" tooltip-html-unsafe="show/hide background image of component."><i class="fa fa-info-circle" /></span>
         <switch ng-model="component.bg.img.show" class="pull-right"></switch>
         <br>
-        <small>Please select an image of 1280 x 400px minimum to prevent blurriness</small>
+        <!-- <small>Please select an image of 1280 x 400px minimum to prevent blurriness</small> -->
     </div>
     <div class="form-group" ng-if="component.type === 'blog' || component.type === 'blog-teaser'">
         <label for="post-order">Post Order </label>
@@ -214,7 +164,7 @@
                 </div>
             </div>
             <div class="bgimg" id="bgimg" ng-if="component.bg.img.url" ng-show="component.bg.img.show">
-                <i class="fa fa-close" ng-click="removeImage(false)"></i>
+                <i class="fa fa-close" ng-click="vm.removeBackgroundImage(component)"></i>
                 <img ng-src="{{component.bg.img.url}}" ng-model="component.bg.img.url" ng-click="vm.addBackground(sectionIndex, componentIndex)" class="img-thumbnail">
             </div>
             <div class="clearfix margin-bottom-10"></div>
@@ -289,5 +239,16 @@
                 </div>
             </div>
         </div>
+        <form class="form-horizontal" ng-show="!component.bg.img.show" ng-hide="isEmail">
+            <div class="row">
+                <div class="col-sm-12">
+                    <label for="bg_color_opacity">Add BG Opacity</label>
+                    <span tooltip-placement="top" tooltip-html-unsafe="Set Background opacity of component."><i class="fa fa-info-circle" /></span>
+                </div>
+                <div class="col-sm-12">
+                    <rzslider name="bg_color_opacity" class="slider-opacity" rz-slider-precision="2" rz-slider-step="0.1" name="bg-opacity" rz-slider-model="component.bg.opacity" rz-slider-floor="0" rz-slider-ceil="1"></rzslider>
+                </div>
+            </div>
+        </form>
     </div>
 </div>

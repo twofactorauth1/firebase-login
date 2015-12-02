@@ -43,6 +43,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, SimpleSiteBuil
     vm.showInsert = true;
     vm.applyThemeToSite = SimpleSiteBuilderService.applyThemeToSite;
     vm.insertMediaCallback = insertMediaCallback;
+    vm.removeBackgroundImage = removeBackgroundImage;
     vm.removeImage = removeImage;
 
     editableOptions.theme = 'bs3';
@@ -58,11 +59,12 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, SimpleSiteBuil
     		vm.navigation.indexClass = 'ssb-sidebar-position-0';
     	},
     	loadPage: function(pageId) {
-            if (pageId) {
-                $location.path('/website/site-builder/pages/' + id);
+            if (pageId && pageId !== vm.state.page._id) {
+                $location.path('/website/site-builder/pages/' + pageId);
+            } else {
+                vm.navigation.index = 1;
+                vm.navigation.indexClass = 'ssb-sidebar-position-1';
             }
-    		vm.navigation.index = 1;
-    		vm.navigation.indexClass = 'ssb-sidebar-position-1';
     	},
     	goToPagesListPage: function() {
     		$location.url('/website/site-builder/pages/');
@@ -121,8 +123,12 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, SimpleSiteBuil
       return true;
     };
 
-    function removeImage(image) {
-        debugger;
+    function removeBackgroundImage(container) {
+        container.bg.img.url = null;
+    }
+
+    function removeImage(container) {
+        container.src = null;
     }
 
   	function getPlatformSections() {
