@@ -6746,9 +6746,22 @@ a[href="https://froala.com/wysiwyg-editor"] {
   left: 20px;
   border-radius: 5px 5px;
 }
-.ssb-theme-young-soul {
-  color: red;
-  background: blue;
+.ssb-theme-young-soul .ssb-section-layout {
+  background-color: #e8e7e7;
+}
+.ssb-theme-young-soul .ssb-page-section-layout-header {
+  background-color: #9acccb;
+}
+.ssb-theme-young-soul h1,
+.ssb-theme-young-soul h2,
+.ssb-theme-young-soul h3,
+.ssb-theme-young-soul h4,
+.ssb-theme-young-soul h5,
+.ssb-theme-young-soul a,
+.ssb-theme-young-soul p,
+.ssb-theme-young-soul span,
+.ssb-theme-young-soul label {
+  color: #000000;
 }
 #componentloader {
   overflow: visible;
