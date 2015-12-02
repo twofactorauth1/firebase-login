@@ -64,9 +64,10 @@ app.controller('SiteBuilderAddSectionModalController', ['$timeout', 'parentVm', 
 
     // type is 'enabledPlatformSections' or 'enabledUserSections'
 	vm.setSectionType = function (type) {
-        vm.sectionType = type;
-        vm.sections = vm[type];
-        SimpleSiteBuilderService.getUserSections();
+        SimpleSiteBuilderService.getUserSections().then(function() {
+            vm.sectionType = type;
+            vm.sections = vm[type];
+        })
 	};
 
 }]);

@@ -160,8 +160,8 @@
             page.handle = $filter('slugify')(page.handle);
           }
         }
-        if (page.title === '') {
-          $scope.titleError = true;
+        if (!page.title) {
+          page.title = page.handle;
         } else {
           $scope.titleError = false;
         }
@@ -223,11 +223,11 @@
         }
         $scope.closeModal();
 
-        if (newpage.components) {
-          newpage.components = newpage.components.length;
-        } else if (newpage.sections) {
-          newpage.sections = newpage.sections.length;
-        }
+        // if (newpage.components) {
+        //   newpage.components = newpage.components.length;
+        // } else if (newpage.sections) {
+        //   newpage.sections = newpage.sections.length;
+        // }
 
 
         $scope.pages.unshift(newpage);
@@ -236,10 +236,12 @@
         page.handle = "";
         $scope.checkAndSetIndexPage($scope.pages);
         $scope.resetTemplateDetails();
+
+        $scope.viewSimpleSiteBuilder(newpage);
       }
 
 
-        if (page.ssb) {
+        // if (page.ssb) {
 
           WebsiteService.getWebsite(function(data) {
             SimpleSiteBuilderService.createPage(page._id).then(function(data) {
@@ -248,22 +250,22 @@
             });
           });
 
-        } else {
+        // } else {
 
-          if (!hasHandle) {
+        //   if (!hasHandle) {
 
-            WebsiteService.createPageFromTemplate(page._id, pageData, function (_newPage, error) {
-              createPageCallback(_newPage, error);
-            });
+        //     WebsiteService.createPageFromTemplate(page._id, pageData, function (_newPage, error) {
+        //       createPageCallback(_newPage, error);
+        //     });
 
-          } else {
-            toaster.pop('error', "Page URL " + page.handle, "Already exists");
-            $event.preventDefault();
-            $event.stopPropagation();
-            $scope.saveLoading = false;
-          }
+        //   } else {
+        //     toaster.pop('error', "Page URL " + page.handle, "Already exists");
+        //     $event.preventDefault();
+        //     $event.stopPropagation();
+        //     $scope.saveLoading = false;
+        //   }
 
-        }
+        // }
     };
 
     $scope.viewSingle = function (page) {

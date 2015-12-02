@@ -214,6 +214,10 @@ module.exports = {
             function createSections(website, theme, template, cb) {
                 var sections = template.get('sections');
 
+                if (!template.get('ssb') && template.get('config').components.length) {
+                    sections = self.transformComponentsToSections(template.get('config').components);
+                }
+
                 _.each(sections, function(section){
                     var id = $$.u.idutils.generateUUID();
                     section._id = id;
@@ -341,6 +345,7 @@ module.exports = {
                     }
                     section.accountId = accountId;
                 });
+
                 sectionDao.saveSections(sections, function(err, updatedSections){
                     if(err) {
                         self.log.error('Error saving sections:', err);
@@ -525,5 +530,30 @@ module.exports = {
                 return fn(null, components);
             }
         });
+    },
+
+    /*
+     *
+     * Transform legacy template components to new section/component model format
+     */
+    transformComponentsToSections: function(components) {
+
+        var sections = [];
+
+        for (var i = 0; i < components.length; i++) {
+            var component = components[i];
+            var defaultSectionObj = {
+                layout: '1-col',
+                name: component.type + ' Section',
+                components: [component]
+            };
+
+            // defaultSectionObj.name = sectionName(defaultSectionObj) + ' Section';
+
+            sections[i] = defaultSectionObj;
+
+        }
+
+        return sections;
     }
 };

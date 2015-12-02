@@ -120,43 +120,49 @@
 
 		function successPage(data) {
 
-			/*
-			 *
-			 * Transform legacy pages to new section/component model format
-			 */
-			if (data.components && data.components.length && !data.sections) {
-				data.sections = angular.copy(data.components);
-				for (var i = 0; i < data.sections.length; i++) {
-					var component = angular.copy(data.sections[i]);
-					var defaultSectionObj = {
-						layout: '1-col',
-						components: [component]
-					};
+			var page = transformComponentsToSections(data);
+			ssbService.page = page;
 
-            defaultSectionObj.name = sectionName(defaultSectionObj) + ' Section';
-
-					data.sections[i] = defaultSectionObj;
-
-				}
-				// delete data.components;
-			}
-
-              /*
-               *
-               * Name sections without a name (can be edited in UI)
-               */
-              for (var i = 0; i < data.sections.length; i++) {
-                if (data.sections[i] && !data.sections[i].name) {
-                  data.sections[i].name = sectionName(data.sections[i]) + ' Section';
-                }
-              }
-
-			ssbService.page = data;
 		}
 
 		function errorPage(error) {
 			console.error('SimpleSiteBuilderService page error: ' + error);
 		}
+
+        function transformComponentsToSections(page) {
+            /*
+             *
+             * Transform legacy pages to new section/component model format
+             */
+            if (page.components && page.components.length && !page.sections.length) {
+                page.sections = angular.copy(page.components);
+                for (var i = 0; i < page.sections.length; i++) {
+                    var component = angular.copy(page.sections[i]);
+                    var defaultSectionObj = {
+                        layout: '1-col',
+                        components: [component]
+                    };
+
+                    defaultSectionObj.name = sectionName(defaultSectionObj) + ' Section';
+
+                    page.sections[i] = defaultSectionObj;
+
+                }
+                // delete page.components;
+            }
+
+            /*
+            *
+            * Name sections without a name (can be edited in UI)
+            */
+            for (var i = 0; i < page.sections.length; i++) {
+                if (page.sections[i] && !page.sections[i].name) {
+                  page.sections[i].name = sectionName(page.sections[i]) + ' Section';
+                }
+            }
+
+            return page;
+        }
 
 		function saveWebsite(website) {
 
