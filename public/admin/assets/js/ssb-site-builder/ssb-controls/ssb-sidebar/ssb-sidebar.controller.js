@@ -43,6 +43,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, SimpleSiteBuil
     vm.showInsert = true;
     vm.applyThemeToSite = SimpleSiteBuilderService.applyThemeToSite;
     vm.insertMediaCallback = insertMediaCallback;
+    vm.removeImage = removeImage;
 
     editableOptions.theme = 'bs3';
 
@@ -58,7 +59,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, SimpleSiteBuil
     	},
     	loadPage: function(pageId) {
             if (pageId) {
-                //TODO: load new page if not currently editing that page
+                $location.path('/website/site-builder/pages/' + id);
             }
     		vm.navigation.index = 1;
     		vm.navigation.indexClass = 'ssb-sidebar-position-1';
@@ -119,6 +120,10 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, SimpleSiteBuil
 
       return true;
     };
+
+    function removeImage(image) {
+        debugger;
+    }
 
   	function getPlatformSections() {
         alert('used!')

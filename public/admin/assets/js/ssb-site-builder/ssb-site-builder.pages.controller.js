@@ -272,12 +272,20 @@
 
     $scope.viewSimpleSiteBuilder = function (page) {
 
-        var id = $scope.pages.filter(function(page) {
-            return page.handle == 'index'
-        })[0]._id;
+        var id;
 
-        if (!id) {
-            id = pages[0]._id;
+        if ($scope.pages.length) {
+
+            id = $scope.pages.filter(function(page) {
+                return page.handle == 'index'
+            });
+
+            if (id.length) {
+                id = id[0]._id
+            } else {
+                id = $scope.pages[0]._id;
+            }
+
         }
 
         if (page) {
