@@ -334,6 +334,13 @@ module.exports = {
             },
             function updateSections(existingPage, cb) {
                 var sections = page.get('sections');
+                _.each(sections, function(section){
+                    //if the accountId is 0, it is a platform section
+                    if(section.accountId === 0) {
+                        section._id = null;
+                    }
+                    section.accountId = accountId;
+                });
                 sectionDao.saveSections(sections, function(err, updatedSections){
                     if(err) {
                         self.log.error('Error saving sections:', err);
