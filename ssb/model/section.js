@@ -19,7 +19,11 @@ var section = $$.m.ModelBase.extend({
             accountId:null,
             layout: '',
             components: [],//array of components, similar to what's on pages now
-
+            title:'',
+            description:'',
+            filter:'',
+            preview:'',
+            enabled:true,
             created: {
                 date: new Date(),
                 by: null
