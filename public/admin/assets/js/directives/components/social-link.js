@@ -11,8 +11,7 @@ app.directive('socialLinkComponent', ["$modal", function ($modal) {
     link: function (scope, element, attrs, ctrl) {
       scope.isEditing = true;
       scope.sortableConfig = {
-        animation: 150,  
-        delay: 10,
+        animation: 150, 
         onSort: function (evt) {
           
         },
