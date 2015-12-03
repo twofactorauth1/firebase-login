@@ -100,7 +100,8 @@ module.exports = {
         var blockId = block.id();
         var lookup = {
             '0': self._handleCreatePage,
-            '1': self._handleCreateFormOnPage
+            '1': self._handleCreateFormOnPage,
+            '2': self._handleFormSettingsForLeads
         };
         if(typeof lookup[''+blockId] !== 'function') {
             self.log.error('No handler found for blockId:' + blockId);
@@ -129,6 +130,20 @@ module.exports = {
         var self = this;
         //self.log.debug('>> _handleCreateFormOnPage');
         var query = {accountId:account.id(), latest:true, 'components.type':'simple-form'};
+        pageDao.exists(query, $$.m.ssb.Page, function(err, exists){
+            if(err) {
+                //self.log.error('Error checking for page with form existence:', err);
+                fn(err);
+            } else {
+                //self.log.debug('<< _handleCreateFormOnPage', exists);
+                fn(null, exists);
+            }
+        });
+    },
+
+    _handleFormSettingsForLeads: function(account, block, fn) {
+        var self = this;
+        var query = {accountId:account.id(), latest:true, components: {$elemMatch: {type:'simple-form', contact_type:'ld'}}};
         pageDao.exists(query, $$.m.ssb.Page, function(err, exists){
             if(err) {
                 //self.log.error('Error checking for page with form existence:', err);

@@ -69,7 +69,7 @@ module.exports = {
                         }
                     });
                 });
-                
+                // for each workstream, mark it completed if all blocks are completed
                 _.each(workstreams, function(workstream){
                     if(workstream.get('completed') === false) {
                         var completed = true;
