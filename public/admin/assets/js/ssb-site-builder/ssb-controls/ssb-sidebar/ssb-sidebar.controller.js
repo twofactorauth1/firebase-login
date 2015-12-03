@@ -45,6 +45,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, SimpleSiteBuil
     vm.insertMediaCallback = insertMediaCallback;
     vm.removeBackgroundImage = removeBackgroundImage;
     vm.removeImage = removeImage;
+    vm.createPage = createPage;
 
     editableOptions.theme = 'bs3';
 
@@ -60,6 +61,21 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, SimpleSiteBuil
     	},
     	loadPage: function(pageId) {
             if (pageId && pageId !== vm.state.page._id) {
+                vm.state.page = null;
+                vm.uiState = {
+                    loading: 0,
+                    activeSectionIndex: undefined,
+                    activeComponentIndex: undefined,
+                    show: {
+                        flyover: true,
+                        sidebar: true
+                    },
+                    accordion: {
+                        site: {},
+                        page: {},
+                        sections: {}
+                    }
+                };
                 $location.path('/website/site-builder/pages/' + pageId);
             } else {
                 vm.navigation.index = 1;
@@ -380,6 +396,17 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, SimpleSiteBuil
   		// 	vm.uiState.duplicateUrl = dup;
   		// })
     }
+
+    function createPage(template) {
+
+        return (
+            SimpleSiteBuilderService.createPage(template._id).then(function(data) {
+                vm.closeModal();
+                vm.navigation.loadPage(data.data._id);
+            })
+        )
+
+    };
 
 
     function init(element) {

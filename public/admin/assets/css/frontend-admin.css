@@ -6858,6 +6858,10 @@ a[href="https://froala.com/wysiwyg-editor"] {
   bottom: -3.5em !important;
   right: 1em!important;
   z-index: 2;
+  display: none;
+}
+.ssb-main:hover .ssb-page-section-layout-header .social-link-v1 .social-link > .btn.social-links {
+  display: block;
 }
 .ssb-main[data-eq-state$="medium"] .ssb-page-section-layout-header .social-link-v1 .social-link ul,
 .ssb-main[data-eq-state$="large"] .ssb-page-section-layout-header .social-link-v1 .social-link ul {

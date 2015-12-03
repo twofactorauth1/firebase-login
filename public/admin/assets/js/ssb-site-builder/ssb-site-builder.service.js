@@ -9,9 +9,10 @@
 	/* @ngInject */
 	function SimpleSiteBuilderService($http, $q, $timeout, AccountService, WebsiteService) {
 		var ssbService = {};
-		var baseWebsiteAPIUrl = '/api/1.0/cms/website/'; //TODO: upgrade to api/2.0 when ready
+		var baseWebsiteAPIUrl = '/api/1.0/cms/website/';
 		var basePageAPIUrl = '/api/1.0/cms/page/';
 		var baseComponentAPIUrl = '/api/1.0/cms/component/';
+        var baseTemplateAPIUrl = '/api/1.0/cms/template/';
         var baseWebsiteAPIUrlv2 = '/api/2.0/cms/websites/'
         var basePageAPIUrlv2 = '/api/2.0/cms/pages/';
         var baseTemplateAPIUrlv2 = '/api/2.0/cms/templates/';
@@ -39,7 +40,9 @@
         ssbService.applyThemeToSite = applyThemeToSite;
         ssbService.createPage = createPage;
         ssbService.getTemplates = getTemplates;
+        ssbService.getLegacyTemplates = getLegacyTemplates;
         ssbService.addSectionToPage = addSectionToPage;
+        // ssbService.createPageFromTemplate = createPageFromTemplate;
 
 
 		function ssbRequest(fn) {
@@ -426,6 +429,26 @@
 
         }
 
+        function getLegacyTemplates() {
+
+          function success(data) {
+            ssbService.legacyTemplates = data;
+            console.log('SimpleSiteBuilderService getLegacyTemplates: ' + data);
+          }
+
+          function error(error) {
+            console.error('SimpleSiteBuilderService getLegacyTemplates error: ' + error);
+          }
+
+          return (
+            ssbRequest($http({
+              url: baseTemplateAPIUrl,
+              method: 'GET',
+            }).success(success).error(error))
+          )
+
+        }
+
         function addSectionToPage(section, version, modalInstance) {
 
             if (!ssbService.page.sections) {
@@ -465,6 +488,81 @@
             ssbService.website.themeOverrides = theme;
         }
 
+        // function createPageFromTemplate(template) {
+        //   //       $scope.validateCreatePage(page, true);
+
+        //   // $scope.titleError = false;
+        //   // $scope.handleError = false;
+        //   // if (!$scope.createPageValidated) {
+        //   //   $scope.titleError = true;
+        //   //   $scope.handleError = true;
+        //   //   $scope.saveLoading = false;
+        //   //   return false;
+        //   // }
+
+        //   // if ($scope.createpage.homepage)
+        //   //   page.handle = 'index';
+
+        //   // var pageData = {
+        //   //   title: page.title,
+        //   //   handle: page.handle,
+        //   //   mainmenu: page.mainmenu
+        //   // };
+
+
+        //   // var hasHandle = false;
+        //   // _.each($scope.pages, function (_page) {
+        //   //   if (_page.handle === page.handle) {
+        //   //     hasHandle = true;
+        //   //   }
+        //   // });
+
+        //   // function createPageCallback(_newPage, error) {
+        //   //   if(error && !_newPage) {
+        //   //     toaster.pop('error', error.message);
+        //   //     $event.preventDefault();
+        //   //     $event.stopPropagation();
+        //   //     $scope.saveLoading = false;
+        //   //     return;
+        //   //   }
+        //   //   var newpage = angular.copy(_newPage);
+        //   //   toaster.pop('success', 'Page Created', 'The ' + newpage.title + ' page was created successfully.');
+        //   //   $scope.minRequirements = true;
+        //   //   $scope.saveLoading = false;
+        //   //   if(newpage.handle == 'index'){
+        //   //     $scope.createpage.showhomepage = false;
+        //   //   }
+        //   //   $scope.closeModal();
+
+        //   //   // if (newpage.components) {
+        //   //   //   newpage.components = newpage.components.length;
+        //   //   // } else if (newpage.sections) {
+        //   //   //   newpage.sections = newpage.sections.length;
+        //   //   // }
+
+
+        //   //   $scope.pages.unshift(newpage);
+        //   //   $scope.displayedPages.unshift(newpage);
+        //   //   page.title = "";
+        //   //   page.handle = "";
+        //   //   $scope.checkAndSetIndexPage($scope.pages);
+        //   //   $scope.resetTemplateDetails();
+
+        //   //   $scope.viewSimpleSiteBuilder(newpage);
+        //   // }
+
+
+        // // if (page.ssb) {
+
+        //   // WebsiteService.getWebsite(function(data) {
+        //     ssbService.createPage(template._id).then(function(data) {
+        //       $scope.closeModal();
+        //       $scope.viewSimpleSiteBuilder(data.data);
+        //     });
+        //   // });
+
+        // }
+
 
 		(function init() {
 
@@ -478,6 +576,7 @@
                 });
                 ssbService.getPages();
                 ssbService.getTemplates();
+                ssbService.getLegacyTemplates();
                 ssbService.getPlatformSections();
 				ssbService.getUserSections();
 			});
