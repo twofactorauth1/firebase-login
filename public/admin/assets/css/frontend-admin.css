@@ -6915,3 +6915,8 @@ a[href="https://froala.com/wysiwyg-editor"] {
 [ssb-image-component] img {
   width: 100%;
 }
+/* DOHY */
+.dashboard-video .container {
+  max-width: 100%;
+  padding: 15px;
+}
