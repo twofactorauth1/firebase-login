@@ -4,8 +4,8 @@
  */
 (function (angular) {
   app.controller('ProfilePersonalCtrl',
-      ["$scope", "$modal", "$timeout", "toaster", "$stateParams", "UserService", "CommonService", "userConstant", "formValidations",
-        function ($scope, $modal, $timeout, toaster, $stateParams, UserService, CommonService, userConstant, formValidations) {
+      ["$scope", "$modal", "$timeout", "toaster", "$stateParams", "UserService", "PaymentService", "CommonService", "userConstant", "formValidations",
+        function ($scope, $modal, $timeout, toaster, $stateParams, UserService, PaymentService, CommonService, userConstant, formValidations) {
     console.log('profile personal >>> ');
 
     //account API call for object population
@@ -17,11 +17,27 @@
       password: '',
       confirm: '',
     };
-    
+    $scope.invoices = [];
     $scope.profileUser = {};
     UserService.getUserActivity(function (activities) {
       $scope.activities = activities;
     });
+
+    $scope.getSubscription = function(){
+      PaymentService.getInvoicesForAccount(function (invoices) {
+            var invoices = invoices;            
+            if(invoices.data.length && invoices.data[0].lines && invoices.data[0].lines.data.length == 2)
+            {
+              $scope.invoices = invoices.data[0].lines.data[1].plan;
+            }
+            else if(invoices.data.length && invoices.data[0].lines && invoices.data[0].lines.data.length == 1)
+            {
+               $scope.invoices = invoices.data[0].lines.data[0].plan;
+            }
+            console.log("Invoices: ", $scope.invoices);
+          });
+    };
+    $scope.getSubscription();
 
     /*
      * @openMediaModal
