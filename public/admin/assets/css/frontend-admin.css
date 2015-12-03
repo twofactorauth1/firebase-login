@@ -97,6 +97,9 @@
 #componentloader .mt10 {
   margin-top: 10px;
 }
+#componentloader body {
+  font-size: 13px;
+}
 #componentloader hr {
   margin-top: 20px;
   margin-bottom: 20px;
@@ -500,7 +503,7 @@
   margin-right: 0px;
 }
 #componentloader .contact-us-v1 .widget-weather .temp {
-  padding: 15px !important;
+  padding: 12px !important;
   height: 230px;
   text-align: center;
   vertical-align: middle;
