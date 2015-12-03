@@ -1078,10 +1078,14 @@ div[data-type="feature-list"] .inner-page {
 .top-bar-wrap .main-block .left-block.edit-mode {
   padding: 20px;
 }
-.top-bar-wrap .main-block .left-block:hover {
+.top-bar-wrap .main-block .social-list-icons {
+  float: left;
+  position: relative;
+}
+.top-bar-wrap .main-block .social-list-icons:hover .left-block {
   border: 3px dashed rgba(0, 0, 0, 0.4);
 }
-.top-bar-wrap .main-block .left-block:hover .add-addtional {
+.top-bar-wrap .main-block .social-list-icons:hover .left-block + .add-addtional {
   display: block;
   font-size: 28px;
 }

@@ -37,12 +37,20 @@
     padding: 20px;
   }
   .left-block:hover {
-    border: 3px dashed rgba(0, 0, 0, 0.4);
+    
   }
-  .left-block:hover {
-    .add-addtional {
-      display: block;
-      font-size: 28px;
+  .social-list-icons{
+    float:left;
+    position:relative;
+    &:hover {
+      .left-block {
+        border: 3px dashed rgba(0, 0, 0, 0.4);
+        +.add-addtional {
+          display: block;
+          font-size: 28px;
+        }
+      }
     }
   }
+  
 }
