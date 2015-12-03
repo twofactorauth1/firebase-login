@@ -4416,6 +4416,8 @@ div[data-type=blog] .container {
 }
 .thumbnail-slider-v1 .carousel-inner {
   max-height: 200px;
+}
+.thumbnail-slider-v1 .carousel-inner:hover {
   overflow: inherit;
 }
 .thumbnail-slider-v1 div.carousel-control {

@@ -4410,6 +4410,8 @@
 }
 #componentloader .thumbnail-slider-v1 .carousel-inner {
   max-height: 200px;
+}
+#componentloader .thumbnail-slider-v1 .carousel-inner:hover {
   overflow: inherit;
 }
 #componentloader .thumbnail-slider-v1 div.carousel-control {
