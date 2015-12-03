@@ -7,8 +7,13 @@ app.controller('AppCtrl', ['$rootScope', '$scope', '$state', '$translate', '$loc
 
     AccountService.getAccount(function (account) {
       $scope.account = account;
+
       $rootScope.account = account;
       AccountService.setMainAccount($scope.account);
+        if(account.showhide.dohy && $state.current.name ==='' || $state.current.name ==='app.dashboard') {
+            console.log('Going to Dohy');
+            $state.go('app.dohy');
+        }
       if (account.locked_sub && !$state.includes('app.account.billing')) {
         $state.go('app.account.billing');
       }
