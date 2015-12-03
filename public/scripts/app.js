@@ -46,8 +46,12 @@ var mainApp = angular
     //$httpProvider.interceptors.push('noCacheInterceptor');
     $routeProvider
       .when('/', {
+        /*
         templateUrl: '../views/cache.html',
         controller: 'CacheCtrl as cacheCtrl'
+        */
+            templateUrl: '../views/main.html',
+            controller: 'LayoutCtrl as layout'
       })
       .when('/404', {
         templateUrl: '../views/404.html',

@@ -23,6 +23,7 @@ var workstream = $$.m.ModelBase.extend({
             deepDiveVideoUrls:[],
             analyticWidgets:[],
             name: '',
+            icon: '',
             _v:"0.1",
             created: {
                 date: new Date(),

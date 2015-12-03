@@ -69,6 +69,22 @@ module.exports = {
                         }
                     });
                 });
+                // for each workstream, mark it completed if all blocks are completed
+                _.each(workstreams, function(workstream){
+                    if(workstream.get('completed') === false) {
+                        var completed = true;
+                        _.each(workstream.get('blocks'), function(block){
+                            if(block.complete === false) {
+                                completed = false;
+                            }
+                        });
+                        if(completed === true) {
+                            workstream.set('completed', true);
+                            update = true;
+                        }
+                    }
+
+                });
                 if(update === true) {
                     workstreamDao.saveWorkstreams(workstreams, cb);
                 } else {
