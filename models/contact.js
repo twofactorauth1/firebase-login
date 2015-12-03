@@ -273,7 +273,7 @@ var contact = $$.m.ModelBase.extend({
           created.by = userId;
           created.strategy = socialType;
           created.socialId = socialId;
-          
+          created.date = new Date();
           this.set({
             created: created
           });
