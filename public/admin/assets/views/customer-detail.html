@@ -429,11 +429,11 @@
                                                     Gender
                                                 </label>
                                                 <div class="clip-radio radio-primary">
-                                                    <input type="radio" id="us-female" name="gender" value="female" ng-model="customer.gender">
+                                                    <input type="radio" ng-checked="customer.gender.toLowerCase() == 'female'" id="us-female" name="gender" value="female" ng-model="customer.gender">
                                                     <label for="us-female">
                                                         Female
                                                     </label>
-                                                    <input type="radio" id="us-male" name="gender" value="male" ng-model="customer.gender">
+                                                    <input type="radio" ng-checked="customer.gender.toLowerCase() == 'male'" id="us-male" name="gender" value="male" ng-model="customer.gender">
                                                     <label for="us-male">
                                                         Male
                                                     </label>
