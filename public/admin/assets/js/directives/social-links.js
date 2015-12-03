@@ -217,10 +217,12 @@ app.directive('socialLinks', ['$modal', '$http', '$timeout', '$q', '$compile', '
               selectedName = _.findWhere(scope.component.networks, {
                 name: old_value.name
               });
-              if (selectedName) {
-                var index = scope.component.networks.indexOf(selectedName)
-                scope.component.networks.splice(index, 1);
-              }
+              scope.$apply(function () {
+                if (selectedName) {
+                  var index = scope.component.networks.indexOf(selectedName)
+                  scope.component.networks.splice(index, 1);
+                }
+              });
             }, 500);
             break;
         }
