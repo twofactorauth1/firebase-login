@@ -749,19 +749,19 @@
         $scope.saveLoading = false;
         return;
       }
-
+      if($scope.order.line_items.length <= 0)
+      {
+        toaster.pop('error', 'Products cannot be blank');
+        $scope.saveLoading = false;
+        return;
+      } 
       if ($stateParams.orderId) {
         OrderService.updateOrder($scope.order, function (updatedOrder) {
           $scope.saveLoading = false;
           console.log('updatedOrder ', updatedOrder);
           toaster.pop('success', 'Order updated successfully.');
         });
-      }
-      else if($scope.order.line_items.length <= 0)
-      {
-        toaster.pop('error', 'Products cannot be blank');
-        $scope.saveLoading = false;
-      } 
+      }      
       else {
         OrderService.createOrder($scope.order, function (updatedOrder) {
           toaster.pop('success', 'Order created successfully.');
