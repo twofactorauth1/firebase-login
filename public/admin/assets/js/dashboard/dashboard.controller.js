@@ -44,9 +44,9 @@
         var contactsPerDayData = [];
         _.each(contactsByDay, function(dayData){
             var xy = [];
-            console.log(dayData._id._id.year + '.' + dayData._id._id.month + '.' + dayData._id._id.day);
+
+            //subtract one from the month.  mongo is 1-based and js is 0-based.  Dat off-by-one, tho.
             xy[0] = new Date(dayData._id._id.year, dayData._id._id.month-1, dayData._id._id.day, 0,0,0,0).getTime();
-            console.log(xy[0]);
             xy[1] = dayData.count;
             contactsPerDayData.push(xy);
         });
@@ -65,7 +65,7 @@
                 },
                 tooltip: {
                     headerFormat: '<b>{point.x:%b %d}</b><br>',
-                    pointFormat: '<b class="text-center">{point.y}</b>',
+                    pointFormat: '<b class="text-center">{point.y}</b>'
                 },
                 legend: {
                     enabled: true
@@ -94,7 +94,7 @@
                 }
             },
             series: [{
-                name: 'Contacts Per Day',
+                name: 'New Leads Per Day',
                 data: contactsPerDayData
             }],
             credits: {
