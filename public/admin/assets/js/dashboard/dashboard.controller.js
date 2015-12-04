@@ -8,14 +8,28 @@
     var vm = this;
 
     vm.state = {};
+    vm.state.account = $scope.account;
 
     $scope.$watch(function() { return DashboardService.state }, function(state) {
         vm.state = state;
         var analyticsWidgets = [];
+
+        var incompleteWorkstreams = [];
+        var completeWorkstreams = [];
+
         _.each(state.workstreams, function(workstream){
+
             analyticsWidgets = analyticsWidgets.concat(workstream.analyticWidgets);
+            if(workstream.completed===true) {
+                completeWorkstreams.push(workstream);
+            } else {
+                incompleteWorkstreams.push(workstream);
+            }
         });
         vm.state.analyticsWidgets = analyticsWidgets;
+        vm.state.completeWorkstreams = completeWorkstreams;
+        vm.state.incompleteWorksreams = incompleteWorkstreams;
+
     }, true);
 
     (function init() {
