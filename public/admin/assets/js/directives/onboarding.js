@@ -1,7 +1,7 @@
 'use strict';
 /*global app, moment, angular*/
 /*jslint unparam:true*/
-app.directive('indigOnboarding', function ($rootScope, $location, $sce, $state, toaster, $templateCache, UserService, ONBOARDINGCONSTANT) {
+app.directive('indigOnboarding', function ($rootScope, $location, $sce, $state, $templateCache, UserService, ONBOARDINGCONSTANT) {
   return {
     scope: {
       minRequirements: '='
@@ -129,8 +129,7 @@ app.directive('indigOnboarding', function ($rootScope, $location, $sce, $state, 
        */
 
       $scope.checkTaskStatus = function () {
-        //clear any toasters from previous page
-        toaster.clear('*');
+        
         var _matchingTask = _.find($scope.onboardingStepMap, function (task) {
           return task.pane.state === $state.current.name;
         });
@@ -145,10 +144,6 @@ app.directive('indigOnboarding', function ($rootScope, $location, $sce, $state, 
 
           if (status === 'not_started' || $scope.resetTask) {
             $scope.executeOnboarding();
-          }
-
-          if (status === 'started' && !$scope.manualComplete && !$scope.resetTask) {
-            toaster.pop('info', null, 'You\'re almost done with this step. Finish the task or manually complete. <br><div class="margin-top-10"><a class="btn btn-primary margin-right-10" href="' + $scope.getOnboardURL(_matchingTask) + '">Task Info</a><a class="btn btn-warning" href="' + $scope.getOnboardURL(_matchingTask, true) + '">Mark Complete</a></div>', 15000, 'trustedHtml');
           }
 
           if ($scope.manualComplete) {
@@ -181,8 +176,7 @@ app.directive('indigOnboarding', function ($rootScope, $location, $sce, $state, 
        */
 
       $scope.stateOrLocationChanged = function () {
-        //clear any toasters from previous page
-        toaster.clear('*');
+        
         if ($location.search().resetTask) {
           $scope.resetTask = true;
         }
