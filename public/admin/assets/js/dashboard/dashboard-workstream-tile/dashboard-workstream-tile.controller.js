@@ -2,7 +2,7 @@
 
 app.controller('DashboardWorkstreamTileComponentController', dashboardWorkstreamTileComponentController);
 
-dashboardWorkstreamTileComponentController.$inject = ['$scope', '$attrs', '$filter', 'SimpleSiteBuilderService', '$modal'];
+dashboardWorkstreamTileComponentController.$inject = ['$scope', '$attrs', '$filter', 'DashboardService', '$modal'];
 /* @ngInject */
 function dashboardWorkstreamTileComponentController($scope, $attrs, $filter, DashboardService, $modal) {
 
@@ -11,10 +11,13 @@ function dashboardWorkstreamTileComponentController($scope, $attrs, $filter, Das
     vm.init = init;
     vm.workstreamClick = workstreamClick;
     vm.playWorkstreamVideo = playWorkstreamVideo;
+    vm.videoClosed = videoClosed;
     vm.openModal = openModal;
+    vm.closeModal = closeModal;
+    vm.getVideoConfigObject = getVideoConfigObject;
     vm.videoConfig = {
         version: 3,
-        text: 'Workstream Video',
+        text: null,
         visibility: true,
         type: 'video',
         videoType: 'youtube',
@@ -27,6 +30,8 @@ function dashboardWorkstreamTileComponentController($scope, $attrs, $filter, Das
         videoControls: false
     }
 
+    vm.onPlayerReady = onPlayerReady;
+
     function workstreamClick() {
 
         if (!vm.workstream.unlocked) {
@@ -34,12 +39,16 @@ function dashboardWorkstreamTileComponentController($scope, $attrs, $filter, Das
             /*
 
             [x] show video overlay
-            [ ] on overlay close, set unlocked=true
+            [x] on overlay close, set unlocked=true
             [ ] show block list
 
             */
 
-            vm.playWorkstreamVideo();
+            var vid1 = vm.playWorkstreamVideo()
+
+            vid1.result.finally(vm.videoClosed);
+            vid1.result.catch(vm.videoClosed);
+            vid1.result.then(vm.videoClosed);
 
         }
 
@@ -52,6 +61,23 @@ function dashboardWorkstreamTileComponentController($scope, $attrs, $filter, Das
     function playWorkstreamVideo() {
         vm.videoConfig.video = vm.workstream.unlockVideoUrl;
         return vm.openModal('dashboard-workstream-tile-video');
+    }
+
+    /*
+     * @videoClosed
+     * called when video modal closes
+     */
+    function videoClosed(data) {
+        debugger;
+        DashboardService.unlockWorkstream(vm.workstream._id);
+    }
+
+    /*
+     * @closeModal
+     * default close modal
+     */
+    function closeModal() {
+        vm.modalInstance.close();
     }
 
     /*
@@ -71,9 +97,16 @@ function dashboardWorkstreamTileComponentController($scope, $attrs, $filter, Das
       return vm.modalInstance;
     }
 
-    function unlockWorkstream() {
-        //call API
-        // vm.workstream._id
+    function onPlayerReady(videogularApi) {
+        debugger;
+    }
+
+    function getVideoConfigObject(workstream) {
+        return (
+            angular.extend(vm.videoConfig, {
+                video: workstream.unlockVideoUrl
+            })
+        )
     }
 
     function init(element) {

@@ -6916,6 +6916,12 @@ a[href="https://froala.com/wysiwyg-editor"] {
   width: 100%;
 }
 /* DOHY */
+dashboard-workstream-tile-component.state-unlocked {
+  box-shadow: 1px 1px 1px 0px #5bc0de;
+}
+dashboard-workstream-tile-component .workstream-block-list {
+  text-align: left;
+}
 .dashboard-video .container {
   max-width: 100%;
   padding: 15px;

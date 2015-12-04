@@ -123,7 +123,7 @@ module.exports = {
         var self = this;
         self.log.debug('>> unlockWorkstream');
 
-        var query = {_id:workstreamId, accountId:accountId};
+        var query = { _id: parseInt(workstreamId, 10), accountId: accountId };
         workstreamDao.findOne(query, $$.m.Workstream, function(err, workstream){
             if(err) {
                 self.log.error('Error getting workstream:', err);
