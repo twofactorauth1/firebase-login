@@ -15,7 +15,7 @@
         <ol class="workstream-block-list list-unstyled" ng-if="vm.workstream.unlocked">
             <li class="workstream-block-list-item" ng-repeat="block in vm.workstream.blocks">
                 <a href="{{block.link}}" class="checkbox clip-check check-primary checkbox-inline" tooltip-placement="right" tooltip-html-unsafe="{{block.helpText}}">
-                    <input ng-disabled type="checkbox" id="block-{{block._id}}-{{$index}}" ng-model="block.complete">
+                    <input disabled type="checkbox" id="block-{{block._id}}-{{$index}}" ng-model="block.complete">
                     <label for="block-{{block._id}}-{{$index}}">
                         {{block.name}}
                     </label>
