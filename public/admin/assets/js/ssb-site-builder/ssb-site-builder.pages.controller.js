@@ -19,8 +19,12 @@
       vm.state.templates = templates;
     }, true);
 
+    $scope.$watch(function() { return SimpleSiteBuilderService.legacyTemplates }, function(templates) {
+      vm.state.legacyTemplates = templates;
+    }, true);
 
-    //TODO: use vm pattern...
+
+    //TODO: use vm pattern in this controller...
 
     $scope.tableView = 'list';
     $scope.itemPerPage = 40;
@@ -171,101 +175,22 @@
       }
     };
 
-    $scope.createPageFromTemplate = function (page, $event) {
+    $scope.createPage = function (template) {
 
-      if ($scope.saveLoading) {
-        return
-      }
-
-      $scope.saveLoading = true;
-      $scope.validateCreatePage(page, true);
-
-      $scope.titleError = false;
-      $scope.handleError = false;
-      if (!$scope.createPageValidated) {
-        $scope.titleError = true;
-        $scope.handleError = true;
-        $scope.saveLoading = false;
-        return false;
-      }
-
-      if ($scope.createpage.homepage)
-        page.handle = 'index';
-
-      var pageData = {
-        title: page.title,
-        handle: page.handle,
-        mainmenu: page.mainmenu
-      };
-
-
-      var hasHandle = false;
-      _.each($scope.pages, function (_page) {
-        if (_page.handle === page.handle) {
-          hasHandle = true;
+        if ($scope.saveLoading) {
+            return
         }
-      });
 
-      function createPageCallback(_newPage, error) {
-        if(error && !_newPage) {
-          toaster.pop('error', error.message);
-          $event.preventDefault();
-          $event.stopPropagation();
-          $scope.saveLoading = false;
-          return;
-        }
-        var newpage = angular.copy(_newPage);
-        toaster.pop('success', 'Page Created', 'The ' + newpage.title + ' page was created successfully.');
-        $scope.minRequirements = true;
-        $scope.saveLoading = false;
-        if(newpage.handle == 'index'){
-          $scope.createpage.showhomepage = false;
-        }
-        $scope.closeModal();
+        $scope.saveLoading = true;
 
-        // if (newpage.components) {
-        //   newpage.components = newpage.components.length;
-        // } else if (newpage.sections) {
-        //   newpage.sections = newpage.sections.length;
-        // }
+        return (
+            SimpleSiteBuilderService.createPage(template._id).then(function(data) {
+                $scope.saveLoading = false;
+                $scope.closeModal();
+                $scope.viewSimpleSiteBuilder(data.data);
+            })
+        )
 
-
-        $scope.pages.unshift(newpage);
-        $scope.displayedPages.unshift(newpage);
-        page.title = "";
-        page.handle = "";
-        $scope.checkAndSetIndexPage($scope.pages);
-        $scope.resetTemplateDetails();
-
-        $scope.viewSimpleSiteBuilder(newpage);
-      }
-
-
-        // if (page.ssb) {
-
-          WebsiteService.getWebsite(function(data) {
-            SimpleSiteBuilderService.createPage(page._id).then(function(data) {
-              $scope.closeModal();
-              $scope.viewSimpleSiteBuilder(data.data);
-            });
-          });
-
-        // } else {
-
-        //   if (!hasHandle) {
-
-        //     WebsiteService.createPageFromTemplate(page._id, pageData, function (_newPage, error) {
-        //       createPageCallback(_newPage, error);
-        //     });
-
-        //   } else {
-        //     toaster.pop('error', "Page URL " + page.handle, "Already exists");
-        //     $event.preventDefault();
-        //     $event.stopPropagation();
-        //     $scope.saveLoading = false;
-        //   }
-
-        // }
     };
 
     $scope.viewSingle = function (page) {
@@ -378,10 +303,6 @@
     (function init() {
 
         $scope.getPages();
-
-        WebsiteService.getTemplates(function (templates) {
-            $scope.legacyTemplates = templates;
-        });
 
     })();
 

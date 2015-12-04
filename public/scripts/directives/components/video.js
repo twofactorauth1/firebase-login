@@ -6,7 +6,6 @@ app.directive('videoComponent',['$sce', function ($sce) {
     templateUrl: '/components/component-wrap.html',
     link: function (scope, element, attrs, ctrl) {
       scope.flvVideoUrl = function (iframeUrl, url) {
-        debugger;
         var parsedUrl = urlParser.parse(url);
         var retUrl = "";
         if (parsedUrl)

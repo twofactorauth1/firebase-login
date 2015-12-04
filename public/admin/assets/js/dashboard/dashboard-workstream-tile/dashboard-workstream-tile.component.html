@@ -1,0 +1,31 @@
+<div class="panel panel-white no-radius text-center margin-bottom-0 cursor-pointer">
+    <div class="panel-body" ng-class="{'state-unlocked': vm.workstream.unlocked, 'bg-light-grey': hover1}" ng-mouseenter="hover1 = true" ng-mouseleave="hover1 = false" ng-click="vm.workstreamClick()">
+
+        <span class="workstream-icon fa-stack fa-2x">
+            <i class="fa fa-square fa-stack-2x text-primary"></i>
+            <i class="fa fa-user fa-stack-1x fa-inverse"></i>
+        </span>
+
+        <h3 class="workstream-title">{{vm.workstream.name}}</h3>
+
+        <p class="worksteam-description text-small">
+            This is a workstream
+        </p>
+
+        <ol class="workstream-block-list list-unstyled" ng-if="vm.workstream.unlocked">
+            <li class="workstream-block-list-item" ng-repeat="block in vm.workstream.blocks">
+                <a href="{{block.link}}" class="checkbox clip-check check-primary checkbox-inline" tooltip-placement="right" tooltip-html-unsafe="{{block.helpText}}">
+                    <input disabled type="checkbox" id="block-{{block._id}}-{{$index}}" ng-model="block.complete">
+                    <label for="block-{{block._id}}-{{$index}}">
+                        {{block.name}}
+                    </label>
+                </a>
+            </li>
+        </ol>
+
+        <div class="workstream-video-thumbnail" ng-if="vm.workstream.unlocked">
+            <div video-component component="vm.getVideoConfigObject(vm.workstream)"></div>
+        </div>
+
+    </div>
+</div>

@@ -6858,6 +6858,10 @@ a[href="https://froala.com/wysiwyg-editor"] {
   bottom: -3.5em !important;
   right: 1em!important;
   z-index: 2;
+  display: none;
+}
+.ssb-main:hover .ssb-page-section-layout-header .social-link-v1 .social-link > .btn.social-links {
+  display: block;
 }
 .ssb-main[data-eq-state$="medium"] .ssb-page-section-layout-header .social-link-v1 .social-link ul,
 .ssb-main[data-eq-state$="large"] .ssb-page-section-layout-header .social-link-v1 .social-link ul {
@@ -6910,4 +6914,15 @@ a[href="https://froala.com/wysiwyg-editor"] {
 }
 [ssb-image-component] img {
   width: 100%;
+}
+/* DOHY */
+dashboard-workstream-tile-component.state-unlocked {
+  box-shadow: 1px 1px 1px 0px #5bc0de;
+}
+dashboard-workstream-tile-component .workstream-block-list {
+  text-align: left;
+}
+.dashboard-video .container {
+  max-width: 100%;
+  padding: 15px;
 }

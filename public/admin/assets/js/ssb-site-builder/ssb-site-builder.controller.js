@@ -90,6 +90,10 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
       vm.state.templates = templates;
     }, true);
 
+    $scope.$watch(function() { return SimpleSiteBuilderService.legacyTemplates }, function(templates) {
+      vm.state.legacyTemplates = templates;
+    }, true);
+
     $scope.$watch(function() { return SimpleSiteBuilderService.platformSections }, function(sections) {
       vm.state.platformSections = sections;
     }, true);

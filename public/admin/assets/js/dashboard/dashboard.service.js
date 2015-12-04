@@ -9,7 +9,9 @@
 	/* @ngInject */
 	function DashboardService($http, $q, $timeout, AccountService) {
 
-        var dashboardService = {};
+        var dashboardService = {
+            state: {}
+        };
         var baseWorkstreamsAPIUrl = '/api/2.0/dashboard/workstreams';
 
         dashboardService.getWorkstreams = getWorkstreams;
@@ -30,7 +32,7 @@
         function getWorkstreams() {
 
             function success(data) {
-                dashboardService.workstreams = data;
+                dashboardService.state.workstreams = data;
             }
 
             function error(error) {

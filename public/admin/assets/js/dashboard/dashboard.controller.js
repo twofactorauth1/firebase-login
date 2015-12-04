@@ -10,12 +10,15 @@
     vm.state = {};
     vm.state.account = $scope.account;
 
-    $scope.$watch(function() { return DashboardService.workstreams }, function(workstreams) {
-        vm.state.workstreams = workstreams;
+    $scope.$watch(function() { return DashboardService.state }, function(state) {
+        vm.state = state;
         var analyticsWidgets = [];
+
         var incompleteWorkstreams = [];
         var completeWorkstreams = [];
-        _.each(workstreams, function(workstream){
+
+        _.each(state.workstreams, function(workstream){
+
             analyticsWidgets = analyticsWidgets.concat(workstream.analyticWidgets);
             if(workstream.completed===true) {
                 completeWorkstreams.push(workstream);

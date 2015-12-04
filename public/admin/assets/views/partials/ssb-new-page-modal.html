@@ -1,6 +1,6 @@
 <script type="text/ng-template" id="new-page-modal">
     <div class="modal-header">
-        <button type="button" class="close" ng-click="closeModal()">
+        <button type="button" class="close" ng-click="closeModal() || vm.closeModal()">
             <span aria-hidden="true">&times;</span>
             <span class="sr-only">Close</span>
         </button>
@@ -9,7 +9,7 @@
     <div class="modal-body pages-modal bg-white" ng-class="{'no-padding pages-padding-top': !templateDetails }">
         <div ng-hide="templateDetails">
             <div ng-repeat="template in vm.state.templates | orderBy:'title'">
-                <div class="single-type margin-bottom-15" ng-click="createPageFromTemplate(template, $event)">
+                <div class="single-type margin-bottom-15" ng-click="createPage(template) || vm.createPage(template)">
                     <div class="col-sm-3 col-xs-12">
                         <div class="img-wrap">
                             <a ng-href="{{template.previewUrl}}" title="" data-gallery="">
@@ -29,8 +29,8 @@
                 </div>
                 <div class="clearfix"></div>
             </div>
-            <div ng-repeat="template in legacyTemplates | orderBy:'title'">
-                <div class="single-type margin-bottom-15" ng-click="createPageFromTemplate(template, $event)">
+            <div ng-repeat="template in vm.state.legacyTemplates | orderBy:'title'">
+                <div class="single-type margin-bottom-15" ng-click="createPage(template) || vm.createPage(template)">
                     <div class="col-sm-3 col-xs-12">
                         <div class="img-wrap">
                             <a ng-href="{{template.previewUrl}}" title="" data-gallery="">
