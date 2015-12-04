@@ -53,6 +53,12 @@
         }
       });
       $scope.topicsLoaded = true;
+      if ($location.search().topic) {
+        var _topic = _.find($scope.topics, function (top) {
+          return top._id === $location.search().topic;
+        });
+        $scope.viewSingle(_topic);
+      } 
     });
 
     $scope.updateTopic = function (topic) {
