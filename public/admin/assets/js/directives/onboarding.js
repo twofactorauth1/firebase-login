@@ -218,30 +218,7 @@ app.directive('indigOnboarding', function ($rootScope, $location, $sce, $state, 
 
             //find any remaining tasks
             $scope.startJoyRide = false;
-
-            var tasksRemaining = false;
-            _.each($scope.onboardingStepMap, function (step) {
-              var matchingTask = _.find($scope.userTasks, function (v, k) {
-                return k === step.pane.taskKey;
-              });
-              if (matchingTask === 'not_started' || matchingTask === 'started') {
-                tasksRemaining = true;
-              }
-              step.pane.status = matchingTask;
-            });
-
-            if (tasksRemaining) {
-              var nextTask = _.find($scope.onboardingStepMap, function (step) {
-                return step.pane.status !== 'finished';
-              });
-              var url = $state.href(nextTask.pane.state, {}, {
-                absolute: false
-              });
-              url += '?onboarding=' + nextTask.pane.taskKey;
-              toaster.pop('success', null, 'Complete: Next task is <br> <a class="btn btn-primary" href="' + url + '">' + nextTask.pane.heading + '</a>', 15000, 'trustedHtml');
-            } else {
-              toaster.pop('success', 'Task Complete. No more tasks to complete.');
-            }
+            
           });
         }
       };
