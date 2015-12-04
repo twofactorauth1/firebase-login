@@ -10,13 +10,18 @@
 	function DashboardService($http, $q, $timeout, AccountService) {
 
         var dashboardService = {
-            state: {}
+            state: {
+                workstreams:[],
+                reports:{}
+            }
         };
         var baseWorkstreamsAPIUrl = '/api/2.0/dashboard/workstreams';
+        var baseReportsAPIUrl = '/api/2.0/dashboard/reports';
 
         dashboardService.getWorkstreams = getWorkstreams;
         dashboardService.getWorkstream = getWorkstream;
         dashboardService.unlockWorkstream = unlockWorkstream;
+        dashboardService.getContactsByDayReport = getContactsByDayReport;
         dashboardService.loading = {value:0};
 
 		function dashRequest(fn) {
@@ -67,6 +72,18 @@
 
             return dashRequest($http.post(baseWorkstreamsAPIUrl + '/' + id + '/unlock').success(success).error(error));
 
+        }
+
+        function getContactsByDayReport() {
+            function success(data) {
+                dashboardService.state.reports.contactsByDay = data;
+            }
+
+            function error(error) {
+                console.error('DashboardService getContactsByDayReport error: ' + error);
+            }
+
+            return dashRequest($http.get(baseReportsAPIUrl + '/contactsByDay').success(success).error(error));
         }
 
 

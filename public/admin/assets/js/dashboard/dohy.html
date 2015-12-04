@@ -34,9 +34,9 @@
                         <div class="panel-body" ng-class="{'bg-light-grey': hover1}" ng-mouseenter="hover1 = true" ng-mouseleave="hover1 = false">
                             <span class="fa-stack fa-2x"> <i class="fa fa-square fa-stack-2x text-primary"></i> <i class="fa fa-user fa-stack-1x fa-inverse"></i> </span>
                             <h3 class="StepTitle">{{widget.name}}</h3>
-                            <p class="text-small">
-                                This is an Analytic Widget
-                            </p>
+                            <div class="height-350">
+                                <highchart config="vm.state.reports.contactsByDayConfig" id="contactsByDayConfig"></highchart>
+                            </div>
                         </div>
                     </div>
                 </div>

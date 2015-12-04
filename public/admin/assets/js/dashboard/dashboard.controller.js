@@ -32,8 +32,80 @@
 
     }, true);
 
-    (function init() {
+    $scope.$watch(function() {return DashboardService.state.reports}, function(reports){
+        if(reports.contactsByDay) {
+            vm.state.reports.contactsByDayConfig = buildContactsByDayWidgetConfig(reports.contactsByDay);
+        }
+    }, true);
 
+
+
+    var buildContactsByDayWidgetConfig = function(contactsByDay) {
+        var contactsPerDayData = [];
+        _.each(contactsByDay, function(dayData){
+            var xy = [];
+            console.log(dayData._id._id.year + '.' + dayData._id._id.month + '.' + dayData._id._id.day);
+            xy[0] = new Date(dayData._id._id.year, dayData._id._id.month-1, dayData._id._id.day, 0,0,0,0).getTime();
+            console.log(xy[0]);
+            xy[1] = dayData.count;
+            contactsPerDayData.push(xy);
+        });
+        var config = {
+            options: {
+                chart: {
+                    spacing: [25, 25, 25, 25],
+                    height: 360
+                },
+                colors: ['#41b0c7', '#fcb252', '#309cb2', '#f8cc49', '#f8d949'],
+                title: {
+                    text: ''
+                },
+                subtitle: {
+                    text: ''
+                },
+                tooltip: {
+                    headerFormat: '<b>{point.x:%b %d}</b><br>',
+                    pointFormat: '<b class="text-center">{point.y}</b>',
+                },
+                legend: {
+                    enabled: true
+                },
+                exporting: {
+                    enabled: false
+                },
+                plotOptions: {
+                    series: {
+                        marker: {
+                            enabled: true,
+                            radius: 3
+                        }
+                    }
+                }
+            },
+            xAxis: {
+                type: 'datetime',
+                labels: {
+                    format: "{value:%b %d}"
+                }
+            },
+            yAxis: {
+                title: {
+                    text: ''
+                }
+            },
+            series: [{
+                name: 'Contacts Per Day',
+                data: contactsPerDayData
+            }],
+            credits: {
+                enabled: false
+            }
+        };
+        return config;
+    };
+
+    (function init() {
+        DashboardService.getContactsByDayReport();
 
     })();
 
