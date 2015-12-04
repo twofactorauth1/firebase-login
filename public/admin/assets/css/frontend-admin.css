@@ -6922,6 +6922,9 @@ dashboard-workstream-tile-component.state-unlocked {
 dashboard-workstream-tile-component .workstream-block-list {
   text-align: left;
 }
+dashboard-workstream-tile-component .tooltip {
+  min-width: 10em;
+}
 .dashboard-video .container {
   max-width: 100%;
   padding: 15px;

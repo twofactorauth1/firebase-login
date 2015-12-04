@@ -29,7 +29,7 @@
         <div class="row">
             <!-- for each analyticWidget, create a box -->
             <div ng-repeat="widget in vm.state.analyticsWidgets">
-                <div class="col-sm-3">
+                <div class="col-sm-6 margin-bottom-20">
                     <div class="panel panel-white no-radius text-center margin-bottom-0 cursor-pointer" ui-sref="app.customers">
                         <div class="panel-body" ng-class="{'bg-light-grey': hover1}" ng-mouseenter="hover1 = true" ng-mouseleave="hover1 = false">
                             <span class="fa-stack fa-2x"> <i class="fa fa-square fa-stack-2x text-primary"></i> <i class="fa fa-user fa-stack-1x fa-inverse"></i> </span>
@@ -48,7 +48,7 @@
     <div class="container-fluid container-fullw bg-white">
         <div class="row">
             <div ng-repeat="workstream in vm.state.completeWorkstreams">
-                <div class="col-sm-3">
+                <div class="col-sm-6 margin-bottom-20">
                     <div class="panel panel-white no-radius text-center margin-bottom-0 cursor-pointer" ui-sref="app.customers">
                         <div class="panel-body" ng-class="{'bg-light-grey': hover1}" ng-mouseenter="hover1 = true" ng-mouseleave="hover1 = false">
                             <span class="fa-stack fa-2x"> <i class="fa fa-square fa-stack-2x text-primary"></i> <i class="fa fa-user fa-stack-1x fa-inverse"></i> </span>

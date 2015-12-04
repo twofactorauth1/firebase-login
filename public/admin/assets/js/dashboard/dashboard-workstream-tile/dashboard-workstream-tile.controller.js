@@ -21,6 +21,7 @@ function dashboardWorkstreamTileComponentController($scope, $attrs, $filter, Das
         visibility: true,
         type: 'video',
         videoType: 'youtube',
+        // videoType: 'html5',
         video: null,
         videoWidth: 400,
         videoHeight: 400,
@@ -30,25 +31,17 @@ function dashboardWorkstreamTileComponentController($scope, $attrs, $filter, Das
         videoControls: false
     }
 
-    vm.onPlayerReady = onPlayerReady;
+    // vm.onPlayerReady = onPlayerReady;
 
+    /*
+     * @workstreamClick
+     * play video if workstream is not unlocked
+     */
     function workstreamClick() {
 
         if (!vm.workstream.unlocked) {
 
-            /*
-
-            [x] show video overlay
-            [x] on overlay close, set unlocked=true
-            [ ] show block list
-
-            */
-
-            var vid1 = vm.playWorkstreamVideo()
-
-            vid1.result.finally(vm.videoClosed);
-            vid1.result.catch(vm.videoClosed);
-            vid1.result.then(vm.videoClosed);
+            vm.playWorkstreamVideo().result.then(vm.videoClosed);
 
         }
 
@@ -68,7 +61,6 @@ function dashboardWorkstreamTileComponentController($scope, $attrs, $filter, Das
      * called when video modal closes
      */
     function videoClosed(data) {
-        debugger;
         DashboardService.unlockWorkstream(vm.workstream._id);
     }
 
@@ -97,9 +89,9 @@ function dashboardWorkstreamTileComponentController($scope, $attrs, $filter, Das
       return vm.modalInstance;
     }
 
-    function onPlayerReady(videogularApi) {
-        debugger;
-    }
+    // function onPlayerReady(videogularApi) {
+    //     debugger;
+    // }
 
     function getVideoConfigObject(workstream) {
         return (

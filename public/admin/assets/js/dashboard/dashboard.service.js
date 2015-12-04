@@ -63,7 +63,12 @@
         function unlockWorkstream(id) {
 
             function success(data) {
+
                 console.info('DashboardService unlockWorkstream:', data);
+
+                //replace updated workstream with server response
+                _.extend(_.findWhere(dashboardService.state.workstreams, { _id: data._id }), data);
+
             }
 
             function error(error) {

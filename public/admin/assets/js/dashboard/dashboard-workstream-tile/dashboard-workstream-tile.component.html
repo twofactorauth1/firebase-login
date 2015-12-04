@@ -9,7 +9,7 @@
         <h3 class="workstream-title">{{vm.workstream.name}}</h3>
 
         <p class="worksteam-description text-small">
-            This is a workstream
+            {{vm.workstream.description || 'This worksteam needs a description.'}}
         </p>
 
         <ol class="workstream-block-list list-unstyled" ng-if="vm.workstream.unlocked">
@@ -22,6 +22,10 @@
                 </a>
             </li>
         </ol>
+
+        <div class="workstream-percent-complete" ng-if="vm.workstream.unlocked">
+            {{vm.workstream.completePercentage}}
+        </div>
 
         <div class="workstream-video-thumbnail" ng-if="vm.workstream.unlocked">
             <div video-component component="vm.getVideoConfigObject(vm.workstream)"></div>
