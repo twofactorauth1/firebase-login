@@ -154,7 +154,7 @@ module.exports = {
 
         //db.contacts.aggregate([{$match:{accountId:4}},{$group:{ _id: {month: {$month:'$created.date'}, year: {$year:'$created.date'}, day: {$dayOfMonth:'$created.date'}}, count:{ "$sum": 1 }}}])
         var groupCriteria = {_id: {month: {$month:'$created.date'}, year: {$year:'$created.date'}, day: {$dayOfMonth:'$created.date'}}};
-        var matchCriteria = {accountId:accountId, 'created.date': {$gt: new Date(2015,8,1,0,0,0,0)}};//TODO: remove this hardcoded time limit
+        var matchCriteria = {accountId:accountId, 'created.date': {$gt: new Date(2015,8,1,0,0,0,0)}, tags:'ld'};//TODO: remove this hardcoded time limit
 
         contactDao.aggregate(groupCriteria, matchCriteria, $$.m.Contact, function(err, results){
             fn(err, results);
