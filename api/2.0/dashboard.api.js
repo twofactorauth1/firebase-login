@@ -27,6 +27,9 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('workstreams'), this.isAuthAndSubscribedApi.bind(this), this.getWorkstreamsForAccount.bind(this));
         app.get(this.url('workstreams/:id'), this.isAuthAndSubscribedApi.bind(this), this.getWorkstream.bind(this));
         app.post(this.url('workstreams/:id/unlock'), this.isAuthAndSubscribedApi.bind(this), this.unlockWorkstream.bind(this));
+
+        //these might need to move into their own api
+        app.get(this.url('reports/contactsByDay'), this.isAuthAndSubscribedApi.bind(this), this.getContactsByDayReport.bind(this));
     },
 
     noop: function(req, resp) {
@@ -78,6 +81,17 @@ _.extend(api.prototype, baseApi.prototype, {
         workstreamManager.unlockWorkstream(accountId, workstreamId, function(err, workstream){
             self.log.debug('<< unlockWorkstream');
             return self.sendResultOrError(resp, err, workstream, "Error unlocking workstream");
+        });
+    },
+
+    getContactsByDayReport: function(req, resp) {
+        var self = this;
+        self.log.debug('>> getContactsByDayReport');
+        var accountId = parseInt(self.accountId(req));
+
+        workstreamManager.getContactsByDayReport(accountId, function(err, results){
+            self.log.debug('<< getContactsByDayReport');
+            return self.sendResultOrError(resp, err, results, "Error getting report");
         });
     }
 

@@ -9,6 +9,7 @@ var logger = $$.g.getLogger("workstream_manager");
 var workstreamDao = require('./dao/workstream.dao');
 var blockDao = require('./dao/block.dao');
 var accountDao = require('../dao/account.dao');
+var contactDao = require('../dao/contact.dao');
 
 var blockManager = require('./block_manager');
 var async = require('async');
@@ -141,6 +142,22 @@ module.exports = {
                 });
 
             }
+        });
+
+    },
+
+    /*
+     * This may need to go somewhere else
+     */
+    getContactsByDayReport: function(accountId, fn) {
+        var self = this;
+
+        //db.contacts.aggregate([{$match:{accountId:4}},{$group:{ _id: {month: {$month:'$created.date'}, year: {$year:'$created.date'}, day: {$dayOfMonth:'$created.date'}}, count:{ "$sum": 1 }}}])
+        var groupCriteria = {_id: {month: {$month:'$created.date'}, year: {$year:'$created.date'}, day: {$dayOfMonth:'$created.date'}}};
+        var matchCriteria = {accountId:accountId, 'created.date': {$gt: new Date(2015,8,1,0,0,0,0)}};//TODO: remove this hardcoded time limit
+
+        contactDao.aggregate(groupCriteria, matchCriteria, $$.m.Contact, function(err, results){
+            fn(err, results);
         });
 
     },
