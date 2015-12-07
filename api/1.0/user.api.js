@@ -32,6 +32,8 @@ var Intercom = require('intercom.io');
 var intercomConfig = require('../../configs/intercom.config');
 var intercom = new Intercom(intercomConfig.INTERCOM_APP_ID, intercomConfig.INTERCOM_API_KEY);
 
+
+
 var api = function() {
     this.init.apply(this, arguments);
 };
@@ -664,6 +666,7 @@ _.extend(api.prototype, baseApi.prototype, {
                                         } else {
                                             self.log.debug('Admin user added to account ' + accountId);
                                         }
+                                        callback(null, accountId);
                                     });
                                 });
 
@@ -674,9 +677,10 @@ _.extend(api.prototype, baseApi.prototype, {
                     });
                 });
             }
-        ], function(err, result){
+        ], function(err, accountId){
             //we don't really need to do anything here.
-            self.log.warn('Unexpected method call!!!')
+            self.log.debug('Finished creating account [' + accountId + ']');
+            return;
         });
 
 

@@ -15,6 +15,7 @@ var contactDao = require('./contact.dao');
 var appConfig = require('../configs/app.config');
 var analyticsManager = require('../analytics/analytics_manager');
 var socialConfigManager = require('../socialconfig/socialconfig_manager');
+var workstreamManager = require('../workstream/workstream_manager');
 
 var mandrillHelper = require('../utils/mandrillhelper');
 var notificationConfig = require('../configs/notification.config');
@@ -442,6 +443,17 @@ module.exports = {
                             callback(null, accountId, user);
                         }
                     });
+                });
+            },
+            function addWorkstreams(accountId, user, callback) {
+                log.debug('Adding default workstreams');
+                workstreamManager.addDefaultWorkstreamsToAccount(accountId, function(err, savedStreams){
+                    if(err) {
+                        log.error('Error adding streams to account:', err);
+                        callback(err);
+                    } else {
+                        callback(null, accountId, user);
+                    }
                 });
             },
             function stepNine(accountId, user, callback){

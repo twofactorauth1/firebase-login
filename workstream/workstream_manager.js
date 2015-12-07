@@ -124,7 +124,7 @@ module.exports = {
         var self = this;
         self.log.debug('>> unlockWorkstream');
 
-        var query = { _id: parseInt(workstreamId, 10), accountId: accountId };
+        var query = { _id: workstreamId, accountId: accountId };
         workstreamDao.findOne(query, $$.m.Workstream, function(err, workstream){
             if(err) {
                 self.log.error('Error getting workstream:', err);
@@ -160,6 +160,74 @@ module.exports = {
             fn(err, results);
         });
 
+    },
+
+    addDefaultWorkstreamsToAccount: function(accountId, fn) {
+        var self = this;
+        self.log.debug('>> addDefaultWorkstreamsToAccount');
+        //TODO: make these a constant somewhere else
+        var defaultWorkstream = new $$.m.Workstream({
+            "accountId" : accountId,
+            "unlockVideoUrl" : "https://www.youtube.com/watch?v=mlB1aDUDjiU",
+            "unlocked" : false,
+            "completed" : false,
+            "blocks" : [
+            {
+                "_id" : 0,
+                "name" : "Create Page",
+                "link" : "/admin/website/pages",
+                "helpText" : "Create a page on your website that will collect information on leads.",
+                "complete" : true
+            },
+            {
+                "_id" : 1,
+                "name" : "Add form to Page",
+                "link" : "/admin/website/pages",
+                "helpText" : "Add a form to your page that will collection information about Leads.",
+                "complete" : true
+            },
+            {
+                "_id" : 2,
+                "name" : "Configure Form for Leads",
+                "link" : "/admin/website/pages",
+                "helpText" : "Configure the form on your page to apply a label of 'Lead' to new contacts.",
+                "complete" : true
+            }
+        ],
+            "deepDiveVideoUrls" : [],
+            "analyticWidgets" : [
+            {
+                "name" : "PageViews"
+            },
+            {
+                "name" : "LeadsPerDay"
+            }
+        ],
+            "name" : "Collect Leads",
+            "icon" : "",
+            "_v" : "0.1",
+            "created" : {
+            "date" : null,
+                "by" : null
+        },
+            "modified" : {
+            "date" : null,
+                "by" : null
+        }
+        });
+
+        var workstreamAry = [];
+        workstreamAry.push(defaultWorkstream);
+
+        workstreamDao.saveWorkstreams(workstreamAry, function(err, savedStreams){
+            if(err) {
+                self.log.error('Error saving default workstreams:', err);
+                return fn(err);
+            } else {
+                self.log.debug('<< addDefaultWorkstreamsToAccount');
+                return fn(null, savedStreams);
+            }
+        });
     },
 
 
