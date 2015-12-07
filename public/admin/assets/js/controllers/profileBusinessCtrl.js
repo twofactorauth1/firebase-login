@@ -226,6 +226,7 @@
 
     $scope.profileSaveFn = function () {
       console.log('profileSaveFn >>>');
+      $scope.myform.$dirty = false;
       $scope.validateBeforeSave();
       if (!$scope.isValid) {
         toaster.pop("error", "Business hours are not valid");
