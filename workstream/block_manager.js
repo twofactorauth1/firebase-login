@@ -50,6 +50,7 @@ module.exports = {
                         eachCB();
                     } else {
                         this._handleBlock(account, block, function(err, isCompleted){
+
                             if(isCompleted === true) {
                                 completedBlocks.push(block.toJSON());
                                 completedBlockIDs.push(block.id());
@@ -114,7 +115,8 @@ module.exports = {
         //need to ensure at least one page exists
         var self = this;
         //self.log.debug('>> _handleCreatePage');
-        pageDao.exists({accountId:account.id()}, $$.m.ssb.Page, function(err, exists){
+        var query = {accountId:account.id(), handle: {$nin: ['coming-soon', 'blog', 'single-post']}};
+        pageDao.exists(query, $$.m.ssb.Page, function(err, exists){
             if(err) {
                 //self.log.error('Error checking for page existence:', err);
                 fn(err);

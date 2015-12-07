@@ -177,21 +177,21 @@ module.exports = {
                 "name" : "Create Page",
                 "link" : "/admin/website/pages",
                 "helpText" : "Create a page on your website that will collect information on leads.",
-                "complete" : true
+                "complete" : false
             },
             {
                 "_id" : 1,
                 "name" : "Add form to Page",
                 "link" : "/admin/website/pages",
                 "helpText" : "Add a form to your page that will collection information about Leads.",
-                "complete" : true
+                "complete" : false
             },
             {
                 "_id" : 2,
                 "name" : "Configure Form for Leads",
                 "link" : "/admin/website/pages",
                 "helpText" : "Configure the form on your page to apply a label of 'Lead' to new contacts.",
-                "complete" : true
+                "complete" : false
             }
         ],
             "deepDiveVideoUrls" : [],
