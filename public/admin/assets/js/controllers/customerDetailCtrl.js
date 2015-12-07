@@ -107,8 +107,8 @@
       console.log('customer_data:', $scope.customer_data);
       CustomerService.saveCustomer($scope.customer_data, function (customer) {
         $scope.customer = customer;
+        $scope.originalCustomer = angular.copy($scope.customer);
         $scope.setTags();
-        $scope.changesConfirmed = true;
         toaster.pop('success', 'Notes Added.');
       });
     };
@@ -247,6 +247,7 @@
       //customer has no address
       if (!_firstAddress) {
         $scope.loadingMap = false;
+        $scope.originalCustomer = angular.copy($scope.customer);
       } else {
         //customer has address and lat/lon
         if (_firstAddress.lat && _firstAddress.lon) {
@@ -318,6 +319,7 @@
               $scope.originalCustomer = angular.copy($scope.customer);
               $scope.loadingMap = false;
             });
+            $scope.originalCustomer = angular.copy($scope.customer);
           }
 
         }
@@ -468,8 +470,7 @@
                 }
               }
               if(showAlert){
-                SweetAlert.swal("Saved!", "Your edits were saved to the page.", "success");
-                $scope.changesConfirmed = true;
+                SweetAlert.swal("Saved!", "Your edits were saved to the page.", "success");                
                 window.location = newUrl;
               }
             });
@@ -1010,48 +1011,18 @@
     };
 
 
-    /*
-     * @locationChangeStart
-     * - Before user leaves editor, ask if they want to save changes
-     */
-
-    $scope.changesConfirmed = false;
-    $scope.isDirty = false;
-
-    var offFn = $rootScope.$on('$locationChangeStart', function (event, newUrl, oldUrl) {
-      if ($scope.originalCustomer && $scope.customer && !angular.equals($scope.originalCustomer, $scope.customer)) {
-        $scope.isDirty = true;
-      }
-
-      if ($scope.isDirty && !$scope.changesConfirmed) {
-        event.preventDefault();
-        SweetAlert.swal({
-            title: "Are you sure?",
-            text: "You have unsaved data that will be lost",
-            type: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#DD6B55",
-            confirmButtonText: "Yes, save changes!",
-            cancelButtonText: "No, do not save changes!",
-            closeOnConfirm: false,
-            closeOnCancel: false
-          },
-          function (isConfirm) {
-            if (isConfirm) {              
-              $scope.customerSaveFn(false, true, newUrl);
-            } else {
-              $scope.changesConfirmed = true;
-              SweetAlert.swal("Cancelled", "Your edits were NOT saved.", "error");
-              window.location = newUrl;
-            }
-            $scope.isDirty = false;
-            
-            //set window location
-            
-            offFn();
-          });
-      }
-    });
+    $scope.checkIfDirty = function(){
+      var isDirty = false;
+      if($scope.newNote && $scope.newNote.text)
+        isDirty = true;
+      if($scope.originalCustomer && !angular.equals($scope.originalCustomer, $scope.customer))
+        isDirty = true;
+      return isDirty;
+    }
+    $scope.resetDirty = function(){
+      $scope.originalCustomer = null;
+      $scope.customer = null;
+    }
 
   }]);
 }(angular));

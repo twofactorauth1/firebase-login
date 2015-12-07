@@ -12,6 +12,7 @@
     AccountService.getAccount(function (account) {
       $scope.account = account;
       $scope.setDefaults();
+      $scope.originalAccount = angular.copy($scope.account);
     });
 
     //user API call for object population
@@ -226,7 +227,7 @@
 
     $scope.profileSaveFn = function () {
       console.log('profileSaveFn >>>');
-      $scope.myform.$dirty = false;
+      angular.copy($scope.account, $scope.originalAccount);
       $scope.validateBeforeSave();
       if (!$scope.isValid) {
         toaster.pop("error", "Business hours are not valid");
@@ -338,6 +339,17 @@
         }
       }
     };
+
+    $scope.checkIfDirty = function(){
+      var isDirty = false;      
+      if($scope.originalAccount && !angular.equals($scope.originalAccount, $scope.account))
+        isDirty = true;
+      return isDirty;
+    }
+    $scope.resetDirty = function(){
+      $scope.originalAccount = null;
+      $scope.account = null;
+    }
 
   }]);
 }(angular));

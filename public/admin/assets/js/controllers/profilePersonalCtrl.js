@@ -73,6 +73,7 @@
 
     $scope.setProfileUser = function(user) {
       $scope.profileUser= angular.copy(user);
+      $scope.originalprofileUser = angular.copy($scope.profileUser);
 
       // we don't show a real password since we don't respond with password data
       $scope.auth.password = userConstant.personal_profile.PASSWORD_PLACEHOLDER;
@@ -119,6 +120,7 @@
     $scope.profileSaveFn = function () {
       //$scope.currentUser = $scope.profileUser;    
      // simpleForm.$setPristine(true);
+      angular.copy($scope.profileUser, $scope.originalprofileUser);
       if (!$scope.profileUser.email) {
         toaster.pop("error", "Email is required.");
         return;
@@ -155,6 +157,16 @@
     };
     $scope.changePage = function (page) {
       $scope.curPage = $scope.curPage + page;
+    }
+    $scope.checkIfDirty = function(){
+      var isDirty = false;      
+      if($scope.originalprofileUser && !angular.equals($scope.originalprofileUser, $scope.profileUser))
+        isDirty = true;
+      return isDirty;
+    }
+    $scope.resetDirty = function(){
+      $scope.originalprofileUser = null;
+      $scope.profileUser = null;
     }
   }]);
 })(angular);

@@ -4,9 +4,14 @@
 app.directive('indigNavprompt', function ($rootScope, $location, $state, SweetAlert, $urlRouter) {
   return {
     restrict: 'C',
+    scope:{
+      checkIfDirty: '&',
+      resetDirty: '&',
+      myState: '@myState'
+    },
     link: function (scope, elem, attrs) {
       $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
-        if(scope.myform && scope.myform.$dirty){
+        if(scope.myState && $state.$current.name === scope.myState && scope.checkIfDirty && scope.checkIfDirty()){
           event.preventDefault();
           SweetAlert.swal({
               title: "Are you sure?",
@@ -20,8 +25,8 @@ app.directive('indigNavprompt', function ($rootScope, $location, $state, SweetAl
               closeOnCancel: true
               }, function (isConfirm) {
                 if (isConfirm) {
+                  scope.resetDirty && scope.resetDirty();
                   SweetAlert.swal("Not Saved!", "Data not saved.", "success");
-                  scope.myform.$dirty = false;
                   $state.go(toState, toParams, {notify: false})
                   .then(function() {
                       $rootScope.$broadcast('$stateChangeSuccess', toState, toParams, fromState, fromParams);
@@ -30,8 +35,11 @@ app.directive('indigNavprompt', function ($rootScope, $location, $state, SweetAl
                 else{
                   $rootScope.$broadcast('$stateChangeSuccess', toState, toParams, fromState, fromParams);
                 }
-              });
-          }
+          });
+        }
+        else{
+          scope.resetDirty && scope.resetDirty();
+        }
       });
     }
   };

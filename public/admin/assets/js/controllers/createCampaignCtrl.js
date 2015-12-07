@@ -1468,6 +1468,14 @@
       }
     };
 
+    $scope.checkIfDirty = function(){      
+      return $scope.originalCampaignObj && $scope.pendingChanges();
+    }
+    $scope.resetDirty = function(){
+        $scope.originalCampaignObj = null;
+        $scope.newCampaignObj = null;
+    }
+
     /*
      * @init
      * - Set page context (if creating or loading existing campaign).
