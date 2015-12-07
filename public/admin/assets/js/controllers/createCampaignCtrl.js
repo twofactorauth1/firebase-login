@@ -827,6 +827,7 @@
       $scope.newCampaignObj.status = 'RUNNING';
       $scope.navigateOnSave = function() {
         $timeout(function() {
+          $scope.resetDirty();
           window.location = '/admin/#/marketing/campaigns';
         }, 750);
       };
@@ -1171,6 +1172,7 @@
           $scope.navigateURL = _url;
           $scope.navigateOnSave = function() {
             $timeout(function() {
+              $scope.resetDirty();
               $window.location = $scope.navigateURL
             }, 750);
           };
@@ -1194,6 +1196,7 @@
         } else {
           $scope.navigateOnSave = function() {
             $timeout(function() {
+              $scope.resetDirty();
               window.location = '/admin/#/marketing/campaigns';
             }, 750);
           };
@@ -1469,11 +1472,13 @@
     };
 
     $scope.checkIfDirty = function(){      
-      return $scope.originalCampaignObj && $scope.pendingChanges();
+      return $scope.originalCampaignObj && $scope.originalEmailToSend && $scope.delivery.originalDate && $scope.isEditable && $scope.pendingChanges();
     }
     $scope.resetDirty = function(){
         $scope.originalCampaignObj = null;
         $scope.newCampaignObj = null;
+        $scope.originalEmailToSend = null;
+        $scope.delivery.originalDate = null;
     }
 
     /*
