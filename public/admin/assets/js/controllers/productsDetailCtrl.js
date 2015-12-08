@@ -464,7 +464,7 @@
     };
 
     /*
-     * @deleteCustomerFn
+     * @deleteProductFn
      * -
      */
 
@@ -482,7 +482,8 @@
       }, function (isConfirm) {
         if (isConfirm) {
           ProductService.deleteProduct(product._id, function () {
-            toaster.pop('warning', 'Customer Deleted.');
+            toaster.pop('warning', 'Product Deleted.');
+            $scope.originalProduct = angular.copy($scope.product);
             $state.go('app.commerce.products');
           });
         }
