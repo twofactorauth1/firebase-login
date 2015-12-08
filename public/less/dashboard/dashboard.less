@@ -1,5 +1,20 @@
 /* DOHY */
 
+.dohy-dashboard-container {
+    background-color: black;
+    background-image: url('http://s3.amazonaws.com/indigenous-digital-assets/account_6/dohy-bg-mountain-1_1449539273222.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+
+    #page-title, .container-fullw {
+        border: none;
+    }
+
+    #page-title .mainTitle, #page-title .mainDescription {
+        color: white;
+        text-align: center;
+    }
+}
 
 dashboard-workstream-tile-component {
 
@@ -17,11 +32,80 @@ dashboard-workstream-tile-component {
 
 }
 
+.workstream-tile-container {
+    display: inline-block;
+    width: 50%;
 
+    @media screen and (min-width: 768px) {
+        width: 25%;
+        // height: 200px;
+    }
+
+    @media screen and (min-width: 1024px) {
+        width: 20%;
+        // height: 250px;
+    }
+}
 
 .dashboard-video {
     .container {
         max-width: 100%;
         padding: 15px;
+    }
+}
+.dashboard-logo {    
+    max-width: 100px;
+}
+.dashboard-logo-edit {    
+    text-align: center;
+    font-size: 10px;
+    color: white;
+}   
+
+.indi-circle {
+    background-color: transparent;
+    width: 100%;
+    height: auto;
+    margin: 0 auto;
+    cursor: pointer;
+    border-radius: 50% 50%;
+    overflow: hidden;
+
+    .indi-circle-title {
+        position: absolute;
+        bottom: 0;
+        height: 50%;
+        height: calc(~'50% - .5em');
+        padding: 1em .5em;
+        color: #50b0c9;
+        font-weight: bold;
+        background: #ffffff;
+        width: 100%;
+        text-align: center;
+        box-shadow: 0px -9px 10px -6px rgba(0, 0, 0, .3);
+    }
+
+    .indi-circle-img {
+        width: 100%;
+        height: auto;
+        box-shadow: 0px 0px 1px 2px rgba(0, 0, 0, .3);
+        border-radius: 50% 50%;
+    }
+
+    .panel-body {
+        cursor: initial;
+        position: absolute;
+        width: 100%;
+        height: auto;
+    }
+
+    @media screen and (min-width: 768px) {
+        // width: 200px;
+        // height: 200px;
+    }
+
+    @media screen and (min-width: 1024px) {
+        // width: 250px;
+        // height: 250px;
     }
 }

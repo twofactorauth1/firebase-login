@@ -1,10 +1,17 @@
-<div class="panel panel-white no-radius text-center margin-bottom-0 cursor-pointer">
-    <div class="panel-body" ng-class="{'state-unlocked': vm.workstream.unlocked, 'bg-light-grey': hover1}" ng-mouseenter="hover1 = true" ng-mouseleave="hover1 = false" ng-click="vm.workstreamClick()">
+<div class="workstream-tile-container">
 
-        <span class="workstream-icon fa-stack fa-2x">
-            <i class="fa fa-square fa-stack-2x text-primary"></i>
-            <i class="fa fa-user fa-stack-1x fa-inverse"></i>
-        </span>
+    <div class="indi-circle panel panel-white text-center margin-bottom-0 cursor-pointer" ng-click="vm.workstreamClick()">
+
+        <img class="indi-circle-img" src="http://s3.amazonaws.com/indigenous-digital-assets/account_6/dohy-circle-configure-business-profile_1449548586772.png" alt="{{vm.workstream.name}}" />
+
+        <h3 class="workstream-title indi-circle-title">{{vm.workstream.name}}</h3>
+
+    </div>
+
+    <div
+        ng-if="vm.uiState.openWorkstream === vm.workstream._id"
+        class="panel-body"
+        ng-class="{ 'state-unlocked': vm.workstream.unlocked }">
 
         <h3 class="workstream-title">{{vm.workstream.name}}</h3>
 
@@ -15,10 +22,10 @@
         <ol class="workstream-block-list list-unstyled" ng-if="vm.workstream.unlocked">
             <li class="workstream-block-list-item" ng-repeat="block in vm.workstream.blocks">
                 <a href="{{block.link}}" class="checkbox clip-check check-primary checkbox-inline" tooltip-placement="right" tooltip-html-unsafe="{{block.helpText}}">
-                    <input disabled type="checkbox" id="block-{{block._id}}-{{$index}}" ng-model="block.complete">
-                    <label for="block-{{block._id}}-{{$index}}">
+                    <!-- <input disabled type="checkbox" id="block-{{block._id}}-{{$index}}" ng-model="block.complete"> -->
+                    <!-- <label for="block-{{block._id}}-{{$index}}"> -->
                         {{block.name}}
-                    </label>
+                    <!-- </label> -->
                 </a>
             </li>
         </ol>
@@ -32,4 +39,5 @@
         </div>
 
     </div>
+
 </div>

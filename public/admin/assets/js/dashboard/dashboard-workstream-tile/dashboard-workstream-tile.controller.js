@@ -43,6 +43,10 @@ function dashboardWorkstreamTileComponentController($scope, $attrs, $filter, Das
 
             vm.playWorkstreamVideo().result.then(vm.videoClosed);
 
+        } else {
+
+            vm.uiState.openWorkstream = vm.workstream._id;
+
         }
 
     }

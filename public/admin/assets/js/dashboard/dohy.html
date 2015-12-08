@@ -3,7 +3,13 @@
     <!-- start: DASHBOARD TITLE -->
     <section id="page-title" class="padding-top-15 padding-bottom-15">
         <div class="row">
-            <div class="col-sm-7">
+            <div>
+                <div class="dashboard-logo indi-circle margin-bottom-10">
+                    <img class="indi-circle-img" ng-src="{{vm.state.account.business.logo}}" err-src="assets/images/default-user.png" alt="">
+                </div>
+                <div ng-if="!vm.state.account.business.logo" class="dashboard-logo-edit cursor-pointer margin-bottom-10">
+                    <span ng-click="vm.openMediaModal('media-modal', 'MediaModalCtrl', 'lg')"><i class="fa fa-edit"></i> EDIT LOGO </span>
+                </div>
                 <h1 class="mainTitle" translate="dashboard.WELCOME" translate-values="{ appName: app.name }"></h1>
                 <span class="mainDescription">Choose Your Own Adventure</span>
             </div>
@@ -13,14 +19,15 @@
     </section>
     <!-- end: DASHBOARD TITLE -->
     <!-- start: Incomplete Workstreams -->
-    <div class="container-fluid container-fullw bg-white">
+    <div class="container-fluid container-fullw">
         <div class="row">
             <!-- For each workstream, create a box -->
-            <div ng-repeat="workstream in vm.state.workstreams">
-                <div class="col-sm-3">
-                    <dashboard-workstream-tile-component state="vm.state" workstream="workstream"></dashboard-workstream-tile-component>
-                </div>
-            </div>
+            <dashboard-workstream-tile-component
+                ng-repeat="workstream in vm.state.workstreams"
+                state="vm.state"
+                ui-state="vm.uiState"
+                workstream="workstream">
+            </dashboard-workstream-tile-component>
         </div>
     </div>
     <!-- end: Incomplete Workstreams -->
@@ -31,7 +38,7 @@
             <div ng-repeat="widget in vm.state.analyticsWidgets">
                 <div class="col-sm-6 margin-bottom-20">
                     <div class="panel panel-white no-radius text-center margin-bottom-0 cursor-pointer" ui-sref="app.customers">
-                        <div class="panel-body" ng-class="{'bg-light-grey': hover1}" ng-mouseenter="hover1 = true" ng-mouseleave="hover1 = false">
+                        <div class="panel-body">
                             <span class="fa-stack fa-2x"> <i class="fa fa-square fa-stack-2x text-primary"></i> <i class="fa fa-user fa-stack-1x fa-inverse"></i> </span>
                             <h3 class="StepTitle">{{widget.name}}</h3>
                             <div class="height-350">
@@ -45,12 +52,12 @@
     </div>
     <!-- end: Analytic Widgets -->
     <!-- start: Completed Workstreams -->
-    <div class="container-fluid container-fullw bg-white">
+    <div class="container-fluid container-fullw">
         <div class="row">
             <div ng-repeat="workstream in vm.state.completeWorkstreams">
                 <div class="col-sm-6 margin-bottom-20">
                     <div class="panel panel-white no-radius text-center margin-bottom-0 cursor-pointer" ui-sref="app.customers">
-                        <div class="panel-body" ng-class="{'bg-light-grey': hover1}" ng-mouseenter="hover1 = true" ng-mouseleave="hover1 = false">
+                        <div class="panel-body">
                             <span class="fa-stack fa-2x"> <i class="fa fa-square fa-stack-2x text-primary"></i> <i class="fa fa-user fa-stack-1x fa-inverse"></i> </span>
                             <h3 class="StepTitle">{{workstream.name}}</h3>
                             <p class="text-small">

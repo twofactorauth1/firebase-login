@@ -130,6 +130,7 @@
       UserService.putUser($scope.profileUser, function (user) {        
         $scope.refreshUser();
         toaster.pop('success', 'Profile Saved.');
+        angular.copy($scope.profileUser, $scope.originalprofileUser);
       });
 
       // check if password needs to be changed

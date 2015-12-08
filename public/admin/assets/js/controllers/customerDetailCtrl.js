@@ -995,6 +995,7 @@
         if (isConfirm) {
           CustomerService.deleteCustomer(customer._id, function () {
             toaster.pop('warning', 'Customer Deleted.');
+            $scope.originalCustomer = angular.copy($scope.customer);
             $state.go('app.customers');
           });
         }
