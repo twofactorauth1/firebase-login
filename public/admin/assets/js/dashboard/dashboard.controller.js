@@ -44,7 +44,22 @@
         vm.state.completeWorkstreams = completeWorkstreams;
         vm.state.incompleteWorksreams = incompleteWorkstreams;
 
+        var analytics = [{
+            name : 'Business Profile',
+            background: 'http://s3.amazonaws.com/indigenous-digital-assets/account_6/dohy-circle-configure-business-profile_1449548586772.png' 
+        },
+        {
+            name : 'Website',
+            background: 'http://s3.amazonaws.com/indigenous-digital-assets/account_6/dohy-circle-configure-business-profile_1449548586772.png' 
+        },
+        {
+            name : 'Blog',
+            background: 'http://s3.amazonaws.com/indigenous-digital-assets/account_6/dohy-circle-configure-business-profile_1449548586772.png' 
+        }]
+        vm.state.analytics = analytics;
     }, true);
+
+    
 
     $scope.$watch(function() {return DashboardService.state.reports}, function(reports){
         if(reports.contactsByDay) {
@@ -155,8 +170,8 @@
     function insertMedia(asset) {
         vm.state.account.business.logo = asset.url;
         DashboardService.updateAccount(vm.state.account).then(function(response){
-        toaster.pop('success', 'Business Logo', 'The logo was updated successfully.');
-        console.log('Account logo updated');
+            toaster.pop('success', 'Business Logo', 'The logo was updated successfully.');
+            console.log('Account logo updated');
         })
     };
 

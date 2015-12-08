@@ -400,7 +400,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         ncyBreadcrumb: {
             label: 'DOHY'
         },
-        resolve: loadSequence('DOHYCtrl', 'dashboardService', 'DashboardWorkstreamTileComponent', 'DashboardWorkstreamTileComponentController', 'jsVideoUrlParser', 'highcharts')
+        resolve: loadSequence('DOHYCtrl', 'dashboardService', 'DashboardWorkstreamTileComponent', 'DashboardWorkstreamTileComponentController', 'DashboardAnalyticTileComponent', 'DashboardAnalyticTileComponentController', 'jsVideoUrlParser', 'highcharts')
     })
 
     // Login routes

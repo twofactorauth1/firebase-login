@@ -25,6 +25,7 @@
         dashboardService.getContactsByDayReport = getContactsByDayReport;
         dashboardService.loading = {value:0};
         dashboardService.updateAccount = updateAccount;
+        //dashboardService.getAnalytics = getAnalytics;
 
 		function dashRequest(fn) {
             dashboardService.loading.value = dashboardService.loading.value + 1;

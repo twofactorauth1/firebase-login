@@ -71,6 +71,18 @@
     </div>
     <!-- end: Completed Workstreams -->
 
+    <div class="container-fluid container-fullw">
+    
+        <div class="row">
+            <!-- For each workstream, create a box -->
+            <dashboard-analytic-tile-component
+                ng-repeat="analytic in vm.state.analytics"
+                state="vm.state"
+                ui-state="vm.uiState"
+                analytic="analytic">
+            </dashboard-analytic-tile-component>
+        </div>
+    </div>
 
     <div data-ng-include data-src=" 'assets/js/dashboard/dashboard-workstream-tile/dashboard-workstream-tile-video.modal.html' " ></div>
 
