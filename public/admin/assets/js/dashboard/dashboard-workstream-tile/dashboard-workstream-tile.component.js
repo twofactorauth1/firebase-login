@@ -8,8 +8,10 @@ function dashboardWorkstreamTile() {
         restrict: 'E',
         scope: {
             state: '=',
+            uiState: '=',
             workstream: '='
         },
+        replace: true,
         templateUrl: 'assets/js/dashboard/dashboard-workstream-tile/dashboard-workstream-tile.component.html',
         controller: 'DashboardWorkstreamTileComponentController',
         controllerAs: 'vm',

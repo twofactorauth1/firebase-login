@@ -10,6 +10,10 @@
     vm.state = {};
     vm.state.account = $scope.account;
 
+    vm.uiState = {
+        openWorkstream: null
+    };
+
     $scope.$watch(function() { return DashboardService.state }, function(state) {
         vm.state = state;
         var analyticsWidgets = [];
