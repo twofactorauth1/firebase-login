@@ -146,6 +146,35 @@ module.exports = {
 
     },
 
+    markBlockComplete: function(accountId, workstreamId, blockId, modified, fn) {
+        var self = this;
+        self.log.debug('>> markBlockComplete');
+        var query = {_id:workstreamId, accountId:accountId};
+        workstreamDao.findOne(query, $$.m.Workstream, function(err, workstream) {
+            if (err || !workstream) {
+                self.log.error('Error getting workstream:', err);
+                return fn(err);
+            } else {
+                _.each(workstream.get('blocks'), function(block){
+                    if(block._id === blockId) {
+                        block.complete = true;
+                    }
+                });
+                workstream.set('modified', modified);
+                workstreamDao.saveOrUpdate(workstream, function(err, stream){
+                    if(err) {
+                        self.log.error('Error saving workstream:', err);
+                        return fn(err);
+                    } else {
+                        self.log.debug('<< markBlockComplete');
+                        return fn(null, stream);
+                    }
+                });
+            }
+        });
+
+    },
+
     /*
      * This may need to go somewhere else
      */
