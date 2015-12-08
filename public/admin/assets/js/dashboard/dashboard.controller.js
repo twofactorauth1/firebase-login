@@ -7,15 +7,18 @@
 
     var vm = this;
 
-    vm.state = {};
-    vm.state.account = $scope.account;
+    vm.state = {};    
 
     vm.uiState = {
         openWorkstream: null
     };
-
+    vm.showInsert = true;
+    vm.openMediaModal = openMediaModal;
+    vm.insertMedia = insertMedia;
+    
     $scope.$watch(function() { return DashboardService.state }, function(state) {
         vm.state = state;
+        vm.state.account = $scope.account;
         var analyticsWidgets = [];
 
         var incompleteWorkstreams = [];
@@ -113,6 +116,48 @@
             }
         };
         return config;
+    };
+
+    
+    function openMediaModal(modal, controller, size) {
+        console.log('openModal >>> ', modal, controller);
+        var _modal = {
+            templateUrl: modal,
+            keyboard: false,
+            backdrop: 'static',
+            size: 'md',
+            resolve: {
+                vm: function() {
+                    return vm;
+                }
+            }
+        };
+        if (controller) {
+            _modal.controller = controller;
+            _modal.resolve.showInsert = function () {
+              return vm.showInsert;
+            };
+            _modal.resolve.insertMedia = function () {
+              return vm.insertMedia;
+            };
+        }
+
+        if (size) {
+            _modal.size = 'lg';
+        }
+
+        vm.modalInstance = $modal.open(_modal);
+
+        vm.modalInstance.result.then(null, function () {
+            angular.element('.sp-container').addClass('sp-hidden');
+        });
+    }
+    function insertMedia(asset) {
+        vm.state.account.business.logo = asset.url;
+        DashboardService.updateAccount(vm.state.account).then(function(response){
+        toaster.pop('success', 'Business Logo', 'The logo was updated successfully.');
+        console.log('Account logo updated');
+        })
     };
 
     (function init() {

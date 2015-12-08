@@ -17,12 +17,14 @@
         };
         var baseWorkstreamsAPIUrl = '/api/2.0/dashboard/workstreams';
         var baseReportsAPIUrl = '/api/2.0/dashboard/reports';
+        var baseAccountAPIUrl = '/api/1.0/account/';
 
         dashboardService.getWorkstreams = getWorkstreams;
         dashboardService.getWorkstream = getWorkstream;
         dashboardService.unlockWorkstream = unlockWorkstream;
         dashboardService.getContactsByDayReport = getContactsByDayReport;
         dashboardService.loading = {value:0};
+        dashboardService.updateAccount = updateAccount;
 
 		function dashRequest(fn) {
             dashboardService.loading.value = dashboardService.loading.value + 1;
@@ -91,8 +93,18 @@
             return dashRequest($http.get(baseReportsAPIUrl + '/contactsByDay').success(success).error(error));
         }
 
+        function updateAccount(account) {
 
+            function success(data) {
+                console.info('DashboardService updateAccount:', data);
+            }
 
+            function error(error) {
+                console.error('DashboardService updateAccount:', error);
+            }
+            return (
+                dashRequest($http.put(baseAccountAPIUrl + [account._id].join('/'), account)).success(success).error(error));
+        }
 
 		(function init() {
 

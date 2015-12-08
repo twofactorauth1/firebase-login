@@ -6958,6 +6958,14 @@ dashboard-workstream-tile-component .tooltip {
   max-width: 100%;
   padding: 15px;
 }
+.dashboard-logo {
+  max-width: 100px;
+}
+.dashboard-logo-edit {
+  text-align: center;
+  font-size: 10px;
+  color: white;
+}
 .indi-circle {
   background-color: transparent;
   width: 100%;
