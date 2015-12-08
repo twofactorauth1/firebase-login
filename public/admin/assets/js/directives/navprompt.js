@@ -37,9 +37,6 @@ app.directive('indigNavprompt', function ($rootScope, $location, $state, SweetAl
                 }
           });
         }
-        else{
-          scope.resetDirty && scope.resetDirty();
-        }
       });
     }
   };
