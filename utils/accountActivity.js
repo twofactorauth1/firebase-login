@@ -25,7 +25,8 @@ var accountActivity = {
 
     runReport: function(callback) {
         var self = this;
-        var reportAry = [109,45,97,79,21,80,37,38,12,15,126,129,130,132,133,134,135,136,137,138,139,140,141,142,
+        /*
+        var reportAry = [12,15,21,37,38,45,79,80,97,109,126,129,130,132,133,134,135,136,137,138,139,140,141,142,
                          158,161,169,170,171,172,173,174,175,176,177,178,179,181,182,183,184,185,186,187,188,189,
                          190,191,192,193,194,195,196,197,198,199,200,201,202,203,204,205,206,207,208,209,210,211,
                          212,213,217,218,219,220,221,222,223,224,225,226,227,229,232,233,234,235,236,237,238,239,
@@ -36,7 +37,9 @@ var accountActivity = {
                          338,339,340,341,342,343,344,345,347,348,350,351,352,353,354,356,357,358,359,360,361,363,
                          364,365,366,367,368,369,370,371,372,373,375,376,377,379,380,381,382,385,386,387,388,71,
                          389,390,391,392,393,394,395,396,397,398,399,400,402,403,404,405,407,408,409,410,412,413,
-                         414,415,417,418,419,420,421,422,423,424,425,426,427,428,429,430,431, 432,438,439,440,443,
+                         414,415,417,418,419,420,421,422,423,424,425,426,427,428,429,430,431];
+
+        var reportAry2 = [432,438,439,440,443,
                          444,445,446,448,449,450,451,452,453,454,455,456,457,458,459,460,461,462,463,464,465,466,
                          467,468,469,470,471,472,473,474,475,476,477,478,479,480,481,482,483,484,485,486,487,488,
                          489,490,491,492,493,494,495,496,497,498,499,500,501,502,503,504,505,506,507,508,509,510,
@@ -56,83 +59,87 @@ var accountActivity = {
                          807,808,809,810,811,812,813,814,815,816,817,818,819,820,821,822,823,824,825,826,827,828,
                          829,830,831,832,833,834,835,836,837,838,839,840,841,842,843,844,845,847,848,849,850,851,
                          852,853,854,855,856,857,858,859,860,861,862,863,864,865,866,867,868,869,870,871,872,873,
-                         874,875,876,877,878,879,880,881,882,883,884,885,886,887,888,889,890];
+                         874,875,876,877,878,879,880,881,882,883,884,885,886,887,888,889,890,891,892];
+        */
+        accountDao.findMany({_id: {$ne:'__counter__'}}, $$.m.Account, function(err, list){
+            var accountIDs = _.map(list, function(account){return account.id();});
+            var activityAry = [];
+            async.eachLimit(accountIDs, 20, function(accountId, cb){
+                self.getActivityForAccount(accountId, function(err, activity){
+                    if(activity) {
+                        activityAry.push(activity);
+                    }
+                    cb();
+                });
+            }, function done(err){
+                //first, last, email, city, state, country, Day 11, Day 14
+                self.log.debug('AccountId,First,Last,email,City,State,Country,Phone,Name,Custom Domain,Signup Date,' +
+                    'Trial Days Remaining,Day11,Day14,Last Activity,Pointed Domain,Pages Created,Posts Created,' +
+                    'Social Integrations,Stripe Integration,Products,Orders,Contacts,Campaigns');
 
-        var activityAry = [];
-        async.eachLimit(reportAry, 20, function(accountId, cb){
-            self.getActivityForAccount(accountId, function(err, activity){
-                if(activity) {
-                    activityAry.push(activity);
-                }
-                cb();
+                var sortedAry = _.sortBy(activityAry, 'accountId');
+                var csv = "";
+
+                _.each(sortedAry, function(activity){
+                    /*
+                     * remove undefineds
+                     */
+                    activity.firstName = activity.firstName ||'';
+                    activity.lastName = activity.lastName ||'';
+                    activity.email = activity.email ||'';
+                    activity.city = activity.city ||'';
+                    activity.state = activity.state ||'';
+                    activity.country = activity.country ||'';
+                    activity.phone = activity.phone ||'';
+                    activity.name = activity.name ||'';
+                    activity.customDomain = activity.customDomain ||'';
+                    activity.signupDate = activity.signupDate ||'';
+                    activity.trialDaysRemaining = activity.trialDaysRemaining ||'';
+                    activity.conversionDate = activity.conversionDate ||'';
+                    activity.day11 = activity.day11 ||'';
+                    activity.day14 = activity.day14 ||'';
+                    activity.lastActivity = activity.lastActivity ||'';
+                    activity.pointedDomain = activity.pointedDomain ||'';
+                    activity.pages = activity.pages ||'';
+                    activity.posts = activity.posts ||'';
+                    activity.socialIntegrations = activity.socialIntegrations ||'';
+                    activity.stripeIntegrated = activity.stripeIntegrated ||'';
+                    activity.products = activity.products ||'';
+                    activity.orders = activity.orders ||'';
+                    activity.contacts = activity.contacts ||'';
+                    activity.campaigns = activity.campaigns ||'';
+
+                    csv += '\n' + activity.accountId + ',' +
+                        '"' + activity.firstName + '",' +
+                        '"' + activity.lastName + '",' +
+                        activity.email + ',' +
+                        activity.city + ',' +
+                        activity.state + ',' +
+                        activity.country + ',' +
+                        activity.phone + ',' +
+                        activity.name + ',' +
+                        activity.customDomain + ',' +
+                        activity.signupDate + ',' +
+                        activity.trialDaysRemaining + ',' +
+                        activity.conversionDate + ',' +
+                        activity.day11 + ',' +
+                        activity.day14 + ',' +
+                        activity.lastActivity + ',' +
+                        activity.pointedDomain +',' +
+                        activity.pages + ',' +
+                        activity.posts +',' +
+                        activity.socialIntegrations + ',' +
+                        activity.stripeIntegrated + ',' +
+                        activity.products +',' +
+                        activity.orders + ',' +
+                        activity.contacts + ',' +
+                        activity.campaigns;
+                });
+                self.log.debug(csv);
+                callback();
             });
-        }, function done(err){
-            //first, last, email, city, state, country, Day 11, Day 14
-            self.log.debug('AccountId,First,Last,email,City,State,Country,Phone,Name,Custom Domain,Signup Date,' +
-                'Trial Days Remaining,Day11,Day14,Last Activity,Pointed Domain,Pages Created,Posts Created,' +
-                'Social Integrations,Stripe Integration,Products,Orders,Contacts,Campaigns');
-
-            var sortedAry = _.sortBy(activityAry, 'accountId');
-            var csv = "";
-
-            _.each(sortedAry, function(activity){
-                /*
-                 * remove undefineds
-                 */
-                activity.firstName = activity.firstName ||'';
-                activity.lastName = activity.lastName ||'';
-                activity.email = activity.email ||'';
-                activity.city = activity.city ||'';
-                activity.state = activity.state ||'';
-                activity.country = activity.country ||'';
-                activity.phone = activity.phone ||'';
-                activity.name = activity.name ||'';
-                activity.customDomain = activity.customDomain ||'';
-                activity.signupDate = activity.signupDate ||'';
-                activity.trialDaysRemaining = activity.trialDaysRemaining ||'';
-                activity.conversionDate = activity.conversionDate ||'';
-                activity.day11 = activity.day11 ||'';
-                activity.day14 = activity.day14 ||'';
-                activity.lastActivity = activity.lastActivity ||'';
-                activity.pointedDomain = activity.pointedDomain ||'';
-                activity.pages = activity.pages ||'';
-                activity.posts = activity.posts ||'';
-                activity.socialIntegrations = activity.socialIntegrations ||'';
-                activity.stripeIntegrated = activity.stripeIntegrated ||'';
-                activity.products = activity.products ||'';
-                activity.orders = activity.orders ||'';
-                activity.contacts = activity.contacts ||'';
-                activity.campaigns = activity.campaigns ||'';
-
-                csv += '\n' + activity.accountId + ',' +
-                    '"' + activity.firstName + '",' +
-                    '"' + activity.lastName + '",' +
-                    activity.email + ',' +
-                    activity.city + ',' +
-                    activity.state + ',' +
-                    activity.country + ',' +
-                    activity.phone + ',' +
-                    activity.name + ',' +
-                    activity.customDomain + ',' +
-                    activity.signupDate + ',' +
-                    activity.trialDaysRemaining + ',' +
-                    activity.conversionDate + ',' +
-                    activity.day11 + ',' +
-                    activity.day14 + ',' +
-                    activity.lastActivity + ',' +
-                    activity.pointedDomain +',' +
-                    activity.pages + ',' +
-                    activity.posts +',' +
-                    activity.socialIntegrations + ',' +
-                    activity.stripeIntegrated + ',' +
-                    activity.products +',' +
-                    activity.orders + ',' +
-                    activity.contacts + ',' +
-                    activity.campaigns;
-            });
-            self.log.debug(csv);
-            callback();
         });
+
         //self.getActivityForAccount(109, callback);
     },
 
@@ -275,9 +282,15 @@ var accountActivity = {
                         self.log.error('Error fetching user activities', err);
                         cb(err);
                     } else {
-                        var activityTimestamp = _.last(activities).get('start');
-                        activity.lastActivity = moment(activityTimestamp).format('MM/DD/YYYY HH:mm');
-                        cb(null, account);
+                        if(activities && activities.length > 0) {
+                            var activityTimestamp = _.last(activities).get('start');
+                            activity.lastActivity = moment(activityTimestamp).format('MM/DD/YYYY HH:mm');
+                            cb(null, account);
+                        } else {
+                            activity.lastActivity = 'NEVER';
+                            cb(null, account);
+                        }
+
                     }
                 });
             },
@@ -345,46 +358,71 @@ var accountActivity = {
                 }
             },
             function getContactForAccount(account, user, cb) {
-                contactDao.getContactByEmailAndAccount(user.get('username'), appConfig.mainAccountID, function(err, contact){
-                    if(err) {
-                        self.log.error('Error fetching contacts: ', err);
-                        cb(err);
-                    } else {
-                        //self.log.debug('Found this contact', contact);
-                        if(contact) {
-                            //self.log.debug('contact name: ' + contact.get('first') + ' ' + contact.get('last'));
-                            activity.firstName = contact.get('first');
-                            activity.lastName = contact.get('last');
-                            try {
-                                var address = contact.get('details')[0].addresses[0];
-                            } catch(exception) {
-                                //whatever
-                            }
+                if(!user) {
+                    self.log.warn('\n\n\nNO user for account:', account);
+                    cb();
+                }
+                try {
+                    contactDao.getContactByEmailAndAccount(user.get('username'), appConfig.mainAccountID, function(err, contact){
+                        if(err) {
+                            self.log.error('Error fetching contacts: ', err);
+                            cb(err);
+                        } else {
+                            //self.log.debug('Found this contact', contact);
+                            if(contact) {
+                                //self.log.debug('contact name: ' + contact.get('first') + ' ' + contact.get('last'));
+                                activity.firstName = contact.get('first');
+                                activity.lastName = contact.get('last');
+                                try {
+                                    var address = contact.get('details')[0].addresses[0];
+                                } catch(exception) {
+                                    //whatever
+                                }
 
-                            if(address) {
-                                activity.city = address.city;
-                                activity.state = address.state;
-                                activity.zip = address.zip;
-                                activity.country = address.country;
+                                if(address) {
+                                    activity.city = address.city;
+                                    activity.state = address.state;
+                                    activity.zip = address.zip;
+                                    activity.country = address.country;
+                                }
                             }
+                            //self.log.debug('user name: ' + user.get('first') + ' ' + user.get('last'));
+                            activity.email = user.get('username');
+
+                            cb();
                         }
-                        //self.log.debug('user name: ' + user.get('first') + ' ' + user.get('last'));
-                        activity.email = user.get('username');
+                    });
+                } catch(exception) {
+                    self.log.error('Exception working on account and user:', {account:account, user:user});
+                    self.log.error('The exception was:', exception);
+                    cb();
+                }
 
-                        cb();
-                    }
-                });
             }
         ], function done(err){
             self.log.info('Activity:', activity);
             fn(err, activity);
         });
+    },
 
+    cleanupAccounts: function(callback) {
+        var self = this;
+        var deleteTheseAccounts = [2,3,8,9,10,11,17,18,19,22,24,25,26,27,28,30,39,40,41,43,46,48,50,68,69,73,74,81,82,
+            83,84,85,86,87,91,96,98,102,106,121,123];
 
-
+        async.eachSeries(deleteTheseAccounts, function(accountId, cb){
+            self.log.debug('deleting ' + accountId);
+            accountDao.deleteAccountAndArtifacts(accountId, function(err, value){
+                if(err) {
+                    self.log.error('Error deleting account [' + accountId + ']: ', err);
+                }
+                cb();
+            });
+        }, function done(err){
+            self.log.debug('Done deleting accounts');
+            callback();
+        });
     }
-
-
 
 };
 
