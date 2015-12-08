@@ -6979,7 +6979,7 @@ dashboard-workstream-tile-component .tooltip {
   border: 1px solid white;
   color: white;
   font-size: 14px;
-  min-width: 200px;
+  min-width: 80%;
 }
 .analytic-tile-container .title-container {
   margin-top: 10%;
