@@ -1,10 +1,14 @@
 /* DOHY */
 
 .dohy-dashboard-container {
+
+    @import "grid.less";
+
     background-color: black;
     background-image: url('http://s3.amazonaws.com/indigenous-digital-assets/account_6/dohy-bg-mountain-1_1449539273222.jpg');
     background-repeat: no-repeat;
-    background-size: cover;
+    // background-size: cover;
+    background-size: 100% auto;
 
     #page-title, .container-fullw {
         border: none;
@@ -16,10 +20,28 @@
     }
 }
 
-dashboard-workstream-tile-component {
+.workstream-container {
+    position: relative;
+}
 
-    &.state-unlocked {
-        box-shadow: 1px 1px 1px 0px #5bc0de;
+.workstream-tile-container {
+    margin: 0 1em;
+
+    .workstream-panel-circle {
+        // float: left;
+        // width: 50%;
+        // padding: .5em;
+        // vertical-align: top;
+
+        @media screen and (min-width: 768px) {
+            // width: 25%;
+        }
+
+        @media screen and (min-width: 1024px) {
+            // width: 20%;
+            // max-width: 230px;
+            // padding: .85em;
+        }
     }
 
     .workstream-block-list {
@@ -30,21 +52,22 @@ dashboard-workstream-tile-component {
         min-width: 10em;
     }
 
+    &.workstream-state-unlocked {
+
+        .workstream-panel-circle {
+            background: gray;
+        }
+
+    }
+
 }
 
-.workstream-tile-container {
-    display: inline-block;
-    width: 50%;
-
-    @media screen and (min-width: 768px) {
-        width: 25%;
-        // height: 200px;
-    }
-
-    @media screen and (min-width: 1024px) {
-        width: 20%;
-        // height: 250px;
-    }
+.workstream-detail-panel {
+    background: #fff;
+    width: 100%;
+    position: absolute;
+    top: auto;
+    left: 0;
 }
 
 .dashboard-video {
@@ -53,14 +76,14 @@ dashboard-workstream-tile-component {
         padding: 15px;
     }
 }
-.dashboard-logo {    
+.dashboard-logo {
     max-width: 100px;
 }
-.dashboard-logo-edit {    
+.dashboard-logo-edit {
     text-align: center;
     font-size: 10px;
     color: white;
-} 
+}
 
 .analytic-tile-container {
     .left-title{
@@ -82,8 +105,8 @@ dashboard-workstream-tile-component {
         margin-top:10%;
         margin-bottom:10%;
     }
-    
-}  
+
+}
 
 .indi-circle {
     background-color: transparent;
@@ -171,7 +194,7 @@ dashboard-workstream-tile-component {
         height: auto;
         padding: 4px;
         line-height: 1.42857143;
-        
+
         border: none;
         border-radius: 10px;
     }

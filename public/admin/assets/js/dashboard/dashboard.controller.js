@@ -7,15 +7,15 @@
 
     var vm = this;
 
-    vm.state = {};    
+    vm.state = {};
 
     vm.uiState = {
-        openWorkstream: null
+        openWorkstream: { _id: undefined }
     };
     vm.showInsert = true;
     vm.openMediaModal = openMediaModal;
     vm.insertMedia = insertMedia;
-    
+
     $scope.$watch(function() { return DashboardService.state }, function(state) {
         vm.state = state;
         vm.state.account = $scope.account;
@@ -40,33 +40,18 @@
             workstream.completePercentage = completeBlocks + ' out of ' + (completeBlocks + incompleteBlocks) + ' completed.'
 
         });
-        vm.state.analyticsWidgets = analyticsWidgets;
+        // vm.state.analyticsWidgets = analyticsWidgets;
         vm.state.completeWorkstreams = completeWorkstreams;
         vm.state.incompleteWorksreams = incompleteWorkstreams;
-
-        var analytics = [{
-            name : 'Business Profile',
-            background: 'http://s3.amazonaws.com/indigenous-digital-assets/account_6/dohy-circle-configure-business-profile_1449548586772.png' 
-        },
-        {
-            name : 'Website',
-            background: 'http://s3.amazonaws.com/indigenous-digital-assets/account_6/dohy-circle-configure-business-profile_1449548586772.png' 
-        },
-        {
-            name : 'Blog',
-            background: 'http://s3.amazonaws.com/indigenous-digital-assets/account_6/dohy-circle-configure-business-profile_1449548586772.png' 
-        }]
-        vm.state.analytics = analytics;
     }, true);
 
-    
+
 
     $scope.$watch(function() {return DashboardService.state.reports}, function(reports){
         if(reports.contactsByDay) {
             vm.state.reports.contactsByDayConfig = buildContactsByDayWidgetConfig(reports.contactsByDay);
         }
     }, true);
-
 
 
     var buildContactsByDayWidgetConfig = function(contactsByDay) {
@@ -131,9 +116,8 @@
             }
         };
         return config;
-    };
+    }
 
-    
     function openMediaModal(modal, controller, size) {
         console.log('openModal >>> ', modal, controller);
         var _modal = {
@@ -167,13 +151,14 @@
             angular.element('.sp-container').addClass('sp-hidden');
         });
     }
+
     function insertMedia(asset) {
         vm.state.account.business.logo = asset.url;
         DashboardService.updateAccount(vm.state.account).then(function(response){
             toaster.pop('success', 'Business Logo', 'The logo was updated successfully.');
             console.log('Account logo updated');
         })
-    };
+    }
 
     (function init() {
         DashboardService.getContactsByDayReport();

@@ -1,42 +1,51 @@
-<div class="workstream-tile-container">
+<div class="workstream-tile-container image__cell" ng-class="{ 'workstream-state-unlocked': vm.workstream.unlocked, 'workstream-state-complete': vm.workstream.complete, 'is-collapsed': !vm.uiState.openWorkstream._id === vm.workstream._id, 'is-expanded': vm.uiState.openWorkstream._id === vm.workstream._id}">
 
-    <div class="indi-circle panel panel-white text-center margin-bottom-0 cursor-pointer" ng-click="vm.workstreamClick()">
+    <div
+        class="indi-circle workstream-panel-circle image--basic panel panel-white text-center margin-bottom-0 cursor-pointer"
+        ng-click="vm.workstreamClick()">
 
         <img class="indi-circle-img" src="http://s3.amazonaws.com/indigenous-digital-assets/account_6/dohy-circle-configure-business-profile_1449548586772.png" alt="{{vm.workstream.name}}" />
 
         <h3 class="workstream-title indi-circle-title">{{vm.workstream.name}}</h3>
 
+        <div class="arrow--up"></div>
+
     </div>
 
     <div
-        ng-if="vm.uiState.openWorkstream === vm.workstream._id"
-        class="panel-body"
-        ng-class="{ 'state-unlocked': vm.workstream.unlocked }">
+        ng-if="vm.uiState.openWorkstream._id == vm.workstream._id"
+        class="workstream-detail-panel image--expand panel-body">
 
         <h3 class="workstream-title">{{vm.workstream.name}}</h3>
 
         <p class="worksteam-description text-small">
-            {{vm.workstream.description || 'This worksteam needs a description.'}}
+            {{vm.workstream.description || 'This workstream needs a description.'}}
         </p>
 
         <ol class="workstream-block-list list-unstyled" ng-if="vm.workstream.unlocked">
-            <li class="workstream-block-list-item" ng-repeat="block in vm.workstream.blocks">
-                <a href="{{block.link}}" class="checkbox clip-check check-primary checkbox-inline" tooltip-placement="right" tooltip-html-unsafe="{{block.helpText}}">
-                    <!-- <input disabled type="checkbox" id="block-{{block._id}}-{{$index}}" ng-model="block.complete"> -->
-                    <!-- <label for="block-{{block._id}}-{{$index}}"> -->
-                        {{block.name}}
-                    <!-- </label> -->
+            <li class="workstream-block-list-item" ng-repeat="block in vm.uiState.openWorkstream.blocks">
+                <a
+                    href="{{block.link}}"
+                    class="checkbox clip-check check-primary checkbox-inline"
+                    ng-class="{ 'workstream-block-complete': block.complete}"
+                    tooltip-placement="right"
+                    tooltip-html-unsafe="{{block.helpText}}">
+
+                    {{block.name}}
+
                 </a>
             </li>
         </ol>
 
         <div class="workstream-percent-complete" ng-if="vm.workstream.unlocked">
-            {{vm.workstream.completePercentage}}
+            {{vm.uiState.openWorkstream.completePercentage}}
         </div>
 
         <div class="workstream-video-thumbnail" ng-if="vm.workstream.unlocked">
             <div video-component component="vm.getVideoConfigObject(vm.workstream)"></div>
         </div>
+
+        <div ng-click="vm.workstreamClick()" class="expand__close"></div>
 
     </div>
 

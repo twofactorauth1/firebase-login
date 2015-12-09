@@ -45,7 +45,15 @@ function dashboardWorkstreamTileComponentController($scope, $attrs, $filter, Das
 
         } else {
 
-            vm.uiState.openWorkstream = vm.workstream._id;
+            if (vm.uiState.openWorkstream._id === vm.workstream._id) {
+
+                vm.uiState.openWorkstream = null;
+
+            } else {
+
+                vm.uiState.openWorkstream = vm.workstream;
+
+            }
 
         }
 

@@ -7,7 +7,7 @@
                 <div class="dashboard-logo indi-circle margin-bottom-10">
                     <img class="indi-circle-img" ng-src="{{vm.state.account.business.logo}}" err-src="assets/images/default-user.png" alt="">
                 </div>
-                <div ng-if="!vm.state.account.business.logo" class="dashboard-logo-edit cursor-pointer margin-bottom-10">
+                <div class="dashboard-logo-edit cursor-pointer margin-bottom-10">
                     <span ng-click="vm.openMediaModal('media-modal', 'MediaModalCtrl', 'lg')"><i class="fa fa-edit"></i> EDIT LOGO </span>
                 </div>
                 <h1 class="mainTitle" translate="dashboard.WELCOME" translate-values="{ appName: app.name }"></h1>
@@ -18,41 +18,49 @@
         </div>
     </section>
     <!-- end: DASHBOARD TITLE -->
+
     <!-- start: Incomplete Workstreams -->
-    <div class="container-fluid container-fullw">
+    <div class="workstream-container container-fluid container-fullw">
         <div class="row">
-            <!-- For each workstream, create a box -->
-            <dashboard-workstream-tile-component
-                ng-repeat="workstream in vm.state.workstreams"
-                state="vm.state"
-                ui-state="vm.uiState"
-                workstream="workstream">
-            </dashboard-workstream-tile-component>
-        </div>
-    </div>
-    <!-- end: Incomplete Workstreams -->
-    <!-- start: Analytic Widgets -->
-    <div class="container-fluid container-fullw">
-        <div class="row">
-            <!-- for each analyticWidget, create a box -->
-            <div ng-repeat="widget in vm.state.analyticsWidgets">
-                <div class="col-sm-6 margin-bottom-20">
-                    <div class="panel panel-white no-radius text-center margin-bottom-0 cursor-pointer" ui-sref="app.customers">
-                        <div class="panel-body">
-                            <span class="fa-stack fa-2x"> <i class="fa fa-square fa-stack-2x text-primary"></i> <i class="fa fa-user fa-stack-1x fa-inverse"></i> </span>
-                            <h3 class="StepTitle">{{widget.name}}</h3>
-                            <div class="height-350">
-                                <highchart config="vm.state.reports.contactsByDayConfig" id="contactsByDayConfig"></highchart>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div class="image-grid" ng-repeat="workstream in vm.state.workstreams track by $index">
+                <dashboard-analytic-tile-component
+                    ng-if="workstream.completed"
+                    ng-repeat="analytic in workstream.analytics track by $index"
+                    state="vm.state"
+                    ui-state="vm.uiState"
+                    analytics="analytic">
+                </dashboard-analytic-tile-component>
             </div>
         </div>
+        <div class="row">
+            <div class="image-grid" ng-repeat="workstream in vm.state.workstreams track by $index">
+                <dashboard-workstream-tile-component
+                    ng-if="!workstream.completed"
+                    state="vm.state"
+                    ui-state="vm.uiState"
+                    workstream="workstream">
+                </dashboard-workstream-tile-component>
+            </div>
+        </div>
+
     </div>
+    <!-- end: Incomplete Workstreams -->
+
+    <!-- start: Analytic Widgets -->
+    <!-- <div class="container-fluid container-fullw">
+        <div class="row">
+            <dashboard-analytic-tile-component
+                ng-repeat="analytic in vm.state.analyticsWidgets"
+                state="vm.state"
+                ui-state="vm.uiState"
+                analytic="analytic">
+            </dashboard-analytic-tile-component>
+        </div>
+    </div> -->
     <!-- end: Analytic Widgets -->
+
     <!-- start: Completed Workstreams -->
-    <div class="container-fluid container-fullw">
+    <!-- <div class="container-fluid container-fullw">
         <div class="row">
             <div ng-repeat="workstream in vm.state.completeWorkstreams">
                 <div class="col-sm-6 margin-bottom-20">
@@ -68,21 +76,8 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
     <!-- end: Completed Workstreams -->
-
-    <div class="container-fluid container-fullw">
-    
-        <div class="row">
-            <!-- For each workstream, create a box -->
-            <dashboard-analytic-tile-component
-                ng-repeat="analytic in vm.state.analytics"
-                state="vm.state"
-                ui-state="vm.uiState"
-                analytic="analytic">
-            </dashboard-analytic-tile-component>
-        </div>
-    </div>
 
     <div data-ng-include data-src=" 'assets/js/dashboard/dashboard-workstream-tile/dashboard-workstream-tile-video.modal.html' " ></div>
 
