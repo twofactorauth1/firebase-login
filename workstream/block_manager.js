@@ -9,6 +9,7 @@ var logger = $$.g.getLogger("block_manager");
 var blockDao = require('./dao/block.dao');
 var accountDao = require('../dao/account.dao');
 var pageDao = require('../ssb/dao/page.dao');
+var assetManager = require('../assets/asset_manager');
 var async = require('async');
 
 module.exports = {
@@ -102,7 +103,8 @@ module.exports = {
         var lookup = {
             '0': self._handleCreatePage,
             '1': self._handleCreateFormOnPage,
-            '2': self._handleFormSettingsForLeads
+            '2': self._handleFormSettingsForLeads,
+            '3': self._handleUploadMedia
         };
         if(typeof lookup[''+blockId] !== 'function') {
             self.log.warn('No handler found for blockId:' + blockId);
@@ -153,6 +155,23 @@ module.exports = {
             } else {
                 //self.log.debug('<< _handleCreateFormOnPage', exists);
                 fn(null, exists);
+            }
+        });
+    },
+
+    _handleUploadMedia: function(account, block, fn) {
+        //findBySource(S3)
+        var self = this;
+        assetManager.findBySource(account.id(), 'S3', 0, 0, function(err, assets){
+            if(err || !assets) {
+                fn(err);
+            } else {
+                if(assets && assets.length > 0) {
+                    return fn(null, true);
+                } else {
+                    return fn(null, false);
+                }
+
             }
         });
     }
