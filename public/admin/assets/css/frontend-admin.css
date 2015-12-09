@@ -7060,6 +7060,10 @@ a[href="https://froala.com/wysiwyg-editor"] {
 .workstream-tile-container.workstream-state-unlocked .workstream-panel-circle {
   background: gray;
 }
+.workstream-tile-container a.workstream-block-complete {
+  color: #1a5200;
+  pointer-events: none;
+}
 .workstream-detail-panel {
   background: #fff;
   width: 100%;
