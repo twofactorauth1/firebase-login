@@ -11,6 +11,11 @@ var accountDao = require('../dao/account.dao');
 var pageDao = require('../ssb/dao/page.dao');
 var websiteDao = require('../ssb/dao/website.dao');
 var assetManager = require('../assets/asset_manager');
+var contactDao = require('../dao/contact.dao');
+var emailDao = require('../cms/dao/email.dao');
+var campaignDao = require('../campaign/dao/campaign.dao');
+var socialConfigDao = require('../socialconfig/dao/socialconfig.dao');
+var productDao = require('../products/dao/product.dao');
 var async = require('async');
 
 module.exports = {
@@ -106,7 +111,16 @@ module.exports = {
             '1': self._handleCreateFormOnPage,
             '2': self._handleFormSettingsForLeads,
             '3': self._handleUploadMedia,
-            '4': self._handleWebsiteAndSEO
+            '4': self._handleWebsiteAndSEO,
+            '5': self._handleAssociateDomain,
+            '6': self._handleAddContacts,
+            '7': self._handleConfigureAutoresponseEmail,
+            '8': self._handleConfigureCampaign,
+            '9': self._handleSocialMediaIntegration,
+            '10': self._handleCreateBlogPost,
+            '11': self._handleIntegrateStripe,
+            '12': self._handleAddProduct,
+            '13': self._handleSetupOnlineStore
         };
         if(typeof lookup[''+blockId] !== 'function') {
             self.log.warn('No handler found for blockId:' + blockId);
@@ -197,7 +211,111 @@ module.exports = {
                 fn(null, exists);
             }
         });
+    },
+
+    _handleAssociateDomain: function(account, block, fn) {
+        var query = {_id:account.id(), customDomain: {$ne: ''}};
+        accountDao.exists(query, $$.m.Account, function(err, exists){
+            if(err) {
+                //self.log.error('Error checking for page with form existence:', err);
+                fn(err);
+            } else {
+                //self.log.debug('<< _handleCreateFormOnPage', exists);
+                fn(null, exists);
+            }
+        });
+    },
+
+    _handleAddContacts: function(account, block, fn) {
+        var query = {accountId:account.id()};
+        contactDao.exists(query, $$.m.Contact, function(err, exists){
+            if(err) {
+                fn(err);
+            } else {
+                fn(null, exists);
+            }
+        });
+    },
+
+    _handleConfigureAutoresponseEmail: function(account, block, fn) {
+        //look for emails with type email
+        var query = {accountId:account.id(), type:'email'};
+        emailDao.exists(query, $$.m.cms.Email, function(err, exists){
+            if(err) {
+                fn(err);
+            } else {
+                fn(null, exists);
+            }
+        });
+    },
+
+    _handleConfigureCampaign: function(account, block, fn) {
+        var query = {accountId:account.id()};
+        campaignDao.exists(query, $$.m.Campaign, function(err, exists){
+            if(err) {
+                fn(err);
+            } else {
+                fn(null, exists);
+            }
+        });
+    },
+
+    _handleSocialMediaIntegration: function(account, block, fn) {
+        var query={accountId:account.id(), 'socialAccounts.0': {$exists:true}};
+        socialConfigDao.exists(query, $$.m.SocialConfig, function(err, exists){
+            if(err) {
+                fn(err);
+            } else {
+                fn(null, exists);
+            }
+        });
+    },
+
+    _handleCreateBlogPost: function(account, block, fn) {
+        var query = {accountId:account.id(), post_status:'PUBLISHED'};
+        pageDao.exists(query, $$.m.BlogPost, function(err, exists){
+            if(err) {
+                fn(err);
+            } else {
+                fn(null, exists);
+            }
+        });
+    },
+
+    _handleIntegrateStripe: function(account, block, fn) {
+        var query = {_id:account.id(), 'credentials.type':'stripe'};
+        accountDao.exists(query, $$.m.Account, function(err, exists){
+            if(err) {
+                fn(err);
+            } else {
+                fn(null, exists);
+            }
+        });
+    },
+
+    _handleAddProduct: function(account, block, fn) {
+        var query = {accountId:account.id(), status:'active'};
+        productDao.exists(query, $$.m.Product, function(err, exists){
+            if(err) {
+                fn(err);
+            } else {
+                fn(null, exists);
+            }
+        });
+
+    },
+
+    _handleSetupOnlineStore: function(account, block, fn) {
+        var query = {accountId:account.id(), latest:true, 'components.type':'products'};
+        pageDao.exists(query, $$.m.cms.Page, function(err, exists){
+            if(err) {
+                fn(err);
+            } else {
+                fn(null, exists);
+            }
+        });
     }
+
 
 
 }
