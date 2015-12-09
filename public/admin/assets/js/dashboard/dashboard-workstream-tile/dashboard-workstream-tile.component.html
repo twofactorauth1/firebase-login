@@ -1,7 +1,7 @@
-<div class="workstream-tile-container image__cell" ng-class="{ 'workstream-state-unlocked': vm.workstream.unlocked, 'workstream-state-complete': vm.workstream.complete, 'is-collapsed': !vm.uiState.openWorkstream._id === vm.workstream._id, 'is-expanded': vm.uiState.openWorkstream._id === vm.workstream._id}">
+<div class="workstream-tile-container image--basic" ng-class="{ 'workstream-state-unlocked': vm.workstream.unlocked, 'workstream-state-complete': vm.workstream.complete }">
 
     <div
-        class="indi-circle workstream-panel-circle image--basic panel panel-white text-center margin-bottom-0 cursor-pointer"
+        class="indi-circle workstream-panel-circle panel panel-white text-center margin-bottom-0 cursor-pointer"
         ng-click="vm.workstreamClick()">
 
         <img class="indi-circle-img" src="http://s3.amazonaws.com/indigenous-digital-assets/account_6/dohy-circle-configure-business-profile_1449548586772.png" alt="{{vm.workstream.name}}" />
@@ -12,9 +12,7 @@
 
     </div>
 
-    <div
-        ng-if="vm.uiState.openWorkstream._id == vm.workstream._id"
-        class="workstream-detail-panel image--expand panel-body">
+    <div class="workstream-detail-panel image--expand panel-body">
 
         <h3 class="workstream-title">{{vm.workstream.name}}</h3>
 

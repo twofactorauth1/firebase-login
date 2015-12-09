@@ -7015,25 +7015,22 @@ a[href="https://froala.com/wysiwyg-editor"] {
 }
 @media only screen and (min-width: 531px) {
   .dohy-dashboard-container .image__cell {
-    width: 20%;
+    width: 25%;
   }
-  .dohy-dashboard-container .image__cell:nth-of-type(5n+2) .image--expand {
+  .dohy-dashboard-container .image__cell:nth-of-type(4n+2) .image--expand {
     margin-left: -100%;
   }
-  .dohy-dashboard-container .image__cell:nth-of-type(5n+3) .image--expand {
+  .dohy-dashboard-container .image__cell:nth-of-type(4n+3) .image--expand {
     margin-left: -200%;
   }
-  .dohy-dashboard-container .image__cell:nth-of-type(5n+4) .image--expand {
+  .dohy-dashboard-container .image__cell:nth-of-type(4n+4) .image--expand {
     margin-left: -300%;
   }
-  .dohy-dashboard-container .image__cell:nth-of-type(5n+5) .image--expand {
-    margin-left: -400%;
-  }
-  .dohy-dashboard-container .image__cell:nth-of-type(5n+6) {
+  .dohy-dashboard-container .image__cell:nth-of-type(4n+5) .image--expand {
     clear: left;
   }
   .dohy-dashboard-container .image--expand {
-    width: 500%;
+    width: 400%;
   }
 }
 .dohy-dashboard-container #page-title,
@@ -7063,9 +7060,6 @@ a[href="https://froala.com/wysiwyg-editor"] {
 .workstream-detail-panel {
   background: #fff;
   width: 100%;
-  position: absolute;
-  top: auto;
-  left: 0;
 }
 .dashboard-video .container {
   max-width: 100%;

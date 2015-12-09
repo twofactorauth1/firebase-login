@@ -21,8 +21,10 @@
 
     <!-- start: Incomplete Workstreams -->
     <div class="workstream-container container-fluid container-fullw">
-        <div class="row">
-            <div class="image-grid" ng-repeat="workstream in vm.state.workstreams track by $index">
+        <div class="image-grid row">
+            <div
+                class="image__cell"
+                ng-repeat="workstream in vm.state.workstreams track by $index">
                 <dashboard-analytic-tile-component
                     ng-if="workstream.completed"
                     ng-repeat="analytic in workstream.analytics track by $index"
@@ -32,8 +34,11 @@
                 </dashboard-analytic-tile-component>
             </div>
         </div>
-        <div class="row">
-            <div class="image-grid" ng-repeat="workstream in vm.state.workstreams track by $index">
+        <div class="image-grid row">
+            <div
+                class="image__cell"
+                ng-repeat="workstream in vm.state.workstreams track by $index"
+                ng-class="{ 'is-collapsed': vm.uiState.openWorkstream._id !== vm.state.workstream._id, 'is-expanded': vm.uiState.openWorkstream._id === vm.state.workstream._id }">
                 <dashboard-workstream-tile-component
                     ng-if="!workstream.completed"
                     state="vm.state"
