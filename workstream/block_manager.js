@@ -9,6 +9,7 @@ var logger = $$.g.getLogger("block_manager");
 var blockDao = require('./dao/block.dao');
 var accountDao = require('../dao/account.dao');
 var pageDao = require('../ssb/dao/page.dao');
+var websiteDao = require('../ssb/dao/website.dao');
 var assetManager = require('../assets/asset_manager');
 var async = require('async');
 
@@ -104,7 +105,8 @@ module.exports = {
             '0': self._handleCreatePage,
             '1': self._handleCreateFormOnPage,
             '2': self._handleFormSettingsForLeads,
-            '3': self._handleUploadMedia
+            '3': self._handleUploadMedia,
+            '4': self._handleWebsiteAndSEO
         };
         if(typeof lookup[''+blockId] !== 'function') {
             self.log.warn('No handler found for blockId:' + blockId);
@@ -172,6 +174,27 @@ module.exports = {
                     return fn(null, false);
                 }
 
+            }
+        });
+    },
+
+    _handleWebsiteAndSEO: function(account, block, fn) {
+        //website.settings.favicon
+        //website.title != 'Default Website Title'
+        //website.seo.description
+        var query = {
+            accountId:account.id(),
+            'settings.favicon': {$exists:true},
+            'seo.description': {$exists:true},
+            'title': {$ne: 'Default Website Title'}
+        };
+        websiteDao.exists(query, $$.m.ssb.Website, function(err, exists){
+            if(err) {
+                //self.log.error('Error checking for page with form existence:', err);
+                fn(err);
+            } else {
+                //self.log.debug('<< _handleCreateFormOnPage', exists);
+                fn(null, exists);
             }
         });
     }
