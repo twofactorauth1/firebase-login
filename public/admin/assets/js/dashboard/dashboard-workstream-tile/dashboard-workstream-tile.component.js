@@ -1,7 +1,7 @@
 (function(){
 
 app.directive('dashboardWorkstreamTileComponent', dashboardWorkstreamTile);
-
+/* @ngInject */
 function dashboardWorkstreamTile() {
 
     return {

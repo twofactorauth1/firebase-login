@@ -1,7 +1,7 @@
 (function(){
 
 app.directive('dashboardAnalyticTileComponent', dashboardAnalyticTile);
-
+/* @ngInject */
 function dashboardAnalyticTile() {
 
     return {
