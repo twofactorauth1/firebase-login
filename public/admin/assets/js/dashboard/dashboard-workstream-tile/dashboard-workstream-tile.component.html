@@ -1,4 +1,4 @@
-<div class="workstream-tile-container image--basic" ng-class="{ 'workstream-state-unlocked': vm.workstream.unlocked, 'workstream-state-complete': vm.workstream.complete }">
+<div class="workstream-tile-container image--basic" ng-class="{ 'workstream-state-unlocked': vm.workstream.unlocked, 'workstream-state-completed': vm.workstream.completed }">
 
     <div
         class="indi-circle workstream-panel-circle panel panel-white text-center margin-bottom-0 cursor-pointer"
@@ -36,7 +36,7 @@
             <ol class="workstream-block-list list-unstyled" ng-if="vm.workstream.unlocked">
                 <li class="workstream-block-list-item" ng-repeat="block in vm.uiState.openWorkstream.blocks">
                     <a
-                        href="/#{{block.link}}"
+                        href="#{{block.link}}"
                         class="workstream-block-link checkbox clip-check check-primary checkbox-inline"
                         ng-class="{ 'workstream-block-complete': block.complete}"
                         tooltip-placement="right"

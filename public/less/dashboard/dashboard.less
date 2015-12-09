@@ -10,9 +10,11 @@
         background-image: url('http://s3.amazonaws.com/indigenous-digital-assets/account_6/dohy-bg-mountain-1_1449539273222.jpg');
         background-repeat: no-repeat;
         background-size: cover;
-        min-height: 2000px;
+        // min-height: 1000px;
         // min-height: calc(~'100vh - 70px');
+        min-height: 100vh;
         margin: 0 -15px;
+        background-attachment: fixed;
     }
 
     @import "grid.less";
@@ -74,6 +76,14 @@
 
     }
 
+    &.workstream-state-completed {
+
+        .workstream-panel-circle {
+            background: green;
+        }
+
+    }
+
     a.workstream-block-complete{
        // pointer-events: none;
         &:after{
@@ -83,6 +93,18 @@
         }
     }
 
+}
+
+.workstream-progress-bar {
+    position: absolute;
+    top: 45%;
+    left: 50%;
+    width: 80%;
+    background: blue;
+    height: 8px;
+    transform: translate(-50%, -45%);
+    border-radius: 5em;
+    box-shadow: 0 0 0px 4px rgba(0,0,0,.5);
 }
 
 .is-expanded {
@@ -109,15 +131,24 @@
 }
 
 .dashboard-logo {
+    // box-shadow: @boxShadow;
     max-width: 100px;
-    box-shadow: @boxShadow;
     max-height: 200px;
     background-color: transparent;
     width: 75%;
     height: auto;
     margin: 0 auto;
     cursor: pointer;
-    overflow: hidden;
+    // overflow: hidden;
+
+    .indi-circle-img {
+        background: #f3f3f3;
+        opacity: .5!important;
+    }
+
+    img {
+        width: 100%;
+    }
 }
 
 .dashboard-logo-edit {

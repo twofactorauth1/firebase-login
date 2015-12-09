@@ -6921,8 +6921,9 @@ a[href="https://froala.com/wysiwyg-editor"] {
   background-image: url('http://s3.amazonaws.com/indigenous-digital-assets/account_6/dohy-bg-mountain-1_1449539273222.jpg');
   background-repeat: no-repeat;
   background-size: cover;
-  min-height: 2000px;
+  min-height: 100vh;
   margin: 0 -15px;
+  background-attachment: fixed;
 }
 .dohy-dashboard-container .basic__img *,
 .dohy-dashboard-container .expand__clos *,
@@ -6981,7 +6982,6 @@ a[href="https://froala.com/wysiwyg-editor"] {
   overflow: hidden;
   background: #f3f3f3;
   max-height: 0;
-  transition: max-height 0.3s ease-in-out, margin-bottom 0.1s 0.2s;
 }
 .dohy-dashboard-container .image--expand [class^="col-"],
 .dohy-dashboard-container .image--expand [class*=" col-"] {
@@ -7115,14 +7115,18 @@ a[href="https://froala.com/wysiwyg-editor"] {
 }
 .dashboard-logo {
   max-width: 100px;
-  box-shadow: 0px 0px 0px 5px rgba(0, 0, 0, 0.1);
   max-height: 200px;
   background-color: transparent;
   width: 75%;
   height: auto;
   margin: 0 auto;
   cursor: pointer;
-  overflow: hidden;
+}
+.dashboard-logo .indi-circle-img {
+  background: #f3f3f3;
+}
+.dashboard-logo img {
+  width: 100%;
 }
 .dashboard-logo-edit {
   text-align: center;
