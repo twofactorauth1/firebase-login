@@ -1,14 +1,21 @@
 /* DOHY */
 
+@boxShadow: 0px 0px 0px 5px rgba(0,0,0,.1);
+@headerFontFamily: 'Raleway', sans-serif;
+
 .dohy-dashboard-container {
 
-    @import "grid.less";
+    .dohy-dashboard-inner {
+        background-color: black;
+        background-image: url('http://s3.amazonaws.com/indigenous-digital-assets/account_6/dohy-bg-mountain-1_1449539273222.jpg');
+        background-repeat: no-repeat;
+        background-size: cover;
+        min-height: 2000px;
+        // min-height: calc(~'100vh - 70px');
+        margin: 0 -15px;
+    }
 
-    background-color: black;
-    background-image: url('http://s3.amazonaws.com/indigenous-digital-assets/account_6/dohy-bg-mountain-1_1449539273222.jpg');
-    background-repeat: no-repeat;
-    // background-size: cover;
-    background-size: 100% auto;
+    @import "grid.less";
 
     #page-title, .container-fullw {
         border: none;
@@ -17,6 +24,8 @@
     #page-title .mainTitle, #page-title .mainDescription {
         color: white;
         text-align: center;
+        font-family: @headerFontFamily;
+        font-weight: bold;
     }
 }
 
@@ -25,13 +34,13 @@
 }
 
 .workstream-tile-container {
-    margin: 0 1em;
+    margin: 0;// 1em;
 
     .workstream-panel-circle {
-        // float: left;
-        // width: 50%;
-        // padding: .5em;
-        // vertical-align: top;
+
+        &:hover {
+            background-color: #eca300!important;
+        }
 
         @media screen and (min-width: 768px) {
             // width: 25%;
@@ -48,6 +57,11 @@
         text-align: left;
     }
 
+    .workstream-block-link {
+        color: #5bc0de;
+        font-weight: bold;
+    }
+
     .tooltip {
         min-width: 10em;
     }
@@ -55,13 +69,13 @@
     &.workstream-state-unlocked {
 
         .workstream-panel-circle {
-            background: gray;
+            background: #5bc0de;
         }
 
     }
 
-    a.workstream-block-complete{        
-        pointer-events: none;
+    a.workstream-block-complete{
+       // pointer-events: none;
         &:after{
           content:'\2713';
           color: #1a5200;
@@ -71,12 +85,20 @@
 
 }
 
+.is-expanded {
+    .workstream-panel-circle {
+        background-color: #eca300!important;
+    }
+}
+
 .workstream-detail-panel {
-    background: #fff;
+    background: #f3f3f3;
     width: 100%;
-    // position: absolute;
-    // top: auto;
-    // left: 0;
+
+    .workstream-title {
+        font-weight: bold;
+        color: #3b3b3b;
+    }
 }
 
 .dashboard-video {
@@ -85,9 +107,19 @@
         padding: 15px;
     }
 }
+
 .dashboard-logo {
     max-width: 100px;
+    box-shadow: @boxShadow;
+    max-height: 200px;
+    background-color: transparent;
+    width: 75%;
+    height: auto;
+    margin: 0 auto;
+    cursor: pointer;
+    overflow: hidden;
 }
+
 .dashboard-logo-edit {
     text-align: center;
     font-size: 10px;
@@ -119,12 +151,13 @@
 
 .indi-circle {
     background-color: transparent;
-    width: 100%;
+    width: 75%;
     height: auto;
     margin: 0 auto;
     cursor: pointer;
     border-radius: 50% 50%;
     overflow: hidden;
+    box-shadow: @boxShadow;
 
     .indi-circle-title {
         position: absolute;
@@ -133,11 +166,14 @@
         height: calc(~'50% - .5em');
         padding: 1em .5em;
         color: #50b0c9;
+        font-family: @headerFontFamily;
         font-weight: bold;
-        background: #ffffff;
+        font-size: 1.25em;
+        background: #f3f3f3;
         width: 100%;
         text-align: center;
         box-shadow: 0px -9px 10px -6px rgba(0, 0, 0, .3);
+        margin-bottom: 0;
     }
 
     .indi-circle-img {
@@ -145,6 +181,7 @@
         height: auto;
         box-shadow: 0px 0px 1px 2px rgba(0, 0, 0, .3);
         border-radius: 50% 50%;
+        opacity: .8;
     }
 
     .panel-body {
@@ -170,7 +207,7 @@
     max-width: 100%;
     height: auto;
     line-height: 1.42857143;
-    background-color: #fff;
+    background-color: #f3f3f3;
     border: 4px solid rgba(0,0,0,0.4);
     border-radius: 10px;
 
@@ -181,7 +218,7 @@
         right: 10px;
         padding: .5em .5em;
         font-weight: bold;
-        background: #ffffff;
+        background: #f3f3f3;
         width: 90%;
         font-size: 20px;
         text-align: center;
@@ -203,7 +240,6 @@
         height: auto;
         padding: 4px;
         line-height: 1.42857143;
-
         border: none;
         border-radius: 10px;
     }
@@ -227,7 +263,7 @@
 }
 .workstream-video-thumbnail{
     .workstream-poster-container{
-        width: 70%;
+        width: 100%;
         .workstream-poster-image-container{
             position: relative;
             span{
@@ -245,6 +281,6 @@
                 width: 100%;
             }
         }
-            
+
     }
 }
