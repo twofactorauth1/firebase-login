@@ -6951,7 +6951,7 @@ a[href="https://froala.com/wysiwyg-editor"] {
   cursor: pointer;
 }
 .dohy-dashboard-container .image__cell.is-expanded .image--expand {
-  max-height: 500px;
+  max-height: 100%;
   margin-bottom: 10px;
 }
 .dohy-dashboard-container .image--expand {
@@ -7174,4 +7174,24 @@ a[href="https://froala.com/wysiwyg-editor"] {
   position: absolute;
   width: 100%;
   height: auto;
+}
+.workstream-video-thumbnail .workstream-poster-container {
+  width: 70%;
+}
+.workstream-video-thumbnail .workstream-poster-container .workstream-poster-image-container {
+  position: relative;
+}
+.workstream-video-thumbnail .workstream-poster-container .workstream-poster-image-container span {
+  color: red;
+  position: absolute;
+  bottom: 0;
+  top: 0;
+  right: 0;
+  left: 0;
+  margin: auto;
+  width: 5px;
+  height: 5px;
+}
+.workstream-video-thumbnail .workstream-poster-container .workstream-poster-image-container .workstream-poster-image {
+  width: 100%;
 }
