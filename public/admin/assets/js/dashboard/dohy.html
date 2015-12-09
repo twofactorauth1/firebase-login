@@ -38,7 +38,7 @@
             <div
                 class="image__cell"
                 ng-repeat="workstream in vm.state.workstreams track by $index"
-                ng-class="{ 'is-collapsed': vm.uiState.openWorkstream._id !== vm.state.workstream._id, 'is-expanded': vm.uiState.openWorkstream._id === vm.state.workstream._id }">
+                ng-class="{ 'is-collapsed': vm.uiState.openWorkstream._id !== workstream._id, 'is-expanded': vm.uiState.openWorkstream._id === workstream._id }">
                 <dashboard-workstream-tile-component
                     ng-if="!workstream.completed"
                     state="vm.state"
