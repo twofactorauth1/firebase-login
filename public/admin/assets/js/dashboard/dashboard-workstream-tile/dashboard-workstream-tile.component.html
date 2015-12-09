@@ -39,11 +39,11 @@
             {{vm.uiState.openWorkstream.completePercentage}}
         </div>
 
-        <div class="workstream-video-thumbnail" ng-if="vm.workstream.unlocked" ng-init="vm.getVideoPosterImage(vm.workstream)">            
+        <div class="workstream-video-thumbnail" ng-if="vm.workstream.unlocked" ng-init="vm.getVideoConfigObject(vm.workstream)">            
             <div class="workstream-poster-container cursor-pointer" ng-click="vm.playWorkstreamVideo()">                
                <div class="workstream-poster-image-container">
                     <span><i class="fa fa-youtube-play fa-3x"/></span>
-                    <img class="workstream-poster-image" src="{{vm.posterImage}}">
+                    <img class="workstream-poster-image" src="{{vm.videoConfig.videoPosterImage}}">
                </div>               
                 
             </div>            

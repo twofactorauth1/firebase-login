@@ -15,7 +15,7 @@ function dashboardWorkstreamTileComponentController($scope, $attrs, $filter, Das
     vm.openModal = openModal;
     vm.closeModal = closeModal;
     vm.getVideoConfigObject = getVideoConfigObject;
-    vm.getVideoPosterImage = getVideoPosterImage;
+    
     vm.videoConfig = {
         version: 3,
         text: null,
@@ -30,6 +30,7 @@ function dashboardWorkstreamTileComponentController($scope, $attrs, $filter, Das
         videoMp4: false,
         videoWebm: false,
         videoControls: false
+
     }
 
     // vm.onPlayerReady = onPlayerReady;
@@ -106,26 +107,20 @@ function dashboardWorkstreamTileComponentController($scope, $attrs, $filter, Das
     //     debugger;
     // }
 
-    function getVideoConfigObject(workstream) {      
+    function getVideoConfigObject(workstream) {  
+        var parsedUrl = urlParser.parse(workstream.unlockVideoUrl);
+        var posterImage = null      
+        if(parsedUrl){
+          posterImage = "//img.youtube.com/vi/"+parsedUrl.id+"/0.jpg";
+        }   
         return (
             angular.extend(vm.videoConfig, {
                 video: workstream.unlockVideoUrl,
-                videoAutoPlay: true
+                videoAutoPlay: true,
+                videoPosterImage : posterImage
             })
         )
     }
-
-    function getVideoPosterImage(workstream){
-      var videoUrl = workstream.unlockVideoUrl;
-      var videoUrlArr = videoUrl.split("?v=");
-      var img = null;
-      if(videoUrlArr.length > 1){
-        img = videoUrlArr[1];
-      }
-      var posterImage = "//img.youtube.com/vi/"+img+"/0.jpg";
-      vm.posterImage = posterImage;
-    }
-
     function init(element) {
         vm.element = element;
     }
