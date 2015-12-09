@@ -27,6 +27,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('workstreams'), this.isAuthAndSubscribedApi.bind(this), this.getWorkstreamsForAccount.bind(this));
         app.get(this.url('workstreams/:id'), this.isAuthAndSubscribedApi.bind(this), this.getWorkstream.bind(this));
         app.post(this.url('workstreams/:id/unlock'), this.isAuthAndSubscribedApi.bind(this), this.unlockWorkstream.bind(this));
+        app.post(this.url('workstreams/:id/blocks/:blockId/complete'), this.isAuthAndSubscribedApi.bind(this), this.markBlockComplete.bind(this));
 
         //these might need to move into their own api
         app.get(this.url('reports/contactsByDay'), this.isAuthAndSubscribedApi.bind(this), this.getContactsByDayReport.bind(this));
@@ -81,6 +82,23 @@ _.extend(api.prototype, baseApi.prototype, {
         workstreamManager.unlockWorkstream(accountId, workstreamId, function(err, workstream){
             self.log.debug('<< unlockWorkstream');
             return self.sendResultOrError(resp, err, workstream, "Error unlocking workstream");
+        });
+    },
+
+    markBlockComplete: function(req, resp) {
+        var self = this;
+        self.log.debug('>> markBlockComplete');
+        var accountId = parseInt(self.accountId(req));
+        var workstreamId = req.params.id;
+        var blockId = parseInt(req.params.blockId);
+        var modified = {
+            by: self.userId(req),
+            date: new Date()
+        };
+
+        workstreamManager.markBlockComplete(accountId, workstreamId, blockId, modified, function(err, workstream){
+            self.log.debug('<< markBlockComplete');
+            return self.sendResultOrError(resp, err, workstream, "Error marking block complete");
         });
     },
 

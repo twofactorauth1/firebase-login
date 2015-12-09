@@ -20,10 +20,10 @@ var workstream = $$.m.ModelBase.extend({
             unlocked: false,
             completed: false,
             blocks:[],
-            deepDiveVideoUrls:[],
-            analyticWidgets:[],
+            analyticWidgets:[],//insights
             name: '',
             icon: '',
+            bgImage: '',
             _v:"0.1",
             created: {
                 date: new Date(),

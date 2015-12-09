@@ -105,8 +105,8 @@ module.exports = {
             '2': self._handleFormSettingsForLeads
         };
         if(typeof lookup[''+blockId] !== 'function') {
-            self.log.error('No handler found for blockId:' + blockId);
-            return fn('No handler found for blockId:' + blockId);
+            self.log.warn('No handler found for blockId:' + blockId);
+            return fn('', false);
         }
         return lookup[''+blockId](account, block, fn);
     },

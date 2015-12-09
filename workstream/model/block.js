@@ -18,6 +18,8 @@ var block = $$.m.ModelBase.extend({
             name:'',
             link:'',
             helpText:'',
+            helpTopics:[],
+            helpVideos:[],
             _v:"0.1",
             created: {
                 date: new Date(),
