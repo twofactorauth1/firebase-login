@@ -8,10 +8,11 @@ app.directive('videoComponent',['$sce', function ($sce) {
       scope.flvVideoUrl = function (iframeUrl, url, autoPlay) {
         var parsedUrl = urlParser.parse(url);
         var retUrl = "";
-        if (parsedUrl)
+        if (parsedUrl) {
           retUrl = iframeUrl + parsedUrl.id + '?showinfo=0&rel=0&hd=1';
           if(autoPlay)
             retUrl = retUrl + '&autoplay=1';
+        }
         else
           retUrl = iframeUrl
         return $sce.trustAsResourceUrl(retUrl);
