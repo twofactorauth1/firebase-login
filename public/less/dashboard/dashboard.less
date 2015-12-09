@@ -60,9 +60,13 @@
 
     }
 
-    a.workstream-block-complete{
-        color: #1a5200;
+    a.workstream-block-complete{        
         pointer-events: none;
+        &:after{
+          content:'\2713';
+          color: #1a5200;
+          font-weight: bold;
+        }
     }
 
 }
