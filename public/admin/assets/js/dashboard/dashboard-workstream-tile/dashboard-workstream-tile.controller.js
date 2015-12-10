@@ -141,7 +141,9 @@ function dashboardWorkstreamTileComponentController($scope, $attrs, $filter, Das
             vm.openMediaModal('media-modal', 'MediaModalCtrl', 'lg');
             break;
         case "websiteseo":
-            openAside('top');
+            $timeout(function () {
+                angular.element(".topbar-settings").click();
+            }, 0)
             break;    
         default:
             //code
