@@ -78,8 +78,9 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> unlockWorkstream');
         var accountId = parseInt(self.accountId(req));
         var workstreamId = req.params.id;
+        var userId = self.userId(req);
 
-        workstreamManager.unlockWorkstream(accountId, workstreamId, function(err, workstream){
+        workstreamManager.unlockWorkstream(accountId, workstreamId, userId, function(err, workstream){
             self.log.debug('<< unlockWorkstream');
             return self.sendResultOrError(resp, err, workstream, "Error unlocking workstream");
         });

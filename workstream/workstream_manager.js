@@ -12,6 +12,7 @@ var accountDao = require('../dao/account.dao');
 var contactDao = require('../dao/contact.dao');
 
 var blockManager = require('./block_manager');
+var userActivityManager = require('../useractivities/useractivity_manager');
 var async = require('async');
 
 module.exports = {
@@ -120,7 +121,7 @@ module.exports = {
         });
     },
 
-    unlockWorkstream: function(accountId, workstreamId, fn) {
+    unlockWorkstream: function(accountId, workstreamId, userId, fn) {
         var self = this;
         self.log.debug('>> unlockWorkstream');
 
@@ -137,7 +138,14 @@ module.exports = {
                         return fn(err);
                     } else {
                         self.log.debug('<< unlockWorkstream');
-                        return fn(null, updatedWorkstream);
+                        fn(null, updatedWorkstream);
+                        var userActivity = new $$.m.UserActivity({
+                            accountId: accountId,
+                            userId: userId,
+                            activityType:$$.m.UserActivity.types.UNLOCK_WORKSTREAM,
+                            note: 'Workstream ' + workstreamId
+                        });
+                        return userActivityManager.createUserActivity(userActivity, function(){});
                     }
                 });
 
@@ -167,7 +175,14 @@ module.exports = {
                         return fn(err);
                     } else {
                         self.log.debug('<< markBlockComplete');
-                        return fn(null, stream);
+                        fn(null, stream);
+                        var userActivity = new $$.m.UserActivity({
+                            accountId: accountId,
+                            userId: modified.by,
+                            activityType:$$.m.UserActivity.types.MARK_BLOCK_COMPLETE,
+                            note: 'Workstream ' + workstreamId + 'and Block:' + blockId
+                        });
+                        return userActivityManager.createUserActivity(userActivity, function(){});
                     }
                 });
             }
