@@ -2,9 +2,9 @@
 
 app.controller('DashboardWorkstreamTileComponentController', dashboardWorkstreamTileComponentController);
 
-dashboardWorkstreamTileComponentController.$inject = ['$scope', '$attrs', '$filter', 'DashboardService', '$modal'];
+dashboardWorkstreamTileComponentController.$inject = ['$scope', '$attrs', '$filter', 'DashboardService', '$modal', '$timeout', '$document'];
 /* @ngInject */
-function dashboardWorkstreamTileComponentController($scope, $attrs, $filter, DashboardService, $modal) {
+function dashboardWorkstreamTileComponentController($scope, $attrs, $filter, DashboardService, $modal, $timeout, $document) {
 
     var vm = this;
 
@@ -52,8 +52,14 @@ function dashboardWorkstreamTileComponentController($scope, $attrs, $filter, Das
                 vm.uiState.openWorkstream = null;
 
             } else {
-
                 vm.uiState.openWorkstream = vm.workstream;
+                $timeout(function () {
+                    var elementId = vm.workstream._id;
+                    var element = document.getElementById(elementId);
+                    if (element) {
+                      $document.scrollToElementAnimated(element, 175, 1000);
+                    }
+                }, 0);
 
             }
 
