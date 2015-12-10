@@ -297,19 +297,36 @@
         width: 100%;
         .workstream-poster-image-container{
             position: relative;
-            span{
-                color: red;
+            .fa{
+                color: #1f1f1f;
                 position: absolute;
-                bottom: 0;
-                top: 0;
+                top: 0px;
+                opacity: .81;
                 right: 0;
                 left: 0;
                 margin: auto;
-                width: 5px;
-                height: 5px;
+                bottom: 0;
+                height: 18px;
+                width: 53px;
+                line-height: 18px;
+                .icon-inner{
+                    background: white;
+                    height: 30px;                    
+                    margin-top: -23px;
+                    z-index: -1;
+                    width: 30px;
+                    opacity: 1;
+                    margin-left: 12px;
+                }
             }
             .workstream-poster-image{
                 width: 100%;
+            }
+            &:hover{
+                .fa{
+                    color: #cc181e;
+                    opacity: 1;
+                }
             }
         }
 

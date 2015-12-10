@@ -7093,10 +7093,24 @@ a[href="https://froala.com/wysiwyg-editor"] {
 .workstream-tile-container.workstream-state-unlocked .workstream-panel-circle {
   background: #5bc0de;
 }
+.workstream-tile-container.workstream-state-completed .workstream-panel-circle {
+  background: green;
+}
 .workstream-tile-container a.workstream-block-complete:after {
   content: '\2713';
   color: #1a5200;
   font-weight: bold;
+}
+.workstream-progress-bar {
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  width: 80%;
+  background: blue;
+  height: 8px;
+  transform: translate(-50%, -45%);
+  border-radius: 5em;
+  box-shadow: 0 0 0px 4px rgba(0, 0, 0, 0.5);
 }
 .is-expanded .workstream-panel-circle {
   background-color: #eca300!important;
@@ -7124,6 +7138,7 @@ a[href="https://froala.com/wysiwyg-editor"] {
 }
 .dashboard-logo .indi-circle-img {
   background: #f3f3f3;
+  opacity: .5!important;
 }
 .dashboard-logo img {
   width: 100%;
@@ -7243,17 +7258,32 @@ a[href="https://froala.com/wysiwyg-editor"] {
 .workstream-video-thumbnail .workstream-poster-container .workstream-poster-image-container {
   position: relative;
 }
-.workstream-video-thumbnail .workstream-poster-container .workstream-poster-image-container span {
-  color: red;
+.workstream-video-thumbnail .workstream-poster-container .workstream-poster-image-container .fa {
+  color: #1f1f1f;
   position: absolute;
-  bottom: 0;
-  top: 0;
+  top: 0px;
+  opacity: .81;
   right: 0;
   left: 0;
   margin: auto;
-  width: 5px;
-  height: 5px;
+  bottom: 0;
+  height: 18px;
+  width: 53px;
+  line-height: 18px;
+}
+.workstream-video-thumbnail .workstream-poster-container .workstream-poster-image-container .fa .icon-inner {
+  background: white;
+  height: 30px;
+  margin-top: -23px;
+  z-index: -1;
+  width: 30px;
+  opacity: 1;
+  margin-left: 12px;
 }
 .workstream-video-thumbnail .workstream-poster-container .workstream-poster-image-container .workstream-poster-image {
   width: 100%;
+}
+.workstream-video-thumbnail .workstream-poster-container .workstream-poster-image-container:hover .fa {
+  color: #cc181e;
+  opacity: 1;
 }
