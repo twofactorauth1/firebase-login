@@ -15,6 +15,8 @@ function dashboardWorkstreamTileComponentController($scope, $attrs, $filter, Das
     vm.openModal = openModal;
     vm.closeModal = closeModal;
     vm.getVideoConfigObject = getVideoConfigObject;
+    vm.callAliasMethod = callAliasMethod;
+    vm.openMediaModal = openMediaModal;
     
     vm.videoConfig = {
         version: 3,
@@ -127,6 +129,64 @@ function dashboardWorkstreamTileComponentController($scope, $attrs, $filter, Das
             })
         )
     }
+
+    /*
+     * @callAliasMethod
+     * call to alias methods 
+    */
+
+    function callAliasMethod(alias){
+        switch(alias.toLowerCase()) {
+        case "mediamanager":
+            vm.openMediaModal('media-modal', 'MediaModalCtrl', 'lg');
+            break;
+        case "websiteseo":
+            openAside('top');
+            break;    
+        default:
+            //code
+        }
+    }
+
+    /*
+     * @openMediaModal
+     * open Media Modal
+    */
+
+    function openMediaModal(modal, controller, size) {
+        console.log('openModal >>> ', modal, controller);
+        var _modal = {
+            templateUrl: modal,
+            keyboard: false,
+            backdrop: 'static',
+            size: 'md',
+            resolve: {
+                vm: function() {
+                    return vm;
+                }
+            }
+        };
+        if (controller) {
+            _modal.controller = controller;
+            _modal.resolve.showInsert = function () {
+              return vm.showInsert;
+            };
+            _modal.resolve.insertMedia = function () {
+              return vm.insertMedia;
+            };
+        }
+
+        if (size) {
+            _modal.size = 'lg';
+        }
+
+        vm.modalInstance = $modal.open(_modal);
+
+        vm.modalInstance.result.then(null, function () {
+            angular.element('.sp-container').addClass('sp-hidden');
+        });
+    }
+    
     function init(element) {
         vm.element = element;
     }
@@ -134,3 +194,4 @@ function dashboardWorkstreamTileComponentController($scope, $attrs, $filter, Das
 }
 
 })();
+
