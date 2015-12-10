@@ -39,28 +39,29 @@
 
             <ol class="workstream-block-list list-unstyled" ng-if="vm.workstream.unlocked">
                 <li class="workstream-block-list-item" ng-repeat="block in vm.uiState.openWorkstream.blocks">
-                    <a ng-if = "!block.alias"
-                        href="{{block.link}}"
-                        class="workstream-block-link checkbox clip-check check-primary checkbox-inline"
-                        ng-class="{ 'workstream-block-complete': block.complete}"
+                    <a ng-if="block.complete" 
+                        href="javascript:void(0)"                      
+                        class="workstream-block-link checkbox clip-check check-primary checkbox-inline workstream-block-complete"
                         tooltip-placement="right"
                         tooltip-html-unsafe="{{block.helpText}}">
-
                         {{block.name}}
-
                     </a>
-                    <a ng-if="block.alias" 
+                    <a ng-if = "!block.alias && !block.complete"
+                        href="{{block.link}}"
+                        class="workstream-block-link checkbox clip-check check-primary checkbox-inline"
+                        tooltip-placement="right"
+                        tooltip-html-unsafe="{{block.helpText}}">
+                        {{block.name}}
+                    </a>
+                    <a ng-if="block.alias && !block.complete" 
                         href="javascript:void(0)"                      
                         class="workstream-block-link checkbox clip-check check-primary checkbox-inline"
-                        ng-class="{ 'workstream-block-complete': block.complete}"
                         tooltip-placement="right"
                         ng-click="vm.callAliasMethod(block.alias)"
                         tooltip-html-unsafe="{{block.helpText}}">
-
                         {{block.name}}
-
                     </a>
-                    
+
                 </li>
             </ol>
 
