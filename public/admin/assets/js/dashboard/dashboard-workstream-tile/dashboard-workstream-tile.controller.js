@@ -2,9 +2,9 @@
 
 app.controller('DashboardWorkstreamTileComponentController', dashboardWorkstreamTileComponentController);
 
-dashboardWorkstreamTileComponentController.$inject = ['$scope', '$attrs', '$filter', 'DashboardService', '$modal', '$timeout', '$document'];
+dashboardWorkstreamTileComponentController.$inject = ['$scope', '$attrs', '$filter', 'DashboardService', '$modal', '$timeout', '$document', '$interval'];
 /* @ngInject */
-function dashboardWorkstreamTileComponentController($scope, $attrs, $filter, DashboardService, $modal, $timeout, $document) {
+function dashboardWorkstreamTileComponentController($scope, $attrs, $filter, DashboardService, $modal, $timeout, $document, $interval) {
 
     var vm = this;
 
@@ -17,7 +17,9 @@ function dashboardWorkstreamTileComponentController($scope, $attrs, $filter, Das
     vm.getVideoConfigObject = getVideoConfigObject;
     vm.callAliasMethod = callAliasMethod;
     vm.openMediaModal = openMediaModal;
-    
+    vm.augmentCompletePercentage = augmentCompletePercentage;
+    vm.completePercentageStyle = '0%';
+
     vm.videoConfig = {
         version: 3,
         text: null,
@@ -83,7 +85,9 @@ function dashboardWorkstreamTileComponentController($scope, $attrs, $filter, Das
      * called when video modal closes
      */
     function videoClosed(data) {
-        DashboardService.unlockWorkstream(vm.workstream._id);
+        DashboardService.unlockWorkstream(vm.workstream._id).then(function() {
+            vm.workstreamClick();
+        });
     }
 
     /*
@@ -115,12 +119,12 @@ function dashboardWorkstreamTileComponentController($scope, $attrs, $filter, Das
     //     debugger;
     // }
 
-    function getVideoConfigObject(workstream) {  
+    function getVideoConfigObject(workstream) {
         var parsedUrl = urlParser.parse(workstream.unlockVideoUrl);
-        var posterImage = null      
+        var posterImage = null
         if(parsedUrl){
           posterImage = "//img.youtube.com/vi/"+parsedUrl.id+"/0.jpg";
-        }   
+        }
         return (
             angular.extend(vm.videoConfig, {
                 video: workstream.unlockVideoUrl,
@@ -132,7 +136,7 @@ function dashboardWorkstreamTileComponentController($scope, $attrs, $filter, Das
 
     /*
      * @callAliasMethod
-     * call to alias methods 
+     * call to alias methods
     */
 
     function callAliasMethod(alias){
@@ -144,7 +148,7 @@ function dashboardWorkstreamTileComponentController($scope, $attrs, $filter, Das
             $timeout(function () {
                 angular.element(".topbar-settings").click();
             }, 0)
-            break;    
+            break;
         default:
             //code
         }
@@ -188,9 +192,33 @@ function dashboardWorkstreamTileComponentController($scope, $attrs, $filter, Das
             angular.element('.sp-container').addClass('sp-hidden');
         });
     }
-    
+
+    function augmentCompletePercentage(percentage) {
+
+        var p = 0;
+
+        var stop = $interval(function() {
+            console.log('p = ', p);
+            if (p === percentage) {
+                $interval.cancel(stop);
+            }
+
+            p = p + 1;
+
+            vm.completePercentageStyle = p + '%';
+
+        }, 10);
+
+    }
+
     function init(element) {
+
         vm.element = element;
+
+        $timeout(function() {
+            vm.augmentCompletePercentage(parseInt(vm.workstream.completePercentage, 10));
+        }, 1000);
+
     }
 
 }

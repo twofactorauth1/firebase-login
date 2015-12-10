@@ -36,8 +36,8 @@
             var completeBlocks = workstream.blocks.filter(function(block) { return block.complete; }).length;
             var incompleteBlocks = workstream.blocks.filter(function(block) { return !block.complete; }).length;
 
-            // workstream.completePercentage = $filter('number')(100 * completeBlocks / (completeBlocks + incompleteBlocks), 2);
-            workstream.completePercentage = completeBlocks + ' out of ' + (completeBlocks + incompleteBlocks) + ' completed.'
+            workstream.completeRatio = completeBlocks + ' out of ' + (completeBlocks + incompleteBlocks) + ' completed.';
+            workstream.completePercentage = $filter('number')(100 * completeBlocks / (completeBlocks + incompleteBlocks), 0);
 
         });
         // vm.state.analyticsWidgets = analyticsWidgets;

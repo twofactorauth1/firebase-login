@@ -6916,6 +6916,17 @@ a[href="https://froala.com/wysiwyg-editor"] {
   width: 100%;
 }
 /* DOHY */
+.dohy-dashboard-container #loading-bar {
+  position: absolute;
+  bottom: 0;
+  height: 100%;
+  width: 100%;
+}
+.dohy-dashboard-container #loading-bar .bar {
+  position: absolute;
+  bottom: calc(50% - .75em);
+  top: auto;
+}
 .dohy-dashboard-container .dohy-dashboard-inner {
   background-color: black;
   background-image: url('http://s3.amazonaws.com/indigenous-digital-assets/account_6/dohy-bg-mountain-1_1449539273222.jpg');
@@ -7052,25 +7063,22 @@ a[href="https://froala.com/wysiwyg-editor"] {
 }
 @media only screen and (min-width: 531px) {
   .dohy-dashboard-container .image__cell {
-    width: 20%;
+    width: 25%;
   }
-  .dohy-dashboard-container .image__cell:nth-of-type(5n+2) .image--expand {
+  .dohy-dashboard-container .image__cell:nth-of-type(4n+2) .image--expand {
     margin-left: -100%;
   }
-  .dohy-dashboard-container .image__cell:nth-of-type(5n+3) .image--expand {
+  .dohy-dashboard-container .image__cell:nth-of-type(4n+3) .image--expand {
     margin-left: -200%;
   }
-  .dohy-dashboard-container .image__cell:nth-of-type(5n+4) .image--expand {
+  .dohy-dashboard-container .image__cell:nth-of-type(4n+4) .image--expand {
     margin-left: -300%;
   }
-  .dohy-dashboard-container .image__cell:nth-of-type(5n+5) .image--expand {
-    margin-left: -400%;
-  }
-  .dohy-dashboard-container .image__cell:nth-of-type(5n+6) {
+  .dohy-dashboard-container .image__cell:nth-of-type(4n+5) .image--expand {
     clear: left;
   }
   .dohy-dashboard-container .image--expand {
-    width: 500%;
+    width: 400%;
   }
 }
 .dohy-dashboard-container #page-title,
@@ -7196,7 +7204,7 @@ a[href="https://froala.com/wysiwyg-editor"] {
   bottom: 0;
   height: 50%;
   height: calc(50% - .5em);
-  padding: 1em .5em;
+  padding: 1em .75em;
   color: #50b0c9;
   font-family: 'Raleway', sans-serif;
   font-weight: bold;
@@ -7206,6 +7214,7 @@ a[href="https://froala.com/wysiwyg-editor"] {
   text-align: center;
   box-shadow: 0px -9px 10px -6px rgba(0, 0, 0, 0.3);
   margin-bottom: 0;
+  line-height: 1.25em;
 }
 .indi-circle .indi-circle-img {
   width: 100%;

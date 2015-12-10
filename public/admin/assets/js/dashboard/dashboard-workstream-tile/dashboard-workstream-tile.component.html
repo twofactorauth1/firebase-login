@@ -7,11 +7,15 @@
 
         <img class="indi-circle-img" src="http://s3.amazonaws.com/indigenous-digital-assets/account_6/dohy-circle-configure-business-profile_1449548586772.png" alt="{{vm.workstream.name}}" />
 
-        <h3 class="workstream-title indi-circle-title">{{vm.workstream.name}}</h3>
+        <div id="loading-bar"><div class="bar" ng-style="{ 'width': vm.completePercentageStyle }"><div class="peg"></div></div></div>
+
+        <h3 class="workstream-title indi-circle-title">
+            {{vm.workstream.name}}
+        </h3>
 
         </div>
     </div>
-    
+
 
     <div id="{{vm.workstream._id}}" class="workstream-detail-panel image--expand panel-body">
 
@@ -20,7 +24,7 @@
                 <div class="workstream-poster-container cursor-pointer" ng-click="vm.playWorkstreamVideo()">
                    <div class="workstream-poster-image-container">
                         <i class="fa fa-youtube-play fa-4x">
-                            <div class="icon-inner">                            
+                            <div class="icon-inner">
                             </div>
                         </i>
                         <img class="workstream-poster-image" src="{{vm.videoConfig.videoPosterImage}}">
@@ -39,8 +43,8 @@
 
             <ol class="workstream-block-list list-unstyled" ng-if="vm.workstream.unlocked">
                 <li class="workstream-block-list-item" ng-repeat="block in vm.uiState.openWorkstream.blocks">
-                    <a ng-if="block.complete" 
-                        href="javascript:void(0)"                      
+                    <a ng-if="block.complete"
+                        href="javascript:void(0)"
                         class="workstream-block-link checkbox clip-check check-primary checkbox-inline workstream-block-complete"
                         tooltip-placement="right"
                         tooltip-html-unsafe="{{block.helpText}}">
@@ -53,8 +57,8 @@
                         tooltip-html-unsafe="{{block.helpText}}">
                         {{block.name}}
                     </a>
-                    <a ng-if="block.alias && !block.complete" 
-                        href="javascript:void(0)"                      
+                    <a ng-if="block.alias && !block.complete"
+                        href="javascript:void(0)"
                         class="workstream-block-link checkbox clip-check check-primary checkbox-inline"
                         tooltip-placement="right"
                         ng-click="vm.callAliasMethod(block.alias)"
@@ -66,7 +70,7 @@
             </ol>
 
             <div class="workstream-percent-complete" ng-if="vm.workstream.unlocked">
-                {{vm.uiState.openWorkstream.completePercentage}}
+                {{vm.uiState.openWorkstream.completeRatio}}
             </div>
         </div>
 
