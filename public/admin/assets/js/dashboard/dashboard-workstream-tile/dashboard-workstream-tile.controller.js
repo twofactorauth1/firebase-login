@@ -44,7 +44,7 @@ function dashboardWorkstreamTileComponentController($scope, $attrs, $filter, Das
     function workstreamClick() {
 
         if (!vm.workstream.unlocked) {
-
+            vm.uiState.openWorkstream = null;
             vm.playWorkstreamVideo().result.then(vm.videoClosed);
 
         } else {
