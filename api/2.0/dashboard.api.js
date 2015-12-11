@@ -111,8 +111,10 @@ _.extend(api.prototype, baseApi.prototype, {
         var self = this;
         self.log.debug('>> getContactsByDayReport');
         var accountId = parseInt(self.accountId(req));
+        var startDate = moment(req.query.startDate);
+        var endDate = moment(req.query.endDate);
 
-        workstreamManager.getContactsByDayReport(accountId, function(err, results){
+        workstreamManager.getContactsByDayReport(accountId, startDate.toDate(), endDate.toDate(), function(err, results){
             self.log.debug('<< getContactsByDayReport');
             return self.sendResultOrError(resp, err, results, "Error getting report");
         });

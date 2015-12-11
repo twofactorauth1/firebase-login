@@ -247,20 +247,25 @@ module.exports = {
     /*
      * This may need to go somewhere else
      */
-    getContactsByDayReport: function(accountId, fn) {
+    getContactsByDayReport: function(accountId, startDate, endDate, fn) {
         var self = this;
 
         //db.contacts.aggregate([{$match:{accountId:4}},{$group:{ _id: {month: {$month:'$created.date'}, year: {$year:'$created.date'}, day: {$dayOfMonth:'$created.date'}}, count:{ "$sum": 1 }}}])
-        var groupCriteria = {_id: {month: {$month:'$created.date'}, year: {$year:'$created.date'}, day: {$dayOfMonth:'$created.date'}}};
-        var matchCriteria = {accountId:accountId, 'created.date': {$gt: new Date(2015,8,1,0,0,0,0)}, tags:'ld'};//TODO: remove this hardcoded time limit
+        var groupCriteria = {_id: {month: {$month:'$created.date'}, year: {$year:'$created.date'}, day: {$dayOfMonth:'$created.date'}, tag:'$tags'}};
+        var matchCriteria = {accountId:accountId, 'created.date': {$gte: startDate, $lte:endDate}};
 
-        contactDao.aggregate(groupCriteria, matchCriteria, $$.m.Contact, function(err, results){
+        contactDao.aggregateWithSum(groupCriteria, matchCriteria, $$.m.Contact, function(err, results){
             var totalObj = {};
             var total = 0;
+            var leadTotal = 0;
             _.each(results, function(result){
                 total+= result.count;
+                if(result._id._id.tag && result._id._id.tag[0] === 'ld') {
+                    leadTotal+= result.count;
+                }
             });
             totalObj.total = total;
+            totalObj.leadTotal = leadTotal;
             results.push(totalObj);
             fn(err, results);
         });
