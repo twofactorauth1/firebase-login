@@ -256,7 +256,7 @@ module.exports = {
         var matchCriteria = {accountId:accountId, 'created.date': {$gte: startDate, $lte:endDate}};
 
         contactDao.aggregateWithSum(groupCriteria, matchCriteria, $$.m.Contact, function(err, results){
-            
+
             var total = 0;
             var leadTotal = 0;
             _.each(results, function(result){
@@ -400,16 +400,22 @@ module.exports = {
 
             var total = 0;
             var totalAmount = 0;
+
             _.each(results, function(result){
                 total+= result.count;
                 totalAmount += result.amount;
+                result.amount = result.amount.toFixed(2);
+                result.month = result._id._id.month;
+                result.orderCount = result.count;
+                delete result._id;
+                delete result.count;
             });
 
 
             var response = {
-                results: results,
+                results: _.sortBy(results, 'month'),
                 total: total,
-                totalAmount: totalAmount
+                totalAmount: totalAmount.toFixed(2)
             };
             self.log.debug('<< getRevenueByMonthReport');
             fn(err, response);
