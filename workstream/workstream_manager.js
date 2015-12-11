@@ -333,10 +333,15 @@ module.exports = {
 
                 var total = 0;
                 _.each(results, function(result){
+                    if(result._id._id.day < 10) {
+                        result._id._id.day = '0' + result._id._id.day;
+                    }
+                    result.day = result._id._id.year + '-' + result._id._id.month + '-' + result._id._id.day;
+                    delete result._id;
                     total+= result.count;
                 });
                 var response = {
-                    results:results,
+                    results: _.sortBy(results, 'day'),
                     total:total
                 };
                 self.log.debug('<< getPageViewsByDayReport');
