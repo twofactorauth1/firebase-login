@@ -52,6 +52,14 @@ module.exports = {
                     }
                 });
             },
+            function createDefaultStreamsIfNotPresent(workstreams, cb) {
+                if(!workstreams || workstreams.length === 0) {
+                    self.log.debug('Creating default workstreams for account ' + accountId);
+                    self.addDefaultWorkstreamsToAccount(accountId, cb);
+                } else {
+                    cb(null, workstreams);
+                }
+            },
             function getCompletedBlocks(workstreams, cb){
                 self._getCompletedBlocks(accountId, function(err, completedBlocks){
                     if(err) {
@@ -118,8 +126,50 @@ module.exports = {
                 self.log.error('Error getting workstream:', err);
                 return fn(err);
             } else {
-                self.log.debug('<< getWorkstream');
-                return fn(null, workstream);
+                self._getCompletedBlocks(accountId, function(err, completedBlocks){
+                    if(err) {
+                        self.log.error('Error getting completed blocks:', err);
+                        return fn(err);
+                    } else {
+                        var update = false;
+                        var completedBlockIDs = _.map(completedBlocks, function(block){return block._id;});
+
+                        _.each(workstream.get('blocks'), function(block){
+                            if(_.contains(completedBlockIDs, block._id)) {
+                                block.complete = true;
+                                update = true;
+                            }
+                        });
+                        if(workstream.get('completed') === false) {
+                            var completed = true;
+                            _.each(workstream.get('blocks'), function(block){
+                                if(block.complete === false) {
+                                    completed = false;
+                                }
+                            });
+                            if(completed === true) {
+                                workstream.set('completed', true);
+                                update = true;
+                            }
+                        }
+
+                        if(update === true) {
+                            workstreamDao.saveOrUpdate(workstream, function(err, updatedStream){
+                                if(err) {
+                                    self.log.error('Error updating completeness on workstream:', err);
+                                    return fn(err, null);
+                                } else {
+                                    self.log.debug('<< getWorkstream');
+                                    return fn(null, updatedStream);
+                                }
+                            });
+                        } else {
+                            self.log.debug('<< getWorkstream');
+                            return fn(null, workstream);
+                        }
+                    }
+                });
+
             }
         });
     },
