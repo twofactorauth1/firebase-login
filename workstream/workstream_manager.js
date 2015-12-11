@@ -255,6 +255,13 @@ module.exports = {
         var matchCriteria = {accountId:accountId, 'created.date': {$gt: new Date(2015,8,1,0,0,0,0)}, tags:'ld'};//TODO: remove this hardcoded time limit
 
         contactDao.aggregate(groupCriteria, matchCriteria, $$.m.Contact, function(err, results){
+            var totalObj = {};
+            var total = 0;
+            _.each(results, function(result){
+                total+= result.count;
+            });
+            totalObj.total = total;
+            results.push(totalObj);
             fn(err, results);
         });
 
@@ -304,6 +311,13 @@ module.exports = {
                 _id: {month: {$month:'$server_time_dt'}, year: {$year:'$server_time_dt'}, day: {$dayOfMonth:'$server_time_dt'}}
             };
             analyticsDao.aggregateWithSum(groupCriteria, query, $$.m.PageEvent, function(err, results){
+                var totalObj = {};
+                var total = 0;
+                _.each(results, function(result){
+                    total+= result.count;
+                });
+                totalObj.total = total;
+                results.push(totalObj);
                 self.log.debug('<< getPageViewsByDayReport');
                 fn(err, results);
             });
@@ -331,6 +345,14 @@ module.exports = {
         };
 
         analyticsDao.aggregateWithSum(groupCriteria, query, $$.m.SessionEvent, function(err, results){
+
+            var totalObj = {};
+            var total = 0;
+            _.each(results, function(result){
+                total+= result.count;
+            });
+            totalObj.total = total;
+            results.push(totalObj);
             self.log.debug('<< getUniqueVisitorsByDayReport');
             fn(err, results);
         });

@@ -132,9 +132,9 @@ defaultWorkstreams[2] = {
         }
     ],
     "analyticWidgets" : [
-        {name:"CampaignMetrics"},
+        {name: "CampaignMetrics"},
         {name: "SocialMedia"},
-        {name:"Visitors"}
+        {name: "visitors"}
     ],
     "name" : "Engage Your Customers",
     "icon" : "",
