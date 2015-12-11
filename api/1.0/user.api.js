@@ -576,7 +576,7 @@ _.extend(api.prototype, baseApi.prototype, {
             function(accountId, subId, user, stripeCustomerId, sub, account, callback) {
                 self.log.debug('Updated account billing.');
                 self.sm.addSubscriptionToAccount(accountId, subId, plan, user.id(), function(err, value){
-                    authenticationDao.getAuthenticatedUrlForAccount(accountId, user.id(), "admin", function (err, value) {
+                    authenticationDao.getAuthenticatedUrlForAccount(accountId, user.id(), "admin/welcome", function (err, value) {
                         self.log.debug('Redirecting to: ' + value);
                         if (err) {
                             res.redirect("/home");
