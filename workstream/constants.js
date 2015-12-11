@@ -35,7 +35,7 @@ defaultWorkstreams[0] = {
         }
     ],
     "analyticWidgets" : [
-        "visitors"
+        {name:"visitors", link:''}
     ],
     "name" : "Build a Website",
     "icon" : "",
@@ -80,7 +80,7 @@ defaultWorkstreams[1] = {
         }
     ],
     "analyticWidgets" : [
-        "contacts"
+        {name:"contacts"}
     ],
     "name" : "Generate Leads",
     "icon" : "",
@@ -132,9 +132,9 @@ defaultWorkstreams[2] = {
         }
     ],
     "analyticWidgets" : [
-        "CampaignMetrics",
-        "SocialMedia",
-        "Visitors"
+        {name:"CampaignMetrics"},
+        {name: "SocialMedia"},
+        {name:"Visitors"}
     ],
     "name" : "Engage Your Customers",
     "icon" : "",
@@ -179,8 +179,8 @@ defaultWorkstreams[3] = {
         }
     ],
     "analyticWidgets" : [
-        "Orders",
-        "Revenue"
+        {name:"Orders"},
+        {name:"Revenue"}
     ],
     "name" : "Make Money",
     "icon" : "",
