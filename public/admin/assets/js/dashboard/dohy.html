@@ -19,20 +19,23 @@
     </section>
     <!-- end: DASHBOARD TITLE -->
 
-    <!-- start: Incomplete Workstreams -->
     <div class="workstream-container container-fluid container-fullw">
+
+        <!-- start: Analytics -->
         <div class="image-grid row">
             <div
-                ng-repeat="workstream in vm.state.workstreams track by $index">
+                ng-repeat="analytic in vm.state.analyticsWidgets track by $index"
+                class="image__cell">
                 <dashboard-analytic-tile-component
-                    ng-if="workstream.completed"
-                    ng-repeat="analytic in workstream.analyticWidgets track by $index"
                     state="vm.state"
                     ui-state="vm.uiState"
                     analytic="analytic">
                 </dashboard-analytic-tile-component>
             </div>
         </div>
+        <!-- end: Analytics -->
+
+        <!-- start: Workstreams -->
         <div class="image-grid row">
             <div
                 class="image__cell"
@@ -45,42 +48,11 @@
                 </dashboard-workstream-tile-component>
             </div>
         </div>
+        <!-- end: Incomplete Workstreams -->
 
     </div>
-    <!-- end: Incomplete Workstreams -->
 
-    <!-- start: Analytic Widgets -->
-    <!-- <div class="container-fluid container-fullw">
-        <div class="row">
-            <dashboard-analytic-tile-component
-                ng-repeat="analytic in vm.state.analyticsWidgets"
-                state="vm.state"
-                ui-state="vm.uiState"
-                analytic="analytic">
-            </dashboard-analytic-tile-component>
-        </div>
-    </div> -->
-    <!-- end: Analytic Widgets -->
 
-    <!-- start: Completed Workstreams -->
-    <!-- <div class="container-fluid container-fullw">
-        <div class="row">
-            <div ng-repeat="workstream in vm.state.completeWorkstreams">
-                <div class="col-sm-6 margin-bottom-20">
-                    <div class="panel panel-white no-radius text-center margin-bottom-0 cursor-pointer" ui-sref="app.customers">
-                        <div class="panel-body">
-                            <span class="fa-stack fa-2x"> <i class="fa fa-square fa-stack-2x text-primary"></i> <i class="fa fa-user fa-stack-1x fa-inverse"></i> </span>
-                            <h3 class="StepTitle">{{workstream.name}}</h3>
-                            <p class="text-small">
-                                This is a completed workstream
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> -->
-    <!-- end: Completed Workstreams -->
 
     <div class="indi-help-text center">
         <span>

@@ -26,8 +26,8 @@
 
         _.each(vm.state.workstreams, function(workstream){
 
-            analyticsWidgets = analyticsWidgets.concat(workstream.analyticWidgets);
             if(workstream.completed===true) {
+                analyticsWidgets = analyticsWidgets.concat(workstream.analyticWidgets);
                 completeWorkstreams.push(workstream);
             } else {
                 incompleteWorkstreams.push(workstream);
@@ -40,7 +40,8 @@
             workstream.completePercentage = $filter('number')(100 * completeBlocks / (completeBlocks + incompleteBlocks), 0);
 
         });
-        
+
+        vm.state.analyticsWidgets = analyticsWidgets;
         vm.state.completeWorkstreams = completeWorkstreams;
         vm.state.incompleteWorksreams = incompleteWorkstreams;
     }, true);
