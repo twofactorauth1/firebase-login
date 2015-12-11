@@ -264,9 +264,20 @@ module.exports = {
                 if(result._id._id.tag && result._id._id.tag[0] === 'ld') {
                     leadTotal+= result.count;
                 }
+                if(result._id._id.day < 10) {
+                    result._id._id.day = '0' + result._id._id.day;
+                }
+                result.day = result._id._id.year + '-' + result._id._id.month + '-' + result._id._id.day;
+                if(result._id._id.tag && result._id._id.tag.length > 0) {
+                    result.tag = result._id._id.tag[0];
+                } else {
+                    result.tag = 'NONE'
+                }
+                delete result._id;
+
             });
             var response = {
-                results:results,
+                results: _.sortBy(results, 'day'),
                 total:total,
                 leadTotal:leadTotal
             };
