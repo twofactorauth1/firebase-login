@@ -7225,26 +7225,25 @@ a[href="https://froala.com/wysiwyg-editor"] {
 .dashboard-logo-edit {
   text-align: center;
   font-size: 10px;
-  color: white;
+  color: #f3f3f3;
 }
 .analytic-tile-container .left-title {
-  font-size: 15px;
-  color: white;
+  color: #f3f3f3;
 }
 .analytic-tile-container .right-value {
   font-size: 20px;
   font-weight: bold;
-  color: white;
+  color: #f3f3f3;
 }
 .analytic-tile-container .btn-o {
   border: 1px solid white;
-  color: white;
+  color: #f3f3f3;
   font-size: 14px;
   min-width: 80%;
 }
 .analytic-tile-container .title-container {
-  margin-top: 10%;
-  margin-bottom: 10%;
+  margin-top: 8%;
+  margin-bottom: 8%;
 }
 .indi-circle {
   background-color: transparent;
@@ -7307,13 +7306,14 @@ a[href="https://froala.com/wysiwyg-editor"] {
   height: auto;
 }
 .indi-rounded {
-  display: inline-block;
-  max-width: 100%;
+  max-width: 85%;
   height: auto;
   line-height: 1.42857143;
   background-color: #f3f3f3;
   border: 4px solid rgba(0, 0, 0, 0.4);
   border-radius: 10px;
+  margin: 0 auto;
+  margin-bottom: 20px;
 }
 .indi-rounded .indi-rounded-title {
   position: absolute;

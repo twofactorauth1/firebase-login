@@ -40,7 +40,7 @@
             workstream.completePercentage = $filter('number')(100 * completeBlocks / (completeBlocks + incompleteBlocks), 0);
 
         });
-        // vm.state.analyticsWidgets = analyticsWidgets;
+        
         vm.state.completeWorkstreams = completeWorkstreams;
         vm.state.incompleteWorksreams = incompleteWorkstreams;
     }, true);

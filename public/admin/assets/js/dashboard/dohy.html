@@ -23,14 +23,13 @@
     <div class="workstream-container container-fluid container-fullw">
         <div class="image-grid row">
             <div
-                class="image__cell"
                 ng-repeat="workstream in vm.state.workstreams track by $index">
                 <dashboard-analytic-tile-component
                     ng-if="workstream.completed"
                     ng-repeat="analytic in workstream.analyticWidgets track by $index"
                     state="vm.state"
                     ui-state="vm.uiState"
-                    analytics="analytic">
+                    analytic="analytic">
                 </dashboard-analytic-tile-component>
             </div>
         </div>
