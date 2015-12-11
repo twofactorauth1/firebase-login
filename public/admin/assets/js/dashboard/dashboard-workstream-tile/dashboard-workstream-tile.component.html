@@ -5,7 +5,7 @@
         class="indi-circle workstream-panel-circle panel panel-white text-center margin-bottom-0 cursor-pointer"
         ng-click="vm.workstreamClick()">
 
-        <img class="indi-circle-img grayscale workstream-panel-img" src="http://s3.amazonaws.com/indigenous-digital-assets/account_6/dohy-send-email-2.png" alt="{{vm.workstream.name}}" />
+        <img class="indi-circle-img grayscale workstream-panel-img"  ng-src="{{vm.workstream.bgImage}}" err-src="assets/images/default-page.jpg" alt="{{vm.workstream.name}}" />
 
         <div id="loading-bar"><div class="bar" ng-style="{ 'width': vm.completePercentageStyle }"><div class="peg"></div></div></div>
 
