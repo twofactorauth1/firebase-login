@@ -17,8 +17,9 @@ app.controller('AppCtrl', ['$rootScope', '$scope', '$state', '$translate', '$loc
       if (account.locked_sub && !$state.includes('app.account.billing')) {
         $state.go('app.account.billing');
       }
+
       if (account.firstLogin) {
-	$state.go('app.support.gettingstarted');
+	    //$state.go('app.support.gettingstarted');
         account.firstLogin = false;
         AccountService.updateAccount(account, function () {
           console.log('account updated');
