@@ -83,6 +83,15 @@
     </div> -->
     <!-- end: Completed Workstreams -->
 
+    <div class="indi-help-text center">
+        <span>
+            Need some help getting started? <a href="#" ng-click="cancel($event);" onclick="Intercom('showNewMessage', '')">Contact</a> our Success Team
+        </span>
+        <span ng-if="vm.state.account.billing.plan==='NO_PLAN_ARGUMENT'">
+            You have {{::account.trialDaysRemaining}} trial days remaining. Ready to join? Click <a href='/admin/#/account/billing'>here</a> to select your plan.
+        </span>
+    </div>
+
     <div data-ng-include data-src=" 'assets/js/dashboard/dashboard-workstream-tile/dashboard-workstream-tile-video.modal.html' " ></div>
 
 </div>

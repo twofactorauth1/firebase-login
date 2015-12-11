@@ -7129,6 +7129,17 @@ a[href="https://froala.com/wysiwyg-editor"] {
   margin: 0 -15px;
   background-attachment: fixed;
 }
+.dohy-dashboard-container .dohy-dashboard-inner .indi-help-text {
+  color: #f3f3f3;
+  padding: 20px;
+}
+.dohy-dashboard-container .dohy-dashboard-inner .indi-help-text span {
+  display: block;
+}
+.dohy-dashboard-container .dohy-dashboard-inner .indi-help-text span a {
+  color: #5bc0de;
+  text-decoration: underline;
+}
 .dohy-dashboard-container #page-title,
 .dohy-dashboard-container .container-fullw {
   border: none;
