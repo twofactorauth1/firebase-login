@@ -1,7 +1,7 @@
 'use strict';
 /*global app, moment, angular*/
 /*jslint unparam:true*/
-app.controller('MediaModalCtrl', ['$scope', '$modalInstance', '$http', '$timeout', 'FileUploader', 'AssetsService', 'ToasterService', 'showInsert', 'insertMedia', 'SweetAlert', function ($scope, $modalInstance, $http, $timeout, FileUploader, AssetsService, ToasterService, showInsert, insertMedia, SweetAlert) {
+app.controller('MediaModalCtrl', ['$scope', '$injector', '$modalInstance', '$http', '$timeout', 'FileUploader', 'AssetsService', 'ToasterService', 'showInsert', 'insertMedia', 'SweetAlert', function ($scope, $injector, $modalInstance, $http, $timeout, FileUploader, AssetsService, ToasterService, showInsert, insertMedia, SweetAlert) {
   var uploader, footerElement, headerElement, contentElement, mediaElement, mediaModalElement;
 
   $scope.showInsert = showInsert;
@@ -333,4 +333,8 @@ app.controller('MediaModalCtrl', ['$scope', '$modalInstance', '$http', '$timeout
     $scope.singleSelected = false;
     $scope.closeModal();
   };
+  $scope.m.onCallbackOnMediaClose = function(){
+    insertMedia();
+    $scope.closeModal();
+  }
 }]);

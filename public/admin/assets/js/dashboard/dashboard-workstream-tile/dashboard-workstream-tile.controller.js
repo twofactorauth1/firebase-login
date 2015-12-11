@@ -19,7 +19,7 @@ function dashboardWorkstreamTileComponentController($scope, $attrs, $filter, Das
     vm.openMediaModal = openMediaModal;
     vm.augmentCompletePercentage = augmentCompletePercentage;
     vm.completePercentageStyle = '0%';
-
+    vm.callbackOnMediaClose = callbackOnMediaClose;
     vm.videoConfig = {
         version: 3,
         text: null,
@@ -161,11 +161,13 @@ function dashboardWorkstreamTileComponentController($scope, $attrs, $filter, Das
 
     function openMediaModal(modal, controller, size) {
         console.log('openModal >>> ', modal, controller);
+        $scope.showDone = true;
         var _modal = {
             templateUrl: modal,
             keyboard: false,
             backdrop: 'static',
             size: 'md',
+            scope: $scope,
             resolve: {
                 vm: function() {
                     return vm;
@@ -178,7 +180,7 @@ function dashboardWorkstreamTileComponentController($scope, $attrs, $filter, Das
               return vm.showInsert;
             };
             _modal.resolve.insertMedia = function () {
-              return vm.insertMedia;
+              return vm.callbackOnMediaClose;
             };
         }
 
@@ -191,6 +193,19 @@ function dashboardWorkstreamTileComponentController($scope, $attrs, $filter, Das
         vm.modalInstance.result.then(null, function () {
             angular.element('.sp-container').addClass('sp-hidden');
         });
+    }
+
+    function callbackOnMediaClose(){
+        // Need to call getWorkstream(vm.uiState.openWorkstream._id)
+        // but it is not returning updated object.
+        DashboardService.getWorkstreams().then(function(response){
+            var data = response.data;
+            if(data){
+                vm.uiState.openWorkstream = _.findWhere(data, {
+                    _id: vm.uiState.openWorkstream._id
+                });
+            }
+        })
     }
 
     function augmentCompletePercentage(percentage) {
