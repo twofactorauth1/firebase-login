@@ -10,10 +10,13 @@ var workstreamDao = require('./dao/workstream.dao');
 var blockDao = require('./dao/block.dao');
 var accountDao = require('../dao/account.dao');
 var contactDao = require('../dao/contact.dao');
+var analyticsDao = require('../analytics/dao/analytics.dao');
 
 var blockManager = require('./block_manager');
 var userActivityManager = require('../useractivities/useractivity_manager');
 var async = require('async');
+var moment = require('moment');
+var appConfig = require('../configs/app.config');
 
 module.exports = {
     log: logger,
@@ -203,6 +206,61 @@ module.exports = {
         contactDao.aggregate(groupCriteria, matchCriteria, $$.m.Contact, function(err, results){
             fn(err, results);
         });
+
+    },
+
+    getPageViewsByDayReport: function(accountId, startDate, endDate, fn) {
+        var self = this;
+        self.log.debug('>> getPageViewsByDayReport');
+        /*
+         * query: {
+         *  url.domain in accountUrl (+/- www)
+         *  server_time gt startDate -> ms AND lt endDate ->  ms ... using server's timezone as startDay/endDay
+         * }
+         *
+         * db.page_events.aggregate([{$match:{
+         'url.domain': {$in:['www.indigenous.local', 'indigenous.local']},
+         'server_time': {$gt:1448928000000},
+         'server_time': {$lt:1449886165000},
+         'server_time_dt': {$exists:true}}
+         }, {
+         $group:{
+         _id: {month: {$month:'$server_time_dt'}, year: {$year:'$server_time_dt'}, day: {$dayOfMonth:'$server_time_dt'}}, count: {$sum:1}
+         }
+         }])
+         */
+        accountDao.getServerDomainByAccount(accountId, function(err, url){
+            if(err || !url) {
+                self.log.error('Error getting server domain:', err);
+                return fn(err);
+            }
+
+            var startDateMillis = startDate.getTime();
+            var endDateMillis = endDate.getTime();
+            var urlAry = [];
+            urlAry.push(url);
+            if(accountId === appConfig.mainAccountID) {
+                //this is a hack for local
+                urlAry.push(appConfig.www_url.replace('http://', '').replace(':3000', ''));
+            }
+            var query = {
+                'url.domain': {$in:urlAry},
+                'server_time': {$gt:startDateMillis, $lt:endDateMillis},
+                'server_time_dt': {$exists:true}
+            };
+            self.log.debug('query:', query);
+            var groupCriteria = {
+                _id: {month: {$month:'$server_time_dt'}, year: {$year:'$server_time_dt'}, day: {$dayOfMonth:'$server_time_dt'}}
+            };
+            analyticsDao.aggregateWithSum(groupCriteria, query, $$.m.PageEvent, function(err, results){
+                self.log.debug('<< getPageViewsByDayReport');
+                fn(err, results);
+            });
+
+        });
+
+        //db.page_events.find({'url.domain': {$in:['www.indigenous.io', 'indigenous.io']}, server_time : {$gt: 1448928000000}}).count()
+
 
     },
 

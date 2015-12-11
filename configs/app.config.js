@@ -158,5 +158,19 @@ module.exports = {
             _serverUrl += ":" + process.env.PORT;
         }
         return _serverUrl;
+    },
+
+    getServerDomain: function(subdomain, customDomain) {
+        if(!subdomain && !customDomain) {
+            return wwwUrl;
+        }
+        var serverDomain = '';
+        if(customDomain) {
+            serverDomain = customDomain;
+        } else {
+            serverDomain = subdomain + "." + process.env.ROOT_HOST;
+        }
+
+        return serverDomain;
     }
 };

@@ -394,6 +394,29 @@ var mongodao = {
         return self._aggregateMongoWithCustomStages(stageAry, type, fn);
     },
 
+    _aggregateMongoWithSum: function (groupCriteria, matchCriteria, type, fn) {
+        var self = this;
+        var stageAry = [];
+        stageAry.push({$match: matchCriteria});
+        stageAry.push({
+            $group: {
+                _id: groupCriteria,
+
+                // Count number of matching docs for the group
+                count: { $sum: 1 }
+
+            }
+        });
+        stageAry.push({
+            // Limit results to duplicates (more than 1 match)
+            $match: {
+                count: { $gt: 1 }
+            }
+        });
+
+        return self._aggregateMongoWithCustomStages(stageAry, type, fn);
+    },
+
     _wrapArrayMongo: function (value, fields, type, fn) {
         var self = this, arr = [];
         value.forEach(function (item) {

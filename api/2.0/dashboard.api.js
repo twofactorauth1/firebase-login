@@ -9,6 +9,8 @@ var baseApi = require('../base.api.js');
 var workstreamDao = require('../../workstream/dao/workstream.dao');
 var workstreamManager = require('../../workstream/workstream_manager');
 
+var moment = require('moment');
+
 var api = function () {
     this.init.apply(this, arguments);
 };
@@ -31,6 +33,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         //these might need to move into their own api
         app.get(this.url('reports/contactsByDay'), this.isAuthAndSubscribedApi.bind(this), this.getContactsByDayReport.bind(this));
+        app.get(this.url('reports/pageViewsByDay'), this.isAuthAndSubscribedApi.bind(this), this.getPageViewsByDayReport.bind(this));
     },
 
     noop: function(req, resp) {
@@ -112,6 +115,21 @@ _.extend(api.prototype, baseApi.prototype, {
             self.log.debug('<< getContactsByDayReport');
             return self.sendResultOrError(resp, err, results, "Error getting report");
         });
+    },
+
+    getPageViewsByDayReport: function(req, resp) {
+        var self = this;
+        self.log.debug('>> getPageViewsByDayReport');
+        var accountId = parseInt(self.accountId(req));
+        var startDate = moment(req.query.startDate);
+        var endDate = moment(req.query.endDate);
+
+        self.log.debug('Using dates:' + startDate.toDate() + ' and ' + endDate.toDate());
+        workstreamManager.getPageViewsByDayReport(accountId, startDate.toDate(), endDate.toDate(), function(err, results){
+            self.log.debug('<< getPageViewsByDayReport');
+            return self.sendResultOrError(resp, err, results, "Error getting report");
+        });
+
     }
 
 });
