@@ -17,6 +17,7 @@ var userActivityManager = require('../useractivities/useractivity_manager');
 var async = require('async');
 var moment = require('moment');
 var appConfig = require('../configs/app.config');
+var constants = require('./constants');
 
 module.exports = {
     log: logger,
@@ -339,29 +340,25 @@ module.exports = {
     addDefaultWorkstreamsToAccount: function(accountId, fn) {
         var self = this;
         self.log.debug('>> addDefaultWorkstreamsToAccount');
-        var query = {accountId:0};
-        workstreamDao.findMany(query, $$.m.Workstream, function(err, ary){
-            if(err || !ary) {
-                self.log.error('Error finding default workstreams:', err);
+
+
+        var ary = constants.defaultWorkstreams.slice();
+        _.each(ary, function(stream, index){
+            stream = new $$.m.Workstream(stream);
+            stream.set('_id', null);
+            stream.set('accountId', accountId);
+            stream.set('created', {date: new Date(), by:null});
+            ary[index] = stream;
+        });
+        workstreamDao.saveWorkstreams(ary, function(err, savedStreams){
+            if(err) {
+                self.log.error('Error saving default workstreams:', err);
                 return fn(err);
             } else {
-                _.each(ary, function(stream){
-                    stream.set('_id', null);
-                    stream.set('accountId', accountId);
-                    stream.set('created', {date: new Date(), by:null});
-                });
-                workstreamDao.saveWorkstreams(ary, function(err, savedStreams){
-                    if(err) {
-                        self.log.error('Error saving default workstreams:', err);
-                        return fn(err);
-                    } else {
-                        self.log.debug('<< addDefaultWorkstreamsToAccount');
-                        return fn(null, savedStreams);
-                    }
-                });
+                self.log.debug('<< addDefaultWorkstreamsToAccount');
+                return fn(null, savedStreams);
             }
         });
-
 
     },
 
