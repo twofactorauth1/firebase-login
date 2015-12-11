@@ -7132,6 +7132,7 @@ a[href="https://froala.com/wysiwyg-editor"] {
 .dohy-dashboard-container .dohy-dashboard-inner .indi-help-text {
   color: #f3f3f3;
   padding: 20px;
+  font-weight: bold;
 }
 .dohy-dashboard-container .dohy-dashboard-inner .indi-help-text span {
   display: block;
@@ -7183,16 +7184,13 @@ a[href="https://froala.com/wysiwyg-editor"] {
   color: #5bc0de;
   font-weight: bold;
 }
-.workstream-progress-bar {
+.workstream-tile-container .fa-check-circle {
+  color: #5bc0de;
+  z-index: 1;
   position: absolute;
-  top: 45%;
+  top: 25%;
   left: 50%;
-  width: 80%;
-  background: blue;
-  height: 8px;
-  transform: translate(-50%, -45%);
-  border-radius: 5em;
-  box-shadow: 0 0 0px 4px rgba(0, 0, 0, 0.5);
+  font-size: 2em;
 }
 .workstream-detail-panel {
   background: #f3f3f3;

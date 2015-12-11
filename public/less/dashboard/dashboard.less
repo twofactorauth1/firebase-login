@@ -32,17 +32,23 @@
         min-height: 100vh;
         margin: 0 -15px;
         background-attachment: fixed;
+
         .indi-help-text{
             color: #f3f3f3;
             padding: 20px;
-            span{
+            font-weight: bold;
+
+            span {
                 display:block;
-                a{
+
+                a {
                     color: #5bc0de;
                     text-decoration: underline;
                 }
+
             }
         }
+
     }
 
     #page-title, .container-fullw {
@@ -118,18 +124,16 @@
         font-weight: bold;
     }
 
-}
+    .fa-check-circle {
+        color: #5bc0de;
+        z-index: 1;
+        position: absolute;
+        top: 25%;
+        left: 50%;
+        font-size: 5em;
+        transform: translate(-50%,-50%);
+    }
 
-.workstream-progress-bar {
-    position: absolute;
-    top: 45%;
-    left: 50%;
-    width: 80%;
-    background: blue;
-    height: 8px;
-    transform: translate(-50%, -45%);
-    border-radius: 5em;
-    box-shadow: 0 0 0px 4px rgba(0,0,0,.5);
 }
 
 .workstream-detail-panel {
@@ -277,7 +281,7 @@
     }
 }
 
-.indi-rounded {    
+.indi-rounded {
     max-width: 85%;
     height: auto;
     line-height: 1.42857143;

@@ -7,7 +7,9 @@
 
         <img class="indi-circle-img grayscale workstream-panel-img"  ng-src="{{vm.workstream.bgImage}}" err-src="assets/images/default-page.jpg" alt="{{vm.workstream.name}}" />
 
-        <div id="loading-bar"><div class="bar" ng-style="{ 'width': vm.completePercentageStyle }"><div class="peg"></div></div></div>
+        <i ng-if="vm.workstream.completed" class="fa fa-check-circle"></i>
+
+        <div ng-if="vm.workstream.unlocked" id="loading-bar"><div class="bar" ng-style="{ 'width': vm.completePercentageStyle }"><div class="peg"></div></div></div>
 
         <h3 class="workstream-title indi-circle-title">
             <div>{{vm.workstream.name}}</div>
@@ -37,7 +39,7 @@
         <div class="col-md-8 padding-20">
             <h3 class="workstream-title">{{vm.workstream.name}}</h3>
 
-            <p class="worksteam-description text-small">
+            <p class="workstream-description text-small">
                 {{vm.workstream.description || 'This workstream needs a description.'}}
             </p>
 
