@@ -11,6 +11,7 @@ var blockDao = require('./dao/block.dao');
 var accountDao = require('../dao/account.dao');
 var contactDao = require('../dao/contact.dao');
 var analyticsDao = require('../analytics/dao/analytics.dao');
+var orderDao = require('../orders/dao/order.dao');
 
 var blockManager = require('./block_manager');
 var userActivityManager = require('../useractivities/useractivity_manager');
@@ -362,6 +363,46 @@ module.exports = {
             fn(err, results);
         });
 
+    },
+
+    getRevenueByMonthReport: function(accountId, fn) {
+        var self = this;
+        self.log.debug('>> getRevenueByMonthReport');
+        var startOfYear= moment().startOf('year').toDate();
+        var query = {
+            account_id:accountId,
+            created_at: {$gte: startOfYear}
+        };
+        var groupCriteria = {
+            _id:{month: {$month:'$created_at'}}
+        };
+
+        var stageAry = [];
+        stageAry.push({$match: query});
+        stageAry.push({
+            $group: {
+                _id: groupCriteria,
+
+                // Count number of matching docs for the group
+                count: { $sum: 1 },
+                amount: {$sum: '$total'}
+            }
+        });
+
+        orderDao.aggregateWithCustomStages(stageAry, $$.m.Order, function(err, results){
+            var totalObj = {};
+            var total = 0;
+            var totalAmount = 0;
+            _.each(results, function(result){
+                total+= result.count;
+                totalAmount += result.amount;
+            });
+            totalObj.total = total;
+            totalObj.totalAmount = totalAmount;
+            results.push(totalObj);
+            self.log.debug('<< getRevenueByMonthReport');
+            fn(err, results);
+        });
     },
 
     addDefaultWorkstreamsToAccount: function(accountId, fn) {
