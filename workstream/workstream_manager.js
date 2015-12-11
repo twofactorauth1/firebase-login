@@ -256,7 +256,7 @@ module.exports = {
         var matchCriteria = {accountId:accountId, 'created.date': {$gte: startDate, $lte:endDate}};
 
         contactDao.aggregateWithSum(groupCriteria, matchCriteria, $$.m.Contact, function(err, results){
-            var totalObj = {};
+            
             var total = 0;
             var leadTotal = 0;
             _.each(results, function(result){
@@ -265,10 +265,12 @@ module.exports = {
                     leadTotal+= result.count;
                 }
             });
-            totalObj.total = total;
-            totalObj.leadTotal = leadTotal;
-            results.push(totalObj);
-            fn(err, results);
+            var response = {
+                results:results,
+                total:total,
+                leadTotal:leadTotal
+            };
+            fn(err, response);
         });
 
     },
@@ -317,15 +319,17 @@ module.exports = {
                 _id: {month: {$month:'$server_time_dt'}, year: {$year:'$server_time_dt'}, day: {$dayOfMonth:'$server_time_dt'}}
             };
             analyticsDao.aggregateWithSum(groupCriteria, query, $$.m.PageEvent, function(err, results){
-                var totalObj = {};
+
                 var total = 0;
                 _.each(results, function(result){
                     total+= result.count;
                 });
-                totalObj.total = total;
-                results.push(totalObj);
+                var response = {
+                    results:results,
+                    total:total
+                };
                 self.log.debug('<< getPageViewsByDayReport');
-                fn(err, results);
+                fn(err, response);
             });
 
         });
@@ -352,15 +356,18 @@ module.exports = {
 
         analyticsDao.aggregateWithSum(groupCriteria, query, $$.m.SessionEvent, function(err, results){
 
-            var totalObj = {};
+
             var total = 0;
             _.each(results, function(result){
                 total+= result.count;
             });
-            totalObj.total = total;
-            results.push(totalObj);
+            var response = {
+                results:results,
+                total:total
+            };
+
             self.log.debug('<< getUniqueVisitorsByDayReport');
-            fn(err, results);
+            fn(err, response);
         });
 
     },
@@ -390,18 +397,22 @@ module.exports = {
         });
 
         orderDao.aggregateWithCustomStages(stageAry, $$.m.Order, function(err, results){
-            var totalObj = {};
+
             var total = 0;
             var totalAmount = 0;
             _.each(results, function(result){
                 total+= result.count;
                 totalAmount += result.amount;
             });
-            totalObj.total = total;
-            totalObj.totalAmount = totalAmount;
-            results.push(totalObj);
+
+
+            var response = {
+                results: results,
+                total: total,
+                totalAmount: totalAmount
+            };
             self.log.debug('<< getRevenueByMonthReport');
-            fn(err, results);
+            fn(err, response);
         });
     },
 
