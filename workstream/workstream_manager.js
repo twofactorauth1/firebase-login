@@ -261,6 +261,28 @@ module.exports = {
 
         //db.page_events.find({'url.domain': {$in:['www.indigenous.io', 'indigenous.io']}, server_time : {$gt: 1448928000000}}).count()
 
+    },
+
+    getNewVisitorsByDayReport: function(accountId, startDate, endDate, fn) {
+        var self = this;
+        self.log.debug('>> getUniqueVisitorsByDayReport');
+        var startDateMillis = startDate.getTime();
+        var endDateMillis = endDate.getTime();
+        //db.session_events.find({accountId:6, server_time_dt:{$exists:true}, new_visitor:true, server_time: {$lt:1449786165000, $gt:1448928000000}})
+        var query = {
+            accountId:accountId,
+            server_time_dt:{$exists:true},
+            new_visitor:true,
+            server_time: {$gt:startDateMillis, $lt:endDateMillis}
+        };
+        var groupCriteria = {
+            _id: {month: {$month:'$server_time_dt'}, year: {$year:'$server_time_dt'}, day: {$dayOfMonth:'$server_time_dt'}}
+        };
+
+        analyticsDao.aggregateWithSum(groupCriteria, query, $$.m.SessionEvent, function(err, results){
+            self.log.debug('<< getUniqueVisitorsByDayReport');
+            fn(err, results);
+        });
 
     },
 

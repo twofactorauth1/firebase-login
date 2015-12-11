@@ -34,6 +34,7 @@ _.extend(api.prototype, baseApi.prototype, {
         //these might need to move into their own api
         app.get(this.url('reports/contactsByDay'), this.isAuthAndSubscribedApi.bind(this), this.getContactsByDayReport.bind(this));
         app.get(this.url('reports/pageViewsByDay'), this.isAuthAndSubscribedApi.bind(this), this.getPageViewsByDayReport.bind(this));
+        app.get(this.url('reports/newVisitorsByDay'), this.isAuthAndSubscribedApi.bind(this), this.getNewVisitorsByDayReport.bind(this));
     },
 
     noop: function(req, resp) {
@@ -130,6 +131,20 @@ _.extend(api.prototype, baseApi.prototype, {
             return self.sendResultOrError(resp, err, results, "Error getting report");
         });
 
+    },
+
+    getNewVisitorsByDayReport: function(req, resp) {
+        var self = this;
+        self.log.debug('>> getUniqueVisitorsByDayReport');
+        var accountId = parseInt(self.accountId(req));
+        var startDate = moment(req.query.startDate);
+        var endDate = moment(req.query.endDate);
+
+        self.log.debug('Using dates:' + startDate.toDate() + ' and ' + endDate.toDate());
+        workstreamManager.getNewVisitorsByDayReport(accountId, startDate.toDate(), endDate.toDate(), function(err, results){
+            self.log.debug('<< getUniqueVisitorsByDayReport');
+            return self.sendResultOrError(resp, err, results, "Error getting report");
+        });
     }
 
 });
