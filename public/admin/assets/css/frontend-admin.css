@@ -97,6 +97,11 @@
 #componentloader .mt10 {
   margin-top: 10px;
 }
+#componentloader .full-color {
+  filter: url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\'><filter id=\'grayscale\'><feColorMatrix type=\'matrix\' values=\'1 0 0 0 0, 0 1 0 0 0, 0 0 1 0 0, 0 0 0 1 0\'/></filter></svg>#grayscale");
+  -webkit-filter: grayscale(0%);
+  opacity: 1;
+}
 #componentloader body {
   font-size: 13px;
 }
@@ -6916,26 +6921,6 @@ a[href="https://froala.com/wysiwyg-editor"] {
   width: 100%;
 }
 /* DOHY */
-.dohy-dashboard-container #loading-bar {
-  position: absolute;
-  bottom: 0;
-  height: 100%;
-  width: 100%;
-}
-.dohy-dashboard-container #loading-bar .bar {
-  position: absolute;
-  bottom: calc(50% - .75em);
-  top: auto;
-}
-.dohy-dashboard-container .dohy-dashboard-inner {
-  background-color: black;
-  background-image: url('http://s3.amazonaws.com/indigenous-digital-assets/account_6/dohy-bg-mountain-1_1449539273222.jpg');
-  background-repeat: no-repeat;
-  background-size: cover;
-  min-height: 100vh;
-  margin: 0 -15px;
-  background-attachment: fixed;
-}
 .dohy-dashboard-container .basic__img *,
 .dohy-dashboard-container .expand__clos *,
 .dohy-dashboard-container .image--basic *,
@@ -7047,7 +7032,7 @@ a[href="https://froala.com/wysiwyg-editor"] {
   margin: 0 auto;
   box-sizing: border-box;
 }
-@media only screen and (max-width: 530px) {
+@media only screen and (max-width: 660px) {
   .dohy-dashboard-container .image__cell {
     width: 50%;
   }
@@ -7061,7 +7046,7 @@ a[href="https://froala.com/wysiwyg-editor"] {
     width: 200%;
   }
 }
-@media only screen and (min-width: 531px) {
+@media only screen and (min-width: 661px) {
   .dohy-dashboard-container .image__cell {
     width: 25%;
   }
@@ -7081,6 +7066,69 @@ a[href="https://froala.com/wysiwyg-editor"] {
     width: 400%;
   }
 }
+.dohy-dashboard-container img.grayscale {
+  filter: url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\'><filter id=\'grayscale\'><feColorMatrix type=\'matrix\' values=\'0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0 0 0 1 0\'/></filter></svg>#grayscale");
+  /* Firefox 10+ */
+  filter: gray;
+  /* IE6-9 */
+  -webkit-filter: grayscale(100%);
+  /* Chrome 19+ & Safari 6+ */
+  -webkit-transition: all .6s ease;
+  /* Fade to color for Chrome and Safari */
+}
+.dohy-dashboard-container img.grayscale:hover {
+  filter: url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\'><filter id=\'grayscale\'><feColorMatrix type=\'matrix\' values=\'1 0 0 0 0, 0 1 0 0 0, 0 0 1 0 0, 0 0 0 1 0\'/></filter></svg>#grayscale");
+  -webkit-filter: grayscale(0%);
+}
+.dohy-dashboard-container svg {
+  background: url(http://4.bp.blogspot.com/-IzPWLqY4gJ0/T01CPzNb1KI/AAAAAAAACgA/_8uyj68QhFE/s400/a2cf7051-5952-4b39-aca3-4481976cb242.jpg);
+}
+.dohy-dashboard-container svg image {
+  transition: all .6s ease;
+}
+.dohy-dashboard-container svg image:hover {
+  opacity: 0;
+}
+.dohy-dashboard-container div.half-grayscale-container {
+  background: url(http://4.bp.blogspot.com/-IzPWLqY4gJ0/T01CPzNb1KI/AAAAAAAACgA/_8uyj68QhFE/s1600/a2cf7051-5952-4b39-aca3-4481976cb242.jpg) no-repeat;
+  /* IE6-9 */
+}
+.dohy-dashboard-container img.half-grayscale {
+  filter: url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\'><filter id=\'grayscale\'><feColorMatrix type=\'saturate\' values=\'0.5\'/></filter></svg>#grayscale");
+  /* Firefox 10+ */
+  filter: gray alpha(opacity=50);
+  /* IE6-9 */
+  -webkit-filter: grayscale(50%);
+  /* Chrome 19+ & Safari 6+ */
+  -webkit-transition: all .6s ease;
+  /* Fade to color for Chrome and Safari */
+  -webkit-backface-visibility: hidden;
+  /* Fix for transition flickering */
+}
+.dohy-dashboard-container img.half-grayscale:hover {
+  filter: none;
+  -webkit-filter: grayscale(0%);
+}
+.dohy-dashboard-container #loading-bar {
+  position: absolute;
+  bottom: 0;
+  height: 100%;
+  width: 100%;
+}
+.dohy-dashboard-container #loading-bar .bar {
+  position: absolute;
+  bottom: calc(50% - .75em);
+  top: auto;
+}
+.dohy-dashboard-container .dohy-dashboard-inner {
+  background-color: black;
+  background-image: url('http://s3.amazonaws.com/indigenous-digital-assets/account_6/dohy-bg-mountain-1_1449539273222.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  min-height: 100vh;
+  margin: 0 -15px;
+  background-attachment: fixed;
+}
 .dohy-dashboard-container #page-title,
 .dohy-dashboard-container .container-fullw {
   border: none;
@@ -7092,21 +7140,24 @@ a[href="https://froala.com/wysiwyg-editor"] {
   font-family: 'Raleway', sans-serif;
   font-weight: bold;
 }
+.dohy-dashboard-container .is-expanded .workstream-panel-img {
+  filter: url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\'><filter id=\'grayscale\'><feColorMatrix type=\'matrix\' values=\'1 0 0 0 0, 0 1 0 0 0, 0 0 1 0 0, 0 0 0 1 0\'/></filter></svg>#grayscale");
+  -webkit-filter: grayscale(0%);
+  opacity: 1;
+}
 .workstream-container {
   position: relative;
 }
 .workstream-tile-container {
   margin: 0;
 }
-.workstream-tile-container .workstream-panel-circle:hover {
-  background-color: #eca300!important;
+.workstream-tile-container .workstream-panel-circle:hover .workstream-panel-img {
+  filter: url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\'><filter id=\'grayscale\'><feColorMatrix type=\'matrix\' values=\'1 0 0 0 0, 0 1 0 0 0, 0 0 1 0 0, 0 0 0 1 0\'/></filter></svg>#grayscale");
+  -webkit-filter: grayscale(0%);
+  opacity: 1;
 }
 .workstream-tile-container .workstream-block-list {
   text-align: left;
-}
-.workstream-tile-container .workstream-block-link {
-  color: #5bc0de;
-  font-weight: bold;
 }
 .workstream-tile-container .tooltip {
   min-width: 10em;
@@ -7117,9 +7168,8 @@ a[href="https://froala.com/wysiwyg-editor"] {
 .workstream-tile-container.workstream-state-completed .workstream-panel-circle {
   background: green;
 }
-.workstream-tile-container a.workstream-block-complete:after {
-  content: '\2713';
-  color: #1a5200;
+.workstream-tile-container .workstream-block-link {
+  color: #5bc0de;
   font-weight: bold;
 }
 .workstream-progress-bar {
@@ -7132,9 +7182,6 @@ a[href="https://froala.com/wysiwyg-editor"] {
   transform: translate(-50%, -45%);
   border-radius: 5em;
   box-shadow: 0 0 0px 4px rgba(0, 0, 0, 0.5);
-}
-.is-expanded .workstream-panel-circle {
-  background-color: #eca300!important;
 }
 .workstream-detail-panel {
   background: #f3f3f3;
@@ -7160,7 +7207,6 @@ a[href="https://froala.com/wysiwyg-editor"] {
 }
 .dashboard-logo .indi-circle-img {
   background: #f3f3f3;
-  opacity: .5!important;
 }
 .dashboard-logo img {
   width: 100%;
@@ -7198,17 +7244,18 @@ a[href="https://froala.com/wysiwyg-editor"] {
   border-radius: 50% 50%;
   overflow: hidden;
   box-shadow: 0px 0px 0px 5px rgba(0, 0, 0, 0.1);
+  will-change: transform;
 }
 .indi-circle .indi-circle-title {
   position: absolute;
   bottom: 0;
   height: 50%;
   height: calc(50% - .5em);
-  padding: 1em .75em;
+  padding: .5em .75em;
   color: #50b0c9;
   font-family: 'Raleway', sans-serif;
   font-weight: bold;
-  font-size: 1.25em;
+  font-size: 12px;
   background: #f3f3f3;
   width: 100%;
   text-align: center;
@@ -7216,12 +7263,31 @@ a[href="https://froala.com/wysiwyg-editor"] {
   margin-bottom: 0;
   line-height: 1.25em;
 }
+@media screen and (min-width: 450px) {
+  .indi-circle .indi-circle-title {
+    font-size: 1.25em;
+  }
+}
+@media screen and (min-width: 667px) {
+  .indi-circle .indi-circle-title {
+    font-size: 1em;
+  }
+}
+@media screen and (min-width: 800px) {
+  .indi-circle .indi-circle-title {
+    font-size: 1.25em;
+    padding: 1em;
+  }
+}
 .indi-circle .indi-circle-img {
   width: 100%;
   height: auto;
   box-shadow: 0px 0px 1px 2px rgba(0, 0, 0, 0.3);
   border-radius: 50% 50%;
   opacity: .8;
+}
+.indi-circle .indi-circle-img:hover {
+  opacity: 1;
 }
 .indi-circle .panel-body {
   cursor: initial;

@@ -5,12 +5,12 @@
         class="indi-circle workstream-panel-circle panel panel-white text-center margin-bottom-0 cursor-pointer"
         ng-click="vm.workstreamClick()">
 
-        <img class="indi-circle-img" src="http://s3.amazonaws.com/indigenous-digital-assets/account_6/dohy-circle-configure-business-profile_1449548586772.png" alt="{{vm.workstream.name}}" />
+        <img class="indi-circle-img grayscale workstream-panel-img" src="http://s3.amazonaws.com/indigenous-digital-assets/account_6/dohy-send-email-2.png" alt="{{vm.workstream.name}}" />
 
         <div id="loading-bar"><div class="bar" ng-style="{ 'width': vm.completePercentageStyle }"><div class="peg"></div></div></div>
 
         <h3 class="workstream-title indi-circle-title">
-            {{vm.workstream.name}}
+            <div>{{vm.workstream.name}}</div>
         </h3>
 
         </div>
@@ -48,22 +48,36 @@
                         class="workstream-block-link checkbox clip-check check-primary checkbox-inline workstream-block-complete"
                         tooltip-placement="right"
                         tooltip-html-unsafe="{{block.helpText}}">
+
                         {{block.name}}
+
+                        <i class="fa fa-check-circle"></i>
+
                     </a>
+
                     <a ng-if = "!block.alias && !block.complete"
                         href="{{block.link}}"
                         class="workstream-block-link checkbox clip-check check-primary checkbox-inline"
                         tooltip-placement="right"
                         tooltip-html-unsafe="{{block.helpText}}">
+
                         {{block.name}}
+
+                        <i class="fa fa-long-arrow-right"></i>
+
                     </a>
+
                     <a ng-if="block.alias && !block.complete"
                         href="javascript:void(0)"
                         class="workstream-block-link checkbox clip-check check-primary checkbox-inline"
                         tooltip-placement="right"
                         ng-click="vm.callAliasMethod(block.alias)"
                         tooltip-html-unsafe="{{block.helpText}}">
+
                         {{block.name}}
+
+                        <i class="fa fa-long-arrow-right"></i>
+
                     </a>
 
                 </li>
