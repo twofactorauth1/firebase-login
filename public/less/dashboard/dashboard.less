@@ -3,6 +3,8 @@
 @boxShadow: 0px 0px 0px 5px rgba(0,0,0,.1);
 @headerFontFamily: 'Raleway', sans-serif;
 
+@import "navigation-notification-icon.less";
+
 .dohy-dashboard-container {
 
     @import "grid.less";
@@ -124,7 +126,7 @@
         font-weight: bold;
     }
 
-    .fa-check-circle {
+    .workstream-panel-circle-container .fa-check-circle {
         color: #5bc0de;
         z-index: 1;
         position: absolute;
@@ -322,6 +324,7 @@
         line-height: 1.42857143;
         border: none;
         border-radius: 10px;
+        opacity: 0;
     }
 
     .panel-body {

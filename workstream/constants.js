@@ -35,7 +35,10 @@ defaultWorkstreams[0] = {
         }
     ],
     "analyticWidgets" : [
-        {name:"visitors", link:''}
+        {
+            name: "visitors",
+            link: "/admin/#/website/site-analytics"
+        }
     ],
     "name" : "Build a Website",
     "icon" : "",
@@ -80,11 +83,14 @@ defaultWorkstreams[1] = {
         }
     ],
     "analyticWidgets" : [
-        {name:"contacts"}
+        {
+            name: "contacts",
+            link: "/admin/#/customers"
+        }
     ],
     "name" : "Generate Leads",
     "icon" : "",
-    "bgImage" : "//s3.amazonaws.com/indigenous-digital-assets/account_6/dohy-website-builder-2.png",
+    "bgImage" : "//s3.amazonaws.com/indigenous-digital-assets/account_6/dohy-campaign-2.png",
     "_v" : "0.1",
     "created" : {
         "date" : new Date(),
@@ -132,13 +138,22 @@ defaultWorkstreams[2] = {
         }
     ],
     "analyticWidgets" : [
-        {name: "CampaignMetrics"},
-        {name: "SocialMedia"},
-        {name: "visitors"}
+        {
+            name: "CampaignMetrics",
+            link: "/admin/#/marketing/campaigns"
+        },
+        {
+            name: "SocialMedia",
+            link: "/admin/#/marketing/social-feed"
+        },
+        {
+            name: "visitors",
+            link: "/admin/#/website/site-analytics"
+        }
     ],
     "name" : "Engage Your Customers",
     "icon" : "",
-    "bgImage" : "//s3.amazonaws.com/indigenous-digital-assets/account_6/dohy-website-builder-2.png",
+    "bgImage" : "//s3.amazonaws.com/indigenous-digital-assets/account_6/dohy-social-media-2.png",
     "_v" : "0.1",
     "created" : {
         "date" : new Date(),
@@ -179,12 +194,18 @@ defaultWorkstreams[3] = {
         }
     ],
     "analyticWidgets" : [
-        {name:"Orders"},
-        {name:"Revenue"}
+        {
+            name: "Orders",
+            link: "/admin/#/commerce/orders"
+        },
+        {
+            name: "Revenue",
+            link: "/admin/#/commerce/orders"
+        }
     ],
     "name" : "Make Money",
     "icon" : "",
-    "bgImage" : "//s3.amazonaws.com/indigenous-digital-assets/account_6/dohy-website-builder-2.png",
+    "bgImage" : "//s3.amazonaws.com/indigenous-digital-assets/account_6/dohy-ecommerce-2.png",
     "_v" : "0.1",
     "created" : {
         "date" : new Date(),

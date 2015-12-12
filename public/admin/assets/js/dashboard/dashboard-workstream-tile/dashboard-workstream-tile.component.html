@@ -45,6 +45,7 @@
 
             <ol class="workstream-block-list list-unstyled" ng-if="vm.workstream.unlocked">
                 <li class="workstream-block-list-item" ng-repeat="block in vm.uiState.openWorkstream.blocks">
+                    <h1>{{block.complete}}</h1>
                     <a ng-if="block.complete"
                         href="javascript:void(0)"
                         class="workstream-block-link checkbox clip-check check-primary checkbox-inline workstream-block-complete"

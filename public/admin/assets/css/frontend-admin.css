@@ -6921,6 +6921,69 @@ a[href="https://froala.com/wysiwyg-editor"] {
   width: 100%;
 }
 /* DOHY */
+.main-navigation-menu .dashboard-update-icon {
+  position: absolute;
+  top: 50%;
+  right: .5em;
+  transform: translateY(-50%);
+  color: #f2b865!important;
+  -moz-animation-name: pulse;
+  -moz-animation-duration: 2s;
+  -moz-animation-iteration-count: 3;
+  -webkit-animation-name: pulse;
+  -webkit-animation-duration: 2s;
+  -webkit-animation-iteration-count: 3;
+  -ms-animation-name: pulse;
+  -ms-animation-duration: 2s;
+  -ms-animation-iteration-count: 3;
+  animation-name: pulse;
+  animation-duration: 2s;
+  animation-iteration-count: 3;
+}
+@-moz-keyframes pulse {
+  from {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+@-webkit-keyframes pulse {
+  from {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+@-ms-keyframes pulse {
+  from {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+@keyframes pulse {
+  from {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
 .dohy-dashboard-container .basic__img *,
 .dohy-dashboard-container .expand__clos *,
 .dohy-dashboard-container .image--basic *,
@@ -7184,13 +7247,14 @@ a[href="https://froala.com/wysiwyg-editor"] {
   color: #5bc0de;
   font-weight: bold;
 }
-.workstream-tile-container .fa-check-circle {
+.workstream-tile-container .workstream-panel-circle-container .fa-check-circle {
   color: #5bc0de;
   z-index: 1;
   position: absolute;
   top: 25%;
   left: 50%;
-  font-size: 2em;
+  font-size: 5em;
+  transform: translate(-50%, -50%);
 }
 .workstream-detail-panel {
   background: #f3f3f3;
@@ -7343,6 +7407,7 @@ a[href="https://froala.com/wysiwyg-editor"] {
   line-height: 1.42857143;
   border: none;
   border-radius: 10px;
+  opacity: 0;
 }
 .indi-rounded .panel-body {
   cursor: initial;

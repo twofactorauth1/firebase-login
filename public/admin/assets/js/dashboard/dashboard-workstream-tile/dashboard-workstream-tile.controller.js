@@ -115,10 +115,6 @@ function dashboardWorkstreamTileComponentController($scope, $attrs, $filter, Das
       return vm.modalInstance;
     }
 
-    // function onPlayerReady(videogularApi) {
-    //     debugger;
-    // }
-
     function getVideoConfigObject(workstream) {
         var parsedUrl = urlParser.parse(workstream.unlockVideoUrl);
         var posterImage = null
@@ -196,7 +192,7 @@ function dashboardWorkstreamTileComponentController($scope, $attrs, $filter, Das
     }
 
     function callbackOnMediaClose(){
-        // Need to call getWorkstream(vm.uiState.openWorkstream._id)
+        // TODO: Need to call getWorkstream(vm.uiState.openWorkstream._id)
         // but it is not returning updated object.
         DashboardService.getWorkstreams().then(function(response){
             var data = response.data;
@@ -213,7 +209,7 @@ function dashboardWorkstreamTileComponentController($scope, $attrs, $filter, Das
         var p = 0;
 
         var stop = $interval(function() {
-            console.log('p = ', p);
+
             if (p === percentage) {
                 $interval.cancel(stop);
             }

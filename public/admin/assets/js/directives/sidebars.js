@@ -1,5 +1,5 @@
 'use strict';
-/** 
+/**
   * A set of directives for left and right sidebar.
 */
 app.directive('sidebar', ['$document', '$rootScope',
@@ -96,11 +96,34 @@ function ($document, $rootScope) {
         return $('.app-sidebar-fixed').length;
     }
 
-}).directive('appAside', ['$window', '$rootScope', '$timeout', 'APP_MEDIAQUERY',
-function ($window, $rootScope, $timeout, mq) {
+}).directive('appAside', ['$window', '$rootScope', '$timeout', 'APP_MEDIAQUERY', 'DashboardService',
+function ($window, $rootScope, $timeout, mq, DashboardService) {
     var $html = $('html'), $win = $($window), _this, wrap = $('.app-aside');
     return {
         restrict: 'AC',
+
+        controller: ['$scope', function($scope) {
+
+            $scope.showDashboardNotificationIcon = false;
+
+            $scope.$watch(function() { return DashboardService.updatedWorkstreams }, function() {
+                debugger;
+                if (DashboardService.awayFromDashboard) {
+                    $scope.showDashboardNotificationIcon = true;
+                }
+            }, true);
+
+            $scope.setAwayFromDashbaord = function(urlPath) {
+                debugger;
+                if (urlPath === '#/dashboard' || urlPath === '#/dohy') {
+                    DashboardService.setAwayFromDashboard(false);
+                    // DashboardService.setUpdatedWorkstreams(false);
+                } else {
+                    DashboardService.setAwayFromDashboard(true);
+                }
+            }
+
+        }],
 
         link: function (scope, elem, attrs, controllers) {
             var eventObject = isTouch() ? 'click' : 'mouseenter';
@@ -191,6 +214,9 @@ function ($window, $rootScope, $timeout, mq) {
                     function () {
                         var newPath;
                         newPath = window.location.hash;
+
+                        scope.setAwayFromDashbaord(newPath);
+
                         angular.forEach(elem.find('.main-navigation-menu a'), function (domLink) {
                             var link = angular.element(domLink);
                             var menu;

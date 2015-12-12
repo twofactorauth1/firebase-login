@@ -19,13 +19,18 @@
         var baseReportsAPIUrl = '/api/2.0/dashboard/reports';
         var baseAccountAPIUrl = '/api/1.0/account/';
 
+        dashboardService.loading = { value:0 };
+        dashboardService.updatedWorkstreams = false;
+        dashboardService.lastWorkstream = {};
+        dashboardService.awayFromDashboard = false;
+
         dashboardService.getWorkstreams = getWorkstreams;
         dashboardService.getWorkstream = getWorkstream;
         dashboardService.unlockWorkstream = unlockWorkstream;
         dashboardService.getContactsByDayReport = getContactsByDayReport;
-        dashboardService.loading = {value:0};
         dashboardService.updateAccount = updateAccount;
-        //dashboardService.getAnalytics = getAnalytics;
+        dashboardService.setAwayFromDashboard = setAwayFromDashboard;
+
 
 		function dashRequest(fn) {
             dashboardService.loading.value = dashboardService.loading.value + 1;
@@ -41,6 +46,19 @@
 
             function success(data) {
                 dashboardService.state.workstreams = data;
+
+                if (!dashboardService.awayFromDashboard) {
+                    dashboardService.lastWorkstream = data;
+                } else {
+                    if (!angular.equals(dashboardService.lastWorkstream, data)) {
+                        dashboardService.updatedWorkstreams = true;
+                    } else {
+                        dashboardService.updatedWorkstreams = false;
+                    }
+                }
+
+                //continuously poll for workstream updates
+                $timeout(dashboardService.getWorkstreams, 2000);
             }
 
             function error(error) {
@@ -107,10 +125,18 @@
                 dashRequest($http.put(baseAccountAPIUrl + [account._id].join('/'), account)).success(success).error(error));
         }
 
+        function setAwayFromDashboard(away) {
+            dashboardService.awayFromDashboard = away;
+
+            if (away) {
+                console.log(away);
+            }
+
+        }
+
 		(function init() {
 
             dashboardService.getWorkstreams();
-
 
 		})();
 

@@ -1,28 +1,30 @@
 <div class="analytic-tile-container image--basic">
 
     <div class="indi-rounded panel panel-white text-center cursor-pointer">
-        <h3 class="analytic-title indi-rounded-title">{{vm.analytic}}</h3>
+
+        <h3 class="analytic-title indi-rounded-title">{{vm.analytic.name}}</h3>
+
         <div class="analytic-details">
-        <div class="col-xs-12 title-container">
-                <div class="col-xs-7 left-title">
-                    <span class="pull-left">NEW VISITORS</span>
+
+            <div ng-repeat="analytic in ::vm.analytic.uiDetails" class="col-xs-12 title-container">
+
+                <div class="analytic-data-label col-xs-7 left-title">
+                    <span class="pull-left">{{analytic.analyticDataLabel}}</span>
                 </div>
-                <div class="col-xs-5 right-value">
-                    <span>6</span>
+
+                <div class="analytic-data-value col-xs-5 right-value">
+                    <span>{{analytic.analyticDataValue}}</span>
                 </div>
+
+            </div>
+
+            <div class="center margin-top-10">
+                <button class="center btn btn-primary btn-lg btn-wide btn-o ng-scope"></i>VIEW {{vm.analytic.name}}</button>
+            </div>
+
         </div>
-        <div class="col-xs-12 title-container">
-                <div class="col-xs-7 left-title">
-                    <span class="pull-left">PAGE VIEWS</span>
-                </div>
-                <div class="col-xs-5 right-value">
-                    <span>6</span>
-                </div>
-        </div>
-        <div class="center margin-top-10">
-            <button class="center btn btn-primary btn-lg btn-wide btn-o ng-scope"></i>VIEW ANALYTICS</button>
-        </div>
-        </div>
+
         <img class="indi-rounded-img" src="http://s3.amazonaws.com/indigenous-digital-assets/account_6/dohy-circle-configure-business-profile_1449548586772.png" alt="{{vm.analytic}}" />
+
     </div>
 </div>
