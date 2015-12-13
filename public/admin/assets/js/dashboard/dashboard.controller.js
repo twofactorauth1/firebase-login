@@ -16,12 +16,20 @@
         vm.openMediaModal = openMediaModal;
         vm.insertMedia = insertMedia;
         vm.buildViewModel = buildViewModel;
+        vm.workstreamDisplayOrder = _.invert(_.object(_.pairs(['Build a Website', 'Generate Leads', 'Engage Your Customers', 'Make Money'])));
+        vm.analyticDisplayOrder = _.invert(_.object(_.pairs(['visitors', 'contacts', 'CampaignMetrics', 'Revenue', 'SocialMedia'])));
 
         $scope.$watch(function() { return DashboardService.state }, function(state) {
 
+            state.workstreams = _.sortBy(state.workstreams, function(x) {
+                return vm.workstreamDisplayOrder[x.name]
+            });
+
             vm.state = state;
 
-            vm.buildViewModel();
+            $timeout(function() {
+                vm.buildViewModel();
+            }, 0);
 
         }, true);
 
@@ -63,7 +71,9 @@
 
             //remove duplicates and set to state
             vm.state.lockedAnalyticsWidgets = _.uniq(lockedAnalyticsWidgets, function(w) { return w.name; });
-            vm.state.unlockedAnalyticsWidgets = _.uniq(unlockedAnalyticsWidgets, function(w) { return w.name; });
+            vm.state.unlockedAnalyticsWidgets = _.sortBy(_.uniq(unlockedAnalyticsWidgets, function(w) { return w.name; }), function(x) {
+                return vm.analyticDisplayOrder[x.name]
+            });
 
             vm.state.completeWorkstreams = completeWorkstreams;
             vm.state.incompleteWorksreams = incompleteWorkstreams;

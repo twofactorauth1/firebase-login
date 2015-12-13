@@ -142,10 +142,10 @@ defaultWorkstreams[2] = {
             name: "CampaignMetrics",
             link: "/admin/#/marketing/campaigns"
         },
-        {
-            name: "SocialMedia",
-            link: "/admin/#/marketing/social-feed"
-        },
+        // {
+        //     name: "SocialMedia",
+        //     link: "/admin/#/marketing/social-feed"
+        // },
         {
             name: "visitors",
             link: "/admin/#/website/site-analytics"

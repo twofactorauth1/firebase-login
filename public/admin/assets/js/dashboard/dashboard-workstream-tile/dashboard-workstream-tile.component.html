@@ -1,4 +1,4 @@
-<div class="workstream-tile-container image--basic" ng-class="{ 'workstream-state-unlocked': vm.workstream.unlocked, 'workstream-state-completed': vm.workstream.completed }">
+<div class="workstream-tile-container image--basic" ng-class="{ 'workstream-state-unlocked': vm.workstream.unlocked, 'workstream-state-completed': vm.workstream.completed && workstream.state.unlocked }">
 
     <div class="workstream-panel-circle-container">
         <div
@@ -7,7 +7,7 @@
 
         <img class="indi-circle-img grayscale workstream-panel-img"  ng-src="{{vm.workstream.bgImage}}" err-src="assets/images/default-page.jpg" alt="{{vm.workstream.name}}" />
 
-        <i ng-if="vm.workstream.completed" class="fa fa-check-circle"></i>
+        <i ng-if="vm.workstream.completed && vm.workstream.unlocked" class="fa fa-check-circle"></i>
 
         <div ng-if="vm.workstream.unlocked" id="loading-bar"><div class="bar" ng-style="{ 'width': vm.completePercentageStyle }"><div class="peg"></div></div></div>
 

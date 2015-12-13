@@ -146,10 +146,12 @@
     box-sizing: border-box;
 }
 
-@media only screen and (max-width: 660px) {
+@media only screen and (max-width: 550px) {
 
   .image__cell {
-      width: 50%;
+      width: 100%!important;
+      float: none!important;
+      padding: 1em;
   }
 
   .image__cell:nth-of-type(2n+2) .image--expand {
@@ -166,7 +168,28 @@
 
 }
 
-@media only screen and (min-width: 661px) {
+@media only screen and (max-width: 960px) {
+
+  .image__cell {
+      width: 50%;
+      float: left;
+  }
+
+  .image__cell:nth-of-type(2n+2) .image--expand {
+      margin-left: -100%;
+  }
+
+  .image__cell:nth-of-type(2n+3) {
+      clear:left;
+  }
+
+  .image--expand {
+      width: 200%;
+  }
+
+}
+
+@media only screen and (min-width: 961px) {
   .image__cell {
       width: 25%;
   }

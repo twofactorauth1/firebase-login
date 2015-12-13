@@ -12,30 +12,36 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
 
     vm.analyticMap = analyticMap;
     vm.uiDetails = [];
+
+    //TODO: get from Dashboard.service
     vm.analyticData = {
         'visitors': {},
         'contacts': {},
         'CampaignMetrics': {},
-        'Revenue': {}
+        'Revenue': {},
+        'SocialMedia': {}
     };
+
     vm.getVisitorData = getVisitorData;
     vm.getContactData = getContactData;
     vm.getCampaignData = getCampaignData;
     vm.getRevenueData = getRevenueData;
+    vm.getSocialData = getSocialData;
+    vm.hideIfNotImplemented = hideIfNotImplemented;
 
     function getVisitorData() {
         DashboardService.getPageViewsByDayReport().then(function(data){
-            vm.analyticData['visitors'].pageviews = data.total;
+            vm.analyticData['visitors'].pageviews = data.data.total;
         });
         DashboardService.getNewVisitorsByDayReport().then(function(data){
-            vm.analyticData['visitors'].visitors = data.total;
+            vm.analyticData['visitors'].visitors = data.data.total;
         });
     }
 
     function getContactData() {
         DashboardService.getContactsByDayReport().then(function(data){
-            vm.analyticData['contacts'].customers = data.total;
-            vm.analyticData['contacts'].leads = data.leadTotal;
+            vm.analyticData['contacts'].customers = data.data.total;
+            vm.analyticData['contacts'].leads = data.data.leadTotal;
         });
     }
 
@@ -46,30 +52,38 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
         // });
     }
 
+    function getSocialData() {
+        // DashboardService.getContactsByDayReport().then(function(data){
+            vm.analyticData['SocialMedia'].facebook = 0;
+            vm.analyticData['SocialMedia'].twitter = 0;
+        // });
+    }
+
     function getRevenueData() {
         DashboardService.getContactsByDayReport().then(function(data){
-            vm.analyticData['Revenue'].month = data.total;
-            vm.analyticData['Revenue'].ytd = data.totalAmount;
+            vm.analyticData['Revenue'].month = data.data.total;
+            vm.analyticData['Revenue'].ytd = data.data.totalAmount;
         });
     }
 
     function analyticMap() {
 
-        var ret = [];
+        var ret = {};
 
         switch(vm.analytic.name) {
             case 'visitors':
 
                 vm.getVisitorData();
-
-                ret = [
+                ret.widgetTitle = 'Website';
+                ret.buttonTitle = 'View Analytics';
+                ret.data = [
                     {
                         analyticDataLabel: 'NEW VISITORS',
-                        analyticDataValue: vm.analyticData['visitors'].visitors
+                        analyticDataValue: function() { return vm.analyticData['visitors'].visitors }
                     },
                     {
                         analyticDataLabel: 'PAGE VIEWS',
-                        analyticDataValue: vm.analyticData['visitors'].pageviews
+                        analyticDataValue: function() { return vm.analyticData['visitors'].pageviews }
                     }
                 ]
 
@@ -78,35 +92,51 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
             case 'contacts':
 
                 vm.getContactData();
-
-                ret = [
+                ret.widgetTitle = 'Contacts';
+                ret.buttonTitle = 'Manage Customers';
+                ret.data = [
                     {
                         analyticDataLabel: 'CUSTOMERS',
-                        analyticDataValue: vm.analyticData['contacts'].customers
+                        analyticDataValue: function() { return vm.analyticData['contacts'].customers }
                     },
                     {
                         analyticDataLabel: 'LEADS',
-                        analyticDataValue: vm.analyticData['contacts'].leads
+                        analyticDataValue: function() { return vm.analyticData['contacts'].leads }
                     }
                 ]
                 break;
             case 'CampaignMetrics':
 
                 vm.getCampaignData();
-
-                ret = [
+                ret.widgetTitle = 'Campaigns';
+                ret.buttonTitle = 'View Campaigns';
+                ret.data = [
                     {
                         analyticDataLabel: 'ACTIVE',
-                        analyticDataValue: vm.analyticData['CampaignMetrics'].active
+                        analyticDataValue: function() { return vm.analyticData['CampaignMetrics'].active }
                     },
                     {
                         analyticDataLabel: 'OPENED/CLOSED',
-                        analyticDataValue: vm.analyticData['CampaignMetrics'].openedclosed
+                        analyticDataValue: function() { return vm.analyticData['CampaignMetrics'].openedclosed }
                     }
                 ]
 
                 break;
             case 'SocialMedia':
+
+                vm.getSocialData();
+                ret.widgetTitle = 'Social Media';
+                ret.buttonTitle = 'Manage Social Networks';
+                ret.data = [
+                    {
+                        analyticDataLabel: 'FACEBOOK',
+                        analyticDataValue: function() { return vm.analyticData['SocialMedia'].facebook }
+                    },
+                    {
+                        analyticDataLabel: 'TWITTER',
+                        analyticDataValue: function() { return vm.analyticData['SocialMedia'].twitter }
+                    }
+                ]
 
                 break;
             case 'Orders':
@@ -115,16 +145,18 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
             case 'Revenue':
 
                 vm.getRevenueData();
-
-                ret = [
+                ret.widgetTitle = 'E-Commerce';
+                ret.buttonTitle = 'View Revenue';
+                ret.data = [
                     {
-                        analyticDataLabel: 'REVENUE',
-                        analyticDataValue: vm.analyticData['Revenue'].month
-                    },
-                    {
-                        analyticDataLabel: 'YTD',
-                        analyticDataValue: vm.analyticData['Revenue'].ytd
+                        analyticDataLabel: 'MONTHLY REVENUE',
+                        analyticDataValue: function() { return vm.analyticData['Revenue'].month }
                     }
+                    // ,
+                    // {
+                    //     analyticDataLabel: 'YTD',
+                    //     analyticDataValue: function() { return vm.analyticData['Revenue'].ytd }
+                    // }
                 ]
 
                 break;
@@ -135,10 +167,20 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
         return ret;
     }
 
+    function hideIfNotImplemented() {
+
+        if (vm.uiDetails.data === undefined) {
+            vm.element.parent().hide()
+        }
+
+    }
+
     function init(element) {
         vm.element = element;
 
         vm.uiDetails = vm.analyticMap();
+
+        // vm.hideIfNotImplemented();
 
     }
 
