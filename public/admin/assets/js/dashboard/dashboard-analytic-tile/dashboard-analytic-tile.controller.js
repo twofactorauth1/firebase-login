@@ -93,7 +93,7 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
 
                 vm.getContactData();
                 ret.widgetTitle = 'Contacts';
-                ret.buttonTitle = 'Manage Customers';
+                ret.buttonTitle = 'View Contacts';
                 ret.data = [
                     {
                         analyticDataLabel: 'CUSTOMERS',
@@ -126,7 +126,7 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
 
                 vm.getSocialData();
                 ret.widgetTitle = 'Social Media';
-                ret.buttonTitle = 'Manage Social Networks';
+                ret.buttonTitle = 'View Social Networks';
                 ret.data = [
                     {
                         analyticDataLabel: 'FACEBOOK',
