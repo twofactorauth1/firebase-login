@@ -67,6 +67,7 @@
         font-size: 2.5em;
         max-width: 80%;
         margin: 0 auto;
+        text-transform: none;
     }
 
     .is-expanded .workstream-panel-img {
@@ -147,8 +148,12 @@
         position: absolute;
         top: 25%;
         left: 50%;
-        font-size: 5em;
+        font-size: 3em;
         transform: translate(-50%,-50%);
+
+        @media screen and (min-width: 768px) {
+            font-size: 5em;
+        }
     }
 
 }
@@ -275,8 +280,12 @@
         }
 
         @media screen and (min-width: 800px) {
-            font-size: 1.25em;
-            padding: 1em;
+            font-size: 1.5em;
+        }
+
+        @media screen and (min-width: 1280px) {
+            font-size: 2em;
+            height: calc(~'50% - .35em');
         }
     }
 
@@ -403,6 +412,9 @@
             }
             .workstream-poster-image{
                 width: 100%;
+                max-width: 400px;
+                margin: 0 auto;
+                display: block;
             }
             &:hover{
                 .fa{

@@ -7031,7 +7031,7 @@ a[href="https://froala.com/wysiwyg-editor"] {
   cursor: pointer;
 }
 .dohy-dashboard-container .image__cell.is-expanded .image--expand {
-  max-height: 500px;
+  max-height: 1000px;
   margin-bottom: 10px;
 }
 .dohy-dashboard-container .image--expand {
@@ -7074,13 +7074,20 @@ a[href="https://froala.com/wysiwyg-editor"] {
 }
 .dohy-dashboard-container .expand__close {
   position: absolute;
-  top: 10px;
-  right: 20px;
+  top: 0;
+  right: 0;
+  font-size: 3em;
   color: #454545;
-  font-size: 50px;
   line-height: 50px;
   text-decoration: none;
   cursor: pointer;
+}
+@media screen and (min-width: 400px) {
+  .dohy-dashboard-container .expand__close {
+    top: 10px;
+    right: 20px;
+    font-size: 50px;
+  }
 }
 .dohy-dashboard-container .expand__close:before {
   content: '×';
@@ -7221,6 +7228,7 @@ a[href="https://froala.com/wysiwyg-editor"] {
   font-size: 2.5em;
   max-width: 80%;
   margin: 0 auto;
+  text-transform: none;
 }
 .dohy-dashboard-container .is-expanded .workstream-panel-img {
   filter: url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\'><filter id=\'grayscale\'><feColorMatrix type=\'matrix\' values=\'1 0 0 0 0, 0 1 0 0 0, 0 0 1 0 0, 0 0 0 1 0\'/></filter></svg>#grayscale");
@@ -7269,8 +7277,13 @@ a[href="https://froala.com/wysiwyg-editor"] {
   position: absolute;
   top: 25%;
   left: 50%;
-  font-size: 5em;
+  font-size: 3em;
   transform: translate(-50%, -50%);
+}
+@media screen and (min-width: 768px) {
+  .workstream-tile-container .workstream-panel-circle-container .fa-check-circle {
+    font-size: 5em;
+  }
 }
 .workstream-detail-panel {
   background: #f3f3f3;
@@ -7370,8 +7383,13 @@ a[href="https://froala.com/wysiwyg-editor"] {
 }
 @media screen and (min-width: 800px) {
   .indi-circle .indi-circle-title {
-    font-size: 1.25em;
-    padding: 1em;
+    font-size: 1.5em;
+  }
+}
+@media screen and (min-width: 1280px) {
+  .indi-circle .indi-circle-title {
+    font-size: 2em;
+    height: calc(50% - .35em);
   }
 }
 .indi-circle .indi-circle-img {
@@ -7471,6 +7489,9 @@ a[href="https://froala.com/wysiwyg-editor"] {
 }
 .workstream-video-thumbnail .workstream-poster-container .workstream-poster-image-container .workstream-poster-image {
   width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+  display: block;
 }
 .workstream-video-thumbnail .workstream-poster-container .workstream-poster-image-container:hover .fa {
   color: #cc181e;
