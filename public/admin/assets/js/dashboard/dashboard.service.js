@@ -106,8 +106,9 @@
                  * polyfill lib -> https://github.com/Yaffle/EventSource
                  */
                 if (dashboardService.polls < 300) {
-                    $timeout(dashboardService.getWorkstreams, 2000);
+                    $timeout(dashboardService.getWorkstreams, 3000);
                     dashboardService.polls++;
+                    console.log('dashboardService.polls', dashboardService.polls);
                 }
             }
 

@@ -7105,9 +7105,10 @@ a[href="https://froala.com/wysiwyg-editor"] {
 }
 @media only screen and (max-width: 550px) {
   .dohy-dashboard-container .image__cell {
-    width: 100%!important;
+    width: 80%!important;
     float: none!important;
     padding: 1em;
+    margin: 0 auto;
   }
   .dohy-dashboard-container .image__cell:nth-of-type(2n+2) .image--expand {
     margin-left: -100%;
@@ -7257,12 +7258,11 @@ a[href="https://froala.com/wysiwyg-editor"] {
 }
 .workstream-button {
   display: inline-block !important;
-  color: #5bc0de;
-  border-color: #5bc0de;
+  color: white;
+  border-color: transparent;
   vertical-align: middle;
-  padding: 0 5px;
-  height: 2em;
-  margin: 0 2px;
+  margin: 0;
+  padding: 0;
 }
 .workstream-tile-container {
   margin: 0;
@@ -7335,8 +7335,10 @@ a[href="https://froala.com/wysiwyg-editor"] {
   font-size: 10px;
   color: #f3f3f3;
 }
-.analytic-tile-container {
-  padding: 2em;
+@media screen and (min-width: 1330px) {
+  .analytic-tile-container {
+    padding: 2em;
+  }
 }
 .analytic-tile-container .analytic-data-label {
   color: #f3f3f3;
@@ -7356,8 +7358,10 @@ a[href="https://froala.com/wysiwyg-editor"] {
 }
 .analytic-tile-container .analytic-data-value {
   float: right;
+  text-align: right;
   width: 30%;
-  font-size: 20px;
+  font-size: 1.25em;
+  line-height: 1;
   font-weight: bold;
   color: #f3f3f3;
 }
@@ -7376,8 +7380,7 @@ a[href="https://froala.com/wysiwyg-editor"] {
   width: 100%;
 }
 .analytic-tile-container .title-container {
-  margin-top: 8%;
-  margin-bottom: 8%;
+  margin: 1em 0 0;
 }
 .analytic-locked .analytic-tile-container {
   pointer-events: none;
@@ -7423,7 +7426,7 @@ a[href="https://froala.com/wysiwyg-editor"] {
 }
 @media screen and (min-width: 961px) {
   .indi-circle .indi-circle-title {
-    font-size: 1.5em;
+    font-size: 1.25em;
   }
 }
 @media screen and (min-width: 1280px) {
@@ -7464,7 +7467,7 @@ a[href="https://froala.com/wysiwyg-editor"] {
   height: 20%;
   left: 10px;
   right: 10px;
-  padding: .5em .5em;
+  padding: 5% .5em;
   font-weight: bold;
   background: #f3f3f3;
   width: 90%;
