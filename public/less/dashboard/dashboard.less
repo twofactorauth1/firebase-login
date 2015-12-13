@@ -26,7 +26,7 @@
 
     .dohy-dashboard-inner {
         background-color: black;
-        background-image: url('http://s3.amazonaws.com/indigenous-digital-assets/account_6/dohy-bg-mountain-1_1449539273222.jpg');
+        background-image: linear-gradient( rgba(0, 0, 0, .35), rgba(0, 0, 0, 0.35) ), url('http://s3.amazonaws.com/indigenous-digital-assets/account_6/dohy-bg-mountain-1_1449539273222.jpg');
         background-repeat: no-repeat;
         background-size: cover;
         // min-height: 1000px;
@@ -57,11 +57,16 @@
         border: none;
     }
 
-    #page-title .mainTitle, #page-title .mainDescription {
+    #page-title .mainTitle, #page-title .mainDescription, .mainTitle {
         color: white;
         text-align: center;
         font-family: @headerFontFamily;
         font-weight: bold;
+        padding: 15px;
+        line-height: 1.25em;
+        font-size: 2.5em;
+        max-width: 80%;
+        margin: 0 auto;
     }
 
     .is-expanded .workstream-panel-img {
@@ -73,6 +78,16 @@
 
 .workstream-container {
     position: relative;
+}
+
+.workstream-button {
+    display: inline-block !important;
+    color: #5bc0de;
+    border-color: #5bc0de;
+    vertical-align: middle;
+    padding: 0 5px;
+    height: 2em;
+    margin: 0 2px;
 }
 
 .workstream-tile-container {
@@ -184,6 +199,11 @@
 }
 
 .analytic-tile-container {
+
+    .analytic-title {
+        text-transform: uppercase;
+    }
+
     .left-title{
         color: #f3f3f3;
     }
@@ -203,6 +223,13 @@
         margin-bottom:8%;
     }
 
+}
+
+.analytic-locked {
+    .analytic-tile-container {
+        pointer-events: none;
+        opacity: .5;
+    }
 }
 
 .indi-circle {
@@ -259,6 +286,8 @@
         box-shadow: 0px 0px 1px 2px rgba(0, 0, 0, .3);
         border-radius: 50% 50%;
         opacity: .8;
+        min-width: 50px;
+        min-height: 50px;
 
         &:hover {
             opacity: 1;
@@ -305,6 +334,7 @@
         font-size: 20px;
         text-align: center;
         box-shadow: 0px -9px 10px -6px rgba(0, 0, 0, .3);
+        top: 0;
     }
     .analytic-details {
         position: absolute;

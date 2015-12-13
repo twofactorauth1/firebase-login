@@ -4,14 +4,21 @@
     <section id="page-title" class="padding-top-25 padding-bottom-15">
         <div class="row">
             <div>
-                <div class="dashboard-logo indi-circle margin-bottom-10" ng-class="{ 'indi-circle': !vm.state.account.business.logo }">
-                    <img ng-click="vm.openMediaModal('media-modal', 'MediaModalCtrl', 'lg')" ng-src="{{vm.state.account.business.logo}}" err-src="assets/images/default-media.png" alt="" ng-class="{ 'indi-circle-img': !vm.state.account.business.logo }">
+                <div class="dashboard-logo indi-circle margin-bottom-10" ng-class="{ 'indi-circle': !vm.account.business.logo }">
+                    <img ng-click="vm.openMediaModal('media-modal', 'MediaModalCtrl', 'lg')" ng-src="{{vm.account.business.logo}}" err-src="assets/images/default-media.png" alt="" ng-class="{ 'indi-circle-img': !vm.account.business.logo }">
                 </div>
                 <div class="dashboard-logo-edit cursor-pointer margin-bottom-10">
                     <span ng-click="vm.openMediaModal('media-modal', 'MediaModalCtrl', 'lg')"><i class="fa fa-edit"></i> EDIT LOGO </span>
                 </div>
-                <h1 class="mainTitle" translate="dashboard.WELCOME" translate-values="{ appName: app.name }"></h1>
-                <span class="mainDescription">Choose Your Own Adventure</span>
+                <h1 class="mainTitle">
+                    Welcome {{vm.account.company.name || vm.account.business.name || vm.account.subdomain}}, what would you like to get started with?
+                </h1>
+                <!-- <span class="mainDescription">Choose Your Own Adventure</span> -->
+                <div class="indi-help-text center">
+                    <span ng-if="vm.account.billing.plan==='NO_PLAN_ARGUMENT'">
+                        You have <a href='/admin/#/account/billing'><span class="workstream-button button-o">{{::account.trialDaysRemaining}}</span></a> trial days remaining. Ready to join? <a href='/admin/#/account/billing'>Select your plan.</a>
+                    </span>
+                </div>
             </div>
             <div class="col-sm-5">
             </div>
@@ -19,24 +26,10 @@
     </section>
     <!-- end: DASHBOARD TITLE -->
 
-    <div class="workstream-container container-fluid container-fullw">
-
-        <!-- start: Analytics -->
-        <div class="image-grid row">
-            <div
-                ng-repeat="analytic in vm.state.analyticsWidgets track by $index"
-                class="image__cell">
-                <dashboard-analytic-tile-component
-                    state="vm.state"
-                    ui-state="vm.uiState"
-                    analytic="analytic">
-                </dashboard-analytic-tile-component>
-            </div>
-        </div>
-        <!-- end: Analytics -->
+    <div ng-if="vm.state.workstreams.length" class="workstream-container container-fluid container-fullw">
 
         <!-- start: Workstreams -->
-        <div class="image-grid row">
+        <section class="image-grid row">
             <div
                 class="image__cell"
                 ng-repeat="workstream in vm.state.workstreams track by $index"
@@ -47,21 +40,45 @@
                     workstream="workstream">
                 </dashboard-workstream-tile-component>
             </div>
-        </div>
+        </section>
         <!-- end: Incomplete Workstreams -->
 
+        <!-- start: Analytics -->
+        <section class="image-grid row">
+
+            <h1 class="mainTitle">
+                Key Business Insights
+            </h1>
+
+            <div
+                ng-repeat="analytic in vm.state.unlockedAnalyticsWidgets track by $index"
+                class="image__cell analytic-unlocked">
+                <dashboard-analytic-tile-component
+                    state="vm.state"
+                    ui-state="vm.uiState"
+                    analytic="analytic">
+                </dashboard-analytic-tile-component>
+            </div>
+            <div
+                ng-repeat="analytic in vm.state.lockedAnalyticsWidgets track by $index"
+                class="image__cell analytic-locked">
+                <dashboard-analytic-tile-component
+                    state="vm.state"
+                    ui-state="vm.uiState"
+                    analytic="analytic">
+                </dashboard-analytic-tile-component>
+            </div>
+        </section>
+        <!-- end: Analytics -->
+
     </div>
-
-
 
     <div class="indi-help-text center">
         <span>
             Need some help getting started? <a href="#" ng-click="cancel($event);" onclick="Intercom('showNewMessage', '')">Contact</a> our Success Team
         </span>
-        <span ng-if="vm.state.account.billing.plan==='NO_PLAN_ARGUMENT'">
-            You have {{::account.trialDaysRemaining}} trial days remaining. Ready to join? Click <a href='/admin/#/account/billing'>here</a> to select your plan.
-        </span>
     </div>
+
 
     <div data-ng-include data-src=" 'assets/js/dashboard/dashboard-workstream-tile/dashboard-workstream-tile-video.modal.html' " ></div>
 

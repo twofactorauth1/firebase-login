@@ -107,17 +107,21 @@ function ($window, $rootScope, $timeout, mq, DashboardService) {
             $scope.showDashboardNotificationIcon = false;
 
             $scope.$watch(function() { return DashboardService.updatedWorkstreams }, function() {
-                debugger;
-                if (DashboardService.awayFromDashboard) {
+
+                /*
+                 * If there is new workstream data from server and we're not on the dashboard,
+                 * Then we want to display the nav notification icon
+                 */
+                if (DashboardService.updatedWorkstreams && DashboardService.awayFromDashboard) {
                     $scope.showDashboardNotificationIcon = true;
                 }
+
             }, true);
 
-            $scope.setAwayFromDashbaord = function(urlPath) {
-                debugger;
+            $scope.userHasNavigated = function(urlPath) {
                 if (urlPath === '#/dashboard' || urlPath === '#/dohy') {
                     DashboardService.setAwayFromDashboard(false);
-                    // DashboardService.setUpdatedWorkstreams(false);
+                    $scope.showDashboardNotificationIcon = false;
                 } else {
                     DashboardService.setAwayFromDashboard(true);
                 }
@@ -215,7 +219,7 @@ function ($window, $rootScope, $timeout, mq, DashboardService) {
                         var newPath;
                         newPath = window.location.hash;
 
-                        scope.setAwayFromDashbaord(newPath);
+                        scope.userHasNavigated(newPath);
 
                         angular.forEach(elem.find('.main-navigation-menu a'), function (domLink) {
                             var link = angular.element(domLink);

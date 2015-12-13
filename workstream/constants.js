@@ -194,10 +194,10 @@ defaultWorkstreams[3] = {
         }
     ],
     "analyticWidgets" : [
-        {
-            name: "Orders",
-            link: "/admin/#/commerce/orders"
-        },
+        // {
+        //     name: "Orders",
+        //     link: "/admin/#/commerce/orders"
+        // },
         {
             name: "Revenue",
             link: "/admin/#/commerce/orders"

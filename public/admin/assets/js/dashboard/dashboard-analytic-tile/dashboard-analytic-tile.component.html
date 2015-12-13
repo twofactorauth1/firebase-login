@@ -2,11 +2,13 @@
 
     <div class="indi-rounded panel panel-white text-center cursor-pointer">
 
+        <img class="indi-rounded-img" src="http://s3.amazonaws.com/indigenous-digital-assets/account_6/dohy-circle-configure-business-profile_1449548586772.png" alt="{{vm.analytic}}" />
+
         <h3 class="analytic-title indi-rounded-title">{{vm.analytic.name}}</h3>
 
         <div class="analytic-details">
 
-            <div ng-repeat="analytic in ::vm.analytic.uiDetails" class="col-xs-12 title-container">
+            <div ng-repeat="analytic in ::vm.uiDetails" class="col-xs-12 title-container">
 
                 <div class="analytic-data-label col-xs-7 left-title">
                     <span class="pull-left">{{analytic.analyticDataLabel}}</span>
@@ -23,8 +25,6 @@
             </div>
 
         </div>
-
-        <img class="indi-rounded-img" src="http://s3.amazonaws.com/indigenous-digital-assets/account_6/dohy-circle-configure-business-profile_1449548586772.png" alt="{{vm.analytic}}" />
 
     </div>
 </div>

@@ -4,6 +4,7 @@
 app.controller('DashboardCtrl', ["$scope", "OrderService", "CustomerService", "ChartAnalyticsService", "UserService", "ChartCommerceService", "$modal", "$filter", "contactConstant", '$state',
     function ($scope, OrderService, CustomerService, ChartAnalyticsService, UserService, ChartCommerceService, $modal, $filter, contactConstant, $state) {
 
+    $scope.accountHideDohy = false;
 
     /*
      * @getAccount
@@ -17,6 +18,7 @@ app.controller('DashboardCtrl', ["$scope", "OrderService", "CustomerService", "C
             $scope.analyticsAccount = account;
             $scope.runVisitorsReport();
             $scope.runNetRevenueReport();
+            $scope.accountHideDohy = true;
         }
 
     });
@@ -24,7 +26,7 @@ app.controller('DashboardCtrl', ["$scope", "OrderService", "CustomerService", "C
 
   /*
    * @getActivityName
-   * - get activity actual name 
+   * - get activity actual name
    */
   $scope.getActivityName = function (activity) {
     var activity_hash = _.findWhere(contactConstant.customer_activity_types.dp, {
