@@ -47,7 +47,7 @@
                 <li class="workstream-block-list-item" ng-repeat="block in vm.uiState.openWorkstream.blocks">
 
                     <a ng-if="block.complete"
-                        href="javascript:void(0)"
+                        href="{{block.link}}"
                         class="workstream-block-link checkbox clip-check check-primary checkbox-inline workstream-block-complete"
                         tooltip-placement="right"
                         tooltip-html-unsafe="{{block.helpText}}">

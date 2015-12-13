@@ -43,6 +43,7 @@
             var incompleteBlocks = 0;
             var lockedAnalyticsWidgets = []
             var unlockedAnalyticsWidgets = []
+            var openWorkstream = _.findWhere(vm.state.workstreams, { _id: vm.uiState.openWorkstream._id });
 
             _.each(vm.state.workstreams, function(workstream){
 
@@ -69,7 +70,7 @@
                 return _.contains(_.pluck(unlockedAnalyticsWidgets, 'name'), w.name)
             });
 
-            //remove duplicates and set to state
+            //remove duplicates and set to state, and sort
             vm.state.lockedAnalyticsWidgets = _.uniq(lockedAnalyticsWidgets, function(w) { return w.name; });
             vm.state.unlockedAnalyticsWidgets = _.sortBy(_.uniq(unlockedAnalyticsWidgets, function(w) { return w.name; }), function(x) {
                 return vm.analyticDisplayOrder[x.name]
@@ -77,6 +78,11 @@
 
             vm.state.completeWorkstreams = completeWorkstreams;
             vm.state.incompleteWorksreams = incompleteWorkstreams;
+
+            //set openWorkstream to updated data
+            if (openWorkstream) {
+                vm.uiState.openWorkstream = openWorkstream;
+            }
 
         }
 
