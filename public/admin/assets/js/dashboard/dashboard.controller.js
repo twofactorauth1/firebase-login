@@ -16,8 +16,8 @@
         vm.openMediaModal = openMediaModal;
         vm.insertMedia = insertMedia;
         vm.buildViewModel = buildViewModel;
-        vm.workstreamDisplayOrder = _.invert(_.object(_.pairs(['Build a Website', 'Generate Leads', 'Engage Your Customers', 'Make Money'])));
-        vm.analyticDisplayOrder = _.invert(_.object(_.pairs(['visitors', 'contacts', 'CampaignMetrics', 'Revenue', 'SocialMedia'])));
+        vm.workstreamDisplayOrder = _.invert(_.object(_.pairs(DashboardService.workstreamDisplayOrder)));
+        vm.analyticDisplayOrder = _.invert(_.object(_.pairs(DashboardService.analyticDisplayOrder)));
 
         $scope.$watch(function() { return DashboardService.state }, function(state) {
 

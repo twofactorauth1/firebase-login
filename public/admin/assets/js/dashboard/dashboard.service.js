@@ -26,6 +26,22 @@
         dashboardService.polls = 0;
         dashboardService.numberPolling = 0;
 
+        dashboardService.workstreamDisplayOrder = [
+            'Build an Online Presence',
+            'Manage Contacts',
+            'Engage Customers',
+            'Make Sales'
+        ];
+
+        dashboardService.analyticDisplayOrder = [
+            'visitors',
+            'contacts',
+            'CampaignMetrics',
+            'Revenue',
+            'SocialMedia'
+        ];
+
+
         dashboardService.getWorkstreams = getWorkstreams;
         dashboardService.getWorkstream = getWorkstream;
         dashboardService.unlockWorkstream = unlockWorkstream;

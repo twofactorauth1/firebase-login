@@ -7115,7 +7115,13 @@ a[href="https://froala.com/wysiwyg-editor"] {
   margin: 0 auto;
   box-sizing: border-box;
 }
-@media only screen and (max-width: 550px) {
+@media only screen and (max-width: 400px) {
+  .dohy-dashboard-container .image__cell {
+    width: 100%;
+    padding: 0;
+  }
+}
+@media only screen and (min-width: 401px) and (max-width: 550px) {
   .dohy-dashboard-container .image__cell {
     width: 80%!important;
     float: none!important;
