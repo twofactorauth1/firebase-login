@@ -34,7 +34,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         resolve: loadSequence('modernizr', 'underscore', 'moment', 'angularMoment', 'uiSwitch', 'perfect-scrollbar-plugin', 'toaster', 'ngAside', 'vAccordion', 'chartjs', 'tc.chartjs', 'oitozero.ngSweetAlert', 'chatCtrl', 'smart-table', 'touchspin-plugin', 'slugifier', 'commonService', 'timeAgoFilter','angularFileUpload', 'ngTextTruncate', 'infinite-scroll', 'ui.select', 'blueimp', 'ngTagsInput', 'titleCase', 'bootstrap-confirmation', 'ladda', 'angular-ladda', 'uuid', 'formatText', 'asideCtrl', 'settingsCtrl', 'assetsService', 'mediaModalCtrl', 'xeditable', 'angular-percentage-filter', 'angular-clipboard', 'google-fonts'),
         abstract: true
     }).state('app.dashboard', {
-        url: "/dashboard",
+        url: "/_dashboard",
         templateUrl: "assets/views/dashboard.html",
         title: 'Dashboard',
         ncyBreadcrumb: {
@@ -393,12 +393,12 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         },
         resolve: loadSequence('onboardingCtrl')
     }).state('app.dohy', {
-        url: '/dohy',
+        url: '/dashboard',
         templateUrl: "assets/js/dashboard/dohy.html",
-        title: 'DOHY',
+        title: 'Dashboard',
         icon: 'ti-layout-media-left-alt',
         ncyBreadcrumb: {
-            label: 'DOHY'
+            label: 'Dashboard'
         },
         resolve: loadSequence('DOHYCtrl', 'dashboardService', 'DashboardWorkstreamTileComponentController', 'DashboardAnalyticTileComponentController', 'jsVideoUrlParser', 'highcharts')
     })
