@@ -962,6 +962,9 @@ div[data-type="feature-list"] .inner-page {
 .feature-list-v4 {
   /* fix firefox responsive images */
 }
+.feature-list-v4 .feature-single {
+  position: relative;
+}
 .feature-list-v4 .feature-list-title {
   text-align: center;
   position: relative;

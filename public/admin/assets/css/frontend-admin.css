@@ -977,6 +977,9 @@
 #componentloader .feature-list-v4 {
   /* fix firefox responsive images */
 }
+#componentloader .feature-list-v4 .feature-single {
+  position: relative;
+}
 #componentloader .feature-list-v4 .feature-list-title {
   text-align: center;
   position: relative;
