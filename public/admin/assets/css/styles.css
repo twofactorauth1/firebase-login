@@ -979,7 +979,6 @@ h5.over-title {
     position: fixed !important;
     top: 65px !important;
     left: 0;
-    z-index: 1;
     float: none;
     -webkit-transform: translate3d(-200px, 0, 0);
     transform: translate3d(-200px, 0, 0);
