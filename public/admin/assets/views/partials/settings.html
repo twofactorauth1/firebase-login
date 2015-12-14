@@ -184,8 +184,8 @@
                                     <div class="favicon-image">
                                         <p class="pagetitle" ng-text-truncate="website.title" ng-tt-chars-threshold="12" ng-tt-no-toggling></p>
                                         <p class="pageurl"><span ng-if="!account.domain">http://{{account.subdomain}}.indigenous.io</span><span ng-if="account.domain">http://{{account.domain}}</span></p>
-                                        <img class="top-favicon" src="{{ website.settings.favicon }}" err-src="https://s3.amazonaws.com/indigenous-account-websites/acct_6/favicon.ico">
-                                        <img class="bottom-favicon" src="{{ website.settings.favicon }}" err-src="https://s3.amazonaws.com/indigenous-account-websites/acct_6/favicon.ico">
+                                        <img class="top-favicon" ng-src="{{ website.settings.favicon }}" err-src="https://s3.amazonaws.com/indigenous-account-websites/acct_6/favicon.ico">
+                                        <img class="bottom-favicon" ng-src="{{ website.settings.favicon }}" err-src="https://s3.amazonaws.com/indigenous-account-websites/acct_6/favicon.ico">
                                     </div>
                                     <div class="user-image-buttons-edit">
                                         <span class="btn btn-primary" ng-click="openMediaModal()"><i class="fa fa-pencil"></i> Edit</span>
