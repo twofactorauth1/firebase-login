@@ -985,15 +985,8 @@ div[data-type="feature-list"] .inner-page {
 .feature-list-v4 .row div div div h5 {
   font-size: 18px;
 }
-.feature-list-v4 .row-xs-height {
-  display: table-row;
-}
-.feature-list-v4 .col-xs-height {
-  display: table-cell;
-  float: none;
-}
 .feature-list-v4 .feature img {
-  max-width: 225px;
+  max-width: 100%;
 }
 @media (min-width: 768px) {
   .feature-list-v4 .container-sm-height {
@@ -1047,7 +1040,7 @@ div[data-type="feature-list"] .inner-page {
   vertical-align: bottom;
 }
 .feature-list-v4 .img-responsive {
-  width: 100%;
+  max-width: 100%;
 }
 .feature-list-v4 .demo {
   background-color: white;
