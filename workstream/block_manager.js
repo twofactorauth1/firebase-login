@@ -238,6 +238,17 @@ module.exports = {
     },
 
     _handleConfigureAutoresponseEmail: function(account, block, fn) {
+        //TODO: to verify this block, do the following:
+        /*
+         * 1. look for any simple-form on their page
+         * 2. If the simple-form is tied to a campaign -> VERIFIED
+         * 3. If the simple-form is tied to an emailId
+         *      3.a If the email is new (type:email) -> VERIFIED
+         *      3.b If the email is type:notification AND modified.date > created.date -> VERIFIED
+         */
+
+
+
         //look for emails with type email
         var query = {accountId:account.id(), type:'email'};
         emailDao.exists(query, $$.m.cms.Email, function(err, exists){
