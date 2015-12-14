@@ -1160,6 +1160,10 @@
   max-width: 100%!important;
   margin: 5px auto!important;
   height: auto;
+  color: inherit;
+}
+#componentloader .navbar-brand:hover {
+  color: inherit;
 }
 #componentloader .navbar-toggle {
   margin-top: 20px;
@@ -1252,6 +1256,10 @@
   margin: 0 auto!important;
   height: auto;
   padding: 0;
+  color: inherit;
+}
+#componentloader .navigation-v2 .navbar .navbar-brand:hover {
+  color: inherit;
 }
 #componentloader .navigation-v2 .navbar ul.navbar-nav {
   width: 100%;
@@ -1323,6 +1331,10 @@
   min-width: 200px;
   width: 100%;
   height: auto;
+  color: inherit;
+}
+#componentloader .navigation-v3 .navbar-brand:hover {
+  color: inherit;
 }
 #componentloader .navigation-v3 .navbar-nav {
   text-align: center;
