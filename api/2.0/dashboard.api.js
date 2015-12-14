@@ -37,6 +37,8 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('reports/newVisitorsByDay'), this.isAuthAndSubscribedApi.bind(this), this.getNewVisitorsByDayReport.bind(this));
         app.get(this.url('reports/revenueByMonth'), this.isAuthAndSubscribedApi.bind(this), this.getRevenueByMonthReport.bind(this));
         app.get(this.url('reports/campaignStatsByMonth'), this.isAuthAndSubscribedApi.bind(this), this.getCampaignStatsByMonthReport.bind(this));
+
+        app.get(this.url('analytics'), this.isAuthAndSubscribedApi.bind(this), this.getDashboardAnalytics.bind(this));
     },
 
     noop: function(req, resp) {
@@ -207,6 +209,28 @@ _.extend(api.prototype, baseApi.prototype, {
 
         workstreamManager.getCampaignStatsByMonthReport(accountId, startDate, endDate, function(err, results){
             self.log.debug('<< getCampaignStatsByMonthReport');
+            return self.sendResultOrError(resp, err, results, "Error getting report");
+        });
+    },
+
+    getDashboardAnalytics: function(req, resp) {
+        var self = this;
+        self.log.debug('>> getDashboardAnalytics');
+        var accountId = parseInt(self.accountId(req));
+        var startDate, endDate;
+        if(req.query.startDate) {
+            startDate = moment(req.query.startDate).toDate();
+        } else {
+            startDate = moment().startOf('month').toDate();
+        }
+        if(req.query.endDate) {
+            endDate = moment(req.query.endDate);
+        } else {
+            endDate = moment().endOf('month').toDate();
+        }
+
+        workstreamManager.getDashboardAnalytics(accountId, startDate, endDate, function(err, results){
+            self.log.debug('<< getDashboardAnalytics');
             return self.sendResultOrError(resp, err, results, "Error getting report");
         });
     }

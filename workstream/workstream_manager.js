@@ -441,8 +441,8 @@ module.exports = {
 
             var response = {
                 results: _.sortBy(results, 'month'),
-                total: total,
-                totalAmount: totalAmount.toFixed(2)
+                YTDTotalOrders: total,
+                YTDTotalAmount: totalAmount.toFixed(2)
             };
             self.log.debug('<< getRevenueByMonthReport');
             fn(err, response);
@@ -520,6 +520,52 @@ module.exports = {
                 return fn(null, response);
             }
         });
+    },
+
+    getDashboardAnalytics: function(accountId, startDate, endDate, fn) {
+        var self = this;
+        self.log.debug('>> getDashboardAnalytics');
+        async.parallel([
+            function getContactsByDay(callback){
+                self.getContactsByDayReport(accountId, startDate, endDate, function(err, results){
+                    callback(err, {contacts:results});
+                });
+            },
+            function getPageViews(callback){
+                self.getPageViewsByDayReport(accountId, startDate, endDate, function(err, results){
+                    callback(err, {pageViews:results});
+                });
+            },
+            function getNewVisitors(callback){
+                self.getNewVisitorsByDayReport(accountId, startDate, endDate, function(err, results){
+                    callback(err, {visitors:results});
+                });
+            },
+            function getRevenue(callback){
+                self.getRevenueByMonthReport(accountId, function(err, results){
+                    callback(err, {revenue:results});
+                });
+            },
+            function getCampaignStats(callback){
+                self.getCampaignStatsByMonthReport(accountId, startDate, endDate, function(err, results){
+                    callback(err, {campaigns:results});
+                });
+            }
+        ], function done(err, results){
+            //compose results and return
+            var response = _.reduce(results, function(response, result){
+                var key = _.keys(result)[0];
+                response[key] = result[key];
+                return response;
+            }, {});
+
+            self.log.debug('<< getDashboardAnalytics');
+            return fn(err, response);
+        });
+
+
+
+
     },
 
     addDefaultWorkstreamsToAccount: function(accountId, fn) {
