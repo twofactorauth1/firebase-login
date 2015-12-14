@@ -12,6 +12,7 @@ var accountDao = require('../dao/account.dao');
 var contactDao = require('../dao/contact.dao');
 var analyticsDao = require('../analytics/dao/analytics.dao');
 var orderDao = require('../orders/dao/order.dao');
+var campaignDao = require('../campaign/dao/campaign.dao');
 
 var blockManager = require('./block_manager');
 var userActivityManager = require('../useractivities/useractivity_manager');
@@ -445,6 +446,79 @@ module.exports = {
             };
             self.log.debug('<< getRevenueByMonthReport');
             fn(err, response);
+        });
+    },
+
+    getCampaignStatsByMonthReport: function(accountId, startDate, endDate, fn){
+        var self = this;
+        self.log.debug('>> getCampaignStatsByMonthReport');
+        /*
+         {$match:{
+         accountId:4
+         }
+         },
+         {$group:{
+         _id: {month: {$month:'$created.date'}},
+         totalSent: {$sum: '$statistics.emailsSent'},
+         totalOpened: {$sum: '$statistics.emailsOpened'},
+         totalParticipants: {$sum: '$statistics.participants'}
+         }
+         */
+
+
+        var query = {
+            accountId:accountId,
+            'created.date': {
+                $gte: startDate,
+                $lte:endDate
+            }
+        };
+        self.log.debug('Using query:', query);
+        var groupCriteria = {_id: {month: {$month:'$created.date'}}};
+        var stageAry = [];
+        stageAry.push({$match: query});
+        stageAry.push({
+            $group: {
+                _id: groupCriteria,
+
+                // Count number of matching docs for the group
+                count: { $sum: 1 },
+                totalSent: {$sum: '$statistics.emailsSent'},
+                totalOpened: {$sum: '$statistics.emailsOpened'},
+                totalClicked: {$sum: '$statistics.emailsClicked'},
+                totalParticipants: {$sum: '$statistics.participants'}
+            }
+        });
+
+        campaignDao.aggregateWithCustomStages(stageAry, $$.m.Campaign, function(err, results){
+            if(err) {
+                self.log.error('Error getting campaign report:', err);
+                return fn(err);
+            } else {
+                var totalSent = 0;
+                var totalOpened = 0;
+                var totalClicked = 0;
+                var totalParticipants =0;
+
+                _.each(results, function(result){
+                    result.month = result._id._id.month;
+                    totalSent += result.totalSent;
+                    totalOpened += result.totalOpened;
+                    totalClicked += result.totalClicked;
+                    totalParticipants += result.totalParticipants;
+                    delete result._id;
+                });
+
+                var response = {
+                    results: _.sortBy(results, 'month'),
+                    totalSent: totalSent,
+                    totalOpened: totalOpened,
+                    totalClicked: totalClicked,
+                    totalPartipants:totalParticipants
+                };
+                self.log.debug('<< getCampaignStatsByMonthReport');
+                return fn(null, response);
+            }
         });
     },
 
