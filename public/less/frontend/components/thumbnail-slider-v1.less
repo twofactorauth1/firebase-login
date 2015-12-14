@@ -75,8 +75,7 @@
 
   .carousel-control.right {
     background: none;
-    right: -20px;
-    top: 44%;
+    top: 42%;
   }
 
   .carousel-inner {
@@ -91,15 +90,22 @@
     top: 62px;
     width: 2%;
   }
-  .carousel-control.left{
-    left: -22px;
-    top: 44%;
+  .carousel-control.left{    
+    top: 42%;
   }
   .hide-scroll{
     overflow: hidden !important;
   }
 
+ @media (max-width: 768px) {
+  .carousel-control.left{    
+    top: 42%;
+    margin-left: -18px;
+  }
+}
+
 }
 div[data-type="thumbnail-slider"]  .inner-page {
     max-width: 100%;
 }
+

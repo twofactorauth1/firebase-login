@@ -4417,8 +4417,7 @@
 }
 #componentloader .thumbnail-slider-v1 .carousel-control.right {
   background: none;
-  right: -20px;
-  top: 44%;
+  top: 42%;
 }
 #componentloader .thumbnail-slider-v1 .carousel-inner {
   max-height: 200px;
@@ -4432,11 +4431,16 @@
   width: 2%;
 }
 #componentloader .thumbnail-slider-v1 .carousel-control.left {
-  left: -22px;
-  top: 44%;
+  top: 42%;
 }
 #componentloader .thumbnail-slider-v1 .hide-scroll {
   overflow: hidden !important;
+}
+@media (max-width: 768px) {
+  #componentloader .thumbnail-slider-v1 .carousel-control.left {
+    top: 42%;
+    margin-left: -18px;
+  }
 }
 #componentloader div[data-type="thumbnail-slider"] .inner-page {
   max-width: 100%;

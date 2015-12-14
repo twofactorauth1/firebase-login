@@ -4423,8 +4423,7 @@ div[data-type=blog] .container {
 }
 .thumbnail-slider-v1 .carousel-control.right {
   background: none;
-  right: -20px;
-  top: 44%;
+  top: 42%;
 }
 .thumbnail-slider-v1 .carousel-inner {
   max-height: 200px;
@@ -4438,11 +4437,16 @@ div[data-type=blog] .container {
   width: 2%;
 }
 .thumbnail-slider-v1 .carousel-control.left {
-  left: -22px;
-  top: 44%;
+  top: 42%;
 }
 .thumbnail-slider-v1 .hide-scroll {
   overflow: hidden !important;
+}
+@media (max-width: 768px) {
+  .thumbnail-slider-v1 .carousel-control.left {
+    top: 42%;
+    margin-left: -18px;
+  }
 }
 div[data-type="thumbnail-slider"] .inner-page {
   max-width: 100%;
