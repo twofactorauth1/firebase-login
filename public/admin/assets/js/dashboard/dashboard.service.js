@@ -24,6 +24,7 @@
         dashboardService.lastWorkstreamSet = [];
         dashboardService.awayFromDashboard = false;
         dashboardService.polls = 0;
+        dashboardService.numberPolling = 0;
 
         dashboardService.getWorkstreams = getWorkstreams;
         dashboardService.getWorkstream = getWorkstream;
@@ -51,6 +52,7 @@
         function getWorkstreams() {
 
             function success(newWorkstreamSet) {
+
 
                 /*
                  * Server data always sets dashboard state
@@ -106,17 +108,25 @@
                  * TODO: should really be a server push w/ EventSource
                  * polyfill lib -> https://github.com/Yaffle/EventSource
                  */
-                (function poll() {
+                if(dashboardService.numberPolling <=1) {
+                    dashboardService.numberPolling--;
+                    (function poll() {
 
-                    if (dashboardService.polls < 300 && dashboardService.loading.value === 0) {
-                        $timeout(dashboardService.getWorkstreams, 3000);
-                        dashboardService.polls++;
-                        console.log('dashboardService.polls', dashboardService.polls);
-                    } else {
-                        $timeout(poll, 1000);
-                    }
+                        if (dashboardService.polls < 300 && dashboardService.loading.value === 0) {
+                            $timeout(dashboardService.getWorkstreams, 3000);
+                            dashboardService.numberPolling++;
+                            dashboardService.polls++;
+                            console.log('dashboardService.polls', dashboardService.polls);
+                        } else {
+                            $timeout(poll, 1000);
+                        }
 
-                })();
+                    })();
+                } else {
+                    dashboardService.numberPolling--;
+                    console.info('dashboardService skipping poll');
+                }
+
             }
 
             function error(error) {
@@ -224,6 +234,7 @@
             dashboardService.awayFromDashboard = away;
             dashboardService.polls = 0;
             dashboardService.getWorkstreams();
+            dashboardService.numberPolling++;
 
             if (away) {
                 console.log(away);
@@ -234,6 +245,7 @@
 		(function init() {
 
             dashboardService.getWorkstreams();
+            dashboardService.numberPolling++;
 
 		})();
 
