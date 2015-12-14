@@ -76,35 +76,40 @@ module.exports = {
                 //for each workstream, mark its block completed if it exists in completed blocks
                 var update = false;
                 var completedBlockIDs = _.map(completedBlocks, function(block){return block._id;});
-                _.each(workstreams, function(workstream){
+                var updatedWorkstreams = [];
+                async.eachSeries(workstreams, function(workstream, callback){
                     _.each(workstream.get('blocks'), function(block){
                         if(_.contains(completedBlockIDs, block._id)) {
                             block.complete = true;
                             update = true;
                         }
-                    });
-                });
-                // for each workstream, mark it completed if all blocks are completed
-                _.each(workstreams, function(workstream){
-                    if(workstream.get('completed') === false) {
-                        var completed = true;
-                        _.each(workstream.get('blocks'), function(block){
-                            if(block.complete === false) {
-                                completed = false;
+                        if(workstream.get('completed') === false) {
+                            var completed = true;
+                            _.each(workstream.get('blocks'), function(block){
+                                if(block.complete === false) {
+                                    completed = false;
+                                }
+                            });
+                            if(completed === true) {
+                                workstream.set('completed', true);
+                                update = true;
                             }
-                        });
-                        if(completed === true) {
-                            workstream.set('completed', true);
-                            update = true;
                         }
+                    });
+                    if(update === true) {
+                        workstreamDao.updateCompletion(workstream, function(err, updatedWorkstream){
+                            updatedWorkstreams.push(updatedWorkstream);
+                            callback(err);
+                        });
+                    } else {
+                        updatedWorkstreams.push(workstream);
+                        callback(null);
                     }
-
+                }, function done(err){
+                    cb(null, updatedWorkstreams);
                 });
-                if(update === true) {
-                    workstreamDao.saveWorkstreams(workstreams, cb);
-                } else {
-                    cb(null, workstreams);
-                }
+
+
             }
         ], function done(err, workstreams){
             if(err) {
