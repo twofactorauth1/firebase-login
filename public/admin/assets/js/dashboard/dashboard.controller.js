@@ -43,7 +43,11 @@
             var incompleteBlocks = 0;
             var lockedAnalyticsWidgets = []
             var unlockedAnalyticsWidgets = []
-            var openWorkstream = _.findWhere(vm.state.workstreams, { _id: vm.uiState.openWorkstream._id });
+            var openWorkstream = {};
+
+            if (vm.uiState.openWorkstream) {
+                openWorkstream = _.findWhere(vm.state.workstreams, { _id: vm.uiState.openWorkstream._id });
+            }
 
             _.each(vm.state.workstreams, function(workstream){
 
