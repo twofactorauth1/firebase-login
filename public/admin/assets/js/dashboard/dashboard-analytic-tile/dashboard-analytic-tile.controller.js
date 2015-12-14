@@ -22,50 +22,6 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
         'SocialMedia': {}
     };
 
-    vm.getVisitorData = getVisitorData;
-    vm.getContactData = getContactData;
-    vm.getCampaignData = getCampaignData;
-    vm.getRevenueData = getRevenueData;
-    vm.getSocialData = getSocialData;
-    vm.hideIfNotImplemented = hideIfNotImplemented;
-
-    function getVisitorData() {
-        DashboardService.getPageViewsByDayReport().then(function(data){
-            vm.analyticData['visitors'].pageviews = data.data.total;
-        });
-        DashboardService.getNewVisitorsByDayReport().then(function(data){
-            vm.analyticData['visitors'].visitors = data.data.total;
-        });
-    }
-
-    function getContactData() {
-        DashboardService.getContactsByDayReport().then(function(data){
-            vm.analyticData['contacts'].customers = data.data.total;
-            vm.analyticData['contacts'].leads = data.data.leadTotal;
-        });
-    }
-
-    function getCampaignData() {
-        // DashboardService.getContactsByDayReport().then(function(data){
-            vm.analyticData['CampaignMetrics'].active = 0;
-            vm.analyticData['CampaignMetrics'].openedclosed = 0;
-        // });
-    }
-
-    function getSocialData() {
-        // DashboardService.getContactsByDayReport().then(function(data){
-            vm.analyticData['SocialMedia'].facebook = 0;
-            vm.analyticData['SocialMedia'].twitter = 0;
-        // });
-    }
-
-    function getRevenueData() {
-        DashboardService.getContactsByDayReport().then(function(data){
-            vm.analyticData['Revenue'].month = data.data.total;
-            vm.analyticData['Revenue'].ytd = data.data.totalAmount;
-        });
-    }
-
     function analyticMap() {
 
         var ret = {};
@@ -73,17 +29,16 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
         switch(vm.analytic.name) {
             case 'visitors':
 
-                vm.getVisitorData();
                 ret.widgetTitle = 'Website';
                 ret.buttonTitle = 'View Analytics';
                 ret.data = [
                     {
                         analyticDataLabel: 'NEW VISITORS',
-                        analyticDataValue: function() { return vm.analyticData['visitors'].visitors }
+                        analyticDataValue: DashboardService.state.analytics.visitors.total
                     },
                     {
                         analyticDataLabel: 'PAGE VIEWS',
-                        analyticDataValue: function() { return vm.analyticData['visitors'].pageviews }
+                        analyticDataValue: DashboardService.state.analytics.pageViews.total
                     }
                 ]
 
@@ -91,40 +46,42 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
 
             case 'contacts':
 
-                vm.getContactData();
                 ret.widgetTitle = 'Contacts';
                 ret.buttonTitle = 'View Contacts';
                 ret.data = [
                     {
                         analyticDataLabel: 'CUSTOMERS',
-                        analyticDataValue: function() { return vm.analyticData['contacts'].customers }
+                        analyticDataValue: DashboardService.state.analytics.contacts.total
                     },
                     {
                         analyticDataLabel: 'LEADS',
-                        analyticDataValue: function() { return vm.analyticData['contacts'].leads }
+                        analyticDataValue: DashboardService.state.analytics.contacts.leadTotal
                     }
                 ]
+
                 break;
             case 'CampaignMetrics':
 
-                vm.getCampaignData();
                 ret.widgetTitle = 'Campaigns';
                 ret.buttonTitle = 'View Campaigns';
                 ret.data = [
                     {
-                        analyticDataLabel: 'ACTIVE',
-                        analyticDataValue: function() { return vm.analyticData['CampaignMetrics'].active }
+                        analyticDataLabel: 'SENT',
+                        analyticDataValue: DashboardService.state.analytics.campaigns.totalSent
                     },
                     {
-                        analyticDataLabel: 'OPENED/CLOSED',
-                        analyticDataValue: function() { return vm.analyticData['CampaignMetrics'].openedclosed }
+                        analyticDataLabel: 'OPENED',
+                        analyticDataValue: DashboardService.state.analytics.campaigns.totalOpened
+                    },
+                    {
+                        analyticDataLabel: 'CLICKED',
+                        analyticDataValue: DashboardService.state.analytics.campaigns.totalClicked
                     }
                 ]
 
                 break;
             case 'SocialMedia':
 
-                vm.getSocialData();
                 ret.widgetTitle = 'Social Media';
                 ret.buttonTitle = 'View Social Networks';
                 ret.data = [
@@ -144,19 +101,17 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
                 break;
             case 'Revenue':
 
-                vm.getRevenueData();
                 ret.widgetTitle = 'E-Commerce';
                 ret.buttonTitle = 'View Revenue';
                 ret.data = [
                     {
-                        analyticDataLabel: 'MONTHLY REVENUE',
-                        analyticDataValue: function() { return vm.analyticData['Revenue'].month }
+                        analyticDataLabel: 'YTD REVENUE',
+                        analyticDataValue: '$' + DashboardService.state.analytics.revenue.YTDTotalAmount
+                    },
+                    {
+                        analyticDataLabel: 'YTD ORDERS',
+                        analyticDataValue: DashboardService.state.analytics.revenue.YTDTotalOrders
                     }
-                    // ,
-                    // {
-                    //     analyticDataLabel: 'YTD',
-                    //     analyticDataValue: function() { return vm.analyticData['Revenue'].ytd }
-                    // }
                 ]
 
                 break;
@@ -176,11 +131,10 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
     }
 
     function init(element) {
+
         vm.element = element;
 
         vm.uiDetails = vm.analyticMap();
-
-        // vm.hideIfNotImplemented();
 
     }
 

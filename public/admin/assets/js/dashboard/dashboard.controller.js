@@ -36,18 +36,12 @@
 
         function buildViewModel() {
 
-            // var analyticsWidgets = [];
             var incompleteWorkstreams = [];
             var completeWorkstreams = [];
             var completeBlocks = 0;
             var incompleteBlocks = 0;
             var lockedAnalyticsWidgets = []
             var unlockedAnalyticsWidgets = []
-            // var openWorkstream = {};
-
-            // if (vm.uiState.openWorkstream) {
-            //     openWorkstream = _.findWhere(vm.state.workstreams, { _id: vm.uiState.openWorkstream._id });
-            // }
 
             _.each(vm.state.workstreams, function(workstream){
 
@@ -82,11 +76,6 @@
 
             vm.state.completeWorkstreams = completeWorkstreams;
             vm.state.incompleteWorksreams = incompleteWorkstreams;
-
-            //set openWorkstream to updated data
-            // if (openWorkstream) {
-            //     vm.uiState.openWorkstream = openWorkstream;
-            // }
 
         }
 
@@ -134,7 +123,7 @@
         }
 
         (function init() {
-            DashboardService.getContactsByDayReport();
+
 
         })();
 

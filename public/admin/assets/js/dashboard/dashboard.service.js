@@ -17,6 +17,7 @@
         };
         var baseWorkstreamsAPIUrl = '/api/2.0/dashboard/workstreams';
         var baseReportsAPIUrl = '/api/2.0/dashboard/reports';
+        var baseAnalyticsAPIUrl = '/api/2.0/dashboard/analytics';
         var baseAccountAPIUrl = '/api/1.0/account/';
 
         dashboardService.loading = { value:0 };
@@ -45,14 +46,9 @@
         dashboardService.getWorkstreams = getWorkstreams;
         dashboardService.getWorkstream = getWorkstream;
         dashboardService.unlockWorkstream = unlockWorkstream;
-
         dashboardService.updateAccount = updateAccount;
         dashboardService.setAwayFromDashboard = setAwayFromDashboard;
-
-        dashboardService.getContactsByDayReport = getContactsByDayReport;
-        dashboardService.getPageViewsByDayReport = getPageViewsByDayReport;
-        dashboardService.getNewVisitorsByDayReport = getNewVisitorsByDayReport;
-        dashboardService.getRevenueByMonthReport = getRevenueByMonthReport;
+        dashboardService.getAnalytics = getAnalytics;
 
 
 		function dashRequest(fn) {
@@ -185,52 +181,19 @@
 
         }
 
-        function getContactsByDayReport() {
+        function getAnalytics() {
+
             function success(data) {
-                console.log('DashboardService getContactsByDayReport: ', data);
+                console.log('DashboardService getAnalytics: ', data);
+                dashboardService.state.analytics = data;
             }
 
             function error(error) {
-                console.error('DashboardService getContactsByDayReport error: ' + error);
+                console.error('DashboardService getAnalytics error: ' + error);
             }
 
-            return dashRequest($http.get(baseReportsAPIUrl + '/contactsByDay').success(success).error(error));
-        }
+            return dashRequest($http.get(baseAnalyticsAPIUrl).success(success).error(error));
 
-        function getPageViewsByDayReport() {
-            function success(data) {
-                console.log('DashboardService getPageViewsByDayReport: ', data);
-            }
-
-            function error(error) {
-                console.error('DashboardService getPageViewsByDayReport error: ' + error);
-            }
-
-            return dashRequest($http.get(baseReportsAPIUrl + '/pageViewsByDay').success(success).error(error));
-        }
-
-        function getNewVisitorsByDayReport() {
-            function success(data) {
-                console.log('DashboardService getNewVisitorsByDayReport: ', data);
-            }
-
-            function error(error) {
-                console.error('DashboardService getNewVisitorsByDayReport error: ' + error);
-            }
-
-            return dashRequest($http.get(baseReportsAPIUrl + '/newVisitorsByDay').success(success).error(error));
-        }
-
-        function getRevenueByMonthReport() {
-            function success(data) {
-                console.log('DashboardService getRevenueByMonthReport: ', data);
-            }
-
-            function error(error) {
-                console.error('DashboardService getRevenueByMonthReport error: ' + error);
-            }
-
-            return dashRequest($http.get(baseReportsAPIUrl + '/revenueByMonth').success(success).error(error));
         }
 
         function updateAccount(account) {
@@ -260,6 +223,7 @@
 
 		(function init() {
 
+            dashboardService.getAnalytics();
             dashboardService.getWorkstreams();
             dashboardService.numberPolling++;
 
