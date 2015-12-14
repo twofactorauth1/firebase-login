@@ -992,15 +992,8 @@
 #componentloader .feature-list-v4 .row div div div h5 {
   font-size: 18px;
 }
-#componentloader .feature-list-v4 .row-xs-height {
-  display: table-row;
-}
-#componentloader .feature-list-v4 .col-xs-height {
-  display: table-cell;
-  float: none;
-}
 #componentloader .feature-list-v4 .feature img {
-  max-width: 225px;
+  max-width: 100%;
 }
 @media (min-width: 768px) {
   #componentloader .feature-list-v4 .container-sm-height {
@@ -1054,7 +1047,7 @@
   vertical-align: bottom;
 }
 #componentloader .feature-list-v4 .img-responsive {
-  width: 100%;
+  max-width: 100%;
 }
 #componentloader .feature-list-v4 .demo {
   background-color: white;
