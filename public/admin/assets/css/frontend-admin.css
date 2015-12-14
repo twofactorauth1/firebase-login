@@ -7311,6 +7311,11 @@ a[href="https://froala.com/wysiwyg-editor"] {
   font-weight: bold;
   color: #3b3b3b;
 }
+.workstream-detail-panel .workstream-percent-complete {
+  display: inline;
+  color: #b9b9b9;
+  font-size: .65em;
+}
 .dashboard-video .container {
   max-width: 100%;
   padding: 15px;

@@ -39,7 +39,12 @@
         </div>
 
         <div class="col-md-8 padding-20">
-            <h3 class="workstream-title">{{vm.workstream.name}}</h3>
+            <h3 class="workstream-title">
+                {{vm.workstream.name}}
+                <div class="workstream-percent-complete" ng-if="vm.workstream.unlocked">
+                    ({{vm.uiState.openWorkstream.completeRatio}})
+                </div>
+            </h3>
 
             <p class="workstream-description text-small">
                 {{vm.workstream.description || 'This workstream needs a description.'}}
@@ -87,10 +92,6 @@
 
                 </li>
             </ol>
-
-            <div class="workstream-percent-complete" ng-if="vm.workstream.unlocked">
-                {{vm.uiState.openWorkstream.completeRatio}}
-            </div>
         </div>
 
         <div ng-click="vm.workstreamClick()" class="expand__close"></div>
