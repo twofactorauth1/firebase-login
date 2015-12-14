@@ -43,11 +43,11 @@
             var incompleteBlocks = 0;
             var lockedAnalyticsWidgets = []
             var unlockedAnalyticsWidgets = []
-            var openWorkstream = {};
+            // var openWorkstream = {};
 
-            if (vm.uiState.openWorkstream) {
-                openWorkstream = _.findWhere(vm.state.workstreams, { _id: vm.uiState.openWorkstream._id });
-            }
+            // if (vm.uiState.openWorkstream) {
+            //     openWorkstream = _.findWhere(vm.state.workstreams, { _id: vm.uiState.openWorkstream._id });
+            // }
 
             _.each(vm.state.workstreams, function(workstream){
 
@@ -84,9 +84,9 @@
             vm.state.incompleteWorksreams = incompleteWorkstreams;
 
             //set openWorkstream to updated data
-            if (openWorkstream) {
-                vm.uiState.openWorkstream = openWorkstream;
-            }
+            // if (openWorkstream) {
+            //     vm.uiState.openWorkstream = openWorkstream;
+            // }
 
         }
 

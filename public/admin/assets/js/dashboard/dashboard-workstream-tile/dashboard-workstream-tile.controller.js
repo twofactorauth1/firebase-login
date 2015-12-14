@@ -86,7 +86,9 @@ function dashboardWorkstreamTileComponentController($scope, $attrs, $filter, Das
      */
     function videoClosed(data) {
         DashboardService.unlockWorkstream(vm.workstream._id).then(function() {
-            vm.workstreamClick();
+            $timeout(function() {
+                vm.workstreamClick();
+            }, 500);
         });
     }
 

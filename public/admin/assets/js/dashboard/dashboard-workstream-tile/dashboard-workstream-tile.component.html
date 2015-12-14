@@ -46,7 +46,7 @@
             </p>
 
             <ol class="workstream-block-list list-unstyled" ng-if="vm.workstream.unlocked">
-                <li class="workstream-block-list-item" ng-repeat="block in vm.uiState.openWorkstream.blocks">
+                <li class="workstream-block-list-item" ng-repeat="block in vm.workstream.blocks">
 
                     <a ng-if="block.complete"
                         href="{{block.link}}"
