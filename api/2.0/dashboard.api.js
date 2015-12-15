@@ -122,7 +122,7 @@ _.extend(api.prototype, baseApi.prototype, {
             startDate = moment().startOf('month').toDate();
         }
         if(req.query.endDate) {
-            endDate = moment(req.query.endDate);
+            endDate = moment(req.query.endDate).toDate();
         } else {
             endDate = moment().endOf('month').toDate();
         }

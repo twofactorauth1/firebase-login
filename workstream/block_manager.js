@@ -246,17 +246,82 @@ module.exports = {
          *      3.a If the email is new (type:email) -> VERIFIED
          *      3.b If the email is type:notification AND modified.date > created.date -> VERIFIED
          */
+        async.waterfall([
+            function verifyCampaign(callback){
+                var query = {accountId: account.id(), latest:true, components: {$elemMatch:{type:'simple-form', campaignId:{$ne:''}}}};
+                pageDao.exists(query, $$.m.ssb.Page, function(err, exists){
+                    callback(err, exists);
+                });
+            },
+            function verifyEmailId(exists, callback) {
+                if(exists === true) {
+                    callback(null, exists);
+                } else {
+                    var query = {accountId: account.id(), latest:true, components: {$elemMatch:{type:'simple-form', emailId:{$ne:''}}}};
+                    pageDao.findMany(query, $$.m.ssb.Page, function(err, pages){
+                        if(err) {
+                            callback(err);
+                        } else {
+                            var emailIdArray = [];
+                            _.each(pages, function(page){
+                                var components = page.get('components');
+                                _.each(components, function(component){
+                                    if(component.type === 'simple-form') {
+                                        emailIdArray.push(component.emailId);
+                                    }
+                                });
+                            });
+                            callback(null, exists, emailIdArray);
+                        }
+                    });
+                }
+            },
+            function verifyEmailTypeEmail(exists, emailIdArray, callback) {
+                if(exists === true) {
+                    callback(null, exists);
+                } else {
+                    async.eachSeries(emailIdArray, function(emailId, cb){
+                        if(exists === true) {
+                            cb(null);
+                        } else {
+                            var query = {type:'email', _id:emailId};
 
+                            emailDao.exists(query, $$.m.Email, function(err, emailExists){
+                                if(emailExists && emailExists=== true) {
+                                    exists = true;
+                                }
+                                cb(null);
+                            });
+                        }
 
-
-        //look for emails with type email
-        var query = {accountId:account.id(), type:'email'};
-        emailDao.exists(query, $$.m.cms.Email, function(err, exists){
-            if(err) {
-                fn(err);
-            } else {
-                fn(null, exists);
+                    }, function done(err){
+                        callback(err, exists, emailIdArray);
+                    });
+                }
+            },
+            function verifyEmailTypeNotification(exists, emailIdArray, callback) {
+                if(exists === true) {
+                    callback(null, exists);
+                } else {
+                    var query = {_id: {$in:emailIdArray}, type:'notification'};
+                    emailDao.findMany(query, $$.m.Email, function(err, emails){
+                        if(err) {
+                            callback(err);
+                        } else {
+                            _.each(emails, function(email){
+                                var created = email.get('created').date;
+                                var modified = email.get('modified').date;
+                                if(moment(modified).isAfter(moment(created))) {
+                                    exists = true;
+                                }
+                            });
+                            callback(null, exists);
+                        }
+                    });
+                }
             }
+        ], function done(err, exists){
+            fn(err, exists);
         });
     },
 
