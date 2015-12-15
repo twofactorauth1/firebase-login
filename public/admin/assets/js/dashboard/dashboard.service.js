@@ -49,6 +49,7 @@
         dashboardService.updateAccount = updateAccount;
         dashboardService.setAwayFromDashboard = setAwayFromDashboard;
         dashboardService.getAnalytics = getAnalytics;
+        dashboardService.getAccount = getAccount;
 
 
 		function dashRequest(fn) {
@@ -196,6 +197,21 @@
 
         }
 
+        function getAccount(account) {
+
+            function success(data) {
+                console.info('DashboardService getAccount:', data);
+                dashboardService.state.account = data;
+            }
+
+            function error(error) {
+                console.error('DashboardService getAccount:', error);
+            }
+            return (
+                dashRequest($http.get(baseAccountAPIUrl).success(success).error(error))
+            );
+        }
+
         function updateAccount(account) {
 
             function success(data) {
@@ -206,14 +222,18 @@
                 console.error('DashboardService updateAccount:', error);
             }
             return (
-                dashRequest($http.put(baseAccountAPIUrl + [account._id].join('/'), account)).success(success).error(error));
+                dashRequest($http.put(baseAccountAPIUrl + [account._id].join('/'), account).success(success).error(error))
+            );
         }
 
         function setAwayFromDashboard(away) {
             dashboardService.awayFromDashboard = away;
+
             dashboardService.polls = 0;
-            dashboardService.getWorkstreams();
             dashboardService.numberPolling++;
+
+            dashboardService.getWorkstreams();
+            dashboardService.getAccount();
 
             if (away) {
                 console.log(away);
@@ -223,6 +243,7 @@
 
 		(function init() {
 
+            dashboardService.getAccount();
             dashboardService.getAnalytics();
             dashboardService.getWorkstreams();
             dashboardService.numberPolling++;

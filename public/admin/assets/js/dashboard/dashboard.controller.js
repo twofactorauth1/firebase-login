@@ -6,7 +6,9 @@
 
         var vm = this;
 
-        vm.account = $scope.account;
+        vm.state = {
+            account: $scope.account
+        }
 
         vm.uiState = {
             openWorkstream: { _id: undefined }
@@ -115,8 +117,8 @@
         }
 
         function insertMedia(asset) {
-            vm.account.business.logo = asset.url;
-            DashboardService.updateAccount(vm.account).then(function(response){
+            vm.state.account.business.logo = asset.url;
+            DashboardService.updateAccount(vm.state.account).then(function(response){
                 toaster.pop('success', 'Business Logo', 'The logo was updated successfully.');
                 console.log('Account logo updated');
             })

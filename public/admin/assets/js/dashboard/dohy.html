@@ -4,18 +4,18 @@
     <section id="page-title" class="padding-top-25 padding-bottom-15">
         <div class="row">
             <div>
-                <div class="dashboard-logo margin-bottom-10" ng-class="{ 'indi-circle': !vm.account.business.logo }">
-                    <img ng-click="vm.openMediaModal('media-modal', 'MediaModalCtrl', 'lg')" ng-src="{{vm.account.business.logo}}" err-src="assets/images/default-media.png" alt="" ng-class="{ 'indi-circle-img': !vm.account.business.logo }">
+                <div class="dashboard-logo margin-bottom-10" ng-class="{ 'indi-circle': !vm.state.account.business.logo }">
+                    <img ng-click="vm.openMediaModal('media-modal', 'MediaModalCtrl', 'lg')" ng-src="{{vm.state.account.business.logo}}" err-src="assets/images/default-media.png" alt="" ng-class="{ 'indi-circle-img': !vm.state.account.business.logo }">
                 </div>
                 <div class="dashboard-logo-edit cursor-pointer margin-bottom-10">
                     <span ng-click="vm.openMediaModal('media-modal', 'MediaModalCtrl', 'lg')"><i class="fa fa-edit"></i> EDIT LOGO </span>
                 </div>
                 <h1 class="mainTitle">
-                    Welcome {{vm.account.company.name || vm.account.business.name || vm.account.subdomain}}, what would you like to get started with?
+                    Welcome {{vm.state.account.company.name || vm.state.account.business.name || vm.state.account.subdomain}}, what would you like to get started with?
                 </h1>
                 <!-- <span class="mainDescription">Choose Your Own Adventure</span> -->
                 <div class="indi-help-text center">
-                    <span ng-if="vm.account.billing.plan==='NO_PLAN_ARGUMENT'">
+                    <span ng-if="vm.state.account.billing.plan==='NO_PLAN_ARGUMENT'">
                         You have <a href='/admin/#/account/billing'><span class="workstream-button button-o">{{::account.trialDaysRemaining}}</span></a> trial days remaining. Ready to join? <a href='/admin/#/account/billing'>Select your plan.</a>
                     </span>
                 </div>
