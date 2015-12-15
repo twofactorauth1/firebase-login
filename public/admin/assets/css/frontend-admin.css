@@ -995,6 +995,10 @@
 #componentloader .feature-list-v4 .feature-title h5 {
   margin-top: 0;
 }
+#componentloader .feature-list-v4 .feature-icon {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
 #componentloader .feature-list-v4 .container-xs-height {
   display: table;
   padding-left: 0px;
