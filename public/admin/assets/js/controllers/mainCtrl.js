@@ -10,7 +10,7 @@ app.controller('AppCtrl', ['$rootScope', '$scope', '$state', '$translate', '$loc
 
       $rootScope.account = account;
       AccountService.setMainAccount($scope.account);
-        if(account.showhide.dohy && $state.current.name ==='' || $state.current.name ==='app.dashboard') {
+        if(account.showhide.dohy && $state.current.name ==='app.dashboard') {
             console.log('Going to Dohy');
             $state.go('app.dohy');
         }
