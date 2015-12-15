@@ -512,6 +512,11 @@ module.exports = function(grunt) {
         accountActivity.cleanupAccounts(done);
     });
 
+    grunt.registerTask('cleanupContacts', 'Cleanup Contacts', function(){
+        var done = this.async();
+        accountActivity.cleanupContacts(done);
+    });
+
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-requirejs');
     grunt.loadNpmTasks('grunt-contrib-copy');

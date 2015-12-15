@@ -422,6 +422,42 @@ var accountActivity = {
             self.log.debug('Done deleting accounts');
             callback();
         });
+    },
+
+    cleanupContacts: function(callback) {
+        var self = this;
+        var query = {'created.date': { $type: 2}};
+        contactDao.findMany(query, $$.m.Contact, function(err, contacts){
+            if(err) {
+                self.log.error('Error getting contacts:', err);
+                callback();
+            } else {
+                async.each(contacts, function(contact, cb){
+                    try {
+                        var created = contact.get('created');
+
+                        if (created && _.isString(contact.get('created').date)) {
+                            created.date = moment(created.date).toDate();
+                        }
+                        contactDao.saveOrUpdate(contact, function(err, contact){
+                            if(err) {
+                                self.log.error('Error updating contact:', err);
+                                cb();
+                            } else {
+                                cb();
+                            }
+                        });
+                    } catch(exception) {
+                        self.log.error('Exception:', exception);
+                        cb();
+                    }
+
+                }, function done(err){
+                    self.log.debug('done');
+                    callback();
+                });
+            }
+        });
     }
 
 };
