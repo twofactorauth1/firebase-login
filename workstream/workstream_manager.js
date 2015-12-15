@@ -87,7 +87,7 @@ module.exports = {
                         if(workstream.get('completed') === false) {
                             var completed = true;
                             _.each(workstream.get('blocks'), function(block){
-                                if(block.complete === false) {
+                                if(block.complete === false && block.optional === false) {
                                     completed = false;
                                 }
                             });
@@ -151,7 +151,7 @@ module.exports = {
                         if(workstream.get('completed') === false) {
                             var completed = true;
                             _.each(workstream.get('blocks'), function(block){
-                                if(block.complete === false) {
+                                if(block.complete === false && block.optional === false) {
                                     completed = false;
                                 }
                             });
