@@ -95,6 +95,8 @@
 
     $scope.viewSingle = function (topic) {
       console.log('viewSingle >>> ', topic);
+      if(!topic)
+        return;
       if(!$scope.loaded)          
         $scope.isViewed(topic);
       $scope.loaded = true;
