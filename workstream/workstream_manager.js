@@ -260,8 +260,8 @@ module.exports = {
         //db.contacts.aggregate([{$match:{accountId:4}},{$group:{ _id: {month: {$month:'$created.date'}, year: {$year:'$created.date'}, day: {$dayOfMonth:'$created.date'}}, count:{ "$sum": 1 }}}])
         var groupCriteria = {_id: {month: {$month:'$created.date'}, year: {$year:'$created.date'}, day: {$dayOfMonth:'$created.date'}, tag:'$tags'}};
         var matchCriteria = {accountId:accountId, 'created.date': {$gte: startDate, $lte:endDate}};
-
-        contactDao.aggregateWithSum(groupCriteria, matchCriteria, $$.m.Contact, function(err, results){
+        self.log.debug('using query:', matchCriteria);
+        contactDao.aggregrateWithSumAndDupes(groupCriteria, matchCriteria, $$.m.Contact, function(err, results){
 
             var total = 0;
             var leadTotal = 0;
@@ -335,7 +335,7 @@ module.exports = {
             var groupCriteria = {
                 _id: {month: {$month:'$server_time_dt'}, year: {$year:'$server_time_dt'}, day: {$dayOfMonth:'$server_time_dt'}}
             };
-            analyticsDao.aggregateWithSum(groupCriteria, query, $$.m.PageEvent, function(err, results){
+            analyticsDao.aggregrateWithSumAndDupes(groupCriteria, query, $$.m.PageEvent, function(err, results){
 
                 var total = 0;
                 _.each(results, function(result){
@@ -376,7 +376,7 @@ module.exports = {
             _id: {month: {$month:'$server_time_dt'}, year: {$year:'$server_time_dt'}, day: {$dayOfMonth:'$server_time_dt'}}
         };
 
-        analyticsDao.aggregateWithSum(groupCriteria, query, $$.m.SessionEvent, function(err, results){
+        analyticsDao.aggregrateWithSumAndDupes(groupCriteria, query, $$.m.SessionEvent, function(err, results){
 
 
             var total = 0;

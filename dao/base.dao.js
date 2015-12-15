@@ -270,6 +270,14 @@ _.extend(baseDao.prototype, mongoBaseDao, {
         }
     },
 
+    aggregrateWithSumAndDupes: function(groupCriteria, matchCriteria, type, fn) {
+        if(this.getStorage(type) === 'mongo') {
+            this._aggregateMongoWithSumAndDupes(groupCriteria, matchCriteria, type, fn);
+        } else {
+            fn("No storage medium available for this model type");
+        }
+    },
+
     aggregateWithCustomStages: function(stageAry, type, fn) {
         if(this.getStorage(type) === 'mongo') {
             this._aggregateMongoWithCustomStages(stageAry, type, fn);
