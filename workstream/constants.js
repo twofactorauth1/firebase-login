@@ -16,6 +16,7 @@ defaultWorkstreams[0] = {
             "link" : "/admin/#/website/pages",
             "helpText" : "Create a page on your website that will collect information on leads.",
             "complete" : false,
+            "optional" : false,
             "helpLinks": [
                 { type: "help", name: "Select a page template", link: "/admin/#/support/help-topics?topic=d0d70109-a10f-4786-ace6-c5528df84eb3" },
                 { type: "help", name: "Add and edit components", link: "/admin/#/support/help-topics?topic=efe36633-cafa-4c1f-b48c-98eb23fded7c" }
@@ -28,6 +29,7 @@ defaultWorkstreams[0] = {
             "alias" : "mediaManager",
             "helpText" : "Upload images for use on your website.",
             "complete" : false,
+            "optional" : false,
             "helpLinks": [
                 { type: "help", name: "Upload and manage media", link: "/admin/#/support/help-topics?topic=338ce58c-7119-4678-956f-1c9a45f8dc21" }
             ]
@@ -38,7 +40,8 @@ defaultWorkstreams[0] = {
             "link" : "",
             "alias" : "websiteSeo",
             "helpText" : "Customize your site identity by renaming your site and/or adding a favicon and keywords for SEO.",
-            "complete" : false
+            "complete" : false,
+            "optional" : false
         },
         {
             "_id" : 5,
@@ -46,6 +49,7 @@ defaultWorkstreams[0] = {
             "link" : "/admin/#/support/help-topics?topic=56fc13b6-48ea-4fe0-b0bf-1ba8c0afd62f",
             "helpText" : "Chat with us if you'd like to use your existing URL.",
             "complete" : false,
+            "optional" : true,
             "helpLinks": [
                 { type: "help", name: "Change nameserver from GoDaddy", link: "/admin/#/support/help-topics?topic=56fc13b6-48ea-4fe0-b0bf-1ba8c0afd62f" }
             ]
@@ -83,6 +87,7 @@ defaultWorkstreams[1] = {
             "link" : "/admin/#/customers",
             "helpText" : "Import contacts or create them individually.",
             "complete" : false,
+            "optional" : false,
             "helpLinks": [
                 { type: "help", name: "Import from social networks or .csv files", link: "/admin/#/support/help-topics?topic=7a4d5cd1-fd74-4d15-bce7-3ee6076f56ce" }
             ]
@@ -93,6 +98,7 @@ defaultWorkstreams[1] = {
             "link" : "/admin/#/website/pages",
             "helpText" : "Add a simple form on a page that automatically creates contacts.",
             "complete" : false,
+            "optional" : false,
             "helpLinks": [
                 { type: "help", name: "Create a simple form", link: "/admin/#/support/help-topics?topic=4383048b-48df-4df5-852b-e11abe5d1366" }
             ]
@@ -102,7 +108,8 @@ defaultWorkstreams[1] = {
             "name" : "Create an autoresponder",
             "link" : "/admin/#/emails",
             "helpText" : "Set up an email that is sent to customers when they fill out a simple form.",
-            "complete" : false
+            "complete" : false,
+            "optional" : false
         }
     ],
     "analyticWidgets" : [
@@ -137,6 +144,7 @@ defaultWorkstreams[2] = {
             "link" : "/admin/#/customers",
             "helpText" : "Quickly send a simple, one-time email.",
             "complete" : false,
+            "optional" : false,
             "helpLinks": [
                 { type: "help", name: "Send an email", link: "/admin/#/support/help-topics?topic=e7c74b68-cabd-4228-8b50-dce92cd71525" }
             ]
@@ -147,6 +155,7 @@ defaultWorkstreams[2] = {
             "link" : "/admin/#/marketing/campaigns",
             "helpText" : "Create a reusable email, select your recipients, and schedule it for delivery.",
             "complete" : false,
+            "optional" : false,
             "helpLinks": [
                 { type: "help", name: "Create automated email", link: "/admin/#/support/help-topics?topic=559719c0-c5c4-41bb-b11f-8962efbdd7cf" }
             ]
@@ -157,6 +166,7 @@ defaultWorkstreams[2] = {
             "link" : "/admin/#/account/integrations",
             "helpText" : "Connect your social media accounts so you can view feeds and post to your own.",
             "complete" : false,
+            "optional" : true,
             "helpLinks": [
                 { type: "help", name: "Connect to social networks", link: "/admin/#/support/help-topics?topic=47259629-279f-4365-bbb8-c7205d758f3d" },
                 { type: "help", name: "Post to social networks", link: "/admin/#/support/help-topics?topic=a2ea8916-45c7-4aca-ada3-243920bb8a9a" }
@@ -168,6 +178,7 @@ defaultWorkstreams[2] = {
             "link" : "/admin/#/website/posts",
             "helpText" : "Tell customers what you're thinking about and working on with blog posts that you can publish immediately or later.",
             "complete" : false,
+            "optional" : true,
             "helpLinks": [
                 { type: "help", name: "Add a blog teaser to a page", link: "/admin/#/support/help-topics?topic=49abd6bc-dae1-4f34-a772-8b0c62c5bc92" }
             ]
@@ -213,6 +224,7 @@ defaultWorkstreams[3] = {
             "link" : "/admin/#/account/integrations",
             "helpText" : "Connect your Stripe account so that you can receive payments.",
             "complete" : false,
+            "optional" : false,
             "helpLinks": [
                 { type: "help", name: "Create and post a product", link: "/admin/#/support/help-topics?topic=4c032f2d-0ef3-4fe5-946d-6970ae567333" }
             ]
@@ -223,6 +235,7 @@ defaultWorkstreams[3] = {
             "link" : "/admin/#/commerce/products",
             "helpText" : "Add products with editable descriptions.",
             "complete" : false,
+            "optional" : false,
             "helpLinks": [
                 { type: "help", name: "Create and post a product", link: "/admin/#/support/help-topics?topic=c92f5668-579f-468d-8883-3a85f1209852" }
             ]
@@ -233,6 +246,7 @@ defaultWorkstreams[3] = {
             "link" : "/admin/#/website/pages",
             "helpText" : "Add a product component or store to a page so that customers can view and purchase your offerings.",
             "complete" : false,
+            "optional" : false,
             "helpLinks": [
                 { type: "help", name: "Add and edit components", link: "/admin/#/support/help-topics?topic=efe36633-cafa-4c1f-b48c-98eb23fded7c" },
                 { type: "help", name: "Manage orders", link: "/admin/#/support/help-topics?topic=f066dbed-ae82-4464-8046-70230859d26b" }
