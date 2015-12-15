@@ -176,6 +176,8 @@
                     </button>
                     <button type="button" ng-show="showInsert && singleSelected && !uploader.queue.length" class="btn btn-primary insert-image" ng-click="m.onInsertMedia()">Insert Images
                     </button>
+                    <button type="button" ng-if="showDone && assets.length" class="btn btn-primary insert-image" ng-click="m.onCallbackOnMediaClose()">Done
+                    </button>
                     <div class="clearfix"></div>
                 </div>
             </div>

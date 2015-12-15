@@ -51,15 +51,27 @@
     $scope.emails = [];
 
     $scope.formatDate = function (date) {
+
+      var formattedDate;
+      var localDate;
+
       if (!date._d) {
-        var date = { year: date.year, month: date.month - 1, day: date.day, hour: date.hour, minute: date.minute };
-        var localDate = moment.utc(date);
-        var localDate = localDate.local();
+
+        if (date.year) {
+            formattedDate = { year: date.year, month: date.month - 1, day: date.day, hour: date.hour, minute: date.minute };
+        } else if (date instanceof Date) {
+            formattedDate = moment(date);
+        }
+
+        localDate = moment.utc(formattedDate);
+        localDate = localDate.local();
+
       } else {
-        var localDate = moment(date);
+        localDate = moment(date);
       }
-      
+
       return localDate.format("dddd, MMMM Do YYYY, h:mm A");
+
     };
 
     $scope.updateSendNow = function (value) {
@@ -88,7 +100,7 @@
 
     // selected tags
     $scope.tagSelection = [];
-    
+
     $scope.recipients = [];
     $scope.originalRecipients = [];
     $scope.recipientsToRemove = [];
@@ -143,6 +155,7 @@
       "fromName": "",
       "fromEmail": "",
       "replyTo": "",
+      "bcc": "",
       "components": [{
         "_id": CommonService.generateUniqueAlphaNumericShort(),
         "anchor": CommonService.generateUniqueAlphaNumericShort(),
@@ -302,6 +315,7 @@
           "fromEmail": "",
           "fromName": '',
           "replyTo": '',
+          "bcc": '',
           "subject": '',
           "vars": [],
           "sendAt": {},
@@ -374,7 +388,7 @@
 
     /*
      * @toggleFullscreen
-     * - 
+     * -
      */
     $scope.toggleFullscreen = function () {
       $scope.transitionDone = false;
@@ -576,6 +590,7 @@
         $scope.emailToSend.fromName = $scope.emailToSendPrevious.fromName;
         $scope.emailToSend.fromEmail = $scope.emailToSendPrevious.fromEmail;
         $scope.emailToSend.replyTo = $scope.emailToSendPrevious.replyTo;
+        $scope.emailToSend.bcc = $scope.emailToSendPrevious.bcc;
       } else {
         $scope.emailToSend = $scope.emailToSendPrevious;
         if($scope.newCampaignObj.steps && $scope.newCampaignObj.steps[0] && $scope.newCampaignObj.steps[0].settings && !$scope.newCampaignObj.steps[0].settings.emailId && $scope.emailToSendPrevious)
@@ -593,7 +608,7 @@
       var existingContact = _.find($scope.recipients, function (recipient) {
         return recipient._id === selected._id;
       });
-      
+
       if (!existingContact) {
         $scope.recipients.push(selected);
       }
@@ -664,7 +679,7 @@
 
     /*
      * @eliminateDuplicate
-     * - 
+     * -
      */
     $scope.eliminateDuplicate = function (customer) {
       return $scope.selectedCustomers.individuals.indexOf(customer._id) > -1;
@@ -730,7 +745,7 @@
 
     /*
      * @checkContactExists
-     * - 
+     * -
      */
     $scope.checkContactExists = function (email) {
       var matchingRecipient = _.find($scope.recipients, function (recipient) {
@@ -813,8 +828,9 @@
      */
     $scope.activateCampaign = function () {
       $scope.newCampaignObj.status = 'RUNNING';
-      $scope.navigateOnSave = function() { 
+      $scope.navigateOnSave = function() {
         $timeout(function() {
+          $scope.resetDirty();
           window.location = '/admin/#/marketing/campaigns';
         }, 750);
       };
@@ -851,7 +867,7 @@
 
     /*
      * @createCampaign
-     * - 
+     * -
      */
     $scope.createCampaign = function (newEmail) {
 
@@ -867,10 +883,10 @@
 
     /*
      * @updateCampaign
-     * - 
+     * -
      */
     $scope.updateCampaign = function (newEmail) {
-      
+
       //set/format email and send date
       $scope.setEmail(newEmail);
       $scope.setDate();
@@ -907,7 +923,7 @@
 
     /*
      * @addContacts
-     * - 
+     * -
      */
     $scope.addContacts = function(createdContactsArr, fn) {
       //get an array of contact Ids from recipients
@@ -960,6 +976,7 @@
         stepSettings.fromEmail = newEmail.fromEmail;
         stepSettings.fromName = newEmail.fromName;
         stepSettings.replyTo = newEmail.replyTo;
+        stepSettings.bcc = newEmail.bcc;
         stepSettings.subject = newEmail.subject;
       }
     };
@@ -1065,7 +1082,7 @@
     };
 
     $scope.currentStep = 1;
-    
+
     /*
      * @form
      * - Initial Value
@@ -1114,17 +1131,17 @@
     $scope.createDuplicateCampaign = function (newCampaign) {
       if ($scope.newCampaignObj._id) {
         CampaignService.duplicateCampaign($scope.newCampaignObj._id, newCampaign,function(data) {
-          
+
           $timeout(function() {
             $scope.closeModal();
           }, 0);
-          
+
           if (data._id) {
 
             $timeout(function() {
               window.location = '/admin/#/marketing/campaigns/' + data._id;
             }, 1000);
-          
+
           }
 
         });
@@ -1151,18 +1168,19 @@
             $scope.saveOrUpdateCampaign(true);
           }
         }
-        
+
         $scope.saveLoading = true;
 
         //preserve intended navigation
         if (_url) {
           $scope.navigateURL = _url;
-          $scope.navigateOnSave = function() { 
+          $scope.navigateOnSave = function() {
             $timeout(function() {
-              $window.location = $scope.navigateURL 
+              $scope.resetDirty();
+              $window.location = $scope.navigateURL
             }, 750);
           };
-          
+
           SweetAlert.swal({
             title: "You have unsaved changes.",
             text: "Do you want to save pending changes to this campaign?",
@@ -1180,8 +1198,9 @@
             }
           });
         } else {
-          $scope.navigateOnSave = function() { 
+          $scope.navigateOnSave = function() {
             $timeout(function() {
+              $scope.resetDirty();
               window.location = '/admin/#/marketing/campaigns';
             }, 750);
           };
@@ -1193,7 +1212,7 @@
           }
         }
       }
-      
+
     };
 
     /*
@@ -1265,6 +1284,10 @@
           $scope.emailToSend.replyTo = account.business.emails[0].email;
           $scope.emailToSendCopy.replyTo = account.business.emails[0].email;
         }
+        if (fromEmail && $scope.emailToSend.bcc == '') {
+          $scope.emailToSend.bcc = account.business.emails[0].email;
+          $scope.emailToSendCopy.bcc = account.business.emails[0].email;
+        }
       }
     };
 
@@ -1287,7 +1310,7 @@
      * - find selected email for this campaign by id
      */
     $scope.getEmails = function() {
-      
+
       var promise = WebsiteService.getEmails(false, function (_emails) {
         var emailId = $scope.newCampaignObj.steps[0].settings.emailId;
         var matchedEmail = null;
@@ -1297,7 +1320,7 @@
 
         $scope.emails = _emails;
         $scope.originalEmails = angular.copy(_emails);
-        
+
         matchedEmail = $scope.emails.filter(emailMatch)[0];
         if (emailId && matchedEmail) {
           $scope.emailToSend = matchedEmail;
@@ -1321,9 +1344,9 @@
      * - set editable mode
      */
     $scope.getCampaign = function() {
-      
+
       var promise = CampaignService.getCampaign($stateParams.campaignId, function (data) {
-          
+
           var sendAtDateISOString = moment.utc(data.steps[0].settings.sendAt).subtract('months', 1).toISOString();
           var localMoment = moment(sendAtDateISOString);
 
@@ -1455,6 +1478,16 @@
         $scope.newCampaignObj.steps[0].trigger = null;
       }
     };
+
+    $scope.checkIfDirty = function(){      
+      return $scope.originalCampaignObj && $scope.originalEmailToSend && $scope.delivery.originalDate && $scope.isEditable && $scope.pendingChanges();
+    }
+    $scope.resetDirty = function(){
+        $scope.originalCampaignObj = null;
+        $scope.newCampaignObj = null;
+        $scope.originalEmailToSend = null;
+        $scope.delivery.originalDate = null;
+    }
 
     /*
      * @init

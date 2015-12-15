@@ -1,4 +1,5 @@
 <div ng-controller="OrderDetailCtrl" class="order-detail">
+<indig-navprompt class="indig-navprompt" my-state="{{$state.$current.name}}" reset-dirty="resetDirty()" check-if-dirty="checkIfDirty()"></indig-navprompt>
     <!-- start: PAGE TITLE -->
     <section id="page-title" class="padding-top-15 padding-bottom-15">
         <div class="row">
@@ -9,7 +10,8 @@
             <div ncy-breadcrumb></div>
         </div>
     </section>
-    <div ng-class="{'load1 csspinner': !dataLoaded}">
+    <form name="myform">
+        <div ng-class="{'load1 csspinner': !dataLoaded}">
         <!-- end: PAGE TITLE -->
         <div class="container-fluid container-fullw bg-white margin-bottom-15 padding-top-15 padding-bottom-15">
             <div class="pull-right">
@@ -513,7 +515,8 @@
             </div>
         </div>
         <!-- end: YOUR CONTENT HERE -->
-    </div>
+        </div>
+    </form>
 </div>
 <script type="text/ng-template" id="productImage.html">
     <img src="{{item.product.icon}}" width="150" />

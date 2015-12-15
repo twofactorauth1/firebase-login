@@ -1,7 +1,7 @@
 'use strict';
 /*global app, window*/
 (function (angular) {
-  app.controller('CustomersCtrl', ["$scope", "$state", "toaster", "$modal", "$window", "CustomerService", "SocialConfigService", "userConstant", '$timeout', function ($scope, $state, toaster, $modal, $window, CustomerService, SocialConfigService, userConstant, $timeout) {
+  app.controller('CustomersCtrl', ["$scope", "$state", "toaster", "$modal", "$window", "CustomerService", "SocialConfigService", "userConstant", "formValidations", "CommonService", '$timeout', function ($scope, $state, toaster, $modal, $window, CustomerService, SocialConfigService, userConstant, formValidations, CommonService, $timeout) {
 
     $scope.tableView = 'list';
     $scope.itemPerPage = 100;
@@ -10,7 +10,7 @@
     if (!$state.current.sort) {
       $scope.order = "reverse";
     }
-
+    $scope.formValidations = formValidations;
     $scope.default_image_url = "/admin/assets/images/default-user.png";
 
     $scope.filterCustomerPhotos = function (customers) {
@@ -298,27 +298,55 @@
     };
 
     $scope.addCustomer = function () {
-      $scope.saveLoading = true;
+      
+      $scope.saveLoading = true;      
       var tempTags = [];
       _.each($scope.customer.tags, function (tag) {
         tempTags.push(tag.data);
       });
+      var matchingCustomer = _.findWhere($scope.customers, {
+        bestEmail: $scope.customer.email
+      });
+      if(matchingCustomer){
+        $scope.setDuplicateUser(true);
+        $scope.saveLoading = false;
+        return;
+      }
       var tempCustomer = {
         first: $scope.customer.first,
         middle: $scope.customer.middle,
         last: $scope.customer.last,
         tags: tempTags
       };
+      if($scope.customer.email){
+        tempCustomer.details = [];
+        tempCustomer.details.push({          
+          emails: [{
+            _id: CommonService.generateUniqueAlphaNumericShort(),
+            email: $scope.customer.email
+          }]
+        })
+      }
       CustomerService.saveCustomer(tempCustomer, function (returnedCustomer) {
         $scope.saveLoading = false;
         $scope.fullName = '';
         $scope.customer.tags = {};
+        $scope.customer.email = '';
+        $scope.duplicateCustomer = false;
         $scope.closeModal();
+       
+        
+        returnedCustomer.bestEmail = $scope.checkBestEmail(returnedCustomer);
         $scope.customers.unshift(returnedCustomer);
+        
         toaster.pop('success', 'Customer Successfully Added');
         $scope.minRequirements = true;
       });
     };
+
+    $scope.setDuplicateUser = function(val){
+      $scope.duplicateCustomer = val;
+    }
 
     $scope.$watch('fullName', function (newValue) {
       if (newValue !== undefined) {

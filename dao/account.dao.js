@@ -78,6 +78,17 @@ var dao = {
         }
     },
 
+    getServerDomainByAccount: function(accountId, fn) {
+        var self = this;
+        self.getById(accountId, function(err, value){
+            if(err || !value) {
+                return fn(err, value);
+            }
+            var url = appConfig.getServerDomain(value.get('subdomain'), value.get('customDomain'));
+            fn(null, url);
+        });
+    },
+
 
     getAllAccountsForUserId: function (userId, fn) {
         var self = this;

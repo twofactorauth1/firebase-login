@@ -19,15 +19,17 @@
     <nav class="navbar navbar-default navbar-static-top">
         <div class="container {{isEditing ? 'top-bar-wrap' : ''}}">
             <div class="main-block">
-                <ul ng-sortable="sortableConfig" class="nav left-navbar-nav left-block {{isEditing ? 'edit-mode sortable' : ''}}">
-                    <li ng-repeat="network in component.networks">
-                        <a ng-if="!isEditing" href="{{getUrl(network.url)}}"><i class="fa fa-lg fa-{{network.icon}}"></i></a>
-                        <a ng-if="isEditing" ng-click="openModal('social-links-modal', $index)" class="clickable-link social-links" href="" style="z-index:1033;"><i class="fa fa-lg fa-{{network.icon}}"></i></a>
-                    </li>
+                <div class="social-list-icons">
+                    <ul ng-sortable="sortableConfig" class="nav left-navbar-nav left-block {{isEditing ? 'edit-mode' : ''}}">
+                        <li ng-repeat="network in component.networks">
+                            <a ng-if="!isEditing" href="{{getUrl(network.url)}}"><i class="fa fa-lg fa-{{network.icon}}"></i></a>
+                            <a ng-if="isEditing" ng-click="openModal('social-links-modal', $index)" class="clickable-link social-links" href="" style="z-index:1033;"><i class="fa fa-lg fa-{{network.icon}}"></i></a>
+                        </li>                    
+                    </ul>
                     <div ng-if="isEditing" class="add-addtional center">
                         <a ng-if="isEditing" ng-click="openModal('social-links-modal')" class="clickable-link social-links" data-toggle="modal"><i class="fa fa-plus"></i></a>
                     </div>
-                </ul>
+                </div>
                 <ul class="nav navbar-nav navbar-right right-block">
                     <li class="hour-block">
                         <div class="navbar-text navbar-right"><i ng-if="component.businessHours" class="fa fa-clock-o fa-lg "></i> &nbsp;

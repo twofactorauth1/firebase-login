@@ -1,0 +1,104 @@
+<div
+    class="workstream-tile-container image--basic"
+    ng-class="{ 'workstream-state-unlocked': vm.workstream.unlocked, 'workstream-state-completed': vm.workstream.completed && vm.workstream.unlocked }">
+
+    <div class="workstream-panel-circle-container">
+        <div
+        class="indi-circle workstream-panel-circle panel panel-white text-center margin-bottom-0 cursor-pointer"
+        ng-click="vm.workstreamClick()">
+
+        <img class="indi-circle-img grayscale workstream-panel-img"  ng-src="{{vm.workstream.bgImage}}" err-src="assets/images/default-page.jpg" alt="{{vm.workstream.name}}" />
+
+        <i ng-if="vm.workstream.completed && vm.workstream.unlocked" class="fa fa-check-circle"></i>
+
+        <div ng-if="vm.workstream.unlocked" id="loading-bar"><div class="bar" ng-style="{ 'width': vm.completePercentageStyle }"><div class="peg"></div></div></div>
+
+        <h3 class="workstream-title indi-circle-title">
+            <div>{{vm.workstream.name}}</div>
+        </h3>
+
+        </div>
+    </div>
+
+
+    <div id="{{vm.workstream._id}}" class="workstream-detail-panel image--expand panel-body">
+
+        <div class="col-md-4 padding-20">
+            <div class="workstream-video-thumbnail" ng-if="vm.workstream.unlocked" ng-init="vm.getVideoConfigObject(vm.workstream)">
+                <div class="workstream-poster-container cursor-pointer" ng-click="vm.playWorkstreamVideo()">
+                   <div class="workstream-poster-image-container">
+                        <i class="fa fa-youtube-play fa-4x">
+                            <div class="icon-inner">
+                            </div>
+                        </i>
+                        <img class="workstream-poster-image" src="{{vm.videoConfig.videoPosterImage}}">
+                   </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-8 padding-20">
+
+            <h3 class="workstream-title">
+                {{vm.workstream.name}}
+                <div class="workstream-percent-complete" ng-if="vm.workstream.unlocked">
+                    ({{vm.uiState.openWorkstream.completeRatio}})
+                </div>
+            </h3>
+
+            <p class="workstream-description text-small">
+                {{vm.workstream.description || 'This workstream needs a description.'}}
+            </p>
+
+            <ol class="workstream-block-list list-unstyled" ng-if="vm.workstream.unlocked">
+
+                <li class="workstream-block-list-item" ng-repeat="block in vm.workstream.blocks track by $index">
+
+                    <a ng-if = "!block.alias"
+                        href="{{block.link}}"
+                        class="workstream-block-link checkbox clip-check check-primary checkbox-inline"
+                        ng-class="{ 'workstream-block-complete': block.complete }"
+                        tooltip-placement="right"
+                        tooltip-html-unsafe="{{block.helpText}}">
+
+                        {{block.name}}
+
+                        <i ng-if="!block.complete" class="fa fa-long-arrow-right"></i>
+                        <i ng-if="block.complete" class="fa fa-check-circle"></i>
+
+                    </a>
+
+                    <a ng-if="block.alias"
+                        href="javascript:void(0)"
+                        class="workstream-block-link checkbox clip-check check-primary checkbox-inline"
+                        tooltip-placement="right"
+                        ng-click="vm.callAliasMethod(block.alias)"
+                        tooltip-html-unsafe="{{block.helpText}}">
+
+                        {{block.name}}
+
+                        <i ng-if="!block.complete" class="fa fa-long-arrow-right"></i>
+                        <i ng-if="block.complete" class="fa fa-check-circle"></i>
+
+                    </a>
+
+                    <ul class="workstream-block-help-links list-unstyled">
+                        <li ng-repeat="link in block.helpLinks track by $index">
+                            <i class="fa fa-question-circle"></i>
+                            <a href="{{link.link}}">{{link.name}}</a>
+                            <span ng-if="!$last"> | </span>
+                        </li>
+                    </ul>
+
+                </li>
+
+            </ol>
+
+        </div>
+
+        <div ng-click="vm.workstreamClick()" class="expand__close"></div>
+
+    </div>
+
+</div>

@@ -99,6 +99,11 @@
 .mt10 {
   margin-top: 10px;
 }
+.full-color {
+  filter: url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\'><filter id=\'grayscale\'><feColorMatrix type=\'matrix\' values=\'1 0 0 0 0, 0 1 0 0 0, 0 0 1 0 0, 0 0 0 1 0\'/></filter></svg>#grayscale");
+  -webkit-filter: grayscale(0%);
+  opacity: 1;
+}
 /* ---------------------------------------------------------------------- */
 /*  Basic Elements & Classes
 /* ---------------------------------------------------------------------- */
@@ -498,7 +503,6 @@ h5.over-title {
   overflow-y: visible;
 }
 @media (max-width: 991px) {
-  .app-slide-off #topnav.navbar,
   .app-offsidebar-open #topnav.navbar {
     position: absolute !important;
   }
@@ -973,9 +977,8 @@ h5.over-title {
 @media (max-width: 991px) {
   #sidebar {
     position: fixed !important;
-    top: 0;
+    top: 65px !important;
     left: 0;
-    z-index: 0;
     float: none;
     -webkit-transform: translate3d(-200px, 0, 0);
     transform: translate3d(-200px, 0, 0);

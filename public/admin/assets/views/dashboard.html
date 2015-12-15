@@ -1,7 +1,7 @@
 <div ng-controller="DashboardCtrl">
     <indig-onboarding min-requirements="minRequirements"></indig-onboarding>
     <!-- start: DASHBOARD TITLE -->
-    <section id="page-title" class="padding-top-15 padding-bottom-15">
+    <section ng-if="accountHideDohy" id="page-title" class="padding-top-15 padding-bottom-15">
         <div class="row">
             <div class="col-sm-7">
                 <h1 class="mainTitle" translate="dashboard.WELCOME" translate-values="{ appName: app.name }"></h1>
@@ -13,7 +13,7 @@
     </section>
     <!-- end: DASHBOARD TITLE -->
     <!-- start: FEATURED BOX LINKS -->
-    <div class="container-fluid container-fullw bg-white">
+    <div ng-if="accountHideDohy" class="container-fluid container-fullw bg-white">
         <div class="row">
             <div class="col-sm-3">
                 <div class="panel panel-white no-radius text-center margin-bottom-0 cursor-pointer" ui-sref="app.customers">
@@ -61,7 +61,7 @@
             </div>
         </div>
     </div>
-    <div class="container-fluid container-fullw">
+    <div ng-if="accountHideDohy" class="container-fluid container-fullw">
         <div class="row">
             <div class="col-xs-12 col-sm-6">
                 <div class="row">

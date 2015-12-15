@@ -1,4 +1,5 @@
 <div ng-controller="CreateCampaignCtrl" class="create-campaign">
+<indig-navprompt class="indig-navprompt" my-state="{{$state.$current.name}}" reset-dirty="resetDirty()" check-if-dirty="checkIfDirty()"></indig-navprompt>
     <span ng-hide="emails.length > 0" class="fa fa-spinner fa-spin create-campaign-spinner"></span>
     <div ng-hide="!emails.length">
         <!-- start: PAGE TITLE -->
@@ -298,6 +299,12 @@
                                                     </div>
                                                     <div class="form-group margin-bottom-0">
                                                         <label class="control-label text-bold">
+                                                            Bcc
+                                                        </label>
+                                                        <span editable-email="emailToSend.bcc">{{emailToSend.bcc || "Bcc"}}</span>
+                                                    </div>
+                                                    <div class="form-group margin-bottom-0">
+                                                        <label class="control-label text-bold">
                                                             Subject
                                                         </label>
                                                         <span editable-text="emailToSend.subject" onbeforesave="analyzeSubject($data)">{{emailToSend.subject || "Subject"}}</span>
@@ -592,6 +599,12 @@
                                                         Reply To
                                                     </label>
                                                     <span>{{emailToSend.replyTo}}</span>
+                                                </div>
+                                                <div class="form-group margin-bottom-0">
+                                                    <label class="control-label text-bold">
+                                                        Bcc
+                                                    </label>
+                                                    <span>{{emailToSend.bcc}}</span>
                                                 </div>
                                                 <div class="form-group margin-bottom-0">
                                                     <label class="control-label text-bold">

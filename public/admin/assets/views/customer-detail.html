@@ -1,4 +1,5 @@
 <div class="customer-detail" ng-controller="CustomerDetailCtrl">
+<indig-navprompt class="indig-navprompt" my-state="{{$state.$current.name}}" reset-dirty="resetDirty()" check-if-dirty="checkIfDirty()"></indig-navprompt>
     <section id="page-title" class="padding-top-15 padding-bottom-15">
         <div class="row">
             <div class="col-sm-8">
@@ -429,11 +430,11 @@
                                                     Gender
                                                 </label>
                                                 <div class="clip-radio radio-primary">
-                                                    <input type="radio" id="us-female" name="gender" value="female" ng-model="customer.gender">
+                                                    <input type="radio" ng-checked="customer.gender.toLowerCase() == 'female'" id="us-female" name="gender" value="female" ng-model="customer.gender">
                                                     <label for="us-female">
                                                         Female
                                                     </label>
-                                                    <input type="radio" id="us-male" name="gender" value="male" ng-model="customer.gender">
+                                                    <input type="radio" ng-checked="customer.gender.toLowerCase() == 'male'" id="us-male" name="gender" value="male" ng-model="customer.gender">
                                                     <label for="us-male">
                                                         Male
                                                     </label>

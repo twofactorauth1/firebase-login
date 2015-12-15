@@ -2,7 +2,7 @@
     <div class="row ">
         <div class="map-wrap {{isEditing ? 'editing' : ''}}">
 
-            <map zoom="{{component.map.zoom || 10}}" center="{{component.location.lat}}, {{component.location.lon}}" disable-default-u-i="true" scale-control="false" pan-control="false" zoom-control="false"  scrollwheel="false">
+            <map zoom="{{component.map.zoom || 10}}" center="{{component.location.lat}}, {{component.location.lon}}" disable-default-u-i="true" scale-control="false" pan-control="false" zoom-control="true" scrollwheel="false">
 
             <marker  position="{{component.location.lat}}, {{component.location.lon}}"></marker>
            </map>
