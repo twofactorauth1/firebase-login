@@ -7308,6 +7308,19 @@ a[href="https://froala.com/wysiwyg-editor"] {
 .workstream-tile-container .workstream-block-link {
   color: #5bc0de;
   font-weight: bold;
+  margin: 1em 0 0 0!important;
+}
+.workstream-tile-container .workstream-block-help-links {
+  color: #464646;
+}
+.workstream-tile-container .workstream-block-help-links li {
+  display: inline-block;
+}
+.workstream-tile-container .workstream-block-help-links a {
+  text-decoration: underline !important;
+}
+.workstream-tile-container .workstream-block-help-links span {
+  margin: 0 .5em;
 }
 .workstream-tile-container .workstream-panel-circle-container .fa-check-circle {
   color: #5bc0de;

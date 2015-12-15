@@ -39,6 +39,7 @@
         </div>
 
         <div class="col-md-8 padding-20">
+
             <h3 class="workstream-title">
                 {{vm.workstream.name}}
                 <div class="workstream-percent-complete" ng-if="vm.workstream.unlocked">
@@ -51,33 +52,24 @@
             </p>
 
             <ol class="workstream-block-list list-unstyled" ng-if="vm.workstream.unlocked">
-                <li class="workstream-block-list-item" ng-repeat="block in vm.workstream.blocks">
 
-                    <a ng-if="block.complete"
-                        href="{{block.link}}"
-                        class="workstream-block-link checkbox clip-check check-primary checkbox-inline workstream-block-complete"
-                        tooltip-placement="right"
-                        tooltip-html-unsafe="{{block.helpText}}">
+                <li class="workstream-block-list-item" ng-repeat="block in vm.workstream.blocks track by $index">
 
-                        {{block.name}}
-
-                        <i class="fa fa-check-circle"></i>
-
-                    </a>
-
-                    <a ng-if = "!block.alias && !block.complete"
+                    <a ng-if = "!block.alias"
                         href="{{block.link}}"
                         class="workstream-block-link checkbox clip-check check-primary checkbox-inline"
+                        ng-class="{ 'workstream-block-complete': block.complete }"
                         tooltip-placement="right"
                         tooltip-html-unsafe="{{block.helpText}}">
 
                         {{block.name}}
 
-                        <i class="fa fa-long-arrow-right"></i>
+                        <i ng-if="!block.complete" class="fa fa-long-arrow-right"></i>
+                        <i ng-if="block.complete" class="fa fa-check-circle"></i>
 
                     </a>
 
-                    <a ng-if="block.alias && !block.complete"
+                    <a ng-if="block.alias"
                         href="javascript:void(0)"
                         class="workstream-block-link checkbox clip-check check-primary checkbox-inline"
                         tooltip-placement="right"
@@ -90,8 +82,18 @@
 
                     </a>
 
+                    <ul class="workstream-block-help-links list-unstyled">
+                        <li ng-repeat="link in block.helpLinks track by $index">
+                            <i class="fa fa-question-circle"></i>
+                            <a href="{{link.link}}">{{link.name}}</a>
+                            <span ng-if="!$last"> | </span>
+                        </li>
+                    </ul>
+
                 </li>
+
             </ol>
+
         </div>
 
         <div ng-click="vm.workstreamClick()" class="expand__close"></div>
