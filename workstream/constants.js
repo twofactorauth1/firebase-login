@@ -203,7 +203,7 @@ defaultWorkstreams[2] = {
 defaultWorkstreams[3] = {
     "_id" : null,
     "accountId" : 0,
-    "unlockVideoUrl" : "https://www.youtube.com/watch?v=VfbQ4gww7aI",
+    "unlockVideoUrl" : "https://www.youtube.com/watch?v=b_fXWfLya8Q",
     "unlocked" : false,
     "completed" : false,
     "blocks" : [
