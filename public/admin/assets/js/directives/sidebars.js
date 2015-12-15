@@ -96,8 +96,8 @@ function ($document, $rootScope) {
         return $('.app-sidebar-fixed').length;
     }
 
-}).directive('appAside', ['$window', '$rootScope', '$timeout', 'APP_MEDIAQUERY', 'DashboardService',
-function ($window, $rootScope, $timeout, mq, DashboardService) {
+}).directive('appAside', ['$window', '$rootScope', '$timeout', 'APP_MEDIAQUERY',
+function ($window, $rootScope, $timeout, mq) {
     var $html = $('html'), $win = $($window), _this, wrap = $('.app-aside');
     return {
         restrict: 'AC',
@@ -106,25 +106,25 @@ function ($window, $rootScope, $timeout, mq, DashboardService) {
 
             $scope.showDashboardNotificationIcon = false;
 
-            $scope.$watch(function() { return DashboardService.updatedWorkstreams }, function() {
+            //$scope.$watch(function() { return DashboardService.updatedWorkstreams }, function() {
 
                 /*
                  * If there is new workstream data from server and we're not on the dashboard,
                  * Then we want to display the nav notification icon
                  */
-                if (DashboardService.updatedWorkstreams && DashboardService.awayFromDashboard) {
-                    $scope.showDashboardNotificationIcon = true;
-                }
+                // if (DashboardService.updatedWorkstreams && DashboardService.awayFromDashboard) {
+                //     $scope.showDashboardNotificationIcon = true;
+                // }
 
-            }, true);
+            //}, true);
 
             $scope.userHasNavigated = function(urlPath) {
-                if (urlPath === '#/dashboard' || urlPath === '#/dohy') {
-                    DashboardService.setAwayFromDashboard(false);
-                    $scope.showDashboardNotificationIcon = false;
-                } else {
-                    DashboardService.setAwayFromDashboard(true);
-                }
+                // if (urlPath === '#/dashboard' || urlPath === '#/dohy') {
+                //     DashboardService.setAwayFromDashboard(false);
+                //     $scope.showDashboardNotificationIcon = false;
+                // } else {
+                //     DashboardService.setAwayFromDashboard(true);
+                // }
             }
 
         }],
