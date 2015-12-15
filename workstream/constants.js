@@ -58,7 +58,7 @@ defaultWorkstreams[0] = {
     "analyticWidgets" : [
         {
             name: "visitors",
-            link: "/admin/#/website/site-an alytics"
+            link: "/admin/#/website/site-analytics"
         }
     ],
     "name" : "Build an Online Presence",

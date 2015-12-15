@@ -78,7 +78,8 @@
 
                         {{block.name}}
 
-                        <i class="fa fa-long-arrow-right"></i>
+                        <i ng-if="!block.complete" class="fa fa-long-arrow-right"></i>
+                        <i ng-if="block.complete" class="fa fa-check-circle"></i>
 
                     </a>
 
