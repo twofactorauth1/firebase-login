@@ -29,6 +29,19 @@ var dao = {
         });
     },
 
+    updateCompletion: function(workstream, fn) {
+        var self = this;
+        self.getById(workstream.id(), $$.m.Workstream, function(err, dbWorkstream){
+            if(err) {
+                return fn(err);
+            } else {
+                dbWorkstream.set('blocks', workstream.get('blocks'));
+                dbWorkstream.set('completed', workstream.get('completed'));
+                self.saveOrUpdate(dbWorkstream, fn);
+            }
+        });
+    },
+
     options: {
         name: "workstream.dao",
         defaultModel: $$.m.Workstream

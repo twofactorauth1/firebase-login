@@ -126,6 +126,9 @@ _.extend(api.prototype, baseApi.prototype, {
         var self = this;
         self.log.debug('>> createContact');
         var accountId = parseInt(self.currentAccountId(req));
+        if(req.body.created) {
+            req.body.created.date = new Date();
+        }
 
         self.checkPermissionForAccount(req, self.sc.privs.MODIFY_CONTACT, accountId, function(err, isAllowed) {
             if (isAllowed !== true) {
@@ -162,12 +165,21 @@ _.extend(api.prototype, baseApi.prototype, {
         var accountId = parseInt(self.accountId(req));
 
         var contact = new $$.m.Contact(req.body);
-       
+        var created = contact.get('created');
+
+        if (created && _.isString(contact.get('created').date)) {
+            created.date = moment(created.date).toDate();
+        }
         if (isNew === true) {
             contact.set("accountId", accountId);
             if(this.userId(req)) {                
                 contact.createdBy(this.userId(req), $$.constants.social.types.LOCAL);
             }
+        } else {
+            var modified = {
+                date: new Date(),
+                by: self.userId(req)
+            };
         }
         
         contactDao.saveOrUpdateContact(contact, function (err, value) {

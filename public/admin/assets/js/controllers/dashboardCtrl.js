@@ -1,11 +1,32 @@
 'use strict';
 /*global app, moment, angular, window*/
 /*jslint unparam:true*/
-app.controller('DashboardCtrl', ["$scope", "OrderService", "CustomerService", "ChartAnalyticsService", "UserService", "ChartCommerceService", "$modal", "$filter", "contactConstant", function ($scope, OrderService, CustomerService, ChartAnalyticsService, UserService, ChartCommerceService, $modal, $filter, contactConstant) {
+app.controller('DashboardCtrl', ["$scope", "OrderService", "CustomerService", "ChartAnalyticsService", "UserService", "ChartCommerceService", "$modal", "$filter", "contactConstant", '$state',
+    function ($scope, OrderService, CustomerService, ChartAnalyticsService, UserService, ChartCommerceService, $modal, $filter, contactConstant, $state) {
+
+    $scope.accountHideDohy = false;
+
+    /*
+     * @getAccount
+     * - get user account and then run visitors report
+     */
+
+    UserService.getAccount(function (account) {
+        if(account.showhide.dohy===true) {
+            $state.go('app.dohy');
+        } else {
+            $scope.analyticsAccount = account;
+            $scope.runVisitorsReport();
+            $scope.runNetRevenueReport();
+            $scope.accountHideDohy = true;
+        }
+
+    });
+
 
   /*
    * @getActivityName
-   * - get activity actual name 
+   * - get activity actual name
    */
   $scope.getActivityName = function (activity) {
     var activity_hash = _.findWhere(contactConstant.customer_activity_types.dp, {
@@ -184,16 +205,7 @@ app.controller('DashboardCtrl', ["$scope", "OrderService", "CustomerService", "C
     }
   };
 
-  /*
-   * @getAccount
-   * - get user account and then run visitors report
-   */
 
-  UserService.getAccount(function (account) {
-    $scope.analyticsAccount = account;
-    $scope.runVisitorsReport();
-    $scope.runNetRevenueReport();
-  });
 
   /*
    * @date

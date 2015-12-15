@@ -16,7 +16,7 @@ mainApp.service('geocodeService', ['$http', function ($http) {
     };
 
     this.stringifyAddress = function (address, breakLine) {
-      if (address) {
+      if (address && (address.address || address.address2 || address.city || address.state || address.zip)) {
           //var address = scope.htmlToPlaintext(address);
           var separator = ' ';
           var _topline = _.filter([address.address, address.address2], function (str) {

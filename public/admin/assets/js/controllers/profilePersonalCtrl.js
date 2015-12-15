@@ -4,8 +4,8 @@
  */
 (function (angular) {
   app.controller('ProfilePersonalCtrl',
-      ["$scope", "$modal", "$timeout", "toaster", "$stateParams", "UserService", "CommonService", "userConstant", "formValidations",
-        function ($scope, $modal, $timeout, toaster, $stateParams, UserService, CommonService, userConstant, formValidations) {
+      ["$scope", "$modal", "$timeout", "toaster", "$stateParams", "UserService", "PaymentService", "CommonService", "userConstant", "formValidations",
+        function ($scope, $modal, $timeout, toaster, $stateParams, UserService, PaymentService, CommonService, userConstant, formValidations) {
     console.log('profile personal >>> ');
 
     //account API call for object population
@@ -17,11 +17,27 @@
       password: '',
       confirm: '',
     };
-    
+    $scope.invoices = [];
     $scope.profileUser = {};
     UserService.getUserActivity(function (activities) {
       $scope.activities = activities;
     });
+
+    $scope.getSubscription = function(){
+      PaymentService.getInvoicesForAccount(function (invoices) {
+            var invoices = invoices;            
+            if(invoices.data.length && invoices.data[0].lines && invoices.data[0].lines.data.length == 2)
+            {
+              $scope.invoices = invoices.data[0].lines.data[1].plan;
+            }
+            else if(invoices.data.length && invoices.data[0].lines && invoices.data[0].lines.data.length == 1)
+            {
+               $scope.invoices = invoices.data[0].lines.data[0].plan;
+            }
+            console.log("Invoices: ", $scope.invoices);
+          });
+    };
+    $scope.getSubscription();
 
     /*
      * @openMediaModal
@@ -57,6 +73,7 @@
 
     $scope.setProfileUser = function(user) {
       $scope.profileUser= angular.copy(user);
+      $scope.originalprofileUser = angular.copy($scope.profileUser);
 
       // we don't show a real password since we don't respond with password data
       $scope.auth.password = userConstant.personal_profile.PASSWORD_PLACEHOLDER;
@@ -103,6 +120,7 @@
     $scope.profileSaveFn = function () {
       //$scope.currentUser = $scope.profileUser;    
      // simpleForm.$setPristine(true);
+      angular.copy($scope.profileUser, $scope.originalprofileUser);
       if (!$scope.profileUser.email) {
         toaster.pop("error", "Email is required.");
         return;
@@ -112,6 +130,7 @@
       UserService.putUser($scope.profileUser, function (user) {        
         $scope.refreshUser();
         toaster.pop('success', 'Profile Saved.');
+        angular.copy($scope.profileUser, $scope.originalprofileUser);
       });
 
       // check if password needs to be changed
@@ -139,6 +158,16 @@
     };
     $scope.changePage = function (page) {
       $scope.curPage = $scope.curPage + page;
+    }
+    $scope.checkIfDirty = function(){
+      var isDirty = false;      
+      if($scope.originalprofileUser && !angular.equals($scope.originalprofileUser, $scope.profileUser))
+        isDirty = true;
+      return isDirty;
+    }
+    $scope.resetDirty = function(){
+      $scope.originalprofileUser = null;
+      $scope.profileUser = null;
     }
   }]);
 })(angular);

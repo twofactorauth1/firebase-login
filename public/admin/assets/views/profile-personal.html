@@ -1,5 +1,6 @@
 <!-- start: PAGE TITLE -->
 <div ng-controller="ProfilePersonalCtrl" class="personal">
+<indig-navprompt class="indig-navprompt" my-state="{{$state.$current.name}}" reset-dirty="resetDirty()" check-if-dirty="checkIfDirty()"></indig-navprompt>
 <section id="page-title" class="padding-top-15 padding-bottom-15 margin-bottom-15">
     <div class="row">
         <div class="col-sm-8">
@@ -9,6 +10,7 @@
         <div ncy-breadcrumb></div>
     </div>
 </section>
+<form name="myform">
 <tabset class="tabbable">
     <!-- start: TAB OVERVIEW -->
     <tab heading="Profile">
@@ -139,7 +141,7 @@
                                                         <span class="label label-success">SUBSCRIBE</span> for
                                                         <span ng-if="!activity.customer">[deleted]</span>
                                                         <span ng-if="activity.customer.first">{{activity.customer.first+' '+activity.customer.last}}</span>
-                                                        <span ng-if=! "activity.customer.first">{{activity.customer.details[0].emails[0].email}}</span>subscribed to a <a href="">Indigenous Yearly</a> for $99.
+                                                        <span ng-if="!activity.customer.first">{{activity.customer.details[0].emails[0].email}}</span>subscribed to a <a href="">{{invoices.name}}</a> for ${{invoices.amount/100}}
                                                     </p>
                                                 </div>
                                                 <div ng-switch-when="SUBSCRIBE_CANCEL">
@@ -256,10 +258,9 @@
     <!-- start: TAB EDIT ACCOUNT -->
     <tab heading="Edit Account" active="editActive">
         <div class="col-xs-12">
-            <button class="btn btn-info btn-o pull-right" ng-disabled="form.$invalid" ng-click="profileSaveFn()">Save</button>
+            <button class="btn btn-info btn-o pull-right" ng-disabled="myform.$invalid" ng-click="profileSaveFn()">Save</button>
         </div>
-        <div class="clearfix"></div>
-        <form action="#" role="form" name="form" id="form">
+        <div class="clearfix"></div>        
             <fieldset>
                 <legend>
                     Account Info
@@ -284,26 +285,26 @@
                             </label>
                             <input type="text" placeholder="Last Name" class="form-control" name="lastname" ng-model="profileUser.last">
                         </div>
-                        <div class="form-group" ng-class="{ 'has-error' : form.emailaddress.$invalid && !form.emailaddress.$pristine }">
+                        <div class="form-group" ng-class="{ 'has-error' : myform.emailaddress.$invalid && !myform.emailaddress.$pristine }">
                             <label class="control-label">
                                 Email Address <span class="symbol required"></span>
                             </label>
                             <input type="email" placeholder="Email Address" class="form-control" name="emailaddress" ng-pattern="formValidations.email" ng-model="profileUser.email" required>
-                             <p ng-show="form.emailaddress.$invalid && !form.emailaddress.$pristine" class="help-block">Enter a valid email.</p>
+                             <p ng-show="myform.emailaddress.$invalid && !myform.emailaddress.$pristine" class="help-block">Enter a valid email.</p>
                         </div>
-                        <div class="form-group" ng-class="{ 'has-error' : form.phonenumber.$invalid && !form.phonenumber.$pristine }">
+                        <div class="form-group" ng-class="{ 'has-error' : myform.phonenumber.$invalid && !myform.phonenumber.$pristine }">
                             <label class="control-label">
                                 Phone Number
                             </label>
                             <input type="text" placeholder="Phone Number" class="form-control" name="phonenumber" ng-pattern="formValidations.phone" ng-model="profileUser.phone">
-                            <p ng-show="form.phonenumber.$invalid && !form.phonenumber.$pristine" class="help-block">Enter a valid phone number.</p>
+                            <p ng-show="myform.phonenumber.$invalid && !myform.phonenumber.$pristine" class="help-block">Enter a valid phone number.</p>
                         </div>
-                        <div class="form-group" ng-class="{ 'has-error' : form.extension.$invalid && !form.extension.$pristine }">
+                        <div class="form-group" ng-class="{ 'has-error' : myform.extension.$invalid && !myform.extension.$pristine }">
                             <label class="control-label">
                                 Phone Extension
                             </label>
                             <input type="text" placeholder="Phone Extension" class="form-control" name="extension" ng-pattern="formValidations.extension" ng-model="profileUser.extension">
-                            <p ng-show="form.extension.$invalid && !form.extension.$pristine" class="help-block">Enter a valid phone extension.</p>
+                            <p ng-show="myform.extension.$invalid && !myform.extension.$pristine" class="help-block">Enter a valid phone extension.</p>
                         </div>
                         <div class="form-group">
                             <label class="control-label">
@@ -359,9 +360,10 @@
                     </div>
                 </div>
             </fieldset>
-        </form>
+        
     </tab>
     <!-- end: TAB EDIT ACCOUNT -->
 </tabset>
+</form>
 <!-- end: YOUR CONTENT HERE -->
 </div>

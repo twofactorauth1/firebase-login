@@ -1,380 +1,382 @@
 <div ng-controller="ProfileBusinessCtrl" class="business">
+<indig-navprompt class="indig-navprompt" my-state="{{$state.$current.name}}" reset-dirty="resetDirty()" check-if-dirty="checkIfDirty()"></indig-navprompt>
 <indig-onboarding min-requirements="minRequirements"></indig-onboarding>
-<!-- start: PAGE TITLE -->
-    <section id="page-title" class="padding-top-15 padding-bottom-15 margin-bottom-15">
-        <div class="row">
-            <div class="col-sm-8">
-                <h1 class="mainTitle" translate="sidebar.nav.account.PROFILEBUSINESS"></h1>
-                <span class="mainDescription">Manage Your Business Profile</span>
-            </div>
-            <div ncy-breadcrumb></div>
-        </div>
-    </section>
-    <tabset class="tabbable">
-        <!-- start: TAB OVERVIEW -->
-        <tab heading="Profile">
+<!-- start: PAGE TITLE -->    
+        <section id="page-title" class="padding-top-15 padding-bottom-15 margin-bottom-15">
             <div class="row">
-                <div class="col-md-4">
-                    <div class="user-left">
-                        <div class="center">
-                            <h4>{{account.business.name}}</h4>
-                            <div>
-                                <div class="user-image">
-                                    <div class="thumbnail">
-                                        <img ng-src="{{account.business.logo}}" err-src="assets/images/default-user.png" alt="">
+                <div class="col-sm-8">
+                    <h1 class="mainTitle" translate="sidebar.nav.account.PROFILEBUSINESS"></h1>
+                    <span class="mainDescription">Manage Your Business Profile</span>
+                </div>
+                <div ncy-breadcrumb></div>
+            </div>
+        </section>
+        <form name="myform">
+        <tabset class="tabbable">
+            <!-- start: TAB OVERVIEW -->
+            <tab heading="Profile">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="user-left">
+                            <div class="center">
+                                <h4>{{account.business.name}}</h4>
+                                <div>
+                                    <div class="user-image">
+                                        <div class="thumbnail">
+                                            <img ng-src="{{account.business.logo}}" err-src="assets/images/default-user.png" alt="">
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <hr>
-                            <!-- <div class="social-icons">
-                                <ul>
-                                    <li data-placement="top" data-original-title="Twitter" class="social-twitter tooltips">
-                                        <a href="#" target="_blank"> Twitter </a>
-                                    </li>
-                                    <li data-placement="top" data-original-title="Facebook" class="social-facebook tooltips">
-                                        <a href="#" target="_blank"> Facebook </a>
-                                    </li>
-                                    <li data-placement="top" data-original-title="Google" class="social-google tooltips">
-                                        <a href="#" target="_blank"> Google+ </a>
-                                    </li>
-                                    <li data-placement="top" data-original-title="LinkedIn" class="social-linkedin tooltips">
-                                        <a href="#" target="_blank"> LinkedIn </a>
-                                    </li>
-                                    <li data-placement="top" data-original-title="Github" class="social-github tooltips">
-                                        <a href="#" target="_blank"> Github </a>
-                                    </li>
-                                </ul>
                                 <hr>
-                            </div> -->
+                                <!-- <div class="social-icons">
+                                    <ul>
+                                        <li data-placement="top" data-original-title="Twitter" class="social-twitter tooltips">
+                                            <a href="#" target="_blank"> Twitter </a>
+                                        </li>
+                                        <li data-placement="top" data-original-title="Facebook" class="social-facebook tooltips">
+                                            <a href="#" target="_blank"> Facebook </a>
+                                        </li>
+                                        <li data-placement="top" data-original-title="Google" class="social-google tooltips">
+                                            <a href="#" target="_blank"> Google+ </a>
+                                        </li>
+                                        <li data-placement="top" data-original-title="LinkedIn" class="social-linkedin tooltips">
+                                            <a href="#" target="_blank"> LinkedIn </a>
+                                        </li>
+                                        <li data-placement="top" data-original-title="Github" class="social-github tooltips">
+                                            <a href="#" target="_blank"> Github </a>
+                                        </li>
+                                    </ul>
+                                    <hr>
+                                </div> -->
+                            </div>
+                            <table class="table table-condensed">
+                                <thead>
+                                    <tr>
+                                        <th colspan="3">Contact Information</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>email:</td>
+                                        <td>
+                                            <div ng-repeat="email in account.business.emails">
+                                                <a href="mailto:{{email.email}}">
+                                                    {{email.email}}
+                                                </a>
+                                                <br>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>phone:</td>
+                                        <td>
+                                            <div ng-repeat="phone in account.business.phones">
+                                                <a href="tel:{{phone.number}}">{{phone.number}}</a>
+                                                <span ng-if="phone.extension"> x{{phone.extension}}</span>
+                                                <br>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>address:</td>
+                                        <td>
+                                            <div ng-repeat="address in account.business.addresses">
+                                                <a href>
+                                                    {{address.address}} {{address.address2}}<br>{{address.city}} {{address.state}} {{address.postcode}}
+                                                </a>
+                                                <br>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <table class="table table-condensed">
+                                <thead>
+                                    <tr>
+                                        <th colspan="3">Additional Information</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>description:</td>
+                                        <td><pre class="business-description">{{account.business.description}}</pre></td>
+                                        <td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
-                        <table class="table table-condensed">
-                            <thead>
-                                <tr>
-                                    <th colspan="3">Contact Information</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>email:</td>
-                                    <td>
-                                        <div ng-repeat="email in account.business.emails">
-                                            <a href="mailto:{{email.email}}">
-                                                {{email.email}}
-                                            </a>
-                                            <br>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>phone:</td>
-                                    <td>
-                                        <div ng-repeat="phone in account.business.phones">
-                                            <a href="tel:{{phone.number}}">{{phone.number}}</a>
-                                            <span ng-if="phone.extension"> x{{phone.extension}}</span>
-                                            <br>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>address:</td>
-                                    <td>
-                                        <div ng-repeat="address in account.business.addresses">
-                                            <a href>
-                                                {{address.address}} {{address.address2}}<br>{{address.city}} {{address.state}} {{address.postcode}}
-                                            </a>
-                                            <br>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <table class="table table-condensed">
-                            <thead>
-                                <tr>
-                                    <th colspan="3">Additional Information</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>description:</td>
-                                    <td><pre class="business-description">{{account.business.description}}</pre></td>
-                                    <td>
-                                </tr>
-                            </tbody>
-                        </table>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="panel panel-white" id="businessHours">
+                            <div class="panel-heading border-light">
+                                <h4 class="panel-title text-primary">Business Hours</h4>
+                                <paneltool class="panel-tools" tool-collapse="tool-collapse"></paneltool>
+                            </div>
+                            <div collapse="businessHours" ng-init="businessHours=false" class="panel-wrapper">
+                                <div class="panel-body">
+                                    <div ng-if="!account.business.splitHours" ng-repeat="val in account.business.hours" ng-class="(currentDate | date:'EEE') === val.day ? 'current-day' : ''"><span class="text-bold">{{val.day}} </span> : <span ng-hide="val.closed || val.wholeday">{{val.start}} - {{val.end}}</span><span ng-show="val.closed && !val.wholeday">Closed</span></div>
+                                    <div ng-if="account.business.splitHours" ng-repeat="val in account.business.hours"><span class="text-bold">{{val.day}} </span> : <span ng-hide="val.closed || val.wholeday" ng-if="val.split">{{val.start}} - {{val.end}} and {{val.start2}} - {{val.end2}}</span><span ng-hide="val.closed || val.wholeday" ng-if="!val.split">{{val.start}} - {{val.end}}</span><span ng-show="val.closed && !val.wholeday">Closed</span>
+                                    <span ng-show="!val.closed && val.wholeday">Open 24 hours</span></div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="col-md-8">
-                    <div class="panel panel-white" id="businessHours">
-                        <div class="panel-heading border-light">
-                            <h4 class="panel-title text-primary">Business Hours</h4>
-                            <paneltool class="panel-tools" tool-collapse="tool-collapse"></paneltool>
-                        </div>
-                        <div collapse="businessHours" ng-init="businessHours=false" class="panel-wrapper">
-                            <div class="panel-body">
-                                <div ng-if="!account.business.splitHours" ng-repeat="val in account.business.hours" ng-class="(currentDate | date:'EEE') === val.day ? 'current-day' : ''"><span class="text-bold">{{val.day}} </span> : <span ng-hide="val.closed || val.wholeday">{{val.start}} - {{val.end}}</span><span ng-show="val.closed && !val.wholeday">Closed</span></div>
-                                <div ng-if="account.business.splitHours" ng-repeat="val in account.business.hours"><span class="text-bold">{{val.day}} </span> : <span ng-hide="val.closed || val.wholeday" ng-if="val.split">{{val.start}} - {{val.end}} and {{val.start2}} - {{val.end2}}</span><span ng-hide="val.closed || val.wholeday" ng-if="!val.split">{{val.start}} - {{val.end}}</span><span ng-show="val.closed && !val.wholeday">Closed</span>
-                                <span ng-show="!val.closed && val.wholeday">Open 24 hours</span></div>
-                            </div>
-                        </div>
-                    </div>
+            </tab>
+            <!-- end: TAB OVERVIEW -->
+            <!-- start: TAB EDIT ACCOUNT -->
+            <tab heading="Edit Account" active="editActive" class="edit-account">
+                <div class="col-xs-12">
+                    <button class="btn btn-info btn-o pull-right" ng-disabled="myform.$invalid" ng-click="profileSaveFn()">Save</button>
                 </div>
-            </div>
-        </tab>
-        <!-- end: TAB OVERVIEW -->
-        <!-- start: TAB EDIT ACCOUNT -->
-        <tab heading="Edit Account" active="editActive" class="edit-account">
-            <div class="col-xs-12">
-                <button class="btn btn-info btn-o pull-right" ng-disabled="form.$invalid" ng-click="profileSaveFn()">Save</button>
-            </div>
-            <div class="clearfix"></div>
-            <form action="#" role="form" name="form" id="form">
-                <fieldset>
-                    <legend>
-                        Account Info
-                    </legend>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div>
-                                <label class="control-label">
-                                    Email Address <span class="symbol required">
-                                </label>
-                                <div class="form-group" ng-class="{ 'has-error' : form.email_{{$index}}.$invalid && !form.email_{{$index}}.$pristine }" ng-repeat="email in account.business.emails">
-                                    <span class="input-icon input-icon-right">
-                                        <input type="email" ng-pattern="formValidations.email" placeholder="email address" class="form-control" name="email_{{$index}}" ng-model="account.business.emails[$index].email">
-                                        <p ng-show="form.email_{{$index}}.$invalid && !form.email_{{$index}}.$pristine" class="help-block">Enter a valid email.</p>
-                                        <i ng-if="showAddEmail(email)" ng-click="accountAddEmailFn()" class="ti-plus"></i>
-                                        <i ng-if="!showAddEmail(email)" ng-click="removeEmail($index)" class="ti-minus"></i>
-                                    </span>
-                                </div>
-                            </div>                          
-                            <div ng-repeat="phone in account.business.phones">
-                                <div class="row">
-                                    <div class="col-md-8">
-                                        <div class="form-group" ng-class="{ 'has-error' : form.phone_{{$index}}.$invalid && !form.phone_{{$index}}.$pristine}">
-                                            <label class="control-label">
-                                               Phone Number
-                                            </label>
-                                            <input type="text" placeholder="phone number" class="form-control" ng-pattern="formValidations.phone" name="phone_{{$index}}" ng-model="account.business.phones[$index].number">
-                                            <p ng-show="form.phone_{{$index}}.$invalid && !form.phone_{{$index}}.$pristine" class="help-block">Enter a valid phone number.</p>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group" ng-class="{ 'has-error' : form.extension_{{$index}}.$invalid && !form.extension_{{$index}}.$pristine}">
-                                            <label class="control-label">
-                                                Phone Extension
-                                            </label>
-                                            <input type="text" placeholder="phone extension" class="form-control" ng-pattern="formValidations.extension" name="extension_{{$index}}" ng-model="account.business.phones[$index].extension">
-                                            <p ng-show="form.extension_{{$index}}.$invalid && !form.extension_{{$index}}.$pristine" class="help-block">Enter a valid extension.</p>
-                                        </div>
-                                    </div>
-                                </div>
+                <div class="clearfix"></div>
+                    <fieldset>
+                        <legend>
+                            Account Info
+                        </legend>
+                        <div class="row">
+                            <div class="col-md-6">
                                 <div>
-                                    <div ng-if="showAddPhone(phone)" class="btn btn-wide btn-o btn-primary pull-right" ng-click="accountAddPhoneFn()">Add another phone</div>
-                                    <div ng-if="!showAddPhone(phone)" class="btn btn-wide btn-o btn-warning pull-right" ng-click="removePhone($index)">Remove phone</div>
-                                </div>
-                                <div class="clearfix"></div>
-                            </div>
-                            <div ng-repeat="address in account.business.addresses">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label class="control-label">
-                                                Address Line 1
-                                            </label>
-                                            <input class="form-control" placeholder="address line 1" type="text" name="addressline1" ng-model="address.address">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-8">
-                                        <div class="form-group">
-                                            <label class="control-label">
-                                                Address Line 2
-                                            </label>
-                                            <input class="form-control" placeholder="address line 2" type="text" name="addressline2" ng-model="address.address2">
-                                        </div>
+                                    <label class="control-label">
+                                        Email Address <span class="symbol required">
+                                    </label>
+                                    <div class="form-group" ng-class="{ 'has-error' : myform.email_{{$index}}.$invalid && !myform.email_{{$index}}.$pristine }" ng-repeat="email in account.business.emails">
+                                        <span class="input-icon input-icon-right">
+                                            <input type="email" ng-pattern="formValidations.email" placeholder="email address" class="form-control" name="email_{{$index}}" ng-model="account.business.emails[$index].email">
+                                            <p ng-show="myform.email_{{$index}}.$invalid && !myform.email_{{$index}}.$pristine" class="help-block">Enter a valid email.</p>
+                                            <i ng-if="showAddEmail(email)" ng-click="accountAddEmailFn()" class="ti-plus"></i>
+                                            <i ng-if="!showAddEmail(email)" ng-click="removeEmail($index)" class="ti-minus"></i>
+                                        </span>
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label class="control-label">
-                                                City
-                                            </label>
-                                            <input class="form-control" placeholder="enter your city" type="text" name="city" ng-model="address.city">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-8">
-                                        <div class="form-group">
-                                            <label class="control-label">
-                                                State
-                                            </label>
-                                            <input class="form-control" placeholder="enter your state" type="text" name="state" ng-model="address.state">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label class="control-label">
-                                                Country
-                                            </label>
-                                            <input class="form-control" placeholder="enter your country" type="text" name="country" ng-model="address.country">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-8">
-                                        <div class="form-group" ng-class="{ 'has-error' : form.zip_{{$index}}.$invalid && !form.zip_{{$index}}.$pristine}">
-                                            <label class="control-label">
-                                                Zip Code
-                                            </label>
-                                            <input class="form-control" placeholder="enter your zip code" type="text" name="zip_{{$index}}" ng-pattern="formValidations.zip" ng-model="address.zip">
-                                            <p ng-show="form.zip_{{$index}}.$invalid && !form.zip_{{$index}}.$pristine" class="help-block">Enter a valid zip code.</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div>
-                                    <div ng-if="showAddAddress(address)" class="btn btn-wide btn-o btn-primary pull-right" ng-click="accountAddAddressFn()">Add another address</div>
-                                    <div ng-if="!showAddAddress(address)" class="btn btn-wide btn-o btn-warning pull-right" ng-click="removeAddress($index)">Remove address</div>
-                                </div>
-                                <div class="clearfix"></div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <fieldset>
-                                <legend>
-                                    Logo Upload
-                                </legend>
-                                <div class="form-group center">
-                                    <div>
-                                        <div class="user-image">
-                                            <div class="thumbnail margin-bottom-5">
-                                                <img ng-src="{{ account.business.logo }}" err-src="/admin/assets/images/default-user.png">
+                                <div ng-repeat="phone in account.business.phones">
+                                    <div class="row">
+                                        <div class="col-md-8">
+                                            <div class="form-group" ng-class="{ 'has-error' : myform.phone_{{$index}}.$invalid && !myform.phone_{{$index}}.$pristine}">
+                                                <label class="control-label">
+                                                   Phone Number
+                                                </label>
+                                                <input type="text" placeholder="phone number" class="form-control" ng-pattern="formValidations.phone" name="phone_{{$index}}" ng-model="account.business.phones[$index].number">
+                                                <p ng-show="myform.phone_{{$index}}.$invalid && !myform.phone_{{$index}}.$pristine" class="help-block">Enter a valid phone number.</p>
                                             </div>
                                         </div>
-                                        <div class="user-image-buttons-edit">
-                                            <span class="btn btn-primary" ng-click="openMediaModal()"><i class="fa fa-pencil"></i></span>
-                                            <span class="btn btn-danger" ng-click="removePhoto()"><i class="fa fa-times"></i> </span>
+                                        <div class="col-md-4">
+                                            <div class="form-group" ng-class="{ 'has-error' : myform.extension_{{$index}}.$invalid && !myform.extension_{{$index}}.$pristine}">
+                                                <label class="control-label">
+                                                    Phone Extension
+                                                </label>
+                                                <input type="text" placeholder="phone extension" class="form-control" ng-pattern="formValidations.extension" name="extension_{{$index}}" ng-model="account.business.phones[$index].extension">
+                                                <p ng-show="myform.extension_{{$index}}.$invalid && !myform.extension_{{$index}}.$pristine" class="help-block">Enter a valid extension.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div ng-if="showAddPhone(phone)" class="btn btn-wide btn-o btn-primary pull-right" ng-click="accountAddPhoneFn()">Add another phone</div>
+                                        <div ng-if="!showAddPhone(phone)" class="btn btn-wide btn-o btn-warning pull-right" ng-click="removePhone($index)">Remove phone</div>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
+                                <div ng-repeat="address in account.business.addresses">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label class="control-label">
+                                                    Address Line 1
+                                                </label>
+                                                <input class="form-control" placeholder="address line 1" type="text" name="addressline1" ng-model="address.address">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div class="form-group">
+                                                <label class="control-label">
+                                                    Address Line 2
+                                                </label>
+                                                <input class="form-control" placeholder="address line 2" type="text" name="addressline2" ng-model="address.address2">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label class="control-label">
+                                                    City
+                                                </label>
+                                                <input class="form-control" placeholder="enter your city" type="text" name="city" ng-model="address.city">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div class="form-group">
+                                                <label class="control-label">
+                                                    State
+                                                </label>
+                                                <input class="form-control" placeholder="enter your state" type="text" name="state" ng-model="address.state">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label class="control-label">
+                                                    Country
+                                                </label>
+                                                <input class="form-control" placeholder="enter your country" type="text" name="country" ng-model="address.country">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div class="form-group" ng-class="{ 'has-error' : myform.zip_{{$index}}.$invalid && !myform.zip_{{$index}}.$pristine}">
+                                                <label class="control-label">
+                                                    Zip Code
+                                                </label>
+                                                <input class="form-control" placeholder="enter your zip code" type="text" name="zip_{{$index}}" ng-pattern="formValidations.zip" ng-model="address.zip">
+                                                <p ng-show="myform.zip_{{$index}}.$invalid && !myform.zip_{{$index}}.$pristine" class="help-block">Enter a valid zip code.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div ng-if="showAddAddress(address)" class="btn btn-wide btn-o btn-primary pull-right" ng-click="accountAddAddressFn()">Add another address</div>
+                                        <div ng-if="!showAddAddress(address)" class="btn btn-wide btn-o btn-warning pull-right" ng-click="removeAddress($index)">Remove address</div>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <fieldset>
+                                    <legend>
+                                        Logo Upload
+                                    </legend>
+                                    <div class="form-group center">
+                                        <div>
+                                            <div class="user-image">
+                                                <div class="thumbnail margin-bottom-5">
+                                                    <img ng-src="{{ account.business.logo }}" err-src="/admin/assets/images/default-user.png">
+                                                </div>
+                                            </div>
+                                            <div class="user-image-buttons-edit">
+                                                <span class="btn btn-primary" ng-click="openMediaModal()"><i class="fa fa-pencil"></i></span>
+                                                <span class="btn btn-danger" ng-click="removePhoto()"><i class="fa fa-times"></i> </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                                <div class="form-group">
+                                    <label class="control-label">
+                                        Business Name
+                                    </label>
+                                    <input type="text" placeholder="Business Name" class="form-control" name="businessname" ng-model="account.business.name">
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label">
+                                        Description
+                                    </label>
+                                    <textarea placeholder="Description" class="form-control" name="businessdescription" ng-model="account.business.description"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <legend>
+                            Business Hours
+                        </legend>
+                        <div class="row">
+                            <div class="form-group">
+                                <label for="split-hours">I'd like to enter two sets of hours for a single day</label>
+                                <span tooltip-placement="top" tooltip-html-unsafe="Are your hours split during a single day such as 9-11am and 7-10pm?"><i class="fa fa-info-circle"></i></span>
+                                <switch id="splitHours" ng-model="account.business.splitHours" class="pull-right" ></switch>
+                            </div>
+                            <div class="form-group row">
+                                <div ng-if="account.business.splitHours" class="col-xs-12 multiple-hours min-height45" ng-repeat="val in account.business.hours">
+                                    <div class="col-xs-1">
+                                        <label for="val.day">{{val.day}}:</label>
+                                    </div>
+                                    <div class="col-xs-2" ng-if="!val.closed && !val.wholeday" id="business_hours_start_{{$index}}">
+                                        <select ng-change="validateHours(val, $index)" ng-change="validateHours(val, $index)" class="chosen-select hour-start-select form-control" ng-model="val.start" ng-options="item for item in hours.HOURS">
+                                        </select>
+                                        <span class="error help-block" />
+                                    </div>
+                                    <div class="col-xs-2" ng-if="!val.closed && !val.wholeday" id="business_hours_end_{{$index}}">
+                                        <select ng-change="validateHours(val, $index)" class="chosen-select hour-start-select form-control" ng-model="val.end" ng-options="item for item in hours.HOURS">
+                                        </select>
+                                        <span class="error help-block" />
+                                    </div>
+                                    <label class="pull-left" ng-hide="val.closed || val.wholeday" ng-if="val.split" style="margin:10px"> & </label>
+                                    <div class="col-xs-2" ng-if="val.split && !val.closed && !val.wholeday" id="business_hours_start2_{{$index}}">
+                                        <select ng-change="validateHours(val, $index)" ng-if="val.split" class="chosen-select hour-start-select form-control" ng-model="val.start2" ng-options="item for item in hours.HOURS">
+                                        </select>
+                                        <span class="error help-block" />
+                                    </div>
+                                    <div class="col-xs-2" ng-if="val.split && !val.closed && !val.wholeday">
+                                        <select ng-change="validateHours(val, $index)" class="chosen-select hour-start-select form-control" ng-model="val.end2" ng-options="item for item in hours.HOURS">
+                                        </select>
+                                    </div>
+                                    <div class=" margin-left-5">
+                                        <div class="checkbox clip-check check-primary checkbox-inline" ng-hide="val.closed || val.wholeday">
+                                            <input type="checkbox" id="hoursSplit-{{$index}}" ng-model="val.split">
+                                            <label for="hoursSplit-{{$index}}">
+                                                Split
+                                            </label>
+                                        </div>
+                                        <div ng-hide="val.closed || val.split" class="checkbox clip-check check-primary checkbox-inline">
+                                            <input type="checkbox" id="wholeday-{{$index}}" ng-change="val.closed = false;" ng-model="val.wholeday">
+                                            <label for="wholeday-{{$index}}">
+                                                Open 24 hours
+                                            </label>
+                                        </div>
+                                        <div class="checkbox clip-check check-primary checkbox-inline">
+                                            <input type="checkbox" id="hoursClosed-{{$index}}" ng-model="val.closed" ng-change="val.wholeday = false">
+                                            <label for="hoursClosed-{{$index}}">
+                                                Closed
+                                            </label>
                                         </div>
                                     </div>
                                 </div>
-                            </fieldset>
-                            <div class="form-group">
-                                <label class="control-label">
-                                    Business Name
-                                </label>
-                                <input type="text" placeholder="Business Name" class="form-control" name="businessname" ng-model="account.business.name">
-                            </div>
-                            <div class="form-group">
-                                <label class="control-label">
-                                    Description
-                                </label>
-                                <textarea placeholder="Description" class="form-control" name="businessdescription" ng-model="account.business.description"></textarea>
-                            </div>
-                        </div>
-                    </div>
-                </fieldset>
-                <fieldset>
-                    <legend>
-                        Business Hours
-                    </legend>
-                    <div class="row">
-                        <div class="form-group">
-                            <label for="split-hours">I'd like to enter two sets of hours for a single day</label>
-                            <span tooltip-placement="top" tooltip-html-unsafe="Are your hours split during a single day such as 9-11am and 7-10pm?"><i class="fa fa-info-circle"></i></span>
-                            <switch id="splitHours" ng-model="account.business.splitHours" class="pull-right" ></switch>
-                        </div>
-                        <div class="form-group row">
-                            <div ng-if="account.business.splitHours" class="col-xs-12 multiple-hours min-height45" ng-repeat="val in account.business.hours">
-                                <div class="col-xs-1">
-                                    <label for="val.day">{{val.day}}:</label>
-                                </div>
-                                <div class="col-xs-2" ng-if="!val.closed && !val.wholeday" id="business_hours_start_{{$index}}">
-                                    <select ng-change="validateHours(val, $index)" ng-change="validateHours(val, $index)" class="chosen-select hour-start-select form-control" ng-model="val.start" ng-options="item for item in hours.HOURS">
-                                    </select>
-                                    <span class="error help-block" />
-                                </div>
-                                <div class="col-xs-2" ng-if="!val.closed && !val.wholeday" id="business_hours_end_{{$index}}">
-                                    <select ng-change="validateHours(val, $index)" class="chosen-select hour-start-select form-control" ng-model="val.end" ng-options="item for item in hours.HOURS">
-                                    </select>
-                                    <span class="error help-block" />
-                                </div>
-                                <label class="pull-left" ng-hide="val.closed || val.wholeday" ng-if="val.split" style="margin:10px"> & </label>
-                                <div class="col-xs-2" ng-if="val.split && !val.closed && !val.wholeday" id="business_hours_start2_{{$index}}">
-                                    <select ng-change="validateHours(val, $index)" ng-if="val.split" class="chosen-select hour-start-select form-control" ng-model="val.start2" ng-options="item for item in hours.HOURS">
-                                    </select>
-                                    <span class="error help-block" />
-                                </div>
-                                <div class="col-xs-2" ng-if="val.split && !val.closed && !val.wholeday">
-                                    <select ng-change="validateHours(val, $index)" class="chosen-select hour-start-select form-control" ng-model="val.end2" ng-options="item for item in hours.HOURS">
-                                    </select>
-                                </div>
-                                <div class=" margin-left-5">
-                                    <div class="checkbox clip-check check-primary checkbox-inline" ng-hide="val.closed || val.wholeday">
-                                        <input type="checkbox" id="hoursSplit-{{$index}}" ng-model="val.split">
-                                        <label for="hoursSplit-{{$index}}">
-                                            Split
-                                        </label>
+                                <div class="col-xs-12 min-height45" ng-repeat="val in account.business.hours" ng-if="!account.business.splitHours">
+                                    <div class="col-xs-1">
+                                        <label for="val.day">{{val.day}}:</label>
                                     </div>
-                                    <div ng-hide="val.closed || val.split" class="checkbox clip-check check-primary checkbox-inline">
-                                        <input type="checkbox" id="wholeday-{{$index}}" ng-change="val.closed = false;" ng-model="val.wholeday">
-                                        <label for="wholeday-{{$index}}">
-                                            Open 24 hours
-                                        </label>
+                                    <div class="col-xs-3" id="business_hours_start_{{$index}}" ng-if="!val.closed && !val.wholeday">
+                                        <select ng-change="validateHours(val, $index)" class="chosen-select hour-start-select form-control" ng-model="val.start" ng-options="item for item in hours.HOURS">
+                                        </select>
+                                        <span class="error help-block" />
                                     </div>
-                                    <div class="checkbox clip-check check-primary checkbox-inline">
-                                        <input type="checkbox" id="hoursClosed-{{$index}}" ng-model="val.closed" ng-change="val.wholeday = false">
-                                        <label for="hoursClosed-{{$index}}">
-                                            Closed
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xs-12 min-height45" ng-repeat="val in account.business.hours" ng-if="!account.business.splitHours">
-                                <div class="col-xs-1">
-                                    <label for="val.day">{{val.day}}:</label>
-                                </div>
-                                <div class="col-xs-3" id="business_hours_start_{{$index}}" ng-if="!val.closed && !val.wholeday">
-                                    <select ng-change="validateHours(val, $index)" class="chosen-select hour-start-select form-control" ng-model="val.start" ng-options="item for item in hours.HOURS">
-                                    </select>
-                                    <span class="error help-block" />
-                                </div>
-                                <div class="col-xs-3" ng-if="!val.closed && !val.wholeday">
-                                    <select ng-change="validateHours(val, $index)" class="chosen-select hour-start-select form-control" ng-model="val.end" ng-options="item for item in hours.HOURS">
-                                    </select>
+                                    <div class="col-xs-3" ng-if="!val.closed && !val.wholeday">
+                                        <select ng-change="validateHours(val, $index)" class="chosen-select hour-start-select form-control" ng-model="val.end" ng-options="item for item in hours.HOURS">
+                                        </select>
 
-                                </div>                                
-                                <div class="col-xs-3" ng-if="!val.closed && !val.wholeday">
-                                    <div ng-hide="val.closed" class="checkbox clip-check check-primary checkbox-inline">
-                                        <input type="checkbox" id="wholeday-{{$index}}" ng-change="val.closed = false; val.wholeday=true" ng-model="val.wholeday">
-                                        <label for="wholeday-{{$index}}">
-                                            Open 24 hours
-                                        </label>
                                     </div>
+                                    <div class="col-xs-3" ng-if="!val.closed && !val.wholeday">
+                                        <div ng-hide="val.closed" class="checkbox clip-check check-primary checkbox-inline">
+                                            <input type="checkbox" id="wholeday-{{$index}}" ng-change="val.closed = false; val.wholeday=true" ng-model="val.wholeday">
+                                            <label for="wholeday-{{$index}}">
+                                                Open 24 hours
+                                            </label>
+                                        </div>
 
-                                </div>
-                                <div class="col-xs-3" ng-if="!val.closed && val.wholeday && !account.business.splitHours">
-                                    <div ng-hide="val.closed" class="checkbox clip-check check-primary checkbox-inline">
-                                        <input type="checkbox" id="wholeday-{{$index}}" ng-change="val.closed = false; val.wholeday=false" ng-model="val.wholeday">
-                                        <label for="wholeday-{{$index}}">
-                                            Opened 24 hours
-                                        </label>
                                     </div>
+                                    <div class="col-xs-3" ng-if="!val.closed && val.wholeday && !account.business.splitHours">
+                                        <div ng-hide="val.closed" class="checkbox clip-check check-primary checkbox-inline">
+                                            <input type="checkbox" id="wholeday-{{$index}}" ng-change="val.closed = false; val.wholeday=false" ng-model="val.wholeday">
+                                            <label for="wholeday-{{$index}}">
+                                                Opened 24 hours
+                                            </label>
+                                        </div>
 
-                                </div>
-                                <div class="col-xs-2">
-                                    <div class="checkbox clip-check check-primary checkbox-inline">
-                                        <input type="checkbox" id="closed-{{$index}}" ng-change="val.wholeday = false" ng-model="val.closed">
-                                        <label for="closed-{{$index}}">
-                                            Closed
-                                        </label>
+                                    </div>
+                                    <div class="col-xs-2">
+                                        <div class="checkbox clip-check check-primary checkbox-inline">
+                                            <input type="checkbox" id="closed-{{$index}}" ng-change="val.wholeday = false" ng-model="val.closed">
+                                            <label for="closed-{{$index}}">
+                                                Closed
+                                            </label>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </fieldset>
-            </form>
-        </tab>
-        <!-- end: TAB EDIT ACCOUNT -->
-    </tabset>
+                    </fieldset>
+
+            </tab>
+            <!-- end: TAB EDIT ACCOUNT -->
+        </tabset>
+    </form>
 <!-- end: YOUR CONTENT HERE -->
 </div>

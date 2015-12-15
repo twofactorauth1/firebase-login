@@ -153,9 +153,24 @@
           console.log('$scope.order ', $scope.order);
 
         }
+        $scope.originalOrder = angular.copy($scope.order);
         $scope.dataLoaded = true;
       });
     };
+
+    $scope.checkIfDirty = function(){
+      var isDirty = false;  
+      if($scope.newNote)
+        isDirty = true;    
+      if($scope.originalOrder && !angular.equals($scope.originalOrder, $scope.order))
+        isDirty = true;
+      return isDirty;
+    }
+
+    $scope.resetDirty = function(){
+      $scope.originalOrder = null;
+      $scope.order = null;
+    }
 
     /*
      * @calculateTotals
@@ -326,6 +341,7 @@
           toaster.pop('success', 'Note added to order.');
           $scope.newNote = '';
           $scope.order = updatedOrder;
+          angular.copy($scope.order, $scope.originalOrder);
         });
       } else if ($scope.order) {
         $scope.newNote = '';
@@ -724,6 +740,7 @@
      */
 
     $scope.saveOrder = function (flag, cust) {
+      angular.copy($scope.order, $scope.originalOrder);
       $scope.saveLoading = true;
       // Set order customer Id
       if ($scope.selectedCustomer) {
@@ -749,19 +766,19 @@
         $scope.saveLoading = false;
         return;
       }
-
+      if($scope.order.line_items.length <= 0)
+      {
+        toaster.pop('error', 'Products cannot be blank');
+        $scope.saveLoading = false;
+        return;
+      } 
       if ($stateParams.orderId) {
         OrderService.updateOrder($scope.order, function (updatedOrder) {
           $scope.saveLoading = false;
           console.log('updatedOrder ', updatedOrder);
           toaster.pop('success', 'Order updated successfully.');
         });
-      }
-      else if($scope.order.line_items.length <= 0)
-      {
-        toaster.pop('error', 'Products cannot be blank');
-        $scope.saveLoading = false;
-      } 
+      }      
       else {
         OrderService.createOrder($scope.order, function (updatedOrder) {
           toaster.pop('success', 'Order created successfully.');

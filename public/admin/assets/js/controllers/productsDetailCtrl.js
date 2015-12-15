@@ -74,6 +74,12 @@
       }
     };
 
+    $scope.initDatePicker = function(){
+      setTimeout(function() {
+        $scope.myform.$dirty = false;
+      }, 500);
+    }
+
     /*
      * @getProduct
      * - get single product based on stateparams
@@ -146,57 +152,7 @@
             console.error(err);
           });
       }
-
-      // if ($scope.product.variations.length <= 0) {
-      //     $scope.showVariations = false;
-      //     $scope.product.variations = [{
-      //         "id": $scope.product._id + '-1',
-      //         "type": $scope.product.type,
-      //         "permalink": "https://example/product/ship-your-idea-10/?attribute_pa_color=black",
-      //         "sku": "",
-      //         "price": "19.99",
-      //         "regular_price": "19.99",
-      //         "sale_price": null,
-      //         "taxable": true,
-      //         "tax_status": "taxable",
-      //         "tax_class": "",
-      //         "managing_stock": false,
-      //         "stock_quantity": 0,
-      //         "in_stock": true,
-      //         "backordered": false,
-      //         "purchaseable": true,
-      //         "visible": true,
-      //         "on_sale": false,
-      //         "weight": null,
-      //         "dimensions": {
-      //             "length": "",
-      //             "width": "",
-      //             "height": "",
-      //             "unit": "cm"
-      //         },
-      //         "shipping_class": "",
-      //         "shipping_class_id": null,
-      //         "image": [{
-      //             "id": 610,
-      //             "created_at": "2015-01-22T20:37:18Z",
-      //             "updated_at": "2015-01-22T20:37:18Z",
-      //             "src": "http://example/wp-content/uploads/2015/01/ship-your-idea-black-front.jpg",
-      //             "title": "",
-      //             "alt": "",
-      //             "position": 0
-      //         }],
-      //         "attributes": [{
-      //             "name": "Color",
-      //             "slug": "color",
-      //             "option": "black"
-      //         }],
-      //         "downloads": [],
-      //         "download_limit": 0,
-      //         "download_expiry": 0
-      //     }];
-      // } else {
-      //     $scope.showVariations = true;
-      // }
+      $scope.originalProduct = angular.copy($scope.product);
 
     });
 
@@ -321,17 +277,7 @@
       return _isValid;
     };
 
-    $scope.$watch('product.name', function (newValue) {
-      if (newValue && newValue.length > 0) {
-        $scope.productNameError = false;
-      }
-    });
-
-    $scope.$watch('product.type', function (newValue) {
-      if (newValue && newValue.length > 0) {
-        $scope.productTypeError = false;
-      }
-    });
+   
 
     /*
      * @saveProductFn
@@ -341,6 +287,7 @@
     $scope.saveLoading = false;
 
     $scope.saveProductFn = function () {
+      angular.copy($scope.product, $scope.originalProduct);
       console.log('$scope.selectedDate ', $scope.selectedDate);
       if ($scope.selectedDate.range) {
         $scope.product.sale_date_from = new Date($scope.selectedDate.range.startDate).toISOString();
@@ -351,8 +298,7 @@
         $scope.saveLoading = true;
         ProductService.saveProduct($scope.product, function (product) {
           //format variation attributes
-          $scope.saveLoading = false;
-          $scope.originalProduct = angular.copy(product);
+          $scope.saveLoading = false;          
           toaster.pop('success', 'Product Saved.');
         });
       }
@@ -518,7 +464,7 @@
     };
 
     /*
-     * @deleteCustomerFn
+     * @deleteProductFn
      * -
      */
 
@@ -536,7 +482,8 @@
       }, function (isConfirm) {
         if (isConfirm) {
           ProductService.deleteProduct(product._id, function () {
-            toaster.pop('warning', 'Customer Deleted.');
+            toaster.pop('warning', 'Product Deleted.');
+            $scope.originalProduct = angular.copy($scope.product);
             $state.go('app.commerce.products');
           });
         }
@@ -548,6 +495,16 @@
       angular.element('#convert').iconpicker('setIcon', 'fa-cube');
     }
 
+    $scope.checkIfDirty = function(){
+      var isDirty = false;      
+      if($scope.originalProduct && !angular.equals($scope.originalProduct, $scope.product))
+        isDirty = true;
+      return isDirty;
+    }
+    $scope.resetDirty = function(){
+      $scope.originalProduct = null;
+      $scope.product = null;
+    }
 
   }]);
 }(angular));

@@ -1,0 +1,49 @@
+
+.main-navigation-menu {
+    .dashboard-update-icon {
+        position: absolute;
+        top: 50%;
+        right: .5em;
+        transform: translateY(-50%);
+        color: #f2b865!important;
+
+        //animation
+        -moz-animation-name: notification-icon-pulse;
+        -moz-animation-duration: 2s;
+        -moz-animation-iteration-count: 3;
+        -webkit-animation-name: notification-icon-pulse;
+        -webkit-animation-duration: 2s;
+        -webkit-animation-iteration-count: 3;
+        -ms-animation-name: notification-icon-pulse;
+        -ms-animation-duration: 2s;
+        -ms-animation-iteration-count: 3;
+        animation-name: notification-icon-pulse;
+        animation-duration: 2s;
+        animation-iteration-count: 3;
+    }
+}
+
+
+@-moz-keyframes notification-icon-pulse {
+    from { opacity: 0; }
+    50% { opacity: 1; }
+    to { opacity: 0; }
+}
+
+@-webkit-keyframes notification-icon-pulse {
+    from { opacity: 0; }
+    50% { opacity: 1; }
+    to { opacity: 0; }
+}
+
+@-ms-keyframes notification-icon-pulse {
+    from { opacity: 0; }
+    50% { opacity: 1; }
+    to { opacity: 0; }
+}
+
+@keyframes notification-icon-pulse {
+    from { opacity: 0; }
+    50% { opacity: 1; }
+    to { opacity: 0; }
+}

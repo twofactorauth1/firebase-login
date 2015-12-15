@@ -1,0 +1,39 @@
+<div class="video-block">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="mb20"></div>
+            <div class="videoblock">
+                <div class="videogular-container embed-responsive embed-responsive-16by9">
+                    <iframe ng-if="component.videoType=='youtube'" ng-src="{{flvVideoUrl('//www.youtube.com/embed/', component.video, component.videoAutoPlay)}}" frameborder="0" allowfullscreen style="width: 100%;height: 100%;"></iframe>
+                    <iframe ng-if="component.videoType=='vimeo'" ng-src="{{flvVideoUrl('//player.vimeo.com/video/', component.video)}}" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen style="width: 100%;height: 100%;"></iframe>
+                    <videogular vg-player-ready="vm.onPlayerReady($API)" vg-width="component.videoWidth" vg-height="component.videoHeight" vg-theme="config.theme.url" vg-autoplay="component.videoAutoPlay" vg-stretch="config.stretch" vg-responsive="config.responsive" ng-if="component.videoType=='html5'">
+                        <video class='videoPlayer' preload='metadata'>
+                            <source src="{{trustSrc(component.videoMp4)}}" type='video/mp4' ng-if="component.videoMp4" />
+                            <source src="{{trustSrc(component.videoWebm)}}" type='video/webm' ng-if="component.videoWebm" />
+                        </video>
+                        <vg-video vg-src="video" vg-youtube="rel=1;showinfo=0"></vg-video>
+                        <vg-overlay-play></vg-overlay-play>
+                        <vg-controls vg-autohide="component.videoControls" vg-autohide-time="config.autoHideTime">
+                            <!-- First element from the left -->
+                            <vg-play-pause-button></vg-play-pause-button>
+                            <!-- Second element from the left -->
+                            <vg-scrubBar>
+                                <vg-scrubbarcurrenttime></vg-scrubbarcurrenttime>
+                            </vg-scrubBar>
+                            <!-- Third element from the left -->
+                            <vg-timedisplay>{{ currentTime }} / {{ totalTime }}</vg-timedisplay>
+                            <!-- Fourth element from the left -->
+                            <vg-volume>
+                                <vg-mutebutton></vg-mutebutton>
+                                <vg-volumebar></vg-volumebar>
+                            </vg-volume>
+                            <!-- Fifth element from the left -->
+                            <vg-fullscreenButton></vg-fullscreenButton>
+                        </vg-controls>
+                    </videogular>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+</div>

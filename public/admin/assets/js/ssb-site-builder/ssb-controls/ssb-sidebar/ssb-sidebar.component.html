@@ -8,7 +8,10 @@
 		</div>
 
         <section>
-            <h4 class="ssb-sidebar-sub-heading">Pages</h4>
+            <h4 class="ssb-sidebar-sub-heading">
+                <span>Pages ({{vm.state.pages.length || 0}})</span>
+                <div ng-click="vm.openModal('new-page-modal', null, null, 'lg');" class="ssb-sidebar-item-icon ti-plus display-ib" tooltip-placement="left" tooltip-html-unsafe="Create New Page"></div>
+            </h4>
             <ul class="list-unstyled">
                 <li ng-repeat="page in vm.state.pages track by $index" class="ssb-page-section-settings-item">
                     <div class="ssb-sidebar-item-icon ti-plus display-ib" tooltip-placement="left" tooltip-html-unsafe="Add to Main Menu"></div>

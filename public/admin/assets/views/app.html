@@ -13,7 +13,11 @@
 	<header data-ng-include=" 'assets/views/partials/top-navbar.html' " class="navbar navbar-default navbar-static-top" id="topnav" ng-hide="hideSidebar"></header>
 	<!-- / top navbar -->
 	<!-- main content -->
-	<div data-ng-include=" 'assets/views/partials/main-content.html' " class="main-content" ng-class="{'margin-left-0': hideSidebar, 'ssb-site-builder-container': $state.current.name === 'app.website.ssbSiteBuilder.editor' }"></div>
+	<div
+        data-ng-include=" 'assets/views/partials/main-content.html' "
+        class="main-content"
+        ng-class="{'margin-left-0': hideSidebar, 'ssb-site-builder-container': $state.current.name === 'app.website.ssbSiteBuilder.editor', 'dohy-dashboard-container': $state.current.name === 'app.dohy' }">
+    </div>
 	<!-- / main content -->
 </div>
 <!-- footer -->

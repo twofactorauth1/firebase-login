@@ -55,10 +55,10 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
       $scope.emailLoaded = true;
     }, 0);
     console.log("Emails loaded");
-    
+
     $scope.emails = emails;
 
-    //select the default email for simple form as welcome-aboard
+    // select the default email for simple form as welcome-aboard
     if ($scope.componentEditing.type === 'simple-form' && !$scope.componentEditing.emailId) {
       var _welcomeEmail = _.find(emails, function (_email) {
         return _email.handle === 'welcome-aboard';
@@ -552,7 +552,7 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
           setTimeout(function () {
               $scope.$apply(function () {
                 $scope.updateLinkList();
-              })            
+              })
           }, 500);
         }
       });
@@ -563,7 +563,7 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
           setTimeout(function () {
               $scope.$apply(function () {
                 $scope.updateLinkList();
-              })            
+              })
           }, 500);
         }
       });
@@ -622,7 +622,7 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
     setTimeout(function () {
         $scope.$apply(function () {
           $scope.updateLinkList();
-        })            
+        })
     }, 500);
   };
 
@@ -721,7 +721,7 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
     }
   };
 
-  $scope.validateGeoAddress = function (fn) {   
+  $scope.validateGeoAddress = function (fn) {
     GeocodeService.validateAddress($scope.componentEditing.location, $scope.locationAddress, function (data, results) {
       if (data && results.length === 1) {
         $timeout(function () {
@@ -771,7 +771,7 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
 
   $scope.saveComponentChanges = function () {
     $scope.isDirty.dirty = true;
-    $timeout(function () {      
+    $timeout(function () {
       $(window).trigger('resize');
     }, 0);
   };
@@ -832,7 +832,7 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
     if($scope.componentEditing.bg && $scope.componentEditing.bg.img && !angular.isDefined($scope.componentEditing.bg.img.overlayopacity))
       $scope.componentEditing.bg.img.overlayopacity = 1;
   }
- 
+
   /*
    * @editComponent
    * -
@@ -864,7 +864,7 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
           'mw': mw,
           'usePage': false
         };
-      } 
+      }
 
       setDefualts();
 
@@ -912,7 +912,7 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
       $scope.hours = hoursConstant;
       if(!angular.isDefined($scope.componentEditing.boxOpacity)){
         $scope.componentEditing.boxOpacity = 1;
-      }     
+      }
 
       $scope.place.address = GeocodeService.stringifyAddress($scope.componentEditing.location);
       $scope.originalContactMap = angular.copy($scope.componentEditing.location);
@@ -934,7 +934,7 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
           }
         });
       }
-    }    
+    }
     $scope.contactHoursInvalid = false;
     $scope.contactHours = [];
     var i = 0;
@@ -979,7 +979,7 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
     });
 
 
-    $modalInstance.opened.then(function(){     
+    $modalInstance.opened.then(function(){
       $timeout(function () {
         $rootScope.$broadcast('rzSliderForceRender');
         $scope.originalComponent = angular.copy($scope.componentEditing);
@@ -1007,7 +1007,7 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
   };
   $scope.fillInAddress = function (place) {
     // Get each component of the address from the place details
-    // and fill the corresponding field on the form. 
+    // and fill the corresponding field on the form.
     $scope.setDefaultAddress();
     var i = 0;
     var addressType, val;
@@ -1046,7 +1046,7 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
 
   /*
    * @validateHours
-   * 
+   *
    */
 
   $scope.validateHours = function (hours, index) {
