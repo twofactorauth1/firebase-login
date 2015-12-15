@@ -6,7 +6,7 @@ var defaultWorkstreams = [];
 defaultWorkstreams[0] = {
     "_id" : null,
     "accountId" : 0,
-    "unlockVideoUrl" : "https://www.youtube.com/watch?v=VfbQ4gww7aI",
+    "unlockVideoUrl" : "https://www.youtube.com/watch?v=cIqJZoQnF7s",
     "unlocked" : false,
     "completed" : false,
     "blocks" : [
@@ -77,7 +77,7 @@ defaultWorkstreams[0] = {
 defaultWorkstreams[1] = {
     "_id" : null,
     "accountId" : 0,
-    "unlockVideoUrl" : "https://www.youtube.com/watch?v=VfbQ4gww7aI",
+    "unlockVideoUrl" : "https://www.youtube.com/watch?v=g6ABnRKlv14",
     "unlocked" : false,
     "completed" : false,
     "blocks" : [
@@ -134,7 +134,7 @@ defaultWorkstreams[1] = {
 defaultWorkstreams[2] = {
     "_id" : null,
     "accountId" : 0,
-    "unlockVideoUrl" : "https://www.youtube.com/watch?v=VfbQ4gww7aI",
+    "unlockVideoUrl" : "https://www.youtube.com/watch?v=pcMwuN3fSJI",
     "unlocked" : false,
     "completed" : false,
     "blocks" : [
