@@ -12,44 +12,73 @@ app.controller('AddComponentModalCtrl', ['$scope', '$document', '$modalInstance'
   $scope.isEmail = isEmail;
 
   $scope.pageHandle = pageHandle;
-  
+
   $scope.saveLoading = false;
-  /*
-   * @addComponent
-   * - add the component to the page by retrieving the component and animating the entry
-   */
 
-  $scope.addComponent = function (addedType) {
-    if (!$scope.saveLoading) {
-      $scope.saveLoading = true;
-      var componentType = null;
-      if (addedType.type === 'footer' || addedType.type === 'navigation' || addedType.type === 'single-post' || addedType.type === 'blog-teaser' || addedType.type === 'blog') {
-        componentType = _.findWhere($scope.components, {
-          type: addedType.type
-        });
-        if (componentType) {
-          toaster.pop('error', componentType.type + " component already exists");
-          $scope.saveLoading = false;
-          return;
-        }
-      }
 
-      WebsiteService.getComponent(addedType, addedType.version || 1, function (newComponent) {
-        if (newComponent) {          
-          $scope.closeModal();
-          $scope.components.splice($scope.clickedIndex + 1, 0, newComponent);
-          $timeout(function () {          
-            var element = document.getElementById(newComponent._id);
-            if (element) {
-              $document.scrollToElementAnimated(element, 175, 1000);
-              $(window).trigger('resize');
+    /*
+    * @addComponent
+    * - add the component to the page by retrieving the component and animating the entry
+    */
+    $scope.addComponent = function (addedType) {
+        if (!$scope.saveLoading) {
+            $scope.saveLoading = true;
+            var componentType = null;
+            if (addedType.type === 'footer' || addedType.type === 'navigation' || addedType.type === 'single-post' || addedType.type === 'blog-teaser' || addedType.type === 'blog') {
+                componentType = _.findWhere($scope.components, {
+                  type: addedType.type
+                });
+                if (componentType) {
+                  toaster.pop('error', componentType.type + " component already exists");
+                  $scope.saveLoading = false;
+                  return;
+                }
             }
-          }, 500);
-          toaster.pop('success', "Component Added", "The " + newComponent.type + " component was added successfully.");
+
+            WebsiteService.getComponent(addedType, addedType.version || 1, function (newComponent) {
+                var componentIndex = $scope.clickedIndex + 1;
+                if (newComponent) {
+                    $scope.closeModal();
+                    $scope.components.splice(componentIndex, 0, newComponent);
+                    $timeout(function () {
+                        var element = document.getElementById(newComponent._id);
+                        if (element) {
+                            $document.scrollToElementAnimated(element, 175, 1000);
+                            $(window).trigger('resize');
+                        }
+                    }, 500);
+                    toaster.pop('success', "Component Added", "The " + newComponent.type + " component was added successfully.");
+
+                    if (addedType.type === 'simple-form') {
+                        $scope.setDefaultAutoresponderEmail(componentIndex);
+                    }
+                }
+            });
         }
-      });
-    }
-  };
+    };
+
+    /*
+     * select the default email for simple form as welcome-aboard
+     */
+    $scope.setDefaultAutoresponderEmail = function(componentIndex) {
+
+        var simpleFormComponent = $scope.components[componentIndex - 1];
+
+        WebsiteService.getEmails(true, function (emails) {
+            if (!simpleFormComponent.emailId) {
+
+                var _welcomeEmail = _.find(emails, function (_email) {
+                    return _email.handle === 'welcome-aboard';
+                });
+
+                if (_welcomeEmail) {
+                    simpleFormComponent.emailId = _welcomeEmail._id;
+                }
+
+            }
+        });
+
+    };
 
   /*
    * @closeModal
@@ -323,7 +352,7 @@ app.controller('AddComponentModalCtrl', ['$scope', '$document', '$modalInstance'
         });
         postComponent.enabled = true;
       }
-    }    
+    }
   }
 
   //component label placeholder
@@ -337,7 +366,7 @@ app.controller('AddComponentModalCtrl', ['$scope', '$document', '$modalInstance'
 
 
 
-  
+
   /************************************************************************************************************
    * Takes the componentTypes object and gets the value for the filter property from any that are enabled.
    * It then makes that list unique, sorts the results alphabetically, and and removes the misc value if
