@@ -14,7 +14,7 @@ defaultWorkstreams[0] = {
             "_id" : 0,
             "name" : "Create a page",
             "link" : "/admin/#/website/pages",
-            "helpText" : "Create a page on your website that will collect information on leads.",
+            "helpText" : "Use templates or build original pages for your website.",
             "complete" : false,
             "optional" : false,
             "helpLinks": [
@@ -27,7 +27,7 @@ defaultWorkstreams[0] = {
             "name" : "Upload media",
             "link" : "",
             "alias" : "mediaManager",
-            "helpText" : "Upload images for use on your website.",
+            "helpText" : "Upload and manage documents, audio, images, and video.",
             "complete" : false,
             "optional" : false,
             "helpLinks": [
@@ -263,7 +263,7 @@ defaultWorkstreams[3] = {
             link: "/admin/#/commerce/orders"
         }
     ],
-    "name" : "Make Money",
+    "name" : "Make Sales",
     "icon" : "",
     "bgImage" : "//s3.amazonaws.com/indigenous-digital-assets/account_6/dohy-ecommerce-2.png",
     "_v" : "0.1",
