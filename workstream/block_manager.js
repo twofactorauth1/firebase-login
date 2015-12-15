@@ -255,7 +255,7 @@ module.exports = {
             },
             function verifyEmailId(exists, callback) {
                 if(exists === true) {
-                    callback(null, exists);
+                    callback(null, exists, null);
                 } else {
                     var query = {accountId: account.id(), latest:true, components: {$elemMatch:{type:'simple-form', emailId:{$ne:''}}}};
                     pageDao.findMany(query, $$.m.ssb.Page, function(err, pages){
@@ -278,7 +278,7 @@ module.exports = {
             },
             function verifyEmailTypeEmail(exists, emailIdArray, callback) {
                 if(exists === true) {
-                    callback(null, exists);
+                    callback(null, exists, null);
                 } else {
                     async.eachSeries(emailIdArray, function(emailId, cb){
                         if(exists === true) {
