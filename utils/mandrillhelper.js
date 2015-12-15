@@ -132,6 +132,7 @@ var mandrillHelper =  {
         var self = this;
         self.log = log;
         console.log('sendCampaignEmail >>>');
+        var bcc = stepSettings.bcc;
         self._checkForUnsubscribe(accountId, toAddress, function(err, isUnsubscribed) {
             if (isUnsubscribed == true) {
                 fn(null, 'skipping email for user on unsubscribed list');
@@ -164,7 +165,7 @@ var mandrillHelper =  {
                         "url_strip_qs": null,
                         "preserve_recipients": null,
                         "view_content_link": false,
-                        "bcc_address": null,
+                        "bcc_address": bcc,
                         "tracking_domain": null,
                         "signing_domain": null,
                         "return_path_domain": null,

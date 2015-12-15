@@ -155,6 +155,7 @@
       "fromName": "",
       "fromEmail": "",
       "replyTo": "",
+      "bcc": "",
       "components": [{
         "_id": CommonService.generateUniqueAlphaNumericShort(),
         "anchor": CommonService.generateUniqueAlphaNumericShort(),
@@ -314,6 +315,7 @@
           "fromEmail": "",
           "fromName": '',
           "replyTo": '',
+          "bcc": '',
           "subject": '',
           "vars": [],
           "sendAt": {},
@@ -588,6 +590,7 @@
         $scope.emailToSend.fromName = $scope.emailToSendPrevious.fromName;
         $scope.emailToSend.fromEmail = $scope.emailToSendPrevious.fromEmail;
         $scope.emailToSend.replyTo = $scope.emailToSendPrevious.replyTo;
+        $scope.emailToSend.bcc = $scope.emailToSendPrevious.bcc;
       } else {
         $scope.emailToSend = $scope.emailToSendPrevious;
         if($scope.newCampaignObj.steps && $scope.newCampaignObj.steps[0] && $scope.newCampaignObj.steps[0].settings && !$scope.newCampaignObj.steps[0].settings.emailId && $scope.emailToSendPrevious)
@@ -973,6 +976,7 @@
         stepSettings.fromEmail = newEmail.fromEmail;
         stepSettings.fromName = newEmail.fromName;
         stepSettings.replyTo = newEmail.replyTo;
+        stepSettings.bcc = newEmail.bcc;
         stepSettings.subject = newEmail.subject;
       }
     };
@@ -1279,6 +1283,10 @@
         if (fromEmail && $scope.emailToSend.replyTo == '') {
           $scope.emailToSend.replyTo = account.business.emails[0].email;
           $scope.emailToSendCopy.replyTo = account.business.emails[0].email;
+        }
+        if (fromEmail && $scope.emailToSend.bcc == '') {
+          $scope.emailToSend.bcc = account.business.emails[0].email;
+          $scope.emailToSendCopy.bcc = account.business.emails[0].email;
         }
       }
     };

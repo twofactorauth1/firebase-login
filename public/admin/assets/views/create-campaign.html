@@ -299,6 +299,12 @@
                                                     </div>
                                                     <div class="form-group margin-bottom-0">
                                                         <label class="control-label text-bold">
+                                                            Bcc
+                                                        </label>
+                                                        <span editable-email="emailToSend.bcc">{{emailToSend.bcc || "Bcc"}}</span>
+                                                    </div>
+                                                    <div class="form-group margin-bottom-0">
+                                                        <label class="control-label text-bold">
                                                             Subject
                                                         </label>
                                                         <span editable-text="emailToSend.subject" onbeforesave="analyzeSubject($data)">{{emailToSend.subject || "Subject"}}</span>
@@ -593,6 +599,12 @@
                                                         Reply To
                                                     </label>
                                                     <span>{{emailToSend.replyTo}}</span>
+                                                </div>
+                                                <div class="form-group margin-bottom-0">
+                                                    <label class="control-label text-bold">
+                                                        Bcc
+                                                    </label>
+                                                    <span>{{emailToSend.bcc}}</span>
                                                 </div>
                                                 <div class="form-group margin-bottom-0">
                                                     <label class="control-label text-bold">
