@@ -47,7 +47,7 @@
                 </div>
             </h3>
 
-            <p class="workstream-description text-small">
+            <p ng-if="vm.workstream.description" class="workstream-description text-small">
                 {{vm.workstream.description || 'This workstream needs a description.'}}
             </p>
 
