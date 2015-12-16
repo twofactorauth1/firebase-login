@@ -42,20 +42,17 @@
             var completeWorkstreams = [];
             var completeBlocks = 0;
             var incompleteBlocks = 0;
-            var lockedAnalyticsWidgets = []
-            var unlockedAnalyticsWidgets = []
+            var analyticsWidgets = []
+            //var unlockedAnalyticsWidgets = []
 
             _.each(vm.state.workstreams, function(workstream){
 
                 var analyticsWidgetsCopy = angular.copy(workstream.analyticWidgets);
 
-                if (workstream.completed === true) {
-                    completeWorkstreams.push(workstream);
-                    unlockedAnalyticsWidgets = unlockedAnalyticsWidgets.concat(analyticsWidgetsCopy);
-                } else {
-                    incompleteWorkstreams.push(workstream);
-                    lockedAnalyticsWidgets = lockedAnalyticsWidgets.concat(analyticsWidgetsCopy);
-                }
+                _.each(analyticsWidgetsCopy, function(analytic){
+                    analytic.completed = workstream.completed;
+                    analyticsWidgets.push(analytic);
+                })
 
                 completeBlocks = workstream.blocks.filter(function(block) { return block.complete; }).length;
                 incompleteBlocks = workstream.blocks.filter(function(block) { return !block.complete; }).length;
@@ -65,14 +62,10 @@
 
             });
 
-            //remove unlocked analytics from the locked array
-            lockedAnalyticsWidgets = _.reject(lockedAnalyticsWidgets, function(w) {
-                return _.contains(_.pluck(unlockedAnalyticsWidgets, 'name'), w.name)
-            });
-
+          
             //remove duplicates and set to state, and sort
-            vm.state.lockedAnalyticsWidgets = _.uniq(lockedAnalyticsWidgets, function(w) { return w.name; });
-            vm.state.unlockedAnalyticsWidgets = _.sortBy(_.uniq(unlockedAnalyticsWidgets, function(w) { return w.name; }), function(x) {
+            //vm.state.lockedAnalyticsWidgets = _.uniq(lockedAnalyticsWidgets, function(w) { return w.name; });
+            vm.state.analyticsWidgets = _.sortBy(_.uniq(analyticsWidgets, function(w) { return w.name; }), function(x) {
                 return vm.analyticDisplayOrder[x.name]
             });
 
