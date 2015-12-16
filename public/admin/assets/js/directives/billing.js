@@ -139,51 +139,54 @@ app.directive("billingTrial", ['PaymentService', 'ToasterService', 'UserService'
             scope.selectedPlan.paymentProcessing = true;
 
             PaymentService.getStripeCardToken(cardObj, function(token) {
+              UserService.getAccount(function(account){
+                  scope.account = account;
+                  if (scope.account.billing && scope.account.billing.stripeCustomerId && token) {
+                      UserService.postAccountBilling(scope.account.billing.stripeCustomerId, token, function(accBillingUpdate) {
+                              //console.log('account.billing before update:\n', scope.account.billing);
+                              scope.updateStripeIdFn(accBillingUpdate);
+                              scope.account = accBillingUpdate;
 
+                              scope.savePlanFn(scope.selectedPlan.product_attributes.stripePlans[0].id);
+
+                              // TODO: remove this window refresh HACK when we know what is the problem refreshing data on the billingCtrl.
+                              // $window.location.reload(true);
+                          },
+                          function(err){
+                              ToasterService.clearAll();
+                              ToasterService.show('error', 'The purchase was unsuccessful. Please check your card information.');
+                              console.warn('no valid stripe token.');
+                              scope.selectedPlan.paymentProcessing = false;
+                          });
+                      //scope.cards.data.forEach(function(value, index) {
+                      //  PaymentService.deleteCustomerCard(value.customer, value.id, false, function(card) {});
+                      //});
+                  } else {
+                      // TODO: this is what the skeuocard code was doing, not sure if it makes sense.
+                      console.warn('no valid user, trying with stripe token:\n', token);
+                      if (token) {
+                          PaymentService.postStripeCustomer(token, function(stripeUser) {
+
+                              // TODO: this makes no sense. we only got here if the user was bad
+                              if (scope.currentUser) {
+                                  scope.currentUser.stripeId = stripeUser.id;
+                                  UserService.postAccountBilling(stripeUser.id, token, function(billing) {
+                                      scope.updateStripeIdFn(billing);
+                                  });
+                              }
+
+                          });
+                      }
+                      else {
+                          ToasterService.clearAll();
+                          ToasterService.show('error', 'The purchase was unsuccessful. Please check your card information.');
+                          console.warn('no valid stripe token.');
+                          scope.selectedPlan.paymentProcessing = false;
+                      }
+                  }
+              });
               // update the billing data
-              if (scope.currentUser && scope.currentUser.stripeId && token) {
-                UserService.postAccountBilling(scope.currentUser.stripeId, token, function(accBillingUpdate) {
-                  //console.log('account.billing before update:\n', scope.account.billing);
-                  scope.updateStripeIdFn(accBillingUpdate);
-                  scope.account = accBillingUpdate;
 
-                  scope.savePlanFn(scope.selectedPlan.product_attributes.stripePlans[0].id);
-
-                  // TODO: remove this window refresh HACK when we know what is the problem refreshing data on the billingCtrl.
-                  // $window.location.reload(true);
-                },
-                function(err){
-                    ToasterService.clearAll();
-                    ToasterService.show('error', 'The purchase was unsuccessful. Please check your card information.');
-                    console.warn('no valid stripe token.');
-                    scope.selectedPlan.paymentProcessing = false;
-                });
-                //scope.cards.data.forEach(function(value, index) {
-                //  PaymentService.deleteCustomerCard(value.customer, value.id, false, function(card) {});
-                //});
-              } else {
-                // TODO: this is what the skeuocard code was doing, not sure if it makes sense.
-                console.warn('no valid user, trying with stripe token:\n', token);
-                if (token) {
-                  PaymentService.postStripeCustomer(token, function(stripeUser) {
-
-                    // TODO: this makes no sense. we only got here if the user was bad
-                    if (scope.currentUser) {
-                      scope.currentUser.stripeId = stripeUser.id;
-                      UserService.postAccountBilling(stripeUser.id, token, function(billing) {
-                        scope.updateStripeIdFn(billing);
-                      });
-                    }
-
-                  });
-                }
-                else {
-                  ToasterService.clearAll();
-                  ToasterService.show('error', 'The purchase was unsuccessful. Please check your card information.');
-                  console.warn('no valid stripe token.');
-                  scope.selectedPlan.paymentProcessing = false;
-                }
-              }
 
               //if (token) {
               //  scope.savePlanFn(scope.selectedPlan.product_attributes.stripePlans[0].id);

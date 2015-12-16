@@ -51,23 +51,15 @@
             </h1>
 
             <div
-                ng-repeat="analytic in vm.state.unlockedAnalyticsWidgets track by $index"
-                class="image__cell analytic-unlocked">
+                ng-repeat="analytic in vm.state.analyticsWidgets track by $index"
+                class="image__cell analytic-unlocked" ng-class="{ 'analytic-unlocked': analytic.completed, 'analytic-locked': !analytic.completed }">
                 <dashboard-analytic-tile-component
                     state="vm.state"
                     ui-state="vm.uiState"
                     analytic="analytic">
                 </dashboard-analytic-tile-component>
             </div>
-            <div
-                ng-repeat="analytic in vm.state.lockedAnalyticsWidgets track by $index"
-                class="image__cell analytic-locked">
-                <dashboard-analytic-tile-component
-                    state="vm.state"
-                    ui-state="vm.uiState"
-                    analytic="analytic">
-                </dashboard-analytic-tile-component>
-            </div>
+            
         </section>
         <!-- end: Analytics -->
 

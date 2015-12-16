@@ -727,7 +727,7 @@
      * @print
      * print a variety of things
      */
-
+     
     $scope.print = function (type) {
       console.log('printing type: ', type);
       // if (type === 'invoice') {}
@@ -740,7 +740,7 @@
      */
 
     $scope.saveOrder = function (flag, cust) {
-      angular.copy($scope.order, $scope.originalOrder);
+      
       $scope.saveLoading = true;
       // Set order customer Id
       if ($scope.selectedCustomer) {
@@ -775,6 +775,7 @@
       if ($stateParams.orderId) {
         OrderService.updateOrder($scope.order, function (updatedOrder) {
           $scope.saveLoading = false;
+          angular.copy($scope.order, $scope.originalOrder);
           console.log('updatedOrder ', updatedOrder);
           toaster.pop('success', 'Order updated successfully.');
         });
@@ -782,7 +783,7 @@
       else {
         OrderService.createOrder($scope.order, function (updatedOrder) {
           toaster.pop('success', 'Order created successfully.');
-
+          angular.copy($scope.order, $scope.originalOrder);
           if(flag==1)
           {
             SweetAlert.swal("Saved!", "Your edits were saved to the page.", "success");

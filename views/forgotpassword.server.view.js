@@ -10,6 +10,7 @@ var userDao = require('../dao/user.dao');
 var authenticationDao = require('../dao/authentication.dao');
 var UAParser = require('ua-parser-js');
 var parser = new UAParser();
+var appConfig = require('../configs/app.config');
 
 
 var view = function(req,resp,options) {
@@ -73,9 +74,9 @@ _.extend(view.prototype, BaseView.prototype, {
                 data = self = null;
             } else {
                 var data = self.baseData({
-                    errorMsg: "Recover password failed: " + err
+                    errorMsg: "Recover password failed: " + err,
+                    supportEmail : appConfig.support_email
                 });
-
                 self.resp.render('forgotpassword', data);
 
                 self.cleanUp();

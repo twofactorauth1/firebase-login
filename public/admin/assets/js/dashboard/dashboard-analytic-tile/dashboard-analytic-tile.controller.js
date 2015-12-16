@@ -2,9 +2,9 @@
 
 app.controller('DashboardAnalyticTileComponentController', dashboardAnalyticTileComponentController);
 
-dashboardAnalyticTileComponentController.$inject = ['$scope', '$attrs', '$filter', 'DashboardService', '$modal'];
+dashboardAnalyticTileComponentController.$inject = ['$scope', '$attrs', '$filter', 'DashboardService', '$modal', '$timeout'];
 /* @ngInject */
-function dashboardAnalyticTileComponentController($scope, $attrs, $filter, DashboardService, $modal) {
+function dashboardAnalyticTileComponentController($scope, $attrs, $filter, DashboardService, $modal, $timeout) {
 
     var vm = this;
 
@@ -129,12 +129,20 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
         }
 
     }
+    $scope.$watch(function() { return DashboardService.state.analytics }, function(state, oldState) {
+        if(state && state !== oldState){
+            vm.uiDetails = vm.analyticMap();
+        }
+    })
+    
 
     function init(element) {
 
         vm.element = element;
 
-        vm.uiDetails = vm.analyticMap();
+        $timeout(function() {
+            vm.uiDetails = vm.analyticMap();
+        }, 0);
 
     }
 

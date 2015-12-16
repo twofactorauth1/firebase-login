@@ -7124,6 +7124,9 @@ a[href="https://froala.com/wysiwyg-editor"] {
     width: 100%!important;
     padding: 0;
   }
+  .dohy-dashboard-container .image--expand {
+    width: 100%!important;
+  }
 }
 @media only screen and (min-width: 401px) and (max-width: 550px) {
   .dohy-dashboard-container .image__cell {
@@ -7139,7 +7142,8 @@ a[href="https://froala.com/wysiwyg-editor"] {
     clear: left;
   }
   .dohy-dashboard-container .image--expand {
-    width: 200%;
+    width: 140%!important;
+    margin-left: -20%;
   }
 }
 @media only screen and (max-width: 960px) {
@@ -7313,6 +7317,11 @@ a[href="https://froala.com/wysiwyg-editor"] {
   color: #5bc0de;
   font-weight: bold;
   margin: 1em 0 0 0!important;
+}
+.workstream-tile-container span.workstream-block-optional {
+  position: relative;
+  padding-left: 10px;
+  top: 6px;
 }
 .workstream-tile-container .workstream-block-help-links {
   color: #464646;
