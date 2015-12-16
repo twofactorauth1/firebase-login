@@ -147,6 +147,9 @@ function dashboardWorkstreamTileComponentController($scope, $attrs, $filter, Das
                 angular.element(".topbar-settings").click();
             }, 0)
             break;
+        case "chatwithsupport":
+            Intercom('showNewMessage', '');
+            break;    
         default:
             //code
         }

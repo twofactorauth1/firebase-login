@@ -46,7 +46,8 @@ defaultWorkstreams[0] = {
         {
             "_id" : 5,
             "name" : "Associate an existing domain",
-            "link" : "/admin/#/support/help-topics?topic=56fc13b6-48ea-4fe0-b0bf-1ba8c0afd62f",
+            "link" : "",
+            "alias" : "chatWithSupport",
             "helpText" : "Chat with us if you'd like to use your existing URL.",
             "complete" : false,
             "optional" : true,
