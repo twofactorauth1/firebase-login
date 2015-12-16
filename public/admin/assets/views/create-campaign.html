@@ -164,7 +164,7 @@
                                                 <input type="text" class="form-control input" name="name" ng-model="newCampaignObj.name" ng-change="checkCampaignName(newCampaignObj.name)" ng-required="currentStep == 1" ng-model-options="{ debounce: 800 }" ng-disabled="!isEditable"/>
                                                 <span class="form-control-feedback" ng-class="{'glyphicon glyphicon-remove text-danger': campaignNameExists && campaignNameChecked && !checkingCampaignName, 'glyphicon glyphicon-ok text-nephritis': !campaignNameExists && campaignNameChecked && newCampaignObj.name, 'fa fa-spinner fa-spin':checkingCampaignName}"></span>
                                                 <p class="error text-danger margin-top-5 margin-bottom-0" ng-if="campaignNameExists && campaignNameChecked && !checkingCampaignName">Campaign Name Already Used. Please Choose Another</p>
-                                                <p class="success text-nephritis margin-top-5 margin-bottom-0" ng-if="!campaignNameExists && campaignNameChecked && !checkingCampaignName && newCampaignObj.name">Great Campaign Name!</p>
+                                                <p class="email-subject-status success text-nephritis margin-top-5 margin-bottom-0" ng-if="!campaignNameExists && campaignNameChecked && !checkingCampaignName && newCampaignObj.name">Great Campaign Name!</p>
                                                 <p class="error text-small text-danger margin-top-5 margin-bottom-0" ng-if="CreateCampaign.name.$dirty && CreateCampaign.name.$invalid">Campaign Name is required</p>
                                             </div>
                                         </div>
@@ -443,7 +443,7 @@
                                             <span class="text-muted" ng-if="newCampaignObj.type != 'autoresponder'">{{recipients.length}} / {{customers.length}} contacts selected</span>
                                             <span class="text-muted" ng-if="newCampaignObj.type == 'autoresponder'">{{recipients.length}} contacts created</span>
                                             <div class="clearfix"></div>
-                                            <span class="text-muted" ng-if="selectedCustomers.newEmails.length">{{selectedCustomers.newEmails.length}} 
+                                            <span class="text-muted" ng-if="selectedCustomers.newEmails.length">{{selectedCustomers.newEmails.length}}
                                             <ng-pluralize count="selectedCustomers.newEmails.length"
                                                               when="{'0': 'new contacts will be created',
                                                                      '1': 'new contact will be created',

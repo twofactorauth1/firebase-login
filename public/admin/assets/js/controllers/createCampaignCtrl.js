@@ -1284,10 +1284,6 @@
           $scope.emailToSend.replyTo = account.business.emails[0].email;
           $scope.emailToSendCopy.replyTo = account.business.emails[0].email;
         }
-        // if (fromEmail && $scope.emailToSend.bcc == '') {
-        //   $scope.emailToSend.bcc = account.business.emails[0].email;
-        //   $scope.emailToSendCopy.bcc = account.business.emails[0].email;
-        // }
       }
     };
 
