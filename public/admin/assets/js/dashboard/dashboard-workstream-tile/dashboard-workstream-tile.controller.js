@@ -215,14 +215,21 @@ function dashboardWorkstreamTileComponentController($scope, $attrs, $filter, Das
             if (p === percentage) {
                 $interval.cancel(stop);
             }
-
-            p = p + 1;
-
+            vm.completeStyle = p;
+            p = p + 1;            
             vm.completePercentageStyle = p + '%';
 
         }, 10);
 
     }
+
+    // Added a watch for completed worksreams
+   
+    $scope.$watch(function() { return vm.workstream.completePercentage }, function(newValue) {
+        if(newValue && vm.completeStyle && newValue != vm.completeStyle ){
+             vm.augmentCompletePercentage(parseInt(newValue, 10));
+        }
+    })
 
     function init(element) {
 

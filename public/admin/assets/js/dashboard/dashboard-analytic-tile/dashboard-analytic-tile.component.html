@@ -4,24 +4,24 @@
 
         <img class="indi-rounded-img" src="http://s3.amazonaws.com/indigenous-digital-assets/account_6/dohy-circle-configure-business-profile_1449548586772.png" alt="{{vm.uiDetails.widgetTitle}}" />
 
-        <h3 class="analytic-title indi-rounded-title">{{::vm.uiDetails.widgetTitle}}</h3>
+        <h3 class="analytic-title indi-rounded-title">{{vm.uiDetails.widgetTitle}}</h3>
 
         <div class="analytic-details">
 
-            <div ng-repeat="analytic in ::vm.uiDetails.data" class="col-xs-12 title-container">
+            <div ng-repeat="mydata in vm.uiDetails.data" class="col-xs-12 title-container">
 
                 <div class="analytic-data-label">
-                    <span class="pull-left">{{analytic.analyticDataLabel}}</span>
+                    <span class="pull-left">{{mydata.analyticDataLabel}}</span>
                 </div>
 
                 <div class="analytic-data-value">
-                    <span>{{analytic.analyticDataValue}}</span>
+                    <span>{{mydata.analyticDataValue}}</span>
                 </div>
 
             </div>
 
             <div class="analytic-button-container center margin-top-10">
-                <a href="{{::vm.analytic.link}}" class="center btn btn-primary btn-lg btn-wide btn-o ng-scope"></i>{{::vm.uiDetails.buttonTitle}}</a>
+                <a href="{{vm.analytic.link}}" class="center btn btn-primary btn-lg btn-wide btn-o ng-scope"></i>{{vm.uiDetails.buttonTitle}}</a>
             </div>
 
         </div>
