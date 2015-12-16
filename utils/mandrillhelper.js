@@ -246,7 +246,7 @@ var mandrillHelper =  {
                     self.log.debug('async: ' + async);
                     self.log.debug('ip_pool: ' + ip_pool);
                     self.log.debug('send_at: ' + send_at);
-                    
+
                     juice.juiceResources(message.html, {}, function(err, html){
                         //debugger;
                         //console.log('i am in you!')
@@ -566,7 +566,7 @@ var mandrillHelper =  {
                 juice.juiceResources(message.html, {}, function(err, html){
 
                     // debugger;
-                    
+
                     if (err) {
                         self.log.error('A juice error occurred. Failed to set styles inline.')
                         self.log.error(err);
@@ -626,7 +626,7 @@ var mandrillHelper =  {
         });
     },
 
-    
+
     sendMailReplacement : function(from, to, cc, subject, htmlText, text, fn) {
         var self = this;
         self.log = log;
@@ -870,58 +870,58 @@ var mandrillHelper =  {
 
                 var mergeTagMap = [{
                   mergeTag: '[URL]',
-                  data: _account ? _account.get('subdomain') + '.indigenous.io': null
+                  data: _account ? _account.get('subdomain') + '.indigenous.io': ''
                 }, {
                   mergeTag: '[SUBDOMAIN]',
-                  data: _account ? _account.get('subdomain') : null
+                  data: _account ? _account.get('subdomain') : ''
                 }, {
                   mergeTag: '[CUSTOMDOMAIN]',
-                  data: _account ? _account.get('customDomain'): null
+                  data: _account ? _account.get('customDomain'): ''
                 }, {
                   mergeTag: '[BUSINESSNAME]',
-                  data: _account ? _account.get('business').name: null
+                  data: _account ? _account.get('business').name: ''
                 }, {
                   mergeTag: '[BUSINESSLOGO]',
-                  data: _account ? _account.get('business').logo: null
+                  data: _account ? _account.get('business').logo: ''
                 }, {
                   mergeTag: '[BUSINESSDESCRIPTION]',
-                  data: _account ? _account.get('business').description: null
+                  data: _account ? _account.get('business').description: ''
                 }, {
                   mergeTag: '[BUSINESSPHONE]',
-                  data: _account.get('business').phones && _account.get('business').phones[0] ? _account.get('business').phones[0].number : null
+                  data: _account.get('business').phones && _account.get('business').phones[0] ? _account.get('business').phones[0].number : ''
                 }, {
                   mergeTag: '[BUSINESSEMAIL]',
-                  data: _account.get('business').emails && _account.get('business').emails[0] ? _account.get('business').emails[0].email : null
+                  data: _account.get('business').emails && _account.get('business').emails[0] ? _account.get('business').emails[0].email : ''
                 }, {
                   mergeTag: '[BUSINESSFULLADDRESS]',
-                  data: _address ? _address.address + ' ' + _address.address2 + ' ' + _address.city + ' ' + _address.state + ' ' + _address.zip : null
+                  data: _address ? _address.address + ' ' + _address.address2 + ' ' + _address.city + ' ' + _address.state + ' ' + _address.zip : ''
                 }, {
                   mergeTag: '[BUSINESSADDRESS]',
-                  data: _address ? _address.address : null 
+                  data: _address ? _address.address : ''
                 }, {
                   mergeTag: '[BUSINESSCITY]',
-                  data: _address ? _address.city : null
+                  data: _address ? _address.city : ''
                 }, {
                   mergeTag: '[BUSINESSSTATE]',
-                  data: _address ? _address.state : null
+                  data: _address ? _address.state : ''
                 }, {
                   mergeTag: '[BUSINESSZIP]',
-                  data: _address ? _address.zip : null
+                  data: _address ? _address.zip : ''
                 }, {
                   mergeTag: '[TRIALDAYS]',
-                  data: _account ? _account.get('trialDaysRemaining'): null
+                  data: _account ? _account.get('trialDaysRemaining'): ''
                 }, {
                   mergeTag: '[FULLNAME]',
-                  data: _contact ? _contact.get('first') + ' ' + _contact.get('last'): null
+                  data: _contact ? _contact.get('first') + ' ' + _contact.get('last'): ''
                 }, {
                   mergeTag: '[FIRST]',
-                  data: _contact ? _contact.get('first') : null
+                  data: _contact ? _contact.get('first') : ''
                 }, {
                   mergeTag: '[LAST]',
-                  data: _contact ? _contact.get('last') : null
+                  data: _contact ? _contact.get('last') : ''
                 }, {
                   mergeTag: '[EMAIL]',
-                  data: _contact && _contact.getEmails() && _contact.getEmails()[0] ? _contact.getEmails()[0].email : null
+                  data: _contact && _contact.getEmails() && _contact.getEmails()[0] ? _contact.getEmails()[0].email : ''
                 }];
 
                 if (_user && _userAccount && accountId === 6) {
@@ -937,7 +937,8 @@ var mandrillHelper =  {
                   if (htmlContent.indexOf(map.mergeTag) > -1) {
                     //replace merge vars with relevant data
                     regex = new RegExp(map.mergeTag.replace('[', '\\[').replace(']', '\\]'), 'g');
-                    htmlContent = htmlContent.replace(regex, map.data);
+                    var userData = map.data || '';
+                    htmlContent = htmlContent.replace(regex, userData);
 
                   }
                 });

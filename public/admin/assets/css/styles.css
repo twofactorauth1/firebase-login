@@ -14299,6 +14299,11 @@ tags-input.ti-input-sm .tags .input,
 .create-campaign .well .form-control-feedback.fa {
   top: 20px;
 }
+.create-campaign .well .email-subject-status {
+  position: absolute;
+  right: 3em;
+  top: 12px;
+}
 .create-campaign .mini-editor {
   -webkit-transition: all 1s;
   -moz-transition: all 1s;
