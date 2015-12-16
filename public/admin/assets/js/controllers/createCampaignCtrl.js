@@ -1284,10 +1284,10 @@
           $scope.emailToSend.replyTo = account.business.emails[0].email;
           $scope.emailToSendCopy.replyTo = account.business.emails[0].email;
         }
-        if (fromEmail && $scope.emailToSend.bcc == '') {
-          $scope.emailToSend.bcc = account.business.emails[0].email;
-          $scope.emailToSendCopy.bcc = account.business.emails[0].email;
-        }
+        // if (fromEmail && $scope.emailToSend.bcc == '') {
+        //   $scope.emailToSend.bcc = account.business.emails[0].email;
+        //   $scope.emailToSendCopy.bcc = account.business.emails[0].email;
+        // }
       }
     };
 
@@ -1479,7 +1479,7 @@
       }
     };
 
-    $scope.checkIfDirty = function(){      
+    $scope.checkIfDirty = function(){
       return $scope.originalCampaignObj && $scope.originalEmailToSend && $scope.delivery.originalDate && $scope.isEditable && $scope.pendingChanges();
     }
     $scope.resetDirty = function(){
