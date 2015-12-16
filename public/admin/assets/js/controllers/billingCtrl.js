@@ -206,13 +206,13 @@
     $scope.savePlanFn = function (planId) {
       console.log('savePlanFn >>');
 
-      if ($scope.currentUser.stripeId) {
-        PaymentService.postSubscribeToIndigenous($scope.currentUser.stripeId, planId, null, $scope.planStatus[planId], $scope.selectedAddOns, $scope.Coupon, function (subscription) {
+      if ($scope.account.billing.stripeCustomerId) {
+        PaymentService.postSubscribeToIndigenous($scope.account.billing.stripeCustomerId, planId, null, $scope.planStatus[planId], $scope.selectedAddOns, $scope.Coupon, function (subscription) {
           $scope.cancelOldSubscriptionsFn();
           $scope.selectedPlan = subscription;
           console.log('$scope.selectedPlan:');
           console.log($scope.selectedPlan);
-          PaymentService.getUpcomingInvoice($scope.currentUser.stripeId, function (upcomingInvoice) {
+          PaymentService.getUpcomingInvoice($scope.account.billing.stripeCustomerId, function (upcomingInvoice) {
             $scope.upcomingInvoice = upcomingInvoice;
           });
           PaymentService.getInvoicesForAccount(function (invoices) {
@@ -292,8 +292,8 @@
             ToasterService.processPending();
             ToasterService.processHtmlPending();
           });
-
-          PaymentService.getCustomerCards($scope.currentUser.stripeId, function (cards) {
+          //console.log('before call to cards:', $scope.account);
+          PaymentService.getCustomerCards($scope.account.billing.stripeCustomerId, function (cards) {
             if (cards.data.length) {
               $scope.hasCard = true;
             }
