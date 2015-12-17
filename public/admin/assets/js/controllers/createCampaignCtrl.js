@@ -1411,13 +1411,19 @@
         });
 
         var x = _.map(d, function (tag) {
-          return {
-            uniqueTag: tag[0],
-            matchingTag: _.find(customerTags, function (matchTag) {
-              return matchTag.data === tag[0];
-            }).label,
-            numberOfTags: tag.length
-          };
+            var returnObj = {
+                uniqueTag: tag[0],
+                numberOfTags: tag.length
+            };
+            var matchingTagObj = _.find(customerTags, function (matchTag) {
+                return matchTag.data === tag[0];
+            });
+            if(matchingTagObj) {
+                returnObj.matchingTag = matchingTagObj.label;
+            } else {
+                returnObj.matchingTag = 'No Label';
+            }
+          return returnObj;
         });
         $scope.customerCounts = x;
       });
