@@ -90,7 +90,12 @@ _.extend(api.prototype, baseApi.prototype, {
         order.set('_id', orderId);
         order.attributes.modified.date = new Date();
         self.log.debug('>> Order', order);
-        
+        var created_at = order.get('created_at');
+
+        if (created_at && _.isString(created_at)) {
+            created_at = moment(created_at).toDate();
+            order.set('created_at', created_at);
+        }
         self.checkPermission(req, self.sc.privs.VIEW_ORDER, function(err, isAllowed) {
             if (isAllowed !== true) {
                 return self.send403(res);
