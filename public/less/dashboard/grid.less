@@ -166,10 +166,11 @@
       float: none!important;
       padding: 1em;
       margin: 0 auto;
+
   }
 
   .image__cell:nth-of-type(2n+2) .image--expand {
-      margin-left: -100%;
+      clear:left;
   }
 
   .image__cell:nth-of-type(2n+3) {
@@ -179,11 +180,14 @@
   .image--expand {
     width: 140%!important;
     margin-left: -20%;
+    img{
+        width: 80%;
+      }
   }
 
 }
 
-@media only screen and (max-width: 960px) {
+@media only screen and (min-width: 551px) and (max-width: 960px) {
 
   .image__cell {
       width: 50%;

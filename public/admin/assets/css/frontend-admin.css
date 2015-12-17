@@ -7136,7 +7136,7 @@ a[href="https://froala.com/wysiwyg-editor"] {
     margin: 0 auto;
   }
   .dohy-dashboard-container .image__cell:nth-of-type(2n+2) .image--expand {
-    margin-left: -100%;
+    clear: left;
   }
   .dohy-dashboard-container .image__cell:nth-of-type(2n+3) {
     clear: left;
@@ -7145,8 +7145,11 @@ a[href="https://froala.com/wysiwyg-editor"] {
     width: 140%!important;
     margin-left: -20%;
   }
+  .dohy-dashboard-container .image--expand img {
+    width: 80%;
+  }
 }
-@media only screen and (max-width: 960px) {
+@media only screen and (min-width: 551px) and (max-width: 960px) {
   .dohy-dashboard-container .image__cell {
     width: 50%;
     float: left;
