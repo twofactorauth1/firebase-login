@@ -654,10 +654,17 @@
       }
 
       if (newStatus === 'completed') {
-        OrderService.completeOrder($scope.order._id, note, function (completedOrder) {
+        if($scope.order._id){
+            OrderService.completeOrder($scope.order._id, note, function (completedOrder) {
+            toaster.pop('success', toasterMsg + '"Completed"');
+            $scope.pushLocalNote(completedOrder);
+          });
+        }
+        else
+        { 
           toaster.pop('success', toasterMsg + '"Completed"');
-          $scope.pushLocalNote(completedOrder);
-        });
+        }
+       
       }
 
       if (newStatus === 'cancelled') {
