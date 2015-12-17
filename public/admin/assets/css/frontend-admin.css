@@ -7145,8 +7145,8 @@ a[href="https://froala.com/wysiwyg-editor"] {
     width: 140%!important;
     margin-left: -20%;
   }
-  .dohy-dashboard-container .image--expand img {
-    width: 80%;
+  .dohy-dashboard-container .image--expand .workstream-poster-image {
+    width: 80% !important;
   }
 }
 @media only screen and (min-width: 551px) and (max-width: 960px) {
