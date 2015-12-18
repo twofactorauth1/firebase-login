@@ -425,7 +425,12 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                         };
 
                         newUser.plan = '';
-                        newUser.anonymousId = window.analytics.user().anonymousId();
+                        if(window.analytics && window.analytics.user) {
+                            newUser.anonymousId = window.analytics.user().anonymousId();
+                        } else {
+                            newUser.anonymousId = '';
+                        }
+
                         newUser.permanent_cookie = ipCookie("permanent_cookie");
                         newUser.fingerprint = new Fingerprint().get();
 
