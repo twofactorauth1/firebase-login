@@ -140,9 +140,9 @@ defaultWorkstreams[2] = {
     "completed" : false,
     "blocks" : [
         {
-            "_id" : 6,
+            "_id" : 7,
             "name" : "Send an email",
-            "link" : "/admin/#/customers",
+            "link" : "/admin/#/emails",
             "helpText" : "Quickly send a simple, one-time email.",
             "complete" : false,
             "optional" : false,

@@ -38,7 +38,7 @@ mainApp.controller('CacheCtrl', ['$scope', 'pagesService', '$window', '$location
     if(window.indigenous && window.indigenous.precache && window.indigenous.precache.pages) {
         var page = window.indigenous.precache.pages;
         //pages[page.handle] = page;
-        delete window.indigenous.precache.pages;
+        //delete window.indigenous.precache.pages;
         $scope.page = page;
         $scope.components = page.components;
         _.each(page.components, function(cmp, index){
@@ -51,16 +51,20 @@ mainApp.controller('CacheCtrl', ['$scope', 'pagesService', '$window', '$location
 
     //$scope.page = data;
     //$scope.components = data.components;
+
     angular.element(document).ready(function () {
         setTimeout(function () {
             var locId = $location.$$hash;
+            console.log('locId:', locId);
             if (locId) {
                 var element = document.getElementById(locId);
                 if (element) {
                     $document.scrollToElementAnimated(element, 0, 1000);
+                } else {
+                    console.log('no element');
                 }
             }
-        }, 3000);
+        }, 1000);
     });
 
 }]);

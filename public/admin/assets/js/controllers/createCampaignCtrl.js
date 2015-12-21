@@ -672,8 +672,7 @@
      * -
      */
     $scope.checkBestEmail = function (contact) {
-      var returnVal = CustomerService.checkBestEmail(contact);
-      this.email = contact.email;
+      var returnVal = CustomerService.checkCustomerBestEmail(contact);      
       return returnVal;
     };
 
@@ -1397,7 +1396,7 @@
         $scope.customers = customers;
         var _tags = [];
         _.each(customers, function (customer) {
-          customer.fullName = customer.first + " " + customer.last || '';
+          //customer.fullName = customer.first + " " + customer.last || '';
           if (customer.tags && customer.tags.length > 0) {
             _.each(customer.tags, function (tag) {
               _tags.push(tag);

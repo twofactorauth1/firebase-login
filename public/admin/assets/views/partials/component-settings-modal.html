@@ -195,6 +195,7 @@
                             <span tooltip-placement="top" tooltip-html-unsafe="Post order."><i class="fa fa-info-circle" /></span>
                             <div class="col-sm-6 pull-right">
                                 <select class="chosen-select form-control" ng-model="componentEditing.postorder" ng-change="saveComponent(true)">
+                                    <option ng-if="componentEditing.postorder > 0" value="0"></option>
                                     <option value="1">Date modified: oldest to newest</option>
                                     <option value="2">Date modified: newest to oldest</option>
                                     <option value="3">Date created: oldest to newest</option>

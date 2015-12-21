@@ -87,7 +87,7 @@
                     <ul class="workstream-block-help-links list-unstyled">
                         <li ng-repeat="link in block.helpLinks track by $index">
                             <i class="fa fa-question-circle"></i>
-                            <a href="{{link.link}}">{{link.name}}</a>
+                            <a target="_blank" href="{{link.link}}">{{link.name}}</a>
                             <span ng-if="!$last"> | </span>
                         </li>
                     </ul>
