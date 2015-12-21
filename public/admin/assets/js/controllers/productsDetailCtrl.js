@@ -287,7 +287,7 @@
     $scope.saveLoading = false;
 
     $scope.saveProductFn = function () {
-      angular.copy($scope.product, $scope.originalProduct);
+      
       console.log('$scope.selectedDate ', $scope.selectedDate);
       if ($scope.selectedDate.range) {
         $scope.product.sale_date_from = new Date($scope.selectedDate.range.startDate).toISOString();
@@ -298,6 +298,7 @@
         $scope.saveLoading = true;
         ProductService.saveProduct($scope.product, function (product) {
           //format variation attributes
+          angular.copy($scope.product, $scope.originalProduct);
           $scope.saveLoading = false;          
           toaster.pop('success', 'Product Saved.');
         });

@@ -672,8 +672,7 @@
      * -
      */
     $scope.checkBestEmail = function (contact) {
-      var returnVal = CustomerService.checkBestEmail(contact);
-      this.email = contact.email;
+      var returnVal = CustomerService.checkCustomerBestEmail(contact);      
       return returnVal;
     };
 
@@ -1284,10 +1283,6 @@
           $scope.emailToSend.replyTo = account.business.emails[0].email;
           $scope.emailToSendCopy.replyTo = account.business.emails[0].email;
         }
-        if (fromEmail && $scope.emailToSend.bcc == '') {
-          $scope.emailToSend.bcc = account.business.emails[0].email;
-          $scope.emailToSendCopy.bcc = account.business.emails[0].email;
-        }
       }
     };
 
@@ -1401,7 +1396,7 @@
         $scope.customers = customers;
         var _tags = [];
         _.each(customers, function (customer) {
-          customer.fullName = customer.first + " " + customer.last || '';
+          //customer.fullName = customer.first + " " + customer.last || '';
           if (customer.tags && customer.tags.length > 0) {
             _.each(customer.tags, function (tag) {
               _tags.push(tag);
@@ -1415,13 +1410,19 @@
         });
 
         var x = _.map(d, function (tag) {
-          return {
-            uniqueTag: tag[0],
-            matchingTag: _.find(customerTags, function (matchTag) {
-              return matchTag.data === tag[0];
-            }).label,
-            numberOfTags: tag.length
-          };
+            var returnObj = {
+                uniqueTag: tag[0],
+                numberOfTags: tag.length
+            };
+            var matchingTagObj = _.find(customerTags, function (matchTag) {
+                return matchTag.data === tag[0];
+            });
+            if(matchingTagObj) {
+                returnObj.matchingTag = matchingTagObj.label;
+            } else {
+                returnObj.matchingTag = 'No Label';
+            }
+          return returnObj;
         });
         $scope.customerCounts = x;
       });
@@ -1479,7 +1480,7 @@
       }
     };
 
-    $scope.checkIfDirty = function(){      
+    $scope.checkIfDirty = function(){
       return $scope.originalCampaignObj && $scope.originalEmailToSend && $scope.delivery.originalDate && $scope.isEditable && $scope.pendingChanges();
     }
     $scope.resetDirty = function(){

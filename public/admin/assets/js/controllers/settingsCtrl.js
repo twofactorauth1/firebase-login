@@ -2,7 +2,7 @@
 /*global app, moment, angular, window*/
 /*jslint unparam:true*/
 (function (angular) {
-  app.controller('SettingsCtrl', ["$scope", "$log", "$modal", "$state", "WebsiteService", "AccountService", "UserService", "toaster", "$timeout", '$location', function ($scope, $log, $modal, $state, WebsiteService, AccountService, UserService, toaster, $timeout, $location) {
+  app.controller('SettingsCtrl', ["$scope", "$log", "$modal", "$state", "WebsiteService", "AccountService", "UserService", "toaster", "$timeout", '$location',  function ($scope, $log, $modal, $state, WebsiteService, AccountService, UserService, toaster, $timeout, $location) {
     $scope.keywords = [];
 
     console.log($location.absUrl().replace('main', 'hey'));

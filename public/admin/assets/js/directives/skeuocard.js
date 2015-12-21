@@ -13,13 +13,15 @@ app.directive('indigewebSkeuocard',['PaymentService', 'UserService', 'ToasterSer
             },
             templateUrl: '/admin/assets/views/partials/_skeuocard.html',
             link: function(scope, element, attrs, controllers) {
-                UserService.getUser(function(user) {
-                    scope.user = user;
+
+                UserService.getAccount(function(account){
+                    scope.account = account;
                 });
-                scope.$watch('user', function(newValue, oldValue) {
+                scope.$watch('account', function(newValue, oldValue){
                     var renderedcardFlag=0;
-                    if (newValue && newValue.stripeId) {
-                        PaymentService.getCustomerCards(newValue.stripeId, function(cards) {
+                    if (newValue && newValue.billing.stripeCustomerId) {
+                        console.log('about to call getCustomerCards', scope.account);
+                        PaymentService.getCustomerCards(newValue.billing.stripeCustomerId, function(cards) {
                             scope.cards = cards;
                             if (scope.cards.data.length) {
                                 scope.defaultCardValue = "XXXX-XXXX-XXXX-" + scope.cards.data[0].last4;
@@ -41,8 +43,8 @@ app.directive('indigewebSkeuocard',['PaymentService', 'UserService', 'ToasterSer
                             }
                         }, function(data) {
                             /*element.find('form').card({
-                                container: '.' + scope.wrapper
-                            });*/
+                             container: '.' + scope.wrapper
+                             });*/
 
                         });
                     } else {
@@ -54,6 +56,7 @@ app.directive('indigewebSkeuocard',['PaymentService', 'UserService', 'ToasterSer
                         }
                     }
                 });
+
 
                 scope.checkCardNumber = function() {
                     var card_number = $('#number').val();
@@ -226,8 +229,8 @@ app.directive('indigewebSkeuocard',['PaymentService', 'UserService', 'ToasterSer
                         PaymentService.getStripeCardToken(cardInput, function(token) {
                             if(scope.$parent.closeModal && token)
                                 scope.$parent.closeModal();
-                            if (scope.user && scope.user.stripeId) {
-                                UserService.postAccountBilling(scope.user.stripeId, token, function(billing) {
+                            if (scope.account && scope.account.billing.stripeCustomerId) {
+                                UserService.postAccountBilling(scope.account.billing.stripeCustomerId, token, function(billing) {
                                     scope.updateFn(billing);
                                 },
                                 function(err){
@@ -244,8 +247,8 @@ app.directive('indigewebSkeuocard',['PaymentService', 'UserService', 'ToasterSer
                             } else {
                                 if (token !== undefined) {
                                     PaymentService.postStripeCustomer(token, function(stripeUser) {
-                                        if (scope.user)
-                                            scope.user.stripeId = stripeUser.id;
+                                        if (scope.account)
+                                            scope.account.billing.stripeCustomerId = stripeUser.id;
                                         UserService.postAccountBilling(stripeUser.id, token, function(billing) {
                                             scope.updateFn(billing);
                                         });

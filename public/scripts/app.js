@@ -43,15 +43,17 @@ var mainApp = angular
     if (window.history && window.history.pushState) {
       $locationProvider.html5Mode(true).hashPrefix('!');
     }
+
     //$httpProvider.interceptors.push('noCacheInterceptor');
     $routeProvider
       .when('/', {
-        /*
+
         templateUrl: '../views/cache.html',
         controller: 'CacheCtrl as cacheCtrl'
-        */
+        /*
             templateUrl: '../views/main.html',
             controller: 'LayoutCtrl as layout'
+            */
       })
       .when('/404', {
         templateUrl: '../views/404.html',
@@ -66,6 +68,8 @@ var mainApp = angular
             templateUrl: '../views/main.html',
             controller: 'LayoutCtrl as layout'
       });
+
+
 
   }])
   // .factory('noCacheInterceptor', function () {
@@ -102,6 +106,7 @@ var mainApp = angular
 
     $rootScope.$on("$routeChangeSuccess", function (scope, next, current) {
       // $rootScope.transitionState = "active";
+
       analyticsService.pageStart(function () {
         var editorIndex = window.location.search.indexOf("editor=true");
         if (editorIndex == -1) {

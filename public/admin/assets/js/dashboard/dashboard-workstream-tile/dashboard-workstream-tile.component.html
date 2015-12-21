@@ -47,7 +47,7 @@
                 </div>
             </h3>
 
-            <p class="workstream-description text-small">
+            <p ng-if="vm.workstream.description" class="workstream-description text-small">
                 {{vm.workstream.description || 'This workstream needs a description.'}}
             </p>
 
@@ -82,11 +82,12 @@
                         <i ng-if="block.complete" class="fa fa-check-circle"></i>
 
                     </a>
+                    <span tooltip-placement="right" tooltip-html-unsafe="This is an optional block and not required to unlock analytics" class="workstream-block-optional" ng-if="!block.complete && block.optional">(Optional)</span>
 
                     <ul class="workstream-block-help-links list-unstyled">
                         <li ng-repeat="link in block.helpLinks track by $index">
                             <i class="fa fa-question-circle"></i>
-                            <a href="{{link.link}}">{{link.name}}</a>
+                            <a target="_blank" href="{{link.link}}">{{link.name}}</a>
                             <span ng-if="!$last"> | </span>
                         </li>
                     </ul>

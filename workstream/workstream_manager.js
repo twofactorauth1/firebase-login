@@ -130,7 +130,7 @@ module.exports = {
         var query = {_id:workstreamId, accountId:accountId};
 
         workstreamDao.findOne(query, $$.m.Workstream, function(err, workstream){
-            if(err) {
+            if(err || !workstream) {
                 self.log.error('Error getting workstream:', err);
                 return fn(err);
             } else {

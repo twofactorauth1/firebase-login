@@ -231,8 +231,9 @@
 
             dashboardService.polls = 0;
             dashboardService.numberPolling++;
-
-            dashboardService.getWorkstreams();
+            
+            dashboardService.getAnalytics();
+            dashboardService.getWorkstreams();            
             dashboardService.getAccount();
 
             if (away) {
