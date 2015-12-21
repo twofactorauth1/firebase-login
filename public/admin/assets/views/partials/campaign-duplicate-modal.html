@@ -30,7 +30,7 @@
         </tabset>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-info btn-wide btn-o" ng-disabled="!duplicateCampaign.name || (campaignDuplicateNameExists && campaignDuplicateNameChecked && !checkingDuplicateCampaignName)" ng-click="createDuplicateCampaign(duplicateCampaign)">
+        <button type="button" class="btn btn-info btn-wide btn-o" ng-disabled="!duplicateCampaign.name || saveLoadingDuplicate || (campaignDuplicateNameExists && campaignDuplicateNameChecked && !checkingDuplicateCampaignName)" ng-click="createDuplicateCampaign(duplicateCampaign)">
             Create
         </button>
     </div>
