@@ -2,7 +2,7 @@
 /*global app, Keen, $$*/
 /*jslint unparam: true*/
 (function (angular) {
-  app.service('CustomerService', ['$http', '$rootScope', '$cacheFactory', 'ImportContactService', 'contactConstant', 'userConstant', function ($http, $rootScope, $cacheFactory, ImportContactService, contactConstant, userConstant) {
+  app.service('CustomerService', ['$http', '$rootScope', '$cacheFactory', 'ImportContactService', 'contactConstant', 'userConstant', 'formValidations', function ($http, $rootScope, $cacheFactory, ImportContactService, contactConstant, userConstant, formValidations) {
     var baseUrl = '/api/1.0/';
 
     this.getCache = function () {
@@ -170,6 +170,9 @@
           });
           if (type) {
             tags.push(type.label);
+          }
+          else{
+            tags.push(tag);
           }
         });
       }
@@ -358,10 +361,44 @@
 
 
     this.getCustomerTags = function (fn) {
-      var customerTags = contactConstant.customer_tags.dp;
+      var customerTags = contactConstant.customer_tags.dp;      
       fn(customerTags);
     };
 
+
+    this.getAllCustomerTags = function (customers, fn) {
+      var customerTags = contactConstant.customer_tags.dp;      
+        var contactTags = [];
+        _.each(customers, function (contact) {          
+          if (contact.tags) {
+            _.each(contact.tags, function (tag) {
+              var type = _.find(customerTags, function (type) {
+                return type.data === tag;
+              });
+              if (!type) {
+                contactTags.push({
+                  label : tag,
+                  data : tag
+                })
+              }
+            });
+          }
+        })
+      customerTags = _.uniq(customerTags.concat(contactTags), function(c) { return c.label; })             
+      fn(customerTags);
+    };
+
+    this.tagToCustomer = function (value, fn) {
+      var regexTag = formValidations.customerTags;
+      var isValid = regexTag.test(value);
+      if(isValid){
+        var item = {
+          label: value,
+          data: value
+        };
+      }
+      return item;      
+    };
 
 
     //region IMPORT

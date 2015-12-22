@@ -96,10 +96,13 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
     });
     $scope.availableProductTagsString = $scope.availableProductTags.join(",");
   });
-
-  CustomerService.getCustomerTags(function(tags){
-    $scope.customerTags = tags;
-  });
+  
+  CustomerService.getCustomers(function(customers){
+    CustomerService.getAllCustomerTags(customers,function(tags){
+      $scope.customerTags = tags;
+    });
+  })
+  
 
   $scope.testOptions = {
     min: 5,

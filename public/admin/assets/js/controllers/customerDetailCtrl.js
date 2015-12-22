@@ -928,6 +928,13 @@
         {
           cutomerTags.push(matchingTag.label);
           tempTags.push(matchingTag);
+        }
+        else{
+          cutomerTags.push(tag);
+          tempTags.push({
+            data : tag,
+            label : tag
+          });
         }        
       });
       $scope.myCustomerTags = cutomerTags.join(",");
@@ -1023,6 +1030,16 @@
     $scope.resetDirty = function(){
       $scope.originalCustomer = null;
       $scope.customer = null;
+    }
+
+    CustomerService.getCustomers(function (customers) {        
+      CustomerService.getAllCustomerTags(customers, function(tags){
+        $scope.customerTags = tags;
+      });
+    });
+
+    $scope.tagToCustomer = function(value) {
+     return CustomerService.tagToCustomer(value);
     }
 
   }]);
