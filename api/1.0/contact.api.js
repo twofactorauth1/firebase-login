@@ -535,7 +535,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 var fromContactName = req.body.fromName;
                 var activity = req.body.activity;
                 var contact_type = req.body.contact_type;
-
+                var uniqueEmail = req.body.uniqueEmail;
                 console.log('req.body ', req.body);
 
                 delete req.body.skipWelcomeEmail;
@@ -543,13 +543,14 @@ _.extend(api.prototype, baseApi.prototype, {
                 delete req.body.fromName;
                 delete req.body.activity;
                 delete req.body.contact_type;
+                delete req.body.uniqueEmail;
 
                 contactDao.findMany(query, $$.m.Contact, function(err, list){
                     if(err) {
                         self.log.error('Error checking for existing contact: ' + err);
                         return self.wrapError(resp, 500, "There was a problem signing up.  Please try again later")
                     }
-                    if(list.length > 0) {
+                    if(list.length > 0 && uniqueEmail) {
                         return self.wrapError(resp, 409, "This user already exists for this account.");
                     }
                     var contact = new $$.m.Contact(req.body);
