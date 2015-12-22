@@ -586,13 +586,13 @@
     $scope.confirmOverrideExistingEmails = function(){
       if((!$scope.emailToSend.campaignId || $scope.emailToSend.campaignId !== $scope.newCampaignObj._id) && $scope.selectedEmail.type != 'new'){
         SweetAlert.swal({
-          title: "Want edits to be saved",
-          text: "Do you want edits to be saved to the existing email(thus changes here will propagate to other campaigns using this email)",
+          title: "How would you like to use the selected email?",
+          text: "You are saving changes to an email used by more than one campaign. Do you wish to update the existing email (altering all campaigns) or create and update a copy specific to this campaign?",
           type: "warning",
           showCancelButton: true,
           confirmButtonColor: "#DD6B55",
-          confirmButtonText: "Yes, save changes to existing email!",
-          cancelButtonText: "No, do not save. Create new email as a starting point",
+          confirmButtonText: "Save edits to existing email",
+          cancelButtonText: "Create a copy",
           closeOnConfirm: true,
           closeOnCancel: true
         }, function (isConfirm) {
@@ -634,6 +634,7 @@
         if($scope.newCampaignObj && $scope.newCampaignObj.steps && $scope.newCampaignObj.steps[0] && $scope.newCampaignObj.steps[0].settings)
           $scope.newCampaignObj.steps[0].settings.emailId = null;
       } else {
+        $scope.confirmOverrideExistingEmails();
         $scope.emailToSend = $scope.emailToSendPrevious;
         if($scope.newCampaignObj.steps && $scope.newCampaignObj.steps[0] && $scope.newCampaignObj.steps[0].settings && !$scope.newCampaignObj.steps[0].settings.emailId && $scope.emailToSendPrevious)
           $scope.newCampaignObj.steps[0].settings.emailId = $scope.emailToSendPrevious._id
