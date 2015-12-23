@@ -832,9 +832,9 @@
                             <span tooltip-placement="top" tooltip-html-unsafe="Add a contact tag on signup"><i class="fa fa-info-circle" /></span>
                         </label>
                         <div class="clearfix"></div>
-                        <ui-select class="margin-top-10" ng-model="componentEditing.contact_type" theme="bootstrap" ng-disabled="disabled">
-                            <ui-select-match placeholder="Select tags...">{{$select.selected.label}}</ui-select-match>
-                            <ui-select-choices repeat="tag.data as tag in customerTags | orderBy:'label' | filter:$select.search">
+                        <ui-select multiple ng-model="componentEditing.tags" theme="bootstrap" ng-disabled="disabled">
+                            <ui-select-match placeholder="Select tags...">{{$item.label}}</ui-select-match>
+                            <ui-select-choices repeat="tag in customerTags | orderBy:'label' | filter:$select.search">
                                 {{tag.label}}
                             </ui-select-choices>
                         </ui-select>

@@ -275,6 +275,7 @@ uis.controller('uiSelectCtrl',
   ctrl.lockChoiceExpression = undefined; // Initialized inside uiSelectMatch directive link function
   ctrl.clickTriggeredSelect = false;
   ctrl.$filter = $filter;
+  ctrl.taggingMatchToKey = {isActivated: false, fct: undefined};
 
   ctrl.searchInput = $element.querySelectorAll('input.ui-select-search');
   if (ctrl.searchInput.length !== 1) {
@@ -487,7 +488,7 @@ uis.controller('uiSelectCtrl',
           if ( ctrl.taggingLabel === false ) {
             if ( ctrl.activeIndex < 0 ) {
               item = ctrl.tagging.fct !== undefined ? ctrl.tagging.fct(ctrl.search) : ctrl.search;
-              if (!item || angular.equals( ctrl.items[0], item ) ) {
+              if (!item || angular.equals( ctrl.items[0].toLowerCase(), item.toLowerCase() ) ) {
                 return;
               }
             } else {
@@ -515,9 +516,20 @@ uis.controller('uiSelectCtrl',
             }
           }
           // search ctrl.selected for dupes potentially caused by tagging and return early if found
+          delete item.isTag;
           if ( ctrl.selected && angular.isArray(ctrl.selected) && ctrl.selected.filter( function (selection) { return angular.equals(selection, item); }).length > 0 ) {
             ctrl.close(skipFocusser);
             return;
+          }
+
+          if (ctrl.taggingMatchToKey.isActivated && ctrl.selected && angular.isArray(ctrl.selected)) {
+            var dup = _.find(ctrl.selected, function(ctrlItem){
+                return ctrlItem[ctrl.taggingMatchToKey.fct].toLowerCase() === item[ctrl.taggingMatchToKey.fct].toLowerCase(); 
+            });
+            if(dup){
+              ctrl.close(skipFocusser);
+              return;
+            }
           }
         }
 
@@ -848,6 +860,19 @@ uis.directive('uiSelect',
           else
           {
             $select.tagging = {isActivated: false, fct: undefined};
+          }
+        });
+
+        attrs.$observe('taggingMatchToKey', function() {
+          if(attrs.tagging !== undefined)
+          {
+            // $eval() is needed otherwise we get a string instead of a boolean
+            var taggingMatchToKeyEval = attrs.taggingMatchToKey;
+            $select.taggingMatchToKey = {isActivated: true, fct: taggingMatchToKeyEval};
+          }
+          else
+          {
+            $select.taggingMatchToKey = {isActivated: false, fct: undefined};
           }
         });
 

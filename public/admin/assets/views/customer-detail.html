@@ -444,7 +444,7 @@
                                                 <label class="block">
                                                     Tags
                                                 </label>
-                                                <ui-select tagging="tagToCustomer"  multiple ng-model="customer.tags" theme="bootstrap" ng-disabled="disabled">
+                                                <ui-select tagging="tagToCustomer" tagging-match-to-key="label" multiple ng-model="customer.tags" theme="bootstrap" ng-disabled="disabled">
                                                     <ui-select-match placeholder="Select tags...">{{$item.label}}</ui-select-match>
                                                     <ui-select-choices repeat="tag in customerTags | orderBy:'label' | filter:$select.search">
                                                         {{tag.label}}
