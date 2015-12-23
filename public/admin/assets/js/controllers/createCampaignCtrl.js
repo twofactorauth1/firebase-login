@@ -571,8 +571,8 @@
     $scope.checkEmailTitle = function (_name) {
       if ($scope.selectedEmail.type === 'new') {
         $scope.checkingEmailTitle = true;
-        var exists = _.findWhere($scope.originalEmails, {
-          title: _name
+        var exists = _.find($scope.originalEmails, function(email){
+          return email.title.toLowerCase() == _name.toLowerCase(); 
         });
         $scope.emailTitleExists = exists ? true : false;
       } else {
@@ -602,6 +602,7 @@
               $scope.newCampaignObj.steps[0].settings.emailId = $scope.emailToSendPrevious._id;
               $scope.emailToSend.title = $scope.emailToSendPrevious.title;
             }
+            $scope.checkEmailTitle($scope.emailToSend.title);
           }
           else {
             $scope.replaceExistingEmail = false;
