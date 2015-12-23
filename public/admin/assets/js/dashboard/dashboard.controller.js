@@ -50,7 +50,7 @@
                 var analyticsWidgetsCopy = angular.copy(workstream.analyticWidgets);
 
                 _.each(analyticsWidgetsCopy, function(analytic){
-                    analytic.completed = workstream.completed;
+                    analytic.completed = workstream.unlocked && workstream.completed;
                     analyticsWidgets.push(analytic);
                 })
 
