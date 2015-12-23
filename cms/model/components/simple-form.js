@@ -99,7 +99,7 @@ var component = $$.m.ModelBase.extend({
              */
             contact_type : "ld",
 
-            tags: ["ld"]
+            tags: ["ld"],
 
             /**
              *
