@@ -635,10 +635,12 @@
         if($scope.newCampaignObj && $scope.newCampaignObj.steps && $scope.newCampaignObj.steps[0] && $scope.newCampaignObj.steps[0].settings)
           $scope.newCampaignObj.steps[0].settings.emailId = null;
       } else {
-        $scope.confirmOverrideExistingEmails();
+        
         $scope.emailToSend = $scope.emailToSendPrevious;
         if($scope.newCampaignObj.steps && $scope.newCampaignObj.steps[0] && $scope.newCampaignObj.steps[0].settings && !$scope.newCampaignObj.steps[0].settings.emailId && $scope.emailToSendPrevious)
           $scope.newCampaignObj.steps[0].settings.emailId = $scope.emailToSendPrevious._id
+
+        $scope.confirmOverrideExistingEmails();
         
       }
     }
@@ -972,7 +974,8 @@
       }
       else
       { 
-        $scope.saveLoading = false;      
+        $scope.saveLoading = false;  
+        $scope.resetDirty();    
         $scope.originalCampaignObj = _newCampaign;
         $scope.newCampaignObj = _newCampaign;
         toaster.pop('success', 'Campaign updated successfully');
@@ -1150,6 +1153,7 @@
         $scope.tagSelection.push(tagName);
       }
       $scope.recipients = $scope.getRecipients();
+      
     };
 
     $scope.currentStep = 1;
@@ -1345,16 +1349,7 @@
       });
     };
 
-    /*
-     * @locationChangeStart
-     * - Before user leaves editor, ask if they want to save changes
-     */
-    var offFn = $rootScope.$on('$locationChangeStart', function (event, newUrl, oldUrl) {
-      if (!$scope.changesConfirmed) {
-        $scope.saveCampaign(newUrl);
-      }
-    });
-
+    
     /*
      * @setBusinessDetails
      * - set any filled out info from business data
@@ -1546,12 +1541,16 @@
      * - check for changes in the data
      */
     $scope.pendingChanges =  function() {
+      _.each($scope.recipients, function (recipient) {
+        delete recipient.$$hashKey;
+      })
+      
       return (
-        (!angular.equals($scope.originalCampaignObj, $scope.newCampaignObj)) ||
-        (!angular.equals($scope.originalRecipients, $scope.recipients)) ||
+        ($scope.originalCampaignObj && !angular.equals($scope.originalCampaignObj, $scope.newCampaignObj)) ||
+        ($scope.originalRecipients && !angular.equals($scope.originalRecipients, $scope.recipients)) ||
         (!angular.equals([], $scope.selectedCustomers.newEmails)) ||
-        (!angular.equals($scope.originalEmailToSend, $scope.emailToSend)) ||
-        (!angular.equals($scope.delivery.originalDate, $scope.delivery.date))
+        ($scope.originalEmailToSend && !angular.equals($scope.originalEmailToSend, $scope.emailToSend)) ||
+        ($scope.delivery.originalDate && !angular.equals($scope.delivery.originalDate, $scope.delivery.date))
       )
     };
 
@@ -1580,13 +1579,14 @@
     };
 
     $scope.checkIfDirty = function(){
-      return $scope.originalCampaignObj && $scope.originalEmailToSend && $scope.delivery.originalDate && $scope.isEditable && $scope.pendingChanges();
+      return $scope.isEditable && $scope.pendingChanges();
     }
     $scope.resetDirty = function(){
         $scope.originalCampaignObj = null;
         $scope.newCampaignObj = null;
         $scope.originalEmailToSend = null;
         $scope.delivery.originalDate = null;
+        $scope.originalRecipients = null;
     }
 
     /*
