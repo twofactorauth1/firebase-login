@@ -541,7 +541,7 @@
                                             </div>
                                             <div ng-show="edit[$index]" class="col-xs-12">
                                                 <label ng-show="edit[$index]" for="edit[$index]">Title</label>
-                                                <input ng-blur="updateLinkList()" placeholder="Enter link title" ng-show="edit[$index]" type="text" ng-model="link.label" class="form-control" style="margin-bottom: 10px;">
+                                                <input ng-blur="checkDuplicateLinkTitle(link.label,componentEditing.customnav, true)" placeholder="Enter link title" ng-show="edit[$index]" type="text" ng-model="link.label" class="form-control" style="margin-bottom: 10px;">
                                             </div>
                                             <div class="col-xs-12" ng-show="edit[$index]">
                                                 <div class="clearfix margin-bottom-5"></div>
@@ -602,7 +602,7 @@
                                                 <h4 ng-show="!edit[$index]">
                                                             {{link.label}}
                                                         </h4>
-                                                <input ng-blur="updateLinkList()" ng-show="edit[$index]" type="text" ng-model="link.label" class="form-control" style="margin-top: 10px;">
+                                                <input ng-blur="checkDuplicateLinkTitle(link.label,componentEditing.customnav, true)" ng-show="edit[$index]" type="text" ng-model="link.label" class="form-control" style="margin-top: 10px;">
                                             </div>
                                             <div class="col-xs-3">
                                                 <h4>
