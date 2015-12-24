@@ -5,6 +5,7 @@
 (function (angular) {
   app.controller('CampaignsCtrl', ["$scope", "$timeout", "$location", "toaster", "$filter", "$modal", "CampaignService", function ($scope, $timeout, $location, toaster, $filter, $modal,   CampaignService) {
 
+    $scope.Math = window.Math;
     // $route.reload();
 
     /*

@@ -7191,7 +7191,7 @@ a[href="https://froala.com/wysiwyg-editor"] {
   /* IE6-9 */
   -webkit-filter: grayscale(100%);
   /* Chrome 19+ & Safari 6+ */
-  -webkit-transition: all .6s ease;
+  -webkit-transition: filter .6s ease;
   /* Fade to color for Chrome and Safari */
 }
 .dohy-dashboard-container img.grayscale:hover {
@@ -7237,6 +7237,7 @@ a[href="https://froala.com/wysiwyg-editor"] {
   position: absolute;
   bottom: calc(50% - .75em);
   top: auto;
+  z-index: 1001;
 }
 .dohy-dashboard-container .dohy-dashboard-inner {
   background-color: black;

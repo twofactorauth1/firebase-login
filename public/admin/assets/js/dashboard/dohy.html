@@ -51,7 +51,7 @@
             </h1>
 
             <div
-                ng-repeat="analytic in vm.state.analyticsWidgets track by $index"
+                ng-repeat="analytic in vm.state.analyticsWidgets track by analytic.name"
                 class="image__cell analytic-unlocked" ng-class="{ 'analytic-unlocked': analytic.completed, 'analytic-locked': !analytic.completed }">
                 <dashboard-analytic-tile-component
                     state="vm.state"

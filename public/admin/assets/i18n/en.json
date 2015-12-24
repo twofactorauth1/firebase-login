@@ -138,6 +138,7 @@
   "campaign": {
     "NEWCAMPAIGN": "New Campaign",
     "OPENRATE": "Opens",
+    "PARTICIPANTS": "Participants",
     "SENTRATE": "Sent",
     "CLICKRATE": "Clicks",
     "DESCRIPTION": "Create a new campaign to reach a group of contacts",
