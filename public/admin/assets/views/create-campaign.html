@@ -1,5 +1,5 @@
 <div ng-controller="CreateCampaignCtrl" class="create-campaign">
-
+<indig-navprompt class="indig-navprompt" my-state="{{$state.$current.name}}" reset-dirty="resetDirty()" check-if-dirty="checkIfDirty()"></indig-navprompt>
     <span ng-hide="emails.length > 0" class="fa fa-spinner fa-spin create-campaign-spinner"></span>
     <div ng-hide="!emails.length">
         <!-- start: PAGE TITLE -->
@@ -229,7 +229,7 @@
                                                 <div class="radio clip-radio radio-primary radio-inline" style="margin-bottom:0px!important;margin-top:0px">
                                                     <input type="radio" id="emailTemplate" name="emailtype" value="template" ng-model="selectedEmail.type" ng-click="clearEmail()" ng-disabled="!isEditable">
                                                     <label for="emailTemplate" style="margin-bottom:0px!important">
-                                                        Email Template
+                                                        Existing Email
                                                     </label>
                                                 </div>
                                             </div>
