@@ -595,7 +595,7 @@ _.extend(api.prototype, baseApi.prototype, {
                             contact.createAddress(null, null, null, null, city, state, zip, country, countryCode, displayName, lat, lon, true, true);
                         }
                         var ip = value ? value.ip : null;
-                        contactDao.saveOrUpdateContact(contact, function(err, savedContact){
+                        contactDao.createSignUpContact(contact, function(err, savedContact){
                             if(err) {
                                 self.log.error('Error signing up: ' + err);
                                 req.flash("error", 'There was a problem signing up.  Please try again later.');
