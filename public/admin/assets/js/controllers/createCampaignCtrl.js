@@ -18,7 +18,7 @@
      */
     var customerTags = userConstant.contact_types.dp;
     var nextStep = function () {
-      $scope.currentStep++;     
+      $scope.currentStep++;
     };
     var prevStep = function () {
       $scope.currentStep--;
@@ -543,7 +543,7 @@
         $scope.campaignNameChecked = true;
         $scope.checkingCampaignName = false;
         $scope.campaignNameExists = exists;
-        $scope.emailToSend.title = _name + ' Email Template';
+        $scope.emailToSend.title = _name + ' Email';
         $scope.emailToSend.subject = _name;
         $scope.checkEmailTitle($scope.emailToSend.title);
       });
@@ -570,7 +570,7 @@
       if ($scope.selectedEmail.type === 'new') {
         $scope.checkingEmailTitle = true;
         var exists = _.find($scope.originalEmails, function(email){
-          return email.title.toLowerCase() == _name.toLowerCase(); 
+          return email.title.toLowerCase() == _name.toLowerCase();
         });
         $scope.emailTitleExists = exists ? true : false;
       } else {
@@ -601,7 +601,7 @@
                 $scope.existingEmail.replace = true;
               })
             },0)
-            
+
             if($scope.newCampaignObj.steps && $scope.newCampaignObj.steps[0] && $scope.newCampaignObj.steps[0].settings && !$scope.newCampaignObj.steps[0].settings.emailId && $scope.emailToSendPrevious){
               $scope.newCampaignObj.steps[0].settings.emailId = $scope.emailToSendPrevious._id;
               $scope.emailToSend.title = $scope.emailToSendPrevious.title;
@@ -636,7 +636,7 @@
       if (newEmail) {
         $scope.emailToSendPrevious = angular.copy($scope.emailToSend);
         $scope.emailToSend = $scope.emailToSendCopy;
-        $scope.emailToSend.title = $scope.newCampaignObj.name + ' Email Template';
+        $scope.emailToSend.title = $scope.newCampaignObj.name + ' Email';
         $scope.emailToSend.fromName = $scope.emailToSendPrevious.fromName;
         $scope.emailToSend.fromEmail = $scope.emailToSendPrevious.fromEmail;
         $scope.emailToSend.replyTo = $scope.emailToSendPrevious.replyTo;
@@ -645,13 +645,13 @@
         if($scope.newCampaignObj && $scope.newCampaignObj.steps && $scope.newCampaignObj.steps[0] && $scope.newCampaignObj.steps[0].settings)
           $scope.newCampaignObj.steps[0].settings.emailId = null;
       } else {
-        
+
         $scope.emailToSend = $scope.emailToSendPrevious;
         if($scope.newCampaignObj.steps && $scope.newCampaignObj.steps[0] && $scope.newCampaignObj.steps[0].settings && !$scope.newCampaignObj.steps[0].settings.emailId && $scope.emailToSendPrevious)
           $scope.newCampaignObj.steps[0].settings.emailId = $scope.emailToSendPrevious._id
 
         $scope.confirmOverrideExistingEmails();
-        
+
       }
     }
 
@@ -729,7 +729,7 @@
      * -
      */
     $scope.checkBestEmail = function (contact) {
-      var returnVal = CustomerService.checkCustomerBestEmail(contact);      
+      var returnVal = CustomerService.checkCustomerBestEmail(contact);
       return returnVal;
     };
 
@@ -936,7 +936,7 @@
       $scope.setTagsOnCampaign();
       $scope.updatedEmail = angular.copy(newEmail);
 
-      if($scope.updatedEmail && $scope.existingEmail.replace){        
+      if($scope.updatedEmail && $scope.existingEmail.replace){
         WebsiteService.updateEmail($scope.updatedEmail, function(data, error) {
           CampaignService.createCampaign($scope.newCampaignObj, $scope.savedSuccess);
         });
@@ -964,14 +964,14 @@
 
       //update campaign
 
-      if($scope.updatedEmail && $scope.existingEmail.replace && !$scope.checkIfDuplicateCampaign || ($scope.newCampaignObj && $scope.emailToSend.campaignId && $scope.emailToSend.campaignId === $scope.newCampaignObj._id)){        
+      if($scope.updatedEmail && $scope.existingEmail.replace && !$scope.checkIfDuplicateCampaign || ($scope.newCampaignObj && $scope.emailToSend.campaignId && $scope.emailToSend.campaignId === $scope.newCampaignObj._id)){
         WebsiteService.updateEmail($scope.updatedEmail, function(data, error) {
          CampaignService.updateCampaign($scope.newCampaignObj, $scope.savedSuccess);
         });
       }
       else{
         CampaignService.updateCampaign($scope.newCampaignObj, $scope.savedSuccess);
-      }      
+      }
     };
 
     /*
@@ -979,25 +979,25 @@
      * - callback on create or update success
      * - navigate to next page
      */
-    $scope.savedSuccess = function(_newCampaign) {  
+    $scope.savedSuccess = function(_newCampaign) {
     $scope.updatedEmail.campaignId = _newCampaign._id;
     if($scope.isNewEmailObj)
       WebsiteService.updateEmail($scope.updatedEmail, function(data, error) {
-         
-      });      
+
+      });
       if($scope.checkIfDuplicateCampaign){
         $scope.checkIfDuplicateCampaign = false;
         $scope.redirectAfterDuplicate(_newCampaign._id);
       }
       else
-      { 
-        $scope.saveLoading = false;  
-        $scope.resetDirty();    
+      {
+        $scope.saveLoading = false;
+        $scope.resetDirty();
         toaster.pop('success', 'Campaign updated successfully');
         $scope.emails = [];
         $scope.navigateOnSave && $scope.navigateOnSave();
       }
-      
+
 
     };
 
@@ -1168,7 +1168,7 @@
         $scope.tagSelection.push(tagName);
       }
       $scope.recipients = $scope.getRecipients();
-      
+
     };
 
     $scope.currentStep = 1;
@@ -1249,9 +1249,9 @@
             $scope.updateCampaign(data);
           });
         }
-        else{          
+        else{
           $scope.redirectAfterDuplicate(data._id);
-        } 
+        }
       });
     }
 
@@ -1260,7 +1260,7 @@
      * - TODO: check name exists
      */
     $scope.createDuplicateCampaign = function (newCampaign) {
-      if ($scope.newCampaignObj._id) {        
+      if ($scope.newCampaignObj._id) {
           $scope.saveDuplicateCampaign(newCampaign);
       } else {
         toaster.pop('error', 'Error', 'Please save this campaign before duplicating');
@@ -1364,7 +1364,7 @@
       });
     };
 
-    
+
     /*
      * @setBusinessDetails
      * - set any filled out info from business data
@@ -1573,7 +1573,7 @@
       _.each($scope.recipients, function (recipient) {
         delete recipient.$$hashKey;
       })
-      
+
       return (
         ($scope.originalCampaignObj && !angular.equals($scope.originalCampaignObj, $scope.newCampaignObj)) ||
         ($scope.originalRecipients && !angular.equals($scope.originalRecipients, $scope.recipients)) ||
@@ -1619,14 +1619,14 @@
     }
 
     $scope.setCampaignDirty = function(){
-      if($scope.selectedEmail.type != 'new' && !$scope.existingEmail.replace){        
+      if($scope.selectedEmail.type != 'new' && !$scope.existingEmail.replace){
         if(!$scope.isCampainDirty.dirty){
           $timeout(function() {
             $scope.$apply(function () {
               $scope.isCampainDirty.dirty = true;
               $scope.confirmOverrideExistingEmails();
             })
-          },0)                
+          },0)
         }
       }
     }
