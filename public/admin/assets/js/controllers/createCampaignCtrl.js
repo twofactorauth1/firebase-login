@@ -607,7 +607,7 @@
           else {
             $scope.replaceExistingEmail = false;
             $scope.emailToSend.title = $scope.newCampaignObj.name + " " + moment().toDate().getTime();
-            $scope.emailToSend.campaignId = $scope.newCampaignObj._id;
+            $scope.emailToSend.campaignId = null;
             $scope.selectedEmail.type = 'new';
             $scope.checkEmailTitle($scope.emailToSend.title);
           }

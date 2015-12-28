@@ -130,7 +130,7 @@
     $scope.ckeditorLoaded = false;
     $scope.activeEditor = null;
     $scope.setCampaignDirty = function(){
-      if(($state.current.name === 'app.campaignDetail' || $state.current.name === 'app.marketing.createcampaign') && $scope.selectedEmail.type != 'new' && !$scope.isCampainDirty && !$scope.replaceExistingEmail){
+      if(($state.current.name === 'app.campaignDetail' || $state.current.name === 'app.marketing.createcampaign') &&  $scope.selectedEmail && $scope.selectedEmail.type != 'new' && !$scope.isCampainDirty && !$scope.replaceExistingEmail){
         $scope.isCampainDirty = true;
         $scope.confirmOverrideExistingEmails();
       }
