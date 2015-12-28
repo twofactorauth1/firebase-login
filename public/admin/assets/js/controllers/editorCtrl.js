@@ -129,12 +129,7 @@
 
     $scope.ckeditorLoaded = false;
     $scope.activeEditor = null;
-    $scope.setCampaignDirty = function(){
-      if(($state.current.name === 'app.campaignDetail' || $state.current.name === 'app.marketing.createcampaign') &&  $scope.selectedEmail && $scope.selectedEmail.type != 'new' && !$scope.isCampainDirty && !$scope.replaceExistingEmail){
-        $scope.isCampainDirty = true;
-        $scope.confirmOverrideExistingEmails();
-      }
-    }
+    
     $scope.activateCKeditor = function () {
       CKEDITOR.on("instanceReady", function (ev) {
 
@@ -150,11 +145,9 @@
         }
         ev.editor.on('key', function () {
           $scope.setDirty(true);
-          $scope.setCampaignDirty();
         });
         ev.editor.on('change', function () {
           $scope.setDirty(true);
-          $scope.setCampaignDirty();
         });
         if (!$scope.activeEditor)
           $scope.activeEditor = ev.editor;

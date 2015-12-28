@@ -1,13 +1,15 @@
 'use strict';
 /*global app, angular, moment*/
 (function (angular) {
-  app.controller('CreateCampaignCtrl', ["$scope", "$rootScope", "$modal", "$location", "$window", "$stateParams", "toaster", "$timeout", "CampaignService", "CustomerService", "CommonService", "editableOptions", "AccountService", "userConstant", "WebsiteService", "$q", "formValidations", "SweetAlert", function ($scope, $rootScope, $modal, $location, $window, $stateParams, toaster, $timeout, CampaignService, CustomerService, CommonService, editableOptions, AccountService, userConstant, WebsiteService, $q, formValidations, SweetAlert) {
+  app.controller('CreateCampaignCtrl', ["$scope",  "$rootScope", "$modal", "$location", "$window", "$stateParams", "toaster", "$timeout", "CampaignService", "CustomerService", "CommonService", "editableOptions", "AccountService", "userConstant", "WebsiteService", "$q", "formValidations", "SweetAlert", function ($scope, $rootScope, $modal, $location, $window, $stateParams, toaster, $timeout, CampaignService, CustomerService, CommonService, editableOptions, AccountService, userConstant, WebsiteService, $q, formValidations, SweetAlert) {
 
     /*
      * set editor theme
      */
     editableOptions.theme = 'bs3';
 
+    $scope.existingEmail = {};
+    $scope.isCampainDirty = false;
     /*
      * Setup some initial wizard state
      */
@@ -585,6 +587,7 @@
 
     $scope.confirmOverrideExistingEmails = function(){
       if((!$scope.emailToSend.campaignId || ($scope.newCampaignObj && $scope.emailToSend.campaignId !== $scope.newCampaignObj._id)) && $scope.selectedEmail.type != 'new'){
+        $scope.isCampainDirty = true;
         SweetAlert.swal({
           title: "How would you like to use the selected email?",
           text: "You are saving changes to an email used by more than one campaign. Do you wish to update the existing email (altering all campaigns) or create and update a copy specific to this campaign?",
@@ -597,7 +600,12 @@
           closeOnCancel: true
         }, function (isConfirm) {
           if (isConfirm) {
-            $scope.replaceExistingEmail = true;
+            $timeout(function() {
+              $scope.$apply(function () {
+                $scope.existingEmail.replace = true;
+              })
+            },0)
+            
             if($scope.newCampaignObj.steps && $scope.newCampaignObj.steps[0] && $scope.newCampaignObj.steps[0].settings && !$scope.newCampaignObj.steps[0].settings.emailId && $scope.emailToSendPrevious){
               $scope.newCampaignObj.steps[0].settings.emailId = $scope.emailToSendPrevious._id;
               $scope.emailToSend.title = $scope.emailToSendPrevious.title;
@@ -605,7 +613,11 @@
             $scope.checkEmailTitle($scope.emailToSend.title);
           }
           else {
-            $scope.replaceExistingEmail = false;
+            $timeout(function() {
+              $scope.$apply(function () {
+                $scope.existingEmail.replace = false;
+              })
+            },0)
             $scope.emailToSend.title = $scope.newCampaignObj.name + " " + moment().toDate().getTime();
             $scope.emailToSend.campaignId = null;
             $scope.selectedEmail.type = 'new';
@@ -902,7 +914,7 @@
       //add contacts if new
       $scope.checkAndCreateCustomer(function (createdContactsArr) {
         $scope.addContacts(createdContactsArr);
-        if (!stepSettings.emailId || (angular.isDefined($scope.replaceExistingEmail) && !$scope.replaceExistingEmail)) {
+        if (!stepSettings.emailId || (angular.isDefined($scope.existingEmail.replace) && !$scope.existingEmail.replace)) {
           $scope.emailToSend.campaignId = $scope.newCampaignObj._id;
           WebsiteService.createEmail($scope.emailToSend, function (newEmail) {
             $scope.isNewEmailObj = true;
@@ -927,7 +939,7 @@
       $scope.setTagsOnCampaign();
       $scope.updatedEmail = angular.copy(newEmail);
 
-      if($scope.updatedEmail && $scope.replaceExistingEmail){        
+      if($scope.updatedEmail && $scope.existingEmail.replace){        
         WebsiteService.updateEmail($scope.updatedEmail, function(data, error) {
           CampaignService.createCampaign($scope.newCampaignObj, $scope.savedSuccess);
         });
@@ -955,7 +967,7 @@
 
       //update campaign
 
-      if($scope.updatedEmail && $scope.replaceExistingEmail && !$scope.checkIfDuplicateCampaign || ($scope.newCampaignObj && $scope.emailToSend.campaignId && $scope.emailToSend.campaignId === $scope.newCampaignObj._id)){        
+      if($scope.updatedEmail && $scope.existingEmail.replace && !$scope.checkIfDuplicateCampaign || ($scope.newCampaignObj && $scope.emailToSend.campaignId && $scope.emailToSend.campaignId === $scope.newCampaignObj._id)){        
         WebsiteService.updateEmail($scope.updatedEmail, function(data, error) {
          CampaignService.updateCampaign($scope.newCampaignObj, $scope.savedSuccess);
         });
@@ -984,8 +996,6 @@
       { 
         $scope.saveLoading = false;  
         $scope.resetDirty();    
-        $scope.originalCampaignObj = _newCampaign;
-        $scope.newCampaignObj = _newCampaign;
         toaster.pop('success', 'Campaign updated successfully');
         $scope.emails = [];
         $scope.navigateOnSave && $scope.navigateOnSave();
@@ -1234,7 +1244,7 @@
           delete $scope.emailToSend.version;
           delete $scope.emailToSend.latest;
           $scope.emailToSend.campaignId = data._id;
-          $scope.newCampaignObj = data;
+          $scope.newCampaignObj = angular.copy(data);
 
           $scope.emailToSend.title = newCampaign.name + " " + moment().toDate().getTime();
           WebsiteService.createEmail($scope.emailToSend, function(data){
@@ -1420,7 +1430,7 @@
 
         matchedEmail = $scope.emails.filter(emailMatch)[0];
         if (emailId && matchedEmail) {
-          $scope.emailToSend = matchedEmail;
+          $scope.emailToSend = angular.copy(matchedEmail);
           $scope.originalEmailToSend = angular.copy($scope.emailToSend);
         } else {
           console.log('email not found');
@@ -1448,7 +1458,7 @@
           var localMoment = moment(sendAtDateISOString);
 
           $scope.originalCampaignObj = angular.copy(data);
-          $scope.newCampaignObj = data;
+          $scope.newCampaignObj = angular.copy(data);
           $scope.selectedEmail = {
             type: 'template'
           };
@@ -1597,6 +1607,13 @@
         $scope.originalRecipients = null;
     }
 
+    $scope.setCampaignDirty = function(){
+      if($scope.selectedEmail.type != 'new' && !$scope.isCampainDirty && !$scope.existingEmail.replace){
+        $scope.isCampainDirty = true;
+        $scope.confirmOverrideExistingEmails();
+      }
+    }
+    
     /*
      * @init
      * - Set page context (if creating or loading existing campaign).
