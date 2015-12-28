@@ -10,6 +10,7 @@
 
     $scope.existingEmail = {};
     $scope.isCampainDirty = false;
+    $scope.isCampaign = true;
     /*
      * Setup some initial wizard state
      */
