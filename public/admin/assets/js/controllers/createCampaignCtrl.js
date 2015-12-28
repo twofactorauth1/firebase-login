@@ -902,7 +902,7 @@
       //add contacts if new
       $scope.checkAndCreateCustomer(function (createdContactsArr) {
         $scope.addContacts(createdContactsArr);
-        if (!stepSettings.emailId || !$scope.replaceExistingEmail) {
+        if (!stepSettings.emailId || (angular.isDefined($scope.replaceExistingEmail) && !$scope.replaceExistingEmail)) {
           $scope.emailToSend.campaignId = $scope.newCampaignObj._id;
           WebsiteService.createEmail($scope.emailToSend, function (newEmail) {
             $scope.isNewEmailObj = true;
@@ -948,7 +948,7 @@
 
       //update campaign
 
-      if($scope.replaceExistingEmail && !$scope.checkIfDuplicateCampaign || ($scope.newCampaignObj && $scope.emailToSend.campaignId && $scope.emailToSend.campaignId === $scope.newCampaignObj._id)){
+      if($scope.updatedEmail && $scope.replaceExistingEmail && !$scope.checkIfDuplicateCampaign || ($scope.newCampaignObj && $scope.emailToSend.campaignId && $scope.emailToSend.campaignId === $scope.newCampaignObj._id)){        
         WebsiteService.updateEmail($scope.updatedEmail, function(data, error) {
          CampaignService.updateCampaign($scope.newCampaignObj, $scope.savedSuccess);
         });
