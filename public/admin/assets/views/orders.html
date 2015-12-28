@@ -135,11 +135,11 @@
                                 <th class="column-width">
                                     <input st-search="status" placeholder="Status" class="form-control hidden" type="search" id="searchStatus" ng-model="filterorder.selected.value" />
                                     <ui-select ng-model="filterorder.selected" on-select="triggerInput('#searchStatus')" theme="bootstrap">
-                                        <ui-select-match placeholder="Select Status">{{$select.selected.name}}</ui-select-match>
+                                        <ui-select-match placeholder="Select Status">{{$select.selected.name}}
                                             <!-- <span class="fa" ng-class="{'fa-facebook': $select.selected.type == 'fb'}"></span> -->
-                                            <small ng-bind-html="$select.selected.name"></small>
-                                            <button class="clear" ng-click="clear($event, '#searchStatus')">X</button>
-                                        
+                                           
+                                             <span class="fa fa-times text-danger" ng-click="clear($event, '#searchStatus')"></span>
+                                        </ui-select-match>
                                         <ui-select-null-choice>No Status</ui-select-null-choice>
                                         <ui-select-choices repeat="status in orderStatusOptions | filter: $select.search">
                                             <!-- <span class="fa" ng-class="{'fa-facebook': type.type == 'fb'}"></span> -->
