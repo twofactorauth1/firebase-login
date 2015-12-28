@@ -610,6 +610,7 @@
             $scope.emailToSend.campaignId = null;
             $scope.selectedEmail.type = 'new';
             $scope.checkEmailTitle($scope.emailToSend.title);
+
           }
         })
       }
@@ -901,7 +902,7 @@
       //add contacts if new
       $scope.checkAndCreateCustomer(function (createdContactsArr) {
         $scope.addContacts(createdContactsArr);
-        if (!stepSettings.emailId) {
+        if (!stepSettings.emailId || !$scope.replaceExistingEmail) {
           $scope.emailToSend.campaignId = $scope.newCampaignObj._id;
           WebsiteService.createEmail($scope.emailToSend, function (newEmail) {
             $scope.isNewEmailObj = true;
