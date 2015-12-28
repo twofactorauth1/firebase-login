@@ -584,7 +584,7 @@
     };
 
     $scope.confirmOverrideExistingEmails = function(){
-      if((!$scope.emailToSend.campaignId || $scope.emailToSend.campaignId !== $scope.newCampaignObj._id) && $scope.selectedEmail.type != 'new'){
+      if((!$scope.emailToSend.campaignId || ($scope.newCampaignObj._id && $scope.emailToSend.campaignId !== $scope.newCampaignObj._id)) && $scope.selectedEmail.type != 'new'){
         SweetAlert.swal({
           title: "How would you like to use the selected email?",
           text: "You are saving changes to an email used by more than one campaign. Do you wish to update the existing email (altering all campaigns) or create and update a copy specific to this campaign?",
