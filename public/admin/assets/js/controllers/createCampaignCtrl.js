@@ -9,7 +9,9 @@
     editableOptions.theme = 'bs3';
 
     $scope.existingEmail = {};
-    $scope.isCampainDirty = false;
+    $scope.isCampainDirty = {
+      dirty : false
+    }
     $scope.isCampaign = true;
     /*
      * Setup some initial wizard state
@@ -588,7 +590,7 @@
 
     $scope.confirmOverrideExistingEmails = function(){
       if((!$scope.emailToSend.campaignId || ($scope.newCampaignObj && $scope.emailToSend.campaignId !== $scope.newCampaignObj._id)) && $scope.selectedEmail.type != 'new'){
-        $scope.isCampainDirty = true;
+        $scope.isCampainDirty.dirty = true;
         SweetAlert.swal({
           title: "How would you like to use the selected email?",
           text: "You are saving changes to an email used by more than one campaign. Do you wish to update the existing email (altering all campaigns) or create and update a copy specific to this campaign?",
@@ -1245,7 +1247,7 @@
           delete $scope.emailToSend.version;
           delete $scope.emailToSend.latest;
           $scope.emailToSend.campaignId = data._id;
-          $scope.newCampaignObj = angular.copy(data);
+          $scope.newCampaignObj = data;
 
           $scope.emailToSend.title = newCampaign.name + " " + moment().toDate().getTime();
           WebsiteService.createEmail($scope.emailToSend, function(data){
@@ -1459,7 +1461,7 @@
           var localMoment = moment(sendAtDateISOString);
 
           $scope.originalCampaignObj = angular.copy(data);
-          $scope.newCampaignObj = angular.copy(data);
+          $scope.newCampaignObj = data;
           $scope.selectedEmail = {
             type: 'template'
           };
@@ -1609,11 +1611,28 @@
     }
 
     $scope.setCampaignDirty = function(){
-      if($scope.selectedEmail.type != 'new' && !$scope.isCampainDirty && !$scope.existingEmail.replace){
-        $scope.isCampainDirty = true;
-        $scope.confirmOverrideExistingEmails();
+      if($scope.selectedEmail.type != 'new' && !$scope.existingEmail.replace){
+        
+        if(!$scope.isCampainDirty.dirty){
+                $timeout(function() {
+                  $scope.$apply(function () {
+                    $scope.isCampainDirty.dirty = true;
+                    $scope.confirmOverrideExistingEmails();
+                  })
+            },0)
+                
+              }
       }
     }
+
+    CKEDITOR.on("instanceReady", function (ev) {
+        ev.editor.on('key', function () {
+          $scope.setCampaignDirty();
+        });
+        ev.editor.on('change', function () {
+          $scope.setCampaignDirty();
+        });
+    })
     
     /*
      * @init
