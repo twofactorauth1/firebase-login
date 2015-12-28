@@ -524,13 +524,6 @@
       }
     });
 
-    $scope.$watch('emailToSend.components', function (newValue, oldValue) {
-      if (newValue) {
-        console.log("components changes");
-      }
-    });     
-      
-
     /*
      * @changeCurrentEmail
      * - set selected email
@@ -590,8 +583,7 @@
 
     $scope.confirmOverrideExistingEmails = function(){
       if((!$scope.emailToSend.campaignId || ($scope.newCampaignObj && $scope.emailToSend.campaignId !== $scope.newCampaignObj._id)) && $scope.selectedEmail.type != 'new'){
-        $scope.isCampainDirty.dirty = true;
-        SweetAlert.swal({
+          SweetAlert.swal({
           title: "How would you like to use the selected email?",
           text: "You are saving changes to an email used by more than one campaign. Do you wish to update the existing email (altering all campaigns) or create and update a copy specific to this campaign?",
           type: "warning",
@@ -605,6 +597,7 @@
           if (isConfirm) {
             $timeout(function() {
               $scope.$apply(function () {
+                $scope.isCampainDirty.dirty = true;
                 $scope.existingEmail.replace = true;
               })
             },0)
@@ -618,6 +611,7 @@
           else {
             $timeout(function() {
               $scope.$apply(function () {
+                $scope.isCampainDirty.dirty = true;
                 $scope.existingEmail.replace = false;
               })
             },0)
@@ -1446,6 +1440,20 @@
       return promise;
     };
 
+
+    CKEDITOR.on("instanceReady", function (ev) {
+      ev.editor.on('key', function () {
+        if(!$scope.isCampainDirty.dirty){
+          $scope.setCampaignDirty();
+        }
+      });
+      ev.editor.on('change', function () {
+        if(!$scope.isCampainDirty.dirty){
+          $scope.setCampaignDirty();
+        }
+      });
+    })
+
     /*
      * @getCampaign
      * - get saved campaign data, then...
@@ -1611,29 +1619,17 @@
     }
 
     $scope.setCampaignDirty = function(){
-      if($scope.selectedEmail.type != 'new' && !$scope.existingEmail.replace){
-        
+      if($scope.selectedEmail.type != 'new' && !$scope.existingEmail.replace){        
         if(!$scope.isCampainDirty.dirty){
-                $timeout(function() {
-                  $scope.$apply(function () {
-                    $scope.isCampainDirty.dirty = true;
-                    $scope.confirmOverrideExistingEmails();
-                  })
-            },0)
-                
-              }
+          $timeout(function() {
+            $scope.$apply(function () {
+              $scope.isCampainDirty.dirty = true;
+              $scope.confirmOverrideExistingEmails();
+            })
+          },0)                
+        }
       }
     }
-
-    CKEDITOR.on("instanceReady", function (ev) {
-        ev.editor.on('key', function () {
-          $scope.setCampaignDirty();
-        });
-        ev.editor.on('change', function () {
-          $scope.setCampaignDirty();
-        });
-    })
-    
     /*
      * @init
      * - Set page context (if creating or loading existing campaign).

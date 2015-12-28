@@ -144,7 +144,7 @@
           angular.element('.cke_button__doksoft_button_email').hide();
         }
         ev.editor.on('key', function () {
-          $scope.setDirty(true);
+          $scope.setDirty(true);         
         });
         ev.editor.on('change', function () {
           $scope.setDirty(true);
