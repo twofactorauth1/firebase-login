@@ -948,7 +948,7 @@
 
       //update campaign
 
-      if($scope.replaceExistingEmail && !$scope.checkIfDuplicateCampaign || ($scope.emailToSend.campaignId && $scope.emailToSend.campaignId === $scope.newCampaignObj._id)){
+      if($scope.replaceExistingEmail && !$scope.checkIfDuplicateCampaign || ($scope.newCampaignObj && $scope.emailToSend.campaignId && $scope.emailToSend.campaignId === $scope.newCampaignObj._id)){
         WebsiteService.updateEmail($scope.updatedEmail, function(data, error) {
          CampaignService.updateCampaign($scope.newCampaignObj, $scope.savedSuccess);
         });
