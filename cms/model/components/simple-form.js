@@ -153,7 +153,9 @@ var component = $$.m.ModelBase.extend({
             btn:{
                 color: "#333",
                 bgcolor: "#ccc"
-            }
+            },
+
+            uniqueEmail: false
         }
     },
 
