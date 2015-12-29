@@ -15,6 +15,8 @@ app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userSe
         }).length;
       };
 
+
+
       scope.clearValidations= function(){
         scope.userExists = false;
       };
@@ -66,6 +68,7 @@ app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userSe
           fromEmail: scope.component.fromEmail,
           fromName: scope.component.fromName,
           contact_type: scope.component.contact_type,
+          uniqueEmail: scope.component.uniqueEmail || false,
           activity: {
             activityType: 'CONTACT_FORM',
             note: scope.user.message || "Contact form data.",

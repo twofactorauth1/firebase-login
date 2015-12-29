@@ -168,6 +168,11 @@ app.directive('socialLinks', ['$modal', '$http', '$timeout', '$q', '$compile', '
         } else {
           scope.social = {};
         }
+        if(scope.social.selectedLink){
+          scope.matchingLink = _.findWhere(scope.social_links, {
+              name: scope.social.selectedLink
+          });
+        }
         angular.element("#social-link-name .error").html("");
         angular.element("#social-link-name").removeClass('has-error');
         angular.element("#social-link-url .error").html("");
