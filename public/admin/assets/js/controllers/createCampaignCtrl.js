@@ -1223,6 +1223,7 @@
         if (campaign_id) {
 
           $timeout(function() {
+            $scope.resetDirty();
             window.location = '/admin/#/marketing/campaigns/' + campaign_id;
           }, 1000);
 
@@ -1260,11 +1261,22 @@
      * - TODO: check name exists
      */
     $scope.createDuplicateCampaign = function (newCampaign) {
-      if ($scope.newCampaignObj._id) {
-          $scope.saveDuplicateCampaign(newCampaign);
-      } else {
-        toaster.pop('error', 'Error', 'Please save this campaign before duplicating');
-      }
+        
+              if ($scope.newCampaignObj._id) {
+                CampaignService.checkCampaignNameExists(newCampaign.name, function (exists) {          
+                  $scope.campaignDuplicateNameChecked = true;
+                  $scope.checkingDuplicateCampaignName = false;
+                  $scope.campaignDuplicateNameExists = exists;
+                  if(!exists){                    
+                    $scope.saveDuplicateCampaign(newCampaign);
+                  }
+                });
+              } else {
+                toaster.pop('error', 'Error', 'Please save this campaign before duplicating');
+              }
+          
+        
+     
     };
 
     /*
