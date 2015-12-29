@@ -530,6 +530,8 @@
      */
     $scope.changeCurrentEmail = function (selectedEmail) {
       $scope.emailToSend = selectedEmail;
+      if((!$scope.emailToSend.campaignId || ($scope.newCampaignObj && $scope.emailToSend.campaignId !== $scope.newCampaignObj._id)))
+        $scope.emailToSend.bcc = ""
       $scope.confirmOverrideExistingEmails();
     };
 
