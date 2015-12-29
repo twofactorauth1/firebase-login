@@ -1591,7 +1591,7 @@
       return (
         ($scope.originalCampaignObj && !angular.equals($scope.originalCampaignObj, $scope.newCampaignObj)) ||
         ($scope.originalRecipients && $scope.originalRecipients.length && !angular.equals($scope.originalRecipients, $scope.recipients)) ||
-        (!angular.equals([], $scope.selectedCustomers.newEmails)) ||
+        ($scope.selectedCustomers && $scope.selectedCustomers.newEmails && !angular.equals([], $scope.selectedCustomers.newEmails)) ||
         ($scope.originalEmailToSend && !angular.equals($scope.originalEmailToSend, $scope.emailToSend)) ||
         ($scope.delivery.originalDate && !angular.equals($scope.delivery.originalDate, $scope.delivery.date))
       )
@@ -1633,6 +1633,9 @@
         $scope.originalEmailToSend = null;
         $scope.delivery.originalDate = null;
         $scope.originalRecipients = null;
+        if($scope.selectedCustomers){
+          $scope.selectedCustomers.newEmails = null;
+        }
     }
 
     $scope.setCampaignDirty = function(){
