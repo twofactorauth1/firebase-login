@@ -1588,7 +1588,7 @@
 
       return (
         ($scope.originalCampaignObj && !angular.equals($scope.originalCampaignObj, $scope.newCampaignObj)) ||
-        ($scope.originalRecipients && !angular.equals($scope.originalRecipients, $scope.recipients)) ||
+        ($scope.originalRecipients && $scope.originalRecipients.length && !angular.equals($scope.originalRecipients, $scope.recipients)) ||
         (!angular.equals([], $scope.selectedCustomers.newEmails)) ||
         ($scope.originalEmailToSend && !angular.equals($scope.originalEmailToSend, $scope.emailToSend)) ||
         ($scope.delivery.originalDate && !angular.equals($scope.delivery.originalDate, $scope.delivery.date))
@@ -1619,8 +1619,11 @@
       }
     };
 
+   
     $scope.checkIfDirty = function(){
-      return $scope.isEditable && $scope.pendingChanges();
+      var returnValue = false;
+      returnValue = $scope.isEditable && $scope.pendingChanges();
+      return returnValue;
     }
     $scope.resetDirty = function(){
         $scope.originalCampaignObj = null;
