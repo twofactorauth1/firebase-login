@@ -181,7 +181,8 @@
                                 </td>
                                 <td ng-show="column.name"><strong>First Name: </strong> <span ng-text-truncate="customer.first" ng-tt-chars-threshold="15" ng-tt-no-toggling></span><span ng-if="!customer.first">--</span></td>
                                 <td ng-show="column.name"><strong>Last Name: </strong> <span ng-text-truncate="customer.last" ng-tt-chars-threshold="15" ng-tt-no-toggling></span><span ng-if="!customer.last">--</span></td>
-                                <td ng-show="column.tags"><strong>Tags: </strong>{{contactTags(customer) || '--'}}</td>
+                                <td ng-show="column.tags"><strong>Tags: </strong>
+                                <span ng-text-truncate="contactTags(customer) || '--'" ng-tt-chars-threshold="15" ng-tt-no-toggling></span></td>
                                 <td ng-show="column.email" class="hidden-xs"><strong>Email: </strong> <span ng-if="customer.bestEmail"><a href="mailto:{{customer.bestEmail}}"><span ng-text-truncate="customer.bestEmail" ng-tt-chars-threshold="15" ng-tt-no-toggling></span></a>
                                     </span><span ng-if="!customer.bestEmail">--</span></td>
                                 <td ng-show="column.address" class="hidden-xs"><strong>Address: </strong>
