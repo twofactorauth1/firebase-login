@@ -893,7 +893,7 @@
                                     <ui-select-match placeholder="Select a campaign">
                                         <small ng-bind-html="$select.selected.name"></small>
                                     </ui-select-match>
-                                    <ui-select-choices repeat="campaign._id as campaign in campaigns | filter: $select.search | filter:{ type: 'autoresponder' } track by $index">
+                                    <ui-select-choices repeat="campaign._id as campaign in campaigns | filter: $select.search | filter:{ type: 'autoresponder', status : 'completed' }  track by $index">
                                         <small ng-bind-html="campaign.name | highlight: $select.search"></small>
                                     </ui-select-choices>
                                 </ui-select>
