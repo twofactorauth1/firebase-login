@@ -1531,6 +1531,9 @@
         });
         customers = _.difference(customers, customerWithoutEmails);
         $scope.customers = customers;
+        CustomerService.getAllCustomerTags(customers, function(tags){
+          customerTags = tags;
+        })
         var _tags = [];
         _.each(customers, function (customer) {
           //customer.fullName = customer.first + " " + customer.last || '';

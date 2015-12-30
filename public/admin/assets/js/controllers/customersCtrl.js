@@ -56,11 +56,18 @@
           $scope.setSortOrder($state.current.sort);
         }
         $scope.showCustomers = true;
+        CustomerService.getAllCustomerTags(customers, function(tags){
+          $scope.customerTags = tags;
+        });
 
       });
     };
 
     $scope.getCustomers();
+
+    CustomerService.getCustomerTags(function(tags){
+      $scope.customerTags = tags;
+    });
 
     /*
      * @getters
@@ -279,9 +286,11 @@
     $scope.customer = {};
     $scope.customer.tags = {};
 
-    CustomerService.getCustomerTags(function(tags){
-      $scope.customerTags = tags;
-    });
+    
+
+    $scope.tagToCustomer = function(value) {
+     return CustomerService.tagToCustomer(value);
+    }
 
     $scope.customerPhotoOptions = [{
       name: 'Photo',
@@ -338,10 +347,31 @@
         
         returnedCustomer.bestEmail = $scope.checkBestEmail(returnedCustomer);
         $scope.customers.unshift(returnedCustomer);
-        
+        $scope.incrementCustomerTags(returnedCustomer);
         toaster.pop('success', 'Customer Successfully Added');
         $scope.minRequirements = true;
       });
+    };
+
+    $scope.incrementCustomerTags = function (contact) {
+      var customerTags = $scope.customerTags;
+      if(contact){
+        var contactTags = [];                
+          if (contact.tags) {
+            _.each(contact.tags, function (tag) {
+              var type = _.find(customerTags, function (type) {
+                return type.data === tag;
+              });
+              if (!type) {
+                contactTags.push({
+                  label : tag,
+                  data : tag
+                })
+              }
+            });
+          }
+        $scope.customerTags = _.uniq(customerTags.concat(contactTags), function(w) { return w.label; })       
+      }
     };
 
     $scope.setDuplicateUser = function(val){

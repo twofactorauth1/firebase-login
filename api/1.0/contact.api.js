@@ -556,12 +556,12 @@ _.extend(api.prototype, baseApi.prototype, {
                     var contact = new $$.m.Contact(req.body);
                     contact.set('accountId', value.id());
                     self.log.debug('contact_type ', contact_type);
-                    if (!contact_type) {
+                    if (!contact_type || !contact_type.length) {
                         contact.set('type', 'ld');
                         contact.set('tags', ['ld']);
                     } else {
-                        contact.set('type', contact_type);
-                        contact.set('tags', [contact_type]);
+                        contact.set('type', 'ld');
+                        contact.set('tags', contact_type);
                     }
                     if(contact.get('fingerprint')) {
                         contact.set('fingerprint', ''+contact.get('fingerprint'));
