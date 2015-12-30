@@ -1,13 +1,3 @@
-<style>
-.simple-form-v1 .simple-form-title {
-    color: {
-        {
-            component.txtcolor || 'white'
-        }
-    }
-    ;
-}
-</style>
 <div ng-class="component.type+'-v'+component.version">
     <div id="error-msg" class="alert alert-danger hidden">
         <button type="button" aria-hidden="true" class="close">×</button>
@@ -54,7 +44,7 @@
                         </div>
                         <div class="clearfix mb15 visible-xs"></div>
                         <div class="col-sm-3">
-                            <button type="submit" ng-style="{'background': component.btn.bgcolor, 'color':component.btn.color, 'border-color': component.btn.bgcolor}" class="btn btn-default pull-right btn-block" ng-disabled="simpleForm.$invalid" ng-class="{'custom-orange': component.customBtn}">
+                            <button type="submit" ng-style="{'background': component.btn.bgcolor, 'color':component.btn.color, 'border-color': component.btn.bgcolor}" class="btn btn-default pull-right btn-block btn-simple-form" ng-disabled="simpleForm.$invalid" ng-class="{'custom-orange': component.customBtn}">
                                 <span elem ng-model="component.submitBtn"></span>
                             </button>
                         </div>
@@ -130,3 +120,17 @@
         </div>
     </div>
 </div>
+<style>
+.simple-form-v1 .simple-form-title {
+    color: {
+        {
+            component.txtcolor || 'white'
+        }
+    }
+    ;
+}
+.btn-simple-form:hover, .btn-simple-form:active:focus, .btn-simple-form:active:hover
+{
+    color: {{component.btn.color}}!important
+}
+</style>

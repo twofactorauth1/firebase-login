@@ -1,13 +1,3 @@
-<style>
-.simple-form-v2 .simple-form-title {
-    color: {
-        {
-            component.txtcolor || 'white'
-        }
-    }
-    ;
-}
-</style>
 <div ng-class="component.type+'-v'+component.version">
     <div class="col-xs-12 col-sm-6 col-sm-offset-3">
         <div class="contact-us--title">
@@ -49,7 +39,7 @@
                 <textarea class="form-control input-lg" name="message" placeholder="Message" rows="5" ng-model='user.message'></textarea>
             </div>
             <div class="form-group">
-                <button type="submit" ng-style="{'background': component.btn.bgcolor, 'color':component.btn.color, 'border-color': component.btn.bgcolor}" class="btn btn-default btn-block" ng-disabled="simpleForm.$invalid">
+                <button type="submit" ng-style="{'background': component.btn.bgcolor, 'color':component.btn.color, 'border-color': component.btn.bgcolor}" class="btn btn-default btn-block btn-simple-form" ng-disabled="simpleForm.$invalid">
                     <span elem ng-model="component.submitBtn"></span>
                 </button>
             </div>
@@ -62,3 +52,18 @@
         </form>
     </div>
 </div>
+<style>
+.simple-form-v2 .simple-form-title {
+    color: {
+        {
+            component.txtcolor || 'white'
+        }
+    }
+    ;
+}
+
+.btn-simple-form:hover, .btn-simple-form:active:focus, .btn-simple-form:active:hover
+{
+    color: {{component.btn.color}}!important
+}
+</style>
