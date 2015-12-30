@@ -541,7 +541,7 @@
                                             </div>
                                             <div ng-show="edit[$index]" class="col-xs-12">
                                                 <label ng-show="edit[$index]" for="edit[$index]">Title</label>
-                                                <input ng-blur="updateLinkList()" placeholder="Enter link title" ng-show="edit[$index]" type="text" ng-model="link.label" class="form-control" style="margin-bottom: 10px;">
+                                                <input ng-blur="checkDuplicateLinkTitle(link.label,componentEditing.customnav, true)" placeholder="Enter link title" ng-show="edit[$index]" type="text" ng-model="link.label" class="form-control" style="margin-bottom: 10px;">
                                             </div>
                                             <div class="col-xs-12" ng-show="edit[$index]">
                                                 <div class="clearfix margin-bottom-5"></div>
@@ -602,7 +602,7 @@
                                                 <h4 ng-show="!edit[$index]">
                                                             {{link.label}}
                                                         </h4>
-                                                <input ng-blur="updateLinkList()" ng-show="edit[$index]" type="text" ng-model="link.label" class="form-control" style="margin-top: 10px;">
+                                                <input ng-blur="checkDuplicateLinkTitle(link.label,componentEditing.customnav, true)" ng-show="edit[$index]" type="text" ng-model="link.label" class="form-control" style="margin-top: 10px;">
                                             </div>
                                             <div class="col-xs-3">
                                                 <h4>
@@ -684,7 +684,7 @@
                                     <select ng-disabled="!componentEditing.custom.hours" ng-hide="val.closed" ng-change="validateHours(val, $index)" class="chosen-select hour-start-select form-control" ng-model="val.end" ng-options="item for item in hours.HOURS">
                                     </select>
                                 </div>
-                            </div>                            
+                            </div>
                             <label class="pull-left" ng-hide="val.closed" ng-if="val.split" style="margin:10px"> & </label>
                             <div class="col-xs-5">
                                 <div id="business_hours_start2_{{$index}}" class="inline-table-cell">
@@ -695,7 +695,7 @@
                                     <select ng-disabled="!componentEditing.custom.hours" ng-change="validateHours(val, $index)" ng-if="val.split" ng-hide="val.closed" class="chosen-select hour-start-select form-control" ng-model="val.end2" ng-options="item for item in hours.HOURS">
                                     </select>
                                 </div>
-                            </div>                            
+                            </div>
                             <div class="col-xs-5 margin-left-5" class="inline-table-cell">
                                 <div class="checkbox clip-check check-primary checkbox-inline">
                                     <input ng-disabled="!componentEditing.custom.hours" type="checkbox" id="closed-{{$index}}" ng-change="validateHours(val, $index)" ng-model="val.closed">
@@ -709,7 +709,7 @@
                                         Split
                                     </label>
                                 </div>
-                            </div>                                                       
+                            </div>
                         </div>
                         <div ng-if="!componentEditing.splitHours" class="col-xs-12" ng-repeat="val in componentEditing.hours">
                             <div class="col-xs-1">
@@ -826,6 +826,14 @@
                         </div>
                         <div class="clearfix"></div>
                     </div>
+                    <div class="well">
+                        <div class="form-group margin-bottom-0">
+                            <label><strong>Unique email check:</strong></label>
+                            <span tooltip-placement="top" tooltip-html-unsafe="Enforced unique check on email for contact creation"><i class="fa fa-info-circle" /></span>
+                            <switch name="redirect" ng-model="componentEditing.uniqueEmail" class="pull-right"></switch>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
                     <div class="form-group customer-tags">
                         <label class="block">
                             <strong>Add tag to contact</strong>
@@ -885,7 +893,7 @@
                                     <ui-select-match placeholder="Select a campaign">
                                         <small ng-bind-html="$select.selected.name"></small>
                                     </ui-select-match>
-                                    <ui-select-choices repeat="campaign._id as campaign in campaigns | filter: $select.search | filter:{ type: 'autoresponder' } track by $index">
+                                    <ui-select-choices repeat="campaign._id as campaign in campaigns | filter: $select.search | filter:{ type: 'autoresponder', status : 'completed' }  track by $index">
                                         <small ng-bind-html="campaign.name | highlight: $select.search"></small>
                                     </ui-select-choices>
                                 </ui-select>
@@ -963,8 +971,8 @@
                     <div class="form-group hidden">
                         <label for="slider-direction">Slide Vertically:</label>
                         <span tooltip-placement="top" tooltip-html-unsafe="Slide direction ( horizontal or veritcal)."><i class="fa fa-info-circle" /></span>
-                        <switch id="slider-direction" ng-change="saveTestimonialComponent()" ng-model="componentEditing.slider.vertical" class="pull-right"></switch>                        
-                    </div>                    
+                        <switch id="slider-direction" ng-change="saveTestimonialComponent()" ng-model="componentEditing.slider.vertical" class="pull-right"></switch>
+                    </div>
                     <div class="form-group">
                         <label for="slider-autoplayinterval">Auto Play Interval:</label>
                         <span tooltip-placement="top" tooltip-html-unsafe="Set slider auto play interval."><i class="fa fa-info-circle" /></span>
@@ -1114,7 +1122,7 @@
                         </div>
                     </div>
                     <div class="clearfix"></div>
-                </tab>                
+                </tab>
             </tabset>
             </div>
             <div class="modal-footer" ng-class="{hidden: hover}">

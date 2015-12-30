@@ -19,7 +19,8 @@
                         -->
                         <div class="well well-sm">
                             <input type="text" class="form-control input" name="name" ng-model="duplicateCampaign.name" ng-change="checkDuplicateCampaignName(duplicateCampaign.name)" ng-required="currentStep == 1" ng-model-options="{ debounce: 800 }" placeholder="Enter a name for the duplicate campaign..."/>
-                            <span class="form-control-feedback" ng-class="{'glyphicon glyphicon-remove text-danger': campaignDuplicateNameExists && campaignDuplicateNameChecked && !checkingDuplicateCampaignName, 'glyphicon glyphicon-ok text-nephritis': !campaignDuplicateNameExists && campaignDuplicateNameChecked && duplicateCampaign.name, 'fa fa-spinner fa-spin':checkingDuplicateCampaignName}"></span>
+                            <span ng-if="!checkingDuplicateCampaignName"><i class="form-control-feedback" ng-class="{'glyphicon glyphicon-remove text-danger': campaignDuplicateNameExists && campaignDuplicateNameChecked && !checkingDuplicateCampaignName, 'glyphicon glyphicon-ok text-nephritis': !campaignDuplicateNameExists && campaignDuplicateNameChecked && duplicateCampaign.name}"></i></span>
+                            <span ng-if="checkingDuplicateCampaignName"><i class="form-control-feedback" ng-class="{'fa fa-spinner fa-spin':checkingDuplicateCampaignName}"></i></span>
                             <p class="error text-danger margin-top-5 margin-bottom-0" ng-if="campaignDuplicateNameExists && campaignDuplicateNameChecked && !checkingDuplicateCampaignName">Campaign Name Already Used. Please Choose Another</p>
                             <p class="success text-nephritis margin-top-5 margin-bottom-0" ng-if="!campaignDuplicateNameExists && campaignDuplicateNameChecked && !checkingDuplicateCampaignName && duplicateCampaign.name">Great Campaign Name!</p>
                         </div>
@@ -30,7 +31,7 @@
         </tabset>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-info btn-wide btn-o" ng-disabled="!duplicateCampaign.name || (campaignDuplicateNameExists && campaignDuplicateNameChecked && !checkingDuplicateCampaignName)" ng-click="createDuplicateCampaign(duplicateCampaign)">
+        <button type="button" class="btn btn-info btn-wide btn-o" ng-disabled="!duplicateCampaign.name || saveLoadingDuplicate || (campaignDuplicateNameExists && campaignDuplicateNameChecked && !checkingDuplicateCampaignName)" ng-click="createDuplicateCampaign(duplicateCampaign)">
             Create
         </button>
     </div>

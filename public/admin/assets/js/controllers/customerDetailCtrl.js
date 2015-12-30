@@ -106,9 +106,9 @@
       $scope.customer_data.tags = $scope.unsetTags();
       console.log('customer_data:', $scope.customer_data);
       CustomerService.saveCustomer($scope.customer_data, function (customer) {
-        $scope.customer = customer;
-        $scope.originalCustomer = angular.copy($scope.customer);
+        $scope.customer = customer;        
         $scope.setTags();
+        $scope.originalCustomer = angular.copy($scope.customer);
         toaster.pop('success', 'Notes Added.');
       });
     };

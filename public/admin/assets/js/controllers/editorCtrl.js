@@ -2,7 +2,7 @@
 /*global app, moment, angular, window, CKEDITOR*/
 /*jslint unparam:true*/
 (function (angular) {
-  app.controller('EditorCtrl', ["$scope", "$document", "$rootScope", "$interval", "$timeout", "toaster", "$modal", "$filter", "$location", "WebsiteService", "SweetAlert", "hoursConstant", "GeocodeService", "ProductService", "AccountService", "postConstant", "formValidations", function ($scope, $document, $rootScope, $interval, $timeout, toaster, $modal, $filter, $location, WebsiteService, SweetAlert, hoursConstant, GeocodeService, ProductService, AccountService, postConstant, formValidations) {
+  app.controller('EditorCtrl', ["$scope", "$state", "$document", "$rootScope", "$interval", "$timeout", "toaster", "$modal", "$filter", "$location", "WebsiteService", "SweetAlert", "hoursConstant", "GeocodeService", "ProductService", "AccountService", "postConstant", "formValidations", function ($scope, $state, $document, $rootScope, $interval, $timeout, toaster, $modal, $filter, $location, WebsiteService, SweetAlert, hoursConstant, GeocodeService, ProductService, AccountService, postConstant, formValidations) {
 
     /*
      * @circleOptions
@@ -129,6 +129,7 @@
 
     $scope.ckeditorLoaded = false;
     $scope.activeEditor = null;
+    
     $scope.activateCKeditor = function () {
       CKEDITOR.on("instanceReady", function (ev) {
 
@@ -143,7 +144,7 @@
           angular.element('.cke_button__doksoft_button_email').hide();
         }
         ev.editor.on('key', function () {
-          $scope.setDirty(true);
+          $scope.setDirty(true);         
         });
         ev.editor.on('change', function () {
           $scope.setDirty(true);
@@ -1731,7 +1732,7 @@
     var offFn = $rootScope.$on('$locationChangeStart', function (event, newUrl, oldUrl) {
         checkIfPageDirty(newUrl, function (redirectUrl) {  
           var condition = $scope.isDirty.dirty && !$scope.changesConfirmed;
-          if (condition) {
+          if (condition && !$scope.isCampaign) {
             event.preventDefault();
             SweetAlert.swal({
               title: "Are you sure?",
