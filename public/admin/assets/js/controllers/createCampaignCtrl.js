@@ -1453,7 +1453,7 @@
 
         matchedEmail = $scope.emails.filter(emailMatch)[0];
         if (emailId && matchedEmail) {
-          $scope.emailToSend = matchedEmail;
+          $scope.emailToSend = angular.copy(matchedEmail);
           $scope.originalEmailToSend = angular.copy($scope.emailToSend);
         } else {
           console.log('email not found');
