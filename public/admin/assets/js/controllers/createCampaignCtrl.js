@@ -754,7 +754,10 @@
           return matchTag.label === fullTag;
         });
         if (matchingTag) {
-          tags.push(matchingTag.data);
+          tags.push(matchingTag.label);
+        }
+        else{
+          tags.push(fullTag);
         }
       });
       return tags;
@@ -775,13 +778,22 @@
 
       _.each($scope.customers, function (customer) {
         if (customer.tags && customer.tags.length > 0) {
-          var tagExists = _.intersection(customer.tags, tags);
+          var tempTags = [];
+          var tagLabel = "";
+          _.each(customer.tags, function (tag) {
+              tagLabel = _.findWhere(customerTags, { data: tag });
+              if(tagLabel)
+                tempTags.push(tagLabel.label);
+              else
+                tempTags.push(tag);
+          });
+          var tagExists = _.intersection(tempTags, tags);
           if (tagExists.length > 0) {
             if (!$scope.eliminateDuplicate(customer))
               fullContacts.push(customer);
           }
         } else {
-          if (tags.indexOf('nt') > -1) {
+          if (tags.indexOf('No Tag') > -1) {
             if (!$scope.eliminateDuplicate(customer))
               fullContacts.push(customer);
           }
@@ -1539,7 +1551,11 @@
           //customer.fullName = customer.first + " " + customer.last || '';
           if (customer.tags && customer.tags.length > 0) {
             _.each(customer.tags, function (tag) {
-              _tags.push(tag);
+              var tagLabel = _.findWhere(customerTags, { data: tag });
+              if(tagLabel)
+                _tags.push(tagLabel.label);
+              else
+                _tags.push(tag);
             });
           } else {
             _tags.push('nt');
@@ -1555,12 +1571,12 @@
                 numberOfTags: tag.length
             };
             var matchingTagObj = _.find(customerTags, function (matchTag) {
-                return matchTag.data === tag[0];
+                return matchTag.label === tag[0];
             });
             if(matchingTagObj) {
                 returnObj.matchingTag = matchingTagObj.label;
             } else {
-                returnObj.matchingTag = 'No Label';
+                returnObj.matchingTag = 'No Tag';
             }
           return returnObj;
         });
