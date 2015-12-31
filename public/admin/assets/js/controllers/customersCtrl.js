@@ -46,6 +46,17 @@
           customer.hasTwitterId = $scope.checkTwitterId(customer);
           customer.hasLinkedInId = $scope.checkLinkedInId(customer);
           customer.hasGoogleId = $scope.checkGoogleId(customer);
+          var tempTags = [];
+          var tagLabel = "";
+          _.each(customer.tags, function (tag) {
+             tagLabel = _.findWhere($scope.customerTags, { data: tag });
+              if(tagLabel)
+                tempTags.push(tagLabel.label);
+              else
+                tempTags.push(tag);
+          });
+          if(tempTags)
+            customer.tempTags = _.uniq(tempTags); 
         });
         $scope.customers = customers;
         // In case customer is created from simple form component.
@@ -314,7 +325,7 @@
         tempTags.push(tag.data);
       });
       if(tempTags)
-        tempTags = _.uniq(tempTags, function(w) { return w.data; })       
+        tempTags = _.uniq(tempTags);    
       var matchingCustomer = _.findWhere($scope.customers, {
         bestEmail: $scope.customer.email
       });

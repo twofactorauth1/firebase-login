@@ -971,7 +971,7 @@
           tempTags.push(tag.data);
         });
         if (tempTags) {
-          $scope.customer_data.tags = _.uniq(tempTags, function(w) { return w.data; });
+          $scope.customer_data.tags = _.uniq(tempTags);
         }
     };
 
