@@ -152,7 +152,7 @@
                                             <small ng-bind-html="$select.selected.label"></small>
                                             <span class="fa fa-times text-danger" ng-click="clearFilter($event, '#searchType', 'type')"></span>
                                         </ui-select-match>
-                                        <ui-select-choices repeat="tag in customerTags">
+                                        <ui-select-choices repeat="tag in customerTags |  orderBy:'label'">
                                             <small ng-bind-html="tag.label | highlight: $select.search"></small>
                                         </ui-select-choices>
                                     </ui-select>
