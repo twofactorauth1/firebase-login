@@ -1592,6 +1592,10 @@
      */
     $scope.loadSavedTags = function() {
       _.each($scope.newCampaignObj.contactTags, function(tag) {
+        var tagLabel = _.findWhere(customerTags, { data: tag });
+        if(tagLabel){
+          tag = tagLabel.label
+        }
         var tag = _.findWhere($scope.customerCounts, { uniqueTag: tag });
         if(tag)
           $scope.toggleSelection(tag.matchingTag);
