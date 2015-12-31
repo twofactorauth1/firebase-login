@@ -313,6 +313,8 @@
       _.each($scope.customer.tags, function (tag) {
         tempTags.push(tag.data);
       });
+      if(tempTags)
+        tempTags = _.uniq(tempTags, function(w) { return w.data; })       
       var matchingCustomer = _.findWhere($scope.customers, {
         bestEmail: $scope.customer.email
       });

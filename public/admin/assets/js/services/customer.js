@@ -180,7 +180,7 @@
     };
 
     this.checkBestEmail = function (contact) {
-      if (contact.details && contact.details.length > 0) {
+      if (contact && contact.details && contact.details.length > 0) {
         //see if we have a google contact, that's the best source of email
         var details = _.findWhere(contact.details, {
           type: userConstant.social_types.GOOGLE
@@ -199,7 +199,7 @@
     };
 
     this.checkCustomerBestEmail = function (contact) {
-      if (contact.details && contact.details.length > 0) {
+      if (contact && contact.details && contact.details.length > 0) {
         //see if we have a google contact, that's the best source of email
         var details = _.findWhere(contact.details, {
           type: userConstant.social_types.GOOGLE
@@ -218,7 +218,7 @@
     };
 
     this.checkFacebookId = function (contact) {
-      if (contact.details && contact.details.length > 0) {
+      if (contact && contact.details && contact.details.length > 0) {
         var details = _.findWhere(contact.details, {
           type: userConstant.social_types.FACEBOOK
         });
@@ -231,7 +231,7 @@
     };
 
     this.checkTwitterId = function (contact) {
-      if (contact.details && contact.details.length > 0) {
+      if (contact && contact.details && contact.details.length > 0) {
         var details = _.findWhere(contact.details, {
           type: userConstant.social_types.TWITTER
         });
@@ -244,7 +244,7 @@
     };
 
     this.checkLinkedInId = function (contact) {
-      if (contact.details && contact.details.length > 0) {
+      if (contact && contact.details && contact.details.length > 0) {
         var details = _.findWhere(contact.details, {
           type: userConstant.social_types.LINKEDIN
         });
@@ -290,7 +290,7 @@
 
     this.checkAddress = function (contact) {
       var _address = null;
-      if (contact.details && contact.details.length > 0) {
+      if (contact && contact.details && contact.details.length > 0) {
         if (contact.details && contact.details[0].addresses && contact.details[0].addresses.length > 0) {
           _address = contact.details[0].addresses[0];
           var address_str = "";

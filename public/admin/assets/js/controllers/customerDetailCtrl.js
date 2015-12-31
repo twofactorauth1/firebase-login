@@ -443,37 +443,36 @@
 
           $scope.errorMapData = false;
           CustomerService.checkDuplicateEmail($scope.customer_data.details[0].emails[0].email, !hideToaster, function (data) {
-            if(data && data.length && (data.length > 1 || data[0]._id != $scope.customer_data._id))
+            if(!angular.equals($scope.customer_data.details[0].emails[0].email, $scope.originalCustomer.details[0].emails[0].email) && data && data.length && (data.length > 1 || data[0]._id != $scope.customer_data._id))
             {
               console.log("duplicate email");
               if(!hideToaster)
               {
-                $scope.saveLoading = false;
-                toaster.pop('warning', 'Email already exists.');
+                  SweetAlert.swal({
+                  title: "Duplicate Email",
+                  text: "Email Already exists, Do you want to continue with changes?",
+                  type: "warning",
+                  showCancelButton: true,
+                  confirmButtonColor: "#DD6B55",
+                  confirmButtonText: "Yes, save the changes!",
+                  cancelButtonText: "No, do not save the changes!",
+                  closeOnConfirm: true,
+                  closeOnCancel: true
+                }, function (isConfirm) {
+                  if (isConfirm) {
+                    $scope.saveCustomerChanges(hideToaster, showAlert, newUrl)
+                  }
+                  else{
+                    $scope.saveLoading = false;
+                  }
+                });
                 if(showAlert)                    
                     SweetAlert.swal("Warning", "Your edits were NOT saved.", "error");
               }
             }
             else
             {
-              CustomerService.saveCustomer($scope.customer_data, function (customer) {
-              $scope.customer = customer;
-              $scope.setDefaults();
-              $scope.setTags();
-              $scope.saveLoading = false;
-              $scope.originalCustomer = angular.copy($scope.customer);
-              if (!hideToaster) {
-                if ($scope.currentState === 'customerAdd') {
-                  toaster.pop('success', 'Contact Created.');
-                } else {
-                  toaster.pop('success', 'Contact Saved.');
-                }
-              }
-              if(showAlert){
-                SweetAlert.swal("Saved!", "Your edits were saved to the page.", "success");                
-                window.location = newUrl;
-              }
-            });
+              $scope.saveCustomerChanges(hideToaster, showAlert, newUrl)
             }
           })
         });
@@ -487,6 +486,29 @@
       }
 
     };
+
+    // Save customer
+
+    $scope.saveCustomerChanges =function(hideToaster, showAlert, newUrl){
+        CustomerService.saveCustomer($scope.customer_data, function (customer) {
+          $scope.customer = customer;
+          $scope.setDefaults();
+          $scope.setTags();
+          $scope.saveLoading = false;
+          $scope.originalCustomer = angular.copy($scope.customer);
+          if (!hideToaster) {
+            if ($scope.currentState === 'customerAdd') {
+              toaster.pop('success', 'Contact Created.');
+            } else {
+              toaster.pop('success', 'Contact Saved.');
+            }
+          }
+          if(showAlert){
+            SweetAlert.swal("Saved!", "Your edits were saved to the page.", "success");                
+            window.location = newUrl;
+          }
+        });
+    }
 
     /*
      * @checkContactValidity
@@ -949,7 +971,7 @@
           tempTags.push(tag.data);
         });
         if (tempTags) {
-          $scope.customer_data.tags = tempTags;
+          $scope.customer_data.tags = _.uniq(tempTags, function(w) { return w.data; });
         }
     };
 
