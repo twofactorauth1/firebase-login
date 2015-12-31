@@ -222,16 +222,7 @@ uis.directive('uiSelectChoices',
         scope.$watch('$select.search', function(newValue) {
           if(newValue && !$select.open && $select.multiple) $select.activate(false, true);
           $select.activeIndex = $select.tagging.isActivated ? -1 : 0;
-          $select.refresh(attrs.refresh);         
-          if($select.taggingMatchToKey.isActivated){
-          $timeout(function() {
-            var items = $select.parserResult.source(scope);
-            if(items.length){           
-              $select.refreshItems(items);
-              $select.ngModel.$modelValue = null;
-            }
-          }, 300)
-          } 
+          $select.refresh(attrs.refresh); 
         }, true);
 
         attrs.$observe('refreshDelay', function() {
@@ -404,7 +395,7 @@ uis.controller('uiSelectCtrl',
 
     // See https://github.com/angular/angular.js/blob/v1.2.15/src/ng/directive/ngRepeat.js#L259
     $scope.$watchCollection(ctrl.parserResult.source, function(items) {
-      if (items === undefined || items === null && !ctrl.taggingMatchToKey.isActivated) {
+      if (items === undefined || items === null) {
         // If the user specifies undefined or null => reset the collection
         // Special case: items can be undefined if the user did not initialized the collection on the scope
         // i.e $scope.addresses = [] is missing
