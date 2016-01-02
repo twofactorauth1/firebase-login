@@ -455,7 +455,7 @@
                                         <p><span class="text-bold">Subtotal:</span> <span class="pull-right">{{order.subtotal | currency}}</span></p>
                                         <p><span class="text-bold">Discount ({{calculatedDiscountPercent}}%):</span> <span class="pull-right">{{order.total_discount| currency}}</span></p>
                                         <p ng-if="order.total_shipping"><span class="text-bold">Shipping:</span> <span class="pull-right">{{order.total_shipping}}</span></p>
-                                        <p ng-if="order.total_tax"><span class="text-bold">Tax ({{order.tax_rate * 100| number :1}}%):</span> <span class="pull-right">{{order.total_tax | currency}}</span></p>
+                                        <p ng-if="order.total_tax"><span class="text-bold">Tax ({{order.tax_rate * 100| number :2}}%):</span> <span class="pull-right">{{order.total_tax | currency}}</span></p>
                                         <p><span class="text-bold">Total:</span> <span class="pull-right">{{order.total | currency}}</span></p>
                                         <p class="text-danger" ng-if="order.status == 'refunded'">
                                             <span class="text-bold">Refunded:</span>
