@@ -159,9 +159,9 @@
     };
 
     $scope.checkIfDirty = function(){
-      var isDirty = false;  
+      var isDirty = false;
       if($scope.newNote)
-        isDirty = true;    
+        isDirty = true;
       if($scope.originalOrder && !angular.equals($scope.originalOrder, $scope.order))
         isDirty = true;
       return isDirty;
@@ -215,8 +215,8 @@
     };
 
      var checkBeforeRedirect = function(cust)
-    {   
-        
+    {
+
           	SweetAlert.swal({
             	title: "Are you sure?",
             	text: "You have unsaved data that will be lost",
@@ -228,7 +228,7 @@
             	closeOnConfirm: true,
             	closeOnCancel: true
           	}, function (isConfirm) {
-            	if (isConfirm) {            
+            	if (isConfirm) {
               	$scope.saveOrder(1, cust);
             	} else {
               		 SweetAlert.swal("Cancelled", "Your edits were NOT saved.", "error");
@@ -251,7 +251,7 @@
     	{
     		checkBeforeRedirect(cust);
     	}
-      
+
     };
 
 
@@ -320,7 +320,7 @@
      */
 
     $scope.addNote = function () {
-      
+
       if (!$scope.order.notes) {
         $scope.order.notes = [];
       }
@@ -661,10 +661,10 @@
           });
         }
         else
-        { 
+        {
           toaster.pop('success', toasterMsg + '"Completed"');
         }
-       
+
       }
 
       if (newStatus === 'cancelled') {
@@ -734,7 +734,7 @@
      * @print
      * print a variety of things
      */
-     
+
     $scope.print = function (type) {
       console.log('printing type: ', type);
       // if (type === 'invoice') {}
@@ -747,7 +747,7 @@
      */
 
     $scope.saveOrder = function (flag, cust) {
-      
+
       $scope.saveLoading = true;
       // Set order customer Id
       if ($scope.selectedCustomer) {
@@ -768,7 +768,7 @@
         $scope.order.created.date = new Date().toISOString();
       }
 
-      if (!$scope.order.customer_id) { 	
+      if (!$scope.order.customer_id) {
         toaster.pop('error', 'Orders must contain a customer.');
         $scope.saveLoading = false;
         return;
@@ -778,7 +778,7 @@
         toaster.pop('error', 'Products cannot be blank');
         $scope.saveLoading = false;
         return;
-      } 
+      }
       if ($stateParams.orderId) {
         OrderService.updateOrder($scope.order, function (updatedOrder) {
           $scope.saveLoading = false;
@@ -786,7 +786,7 @@
           console.log('updatedOrder ', updatedOrder);
           toaster.pop('success', 'Order updated successfully.');
         });
-      }      
+      }
       else {
         OrderService.createOrder($scope.order, function (updatedOrder) {
           toaster.pop('success', 'Order created successfully.');
