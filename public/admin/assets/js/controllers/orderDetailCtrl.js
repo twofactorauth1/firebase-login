@@ -274,23 +274,36 @@
     };
 
     /*
-     * @matchUsers
-     * match users to the order notes
-     */
-
+    * @matchUsers
+    * match users to the order notes
+    */
     $scope.matchUsers = function (order) {
-      var notes = order.notes;
-      if (notes && notes.length > 0 && $scope.users) {
-        _.each(notes, function (_note) {
-          var matchingUser = _.find($scope.users, function (_user) {
-            return _user._id === _note.user_id;
-          });
-          if (matchingUser) {
-            _note.user = matchingUser;
-          }
-        });
-      }
-      return notes;
+
+        var notes = order.notes;
+
+        if (notes && notes.length > 0 && $scope.users) {
+
+            _.each(notes, function (_note) {
+
+                var matchingUser = _.find($scope.users, function (_user) {
+                    return _user._id === _note.user_id;
+                });
+
+                if (matchingUser) {
+
+                    _note.user = {
+                        _id: matchingUser._id,
+                        first: matchingUser.first,
+                        last: matchingUser.last,
+                        email: matchingUser.email
+                    };
+
+                }
+
+            });
+        }
+
+        return notes;
     };
 
 
