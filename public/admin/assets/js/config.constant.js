@@ -750,7 +750,7 @@ app.constant('JS_REQUIRES', {
     files: ['../js/libs/angular-smart-table/dist/smart-table.min.js']
   }, {
     name: 'ui.select',
-    files: ['../js/libs_misc/angular-ui-select/dist/select.min.js', '../js/libs_misc/angular-ui-select/dist/select.min.css', '../js/libs/select2/select2.css', '../js/libs/select2-bootstrap-css/select2-bootstrap.min.css', '../js/libs/selectize/dist/css/selectize.bootstrap3.css']
+    files: ['../js/libs_misc/angular-ui-select/dist/select.js', '../js/libs_misc/angular-ui-select/dist/select.min.css', '../js/libs/select2/select2.css', '../js/libs/select2-bootstrap-css/select2-bootstrap.min.css', '../js/libs/selectize/dist/css/selectize.bootstrap3.css']
   }, {
     name: 'ui.mask',
     files: ['../js/libs/angular-ui-utils/mask.min.js']

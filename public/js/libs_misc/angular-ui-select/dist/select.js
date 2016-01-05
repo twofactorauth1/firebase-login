@@ -381,7 +381,7 @@ uis.controller('uiSelectCtrl',
 
     ctrl.refreshItems = function (data){
       data = data || ctrl.parserResult.source($scope);
-      var selectedItems = ctrl.selected;
+      var selectedItems = ctrl.selected;     
       //TODO should implement for single mode removeSelected
       if ((angular.isArray(selectedItems) && !selectedItems.length) || !ctrl.removeSelected) {
         ctrl.setItemsFn(data);
@@ -1463,6 +1463,13 @@ uis.directive('uiSelectMultiple', ['uiSelectMinErr','$timeout', function(uiSelec
           } else{
             items = [];
             //push only if the item is not null
+            if ($select.taggingMatchToKey.isActivated) {
+              var dup = _.find($select.items, function(ctrlItem){
+                  return ctrlItem[$select.taggingMatchToKey.fct].toLowerCase() === newItem[$select.taggingMatchToKey.fct].toLowerCase(); 
+              });
+            if(dup)
+              newItem = null;
+            }
             if(newItem){
               items.push(newItem);  
             }
