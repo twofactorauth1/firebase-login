@@ -1,6 +1,7 @@
 'use strict';
 /*global mainApp*/
 mainApp.factory('pagesService', ['$http', '$location', '$cacheFactory', function ($http, $location, $cacheFactory) {
+    var apiURL = '/api/2.0/cms/website/'
     var pages = {};
     var pagecache = $cacheFactory('pages');
     return function (websiteId, callback) {
@@ -45,17 +46,17 @@ mainApp.factory('pagesService', ['$http', '$location', '$cacheFactory', function
             }
         }
 
-        $http.get('/api/1.0/cms/website/' + websiteId + '/page/' + path, {
+        $http.get(apiURL + websiteId + '/page/' + path, {
             cache: true
         }).success(function (page) {
             if (page !== null && page.accountId) {
-                $http.get('/api/1.0/cms/website/' + websiteId + '/pages')
+                $http.get(apiURL + websiteId + '/pages')
                     .success(function (pages) {
                         pagecache.put('pages', pages);
                     })
                 callback(null, page);
             } else if (page !== null && path === 'index') {
-                $http.get('/api/1.0/cms/website/' + websiteId + '/page/coming-soon', {
+                $http.get(apiURL + websiteId + '/page/coming-soon', {
                     cache: true
                 }).success(function (page) {
                     if (page !== null) {
@@ -74,7 +75,7 @@ mainApp.factory('pagesService', ['$http', '$location', '$cacheFactory', function
         }).error(function (err) {
             if(path === 'index') {
                 //we have no index page... look for a coming-soon page.
-                $http.get('/api/1.0/cms/website/' + websiteId + '/page/coming-soon', {
+                $http.get(apiURL + websiteId + '/page/coming-soon', {
                     cache: true
                 }).success(function (page) {
                     if (page !== null) {

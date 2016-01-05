@@ -307,10 +307,30 @@ module.exports = {
         self.log.debug('>> getPage');
 
         pageDao.getPageById(accountId, pageId, function(err, page){
-            if(err) {
+            if(err || !page) {
                 self.log.error('Error getting page:', err);
                 return fn(err, null);
             } else {
+                var sections = page.get('sections') || [];
+                sectionDao.dereferenceSections(sections, function(err, sectionAry){
+                    page.set('sections', sectionAry);
+                    self.log.debug('<< getPage');
+                    return fn(null, page);
+                });
+
+            }
+        });
+    },
+
+    getPageByHandle: function(accountId, handle, websiteId, fn) {
+        var self = this;
+        self.log.debug('>> getPageByHandle (' + accountId + ',' + handle + ',' + websiteId + ')');
+        pageDao.getLatestPageForWebsite(websiteId, handle, accountId, function(err, page){
+            if(err || !page) {
+                self.log.error('Error getting page:', err);
+                return fn(err, null);
+            } else {
+                var sections = page.get('sections') || [];
                 sectionDao.dereferenceSections(page.get('sections'), function(err, sectionAry){
                     page.set('sections', sectionAry);
                     self.log.debug('<< getPage');

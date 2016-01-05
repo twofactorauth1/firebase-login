@@ -77,6 +77,10 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('sections/platform'), this.isAuthAndSubscribedApi.bind(this), this.listPlatformSections.bind(this));
         app.get(this.url('sections/user'), this.isAuthAndSubscribedApi.bind(this), this.listAccountSections.bind(this));
         app.get(this.url('sections/:id'), this.isAuthAndSubscribedApi.bind(this), this.getSection.bind(this));
+
+
+        //LEGACY SUPPORT
+        app.get(this.url('website/:id/page/:handle'), this.setup.bind(this), this.getPageByHandle.bind(this));
     },
 
     noop: function(req, resp) {
@@ -380,6 +384,24 @@ _.extend(api.prototype, baseApi.prototype, {
                 });
             }
         });
+    },
+
+    getPageByHandle: function(req, resp) {
+        var self = this;
+        self.log.debug('>> getPageByHandle');
+        var websiteId = req.params.id;
+        var pageHandle = req.params.handle;
+        var accountId = parseInt(self.currentAccountId(req));
+
+        ssbManager.getPageByHandle(accountId, pageHandle, websiteId, function(err, value){
+            if (!value) {
+                err = $$.u.errors._404_PAGE_NOT_FOUND;
+            }
+            self.log.debug('<< getPageByHandle');
+            self.sendResultOrError(resp, err, value, "Error Retrieving Page for Website", err);
+            self = null;
+        });
+
     }
 
 
