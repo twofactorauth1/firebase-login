@@ -241,7 +241,7 @@
       var _firstAddress;
 
       if ($scope.customer.details[0].addresses.length > -1) {
-        _firstAddress = $scope.customer.details[0].addresses[0];
+        _firstAddress = angular.copy($scope.customer.details[0].addresses[0]);
       }
 
       //customer has no address

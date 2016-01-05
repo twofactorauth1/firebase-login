@@ -46,6 +46,8 @@
           customer.hasTwitterId = $scope.checkTwitterId(customer);
           customer.hasLinkedInId = $scope.checkLinkedInId(customer);
           customer.hasGoogleId = $scope.checkGoogleId(customer);
+
+          customer.bestAddress = $scope.displayAddressFormat(customer);
           var tempTags = [];
           var tagLabel = "";
           _.each(customer.tags, function (tag) {
@@ -105,12 +107,7 @@
         return "";
       },
       address: function (value) {
-        if (value.details[0] && value.details[0].addresses && value.details[0].addresses[0] && value.details[0].addresses[0].city && value.details[0].addresses[0].state) {
-          return [value.details[0].addresses[0].city, value.details[0].addresses[0].state].join(' ').trim();
-        }
-        if (value.details[0] && value.details[0].addresses && value.details[0].addresses[0] && value.details[0].addresses[0].address && !value.details[0].addresses[0].city) {
-          return value.details[0].addresses[0].address;
-        }
+        return value.bestAddress
       },
       social: function (value) {
         if (value.hasLinkedInId) {
@@ -264,6 +261,32 @@
       return returnVal;
     };
 
+    $scope.displayAddressFormat = function (customer) {
+      if (customer.details.length !== 0 && customer.details[0].addresses && customer.details[0].addresses.length !== 0) {
+        var address = customer.details[0].addresses[0];
+        if (address && (address.address || address.address2 || address.city || address.state || address.zip)) {
+          //var address = scope.htmlToPlaintext(address);
+          var separator = ' ';
+          var _topline = '';
+          if(address.address || address.address2)
+            _topline = _.filter([address.address, address.address2], function (str) {
+              return str !== "";
+            }).join(", ");
+          var _bottomline = '';
+          if(address.city || address.state || address.zip)
+           _bottomline = _.filter([address.city, address.state, address.zip], function (str) {
+            return str !== "";
+          }).join(", ");
+          if(_bottomline && _topline){
+            separator = ", "
+          }
+          if (_topline) {            
+            return _topline + separator + _bottomline;
+          }
+          return _bottomline;
+        }
+    }
+    };
     $scope.viewSingle = function (customer) {
       var tableState = $scope.getSortOrder();
       $state.current.sort = tableState.sort;
