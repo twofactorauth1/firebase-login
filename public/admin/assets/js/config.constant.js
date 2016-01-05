@@ -20,7 +20,8 @@ app.constant('formValidations', {
    'email': /^[-a-z0-9~!$%^&*_=+}{\'?]+(\.[-a-z0-9~!$%^&*_=+}{\'?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+)*\.(aero|arpa|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|mobi|[a-z][a-z])|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$/i,
    'phone': /^\(?(\d{3})\)?[ .-]?(\d{3})[ .-]?(\d{4})$/,
    'zip': /(^\d{5}$)|(^\d{5}-\d{4}$)/,
-   'extension': /^[0-9]*$/
+   'extension': /^[0-9]*$/,
+   'customerTags': /^[a-z\d\-_\s]+$/i
   });
 
 /*
@@ -749,7 +750,7 @@ app.constant('JS_REQUIRES', {
     files: ['../js/libs/angular-smart-table/dist/smart-table.min.js']
   }, {
     name: 'ui.select',
-    files: ['../js/libs/angular-ui-select/dist/select.min.js', '../js/libs/angular-ui-select/dist/select.min.css', '../js/libs/select2/select2.css', '../js/libs/select2-bootstrap-css/select2-bootstrap.min.css', '../js/libs/selectize/dist/css/selectize.bootstrap3.css']
+    files: ['../js/libs_misc/angular-ui-select/dist/select.js', '../js/libs_misc/angular-ui-select/dist/select.min.css', '../js/libs/select2/select2.css', '../js/libs/select2-bootstrap-css/select2-bootstrap.min.css', '../js/libs/selectize/dist/css/selectize.bootstrap3.css']
   }, {
     name: 'ui.mask',
     files: ['../js/libs/angular-ui-utils/mask.min.js']

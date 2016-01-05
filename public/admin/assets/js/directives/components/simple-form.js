@@ -11,6 +11,11 @@ app.directive('simpleFormComponent',["formValidations", function (formValidation
     link: function (scope, element, attrs) {
       scope.isEditing = true;
       scope.formValidations = formValidations;
+      if(!angular.isDefined(scope.component.tags)){
+        scope.component.tags = [];
+        if(scope.component.contact_type)
+          scope.component.tags.push(scope.component.contact_type);
+      }
       var nameExists = _.find(scope.component.fields, function (_field) {
         return _field.name === 'extension';
       });

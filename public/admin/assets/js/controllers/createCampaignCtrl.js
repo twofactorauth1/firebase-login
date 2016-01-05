@@ -652,7 +652,7 @@
         if($scope.newCampaignObj.steps && $scope.newCampaignObj.steps[0] && $scope.newCampaignObj.steps[0].settings && !$scope.newCampaignObj.steps[0].settings.emailId && $scope.emailToSendPrevious)
           $scope.newCampaignObj.steps[0].settings.emailId = $scope.emailToSendPrevious._id
 
-        $scope.confirmOverrideExistingEmails();
+        $scope.actualEmailToSend = angular.copy($scope.emailToSend);
 
       }
     }
@@ -754,7 +754,10 @@
           return matchTag.label === fullTag;
         });
         if (matchingTag) {
-          tags.push(matchingTag.data);
+          tags.push(matchingTag.label);
+        }
+        else{
+          tags.push(fullTag);
         }
       });
       return tags;
@@ -775,13 +778,22 @@
 
       _.each($scope.customers, function (customer) {
         if (customer.tags && customer.tags.length > 0) {
-          var tagExists = _.intersection(customer.tags, tags);
+          var tempTags = [];
+          var tagLabel = "";
+          _.each(customer.tags, function (tag) {
+              tagLabel = _.findWhere(customerTags, { data: tag });
+              if(tagLabel)
+                tempTags.push(tagLabel.label);
+              else
+                tempTags.push(tag);
+          });
+          var tagExists = _.intersection(tempTags, tags);
           if (tagExists.length > 0) {
             if (!$scope.eliminateDuplicate(customer))
               fullContacts.push(customer);
           }
         } else {
-          if (tags.indexOf('nt') > -1) {
+          if (tags.indexOf('No Tag') > -1) {
             if (!$scope.eliminateDuplicate(customer))
               fullContacts.push(customer);
           }
@@ -899,6 +911,13 @@
       }
     };
 
+
+    $scope.$watchGroup(['emailToSend.fromName', 'emailToSend.fromEmail', 'emailToSend.replyTo', 'emailToSend.bcc', 'emailToSend.subject'], function(newValue, oldValue){
+       if(newValue && $scope.actualEmailToSend && !angular.equals($scope.actualEmailToSend, $scope.emailToSend) && !$scope.existingEmail.replace && $scope.selectedEmail.type != 'new'){
+          $scope.confirmOverrideExistingEmails();
+       }
+    });
+
     /*
      * @saveOrUpdateCampaign
      * - save or update campaign based on new campaign or existing
@@ -909,8 +928,7 @@
       $scope.changesConfirmed = true;
       var actionFn = update ? 'updateCampaign' : 'createCampaign';
       var stepSettings = $scope.newCampaignObj.steps[0].settings;
-
-      //add contacts if new
+      
       $scope.checkAndCreateCustomer(function (createdContactsArr) {
         $scope.addContacts(createdContactsArr);
         if (!stepSettings.emailId || (angular.isDefined($scope.existingEmail.replace) && !$scope.existingEmail.replace)) {
@@ -1441,7 +1459,7 @@
 
         matchedEmail = $scope.emails.filter(emailMatch)[0];
         if (emailId && matchedEmail) {
-          $scope.emailToSend = angular.copy(matchedEmail);
+          $scope.emailToSend = matchedEmail;
           $scope.originalEmailToSend = angular.copy($scope.emailToSend);
         } else {
           console.log('email not found');
@@ -1531,12 +1549,19 @@
         });
         customers = _.difference(customers, customerWithoutEmails);
         $scope.customers = customers;
+        CustomerService.getAllCustomerTags(customers, function(tags){
+          customerTags = tags;
+        })
         var _tags = [];
         _.each(customers, function (customer) {
           //customer.fullName = customer.first + " " + customer.last || '';
           if (customer.tags && customer.tags.length > 0) {
             _.each(customer.tags, function (tag) {
-              _tags.push(tag);
+              var tagLabel = _.findWhere(customerTags, { data: tag });
+              if(tagLabel)
+                _tags.push(tagLabel.label);
+              else
+                _tags.push(tag);
             });
           } else {
             _tags.push('nt');
@@ -1552,12 +1577,12 @@
                 numberOfTags: tag.length
             };
             var matchingTagObj = _.find(customerTags, function (matchTag) {
-                return matchTag.data === tag[0];
+                return matchTag.label === tag[0];
             });
             if(matchingTagObj) {
                 returnObj.matchingTag = matchingTagObj.label;
             } else {
-                returnObj.matchingTag = 'No Label';
+                returnObj.matchingTag = 'No Tag';
             }
           return returnObj;
         });
@@ -1573,6 +1598,10 @@
      */
     $scope.loadSavedTags = function() {
       _.each($scope.newCampaignObj.contactTags, function(tag) {
+        var tagLabel = _.findWhere(customerTags, { data: tag });
+        if(tagLabel){
+          tag = tagLabel.label
+        }
         var tag = _.findWhere($scope.customerCounts, { uniqueTag: tag });
         if(tag)
           $scope.toggleSelection(tag.matchingTag);

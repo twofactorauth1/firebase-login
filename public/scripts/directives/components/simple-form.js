@@ -8,7 +8,11 @@ app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userSe
     templateUrl: '/components/component-wrap.html',
     link: function (scope) {
       console.log('scope.component ', scope.component);
-
+      if(!angular.isDefined(scope.component.tags)){
+        scope.component.tags = [];
+        if(scope.component.contact_type)
+          scope.component.tags.push(scope.component.contact_type);
+      }
       scope.fieldsLength = function () {
         return _.filter(scope.component.fields, function (_field) {
           return _field.value === true;
@@ -67,7 +71,7 @@ app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userSe
           skipWelcomeEmail: skipWelcomeEmail,
           fromEmail: scope.component.fromEmail,
           fromName: scope.component.fromName,
-          contact_type: scope.component.contact_type,
+          contact_type: scope.component.tags,
           uniqueEmail: scope.component.uniqueEmail || false,
           activity: {
             activityType: 'CONTACT_FORM',

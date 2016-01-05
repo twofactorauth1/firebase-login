@@ -96,10 +96,42 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
     });
     $scope.availableProductTagsString = $scope.availableProductTags.join(",");
   });
-
   CustomerService.getCustomerTags(function(tags){
     $scope.customerTags = tags;
   });
+  CustomerService.getCustomers(function(customers){
+    CustomerService.getAllCustomerTags(customers,function(tags){
+      $scope.customerTags = tags;
+    });
+  })
+
+    var setTags = function () {
+      console.log('setTags >>>');
+      var tempTags = [];
+      _.each($scope.componentEditing.tags, function (tag , index) {
+        var matchingTag = _.findWhere($scope.customerTags, {
+          data: tag
+        });
+        if(matchingTag)
+        {          
+          tempTags.push(matchingTag);
+        }  
+      });
+      $scope.componentEditing.tags = tempTags;
+      console.log('$scope.componentEditing.tags >>>', $scope.componentEditing.tags);
+    };
+
+    var unsetTags = function() {
+      var tempTags = [];
+        var _tags = angular.copy($scope.componentEditing.tags);
+        _.each(_tags, function (tag) {
+          tempTags.push(tag.data);
+        });
+        if (tempTags) {
+          $scope.componentEditing.tags = tempTags;
+        }
+    };
+  
 
   $scope.testOptions = {
     min: 5,
@@ -439,6 +471,10 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
             angular.element('.modal-backdrop').remove();
           });
         } else {
+          if($scope.componentEditing.type === "simple-form")
+            {
+              unsetTags();
+            }
           $modalInstance.close();
           angular.element('.modal-backdrop').remove();
         }
@@ -917,6 +953,11 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
       }
 
       setDefualts();
+
+      if($scope.componentEditing.type === "simple-form")
+      {
+        setTags();
+      }
 
       if ($scope.componentEditing.type === 'navigation') {
         componentType = _.findWhere($scope.componentTypes, {

@@ -699,7 +699,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
               "company": "",
               "postcode": customer.details[0].addresses[0].zip,
               "email": customer.details[0].emails[0].email,
-              "address_2": customer.details[0].addresses[0].address_2,
+              "address_2": customer.details[0].addresses[0].address2,
               "state": customer.details[0].addresses[0].state
             },
             "billing_address": {
@@ -712,7 +712,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
               "company": "",
               "postcode": customer.details[0].addresses[0].zip,
               "email": customer.details[0].emails[0].email,
-              "address_2": customer.details[0].addresses[0].address_2,
+              "address_2": customer.details[0].addresses[0].address2,
               "state": customer.details[0].addresses[0].state
             },
             "notes": []

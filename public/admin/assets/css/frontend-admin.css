@@ -790,6 +790,7 @@
   right: 0;
   opacity: .8;
   color: #ffffff;
+  z-index: 999;
 }
 #componentloader .editing .features-wrap .feature:hover .delete-feature:hover {
   opacity: 1;
@@ -1324,6 +1325,9 @@
 #componentloader .navigation1 {
   position: relative;
   z-index: 5;
+}
+#componentloader .editing .top-menu-link {
+  top: 2px;
 }
 #componentloader .navigation-v3 .nav {
   margin-top: 0px!important;

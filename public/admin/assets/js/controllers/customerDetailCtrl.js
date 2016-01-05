@@ -209,7 +209,7 @@
         $scope.loadingMap = false;
       }
       var validMapData = false;
-      if ($scope.ip_geo_address) {
+      if ($scope.ip_geo_address && !angular.equals($scope.originalCustomer.details[0].addresses[0], $scope.customer.details[0].addresses[0])) {
         CustomerService.getGeoSearchAddress($scope.ip_geo_address, function (data) {
           if (data.error === undefined) {
             $scope.location.lat = parseFloat(data.lat);
@@ -241,7 +241,7 @@
       var _firstAddress;
 
       if ($scope.customer.details[0].addresses.length > -1) {
-        _firstAddress = $scope.customer.details[0].addresses[0];
+        _firstAddress = angular.copy($scope.customer.details[0].addresses[0]);
       }
 
       //customer has no address
@@ -443,37 +443,36 @@
 
           $scope.errorMapData = false;
           CustomerService.checkDuplicateEmail($scope.customer_data.details[0].emails[0].email, !hideToaster, function (data) {
-            if(data && data.length && (data.length > 1 || data[0]._id != $scope.customer_data._id))
+            if(!angular.equals($scope.customer_data.details[0].emails[0].email, $scope.originalCustomer.details[0].emails[0].email) && data && data.length && (data.length > 1 || data[0]._id != $scope.customer_data._id))
             {
               console.log("duplicate email");
               if(!hideToaster)
               {
-                $scope.saveLoading = false;
-                toaster.pop('warning', 'Email already exists.');
+                  SweetAlert.swal({
+                  title: "Duplicate Email",
+                  text: "Email Already exists, Do you want to continue with changes?",
+                  type: "warning",
+                  showCancelButton: true,
+                  confirmButtonColor: "#DD6B55",
+                  confirmButtonText: "Yes, save the changes!",
+                  cancelButtonText: "No, do not save the changes!",
+                  closeOnConfirm: true,
+                  closeOnCancel: true
+                }, function (isConfirm) {
+                  if (isConfirm) {
+                    $scope.saveCustomerChanges(hideToaster, showAlert, newUrl)
+                  }
+                  else{
+                    $scope.saveLoading = false;
+                  }
+                });
                 if(showAlert)                    
                     SweetAlert.swal("Warning", "Your edits were NOT saved.", "error");
               }
             }
             else
             {
-              CustomerService.saveCustomer($scope.customer_data, function (customer) {
-              $scope.customer = customer;
-              $scope.setDefaults();
-              $scope.setTags();
-              $scope.saveLoading = false;
-              $scope.originalCustomer = angular.copy($scope.customer);
-              if (!hideToaster) {
-                if ($scope.currentState === 'customerAdd') {
-                  toaster.pop('success', 'Contact Created.');
-                } else {
-                  toaster.pop('success', 'Contact Saved.');
-                }
-              }
-              if(showAlert){
-                SweetAlert.swal("Saved!", "Your edits were saved to the page.", "success");                
-                window.location = newUrl;
-              }
-            });
+              $scope.saveCustomerChanges(hideToaster, showAlert, newUrl)
             }
           })
         });
@@ -487,6 +486,29 @@
       }
 
     };
+
+    // Save customer
+
+    $scope.saveCustomerChanges =function(hideToaster, showAlert, newUrl){
+        CustomerService.saveCustomer($scope.customer_data, function (customer) {
+          $scope.customer = customer;
+          $scope.setDefaults();
+          $scope.setTags();
+          $scope.saveLoading = false;
+          $scope.originalCustomer = angular.copy($scope.customer);
+          if (!hideToaster) {
+            if ($scope.currentState === 'customerAdd') {
+              toaster.pop('success', 'Contact Created.');
+            } else {
+              toaster.pop('success', 'Contact Saved.');
+            }
+          }
+          if(showAlert){
+            SweetAlert.swal("Saved!", "Your edits were saved to the page.", "success");                
+            window.location = newUrl;
+          }
+        });
+    }
 
     /*
      * @checkContactValidity
@@ -928,6 +950,13 @@
         {
           cutomerTags.push(matchingTag.label);
           tempTags.push(matchingTag);
+        }
+        else{
+          cutomerTags.push(tag);
+          tempTags.push({
+            data : tag,
+            label : tag
+          });
         }        
       });
       $scope.myCustomerTags = cutomerTags.join(",");
@@ -942,7 +971,7 @@
           tempTags.push(tag.data);
         });
         if (tempTags) {
-          $scope.customer_data.tags = tempTags;
+          $scope.customer_data.tags = _.uniq(tempTags);
         }
     };
 
@@ -1023,6 +1052,16 @@
     $scope.resetDirty = function(){
       $scope.originalCustomer = null;
       $scope.customer = null;
+    }
+
+    CustomerService.getCustomers(function (customers) {        
+      CustomerService.getAllCustomerTags(customers, function(tags){
+        $scope.customerTags = tags;
+      });
+    });
+
+    $scope.tagToCustomer = function(value) {
+     return CustomerService.tagToCustomer(value);
     }
 
   }]);
