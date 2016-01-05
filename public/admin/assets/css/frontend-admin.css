@@ -790,6 +790,7 @@
   right: 0;
   opacity: .8;
   color: #ffffff;
+  z-index: 999;
 }
 #componentloader .editing .features-wrap .feature:hover .delete-feature:hover {
   opacity: 1;
