@@ -10443,8 +10443,9 @@ nav.links a {
 /*  Login
 /* ---------------------------------------------------------------------- */
 .main-login {
-  margin-top: 0;
+  margin-top: 20px;
   position: relative;
+  background-color: #333;
 }
 @media (max-width: 991px) {
   .main-login {
