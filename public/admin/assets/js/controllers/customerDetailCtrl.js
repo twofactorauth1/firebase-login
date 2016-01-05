@@ -209,7 +209,7 @@
         $scope.loadingMap = false;
       }
       var validMapData = false;
-      if ($scope.ip_geo_address) {
+      if ($scope.ip_geo_address && !angular.equals($scope.originalCustomer.details[0].addresses[0], $scope.customer.details[0].addresses[0])) {
         CustomerService.getGeoSearchAddress($scope.ip_geo_address, function (data) {
           if (data.error === undefined) {
             $scope.location.lat = parseFloat(data.lat);
