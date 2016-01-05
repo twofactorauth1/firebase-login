@@ -62,14 +62,14 @@
 
             });
 
-          
+
             //remove duplicates and set to state, and sort
             //vm.state.lockedAnalyticsWidgets = _.uniq(lockedAnalyticsWidgets, function(w) { return w.name; });
             vm.state.analyticsWidgets = _.sortBy(_.uniq(analyticsWidgets, function(w) { return w.name; }), function(x) {
                 return vm.analyticDisplayOrder[x.name] && !x.completed
             });
 
-            
+
 
             vm.state.completeWorkstreams = completeWorkstreams;
             vm.state.incompleteWorksreams = incompleteWorkstreams;
@@ -112,7 +112,7 @@
         }
 
         function insertMedia(asset) {
-            vm.state.account.business.logo = asset.url;
+            vm.state.account.business.logo = asset.url.replace(/^https?:/,'');
             DashboardService.updateAccount(vm.state.account).then(function(response){
                 toaster.pop('success', 'Business Logo', 'The logo was updated successfully.');
                 console.log('Account logo updated');
