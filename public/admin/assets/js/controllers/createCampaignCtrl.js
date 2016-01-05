@@ -652,7 +652,7 @@
         if($scope.newCampaignObj.steps && $scope.newCampaignObj.steps[0] && $scope.newCampaignObj.steps[0].settings && !$scope.newCampaignObj.steps[0].settings.emailId && $scope.emailToSendPrevious)
           $scope.newCampaignObj.steps[0].settings.emailId = $scope.emailToSendPrevious._id
 
-        $scope.confirmOverrideExistingEmails();
+        $scope.actualEmailToSend = angular.copy($scope.emailToSend);
 
       }
     }
@@ -911,6 +911,13 @@
       }
     };
 
+
+    $scope.$watchGroup(['emailToSend.fromName', 'emailToSend.fromEmail', 'emailToSend.replyTo', 'emailToSend.bcc', 'emailToSend.subject'], function(newValue, oldValue){
+       if(newValue && !angular.equals($scope.actualEmailToSend, $scope.emailToSend) && !$scope.existingEmail.replace && $scope.selectedEmail.type != 'new'){
+          $scope.confirmOverrideExistingEmails();
+       }
+    });
+
     /*
      * @saveOrUpdateCampaign
      * - save or update campaign based on new campaign or existing
@@ -921,8 +928,7 @@
       $scope.changesConfirmed = true;
       var actionFn = update ? 'updateCampaign' : 'createCampaign';
       var stepSettings = $scope.newCampaignObj.steps[0].settings;
-
-      //add contacts if new
+      
       $scope.checkAndCreateCustomer(function (createdContactsArr) {
         $scope.addContacts(createdContactsArr);
         if (!stepSettings.emailId || (angular.isDefined($scope.existingEmail.replace) && !$scope.existingEmail.replace)) {
