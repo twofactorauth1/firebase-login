@@ -913,7 +913,7 @@
 
 
     $scope.$watchGroup(['emailToSend.fromName', 'emailToSend.fromEmail', 'emailToSend.replyTo', 'emailToSend.bcc', 'emailToSend.subject'], function(newValue, oldValue){
-       if(newValue && !angular.equals($scope.actualEmailToSend, $scope.emailToSend) && !$scope.existingEmail.replace && $scope.selectedEmail.type != 'new'){
+       if(newValue && $scope.actualEmailToSend && !angular.equals($scope.actualEmailToSend, $scope.emailToSend) && !$scope.existingEmail.replace && $scope.selectedEmail.type != 'new'){
           $scope.confirmOverrideExistingEmails();
        }
     });
