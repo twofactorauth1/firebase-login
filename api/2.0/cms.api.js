@@ -81,6 +81,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         //LEGACY SUPPORT
         app.get(this.url('website/:id/page/:handle'), this.setup.bind(this), this.getPageByHandle.bind(this));
+        app.get(this.url('website/:id/pages'), this.setup.bind(this), this.listPages.bind(this));//get pages
     },
 
     noop: function(req, resp) {
@@ -225,15 +226,9 @@ _.extend(api.prototype, baseApi.prototype, {
         var accountId = parseInt(self.accountId(req));
         var websiteId = req.params.id;
 
-        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed) {
-            if (isAllowed !== true) {
-                return self.send403(resp);
-            } else {
-                ssbManager.listPages(accountId, websiteId, function(err, pages){
-                    self.log.debug('<< listPages');
-                    return self.sendResultOrError(resp, err, pages, "Error listing pages");
-                });
-            }
+        ssbManager.listPages(accountId, websiteId, function(err, pages){
+            self.log.debug('<< listPages');
+            return self.sendResultOrError(resp, err, pages, "Error listing pages");
         });
     },
 
