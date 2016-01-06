@@ -1578,6 +1578,9 @@
 #componentloader .team-member-wrap .profile-social li {
   display: inline-block;
 }
+#componentloader .team-member-wrap.row {
+  margin-right: 0px !important;
+}
 #componentloader .meet-team-v1 .title {
   position: relative;
 }
