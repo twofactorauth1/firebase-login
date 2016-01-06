@@ -53,7 +53,7 @@ mainApp.factory('pagesService', ['$http', '$location', '$cacheFactory', function
                 $http.get(apiURL + websiteId + '/pages')
                     .success(function (pages) {
                         pagecache.put('pages', pages);
-                    })
+                    });
                 callback(null, page);
             } else if (page !== null && path === 'index') {
                 $http.get(apiURL + websiteId + '/page/coming-soon', {

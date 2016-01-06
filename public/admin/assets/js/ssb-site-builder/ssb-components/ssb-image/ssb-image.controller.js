@@ -2,9 +2,9 @@
 
 app.controller('SiteBuilderImageComponentController', ssbImageComponentController);
 
-ssbImageComponentController.$inject = ['$scope', '$attrs', '$filter', 'SimpleSiteBuilderService', '$stateParams', '$transclude'];
+ssbImageComponentController.$inject = ['$scope', '$attrs', '$filter', '$transclude'];
 /* @ngInject */
-function ssbImageComponentController($scope, $attrs, $filter, SimpleSiteBuilderService, $stateParams, $transclude) {
+function ssbImageComponentController($scope, $attrs, $filter, $transclude) {
 
   console.info('ssb-image directive init...')
 
