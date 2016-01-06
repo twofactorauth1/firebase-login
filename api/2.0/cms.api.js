@@ -81,7 +81,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         //LEGACY SUPPORT
         app.get(this.url('website/:id/page/:handle'), this.setup.bind(this), this.getPageByHandle.bind(this));
-        app.get(this.url('website/:id/pages'), this.setup.bind(this), this.listPages.bind(this));//get pages
+        app.get(this.url('website/:id/pages'), this.setup.bind(this), this.listPagesWithSections.bind(this));//get pages
     },
 
     noop: function(req, resp) {
@@ -392,21 +392,24 @@ _.extend(api.prototype, baseApi.prototype, {
             if (!value) {
                 err = $$.u.errors._404_PAGE_NOT_FOUND;
             }
-            if(value && !value.get('sections') || value.get('sections').length === 0) {
-                //TODO: convert legacy CMS pages to SSB for display
-                self.log.debug('Converting legacy page');
-                var sections = [];
-                var section = {};
-                section.components = value.get('components');
-                section.ssb = false;
-                sections.push(section);
-                value.set('sections', sections);
-            }
+
             self.log.debug('<< getPageByHandle');
             self.sendResultOrError(resp, err, value, "Error Retrieving Page for Website", err);
             self = null;
         });
 
+    },
+
+    listPagesWithSections: function(req, resp) {
+        var self = this;
+        self.log.debug('>> listPagesWithSections');
+        var accountId = parseInt(self.accountId(req));
+        var websiteId = req.params.id;
+
+        ssbManager.listPagesWithSections(accountId, websiteId, function(err, pages){
+            self.log.debug('<< listPagesWithSections');
+            return self.sendResultOrError(resp, err, pages, "Error listing pages");
+        });
     }
 
 
