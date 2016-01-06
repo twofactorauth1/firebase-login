@@ -911,5 +911,14 @@ app.constant('JS_REQUIRES', {
     files: [
       "../js/libs_misc/froala-wysiwyg-editor/js/plugins/media_manager.min.js",
       '../js/libs_misc/froala-wysiwyg-editor/config/config.js']
+  },
+  {
+    name: 'videogular',
+    files: [
+      "../js/libs_misc/videogular/videogular.js",
+      '../js/libs/videogular-controls/controls.js',
+      '../js/libs/videogular-overlay-play/overlay-play.js',
+      '../js/libs/videogular-buffering/buffering.js',
+      '../js/libs/videogular-poster/poster.js']
   }]
 });
