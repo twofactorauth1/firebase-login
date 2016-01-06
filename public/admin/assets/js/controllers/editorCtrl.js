@@ -1683,16 +1683,20 @@
     };
 
     $scope.addUnderNavSetting = function (masthead_id, fn) {
-      $scope.allowUndernav = false;
+      var data = {
+        allowUndernav : false,
+        navComponent: null
+      }
       $scope.components.forEach(function (value, index) {
         if (value && value.type === 'masthead' && value._id == masthead_id) {
           if (index != 0 && $scope.components[index - 1].type == "navigation") {
-            $scope.allowUndernav = true;
+            data.allowUndernav = true; 
+            data.navComponent =  $scope.components[index - 1];         
           } else
-            $scope.allowUndernav = false;
+            data.allowUndernav = false;
         }
       })
-      fn($scope.allowUndernav);
+      fn(data);
     }
 
     /*
