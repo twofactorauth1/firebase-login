@@ -11,7 +11,7 @@
 <!-- end: PAGE TITLE -->
 <!-- start: CONTENT -->
 <div ng-controller="HelpTopicsCtrl">
-    <div class="load1" ng-class="{'csspinner': !topicsLoaded}">
+    <div ng-show="topicsLoaded">
         <div class="search-topics container-fluid container-fullw bg-white" ng-if="!showSingle">
             <div class="row">
                 <div class="col-sm-8 col-sm-offset-2 margin-bottom-15 no-padding">
@@ -124,6 +124,8 @@
                 </div>
             </div>
         </div>
+    </div>
+    <div ng-show="!topicsLoaded" style="height:450px" class="load1 csspinner">
     </div>
 </div>
 <!-- end: CONTENT -->
