@@ -213,7 +213,7 @@
                                 </td>
                                 <td class="hidden-xs" ng-class="{'center': tableView == 'list'}"><strong>SKUs: </strong>
                                     <span ng-repeat="item in order.line_items track by $index">
-                                        <span>{{item.sku ? item.sku : ' '}}</span>
+                                        <span>{{item.product.sku ? item.product.sku : ' '}}</span>
                                         <br ng-if="($index+1 < order.line_items.length)" />
                                     </span>
                                 </td>
