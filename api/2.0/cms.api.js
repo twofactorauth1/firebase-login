@@ -398,6 +398,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 var sections = [];
                 var section = {};
                 section.components = value.get('components');
+                section.ssb = false;
                 sections.push(section);
                 value.set('sections', sections);
             }
