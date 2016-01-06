@@ -120,14 +120,26 @@ module.exports = {
                                     self.log.debug('<< createCampaign');
                                     return fn(null, updatedCampaign);
                                 }
-
                             });
                         } else {
                             self.log.debug('<< createCampaign');
                             return fn(null, campaign);
                         }
                     });
-                } else {
+                }
+                else if(campaignObj.get('status') !== initialStatus) {
+                    campaignObj.set('status', initialStatus);
+                    self.updateCampaign(campaignObj, function(err, updatedCampaign){
+                        if(err) {
+                            self.log.error('Error updating campaign status:', err);
+                            return fn(err);
+                        } else {
+                            self.log.debug('<< createCampaign');
+                            return fn(null, updatedCampaign);
+                        }
+                    });
+                }
+                else {
                     self.log.debug('<< createCampaign');
                     return fn(null, value);
                 }
