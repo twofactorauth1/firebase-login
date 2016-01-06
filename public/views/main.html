@@ -1,3 +1,5 @@
-<div ng-repeat="value in components" class="fragment">
-    <div data-ng-include=" '../components/component-switch.html' "></div>
+<div ng-repeat="section in page.sections" class="fragment">
+    <div ng-repeat="value in section.components" class="fragment">
+        <div data-ng-include=" '../components/component-switch.html' "></div>
+    </div>
 </div>

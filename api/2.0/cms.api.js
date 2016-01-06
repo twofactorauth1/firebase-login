@@ -392,6 +392,15 @@ _.extend(api.prototype, baseApi.prototype, {
             if (!value) {
                 err = $$.u.errors._404_PAGE_NOT_FOUND;
             }
+            if(value && !value.get('sections') || value.get('sections').length === 0) {
+                //TODO: convert legacy CMS pages to SSB for display
+                self.log.debug('Converting legacy page');
+                var sections = [];
+                var section = {};
+                section.components = value.get('components');
+                sections.push(section);
+                value.set('sections', sections);
+            }
             self.log.debug('<< getPageByHandle');
             self.sendResultOrError(resp, err, value, "Error Retrieving Page for Website", err);
             self = null;
