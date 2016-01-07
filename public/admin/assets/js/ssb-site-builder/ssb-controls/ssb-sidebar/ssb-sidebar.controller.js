@@ -423,7 +423,8 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, SimpleSiteBuil
         });
 
         _.each(vm.enabledPlatformSections, function (element, index) {
-            if (featured.indexOf(element.name.toLowerCase())) !== -1) {
+            console.log(element.title);
+            if (featured.indexOf(element.title.toLowerCase()) !== -1) {
                 element.featured = true;
             }
         });

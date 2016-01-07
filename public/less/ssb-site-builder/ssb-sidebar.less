@@ -1,5 +1,5 @@
 .ssb-sidebar {
-	overflow: scroll;
+	// overflow: scroll;
 	// overflow-x: hidden;
 	display: none;
 	height: 200px;
@@ -46,7 +46,7 @@
         // width: 25%;
         height: ~"calc(100% - 140px)";
         // left: 140px;
-        // top: 100px;
+        top: 126px;
         // width: 25%;
         min-width: 325px;
     }
@@ -98,6 +98,15 @@
         // width: 100%;
         // left: 70px;
         float: left;
+        width: ~"calc(100% - 70px - 15px)"; //70px for ssb-sidebar-icons width, 15px for ssb-sidebar-icons padding
+        height: ~"calc(100vh - 184px)";
+        overflow: auto;
+        position: relative;
+        top: 15px;
+    }
+
+    .tab-pane {
+        padding: 0;
     }
 }
 
@@ -286,16 +295,28 @@
 .ssb-sidebar-icons {
 
     float: left;
+    background: none;
+    // position: fixed;
+    // top: 50%;
+    // transform: translateY(-50%);
 
     .nav {
-
+        padding: 0 0 0 15px;
+        margin: 15px 0 0 0;
     }
 
     .nav-tab {
         width: 70px;
-        height: 45px;
+        // height: 45px;
         cursor: pointer;
-        text-align: center;
+        text-align: center!important;
+        // margin: 1em 0;
+        background: #131e26;
+        padding: 1em;
+    }
+
+    .nav-tab-is-active {
+        background: white;
     }
 
 }

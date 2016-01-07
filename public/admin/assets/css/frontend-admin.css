@@ -6294,7 +6294,7 @@ a[href="https://froala.com/wysiwyg-editor"] {
   display: block;
 }
 .ssb-site-builder .ssb-main {
-  top: 10px;
+  top: 62px;
 }
 .ssb-site-builder .ssb-main > ssb-action-buttons {
   position: fixed;
@@ -6498,7 +6498,6 @@ a[href="https://froala.com/wysiwyg-editor"] {
   }
 }
 .ssb-sidebar {
-  overflow: scroll;
   display: none;
   height: 200px;
   clear: both;
@@ -6527,6 +6526,7 @@ a[href="https://froala.com/wysiwyg-editor"] {
   .ssb-sidebar {
     position: fixed;
     height: calc(100% - 140px);
+    top: 126px;
     min-width: 325px;
   }
 }
@@ -6562,6 +6562,14 @@ a[href="https://froala.com/wysiwyg-editor"] {
 }
 .ssb-sidebar-inner .editor-group {
   float: left;
+  width: calc(100% - 70px - 15px);
+  height: calc(100vh - 184px);
+  overflow: auto;
+  position: relative;
+  top: 15px;
+}
+.ssb-sidebar-inner .tab-pane {
+  padding: 0;
 }
 .ssb-sidebar-section-open {
   background: #fff;
@@ -6697,84 +6705,31 @@ a[href="https://froala.com/wysiwyg-editor"] {
 }
 .ssb-sidebar-icons {
   float: left;
+  background: none;
+}
+.ssb-sidebar-icons .nav {
+  padding: 0 0 0 15px;
+  margin: 15px 0 0 0;
 }
 .ssb-sidebar-icons .nav-tab {
   width: 70px;
-  height: 45px;
   cursor: pointer;
-  text-align: center;
-}
-.ssb-flyover {
-  position: absolute;
-  top: 40px;
-  left: 30%;
-  display: none;
-}
-.ssb-flyover label {
-  font-weight: 100;
-  font-size: .85em;
-}
-.ssb-flyover .draggable {
-  box-shadow: -4px 0px 7px -2px rgba(0, 0, 0, 0.3);
-}
-.ssb-flyover-list-container {
-  margin-top: -5px;
-}
-.ssb-flyover-title {
-  margin: 1.5em 0 0 0;
-  background-color: #FAFAFA;
+  text-align: center!important;
+  background: #131e26;
   padding: 1em;
-  border-radius: 5px 5px 0px 0px;
-  text-transform: capitalize;
-  cursor: move;
-  position: relative;
-  z-index: 1;
 }
-.ssb-flyover-card-container {
-  position: relative;
-  width: 320px;
-}
-.ssb-flyover-card-title {
-  margin-bottom: 2em;
-  text-transform: capitalize;
-}
-.ssb-flyover-card {
-  position: absolute;
-  top: 0;
-  left: 0;
+.ssb-sidebar-icons .nav-tab-is-active {
   background: white;
-  padding: 1em;
+}
+ssb-topbar {
+  position: fixed;
+  top: 65px;
+  left: 0;
+  height: 60px;
   width: 100%;
-  box-shadow: -4px 0px 7px -2px rgba(0, 0, 0, 0.3);
-  border-radius: 0px 0px 5px 5px;
-  font-size: 18px;
-}
-.ssb-flyover-card .close {
-  position: absolute;
-  top: .5em;
-  right: .5em;
-  font-size: 1.5em;
-}
-.ssb-flyover-card-link {
-  padding: 1em 0;
-  cursor: pointer;
-}
-.ssb-flyover-card-link i {
-  vertical-align: middle;
-  font-size: 10px;
-  margin-left: .5em;
-}
-.ssb-flyover-card-level-0 {
-  z-index: 1;
-  top: 10px;
-  left: 10px;
-  border-radius: 5px 5px;
-}
-.ssb-flyover-card-level-1 {
-  z-index: 2;
-  top: 20px;
-  left: 20px;
-  border-radius: 5px 5px;
+  background: #131e26;
+  color: white;
+  text-align: center;
 }
 .ssb-theme-young-soul .ssb-section-layout {
   background-color: #e8e7e7;
