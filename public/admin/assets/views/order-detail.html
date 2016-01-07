@@ -442,9 +442,9 @@
                                             </div>
                                         </td>
                                         <td class="center" width="100">
-                                            <span class="fa fa-edit fa-lg margin-right-5" ng-click="item[$index].editing = true" ng-show="!item[$index].editing"></span>
-                                            <span class="fa fa-times-circle-o fa-lg text-danger" ng-click="removeLineItem($index)" ng-show="!item[$index].editing"></span>
-                                            <span class="fa fa-check-circle-o fa-lg text-success" ng-click="item[$index].editing = false" ng-show="item[$index].editing"></span>
+                                            <span class="fa fa-edit fa-lg margin-right-5" ng-click="item[$index].editing = true" ng-show="!item[$index].editing&&order.status==='pending_payment'"></span>
+                                            <span class="fa fa-times-circle-o fa-lg text-danger" ng-click="removeLineItem($index)" ng-show="!item[$index].editing&&order.status==='pending_payment'"></span>
+                                            <span class="fa fa-check-circle-o fa-lg text-success" ng-click="item[$index].editing = false" ng-show="item[$index].editing&&order.status==='pending_payment'"></span>
                                         </td>
                                     </tr>
                                 </tbody>
