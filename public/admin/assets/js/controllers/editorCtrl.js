@@ -835,19 +835,50 @@
       $scope.openModal('media-modal', 'MediaModalCtrl', null, 'lg');
     };
 
+    function getFilename(url)
+    {
+       if (url)
+       {
+          var m = url.toString().match(/.*\/(.+?)\./);
+          if (m && m.length > 1)
+          {
+             return m[1];
+          }
+       }
+       return "";
+    }
+
+    function getUrl(value) {
+      if (value && !/http[s]?/.test(value)) {
+        value = 'http:' + value;
+      }
+      return value;
+    };
+
     /*
      * @addCKEditorImage
      * -
      */
-
-    $scope.addCKEditorImage = function (url, inlineInput, edit) {
+    $scope.addCKEditorImage = function (url, inlineInput, edit) {     
+    WebsiteService.isImage(url).then(function(result) {
+      var _image = result;
       if (inlineInput) {
         if (edit) {
           inlineInput.val(url);
         } else {
-          inlineInput.insertHtml('<img data-cke-saved-src="' + url + '" src="' + url + '"/>');
+          if(_image)
+            inlineInput.insertHtml('<img data-cke-saved-src="' + url + '" src="' + url + '"/>');
+          else{
+            url = getUrl(url);
+            var _text = inlineInput && inlineInput.getSelection() && inlineInput.getSelection().getSelectedText();
+            if(!_text)
+               _text = getFilename(url)
+            inlineInput.insertHtml('<a data-cke-saved-href="' + url + '" href="' + url + '">' + _text + '</a>');            
+          }
         }
       }
+    });     
+      
     };
 
     /*
