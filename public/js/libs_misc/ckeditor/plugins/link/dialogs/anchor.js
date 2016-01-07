@@ -17,15 +17,15 @@ CKEDITOR.dialog.add("anchor", function(c) {
 		minWidth : 300,
 		minHeight : 60,
 		onOk : function() {
-			var name = CKEDITOR.tools.trim(this.getValueOf("info", "txtName")), attributes = {
+			var name = CKEDITOR.tools.trim(this.getValueOf("info", "txtName")), a = {
 				id : name,
 				name : name,
 				"data-cke-saved-name" : name
 			};
 			if (this._.selectedElement)
 			{
-				var a = c.getSelection(), b = a.getSelectedElement()
-				this._.selectedElement.data("cke-realelement") ?  CKEDITOR.plugins.link.tryRestoreFakeAnchor(c, b).replace(b) : this._.selectedElement.setAttributes(attributes);
+				var z = c.getSelection(), b = z.getSelectedElement()
+				this._.selectedElement.data("cke-realelement") ?  CKEDITOR.plugins.link.tryRestoreFakeAnchor(c, b).replace(b) : this._.selectedElement.setAttributes(a);
 			}
 			else {
 				var b = c.getSelection(), b = b && b.getRanges()[0];

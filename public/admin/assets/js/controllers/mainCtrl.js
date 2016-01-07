@@ -186,5 +186,23 @@ app.controller('AppCtrl', ['$rootScope', '$scope', '$state', '$translate', '$loc
       $scope.currentUser = user;
     });
 
+    $scope.openTopBarMediaModal = function () {      
+      $scope.modalInstance = $modal.open({
+        templateUrl: 'media-modal',
+        controller: 'MediaModalCtrl',
+        size: 'lg',
+        keyboard: false,
+        backdrop: 'static',
+        resolve: {
+          showInsert: function () {
+            
+          },
+          insertMedia: function () {
+            
+          }
+        }
+      });
+    };
+
   }
 ]);
