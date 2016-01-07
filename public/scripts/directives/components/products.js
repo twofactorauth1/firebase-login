@@ -18,7 +18,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
       // initializations
       scope.showTax = true;
       scope.showNotTaxed = false; // Some items are not taxed when summing
-      
+
       /*
        * @filterTags
        * - if component has tags filter them or return the _product
@@ -80,7 +80,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
             _filteredProducts.push(product);
           }
         });
-        scope.products = _filteredProducts;        
+        scope.products = _filteredProducts;
         if (fn) {
           fn();
         }
@@ -111,7 +111,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
             if (taxdata.results[0].taxSales === 0) {
               taxdata.results[0].taxSales = 1;
             }
-            scope.taxPercent = parseFloat(taxdata.results[0].taxSales * 100).toFixed(0);
+            scope.taxPercent = parseFloat(taxdata.results[0].taxSales * 100).toFixed(2);
             if (fn) {
               fn(scope.taxPercent);
             }
@@ -463,7 +463,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                          angular.element("#card_name").removeClass('has-error').addClass('has-success');
                          angular.element("#card_name .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
                      }
-                  
+
                 };*/
 
 
@@ -513,7 +513,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
         scope.total = _subTotal + _totalTax;
       };
 
-     
+
       function isEmpty(str) {
         return (!str || 0 === str.length);
       }
@@ -664,7 +664,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
 
           var customer = scope.newContact;
           console.log('customer, ', customer);
-          
+
           //UserService.postContact(scope.newContact, function (customer) {
           var order = {
             //"customer_id": customer._id,
@@ -742,7 +742,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 scope.failedOrderMessage = failedOrderMessage;
                 return;
               }
-            console.log('order, ', order);            
+            console.log('order, ', order);
             scope.checkoutModalState = 5;
             scope.cartDetails = [];
             _.each(scope.products, function (product) {
@@ -780,7 +780,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
        */
        scope.initializeModalEvents = function()
        {
-          angular.element('#cart-checkout-modal').off('hidden.bs.modal').on('hidden.bs.modal', function () {            
+          angular.element('#cart-checkout-modal').off('hidden.bs.modal').on('hidden.bs.modal', function () {
             console.log("modal closed");
             $timeout(function () {
               scope.$apply(function () {
@@ -788,13 +788,13 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                   scope.checkoutModalState = 1;
                   scope.newContact = {};
                   clearCardDetails();
-                  scope.showTax = false;                  
+                  scope.showTax = false;
                 }
               });
             },0);
           });
        }
-             
+
       /*
        * @pageChanged
        * - when a page is changes splice the array to show offset products
@@ -859,7 +859,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                          angular.element("#card_name").removeClass('has-error').addClass('has-success');
                          angular.element("#card_name .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
                      }
-                  
+
                 };
 
 
@@ -942,7 +942,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
           $("#card_name .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
         }
       };*/
-     
+
     },
     controller: function ($scope) {
       $scope.setCheckoutState = function (state) {
