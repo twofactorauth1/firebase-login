@@ -15,6 +15,18 @@
       "SEEALL": "See All"
     },
 
+    "media": {
+      "MAIN": "Media",
+      "HEADER": "Upload media",
+      "SEEALL": "See All"
+    },
+
+    "help": {
+      "MAIN": "Help",
+      "HEADER": "Help Pages",
+      "SEEALL": "See All"
+    },
+
     "activities": {
       "MAIN": "Activities",
       "HEADER": "You have new notifications",
