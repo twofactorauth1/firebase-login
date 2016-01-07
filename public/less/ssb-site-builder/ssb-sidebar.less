@@ -1,9 +1,11 @@
 .ssb-sidebar {
-	overflow: auto;
-	overflow-x: hidden;
+	overflow: scroll;
+	// overflow-x: hidden;
 	display: none;
 	height: 200px;
-    box-shadow: 0px -1px 3px 1px rgba(0, 0, 0, .5);
+    // box-shadow: 0px -1px 3px 1px rgba(0, 0, 0, .5);
+    clear: both;
+    padding-right: 70px;
 
     img {
       max-width: 100%;
@@ -19,23 +21,23 @@
 
     .partition-light-primary {
 
-    [class^="col-"],
-    [class*=" col-"] {
-      padding: 0;
-    }
+        [class^="col-"],
+        [class*=" col-"] {
+          padding: 0;
+        }
 
-    .lead {
-      font-size: 13px;
-    }
+        .lead {
+          font-size: 13px;
+        }
 
     }
 
     .head-menu-links {
-    .container-fluid {
-      & > div > div {
-        padding: 0 1em 0;
-      }
-    }
+        .container-fluid {
+          & > div > div {
+            padding: 0 1em 0;
+          }
+        }
     }
 
     @media (min-width: 768px) {
@@ -86,14 +88,16 @@
 }
 
 .ssb-sidebar-inner {
-    transition: all 500ms cubic-bezier(0.550, 0.085, 0.680, 0.530); /* easeInQuad */
-    position: relative;
+    // transition: all 500ms cubic-bezier(0.550, 0.085, 0.680, 0.530); /* easeInQuad */
+    // position: relative;
     // width: 200%;
 
     .editor-group {
-        float: left;
+        // float: left;
         // width: 50%;
-        width: 100%;
+        // width: 100%;
+        // left: 70px;
+        float: left;
     }
 }
 
@@ -275,6 +279,23 @@
 
     .sp-dd {
         display: none;
+    }
+
+}
+
+.ssb-sidebar-icons {
+
+    float: left;
+
+    .nav {
+
+    }
+
+    .nav-tab {
+        width: 70px;
+        height: 45px;
+        cursor: pointer;
+        text-align: center;
     }
 
 }
