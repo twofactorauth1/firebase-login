@@ -670,7 +670,13 @@
         if($scope.order._id){
             OrderService.completeOrder($scope.order._id, note, function (completedOrder) {
             toaster.pop('success', toasterMsg + '"Completed"');
+            $scope.originalOrder.status = 'completed';
+            var update = false;
+            if(angular.equals($scope.order, $scope.originalOrder))
+               update = true;
             $scope.pushLocalNote(completedOrder);
+            if(update)
+              angular.copy($scope.order, $scope.originalOrder);
           });
         }
         else
