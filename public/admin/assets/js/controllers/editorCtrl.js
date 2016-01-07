@@ -873,7 +873,7 @@
             var _text = inlineInput && inlineInput.getSelection() && inlineInput.getSelection().getSelectedText();
             if(!_text)
                _text = getFilename(url)
-            inlineInput.insertHtml('<a data-cke-saved-href="' + url + '" href="' + url + '">' + _text + '</a>');            
+            inlineInput.insertHtml('<a target="_blank" data-cke-saved-href="' + url + '" href="' + url + '">' + _text + '</a>');            
           }
         }
       }
