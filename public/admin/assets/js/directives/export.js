@@ -43,7 +43,7 @@ app.directive('stExport', ['$http', '$timeout', 'OrderService', function($http, 
 
 		        			for (var li in val) {
 								li_name = val[li].name;
-								li_sku = val[li].sku;
+								li_sku = val[li].product ? val[li].product.sku : val[li].sku;
 								li_qty = val[li].quantity;
 
 								if (li_qty) {

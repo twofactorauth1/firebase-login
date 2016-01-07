@@ -77,6 +77,11 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url('sections/platform'), this.isAuthAndSubscribedApi.bind(this), this.listPlatformSections.bind(this));
         app.get(this.url('sections/user'), this.isAuthAndSubscribedApi.bind(this), this.listAccountSections.bind(this));
         app.get(this.url('sections/:id'), this.isAuthAndSubscribedApi.bind(this), this.getSection.bind(this));
+
+
+        //LEGACY SUPPORT
+        app.get(this.url('website/:id/page/:handle'), this.setup.bind(this), this.getPageByHandle.bind(this));
+        app.get(this.url('website/:id/pages'), this.setup.bind(this), this.listPagesWithSections.bind(this));//get pages
     },
 
     noop: function(req, resp) {
@@ -221,15 +226,9 @@ _.extend(api.prototype, baseApi.prototype, {
         var accountId = parseInt(self.accountId(req));
         var websiteId = req.params.id;
 
-        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed) {
-            if (isAllowed !== true) {
-                return self.send403(resp);
-            } else {
-                ssbManager.listPages(accountId, websiteId, function(err, pages){
-                    self.log.debug('<< listPages');
-                    return self.sendResultOrError(resp, err, pages, "Error listing pages");
-                });
-            }
+        ssbManager.listPages(accountId, websiteId, function(err, pages){
+            self.log.debug('<< listPages');
+            return self.sendResultOrError(resp, err, pages, "Error listing pages");
         });
     },
 
@@ -379,6 +378,37 @@ _.extend(api.prototype, baseApi.prototype, {
                     return self.sendResultOrError(resp, err, components, "Error listing components");
                 });
             }
+        });
+    },
+
+    getPageByHandle: function(req, resp) {
+        var self = this;
+        self.log.debug('>> getPageByHandle');
+        var websiteId = req.params.id;
+        var pageHandle = req.params.handle;
+        var accountId = parseInt(self.currentAccountId(req));
+
+        ssbManager.getPageByHandle(accountId, pageHandle, websiteId, function(err, value){
+            if (!value) {
+                err = $$.u.errors._404_PAGE_NOT_FOUND;
+            }
+
+            self.log.debug('<< getPageByHandle');
+            self.sendResultOrError(resp, err, value, "Error Retrieving Page for Website", err);
+            self = null;
+        });
+
+    },
+
+    listPagesWithSections: function(req, resp) {
+        var self = this;
+        self.log.debug('>> listPagesWithSections');
+        var accountId = parseInt(self.accountId(req));
+        var websiteId = req.params.id;
+
+        ssbManager.listPagesWithSections(accountId, websiteId, function(err, pages){
+            self.log.debug('<< listPagesWithSections');
+            return self.sendResultOrError(resp, err, pages, "Error listing pages");
         });
     }
 

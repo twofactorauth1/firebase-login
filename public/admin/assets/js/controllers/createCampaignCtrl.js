@@ -634,7 +634,7 @@
     $scope.clearEmail = function (newEmail) {
       $scope.checkingEmailTitle = false;
       // $scope.emailToSend.title = "";
-      $scope.setBusinessDetails();
+      $scope.setBusinessDetails(true);
       if (newEmail) {
         $scope.emailToSendPrevious = angular.copy($scope.emailToSend);
         $scope.emailToSend = $scope.emailToSendCopy;
@@ -642,7 +642,8 @@
         $scope.emailToSend.fromName = $scope.emailToSendPrevious.fromName;
         $scope.emailToSend.fromEmail = $scope.emailToSendPrevious.fromEmail;
         $scope.emailToSend.replyTo = $scope.emailToSendPrevious.replyTo;
-        $scope.emailToSend.bcc = $scope.emailToSendPrevious.bcc;
+        $scope.emailToSend.bcc = "";
+        $scope.emailToSend.subject = $scope.newCampaignObj.name;
         $scope.checkEmailTitle($scope.emailToSend.title);
         if($scope.newCampaignObj && $scope.newCampaignObj.steps && $scope.newCampaignObj.steps[0] && $scope.newCampaignObj.steps[0].settings)
           $scope.newCampaignObj.steps[0].settings.emailId = null;
@@ -1401,7 +1402,7 @@
      * @setBusinessDetails
      * - set any filled out info from business data
      */
-    $scope.setBusinessDetails = function() {
+    $scope.setBusinessDetails = function(update) {
       var account = $scope.account;
       var logo = account.business.logo || '<h2>Logo Here</h2>';
       var businessName = account.business.name || 'Edit name';
@@ -1412,15 +1413,15 @@
           $scope.emailToSend.components[0].logo = '<img src="' + account.business.logo + '"/>';
           $scope.emailToSendCopy.components[0].logo = '<img src="' + account.business.logo + '"/>';
         }
-        if (businessName && $scope.emailToSend.fromName == '') {
+        if (businessName && ($scope.emailToSend.fromName == '' || update)) {
           $scope.emailToSend.fromName = account.business.name;
           $scope.emailToSendCopy.fromName = account.business.name;
         }
-        if (fromEmail && $scope.emailToSend.fromEmail == '') {
+        if (fromEmail && ($scope.emailToSend.fromEmail == '' || update)) {
           $scope.emailToSend.fromEmail = account.business.emails[0].email;
           $scope.emailToSendCopy.fromEmail = account.business.emails[0].email;
         }
-        if (fromEmail && $scope.emailToSend.replyTo == '') {
+        if (fromEmail && ($scope.emailToSend.replyTo == '' || update)) {
           $scope.emailToSend.replyTo = account.business.emails[0].email;
           $scope.emailToSendCopy.replyTo = account.business.emails[0].email;
         }

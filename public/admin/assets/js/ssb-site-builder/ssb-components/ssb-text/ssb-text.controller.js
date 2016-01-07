@@ -2,9 +2,9 @@
 
 app.controller('SiteBuilderTextComponentController', ssbTextComponentController);
 
-ssbTextComponentController.$inject = ['$scope', '$attrs', '$filter', 'SimpleSiteBuilderService', '$stateParams', '$transclude'];
+ssbTextComponentController.$inject = ['$scope', '$attrs', '$filter', '$transclude'];
 /* @ngInject */
-function ssbTextComponentController($scope, $attrs, $filter, SimpleSiteBuilderService, $stateParams, $transclude) {
+function ssbTextComponentController($scope, $attrs, $filter, $transclude) {
 
   console.info('ssb-text directive init...')
 

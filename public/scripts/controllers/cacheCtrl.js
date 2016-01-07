@@ -11,16 +11,20 @@ mainApp.controller('CacheCtrl', ['$scope', 'pagesService', '$window', '$location
         }
     }*/
     $scope.addUnderNavSetting = function (masthead_id, fn) {
-        $scope.allowUndernav = false;
-        $scope.components.forEach(function (value, index) {
-            if (value && value.type === 'masthead' && value._id == masthead_id) {
-                if (index != 0 && $scope.components[index - 1].type == "navigation") {
-                    $scope.allowUndernav = true;
-                } else
-                    $scope.allowUndernav = false;
-            }
-        })
-        fn($scope.allowUndernav);
+      var data = {
+        allowUndernav : false,
+        navComponent: null
+      }
+      $scope.components.forEach(function (value, index) {
+        if (value && value.type === 'masthead' && value._id == masthead_id) {
+          if (index != 0 && $scope.components[index - 1].type == "navigation") {
+            data.allowUndernav = true; 
+            data.navComponent =  $scope.components[index - 1];         
+          } else
+            data.allowUndernav = false;
+        }
+      })
+      fn(data);
     };
 
     $scope.defaultSpacings = {

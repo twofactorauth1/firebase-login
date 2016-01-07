@@ -933,10 +933,9 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
       if (!$scope.componentEditing.spacing) {
         console.log('component editing doesnt have spacing');
         var pt, pb = 50;
-        var mw = 1024;
+        var mw = "100%";
         if($scope.componentEditing.type === "contact-us" || $scope.componentEditing.type === "navigation"){
           pt = pb = 0;
-          mw = "100%";
         }
         $scope.componentEditing.spacing = {
           'pt': pt,

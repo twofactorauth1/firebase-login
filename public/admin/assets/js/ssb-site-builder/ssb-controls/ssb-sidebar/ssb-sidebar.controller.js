@@ -49,10 +49,10 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, SimpleSiteBuil
 
     editableOptions.theme = 'bs3';
 
-    $scope.$watch('vm.uiState.activeSectionIndex', function(index) {
-        console.log('activeSectionIndex changed: ', index);
-        vm.navigation.loadPage();
-    }, true);
+    // $scope.$watch('vm.uiState.activeSectionIndex', function(index) {
+    //     console.log('activeSectionIndex changed: ', index);
+    //     vm.navigation.loadPage();
+    // }, true);
 
     vm.navigation = {
     	back: function() {
@@ -408,9 +408,94 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, SimpleSiteBuil
 
     };
 
+    function setupSectionContent() {
+
+        var sectionLabel;
+
+        var featured = ['header', 'feature block', 'meet team'];
+
+        /*
+        * @platformSections
+        * - an array of section types and icons for the add section modal
+        */
+        vm.enabledPlatformSections = _.where(vm.state.platformSections, {
+            enabled: true
+        });
+
+        _.each(vm.enabledPlatformSections, function (element, index) {
+            console.log(element.title);
+            if (featured.indexOf(element.title.toLowerCase()) !== -1) {
+                element.featured = true;
+            }
+        });
+
+        /*
+        * @userSections
+        * - an array of sections created by current user
+        */
+        vm.enabledUserSections = _.where(vm.state.userSections, {
+            enabled: true
+        });
+
+        //initially show platform sections
+        vm.sections = vm.enabledPlatformSections;
+        vm.sectionType = 'enabledPlatformSections';
+
+        /************************************************************************************************************
+        * Takes the platformSections object and gets the value for the filter property from any that are enabled.
+        * It then makes that list unique, sorts the results alphabetically, and and removes the misc value if
+        * it exists. (The misc value is added back on to the end of the list later)
+        ************************************************************************************************************/
+        vm.sectionFilters = _.without(_.uniq(_.pluck(_.sortBy(vm.enabledPlatformSections, 'filter'), 'filter')), 'misc');
+
+        // Iterates through the array of filters and replaces each one with an object containing an
+        // upper and lowercase version
+        _.each(vm.sectionFilters, function (element, index) {
+            sectionLabel = element.charAt(0).toUpperCase() + element.substring(1).toLowerCase();
+            vm.sectionFilters[index] = {
+              'capitalized': sectionLabel,
+              'lowercase': element
+            };
+            sectionLabel = null;
+        });
+
+        // Manually add the FEATURED option to the beginning of the list
+        vm.sectionFilters.unshift({
+            'capitalized': 'Featured',
+            'lowercase': 'featured'
+        });
+
+        // Manually add the Misc section back on to the end of the list
+        // Exclude 'Misc' filter for emails
+        vm.sectionFilters.push({
+          'capitalized': 'Misc',
+          'lowercase': 'misc'
+        });
+
+        // Manually add the All option to the end of the list
+        vm.sectionFilters.push({
+            'capitalized': 'All',
+            'lowercase': 'all'
+        });
+
+        vm.setFilterType = function (label) {
+            vm.typefilter = label;
+        };
+
+        // type is 'enabledPlatformSections' or 'enabledUserSections'
+        vm.setSectionType = function (type) {
+            SimpleSiteBuilderService.getUserSections().then(function() {
+                vm.sectionType = type;
+                vm.sections = vm[type];
+            })
+        };
+
+    }
 
     function init(element) {
     	vm.element = element;
+
+        setupSectionContent();
     }
 
 }

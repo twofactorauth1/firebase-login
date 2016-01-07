@@ -2,9 +2,9 @@
 
 app.controller('SiteBuilderPageSectionController', ssbPageSectionController);
 
-ssbPageSectionController.$inject = ['$scope', '$attrs', '$filter', 'SimpleSiteBuilderService', '$stateParams', '$transclude'];
+ssbPageSectionController.$inject = ['$scope', '$attrs', '$filter', '$transclude'];
 /* @ngInject */
-function ssbPageSectionController($scope, $attrs, $filter, SimpleSiteBuilderService, $stateParams, $transclude) {
+function ssbPageSectionController($scope, $attrs, $filter, $transclude) {
 
   console.info('page-section directive init...')
 
@@ -113,7 +113,8 @@ function ssbPageSectionController($scope, $attrs, $filter, SimpleSiteBuilderServ
       classString += 'ssb-component-index-' + index + ' ';
     }
 
-    if (index === vm.uiState.activeComponentIndex) {
+
+    if (vm.uiState && index === vm.uiState.activeComponentIndex) {
       classString += 'ssb-active-component ';
     }
 

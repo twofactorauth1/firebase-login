@@ -15,7 +15,7 @@ function ssbPageSection($compile) {
       state: '=',
       uiState: '='
     },
-    templateUrl: 'assets/js/ssb-site-builder/ssb-components/ssb-page-section/ssb-page-section.edit.html',
+    templateUrl: '/admin/assets/js/ssb-site-builder/ssb-components/ssb-page-section/ssb-page-section.component.html',
     replace: true,
   	link: function (scope, element, attrs, ctrl) {
   		ctrl.init(element);

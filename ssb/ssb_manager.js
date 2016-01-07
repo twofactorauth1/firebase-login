@@ -302,17 +302,87 @@ module.exports = {
         });
     },
 
+    listPagesWithSections: function(accountId, websiteId, fn) {
+        var self = this;
+        self.log.debug('>> listPages');
+        var query = {accountId:accountId, websiteId:websiteId, latest:true};
+        pageDao.findMany(query, $$.m.ssb.Page, function(err, pages){
+            if(err) {
+                self.log.error('error getting pages:', err);
+                return fn(err);
+            } else {
+                async.each(pages, function(page, cb){
+                    var sections = page.get('sections') || [];
+                    sectionDao.dereferenceSections(sections, function(err, sectionAry){
+                        if(err) {
+                            cb(err);
+                        } else {
+                            //handle legacy pages without sections
+                            if(sectionAry && sectionAry.length === 0) {
+                                self.log.debug('Converting legacy page');
+                                var section = {};
+                                section.components = page.get('components');
+                                section.ssb = false;
+                                sections.push(section);
+                                page.set('sections', sections);
+                            } else {
+                                page.set('sections', sectionAry);
+                            }
+
+                            cb(null);
+                        }
+                    });
+                }, function done(err){
+                    self.log.debug('<< listPages');
+                    return fn(err, pages);
+                });
+
+            }
+        });
+    },
+
     getPage: function(accountId, pageId, fn) {
         var self = this;
         self.log.debug('>> getPage');
 
         pageDao.getPageById(accountId, pageId, function(err, page){
-            if(err) {
+            if(err || !page) {
                 self.log.error('Error getting page:', err);
                 return fn(err, null);
             } else {
-                sectionDao.dereferenceSections(page.get('sections'), function(err, sectionAry){
+                var sections = page.get('sections') || [];
+                sectionDao.dereferenceSections(sections, function(err, sectionAry){
                     page.set('sections', sectionAry);
+                    self.log.debug('<< getPage');
+                    return fn(null, page);
+                });
+
+            }
+        });
+    },
+
+    getPageByHandle: function(accountId, handle, websiteId, fn) {
+        var self = this;
+        self.log.debug('>> getPageByHandle (' + accountId + ',' + handle + ',' + websiteId + ')');
+        pageDao.getLatestPageForWebsite(websiteId, handle, accountId, function(err, page){
+            if(err || !page) {
+                self.log.error('Error getting page:', err);
+                return fn(err, null);
+            } else {
+                var sections = page.get('sections') || [];
+                sectionDao.dereferenceSections(page.get('sections'), function(err, sectionAry){
+
+                    //handle legacy pages without sections
+                    if(sectionAry && sectionAry.length === 0) {
+                        self.log.debug('Converting legacy page');
+                        var section = {};
+                        section.components = page.get('components');
+                        section.ssb = false;
+                        sections.push(section);
+                        page.set('sections', sections);
+                    } else {
+                        page.set('sections', sectionAry);
+                    }
                     self.log.debug('<< getPage');
                     return fn(null, page);
                 });

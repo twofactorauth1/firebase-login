@@ -182,6 +182,9 @@
       var _subtotal = 0;
       var _total = 0;
       var _discount = 0;
+      var _tax = 0;
+      var _taxrate= $scope.order.tax_rate || 0;
+
       _.each($scope.order.line_items, function (line_item) {
         if (line_item.quantity) {
           line_item.total = line_item.regular_price * line_item.quantity;
@@ -195,7 +198,7 @@
         _subtotal += parseFloat(line_item.regular_price) * parseFloat(line_item.quantity);
         _total += parseFloat(line_item.regular_price) * parseFloat(line_item.quantity);
       });
-      $scope.order.total = _total;
+
       $scope.order.subtotal = _subtotal;
       $scope.order.total_discount = _discount;
       if (_discount) {
@@ -203,6 +206,8 @@
       } else {
         $scope.calculatedDiscountPercent = '';
       }
+      $scope.order.total_tax = (_subtotal - _discount) * _taxrate;
+      $scope.order.total = (_subtotal - _discount) + $scope.order.total_tax;
     };
 
     /*
@@ -670,7 +675,13 @@
         if($scope.order._id){
             OrderService.completeOrder($scope.order._id, note, function (completedOrder) {
             toaster.pop('success', toasterMsg + '"Completed"');
+            $scope.originalOrder.status = 'completed';
+            var update = false;
+            if(angular.equals($scope.order, $scope.originalOrder))
+               update = true;
             $scope.pushLocalNote(completedOrder);
+            if(update)
+              angular.copy($scope.order, $scope.originalOrder);
           });
         }
         else

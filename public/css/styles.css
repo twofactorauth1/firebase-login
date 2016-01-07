@@ -1569,6 +1569,9 @@ div[data-type="feature-block"] .component-inner {
 .team-member-wrap .profile-social li {
   display: inline-block;
 }
+.team-member-wrap.row {
+  margin-right: 0px !important;
+}
 .meet-team-v1 .title {
   position: relative;
 }
@@ -9900,4 +9903,21 @@ Social Icons
 .btn-scroll.btn-scroll-left:before {
   left: -100%;
   top: 0;
+}
+.ssb-theme-young-soul .ssb-section-layout {
+  background-color: #e8e7e7;
+}
+.ssb-theme-young-soul .ssb-page-section-layout-header {
+  background-color: #9acccb;
+}
+.ssb-theme-young-soul h1,
+.ssb-theme-young-soul h2,
+.ssb-theme-young-soul h3,
+.ssb-theme-young-soul h4,
+.ssb-theme-young-soul h5,
+.ssb-theme-young-soul a,
+.ssb-theme-young-soul p,
+.ssb-theme-young-soul span,
+.ssb-theme-young-soul label {
+  color: #000000;
 }

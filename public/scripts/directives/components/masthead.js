@@ -23,7 +23,8 @@ app.directive('mastheadComponent', ['$window', function ($window) {
       });
       scope.setUnderbnavMargin = function () {
         scope.$parent.addUnderNavSetting(scope.component._id, function (data) {
-          scope.allowUndernav = data;
+          scope.allowUndernav = data.allowUndernav;
+          scope.navComponent = data.navComponent;
         });
         setTimeout(function () {
           var mastheadElement = angular.element(".component_wrap_"+scope.component._id+".undernav200");
@@ -35,9 +36,21 @@ app.directive('mastheadComponent', ['$window', function ($window) {
               mastheadElement.css("margin-top", -margin);
               if (scope.allowFullScreen)
                 mastheadElement.css("height", $window.innerHeight + navHeight);
-            }
+            }           
+
             angular.element(".undernav").addClass("nav-undernav");
-            angular.element(".nav-undernav .bg").addClass("bg-nav-undernav");
+            var addNavBg = true;
+            if(scope.navComponent){
+              if(scope.navComponent.bg && scope.navComponent.bg.img && !scope.navComponent.bg.img.show && scope.navComponent.bg.color){
+                addNavBg = false;
+              }
+            }
+            if(addNavBg)
+              angular.element(".nav-undernav .bg").addClass("bg-nav-undernav");
+            else
+              angular.element(".nav-undernav .bg").removeClass("bg-nav-undernav");
+            angular.element(".undernav").closest('li.fragment').addClass("li-nav-undernav");
+            
             if (mastheadUnderNavElement)
               mastheadUnderNavElement.css("height", margin);
             if (angular.element(".masthead-actions"))

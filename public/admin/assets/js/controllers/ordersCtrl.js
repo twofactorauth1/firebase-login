@@ -2,7 +2,7 @@
 /*global app, moment, angular, window*/
 /*jslint unparam:true*/
 (function (angular) {
-  app.controller('OrdersCtrl', ["$scope", "toaster", "$modal", "$filter", "$state", "OrderService", "CustomerService", "orderConstant", function ($scope, toaster, $modal, $filter, $state, OrderService, CustomerService, orderConstant) {
+  app.controller('OrdersCtrl', ["$scope", "toaster", "$modal", "$filter", "$state", "OrderService", "CustomerService", "orderConstant", "ProductService", function ($scope, toaster, $modal, $filter, $state, OrderService, CustomerService, orderConstant, ProductService) {
     
     $scope.tableView = 'list';
     $scope.itemPerPage = 100;
@@ -70,20 +70,40 @@
      * - get all the orders for this account and create line_items_total
      *   and add decimal point to total then create scope
      */
-
-    OrderService.getOrders(function (orders) {
-      _.each(orders, function (order) {
-        if (order.line_items) {
-          order.line_items_total = order.line_items.length;
-        } else {
-          order.line_items_total = 0;
-        }
-
-        order.total = order.total;
+    $scope.getProducts = function () {
+      ProductService.getProducts(function (products) {
+        $scope.products = products;
+        $scope.getOrder();
       });
-      $scope.orders = orders;
-      $scope.showOrders = true;
+    };
+    ProductService.getProducts(function (products) {
+      $scope.products = products;
+      OrderService.getOrders(function (orders) {
+        _.each(orders, function (order) {
+          if (order.line_items) {
+            order.line_items_total = order.line_items.length;
+          } else {
+            order.line_items_total = 0;
+          }
+          $scope.matchProducts(order);
+          order.total = order.total;
+        });
+        $scope.orders = orders;
+        $scope.showOrders = true;
+      });
     });
+
+    $scope.matchProducts = function (order) {
+      var lineitems = order.line_items || {};
+      if (lineitems.length > 0) {
+        _.each(lineitems, function (item) {
+          var matchProduct = _.find($scope.products, function (product) {
+            return product._id === item.product_id;
+          });
+          item.product = matchProduct;
+        });
+      }
+    };
 
     $scope.formatOrderStatus = function (status) {
       return OrderService.formatOrderStatus(status);
