@@ -27,11 +27,18 @@ app.directive('featureListComponent',['$window', function ($window) {
 			resetHeight();		
 			scope.resizeFeatureTiles();
 		});
+        /*
 		angular.element(document).ready(function () {
 			setTimeout(function () {
 			  scope.resizeFeatureTiles();
 			}, 2000)
 		});
+		*/
+        scope.$watch('component', function(){
+            if(scope.component) {
+                scope.resizeFeatureTiles();
+            }
+        });
     }
   };
 }]);
