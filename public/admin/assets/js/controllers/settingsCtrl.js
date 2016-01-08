@@ -71,7 +71,8 @@
       if (!account.commerceSettings) {
         account.commerceSettings = {
           taxes: true,
-          taxbased: ''
+          taxbased: '',
+          taxnexus: ''
         };
       }
     });

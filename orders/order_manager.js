@@ -169,7 +169,7 @@ module.exports = {
                 log.debug('fetching products');
                 var productAry = [];
                 async.each(order.get('line_items'), function iterator(item, cb){
-                    productManager.getProduct(item.product_id, function(err, product){                        
+                    productManager.getProduct(item.product_id, function(err, product){
                         if(err) {
                             cb(err);
                         } else {
@@ -181,14 +181,15 @@ module.exports = {
                         }
                     });
                 }, function done(err){
-                    log.debug('Sanjjeeeee is');
                     callback(err, account, productAry);
                 });
             },
             //determine tax rate
             function(account, productAry, callback) {
                 log.debug('commerceSettings');
+                var _taxRate = 0;
                 var commerceSettings = account.get('commerceSettings');
+
                 if(commerceSettings && commerceSettings.taxes === true) {
                     //figure out the rate
                     var zip = 0;
@@ -203,18 +204,33 @@ module.exports = {
                     }
                     if(zip !== 0) {
                         productManager.getTax(zip, function(err, rate){
-                            log.debug('Using rate:', rate);
+                            log.debug('Tax Service Response: ', rate);
                             if(rate && rate.results && rate.results.length > 0) {
-                                callback(err, account, productAry, rate.results[0].taxSales);
+                                _taxRate = rate.results[0].taxSales; // nexus location or business_location
+                                log.debug('Initial Tax Rate: ', _taxRate);
+
+                                if(commerceSettings.taxbased !== 'business_location'
+                                    && commerceSettings.taxnexus && commerceSettings.taxnexus.length > 0) {
+
+                                    log.debug('Vetting Nexus: ', _.pluck(commerceSettings.taxnexus, "text"), '<-', rate.results[0].geoState);
+                                    if (_.pluck(commerceSettings.taxnexus, "text").indexOf(rate.results[0].geoState) < 0) {
+                                        _taxRate = 0; // Force rate to zero. Non-nexus location
+                                    }
+                                }
                             } else {
-                                callback(err, account, productAry, 0);
+                                log.debug('Tax Service (productManager.getTax) Response ERR: ', _errHolder);
+                                _taxRate = 0; // Force rate to zero. Error or issue getting rate from tax service.
                             }
+                            log.debug('Applicable Tax Rate (first): ', _taxRate);
+                            callback(err, account, productAry, _taxRate);
                         });
+                    } else {
+                        log.debug('Applicable Tax Rate (second): ', _taxRate);
+                        callback(null, account, productAry, _taxRate);
                     }
-                    else
-                        callback(null, account, productAry, 0);
                 } else {
-                    callback(null, account, productAry, 0);
+                    log.debug('Applicable Tax Rate (third): ', _taxRate);
+                    callback(null, account, productAry, _taxRate);
                 }
             },
             //validate
@@ -682,7 +698,7 @@ module.exports = {
                 refundAmount = amount;
             }
             var metadata = null;
-            
+
             stripeDao.createRefund(chargeId, refundAmount, false, reason, metadata, accessToken, function(err, refund){
                 if(err) {
                     log.error('Error creating refund: ' + err);

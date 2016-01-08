@@ -108,8 +108,8 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
         ProductService.getTax(postcode, function (taxdata) {
           if (taxdata.results[0] && taxdata.results[0].taxSales) {
             scope.showTax = true;
-            if (scope.settings.taxnexus
-                && _.pluck(scope.settings.taxnexus,"text").indexOf(taxdata.results[0].geoState) >- 1) {
+            if ((scope.settings.taxbased === 'business_location') || (scope.settings.taxnexus
+                && _.pluck(scope.settings.taxnexus,"text").indexOf(taxdata.results[0].geoState) >- 1)) {
                 console.debug('Nexus location - taxable: ', taxdata.results[0].geoState);
                 scope.taxPercent = parseFloat(taxdata.results[0].taxSales * 100).toFixed(2);
             } else {
