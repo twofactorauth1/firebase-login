@@ -24,7 +24,8 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
             site: {},
             page: {},
             sections: {}
-        }
+        },
+        openSidebarPanel: ''
     };
 
     vm.updateActiveSection = updateActiveSection;
@@ -303,6 +304,10 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
             e.preventDefault();
             e.stopPropagation();
           }
+        });
+
+        angular.element("body").on("click", ".ssb-main", function (e) {
+          vm.uiState.openSidebarPanel = '';
         });
 
         setupBreakpoints();

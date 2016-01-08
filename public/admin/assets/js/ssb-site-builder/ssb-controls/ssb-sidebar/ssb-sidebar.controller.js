@@ -412,7 +412,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, SimpleSiteBuil
 
         var sectionLabel;
 
-        var featured = ['header', 'feature block', 'meet team'];
+        var featured = ['header', 'hero image', 'feature block', 'meet team', 'testimonials'];
 
         /*
         * @platformSections
@@ -423,7 +423,6 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, SimpleSiteBuil
         });
 
         _.each(vm.enabledPlatformSections, function (element, index) {
-            console.log(element.title);
             if (featured.indexOf(element.title.toLowerCase()) !== -1) {
                 element.featured = true;
             }

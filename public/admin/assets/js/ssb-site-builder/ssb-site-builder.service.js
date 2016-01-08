@@ -462,7 +462,9 @@
                     ssbService.page.sections.push(response);
                     ssbService.setActiveSection(numSections);
                     ssbService.setActiveComponent(null);
-                    modalInstance.close();
+                    if (modalInstance) {
+                        modalInstance.close();
+                    }
                 })
             )
 
