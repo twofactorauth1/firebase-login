@@ -218,7 +218,7 @@ module.exports = {
                                     }
                                 }
                             } else {
-                                log.debug('Tax Service (productManager.getTax) Response ERR: ', _errHolder);
+                                log.debug('Tax Service (productManager.getTax) Response ERR: ', err);
                                 _taxRate = 0; // Force rate to zero. Error or issue getting rate from tax service.
                             }
                             log.debug('Applicable Tax Rate (first): ', _taxRate);
