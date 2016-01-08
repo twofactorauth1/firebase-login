@@ -93,7 +93,8 @@ var account = $$.m.ModelBase.extend({
             },
             commerceSettings : {
                 taxes : true,
-                taxbased : "business_location"
+                taxbased : "business_location",
+                taxnexus : []
             },
             created: {
                 date: new Date(),
