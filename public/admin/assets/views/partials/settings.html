@@ -264,6 +264,11 @@
                                     <option value="">-- choose --</option>
                                 </select>
                             </div>
+                            <div ng-if="account.commerceSettings.taxbased !== 'business_location'" class="form-group">
+                                <label>Sales are Taxable Only in (States):</label>
+                                <span tooltip-placement="right" tooltip-html-unsafe="Unless specified otherwise, all locations are assumed to be taxable."><i class="fa fa-info-circle" /></span>
+                                <tags-input min-length="2" placeholder="State(s)" ng-model="account.commerceSettings.taxnexus"></tags-input>
+                            </div>
                         </div>
                     </form>
                     <div class="clearfix"></div>
