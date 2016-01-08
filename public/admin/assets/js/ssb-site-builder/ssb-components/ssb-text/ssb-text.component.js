@@ -14,7 +14,7 @@ function ssbTextComponent($compile) {
       componentClass: '&',
       component: '='
     },
-    templateUrl: 'admin/assets/js/ssb-site-builder/ssb-components/ssb-text/ssb-text.component.html',
+    templateUrl: '/admin/assets/js/ssb-site-builder/ssb-components/ssb-text/ssb-text.component.html',
     replace: true,
   	link: function (scope, element, attrs, ctrl) {
   		ctrl.init(element);
