@@ -13,9 +13,9 @@ app.config(['$provide', function ($provide){
 
 app.controller('SiteBuilderSidebarController', ssbSiteBuilderSidebarController);
 
-ssbSiteBuilderSidebarController.$inject = ['$scope', '$attrs', '$filter', 'SimpleSiteBuilderService', '$modal', 'editableOptions', '$location', 'SweetAlert'];
+ssbSiteBuilderSidebarController.$inject = ['$scope', '$attrs', '$filter', '$document', '$timeout', 'SimpleSiteBuilderService', '$modal', 'editableOptions', '$location', 'SweetAlert'];
 /* @ngInject */
-function ssbSiteBuilderSidebarController($scope, $attrs, $filter, SimpleSiteBuilderService, $modal, editableOptions, $location, SweetAlert) {
+function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $timeout, SimpleSiteBuilderService, $modal, editableOptions, $location, SweetAlert) {
 
     console.info('site-build sidebar directive init...')
 
@@ -270,6 +270,15 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, SimpleSiteBuil
 
     function setActiveSection(index) {
         SimpleSiteBuilderService.setActiveSection(index);
+
+        //TODO: not working...
+        $timeout(function () {
+            var elementId = vm.state.page.sections[index]._id;
+            var element = angular.element(document.getElementById(elementId));
+            if (element) {
+              $document.scrollToElement(element, 175, 1000);
+            }
+        }, 0);
     }
 
     function addBackground(sectionIndex, componentIndex) {
