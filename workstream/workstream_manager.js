@@ -427,7 +427,7 @@ module.exports = {
 
             var total = 0;
             var totalAmount = 0;
-            self.log.debug(results);
+
             _.each(results, function(result){
                 total+= result.count;
                 totalAmount += parseFloat(result.amount);
@@ -438,7 +438,7 @@ module.exports = {
             });
 
             var response = {
-                results: results,
+                //results: results,
                 YTDTotalOrders: total,
                 YTDTotalAmount: totalAmount.toFixed(2)
             };
