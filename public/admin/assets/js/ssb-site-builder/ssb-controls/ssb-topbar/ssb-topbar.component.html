@@ -1,6 +1,25 @@
-<div class="ssb-topbar-inner">
-    <h2 class="col-md-8 pull-left">TOPBAR</h2>
+<div class="ssb-topbar-inner col-xs-12">
 
-    <ssb-action-buttons class="ssb-control-bar col-md-4 pull-right" save-action="vm.savePage()" cancel-action="vm.cancelPendingEdits()" ng-show="vm.state.pendingChanges"></ssb-action-buttons>
+    <div class="col-md-3 pull-left">
+        <ui-select ng-model="vm.state.page" theme="bootstrap" search-enabled="false">
+            <ui-select-match>
+                <small ng-bind-html="$select.selected.title"></small>
+            </ui-select-match>
+            <ui-select-choices repeat="page in vm.state.pages track by $index">
+                <small ng-bind-html="page.title"></small>
+            </ui-select-choices>
+        </ui-select>
+    </div>
+
+    <div class="col-md-5 center">
+        <button class="btn btn-primary">
+            <a href="/{{vm.state.page.handle}}" target="_blank" style="color: white;"><span class="ti-eye"></span> Preview</a>
+        </button>
+    </div>
+
+    <div class="col-md-4 pull-right">
+        <ssb-action-buttons class="ssb-control-bar" save-action="vm.savePage()" cancel-action="vm.cancelPendingEdits()" state="vm.state"></ssb-action-buttons>
+        <!-- <div class="ssb-topbar-icon ti-eye" tooltip-placement="bottom" tooltip-html-unsafe="Preview"></button> -->
+    </div>
 
 </div>

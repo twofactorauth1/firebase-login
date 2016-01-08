@@ -47,6 +47,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
     vm.removeBackgroundImage = removeBackgroundImage;
     vm.removeImage = removeImage;
     vm.createPage = createPage;
+    vm.getTemplateById = getTemplateById;
 
     editableOptions.theme = 'bs3';
 
@@ -420,6 +421,10 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
             })
         )
 
+    };
+
+    function getTemplateById(id) {
+        SimpleSiteBuilderService.getTemplateById(id);
     };
 
     function setupSectionContent() {

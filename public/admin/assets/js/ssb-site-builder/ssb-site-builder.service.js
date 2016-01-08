@@ -40,6 +40,7 @@
         ssbService.applyThemeToSite = applyThemeToSite;
         ssbService.createPage = createPage;
         ssbService.getTemplates = getTemplates;
+        ssbService.getTemplateById = getTemplateById;
         ssbService.getLegacyTemplates = getLegacyTemplates;
         ssbService.addSectionToPage = addSectionToPage;
         // ssbService.createPageFromTemplate = createPageFromTemplate;
@@ -426,6 +427,14 @@
               method: 'GET',
             }).success(success).error(error))
           )
+
+        }
+
+        function getTemplateById(id) {
+
+          return _.where(ssbService.templates, {
+            _id: id
+          });
 
         }
 
