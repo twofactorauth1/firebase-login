@@ -139,6 +139,112 @@ module.exports = {
 
     },
 
+    updateS3Template: function(accountId, pageName, pageId, fn) {
+        var self = this;
+        var html = '';
+        async.waterfall([
+            function getWebpageData(cb) {
+                cmsDao.getDataForWebpage(accountId, 'index', function (err, value) {
+                    if(err) {
+                        self.log.error('Error getting data for website:', err);
+                        cb(err);
+                    } else {
+                        cb(null, value);
+                    }
+                });
+            },
+            function getPage(webpageData, cb) {
+                if(pageName) {
+                    cmsDao.getLatestPageForWebsite(webpageData.website._id, pageName, accountId, function(err, page){
+                        if(err) {
+                            self.log.error('Error getting latest page for website:', err);
+                            cb(err);
+                        } else {
+                            cb(null, webpageData, page);
+                        }
+                    });
+                } else if(pageId) {
+                    cmsDao.getPageById(pageId, function(err, page){
+                        if(err ||!page) {
+                            self.log.error('Error getting latest page for website:', err);
+                            cb(err|| 'No Page found');
+                        } else {
+                            pageName = page.get('handle');
+                            cb(null, webpageData, page);
+                        }
+                    });
+                } else {
+                    cb('Both pageName and pageId are null');
+                }
+
+            },
+            function getFallbackPageIfNeeded(webpageData, page, cb) {
+                if(page) {
+                    cb(null, webpageData, page);
+                } else {
+                    self.log.debug('Looking for coming-soon page');
+                    cmsDao.getLatestPageForWebsite(webpageData.website._id, 'coming-soon', accountId, function(err, page){
+                        if(err) {
+                            self.log.error('Error getting coming-soon page:', err);
+                            cb(err);
+                        } else {
+                            cb(null, webpageData, page);
+                        }
+                    });
+                }
+            },
+            function readComponents(webpageData, page, cb) {
+                if(page) {
+                    if(page.get('sections') != null && page.get('sections').length > 0) {
+                        //<ssb-page-section section="section" index="$index" class="ssb-page-section"></ssb-page-section>
+                        _.each(page.get('sections'), function(section, index){
+                            html = html + '<ssb-page-section section="sections_' + index + '" index="' + index + '" class="ssb-page-section"></ssb-page-section>';
+                        });
+                    } else {
+                        _.each(page.get('components'), function(component, index){
+                            var divName = self.getDirectiveNameDivByType(component.type);
+                            html = html + divName + ' component="components_' + index + '"></div>';
+                        });
+                    }
+
+                    cb(null);
+                } else {
+                    cb('Could not find page with handle ' + pageName);
+                }
+
+            },
+            function writeTemplate(cb) {
+                self.log.debug('Storing to s3');
+                var environmentName = 'prod';
+                if(appConfig.nonProduction === true) {
+                    environmentName = 'test';
+                }
+                var path = environmentName + '/acct_' + accountId + '/' + pageName;
+                var req = s3Client.put(path, {
+                    'Content-Length': Buffer.byteLength(html),
+                    'Content-Type': 'text/html'
+                });
+                req.on('response', function(res){
+                    if (200 == res.statusCode) {
+                        self.log.debug('Success!');
+                        cb();
+                    }
+                });
+                req.end(html);
+
+            }],
+            function done(err){
+                if(err) {
+                    self.log.error("Error building template:", err);
+                    fn(err);
+
+                } else {
+                    fn(null, html);
+                }
+            }
+        );
+    },
+
     getOrCreateS3Template: function(accountId, pageName, resp) {
         var self = this;
         var environmentName = 'prod';
