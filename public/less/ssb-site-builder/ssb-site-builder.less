@@ -8,12 +8,18 @@ a[href="https://froala.com/wysiwyg-editor"] {
 
 .app-minimal-admin-chrome {
 
-    &#app {
-        padding-top: 0;
-    }
+    @media screen and (min-width: 992px) {
+        #topnav > .navbar-collapse {
+            box-shadow: 0px 4px 5px 2px rgba(0,0,0,.5);
+        }
 
-    #sidebar {
-        box-shadow: 0px 4px 5px 2px rgba(0,0,0,.5);
+        &#app {
+            padding-top: 0;
+        }
+
+        #sidebar {
+            box-shadow: 0px 4px 5px 2px rgba(0,0,0,.5);
+        }
     }
 
     footer {
@@ -43,7 +49,12 @@ a[href="https://froala.com/wysiwyg-editor"] {
 	display: block;
 
 	.ssb-main {
-        top: 125px;
+
+        top: 60px;
+
+        @media screen and (min-width: 992px) {
+            top: 125px;
+        }
 
 		& > ssb-action-buttons {
 			position: fixed;
@@ -217,8 +228,12 @@ a[href="https://froala.com/wysiwyg-editor"] {
 		}
 	}
 
-	&:hover .ssb-active-section,
-	&:hover .ssb-active-section .ssb-active-component {
+    .ssb-active-section .ssb-settings-btn {
+        display: block;
+    }
+
+	.ssb-active-section,
+	.ssb-active-section .ssb-active-component {
 		&:before {
 			z-index: 1;
 			position: absolute;
@@ -241,8 +256,8 @@ a[href="https://froala.com/wysiwyg-editor"] {
 	.edit-wrap:hover .editable-title {
 		left: auto;
 		right: 0;
-    top: 0;
-    border-radius: 0;
+        top: 0;
+        border-radius: 0;
 	}
 
   .simple-form-v1 .btn .edit-wrap:hover .editable-title {

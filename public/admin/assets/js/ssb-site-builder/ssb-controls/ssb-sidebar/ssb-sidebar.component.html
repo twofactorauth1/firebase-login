@@ -73,7 +73,7 @@
                                 <div class="col-xs-6">
                                     <h4>{{section.title}}</h4>
                                     <p>{{section.description}}</p>
-                                    <button type="button" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-plus pull-right" ng-click="vm.addSectionToPage(section);vm.openSidebarPanel = '';">
+                                    <button type="button" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-plus pull-right" ng-click="vm.addSectionToPage(section);vm.uiState.openSidebarPanel = '';">
                                         <span>Add section</span>
                                     </button>
                                 </div>
@@ -91,7 +91,7 @@
                                 <div class="col-xs-6">
                                     <h4>{{section.title}}</h4>
                                     <p>{{section.description}}</p>
-                                    <button type="button" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-plus pull-right" ng-click="vm.addSectionToPage(section);vm.openSidebarPanel = '';">
+                                    <button type="button" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-plus pull-right" ng-click="vm.addSectionToPage(section);vm.uiState.openSidebarPanel = '';">
                                         <span>Add section</span>
                                     </button>
                                 </div>
@@ -109,7 +109,7 @@
                                 <div class="col-xs-6">
                                     <h4>{{section.title}}</h4>
                                     <p>{{section.description}}</p>
-                                    <button type="button" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-plus pull-right" ng-click="vm.addSectionToPage(section);vm.openSidebarPanel = '';">
+                                    <button type="button" class="btn btn-primary btn-wide btn-scroll btn-scroll-top ti-plus pull-right" ng-click="vm.addSectionToPage(section);vm.uiState.openSidebarPanel = '';">
                                         <span>Add section</span>
                                     </button>
                                 </div>
@@ -163,15 +163,17 @@
 
             <section>
                 <h4 class="ssb-sidebar-sub-heading">
-                    <span>Pages ({{vm.state.pages.length || 0}})</span>
-                    <div ng-click="vm.openModal('new-page-modal', null, null, 'lg');" class="ssb-sidebar-item-icon ti-plus display-ib" tooltip-placement="left" tooltip-html-unsafe="Create New Page"></div>
+                    <span>Pages ({{vm.state.pages.length}})</span>
+                    <!-- <div ng-click="vm.openModal('new-page-modal', null, null, 'lg');" class="ssb-sidebar-item-icon ti-plus display-ib" tooltip-placement="left" tooltip-html-unsafe="Create New Page"></div> -->
                 </h4>
 
-                <div class="close-panel ti-close"  ng-click="vm.openSidebarPanel = ''"></div>
+                <div class="close-panel ti-close"  ng-click="vm.uiState.openSidebarPanel = ''"></div>
+
+                <button ng-click="vm.openModal('new-page-modal', null, null, 'lg');" class="btn btn-primary">Add Page</button>
 
                 <ul class="list-unstyled">
                     <li ng-repeat="page in vm.state.pages track by $index" class="ssb-page-section-settings-item">
-                        <div class="ssb-sidebar-item-icon ti-plus display-ib" tooltip-placement="left" tooltip-html-unsafe="Add to Main Menu"></div>
+                        <div ng-click="vm.openModal('ssb-page-settings-modal', 'SiteBuilderPageSettingsModalController', null, 'lg');" class="ssb-sidebar-item-icon ti-settings display-ib" tooltip-placement="left" tooltip-html-unsafe="Page Settings"></div>
                         <div class="panel-group">
                             <div class="ssb-sidebar-sortable-item panel panel-default">
                                 <div class="panel-heading">
@@ -194,10 +196,12 @@
             <section>
                 <h4 class="ssb-sidebar-sub-heading">
                     <span>Page Sections ({{vm.state.page.sections.length || 0}})</span>
-                    <div ng-click="vm.openModal('ssb-add-section-modal', 'SiteBuilderAddSectionModalController', null, 'lg');" class="ssb-sidebar-item-icon ti-plus display-ib" tooltip-placement="left" tooltip-html-unsafe="Add Section"></div>
+                    <!-- <div ng-click="vm.uiState.openSidebarPanel = 'add'" class="ssb-sidebar-item-icon ti-plus display-ib" tooltip-placement="left" tooltip-html-unsafe="Add Section"></div> -->
                 </h4>
 
-                <div class="close-panel ti-close"  ng-click="vm.openSidebarPanel = ''"></div>
+                <div class="close-panel ti-close"  ng-click="vm.uiState.openSidebarPanel = ''"></div>
+
+                <button ng-click="vm.uiState.openSidebarPanel = 'add'" class="btn btn-primary">Add Section</button>
 
                 <ul ng-if="vm.state.page.sections" class="list-unstyled" ng-sortable="vm.sortableOptions" ng-model="vm.state.page.sections">
                     <li ng-repeat="section in vm.state.page.sections track by $index" ng-init="sectionIndex = $index" class="ssb-page-section-settings-item">
@@ -206,20 +210,16 @@
                         <!-- <div ng-hide="!vm.uiState.accordion.sections[sectionIndex].isOpen" class="ssb-sidebar-item-icon ssb-sidebar-move-handle ti-angle-down display-ib"></div>
                         <div ng-hide="vm.uiState.accordion.sections[sectionIndex].isOpen" class="ssb-sidebar-item-icon ssb-sidebar-move-handle ti-angle-up display-ib"></div> -->
 
-                        <!-- <h4 class="panel-title">
-                            {{section.name}}
-                        </h4> -->
+                        <div class="accordion panel-group">
+                            <div class="ssb-sidebar-sortable-item panel panel-default" ng-click="vm.setActiveSection(sectionIndex)" ng-class="{ 'ssb-sidebar-section-open': vm.uiState.accordion.sections[sectionIndex].isOpen }">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">
+                                        <a href="javascript:void(0)" class="accordion-toggle"><span>{{section.name}}</span></a>
+                                    </h4>
+                                </div>
+                            </div>
+                        </div>
 
-                        <accordion close-others="oneAtATime" class="accordion">
-                            <accordion-group heading="{{section.name}}"
-                                is-open="vm.uiState.accordion.sections[sectionIndex].isOpen"
-                                ng-click="vm.togglePageSectionAccordion(sectionIndex)"
-                                ng-class="{ 'ssb-sidebar-section-open': vm.uiState.accordion.sections[sectionIndex].isOpen }"
-                                class="ssb-sidebar-sortable-item">
-
-                            </accordion-group>
-
-                        </accordion>
                     </li>
                 </ul>
             </section>
@@ -233,7 +233,7 @@
             <section>
                 <h4 class="ssb-sidebar-sub-heading">Theme Settings</h4>
 
-                <div class="close-panel ti-close"  ng-click="vm.openSidebarPanel = ''"></div>
+                <div class="close-panel ti-close"  ng-click="vm.uiState.openSidebarPanel = ''"></div>
 
                 <ul class="list-unstyled">
                     <li class="ssb-page-section-settings-item">
@@ -304,12 +304,16 @@
         </div>
     </div>
 
-    <section ng-if="vm.uiState.showSectionPanel && vm.state.page.sections[vm.uiState.activeSectionIndex]" class="ssb-sidebar-section-panel">
+    <section
+        ng-if="vm.uiState.showSectionPanel && vm.state.page.sections[vm.uiState.activeSectionIndex]"
+        class="ssb-sidebar-section-panel draggable"
+        ind-draggable>
+
         <h4 class="ssb-sidebar-sub-heading">
             {{vm.state.page.sections[vm.uiState.activeSectionIndex].name}}
         </h4>
 
-        <div class="close-panel ti-close"  ng-click="vm.uiState.showSectionPanel = false"></div>
+        <div class="close-panel ti-close" ng-click="vm.uiState.showSectionPanel = false"></div>
 
         <div class="clearfix overflow-auto" ng-include=" 'assets/js/ssb-site-builder/ssb-components/ssb-page-section/sidebar.settings.html' "></div>
         <div class="form-group padding-top-10">

@@ -22,7 +22,7 @@
                     <div class="well empty-page center">
                         <h1 >This Page is Empty.</h1>
                         <h4>Add some sections and start editing!</h4>
-                        <button class="btn btn-info margin-top-15" ng-click="vm.openModal('ssb-add-section-modal', 'SiteBuilderAddSectionModalController', null, 'lg');">Add Section</button>
+                        <button class="btn btn-info margin-top-15" ng-click="vm.uiState.openSidebarPanel = 'add'">Add Section</button>
                     </div>
                     <div class="clearfix mb15"></div>
                 </li>
@@ -31,7 +31,7 @@
 			<div ng-if="vm.state.page.sections.length">
 
 				<ssb-page-section
-					ng-repeat="section in vm.state.page.sections track by $index"
+					ng-repeat="section in vm.state.page.sections track by section._id"
 					section="section"
 					index="$index"
 					ng-class="{ 'ssb-active-section': $index === vm.uiState.activeSectionIndex }"
@@ -51,6 +51,7 @@
     <ssb-topbar state="vm.state" ui-state="vm.uiState"></ssb-topbar>
 
     <div data-ng-include data-src=" 'assets/js/ssb-site-builder/ssb-controls/ssb-add-section-modal/ssb-add-section-modal.component.html' " ></div>
+    <div data-ng-include data-src=" 'assets/js/ssb-site-builder/ssb-controls/ssb-page-settings-modal/ssb-page-settings-modal.component.html' " ></div>
     <div data-ng-include data-src=" 'assets/views/partials/social-links-modal.html' " ></div>
     <div data-ng-include data-src=" 'assets/views/partials/ssb-new-page-modal.html' " ></div>
 

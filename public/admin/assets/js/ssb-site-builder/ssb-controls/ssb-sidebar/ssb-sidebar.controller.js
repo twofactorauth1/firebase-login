@@ -27,6 +27,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, SimpleSiteBuil
     vm.cancelPendingEdits = cancelPendingEdits;
     vm.togglePageSectionAccordion = togglePageSectionAccordion;
     vm.togglePageSectionComponentAccordion = togglePageSectionComponentAccordion;
+    vm.setActiveSection = setActiveSection;
     vm.getPlatformSections = getPlatformSections;
     vm.getPlatformComponents = getPlatformComponents;
     vm.addSectionToPage = addSectionToPage;
@@ -265,6 +266,10 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, SimpleSiteBuil
     function togglePageSectionComponentAccordion(index) {
   		//TODO: this fires on all clicks anywhere within the component panel... so all settings, etc.
   		SimpleSiteBuilderService.setActiveComponent(index);
+    }
+
+    function setActiveSection(index) {
+        SimpleSiteBuilderService.setActiveSection(index);
     }
 
     function addBackground(sectionIndex, componentIndex) {

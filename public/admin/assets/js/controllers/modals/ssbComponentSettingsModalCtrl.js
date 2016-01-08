@@ -75,7 +75,6 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
   $scope.sliderValue = 1;
 
   $scope.addBackground = function () {
-    debugger;
     $scope.$parent.showInsert = true;
     $scope.openParentModal('media-modal', 'MediaModalCtrl', null, 'lg');
   };
@@ -902,7 +901,6 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
 
     if ($scope.componentEditing) {
       WebsiteService.getComponentVersions($scope.componentEditing.type, function (versions) {
-        debugger; //versions arent being populated in the advanced tab?
         $scope.componentEditingVersions = versions;
         if ($scope.componentEditing && $scope.componentEditing.version) {
           $scope.componentEditing.version = $scope.componentEditing.version.toString();
