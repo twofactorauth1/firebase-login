@@ -116,6 +116,11 @@ if( process.env.ROOT_HOST !== 'indigenous.io') {
     cookieName = 'test_' + cookieName;
 }
 
+var nonProduction = true;
+if(process.env.ROOT_HOST === 'indigenous.io') {
+    nonProduction = false;
+}
+
 //---------------------------------------------------------
 //  GROUP ADMIN USERS
 //---------------------------------------------------------
@@ -141,6 +146,7 @@ module.exports = {
     cookie_subdomain: '.' + process.env.ROOT_HOST,
     cookie_name: cookieName,
     groupAdminUserIds: groupAdminUserIDs,
+    nonProduction:nonProduction,
 
     getServerUrl: function (subdomain, domain) {
         if (subdomain == null && domain == null) {

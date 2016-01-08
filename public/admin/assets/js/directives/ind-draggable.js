@@ -1,10 +1,14 @@
-app.directive('ind-draggable', ['$document', function($document) {
+app.directive('indDraggable', ['$document', function($document) {
   return {
     link: function(scope, element, attr) {
-      var startX = 0, startY = 0, x = 0, y = 0;
+
+      var startX = element.position().left || 0;
+      var startY = element.position().top || 0;
+      var x = startX;
+      var y = startY;
 
       element.css({
-       position: 'relative',
+       position: 'fixed',
        // border: '1px solid red',
        // backgroundColor: 'lightgrey',
        // cursor: 'pointer'
@@ -12,12 +16,12 @@ app.directive('ind-draggable', ['$document', function($document) {
 
       element.on('mousedown', function(event) {
         // Prevent default dragging of selected content (if not form element)
-        if (event.target.nodeName !== 'INPUT' && 
-            event.target.nodeName !== 'TEXTAREA' && 
+        if (event.target.nodeName !== 'INPUT' &&
+            event.target.nodeName !== 'TEXTAREA' &&
             event.target.nodeName !== 'SELECT') {
-        
+
           event.preventDefault();
-        
+
         }
 
         startX = event.pageX - x;

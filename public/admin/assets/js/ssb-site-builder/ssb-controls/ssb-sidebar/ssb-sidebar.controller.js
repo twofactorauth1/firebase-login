@@ -27,6 +27,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, SimpleSiteBuil
     vm.cancelPendingEdits = cancelPendingEdits;
     vm.togglePageSectionAccordion = togglePageSectionAccordion;
     vm.togglePageSectionComponentAccordion = togglePageSectionComponentAccordion;
+    vm.setActiveSection = setActiveSection;
     vm.getPlatformSections = getPlatformSections;
     vm.getPlatformComponents = getPlatformComponents;
     vm.addSectionToPage = addSectionToPage;
@@ -267,6 +268,10 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, SimpleSiteBuil
   		SimpleSiteBuilderService.setActiveComponent(index);
     }
 
+    function setActiveSection(index) {
+        SimpleSiteBuilderService.setActiveSection(index);
+    }
+
     function addBackground(sectionIndex, componentIndex) {
     	vm.openMediaModal('media-modal', 'MediaModalCtrl', null, 'lg');
 
@@ -412,7 +417,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, SimpleSiteBuil
 
         var sectionLabel;
 
-        var featured = ['header', 'feature block', 'meet team'];
+        var featured = ['header', 'hero image', 'feature block', 'meet team', 'testimonials'];
 
         /*
         * @platformSections
@@ -423,7 +428,6 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, SimpleSiteBuil
         });
 
         _.each(vm.enabledPlatformSections, function (element, index) {
-            console.log(element.title);
             if (featured.indexOf(element.title.toLowerCase()) !== -1) {
                 element.featured = true;
             }
