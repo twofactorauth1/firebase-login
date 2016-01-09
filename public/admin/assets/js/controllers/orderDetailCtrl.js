@@ -249,7 +249,8 @@
     	{
     		var cust_url = '/customers/' + cust._id;
       		$location.url(cust_url).search({
-        		order: "true"
+        		order: "true",
+            id: $scope.order._id
       		});
     	}
     	else
