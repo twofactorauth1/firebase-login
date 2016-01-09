@@ -1,7 +1,7 @@
 'use strict';
 /*global app, moment, angular, window*/
 /*jslint unparam:true*/
-app.directive('navigationComponent', ['WebsiteService', 'AccountService', function (WebsiteService, AccountService) {
+app.directive('navigationComponent', ['WebsiteService', 'AccountService', '$timeout', function (WebsiteService, AccountService, $timeout) {
   return {
     scope: {
       component: '=',
@@ -20,6 +20,11 @@ app.directive('navigationComponent', ['WebsiteService', 'AccountService', functi
           scope.website.linkLists = lnklist;
         };
       }
+      scope.$watch('component.logo', function (newValue, oldValue) {        
+          $timeout(function () {
+            $(window).trigger('resize');
+          }, 0);
+      })
     },
     controller: function ($scope, WebsiteService, AccountService, $compile) {
       $scope.isSinglePost = $scope.$parent.isSinglePost;
