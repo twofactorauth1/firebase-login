@@ -80,6 +80,12 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
 
     $scope.$watch(function() { return SimpleSiteBuilderService.pages }, function(pages) {
       vm.state.pages = pages;
+      var parsed = angular.fromJson(pages);
+      var arr = [];
+      _.each(parsed, function (page) {
+          arr.push(page);
+      });
+      vm.state.arr_pages = arr;
     }, true);
 
     //TODO: optimize this, we dont need to watch since this won't change

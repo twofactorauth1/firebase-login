@@ -5,7 +5,7 @@
             <ui-select-match>
                 <small ng-bind-html="$select.selected.title"></small>
             </ui-select-match>
-            <ui-select-choices repeat="page in vm.state.pages track by $index">
+            <ui-select-choices repeat="page in vm.state.arr_pages track by $index">
                 <small ng-bind-html="page.title"></small>
             </ui-select-choices>
         </ui-select>
