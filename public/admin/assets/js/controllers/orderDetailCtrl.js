@@ -300,7 +300,8 @@
                         _id: matchingUser._id,
                         first: matchingUser.first,
                         last: matchingUser.last,
-                        email: matchingUser.email
+                        email: matchingUser.email,
+                        profilePhotos: matchingUser.profilePhotos
                     };
 
                 }
