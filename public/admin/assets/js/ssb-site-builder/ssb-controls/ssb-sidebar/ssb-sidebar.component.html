@@ -201,7 +201,7 @@
 
                 <ul class="list-unstyled">
                     <li ng-repeat="page in vm.state.pages track by $index" class="ssb-page-section-settings-item">
-                        <div ng-click="vm.openModal('ssb-page-settings-modal', 'SiteBuilderPageSettingsModalController', null, 'lg');" class="ssb-sidebar-item-icon ti-settings display-ib" tooltip-placement="left" tooltip-html-unsafe="Page Settings"></div>
+                        <div ng-click="vm.openPageSettingsModal('ssb-page-settings-modal', 'SiteBuilderPageSettingsModalController', null, 'lg', page._id);" class="ssb-sidebar-item-icon ti-settings display-ib" tooltip-placement="left" tooltip-html-unsafe="Page Settings"></div>
                         <div class="panel-group">
                             <div class="ssb-sidebar-sortable-item panel panel-default">
                                 <div class="panel-heading">
