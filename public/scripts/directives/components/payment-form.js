@@ -526,16 +526,23 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                 }
             };
 
-            scope.validateEmail = function(data)
+            scope.validateEmail = function(data, newAccount)
             {
                 if (data === true) {
-                    scope.validateForm = false;
+                    //scope.validateForm = false;
                     scope.loading = false;
-                    angular.element("#email .error").html("Email Already Exists");
-                    angular.element("#email").addClass('has-error');
+                    if(newAccount) {
+                        newAccount.hidePassword = true;
+                    }
+
+                    angular.element("#email .error").html("You will be able to log in to this account with your existing credentials.");
+                    angular.element("#email").addClass('has-success');
                     angular.element("#email .glyphicon").addClass('glyphicon-remove');
                 } else {
                     scope.validateForm = true;
+                    if(newAccount) {
+                        newAccount.hidePassword = false;
+                    }
                     angular.element("#email .error").html("");
                     angular.element("#email").removeClass('has-error').addClass('has-success');
                     angular.element("#email .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
@@ -582,7 +589,7 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                         scope.promises.push(UserService.checkDuplicateEmail(newAccount.email));
                     else
                         UserService.checkEmailExists(newAccount.email, function(data) {
-                            scope.validateEmail(data);
+                            scope.validateEmail(data, newAccount);
                         });
                 }
             };
