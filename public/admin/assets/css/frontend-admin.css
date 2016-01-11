@@ -6519,6 +6519,13 @@ a[href="https://froala.com/wysiwyg-editor"] {
     float: none!important;
   }
 }
+.ssb-footer-page-settings-modal ul.page-settings {
+  float: left;
+}
+.ssb-footer-page-settings-modal ul.page-settings li {
+  display: inline-block;
+  margin: 0 0 0 10px;
+}
 .ssb-sidebar {
   display: none;
   height: 200px;
