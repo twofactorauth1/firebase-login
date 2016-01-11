@@ -1,4 +1,4 @@
-<section class="ssb-section-layout {{vm.sectionClass(vm.section)}}" ng-attr-style="{{vm.sectionStyle(vm.section)}}">
+<section id="{{vm.section._id}}" class="ssb-section-layout {{vm.sectionClass(vm.section)}}" ng-attr-style="{{vm.sectionStyle(vm.section)}}">
     <ssb-component-loader
         ng-if="vm.section.components.length"
         ng-repeat="component in vm.section.components track by $index"

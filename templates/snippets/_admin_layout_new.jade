@@ -43,11 +43,11 @@ html(lang='en', data-ng-app='indigenousApp')
     link(rel='stylesheet', href='/js/libs/slick-carousel/slick/slick.css')
     // EMAIL
     link(rel='stylesheet', href='assets/css/email.css')
-    
+
 
 
   body(ng-controller='AppCtrl')
-    #app(ui-view='', ng-class="{'app-mobile' : app.isMobile, 'app-navbar-fixed' : app.layout.isNavbarFixed, 'app-sidebar-fixed' : app.layout.isSidebarFixed, 'app-sidebar-closed':app.layout.isSidebarClosed, 'app-footer-fixed':app.layout.isFooterFixed}")
+    #app(ui-view='', ng-class="{'app-mobile' : app.isMobile, 'app-navbar-fixed' : app.layout.isNavbarFixed, 'app-sidebar-fixed' : app.layout.isSidebarFixed, 'app-sidebar-closed':app.layout.isSidebarClosed, 'app-footer-fixed':app.layout.isFooterFixed, 'app-minimal-admin-chrome': app.layout.isMinimalAdminChrome}")
 
     block body_scripts
             include admin_body_scripts

@@ -39,36 +39,61 @@ mainApp.controller('CacheCtrl', ['$scope', 'pagesService', '$window', '$location
         'mw': '100%',
         'usePage': false
     };
-    if(window.indigenous && window.indigenous.precache && window.indigenous.precache.pages) {
-        var page = window.indigenous.precache.pages;
-        //pages[page.handle] = page;
-        //delete window.indigenous.precache.pages;
-        $scope.page = page;
-        $scope.components = page.components;
-        _.each(page.components, function(cmp, index){
-            $scope['components_' + index] = cmp;
-        });
-        //console.log('components_9:', $scope.components_9);
-        //$scope.components_0 = page.components[0];
 
-    }
 
-    //$scope.page = data;
-    //$scope.components = data.components;
+    $scope.components = [];
+    pagesService($scope.websiteId, function (err, data) {
+        console.log('pagesService ', data);
+        if (err) {
+            console.warn('no page found', $location.$$path);
+            if ($location.$$path === '/login') {
+                $window.location.href = '/login';
+            } else {
+                $window.location.href = '/404';
+            }
 
-    angular.element(document).ready(function () {
-        setTimeout(function () {
-            var locId = $location.$$hash;
-            console.log('locId:', locId);
-            if (locId) {
-                var element = document.getElementById(locId);
-                if (element) {
-                    $document.scrollToElementAnimated(element, 0, 1000);
+        } else {
+            $scope.page = data;
+            $scope.sections = data.sections;
+
+            _.each(data.sections, function(section, index1){
+                if(section.ssb === false) {
+                    $scope.components = $scope.components.concat(section.components);
                 } else {
-                    console.log('no element');
+                    //this is what the template should be:
+                    //<ssb-page-section section="section" index="$index" class="ssb-page-section"></ssb-page-section>
+                    $scope['sections_' + index1] = section;
+                }
+            });
+            _.each($scope.components, function(cmp, index){
+                $scope['components_' + index] = cmp;
+            });
+            console.log('$scope.components_0:', $scope.components_0);
+
+            if (data.handle === 'single-post') {
+                var post_component = _.findWhere($scope.page.components, {
+                    type: 'single-post'
+                });
+                if (post_component) {
+                    $scope.blog_post = post_component;
                 }
             }
-        }, 1000);
+
+            angular.element(document).ready(function () {
+                setTimeout(function () {
+                    var locId = $location.$$hash;
+                    if (locId) {
+                        var element = document.getElementById(locId);
+                        if (element) {
+                            $document.scrollToElementAnimated(element, 0, 1000);
+                        }
+                    }
+                }, 3000);
+            })
+        }
     });
+
+
+
 
 }]);

@@ -1,3 +1,25 @@
 <div class="ssb-topbar-inner">
-    <h2>TOPBAR</h2>
+
+    <div class="col-xs-2 pull-left">
+        <ui-select
+            ng-model="vm.state.page"
+            ng-change="vm.navigation.loadPage(vm.state.page._id);"
+            theme="bootstrap"
+            search-enabled="false">
+
+            <ui-select-match>
+                <small ng-bind-html="$select.selected.title"></small>
+            </ui-select-match>
+
+            <ui-select-choices repeat="page in vm.state.arr_pages track by $index">
+                <small ng-bind-html="page.title"></small>
+            </ui-select-choices>
+
+        </ui-select>
+    </div>
+
+    <div class="col-xs-10 text-right">
+        <ssb-action-buttons class="ssb-control-bar" save-action="vm.savePage()" cancel-action="vm.cancelPendingEdits()" state="vm.state"></ssb-action-buttons>
+    </div>
+
 </div>

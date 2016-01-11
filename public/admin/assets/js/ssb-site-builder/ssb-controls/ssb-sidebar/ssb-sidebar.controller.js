@@ -13,9 +13,9 @@ app.config(['$provide', function ($provide){
 
 app.controller('SiteBuilderSidebarController', ssbSiteBuilderSidebarController);
 
-ssbSiteBuilderSidebarController.$inject = ['$scope', '$attrs', '$filter', 'SimpleSiteBuilderService', '$modal', 'editableOptions', '$location', 'SweetAlert'];
+ssbSiteBuilderSidebarController.$inject = ['$scope', '$attrs', '$filter', '$document', '$timeout', 'SimpleSiteBuilderService', '$modal', 'editableOptions', '$location', 'SweetAlert'];
 /* @ngInject */
-function ssbSiteBuilderSidebarController($scope, $attrs, $filter, SimpleSiteBuilderService, $modal, editableOptions, $location, SweetAlert) {
+function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $timeout, SimpleSiteBuilderService, $modal, editableOptions, $location, SweetAlert) {
 
     console.info('site-build sidebar directive init...')
 
@@ -27,6 +27,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, SimpleSiteBuil
     vm.cancelPendingEdits = cancelPendingEdits;
     vm.togglePageSectionAccordion = togglePageSectionAccordion;
     vm.togglePageSectionComponentAccordion = togglePageSectionComponentAccordion;
+    vm.setActiveSection = setActiveSection;
     vm.getPlatformSections = getPlatformSections;
     vm.getPlatformComponents = getPlatformComponents;
     vm.addSectionToPage = addSectionToPage;
@@ -36,6 +37,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, SimpleSiteBuil
     vm.addBackground = addBackground;
     vm.addImage = addImage;
     vm.openModal = openModal;
+    vm.openPageSettingsModal = openPageSettingsModal;
     vm.closeModal = closeModal;
     vm.openMediaModal = openMediaModal;
     vm.insertMedia = insertMedia;
@@ -46,6 +48,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, SimpleSiteBuil
     vm.removeBackgroundImage = removeBackgroundImage;
     vm.removeImage = removeImage;
     vm.createPage = createPage;
+    vm.getTemplateById = getTemplateById;
 
     editableOptions.theme = 'bs3';
 
@@ -267,6 +270,19 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, SimpleSiteBuil
   		SimpleSiteBuilderService.setActiveComponent(index);
     }
 
+    function setActiveSection(index) {
+        SimpleSiteBuilderService.setActiveSection(index);
+
+        //TODO: not working...
+        $timeout(function () {
+            var elementId = vm.state.page.sections[index]._id;
+            var element = angular.element(document.getElementById(elementId));
+            if (element) {
+              $document.scrollToElement(element, 175, 1000);
+            }
+        }, 0);
+    }
+
     function addBackground(sectionIndex, componentIndex) {
     	vm.openMediaModal('media-modal', 'MediaModalCtrl', null, 'lg');
 
@@ -346,6 +362,42 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, SimpleSiteBuil
 
     }
 
+
+    function openPageSettingsModal(modal, controller, index, size, pageId) {
+      console.log('openModal >>> ', modal, controller, index);
+      var _modal = {
+        templateUrl: modal,
+        keyboard: false,
+        backdrop: 'static',
+        size: 'md',
+        scope: $scope,
+        resolve: {
+            parentVm: function () {
+                return vm;
+            }
+        }
+      };
+
+      if (controller) {
+        _modal.controller = controller + ' as vm';
+      }
+
+      if (size) {
+        _modal.size = 'lg';
+      }
+
+      _modal.resolve.pageId = function () {
+        return pageId;
+      };
+
+      vm.modalInstance = $modal.open(_modal);
+
+      vm.modalInstance.result.then(null, function () {
+        angular.element('.sp-container').addClass('sp-hidden');
+      });
+
+    }
+
     function openMediaModal(modal, controller, index, size) {
       console.log('openModal >>> ', modal, controller, index);
       var _modal = {
@@ -408,11 +460,15 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, SimpleSiteBuil
 
     };
 
+    function getTemplateById(id) {
+        SimpleSiteBuilderService.getTemplateById(id);
+    };
+
     function setupSectionContent() {
 
         var sectionLabel;
 
-        var featured = ['header', 'feature block', 'meet team'];
+        var featured = ['header', 'hero image', 'feature block', 'meet team', 'testimonials'];
 
         /*
         * @platformSections
@@ -423,7 +479,6 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, SimpleSiteBuil
         });
 
         _.each(vm.enabledPlatformSections, function (element, index) {
-            console.log(element.title);
             if (featured.indexOf(element.title.toLowerCase()) !== -1) {
                 element.featured = true;
             }

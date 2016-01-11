@@ -20,6 +20,7 @@ require('../../cms/model/email');
 var cmsManager = require('../../cms/cms_manager');
 var preRenderConfig = require('../../configs/prerender.config');
 var request = require('request');
+var pageCacheManager = require('../../cms/pagecache_manager');
 
 var api = function () {
     this.init.apply(this, arguments);
@@ -565,7 +566,7 @@ _.extend(api.prototype, baseApi.prototype, {
                         self = null;
                     });
                     var pageUrl = self._buildPageUrl(req, page.get('handle'));
-                    self._updatePageCache(pageUrl);
+                    self._updatePageCache(pageUrl, accountId, page.get('handle'), null);
                     self.createUserActivity(req, 'CREATE_PAGE', null, null, function(){});
                 });
             }
@@ -610,7 +611,7 @@ _.extend(api.prototype, baseApi.prototype, {
                             self = null;
                         });
                         var pageUrl = self._buildPageUrl(req, page.get('handle'));
-                        self._updatePageCache(pageUrl);
+                        self._updatePageCache(pageUrl, accountId, pageObj.handle, temp);
                         self.createUserActivity(req, 'CREATE_PAGE', null, null, function(){});
                     });
                 } else {
@@ -661,7 +662,7 @@ _.extend(api.prototype, baseApi.prototype, {
                             self = null;
                         });
                         var pageUrl = self._buildPageUrl(req, page.get('handle'));
-                        self._updatePageCache(pageUrl);
+                        self._updatePageCache(pageUrl, accountId, pageObj.handle, null);
                         self.createUserActivity(req, 'CREATE_PAGE', null, null, function(){});
                     });
                 } else {
@@ -699,7 +700,7 @@ _.extend(api.prototype, baseApi.prototype, {
                         self = null;
                     });
                     var pageUrl = self._buildPageUrl(req, value.get('handle'));
-                    self._updatePageCache(pageUrl);
+                    self._updatePageCache(pageUrl, accountId, null, pageId);
                     self.createUserActivity(req, 'UPDATE_PAGE', null, {pageId: pageId}, function(){});
                 });
             }
@@ -1693,7 +1694,7 @@ _.extend(api.prototype, baseApi.prototype, {
                     self.log.debug('<< updateBlogPost');
                     self.sendResultOrError(res, err, value, "Error updating Blog Post");
                     var pageUrl = self._buildPageUrl(req, 'blog/' + value.get('post_url'));
-                    self._updatePageCache(pageUrl);
+                    self._updatePageCache(pageUrl, accountId, null, pageId);
                     self.createUserActivity(req, 'UPDATE_BLOGPOST', null, null, function(){});
                     self = null;
                 });
@@ -2196,7 +2197,7 @@ _.extend(api.prototype, baseApi.prototype, {
         return host + '/page/' + handle;
     },
 
-    _updatePageCache: function(url) {
+    _updatePageCache: function(url, accountId, pageName, pageId) {
         var self = this;
         self.log.debug('>> _updatePageCache(' + url + ')');
         var params = {
@@ -2219,6 +2220,10 @@ _.extend(api.prototype, baseApi.prototype, {
                 return;
             }
         });
+        pageCacheManager.updateS3Template(accountId, pageName, pageId, function(err, value){
+
+        });
+
     }
 
 });

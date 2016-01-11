@@ -249,7 +249,8 @@
     	{
     		var cust_url = '/customers/' + cust._id;
       		$location.url(cust_url).search({
-        		order: "true"
+        		order: "true",
+            id: $scope.order._id
       		});
     	}
     	else
@@ -300,7 +301,8 @@
                         _id: matchingUser._id,
                         first: matchingUser.first,
                         last: matchingUser.last,
-                        email: matchingUser.email
+                        email: matchingUser.email,
+                        profilePhotos: matchingUser.profilePhotos
                     };
 
                 }

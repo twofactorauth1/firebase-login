@@ -30,7 +30,8 @@ block content
                 li(ng-repeat='accountinavaliableAccounts')
                   a(href="/reauth/#{val.id}")
                     div(class="account-logo")
-                      img(src="#{val.logo}")
+                      if val.logo
+                        img(src="#{val.logo}")
                     if val.subdomain === 'main'
                       span www.indigenous.io
                     if val.domain

@@ -14,6 +14,7 @@ var preRenderConfig = require('../../configs/prerender.config');
 var request = require('request');
 
 var ssbManager = require('../../ssb/ssb_manager');
+var pageCacheManager = require('../../cms/pagecache_manager');
 
 var api = function () {
     this.init.apply(this, arguments);
@@ -286,8 +287,9 @@ _.extend(api.prototype, baseApi.prototype, {
             } else {
                 var modified = {date: new Date(), by:self.userId(req)};
                 ssbManager.updatePage(accountId, pageId, updatedPage, modified, function(err, page){
-                    self.log.debug('<< getPage');
-                    return self.sendResultOrError(resp, err, page, "Error fetching page");
+                    self.log.debug('<< updatePage');
+                    self.sendResultOrError(resp, err, page, "Error fetching page");
+                    pageCacheManager.updateS3Template(accountId, null, pageId, function(err, value){});
                 });
             }
         });
