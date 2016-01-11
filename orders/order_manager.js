@@ -206,7 +206,7 @@ module.exports = {
                         productManager.getTax(zip, function(err, rate){
                             log.debug('Tax Service Response: ', rate);
                             if(rate && rate.results && rate.results.length > 0) {
-                                _taxRate = rate.results[0].taxSales; // nexus location or business_location
+                                _taxRate = rate.results[0].taxSales.toFixed(4); // nexus location or business_location
                                 log.debug('Initial Tax Rate: ', _taxRate);
 
                                 if(commerceSettings.taxbased !== 'business_location'
