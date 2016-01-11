@@ -537,7 +537,7 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
 
                     angular.element("#email .error").html("You will be able to log in to this account with your existing credentials.");
                     angular.element("#email").addClass('has-success');
-                    angular.element("#email .glyphicon").addClass('glyphicon-remove');
+                    angular.element("#email .glyphicon").addClass('glyphicon-ok');
                 } else {
                     scope.validateForm = true;
                     if(newAccount) {
