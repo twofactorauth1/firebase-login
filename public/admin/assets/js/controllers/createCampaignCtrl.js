@@ -633,22 +633,19 @@
      */
     $scope.clearEmail = function (newEmail) {
       $scope.checkingEmailTitle = false;
-      // $scope.emailToSend.title = "";
-      $scope.setBusinessDetails(true);
+      // $scope.emailToSend.title = "";      
       if (newEmail) {
         $scope.emailToSendPrevious = angular.copy($scope.emailToSend);
+        $scope.setBusinessDetails(newEmail);
         $scope.emailToSend = $scope.emailToSendCopy;
         $scope.emailToSend.title = $scope.newCampaignObj.name + ' Email';
-        $scope.emailToSend.fromName = $scope.emailToSendPrevious.fromName;
-        $scope.emailToSend.fromEmail = $scope.emailToSendPrevious.fromEmail;
-        $scope.emailToSend.replyTo = $scope.emailToSendPrevious.replyTo;
         $scope.emailToSend.bcc = "";
         $scope.emailToSend.subject = $scope.newCampaignObj.name;
         $scope.checkEmailTitle($scope.emailToSend.title);
         if($scope.newCampaignObj && $scope.newCampaignObj.steps && $scope.newCampaignObj.steps[0] && $scope.newCampaignObj.steps[0].settings)
           $scope.newCampaignObj.steps[0].settings.emailId = null;
       } else {
-
+        $scope.setBusinessDetails();
         $scope.emailToSend = $scope.emailToSendPrevious;
         if($scope.newCampaignObj.steps && $scope.newCampaignObj.steps[0] && $scope.newCampaignObj.steps[0].settings && !$scope.newCampaignObj.steps[0].settings.emailId && $scope.emailToSendPrevious)
           $scope.newCampaignObj.steps[0].settings.emailId = $scope.emailToSendPrevious._id

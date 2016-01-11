@@ -17,7 +17,33 @@
                         Page Info
                     </tab-heading>
 
-                    <p>TODO 1</p>
+                    <div>
+                        <div class="mb10"></div>
+                        <div class="form-group">
+                            <label>Title:</label>
+                            <input class="form-control input-lg" type="text" ng-model="vm.page.title">
+                        </div>
+                        <div class="form-group">
+                            <label>Menu Title:</label>
+                            <input class="form-control input-lg" type="text" ng-model="vm.page.menuTitle">
+                        </div> 
+                        <div class="form-group">
+                            <div class="checkbox clip-check check-info checkbox-inline">
+                                <input id="checkbox1" type="checkbox" ng-true-value="false" ng-false-value="true" ng-model="vm.page.mainmenu">
+                                <label for="checkbox1">
+                                    Hide from menu
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="checkbox clip-check check-info checkbox-inline">
+                                <input id="checkbox2" type="checkbox" ng-model="vm.page.homepage" checked>
+                                <label for="checkbox2">
+                                    Set as Home Page
+                                </label>
+                            </div>
+                        </div>            
+                    </div>
 
                 </tab>
                 <tab>
@@ -25,7 +51,25 @@
                         Permissions
                     </tab-heading>
 
-                    <p>TODO 2</p>
+                    <div>
+                        <div class="mb10"></div>
+                        <div class="form-group">
+                            <label>
+                                <input type="radio" ng-model="vm.page.restriction" value="no-restrictions"><strong> No restrictions</strong>
+                                <p class="margin-top-5">This page is public and open to all</p>
+                            </label>
+                            <hr/>
+                            <label>
+                                <input type="radio" ng-model="vm.page.restriction" value="password-protection"><strong> Password protection</strong>
+                                <p class="margin-top-5">Visitors need to enter a paasword to view this page</p>
+                            </label>
+                            <hr/>
+                            <label>
+                                <input type="radio" ng-model="vm.page.restriction" value="members-only"><strong> Members only</strong>
+                                <p class="margin-top-5">Visitors need to register as site members to see this page</p>
+                            </label>
+                        </div>  
+                    </div>
 
                 </tab>
                 <tab>
@@ -33,58 +77,57 @@
                         Page SEO
                     </tab-heading>
 
-                    <p>TODO 3</p>
-
+                    <div>
+                        <div class="mb10"></div>
+                        <div class="form-group">
+                            <label>Title:</label>
+                            <input class="form-control input-lg" type="text" ng-model="vm.page.title">
+                        </div>
+                        <div class="form-group">
+                            <label>Description:</label>
+                            <textarea type="text" class="form-control" ng-model="vm.page.seo.description"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Keywords</label>                           
+                            <tags-input min-length="1" ng-model="vm.page.seo.keywords"></tags-input>
+                        </div>
+                        <div class="form-group">
+                            <label>Url:</label>
+                            <input class="form-control input-lg" type="text" ng-model="vm.page.handle">
+                        </div>
+                        <div class="form-group">
+                            <div class="checkbox clip-check check-info checkbox-inline">
+                                <input id="checkbox3" type="checkbox" ng-true-value="false" ng-false-value="true" ng-model="vm.page.showinseo">
+                                <label for="checkbox3">
+                                    Hide from Search Engines
+                                </label>
+                            </div>
+                        </div>           
+                    </div>
                 </tab>
-
 
             </tabset>
             <div class="clearfix"></div>
         </section>
 
-        <section>
-            <ul>
-                <li>Rename</li>
-                <li>Duplicate</li>
-                <li>Hide</li>
-                <li>Delete</li>
-            </ul>
+        <section class="hidden">
+            
         </section>
 
     </div>
-
+    <div class="clearfix"></div>
+    <div class="modal-footer ssb-footer-page-settings-modal">  
+        <ul class="list-unstyled page-settings">
+            <li>Rename</li>
+            <li>Duplicate</li>
+            <li>Hide</li>
+            <li>Delete</li>
+        </ul>      
+        <div class="pull-right">
+            <button class="btn btn-primary" ng-click="vm.parentVm.closeModal()">Close</button>
+        </div>
+        <div class="pull-right margin-right-5">
+            <button class="btn btn-primary" ng-click="vm.saveSettings()">Done </button>
+        </div>
+    </div>
 </script>
-
-<div id="blueimp-gallery" class="blueimp-gallery">
-        <!-- The container for the modal slides -->
-        <div class="slides">
-
-        </div>
-        <!-- Controls for the borderless lightbox -->
-        <h3 class="title"></h3>
-        <a class="prev">‹</a>
-        <a class="next">›</a>
-        <a class="close">×</a>
-        <a class="play-pause"></a>
-        <!-- The modal dialog, which will be used to wrap the lightbox content -->
-        <div class="modal fade">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" aria-hidden="true">&times;</button>
-                        <h4 class="modal-title"></h4>
-                    </div>
-                    <div class="modal-body next"></div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default pull-left prev">
-                            <i class="glyphicon glyphicon-chevron-left"></i> Previous
-                        </button>
-                        <button type="button" class="btn btn-primary next">
-                            Next
-                            <i class="glyphicon glyphicon-chevron-right"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-</div>
