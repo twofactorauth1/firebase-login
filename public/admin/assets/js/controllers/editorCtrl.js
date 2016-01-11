@@ -2,7 +2,7 @@
 /*global app, moment, angular, window, CKEDITOR*/
 /*jslint unparam:true*/
 (function (angular) {
-  app.controller('EditorCtrl', ["$scope", "$document", "$rootScope", "$interval", "$timeout", "toaster", "$modal", "$filter", "$location", "WebsiteService", "SweetAlert", "hoursConstant", "GeocodeService", "ProductService", "AccountService", "postConstant", "formValidations", function ($scope, $document, $rootScope, $interval, $timeout, toaster, $modal, $filter, $location, WebsiteService, SweetAlert, hoursConstant, GeocodeService, ProductService, AccountService, postConstant, formValidations) {
+  app.controller('EditorCtrl', ["$scope", "$state", "$document", "$rootScope", "$interval", "$timeout", "toaster", "$modal", "$filter", "$location", "WebsiteService", "SweetAlert", "hoursConstant", "GeocodeService", "ProductService", "AccountService", "postConstant", "formValidations", function ($scope, $state, $document, $rootScope, $interval, $timeout, toaster, $modal, $filter, $location, WebsiteService, SweetAlert, hoursConstant, GeocodeService, ProductService, AccountService, postConstant, formValidations) {
 
     /*
      * @circleOptions
@@ -129,6 +129,7 @@
 
     $scope.ckeditorLoaded = false;
     $scope.activeEditor = null;
+    
     $scope.activateCKeditor = function () {
       CKEDITOR.on("instanceReady", function (ev) {
 
@@ -143,7 +144,7 @@
           angular.element('.cke_button__doksoft_button_email').hide();
         }
         ev.editor.on('key', function () {
-          $scope.setDirty(true);
+          $scope.setDirty(true);         
         });
         ev.editor.on('change', function () {
           $scope.setDirty(true);
@@ -834,19 +835,50 @@
       $scope.openModal('media-modal', 'MediaModalCtrl', null, 'lg');
     };
 
+    function getFilename(url)
+    {
+       if (url)
+       {
+          var m = url.toString().match(/.*\/(.+?)\./);
+          if (m && m.length > 1)
+          {
+             return m[1];
+          }
+       }
+       return "";
+    }
+
+    function getUrl(value) {
+      if (value && !/http[s]?/.test(value)) {
+        value = 'http:' + value;
+      }
+      return value;
+    };
+
     /*
      * @addCKEditorImage
      * -
      */
-
-    $scope.addCKEditorImage = function (url, inlineInput, edit) {
+    $scope.addCKEditorImage = function (url, inlineInput, edit) {     
+    WebsiteService.isImage(url).then(function(result) {
+      var _image = result;
       if (inlineInput) {
         if (edit) {
           inlineInput.val(url);
         } else {
-          inlineInput.insertHtml('<img data-cke-saved-src="' + url + '" src="' + url + '"/>');
+          if(_image)
+            inlineInput.insertHtml('<img data-cke-saved-src="' + url + '" src="' + url + '"/>');
+          else{
+            url = getUrl(url);
+            var _text = inlineInput && inlineInput.getSelection() && inlineInput.getSelection().getSelectedText();
+            if(!_text)
+               _text = getFilename(url)
+            inlineInput.insertHtml('<a target="_blank" data-cke-saved-href="' + url + '" href="' + url + '">' + _text + '</a>');            
+          }
         }
       }
+    });     
+      
     };
 
     /*
@@ -1682,16 +1714,20 @@
     };
 
     $scope.addUnderNavSetting = function (masthead_id, fn) {
-      $scope.allowUndernav = false;
+      var data = {
+        allowUndernav : false,
+        navComponent: null
+      }
       $scope.components.forEach(function (value, index) {
         if (value && value.type === 'masthead' && value._id == masthead_id) {
           if (index != 0 && $scope.components[index - 1].type == "navigation") {
-            $scope.allowUndernav = true;
+            data.allowUndernav = true; 
+            data.navComponent =  $scope.components[index - 1];         
           } else
-            $scope.allowUndernav = false;
+            data.allowUndernav = false;
         }
       })
-      fn($scope.allowUndernav);
+      fn(data);
     }
 
     /*
@@ -1731,7 +1767,7 @@
     var offFn = $rootScope.$on('$locationChangeStart', function (event, newUrl, oldUrl) {
         checkIfPageDirty(newUrl, function (redirectUrl) {  
           var condition = $scope.isDirty.dirty && !$scope.changesConfirmed;
-          if (condition) {
+          if (condition && !$scope.isCampaign) {
             event.preventDefault();
             SweetAlert.swal({
               title: "Are you sure?",

@@ -1,5 +1,5 @@
 /**
- * COPYRIGHT INDIGENOUS SOFTWARE, INC., LLC 2014
+ * COPYRIGHT INDIGENOUS SOFTWARE, INC., LLC 2014-2016
  *
  * All use or reproduction of any or all of this content must be approved.
  * Please contact info@indigenous.io for approval or questions.
@@ -73,7 +73,7 @@ var account = $$.m.ModelBase.extend({
                 "stripeCustomerId": '', //Stripe customerId... also stored on User
                 "cardToken": '', //optional. Not sure if we need this if we have the customer reference
                 "signupDate": new Date(),
-                "trialLength": 14
+                "trialLength": 31
             },
 
             'credentials': [],
@@ -93,7 +93,8 @@ var account = $$.m.ModelBase.extend({
             },
             commerceSettings : {
                 taxes : true,
-                taxbased : "business_location"
+                taxbased : "business_location",
+                taxnexus : []
             },
             created: {
                 date: new Date(),

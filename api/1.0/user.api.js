@@ -422,7 +422,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         var cardToken = req.body.cardToken;
         var plan = req.body.plan || 'NO_PLAN_ARGUMENT';
-        var trialLength = req.body.trialLength || 15;//using 15 instead of 14 to give 14 FULL days
+        var trialLength = req.body.trialLength || 31;//using 15 instead of 14 to give 14 FULL days
         self.log.debug('>> plan ', plan);
 
         var sendWelcomeEmail = true;//this can be overridden in the request.
@@ -554,7 +554,7 @@ _.extend(api.prototype, baseApi.prototype, {
                             self.log.error('Error saving billing information to account: ' + err);
                             return self.wrapError(res, 500, 'Error saving billing information to account', err);
                         }
-                       
+
                         if(req.user || req.session.cookie) {
                             //we are currently logged in with another account.  We need to logout before logging into the new account.
                             //req.session.cookie = null;
@@ -568,7 +568,7 @@ _.extend(api.prototype, baseApi.prototype, {
                         req.session.domain = updatedAccount.get('domain');
                         //req.session.locked = true;//TODO: change this eventually
                         self.log.debug('Just set session accountId to: ' + req.session.accountId);
-                       
+
                         callback(null, account.id(), sub.id, user, stripeCustomer.id, sub, updatedAccount);
                     });
                 });
@@ -586,7 +586,7 @@ _.extend(api.prototype, baseApi.prototype, {
                         user.set("accountUrl", value.toLowerCase());
                         var json = user.toJSON('public', {accountId:accountId});
 
-                        req.session.midSignup = false;                       
+                        req.session.midSignup = false;
                         self.createUserActivityWithParams(accountId, user.id(), 'CREATE_ACCOUNT', null, "Congratulations, your account was successfully created.", function(){});
                         var activity = new $$.m.ContactActivity({
                             accountId: accountId,

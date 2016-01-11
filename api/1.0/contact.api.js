@@ -526,7 +526,8 @@ _.extend(api.prototype, baseApi.prototype, {
                 //TODO: check if contact exists
                 var query = {};
                 query.accountId = value.id();
-                query['details.emails.email'] = req.body.details[0].emails[0].email;
+                
+                query['details.emails.email'] = new RegExp('^'+req.body.details[0].emails[0].email+'$', "i");
                 var skipWelcomeEmail = req.body.skipWelcomeEmail;
                 var fromContactEmail = req.body.fromEmail;
                 var campaignId = req.body.campaignId;
@@ -535,7 +536,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 var fromContactName = req.body.fromName;
                 var activity = req.body.activity;
                 var contact_type = req.body.contact_type;
-
+                var uniqueEmail = req.body.uniqueEmail;
                 console.log('req.body ', req.body);
 
                 delete req.body.skipWelcomeEmail;
@@ -543,24 +544,25 @@ _.extend(api.prototype, baseApi.prototype, {
                 delete req.body.fromName;
                 delete req.body.activity;
                 delete req.body.contact_type;
+                delete req.body.uniqueEmail;
 
                 contactDao.findMany(query, $$.m.Contact, function(err, list){
                     if(err) {
                         self.log.error('Error checking for existing contact: ' + err);
                         return self.wrapError(resp, 500, "There was a problem signing up.  Please try again later")
                     }
-                    if(list.length > 0) {
+                    if(list.length > 0 && uniqueEmail) {
                         return self.wrapError(resp, 409, "This user already exists for this account.");
                     }
                     var contact = new $$.m.Contact(req.body);
                     contact.set('accountId', value.id());
                     self.log.debug('contact_type ', contact_type);
-                    if (!contact_type) {
+                    if (!contact_type || !contact_type.length) {
                         contact.set('type', 'ld');
                         contact.set('tags', ['ld']);
                     } else {
-                        contact.set('type', contact_type);
-                        contact.set('tags', [contact_type]);
+                        contact.set('type', 'ld');
+                        contact.set('tags', contact_type);
                     }
                     if(contact.get('fingerprint')) {
                         contact.set('fingerprint', ''+contact.get('fingerprint'));
@@ -594,7 +596,7 @@ _.extend(api.prototype, baseApi.prototype, {
                             contact.createAddress(null, null, null, null, city, state, zip, country, countryCode, displayName, lat, lon, true, true);
                         }
                         var ip = value ? value.ip : null;
-                        contactDao.saveOrUpdateContact(contact, function(err, savedContact){
+                        contactDao.createSignUpContact(contact, function(err, savedContact){
                             if(err) {
                                 self.log.error('Error signing up: ' + err);
                                 req.flash("error", 'There was a problem signing up.  Please try again later.');

@@ -31,6 +31,7 @@ function ($rootScope, $state, $stateParams) {
             isSidebarFixed: true, // true if you want to initialize the template with fixed sidebar
             isSidebarClosed: false, // true if you want to initialize the template with closed sidebar
             isFooterFixed: false, // true if you want to initialize the template with fixed footer
+            isMinimalAdminChrome: false, //minimal admin chrome for site builder experience
             theme: 'theme-6', // indicate the theme chosen for your project
             logo: 'assets/images/logo.png', // relative path of the project logo
         }

@@ -61,6 +61,7 @@ var emailTemplateUtil = {
     },
 
     serverUrl: appConfig.server_url,
+    wwwUrl: appConfig.www_url,
     supportEmail: appConfig.support_email,
     //endregion
 
@@ -68,8 +69,11 @@ var emailTemplateUtil = {
     //region PUBLIC
     resetPassword: function(accountId, resetPasswordToken, user, toEmail, props, fn) {
         var self = this;       
-
-        var serverUrl = this._getServerUrl(accountId, function(err, value) {
+        if(accountId === appConfig.mainAccountID) {
+            // we don't want the actual URL for 'main'... instead, we want www.
+            accountId = 0;
+        }
+        this._getServerUrl(accountId, function(err, value) {
             if (err) {
                 return fn(err, value);
             }
@@ -107,7 +111,7 @@ var emailTemplateUtil = {
         if (accountId > 0) {
             return accountDao.getServerUrlByAccount(accountId, fn);
         } else {
-            return fn(null, this.serverUrl);
+            return fn(null, this.wwwUrl);
         }
     },
 

@@ -2,7 +2,7 @@
 /*global app, Keen, $$*/
 /*jslint unparam: true*/
 (function (angular) {
-  app.service('CustomerService', ['$http', '$rootScope', '$cacheFactory', 'ImportContactService', 'contactConstant', 'userConstant', function ($http, $rootScope, $cacheFactory, ImportContactService, contactConstant, userConstant) {
+  app.service('CustomerService', ['$http', '$rootScope', '$cacheFactory', 'ImportContactService', 'contactConstant', 'userConstant', 'formValidations', function ($http, $rootScope, $cacheFactory, ImportContactService, contactConstant, userConstant, formValidations) {
     var baseUrl = '/api/1.0/';
 
     this.getCache = function () {
@@ -171,13 +171,16 @@
           if (type) {
             tags.push(type.label);
           }
+          else{
+            tags.push(tag);
+          }
         });
       }
       return tags.join(', ');
     };
 
     this.checkBestEmail = function (contact) {
-      if (contact.details && contact.details.length > 0) {
+      if (contact && contact.details && contact.details.length > 0) {
         //see if we have a google contact, that's the best source of email
         var details = _.findWhere(contact.details, {
           type: userConstant.social_types.GOOGLE
@@ -196,7 +199,7 @@
     };
 
     this.checkCustomerBestEmail = function (contact) {
-      if (contact.details && contact.details.length > 0) {
+      if (contact && contact.details && contact.details.length > 0) {
         //see if we have a google contact, that's the best source of email
         var details = _.findWhere(contact.details, {
           type: userConstant.social_types.GOOGLE
@@ -215,7 +218,7 @@
     };
 
     this.checkFacebookId = function (contact) {
-      if (contact.details && contact.details.length > 0) {
+      if (contact && contact.details && contact.details.length > 0) {
         var details = _.findWhere(contact.details, {
           type: userConstant.social_types.FACEBOOK
         });
@@ -228,7 +231,7 @@
     };
 
     this.checkTwitterId = function (contact) {
-      if (contact.details && contact.details.length > 0) {
+      if (contact && contact.details && contact.details.length > 0) {
         var details = _.findWhere(contact.details, {
           type: userConstant.social_types.TWITTER
         });
@@ -241,7 +244,7 @@
     };
 
     this.checkLinkedInId = function (contact) {
-      if (contact.details && contact.details.length > 0) {
+      if (contact && contact.details && contact.details.length > 0) {
         var details = _.findWhere(contact.details, {
           type: userConstant.social_types.LINKEDIN
         });
@@ -287,7 +290,7 @@
 
     this.checkAddress = function (contact) {
       var _address = null;
-      if (contact.details && contact.details.length > 0) {
+      if (contact && contact.details && contact.details.length > 0) {
         if (contact.details && contact.details[0].addresses && contact.details[0].addresses.length > 0) {
           _address = contact.details[0].addresses[0];
           var address_str = "";
@@ -358,10 +361,44 @@
 
 
     this.getCustomerTags = function (fn) {
-      var customerTags = contactConstant.customer_tags.dp;
+      var customerTags = contactConstant.customer_tags.dp;      
       fn(customerTags);
     };
 
+
+    this.getAllCustomerTags = function (customers, fn) {
+      var customerTags = contactConstant.customer_tags.dp;      
+        var contactTags = [];
+        _.each(customers, function (contact) {          
+          if (contact.tags) {
+            _.each(contact.tags, function (tag) {
+              var type = _.find(customerTags, function (type) {
+                return type.data === tag;
+              });
+              if (!type) {
+                contactTags.push({
+                  label : tag,
+                  data : tag
+                })
+              }
+            });
+          }
+        })
+      customerTags = _.uniq(customerTags.concat(contactTags), function(c) { return c.label; })             
+      fn(customerTags);
+    };
+
+    this.tagToCustomer = function (value, fn) {
+      var regexTag = formValidations.customerTags;
+      var isValid = regexTag.test(value);
+      if(isValid){
+        var item = {
+          label: value,
+          data: value
+        };
+      }
+      return item;      
+    };
 
 
     //region IMPORT

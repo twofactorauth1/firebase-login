@@ -26,8 +26,8 @@
         <div class="clearfix"></div>
     </div>
     <div class="modal-footer">
-        <button ng-if="social.selectedLink" type="button" class="btn btn-primary" ng-click="saveSocialLink(social, component._id, 'update')">Update {{social.selectedLink}}</button>
-        <button ng-if="social.selectedLink" type="button" class="btn btn-primary" ng-click="saveSocialLink(social, component._id, 'delete')" data-dismiss="modal">Delete {{social.selectedLink}}</button>
+        <button ng-if="social.selectedLink" type="button" class="btn btn-primary" ng-click="saveSocialLink(social, component._id, 'update')">Update {{matchingLink.tooltip}}</button>
+        <button ng-if="social.selectedLink" type="button" class="btn btn-primary" ng-click="saveSocialLink(social, component._id, 'delete')" data-dismiss="modal">Delete {{matchingLink.tooltip}}</button>
         <button ng-if="!social.selectedLink" type="button" class="btn btn-primary" ng-click="saveSocialLink(social, component._id, 'add')">Save changes</button>
     </div>
 </script>

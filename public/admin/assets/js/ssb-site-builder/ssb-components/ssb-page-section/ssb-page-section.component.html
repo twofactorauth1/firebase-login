@@ -1,12 +1,12 @@
-<section class="ssb-section-layout row {{vm.sectionClass(vm.section)}}" ng-attr-style="{{vm.sectionStyle(vm.section)}}">
-  <ssb-component-loader
-		ng-if="vm.section.components.length"
-		ng-repeat="component in vm.section.components track by $index"
-    component-class="vm.componentClass(component, $index)"
-    component-style="vm.componentStyle(component, $index)"
-		component="component"
-		website="vm.state.website"
-		state="vm.state"
-		ui-state="vm.uiState">
-	</ssb-component-loader>
+<section id="{{vm.section._id}}" class="ssb-section-layout {{vm.sectionClass(vm.section)}}" ng-attr-style="{{vm.sectionStyle(vm.section)}}">
+    <ssb-component-loader
+        ng-if="vm.section.components.length"
+        ng-repeat="component in vm.section.components track by $index"
+        component-class="vm.componentClass(component, $index)"
+        component-style="vm.componentStyle(component, $index)"
+        component="component"
+        website="vm.state.website"
+        state="vm.state"
+        ui-state="vm.uiState">
+    </ssb-component-loader>
 </section>

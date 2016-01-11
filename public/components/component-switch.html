@@ -100,6 +100,19 @@
         <div email-component component="value"></div>
     </div>
 
+    <!-- SSB stuff. -->
+    <div ng-switch-when="ssb-text">
+        <div ssbTextComponent component="value"></div>
+    </div>
+
+    <div ng-switch-when="ssb-page-section">
+        <div ssbPageSection component="value"></div>
+    </div>
+
+    <div ng-switch-when="ssb-image">
+        <div ssbImageComponent component="value"></div>
+    </div>
+
     <div ng-switch-default style="color: red; outline-color: red; padding: 10px">
         ERROR: could not find matching directive for component.type = {{value.type}}
     </div>

@@ -56,7 +56,7 @@
 
     // Add remove photo
     $scope.insertPhoto = function (asset) {
-      $scope.account.business.logo = asset.url;
+      $scope.account.business.logo = asset.url.replace(/^https?:/,'');
     };
 
     $scope.removePhoto = function (asset) {
@@ -78,7 +78,7 @@
       return email._id === $scope.account.business.emails[0]._id;
     };
 
-    // Add/Remove phone numbers        
+    // Add/Remove phone numbers
     $scope.accountAddPhoneFn = function () {
       $scope.account.business.phones.push({
         _id: CommonService.generateUniqueAlphaNumericShort(),
@@ -342,7 +342,7 @@
     };
 
     $scope.checkIfDirty = function(){
-      var isDirty = false;      
+      var isDirty = false;
       if($scope.actualAccount && !angular.equals($scope.actualAccount, $scope.account))
         isDirty = true;
       return isDirty;

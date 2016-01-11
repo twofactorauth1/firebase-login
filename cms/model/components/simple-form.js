@@ -99,6 +99,8 @@ var component = $$.m.ModelBase.extend({
              */
             contact_type : "ld",
 
+            tags: ["ld"],
+
             /**
              *
              *
@@ -153,7 +155,9 @@ var component = $$.m.ModelBase.extend({
             btn:{
                 color: "#333",
                 bgcolor: "#ccc"
-            }
+            },
+
+            uniqueEmail: false
         }
     },
 

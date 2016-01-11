@@ -898,6 +898,43 @@ var dao = {
 
     },
 
+    createSignUpContact: function(contact, fn) {
+        var self = this;
+        self.log.debug('>> saveOrUpdateContact');        
+        self.saveOrUpdate(contact, function(err, savedContact){
+            if(err) {
+                self.log.error('Error creating contact: ' + err);
+                fn(err, null);
+            } else {
+                var activity = new $$.m.ContactActivity({
+                    accountId: savedContact.get('accountId'),
+                    contactId: savedContact.id(),
+                    activityType: $$.m.ContactActivity.types.CONTACT_CREATED,
+                    note: "Contact created.",
+                    start:new Date() //datestamp
+
+                });
+                contactActivityManager.createActivity(activity, function(err, value){
+                    if(err) {
+                        self.log.error('Error creating contactActivity for new contact with id: ' + savedContact.id());
+                    } else {
+                        self.log.debug('created contactActivity for new contact with id: ' + savedContact.id());
+                    }
+                });
+                self._createHistoricActivities(savedContact.get('accountId'), savedContact.id(), savedContact.get('fingerprint'), function(err, val){
+                    if(err) {
+                        self.log.error('Error creating historic activities for new contact: ' + err);
+                    } else {
+                        self.log.debug('Successfully created historic activities for new contact');
+                    }
+                });
+                self.log.debug('<< saveOrUpdateContact');
+                fn(null, savedContact);
+            }
+        });
+
+    },
+
     _createHistoricActivities: function(accountId, contactId, fingerprint, fn) {
         //create PAGE_VIEW activities
         var self = this;

@@ -40,6 +40,7 @@
         ssbService.applyThemeToSite = applyThemeToSite;
         ssbService.createPage = createPage;
         ssbService.getTemplates = getTemplates;
+        ssbService.getTemplateById = getTemplateById;
         ssbService.getLegacyTemplates = getLegacyTemplates;
         ssbService.addSectionToPage = addSectionToPage;
         // ssbService.createPageFromTemplate = createPageFromTemplate;
@@ -429,6 +430,14 @@
 
         }
 
+        function getTemplateById(id) {
+
+          return _.where(ssbService.templates, {
+            _id: id
+          });
+
+        }
+
         function getLegacyTemplates() {
 
           function success(data) {
@@ -462,7 +471,9 @@
                     ssbService.page.sections.push(response);
                     ssbService.setActiveSection(numSections);
                     ssbService.setActiveComponent(null);
-                    modalInstance.close();
+                    if (modalInstance) {
+                        modalInstance.close();
+                    }
                 })
             )
 

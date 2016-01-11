@@ -382,7 +382,7 @@
                                 <img ng-src="{{selectedProduct.icon}}" class="img-responsive">
                             </div>
                             <div ng-if="!selectedProduct.is_image && selectedProduct.icon" class="img-wrap icon">
-                                <i class="fa {{selectedProduct.icon}} fa-5x"></i>
+                                <i ng-style="{'color':component.iconColor}" class="fa {{selectedProduct.icon}} fa-5x"></i>
                             </div>
                             <div ng-if="!selectedProduct.is_image && !selectedProduct.icon" class="img-wrap no-preview">
                                 <h3>No Preview <br> Available</h3>

@@ -24,7 +24,9 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
             site: {},
             page: {},
             sections: {}
-        }
+        },
+        openSidebarPanel: '',
+        showSectionPanel: false
     };
 
     vm.updateActiveSection = updateActiveSection;
@@ -78,6 +80,12 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
 
     $scope.$watch(function() { return SimpleSiteBuilderService.pages }, function(pages) {
       vm.state.pages = pages;
+      var parsed = angular.fromJson(pages);
+      var arr = [];
+      _.each(parsed, function (page) {
+          arr.push(page);
+      });
+      vm.state.arr_pages = arr;
     }, true);
 
     //TODO: optimize this, we dont need to watch since this won't change
@@ -105,6 +113,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     $rootScope.$on('$stateChangeStart',
         function (event) {
             $rootScope.app.layout.isSidebarClosed = vm.uiState.isSidebarClosed;
+            $rootScope.app.layout.isMinimalAdminChrome =  vm.uiState.isMinimalAdminChrome;
         }
     );
 
@@ -305,10 +314,18 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
           }
         });
 
+        angular.element("body").on("click", ".ssb-main", function (e) {
+          vm.uiState.openSidebarPanel = '';
+          vm.uiState.showSectionPanel = true;
+        });
+
         setupBreakpoints();
 
         vm.uiState.isSidebarClosed = $rootScope.app.layout.isSidebarClosed;
         $rootScope.app.layout.isSidebarClosed = true;
+
+        vm.uiState.isMinimalAdminChrome = $rootScope.app.layout.isMinimalAdminChrome;
+        $rootScope.app.layout.isMinimalAdminChrome = true;
 
         vm.uiStateOriginal = angular.copy(vm.uiState);
 

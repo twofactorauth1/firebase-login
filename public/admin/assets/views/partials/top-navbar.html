@@ -23,11 +23,21 @@
     </a>
     <ul class="nav navbar-right margin-right-0" ct-fullheight="window" data-ct-fullheight-exclusion="header" data-ct-fullheight-if="isSmallDevice">
         <!-- start: MESSAGES DROPDOWN -->
+        <li>
+            <a class="topbar-media" ng-click="openTopBarMediaModal()">
+                <i class="ti-upload"></i> <span translate="topbar.media.MAIN">Media</span>
+            </a>
+        </li>
         <li ng-controller="AsideCtrl">
             <a class="topbar-settings" ng-click="openAside('top')">
                 <i class="ti-settings"></i> <span translate="topbar.settings.MAIN">Settings</span>
             </a>
         </li>
+        <li>
+            <a class="topbar-settings" href="#/support/help-topics">
+                <i class="ti-help-alt"></i> <span translate="topbar.help.MAIN">Help</span>
+            </a>
+        </li>    
         <!-- end: MESSAGES DROPDOWN -->
         <!-- start: ACTIVITIES DROPDOWN -->
         <li class="dropdown hidden" dropdown on-toggle="toggled(open)">

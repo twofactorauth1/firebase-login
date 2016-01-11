@@ -18,6 +18,10 @@ app.directive('videoComponent',['$sce', function ($sce) {
         return $sce.trustAsResourceUrl(retUrl);
       };
 
+      scope.trustSrc = function (src) {
+        return $sce.trustAsResourceUrl(src);
+      };
+
       scope.config = {
         width: 780,
         height: 320,

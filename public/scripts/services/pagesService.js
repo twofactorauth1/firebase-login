@@ -1,8 +1,17 @@
 'use strict';
 /*global mainApp*/
 mainApp.factory('pagesService', ['$http', '$location', '$cacheFactory', function ($http, $location, $cacheFactory) {
+    var apiURL = '/api/2.0/cms/website/';
     var pages = {};
     var pagecache = $cacheFactory('pages');
+    //take advantage of precache
+    if(window.indigenous && window.indigenous.precache && window.indigenous.precache.pages) {
+        var page = window.indigenous.precache.pages;
+        pages[page.handle] = page;
+        delete window.indigenous.precache.pages;
+
+    }
+
     return function (websiteId, callback) {
         var path = $location.$$path.replace('/page/', '');
 
@@ -41,21 +50,21 @@ mainApp.factory('pagesService', ['$http', '$location', '$cacheFactory', function
                 return _page.handle === _path;
             });
             if (_matchingPage) {
-                callback(null, _matchingPage);
+                return callback(null, _matchingPage);
             }
         }
 
-        $http.get('/api/1.0/cms/website/' + websiteId + '/page/' + path, {
+        return $http.get(apiURL + websiteId + '/page/' + path, {
             cache: true
         }).success(function (page) {
             if (page !== null && page.accountId) {
-                $http.get('/api/1.0/cms/website/' + websiteId + '/pages')
+                $http.get(apiURL + websiteId + '/pages')
                     .success(function (pages) {
                         pagecache.put('pages', pages);
-                    })
+                    });
                 callback(null, page);
             } else if (page !== null && path === 'index') {
-                $http.get('/api/1.0/cms/website/' + websiteId + '/page/coming-soon', {
+                $http.get(apiURL + websiteId + '/page/coming-soon', {
                     cache: true
                 }).success(function (page) {
                     if (page !== null) {
@@ -74,7 +83,7 @@ mainApp.factory('pagesService', ['$http', '$location', '$cacheFactory', function
         }).error(function (err) {
             if(path === 'index') {
                 //we have no index page... look for a coming-soon page.
-                $http.get('/api/1.0/cms/website/' + websiteId + '/page/coming-soon', {
+                $http.get(apiURL + websiteId + '/page/coming-soon', {
                     cache: true
                 }).success(function (page) {
                     if (page !== null) {

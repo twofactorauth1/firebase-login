@@ -95,6 +95,11 @@ _.extend(api.prototype, baseApi.prototype, {
                     by: req.user.id(),
                     date: new Date()
                 };
+                 var created = campaignObj.get('created');
+
+                if (created && _.isString(campaignObj.get('created').date)) {
+                    created.date = moment(campaignObj.date).toDate();
+                }
                 campaignObj.set('modified', modified);
                 campaignManager.updateCampaign(campaignObj, function(err, value){
                     self.log.debug('<< updateCampaign');

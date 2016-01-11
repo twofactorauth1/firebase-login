@@ -160,7 +160,7 @@ exports.stripe_dao_test = {
             var card = {
                 'number': '4242424242424242',
                 'exp_month': '12',
-                'exp_year':'2015'
+                'exp_year':'2016'
 
             };
 
@@ -420,7 +420,7 @@ exports.stripe_dao_test = {
         var card = {
             'number': '5555555555554444',
             'exp_month': '12',
-            'exp_year':'2015',
+            'exp_year':'2016',
             'cvc': '111'
         };
 

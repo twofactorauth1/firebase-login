@@ -89,7 +89,7 @@
                     </div>
                 </div>
             </div>
-            <div ng-if="!isLoaded && feed.length <= 0">
+            <div style="height:220px" ng-show="!isLoaded && feed.length <= 0">
                 <div class="panel panel-transparent">
                     <div class="panel-body">
                         <h4 class="center"><span class="fa fa-spinner fa-spin"></span> <br> Loading Feeds...</h4>
@@ -317,7 +317,7 @@
     <div class="modal-body no-padding bg-white">
         <div class="panel panel-white margin-bottom-0">
             <div class="panel-body no-padding">
-                <ul class="comments" ng-if="tempPost.comments">
+                <ul class="comments" ng-if="visibleComments.length">
                     <li ng-repeat="comment in visibleComments | orderBy:'created':true track by $index">
                         <img ng-src="{{comment.picture}}" class="img-circle margin-right-15 pull-left" width="32">
                         <small class="pull-right">{{comment.created | timeAgoFilter}}</small>
@@ -325,7 +325,7 @@
                         <small>{{comment.comment}}</small>
                     </li>
                 </ul>
-                <div ng-if="!tempPost.comments">
+                <div ng-if="!visibleComments.length">
                     <div class="margin-bottom-30"></div>
                     <h4 class="center"><span class="fa fa-comments"></span> No Comments</h4>
                     <div class="margin-bottom-30"></div>

@@ -59,3 +59,14 @@
   display: block;
   visibility: visible;
 }
+.email-body .component-hidden {
+    text-align: center;
+    padding: 5px 0;
+    height: 150px;
+    background: transparent !important;
+    position: relative;
+    .transition(margin .5s);
+}
+.email-body .component-hidden h3 {
+  line-height: 150px;
+}

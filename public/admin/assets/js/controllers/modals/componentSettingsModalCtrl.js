@@ -96,10 +96,42 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
     });
     $scope.availableProductTagsString = $scope.availableProductTags.join(",");
   });
-
   CustomerService.getCustomerTags(function(tags){
     $scope.customerTags = tags;
   });
+  CustomerService.getCustomers(function(customers){
+    CustomerService.getAllCustomerTags(customers,function(tags){
+      $scope.customerTags = tags;
+    });
+  })
+
+    var setTags = function () {
+      console.log('setTags >>>');
+      var tempTags = [];
+      _.each($scope.componentEditing.tags, function (tag , index) {
+        var matchingTag = _.findWhere($scope.customerTags, {
+          data: tag
+        });
+        if(matchingTag)
+        {          
+          tempTags.push(matchingTag);
+        }  
+      });
+      $scope.componentEditing.tags = tempTags;
+      console.log('$scope.componentEditing.tags >>>', $scope.componentEditing.tags);
+    };
+
+    var unsetTags = function() {
+      var tempTags = [];
+        var _tags = angular.copy($scope.componentEditing.tags);
+        _.each(_tags, function (tag) {
+          tempTags.push(tag.data);
+        });
+        if (tempTags) {
+          $scope.componentEditing.tags = tempTags;
+        }
+    };
+  
 
   $scope.testOptions = {
     min: 5,
@@ -136,6 +168,7 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
    * -
    */
   $scope.originalWebsite = angular.copy($scope.website);
+
   $scope.revertComponent = function () {
     if ($scope.componentEditing.type === 'navigation') {
       $scope.website.linkLists = $scope.originalWebsite.linkLists;
@@ -438,6 +471,10 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
             angular.element('.modal-backdrop').remove();
           });
         } else {
+          if($scope.componentEditing.type === "simple-form")
+            {
+              unsetTags();
+            }
           $modalInstance.close();
           angular.element('.modal-backdrop').remove();
         }
@@ -570,6 +607,49 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
     }
   };
 
+  $scope.checkDuplicateLinkTitle = function(title, customLinks, update){
+    var returnVal = false;
+    var _list = null;
+    if($scope.componentEditing.linkLists)
+      $scope.componentEditing.linkLists.forEach(function (value, index) {
+        if (value.handle === "head-menu") {
+          _list = value;
+        }
+      });
+    if(!customLinks && $scope.website.linkLists){
+      $scope.website.linkLists.forEach(function (value, index) {
+        if (value.handle === "head-menu") {
+          _list = value;
+        }
+      })
+    }
+
+    if(_list){
+      var matchedLinkList = _.filter(_list.links, function(lnk){
+        return lnk.label.toLowerCase() == title.toLowerCase();
+      });
+      if(!update && matchedLinkList.length){
+        returnVal = true;
+      }
+      if(update && matchedLinkList.length > 1){
+        returnVal = true;
+      }
+    }
+    if(returnVal){
+      if(update)
+      {
+        $scope.website.linkLists = angular.copy($scope.originalLinkList);
+        $scope.componentEditing.linkLists = angular.copy($scope.originalCustomLinkList);
+      }
+      toaster.pop('warning', "Link title already exists.");
+    }
+    if(update && !returnVal){
+
+      $scope.updateLinkList();
+    }
+    return returnVal;
+  }
+
   /*
    * @addLinkToNav
    * -
@@ -578,6 +658,9 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
   $scope.addLinkToNav = function () {
 
     if ($scope.newLink && $scope.newLink.linkTitle && $scope.newLink.linkUrl) {
+      if($scope.checkDuplicateLinkTitle($scope.newLink.linkTitle, $scope.componentEditing.customnav)){
+        return;
+      }
       if ($scope.componentEditing.customnav) {
         if (!$scope.componentEditing.linkLists) {
           $scope.componentEditing.linkLists = [];
@@ -699,6 +782,9 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
       }
 
     }
+
+    $scope.originalLinkList = angular.copy($scope.website.linkLists);
+    $scope.originalCustomLinkList = angular.copy($scope.componentEditing.linkLists);
   };
 
   $scope.refreshSlider = function () {
@@ -847,10 +933,9 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
       if (!$scope.componentEditing.spacing) {
         console.log('component editing doesnt have spacing');
         var pt, pb = 50;
-        var mw = 1024;
+        var mw = "100%";
         if($scope.componentEditing.type === "contact-us" || $scope.componentEditing.type === "navigation"){
           pt = pb = 0;
-          mw = "100%";
         }
         $scope.componentEditing.spacing = {
           'pt': pt,
@@ -868,11 +953,18 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
 
       setDefualts();
 
+      if($scope.componentEditing.type === "simple-form")
+      {
+        setTags();
+      }
+
       if ($scope.componentEditing.type === 'navigation') {
         componentType = _.findWhere($scope.componentTypes, {
           type: $scope.componentEditing.type,
           version: parseInt($scope.componentEditing.version, 10)
         });
+        $scope.originalLinkList = angular.copy($scope.website.linkLists);
+        $scope.originalCustomLinkList = angular.copy($scope.componentEditing.linkLists);
       } else {
         componentType = _.findWhere($scope.componentTypes, {
           type: $scope.componentEditing.type

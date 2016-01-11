@@ -680,6 +680,7 @@ var user = $$.m.ModelBase.extend({
         _.each(accountIds, function(accountId){
             var credentials = self.getUserAccountCredentials(accountId, $$.constants.user.credential_types.LOCAL);
             credentials.password = password;
+            credentials.scheme = CURRENT_SCHEME;
         });
         return;
     },
