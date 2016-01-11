@@ -1,4 +1,7 @@
 <div class="button-group">
 	<button ng-disabled="!vm.state.pendingChanges" class="btn btn-default" ng-click="vm.cancel()"><span class="ti-eraser"></span> Cancel</button>
 	<button ng-disabled="!vm.state.pendingChanges" class="btn btn-primary" ng-click="vm.save()"><span class="ti-check"></span> Save</button>
+    <button class="btn btn-primary">
+        <a href="/{{vm.state.page.handle}}" target="_blank" style="color: white;"><span class="ti-eye"></span> Preview</a>
+    </button>
 </div>

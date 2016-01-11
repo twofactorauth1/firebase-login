@@ -19,7 +19,7 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude) {
   //TODO: use https://github.com/martinandert/react-inline to generate inline styles for sections/components
 
   function sectionClass(section) {
-    var classString = '';
+    var classString = 'col-xs-12 ';
 
     if (section.layout) {
         classString += 'ssb-page-section-layout-' + section.layout;
@@ -91,31 +91,31 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude) {
   }
 
   function componentClass(component, index) {
-    var classString = '';
+    var classString = 'col-xs-12';
 
     if (vm.section.layout === '1-col') {
-      classString += 'col-md-12 ';
+      // classString += 'col-sm-12 ';
     }
 
     if (vm.section.layout === '2-col') {
-      classString += 'col-md-6 ';
+      classString += ' col-md-6 ';
     }
 
     if (vm.section.layout === '3-col') {
-      classString += 'col-md-4 ';
+      classString += ' col-md-4 ';
     }
 
     if (vm.section.layout === '4-col') {
-      classString += 'col-md-3';
+      classString += ' col-md-3';
     }
 
     if (index) {
-      classString += 'ssb-component-index-' + index + ' ';
+      classString += ' ssb-component-index-' + index + ' ';
     }
 
 
     if (vm.uiState && index === vm.uiState.activeComponentIndex) {
-      classString += 'ssb-active-component ';
+      classString += ' ssb-active-component ';
     }
 
     return classString;

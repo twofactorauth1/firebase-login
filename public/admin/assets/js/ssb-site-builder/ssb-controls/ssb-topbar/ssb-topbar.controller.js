@@ -14,6 +14,29 @@ function ssbSiteBuilderTopbarController($scope, $attrs, $filter, SimpleSiteBuild
     vm.savePage = savePage;
     vm.cancelPendingEdits = cancelPendingEdits;
 
+    vm.navigation = {
+        loadPage: function(pageId) {
+            if (pageId && pageId !== vm.state.page._id) {
+                vm.state.page = null;
+                vm.uiState = {
+                    loading: 0,
+                    activeSectionIndex: undefined,
+                    activeComponentIndex: undefined,
+                    show: {
+                        flyover: true,
+                        sidebar: true
+                    },
+                    accordion: {
+                        site: {},
+                        page: {},
+                        sections: {}
+                    }
+                };
+                $location.path('/website/site-builder/pages/' + pageId);
+            }
+        }
+    };
+
     function savePage() {
         SweetAlert.swal({
         title: "Are you sure?",
