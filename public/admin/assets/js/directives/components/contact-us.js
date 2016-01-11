@@ -53,6 +53,9 @@ app.directive('contactUsComponent', ['AccountService', 'GeocodeService', '$timeo
         if (newValue && scope.component.boxColor) {
           scope.boxColor = hexToRgb(scope.component.boxColor, scope.component.boxOpacity);
         }
+        else{
+          scope.boxColor = null;
+        }
       });
       scope.$watch('component.boxOpacity', function (newValue, oldValue) {
         if (angular.isDefined(newValue) && scope.component.boxColor) {
