@@ -1156,6 +1156,7 @@ div[data-type="feature-list"] .inner-page {
   margin: 5px auto!important;
   height: auto;
   color: inherit;
+  line-height: inherit;
 }
 .navbar-brand:hover {
   color: inherit;

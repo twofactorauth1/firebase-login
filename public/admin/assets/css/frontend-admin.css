@@ -1169,6 +1169,7 @@
   margin: 5px auto!important;
   height: auto;
   color: inherit;
+  line-height: inherit;
 }
 #componentloader .navbar-brand:hover {
   color: inherit;
