@@ -20,6 +20,8 @@ var Page = require('../model/page');
 var Email = require('../model/email');
 var BlogPost = require('../model/blogpost');
 
+var ssbThemeDao = require('../../ssb/dao/theme.dao.js');
+
 var dao = {
 
     options: {
@@ -1214,9 +1216,19 @@ var dao = {
             }
             var obj = value.toJSON('public');
             self.getById(obj.website.websiteId, Website, function(err, website){
-                obj.website = website.toJSON('public');
-                self.log.debug('<< getDataForWebpage');
-                fn(err, obj);
+                ssbThemeDao.getThemeById(website.get('themeId'), function(err, theme) {
+                    if(err) {
+                        self.log.error('Error getting theme:', err);
+                        return fn(err, null);
+                    } else {
+                        if (theme) {
+                            website.set('theme', theme.toJSON('public'));
+                            obj.website = website.toJSON('public');
+                            self.log.debug('<< getDataForWebpage');
+                        }
+                        return fn(null, obj);
+                    }
+                });
             });
         });
     },
@@ -1224,7 +1236,7 @@ var dao = {
     createDefaultPageForAccount: function(accountId, websiteId, fn) {
         var self = this;
         self.log.debug('>> createDefaultPageForAccount');
-        
+
         var page = new $$.m.cms.Page({
             "accountId" : accountId,
             "websiteId" : websiteId,

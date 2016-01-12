@@ -24,7 +24,8 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude) {
     if (section.layout) {
         classString += 'ssb-page-section-layout-' + section.layout;
     }
-
+    // console.debug('section classString')
+    // console.debug(classString)
     return classString;
   }
 

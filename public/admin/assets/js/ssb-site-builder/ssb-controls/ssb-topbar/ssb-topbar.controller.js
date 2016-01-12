@@ -15,10 +15,11 @@ function ssbSiteBuilderTopbarController($scope, $attrs, $filter, SimpleSiteBuild
     vm.cancelPendingEdits = cancelPendingEdits;
 
     vm.navigation = {
-        loadPage: function(pageId) {
-            if (pageId && pageId !== vm.state.page._id) {
+        loadPage: function(page) {
+            if (page._id && page._id !== vm.state.page._id) {
                 vm.state.page = null;
                 vm.uiState = {
+                    selectedPage: page,
                     loading: 0,
                     activeSectionIndex: undefined,
                     activeComponentIndex: undefined,
@@ -32,7 +33,7 @@ function ssbSiteBuilderTopbarController($scope, $attrs, $filter, SimpleSiteBuild
                         sections: {}
                     }
                 };
-                $location.path('/website/site-builder/pages/' + pageId);
+                $location.path('/website/site-builder/pages/' + page._id);
             }
         }
     };
