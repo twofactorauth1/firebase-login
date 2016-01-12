@@ -6845,7 +6845,10 @@ ssb-topbar {
 .ssb-topbar-icon {
   font-size: 2em;
 }
-.ssb-theme-young-soul .ssb-section-layout {
+.ssb-theme-young-soul {
+  font-family: "Roboto", Helvetica, Arial, sans-serif;
+}
+.ssb-theme-young-soul .ssb-page-section {
   background-color: #e8e7e7;
 }
 .ssb-theme-young-soul .ssb-page-section-layout-header {
