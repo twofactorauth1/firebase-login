@@ -267,7 +267,7 @@ module.exports = {
             var leadTotal = 0;
             _.each(results, function(result){
                 total+= result.count;
-                if(result._id._id.tag && result._id._id.tag[0] === 'ld') {
+                if(result._id._id.tag && result._id._id.tag.indexOf('ld') > -1 ) {
                     leadTotal+= result.count;
                 }
                 if(result._id._id.day < 10) {
