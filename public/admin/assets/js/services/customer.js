@@ -113,6 +113,10 @@
 
     var customerUploading = 0;
     var customerArr = [];
+    
+    this.resetCount = function(){
+      customerUploading = 0;
+    }
 
     this.importCsvCustomers = function (customers, fn) {
       var self = this;
