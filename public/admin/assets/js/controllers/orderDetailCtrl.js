@@ -817,6 +817,7 @@
         OrderService.createOrder($scope.order, function (updatedOrder) {
           toaster.pop('success', 'Order created successfully.');
           angular.copy($scope.order, $scope.originalOrder);
+          $scope.saveLoading = false;
           if(flag==1)
           {
             SweetAlert.swal("Saved!", "Your edits were saved to the page.", "success");
@@ -829,10 +830,8 @@
           else
           {
           	$location.path('/commerce/orders');
-          }
-          $scope.saveLoading = false;
+          }          
         });
-        $scope.saveLoading = false;
       }
     };
 
