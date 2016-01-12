@@ -232,8 +232,8 @@
                 <button ng-click="vm.uiState.openSidebarPanel = 'add'" class="btn btn-primary">Add Section</button>
 
                 <ul ng-if="vm.state.page.sections" class="list-unstyled" ng-sortable="vm.sortableOptions" ng-model="vm.state.page.sections">
-                    <li ng-repeat="section in vm.state.page.sections track by $index" ng-init="sectionIndex = $index" class="ssb-page-section-settings-item">
-                        <div class="ssb-sidebar-item-icon ssb-sidebar-move-handle ti-move display-ib"></div>
+                    <li ng-repeat="section in vm.state.page.sections track by $index" ng-init="sectionIndex = $index" class="ssb-page-section-settings-item ssb-sidebar-move-handle">
+                        <div class="ssb-sidebar-item-icon ti-move display-ib"></div>
                         <div class="ssb-sidebar-item-icon ssb-sidebar-item-icon-offset-1 ti-close display-ib" ng-if="vm.uiState.accordion.sections[sectionIndex].isOpen" ng-click="vm.removeSectionFromPage(sectionIndex)" tooltip-placement="left" tooltip-html-unsafe="Remove section"></div>
                         <!-- <div ng-hide="!vm.uiState.accordion.sections[sectionIndex].isOpen" class="ssb-sidebar-item-icon ssb-sidebar-move-handle ti-angle-down display-ib"></div>
                         <div ng-hide="vm.uiState.accordion.sections[sectionIndex].isOpen" class="ssb-sidebar-item-icon ssb-sidebar-move-handle ti-angle-up display-ib"></div> -->

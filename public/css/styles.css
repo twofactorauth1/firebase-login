@@ -10248,13 +10248,6 @@ a[href="https://froala.com/wysiwyg-editor"] {
 .ssb-page-section-settings-item {
   position: relative;
 }
-.ssb-sidebar-move-handle {
-  position: absolute;
-  top: 1em;
-  right: 1em;
-  z-index: 1;
-  cursor: move;
-}
 .ssb-sidebar-item-icon {
   position: absolute;
   top: 1em;
@@ -10472,6 +10465,19 @@ ssb-topbar {
   ssb-topbar .ssb-topbar-inner {
     padding-left: 75px;
   }
+}
+ssb-topbar .ui-select-match {
+  outline: none;
+  box-shadow: none;
+  background-color: transparent;
+  width: 150px;
+}
+ssb-topbar .ui-select-match-text > small {
+  width: 125px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  display: inline-block;
+  vertical-align: middle;
 }
 .ssb-topbar-icon {
   font-size: 2em;

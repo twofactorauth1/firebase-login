@@ -2,8 +2,9 @@
 
     <div class="col-xs-2 pull-left">
         <ui-select
-            ng-model="vm.state.page"
-            ng-change="vm.navigation.loadPage(vm.state.page._id);"
+            ng-init="vm.uiState.selectedPage = vm.state.page"
+            ng-model="vm.uiState.selectedPage"
+            ng-change="vm.navigation.loadPage($select.selected);"
             theme="bootstrap"
             search-enabled="false">
 
