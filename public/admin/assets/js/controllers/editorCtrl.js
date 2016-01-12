@@ -215,8 +215,8 @@
         type: 'contact-us'
       });
       if ($scope.contactComponentType) {
-        GeocodeService.validateAddress($scope.contactComponentType.location, null, function (data) {
-          if (!data) {
+        GeocodeService.validateAddress($scope.contactComponentType.location, null, function (data, results) {
+          if (!data || (results && !results.length)) {
             toaster.pop('warning', 'Address could not be found for contact component. Please enter valid address');
             $scope.saveLoading = false;
             fn(false);
