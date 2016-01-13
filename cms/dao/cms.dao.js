@@ -1216,19 +1216,9 @@ var dao = {
             }
             var obj = value.toJSON('public');
             self.getById(obj.website.websiteId, Website, function(err, website){
-                ssbThemeDao.getThemeById(website.get('themeId'), function(err, theme) {
-                    if(err) {
-                        self.log.error('Error getting theme:', err);
-                        return fn(err, null);
-                    } else {
-                        if (theme) {
-                            website.set('theme', theme.toJSON('public'));
-                            obj.website = website.toJSON('public');
-                            self.log.debug('<< getDataForWebpage');
-                        }
-                        return fn(null, obj);
-                    }
-                });
+                obj.website = website.toJSON('public');
+                self.log.debug('<< getDataForWebpage');
+                fn(err, obj);
             });
         });
     },
