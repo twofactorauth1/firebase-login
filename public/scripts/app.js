@@ -67,10 +67,14 @@ var mainApp = angular
                 },
                 controller: 'CacheCtrl as cacheCtrl'
             })
+            .when('/404', {
+                templateUrl: '../views/404.html',
+                controller: 'NotFoundCtrl as notfound'
+            })
             .when('/:name', {
                 /*templateUrl: function(urlattr){
-                    return '/template/' + urlattr.name;
-                },*/
+                 return '/template/' + urlattr.name;
+                 },*/
                 template: function(urlattr) {
                     var s = '<div data-ng-include="';
                     s += " '/template/" + urlattr.name + "'";
@@ -78,10 +82,6 @@ var mainApp = angular
                     return s;
                 },
                 controller: 'CacheCtrl as cacheCtrl'
-            })
-            .when('/404', {
-                templateUrl: '../views/404.html',
-                controller: 'NotFoundCtrl as notfound'
             })
             .when('/cached/:page', {
                 controller: 'CacheCtrl as cacheCtrl',
