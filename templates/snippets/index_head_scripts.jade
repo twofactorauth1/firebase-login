@@ -21,14 +21,62 @@ script(type="text/javascript").
                 window.analytics.load('#{segmentIOWriteKey}');
         window.analytics.page('Index', {accountId:#{account._id}});
 
+if (account.website.settings.font_family && account.website.settings.font_family_2) || (typeof account.website.theme.hasCustomFonts !== undefined && account.website.theme.hasCustomFonts === true)
+    script(src="//ajax.googleapis.com/ajax/libs/webfont/1.5.18/webfont.js")
+
 if account.website.settings.font_family && account.website.settings.font_family_2
-    script(src="//ajax.googleapis.com/ajax/libs/webfont/1/webfont.js")
     script(type="text/javascript").
         WebFont.load({
-                          google: {
-                                 families: [#{"'"+account.website.settings.font_family+"'"}, #{"'"+account.website.settings.font_family_2+"'"}]
-                           }
-               });
+          google: {
+                 families: [#{"'"+account.website.settings.font_family+"'"}, #{"'"+account.website.settings.font_family_2+"'"}]
+           }
+        });
+
+if (typeof account.website.theme.hasCustomFonts !== undefined && account.website.theme.hasCustomFonts === true)
+    script(type="text/javascript").
+        WebFont.load({
+            google: {
+                families: [!{account.website.theme.defaultFontStack}]
+            }
+        });
+        window.WebFontConfig = {
+            active: function() {
+                sessionStorage.fonts = true;
+            }
+        }
+
+if account.website.themeOverrides
+    style.
+        .ssb-theme-#{account.website.theme.handle} {
+            font-family: !{account.website.themeOverrides.defaultFontStack};
+        }
+
+        .ssb-theme-#{account.website.theme.handle} .ssb-page-section {
+            background-color: #{account.website.themeOverrides.styles.bodyBackgroundColor};
+        }
+
+        .ssb-theme-#{account.website.theme.handle} .ssb-page-section-layout-header {
+            background-color: #{account.website.themeOverrides.styles.headerBackgroundColor};
+        }
+
+        .ssb-theme-heading {
+            font-size: #{account.website.themeOverrides.styles.headingSize};
+        }
+
+        .ssb-theme-paragraph {
+            font-size: #{account.website.themeOverrides.styles.paragraphSize};
+        }
+
+        .btn, .btn-default, .btn-block, .btn-primary, button, .ssb-theme-btn {
+            background-color: #{account.website.themeOverrides.styles.primaryBtnBackgroundColor};
+            color: #{account.website.themeOverrides.styles.primaryBtnTextColor};
+        }
+
+        h1, h2, h3, h4, h5, a, p, span, label {
+            color: #{account.website.themeOverrides.styles.primaryTextColor};
+        }
+
+
 
 if account._id == 890
     script(src="//load.sumome.com/" data-sumo-site-id="ebfbe1c031968e0d81f4ca79b2fdc7a86b9132054a40985e435727147fd894f3")
