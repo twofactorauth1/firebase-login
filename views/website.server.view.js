@@ -216,6 +216,15 @@ _.extend(view.prototype, BaseView.prototype, {
 
             },
 
+            function addSSBSection(webpageData, page, cb){
+                var ssbSectionTemplate = {'id':'/admin/assets/js/ssb-site-builder/ssb-components/ssb-page-section/ssb-page-section.component.html'};
+                fs.readFile('public/admin/assets/js/ssb-site-builder/ssb-components/ssb-page-section/ssb-page-section.component.html', 'utf8', function(err, html) {
+                    ssbSectionTemplate.data = html;
+                    data.templateIncludes.push(ssbSectionTemplate);
+                    cb(null, webpageData, page);
+                });
+            },
+
             function(value, page, cb) {
                 data.components = JSON.stringify(page.get('components'));
 
