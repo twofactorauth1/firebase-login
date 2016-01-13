@@ -694,11 +694,22 @@
 
       if (existingContactIndex > -1) {
         //get the tags that have been selected
-        // var tags = $scope.getSelectedTags();
-        // var tagExists = _.intersection(contact.tags || ['nt'], tags);
-        // if (tagExists.length === 0) {
-          $scope.recipients.splice(existingContactIndex, 1);
-        // }
+         var tags = $scope.getSelectedTags();
+         var tempTags = [];
+         var tagLabel = "";
+         _.each(contact.tags, function (tag) {
+              tagLabel = _.findWhere(customerTags, { data: tag });
+              if(tagLabel)
+                tempTags.push(tagLabel.label);
+              else
+                tempTags.push(tag);
+        });
+        if(!tempTags.length)
+          tempTags.push('No Tag');
+        var tagExists = _.intersection(tempTags, tags);
+        if (tagExists.length === 0) {
+            $scope.recipients.splice(existingContactIndex, 1);
+        }
 
       }
       // clear search text
@@ -803,7 +814,7 @@
           fullContacts.push(customer);
         }
       });
-
+      
       return fullContacts;
     };
 
@@ -1524,11 +1535,18 @@
      * @getContacts
      * - get saved customers attached to this campaign
      */
+    $scope.selectedCustomers.individuals = [];
     $scope.getContacts = function() {
       var promise = CampaignService.getCampaignContacts($stateParams.campaignId, function (data) {
           $scope.originalRecipients = angular.copy(data);
           $scope.recipients = data;
-          $scope.selectedCustomers.individuals = data;
+          var individuals = [];
+          _.each(data, function (customer) {
+              individuals.push(
+                customer._id
+              )
+          })
+          $scope.selectedCustomers.individuals = individuals;
       });
       return promise;
     };
@@ -1551,7 +1569,12 @@
           customerTags = tags;
         })
         var _tags = [];
+        $scope.allCustomers = [];
         _.each(customers, function (customer) {
+          $scope.allCustomers.push({
+            _id: customer._id,
+            first: customer.first
+          })
           //customer.fullName = customer.first + " " + customer.last || '';
           if (customer.tags && customer.tags.length > 0) {
             _.each(customer.tags, function (tag) {
@@ -1689,9 +1712,9 @@
         }).then(function(data) {
           return $scope.getAccount();
         }).then(function(data) {
-          return $scope.getContacts();
-        }).then(function(data) {
           return $scope.getCustomers();
+        }).then(function(data) {
+          return $scope.getContacts();
         }).then(function(data) {
           $scope.loadSavedTags();
         });
