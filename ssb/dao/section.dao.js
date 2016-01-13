@@ -38,7 +38,7 @@ var dao = {
         var self = this;
         var deReffedAry = [];
         async.eachSeries(sectionAry, function(section, cb){
-            self.log.debug('Section:', section);
+            //self.log.debug('Section:', section);
             self.getById(section._id, $$.m.ssb.Section, function(err, section){
                 if(err) {
                     cb(err);
@@ -48,7 +48,7 @@ var dao = {
                 }
             });
         }, function done(err){
-            self.log.debug('Array:', deReffedAry);
+            //self.log.debug('Array:', deReffedAry);
             fn(err, deReffedAry);
         });
     },
