@@ -241,8 +241,12 @@ _.extend(view.prototype, BaseView.prototype, {
                 _.each(pages, function(page){
                     pageHolder[page.get('handle')] = page.toJSON('public');
                 });
+                //account.website.themeOverrides.styles.
+
                 data.pages = pageHolder;
                 data.account = value;
+                data.account.website.themeOverrides = data.account.website.themeOverrides ||{};
+                data.account.website.themeOverrides.styles = data.account.website.themeOverrides.styles || {};
                 value.website = value.website || {};
                 data.title = value.website.title;
                 data.author = 'Indigenous';//TODO: wut?
