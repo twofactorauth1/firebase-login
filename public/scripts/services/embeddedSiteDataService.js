@@ -83,36 +83,20 @@ mainApp.factory('embeddedSiteDataService', ['$http', '$location', '$cacheFactory
 
         service.path = urlPathFallbacks();
 
-        var cb = callback;
-
-        if (typeof service.siteData.pages[service.path] !== undefined) {
+        if (typeof service.siteData.pages[service.path] !== 'undefined') {
 
             callback(null, service.siteData.pages[service.path]);
 
+        } else if (typeof service.siteData.pages['coming-soon'] !== 'undefined') {
+
+            callback(null, service.siteData.pages['coming-soon']);
+
         } else {
 
-            $http.get(apiURL + websiteId + '/page/coming-soon', {
-                cache: true
-            }).success(function (page) {
-
-                if (page !== null) {
-
-                    service.siteData.pages[page.handle] = page;
-                    callback(null, page);
-
-                } else {
-
-                    callback("page not found", null);
-
-                }
-
-            }).error(function (err) {
-
-                callback(err, null);
-
-            });
+            callback("page not found", null);
 
         }
+
 
     }
 
