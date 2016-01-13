@@ -56,7 +56,7 @@ mainApp.factory('embeddedSiteDataService', ['$http', '$location', '$cacheFactory
             path = path.replace('/', '');
         }
 
-        service.path = path;
+        return path;
     }
 
 
@@ -80,6 +80,8 @@ mainApp.factory('embeddedSiteDataService', ['$http', '$location', '$cacheFactory
      *
      */
     function getPageData(websiteId, callback) {
+
+        service.path = urlPathFallbacks();
 
         var cb = callback;
 
@@ -118,7 +120,6 @@ mainApp.factory('embeddedSiteDataService', ['$http', '$location', '$cacheFactory
     (function init() {
 
         service.getSiteData();
-        service.urlPathFallbacks();
 
     })();
 
