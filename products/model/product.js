@@ -57,6 +57,18 @@ var product = $$.m.ModelBase.extend({
 
             fulfillment_email: false,
 
+            emailSettings: {
+              "emailId": "",
+              "offset": "", //in minutes
+              "fromEmail": "",
+              "fromName": '',
+              "replyTo": '',
+              "bcc": '',
+              "subject": '',
+              "vars": [],
+              "sendAt": {}
+            },
+
             /* Example:
                 {
                     "id": 609,

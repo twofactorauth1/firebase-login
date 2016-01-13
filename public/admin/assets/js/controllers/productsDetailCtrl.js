@@ -93,11 +93,7 @@
     }
 
     var setProductEmailSettings = function(product){
-      product.steps = [{
-        "type": "email",
-        "trigger": null,
-        "index": 1,
-        "settings": {
+      product.emailSettings = {
           "emailId": "",
           "offset": "", //in minutes
           "fromEmail": "",
@@ -106,9 +102,8 @@
           "bcc": '',
           "subject": '',
           "vars": [],
-          "sendAt": {},
+          "sendAt": {}
         }
-      }]
     }
 
      /*
@@ -316,7 +311,7 @@
      */
     $scope.setEmail = function(newEmail) {
       if (newEmail) {
-        var stepSettings = $scope.product.steps[0].settings;
+        var stepSettings = $scope.product.emailSettings;
         stepSettings.emailId = newEmail._id;
         stepSettings.fromEmail = newEmail.fromEmail;
         stepSettings.fromName = newEmail.fromName;
@@ -355,7 +350,7 @@
             return;
           }
           
-          var stepSettings = $scope.product.steps[0].settings;
+          var stepSettings = $scope.product.emailSettings;
           if (!stepSettings.emailId || (angular.isDefined($scope.existingEmail.replace) && !$scope.existingEmail.replace)) {
             $scope.emailToSend.productId = $scope.product._id;
             WebsiteService.createEmail($scope.emailToSend, function (newEmail) {
@@ -810,16 +805,16 @@
 
 
     $scope.getEmails = function() {
-      if(!$scope.product.steps){
+      if(!$scope.product.emailSettings){
         setProductEmailSettings($scope.product);
       }
-      if($scope.product.fulfillment_email && $scope.product.steps[0].settings.emailId)      
+      if($scope.product.fulfillment_email && $scope.product.emailSettings.emailId)      
         $scope.selectedEmail = {
           type: 'template'
         };
       
       var promise = WebsiteService.getEmails(false, function (_emails) {        
-        var emailId = $scope.product.steps[0].settings.emailId;
+        var emailId = $scope.product.emailSettings.emailId;
         var matchedEmail = null;
         var emailMatch = function(email) {
           return email._id === emailId;
@@ -876,13 +871,13 @@
         $scope.emailToSend.bcc = "";
         $scope.emailToSend.subject = $scope.product.name;
         $scope.checkEmailTitle($scope.emailToSend.title);
-        if($scope.product && $scope.product.steps && $scope.product.steps[0] && $scope.product.steps[0].settings)
-          $scope.product.steps[0].settings.emailId = null;
+        if($scope.product && $scope.product.emailSettings)
+          $scope.product.emailSettings.emailId = null;
       } else {
         $scope.setBusinessDetails();
         $scope.emailToSend = $scope.emailToSendPrevious;
-        if($scope.product.steps && $scope.product.steps[0] && $scope.product.steps[0].settings && !$scope.product.steps[0].settings.emailId && $scope.emailToSendPrevious)
-          $scope.product.steps[0].settings.emailId = $scope.emailToSendPrevious._id
+        if($scope.product.emailSettings && !$scope.product.emailSettings.emailId && $scope.emailToSendPrevious)
+          $scope.product.emailSettings.emailId = $scope.emailToSendPrevious._id
         $scope.actualEmailToSend = angular.copy($scope.emailToSend);
       }
     }
@@ -909,8 +904,8 @@
               })
             },0)
 
-            if($scope.product.steps && $scope.product.steps[0] && $scope.product.steps[0].settings && !$scope.product.steps[0].settings.emailId && $scope.emailToSendPrevious){
-              $scope.product.steps[0].settings.emailId = $scope.emailToSendPrevious._id;
+            if($scope.product.emailSettings && !$scope.product.emailSettings.emailId && $scope.emailToSendPrevious){
+              $scope.product.emailSettings.emailId = $scope.emailToSendPrevious._id;
               $scope.emailToSend.title = $scope.emailToSendPrevious.title;
             }
             $scope.checkEmailTitle($scope.emailToSend.title);
