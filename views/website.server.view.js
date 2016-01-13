@@ -162,6 +162,7 @@ _.extend(view.prototype, BaseView.prototype, {
             },
             function getAllPages(webpageData, cb) {
                 ssbManager.listPagesWithSections(accountId, webpageData.website._id, function(err, pages){
+                    self.log.debug('Using the following pages:', pages);
                     cb(err, webpageData, pages);
                 });
             },
@@ -203,7 +204,35 @@ _.extend(view.prototype, BaseView.prototype, {
                     data.templateIncludes[0] = {id:'/components/component-wrap.html'};
                     fs.readFile('public/components/component-wrap.html', 'utf8', function(err, html){
                         data.templateIncludes[0].data = html;
-                        cb(null, webpageData, pages);
+                        var components = [];
+                        _.each(pages, function(page){
+                            _.each(page.get('sections'), function(section){
+                                self.log.debug('Page ' + page.get('handle') + ' has components:', section.components);
+                                components = components.concat(section.components);
+                            });
+                        });
+                        self.log.debug('components:', components);
+                        async.each(components, function(component, cb){
+                            if(component) {
+                                var obj = {};
+                                obj.id = '/components/' + component.type + '_v' + component.version + '.html';
+                                if(_.findWhere(data.templateIncludes, {id: obj.id})) {
+                                    cb(null);
+                                } else {
+                                    fs.readFile('public' + obj.id, 'utf8', function(err, html){
+                                        obj.data = html;
+                                        data.templateIncludes.push(obj);
+                                        cb();
+                                    });
+                                }
+                            } else {
+                                cb();
+                            }
+
+                        }, function done(err){
+                            cb(null, webpageData, pages);
+                        });
+
                         //TODO: loop through each page.  Grab each unique component and add the template
                         /*
                         async.each(page.get('components'), function(component, cb){
