@@ -166,37 +166,6 @@ _.extend(view.prototype, BaseView.prototype, {
                     cb(err, webpageData, pages);
                 });
             },
-            /*
-             * No longer needed... loading all pages.
-            function getPage(webpageData, cb) {
-                cmsDao.getLatestPageForWebsite(webpageData.website._id, handle, accountId, function(err, page){
-                   if(err) {
-                       self.log.error('Error getting latest page for website:', err);
-                       cb(err);
-                   } else {
-                       cb(null, webpageData, page);
-                   }
-                });
-            },
-            */
-            /*
-             * No longer needed... loading all pages.
-            function getFallbackPageIfNeeded(webpageData, page, cb) {
-                if(page) {
-                    cb(null, webpageData, page);
-                } else {
-                    self.log.debug('Looking for coming-soon page');
-                    cmsDao.getLatestPageForWebsite(webpageData.website._id, 'coming-soon', accountId, function(err, page){
-                        if(err) {
-                            self.log.error('Error getting coming-soon page:', err);
-                            cb(err);
-                        } else {
-                            cb(null, webpageData, page);
-                        }
-                    });
-                }
-            },
-            */
             function readComponents(webpageData, pages, cb) {
                 data.templates = '';
                 if(pages) {
@@ -233,21 +202,7 @@ _.extend(view.prototype, BaseView.prototype, {
                             cb(null, webpageData, pages);
                         });
 
-                        //TODO: loop through each page.  Grab each unique component and add the template
-                        /*
-                        async.each(page.get('components'), function(component, cb){
-                            // /components/'+component.type+'_v'+component.version+'.html
-                            var obj = {};
-                            obj.id = '/components/' + component.type + '_v' + component.version + '.html';
-                            fs.readFile('public' + obj.id, 'utf8', function(err, html){
-                                obj.data = html;
-                                data.templateIncludes.push(obj);
-                                cb();
-                            });
-                        }, function done(err){
-                            cb(null, webpageData, pages);
-                        });
-                        */
+
                     });
                 } else {
                     cb('Could not find ' + handle);
@@ -265,12 +220,10 @@ _.extend(view.prototype, BaseView.prototype, {
             },
 
             function(value, pages, cb) {
-                //data.components = JSON.stringify(page.get('components'));
                 var pageHolder = {};
                 _.each(pages, function(page){
                     pageHolder[page.get('handle')] = page.toJSON('public');
                 });
-                //account.website.themeOverrides.styles.
 
                 data.pages = pageHolder;
                 data.account = value;

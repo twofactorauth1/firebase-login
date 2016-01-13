@@ -1216,10 +1216,7 @@ var dao = {
             }
             var obj = value.toJSON('public');
             self.getById(obj.website.websiteId, Website, function(err, website){
-                // original
-                // obj.website = website.toJSON('public');
-                // self.log.debug('<< getDataForWebpage');
-                // fn(err, obj);
+
                 ssbThemeDao.getThemeById(website.get('themeId'), function(err, theme) {
                     if(err) {
                         self.log.error('Error getting theme:', err);
