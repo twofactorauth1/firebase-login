@@ -408,7 +408,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         var username = req.body.username.toLowerCase();
         var password1 = req.body.password;
-        var password2 = req.body.password2;
+        //var password2 = req.body.password2; -- verification is done on the frontend.
         var email = req.body.username.toLowerCase();
         var accountToken = req.body.accountToken;
         var anonymousId = req.body.anonymousId;
@@ -419,10 +419,11 @@ _.extend(api.prototype, baseApi.prototype, {
         var lastName = req.body.last;
         var middle = req.body.middle;
         var campaignId = req.body.campaignId;
+        var existingUser = req.body.existingUser;
 
         var cardToken = req.body.cardToken;
         var plan = req.body.plan || 'NO_PLAN_ARGUMENT';
-        var trialLength = req.body.trialLength || 31;//using 15 instead of 14 to give 14 FULL days
+        var trialLength = req.body.trialLength || 31;//using 31 instead of 30 to give 30 FULL days
         self.log.debug('>> plan ', plan);
 
         var sendWelcomeEmail = true;//this can be overridden in the request.
@@ -451,6 +452,7 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> middle', middle);
         self.log.debug('>> last', lastName);
         self.log.debug('>> campaignId', campaignId);
+        self.log.debug('>> existingUser', existingUser);
 
         var name = {
             first:firstName,
@@ -461,7 +463,7 @@ _.extend(api.prototype, baseApi.prototype, {
 
         async.waterfall([
             function(callback){
-                if(!password1) {
+                if(!password1 && !existingUser) {
                     self.log.debug('Creating user from social');
                     userManager.createAccountAndUserFromTempAccount(accountToken, fingerprint, sendWelcomeEmail, function(err, accountAndUser){
                         if(err) {
