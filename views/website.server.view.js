@@ -11,6 +11,7 @@ var cmsDao = require('../cms/dao/cms.dao.js');
 var segmentioConfig = require('../configs/segmentio.config.js');
 var fs = require('fs');
 var async = require('async');
+var ssbManager = require('../ssb/ssb_manager');
 
 var view = function (req, resp, options) {
     this.init.apply(this, arguments);
@@ -159,6 +160,13 @@ _.extend(view.prototype, BaseView.prototype, {
                    }
                 });
             },
+            function getAllPages(webpageData, cb) {
+                ssbManager.listPagesWithSections(accountId, webpageData.website._id, function(err, pages){
+                    cb(err, webpageData, pages);
+                });
+            },
+            /*
+             * No longer needed... loading all pages.
             function getPage(webpageData, cb) {
                 cmsDao.getLatestPageForWebsite(webpageData.website._id, handle, accountId, function(err, page){
                    if(err) {
@@ -169,6 +177,9 @@ _.extend(view.prototype, BaseView.prototype, {
                    }
                 });
             },
+            */
+            /*
+             * No longer needed... loading all pages.
             function getFallbackPageIfNeeded(webpageData, page, cb) {
                 if(page) {
                     cb(null, webpageData, page);
@@ -184,19 +195,17 @@ _.extend(view.prototype, BaseView.prototype, {
                     });
                 }
             },
-            function readComponents(webpageData, page, cb) {
+            */
+            function readComponents(webpageData, pages, cb) {
                 data.templates = '';
-                if(page) {
-                    _.each(page.get('components'), function(component, index){
-                        var divName = self.getDirectiveNameDivByType(component.type);
-                        data.templates = data.templates + divName + ' component="components_' + index + '"></div>';
-                    });
-
+                if(pages) {
                     data.templateIncludes = [];
                     data.templateIncludes[0] = {id:'/components/component-wrap.html'};
                     fs.readFile('public/components/component-wrap.html', 'utf8', function(err, html){
                         data.templateIncludes[0].data = html;
-
+                        cb(null, webpageData, pages);
+                        //TODO: loop through each page.  Grab each unique component and add the template
+                        /*
                         async.each(page.get('components'), function(component, cb){
                             // /components/'+component.type+'_v'+component.version+'.html
                             var obj = {};
@@ -207,8 +216,9 @@ _.extend(view.prototype, BaseView.prototype, {
                                 cb();
                             });
                         }, function done(err){
-                            cb(null, webpageData, page);
+                            cb(null, webpageData, pages);
                         });
+                        */
                     });
                 } else {
                     cb('Could not find ' + handle);
@@ -216,22 +226,26 @@ _.extend(view.prototype, BaseView.prototype, {
 
             },
 
-            function addSSBSection(webpageData, page, cb){
+            function addSSBSection(webpageData, pages, cb){
                 var ssbSectionTemplate = {'id':'/admin/assets/js/ssb-site-builder/ssb-components/ssb-page-section/ssb-page-section.component.html'};
                 fs.readFile('public/admin/assets/js/ssb-site-builder/ssb-components/ssb-page-section/ssb-page-section.component.html', 'utf8', function(err, html) {
                     ssbSectionTemplate.data = html;
                     data.templateIncludes.push(ssbSectionTemplate);
-                    cb(null, webpageData, page);
+                    cb(null, webpageData, pages);
                 });
             },
 
-            function(value, page, cb) {
-                data.components = JSON.stringify(page.get('components'));
-
+            function(value, pages, cb) {
+                //data.components = JSON.stringify(page.get('components'));
+                var pageHolder = {};
+                _.each(pages, function(page){
+                    pageHolder[page.get('handle')] = page.toJSON('public');
+                });
+                data.pages = pageHolder;
                 data.account = value;
                 value.website = value.website || {};
                 data.title = value.website.title;
-                data.author = 'Indigenous';
+                data.author = 'Indigenous';//TODO: wut?
                 data.segmentIOWriteKey = segmentioConfig.SEGMENT_WRITE_KEY;
                 data.website = value.website || {};
                 data.seo = {
