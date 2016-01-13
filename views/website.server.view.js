@@ -183,16 +183,18 @@ _.extend(view.prototype, BaseView.prototype, {
                             });
                         });
                         //self.log.debug('components:', components);
-                        async.each(components, function(component, cb){
+                        var map = {};
+                        async.eachSeries(components, function(component, cb){
                             if(component) {
                                 var obj = {};
                                 obj.id = '/components/' + component.type + '_v' + component.version + '.html';
-                                if(_.findWhere(data.templateIncludes, {id: obj.id})) {
+                                if(map[obj.id]) {
                                     cb(null);
                                 } else {
                                     fs.readFile('public' + obj.id, 'utf8', function(err, html){
                                         obj.data = html;
                                         data.templateIncludes.push(obj);
+                                        map[obj.id] = obj;
                                         cb();
                                     });
                                 }
