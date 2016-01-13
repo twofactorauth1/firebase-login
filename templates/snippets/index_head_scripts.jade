@@ -80,9 +80,8 @@ if pages
     script(type="text/javascript").
         window.indigenous = window.indigenous ||{};
         window.indigenous.precache = window.indigenous.precache || {};
-        var pages = !{JSON.stringify(pages)};
-        console.log('pages:', pages);
-        window.indigenous.precache.siteData = pages;
+        window.indigenous.precache.siteData = window.indigenous.precache.siteData || {};
+        window.indigenous.precache.siteData.pages = !{JSON.stringify(pages)};
 
 if account._id == 890
     script(src="//load.sumome.com/" data-sumo-site-id="ebfbe1c031968e0d81f4ca79b2fdc7a86b9132054a40985e435727147fd894f3")
