@@ -159,7 +159,7 @@ var page = $$.m.ModelBase.extend({
 
     transients: {
         deepCopy: true,
-        public: [
+        frontend: [
             function (json, options) {
                 if(json.created) {
                     delete json.created;

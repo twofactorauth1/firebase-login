@@ -226,7 +226,7 @@ _.extend(view.prototype, BaseView.prototype, {
             function(value, pages, cb) {
                 var pageHolder = {};
                 _.each(pages, function(page){
-                    pageHolder[page.get('handle')] = page.toJSON('public');
+                    pageHolder[page.get('handle')] = page.toJSON('frontend');
                 });
 
                 data.pages = pageHolder;
