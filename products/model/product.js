@@ -55,6 +55,8 @@ var product = $$.m.ModelBase.extend({
 
             variations: [],
 
+            fulfillment_email: false,
+
             /* Example:
                 {
                     "id": 609,

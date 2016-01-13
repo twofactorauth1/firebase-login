@@ -3,7 +3,7 @@
  * service for products
  */
 (function(angular) {
-    app.service('ProductService',  ['$http', 'productConstant', function($http, productConstant) {
+    app.service('ProductService',  ['$http', 'productConstant', '$q', function($http, productConstant, $q) {
         var baseUrl = '/api/1.0/';
 
         this.getProducts = function(fn) {
@@ -35,6 +35,19 @@
                 .success(function(data, status, headers, config) {
                     fn(data);
                 });
+        };
+
+        this.getSingleProduct = function(productId, fn) {
+            var deferred = $q.defer();
+            var apiUrl = baseUrl + ['products', productId].join('/');
+            $http.get(apiUrl)
+            .success(function(data, status, headers, config) {
+                deferred.resolve(fn(data));
+            }).error(function (err) {
+                  console.warn('END:Campaign Service with ERROR');
+                  fn(err, null);
+            });
+            return deferred.promise;
         };
 
         this.getIndigenousProducts = function(fn) {

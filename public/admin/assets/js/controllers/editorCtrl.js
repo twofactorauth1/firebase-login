@@ -1767,7 +1767,7 @@
     var offFn = $rootScope.$on('$locationChangeStart', function (event, newUrl, oldUrl) {
         checkIfPageDirty(newUrl, function (redirectUrl) {  
           var condition = $scope.isDirty.dirty && !$scope.changesConfirmed;
-          if (condition && !$scope.isCampaign) {
+          if (condition && !$scope.isCampaign && !$scope.isProduct) {
             event.preventDefault();
             SweetAlert.swal({
               title: "Are you sure?",
