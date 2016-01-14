@@ -16,6 +16,39 @@
             }
         }
     }
+    .well {
+        position: relative;
+        .form-control-feedback {
+            text-align: left;
+            height: auto;
+            width: auto;
+            margin-right: 16px;
+            &.glyphicon {
+                top: 8px
+            }
+            &.fa {
+                top: 20px
+            }
+        }
+        .email-subject-status {
+            position: absolute;
+            right: 3em;
+            top: 12px;
+        }
+    }
+    .mini-editor {
+        .transition(all 1s);
+        overflow: auto;
+    }
+    .show-fullscreen {
+        position: absolute;
+        right: 0;
+        margin-right: 18px;
+        z-index: 999;
+    }
+    #componentloader {
+        min-height: 100% !important;
+    }
 }
 .iconpicker-popover .btn.disabled{
     pointer-events: none;

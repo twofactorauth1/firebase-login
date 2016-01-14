@@ -142,14 +142,17 @@
                         </div>
                         <div class="form-group">
                             <label>Max Width</label>
+                            <input type="number" string-to-number ng-model="vm.state.page.sections[vm.uiState.activeSectionIndex].spacing.mw" min="100" max="3000" data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down">
+                            <!--
                             <ui-select ng-model="vm.state.page.sections[vm.uiState.activeSectionIndex].spacing.mw" theme="bootstrap" ng-disabled="vm.state.page.sections[vm.uiState.activeSectionIndex].spacing.usePage">
                                 <ui-select-match placeholder="Select a Resolution">
                                     <small ng-bind-html="$select.selected"></small>
                                 </ui-select-match>
-                                <ui-select-choices repeat="res in resolutions | filter: $select.search track by $index">
+                                <ui-select-choices repeat="res in ['768', '992', '1024', ] | filter: $select.search track by $index">
                                     <small ng-bind-html="res | highlight: $select.search"></small>
                                 </ui-select-choices>
                             </ui-select>
+                            -->
                             <label for="ssb-page-section-line-height-input-{{sectionIndex}}">Line Height</label>
                             <input id="ssb-page-section-line-height-input-{{sectionIndex}}" type="number" string-to-number ng-model="vm.state.page.sections[vm.uiState.activeSectionIndex].spacing.lineHeight" data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down">
                         </div>

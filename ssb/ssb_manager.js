@@ -1,7 +1,7 @@
 
 
 
-var logger = $$.g.getLogger("cms_manager");
+var logger = $$.g.getLogger("ssb_manager");
 var templateDao = require('./dao/template.dao');
 var themeDao = require('./dao/theme.dao');
 var websiteDao = require('./dao/website.dao');
@@ -319,7 +319,7 @@ module.exports = {
                         } else {
                             //handle legacy pages without sections
                             if(sectionAry && sectionAry.length === 0) {
-                                self.log.debug('Converting legacy page');
+                                //self.log.debug('Converting legacy page');
                                 var section = {};
                                 section.components = page.get('components');
                                 section.ssb = false;
@@ -374,7 +374,7 @@ module.exports = {
 
                     //handle legacy pages without sections
                     if(sectionAry && sectionAry.length === 0) {
-                        self.log.debug('Converting legacy page');
+                        //self.log.debug('Converting legacy page');
                         var section = {};
                         section.components = page.get('components');
                         section.ssb = false;

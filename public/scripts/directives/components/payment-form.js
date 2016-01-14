@@ -421,7 +421,8 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                             first: newAccount.first,
                             middle: newAccount.middle,
                             last: newAccount.last,
-                            campaignId: scope.component.campaignId
+                            campaignId: scope.component.campaignId,
+                            existingUser: newAccount.existingUser
                         };
 
                         newUser.plan = '';
@@ -533,15 +534,17 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                     scope.loading = false;
                     if(newAccount) {
                         newAccount.hidePassword = true;
+                        newAccount.existingUser = true;
                     }
 
                     angular.element("#email .error").html("You will be able to log in to this account with your existing credentials.");
                     angular.element("#email").addClass('has-success');
-                    angular.element("#email .glyphicon").addClass('glyphicon-remove');
+                    angular.element("#email .glyphicon").addClass('glyphicon-ok');
                 } else {
                     scope.validateForm = true;
                     if(newAccount) {
                         newAccount.hidePassword = false;
+                        newAccount.existingUser = false;
                     }
                     angular.element("#email .error").html("");
                     angular.element("#email").removeClass('has-error').addClass('has-success');

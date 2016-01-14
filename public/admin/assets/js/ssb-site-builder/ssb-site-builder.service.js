@@ -5,9 +5,9 @@
 
 	app.factory('SimpleSiteBuilderService', SimpleSiteBuilderService);
 
-	SimpleSiteBuilderService.$inject = ['$http', '$q', '$timeout', 'AccountService', 'WebsiteService'];
+	SimpleSiteBuilderService.$inject = ['$rootScope', '$http', '$q', '$timeout', 'AccountService', 'WebsiteService'];
 	/* @ngInject */
-	function SimpleSiteBuilderService($http, $q, $timeout, AccountService, WebsiteService) {
+	function SimpleSiteBuilderService($rootScope, $http, $q, $timeout, AccountService, WebsiteService) {
 		var ssbService = {};
 		var baseWebsiteAPIUrl = '/api/1.0/cms/website/';
 		var basePageAPIUrl = '/api/1.0/cms/page/';
@@ -481,12 +481,22 @@
 
         function applyThemeToSite(theme) {
             // Load web font loader
-            if (theme.name && theme.name !== 'Default') {
-                WebFont.load({
-                    google: {
-                        families: [theme.defaultFontStack.split(',')[0].replace(/"/g, '')]
+            if (theme.name && theme.hasCustomFonts) {
+
+                var unbindWatcher = $rootScope.$watch(function() {
+                    return angular.isDefined(window.WebFont);
+                }, function(newValue, oldValue) {
+                    if (newValue) {
+                        console.debug(newValue, oldValue);
+                        window.WebFont.load({
+                            google: {
+                                families: [theme.defaultFontStack.split(',')[0].replace(/"/g, '')]
+                            }
+                        });
+                        unbindWatcher();
                     }
                 });
+
                 window.WebFontConfig = {
                     active: function() {
                         sessionStorage.fonts = true;
@@ -494,85 +504,12 @@
                 }
             }
 
-            ssbService.website.themeId = theme._id;
-            ssbService.website.theme = theme;
-            ssbService.website.themeOverrides = theme;
+            if (!ssbService.website.theme) {
+                ssbService.website.themeId = theme._id;
+                ssbService.website.theme = theme;
+                ssbService.website.themeOverrides = theme;
+            }
         }
-
-        // function createPageFromTemplate(template) {
-        //   //       $scope.validateCreatePage(page, true);
-
-        //   // $scope.titleError = false;
-        //   // $scope.handleError = false;
-        //   // if (!$scope.createPageValidated) {
-        //   //   $scope.titleError = true;
-        //   //   $scope.handleError = true;
-        //   //   $scope.saveLoading = false;
-        //   //   return false;
-        //   // }
-
-        //   // if ($scope.createpage.homepage)
-        //   //   page.handle = 'index';
-
-        //   // var pageData = {
-        //   //   title: page.title,
-        //   //   handle: page.handle,
-        //   //   mainmenu: page.mainmenu
-        //   // };
-
-
-        //   // var hasHandle = false;
-        //   // _.each($scope.pages, function (_page) {
-        //   //   if (_page.handle === page.handle) {
-        //   //     hasHandle = true;
-        //   //   }
-        //   // });
-
-        //   // function createPageCallback(_newPage, error) {
-        //   //   if(error && !_newPage) {
-        //   //     toaster.pop('error', error.message);
-        //   //     $event.preventDefault();
-        //   //     $event.stopPropagation();
-        //   //     $scope.saveLoading = false;
-        //   //     return;
-        //   //   }
-        //   //   var newpage = angular.copy(_newPage);
-        //   //   toaster.pop('success', 'Page Created', 'The ' + newpage.title + ' page was created successfully.');
-        //   //   $scope.minRequirements = true;
-        //   //   $scope.saveLoading = false;
-        //   //   if(newpage.handle == 'index'){
-        //   //     $scope.createpage.showhomepage = false;
-        //   //   }
-        //   //   $scope.closeModal();
-
-        //   //   // if (newpage.components) {
-        //   //   //   newpage.components = newpage.components.length;
-        //   //   // } else if (newpage.sections) {
-        //   //   //   newpage.sections = newpage.sections.length;
-        //   //   // }
-
-
-        //   //   $scope.pages.unshift(newpage);
-        //   //   $scope.displayedPages.unshift(newpage);
-        //   //   page.title = "";
-        //   //   page.handle = "";
-        //   //   $scope.checkAndSetIndexPage($scope.pages);
-        //   //   $scope.resetTemplateDetails();
-
-        //   //   $scope.viewSimpleSiteBuilder(newpage);
-        //   // }
-
-
-        // // if (page.ssb) {
-
-        //   // WebsiteService.getWebsite(function(data) {
-        //     ssbService.createPage(template._id).then(function(data) {
-        //       $scope.closeModal();
-        //       $scope.viewSimpleSiteBuilder(data.data);
-        //     });
-        //   // });
-
-        // }
 
 
 		(function init() {

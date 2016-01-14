@@ -14165,6 +14165,42 @@ tags-input.ti-input-sm .tags .input,
 .product-detail #variation-manager #panel4 .panel-body {
   border-top: 1px solid #eee;
 }
+.product-detail .well {
+  position: relative;
+}
+.product-detail .well .form-control-feedback {
+  text-align: left;
+  height: auto;
+  width: auto;
+  margin-right: 16px;
+}
+.product-detail .well .form-control-feedback.glyphicon {
+  top: 8px;
+}
+.product-detail .well .form-control-feedback.fa {
+  top: 20px;
+}
+.product-detail .well .email-subject-status {
+  position: absolute;
+  right: 3em;
+  top: 12px;
+}
+.product-detail .mini-editor {
+  -webkit-transition: all 1s;
+  -moz-transition: all 1s;
+  -ms-transition: all 1s;
+  -o-transition: all 1s;
+  overflow: auto;
+}
+.product-detail .show-fullscreen {
+  position: absolute;
+  right: 0;
+  margin-right: 18px;
+  z-index: 999;
+}
+.product-detail #componentloader {
+  min-height: 100% !important;
+}
 .iconpicker-popover .btn.disabled {
   pointer-events: none;
 }

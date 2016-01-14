@@ -584,10 +584,9 @@
 #componentloader .component-wrap div.element-wrap img.img-responsive {
   display: inline-block;
 }
+#componentloader .component-wrap div.element-wrap span[contenteditable="true"],
+#componentloader .component-wrap div.element-wrap span.cke_image_resizer_wrapper,
 #componentloader .component-wrap div.element-wrap span.cke_widget_wrapper.img-spanclass {
-  max-width: 100%;
-}
-#componentloader .component-wrap div.element-wrap span.cke_image_resizer_wrapper {
   max-width: 100%;
 }
 #componentloader .component-wrap .component > [id] .bg {
@@ -1156,6 +1155,9 @@
 #componentloader .navbar .navigation-logo.edit-wrap .fr-element {
   min-height: 100px;
 }
+#componentloader .navbar .navigation-logo.edit-wrap .img {
+  max-width: 100% !important;
+}
 #componentloader .navbar-box {
   -webkit-box-shadow: 0px 1px 10px 0px rgba(0, 0, 0, 0.25);
   -moz-box-shadow: 0px 1px 10px 0px rgba(0, 0, 0, 0.25);
@@ -1166,6 +1168,7 @@
   margin: 5px auto!important;
   height: auto;
   color: inherit;
+  line-height: inherit;
 }
 #componentloader .navbar-brand:hover {
   color: inherit;
@@ -1391,6 +1394,9 @@
 #componentloader .navigation1 {
   position: relative;
   z-index: 5;
+}
+#componentloader .navigation-logo img {
+  max-width: 100%;
 }
 #componentloader .feature-block-v1 {
   position: relative;
@@ -6611,13 +6617,6 @@ a[href="https://froala.com/wysiwyg-editor"] {
 .ssb-page-section-settings-item {
   position: relative;
 }
-.ssb-sidebar-move-handle {
-  position: absolute;
-  top: 1em;
-  right: 1em;
-  z-index: 1;
-  cursor: move;
-}
 .ssb-sidebar-item-icon {
   position: absolute;
   top: 1em;
@@ -6836,10 +6835,26 @@ ssb-topbar {
     padding-left: 75px;
   }
 }
+ssb-topbar .ui-select-match {
+  outline: none;
+  box-shadow: none;
+  background-color: transparent;
+  width: 150px;
+}
+ssb-topbar .ui-select-match-text > small {
+  width: 125px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  display: inline-block;
+  vertical-align: middle;
+}
 .ssb-topbar-icon {
   font-size: 2em;
 }
-.ssb-theme-young-soul .ssb-section-layout {
+.ssb-theme-young-soul {
+  font-family: "Roboto", Helvetica, Arial, sans-serif;
+}
+.ssb-theme-young-soul .ssb-page-section {
   background-color: #e8e7e7;
 }
 .ssb-theme-young-soul .ssb-page-section-layout-header {

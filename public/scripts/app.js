@@ -61,19 +61,11 @@ var mainApp = angular
                 */
                 template: function(urlattr) {
                     var s = '<div data-ng-include="';
-                    s += " '/template/index'";
-                    s += ' "></div>';
-                    return s;
-                },
-                controller: 'CacheCtrl as cacheCtrl'
-            })
-            .when('/:name', {
-                /*templateUrl: function(urlattr){
-                    return '/template/' + urlattr.name;
-                },*/
-                template: function(urlattr) {
-                    var s = '<div data-ng-include="';
-                    s += " '/template/" + urlattr.name + "'";
+                    s += " '/template/index";
+                    if(urlattr.cachebuster) {
+                        s+='?cachebuster=' + urlattr.cachebuster;
+                    }
+                    s+= "'";
                     s += ' "></div>';
                     return s;
                 },
@@ -82,6 +74,20 @@ var mainApp = angular
             .when('/404', {
                 templateUrl: '../views/404.html',
                 controller: 'NotFoundCtrl as notfound'
+            })
+            .when('/:name', {
+                template: function(urlattr) {
+
+                    var s = '<div data-ng-include="';
+                    s += " '/template/" + urlattr.name;
+                    if(urlattr.cachebuster) {
+                        s+='?cachebuster=' + urlattr.cachebuster;
+                    }
+                    s+= "'";
+                    s += ' "></div>';
+                    return s;
+                },
+                controller: 'CacheCtrl as cacheCtrl'
             })
             .when('/cached/:page', {
                 controller: 'CacheCtrl as cacheCtrl',

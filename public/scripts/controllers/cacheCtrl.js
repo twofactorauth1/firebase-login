@@ -1,6 +1,6 @@
 'use strict';
 /*global mainApp*/
-mainApp.controller('CacheCtrl', ['$scope', 'pagesService', '$window', '$location', '$document', '$timeout', function ($scope, pagesService, $window, $location, $document, $timeout) {
+mainApp.controller('CacheCtrl', ['$scope', 'embeddedSiteDataService', '$window', '$location', '$document', '$timeout', function ($scope, embeddedSiteDataService, $window, $location, $document, $timeout) {
     $scope.isEditing = false;
     $scope.blog_post = null;
     console.log('cache ctrl');
@@ -18,8 +18,8 @@ mainApp.controller('CacheCtrl', ['$scope', 'pagesService', '$window', '$location
       $scope.components.forEach(function (value, index) {
         if (value && value.type === 'masthead' && value._id == masthead_id) {
           if (index != 0 && $scope.components[index - 1].type == "navigation") {
-            data.allowUndernav = true; 
-            data.navComponent =  $scope.components[index - 1];         
+            data.allowUndernav = true;
+            data.navComponent =  $scope.components[index - 1];
           } else
             data.allowUndernav = false;
         }
@@ -42,7 +42,7 @@ mainApp.controller('CacheCtrl', ['$scope', 'pagesService', '$window', '$location
 
 
     $scope.components = [];
-    pagesService($scope.websiteId, function (err, data) {
+    embeddedSiteDataService.getPageData($scope.websiteId, function (err, data) {
         console.log('pagesService ', data);
         if (err) {
             console.warn('no page found', $location.$$path);

@@ -610,6 +610,7 @@ app.controller('ImportCustomerModalCtrl', ['$scope', '$location', '$timeout', '$
     });
 
     $scope.uploadingServerCsv = true;
+    CustomerService.resetCount();
     CustomerService.importCsvCustomers(customersToAdd, function () {
       console.log('upload started ...', $scope.uploadingServerCsv);
     });

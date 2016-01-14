@@ -32,7 +32,7 @@ var dao = {
      * @param accountId
      * @param fn
      */
-    createStripeCustomer: function(cardToken, contact, accountId, fn) {
+    createStripeCustomer: function(cardToken, contact, accountId, newAccountId, fn) {
         //TODO: check if this is already a customer and add accountId
         var self = this;
         self.log.debug(">> createStripeCustomer");
@@ -42,6 +42,8 @@ var dao = {
         params.metadata = {};
         params.metadata.contactId = contact.get('id');
         params.metadata.accountId_0 = accountId;
+        params.metadata.accounts = [];
+        params.metadata.accounts.push(newAccountId);
         if(cardToken && cardToken.length > 0) {
             params.card = cardToken;
         }
@@ -83,7 +85,7 @@ var dao = {
         });
     },
 
-    createStripeCustomerForUser: function(cardToken, user, accountId, accountBalance, fn) {
+    createStripeCustomerForUser: function(cardToken, user, accountId, accountBalance, newAccountId, fn) {
         //TODO: check if this is already a customer and add accountId
         var self = this;
         self.log.debug(">> createStripeCustomerForUser");
@@ -97,6 +99,8 @@ var dao = {
         params.metadata = {};
         params.metadata.contactId = user.id();
         params.metadata.accountId_0 = accountId;
+        params.metadata.accounts = [];
+        params.metadata.accounts.push(newAccountId);
         if(cardToken && cardToken.length > 0) {
             params.card = cardToken;
         }

@@ -53,7 +53,7 @@ module.exports = {
                 var email = user.get('email');
 
                 user.createUserAccount(accountId, username, null, roleAry);
-                if(user.id().toString().substring(0, 4) ==='temp') {
+                if(user.id() && user.id().toString().substring(0, 4) ==='temp') {
                     //user does not exist.  set temp ID to null.
                     user.set('_id', null);
                 }
@@ -70,6 +70,9 @@ module.exports = {
                 socialConfigManager.createSocialConfigFromUser(account.id(), user, function(err, value){
                     if(err) {
                         log.error('Error creating social config for account:' + account.id());
+                        callback(err);
+                    } else {
+                        callback(null, account, user);
                     }
 
                 });
@@ -320,16 +323,20 @@ module.exports = {
         var user = null;
         async.waterfall([
             function stepOne(callback){
-                //encrypt the password
-                var userForEncryption = new $$.m.User({});
-                userForEncryption.encryptPasswordAsync(password, function(err, hash){
-                    if(err) {
-                        log.error('Error encrypting password: ' + err);
-                        callback(err);
-                    } else {
-                        callback(null, hash);
-                    }
-                });
+                //encrypt the password if it is present
+                if(password) {
+                    var userForEncryption = new $$.m.User({});
+                    userForEncryption.encryptPasswordAsync(password, function(err, hash){
+                        if(err) {
+                            log.error('Error encrypting password: ' + err);
+                            callback(err);
+                        } else {
+                            callback(null, hash);
+                        }
+                    });
+                } else {
+                    callback(null, null);
+                }
             },
             function stepTwo(hash, callback){
                 dao.getUserByUsername(username, function(err, value) {
@@ -341,6 +348,7 @@ module.exports = {
                             //return fn(true, "An account with this username already exists");
                             user = value;
                             user.set('fingerprint', fingerprint);
+                            hash = user.getCredentials($$.constants.user.credential_types.LOCAL).password;
                         } else {
                             user = new $$.m.User({
                                 username:username,

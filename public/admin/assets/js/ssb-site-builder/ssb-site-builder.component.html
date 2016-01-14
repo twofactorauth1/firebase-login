@@ -1,9 +1,4 @@
-<style>
-	.wf-active .ssb-main.custom-fonts{
-		font-family:{{vm.state.website.themeOverrides.defaultFontStack}}
-	}
-</style>
-<link rel="stylesheet" ng-href="css/ssb-site-builder/ssb-themes/ssb-theme-{{ vm.state.website.theme.name | slugify}}.css">
+<!-- <link rel="stylesheet" ng-href="css/ssb-site-builder/ssb-themes/ssb-theme-{{ vm.state.website.theme.name | slugify}}.css"> -->
 <style>
     /* TODO: theme overrides */
 </style>
@@ -31,7 +26,7 @@
 			<div ng-if="vm.state.page.sections.length">
 
 				<ssb-page-section
-					ng-repeat="section in vm.state.page.sections track by section._id"
+					ng-repeat="section in vm.state.page.sections track by $index"
 					section="section"
 					index="$index"
 					ng-class="{ 'ssb-active-section': $index === vm.uiState.activeSectionIndex }"

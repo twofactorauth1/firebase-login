@@ -714,6 +714,7 @@ app.constant('JS_REQUIRES', {
     'toTrusted': 'assets/js/filters/to_trusted.js',
     'generateURLforLinks': 'assets/js/filters/generateURLforLinks.js',
     'selectedTags': 'assets/js/filters/productTags.js',
+    'propsFilter': 'assets/js/filters/propsFilter.js',
 
     //*** Directives
     'mediaModal': 'assets/js/directives/mediadirective.js',

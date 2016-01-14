@@ -215,8 +215,8 @@
         type: 'contact-us'
       });
       if ($scope.contactComponentType) {
-        GeocodeService.validateAddress($scope.contactComponentType.location, null, function (data) {
-          if (!data) {
+        GeocodeService.validateAddress($scope.contactComponentType.location, null, function (data, results) {
+          if (!data || (results && !results.length)) {
             toaster.pop('warning', 'Address could not be found for contact component. Please enter valid address');
             $scope.saveLoading = false;
             fn(false);
@@ -1767,7 +1767,7 @@
     var offFn = $rootScope.$on('$locationChangeStart', function (event, newUrl, oldUrl) {
         checkIfPageDirty(newUrl, function (redirectUrl) {  
           var condition = $scope.isDirty.dirty && !$scope.changesConfirmed;
-          if (condition && !$scope.isCampaign) {
+          if (condition && !$scope.isCampaign && !$scope.isProduct) {
             event.preventDefault();
             SweetAlert.swal({
               title: "Are you sure?",
