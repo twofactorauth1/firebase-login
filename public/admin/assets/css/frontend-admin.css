@@ -6871,6 +6871,12 @@ ssb-topbar .ui-select-match-text > small {
 .ssb-theme-young-soul label {
   color: #000000;
 }
+.ssb-theme-young-soul .ssb-theme-heading-text {
+  font-size: 12px;
+}
+.ssb-theme-young-soul .ssb-theme-paragraph-text {
+  font-size: 12px;
+}
 #componentloader {
   overflow: visible;
   min-height: auto;

@@ -1,6 +1,40 @@
-<!-- <link rel="stylesheet" ng-href="css/ssb-site-builder/ssb-themes/ssb-theme-{{ vm.state.website.theme.name | slugify}}.css"> -->
+
 <style>
-    /* TODO: theme overrides */
+    /*
+
+    TODO:
+        - decide on classnames for all hook-able stuff
+        - mirror classnames here and in theme stylesheet(s)
+        - add the hook classes to all relevant component markup
+
+    */
+
+ .ssb-theme-young-soul {
+
+    font-family: "Roboto", Helvetica, Arial, sans-serif;
+
+    .ssb-page-section {
+        background-color: #e8e7e7;
+    }
+
+    .ssb-page-section-layout-header {
+        background-color: #9acccb;
+    }
+
+    h1, h2, h3, h4, h5, a, p, span, label {
+        color: #000000;
+    }
+
+    .ssb-theme-heading-text {
+        font-size: 16px;
+    }
+
+    .ssb-theme-paragraph-text {
+        font-size: 12px;
+    }
+
+}
+
 </style>
 <div>
 
