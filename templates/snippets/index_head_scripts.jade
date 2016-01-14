@@ -21,7 +21,7 @@ script(type="text/javascript").
                 window.analytics.load('#{segmentIOWriteKey}');
         window.analytics.page('Index', {accountId:#{account._id}});
 
-if (account.website.settings.font_family && account.website.settings.font_family_2) || (typeof account.website.theme.hasCustomFonts !== undefined && account.website.theme.hasCustomFonts === true)
+if (account.website.settings.font_family && account.website.settings.font_family_2) || (typeof account.website.theme !== undefined && typeof account.website.theme.hasCustomFonts !== undefined && account.website.theme.hasCustomFonts === true)
     script(src="//ajax.googleapis.com/ajax/libs/webfont/1.5.18/webfont.js")
 
 if account.website.settings.font_family && account.website.settings.font_family_2
@@ -32,7 +32,7 @@ if account.website.settings.font_family && account.website.settings.font_family_
            }
         });
 
-if (typeof account.website.theme.hasCustomFonts !== undefined && account.website.theme.hasCustomFonts === true)
+if (typeof account.website.theme !== undefined && typeof account.website.theme.hasCustomFonts !== undefined && account.website.theme.hasCustomFonts === true)
     script(type="text/javascript").
         WebFont.load({
             google: {
