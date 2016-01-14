@@ -61,7 +61,11 @@ var mainApp = angular
                 */
                 template: function(urlattr) {
                     var s = '<div data-ng-include="';
-                    s += " '/template/index'";
+                    s += " '/template/index";
+                    if(urlattr.cachebuster) {
+                        s+='?cachebuster=' + urlattr.cachebuster;
+                    }
+                    s+= "'";
                     s += ' "></div>';
                     return s;
                 },
@@ -72,12 +76,14 @@ var mainApp = angular
                 controller: 'NotFoundCtrl as notfound'
             })
             .when('/:name', {
-                /*templateUrl: function(urlattr){
-                 return '/template/' + urlattr.name;
-                 },*/
                 template: function(urlattr) {
+
                     var s = '<div data-ng-include="';
-                    s += " '/template/" + urlattr.name + "'";
+                    s += " '/template/" + urlattr.name;
+                    if(urlattr.cachebuster) {
+                        s+='?cachebuster=' + urlattr.cachebuster;
+                    }
+                    s+= "'";
                     s += ' "></div>';
                     return s;
                 },
