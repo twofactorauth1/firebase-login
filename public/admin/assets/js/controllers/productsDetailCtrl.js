@@ -889,7 +889,7 @@
       if((!$scope.emailToSend.campaignId || ($scope.product && $scope.emailToSend.campaignId !== $scope.product._id)) && $scope.selectedEmail.type != 'new'){
           SweetAlert.swal({
           title: "How would you like to use the selected email?",
-          text: "You are saving changes to an email used by more than one product. Do you wish to update the existing email (altering all products) or create and update a copy specific to this product?",
+          text: "You are saving changes to an email used by more than one product OR campaign. Do you wish to update the existing email (altering all products OR campaigns) or create and update a copy specific to this product?",
           type: "warning",
           showCancelButton: true,
           confirmButtonColor: "#DD6B55",
