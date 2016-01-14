@@ -886,7 +886,7 @@
 
 
     $scope.confirmOverrideExistingEmails = function(){
-      if((!$scope.emailToSend.campaignId || ($scope.product && $scope.emailToSend.campaignId !== $scope.product._id)) && $scope.selectedEmail.type != 'new'){
+      if((!$scope.emailToSend.productId || ($scope.product && $scope.emailToSend.productId !== $scope.product._id)) && $scope.selectedEmail.type != 'new'){
           SweetAlert.swal({
           title: "How would you like to use the selected email?",
           text: "You are saving changes to an email used by more than one product OR campaign. Do you wish to update the existing email (altering all products OR campaigns) or create and update a copy specific to this product?",
@@ -920,7 +920,7 @@
               })
             },0)
             $scope.emailToSend.title = $scope.product.name + " " + moment().toDate().getTime();
-            $scope.emailToSend.campaignId = null;
+            $scope.emailToSend.productId = null;
             $scope.selectedEmail.type = 'new';
             $scope.checkEmailTitle($scope.emailToSend.title);
           }
