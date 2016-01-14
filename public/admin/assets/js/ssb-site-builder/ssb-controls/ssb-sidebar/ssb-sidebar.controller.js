@@ -544,22 +544,14 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
                 vm.sections = vm[type];
             })
         };
-
-    }
+    }    
 
     function init(element) {
     	vm.element = element;
-      if(!vm.state.platformSections){          
-        SimpleSiteBuilderService.getPlatformSections().then(function(sections) {
-          vm.state.platformSections = sections.data;
-          setupSectionContent();
-        })
-      }
-      else{
+      $scope.$watch(function() { return SimpleSiteBuilderService.platformSections }, function(sections) {
         setupSectionContent();
-      }
+      }, true);
     }
-
 }
 
 })();
