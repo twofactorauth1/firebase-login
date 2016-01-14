@@ -473,7 +473,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
         /*
         * @platformSections
         * - an array of section types and icons for the add section modal
-        */
+        */        
         vm.enabledPlatformSections = _.where(vm.state.platformSections, {
             enabled: true
         });
@@ -544,15 +544,14 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
                 vm.sections = vm[type];
             })
         };
-
-    }
+    }    
 
     function init(element) {
     	vm.element = element;
-
+      $scope.$watch(function() { return SimpleSiteBuilderService.platformSections }, function(sections) {
         setupSectionContent();
+      }, true);
     }
-
 }
 
 })();

@@ -587,7 +587,7 @@
       if((!$scope.emailToSend.campaignId || ($scope.newCampaignObj && $scope.emailToSend.campaignId !== $scope.newCampaignObj._id)) && $scope.selectedEmail.type != 'new'){
           SweetAlert.swal({
           title: "How would you like to use the selected email?",
-          text: "You are saving changes to an email used by more than one campaign. Do you wish to update the existing email (altering all campaigns) or create and update a copy specific to this campaign?",
+          text: "You are saving changes to an email used by more than one campaign or product. Do you wish to update the existing email (altering all campaigns or products) or create and update a copy specific to this campaign?",
           type: "warning",
           showCancelButton: true,
           confirmButtonColor: "#DD6B55",
@@ -1475,7 +1475,7 @@
         }
 
         $scope.emailToSendPrevious = $scope.emails[0];
-
+        $scope.actualEmailToSend = angular.copy($scope.emailToSend);
       });
 
       return promise;

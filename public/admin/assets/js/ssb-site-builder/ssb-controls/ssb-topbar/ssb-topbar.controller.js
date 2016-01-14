@@ -84,6 +84,8 @@ function ssbSiteBuilderTopbarController($scope, $attrs, $filter, SimpleSiteBuild
 
     function init(element) {
     	vm.element = element;
+        if(!vm.state.page)
+            vm.state.page = SimpleSiteBuilderService.page;
     }
 
 }

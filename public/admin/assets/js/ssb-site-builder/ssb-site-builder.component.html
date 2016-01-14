@@ -60,7 +60,7 @@
 			<div ng-if="vm.state.page.sections.length">
 
 				<ssb-page-section
-					ng-repeat="section in vm.state.page.sections track by section._id"
+					ng-repeat="section in vm.state.page.sections track by $index"
 					section="section"
 					index="$index"
 					ng-class="{ 'ssb-active-section': $index === vm.uiState.activeSectionIndex }"
