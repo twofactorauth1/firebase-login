@@ -1475,7 +1475,7 @@
         }
 
         $scope.emailToSendPrevious = $scope.emails[0];
-
+        $scope.actualEmailToSend = angular.copy($scope.emailToSend);
       });
 
       return promise;

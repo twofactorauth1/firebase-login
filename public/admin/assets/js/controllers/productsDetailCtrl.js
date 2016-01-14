@@ -829,10 +829,12 @@
         if (emailId && matchedEmail) {
           $scope.emailToSend = matchedEmail;
           $scope.originalEmailToSend = angular.copy($scope.emailToSend);
+
         } else {
           console.log('email not found');
         }
         $scope.emailToSendPrevious = $scope.emails[0];
+        $scope.actualEmailToSend = angular.copy($scope.emailToSend);
       });
       $scope.originalProduct = angular.copy($scope.product);
       return promise;
