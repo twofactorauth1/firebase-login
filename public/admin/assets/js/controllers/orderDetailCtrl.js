@@ -2,7 +2,7 @@
 /*global app, moment, angular, window*/
 /*jslint unparam:true*/
 (function (angular) {
-  app.controller('OrderDetailCtrl', ["$scope", "toaster", "$modal", "$filter", "$stateParams", "$location", "OrderService", "CustomerService", "UserService", "ProductService", "SweetAlert", "orderConstant", function ($scope, toaster, $modal, $filter, $stateParams, $location, OrderService, CustomerService, UserService, ProductService, SweetAlert, orderConstant) {
+  app.controller('OrderDetailCtrl', ["$scope", "toaster", "$modal", "$filter", "$stateParams", "$location", "OrderService", "CustomerService", "UserService", "ProductService", "SweetAlert", "orderConstant", "productConstant", function ($scope, toaster, $modal, $filter, $stateParams, $location, OrderService, CustomerService, UserService, ProductService, SweetAlert, orderConstant, productConstant) {
 
     $scope.dataLoaded = false;
     //TODO
@@ -84,12 +84,13 @@
     $scope.getProducts = function () {
       ProductService.getProducts(function (products) {
         $scope.products = products;
+        $scope.activeProducts = products.filter(function(product) { return product.status === productConstant.product_status_types.ACTIVE });
         $scope.getOrder();
       });
     };
 
     $scope.eliminateUsedProducts = function () {
-      $scope.filterProducts = angular.copy($scope.products);
+      $scope.filterProducts = angular.copy($scope.activeProducts);
       _.each($scope.order.line_items, function (line_item) {
         var matchProduct = _.find($scope.filterProducts, function (product) {
           return product._id === line_item.product_id;
