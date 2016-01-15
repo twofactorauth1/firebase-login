@@ -102,6 +102,7 @@ module.exports = function(grunt) {
                     '../indigeweb/public/admin/assets/css/frontend-admin.css': [ 'public/less/frontend-admin.less' ],
                     '../indigeweb/public/css/styles.css': [ 'public/less/frontend.less' ],
                     '../indigeweb/public/admin/assets/css/styles.css': [ 'public/less/styles.less' ],
+                    '../indigeweb/public/admin/assets/css/theme.css': [ 'public/less/theme.less' ],
                     // '../indigeweb/public/admin/assets/css/ssb-site-builder/styles.css': [ 'public/less/ssb-site-builder/frontend/styles.less' ],
                     '../indigeweb/public/css/ssb-site-builder/ssb-themes/ssb-theme-young-soul.css': [ 'public/less/ssb-site-builder/ssb-frontend/ssb-themes/ssb-theme-young-soul.less' ]
                 }
