@@ -153,7 +153,7 @@ app.directive("billingTrial", ['PaymentService', 'ToasterService', 'UserService'
                               // $window.location.reload(true);
                           },
                           function(err){
-                              ToasterService.clearAll();
+                              //ToasterService.clearAll();
                               ToasterService.show('error', 'The purchase was unsuccessful. Please check your card information.');
                               console.warn('no valid stripe token.');
                               scope.selectedPlan.paymentProcessing = false;
@@ -178,7 +178,7 @@ app.directive("billingTrial", ['PaymentService', 'ToasterService', 'UserService'
                           });
                       }
                       else {
-                          ToasterService.clearAll();
+                          //ToasterService.clearAll();
                           ToasterService.show('error', 'The purchase was unsuccessful. Please check your card information.');
                           console.warn('no valid stripe token.');
                           scope.selectedPlan.paymentProcessing = false;
