@@ -26,7 +26,9 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
             sections: {}
         },
         openSidebarPanel: '',
-        showSectionPanel: false
+        openSidebarSectionPanel: { name: '', id: '' },
+        showSectionPanel: false,
+
     };
 
     vm.updateActiveSection = updateActiveSection;

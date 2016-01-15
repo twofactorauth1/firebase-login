@@ -6296,8 +6296,8 @@ a[href="https://froala.com/wysiwyg-editor"] {
 .app-minimal-admin-chrome footer {
   display: none;
 }
-.fr-toolbar.fr-inline.fr-desktop {
-  margin-top: 6em!important;
+.fr-wrapper.show-placeholder .fr-placeholder {
+  pointer-events: none;
 }
 .ssb-site-builder-container {
   height: 100%;
@@ -6470,8 +6470,8 @@ a[href="https://froala.com/wysiwyg-editor"] {
   top: 0;
   border-radius: 0;
 }
-.ssb-site-builder .simple-form-v1 .btn .edit-wrap:hover .editable-title {
-  top: auto;
+.ssb-site-builder .simple-form-v1 .edit-wrap:hover .editable-title {
+  top: -1.5em;
 }
 .ssb-section-modal .ssb-section-modal-list-item {
   padding: 1em;
@@ -6797,11 +6797,16 @@ a[href="https://froala.com/wysiwyg-editor"] {
   max-height: calc(100% - 182px);
   overflow: auto;
   overflow-x: hidden;
-  max-width: 300px;
+  width: 300px;
+  max-height: 600px;
 }
 .ssb-sidebar-section-panel.draggable > .ssb-sidebar-sub-heading {
   cursor: move;
   border-radius: 5px 5px 0px 0px;
+  text-transform: capitalize;
+}
+.ssb-sidebar-section-panel.draggable > .ssb-sidebar-sub-heading i {
+  cursor: pointer;
 }
 .ssb-sidebar-section-panel .close {
   position: absolute;
@@ -6812,11 +6817,36 @@ a[href="https://froala.com/wysiwyg-editor"] {
 .ssb-sidebar-section-panel .panel-group {
   margin-bottom: 0;
 }
+.ssb-sidebar-section-panel .row:not(:first-of-type) {
+  border-top: 1px solid #ddd;
+}
+.ssb-sidebar-section-panel .ssb-sidebar-section-panel-btn {
+  width: 100%;
+  padding: .5em 0;
+  text-align: left;
+}
+.ssb-sidebar-section-panel-component-btns .ssb-sidebar-section-panel-btn {
+  padding: 1em;
+  text-align: center;
+  margin: .5em auto;
+  display: block;
+  text-transform: capitalize;
+}
 .close-panel {
   position: absolute;
   top: 2em;
   right: 1em;
   cursor: pointer;
+}
+.ssb-sidebar-section-panel-component-panel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 300px;
+  max-height: 600px;
+  background: white;
+  z-index: 1;
+  overflow: hidden;
 }
 ssb-topbar {
   position: fixed;
@@ -6853,6 +6883,7 @@ ssb-topbar .ui-select-match-text > small {
 }
 .ssb-theme-young-soul {
   font-family: "Roboto", Helvetica, Arial, sans-serif;
+  color: #000;
 }
 .ssb-theme-young-soul .ssb-page-section {
   background-color: #e8e7e7;
@@ -6860,19 +6891,14 @@ ssb-topbar .ui-select-match-text > small {
 .ssb-theme-young-soul .ssb-page-section-layout-header {
   background-color: #9acccb;
 }
-.ssb-theme-young-soul h1,
-.ssb-theme-young-soul h2,
-.ssb-theme-young-soul h3,
-.ssb-theme-young-soul h4,
-.ssb-theme-young-soul h5,
-.ssb-theme-young-soul a,
-.ssb-theme-young-soul p,
-.ssb-theme-young-soul span,
-.ssb-theme-young-soul label {
-  color: #000000;
+.ssb-theme-young-soul .ssb-navigation a {
+  color: #000;
+}
+.ssb-theme-young-soul .ssb-theme-main-header-text {
+  font-size: 96px;
 }
 .ssb-theme-young-soul .ssb-theme-heading-text {
-  font-size: 12px;
+  font-size: 16px;
 }
 .ssb-theme-young-soul .ssb-theme-paragraph-text {
   font-size: 12px;

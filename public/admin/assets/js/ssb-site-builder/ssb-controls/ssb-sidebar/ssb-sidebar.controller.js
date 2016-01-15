@@ -52,11 +52,6 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
 
     editableOptions.theme = 'bs3';
 
-    // $scope.$watch('vm.uiState.activeSectionIndex', function(index) {
-    //     console.log('activeSectionIndex changed: ', index);
-    //     vm.navigation.loadPage();
-    // }, true);
-
     vm.navigation = {
     	back: function() {
     		vm.navigation.index = 0;

@@ -391,11 +391,18 @@
     max-height: ~"calc(100% - 182px)";
     overflow: auto;
     overflow-x: hidden;
-    max-width: 300px;
+    width: 300px;
+    max-height: 600px;
 
     &.draggable > .ssb-sidebar-sub-heading {
         cursor: move;
         border-radius: 5px 5px 0px 0px;
+        // border: 0 none;
+        text-transform: capitalize;
+
+        i {
+            cursor: pointer;
+        }
     }
 
     .close {
@@ -408,6 +415,24 @@
     .panel-group {
         margin-bottom: 0;
     }
+
+    .row:not(:first-of-type) {
+        border-top: 1px solid #ddd;
+    }
+
+    .ssb-sidebar-section-panel-btn {
+        width: 100%;
+        padding: .5em 0;
+        text-align: left;
+    }
+}
+
+.ssb-sidebar-section-panel-component-btns .ssb-sidebar-section-panel-btn {
+    padding: 1em;
+    text-align: center;
+    margin: .5em auto;
+    display: block;
+    text-transform: capitalize;
 }
 
 .close-panel {
@@ -416,3 +441,18 @@
     right: 1em;
     cursor: pointer;
 }
+
+.ssb-sidebar-section-panel-component-panel {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 300px;
+    max-height: 600px;
+    background: white;
+    z-index: 1;
+    overflow: hidden;
+
+
+}
+
+

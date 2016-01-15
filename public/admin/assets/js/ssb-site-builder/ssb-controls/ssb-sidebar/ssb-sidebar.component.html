@@ -332,73 +332,7 @@
         </div>
     </div>
 
-    <section
-        ng-if="vm.uiState.showSectionPanel && vm.state.page.sections[vm.uiState.activeSectionIndex]"
-        class="ssb-sidebar-section-panel draggable"
-        ind-draggable>
-
-        <h4 class="ssb-sidebar-sub-heading">
-            {{vm.state.page.sections[vm.uiState.activeSectionIndex].name}}
-        </h4>
-
-        <div class="close-panel ti-close" ng-click="vm.uiState.showSectionPanel = false"></div>
-
-        <!-- TODO: component-based settings buttons social-link -->
-
-        <div class="clearfix overflow-auto" ng-include=" 'assets/js/ssb-site-builder/ssb-components/ssb-page-section/sidebar.settings.html' "></div>
-
-        <div class="form-group padding-top-10">
-            <h5 class="ssb-sidebar-settings-heading">Components ({{vm.state.page.sections[vm.uiState.activeSectionIndex].components.length}})</h5>
-            <ul class="list-unstyled ssb-sidebar-section-components-list">
-                <li ng-repeat="component in vm.state.page.sections[vm.uiState.activeSectionIndex].components track by $index" ng-init="componentIndex = $index">
-                    <accordion close-others="oneAtATime" class="accordion">
-                        <accordion-group
-                            is-open="vm.uiState.accordion.sections[sectionIndex].components[componentIndex].isOpen"
-                            ng-click="vm.togglePageSectionComponentAccordion(componentIndex)"
-                            class="ssb-sidebar-sortable-item ssb-sidebar-sortable-item-component">
-
-                            <accordion-heading>
-                                <div ng-class="{ 'ssb-sidebar-component-open': vm.uiState.accordion.sections[sectionIndex].components[componentIndex].isOpen }">
-                                    {{(componentIndex + 1)}} - {{component.header_title || component.type}}
-                                </div>
-                                <div class="ssb-sidebar-item-icon ssb-sidebar-move-handle ti-move display-ib"></div>
-                                <div
-                                    class="ssb-sidebar-item-icon ssb-sidebar-item-icon-offset-1 ti-close display-ib"
-                                    ng-if="vm.uiState.accordion.sections[sectionIndex].components[componentIndex].isOpen"
-                                    ng-click="vm.removeComponentFromSection(componentIndex)"
-                                    tooltip-placement="left"
-                                    tooltip-html-unsafe="Remove component">
-                                </div>
-                            </accordion-heading>
-
-                            <div ng-include=" 'assets/js/ssb-site-builder/ssb-components/shared/basic.html' "></div>
-
-                            <ul class="list-unstyled">
-                                <li>
-                                    <accordion close-others="oneAtATime" class="accordion">
-                                        <div ng-if="component.type !== undefined" ng-include=" 'assets/js/ssb-site-builder/ssb-components/' + component.type + '/sidebar.settings.html' "></div>
-                                        <ssb-action-buttons save-action="vm.savePage()" cancel-action="vm.cancelPendingEdits()" ng-show="vm.state.pendingChanges"></ssb-action-buttons>
-                                    </accordion>
-                                </li>
-                            </ul>
-                        </accordion-group>
-                    </accordion>
-                </li>
-                <li ng-if="vm.state.page.sections[vm.uiState.activeSectionIndex].canAddComponents !== false" class="ssb-sidebar-component-list">
-                    <accordion close-others="oneAtATime" class="accordion" ng-click="vm.getPlatformComponents()">
-                        <accordion-group heading="Add + ">
-                            <ul class="list-unstyled">
-                                <li ng-repeat="component in vm.platformComponents track by $index" ng-click="vm.addComponentToSection(component, sectionIndex)" class="center">
-                                    <img src="{{component.preview}}" alt="{{component.type}}" />
-                                    {{component.header_title || component.title || component.type}}
-                                </li>
-                            </ul>
-                        </accordion-group>
-                    </accordion>
-                </li>
-            </ul>
-        </div>
-    </section>
+    <div data-ng-include data-src=" 'assets/js/ssb-site-builder/ssb-controls/ssb-sidebar/templates/ssb-sidebar-section-panel.component.html' "></div>
 
 
 	    <!-- <section ng-repeat="linkList in vm.state.website.linkLists track by $index">
