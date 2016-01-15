@@ -741,6 +741,7 @@
       var promise = AccountService.getAccount(function (_account) {
         $scope.account = _account;
         $scope.setBusinessDetails();
+        $scope.actualEmailToSend = angular.copy($scope.emailToSend);
       });
       return promise;
     };
@@ -833,8 +834,7 @@
         } else {
           console.log('email not found');
         }
-        $scope.emailToSendPrevious = $scope.emails[0];
-        $scope.actualEmailToSend = angular.copy($scope.emailToSend);
+        $scope.emailToSendPrevious = $scope.emails[0];       
       });
       $scope.originalProduct = angular.copy($scope.product);
       return promise;
