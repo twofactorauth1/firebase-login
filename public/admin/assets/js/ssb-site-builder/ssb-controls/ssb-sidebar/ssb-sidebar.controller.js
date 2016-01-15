@@ -13,9 +13,9 @@ app.config(['$provide', function ($provide){
 
 app.controller('SiteBuilderSidebarController', ssbSiteBuilderSidebarController);
 
-ssbSiteBuilderSidebarController.$inject = ['$scope', '$attrs', '$filter', 'SimpleSiteBuilderService', '$modal', 'editableOptions', '$location', 'SweetAlert'];
+ssbSiteBuilderSidebarController.$inject = ['$scope', '$attrs', '$filter', '$document', '$timeout', 'SimpleSiteBuilderService', '$modal', 'editableOptions', '$location', 'SweetAlert'];
 /* @ngInject */
-function ssbSiteBuilderSidebarController($scope, $attrs, $filter, SimpleSiteBuilderService, $modal, editableOptions, $location, SweetAlert) {
+function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $timeout, SimpleSiteBuilderService, $modal, editableOptions, $location, SweetAlert) {
 
     console.info('site-build sidebar directive init...')
 
@@ -27,6 +27,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, SimpleSiteBuil
     vm.cancelPendingEdits = cancelPendingEdits;
     vm.togglePageSectionAccordion = togglePageSectionAccordion;
     vm.togglePageSectionComponentAccordion = togglePageSectionComponentAccordion;
+    vm.setActiveSection = setActiveSection;
     vm.getPlatformSections = getPlatformSections;
     vm.getPlatformComponents = getPlatformComponents;
     vm.addSectionToPage = addSectionToPage;
@@ -36,6 +37,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, SimpleSiteBuil
     vm.addBackground = addBackground;
     vm.addImage = addImage;
     vm.openModal = openModal;
+    vm.openPageSettingsModal = openPageSettingsModal;
     vm.closeModal = closeModal;
     vm.openMediaModal = openMediaModal;
     vm.insertMedia = insertMedia;
@@ -46,13 +48,9 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, SimpleSiteBuil
     vm.removeBackgroundImage = removeBackgroundImage;
     vm.removeImage = removeImage;
     vm.createPage = createPage;
+    vm.getTemplateById = getTemplateById;
 
     editableOptions.theme = 'bs3';
-
-    // $scope.$watch('vm.uiState.activeSectionIndex', function(index) {
-    //     console.log('activeSectionIndex changed: ', index);
-    //     vm.navigation.loadPage();
-    // }, true);
 
     vm.navigation = {
     	back: function() {
@@ -267,6 +265,19 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, SimpleSiteBuil
   		SimpleSiteBuilderService.setActiveComponent(index);
     }
 
+    function setActiveSection(index) {
+        SimpleSiteBuilderService.setActiveSection(index);
+
+        //TODO: not working...
+        $timeout(function () {
+            var elementId = vm.state.page.sections[index]._id;
+            var element = angular.element(document.getElementById(elementId));
+            if (element) {
+              $document.scrollToElement(element, 175, 1000);
+            }
+        }, 0);
+    }
+
     function addBackground(sectionIndex, componentIndex) {
     	vm.openMediaModal('media-modal', 'MediaModalCtrl', null, 'lg');
 
@@ -346,6 +357,42 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, SimpleSiteBuil
 
     }
 
+
+    function openPageSettingsModal(modal, controller, index, size, pageId) {
+      console.log('openModal >>> ', modal, controller, index);
+      var _modal = {
+        templateUrl: modal,
+        keyboard: false,
+        backdrop: 'static',
+        size: 'md',
+        scope: $scope,
+        resolve: {
+            parentVm: function () {
+                return vm;
+            }
+        }
+      };
+
+      if (controller) {
+        _modal.controller = controller + ' as vm';
+      }
+
+      if (size) {
+        _modal.size = 'lg';
+      }
+
+      _modal.resolve.pageId = function () {
+        return pageId;
+      };
+
+      vm.modalInstance = $modal.open(_modal);
+
+      vm.modalInstance.result.then(null, function () {
+        angular.element('.sp-container').addClass('sp-hidden');
+      });
+
+    }
+
     function openMediaModal(modal, controller, index, size) {
       console.log('openModal >>> ', modal, controller, index);
       var _modal = {
@@ -408,96 +455,116 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, SimpleSiteBuil
 
     };
 
+    function getTemplateById(id) {
+        SimpleSiteBuilderService.getTemplateById(id);
+    };
+
+    /*
+     * Transforms the content data to be used in the tabset UI
+     *
+     */
     function setupSectionContent() {
 
-        var sectionLabel;
+        var unbindWatcher = $scope.$watch(function() {
+            return SimpleSiteBuilderService.platformSections
+        }, function(newValue, oldValue) {
 
-        var featured = ['header', 'feature block', 'meet team'];
+            if (newValue) {
 
-        /*
-        * @platformSections
-        * - an array of section types and icons for the add section modal
-        */
-        vm.enabledPlatformSections = _.where(vm.state.platformSections, {
-            enabled: true
-        });
+                var sectionLabel;
 
-        _.each(vm.enabledPlatformSections, function (element, index) {
-            console.log(element.title);
-            if (featured.indexOf(element.title.toLowerCase()) !== -1) {
-                element.featured = true;
+                var featured = ['header', 'hero image', 'feature block', 'meet team', 'testimonials'];
+
+                /*
+                * @platformSections
+                * - an array of section types and icons for the add section modal
+                */
+                vm.enabledPlatformSections = _.where(vm.state.platformSections, {
+                    enabled: true
+                });
+
+                _.each(vm.enabledPlatformSections, function (element, index) {
+                    if (featured.indexOf(element.title.toLowerCase()) !== -1) {
+                        element.featured = true;
+                    }
+                });
+
+                /*
+                * @userSections
+                * - an array of sections created by current user
+                */
+                vm.enabledUserSections = _.where(vm.state.userSections, {
+                    enabled: true
+                });
+
+                //initially show platform sections
+                vm.sections = vm.enabledPlatformSections;
+                vm.sectionType = 'enabledPlatformSections';
+
+                /************************************************************************************************************
+                * Takes the platformSections object and gets the value for the filter property from any that are enabled.
+                * It then makes that list unique, sorts the results alphabetically, and and removes the misc value if
+                * it exists. (The misc value is added back on to the end of the list later)
+                ************************************************************************************************************/
+                vm.sectionFilters = _.without(_.uniq(_.pluck(_.sortBy(vm.enabledPlatformSections, 'filter'), 'filter')), 'misc');
+
+                // Iterates through the array of filters and replaces each one with an object containing an
+                // upper and lowercase version
+                _.each(vm.sectionFilters, function (element, index) {
+                    sectionLabel = element.charAt(0).toUpperCase() + element.substring(1).toLowerCase();
+                    vm.sectionFilters[index] = {
+                      'capitalized': sectionLabel,
+                      'lowercase': element
+                    };
+                    sectionLabel = null;
+                });
+
+                // Manually add the FEATURED option to the beginning of the list
+                vm.sectionFilters.unshift({
+                    'capitalized': 'Featured',
+                    'lowercase': 'featured'
+                });
+
+                // Manually add the Misc section back on to the end of the list
+                // Exclude 'Misc' filter for emails
+                vm.sectionFilters.push({
+                  'capitalized': 'Misc',
+                  'lowercase': 'misc'
+                });
+
+                // Manually add the All option to the end of the list
+                vm.sectionFilters.push({
+                    'capitalized': 'All',
+                    'lowercase': 'all'
+                });
+
+                vm.setFilterType = function (label) {
+                    vm.typefilter = label;
+                };
+
+                // type is 'enabledPlatformSections' or 'enabledUserSections'
+                vm.setSectionType = function (type) {
+                    SimpleSiteBuilderService.getUserSections().then(function() {
+                        vm.sectionType = type;
+                        vm.sections = vm[type];
+                    })
+                };
+
+
+                unbindWatcher();
+
             }
-        });
-
-        /*
-        * @userSections
-        * - an array of sections created by current user
-        */
-        vm.enabledUserSections = _.where(vm.state.userSections, {
-            enabled: true
-        });
-
-        //initially show platform sections
-        vm.sections = vm.enabledPlatformSections;
-        vm.sectionType = 'enabledPlatformSections';
-
-        /************************************************************************************************************
-        * Takes the platformSections object and gets the value for the filter property from any that are enabled.
-        * It then makes that list unique, sorts the results alphabetically, and and removes the misc value if
-        * it exists. (The misc value is added back on to the end of the list later)
-        ************************************************************************************************************/
-        vm.sectionFilters = _.without(_.uniq(_.pluck(_.sortBy(vm.enabledPlatformSections, 'filter'), 'filter')), 'misc');
-
-        // Iterates through the array of filters and replaces each one with an object containing an
-        // upper and lowercase version
-        _.each(vm.sectionFilters, function (element, index) {
-            sectionLabel = element.charAt(0).toUpperCase() + element.substring(1).toLowerCase();
-            vm.sectionFilters[index] = {
-              'capitalized': sectionLabel,
-              'lowercase': element
-            };
-            sectionLabel = null;
-        });
-
-        // Manually add the FEATURED option to the beginning of the list
-        vm.sectionFilters.unshift({
-            'capitalized': 'Featured',
-            'lowercase': 'featured'
-        });
-
-        // Manually add the Misc section back on to the end of the list
-        // Exclude 'Misc' filter for emails
-        vm.sectionFilters.push({
-          'capitalized': 'Misc',
-          'lowercase': 'misc'
-        });
-
-        // Manually add the All option to the end of the list
-        vm.sectionFilters.push({
-            'capitalized': 'All',
-            'lowercase': 'all'
-        });
-
-        vm.setFilterType = function (label) {
-            vm.typefilter = label;
-        };
-
-        // type is 'enabledPlatformSections' or 'enabledUserSections'
-        vm.setSectionType = function (type) {
-            SimpleSiteBuilderService.getUserSections().then(function() {
-                vm.sectionType = type;
-                vm.sections = vm[type];
-            })
-        };
+        }, true);
 
     }
 
     function init(element) {
-    	vm.element = element;
+
+        vm.element = element;
 
         setupSectionContent();
-    }
 
+    }
 }
 
 })();

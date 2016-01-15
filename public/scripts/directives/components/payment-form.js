@@ -421,7 +421,8 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                             first: newAccount.first,
                             middle: newAccount.middle,
                             last: newAccount.last,
-                            campaignId: scope.component.campaignId
+                            campaignId: scope.component.campaignId,
+                            existingUser: newAccount.existingUser
                         };
 
                         newUser.plan = '';
@@ -526,16 +527,25 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                 }
             };
 
-            scope.validateEmail = function(data)
+            scope.validateEmail = function(data, newAccount)
             {
                 if (data === true) {
-                    scope.validateForm = false;
+                    //scope.validateForm = false;
                     scope.loading = false;
-                    angular.element("#email .error").html("Email Already Exists");
-                    angular.element("#email").addClass('has-error');
-                    angular.element("#email .glyphicon").addClass('glyphicon-remove');
+                    if(newAccount) {
+                        newAccount.hidePassword = true;
+                        newAccount.existingUser = true;
+                    }
+
+                    angular.element("#email .error").html("You will be able to log in to this account with your existing credentials.");
+                    angular.element("#email").addClass('has-success');
+                    angular.element("#email .glyphicon").addClass('glyphicon-ok');
                 } else {
                     scope.validateForm = true;
+                    if(newAccount) {
+                        newAccount.hidePassword = false;
+                        newAccount.existingUser = false;
+                    }
                     angular.element("#email .error").html("");
                     angular.element("#email").removeClass('has-error').addClass('has-success');
                     angular.element("#email .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
@@ -582,7 +592,7 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                         scope.promises.push(UserService.checkDuplicateEmail(newAccount.email));
                     else
                         UserService.checkEmailExists(newAccount.email, function(data) {
-                            scope.validateEmail(data);
+                            scope.validateEmail(data, newAccount);
                         });
                 }
             };

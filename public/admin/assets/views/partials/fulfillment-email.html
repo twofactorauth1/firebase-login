@@ -1,0 +1,138 @@
+<div class="col-sm-12" ng-show="product.fulfillment_email">
+    <div>
+        <div class="row">
+            <div class="col-sm-8 col-sm-offset-2">
+                <div class="well bg-primary margin-top-30">
+                    <div class="padding-15 center">
+                        <h2 class="StepTitle text-white text-bold"><i class="fa fa-envelope fa-2x fa-inverse block margin-bottom-10"></i> Content</h2>
+                        <p class="margin-bottom-0 text-large">
+                            Design a custom email or select an email from email templates.
+                        </p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Email Type</label>
+                    <div class="clearfix"></div>
+                    <div class="well well-sm">
+                        <div class="radio clip-radio radio-primary radio-inline" style="margin-bottom:0px!important;margin-top:0px">
+                            <input type="radio" id="newEmail" ng-click="clearEmail(true)" name="emailtype" value="new" ng-model="selectedEmail.type">
+                            <label for="newEmail" style="margin-bottom:0px!important">
+                                New Email
+                            </label>
+                        </div>
+                        <div class="radio clip-radio radio-primary radio-inline" style="margin-bottom:0px!important;margin-top:0px">
+                            <input type="radio" id="emailTemplate" name="emailtype" value="template" ng-model="selectedEmail.type" ng-click="clearEmail()">
+                            <label for="emailTemplate" style="margin-bottom:0px!important">
+                                Existing Email
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group" ng-if="selectedEmail.type === 'new'">
+                    <label>
+                        Email Title <span class="symbol required"></span>
+                    </label>
+                    <div class="well well-sm">
+                        <input type="text" class="form-control input" name="name" ng-model="emailToSend.title" ng-change="checkEmailTitle(emailToSend.title)" ng-model-options="{ debounce: 800 }"/>
+                        <span class="form-control-feedback" ng-class="{'glyphicon glyphicon-remove text-danger': emailTitleExists && emailTitleChecked && !checkingEmailTitle, 'glyphicon glyphicon-ok text-nephritis': !emailTitleExists && emailTitleChecked && emailToSend.title, 'fa fa-spinner fa-spin':checkingEmailTitle}"></span>
+                        <p class="error text-danger margin-top-5 margin-bottom-0" ng-if="emailTitleExists && emailTitleChecked && !checkingEmailTitle">Email Title Already Used. Please Choose Another</p>
+                        <p class="success text-nephritis margin-top-5 margin-bottom-0" ng-if="!emailTitleExists && emailTitleChecked && !checkingEmailTitle && emailToSend.title">Great Email Title!</p>
+                    </div>
+                </div>
+                <div ng-if="selectedEmail.type === 'template'">
+                    <label>
+                        Email Template <span class="symbol required"></span>
+                    </label>
+                    <div class="well well-sm">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <span ng-if="!emails.length">Loading... <b class="fa fa-spinner fa-spin"/></span>
+                                <ui-select ng-if="emails.length" ng-model="product.emailSettings.emailId" theme="bootstrap" ng-disabled="disabled" on-select="changeCurrentEmail($select.selected)" search-enabled="true" style="min-width:100%">
+                                    <ui-select-match placeholder="Select an email template">{{$select.selected.title}} (subject:{{$select.selected.subject}})</ui-select-match>
+                                    <ui-select-choices repeat="email._id as email in emails | propsFilter: {title: $select.search}">
+                                        <div ng-bind-html="email.title | highlight: $select.search"></div>
+                                        <small>
+                                        subject: <span ng-bind-html="''+email.subject | highlight: $select.search"></span>
+                                      </small>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="mini-editor" ng-class="{'col-sm-8 col-sm-offset-2': !fullscreen, 'col-xs-12': fullscreen}">
+                <div class="panel panel-white margin-top-5 margin-bottom-30" ng-if="!showPreview">
+                    <div class="panel-body no-padding">
+                        <div class="padding-15">
+                            <div ng-show="!fullscreen" class="hidden show-fullscreen">
+                                <button class="btn btn-o btn-primary" ng-click="togglePreview()">Preview</button>
+                                <button class="btn btn-o btn-primary" ng-click="toggleFullscreen()"><span class="fa fa-expand"></span></button>
+                            </div>
+                            <div ng-show="fullscreen">
+                                <button class="btn btn-o btn-primary show-fullscreen" ng-click="toggleFullscreen()"><span class="fa fa-compress"></span></button>
+                            </div>
+                            <div class="form-group margin-bottom-0">
+                                <label class="control-label text-bold">
+                                    From Name
+                                </label>
+                                <span editable-text="emailToSend.fromName">{{emailToSend.fromName || "From Name"}}</span>
+                            </div>
+                            <div class="form-group margin-bottom-0">
+                                <label class="control-label text-bold">
+                                    From Email
+                                </label>
+                                <span editable-email="emailToSend.fromEmail">{{emailToSend.fromEmail || "From Email"}}</span>
+                            </div>
+                            <div class="form-group margin-bottom-0">
+                                <label class="control-label text-bold">
+                                    Reply To
+                                </label>
+                                <span editable-email="emailToSend.replyTo">{{emailToSend.replyTo || "Reply To"}}</span>
+                            </div>
+                            <div class="form-group margin-bottom-0">
+                                <label class="control-label text-bold">
+                                    Bcc
+                                </label>
+                                <span editable-email="emailToSend.bcc">{{emailToSend.bcc || "Bcc"}}</span>
+                            </div>
+                            <div class="form-group margin-bottom-0">
+                                <label class="control-label text-bold">
+                                    Subject
+                                </label>
+                                <span editable-text="emailToSend.subject" onbeforesave="analyzeSubject($data)">{{emailToSend.subject || "Subject"}}</span>
+                                <div class="clearfix"></div>
+                            </div>
+                            <div class="form-group margin-bottom-10" ng-if="emailToSend.subject" ng-show="subjectScore">
+                                <label> <a href="#" style="color:#858585" ng-click="openModal('subject-score-modal')">Subject Strength <span class="fa fa-info-circle"></span></a></label>
+                                <label class="pull-right text-bold" ng-class="{'text-danger': subjectScore<25, 'text-warning': subjectScore>=25 && subjectScore<50, 'text-info': subjectScore>=50 && subjectScore<75, 'text-nephritis': subjectScore>=75}">
+                                    <span ng-if="subjectScore<30">Weak</span>
+                                    <span ng-if="subjectScore>=30 && subjectScore<=50">Fair</span>
+                                    <span ng-if="subjectScore>50 && subjectScore<80">Good</span>
+                                    <span ng-if="subjectScore>=80">Strong</span> {{subjectScore}}%</label>
+                                <progressbar value="subjectScore" animate="true" type="{{getProgressType(subjectScore)}}" class="progress-xs margin-bottom-0"></progressbar>
+                            </div>
+                        </div>
+                        <div style="transform: translate3d(0,0,0);" ng-controller="EditorCtrl" ng-init="retrieveEmail(null, emailToSend); activateCKeditor();">
+                            <div>
+                                <div id="editor-toolbar" class="no-top-required email-toolbar"></div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div ng-hide="!ckeditorLoaded">
+                                <div data-ng-include data-src=" 'assets/views/partials/component-loader.html' "></div>
+                            </div>
+                            <div class="loading-editor" ct-fullheight="window" data-ct-fullheight-exclusion="header" ng-hide="ckeditorLoaded">
+                                <div class="col-xs-12">
+                                    <h1 class="center"><span class="fa fa-spinner fa-spin"></span><br> Loading Editor...</h1>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>                   
+</div>
+<div data-ng-include data-src=" 'assets/views/partials/component-settings-modal.html' "></div>
+<div data-ng-include data-src=" 'assets/views/partials/add-component-modal.html' " ></div> 

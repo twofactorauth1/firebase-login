@@ -584,10 +584,9 @@
 #componentloader .component-wrap div.element-wrap img.img-responsive {
   display: inline-block;
 }
+#componentloader .component-wrap div.element-wrap span[contenteditable="true"],
+#componentloader .component-wrap div.element-wrap span.cke_image_resizer_wrapper,
 #componentloader .component-wrap div.element-wrap span.cke_widget_wrapper.img-spanclass {
-  max-width: 100%;
-}
-#componentloader .component-wrap div.element-wrap span.cke_image_resizer_wrapper {
   max-width: 100%;
 }
 #componentloader .component-wrap .component > [id] .bg {
@@ -1156,6 +1155,9 @@
 #componentloader .navbar .navigation-logo.edit-wrap .fr-element {
   min-height: 100px;
 }
+#componentloader .navbar .navigation-logo.edit-wrap .img {
+  max-width: 100% !important;
+}
 #componentloader .navbar-box {
   -webkit-box-shadow: 0px 1px 10px 0px rgba(0, 0, 0, 0.25);
   -moz-box-shadow: 0px 1px 10px 0px rgba(0, 0, 0, 0.25);
@@ -1166,6 +1168,7 @@
   margin: 5px auto!important;
   height: auto;
   color: inherit;
+  line-height: inherit;
 }
 #componentloader .navbar-brand:hover {
   color: inherit;
@@ -1391,6 +1394,9 @@
 #componentloader .navigation1 {
   position: relative;
   z-index: 5;
+}
+#componentloader .navigation-logo img {
+  max-width: 100%;
 }
 #componentloader .feature-block-v1 {
   position: relative;
@@ -6276,12 +6282,26 @@
 a[href="https://froala.com/wysiwyg-editor"] {
   display: none!important;
 }
-.fr-toolbar.fr-inline.fr-desktop {
-  margin-top: 6em!important;
+@media screen and (min-width: 992px) {
+  .app-minimal-admin-chrome #topnav > .navbar-collapse {
+    box-shadow: 0px 4px 5px 2px rgba(0, 0, 0, 0.5);
+  }
+  .app-minimal-admin-chrome#app {
+    padding-top: 0;
+  }
+  .app-minimal-admin-chrome #sidebar {
+    box-shadow: 0px 4px 5px 2px rgba(0, 0, 0, 0.5);
+  }
+}
+.app-minimal-admin-chrome footer {
+  display: none;
+}
+.fr-wrapper.show-placeholder .fr-placeholder {
+  pointer-events: none;
 }
 .ssb-site-builder-container {
   height: 100%;
-  height: calc(100vh - 65px);
+  height: 100vh;
   overflow: auto;
 }
 .ssb-site-builder-container #componentloader .component-wrap {
@@ -6294,7 +6314,12 @@ a[href="https://froala.com/wysiwyg-editor"] {
   display: block;
 }
 .ssb-site-builder .ssb-main {
-  top: 62px;
+  top: 60px;
+}
+@media screen and (min-width: 992px) {
+  .ssb-site-builder .ssb-main {
+    top: 125px;
+  }
 }
 .ssb-site-builder .ssb-main > ssb-action-buttons {
   position: fixed;
@@ -6309,8 +6334,8 @@ a[href="https://froala.com/wysiwyg-editor"] {
     height: 100%;
     width: 100%;
     position: relative;
-    box-shadow: 0px -1px 3px 1px rgba(0, 0, 0, 0.5);
     float: left;
+    padding-left: 70px;
   }
 }
 .ssb-site-builder .ssb-main .fr-toolbar {
@@ -6421,8 +6446,11 @@ a[href="https://froala.com/wysiwyg-editor"] {
 .ssb-site-builder .ssb-edit-control:hover .ssb-edit-control-inactive {
   display: none;
 }
-.ssb-site-builder:hover .ssb-active-section:before,
-.ssb-site-builder:hover .ssb-active-section .ssb-active-component:before {
+.ssb-site-builder .ssb-active-section .ssb-settings-btn {
+  display: block;
+}
+.ssb-site-builder .ssb-active-section:before,
+.ssb-site-builder .ssb-active-section .ssb-active-component:before {
   z-index: 1;
   position: absolute;
   top: 0;
@@ -6431,10 +6459,10 @@ a[href="https://froala.com/wysiwyg-editor"] {
   height: 100%;
   content: '';
   display: block;
-  box-shadow: 0px 0px 0px 8px rgba(71, 184, 217, 0.75);
+  box-shadow: inset 0px 0px 0px 8px rgba(71, 184, 217, 0.75);
 }
 .ssb-site-builder:hover .ssb-active-section .ssb-active-component:before {
-  box-shadow: 0px 0px 0px 4px orange;
+  box-shadow: inset 0px 0px 0px 4px orange;
 }
 .ssb-site-builder .edit-wrap:hover .editable-title {
   left: auto;
@@ -6442,8 +6470,8 @@ a[href="https://froala.com/wysiwyg-editor"] {
   top: 0;
   border-radius: 0;
 }
-.ssb-site-builder .simple-form-v1 .btn .edit-wrap:hover .editable-title {
-  top: auto;
+.ssb-site-builder .simple-form-v1 .edit-wrap:hover .editable-title {
+  top: -1.5em;
 }
 .ssb-section-modal .ssb-section-modal-list-item {
   padding: 1em;
@@ -6497,11 +6525,17 @@ a[href="https://froala.com/wysiwyg-editor"] {
     float: none!important;
   }
 }
+.ssb-footer-page-settings-modal ul.page-settings {
+  float: left;
+}
+.ssb-footer-page-settings-modal ul.page-settings li {
+  display: inline-block;
+  margin: 0 0 0 10px;
+}
 .ssb-sidebar {
   display: none;
   height: 200px;
   clear: both;
-  padding-right: 70px;
 }
 .ssb-sidebar img {
   max-width: 100%;
@@ -6525,9 +6559,8 @@ a[href="https://froala.com/wysiwyg-editor"] {
 @media (min-width: 768px) {
   .ssb-sidebar {
     position: fixed;
-    height: calc(100% - 140px);
-    top: 126px;
-    min-width: 325px;
+    height: 100%;
+    top: 125px;
   }
 }
 .ssb-sidebar.ssb-sidebar-show {
@@ -6560,17 +6593,6 @@ a[href="https://froala.com/wysiwyg-editor"] {
   left: auto;
   right: .5em;
 }
-.ssb-sidebar-inner .editor-group {
-  float: left;
-  width: calc(100% - 70px - 15px);
-  height: calc(100vh - 184px);
-  overflow: auto;
-  position: relative;
-  top: 15px;
-}
-.ssb-sidebar-inner .tab-pane {
-  padding: 0;
-}
 .ssb-sidebar-section-open {
   background: #fff;
 }
@@ -6594,13 +6616,6 @@ a[href="https://froala.com/wysiwyg-editor"] {
 }
 .ssb-page-section-settings-item {
   position: relative;
-}
-.ssb-sidebar-move-handle {
-  position: absolute;
-  top: 1em;
-  right: 1em;
-  z-index: 1;
-  cursor: move;
 }
 .ssb-sidebar-item-icon {
   position: absolute;
@@ -6703,23 +6718,135 @@ a[href="https://froala.com/wysiwyg-editor"] {
 .ssb-spectrum-color-picker .sp-dd {
   display: none;
 }
+.ssb-sidebar-inner {
+  height: 100%;
+}
+.ssb-sidebar-inner .editor-group {
+  float: left;
+  width: calc(100% - 70px - 15px);
+  max-width: 800px;
+  height: calc(100vh - 125px);
+  overflow: auto;
+  position: relative;
+  min-width: 250px;
+  box-shadow: 0px -1px 3px 1px rgba(0, 0, 0, 0.5);
+}
+.ssb-sidebar-inner .editor-group .ssb-sidebar-sub-heading {
+  border: none;
+}
+.ssb-sidebar-inner .editor-group .tabs-left .tab-content {
+  border: none;
+}
+.ssb-sidebar-inner .editor-group .tabbable {
+  background-color: transparent;
+}
+.ssb-sidebar-inner .editor-group .tabs-left > .nav-tabs > li > a {
+  padding-left: 1em;
+}
+.ssb-sidebar-inner .editor-group .tabs-left > .nav-tabs > li.active > a {
+  font-weight: bold;
+  border: none;
+  box-shadow: none;
+}
+.ssb-sidebar-inner > .tab-pane {
+  padding: 0;
+}
 .ssb-sidebar-icons {
   float: left;
-  background: none;
-}
-.ssb-sidebar-icons .nav {
-  padding: 0 0 0 15px;
-  margin: 15px 0 0 0;
+  background: #131e26;
+  height: 100%;
 }
 .ssb-sidebar-icons .nav-tab {
   width: 70px;
+  margin: 0;
   cursor: pointer;
   text-align: center!important;
   background: #131e26;
   padding: 1em;
 }
+.ssb-sidebar-icons .nav-tab:hover {
+  color: #48b1cc;
+}
+.ssb-sidebar-icons .nav-tab a {
+  border: none;
+  margin: 0;
+  box-shadow: none;
+  font-weight: bold;
+}
 .ssb-sidebar-icons .nav-tab-is-active {
   background: white;
+}
+.ssb-sidebar-icons .nav-tab-is-active:after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: -5px;
+  background: white;
+  height: 100%;
+  width: 10px;
+  z-index: 1;
+}
+.ssb-sidebar-section-panel {
+  position: fixed;
+  top: 145px;
+  right: 35px;
+  background: white;
+  box-shadow: 4px 4px 7px -2px rgba(0, 0, 0, 0.3);
+  border-radius: 5px;
+  font-size: 12px;
+  max-height: calc(100% - 182px);
+  overflow: auto;
+  overflow-x: hidden;
+  width: 300px;
+  max-height: 600px;
+}
+.ssb-sidebar-section-panel.draggable > .ssb-sidebar-sub-heading {
+  cursor: move;
+  border-radius: 5px 5px 0px 0px;
+  text-transform: capitalize;
+}
+.ssb-sidebar-section-panel.draggable > .ssb-sidebar-sub-heading i {
+  cursor: pointer;
+}
+.ssb-sidebar-section-panel .close {
+  position: absolute;
+  top: .5em;
+  right: .5em;
+  font-size: 1.5em;
+}
+.ssb-sidebar-section-panel .panel-group {
+  margin-bottom: 0;
+}
+.ssb-sidebar-section-panel .row:not(:first-of-type) {
+  border-top: 1px solid #ddd;
+}
+.ssb-sidebar-section-panel .ssb-sidebar-section-panel-btn {
+  width: 100%;
+  padding: .5em 0;
+  text-align: left;
+}
+.ssb-sidebar-section-panel-component-btns .ssb-sidebar-section-panel-btn {
+  padding: 1em;
+  text-align: center;
+  margin: .5em auto;
+  display: block;
+  text-transform: capitalize;
+}
+.close-panel {
+  position: absolute;
+  top: 2em;
+  right: 1em;
+  cursor: pointer;
+}
+.ssb-sidebar-section-panel-component-panel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 300px;
+  max-height: 600px;
+  background: white;
+  z-index: 1;
+  overflow: hidden;
 }
 ssb-topbar {
   position: fixed;
@@ -6727,26 +6854,54 @@ ssb-topbar {
   left: 0;
   height: 60px;
   width: 100%;
-  background: #131e26;
+  background: #1c2b36;
   color: white;
   text-align: center;
+  box-shadow: 0px 1px 5px 1px rgba(0, 0, 0, 0.5);
+  line-height: 60px;
 }
-.ssb-theme-young-soul .ssb-section-layout {
+@media screen and (min-width: 992px) {
+  ssb-topbar .ssb-topbar-inner {
+    padding-left: 75px;
+  }
+}
+ssb-topbar .ui-select-match {
+  outline: none;
+  box-shadow: none;
+  background-color: transparent;
+  width: 150px;
+}
+ssb-topbar .ui-select-match-text > small {
+  width: 125px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  display: inline-block;
+  vertical-align: middle;
+}
+.ssb-topbar-icon {
+  font-size: 2em;
+}
+.ssb-theme-young-soul {
+  font-family: "Roboto", Helvetica, Arial, sans-serif;
+  color: #000;
+}
+.ssb-theme-young-soul .ssb-page-section {
   background-color: #e8e7e7;
 }
 .ssb-theme-young-soul .ssb-page-section-layout-header {
   background-color: #9acccb;
 }
-.ssb-theme-young-soul h1,
-.ssb-theme-young-soul h2,
-.ssb-theme-young-soul h3,
-.ssb-theme-young-soul h4,
-.ssb-theme-young-soul h5,
-.ssb-theme-young-soul a,
-.ssb-theme-young-soul p,
-.ssb-theme-young-soul span,
-.ssb-theme-young-soul label {
-  color: #000000;
+.ssb-theme-young-soul .ssb-navigation a {
+  color: #000;
+}
+.ssb-theme-young-soul .ssb-theme-main-header-text {
+  font-size: 96px;
+}
+.ssb-theme-young-soul .ssb-theme-heading-text {
+  font-size: 16px;
+}
+.ssb-theme-young-soul .ssb-theme-paragraph-text {
+  font-size: 12px;
 }
 #componentloader {
   overflow: visible;
@@ -6835,9 +6990,6 @@ ssb-topbar {
   right: 1em!important;
   z-index: 2;
   display: none;
-}
-.ssb-main:hover .ssb-page-section-layout-header .social-link-v1 .social-link > .btn.social-links {
-  display: block;
 }
 .ssb-main[data-eq-state$="medium"] .ssb-page-section-layout-header .social-link-v1 .social-link ul,
 .ssb-main[data-eq-state$="large"] .ssb-page-section-layout-header .social-link-v1 .social-link ul {

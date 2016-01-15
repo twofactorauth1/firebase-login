@@ -227,7 +227,7 @@ defaultWorkstreams[3] = {
             "complete" : false,
             "optional" : false,
             "helpLinks": [
-                { type: "help", name: "Create and post a product", link: "/admin/#/support/help-topics?topic=4c032f2d-0ef3-4fe5-946d-6970ae567333" }
+                { type: "help", name: "Integrate Stripe", link: "/admin/#/support/help-topics?topic=4c032f2d-0ef3-4fe5-946d-6970ae567333" }
             ]
         },
         {

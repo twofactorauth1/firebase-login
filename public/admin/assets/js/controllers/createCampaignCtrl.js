@@ -587,7 +587,7 @@
       if((!$scope.emailToSend.campaignId || ($scope.newCampaignObj && $scope.emailToSend.campaignId !== $scope.newCampaignObj._id)) && $scope.selectedEmail.type != 'new'){
           SweetAlert.swal({
           title: "How would you like to use the selected email?",
-          text: "You are saving changes to an email used by more than one campaign. Do you wish to update the existing email (altering all campaigns) or create and update a copy specific to this campaign?",
+          text: "You are saving changes to an email used by more than one campaign or product. Do you wish to update the existing email (altering all campaigns or products) or create and update a copy specific to this campaign?",
           type: "warning",
           showCancelButton: true,
           confirmButtonColor: "#DD6B55",
@@ -633,22 +633,19 @@
      */
     $scope.clearEmail = function (newEmail) {
       $scope.checkingEmailTitle = false;
-      // $scope.emailToSend.title = "";
-      $scope.setBusinessDetails(true);
+      // $scope.emailToSend.title = "";      
       if (newEmail) {
         $scope.emailToSendPrevious = angular.copy($scope.emailToSend);
+        $scope.setBusinessDetails(newEmail);
         $scope.emailToSend = $scope.emailToSendCopy;
         $scope.emailToSend.title = $scope.newCampaignObj.name + ' Email';
-        $scope.emailToSend.fromName = $scope.emailToSendPrevious.fromName;
-        $scope.emailToSend.fromEmail = $scope.emailToSendPrevious.fromEmail;
-        $scope.emailToSend.replyTo = $scope.emailToSendPrevious.replyTo;
         $scope.emailToSend.bcc = "";
         $scope.emailToSend.subject = $scope.newCampaignObj.name;
         $scope.checkEmailTitle($scope.emailToSend.title);
         if($scope.newCampaignObj && $scope.newCampaignObj.steps && $scope.newCampaignObj.steps[0] && $scope.newCampaignObj.steps[0].settings)
           $scope.newCampaignObj.steps[0].settings.emailId = null;
       } else {
-
+        $scope.setBusinessDetails();
         $scope.emailToSend = $scope.emailToSendPrevious;
         if($scope.newCampaignObj.steps && $scope.newCampaignObj.steps[0] && $scope.newCampaignObj.steps[0].settings && !$scope.newCampaignObj.steps[0].settings.emailId && $scope.emailToSendPrevious)
           $scope.newCampaignObj.steps[0].settings.emailId = $scope.emailToSendPrevious._id
@@ -697,11 +694,22 @@
 
       if (existingContactIndex > -1) {
         //get the tags that have been selected
-        // var tags = $scope.getSelectedTags();
-        // var tagExists = _.intersection(contact.tags || ['nt'], tags);
-        // if (tagExists.length === 0) {
-          $scope.recipients.splice(existingContactIndex, 1);
-        // }
+         var tags = $scope.getSelectedTags();
+         var tempTags = [];
+         var tagLabel = "";
+         _.each(contact.tags, function (tag) {
+              tagLabel = _.findWhere(customerTags, { data: tag });
+              if(tagLabel)
+                tempTags.push(tagLabel.label);
+              else
+                tempTags.push(tag);
+        });
+        if(!tempTags.length)
+          tempTags.push('No Tag');
+        var tagExists = _.intersection(tempTags, tags);
+        if (tagExists.length === 0) {
+            $scope.recipients.splice(existingContactIndex, 1);
+        }
 
       }
       // clear search text
@@ -806,7 +814,7 @@
           fullContacts.push(customer);
         }
       });
-
+      
       return fullContacts;
     };
 
@@ -1437,6 +1445,7 @@
       var promise = AccountService.getAccount(function (_account) {
         $scope.account = _account;
         $scope.setBusinessDetails();
+        $scope.actualEmailToSend = angular.copy($scope.emailToSend);
       });
       return promise;
     };
@@ -1466,8 +1475,7 @@
           console.log('email not found');
         }
 
-        $scope.emailToSendPrevious = $scope.emails[0];
-
+        $scope.emailToSendPrevious = $scope.emails[0];        
       });
 
       return promise;
@@ -1527,11 +1535,18 @@
      * @getContacts
      * - get saved customers attached to this campaign
      */
+    $scope.selectedCustomers.individuals = [];
     $scope.getContacts = function() {
       var promise = CampaignService.getCampaignContacts($stateParams.campaignId, function (data) {
           $scope.originalRecipients = angular.copy(data);
           $scope.recipients = data;
-          $scope.selectedCustomers.individuals = data;
+          var individuals = [];
+          _.each(data, function (customer) {
+              individuals.push(
+                customer._id
+              )
+          })
+          $scope.selectedCustomers.individuals = individuals;
       });
       return promise;
     };
@@ -1554,7 +1569,12 @@
           customerTags = tags;
         })
         var _tags = [];
+        $scope.allCustomers = [];
         _.each(customers, function (customer) {
+          $scope.allCustomers.push({
+            _id: customer._id,
+            first: customer.first
+          })
           //customer.fullName = customer.first + " " + customer.last || '';
           if (customer.tags && customer.tags.length > 0) {
             _.each(customer.tags, function (tag) {
@@ -1692,9 +1712,9 @@
         }).then(function(data) {
           return $scope.getAccount();
         }).then(function(data) {
-          return $scope.getContacts();
-        }).then(function(data) {
           return $scope.getCustomers();
+        }).then(function(data) {
+          return $scope.getContacts();
         }).then(function(data) {
           $scope.loadSavedTags();
         });
@@ -1708,35 +1728,5 @@
     })();
 
   }]);
-
-  app.filter('propsFilter', function () {
-    return function (items, props) {
-      var out = [];
-
-      if (angular.isArray(items)) {
-        items.forEach(function (item) {
-          var itemMatches = false;
-
-          var keys = Object.keys(props);
-          var i = 0;
-          for (i; i < keys.length; i++) {
-            if (item[keys[i]] && item[keys[i]].toString().toLowerCase().indexOf(props[keys[i]].toLowerCase()) !== -1) {
-              itemMatches = true;
-              break;
-            }
-          }
-
-          if (itemMatches) {
-            out.push(item);
-          }
-        });
-      } else {
-        // Let the output be the input untouched
-        out = items;
-      }
-
-      return out;
-    };
-  });
 
 }(angular));

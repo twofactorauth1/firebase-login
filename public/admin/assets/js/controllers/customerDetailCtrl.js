@@ -135,12 +135,13 @@
           var matchingUser = _.find($scope.users, function (_user) {
             return _user._id === _note.user_id;
           });
-          /*
-          * I'm not sure why we are doing this.  removing for now.
+
+          // This code is used to show related user profile image in notes         
+          
           if (matchingUser) {
-            _note.user = matchingUser;
+            if(matchingUser.profilePhotos && matchingUser.profilePhotos[0])
+            _note.user_profile_photo = matchingUser.profilePhotos[0];
           }
-          */
         });
 
         return notes;
@@ -959,7 +960,7 @@
           });
         }        
       });
-      $scope.myCustomerTags = cutomerTags.join(",");
+      $scope.myCustomerTags = cutomerTags.join(", ");
       $scope.customer.tags = tempTags;
       console.log('$scope.customer.tags >>>', $scope.customer.tags);
     };

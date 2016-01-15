@@ -36,6 +36,7 @@ app.controller('AppCtrl', ['$rootScope', '$scope', '$state', '$translate', '$loc
       } else {
         $scope.hideSidebar = false;
       }
+      
     });
 
     // Loading bar transition
@@ -44,7 +45,7 @@ app.controller('AppCtrl', ['$rootScope', '$scope', '$state', '$translate', '$loc
 
     $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
       //start loading bar on stateChangeStart
-
+      $rootScope.app.layout.isMinimalAdminChrome =  false;
       if ($scope.account && $scope.account.locked_sub && $state.includes('app.account.billing')) {
         cfpLoadingBar.complete();
       } else {

@@ -8,10 +8,10 @@
                 <div elem ng-model="component.text"></div>
             </div>
         </header>
-        <div ng-if="filteredProducts.length" masonry load-images="true" reload-on-show class="tab-pane active row" id="{{productSection['product-section-id']}}">
+        <div ng-if="filteredProducts.length" masonry load-images="true" reload-on-show class="tab-pane active" id="{{productSection['product-section-id']}}">
             <div class="masonry-brick" data-class="product-section-id"
                  ng-class="{
-                    'col-xs-4 col-xs-offset-4': filteredProducts.length == 1,
+                    'col-xs-12 col-sm-4 col-sm-offset-4': filteredProducts.length == 1,
                     'col-xs-12 col-sm-6': filteredProducts.length == 2,
                     'col-xs-12 col-sm-6 col-md-4': filteredProducts.length > 2
                     }"
@@ -396,7 +396,7 @@
                                     <h4 class="title">{{selectedProduct.name}}</h4>
                                     <h4 ng-if="!selectedProduct.hasVariations">{{selectedProduct.regular_price | currency}}</h4>
                                     <h4 ng-if="selectedProduct.hasVariations && matchedVariation">{{matchedVariation.regular_price | currency}}</h4>
-                                    
+
                                     <div class="clearfix"></div>
                                 </div>
                                 <div class="attributes form-horizontal">

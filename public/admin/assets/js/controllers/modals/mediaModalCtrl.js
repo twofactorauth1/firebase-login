@@ -157,6 +157,17 @@ app.controller('MediaModalCtrl', ['$scope', '$injector', '$modalInstance', '$htt
     document: ['application/octet-stream', 'application/pdf']
   };
 
+  $scope.getFileType = function(mime){
+    if(mime.match('audio.*'))
+      return "audio"
+    else if(mime.match('video.*'))
+      return "video"
+    else if(mime === 'application/pdf')
+      return "pdf"
+    if(mime === 'application/octet-stream')
+      return "octet-stream"    
+  }
+
   $scope.m.selectTriggerFn = function (status) {
     $scope.selectModel.select_all = status;
     $scope.m.selectAll();

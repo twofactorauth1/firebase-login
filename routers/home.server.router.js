@@ -20,6 +20,7 @@ var userActivityManager = require('../useractivities/useractivity_manager');
 var sitemigration_middleware = require('../sitemigration/middleware/sitemigration_middleware');
 var userManager = require('../dao/user.manager');
 var accountDao = require('../dao/account.dao');
+var pageCacheManager = require('../cms/pagecache_manager');
 
 var router = function() {
     this.init.apply(this, arguments);
@@ -68,6 +69,8 @@ _.extend(router.prototype, BaseRouter.prototype, {
          * This is a POC route for page caching.
          */
         app.get('/cached/:page', this.frontendSetup.bind(this), this.optimizedIndex.bind(this));
+        app.get('/template', this.frontendSetup.bind(this), this.getOrCreateTemplate.bind(this));
+        app.get('/template/:page', this.frontendSetup.bind(this), this.getOrCreateTemplate.bind(this));
         return this;
     },
 
@@ -433,6 +436,19 @@ _.extend(router.prototype, BaseRouter.prototype, {
         new WebsiteView(req, resp).renderCachedPage(accountId, pageName);
 
         self.log.debug('<< optimizedIndex');
+    },
+
+    getOrCreateTemplate: function(req, resp) {
+        var self = this;
+        var accountId = self.unAuthAccountId(req) || appConfig.mainAccountID;
+        if(accountId === 'new') {//we are on the signup page
+            accountId = appConfig.mainAccountID;
+        }
+        var pageName = req.params.page || 'index';
+        var update = req.query.cachebuster || false;
+        self.log.debug('>> getOrCreateTemplate ' + accountId + ', ' + pageName + ', ' + update);
+        //return pageCacheManager.getOrCreateLocalTemplate(accountId, pageName, resp);
+        return pageCacheManager.getOrCreateS3Template(accountId, pageName, update, resp);
     }
 });
 

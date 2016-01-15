@@ -234,7 +234,7 @@ app.directive('indigewebSkeuocard',['PaymentService', 'UserService', 'ToasterSer
                                     scope.updateFn(billing);
                                 },
                                 function(err){
-                                    ToasterService.clearAll();
+                                    //ToasterService.clearAll();
                                     ToasterService.show('error', 'The purchase was unsuccessful. Please check your card information.');
                                     //Closing the previous opened
                                     scope.$parent.closeModal('change-card-modal');

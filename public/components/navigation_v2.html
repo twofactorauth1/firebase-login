@@ -26,13 +26,13 @@
                     <span class="icon-bar"></span>
                 </button>
                 <div ng-if="isEditing"  class="navbar-brand" href="/" data-name="{{account.company.name}}" style="margin:{{component.logo.margin.t}} {{component.logo.margin.r}} {{component.logo.margin.b}} {{component.logo.margin.l}}!important;padding:{{component.logo.padding}};">
-                    <div class="nav-logo">
+                    <div class="nav-logo ssb-theme-main-header-text">
                         <div ng-if="!isSinglePost" elem ng-model="component.logo" class="navigation-logo"></div>
                         <div ng-if="isSinglePost" class="navigation-logo" tooltip-placement="bottom" tooltip="This component is only editable on the single-post page" ng-bind-html="component.logo | unsafe"></div>
                     </div>
                 </div>
                 <a ng-if="!isEditing" class="navbar-brand" href="/" data-name="{{account.company.name}}" style="margin:{{component.logo.margin.t}} {{component.logo.margin.r}} {{component.logo.margin.b}} {{component.logo.margin.l}}!important;padding:{{component.logo.padding}};">
-                    <div class="nav-logo">
+                    <div class="nav-logo ssb-theme-main-header-text">
                         <div ng-if="!isSinglePost" elem ng-model="component.logo" class="navigation-logo"></div>
                         <div ng-if="isSinglePost" class="navigation-logo" tooltip-placement="bottom" tooltip="This component is only editable on the single-post page" ng-bind-html="component.logo | unsafe"></div>
                     </div>
@@ -43,7 +43,7 @@
             <div ng-if="!component.customnav" class="collapse navbar-collapse" id="bs-example-navbar-collapse-1" ng-class="{'navbgcolor' : !(component.bg.img.show && component.bg.img.url) }" ng-style="{'background' : component.nav.bg }">
                 <ul  class="nav navbar-nav navbar-right" data-ng-repeat="mainMenu in website.linkLists track by $index" data-ng-if=" mainMenu.handle=='head-menu' ">
                     <li data-ng-repeat="link in mainMenu.links track by $index">
-                        <a data-ng-show="link.linkTo.type == 'section'" data-ng-href="{{link.linkTo|generateURLforLinks}}" class="{{link.class}}" du-smooth-scroll ng-style="{'color' : component.txtcolor }">{{link.label || link.url}}</a>
+                        <a data-ng-show="link.linkTo.type == 'section'" data-ng-href="{{link.linkTo|generateURLforLinks}}" class="{{link.linkTo.page === currentpage.handle ? 'active' : link.class}}" du-smooth-scroll ng-style="{'color' : component.txtcolor }">{{link.label || link.url}}</a>
                         <a ng-if="link.linkTo.type === 'external'" target="_blank" data-ng-hide="link.linkTo.type == 'section'" data-ng-href="{{link.linkTo|generateURLforLinks}}" class="{{link.linkTo.data === currentpage.handle ? 'active' : link.class}}" ng-style="{'color' : component.txtcolor }">{{link.label || link.url}}</a>
                         <a ng-if="link.linkTo.type !== 'external'" data-ng-hide="link.linkTo.type == 'section'" data-ng-href="{{link.linkTo|generateURLforLinks}}" class="{{link.linkTo.data === currentpage.handle ? 'active' : link.class}}" ng-style="{'color' : component.txtcolor }">{{link.label || link.url}}</a>
                     </li>
@@ -52,7 +52,7 @@
              <div ng-if="component.customnav" class="collapse navbar-collapse" id="bs-example-navbar-collapse-1" ng-style="{'background' : component.nav.bg }">
                 <ul class="nav navbar-nav navbar-right" data-ng-repeat="mainMenu in component.linkLists track by $index" data-ng-if=" mainMenu.handle=='head-menu' ">
                     <li data-ng-repeat="link in mainMenu.links track by $index">
-                        <a data-ng-show="link.linkTo.type == 'section'" data-ng-href="{{link.linkTo|generateURLforLinks}}" class="{{link.class}}" du-smooth-scroll ng-style="{'color' : component.txtcolor }">{{link.label || link.url}}</a>
+                        <a data-ng-show="link.linkTo.type == 'section'" data-ng-href="{{link.linkTo|generateURLforLinks}}" class="{{link.linkTo.page === currentpage.handle ? 'active' : link.class}}" du-smooth-scroll ng-style="{'color' : component.txtcolor }">{{link.label || link.url}}</a>
                         <a ng-if="link.linkTo.type === 'external'" target="_blank" data-ng-hide="link.linkTo.type == 'section'" data-ng-href="{{link.linkTo|generateURLforLinks}}" class="{{link.linkTo.data === currentpage.handle ? 'active' : link.class}}" ng-style="{'color' : component.txtcolor }">{{link.label || link.url}}</a>
                         <a  ng-if="link.linkTo.type !== 'external'" data-ng-hide="link.linkTo.type == 'section'" data-ng-href="{{link.linkTo|generateURLforLinks}}" class="{{link.linkTo.data === currentpage.handle ? 'active' : link.class}}" ng-style="{'color' : component.txtcolor }">{{link.label || link.url}}</a>
                     </li>

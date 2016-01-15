@@ -136,16 +136,6 @@
 
     $scope.triggerInput = function (element, custom) {
       angular.element(element).trigger('input');
-      if (element === '#searchStatus' && custom) {
-        setTimeout(function () {
-          $scope.$apply(function () {
-            $scope.displayedProducts = _.where($scope.displayedProducts, {
-              status: angular.element(element).val()
-            });
-          })
-        }, 500)
-
-      }
     };
 
     $scope.resizeGrid = function(filtered)

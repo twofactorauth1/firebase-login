@@ -51,14 +51,43 @@ var mainApp = angular
                 templateUrl: '../views/cache.html',
                 controller: 'CacheCtrl as cacheCtrl'
                 */
-
+                /*
                  templateUrl: '../views/main.html',
                  controller: 'LayoutCtrl as layout'
-
+                */
+                /*
+                templateUrl: '/template/index',
+                controller: 'CacheCtrl as cacheCtrl'
+                */
+                template: function(urlattr) {
+                    var s = '<div data-ng-include="';
+                    s += " '/template/index";
+                    if(urlattr.cachebuster) {
+                        s+='?cachebuster=' + urlattr.cachebuster;
+                    }
+                    s+= "'";
+                    s += ' "></div>';
+                    return s;
+                },
+                controller: 'CacheCtrl as cacheCtrl'
             })
             .when('/404', {
                 templateUrl: '../views/404.html',
                 controller: 'NotFoundCtrl as notfound'
+            })
+            .when('/:name', {
+                template: function(urlattr) {
+
+                    var s = '<div data-ng-include="';
+                    s += " '/template/" + urlattr.name;
+                    if(urlattr.cachebuster) {
+                        s+='?cachebuster=' + urlattr.cachebuster;
+                    }
+                    s+= "'";
+                    s += ' "></div>';
+                    return s;
+                },
+                controller: 'CacheCtrl as cacheCtrl'
             })
             .when('/cached/:page', {
                 controller: 'CacheCtrl as cacheCtrl',

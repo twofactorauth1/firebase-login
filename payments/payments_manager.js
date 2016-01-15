@@ -10,14 +10,26 @@ var stripeDao = require('./dao/stripe.dao.js');
 var log = $$.g.getLogger("payments_manager");
 
 module.exports = {
-    createStripeCustomerForUser: function(cardToken, user, accountId, fn) {
+    createStripeCustomerForUser: function(cardToken, user, accountId, newAccountId, fn) {
         log.debug('>> createStripeCustomerForUser');
         //check for customer first.
         var customerId = user.get('stripeId');
         if(customerId && customerId.length >0){
-            stripeDao.getStripeCustomer(customerId, fn);
+            stripeDao.getStripeCustomer(customerId, function(err, stripeCustomer){
+                if(err) {
+                    log.error('Error fetching Stripe customer:',err);
+                    return fn(err);
+                } else {
+                    log.debug('got stripe customer:', stripeCustomer);
+                    var accounts = [];
+                    accounts.push(stripeCustomer.metadata.accounts ||'');
+                    accounts.push(newAccountId);
+                    stripeCustomer.metadata.accounts = accounts;
+                    stripeDao.updateStripeCustomer(customerId, null, null, null, null, null, null, stripeCustomer.metadata, fn);
+                }
+            });
         } else {
-            stripeDao.createStripeCustomerForUser(cardToken, user, accountId, 0, fn);
+            stripeDao.createStripeCustomerForUser(cardToken, user, accountId, 0, newAccountId, fn);
         }
     },
 

@@ -82,8 +82,7 @@ _.extend(api.prototype, baseApi.prototype, {
     getTax: function(req, res) {
         var self = this;
         self.log.debug('>> getTax');
-
-        var postcode = parseFloat(req.params.postcode);
+        var postcode = req.params.postcode;
 
         productManager.getTax(postcode, function(err, value){
             self.log.debug('tax value ', value);
@@ -162,7 +161,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var product = new $$.m.Product(req.body);
         var productId = req.params.id;
         product.set('_id', productId);
-       
+
         product.attributes.modified.date = new Date();
         productManager.getProduct(productId, function(err, savedProduct){
             var accountId = savedProduct.get('accountId');
@@ -194,20 +193,20 @@ _.extend(api.prototype, baseApi.prototype, {
                     return self.send403(res);
                 } else {
                     productManager.deleteProduct(productId, function(err, value){
-                        self.log.debug('<< deleteProduct'); 
+                        self.log.debug('<< deleteProduct');
                         if (!err && value != null) {
-                            self.sendResult(res, {deleted:true});                            
+                            self.sendResult(res, {deleted:true});
                             self.createUserActivity(req, 'DELETE_PRODUCT', null, {id: productId}, function(){});
                         } else {
                             self.wrapError(res, 401, null, err, value);
-                        }  
+                        }
                     });
                 }
             });
         });
 
     },
-                    
+
     getProductsByType: function(req, res) {
         var self = this;
         self.log.debug('>> getProductsByType');

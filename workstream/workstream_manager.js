@@ -267,7 +267,7 @@ module.exports = {
             var leadTotal = 0;
             _.each(results, function(result){
                 total+= result.count;
-                if(result._id._id.tag && result._id._id.tag[0] === 'ld') {
+                if(result._id._id.tag && result._id._id.tag.indexOf('ld') > -1 ) {
                     leadTotal+= result.count;
                 }
                 if(result._id._id.day < 10) {
@@ -415,11 +415,11 @@ module.exports = {
         stageAry.push({$match: query});
         stageAry.push({
             $group: {
-                _id: groupCriteria,
+                _id: "$_id",
 
                 // Count number of matching docs for the group
                 count: { $sum: 1 },
-                amount: {$sum: '$total'}
+                amount: { $max: '$total' } // total is currently a string (cannot $sum in aggregate)
             }
         });
 
@@ -430,21 +430,19 @@ module.exports = {
 
             _.each(results, function(result){
                 total+= result.count;
-                totalAmount += result.amount;
-                result.amount = result.amount.toFixed(2);
-                result.month = result._id._id.month;
-                result.orderCount = result.count;
+                totalAmount += parseFloat(result.amount);
+
                 delete result._id;
                 delete result.count;
+                delete result.amount;
             });
 
-
             var response = {
-                results: _.sortBy(results, 'month'),
+                //results: results,
                 YTDTotalOrders: total,
                 YTDTotalAmount: totalAmount.toFixed(2)
             };
-            self.log.debug('<< getRevenueByMonthReport');
+            self.log.debug('<< getRevenueByMonthReport: ', response);
             fn(err, response);
         });
     },
