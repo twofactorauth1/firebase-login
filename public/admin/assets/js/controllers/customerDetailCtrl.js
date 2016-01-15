@@ -960,7 +960,7 @@
           });
         }        
       });
-      $scope.myCustomerTags = cutomerTags.join(",");
+      $scope.myCustomerTags = cutomerTags.join(", ");
       $scope.customer.tags = tempTags;
       console.log('$scope.customer.tags >>>', $scope.customer.tags);
     };
