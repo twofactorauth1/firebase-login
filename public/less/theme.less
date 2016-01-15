@@ -139,16 +139,6 @@ header {
             }
         }
     }
-    .dropdown-off-sidebar {
-        border-left-color: $collapseBorder-color !important;
-        background: $collapse-color !important;
-        color: $collapseElements-color !important;
-        @media (max-width: $screen-sm-max) {
-            background: $header-color !important;
-            border-left-color: $headerBorder-color !important;
-            color: $headerElements-color !important;
-        }
-    }
 }
 
 #sidebar {
@@ -417,76 +407,6 @@ ul.sub-menu {
                 /* Internet Explorer 10+ */
                 color: $text-light !important;
             }
-        }
-    }
-}
-
-#off-sidebar {
-    background: $offSidebar-color !important;
-    border-color: $offSidebarBorder-color !important;
-    .sidebar-back {
-        color: $offSidebarElements-color;
-    }
-    .tab-content {
-        background: $offSidebar-color !important;
-    }
-    .nav-tabs.nav-justified {
-        > li {
-            > a {
-                border-color: $offSidebarBorder-color;
-                color: rgba($offSidebarElements-color, 0.7);
-                background: darken($offSidebar-color, 5%);
-                &:hover,
-                &:focus {
-                    background: darken($offSidebar-color, 10%);
-                    color: rgba($offSidebarElements-color, 0.8);
-                }
-            }
-            &.active > a,
-            &.active > a:hover,
-            &.active > a:focus {
-                color: $offSidebarElements-color;
-                background: $offSidebar-color;
-                border-bottom-color: $offSidebar-color;
-            }
-        }
-    }
-    .media-list .media {
-        border-color: $offSidebarBorder-color;
-        color: $offSidebarText-color;
-        a:hover {
-            background: darken($offSidebar-color, 10%);
-        }
-        .media-heading {
-            color: $offSidebarText-color !important;
-        }
-        .media-body span {
-            color: lighten($offSidebarText-color, 10%);
-        }
-    }
-    .sidebar-title {
-        color: $offSidebarText-color;
-    }
-    .discussion {
-        .messages-date {
-            color: $offSidebarText-color;
-        }
-        .message-name {
-            color: $offSidebarText-color;
-        }
-    }
-    .message-bar {
-        background: darken($offSidebar-color, 10%);
-        border-top-color: $offSidebarBorder-color;
-        textarea {
-            background: #fff;
-            border-color: $offSidebarBorder-color;
-        }
-        .link {
-            color: $offSidebarElements-color;
-        }
-        a.icon-only {
-            color: $offSidebarText-color;
         }
     }
 }
