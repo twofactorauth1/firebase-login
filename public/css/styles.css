@@ -10474,10 +10474,10 @@ a[href="https://froala.com/wysiwyg-editor"] {
   top: 0;
   left: 0;
   width: 300px;
-  max-height: 600px;
   background: white;
   z-index: 1;
   overflow: hidden;
+  min-height: 100%;
 }
 ssb-topbar {
   position: fixed;

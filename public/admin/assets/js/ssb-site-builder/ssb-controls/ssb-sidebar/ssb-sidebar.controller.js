@@ -26,7 +26,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
     vm.saveWebsite = saveWebsite;
     vm.cancelPendingEdits = cancelPendingEdits;
     vm.togglePageSectionAccordion = togglePageSectionAccordion;
-    vm.togglePageSectionComponentAccordion = togglePageSectionComponentAccordion;
+    vm.setActiveComponent = setActiveComponent;
     vm.setActiveSection = setActiveSection;
     vm.getPlatformSections = getPlatformSections;
     vm.getPlatformComponents = getPlatformComponents;
@@ -84,7 +84,30 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
     		$location.url('/website/site-builder/pages/');
     	},
     	index: 0,
-    	indexClass: 'ssb-sidebar-position-1'
+    	indexClass: 'ssb-sidebar-position-1',
+        sectionPanel: {
+            navigationHistory: [],
+            loadPanel: function(obj, back) {
+
+                if (!back) {
+                    vm.navigation.sectionPanel.navigationHistory.push(obj);
+                }
+
+                vm.uiState.openSidebarSectionPanel = obj;
+                console.log(vm.navigation.sectionPanel.navigationHistory);
+
+            },
+            back: function() {
+                var hist = vm.navigation.sectionPanel.navigationHistory;
+                var previousPanel;
+
+                hist.pop();
+
+                previousPanel = hist.length ? hist[hist.length - 1] : { name: '', id: ''};
+
+                vm.navigation.sectionPanel.loadPanel(previousPanel, true);
+            }
+        }
     };
 
     vm.sortableOptions = {
@@ -260,7 +283,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
   		}
     }
 
-    function togglePageSectionComponentAccordion(index) {
+    function setActiveComponent(index) {
   		//TODO: this fires on all clicks anywhere within the component panel... so all settings, etc.
   		SimpleSiteBuilderService.setActiveComponent(index);
     }

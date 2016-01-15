@@ -1,0 +1,22 @@
+<div class="form-group">
+  <div class="radio">
+    <label>
+      <input type="radio" ng-model="vm.state.page.sections[vm.uiState.activeSectionIndex].layout" value="1-col"/> Stacked
+    </label>
+  </div>
+  <div class="radio">
+    <label>
+      <input type="radio" ng-model="vm.state.page.sections[vm.uiState.activeSectionIndex].layout" value="2-col"/> 2 Column Grid
+    </label>
+  </div>
+  <div class="radio">
+    <label>
+      <input type="radio" ng-model="vm.state.page.sections[vm.uiState.activeSectionIndex].layout" value="3-col"/> 3 Column Grid
+    </label>
+  </div>
+</div>
+
+<div
+    ng-init="component = section"
+    ng-include=" 'assets/js/ssb-site-builder/ssb-components/shared/sidebar.settings.layout.html' ">
+</div>

@@ -2,12 +2,12 @@
     ng-if="vm.uiState.showSectionPanel && vm.state.page.sections[vm.uiState.activeSectionIndex]"
     class="ssb-sidebar-section-panel draggable"
     ind-draggable>
-
+    <!-- <small>{{vm.uiState.openSidebarSectionPanel.id}}</small> -->
     <h4 class="ssb-sidebar-sub-heading">
         <span ng-if="vm.uiState.openSidebarSectionPanel.name === ''">{{vm.state.page.sections[vm.uiState.activeSectionIndex].name}}</span>
         <div
             ng-if="vm.uiState.openSidebarSectionPanel.name !== ''"
-            ng-click="vm.uiState.openSidebarSectionPanel = { name: '', id: '' }">
+            ng-click="vm.setActiveComponent(null);vm.navigation.sectionPanel.back();">
 
             <i class="ti-arrow-left"></i>
             {{vm.uiState.openSidebarSectionPanel.name}}
@@ -26,7 +26,7 @@
                 <accordion close-others="oneAtATime" class="accordion">
                     <accordion-group
                         is-open="vm.uiState.accordion.sections[sectionIndex].components[componentIndex].isOpen"
-                        ng-click="vm.togglePageSectionComponentAccordion(componentIndex)"
+                        ng-click="vm.setActiveComponent(componentIndex)"
                         class="ssb-sidebar-sortable-item ssb-sidebar-sortable-item-component">
 
                         <accordion-heading>
