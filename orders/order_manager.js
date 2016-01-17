@@ -15,6 +15,7 @@ var mandrillHelper = require('../utils/mandrillhelper');
 var accountDao = require('../dao/account.dao');
 var cmsManager = require('../cms/cms_manager');
 var productManager = require('../products/product_manager');
+var juice = require('juice');
 require('moment');
 
 module.exports = {
@@ -522,8 +523,18 @@ module.exports = {
                                     component.text = "The following order was created:";
                                     component.orderurl = "https://" + account.get('subdomain') + ".indigenous.io/admin/#/commerce/orders/" + updatedOrder.attributes._id;
                                     app.render('emails/base_email_order_admin_notification', component, function(err, html){
-                                        mandrillHelper.sendOrderEmail(fromAddress, fromName, fromAddress, fromName, subject, html, accountId, orderId, vars, '0', function(){
-                                            log.debug('Admin Notification Sent');
+                                        juice.juiceResources(html, {}, function(err, _html) {
+                                            if (err) {
+                                                self.log.error('A juice error occurred. Failed to set styles inline.')
+                                                self.log.error(err);
+                                                fn(err, null);
+                                            } else {
+                                                log.debug('juiced - one ' + _html);
+                                                html = _html.replace('//s3.amazonaws', 'http://s3.amazonaws');
+                                            }
+                                            mandrillHelper.sendOrderEmail(fromAddress, fromName, fromAddress, fromName, subject, html, accountId, orderId, vars, '0', function(){
+                                                log.debug('Admin Notification Sent');
+                                            });
                                         });
                                     });
                                 }
@@ -533,9 +544,21 @@ module.exports = {
                                 component.order = updatedOrder.attributes;
                                 log.debug('Using this for data', component);
                                 app.render('emails/base_email_order', component, function(err, html) {
-                                    mandrillHelper.sendOrderEmail(fromAddress, fromName, toAddress, toName, subject, html, accountId, orderId, vars, email._id, function(){
-                                        callback(null, updatedOrder);
+                                    juice.juiceResources(html, {}, function(err, _html) {
+                                        if (err) {
+                                            self.log.error('A juice error occurred. Failed to set styles inline.')
+                                            self.log.error(err);
+                                            fn(err, null);
+                                        } else {
+                                            log.debug('juiced - two' + _html);
+                                            html = _html.replace('//s3.amazonaws', 'http://s3.amazonaws');
+                                        }
+
+                                        mandrillHelper.sendOrderEmail(fromAddress, fromName, toAddress, toName, subject, html, accountId, orderId, vars, email._id, function(){
+                                            callback(null, updatedOrder);
+                                        });
                                     });
+
 
                                     if(emailPreferences.new_orders === true) {
                                         //Send additional details
@@ -543,13 +566,22 @@ module.exports = {
                                         component.text = "The following order was created:";
                                         component.orderurl = "https://" + account.get('subdomain') + ".indigenous.io/admin/#/commerce/orders/" + updatedOrder.attributes._id;
                                         app.render('emails/base_email_order_admin_notification', component, function(err, html){
-                                            mandrillHelper.sendOrderEmail(fromAddress, fromName, fromAddress, fromName, subject, html, accountId, orderId, vars, email._id, function(){
-                                                log.debug('Admin Notification Sent');
+                                            juice.juiceResources(_html, {}, function(err, html) {
+                                                if (err) {
+                                                    self.log.error('A juice error occurred. Failed to set styles inline.')
+                                                    self.log.error(err);
+                                                    fn(err, null);
+                                                } else {
+                                                    log.debug('juiced - three' + _html);
+                                                    html = _html.replace('//s3.amazonaws', 'http://s3.amazonaws');
+                                                }
+
+                                                mandrillHelper.sendOrderEmail(fromAddress, fromName, fromAddress, fromName, subject, html, accountId, orderId, vars, email._id, function(){
+                                                    log.debug('Admin Notification Sent');
+                                                });
                                             });
                                         });
-
                                     }
-
                                 });
 
                             }
