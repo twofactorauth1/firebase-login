@@ -1,28 +1,16 @@
 <div class="col-xs-12 container-fluid">
 
     <div class="row padding-10">
-        <div class="form-group col-xs-6 ssb-spectrum-color-picker">
-            <!-- <h5 class="ssb-sidebar-settings-heading">Settings</h5> -->
 
-            <spectrum-colorpicker format="'hex'" options="vm.spectrum.options" ng-model="vm.state.page.sections[vm.uiState.activeSectionIndex].txtcolor"></spectrum-colorpicker>
-            <label for="colorpicker">Text <span tooltip-placement="top" tooltip-html-unsafe="Text color of section."><i class="fa fa-info-circle" /></span></label>
-        </div>
-        <div class="form-group col-xs-6 ssb-spectrum-color-picker">
-            <spectrum-colorpicker format="'hex'" options="vm.spectrum.options" ng-model="vm.state.page.sections[vm.uiState.activeSectionIndex].bg.color"></spectrum-colorpicker>
-            <label for="colorpicker">Background <span tooltip-placement="top" tooltip-html-unsafe="Background color of section."><i class="fa fa-info-circle" /></span></label>
-        </div>
-    </div>
-
-    <div class="row padding-10">
-
-        <button ng-click="vm.navigation.sectionPanel.loadPanel({ name: 'Background', id: 'background' })" class="ssb-sidebar-section-panel-btn btn btn-link">
-            <i class="ti-brush display-ib"></i> Background
+        <button ng-click="vm.navigation.sectionPanel.loadPanel({ name: 'Design', id: 'design' })" class="ssb-sidebar-section-panel-btn btn btn-link">
+            <i class="ti-brush display-ib"></i> Design
         </button>
 
         <div
-            ng-if="'background' === vm.uiState.openSidebarSectionPanel.id"
-            class="ssb-sidebar-section-panel-component-panel"
-            ng-include=" 'assets/js/ssb-site-builder/ssb-components/ssb-page-section/sidebar.settings.background.html' ">
+            class="ssb-sidebar-section-panel-component-panel container-fluid"
+            ng-if="'design' === vm.uiState.openSidebarSectionPanel.id"
+            ng-init="component = vm.state.page.sections[vm.uiState.activeSectionIndex]"
+            ng-include=" 'assets/js/ssb-site-builder/ssb-components/ssb-page-section/sidebar.settings.design.html' ">
         </div>
 
         <button ng-click="vm.navigation.sectionPanel.loadPanel({ name: 'Layout', id: 'layout' })" class="ssb-sidebar-section-panel-btn btn btn-link">
@@ -30,9 +18,9 @@
         </button>
 
         <div
+            class="ssb-sidebar-section-panel-component-panel container-fluid"
             ng-if="'layout' === vm.uiState.openSidebarSectionPanel.id"
-            class="ssb-sidebar-section-panel-component-panel"
-            ng-init="component = section"
+            ng-init="component = vm.state.page.sections[vm.uiState.activeSectionIndex]"
             ng-include=" 'assets/js/ssb-site-builder/ssb-components/ssb-page-section/sidebar.settings.layout.html' ">
         </div>
 
@@ -44,14 +32,15 @@
             ng-init="componentIndex = $index">
 
             <button
-                ng-click="vm.setActiveComponent(componentIndex);vm.navigation.sectionPanel.loadPanel({ name: component.type, id: component._id });"
-                class="ssb-sidebar-section-panel-btn btn btn-primary">
+                class="ssb-sidebar-section-panel-btn btn btn-primary"
+                ng-click="vm.setActiveComponent(componentIndex);vm.navigation.sectionPanel.loadPanel({ name: component.type, id: component._id });">
                 <i class="ti-settings display-ib"></i> Manage {{component.type}}
             </button>
 
             <div ng-if="component._id === vm.uiState.openSidebarSectionPanel.id" class="ssb-sidebar-section-panel-component-panel">
                 <!-- <div ng-include=" 'assets/js/ssb-site-builder/ssb-components/shared/basic.html' "></div> -->
                 <div
+                    class="container-fluid"
                     ng-if="component.type !== undefined"
                     ng-init="sectionIndex = vm.uiState.activeSectionIndex"
                     ng-include=" 'assets/js/ssb-site-builder/ssb-components/' + component.type + '/sidebar.settings.html' ">

@@ -427,7 +427,7 @@
     }
 }
 
-.ssb-sidebar-section-panel-component-btns .ssb-sidebar-section-panel-btn {
+.ssb-sidebar-section-panel-component-btns .ssb-sidebar-section-panel-btn.btn-primary {
     padding: 1em;
     text-align: center;
     margin: .5em auto;
@@ -446,11 +446,15 @@
     position: absolute;
     top: 0;
     left: 0;
-    width: 300px;
+    width: 100%;
     background: white;
     z-index: 1;
     overflow: hidden;
     min-height: 100%;
+
+    rzslider {
+        width: calc(~"100% - 15px");
+    }
 
 }
 

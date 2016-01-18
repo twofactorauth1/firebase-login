@@ -6825,7 +6825,7 @@ a[href="https://froala.com/wysiwyg-editor"] {
   padding: .5em 0;
   text-align: left;
 }
-.ssb-sidebar-section-panel-component-btns .ssb-sidebar-section-panel-btn {
+.ssb-sidebar-section-panel-component-btns .ssb-sidebar-section-panel-btn.btn-primary {
   padding: 1em;
   text-align: center;
   margin: .5em auto;
@@ -6842,11 +6842,14 @@ a[href="https://froala.com/wysiwyg-editor"] {
   position: absolute;
   top: 0;
   left: 0;
-  width: 300px;
+  width: 100%;
   background: white;
   z-index: 1;
   overflow: hidden;
   min-height: 100%;
+}
+.ssb-sidebar-section-panel-component-panel rzslider {
+  width: calc(100% - 15px);
 }
 ssb-topbar {
   position: fixed;
