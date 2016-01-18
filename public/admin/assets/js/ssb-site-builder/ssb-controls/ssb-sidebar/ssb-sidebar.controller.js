@@ -279,7 +279,6 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
         tooltip: "Yelp",
         url: "http://www.yelp.com"
       }];
-    };
 
     function insertMedia(asset) {
       vm.insertMediaCallback(asset);
