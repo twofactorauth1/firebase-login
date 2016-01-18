@@ -152,6 +152,135 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
   	  }
   	};
 
+    //TODO: move into config services
+    vm.social_links = [{
+        name: "adn",
+        icon: "adn",
+        tooltip: "Adn",
+        url: "http://www.adn.com"
+      }, {
+        name: "bitbucket",
+        icon: "bitbucket",
+        tooltip: "BitBucket",
+        url: "https://bitbucket.org"
+      }, {
+        name: "dropbox",
+        icon: "dropbox",
+        tooltip: "Dropbox",
+        url: "https://www.dropbox.com"
+      }, {
+        name: "facebook",
+        icon: "facebook",
+        tooltip: "Facebook",
+        url: "https://www.facebook.com"
+      }, {
+        name: "flickr",
+        icon: "flickr",
+        tooltip: "Flickr",
+        url: "https://www.flickr.com"
+      }, {
+        name: "foursquare",
+        icon: "foursquare",
+        tooltip: "Four Square",
+        url: "https://foursquare.com"
+      }, {
+        name: "github",
+        icon: "github",
+        tooltip: "Github",
+        url: "https://github.com"
+      }, {
+        name: "google-plus",
+        icon: "google-plus",
+        tooltip: "Google Plus",
+        url: "https://www.gmail.com"
+      }, {
+        name: "instagram",
+        icon: "instagram",
+        tooltip: "Instagram",
+        url: "https://instagram.com"
+      }, {
+        name: "linkedin",
+        icon: "linkedin",
+        tooltip: "Linkedin",
+        url: "https://www.linkedin.com"
+      }, {
+        name: "microsoft",
+        icon: "windows",
+        tooltip: "Microsoft",
+        url: "http://www.microsoft.com"
+      }, {
+        name: "openid",
+        icon: "openid",
+        tooltip: "Open Id",
+        url: "http://openid.com"
+      }, {
+        name: "pinterest",
+        icon: "pinterest",
+        tooltip: "Pinterest",
+        url: "https://www.pinterest.com"
+      }, {
+        name: "reddit",
+        icon: "reddit",
+        tooltip: "Reddit",
+        url: "http://www.reddit.com"
+      }, {
+        name: "comment-o",
+        icon: "comment-o",
+        tooltip: "Snapchat",
+        url: "https://www.snapchat.com"
+      }, {
+        name: "soundcloud",
+        icon: "soundcloud",
+        tooltip: "Sound Cloud",
+        url: "https://soundcloud.com"
+      }, {
+        name: "tumblr",
+        icon: "tumblr",
+        tooltip: "Tumblr",
+        url: "https://www.tumblr.com"
+      }, {
+        name: "twitter",
+        icon: "twitter",
+        tooltip: "Twitter",
+        url: "https://twitter.com"
+      }, {
+        name: "vimeo",
+        icon: "vimeo-square",
+        tooltip: "Vimeo",
+        url: "https://vimeo.com"
+      }, {
+        name: "vine",
+        icon: "vine",
+        tooltip: "Vine",
+        url: "http://www.vinemarket.com"
+      }, {
+        name: "vk",
+        icon: "vk",
+        tooltip: "Vk",
+        url: "http://vk.com"
+      }, {
+        name: "desktop",
+        icon: "desktop",
+        tooltip: "Website",
+        url: "http://www.website.com"
+      }, {
+        name: "yahoo",
+        icon: "yahoo",
+        tooltip: "Yahoo",
+        url: "https://yahoo.com"
+      }, {
+        name: "youtube",
+        icon: "youtube",
+        tooltip: "Youtube",
+        url: "https://www.youtube.com"
+      }, {
+        name: "yelp",
+        icon: "yelp",
+        tooltip: "Yelp",
+        url: "http://www.yelp.com"
+      }];
+    };
+
     function insertMedia(asset) {
       vm.insertMediaCallback(asset);
 
