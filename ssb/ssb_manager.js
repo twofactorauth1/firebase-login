@@ -233,7 +233,35 @@ module.exports = {
                     }
                 });
             },
-            function createPage(website, theme, template, sections, cb){
+            function getGlobalHeader(website, theme, template, sections, cb){
+                var query = {
+                    accountId:accountId,
+                    globalHeader:true
+                };
+                sectionDao.findOne(query, $$.m.ssb.Section, function(err, section){
+                    if(err) {
+                        self.log.error('Error finding global header:', err);
+                        cb(err);
+                    } else {
+                        cb(null, website, theme, template, sections, section);
+                    }
+                });
+            },
+            function getGlobalFooter(website, theme, template, sections, header, cb){
+                var query = {
+                    accountId:accountId,
+                    globalFooter:true
+                };
+                sectionDao.findOne(query, $$.m.ssb.Section, function(err, section){
+                    if(err) {
+                        self.log.error('Error finding global footer:', err);
+                        cb(err);
+                    } else {
+                        cb(null, website, theme, template, sections, header, section);
+                    }
+                });
+            },
+            function createPage(website, theme, template, sections, header, footer, cb){
                 //TODO: make sure this name is unique
                 //var pageName = slug(template.get('name') + '-' + $$.u.idutils.generateUniqueAlphaNumeric(5, true, true));
 
@@ -244,9 +272,29 @@ module.exports = {
 
 
                 var jsonSections = [];
+                if(header) {
+                    jsonSections.push(header.toReference());
+                    //find and remove the default header
+                   sections = _.filter(sections, function(section){
+                       if(section.get('name') !== 'Header') {
+                           return true;
+                       }
+                   });
+                }
+                if(footer) {
+                    //find and remove the default footer
+                    sections = _.filter(sections, function(section){
+                        if(section.get('name') !== 'Footer') {
+                            return true;
+                        }
+                    });
+                }
                 _.each(sections, function(section){
                     jsonSections.push(section.toReference());
                 });
+                if(footer) {
+                    jsonSections.push(footer.toReference());
+                }
 
                 var page = new $$.m.ssb.Page({
                     accountId:accountId,
