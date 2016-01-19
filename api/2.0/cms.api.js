@@ -46,6 +46,10 @@ _.extend(api.prototype, baseApi.prototype, {
         app.post(this.url('templates/:id'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//update
         app.delete(this.url('templates/:id'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//delete
 
+        // SITE TEMPLATES
+        app.get(this.url('sitetemplates'), this.isAuthAndSubscribedApi.bind(this), this.listSiteTemplates.bind(this));
+        app.get(this.url('sitetemplates/:id'), this.isAuthAndSubscribedApi.bind(this), this.getSiteTemplate.bind(this));
+
         // WEBSITE - work with website objects
         app.get(this.url('websites'), this.isAuthAndSubscribedApi.bind(this), this.listWebsites.bind(this));//get default (0th) website for current account
         app.get(this.url('websites/:id'), this.isAuthAndSubscribedApi.bind(this), this.getWebsite.bind(this));//get
@@ -54,6 +58,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.delete(this.url('websites/:id'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//delete
 
         app.get(this.url('websites/:id/theme'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//get theme
+        app.post(this.url('websites/:id/sitetemplates/:siteTemplateId'), this.isAuthAndSubscribedApi.bind(this), this.setSiteTemplate.bind(this));
 
         //PAGE
         app.get(this.url('websites/:id/pages'), this.isAuthAndSubscribedApi.bind(this), this.listPages.bind(this));//get pages
@@ -411,6 +416,46 @@ _.extend(api.prototype, baseApi.prototype, {
         ssbManager.listPagesWithSections(accountId, websiteId, function(err, pages){
             self.log.debug('<< listPagesWithSections');
             return self.sendResultOrError(resp, err, pages, "Error listing pages");
+        });
+    },
+
+    listSiteTemplates: function(req, resp) {
+        var self = this;
+        self.log.debug('>> listSiteTemplates');
+        var accountId = parseInt(self.accountId(req));
+
+        ssbManager.listSiteTemplates(accountId, function(err, templates){
+            self.log.debug('<< listSiteTemplates');
+            return self.sendResultOrError(resp, err, templates, "Error listing Site Templates");
+        });
+    },
+
+    getSiteTemplate: function(req, resp) {
+        var self = this;
+        self.log.debug('>> getSiteTemplate');
+        var accountId = parseInt(self.accountId(req));
+        var siteTemplateId = req.params.id;
+
+        ssbManager.getSiteTemplate(accountId, siteTemplateId, function(err, template){
+            self.log.debug('<< getSiteTemplate');
+            return self.sendResultOrError(resp, err, template, "Error getting Site Template");
+        });
+    },
+
+    setSiteTemplate: function(req, resp) {
+        var self = this;
+        self.log.debug('>> setSiteTemplate');
+        var accountId = parseInt(self.accountId(req));
+        var websiteId = req.params.id;
+        var siteTemplateId = req.params.siteTemplateId;
+        var created = {
+            date: new Date(),
+            by: self.userId(req)
+        };
+
+        ssbManager.setSiteTemplate(accountId, siteTemplateId, websiteId, created, function(err, value){
+            self.log.debug('<< setSiteTemplate');
+            return self.sendResultOrError(resp, err, value, "Error setting Site Template");
         });
     }
 

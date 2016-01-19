@@ -8,8 +8,10 @@ var websiteDao = require('./dao/website.dao');
 var pageDao = require('./dao/page.dao');
 var sectionDao = require('./dao/section.dao');
 var componentDao = require('./dao/component.dao');
+var siteTemplateDao = require('./dao/sitetemplate.dao');
 var async = require('async');
 var slug = require('slug');
+var constants = require('./constants');
 
 var PLATFORM_ID = 0;
 
@@ -441,7 +443,7 @@ module.exports = {
 
     updatePage: function(accountId, pageId, page, modified, fn) {
         var self = this;
-        self.log.debug('>> updatePage');
+        self.log.debug('>> updatePage (' + pageId + ')');
         //debugger;
         async.waterfall([
             function getExistingPage(cb){
@@ -493,8 +495,6 @@ module.exports = {
                 });
             },
             function deleteRemovedSections(existingPage, updatedPage, updatedSections, cb){
-                //var updatedSections = updatedPage.get('sections');
-                //TODO: updatedSections is an Array of Section Objects... the pluck will not work
 
                 var updatedSectionIDs =_.map(updatedSections, function(section){
                     return section.id();
@@ -673,5 +673,111 @@ module.exports = {
         }
 
         return sections;
+    },
+
+    listSiteTemplates: function(accountId, fn){
+        var self = this;
+        self.log.debug('>> listSiteTemplates');
+
+        siteTemplateDao.findMany({_id: {$ne:'__counter__'}}, $$.m.ssb.SiteTemplate, function(err, siteTemplates){
+            if(err) {
+                self.log.error('Error listing site templates:', err);
+                return fn(err);
+            } else {
+                self.log.debug('<< listSiteTemplates');
+                return fn(null, siteTemplates);
+            }
+        });
+    },
+
+    getSiteTemplate: function(accountId, siteTemplateId, fn) {
+        var self = this;
+        self.log.debug('>> getSiteTemplate');
+        siteTemplateDao.getById(siteTemplateId, $$.m.ssb.SiteTemplate, function(err, siteTemplate){
+            if(err) {
+                self.log.error('Error getting site template:', err);
+                return fn(err);
+            } else {
+                self.log.debug('<< getSiteTemplate');
+                return fn(null, siteTemplate);
+            }
+        });
+    },
+
+    setSiteTemplate: function(accountId, siteTemplateId, websiteId, created, fn) {
+        var self = this;
+        self.log.debug('>> setSiteTemplate');
+
+        /*
+         * 1. Get the website
+         * 2. Set the siteTemplateId
+         * 3. Create the default pages
+         */
+
+        async.waterfall([
+            function getWebsite(cb){
+                websiteDao.getWebsiteById(accountId, websiteId, function(err, website){
+                    if(err) {
+                        self.log.error('Error getting website:', err);
+                        cb(err);
+                    } else {
+                        cb(null, website);
+                    }
+                });
+            },
+            function setSiteTemplate(website, cb){
+                var currentSiteTemplate = website.get('siteTemplateId');
+                var createPages = true;
+                if(currentSiteTemplate) {
+                    createPages = false;
+                }
+                website.set('siteTemplateId', siteTemplateId);
+                website.set('modified', created);
+                websiteDao.saveOrUpdate(website, function(err, updatedWebsite){
+                    if(err) {
+                        self.log.error('Error updating website:', err);
+                    }
+                    cb(err, updatedWebsite, createPages);
+                });
+            },
+            function createDefaultPages(website, createPages, cb){
+                if(createPages === true) {
+                    async.each(constants.defaultPages, function(page, callback){
+                        //need to insert a blank page and then update it.  This allows us to re-use the updatePage functionality
+                        var blankPage = new $$.m.ssb.Page({accountId: accountId, created:created});
+                        pageDao.saveOrUpdate(blankPage, function(err, updatedPage){
+                            if(err) {
+                                callback(err)
+                            } else {
+                                var pageId = updatedPage.id();
+                                self.log.debug('Created a page with id:', pageId);
+                                page = new $$.m.ssb.Page(page);
+                                page.set('_id', pageId);
+                                page.set('created', created);
+                                page.set('accountId', accountId);
+                                page.set('websiteId', websiteId);
+                                page.set('siteTemplateId', siteTemplateId);//TODO: do we need this?  templateId?  both?
+                                self.updatePage(accountId, pageId, page, created, function(err, savedPage){
+                                    self.log.debug('updated page');
+                                    callback(err, savedPage);
+                                });
+                            }
+                        });
+                    }, function(err){
+                        self.log.debug('finished updating pages');
+                        cb(err);
+                    });
+                } else {
+                    self.log.debug('Skipping page creation');
+                    cb(null);
+                }
+
+            }
+        ], function done(err){
+            //TODO: if we need to return anything from this method, add it as a param.
+            self.log.debug('<< setSiteTemplate');
+            fn(err, {ok:true});
+        });
+
     }
 };
