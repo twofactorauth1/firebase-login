@@ -15,8 +15,10 @@ var mandrillHelper = require('../utils/mandrillhelper');
 var accountDao = require('../dao/account.dao');
 var cmsManager = require('../cms/cms_manager');
 var productManager = require('../products/product_manager');
+var emailDao = require('../cms/dao/email.dao');
 var juice = require('juice');
 require('moment');
+
 
 module.exports = {
 
@@ -322,16 +324,16 @@ module.exports = {
                 order.set('total', totalAmount.toFixed(2));
                 log.debug('total is now: ' + order.get('total'));
                 order.set('total_line_items_quantity', totalLineItemsQuantity);
-                callback(null, order);
+                callback(null, account, order);
 
             },
             //save
-            function(validatedOrder, callback){
+            function(account, validatedOrder, callback){
                 //look for customer instead of customer_id
                 if(validatedOrder.get('customer') && validatedOrder.get('customer_id')) {
                     log.warn('request contains BOTH customer and customer_id.  Dropping customer.');
                     validatedOrder.set('customer', null);
-                    callback(null, validatedOrder);
+                    callback(null, account, validatedOrder);
                 } else if(validatedOrder.get('customer') === null && validatedOrder.get('customer_id') === null) {
                     //return an error.
                     callback('Either a customer or customer_id is required.');
@@ -346,16 +348,16 @@ module.exports = {
                         } else {
                             validatedOrder.set('customer_id', savedContact.id());
                             validatedOrder.set('customer', null);
-                            callback(null, validatedOrder);
+                            callback(null, account, validatedOrder);
                         }
                     });
                 } else {
                     //we have the id.
-                    callback(null, validatedOrder);
+                    callback(null, account, validatedOrder);
                 }
             },
             //get contact
-            function(savedOrder, callback) {
+            function(account, savedOrder, callback) {
                 log.debug('getting contact');
                 contactDao.getById(savedOrder.get('customer_id'), $$.m.Contact, function(err, contact){
                     if(err) {
@@ -382,7 +384,7 @@ module.exports = {
 
                                 savedOrder.set('order_id', max);
                                 dao.saveOrUpdate(savedOrder, function(err, updatedOrder){
-                                    callback(err, updatedOrder, contact);
+                                    callback(err, account, updatedOrder, contact);
                                 });
                             }
                         });
@@ -391,7 +393,7 @@ module.exports = {
                 });
             },
             //charge
-            function(savedOrder, contact, callback){
+            function(account, savedOrder, contact, callback){
                 log.debug('attempting to charge order');
                 var paymentDetails = savedOrder.get('payment_details');
                 if (savedOrder.get('total') > 0) {
@@ -439,20 +441,20 @@ module.exports = {
                                         callback(err);
                                     });
                                 } else {
-                                    callback(null, savedOrder, charge, contact);
+                                    callback(null, account, savedOrder, charge, contact);
                                 }
                             });
                     } else {
                         log.warn('unsupported payment method: ' + paymentDetails.method_id);
-                        callback(null, savedOrder, null, contact);
+                        callback(null, account, savedOrder, null, contact);
                     }
                 } else {
-                    callback(null, savedOrder, null, contact);
+                    callback(null, account, savedOrder, null, contact);
                 }
             },
             //update
 
-            function(savedOrder, charge, contact, callback){
+            function(account, savedOrder, charge, contact, callback){
                 log.debug('updating saved order');
                 /*
                  * need to set:
@@ -478,13 +480,13 @@ module.exports = {
                         log.error('Error updating order: ' + err);
                         callback(err);
                     } else {
-                        callback(null, updatedOrder, contact);
+                        callback(null, account, updatedOrder, contact);
                     }
                 });
 
             },
             //send new order email
-            function(updatedOrder, contact, callback) {
+            function(account, updatedOrder, contact, callback) {
                 log.debug('Sending new order email');
                 var toAddress = "";
                 if(contact.getEmails()[0])
@@ -506,7 +508,7 @@ module.exports = {
                         var emailPreferences = account.get('email_preferences');
                         if(!business || !business.emails || !business.emails[0].email) {
                             log.warn('No account email.  No NEW_ORDER email sent');
-                            callback(null, updatedOrder);
+                            callback(null, account, updatedOrder);
                         }
                         var subject = 'Your '+business.name+' order receipt from '+moment().format('MMM Do, YYYY');
                         var fromAddress = business.emails[0].email;
@@ -538,7 +540,7 @@ module.exports = {
                                         });
                                     });
                                 }
-                                callback(null, updatedOrder);
+                                callback(null, account, updatedOrder);
                             } else {
                                 var component = email.get('components')[0];
                                 component.order = updatedOrder.attributes;
@@ -555,7 +557,7 @@ module.exports = {
                                         }
 
                                         mandrillHelper.sendOrderEmail(fromAddress, fromName, toAddress, toName, subject, html, accountId, orderId, vars, email._id, function(){
-                                            callback(null, updatedOrder);
+                                            callback(null, account, updatedOrder);
                                         });
                                     });
 
@@ -591,7 +593,141 @@ module.exports = {
                 });
 
 
+            },
+            // check and get fulfillment email products
+            function(account, order, callback) {  
+                log.debug('Order is', order); 
+                if(order.get('payment_details') && order.get('payment_details').paid && order.get('status')) {
+                    var productAry = [];                    
+                    async.each(order.get('line_items'), function iterator(item, cb){
+                        productManager.getProduct(item.product_id, function(err, product){
+                            if(err) {
+                                cb(err);
+                            } else {
+                                if(product.get('fulfillment_email')){
+                                    productAry.push(product);
+                                }                          
+                                log.debug('Product is', product);
+                                cb();
+                            }
+                        });
+                    }, function done(err){
+                        log.debug('productAry', productAry);
+                        callback(err, account, order, productAry)
+                    });
+                }
+                else{
+                    callback(null, account, order, null)
+                }
+                
+            },
+            // Send fulfillment email to admin
+            function(account, order, fulfillmentProductArr, callback) {
+                if(fulfillmentProductArr && fulfillmentProductArr.length){
+                    var business = account.get('business');
+                    
+                    if(!business || !business.emails || !business.emails[0].email) {
+                        log.warn('No account email.  No Fulfillment email sent');
+                        order.notes.push({
+                            note: 'No account email exists hence no fulfillment email sent.',
+                            user_id: userId,
+                            date: new Date()
+                        })
+                        dao.saveOrUpdate(order, function(err, order){
+                            if(err) {
+                                log.error('Error updating order: ' + err);
+                                callback(err);
+                            } else {
+                                callback(null,order);
+                            }
+                        });
+                    }
+                    else{
+                        var toName = account.get('first') + ' ' + account.get('last');
+                        var accountId = order.get('account_id');
+                        var  toAddress = business.emails[0].email;
+                        
+                        async.each(fulfillmentProductArr, function iterator(product, cb){
+                            var settings = product.get("emailSettings");
+                            var fromAddress = settings.fromEmail;
+                            var subject = settings.subject;
+                            var orderId = order.get("_id");
+                            var accountId = order.get('accountId');
+                            var vars = settings.vars || [];
+                            var fromName = settings.fromName;
+                            var emailId = settings.emailId;
+                            
+                            emailDao.getEmailById(emailId, function(err, email){
+                                if(err || !email) {
+                                    self.log.error('Error getting email to render: ' + err);
+                                    return fn(err, null);
+                                }
+                                var components = [];
+                                var keys = ['logo','title','text','text1','text2','text3'];
+                                var regex = new RegExp('src="//s3.amazonaws', "g");
+
+                                email.get('components').forEach(function(component){
+                                    if(component.visibility){
+                                        for (var i = 0; i < keys.length; i++) {
+                                            if (component[keys[i]]) {
+                                            component[keys[i]] = component[keys[i]].replace(regex, 'src="http://s3.amazonaws');
+                                            }
+                                        }
+                                        if (!component.bg.color) {
+                                            component.bg.color = '#ffffff';
+                                        }
+                                        if (!component.emailBg) {
+                                            component.emailBg = '#ffffff';
+                                        }
+                                        if (component.bg.img && component.bg.img.show && component.bg.img.url) {
+                                            component.emailBgImage = component.bg.img.url.replace('//s3.amazonaws', 'http://s3.amazonaws');
+                                        }
+                                        if (!component.txtcolor) {
+                                            component.txtcolor = '#000000';
+                                        }
+                                        components.push(component);
+                                    }                                    
+                                });
+                                
+                                app.render('emails/base_email_v2', { components: components }, function(err, html) {
+                                    if (err) {
+                                        log.error('Error updating order: ' + err);
+                                        log.warn('email will not be sent.');
+                                        cb();
+                                    } else {
+                                        mandrillHelper.sendFulfillmentEmail(fromAddress, fromName, toAddress, toName, subject, html, accountId, orderId, vars, email._id, function(){                                        
+                                            if(err) {
+                                                log.warn('Error sending email');
+                                                order.notes.push({
+                                                    note: 'Error sending fulfillment email.',
+                                                    user_id: userId,
+                                                    date: new Date()
+                                                })
+                                                dao.saveOrUpdate(order, function(err, order){
+                                                    if(err) {
+                                                        log.error('Error updating order: ' + err);
+                                                        callback(err);
+                                                    } else {
+                                                        cb();
+                                                    }
+                                                });
+                                            }
+                                            else
+                                                cb();
+                                        });
+                                    }
+                                });
+                            });
+                        }, function done(err){
+                            callback(null, order);
+                        });
+                    }
+                }
+                else{
+                    callback(null, order);
+                }
             }
+
         ], function(err, result){
             if(err) {
                 log.error('Error creating order: ' + err);
