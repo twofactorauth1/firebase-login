@@ -1218,6 +1218,11 @@ ul.nav {
 .navigation-v1 .nav-logo div.tooltip.bottom {
   margin-top: -30px;
 }
+@media (max-width: 767px) {
+  .navigation-v1 .navbar .nav > li {
+    float: none;
+  }
+}
 .nav-undernav .component {
   position: relative;
   z-index: 1;
@@ -1378,6 +1383,19 @@ ul.nav {
   -ms-transition: all 0.4s;
   -o-transition: all 0.4s;
   transition: all 0.4s;
+}
+@media (max-width: 767px) {
+  .navigation-v3 .navbar-nav {
+    margin: 0 !important;
+  }
+  .navigation-v3 .navbar-nav > li {
+    min-height: 50px;
+    float: none;
+    display: inherit;
+  }
+  .navigation-v3 .navbar .nav > li > a {
+    line-height: 30px;
+  }
 }
 .navigation1 {
   position: relative;

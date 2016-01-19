@@ -13,9 +13,9 @@ app.config(['$provide', function ($provide){
 
 app.controller('SiteBuilderSidebarController', ssbSiteBuilderSidebarController);
 
-ssbSiteBuilderSidebarController.$inject = ['$scope', '$attrs', '$filter', '$document', '$timeout', 'SimpleSiteBuilderService', '$modal', 'editableOptions', '$location', 'SweetAlert'];
+ssbSiteBuilderSidebarController.$inject = ['$scope', '$attrs', '$filter', '$document', '$timeout', 'SimpleSiteBuilderService', '$modal', 'editableOptions', '$location', 'SweetAlert', 'CustomerService' ];
 /* @ngInject */
-function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $timeout, SimpleSiteBuilderService, $modal, editableOptions, $location, SweetAlert) {
+function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $timeout, SimpleSiteBuilderService, $modal, editableOptions, $location, SweetAlert, CustomerService) {
 
     console.info('site-build sidebar directive init...')
 
@@ -49,7 +49,8 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
     vm.removeImage = removeImage;
     vm.createPage = createPage;
     vm.getTemplateById = getTemplateById;
-
+    vm.tagToCustomer = tagToCustomer;
+    //vm.customerTags = [];
     editableOptions.theme = 'bs3';
 
     vm.navigation = {
@@ -685,12 +686,20 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
 
     }
 
+    function tagToCustomer(value) {
+      return CustomerService.tagToCustomer(value);
+    }
+
     function init(element) {
 
         vm.element = element;
 
         setupSectionContent();
-
+        CustomerService.getCustomers(function(customers){
+          CustomerService.getAllCustomerTags(customers,function(tags){
+            vm.customerTags = tags;
+          });
+        })
     }
 }
 
