@@ -6,23 +6,25 @@
             <i class="ti-brush display-ib"></i> Design
         </button>
 
-        <div
+        <ssb-sidebar-settings-panel
             class="ssb-sidebar-section-panel-component-panel container-fluid"
             ng-if="'design' === vm.uiState.openSidebarSectionPanel.id"
-            ng-init="component = vm.state.page.sections[vm.uiState.activeSectionIndex]"
-            ng-include=" 'assets/js/ssb-site-builder/ssb-components/ssb-page-section/sidebar.settings.design.html' ">
-        </div>
+            settings-type="design"
+            state="vm.state"
+            ui-state="vm.uiState">
+        </ssb-sidebar-settings-panel>
 
         <button ng-click="vm.navigation.sectionPanel.loadPanel({ name: 'Layout', id: 'layout' })" class="ssb-sidebar-section-panel-btn btn btn-link">
-            <i class="ti-brush display-ib"></i> Layout
+            <i class="ti-layout display-ib"></i> Layout
         </button>
 
-        <div
+        <ssb-sidebar-settings-panel
             class="ssb-sidebar-section-panel-component-panel container-fluid"
             ng-if="'layout' === vm.uiState.openSidebarSectionPanel.id"
-            ng-init="component = vm.state.page.sections[vm.uiState.activeSectionIndex]"
-            ng-include=" 'assets/js/ssb-site-builder/ssb-components/ssb-page-section/sidebar.settings.layout.html' ">
-        </div>
+            settings-type="layout"
+            state="vm.state"
+            ui-state="vm.uiState">
+        </ssb-sidebar-settings-panel>
 
     </div>
 

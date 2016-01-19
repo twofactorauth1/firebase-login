@@ -158,7 +158,7 @@ app.controller('SiteBuilderSocialLinkModalController', ['$timeout', 'parentVm', 
             vm.updateSocialNetworks(old_value, mode, social);
             vm.social = {};
             vm.meetTeamIndex = null;
-            vm.closeModal();
+            vm.parentVm.closeModal();
         // }
 
     }
@@ -168,7 +168,7 @@ app.controller('SiteBuilderSocialLinkModalController', ['$timeout', 'parentVm', 
         switch (mode) {
           case "add":
             if (new_value && new_value.name && new_value.url) {
-              scope.component.networks.push({
+              vm.component.networks.push({
                 name: new_value.name,
                 url: new_value.url,
                 icon: new_value.icon
@@ -177,7 +177,7 @@ app.controller('SiteBuilderSocialLinkModalController', ['$timeout', 'parentVm', 
             break;
           case "update":
             if (new_value && new_value.name && new_value.url) {
-              selectedName = _.findWhere(scope.component.networks, {
+              selectedName = _.findWhere(vm.component.networks, {
                 name: old_value.name
               });
               selectedName.name = new_value.name;
@@ -188,13 +188,13 @@ app.controller('SiteBuilderSocialLinkModalController', ['$timeout', 'parentVm', 
           case "delete":
             //wait for modal animation for 500ms
             $timeout(function () {
-              selectedName = _.findWhere(scope.component.networks, {
+              selectedName = _.findWhere(vm.component.networks, {
                 name: old_value.name
               });
               scope.$apply(function () {
                 if (selectedName) {
-                  var index = scope.component.networks.indexOf(selectedName)
-                  scope.component.networks.splice(index, 1);
+                  var index = vm.component.networks.indexOf(selectedName)
+                  vm.component.networks.splice(index, 1);
                 }
               });
             }, 500);
