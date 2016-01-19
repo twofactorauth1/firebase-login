@@ -22,6 +22,8 @@ var notificationConfig = require('../configs/notification.config');
 var fs = require('fs');
 var async = require('async');
 
+var CREATE_DEFAULT_PAGES = true;
+
 module.exports = {
 
     createAccountAndUserFromTempAccount: function(accountToken, fingerprint, sendWelcomeEmail, fn) {
@@ -100,13 +102,19 @@ module.exports = {
                         callback(err);
                     } else {
                         log.debug('creating default pages');
-                        cmsManager.createDefaultPageForAccount(accountId, value.id(), function (err, value) {
-                            if (err) {
-                                log.error('Error creating default page for account: ' + err);
-                                callback(err);
-                            }
+                        if(CREATE_DEFAULT_PAGES === true) {
+                            cmsManager.createDefaultPageForAccount(accountId, value.id(), function (err, value) {
+                                if (err) {
+                                    log.error('Error creating default page for account: ' + err);
+                                    callback(err);
+                                }
+                                callback(null, account, user);
+                            });
+                        } else {
+                            log.debug('skipping default page creation');
                             callback(null, account, user);
-                        });
+                        }
+
                     }
                 });
             },
@@ -431,14 +439,20 @@ module.exports = {
             },
             function stepSeven(accountId, websiteId, user, callback){
                 log.debug('creating default page');
-                cmsManager.createDefaultPageForAccount(accountId, websiteId, function(err, value) {
-                    if (err) {
-                        log.error('Error creating default page for account: ' + err);
-                        fn(err, null);
-                    } else {
-                        callback(null, accountId, user);
-                    }
-                });
+                if(CREATE_DEFAULT_PAGES === true) {
+                    cmsManager.createDefaultPageForAccount(accountId, websiteId, function(err, value) {
+                        if (err) {
+                            log.error('Error creating default page for account: ' + err);
+                            fn(err, null);
+                        } else {
+                            callback(null, accountId, user);
+                        }
+                    });
+                } else {
+                    log.debug('Skipping default page creation');
+                    callback(null, accountId, user);
+                }
+
             },
             function stepEight(accountId, user, callback){
                 log.debug('Updating email notifications');
