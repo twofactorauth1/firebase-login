@@ -10456,6 +10456,12 @@ a[href="https://froala.com/wysiwyg-editor"] {
   padding: .5em 0;
   text-align: left;
 }
+.ssb-sidebar-section-panel .ssb-sidebar-section-panel-btn:hover {
+  text-decoration: none;
+}
+.ssb-sidebar-section-panel .ssb-sidebar-section-panel-btn i {
+  padding-right: .25em;
+}
 .ssb-sidebar-section-panel-component-btns .ssb-sidebar-section-panel-btn.btn-primary {
   padding: 1em;
   text-align: center;

@@ -10,7 +10,7 @@
         <ui-select-match placeholder="Select a Resolution">
             <small ng-bind-html="$select.selected"></small>
         </ui-select-match>
-        <ui-select-choices repeat="res in resolutions | filter: $select.search track by $index">
+        <ui-select-choices repeat="res in ['500px', '900px', '1024px', '1280px', '1440px'] | filter: $select.search track by $index">
             <small ng-bind-html="res | highlight: $select.search"></small>
         </ui-select-choices>
     </ui-select>
