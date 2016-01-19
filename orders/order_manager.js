@@ -595,10 +595,10 @@ module.exports = {
 
             },
             // check and get fulfillment email products
-            function(account, order, callback) {  
-                log.debug('Order is', order); 
+            function(account, order, callback) {
+                log.debug('Order is', order);
                 if(order.get('payment_details') && order.get('payment_details').paid && order.get('status')) {
-                    var productAry = [];                    
+                    var productAry = [];
                     async.each(order.get('line_items'), function iterator(item, cb){
                         productManager.getProduct(item.product_id, function(err, product){
                             if(err) {
@@ -606,7 +606,7 @@ module.exports = {
                             } else {
                                 if(product.get('fulfillment_email')){
                                     productAry.push(product);
-                                }                          
+                                }
                                 log.debug('Product is', product);
                                 cb();
                             }
@@ -619,17 +619,15 @@ module.exports = {
                 else{
                     callback(null, account, order, null)
                 }
-                
+
             },
-            // Send fulfillment email to admin
+            // Send fulfillment email to ordering user
             function(account, order, fulfillmentProductArr, callback) {
                 if(fulfillmentProductArr && fulfillmentProductArr.length){
-                    var business = account.get('business');
-                    
-                    if(!business || !business.emails || !business.emails[0].email) {
-                        log.warn('No account email.  No Fulfillment email sent');
+                    if(!order || !order.get('billing_address') || !order.get('billing_address').email) {
+                        log.warn('No order email address.  No Fulfillment email sent.');
                         order.notes.push({
-                            note: 'No account email exists hence no fulfillment email sent.',
+                            note: 'No email address provided with order. No fulfillment email sent.',
                             user_id: userId,
                             date: new Date()
                         })
@@ -643,10 +641,11 @@ module.exports = {
                         });
                     }
                     else{
-                        var toName = account.get('first') + ' ' + account.get('last');
+                        var _ba = order.get('billing_address');
+                        var toName = (_ba.first_name || '') + ' ' + (_ba.last_name || '');
                         var accountId = order.get('account_id');
-                        var  toAddress = business.emails[0].email;
-                        
+                        var toAddress = _ba.email;
+
                         async.each(fulfillmentProductArr, function iterator(product, cb){
                             var settings = product.get("emailSettings");
                             var fromAddress = settings.fromEmail;
@@ -656,7 +655,7 @@ module.exports = {
                             var vars = settings.vars || [];
                             var fromName = settings.fromName;
                             var emailId = settings.emailId;
-                            
+
                             emailDao.getEmailById(emailId, function(err, email){
                                 if(err || !email) {
                                     self.log.error('Error getting email to render: ' + err);
@@ -686,16 +685,16 @@ module.exports = {
                                             component.txtcolor = '#000000';
                                         }
                                         components.push(component);
-                                    }                                    
+                                    }
                                 });
-                                
+
                                 app.render('emails/base_email_v2', { components: components }, function(err, html) {
                                     if (err) {
                                         log.error('Error updating order: ' + err);
                                         log.warn('email will not be sent.');
                                         cb();
                                     } else {
-                                        mandrillHelper.sendFulfillmentEmail(fromAddress, fromName, toAddress, toName, subject, html, accountId, orderId, vars, email._id, function(){                                        
+                                        mandrillHelper.sendFulfillmentEmail(fromAddress, fromName, toAddress, toName, subject, html, accountId, orderId, vars, email._id, function(){
                                             if(err) {
                                                 log.warn('Error sending email');
                                                 order.notes.push({
