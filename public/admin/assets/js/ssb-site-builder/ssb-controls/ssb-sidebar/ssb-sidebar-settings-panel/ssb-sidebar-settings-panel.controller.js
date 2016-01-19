@@ -12,7 +12,12 @@ function ssbSiteBuilderSidebarSettingsPanelController($scope, $attrs, $filter, $
 
     vm.init = init
 
-    $scope.component = vm.state.page.sections[vm.uiState.activeSectionIndex];
+    //TODO: move into config services
+    vm.spectrum = {
+      options: SimpleSiteBuilderService.getSpectrumColorOptions()
+    };
+
+    $scope.component = vm.component;
 
     function init(element) {
 

@@ -7,17 +7,17 @@ function ssbSidebarSettingsPanel() {
     return {
         restrict: 'E',
         scope: {
+            component: '=',
             state: '=',
-            uiState: '='
+            uiState: '=',
+            addBackground: '='
         },
         templateUrl: function(element, attrs) {
 
             var url = '';
 
-            if (attrs.settingsType === 'design') {
-                url = 'assets/js/ssb-site-builder/ssb-components/ssb-page-section/sidebar.settings.design.html';
-            } else if (attrs.settingsType === 'layout') {
-                url = 'assets/js/ssb-site-builder/ssb-components/ssb-page-section/sidebar.settings.layout.html';
+            if (attrs.settingsTemplate) {
+                url = attrs.settingsTemplate;
             }
 
             return url;

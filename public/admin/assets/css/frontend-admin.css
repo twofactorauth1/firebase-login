@@ -6906,6 +6906,11 @@ ssb-topbar .ui-select-match-text > small {
 .ssb-theme-young-soul .ssb-theme-main-header-text {
   font-size: 96px;
 }
+.ssb-theme-young-soul .ssb-theme-hero-text {
+  color: #FAC51C;
+  font-size: 96px;
+  text-align: center;
+}
 .ssb-theme-young-soul .ssb-theme-heading-text {
   font-size: 16px;
 }

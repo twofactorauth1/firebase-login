@@ -10,7 +10,7 @@
             ng-click="vm.setActiveComponent(null);vm.navigation.sectionPanel.back();">
 
             <i class="ti-arrow-left"></i>
-            {{vm.uiState.openSidebarSectionPanel.name}}
+            {{vm.uiState.openSidebarSectionPanel.name | cleanType}}
 
         </div>
     </h4>

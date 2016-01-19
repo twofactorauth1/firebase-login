@@ -9,9 +9,11 @@
         <ssb-sidebar-settings-panel
             class="ssb-sidebar-section-panel-component-panel container-fluid"
             ng-if="'design' === vm.uiState.openSidebarSectionPanel.id"
-            settings-type="design"
+            settings-template="assets/js/ssb-site-builder/ssb-components/ssb-page-section/sidebar.settings.design.html"
+            component="vm.state.page.sections[vm.uiState.activeSectionIndex]"
             state="vm.state"
-            ui-state="vm.uiState">
+            ui-state="vm.uiState"
+            addBackground="vm.addBackground">
         </ssb-sidebar-settings-panel>
 
         <button ng-click="vm.navigation.sectionPanel.loadPanel({ name: 'Layout', id: 'layout' })" class="ssb-sidebar-section-panel-btn btn btn-link">
@@ -21,7 +23,8 @@
         <ssb-sidebar-settings-panel
             class="ssb-sidebar-section-panel-component-panel container-fluid"
             ng-if="'layout' === vm.uiState.openSidebarSectionPanel.id"
-            settings-type="layout"
+            settings-template="assets/js/ssb-site-builder/ssb-components/ssb-page-section/sidebar.settings.layout.html"
+            component="vm.state.page.sections[vm.uiState.activeSectionIndex]"
             state="vm.state"
             ui-state="vm.uiState">
         </ssb-sidebar-settings-panel>
@@ -36,7 +39,7 @@
             <button
                 class="ssb-sidebar-section-panel-btn btn btn-primary"
                 ng-click="vm.setActiveComponent(componentIndex);vm.navigation.sectionPanel.loadPanel({ name: component.type, id: component._id });">
-                <i class="ti-settings display-ib"></i> Manage {{component.type}}
+                <i class="ti-settings display-ib"></i> Manage {{component.type | cleanType}}
             </button>
 
             <div ng-if="component._id === vm.uiState.openSidebarSectionPanel.id" class="ssb-sidebar-section-panel-component-panel">

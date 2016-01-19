@@ -1,20 +1,42 @@
-<div class="form-group add-image" ng-if="!component.src">
-  <div class="btn-wrap">
-    <input id="abi" ng-model="component.src" type="button" class="pull-right btn btn-primary" value="Add Image" ng-click="vm.addImage(sectionIndex, componentIndex)">
-  </div>
+<div class="row padding-10">
+    <div class="form-group add-image" ng-if="!component.src">
+      <div class="btn-wrap">
+        <input id="abi" ng-model="component.src" type="button" class="pull-right btn btn-primary" value="Add Image" ng-click="vm.addImage(sectionIndex, componentIndex)">
+      </div>
+    </div>
+    <div class="bgimg" id="bgimg" ng-if="component.src">
+      <i class="fa fa-close" ng-click="vm.removeImage(component)"></i>
+      <img ng-src="{{component.src}}" ng-model="component.src" ng-click="vm.addImage(sectionIndex, componentIndex)" class="img-thumbnail">
+    </div>
 </div>
-<div class="bgimg" id="bgimg" ng-if="component.src">
-  <i class="fa fa-close" ng-click="vm.removeImage(component)"></i>
-  <img ng-src="{{component.src}}" ng-model="component.src" ng-click="vm.addImage(sectionIndex, componentIndex)" class="img-thumbnail">
+
+<div class="row padding-10">
+    <div class="form-group">
+        <label for="ssb-component-image-settings-alt-text-{{sectionIndex}}">Alt Text</label>
+        <input id="ssb-component-image-settings-alt-text-{{sectionIndex}}" type="text" ng-model="component.alttext">
+    </div>
 </div>
 
-<label for="ssb-component-image-settings-alt-text-{{sectionIndex}}">Alt Text</label>
-<input id="ssb-component-image-settings-alt-text-{{sectionIndex}}" type="text" ng-model="component.alttext">
+<div class="row padding-10">
 
-<accordion-group heading="Spacing">
-  <div ng-include=" 'assets/js/ssb-site-builder/ssb-components/shared/spacing.html' "></div>
-</accordion-group>
+    <button ng-click="vm.navigation.sectionPanel.loadPanel({ name: 'Layout', id: 'layout' })" class="ssb-sidebar-section-panel-btn btn btn-link">
+        <i class="ti-brush display-ib"></i> Layout
+    </button>
 
-<accordion-group heading="Advanced">
-  <div ng-include=" 'assets/js/ssb-site-builder/ssb-components/shared/advanced.html' "></div>
-</accordion-group>
+    <div
+        ng-if="'layout' === vm.uiState.openSidebarSectionPanel.id"
+        class="ssb-sidebar-section-panel-component-panel"
+        ng-include=" 'assets/js/ssb-site-builder/ssb-components/shared/sidebar.settings.layout.html' ">
+    </div>
+
+    <button ng-click="vm.navigation.sectionPanel.loadPanel({ name: 'Advanced', id: 'advanced' })" class="ssb-sidebar-section-panel-btn btn btn-link">
+        <i class="ti-brush display-ib"></i> Advanced Settings
+    </button>
+
+    <div
+        ng-if="'layout' === vm.uiState.openSidebarSectionPanel.id"
+        class="ssb-sidebar-section-panel-component-panel"
+        ng-include=" 'assets/js/ssb-site-builder/ssb-components/shared/sidebar.settings.advanced.html' ">
+    </div>
+
+</div>

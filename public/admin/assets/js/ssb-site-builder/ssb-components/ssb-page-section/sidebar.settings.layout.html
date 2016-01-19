@@ -21,7 +21,10 @@
   </div>
 </div>
 
-<div
-    ng-init="component = section"
-    ng-include=" 'assets/js/ssb-site-builder/ssb-components/shared/sidebar.settings.layout.html' ">
-</div>
+<ssb-sidebar-settings-panel
+    class="container-fluid"
+    settings-template="assets/js/ssb-site-builder/ssb-components/shared/sidebar.settings.layout.html"
+    component="vm.state.page.sections[vm.uiState.activeSectionIndex]"
+    state="vm.state"
+    ui-state="vm.uiState">
+</ssb-sidebar-settings-panel>
