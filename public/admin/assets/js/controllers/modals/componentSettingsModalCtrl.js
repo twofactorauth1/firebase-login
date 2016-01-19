@@ -105,33 +105,44 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
     });
   })
 
-    var setTags = function () {
-      console.log('setTags >>>');
-      var tempTags = [];
-      _.each($scope.componentEditing.tags, function (tag , index) {
-        var matchingTag = _.findWhere($scope.customerTags, {
-          data: tag
-        });
-        if(matchingTag)
-        {          
-          tempTags.push(matchingTag);
-        }  
+  $scope.setTags = function () {
+    console.log('setTags >>>');
+    var tempTags = [];
+    var _customerTags = [];
+    _.each($scope.componentEditing.tags, function (tag , index) {
+      var matchingTag = _.findWhere($scope.customerTags, {
+        data: tag
       });
-      $scope.componentEditing.tags = tempTags;
-      console.log('$scope.componentEditing.tags >>>', $scope.componentEditing.tags);
-    };
-
-    var unsetTags = function() {
-      var tempTags = [];
-        var _tags = angular.copy($scope.componentEditing.tags);
-        _.each(_tags, function (tag) {
-          tempTags.push(tag.data);
+      if(matchingTag)
+      {
+        _customerTags.push(matchingTag.label);
+        tempTags.push(matchingTag);
+      }
+      else {
+        _customerTags.push(tag);
+        tempTags.push({
+            data : tag,
+            label : tag
         });
-        if (tempTags) {
-          $scope.componentEditing.tags = tempTags;
-        }
-    };
-  
+      }
+    });
+    $scope.customerTags = _customerTags.join(", ");
+    $scope.componentEditing.tags = tempTags;
+
+    console.log('$scope.componentEditing.tags >>>', $scope.componentEditing.tags);
+  };
+
+  var unsetTags = function() {
+    var tempTags = [];
+      var _tags = angular.copy($scope.componentEditing.tags);
+      _.each(_tags, function (tag) {
+        tempTags.push(tag.data);
+      });
+      if (tempTags) {
+        $scope.componentEditing.tags = tempTags;
+      }
+  };
+
 
   $scope.testOptions = {
     min: 5,
@@ -955,7 +966,7 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
 
       if($scope.componentEditing.type === "simple-form")
       {
-        setTags();
+        $scope.setTags();
       }
 
       if ($scope.componentEditing.type === 'navigation') {
@@ -1217,5 +1228,9 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
         $scope.updateLinkList();
       }
     };
+
+  $scope.tagToCustomer = function(value) {
+    return CustomerService.tagToCustomer(value);
+  }
 
 }]);
