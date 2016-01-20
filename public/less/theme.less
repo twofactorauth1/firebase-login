@@ -8,7 +8,7 @@
 @app-background: #F0F3F4;
 @elements-color: #798CA6;
 //NAV HEADER COLORS
-@header-color: #1C2B36;
+@header-color: #fff;
 @headerBorder-color: rgba(0, 0, 0, 0.2);
 @headerText-color: @white;
 @headerElements-color: #5c798f;
@@ -21,21 +21,16 @@
 @menuMobile-color: darken(@header-color, 5%);
 @menuMobileBorder-color: @black;
 //SIDEBAR COLORS
-@sidebar-color: #1C2B36;
-@sidebarText-color: #5c798f;
+@sidebar-color: #fff;
+@sidebarText-color: #48b1cc;
 @sidebarBorder-color: transparent;
 @sidebarBorder-width: 0;
-//OFF-SIDEBAR COLORS
-@offSidebar-color: @white;
-@offSidebarBorder-color: #c8c7cc;
-@offSidebarText-color: #777;
-@offSidebarElements-color: #6254B2;
 //MAIN NAVIGATION COLORS
-@nav-color: #16232D;
-@navBorder-color: darken(#8b91a0, 50%);
-@navText-color: #b4bcc8;
-@navActive-color: #131E26;
-@navHover-color: darken(@nav-color, 5%);
+@nav-color: #fff;
+@navBorder-color: @nav-color;
+@navText-color: #48b1cc;
+@navActive-color: #48b1cc;
+@navHover-color: lighten(#48b1cc, 50%);
 @navElements-color: #48b1cc;
 //SCROLLBAR COLORS
 @scrollBar-color: #999;
@@ -143,6 +138,7 @@ header {
 
 #sidebar {
     background: @sidebar-color !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     &:before {
         border-right-width: @sidebarBorder-width !important;
         border-right-style: solid;
@@ -177,7 +173,7 @@ header {
                         }
                     }
                     .item-inner {
-                        color: @navText-color !important;
+                        color: @headerElements-color !important;
                         border-bottom-color: @navBorder-color;
                     }
                 }
@@ -185,7 +181,7 @@ header {
                     background: @navHover-color !important;
                 }
                 &.open {
-                    background: @navHover-color !important;
+                    // background: @navHover-color !important;
                 }
                 .no-touch & {
                     &:hover {
@@ -224,22 +220,23 @@ header {
                         }
                     }
                     .sub-menu {
-                        background: darken(@nav-color, 3%);
+                        background: @nav-color;
                     }
                 }
             }
             .sub-menu {
-                background: darken(@nav-color, 3%);
+                background: @nav-color;
                 > li {
                     &.open {
-                        background: @navHover-color !important;
+                        // background: @navHover-color !important;
                     }
                     a {
                         color: @navText-color;
                     }
                     &.active {
                         a {
-                            background: darken(@nav-color, 12%) !important;
+                            // background: darken(@nav-color, 12%) !important;
+                            font-weight: bold;
                         }
                     }
                 }
@@ -256,7 +253,7 @@ header {
                     }
                 }
                 &.open {
-                    background: darken(@nav-color, 5%);
+                    // background: darken(@nav-color, 5%);
                 }
             }
         }
@@ -305,12 +302,12 @@ header {
                 }
             }
             > .item-inner {
-                background: darken(@nav-color, 10%) !important;
+                background: lighten(@navElements-color, 10%) !important;
                 .title {
-                    color: @navText-color !important;
+                    color: @nav-color !important;
                 }
                 &.active {
-                    background: darken(@nav-color, 10%) !important;
+                    background: darken(@navElements-color, 10%) !important;
                     &:before {
                         border-left: 12px solid @sidebarBorder-color;
                     }
@@ -335,17 +332,17 @@ header {
                     a {
                         color: @navText-color !important;
                         &.hover {
-                            background: darken(@nav-color, 10%) !important;
+                            // background: darken(@nav-color, 10%) !important;
                         }
                         .no-touch & {
                             &:hover {
-                                background: darken(@nav-color, 10%) !important;
+                                // background: darken(@nav-color, 10%) !important;
                             }
                         }
                     }
                     &.active > a,
                     &.open > a {
-                        background: darken(@nav-color, 10%) !important;
+                        background: @nav-color !important;
                     }
                 }
             }
@@ -418,5 +415,5 @@ ul.sub-menu {
 #app > footer {
     background: @header-color !important;
     border-top-color: @headerBorder-color !important;
-    color: @headerText-color;
+    color: @headerElements-color;
 }

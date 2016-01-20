@@ -318,8 +318,8 @@ h5.over-title {
     overflow: hidden;
     z-index: 2;
     position: absolute;
-    -webkit-transform: translate3d(200px, 0, 0);
-    transform: translate3d(200px, 0, 0);
+    -webkit-transform: translate3d(199px, 0, 0);
+    transform: translate3d(199px, 0, 0);
     -webkit-transition: transform 300ms ease 0s;
     -moz-transition: transform 300ms ease 0s;
     -ms-transition: transform 300ms ease 0s;
@@ -462,7 +462,7 @@ h5.over-title {
 }
 @media (min-width: 768px) {
   #topnav.navbar .navbar-collapse {
-    margin-left: 200px;
+    margin-left: 199px;
     height: 65px !important;
   }
   #topnav.navbar .navbar-collapse .nav {
@@ -847,7 +847,7 @@ h5.over-title {
 /*  Sidebar
 /* ---------------------------------------------------------------------- */
 #sidebar {
-  width: 200px;
+  width: 199px;
   float: left;
   left: 0;
   bottom: 0;
@@ -914,8 +914,8 @@ h5.over-title {
     top: 65px !important;
     left: 0;
     float: none;
-    -webkit-transform: translate3d(-200px, 0, 0);
-    transform: translate3d(-200px, 0, 0);
+    -webkit-transform: translate3d(-199px, 0, 0);
+    transform: translate3d(-199px, 0, 0);
     -webkit-transition: transform 300ms ease 0s;
     -moz-transition: transform 300ms ease 0s;
     -ms-transition: transform 300ms ease 0s;
@@ -1088,10 +1088,6 @@ ul.sub-menu li {
   margin-top: 1px !important;
   padding: 0;
 }
-ul.sub-menu li.active,
-ul.sub-menu li.open {
-  background: #e7e7e9 !important;
-}
 .no-touch ul.sub-menu li:hover {
   background: #edecee;
 }
@@ -1138,7 +1134,7 @@ ul.sub-menu li ul.sub-menu li ul.sub-menu li a {
     overflow-x: visible;
     height: auto;
     bottom: auto;
-    width: 200px;
+    width: 199px;
     z-index: 1050;
     display: none;
   }
@@ -1203,7 +1199,7 @@ ul.sub-menu li ul.sub-menu li ul.sub-menu li a {
     top: 0;
     padding: 13px 0;
     border-bottom: none !important;
-    width: 200px;
+    width: 199px;
     background: #efeff0;
     margin-left: 0;
     z-index: 1051;
@@ -1251,7 +1247,7 @@ ul.sub-menu li ul.sub-menu li ul.sub-menu li a {
     display: none;
   }
   .app-sidebar-closed .app-aside > ul.sub-menu {
-    width: 200px;
+    width: 199px;
     display: block !important;
     overflow: auto;
     padding: 0;
@@ -1314,7 +1310,7 @@ ul.sub-menu li ul.sub-menu li ul.sub-menu li a {
     padding: 13px 0;
     bottom: 0;
     border-bottom: none !important;
-    width: 200px;
+    width: 199px;
     background: #efeff0;
     margin-left: 0;
   }
@@ -1462,7 +1458,7 @@ ul.sub-menu li ul.sub-menu li ul.sub-menu li a {
 @media (min-width: 992px) {
   .main-content {
     margin-top: 65px;
-    margin-left: 200px;
+    margin-left: 199px;
   }
   .app-navbar-fixed .main-content {
     margin-top: 0;
@@ -1505,7 +1501,7 @@ ul.sub-menu li ul.sub-menu li ul.sub-menu li a {
 }
 @media (min-width: 992px) {
   #app > footer {
-    margin-left: 200px;
+    margin-left: 199px;
   }
   #app.app-sidebar-closed > footer {
     margin-left: 70px;
