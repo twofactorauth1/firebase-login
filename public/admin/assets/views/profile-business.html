@@ -1,7 +1,7 @@
 <div ng-controller="ProfileBusinessCtrl" class="business">
 <indig-navprompt class="indig-navprompt" my-state="{{$state.$current.name}}" reset-dirty="resetDirty()" check-if-dirty="checkIfDirty()"></indig-navprompt>
 <indig-onboarding min-requirements="minRequirements"></indig-onboarding>
-<!-- start: PAGE TITLE -->    
+<!-- start: PAGE TITLE -->
         <section id="page-title" class="padding-top-15 padding-bottom-15 margin-bottom-15">
             <div class="row">
                 <div class="col-sm-8">
@@ -57,7 +57,7 @@
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td>email:</td>
+                                        <td>Email:</td>
                                         <td>
                                             <div ng-repeat="email in account.business.emails">
                                                 <a href="mailto:{{email.email}}">
@@ -68,7 +68,7 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td>phone:</td>
+                                        <td>Phone:</td>
                                         <td>
                                             <div ng-repeat="phone in account.business.phones">
                                                 <a href="tel:{{phone.number}}">{{phone.number}}</a>
@@ -78,7 +78,7 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td>address:</td>
+                                        <td>Address:</td>
                                         <td>
                                             <div ng-repeat="address in account.business.addresses">
                                                 <a href>
@@ -98,7 +98,7 @@
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td>description:</td>
+                                        <td>Description:</td>
                                         <td><pre class="business-description">{{account.business.description}}</pre></td>
                                         <td>
                                     </tr>
@@ -142,7 +142,7 @@
                                     </label>
                                     <div class="form-group" ng-class="{ 'has-error' : myform.email_{{$index}}.$invalid && !myform.email_{{$index}}.$pristine }" ng-repeat="email in account.business.emails">
                                         <span class="input-icon input-icon-right">
-                                            <input type="email" ng-pattern="formValidations.email" placeholder="email address" class="form-control" name="email_{{$index}}" ng-model="account.business.emails[$index].email">
+                                            <input type="email" ng-pattern="formValidations.email" placeholder="Email address" class="form-control" name="email_{{$index}}" ng-model="account.business.emails[$index].email">
                                             <p ng-show="myform.email_{{$index}}.$invalid && !myform.email_{{$index}}.$pristine" class="help-block">Enter a valid email.</p>
                                             <i ng-if="showAddEmail(email)" ng-click="accountAddEmailFn()" class="ti-plus"></i>
                                             <i ng-if="!showAddEmail(email)" ng-click="removeEmail($index)" class="ti-minus"></i>
@@ -156,16 +156,16 @@
                                                 <label class="control-label">
                                                    Phone Number
                                                 </label>
-                                                <input type="text" placeholder="phone number" class="form-control" ng-pattern="formValidations.phone" name="phone_{{$index}}" ng-model="account.business.phones[$index].number">
+                                                <input type="text" placeholder="Phone number" class="form-control" ng-pattern="formValidations.phone" name="phone_{{$index}}" ng-model="account.business.phones[$index].number">
                                                 <p ng-show="myform.phone_{{$index}}.$invalid && !myform.phone_{{$index}}.$pristine" class="help-block">Enter a valid phone number.</p>
                                             </div>
                                         </div>
                                         <div class="col-md-4">
                                             <div class="form-group" ng-class="{ 'has-error' : myform.extension_{{$index}}.$invalid && !myform.extension_{{$index}}.$pristine}">
                                                 <label class="control-label">
-                                                    Phone Extension
+                                                    Extension
                                                 </label>
-                                                <input type="text" placeholder="phone extension" class="form-control" ng-pattern="formValidations.extension" name="extension_{{$index}}" ng-model="account.business.phones[$index].extension">
+                                                <input type="text" placeholder="Extension" class="form-control" ng-pattern="formValidations.extension" name="extension_{{$index}}" ng-model="account.business.phones[$index].extension">
                                                 <p ng-show="myform.extension_{{$index}}.$invalid && !myform.extension_{{$index}}.$pristine" class="help-block">Enter a valid extension.</p>
                                             </div>
                                         </div>
@@ -183,7 +183,7 @@
                                                 <label class="control-label">
                                                     Address Line 1
                                                 </label>
-                                                <input class="form-control" placeholder="address line 1" type="text" name="addressline1" ng-model="address.address">
+                                                <input class="form-control" placeholder="Address line 1" type="text" name="addressline1" ng-model="address.address">
                                             </div>
                                         </div>
                                         <div class="col-md-8">
@@ -191,7 +191,7 @@
                                                 <label class="control-label">
                                                     Address Line 2
                                                 </label>
-                                                <input class="form-control" placeholder="address line 2" type="text" name="addressline2" ng-model="address.address2">
+                                                <input class="form-control" placeholder="Address line 2" type="text" name="addressline2" ng-model="address.address2">
                                             </div>
                                         </div>
                                     </div>
@@ -201,7 +201,7 @@
                                                 <label class="control-label">
                                                     City
                                                 </label>
-                                                <input class="form-control" placeholder="enter your city" type="text" name="city" ng-model="address.city">
+                                                <input class="form-control" placeholder="Enter city" type="text" name="city" ng-model="address.city">
                                             </div>
                                         </div>
                                         <div class="col-md-8">
@@ -209,7 +209,7 @@
                                                 <label class="control-label">
                                                     State
                                                 </label>
-                                                <input class="form-control" placeholder="enter your state" type="text" name="state" ng-model="address.state">
+                                                <input class="form-control" placeholder="Enter state" type="text" name="state" ng-model="address.state">
                                             </div>
                                         </div>
                                     </div>
@@ -219,7 +219,7 @@
                                                 <label class="control-label">
                                                     Country
                                                 </label>
-                                                <input class="form-control" placeholder="enter your country" type="text" name="country" ng-model="address.country">
+                                                <input class="form-control" placeholder="Enter country" type="text" name="country" ng-model="address.country">
                                             </div>
                                         </div>
                                         <div class="col-md-8">
@@ -227,7 +227,7 @@
                                                 <label class="control-label">
                                                     Zip Code
                                                 </label>
-                                                <input class="form-control" placeholder="enter your zip code" type="text" name="zip_{{$index}}" ng-pattern="formValidations.zip" ng-model="address.zip">
+                                                <input class="form-control" placeholder="Enter postcode" type="text" name="zip_{{$index}}" ng-pattern="formValidations.zip" ng-model="address.zip">
                                                 <p ng-show="myform.zip_{{$index}}.$invalid && !myform.zip_{{$index}}.$pristine" class="help-block">Enter a valid zip code.</p>
                                             </div>
                                         </div>

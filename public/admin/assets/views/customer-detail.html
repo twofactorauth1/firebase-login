@@ -247,14 +247,14 @@
                                                 </label>
                                                 <div class="form-group" ng-if="!customer.details[0].emails">
                                                     <span class="input-icon input-icon-right">
-                                                        <input type="email" placeholder="email address" class="form-control" name="email" ng-model="customer.details[0].emails[$index].email" ng-blur="updateCustomer()">
+                                                        <input type="email" placeholder="Email address" class="form-control" name="email" ng-model="customer.details[0].emails[$index].email" ng-blur="updateCustomer()">
                                                         <i ng-if="showAddEmail(email)" ng-click="customerAddEmailFn()" class="ti-plus"></i>
                                                         <i ng-if="!showAddEmail(email)" ng-click="removeEmail($index)" class="ti-minus"></i>
                                                     </span>
                                                 </div>
                                                 <div class="form-group" ng-class="{ 'has-error' : form.email_{{$index}}.$invalid && !form.email_{{$index}}.$pristine }" ng-repeat="email in customer.details[0].emails  track by $index">
                                                     <span class="input-icon input-icon-right">
-                                                        <input type="email"  ng-pattern="formValidations.email" placeholder="email address" class="form-control" name="email_{{$index}}" ng-model="customer.details[0].emails[$index].email" ng-blur="updateCustomer()">
+                                                        <input type="email"  ng-pattern="formValidations.email" placeholder="Email address" class="form-control" name="email_{{$index}}" ng-model="customer.details[0].emails[$index].email" ng-blur="updateCustomer()">
                                                         <p ng-show="form.email_{{$index}}.$invalid && !form.email_{{$index}}.$pristine" class="help-block">Enter a valid email.</p>
                                                         <i ng-if="showAddEmail(email)" ng-click="customerAddEmailFn()" class="ti-plus"></i>
                                                         <i ng-if="!showAddEmail(email)" ng-click="removeEmail($index)" class="ti-minus"></i>
@@ -268,7 +268,7 @@
                                                             <label class="control-label">
                                                                 Phone Number
                                                             </label>
-                                                           <input type="text" placeholder="phone number" class="form-control" ng-pattern="formValidations.phone" name="phone_{{$index}}" ng-model="customer.details[0].phones[$index].number" ng-blur="updateCustomer()">
+                                                           <input type="text" placeholder="Phone number" class="form-control" ng-pattern="formValidations.phone" name="phone_{{$index}}" ng-model="customer.details[0].phones[$index].number" ng-blur="updateCustomer()">
                                                            <p ng-show="form.phone_{{$index}}.$invalid && !form.phone_{{$index}}.$pristine" class="help-block">Enter a valid phone number.</p>
                                                         </div>
                                                     </div>
@@ -277,7 +277,7 @@
                                                             <label class="control-label">
                                                                 Extension
                                                             </label>
-                                                            <input type="text" placeholder="phone extension" class="form-control" ng-pattern="formValidations.extension" name="extension_{{$index}}" ng-model="customer.details[0].phones[$index].extension" ng-blur="updateCustomer()">
+                                                            <input type="text" placeholder="Extension" class="form-control" ng-pattern="formValidations.extension" name="extension_{{$index}}" ng-model="customer.details[0].phones[$index].extension" ng-blur="updateCustomer()">
                                                             <p ng-show="form.extension_{{$index}}.$invalid && !form.extension_{{$index}}.$pristine" class="help-block">Enter a valid extension.</p>
                                                         </div>
                                                     </div>
@@ -315,7 +315,7 @@
                                                             <label class="control-label">
                                                                 Address Line 1
                                                             </label>
-                                                            <input class="form-control" placeholder="address line 1" type="text" name="addressline1" ng-model="address.address">
+                                                            <input class="form-control" placeholder="Address line 1" type="text" name="addressline1" ng-model="address.address">
                                                         </div>
                                                     </div>
                                                     <div class="col-md-8">
@@ -323,7 +323,7 @@
                                                             <label class="control-label">
                                                                 Address Line 2
                                                             </label>
-                                                            <input class="form-control" placeholder="address line 2" type="text" name="addressline2" ng-model="address.address2">
+                                                            <input class="form-control" placeholder="Address line 2" type="text" name="addressline2" ng-model="address.address2">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -333,7 +333,7 @@
                                                             <label class="control-label">
                                                                 City
                                                             </label>
-                                                            <input class="form-control" placeholder="enter your city" type="text" name="city" ng-model="address.city">
+                                                            <input class="form-control" placeholder="Enter city" type="text" name="city" ng-model="address.city">
                                                         </div>
                                                     </div>
                                                     <div class="col-md-8">
@@ -341,7 +341,7 @@
                                                             <label class="control-label">
                                                                 State
                                                             </label>
-                                                            <input class="form-control" placeholder="enter your state" type="text" name="state" ng-model="address.state">
+                                                            <input class="form-control" placeholder="Enter state" type="text" name="state" ng-model="address.state">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -351,7 +351,7 @@
                                                             <label class="control-label">
                                                                 Country
                                                             </label>
-                                                            <input class="form-control" placeholder="enter your country" type="text" name="country" ng-model="address.country">
+                                                            <input class="form-control" placeholder="Enter country" type="text" name="country" ng-model="address.country">
                                                         </div>
                                                     </div>
                                                     <div class="col-md-8">
@@ -359,7 +359,7 @@
                                                             <label class="control-label">
                                                                 Zip Code
                                                             </label>
-                                                            <input class="form-control" placeholder="enter your zip code" type="text" name="zip" ng-model="address.zip">
+                                                            <input class="form-control" placeholder="Enter postcode" type="text" name="zip" ng-model="address.zip">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -391,7 +391,7 @@
                                             </fieldset>
                                             <div class="form-group">
                                                 <label class="">Contact Name</label>
-                                                <input id="input-fullname" class="form-control" ng-model="data.fullName" placeholder="full name" type="text" ng-change="setFullName()">
+                                                <input id="input-fullname" class="form-control" ng-model="data.fullName" placeholder="Full name" type="text" ng-change="setFullName()">
                                                 <small>
                                                     <strong>first:</strong>
                                                     <code>
@@ -415,15 +415,15 @@
                                             </div>
                                             <div class="form-group" ng-show="showSplitName">
                                                 <label class="">First Name</label>
-                                                <input id="input-first" class="form-control" ng-model="customer.first" placeholder="first name" type="text" ng-change="updateFullName()">
+                                                <input id="input-first" class="form-control" ng-model="customer.first" placeholder="First name" type="text" ng-change="updateFullName()">
                                             </div>
                                             <div class="form-group" ng-show="showSplitName">
                                                 <label class="">Middle Name</label>
-                                                <input id="input-middle" class="form-control" ng-model="customer.middle" placeholder="middle name" type="text" ng-change="updateFullName()">
+                                                <input id="input-middle" class="form-control" ng-model="customer.middle" placeholder="Middle name" type="text" ng-change="updateFullName()">
                                             </div>
                                             <div class="form-group" ng-show="showSplitName">
                                                 <label class="">Last Name</label>
-                                                <input id="input-last" class="form-control" ng-model="customer.last" placeholder="last name" type="text" ng-change="updateFullName()">
+                                                <input id="input-last" class="form-control" ng-model="customer.last" placeholder="Last name" type="text" ng-change="updateFullName()">
                                             </div>
                                             <div class="form-group">
                                                 <label class="block">
