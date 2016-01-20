@@ -633,7 +633,7 @@
      */
     $scope.clearEmail = function (newEmail) {
       $scope.checkingEmailTitle = false;
-      // $scope.emailToSend.title = "";      
+      $scope.actualEmailToSend = null;    
       if (newEmail) {
         $scope.emailToSendPrevious = angular.copy($scope.emailToSend);
         $scope.setBusinessDetails(newEmail);
@@ -649,8 +649,10 @@
         $scope.emailToSend = $scope.emailToSendPrevious;
         if($scope.newCampaignObj.steps && $scope.newCampaignObj.steps[0] && $scope.newCampaignObj.steps[0].settings && !$scope.newCampaignObj.steps[0].settings.emailId && $scope.emailToSendPrevious)
           $scope.newCampaignObj.steps[0].settings.emailId = $scope.emailToSendPrevious._id
-
-        $scope.actualEmailToSend = angular.copy($scope.emailToSend);
+        
+        $timeout(function() {
+          $scope.actualEmailToSend = angular.copy($scope.emailToSend);
+        }, 500);
 
       }
     }
@@ -1445,7 +1447,10 @@
       var promise = AccountService.getAccount(function (_account) {
         $scope.account = _account;
         $scope.setBusinessDetails();
-        $scope.actualEmailToSend = angular.copy($scope.emailToSend);
+        
+        $timeout(function() {
+          $scope.actualEmailToSend = angular.copy($scope.emailToSend);
+        }, 500);
       });
       return promise;
     };
