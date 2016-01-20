@@ -568,7 +568,7 @@ module.exports = {
                                         component.text = "The following order was created:";
                                         component.orderurl = "https://" + account.get('subdomain') + ".indigenous.io/admin/#/commerce/orders/" + updatedOrder.attributes._id;
                                         app.render('emails/base_email_order_admin_notification', component, function(err, html){
-                                            juice.juiceResources(_html, {}, function(err, html) {
+                                            juice.juiceResources(html, {}, function(err, _html) {
                                                 if (err) {
                                                     self.log.error('A juice error occurred. Failed to set styles inline.')
                                                     self.log.error(err);
