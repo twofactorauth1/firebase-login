@@ -66,24 +66,22 @@ if account.website.themeOverrides
 
         .ssb-theme-#{account.website.theme.handle} .ssb-theme-main-header-text {
             color: #{account.website.themeOverrides.styles.headerColor};
-            font-size: #{account.website.themeOverrides.styles.headerSize};
         }
 
-        .ssb-theme-#{account.website.theme.handle} .ssb-theme-page-section-layout-hero {
+        .ssb-theme-#{account.website.theme.handle} .ssb-page-section-layout-hero {
             background-color: #{account.website.themeOverrides.styles.heroBackgroundColor};
         }
 
         .ssb-theme-#{account.website.theme.handle} .ssb-theme-hero-text {
             color: #{account.website.themeOverrides.styles.heroColor};
-            font-size: #{account.website.themeOverrides.styles.heroSize};
         }
 
         .ssb-theme-#{account.website.theme.handle} .ssb-theme-heading-text {
-            font-size: #{account.website.themeOverrides.styles.headingSize};
+
         }
 
         .ssb-theme-#{account.website.theme.handle} .ssb-theme-paragraph-text {
-            font-size: #{account.website.themeOverrides.styles.paragraphSize};
+
         }
 
         .ssb-theme-#{account.website.theme.handle} .btn,
@@ -94,6 +92,26 @@ if account.website.themeOverrides
         .ssb-theme-#{account.website.theme.handle} .ssb-theme-btn {
             background-color: #{account.website.themeOverrides.styles.primaryBtnBackgroundColor};
             color: #{account.website.themeOverrides.styles.primaryBtnTextColor};
+        }
+
+        @media screen and (min-width: 768px) {
+
+            .ssb-theme-#{account.website.theme.handle} .ssb-theme-main-header-text {
+                font-size: #{account.website.themeOverrides.styles.headerSize};
+            }
+
+            .ssb-theme-#{account.website.theme.handle} .ssb-theme-hero-text {
+                font-size: #{account.website.themeOverrides.styles.heroSize};
+            }
+
+            .ssb-theme-#{account.website.theme.handle} .ssb-theme-heading-text {
+                font-size: #{account.website.themeOverrides.styles.headingSize};
+            }
+
+            .ssb-theme-#{account.website.theme.handle} .ssb-theme-paragraph-text {
+                font-size: #{account.website.themeOverrides.styles.paragraphSize};
+            }
+
         }
 
 
