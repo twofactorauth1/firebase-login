@@ -77,11 +77,11 @@
                                                     <td>{{customer._id}}</td>
                                                 </tr>
                                                 <tr>
-                                                    <td>tags:</td>
+                                                    <td>Tags:</td>
                                                     <td>{{myCustomerTags}}</td>
                                                 </tr>
                                                 <tr>
-                                                    <td>gender:</td>
+                                                    <td>Gender:</td>
                                                     <td>{{customer.gender}}</td>
                                                 </tr>
                                             </tbody>
@@ -94,7 +94,7 @@
                                             </thead>
                                             <tbody>
                                                 <tr>
-                                                    <td>email:</td>
+                                                    <td>Email:</td>
                                                     <td>
                                                         <div ng-repeat="email in customer.details[0].emails track by $index">
                                                             <a href="mailto:{{email.email}}">{{email.email}}</a>
@@ -103,7 +103,7 @@
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <td>phone:</td>
+                                                    <td>Phone:</td>
                                                     <td>
                                                         <div ng-repeat="phone in customer.details[0].phones  track by $index">
                                                             <a ng-if="phone.number" href="tel:{{phone.number}}">{{phone.number}}</a>
@@ -114,7 +114,7 @@
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <td>address(es):</td>
+                                                    <td>Address(es):</td>
                                                     <td>
                                                         <div ng-repeat="address in customer.details[0].addresses track by $index">
                                                             <a href>
@@ -126,7 +126,7 @@
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <td>website:</td>
+                                                    <td>Website:</td>
                                                     <td>
                                                         <div>
                                                             <a href="http://{{customer.details[0].websites[0].website}}">{{customer.details[0].websites[0].website}}</a>
@@ -135,7 +135,7 @@
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <td>company name:</td>
+                                                    <td>Company:</td>
                                                     <td>
                                                         <div>
                                                             {{customer.details[0].company}}
@@ -393,15 +393,15 @@
                                                 <label class="">Contact Name</label>
                                                 <input id="input-fullname" class="form-control" ng-model="data.fullName" placeholder="Full name" type="text" ng-change="setFullName()">
                                                 <small>
-                                                    <strong>first:</strong>
+                                                    <strong>First:</strong>
                                                     <code>
                                                         <span id="hint-first">{{customer.first}}</span>
                                                     </code>
-                                                    <strong>middle:</strong>
+                                                    <strong>Middle:</strong>
                                                     <code>
                                                         <span id="hint-middle">{{customer.middle}}</span>
                                                     </code>
-                                                    <strong>last:</strong>
+                                                    <strong>Last:</strong>
                                                     <code>
                                                         <span id="hint-last">{{customer.last}}</span>
                                                     </code>
