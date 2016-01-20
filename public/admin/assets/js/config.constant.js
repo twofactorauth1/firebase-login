@@ -876,7 +876,7 @@ app.constant('JS_REQUIRES', {
     files: [
       '../js/libs/froala-wysiwyg-editor/css/froala_editor.css',
       '../js/libs/froala-wysiwyg-editor/css/froala_style.min.css',
-      '../js/libs/froala-wysiwyg-editor/js/froala_editor.min.js'
+      '../js/libs_misc/froala-wysiwyg-editor/js/froala_editor.min.js'
       ]
   },
   {
