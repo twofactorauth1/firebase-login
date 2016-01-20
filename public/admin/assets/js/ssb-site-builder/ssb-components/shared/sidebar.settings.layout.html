@@ -10,17 +10,17 @@
         <ui-select-match placeholder="Select a Resolution">
             <small ng-bind-html="$select.selected"></small>
         </ui-select-match>
-        <ui-select-choices repeat="res in ['500px', '900px', '1024px', '1280px', '1440px'] | filter: $select.search track by $index">
+        <ui-select-choices repeat="res in ['500', '900', '1024', '1280', '1440'] | filter: $select.search track by $index">
             <small ng-bind-html="res | highlight: $select.search"></small>
         </ui-select-choices>
     </ui-select>
 </div>
-<div class="well margin-bottom-0 partition-light-primary">
+<div class="padding-5 margin-bottom-0 partition-light-primary">
     <label class="text-white lead">Margin</label>
     <div class="spacing-mt">
         <input type="number" string-to-number ng-model="component.spacing.mt"  min="-500" max="500" data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down" ng-disabled="component.spacing.usePage">
     </div>
-    <div class="col-xs-2">
+    <div class="col-xs-3">
         <div class="spacing-ml">
             <input type="number" string-to-number ng-model="component.spacing.ml"  min="-500" max="500" data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down" ng-disabled="component.spacing.usePage">
             <div class="checkbox clip-check check-primary checkbox-inline">
@@ -31,9 +31,9 @@
             </div>
         </div>
     </div>
-    <div class="col-xs-8">
-        <div class="well partition-dark-primary">
-            <label class="text-white lead">Padding</label>
+    <div class="col-xs-6 margin-bottom-10">
+        <div class="padding-5 partition-dark-primary">
+            <label class="padding-top-15 text-white lead">Padding</label>
             <div class="spacing-pt">
                 <input type="number" string-to-number ng-model="component.spacing.pt" min="-500" max="500" data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down" ng-disabled="component.spacing.usePage">
             </div>
@@ -53,7 +53,7 @@
             </div>
         </div>
     </div>
-    <div class="col-xs-2">
+    <div class="col-xs-3">
         <div class="spacing-mr">
             <input type="number" string-to-number ng-model="component.spacing.mr"  min="-500" max="500" data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down" ng-disabled="component.spacing.usePage">
             <div class="checkbox clip-check check-primary checkbox-inline">
@@ -65,7 +65,7 @@
         </div>
     </div>
     <div class="clearfix"></div>
-    <div class="spacing-mb">
+    <div class="spacing-mb margin-bottom-10">
         <input type="number" string-to-number ng-model="component.spacing.mb"  min="-500" max="500" data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down" ng-disabled="component.spacing.usePage">
     </div>
 </div>

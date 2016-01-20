@@ -479,7 +479,14 @@
 
         }
 
-        function applyThemeToSite(theme) {
+        /*
+         * Apply theme fonts, styles and default themeoverrides for theme
+         *
+         * @param theme - theme obj
+         * @param keepCurrentOverrides - when not changing themes, should not set new themeOverrides
+         *
+         */
+        function applyThemeToSite(theme, keepCurrentOverrides) {
             // Load web font loader
             if (theme.name && theme.hasCustomFonts) {
 
@@ -504,11 +511,13 @@
                 }
             }
 
-            if (!ssbService.website.theme) {
-                ssbService.website.themeId = theme._id;
-                ssbService.website.theme = theme;
+            ssbService.website.themeId = theme._id;
+            ssbService.website.theme = theme;
+
+            if (keepCurrentOverrides === undefined) {
                 ssbService.website.themeOverrides = theme;
             }
+
         }
 
         function getSpectrumColorOptions() {
@@ -546,7 +555,15 @@
                 ssbService.getSite(data.website.websiteId).then(function() {
                     ssbService.getThemes().then(function(themes) {
                         var theme = themes.data.filter(function(t) { return t._id === ssbService.website.themeId })[0] || {};
-                        ssbService.applyThemeToSite(theme);
+                        var defaultTheme;
+
+                        if (theme._id) {
+                            ssbService.applyThemeToSite(theme, true);
+                        } else {
+                            defaultTheme = themes.data.filter(function(t) { return t.handle === 'default' })[0] || {};
+                            ssbService.applyThemeToSite(defaultTheme);
+                        }
+
                     });
                 });
                 ssbService.getPages();

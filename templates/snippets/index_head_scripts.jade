@@ -48,33 +48,54 @@ if (typeof account.website.theme !== undefined && typeof account.website.theme.h
 if account.website.themeOverrides
     style.
         .ssb-theme-#{account.website.theme.handle} {
+            color: #{account.website.themeOverrides.primaryTextColor};
             font-family: !{account.website.themeOverrides.defaultFontStack};
         }
 
-        .ssb-theme-#{account.website.theme.handle} .ssb-page-section {
+        .ssb-theme-#{account.website.theme.handle} .ssb-section-layout {
             background-color: #{account.website.themeOverrides.styles.bodyBackgroundColor};
+        }
+
+        .ssb-theme-#{account.website.theme.handle} .ssb-navigation a {
+            color: #{account.website.themeOverrides.styles.primaryTextColor};
         }
 
         .ssb-theme-#{account.website.theme.handle} .ssb-page-section-layout-header {
             background-color: #{account.website.themeOverrides.styles.headerBackgroundColor};
         }
 
-        .ssb-theme-heading {
+        .ssb-theme-#{account.website.theme.handle} .ssb-theme-main-header-text {
+            color: #{account.website.themeOverrides.styles.headerColor};
+            font-size: #{account.website.themeOverrides.styles.headerSize};
+        }
+
+        .ssb-theme-#{account.website.theme.handle} .ssb-theme-page-section-layout-hero {
+            background-color: #{account.website.themeOverrides.styles.heroBackgroundColor};
+        }
+
+        .ssb-theme-#{account.website.theme.handle} .ssb-theme-hero-text {
+            color: #{account.website.themeOverrides.styles.heroColor};
+            font-size: #{account.website.themeOverrides.styles.heroSize};
+        }
+
+        .ssb-theme-#{account.website.theme.handle} .ssb-theme-heading-text {
             font-size: #{account.website.themeOverrides.styles.headingSize};
         }
 
-        .ssb-theme-paragraph {
+        .ssb-theme-#{account.website.theme.handle} .ssb-theme-paragraph-text {
             font-size: #{account.website.themeOverrides.styles.paragraphSize};
         }
 
-        .btn, .btn-default, .btn-block, .btn-primary, button, .ssb-theme-btn {
+        .ssb-theme-#{account.website.theme.handle} .btn,
+        .ssb-theme-#{account.website.theme.handle} .btn-default,
+        .ssb-theme-#{account.website.theme.handle} .btn-block,
+        .ssb-theme-#{account.website.theme.handle} .btn-primary,
+        .ssb-theme-#{account.website.theme.handle} button,
+        .ssb-theme-#{account.website.theme.handle} .ssb-theme-btn {
             background-color: #{account.website.themeOverrides.styles.primaryBtnBackgroundColor};
             color: #{account.website.themeOverrides.styles.primaryBtnTextColor};
         }
 
-        h1, h2, h3, h4, h5, a, p, span, label {
-            color: #{account.website.themeOverrides.styles.primaryTextColor};
-        }
 
 if pages
     script(type="text/javascript").

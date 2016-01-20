@@ -138,20 +138,21 @@ module.exports = {
                 if(modifiedWebsite.attributes.theme) {
                     delete modifiedWebsite.attributes.theme;
                 }
+
                 websiteDao.saveOrUpdate(modifiedWebsite, function(err, updatedWebsite){
                     if(err) {
                         self.log.error('Error updating website:', err);
                         return fn(err, null);
                     } else {
-                        if(website.get('themeId')) {
-                            themeDao.getThemeById(website.get('themeId'), function (err, theme) {
+                        if(updatedWebsite.get('themeId')) {
+                            themeDao.getThemeById(updatedWebsite.get('themeId'), function (err, theme) {
                                 if (err) {
                                     self.log.error('Error getting theme:', err);
                                     return fn(err, null);
                                 } else {
-                                    website.set('theme', theme);
+                                    updatedWebsite.set('theme', theme);
                                     self.log.debug('<< getWebsite');
-                                    return fn(null, website);
+                                    return fn(null, updatedWebsite);
                                 }
                             });
                         } else {

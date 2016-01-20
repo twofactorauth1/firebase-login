@@ -9,8 +9,7 @@ function ssbSidebarSettingsPanel() {
         scope: {
             component: '=',
             state: '=',
-            uiState: '=',
-            addBackground: '='
+            uiState: '='
         },
         templateUrl: function(element, attrs) {
 

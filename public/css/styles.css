@@ -426,25 +426,6 @@ fieldset[disabled] .btn-linked-in.active {
     margin-right: 0px !important;
   }
 }
-a.ssb-button {
-  background-color: #48b1cc;
-  border-color: #48b1cc;
-  color: #ffffff;
-  display: inline-block;
-  padding: 6px 12px;
-  margin-bottom: 0;
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 1.42857143;
-  text-align: center;
-  white-space: nowrap;
-  vertical-align: middle;
-  touch-action: manipulation;
-  cursor: pointer;
-  -webkit-user-select: none;
-  border: 1px solid transparent;
-  border-radius: 4px;
-}
 .accordion-v1 .title {
   text-align: center;
   margin-bottom: 20px;
@@ -1193,7 +1174,7 @@ ul.nav {
   padding: 12px 20px;
 }
 .editable.navigation-logo,
-.editable .fr-element {
+.editable.navigation-logo .fr-element {
   min-height: 85px;
   min-width: 85px;
 }
@@ -9948,6 +9929,9 @@ a[href="https://froala.com/wysiwyg-editor"] {
 .fr-wrapper.show-placeholder .fr-placeholder {
   pointer-events: none;
 }
+.fr-element {
+  text-align: inherit!important;
+}
 .ssb-site-builder-container {
   height: 100%;
   height: 100vh;
@@ -10201,6 +10185,7 @@ a[href="https://froala.com/wysiwyg-editor"] {
 }
 .ssb-sidebar .partition-light-primary .lead {
   font-size: 13px;
+  margin-bottom: 32px;
 }
 .ssb-sidebar .head-menu-links .container-fluid > div > div {
   padding: 0 1em 0;
@@ -10540,31 +10525,44 @@ ssb-topbar .ui-select-match-text > small {
   font-size: 2em;
 }
 .ssb-theme-young-soul {
-  font-family: "Roboto", Helvetica, Arial, sans-serif;
   color: #000;
+  font-family: "Roboto", Helvetica, Arial, sans-serif;
 }
-.ssb-theme-young-soul .ssb-page-section {
-  background-color: #e8e7e7;
-}
-.ssb-theme-young-soul .ssb-page-section-layout-header {
+.ssb-theme-young-soul .ssb-section-layout {
   background-color: #9acccb;
 }
 .ssb-theme-young-soul .ssb-navigation a {
   color: #000;
 }
+.ssb-theme-young-soul .ssb-page-section-layout-header {
+  background-color: #9acccb;
+}
 .ssb-theme-young-soul .ssb-theme-main-header-text {
+  color: #000000;
   font-size: 96px;
+}
+.ssb-theme-young-soul .ssb-page-section-layout-hero {
+  background-color: #000000;
+  text-align: center;
 }
 .ssb-theme-young-soul .ssb-theme-hero-text {
   color: #FAC51C;
   font-size: 96px;
-  text-align: center;
 }
 .ssb-theme-young-soul .ssb-theme-heading-text {
   font-size: 16px;
 }
 .ssb-theme-young-soul .ssb-theme-paragraph-text {
   font-size: 12px;
+}
+.ssb-theme-young-soul .btn,
+.ssb-theme-young-soul .btn-default,
+.ssb-theme-young-soul .btn-block,
+.ssb-theme-young-soul .btn-primary,
+.ssb-theme-young-soul button,
+.ssb-theme-young-soul .ssb-theme-btn {
+  background-color: #000;
+  color: #fff;
 }
 #componentloader {
   overflow: visible;
@@ -10581,9 +10579,6 @@ ssb-topbar .ui-select-match-text > small {
  */
 .ssb-main .ssb-page-section-layout-header .masthead-v1 .home-text {
   padding: 0!important;
-}
-.ssb-main .ssb-page-section-layout-header .navigation-v2 .navbar .navigation-logo.edit-wrap .fr-element {
-  line-height: 1!important;
 }
 .ssb-main .ssb-page-section-layout-header .navigation-v2 .navbar .navbar-header {
   min-height: 0!important;

@@ -1,27 +1,40 @@
 .ssb-theme-young-soul {
-  font-family: "Roboto", Helvetica, Arial, sans-serif;
   color: #000;
+  font-family: "Roboto", Helvetica, Arial, sans-serif;
 }
-.ssb-theme-young-soul .ssb-page-section {
-  background-color: #e8e7e7;
-}
-.ssb-theme-young-soul .ssb-page-section-layout-header {
+.ssb-theme-young-soul .ssb-section-layout {
   background-color: #9acccb;
 }
 .ssb-theme-young-soul .ssb-navigation a {
   color: #000;
 }
+.ssb-theme-young-soul .ssb-page-section-layout-header {
+  background-color: #9acccb;
+}
 .ssb-theme-young-soul .ssb-theme-main-header-text {
+  color: #000000;
   font-size: 96px;
+}
+.ssb-theme-young-soul .ssb-page-section-layout-hero {
+  background-color: #000000;
+  text-align: center;
 }
 .ssb-theme-young-soul .ssb-theme-hero-text {
   color: #FAC51C;
   font-size: 96px;
-  text-align: center;
 }
 .ssb-theme-young-soul .ssb-theme-heading-text {
   font-size: 16px;
 }
 .ssb-theme-young-soul .ssb-theme-paragraph-text {
   font-size: 12px;
+}
+.ssb-theme-young-soul .btn,
+.ssb-theme-young-soul .btn-default,
+.ssb-theme-young-soul .btn-block,
+.ssb-theme-young-soul .btn-primary,
+.ssb-theme-young-soul button,
+.ssb-theme-young-soul .ssb-theme-btn {
+  background-color: #000;
+  color: #fff;
 }

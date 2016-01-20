@@ -12,6 +12,13 @@ function ssbSiteBuilderSidebarSettingsPanelController($scope, $attrs, $filter, $
 
     vm.init = init
 
+    //get functions from ssb-sidebar.controller.js
+    var pVm = $scope.$parent.vm;
+    vm.addBackground = pVm.addBackground;
+    vm.navigation = pVm.navigation;
+    vm.removeImage = pVm.removeImage;
+    vm.removeBackgroundImage = pVm.removeBackgroundImage;
+
     //TODO: move into config services
     vm.spectrum = {
       options: SimpleSiteBuilderService.getSpectrumColorOptions()

@@ -20,7 +20,7 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude) {
 
   function sectionClass(section) {
     var classString = 'col-xs-12 ';
-
+    console.log('section.layout', section.layout);
     if (section.layout) {
         classString += 'ssb-page-section-layout-' + section.layout;
     }
@@ -29,67 +29,94 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude) {
     return classString;
   }
 
-  function sectionStyle(section) {
-    var styleString = '';
+    function sectionStyle(section) {
+        var styleString = '';
 
-    if (section.spacing) {
-      if (section.spacing.pt) {
-        styleString += 'padding-top: ' + section.spacing.pt + 'px;';
-      }
+        if (section.spacing) {
+            if (section.spacing.pt) {
+                styleString += 'padding-top: ' + section.spacing.pt + 'px;';
+            }
 
-      if (section.spacing.pt) {
-        styleString += 'padding-bottom: ' + section.spacing.pb + 'px;';
-      }
+            if (section.spacing.pt) {
+                styleString += 'padding-bottom: ' + section.spacing.pb + 'px;';
+            }
 
-      if (section.spacing.pt) {
-        styleString += 'padding-left: ' + section.spacing.pl + 'px;';
-      }
+            if (section.spacing.pt) {
+                styleString += 'padding-left: ' + section.spacing.pl + 'px;';
+            }
 
-      if (section.spacing.pt) {
-        styleString += 'padding-right: ' + section.spacing.pr + 'px;';
-      }
+            if (section.spacing.pt) {
+                styleString += 'padding-right: ' + section.spacing.pr + 'px;';
+            }
 
-      if (section.spacing.pt) {
-        styleString += 'margin-top: ' + section.spacing.mt + 'px;';
-      }
+            if (section.spacing.pt) {
+                styleString += 'margin-top: ' + section.spacing.mt + 'px;';
+            }
 
-      if (section.spacing.pt) {
-        styleString += 'margin-bottom: ' + section.spacing.mb + 'px;';
-      }
+            if (section.spacing.pt) {
+                styleString += 'margin-bottom: ' + section.spacing.mb + 'px;';
+            }
 
-      if (section.spacing.pt) {
-        styleString += 'margin-left: ' + section.spacing.ml == 'auto' ? section.spacing.ml: section.spacing.ml + 'px;';
-      }
+            if (section.spacing.pt) {
+                styleString += 'margin-left: ' + section.spacing.ml == 'auto' ? section.spacing.ml: section.spacing.ml + 'px;';
+            }
 
-      if (section.spacing.pt) {
-        styleString += 'margin-right: ' + section.spacing.mr == 'auto' ? section.spacing.mr : section.spacing.mr + 'px;';
-      }
+            if (section.spacing.pt) {
+                styleString += 'margin-right: ' + section.spacing.mr == 'auto' ? section.spacing.mr : section.spacing.mr + 'px;';
+            }
 
-      if (section.spacing.pt) {
-        styleString += 'max-width: ' + section.spacing.mw == '100%' ? section.spacing.mw : section.spacing.mw  + 'px;';
-      }
+            if (section.spacing.pt) {
+                styleString += 'max-width: ' + section.spacing.mw == '100%' ? section.spacing.mw : section.spacing.mw  + 'px;';
+            }
 
-      if (section.spacing.lineHeight) {
-        styleString += 'line-height: ' + section.spacing.lineHeight;
-      }
+            if (section.spacing.lineHeight) {
+                styleString += 'line-height: ' + section.spacing.lineHeight;
+            }
+        }
+
+        if (section.txtcolor) {
+            styleString += 'color: ' + section.txtcolor + ';';
+        }
+
+        if (section.bg) {
+
+            /*
+            TODO: implement all the inline-style and inline <style> stuff for sections
+            bg:
+                color: ""
+                img:
+                    blur: false
+                    height: null
+                    overlay: true
+                    overlaycolor: "#d24d57"
+                    overlayopacity: 60
+                    parallax: false
+                    show: true
+                    url: "//s3.amazonaws.com/indigenous-digital-assets/account_1191/graph_paper_1447199316134.gif"
+                    width: null
+                opacity: 0.4
+
+            */
+
+            // .{{component.type}}{{component._id}} .bg-overlay {
+            //     background: {{component.bg.img.overlaycolor || 'transparent'}}!important;
+            //     opacity: {{component.bg.img.overlayopacity === 0 ? component.bg.img.overlayopacity : component.bg.img.overlayopacity/100 || 1}};
+            // }
+            // .{{component.type}}{{component._id}} {
+            //     opacity: {{component.bg.opacity === 0 ? 0 : component.bg.opacity || 1}};
+            // }
+
+            if (section.bg.color) {
+                styleString += 'background-color: ' + section.bg.color + ';';
+            }
+
+            if (section.bg.img && section.bg.img.show && section.bg.img.url !== '') {
+                styleString += 'background-image: url("' + section.bg.img.url + '")';
+            }
+        }
+
+        return styleString;
     }
-
-    if (section.txtcolor) {
-      styleString += 'color: ' + section.txtcolor + ';';
-    }
-
-    if (section.bg) {
-      if (section.bg.color) {
-        styleString += 'background-color: ' + section.bg.color + ';';
-      }
-
-      if (section.bg.img && section.bg.img.show && section.bg.img.url !== '') {
-        styleString += 'background-image: url("' + section.bg.img.url + '")';
-      }
-    }
-
-    return styleString;
-  }
 
   function componentClass(component, index) {
     var classString = 'col-xs-12';
