@@ -113,8 +113,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     }, true);
 
     $rootScope.$on('$stateChangeStart',
-        function (event) {
-            //$rootScope.app.layout.isSidebarClosed = vm.uiState.isSidebarClosed;
+        function (event) {            
             $rootScope.app.layout.isMinimalAdminChrome =  false;
         }
     );
@@ -323,8 +322,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
 
         setupBreakpoints();
 
-        //vm.uiState.isSidebarClosed = $rootScope.app.layout.isSidebarClosed;
-        //$rootScope.app.layout.isSidebarClosed = true;
+        vm.uiState.isSidebarClosed = $rootScope.app.layout.isSidebarClosed;
         $rootScope.app.layout.isMinimalAdminChrome = true;
 
         vm.uiStateOriginal = angular.copy(vm.uiState);
