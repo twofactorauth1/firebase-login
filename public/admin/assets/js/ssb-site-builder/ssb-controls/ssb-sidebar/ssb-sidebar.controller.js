@@ -399,7 +399,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
         //TODO: not working...
         $timeout(function () {
             var elementId = vm.state.page.sections[index]._id;
-            var element = angular.element(document.getElementById(elementId));
+            var element = document.getElementById(elementId);
             if (element) {
               $document.scrollToElement(element, 175, 1000);
             }
