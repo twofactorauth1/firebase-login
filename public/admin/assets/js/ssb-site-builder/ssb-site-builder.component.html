@@ -113,20 +113,24 @@
 </style>
 <div>
 
-	<div class="ssb-main ssb-edit-mode custom-fonts ssb-theme-{{vm.state.website.theme.name | slugify}}" ng-class="{ 'ssb-main-full-width': !vm.uiState.show.sidebar }" data-eq-pts="small: 400, medium: 768, large: 1240">
+    <div class="loading-editor" ct-fullheight="window" data-ct-fullheight-exclusion="header" ng-hide="vm.uiState.loaded">
+        <div class="col-xs-12">
+            <h1 class="center"><span class="fa fa-spinner fa-spin"></span><br><br> Hang tight, we're loading your page...</h1>
+        </div>
+    </div>
 
-		<div class="csspinner center"></div>
-		<!-- <div class="csspinner center" ng-if="vm.uiState.loading > 0"></div> -->
+	<div class="ssb-main ssb-edit-mode custom-fonts ssb-theme-{{vm.state.website.theme.name | slugify}}" ng-class="{ 'ssb-main-full-width': !vm.uiState.show.sidebar }" data-eq-pts="small: 400, medium: 768, large: 1240" ng-hide="!vm.uiState.loaded">
+
 
 		<div id="componentloader">
 
 
-            <ul ng-if="!vm.state.page.sections.length" class="list-unstyled margin-bottom-0">
+            <ul ng-if="vm.state.page && !vm.state.page.sections.length && vm.uiState.loaded" class="list-unstyled margin-bottom-0">
                 <li>
                     <div class="well empty-page center">
-                        <h1 >This Page is Empty.</h1>
+                        <h1>This Page is Empty.</h1>
                         <h4>Add some sections and start editing!</h4>
-                        <button class="btn btn-info margin-top-15" ng-click="vm.uiState.openSidebarPanel = 'add'">Add Section</button>
+                        <button class="ssb-empty-page-add-btn btn btn-info margin-top-15" ng-click="vm.uiState.openSidebarPanel = 'add'">Add Section</button>
                     </div>
                     <div class="clearfix mb15"></div>
                 </li>
@@ -150,9 +154,9 @@
 
 	</div>
 
-    <ssb-sidebar state="vm.state" ui-state="vm.uiState" ng-class="{ 'ssb-sidebar-show': vm.uiState.show.sidebar, 'ssb-sidebar': true }"></ssb-sidebar>
+    <ssb-sidebar ng-if="vm.state.page" class="fade-in-left ssb-sidebar" state="vm.state" ui-state="vm.uiState" ng-class="{ 'ssb-sidebar-show': vm.uiState.show.sidebar }"></ssb-sidebar>
 
-    <ssb-topbar state="vm.state" ui-state="vm.uiState"></ssb-topbar>
+    <ssb-topbar ng-if="vm.state.page" class="fade-in-down" state="vm.state" ui-state="vm.uiState"></ssb-topbar>
 
     <div data-ng-include data-src=" 'assets/js/ssb-site-builder/ssb-controls/ssb-add-section-modal/ssb-add-section-modal.component.html' " ></div>
     <div data-ng-include data-src=" 'assets/js/ssb-site-builder/ssb-controls/ssb-page-settings-modal/ssb-page-settings-modal.component.html' " ></div>

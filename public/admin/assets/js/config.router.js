@@ -51,7 +51,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         }
     }).state('app.website.ssbSiteBuilder', {
         url: '/site-builder',
-        template: '<div ui-view class="fade-in-up"></div>',
+        template: '<div ui-view class=""></div>',
         title: 'Simple Site Builder',
         ncyBreadcrumb: {
             label: 'Simple Site Builder',

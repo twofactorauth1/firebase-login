@@ -31,6 +31,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
     vm.getPlatformSections = getPlatformSections;
     vm.getPlatformComponents = getPlatformComponents;
     vm.addSectionToPage = addSectionToPage;
+    vm.scrollToActiveSection = scrollToActiveSection;
     vm.removeSectionFromPage = removeSectionFromPage;
     vm.removeComponentFromSection = removeComponentFromSection;
     vm.addComponentToSection = addComponentToSection;
@@ -60,21 +61,22 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
     	},
     	loadPage: function(pageId) {
             if (pageId && pageId !== vm.state.page._id) {
-                vm.state.page = null;
-                vm.uiState = {
-                    loading: 0,
-                    activeSectionIndex: undefined,
-                    activeComponentIndex: undefined,
-                    show: {
-                        flyover: true,
-                        sidebar: true
-                    },
-                    accordion: {
-                        site: {},
-                        page: {},
-                        sections: {}
-                    }
-                };
+                // vm.state.page = null;
+                // vm.uiState = {
+                //     loading: 0,
+                //     activeSectionIndex: undefined,
+                //     activeComponentIndex: undefined,
+                //     show: {
+                //         flyover: true,
+                //         sidebar: true
+                //     },
+                //     accordion: {
+                //         site: {},
+                //         page: {},
+                //         sections: {}
+                //     }
+                // };
+                vm.uiState.loaded = false;
                 $location.path('/website/site-builder/pages/' + pageId);
             } else {
                 vm.navigation.index = 1;
@@ -294,7 +296,19 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
     }
 
     function addSectionToPage(section, version) {
-      SimpleSiteBuilderService.addSectionToPage(section, version, vm.modalInstance);
+      SimpleSiteBuilderService.addSectionToPage(section, version, vm.modalInstance).then(function() {
+        vm.scrollToActiveSection();
+      });
+    }
+
+    function scrollToActiveSection() {
+        $timeout(function () {
+            var scrollContainerEl = document.querySelector('.ssb-site-builder-container');
+            var activeSection = document.querySelector('.ssb-active-section');
+            if (activeSection) {
+              scrollContainerEl.scrollTop = activeSection.offsetTop;
+            }
+        }, 500);
     }
 
     function removeSectionFromPage(index) {
@@ -396,13 +410,9 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
     function setActiveSection(index) {
         SimpleSiteBuilderService.setActiveSection(index);
 
-        $timeout(function () {
-            var scrollContainerEl = document.querySelector('.ssb-site-builder-container');
-            var activeSection = document.querySelector('.ssb-active-section');
-            if (activeSection) {
-              scrollContainerEl.scrollTop = activeSection.offsetTop;
-            }
-        }, 10);
+        vm.uiState.showSectionPanel = true;
+
+        vm.scrollToActiveSection();
     }
 
     function addBackground(sectionIndex, componentIndex) {

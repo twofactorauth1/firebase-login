@@ -113,7 +113,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     }, true);
 
     $rootScope.$on('$stateChangeStart',
-        function (event) {            
+        function (event) {
             $rootScope.app.layout.isMinimalAdminChrome =  false;
         }
     );
@@ -189,6 +189,12 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     function updateLoading(loadingObj) {
         console.info('vm.uiState.loading', loadingObj );
         vm.uiState.loading = loadingObj.value;
+
+        if (!vm.uiState.loaded) {
+            $timeout(function() {
+                vm.uiState.loaded = true;
+            }, 2000);
+        }
     }
 
     function closeModal() {
@@ -315,9 +321,9 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
           }
         });
 
-        angular.element("body").on("click", ".ssb-main", function (e) {
+        angular.element("body").on("click", ".ssb-main :not(.ssb-empty-page-add-btn)", function (e) {
           vm.uiState.openSidebarPanel = '';
-          vm.uiState.showSectionPanel = true;
+          // vm.uiState.showSectionPanel = true;
         });
 
         setupBreakpoints();
