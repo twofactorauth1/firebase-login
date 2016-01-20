@@ -396,14 +396,13 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
     function setActiveSection(index) {
         SimpleSiteBuilderService.setActiveSection(index);
 
-        //TODO: not working...
         $timeout(function () {
-            var elementId = vm.state.page.sections[index]._id;
-            var element = document.getElementById(elementId);
-            if (element) {
-              $document.scrollToElement(element, 175, 1000);
+            var scrollContainerEl = document.querySelector('.ssb-site-builder-container');
+            var activeSection = document.querySelector('.ssb-active-section');
+            if (activeSection) {
+              scrollContainerEl.scrollTop = activeSection.offsetTop;
             }
-        }, 0);
+        }, 10);
     }
 
     function addBackground(sectionIndex, componentIndex) {
@@ -648,10 +647,10 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
                 });
 
                 // Manually add the FEATURED option to the beginning of the list
-                vm.sectionFilters.unshift({
-                    'capitalized': 'Featured',
-                    'lowercase': 'featured'
-                });
+                // vm.sectionFilters.unshift({
+                //     'capitalized': 'Featured',
+                //     'lowercase': 'featured'
+                // });
 
                 // Manually add the Misc section back on to the end of the list
                 // Exclude 'Misc' filter for emails

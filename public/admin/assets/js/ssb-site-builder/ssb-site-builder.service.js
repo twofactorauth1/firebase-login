@@ -459,17 +459,27 @@
         }
 
         function addSectionToPage(section, version, modalInstance) {
+            var insertAt;
+            var numSections;
+            var hasHeader = false;
+            var hasFooter = false;
 
             if (!ssbService.page.sections) {
                 ssbService.page.sections = [];
+            } else {
+                hasHeader = pageHasHeader(ssbService.pages.sections);
+                hasFooter = pageHasFooter(ssbService.page.sections);
+                console.debug(hasFooter);
             }
 
-            var numSections = ssbService.page.sections.length;
+            numSections = ssbService.page.sections.length;
+
+            insertAt = hasFooter ? numSections - 1 : numSections;
 
             return (
                 ssbService.getSection(section, version || 1).then(function(response) {
-                    ssbService.page.sections.push(response);
-                    ssbService.setActiveSection(numSections);
+                    ssbService.page.sections.splice(insertAt, 0, response);
+                    ssbService.setActiveSection(insertAt);
                     ssbService.setActiveComponent(null);
                     if (modalInstance) {
                         modalInstance.close();
@@ -477,6 +487,37 @@
                 })
             )
 
+        }
+
+        /*
+         * Determine if page has a header
+         * - TODO: implement if needed
+         *
+         *
+         */
+        function pageHasHeader(sections) {
+            return false
+        }
+
+        /*
+         * Determine if page has a footer
+         *
+         *
+         *
+         */
+        function pageHasFooter(sections) {
+            var hasSectionFooter = false;
+            var hasComponentFooter = false;
+            var match = _.filter(sections, function(s){
+
+                hasSectionFooter = s.name.toLowerCase() === 'footer';
+                hasComponentFooter = _.where(s.components, { type: 'footer' }).length !== 0;
+
+                return hasSectionFooter || hasComponentFooter
+
+            });
+
+            return match.length !== 0
         }
 
         /*

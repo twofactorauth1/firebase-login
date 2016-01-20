@@ -19,8 +19,8 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude) {
   //TODO: use https://github.com/martinandert/react-inline to generate inline styles for sections/components
 
   function sectionClass(section) {
-    var classString = 'col-xs-12 ';
-    console.log('section.layout', section.layout);
+    var classString = 'container-fluid '; //col-xs-12 was messing up legacy
+    // console.log('section.layout', section.layout);
     if (section.layout) {
         classString += 'ssb-page-section-layout-' + section.layout;
     }
@@ -119,7 +119,7 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude) {
     }
 
   function componentClass(component, index) {
-    var classString = 'col-xs-12';
+    var classString = 'container-fluid ';
 
     if (vm.section.layout === '1-col') {
       // classString += 'col-sm-12 ';
