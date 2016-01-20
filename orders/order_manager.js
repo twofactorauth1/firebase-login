@@ -595,9 +595,9 @@ module.exports = {
 
             },
             // check and get fulfillment email products
-            function(account, order, callback) {
-                log.debug('Order is', order);
-                if(order.get('payment_details') && order.get('payment_details').paid && order.get('status')) {
+            function(account, order, callback) {  
+                log.debug('Order is', order);              
+                if(order.get('payment_details') && order.get('payment_details').card_token && order.get('payment_details').paid && order.get('status') && order.get('status') !=='pending_payment') {
                     var productAry = [];
                     async.each(order.get('line_items'), function iterator(item, cb){
                         productManager.getProduct(item.product_id, function(err, product){
@@ -626,7 +626,7 @@ module.exports = {
                 if(fulfillmentProductArr && fulfillmentProductArr.length){
                     if(!order || !order.get('billing_address') || !order.get('billing_address').email) {
                         log.warn('No order email address.  No Fulfillment email sent.');
-                        order.notes.push({
+                        order.get("notes").push({
                             note: 'No email address provided with order. No fulfillment email sent.',
                             user_id: userId,
                             date: new Date()
@@ -697,7 +697,7 @@ module.exports = {
                                         mandrillHelper.sendFulfillmentEmail(fromAddress, fromName, toAddress, toName, subject, html, accountId, orderId, vars, email._id, function(){
                                             if(err) {
                                                 log.warn('Error sending email');
-                                                order.notes.push({
+                                                order.get("notes").push({
                                                     note: 'Error sending fulfillment email.',
                                                     user_id: userId,
                                                     date: new Date()
