@@ -2,6 +2,8 @@
 
 app.directive('ssbPageSection', ssbPageSection);
 
+ssbPageSection.$inject = ['$compile'];
+/* @ngInject */
 function ssbPageSection($compile) {
   return {
   	// transclude: true,

@@ -2,6 +2,8 @@
 
 app.directive('ssbComponentLoader', ssbComponentLoader);
 
+ssbComponentLoader.$inject = ['$compile'];
+/* @ngInject */
 function ssbComponentLoader($compile) {
   return {
   	restrict: 'E',
