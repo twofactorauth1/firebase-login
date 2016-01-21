@@ -1,7 +1,7 @@
 // 'use strict'; <--- DO NOT USE! CKEDITOR FAILS (https://github.com/WebSpellChecker/ckeditor-plugin-scayt/issues/65)
 /*global app, moment, angular, window, CKEDITOR*/
 /*jslint unparam:true*/
-app.directive("elem", function($timeout) {
+app.directive("elem", function($timeout, $compile) {
   return {
     require: '?ngModel',
     replace: true,
@@ -43,6 +43,9 @@ app.directive("elem", function($timeout) {
         $(function() {
           setTimeout(function() {
             $(elem).on('froalaEditor.initialized', function(e, editor) {
+              //var div = editor.$tb.first("fr-toolbar");
+              //div.attr('ind-draggable', 'ind-draggable');
+              //$compile(div)(scope);
               if (ngModel.$viewValue) {
                 editor.html.set(ngModel.$viewValue);
               }
