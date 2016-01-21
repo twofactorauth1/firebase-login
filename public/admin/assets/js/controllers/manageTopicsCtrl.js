@@ -93,7 +93,7 @@
           newtopic.title = "";
           newtopic.category = "";
 
-          $scope.resetTopicsDetails();
+          //$scope.resetTopicsDetails();
         });
       // } else {
       //   toaster.pop('error', "Page URL " + page.handle, "Already exists");
