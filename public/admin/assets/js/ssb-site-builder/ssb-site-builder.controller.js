@@ -321,7 +321,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
           }
         });
 
-        angular.element("body").on("click", ".ssb-main :not(.ssb-empty-page-add-btn)", function (e) {
+        angular.element("body").on("click", ".ssb-page-section", function (e) {
           vm.uiState.openSidebarPanel = '';
           // vm.uiState.showSectionPanel = true;
         });

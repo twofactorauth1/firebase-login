@@ -10532,12 +10532,16 @@ a[href="https://froala.com/wysiwyg-editor"] {
 .ssb-sidebar-section-panel-component-panel rzslider {
   width: calc(100% - 15px);
 }
+.app-sidebar-closed ssb-topbar {
+  left: 0;
+  width: 100%;
+}
 ssb-topbar {
   position: fixed;
   top: 65px;
-  left: 0;
+  left: 125px;
   height: 60px;
-  width: 100%;
+  width: calc(100% - 125px);
   background: #1c2b36;
   color: white;
   text-align: center;

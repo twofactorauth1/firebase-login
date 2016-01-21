@@ -2,11 +2,11 @@
 /*  Theme 6
 /* ---------------------------------------------------------------------- */
 body {
-  background: #F0F3F4;
+  background: #f7f7f8;
 }
 @media (max-width: 991px) {
   .app-content {
-    background: #F0F3F4;
+    background: #f7f7f8;
   }
 }
 header .navbar-header {
@@ -142,7 +142,7 @@ header .navbar-collapse .navbar-right .dot-badge {
     border-right-color: transparent !important;
   }
   #sidebar nav > ul > li.active:after {
-    border-right-color: #F0F3F4 !important;
+    border-right-color: #f7f7f8 !important;
   }
 }
 #sidebar nav > ul > li.active > a:active:focus {
