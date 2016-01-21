@@ -6649,6 +6649,12 @@ a[href="https://froala.com/wysiwyg-editor"] {
 .ssb-sidebar-item-icon-offset-2 {
   right: 5em;
 }
+.ssb-sidebar-item-icon-offset-3 {
+  right: 7em;
+}
+.ssb-sidebar-sortable-item .hidden-faded {
+  opacity: 0.4;
+}
 .ssb-settings-list {
   background: white;
   margin: 0;

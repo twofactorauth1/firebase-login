@@ -51,6 +51,8 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
     vm.createPage = createPage;
     vm.getTemplateById = getTemplateById;
     vm.tagToCustomer = tagToCustomer;
+    vm.editSectionName = editSectionName;
+    vm.hideSectionFromPage = hideSectionFromPage;
     //vm.customerTags = [];
     editableOptions.theme = 'bs3';
 
@@ -311,7 +313,41 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
         }, 500);
     }
 
-    function removeSectionFromPage(index) {
+    function editSectionName(id) {
+      $timeout(function () {
+        angular.element(document.getElementById(id)).click();
+      },0);
+    }
+
+    function hideSectionFromPage(section) {
+      if(!angular.isDefined(section.visibility)){
+        section.visibility = true;
+      }
+      if(section.visibility){
+        SweetAlert.swal({
+        title: "Are you sure?",
+        text: "Do you want to hide this section from page?",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: "Yes, hide it!",
+        cancelButtonText: "No, do not hide it!",
+        closeOnConfirm: true,
+        closeOnCancel: true
+      },
+      function (isConfirm) {
+        if (isConfirm) {
+          section.visibility = false;
+        }
+      });
+      }
+      else{
+        section.visibility = true;
+      }
+      
+    }
+
+    function removeSectionFromPage(section) {
       SweetAlert.swal({
         title: "Are you sure?",
         text: "Do you want to delete this section?",
