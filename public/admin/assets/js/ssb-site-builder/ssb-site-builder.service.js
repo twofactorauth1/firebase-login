@@ -44,6 +44,7 @@
         ssbService.getLegacyTemplates = getLegacyTemplates;
         ssbService.addSectionToPage = addSectionToPage;
         ssbService.getSpectrumColorOptions = getSpectrumColorOptions;
+        ssbService.deletePage = deletePage;
 
 
 		function ssbRequest(fn) {
@@ -109,6 +110,26 @@
 			)
 
 		}
+
+        function deletePage(page) {
+            function success(data) {
+                console.log('SimpleSiteBuilderService requested page deleted');
+                delete ssbService.pages[page.handle];
+            }
+
+            function error(error) {
+                console.error('SimpleSiteBuilderService page delete error: ' + error);
+            }
+
+            return (
+                ssbRequest($http({
+                    url: basePageAPIUrlv2 + page._id,
+                    method: 'DELETE',
+                    data: angular.toJson(page)
+                }).success(success).error(error))
+            )
+
+        }
 
         function createPage(templateId) {
 

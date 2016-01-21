@@ -118,10 +118,10 @@
     <div class="clearfix"></div>
     <div class="modal-footer ssb-footer-page-settings-modal">  
         <ul class="list-unstyled page-settings">
-            <li>Rename</li>
-            <li>Duplicate</li>
-            <li>Hide</li>
-            <li>Delete</li>
+            <li><a href="javascript:void(0)"><i class="fa fa-edit"></i> Rename</a></li>
+            <li><a href="javascript:void(0)"><i class="fa fa-copy"></i> Duplicate</a></li>
+            <li><a href="javascript:void(0)"><i class="fa fa-eye"></i> Hide</a></li>
+            <li><a href="javascript:void(0)" ng-click="vm.deletePage(vm.page)" ><i class="fa fa-trash"></i> Delete</a></li>            
         </ul>      
         <div class="pull-right">
             <button class="btn btn-primary" ng-click="vm.parentVm.closeModal()">Close</button>
