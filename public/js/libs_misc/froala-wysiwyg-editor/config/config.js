@@ -6,7 +6,7 @@ $.FroalaEditor.RegisterCommand('insertButton', {
     undo: true,
     refreshAfterCallback: true,
     callback: function () {
-        this.html.insert('<button class="btn btn-primary">Button Text</button>');
+        this.html.insert('<a class="btn btn-primary ssb-button">Button Text</a>');
         this.undo.saveStep();
     }
 });
@@ -56,8 +56,7 @@ $.FroalaEditor.config = {
      },
      linkStyles:{
         'fr-green': 'Green',
-        'fr-strong': 'Thick',
-        'btn': 'Button'
+        'fr-strong': 'Thick'
      },
      imageInsertButtons: ['imageBack', 'imageByURL', 'mediaManager'],
      // initOnClick: true,
