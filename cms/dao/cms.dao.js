@@ -1343,8 +1343,7 @@ var dao = {
                     "logo" : "<h2>Logo Here</h2>",
                     "title" : "<h2 class='center'>Thanks for Checking Us Out</h2>",
                     "subtitle" : "subtitle",
-                    "text" : "We will get back to you shortly.",
-                    "from_email" : "",
+                    "text" : "We will get back to you shortly.",                    
                     "bg" : {
                         "img" : {
                             "url" : "",
@@ -1385,8 +1384,7 @@ var dao = {
                     "logo" : "<h2>Logo Here</h2>",
                     "title" : "<h2 class='center'>New Order</h2>",
                     "subtitle" : "subtitle",
-                    "text" : "New Order",
-                    "from_email" : "info@indigenous.io",
+                    "text" : "New Order",                   
                     "bg" : {
                         "img" : {
                             "url" : "",
@@ -1426,8 +1424,7 @@ var dao = {
                     "logo" : "<h2>Logo Here</h2>",
                     "title" : "<h2 class='center'>Order Processing</h2>",
                     "subtitle" : "subtitle",
-                    "text" : "Order Processing",
-                    "from_email" : "info@indigenous.io",
+                    "text" : "Order Processing",                    
                     "bg" : {
                         "img" : {
                             "url" : "",
@@ -1467,8 +1464,7 @@ var dao = {
                     "logo" : "<h2>Logo Here</h2>",
                     "title" : "<h2 class='center'>Order Completed</h2>",
                     "subtitle" : "subtitle",
-                    "text" : "Order Completed",
-                    "from_email" : "info@indigenous.io",
+                    "text" : "Order Completed",                    
                     "bg" : {
                         "img" : {
                             "url" : "",
@@ -1508,8 +1504,7 @@ var dao = {
                     "logo" : "<h2>Logo Here</h2>",
                     "title" : "<h2 class='center'>Order Cancelled</h2>",
                     "subtitle" : "subtitle",
-                    "text" : "Order Cancelled",
-                    "from_email" : "info@indigenous.io",
+                    "text" : "Order Cancelled",                    
                     "bg" : {
                         "img" : {
                             "url" : "",
@@ -1550,7 +1545,6 @@ var dao = {
                     "title" : "<h2 class='center'>Customer Invoice</h2>",
                     "subtitle" : "subtitle",
                     "text" : "Customer Invoice",
-                    "from_email" : "info@indigenous.io",
                     "bg" : {
                         "img" : {
                             "url" : "",
