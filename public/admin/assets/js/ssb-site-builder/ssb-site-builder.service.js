@@ -165,7 +165,8 @@
                     var component = angular.copy(page.sections[i]);
                     var defaultSectionObj = {
                         layout: '1-col',
-                        components: [component]
+                        components: [component],
+                        visibility: true
                     };
 
                     defaultSectionObj.name = sectionName(defaultSectionObj) + ' Section';
