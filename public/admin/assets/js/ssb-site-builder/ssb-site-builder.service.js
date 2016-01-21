@@ -213,6 +213,10 @@
 		//TODO: component versions
 		function getComponent(component, version) {
 
+            if (!version) {
+                version = 1;
+            }
+
 			function success(data) {
 				console.log('SimpleSiteBuilderService requested component: ' + data);
 			}

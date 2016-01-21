@@ -15,6 +15,7 @@ ssb-topbar {
     text-align: center;
     box-shadow: 0px 1px 5px 1px rgba(0, 0, 0, 0.5);
     line-height: 60px;
+    transform: translate3d(0,0,0);
     // opacity: 0;
     // animation: fadeIn .5s 1s forwards;
     // transition: opacity 500ms cubic-bezier(0.550, 0.085, 0.680, 0.530); /* easeInQuad */
@@ -46,4 +47,14 @@ ssb-topbar {
 .ssb-topbar-icon {
     font-size: 2em;
 
+}
+
+.ssb-control-bar {
+    .btn {
+        font-size: 1.25em;
+    }
+
+    .btn[disabled] {
+        pointer-events: none;
+    }
 }
