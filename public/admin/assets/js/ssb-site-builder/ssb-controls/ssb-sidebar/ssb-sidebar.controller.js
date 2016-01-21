@@ -320,9 +320,6 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
     }
 
     function hideSectionFromPage(section) {
-      if(!angular.isDefined(section.visibility)){
-        section.visibility = true;
-      }
       if(section.visibility){
         SweetAlert.swal({
         title: "Are you sure?",
