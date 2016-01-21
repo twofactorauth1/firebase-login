@@ -341,10 +341,10 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
       else{
         section.visibility = true;
       }
-      
+
     }
 
-    function removeSectionFromPage(section) {
+    function removeSectionFromPage(index) {
       SweetAlert.swal({
         title: "Are you sure?",
         text: "Do you want to delete this section?",
