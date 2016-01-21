@@ -38,8 +38,10 @@ app.controller('SiteBuilderPageSettingsModalController', ['$timeout', 'parentVm'
                 SweetAlert.swal("Saved!", "Page is deleted.", "success");
                 angular.element('.modal.in').show();
                 vm.parentVm.closeModal();
-                if(vm.parentVm.uiState.selectedPage._id === page._id){
-                	$location.path('/website/site-builder/pages');
+                if(vm.parentVm.uiState.selectedPage._id === page._id){                	
+                	$timeout(function () {
+              			$location.path('/website/site-builder/pages/');
+            		}, 0);
                 }
             })  
         } else {
