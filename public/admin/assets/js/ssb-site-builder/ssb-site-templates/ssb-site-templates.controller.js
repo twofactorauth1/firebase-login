@@ -2,9 +2,9 @@
 
 app.controller('SiteBuilderSiteTemplatesController', ssbSiteBuilderSiteTemplatesController);
 
-ssbSiteBuilderSiteTemplatesController.$inject = ['$scope', '$attrs', '$filter', '$location', '$document', '$timeout', 'SimpleSiteBuilderService', '$modal', 'editableOptions', '$location', 'SweetAlert', 'CustomerService' ];
+ssbSiteBuilderSiteTemplatesController.$inject = ['$scope', '$attrs', '$filter', '$document', '$timeout', 'SimpleSiteBuilderService', '$modal', 'editableOptions', '$location', 'SweetAlert', 'CustomerService' ];
 /* @ngInject */
-function ssbSiteBuilderSiteTemplatesController($scope, $attrs, $filter, $location, $document, $timeout, SimpleSiteBuilderService, $modal, editableOptions, $location, SweetAlert, CustomerService) {
+function ssbSiteBuilderSiteTemplatesController($scope, $attrs, $filter, $document, $timeout, SimpleSiteBuilderService, $modal, editableOptions, $location, SweetAlert, CustomerService) {
 
     console.info('site-build sidebar directive init...')
 
