@@ -20,18 +20,47 @@ var template = $$.m.ModelBase.extend({
              * @default ""
              */
             _id: "",
-
             "name" : "Default",
             "accountId" : 6,
             "public" : true,
-            // "ssb" : true,
             "description": "",
 
-            /**
-             * SSB default content container
+            /*
+             * Preview Image
+             *
+             * @property previewUrl
+             * @type {String}
+             * @default ""
+             *
              */
-            "sections": [],
+            "previewUrl": "",
 
+            /*
+             * Default pages
+             * - created on user selection of site template
+             * @property defaultPageTemplates
+             * @type {Array}
+             *
+             *    ex:
+             *        [{
+             *            "type": "template",
+             *            "pageTemplateId": "1103202892929",
+             *            "pageHandle": "index",
+             *            "pageTitle": "Home"
+             *        }]
+             *
+             * @default []
+             */
+            "defaultPageTemplates": [],
+
+            /*
+             * Default Theme
+             *
+             * @property defaultTheme
+             * @type {String}
+             * @default "default"
+             */
+            "defaultTheme": "default",
 
             /**
              * Created by data

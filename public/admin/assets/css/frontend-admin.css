@@ -6554,6 +6554,18 @@ a[href="https://froala.com/wysiwyg-editor"] {
   display: inline-block;
   margin: 0 0 0 10px;
 }
+.ssb-site-template-grid-item {
+  display: inline-block;
+  text-align: center;
+  padding: 1em;
+}
+.ssb-site-template-grid-item h1 {
+  display: inline-block;
+  margin: .5em 0 0;
+}
+.ssb-site-template-img-container {
+  cursor: pointer;
+}
 .ssb-sidebar {
   display: none;
   height: 200px;

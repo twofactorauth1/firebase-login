@@ -703,6 +703,7 @@ app.constant('JS_REQUIRES', {
     'assetsService': 'assets/js/services/assets.js',
     'geocodeService': 'assets/js/services/geocode.js',
     'dashboardService': 'assets/js/dashboard/dashboard.service.js',
+    'simpleSiteBuilderService': 'assets/js/ssb-site-builder/ssb-site-builder.service.js',
     //*** Filters
     'htmlToPlaintext': 'assets/js/filters/htmlToPlaintext.js',
     'secTotime': 'assets/js/filters/secTotime.js',

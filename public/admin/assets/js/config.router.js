@@ -59,13 +59,13 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         }
     }).state('app.website.ssbSiteBuilder.pages', {
         url: '/pages/',
-        templateUrl: "assets/js/ssb-site-builder/ssb-site-builder.pages.component.html",
-        title: 'Simple Site Builder Pages',
+        template: "<ssb-site-templates></ssb-site-templates>",
+        title: 'Choose a site template',
         icon: 'ti-layout-media-left-alt',
         ncyBreadcrumb: {
-            label: 'Simple Site Builder Pages'
+            label: 'Simple Site Builder - Site Templates'
         },
-        resolve: loadSequence('pagesCtrl', 'userService')
+        resolve: loadSequence('simpleSiteBuilderService')
     }).state('app.website.ssbSiteBuilder.editor', {
         url: '/pages/:pageId',
         template: '<ssb-site-builder class="ssb-site-builder"></ssb-site-builder>',

@@ -3,8 +3,8 @@ var defaultPages = [];
 defaultPages[0] = {
     "_id" : null,
     "accountId" : 0,
-    "handle": "",
-    "title": "",
+    "handle": "index",
+    "title": "Home",
     seo: null,
     visibility: {
         visible: true,

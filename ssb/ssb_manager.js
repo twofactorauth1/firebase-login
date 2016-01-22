@@ -707,7 +707,7 @@ module.exports = {
 
     setSiteTemplate: function(accountId, siteTemplateId, websiteId, created, fn) {
         var self = this;
-        self.log.debug('>> setSiteTemplate');
+        self.log.debug('>> setSiteTemplate', siteTemplateId);
 
         /*
          * 1. Get the website
@@ -738,35 +738,90 @@ module.exports = {
                     if(err) {
                         self.log.error('Error updating website:', err);
                     }
+                    self.log.debug('setSiteTemplate', updatedWebsite.get('siteTemplateId'));
                     cb(err, updatedWebsite, createPages);
                 });
             },
             function createDefaultPages(website, createPages, cb){
                 if(createPages === true) {
-                    async.each(constants.defaultPages, function(page, callback){
-                        //need to insert a blank page and then update it.  This allows us to re-use the updatePage functionality
-                        var blankPage = new $$.m.ssb.Page({accountId: accountId, created:created});
-                        pageDao.saveOrUpdate(blankPage, function(err, updatedPage){
-                            if(err) {
-                                callback(err)
-                            } else {
-                                var pageId = updatedPage.id();
-                                self.log.debug('Created a page with id:', pageId);
-                                page = new $$.m.ssb.Page(page);
-                                page.set('_id', pageId);
-                                page.set('created', created);
-                                page.set('accountId', accountId);
-                                page.set('websiteId', websiteId);
-                                page.set('siteTemplateId', siteTemplateId);//TODO: do we need this?  templateId?  both?
-                                self.updatePage(accountId, pageId, page, created, function(err, savedPage){
-                                    self.log.debug('updated page');
-                                    callback(err, savedPage);
-                                });
-                            }
+                    self.log.debug('createDefaultPages', website.get('siteTemplateId'));
+                    self.getSiteTemplate(accountId, website.get('siteTemplateId'), function(err, siteTemplate) {
+
+                        if (err) {
+                            self.log.error('Error getting siteTemplate for website:', err);
+                            return cb(err);
+                        }
+
+                        var pagesToCreate = siteTemplate.get('defaultPageTemplates'); //array of template reference objs
+                        var indexPageId = undefined;
+
+                        if (!pagesToCreate.length) {
+                            pagesToCreate = constants.defaultPages; //hard-coded page object(s)
+                        }
+
+                        async.each(pagesToCreate, function(pageData, callback){
+                            //need to insert a blank page and then update it.  This allows us to re-use the updatePage functionality
+                            var blankPage = new $$.m.ssb.Page({accountId: accountId, created:created});
+                            pageDao.saveOrUpdate(blankPage, function(err, updatedPage){
+                                if(err) {
+                                    callback(err)
+                                } else {
+                                    var pageId = updatedPage.id();
+                                    self.log.debug('Created a page with id:', pageId);
+
+                                    //if pageData has a template reference from the selected site template's defaultPageTemplates prop then use that
+                                    if (pageData.type === 'template') {
+
+                                        self.log.debug("using the siteTemplate's defaultPageTemplates to update a default page");
+                                        self.getTemplate(pageData.pageTemplateId, function(template) {
+
+                                            var page = new $$.m.ssb.Page(template);
+                                            page.set('_id', pageId);
+                                            page.set('created', created);
+                                            page.set('accountId', accountId);
+                                            page.set('websiteId', websiteId);
+                                            page.set('siteTemplateId', siteTemplateId);
+                                            page.set('title', pageData.pageTitle);
+                                            page.set('handle', pageData.pageHandle);
+                                            page.set('sections', template.sections);
+                                            page.set('latest', true);
+
+                                            if (page.get('handle') === 'index') {
+                                                indexPageId = pageId;
+                                            }
+
+                                            self.updatePage(accountId, pageId, page, created, function(err, savedPage){
+                                                self.log.debug('updated page');
+                                                callback(err, savedPage);
+                                            });
+                                        });
+
+                                    //else pageData doesn't have template reference, then we're using constants.defaultPages file to build a default page
+                                    } else {
+                                        var page = new $$.m.ssb.Page(pageData);
+                                        page.set('_id', pageId);
+                                        page.set('created', created);
+                                        page.set('accountId', accountId);
+                                        page.set('websiteId', websiteId);
+                                        page.set('siteTemplateId', siteTemplateId);
+                                        page.set('sections', pageData.sections);
+
+                                        if (page.get('handle') === 'index') {
+                                            indexPageId = pageId;
+                                        }
+
+                                        self.log.debug('using constants.defaultPages to update a default page');
+                                        self.updatePage(accountId, pageId, page, created, function(err, savedPage){
+                                            self.log.debug('updated page');
+                                            callback(err, savedPage);
+                                        });
+                                    }
+                                }
+                            });
+                        }, function(err){
+                            self.log.debug('finished updating pages');
+                            cb(err, indexPageId);
                         });
-                    }, function(err){
-                        self.log.debug('finished updating pages');
-                        cb(err);
                     });
                 } else {
                     self.log.debug('Skipping page creation');
@@ -774,10 +829,19 @@ module.exports = {
                 }
 
             }
-        ], function done(err){
-            //TODO: if we need to return anything from this method, add it as a param.
+        ], function done(err, indexPageId){
+            //Note: [Jack] I added id of index page so we know where to send user when we get the response
             self.log.debug('<< setSiteTemplate');
-            fn(err, {ok:true});
+
+            var responseObj = {
+                ok: true
+            }
+
+            if (indexPageId) {
+                responseObj.indexPageId = indexPageId;
+            }
+
+            fn(err, responseObj);
         });
 
     }

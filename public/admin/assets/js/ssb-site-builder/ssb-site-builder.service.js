@@ -16,6 +16,7 @@
         var baseWebsiteAPIUrlv2 = '/api/2.0/cms/websites/'
         var basePageAPIUrlv2 = '/api/2.0/cms/pages/';
         var baseTemplateAPIUrlv2 = '/api/2.0/cms/templates/';
+        var baseSiteTemplateAPIUrlv2 = '/api/2.0/cms/sitetemplates/';
         var baseThemesAPIUrlv2 = '/api/2.0/cms/themes/';
         var baseSectionAPIUrlv2 = '/api/2.0/cms/sections/';
         var baseComponentAPIUrlv2 = '/api/2.0/cms/components/';
@@ -40,6 +41,8 @@
         ssbService.applyThemeToSite = applyThemeToSite;
         ssbService.createPage = createPage;
         ssbService.getTemplates = getTemplates;
+        ssbService.getSiteTemplates = getSiteTemplates;
+        ssbService.setSiteTemplate = setSiteTemplate;
         ssbService.getTemplateById = getTemplateById;
         ssbService.getLegacyTemplates = getLegacyTemplates;
         ssbService.addSectionToPage = addSectionToPage;
@@ -454,6 +457,47 @@
             }).success(success).error(error))
           )
 
+        }
+
+        function getSiteTemplates() {
+
+          function success(data) {
+            ssbService.siteTemplates = data;
+            console.log('SimpleSiteBuilderService getSiteTemplates: ' + data);
+          }
+
+          function error(error) {
+            console.error('SimpleSiteBuilderService getSiteTemplates error: ' + error);
+          }
+
+          return (
+            ssbRequest($http({
+              url: baseSiteTemplateAPIUrlv2,
+              method: 'GET',
+            }).success(success).error(error))
+          )
+
+        }
+
+        function setSiteTemplate(templateId) {
+
+            function success(data) {
+                console.log('SimpleSiteBuilderService setSiteTemplate: ' + data);
+            }
+
+            function error(error) {
+                console.error('SimpleSiteBuilderService setSiteTemplate error: ' + error);
+            }
+
+            return (
+                ssbRequest($http({
+                    url: baseWebsiteAPIUrlv2 + ssbService.website._id + '/sitetemplates/' + templateId,
+                    method: 'POST',
+                    data: {
+                        siteTemplateId: templateId
+                    }
+                }).success(success).error(error))
+            )
         }
 
         function getTemplateById(id) {
