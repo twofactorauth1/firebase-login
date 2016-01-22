@@ -102,8 +102,8 @@
 
 		}
 
-		function savePage(page) {
-
+		function savePage(page) {            
+            page.sb = true;
 			return (
 				ssbRequest($http({
 					url: basePageAPIUrlv2 + page._id,
@@ -136,13 +136,13 @@
 
         function createPage(templateId) {
 
-          return (
-            ssbRequest($http({
-              url: baseWebsiteAPIUrlv2 + ssbService.website._id + '/page/',
-              method: 'POST',
-              data: { templateId: templateId }
-            }).success(successPage).error(errorPage))
-          )
+            return (
+                ssbRequest($http({
+                  url: baseWebsiteAPIUrlv2 + ssbService.website._id + '/page/',
+                  method: 'POST',
+                  data: { templateId: templateId }
+                }).success(successPage).error(errorPage))
+            )
 
         }
 
