@@ -37,9 +37,9 @@
                         </div>
                         <div class="form-group">
                             <div class="checkbox clip-check check-info checkbox-inline">
-                                <input id="checkbox2" type="checkbox" ng-model="vm.page.homepage" checked>
+                                <input id="checkbox2" ng-change="vm.setAsHomePage(vm.homePage)" type="checkbox" ng-model="vm.homePage" checked>
                                 <label for="checkbox2">
-                                    Set as Home Page
+                                    Set as Homepage
                                 </label>
                             </div>
                         </div>            
@@ -118,7 +118,7 @@
     <div class="clearfix"></div>
     <div class="modal-footer ssb-footer-page-settings-modal">  
         <ul class="list-unstyled page-settings">            
-            <li><a href="javascript:void(0)"><i class="fa fa-copy"></i> Duplicate</a></li>
+            <li><a href="javascript:void(0)" ng-click="vm.duplicatePage()"><i class="fa fa-copy"></i> Duplicate</a></li>
             <li><a href="javascript:void(0)"><i class="fa fa-eye"></i> Hide</a></li>
             <li><a href="javascript:void(0)" ng-click="vm.deletePage(vm.page)" ><i class="fa fa-trash"></i> Delete</a></li>            
         </ul>      
