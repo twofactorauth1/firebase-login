@@ -445,7 +445,7 @@ module.exports = {
     updatePage: function(accountId, pageId, page, modified, fn) {
         var self = this;
         self.log.debug('>> updatePage (' + pageId + ')');
-        //debugger;
+
         async.waterfall([
             function getExistingPage(cb){
                 pageDao.getPageById(accountId, pageId, function(err, existingPage){
@@ -459,6 +459,7 @@ module.exports = {
             },
             function updateSections(existingPage, cb) {
                 var sections = page.get('sections');
+
                 _.each(sections, function(section){
                     //if the accountId is 0, it is a platform section
                     if(section.accountId === 0) {
@@ -472,7 +473,6 @@ module.exports = {
                         self.log.error('Error saving sections:', err);
                         cb(err);
                     } else {
-                        //debugger;
                         cb(null, existingPage, updatedSections);
                     }
                 });
@@ -511,6 +511,7 @@ module.exports = {
                         sectionsToBeDeleted.push(section);
                     }
                 });
+
                 async.each(sectionsToBeDeleted, function(section, cb){
                     sectionDao.removeById(section._id, $$.m.ssb.Section, function(err, value){
                         cb(err);
@@ -526,10 +527,12 @@ module.exports = {
         ], function done(err, updatedPage, updatedSections){
             if(updatedPage) {
                 var sectionArray = [];
+
                 _.each(updatedSections, function(section){
                     sectionArray.push(section.toJSON());
                 });
                 updatedPage.set('sections', sectionArray);
+
             }
             self.log.debug('<< updatePage');
             return fn(err, updatedPage);
@@ -759,7 +762,7 @@ module.exports = {
                             pagesToCreate = constants.defaultPages; //hard-coded page object(s)
                         }
 
-                        async.each(pagesToCreate, function(pageData, callback){
+                        async.eachSeries(pagesToCreate, function(pageData, callback){
                             //need to insert a blank page and then update it.  This allows us to re-use the updatePage functionality
                             var blankPage = new $$.m.ssb.Page({accountId: accountId, created:created});
                             pageDao.saveOrUpdate(blankPage, function(err, updatedPage){
@@ -773,9 +776,14 @@ module.exports = {
                                     if (pageData.type === 'template') {
 
                                         self.log.debug("using the siteTemplate's defaultPageTemplates to update a default page");
-                                        self.getTemplate(pageData.pageTemplateId, function(template) {
+                                        self.getTemplate(pageData.pageTemplateId, function(err, template) {
 
-                                            var page = new $$.m.ssb.Page(template);
+                                            if (err) {
+                                                return callback(err);
+                                            }
+
+                                            var templateObj = template.toJSON();
+                                            var page = new $$.m.ssb.Page(templateObj);
                                             page.set('_id', pageId);
                                             page.set('created', created);
                                             page.set('accountId', accountId);
@@ -783,8 +791,6 @@ module.exports = {
                                             page.set('siteTemplateId', siteTemplateId);
                                             page.set('title', pageData.pageTitle);
                                             page.set('handle', pageData.pageHandle);
-                                            page.set('sections', template.sections);
-                                            page.set('latest', true);
 
                                             if (page.get('handle') === 'index') {
                                                 indexPageId = pageId;
@@ -804,7 +810,6 @@ module.exports = {
                                         page.set('accountId', accountId);
                                         page.set('websiteId', websiteId);
                                         page.set('siteTemplateId', siteTemplateId);
-                                        page.set('sections', pageData.sections);
 
                                         if (page.get('handle') === 'index') {
                                             indexPageId = pageId;
