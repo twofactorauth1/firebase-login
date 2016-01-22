@@ -305,7 +305,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
       },0);
     }
 
-    function hideSectionFromPage(section) {
+    function hideSectionFromPage(section, index) {
       if(section.visibility){
         SweetAlert.swal({
         title: "Are you sure?",
@@ -321,11 +321,13 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
       function (isConfirm) {
         if (isConfirm) {
           section.visibility = false;
+          setActiveSection(index);
         }
       });
       }
       else{
         section.visibility = true;
+        setActiveSection(index);
       }
 
     }
@@ -426,12 +428,14 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
   		SimpleSiteBuilderService.setActiveComponent(index);
     }
 
-    function setActiveSection(index) {
-        SimpleSiteBuilderService.setActiveSection(index);
-
+    function setActiveSection(index) {  
+      vm.uiState.showSectionPanel = false;    
+      SimpleSiteBuilderService.setActiveSection(index);
+      if (vm.state.page.sections[index].visibility) {        
         vm.uiState.showSectionPanel = true;
-
         vm.scrollToActiveSection();
+      }
+        
     }
 
     function addBackground(sectionIndex, componentIndex) {

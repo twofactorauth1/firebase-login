@@ -23,10 +23,11 @@ app.directive('mastheadComponent', ['$window', function ($window) {
                     scope.setUnderbnavMargin();
                 });
                 scope.setUnderbnavMargin = function () {
-                    scope.$parent.addUnderNavSetting(scope.component._id, function (data) {
-                        scope.allowUndernav = data.allowUndernav;
-                        scope.navComponent = data.navComponent;
-                    });
+                    if(scope.$parent.addUnderNavSetting)
+                        scope.$parent.addUnderNavSetting(scope.component._id, function (data) {
+                            scope.allowUndernav = data.allowUndernav;
+                            scope.navComponent = data.navComponent;
+                        });
                     setTimeout(function () {
                         var mastheadElement = angular.element(".component_wrap_" + scope.component._id + ".undernav200");
                         var mastheadUnderNavElement = angular.element(".masthead_" + scope.component._id + ".mastHeadUndernav");

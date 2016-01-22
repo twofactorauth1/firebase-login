@@ -145,7 +145,8 @@
 					ng-class="{ 'ssb-active-section': $index === vm.uiState.activeSectionIndex }"
 					class="ssb-page-section"
 					state="vm.state"
-					ui-state="vm.uiState">
+					ui-state="vm.uiState"
+          ng-if="section.visibility || vm.section.visibility === undefined">
 				</ssb-page-section>
 
 			</div>
