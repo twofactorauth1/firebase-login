@@ -459,22 +459,23 @@
         border-top: 1px solid #ddd;
     }
 
-    .ssb-sidebar-section-panel-btn {
-        width: 100%;
-        padding: .5em 0;
-        text-align: left;
+}
+.ssb-sidebar-section-panel-btn.btn-link {
+    width: 100%;
+    padding: .5em 0;
+    text-align: left;
 
-        &:hover {
-            text-decoration: none;
-        }
+    &:hover {
+        text-decoration: none;
+    }
 
-        i {
-            padding-right: .25em;
-        }
+    i {
+        padding-right: .25em;
     }
 }
 
-.ssb-sidebar-section-panel-component-btns .ssb-sidebar-section-panel-btn.btn-primary {
+.ssb-sidebar-section-panel-btn.btn-primary {
+    width: 100%;
     padding: 1em;
     text-align: center;
     margin: .5em auto;
@@ -490,6 +491,7 @@
 }
 
 .ssb-sidebar-section-panel-component-panel {
+    display: block;
     position: relative;
     top: 0;
     left: 0;

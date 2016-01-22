@@ -12,7 +12,13 @@
 </div>
 <div class="row padding-10">
     <div class="col-xs-12">
-        {{component.bg.img.show}}
+        <div class="form-group" ng-if="component.type != 'contact-us' && component.type != 'navigation' && component.type != 'top-bar' && component.type != 'blog'" ng-hide="isEmail">
+            <label for="bg_hide" class="margin-bottom-0">Show Background Image</label>
+            <span tooltip-placement="top" tooltip-html-unsafe="show/hide background image of component."><i class="fa fa-info-circle" /></span>
+            <switch ng-model="component.bg.img.show" class="pull-right"></switch>
+            <br>
+            <!-- <small>Please select an image of 1280 x 400px minimum to prevent blurriness</small> -->
+        </div>
         <div class="form-group add-image" ng-show="component.bg.img.show" ng-if="!component.bg.img.url">
             <div class="btn-wrap">
                 <input id="abi" ng-model="component.bg.img.url" type="button" class="btn btn-primary" value="Add BG Image" ng-click="vm.addBackground(sectionIndex, componentIndex)">

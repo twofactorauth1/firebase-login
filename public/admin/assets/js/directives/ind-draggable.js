@@ -27,11 +27,11 @@ app.directive('indDraggable', ['$document', function($document) {
 
         //allow dragging a draggable item within a draggable panel... ah!
         //TODO: not working
-        if ($(event.target).parents('.ssb-page-section-settings-item').children('.ti-move').length < 1) {
+        // if ($(event.target).parents('.ssb-page-section-settings-item').children('.ti-move').length < 1) {
 
-            event.preventDefault();
+        //     event.preventDefault();
 
-        }
+        // }
 
         startX = event.pageX - x;
         startY = event.pageY - y;
