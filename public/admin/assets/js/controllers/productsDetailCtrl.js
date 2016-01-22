@@ -848,7 +848,7 @@
       if ($scope.selectedEmail.type === 'new') {
         $scope.checkingEmailTitle = true;
         var exists = _.find($scope.originalEmails, function(email){
-          return email.title.toLowerCase() == _name.toLowerCase();
+          return email.title && email.title.toLowerCase() == _name.toLowerCase();
         });
         $scope.emailTitleExists = exists ? true : false;
       } else {
