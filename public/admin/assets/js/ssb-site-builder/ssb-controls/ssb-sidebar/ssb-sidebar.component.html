@@ -1,4 +1,4 @@
-<div class="ssb-sidebar-inner" ng-class="vm.navigation.indexClass">
+<div class="ssb-sidebar-inner" ng-class="vm.uiState.navigation.indexClass">
 
     <div class="ssb-sidebar-icons tabbable tabs-left margin-bottom-0 ng-isolate-scope">
         <ul class="nav nav-tabs">
@@ -196,7 +196,7 @@
                             <div class="ssb-sidebar-sortable-item panel panel-default">
                                 <div class="panel-heading">
                                     <h4 class="panel-title">
-                                        <a href page-id="page._id" ng-click="vm.navigation.loadPage(page._id)">{{page.title}}</a>
+                                        <a href page-id="page._id" ng-click="vm.uiState.navigation.loadPage(page._id)">{{page.title}}</a>
                                     </h4>
                                 </div>
                             </div>
@@ -376,7 +376,7 @@
 		        		<div class="ssb-sidebar-sortable-item panel panel-default">
 			        		<div class="panel-heading">
 				        		<h4 class="panel-title">
-				        			<a href page-id="page._id" ng-click="vm.navigation.loadPage(page._id)">{{link.label}}</a>
+				        			<a href page-id="page._id" ng-click="vm.uiState.navigation.loadPage(page._id)">{{link.label}}</a>
 				        		</h4>
 				        	</div>
 			        	</div>
@@ -390,7 +390,7 @@
 	<div class="page-editor-group editor-group"> -->
 
 		<!-- <div class="ssb-sidebar-heading">
-			<div class="ti-arrow-left" ng-click="vm.navigation.back()"></div>
+			<div class="ti-arrow-left" ng-click="vm.uiState.navigation.back()"></div>
 			<h4>{{vm.state.page.title}}</h4>
 		</div> -->
 

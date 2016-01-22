@@ -45,6 +45,51 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     vm.applyThemeToSite = SimpleSiteBuilderService.applyThemeToSite;
     vm.addSectionToPage = addSectionToPage;
 
+    vm.uiState.navigation = {
+        back: function() {
+            vm.uiState.navigation.index = 0;
+            vm.uiState.navigation.indexClass = 'ssb-sidebar-position-0';
+        },
+        loadPage: function(pageId) {
+            if (pageId && pageId !== vm.state.page._id) {
+                SimpleSiteBuilderService.getPages();
+                vm.uiState.loaded = false;
+                $location.path('/website/site-builder/pages/' + pageId);
+            } else {
+                vm.uiState.navigation.index = 1;
+                vm.uiState.navigation.indexClass = 'ssb-sidebar-position-1';
+            }
+        },
+        goToPagesListPage: function() {
+            $location.url('/website/site-builder/pages/');
+        },
+        index: 0,
+        indexClass: 'ssb-sidebar-position-1',
+        sectionPanel: {
+            navigationHistory: [],
+            loadPanel: function(obj, back) {
+
+                if (!back) {
+                    vm.uiState.navigation.sectionPanel.navigationHistory.push(obj);
+                }
+
+                vm.uiState.openSidebarSectionPanel = obj;
+                console.log(vm.uiState.navigation.sectionPanel.navigationHistory);
+
+            },
+            back: function() {
+                var hist = vm.uiState.navigation.sectionPanel.navigationHistory;
+                var previousPanel;
+
+                hist.pop();
+
+                previousPanel = hist.length ? hist[hist.length - 1] : { name: '', id: ''};
+
+                vm.uiState.navigation.sectionPanel.loadPanel(previousPanel, true);
+            }
+        }
+    };
+
     $scope.$watch(function() { return SimpleSiteBuilderService.website; }, function(website){
         vm.state.originalWebsite = angular.copy(website);
         vm.state.pendingChanges = false;

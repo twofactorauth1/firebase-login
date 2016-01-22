@@ -14,7 +14,7 @@ function ssbSiteBuilderTopbarController($scope, $timeout, $attrs, $filter, Simpl
     vm.savePage = savePage;
     vm.cancelPendingEdits = cancelPendingEdits;
 
-    vm.navigation = {
+    vm.uiState.navigation = {
         loadPage: function(page) {
             if (page._id && page._id !== vm.state.page._id) {
                 SimpleSiteBuilderService.getPages();

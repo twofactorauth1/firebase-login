@@ -57,51 +57,6 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
     //vm.customerTags = [];
     editableOptions.theme = 'bs3';
 
-    vm.navigation = {
-    	back: function() {
-    		vm.navigation.index = 0;
-    		vm.navigation.indexClass = 'ssb-sidebar-position-0';
-    	},
-    	loadPage: function(pageId) {
-            if (pageId && pageId !== vm.state.page._id) {
-                SimpleSiteBuilderService.getPages();
-                vm.uiState.loaded = false;
-                $location.path('/website/site-builder/pages/' + pageId);
-            } else {
-                vm.navigation.index = 1;
-                vm.navigation.indexClass = 'ssb-sidebar-position-1';
-            }
-    	},
-    	goToPagesListPage: function() {
-    		$location.url('/website/site-builder/pages/');
-    	},
-    	index: 0,
-    	indexClass: 'ssb-sidebar-position-1',
-        sectionPanel: {
-            navigationHistory: [],
-            loadPanel: function(obj, back) {
-
-                if (!back) {
-                    vm.navigation.sectionPanel.navigationHistory.push(obj);
-                }
-
-                vm.uiState.openSidebarSectionPanel = obj;
-                console.log(vm.navigation.sectionPanel.navigationHistory);
-
-            },
-            back: function() {
-                var hist = vm.navigation.sectionPanel.navigationHistory;
-                var previousPanel;
-
-                hist.pop();
-
-                previousPanel = hist.length ? hist[hist.length - 1] : { name: '', id: ''};
-
-                vm.navigation.sectionPanel.loadPanel(previousPanel, true);
-            }
-        }
-    };
-
     vm.sortableOptions = {
     	handle: '.ssb-sidebar-move-handle',
 		onSort: function (evt) {
@@ -616,7 +571,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
         return (
             SimpleSiteBuilderService.createPage(template._id).then(function(data) {
                 vm.closeModal();
-                vm.navigation.loadPage(data.data._id);
+                vm.uiState.navigation.loadPage(data.data._id);
             })
         )
 

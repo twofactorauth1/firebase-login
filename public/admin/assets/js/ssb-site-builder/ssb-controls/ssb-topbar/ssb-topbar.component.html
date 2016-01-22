@@ -4,7 +4,7 @@
         <ui-select
             ng-init="vm.uiState.selectedPage = vm.state.page"
             ng-model="vm.uiState.selectedPage"
-            ng-change="vm.navigation.loadPage($select.selected);"
+            ng-change="vm.uiState.navigation.loadPage($select.selected);"
             theme="bootstrap"
             search-enabled="false">
 
