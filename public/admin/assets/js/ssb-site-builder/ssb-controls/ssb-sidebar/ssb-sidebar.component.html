@@ -181,7 +181,7 @@
                 </ul>
 
                 <h4 class="ssb-sidebar-sub-heading">
-                    <span>All Pages ({{Object.keys(vm.state.pages).length || 0}})</span>
+                    <span>All Pages ({{vm.getNumberOfPages(vm.state.pages)}})</span>
                     <!-- <div ng-click="vm.openModal('new-page-modal', null, null, 'lg');" class="ssb-sidebar-item-icon ti-plus display-ib" tooltip-placement="left" tooltip-html-unsafe="Create New Page"></div> -->
                 </h4>
 

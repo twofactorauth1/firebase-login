@@ -49,6 +49,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
     vm.removeBackgroundImage = removeBackgroundImage;
     vm.removeImage = removeImage;
     vm.createPage = createPage;
+    vm.getNumberOfPages = getNumberOfPages;
     vm.getTemplateById = getTemplateById;
     vm.tagToCustomer = tagToCustomer;
     vm.editSectionName = editSectionName;
@@ -610,6 +611,10 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
         )
 
     };
+
+    function getNumberOfPages() {
+        return Object.keys(vm.state.pages).length;
+    }
 
     function getTemplateById(id) {
         SimpleSiteBuilderService.getTemplateById(id);
