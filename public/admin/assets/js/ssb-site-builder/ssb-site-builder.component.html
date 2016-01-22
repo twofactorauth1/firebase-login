@@ -113,9 +113,12 @@
 </style>
 <div>
 
-    <div class="loading-editor" ct-fullheight="window" data-ct-fullheight-exclusion="header" ng-hide="vm.uiState.loaded">
+    <div class="loading-editor" ct-fullheight="window" data-ct-fullheight-exclusion="header" ng-hide="vm.uiState.loaded" ng-show="vm.state.cancelChanges">
         <div class="col-xs-12">
-            <h1 class="center"><span class="fa fa-spinner fa-spin"></span><br><br> Hang tight, we're loading your page...</h1>
+            <h1 class="center"><span class="fa fa-spinner fa-spin"></span><br><br>
+            <span ng-if="!vm.uiState.loaded">Hang tight, we're loading your page...</span>
+            <span ng-if="vm.state.cancelChanges">Please wait, we're reverting your changes...</span>            
+             </h1>
         </div>
     </div>
 
@@ -125,7 +128,7 @@
 		<div id="componentloader">
 
 
-            <ul ng-if="vm.state.page && !vm.state.page.sections.length && vm.uiState.loaded" class="list-unstyled margin-bottom-0">
+            <ul ng-hide="vm.state.cancelChanges" ng-if="vm.state.page && !vm.state.page.sections.length && vm.uiState.loaded" class="list-unstyled margin-bottom-0">
                 <li>
                     <div class="well empty-page center">
                         <h1>This Page is Empty.</h1>
@@ -145,7 +148,8 @@
 					ng-class="{ 'ssb-active-section': $index === vm.uiState.activeSectionIndex }"
 					class="ssb-page-section"
 					state="vm.state"
-					ui-state="vm.uiState">
+					ui-state="vm.uiState"
+          ng-if="section.visibility || vm.section.visibility === undefined">
 				</ssb-page-section>
 
 			</div>

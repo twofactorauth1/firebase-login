@@ -64,7 +64,10 @@ function ssbSiteBuilderSiteTemplatesController($scope, $attrs, $filter, $documen
     function redirectToEditor() {
         var id = '';
         var homePage = null;
-        var pagesArray = Object.keys(vm.state.pages);
+        var pagesArray = null;
+
+        if(vm.state.pages)
+           pagesArray =  Object.keys(vm.state.pages);
 
         if (pagesArray.length) {
 

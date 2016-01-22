@@ -2,9 +2,9 @@
 
 app.controller('SiteBuilderTopbarController', ssbSiteBuilderTopbarController);
 
-ssbSiteBuilderTopbarController.$inject = ['$scope', '$attrs', '$filter', 'SimpleSiteBuilderService', '$modal', '$location', 'SweetAlert'];
+ssbSiteBuilderTopbarController.$inject = ['$scope', '$timeout', '$attrs', '$filter', 'SimpleSiteBuilderService', '$modal', '$location', 'SweetAlert'];
 /* @ngInject */
-function ssbSiteBuilderTopbarController($scope, $attrs, $filter, SimpleSiteBuilderService, $modal, $location, SweetAlert) {
+function ssbSiteBuilderTopbarController($scope, $timeout, $attrs, $filter, SimpleSiteBuilderService, $modal, $location, SweetAlert) {
 
     console.info('site-build topbar directive init...')
 
@@ -54,8 +54,14 @@ function ssbSiteBuilderTopbarController($scope, $attrs, $filter, SimpleSiteBuild
 
     function cancelPendingEdits() {
       vm.state.pendingChanges = false;
-      vm.state.website = vm.state.originalWebsite;
-      vm.state.page = vm.state.originalPage;
+      vm.state.cancelChanges = true;
+      vm.state.website = null;
+      vm.state.page = null;
+      $timeout(function () {
+        vm.state.website = angular.copy(vm.state.originalWebsite);    
+        vm.state.page = angular.copy(vm.state.originalPage);  
+        vm.state.cancelChanges = false;          
+      }, 0);      
     }
 
     function saveWebsite() {

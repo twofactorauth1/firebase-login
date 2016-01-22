@@ -96,22 +96,32 @@
 			return ssbRequest($http.get(baseWebsiteAPIUrl + ssbService.websiteId + '/pages').success(success).error(error));
 		}
 
-		function getPage(id) {
+		function getPage(id, isSettings) {
+            function success(data) {
+                console.log('SimpleSiteBuilderService requested page data' + data);
+            }
 
-			return ssbRequest($http.get(basePageAPIUrlv2 + id).success(successPage).error(errorPage));
-
+			return ssbRequest($http.get(basePageAPIUrlv2 + id).success(
+                isSettings ? success : successPage)
+            .error(errorPage));
 		}
 
-		function savePage(page) {
-
+		function savePage(page, isSettings) { 
+            function success(data) {
+                if(ssbService.pages && ssbService.pages[page.handle] && data.title){
+                    ssbService.pages[page.handle].title = data.title;
+                }
+                console.log('SimpleSiteBuilderService requested page settings saved' + data);
+            }   
+            if(!isSettings)        
+                page.sb = true;
 			return (
 				ssbRequest($http({
 					url: basePageAPIUrlv2 + page._id,
 					method: 'POST',
 					data: angular.toJson(page)
-				}).success(successPage).error(errorPage))
+				}).success(isSettings ? success : successPage).error(errorPage))
 			)
-
 		}
 
         function deletePage(page) {
@@ -136,13 +146,13 @@
 
         function createPage(templateId) {
 
-          return (
-            ssbRequest($http({
-              url: baseWebsiteAPIUrlv2 + ssbService.website._id + '/page/',
-              method: 'POST',
-              data: { templateId: templateId }
-            }).success(successPage).error(errorPage))
-          )
+            return (
+                ssbRequest($http({
+                  url: baseWebsiteAPIUrlv2 + ssbService.website._id + '/page/',
+                  method: 'POST',
+                  data: { templateId: templateId }
+                }).success(successPage).error(errorPage))
+            )
 
         }
 

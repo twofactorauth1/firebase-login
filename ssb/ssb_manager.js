@@ -312,7 +312,8 @@ module.exports = {
                     sections: jsonSections,
                     templateId: templateId,
                     created: created,
-                    modified:created
+                    modified:created,
+                    sb:true
 
                 });
                 pageDao.saveOrUpdate(page, function(err, value){

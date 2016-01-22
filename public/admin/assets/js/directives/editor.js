@@ -52,8 +52,9 @@ app.directive("elem", function($timeout, $compile) {
             }).froalaEditor($.FroalaEditor.config)
               .on('froalaEditor.contentChanged', function(e, editor) {
                 scope.updateFroalaContent(editor);
-              })
-              .on('froalaEditor.image.resizeEnd', function(e, editor, $img) {
+              }).on('froalaEditor.keydown', function(e, editor) {
+                scope.updateFroalaContent(editor);
+              }).on('froalaEditor.image.resizeEnd', function(e, editor, $img) {
                 scope.updateFroalaContent(editor);
               });
           }, 1000);
