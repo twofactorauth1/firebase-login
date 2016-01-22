@@ -10200,11 +10200,18 @@ a[href="https://froala.com/wysiwyg-editor"] {
 .ssb-sidebar .tooltip {
   z-index: 99999;
 }
+.ssb-sidebar .spacing-mr,
+.ssb-sidebar .spacing-ml {
+  margin: 0;
+}
 .ssb-sidebar .partition-light-primary [class^="col-"],
-.ssb-sidebar .partition-light-primary [class*=" col-"] {
+.ssb-sidebar .partition-dark-primary [class^="col-"],
+.ssb-sidebar .partition-light-primary [class*=" col-"],
+.ssb-sidebar .partition-dark-primary [class*=" col-"] {
   padding: 0;
 }
-.ssb-sidebar .partition-light-primary .lead {
+.ssb-sidebar .partition-light-primary .lead,
+.ssb-sidebar .partition-dark-primary .lead {
   font-size: 13px;
   margin-bottom: 32px;
 }

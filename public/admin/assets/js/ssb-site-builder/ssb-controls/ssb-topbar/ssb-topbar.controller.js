@@ -13,14 +13,11 @@ function ssbSiteBuilderTopbarController($scope, $timeout, $attrs, $filter, Simpl
     vm.init = init;
     vm.savePage = savePage;
     vm.cancelPendingEdits = cancelPendingEdits;
+    vm.loadPage = loadPage;
 
-    vm.uiState.navigation = {
-        loadPage: function(page) {
-            if (page._id && page._id !== vm.state.page._id) {
-                SimpleSiteBuilderService.getPages();
-                $location.path('/website/site-builder/pages/' + page._id);
-            }
-        }
+    function loadPage(page) {
+        vm.uiState.navigation.loadPage(page._id);
+        SimpleSiteBuilderService.getPages();
     };
 
     function savePage() {
@@ -58,10 +55,10 @@ function ssbSiteBuilderTopbarController($scope, $timeout, $attrs, $filter, Simpl
       vm.state.website = null;
       vm.state.page = null;
       $timeout(function () {
-        vm.state.website = angular.copy(vm.state.originalWebsite);    
-        vm.state.page = angular.copy(vm.state.originalPage);  
-        vm.state.cancelChanges = false;          
-      }, 0);      
+        vm.state.website = angular.copy(vm.state.originalWebsite);
+        vm.state.page = angular.copy(vm.state.originalPage);
+        vm.state.cancelChanges = false;
+      }, 0);
     }
 
     function saveWebsite() {

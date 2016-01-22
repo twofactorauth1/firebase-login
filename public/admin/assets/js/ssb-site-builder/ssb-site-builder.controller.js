@@ -2,9 +2,9 @@
 
 app.controller('SiteBuilderController', ssbSiteBuilderController);
 
-ssbSiteBuilderController.$inject = ['$scope', '$rootScope', '$attrs', '$filter', 'SimpleSiteBuilderService', '$stateParams', '$modal', 'SweetAlert', '$window', '$timeout'];
+ssbSiteBuilderController.$inject = ['$scope', '$rootScope', '$attrs', '$filter', 'SimpleSiteBuilderService', '$stateParams', '$modal', 'SweetAlert', '$window', '$timeout', '$location'];
 /* @ngInject */
-function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSiteBuilderService, $stateParams, $modal, SweetAlert, $window, $timeout) {
+function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSiteBuilderService, $stateParams, $modal, SweetAlert, $window, $timeout, $location) {
 
     console.info('site-builder directive init...')
 
@@ -86,6 +86,10 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
                 previousPanel = hist.length ? hist[hist.length - 1] : { name: '', id: ''};
 
                 vm.uiState.navigation.sectionPanel.loadPanel(previousPanel, true);
+            },
+            reset: function() {
+                vm.uiState.openSidebarSectionPanel = { name: '', id: '' };
+                vm.uiState.navigation.sectionPanel.navigationHistory = [];
             }
         }
     };
@@ -215,13 +219,16 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
 
     function updateActiveSection(index) {
         if (index !== undefined) {
-            vm.uiState.accordion.sections = {};
+            // vm.uiState.accordion.sections = {};
             vm.uiState.activeSectionIndex = index;
-            vm.uiState.accordion.sections.isOpen = true;
-            vm.uiState.accordion.sections[index] = { components: {} };
-            vm.uiState.accordion.sections[index].isOpen = true;
+            // vm.uiState.accordion.sections.isOpen = true;
+            // vm.uiState.accordion.sections[index] = { components: {} };
+            // vm.uiState.accordion.sections[index].isOpen = true;
             // updateActiveComponent(0);
         }
+
+        //reset section sidebar panel navigation
+        vm.uiState.navigation.sectionPanel.reset();
     }
 
     function updateActiveComponent(index) {

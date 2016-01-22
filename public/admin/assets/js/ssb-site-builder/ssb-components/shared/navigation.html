@@ -146,8 +146,6 @@
             </li>
         </ul>
     </div>
-</div>
-<div class="row padding-10">
     <div ng-if="component.customnav" id="reorderNavBarContainer" class="form-group">
         <ul ng-sortable="barConfig" class="component-sortable" ng-model="customMenu.links" ng-class="{'dragging': dragging}" class="nav-bar" data-ng-repeat="customMenu in component.linkLists track by $index" data-ng-if="customMenu.handle=='head-menu' ">
             <li data-ng-repeat="link in customMenu.links track by $index" class="margin-bottom-10 fragment">
