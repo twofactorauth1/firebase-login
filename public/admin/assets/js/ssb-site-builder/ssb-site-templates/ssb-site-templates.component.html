@@ -11,7 +11,7 @@
 
         <ul class="list-unstyled">
 
-            <li ng-repeat="template in vm.state.siteTemplates track by $index" ng-click="vm.selectSiteTemplate(template._id)" class="ssb-site-template-grid-item col-xs-12 col-sm-4">
+            <li ng-repeat="template in vm.state.siteTemplates track by $index" ng-click="vm.selectSiteTemplate(template)" class="ssb-site-template-grid-item col-xs-12 col-sm-4">
 
                 <div class="ssb-site-template-img-container">
                     <img class="ssb-site-template-img img-responsive" src="{{template.previewUrl}}"/>

@@ -479,7 +479,7 @@
 
         }
 
-        function setSiteTemplate(templateId) {
+        function setSiteTemplate(siteTemplate) {
 
             function success(data) {
                 console.log('SimpleSiteBuilderService setSiteTemplate: ' + data);
@@ -491,10 +491,11 @@
 
             return (
                 ssbRequest($http({
-                    url: baseWebsiteAPIUrlv2 + ssbService.website._id + '/sitetemplates/' + templateId,
+                    url: baseWebsiteAPIUrlv2 + ssbService.website._id + '/sitetemplates/' + siteTemplate._id,
                     method: 'POST',
                     data: {
-                        siteTemplateId: templateId
+                        siteTemplateId: siteTemplate._id,
+                        siteThemeId: siteTemplate.defaultTheme
                     }
                 }).success(success).error(error))
             )

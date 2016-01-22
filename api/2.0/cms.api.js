@@ -448,12 +448,15 @@ _.extend(api.prototype, baseApi.prototype, {
         var accountId = parseInt(self.accountId(req));
         var websiteId = req.params.id;
         var siteTemplateId = req.params.siteTemplateId;
+        var siteThemeId = req.params.siteThemeId;
         var created = {
             date: new Date(),
             by: self.userId(req)
         };
 
-        ssbManager.setSiteTemplate(accountId, siteTemplateId, websiteId, created, function(err, value){
+        self.log.debug('siteThemeId', siteThemeId)
+
+        ssbManager.setSiteTemplate(accountId, siteTemplateId, siteThemeId, websiteId, created, function(err, value){
             self.log.debug('<< setSiteTemplate');
             return self.sendResultOrError(resp, err, value, "Error setting Site Template");
         });

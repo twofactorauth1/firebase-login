@@ -708,7 +708,7 @@ module.exports = {
         });
     },
 
-    setSiteTemplate: function(accountId, siteTemplateId, websiteId, created, fn) {
+    setSiteTemplate: function(accountId, siteTemplateId, siteThemeId, websiteId, created, fn) {
         var self = this;
         self.log.debug('>> setSiteTemplate', siteTemplateId);
 
@@ -729,13 +729,14 @@ module.exports = {
                     }
                 });
             },
-            function setSiteTemplate(website, cb){
+            function setSiteTemplateAndTheme(website, cb){
                 var currentSiteTemplate = website.get('siteTemplateId');
                 var createPages = true;
                 if(currentSiteTemplate) {
                     createPages = false;
                 }
                 website.set('siteTemplateId', siteTemplateId);
+                website.set('themeId', siteThemeId);
                 website.set('modified', created);
                 websiteDao.saveOrUpdate(website, function(err, updatedWebsite){
                     if(err) {

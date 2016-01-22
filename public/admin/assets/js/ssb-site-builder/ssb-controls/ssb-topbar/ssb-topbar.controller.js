@@ -17,22 +17,7 @@ function ssbSiteBuilderTopbarController($scope, $attrs, $filter, SimpleSiteBuild
     vm.navigation = {
         loadPage: function(page) {
             if (page._id && page._id !== vm.state.page._id) {
-                vm.state.page = null;
-                vm.uiState = {
-                    selectedPage: page,
-                    loading: 0,
-                    activeSectionIndex: undefined,
-                    activeComponentIndex: undefined,
-                    show: {
-                        flyover: true,
-                        sidebar: true
-                    },
-                    accordion: {
-                        site: {},
-                        page: {},
-                        sections: {}
-                    }
-                };
+                SimpleSiteBuilderService.getPages();
                 $location.path('/website/site-builder/pages/' + page._id);
             }
         }
