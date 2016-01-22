@@ -113,18 +113,25 @@
 			</li>
 		</ul>
 	</li>
-	<li ng-class="{'active open':$state.includes('app.emails')}">
-		<a ui-sref="app.emails">
-			<div class="item-content">
-				<div class="item-media">
-					<i class="ti-email"></i>
-				</div>
-				<div class="item-inner">
-					<span class="title" translate="sidebar.nav.emails.MAIN"> Emails </span>
-				</div>
-			</div>
-		</a>
-	</li>
+    <li ng-class="{'active open':$state.includes('app.emails')}">
+        <a href="javascript:void(0)">
+            <div class="item-content">
+                <div class="item-media">
+                    <i class="ti-user"></i>
+                </div>
+                <div class="item-inner">
+                    <span class="title" translate="sidebar.nav.emails.MAIN"> Emails </span>
+                </div>
+            </div>
+        </a>
+        <ul class="sub-menu">
+            <li ui-sref-active="active">
+                <a ui-sref="app.emails">
+                    <span class="title" translate="sidebar.nav.emails.MANAGE"> Manage </span>
+                </a>
+            </li>
+        </ul>
+    </li>
 	<li ng-class="{'active open':$state.includes('app.marketing')}">
 		<a href="javascript:void(0)">
 			<div class="item-content">
