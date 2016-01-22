@@ -15,12 +15,21 @@ app.directive('indDraggable', ['$document', function($document) {
       });
 
       element.on('mousedown', function(event) {
+
         // Prevent default dragging of selected content (if not form element)
         if (event.target.nodeName !== 'INPUT' &&
             event.target.nodeName !== 'TEXTAREA' &&
             event.target.nodeName !== 'SELECT') {
 
-          event.preventDefault();
+            event.preventDefault();
+
+        }
+
+        //allow dragging a draggable item within a draggable panel... ah!
+        //TODO: not working
+        if ($(event.target).parents('.ssb-page-section-settings-item').children('.ti-move').length < 1) {
+
+            event.preventDefault();
 
         }
 
@@ -37,6 +46,11 @@ app.directive('indDraggable', ['$document', function($document) {
           top: y + 'px',
           left:  x + 'px'
         });
+
+        if (y > 3 || x > 3) {
+            event.stopPropagation();
+        }
+
       }
 
       function mouseup() {

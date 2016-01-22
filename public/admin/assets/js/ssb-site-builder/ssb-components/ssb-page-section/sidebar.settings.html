@@ -6,27 +6,10 @@
             <i class="ti-brush display-ib"></i> Design
         </button>
 
-        <ssb-sidebar-settings-panel
-            class="ssb-sidebar-section-panel-component-panel container-fluid"
-            ng-if="'design' === vm.uiState.openSidebarSectionPanel.id"
-            settings-template="assets/js/ssb-site-builder/ssb-components/ssb-page-section/sidebar.settings.design.html"
-            component="vm.state.page.sections[vm.uiState.activeSectionIndex]"
-            state="vm.state"
-            ui-state="vm.uiState">
-        </ssb-sidebar-settings-panel>
-
         <button ng-click="vm.navigation.sectionPanel.loadPanel({ name: 'Layout', id: 'layout' })" class="ssb-sidebar-section-panel-btn btn btn-link">
             <i class="ti-layout display-ib"></i> Layout
         </button>
 
-        <ssb-sidebar-settings-panel
-            class="ssb-sidebar-section-panel-component-panel container-fluid"
-            ng-if="'layout' === vm.uiState.openSidebarSectionPanel.id"
-            settings-template="assets/js/ssb-site-builder/ssb-components/ssb-page-section/sidebar.settings.layout.html"
-            component="vm.state.page.sections[vm.uiState.activeSectionIndex]"
-            state="vm.state"
-            ui-state="vm.uiState">
-        </ssb-sidebar-settings-panel>
 
     </div>
 
@@ -37,19 +20,9 @@
 
             <button
                 class="ssb-sidebar-section-panel-btn btn btn-primary"
-                ng-click="vm.setActiveComponent(componentIndex);vm.navigation.sectionPanel.loadPanel({ name: component.type, id: component._id });">
+                ng-click="vm.setActiveComponent($index);vm.navigation.sectionPanel.loadPanel({ name: component.type, id: component._id, componentId: component._id });">
                 <i class="ti-settings display-ib"></i> Manage {{component.type | cleanType}}
             </button>
-
-            <div ng-if="component._id === vm.uiState.openSidebarSectionPanel.id" class="ssb-sidebar-section-panel-component-panel">
-                <!-- <div ng-include=" 'assets/js/ssb-site-builder/ssb-components/shared/basic.html' "></div> -->
-                <div
-                    class="container-fluid"
-                    ng-if="component.type !== undefined"
-                    ng-init="sectionIndex = vm.uiState.activeSectionIndex"
-                    ng-include=" 'assets/js/ssb-site-builder/ssb-components/' + component.type + '/sidebar.settings.html' ">
-                </div>
-            </div>
 
         </div>
 

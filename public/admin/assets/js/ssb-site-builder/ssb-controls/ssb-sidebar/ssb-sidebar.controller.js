@@ -418,10 +418,10 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
       vm.state.website = null;
       vm.state.page = null;
       $timeout(function () {
-        vm.state.website = angular.copy(vm.state.originalWebsite);    
-        vm.state.page = angular.copy(vm.state.originalPage);  
-        vm.state.cancelChanges = false;          
-      }, 0);      
+        vm.state.website = angular.copy(vm.state.originalWebsite);
+        vm.state.page = angular.copy(vm.state.originalPage);
+        vm.state.cancelChanges = false;
+      }, 0);
     }
 
   	function togglePageSectionAccordion(index) {
@@ -435,14 +435,14 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
   		SimpleSiteBuilderService.setActiveComponent(index);
     }
 
-    function setActiveSection(index) {  
-      vm.uiState.showSectionPanel = false;    
+    function setActiveSection(index) {
+      vm.uiState.showSectionPanel = false;
       SimpleSiteBuilderService.setActiveSection(index);
-      if (vm.state.page.sections[index].visibility) {        
+      if (vm.state.page.sections[index].visibility) {
         vm.uiState.showSectionPanel = true;
         vm.scrollToActiveSection();
       }
-        
+
     }
 
     function addBackground(sectionIndex, componentIndex) {

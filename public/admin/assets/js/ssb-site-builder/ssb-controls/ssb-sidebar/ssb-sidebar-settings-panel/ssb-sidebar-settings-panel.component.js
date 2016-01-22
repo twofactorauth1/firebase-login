@@ -2,31 +2,46 @@
 
 app.directive('ssbSidebarSettingsPanel', ssbSidebarSettingsPanel);
 
-function ssbSidebarSettingsPanel() {
+ssbSidebarSettingsPanel.$inject = ['$compile', '$http', '$templateCache', '$parse'];
+/* @ngInject */
+function ssbSidebarSettingsPanel($compile, $http, $templateCache, $parse) {
 
     return {
         restrict: 'E',
         scope: {
             component: '=',
             state: '=',
-            uiState: '='
-        },
-        templateUrl: function(element, attrs) {
-
-            var url = '';
-
-            if (attrs.settingsTemplate) {
-                url = attrs.settingsTemplate;
-            }
-
-            return url;
-
+            uiState: '=',
+            settingsTemplate: '@'
         },
         controller: 'SiteBuilderSidebarSettingsPanelController',
         controllerAs: 'vm',
         bindToController: true,
         link: function(scope, element, attrs, ctrl) {
-            ctrl.init(element);
+
+            var templateUrl = '';
+
+            if (ctrl.settingsTemplate) {
+
+                if (ctrl.settingsTemplate.indexOf('#COMPONENTTYPE#') !== -1) {
+                    ctrl.settingsTemplate = ctrl.settingsTemplate.replace('#COMPONENTTYPE#', scope.component.type);
+                }
+
+
+                templateUrl = ctrl.settingsTemplate;
+
+                $http
+                    .get(templateUrl, { cache: $templateCache })
+                    .success(function(templateContent) {
+
+                        element.empty().append($compile(templateContent)(scope));
+
+                        ctrl.init(element);
+
+                    });
+
+            }
+
         }
     };
 

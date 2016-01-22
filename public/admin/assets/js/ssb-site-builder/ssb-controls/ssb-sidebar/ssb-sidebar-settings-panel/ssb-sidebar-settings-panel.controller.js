@@ -15,6 +15,8 @@ function ssbSiteBuilderSidebarSettingsPanelController($scope, $attrs, $filter, $
     //get functions from ssb-sidebar.controller.js
     var pVm = $scope.$parent.vm;
     vm.addBackground = pVm.addBackground;
+    vm.openModal = pVm.openModal;
+    vm.setActiveComponent = pVm.setActiveComponent;
     vm.navigation = pVm.navigation;
     vm.removeImage = pVm.removeImage;
     vm.removeBackgroundImage = pVm.removeBackgroundImage;
