@@ -6,28 +6,28 @@ ssbPageSectionController.$inject = ['$scope', '$attrs', '$filter', '$transclude'
 /* @ngInject */
 function ssbPageSectionController($scope, $attrs, $filter, $transclude) {
 
-  console.info('page-section directive init...')
+    console.info('page-section directive init...')
 
-  var vm = this;
+    var vm = this;
 
-  vm.init = init;
-  vm.sectionClass = sectionClass;
-  vm.sectionStyle = sectionStyle;
-  vm.componentClass = componentClass;
-  vm.componentStyle = componentStyle;
+    vm.init = init;
+    vm.sectionClass = sectionClass;
+    vm.sectionStyle = sectionStyle;
+    vm.componentClass = componentClass;
+    vm.componentStyle = componentStyle;
 
-  //TODO: use https://github.com/martinandert/react-inline to generate inline styles for sections/components
+    //TODO: use https://github.com/martinandert/react-inline to generate inline styles for sections/components
 
-  function sectionClass(section) {
-    var classString = 'container-fluid '; //col-xs-12 was messing up legacy
-    // console.log('section.layout', section.layout);
-    if (section.layout) {
-        classString += 'ssb-page-section-layout-' + section.layout;
+    function sectionClass(section) {
+        var classString = 'container-fluid '; //col-xs-12 was messing up legacy
+        // console.log('section.layout', section.layout);
+        if (section.layout) {
+            classString += 'ssb-page-section-layout-' + section.layout;
+        }
+        // console.debug('section classString')
+        // console.debug(classString)
+        return classString;
     }
-    // console.debug('section classString')
-    // console.debug(classString)
-    return classString;
-  }
 
     function sectionStyle(section) {
         var styleString = '';
@@ -71,6 +71,10 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude) {
 
             if (section.spacing.lineHeight) {
                 styleString += 'line-height: ' + section.spacing.lineHeight;
+            }
+
+            if (section.spacing.mw) {
+                styleString += 'max-width: ' + section.spacing.mw;
             }
         }
 
@@ -118,37 +122,37 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude) {
         return styleString;
     }
 
-  function componentClass(component, index) {
-    var classString = 'container-fluid ';
+    function componentClass(component, index) {
+        var classString = 'container-fluid ';
 
-    if (vm.section.layout === '1-col') {
-      // classString += 'col-sm-12 ';
+        if (vm.section.layout === '1-col') {
+          // classString += 'col-sm-12 ';
+        }
+
+        if (vm.section.layout === '2-col') {
+          classString += ' col-md-6 ';
+        }
+
+        if (vm.section.layout === '3-col') {
+          classString += ' col-md-4 ';
+        }
+
+        if (vm.section.layout === '4-col') {
+          classString += ' col-md-3';
+        }
+
+        if (index) {
+          classString += ' ssb-component-index-' + index + ' ';
+        }
+
+
+        if (vm.uiState && index === vm.uiState.activeComponentIndex) {
+          classString += ' ssb-active-component ';
+        }
+
+        return classString;
+
     }
-
-    if (vm.section.layout === '2-col') {
-      classString += ' col-md-6 ';
-    }
-
-    if (vm.section.layout === '3-col') {
-      classString += ' col-md-4 ';
-    }
-
-    if (vm.section.layout === '4-col') {
-      classString += ' col-md-3';
-    }
-
-    if (index) {
-      classString += ' ssb-component-index-' + index + ' ';
-    }
-
-
-    if (vm.uiState && index === vm.uiState.activeComponentIndex) {
-      classString += ' ssb-active-component ';
-    }
-
-    return classString;
-
-  }
 
   function componentStyle(component) {
     var styleString = '';
