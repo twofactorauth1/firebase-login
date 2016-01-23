@@ -368,7 +368,7 @@ module.exports = {
         pageDao.getPageById(accountId, pageId, function(err, page) {
 
             if (page && page.get('mainmenu') == true) {
-                self.getWebsiteLinklistsByHandle(page.get('websiteId'), "head-menu", function(err, list) {
+                self.getWebsiteLinklistsByHandle(accountId, page.get('websiteId'), "head-menu", function(err, list) {
                     if (err) {
                         self.log.error('Error getting website linklists by handle: ' + err);
                         fn(err, value);
@@ -382,7 +382,7 @@ module.exports = {
                             }
                         };
                         list.links.pop(link);
-                        self.updateWebsiteLinklists(page.get('websiteId'), "head-menu", list, function(err, linkLists) {
+                        self.updateWebsiteLinklists(accountId, page.get('websiteId'), "head-menu", list, function(err, linkLists) {
                             if (err) {
                                 self.log.error('Error updating website linklists by handle: ' + err);
                                 fn(err, page);
@@ -418,12 +418,11 @@ module.exports = {
             }
         })
     },
-    updateWebsiteLinklists: function(websiteId, handle, linklist, fn) {
+    updateWebsiteLinklists: function(accountId, websiteId, handle, linklist, fn) {
         var self = this;
-        self.log = log;
         self.log.debug('>> updateWebsiteLinklists');
 
-        websiteDao.getWebsiteById(websiteId, function(err, website){
+        websiteDao.getWebsiteById(accountId, websiteId, function(err, website){
             if(err) {
                 self.log.error('Error getting website linklists for id [' + websiteId + '] and handle [' + handle + ']');
                 fn(err, null);
@@ -455,12 +454,11 @@ module.exports = {
             }
         });
     },
-    getWebsiteLinklistsByHandle: function(websiteId, handle, fn) {
+    getWebsiteLinklistsByHandle: function(accountId, websiteId, handle, fn) {
         var self = this;
-        self.log = log;
         self.log.debug('>> getWebsiteLinklistsByHandle(' + websiteId + ',' + handle + ')');
 
-        websiteDao.getWebsiteById(websiteId, function(err, website){
+        websiteDao.getWebsiteById(accountId, websiteId, function(err, website){
             if(err) {
                 self.log.error('Error getting website linklists for id [' + websiteId + '] and handle [' + handle + ']');
                 fn(err, null);
