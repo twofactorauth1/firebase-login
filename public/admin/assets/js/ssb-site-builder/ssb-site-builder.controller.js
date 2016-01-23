@@ -218,11 +218,11 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
 
     function updateActiveSection(index) {
         if (index !== undefined) {
-            // vm.uiState.accordion.sections = {};
+            vm.uiState.accordion.sections = {};
             vm.uiState.activeSectionIndex = index;
-            // vm.uiState.accordion.sections.isOpen = true;
-            // vm.uiState.accordion.sections[index] = { components: {} };
-            // vm.uiState.accordion.sections[index].isOpen = true;
+            vm.uiState.accordion.sections.isOpen = true;
+            vm.uiState.accordion.sections[index] = { components: {} };
+            vm.uiState.accordion.sections[index].isOpen = true;
             // updateActiveComponent(0);
         }
 
