@@ -15,6 +15,7 @@ function ssbSiteBuilderSidebarSettingsPanelController($scope, $attrs, $filter, $
     //get functions from ssb-sidebar.controller.js
     var pVm = $scope.$parent.vm;
     vm.addBackground = pVm.addBackground;
+    vm.addImage = pVm.addImage;
     vm.openModal = pVm.openModal;
     vm.setActiveComponent = pVm.setActiveComponent;
     vm.removeImage = pVm.removeImage;
@@ -26,6 +27,15 @@ function ssbSiteBuilderSidebarSettingsPanelController($scope, $attrs, $filter, $
     };
 
     $scope.component = vm.component;
+
+    //TODO: change child components... unset (blank out) or set to color?
+    $scope.$watch(function() { return vm.component.txtcolor; }, function(color) {
+        console.debug(color);
+    });
+
+    $scope.$watch(function() { return vm.component.bg.color; }, function(color) {
+        console.debug(color);
+    });
 
     function init(element) {
 

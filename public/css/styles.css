@@ -10594,6 +10594,46 @@ ssb-topbar .ui-select-match-text > small {
 .ssb-control-bar .btn[disabled] {
   pointer-events: none;
 }
+.ssb-theme-default {
+  color: #73879C;
+  font-family: "Helvetica Neue", "Helvetica", "Arial", "sans-serif";
+}
+.ssb-theme-default .ssb-section-layout {
+  background-color: #FFFFFF;
+}
+.ssb-theme-default .ssb-navigation a {
+  color: #73879C;
+}
+.ssb-theme-default .ssb-page-section-layout-header {
+  background-color: #FFFFFF;
+}
+.ssb-theme-default .ssb-theme-main-header-text {
+  color: #58585b;
+  font-size: 96px;
+}
+.ssb-theme-default .ssb-page-section-layout-hero {
+  background-color: #FFFFFF;
+  text-align: center;
+}
+.ssb-theme-default .ssb-theme-hero-text {
+  color: #73879C;
+  font-size: 96px;
+}
+.ssb-theme-default .ssb-theme-heading-text {
+  font-size: 24px;
+}
+.ssb-theme-default .ssb-theme-paragraph-text {
+  font-size: 14px;
+}
+.ssb-theme-default .btn,
+.ssb-theme-default .btn-default,
+.ssb-theme-default .btn-block,
+.ssb-theme-default .btn-primary,
+.ssb-theme-default button,
+.ssb-theme-default .ssb-theme-btn {
+  background-color: #4BB0CB!important;
+  color: #FFFFFF;
+}
 .ssb-theme-young-soul {
   color: #000;
   font-family: "Roboto", Helvetica, Arial, sans-serif;
