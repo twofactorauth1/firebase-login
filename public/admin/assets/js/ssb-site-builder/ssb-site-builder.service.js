@@ -40,6 +40,7 @@
     	ssbService.getThemes = getThemes;
         ssbService.applyThemeToSite = applyThemeToSite;
         ssbService.createPage = createPage;
+        ssbService.createDuplicatePage = createDuplicatePage;        
         ssbService.getTemplates = getTemplates;
         ssbService.getSiteTemplates = getSiteTemplates;
         ssbService.setSiteTemplate = setSiteTemplate;
@@ -151,6 +152,18 @@
                   url: baseWebsiteAPIUrlv2 + ssbService.website._id + '/page/',
                   method: 'POST',
                   data: { templateId: templateId }
+                }).success(successPage).error(errorPage))
+            )
+
+        }
+
+        function createDuplicatePage(page) {
+            
+            return (
+                ssbRequest($http({
+                  url: baseWebsiteAPIUrlv2 + ssbService.website._id + '/duplicate/page/',
+                  method: 'POST',
+                  data: angular.toJson(page)
                 }).success(successPage).error(errorPage))
             )
 

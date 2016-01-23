@@ -339,6 +339,147 @@ module.exports = {
 
     },
 
+    createDuplicatePage: function(accountId, page, created, fn) {
+        var self = this;
+        self.log.debug('>> createDuplicatePage');           
+                
+        var pageHandle = slug(page.get('handle')) +  '-' + $$.u.idutils.generateUniqueAlphaNumeric(5, true, true);
+        
+        
+        page.set("handle", pageHandle);
+        page.set("created", created);
+        page.set("modified", created);
+        page.set("ssb", true);
+        pageDao.saveOrUpdate(page, function(err, value){
+            if(err) {
+                fn(err, null);
+            } else {
+                self.log.debug('<< createDuplicatePage');
+                fn(null, page);
+            }
+        });
+    },
+
+    deletePage: function(pageId, accountId, fn) {
+        var self = this;        
+
+        self.log.debug('>> deletePage');
+
+        pageDao.getPageById(accountId, pageId, function(err, page) {
+
+            if (page && page.get('mainmenu') == true) {
+                self.getWebsiteLinklistsByHandle(page.get('websiteId'), "head-menu", function(err, list) {
+                    if (err) {
+                        self.log.error('Error getting website linklists by handle: ' + err);
+                        fn(err, value);
+                    } else {
+                        var link = {
+                            label : page.get('title'),
+                            type : "link",
+                            linkTo : {
+                                type : "page",
+                                data : page.get('handle')
+                            }
+                        };
+                        list.links.pop(link);
+                        self.updateWebsiteLinklists(page.get('websiteId'), "head-menu", list, function(err, linkLists) {
+                            if (err) {
+                                self.log.error('Error updating website linklists by handle: ' + err);
+                                fn(err, page);
+                            } else {
+                                var query = {};
+                                query._id = new RegExp('' + pageId + '(_.*)*');
+                                pageDao.removeByQuery(query, $$.m.ssb.Page, function(err, value){
+                                
+                                    if (err) {
+                                        self.log.error('Error deleting page with id [' + pageId + ']: ' + err);
+                                        fn(err, null);
+                                    } else {
+                                        self.log.debug('<< deletePage');
+                                        fn(null, value);
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
+            } else {
+                var query = {};
+                query._id = new RegExp('' + pageId + '(_.*)*');
+                pageDao.removeByQuery(query, $$.m.ssb.Page, function(err, value){
+                   if (err) {
+                        self.log.error('Error deleting page with id [' + pageId + ']: ' + err);
+                        fn(err, null);
+                    } else {
+                        self.log.debug('<< deletePage');
+                        fn(null, value);
+                    }
+                });
+            }
+        })
+    },
+    updateWebsiteLinklists: function(websiteId, handle, linklist, fn) {
+        var self = this;
+        self.log = log;
+        self.log.debug('>> updateWebsiteLinklists');
+
+        websiteDao.getWebsiteById(websiteId, function(err, website){
+            if(err) {
+                self.log.error('Error getting website linklists for id [' + websiteId + '] and handle [' + handle + ']');
+                fn(err, null);
+            } else {
+
+                var linkListAry = website.get('linkLists');
+                var targetListIndex = -1;
+                for(var i=0; i<linkListAry.length; i++) {
+                    if(linkListAry[i].handle === handle) {
+                        targetListIndex = i;
+                        break;
+                    }
+                }
+                if(targetListIndex !== -1) {
+                    linkListAry.splice(targetListIndex, 1, linklist);
+                    websiteDao.saveOrUpdate(website, function(err, value){
+                        if(err) {
+                            self.log.error('Error updating website: ' + err);
+                            fn(err, null);
+                        } else {
+                            self.log.debug('<< updateWebsiteLinklists');
+                            fn(null, value.get('linkLists'));
+                        }
+                    });
+                } else {
+                    self.log.error('linklist with handle [' + handle + '] was not found');
+                    fn('linklist with handle [' + handle + '] was not found', null);
+                }
+            }
+        });
+    },
+    getWebsiteLinklistsByHandle: function(websiteId, handle, fn) {
+        var self = this;
+        self.log = log;
+        self.log.debug('>> getWebsiteLinklistsByHandle(' + websiteId + ',' + handle + ')');
+
+        websiteDao.getWebsiteById(websiteId, function(err, website){
+            if(err) {
+                self.log.error('Error getting website linklists for id [' + websiteId + '] and handle [' + handle + ']');
+                fn(err, null);
+            } else {
+                self.log.debug('got the website:');
+                console.dir(website);
+                var linkListAry = website.get('linkLists');
+                var targetList = null;
+                for(var i=0; i<linkListAry.length; i++) {
+                    if(linkListAry[i].handle === handle) {
+                        targetList = linkListAry[i];
+                        break;
+                    }
+                }
+                self.log.debug('<< getWebsiteLinklistsByHandle');
+                fn(null, targetList);
+            }
+        });
+    },
     listPages: function(accountId, websiteId, fn) {
         var self = this;
         self.log.debug('>> listPages');
