@@ -130,6 +130,11 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     }, true);
 
     $scope.$watch(function() { return SimpleSiteBuilderService.pages }, function(pages) {
+      //filter blog pages
+      if(pages){
+        delete pages["blog"];
+        delete pages["single-post"];
+      }      
       vm.state.pages = pages;
       var parsed = angular.fromJson(pages);
       var arr = [];
