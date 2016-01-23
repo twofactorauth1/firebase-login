@@ -103,7 +103,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     $scope.$watch(function() { return SimpleSiteBuilderService.page; }, function(page){
         vm.state.originalPage = angular.copy(page);
         vm.state.pendingChanges = false;
-        vm.state.page = page;
+        vm.state.page = page;                    
     });
 
     $scope.$watch(function() { return SimpleSiteBuilderService.activeSectionIndex }, updateActiveSection, true);
@@ -212,14 +212,8 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
 
     function cancelPendingEdits() {
       vm.state.pendingChanges = false;
-      vm.state.cancelChanges = true;
-      vm.state.website = null;
-      vm.state.page = null;
-      $timeout(function () {
-        vm.state.website = angular.copy(vm.state.originalWebsite);
-        vm.state.page = angular.copy(vm.state.originalPage);
-        vm.state.cancelChanges = false;
-      }, 0);
+      vm.state.website = angular.copy(vm.state.originalWebsite);
+      vm.state.page = angular.copy(vm.state.originalPage);        
     }
 
     function updateActiveSection(index) {

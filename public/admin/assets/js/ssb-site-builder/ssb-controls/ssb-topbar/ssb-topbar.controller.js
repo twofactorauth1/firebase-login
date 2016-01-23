@@ -51,14 +51,8 @@ function ssbSiteBuilderTopbarController($scope, $timeout, $attrs, $filter, Simpl
 
     function cancelPendingEdits() {
       vm.state.pendingChanges = false;
-      vm.state.cancelChanges = true;
-      vm.state.website = null;
-      vm.state.page = null;
-      $timeout(function () {
-        vm.state.website = angular.copy(vm.state.originalWebsite);
-        vm.state.page = angular.copy(vm.state.originalPage);
-        vm.state.cancelChanges = false;
-      }, 0);
+      vm.state.website = angular.copy(vm.state.originalWebsite);
+      vm.state.page = angular.copy(vm.state.originalPage);        
     }
 
     function saveWebsite() {
