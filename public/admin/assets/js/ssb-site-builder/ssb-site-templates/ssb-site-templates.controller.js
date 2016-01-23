@@ -15,9 +15,10 @@ function ssbSiteBuilderSiteTemplatesController($scope, $attrs, $filter, $documen
     vm.getSiteTemplates = getSiteTemplates;
     vm.redirectToEditor = redirectToEditor;
 
-
     vm.state = {};
-    vm.uiState = {};
+    vm.uiState = {
+        loading: true
+    };
 
 
     var unbindPagesWatcher = $scope.$watch(function() { return SimpleSiteBuilderService.pages }, function(pages) {
@@ -37,6 +38,8 @@ function ssbSiteBuilderSiteTemplatesController($scope, $attrs, $filter, $documen
 
             if (website.siteTemplateId) {
                 vm.redirectToEditor();
+            } else {
+                vm.uiState.loading = false;
             }
 
             vm.state.website = website;

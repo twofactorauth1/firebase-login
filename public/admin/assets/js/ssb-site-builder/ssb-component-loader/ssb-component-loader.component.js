@@ -16,7 +16,8 @@ function ssbComponentLoader($compile) {
       	state: '=',
       	uiState: '=',
         componentClass: '&',
-        componentStyle: '&'
+        componentStyle: '&',
+        componentControl: '='
       },
     replace: true,
   	link: function (scope, element, attrs, ctrl) {
@@ -27,10 +28,11 @@ function ssbComponentLoader($compile) {
                         'ui-state="vm.uiState" ' +
                         'ssb-editor="true" ' +
                         'class="ssb-component ssb-{{vm.component.type}} {{vm.componentClass(vm.component)}}" ' +
-                        'ng-attr-style="{{vm.componentStyle(vm.component)}}">' +
+                        'ng-attr-style="{{vm.componentStyle(vm.component)}}" ' +
+                        'control="vm.componentControl">' +
                       '</div>';
   		var compiled = $compile(template)(scope)
-      element.replaceWith(compiled);
+        element.replaceWith(compiled);
   	}
   }
 

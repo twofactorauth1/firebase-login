@@ -5,7 +5,7 @@ app.directive('contactUsComponent', ['AccountService', 'GeocodeService', '$timeo
   return {
     scope: {
       component: '=',
-      control: '=',
+      control: '=?',
       ssbEditor: '='
     },
     templateUrl: '/components/component-wrap.html',
@@ -115,7 +115,11 @@ app.directive('contactUsComponent', ['AccountService', 'GeocodeService', '$timeo
         google.maps.event.trigger(scope.map, 'resize');
         scope.map.setCenter(new google.maps.LatLng(51, 0));
       });
-      // if(!scope.ssbEditor){
+
+        // if (!scope.control) {
+        //     scope.control = {};
+        // }
+
         scope.control.refreshMap = function () {
           if ((!scope.component.location.address && !scope.component.location.address2 && !scope.component.location.city && !scope.component.location.state && !scope.component.location.zip) || !scope.component.custom.address) {
             scope.setBusinessDetails(true, function () {
@@ -132,46 +136,55 @@ app.directive('contactUsComponent', ['AccountService', 'GeocodeService', '$timeo
               console.log("hours refreshed");
             });
         };
-      // }
 
 
-      scope.$parent.$watch('ckeditorLoaded', function (newValue, oldValue) {
-        if(newValue)
-        {
-          AccountService.getAccount(function (account) {
-            scope.account = account;
-            if(!scope.component.custom.hours)
-            {
-              scope.setBusinessDetails(false, function () {
-                console.log("hours refreshed");
-              });
+        scope.$parent.$watchGroup(['ckeditorLoaded', 'vm.uiState.loaded'], function (newValue, oldValue) {
+            if (newValue[0] || newValue[1]) {
+                AccountService.getAccount(function (account) {
+
+                    scope.account = account;
+
+                    if (!scope.component.custom.hours) {
+                        scope.setBusinessDetails(false, function () {
+                            console.log("hours refreshed");
+                        });
+                    }
+
+                    if ((!scope.component.location.address &&
+                        !scope.component.location.address2 &&
+                        !scope.component.location.city &&
+                        !scope.component.location.state &&
+                        !scope.component.location.zip) ||
+                        !scope.component.custom.address) {
+
+                        scope.setBusinessDetails(true, function () {
+                            $timeout(function () {
+                                scope.updateContactUsAddress();
+                            }, 500);
+                        });
+
+                    } else {
+
+                        $timeout(function () {
+                            scope.updateContactUsAddress();
+                        }, 500);
+                    }
+
+                });
             }
-            if ((!scope.component.location.address && !scope.component.location.address2 && !scope.component.location.city && !scope.component.location.state && !scope.component.location.zip) || !scope.component.custom.address) {
-            scope.setBusinessDetails(true, function () {
-              $timeout(function () {
-                scope.updateContactUsAddress();
-              },500);
-            });
-            } else {
-              $timeout(function () {
-                scope.updateContactUsAddress();
-              },500);
-            }
-          });
-        }
-      })
+        });
 
-      scope.$on("angular-resizable.resizeEnd", function (event, args) {
-        var calculated_size = args;
-        if(calculated_size.width === false)
-        {
-          scope.component.boxProperties.height = calculated_size.height;
-        }
-        else if(calculated_size.height === false)
-        {
-          scope.component.boxProperties.width = calculated_size.width;
-        }
-      })
+        scope.$on("angular-resizable.resizeEnd", function (event, args) {
+            var calculated_size = args;
+            if (calculated_size.width === false) {
+                scope.component.boxProperties.height = calculated_size.height;
+            } else if (calculated_size.height === false) {
+                scope.component.boxProperties.width = calculated_size.width;
+            }
+        });
+
     }
+
   };
+
 }]);

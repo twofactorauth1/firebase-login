@@ -2,13 +2,17 @@
     <div id="component-setting-modal">
         <div class="modal-header">
             <div class="modal-btns">
-                <button type="button" class="close" ng-click="closeModal()">
+                <button type="button" class="close" ng-click="vm.parentVm.closeModal()">
                     <span aria-hidden="true">&times;</span>
                     <span class="sr-only">Close</span>
                 </button>
                 <a aria-hidden="true" class="close" type="button" style="font-size: 24px;line-height: 34px;" ng-mouseenter="hover = true" ng-mouseleave="hover = false"><i class="fa fa-eye" style="font-size: 20px;"></i></a>
             </div>
-            <h4 class="modal-title">{{(component.type | cleanType || component.header_title || component.type | uppercase) | htmlToPlaintext}} Settings</h4>
+
+            <h4 class="modal-title">
+                {{(vm.component.type | cleanType)}} Settings
+            </h4>
+
         </div>
         <div class="modal-body no-padding" ng-class="{hidden: hover}">
             <tabset>
@@ -25,7 +29,7 @@
                 </tab>
                 <tab>
                     <tab-heading>
-                        <span>Address</span>
+                        <span>Hours</span>
                     </tab-heading>
 
                     <div
@@ -36,7 +40,7 @@
                 </tab>
                 <tab>
                     <tab-heading>
-                        <span>Address</span>
+                        <span>Map</span>
                     </tab-heading>
 
                     <div
@@ -49,9 +53,6 @@
             </div>
             <div class="modal-footer" ng-class="{hidden: hover}">
                 <div class="form-group margin-bottom-0">
-                    // <a type="button" ng-click="revertComponent()" class="btn btn-warning btn-o btn-wide">
-                    //     Revert
-                    // </a>
                     <a type="button" class="btn btn-info btn-wide btn-o" ng-click="closeModal()">
                         Done
                     </a>

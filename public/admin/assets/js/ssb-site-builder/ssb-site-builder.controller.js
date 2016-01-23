@@ -28,7 +28,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         openSidebarPanel: '',
         openSidebarSectionPanel: { name: '', id: '' },
         showSectionPanel: false,
-
+        componentControl: {}
     };
 
     vm.updateActiveSection = updateActiveSection;
@@ -103,7 +103,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     $scope.$watch(function() { return SimpleSiteBuilderService.page; }, function(page){
         vm.state.originalPage = angular.copy(page);
         vm.state.pendingChanges = false;
-        vm.state.page = page;                    
+        vm.state.page = page;
     });
 
     $scope.$watch(function() { return SimpleSiteBuilderService.activeSectionIndex }, updateActiveSection, true);
@@ -134,7 +134,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
       if(pages){
         delete pages["blog"];
         delete pages["single-post"];
-      }      
+      }
       vm.state.pages = pages;
       var parsed = angular.fromJson(pages);
       var arr = [];
@@ -213,7 +213,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     function cancelPendingEdits() {
       vm.state.pendingChanges = false;
       vm.state.website = angular.copy(vm.state.originalWebsite);
-      vm.state.page = angular.copy(vm.state.originalPage);        
+      vm.state.page = angular.copy(vm.state.originalPage);
     }
 
     function updateActiveSection(index) {
