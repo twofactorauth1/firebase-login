@@ -65,7 +65,8 @@ _.extend(api.prototype, baseApi.prototype, {
         app.post(this.url('websites/:id/page'), this.isAuthAndSubscribedApi.bind(this), this.createPage.bind(this));//create page
         app.get(this.url('pages/:id'), this.isAuthAndSubscribedApi.bind(this), this.getPage.bind(this));//get page
         app.post(this.url('pages/:id'), this.isAuthAndSubscribedApi.bind(this), this.updatePage.bind(this));//update page
-        app.delete(this.url('pages/:id'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//delete page
+        app.delete(this.url('pages/:id'), this.isAuthAndSubscribedApi.bind(this), this.deletePage.bind(this));//delete page
+        app.post(this.url('websites/:websiteId/duplicate/page'), this.isAuthAndSubscribedApi.bind(this), this.createDuplicatePage.bind(this));//create duplicate page
 
         app.get(this.url('pages/:id/template'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//get page template
         //app.post(this.url('pages/:id/template/:templateId'), this.isAuthAndSubscribedApi.bind(this), this.noop.bind(this));//set page template
@@ -96,6 +97,29 @@ _.extend(api.prototype, baseApi.prototype, {
         var accountId = parseInt(self.accountId(req));
         self.log.debug('<< noop');
         self.sendResult(resp, {msg:'method not implemented'});
+    },
+
+    deletePage: function(req, resp) {
+
+        var self = this;
+        self.log.debug('>> deletePage');
+        var accountId = parseInt(self.accountId(req));
+
+        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                var pageId = req.params.id;
+                
+                ssbManager.deletePage(pageId, accountId, function (err, page) {
+                    if(err) {
+                        self.wrapError(resp, 500, err, "Error deleting page");
+                    } else {
+                        self.send200(resp);
+                    }
+                });
+            }
+        });
     },
 
     listTemplates: function(req, resp) {
@@ -253,6 +277,29 @@ _.extend(api.prototype, baseApi.prototype, {
                 var created = {date: new Date(), by:self.userId(req)};
                 ssbManager.createPage(accountId, websiteId, templateId, created, function(err, page){
                     self.log.debug('<< createPage');
+                    return self.sendResultOrError(resp, err, page, "Error creating page");
+                });
+            }
+        });
+
+    },
+
+    createDuplicatePage: function(req, resp) {
+        var self = this;
+        self.log.debug('>> createDuplicatePage');
+        var _page = req.body;
+        // Delete _id of the existing page;
+        delete _page._id;
+        var duplicatePage = new $$.m.ssb.Page(req.body);
+        var accountId = parseInt(self.accountId(req));
+
+        self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed){
+            if(isAllowed !== true) {
+                return self.send403(resp);
+            } else {
+                var created = {date: new Date(), by:self.userId(req)};
+                ssbManager.createDuplicatePage(accountId, duplicatePage, created, function(err, page){
+                    self.log.debug('<< createDuplicatePage');
                     return self.sendResultOrError(resp, err, page, "Error creating page");
                 });
             }

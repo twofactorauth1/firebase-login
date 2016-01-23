@@ -12,7 +12,10 @@ app.controller('SiteBuilderPageSettingsModalController', ['$timeout', 'parentVm'
   vm.setAsHomePage = setAsHomePage;
   vm.duplicatePage = duplicatePage;
   function duplicatePage(){
-    // to do
+    SimpleSiteBuilderService.createDuplicatePage(vm.page).then(function(page) {
+        vm.parentVm.closeModal();
+        vm.parentVm.uiState.navigation.loadPage(page.data._id);
+    })
   }
   function saveSettings() {
   	SimpleSiteBuilderService.savePage(vm.page, true).then(function(page) {
@@ -52,10 +55,10 @@ app.controller('SiteBuilderPageSettingsModalController', ['$timeout', 'parentVm'
     }
     
   }
-  function deletePage(page) {
+  function deletePage() {
     angular.element('.modal.in').hide();
     var _deleteText = "Do you want to delete this page";
-    if(page.handle === 'index')
+    if(vm.page.handle === 'index')
     {
       var _deleteText = "This is home page of the website. Do you want to delete this page";
     }
@@ -71,12 +74,12 @@ app.controller('SiteBuilderPageSettingsModalController', ['$timeout', 'parentVm'
       closeOnCancel: true
     }, function (isConfirm) {
       if (isConfirm) {
-          SimpleSiteBuilderService.deletePage(page).then(function(response){
+          SimpleSiteBuilderService.deletePage(vm.page).then(function(response){
               console.log('page deleted');
               SweetAlert.swal("Saved!", "Page is deleted.", "success");
               angular.element('.modal.in').show();
               vm.parentVm.closeModal();
-              if(vm.parentVm.uiState.selectedPage._id === page._id){                	
+              if(vm.parentVm.state.page._id === vm.page._id){                	
               	$timeout(function () {
             			$location.path('/website/site-builder/pages/');
           		}, 0);

@@ -40,6 +40,7 @@
     	ssbService.getThemes = getThemes;
         ssbService.applyThemeToSite = applyThemeToSite;
         ssbService.createPage = createPage;
+        ssbService.createDuplicatePage = createDuplicatePage;        
         ssbService.getTemplates = getTemplates;
         ssbService.getSiteTemplates = getSiteTemplates;
         ssbService.setSiteTemplate = setSiteTemplate;
@@ -114,7 +115,7 @@
                 console.log('SimpleSiteBuilderService requested page settings saved' + data);
             }
             if(!isSettings)
-                page.sb = true;
+                page.ssb = true;
 			return (
 				ssbRequest($http({
 					url: basePageAPIUrlv2 + page._id,
@@ -151,6 +152,18 @@
                   url: baseWebsiteAPIUrlv2 + ssbService.website._id + '/page/',
                   method: 'POST',
                   data: { templateId: templateId }
+                }).success(successPage).error(errorPage))
+            )
+
+        }
+
+        function createDuplicatePage(page) {
+            
+            return (
+                ssbRequest($http({
+                  url: baseWebsiteAPIUrlv2 + ssbService.website._id + '/duplicate/page/',
+                  method: 'POST',
+                  data: angular.toJson(page)
                 }).success(successPage).error(errorPage))
             )
 

@@ -45,7 +45,7 @@
     $scope.formatPages = function (pages, fn) {
       var pagesArr = [];
       _.each(pages, function (page) {
-        if (page && !page.sb) {
+        if (page && !page.ssb) {
           if (page.components) {
             page.components = page.components.length;
           } else {
