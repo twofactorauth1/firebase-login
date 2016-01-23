@@ -759,12 +759,29 @@ module.exports = {
 
                         var pagesToCreate = siteTemplate.get('defaultPageTemplates'); //array of template reference objs
                         var indexPageId = undefined;
+                        var linkLists = [{
+                            "name" : "Head Menu",
+                            "handle" : "head-menu",
+                            "links" : []
+                        }];
 
                         if (!pagesToCreate.length) {
                             pagesToCreate = constants.defaultPages; //hard-coded page object(s)
                         }
 
                         async.eachSeries(pagesToCreate, function(pageData, callback){
+                            self.log.debug('pagesToCreate', pagesToCreate);
+
+                            //push page to website's linkList
+                            linkLists[0].links.push({
+                                "label" : pageData.pageTitle,
+                                "type" : "link",
+                                "linkTo" : {
+                                    "type" : "page",
+                                    "data" : pageData.pageHandle
+                                }
+                            });
+
                             //need to insert a blank page and then update it.  This allows us to re-use the updatePage functionality
                             var blankPage = new $$.m.ssb.Page({accountId: accountId, created:created});
                             pageDao.saveOrUpdate(blankPage, function(err, updatedPage){
@@ -799,36 +816,37 @@ module.exports = {
                                             }
 
                                             self.updatePage(accountId, pageId, page, created, function(err, savedPage){
-                                                self.log.debug('updated page');
-                                                callback(err, savedPage);
+                                                self.log.debug('updated page using siteTemplate data');
+                                                callback(err);
                                             });
                                         });
 
-                                    //else pageData doesn't have template reference, then we're using constants.defaultPages file to build a default page
+                                    //else error pageData doesn't have template reference
                                     } else {
-                                        var page = new $$.m.ssb.Page(pageData);
-                                        page.set('_id', pageId);
-                                        page.set('created', created);
-                                        page.set('accountId', accountId);
-                                        page.set('websiteId', websiteId);
-                                        page.set('siteTemplateId', siteTemplateId);
-
-                                        if (page.get('handle') === 'index') {
-                                            indexPageId = pageId;
-                                        }
-
-                                        self.log.debug('using constants.defaultPages to update a default page');
-                                        self.updatePage(accountId, pageId, page, created, function(err, savedPage){
-                                            self.log.debug('updated page');
-                                            callback(err, savedPage);
-                                        });
+                                        callback("No template referenced in siteTemplate");
                                     }
                                 }
                             });
                         }, function(err){
                             self.log.debug('finished updating pages');
-                            cb(err, indexPageId);
+
+                            //update website's linkLists to match the default pages created
+                            website.set('linkLists', linkLists);
+
+                            self.updateWebsite(accountId, websiteId, created, website, function(err, website) {
+
+                                if (err) {
+                                    return cb(err);
+                                }
+
+                                self.log.debug('finished updating website linkList', website.get('linkLists'));
+
+                                //finally done...
+                                cb(err, indexPageId);
+                            });
+
                         });
+
                     });
                 } else {
                     self.log.debug('Skipping page creation');

@@ -106,14 +106,14 @@
             .error(errorPage));
 		}
 
-		function savePage(page, isSettings) { 
+		function savePage(page, isSettings) {
             function success(data) {
                 if(ssbService.pages && ssbService.pages[page.handle] && data.title){
                     ssbService.pages[page.handle].title = data.title;
                 }
                 console.log('SimpleSiteBuilderService requested page settings saved' + data);
-            }   
-            if(!isSettings)        
+            }
+            if(!isSettings)
                 page.sb = true;
 			return (
 				ssbRequest($http({

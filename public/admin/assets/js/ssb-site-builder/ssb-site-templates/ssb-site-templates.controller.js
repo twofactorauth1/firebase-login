@@ -56,7 +56,9 @@ function ssbSiteBuilderSiteTemplatesController($scope, $attrs, $filter, $documen
         SimpleSiteBuilderService.setSiteTemplate(templateId).then(function(response) {
             console.log(response.data);
             if (response.data.ok && response.data.indexPageId) {
-                $location.path('/website/site-builder/pages/' + response.data.indexPageId);
+                SimpleSiteBuilderService.getSite(vm.state.website._id).then(function(){
+                    $location.path('/website/site-builder/pages/' + response.data.indexPageId);
+                });
             }
         });
     }
@@ -64,10 +66,11 @@ function ssbSiteBuilderSiteTemplatesController($scope, $attrs, $filter, $documen
     function redirectToEditor() {
         var id = '';
         var homePage = null;
-        var pagesArray = null;
+        var pagesArray = [];
 
-        if(vm.state.pages)
+        if (vm.state.pages) {
            pagesArray =  Object.keys(vm.state.pages);
+        }
 
         if (pagesArray.length) {
 

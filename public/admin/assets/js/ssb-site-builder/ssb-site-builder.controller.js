@@ -353,8 +353,11 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     };
 
     function setupBreakpoints() {
-      $window.eqjs.refreshNodes();
-      $window.eqjs.query();
+        $timeout(function() {
+            console.log('setupBreakpoints')
+            $window.eqjs.refreshNodes();
+            $window.eqjs.query();
+        }, 1000);
     };
 
     // Hook froala insert up to our Media Manager
