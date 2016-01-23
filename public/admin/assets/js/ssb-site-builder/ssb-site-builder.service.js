@@ -114,7 +114,7 @@
                 console.log('SimpleSiteBuilderService requested page settings saved' + data);
             }
             if(!isSettings)
-                page.sb = true;
+                page.ssb = true;
 			return (
 				ssbRequest($http({
 					url: basePageAPIUrlv2 + page._id,

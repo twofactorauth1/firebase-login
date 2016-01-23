@@ -313,7 +313,7 @@ module.exports = {
                     templateId: templateId,
                     created: created,
                     modified:created,
-                    sb:true
+                    ssb:true
 
                 });
                 pageDao.saveOrUpdate(page, function(err, value){
