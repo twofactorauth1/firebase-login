@@ -110,7 +110,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 return self.send403(res);
             } else {
                 var pageId = req.params.id;
-                
+
                 ssbManager.deletePage(pageId, accountId, function (err, page) {
                     if(err) {
                         self.wrapError(resp, 500, err, "Error deleting page");
@@ -495,7 +495,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var accountId = parseInt(self.accountId(req));
         var websiteId = req.params.id;
         var siteTemplateId = req.params.siteTemplateId;
-        var siteThemeId = req.params.siteThemeId;
+        var siteThemeId = req.body.siteThemeId;
         var created = {
             date: new Date(),
             by: self.userId(req)

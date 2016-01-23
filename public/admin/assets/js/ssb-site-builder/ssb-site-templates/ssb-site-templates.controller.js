@@ -12,11 +12,13 @@ function ssbSiteBuilderSiteTemplatesController($scope, $attrs, $filter, $documen
 
     vm.init = init;
     vm.selectSiteTemplate = selectSiteTemplate;
+    vm.getSiteTemplates = getSiteTemplates;
     vm.redirectToEditor = redirectToEditor;
 
 
     vm.state = {};
     vm.uiState = {};
+
 
     var unbindPagesWatcher = $scope.$watch(function() { return SimpleSiteBuilderService.pages }, function(pages) {
         if (pages) {
@@ -45,19 +47,42 @@ function ssbSiteBuilderSiteTemplatesController($scope, $attrs, $filter, $documen
     /*
      * Get Site Templates
      */
-    SimpleSiteBuilderService.getSiteTemplates().then(function(siteTemplates) {
-        if (siteTemplates.data) {
-            vm.state.siteTemplates = siteTemplates.data;
-        }
-    });
+    function getSiteTemplates() {
+        SimpleSiteBuilderService.getSiteTemplates().then(function(siteTemplates) {
+            if (siteTemplates.data) {
+                vm.state.siteTemplates = siteTemplates.data;
+            }
+        });
+    }
 
-
+    /*
+     * Select Site Template
+     *
+     * - set template on website
+     * - check response has created index page handle
+     * - get latest website from server (so it includes latest linkLists and themeId)
+     * - get latest theme data for that theme
+     * - forward to editor with index page active
+     *
+     * - TODO: can optimize this when theme is materialized on website response
+     */
     function selectSiteTemplate(templateId) {
+        vm.uiState.loading = true;
         SimpleSiteBuilderService.setSiteTemplate(templateId).then(function(response) {
             console.log(response.data);
             if (response.data.ok && response.data.indexPageId) {
                 SimpleSiteBuilderService.getSite(vm.state.website._id).then(function(){
-                    $location.path('/website/site-builder/pages/' + response.data.indexPageId);
+                    SimpleSiteBuilderService.setupTheme().then(function() {
+
+                        $timeout(function() {
+                            $location.path('/website/site-builder/pages/' + response.data.indexPageId);
+                        }, 500);
+
+                        $timeout(function() {
+                            vm.uiState.loading = false;
+                        }, 2000);
+
+                    });
                 });
             }
         });
@@ -94,6 +119,8 @@ function ssbSiteBuilderSiteTemplatesController($scope, $attrs, $filter, $documen
     function init(element) {
 
         vm.element = element;
+
+        vm.getSiteTemplates();
 
     }
 }

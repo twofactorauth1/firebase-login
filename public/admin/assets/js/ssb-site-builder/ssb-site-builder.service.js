@@ -37,10 +37,11 @@
         ssbService.getUserSections   = getUserSections;
 		ssbService.checkForDuplicatePage = checkForDuplicatePage;
 		ssbService.loading = { value: 0 };
-    	ssbService.getThemes = getThemes;
+        ssbService.getThemes = getThemes;
+    	ssbService.setupTheme = setupTheme;
         ssbService.applyThemeToSite = applyThemeToSite;
         ssbService.createPage = createPage;
-        ssbService.createDuplicatePage = createDuplicatePage;        
+        ssbService.createDuplicatePage = createDuplicatePage;
         ssbService.getTemplates = getTemplates;
         ssbService.getSiteTemplates = getSiteTemplates;
         ssbService.setSiteTemplate = setSiteTemplate;
@@ -158,7 +159,7 @@
         }
 
         function createDuplicatePage(page) {
-            
+
             return (
                 ssbRequest($http({
                   url: baseWebsiteAPIUrlv2 + ssbService.website._id + '/duplicate/page/',
@@ -615,6 +616,27 @@
         }
 
         /*
+         * setup Theme
+         *
+         * - get latest theme data based on website's themeId
+         *
+         */
+        function setupTheme() {
+            return ssbService.getThemes().then(function(themes) {
+                var theme = themes.data.filter(function(t) { return t._id === ssbService.website.themeId })[0] || {};
+                var defaultTheme;
+
+                if (theme._id) {
+                    ssbService.applyThemeToSite(theme, true);
+                } else {
+                    defaultTheme = themes.data.filter(function(t) { return t.handle === 'default' })[0] || {};
+                    ssbService.applyThemeToSite(defaultTheme);
+                }
+
+            });
+        }
+
+        /*
          * Apply theme fonts, styles and default themeoverrides for theme
          *
          * @param theme - theme obj
@@ -688,18 +710,7 @@
 			AccountService.getAccount(function(data) {
 				ssbService.websiteId = data.website.websiteId;
                 ssbService.getSite(data.website.websiteId).then(function() {
-                    ssbService.getThemes().then(function(themes) {
-                        var theme = themes.data.filter(function(t) { return t._id === ssbService.website.themeId })[0] || {};
-                        var defaultTheme;
-
-                        if (theme._id) {
-                            ssbService.applyThemeToSite(theme, true);
-                        } else {
-                            defaultTheme = themes.data.filter(function(t) { return t.handle === 'default' })[0] || {};
-                            ssbService.applyThemeToSite(defaultTheme);
-                        }
-
-                    });
+                    ssbService.setupTheme();
                 });
                 ssbService.getPages();
                 ssbService.getTemplates();
