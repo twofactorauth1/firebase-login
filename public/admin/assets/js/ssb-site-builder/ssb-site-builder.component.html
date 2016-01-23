@@ -60,55 +60,6 @@
     color: {{vm.state.website.themeOverrides.styles.primaryBtnTextColor}};
 }
 
-/*.ssb-main.ssb-theme-{{vm.state.website.theme.handle}} .ssb-spectrum-color-picker-text .sp-preview-inner {
-    background-color: {{vm.state.website.themeOverrides.styles.primaryTextColor}};
-}
-
-.ssb-main.ssb-theme-{{vm.state.website.theme.handle}} .ssb-spectrum-color-picker-background .sp-preview-inner {
-    background-color: {{vm.state.website.themeOverrides.styles.bodyBackgroundColor}};
-}*/
-
-/*
-{
-  "_id": "565dcf9ffa7d8f489a489103",
-  "name": "Young Soul",
-  "accountId": 6,
-  "public": true,
-  "ssb": true,
-  "styles": {
-    "bodyBackgroundColor": null,
-    "headerBackgroundColor": null,
-    "headerTextColor": null,
-    "headerSize",
-    "heroSize",
-    "heroTextColor",
-    "heroBackgroundColor",
-    "headingSize": "16px",
-    "paragraphSize": "12px",
-    "primaryBtnBackgroundColor": null,
-    "primaryBtnTextColor": null,
-    "primaryTextColor": null
-  },
-  "headingFontStack": "\"Roboto\", \"Helvetica\", \"Arial\", \"sans-serif\"",
-  "paragraphFontStack": "\"Roboto\", \"Helvetica\", \"Arial\", \"sans-serif\"",
-  "defaultSections": [
-    {}
-  ],
-  "created": {
-    "date": "2016-01-12T20:16:14.954Z",
-    "by": null
-  },
-  "modified": {
-    "date": null,
-    "by": null
-  },
-  "defaultFontStack": "\"Roboto\", \"Helvetica\", \"Arial\", \"sans-serif\"",
-  "handle": "young-soul",
-  "previewImage": "https://s3.amazonaws.com/indigenous-themes/young-soul/young-soul-preview.png",
-  "hasCustomFonts": true
-}
-*/
-
 
 </style>
 <div>
@@ -116,7 +67,7 @@
     <div class="loading-editor" ct-fullheight="window" data-ct-fullheight-exclusion="header" ng-hide="vm.uiState.loaded">
         <div class="col-xs-12">
             <h1 class="center"><span class="fa fa-spinner fa-spin"></span><br><br>
-             Hang tight, we're loading your page...       
+             Hang tight, we're loading your page...
             </h1>
         </div>
     </div>
@@ -148,7 +99,7 @@
 					class="ssb-page-section"
 					state="vm.state"
 					ui-state="vm.uiState"
-          ng-if="section.visibility || vm.section.visibility === undefined">
+                    ng-if="section.visibility || vm.section.visibility === undefined">
 				</ssb-page-section>
 
 			</div>
@@ -164,6 +115,7 @@
     <div data-ng-include data-src=" 'assets/js/ssb-site-builder/ssb-controls/ssb-add-section-modal/ssb-add-section-modal.component.html' " ></div>
     <div data-ng-include data-src=" 'assets/js/ssb-site-builder/ssb-controls/ssb-page-settings-modal/ssb-page-settings-modal.component.html' " ></div>
     <div data-ng-include data-src=" 'assets/js/ssb-site-builder/ssb-components/social-link/modal.settings.html' " ></div>
+    <div data-ng-include data-src=" 'assets/js/ssb-site-builder/ssb-components/contact-us/modal.settings.html' " ></div>
     <div data-ng-include data-src=" 'assets/views/partials/social-links-modal.html' " ></div>
     <div data-ng-include data-src=" 'assets/views/partials/ssb-new-page-modal.html' " ></div>
 

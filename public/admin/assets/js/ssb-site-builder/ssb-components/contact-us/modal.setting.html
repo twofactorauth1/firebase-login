@@ -1,0 +1,66 @@
+<script type="text/ng-template" id="ssb-contact-us-modal">
+    <div id="component-setting-modal">
+        <div class="modal-header">
+            <div class="modal-btns">
+                <button type="button" class="close" ng-click="closeModal()">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                <a aria-hidden="true" class="close" type="button" style="font-size: 24px;line-height: 34px;" ng-mouseenter="hover = true" ng-mouseleave="hover = false"><i class="fa fa-eye" style="font-size: 20px;"></i></a>
+            </div>
+            <h4 class="modal-title">{{(component.type | cleanType || component.header_title || component.type | uppercase) | htmlToPlaintext}} Settings</h4>
+        </div>
+        <div class="modal-body no-padding" ng-class="{hidden: hover}">
+            <tabset>
+                <tab>
+                    <tab-heading>
+                        <span>Address</span>
+                    </tab-heading>
+
+                    <div
+                        data-ng-include
+                        data-src=" 'assets/js/ssb-site-builder/ssb-components/shared/contact-us-address.html' " >
+                    </div>
+
+                </tab>
+                <tab>
+                    <tab-heading>
+                        <span>Address</span>
+                    </tab-heading>
+
+                    <div
+                        data-ng-include
+                        data-src=" 'assets/js/ssb-site-builder/ssb-components/shared/contact-us-hours.html' " >
+                    </div>
+
+                </tab>
+                <tab>
+                    <tab-heading>
+                        <span>Address</span>
+                    </tab-heading>
+
+                    <div
+                        data-ng-include
+                        data-src=" 'assets/js/ssb-site-builder/ssb-components/shared/map.html' " >
+                    </div>
+
+                </tab>
+            </tabset>
+            </div>
+            <div class="modal-footer" ng-class="{hidden: hover}">
+                <div class="form-group margin-bottom-0">
+                    // <a type="button" ng-click="revertComponent()" class="btn btn-warning btn-o btn-wide">
+                    //     Revert
+                    // </a>
+                    <a type="button" class="btn btn-info btn-wide btn-o" ng-click="closeModal()">
+                        Done
+                    </a>
+                </div>
+            </div>
+            <a class="btn btn-outline pull-right media-modal hidden" on-insert-mediacb="insertMedia" user='user' data-main='true'>
+                <i class="fa fa fa-image"></i>
+                <span class="hidden-xs">Media</span>
+            </a>
+            <!-- /.modal -->
+        </div>
+</script>

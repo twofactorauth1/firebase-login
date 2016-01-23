@@ -1,5 +1,14 @@
 <div>
-    <section id="page-title" class="padding-top-15 padding-bottom-15">
+
+    <div class="loading-editor" ct-fullheight="window" data-ct-fullheight-exclusion="header" ng-hide="!vm.uiState.loading">
+        <div class="col-xs-12">
+            <h1 class="center"><span class="fa fa-spinner fa-spin"></span><br><br>
+             Loading...
+            </h1>
+        </div>
+    </div>
+
+    <section id="page-title" class="padding-top-15 padding-bottom-15" ng-hide="vm.uiState.loading">
         <div class="row">
             <div class="col-xs-12">
                 <h1 class="mainTitle">Site Builder</h1>
@@ -7,7 +16,7 @@
             </div>
         </div>
     </section>
-    <section class="ssb-site-template-grid">
+    <section class="ssb-site-template-grid" ng-hide="vm.uiState.loading">
 
         <ul class="list-unstyled">
 
