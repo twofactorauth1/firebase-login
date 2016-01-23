@@ -15,7 +15,7 @@
 }
 .fr-element {
   background: transparent;
-  color: #000000;
+  /*color: #000000;*/
   position: relative;
   z-index: 2;
   text-align: initial;
