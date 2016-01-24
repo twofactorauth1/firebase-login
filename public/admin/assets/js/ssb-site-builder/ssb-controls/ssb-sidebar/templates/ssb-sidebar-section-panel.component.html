@@ -4,14 +4,32 @@
     ind-draggable>
 
     <h4 class="ssb-sidebar-sub-heading">
-        <span ng-if="vm.uiState.openSidebarSectionPanel.name === ''">{{vm.state.page.sections[vm.uiState.activeSectionIndex].name}}</span>
-        <div
-            ng-if="vm.uiState.openSidebarSectionPanel.name !== ''">
+        <span ng-if="vm.uiState.openSidebarSectionPanel.name === ''">
+            {{vm.state.page.sections[vm.uiState.activeSectionIndex].name}}
+
+            <!-- {{vm.uiState.activeComponentIndex !== undefined &&
+            vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex]._id !== undefined &&
+            vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex]._id === vm.uiState.openSidebarSectionPanel.id &&
+            (vm.state.page.sections[vm.uiState.activeSectionIndex].components.length === 1)}}
+            <br>
+            vm.uiState.activeComponentIndex:{{vm.uiState.activeComponentIndex}}
+            <br>
+            vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex]._id:{{vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex]._id}}
+            <br>
+            vm.uiState.openSidebarSectionPanel.id:{{vm.uiState.openSidebarSectionPanel.id}}
+            <br>
+            (vm.state.page.sections[vm.uiState.activeSectionIndex].components.length === 1):{{(vm.state.page.sections[vm.uiState.activeSectionIndex].components.length === 1)}}
+            <br> -->
+
+        </span>
+        <div ng-if="vm.uiState.openSidebarSectionPanel.name !== ''">
 
             <i class="ti-arrow-left" ng-click="vm.uiState.navigation.sectionPanel.back();"></i>
             {{vm.uiState.openSidebarSectionPanel.name | cleanType}}
 
-            <!-- {{vm.uiState.openSidebarSectionPanel}} -->
+            <!-- {{vm.uiState.openSidebarSectionPanel._id}}-
+            {{vm.uiState.openSidebarSectionPanel.name}}-
+            {{vm.uiState.openSidebarSectionPanel.componentId}}- -->
 
         </div>
     </h4>
@@ -20,7 +38,7 @@
 
     <!-- Section Settings Home -->
     <ssb-sidebar-settings-panel
-        ng-if="!vm.uiState.openSidebarSectionPanel.id"
+        ng-if="!vm.uiState.openSidebarSectionPanel.id && (vm.state.page.sections[vm.uiState.activeSectionIndex].components.length > 1)"
         settings-template="assets/js/ssb-site-builder/ssb-components/ssb-page-section/sidebar.settings.html"
         component="vm.state.page.sections[vm.uiState.activeSectionIndex]"
         state="vm.state"
@@ -50,7 +68,7 @@
     <!-- Component Settings Home -->
     <ssb-sidebar-settings-panel
         class="ssb-sidebar-section-panel-component-panel container-fluid"
-        ng-if="vm.uiState.activeComponentIndex !== undefined && vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex]._id !== undefined && vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex]._id === vm.uiState.openSidebarSectionPanel.id"
+        ng-if="vm.uiState.activeComponentIndex !== undefined && vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex]._id !== undefined && vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex]._id === vm.uiState.openSidebarSectionPanel.id && (vm.state.page.sections[vm.uiState.activeSectionIndex].components.length === 1)"
         settings-template="assets/js/ssb-site-builder/ssb-components/#COMPONENTTYPE#/sidebar.settings.html"
         component="vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex]"
         state="vm.state"
