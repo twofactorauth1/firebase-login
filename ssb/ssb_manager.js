@@ -726,12 +726,14 @@ module.exports = {
                         } else {
                             self.log.debug('<< check for index page');
                             if(page){
-                                var query = {};
-                                var pageId = page.get("_id");
-                                query._id = new RegExp('' + pageId + '(_.*)*');
-                                pageDao.removeByQuery(query, $$.m.ssb.Page, function(err, value){                                
+                                page.set("handle", "index-old-" + new Date().getTime() );
+                                var visibility = page.get("visibility");
+                                visibility.visible = false;
+                                page.set("visibility", visibility );
+                                
+                                pageDao.saveOrUpdate(page, function(err, value){                                
                                     if (err) {
-                                        self.log.error('Error deleting page with id [' + pageId + ']: ' + err);
+                                        self.log.error('Error updating page with id [' + page.get("_id") + ']: ' + err);
                                         cb(err);
                                     } else {
                                         updatedPage.set("handle", 'index');
