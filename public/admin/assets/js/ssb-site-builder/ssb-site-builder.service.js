@@ -631,6 +631,8 @@
                 } else {
                     defaultTheme = themes.data.filter(function(t) { return t.handle === 'default' })[0] || {};
                     ssbService.applyThemeToSite(defaultTheme);
+                    ssbService.website.themeId = defaultTheme._id;
+                    ssbservice.saveWebsite(ssbService.website);
                 }
 
             });
@@ -645,7 +647,7 @@
          */
         function applyThemeToSite(theme, keepCurrentOverrides) {
             // Load web font loader
-            
+
 
                 var unbindWatcher = $rootScope.$watch(function() {
                     return angular.isDefined(window.WebFont);
@@ -654,7 +656,7 @@
                         var defaultFamilies = ["Roboto", "Oswald", "Montserrat", "Open+Sans+Condensed"];
                         if (theme.name && theme.hasCustomFonts) {
                           var _fontStack = theme.defaultFontStack.split(',')[0].replace(/"/g, '');
-                          if(defaultFamilies.indexOf(_fontStack) === -1)  
+                          if(defaultFamilies.indexOf(_fontStack) === -1)
                             defaultFamilies.push(_fontStack);
                         }
                         window.WebFont.load({
@@ -671,12 +673,12 @@
                         sessionStorage.fonts = true;
                     }
                 }
-            
+
 
             ssbService.website.themeId = theme._id;
             ssbService.website.theme = theme;
 
-            if (keepCurrentOverrides === undefined) {
+            if (keepCurrentOverrides === undefined || !angular.isDefined(ssbService.website.themeOverrides.styles)) {
                 $timeout(function() {
                     ssbService.website.themeOverrides = theme;
                 });

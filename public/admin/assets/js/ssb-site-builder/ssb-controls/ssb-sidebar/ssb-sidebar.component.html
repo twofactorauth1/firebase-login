@@ -182,12 +182,11 @@
 
                 <h4 class="ssb-sidebar-sub-heading">
                     <span>All Pages ({{vm.getNumberOfPages(vm.state.pages)}})</span>
-                    <!-- <div ng-click="vm.openModal('new-page-modal', null, null, 'lg');" class="ssb-sidebar-item-icon ti-plus display-ib" tooltip-placement="left" tooltip-html-unsafe="Create New Page"></div> -->
                 </h4>
 
                 <div class="close-panel ti-close"  ng-click="vm.uiState.openSidebarPanel = ''"></div>
 
-                <button ng-click="vm.openModal('new-page-modal', null, null, 'lg');" class="btn btn-primary">Add Page</button>
+                <button ng-click="vm.openModal('ssb-new-page-modal', null, null, null);" class="btn btn-primary">Add Page</button>
 
                 <ul class="list-unstyled">
                     <li ng-repeat="page in vm.state.pages track by $index" class="ssb-page-section-settings-item">

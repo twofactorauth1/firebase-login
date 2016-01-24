@@ -67,6 +67,7 @@ function ssbSiteBuilderSiteTemplatesController($scope, $attrs, $filter, $documen
      *
      * - set template on website
      * - check response has created index page handle
+     * - get latest pages from server
      * - get latest website from server (so it includes latest linkLists and themeId)
      * - get latest theme data for that theme
      * - forward to editor with index page active
@@ -78,13 +79,21 @@ function ssbSiteBuilderSiteTemplatesController($scope, $attrs, $filter, $documen
         SimpleSiteBuilderService.setSiteTemplate(templateId).then(function(response) {
             console.log(response.data);
             if (response.data.ok && response.data.indexPageId) {
+                //get all pages
+                SimpleSiteBuilderService.getPages();
+
+                //get latest website
                 SimpleSiteBuilderService.getSite(vm.state.website._id).then(function(){
+
+                    //set theme
                     SimpleSiteBuilderService.setupTheme().then(function() {
 
+                        //forward to editor
                         $timeout(function() {
                             $location.path('/website/site-builder/pages/' + response.data.indexPageId);
                         }, 500);
 
+                        //clear loading var
                         $timeout(function() {
                             vm.uiState.loading = false;
                         }, 2000);

@@ -6507,6 +6507,20 @@ a[href="https://froala.com/wysiwyg-editor"] {
 .ssb-section-modal .ssb-section-modal-list-item.active {
   opacity: 1;
 }
+.ssb-pages-modal .single-type {
+  cursor: pointer;
+}
+.ssb-pages-modal .single-type:hover .fa-chevron-right {
+  color: #47B8D9;
+}
+.ssb-pages-modal-preview-image {
+  max-height: 150px;
+  margin: 0 0 1em 0;
+  overflow: hidden;
+}
+.ssb-page-modal-right-arrow {
+  cursor: pointer;
+}
 .ssb-theme-settings-list li {
   display: inline-block;
 }
@@ -7156,7 +7170,7 @@ body[class*="ssb-theme-"] .ssb-theme-main-header-text {
 .ssb-main[data-eq-state$="large"] .ssb-page-section-layout-header .navigation-v2 .navbar ul.navbar-nav {
   float: right!important;
   width: 60%!important;
-  margin: 0 40% 0 0!important;
+  margin: 0 50% 0 0!important;
   padding: 0!important;
   text-align: right!important;
 }
@@ -7167,7 +7181,7 @@ body[class*="ssb-theme-"] .ssb-theme-main-header-text {
   .ssb-main:not([class*="ssb-edit-mode"]) .ssb-page-section-layout-header .navigation-v2 .navbar ul.navbar-nav {
     float: right!important;
     width: 60%!important;
-    margin: 0 40% 0 0!important;
+    margin: 0 50% 0 0!important;
     padding: 0!important;
     text-align: right!important;
   }

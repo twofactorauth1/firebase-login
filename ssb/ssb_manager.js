@@ -216,25 +216,68 @@ module.exports = {
             },
             function createSections(website, theme, template, cb) {
                 var sections = template.get('sections');
+                var dereferencedSections = [];
 
                 if (!template.get('ssb') && template.get('config').components.length) {
                     sections = self.transformComponentsToSections(template.get('config').components);
                 }
 
-                _.each(sections, function(section){
-                    var id = $$.u.idutils.generateUUID();
-                    section._id = id;
-                    section.anchor = id;
-                    section.accountId = accountId;
-                });
-                sectionDao.saveSections(sections, function(err, sectionAry){
-                    if(err) {
-                        self.log.error('Error saving default sections:', err);
-                        cb(err);
+                async.eachSeries(sections, function(section, callback){
+
+                    //if template uses section references instead of full section data
+                    if (section._id && Object.keys(section).length === 1) {
+
+                        //then we'll get the reference and set the section data, changing out id's and keeping a ref
+                        self.log.debug('createPage->createSections: use ref instead of creating new');
+
+                        sectionDao.getById(section._id, $$.m.ssb.Section, function(err, referencedSection){
+                            if(err) {
+                                callback(err);
+                            } else {
+                                self.log.debug('referencedSection', referencedSection);
+                                var s = section;
+                                var id = $$.u.idutils.generateUUID();
+                                var refId = s._id;
+                                s = referencedSection.toJSON();
+                                s.ref = refId;
+                                s._id = id;
+                                s.anchor = id;
+                                s.accountId = accountId;
+                                self.log.debug('new dereferenced', s);
+                                dereferencedSections.push(s);
+                                callback();
+                            }
+                        });
+
                     } else {
-                        cb(null, website, theme, template, sectionAry);
+                        var id = $$.u.idutils.generateUUID();
+                        section._id = id;
+                        section.anchor = id;
+                        section.accountId = accountId;
+                        dereferencedSections.push(section);
+                        callback();
                     }
+
+                }, function(err){
+
+                    if(err) {
+                        self.log.error("Error getting template's referenced sections:", err);
+                        cb(err);
+                    }
+
+                    sectionDao.saveSections(dereferencedSections, function(err, sectionAry){
+                        if(err) {
+                            self.log.error('Error saving default sections:', err);
+                            cb(err);
+                        } else {
+                            cb(null, website, theme, template, sectionAry);
+                        }
+                    });
+
                 });
+
+
+
             },
             function getGlobalHeader(website, theme, template, sections, cb){
                 var query = {
@@ -599,23 +642,65 @@ module.exports = {
             },
             function updateSections(existingPage, cb) {
                 var sections = page.get('sections');
+                var dereferencedSections = [];
 
-                _.each(sections, function(section){
-                    //if the accountId is 0, it is a platform section
-                    if(section.accountId === 0) {
-                        section._id = null;
-                    }
-                    section.accountId = accountId;
-                });
+                // _.each(sections, function(section){
+                async.eachSeries(sections, function(section, callback){
 
-                sectionDao.saveSections(sections, function(err, updatedSections){
-                    if(err) {
-                        self.log.error('Error saving sections:', err);
-                        cb(err);
+                    //if template uses section references instead of full section data
+                    if (section._id && Object.keys(section).length === 1) {
+                        sectionDao.getById(section._id, $$.m.ssb.Section, function(err, referencedSection){
+                            if(err) {
+                                callback(err);
+                            } else {
+                                self.log.debug('referencedSection', referencedSection);
+                                var s = section;
+                                var id = $$.u.idutils.generateUUID();
+                                var refId = s._id;
+                                s = referencedSection.toJSON();
+                                s.ref = refId;
+                                s._id = id;
+                                s.anchor = id;
+                                s.accountId = accountId;
+                                self.log.debug('new dereferenced', s);
+                                dereferencedSections.push(s);
+                                callback();
+                            }
+                        });
+
                     } else {
-                        cb(null, existingPage, updatedSections);
+
+                        if (section.accountId === 0) {
+                            var id = $$.u.idutils.generateUUID();
+                            section._id = id;
+                            section.anchor = id;
+                        }
+
+                        section.accountId = accountId;
+                        dereferencedSections.push(section);
+                        callback();
+
                     }
+
+                }, function(err){
+
+                    if(err) {
+                        self.log.error("Error getting template's referenced sections:", err);
+                        cb(err);
+                    }
+
+                    sectionDao.saveSections(dereferencedSections, function(err, updatedSections){
+                        if(err) {
+                            self.log.error('Error saving sections:', err);
+                            cb(err);
+                        } else {
+                            cb(null, existingPage, updatedSections);
+                        }
+                    });
+
                 });
+
+
             },
             function updateThePage(existingPage, updatedSections, cb){
                 //var sections = page.get('sections');
