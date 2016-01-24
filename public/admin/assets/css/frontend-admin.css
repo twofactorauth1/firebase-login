@@ -6998,32 +6998,32 @@ ssb-topbar .ui-select-match-text > small {
 .ssb-control-bar .btn[disabled] {
   pointer-events: none;
 }
-body[class*="ssb-theme-"] .ssb-page-section-layout-hero .btn,
-body[class*="ssb-theme-"] .ssb-page-section-layout-hero .btn-default,
-body[class*="ssb-theme-"] .ssb-page-section-layout-hero .btn-block,
-body[class*="ssb-theme-"] .ssb-page-section-layout-hero .btn-primary,
-body[class*="ssb-theme-"] .ssb-page-section-layout-hero button,
-body[class*="ssb-theme-"] .ssb-page-section-layout-hero .ssb-theme-btn {
+[class*="ssb-theme-"] .ssb-page-section-layout-hero .btn,
+[class*="ssb-theme-"] .ssb-page-section-layout-hero .btn-default,
+[class*="ssb-theme-"] .ssb-page-section-layout-hero .btn-block,
+[class*="ssb-theme-"] .ssb-page-section-layout-hero .btn-primary,
+[class*="ssb-theme-"] .ssb-page-section-layout-hero button,
+[class*="ssb-theme-"] .ssb-page-section-layout-hero .ssb-theme-btn {
   line-height: 1em;
   vertical-align: middle;
 }
-body[class*="ssb-theme-"] .ssb-page-section-layout-hero .btn *,
-body[class*="ssb-theme-"] .ssb-page-section-layout-hero .btn-default *,
-body[class*="ssb-theme-"] .ssb-page-section-layout-hero .btn-block *,
-body[class*="ssb-theme-"] .ssb-page-section-layout-hero .btn-primary *,
-body[class*="ssb-theme-"] .ssb-page-section-layout-hero button *,
-body[class*="ssb-theme-"] .ssb-page-section-layout-hero .ssb-theme-btn * {
+[class*="ssb-theme-"] .ssb-page-section-layout-hero .btn *,
+[class*="ssb-theme-"] .ssb-page-section-layout-hero .btn-default *,
+[class*="ssb-theme-"] .ssb-page-section-layout-hero .btn-block *,
+[class*="ssb-theme-"] .ssb-page-section-layout-hero .btn-primary *,
+[class*="ssb-theme-"] .ssb-page-section-layout-hero button *,
+[class*="ssb-theme-"] .ssb-page-section-layout-hero .ssb-theme-btn * {
   display: inline-block;
   line-height: 1;
 }
-body[class*="ssb-theme-"] .ssb-theme-main-header-text {
+[class*="ssb-theme-"] .ssb-theme-main-header-text {
   font-size: 43px;
   margin: 34px auto 0;
   text-align: center;
   width: 60%;
 }
 @media screen and (min-width: 768px) {
-  body[class*="ssb-theme-"] .ssb-theme-main-header-text {
+  [class*="ssb-theme-"] .ssb-theme-main-header-text {
     font-size: 96px;
   }
 }
@@ -7146,6 +7146,9 @@ body[class*="ssb-theme-"] .ssb-theme-main-header-text {
 /*
  * OVERRIDES FOR LEGACY COMPONENT STYLES
  */
+.ssb-main .ssb-page-section-layout-header .nav-logo {
+  display: none!important;
+}
 .ssb-main .ssb-page-section-layout-header .masthead-v1 .home-text {
   padding: 0!important;
 }
@@ -7166,24 +7169,27 @@ body[class*="ssb-theme-"] .ssb-theme-main-header-text {
 .ssb-main[data-eq-state$="large"] .ssb-page-section-layout-header .navigation-v2 .navbar .nav > li > a {
   padding: 10px 25px 10px;
 }
+.ssb-main[data-eq-state$="medium"] .ssb-page-section-layout-header [navigation-component],
+.ssb-main[data-eq-state$="large"] .ssb-page-section-layout-header [navigation-component] {
+  float: left;
+  width: 50%;
+}
 .ssb-main[data-eq-state$="medium"] .ssb-page-section-layout-header .navigation-v2 .navbar ul.navbar-nav,
 .ssb-main[data-eq-state$="large"] .ssb-page-section-layout-header .navigation-v2 .navbar ul.navbar-nav {
   float: right!important;
-  width: 60%!important;
-  margin: 0 50% 0 0!important;
-  padding: 0!important;
-  text-align: right!important;
+  width: auto!important;
 }
 @media screen and (min-width: 768px) {
   .ssb-main:not([class*="ssb-edit-mode"]) .ssb-page-section-layout-header .navigation-v2 .navbar .nav > li > a {
     padding: 10px 25px 10px;
   }
+  .ssb-main:not([class*="ssb-edit-mode"]) .ssb-page-section-layout-header [navigation-component] {
+    float: left;
+    width: 50%;
+  }
   .ssb-main:not([class*="ssb-edit-mode"]) .ssb-page-section-layout-header .navigation-v2 .navbar ul.navbar-nav {
     float: right!important;
-    width: 60%!important;
-    margin: 0 50% 0 0!important;
-    padding: 0!important;
-    text-align: right!important;
+    width: auto!important;
   }
 }
 .ssb-main[data-eq-state$="large"] .ssb-page-section-layout-header .navigation-v2 .navbar ul.navbar-nav {
@@ -7220,10 +7226,8 @@ body[class*="ssb-theme-"] .ssb-theme-main-header-text {
 }
 .ssb-main[data-eq-state$="medium"] .ssb-page-section-layout-header .social-link-v1 .social-link ul,
 .ssb-main[data-eq-state$="large"] .ssb-page-section-layout-header .social-link-v1 .social-link ul {
-  position: absolute!important;
-  right: 0!important;
-  width: 35%!important;
-  top: -5em !important;
+  margin-bottom: 10px!important;
+  padding-top: 0!important;
 }
 .ssb-main[data-eq-state$="medium"] .ssb-page-section-layout-header .social-link-v1 .social-link ul li,
 .ssb-main[data-eq-state$="large"] .ssb-page-section-layout-header .social-link-v1 .social-link ul li {
@@ -7231,10 +7235,8 @@ body[class*="ssb-theme-"] .ssb-theme-main-header-text {
 }
 @media screen and (min-width: 768px) {
   .ssb-main:not([class*="ssb-edit-mode"]) .ssb-page-section-layout-header .social-link-v1 .social-link ul {
-    position: absolute!important;
-    right: 0!important;
-    width: 35%!important;
-    top: -5em !important;
+    margin-bottom: 10px!important;
+    padding-top: 0!important;
   }
   .ssb-main:not([class*="ssb-edit-mode"]) .ssb-page-section-layout-header .social-link-v1 .social-link ul li {
     float: left!important;
@@ -7255,7 +7257,13 @@ body[class*="ssb-theme-"] .ssb-theme-main-header-text {
 .ssb-main .simple-form-v1 .inner-page {
   padding: 0 0 30px!important;
 }
-[ssb-text-component] {
+.ssb-page-section-layout-header [ssb-text-component] {
+  width: 100%;
+  height: 150px;
+  text-align: center;
+  font-size: 96px;
+}
+.ssb-page-section-layout-hero [ssb-text-component] {
   position: absolute;
   top: 50%;
   left: 50%;
