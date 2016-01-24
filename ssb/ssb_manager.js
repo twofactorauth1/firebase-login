@@ -341,11 +341,11 @@ module.exports = {
 
     createDuplicatePage: function(accountId, page, created, fn) {
         var self = this;
-        self.log.debug('>> createDuplicatePage');           
-                
+        self.log.debug('>> createDuplicatePage');
+
         var pageHandle = slug(page.get('handle')) +  '-' + $$.u.idutils.generateUniqueAlphaNumeric(5, true, true);
-        
-        
+
+
         page.set("handle", pageHandle);
         page.set("created", created);
         page.set("modified", created);
@@ -361,7 +361,7 @@ module.exports = {
     },
 
     deletePage: function(pageId, accountId, fn) {
-        var self = this;        
+        var self = this;
 
         self.log.debug('>> deletePage');
 
@@ -390,7 +390,7 @@ module.exports = {
                                 var query = {};
                                 query._id = new RegExp('' + pageId + '(_.*)*');
                                 pageDao.removeByQuery(query, $$.m.ssb.Page, function(err, value){
-                                
+
                                     if (err) {
                                         self.log.error('Error deleting page with id [' + pageId + ']: ' + err);
                                         fn(err, null);
@@ -582,7 +582,7 @@ module.exports = {
         });
     },
 
-    updatePage: function(accountId, pageId, page, modified,homePage, fn) {
+    updatePage: function(accountId, pageId, page, modified, homePage, fn) {
         var self = this;
         self.log.debug('>> updatePage (' + pageId + ')');
 
@@ -662,7 +662,7 @@ module.exports = {
                     }
                     cb(null, updatedPage, updatedSections);
                 });
-            },            
+            },
             function updateLinkList(updatedPage, updatedSections, cb){
                 if (updatedPage && updatedPage.get('mainmenu') === false) {
                     self.getWebsiteLinklistsByHandle(accountId, updatedPage.get('websiteId'), "head-menu", function(err, list) {
@@ -715,7 +715,7 @@ module.exports = {
                 }
                 else{
                     cb(null, updatedPage, updatedSections);
-                }               
+                }
             },
             function setAsHomePage(updatedPage, updatedSections, cb){
                 if (updatedPage && updatedPage.get("handle") !=='index' && homePage) {
@@ -730,8 +730,8 @@ module.exports = {
                                 var visibility = page.get("visibility");
                                 visibility.visible = false;
                                 page.set("visibility", visibility );
-                                
-                                pageDao.saveOrUpdate(page, function(err, value){                                
+
+                                pageDao.saveOrUpdate(page, function(err, value){
                                     if (err) {
                                         self.log.error('Error updating page with id [' + page.get("_id") + ']: ' + err);
                                         cb(err);
@@ -745,7 +745,7 @@ module.exports = {
                                                 cb(null, updatedPage, updatedSections);
                                             }
                                         });
-                                        
+
                                     }
                                 });
                             }
@@ -760,15 +760,15 @@ module.exports = {
                                         cb(null, updatedPage, updatedSections);
                                     }
                                 });
-                            }   
+                            }
                         }
                     });
                 }
                 else{
                     cb(null, updatedPage, updatedSections);
-                }               
+                }
             }
-            
+
         ], function done(err, updatedPage, updatedSections){
             if(updatedPage) {
                 var sectionArray = [];
@@ -780,6 +780,7 @@ module.exports = {
 
             }
             self.log.debug('<< updatePage');
+            debugger;
             return fn(err, updatedPage);
         });
 
@@ -1059,7 +1060,7 @@ module.exports = {
                                                 indexPageId = pageId;
                                             }
 
-                                            self.updatePage(accountId, pageId, page, created, function(err, savedPage){
+                                            self.updatePage(accountId, pageId, page, created, null, function(err, savedPage){
                                                 self.log.debug('updated page using siteTemplate data');
                                                 callback(err);
                                             });
