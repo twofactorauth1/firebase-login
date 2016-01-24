@@ -227,6 +227,8 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
             //if there is only 1 component in a section, make it active
             if (vm.state.page.sections[index].components.length === 1) {
                 updateActiveComponent(0);
+            } else {
+                vm.uiState.activeComponentIndex = undefined;
             }
 
         }

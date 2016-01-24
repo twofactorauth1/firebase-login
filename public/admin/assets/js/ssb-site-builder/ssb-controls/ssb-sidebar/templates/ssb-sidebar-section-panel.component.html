@@ -38,7 +38,7 @@
 
     <!-- Section Settings Home -->
     <ssb-sidebar-settings-panel
-        ng-if="!vm.uiState.openSidebarSectionPanel.id && (vm.state.page.sections[vm.uiState.activeSectionIndex].components.length > 1)"
+        ng-if="!vm.uiState.openSidebarSectionPanel.id"
         settings-template="assets/js/ssb-site-builder/ssb-components/ssb-page-section/sidebar.settings.html"
         component="vm.state.page.sections[vm.uiState.activeSectionIndex]"
         state="vm.state"
@@ -68,7 +68,7 @@
     <!-- Component Settings Home -->
     <ssb-sidebar-settings-panel
         class="ssb-sidebar-section-panel-component-panel container-fluid"
-        ng-if="vm.uiState.activeComponentIndex !== undefined && vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex]._id !== undefined && vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex]._id === vm.uiState.openSidebarSectionPanel.id && (vm.state.page.sections[vm.uiState.activeSectionIndex].components.length === 1)"
+        ng-if="vm.uiState.activeComponentIndex !== undefined && vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex]._id !== undefined && vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex]._id === vm.uiState.openSidebarSectionPanel.id"
         settings-template="assets/js/ssb-site-builder/ssb-components/#COMPONENTTYPE#/sidebar.settings.html"
         component="vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex]"
         state="vm.state"
@@ -78,7 +78,7 @@
     <!-- Component Settings Design -->
     <ssb-sidebar-settings-panel
         class="ssb-sidebar-section-panel-component-panel container-fluid"
-        ng-if="'design' + vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex]._id === vm.uiState.openSidebarSectionPanel.id"
+        ng-if="vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex] && ('design' + vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex]._id) === vm.uiState.openSidebarSectionPanel.id"
         settings-template="assets/js/ssb-site-builder/ssb-components/shared/sidebar.settings.design.html"
         component="vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex]"
         state="vm.state"
@@ -88,7 +88,7 @@
     <!-- Component Settings Layout -->
     <ssb-sidebar-settings-panel
         class="ssb-sidebar-section-panel-component-panel container-fluid"
-        ng-if="'layout' + vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex]._id === vm.uiState.openSidebarSectionPanel.id"
+        ng-if="vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex] && ('layout' + vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex]._id) === vm.uiState.openSidebarSectionPanel.id"
         settings-template="assets/js/ssb-site-builder/ssb-components/shared/sidebar.settings.layout.html"
         component="vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex]"
         state="vm.state"
@@ -98,7 +98,7 @@
     <!-- Component Settings Advanced -->
     <ssb-sidebar-settings-panel
         class="ssb-sidebar-section-panel-component-panel container-fluid"
-        ng-if="'advanced' + vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex]._id === vm.uiState.openSidebarSectionPanel.id"
+        ng-if="vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex] && ('advanced' + vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex]._id) === vm.uiState.openSidebarSectionPanel.id"
         settings-template="assets/js/ssb-site-builder/ssb-components/shared/sidebar.settings.advanced.html"
         component="vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex]"
         state="vm.state"
@@ -108,7 +108,7 @@
     <!-- Component Settings Specific :: {{'navigation' + vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex]._id}}::{{vm.uiState.openSidebarSectionPanel.id}} -->
     <ssb-sidebar-settings-panel
         class="ssb-sidebar-section-panel-component-panel container-fluid"
-        ng-if="'navigation' + vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex]._id === vm.uiState.openSidebarSectionPanel.id"
+        ng-if="vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex] &&  ('navigation' + vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex]._id) === vm.uiState.openSidebarSectionPanel.id"
         settings-template="assets/js/ssb-site-builder/ssb-components/shared/navigation.html"
         component="vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex]"
         state="vm.state"
