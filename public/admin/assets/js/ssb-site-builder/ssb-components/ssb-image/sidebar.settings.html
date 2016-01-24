@@ -12,7 +12,11 @@
 
 <div class="row padding-10">
     <div class="form-group">
-        <label for="ssb-component-image-settings-alt-text-{{vm.uiState.activeSectionIndex}}">Alt Text</label>
+        <label for="ssb-component-image-settings-alt-text-{{vm.uiState.activeSectionIndex}}">
+            <h5>
+                Image Title <span tooltip-placement="right" tooltip-html-unsafe="Set a descriptive image title for search engines."><i class="fa fa-info-circle" /></span>
+            </h5>
+        </label>
         <input id="ssb-component-image-settings-alt-text-{{vm.uiState.activeSectionIndex}}" type="text" ng-model="component.alttext">
     </div>
 </div>
