@@ -6893,7 +6893,7 @@ a[href="https://froala.com/wysiwyg-editor"] {
 .ssb-sidebar-section-panel .row:not(:first-of-type) {
   border-top: 1px solid #ddd;
 }
-.ssb-sidebar-section-panel .ssb-sidebar-item-icon {
+.ssb-sidebar-section-panel .ssb-sidebar-item-section-actions .ssb-sidebar-item-icon {
   position: static;
   display: inline-block;
   margin: 1em;

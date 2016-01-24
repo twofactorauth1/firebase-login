@@ -227,14 +227,14 @@
                         <div
                             ng-hide="vm.uiState.accordion.sections[vm.uiState.activeSectionIndex].isEdit"
                             class="ssb-sidebar-item-icon ssb-sidebar-item-icon-offset-1 ti-close display-ib"
-                            ng-if="vm.uiState.accordion.sections[vm.uiState.activeSectionIndex].isOpen" ng-click="vm.removeSectionFromPage(vm.uiState.activeSectionIndex)"
+                            ng-if="vm.uiState.activeSectionIndex === $index" ng-click="vm.removeSectionFromPage(vm.uiState.activeSectionIndex)"
                             tooltip-placement="left"
                             tooltip-html-unsafe="Remove section">
                         </div>
                         <div
                             ng-hide="vm.uiState.accordion.sections[vm.uiState.activeSectionIndex].isEdit"
                             class="ssb-sidebar-item-icon ssb-sidebar-item-icon-offset-2 ti-pencil display-ib"
-                            ng-if="vm.uiState.accordion.sections[vm.uiState.activeSectionIndex].isOpen"
+                            ng-if="vm.uiState.activeSectionIndex === $index"
                             ng-click="vm.uiState.accordion.sections[vm.uiState.activeSectionIndex].isEdit = true; vm.editSectionName('editable_{{section._id}}')"
                             tooltip-placement="left"
                             tooltip-html-unsafe="Rename section">
@@ -242,14 +242,14 @@
                         <div
                             ng-hide="vm.uiState.accordion.sections[vm.uiState.activeSectionIndex].isEdit"
                             class="ssb-sidebar-item-icon ssb-sidebar-item-icon-offset-3 display-ib ti-eye"
-                            ng-if="vm.uiState.accordion.sections[vm.uiState.activeSectionIndex].isOpen"
+                            ng-if="vm.uiState.activeSectionIndex === $index"
                             ng-click="vm.hideSectionFromPage(section, vm.uiState.activeSectionIndex)"
                             tooltip-placement="left"
                             tooltip-html-unsafe="Show/hide section">
                         </div>
 
                         <div class="accordion panel-group">
-                            <div class="ssb-sidebar-sortable-item panel panel-default" ng-click="vm.setActiveSection(vm.uiState.activeSectionIndex)" ng-class="{ 'ssb-sidebar-section-open': vm.uiState.accordion.sections[vm.uiState.activeSectionIndex].isOpen }">
+                            <div class="ssb-sidebar-sortable-item panel panel-default" ng-click="vm.setActiveSection($index)" ng-class="{ 'ssb-sidebar-section-open': vm.uiState.activeSectionIndex === $index }">
                                 <div class="panel-heading">
                                     <h4 class="panel-title">
                                         <a href="javascript:void(0)" class="accordion-toggle">

@@ -18,16 +18,6 @@ function ssbSiteBuilderEditControlController($scope, $attrs, $filter, SimpleSite
     function setActiveSection(index) {
     	SimpleSiteBuilderService.setActiveSection(index);
         vm.uiState.showSectionPanel = true;
-
-        var components = vm.state.page.sections[index].components;
-        if (components.length === 1) {
-            vm.uiState.navigation.sectionPanel.loadPanel({
-                'name': components[0].type,
-                'componentId': components[0]._id,
-                'id': components[0]._id
-            })
-        }
-
     }
 
     // function setEditControlVisibilityOn() {
