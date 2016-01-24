@@ -330,7 +330,11 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> updatePage');
         var accountId = parseInt(self.accountId(req));
         var pageId = req.params.id;
-        var updatedPage = new $$.m.ssb.Page(req.body);
+        var _page = req.body;
+        var homePage = _page.homePage;
+        delete _page.homePage;
+        var updatedPage = new $$.m.ssb.Page(_page);
+        
         updatedPage.set('_id', pageId);//make sure we don't change the ID
 
         self.checkPermissionForAccount(req, self.sc.privs.MODIFY_WEBSITE, accountId, function(err, isAllowed) {
@@ -338,7 +342,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 return self.send403(resp);
             } else {
                 var modified = {date: new Date(), by:self.userId(req)};
-                ssbManager.updatePage(accountId, pageId, updatedPage, modified, function(err, page){
+                ssbManager.updatePage(accountId, pageId, updatedPage, modified, homePage, function(err, page){
                     self.log.debug('<< updatePage');
                     self.sendResultOrError(resp, err, page, "Error fetching page");
                     pageCacheManager.updateS3Template(accountId, null, pageId, function(err, value){});

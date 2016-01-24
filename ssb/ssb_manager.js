@@ -374,7 +374,7 @@ module.exports = {
                         fn(err, value);
                     } else {
                         var link = {
-                            label : page.get('title'),
+                            label : page.get('menuTitle') || page.get('title'),
                             type : "link",
                             linkTo : {
                                 type : "page",
@@ -582,7 +582,7 @@ module.exports = {
         });
     },
 
-    updatePage: function(accountId, pageId, page, modified, fn) {
+    updatePage: function(accountId, pageId, page, modified,homePage, fn) {
         var self = this;
         self.log.debug('>> updatePage (' + pageId + ')');
 
@@ -663,7 +663,111 @@ module.exports = {
                     cb(null, updatedPage, updatedSections);
                 });
 
-            }
+            },
+            function setAsHomePage(updatedPage, updatedSections, cb){
+                if (updatedPage && updatedPage.get("handle") !=='index' && homePage) {
+                    self.getPageByHandle(accountId, 'index', updatedPage.get('websiteId'), function(err, page) {
+                        if (err) {
+                            self.log.error('Error getting index page: ' + err);
+                            cb(err);
+                        } else {
+                            self.log.debug('<< check for index page');
+                            if(page){
+                                var query = {};
+                                var pageId = page.get("_id");
+                                query._id = new RegExp('' + pageId + '(_.*)*');
+                                pageDao.removeByQuery(query, $$.m.ssb.Page, function(err, value){                                
+                                    if (err) {
+                                        self.log.error('Error deleting page with id [' + pageId + ']: ' + err);
+                                        cb(err);
+                                    } else {
+                                        updatedPage.set("handle", 'index');
+                                        pageDao.saveOrUpdate(updatedPage, function(err, updatedPage){
+                                            if(err) {
+                                                self.log.error('Error updating page:', err);
+                                                cb(err);
+                                            } else {
+                                                cb(null, updatedPage, updatedSections);
+                                            }
+                                        });
+                                        
+                                    }
+                                });
+                            }
+                            else{
+                                self.log.debug('<< no index page found');
+                                updatedPage.set("handle", 'index');
+                                pageDao.saveOrUpdate(updatedPage, function(err, updatedPage){
+                                    if(err) {
+                                        self.log.error('Error updating page:', err);
+                                        cb(err);
+                                    } else {
+                                        cb(null, updatedPage, updatedSections);
+                                    }
+                                });
+                            }   
+                        }
+                    });
+                }
+                else{
+                    cb(null, updatedPage, updatedSections);
+                }               
+            },
+            function updateLinkList(updatedPage, updatedSections, cb){
+                if (updatedPage && updatedPage.get('mainmenu') === false) {
+                    self.getWebsiteLinklistsByHandle(accountId, updatedPage.get('websiteId'), "head-menu", function(err, list) {
+                        if (err) {
+                            self.log.error('Error getting website linklists by handle: ' + err);
+                            cb(err);
+                        } else {
+                            var link = {
+                                label : updatedPage.get('menuTitle') || updatedPage.get('title'),
+                                type : "link",
+                                linkTo : {
+                                    type : "page",
+                                    data : updatedPage.get('handle')
+                                }
+                            };
+                            list.links.pop(link);
+                            self.updateWebsiteLinklists(accountId, updatedPage.get('websiteId'), "head-menu", list, function(err, linkLists) {
+                                if (err) {
+                                    self.log.error('Error updating website linklists by handle: ' + err);
+                                    cb(err);
+                                } else {
+                                   cb(null, updatedPage, updatedSections);
+                                }
+                            });
+                        }
+                    });
+                }
+                else if (updatedPage && updatedPage.get('mainmenu')) {
+                    self.getWebsiteLinklistsByHandle(accountId, updatedPage.get('websiteId'), "head-menu", function(err, list) {
+                        if (err) {
+                            self.log.error('Error getting website linklists by handle: ' + err);
+                            cb(err);
+                        } else {
+
+                            _.each(list.links, function(link){
+                                if(link.linkTo && link.linkTo.type === 'page' && link.linkTo.data === updatedPage.get('handle')){
+                                    link.label = updatedPage.get('menuTitle') || updatedPage.get('title')
+                                }
+                            });
+                            self.updateWebsiteLinklists(accountId, updatedPage.get('websiteId'), "head-menu", list, function(err, linkLists) {
+                                if (err) {
+                                    self.log.error('Error updating website linklists by handle: ' + err);
+                                    cb(err);
+                                } else {
+                                    cb(null, updatedPage, updatedSections);
+                                }
+                            });
+                        }
+                    });
+                }
+                else{
+                    cb(null, updatedPage, updatedSections);
+                }               
+            },
+            
         ], function done(err, updatedPage, updatedSections){
             if(updatedPage) {
                 var sectionArray = [];

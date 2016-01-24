@@ -10186,6 +10186,9 @@ a[href="https://froala.com/wysiwyg-editor"] {
   display: inline-block;
   margin: 0 0 0 10px;
 }
+.greyed-out {
+  background: #f1f1f1;
+}
 .ssb-sidebar {
   display: none;
   height: 200px;
