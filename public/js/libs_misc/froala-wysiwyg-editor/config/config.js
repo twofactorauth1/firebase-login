@@ -58,7 +58,34 @@ $.FroalaEditor.config = {
         'fr-green': 'Green',
         'fr-strong': 'Thick'
      },
-     imageInsertButtons: ['imageBack', 'imageByURL', 'mediaManager'],
+     fontFamily:{"Arial,Helvetica,sans-serif":"Arial","Georgia,serif":"Georgia",
+                "Impact,Charcoal,sans-serif":"Impact",
+                "Tahoma,Geneva,sans-serif":"Tahoma",
+                "'Times New Roman',Times,serif":"Times New Roman",
+                "Verdana,Geneva,sans-serif":"Verdana",
+                "Roboto,sans-serif": 'Roboto',
+                "Oswald,sans-serif": 'Oswald',
+                "Montserrat,sans-serif": 'Montserrat',
+                "'Open Sans Condensed',sans-serif": 'Open Sans Condensed'
+                }, 
+    imageInsertButtons: ['imageBack', 'imageByURL', 'mediaManager'],
+    // imageUploadToS3: {
+    //     bucket: 'indigenous-digital-assets',
+    //     region: 's3',
+    //     keyStart: 'account_6/',
+    //     callback: function (url, key) {
+    //       // The URL and Key returned from Amazon.
+    //       console.log (url);
+    //       console.log (key);
+    //     },
+    //     params: {
+    //       acl: 'public-read', // ACL according to Amazon Documentation.
+    //       AWSAccessKeyId: 'AKIAIF4QBTOMBZRWROGQ', // Access Key from Amazon.
+    //       policy: '', // Policy string computed in the backend.
+    //       signature: '', // Signature computed in the backend.
+    //     }
+    // },
+    //  requestWithCORS: false
      // initOnClick: true,
      // editInPopup: true,
      // spellcheck: true,
