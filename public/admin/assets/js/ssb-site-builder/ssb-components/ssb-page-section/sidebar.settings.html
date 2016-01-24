@@ -35,9 +35,7 @@
     </div>
 
     <div class="row padding-10 ssb-sidebar-section-panel-component-btns">
-        <div
-            ng-repeat="component in vm.state.page.sections[vm.uiState.activeSectionIndex].components track by $index"
-            ng-init="componentIndex = $index">
+        <div ng-repeat="component in vm.state.page.sections[vm.uiState.activeSectionIndex].components track by $index">
 
             <button
                 class="ssb-sidebar-section-panel-btn btn btn-primary"
