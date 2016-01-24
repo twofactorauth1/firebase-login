@@ -22,7 +22,7 @@ var notificationConfig = require('../configs/notification.config');
 var fs = require('fs');
 var async = require('async');
 
-var CREATE_DEFAULT_PAGES = true;
+var CREATE_DEFAULT_PAGES = false;
 
 module.exports = {
 
