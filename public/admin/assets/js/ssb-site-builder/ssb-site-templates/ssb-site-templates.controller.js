@@ -26,6 +26,10 @@ function ssbSiteBuilderSiteTemplatesController($scope, $attrs, $filter, $documen
 
             unbindPagesWatcher();
 
+            if (Object.keys(pages).length !== 0) {
+                vm.redirectToEditor();
+            }
+
             vm.state.pages = pages;
 
         }
