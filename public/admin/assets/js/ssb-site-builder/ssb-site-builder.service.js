@@ -645,16 +645,21 @@
          */
         function applyThemeToSite(theme, keepCurrentOverrides) {
             // Load web font loader
-            if (theme.name && theme.hasCustomFonts) {
+            
 
                 var unbindWatcher = $rootScope.$watch(function() {
                     return angular.isDefined(window.WebFont);
                 }, function(newValue, oldValue) {
                     if (newValue) {
-                        console.debug(newValue, oldValue);
+                        var defaultFamilies = ["Roboto", "Oswald", "Montserrat", "Open+Sans+Condensed"];
+                        if (theme.name && theme.hasCustomFonts) {
+                          var _fontStack = theme.defaultFontStack.split(',')[0].replace(/"/g, '');
+                          if(defaultFamilies.indexOf(_fontStack) === -1)  
+                            defaultFamilies.push(_fontStack);
+                        }
                         window.WebFont.load({
                             google: {
-                                families: [theme.defaultFontStack.split(',')[0].replace(/"/g, '')]
+                                families: defaultFamilies
                             }
                         });
                         unbindWatcher();
@@ -666,7 +671,7 @@
                         sessionStorage.fonts = true;
                     }
                 }
-            }
+            
 
             ssbService.website.themeId = theme._id;
             ssbService.website.theme = theme;
