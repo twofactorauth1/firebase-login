@@ -65,7 +65,7 @@ if account.website.themeOverrides
         }
 
         .ssb-theme-#{account.website.theme.handle} .ssb-theme-main-header-text {
-            color: #{account.website.themeOverrides.styles.headerColor};
+            /*color: #{account.website.themeOverrides.styles.headerColor};*/
         }
 
         .ssb-theme-#{account.website.theme.handle} .ssb-page-section-layout-hero {
@@ -73,15 +73,15 @@ if account.website.themeOverrides
         }
 
         .ssb-theme-#{account.website.theme.handle} .ssb-theme-hero-text {
-            color: #{account.website.themeOverrides.styles.heroColor};
+            /*color: #{account.website.themeOverrides.styles.heroColor};*/
         }
 
         .ssb-theme-#{account.website.theme.handle} .ssb-theme-heading-text {
-
+            color: #{account.website.themeOverrides.styles.primaryTextColor};
         }
 
         .ssb-theme-#{account.website.theme.handle} .ssb-theme-paragraph-text {
-
+            color: #{account.website.themeOverrides.styles.primaryTextColor};
         }
 
         .ssb-theme-#{account.website.theme.handle} .btn,
@@ -92,6 +92,10 @@ if account.website.themeOverrides
         .ssb-theme-#{account.website.theme.handle} .ssb-theme-btn {
             background-color: #{account.website.themeOverrides.styles.primaryBtnBackgroundColor};
             color: #{account.website.themeOverrides.styles.primaryBtnTextColor};
+        }
+
+        .ssb-theme-young-soul .navbar-toggle .icon-bar {
+            background-color: #{account.website.themeOverrides.styles.primaryBtnTextColor};
         }
 
         @media screen and (min-width: 768px) {

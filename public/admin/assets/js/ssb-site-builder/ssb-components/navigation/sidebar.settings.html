@@ -15,40 +15,12 @@
         <i class="ti-brush display-ib"></i> Design
     </button>
 
-    <div
-        ng-if="'design' + component._id === vm.uiState.openSidebarSectionPanel.id"
-        class="ssb-sidebar-section-panel-component-panel"
-        ng-include=" 'assets/js/ssb-site-builder/ssb-components/shared/sidebar.settings.design.html' ">
-    </div>
-
     <button ng-click="vm.uiState.navigation.sectionPanel.loadPanel({ name: 'Layout', id: 'layout' + component._id, componentId: component._id })" class="ssb-sidebar-section-panel-btn btn btn-link">
         <i class="ti-brush display-ib"></i> Layout
     </button>
-
-    <div
-        ng-if="'layout' + component._id === vm.uiState.openSidebarSectionPanel.id"
-        class="ssb-sidebar-section-panel-component-panel"
-        ng-include=" 'assets/js/ssb-site-builder/ssb-components/shared/sidebar.settings.layout.html' ">
-    </div>
 
     <button ng-click="vm.uiState.navigation.sectionPanel.loadPanel({ name: 'Advanced', id: 'advanced' + component._id, componentId: component._id })" class="ssb-sidebar-section-panel-btn btn btn-link">
         <i class="ti-brush display-ib"></i> Advanced Settings
     </button>
 
-    <div
-        ng-if="'advanced' + component._id === vm.uiState.openSidebarSectionPanel.id"
-        class="ssb-sidebar-section-panel-component-panel"
-        ng-include=" 'assets/js/ssb-site-builder/ssb-components/shared/sidebar.settings.advanced.html' ">
-    </div>
-
 </div>
-
-<!-- <div ng-include=" 'assets/js/ssb-site-builder/ssb-components/shared/basic.html' "></div> -->
-
-<!-- <accordion-group heading="Spacing">
-	<div ng-include=" 'assets/js/ssb-site-builder/ssb-components/shared/spacing.html' "></div>
-</accordion-group>
-<accordion-group heading="Advanced">
-	<div ng-include=" 'assets/js/ssb-site-builder/ssb-components/shared/advanced.html' "></div>
-</accordion-group>
- -->

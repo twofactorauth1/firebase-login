@@ -20,6 +20,9 @@ function ssbSiteBuilderSidebarSettingsPanelController($scope, $attrs, $filter, $
     vm.setActiveComponent = pVm.setActiveComponent;
     vm.removeImage = pVm.removeImage;
     vm.removeBackgroundImage = pVm.removeBackgroundImage;
+    vm.removeSectionFromPage = pVm.removeSectionFromPage;
+    vm.hideSectionFromPage = pVm.hideSectionFromPage;
+    vm.editSectionName = pVm.editSectionName;
 
     //TODO: move into config services
     vm.spectrum = {
@@ -29,11 +32,15 @@ function ssbSiteBuilderSidebarSettingsPanelController($scope, $attrs, $filter, $
     $scope.component = vm.component;
 
     //TODO: change child components... unset (blank out) or set to color?
-    $scope.$watch(function() { return vm.component.txtcolor; }, function(color) {
+    $scope.$watch(function() {
+        return vm.component ? vm.component.txtcolor : '';
+    }, function(color) {
         console.debug(color);
     });
 
-    $scope.$watch(function() { return vm.component.bg.color; }, function(color) {
+    $scope.$watch(function() {
+        return vm.component ? vm.component.bg.color : '';
+    }, function(color) {
         console.debug(color);
     });
 

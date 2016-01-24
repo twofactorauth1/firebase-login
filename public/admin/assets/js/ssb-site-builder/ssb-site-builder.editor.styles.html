@@ -1,0 +1,87 @@
+<style>
+    /*
+
+    TODO:
+        - decide on classnames for all hook-able stuff
+        - mirror classnames here and in theme stylesheet(s)
+        - add the hook classes to all relevant component markup
+
+    */
+
+
+.ssb-theme-{{vm.state.website.theme.handle}} {
+    color: {{vm.state.website.themeOverrides.styles.primaryTextColor}};
+    font-family: {{vm.state.website.themeOverrides.defaultFontStack}};
+}
+
+.ssb-theme-{{vm.state.website.theme.handle}} .ssb-section-layout {
+    background-color: {{vm.state.website.themeOverrides.styles.bodyBackgroundColor}};
+}
+
+.ssb-theme-{{vm.state.website.theme.handle}} .ssb-navigation a {
+    color: {{vm.state.website.themeOverrides.styles.primaryTextColor}};
+}
+
+.ssb-theme-{{vm.state.website.theme.handle}} .ssb-page-section-layout-header {
+    background-color: {{vm.state.website.themeOverrides.styles.headerBackgroundColor}};
+}
+
+.ssb-theme-{{vm.state.website.theme.handle}} .ssb-theme-main-header-text {
+    /*color: {{vm.state.website.themeOverrides.styles.headerTextColor}};*/
+    /*font-size: {{vm.state.website.themeOverrides.styles.headerSize}};*/
+}
+
+.ssb-theme-{{vm.state.website.theme.handle}} .ssb-page-section-layout-hero {
+    background-color: {{vm.state.website.themeOverrides.styles.heroBackgroundColor}};
+    text-align: center;
+}
+
+.ssb-theme-{{vm.state.website.theme.handle}} .ssb-theme-hero-text {
+    color: {{vm.state.website.themeOverrides.styles.heroTextColor}};
+    font-size: {{vm.state.website.themeOverrides.styles.heroSize}};
+}
+
+.ssb-theme-{{vm.state.website.theme.handle}} .ssb-theme-heading-text {
+    font-size: {{vm.state.website.themeOverrides.styles.headingSize}};
+}
+
+.ssb-theme-{{vm.state.website.theme.handle}} .ssb-theme-paragraph-text {
+    font-size: {{vm.state.website.themeOverrides.styles.paragraphSize}};
+}
+
+.ssb-theme-{{vm.state.website.theme.handle}} .btn,
+.ssb-theme-{{vm.state.website.theme.handle}} .btn-default,
+.ssb-theme-{{vm.state.website.theme.handle}} .btn-block,
+.ssb-theme-{{vm.state.website.theme.handle}} .btn-primary,
+.ssb-theme-{{vm.state.website.theme.handle}} button,
+.ssb-theme-{{vm.state.website.theme.handle}} .ssb-theme-btn {
+    background-color: {{vm.state.website.themeOverrides.styles.primaryBtnBackgroundColor}}!important;
+    color: {{vm.state.website.themeOverrides.styles.primaryBtnTextColor}};
+}
+
+.ssb-theme-young-soul .navbar-toggle .icon-bar {
+    color: {{vm.state.website.themeOverrides.styles.primaryBtnTextColor}};
+}
+
+@media screen and (min-width: 768px) {
+
+    .ssb-theme-{{vm.state.website.theme.handle}} .ssb-theme-main-header-text {
+        font-size: {{vm.state.website.themeOverrides.styles.headerSize}};
+    }
+
+    .ssb-theme-{{vm.state.website.theme.handle}} .ssb-theme-hero-text {
+        font-size: {{vm.state.website.themeOverrides.styles.heroSize}};
+    }
+
+    .ssb-theme-{{vm.state.website.theme.handle}} .ssb-theme-heading-text {
+        font-size: {{vm.state.website.themeOverrides.styles.headingSize}};
+    }
+
+    .ssb-theme-{{vm.state.website.theme.handle}} .ssb-theme-paragraph-text {
+        font-size: {{vm.state.website.themeOverrides.styles.paragraphSize}};
+    }
+
+}
+
+
+</style>

@@ -13,6 +13,27 @@
 
     </div>
 
+    <div class="row padding-10">
+        <div
+            class="ssb-sidebar-item-icon ssb-sidebar-item-icon-offset-1 ti-close display-ib"
+            ng-click="vm.removeSectionFromPage(vm.uiState.activeSectionIndex)"
+            tooltip-placement="top"
+            tooltip-html-unsafe="Remove section">
+        </div>
+        <div
+            class="ssb-sidebar-item-icon ssb-sidebar-item-icon-offset-2 ti-pencil display-ib"
+            ng-click="vm.editSectionName('editable_{{section._id}}')"
+            tooltip-placement="top"
+            tooltip-html-unsafe="Rename section">
+        </div>
+        <div
+            class="ssb-sidebar-item-icon ssb-sidebar-item-icon-offset-3 display-ib ti-eye"
+            ng-click="vm.hideSectionFromPage(vm.state.page.sections[vm.uiState.activeSectionIndex], vm.uiState.activeSectionIndex)"
+            tooltip-placement="top"
+            tooltip-html-unsafe="Show/hide section">
+        </div>
+    </div>
+
     <div class="row padding-10 ssb-sidebar-section-panel-component-btns">
         <div
             ng-repeat="component in vm.state.page.sections[vm.uiState.activeSectionIndex].components track by $index"

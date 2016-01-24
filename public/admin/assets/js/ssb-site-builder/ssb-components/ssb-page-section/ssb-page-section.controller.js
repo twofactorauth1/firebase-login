@@ -22,10 +22,23 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude) {
         var classString = 'container-fluid '; //col-xs-12 was messing up legacy
         // console.log('section.layout', section.layout);
         if (section.layout) {
+
             classString += 'ssb-page-section-layout-' + section.layout;
+
+            // if (section.layout === 'header') {
+            //     var navigationComponent = _.where(section.components, { type: 'navigation' });
+
+            //     if (navigationComponent[0]) {
+            //         var hideNav;
+            //     }
+            // }
+
         }
+
         // console.debug('section classString')
         // console.debug(classString)
+
+
         return classString;
     }
 
@@ -37,45 +50,44 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude) {
                 styleString += 'padding-top: ' + section.spacing.pt + 'px;';
             }
 
-            if (section.spacing.pt) {
+            if (section.spacing.pb) {
                 styleString += 'padding-bottom: ' + section.spacing.pb + 'px;';
             }
 
-            if (section.spacing.pt) {
+            if (section.spacing.pl) {
                 styleString += 'padding-left: ' + section.spacing.pl + 'px;';
             }
 
-            if (section.spacing.pt) {
+            if (section.spacing.pr) {
                 styleString += 'padding-right: ' + section.spacing.pr + 'px;';
             }
 
-            if (section.spacing.pt) {
+            if (section.spacing.mt) {
                 styleString += 'margin-top: ' + section.spacing.mt + 'px;';
             }
 
-            if (section.spacing.pt) {
+            if (section.spacing.mb) {
                 styleString += 'margin-bottom: ' + section.spacing.mb + 'px;';
             }
 
-            if (section.spacing.pt) {
-                styleString += 'margin-left: ' + section.spacing.ml == 'auto' ? section.spacing.ml: section.spacing.ml + 'px;';
+            if (section.spacing.ml) {
+                styleString += section.spacing.ml == 'auto' ? 'margin-left: ' + section.spacing.ml: 'margin-left: ' + section.spacing.ml + 'px;';
             }
 
-            if (section.spacing.pt) {
-                styleString += 'margin-right: ' + section.spacing.mr == 'auto' ? section.spacing.mr : section.spacing.mr + 'px;';
+            if (section.spacing.mr) {
+                styleString += (section.spacing.mr == 'auto') ? 'margin-right: ' + section.spacing.mr : 'margin-right: ' + section.spacing.mr + 'px;';
             }
 
-            if (section.spacing.pt) {
-                styleString += 'max-width: ' + section.spacing.mw == '100%' ? section.spacing.mw : section.spacing.mw  + 'px;';
+            if (section.spacing.mw) {
+                styleString += (section.spacing.mw == '100%') ?
+                    'max-width: ' + section.spacing.mw :
+                    'max-width: ' + section.spacing.mw  + 'px;margin:0 auto!important;';
             }
 
             if (section.spacing.lineHeight) {
                 styleString += 'line-height: ' + section.spacing.lineHeight;
             }
 
-            if (section.spacing.mw) {
-                styleString += 'max-width: ' + section.spacing.mw;
-            }
         }
 
         if (section.txtcolor) {
@@ -114,7 +126,7 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude) {
                 styleString += 'background-color: ' + section.bg.color + ';';
             }
 
-            if (section.bg.img && section.bg.img.show && section.bg.img.url !== '') {
+            if (section.bg.img && section.bg.img.show && section.bg.img.url && section.bg.img.url !== '') {
                 styleString += 'background-image: url("' + section.bg.img.url + '")';
             }
         }
@@ -158,45 +170,47 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude) {
     var styleString = '';
 
     if (component.spacing) {
-      if (component.spacing.pt) {
-        styleString += 'padding-top: ' + component.spacing.pt + 'px;';
-      }
+        if (component.spacing.pt) {
+            styleString += 'padding-top: ' + component.spacing.pt + 'px;';
+        }
 
-      if (component.spacing.pt) {
-        styleString += 'padding-bottom: ' + component.spacing.pb + 'px;';
-      }
+        if (component.spacing.pb) {
+            styleString += 'padding-bottom: ' + component.spacing.pb + 'px;';
+        }
 
-      if (component.spacing.pt) {
-        styleString += 'padding-left: ' + component.spacing.pl + 'px;';
-      }
+        if (component.spacing.pl) {
+            styleString += 'padding-left: ' + component.spacing.pl + 'px;';
+        }
 
-      if (component.spacing.pt) {
-        styleString += 'padding-right: ' + component.spacing.pr + 'px;';
-      }
+        if (component.spacing.pr) {
+            styleString += 'padding-right: ' + component.spacing.pr + 'px;';
+        }
 
-      if (component.spacing.pt) {
-        styleString += 'margin-top: ' + component.spacing.mt + 'px;';
-      }
+        if (component.spacing.mt) {
+            styleString += 'margin-top: ' + component.spacing.mt + 'px;';
+        }
 
-      if (component.spacing.pt) {
-        styleString += 'margin-bottom: ' + component.spacing.mb + 'px;';
-      }
+        if (component.spacing.mb) {
+            styleString += 'margin-bottom: ' + component.spacing.mb + 'px;';
+        }
 
-      if (component.spacing.pt) {
-        styleString += 'margin-left: ' + component.spacing.ml == 'auto' ? component.spacing.ml: component.spacing.ml + 'px;';
-      }
+        if (component.spacing.ml) {
+            styleString += component.spacing.ml == 'auto' ? 'margin-left: ' + component.spacing.ml: 'margin-left: ' + component.spacing.ml + 'px;';
+        }
 
-      if (component.spacing.pt) {
-        styleString += 'margin-right: ' + component.spacing.mr == 'auto' ? component.spacing.mr : component.spacing.mr + 'px;';
-      }
+        if (component.spacing.mr) {
+            styleString += (component.spacing.mr == 'auto') ? 'margin-right: ' + component.spacing.mr : 'margin-right: ' + component.spacing.mr + 'px;';
+        }
 
-      if (component.spacing.pt) {
-        styleString += 'max-width: ' + component.spacing.mw == '100%' ? component.spacing.mw : component.spacing.mw  + 'px;';
-      }
+        if (component.spacing.mw) {
+            styleString += (component.spacing.mw == '100%') ?
+                'max-width: ' + component.spacing.mw :
+                'max-width: ' + component.spacing.mw  + 'px;margin:0 auto!important;';
+        }
 
-      if (component.spacing.lineHeight) {
-        styleString += 'line-height: ' + component.spacing.lineHeight;
-      }
+        if (component.spacing.lineHeight) {
+            styleString += 'line-height: ' + component.spacing.lineHeight;
+        }
     }
 
     if (component.txtcolor) {

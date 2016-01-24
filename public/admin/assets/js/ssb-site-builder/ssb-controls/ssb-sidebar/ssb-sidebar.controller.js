@@ -370,7 +370,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
   	function cancelPendingEdits() {
       vm.state.pendingChanges = false;
       vm.state.website = angular.copy(vm.state.originalWebsite);
-      vm.state.page = angular.copy(vm.state.originalPage);        
+      vm.state.page = angular.copy(vm.state.originalPage);
     }
 
   	function togglePageSectionAccordion(index) {
@@ -419,7 +419,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
       vm.openMediaModal('media-modal', 'MediaModalCtrl', null, 'lg');
 
       vm.insertMediaCallback = function(asset) {
-        if (componentIndex) {
+        if (componentIndex !== undefined) {
           vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex].src = asset.url;
         } else {
           vm.state.page.sections[vm.uiState.activeSectionIndex].src = asset.url;

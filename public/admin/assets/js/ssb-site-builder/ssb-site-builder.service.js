@@ -672,7 +672,9 @@
             ssbService.website.theme = theme;
 
             if (keepCurrentOverrides === undefined) {
-                ssbService.website.themeOverrides = theme;
+                $timeout(function() {
+                    ssbService.website.themeOverrides = theme;
+                });
             }
 
         }
