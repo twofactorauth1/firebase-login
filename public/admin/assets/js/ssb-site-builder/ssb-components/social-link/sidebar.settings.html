@@ -17,34 +17,16 @@
 
 <div class="row padding-10">
 
-    <button ng-click="vm.uiState.navigation.sectionPanel.loadPanel({ name: 'Design', id: 'design' })" class="ssb-sidebar-section-panel-btn btn btn-link">
+    <button ng-click="vm.uiState.navigation.sectionPanel.loadPanel({ name: 'Design', id: 'design' + component._id, componentId: component._id })" class="ssb-sidebar-section-panel-btn btn btn-link">
         <i class="ti-brush display-ib"></i> Design
     </button>
 
-    <div
-        ng-if="'background' === vm.uiState.openSidebarSectionPanel.id"
-        class="ssb-sidebar-section-panel-component-panel"
-        ng-include=" 'assets/js/ssb-site-builder/ssb-components/shared/sidebar.settings.design.html' ">
-    </div>
-
-    <button ng-click="vm.uiState.navigation.sectionPanel.loadPanel({ name: 'Layout', id: 'layout' })" class="ssb-sidebar-section-panel-btn btn btn-link">
+    <button ng-click="vm.uiState.navigation.sectionPanel.loadPanel({ name: 'Layout', id: 'layout' + component._id, componentId: component._id })" class="ssb-sidebar-section-panel-btn btn btn-link">
         <i class="ti-brush display-ib"></i> Layout
     </button>
 
-    <div
-        ng-if="'layout' === vm.uiState.openSidebarSectionPanel.id"
-        class="ssb-sidebar-section-panel-component-panel"
-        ng-include=" 'assets/js/ssb-site-builder/ssb-components/shared/sidebar.settings.layout.html' ">
-    </div>
-
-    <button ng-click="vm.uiState.navigation.sectionPanel.loadPanel({ name: 'Advanced', id: 'advanced' })" class="ssb-sidebar-section-panel-btn btn btn-link">
+    <button ng-click="vm.uiState.navigation.sectionPanel.loadPanel({ name: 'Advanced', id: 'advanced' + component._id, componentId: component._id })" class="ssb-sidebar-section-panel-btn btn btn-link">
         <i class="ti-brush display-ib"></i> Advanced Settings
     </button>
-
-    <div
-        ng-if="'layout' === vm.uiState.openSidebarSectionPanel.id"
-        class="ssb-sidebar-section-panel-component-panel"
-        ng-include=" 'assets/js/ssb-site-builder/ssb-components/shared/sidebar.settings.advanced.html' ">
-    </div>
 
 </div>

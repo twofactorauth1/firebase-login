@@ -50,6 +50,7 @@ if account.website.themeOverrides
         .ssb-theme-#{account.website.theme.handle} {
             color: #{account.website.themeOverrides.primaryTextColor};
             font-family: !{account.website.themeOverrides.defaultFontStack};
+            background-color: #{account.website.themeOverrides.styles.bodyBackgroundColor};
         }
 
         .ssb-theme-#{account.website.theme.handle} .ssb-section-layout {
@@ -92,6 +93,7 @@ if account.website.themeOverrides
         .ssb-theme-#{account.website.theme.handle} .ssb-theme-btn {
             background-color: #{account.website.themeOverrides.styles.primaryBtnBackgroundColor};
             color: #{account.website.themeOverrides.styles.primaryBtnTextColor};
+            border-color: #{account.website.themeOverrides.styles.primaryBtnBackgroundColor};
         }
 
         .ssb-theme-young-soul .navbar-toggle .icon-bar {

@@ -71,16 +71,16 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude) {
             }
 
             if (section.spacing.ml) {
-                styleString += section.spacing.ml == 'auto' ? 'margin-left: ' + section.spacing.ml: 'margin-left: ' + section.spacing.ml + 'px;';
+                styleString += section.spacing.ml == 'auto' ? 'margin-left: ' + section.spacing.ml + ';float: none;' : 'margin-left: ' + section.spacing.ml + 'px;';
             }
 
             if (section.spacing.mr) {
-                styleString += (section.spacing.mr == 'auto') ? 'margin-right: ' + section.spacing.mr : 'margin-right: ' + section.spacing.mr + 'px;';
+                styleString += (section.spacing.mr == 'auto') ? 'margin-right: ' + section.spacing.mr + ';float: none;' : 'margin-right: ' + section.spacing.mr + 'px;';
             }
 
             if (section.spacing.mw) {
                 styleString += (section.spacing.mw == '100%') ?
-                    'max-width: ' + section.spacing.mw :
+                    'max-width: ' + section.spacing.mw + ';' :
                     'max-width: ' + section.spacing.mw  + 'px;margin:0 auto!important;';
             }
 
@@ -195,16 +195,16 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude) {
         }
 
         if (component.spacing.ml) {
-            styleString += component.spacing.ml == 'auto' ? 'margin-left: ' + component.spacing.ml: 'margin-left: ' + component.spacing.ml + 'px;';
+            styleString += component.spacing.ml == 'auto' ? 'margin-left: ' + component.spacing.ml + ';float: none;' : 'margin-left: ' + component.spacing.ml + 'px;';
         }
 
         if (component.spacing.mr) {
-            styleString += (component.spacing.mr == 'auto') ? 'margin-right: ' + component.spacing.mr : 'margin-right: ' + component.spacing.mr + 'px;';
+            styleString += (component.spacing.mr == 'auto') ? 'margin-right: ' + component.spacing.mr + ';float: none;' : 'margin-right: ' + component.spacing.mr + 'px;';
         }
 
         if (component.spacing.mw) {
             styleString += (component.spacing.mw == '100%') ?
-                'max-width: ' + component.spacing.mw :
+                'max-width: ' + component.spacing.mw + ';' :
                 'max-width: ' + component.spacing.mw  + 'px;margin:0 auto!important;';
         }
 
@@ -214,7 +214,11 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude) {
     }
 
     if (component.txtcolor) {
-      styleString += 'color: ' + component.txtcolor + ';';
+        styleString += 'color: ' + component.txtcolor + ';';
+    }
+
+    if (component.visibility === false) {
+        styleString += 'display: none!important;';
     }
 
     if (component.bg) {

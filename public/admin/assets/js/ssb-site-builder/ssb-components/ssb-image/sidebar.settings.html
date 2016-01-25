@@ -17,17 +17,18 @@
                 Image Title <span tooltip-placement="right" tooltip-html-unsafe="Set a descriptive image title for search engines."><i class="fa fa-info-circle" /></span>
             </h5>
         </label>
+        <br>
         <input id="ssb-component-image-settings-alt-text-{{vm.uiState.activeSectionIndex}}" type="text" ng-model="component.alttext">
     </div>
 </div>
 
 <div class="row padding-10">
 
-    <button ng-click="vm.uiState.navigation.sectionPanel.loadPanel({ name: 'Layout', id: 'layout' })" class="ssb-sidebar-section-panel-btn btn btn-link">
+    <button ng-click="vm.uiState.navigation.sectionPanel.loadPanel({ name: 'Layout', id: 'layout' + component._id, componentId: component._id })" class="ssb-sidebar-section-panel-btn btn btn-link">
         <i class="ti-brush display-ib"></i> Layout
     </button>
 
-    <button ng-click="vm.uiState.navigation.sectionPanel.loadPanel({ name: 'Advanced', id: 'advanced' })" class="ssb-sidebar-section-panel-btn btn btn-link">
+    <button ng-click="vm.uiState.navigation.sectionPanel.loadPanel({ name: 'Advanced', id: 'advanced' + component._id, componentId: component._id })" class="ssb-sidebar-section-panel-btn btn btn-link">
         <i class="ti-brush display-ib"></i> Advanced Settings
     </button>
 

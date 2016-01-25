@@ -339,33 +339,54 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
   	}
 
   	function savePage() {
-  		SweetAlert.swal({
-        title: "Are you sure?",
-        text: "CAUTION: For testing purposes only! Do not save your edits here unless you're OK with your pages breaking. This editor is under active development. Pages saved in Simple Site Builder will not render and will not be editable in the legacy editor.",
-        type: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#DD6B55",
-        confirmButtonText: "Yes — I'll use Simple Site Builder going forward.",
-        cancelButtonText: "No — I will use the legacy editor for now.",
-        closeOnConfirm: true,
-        closeOnCancel: true
-      },
-      function (isConfirm) {
-        if (isConfirm) {
+        var isLegacyPage = vm.state.page.ssb;
 
-          vm.state.pendingChanges = false;
+        console.log(isLegacyPage);
 
-          saveWebsite();
+        if (!vm.uiState.hasSeenWarning && isLegacyPage) {
 
-          return (
-            SimpleSiteBuilderService.savePage(vm.state.page).then(function(response){
-              console.log('page saved');
-            })
-          )
+            SweetAlert.swal({
+              title: "Are you sure?",
+              text: "CAUTION: This editor is under active development. Pages saved in Site Builder will not render or be editable in the legacy Pages editor.",
+              type: "warning",
+              showCancelButton: true,
+              confirmButtonColor: "#DD6B55",
+              confirmButtonText: "Yes — Use Site Builder editor.",
+              cancelButtonText: "No — Use the legacy editor.",
+              closeOnConfirm: true,
+              closeOnCancel: true
+            },
+            function (isConfirm) {
+                if (isConfirm) {
 
+                    vm.uiState.hasSeenWarning = true;
+
+                    vm.state.pendingChanges = false;
+
+                    saveWebsite();
+
+                    return (
+                        SimpleSiteBuilderService.savePage(vm.state.page).then(function(response){
+                            console.log('page saved');
+                        })
+                    )
+
+                }
+            });
+
+        } else {
+            vm.state.pendingChanges = false;
+
+            saveWebsite();
+
+            return (
+                SimpleSiteBuilderService.savePage(vm.state.page).then(function(response){
+                    console.log('page saved');
+                })
+            )
         }
-      });
-  	}
+
+    }
 
   	function cancelPendingEdits() {
       vm.state.pendingChanges = false;
@@ -405,13 +426,13 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
         }
       }
 
-      if (sectionIndex !== undefined) {
-        SimpleSiteBuilderService.setActiveSection(sectionIndex);
-        SimpleSiteBuilderService.setActiveComponent(undefined);
-      } else {
+      // if (sectionIndex !== undefined) {
+      //   SimpleSiteBuilderService.setActiveSection(sectionIndex);
+      //   SimpleSiteBuilderService.setActiveComponent(undefined);
+      // } else {
         SimpleSiteBuilderService.setActiveSection(sectionIndex);
         SimpleSiteBuilderService.setActiveComponent(componentIndex);
-      }
+      // }
 
     }
 
@@ -426,13 +447,13 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
         }
       }
 
-      if (sectionIndex !== undefined) {
-        SimpleSiteBuilderService.setActiveSection(sectionIndex);
-        SimpleSiteBuilderService.setActiveComponent(undefined);
-      } else {
+      // if (sectionIndex !== undefined) {
+      //   SimpleSiteBuilderService.setActiveSection(sectionIndex);
+      //   SimpleSiteBuilderService.setActiveComponent(undefined);
+      // } else {
         SimpleSiteBuilderService.setActiveSection(sectionIndex);
         SimpleSiteBuilderService.setActiveComponent(componentIndex);
-      }
+      // }
 
     }
 

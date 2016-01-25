@@ -7,10 +7,7 @@
         <span ng-if="vm.uiState.openSidebarSectionPanel.name === ''">
             {{vm.state.page.sections[vm.uiState.activeSectionIndex].name}}
 
-            <!-- {{vm.uiState.activeComponentIndex !== undefined &&
-            vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex]._id !== undefined &&
-            vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex]._id === vm.uiState.openSidebarSectionPanel.id &&
-            (vm.state.page.sections[vm.uiState.activeSectionIndex].components.length === 1)}}
+            <!-- <small>
             <br>
             vm.uiState.activeComponentIndex:{{vm.uiState.activeComponentIndex}}
             <br>
@@ -19,7 +16,8 @@
             vm.uiState.openSidebarSectionPanel.id:{{vm.uiState.openSidebarSectionPanel.id}}
             <br>
             (vm.state.page.sections[vm.uiState.activeSectionIndex].components.length === 1):{{(vm.state.page.sections[vm.uiState.activeSectionIndex].components.length === 1)}}
-            <br> -->
+            <br>
+            </small> -->
 
         </span>
         <div ng-if="vm.uiState.openSidebarSectionPanel.name !== ''">
@@ -27,9 +25,13 @@
             <i class="ti-arrow-left" ng-click="vm.uiState.navigation.sectionPanel.back();"></i>
             {{vm.uiState.openSidebarSectionPanel.name | cleanType}}
 
-            <!-- {{vm.uiState.openSidebarSectionPanel._id}}-
-            {{vm.uiState.openSidebarSectionPanel.name}}-
-            {{vm.uiState.openSidebarSectionPanel.componentId}}- -->
+            <!-- <small>
+            {{vm.uiState.openSidebarSectionPanel._id}}-<br>
+            {{vm.uiState.openSidebarSectionPanel.name}}-<br>
+            {{vm.uiState.openSidebarSectionPanel.componentId}}-<br>
+            {{vm.uiState.activeSectionIndex}}-<br>
+            {{vm.uiState.componentIndex}}-<br>
+            </small> -->
 
         </div>
     </h4>
@@ -105,7 +107,7 @@
         ui-state="vm.uiState">
     </ssb-sidebar-settings-panel>
 
-    <!-- Component Settings Specific :: {{'navigation' + vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex]._id}}::{{vm.uiState.openSidebarSectionPanel.id}} -->
+    <!-- Component Settings Specific -->
     <ssb-sidebar-settings-panel
         class="ssb-sidebar-section-panel-component-panel container-fluid"
         ng-if="vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex] &&  ('navigation' + vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex]._id) === vm.uiState.openSidebarSectionPanel.id"
@@ -115,5 +117,22 @@
         ui-state="vm.uiState">
     </ssb-sidebar-settings-panel>
 
+    <ssb-sidebar-settings-panel
+        class="ssb-sidebar-section-panel-component-panel container-fluid"
+        ng-if="vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex] &&  ('video' + vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex]._id) === vm.uiState.openSidebarSectionPanel.id"
+        settings-template="assets/js/ssb-site-builder/ssb-components/shared/video.html"
+        component="vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex]"
+        state="vm.state"
+        ui-state="vm.uiState">
+    </ssb-sidebar-settings-panel>
+
+    <ssb-sidebar-settings-panel
+        class="ssb-sidebar-section-panel-component-panel container-fluid"
+        ng-if="vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex] &&  ('simple-form' + vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex]._id) === vm.uiState.openSidebarSectionPanel.id"
+        settings-template="assets/js/ssb-site-builder/ssb-components/shared/simple-form.html"
+        component="vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex]"
+        state="vm.state"
+        ui-state="vm.uiState">
+    </ssb-sidebar-settings-panel>
 
 </section>

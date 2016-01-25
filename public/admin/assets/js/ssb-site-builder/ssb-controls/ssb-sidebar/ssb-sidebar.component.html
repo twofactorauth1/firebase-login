@@ -161,13 +161,13 @@
                 <ul class="list-unstyled ssb-settings-list">
                     <li>
                         <label>
-                            Title:
+                            <h5>Title:</h5>
                             <span editable-text="vm.state.page.title" onbeforesave="">{{vm.state.page.title}}</span>
                         </label>
                     </li>
                     <li>
                         <label>
-                            URL:
+                            <h5>URL:</h5>
                             <span editable-text="vm.state.page.handle" onbeforesave="">{{vm.state.page.handle}}</span>
                         </label>
                     </li>
@@ -220,7 +220,7 @@
 
                 <button ng-click="vm.uiState.openSidebarPanel = 'add'" class="btn btn-primary">Add Section</button>
 
-                <ul ng-if="vm.state.page.sections" class="list-unstyled" ng-sortable="vm.sortableOptions" ng-model="vm.state.page.sections">
+                <ul ng-if="vm.state.page.sections" class="ssb-sidebar-page-sections-list list-unstyled" ng-sortable="vm.sortableOptions" ng-model="vm.state.page.sections">
                     <li ng-repeat="section in vm.state.page.sections track by $index" class="ssb-page-section-settings-item ssb-sidebar-move-handle">
                         <div class="ssb-sidebar-item-icon ti-move display-ib"></div>
                         <div
@@ -262,6 +262,9 @@
 
                     </li>
                 </ul>
+
+                <!-- <button ng-click="vm.resetSiteTemplate()">Reset site</button> -->
+
             </section>
 
         </div>
