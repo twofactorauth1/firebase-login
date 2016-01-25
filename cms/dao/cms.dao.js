@@ -1216,12 +1216,15 @@ var dao = {
             }
             var obj = value.toJSON('public');
             self.getById(obj.website.websiteId, Website, function(err, website){
-
-                ssbThemeDao.getThemeById(website.get('themeId'), function(err, theme) {
-                    if(err) {
-                        self.log.error('Error getting theme:', err);
-                        return fn(err, null);
+                var themeId = website.get('themeId').valueOf();
+                self.log.debug('>> getThemeById', themeId);
+                ssbThemeDao.getThemeById(themeId, function(err, theme) {
+                    if(err || !theme) {
+                        self.log.error('Error getting theme, err:', err);
+                        self.log.error('Error getting theme, themeId:', themeId);
+                        return fn(err, obj);
                     } else {
+                        self.log.debug('<< getThemeById', theme);
                         if (theme) {
                             website.set('theme', theme.toJSON('public'));
                         } else {
@@ -1343,7 +1346,7 @@ var dao = {
                     "logo" : "<h2>Logo Here</h2>",
                     "title" : "<h2 class='center'>Thanks for Checking Us Out</h2>",
                     "subtitle" : "subtitle",
-                    "text" : "We will get back to you shortly.",                    
+                    "text" : "We will get back to you shortly.",
                     "bg" : {
                         "img" : {
                             "url" : "",
@@ -1384,7 +1387,7 @@ var dao = {
                     "logo" : "<h2>Logo Here</h2>",
                     "title" : "<h2 class='center'>New Order</h2>",
                     "subtitle" : "subtitle",
-                    "text" : "New Order",                   
+                    "text" : "New Order",
                     "bg" : {
                         "img" : {
                             "url" : "",
@@ -1424,7 +1427,7 @@ var dao = {
                     "logo" : "<h2>Logo Here</h2>",
                     "title" : "<h2 class='center'>Order Processing</h2>",
                     "subtitle" : "subtitle",
-                    "text" : "Order Processing",                    
+                    "text" : "Order Processing",
                     "bg" : {
                         "img" : {
                             "url" : "",
@@ -1464,7 +1467,7 @@ var dao = {
                     "logo" : "<h2>Logo Here</h2>",
                     "title" : "<h2 class='center'>Order Completed</h2>",
                     "subtitle" : "subtitle",
-                    "text" : "Order Completed",                    
+                    "text" : "Order Completed",
                     "bg" : {
                         "img" : {
                             "url" : "",
@@ -1504,7 +1507,7 @@ var dao = {
                     "logo" : "<h2>Logo Here</h2>",
                     "title" : "<h2 class='center'>Order Cancelled</h2>",
                     "subtitle" : "subtitle",
-                    "text" : "Order Cancelled",                    
+                    "text" : "Order Cancelled",
                     "bg" : {
                         "img" : {
                             "url" : "",

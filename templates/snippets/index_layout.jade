@@ -51,8 +51,10 @@ html(class="no-js", lang="en" ng-app="mainApp" ng-controller="MainCtrl as main",
                     window.indigenous.precache = window.indigenous.precache || {};
                     window.indigenous.precache.pages = {components:components};
 
+        //- script.
+        //-     var test = !{JSON.stringify(account.website)};
 
-    body(class='theme-main navbar-v#{ account.website.nav_version } ssb-main ssb-theme-#{account.website.themeOverrides.handle} ng-cloak', ng-cloak)
+    body(class='theme-main navbar-v#{ account.website.nav_version } ssb-main ssb-theme-#{account.website.theme.handle} ng-cloak', ng-cloak)
         block body_content
             div(id='fb-root')
             div(id='toolbar')
