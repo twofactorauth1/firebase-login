@@ -632,7 +632,7 @@
                     defaultTheme = themes.data.filter(function(t) { return t.handle === 'default' })[0] || {};
                     ssbService.applyThemeToSite(defaultTheme);
                     ssbService.website.themeId = defaultTheme._id;
-                    ssbservice.saveWebsite(ssbService.website);
+                    ssbService.saveWebsite(ssbService.website);
                 }
 
             });
