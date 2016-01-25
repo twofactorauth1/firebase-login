@@ -39,7 +39,7 @@
 
             <button
                 class="ssb-sidebar-section-panel-btn btn btn-primary"
-                ng-click="vm.setActiveComponent($index);vm.uiState.navigation.sectionPanel.loadPanel({ name: component.type, id: component._id, componentId: component._id });">
+                ng-click="vm.setActiveComponent($index);vm.uiState.navigation.sectionPanel.reset();vm.uiState.navigation.sectionPanel.loadPanel({ name: component.type, id: component._id, componentId: component._id });">
                 <i class="ti-settings display-ib"></i> Manage {{component.type | cleanType}}
             </button>
 
