@@ -1216,25 +1216,32 @@ var dao = {
             }
             var obj = value.toJSON('public');
             self.getById(obj.website.websiteId, Website, function(err, website){
-                var themeId = website.get('themeId').valueOf();
-                self.log.debug('>> getThemeById', themeId);
-                ssbThemeDao.getThemeById(themeId, function(err, theme) {
-                    if(err || !theme) {
-                        self.log.error('Error getting theme, err:', err);
-                        self.log.error('Error getting theme, themeId:', themeId);
-                        return fn(err, obj);
-                    } else {
-                        self.log.debug('<< getThemeById', theme);
-                        if (theme) {
-                            website.set('theme', theme.toJSON('public'));
+
+                if (website.get('themeId')) {
+                    var themeId = website.get('themeId').valueOf();
+                    self.log.debug('>> getThemeById', themeId);
+                    ssbThemeDao.getThemeById(themeId, function(err, theme) {
+                        if(err || !theme) {
+                            self.log.error('Error getting theme, err:', err);
+                            self.log.error('Error getting theme, themeId:', themeId);
+                            return fn(err, obj);
                         } else {
-                            website.set('theme', {});
+                            self.log.debug('<< getThemeById', theme);
+                            if (theme) {
+                                website.set('theme', theme.toJSON('public'));
+                            } else {
+                                website.set('theme', {});
+                            }
+                            obj.website = website.toJSON('public');
+                            self.log.debug('<< getDataForWebpage');
+                            return fn(null, obj);
                         }
-                        obj.website = website.toJSON('public');
-                        self.log.debug('<< getDataForWebpage');
-                        return fn(null, obj);
-                    }
-                });
+                    });
+                } else {
+                    obj.website = website.toJSON('public');
+                    self.log.debug('<< getDataForWebpage');
+                    return fn(null, obj);
+                }
 
             });
         });
