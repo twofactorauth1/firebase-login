@@ -177,7 +177,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
             return true;
     }
     $scope.resetDirty = function(){
-        
+        vm.state.pendingChanges = false;
     }
 
     function saveWebsite() {
