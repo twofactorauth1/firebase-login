@@ -25,6 +25,7 @@ function ssbSiteBuilderSidebarSettingsPanelController($scope, $attrs, $filter, $
     vm.editSectionName = pVm.editSectionName;
     vm.tagToCustomer = tagToCustomer;
     vm.customerTags = pVm.customerTags;
+    vm.setTags = vm.setTags;
     //TODO: move into config services
     vm.spectrum = {
       options: SimpleSiteBuilderService.getSpectrumColorOptions()
@@ -50,10 +51,30 @@ function ssbSiteBuilderSidebarSettingsPanelController($scope, $attrs, $filter, $
       return CustomerService.tagToCustomer(value);
     }
 
+    vm.setTags = function (_customerTags) {
+        console.log('setTags >>>');
+        
+        _.each(vm.component.tags, function (tag , index) {
+          var matchingTag = _.findWhere(vm.customerTags, {
+            data: tag
+          });
+          if(matchingTag)
+          {        
+            _customerTags.push(matchingTag);
+          }
+          else {
+            _customerTags.push({
+                data : tag,
+                label : tag
+            });
+          }
+        });
+        vm.customerTags = _.uniq(_customerTags, function(c) { return c.label; })        
+    }
+
     function init(element) {
-
         vm.element = element;
-
+        vm.setTags(vm.customerTags);
     }
 }
 
