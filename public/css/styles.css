@@ -10202,6 +10202,7 @@ a[href="https://froala.com/wysiwyg-editor"] {
 }
 .greyed-out {
   background: #f1f1f1;
+  padding: 1em;
 }
 .ssb-sidebar {
   display: none;
@@ -10319,7 +10320,7 @@ a[href="https://froala.com/wysiwyg-editor"] {
 .ssb-settings-list {
   background: white;
   margin: 0;
-  padding: 1em 0 1.5em;
+  padding: 0 0 1.5em;
 }
 .ssb-settings-list li {
   padding: 1em 1em 0;
@@ -10636,15 +10637,42 @@ ssb-topbar .ui-select-match-text > small {
   display: inline-block;
   line-height: 1;
 }
-[class*="ssb-theme-"] .ssb-theme-main-header-text {
+[class*="ssb-theme-"] .ssb-page-section-layout-header [ssb-text-component],
+[class*="ssb-theme-"] .ssb-page-section-layout-hero [ssb-text-component] {
   font-size: 43px;
   margin: 34px auto 0;
   text-align: center;
   width: 60%;
 }
+[class*="ssb-theme-"] .ssb-page-section-layout-header [ssb-text-component] span[style],
+[class*="ssb-theme-"] .ssb-page-section-layout-hero [ssb-text-component] span[style] {
+  font-size: 43px!important;
+}
 @media screen and (min-width: 768px) {
-  [class*="ssb-theme-"] .ssb-theme-main-header-text {
+  [class*="ssb-theme-"] .ssb-page-section-layout-header [ssb-text-component],
+  [class*="ssb-theme-"] .ssb-page-section-layout-hero [ssb-text-component] {
     font-size: 96px;
+    margin: initial;
+    width: 100%;
+  }
+  [class*="ssb-theme-"] .ssb-page-section-layout-header [ssb-text-component] span[style],
+  [class*="ssb-theme-"] .ssb-page-section-layout-hero [ssb-text-component] span[style] {
+    font-size: inherit;
+  }
+}
+[class*="ssb-theme-"] .ssb-page-section-layout-hero [ssb-text-component] {
+  width: 100%;
+  position: static;
+  transform: none;
+  margin: 0;
+}
+@media screen and (min-width: 768px) {
+  [class*="ssb-theme-"] .ssb-page-section-layout-hero [ssb-text-component] {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
   }
 }
 .ssb-theme-default {
@@ -10664,9 +10692,6 @@ ssb-topbar .ui-select-match-text > small {
 .ssb-theme-default .ssb-page-section-layout-hero {
   background-color: #FFFFFF;
   text-align: center;
-}
-.ssb-theme-default .ssb-theme-hero-text {
-  font-size: 96px;
 }
 .ssb-theme-default .ssb-theme-heading-text {
   font-size: 24px;
@@ -10690,6 +10715,7 @@ ssb-topbar .ui-select-match-text > small {
 @media screen and (min-width: 768px) {
   .ssb-theme-default .ssb-theme-main-header-text {
     font-size: 96px;
+    margin: initial;
   }
   .ssb-theme-default .ssb-theme-hero-text {
     font-size: 96px;
@@ -10721,7 +10747,6 @@ ssb-topbar .ui-select-match-text > small {
 }
 .ssb-theme-young-soul .ssb-theme-hero-text {
   color: #FAC51C;
-  font-size: 50%;
 }
 .ssb-theme-young-soul .ssb-theme-heading-text {
   font-size: 16px;
@@ -10869,13 +10894,6 @@ ssb-topbar .ui-select-match-text > small {
 }
 .ssb-main .simple-form-v1 .inner-page {
   padding: 0 0 30px!important;
-}
-.ssb-page-section-layout-hero [ssb-text-component] {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 100%;
 }
 [ssb-image-component] {
   float: left;
