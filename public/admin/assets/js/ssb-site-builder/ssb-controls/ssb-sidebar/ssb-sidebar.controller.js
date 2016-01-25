@@ -398,14 +398,14 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
     	vm.openMediaModal('media-modal', 'MediaModalCtrl', null, 'lg');
 
       vm.insertMediaCallback = function(asset) {
-        if (componentIndex) {
+        if (componentIndex !== undefined) {
           vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex].bg.img.url = asset.url;
         } else {
           vm.state.page.sections[vm.uiState.activeSectionIndex].bg.img.url = asset.url;
         }
       }
 
-      if (sectionIndex) {
+      if (sectionIndex !== undefined) {
         SimpleSiteBuilderService.setActiveSection(sectionIndex);
         SimpleSiteBuilderService.setActiveComponent(undefined);
       } else {
@@ -426,7 +426,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
         }
       }
 
-      if (sectionIndex) {
+      if (sectionIndex !== undefined) {
         SimpleSiteBuilderService.setActiveSection(sectionIndex);
         SimpleSiteBuilderService.setActiveComponent(undefined);
       } else {
