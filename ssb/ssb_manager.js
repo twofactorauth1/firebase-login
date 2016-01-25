@@ -415,16 +415,13 @@ module.exports = {
                     if (err) {
                         self.log.error('Error getting website linklists by handle: ' + err);
                         fn(err, value);
-                    } else {
-                        var link = {
-                            label : page.get('menuTitle') || page.get('title'),
-                            type : "link",
-                            linkTo : {
-                                type : "page",
-                                data : page.get('handle')
-                            }
-                        };
-                        list.links.pop(link);
+                    } else {                        
+                        if(list && list.links){
+                            self.getUpdatedWebsiteLinkList(list, page.get("handle"), function(err, updatedList){
+                                list = updatedList;    
+                            })
+                        }
+                        
                         self.updateWebsiteLinklists(accountId, page.get('websiteId'), "head-menu", list, function(err, linkLists) {
                             if (err) {
                                 self.log.error('Error updating website linklists by handle: ' + err);
@@ -496,6 +493,24 @@ module.exports = {
                 }
             }
         });
+    },
+    getUpdatedWebsiteLinkList: function(list, handle, fn){
+        var self = this;
+        
+        var linkList = list.links.filter(function (lnk) {
+        return lnk.type === 'link' &&
+             lnk.linkTo && lnk.linkTo.data === handle &&
+             lnk.linkTo.type === 'page'
+        });
+        if(linkList){
+            _.each(linkList, function(link){
+                var _index = list.links.indexOf(link);
+                if(_index > -1)
+                    list.links.splice(_index, 1);
+            });
+        }
+        self.log.debug('>> updatedLinkList is' + list );
+        fn(null, list);
     },
     getWebsiteLinklistsByHandle: function(accountId, websiteId, handle, fn) {
         var self = this;
@@ -755,15 +770,11 @@ module.exports = {
                             self.log.error('Error getting website linklists by handle: ' + err);
                             cb(err);
                         } else {
-                            var link = {
-                                label : updatedPage.get('menuTitle') || updatedPage.get('title'),
-                                type : "link",
-                                linkTo : {
-                                    type : "page",
-                                    data : updatedPage.get('handle')
-                                }
-                            };
-                            list.links.pop(link);
+                            if(list && list.links){
+                                self.getUpdatedWebsiteLinkList(list, updatedPage.get("handle"), function(err, updatedList){
+                                    list = updatedList;    
+                                })
+                            }
                             self.updateWebsiteLinklists(accountId, updatedPage.get('websiteId'), "head-menu", list, function(err, linkLists) {
                                 if (err) {
                                     self.log.error('Error updating website linklists by handle: ' + err);
