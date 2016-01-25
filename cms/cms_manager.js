@@ -1313,15 +1313,20 @@ module.exports = {
                         self.log.error('Error getting website linklists by handle: ' + err);
                         fn(err, value);
                     } else {
-                        var link = {
-                            label : page.get('title'),
-                            type : "link",
-                            linkTo : {
-                                type : "page",
-                                data : page.get('handle')
+                        if(list && list.links){
+                            var linkList = list.links.filter(function (lnk) {
+                            return lnk.type === 'link' &&
+                                 lnk.linkTo && lnk.linkTo.data === page.get('handle') &&
+                                 lnk.linkTo.type === 'page'
+                            });
+                            if(linkList){
+                                _.each(linkList, function(link){
+                                    var _index = list.links.indexOf(link);
+                                    if(_index > -1)
+                                        list.links.splice(_index, 1);
+                                });
                             }
-                        };
-                        list.links.pop(link);
+                        }
                         self.updateWebsiteLinklists(page.get('websiteId'), "head-menu", list, function(err, linkLists) {
                             if (err) {
                                 self.log.error('Error updating website linklists by handle: ' + err);

@@ -2,9 +2,9 @@
 
 app.controller('SiteBuilderController', ssbSiteBuilderController);
 
-ssbSiteBuilderController.$inject = ['$scope', '$rootScope', '$attrs', '$filter', 'SimpleSiteBuilderService', '$stateParams', '$modal', 'SweetAlert', '$window', '$timeout', '$location'];
+ssbSiteBuilderController.$inject = ['$scope', '$rootScope', '$attrs', '$filter', 'SimpleSiteBuilderService', '$state', '$stateParams', '$modal', 'SweetAlert', '$window', '$timeout', '$location'];
 /* @ngInject */
-function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSiteBuilderService, $stateParams, $modal, SweetAlert, $window, $timeout, $location) {
+function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSiteBuilderService, $state, $stateParams, $modal, SweetAlert, $window, $timeout, $location) {
 
     console.info('site-builder directive init...')
 
@@ -171,6 +171,14 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
             $rootScope.app.layout.isMinimalAdminChrome =  false;
         }
     );
+
+    $scope.checkIfDirty = function(){
+        if(vm.state.pendingChanges)
+            return true;
+    }
+    $scope.resetDirty = function(){
+        vm.state.pendingChanges = false;
+    }
 
     function saveWebsite() {
         vm.state.pendingChanges = false;
