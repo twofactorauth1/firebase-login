@@ -7012,6 +7012,9 @@ ssb-topbar .ui-select-match-text > small {
   vertical-align: middle;
   padding: 1em;
 }
+[class*="ssb-theme-"] .ssb-page-section-layout-hero {
+  position: relative;
+}
 [class*="ssb-theme-"] .ssb-page-section-layout-hero .btn *,
 [class*="ssb-theme-"] .ssb-page-section-layout-hero .btn-default *,
 [class*="ssb-theme-"] .ssb-page-section-layout-hero .btn-block *,
