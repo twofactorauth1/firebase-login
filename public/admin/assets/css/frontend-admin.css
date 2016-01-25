@@ -6905,6 +6905,9 @@ a[href="https://froala.com/wysiwyg-editor"] {
   right: .5em;
   font-size: 1.5em;
 }
+.ssb-sidebar-section-panel .ui-select-match-close {
+  position: initial;
+}
 .ssb-sidebar-section-panel .panel-group {
   margin-bottom: 0;
 }
@@ -7096,7 +7099,6 @@ ssb-topbar .ui-select-match-text > small {
 @media screen and (min-width: 768px) {
   .ssb-theme-default .ssb-theme-main-header-text {
     font-size: 96px;
-    margin: initial;
   }
   .ssb-theme-default .ssb-theme-hero-text {
     font-size: 96px;

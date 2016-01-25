@@ -2,9 +2,9 @@
 
 app.controller('SiteBuilderSidebarSettingsPanelController', ssbSiteBuilderSidebarSettingsPanelController);
 
-ssbSiteBuilderSidebarSettingsPanelController.$inject = ['$scope', '$attrs', '$filter', '$document', '$timeout', 'SimpleSiteBuilderService', '$modal', 'editableOptions', '$location', 'SweetAlert'];
+ssbSiteBuilderSidebarSettingsPanelController.$inject = ['$scope', '$attrs', '$filter', '$document', '$timeout', 'SimpleSiteBuilderService', '$modal', 'editableOptions', '$location', 'SweetAlert', 'CustomerService'];
 /* @ngInject */
-function ssbSiteBuilderSidebarSettingsPanelController($scope, $attrs, $filter, $document, $timeout, SimpleSiteBuilderService, $modal, editableOptions, $location, SweetAlert) {
+function ssbSiteBuilderSidebarSettingsPanelController($scope, $attrs, $filter, $document, $timeout, SimpleSiteBuilderService, $modal, editableOptions, $location, SweetAlert, CustomerService) {
 
     console.info('site-build sidebar settings-panel directive init...')
 
@@ -23,7 +23,8 @@ function ssbSiteBuilderSidebarSettingsPanelController($scope, $attrs, $filter, $
     vm.removeSectionFromPage = pVm.removeSectionFromPage;
     vm.hideSectionFromPage = pVm.hideSectionFromPage;
     vm.editSectionName = pVm.editSectionName;
-
+    vm.tagToCustomer = tagToCustomer;
+    vm.customerTags = pVm.customerTags;
     //TODO: move into config services
     vm.spectrum = {
       options: SimpleSiteBuilderService.getSpectrumColorOptions()
@@ -43,6 +44,11 @@ function ssbSiteBuilderSidebarSettingsPanelController($scope, $attrs, $filter, $
     }, function(color) {
         console.debug(color);
     });
+
+
+    function tagToCustomer(value) {
+      return CustomerService.tagToCustomer(value);
+    }
 
     function init(element) {
 

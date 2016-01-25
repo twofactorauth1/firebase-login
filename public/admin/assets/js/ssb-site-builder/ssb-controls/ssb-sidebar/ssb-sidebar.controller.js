@@ -51,7 +51,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
     vm.createPage = createPage;
     vm.getNumberOfPages = getNumberOfPages;
     vm.getTemplateById = getTemplateById;
-    vm.tagToCustomer = tagToCustomer;
+    
     vm.editSectionName = editSectionName;
     vm.hideSectionFromPage = hideSectionFromPage;
     //vm.customerTags = [];
@@ -697,10 +697,6 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
             }
         }, true);
 
-    }
-
-    function tagToCustomer(value) {
-      return CustomerService.tagToCustomer(value);
     }
 
     function init(element) {
