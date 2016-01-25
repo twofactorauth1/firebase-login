@@ -202,7 +202,7 @@ iframe.fr-iframe {
   display: none;
 }
 .fr-toolbar.fr-inline.fr-desktop {
-  white-space: nowrap;
+  margin-right: 25px;
   position: absolute;
   margin-top: 50px;
 }
@@ -417,7 +417,7 @@ iframe.fr-iframe {
 }
 .fr-toolbar .fr-command.fr-btn.fr-hidden,
 .fr-popup .fr-command.fr-btn.fr-hidden {
-  display: none;
+  /*display: none;*/
 }
 .fr-toolbar.fr-disabled .fr-btn,
 .fr-popup.fr-disabled .fr-btn,
@@ -888,6 +888,12 @@ iframe.fr-iframe {
     margin-left: 3px !important;
   }
 }
+@media (max-width: 767px) {
+  .fr-toolbar.fr-inline .fr-separator.fr-vs {    
+    display: none;
+  }
+}
+
 .fr-opacity-0 {
   -webkit-opacity: 0;
   -moz-opacity: 0;
