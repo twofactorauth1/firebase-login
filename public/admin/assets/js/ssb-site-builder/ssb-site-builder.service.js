@@ -159,13 +159,19 @@
         }
 
         function createDuplicatePage(page) {
+            function success(data) {
+                console.log('SimpleSiteBuilderService requested page created');                
+            }
 
+            function error(error) {
+                console.error('SimpleSiteBuilderService page error: ' + error);
+            }
             return (
                 ssbRequest($http({
                   url: baseWebsiteAPIUrlv2 + ssbService.website._id + '/duplicate/page/',
                   method: 'POST',
                   data: angular.toJson(page)
-                }).success(successPage).error(errorPage))
+                }).success(success).error(error))
             )
 
         }
