@@ -13,9 +13,9 @@ app.config(['$provide', function ($provide){
 
 app.controller('SiteBuilderSidebarController', ssbSiteBuilderSidebarController);
 
-ssbSiteBuilderSidebarController.$inject = ['$scope', '$attrs', '$filter', '$document', '$timeout', 'SimpleSiteBuilderService', '$modal', 'editableOptions', '$location', 'SweetAlert', 'CustomerService' ];
+ssbSiteBuilderSidebarController.$inject = ['$scope', '$attrs', '$filter', '$document', '$timeout', 'SimpleSiteBuilderService', '$modal', 'editableOptions', '$location', 'SweetAlert', 'CustomerService', 'toaster'];
 /* @ngInject */
-function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $timeout, SimpleSiteBuilderService, $modal, editableOptions, $location, SweetAlert, CustomerService) {
+function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $timeout, SimpleSiteBuilderService, $modal, editableOptions, $location, SweetAlert, CustomerService, toaster) {
 
     console.info('site-build sidebar directive init...')
 
@@ -51,7 +51,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
     vm.createPage = createPage;
     vm.getNumberOfPages = getNumberOfPages;
     vm.getTemplateById = getTemplateById;
-    
+
     vm.editSectionName = editSectionName;
     vm.hideSectionFromPage = hideSectionFromPage;
     //vm.customerTags = [];
@@ -339,7 +339,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
   	}
 
   	function savePage() {
-        var isLegacyPage = vm.state.page.ssb;
+        var isLegacyPage = !vm.state.page.ssb;
 
         console.log(isLegacyPage);
 
@@ -368,6 +368,9 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
                     return (
                         SimpleSiteBuilderService.savePage(vm.state.page).then(function(response){
                             console.log('page saved');
+                            toaster.pop('success', 'Page Saved', 'The page was saved successfully.');
+                        }).catch(function(err) {
+                            toaster.pop('error', 'Error', 'The page was not saved. Please try again.');
                         })
                     )
 
@@ -382,6 +385,9 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
             return (
                 SimpleSiteBuilderService.savePage(vm.state.page).then(function(response){
                     console.log('page saved');
+                    toaster.pop('success', 'Page Saved', 'The page was saved successfully.');
+                }).catch(function(err) {
+                    toaster.pop('error', 'Error', 'The page was not saved. Please try again.');
                 })
             )
         }

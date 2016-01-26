@@ -42,43 +42,46 @@ app.controller('SiteBuilderPageSettingsModalController', ['$timeout', 'parentVm'
             SweetAlert.swal("Saved!", "Page settings saved.", "success");
             angular.element('.modal.in').show();
             vm.loading = false;
-          }) 
+          })
       } else {
         angular.element('.modal.in').show();
         vm.loading = false;
       }
-    });   
+    });
   }
 
   function saveSettings() {
     vm.loading = true;
   	SimpleSiteBuilderService.savePage(vm.page, true).then(function(page) {
-      vm.originalPage = angular.copy(vm.page);
-			toaster.pop('success', 'Setting Saved', 'The page settings saved successfully.');
-      vm.loading = false;
-      if(vm.page.homePage){
+        vm.originalPage = angular.copy(vm.page);
+        toaster.pop('success', 'Setting Saved', 'The page settings saved successfully.');
+        vm.loading = false;
+
         vm.parentVm.closeModal();
-        vm.parentVm.uiState.navigation.loadPage(vm.page._id);
-      }
-		})
+
+        if (vm.page.homePage) {
+            vm.parentVm.uiState.navigation.loadPage(vm.page._id);
+        }
+	});
   }
-  function setAsHomePage(status) {    
+
+  function setAsHomePage(status) {
     if(status){
       if(vm.parentVm.state.pages["index"] && vm.page.handle !== 'index'){
         console.log("Homepage already exists");
           SweetAlert.swal({
             title: "Are you sure?",
-            text: "CAUTION: Home page already exists. Do you want to set this page as 'Homepage'?",
+            text: "CAUTION: Home page already exists. Do you want to set this page as your new home page?",
             type: "warning",
             showCancelButton: true,
             confirmButtonColor: "#DD6B55",
-            confirmButtonText: "Yes — I'll set this page as 'Homepage'",
-            cancelButtonText: "No — I will use existing 'Homepage' for now.",
+            confirmButtonText: "Yes",
+            cancelButtonText: "No",
             closeOnConfirm: true,
             closeOnCancel: true
           }, function (isConfirm) {
           if (isConfirm) {
-            vm.page.homePage = true; 
+            vm.page.homePage = true;
             angular.element('.modal.in').show();
           } else {
             angular.element('.modal.in').show();
@@ -94,7 +97,7 @@ app.controller('SiteBuilderPageSettingsModalController', ['$timeout', 'parentVm'
       vm.page.homePage = false;
       vm.page = angular.copy(vm.originalPage);
     }
-    
+
   }
   function deletePage() {
     vm.loading = true;
@@ -110,8 +113,8 @@ app.controller('SiteBuilderPageSettingsModalController', ['$timeout', 'parentVm'
       type: "warning",
       showCancelButton: true,
       confirmButtonColor: "#DD6B55",
-      confirmButtonText: "Yes, delete page!",
-      cancelButtonText: "No, do not delete page!",
+      confirmButtonText: "Yes",
+      cancelButtonText: "No",
       closeOnConfirm: false,
       closeOnCancel: true
     }, function (isConfirm) {
@@ -122,12 +125,12 @@ app.controller('SiteBuilderPageSettingsModalController', ['$timeout', 'parentVm'
               angular.element('.modal.in').show();
               vm.parentVm.closeModal();
               vm.loading = false;
-              if(vm.parentVm.state.page._id === vm.page._id){                	
+              if(vm.parentVm.state.page._id === vm.page._id){
               	$timeout(function () {
             			$location.path('/website/site-builder/pages/');
           		}, 0);
               }
-          })  
+          })
       } else {
         angular.element('.modal.in').show();
         vm.loading = false;
@@ -135,7 +138,7 @@ app.controller('SiteBuilderPageSettingsModalController', ['$timeout', 'parentVm'
     });
   };
   vm.loading = true;
-  SimpleSiteBuilderService.getPage(vm.pageId, true).then(function(page) {    
+  SimpleSiteBuilderService.getPage(vm.pageId, true).then(function(page) {
     vm.page = page.data;
     vm.originalPage = angular.copy(vm.page);
     // Special case if selected page is current page
@@ -144,7 +147,7 @@ app.controller('SiteBuilderPageSettingsModalController', ['$timeout', 'parentVm'
       vm.page.handle = vm.parentVm.state.page.handle;
     }
     vm.loading = false;
-  
+
   })
 
 }]);

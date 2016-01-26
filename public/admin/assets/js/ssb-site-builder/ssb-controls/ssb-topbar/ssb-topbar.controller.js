@@ -2,9 +2,9 @@
 
 app.controller('SiteBuilderTopbarController', ssbSiteBuilderTopbarController);
 
-ssbSiteBuilderTopbarController.$inject = ['$scope', '$timeout', '$attrs', '$filter', 'SimpleSiteBuilderService', '$modal', '$location', 'SweetAlert'];
+ssbSiteBuilderTopbarController.$inject = ['$scope', '$timeout', '$attrs', '$filter', 'SimpleSiteBuilderService', '$modal', '$location', 'SweetAlert', 'toaster'];
 /* @ngInject */
-function ssbSiteBuilderTopbarController($scope, $timeout, $attrs, $filter, SimpleSiteBuilderService, $modal, $location, SweetAlert) {
+function ssbSiteBuilderTopbarController($scope, $timeout, $attrs, $filter, SimpleSiteBuilderService, $modal, $location, SweetAlert, toaster) {
 
     console.info('site-build topbar directive init...')
 
@@ -21,7 +21,7 @@ function ssbSiteBuilderTopbarController($scope, $timeout, $attrs, $filter, Simpl
     };
 
     function savePage() {
-        var isLegacyPage = vm.state.page.ssb;
+        var isLegacyPage = !vm.state.page.ssb;
 
         console.log(isLegacyPage);
 
@@ -50,6 +50,7 @@ function ssbSiteBuilderTopbarController($scope, $timeout, $attrs, $filter, Simpl
                     return (
                         SimpleSiteBuilderService.savePage(vm.state.page).then(function(response){
                             console.log('page saved');
+                            toaster.pop('success', 'Page Saved', 'The page was saved successfully.');
                         })
                     )
 
@@ -64,6 +65,9 @@ function ssbSiteBuilderTopbarController($scope, $timeout, $attrs, $filter, Simpl
             return (
                 SimpleSiteBuilderService.savePage(vm.state.page).then(function(response){
                     console.log('page saved');
+                    toaster.pop('success', 'Page Saved', 'The page was saved successfully.');
+                }).catch(function(err) {
+                    toaster.pop('error', 'Error', 'The page was not saved. Please try again.');
                 })
             )
         }

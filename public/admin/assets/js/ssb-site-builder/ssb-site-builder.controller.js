@@ -2,9 +2,9 @@
 
 app.controller('SiteBuilderController', ssbSiteBuilderController);
 
-ssbSiteBuilderController.$inject = ['$scope', '$rootScope', '$attrs', '$filter', 'SimpleSiteBuilderService', '$state', '$stateParams', '$modal', 'SweetAlert', '$window', '$timeout', '$location'];
+ssbSiteBuilderController.$inject = ['$scope', '$rootScope', '$attrs', '$filter', 'SimpleSiteBuilderService', '$state', '$stateParams', '$modal', 'SweetAlert', '$window', '$timeout', '$location', 'toaster'];
 /* @ngInject */
-function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSiteBuilderService, $state, $stateParams, $modal, SweetAlert, $window, $timeout, $location) {
+function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSiteBuilderService, $state, $stateParams, $modal, SweetAlert, $window, $timeout, $location, toaster) {
 
     console.info('site-builder directive init...')
 
@@ -190,7 +190,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     }
 
     function savePage() {
-        var isLegacyPage = vm.state.page.ssb;
+        var isLegacyPage = !vm.state.page.ssb;
 
         console.log(isLegacyPage);
 
@@ -219,6 +219,9 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
                     return (
                         SimpleSiteBuilderService.savePage(vm.state.page).then(function(response){
                             console.log('page saved');
+                            toaster.pop('success', 'Page Saved', 'The page was saved successfully.');
+                        }).catch(function(err) {
+                            toaster.pop('error', 'Error', 'The page was not saved. Please try again.');
                         })
                     )
 
@@ -233,6 +236,9 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
             return (
                 SimpleSiteBuilderService.savePage(vm.state.page).then(function(response){
                     console.log('page saved');
+                    toaster.pop('success', 'Page Saved', 'The page was saved successfully.');
+                }).catch(function(err) {
+                    toaster.pop('error', 'Error', 'The page was not saved. Please try again.');
                 })
             )
         }
