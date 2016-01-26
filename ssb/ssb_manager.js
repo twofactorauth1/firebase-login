@@ -415,13 +415,13 @@ module.exports = {
                     if (err) {
                         self.log.error('Error getting website linklists by handle: ' + err);
                         fn(err, value);
-                    } else {                        
+                    } else {
                         if(list && list.links){
                             self.getUpdatedWebsiteLinkList(list, page.get("handle"), function(err, updatedList){
-                                list = updatedList;    
+                                list = updatedList;
                             })
                         }
-                        
+
                         self.updateWebsiteLinklists(accountId, page.get('websiteId'), "head-menu", list, function(err, linkLists) {
                             if (err) {
                                 self.log.error('Error updating website linklists by handle: ' + err);
@@ -496,7 +496,7 @@ module.exports = {
     },
     getUpdatedWebsiteLinkList: function(list, handle, fn){
         var self = this;
-        
+
         var linkList = list.links.filter(function (lnk) {
         return lnk.type === 'link' &&
              lnk.linkTo && lnk.linkTo.data === handle &&
@@ -655,7 +655,35 @@ module.exports = {
                     }
                 });
             },
-            function updateSections(existingPage, cb) {
+            function getGlobalHeader(existingPage, cb){
+                var query = {
+                    accountId:accountId,
+                    globalHeader:true
+                };
+                sectionDao.findOne(query, $$.m.ssb.Section, function(err, section){
+                    if(err) {
+                        self.log.error('Error finding global header:', err);
+                        cb(err);
+                    } else {
+                        cb(null, existingPage, section);
+                    }
+                });
+            },
+            function getGlobalFooter(existingPage, globalHeader, cb){
+                var query = {
+                    accountId:accountId,
+                    globalFooter:true
+                };
+                sectionDao.findOne(query, $$.m.ssb.Section, function(err, section){
+                    if(err) {
+                        self.log.error('Error finding global footer:', err);
+                        cb(err);
+                    } else {
+                        cb(null, existingPage, globalHeader, section);
+                    }
+                });
+            },
+            function updateSections(existingPage, globalHeader, globalFooter, cb) {
                 var sections = page.get('sections');
                 var dereferencedSections = [];
 
@@ -678,7 +706,23 @@ module.exports = {
                                 s.anchor = id;
                                 s.accountId = accountId;
                                 self.log.debug('new dereferenced', s);
+
+
+                                // section is globalHeader reference and user already has globalHeader in their account's section collection
+                                if (s.globalHeader && globalHeader) {
+                                    self.log.debug('page has globalHeader ref, account has globalHeader');
+                                    s._id = globalHeader.id();
+                                    s.refId = referencedSection.id();
+                                }
+
+                                if (s.globalFooter && globalFooter) {
+                                    self.log.debug('page has globalFooter ref, account has globalFooter');
+                                    s._id = globalFooter.id();
+                                    s.refId = referencedSection.id();
+                                }
+
                                 dereferencedSections.push(s);
+
                                 callback();
                             }
                         });
@@ -689,6 +733,19 @@ module.exports = {
                             var id = $$.u.idutils.generateUUID();
                             section._id = id;
                             section.anchor = id;
+                        }
+
+                        // section is globalHeader reference and user already has globalHeader in their account's section collection
+                        if (section.globalHeader && globalHeader) {
+                            self.log.debug('page has globalHeader ref, account has globalHeader');
+                            section._id = globalHeader.id();
+                            section.refId = section._id;
+                        }
+
+                        if (section.globalFooter && globalFooter) {
+                            self.log.debug('page has globalFooter ref, account has globalFooter');
+                            section._id = globalFooter.id();
+                            section.refId = section._id;
                         }
 
                         section.accountId = accountId;
@@ -772,7 +829,7 @@ module.exports = {
                         } else {
                             if(list && list.links){
                                 self.getUpdatedWebsiteLinkList(list, updatedPage.get("handle"), function(err, updatedList){
-                                    list = updatedList;    
+                                    list = updatedList;
                                 })
                             }
                             self.updateWebsiteLinklists(accountId, updatedPage.get('websiteId'), "head-menu", list, function(err, linkLists) {
@@ -876,7 +933,6 @@ module.exports = {
 
             }
             self.log.debug('<< updatePage');
-            debugger;
             return fn(err, updatedPage);
         });
 
@@ -1074,9 +1130,9 @@ module.exports = {
             function setSiteTemplateAndTheme(website, cb){
                 var currentSiteTemplate = website.get('siteTemplateId');
                 var createPages = true;
-                if(currentSiteTemplate) {
-                    createPages = false;
-                }
+                // if(currentSiteTemplate) {
+                //     createPages = false;
+                // }
                 website.set('siteTemplateId', siteTemplateId);
                 website.set('themeId', siteThemeId);
                 website.set('modified', created);

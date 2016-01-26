@@ -40,7 +40,7 @@ function ssbSiteBuilderSiteTemplatesController($scope, $attrs, $filter, $documen
 
             unbindWebsiteWatcher();
 
-            if (website.siteTemplateId) {
+            if (website.siteTemplateId && vm.state.pages && vm.state.pages.length) {
                 vm.redirectToEditor();
             } else {
                 vm.uiState.loading = false;
