@@ -21,35 +21,27 @@ function ssbSiteBuilderSiteTemplatesController($scope, $attrs, $filter, $documen
     };
 
 
-    var unbindPagesWatcher = $scope.$watch(function() { return SimpleSiteBuilderService.pages }, function(pages) {
-        if (pages) {
+    var unbindWatcher = $scope.$watchGroup([
+        function() { return SimpleSiteBuilderService.pages },
+        function() { return SimpleSiteBuilderService.website }
+        ], function(pages) {
+        if (pages && website && website._id) {
 
-            unbindPagesWatcher();
+            unbindWatcher();
 
-            if (Object.keys(pages).length !== 0) {
-                vm.redirectToEditor();
-            }
-
-            vm.state.pages = pages;
-
-        }
-    }, true);
-
-    var unbindWebsiteWatcher = $scope.$watch(function() { return SimpleSiteBuilderService.website }, function(website) {
-        if (website && website._id) {
-
-            unbindWebsiteWatcher();
-
-            if (website.siteTemplateId && vm.state.pages && vm.state.pages.length) {
+            if (Object.keys(pages).length !== 0 && website.siteTemplateId) {
                 vm.redirectToEditor();
             } else {
                 vm.uiState.loading = false;
             }
 
+            vm.state.pages = pages;
             vm.state.website = website;
 
         }
     }, true);
+
+
 
     /*
      * Get Site Templates
