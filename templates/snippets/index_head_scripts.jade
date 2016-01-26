@@ -65,16 +65,16 @@ if (typeof account.website.theme !== 'undefined' && typeof account.website.theme
             background-color: #{account.website.themeOverrides.styles.headerBackgroundColor};
         }
 
-        .ssb-theme-#{account.website.theme.handle} .ssb-theme-main-header-text {
-            /*color: #{account.website.themeOverrides.styles.headerColor};*/
+        .ssb-theme-#{account.website.theme.handle} .ssb-page-section-layout-header [ssb-text-component] {
+            color: #{account.website.themeOverrides.styles.headerColor};
         }
 
         .ssb-theme-#{account.website.theme.handle} .ssb-page-section-layout-hero {
             background-color: #{account.website.themeOverrides.styles.heroBackgroundColor};
         }
 
-        .ssb-theme-#{account.website.theme.handle} .ssb-theme-hero-text {
-            /*color: #{account.website.themeOverrides.styles.heroColor};*/
+        .ssb-theme-#{account.website.theme.handle} .ssb-page-section-layout-hero [ssb-text-component] {
+            color: #{account.website.themeOverrides.styles.heroColor};
         }
 
         .ssb-theme-#{account.website.theme.handle} .ssb-theme-heading-text {
@@ -102,11 +102,11 @@ if (typeof account.website.theme !== 'undefined' && typeof account.website.theme
 
         @media screen and (min-width: 768px) {
 
-            .ssb-theme-#{account.website.theme.handle} .ssb-theme-main-header-text {
+            .ssb-theme-#{account.website.theme.handle} .ssb-page-section-layout-header [ssb-text-component] {
                 font-size: #{account.website.themeOverrides.styles.headerSize};
             }
 
-            .ssb-theme-#{account.website.theme.handle} .ssb-theme-hero-text {
+            .ssb-theme-#{account.website.theme.handle} .ssb-page-section-layout-hero [ssb-text-component] {
                 font-size: #{account.website.themeOverrides.styles.heroSize};
             }
 
