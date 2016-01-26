@@ -15,9 +15,11 @@ app.controller('SiteBuilderPageSettingsModalController', ['$timeout', 'parentVm'
   function duplicatePage(){
     vm.loading = true;
     SimpleSiteBuilderService.createDuplicatePage(vm.page).then(function(page) {
-        vm.parentVm.closeModal();
-        vm.loading = false;
-        vm.parentVm.uiState.navigation.loadPage(page.data._id);
+        SimpleSiteBuilderService.getPages().then(function() {
+            vm.parentVm.closeModal();
+            vm.loading = false;
+            vm.parentVm.uiState.navigation.loadPage(page.data._id);
+        });
     })
   }
   function hideFromMenu(){
@@ -35,14 +37,22 @@ app.controller('SiteBuilderPageSettingsModalController', ['$timeout', 'parentVm'
       closeOnCancel: true
     }, function (isConfirm) {
       if (isConfirm) {
-          var originalPage = angular.copy(vm.originalPage);
-          originalPage.mainmenu = false;
-          SimpleSiteBuilderService.savePage(originalPage, true).then(function(page) {
-            vm.page.mainmenu = false;
-            SweetAlert.swal("Saved!", "Page settings saved.", "success");
+        var originalPage = angular.copy(vm.originalPage);
+        originalPage.mainmenu = false;
+        SimpleSiteBuilderService.savePage(originalPage, true).then(function(page) {
+
+            SimpleSiteBuilderService.getPages().then(function() {
+                vm.page.mainmenu = false;
+                SweetAlert.swal("Saved!", "Page settings saved.", "success");
+                angular.element('.modal.in').show();
+                vm.loading = false;
+            })
+
+        }).catch(function(err) {
+            toaster.pop('success', 'Setting Saved', 'The page settings saved successfully.');
             angular.element('.modal.in').show();
             vm.loading = false;
-          })
+        });
       } else {
         angular.element('.modal.in').show();
         vm.loading = false;
@@ -54,15 +64,22 @@ app.controller('SiteBuilderPageSettingsModalController', ['$timeout', 'parentVm'
     vm.loading = true;
   	SimpleSiteBuilderService.savePage(vm.page, true).then(function(page) {
         vm.originalPage = angular.copy(vm.page);
-        toaster.pop('success', 'Setting Saved', 'The page settings saved successfully.');
-        vm.loading = false;
 
-        vm.parentVm.closeModal();
+
+        SimpleSiteBuilderService.getPages().then(function() {
+            toaster.pop('success', 'Setting Saved', 'The page settings saved successfully.');
+            vm.loading = false;
+            vm.parentVm.closeModal();
+        })
 
         if (vm.page.homePage) {
             vm.parentVm.uiState.navigation.loadPage(vm.page._id);
         }
-	});
+	}).catch(function(err) {
+        toaster.pop('success', 'Setting Saved', 'The page settings saved successfully.');
+        vm.loading = false;
+        vm.parentVm.closeModal();
+    });;
   }
 
   function setAsHomePage(status) {
@@ -121,15 +138,19 @@ app.controller('SiteBuilderPageSettingsModalController', ['$timeout', 'parentVm'
       if (isConfirm) {
           SimpleSiteBuilderService.deletePage(vm.page).then(function(response){
               console.log('page deleted');
-              SweetAlert.swal("Saved!", "Page is deleted.", "success");
-              angular.element('.modal.in').show();
-              vm.parentVm.closeModal();
-              vm.loading = false;
-              if(vm.parentVm.state.page._id === vm.page._id){
-              	$timeout(function () {
-            			$location.path('/website/site-builder/pages/');
-          		}, 0);
-              }
+
+                SimpleSiteBuilderService.getPages().then(function() {
+                  SweetAlert.swal("Saved!", "Page is deleted.", "success");
+                  angular.element('.modal.in').show();
+                  vm.parentVm.closeModal();
+                  vm.loading = false;
+                  if(vm.parentVm.state.page._id === vm.page._id){
+                  	$timeout(function () {
+                			$location.path('/website/site-builder/pages/');
+              		}, 0);
+                  }
+                });
+
           })
       } else {
         angular.element('.modal.in').show();
