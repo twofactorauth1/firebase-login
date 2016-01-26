@@ -33,14 +33,14 @@ function ssbSiteBuilderSiteTemplatesController($scope, $attrs, $filter, $documen
 
             unbindWatcher();
 
+            vm.state.pages = pages;
+            vm.state.website = website;
+
             if (Object.keys(pages).length !== 0 && website.siteTemplateId) {
                 vm.redirectToEditor();
             } else {
                 vm.uiState.loading = false;
             }
-
-            vm.state.pages = pages;
-            vm.state.website = website;
 
         }
 
