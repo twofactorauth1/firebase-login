@@ -9933,8 +9933,13 @@ a[href="https://froala.com/wysiwyg-editor"] {
   text-align: inherit!important;
   color: inherit;
 }
-.fr-element::selection {
-  background-color: red;
+.fr-wrapper ::selection {
+  background: rgba(72, 177, 204, 0.25) !important;
+  color: inherit!important;
+}
+.fr-wrapper ::-moz-selection {
+  background: rgba(72, 177, 204, 0.25) !important;
+  color: inherit!important;
 }
 .ssb-site-builder-container {
   height: 100%;
@@ -10646,17 +10651,31 @@ ssb-topbar .ui-select-match-text > small {
   display: inline-block;
   line-height: 1.2;
 }
-[class*="ssb-theme-"] .ssb-page-section-layout-header [ssb-text-component],
-[class*="ssb-theme-"] .ssb-page-section-layout-hero [ssb-text-component] {
+[class*="ssb-theme-"] .ssb-page-section-layout-header [ssb-text-component][data-eq-state$="small"],
+[class*="ssb-theme-"] .ssb-page-section-layout-hero [ssb-text-component][data-eq-state$="small"] {
   font-size: 14vw;
   margin: .25em auto 0;
   text-align: center;
   width: 60%;
   line-height: 1;
 }
-[class*="ssb-theme-"] .ssb-page-section-layout-header [ssb-text-component] span[style],
-[class*="ssb-theme-"] .ssb-page-section-layout-hero [ssb-text-component] span[style] {
+[class*="ssb-theme-"] .ssb-page-section-layout-header [ssb-text-component][data-eq-state$="small"] span[style],
+[class*="ssb-theme-"] .ssb-page-section-layout-hero [ssb-text-component][data-eq-state$="small"] span[style] {
   font-size: 14vw!important;
+}
+@media screen and (max-width: 767px) {
+  [class*="ssb-theme-"] .ssb-page-section-layout-header [ssb-text-component]:not([class*="ssb-edit-mode"]),
+  [class*="ssb-theme-"] .ssb-page-section-layout-hero [ssb-text-component]:not([class*="ssb-edit-mode"]) {
+    font-size: 14vw;
+    margin: .25em auto 0;
+    text-align: center;
+    width: 60%;
+    line-height: 1;
+  }
+  [class*="ssb-theme-"] .ssb-page-section-layout-header [ssb-text-component]:not([class*="ssb-edit-mode"]) span[style],
+  [class*="ssb-theme-"] .ssb-page-section-layout-hero [ssb-text-component]:not([class*="ssb-edit-mode"]) span[style] {
+    font-size: 14vw!important;
+  }
 }
 [class*="ssb-theme-"] .ssb-page-section-layout-header [ssb-text-component][data-eq-state$="medium"],
 [class*="ssb-theme-"] .ssb-page-section-layout-hero [ssb-text-component][data-eq-state$="medium"],
