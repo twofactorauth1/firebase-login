@@ -24,7 +24,11 @@ function ssbSiteBuilderSiteTemplatesController($scope, $attrs, $filter, $documen
     var unbindWatcher = $scope.$watchGroup([
         function() { return SimpleSiteBuilderService.pages },
         function() { return SimpleSiteBuilderService.website }
-        ], function(pages) {
+        ], function(values) {
+
+        var pages = values[0];
+        var website = values[1];
+
         if (pages && website && website._id) {
 
             unbindWatcher();
@@ -39,6 +43,7 @@ function ssbSiteBuilderSiteTemplatesController($scope, $attrs, $filter, $documen
             vm.state.website = website;
 
         }
+
     }, true);
 
 
