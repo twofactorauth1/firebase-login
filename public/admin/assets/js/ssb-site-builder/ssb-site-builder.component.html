@@ -27,8 +27,8 @@
     background-color: {{vm.state.website.themeOverrides.styles.headerBackgroundColor}};
 }
 
-.ssb-theme-{{vm.state.website.theme.handle}} .ssb-theme-main-header-text {
-    /*color: {{vm.state.website.themeOverrides.styles.headerTextColor}};*/
+.ssb-theme-{{vm.state.website.theme.handle}} .ssb-page-section-layout-header [ssb-text-component] {
+    color: {{vm.state.website.themeOverrides.styles.headerTextColor}};
     /*font-size: {{vm.state.website.themeOverrides.styles.headerSize}};*/
 }
 
@@ -37,9 +37,9 @@
     text-align: center;
 }
 
-.ssb-theme-{{vm.state.website.theme.handle}} .ssb-theme-hero-text {
+.ssb-theme-{{vm.state.website.theme.handle}} .ssb-page-section-layout-hero [ssb-text-component] {
     color: {{vm.state.website.themeOverrides.styles.heroTextColor}};
-    font-size: {{vm.state.website.themeOverrides.styles.heroSize}};
+    /*font-size: {{vm.state.website.themeOverrides.styles.heroSize}};*/
 }
 
 .ssb-theme-{{vm.state.website.theme.handle}} .ssb-theme-heading-text {
@@ -67,11 +67,11 @@
 
 @media screen and (min-width: 768px) {
 
-    .ssb-theme-{{vm.state.website.theme.handle}} .ssb-theme-main-header-text {
+    .ssb-theme-{{vm.state.website.theme.handle}} .ssb-page-section-layout-header [ssb-text-component] {
         font-size: {{vm.state.website.themeOverrides.styles.headerSize}};
     }
 
-    .ssb-theme-{{vm.state.website.theme.handle}} .ssb-theme-hero-text {
+    .ssb-theme-{{vm.state.website.theme.handle}} .ssb-page-section-layout-hero [ssb-text-component] {
         font-size: {{vm.state.website.themeOverrides.styles.heroSize}};
     }
 

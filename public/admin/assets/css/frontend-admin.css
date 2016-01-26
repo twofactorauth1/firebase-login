@@ -6302,6 +6302,9 @@ a[href="https://froala.com/wysiwyg-editor"] {
   text-align: inherit!important;
   color: inherit;
 }
+.fr-element::selection {
+  background-color: red;
+}
 .ssb-site-builder-container {
   height: 100%;
   height: 100vh;
@@ -7022,30 +7025,80 @@ ssb-topbar .ui-select-match-text > small {
 [class*="ssb-theme-"] .ssb-page-section-layout-hero button *,
 [class*="ssb-theme-"] .ssb-page-section-layout-hero .ssb-theme-btn * {
   display: inline-block;
-  line-height: 1;
+  line-height: 1.2;
 }
 [class*="ssb-theme-"] .ssb-page-section-layout-header [ssb-text-component],
 [class*="ssb-theme-"] .ssb-page-section-layout-hero [ssb-text-component] {
-  font-size: 43px;
-  margin: 34px auto 0;
+  font-size: 14vw;
+  margin: .25em auto 0;
   text-align: center;
   width: 60%;
+  line-height: 1;
 }
 [class*="ssb-theme-"] .ssb-page-section-layout-header [ssb-text-component] span[style],
 [class*="ssb-theme-"] .ssb-page-section-layout-hero [ssb-text-component] span[style] {
-  font-size: 43px!important;
+  font-size: 14vw!important;
+}
+[class*="ssb-theme-"] .ssb-page-section-layout-header [ssb-text-component][data-eq-state$="medium"],
+[class*="ssb-theme-"] .ssb-page-section-layout-hero [ssb-text-component][data-eq-state$="medium"],
+[class*="ssb-theme-"] .ssb-page-section-layout-header [ssb-text-component][data-eq-state$="large"],
+[class*="ssb-theme-"] .ssb-page-section-layout-hero [ssb-text-component][data-eq-state$="large"] {
+  font-size: 96px;
+  margin: initial;
+  width: 100%;
+}
+[class*="ssb-theme-"] .ssb-page-section-layout-header [ssb-text-component][data-eq-state$="medium"] span[style],
+[class*="ssb-theme-"] .ssb-page-section-layout-hero [ssb-text-component][data-eq-state$="medium"] span[style],
+[class*="ssb-theme-"] .ssb-page-section-layout-header [ssb-text-component][data-eq-state$="large"] span[style],
+[class*="ssb-theme-"] .ssb-page-section-layout-hero [ssb-text-component][data-eq-state$="large"] span[style] {
+  font-size: inherit;
 }
 @media screen and (min-width: 768px) {
-  [class*="ssb-theme-"] .ssb-page-section-layout-header [ssb-text-component],
-  [class*="ssb-theme-"] .ssb-page-section-layout-hero [ssb-text-component] {
+  [class*="ssb-theme-"] .ssb-page-section-layout-header [ssb-text-component]:not([class*="ssb-edit-mode"]),
+  [class*="ssb-theme-"] .ssb-page-section-layout-hero [ssb-text-component]:not([class*="ssb-edit-mode"]) {
     font-size: 96px;
     margin: initial;
     width: 100%;
   }
-  [class*="ssb-theme-"] .ssb-page-section-layout-header [ssb-text-component] span[style],
-  [class*="ssb-theme-"] .ssb-page-section-layout-hero [ssb-text-component] span[style] {
+  [class*="ssb-theme-"] .ssb-page-section-layout-header [ssb-text-component]:not([class*="ssb-edit-mode"]) span[style],
+  [class*="ssb-theme-"] .ssb-page-section-layout-hero [ssb-text-component]:not([class*="ssb-edit-mode"]) span[style] {
     font-size: inherit;
   }
+}
+[class*="ssb-theme-"] .ssb-page-section-layout-header[data-eq-state$="medium"],
+[class*="ssb-theme-"] .ssb-page-section-layout-header[data-eq-state$="large"] {
+  padding: 2em 0 0;
+}
+@media screen and (min-width: 768px) {
+  [class*="ssb-theme-"] .ssb-page-section-layout-header:not([class*="ssb-edit-mode"]) {
+    padding: 2em 0 0;
+  }
+}
+[class*="ssb-theme-"] .ssb-page-section-layout-header [navigation-component] {
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+}
+[class*="ssb-theme-"] .ssb-page-section-layout-header [navigation-component][data-eq-state$="medium"],
+[class*="ssb-theme-"] .ssb-page-section-layout-header [navigation-component][data-eq-state$="large"] {
+  position: static;
+  top: auto;
+  left: auto;
+  width: 50%;
+}
+@media screen and (min-width: 768px) {
+  [class*="ssb-theme-"] .ssb-page-section-layout-header [navigation-component]:not([class*="ssb-edit-mode"]) {
+    position: static;
+    top: auto;
+    left: auto;
+    width: 50%;
+  }
+}
+[class*="ssb-theme-"] .ssb-page-section-layout-header [navigation-component] .navbar-toggle {
+  font-size: 14vw;
+  margin-top: .35em;
 }
 [class*="ssb-theme-"] .ssb-page-section-layout-hero [ssb-text-component] {
   width: 100%;
@@ -7053,8 +7106,16 @@ ssb-topbar .ui-select-match-text > small {
   transform: none;
   margin: 0;
 }
+[class*="ssb-theme-"] .ssb-page-section-layout-hero [ssb-text-component][data-eq-state$="medium"],
+[class*="ssb-theme-"] .ssb-page-section-layout-hero [ssb-text-component][data-eq-state$="large"] {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+}
 @media screen and (min-width: 768px) {
-  [class*="ssb-theme-"] .ssb-page-section-layout-hero [ssb-text-component] {
+  [class*="ssb-theme-"] .ssb-page-section-layout-hero [ssb-text-component]:not([class*="ssb-edit-mode"]) {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -7076,9 +7137,15 @@ ssb-topbar .ui-select-match-text > small {
 .ssb-theme-default .ssb-page-section-layout-header {
   background-color: #FFFFFF;
 }
+.ssb-theme-default .ssb-page-section-layout-header [ssb-text-component] {
+  color: #58585b;
+}
 .ssb-theme-default .ssb-page-section-layout-hero {
   background-color: #FFFFFF;
   text-align: center;
+}
+.ssb-theme-default .ssb-page-section-layout-hero [ssb-text-component] {
+  color: #73879C;
 }
 .ssb-theme-default .ssb-theme-heading-text {
   font-size: 24px;
@@ -7100,10 +7167,10 @@ ssb-topbar .ui-select-match-text > small {
   background-color: #FFFFFF;
 }
 @media screen and (min-width: 768px) {
-  .ssb-theme-default .ssb-theme-main-header-text {
+  .ssb-theme-default .ssb-page-section-layout-header [ssb-text-component] {
     font-size: 96px;
   }
-  .ssb-theme-default .ssb-theme-hero-text {
+  .ssb-theme-default .ssb-page-section-layout-hero [ssb-text-component] {
     font-size: 96px;
   }
   .ssb-theme-default .ssb-theme-heading-text {
@@ -7127,18 +7194,21 @@ ssb-topbar .ui-select-match-text > small {
 .ssb-theme-young-soul .ssb-page-section-layout-header {
   background-color: #9acccb;
 }
+.ssb-theme-young-soul .ssb-page-section-layout-header [ssb-text-component] {
+  color: #000000;
+}
 .ssb-theme-young-soul .ssb-page-section-layout-hero {
   background-color: #000000;
   text-align: center;
 }
-.ssb-theme-young-soul .ssb-theme-hero-text {
+.ssb-theme-young-soul .ssb-page-section-layout-hero [ssb-text-component] {
   color: #FAC51C;
 }
 .ssb-theme-young-soul .ssb-theme-heading-text {
   font-size: 16px;
 }
 .ssb-theme-young-soul .ssb-theme-paragraph-text {
-  font-size: 12px;
+  font-size: 14px;
 }
 .ssb-theme-young-soul .btn,
 .ssb-theme-young-soul .btn-default,
@@ -7154,11 +7224,10 @@ ssb-topbar .ui-select-match-text > small {
   background-color: #FFFFFF;
 }
 @media screen and (min-width: 768px) {
-  .ssb-theme-young-soul .ssb-theme-main-header-text {
+  .ssb-theme-young-soul .ssb-page-section-layout-header [ssb-text-component] {
     font-size: 96px;
-    margin: initial;
   }
-  .ssb-theme-young-soul .ssb-theme-hero-text {
+  .ssb-theme-young-soul .ssb-page-section-layout-hero [ssb-text-component] {
     font-size: 96px;
   }
   .ssb-theme-young-soul .ssb-theme-heading-text {
@@ -7186,6 +7255,15 @@ ssb-topbar .ui-select-match-text > small {
 /*
  * OVERRIDES FOR LEGACY COMPONENT STYLES
  */
+.ssb-main[data-eq-state$="medium"] .ssb-page-section-layout-header [navigation-component],
+.ssb-main[data-eq-state$="large"] .ssb-page-section-layout-header [navigation-component] {
+  margin-right: calc(-30%);
+}
+@media screen and (min-width: 768px) {
+  .ssb-main:not([class*="ssb-edit-mode"]) .ssb-page-section-layout-header [navigation-component] {
+    margin-right: calc(-30%);
+  }
+}
 .ssb-main .ssb-page-section-layout-header .nav-logo {
   display: none!important;
 }
@@ -7202,9 +7280,6 @@ ssb-topbar .ui-select-match-text > small {
 .ssb-main .navbar .nav > li > a {
   color: inherit!important;
 }
-.ssb-main .ssb-page-section-layout-header .navigation-v2 .navbar .navbar-brand img {
-  display: inline-block !important;
-}
 .ssb-main[data-eq-state$="medium"] .ssb-page-section-layout-header .navigation-v2 .navbar .nav > li > a,
 .ssb-main[data-eq-state$="large"] .ssb-page-section-layout-header .navigation-v2 .navbar .nav > li > a {
   padding: 10px 25px 10px;
@@ -7213,6 +7288,8 @@ ssb-topbar .ui-select-match-text > small {
 .ssb-main[data-eq-state$="large"] .ssb-page-section-layout-header [navigation-component] {
   float: left;
   width: 50%;
+  position: relative;
+  z-index: 1;
 }
 .ssb-main[data-eq-state$="medium"] .ssb-page-section-layout-header .navigation-v2 .navbar ul.navbar-nav,
 .ssb-main[data-eq-state$="large"] .ssb-page-section-layout-header .navigation-v2 .navbar ul.navbar-nav {
@@ -7226,11 +7303,16 @@ ssb-topbar .ui-select-match-text > small {
   .ssb-main:not([class*="ssb-edit-mode"]) .ssb-page-section-layout-header [navigation-component] {
     float: left;
     width: 50%;
+    position: relative;
+    z-index: 1;
   }
   .ssb-main:not([class*="ssb-edit-mode"]) .ssb-page-section-layout-header .navigation-v2 .navbar ul.navbar-nav {
     float: right!important;
     width: auto!important;
   }
+}
+.ssb-main .ssb-page-section-layout-header [social-link-component] .component-inner .container {
+  padding: 0;
 }
 .ssb-main .ssb-page-section-layout-header .social-link-v1 ul li {
   width: 35px!important;
@@ -7258,20 +7340,11 @@ ssb-topbar .ui-select-match-text > small {
 }
 .ssb-main[data-eq-state$="medium"] .ssb-page-section-layout-header .social-link-v1 .social-link ul,
 .ssb-main[data-eq-state$="large"] .ssb-page-section-layout-header .social-link-v1 .social-link ul {
-  margin-bottom: 10px!important;
-  padding-top: 0!important;
-}
-.ssb-main[data-eq-state$="medium"] .ssb-page-section-layout-header .social-link-v1 .social-link ul li,
-.ssb-main[data-eq-state$="large"] .ssb-page-section-layout-header .social-link-v1 .social-link ul li {
-  float: left!important;
+  padding-top: 1em!important;
 }
 @media screen and (min-width: 768px) {
   .ssb-main:not([class*="ssb-edit-mode"]) .ssb-page-section-layout-header .social-link-v1 .social-link ul {
-    margin-bottom: 10px!important;
-    padding-top: 0!important;
-  }
-  .ssb-main:not([class*="ssb-edit-mode"]) .ssb-page-section-layout-header .social-link-v1 .social-link ul li {
-    float: left!important;
+    padding-top: 1em!important;
   }
 }
 .ssb-main .video-block .videogular-container {

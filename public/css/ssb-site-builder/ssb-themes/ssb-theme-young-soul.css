@@ -12,18 +12,21 @@
 .ssb-theme-young-soul .ssb-page-section-layout-header {
   background-color: #9acccb;
 }
+.ssb-theme-young-soul .ssb-page-section-layout-header [ssb-text-component] {
+  color: #000000;
+}
 .ssb-theme-young-soul .ssb-page-section-layout-hero {
   background-color: #000000;
   text-align: center;
 }
-.ssb-theme-young-soul .ssb-theme-hero-text {
+.ssb-theme-young-soul .ssb-page-section-layout-hero [ssb-text-component] {
   color: #FAC51C;
 }
 .ssb-theme-young-soul .ssb-theme-heading-text {
   font-size: 16px;
 }
 .ssb-theme-young-soul .ssb-theme-paragraph-text {
-  font-size: 12px;
+  font-size: 14px;
 }
 .ssb-theme-young-soul .btn,
 .ssb-theme-young-soul .btn-default,
@@ -39,11 +42,10 @@
   background-color: #FFFFFF;
 }
 @media screen and (min-width: 768px) {
-  .ssb-theme-young-soul .ssb-theme-main-header-text {
+  .ssb-theme-young-soul .ssb-page-section-layout-header [ssb-text-component] {
     font-size: 96px;
-    margin: initial;
   }
-  .ssb-theme-young-soul .ssb-theme-hero-text {
+  .ssb-theme-young-soul .ssb-page-section-layout-hero [ssb-text-component] {
     font-size: 96px;
   }
   .ssb-theme-young-soul .ssb-theme-heading-text {

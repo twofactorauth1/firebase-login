@@ -3,16 +3,18 @@
  */
 .ssb-main {
 
+    .ssb-media-query-medium({
+        .ssb-page-section-layout-header [navigation-component] {
+            margin-right: calc(-50% + 20em);
+        }
+    });
+
     .ssb-page-section-layout-header .nav-logo {
         display: none!important;
     }
 
     .ssb-page-section-layout-header .masthead-v1 .home-text {
         padding: 0!important;
-    }
-
-    .ssb-page-section-layout-header .navigation-v2 .navbar .navigation-logo.edit-wrap .fr-element {
-        // line-height: 1!important;
     }
 
     .ssb-page-section-layout-header .navigation-v2 .navbar .navbar-header {
@@ -27,10 +29,6 @@
         color: inherit!important;
     }
 
-    .ssb-page-section-layout-header .navigation-v2 .navbar .navbar-brand img {
-        display: inline-block!important;
-    }
-
     .ssb-media-query-medium({
         .ssb-page-section-layout-header .navigation-v2 .navbar .nav > li > a {
             padding: 10px 25px 10px;
@@ -38,6 +36,8 @@
         .ssb-page-section-layout-header [navigation-component] {
             float: left;
             width: 50%;
+            position: relative;
+            z-index: 1;
         }
         .ssb-page-section-layout-header .navigation-v2 .navbar ul.navbar-nav {
             float: right!important;
@@ -57,6 +57,10 @@
             // margin: 0 50% 0 0!important;
         }
     });
+
+    .ssb-page-section-layout-header [social-link-component] .component-inner .container {
+        padding: 0;
+    }
 
     .ssb-page-section-layout-header .social-link-v1 ul li {
         width: 35px!important;
@@ -87,27 +91,12 @@
         display: none;
     }
 
-    &:hover .ssb-page-section-layout-header .social-link-v1 .social-link > .btn.social-links {
-        // display: block;
-    }
-
     .ssb-media-query-medium({
         .ssb-page-section-layout-header .social-link-v1 .social-link ul {
-            // position: absolute!important;
-            // right: 0!important;
-            // width: 35%!important;
-            // top: -5em!important;
-            margin-bottom: 10px!important;
-            padding-top: 0!important;
+            padding-top: 1em!important;
         }
         .ssb-page-section-layout-header .social-link-v1 .social-link ul li {
-            float: left!important;
-        }
-    });
-
-    .ssb-media-query-large({
-        .ssb-page-section-layout-header .social-link-v1 .social-link ul {
-            // width: 50%!important;
+            // float: left!important;
         }
     });
 
