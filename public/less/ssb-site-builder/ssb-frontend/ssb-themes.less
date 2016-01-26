@@ -1,3 +1,14 @@
+.ssb-media-query-small-only(@rules) {
+  &[data-eq-state$="small"] {
+    @rules();
+  }
+  @media screen and (max-width: 767px) {
+    &:not([class*="ssb-edit-mode"]) {
+      @rules();
+    }
+  }
+}
+
 .ssb-media-query-medium(@rules) {
   &[data-eq-state$="medium"],
   &[data-eq-state$="large"] {
@@ -44,15 +55,18 @@
 
     .ssb-page-section-layout-header [ssb-text-component],
     .ssb-page-section-layout-hero [ssb-text-component] {
-        font-size: 14vw;
-        margin: .25em auto 0;
-        text-align: center;
-        width: 60%;
-        line-height: 1;
 
-        span[style] {
-            font-size: 14vw!important;
-        }
+        .ssb-media-query-small-only({
+            font-size: 14vw;
+            margin: .25em auto 0;
+            text-align: center;
+            width: 60%;
+            line-height: 1;
+
+            span[style] {
+                font-size: 14vw!important;
+            }
+        });
 
         .ssb-media-query-medium({
             font-size: 96px;

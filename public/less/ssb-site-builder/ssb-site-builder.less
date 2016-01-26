@@ -38,8 +38,14 @@ a[href="https://froala.com/wysiwyg-editor"] {
     color: inherit;
 }
 
-.fr-element::selection {
-    background-color: red;
+.fr-wrapper ::selection {
+  background: rgba(72, 177, 204, .25)!important;
+  color: inherit!important;
+}
+
+.fr-wrapper ::-moz-selection {
+  background: rgba(72, 177, 204, .25)!important;
+  color: inherit!important;
 }
 
 .ssb-site-builder-container {
