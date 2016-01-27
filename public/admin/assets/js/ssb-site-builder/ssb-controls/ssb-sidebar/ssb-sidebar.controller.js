@@ -61,6 +61,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
     	handle: '.ssb-sidebar-move-handle',
 		onSort: function (evt) {
 			console.log(evt);
+            vm.setActiveSection(evt.newIndex);
 		},
 		onStart: function (evt) {
 			vm.dragging = true;
@@ -425,7 +426,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
     	vm.openMediaModal('media-modal', 'MediaModalCtrl', null, 'lg');
 
       vm.insertMediaCallback = function(asset) {
-        if (componentIndex !== undefined) {
+        if (componentIndex !== undefined && componentIndex !== null) {
           vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex].bg.img.url = asset.url;
         } else {
           vm.state.page.sections[vm.uiState.activeSectionIndex].bg.img.url = asset.url;
@@ -446,7 +447,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
       vm.openMediaModal('media-modal', 'MediaModalCtrl', null, 'lg');
 
       vm.insertMediaCallback = function(asset) {
-        if (componentIndex !== undefined) {
+        if (componentIndex !== undefined && componentIndex !== null) {
           vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex].src = asset.url;
         } else {
           vm.state.page.sections[vm.uiState.activeSectionIndex].src = asset.url;
