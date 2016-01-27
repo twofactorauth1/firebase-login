@@ -135,4 +135,13 @@
         ui-state="vm.uiState">
     </ssb-sidebar-settings-panel>
 
+    <ssb-sidebar-settings-panel
+        class="ssb-sidebar-section-panel-component-panel container-fluid"
+        ng-if="vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex] &&  ('products' + vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex]._id) === vm.uiState.openSidebarSectionPanel.id"
+        settings-template="assets/js/ssb-site-builder/ssb-components/shared/products.html"
+        component="vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex]"
+        state="vm.state"
+        ui-state="vm.uiState">
+    </ssb-sidebar-settings-panel>
+
 </section>
