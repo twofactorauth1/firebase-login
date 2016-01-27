@@ -21,18 +21,19 @@ app.directive('indigNavprompt', function ($rootScope, $location, $state, SweetAl
               confirmButtonColor: "#DD6B55",
               confirmButtonText: "Yes",
               cancelButtonText: "No",
-              closeOnConfirm: false,
-              closeOnCancel: true
-              }, function (isConfirm) {
+              closeOnConfirm: true,
+              closeOnCancel: true,
+              }, function (isConfirm) {                
                 if (isConfirm) {
-                    $rootScope.$broadcast('$stateChangeSuccess', toState, toParams, fromState, fromParams);
-                } else {
-                    scope.resetDirty && scope.resetDirty();
-                    SweetAlert.swal("Not Saved", "Unsaved data was discarded.", "success");
-                    $state.go(toState, toParams, { notify: false })
-                        .then(function() {
-                            $rootScope.$broadcast('$stateChangeSuccess', toState, toParams, fromState, fromParams);
-                        })
+                  $rootScope.$broadcast('$stateChangeSuccess', toState, toParams, fromState, fromParams);                  
+                }
+                else{
+                  scope.resetDirty && scope.resetDirty();
+                  SweetAlert.swal("Not Saved!", "Unsaved data was discarded.", "success");
+                  $state.go(toState, toParams, {notify: false})
+                  .then(function() {                      
+                      $rootScope.$broadcast('$stateChangeSuccess', toState, toParams, fromState, fromParams);
+                   })
                 }
           });
         }
