@@ -65,20 +65,20 @@ app.controller('SiteBuilderPageSettingsModalController', ['$timeout', 'parentVm'
   	SimpleSiteBuilderService.savePage(vm.page, true).then(function(page) {
         vm.originalPage = angular.copy(vm.page);
 
-
         SimpleSiteBuilderService.getPages().then(function() {
             toaster.pop('success', 'Setting Saved', 'The page settings saved successfully.');
             vm.loading = false;
             vm.parentVm.closeModal();
         })
-
         if (vm.page.homePage) {
             vm.parentVm.uiState.navigation.loadPage(vm.page._id);
         }
 	}).catch(function(err) {
-        toaster.pop('success', 'Setting Saved', 'The page settings saved successfully.');
-        vm.loading = false;
-        vm.parentVm.closeModal();
+        if(err.message)
+           toaster.pop('error', error.message);   
+          else
+            toaster.pop('error', "Setting not saved", "Error while saving page settings");        
+        vm.loading = false;        
     });;
   }
 
