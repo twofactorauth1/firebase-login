@@ -39,14 +39,17 @@ var dao = {
         var deReffedAry = [];
         async.eachSeries(sectionAry, function(section, cb){
             //self.log.debug('Section:', section);
-            self.getById(section._id, $$.m.ssb.Section, function(err, section){
-                if(err) {
-                    cb(err);
-                } else {
-                    deReffedAry.push(section);
-                    cb();
-                }
-            });
+            if(section._id)
+                self.getById(section._id, $$.m.ssb.Section, function(err, section){
+                    if(err) {
+                        cb(err);
+                    } else {
+                        deReffedAry.push(section);
+                        cb();
+                    }
+                });
+            else
+                cb();
         }, function done(err){
             //self.log.debug('Array:', deReffedAry);
             fn(err, deReffedAry);
