@@ -20,6 +20,7 @@ function ssbSiteBuilderTopbarController($scope, $timeout, $attrs, $filter, Simpl
         SimpleSiteBuilderService.getPages();
     };
 
+    //TODO: refactor, this function exists in multiple controllers :)
     function savePage() {
         var isLegacyPage = !vm.state.page.ssb;
 
@@ -45,6 +46,12 @@ function ssbSiteBuilderTopbarController($scope, $timeout, $attrs, $filter, Simpl
 
                     vm.state.pendingChanges = false;
 
+                    //hide section panel
+                    vm.uiState.showSectionPanel = false;
+
+                    //reset section panel
+                    vm.uiState.navigation.sectionPanel.reset();
+
                     saveWebsite();
 
                     return (
@@ -59,6 +66,12 @@ function ssbSiteBuilderTopbarController($scope, $timeout, $attrs, $filter, Simpl
 
         } else {
             vm.state.pendingChanges = false;
+
+            //hide section panel
+            vm.uiState.showSectionPanel = false;
+
+            //reset section panel
+            vm.uiState.navigation.sectionPanel.reset();
 
             saveWebsite();
 
@@ -80,7 +93,7 @@ function ssbSiteBuilderTopbarController($scope, $timeout, $attrs, $filter, Simpl
       vm.state.page = angular.copy(vm.state.originalPage);
       vm.state.originalPage = null;
       vm.state.originalWebsite = null;
-        $timeout(function() { 
+        $timeout(function() {
             vm.state.originalWebsite = angular.copy(vm.state.website);
             vm.state.originalPage = angular.copy(vm.state.page);
         }, 0);

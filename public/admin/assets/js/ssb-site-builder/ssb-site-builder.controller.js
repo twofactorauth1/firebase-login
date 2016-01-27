@@ -94,20 +94,20 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         }
     };
 
-    $scope.$watch(function() { return SimpleSiteBuilderService.website; }, function(website){                
+    $scope.$watch(function() { return SimpleSiteBuilderService.website; }, function(website){
         vm.state.pendingChanges = false;
         vm.state.website = website;
         vm.state.originalWebsite = null;
-        $timeout(function() { 
+        $timeout(function() {
             vm.state.originalWebsite = angular.copy(website);
         }, 2000);
     });
 
-    $scope.$watch(function() { return SimpleSiteBuilderService.page; }, function(page){        
+    $scope.$watch(function() { return SimpleSiteBuilderService.page; }, function(page){
         vm.state.pendingChanges = false;
         vm.state.page = page;
         vm.state.originalPage = null;
-        $timeout(function() { 
+        $timeout(function() {
             vm.state.originalPage = angular.copy(page);
         }, 2000);
     });
@@ -195,9 +195,10 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         )
     }
 
+    //TODO: refactor, this function exists in multiple controllers :)
     function savePage() {
         vm.state.isSaved = false;
-        var isLegacyPage = !vm.state.page.ssb;        
+        var isLegacyPage = !vm.state.page.ssb;
         console.log(isLegacyPage);
 
         if (!vm.uiState.hasSeenWarning && isLegacyPage) {
@@ -220,6 +221,12 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
 
                     vm.state.pendingChanges = false;
 
+                    //hide section panel
+                    vm.uiState.showSectionPanel = false;
+
+                    //reset section panel
+                    vm.uiState.navigation.sectionPanel.reset();
+
                     saveWebsite();
 
                     return (
@@ -238,6 +245,12 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
 
         } else {
             vm.state.pendingChanges = false;
+
+            //hide section panel
+            vm.uiState.showSectionPanel = false;
+
+            //reset section panel
+            vm.uiState.navigation.sectionPanel.reset();
 
             saveWebsite();
 
@@ -301,7 +314,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         vm.uiState.loading = loadingObj.value;
 
         if (!vm.uiState.loaded) {
-            $timeout(function() { 
+            $timeout(function() {
                 vm.uiState.loaded = true;
             }, 2000);
         }

@@ -8,3 +8,89 @@
     text-align: center;
     font-size: 96px;
 }
+
+.ssb-main {
+    .ssb-media-query-medium({
+        .ssb-page-section-layout-header [navigation-component] {
+            margin-right: calc(~"-50% + 20em");
+        }
+    });
+
+    .ssb-page-section-layout-header .nav-logo {
+        display: none!important;
+    }
+
+    .ssb-page-section-layout-header .masthead-v1 .home-text {
+        padding: 0!important;
+    }
+
+    .ssb-page-section-layout-header .navigation-v2 .navbar {
+        min-height: 0!important;
+    }
+
+    .ssb-page-section-layout-header .navigation-v2 .navbar .navbar-header {
+        min-height: 0!important;
+    }
+
+    .ssb-page-section-layout-header .navigation-v2 .navbar .nav > li > a {
+        padding: 1em;
+    }
+
+    .ssb-page-section-layout-header .navbar-default .navbar-brand, .navbar .nav > li > a {
+        color: inherit!important;
+    }
+
+    .ssb-media-query-medium({
+
+        .ssb-page-section-layout-header .navigation-v2 .navbar .nav > li > a {
+            padding: 10px 25px 10px;
+        }
+        .ssb-page-section-layout-header [navigation-component] {
+            float: left;
+            width: 50%;
+            position: relative;
+            z-index: 2!important;
+        }
+        .ssb-page-section-layout-header .navigation-v2 .navbar ul.navbar-nav {
+            float: right!important;
+            width: auto!important;
+        }
+
+    });
+
+    .ssb-page-section-layout-header [social-link-component] .component-inner .container {
+        padding: 0;
+    }
+
+    .ssb-page-section-layout-header .social-link-v1 ul li {
+        width: 35px!important;
+        height: 35px!important;
+        margin: 0!important;
+    }
+
+    .ssb-page-section-layout-header .social-link-v1 .btn-social-icon.btn-lg {
+        height: 35px!important;
+        width: 35px!important;
+    }
+
+    .ssb-page-section-layout-header .social-link-v1 .btn-social-icon.btn-lg :first-child {
+        line-height: 35px!important;
+    }
+
+    .ssb-page-section-layout-header .social-link-v1 .social-link ul [class*="btn-"] {
+        background: none!important;
+        border: none!important;
+        color: inherit!important;
+    }
+
+    .ssb-page-section-layout-header .social-link-v1 .social-link > .btn.social-links {
+        display: none;
+    }
+
+    .ssb-media-query-medium({
+        .ssb-page-section-layout-header .social-link-v1 .social-link ul {
+            padding-top: 1em!important;
+            margin-bottom: 0!important;
+        }
+    });
+}

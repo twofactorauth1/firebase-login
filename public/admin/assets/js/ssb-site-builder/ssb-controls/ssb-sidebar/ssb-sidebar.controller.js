@@ -339,6 +339,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
   		)
   	}
 
+    //TODO: refactor, this function exists in multiple controllers :)
   	function savePage() {
         var isLegacyPage = !vm.state.page.ssb;
 
@@ -364,6 +365,12 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
 
                     vm.state.pendingChanges = false;
 
+                    //hide section panel
+                    vm.uiState.showSectionPanel = false;
+
+                    //reset section panel
+                    vm.uiState.navigation.sectionPanel.reset();
+
                     saveWebsite();
 
                     return (
@@ -380,6 +387,12 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
 
         } else {
             vm.state.pendingChanges = false;
+
+            //hide section panel
+            vm.uiState.showSectionPanel = false;
+
+            //reset section panel
+            vm.uiState.navigation.sectionPanel.reset();
 
             saveWebsite();
 
