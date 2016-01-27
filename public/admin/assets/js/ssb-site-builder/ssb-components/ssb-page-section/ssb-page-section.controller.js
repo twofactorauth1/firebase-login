@@ -12,7 +12,9 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude) {
 
     vm.init = init;
     vm.sectionClass = sectionClass;
+    vm.sectionBGClass = sectionBGClass;
     vm.sectionStyle = sectionStyle;
+    vm.sectionBGStyle = sectionBGStyle;
     vm.componentClass = componentClass;
     vm.componentStyle = componentStyle;
 
@@ -20,24 +22,34 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude) {
 
     function sectionClass(section) {
         var classString = 'container-fluid '; //col-xs-12 was messing up legacy
-        // console.log('section.layout', section.layout);
+
         if (section.layout) {
 
             classString += 'ssb-page-section-layout-' + section.layout;
-
-            // if (section.layout === 'header') {
-            //     var navigationComponent = _.where(section.components, { type: 'navigation' });
-
-            //     if (navigationComponent[0]) {
-            //         var hideNav;
-            //     }
-            // }
 
         }
 
         // console.debug('section classString')
         // console.debug(classString)
 
+        return classString;
+    }
+
+    function sectionBGClass(section) {
+        var classString = '';
+
+
+        if (section.bg) {
+
+            if (section.bg.img && section.bg.img.blur) {
+                classString += ' blur-image';
+            }
+
+            if (section.bg.img && section.bg.img.parallax) {
+                classString += ' parallax';
+            }
+
+        }
 
         return classString;
     }
@@ -94,10 +106,15 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude) {
             styleString += 'color: ' + section.txtcolor + ';';
         }
 
+        return styleString;
+    }
+
+    function sectionBGStyle(section) {
+        var styleString = '';
+
         if (section.bg) {
 
             /*
-            TODO: implement all the inline-style and inline <style> stuff for sections
             bg:
                 color: ""
                 img:
@@ -114,14 +131,6 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude) {
 
             */
 
-            // .{{component.type}}{{component._id}} .bg-overlay {
-            //     background: {{component.bg.img.overlaycolor || 'transparent'}}!important;
-            //     opacity: {{component.bg.img.overlayopacity === 0 ? component.bg.img.overlayopacity : component.bg.img.overlayopacity/100 || 1}};
-            // }
-            // .{{component.type}}{{component._id}} {
-            //     opacity: {{component.bg.opacity === 0 ? 0 : component.bg.opacity || 1}};
-            // }
-
             if (section.bg.color) {
                 styleString += 'background-color: ' + section.bg.color + ';';
             }
@@ -129,6 +138,7 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude) {
             if (section.bg.img && section.bg.img.show && section.bg.img.url && section.bg.img.url !== '') {
                 styleString += 'background-image: url("' + section.bg.img.url + '")';
             }
+
         }
 
         return styleString;
