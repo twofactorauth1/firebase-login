@@ -235,15 +235,23 @@ module.exports = {
                                 callback(err);
                             } else {
                                 self.log.debug('referencedSection', referencedSection);
-                                var s = section;
                                 var id = $$.u.idutils.generateUUID();
-                                var refId = s._id;
-                                s = referencedSection.toJSON();
-                                s.ref = refId;
-                                s._id = id;
-                                s.anchor = id;
-                                s.accountId = accountId;
-                                self.log.debug('new dereferenced', s);
+                                if(referencedSection)
+                                {
+                                    var s = section;                                    
+                                    var refId = s._id;
+                                    s = referencedSection.toJSON();
+                                    s.ref = refId;
+                                    s._id = id;
+                                    s.anchor = id;
+                                    s.accountId = accountId;
+                                    self.log.debug('new dereferenced', s);
+                                }
+                                else{                                    
+                                    section._id = id;
+                                    section.anchor = id;
+                                    section.accountId = accountId;
+                                }
                                 dereferencedSections.push(s);
                                 callback();
                             }

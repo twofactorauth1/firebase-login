@@ -129,6 +129,16 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         }
     }, true);
 
+    // $scope.$watch('vm.uiState.loaded', function(loaded) {
+    //     $timeout(function() {
+    //         if(loaded){
+    //             vm.originalPage = angular.copy(vm.state.page);
+    //             vm.originalWebsite = angular.copy(vm.state.website);
+    //         }
+    //         vm.uiState.contentLoaded = loaded;
+    //     }, 5000);
+    // }, true)
+
     $scope.$watch(function() { return SimpleSiteBuilderService.pages }, function(pages) {
       //filter blog pages
       if(pages){
@@ -291,7 +301,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         vm.uiState.loading = loadingObj.value;
 
         if (!vm.uiState.loaded) {
-            $timeout(function() {
+            $timeout(function() { 
                 vm.uiState.loaded = true;
             }, 2000);
         }
