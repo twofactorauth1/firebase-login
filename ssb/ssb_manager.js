@@ -1025,10 +1025,11 @@ module.exports = {
         var self = this;
         self.log.debug('>> getSection');
         var query = {_id: sectionId, accountId: {$in: [accountId, PLATFORM_ID]}};
-
+        self.log.debug('query: ', query);
         sectionDao.findOne(query, $$.m.ssb.Section, function(err, section){
-            if(err) {
+            if(err || !section) {
                 self.log.error('Error getting section:', err);
+                self.log.error('Error getting section:', sectionId);
                 return fn(err);
             } else {
                 self.log.debug('<< getSection');

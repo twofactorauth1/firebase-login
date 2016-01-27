@@ -52,6 +52,33 @@
         ssbService.deletePage = deletePage;
 
 
+        ssbService.contentComponentDisplayOrder = [];
+
+        /*
+         * This represents the category sorting for the add content panel
+         */
+        ssbService.contentSectionDisplayOrder = [
+            'welcome',
+            'image gallery',
+            'text',
+            'video',
+            'mixed content',
+            'about us',
+            'products & services',
+            'clients',
+            'team',
+            'testimonials',
+            'contact us',
+            'blog',
+            'features',
+            'navigation',
+            'forms',
+            'social',
+            'video',
+            'misc'
+        ];
+
+
 		function ssbRequest(fn) {
 			// return $timeout(function() {
 				ssbService.loading.value = ssbService.loading.value + 1;
@@ -160,7 +187,7 @@
 
         function createDuplicatePage(page) {
             function success(data) {
-                console.log('SimpleSiteBuilderService requested page created');                
+                console.log('SimpleSiteBuilderService requested page created');
             }
 
             function error(error) {
@@ -579,11 +606,15 @@
 
             return (
                 ssbService.getSection(section, version || 1).then(function(response) {
-                    ssbService.page.sections.splice(insertAt, 0, response);
-                    ssbService.setActiveSection(insertAt);
-                    ssbService.setActiveComponent(null);
-                    if (modalInstance) {
-                        modalInstance.close();
+                    if (response) {
+                        ssbService.page.sections.splice(insertAt, 0, response);
+                        ssbService.setActiveSection(insertAt);
+                        ssbService.setActiveComponent(null);
+                        if (modalInstance) {
+                            modalInstance.close();
+                        }
+                    } else {
+                        console.error("Error loading section/component:", section);
                     }
                 })
             )
@@ -611,8 +642,10 @@
             var hasComponentFooter = false;
             var match = _.filter(sections, function(s){
 
-                hasSectionFooter = s.name.toLowerCase() === 'footer';
-                hasComponentFooter = _.where(s.components, { type: 'footer' }).length !== 0;
+                if (s.name && s.components) {
+                    hasSectionFooter = s.name.toLowerCase() === 'footer';
+                    hasComponentFooter = _.where(s.components, { type: 'footer' }).length !== 0;
+                }
 
                 return hasSectionFooter || hasComponentFooter
 
