@@ -235,15 +235,23 @@ module.exports = {
                                 callback(err);
                             } else {
                                 self.log.debug('referencedSection', referencedSection);
-                                var s = section;
                                 var id = $$.u.idutils.generateUUID();
-                                var refId = s._id;
-                                s = referencedSection.toJSON();
-                                s.ref = refId;
-                                s._id = id;
-                                s.anchor = id;
-                                s.accountId = accountId;
-                                self.log.debug('new dereferenced', s);
+                                if(referencedSection)
+                                {
+                                    var s = section;                                    
+                                    var refId = s._id;
+                                    s = referencedSection.toJSON();
+                                    s.ref = refId;
+                                    s._id = id;
+                                    s.anchor = id;
+                                    s.accountId = accountId;
+                                    self.log.debug('new dereferenced', s);
+                                }
+                                else{                                    
+                                    section._id = id;
+                                    section.anchor = id;
+                                    section.accountId = accountId;
+                                }
                                 dereferencedSections.push(s);
                                 callback();
                             }
@@ -356,8 +364,8 @@ module.exports = {
                     templateId: templateId,
                     created: created,
                     modified:created,
-                    ssb:true
-
+                    ssb:true,
+                    mainmenu: true
                 });
                 pageDao.saveOrUpdate(page, function(err, value){
                     if(err) {
@@ -367,6 +375,39 @@ module.exports = {
                         cb(null, value, sections);
                     }
                 });
+            },
+            function addLinkToNav(page, sections, cb){
+                if (page.get('mainmenu') == true) {
+                    self.getWebsiteLinklistsByHandle(accountId, page.get('websiteId'),"head-menu",function(err,list){
+                        if(err) {
+                            self.log.error('Error getting website linklists by handle: ' + err);
+                            cb(err);
+                        } else {
+                            var link={
+                                label: page.get('menuTitle') || page.get('title'),
+                                type: "link",
+                                linkTo: {
+                                    type:"page",
+                                    data:page.get('handle')
+                                }
+                            };
+                            list.links.push(link);
+                            self.updateWebsiteLinklists(accountId, page.get('websiteId'),"head-menu",list,function(err, linkLists){
+                                if(err) {
+                                    self.log.error('Error updating website linklists by handle: ' + err);
+                                    cb(err);
+                                } else {
+                                    self.log.debug('<< createPage');
+                                    cb(null, page, sections);
+                                }
+                            });
+                        }
+
+                    });
+                } else {
+                    self.log.debug('<< without mainmenu');
+                    cb(null, page, sections);
+                } 
             }
         ], function done(err, page, sections){
             if(err) {
@@ -387,20 +428,63 @@ module.exports = {
         self.log.debug('>> createDuplicatePage');
 
         var pageHandle = slug(page.get('handle')) +  '-' + $$.u.idutils.generateUniqueAlphaNumeric(5, true, true);
-
-
         page.set("handle", pageHandle);
         page.set("created", created);
         page.set("modified", created);
         page.set("ssb", true);
-        pageDao.saveOrUpdate(page, function(err, value){
+        page.set("mainmenu", true);
+        async.waterfall([            
+            function createPage(cb){                
+                pageDao.saveOrUpdate(page, function(err, value){
+                    if(err) {
+                        self.log.error('Error creating page:', err);
+                        cb(err);
+                    } else {
+                        cb(null, value);
+                    }
+                });
+            },
+            function addLinkToNav(page, cb){
+                if (page.get('mainmenu') == true) {
+                    self.getWebsiteLinklistsByHandle(accountId, page.get('websiteId'),"head-menu",function(err,list){
+                        if(err) {
+                            self.log.error('Error getting website linklists by handle: ' + err);
+                            cb(err);
+                        } else {
+                            var link={
+                                label: page.get('menuTitle') || page.get('title'),
+                                type: "link",
+                                linkTo: {
+                                    type:"page",
+                                    data:page.get('handle')
+                                }
+                            };
+                            list.links.push(link);
+                            self.updateWebsiteLinklists(accountId, page.get('websiteId'),"head-menu",list,function(err, linkLists){
+                                if(err) {
+                                    self.log.error('Error updating website linklists by handle: ' + err);
+                                    cb(err);
+                                } else {
+                                    self.log.debug('<< createPage');
+                                    cb(null, page);
+                                }
+                            });
+                        }
+
+                    });
+                } else {
+                    self.log.debug('<< without mainmenu');
+                    cb(null, page);
+                } 
+            }
+        ], function done(err, page){
             if(err) {
                 fn(err, null);
             } else {
                 self.log.debug('<< createDuplicatePage');
                 fn(null, page);
             }
-        });
+        });        
     },
 
     deletePage: function(pageId, accountId, fn) {

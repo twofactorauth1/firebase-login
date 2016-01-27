@@ -94,16 +94,22 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         }
     };
 
-    $scope.$watch(function() { return SimpleSiteBuilderService.website; }, function(website){
-        vm.state.originalWebsite = angular.copy(website);
+    $scope.$watch(function() { return SimpleSiteBuilderService.website; }, function(website){                
         vm.state.pendingChanges = false;
         vm.state.website = website;
+        vm.state.originalWebsite = null;
+        $timeout(function() { 
+            vm.state.originalWebsite = angular.copy(website);
+        }, 2000);
     });
 
-    $scope.$watch(function() { return SimpleSiteBuilderService.page; }, function(page){
-        vm.state.originalPage = angular.copy(page);
+    $scope.$watch(function() { return SimpleSiteBuilderService.page; }, function(page){        
         vm.state.pendingChanges = false;
         vm.state.page = page;
+        vm.state.originalPage = null;
+        $timeout(function() { 
+            vm.state.originalPage = angular.copy(page);
+        }, 2000);
     });
 
     $scope.$watch(function() { return SimpleSiteBuilderService.activeSectionIndex }, updateActiveSection, true);
@@ -113,7 +119,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     $scope.$watch(function() { return SimpleSiteBuilderService.loading }, updateLoading, true);
 
     $scope.$watch('vm.state.page', function(page) {
-        if (page && !angular.equals(page, vm.state.originalPage)) {
+        if (page && vm.state.originalPage && !angular.equals(page, vm.state.originalPage)) {
             vm.state.pendingChanges = true;
             setupBreakpoints();
         } else {
@@ -122,7 +128,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     }, true);
 
     $scope.$watch('vm.state.website', function(website) {
-        if (!angular.equals(website, vm.state.originalWebsite)) {
+        if (vm.state.originalWebsite && !angular.equals(website, vm.state.originalWebsite)) {
             vm.state.pendingChanges = true;
         } else {
             vm.state.pendingChanges = false;
@@ -190,8 +196,8 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     }
 
     function savePage() {
-        var isLegacyPage = !vm.state.page.ssb;
-
+        vm.state.isSaved = false;
+        var isLegacyPage = !vm.state.page.ssb;        
         console.log(isLegacyPage);
 
         if (!vm.uiState.hasSeenWarning && isLegacyPage) {
@@ -220,7 +226,9 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
                         SimpleSiteBuilderService.savePage(vm.state.page).then(function(response){
                             console.log('page saved');
                             toaster.pop('success', 'Page Saved', 'The page was saved successfully.');
+                            vm.state.isSaved = true;
                         }).catch(function(err) {
+                            vm.state.isSaved = true;
                             toaster.pop('error', 'Error', 'The page was not saved. Please try again.');
                         })
                     )
@@ -237,8 +245,10 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
                 SimpleSiteBuilderService.savePage(vm.state.page).then(function(response){
                     console.log('page saved');
                     toaster.pop('success', 'Page Saved', 'The page was saved successfully.');
+                    vm.state.isSaved = true;
                 }).catch(function(err) {
                     toaster.pop('error', 'Error', 'The page was not saved. Please try again.');
+                    vm.state.isSaved = true;
                 })
             )
         }
@@ -291,7 +301,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         vm.uiState.loading = loadingObj.value;
 
         if (!vm.uiState.loaded) {
-            $timeout(function() {
+            $timeout(function() { 
                 vm.uiState.loaded = true;
             }, 2000);
         }

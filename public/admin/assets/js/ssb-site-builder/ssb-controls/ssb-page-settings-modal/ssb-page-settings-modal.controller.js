@@ -15,11 +15,13 @@ app.controller('SiteBuilderPageSettingsModalController', ['$timeout', 'parentVm'
   function duplicatePage(){
     vm.loading = true;
     SimpleSiteBuilderService.createDuplicatePage(vm.page).then(function(page) {
+      SimpleSiteBuilderService.getSite(vm.page.websiteId).then(function() {
         SimpleSiteBuilderService.getPages().then(function() {
             vm.parentVm.closeModal();
             vm.loading = false;
             vm.parentVm.uiState.navigation.loadPage(page.data._id);
         });
+      });  
     })
   }
   function hideFromMenu(){
@@ -33,23 +35,26 @@ app.controller('SiteBuilderPageSettingsModalController', ['$timeout', 'parentVm'
       confirmButtonColor: "#DD6B55",
       confirmButtonText: "Yes, hide page!",
       cancelButtonText: "No, do not hide page!",
-      closeOnConfirm: false,
+      closeOnConfirm: true,
       closeOnCancel: true
     }, function (isConfirm) {
       if (isConfirm) {
         var originalPage = angular.copy(vm.originalPage);
         originalPage.mainmenu = false;
+        angular.element('.modal.in').show();
         SimpleSiteBuilderService.savePage(originalPage, true).then(function(page) {
-
+          SimpleSiteBuilderService.getSite(vm.page.websiteId).then(function() {
             SimpleSiteBuilderService.getPages().then(function() {
                 vm.page.mainmenu = false;
-                SweetAlert.swal("Saved!", "Page settings saved.", "success");
-                angular.element('.modal.in').show();
+                toaster.pop('success', 'Setting Saved', 'The page settings saved successfully.');                
                 vm.loading = false;
             })
-
+          }) 
         }).catch(function(err) {
-            toaster.pop('success', 'Setting Saved', 'The page settings saved successfully.');
+            if(err.message)
+              toaster.pop('error', error.message);   
+            else
+              toaster.pop('error', "Setting not saved", "Error while saving page settings"); 
             angular.element('.modal.in').show();
             vm.loading = false;
         });
@@ -64,21 +69,22 @@ app.controller('SiteBuilderPageSettingsModalController', ['$timeout', 'parentVm'
     vm.loading = true;
   	SimpleSiteBuilderService.savePage(vm.page, true).then(function(page) {
         vm.originalPage = angular.copy(vm.page);
-
-
-        SimpleSiteBuilderService.getPages().then(function() {
-            toaster.pop('success', 'Setting Saved', 'The page settings saved successfully.');
-            vm.loading = false;
-            vm.parentVm.closeModal();
-        })
-
+          SimpleSiteBuilderService.getSite(vm.page.websiteId).then(function() {
+            SimpleSiteBuilderService.getPages().then(function() {
+                toaster.pop('success', 'Setting Saved', 'The page settings saved successfully.');
+                vm.loading = false;
+                vm.parentVm.closeModal();
+            })
+          })  
         if (vm.page.homePage) {
             vm.parentVm.uiState.navigation.loadPage(vm.page._id);
         }
 	}).catch(function(err) {
-        toaster.pop('success', 'Setting Saved', 'The page settings saved successfully.');
-        vm.loading = false;
-        vm.parentVm.closeModal();
+        if(err.message)
+           toaster.pop('error', error.message);   
+          else
+            toaster.pop('error', "Setting not saved", "Error while saving page settings");        
+        vm.loading = false;        
     });;
   }
 
@@ -132,16 +138,17 @@ app.controller('SiteBuilderPageSettingsModalController', ['$timeout', 'parentVm'
       confirmButtonColor: "#DD6B55",
       confirmButtonText: "Yes",
       cancelButtonText: "No",
-      closeOnConfirm: false,
+      closeOnConfirm: true,
       closeOnCancel: true
     }, function (isConfirm) {
       if (isConfirm) {
+          angular.element('.modal.in').show();
           SimpleSiteBuilderService.deletePage(vm.page).then(function(response){
               console.log('page deleted');
-
+              SimpleSiteBuilderService.getSite(vm.page.websiteId).then(function() {
                 SimpleSiteBuilderService.getPages().then(function() {
-                  SweetAlert.swal("Saved!", "Page is deleted.", "success");
-                  angular.element('.modal.in').show();
+                 toaster.pop('success', 'Page deleted', 'The page deleted successfully.');
+                  
                   vm.parentVm.closeModal();
                   vm.loading = false;
                   if(vm.parentVm.state.page._id === vm.page._id){
@@ -150,7 +157,7 @@ app.controller('SiteBuilderPageSettingsModalController', ['$timeout', 'parentVm'
               		}, 0);
                   }
                 });
-
+              })  
           })
       } else {
         angular.element('.modal.in').show();
