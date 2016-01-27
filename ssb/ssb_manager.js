@@ -364,8 +364,8 @@ module.exports = {
                     templateId: templateId,
                     created: created,
                     modified:created,
-                    ssb:true
-
+                    ssb:true,
+                    mainmenu: true
                 });
                 pageDao.saveOrUpdate(page, function(err, value){
                     if(err) {
@@ -375,6 +375,39 @@ module.exports = {
                         cb(null, value, sections);
                     }
                 });
+            },
+            function addLinkToNav(page, sections, cb){
+                if (page.get('mainmenu') == true) {
+                    self.getWebsiteLinklistsByHandle(accountId, page.get('websiteId'),"head-menu",function(err,list){
+                        if(err) {
+                            self.log.error('Error getting website linklists by handle: ' + err);
+                            cb(err);
+                        } else {
+                            var link={
+                                label: page.get('title'),
+                                type: "link",
+                                linkTo: {
+                                    type:"page",
+                                    data:page.get('handle')
+                                }
+                            };
+                            list.links.push(link);
+                            self.updateWebsiteLinklists(accountId, page.get('websiteId'),"head-menu",list,function(err, linkLists){
+                                if(err) {
+                                    self.log.error('Error updating website linklists by handle: ' + err);
+                                    cb(err);
+                                } else {
+                                    self.log.debug('<< createPage');
+                                    cb(null, page, sections);
+                                }
+                            });
+                        }
+
+                    });
+                } else {
+                    self.log.debug('<< without mainmenu');
+                    cb(null, page, sections);
+                } 
             }
         ], function done(err, page, sections){
             if(err) {
