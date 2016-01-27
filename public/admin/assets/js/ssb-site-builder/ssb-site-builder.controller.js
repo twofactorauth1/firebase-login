@@ -94,16 +94,22 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         }
     };
 
-    $scope.$watch(function() { return SimpleSiteBuilderService.website; }, function(website){
-        vm.state.originalWebsite = angular.copy(website);
+    $scope.$watch(function() { return SimpleSiteBuilderService.website; }, function(website){                
         vm.state.pendingChanges = false;
         vm.state.website = website;
+        vm.state.originalWebsite = null;
+        $timeout(function() { 
+            vm.state.originalWebsite = angular.copy(website);
+        }, 2000);
     });
 
-    $scope.$watch(function() { return SimpleSiteBuilderService.page; }, function(page){
-        vm.state.originalPage = angular.copy(page);
+    $scope.$watch(function() { return SimpleSiteBuilderService.page; }, function(page){        
         vm.state.pendingChanges = false;
         vm.state.page = page;
+        vm.state.originalPage = null;
+        $timeout(function() { 
+            vm.state.originalPage = angular.copy(page);
+        }, 2000);
     });
 
     $scope.$watch(function() { return SimpleSiteBuilderService.activeSectionIndex }, updateActiveSection, true);
@@ -113,7 +119,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     $scope.$watch(function() { return SimpleSiteBuilderService.loading }, updateLoading, true);
 
     $scope.$watch('vm.state.page', function(page) {
-        if (page && !angular.equals(page, vm.state.originalPage)) {
+        if (page && vm.state.originalPage && !angular.equals(page, vm.state.originalPage)) {
             vm.state.pendingChanges = true;
             setupBreakpoints();
         } else {
@@ -122,22 +128,12 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     }, true);
 
     $scope.$watch('vm.state.website', function(website) {
-        if (!angular.equals(website, vm.state.originalWebsite)) {
+        if (vm.state.originalWebsite && !angular.equals(website, vm.state.originalWebsite)) {
             vm.state.pendingChanges = true;
         } else {
             vm.state.pendingChanges = false;
         }
     }, true);
-
-    // $scope.$watch('vm.uiState.loaded', function(loaded) {
-    //     $timeout(function() {
-    //         if(loaded){
-    //             vm.originalPage = angular.copy(vm.state.page);
-    //             vm.originalWebsite = angular.copy(vm.state.website);
-    //         }
-    //         vm.uiState.contentLoaded = loaded;
-    //     }, 5000);
-    // }, true)
 
     $scope.$watch(function() { return SimpleSiteBuilderService.pages }, function(pages) {
       //filter blog pages
