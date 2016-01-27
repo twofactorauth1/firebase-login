@@ -39,7 +39,7 @@ var dao = {
         var deReffedAry = [];
         async.eachSeries(sectionAry, function(section, cb){
             //self.log.debug('Section:', section);
-            if(section._id)
+            if(section && section._id)
                 self.getById(section._id, $$.m.ssb.Section, function(err, section){
                     if(err) {
                         cb(err);
