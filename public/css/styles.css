@@ -11008,6 +11008,14 @@ ssb-topbar .ui-select-match-text > small {
     margin-bottom: 0!important;
   }
 }
+.ssb-main .ssb-page-section-layout-header-fixed {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: auto;
+  z-index: 2;
+}
 [class*="ssb-theme-"] .ssb-page-section-layout-hero .btn,
 [class*="ssb-theme-"] .ssb-page-section-layout-hero .btn-default,
 [class*="ssb-theme-"] .ssb-page-section-layout-hero .btn-block,
