@@ -10589,7 +10589,6 @@ a[href="https://froala.com/wysiwyg-editor"] {
   z-index: 1;
   overflow: hidden;
   min-height: 100%;
-  max-height: 600px;
 }
 .ssb-sidebar-section-panel-component-panel rzslider {
   width: calc(100% - 15px);

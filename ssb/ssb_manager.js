@@ -908,7 +908,7 @@ module.exports = {
                             cb(err);
                         } else {
                             _.each(list.links, function(link){
-                                if(link.linkTo && link.linkTo.data === updatedPage.get('handle')){
+                                if(link.linkTo && (link.linkTo.type === 'home' || link.linkTo.type === 'page') && link.linkTo.data === updatedPage.get('handle')){
                                     link.label = updatedPage.get('menuTitle') || updatedPage.get('title')
                                 }
                             });
