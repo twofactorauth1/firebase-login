@@ -5,9 +5,9 @@
 
 	app.factory('SimpleSiteBuilderService', SimpleSiteBuilderService);
 
-	SimpleSiteBuilderService.$inject = ['$rootScope', '$http', '$q', '$timeout', 'AccountService', 'WebsiteService'];
+	SimpleSiteBuilderService.$inject = ['$rootScope', '$http', '$q', '$timeout', 'AccountService', 'WebsiteService', '$modal'];
 	/* @ngInject */
-	function SimpleSiteBuilderService($rootScope, $http, $q, $timeout, AccountService, WebsiteService) {
+	function SimpleSiteBuilderService($rootScope, $http, $q, $timeout, AccountService, WebsiteService, $modal) {
 		var ssbService = {};
 		var baseWebsiteAPIUrl = '/api/1.0/cms/website/';
 		var basePageAPIUrl = '/api/1.0/cms/page/';
@@ -50,6 +50,8 @@
         ssbService.addSectionToPage = addSectionToPage;
         ssbService.getSpectrumColorOptions = getSpectrumColorOptions;
         ssbService.deletePage = deletePage;
+        ssbService.openMediaModal = openMediaModal;
+        ssbService.setMediaForComponent = setMediaForComponent;
 
 
         ssbService.contentComponentDisplayOrder = [];
@@ -752,6 +754,109 @@
                 ]
             }
         }
+
+        function openMediaModal(modal, controller, index, size, vm, component, componentItemIndex, update) {
+            console.log('openModal >>> ', modal, controller, index);
+            var _modal = {
+                templateUrl: modal,
+                keyboard: false,
+                backdrop: 'static',
+                size: 'md',
+                resolve: {
+                    vm: function() {
+                        return vm;
+                    },
+                    showInsert: function () {
+                        return true
+                    },
+                    insertMedia: function () {
+                        return function(asset) {
+
+                            ssbService.setMediaForComponent(asset, component, componentItemIndex, update);
+
+                        }
+                    },
+                    component: function() {
+                        return component;
+                    },
+                    componentItemIndex: function() {
+                        return componentItemIndex;
+                    },
+                    update: function() {
+                        return update;
+                    }
+                }
+            };
+
+            if (controller) {
+                _modal.controller = controller;
+            }
+
+            if (size) {
+                _modal.size = 'lg';
+            }
+
+            return $modal.open(_modal);
+
+            // vm.modalInstance = $modal.open(_modal);
+
+            // vm.modalInstance.result.then(null, function () {
+            //     angular.element('.sp-container').addClass('sp-hidden');
+            // });
+
+        }
+
+        //TODO: this is legacy code adapted from editorCtrl.js, needs to be removed when we no longer support these components
+        function setMediaForComponent(asset, component, index, update) {
+
+            var obj = {};
+            var type = component.type;
+
+            //if image/text component
+            if (type === 'image-text') {
+
+                component.imgurl = asset.url;
+
+            } else if (type === 'image-gallery') {
+
+                if (update) {
+
+                    component.images[index].url = asset.url;
+
+                } else {
+
+                    component.images.splice(index + 1, 0, {
+                        url: asset.url
+                    });
+
+                }
+
+            } else if (type === 'thumbnail-slider') {
+
+                if (update) {
+
+                    component.thumbnailCollection[index].url = asset.url;
+
+                } else {
+
+                    component.thumbnailCollection.splice(index + 1, 0, {
+                        url: asset.url
+                    });
+
+                }
+
+            } else if (type === 'meet-team') {
+
+                component.teamMembers[index].profilepic = asset.url;
+
+            } else {
+
+                console.log('unknown component or image location');
+
+            }
+
+        }
+
 
 		(function init() {
 

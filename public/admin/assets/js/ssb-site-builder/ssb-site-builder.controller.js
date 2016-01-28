@@ -12,6 +12,23 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
 
     vm.init = init;
     vm.state = {};
+
+    vm.updateActiveSection = updateActiveSection;
+    vm.updateActiveComponent = updateActiveComponent;
+    vm.savePage = savePage;
+    vm.saveWebsite = saveWebsite;
+    vm.cancelPendingEdits = cancelPendingEdits;
+    vm.openMediaModal = openMediaModal;
+    vm.openModal = openModal;
+    vm.closeModal = closeModal;
+    vm.insertMedia = insertMedia;
+    vm.addFroalaImage = addFroalaImage;
+    vm.imageEditor = {};
+    vm.applyThemeToSite = SimpleSiteBuilderService.applyThemeToSite;
+    vm.addSectionToPage = addSectionToPage;
+    vm.legacyComponentMedia = legacyComponentMedia;
+
+
     vm.uiState = {
         loading: 0,
         activeSectionIndex: undefined,
@@ -28,22 +45,10 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         openSidebarPanel: '',
         openSidebarSectionPanel: { name: '', id: '' },
         showSectionPanel: false,
-        componentControl: {}
+        componentControl: {}, //hook into component scope (contact-us)
+        componentMedia: vm.legacyComponentMedia //hook into component scope (image-gallery)
     };
 
-    vm.updateActiveSection = updateActiveSection;
-    vm.updateActiveComponent = updateActiveComponent;
-    vm.savePage = savePage;
-    vm.saveWebsite = saveWebsite;
-    vm.cancelPendingEdits = cancelPendingEdits;
-    vm.openMediaModal = openMediaModal;
-    vm.openModal = openModal;
-    vm.closeModal = closeModal;
-    vm.insertMedia = insertMedia;
-    vm.addFroalaImage = addFroalaImage;
-    vm.imageEditor = {};
-    vm.applyThemeToSite = SimpleSiteBuilderService.applyThemeToSite;
-    vm.addSectionToPage = addSectionToPage;
 
     vm.uiState.navigation = {
         back: function() {
@@ -424,6 +429,31 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
             $window.eqjs.query();
         }, 3000);
     };
+
+    function legacyComponentMedia(componentId, index, update) {
+        // $scope.imageChange = true;
+        // $scope.showInsert = true;
+        // $scope.updateImage = update;
+        // $scope.componentImageIndex = index;
+        // $scope.componentEditing = _.findWhere($scope.components, {
+        //     _id: componentId
+        // });
+        // $scope.openModal('media-modal', 'MediaModalCtrl', null, 'lg');
+
+        var component = _(vm.state.page.sections)
+            .chain()
+            .pluck('components')
+            .flatten()
+            .findWhere({_id: componentId})
+            .value()
+
+        SimpleSiteBuilderService.openMediaModal('media-modal', 'MediaModalCtrl', null, 'lg', vm, component, index, update).result.then(function(){
+            // debugger;
+
+            //TODO: somehow need to trigger this if component.type === 'thumbnail-slider'
+            // $scope.thumbnailSlider.refreshSlider();
+        })
+    }
 
     // Hook froala insert up to our Media Manager
     window.clickandInsertImageButton = function (editor) {

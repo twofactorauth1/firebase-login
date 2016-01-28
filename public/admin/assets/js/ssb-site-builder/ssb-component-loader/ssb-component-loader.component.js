@@ -17,7 +17,8 @@ function ssbComponentLoader($compile) {
       	uiState: '=',
         componentClass: '&',
         componentStyle: '&',
-        componentControl: '='
+        componentControl: '=',
+        componentMedia: '='
       },
     replace: true,
   	link: function (scope, element, attrs, ctrl) {
@@ -29,7 +30,8 @@ function ssbComponentLoader($compile) {
                         'ssb-editor="true" ' +
                         'class="ssb-component ssb-{{vm.component.type}} {{vm.componentClass(vm.component)}}" ' +
                         'ng-attr-style="{{vm.componentStyle(vm.component)}}" ' +
-                        'control="vm.componentControl">' +
+                        'control="vm.componentControl"' +
+                        'media="vm.componentMedia(componentId, index, update)">' +
                       '</div>';
   		var compiled = $compile(template)(scope)
         element.replaceWith(compiled);

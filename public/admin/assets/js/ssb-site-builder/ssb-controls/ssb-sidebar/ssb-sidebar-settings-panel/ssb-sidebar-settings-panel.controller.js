@@ -23,9 +23,14 @@ function ssbSiteBuilderSidebarSettingsPanelController($scope, $attrs, $filter, $
     vm.removeSectionFromPage = pVm.removeSectionFromPage;
     vm.hideSectionFromPage = pVm.hideSectionFromPage;
     vm.editSectionName = pVm.editSectionName;
+    vm.moveSection = pVm.moveSection;
+
+
     vm.tagToCustomer = tagToCustomer;
     vm.customerTags = pVm.customerTags;
     vm.setTags = vm.setTags;
+
+
     //TODO: move into config services
     vm.spectrum = {
       options: SimpleSiteBuilderService.getSpectrumColorOptions()
@@ -53,13 +58,13 @@ function ssbSiteBuilderSidebarSettingsPanelController($scope, $attrs, $filter, $
 
     vm.setTags = function (_customerTags) {
         console.log('setTags >>>');
-        
+
         _.each(vm.component.tags, function (tag , index) {
           var matchingTag = _.findWhere(vm.customerTags, {
             data: tag
           });
           if(matchingTag)
-          {        
+          {
             _customerTags.push(matchingTag);
           }
           else {
@@ -69,7 +74,7 @@ function ssbSiteBuilderSidebarSettingsPanelController($scope, $attrs, $filter, $
             });
           }
         });
-        vm.customerTags = _.uniq(_customerTags, function(c) { return c.label; })        
+        vm.customerTags = _.uniq(_customerTags, function(c) { return c.label; })
     }
 
     function init(element) {
