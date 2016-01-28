@@ -1,7 +1,30 @@
-.text-only-v1{
+.text-only-v1 {
 	@media (max-width: 720px) {
-        .table-scroll table{
+        .table-scroll table {
             display: block;
         }
     }
+
+    @media (max-width: 1075px) {
+
+        overflow: hidden;
+
+        table {
+            display: block;
+            width: 100%!important;
+        }
+
+        tbody, tr {
+            display: block;
+        }
+
+        td, th {
+            display: block;
+            width: 100%!important;
+            position: relative;
+            padding: 1em 0!important;
+        }
+
+    }
+
 }
