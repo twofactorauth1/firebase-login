@@ -1,4 +1,4 @@
-app.directive('singlePostComponent', ['$location', 'accountService', 'postService', function ($location, AccountService, PostService) {
+app.directive('singlePostComponent', ['$window', '$location', 'accountService', 'postService', function ($window, $location, AccountService, PostService) {
   return {
     scope: {
       component: '='
@@ -21,6 +21,7 @@ app.directive('singlePostComponent', ['$location', 'accountService', 'postServic
           PostService.getSinglePost(_handle, data.website.websiteId, function (post) {
             console.log('post data ', post);
             scope.blog.post = post;
+            $window.document.title = $window.document.title + ": " + post.post_title;
           });
         });
 
