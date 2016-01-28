@@ -116,17 +116,17 @@
 
     </div>
     <div class="clearfix"></div>
-    <div ng-class="{'disabled' : vm.loading}" class="modal-footer ssb-footer-page-settings-modal">  
-        <ul ng-disabled="vm.loading" class="list-unstyled page-settings">            
+    <div ng-class="{'disabled' : vm.loading || vm.saveLoading}" class="modal-footer ssb-footer-page-settings-modal">  
+        <ul class="list-unstyled page-settings">
             <li><a tooltip-placement="bottom" tooltip-html-unsafe="Create a duplicate page" href="javascript:void(0)" ng-click="vm.duplicatePage()"><i class="fa fa-copy"></i> Duplicate</a></li>
             <li><a tooltip-placement="bottom" tooltip-html-unsafe="Hide this page from main menu" ng-click="vm.hideFromMenu()" href="javascript:void(0)"><i class="fa fa-eye"></i> Hide</a></li>
             <li><a tooltip-placement="bottom" tooltip-html-unsafe="Delete this page" href="javascript:void(0)" ng-click="vm.deletePage()" ><i class="fa fa-trash"></i> Delete</a></li>            
         </ul>      
         <div class="pull-right">
-            <button  ng-disabled="vm.loading" class="btn btn-primary" ng-click="vm.parentVm.closeModal()">Close</button>
+            <button class="btn btn-primary" ng-click="vm.parentVm.closeModal()">Close</button>
         </div>
         <div class="pull-right margin-right-5">
-            <button  ng-disabled="vm.loading" class="btn btn-primary" ng-click="vm.saveSettings()">Save </button>
+            <button ng-disabled="vm.loading || vm.saveLoading" class="btn btn-primary" ng-click="vm.saveSettings()">Save <span ng-if="vm.saveLoading" class="fa fa-spinner fa-spin"></span></button>
         </div>
     </div>
 </script>

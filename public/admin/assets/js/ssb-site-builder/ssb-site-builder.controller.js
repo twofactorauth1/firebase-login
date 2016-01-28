@@ -196,7 +196,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     }
 
     function savePage() {
-        vm.state.isSaved = false;
+        vm.state.saveLoading = true;
         var isLegacyPage = !vm.state.page.ssb;        
         console.log(isLegacyPage);
 
@@ -226,13 +226,15 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
                         SimpleSiteBuilderService.savePage(vm.state.page).then(function(response){
                             console.log('page saved');
                             toaster.pop('success', 'Page Saved', 'The page was saved successfully.');
-                            vm.state.isSaved = true;
+                            vm.state.saveLoading = false;
                         }).catch(function(err) {
-                            vm.state.isSaved = true;
+                            vm.state.saveLoading = false;
                             toaster.pop('error', 'Error', 'The page was not saved. Please try again.');
                         })
                     )
-
+                }
+                else{
+                    vm.state.saveLoading = false;
                 }
             });
 
@@ -245,10 +247,10 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
                 SimpleSiteBuilderService.savePage(vm.state.page).then(function(response){
                     console.log('page saved');
                     toaster.pop('success', 'Page Saved', 'The page was saved successfully.');
-                    vm.state.isSaved = true;
+                    vm.state.saveLoading = false;
                 }).catch(function(err) {
                     toaster.pop('error', 'Error', 'The page was not saved. Please try again.');
-                    vm.state.isSaved = true;
+                    vm.state.saveLoading = false;
                 })
             )
         }

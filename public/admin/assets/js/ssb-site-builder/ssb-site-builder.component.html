@@ -91,7 +91,7 @@
 
 <!-- <div data-ng-include data-src=" 'assets/js/ssb-site-builder/ssb-site-builder.editor.styles.html' "></div> -->
 <div>
-    <indig-navprompt class="indig-navprompt" my-state="app.website.ssbSiteBuilder.editor" reset-dirty="resetDirty()" check-if-dirty="checkIfDirty()" save-page="vm.savePage()" save-page-check="vm.state.isSaved"></indig-navprompt>
+    <indig-navprompt class="indig-navprompt" my-state="app.website.ssbSiteBuilder.editor" reset-dirty="resetDirty()" check-if-dirty="checkIfDirty()" save-page="vm.savePage()" save-page-check="!vm.state.saveLoading"></indig-navprompt>
     <div class="loading-editor" ct-fullheight="window" data-ct-fullheight-exclusion="header" ng-hide="vm.uiState.loaded">
         <div class="col-xs-12">
             <h1 class="center"><span class="fa fa-spinner fa-spin"></span><br><br>
