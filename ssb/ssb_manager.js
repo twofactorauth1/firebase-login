@@ -877,6 +877,55 @@ module.exports = {
                     }
                     cb(null, updatedPage, updatedSections);
                 });
+            },            
+            function setAsHomePage(updatedPage, updatedSections, cb){
+                if (updatedPage && updatedPage.get("handle") !=='index' && homePage) {
+                    self.getPageByHandle(accountId, 'index', updatedPage.get('websiteId'), function(err, page) {
+                        if (err) {
+                            self.log.error('Error getting index page: ' + err);
+                            cb(err);
+                        } else {
+                            self.log.debug('<< check for index page');
+                            if(page){
+                                page.set("handle", "index-old-" + new Date().getTime() );
+                                var visibility = page.get("visibility");
+                                visibility.visible = false;
+                                page.set("visibility", visibility );
+                                pageDao.saveOrUpdate(page, function(err, value){
+                                    if (err) {
+                                        self.log.error('Error updating page with id [' + page.get("_id") + ']: ' + err);
+                                        cb(err);
+                                    } else {
+                                        updatedPage.set("handle", 'index');
+                                        pageDao.saveOrUpdate(updatedPage, function(err, updatedPage){
+                                            if(err) {
+                                                self.log.error('Error updating page:', err);
+                                                cb(err);
+                                            } else {
+                                                cb(null, updatedPage, updatedSections);
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+                            else{
+                                self.log.debug('<< no index page found');
+                                updatedPage.set("handle", 'index');
+                                pageDao.saveOrUpdate(updatedPage, function(err, updatedPage){
+                                    if(err) {
+                                        self.log.error('Error updating page:', err);
+                                        cb(err);
+                                    } else {
+                                        cb(null, updatedPage, updatedSections);
+                                    }
+                                });
+                            }
+                        }
+                    });
+                }
+                else{
+                    cb(null, updatedPage, updatedSections);
+                }
             },
             function updateLinkList(updatedPage, updatedSections, cb){
                 if (updatedPage.get('mainmenu') === false) {
@@ -907,11 +956,25 @@ module.exports = {
                             self.log.error('Error getting website linklists by handle: ' + err);
                             cb(err);
                         } else {
+                            var _exists = false;
                             _.each(list.links, function(link){
                                 if(link.linkTo && (link.linkTo.type === 'home' || link.linkTo.type === 'page') && link.linkTo.data === updatedPage.get('handle')){
                                     link.label = updatedPage.get('menuTitle') || updatedPage.get('title')
+                                    _exists = true;
                                 }
                             });
+                            if(!_exists){
+                                var link=
+                                {
+                                    label: page.get('menuTitle') || page.get('title'),
+                                    type: "link",
+                                    linkTo: {
+                                        type:"page",
+                                        data:page.get('handle')
+                                    }
+                                };
+                                list.links.push(link);
+                            }
                             self.updateWebsiteLinklists(accountId, updatedPage.get('websiteId'), "head-menu", list, function(err, linkLists) {
                                 if (err) {
                                     self.log.error('Error updating website linklists by handle: ' + err);
@@ -922,57 +985,6 @@ module.exports = {
                             });
                         }
                     });
-                }
-            },
-            function setAsHomePage(updatedPage, updatedSections, cb){
-                if (updatedPage && updatedPage.get("handle") !=='index' && homePage) {
-                    self.getPageByHandle(accountId, 'index', updatedPage.get('websiteId'), function(err, page) {
-                        if (err) {
-                            self.log.error('Error getting index page: ' + err);
-                            cb(err);
-                        } else {
-                            self.log.debug('<< check for index page');
-                            if(page){
-                                page.set("handle", "index-old-" + new Date().getTime() );
-                                var visibility = page.get("visibility");
-                                visibility.visible = false;
-                                page.set("visibility", visibility );
-
-                                pageDao.saveOrUpdate(page, function(err, value){
-                                    if (err) {
-                                        self.log.error('Error updating page with id [' + page.get("_id") + ']: ' + err);
-                                        cb(err);
-                                    } else {
-                                        updatedPage.set("handle", 'index');
-                                        pageDao.saveOrUpdate(updatedPage, function(err, updatedPage){
-                                            if(err) {
-                                                self.log.error('Error updating page:', err);
-                                                cb(err);
-                                            } else {
-                                                cb(null, updatedPage, updatedSections);
-                                            }
-                                        });
-
-                                    }
-                                });
-                            }
-                            else{
-                                self.log.debug('<< no index page found');
-                                updatedPage.set("handle", 'index');
-                                pageDao.saveOrUpdate(updatedPage, function(err, updatedPage){
-                                    if(err) {
-                                        self.log.error('Error updating page:', err);
-                                        cb(err);
-                                    } else {
-                                        cb(null, updatedPage, updatedSections);
-                                    }
-                                });
-                            }
-                        }
-                    });
-                }
-                else{
-                    cb(null, updatedPage, updatedSections);
                 }
             }
 
