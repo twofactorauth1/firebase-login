@@ -100,7 +100,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         vm.state.originalWebsite = null;
         $timeout(function() { 
             vm.state.originalWebsite = angular.copy(website);
-        }, 2000);
+        }, 1000);
     });
 
     $scope.$watch(function() { return SimpleSiteBuilderService.page; }, function(page){        
@@ -109,7 +109,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         vm.state.originalPage = null;
         $timeout(function() { 
             vm.state.originalPage = angular.copy(page);
-        }, 2000);
+        }, 1000);
     });
 
     $scope.$watch(function() { return SimpleSiteBuilderService.activeSectionIndex }, updateActiveSection, true);

@@ -99,10 +99,14 @@
 			ssbService.activeComponentIndex = componentIndex;
 		}
 
-		function getSite(id) {
+		function getSite(id, isLoading) {
 
 			function success(data) {
-				ssbService.website = data;
+                if(!isLoading)
+				    ssbService.website = data;
+                else{
+                    ssbService.setupTheme(data);
+                }
 			}
 
 			function error(error) {
@@ -660,20 +664,22 @@
          * - get latest theme data based on website's themeId
          *
          */
-        function setupTheme() {
+        function setupTheme(website) {
             return ssbService.getThemes().then(function(themes) {
-                var theme = themes.data.filter(function(t) { return t._id === ssbService.website.themeId })[0] || {};
+                var theme = themes.data.filter(function(t) { return t._id === website.themeId })[0] || {};
                 var defaultTheme;
 
                 if (theme._id) {
-                    ssbService.applyThemeToSite(theme, true);
+                    ssbService.applyThemeToSite(theme, true, website);
                 } else {
                     defaultTheme = themes.data.filter(function(t) { return t.handle === 'default' })[0] || {};
-                    ssbService.applyThemeToSite(defaultTheme);
-                    ssbService.website.themeId = defaultTheme._id;
-                    ssbService.saveWebsite(ssbService.website);
+                    ssbService.applyThemeToSite(defaultTheme, false, website);
+                    website.themeId = defaultTheme._id;
+                    ssbService.saveWebsite(website);
                 }
-
+                $timeout(function() {
+                    ssbService.website = website;
+                }, 100);
             });
         }
 
@@ -684,10 +690,10 @@
          * @param keepCurrentOverrides - when not changing themes, should not set new themeOverrides
          *
          */
-        function applyThemeToSite(theme, keepCurrentOverrides) {
+        function applyThemeToSite(theme, keepCurrentOverrides, website) {
             // Load web font loader
 
-
+                var _website = website || ssbService.website;
                 var unbindWatcher = $rootScope.$watch(function() {
                     return angular.isDefined(window.WebFont);
                 }, function(newValue, oldValue) {
@@ -714,12 +720,12 @@
                 }
 
 
-            ssbService.website.themeId = theme._id;
-            ssbService.website.theme = theme;
+            _website.themeId = theme._id;
+            _website.theme = theme;
 
-            if (keepCurrentOverrides === undefined || !angular.isDefined(ssbService.website.themeOverrides.styles)) {
+            if (keepCurrentOverrides === undefined || !angular.isDefined(_website.themeOverrides.styles)) {
                 $timeout(function() {
-                    ssbService.website.themeOverrides = theme;
+                    _website.themeOverrides = theme;
                 });
             }
 
@@ -757,9 +763,7 @@
 
 			AccountService.getAccount(function(data) {
 				ssbService.websiteId = data.website.websiteId;
-                ssbService.getSite(data.website.websiteId).then(function() {
-                    ssbService.setupTheme();
-                });
+                ssbService.getSite(data.website.websiteId, true);
                 ssbService.getPages();
                 ssbService.getTemplates();
                 ssbService.getLegacyTemplates();
