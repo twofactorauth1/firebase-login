@@ -29,6 +29,16 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude) {
 
         }
 
+        if (section.layoutModifiers) {
+
+            if (section.layoutModifiers.fixed) {
+
+                classString += ' ssb-page-section-layout-' + section.layout + '-fixed';
+
+            }
+
+        }
+
         // console.debug('section classString')
         // console.debug(classString)
 
@@ -36,7 +46,7 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude) {
     }
 
     function sectionBGClass(section) {
-        var classString = '';
+        var classString = ' ';
 
 
         if (section.bg) {
@@ -55,7 +65,7 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude) {
     }
 
     function sectionStyle(section) {
-        var styleString = '';
+        var styleString = ' ';
 
         if (section.spacing) {
             if (section.spacing.pt) {
@@ -110,7 +120,7 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude) {
     }
 
     function sectionBGStyle(section) {
-        var styleString = '';
+        var styleString = ' ';
 
         if (section.bg) {
 
@@ -177,7 +187,7 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude) {
     }
 
   function componentStyle(component) {
-    var styleString = '';
+    var styleString = ' ';
 
     if (component.spacing) {
         if (component.spacing.pt) {
@@ -244,9 +254,29 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude) {
     return styleString;
   }
 
-  function init(element) {
-  	vm.element = element;
-  }
+
+    function setFixedPosition(state) {
+
+        var mainEl = vm.element.parents('.ssb-main:first');
+        var elementHeight = vm.element.height();
+
+        if (state === 'on') {
+
+            mainEl.css({
+                'padding-top': elementHeight
+            });
+
+        } else {
+            mainEl.css({
+                'padding-top': ''
+            });
+        }
+
+    }
+
+    function init(element) {
+        vm.element = element;
+    }
 
 }
 

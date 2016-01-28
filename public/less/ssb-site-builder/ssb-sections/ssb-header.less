@@ -94,13 +94,17 @@
         }
     });
 
-    .ssb-page-section-layout-header-fixed {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: auto;
-        z-index: 2;
-    }
+
+    .ssb-media-query-medium({
+        .ssb-page-section-layout-header-fixed {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: auto;
+            z-index: 2;
+        }
+    });
+
 
 }
