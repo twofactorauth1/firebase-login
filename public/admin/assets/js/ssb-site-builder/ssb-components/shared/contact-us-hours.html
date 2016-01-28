@@ -24,22 +24,22 @@
         </div>
         <div class="col-xs-5">
             <div id="business_hours_start_{{$index}}" class="inline-table-cell">
-            <select ng-disabled="!vm.component.custom.hours" ng-change="vm.validateHours(val, $index)" ng-hide="val.closed" class="chosen-select hour-start-select form-control" ng-model="val.start" ng-options="item for item in hours.HOURS">
+            <select ng-disabled="!vm.component.custom.hours" ng-change="vm.validateHours(val, $index)" ng-hide="val.closed" class="chosen-select hour-start-select form-control" ng-model="val.start" ng-options="item for item in vm.hours.HOURS">
             </select>
             </div>
             <div id="business_hours_end_{{$index}}" class="inline-table-cell">
-                <select ng-disabled="!vm.component.custom.hours" ng-hide="val.closed" ng-change="vm.validateHours(val, $index)" class="chosen-select hour-start-select form-control" ng-model="val.end" ng-options="item for item in hours.HOURS">
+                <select ng-disabled="!vm.component.custom.hours" ng-hide="val.closed" ng-change="vm.validateHours(val, $index)" class="chosen-select hour-start-select form-control" ng-model="val.end" ng-options="item for item in vm.hours.HOURS">
                 </select>
             </div>
         </div>
         <label class="pull-left" ng-hide="val.closed" ng-if="val.split" style="margin:10px"> & </label>
         <div class="col-xs-5">
             <div id="business_hours_start2_{{$index}}" class="inline-table-cell">
-                <select ng-disabled="!vm.component.custom.hours" ng-change="vm.validateHours(val, $index)" ng-hide="val.closed" ng-if="val.split" class="chosen-select hour-start-select form-control" ng-model="val.start2" ng-options="item for item in hours.HOURS">
+                <select ng-disabled="!vm.component.custom.hours" ng-change="vm.validateHours(val, $index)" ng-hide="val.closed" ng-if="val.split" class="chosen-select hour-start-select form-control" ng-model="val.start2" ng-options="item for item in vm.hours.HOURS">
                 </select>
             </div>
             <div class="inline-table-cell">
-                <select ng-disabled="!vm.component.custom.hours" ng-change="vm.validateHours(val, $index)" ng-if="val.split" ng-hide="val.closed" class="chosen-select hour-start-select form-control" ng-model="val.end2" ng-options="item for item in hours.HOURS">
+                <select ng-disabled="!vm.component.custom.hours" ng-change="vm.validateHours(val, $index)" ng-if="val.split" ng-hide="val.closed" class="chosen-select hour-start-select form-control" ng-model="val.end2" ng-options="item for item in vm.hours.HOURS">
                 </select>
             </div>
         </div>
@@ -63,11 +63,11 @@
             <label for="val.day">{{val.day}}:</label>
         </div>
         <div class="col-xs-3" id="business_hours_start_{{$index}}">
-            <select ng-disabled="!vm.component.custom.hours" ng-change="vm.validateHours(val, $index)" ng-hide="val.closed || val.wholeday" class="chosen-select hour-start-select form-control" ng-model="val.start" ng-options="item for item in hours.HOURS">
+            <select ng-disabled="!vm.component.custom.hours" ng-change="vm.validateHours(val, $index)" ng-hide="val.closed || val.wholeday" class="chosen-select hour-start-select form-control" ng-model="val.start" ng-options="item for item in vm.hours.HOURS">
             </select>
         </div>
         <div class="col-xs-3">
-            <select ng-disabled="!vm.component.custom.hours" ng-change="vm.validateHours(val, $index)" ng-hide="val.closed || val.wholeday" class="chosen-select hour-start-select form-control" ng-model="val.end" ng-options="item for item in hours.HOURS">
+            <select ng-disabled="!vm.component.custom.hours" ng-change="vm.validateHours(val, $index)" ng-hide="val.closed || val.wholeday" class="chosen-select hour-start-select form-control" ng-model="val.end" ng-options="item for item in vm.hours.HOURS">
             </select>
         </div>
         <div class="col-xs-3">

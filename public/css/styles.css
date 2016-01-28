@@ -10209,6 +10209,9 @@ a[href="https://froala.com/wysiwyg-editor"] {
   display: inline-block;
   margin: 0 0 0 10px;
 }
+.ssb-footer-page-settings-modal.disabled ul.page-settings li a {
+  color: #808080;
+}
 .greyed-out {
   background: #f1f1f1;
   padding: 1em;
@@ -10306,6 +10309,10 @@ a[href="https://froala.com/wysiwyg-editor"] {
 }
 .ssb-page-section-settings-item {
   position: relative;
+}
+.site-editor-group-pages .active-page a {
+  color: #47B8D9 !important;
+  font-weight: 600;
 }
 .ssb-sidebar-item-icon {
   position: absolute;
@@ -10582,7 +10589,6 @@ a[href="https://froala.com/wysiwyg-editor"] {
   z-index: 1;
   overflow: hidden;
   min-height: 100%;
-  max-height: 600px;
 }
 .ssb-sidebar-section-panel-component-panel rzslider {
   width: calc(100% - 15px);

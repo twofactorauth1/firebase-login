@@ -283,9 +283,6 @@ module.exports = {
                     });
 
                 });
-
-
-
             },
             function getGlobalHeader(website, theme, template, sections, cb){
                 var query = {
@@ -321,10 +318,6 @@ module.exports = {
 
                 var pageHandle = slug(template.get('handle')) +  '-' + $$.u.idutils.generateUniqueAlphaNumeric(5, true, true);
                 var pageTitle = template.get('name');
-
-
-
-
                 var jsonSections = [];
                 if(header) {
                     jsonSections.push(header.toReference());
@@ -364,8 +357,7 @@ module.exports = {
                     templateId: templateId,
                     created: created,
                     modified:created,
-                    ssb:true,
-                    mainmenu: true
+                    ssb:true
                 });
                 pageDao.saveOrUpdate(page, function(err, value){
                     if(err) {
@@ -376,38 +368,32 @@ module.exports = {
                     }
                 });
             },
-            function addLinkToNav(page, sections, cb){
-                if (page.get('mainmenu') == true) {
-                    self.getWebsiteLinklistsByHandle(accountId, page.get('websiteId'),"head-menu",function(err,list){
-                        if(err) {
-                            self.log.error('Error getting website linklists by handle: ' + err);
-                            cb(err);
-                        } else {
-                            var link={
-                                label: page.get('menuTitle') || page.get('title'),
-                                type: "link",
-                                linkTo: {
-                                    type:"page",
-                                    data:page.get('handle')
-                                }
-                            };
-                            list.links.push(link);
-                            self.updateWebsiteLinklists(accountId, page.get('websiteId'),"head-menu",list,function(err, linkLists){
-                                if(err) {
-                                    self.log.error('Error updating website linklists by handle: ' + err);
-                                    cb(err);
-                                } else {
-                                    self.log.debug('<< createPage');
-                                    cb(null, page, sections);
-                                }
-                            });
-                        }
-
-                    });
-                } else {
-                    self.log.debug('<< without mainmenu');
-                    cb(null, page, sections);
-                } 
+            function addLinkToNav(page, sections, cb){                
+                self.getWebsiteLinklistsByHandle(accountId, page.get('websiteId'),"head-menu",function(err,list){
+                    if(err) {
+                        self.log.error('Error getting website linklists by handle: ' + err);
+                        cb(err);
+                    } else {
+                        var link={
+                            label: page.get('menuTitle') || page.get('title'),
+                            type: "link",
+                            linkTo: {
+                                type:"page",
+                                data:page.get('handle')
+                            }
+                        };
+                        list.links.push(link);
+                        self.updateWebsiteLinklists(accountId, page.get('websiteId'),"head-menu",list,function(err, linkLists){
+                            if(err) {
+                                self.log.error('Error updating website linklists by handle: ' + err);
+                                cb(err);
+                            } else {
+                                self.log.debug('<< createPage');
+                                cb(null, page, sections);
+                            }
+                        });
+                    }
+                });
             }
         ], function done(err, page, sections){
             if(err) {
@@ -431,8 +417,7 @@ module.exports = {
         page.set("handle", pageHandle);
         page.set("created", created);
         page.set("modified", created);
-        page.set("ssb", true);
-        page.set("mainmenu", true);
+        page.set("ssb", true)
         async.waterfall([            
             function createPage(cb){                
                 pageDao.saveOrUpdate(page, function(err, value){
@@ -444,38 +429,32 @@ module.exports = {
                     }
                 });
             },
-            function addLinkToNav(page, cb){
-                if (page.get('mainmenu') == true) {
-                    self.getWebsiteLinklistsByHandle(accountId, page.get('websiteId'),"head-menu",function(err,list){
-                        if(err) {
-                            self.log.error('Error getting website linklists by handle: ' + err);
-                            cb(err);
-                        } else {
-                            var link={
-                                label: page.get('menuTitle') || page.get('title'),
-                                type: "link",
-                                linkTo: {
-                                    type:"page",
-                                    data:page.get('handle')
-                                }
-                            };
-                            list.links.push(link);
-                            self.updateWebsiteLinklists(accountId, page.get('websiteId'),"head-menu",list,function(err, linkLists){
-                                if(err) {
-                                    self.log.error('Error updating website linklists by handle: ' + err);
-                                    cb(err);
-                                } else {
-                                    self.log.debug('<< createPage');
-                                    cb(null, page);
-                                }
-                            });
-                        }
-
-                    });
-                } else {
-                    self.log.debug('<< without mainmenu');
-                    cb(null, page);
-                } 
+            function addLinkToNav(page, cb){                
+                self.getWebsiteLinklistsByHandle(accountId, page.get('websiteId'),"head-menu",function(err,list){
+                    if(err) {
+                        self.log.error('Error getting website linklists by handle: ' + err);
+                        cb(err);
+                    } else {
+                        var link={
+                            label: page.get('menuTitle') || page.get('title'),
+                            type: "link",
+                            linkTo: {
+                                type:"page",
+                                data:page.get('handle')
+                            }
+                        };
+                        list.links.push(link);
+                        self.updateWebsiteLinklists(accountId, page.get('websiteId'),"head-menu",list,function(err, linkLists){
+                            if(err) {
+                                self.log.error('Error updating website linklists by handle: ' + err);
+                                cb(err);
+                            } else {
+                                self.log.debug('<< createPage');
+                                cb(null, page);
+                            }
+                        });
+                    }
+                });                
             }
         ], function done(err, page){
             if(err) {
@@ -486,15 +465,13 @@ module.exports = {
             }
         });        
     },
-
     deletePage: function(pageId, accountId, fn) {
         var self = this;
 
         self.log.debug('>> deletePage');
 
         pageDao.getPageById(accountId, pageId, function(err, page) {
-
-            if (page && page.get('mainmenu') == true) {
+            if (page) {
                 self.getWebsiteLinklistsByHandle(accountId, page.get('websiteId'), "head-menu", function(err, list) {
                     if (err) {
                         self.log.error('Error getting website linklists by handle: ' + err);
@@ -505,7 +482,6 @@ module.exports = {
                                 list = updatedList;
                             })
                         }
-
                         self.updateWebsiteLinklists(accountId, page.get('websiteId'), "head-menu", list, function(err, linkLists) {
                             if (err) {
                                 self.log.error('Error updating website linklists by handle: ' + err);
@@ -514,7 +490,6 @@ module.exports = {
                                 var query = {};
                                 query._id = new RegExp('' + pageId + '(_.*)*');
                                 pageDao.removeByQuery(query, $$.m.ssb.Page, function(err, value){
-
                                     if (err) {
                                         self.log.error('Error deleting page with id [' + pageId + ']: ' + err);
                                         fn(err, null);
@@ -542,6 +517,7 @@ module.exports = {
             }
         })
     },
+
     updateWebsiteLinklists: function(accountId, websiteId, handle, linklist, fn) {
         var self = this;
         self.log.debug('>> updateWebsiteLinklists');
@@ -578,13 +554,13 @@ module.exports = {
             }
         });
     },
+
     getUpdatedWebsiteLinkList: function(list, handle, fn){
         var self = this;
 
         var linkList = list.links.filter(function (lnk) {
         return lnk.type === 'link' &&
-             lnk.linkTo && lnk.linkTo.data === handle &&
-             lnk.linkTo.type === 'page'
+             lnk.linkTo && lnk.linkTo.data === handle
         });
         if(linkList){
             _.each(linkList, function(link){
@@ -855,8 +831,6 @@ module.exports = {
                     });
 
                 });
-
-
             },
             function updateThePage(existingPage, updatedSections, cb){
                 //var sections = page.get('sections');
@@ -903,9 +877,58 @@ module.exports = {
                     }
                     cb(null, updatedPage, updatedSections);
                 });
+            },            
+            function setAsHomePage(updatedPage, updatedSections, cb){
+                if (updatedPage && updatedPage.get("handle") !=='index' && homePage) {
+                    self.getPageByHandle(accountId, 'index', updatedPage.get('websiteId'), function(err, page) {
+                        if (err) {
+                            self.log.error('Error getting index page: ' + err);
+                            cb(err);
+                        } else {
+                            self.log.debug('<< check for index page');
+                            if(page){
+                                page.set("handle", "index-old-" + new Date().getTime() );
+                                var visibility = page.get("visibility");
+                                visibility.visible = false;
+                                page.set("visibility", visibility );
+                                pageDao.saveOrUpdate(page, function(err, value){
+                                    if (err) {
+                                        self.log.error('Error updating page with id [' + page.get("_id") + ']: ' + err);
+                                        cb(err);
+                                    } else {
+                                        updatedPage.set("handle", 'index');
+                                        pageDao.saveOrUpdate(updatedPage, function(err, updatedPage){
+                                            if(err) {
+                                                self.log.error('Error updating page:', err);
+                                                cb(err);
+                                            } else {
+                                                cb(null, updatedPage, updatedSections);
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+                            else{
+                                self.log.debug('<< no index page found');
+                                updatedPage.set("handle", 'index');
+                                pageDao.saveOrUpdate(updatedPage, function(err, updatedPage){
+                                    if(err) {
+                                        self.log.error('Error updating page:', err);
+                                        cb(err);
+                                    } else {
+                                        cb(null, updatedPage, updatedSections);
+                                    }
+                                });
+                            }
+                        }
+                    });
+                }
+                else{
+                    cb(null, updatedPage, updatedSections);
+                }
             },
             function updateLinkList(updatedPage, updatedSections, cb){
-                if (updatedPage && updatedPage.get('mainmenu') === false) {
+                if (updatedPage.get('mainmenu') === false) {
                     self.getWebsiteLinklistsByHandle(accountId, updatedPage.get('websiteId'), "head-menu", function(err, list) {
                         if (err) {
                             self.log.error('Error getting website linklists by handle: ' + err);
@@ -927,18 +950,31 @@ module.exports = {
                         }
                     });
                 }
-                else if (updatedPage && updatedPage.get('mainmenu')) {
+                else {
                     self.getWebsiteLinklistsByHandle(accountId, updatedPage.get('websiteId'), "head-menu", function(err, list) {
                         if (err) {
                             self.log.error('Error getting website linklists by handle: ' + err);
                             cb(err);
                         } else {
-
+                            var _exists = false;
                             _.each(list.links, function(link){
-                                if(link.linkTo && link.linkTo.type === 'page' && link.linkTo.data === updatedPage.get('handle')){
+                                if(link.linkTo && (link.linkTo.type === 'home' || link.linkTo.type === 'page') && link.linkTo.data === updatedPage.get('handle')){
                                     link.label = updatedPage.get('menuTitle') || updatedPage.get('title')
+                                    _exists = true;
                                 }
                             });
+                            if(!_exists){
+                                var link=
+                                {
+                                    label: page.get('menuTitle') || page.get('title'),
+                                    type: "link",
+                                    linkTo: {
+                                        type:"page",
+                                        data:page.get('handle')
+                                    }
+                                };
+                                list.links.push(link);
+                            }
                             self.updateWebsiteLinklists(accountId, updatedPage.get('websiteId'), "head-menu", list, function(err, linkLists) {
                                 if (err) {
                                     self.log.error('Error updating website linklists by handle: ' + err);
@@ -949,60 +985,6 @@ module.exports = {
                             });
                         }
                     });
-                }
-                else{
-                    cb(null, updatedPage, updatedSections);
-                }
-            },
-            function setAsHomePage(updatedPage, updatedSections, cb){
-                if (updatedPage && updatedPage.get("handle") !=='index' && homePage) {
-                    self.getPageByHandle(accountId, 'index', updatedPage.get('websiteId'), function(err, page) {
-                        if (err) {
-                            self.log.error('Error getting index page: ' + err);
-                            cb(err);
-                        } else {
-                            self.log.debug('<< check for index page');
-                            if(page){
-                                page.set("handle", "index-old-" + new Date().getTime() );
-                                var visibility = page.get("visibility");
-                                visibility.visible = false;
-                                page.set("visibility", visibility );
-
-                                pageDao.saveOrUpdate(page, function(err, value){
-                                    if (err) {
-                                        self.log.error('Error updating page with id [' + page.get("_id") + ']: ' + err);
-                                        cb(err);
-                                    } else {
-                                        updatedPage.set("handle", 'index');
-                                        pageDao.saveOrUpdate(updatedPage, function(err, updatedPage){
-                                            if(err) {
-                                                self.log.error('Error updating page:', err);
-                                                cb(err);
-                                            } else {
-                                                cb(null, updatedPage, updatedSections);
-                                            }
-                                        });
-
-                                    }
-                                });
-                            }
-                            else{
-                                self.log.debug('<< no index page found');
-                                updatedPage.set("handle", 'index');
-                                pageDao.saveOrUpdate(updatedPage, function(err, updatedPage){
-                                    if(err) {
-                                        self.log.error('Error updating page:', err);
-                                        cb(err);
-                                    } else {
-                                        cb(null, updatedPage, updatedSections);
-                                    }
-                                });
-                            }
-                        }
-                    });
-                }
-                else{
-                    cb(null, updatedPage, updatedSections);
                 }
             }
 

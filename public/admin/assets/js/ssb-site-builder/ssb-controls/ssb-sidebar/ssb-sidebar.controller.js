@@ -53,6 +53,9 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
     vm.getTemplateById = getTemplateById;
     vm.editSectionName = editSectionName;
     vm.hideSectionFromPage = hideSectionFromPage;
+    vm.deletePage = deletePage;
+    vm.duplicatePage = duplicatePage;
+    vm.hideFromMenu = hideFromMenu;
     vm.moveSection = moveSection;
 
     editableOptions.theme = 'bs3';
@@ -739,6 +742,89 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
             }
         }, true);
 
+    }
+
+    function hideFromMenu(){
+      SweetAlert.swal({
+        title: "Are you sure?",
+        text: "Do you want to hide this page from main menu",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: "Yes, hide page!",
+        cancelButtonText: "No, do not hide page!",
+        closeOnConfirm: true,
+        closeOnCancel: true
+      }, function (isConfirm) {
+        if (isConfirm) {
+            vm.state.page.mainmenu = false;
+        }
+      });
+    }
+
+    function deletePage() {
+      var _deleteText = "Do you want to delete this page";
+      if(vm.state.page.handle === 'index')
+      {
+        var _deleteText = "This is home page of the website. Do you want to delete this page";
+      }
+      SweetAlert.swal({
+        title: "Are you sure?",
+        text: _deleteText,
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: "Yes",
+        cancelButtonText: "No",
+        closeOnConfirm: true,
+        closeOnCancel: true
+      }, function (isConfirm) {
+        if (isConfirm) {
+          vm.state.saveLoading = true;
+          SimpleSiteBuilderService.deletePage(vm.state.page).then(function(response){
+            SimpleSiteBuilderService.getSite(vm.state.page.websiteId).then(function() {
+              SimpleSiteBuilderService.getPages().then(function(pages) {
+                vm.state.saveLoading = false;
+                console.log('page deleted');
+                toaster.pop('success', 'Page deleted', 'The page deleted successfully.');
+                  $timeout(function () {
+                    if(pages["index"])
+                        vm.uiState.navigation.loadPage(pages["index"]._id);
+                      else
+                        $location.path('/website/site-builder/pages/');
+                }, 0);
+
+              });
+            });
+          })
+        }
+      });
+    };
+
+    function duplicatePage(){
+      SweetAlert.swal({
+        title: "Are you sure?",
+        text: "Do you want to create a duplicate page?",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: "Yes",
+        cancelButtonText: "No",
+        closeOnConfirm: true,
+        closeOnCancel: true
+      }, function (isConfirm) {
+        if (isConfirm) {
+            vm.state.saveLoading = true;
+            SimpleSiteBuilderService.createDuplicatePage(vm.state.page).then(function(page) {
+            SimpleSiteBuilderService.getSite(vm.state.page.websiteId).then(function() {
+              SimpleSiteBuilderService.getPages().then(function() {
+                  vm.state.saveLoading = false;
+                  vm.uiState.navigation.loadPage(page.data._id);
+              });
+            });
+          })
+        }
+      });
     }
 
     function init(element) {

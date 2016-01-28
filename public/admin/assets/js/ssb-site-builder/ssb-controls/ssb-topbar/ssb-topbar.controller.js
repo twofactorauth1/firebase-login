@@ -22,8 +22,8 @@ function ssbSiteBuilderTopbarController($scope, $timeout, $attrs, $filter, Simpl
 
     //TODO: refactor, this function exists in multiple controllers :)
     function savePage() {
-        var isLegacyPage = !vm.state.page.ssb;
-
+        vm.state.saveLoading = true;
+        var isLegacyPage = !vm.state.page.ssb;        
         console.log(isLegacyPage);
 
         if (!vm.uiState.hasSeenWarning && isLegacyPage) {
@@ -58,9 +58,15 @@ function ssbSiteBuilderTopbarController($scope, $timeout, $attrs, $filter, Simpl
                         SimpleSiteBuilderService.savePage(vm.state.page).then(function(response){
                             console.log('page saved');
                             toaster.pop('success', 'Page Saved', 'The page was saved successfully.');
+                            vm.state.saveLoading = false;
+                        }).catch(function(err) {
+                            vm.state.saveLoading = false;
+                            toaster.pop('error', 'Error', 'The page was not saved. Please try again.');
                         })
                     )
-
+                }
+                else{
+                    vm.state.saveLoading = false;
                 }
             });
 
@@ -79,12 +85,14 @@ function ssbSiteBuilderTopbarController($scope, $timeout, $attrs, $filter, Simpl
                 SimpleSiteBuilderService.savePage(vm.state.page).then(function(response){
                     console.log('page saved');
                     toaster.pop('success', 'Page Saved', 'The page was saved successfully.');
+                    vm.state.saveLoading = false;
                 }).catch(function(err) {
                     toaster.pop('error', 'Error', 'The page was not saved. Please try again.');
+                    vm.state.saveLoading = false;
                 })
             )
         }
-
+        
     }
 
     function cancelPendingEdits() {
