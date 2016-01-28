@@ -11046,6 +11046,15 @@ ssb-topbar .ui-select-match-text > small {
   display: inline-block;
   line-height: 1.2;
 }
+.ssb-image-gallery {
+  background: green;
+  min-height: 150px;
+}
+.ssb-image-gallery ssb-text-component {
+  text-align: center;
+  width: 90%;
+  margin: 0 auto;
+}
 #componentloader {
   overflow: visible;
   min-height: auto;

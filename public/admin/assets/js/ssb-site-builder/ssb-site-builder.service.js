@@ -60,8 +60,8 @@
          * This represents the category sorting for the add content panel
          */
         ssbService.contentSectionDisplayOrder = [
-            'welcome',
-            'image gallery',
+            'welcome & landing',
+            'images',
             'text',
             'video',
             'mixed content',
@@ -76,7 +76,6 @@
             'navigation',
             'forms',
             'social',
-            'video',
             'misc'
         ];
 
