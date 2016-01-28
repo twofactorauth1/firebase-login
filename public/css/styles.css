@@ -11008,13 +11008,24 @@ ssb-topbar .ui-select-match-text > small {
     margin-bottom: 0!important;
   }
 }
-.ssb-main .ssb-page-section-layout-header-fixed {
+.ssb-main[data-eq-state$="medium"] .ssb-page-section-layout-header-fixed,
+.ssb-main[data-eq-state$="large"] .ssb-page-section-layout-header-fixed {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: auto;
   z-index: 2;
+}
+@media screen and (min-width: 768px) {
+  .ssb-main:not([class*="ssb-edit-mode"]) .ssb-page-section-layout-header-fixed {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: auto;
+    z-index: 2;
+  }
 }
 [class*="ssb-theme-"] .ssb-page-section-layout-hero .btn,
 [class*="ssb-theme-"] .ssb-page-section-layout-hero .btn-default,
