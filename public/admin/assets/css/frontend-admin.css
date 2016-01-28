@@ -5204,6 +5204,26 @@
     display: block;
   }
 }
+@media (max-width: 1075px) {
+  #componentloader .text-only-v1 {
+    overflow: hidden;
+  }
+  #componentloader .text-only-v1 table {
+    display: block;
+    width: 100%!important;
+  }
+  #componentloader .text-only-v1 tbody,
+  #componentloader .text-only-v1 tr {
+    display: block;
+  }
+  #componentloader .text-only-v1 td,
+  #componentloader .text-only-v1 th {
+    display: block;
+    width: 100%!important;
+    position: relative;
+    padding: 1em 0!important;
+  }
+}
 #componentloader .blog-item {
   background: #fcfcfc;
   margin-bottom: 20px;

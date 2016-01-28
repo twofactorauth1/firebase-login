@@ -5215,6 +5215,26 @@ fieldset[disabled] .btn-vimeo-square.active {
     display: block;
   }
 }
+@media (max-width: 1075px) {
+  .text-only-v1 {
+    overflow: hidden;
+  }
+  .text-only-v1 table {
+    display: block;
+    width: 100%!important;
+  }
+  .text-only-v1 tbody,
+  .text-only-v1 tr {
+    display: block;
+  }
+  .text-only-v1 td,
+  .text-only-v1 th {
+    display: block;
+    width: 100%!important;
+    position: relative;
+    padding: 1em 0!important;
+  }
+}
 .blog-item {
   background: #fcfcfc;
   margin-bottom: 20px;
