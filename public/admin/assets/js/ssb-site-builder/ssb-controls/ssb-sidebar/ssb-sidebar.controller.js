@@ -51,10 +51,10 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
     vm.createPage = createPage;
     vm.getNumberOfPages = getNumberOfPages;
     vm.getTemplateById = getTemplateById;
-
     vm.editSectionName = editSectionName;
     vm.hideSectionFromPage = hideSectionFromPage;
-    //vm.customerTags = [];
+    vm.moveSection = moveSection;
+
     editableOptions.theme = 'bs3';
 
     vm.sortableOptions = {
@@ -263,29 +263,51 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
     }
 
     function hideSectionFromPage(section, index) {
-      if(section.visibility){
-        SweetAlert.swal({
-        title: "Are you sure?",
-        text: "Do you want to hide this section from page?",
-        type: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#DD6B55",
-        confirmButtonText: "Yes, hide it!",
-        cancelButtonText: "No, do not hide it!",
-        closeOnConfirm: true,
-        closeOnCancel: true
-      },
-      function (isConfirm) {
-        if (isConfirm) {
-          section.visibility = false;
-          setActiveSection(index);
+
+        if(section.visibility){
+
+            SweetAlert.swal({
+                title: "Are you sure?",
+                text: "Do you want to hide this section from page?",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Yes, hide it!",
+                cancelButtonText: "No, do not hide it!",
+                closeOnConfirm: true,
+                closeOnCancel: true
+            },
+            function (isConfirm) {
+                if (isConfirm) {
+                    section.visibility = false;
+                    setActiveSection(index);
+                }
+            });
+
+        } else {
+            section.visibility = true;
+            setActiveSection(index);
         }
-      });
-      }
-      else{
-        section.visibility = true;
-        setActiveSection(index);
-      }
+
+    }
+
+    function moveSection(direction, section, index) {
+
+        var sectionsArray = vm.state.page.sections;
+        var toIndex;
+        var fromIndex = index;
+
+        if (direction === 'up') {
+            toIndex = fromIndex - 1;
+        }
+
+        if (direction === 'down') {
+            toIndex = fromIndex + 1;
+        }
+
+        sectionsArray.splice(toIndex, 0, sectionsArray.splice(fromIndex, 1)[0] );
+
+        vm.setActiveSection(toIndex);
 
     }
 
