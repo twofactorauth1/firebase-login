@@ -699,7 +699,6 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
                                         .without('misc') // remove misc, put at end of array later
 
                                         .sortBy(function(x) { // sort by predetermined order
-                                            console.log(x, parseInt(vm.uiState.contentSectionDisplayOrder[x], 10));
                                             return vm.uiState.contentSectionDisplayOrder[x] && parseInt(vm.uiState.contentSectionDisplayOrder[x], 10)
                                         })
 

@@ -19,7 +19,7 @@ app.controller('SiteBuilderContactUsModalController', ['$scope', '$timeout', 'pa
     vm.setLatLon = setLatLon;
     vm.validateGeoAddress = validateGeoAddress;
     vm.validateHours = validateHours;
-   
+
 
     function updateContactUsAddress() {
         if (!angular.equals(vm.originalContactMap, vm.component.location)) {
@@ -42,7 +42,7 @@ app.controller('SiteBuilderContactUsModalController', ['$scope', '$timeout', 'pa
                         vm.setLatLon(results[0].geometry.location.lat(), results[0].geometry.location.lng());
                         vm.errorMapData = false;
                         angular.copy(vm.component.location, vm.originalContactMap);
-                        vm.parentVm.uiState.componentControl.refreshMap();                        
+                        vm.parentVm.uiState.componentControl.refreshMap();
                     });
                 }, 0);
             } else {
@@ -60,12 +60,12 @@ app.controller('SiteBuilderContactUsModalController', ['$scope', '$timeout', 'pa
     };
 
     function saveComponent(is_address) {
-    if(is_address){
-      vm.parentVm.uiState.componentControl.refreshMap();
-      vm.place.address = GeocodeService.stringifyAddress(vm.component.location);
-    }
-    else
-        vm.parentVm.uiState.componentControl.refreshHours();        
+        if (is_address) {
+            vm.parentVm.uiState.componentControl.refreshMap();
+            vm.place.address = GeocodeService.stringifyAddress(vm.component.location);
+        } else {
+            vm.parentVm.uiState.componentControl.refreshHours();
+        }
     };
 
     vm.contactHoursInvalid = false;
@@ -194,7 +194,7 @@ app.controller('SiteBuilderContactUsModalController', ['$scope', '$timeout', 'pa
         vm.component.location.zip = "";
         vm.component.location.country = "";
     };
-    
+
     vm.place.address = GeocodeService.stringifyAddress(vm.component.location);
     $scope.$watch('vm.place.address', function (newValue) {
         if (newValue) {
