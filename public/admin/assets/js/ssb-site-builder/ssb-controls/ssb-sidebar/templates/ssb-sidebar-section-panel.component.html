@@ -1,10 +1,14 @@
-<section
+<section ng-init="vm.state.editSection=false"
     ng-if="vm.uiState.showSectionPanel && vm.state.page.sections[vm.uiState.activeSectionIndex]"
     class="ssb-sidebar-section-panel draggable"
     ind-draggable>
 
     <h4 class="ssb-sidebar-sub-heading">
-        <span ng-if="vm.uiState.openSidebarSectionPanel.name === ''">
+        
+        <span onhide="vm.state.editSection=false" id="edit_section_name" ng-if="vm.state.editSection" editable-text="vm.state.page.sections[vm.uiState.activeSectionIndex].name">{{vm.state.page.sections[vm.uiState.activeSectionIndex].name}}</span>
+
+
+        <span ng-if="!vm.state.editSection && vm.uiState.openSidebarSectionPanel.name === ''">
             {{vm.state.page.sections[vm.uiState.activeSectionIndex].name}}
 
             <!-- <small>

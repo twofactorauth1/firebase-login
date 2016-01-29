@@ -30,7 +30,7 @@
         </div>
         <div
             class="ssb-sidebar-item-icon ssb-sidebar-item-icon-offset-2 ti-pencil display-ib"
-            ng-click="vm.editSectionName('editable_{{section._id}}')"
+            ng-click="vm.state.editSection = true; vm.editSectionName('edit_section_name')"
             tooltip-placement="top"
             tooltip-html-unsafe="Rename section">
         </div>
