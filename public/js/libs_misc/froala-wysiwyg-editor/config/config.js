@@ -1,22 +1,5 @@
 $.FroalaEditor.DefineIcon('insertButton', { NAME: 'plus'})
-
-$.FroalaEditor.RegisterCommand('insertButton', {
-    title: 'Insert Button',
-    focus: true,
-    undo: true,
-    refreshAfterCallback: true,
-    callback: function () {
-        this.html.insert('<a class="btn btn-primary ssb-button">Button Text</a>');
-        this.undo.saveStep();
-    }
-});
-
-
-$.FroalaEditor.config = {
-	 enter: $.FroalaEditor.ENTER_BR,
-     toolbarInline: true,
-     toolbarVisibleWithoutSelection: true,
-     toolbarButtons: [
+var toolbarbuttons = [
         'bold',
         'italic',
         'underline',
@@ -25,8 +8,7 @@ $.FroalaEditor.config = {
         'fontSize',
         '|',
         'color',
-        'emoticons',
-        'inlineStyle',
+        'emoticons',        
         'paragraphStyle',
         '|',
         'paragraphFormat',
@@ -48,7 +30,27 @@ $.FroalaEditor.config = {
         'redo',
         'clearFormatting',
         'selectAll'
-    ],
+    ];
+$.FroalaEditor.RegisterCommand('insertButton', {
+    title: 'Insert Button',
+    focus: true,
+    undo: true,
+    refreshAfterCallback: true,
+    callback: function () {
+        this.html.insert('<a class="btn btn-primary ssb-button">Button Text</a>');
+        this.undo.saveStep();
+    }
+});
+
+
+$.FroalaEditor.config = {
+     enter: $.FroalaEditor.ENTER_BR,
+     toolbarInline: true,
+     toolbarVisibleWithoutSelection: true,
+     toolbarButtons: toolbarbuttons,
+     toolbarButtonsMD: toolbarbuttons,
+     toolbarButtonsSM: toolbarbuttons,
+     toolbarButtonsXS: toolbarbuttons,
      imageStyles: {
         'img-rounded': 'Rounded Square',
         'img-thumbnail': 'Square with Border',
