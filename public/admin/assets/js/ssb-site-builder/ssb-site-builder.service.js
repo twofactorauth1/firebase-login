@@ -20,6 +20,7 @@
         var baseThemesAPIUrlv2 = '/api/2.0/cms/themes/';
         var baseSectionAPIUrlv2 = '/api/2.0/cms/sections/';
         var baseComponentAPIUrlv2 = '/api/2.0/cms/components/';
+        var basePagesWebsiteAPIUrl = '/api/2.0/cms/website/';
 
 		ssbService.getSite = getSite;
 		ssbService.getPage = getPage;
@@ -52,7 +53,7 @@
         ssbService.deletePage = deletePage;
         ssbService.openMediaModal = openMediaModal;
         ssbService.setMediaForComponent = setMediaForComponent;
-
+        ssbService.getPagesWithSections = getPagesWithSections;
 
         ssbService.contentComponentDisplayOrder = [];
 
@@ -129,6 +130,19 @@
 
 			return ssbRequest($http.get(baseWebsiteAPIUrl + ssbService.websiteId + '/pages').success(success).error(error));
 		}
+
+        function getPagesWithSections() {
+
+            function success(data) {
+                 console.log('SimpleSiteBuilderService getPages');
+            }
+
+            function error(error) {
+                console.error('SimpleSiteBuilderService getPages error: ' + error);
+            }
+
+            return ssbRequest($http.get(basePagesWebsiteAPIUrl + ssbService.websiteId + '/pages').success(success).error(error));
+        }
 
 		function getPage(id, isSettings) {
             function success(data) {

@@ -396,8 +396,29 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
       $scope.currentPage = _.find($scope.filterdedPages, function (page) {
         return page.handle === newValue;
       });
+      $scope.currentPage.components = getPageComponents($scope.currentPage);
     }
   });
+
+
+      var getPageComponents = function(page) {
+        var components = [];
+        if (page.components && page.components.length && !page.sections.length) {
+            components = page.components;
+        }
+        else{
+            for (var i = 0; i < page.sections.length; i++) {
+                if (page.sections[i] && page.sections[i].components) {
+                  for (var j = 0; j < page.sections[i].components.length; j++) {
+                    if (page.sections[i].components[j]) {
+                      components.push(page.sections[i].components[j])
+                    }
+                  }
+                }
+            }
+        }
+        return components;
+  }
 
   $scope.initializeEditLinks = function (link, status) {
     if (link.page) {
@@ -407,6 +428,7 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
       $scope.currentPage = _.find($scope.filterdedPages, function (page) {
         return page.handle === link.page;
       });
+      $scope.currentPage.components = getPageComponents($scope.currentPage);
     }
   };
 
@@ -1064,14 +1086,8 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
        * @getPages
        * -
        */
-
-      WebsiteService.getPages(function (pages) {
-        var parsed = angular.fromJson(pages);
-        var arr = [];
-        _.each(parsed, function (page) {
-          arr.push(page);
-        });
-        $scope.allPages = arr;
+      SimpleSiteBuilderService.getPagesWithSections().then(function(pages) {
+        $scope.allPages = pages.data;
 
         AccountService.getAccount(function(data) {
           if (!data.showhide.blog) {
