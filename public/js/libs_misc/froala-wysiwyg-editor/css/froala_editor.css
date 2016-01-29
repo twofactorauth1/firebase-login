@@ -931,3 +931,11 @@ iframe.fr-iframe {
 .fr-sticky-on + .fr-sticky-dummy {
   display: block;
 }
+.fr-popup .fr-color-set > span{
+  width: 16px !important;
+  height: 16px !important;
+  margin: 2px;
+}
+.fr-popup .fr-color-set > span.fr-selected-color::after {  
+  line-height: 16px !important;
+}
