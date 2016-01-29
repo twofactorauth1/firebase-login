@@ -50,10 +50,14 @@
     font-size: {{vm.state.website.themeOverrides.styles.paragraphSize}};
 }
 
-.ssb-theme-{{vm.state.website.theme.handle}} .ssb-theme-btn {
-    background: {{vm.state.website.themeOverrides.styles.primaryBtnBackgroundColor}};
+.ssb-theme-{{vm.state.website.theme.handle}} .ssb-theme-btn, .ssb-theme-{{vm.state.website.theme.handle}} .ssb-theme-btn:hover {
+    background-color: {{vm.state.website.themeOverrides.styles.primaryBtnBackgroundColor}};
     color: {{vm.state.website.themeOverrides.styles.primaryBtnTextColor}};
     border-color: {{vm.state.website.themeOverrides.styles.primaryBtnBackgroundColor}};
+}
+
+.ssb-theme-{{vm.state.website.theme.handle}} .ssb-theme-btn:hover, .ssb-theme-{{vm.state.website.theme.handle}} .ssb-theme-btn:active, .ssb-theme-{{vm.state.website.theme.handle}} .ssb-theme-btn:focus {
+    background-color: {{vm.state.website.themeOverrides.styles.primaryBtnBackgroundColor}}!important;
 }
 
 .ssb-theme-young-soul .navbar-toggle .icon-bar {

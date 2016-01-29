@@ -46,7 +46,7 @@ function ssbSiteBuilderSidebarSettingsPanelController($scope, $attrs, $filter, $
     });
 
     $scope.$watch(function() {
-        return vm.component ? vm.component.bg.color : '';
+        return vm.component && vm.component.bg ? vm.component.bg.color : '';
     }, function(color) {
         console.debug(color);
     });

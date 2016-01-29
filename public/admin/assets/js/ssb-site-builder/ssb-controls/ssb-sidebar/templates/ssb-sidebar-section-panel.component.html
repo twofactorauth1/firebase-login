@@ -4,7 +4,7 @@
     ind-draggable>
 
     <h4 class="ssb-sidebar-sub-heading">
-        
+
         <span onhide="vm.state.editSection=false" id="edit_section_name" ng-if="vm.state.editSection" editable-text="vm.state.page.sections[vm.uiState.activeSectionIndex].name">{{vm.state.page.sections[vm.uiState.activeSectionIndex].name}}</span>
 
 
@@ -152,6 +152,15 @@
         class="ssb-sidebar-section-panel-component-panel container-fluid"
         ng-if="vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex] &&  ('team' + vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex]._id) === vm.uiState.openSidebarSectionPanel.id"
         settings-template="assets/js/ssb-site-builder/ssb-components/shared/meet-team.html"
+        component="vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex]"
+        state="vm.state"
+        ui-state="vm.uiState">
+    </ssb-sidebar-settings-panel>
+
+    <ssb-sidebar-settings-panel
+        class="ssb-sidebar-section-panel-component-panel container-fluid"
+        ng-if="vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex] &&  ('testimonials' + vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex]._id) === vm.uiState.openSidebarSectionPanel.id"
+        settings-template="assets/js/ssb-site-builder/ssb-components/shared/testimonials.html"
         component="vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex]"
         state="vm.state"
         ui-state="vm.uiState">

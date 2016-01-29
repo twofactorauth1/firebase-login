@@ -1,16 +1,26 @@
-<!-- <accordion-group heading="Basic">
-	<div ng-include=" 'assets/js/ssb-site-builder/ssb-components/shared/basic.html' "></div>
-</accordion-group> -->
-<accordion close-others="oneAtATime" class="accordion">
-	<accordion-group heading="Spacing">
-		<div ng-include=" 'assets/js/ssb-site-builder/ssb-components/shared/spacing.html' "></div>
-	</accordion-group>
+<div ng-if="component.version === 2" class="row padding-10">
 
-	<accordion-group heading="Advanced">
-		<div ng-include=" 'assets/js/ssb-site-builder/ssb-components/shared/advanced.html' "></div>
-	</accordion-group>
+    <button
+        ng-click="vm.uiState.navigation.sectionPanel.loadPanel({ name: 'testimonials', id: 'testimonials' + component._id, componentId: component._id });"
+        class="ssb-sidebar-section-panel-btn btn btn-primary">
+        <i class="ti-settings display-ib"></i> Edit Testimonial Settings
+    </button>
 
-	<accordion-group heading="Testimonials">
-		<div ng-include=" 'assets/js/ssb-site-builder/ssb-components/shared/testimonials.html' "></div>
-	</accordion-group>
-</accordion>
+</div>
+
+
+<div class="row padding-10">
+
+    <button ng-click="vm.uiState.navigation.sectionPanel.loadPanel({ name: 'Design', id: 'design' + component._id, componentId: component._id })" class="ssb-sidebar-section-panel-btn btn btn-link">
+        <i class="ti-brush display-ib"></i> Design
+    </button>
+
+    <button ng-click="vm.uiState.navigation.sectionPanel.loadPanel({ name: 'Layout', id: 'layout' + component._id, componentId: component._id })" class="ssb-sidebar-section-panel-btn btn btn-link">
+        <i class="ti-layout display-ib"></i> Layout
+    </button>
+
+    <button ng-click="vm.uiState.navigation.sectionPanel.loadPanel({ name: 'Advanced', id: 'advanced' + component._id, componentId: component._id })" class="ssb-sidebar-section-panel-btn btn btn-link">
+        <i class="ti-settings display-ib"></i> Advanced Settings
+    </button>
+
+</div>
