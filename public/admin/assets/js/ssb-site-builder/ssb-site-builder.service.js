@@ -666,20 +666,21 @@
          *
          */
         function setupTheme(website) {
+            var _website = website || ssbService.website;
             return ssbService.getThemes().then(function(themes) {
-                var theme = themes.data.filter(function(t) { return t._id === website.themeId })[0] || {};
+                var theme = themes.data.filter(function(t) { return t._id === _website.themeId })[0] || {};
                 var defaultTheme;
 
                 if (theme._id) {
-                    ssbService.applyThemeToSite(theme, true, website);
+                    ssbService.applyThemeToSite(theme, true, _website);
                 } else {
                     defaultTheme = themes.data.filter(function(t) { return t.handle === 'default' })[0] || {};
-                    ssbService.applyThemeToSite(defaultTheme, false, website);
-                    website.themeId = defaultTheme._id;
-                    ssbService.saveWebsite(website);
+                    ssbService.applyThemeToSite(defaultTheme, false, _website);
+                    _website.themeId = defaultTheme._id;
+                    ssbService.saveWebsite(_website);
                 }
                 $timeout(function() {
-                    ssbService.website = website;
+                    ssbService.website = _website;
                 }, 100);
             });
         }

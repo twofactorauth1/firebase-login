@@ -11075,6 +11075,9 @@ ssb-topbar .ui-select-match-text > small {
 .ssb-main .simple-form-v1 .inner-page {
   padding: 0 0 30px!important;
 }
+[ssb-text-component] {
+  position: relative;
+}
 [ssb-image-component] {
   float: left;
   width: 100%;
