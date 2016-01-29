@@ -9946,22 +9946,6 @@ a[href="https://froala.com/wysiwyg-editor"] {
 .app-minimal-admin-chrome footer {
   display: none;
 }
-.fr-wrapper.show-placeholder .fr-placeholder {
-  pointer-events: none;
-}
-.fr-wrapper .fr-element {
-  text-align: inherit!important;
-  color: inherit;
-  overflow: hidden;
-}
-.fr-wrapper ::selection {
-  background: rgba(72, 177, 204, 0.25) !important;
-  color: inherit!important;
-}
-.fr-wrapper ::-moz-selection {
-  background: rgba(72, 177, 204, 0.25) !important;
-  color: inherit!important;
-}
 .ssb-site-builder-container {
   height: 100%;
   height: 100vh;
@@ -10472,6 +10456,9 @@ a[href="https://froala.com/wysiwyg-editor"] {
   border: none;
   box-shadow: none;
 }
+.ssb-sidebar-inner .editor-group tab-heading {
+  text-transform: capitalize;
+}
 .ssb-sidebar-inner > .tab-pane {
   padding: 0;
 }
@@ -10656,6 +10643,20 @@ ssb-topbar .ui-select-match-text > small {
 .ssb-control-bar .btn[disabled] {
   pointer-events: none;
 }
+[class*="ssb-theme-"] .ssb-theme-btn:hover {
+  background-color: inherit;
+  color: inherit;
+}
+[class*="ssb-theme-"] .ssb-theme-btn:hover:before {
+  background: rgba(255, 255, 255, 0.1);
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
 [class*="ssb-theme-"] .ssb-page-section-layout-header [ssb-text-component][data-eq-state$="small"],
 [class*="ssb-theme-"] .ssb-page-section-layout-hero [ssb-text-component][data-eq-state$="small"] {
   font-size: 14vw;
@@ -10796,15 +10797,10 @@ ssb-topbar .ui-select-match-text > small {
 .ssb-theme-default .ssb-theme-paragraph-text {
   font-size: 14px;
 }
-.ssb-theme-default .btn,
-.ssb-theme-default .btn-default,
-.ssb-theme-default .btn-block,
-.ssb-theme-default .btn-primary,
-.ssb-theme-default button,
 .ssb-theme-default .ssb-theme-btn {
-  background-color: #4BB0CB!important;
+  background-color: #4BB0CB;
   color: #FFFFFF;
-  border-color: #4BB0CB!important;
+  border-color: #4BB0CB;
 }
 .ssb-theme-default .navbar-toggle .icon-bar {
   background-color: #FFFFFF;
@@ -10853,11 +10849,6 @@ ssb-topbar .ui-select-match-text > small {
 .ssb-theme-young-soul .ssb-theme-paragraph-text {
   font-size: 14px;
 }
-.ssb-theme-young-soul .btn,
-.ssb-theme-young-soul .btn-default,
-.ssb-theme-young-soul .btn-block,
-.ssb-theme-young-soul .btn-primary,
-.ssb-theme-young-soul button,
 .ssb-theme-young-soul .ssb-theme-btn {
   background-color: #000;
   color: #fff;
@@ -10882,6 +10873,7 @@ ssb-topbar .ui-select-match-text > small {
 }
 .ssb-section-layout {
   position: relative;
+  overflow: hidden;
 }
 .ssb-section-layout .bg {
   position: absolute;
@@ -11027,21 +11019,11 @@ ssb-topbar .ui-select-match-text > small {
     z-index: 2;
   }
 }
-[class*="ssb-theme-"] .ssb-page-section-layout-hero .btn,
-[class*="ssb-theme-"] .ssb-page-section-layout-hero .btn-default,
-[class*="ssb-theme-"] .ssb-page-section-layout-hero .btn-block,
-[class*="ssb-theme-"] .ssb-page-section-layout-hero .btn-primary,
-[class*="ssb-theme-"] .ssb-page-section-layout-hero button,
 [class*="ssb-theme-"] .ssb-page-section-layout-hero .ssb-theme-btn {
   line-height: 1em;
   vertical-align: middle;
   padding: 1em;
 }
-[class*="ssb-theme-"] .ssb-page-section-layout-hero .btn *,
-[class*="ssb-theme-"] .ssb-page-section-layout-hero .btn-default *,
-[class*="ssb-theme-"] .ssb-page-section-layout-hero .btn-block *,
-[class*="ssb-theme-"] .ssb-page-section-layout-hero .btn-primary *,
-[class*="ssb-theme-"] .ssb-page-section-layout-hero button *,
 [class*="ssb-theme-"] .ssb-page-section-layout-hero .ssb-theme-btn * {
   display: inline-block;
   line-height: 1.2;

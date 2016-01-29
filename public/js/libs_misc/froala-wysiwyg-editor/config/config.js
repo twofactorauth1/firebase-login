@@ -8,7 +8,7 @@ var toolbarbuttons = [
         'fontSize',
         '|',
         'color',
-        'emoticons',        
+        'emoticons',
         'paragraphStyle',
         '|',
         'paragraphFormat',
@@ -49,7 +49,14 @@ $.FroalaEditor.RegisterCommand('insertButton', {
     undo: true,
     refreshAfterCallback: true,
     callback: function () {
-        this.html.insert('<a class="btn btn-primary ssb-button">Button Text</a>');
+        var buttonHTML = '<a class="btn btn-primary ssb-theme-btn">' +
+                            '<span contenteditable="false" class="ssb-froala-content-editable-false">' +
+                                '&nbsp;' +
+                            '</span>' +
+                            'Button Text' +
+                         '</a>';
+
+        this.html.insert(buttonHTML);
         this.undo.saveStep();
     }
 });
@@ -81,7 +88,7 @@ $.FroalaEditor.config = {
                 "Oswald,sans-serif": 'Oswald',
                 "Montserrat,sans-serif": 'Montserrat',
                 "'Open Sans Condensed',sans-serif": 'Open Sans Condensed'
-                }, 
+                },
     imageInsertButtons: ['imageBack', 'imageByURL', 'mediaManager'],
     colorsText: [].concat.apply([], spectrumColors),
     colorsBackground: [].concat.apply([], spectrumColors),

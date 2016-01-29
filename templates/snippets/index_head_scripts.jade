@@ -85,11 +85,12 @@ if (typeof account.website.theme !== 'undefined' && typeof account.website.theme
             color: #{account.website.themeOverrides.styles.primaryTextColor};
         }
 
-        .ssb-theme-#{account.website.theme.handle} .btn,
-        .ssb-theme-#{account.website.theme.handle} .btn-default,
-        .ssb-theme-#{account.website.theme.handle} .btn-block,
-        .ssb-theme-#{account.website.theme.handle} .btn-primary,
-        .ssb-theme-#{account.website.theme.handle} button,
+        .ssb-theme-#{account.website.theme.handle} .ssb-theme-btn {
+            background-color: #{account.website.themeOverrides.styles.primaryBtnBackgroundColor};
+            color: #{account.website.themeOverrides.styles.primaryBtnTextColor};
+            border-color: #{account.website.themeOverrides.styles.primaryBtnBackgroundColor};
+        }
+
         .ssb-theme-#{account.website.theme.handle} .ssb-theme-btn {
             background-color: #{account.website.themeOverrides.styles.primaryBtnBackgroundColor};
             color: #{account.website.themeOverrides.styles.primaryBtnTextColor};

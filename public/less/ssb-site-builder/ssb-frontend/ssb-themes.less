@@ -35,6 +35,22 @@
 
 [class*="ssb-theme-"] {
 
+    .ssb-theme-btn:hover {
+        background-color: inherit;
+        color: inherit;
+    }
+
+    .ssb-theme-btn:hover:before {
+        background: rgba(255, 255, 255, 0.1);
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+    }
+
 
     .ssb-page-section-layout-header [ssb-text-component],
     .ssb-page-section-layout-hero [ssb-text-component] {

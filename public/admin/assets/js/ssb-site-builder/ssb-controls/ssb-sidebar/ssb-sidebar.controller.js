@@ -224,7 +224,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
     }
 
   	function getPlatformSections() {
-        alert('used!')
+        // alert('used!')
   		// SimpleSiteBuilderService.getPlatformSections().then(function(data) {
     //     vm.platformSections = data;
       // });

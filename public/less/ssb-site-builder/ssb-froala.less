@@ -1,0 +1,36 @@
+
+.fr-toolbar.fr-inline.fr-desktop {
+    // margin-top: 6em!important;
+}
+
+.fr-wrapper.show-placeholder .fr-placeholder {
+    pointer-events: none;
+}
+
+.fr-wrapper .fr-element {
+    text-align: inherit!important;
+    color: inherit;
+    overflow: hidden;
+}
+
+.fr-wrapper ::selection {
+    background: rgba(21, 86, 103, 0.25) !important;
+    color: inherit!important;
+}
+
+.fr-wrapper ::-moz-selection {
+    background: rgba(21, 86, 103, 0.25) !important;
+    color: inherit!important;
+}
+
+/*
+ * This element prevents inserted HTML elements from
+ * being deleted when they have no text in them. We
+ * want to hide it visually so that it doesn't mess
+ * with centering, etc.
+ *
+ * - See /indigeweb/public/js/libs_misc/froala-wysiwyg-editor/config/config.js for usage
+ */
+.ssb-froala-content-editable-false {
+    display: none!important;
+}
