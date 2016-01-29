@@ -109,8 +109,8 @@
                     <div class="clearfix mb15"></div>
                     <p class="center"><span ng-show="currentCoupon.created != 1437591986 && paymentFormProduct.product_attributes.stripePlans[0].signup_fee">+ <i class="fa fa-usd fa-1"></i> {{subscriptionPlanOneTimeFee}} One Time Setup Fee</span> <span ng-if="currentCoupon.created == 1437591986">No Setup Fee</span></p>
                     <div class="col-xs-12">
-                        <a type="button" class="btn btn-success btn-block center" ng-if="newAccount.membership != plan.id" ng-hide="subscriptionPlans.length == 1" ng-click="selectSubscriptionPlanFn(plan.id, plan.amount, plan.interval, planStatus[plan.id].signup_fee)">Choose</a>
-                        <a type="button" class="btn btn-green btn-block center active" ng-hide="subscriptionPlans.length == 1" ng-if="newAccount.membership == plan.id">Selected</a>
+                        <a type="button" class="btn ssb-theme-btn btn-success btn-block center" ng-if="newAccount.membership != plan.id" ng-hide="subscriptionPlans.length == 1" ng-click="selectSubscriptionPlanFn(plan.id, plan.amount, plan.interval, planStatus[plan.id].signup_fee)">Choose</a>
+                        <a type="button" class="btn ssb-theme-btn btn-green btn-block center active" ng-hide="subscriptionPlans.length == 1" ng-if="newAccount.membership == plan.id">Selected</a>
                     </div>
                     <div class="clearfix"></div>
                 </div>

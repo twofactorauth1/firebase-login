@@ -2,8 +2,8 @@
     <div class="social-link">
         <ul ng-sortable="sortableConfig">
             <li ng-repeat="network in component.networks track by $index">
-                    <a ng-if="!isEditing" href="{{getUrl(network.url)}}" class="btn btn-social-icon btn-lg btn-{{network.name}}" target="_blank"><i class="fa fa-{{network.icon}}"></i></a>                
-                    <a ng-if="isEditing" ng-click="openModal('social-links-modal', $index)" style="z-index:1033;" class="btn clickable-link social-links btn-social-icon btn-lg btn-{{network.name}}">
+                    <a ng-if="!isEditing" href="{{getUrl(network.url)}}" class="btn ssb-theme-btn btn-social-icon btn-lg btn-{{network.name}}" target="_blank"><i class="fa fa-{{network.icon}}"></i></a>                
+                    <a ng-if="isEditing" ng-click="openModal('social-links-modal', $index)" style="z-index:1033;" class="btn ssb-theme-btn clickable-link social-links btn-social-icon btn-lg btn-{{network.name}}">
                     <i class="fa fa-{{network.icon}}"></i>
                     </a>
             </li>

@@ -36,10 +36,10 @@
                         <div class="btn-contact-photo">
                           <div class="btn-link btn-edit-photo">
                              <div class="form-group">
-                            <button  class="btn btn-black pull-right"  ng-click="setProfileImage(component._id, layout.customer)" >Change Photo</button>
+                            <button  class="btn ssb-theme-btn btn-black pull-right"  ng-click="setProfileImage(component._id, layout.customer)" >Change Photo</button>
                             </div>
                              <div class="form-group">
-                           <button  class="btn btn-black pull-right"  ng-click="#" >Change Password</button>
+                           <button  class="btn ssb-theme-btn btn-black pull-right"  ng-click="#" >Change Password</button>
                          </div>
                           </div>
                         </div>
@@ -64,11 +64,11 @@
                        <input class="form-control input-edit-email " indigeweb-validate-form-fields validation-type="email" placeholder="new email" check_email="" data-email="" type="email" ng-model="layout.customer.details[0].emails[0].email">
                         </div>
                         <div class="form-group">
-                        <button  class="btn btn-primary btn-lg pull-right"  ng-click="saveCustomerAccount(layout.customer)" >Save Customer Account</button>
+                        <button  class="btn ssb-theme-btn btn-primary btn-lg pull-right"  ng-click="saveCustomerAccount(layout.customer)" >Save Customer Account</button>
                       </div>
                         <div class="btn-edit-photo-controls hidden-md hidden-lg hidden">
-                          <div class="btn btn-primary btn-remove-photo">Remove Photo</div>
-                          <div class="btn btn-primary btn-upload-photo">Upload Photo</div>
+                          <div class="btn ssb-theme-btn btn-primary btn-remove-photo">Remove Photo</div>
+                          <div class="btn ssb-theme-btn btn-primary btn-upload-photo">Upload Photo</div>
                         </div>
                       </div>
                     </row>
@@ -93,7 +93,7 @@
               {{getAddressByType(layout.customer, 'billing')}}
               </span>
                <div class="form-group">
-                    <button  ng-if="layout.billing" class="btn btn-change btn-sm"  ng-click="showEdit('billing')">CHANGE</button>
+                    <button  ng-if="layout.billing" class="btn ssb-theme-btn btn-change btn-sm"  ng-click="showEdit('billing')">CHANGE</button>
                   </div>
                 <div id="edit-addresses-container" ng-show="layout.billingChange">
 
@@ -147,7 +147,7 @@
               {{getAddressByType(layout.customer, 'shipping')}}
               </span>
                <div class="form-group">
-                <button  ng-if="layout.shipping" class="btn btn-change btn-sm" ng-click="showEdit('shipping')" >CHANGE</button>
+                <button  ng-if="layout.shipping" class="btn ssb-theme-btn btn-change btn-sm" ng-click="showEdit('shipping')" >CHANGE</button>
               </div>
 
               <div id="edit-addresses-container" ng-show="layout.shippingChange">

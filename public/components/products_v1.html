@@ -42,20 +42,20 @@
                             <p class="description product-description">{{product.description}}</p>
                         </div>
                         <div class="actions">
-                            <a class="btn btn-primary btn-block center" href="#" ng-if="product.hasVariations" data-toggle="modal" data-target="#product-details-modal" ng-click="updateSelectedProduct(product)">
+                            <a class="btn ssb-theme-btn btn-primary btn-block center" href="#" ng-if="product.hasVariations" data-toggle="modal" data-target="#product-details-modal" ng-click="updateSelectedProduct(product)">
                                 Select Options
                             </a>
-                            <button class="btn btn-primary btn-block center" ng-click="addDetailsToCart(product)" href="#" ng-if="product.type != 'external' && product.clicked != true && !product.hasVariations">
+                            <button class="btn ssb-theme-btn btn-primary btn-block center" ng-click="addDetailsToCart(product)" href="#" ng-if="product.type != 'external' && product.clicked != true && !product.hasVariations">
                                 <div data-class="btn-text">
                                     <span class="fa fa-shopping-cart"></span> Add to Cart
                                 </div>
                             </button>
-                            <button class="btn btn-success btn-block center" href="#" ng-if="product.type != 'external' && product.clicked == true && !product.hasVariations">
+                            <button class="btn ssb-theme-btn btn-success btn-block center" href="#" ng-if="product.type != 'external' && product.clicked == true && !product.hasVariations">
                                 <div data-class="btn-text">
                                     <span class="fa fa-check"></span> Added to Cart!
                                 </div>
                             </button>
-                            <a class="btn btn-primary btn-block center" href="http://{{product.externalLinklinkUrl}}" ng-if="product.type == 'external'" target="{{product.externalLinkOpenIn}}">
+                            <a class="btn ssb-theme-btn btn-primary btn-block center" href="http://{{product.externalLinklinkUrl}}" ng-if="product.type == 'external'" target="{{product.externalLinkOpenIn}}">
                                 <div data-class="btn-text">
                                     <span class="fa fa-shopping-cart hidden"></span> {{product.externalLinklinkText || 'External Link'}}
                                 </div>
@@ -84,10 +84,10 @@
             <a ng-click="addProducts()" class=" btn btn-primary btn-lg btn-wide btn-o add-feature"> <i class="fa fa-plus"></i> Add Products</a>
         </div>
     </div>
-    <a ng-show="!isEditing" href="#" class="btn btn-primary btn-lg btnLaunchCart" data-toggle="modal" data-target="#cart-checkout-modal">
+    <a ng-show="!isEditing" href="#" class="btn ssb-theme-btn btn-primary btn-lg btnLaunchCart" data-toggle="modal" data-target="#cart-checkout-modal">
         <span class="fa fa-shopping-cart"></span> <span ng-if="cartDetails.length > 0">({{cartDetails.length}})</span>
     </a>
-    <a ng-show="isEditing" href="#" tooltip-placement="bottom" tooltip="This button is functional only at front end" class="btn btn-primary btn-lg btnLaunchCart">
+    <a ng-show="isEditing" href="#" tooltip-placement="bottom" tooltip="This button is functional only at front end" class="btn ssb-theme-btn btn-primary btn-lg btnLaunchCart">
         <span class="fa fa-shopping-cart"></span> <span ng-if="cartDetails.length > 0">({{cartDetails.length}})</span>
     </a>
     <div class="modal fade" id="cart-checkout-modal">
@@ -350,19 +350,19 @@
                     <div class="clearfix"></div>
                 </div>
                 <div class="modal-footer cart-footer" ng-hide="checkoutModalState !== 3">
-                    <button class="btn btn-orange btn-checkout pull-right" ng-click="makeCartPayment()"><i class="fa fa-shopping-cart"></i> Checkout</button>
-                    <button class="btn btn-info continue-shopping pull-left" ng-click="setCheckoutState(2)"><i class="fa fa-chevron-left"></i> Back
+                    <button class="btn ssb-theme-btn btn-orange btn-checkout pull-right" ng-click="makeCartPayment()"><i class="fa fa-shopping-cart"></i> Checkout</button>
+                    <button class="btn ssb-theme-btn btn-info continue-shopping pull-left" ng-click="setCheckoutState(2)"><i class="fa fa-chevron-left"></i> Back
                     </button>
                 </div>
                 <div class="modal-footer billing-footer" ng-hide="checkoutModalState !== 2">
-                    <button class="btn btn-success btn-payment pull-right" ng-click="validateAddressDetails(newContact.details[0].addresses[0], newContact.details[0].emails[0].email, newContact.details[0].phones[0].number)"><i class="fa fa-credit-card"></i> Payment <i class="fa fa-chevron-right"></i></button>
-                    <button class="btn pull-left btn-info back-to-shopping-cart" ng-click="setCheckoutState(1)"><i class="fa fa-chevron-left"></i> Back
+                    <button class="btn ssb-theme-btn btn-success btn-payment pull-right" ng-click="validateAddressDetails(newContact.details[0].addresses[0], newContact.details[0].emails[0].email, newContact.details[0].phones[0].number)"><i class="fa fa-credit-card"></i> Payment <i class="fa fa-chevron-right"></i></button>
+                    <button class="btn ssb-theme-btn pull-left btn-info back-to-shopping-cart" ng-click="setCheckoutState(1)"><i class="fa fa-chevron-left"></i> Back
                     </button>
                 </div>
                 <div class="modal-footer payment-footer" ng-hide="checkoutModalState !== 1">
-                    <button class="btn btn-success btn-confirm-payment pull-right" ng-disabled="!cartDetails || cartDetails.length <= 0" ng-click="setCheckoutState(2)"> Next <i class="fa fa-chevron-right"></i>
+                    <button class="btn ssb-theme-btn btn-success btn-confirm-payment pull-right" ng-disabled="!cartDetails || cartDetails.length <= 0" ng-click="setCheckoutState(2)"> Next <i class="fa fa-chevron-right"></i>
                     </button>
-                    <button class="btn pull-left btn-info back-to-billing-shipping" data-dismiss="modal" ng-click="setCheckoutState(1)"><i class="fa fa-chevron-left"></i> Continue Shopping
+                    <button class="btn ssb-theme-btn pull-left btn-info back-to-billing-shipping" data-dismiss="modal" ng-click="setCheckoutState(1)"><i class="fa fa-chevron-left"></i> Continue Shopping
                     </button>
                 </div>
             </div>
@@ -412,17 +412,17 @@
                                     </div>
                                 </div>
                                 <div class="actions">
-                                    <button class="btn btn-primary btn-block center" ng-click="addDetailsToCart(selectedProduct, matchedVariation)" href="#" ng-if="selectedProduct.type != 'external' && selectedProduct.clicked != true && matchedVariation">
+                                    <button class="btn ssb-theme-btn btn-primary btn-block center" ng-click="addDetailsToCart(selectedProduct, matchedVariation)" href="#" ng-if="selectedProduct.type != 'external' && selectedProduct.clicked != true && matchedVariation">
                                         <div data-class="btn-text">
                                             <span class="fa fa-shopping-cart"></span> Add to Cart
                                         </div>
                                     </button>
-                                    <button class="btn btn-success btn-block center" href="#" ng-if="selectedProduct.type != 'external' && selectedProduct.clicked == true && !selectedProduct.hasVariations">
+                                    <button class="btn ssb-theme-btn btn-success btn-block center" href="#" ng-if="selectedProduct.type != 'external' && selectedProduct.clicked == true && !selectedProduct.hasVariations">
                                         <div data-class="btn-text">
                                             <span class="fa fa-check"></span> Added to Cart!
                                         </div>
                                     </button>
-                                    <a class="btn btn-primary btn-block center" href="http://{{selectedProduct.externalLinklinkUrl}}" ng-if="selectedProduct.type == 'external'" target="{{selectedProduct.externalLinkOpenIn}}">
+                                    <a class="btn ssb-theme-btn btn-primary btn-block center" href="http://{{selectedProduct.externalLinklinkUrl}}" ng-if="selectedProduct.type == 'external'" target="{{selectedProduct.externalLinkOpenIn}}">
                                         <div data-class="btn-text">
                                             <span class="fa fa-shopping-cart hidden"></span> {{selectedProduct.externalLinklinkText || 'External Link'}}
                                         </div>
