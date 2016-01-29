@@ -238,7 +238,7 @@ module.exports = {
                                 var id = $$.u.idutils.generateUUID();
                                 if(referencedSection)
                                 {
-                                    var s = section;                                    
+                                    var s = section;
                                     var refId = s._id;
                                     s = referencedSection.toJSON();
                                     s.ref = refId;
@@ -247,7 +247,7 @@ module.exports = {
                                     s.accountId = accountId;
                                     self.log.debug('new dereferenced', s);
                                 }
-                                else{                                    
+                                else{
                                     section._id = id;
                                     section.anchor = id;
                                     section.accountId = accountId;
@@ -368,7 +368,7 @@ module.exports = {
                     }
                 });
             },
-            function addLinkToNav(page, sections, cb){                
+            function addLinkToNav(page, sections, cb){
                 self.getWebsiteLinklistsByHandle(accountId, page.get('websiteId'),"head-menu",function(err,list){
                     if(err) {
                         self.log.error('Error getting website linklists by handle: ' + err);
@@ -418,8 +418,8 @@ module.exports = {
         page.set("created", created);
         page.set("modified", created);
         page.set("ssb", true)
-        async.waterfall([            
-            function createPage(cb){                
+        async.waterfall([
+            function createPage(cb){
                 pageDao.saveOrUpdate(page, function(err, value){
                     if(err) {
                         self.log.error('Error creating page:', err);
@@ -429,7 +429,7 @@ module.exports = {
                     }
                 });
             },
-            function addLinkToNav(page, cb){                
+            function addLinkToNav(page, cb){
                 self.getWebsiteLinklistsByHandle(accountId, page.get('websiteId'),"head-menu",function(err,list){
                     if(err) {
                         self.log.error('Error getting website linklists by handle: ' + err);
@@ -454,7 +454,7 @@ module.exports = {
                             }
                         });
                     }
-                });                
+                });
             }
         ], function done(err, page){
             if(err) {
@@ -463,7 +463,7 @@ module.exports = {
                 self.log.debug('<< createDuplicatePage');
                 fn(null, page);
             }
-        });        
+        });
     },
     deletePage: function(pageId, accountId, fn) {
         var self = this;
@@ -759,8 +759,8 @@ module.exports = {
                                 self.log.debug('referencedSection', referencedSection);
                                 var id = $$.u.idutils.generateUUID();
                                 if(referencedSection)
-                                {                               
-                                        var s = section;                                        
+                                {
+                                        var s = section;
                                         var refId = s._id;
                                         s = referencedSection.toJSON();
                                         s.ref = refId;
@@ -768,21 +768,21 @@ module.exports = {
                                         s.anchor = id;
                                         s.accountId = accountId;
                                         self.log.debug('new dereferenced', s);
-        
-        
+
+
                                         // section is globalHeader reference and user already has globalHeader in their account's section collection
                                         if (s.globalHeader && globalHeader) {
                                             self.log.debug('page has globalHeader ref, account has globalHeader');
                                             s._id = globalHeader.id();
                                             s.refId = referencedSection.id();
                                         }
-        
+
                                         if (s.globalFooter && globalFooter) {
                                             self.log.debug('page has globalFooter ref, account has globalFooter');
                                             s._id = globalFooter.id();
                                             s.refId = referencedSection.id();
                                         }
-        
+
                                         dereferencedSections.push(s);
                                     }
                                     else{
@@ -901,7 +901,7 @@ module.exports = {
                     }
                     cb(null, updatedPage, updatedSections);
                 });
-            },            
+            },
             function setAsHomePage(updatedPage, updatedSections, cb){
                 if (updatedPage && updatedPage.get("handle") !=='index' && homePage) {
                     self.getPageByHandle(accountId, 'index', updatedPage.get('websiteId'), function(err, page) {
@@ -1097,7 +1097,8 @@ module.exports = {
             filter:1,
             description:1,
             enabled:1,
-            title: 1
+            title: 1,
+            version: 1
         };
 
         sectionDao.findManyWithFields(query, fields, $$.m.ssb.Section, function(err, list){

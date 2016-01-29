@@ -39,9 +39,6 @@
 .ssb-theme-young-soul .ssb-theme-btn:focus {
   background-color: #000!important;
 }
-.ssb-theme-young-soul .navbar-toggle .icon-bar {
-  background-color: #FFFFFF;
-}
 @media screen and (min-width: 768px) {
   .ssb-theme-young-soul .ssb-page-section-layout-header [ssb-text-component] {
     font-size: 96px;

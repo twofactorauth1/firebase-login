@@ -11,31 +11,33 @@ app.directive('blogComponent', ['$filter', '$timeout', 'WebsiteService', 'toaste
     },
     templateUrl: '/components/component-wrap.html',
     link: function (scope, element, attrs) {
-      scope.isEditing = true;
-      scope.changeBlogImage = function (blog, index) {
-        scope.media({
-          blog: blog,
-          index: index
-        });
-    };
-    scope.deletedPosts = [];
-    scope.component.spacing = scope.$parent.defaultSpacings; 
-    if(!scope.ssbEditor)
-      scope.control.saveBlogData = function () {
-        _.each(scope.blog.blogposts, function (value, index) {
-            var matching_post = _.find(scope.originalBlogPosts, function (item) {
-              return item._id === value._id
-            })
-            if (!angular.equals(matching_post, value))
-              WebsiteService.updatePost(scope.$parent.page._id, value._id, value, function (data) {});
-          })
-        if(scope.deletedPosts.length){
-          WebsiteService.bulkDeletePosts(scope.$parent.page._id, scope.deletedPosts, function (data) {});
-          scope.deletedPosts = [];
-        }
-
+        scope.isEditing = true;
+        scope.changeBlogImage = function (blog, index) {
+            scope.media({
+                blog: blog,
+                index: index
+            });
         };
-      },
+        scope.deletedPosts = [];
+        scope.component.spacing = scope.$parent.defaultSpacings;
+
+        scope.control.saveBlogData = function () {
+            _.each(scope.blog.blogposts, function (value, index) {
+                var matching_post = _.find(scope.originalBlogPosts, function (item) {
+                    return item._id === value._id
+                })
+
+                if (!angular.equals(matching_post, value)) {
+                    WebsiteService.updatePost(scope.$parent.page._id, value._id, value, function (data) {});
+                }
+            });
+
+            if (scope.deletedPosts.length) {
+                WebsiteService.bulkDeletePosts(scope.$parent.page._id, scope.deletedPosts, function (data) {});
+                scope.deletedPosts = [];
+            }
+        };
+    },
     controller: function ($scope, WebsiteService, $compile, $filter, $timeout) {
       $scope.blog = {};
       $scope.showCloud = false;
@@ -249,7 +251,7 @@ app.directive('blogComponent', ['$filter', '$timeout', 'WebsiteService', 'toaste
         }
       });
       console.log('delete post');
-        
+
       };
     }
   };
