@@ -757,59 +757,49 @@ module.exports = {
                                 callback(err);
                             } else {
                                 self.log.debug('referencedSection', referencedSection);
-                                var s = section;
-                                var id = $$.u.idutils.generateUUID();
-                                var refId = s._id;
-                                s = referencedSection.toJSON();
-                                s.ref = refId;
-                                s._id = id;
-                                s.anchor = id;
-                                s.accountId = accountId;
-                                self.log.debug('new dereferenced', s);
-
-
-                                // section is globalHeader reference and user already has globalHeader in their account's section collection
-                                if (s.globalHeader && globalHeader) {
-                                    self.log.debug('page has globalHeader ref, account has globalHeader');
-                                    s._id = globalHeader.id();
-                                    s.refId = referencedSection.id();
+                                if(referencedSection){
+                                    var s = section;
+                                    var id = $$.u.idutils.generateUUID();
+                                    var refId = s._id;
+                                    s = referencedSection.toJSON();
+                                    s.ref = refId;
+                                    s._id = id;
+                                    s.anchor = id;
+                                    s.accountId = accountId;
+                                    self.log.debug('new dereferenced', s);
+    
+    
+                                    // section is globalHeader reference and user already has globalHeader in their account's section collection
+                                    if (s.globalHeader && globalHeader) {
+                                        self.log.debug('page has globalHeader ref, account has globalHeader');
+                                        s._id = globalHeader.id();
+                                        s.refId = referencedSection.id();
+                                    }
+    
+                                    if (s.globalFooter && globalFooter) {
+                                        self.log.debug('page has globalFooter ref, account has globalFooter');
+                                        s._id = globalFooter.id();
+                                        s.refId = referencedSection.id();
+                                    }
+                                    dereferencedSections.push(s);
                                 }
-
-                                if (s.globalFooter && globalFooter) {
-                                    self.log.debug('page has globalFooter ref, account has globalFooter');
-                                    s._id = globalFooter.id();
-                                    s.refId = referencedSection.id();
+                                else{
+                                    self.getDefferedSections(accountId, section, globalHeader, globalFooter, function(updatedSection){
+                                        dereferencedSections.push(updatedSection);
+                                    });
+                                    
                                 }
-
-                                dereferencedSections.push(s);
+                                
 
                                 callback();
                             }
                         });
 
                     } else {
-
-                        if (section.accountId === 0) {
-                            var id = $$.u.idutils.generateUUID();
-                            section._id = id;
-                            section.anchor = id;
-                        }
-
-                        // section is globalHeader reference and user already has globalHeader in their account's section collection
-                        if (section.globalHeader && globalHeader) {
-                            self.log.debug('page has globalHeader ref, account has globalHeader');
-                            section._id = globalHeader.id();
-                            section.refId = section._id;
-                        }
-
-                        if (section.globalFooter && globalFooter) {
-                            self.log.debug('page has globalFooter ref, account has globalFooter');
-                            section._id = globalFooter.id();
-                            section.refId = section._id;
-                        }
-
-                        section.accountId = accountId;
-                        dereferencedSections.push(section);
+                        self.getDefferedSections(accountId, section, globalHeader, globalFooter, function(updatedSection){
+                             dereferencedSections.push(updatedSection);
+                        });
+                       
                         callback();
 
                     }
@@ -1003,6 +993,28 @@ module.exports = {
         });
 
 
+    },
+
+    getDefferedSections: function(accountId, section, globalHeader, globalFooter, fn){
+        var self = this;
+        if (section.accountId === 0) {
+            var id = $$.u.idutils.generateUUID();
+            section._id = id;
+            section.anchor = id;
+        }
+        // section is globalHeader reference and user already has globalHeader in their account's section collection
+        if (section.globalHeader && globalHeader) {
+            self.log.debug('page has globalHeader ref, account has globalHeader');
+            section._id = globalHeader.id();
+            section.refId = section._id;
+        }
+        if (section.globalFooter && globalFooter) {
+            self.log.debug('page has globalFooter ref, account has globalFooter');
+            section._id = globalFooter.id();
+            section.refId = section._id;
+        }
+        section.accountId = accountId; 
+        return fn(section);
     },
 
     listAccountSectionSummaries: function(accountId, fn) {
