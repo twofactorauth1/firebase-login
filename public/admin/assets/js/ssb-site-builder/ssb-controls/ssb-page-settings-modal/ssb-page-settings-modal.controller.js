@@ -12,6 +12,7 @@ app.controller('SiteBuilderPageSettingsModalController', ['$timeout', 'parentVm'
   vm.setAsHomePage = setAsHomePage;
   vm.duplicatePage = duplicatePage;
   vm.hideFromMenu = hideFromMenu;
+  
   function duplicatePage(){
     vm.saveLoading = true;
     
@@ -59,8 +60,8 @@ app.controller('SiteBuilderPageSettingsModalController', ['$timeout', 'parentVm'
     });
   }
 
-  function setAsHomePage(status) {
-    if(status){
+  function setAsHomePage() {
+    if(vm.page.homePage){
       if(vm.parentVm.state.pages["index"] && vm.page.handle !== 'index'){
         angular.element('.modal.in').hide();
         console.log("Homepage already exists");
