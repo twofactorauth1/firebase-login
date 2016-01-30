@@ -14,7 +14,7 @@ app.controller('SiteBuilderPageSettingsModalController', ['$timeout', 'parentVm'
   vm.hideFromMenu = hideFromMenu;
   function duplicatePage(){
     vm.saveLoading = true;
-    saveWebsite();
+    
     SimpleSiteBuilderService.createDuplicatePage(vm.page).then(function(page) {
       SimpleSiteBuilderService.getSite(vm.page.websiteId).then(function() {
         SimpleSiteBuilderService.getPages().then(function() {
@@ -115,7 +115,7 @@ app.controller('SiteBuilderPageSettingsModalController', ['$timeout', 'parentVm'
 
           vm.saveLoading = true;
           angular.element('.modal.in').show();
-          saveWebsite();
+          
           SimpleSiteBuilderService.deletePage(vm.page).then(function(response){
               console.log('page deleted');
               SimpleSiteBuilderService.getSite(vm.page.websiteId).then(function() {
