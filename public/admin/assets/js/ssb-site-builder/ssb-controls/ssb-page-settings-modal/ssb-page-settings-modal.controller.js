@@ -14,6 +14,7 @@ app.controller('SiteBuilderPageSettingsModalController', ['$timeout', 'parentVm'
   vm.hideFromMenu = hideFromMenu;
   function duplicatePage(){
     vm.saveLoading = true;
+    saveWebsite();
     SimpleSiteBuilderService.createDuplicatePage(vm.page).then(function(page) {
       SimpleSiteBuilderService.getSite(vm.page.websiteId).then(function() {
         SimpleSiteBuilderService.getPages().then(function() {
@@ -25,7 +26,6 @@ app.controller('SiteBuilderPageSettingsModalController', ['$timeout', 'parentVm'
     })
   }
   function hideFromMenu(){
-    vm.saveLoading = true;
     angular.element('.modal.in').hide();
     SweetAlert.swal({
       title: "Are you sure?",
@@ -42,55 +42,27 @@ app.controller('SiteBuilderPageSettingsModalController', ['$timeout', 'parentVm'
         var originalPage = angular.copy(vm.originalPage);
         originalPage.mainmenu = false;
         angular.element('.modal.in').show();
-        SimpleSiteBuilderService.savePage(originalPage, true).then(function(page) {
-          SimpleSiteBuilderService.getSite(vm.page.websiteId).then(function() {
-            SimpleSiteBuilderService.getPages().then(function() {
-                vm.page.mainmenu = false;
-                toaster.pop('success', 'Setting Saved', 'The page settings saved successfully.');                
-                vm.saveLoading = false;
-            })
-          }) 
-        }).catch(function(err) {
-            if(err.message)
-              toaster.pop('error', error.message);   
-            else
-              toaster.pop('error', "Setting not saved", "Error while saving page settings"); 
-            angular.element('.modal.in').show();
-            vm.saveLoading = false;
-        });
+        savePage(originalPage).then(function(){
+          vm.page.mainmenu = false;
+          angular.element('.modal.in').show();
+        })
       } else {
-        angular.element('.modal.in').show();
         vm.saveLoading = false;
+        angular.element('.modal.in').show();
       }
     });
   }
 
   function saveSettings() {
-    vm.saveLoading = true;
-  	SimpleSiteBuilderService.savePage(vm.page, true).then(function(page) {
-        vm.originalPage = angular.copy(vm.page);
-          SimpleSiteBuilderService.getSite(vm.page.websiteId).then(function() {
-            SimpleSiteBuilderService.getPages().then(function() {
-                toaster.pop('success', 'Setting Saved', 'The page settings saved successfully.');
-                vm.saveLoading = false;
-                vm.parentVm.closeModal();
-            })
-          })  
-        if (vm.page.homePage) {
-            vm.parentVm.uiState.navigation.loadPage(vm.page._id);
-        }
-	}).catch(function(err) {
-        if(err.message)
-           toaster.pop('error', error.message);   
-          else
-            toaster.pop('error', "Setting not saved", "Error while saving page settings");        
-        vm.saveLoading = false;        
-    });;
+    savePage(vm.page).then(function(){
+      vm.parentVm.closeModal();
+    });
   }
 
   function setAsHomePage(status) {
     if(status){
       if(vm.parentVm.state.pages["index"] && vm.page.handle !== 'index'){
+        angular.element('.modal.in').hide();
         console.log("Homepage already exists");
           SweetAlert.swal({
             title: "Are you sure?",
@@ -118,12 +90,10 @@ app.controller('SiteBuilderPageSettingsModalController', ['$timeout', 'parentVm'
     }
     else{
       vm.page.homePage = false;
-      vm.page = angular.copy(vm.originalPage);
     }
 
   }
   function deletePage() {
-    vm.saveLoading = true;
     angular.element('.modal.in').hide();
     var _deleteText = "Do you want to delete this page";
     if(vm.page.handle === 'index')
@@ -142,7 +112,10 @@ app.controller('SiteBuilderPageSettingsModalController', ['$timeout', 'parentVm'
       closeOnCancel: true
     }, function (isConfirm) {
       if (isConfirm) {
+
+          vm.saveLoading = true;
           angular.element('.modal.in').show();
+          saveWebsite();
           SimpleSiteBuilderService.deletePage(vm.page).then(function(response){
               console.log('page deleted');
               SimpleSiteBuilderService.getSite(vm.page.websiteId).then(function() {
@@ -159,11 +132,32 @@ app.controller('SiteBuilderPageSettingsModalController', ['$timeout', 'parentVm'
               })  
           })
       } else {
-        angular.element('.modal.in').show();
         vm.saveLoading = false;
+        angular.element('.modal.in').show();        
       }
     });
   };
+
+  function savePage(page){
+    vm.saveLoading = true;
+    return(
+      SimpleSiteBuilderService.savePage(page, true).then(function() {      
+        SimpleSiteBuilderService.getSite(page.websiteId).then(function() {
+          SimpleSiteBuilderService.getPages().then(function() {
+              vm.saveLoading = false;              
+              toaster.pop('success', 'Setting Saved', 'The page settings saved successfully.');              
+          })
+        })
+      }).catch(function(err) {
+          vm.saveLoading = false;
+          if(err.message)
+             toaster.pop('error', error.message);   
+          else
+            toaster.pop('error', "Setting not saved", "Error while saving page settings");                  
+      })
+    )
+  }
+  
   vm.loading = true;
   SimpleSiteBuilderService.getPage(vm.pageId, true).then(function(page) {
     vm.page = page.data;
