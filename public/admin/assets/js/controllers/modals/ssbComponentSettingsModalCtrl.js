@@ -401,23 +401,23 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
   });
 
 
-      var getPageComponents = function(page) {
-        var components = [];
-        if (page.components && page.components.length && !page.sections.length) {
-            components = page.components;
-        }
-        else{
-            for (var i = 0; i < page.sections.length; i++) {
-                if (page.sections[i] && page.sections[i].components) {
-                  for (var j = 0; j < page.sections[i].components.length; j++) {
-                    if (page.sections[i].components[j]) {
-                      components.push(page.sections[i].components[j])
-                    }
-                  }
+  function getPageComponents(page) {
+    var components = [];
+    if (page.components && page.components.length && !page.sections.length) {
+        components = page.components;
+    }
+    else{
+        for (var i = 0; i < page.sections.length; i++) {
+            if (page.sections[i] && page.sections[i].components) {
+              for (var j = 0; j < page.sections[i].components.length; j++) {
+                if (page.sections[i].components[j]) {
+                  components.push(page.sections[i].components[j])
                 }
+              }
             }
         }
-        return components;
+    }
+    return components;
   }
 
   $scope.initializeEditLinks = function (link, status) {
@@ -647,14 +647,12 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
         $scope.website.linkLists.forEach(function (value, index) {
           if (value.handle === "head-menu") {
             $scope.component.linkLists[index].links = [];
-            //$scope.saveCustomComponent();
           }
         });
       } else {
         $scope.website.linkLists.forEach(function (value, index) {
           if (value.handle === "head-menu") {
             $scope.website.linkLists[index].links = [];
-            //$scope.updateWebsite($scope.website);
           }
         });
       }
@@ -668,44 +666,7 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
       $rootScope.$broadcast('rzSliderForceRender');
     }, 0);
   };
-
-  // $scope.setLatLon = function (lat, lon) {
-  //   $scope.component.location.lat = lat;
-  //   $scope.component.location.lon = lon;
-  // };
-
-  // $scope.updateContactUsAddress = function () {
-  //   if (!angular.equals($scope.originalContactMap, $scope.component.location)) {
-  //     $scope.locationAddress = null;
-  //      $scope.setLatLon();
-  //     $scope.validateGeoAddress();
-  //   }
-  // };
-
-  // $scope.validateGeoAddress = function (fn) {
-  //   GeocodeService.validateAddress($scope.component.location, $scope.locationAddress, function (data, results) {
-  //     if (data && results.length === 1) {
-  //       $timeout(function () {
-  //         $scope.$apply(function () {
-  //           $scope.setLatLon(results[0].geometry.location.lat(), results[0].geometry.location.lng());
-  //           $scope.errorMapData = false;
-  //           angular.copy($scope.component.location, $scope.originalContactMap);
-  //           $scope.contactMap.refreshMap();
-  //         });
-  //       }, 0);
-  //     } else {
-  //       $timeout(function () {
-  //         $scope.$apply(function () {
-  //           $scope.errorMapData = true;
-  //           angular.copy($scope.component.location, $scope.originalContactMap);
-  //         });
-  //       }, 0);
-  //     }
-  //     if (fn) {
-  //       fn();
-  //     }
-  //   });
-  // };
+  
 
   $scope.saveComponentVersion = function () {
     $scope.$parent.vm.pendingChanges = true;
@@ -1004,76 +965,7 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
     }
   });
 
-  // /*
-  //  * @validateHours
-  //  *
-  //  */
-
-  // $scope.validateHours = function (hours, index) {
-  //   $scope.contactHours[index].valid = true;
-  //   if (!hours.closed) {
-  //     var startTime = hours.start;
-  //     var endTime = hours.end;
-  //     if (startTime && endTime) {
-  //       startTime = startTime.split(" ")[1] === 'pm' && startTime.split(":")[0] !== '12' ? parseInt(startTime.split(":")[0], 10) + 12 : parseInt(startTime.split(":")[0], 10);
-  //       endTime = endTime.split(" ")[1] === 'pm' && endTime.split(":")[0] !== '12' ? parseInt(endTime.split(":")[0], 10) + 12 : parseInt(endTime.split(":")[0], 10);
-  //       startTime = parseInt(hours.start.split(":")[1], 10) === 30 ? startTime + 0.5 : startTime;
-  //       endTime = parseInt(hours.end.split(":")[1], 10) === 30 ? endTime + 0.5 : endTime;
-  //     }
-  //     if (hours.split && $scope.component.splitHours) {
-  //       angular.element("#business_hours_start_" + index).removeClass('has-error');
-  //       angular.element("#business_hours_start2_" + index).removeClass('has-error');
-  //       angular.element("#business_hours_end_" + index).removeClass('has-error');
-  //       var startTime2 = hours.start2;
-  //       var endTime2 = hours.end2;
-  //       if (startTime2 && endTime2) {
-  //         startTime2 = startTime2.split(" ")[1] === 'pm' && startTime2.split(":")[0] !== '12' ? parseInt(startTime2.split(":")[0], 10) + 12 : parseInt(startTime2.split(":")[0], 10);
-  //         endTime2 = endTime2.split(" ")[1] === 'pm' && endTime2.split(":")[0] !== '12' ? parseInt(endTime2.split(":")[0], 10) + 12 : parseInt(endTime2.split(":")[0], 10);
-  //         startTime2 = parseInt(hours.start2.split(":")[1], 10) === 30 ? startTime2 + 0.5 : startTime2;
-  //         endTime2 = parseInt(hours.end2.split(":")[1], 10) === 30 ? endTime2 + 0.5 : endTime2;
-  //       }
-  //       if (startTime > endTime || startTime > startTime2 || startTime > endTime2) {
-  //         if (startTime > endTime) {
-  //           angular.element("#business_hours_start_" + index).addClass('has-error');
-  //         } else if (startTime > startTime2) {
-  //           angular.element("#business_hours_start_" + index).addClass('has-error');
-  //         } else if (startTime > endTime2) {
-  //           angular.element("#business_hours_start_" + index).addClass('has-error');
-  //         }
-  //         $scope.contactHours[index].valid = false;
-  //       }
-  //       if (endTime > startTime2 || endTime > endTime2) {
-  //         if (endTime > startTime2) {
-  //           angular.element("#business_hours_end_" + index).addClass('has-error');
-  //         } else if (endTime > endTime2) {
-  //           angular.element("#business_hours_end_" + index).addClass('has-error');
-  //         }
-  //         $scope.contactHours[index].valid = false;
-  //       }
-  //       if (startTime2 > endTime2) {
-  //         angular.element("#business_hours_start2_" + index).addClass('has-error');
-  //         $scope.contactHours[index].valid = false;
-  //       }
-  //     } else if (!hours.wholeday) {
-  //       angular.element("#business_hours_start_" + index).removeClass('has-error');
-  //       if (startTime > endTime) {
-  //         angular.element("#business_hours_start_" + index).addClass('has-error');
-  //         $scope.contactHours[index].valid = false;
-  //       }
-  //     }
-  //   }
-
-  //   var validate = _.where($scope.contactHours, {
-  //     valid: false
-  //   });
-  //   if (validate && validate.length) {
-  //     $scope.contactHoursInvalid = true;
-  //   } else {
-  //     $scope.contactHoursInvalid = false;
-  //   }
-
-  // };
-
+  
   $scope.slugifyAnchor = function (url) {
     if (url) {
       $scope.component.anchor = $filter('slugify')(url);
