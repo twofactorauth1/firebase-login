@@ -29,23 +29,19 @@ app.directive('testimonialsComponent', ['$timeout', function ($timeout) {
             }
         });
 
-        var addRemoveTestimonials = function(index, add){
-            var testimonials = angular.copy(scope.component.testimonials);
-            if(add){
-                var newTestimonial = {
-                    "img": "<img src='https://s3-us-west-2.amazonaws.com/indigenous-admin/default-user.png'/>",
-                    "name": "First Last",
-                    "site": "www.examplesite.com",
-                    "text": "This is the testimonial."
-                };
-                testimonials.splice(index + 1, 0, newTestimonial);
+        scope.newTestimonial = {
+            "img": "<img src='https://s3-us-west-2.amazonaws.com/indigenous-admin/default-user.png'/>",
+            "name": "First Last",
+            "site": "www.examplesite.com",
+            "text": "This is the testimonial."
+        };
+
+        function addRemoveTestimonials(index, add){            
+            if(add){                
+                scope.component.testimonials.splice(index + 1, 0, scope.newTestimonial);
             } else {
-                testimonials.splice(index, 1);
-            }
-            scope.component.testimonials = testimonials;
-            $timeout(function () {
-                scope.dataLoaded = !scope.dataLoaded;
-            });
+                scope.component.testimonials.splice(index, 1);
+            }            
         };
 
         scope.deleteTestimonial = function (index) {
@@ -58,8 +54,9 @@ app.directive('testimonialsComponent', ['$timeout', function ($timeout) {
         };
 
         scope.control.refreshSlider = function () {
+            scope.dataLoaded = false;
             $timeout(function () {
-                scope.dataLoaded = !scope.dataLoaded;
+                scope.dataLoaded = true;
             });
         };
 
