@@ -27,6 +27,11 @@ function ssbSiteBuilderSiteTemplatesController($scope, $attrs, $filter, $documen
         ], function(values) {
 
         var pages = values[0];
+        if(pages)
+        {
+            delete pages["blog"];
+            delete pages["single-post"];
+        }
         var website = values[1];
 
         if (pages && website && website._id) {
