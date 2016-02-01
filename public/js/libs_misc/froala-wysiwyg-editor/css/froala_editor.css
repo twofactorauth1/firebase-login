@@ -204,7 +204,7 @@ iframe.fr-iframe {
 .fr-toolbar.fr-inline.fr-desktop {
   margin-right: 10px;
   position: absolute;
-  margin-top: 20px;
+  margin-top: 10px;
 }
 .fr-toolbar.fr-inline.fr-desktop .fr-arrow {
   width: 0;
