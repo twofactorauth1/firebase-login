@@ -1,4 +1,3 @@
-$.FroalaEditor.DefineIcon('insertButton', { NAME: 'plus'})
 var toolbarbuttons = [
         'bold',
         'italic',
@@ -20,6 +19,7 @@ var toolbarbuttons = [
         '-',
         'insertLink',
         'insertButton',
+        'insertIcon',
         'insertImage',
         'insertVideo',
         'insertFile',
@@ -42,25 +42,6 @@ var spectrumColors = [
               ["#E29C45", "#F9690E", "#CA6924", "#F5AB35", "#BFBFBF", "#F2F1EF", "#BDC3C7", "#ECF0F1", "#D2D7D3", "#757D75"],
               ["#EEEEEE", "#ABB7B7", "#6C7A89", "#95A5A6", "#9ACCCB", "#E8E7E7", "#000000", "#FFFFFF", "#50c7e8"]
             ];
-
-$.FroalaEditor.RegisterCommand('insertButton', {
-    title: 'Insert Button',
-    focus: true,
-    undo: true,
-    refreshAfterCallback: true,
-    callback: function () {
-        var buttonHTML = '<a class="btn btn-primary ssb-theme-btn">' +
-                            '<span contenteditable="false" class="ssb-froala-content-editable-false">' +
-                                '&nbsp;' +
-                            '</span>' +
-                            'Button Text' +
-                         '</a>';
-
-        this.html.insert(buttonHTML);
-        this.undo.saveStep();
-    }
-});
-
 
 $.FroalaEditor.config = {
      enter: $.FroalaEditor.ENTER_BR,
