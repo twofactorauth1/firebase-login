@@ -41,7 +41,7 @@ app.directive("elem", function($timeout, $compile) {
 
       if (scope.$parent.ssbEditor || (scope.$parent.vm && scope.$parent.vm.ssbEditor)) {
         $(function() {
-          setTimeout(function() {
+          $timeout(function() {
             $(elem).on('froalaEditor.initialized', function(e, editor) {
               //var div = editor.$tb.first("fr-toolbar");
               //div.attr('ind-draggable', 'ind-draggable');
@@ -56,6 +56,16 @@ app.directive("elem", function($timeout, $compile) {
                 scope.updateFroalaContent(editor);
               }).on('froalaEditor.image.resizeEnd', function(e, editor, $img) {
                 scope.updateFroalaContent(editor);
+              }).on('froalaEditor.toolbar.show', function(e, editor) {
+                $timeout(function(){
+                  var left = editor.$tb.offset().left;
+                  var screenLeft = 0;
+                  if($("#componentloader").offset)
+                    screenLeft = $("#componentloader").offset().left;
+                  if(left < screenLeft){
+                    editor.$tb.css("left", screenLeft);
+                  }  
+                },0)                              
               });
           }, 1000);
         });
