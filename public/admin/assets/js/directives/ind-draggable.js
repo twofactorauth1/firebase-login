@@ -14,7 +14,12 @@ app.directive('indDraggable', ['$document', function($document) {
        // cursor: 'pointer'
       });
 
-      element.on('mousedown', function(event) {
+      // Added handle to drag element
+      var container = element.find(".draggable-handle");
+      if(container.length === 0)
+        container = element;
+
+      container.on('mousedown', function(event) {
 
         // Prevent default dragging of selected content (if not form element)
         if (event.target.nodeName !== 'INPUT' &&
