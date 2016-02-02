@@ -17,6 +17,7 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude) {
     vm.sectionBGStyle = sectionBGStyle;
     vm.componentClass = componentClass;
     vm.componentStyle = componentStyle;
+    vm.sectionHasFooter = sectionHasFooter;
 
     //TODO: use https://github.com/martinandert/react-inline to generate inline styles for sections/components
 
@@ -37,6 +38,10 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude) {
 
             }
 
+        }
+
+        if (vm.sectionHasFooter(section)) {
+            classString += ' ssb-page-section-layout-overflow-visible';
         }
 
         // console.debug('section classString')
@@ -272,6 +277,10 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude) {
             });
         }
 
+    }
+
+    function sectionHasFooter(section) {
+        return _.findWhere(section.components, { type: 'footer' });
     }
 
     function init(element) {

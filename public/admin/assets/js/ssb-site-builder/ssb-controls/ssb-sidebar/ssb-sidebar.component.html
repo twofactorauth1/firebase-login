@@ -74,7 +74,7 @@
                                     <i
                                         class="fa fa-info"
                                         tooltip-placement="left"
-                                        tooltip-html-unsafe="<h4>{{section.title}}</h4><p>{{section.description}}</p>">
+                                        tooltip-html-unsafe="<h4>{{section.name || section.title}}</h4><p>{{section.description}}</p>">
                                     </i>
                                 </div>
                                 <div class="ssb-sidebar-add-section-btn">
@@ -95,7 +95,7 @@
                                     <i
                                         class="fa fa-info"
                                         tooltip-placement="left"
-                                        tooltip-html-unsafe="<h4>{{section.title}}</h4><p>{{section.description}}</p>">
+                                        tooltip-html-unsafe="<h4>{{section.name || section.title}}</h4><p>{{section.description}}</p>">
                                     </i>
                                 </div>
                                 <div class="ssb-sidebar-add-section-btn">
@@ -370,7 +370,7 @@
                             </div>
                         </div>
 
-                        <div class="row padding-10">
+                        <!-- <div class="row padding-10">
                             Heading Size: <input type="number" string-to-number="" ng-model="vm.state.website.themeOverrides.styles.headingSize" min="12" max="500" data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down"> (px)
                         </div>
                         <div class="row padding-10">
@@ -393,7 +393,7 @@
                             <div ng-attr-style="background-color: {{vm.state.website.themeOverrides.styles.bodyBackgroundColor}}; font-family: {{vm.state.website.themeOverrides.defaultFontStack}};">
                                 {{vm.state.website.themeOverrides.paragraphFontStack}}
                             </div>
-                        </div>
+                        </div> -->
 
 
                     </div>
@@ -404,39 +404,5 @@
 
     <div data-ng-include data-src=" 'assets/js/ssb-site-builder/ssb-controls/ssb-sidebar/templates/ssb-sidebar-section-panel.component.html' "></div>
 
-
-	    <!-- <section ng-repeat="linkList in vm.state.website.linkLists track by $index">
-	        <h4 class="ssb-sidebar-sub-heading">{{::linkList.name}}</h4>
-	        <ul class="list-unstyled" ng-sortable="vm.sortableOptions" ng-model="linkList.links">
-	        	<li ng-repeat="link in linkList.links track by $index" class="ssb-page-section-settings-item">
-	        		<div class="ssb-sidebar-item-icon ssb-sidebar-move-handle ti-move display-ib"></div>
-	        		<div class="ssb-sidebar-item-icon ssb-sidebar-item-icon-offset-1 ti-close display-ib" tooltip-placement="left" tooltip-html-unsafe="Remove from {{::linkList.name}}"></div>
-	        		<div class="panel-group">
-		        		<div class="ssb-sidebar-sortable-item panel panel-default">
-			        		<div class="panel-heading">
-				        		<h4 class="panel-title">
-				        			<a href page-id="page._id" ng-click="vm.uiState.navigation.loadPage(page._id)">{{link.label}}</a>
-				        		</h4>
-				        	</div>
-			        	</div>
-			        </div>
-	        	</li>
-	        </ul>
-	    </section> -->
-
-	<!-- </div>
-
-	<div class="page-editor-group editor-group"> -->
-
-		<!-- <div class="ssb-sidebar-heading">
-			<div class="ti-arrow-left" ng-click="vm.uiState.navigation.back()"></div>
-			<h4>{{vm.state.page.title}}</h4>
-		</div> -->
-
-
-
-
-
-	<!-- </div> -->
 
 </div>

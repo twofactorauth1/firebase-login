@@ -54,6 +54,7 @@
         ssbService.openMediaModal = openMediaModal;
         ssbService.setMediaForComponent = setMediaForComponent;
         ssbService.getPagesWithSections = getPagesWithSections;
+        ssbService.extendComponentData = extendComponentData;
 
         ssbService.contentComponentDisplayOrder = [];
 
@@ -605,7 +606,7 @@
 
         }
 
-        function addSectionToPage(section, version, modalInstance) {
+        function addSectionToPage(section, version, replaceAtIndex, oldSection) {
             var insertAt;
             var numSections;
             var hasHeader = false;
@@ -626,17 +627,60 @@
             return (
                 ssbService.getSection(section, version || 1).then(function(response) {
                     if (response) {
-                        ssbService.page.sections.splice(insertAt, 0, response);
-                        ssbService.setActiveSection(insertAt);
-                        ssbService.setActiveComponent(null);
-                        if (modalInstance) {
-                            modalInstance.close();
+
+                        if (replaceAtIndex) {
+                            var extendedData = ssbService.extendComponentData(oldSection, response);
+                            ssbService.setActiveSection(null);
+                            ssbService.page.sections.splice(replaceAtIndex, 1, extendedData);
+                            ssbService.setActiveSection(replaceAtIndex);
+                            ssbService.setActiveComponent(null);
+                        } else {
+                            ssbService.page.sections.splice(insertAt, 0, response);
+                            ssbService.setActiveSection(insertAt);
+                            ssbService.setActiveComponent(null);
                         }
+
                     } else {
                         console.error("Error loading section/component:", section);
                     }
                 })
             )
+
+        }
+
+        /*
+         * extendComponentData
+         * - extend authored data onto new components
+         * - match component order of newSection
+         * - omit keys we don't want transfered
+         *
+         * @param {} oldSection - section being replaced
+         * @param {} newSection - section from server
+         *
+         * @returns {*} newSection with any authored data
+         *
+         */
+        function extendComponentData(oldSection, newSection) {
+
+            var keysToOmit = ['$$hashKey', '_id', 'anchor', 'accountId', 'version', 'type', 'layout', 'spacing'];
+            var newComponents = angular.copy(newSection.components);
+            var newComponentsOrder = _.invert(_.object(_.pairs(_.pluck(newComponents, 'type')))); // ['componentType1', 'componentType2', ...]
+            var oldComponents = _(angular.copy(oldSection.components)).chain()
+
+                                    .sortBy(function(x) { // sort by order of newComponents
+                                        return newComponentsOrder[x.type] && parseInt(newComponentsOrder[x.type], 10)
+                                    })
+
+                                    .value(); // return the new array
+
+            delete newSection.components;
+            delete oldSection.components;
+
+            newSection.components = _.map(newComponents, function(c, index) {
+                return $.extend({}, c, _.omit(oldComponents[index], keysToOmit));
+            });
+
+            return $.extend({}, newSection, _.omit(oldSection, keysToOmit));
 
         }
 

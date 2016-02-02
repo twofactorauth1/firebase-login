@@ -758,54 +758,55 @@ module.exports = {
                             } else {
                                 self.log.debug('referencedSection', referencedSection);
                                 var id = $$.u.idutils.generateUUID();
-                                if(referencedSection)
-                                {
-                                        var s = section;
-                                        var refId = s._id;
-                                        s = referencedSection.toJSON();
-                                        s.ref = refId;
-                                        s._id = id;
-                                        s.anchor = id;
-                                        s.accountId = accountId;
-                                        self.log.debug('new dereferenced', s);
+                                if (referencedSection) {
+                                    var s = section;
+                                    var refId = s._id;
+                                    s = referencedSection.toJSON();
+                                    s.ref = refId;
+                                    s._id = id;
+                                    s.anchor = id;
+                                    s.accountId = accountId;
+                                    self.log.debug('new dereferenced', s);
 
 
-                                        // section is globalHeader reference and user already has globalHeader in their account's section collection
-                                        if (s.globalHeader && globalHeader) {
-                                            self.log.debug('page has globalHeader ref, account has globalHeader');
-                                            s._id = globalHeader.id();
-                                            s.refId = referencedSection.id();
-                                        }
-
-                                        if (s.globalFooter && globalFooter) {
-                                            self.log.debug('page has globalFooter ref, account has globalFooter');
-                                            s._id = globalFooter.id();
-                                            s.refId = referencedSection.id();
-                                        }
-
-                                        dereferencedSections.push(s);
+                                    // section is globalHeader reference and user already has globalHeader in their account's section collection
+                                    if (s.globalHeader && globalHeader) {
+                                        self.log.debug('page has globalHeader ref, account has globalHeader');
+                                        s._id = globalHeader.id();
+                                        s.refId = referencedSection.id();
                                     }
-                                    else{
-                                        section._id = id;
-                                        section.anchor = id;
-                                        section.accountId = accountId;
 
-                                        // section is globalHeader reference and user already has globalHeader in their account's section collection
-                                        if (section.globalHeader && globalHeader) {
-                                            self.log.debug('page has globalHeader ref, account has globalHeader');
-                                            section._id = globalHeader.id();
-                                            section.refId = section._id;
-                                        }
-
-                                        if (section.globalFooter && globalFooter) {
-                                            self.log.debug('page has globalFooter ref, account has globalFooter');
-                                            section._id = globalFooter.id();
-                                            section.refId = section._id;
-                                        }
-
-                                        section.accountId = accountId;
-                                        dereferencedSections.push(section);
+                                    if (s.globalFooter && globalFooter) {
+                                        self.log.debug('page has globalFooter ref, account has globalFooter');
+                                        s._id = globalFooter.id();
+                                        s.refId = referencedSection.id();
                                     }
+
+                                    dereferencedSections.push(s);
+
+                                } else {
+
+                                    section._id = id;
+                                    section.anchor = id;
+                                    section.accountId = accountId;
+
+                                    // section is globalHeader reference and user already has globalHeader in their account's section collection
+                                    if (section.globalHeader && globalHeader) {
+                                        self.log.debug('page has globalHeader ref, account has globalHeader');
+                                        section._id = globalHeader.id();
+                                        section.refId = section._id;
+                                    }
+
+                                    if (section.globalFooter && globalFooter) {
+                                        self.log.debug('page has globalFooter ref, account has globalFooter');
+                                        section._id = globalFooter.id();
+                                        section.refId = section._id;
+                                    }
+
+                                    section.accountId = accountId;
+                                    dereferencedSections.push(section);
+
+                                }
 
                                 callback();
                             }
@@ -813,7 +814,10 @@ module.exports = {
 
                     } else {
 
+                        self.log.debug(section.name + ' :: ' + section.title);
+
                         if (section.accountId === 0) {
+                            self.log.debug('section.accountId === 0', section.name + ' :: ' + section.title);
                             var id = $$.u.idutils.generateUUID();
                             section._id = id;
                             section.anchor = id;

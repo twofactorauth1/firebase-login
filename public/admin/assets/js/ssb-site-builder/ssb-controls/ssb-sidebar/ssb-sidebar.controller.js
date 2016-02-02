@@ -243,8 +243,8 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
     	)
     }
 
-    function addSectionToPage(section, version) {
-      SimpleSiteBuilderService.addSectionToPage(section, version, vm.modalInstance).then(function() {
+    function addSectionToPage(section, version, replaceAtIndex, oldSection) {
+      SimpleSiteBuilderService.addSectionToPage(section, version, replaceAtIndex, vm.state.page.sections[vm.uiState.activeSectionIndex]).then(function() {
         vm.scrollToActiveSection();
       });
     }

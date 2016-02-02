@@ -24,11 +24,14 @@ function ssbSiteBuilderSidebarSettingsPanelController($scope, $attrs, $filter, $
     vm.hideSectionFromPage = pVm.hideSectionFromPage;
     vm.editSectionName = pVm.editSectionName;
     vm.moveSection = pVm.moveSection;
-
+    vm.enabledPlatformSections = pVm.enabledPlatformSections;
+    vm.customerTags = pVm.customerTags;
+    vm.addSectionToPage = pVm.addSectionToPage;
 
     vm.tagToCustomer = tagToCustomer;
-    vm.customerTags = pVm.customerTags;
-    vm.setTags = vm.setTags;
+    vm.setTags = setTags;
+    vm.filteredSections = filteredSections;
+    vm.isSelectedLayout = isSelectedLayout;
 
 
     //TODO: move into config services
@@ -51,12 +54,84 @@ function ssbSiteBuilderSidebarSettingsPanelController($scope, $attrs, $filter, $
         console.debug(color);
     });
 
+    /*
+     * isSelectedLayout
+     *
+     * @param section {}
+     * @returns bool
+     *
+     * TODO: optimize with filteredSections?
+     *
+     */
+    function isSelectedLayout(section) {
+
+        var selected = false;
+        var currentSection = vm.state.page.sections[vm.uiState.activeSectionIndex];
+
+        if (section.type === 'ssb-page-section' && section.version === currentSection.version) {
+
+            //match title
+            selected = section.title === currentSection.title;
+
+        } else {
+
+            var childComponents = _.map(currentSection.components, function(component) {
+                return {
+                    type: component.type,
+                    version: component.version
+                }
+            });
+            var match = _.findWhere(childComponents, { 'type': section.type, 'version': parseInt(section.version, 10) });
+
+            //match type
+            selected = angular.isObject(match);
+
+        }
+
+        return selected;
+    }
+
+    /*
+     * filteredSections
+     * - Return section content related to currently selected section
+     *
+     * @returns {*}
+     *
+     * TODO: optimize with isSelectedLayout?
+     *
+     */
+    function filteredSections() {
+
+        var currentSection = vm.state.page.sections[vm.uiState.activeSectionIndex];
+        var childComponentTypes = _(currentSection.components).pluck('type');
+
+        //filter list of enabled content sections based on title or type
+        return _.filter(vm.enabledPlatformSections, function(section) {
+
+            //if ssb-page-section, match on title
+            if (section.type === 'ssb-page-section') {
+
+                //match title
+                return section.title === currentSection.title;
+
+            //else if legacy component
+            } else if (currentSection.components.length === 1) {
+
+                //match type
+                return _.contains(childComponentTypes, section.type);
+
+            }
+
+        })
+
+
+    }
 
     function tagToCustomer(value) {
       return CustomerService.tagToCustomer(value);
     }
 
-    vm.setTags = function (_customerTags) {
+    function setTags(_customerTags) {
         console.log('setTags >>>');
 
         _.each(vm.component.tags, function (tag , index) {
