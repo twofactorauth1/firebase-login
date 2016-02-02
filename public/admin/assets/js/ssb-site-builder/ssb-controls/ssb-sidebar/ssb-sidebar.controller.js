@@ -396,8 +396,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
                     //reset section panel
                     vm.uiState.navigation.sectionPanel.reset();
 
-                    saveWebsite();
-
+                    saveWebsite().then(function(){
                     return (
                         SimpleSiteBuilderService.savePage(vm.state.page).then(function(response){
                             console.log('page saved');
@@ -405,8 +404,8 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
                         }).catch(function(err) {
                             toaster.pop('error', 'Error', 'The page was not saved. Please try again.');
                         })
-                    )
-
+                      )
+                    })
                 }
             });
 
@@ -419,16 +418,18 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
             //reset section panel
             vm.uiState.navigation.sectionPanel.reset();
 
-            saveWebsite();
-
-            return (
+            saveWebsite().then(function(){
+              return (
                 SimpleSiteBuilderService.savePage(vm.state.page).then(function(response){
                     console.log('page saved');
                     toaster.pop('success', 'Page Saved', 'The page was saved successfully.');
                 }).catch(function(err) {
                     toaster.pop('error', 'Error', 'The page was not saved. Please try again.');
                 })
-            )
+              )
+            })
+
+            
         }
 
     }
@@ -631,15 +632,15 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
             return;
         }
         vm.state.saveLoading = true;
-        vm.saveWebsite();
-        return (
+        vm.saveWebsite().then(function(){
+          return (
             SimpleSiteBuilderService.createPage(template._id).then(function(data) {              
                   vm.closeModal();
                   vm.state.saveLoading = false;
                   vm.uiState.navigation.loadPage(data.data._id);              
             })
-        )
-
+          )
+        })
     };
 
     function getNumberOfPages() {
@@ -832,10 +833,11 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
       }, function (isConfirm) {
         if (isConfirm) {
           vm.state.saveLoading = true;
-          saveWebsite();
-          SimpleSiteBuilderService.createDuplicatePage(vm.state.page).then(function(page) {            
-            vm.state.saveLoading = false;
-            vm.uiState.navigation.loadPage(page.data._id);
+          saveWebsite().then(function(){
+            SimpleSiteBuilderService.createDuplicatePage(vm.state.page).then(function(page) {            
+              vm.state.saveLoading = false;
+              vm.uiState.navigation.loadPage(page.data._id);
+            })
           })
         }
       });

@@ -15,12 +15,14 @@ app.controller('SiteBuilderPageSettingsModalController', ['$timeout', 'parentVm'
   
   function duplicatePage(){
     vm.saveLoading = true;
-    saveWebsite();
-    SimpleSiteBuilderService.createDuplicatePage(vm.page).then(function(page) {
+    saveWebsite().then(function(){
+      SimpleSiteBuilderService.createDuplicatePage(vm.page).then(function(page) {
         vm.parentVm.closeModal();
         vm.saveLoading = false;
         vm.parentVm.uiState.navigation.loadPage(page.data._id);
-    });
+      });
+    })
+    
   }
   function hideFromMenu(){
     angular.element('.modal.in').hide();
@@ -112,21 +114,22 @@ app.controller('SiteBuilderPageSettingsModalController', ['$timeout', 'parentVm'
 
           vm.saveLoading = true;
           angular.element('.modal.in').show();
-          saveWebsite();
-          SimpleSiteBuilderService.deletePage(vm.page).then(function(response){
-              console.log('page deleted');
-              SimpleSiteBuilderService.getSite(vm.page.websiteId).then(function() {
-                SimpleSiteBuilderService.getPages().then(function() {
-                 toaster.pop('success', 'Page deleted', 'The page deleted successfully.');                  
-                  vm.parentVm.closeModal();
-                  vm.saveLoading = false;
-                  if(vm.parentVm.state.page._id === vm.page._id){
-                  	$timeout(function () {
-                			$location.path('/website/site-builder/pages/');
-              		}, 0);
-                  }
-                });
-              })  
+          saveWebsite().then(function(){
+            SimpleSiteBuilderService.deletePage(vm.page).then(function(response){
+                console.log('page deleted');
+                SimpleSiteBuilderService.getSite(vm.page.websiteId).then(function() {
+                  SimpleSiteBuilderService.getPages().then(function() {
+                   toaster.pop('success', 'Page deleted', 'The page deleted successfully.');                  
+                    vm.parentVm.closeModal();
+                    vm.saveLoading = false;
+                    if(vm.parentVm.state.page._id === vm.page._id){
+                    	$timeout(function () {
+                  			$location.path('/website/site-builder/pages/');
+                		}, 0);
+                    }
+                  });
+                })  
+            })
           })
       } else {
         vm.saveLoading = false;
@@ -137,23 +140,24 @@ app.controller('SiteBuilderPageSettingsModalController', ['$timeout', 'parentVm'
 
   function savePage(page){
     vm.saveLoading = true;
-    saveWebsite();
-    return(
-      SimpleSiteBuilderService.savePage(page, true).then(function() {      
-        SimpleSiteBuilderService.getSite(page.websiteId).then(function() {
-          SimpleSiteBuilderService.getPages().then(function() {
-              vm.saveLoading = false;              
-              toaster.pop('success', 'Setting Saved', 'The page settings saved successfully.');              
+    saveWebsite().then(function(){
+      return(
+        SimpleSiteBuilderService.savePage(page, true).then(function() {      
+          SimpleSiteBuilderService.getSite(page.websiteId).then(function() {
+            SimpleSiteBuilderService.getPages().then(function() {
+                vm.saveLoading = false;              
+                toaster.pop('success', 'Setting Saved', 'The page settings saved successfully.');              
+            })
           })
+        }).catch(function(err) {
+            vm.saveLoading = false;
+            if(err.message)
+               toaster.pop('error', error.message);   
+            else
+              toaster.pop('error', "Setting not saved", "Error while saving page settings");                  
         })
-      }).catch(function(err) {
-          vm.saveLoading = false;
-          if(err.message)
-             toaster.pop('error', error.message);   
-          else
-            toaster.pop('error', "Setting not saved", "Error while saving page settings");                  
-      })
-    )
+      )
+    })
   }
 
   function saveWebsite() {
