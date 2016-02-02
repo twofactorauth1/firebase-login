@@ -291,7 +291,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
             vm.uiState.accordion.sections[index].isOpen = true;
 
             //if there is only 1 component in a section, make it active
-            if (vm.state.page.sections[index].components && vm.state.page.sections[index].components.length === 1) {
+            if (vm.state.page.sections[index] && vm.state.page.sections[index].components && vm.state.page.sections[index].components.length === 1) {
                 updateActiveComponent(0);
             } else {
                 SimpleSiteBuilderService.setActiveComponent(undefined);
