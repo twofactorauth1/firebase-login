@@ -2823,10 +2823,10 @@
   margin-bottom: 15px;
 }
 #componentloader .products-v1 .btnLaunchCart {
-  position: fixed;
-  right: 0;
-  top: 0;
-  margin-top: 30px;
+  position: fixed !important;
+  right: 0 !important;
+  top: 0 !important;
+  left: inherit !important;
   margin-top: 130px;
   border-top-right-radius: 0px;
   border-bottom-right-radius: 0px;
