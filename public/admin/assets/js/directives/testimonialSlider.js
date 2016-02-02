@@ -10,13 +10,15 @@ app.directive('testimonialSlider',function($timeout){
  		$(element).slick("unslick");
         var testimonials = angular.copy(scope.component.testimonials);
         if(newSlide){                
-            testimonials.splice(index + 1, 0, scope.newTestimonial);
+            testimonials.splice(index + 1, 0, angular.copy(scope.newTestimonial));
         } else {
             testimonials.splice(index, 1);
         }
         scope.component.testimonials = testimonials;
         $timeout(function () {
-            $(element).slick(scope.$eval(attrs.testimonialSlider));
+            scope.$apply(function () {
+                $(element).slick(scope.$eval(attrs.testimonialSlider));
+            })
         });
     };
 
