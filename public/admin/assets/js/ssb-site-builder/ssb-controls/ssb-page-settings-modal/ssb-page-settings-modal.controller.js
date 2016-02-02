@@ -15,7 +15,7 @@ app.controller('SiteBuilderPageSettingsModalController', ['$timeout', 'parentVm'
   
   function duplicatePage(){
     vm.saveLoading = true;
-    
+    saveWebsite();
     SimpleSiteBuilderService.createDuplicatePage(vm.page).then(function(page) {
         vm.parentVm.closeModal();
         vm.saveLoading = false;
@@ -112,7 +112,7 @@ app.controller('SiteBuilderPageSettingsModalController', ['$timeout', 'parentVm'
 
           vm.saveLoading = true;
           angular.element('.modal.in').show();
-          
+          saveWebsite();
           SimpleSiteBuilderService.deletePage(vm.page).then(function(response){
               console.log('page deleted');
               SimpleSiteBuilderService.getSite(vm.page.websiteId).then(function() {
@@ -137,6 +137,7 @@ app.controller('SiteBuilderPageSettingsModalController', ['$timeout', 'parentVm'
 
   function savePage(page){
     vm.saveLoading = true;
+    saveWebsite();
     return(
       SimpleSiteBuilderService.savePage(page, true).then(function() {      
         SimpleSiteBuilderService.getSite(page.websiteId).then(function() {
@@ -154,7 +155,14 @@ app.controller('SiteBuilderPageSettingsModalController', ['$timeout', 'parentVm'
       })
     )
   }
-  
+
+  function saveWebsite() {
+      return (
+          SimpleSiteBuilderService.saveWebsite(vm.state.website).then(function(response){
+              console.log('website saved');
+          })
+      )
+  }  
   vm.loading = true;
   SimpleSiteBuilderService.getPage(vm.pageId, true).then(function(page) {
     vm.page = page.data;
