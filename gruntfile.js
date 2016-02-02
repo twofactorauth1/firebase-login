@@ -20,6 +20,7 @@ var srcfiles = [];
 
 var bowerLockdown = require('./utils/bowerlockdown');
 var accountActivity = require('./utils/accountActivity');
+var _ = require('underscore');
 
 module.exports = function(grunt) {
 
@@ -355,7 +356,7 @@ module.exports = function(grunt) {
         karma: {
             unit: {
                 configFile: 'karma.conf.js',
-                singleRun: true,
+                singleRun: true
             }
         },
 
@@ -517,6 +518,7 @@ module.exports = function(grunt) {
         var done = this.async();
         accountActivity.cleanupContacts(done);
     });
+
 
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-requirejs');
