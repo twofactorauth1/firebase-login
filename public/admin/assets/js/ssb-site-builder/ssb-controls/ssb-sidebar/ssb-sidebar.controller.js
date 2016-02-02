@@ -243,8 +243,8 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
     	)
     }
 
-    function addSectionToPage(section, version) {
-      SimpleSiteBuilderService.addSectionToPage(section, version, vm.modalInstance).then(function() {
+    function addSectionToPage(section, version, replaceAtIndex, oldSection) {
+      SimpleSiteBuilderService.addSectionToPage(section, version, replaceAtIndex, vm.state.page.sections[vm.uiState.activeSectionIndex]).then(function() {
         vm.scrollToActiveSection();
       });
     }
@@ -396,8 +396,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
                     //reset section panel
                     vm.uiState.navigation.sectionPanel.reset();
 
-                    saveWebsite();
-
+                    saveWebsite().then(function(){
                     return (
                         SimpleSiteBuilderService.savePage(vm.state.page).then(function(response){
                             console.log('page saved');
@@ -405,8 +404,8 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
                         }).catch(function(err) {
                             toaster.pop('error', 'Error', 'The page was not saved. Please try again.');
                         })
-                    )
-
+                      )
+                    })
                 }
             });
 
@@ -419,16 +418,18 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
             //reset section panel
             vm.uiState.navigation.sectionPanel.reset();
 
-            saveWebsite();
-
-            return (
+            saveWebsite().then(function(){
+              return (
                 SimpleSiteBuilderService.savePage(vm.state.page).then(function(response){
                     console.log('page saved');
                     toaster.pop('success', 'Page Saved', 'The page was saved successfully.');
                 }).catch(function(err) {
                     toaster.pop('error', 'Error', 'The page was not saved. Please try again.');
                 })
-            )
+              )
+            })
+
+            
         }
 
     }
@@ -627,14 +628,19 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
     }
 
     function createPage(template) {
-
-        return (
-            SimpleSiteBuilderService.createPage(template._id).then(function(data) {
-                vm.closeModal();
-                vm.uiState.navigation.loadPage(data.data._id);
+        if (vm.state.saveLoading) {
+            return;
+        }
+        vm.state.saveLoading = true;
+        vm.saveWebsite().then(function(){
+          return (
+            SimpleSiteBuilderService.createPage(template._id).then(function(data) {              
+                  vm.closeModal();
+                  vm.state.saveLoading = false;
+                  vm.uiState.navigation.loadPage(data.data._id);              
             })
-        )
-
+          )
+        })
     };
 
     function getNumberOfPages() {
@@ -826,14 +832,12 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
         closeOnCancel: true
       }, function (isConfirm) {
         if (isConfirm) {
-            vm.state.saveLoading = true;
-            SimpleSiteBuilderService.createDuplicatePage(vm.state.page).then(function(page) {
-            SimpleSiteBuilderService.getSite(vm.state.page.websiteId).then(function() {
-              SimpleSiteBuilderService.getPages().then(function() {
-                  vm.state.saveLoading = false;
-                  vm.uiState.navigation.loadPage(page.data._id);
-              });
-            });
+          vm.state.saveLoading = true;
+          saveWebsite().then(function(){
+            SimpleSiteBuilderService.createDuplicatePage(vm.state.page).then(function(page) {            
+              vm.state.saveLoading = false;
+              vm.uiState.navigation.loadPage(page.data._id);
+            })
           })
         }
       });

@@ -105,11 +105,11 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
                 ret.buttonTitle = 'View Revenue';
                 ret.data = [
                     {
-                        analyticDataLabel: 'YTD REVENUE',
+                        analyticDataLabel: 'YTD NEW REVENUE',
                         analyticDataValue: '$' + DashboardService.state.analytics.revenue.YTDTotalAmount
                     },
                     {
-                        analyticDataLabel: 'YTD ORDERS',
+                        analyticDataLabel: 'YTD NEW ORDERS',
                         analyticDataValue: DashboardService.state.analytics.revenue.YTDTotalOrders
                     }
                 ]
@@ -134,7 +134,7 @@ function dashboardAnalyticTileComponentController($scope, $attrs, $filter, Dashb
             vm.uiDetails = vm.analyticMap();
         }
     })
-    
+
 
     function init(element) {
 
