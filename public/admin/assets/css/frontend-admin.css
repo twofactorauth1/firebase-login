@@ -6986,9 +6986,7 @@ a[href="https://froala.com/wysiwyg-editor"] {
   width: calc(100% - 15px);
 }
 .ssb-section-content-list-item {
-  padding: 1em;
-  border: 6px solid white;
-  margin: 1em 0;
+  margin: 0 .5em 1em 0;
 }
 .ssb-section-content-list-item-on {
   border: 6px solid #47B8D9;
