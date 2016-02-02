@@ -527,8 +527,8 @@ module.exports = {
                                     app.render('emails/base_email_order_admin_notification', component, function(err, html){
                                         juice.juiceResources(html, {}, function(err, _html) {
                                             if (err) {
-                                                self.log.error('A juice error occurred. Failed to set styles inline.')
-                                                self.log.error(err);
+                                                log.error('A juice error occurred. Failed to set styles inline.')
+                                                log.error(err);
                                                 fn(err, null);
                                             } else {
                                                 log.debug('juiced - one ' + _html);
@@ -548,8 +548,8 @@ module.exports = {
                                 app.render('emails/base_email_order', component, function(err, html) {
                                     juice.juiceResources(html, {}, function(err, _html) {
                                         if (err) {
-                                            self.log.error('A juice error occurred. Failed to set styles inline.')
-                                            self.log.error(err);
+                                            log.error('A juice error occurred. Failed to set styles inline.')
+                                            log.error(err);
                                             fn(err, null);
                                         } else {
                                             log.debug('juiced - two' + _html);
@@ -570,8 +570,8 @@ module.exports = {
                                         app.render('emails/base_email_order_admin_notification', component, function(err, html){
                                             juice.juiceResources(html, {}, function(err, _html) {
                                                 if (err) {
-                                                    self.log.error('A juice error occurred. Failed to set styles inline.')
-                                                    self.log.error(err);
+                                                    log.error('A juice error occurred. Failed to set styles inline.')
+                                                    log.error(err);
                                                     fn(err, null);
                                                 } else {
                                                     log.debug('juiced - three' + _html);
@@ -658,7 +658,7 @@ module.exports = {
 
                             emailDao.getEmailById(emailId, function(err, email){
                                 if(err || !email) {
-                                    self.log.error('Error getting email to render: ' + err);
+                                    log.error('Error getting email to render: ' + err);
                                     return fn(err, null);
                                 }
                                 var components = [];
