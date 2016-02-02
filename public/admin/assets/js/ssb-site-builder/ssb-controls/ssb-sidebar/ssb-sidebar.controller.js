@@ -627,11 +627,16 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
     }
 
     function createPage(template) {
-
+        if (vm.state.saveLoading) {
+            return;
+        }
+        vm.state.saveLoading = true;
+        vm.saveWebsite();
         return (
-            SimpleSiteBuilderService.createPage(template._id).then(function(data) {
-                vm.closeModal();
-                vm.uiState.navigation.loadPage(data.data._id);
+            SimpleSiteBuilderService.createPage(template._id).then(function(data) {              
+                  vm.closeModal();
+                  vm.state.saveLoading = false;
+                  vm.uiState.navigation.loadPage(data.data._id);              
             })
         )
 
@@ -826,14 +831,11 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
         closeOnCancel: true
       }, function (isConfirm) {
         if (isConfirm) {
-            vm.state.saveLoading = true;
-            SimpleSiteBuilderService.createDuplicatePage(vm.state.page).then(function(page) {
-            SimpleSiteBuilderService.getSite(vm.state.page.websiteId).then(function() {
-              SimpleSiteBuilderService.getPages().then(function() {
-                  vm.state.saveLoading = false;
-                  vm.uiState.navigation.loadPage(page.data._id);
-              });
-            });
+          vm.state.saveLoading = true;
+          saveWebsite();
+          SimpleSiteBuilderService.createDuplicatePage(vm.state.page).then(function(page) {            
+            vm.state.saveLoading = false;
+            vm.uiState.navigation.loadPage(page.data._id);
           })
         }
       });

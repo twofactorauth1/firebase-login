@@ -17,14 +17,10 @@ app.controller('SiteBuilderPageSettingsModalController', ['$timeout', 'parentVm'
     vm.saveLoading = true;
     
     SimpleSiteBuilderService.createDuplicatePage(vm.page).then(function(page) {
-      SimpleSiteBuilderService.getSite(vm.page.websiteId).then(function() {
-        SimpleSiteBuilderService.getPages().then(function() {
-            vm.parentVm.closeModal();
-            vm.saveLoading = false;
-            vm.parentVm.uiState.navigation.loadPage(page.data._id);
-        });
-      });  
-    })
+        vm.parentVm.closeModal();
+        vm.saveLoading = false;
+        vm.parentVm.uiState.navigation.loadPage(page.data._id);
+    });
   }
   function hideFromMenu(){
     angular.element('.modal.in').hide();
