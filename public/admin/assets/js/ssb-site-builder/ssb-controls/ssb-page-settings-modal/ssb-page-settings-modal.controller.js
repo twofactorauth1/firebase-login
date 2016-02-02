@@ -158,7 +158,7 @@ app.controller('SiteBuilderPageSettingsModalController', ['$timeout', 'parentVm'
 
   function saveWebsite() {
       return (
-          SimpleSiteBuilderService.saveWebsite(vm.state.website).then(function(response){
+          SimpleSiteBuilderService.saveWebsite(vm.parentVm.state.website).then(function(response){
               console.log('website saved');
           })
       )
