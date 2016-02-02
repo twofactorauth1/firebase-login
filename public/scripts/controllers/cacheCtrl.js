@@ -57,12 +57,14 @@ mainApp.controller('CacheCtrl', ['$scope', 'embeddedSiteDataService', '$window',
             $scope.sections = data.sections;
 
             _.each(data.sections, function(section, index1){
-                if(section.ssb === false) {
-                    $scope.components = $scope.components.concat(section.components);
-                } else {
-                    //this is what the template should be:
-                    //<ssb-page-section section="section" index="$index" class="ssb-page-section"></ssb-page-section>
-                    $scope['sections_' + index1] = section;
+                if (section) {
+                    if(section.ssb === false) {
+                        $scope.components = $scope.components.concat(section.components);
+                    } else {
+                        //this is what the template should be:
+                        //<ssb-page-section section="section" index="$index" class="ssb-page-section"></ssb-page-section>
+                        $scope['sections_' + index1] = section;
+                    }
                 }
             });
             _.each($scope.components, function(cmp, index){

@@ -1,8 +1,57 @@
+var toolbarbuttons = [
+        'bold',
+        'italic',
+        'underline',
+        'strikeThrough',
+        'fontFamily',
+        'fontSize',
+        '|',
+        'color',
+        'emoticons',
+        'paragraphStyle',
+        '|',
+        'paragraphFormat',
+        'align',
+        'formatOL',
+        'formatUL',
+        'outdent',
+        'indent',
+        '-',
+        'insertLink',
+        'insertButton',
+        'insertIcon',
+        'insertImage',
+        'insertVideo',
+        'insertFile',
+        'insertTable',
+        '|',
+        'insertHR',
+        'undo',
+        'redo',
+        'clearFormatting',
+        'selectAll'
+    ];
+var spectrumColors = [
+              ["#C91F37", "#DC3023", "#9D2933", "#CF000F", "#E68364", "#F22613", "#CF3A24", "#C3272B", "#8F1D21", "#D24D57"],
+              ["#F08F907", "#F47983", "#DB5A6B", "#C93756", "#FCC9B9", "#FFB3A7", "#F62459", "#F58F84", "#875F9A", "#5D3F6A"],
+              ["#89729E", "#763568", "#8D608C", "#A87CA0", "#5B3256", "#BF55EC", "#8E44AD", "#9B59B6", "#BE90D4", "#4D8FAC"],
+              ["#5D8CAE", "#22A7F0", "#19B5FE", "#59ABE3", "#48929B", "#317589", "#89C4F4", "#4B77BE", "#1F4788", "#003171"],
+              ["#044F67", "#264348", "#7A942E", "#8DB255", "#5B8930", "#6B9362", "#407A52", "#006442", "#87D37C", "#26A65B"],
+              ["#26C281", "#049372", "#2ABB9B", "#16A085", "#36D7B7", "#03A678", "#4DAF7C", "#D9B611", "#F3C13A", "#F7CA18"],
+              ["#E2B13C", "#A17917", "#F5D76E", "#F4D03F", "#FFA400", "#E08A1E", "#FFB61E", "#FAA945", "#FFA631", "#FFB94E"],
+              ["#E29C45", "#F9690E", "#CA6924", "#F5AB35", "#BFBFBF", "#F2F1EF", "#BDC3C7", "#ECF0F1", "#D2D7D3", "#757D75"],
+              ["#EEEEEE", "#ABB7B7", "#6C7A89", "#95A5A6", "#9ACCCB", "#E8E7E7", "#000000", "#FFFFFF", "#50c7e8"],
+              ["REMOVE"]
+            ];
+
 $.FroalaEditor.config = {
-	 enter: $.FroalaEditor.ENTER_BR,
+     enter: $.FroalaEditor.ENTER_BR,
      toolbarInline: true,
      toolbarVisibleWithoutSelection: true,
-     toolbarButtons: ['bold', 'italic', 'underline', 'strikeThrough', 'fontFamily', 'fontSize', '|', 'color', 'emoticons', 'inlineStyle', 'paragraphStyle', '|', 'paragraphFormat', 'align', 'formatOL', 'formatUL', 'outdent', 'indent', '-', 'insertLink', 'insertImage', 'insertVideo', 'insertFile', 'insertTable', '|', 'insertHR', 'undo', 'redo', 'clearFormatting', 'selectAll'],
+     toolbarButtons: toolbarbuttons,
+     toolbarButtonsMD: toolbarbuttons,
+     toolbarButtonsSM: toolbarbuttons,
+     toolbarButtonsXS: toolbarbuttons,
      imageStyles: {
         'img-rounded': 'Rounded Square',
         'img-thumbnail': 'Square with Border',
@@ -10,10 +59,39 @@ $.FroalaEditor.config = {
      },
      linkStyles:{
         'fr-green': 'Green',
-        'fr-strong': 'Thick',
-        'ssb-button': 'Button'
+        'fr-strong': 'Thick'
      },
-     imageInsertButtons: ['imageBack', 'imageByURL', 'mediaManager'],
+     fontFamily:{"Arial,Helvetica,sans-serif":"Arial","Georgia,serif":"Georgia",
+                "Impact,Charcoal,sans-serif":"Impact",
+                "Tahoma,Geneva,sans-serif":"Tahoma",
+                "'Times New Roman',Times,serif":"Times New Roman",
+                "Verdana,Geneva,sans-serif":"Verdana",
+                "Roboto,sans-serif": 'Roboto',
+                "Oswald,sans-serif": 'Oswald',
+                "Montserrat,sans-serif": 'Montserrat',
+                "'Open Sans Condensed',sans-serif": 'Open Sans Condensed'
+                },
+    imageInsertButtons: ['imageBack', 'imageByURL', 'mediaManager'],
+    colorsText: [].concat.apply([], spectrumColors),
+    colorsBackground: [].concat.apply([], spectrumColors),
+    colorsStep: 10,
+    // imageUploadToS3: {
+    //     bucket: 'indigenous-digital-assets',
+    //     region: 's3',
+    //     keyStart: 'account_6/',
+    //     callback: function (url, key) {
+    //       // The URL and Key returned from Amazon.
+    //       console.log (url);
+    //       console.log (key);
+    //     },
+    //     params: {
+    //       acl: 'public-read', // ACL according to Amazon Documentation.
+    //       AWSAccessKeyId: 'AKIAIF4QBTOMBZRWROGQ', // Access Key from Amazon.
+    //       policy: '', // Policy string computed in the backend.
+    //       signature: '', // Signature computed in the backend.
+    //     }
+    // },
+    //  requestWithCORS: false
      // initOnClick: true,
      // editInPopup: true,
      // spellcheck: true,

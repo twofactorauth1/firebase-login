@@ -1,0 +1,114 @@
+<div class="row padding-10">
+    <div class="form-group col-xs-6 ssb-spectrum-color-picker">
+        <spectrum-colorpicker class="ssb-spectrum-color-picker-text" format="'hex'" options="vm.spectrum.options" ng-model="component.txtcolor"></spectrum-colorpicker>
+        <label for="colorpicker">Text <span tooltip-placement="top" tooltip-html-unsafe="Text color of section."><i class="fa fa-info-circle" /></span></label>
+    </div>
+    <div class="form-group col-xs-6 ssb-spectrum-color-picker">
+        <spectrum-colorpicker class="ssb-spectrum-color-picker-background" format="'hex'" options="vm.spectrum.options" ng-model="component.bg.color"></spectrum-colorpicker>
+        <label for="colorpicker">Background <span tooltip-placement="top" tooltip-html-unsafe="Background color of section."><i class="fa fa-info-circle" /></span></label>
+    </div>
+</div>
+<div class="row padding-10">
+    <div class="col-xs-12">
+        <div class="form-group" ng-if="component.type != 'contact-us' && component.type != 'navigation' && component.type != 'top-bar' && component.type != 'blog'" ng-hide="isEmail">
+            <label for="bg_hide" class="margin-bottom-0">Show Background Image</label>
+            <span tooltip-placement="top" tooltip-html-unsafe="show/hide background image of component."><i class="fa fa-info-circle" /></span>
+            <switch ng-model="component.bg.img.show" class="pull-right"></switch>
+            <br>
+            <!-- <small>Please select an image of 1280 x 400px minimum to prevent blurriness</small> -->
+        </div>
+        <div class="form-group add-image" ng-show="component.bg.img.show" ng-if="!component.bg.img.url">
+            <div class="btn-wrap">
+                <input id="abi" ng-model="component.bg.img.url" type="button" class="btn btn-primary" value="Add BG Image" ng-click="vm.addBackground(vm.uiState.activeSectionIndex, null)">
+            </div>
+        </div>
+        <div class="bgimg" id="bgimg" ng-if="component.bg.img.url" ng-show="component.bg.img.show">
+            <i class="fa fa-close" ng-click="vm.removeBackgroundImage(component)"></i>
+            <img ng-src="{{component.bg.img.url}}" ng-model="component.bg.img.url" ng-click="vm.addBackground(vm.uiState.activeSectionIndex, null)" class="img-thumbnail">
+        </div>
+        <div class="clearfix margin-bottom-10"></div>
+        <div class="form-group" ng-if="component.type == 'masthead'" ng-show="component.bg.img.show">
+            <label for="bg_position">Background Position</label>
+            <span tooltip-placement="top" tooltip-html-unsafe="Set Background image position."><i class="fa fa-info-circle" /></span>
+            <div class="clearfix"></div>
+            <div class="radio clip-radio radio-primary radio-inline">
+                <input type="radio" id="leftPosition" name="inline" value="left" ng-model="component.bg.img.position">
+                <label for="leftPosition">
+                    Left
+                </label>
+            </div>
+            <div class="radio clip-radio radio-primary radio-inline">
+                <input type="radio" id="centerPosition" name="inline" value="center" ng-model="component.bg.img.position">
+                <label for="centerPosition">
+                    Center
+                </label>
+            </div>
+            <div class="radio clip-radio radio-primary radio-inline">
+                <input type="radio" id="rightPosition" name="inline" value="right" ng-model="component.bg.img.position">
+                <label for="rightPosition">
+                    Right
+                </label>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row padding-10">
+    <div class="col-xs-12">
+        <div class="form-group" ng-show="component.bg.img.show" ng-if="component.type != 'navigation'">
+            <label for="bg_blur">Blur BG</label>
+            <span tooltip-placement="top" tooltip-html-unsafe="Add/remove blur effect to background image."><i class="fa fa-info-circle" /></span>
+            <switch ng-model="component.bg.img.blur" class="pull-right"></switch>
+        </div>
+        <div class="form-group" ng-if="component.type != 'navigation'" ng-show="component.bg.img.show">
+            <label for="bg_parallax" ng-if="component.type != 'navigation'">Parallax:</label>
+            <span tooltip-placement="top" tooltip-html-unsafe="Add/remove Parallax to background image."><i class="fa fa-info-circle" /></span>
+            <switch ng-model="component.bg.img.parallax" class="pull-right"></switch>
+        </div>
+        <div class="form-group" ng-if="component.type == 'masthead'" ng-show="component.bg.img.show">
+            <label for="bg_overlay">Under Nav</label>
+            <span tooltip-placement="top" tooltip-html-unsafe="Make Masthead go underneath nav."><i class="fa fa-info-circle" /></span>
+            <switch ng-model="component.bg.img.undernav" class="pull-right"></switch>
+        </div>
+        <div class="form-group" ng-if="component.type == 'masthead' && component.bg.img.undernav" ng-show="component.bg.img.show">
+            <label for="bg_fullscreen">Full Screen</label>
+            <span tooltip-placement="top" tooltip-html-unsafe="Switch Masthead background to fullscreen."><i class="fa fa-info-circle" /></span>
+            <switch ng-model="component.bg.img.fullscreen" class="pull-right"></switch>
+        </div>
+        <!-- <hr ng-show="component.bg.img.show"></hr> -->
+        <div class="form-group" ng-if="component.type != 'navigation'" ng-show="component.bg.img.show">
+            <label for="bg_overlay">Add Overlay</label>
+            <span tooltip-placement="top" tooltip-html-unsafe="Add/remove Overlay to background image."><i class="fa fa-info-circle" /></span>
+            <switch ng-model="component.bg.img.overlay" class="pull-right"></switch>
+        </div>
+        <div class="form-group" ng-if="component.type != 'navigation'" ng-show="component.bg.img.show && component.bg.img.overlay">
+            <label for="bg_overlay_color">Overlay Color</label>
+            <span tooltip-placement="top" tooltip-html-unsafe="Add color to Overlay effect."><i class="fa fa-info-circle" /></span>
+            <div class="pull-right">
+                <h4 class="pull-left"><i class="fa fa-eyedropper" /></h4>
+                <spectrum-colorpicker format="rgba" options="vm.spectrum.options" class="pull-right" ng-model="component.bg.img.overlaycolor"></spectrum-colorpicker>
+            </div>
+        </div>
+        <div ng-if="component.type != 'navigation'" ng-show="component.bg.img.overlay && component.bg.img.show">
+            <div class="row">
+                <div class="col-xs-12">
+                    <label for="bg_overlay_opacity">Overlay Opacity</label>
+                    <span tooltip-placement="top" tooltip-html-unsafe="Set Overlay opacity."><i class="fa fa-info-circle" /></span>
+                </div>
+                <div class="col-xs-12">
+                 <rzslider class="slider-opacity" rz-slider-step="10"  name="bg-opacity" rz-slider-model="component.bg.img.overlayopacity" rz-slider-floor="0" rz-slider-ceil="100"></rzslider>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- <form class="container-fluid form-horizontal" ng-show="!component.bg.img.show" ng-hide="isEmail">
+        <div class="row">
+            <div class="col-sm-12">
+                <label for="bg_color_opacity">Add BG Opacity</label>
+                <span tooltip-placement="top" tooltip-html-unsafe="Set Background opacity of component."><i class="fa fa-info-circle" /></span>
+            </div>
+            <div class="col-sm-12">
+                <rzslider name="bg_color_opacity" class="slider-opacity" rz-slider-precision="2" rz-slider-step="0.1" name="bg-opacity" rz-slider-model="component.bg.opacity" rz-slider-floor="0" rz-slider-ceil="1"></rzslider>
+            </div>
+        </div>
+    </form> -->
+</div>

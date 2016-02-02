@@ -4,7 +4,7 @@
         <ui-select
             ng-init="vm.uiState.selectedPage = vm.state.page"
             ng-model="vm.uiState.selectedPage"
-            ng-change="vm.navigation.loadPage($select.selected);"
+            ng-change="vm.loadPage($select.selected);"
             theme="bootstrap"
             search-enabled="false">
 
@@ -12,7 +12,7 @@
                 <small ng-bind-html="$select.selected.title"></small>
             </ui-select-match>
 
-            <ui-select-choices repeat="page in vm.state.arr_pages track by $index">
+            <ui-select-choices class="margin-top-20" repeat="page in vm.state.arr_pages track by $index">
                 <small ng-bind-html="page.title"></small>
             </ui-select-choices>
 

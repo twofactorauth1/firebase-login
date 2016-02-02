@@ -1,73 +1,187 @@
-<section
+<section ng-init="vm.state.editSection=false"
     ng-if="vm.uiState.showSectionPanel && vm.state.page.sections[vm.uiState.activeSectionIndex]"
     class="ssb-sidebar-section-panel draggable"
     ind-draggable>
 
-    <h4 class="ssb-sidebar-sub-heading">
-        <span ng-if="vm.uiState.openSidebarSectionPanel.name === ''">{{vm.state.page.sections[vm.uiState.activeSectionIndex].name}}</span>
-        <div
-            ng-if="vm.uiState.openSidebarSectionPanel.name !== ''"
-            ng-click="vm.uiState.openSidebarSectionPanel = { name: '', id: '' }">
+    <h4 class="ssb-sidebar-sub-heading draggable-handle">
 
-            <i class="ti-arrow-left"></i>
-            {{vm.uiState.openSidebarSectionPanel.name}}
+        <span onhide="vm.state.editSection=false" id="edit_section_name" ng-if="vm.state.editSection" editable-text="vm.state.page.sections[vm.uiState.activeSectionIndex].name">{{vm.state.page.sections[vm.uiState.activeSectionIndex].name}}</span>
+
+
+        <span ng-if="!vm.state.editSection && vm.uiState.openSidebarSectionPanel.name === ''">
+            {{vm.state.page.sections[vm.uiState.activeSectionIndex].name}}
+
+            <!-- <small>
+            <br>
+            vm.uiState.activeComponentIndex:{{vm.uiState.activeComponentIndex}}
+            <br>
+            vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex]._id:{{vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex]._id}}
+            <br>
+            vm.uiState.openSidebarSectionPanel.id:{{vm.uiState.openSidebarSectionPanel.id}}
+            <br>
+            (vm.state.page.sections[vm.uiState.activeSectionIndex].components.length === 1):{{(vm.state.page.sections[vm.uiState.activeSectionIndex].components.length === 1)}}
+            <br>
+            </small> -->
+
+        </span>
+        <div ng-if="vm.uiState.openSidebarSectionPanel.name !== ''">
+
+            <i class="ti-arrow-left" ng-click="vm.uiState.navigation.sectionPanel.back();"></i>
+            {{vm.uiState.openSidebarSectionPanel.name | cleanType}}
+
+            <!-- <small>
+            {{vm.uiState.openSidebarSectionPanel._id}}-<br>
+            {{vm.uiState.openSidebarSectionPanel.name}}-<br>
+            {{vm.uiState.openSidebarSectionPanel.componentId}}-<br>
+            {{vm.uiState.activeSectionIndex}}-<br>
+            {{vm.uiState.componentIndex}}-<br>
+            </small> -->
 
         </div>
     </h4>
 
     <div class="close-panel ti-close" ng-click="vm.uiState.showSectionPanel = false;vm.uiState.openSidebarSectionPanel = { name: '', id: '' };"></div>
 
-    <div class="clearfix overflow-auto" ng-include=" 'assets/js/ssb-site-builder/ssb-components/ssb-page-section/sidebar.settings.html' "></div>
+    <!-- Section Settings Home -->
+    <ssb-sidebar-settings-panel
+        ng-if="!vm.uiState.openSidebarSectionPanel.id"
+        settings-template="assets/js/ssb-site-builder/ssb-components/ssb-page-section/sidebar.settings.html"
+        component="vm.state.page.sections[vm.uiState.activeSectionIndex]"
+        state="vm.state"
+        ui-state="vm.uiState">
+    </ssb-sidebar-settings-panel>
 
-    <!-- <div class="form-group padding-top-10">
-        <h5 class="ssb-sidebar-settings-heading">Components ({{vm.state.page.sections[vm.uiState.activeSectionIndex].components.length}})</h5>
-        <ul class="list-unstyled ssb-sidebar-section-components-list">
-            <li ng-repeat="component in vm.state.page.sections[vm.uiState.activeSectionIndex].components track by $index" ng-init="componentIndex = $index">
-                <accordion close-others="oneAtATime" class="accordion">
-                    <accordion-group
-                        is-open="vm.uiState.accordion.sections[sectionIndex].components[componentIndex].isOpen"
-                        ng-click="vm.togglePageSectionComponentAccordion(componentIndex)"
-                        class="ssb-sidebar-sortable-item ssb-sidebar-sortable-item-component">
+    <!-- Section Settings Design -->
+    <ssb-sidebar-settings-panel
+        class="ssb-sidebar-section-panel-component-panel container-fluid"
+        ng-if="'design' === vm.uiState.openSidebarSectionPanel.id"
+        settings-template="assets/js/ssb-site-builder/ssb-components/ssb-page-section/sidebar.settings.design.html"
+        component="vm.state.page.sections[vm.uiState.activeSectionIndex]"
+        state="vm.state"
+        ui-state="vm.uiState">
+    </ssb-sidebar-settings-panel>
 
-                        <accordion-heading>
-                            <div ng-class="{ 'ssb-sidebar-component-open': vm.uiState.accordion.sections[sectionIndex].components[componentIndex].isOpen }">
-                                {{(componentIndex + 1)}} - {{component.header_title || component.type}}
-                            </div>
-                            <div class="ssb-sidebar-item-icon ssb-sidebar-move-handle ti-move display-ib"></div>
-                            <div
-                                class="ssb-sidebar-item-icon ssb-sidebar-item-icon-offset-1 ti-close display-ib"
-                                ng-if="vm.uiState.accordion.sections[sectionIndex].components[componentIndex].isOpen"
-                                ng-click="vm.removeComponentFromSection(componentIndex)"
-                                tooltip-placement="left"
-                                tooltip-html-unsafe="Remove component">
-                            </div>
-                        </accordion-heading>
+    <!-- Section Settings Layout -->
+    <ssb-sidebar-settings-panel
+        class="ssb-sidebar-section-panel-component-panel container-fluid"
+        ng-if="'layout' === vm.uiState.openSidebarSectionPanel.id"
+        settings-template="assets/js/ssb-site-builder/ssb-components/ssb-page-section/sidebar.settings.layout.html"
+        component="vm.state.page.sections[vm.uiState.activeSectionIndex]"
+        state="vm.state"
+        ui-state="vm.uiState">
+    </ssb-sidebar-settings-panel>
 
-                        <div ng-include=" 'assets/js/ssb-site-builder/ssb-components/shared/basic.html' "></div>
+    <!-- Component Settings Home -->
+    <ssb-sidebar-settings-panel
+        class="ssb-sidebar-section-panel-component-panel container-fluid"
+        ng-if="vm.uiState.activeComponentIndex !== undefined && vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex]._id !== undefined && vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex]._id === vm.uiState.openSidebarSectionPanel.id"
+        settings-template="assets/js/ssb-site-builder/ssb-components/#COMPONENTTYPE#/sidebar.settings.html"
+        component="vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex]"
+        state="vm.state"
+        ui-state="vm.uiState">
+    </ssb-sidebar-settings-panel>
 
-                        <ul class="list-unstyled">
-                            <li>
-                                <accordion close-others="oneAtATime" class="accordion">
-                                    <div ng-if="component.type !== undefined" ng-init="sectionIndex = vm.uiState.activeSectionIndex" ng-include=" 'assets/js/ssb-site-builder/ssb-components/' + component.type + '/sidebar.settings.html' "></div>
-                                    <ssb-action-buttons save-action="vm.savePage()" cancel-action="vm.cancelPendingEdits()" ng-show="vm.state.pendingChanges"></ssb-action-buttons>
-                                </accordion>
-                            </li>
-                        </ul>
-                    </accordion-group>
-                </accordion>
-            </li>
-            <li ng-if="vm.state.page.sections[vm.uiState.activeSectionIndex].canAddComponents !== false" class="ssb-sidebar-component-list">
-                <accordion close-others="oneAtATime" class="accordion" ng-click="vm.getPlatformComponents()">
-                    <accordion-group heading="Add + ">
-                        <ul class="list-unstyled">
-                            <li ng-repeat="component in vm.platformComponents track by $index" ng-click="vm.addComponentToSection(component, sectionIndex)" class="center">
-                                <img src="{{component.preview}}" alt="{{component.type}}" />
-                                {{component.header_title || component.title || component.type}}
-                            </li>
-                        </ul>
-                    </accordion-group>
-                </accordion>
-            </li>
-        </ul>
-    </div> -->
+    <!-- Component Settings Design -->
+    <ssb-sidebar-settings-panel
+        class="ssb-sidebar-section-panel-component-panel container-fluid"
+        ng-if="vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex] && ('design' + vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex]._id) === vm.uiState.openSidebarSectionPanel.id"
+        settings-template="assets/js/ssb-site-builder/ssb-components/shared/sidebar.settings.design.html"
+        component="vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex]"
+        state="vm.state"
+        ui-state="vm.uiState">
+    </ssb-sidebar-settings-panel>
+
+    <!-- Component Settings Layout -->
+    <ssb-sidebar-settings-panel
+        class="ssb-sidebar-section-panel-component-panel container-fluid"
+        ng-if="vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex] && ('layout' + vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex]._id) === vm.uiState.openSidebarSectionPanel.id"
+        settings-template="assets/js/ssb-site-builder/ssb-components/shared/sidebar.settings.layout.html"
+        component="vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex]"
+        state="vm.state"
+        ui-state="vm.uiState">
+    </ssb-sidebar-settings-panel>
+
+    <!-- Component Settings Advanced -->
+    <ssb-sidebar-settings-panel
+        class="ssb-sidebar-section-panel-component-panel container-fluid"
+        ng-if="vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex] && ('advanced' + vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex]._id) === vm.uiState.openSidebarSectionPanel.id"
+        settings-template="assets/js/ssb-site-builder/ssb-components/shared/sidebar.settings.advanced.html"
+        component="vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex]"
+        state="vm.state"
+        ui-state="vm.uiState">
+    </ssb-sidebar-settings-panel>
+
+    <!-- Component Settings Specific -->
+    <ssb-sidebar-settings-panel
+        class="ssb-sidebar-section-panel-component-panel container-fluid"
+        ng-if="vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex] &&  ('navigation' + vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex]._id) === vm.uiState.openSidebarSectionPanel.id"
+        settings-template="assets/js/ssb-site-builder/ssb-components/shared/navigation.html"
+        component="vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex]"
+        state="vm.state"
+        ui-state="vm.uiState">
+    </ssb-sidebar-settings-panel>
+
+    <ssb-sidebar-settings-panel
+        class="ssb-sidebar-section-panel-component-panel container-fluid"
+        ng-if="vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex] &&  ('video' + vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex]._id) === vm.uiState.openSidebarSectionPanel.id"
+        settings-template="assets/js/ssb-site-builder/ssb-components/shared/video.html"
+        component="vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex]"
+        state="vm.state"
+        ui-state="vm.uiState">
+    </ssb-sidebar-settings-panel>
+
+    <ssb-sidebar-settings-panel
+        class="ssb-sidebar-section-panel-component-panel container-fluid"
+        ng-if="vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex] &&  ('simple-form' + vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex]._id) === vm.uiState.openSidebarSectionPanel.id"
+        settings-template="assets/js/ssb-site-builder/ssb-components/shared/simple-form.html"
+        component="vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex]"
+        state="vm.state"
+        ui-state="vm.uiState">
+    </ssb-sidebar-settings-panel>
+
+    <ssb-sidebar-settings-panel
+        class="ssb-sidebar-section-panel-component-panel container-fluid"
+        ng-if="vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex] &&  ('products' + vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex]._id) === vm.uiState.openSidebarSectionPanel.id"
+        settings-template="assets/js/ssb-site-builder/ssb-components/shared/products.html"
+        component="vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex]"
+        state="vm.state"
+        ui-state="vm.uiState">
+    </ssb-sidebar-settings-panel>
+
+    <ssb-sidebar-settings-panel
+        class="ssb-sidebar-section-panel-component-panel container-fluid"
+        ng-if="vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex] &&  ('team' + vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex]._id) === vm.uiState.openSidebarSectionPanel.id"
+        settings-template="assets/js/ssb-site-builder/ssb-components/shared/meet-team.html"
+        component="vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex]"
+        state="vm.state"
+        ui-state="vm.uiState">
+    </ssb-sidebar-settings-panel>
+
+    <ssb-sidebar-settings-panel
+        class="ssb-sidebar-section-panel-component-panel container-fluid"
+        ng-if="vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex] &&  ('testimonials' + vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex]._id) === vm.uiState.openSidebarSectionPanel.id"
+        settings-template="assets/js/ssb-site-builder/ssb-components/shared/testimonials.html"
+        component="vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex]"
+        state="vm.state"
+        ui-state="vm.uiState">
+    </ssb-sidebar-settings-panel>
+
+    <ssb-sidebar-settings-panel
+        class="ssb-sidebar-section-panel-component-panel container-fluid"
+        ng-if="vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex] &&  ('top-bar' + vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex]._id) === vm.uiState.openSidebarSectionPanel.id"
+        settings-template="assets/js/ssb-site-builder/ssb-components/shared/top-bar.html"
+        component="vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex]"
+        state="vm.state"
+        ui-state="vm.uiState">
+    </ssb-sidebar-settings-panel>
+
+    <ssb-sidebar-settings-panel
+        class="ssb-sidebar-section-panel-component-panel container-fluid"
+        ng-if="vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex] &&  ('blog' + vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex]._id) === vm.uiState.openSidebarSectionPanel.id"
+        settings-template="assets/js/ssb-site-builder/ssb-components/shared/blog.html"
+        component="vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex]"
+        state="vm.state"
+        ui-state="vm.uiState">
+    </ssb-sidebar-settings-panel>
+
 </section>

@@ -83,7 +83,7 @@
           // "title": "<h2 class='center'>New Email</h2>",
           // "subtitle": "subtitle",
           // "text": "This is your new email",
-          "from_email": "info@indigenous.io",
+          
           "bg": {
             "img": {
               "url": "",
@@ -106,7 +106,7 @@
           "title": '<h2 style="text-align:center;color:#58585b;">One Column Layout Section</h2>',
           // "subtitle": "subtitle",
           "text": '<p style="text-align:center;">This is a single column content section.</p>',
-          "from_email": "info@indigenous.io",
+          
           "bg": {
             "img": {
               "url": "",
@@ -129,7 +129,7 @@
           // "subtitle": "subtitle",
           "text1": '<p style="text-align:center;">This is column 1.</p>',
           "text2": '<p style="text-align:center;">This is column 2.</p>',
-          "from_email": "info@indigenous.io",
+          
           "bg": {
             "img": {
               "url": "",
@@ -153,7 +153,7 @@
           "text1": '<p style="text-align:center;">This is column 1.</p>',
           "text2": '<p style="text-align:center;">This is column 2.</p>',
           "text3": '<p style="text-align:center;">This is column 3.</p>',
-          "from_email": "info@indigenous.io",
+          
           "bg": {
             "img": {
               "url": "",
@@ -176,7 +176,7 @@
           // "title": "<h2 class='center'>New Email</h2>",
           // "subtitle": "subtitle",
           "text": "This is an email footer.",
-          "from_email": "info@indigenous.io",
+          
           "bg": {
             "img": {
               "url": "",

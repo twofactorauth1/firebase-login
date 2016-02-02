@@ -54,10 +54,10 @@
 
 		function dashRequest(fn) {
             dashboardService.loading.value = dashboardService.loading.value + 1;
-            console.info('dashService | loading +1 : ' + dashboardService.loading.value);
+            // console.info('dashService | loading +1 : ' + dashboardService.loading.value);
             fn.finally(function() {
                 dashboardService.loading.value = dashboardService.loading.value - 1;
-                console.info('dashService | loading -1 : ' + dashboardService.loading.value);
+                // console.info('dashService | loading -1 : ' + dashboardService.loading.value);
             });
             return fn;
 		}
@@ -129,7 +129,7 @@
                             $timeout(dashboardService.getWorkstreams, 3000);
                             dashboardService.numberPolling++;
                             dashboardService.polls++;
-                            console.log('dashboardService.polls', dashboardService.polls);
+                            // console.log('dashboardService.polls', dashboardService.polls);
                         } else {
                             $timeout(poll, 1000);
                         }
@@ -137,7 +137,7 @@
                     })();
                 } else {
                     dashboardService.numberPolling--;
-                    console.info('dashboardService skipping poll');
+                    // console.info('dashboardService skipping poll');
                 }
 
             }
@@ -231,9 +231,9 @@
 
             dashboardService.polls = 0;
             dashboardService.numberPolling++;
-            
+
             dashboardService.getAnalytics();
-            dashboardService.getWorkstreams();            
+            dashboardService.getWorkstreams();
             dashboardService.getAccount();
 
             if (away) {

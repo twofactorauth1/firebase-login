@@ -17,6 +17,7 @@ function ssbSiteBuilderEditControlController($scope, $attrs, $filter, SimpleSite
 
     function setActiveSection(index) {
     	SimpleSiteBuilderService.setActiveSection(index);
+        vm.uiState.showSectionPanel = true;
     }
 
     // function setEditControlVisibilityOn() {

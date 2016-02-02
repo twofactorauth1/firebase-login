@@ -2,9 +2,9 @@
 
 app.controller('SiteBuilderController', ssbSiteBuilderController);
 
-ssbSiteBuilderController.$inject = ['$scope', '$rootScope', '$attrs', '$filter', 'SimpleSiteBuilderService', '$stateParams', '$modal', 'SweetAlert', '$window', '$timeout'];
+ssbSiteBuilderController.$inject = ['$scope', '$rootScope', '$attrs', '$filter', 'SimpleSiteBuilderService', '$state', '$stateParams', '$modal', 'SweetAlert', '$window', '$timeout', '$location', 'toaster'];
 /* @ngInject */
-function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSiteBuilderService, $stateParams, $modal, SweetAlert, $window, $timeout) {
+function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSiteBuilderService, $state, $stateParams, $modal, SweetAlert, $window, $timeout, $location, toaster) {
 
     console.info('site-builder directive init...')
 
@@ -12,6 +12,23 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
 
     vm.init = init;
     vm.state = {};
+
+    vm.updateActiveSection = updateActiveSection;
+    vm.updateActiveComponent = updateActiveComponent;
+    vm.savePage = savePage;
+    vm.saveWebsite = saveWebsite;
+    vm.cancelPendingEdits = cancelPendingEdits;
+    vm.openMediaModal = openMediaModal;
+    vm.openModal = openModal;
+    vm.closeModal = closeModal;
+    vm.insertMedia = insertMedia;
+    vm.addFroalaImage = addFroalaImage;
+    vm.imageEditor = {};
+    vm.applyThemeToSite = SimpleSiteBuilderService.applyThemeToSite;
+    vm.addSectionToPage = addSectionToPage;
+    vm.legacyComponentMedia = legacyComponentMedia;
+
+
     vm.uiState = {
         loading: 0,
         activeSectionIndex: undefined,
@@ -28,33 +45,77 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         openSidebarPanel: '',
         openSidebarSectionPanel: { name: '', id: '' },
         showSectionPanel: false,
-
+        componentControl: {}, //hook into component scope (contact-us)
+        componentMedia: vm.legacyComponentMedia //hook into component scope (image-gallery)
     };
 
-    vm.updateActiveSection = updateActiveSection;
-    vm.updateActiveComponent = updateActiveComponent;
-    vm.savePage = savePage;
-    vm.saveWebsite = saveWebsite;
-    vm.cancelPendingEdits = cancelPendingEdits;
-    vm.openMediaModal = openMediaModal;
-    vm.openModal = openModal;
-    vm.closeModal = closeModal;
-    vm.insertMedia = insertMedia;
-    vm.addFroalaImage = addFroalaImage;
-    vm.imageEditor = {};
-    vm.applyThemeToSite = SimpleSiteBuilderService.applyThemeToSite;
-    vm.addSectionToPage = addSectionToPage;
+
+    vm.uiState.navigation = {
+        back: function() {
+            vm.uiState.navigation.index = 0;
+            vm.uiState.navigation.indexClass = 'ssb-sidebar-position-0';
+        },
+        loadPage: function(pageId) {
+            if (pageId && pageId !== vm.state.page._id) {
+                SimpleSiteBuilderService.getPages();
+                SimpleSiteBuilderService.getSite(vm.state.website._id);
+                vm.uiState.loaded = false;
+                $location.path('/website/site-builder/pages/' + pageId);
+            } else {
+                vm.uiState.navigation.index = 1;
+                vm.uiState.navigation.indexClass = 'ssb-sidebar-position-1';
+            }
+        },
+        goToPagesListPage: function() {
+            $location.url('/website/site-builder/pages/');
+        },
+        index: 0,
+        indexClass: 'ssb-sidebar-position-1',
+        sectionPanel: {
+            navigationHistory: [],
+            loadPanel: function(obj, back) {
+
+                if (!back) {
+                    vm.uiState.navigation.sectionPanel.navigationHistory.push(obj);
+                }
+
+                vm.uiState.openSidebarSectionPanel = obj;
+                console.log(vm.uiState.navigation.sectionPanel.navigationHistory);
+
+            },
+            back: function() {
+                var hist = vm.uiState.navigation.sectionPanel.navigationHistory;
+                var previousPanel;
+
+                hist.pop();
+
+                previousPanel = hist.length ? hist[hist.length - 1] : { name: '', id: ''};
+
+                vm.uiState.navigation.sectionPanel.loadPanel(previousPanel, true);
+            },
+            reset: function() {
+                vm.uiState.openSidebarSectionPanel = { name: '', id: '' };
+                vm.uiState.navigation.sectionPanel.navigationHistory = [];
+            }
+        }
+    };
 
     $scope.$watch(function() { return SimpleSiteBuilderService.website; }, function(website){
-        vm.state.originalWebsite = angular.copy(website);
         vm.state.pendingChanges = false;
         vm.state.website = website;
+        vm.state.originalWebsite = null;
+        $timeout(function() {
+            vm.state.originalWebsite = angular.copy(website);
+        }, 1000);
     });
 
     $scope.$watch(function() { return SimpleSiteBuilderService.page; }, function(page){
-        vm.state.originalPage = angular.copy(page);
         vm.state.pendingChanges = false;
         vm.state.page = page;
+        vm.state.originalPage = null;
+        $timeout(function() {
+            vm.state.originalPage = angular.copy(page);
+        }, 1000);
     });
 
     $scope.$watch(function() { return SimpleSiteBuilderService.activeSectionIndex }, updateActiveSection, true);
@@ -64,7 +125,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     $scope.$watch(function() { return SimpleSiteBuilderService.loading }, updateLoading, true);
 
     $scope.$watch('vm.state.page', function(page) {
-        if (!angular.equals(page, vm.state.originalPage)) {
+        if (page && vm.state.originalPage && !angular.equals(page, vm.state.originalPage)) {
             vm.state.pendingChanges = true;
             setupBreakpoints();
         } else {
@@ -73,7 +134,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     }, true);
 
     $scope.$watch('vm.state.website', function(website) {
-        if (!angular.equals(website, vm.state.originalWebsite)) {
+        if (vm.state.originalWebsite && !angular.equals(website, vm.state.originalWebsite)) {
             vm.state.pendingChanges = true;
         } else {
             vm.state.pendingChanges = false;
@@ -81,6 +142,11 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     }, true);
 
     $scope.$watch(function() { return SimpleSiteBuilderService.pages }, function(pages) {
+      //filter blog pages
+      if(pages){
+        delete pages["blog"];
+        delete pages["single-post"];
+      }
       vm.state.pages = pages;
       var parsed = angular.fromJson(pages);
       var arr = [];
@@ -114,10 +180,17 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
 
     $rootScope.$on('$stateChangeStart',
         function (event) {
-            $rootScope.app.layout.isSidebarClosed = vm.uiState.isSidebarClosed;
             $rootScope.app.layout.isMinimalAdminChrome =  false;
         }
     );
+
+    $scope.checkIfDirty = function(){
+        if(vm.state.pendingChanges)
+            return true;
+    }
+    $scope.resetDirty = function(){
+        vm.state.pendingChanges = false;
+    }
 
     function saveWebsite() {
         vm.state.pendingChanges = false;
@@ -128,39 +201,88 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         )
     }
 
+    //TODO: refactor, this function exists in multiple controllers :)
     function savePage() {
-        SweetAlert.swal({
-          title: "Are you sure?",
-          text: "CAUTION: For testing purposes only! Do not save your edits here unless you're OK with your pages breaking. This editor is under active development. Pages saved in Simple Site Builder will not render and will not be editable in the legacy editor.",
-          type: "warning",
-          showCancelButton: true,
-          confirmButtonColor: "#DD6B55",
-          confirmButtonText: "Yes — I'll use Simple Site Builder going forward.",
-          cancelButtonText: "No — I will use the legacy editor for now.",
-          closeOnConfirm: true,
-          closeOnCancel: true
-        },
-        function (isConfirm) {
-            if (isConfirm) {
 
-                vm.state.pendingChanges = false;
+        vm.state.saveLoading = true;
+        var isLegacyPage = !vm.state.page.ssb;
+        console.log(isLegacyPage);
 
-                saveWebsite();
+        if (!vm.uiState.hasSeenWarning && isLegacyPage) {
+
+            SweetAlert.swal({
+              title: "Are you sure?",
+              text: "CAUTION: This editor is under active development. Pages saved in Site Builder will not render or be editable in the legacy Pages editor.",
+              type: "warning",
+              showCancelButton: true,
+              confirmButtonColor: "#DD6B55",
+              confirmButtonText: "Yes — Use Site Builder editor.",
+              cancelButtonText: "No — Use the legacy editor.",
+              closeOnConfirm: true,
+              closeOnCancel: true
+            },
+            function (isConfirm) {
+                if (isConfirm) {
+
+                    vm.uiState.hasSeenWarning = true;
+
+                    vm.state.pendingChanges = false;
+
+                    //hide section panel
+                    vm.uiState.showSectionPanel = false;
+
+                    //reset section panel
+                    vm.uiState.navigation.sectionPanel.reset();
+
+                    saveWebsite().then(function(){
+
+                        return (
+                            SimpleSiteBuilderService.savePage(vm.state.page).then(function(response){
+                                console.log('page saved');
+                                toaster.pop('success', 'Page Saved', 'The page was saved successfully.');
+                                vm.state.saveLoading = false;
+                            }).catch(function(err) {
+                                vm.state.saveLoading = false;
+                                toaster.pop('error', 'Error', 'The page was not saved. Please try again.');
+                            })
+                        )
+                    })    
+                }
+                else{
+                    vm.state.saveLoading = false;
+                }
+            });
+
+        } else {
+            vm.state.pendingChanges = false;
+
+            //hide section panel
+            vm.uiState.showSectionPanel = false;
+
+            //reset section panel
+            vm.uiState.navigation.sectionPanel.reset();
+
+            saveWebsite().then(function(){
 
                 return (
                     SimpleSiteBuilderService.savePage(vm.state.page).then(function(response){
                         console.log('page saved');
+                        toaster.pop('success', 'Page Saved', 'The page was saved successfully.');
+                        vm.state.saveLoading = false;
+                    }).catch(function(err) {
+                        toaster.pop('error', 'Error', 'The page was not saved. Please try again.');
+                        vm.state.saveLoading = false;
                     })
                 )
+            })    
+        }
 
-            }
-        });
     }
 
     function cancelPendingEdits() {
-        vm.state.pendingChanges = false;
-        vm.state.website = vm.state.originalWebsite;
-        vm.state.page = vm.state.originalPage;
+      vm.state.pendingChanges = false;
+      vm.state.website = angular.copy(vm.state.originalWebsite);
+      vm.state.page = angular.copy(vm.state.originalPage);
     }
 
     function updateActiveSection(index) {
@@ -170,14 +292,24 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
             vm.uiState.accordion.sections.isOpen = true;
             vm.uiState.accordion.sections[index] = { components: {} };
             vm.uiState.accordion.sections[index].isOpen = true;
-            // updateActiveComponent(0);
+
+            //if there is only 1 component in a section, make it active
+            if (vm.state.page.sections[index] && vm.state.page.sections[index].components && vm.state.page.sections[index].components.length === 1) {
+                updateActiveComponent(0);
+            } else {
+                SimpleSiteBuilderService.setActiveComponent(undefined);
+            }
+
         }
+
+        //reset section sidebar panel navigation
+        vm.uiState.navigation.sectionPanel.reset();
     }
 
     function updateActiveComponent(index) {
-        if (index !== undefined) {
-            vm.uiState.activeComponentIndex = index;
+        vm.uiState.activeComponentIndex = index;
 
+        if (index !== undefined) {
             if (vm.uiState.accordion.sections[vm.uiState.activeSectionIndex]) {
               if (!vm.uiState.accordion.sections[vm.uiState.activeSectionIndex].components[index]) {
                   vm.uiState.accordion.sections[vm.uiState.activeSectionIndex].components[index] = {};
@@ -185,11 +317,18 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
               vm.uiState.accordion.sections[vm.uiState.activeSectionIndex].components[index].isOpen = true;
             }
         }
+
     }
 
     function updateLoading(loadingObj) {
         console.info('vm.uiState.loading', loadingObj );
         vm.uiState.loading = loadingObj.value;
+
+        if (!vm.uiState.loaded) {
+            $timeout(function() {
+                vm.uiState.loaded = true;
+            }, 2000);
+        }
     }
 
     function closeModal() {
@@ -290,9 +429,37 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     };
 
     function setupBreakpoints() {
-      $window.eqjs.refreshNodes();
-      $window.eqjs.query();
+        $timeout(function() {
+            console.log('setupBreakpoints')
+            $window.eqjs.refreshNodes();
+            $window.eqjs.query();
+        }, 3000);
     };
+
+    function legacyComponentMedia(componentId, index, update) {
+        // $scope.imageChange = true;
+        // $scope.showInsert = true;
+        // $scope.updateImage = update;
+        // $scope.componentImageIndex = index;
+        // $scope.componentEditing = _.findWhere($scope.components, {
+        //     _id: componentId
+        // });
+        // $scope.openModal('media-modal', 'MediaModalCtrl', null, 'lg');
+
+        var component = _(vm.state.page.sections)
+            .chain()
+            .pluck('components')
+            .flatten()
+            .findWhere({_id: componentId})
+            .value()
+
+        SimpleSiteBuilderService.openMediaModal('media-modal', 'MediaModalCtrl', null, 'lg', vm, component, index, update).result.then(function(){
+            // debugger;
+
+            //TODO: somehow need to trigger this if component.type === 'thumbnail-slider'
+            // $scope.thumbnailSlider.refreshSlider();
+        })
+    }
 
     // Hook froala insert up to our Media Manager
     window.clickandInsertImageButton = function (editor) {
@@ -316,15 +483,14 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
           }
         });
 
-        angular.element("body").on("click", ".ssb-main", function (e) {
+        angular.element("body").on("click", ".ssb-page-section", function (e) {
           vm.uiState.openSidebarPanel = '';
-          vm.uiState.showSectionPanel = true;
+          // vm.uiState.showSectionPanel = true;
         });
 
         setupBreakpoints();
 
         vm.uiState.isSidebarClosed = $rootScope.app.layout.isSidebarClosed;
-        $rootScope.app.layout.isSidebarClosed = true;
         $rootScope.app.layout.isMinimalAdminChrome = true;
 
         vm.uiStateOriginal = angular.copy(vm.uiState);

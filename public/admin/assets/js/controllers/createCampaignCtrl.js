@@ -171,7 +171,7 @@
         // "title": "<h2 class='center'>New Email</h2>",
         // "subtitle": "subtitle",
         // "text": "This is your new email",
-        "from_email": "info@indigenous.io",
+        
         "bg": {
           "img": {
             "url": "",
@@ -194,7 +194,7 @@
         "title": '<h2 style="text-align:center;">One Column Layout Section</h2>',
         // "subtitle": "subtitle",
         "text": '<p style="text-align:center;">This is a single column content section.</p>',
-        "from_email": "info@indigenous.io",
+        
         "bg": {
           "img": {
             "url": "",
@@ -217,7 +217,7 @@
         // "subtitle": "subtitle",
         "text1": '<p style="text-align:center;">This is column 1.</p>',
         "text2": '<p style="text-align:center;">This is column 2.</p>',
-        "from_email": "info@indigenous.io",
+        
         "bg": {
           "img": {
             "url": "",
@@ -241,7 +241,7 @@
         "text1": '<p style="text-align:center;">This is column 1.</p>',
         "text2": '<p style="text-align:center;">This is column 2.</p>',
         "text3": '<p style="text-align:center;">This is column 3.</p>',
-        "from_email": "info@indigenous.io",
+        
         "bg": {
           "img": {
             "url": "",
@@ -264,7 +264,7 @@
         // "title": "<h2 class='center'>New Email</h2>",
         // "subtitle": "subtitle",
         "text": "This is an email footer.",
-        "from_email": "info@indigenous.io",
+        
         "bg": {
           "img": {
             "url": "",
@@ -572,7 +572,7 @@
       if ($scope.selectedEmail.type === 'new') {
         $scope.checkingEmailTitle = true;
         var exists = _.find($scope.originalEmails, function(email){
-          return email.title.toLowerCase() == _name.toLowerCase();
+          return email.title && email.title.toLowerCase() == _name.toLowerCase();
         });
         $scope.emailTitleExists = exists ? true : false;
       } else {
@@ -633,7 +633,7 @@
      */
     $scope.clearEmail = function (newEmail) {
       $scope.checkingEmailTitle = false;
-      // $scope.emailToSend.title = "";      
+      $scope.actualEmailToSend = null;    
       if (newEmail) {
         $scope.emailToSendPrevious = angular.copy($scope.emailToSend);
         $scope.setBusinessDetails(newEmail);
@@ -649,8 +649,10 @@
         $scope.emailToSend = $scope.emailToSendPrevious;
         if($scope.newCampaignObj.steps && $scope.newCampaignObj.steps[0] && $scope.newCampaignObj.steps[0].settings && !$scope.newCampaignObj.steps[0].settings.emailId && $scope.emailToSendPrevious)
           $scope.newCampaignObj.steps[0].settings.emailId = $scope.emailToSendPrevious._id
-
-        $scope.actualEmailToSend = angular.copy($scope.emailToSend);
+        
+        $timeout(function() {
+          $scope.actualEmailToSend = angular.copy($scope.emailToSend);
+        }, 500);
 
       }
     }
@@ -1445,7 +1447,10 @@
       var promise = AccountService.getAccount(function (_account) {
         $scope.account = _account;
         $scope.setBusinessDetails();
-        $scope.actualEmailToSend = angular.copy($scope.emailToSend);
+        
+        $timeout(function() {
+          $scope.actualEmailToSend = angular.copy($scope.emailToSend);
+        }, 500);
       });
       return promise;
     };

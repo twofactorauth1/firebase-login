@@ -524,7 +524,7 @@ uis.controller('uiSelectCtrl',
 
           if (ctrl.taggingMatchToKey.isActivated && ctrl.selected && angular.isArray(ctrl.selected)) {
             var dup = _.find(ctrl.selected, function(ctrlItem){
-                return ctrlItem[ctrl.taggingMatchToKey.fct].toLowerCase() === item[ctrl.taggingMatchToKey.fct].toLowerCase(); 
+                return ctrlItem[ctrl.taggingMatchToKey.fct] && ctrlItem[ctrl.taggingMatchToKey.fct].toLowerCase() === item[ctrl.taggingMatchToKey.fct].toLowerCase(); 
             });
             if(dup){
               ctrl.close(skipFocusser);
@@ -1465,7 +1465,7 @@ uis.directive('uiSelectMultiple', ['uiSelectMinErr','$timeout', function(uiSelec
             //push only if the item is not null
             if ($select.taggingMatchToKey.isActivated) {
               var dup = _.find($select.items, function(ctrlItem){
-                  return ctrlItem[$select.taggingMatchToKey.fct].toLowerCase() === newItem[$select.taggingMatchToKey.fct].toLowerCase(); 
+                  return ctrlItem[$select.taggingMatchToKey.fct] && ctrlItem[$select.taggingMatchToKey.fct].toLowerCase() === newItem[$select.taggingMatchToKey.fct].toLowerCase(); 
               });
             if(dup)
               newItem = null;

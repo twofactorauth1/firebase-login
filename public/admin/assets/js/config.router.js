@@ -51,7 +51,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         }
     }).state('app.website.ssbSiteBuilder', {
         url: '/site-builder',
-        template: '<div ui-view class="fade-in-up"></div>',
+        template: '<div ui-view class=""></div>',
         title: 'Simple Site Builder',
         ncyBreadcrumb: {
             label: 'Simple Site Builder',
@@ -59,13 +59,13 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         }
     }).state('app.website.ssbSiteBuilder.pages', {
         url: '/pages/',
-        templateUrl: "assets/js/ssb-site-builder/ssb-site-builder.pages.component.html",
-        title: 'Simple Site Builder Pages',
+        template: "<ssb-site-templates></ssb-site-templates>",
+        title: 'Choose a site template',
         icon: 'ti-layout-media-left-alt',
         ncyBreadcrumb: {
-            label: 'Simple Site Builder Pages'
+            label: 'Simple Site Builder - Site Templates'
         },
-        resolve: loadSequence('pagesCtrl', 'userService')
+        resolve: loadSequence('simpleSiteBuilderService')
     }).state('app.website.ssbSiteBuilder.editor', {
         url: '/pages/:pageId',
         template: '<ssb-site-builder class="ssb-site-builder"></ssb-site-builder>',
@@ -77,7 +77,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
             init: ['$stateParams', 'SimpleSiteBuilderService', function($stateParams, SimpleSiteBuilderService) {
                 return SimpleSiteBuilderService.getPage($stateParams.pageId);
             }]
-        }, loadSequence('editorCtrl', 'userService', 'htmlToPlaintext', 'spectrum', 'angular-slider', 'assetsService', 'toasterService', 'geocodeService', 'productService', 'paymentService', 'accountService', 'toTrusted', 'generateURLforLinks', 'truncate', 'ngSticky', 'slick', 'offset', 'jqcloud', 'jsVideoUrlParser', 'selectedTags', 'addComponentModalCtrl', 'componentSettingsModalCtrl', 'ssbComponentSettingsModalCtrl', 'googlePlaces', 'ngMap', 'angularCircularNavigation', 'campaignService', 'angular-resizable', 'wu.masonry', 'froala-wysiwyg-editor', 'froala-wysiwyg-editor-plugins', 'custom-froala-wysiwyg-editor'))
+        }, loadSequence('editorCtrl', 'userService', 'htmlToPlaintext', 'spectrum', 'angular-slider', 'assetsService', 'toasterService', 'geocodeService', 'productService', 'paymentService', 'accountService', 'toTrusted', 'generateURLforLinks', 'truncate', 'ngSticky', 'slick', 'offset', 'jqcloud', 'jsVideoUrlParser', 'selectedTags', 'addComponentModalCtrl', 'componentSettingsModalCtrl', 'ssbComponentSettingsModalCtrl', 'googlePlaces', 'ngMap', 'angularCircularNavigation', 'campaignService', 'angular-resizable', 'wu.masonry', 'froala-wysiwyg-editor', 'froala-wysiwyg-editor-plugins', 'custom-froala-wysiwyg-editor', 'cleanType'))
     }).state('app.website.analytics', {
         url: '/site-analytics',
         templateUrl: "assets/views/site-analytics.html",

@@ -1,11 +1,26 @@
-<!-- <accordion-group heading="Basic">
-	<div ng-include=" 'assets/js/ssb-site-builder/ssb-components/shared/basic.html' "></div>
-</accordion-group> -->
+<!-- <div class="row padding-10">
 
-<accordion-group heading="Spacing">
-	<div ng-include=" 'assets/js/ssb-site-builder/ssb-components/shared/spacing.html' "></div>
-</accordion-group>
+    <button
+        ng-click="vm.openModal('ssb-contact-us-modal', 'SiteBuilderContactUsModalController');"
+        class="ssb-sidebar-section-panel-btn btn btn-primary">
+        <i class="ti-settings display-ib"></i> Edit Business Info
+    </button>
 
-<accordion-group heading="Advanced">
-	<div ng-include=" 'assets/js/ssb-site-builder/ssb-components/shared/advanced.html' "></div>
-</accordion-group>
+</div> -->
+
+
+<div class="row padding-10">
+
+    <button ng-click="vm.uiState.navigation.sectionPanel.loadPanel({ name: 'Design', id: 'design' + component._id, componentId: component._id })" class="ssb-sidebar-section-panel-btn btn btn-link">
+        <i class="ti-brush display-ib"></i> Design
+    </button>
+
+    <button ng-click="vm.uiState.navigation.sectionPanel.loadPanel({ name: 'Layout', id: 'layout' + component._id, componentId: component._id })" class="ssb-sidebar-section-panel-btn btn btn-link">
+        <i class="ti-layout display-ib"></i> Layout
+    </button>
+
+    <button ng-click="vm.uiState.navigation.sectionPanel.loadPanel({ name: 'Advanced', id: 'advanced' + component._id, componentId: component._id })" class="ssb-sidebar-section-panel-btn btn btn-link">
+        <i class="ti-settings display-ib"></i> Advanced Settings
+    </button>
+
+</div>

@@ -69,6 +69,12 @@
       }
     };
 
+    $scope.$watch('pages.length', function (newValue, oldValue) {
+      if (newValue) {
+        $scope.totalPages = $scope.pages.filter(function(page) { return !page.ssb; }).length;
+      }
+    });
+
     WebsiteService.getTemplates(function (templates) {
       $scope.templates = templates;
     });
@@ -309,4 +315,13 @@
     $scope.getPages();
 
   }]);
+  app.filter('ignoreSsbPages', function () {
+  return function (pages) {
+    if (pages) {
+      return pages.filter(function (page) {        
+            return !page.ssb;          
+      });
+    }
+  };
+});
 }(angular));

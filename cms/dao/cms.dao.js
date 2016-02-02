@@ -1217,21 +1217,31 @@ var dao = {
             var obj = value.toJSON('public');
             self.getById(obj.website.websiteId, Website, function(err, website){
 
-                ssbThemeDao.getThemeById(website.get('themeId'), function(err, theme) {
-                    if(err) {
-                        self.log.error('Error getting theme:', err);
-                        return fn(err, null);
-                    } else {
-                        if (theme) {
-                            website.set('theme', theme.toJSON('public'));
+                if (website.get('themeId')) {
+                    var themeId = website.get('themeId').valueOf();
+                    self.log.debug('>> getThemeById', themeId);
+                    ssbThemeDao.getThemeById(themeId, function(err, theme) {
+                        if(err || !theme) {
+                            self.log.error('Error getting theme, err:', err);
+                            self.log.error('Error getting theme, themeId:', themeId);
+                            return fn(err, obj);
                         } else {
-                            website.set('theme', {});
+                            self.log.debug('<< getThemeById', theme);
+                            if (theme) {
+                                website.set('theme', theme.toJSON('public'));
+                            } else {
+                                website.set('theme', {});
+                            }
+                            obj.website = website.toJSON('public');
+                            self.log.debug('<< getDataForWebpage');
+                            return fn(null, obj);
                         }
-                        obj.website = website.toJSON('public');
-                        self.log.debug('<< getDataForWebpage');
-                        return fn(null, obj);
-                    }
-                });
+                    });
+                } else {
+                    obj.website = website.toJSON('public');
+                    self.log.debug('<< getDataForWebpage');
+                    return fn(null, obj);
+                }
 
             });
         });
@@ -1344,7 +1354,6 @@ var dao = {
                     "title" : "<h2 class='center'>Thanks for Checking Us Out</h2>",
                     "subtitle" : "subtitle",
                     "text" : "We will get back to you shortly.",
-                    "from_email" : "",
                     "bg" : {
                         "img" : {
                             "url" : "",
@@ -1386,7 +1395,6 @@ var dao = {
                     "title" : "<h2 class='center'>New Order</h2>",
                     "subtitle" : "subtitle",
                     "text" : "New Order",
-                    "from_email" : "info@indigenous.io",
                     "bg" : {
                         "img" : {
                             "url" : "",
@@ -1427,7 +1435,6 @@ var dao = {
                     "title" : "<h2 class='center'>Order Processing</h2>",
                     "subtitle" : "subtitle",
                     "text" : "Order Processing",
-                    "from_email" : "info@indigenous.io",
                     "bg" : {
                         "img" : {
                             "url" : "",
@@ -1468,7 +1475,6 @@ var dao = {
                     "title" : "<h2 class='center'>Order Completed</h2>",
                     "subtitle" : "subtitle",
                     "text" : "Order Completed",
-                    "from_email" : "info@indigenous.io",
                     "bg" : {
                         "img" : {
                             "url" : "",
@@ -1509,7 +1515,6 @@ var dao = {
                     "title" : "<h2 class='center'>Order Cancelled</h2>",
                     "subtitle" : "subtitle",
                     "text" : "Order Cancelled",
-                    "from_email" : "info@indigenous.io",
                     "bg" : {
                         "img" : {
                             "url" : "",
@@ -1550,7 +1555,6 @@ var dao = {
                     "title" : "<h2 class='center'>Customer Invoice</h2>",
                     "subtitle" : "subtitle",
                     "text" : "Customer Invoice",
-                    "from_email" : "info@indigenous.io",
                     "bg" : {
                         "img" : {
                             "url" : "",

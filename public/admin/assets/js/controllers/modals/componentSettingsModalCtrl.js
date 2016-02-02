@@ -96,42 +96,41 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
     });
     $scope.availableProductTagsString = $scope.availableProductTags.join(",");
   });
-  CustomerService.getCustomerTags(function(tags){
-    $scope.customerTags = tags;
-  });
-  CustomerService.getCustomers(function(customers){
-    CustomerService.getAllCustomerTags(customers,function(tags){
+
+  $scope.getAllCustomerTags = function(){
+    CustomerService.getCustomerTags(function(tags){
       $scope.customerTags = tags;
+      $scope.setTags(tags);
     });
-  })
-
-    var setTags = function () {
-      console.log('setTags >>>');
-      var tempTags = [];
-      _.each($scope.componentEditing.tags, function (tag , index) {
-        var matchingTag = _.findWhere($scope.customerTags, {
-          data: tag
-        });
-        if(matchingTag)
-        {          
-          tempTags.push(matchingTag);
-        }  
+    CustomerService.getCustomers(function(customers){
+      CustomerService.getAllCustomerTags(customers,function(tags){
+        $scope.customerTags = tags;
+        $scope.setTags(tags);
       });
-      $scope.componentEditing.tags = tempTags;
-      console.log('$scope.componentEditing.tags >>>', $scope.componentEditing.tags);
-    };
+    })
+  }
 
-    var unsetTags = function() {
-      var tempTags = [];
-        var _tags = angular.copy($scope.componentEditing.tags);
-        _.each(_tags, function (tag) {
-          tempTags.push(tag.data);
+  $scope.setTags = function (_customerTags) {
+    console.log('setTags >>>');
+    _.each($scope.componentEditing.tags, function (tag , index) {
+      var matchingTag = _.findWhere($scope.customerTags, {
+        data: tag
+      });
+      if(matchingTag)
+      {        
+        _customerTags.push(matchingTag);
+      }
+      else {
+        _customerTags.push({
+            data : tag,
+            label : tag
         });
-        if (tempTags) {
-          $scope.componentEditing.tags = tempTags;
-        }
-    };
-  
+      }
+    });
+    $scope.customerTags = _.uniq(_customerTags, function(c) { return c.label; })
+    console.log('$scope.componentEditing.tags >>>', $scope.componentEditing.tags);
+  };
+
 
   $scope.testOptions = {
     min: 5,
@@ -470,11 +469,7 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
             $modalInstance.close();
             angular.element('.modal-backdrop').remove();
           });
-        } else {
-          if($scope.componentEditing.type === "simple-form")
-            {
-              unsetTags();
-            }
+        } else {          
           $modalInstance.close();
           angular.element('.modal-backdrop').remove();
         }
@@ -955,7 +950,7 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
 
       if($scope.componentEditing.type === "simple-form")
       {
-        setTags();
+        $scope.getAllCustomerTags();
       }
 
       if ($scope.componentEditing.type === 'navigation') {
@@ -1217,5 +1212,9 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
         $scope.updateLinkList();
       }
     };
+
+  $scope.tagToCustomer = function(value) {
+    return CustomerService.tagToCustomer(value);
+  }
 
 }]);

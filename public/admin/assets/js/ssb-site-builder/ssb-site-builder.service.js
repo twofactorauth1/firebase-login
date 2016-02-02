@@ -5,9 +5,9 @@
 
 	app.factory('SimpleSiteBuilderService', SimpleSiteBuilderService);
 
-	SimpleSiteBuilderService.$inject = ['$rootScope', '$http', '$q', '$timeout', 'AccountService', 'WebsiteService'];
+	SimpleSiteBuilderService.$inject = ['$rootScope', '$http', '$q', '$timeout', 'AccountService', 'WebsiteService', '$modal'];
 	/* @ngInject */
-	function SimpleSiteBuilderService($rootScope, $http, $q, $timeout, AccountService, WebsiteService) {
+	function SimpleSiteBuilderService($rootScope, $http, $q, $timeout, AccountService, WebsiteService, $modal) {
 		var ssbService = {};
 		var baseWebsiteAPIUrl = '/api/1.0/cms/website/';
 		var basePageAPIUrl = '/api/1.0/cms/page/';
@@ -16,9 +16,11 @@
         var baseWebsiteAPIUrlv2 = '/api/2.0/cms/websites/'
         var basePageAPIUrlv2 = '/api/2.0/cms/pages/';
         var baseTemplateAPIUrlv2 = '/api/2.0/cms/templates/';
+        var baseSiteTemplateAPIUrlv2 = '/api/2.0/cms/sitetemplates/';
         var baseThemesAPIUrlv2 = '/api/2.0/cms/themes/';
         var baseSectionAPIUrlv2 = '/api/2.0/cms/sections/';
         var baseComponentAPIUrlv2 = '/api/2.0/cms/components/';
+        var basePagesWebsiteAPIUrl = '/api/2.0/cms/website/';
 
 		ssbService.getSite = getSite;
 		ssbService.getPage = getPage;
@@ -36,14 +38,48 @@
         ssbService.getUserSections   = getUserSections;
 		ssbService.checkForDuplicatePage = checkForDuplicatePage;
 		ssbService.loading = { value: 0 };
-    	ssbService.getThemes = getThemes;
+        ssbService.getThemes = getThemes;
+    	ssbService.setupTheme = setupTheme;
         ssbService.applyThemeToSite = applyThemeToSite;
         ssbService.createPage = createPage;
+        ssbService.createDuplicatePage = createDuplicatePage;
         ssbService.getTemplates = getTemplates;
+        ssbService.getSiteTemplates = getSiteTemplates;
+        ssbService.setSiteTemplate = setSiteTemplate;
         ssbService.getTemplateById = getTemplateById;
         ssbService.getLegacyTemplates = getLegacyTemplates;
         ssbService.addSectionToPage = addSectionToPage;
-        // ssbService.createPageFromTemplate = createPageFromTemplate;
+        ssbService.getSpectrumColorOptions = getSpectrumColorOptions;
+        ssbService.deletePage = deletePage;
+        ssbService.openMediaModal = openMediaModal;
+        ssbService.setMediaForComponent = setMediaForComponent;
+        ssbService.getPagesWithSections = getPagesWithSections;
+        ssbService.extendComponentData = extendComponentData;
+
+        ssbService.contentComponentDisplayOrder = [];
+
+        /*
+         * This represents the category sorting for the add content panel
+         */
+        ssbService.contentSectionDisplayOrder = [
+            'welcome & landing',
+            'images',
+            'text',
+            'video',
+            'mixed content',
+            'about us',
+            'products & services',
+            'clients',
+            'team',
+            'testimonials',
+            'contact us',
+            'blog',
+            'features',
+            'navigation',
+            'forms',
+            'social',
+            'misc'
+        ];
 
 
 		function ssbRequest(fn) {
@@ -66,10 +102,14 @@
 			ssbService.activeComponentIndex = componentIndex;
 		}
 
-		function getSite(id) {
+		function getSite(id, isLoading) {
 
 			function success(data) {
-				ssbService.website = data;
+                if(!isLoading)
+				    ssbService.website = data;
+                else{
+                    ssbService.setupTheme(data);
+                }
 			}
 
 			function error(error) {
@@ -92,33 +132,94 @@
 			return ssbRequest($http.get(baseWebsiteAPIUrl + ssbService.websiteId + '/pages').success(success).error(error));
 		}
 
-		function getPage(id) {
+        function getPagesWithSections() {
 
-			return ssbRequest($http.get(basePageAPIUrlv2 + id).success(successPage).error(errorPage));
+            function success(data) {
+                 console.log('SimpleSiteBuilderService getPages');
+            }
 
+            function error(error) {
+                console.error('SimpleSiteBuilderService getPages error: ' + error);
+            }
+
+            return ssbRequest($http.get(basePagesWebsiteAPIUrl + ssbService.websiteId + '/pages').success(success).error(error));
+        }
+
+		function getPage(id, isSettings) {
+            function success(data) {
+                console.log('SimpleSiteBuilderService requested page data' + data);
+            }
+
+			return ssbRequest($http.get(basePageAPIUrlv2 + id).success(
+                isSettings ? success : successPage)
+            .error(errorPage));
 		}
 
-		function savePage(page) {
-
+		function savePage(page, isSettings) {
+            function success(data) {
+                if(ssbService.pages && ssbService.pages[page.handle] && data.title){
+                    ssbService.pages[page.handle].title = data.title;
+                }
+                console.log('SimpleSiteBuilderService requested page settings saved' + data);
+            }
+            if(!isSettings)
+                page.ssb = true;
 			return (
 				ssbRequest($http({
 					url: basePageAPIUrlv2 + page._id,
 					method: 'POST',
 					data: angular.toJson(page)
-				}).success(successPage).error(errorPage))
+				}).success(isSettings ? success : successPage).error(errorPage))
 			)
-
 		}
+
+        function deletePage(page) {
+            function success(data) {
+                console.log('SimpleSiteBuilderService requested page deleted');
+                delete ssbService.pages[page.handle];
+            }
+
+            function error(error) {
+                console.error('SimpleSiteBuilderService page delete error: ' + error);
+            }
+
+            return (
+                ssbRequest($http({
+                    url: basePageAPIUrlv2 + page._id,
+                    method: 'DELETE',
+                    data: angular.toJson(page)
+                }).success(success).error(error))
+            )
+
+        }
 
         function createPage(templateId) {
 
-          return (
-            ssbRequest($http({
-              url: baseWebsiteAPIUrlv2 + ssbService.website._id + '/page/',
-              method: 'POST',
-              data: { templateId: templateId }
-            }).success(successPage).error(errorPage))
-          )
+            return (
+                ssbRequest($http({
+                  url: baseWebsiteAPIUrlv2 + ssbService.website._id + '/page/',
+                  method: 'POST',
+                  data: { templateId: templateId }
+                }).success(successPage).error(errorPage))
+            )
+
+        }
+
+        function createDuplicatePage(page) {
+            function success(data) {
+                console.log('SimpleSiteBuilderService requested page created');
+            }
+
+            function error(error) {
+                console.error('SimpleSiteBuilderService page error: ' + error);
+            }
+            return (
+                ssbRequest($http({
+                  url: baseWebsiteAPIUrlv2 + ssbService.website._id + '/duplicate/page/',
+                  method: 'POST',
+                  data: angular.toJson(page)
+                }).success(success).error(error))
+            )
 
         }
 
@@ -144,7 +245,8 @@
                     var component = angular.copy(page.sections[i]);
                     var defaultSectionObj = {
                         layout: '1-col',
-                        components: [component]
+                        components: [component],
+                        visibility: true
                     };
 
                     defaultSectionObj.name = sectionName(defaultSectionObj) + ' Section';
@@ -190,6 +292,10 @@
 
 		//TODO: component versions
 		function getComponent(component, version) {
+
+            if (!version) {
+                version = 1;
+            }
 
 			function success(data) {
 				console.log('SimpleSiteBuilderService requested component: ' + data);
@@ -430,6 +536,48 @@
 
         }
 
+        function getSiteTemplates() {
+
+          function success(data) {
+            ssbService.siteTemplates = data;
+            console.log('SimpleSiteBuilderService getSiteTemplates: ' + data);
+          }
+
+          function error(error) {
+            console.error('SimpleSiteBuilderService getSiteTemplates error: ' + error);
+          }
+
+          return (
+            ssbRequest($http({
+              url: baseSiteTemplateAPIUrlv2,
+              method: 'GET',
+            }).success(success).error(error))
+          )
+
+        }
+
+        function setSiteTemplate(siteTemplate) {
+
+            function success(data) {
+                console.log('SimpleSiteBuilderService setSiteTemplate: ' + data);
+            }
+
+            function error(error) {
+                console.error('SimpleSiteBuilderService setSiteTemplate error: ' + error);
+            }
+
+            return (
+                ssbRequest($http({
+                    url: baseWebsiteAPIUrlv2 + ssbService.website._id + '/sitetemplates/' + siteTemplate._id,
+                    method: 'POST',
+                    data: {
+                        siteTemplateId: siteTemplate._id,
+                        siteThemeId: siteTemplate.defaultTheme
+                    }
+                }).success(success).error(error))
+            )
+        }
+
         function getTemplateById(id) {
 
           return _.where(ssbService.templates, {
@@ -458,39 +606,167 @@
 
         }
 
-        function addSectionToPage(section, version, modalInstance) {
+        function addSectionToPage(section, version, replaceAtIndex, oldSection) {
+            var insertAt;
+            var numSections;
+            var hasHeader = false;
+            var hasFooter = false;
 
             if (!ssbService.page.sections) {
                 ssbService.page.sections = [];
+            } else {
+                hasHeader = pageHasHeader(ssbService.pages.sections);
+                hasFooter = pageHasFooter(ssbService.page.sections);
+                console.debug(hasFooter);
             }
 
-            var numSections = ssbService.page.sections.length;
+            numSections = ssbService.page.sections.length;
+
+            insertAt = hasFooter ? numSections - 1 : numSections;
 
             return (
                 ssbService.getSection(section, version || 1).then(function(response) {
-                    ssbService.page.sections.push(response);
-                    ssbService.setActiveSection(numSections);
-                    ssbService.setActiveComponent(null);
-                    if (modalInstance) {
-                        modalInstance.close();
+                    if (response) {
+
+                        if (replaceAtIndex) {
+                            var extendedData = ssbService.extendComponentData(oldSection, response);
+                            ssbService.setActiveSection(null);
+                            ssbService.page.sections.splice(replaceAtIndex, 1, extendedData);
+                            ssbService.setActiveSection(replaceAtIndex);
+                            ssbService.setActiveComponent(null);
+                        } else {
+                            ssbService.page.sections.splice(insertAt, 0, response);
+                            ssbService.setActiveSection(insertAt);
+                            ssbService.setActiveComponent(null);
+                        }
+
+                    } else {
+                        console.error("Error loading section/component:", section);
                     }
                 })
             )
 
         }
 
-        function applyThemeToSite(theme) {
-            // Load web font loader
-            if (theme.name && theme.hasCustomFonts) {
+        /*
+         * extendComponentData
+         * - extend authored data onto new components
+         * - match component order of newSection
+         * - omit keys we don't want transfered
+         *
+         * @param {} oldSection - section being replaced
+         * @param {} newSection - section from server
+         *
+         * @returns {*} newSection with any authored data
+         *
+         */
+        function extendComponentData(oldSection, newSection) {
 
+            var keysToOmit = ['$$hashKey', '_id', 'anchor', 'accountId', 'version', 'type', 'layout', 'spacing'];
+            var newComponents = angular.copy(newSection.components);
+            var newComponentsOrder = _.invert(_.object(_.pairs(_.pluck(newComponents, 'type')))); // ['componentType1', 'componentType2', ...]
+            var oldComponents = _(angular.copy(oldSection.components)).chain()
+
+                                    .sortBy(function(x) { // sort by order of newComponents
+                                        return newComponentsOrder[x.type] && parseInt(newComponentsOrder[x.type], 10)
+                                    })
+
+                                    .value(); // return the new array
+
+            delete newSection.components;
+            delete oldSection.components;
+
+            newSection.components = _.map(newComponents, function(c, index) {
+                return $.extend({}, c, _.omit(oldComponents[index], keysToOmit));
+            });
+
+            return $.extend({}, newSection, _.omit(oldSection, keysToOmit));
+
+        }
+
+        /*
+         * Determine if page has a header
+         * - TODO: implement if needed
+         *
+         *
+         */
+        function pageHasHeader(sections) {
+            return false
+        }
+
+        /*
+         * Determine if page has a footer
+         *
+         *
+         *
+         */
+        function pageHasFooter(sections) {
+            var hasSectionFooter = false;
+            var hasComponentFooter = false;
+            var match = _.filter(sections, function(s){
+
+                if (s.name && s.components) {
+                    hasSectionFooter = s.name.toLowerCase() === 'footer';
+                    hasComponentFooter = _.where(s.components, { type: 'footer' }).length !== 0;
+                }
+
+                return hasSectionFooter || hasComponentFooter
+
+            });
+
+            return match.length !== 0
+        }
+
+        /*
+         * setup Theme
+         *
+         * - get latest theme data based on website's themeId
+         *
+         */
+        function setupTheme(website) {
+            var _website = website || ssbService.website;
+            return ssbService.getThemes().then(function(themes) {
+                var theme = themes.data.filter(function(t) { return t._id === _website.themeId })[0] || {};
+                var defaultTheme;
+
+                if (theme._id) {
+                    ssbService.applyThemeToSite(theme, true, _website);
+                } else {
+                    defaultTheme = themes.data.filter(function(t) { return t.handle === 'default' })[0] || {};
+                    ssbService.applyThemeToSite(defaultTheme, false, _website);
+                    _website.themeId = defaultTheme._id;
+                    ssbService.saveWebsite(_website);
+                }
+                $timeout(function() {
+                    ssbService.website = _website;
+                }, 100);
+            });
+        }
+
+        /*
+         * Apply theme fonts, styles and default themeoverrides for theme
+         *
+         * @param theme - theme obj
+         * @param keepCurrentOverrides - when not changing themes, should not set new themeOverrides
+         *
+         */
+        function applyThemeToSite(theme, keepCurrentOverrides, website) {
+            // Load web font loader
+
+                var _website = website || ssbService.website;
                 var unbindWatcher = $rootScope.$watch(function() {
                     return angular.isDefined(window.WebFont);
                 }, function(newValue, oldValue) {
                     if (newValue) {
-                        console.debug(newValue, oldValue);
+                        var defaultFamilies = ["Roboto", "Oswald", "Montserrat", "Open+Sans+Condensed"];
+                        if (theme.name && theme.hasCustomFonts) {
+                          var _fontStack = theme.defaultFontStack.split(',')[0].replace(/"/g, '');
+                          if(defaultFamilies.indexOf(_fontStack) === -1)
+                            defaultFamilies.push(_fontStack);
+                        }
                         window.WebFont.load({
                             google: {
-                                families: [theme.defaultFontStack.split(',')[0].replace(/"/g, '')]
+                                families: defaultFamilies
                             }
                         });
                         unbindWatcher();
@@ -502,13 +778,147 @@
                         sessionStorage.fonts = true;
                     }
                 }
+
+
+            _website.themeId = theme._id;
+            _website.theme = theme;
+
+            if (keepCurrentOverrides === undefined || !angular.isDefined(_website.themeOverrides.styles)) {
+                $timeout(function() {
+                    _website.themeOverrides = theme;
+                });
             }
 
-            if (!ssbService.website.theme) {
-                ssbService.website.themeId = theme._id;
-                ssbService.website.theme = theme;
-                ssbService.website.themeOverrides = theme;
+        }
+
+        function getSpectrumColorOptions() {
+            return {
+                showPalette: true,
+                clickoutFiresChange: true,
+                showInput: true,
+                showButtons: true,
+                allowEmpty: true,
+                hideAfterPaletteSelect: false,
+                showPaletteOnly: false,
+                togglePaletteOnly: true,
+                togglePaletteMoreText: 'more',
+                togglePaletteLessText: 'less',
+                preferredFormat: 'hex',
+                appendTo: 'body',
+                palette: [
+                  ["#C91F37", "#DC3023", "#9D2933", "#CF000F", "#E68364", "#F22613", "#CF3A24", "#C3272B", "#8F1D21", "#D24D57"],
+                  ["#F08F907", "#F47983", "#DB5A6B", "#C93756", "#FCC9B9", "#FFB3A7", "#F62459", "#F58F84", "#875F9A", "#5D3F6A"],
+                  ["#89729E", "#763568", "#8D608C", "#A87CA0", "#5B3256", "#BF55EC", "#8E44AD", "#9B59B6", "#BE90D4", "#4D8FAC"],
+                  ["#5D8CAE", "#22A7F0", "#19B5FE", "#59ABE3", "#48929B", "#317589", "#89C4F4", "#4B77BE", "#1F4788", "#003171"],
+                  ["#044F67", "#264348", "#7A942E", "#8DB255", "#5B8930", "#6B9362", "#407A52", "#006442", "#87D37C", "#26A65B"],
+                  ["#26C281", "#049372", "#2ABB9B", "#16A085", "#36D7B7", "#03A678", "#4DAF7C", "#D9B611", "#F3C13A", "#F7CA18"],
+                  ["#E2B13C", "#A17917", "#F5D76E", "#F4D03F", "#FFA400", "#E08A1E", "#FFB61E", "#FAA945", "#FFA631", "#FFB94E"],
+                  ["#E29C45", "#F9690E", "#CA6924", "#F5AB35", "#BFBFBF", "#F2F1EF", "#BDC3C7", "#ECF0F1", "#D2D7D3", "#757D75"],
+                  ["#EEEEEE", "#ABB7B7", "#6C7A89", "#95A5A6", "#9ACCCB", "#E8E7E7", "#000000", "#FFFFFF", "#50c7e8"]
+                ]
             }
+        }
+
+        function openMediaModal(modal, controller, index, size, vm, component, componentItemIndex, update) {
+            console.log('openModal >>> ', modal, controller, index);
+            var _modal = {
+                templateUrl: modal,
+                keyboard: false,
+                backdrop: 'static',
+                size: 'md',
+                resolve: {
+                    vm: function() {
+                        return vm;
+                    },
+                    showInsert: function () {
+                        return true
+                    },
+                    insertMedia: function () {
+                        return function(asset) {
+
+                            ssbService.setMediaForComponent(asset, component, componentItemIndex, update);
+
+                        }
+                    },
+                    component: function() {
+                        return component;
+                    },
+                    componentItemIndex: function() {
+                        return componentItemIndex;
+                    },
+                    update: function() {
+                        return update;
+                    }
+                }
+            };
+
+            if (controller) {
+                _modal.controller = controller;
+            }
+
+            if (size) {
+                _modal.size = 'lg';
+            }
+
+            return $modal.open(_modal);
+
+            // vm.modalInstance = $modal.open(_modal);
+
+            // vm.modalInstance.result.then(null, function () {
+            //     angular.element('.sp-container').addClass('sp-hidden');
+            // });
+
+        }
+
+        //TODO: this is legacy code adapted from editorCtrl.js, needs to be removed when we no longer support these components
+        function setMediaForComponent(asset, component, index, update) {
+
+            var obj = {};
+            var type = component.type;
+
+            //if image/text component
+            if (type === 'image-text') {
+
+                component.imgurl = asset.url;
+
+            } else if (type === 'image-gallery') {
+
+                if (update) {
+
+                    component.images[index].url = asset.url;
+
+                } else {
+
+                    component.images.splice(index + 1, 0, {
+                        url: asset.url
+                    });
+
+                }
+
+            } else if (type === 'thumbnail-slider') {
+
+                if (update) {
+
+                    component.thumbnailCollection[index].url = asset.url;
+
+                } else {
+
+                    component.thumbnailCollection.splice(index + 1, 0, {
+                        url: asset.url
+                    });
+
+                }
+
+            } else if (type === 'meet-team') {
+
+                component.teamMembers[index].profilepic = asset.url;
+
+            } else {
+
+                console.log('unknown component or image location');
+
+            }
+
         }
 
 
@@ -516,12 +926,7 @@
 
 			AccountService.getAccount(function(data) {
 				ssbService.websiteId = data.website.websiteId;
-                ssbService.getSite(data.website.websiteId).then(function() {
-                    ssbService.getThemes().then(function(themes) {
-                        var theme = themes.data.filter(function(t) { return t._id === ssbService.website.themeId })[0] || {};
-                        ssbService.applyThemeToSite(theme);
-                    });
-                });
+                ssbService.getSite(data.website.websiteId, true);
                 ssbService.getPages();
                 ssbService.getTemplates();
                 ssbService.getLegacyTemplates();

@@ -1,7 +1,17 @@
 <div class="button-group">
-	<button ng-disabled="!vm.state.pendingChanges" class="btn btn-default" ng-click="vm.cancel()"><span class="ti-eraser"></span> Cancel</button>
-	<button ng-disabled="!vm.state.pendingChanges" class="btn btn-primary" ng-click="vm.save()"><span class="ti-check"></span> Save</button>
-    <button class="btn btn-primary">
-        <a href="/{{vm.state.page.handle}}" target="_blank" style="color: white;"><span class="ti-eye"></span> View</a>
-    </button>
+	<div class="inline-block" tooltip-placement="bottom" tooltip-html-unsafe="Cancel">
+        <button ng-disabled="!vm.state.pendingChanges" class="btn btn-primary btn-o" ng-click="vm.cancel()"><span class="ti-eraser"></span> <span class="sr-only">Cancel</span></button>
+    </div>
+    <div class="inline-block" tooltip-placement="bottom" tooltip-html-unsafe="Save">
+        <button ng-disabled="!vm.state.pendingChanges" class="btn btn-primary btn-o" ng-click="vm.save()">
+         <span ng-if="!vm.state.saveLoading" class="ti-check"></span>
+         <span class="sr-only">Save</span>
+         <span ng-if="vm.state.saveLoading" class="fa fa-spinner fa-spin"></span>
+         </button>
+    </div>
+    <div class="inline-block"  tooltip-placement="bottom" tooltip-html-unsafe="View">
+        <button class="btn btn-primary btn-o">
+            <a href="/{{vm.state.page.handle}}" target="_blank" style="color: inherit;"><span class="ti-eye"></span> <span class="sr-only">View</span></a>
+        </button>
+    </div>
 </div>

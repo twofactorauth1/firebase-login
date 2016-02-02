@@ -27,20 +27,33 @@ a[href="https://froala.com/wysiwyg-editor"] {
     }
 }
 
-.fr-toolbar.fr-inline.fr-desktop {
-    // margin-top: 6em!important;
-}
-.fr-wrapper.show-placeholder .fr-placeholder {
-    pointer-events: none;
-}
-
 .ssb-site-builder-container {
 	height: 100%;
 	height: 100vh;
     overflow: auto;
+    background: #131e26;
+
+    .loading-editor {
+        position: relative;
+        top: 225px;
+        background: #131e26;
+        color: white;
+
+        h1 {
+            color: white;
+        }
+    }
 
     #componentloader .component-wrap {
         background: transparent;
+        z-index: 1;
+    }
+
+    #componentloader {
+        .add-feature.btn-o {
+            background: @indigenous-blue!important;
+            color: white;
+        }
     }
 }
 
@@ -50,6 +63,16 @@ a[href="https://froala.com/wysiwyg-editor"] {
 	height: 100%;
 	// width: 100%;
 	display: block;
+    // overflow: hidden;
+
+    .empty-page {
+        position: relative;
+        top: 100px;
+    }
+
+    .ssb-empty-page-add-btn {
+
+    }
 
 	.ssb-main {
 
@@ -238,7 +261,7 @@ a[href="https://froala.com/wysiwyg-editor"] {
 	.ssb-active-section,
 	.ssb-active-section .ssb-active-component {
 		&:before {
-			z-index: 1;
+			z-index: 2;
 			position: absolute;
 			top: 0;
 			left: 0;
@@ -247,6 +270,7 @@ a[href="https://froala.com/wysiwyg-editor"] {
 			content: '';
 			display: block;
 			box-shadow: inset 0px 0px 0px 8px rgba(71,184,217, 0.75);
+            pointer-events: none;
 		}
 	}
 
@@ -283,6 +307,27 @@ a[href="https://froala.com/wysiwyg-editor"] {
 			opacity: 1;
 		}
 	}
+
+}
+
+.ssb-pages-modal .single-type {
+    cursor: pointer;
+}
+
+.ssb-pages-modal .single-type:hover .fa-chevron-right {
+    color: @indigenous-blue;
+}
+
+.ssb-pages-modal-preview-image {
+    max-height: 150px;
+    margin: 0 0 1em 0;
+    overflow: hidden;
+}
+
+.ssb-pages-modal-text {}
+
+.ssb-page-modal-right-arrow {
+    cursor: pointer;
 
 }
 
@@ -345,4 +390,17 @@ a[href="https://froala.com/wysiwyg-editor"] {
 			margin: 0 0 0 10px;
 		}
 	}
+}
+.ssb-footer-page-settings-modal.disabled{
+	ul.page-settings{
+		li{
+			a{
+				color: #808080;
+			}
+		}
+	}
+}
+.greyed-out{
+	background: #f1f1f1;
+    padding: 1em;
 }

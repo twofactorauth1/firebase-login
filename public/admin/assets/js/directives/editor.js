@@ -1,7 +1,7 @@
 // 'use strict'; <--- DO NOT USE! CKEDITOR FAILS (https://github.com/WebSpellChecker/ckeditor-plugin-scayt/issues/65)
 /*global app, moment, angular, window, CKEDITOR*/
 /*jslint unparam:true*/
-app.directive("elem", function($timeout) {
+app.directive("elem", function($timeout, $compile) {
   return {
     require: '?ngModel',
     replace: true,
@@ -41,17 +41,31 @@ app.directive("elem", function($timeout) {
 
       if (scope.$parent.ssbEditor || (scope.$parent.vm && scope.$parent.vm.ssbEditor)) {
         $(function() {
-          setTimeout(function() {
+          $timeout(function() {
             $(elem).on('froalaEditor.initialized', function(e, editor) {
+              //var div = editor.$tb.first("fr-toolbar");
+              //div.attr('ind-draggable', 'ind-draggable');
+              //$compile(div)(scope);
               if (ngModel.$viewValue) {
                 editor.html.set(ngModel.$viewValue);
               }
             }).froalaEditor($.FroalaEditor.config)
               .on('froalaEditor.contentChanged', function(e, editor) {
                 scope.updateFroalaContent(editor);
-              })
-              .on('froalaEditor.image.resizeEnd', function(e, editor, $img) {
+              }).on('froalaEditor.keydown', function(e, editor) {
                 scope.updateFroalaContent(editor);
+              }).on('froalaEditor.image.resizeEnd', function(e, editor, $img) {
+                scope.updateFroalaContent(editor);
+              }).on('froalaEditor.toolbar.show', function(e, editor) {
+                $timeout(function(){
+                  var left = editor.$tb.offset().left;
+                  var screenLeft = 0;
+                  if($("#componentloader").offset)
+                    screenLeft = $("#componentloader").offset().left;
+                  if(left < screenLeft){
+                    editor.$tb.css("left", screenLeft);
+                  }  
+                },0)                              
               });
           }, 1000);
         });

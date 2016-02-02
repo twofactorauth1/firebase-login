@@ -21,7 +21,7 @@ script(type="text/javascript").
                 window.analytics.load('#{segmentIOWriteKey}');
         window.analytics.page('Index', {accountId:#{account._id}});
 
-if (account.website.settings.font_family && account.website.settings.font_family_2) || (typeof account.website.theme !== undefined && typeof account.website.theme.hasCustomFonts !== undefined && account.website.theme.hasCustomFonts === true)
+if (account.website.settings.font_family && account.website.settings.font_family_2) || (typeof account.website.theme !== 'undefined' && typeof account.website.theme.hasCustomFonts !== 'undefined' && account.website.theme.hasCustomFonts === true)
     script(src="//ajax.googleapis.com/ajax/libs/webfont/1.5.18/webfont.js")
 
 if account.website.settings.font_family && account.website.settings.font_family_2
@@ -32,7 +32,7 @@ if account.website.settings.font_family && account.website.settings.font_family_
            }
         });
 
-if (typeof account.website.theme !== undefined && typeof account.website.theme.hasCustomFonts !== undefined && account.website.theme.hasCustomFonts === true)
+if (typeof account.website.theme !== 'undefined' && typeof account.website.theme.hasCustomFonts !== 'undefined' & account.website.theme.hasCustomFonts === true)
     script(type="text/javascript").
         WebFont.load({
             google: {
@@ -45,36 +45,80 @@ if (typeof account.website.theme !== undefined && typeof account.website.theme.h
             }
         }
 
-if account.website.themeOverrides
+if (typeof account.website.theme !== 'undefined' && typeof account.website.themeOverrides !== 'undefined')
     style.
         .ssb-theme-#{account.website.theme.handle} {
+            color: #{account.website.themeOverrides.primaryTextColor};
             font-family: !{account.website.themeOverrides.defaultFontStack};
+            background-color: #{account.website.themeOverrides.styles.bodyBackgroundColor};
         }
 
-        .ssb-theme-#{account.website.theme.handle} .ssb-page-section {
+        .ssb-theme-#{account.website.theme.handle} .ssb-section-layout {
             background-color: #{account.website.themeOverrides.styles.bodyBackgroundColor};
+        }
+
+        .ssb-theme-#{account.website.theme.handle} .ssb-navigation a {
+            color: #{account.website.themeOverrides.styles.primaryTextColor};
         }
 
         .ssb-theme-#{account.website.theme.handle} .ssb-page-section-layout-header {
             background-color: #{account.website.themeOverrides.styles.headerBackgroundColor};
         }
 
-        .ssb-theme-heading {
-            font-size: #{account.website.themeOverrides.styles.headingSize};
+        .ssb-theme-#{account.website.theme.handle} .ssb-page-section-layout-header [ssb-text-component] {
+            color: #{account.website.themeOverrides.styles.headerColor};
         }
 
-        .ssb-theme-paragraph {
-            font-size: #{account.website.themeOverrides.styles.paragraphSize};
+        .ssb-theme-#{account.website.theme.handle} .ssb-page-section-layout-hero {
+            background-color: #{account.website.themeOverrides.styles.heroBackgroundColor};
         }
 
-        .btn, .btn-default, .btn-block, .btn-primary, button, .ssb-theme-btn {
-            background-color: #{account.website.themeOverrides.styles.primaryBtnBackgroundColor};
-            color: #{account.website.themeOverrides.styles.primaryBtnTextColor};
+        .ssb-theme-#{account.website.theme.handle} .ssb-page-section-layout-hero [ssb-text-component] {
+            color: #{account.website.themeOverrides.styles.heroColor};
         }
 
-        h1, h2, h3, h4, h5, a, p, span, label {
+        .ssb-theme-#{account.website.theme.handle} .ssb-theme-heading-text {
             color: #{account.website.themeOverrides.styles.primaryTextColor};
         }
+
+        .ssb-theme-#{account.website.theme.handle} .ssb-theme-paragraph-text {
+            color: #{account.website.themeOverrides.styles.primaryTextColor};
+        }
+
+        .ssb-theme-#{account.website.theme.handle} .ssb-theme-btn, .ssb-theme-#{account.website.theme.handle} .ssb-theme-btn:hover {
+            background-color: #{account.website.themeOverrides.styles.primaryBtnBackgroundColor};
+            color: #{account.website.themeOverrides.styles.primaryBtnTextColor};
+            border-color: #{account.website.themeOverrides.styles.primaryBtnBackgroundColor};
+        }
+
+        .ssb-theme-#{account.website.theme.handle} .ssb-theme-btn:hover, .ssb-theme-#{account.website.theme.handle} .ssb-theme-btn:active, .ssb-theme-#{account.website.theme.handle} .ssb-theme-btn:focus {
+            background-color: #{account.website.themeOverrides.styles.primaryBtnBackgroundColor}!important;
+        }
+
+        .ssb-theme-young-soul .navbar-toggle .icon-bar {
+            /*background-color: #{account.website.themeOverrides.styles.primaryBtnTextColor};*/
+        }
+
+        @media screen and (min-width: 768px) {
+
+            .ssb-theme-#{account.website.theme.handle} .ssb-page-section-layout-header [ssb-text-component] {
+                font-size: #{account.website.themeOverrides.styles.headerSize};
+            }
+
+            .ssb-theme-#{account.website.theme.handle} .ssb-page-section-layout-hero [ssb-text-component] {
+                font-size: #{account.website.themeOverrides.styles.heroSize};
+            }
+
+            .ssb-theme-#{account.website.theme.handle} .ssb-theme-heading-text {
+                font-size: #{account.website.themeOverrides.styles.headingSize};
+            }
+
+            .ssb-theme-#{account.website.theme.handle} .ssb-theme-paragraph-text {
+                font-size: #{account.website.themeOverrides.styles.paragraphSize};
+            }
+
+        }
+
 
 if pages
     script(type="text/javascript").

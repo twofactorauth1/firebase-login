@@ -1,0 +1,30 @@
+<div class="row padding-10">
+    <div class="form-group">
+        <label for="colorpicker">Visibility:</label>
+        <span tooltip-placement="top" tooltip-html-unsafe="Show/hide vm.component."><i class="fa fa-info-circle" /></span>
+        <switch ng-model="vm.component.visibility" class="pull-right" ng-change="saveComponentChanges()"></switch>
+    </div>
+    <hr ng-if="vm.component.type != 'navigation'"></hr>
+    <div class="form-group" ng-if="vm.component.type != 'navigation'">
+        <label for="component-title" tooltip-placement="top" tooltip="The anchor of the component">Anchor</label>
+        <span tooltip-placement="top" tooltip-html-unsafe="The anchor of the vm.component."><i class="fa fa-info-circle" /></span>
+        <input class="form-control" type="text" ng-model="vm.component.anchor" ng-change="slugifyAnchor(vm.component.anchor);">
+    </div>
+    <!-- <hr></hr>
+    <div class="form-group">
+        <label for="component-title">Version</label>
+        <span tooltip-placement="top" tooltip-html-unsafe="The version of the vm.component."><i class="fa fa-info-circle" /></span>
+        <select ng-model="vm.component.version" ng-change="saveComponentChanges()" class="form-control margin-bottom-0">
+            <option ng-repeat="version in componentVersions track by $index" value="{{version}}" ng-selected="{{version == vm.component.version}}">{{version}}</option>
+        </select>
+    </div> -->
+    <hr ng-if="vm.component.type == 'image-text'"></hr>
+    <div class="form-group" ng-if="vm.component.type == 'image-text'">
+        <label for="colorpicker">Image Position:</label>
+        <span tooltip-placement="top" tooltip-html-unsafe="Set image position to left/right."><i class="fa fa-info-circle" /></span>
+        <select ng-model="vm.component.imagePosition" ng-change="saveComponent(true)" class="form-control">
+            <option value="left">Left</option>
+            <option value="right">Right</option>
+        </select>
+    </div>
+</div>

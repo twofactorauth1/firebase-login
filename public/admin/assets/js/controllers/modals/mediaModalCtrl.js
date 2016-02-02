@@ -153,9 +153,11 @@ app.controller('MediaModalCtrl', ['$scope', '$injector', '$modalInstance', '$htt
   $scope.typeMimes = {
     image: ['image/png', 'image/jpeg', 'image/gif'],
     video: ['video/mpeg', 'video/mp4', 'video/webm', 'video/x-flv', 'video/x-ms-wmv'],
-    audio: ['audio/mpeg'],
+    audio: ['audio/mpeg', 'audio/mp3', 'audio/*'],
     document: ['application/octet-stream', 'application/pdf']
   };
+
+  
 
   $scope.getFileType = function(mime){
     if(mime.match('audio.*'))
@@ -199,7 +201,7 @@ app.controller('MediaModalCtrl', ['$scope', '$injector', '$modalInstance', '$htt
           $scope.batch.push(value);
         }
       } else {
-        if ($scope.mimeList.indexOf(value.mimeType) > -1) {
+        if ($scope.mimeList.indexOf(value.mimeType) > -1 || $scope.getFileType(value.mimeType) === $scope.showType ) {
           $scope.assets.push(value);
           if (value.checked) {
             $scope.batch.push(value);

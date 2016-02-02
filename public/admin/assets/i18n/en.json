@@ -80,7 +80,8 @@
         "MAIN": "Dashboard"
       },
       "emails": {
-        "MAIN": "Emails"
+        "MAIN": "Emails",
+        "MANAGE": "Manage"
       },
       "website": {
         "MAIN": "Website",

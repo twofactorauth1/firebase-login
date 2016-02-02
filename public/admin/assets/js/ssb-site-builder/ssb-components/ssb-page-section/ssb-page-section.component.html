@@ -1,4 +1,33 @@
-<section id="{{vm.section._id}}" class="ssb-section-layout {{vm.sectionClass(vm.section)}}" ng-attr-style="{{vm.sectionStyle(vm.section)}}">
+<section ng-show="vm.section.visibility || vm.section.visibility === undefined" id="section_{{vm.section._id}}" class="ssb-section-layout {{vm.sectionClass(vm.section)}}" ng-attr-style="{{vm.sectionStyle(vm.section)}}">
+
+    <style>
+    #section_{{vm.section._id}} .bg-overlay {
+        background: {{vm.section.bg.img.overlaycolor || 'transparent'}}!important;
+        opacity: {{vm.section.bg.img.overlayopacity === 0 ? vm.section.bg.img.overlayopacity : vm.section.bg.img.overlayopacity/100 || 1}};
+    }
+    #section_{{vm.section._id}} {
+        opacity: {{vm.section.bg.opacity === 0 ? 0 : vm.section.bg.opacity || 1}};
+    }
+    </style>
+
+    <div
+        ng-if="vm.section.bg && !(vm.section.bg.img && vm.section.bg.img.parallax)"
+        class="bg {{vm.sectionBGClass(vm.section)}}"
+        ng-attr-style="{{vm.sectionBGStyle(vm.section)}}">
+    </div>
+
+    <div
+        ng-if="vm.section.bg.img && vm.section.bg.img.url && vm.section.bg.img.show && vm.section.bg.img.parallax"
+        {{vm.section.bg.img.parallax ? parallax-background : ""}}
+        class="bg {{vm.sectionBGClass(vm.section)}}"
+        ng-attr-parallax-ratio="{{vm.section.bg.img.parallax ? '0.4' : '1'}}"
+        style='
+            background: url("{{vm.section.bg.img.url}}") repeat-y;
+            background-size: cover;'>
+    </div>
+
+    <div ng-if="vm.section.bg.img.show && vm.section.bg.img.overlay" class="bg bg-overlay"></div>
+
     <ssb-component-loader
         ng-if="vm.section.components.length"
         ng-repeat="component in vm.section.components track by $index"
@@ -7,6 +36,9 @@
         component="component"
         website="vm.state.website"
         state="vm.state"
-        ui-state="vm.uiState">
+        ui-state="vm.uiState"
+        component-control="vm.uiState.componentControl"
+        component-media="vm.uiState.componentMedia">
     </ssb-component-loader>
+
 </section>

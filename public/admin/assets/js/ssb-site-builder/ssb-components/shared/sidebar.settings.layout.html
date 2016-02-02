@@ -1,0 +1,87 @@
+<!-- <div class="row padding-10" ng-if="component.layoutModifiers">
+    <div class="form-group">
+        <div class="checkbox clip-check check-info checkbox-inline" ng-if="component.layoutModifiers.fixed !== undefined">
+            <input id="layout_1" type="checkbox" ng-true-value="true" ng-false-value="false" ng-model="component.layoutModifiers.fixed">
+            <label for="layout_1">
+                Lock header to top of page
+                <i
+                    class="fa fa-info"
+                    tooltip-placement="bottom"
+                    tooltip-html-unsafe="Also known as fixed or sticky, this makes the header stay visible at the top of the page even if the page is scrolled.">
+                </i>
+            </label>
+        </div>
+    </div>
+</div> -->
+
+<div class="row padding-10">
+    <div class="form-group">
+        <label>Max Width</label>
+        <ui-select ng-model="component.spacing.mw" theme="bootstrap" ng-disabled="component.spacing.usePage">
+            <ui-select-match placeholder="Select a Resolution">
+                <small ng-bind-html="$select.selected"></small>
+            </ui-select-match>
+            <ui-select-choices repeat="res in [320, 360, 480, 720, 768, 1024, 1280, 1360, 1366, 1440, 1600, 1680, 1920, '100%'] | filter: $select.search track by $index">
+                <small ng-bind-html="res | highlight: $select.search"></small>
+            </ui-select-choices>
+        </ui-select>
+    </div>
+</div>
+
+<div class="row padding-10">
+    <div class="padding-15 margin-bottom-0 partition-light-primary">
+        <label class="text-white lead">Outer Spacing</label>
+        <div class="spacing-mt">
+            <input type="number" string-to-number ng-model="component.spacing.mt"  min="-500" max="500" data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down" ng-disabled="component.spacing.usePage">
+        </div>
+        <div class="col-xs-3">
+            <div class="spacing-ml">
+                <input type="number" string-to-number ng-model="component.spacing.ml"  min="-500" max="500" data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down" ng-disabled="component.spacing.usePage">
+                <div class="checkbox clip-check check-primary checkbox-inline">
+                    <input type="checkbox" id="margin-left" ng-model="component.spacing.ml" ng-true-value="'auto'" ng-false-value="'0'" ng-disabled="component.spacing.usePage">
+                    <label for="margin-left" class="text-white">
+                        Auto
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-push-6 col-xs-3">
+            <div class="spacing-mr">
+                <input type="number" string-to-number ng-model="component.spacing.mr"  min="-500" max="500" data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down" ng-disabled="component.spacing.usePage">
+                <div class="checkbox clip-check check-primary checkbox-inline">
+                    <input type="checkbox" id="margin-right" ng-model="component.spacing.mr" ng-true-value="'auto'" ng-false-value="'0'" ng-disabled="component.spacing.usePage">
+                    <label class="text-white" for="margin-right">
+                        Auto
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+        <div class="spacing-mb margin-bottom-10">
+            <input type="number" string-to-number ng-model="component.spacing.mb"  min="-500" max="500" data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down" ng-disabled="component.spacing.usePage">
+        </div>
+    </div>
+</div>
+
+<div class="row padding-10">
+    <div class="padding-15 margin-bottom-0 partition-dark-primary">
+        <label class="text-white lead">Inner Spacing</label>
+        <div class="spacing-mt">
+            <input type="number" string-to-number ng-model="component.spacing.pt"  min="0" max="500" data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down" ng-disabled="component.spacing.usePage">
+        </div>
+        <div class="col-xs-3">
+            <div class="spacing-ml">
+                <input type="number" string-to-number ng-model="component.spacing.pl"  min="0" max="500" data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down" ng-disabled="component.spacing.usePage">
+            </div>
+        </div>
+        <div class="col-xs-push-6 col-xs-3 margin-bottom-20">
+            <div class="spacing-mr">
+                <input type="number" string-to-number ng-model="component.spacing.pr"  min="0" max="500" data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down" ng-disabled="component.spacing.usePage">
+            </div>
+        </div>
+        <div class="clearfix"></div>
+        <div class="spacing-mb margin-bottom-10">
+            <input type="number" string-to-number ng-model="component.spacing.pb"  min="0" max="500" data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down" ng-disabled="component.spacing.usePage">
+        </div>
+    </div>
+</div>

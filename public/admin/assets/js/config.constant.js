@@ -703,6 +703,7 @@ app.constant('JS_REQUIRES', {
     'assetsService': 'assets/js/services/assets.js',
     'geocodeService': 'assets/js/services/geocode.js',
     'dashboardService': 'assets/js/dashboard/dashboard.service.js',
+    'simpleSiteBuilderService': 'assets/js/ssb-site-builder/ssb-site-builder.service.js',
     //*** Filters
     'htmlToPlaintext': 'assets/js/filters/htmlToPlaintext.js',
     'secTotime': 'assets/js/filters/secTotime.js',
@@ -715,6 +716,7 @@ app.constant('JS_REQUIRES', {
     'generateURLforLinks': 'assets/js/filters/generateURLforLinks.js',
     'selectedTags': 'assets/js/filters/productTags.js',
     'propsFilter': 'assets/js/filters/propsFilter.js',
+    'cleanType': 'assets/js/filters/cleanType.js',
 
     //*** Directives
     'mediaModal': 'assets/js/directives/mediadirective.js',
@@ -872,7 +874,8 @@ app.constant('JS_REQUIRES', {
   },
   {
     name: 'froala-wysiwyg-editor',
-    files: ['../js/libs_misc/froala-wysiwyg-editor/css/froala_editor.css',
+    files: [
+      '../js/libs_misc/froala-wysiwyg-editor/css/froala_editor.css',
       '../js/libs/froala-wysiwyg-editor/css/froala_style.min.css',
       '../js/libs/froala-wysiwyg-editor/js/froala_editor.min.js'
       ]
@@ -911,6 +914,9 @@ app.constant('JS_REQUIRES', {
     name: 'custom-froala-wysiwyg-editor',
     files: [
       "../js/libs_misc/froala-wysiwyg-editor/js/plugins/media_manager.min.js",
+      "../js/libs_misc/froala-wysiwyg-editor/js/plugins/font-awesome.js",
+      "../js/libs_misc/froala-wysiwyg-editor/js/plugins/button.js",
+      "../js/libs_misc/froala-wysiwyg-editor/css/plugins/font-awesome.css",
       '../js/libs_misc/froala-wysiwyg-editor/config/config.js']
   },
   {

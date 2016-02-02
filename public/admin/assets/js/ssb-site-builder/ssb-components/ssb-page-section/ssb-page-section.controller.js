@@ -6,170 +6,244 @@ ssbPageSectionController.$inject = ['$scope', '$attrs', '$filter', '$transclude'
 /* @ngInject */
 function ssbPageSectionController($scope, $attrs, $filter, $transclude) {
 
-  console.info('page-section directive init...')
+    console.info('page-section directive init...')
 
-  var vm = this;
+    var vm = this;
 
-  vm.init = init;
-  vm.sectionClass = sectionClass;
-  vm.sectionStyle = sectionStyle;
-  vm.componentClass = componentClass;
-  vm.componentStyle = componentStyle;
+    vm.init = init;
+    vm.sectionClass = sectionClass;
+    vm.sectionBGClass = sectionBGClass;
+    vm.sectionStyle = sectionStyle;
+    vm.sectionBGStyle = sectionBGStyle;
+    vm.componentClass = componentClass;
+    vm.componentStyle = componentStyle;
+    vm.sectionHasFooter = sectionHasFooter;
 
-  //TODO: use https://github.com/martinandert/react-inline to generate inline styles for sections/components
+    //TODO: use https://github.com/martinandert/react-inline to generate inline styles for sections/components
 
-  function sectionClass(section) {
-    var classString = 'col-xs-12 ';
+    function sectionClass(section) {
+        var classString = 'container-fluid '; //col-xs-12 was messing up legacy
 
-    if (section.layout) {
-        classString += 'ssb-page-section-layout-' + section.layout;
-    }
-    // console.debug('section classString')
-    // console.debug(classString)
-    return classString;
-  }
+        if (section.layout) {
 
-  function sectionStyle(section) {
-    var styleString = '';
+            classString += 'ssb-page-section-layout-' + section.layout;
 
-    if (section.spacing) {
-      if (section.spacing.pt) {
-        styleString += 'padding-top: ' + section.spacing.pt + 'px;';
-      }
+        }
 
-      if (section.spacing.pt) {
-        styleString += 'padding-bottom: ' + section.spacing.pb + 'px;';
-      }
+        if (section.layoutModifiers) {
 
-      if (section.spacing.pt) {
-        styleString += 'padding-left: ' + section.spacing.pl + 'px;';
-      }
+            if (section.layoutModifiers.fixed) {
 
-      if (section.spacing.pt) {
-        styleString += 'padding-right: ' + section.spacing.pr + 'px;';
-      }
+                classString += ' ssb-page-section-layout-' + section.layout + '-fixed';
 
-      if (section.spacing.pt) {
-        styleString += 'margin-top: ' + section.spacing.mt + 'px;';
-      }
+            }
 
-      if (section.spacing.pt) {
-        styleString += 'margin-bottom: ' + section.spacing.mb + 'px;';
-      }
+        }
 
-      if (section.spacing.pt) {
-        styleString += 'margin-left: ' + section.spacing.ml == 'auto' ? section.spacing.ml: section.spacing.ml + 'px;';
-      }
+        if (vm.sectionHasFooter(section)) {
+            classString += ' ssb-page-section-layout-overflow-visible';
+        }
 
-      if (section.spacing.pt) {
-        styleString += 'margin-right: ' + section.spacing.mr == 'auto' ? section.spacing.mr : section.spacing.mr + 'px;';
-      }
+        // console.debug('section classString')
+        // console.debug(classString)
 
-      if (section.spacing.pt) {
-        styleString += 'max-width: ' + section.spacing.mw == '100%' ? section.spacing.mw : section.spacing.mw  + 'px;';
-      }
-
-      if (section.spacing.lineHeight) {
-        styleString += 'line-height: ' + section.spacing.lineHeight;
-      }
+        return classString;
     }
 
-    if (section.txtcolor) {
-      styleString += 'color: ' + section.txtcolor + ';';
+    function sectionBGClass(section) {
+        var classString = ' ';
+
+
+        if (section.bg) {
+
+            if (section.bg.img && section.bg.img.blur) {
+                classString += ' blur-image';
+            }
+
+            if (section.bg.img && section.bg.img.parallax) {
+                classString += ' parallax';
+            }
+
+        }
+
+        return classString;
     }
 
-    if (section.bg) {
-      if (section.bg.color) {
-        styleString += 'background-color: ' + section.bg.color + ';';
-      }
+    function sectionStyle(section) {
+        var styleString = ' ';
 
-      if (section.bg.img && section.bg.img.show && section.bg.img.url !== '') {
-        styleString += 'background-image: url("' + section.bg.img.url + '")';
-      }
+        if (section.spacing) {
+            if (section.spacing.pt) {
+                styleString += 'padding-top: ' + section.spacing.pt + 'px;';
+            }
+
+            if (section.spacing.pb) {
+                styleString += 'padding-bottom: ' + section.spacing.pb + 'px;';
+            }
+
+            if (section.spacing.pl) {
+                styleString += 'padding-left: ' + section.spacing.pl + 'px;';
+            }
+
+            if (section.spacing.pr) {
+                styleString += 'padding-right: ' + section.spacing.pr + 'px;';
+            }
+
+            if (section.spacing.mt) {
+                styleString += 'margin-top: ' + section.spacing.mt + 'px;';
+            }
+
+            if (section.spacing.mb) {
+                styleString += 'margin-bottom: ' + section.spacing.mb + 'px;';
+            }
+
+            if (section.spacing.ml) {
+                styleString += section.spacing.ml == 'auto' ? 'margin-left: ' + section.spacing.ml + ';float: none;' : 'margin-left: ' + section.spacing.ml + 'px;';
+            }
+
+            if (section.spacing.mr) {
+                styleString += (section.spacing.mr == 'auto') ? 'margin-right: ' + section.spacing.mr + ';float: none;' : 'margin-right: ' + section.spacing.mr + 'px;';
+            }
+
+            if (section.spacing.mw) {
+                styleString += (section.spacing.mw == '100%') ?
+                    'max-width: ' + section.spacing.mw + ';' :
+                    'max-width: ' + section.spacing.mw  + 'px;margin:0 auto!important;';
+            }
+
+            if (section.spacing.lineHeight) {
+                styleString += 'line-height: ' + section.spacing.lineHeight;
+            }
+
+        }
+
+        if (section.txtcolor) {
+            styleString += 'color: ' + section.txtcolor + ';';
+        }
+
+        return styleString;
     }
 
-    return styleString;
-  }
+    function sectionBGStyle(section) {
+        var styleString = ' ';
 
-  function componentClass(component, index) {
-    var classString = 'col-xs-12';
+        if (section.bg) {
 
-    if (vm.section.layout === '1-col') {
-      // classString += 'col-sm-12 ';
+            /*
+            bg:
+                color: ""
+                img:
+                    blur: false
+                    height: null
+                    overlay: true
+                    overlaycolor: "#d24d57"
+                    overlayopacity: 60
+                    parallax: false
+                    show: true
+                    url: "//s3.amazonaws.com/indigenous-digital-assets/account_1191/graph_paper_1447199316134.gif"
+                    width: null
+                opacity: 0.4
+
+            */
+
+            if (section.bg.color) {
+                styleString += 'background-color: ' + section.bg.color + ';';
+            }
+
+            if (section.bg.img && section.bg.img.show && section.bg.img.url && section.bg.img.url !== '') {
+                styleString += 'background-image: url("' + section.bg.img.url + '")';
+            }
+
+        }
+
+        return styleString;
     }
 
-    if (vm.section.layout === '2-col') {
-      classString += ' col-md-6 ';
+    function componentClass(component, index) {
+        var classString = 'container-fluid ';
+
+        if (vm.section.layout === '1-col') {
+          // classString += 'col-sm-12 ';
+        }
+
+        if (vm.section.layout === '2-col') {
+          classString += ' col-md-6 ';
+        }
+
+        if (vm.section.layout === '3-col') {
+          classString += ' col-md-4 ';
+        }
+
+        if (vm.section.layout === '4-col') {
+          classString += ' col-md-3';
+        }
+
+        if (index) {
+          classString += ' ssb-component-index-' + index + ' ';
+        }
+
+
+        if (vm.uiState && index === vm.uiState.activeComponentIndex) {
+          classString += ' ssb-active-component ';
+        }
+
+        return classString;
+
     }
-
-    if (vm.section.layout === '3-col') {
-      classString += ' col-md-4 ';
-    }
-
-    if (vm.section.layout === '4-col') {
-      classString += ' col-md-3';
-    }
-
-    if (index) {
-      classString += ' ssb-component-index-' + index + ' ';
-    }
-
-
-    if (vm.uiState && index === vm.uiState.activeComponentIndex) {
-      classString += ' ssb-active-component ';
-    }
-
-    return classString;
-
-  }
 
   function componentStyle(component) {
-    var styleString = '';
+    var styleString = ' ';
 
     if (component.spacing) {
-      if (component.spacing.pt) {
-        styleString += 'padding-top: ' + component.spacing.pt + 'px;';
-      }
+        if (component.spacing.pt) {
+            styleString += 'padding-top: ' + component.spacing.pt + 'px;';
+        }
 
-      if (component.spacing.pt) {
-        styleString += 'padding-bottom: ' + component.spacing.pb + 'px;';
-      }
+        if (component.spacing.pb) {
+            styleString += 'padding-bottom: ' + component.spacing.pb + 'px;';
+        }
 
-      if (component.spacing.pt) {
-        styleString += 'padding-left: ' + component.spacing.pl + 'px;';
-      }
+        if (component.spacing.pl) {
+            styleString += 'padding-left: ' + component.spacing.pl + 'px;';
+        }
 
-      if (component.spacing.pt) {
-        styleString += 'padding-right: ' + component.spacing.pr + 'px;';
-      }
+        if (component.spacing.pr) {
+            styleString += 'padding-right: ' + component.spacing.pr + 'px;';
+        }
 
-      if (component.spacing.pt) {
-        styleString += 'margin-top: ' + component.spacing.mt + 'px;';
-      }
+        if (component.spacing.mt) {
+            styleString += 'margin-top: ' + component.spacing.mt + 'px;';
+        }
 
-      if (component.spacing.pt) {
-        styleString += 'margin-bottom: ' + component.spacing.mb + 'px;';
-      }
+        if (component.spacing.mb) {
+            styleString += 'margin-bottom: ' + component.spacing.mb + 'px;';
+        }
 
-      if (component.spacing.pt) {
-        styleString += 'margin-left: ' + component.spacing.ml == 'auto' ? component.spacing.ml: component.spacing.ml + 'px;';
-      }
+        if (component.spacing.ml) {
+            styleString += component.spacing.ml == 'auto' ? 'margin-left: ' + component.spacing.ml + ';float: none;' : 'margin-left: ' + component.spacing.ml + 'px;';
+        }
 
-      if (component.spacing.pt) {
-        styleString += 'margin-right: ' + component.spacing.mr == 'auto' ? component.spacing.mr : component.spacing.mr + 'px;';
-      }
+        if (component.spacing.mr) {
+            styleString += (component.spacing.mr == 'auto') ? 'margin-right: ' + component.spacing.mr + ';float: none;' : 'margin-right: ' + component.spacing.mr + 'px;';
+        }
 
-      if (component.spacing.pt) {
-        styleString += 'max-width: ' + component.spacing.mw == '100%' ? component.spacing.mw : component.spacing.mw  + 'px;';
-      }
+        if (component.spacing.mw) {
+            styleString += (component.spacing.mw == '100%') ?
+                'max-width: ' + component.spacing.mw + ';' :
+                'max-width: ' + component.spacing.mw  + 'px;margin:0 auto!important;';
+        }
 
-      if (component.spacing.lineHeight) {
-        styleString += 'line-height: ' + component.spacing.lineHeight;
-      }
+        if (component.spacing.lineHeight) {
+            styleString += 'line-height: ' + component.spacing.lineHeight;
+        }
     }
 
     if (component.txtcolor) {
-      styleString += 'color: ' + component.txtcolor + ';';
+        styleString += 'color: ' + component.txtcolor + ';';
+    }
+
+    if (component.visibility === false) {
+        styleString += 'display: none!important;';
     }
 
     if (component.bg) {
@@ -185,9 +259,33 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude) {
     return styleString;
   }
 
-  function init(element) {
-  	vm.element = element;
-  }
+
+    function setFixedPosition(state) {
+
+        var mainEl = vm.element.parents('.ssb-main:first');
+        var elementHeight = vm.element.height();
+
+        if (state === 'on') {
+
+            mainEl.css({
+                'padding-top': elementHeight
+            });
+
+        } else {
+            mainEl.css({
+                'padding-top': ''
+            });
+        }
+
+    }
+
+    function sectionHasFooter(section) {
+        return _.findWhere(section.components, { type: 'footer' });
+    }
+
+    function init(element) {
+        vm.element = element;
+    }
 
 }
 

@@ -8,7 +8,7 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
         templateUrl: '/components/component-wrap.html',
         link: function(scope, element, attrs, ctrl) {
             scope.newAccount = {};
-            
+
             //scope.domainExistsAlready = false;  // needs to be undefined to begin with
             scope.emptyBusinessName = false;
             scope.validBusinessName = true;
@@ -38,7 +38,7 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                     UserService.saveOrUpdateTmpAccount(tmpAccount, function(data) {});
                 }
             });
-    
+
             // scope.planStatus = {};
             // scope.emailValidation = formValidations.email;
             // var productId = scope.component.productId;
@@ -362,7 +362,7 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                         scope.loading = false;
                     }
                 }
-                
+
                 if(!scope.validateForm)
                     return;
 
@@ -470,12 +470,8 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                                     //send facebook tracking info
                                     window._fbq = window._fbq || [];
                                     window._fbq.push(['track', '6032779610613', {'value':'0.00','currency':'USD'}]);
-                                    // ensures the optimizely object is defined globally using
-                                    window['optimizely'] = window['optimizely'] || [];
-
-                                    // sends a tracking call to Optimizely for the given event name.
-                                    window.optimizely.push(["trackEvent", "freeTrialSignup"]);
                                     console.log('sent facebook message');
+
                                     //send affiliate purchase info
                                     var leadData = {
                                         first_name: newAccount.first,
@@ -505,7 +501,7 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                             }
                         });
 
-                    });                   
+                    });
                   })
                   .catch(function (err) {
                     scope.loading = false;
@@ -656,10 +652,10 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                 console.log('newAccount.extension ', newAccount.extension);
                 var regex = formValidations.extension;
                 var result =  regex.test(newAccount.extension);
-                if (result || !newAccount.extension) {                                        
+                if (result || !newAccount.extension) {
                     angular.element("#extension .error").html("");
                     angular.element("#extension").removeClass('has-error').addClass('has-success');
-                    angular.element("#extension .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');                    
+                    angular.element("#extension .glyphicon").removeClass('glyphicon-remove').addClass('glyphicon-ok');
                 } else {
                     angular.element("#extension .error").html("Enter a valid extension");
                     angular.element("#extension").addClass('has-error');

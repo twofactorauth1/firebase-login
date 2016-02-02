@@ -2,6 +2,8 @@
 
 app.directive('ssbComponentLoader', ssbComponentLoader);
 
+ssbComponentLoader.$inject = ['$compile'];
+/* @ngInject */
 function ssbComponentLoader($compile) {
   return {
   	restrict: 'E',
@@ -14,7 +16,9 @@ function ssbComponentLoader($compile) {
       	state: '=',
       	uiState: '=',
         componentClass: '&',
-        componentStyle: '&'
+        componentStyle: '&',
+        componentControl: '=',
+        componentMedia: '='
       },
     replace: true,
   	link: function (scope, element, attrs, ctrl) {
@@ -25,10 +29,12 @@ function ssbComponentLoader($compile) {
                         'ui-state="vm.uiState" ' +
                         'ssb-editor="true" ' +
                         'class="ssb-component ssb-{{vm.component.type}} {{vm.componentClass(vm.component)}}" ' +
-                        'ng-attr-style="{{vm.componentStyle(vm.component)}}">' +
+                        'ng-attr-style="{{vm.componentStyle(vm.component)}}" ' +
+                        'control="vm.componentControl"' +
+                        'media="vm.componentMedia(componentId, index, update)">' +
                       '</div>';
   		var compiled = $compile(template)(scope)
-      element.replaceWith(compiled);
+        element.replaceWith(compiled);
   	}
   }
 

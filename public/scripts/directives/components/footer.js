@@ -14,9 +14,10 @@ app.directive('footerComponent', ['websiteService', function (WebsiteService) {
           scope.copyright = {
             year: new Date().getFullYear()
           }
+          scope.copyrightYear = new Date().getFullYear();
         }
       });
     }
   }
 }]);
-  
+

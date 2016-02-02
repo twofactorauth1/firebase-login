@@ -16,8 +16,6 @@ html(class="no-js", lang="en" ng-app="mainApp" ng-controller="MainCtrl as main",
     // <![endif]
     head
         block head
-            if account.accountUrl == 'https://main.indigenous.io'
-                script(src='//cdn.optimizely.com/js/3536810180.js')
             //- override this to include a different head section (e.g. requirehead.jade)
             block headattributes
                 include index_head_styles
@@ -53,7 +51,10 @@ html(class="no-js", lang="en" ng-app="mainApp" ng-controller="MainCtrl as main",
                     window.indigenous.precache = window.indigenous.precache || {};
                     window.indigenous.precache.pages = {components:components};
 
-    body(class='theme-main navbar-v#{ account.website.nav_version } ssb-main ssb-theme-#{account.website.theme.handle} ng-cloak', ng-cloak)
+        //- script.
+        //-     var test = !{JSON.stringify(account.website)};
+
+    body(class='theme-main navbar-v#{ account.website.nav_version } ssb-main ng-cloak', class=(account.website.theme && account.website.theme.handle ? 'ssb-theme-' + account.website.theme.handle : 'ssb-theme-default'), ng-cloak)
         block body_content
             div(id='fb-root')
             div(id='toolbar')
