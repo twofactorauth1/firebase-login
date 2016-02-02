@@ -979,19 +979,20 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
        * -
        */
       SimpleSiteBuilderService.getPagesWithSections().then(function(pages) {
-        $scope.allPages = pages.data;
+        var allPages = pages.data;
 
         AccountService.getAccount(function(data) {
           if (!data.showhide.blog) {
-            var _blogPage = _.findWhere($scope.allPages, {
+            var _blogPage = _.findWhere(allPages, {
               handle: 'blog'
             });
             if (_blogPage) {
-              var _index = _.indexOf($scope.allPages, _blogPage);
-              $scope.allPages.splice(_index, 1);
+              var _index = _.indexOf(allPages, _blogPage);
+              allPages.splice(_index, 1);
             }
           }
-          $scope.filterdedPages = $filter('orderBy')($scope.allPages, "title", false);
+          allPages = _.reject(allPages, function(page){ return page.mainmenu === false });
+          $scope.filterdedPages = $filter('orderBy')(allPages, "title", false);
         });
 
       });

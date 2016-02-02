@@ -52,18 +52,18 @@ function ssbSiteBuilderTopbarController($scope, $timeout, $attrs, $filter, Simpl
                     //reset section panel
                     vm.uiState.navigation.sectionPanel.reset();
 
-                    saveWebsite();
-
-                    return (
-                        SimpleSiteBuilderService.savePage(vm.state.page).then(function(response){
-                            console.log('page saved');
-                            toaster.pop('success', 'Page Saved', 'The page was saved successfully.');
-                            vm.state.saveLoading = false;
-                        }).catch(function(err) {
-                            vm.state.saveLoading = false;
-                            toaster.pop('error', 'Error', 'The page was not saved. Please try again.');
-                        })
-                    )
+                    saveWebsite().then(function(){
+                        return (
+                            SimpleSiteBuilderService.savePage(vm.state.page).then(function(response){
+                                console.log('page saved');
+                                toaster.pop('success', 'Page Saved', 'The page was saved successfully.');
+                                vm.state.saveLoading = false;
+                            }).catch(function(err) {
+                                vm.state.saveLoading = false;
+                                toaster.pop('error', 'Error', 'The page was not saved. Please try again.');
+                            })
+                        )
+                    })
                 }
                 else{
                     vm.state.saveLoading = false;
@@ -79,18 +79,18 @@ function ssbSiteBuilderTopbarController($scope, $timeout, $attrs, $filter, Simpl
             //reset section panel
             vm.uiState.navigation.sectionPanel.reset();
 
-            saveWebsite();
-
-            return (
-                SimpleSiteBuilderService.savePage(vm.state.page).then(function(response){
-                    console.log('page saved');
-                    toaster.pop('success', 'Page Saved', 'The page was saved successfully.');
-                    vm.state.saveLoading = false;
-                }).catch(function(err) {
-                    toaster.pop('error', 'Error', 'The page was not saved. Please try again.');
-                    vm.state.saveLoading = false;
-                })
-            )
+            saveWebsite().then(function(){
+                return (
+                    SimpleSiteBuilderService.savePage(vm.state.page).then(function(response){
+                        console.log('page saved');
+                        toaster.pop('success', 'Page Saved', 'The page was saved successfully.');
+                        vm.state.saveLoading = false;
+                    }).catch(function(err) {
+                        toaster.pop('error', 'Error', 'The page was not saved. Please try again.');
+                        vm.state.saveLoading = false;
+                    })
+                )
+            })
         }
         
     }

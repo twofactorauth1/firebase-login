@@ -58,6 +58,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         loadPage: function(pageId) {
             if (pageId && pageId !== vm.state.page._id) {
                 SimpleSiteBuilderService.getPages();
+                SimpleSiteBuilderService.getSite(vm.state.website._id);
                 vm.uiState.loaded = false;
                 $location.path('/website/site-builder/pages/' + pageId);
             } else {
@@ -233,18 +234,19 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
                     //reset section panel
                     vm.uiState.navigation.sectionPanel.reset();
 
-                    saveWebsite();
+                    saveWebsite().then(function(){
 
-                    return (
-                        SimpleSiteBuilderService.savePage(vm.state.page).then(function(response){
-                            console.log('page saved');
-                            toaster.pop('success', 'Page Saved', 'The page was saved successfully.');
-                            vm.state.saveLoading = false;
-                        }).catch(function(err) {
-                            vm.state.saveLoading = false;
-                            toaster.pop('error', 'Error', 'The page was not saved. Please try again.');
-                        })
-                    )
+                        return (
+                            SimpleSiteBuilderService.savePage(vm.state.page).then(function(response){
+                                console.log('page saved');
+                                toaster.pop('success', 'Page Saved', 'The page was saved successfully.');
+                                vm.state.saveLoading = false;
+                            }).catch(function(err) {
+                                vm.state.saveLoading = false;
+                                toaster.pop('error', 'Error', 'The page was not saved. Please try again.');
+                            })
+                        )
+                    })    
                 }
                 else{
                     vm.state.saveLoading = false;
@@ -260,18 +262,19 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
             //reset section panel
             vm.uiState.navigation.sectionPanel.reset();
 
-            saveWebsite();
+            saveWebsite().then(function(){
 
-            return (
-                SimpleSiteBuilderService.savePage(vm.state.page).then(function(response){
-                    console.log('page saved');
-                    toaster.pop('success', 'Page Saved', 'The page was saved successfully.');
-                    vm.state.saveLoading = false;
-                }).catch(function(err) {
-                    toaster.pop('error', 'Error', 'The page was not saved. Please try again.');
-                    vm.state.saveLoading = false;
-                })
-            )
+                return (
+                    SimpleSiteBuilderService.savePage(vm.state.page).then(function(response){
+                        console.log('page saved');
+                        toaster.pop('success', 'Page Saved', 'The page was saved successfully.');
+                        vm.state.saveLoading = false;
+                    }).catch(function(err) {
+                        toaster.pop('error', 'Error', 'The page was not saved. Please try again.');
+                        vm.state.saveLoading = false;
+                    })
+                )
+            })    
         }
 
     }

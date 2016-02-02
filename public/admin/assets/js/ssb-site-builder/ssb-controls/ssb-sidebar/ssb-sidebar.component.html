@@ -162,13 +162,13 @@
                     <li>
                         <label>
                             <h5>Title:</h5>
-                            <span editable-text="vm.state.page.title" onbeforesave="">{{vm.state.page.title}}</span>
+                            <span editable-text="vm.state.page.title" onbeforesave="" e-required e-placeholder="Enter title">{{vm.state.page.title || 'Enter title'}}</span>
                         </label>
                     </li>
                     <li>
                         <label>
                             <h5>URL:</h5>
-                            <span editable-text="vm.state.page.handle" onbeforesave="">{{vm.state.page.handle}}</span>
+                            <span editable-text="vm.state.page.handle" onbeforesave="" e-required e-placeholder="Enter url">{{vm.state.page.handle || 'Enter url'}}</span>
                         </label>
                     </li>
                     <!-- <li>
