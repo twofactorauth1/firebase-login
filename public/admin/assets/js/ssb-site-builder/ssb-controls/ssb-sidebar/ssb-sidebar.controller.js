@@ -356,7 +356,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
     }
 
   	function saveWebsite() {
-  		vm.state.pendingChanges = false;
+  		vm.state.pendingWebsiteChanges = false;
   		return (
   			SimpleSiteBuilderService.saveWebsite(vm.state.website).then(function(response){
   				console.log('website saved');
@@ -388,7 +388,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
 
                     vm.uiState.hasSeenWarning = true;
 
-                    vm.state.pendingChanges = false;
+                    vm.state.pendingPageChanges = false;
 
                     //hide section panel
                     vm.uiState.showSectionPanel = false;
@@ -410,7 +410,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
             });
 
         } else {
-            vm.state.pendingChanges = false;
+            vm.state.pendingPageChanges = false;
 
             //hide section panel
             vm.uiState.showSectionPanel = false;
@@ -435,7 +435,8 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
     }
 
   	function cancelPendingEdits() {
-      vm.state.pendingChanges = false;
+      vm.state.pendingPageChanges = false;
+      vm.state.pendingWebsiteChanges = false;
       vm.state.website = angular.copy(vm.state.originalWebsite);
       vm.state.page = angular.copy(vm.state.originalPage);
     }

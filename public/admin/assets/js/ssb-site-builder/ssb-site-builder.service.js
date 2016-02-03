@@ -200,8 +200,16 @@
                   url: baseWebsiteAPIUrlv2 + ssbService.website._id + '/page/',
                   method: 'POST',
                   data: { templateId: templateId }
-                }).success(successPage).error(errorPage))
+                }).success(success).error(error))
             )
+
+            function success(data) {
+                console.log('SimpleSiteBuilderService requested page created');
+            }
+
+            function error(error) {
+                console.error('SimpleSiteBuilderService page creation error: ' + error);
+            }
 
         }
 
