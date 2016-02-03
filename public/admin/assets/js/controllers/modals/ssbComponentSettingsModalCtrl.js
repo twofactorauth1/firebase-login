@@ -544,7 +544,7 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
 
     if ($scope.newLink && $scope.newLink.linkTitle && $scope.newLink.linkUrl) {
       if ($scope.component.customnav) {
-        if (!$scope.component.linkLists) {
+        if (!$scope.component.linkLists || !$scope.component.linkLists.length) {
           $scope.component.linkLists = [];
           $scope.component.linkLists.push({
             name: "Head Menu",
