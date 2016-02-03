@@ -903,10 +903,10 @@ module.exports = {
                     if(err) {
                         self.log.error('Error removing section:', err);
                     }
-                    cb(null, updatedPage, updatedSections);
+                    cb(null, existingPage, updatedPage, updatedSections);
                 });
             },
-            function setAsHomePage(updatedPage, updatedSections, cb){
+            function setAsHomePage(existingPage, updatedPage, updatedSections, cb){
                 if (updatedPage && updatedPage.get("handle") !=='index' && homePage) {
                     self.getPageByHandle(accountId, 'index', updatedPage.get('websiteId'), function(err, page) {
                         if (err) {
@@ -930,7 +930,7 @@ module.exports = {
                                                 self.log.error('Error updating page:', err);
                                                 cb(err);
                                             } else {
-                                                cb(null, updatedPage, updatedSections);
+                                                cb(null, existingPage, updatedPage, updatedSections);
                                             }
                                         });
                                     }
@@ -944,7 +944,7 @@ module.exports = {
                                         self.log.error('Error updating page:', err);
                                         cb(err);
                                     } else {
-                                        cb(null, updatedPage, updatedSections);
+                                        cb(null, existingPage, updatedPage, updatedSections);
                                     }
                                 });
                             }
@@ -952,10 +952,10 @@ module.exports = {
                     });
                 }
                 else{
-                    cb(null, updatedPage, updatedSections);
+                    cb(null, existingPage, updatedPage, updatedSections);
                 }
             },
-            function updateLinkList(updatedPage, updatedSections, cb){
+            function updateLinkList(existingPage, updatedPage, updatedSections, cb){
                 if (updatedPage.get('mainmenu') === false) {
                     self.getWebsiteLinklistsByHandle(accountId, updatedPage.get('websiteId'), "head-menu", function(err, list) {
                         if (err) {
@@ -963,7 +963,7 @@ module.exports = {
                             cb(err);
                         } else {
                             if(list && list.links){
-                                self.getUpdatedWebsiteLinkList(list, updatedPage.get("handle"), function(err, updatedList){
+                                self.getUpdatedWebsiteLinkList(list, existingPage.get("handle"), function(err, updatedList){
                                     list = updatedList;
                                 })
                             }
@@ -986,8 +986,9 @@ module.exports = {
                         } else {
                             var _exists = false;
                             _.each(list.links, function(link){
-                                if(link.linkTo && (link.linkTo.type === 'home' || link.linkTo.type === 'page') && link.linkTo.data === updatedPage.get('handle')){
-                                    link.label = updatedPage.get('menuTitle') || updatedPage.get('title')
+                                if(link.linkTo && (link.linkTo.type === 'home' || link.linkTo.type === 'page') && link.linkTo.data === existingPage.get('handle')){
+                                    link.label = updatedPage.get('menuTitle') || updatedPage.get('title');
+                                    link.linkTo.data = updatedPage.get("handle");
                                     _exists = true;
                                 }
                             });

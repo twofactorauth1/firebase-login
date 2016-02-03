@@ -55,9 +55,11 @@ function ssbSiteBuilderTopbarController($scope, $timeout, $attrs, $filter, Simpl
                     saveWebsite().then(function(){
                         return (
                             SimpleSiteBuilderService.savePage(vm.state.page).then(function(response){
-                                console.log('page saved');
-                                toaster.pop('success', 'Page Saved', 'The page was saved successfully.');
-                                vm.state.saveLoading = false;
+                                SimpleSiteBuilderService.getSite(vm.state.website._id).then(function(){
+                                    console.log('page saved');
+                                    toaster.pop('success', 'Page Saved', 'The page was saved successfully.');
+                                    vm.state.saveLoading = false;
+                                })
                             }).catch(function(err) {
                                 vm.state.saveLoading = false;
                                 toaster.pop('error', 'Error', 'The page was not saved. Please try again.');
@@ -82,9 +84,11 @@ function ssbSiteBuilderTopbarController($scope, $timeout, $attrs, $filter, Simpl
             saveWebsite().then(function(){
                 return (
                     SimpleSiteBuilderService.savePage(vm.state.page).then(function(response){
-                        console.log('page saved');
-                        toaster.pop('success', 'Page Saved', 'The page was saved successfully.');
-                        vm.state.saveLoading = false;
+                        SimpleSiteBuilderService.getSite(vm.state.website._id).then(function(){
+                            console.log('page saved');
+                            toaster.pop('success', 'Page Saved', 'The page was saved successfully.');
+                            vm.state.saveLoading = false;
+                        })
                     }).catch(function(err) {
                         toaster.pop('error', 'Error', 'The page was not saved. Please try again.');
                         vm.state.saveLoading = false;

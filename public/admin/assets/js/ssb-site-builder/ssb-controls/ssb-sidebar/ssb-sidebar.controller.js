@@ -366,8 +366,8 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
 
     //TODO: refactor, this function exists in multiple controllers :)
   	function savePage() {
-        var isLegacyPage = !vm.state.page.ssb;
-
+        vm.state.saveLoading = true;
+        var isLegacyPage = !vm.state.page.ssb;        
         console.log(isLegacyPage);
 
         if (!vm.uiState.hasSeenWarning && isLegacyPage) {
@@ -397,15 +397,22 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
                     vm.uiState.navigation.sectionPanel.reset();
 
                     saveWebsite().then(function(){
-                    return (
-                        SimpleSiteBuilderService.savePage(vm.state.page).then(function(response){
-                            console.log('page saved');
-                            toaster.pop('success', 'Page Saved', 'The page was saved successfully.');
-                        }).catch(function(err) {
-                            toaster.pop('error', 'Error', 'The page was not saved. Please try again.');
-                        })
-                      )
+                        return (
+                            SimpleSiteBuilderService.savePage(vm.state.page).then(function(response){
+                                SimpleSiteBuilderService.getSite(vm.state.website._id).then(function(){
+                                    console.log('page saved');
+                                    toaster.pop('success', 'Page Saved', 'The page was saved successfully.');
+                                    vm.state.saveLoading = false;
+                                })
+                            }).catch(function(err) {
+                                vm.state.saveLoading = false;
+                                toaster.pop('error', 'Error', 'The page was not saved. Please try again.');
+                            })
+                        )
                     })
+                }
+                else{
+                    vm.state.saveLoading = false;
                 }
             });
 
@@ -419,19 +426,21 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
             vm.uiState.navigation.sectionPanel.reset();
 
             saveWebsite().then(function(){
-              return (
-                SimpleSiteBuilderService.savePage(vm.state.page).then(function(response){
-                    console.log('page saved');
-                    toaster.pop('success', 'Page Saved', 'The page was saved successfully.');
-                }).catch(function(err) {
-                    toaster.pop('error', 'Error', 'The page was not saved. Please try again.');
-                })
-              )
+                return (
+                    SimpleSiteBuilderService.savePage(vm.state.page).then(function(response){
+                        SimpleSiteBuilderService.getSite(vm.state.website._id).then(function(){
+                            console.log('page saved');
+                            toaster.pop('success', 'Page Saved', 'The page was saved successfully.');
+                            vm.state.saveLoading = false;
+                        })
+                    }).catch(function(err) {
+                        toaster.pop('error', 'Error', 'The page was not saved. Please try again.');
+                        vm.state.saveLoading = false;
+                    })
+                )
             })
-
-            
         }
-
+        
     }
 
   	function cancelPendingEdits() {
@@ -777,6 +786,9 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
       }, function (isConfirm) {
         if (isConfirm) {
             vm.state.page.mainmenu = false;
+        }
+        else{
+          vm.state.page.mainmenu = true; 
         }
       });
     }
