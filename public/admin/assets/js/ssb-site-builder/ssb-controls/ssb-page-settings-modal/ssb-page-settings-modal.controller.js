@@ -41,10 +41,7 @@ app.controller('SiteBuilderPageSettingsModalController', ['$timeout', 'parentVm'
         var originalPage = angular.copy(vm.originalPage);
         originalPage.mainmenu = false;
         angular.element('.modal.in').show();
-        savePage(originalPage).then(function(){
-          vm.page.mainmenu = false;
-          angular.element('.modal.in').show();
-        })
+        savePage(originalPage, true);
       } else {
         vm.saveLoading = false;
         angular.element('.modal.in').show();
@@ -53,9 +50,7 @@ app.controller('SiteBuilderPageSettingsModalController', ['$timeout', 'parentVm'
   }
 
   function saveSettings() {
-    savePage(vm.page).then(function(){
-      vm.parentVm.closeModal();
-    });
+    savePage(vm.page, false);
   }
 
   function setAsHomePage() {
@@ -138,15 +133,22 @@ app.controller('SiteBuilderPageSettingsModalController', ['$timeout', 'parentVm'
     });
   };
 
-  function savePage(page){
+  function savePage(page, hide){
     vm.saveLoading = true;
       return(
-        SimpleSiteBuilderService.saveWebsite(vm.parentVm.state.website).then(function(){
+        saveWebsite().then(function(){
           SimpleSiteBuilderService.savePage(page, true).then(function() {      
             SimpleSiteBuilderService.getSite(page.websiteId).then(function() {
               SimpleSiteBuilderService.getPages().then(function() {
                   vm.saveLoading = false;              
-                  toaster.pop('success', 'Setting Saved', 'The page settings saved successfully.');              
+                  toaster.pop('success', 'Setting Saved', 'The page settings saved successfully.');
+                  if(hide){
+                    vm.page.mainmenu = false;
+                    angular.element('.modal.in').show();
+                  }
+                  else{
+                    vm.parentVm.closeModal();
+                  }
               })
             })
           })
@@ -156,7 +158,7 @@ app.controller('SiteBuilderPageSettingsModalController', ['$timeout', 'parentVm'
                toaster.pop('error', error.message);   
             else
               toaster.pop('error', "Setting not saved", "Error while saving page settings");                  
-        })
+          })
       )
   }
 
