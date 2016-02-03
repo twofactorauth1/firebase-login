@@ -646,6 +646,7 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
       if ($scope.component.customnav) {
         $scope.website.linkLists.forEach(function (value, index) {
           if (value.handle === "head-menu") {
+            $scope.component.linkLists[index] = $scope.component.linkLists[index] || {};
             $scope.component.linkLists[index].links = [];
           }
         });
