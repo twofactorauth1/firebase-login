@@ -1,11 +1,11 @@
 <div class="row padding-10">
     <div class="form-group">
-        <label for="slider-autoplay">Auto Play:</label>
+        <label for="slider-autoplay">Auto Play</label>
         <span tooltip-placement="top" tooltip-html-unsafe="Set slider auto play."><i class="fa fa-info-circle" /></span>
         <switch id="slider-autoplay" ng-model="component.slider.autoPlay" class="pull-right"></switch>
     </div>
     <div class="form-group">
-        <label for="slider-speed">Transition Speed:</label>
+        <label for="slider-speed">Transition Speed</label>
         <span tooltip-placement="top" tooltip-html-unsafe="Speed at which slider scrolls through the testimonials."><i class="fa fa-info-circle" /></span>
         <select id="slider-speed" class="form-control" ng-change="saveTestimonialComponent()" ng-model="component.slider.speed">
             <option value="1000">Slow</option>
@@ -14,12 +14,12 @@
         </select>
     </div>
     <div class="form-group hidden">
-        <label for="slider-direction">Slide Vertically:</label>
+        <label for="slider-direction">Slide Vertically</label>
         <span tooltip-placement="top" tooltip-html-unsafe="Slide direction ( horizontal or veritcal)."><i class="fa fa-info-circle" /></span>
         <switch id="slider-direction" ng-change="saveTestimonialComponent()" ng-model="component.slider.vertical" class="pull-right"></switch>
     </div>
     <div class="form-group">
-        <label for="slider-autoplayinterval">Auto Play Interval:</label>
+        <label for="slider-autoplayinterval">Auto Play Interval</label>
         <span tooltip-placement="top" tooltip-html-unsafe="Set slider auto play interval."><i class="fa fa-info-circle" /></span>
         <select id="slider-autoplayinterval" class="form-control"  ng-change="saveComponent()" ng-model="component.slider.autoPlayInterval">
             <option value="5000">5 Seconds</option>

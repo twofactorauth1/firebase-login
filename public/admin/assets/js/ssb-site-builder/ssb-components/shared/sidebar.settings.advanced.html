@@ -1,6 +1,6 @@
 <div class="row padding-10">
     <div class="form-group">
-        <label for="colorpicker">Visibility:</label>
+        <label for="colorpicker">Visibility</label>
         <span tooltip-placement="top" tooltip-html-unsafe="Show/hide vm.component."><i class="fa fa-info-circle" /></span>
         <switch ng-model="vm.component.visibility" class="pull-right" ng-change="saveComponentChanges()"></switch>
     </div>
@@ -20,7 +20,7 @@
     </div> -->
     <hr ng-if="vm.component.type == 'image-text'"></hr>
     <div class="form-group" ng-if="vm.component.type == 'image-text'">
-        <label for="colorpicker">Image Position:</label>
+        <label for="colorpicker">Image Position</label>
         <span tooltip-placement="top" tooltip-html-unsafe="Set image position to left/right."><i class="fa fa-info-circle" /></span>
         <select ng-model="vm.component.imagePosition" ng-change="saveComponent(true)" class="form-control">
             <option value="left">Left</option>
