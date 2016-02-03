@@ -139,9 +139,9 @@ app.controller('SiteBuilderPageSettingsModalController', ['$timeout', 'parentVm'
   };
 
   function savePage(page){
-    vm.saveLoading = true;
-    saveWebsite().then(function(){
+    vm.saveLoading = true;    
       return(
+      SimpleSiteBuilderService.saveWebsite(vm.parentVm.state.website).then(function(){  
         SimpleSiteBuilderService.savePage(page, true).then(function() {      
           SimpleSiteBuilderService.getSite(page.websiteId).then(function() {
             SimpleSiteBuilderService.getPages().then(function() {
@@ -149,7 +149,8 @@ app.controller('SiteBuilderPageSettingsModalController', ['$timeout', 'parentVm'
                 toaster.pop('success', 'Setting Saved', 'The page settings saved successfully.');              
             })
           })
-        }).catch(function(err) {
+        })
+      }).catch(function(err) {
             vm.saveLoading = false;
             if(err.message)
                toaster.pop('error', error.message);   
