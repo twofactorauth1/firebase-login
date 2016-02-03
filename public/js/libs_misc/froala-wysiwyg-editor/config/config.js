@@ -19,7 +19,6 @@ var toolbarbuttons = [
         '-',
         'insertLink',
         'insertButton',
-        'insertIcon',
         'insertImage',
         'insertVideo',
         'insertFile',
