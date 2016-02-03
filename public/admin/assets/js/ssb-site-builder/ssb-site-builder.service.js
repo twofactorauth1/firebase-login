@@ -636,7 +636,7 @@
                 ssbService.getSection(section, version || 1).then(function(response) {
                     if (response) {
 
-                        if (replaceAtIndex) {
+                        if (angular.isDefined(replaceAtIndex)) {
                             var extendedData = ssbService.extendComponentData(oldSection, response);
                             ssbService.setActiveSection(null);
                             ssbService.page.sections.splice(replaceAtIndex, 1, extendedData);
