@@ -371,7 +371,11 @@
     $scope.saveProduct = function(){
         ProductService.saveProduct($scope.product, function (product) {
           //format variation attributes
+          $scope.product = product;
           angular.copy($scope.product, $scope.originalProduct);
+          if($scope.product.fulfillment_email){
+            $scope.getEmails();  
+          }
           $scope.saveLoading = false;          
           toaster.pop('success', 'Product Saved.');
         });
