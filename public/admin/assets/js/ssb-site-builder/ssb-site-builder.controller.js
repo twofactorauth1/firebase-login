@@ -27,6 +27,8 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     vm.applyThemeToSite = SimpleSiteBuilderService.applyThemeToSite;
     vm.addSectionToPage = addSectionToPage;
     vm.legacyComponentMedia = legacyComponentMedia;
+    vm.checkIfDirty = checkIfDirty;
+    vm.resetDirty = resetDirty;
 
 
     vm.uiState = {
@@ -184,11 +186,11 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         }
     );
 
-    $scope.checkIfDirty = function(){
-        if(vm.state.pendingChanges)
-            return true;
+    function checkIfDirty() {
+        return vm.state.pendingChanges;
     }
-    $scope.resetDirty = function(){
+
+    function resetDirty() {
         vm.state.pendingChanges = false;
     }
 
@@ -246,7 +248,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
                                 toaster.pop('error', 'Error', 'The page was not saved. Please try again.');
                             })
                         )
-                    })    
+                    })
                 }
                 else{
                     vm.state.saveLoading = false;
@@ -274,7 +276,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
                         vm.state.saveLoading = false;
                     })
                 )
-            })    
+            })
         }
 
     }
