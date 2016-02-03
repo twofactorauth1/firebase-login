@@ -10219,6 +10219,7 @@ a[href="https://froala.com/wysiwyg-editor"] {
 .greyed-out {
   background: #f1f1f1;
   padding: 1em;
+  opacity: .5;
 }
 .ssb-sidebar {
   display: none;
@@ -10791,16 +10792,12 @@ ssb-topbar .ui-select-match-text > small {
 }
 .ssb-theme-default .ssb-page-section-layout-header {
   background-color: #FFFFFF;
-}
-.ssb-theme-default .ssb-page-section-layout-header [ssb-text-component] {
   color: #58585b;
 }
 .ssb-theme-default .ssb-page-section-layout-hero {
   background-color: #FFFFFF;
-  text-align: center;
-}
-.ssb-theme-default .ssb-page-section-layout-hero [ssb-text-component] {
   color: #73879C;
+  text-align: center;
 }
 .ssb-theme-default .ssb-theme-heading-text {
   font-size: 24px;
@@ -10846,8 +10843,6 @@ ssb-topbar .ui-select-match-text > small {
 }
 .ssb-theme-young-soul .ssb-page-section-layout-header {
   background-color: #9acccb;
-}
-.ssb-theme-young-soul .ssb-page-section-layout-header [ssb-text-component] {
   color: #000000;
 }
 .ssb-theme-young-soul .ssb-page-section-layout-hero {
