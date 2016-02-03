@@ -1005,10 +1005,6 @@ module.exports = {
                                 var _exists = false;
                                 list.links = _(list.links).chain()
 
-                                                .uniq(function(link) {
-                                                    return link.linkTo.data;
-                                                })
-
                                                 .map(function(link){
                                                     if(link.linkTo && (link.linkTo.type === 'home' || link.linkTo.type === 'page') && link.linkTo.data === existingPage.get('handle')){
                                                         link.label = updatedPage.get('menuTitle') || updatedPage.get('title');
@@ -1016,6 +1012,10 @@ module.exports = {
                                                         _exists = true;
                                                     }
                                                     return link
+                                                })
+
+                                                .uniq(function(link) {
+                                                    return link.linkTo.data;
                                                 })
 
                                                 .filter(function(link){
