@@ -139,18 +139,18 @@ app.controller('SiteBuilderPageSettingsModalController', ['$timeout', 'parentVm'
   };
 
   function savePage(page){
-    vm.saveLoading = true;    
+    vm.saveLoading = true;
       return(
-      SimpleSiteBuilderService.saveWebsite(vm.parentVm.state.website).then(function(){  
-        SimpleSiteBuilderService.savePage(page, true).then(function() {      
-          SimpleSiteBuilderService.getSite(page.websiteId).then(function() {
-            SimpleSiteBuilderService.getPages().then(function() {
-                vm.saveLoading = false;              
-                toaster.pop('success', 'Setting Saved', 'The page settings saved successfully.');              
+        SimpleSiteBuilderService.saveWebsite(vm.parentVm.state.website).then(function(){
+          SimpleSiteBuilderService.savePage(page, true).then(function() {      
+            SimpleSiteBuilderService.getSite(page.websiteId).then(function() {
+              SimpleSiteBuilderService.getPages().then(function() {
+                  vm.saveLoading = false;              
+                  toaster.pop('success', 'Setting Saved', 'The page settings saved successfully.');              
+              })
             })
           })
-        })
-      }).catch(function(err) {
+        }).catch(function(err) {
             vm.saveLoading = false;
             if(err.message)
                toaster.pop('error', error.message);   
@@ -158,7 +158,6 @@ app.controller('SiteBuilderPageSettingsModalController', ['$timeout', 'parentVm'
               toaster.pop('error', "Setting not saved", "Error while saving page settings");                  
         })
       )
-    })
   }
 
   function saveWebsite() {
