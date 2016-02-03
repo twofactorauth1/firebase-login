@@ -49,7 +49,6 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
     vm.removeBackgroundImage = removeBackgroundImage;
     vm.removeImage = removeImage;
     vm.createPage = createPage;
-    vm.getNumberOfPages = getNumberOfPages;
     vm.getTemplateById = getTemplateById;
     vm.editSectionName = editSectionName;
     vm.hideSectionFromPage = hideSectionFromPage;
@@ -367,7 +366,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
     //TODO: refactor, this function exists in multiple controllers :)
   	function savePage() {
         vm.state.saveLoading = true;
-        var isLegacyPage = !vm.state.page.ssb;        
+        var isLegacyPage = !vm.state.page.ssb;
         console.log(isLegacyPage);
 
         if (!vm.uiState.hasSeenWarning && isLegacyPage) {
@@ -440,7 +439,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
                 )
             })
         }
-        
+
     }
 
   	function cancelPendingEdits() {
@@ -644,18 +643,15 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
         vm.state.saveLoading = true;
         vm.saveWebsite().then(function(){
           return (
-            SimpleSiteBuilderService.createPage(template._id).then(function(data) {              
+            SimpleSiteBuilderService.createPage(template._id).then(function(data) {
                   vm.closeModal();
                   vm.state.saveLoading = false;
-                  vm.uiState.navigation.loadPage(data.data._id);              
+                  vm.uiState.navigation.loadPage(data.data._id);
             })
           )
         })
     };
 
-    function getNumberOfPages() {
-        return Object.keys(vm.state.pages).length;
-    }
 
     function getTemplateById(id) {
         SimpleSiteBuilderService.getTemplateById(id);
@@ -788,7 +784,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
             vm.state.page.mainmenu = false;
         }
         else{
-          vm.state.page.mainmenu = true; 
+          vm.state.page.mainmenu = true;
         }
       });
     }
@@ -847,7 +843,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
         if (isConfirm) {
           vm.state.saveLoading = true;
           saveWebsite().then(function(){
-            SimpleSiteBuilderService.createDuplicatePage(vm.state.page).then(function(page) {            
+            SimpleSiteBuilderService.createDuplicatePage(vm.state.page).then(function(page) {
               vm.state.saveLoading = false;
               vm.uiState.navigation.loadPage(page.data._id);
             })

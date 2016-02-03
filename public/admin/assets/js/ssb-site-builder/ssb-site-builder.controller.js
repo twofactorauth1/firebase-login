@@ -145,10 +145,11 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     }, true);
 
     $scope.$watch(function() { return SimpleSiteBuilderService.pages }, function(pages) {
-      //filter blog pages
+      //filter blog pages and coming soon
       if(pages){
         delete pages["blog"];
         delete pages["single-post"];
+        delete pages["coming-soon"];
       }
       vm.state.pages = pages;
       var parsed = angular.fromJson(pages);
@@ -196,8 +197,8 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         vm.state.pendingPageChanges = false;
     }
 
-    function saveWebsite() {  
-        vm.state.pendingWebsiteChanges = false;      
+    function saveWebsite() {
+        vm.state.pendingWebsiteChanges = false;
         return (
             SimpleSiteBuilderService.saveWebsite(vm.state.website).then(function(response){
                 console.log('website saved');
@@ -208,7 +209,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     //TODO: refactor, this function exists in multiple controllers :)
     function savePage() {
         vm.state.saveLoading = true;
-        var isLegacyPage = !vm.state.page.ssb;        
+        var isLegacyPage = !vm.state.page.ssb;
         console.log(isLegacyPage);
 
         if (!vm.uiState.hasSeenWarning && isLegacyPage) {
@@ -281,7 +282,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
                 )
             })
         }
-        
+
     }
 
     function cancelPendingEdits() {

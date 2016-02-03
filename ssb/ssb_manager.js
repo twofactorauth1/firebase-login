@@ -977,41 +977,77 @@ module.exports = {
                             });
                         }
                     });
-                }
-                else {
+                } else {
                     self.getWebsiteLinklistsByHandle(accountId, updatedPage.get('websiteId'), "head-menu", function(err, list) {
                         if (err) {
                             self.log.error('Error getting website linklists by handle: ' + err);
                             cb(err);
                         } else {
-                            var _exists = false;
-                            _.each(list.links, function(link){
-                                if(link.linkTo && (link.linkTo.type === 'home' || link.linkTo.type === 'page') && link.linkTo.data === existingPage.get('handle')){
-                                    link.label = updatedPage.get('menuTitle') || updatedPage.get('title');
-                                    link.linkTo.data = updatedPage.get("handle");
-                                    _exists = true;
-                                }
-                            });
-                            if(!_exists){
-                                var link=
-                                {
-                                    label: page.get('menuTitle') || page.get('title'),
-                                    type: "link",
-                                    linkTo: {
-                                        type:"page",
-                                        data:page.get('handle')
-                                    }
-                                };
-                                list.links.push(link);
-                            }
-                            self.updateWebsiteLinklists(accountId, updatedPage.get('websiteId'), "head-menu", list, function(err, linkLists) {
+
+                            self.log.debug('>> listPages');
+
+                            self.listPages(accountId, updatedPage.get('websiteId'), function(err, pages){
+
+                                self.log.debug('<< listPages');
+
                                 if (err) {
                                     self.log.error('Error updating website linklists by handle: ' + err);
-                                    cb(err);
-                                } else {
-                                    cb(null, updatedPage, updatedSections);
+                                    return cb(err);
                                 }
-                            });
+
+
+                                var pageHandles = pages.map(function(page) {
+                                    if (page.mainmenu || page.mainmenu === undefined) {
+                                        return page.get('handle');
+                                    }
+                                });
+
+                                var _exists = false;
+                                list.links = _(list.links).chain()
+
+                                                .uniq(function(link) {
+                                                    return link.linkTo.data;
+                                                })
+
+                                                .map(function(link){
+                                                    if(link.linkTo && (link.linkTo.type === 'home' || link.linkTo.type === 'page') && link.linkTo.data === existingPage.get('handle')){
+                                                        link.label = updatedPage.get('menuTitle') || updatedPage.get('title');
+                                                        link.linkTo.data = updatedPage.get("handle");
+                                                        _exists = true;
+                                                    }
+                                                    return link
+                                                })
+
+                                                .filter(function(link){
+                                                    //only keep pages that exist and are visible in menu
+                                                    return _.contains(pageHandles, link.linkTo.data)
+                                                })
+
+                                                .value(); //return array value
+
+
+                                if(!_exists){
+                                    var link = {
+                                        label: page.get('menuTitle') || page.get('title'),
+                                        type: "link",
+                                        linkTo: {
+                                            type:"page",
+                                            data:page.get('handle')
+                                        }
+                                    };
+                                    list.links.push(link);
+                                }
+
+                                self.updateWebsiteLinklists(accountId, updatedPage.get('websiteId'), "head-menu", list, function(err, linkLists) {
+                                    if (err) {
+                                        self.log.error('Error updating website linklists by handle: ' + err);
+                                        cb(err);
+                                    } else {
+                                        cb(null, updatedPage, updatedSections);
+                                    }
+                                });
+
+                            })
                         }
                     });
                 }
