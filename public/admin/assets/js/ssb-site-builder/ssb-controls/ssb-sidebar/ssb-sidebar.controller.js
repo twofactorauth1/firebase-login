@@ -808,6 +808,8 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
       }, function (isConfirm) {
         if (isConfirm) {
           vm.state.saveLoading = true;
+          vm.state.pendingPageChanges = false;
+          vm.state.pendingWebsiteChanges = false;
           SimpleSiteBuilderService.deletePage(vm.state.page).then(function(response){
             SimpleSiteBuilderService.getSite(vm.state.page.websiteId).then(function() {
               SimpleSiteBuilderService.getPages().then(function(pages) {

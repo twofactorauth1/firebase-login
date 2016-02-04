@@ -118,6 +118,8 @@ app.controller('SiteBuilderPageSettingsModalController', ['$timeout', 'parentVm'
                     vm.parentVm.closeModal();
                     vm.saveLoading = false;
                     if(vm.parentVm.state.page._id === vm.page._id){
+                      vm.parentVm.state.pendingPageChanges = false;
+                      vm.parentVm.state.pendingWebsiteChanges = false;
                     	$timeout(function () {
                   			$location.path('/website/site-builder/pages/');
                 		}, 0);
