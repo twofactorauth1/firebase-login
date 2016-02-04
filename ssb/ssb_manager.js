@@ -1007,7 +1007,7 @@ module.exports = {
 
                                                 .map(function(link){
                                                     if(link.linkTo && (link.linkTo.type === 'home' || link.linkTo.type === 'page') && link.linkTo.data === existingPage.get('handle')){
-                                                        link.label = updatedPage.get('menuTitle') || updatedPage.get('title');
+                                                        link.label = updatedPage.get('menuTitle') || link.label;
                                                         link.linkTo.data = updatedPage.get("handle");
                                                         _exists = true;
                                                     }
