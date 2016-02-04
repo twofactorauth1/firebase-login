@@ -41,6 +41,7 @@ app.directive('singlePostComponent', ['$window', '$location', 'accountService', 
         }
         return returnValue;
       }
+      $scope.blogPageUrl = $location.$$absUrl;
     }
   }
 }]);
