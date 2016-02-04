@@ -849,7 +849,7 @@ app.constant('JS_REQUIRES', {
     files: ["../js/libs/angular-percentage-filter/percentage.js"]
   }, {
     name: 'blueimp',
-    files: ['../js/libs/blueimp-gallery/js/jquery.blueimp-gallery.min.js', '../js/libs/blueimp-gallery/css/blueimp-gallery.min.css']
+    files: ['../js/libs/blueimp-gallery/css/blueimp-gallery.min.css']
   }, {
     name: 'googlePlaces',
     files: ['../js/libs/angular-google-places-autocomplete/dist/autocomplete.min.css']
