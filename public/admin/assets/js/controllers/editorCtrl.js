@@ -317,7 +317,7 @@
              
               $scope.blog.post = $scope.postControl.getSinglePost();
               angular.copy($scope.blog.post, $scope.originalPost);
-              toaster.pop('success', "Post Saved", "The " + $filter('htmlToPlaintext')($scope.blog.post.post_title) + " post was saved successfully.");              
+              toaster.pop('success', "Post Saved", "The post was saved successfully.");              
               $scope.redirectAfterSave(redirect_url, reload);
             });
           }
@@ -587,7 +587,7 @@
           $scope.single_post = true;
           $scope.components = $scope.page.components;
           $scope.originalPost = angular.copy(data);
-          $rootScope.breadcrumbTitle = $filter('htmlToPlaintext')($scope.blog.post.post_title);
+          $rootScope.breadcrumbTitle = "Single Post"
           $scope.activateCKeditor();
         });
 
@@ -1252,10 +1252,6 @@
     $scope.slugifyDuplicatePostHandle = function (title, post) {
       if (title && post)
         post.post_url = $filter('slugify')(title); 
-    };
-
-    $scope.plainTextTitle = function () {
-      $scope.blog.post.post_title = $filter('htmlToPlaintext')($scope.blog.post.post_title);
     };
 
     $scope.newPage = {};
