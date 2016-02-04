@@ -6,7 +6,7 @@
 *
 -->
 <meta property="og:type" content="article" />
-<meta property="og:title" content="{{blog.post.post_title}}" />
+<meta property="og:title" content="{{getPlainTitle(blog.post.post_title)}}" />
 <meta property="og:image" content="{{blog.post.featured_image.indexOf(' ') > -1 ? getEncodedUrl(blog.post.featured_image) : blog.post.featured_image}}" />
 <div ng-class="component.type+'-v'+component.version">
     <div id="content-area">
@@ -17,7 +17,7 @@
                         <div class="et_pt_blogentry clearfix">
                             <h2 class="et_pt_title">
                             <div class="single-post-title" data-class="post_title">
-                                <div elem ng-model="blog.post.post_title"></div>
+                                <div class-name="plain-post-title" elem ng-model="blog.post.post_title"></div>
                             </div>
                             </h2>
                             <div class="blog-meta single-post-publish-date">

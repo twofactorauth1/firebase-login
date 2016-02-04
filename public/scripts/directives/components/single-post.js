@@ -31,6 +31,16 @@ app.directive('singlePostComponent', ['$window', '$location', 'accountService', 
       scope.getEncodedUrl = function(url){
         return encodeURI(url);
       }
+      scope.getPlainTitle=function(title){
+        var returnValue = title;
+        if(title){
+          var element = angular.element(".plain-post-title");
+          if(element && element.length){
+            returnValue = element.text().trim();
+          }
+        }
+        return returnValue;
+      }
     }
   }
 }]);
