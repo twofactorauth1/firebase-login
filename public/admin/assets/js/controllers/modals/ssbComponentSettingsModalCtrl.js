@@ -659,11 +659,19 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
       }
 
     }
+    $scope.originalLinkList = angular.copy($scope.website.linkLists);
+    $scope.originalCustomLinkList = angular.copy($scope.component.linkLists);
   };
 
-  $scope.refreshLinks = function(label){
+  $scope.refreshLinks = function(label, customnav){
     if(label){
       $scope.updateLinkList();
+    }
+    else{
+      if(customnav)
+        $scope.component.linkLists = angular.copy($scope.originalCustomLinkList);
+      else
+        $scope.website.linkLists = angular.copy($scope.originalLinkList);
     }
   }
 
@@ -808,6 +816,8 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
           type: $scope.component.type,
           version: parseInt($scope.component.version, 10)
         });
+        $scope.originalLinkList = angular.copy($scope.website.linkLists);
+        $scope.originalCustomLinkList = angular.copy($scope.component.linkLists);
       } else {
         componentType = _.findWhere($scope.componentTypes, {
           type: $scope.component.type
