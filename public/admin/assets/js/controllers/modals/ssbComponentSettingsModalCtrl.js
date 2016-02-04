@@ -661,6 +661,12 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
     }
   };
 
+  $scope.refreshLinks = function(label){
+    if(label){
+      $scope.updateLinkList();
+    }
+  }
+
   $scope.refreshSlider = function () {
     console.log('refresh slider');
     $timeout(function () {
