@@ -168,7 +168,7 @@
                     <li>
                         <label>
                             <h5>URL:</h5>
-                            <span editable-text="vm.state.page.handle" onbeforesave="" e-required e-placeholder="Enter url">{{vm.state.page.handle || 'Enter url'}}</span>
+                            <span editable-text="vm.state.page.handle" onbeforesave="vm.validateDuplicatePage($data)" e-required e-placeholder="Enter url">{{vm.state.page.handle || 'Enter url'}}</span>
                         </label>
                     </li>
                     <!-- <li>
