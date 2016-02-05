@@ -814,6 +814,7 @@
           angular.copy($scope.order, $scope.originalOrder);
           console.log('updatedOrder ', updatedOrder);
           toaster.pop('success', 'Order updated successfully.');
+          $location.path('/commerce/orders');
         });
       }
       else {
