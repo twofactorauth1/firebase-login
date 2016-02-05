@@ -111,21 +111,6 @@
       label: "No Image",
       data: "false"
     }];
-
-    $scope.productTypes = [{
-      label: "Digital",
-      data: "digital"
-    }, {
-      label: "Subscription",
-      data: "Subscription"
-    }, {
-      label: "Physical",
-      data: "Physical"
-    }, {
-      label: "External Link",
-      data: "external_link"
-    }];
-
     
     ProductService.productStatusTypes(function(types) {
       $scope.productStatusTypes = types;
