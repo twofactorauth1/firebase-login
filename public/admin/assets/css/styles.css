@@ -12803,12 +12803,6 @@ fieldset[disabled] .btn-vimeo-square.active {
 .editor-toolbar-wrap {
   z-index: 1088;
 }
-@media (min-width: 992px) {
-  .app-sidebar-closed .editor-toolbar-wrap {
-    left: 70px !important;
-    width: calc(95.625%) !important;
-  }
-}
 #editor-toolbar.email-toolbar .cke_top {
   overflow: auto;
 }
