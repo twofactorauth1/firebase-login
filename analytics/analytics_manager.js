@@ -223,12 +223,12 @@ module.exports = {
     },
 
     storePageEvent: function(pageEvent, fn) {
-        _log.debug('>> storePageEvent');
+        //_log.debug('>> storePageEvent');
         dao.saveOrUpdate(pageEvent, fn);
     },
 
     storePingEvent: function(pingEvent, fn) {
-        _log.debug('>> storePingEvent');
+        //_log.debug('>> storePingEvent');
         dao.saveOrUpdate(pingEvent, fn);
     }
 
