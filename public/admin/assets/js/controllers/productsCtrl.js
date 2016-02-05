@@ -66,6 +66,7 @@
       $scope.saveLoading = true;
       ProductService.postProduct($scope.newProduct, function (product) {
         $scope.displayedProducts.unshift(product);
+        $scope.products.unshift(product);
         $scope.modalInstance.close();
         $scope.newProduct = {};
         $scope.minRequirements = true;
