@@ -2,7 +2,7 @@
 /*global app, moment, angular, window, CKEDITOR*/
 /*jslint unparam:true*/
 (function (angular) {
-  app.controller('EditorCtrl', ["$scope", "$state", "$document", "$rootScope", "$interval", "$timeout", "toaster", "$modal", "$filter", "$location", "WebsiteService", "SweetAlert", "hoursConstant", "GeocodeService", "ProductService", "AccountService", "postConstant", "formValidations", function ($scope, $state, $document, $rootScope, $interval, $timeout, toaster, $modal, $filter, $location, WebsiteService, SweetAlert, hoursConstant, GeocodeService, ProductService, AccountService, postConstant, formValidations) {
+  app.controller('EditorCtrl', ["$scope", "$state", "$document", "$rootScope", "$interval", "$timeout", "toaster", "$modal", "$filter", "$location", "WebsiteService", "SweetAlert", "hoursConstant", "GeocodeService", "ProductService", "AccountService", "postConstant", "formValidations", "$window", function ($scope, $state, $document, $rootScope, $interval, $timeout, toaster, $modal, $filter, $location, WebsiteService, SweetAlert, hoursConstant, GeocodeService, ProductService, AccountService, postConstant, formValidations, $window) {
 
     /*
      * @circleOptions
@@ -1754,6 +1754,24 @@
         $scope.dragging = false;
       }
     };
+
+    $scope.$watch('app.layout.isSidebarClosed', function (newValue, oldValue) {
+      resetEditorPosition();
+    });
+
+    angular.element($window).bind('resize', function () {
+      resetEditorPosition();   
+    });
+
+    function resetEditorPosition(){
+      var x = window.scrollX
+      var y = window.scrollY
+      $window.scrollTo(0, 0);
+      $timeout(function() {
+        $window.scrollTo(x, y);
+      },0);
+
+    }
 
     /*
      * @locationChangeStart
