@@ -5,6 +5,8 @@
   app.controller('OrderDetailCtrl', ["$scope", "toaster", "$modal", "$filter", "$stateParams", "$location", "OrderService", "CustomerService", "UserService", "ProductService", "SweetAlert", "orderConstant", "productConstant", function ($scope, toaster, $modal, $filter, $stateParams, $location, OrderService, CustomerService, UserService, ProductService, SweetAlert, orderConstant, productConstant) {
 
     $scope.dataLoaded = false;
+    $scope.billing= {sameAsBilling:false};
+    
     //TODO
     // - $q all api calls
     // 1. getCustomers
@@ -116,7 +118,7 @@
 
     $scope.compareAddress = function () {
       if ($scope.order.shipping_address && $scope.order.billing_address && $scope.order.billing_address.hasOwnProperty("address_1") && angular.equals($scope.order.shipping_address, $scope.order.billing_address)) {
-        $scope.sameAsBilling = true;
+        $scope.billing.sameAsBilling = true;
       }
     };
 
