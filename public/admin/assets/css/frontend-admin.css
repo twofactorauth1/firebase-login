@@ -7384,14 +7384,8 @@ ssb-topbar .ui-select-match-text > small {
     z-index: 2;
   }
 }
-.ssb-page-section-layout-header-v2 .navigation-v2 .navbar {
-  background: red;
-}
-.ssb-page-section-layout-header-v2 .navigation-v2 .navbar .navbar-header {
-  background: green;
-}
-.ssb-page-section-layout-header-v3 .navigation-v2 .navbar .nav > li > a {
-  background: blue;
+.ssb-page-section-layout-header-v5 .navigation-v2 .navbar .navbar-header {
+  display: none;
 }
 .ssb-page-section-layout-hero .ssb-theme-btn {
   line-height: 1em;
