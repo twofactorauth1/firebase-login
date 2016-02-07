@@ -145,14 +145,17 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     }, true);
 
     $scope.$watch(function() { return SimpleSiteBuilderService.pages }, function(pages) {
+      // To track duplicate pages 
+      vm.state.originalPages = angular.copy(pages);
+      vm.state.pages = angular.copy(pages);
+      
       //filter blog pages and coming soon
       if(pages){
-        delete pages["blog"];
-        delete pages["single-post"];
-        delete pages["coming-soon"];
-      }
-      vm.state.pages = pages;
-      var parsed = angular.fromJson(pages);
+        delete vm.state.pages["blog"];
+        delete vm.state.pages["single-post"];
+        delete vm.state.pages["coming-soon"];
+      }      
+      var parsed = angular.fromJson(vm.state.pages);
       var arr = [];
       _.each(parsed, function (page) {
           arr.push(page);

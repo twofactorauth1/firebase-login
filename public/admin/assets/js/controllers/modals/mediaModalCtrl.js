@@ -87,7 +87,7 @@ app.controller('MediaModalCtrl', ['$scope', '$injector', '$modalInstance', '$htt
   uploader.filters.push({
     name: 'customFilter',
     fn: function (item /*{File|FileLikeObject}*/ , options) {
-      return this.queue.length < 10;
+      return this.queue.length < 20;
     }
   });
 

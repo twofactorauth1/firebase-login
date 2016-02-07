@@ -31,6 +31,7 @@ function ssbSiteBuilderSiteTemplatesController($scope, $attrs, $filter, $documen
         {
             delete pages["blog"];
             delete pages["single-post"];
+            delete pages["coming-soon"];
         }
         var website = values[1];
 

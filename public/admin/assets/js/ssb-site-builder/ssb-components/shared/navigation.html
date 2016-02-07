@@ -87,7 +87,7 @@
 
                           <div class="panel-body" ng-show="edit[$index]">
                             <label ng-show="edit[$index]" for="edit[$index]">Title</label>
-                            <input ng-blur="updateLinkList()" placeholder="Enter link title" ng-show="edit[$index]" type="text" ng-model="link.label" class="form-control" style="margin-bottom: 10px;">
+                            <input ng-blur="refreshLinks(link.label, component.customnav)" placeholder="Enter link title" ng-show="edit[$index]" type="text" ng-model="link.label" class="form-control" style="margin-bottom: 10px;">
                           </div>
 
                           <div class="panel-body padding-top-0" ng-show="edit[$index]">
@@ -167,7 +167,7 @@
 
                       <div class="panel-body" ng-show="edit[$index]">
                         <label ng-show="edit[$index]" for="edit[$index]">Title</label>
-                        <input ng-blur="updateLinkList()" placeholder="Enter link title" ng-show="edit[$index]" type="text" ng-model="link.label" class="form-control" style="margin-bottom: 10px;">
+                        <input ng-blur="refreshLinks(link.label, component.customnav)" placeholder="Enter link title" ng-show="edit[$index]" type="text" ng-model="link.label" class="form-control" style="margin-bottom: 10px;">
                       </div>
 
                       <div class="panel-body padding-top-0" ng-show="edit[$index]">

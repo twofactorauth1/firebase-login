@@ -56,7 +56,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
     vm.duplicatePage = duplicatePage;
     vm.hideFromMenu = hideFromMenu;
     vm.moveSection = moveSection;
-
+    vm.validateDuplicatePage = validateDuplicatePage;
     editableOptions.theme = 'bs3';
 
     vm.sortableOptions = {
@@ -808,6 +808,8 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
       }, function (isConfirm) {
         if (isConfirm) {
           vm.state.saveLoading = true;
+          vm.state.pendingPageChanges = false;
+          vm.state.pendingWebsiteChanges = false;
           SimpleSiteBuilderService.deletePage(vm.state.page).then(function(response){
             SimpleSiteBuilderService.getSite(vm.state.page.websiteId).then(function() {
               SimpleSiteBuilderService.getPages().then(function(pages) {
@@ -850,6 +852,13 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
           })
         }
       });
+    }
+
+    function validateDuplicatePage(pageHandle) {
+      var _page = vm.state.originalPages[pageHandle];      
+      if(_page && _page._id !== vm.state.page._id){
+        return "Page url should be unique";
+      }
     }
 
     function init(element) {

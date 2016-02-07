@@ -4,7 +4,7 @@
     } : a(jQuery)
 }(function(a) {
     "use strict";
-     a.FroalaEditor.DefineIcon("insertButton", {
+    a.FroalaEditor.DefineIcon("insertButton", {
         NAME: "plus"
     }), a.FroalaEditor.RegisterCommand('insertButton', {
         title: 'Insert Button',
@@ -21,6 +21,15 @@
 
             this.html.insert(buttonHTML);
             this.undo.saveStep();
+        }
+    });
+
+    a.FroalaEditor.DefineIcon("deleteButton", {
+        NAME: "trash"
+    }), a.FroalaEditor.RegisterCommand('deleteButton', {
+        title: 'Delete',
+        callback: function () {
+           this.link.get("a").remove();
         }
     });
 });

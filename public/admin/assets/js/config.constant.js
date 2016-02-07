@@ -847,10 +847,7 @@ app.constant('JS_REQUIRES', {
   }, {
     name: 'angular-percentage-filter',
     files: ["../js/libs/angular-percentage-filter/percentage.js"]
-  }, {
-    name: 'blueimp',
-    files: ['../js/libs/blueimp-gallery/js/jquery.blueimp-gallery.min.js', '../js/libs/blueimp-gallery/css/blueimp-gallery.min.css']
-  }, {
+  },  {
     name: 'googlePlaces',
     files: ['../js/libs/angular-google-places-autocomplete/dist/autocomplete.min.css']
   }, {
@@ -871,6 +868,10 @@ app.constant('JS_REQUIRES', {
   }, {
     name: 'angular-clipboard',
     files: ['../js/libs/angular-clipboard/angular-clipboard.js'],
+  },
+  {
+    name: 'blueimp',
+    files: ['../js/libs/blueimp-gallery/css/blueimp-gallery.min.css','../js/libs/blueimp-gallery/js/jquery.blueimp-gallery.min.js']
   },
   {
     name: 'froala-wysiwyg-editor',

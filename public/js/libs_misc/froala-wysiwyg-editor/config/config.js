@@ -82,6 +82,7 @@ $.FroalaEditor.config = {
         "'Open Sans Condensed',sans-serif": 'Open Sans Condensed'
     },
     imageInsertButtons: ['imageBack', 'imageByURL', 'mediaManager'],
+    linkEditButtons: ['linkOpen', 'linkStyle', 'linkEdit', 'linkRemove', 'deleteButton'],
     colorsText: [].concat.apply([], spectrumColors),
     colorsBackground: [].concat.apply([], spectrumColors),
     colorsStep: 10,
