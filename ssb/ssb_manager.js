@@ -414,12 +414,44 @@ module.exports = {
         self.log.debug('>> createDuplicatePage');
 
         var pageHandle = slug(page.get('handle')) +  '-' + $$.u.idutils.generateUniqueAlphaNumeric(5, true, true);
-        page.set("handle", pageHandle);
-        page.set("created", created);
-        page.set("modified", created);
-        page.set("ssb", true)
+        var sections = page.get('sections');
+
+        page.set('_id', null);
+        page.set('handle', pageHandle);
+        page.set('title', page.get('title') + ' (copy)');
+        page.set('created', created);
+        page.set('modified', created);
+        page.set('ssb', true)
+
+        //reset all section _id's for duplicate page
+        if (sections.length) {
+            sections = sections.map(function(section) {
+                var id = $$.u.idutils.generateUUID();
+                section._id = id;
+                section.anchor = id;
+                return section;
+            });
+        }
+
         async.waterfall([
-            function createPage(cb){
+            function createSections(cb){
+                sectionDao.saveSections(sections, function(err, sectionAry){
+                    if(err) {
+                        self.log.error('Error saving duplicate page sections:', err);
+                        cb(err);
+                    } else {
+                        var jsonSections = [];
+                        _.each(sectionAry, function(section){
+                            jsonSections.push({_id: section.id()});
+                        });
+
+                        page.set('sections', jsonSections);
+
+                        cb(null, page);
+                    }
+                });
+            },
+            function createPage(page, cb){
                 pageDao.saveOrUpdate(page, function(err, value){
                     if(err) {
                         self.log.error('Error creating page:', err);
