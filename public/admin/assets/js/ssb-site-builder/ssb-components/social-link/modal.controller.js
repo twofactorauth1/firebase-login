@@ -191,12 +191,11 @@ app.controller('SiteBuilderSocialLinkModalController', ['$timeout', 'parentVm', 
               selectedName = _.findWhere(vm.component.networks, {
                 name: old_value.name
               });
-              scope.$apply(function () {
-                if (selectedName) {
+              if (selectedName) {
                   var index = vm.component.networks.indexOf(selectedName)
                   vm.component.networks.splice(index, 1);
-                }
-              });
+              }
+              
             }, 500);
             break;
         }
