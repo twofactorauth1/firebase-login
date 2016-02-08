@@ -89,7 +89,7 @@ function ssbSiteBuilderSiteTemplatesController($scope, $attrs, $filter, $documen
                 SimpleSiteBuilderService.getSite(vm.state.website._id).then(function(){
 
                     //set theme
-                    SimpleSiteBuilderService.setupTheme().then(function() {
+                    SimpleSiteBuilderService.setupTheme(vm.state.website).then(function() {
 
                         //forward to editor
                         $timeout(function() {
