@@ -130,6 +130,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     $scope.$watch('vm.state.page', function(page) {
         if (page && vm.state.originalPage && !angular.equals(page, vm.state.originalPage)) {
             vm.state.pendingPageChanges = true;
+            console.log("Page changed");
             setupBreakpoints();
         } else {
             vm.state.pendingPageChanges = false;
@@ -137,8 +138,9 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     }, true);
 
     $scope.$watch('vm.state.website', function(website) {
-        if (vm.state.originalWebsite && !angular.equals(website, vm.state.originalWebsite)) {
+        if (website && vm.state.originalWebsite && !angular.equals(website, vm.state.originalWebsite)) {
             vm.state.pendingWebsiteChanges = true;
+            console.log("Website changed");
         } else {
             vm.state.pendingWebsiteChanges = false;
         }
