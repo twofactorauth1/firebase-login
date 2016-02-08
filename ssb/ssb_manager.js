@@ -1039,7 +1039,17 @@ module.exports = {
 
                                                 .map(function(link){
                                                     if(link.linkTo && (link.linkTo.type === 'home' || link.linkTo.type === 'page') && link.linkTo.data === existingPage.get('handle')){
-                                                        link.label = updatedPage.get('menuTitle') || link.label || updatedPage.get('title');
+                                                        // check if menu title exists
+                                                        var _label = updatedPage.get('menuTitle');
+                                                        // check if menu title not exists and page title is changed
+                                                        if(!_label && updatedPage.get('title') && updatedPage.get('title') !== existingPage.get('title')){
+                                                            _label = updatedPage.get('title');
+                                                        }
+                                                        // check if menu title not exists and page title does not changed
+                                                        if(!_label){
+                                                            _label = link.label || updatedPage.get('title');
+                                                        }
+                                                        link.label = _label;
                                                         link.linkTo.data = updatedPage.get("handle");
                                                         _exists = true;
                                                     }
