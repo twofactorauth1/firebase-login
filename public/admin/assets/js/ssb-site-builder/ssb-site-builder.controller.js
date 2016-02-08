@@ -139,7 +139,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
 
     $scope.$watch('vm.state.website', function(website) {
         if (website && vm.state.originalWebsite && !angular.equals(website, vm.state.originalWebsite)) {
-            vm.state.pendingWebsiteChanges = true;
+            //vm.state.pendingWebsiteChanges = true;
             console.log("Website changed");
         } else {
             vm.state.pendingWebsiteChanges = false;
