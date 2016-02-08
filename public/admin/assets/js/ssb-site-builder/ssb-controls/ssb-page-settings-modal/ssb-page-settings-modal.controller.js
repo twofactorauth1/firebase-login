@@ -141,7 +141,7 @@ app.controller('SiteBuilderPageSettingsModalController', ['$timeout', 'parentVm'
         saveWebsite().then(function(){
           SimpleSiteBuilderService.savePage(page, true).then(function() {      
             SimpleSiteBuilderService.getSite(page.websiteId).then(function() {
-              SimpleSiteBuilderService.getPages().then(function() {
+              SimpleSiteBuilderService.getPages().then(function(pages) {
                   vm.saveLoading = false;              
                   toaster.pop('success', 'Setting Saved', 'The page settings saved successfully.');
                   if(hide){
@@ -149,6 +149,13 @@ app.controller('SiteBuilderPageSettingsModalController', ['$timeout', 'parentVm'
                     angular.element('.modal.in').show();
                   }
                   else{
+                    if(vm.page._id === vm.parentVm.state.page._id && vm.page.homePage){
+                      var changes = angular.copy(vm.parentVm.state.pendingPageChanges);
+                      vm.parentVm.state.page.handle = "index";
+                      $timeout(function() {
+                        vm.parentVm.state.pendingPageChanges = changes;
+                      }, 0);                      
+                    }
                     vm.parentVm.closeModal();
                   }
               })

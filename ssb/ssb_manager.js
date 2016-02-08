@@ -1042,8 +1042,8 @@ module.exports = {
                                                         // check if menu title exists
                                                         var _label = updatedPage.get('menuTitle');
                                                         // check if menu title not exists and page title is changed
-                                                        if(!_label && updatedPage.get('title') && updatedPage.get('title') !== existingPage.get('title')){
-                                                            _label = updatedPage.get('title');
+                                                        if((!_label && updatedPage.get('title') && updatedPage.get('title') !== existingPage.get('title')) || homePage){
+                                                           _label = updatedPage.get('title');
                                                         }
                                                         // check if menu title not exists and page title does not changed
                                                         if(!_label){
