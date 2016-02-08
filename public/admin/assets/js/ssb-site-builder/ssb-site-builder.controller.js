@@ -109,7 +109,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         vm.state.originalWebsite = null;
         $timeout(function() {
             vm.state.originalWebsite = angular.copy(website);
-        }, 0);
+        }, 1000);
     });
 
     $scope.$watch(function() { return SimpleSiteBuilderService.page; }, function(page){
@@ -118,7 +118,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         vm.state.originalPage = null;
         $timeout(function() {
             vm.state.originalPage = angular.copy(page);
-        }, 0);
+        }, 1000);
     });
 
     $scope.$watch(function() { return SimpleSiteBuilderService.activeSectionIndex }, updateActiveSection, true);
@@ -296,7 +296,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
       vm.state.pendingPageChanges = false;
       vm.state.pendingWebsiteChanges = false;
       vm.state.website = angular.copy(vm.state.originalWebsite);
-      vm.state.page = angular.copy(vm.state.originalPage);
+      SimpleSiteBuilderService.page = angular.copy(vm.state.originalPage);
     }
 
     function updateActiveSection(index) {

@@ -103,13 +103,7 @@ function ssbSiteBuilderTopbarController($scope, $timeout, $attrs, $filter, Simpl
       vm.state.pendingPageChanges = false;
       vm.state.pendingWebsiteChanges = false;
       vm.state.website = angular.copy(vm.state.originalWebsite);
-      vm.state.page = angular.copy(vm.state.originalPage);
-      vm.state.originalPage = null;
-      vm.state.originalWebsite = null;
-        $timeout(function() {
-            vm.state.originalWebsite = angular.copy(vm.state.website);
-            vm.state.originalPage = angular.copy(vm.state.page);
-        }, 0);
+      SimpleSiteBuilderService.page = angular.copy(vm.state.originalPage);
     }
 
     function saveWebsite() {

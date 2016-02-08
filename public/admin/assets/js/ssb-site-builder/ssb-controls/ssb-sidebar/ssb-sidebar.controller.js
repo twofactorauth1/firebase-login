@@ -446,7 +446,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
       vm.state.pendingPageChanges = false;
       vm.state.pendingWebsiteChanges = false;
       vm.state.website = angular.copy(vm.state.originalWebsite);
-      vm.state.page = angular.copy(vm.state.originalPage);
+      SimpleSiteBuilderService.page = angular.copy(vm.state.originalPage);
     }
 
   	function togglePageSectionAccordion(index) {
