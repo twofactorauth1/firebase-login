@@ -10,7 +10,8 @@ app.directive('footerComponent', ['WebsiteService', function (WebsiteService) {
     templateUrl: '/components/component-wrap.html',
     link: function (scope, element, attrs, ctrl) {
       scope.isEditing = true;
-      scope.component.spacing = scope.$parent.defaultSpacings;
+      if(!scope.ssbEditor)
+        scope.component.spacing = scope.$parent.defaultSpacings;
       scope.copyright = {
         year: new Date().getFullYear()
       }

@@ -109,7 +109,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         vm.state.originalWebsite = null;
         $timeout(function() {
             vm.state.originalWebsite = angular.copy(website);
-        }, 1000);
+        }, 0);
     });
 
     $scope.$watch(function() { return SimpleSiteBuilderService.page; }, function(page){
@@ -118,7 +118,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         vm.state.originalPage = null;
         $timeout(function() {
             vm.state.originalPage = angular.copy(page);
-        }, 1000);
+        }, 0);
     });
 
     $scope.$watch(function() { return SimpleSiteBuilderService.activeSectionIndex }, updateActiveSection, true);
@@ -128,7 +128,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     $scope.$watch(function() { return SimpleSiteBuilderService.loading }, updateLoading, true);
 
     $scope.$watch('vm.state.page', function(page) {
-        if (page && vm.state.website && vm.state.originalPage && !angular.equals(page, vm.state.originalPage)) {
+        if (page && vm.state.originalPage && !angular.equals(page, vm.state.originalPage)) {
             vm.state.pendingPageChanges = true;
             console.log("Page changed");
             setupBreakpoints();
