@@ -956,15 +956,40 @@ module.exports = {
                                         self.log.error('Error updating page with id [' + page.get("_id") + ']: ' + err);
                                         cb(err);
                                     } else {
-                                        updatedPage.set("handle", 'index');
-                                        pageDao.saveOrUpdate(updatedPage, function(err, updatedPage){
-                                            if(err) {
-                                                self.log.error('Error updating page:', err);
+                                            self.getWebsiteLinklistsByHandle(accountId, page.get('websiteId'), "head-menu", function(err, list) {
+                                            if (err) {
+                                                self.log.error('Error getting website linklists by handle: ' + err);
                                                 cb(err);
                                             } else {
-                                                cb(null, existingPage, updatedPage, updatedSections);
+                                                    list.links = _(list.links).chain()
+                                                    .map(function(link){
+                                                        if(link.linkTo && link.linkTo.data === "index"){
+                                                            link.linkTo.data = page.get("handle");
+                                                        }
+                                                        return link
+                                                    })
+                                                    .uniq(function(link) {
+                                                        return link.linkTo.data;
+                                                    })
+                                                    .value();
+                                                    self.updateWebsiteLinklists(accountId, updatedPage.get('websiteId'), "head-menu", list, function(err, linkLists) {
+                                                        if (err) {
+                                                            self.log.error('Error updating website linklists by handle: ' + err);
+                                                            cb(err);
+                                                        } else {
+                                                            updatedPage.set("handle", 'index');
+                                                            pageDao.saveOrUpdate(updatedPage, function(err, updatedPage){
+                                                                if(err) {
+                                                                    self.log.error('Error updating page:', err);
+                                                                    cb(err);
+                                                                } else {
+                                                                    cb(null, existingPage, updatedPage, updatedSections);
+                                                                }
+                                                            });
+                                                        }
+                                                    });
                                             }
-                                        });
+                                        });                                        
                                     }
                                 });
                             }
