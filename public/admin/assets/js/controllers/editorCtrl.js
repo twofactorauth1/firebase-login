@@ -102,7 +102,9 @@
     };
 
     $scope.setDirty = function(is_dirty){
-      $scope.isDirty.dirty = is_dirty;      
+      $scope.isDirty.dirty = is_dirty;
+      if(is_dirty)   
+        $scope.changesConfirmed = false;   
     }
 
 
@@ -1792,20 +1794,20 @@
               confirmButtonText: "Yes, save changes!",
               cancelButtonText: "No, do not save changes!",
               closeOnConfirm: false,
-              closeOnCancel: false
+              closeOnCancel: true
             }, function (isConfirm) {
               if (isConfirm) {
                 $scope.redirect = true;
                 $scope.savePage(redirectUrl);
                 $scope.setDirty(false);
-              } else {
-                $scope.redirectWithoutSave(newUrl, true);  
+              } else {                
+                  $scope.redirectWithoutSave(newUrl, true);
               }
               offFn();
             });
-          } else {
-            $scope.redirectWithoutSave(newUrl, false);
-        }
+          } else   
+              $scope.redirectWithoutSave(newUrl, false);
+       
       }) 
     });
 
