@@ -744,10 +744,10 @@
                     ssbService.applyThemeToSite(defaultTheme, false, _website);
                     _website.themeId = defaultTheme._id;
                     ssbService.saveWebsite(_website);
-                }
-                $timeout(function() {
-                    ssbService.website = _website;
-                }, 500);
+                    $timeout(function() {
+                        ssbService.website = _website;
+                    }, 0);
+                }                
             });
         }
 
@@ -778,6 +778,18 @@
                             }
                         });
                         unbindWatcher();
+                        _website.themeId = theme._id;
+                        _website.theme = theme;
+
+                        if (keepCurrentOverrides === undefined || !angular.isDefined(_website.themeOverrides.styles)) {
+                            $timeout(function() {
+                                _website.themeOverrides = theme;
+                            });
+                        }
+                        if(!ssbService.website)
+                            $timeout(function() {
+                                ssbService.website = _website;
+                            }, 100);
                     }
                 });
 
@@ -786,16 +798,6 @@
                         sessionStorage.fonts = true;
                     }
                 }
-
-
-            _website.themeId = theme._id;
-            _website.theme = theme;
-
-            if (keepCurrentOverrides === undefined || !angular.isDefined(_website.themeOverrides.styles)) {
-                $timeout(function() {
-                    _website.themeOverrides = theme;
-                });
-            }
 
         }
 
