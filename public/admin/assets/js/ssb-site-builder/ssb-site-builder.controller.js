@@ -276,9 +276,11 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
                 return (
                     SimpleSiteBuilderService.savePage(vm.state.page).then(function(response){
                         SimpleSiteBuilderService.getSite(vm.state.website._id).then(function(){
-                            console.log('page saved');
-                            toaster.pop('success', 'Page Saved', 'The page was saved successfully.');
-                            vm.state.saveLoading = false;
+                            SimpleSiteBuilderService.getPages().then(function(){
+                                console.log('page saved');
+                                toaster.pop('success', 'Page Saved', 'The page was saved successfully.');
+                                vm.state.saveLoading = false;
+                            })
                         })
                     }).catch(function(err) {
                         toaster.pop('error', 'Error', 'The page was not saved. Please try again.');
