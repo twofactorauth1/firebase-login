@@ -747,7 +747,7 @@
                 }
                 $timeout(function() {
                     ssbService.website = _website;
-                }, 100);
+                }, 500);
             });
         }
 
