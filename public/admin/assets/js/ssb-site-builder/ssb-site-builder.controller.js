@@ -109,7 +109,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         vm.state.originalWebsite = null;
         $timeout(function() {
             vm.state.originalWebsite = angular.copy(website);
-        }, 1000);
+        }, 0);
     });
 
     $scope.$watch(function() { return SimpleSiteBuilderService.page; }, function(page){
