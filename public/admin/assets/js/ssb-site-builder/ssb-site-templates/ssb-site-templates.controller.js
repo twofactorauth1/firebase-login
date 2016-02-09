@@ -131,8 +131,10 @@ function ssbSiteBuilderSiteTemplatesController($scope, $attrs, $filter, $documen
             }
 
         }
-
-        $location.path('/website/site-builder/pages/' + id);
+        if(id)
+            $location.path('/website/site-builder/pages/' + id);
+        else
+            vm.uiState.loading = false;
     }
 
     function init(element) {
