@@ -855,16 +855,16 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
     }
 
     function validateDuplicatePage(pageHandle) {
-      var _page = vm.state.originalPages[pageHandle];      
+      var _page = vm.state.originalPages[pageHandle];
       if(_page && _page._id !== vm.state.page._id){
-        return "Page url should be unique";
+        return "Page handles must be unique.";
       }
       else if(SimpleSiteBuilderService.inValidPageHandles[pageHandle.toLowerCase()]){
         var _handles = [];
         angular.forEach(SimpleSiteBuilderService.inValidPageHandles, function(value, key) {
           _handles.push(value);
         });
-        return "Page url can't be a server routes. Invalid page url's are: " + _handles.join(", ");
+        return "Page handle cannot be a system route.";
       }
     }
 
