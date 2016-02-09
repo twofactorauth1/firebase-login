@@ -590,6 +590,36 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
   };
 
   /*
+   * @setPageLinkTitle
+   * -
+   */
+  $scope.setPageLinkTitle = function (url, update, link) {
+    if(!$scope.component.customnav){
+        var _label = null;
+        var _page = _.findWhere($scope.filterdedPages, {
+            handle: url
+          });
+        if(_page){
+          _label =  _page.menuTitle || _page.title; 
+        }
+
+        if(update){
+          link.label = _label
+        }
+        else{
+          $scope.newLink.linkTitle = _label
+        }
+        if(update)
+        {
+          $timeout(function() {
+            $scope.refreshLinks(_label, false);
+          }, 0);
+          
+        }
+      }
+  };
+
+  /*
    * @updateLinkList
    * - when the navigation is reordered, update the linklist in the website object
    */

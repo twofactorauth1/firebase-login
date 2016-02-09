@@ -969,7 +969,7 @@ module.exports = {
                                                         return link
                                                     })
                                                     .uniq(function(link) {
-                                                        return link.linkTo.data;
+                                                        return link.linkTo;
                                                     })
                                                     .value();
                                                     self.updateWebsiteLinklists(accountId, updatedPage.get('websiteId'), "head-menu", list, function(err, linkLists) {
@@ -1067,12 +1067,8 @@ module.exports = {
                                                         // check if menu title exists
                                                         var _label = updatedPage.get('menuTitle');
                                                         // check if menu title not exists and page title is changed
-                                                        if((!_label && updatedPage.get('title') && updatedPage.get('title') !== existingPage.get('title')) || homePage){
-                                                           _label = updatedPage.get('title');
-                                                        }
-                                                        // check if menu title not exists and page title does not changed
                                                         if(!_label){
-                                                            _label = link.label || updatedPage.get('title');
+                                                           _label = updatedPage.get('title');
                                                         }
                                                         link.label = _label;
                                                         link.linkTo.data = updatedPage.get("handle");
@@ -1082,14 +1078,18 @@ module.exports = {
                                                 })
 
                                                 .uniq(function(link) {
-                                                    return link.linkTo.data;
+                                                    return link.linkTo;
                                                 })
 
                                                 .filter(function(link){
                                                     //only keep pages that exist and are visible in menu
-                                                    return _.contains(pageHandles, link.linkTo.data)
+                                                    if(link.linkTo.type === 'section'){
+                                                        return _.contains(pageHandles, link.linkTo.page)    
+                                                    }
+                                                    else{
+                                                        return _.contains(pageHandles, link.linkTo.data)
+                                                    }                                                    
                                                 })
-
                                                 .value(); //return array value
 
 

@@ -139,7 +139,7 @@ app.controller('SiteBuilderPageSettingsModalController', ['$timeout', 'parentVm'
     vm.saveLoading = true;
       return(
         saveWebsite().then(function(){
-          SimpleSiteBuilderService.savePage(page, true).then(function() {      
+          SimpleSiteBuilderService.savePage(page, true).then(function(data) {      
             SimpleSiteBuilderService.getSite(page.websiteId).then(function() {
               SimpleSiteBuilderService.getPages().then(function(pages) {
                   vm.saveLoading = false;              
@@ -149,11 +149,10 @@ app.controller('SiteBuilderPageSettingsModalController', ['$timeout', 'parentVm'
                     angular.element('.modal.in').show();
                   }
                   else{
-                    if(vm.page._id === vm.parentVm.state.page._id && vm.page.homePage){
-                      var changes = angular.copy(vm.parentVm.state.pendingPageChanges);
-                      vm.parentVm.state.page.handle = "index";
+                    if(vm.page._id === vm.parentVm.state.page._id){
+                      SimpleSiteBuilderService.page = data.data;
                       $timeout(function() {
-                        vm.parentVm.state.pendingPageChanges = changes;
+                        vm.parentVm.state.pendingPageChanges = false;
                       }, 0);                      
                     }
                     vm.parentVm.closeModal();
@@ -179,16 +178,17 @@ app.controller('SiteBuilderPageSettingsModalController', ['$timeout', 'parentVm'
       )
   }  
   vm.loading = true;
-  SimpleSiteBuilderService.getPage(vm.pageId, true).then(function(page) {
-    vm.page = page.data;
-    vm.originalPage = angular.copy(vm.page);
-    // Special case if selected page is current page
-    if(vm.parentVm.state.page && vm.parentVm.state.page._id === vm.pageId){
-      vm.page.title = vm.parentVm.state.page.title;
-      vm.page.handle = vm.parentVm.state.page.handle;
-    }
+  if(vm.pageId === vm.parentVm.state.page._id){
+    vm.page = angular.copy(vm.parentVm.state.page);
+    vm.originalPage = angular.copy(vm.page); 
     vm.loading = false;
-
-  })
+  }
+  else{
+    SimpleSiteBuilderService.getPage(vm.pageId, true).then(function(page) {
+      vm.page = page.data;
+      vm.originalPage = angular.copy(vm.page);      
+      vm.loading = false;
+    })
+  } 
 
 }]);
