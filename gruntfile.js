@@ -485,6 +485,11 @@ module.exports = function(grunt) {
 
     grunt.registerTask('copyAccount',  ['prompt', 'doCopyAccount']);
 
+    grunt.registerTask('syncSSB', 'A task to copy SSB artifacts from test to prod', function(){
+        var done = this.async();
+        dbcopyutil.syncSSBArtifacts(done);
+    });
+
     grunt.registerTask('generateJS', 'Generate JS', function(){
         var done = this.async();
         jsincludeGenerator.buildJSArray('templates/snippets/index_body_scripts.jade', function(data){

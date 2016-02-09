@@ -352,6 +352,137 @@ var copyutil = {
                 fn();
             });
         });
+    },
+
+    syncSSBArtifacts: function(fn) {
+        var srcDBUrl = mongoConfig.TEST_MONGODB_CONNECT;
+        var destDBUrl = mongoConfig.PROD_MONGODB_CONNECT;
+        //var destDBUrl = mongoConfig.LOCAL_MONGODB_CONNECT;
+
+        var srcMongo = mongoskin.db(srcDBUrl, {safe: true});
+        var destMongo = mongoskin.db(destDBUrl, {safe: true});
+
+        //themes, templates, sitetemplates, sections
+        var themes = srcMongo.collection('themes');
+        var templates = srcMongo.collection('templates');
+        var sitetemplates = srcMongo.collection('sitetemplates');
+        var sections = srcMongo.collection('sections');
+
+        async.waterfall([
+            function copyThemes(cb) {
+                console.log('copying themes');
+                themes.find({'accountId':0}).toArray(function(err, items){
+                    if(err) {
+                        console.log('Error finding themes in test:', err);
+                        cb(err);
+                    } else {
+
+                        var themesCollection = destMongo.collection('themes');
+                        async.eachSeries(items,
+                            function(theme, _cb){
+                                themesCollection.save(theme, function(err, savedTheme){
+                                    _cb(err);
+                                });
+                            },
+                            function(err){
+                                if(err) {
+                                    console.log('Error during save: ' + err);
+                                    cb(err);
+                                } else {
+                                    console.log('saved themes');
+                                    cb();
+                                }
+                            }
+                        );
+                    }
+                });
+            },
+            function copyTemplates(cb) {
+                console.log('copying templates');
+                templates.find({'accountId':0}).toArray(function(err, items){
+                    if(err) {
+                        console.log('Error finding templates in test:', err);
+                        cb(err);
+                    } else {
+                        var templatesCollection = destMongo.collection('templates');
+                        async.eachSeries(items,
+                            function(template, _cb){
+                                templatesCollection.save(template, function(err, savedTemplate){
+                                    _cb(err);
+                                });
+                            },
+                            function(err){
+                                if(err) {
+                                    console.log('Error during save: ' + err);
+                                    cb(err);
+                                } else {
+                                    console.log('saved templates');
+                                    cb();
+                                }
+                            }
+                        );
+                    }
+                });
+            },
+            function copySitetemplates(cb) {
+                console.log('copying siteTemplates');
+                sitetemplates.find({'accountId':0}).toArray(function(err, items){
+                    if(err) {
+                        console.log('Error finding sitetemplates in test:', err);
+                        cb(err);
+                    } else {
+                        var sitetemplatesCollection = destMongo.collection('sitetemplates');
+                        async.eachSeries(items,
+                            function(template, _cb){
+                                sitetemplatesCollection.save(template, function(err, savedTemplate){
+                                    _cb(err);
+                                });
+                            },
+                            function(err){
+                                if(err) {
+                                    console.log('Error during save: ' + err);
+                                    cb(err);
+                                } else {
+                                    console.log('saved sitetemplates');
+                                    cb();
+                                }
+                            }
+                        );
+                    }
+                });
+            },
+            function copySections(cb) {
+                console.log('copying sections');
+                sections.find({'accountId':0}).toArray(function(err, items){
+                    if(err) {
+                        console.log('Error finding sections in test:', err);
+                        cb(err);
+                    } else {
+                        var sectionsCollection = destMongo.collection('sections');
+                        async.eachSeries(items,
+                            function(section, _cb){
+                                sectionsCollection.save(section, function(err, savedSection){
+                                    _cb(err);
+                                });
+                            },
+                            function(err){
+                                if(err) {
+                                    console.log('Error during save: ' + err);
+                                    cb(err);
+                                } else {
+                                    console.log('saved sections');
+                                    cb();
+                                }
+                            }
+                        );
+                    }
+                });
+            }
+        ], function done(err){
+            srcMongo.close();
+            destMongo.close();
+            fn(err);
+        });
     }
 
 
