@@ -84,7 +84,7 @@ exports.testGroup = {
         log.debug('runTest');
 
         //create a stripe customer for a user
-        stripeDao.createStripeCustomerForUser(null, testContext.user, testContext.accountId, 0, 0, function(err, value){
+        stripeDao.createStripeCustomerForUser(null, testContext.user, testContext.accountId, 0, 0, null, function(err, value){
             if(err) {
                 test.ok(false, 'Error creating Stripe Customer: ' + err);
                 test.done();
@@ -99,7 +99,7 @@ exports.testGroup = {
                     exp_year: 2020
 
                 };
-                stripeDao.createStripeCard(value.id, card, function(err, card){
+                stripeDao.createStripeCard(value.id, card, null, function(err, card){
                     if(err) {
                         test.ok(false, 'Error creating card for customer: ' + err);
                         test.done();
@@ -187,7 +187,7 @@ exports.postTest = function(test){
                     test.done();
                 } else {
                     log.debug('deleted user: ' + value);
-                    stripeDao.deleteStripeCustomer(testContext.stripeCustomer.id, null, testContext.user.id(), function(err, value){
+                    stripeDao.deleteStripeCustomer(testContext.stripeCustomer.id, null, testContext.user.id(), null, function(err, value){
                         if(err) {
                             test.ok(false, 'Error deleting Stripe Customer: ' + err);
                             test.done();

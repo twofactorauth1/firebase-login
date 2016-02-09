@@ -503,7 +503,7 @@ _.extend(api.prototype, baseApi.prototype, {
             },
             function(user, account, callback){
                 self.log.debug('Created user[' + user.id() + '] and account[' + account.id() + '] objects.');
-                paymentsManager.createStripeCustomerForUser(cardToken, user, appConfig.mainAccountID, account.id(), function(err, stripeCustomer) {
+                paymentsManager.createStripeCustomerForUser(cardToken, user, appConfig.mainAccountID, account.id(), null, function(err, stripeCustomer) {
                     if (err) {
                         self.log.error('Error creating Stripe customer: ' + err);
                         accountDao.deleteAccountAndArtifacts(account.id(), function(_err, value){

@@ -139,7 +139,7 @@ _.extend(api.prototype, baseApi.prototype, {
                             } else {
                                 if(billingObj.cardToken && billingObj.stripeCustomerId) {
                                     //we need to add a cardToken to a customer
-                                    paymentManager.addCardToCustomer(billingObj.cardToken, billingObj.stripeCustomerId, function(err, value){
+                                    paymentManager.addCardToCustomer(billingObj.cardToken, billingObj.stripeCustomerId, null, function(err, value){
                                         if(err) {
                                             self.log.error('Error updating Stripe');
                                             return self.wrapError(res, 500, null, err.message, err.message);
