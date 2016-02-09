@@ -10467,6 +10467,10 @@ a[href="https://froala.com/wysiwyg-editor"] {
 .ssb-sidebar-inner > .tab-pane {
   padding: 0;
 }
+.ssb-sidebar-inner .editable-error.help-block {
+  white-space: normal;
+  max-width: 300px;
+}
 .ssb-sidebar-icons {
   float: left;
   background: #131e26;

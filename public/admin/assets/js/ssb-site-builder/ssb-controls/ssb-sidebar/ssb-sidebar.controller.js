@@ -864,7 +864,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
         angular.forEach(SimpleSiteBuilderService.inValidPageHandles, function(value, key) {
           _handles.push(value);
         });
-        return "Page url can't be a route name.";
+        return "Page url can't be a server routes. Invalid page url's are: " + _handles.join(", ");
       }
     }
 
