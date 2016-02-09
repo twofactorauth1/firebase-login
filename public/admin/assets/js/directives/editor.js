@@ -59,7 +59,7 @@ app.directive("elem", function($timeout, $compile) {
                 scope.updateFroalaContent(editor);
               }).on('froalaEditor.toolbar.show', function(e, editor) {
 
-                editor.$tb.css({ 'opacity': 0 });
+                editor.$tb.css({ 'opacity': 0, 'pointer-events': 'none' });
 
                 $timeout(function(){
                     var left = editor.$tb.offset().left;
@@ -90,7 +90,7 @@ app.directive("elem", function($timeout, $compile) {
                     //     'position': 'absolute', 'width': '150px', 'height': '350px', 'background-color': 'blue', 'top': frElementTopLine - lineHeight - frElementHeightLine
                     // })
 
-                    editor.$tb.css({ 'top': frElementTopLine + frElementHeightLine, 'opacity': 1 });
+                    editor.$tb.css({ 'top': frElementTopLine + frElementHeightLine, 'opacity': 1, 'pointer-events': 'auto' });
 
                 }, 0);
               });
