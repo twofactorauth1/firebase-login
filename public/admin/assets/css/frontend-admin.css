@@ -6591,16 +6591,53 @@ a[href="https://froala.com/wysiwyg-editor"] {
   opacity: .5;
 }
 .ssb-site-template-grid-item {
-  display: inline-block;
-  text-align: center;
   padding: 1em;
+}
+.ssb-site-template-grid-item:not(:hover) img {
+  opacity: 0.8;
+}
+.ssb-site-template-grid-item:hover .ssb-site-template-description {
+  display: block;
 }
 .ssb-site-template-grid-item h1 {
   display: inline-block;
-  margin: .5em 0 0;
+  margin: .25em 0 0;
+}
+.ssb-site-template-grid-item-inner {
+  position: relative;
+  display: inline-block;
+  text-align: center;
+  padding: 0 0 1em;
+  background: #fefefe;
+  border: 2px solid #fcfcfc;
+  box-shadow: 0 1px 2px rgba(34, 25, 25, 0.4);
+  transition: opacity 0.4s ease-in-out;
 }
 .ssb-site-template-img-container {
+  position: relative;
   cursor: pointer;
+  max-height: 258px;
+  overflow: hidden;
+}
+@media screen and (min-width: 1653px) {
+  .ssb-site-template-img-container {
+    max-height: 400px;
+  }
+}
+.ssb-site-template-description {
+  display: none;
+  pointer-events: none;
+  position: absolute;
+  width: calc(100% - 4em);
+  background: #ffffff;
+  color: #48b1cc;
+  text-align: left;
+  padding: 1em 1em .5em 1em;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  max-width: 300px;
+  left: 50%;
+  font-family: Helvetica Neue;
 }
 .ssb-sidebar {
   display: none;

@@ -21,16 +21,23 @@
         <ul class="list-unstyled">
 
             <li ng-repeat="template in vm.state.siteTemplates track by $index" ng-click="vm.selectSiteTemplate(template)" class="ssb-site-template-grid-item col-xs-12 col-sm-4">
+                <div class="ssb-site-template-grid-item-inner">
 
-                <div class="ssb-site-template-img-container">
-                    <img class="ssb-site-template-img img-responsive" src="{{template.previewUrl}}"/>
-                </div>
+                    <div class="ssb-site-template-img-container">
 
-                <h1>
-                    <a href class="btn btn-primary btn-o">{{template.name}}</a>
-                </h1>
+                        <img class="ssb-site-template-img img-responsive" src="{{template.previewUrl}}"/>
 
-                <!-- {"_id":"asdf","name":"Default","accountId":6,"public":true,"description":"","sections":[],"created":{"date":"2016-01-21T22:03:25.090Z","by":null},"modified":{"date":null,"by":null}} -->
+                        <div class="ssb-site-template-description">
+                            <p>{{template.description}}</p>
+                        </div>
+
+                    </div>
+
+                    <h1>
+                        <a href class="btn btn-primary btn-o">{{template.name}}</a>
+                    </h1>
+
+
             </li>
 
         </ul>
