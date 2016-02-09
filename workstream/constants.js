@@ -13,7 +13,8 @@ defaultWorkstreams[0] = {
         {
             "_id" : 0,
             "name" : "Create a page",
-            "link" : "/admin/#/website/pages",
+            "link" : "",
+            "alias": "createPage",
             "helpText" : "Use templates or build original pages for your website.",
             "complete" : false,
             "optional" : false,
