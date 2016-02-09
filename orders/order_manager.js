@@ -288,37 +288,6 @@ module.exports = {
                 totalAmount = subTotal + taxAdded;
 
 
-                /*
-                 * Ignoring client side params
-
-                _.each(order.get('line_items'), function (line_item) {
-                    totalAmount += parseFloat(line_item.total);
-                    subTotal += parseFloat(line_item.total);
-                    totalLineItemsQuantity += parseFloat(line_item.quantity);
-                });
-                log.debug('subtotal: ' + totalAmount);
-                if (order.get('cart_discount')) {
-                    totalAmount -= parseFloat(order.get('cart_discount'));
-                    log.debug('subtracting cart_discount of ' + order.get('cart_discount'));
-                }
-                if (order.get('total_discount')) {
-                    totalAmount -= parseFloat(order.get('total_discount'));
-                    log.debug('subtracting total_discount of ' + order.get('total_discount'));
-                }
-                if (order.get('total_tax') && order.get('total_tax') > 0) {
-                    totalAmount += parseFloat(order.get('total_tax'));
-                    log.debug('adding tax of ' + order.get('total_tax'));
-                }
-                else {
-                    totalAmount += parseFloat(totalAmount * taxPercent);
-                    log.debug('adding tax of ' + order.get('total_tax'));
-                }
-                if (order.get('total_shipping')) {
-                    totalAmount += parseFloat(order.get('total_shipping'));
-                    log.debug('adding shipping of ' + order.get('total_shipping'));
-                }
-                */
-
                 order.set('tax_rate', taxPercent);
                 order.set('subtotal', subTotal.toFixed(2));
                 order.set('total', totalAmount.toFixed(2));
@@ -452,7 +421,7 @@ module.exports = {
                         if(_.find(productAry, function(product){return product.get('type') === 'SUBSCRIPTION'})) {
                             log.debug('creating a subscription');
                             var subscriptionProduct = _.find(productAry, function(product){
-                                return product.get('type') === 'SUBSCRIPTION'});
+                                return product.get('type') === 'SUBSCRIPTION';});
                             var productAttributes = subscriptionProduct.get('product_attributes');
                             var stripePlanAttributes = productAttributes.stripePlans[0];
                             var planId = stripePlanAttributes.id;
@@ -461,25 +430,38 @@ module.exports = {
                             var quantity = 1;
                             var application_fee_percent = null;
                             var accountId = savedOrder.get('account_id');
-                            stripeDao.createStripeSubscription(customerId, planId, coupon, trial_end, card, quantity,
-                                application_fee_percent, metadata, accountId, contactId, userId, accessToken, function(err, value){
-                                    if(err) {
-                                        log.error('Error creating Stripe Subscription: ' + err);
-                                        //set the status of the order to failed
-                                        savedOrder.set('status', $$.m.Order.status.FAILED);
-                                        savedOrder.set('note', savedOrder.get('note') + '\n Payment error: ' + err);
-                                        var modified = {
-                                            date: new Date(),
-                                            by: userId
-                                        };
-                                        savedOrder.set('modified', modified);
-                                        dao.saveOrUpdate(savedOrder, function(_err, updatedSavedOrder){
-                                            callback(err);
-                                        });
-                                    } else {
-                                        callback(null, account, savedOrder, value, contact);
-                                    }
+                            //other items in the purchase can be add-ons
+                            var invoiceItems = _.reject(productAry, function(product){
+                                return product.get('type') === 'SUBSCRIPTION';
                             });
+                            //TODO: handle invoiceItems
+                            /*
+                             async.eachSeries(invoiceItems, function(item, _callback){
+                             stripeDao.createInvoiceItem(customerId, amount, currency, invoiceId, subscriptionId, description, metadata, accessToken, _callback);
+                             }, function done(err){
+
+                             });
+                             */
+                            stripeDao.createStripeSubscription(customerId, planId, coupon, trial_end, card, quantity,
+                                    application_fee_percent, metadata, accountId, contactId, userId, accessToken, function(err, value){
+                                if(err) {
+                                    log.error('Error creating Stripe Subscription: ' + err);
+                                    //set the status of the order to failed
+                                    savedOrder.set('status', $$.m.Order.status.FAILED);
+                                    savedOrder.set('note', savedOrder.get('note') + '\n Payment error: ' + err);
+                                    var modified = {
+                                        date: new Date(),
+                                        by: userId
+                                    };
+                                    savedOrder.set('modified', modified);
+                                    dao.saveOrUpdate(savedOrder, function(_err, updatedSavedOrder){
+                                        callback(err);
+                                    });
+                                } else {
+                                    callback(null, account, savedOrder, value, contact);
+                                }
+                            });
+
                         } else {
                             log.debug('creating a charge');
                             stripeDao.createStripeCharge(amount, currency, card, customerId, contactId, description, metadata,
