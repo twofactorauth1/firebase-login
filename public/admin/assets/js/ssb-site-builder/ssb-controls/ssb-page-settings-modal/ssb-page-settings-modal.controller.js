@@ -1,6 +1,6 @@
 'use strict';
 /*global app*/
-app.controller('SiteBuilderPageSettingsModalController', ['$timeout', 'parentVm', 'pageId', 'toaster', 'SimpleSiteBuilderService', 'SweetAlert', '$location', function ($timeout, parentVm, pageId, toaster, SimpleSiteBuilderService, SweetAlert, $location) {
+app.controller('SiteBuilderPageSettingsModalController', ['$scope', '$timeout', 'parentVm', 'pageId', 'toaster', 'SimpleSiteBuilderService', 'SweetAlert', '$location', function ($scope, $timeout, parentVm, pageId, toaster, SimpleSiteBuilderService, SweetAlert, $location) {
 
 	var sectionLabel;
 	var vm = this;
@@ -176,7 +176,31 @@ app.controller('SiteBuilderPageSettingsModalController', ['$timeout', 'parentVm'
               console.log('website saved');
           })
       )
-  }  
+  }
+
+  function validateDuplicatePage(pageHandle) {
+    var _page = vm.parentVm.state.originalPages[pageHandle];      
+    if(_page && _page._id !== vm.page._id){
+      return "Page url should be unique";
+    }
+    else if(SimpleSiteBuilderService.inValidPageHandles[pageHandle.toLowerCase()]){
+      var _handles = [];
+      angular.forEach(SimpleSiteBuilderService.inValidPageHandles, function(value, key) {
+        _handles.push(value);
+      });
+      return "Page url can't be a route name.";
+    }
+  }
+
+  $scope.$watch('vm.page.handle', function(handle){
+      if(handle){
+        vm.inValidPageHandle = validateDuplicatePage(handle);
+      }
+      else{
+        vm.inValidPageHandle = null;
+      }
+  });
+
   vm.loading = true;
   if(vm.pageId === vm.parentVm.state.page._id){
     vm.page = angular.copy(vm.parentVm.state.page);
