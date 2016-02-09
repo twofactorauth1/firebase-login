@@ -48,7 +48,7 @@ if (typeof account.website.theme !== 'undefined' && typeof account.website.theme
 if (typeof account.website.theme !== 'undefined' && typeof account.website.themeOverrides !== 'undefined')
     style.
         .ssb-theme-#{account.website.theme.handle} {
-            color: #{account.website.themeOverrides.primaryTextColor};
+            color: #{account.website.themeOverrides.styles.primaryTextColor};
             font-family: !{account.website.themeOverrides.defaultFontStack};
             background-color: #{account.website.themeOverrides.styles.bodyBackgroundColor};
         }
@@ -80,11 +80,11 @@ if (typeof account.website.theme !== 'undefined' && typeof account.website.theme
         }
 
         .ssb-theme-#{account.website.theme.handle} .ssb-theme-heading-text {
-            color: #{account.website.themeOverrides.styles.primaryTextColor};
+            font-size: #{account.website.themeOverrides.styles.headingSize};
         }
 
         .ssb-theme-#{account.website.theme.handle} .ssb-theme-paragraph-text {
-            color: #{account.website.themeOverrides.styles.primaryTextColor};
+            font-size: #{account.website.themeOverrides.styles.paragraphSize};
         }
 
         .ssb-theme-#{account.website.theme.handle} .ssb-theme-btn, .ssb-theme-#{account.website.theme.handle} .ssb-theme-btn:hover {

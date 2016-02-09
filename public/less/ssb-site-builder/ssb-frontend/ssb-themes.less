@@ -35,6 +35,15 @@
 
 [class*="ssb-theme-"] {
 
+    -webkit-font-smoothing: antialiased !important;
+
+    .ssb-media-query-small-only({
+        .container {
+            padding-right: 15px!important;
+            padding-left: 15px!important;
+        }
+    });
+
     .ssb-theme-btn:hover:before {
         background: rgba(255, 255, 255, 0.1);
         content: '';

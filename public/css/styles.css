@@ -10508,6 +10508,9 @@ a[href="https://froala.com/wysiwyg-editor"] {
 .ssb-sidebar-add-section:hover .ssb-sidebar-add-section-btn {
   display: block;
 }
+.ssb-sidebar-add-section .ssb-sidebar-add-section-img {
+  background: lightGray;
+}
 .ssb-sidebar-add-section .fa-info {
   color: #48b1cc;
   position: absolute;
@@ -10653,6 +10656,19 @@ ssb-topbar .ui-select-match-text > small {
 }
 .ssb-control-bar .btn[disabled] {
   pointer-events: none;
+}
+[class*="ssb-theme-"] {
+  -webkit-font-smoothing: antialiased !important;
+}
+[class*="ssb-theme-"][data-eq-state$="small"] .container {
+  padding-right: 15px!important;
+  padding-left: 15px!important;
+}
+@media screen and (max-width: 767px) {
+  [class*="ssb-theme-"]:not([class*="ssb-edit-mode"]) .container {
+    padding-right: 15px!important;
+    padding-left: 15px!important;
+  }
 }
 [class*="ssb-theme-"] .ssb-theme-btn:hover:before {
   background: rgba(255, 255, 255, 0.1);
@@ -10878,6 +10894,17 @@ ssb-topbar .ui-select-match-text > small {
 }
 .ssb-section-layout .ssb-component {
   z-index: 1;
+}
+.ssb-page-section-layout-1-col .row,
+.ssb-page-section-layout-2-col .row,
+.ssb-page-section-layout-3-col .row {
+  margin: 0 !important;
+}
+.ssb-page-section-layout-1-col [class*="col-"],
+.ssb-page-section-layout-2-col [class*="col-"],
+.ssb-page-section-layout-3-col [class*="col-"] {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
 }
 .ssb-page-section-layout-overflow-visible {
   overflow: visible;
