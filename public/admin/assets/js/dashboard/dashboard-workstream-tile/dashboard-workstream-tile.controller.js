@@ -2,9 +2,9 @@
 
 app.controller('DashboardWorkstreamTileComponentController', dashboardWorkstreamTileComponentController);
 
-dashboardWorkstreamTileComponentController.$inject = ['$scope', '$attrs', '$filter', '$timeout', '$location', 'DashboardService', '$modal', '$timeout', '$document', '$interval'];
+dashboardWorkstreamTileComponentController.$inject = ['$scope', '$attrs', '$filter', '$location', 'DashboardService', '$modal', '$timeout', '$document', '$interval'];
 /* @ngInject */
-function dashboardWorkstreamTileComponentController($scope, $attrs, $filter, $timeout, $location, DashboardService, $modal, $timeout, $document, $interval) {
+function dashboardWorkstreamTileComponentController($scope, $attrs, $filter, $location, DashboardService, $modal, $timeout, $document, $interval) {
 
     var vm = this;
 
