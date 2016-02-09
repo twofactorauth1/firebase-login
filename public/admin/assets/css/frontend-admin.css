@@ -7384,6 +7384,21 @@ ssb-topbar .ui-select-match-text > small {
     z-index: 2;
   }
 }
+/*
+ * layout-header-v2
+ */
+/*
+ * layout-header-v3
+ */
+/*
+ * layout-header-v4
+ */
+/*
+ * layout-header-v5
+ */
+.ssb-page-section-layout-header-v5 .navigation-v2 .navbar {
+  min-height: 0!important;
+}
 .ssb-page-section-layout-header-v5 .navigation-v2 .navbar .navbar-header {
   display: none;
 }

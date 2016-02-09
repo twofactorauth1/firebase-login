@@ -251,7 +251,10 @@
                 page.sections = angular.copy(page.components);
                 for (var i = 0; i < page.sections.length; i++) {
                     var component = angular.copy(page.sections[i]);
+                    var id = Math.random().toString(36).replace('0.','');
                     var defaultSectionObj = {
+                        _id: id,
+                        accountId: ssbService.account._id,
                         layout: '1-col',
                         components: [component],
                         visibility: true
@@ -747,7 +750,7 @@
                     $timeout(function() {
                         ssbService.website = _website;
                     }, 0);
-                }                
+                }
             });
         }
 
@@ -935,6 +938,7 @@
 		(function init() {
 
 			AccountService.getAccount(function(data) {
+                ssbService.account = data;
 				ssbService.websiteId = data.website.websiteId;
                 ssbService.getSite(data.website.websiteId, true);
                 ssbService.getPages();
