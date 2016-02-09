@@ -859,6 +859,13 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
       if(_page && _page._id !== vm.state.page._id){
         return "Page url should be unique";
       }
+      else if(SimpleSiteBuilderService.inValidPageHandles[pageHandle.toLowerCase()]){
+        var _handles = [];
+        angular.forEach(SimpleSiteBuilderService.inValidPageHandles, function(value, key) {
+          _handles.push(value);
+        });
+        return "Page url can't be a route name.";
+      }
     }
 
     function init(element) {

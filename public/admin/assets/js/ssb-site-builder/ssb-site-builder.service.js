@@ -5,9 +5,9 @@
 
 	app.factory('SimpleSiteBuilderService', SimpleSiteBuilderService);
 
-	SimpleSiteBuilderService.$inject = ['$rootScope', '$http', '$q', '$timeout', 'AccountService', 'WebsiteService', '$modal'];
+	SimpleSiteBuilderService.$inject = ['$rootScope', '$http', '$q', '$timeout', 'AccountService', 'WebsiteService', '$modal', 'pageConstant'];
 	/* @ngInject */
-	function SimpleSiteBuilderService($rootScope, $http, $q, $timeout, AccountService, WebsiteService, $modal) {
+	function SimpleSiteBuilderService($rootScope, $http, $q, $timeout, AccountService, WebsiteService, $modal, pageConstant) {
 		var ssbService = {};
 		var baseWebsiteAPIUrl = '/api/1.0/cms/website/';
 		var basePageAPIUrl = '/api/1.0/cms/page/';
@@ -57,6 +57,7 @@
         ssbService.extendComponentData = extendComponentData;
 
         ssbService.contentComponentDisplayOrder = [];
+        ssbService.inValidPageHandles = pageConstant.inValidPageHandles;
 
         /*
          * This represents the category sorting for the add content panel
