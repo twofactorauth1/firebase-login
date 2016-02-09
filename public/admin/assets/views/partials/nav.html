@@ -43,19 +43,24 @@
 			</div>
 		</a>
 		<ul class="sub-menu">
+            <li ui-sref-active="active" ng-if="account.showhide.ssbSiteBuilder">
+                <a ui-sref="app.website.ssbSiteBuilder.pages">
+                    <span class="title"> Site Builder </span>
+                </a>
+            </li>
+            <li ui-sref-active="active" ng-if="!account.showhide.ssbSiteBuilder || account.showhide.legacyPages">
+                <a ui-sref="app.website.pages">
+                    <span class="title" translate="sidebar.nav.website.PAGES"> Pages </span>
+                </a>
+            </li>
+            <li ui-sref-active="active" ng-if="account.showhide.blog">
+                <a ui-sref="app.website.posts">
+                    <span class="title" translate="sidebar.nav.website.POSTS"> Blog Posts </span>
+                </a>
+            </li>
 			<li ui-sref-active="active">
 				<a ui-sref="app.website.analytics">
 					<span class="title" translate="sidebar.nav.website.ANALYTICS"> Analytics </span>
-				</a>
-			</li>
-			<li ui-sref-active="active" ng-if="!account.showhide.ssbSiteBuilder || account.showhide.legacyPages">
-				<a ui-sref="app.website.pages">
-					<span class="title" translate="sidebar.nav.website.PAGES"> Pages </span>
-				</a>
-			</li>
-			<li ui-sref-active="active" ng-if="account.showhide.blog">
-				<a ui-sref="app.website.posts">
-					<span class="title" translate="sidebar.nav.website.POSTS"> Posts </span>
 				</a>
 			</li>
 			<!-- <li ui-sref-active="active">
@@ -63,11 +68,6 @@
 					<span class="title" translate="sidebar.nav.website.TEMPLATES"> Templates </span>
 				</a>
 			</li> -->
-			<li ui-sref-active="active" ng-if="account.showhide.ssbSiteBuilder">
-				<a ui-sref="app.website.ssbSiteBuilder.pages">
-					<span class="title"> Site Builder </span>
-				</a>
-			</li>
 		</ul>
 	</li>
 	<li ng-class="{'active open':$state.includes('app.customers')}">
