@@ -25,20 +25,22 @@
 
 .ssb-theme-{{vm.state.website.theme.handle}} .ssb-page-section-layout-header {
     background-color: {{vm.state.website.themeOverrides.styles.headerBackgroundColor}};
+    color: {{vm.state.website.themeOverrides.styles.headerTextColor}};
 }
 
 .ssb-theme-{{vm.state.website.theme.handle}} .ssb-page-section-layout-header [ssb-text-component] {
-    color: {{vm.state.website.themeOverrides.styles.headerTextColor}};
+    /*color: {{vm.state.website.themeOverrides.styles.headerTextColor}};*/
     /*font-size: {{vm.state.website.themeOverrides.styles.headerSize}};*/
 }
 
 .ssb-theme-{{vm.state.website.theme.handle}} .ssb-page-section-layout-hero {
     background-color: {{vm.state.website.themeOverrides.styles.heroBackgroundColor}};
+    color: {{vm.state.website.themeOverrides.styles.heroTextColor}};
     text-align: center;
 }
 
 .ssb-theme-{{vm.state.website.theme.handle}} .ssb-page-section-layout-hero [ssb-text-component] {
-    color: {{vm.state.website.themeOverrides.styles.heroTextColor}};
+    /*color: {{vm.state.website.themeOverrides.styles.heroTextColor}};*/
     /*font-size: {{vm.state.website.themeOverrides.styles.heroSize}};*/
 }
 
@@ -90,7 +92,7 @@
 
 <!-- <div data-ng-include data-src=" 'assets/js/ssb-site-builder/ssb-site-builder.editor.styles.html' "></div> -->
 <div>
-    <indig-navprompt class="indig-navprompt" my-state="app.website.ssbSiteBuilder.editor" reset-dirty="resetDirty()" check-if-dirty="checkIfDirty()" save-page="vm.savePage()" save-page-check="!vm.state.saveLoading"></indig-navprompt>
+    <indig-navprompt class="indig-navprompt" my-state="app.website.ssbSiteBuilder.editor" reset-dirty="vm.resetDirty()" check-if-dirty="vm.checkIfDirty()" save-page="vm.savePage()" save-page-check="!vm.state.saveLoading"></indig-navprompt>
     <div class="loading-editor" ct-fullheight="window" data-ct-fullheight-exclusion="header" ng-hide="vm.uiState.loaded">
         <div class="col-xs-12">
             <h1 class="center"><span class="fa fa-spinner fa-spin"></span><br><br>

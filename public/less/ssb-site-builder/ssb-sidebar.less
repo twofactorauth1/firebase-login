@@ -1,3 +1,6 @@
+@import "../modules/_mixins.less";
+@import "../modules/_variables.less";
+
 .ssb-sidebar {
 	display: none;
 	height: 200px;
@@ -353,6 +356,11 @@
     & > .tab-pane {
         padding: 0;
     }
+
+    .editable-error.help-block{
+        white-space: normal;
+        max-width: 300px;
+    }
 }
 
 .ssb-sidebar-icons {
@@ -419,6 +427,8 @@
     }
 
     .ssb-sidebar-add-section-img {
+
+        background: lightGray;
 
         // .tooltip.bottom .tooltip-arrow {
         //     left: 86%;

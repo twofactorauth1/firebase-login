@@ -76,7 +76,7 @@ var component = $$.m.ModelBase.extend({
              videoWidth: 780,
              videoHeight: 320,
              videoImage: '',
-            txtcolor : "#ffffff",
+            txtcolor : "",
 
             /**
              *
@@ -92,7 +92,7 @@ var component = $$.m.ModelBase.extend({
                     overlay: false,
                     show: false
                 },
-                color : "#4bb0cb"
+                color : ""
             },
 
             /**

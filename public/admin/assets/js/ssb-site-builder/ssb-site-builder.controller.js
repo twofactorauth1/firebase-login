@@ -27,6 +27,8 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     vm.applyThemeToSite = SimpleSiteBuilderService.applyThemeToSite;
     vm.addSectionToPage = addSectionToPage;
     vm.legacyComponentMedia = legacyComponentMedia;
+    vm.checkIfDirty = checkIfDirty;
+    vm.resetDirty = resetDirty;
 
 
     vm.uiState = {
@@ -59,7 +61,8 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
             if (pageId && pageId !== vm.state.page._id) {
                 SimpleSiteBuilderService.getPages();
                 SimpleSiteBuilderService.getSite(vm.state.website._id);
-                vm.uiState.loaded = false;
+                if(!vm.state.pendingWebsiteChanges && !vm.state.pendingPageChanges)
+                    vm.uiState.loaded = false;
                 $location.path('/website/site-builder/pages/' + pageId);
             } else {
                 vm.uiState.navigation.index = 1;
@@ -101,7 +104,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     };
 
     $scope.$watch(function() { return SimpleSiteBuilderService.website; }, function(website){
-        vm.state.pendingChanges = false;
+        vm.state.pendingWebsiteChanges = false;
         vm.state.website = website;
         vm.state.originalWebsite = null;
         $timeout(function() {
@@ -110,7 +113,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     });
 
     $scope.$watch(function() { return SimpleSiteBuilderService.page; }, function(page){
-        vm.state.pendingChanges = false;
+        vm.state.pendingPageChanges = false;
         vm.state.page = page;
         vm.state.originalPage = null;
         $timeout(function() {
@@ -126,29 +129,35 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
 
     $scope.$watch('vm.state.page', function(page) {
         if (page && vm.state.originalPage && !angular.equals(page, vm.state.originalPage)) {
-            vm.state.pendingChanges = true;
+            vm.state.pendingPageChanges = true;
+            console.log("Page changed");
             setupBreakpoints();
         } else {
-            vm.state.pendingChanges = false;
+            vm.state.pendingPageChanges = false;
         }
     }, true);
 
     $scope.$watch('vm.state.website', function(website) {
-        if (vm.state.originalWebsite && !angular.equals(website, vm.state.originalWebsite)) {
-            vm.state.pendingChanges = true;
+        if (website && vm.state.originalWebsite && !angular.equals(website, vm.state.originalWebsite)) {
+            vm.state.pendingWebsiteChanges = true;
+            console.log("Website changed");
         } else {
-            vm.state.pendingChanges = false;
+            vm.state.pendingWebsiteChanges = false;
         }
     }, true);
 
     $scope.$watch(function() { return SimpleSiteBuilderService.pages }, function(pages) {
-      //filter blog pages
+      // To track duplicate pages 
+      vm.state.originalPages = angular.copy(pages);
+      vm.state.pages = angular.copy(pages);
+      
+      //filter blog pages and coming soon
       if(pages){
-        delete pages["blog"];
-        delete pages["single-post"];
-      }
-      vm.state.pages = pages;
-      var parsed = angular.fromJson(pages);
+        delete vm.state.pages["blog"];
+        delete vm.state.pages["single-post"];
+        delete vm.state.pages["coming-soon"];
+      }      
+      var parsed = angular.fromJson(vm.state.pages);
       var arr = [];
       _.each(parsed, function (page) {
           arr.push(page);
@@ -184,16 +193,17 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         }
     );
 
-    $scope.checkIfDirty = function(){
-        if(vm.state.pendingChanges)
-            return true;
+    function checkIfDirty() {
+        return vm.state.pendingWebsiteChanges || vm.state.pendingPageChanges;
     }
-    $scope.resetDirty = function(){
-        vm.state.pendingChanges = false;
+
+    function resetDirty() {
+        vm.state.pendingWebsiteChanges = false;
+        vm.state.pendingPageChanges = false;
     }
 
     function saveWebsite() {
-        vm.state.pendingChanges = false;
+        vm.state.pendingWebsiteChanges = false;
         return (
             SimpleSiteBuilderService.saveWebsite(vm.state.website).then(function(response){
                 console.log('website saved');
@@ -203,7 +213,6 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
 
     //TODO: refactor, this function exists in multiple controllers :)
     function savePage() {
-
         vm.state.saveLoading = true;
         var isLegacyPage = !vm.state.page.ssb;
         console.log(isLegacyPage);
@@ -226,7 +235,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
 
                     vm.uiState.hasSeenWarning = true;
 
-                    vm.state.pendingChanges = false;
+                    vm.state.pendingPageChanges = false;
 
                     //hide section panel
                     vm.uiState.showSectionPanel = false;
@@ -235,18 +244,19 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
                     vm.uiState.navigation.sectionPanel.reset();
 
                     saveWebsite().then(function(){
-
                         return (
                             SimpleSiteBuilderService.savePage(vm.state.page).then(function(response){
-                                console.log('page saved');
-                                toaster.pop('success', 'Page Saved', 'The page was saved successfully.');
-                                vm.state.saveLoading = false;
+                                SimpleSiteBuilderService.getSite(vm.state.website._id).then(function(){
+                                    console.log('page saved');
+                                    toaster.pop('success', 'Page Saved', 'The page was saved successfully.');
+                                    vm.state.saveLoading = false;
+                                })
                             }).catch(function(err) {
                                 vm.state.saveLoading = false;
                                 toaster.pop('error', 'Error', 'The page was not saved. Please try again.');
                             })
                         )
-                    })    
+                    })
                 }
                 else{
                     vm.state.saveLoading = false;
@@ -254,7 +264,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
             });
 
         } else {
-            vm.state.pendingChanges = false;
+            vm.state.pendingPageChanges = false;
 
             //hide section panel
             vm.uiState.showSectionPanel = false;
@@ -263,26 +273,30 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
             vm.uiState.navigation.sectionPanel.reset();
 
             saveWebsite().then(function(){
-
                 return (
                     SimpleSiteBuilderService.savePage(vm.state.page).then(function(response){
-                        console.log('page saved');
-                        toaster.pop('success', 'Page Saved', 'The page was saved successfully.');
-                        vm.state.saveLoading = false;
+                        SimpleSiteBuilderService.getSite(vm.state.website._id).then(function(){
+                            SimpleSiteBuilderService.getPages().then(function(){
+                                console.log('page saved');
+                                toaster.pop('success', 'Page Saved', 'The page was saved successfully.');
+                                vm.state.saveLoading = false;
+                            })
+                        })
                     }).catch(function(err) {
                         toaster.pop('error', 'Error', 'The page was not saved. Please try again.');
                         vm.state.saveLoading = false;
                     })
                 )
-            })    
+            })
         }
 
     }
 
     function cancelPendingEdits() {
-      vm.state.pendingChanges = false;
+      vm.state.pendingPageChanges = false;
+      vm.state.pendingWebsiteChanges = false;
       vm.state.website = angular.copy(vm.state.originalWebsite);
-      vm.state.page = angular.copy(vm.state.originalPage);
+      SimpleSiteBuilderService.page = angular.copy(vm.state.originalPage);
     }
 
     function updateActiveSection(index) {

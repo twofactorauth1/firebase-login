@@ -44,7 +44,7 @@ function ssbSiteBuilderTopbarController($scope, $timeout, $attrs, $filter, Simpl
 
                     vm.uiState.hasSeenWarning = true;
 
-                    vm.state.pendingChanges = false;
+                    vm.state.pendingPageChanges = false;
 
                     //hide section panel
                     vm.uiState.showSectionPanel = false;
@@ -55,9 +55,11 @@ function ssbSiteBuilderTopbarController($scope, $timeout, $attrs, $filter, Simpl
                     saveWebsite().then(function(){
                         return (
                             SimpleSiteBuilderService.savePage(vm.state.page).then(function(response){
-                                console.log('page saved');
-                                toaster.pop('success', 'Page Saved', 'The page was saved successfully.');
-                                vm.state.saveLoading = false;
+                                SimpleSiteBuilderService.getSite(vm.state.website._id).then(function(){
+                                    console.log('page saved');
+                                    toaster.pop('success', 'Page Saved', 'The page was saved successfully.');
+                                    vm.state.saveLoading = false;
+                                })
                             }).catch(function(err) {
                                 vm.state.saveLoading = false;
                                 toaster.pop('error', 'Error', 'The page was not saved. Please try again.');
@@ -71,7 +73,7 @@ function ssbSiteBuilderTopbarController($scope, $timeout, $attrs, $filter, Simpl
             });
 
         } else {
-            vm.state.pendingChanges = false;
+            vm.state.pendingPageChanges = false;
 
             //hide section panel
             vm.uiState.showSectionPanel = false;
@@ -82,9 +84,11 @@ function ssbSiteBuilderTopbarController($scope, $timeout, $attrs, $filter, Simpl
             saveWebsite().then(function(){
                 return (
                     SimpleSiteBuilderService.savePage(vm.state.page).then(function(response){
-                        console.log('page saved');
-                        toaster.pop('success', 'Page Saved', 'The page was saved successfully.');
-                        vm.state.saveLoading = false;
+                        SimpleSiteBuilderService.getSite(vm.state.website._id).then(function(){
+                            console.log('page saved');
+                            toaster.pop('success', 'Page Saved', 'The page was saved successfully.');
+                            vm.state.saveLoading = false;
+                        })
                     }).catch(function(err) {
                         toaster.pop('error', 'Error', 'The page was not saved. Please try again.');
                         vm.state.saveLoading = false;
@@ -96,19 +100,14 @@ function ssbSiteBuilderTopbarController($scope, $timeout, $attrs, $filter, Simpl
     }
 
     function cancelPendingEdits() {
-      vm.state.pendingChanges = false;
+      vm.state.pendingPageChanges = false;
+      vm.state.pendingWebsiteChanges = false;
       vm.state.website = angular.copy(vm.state.originalWebsite);
-      vm.state.page = angular.copy(vm.state.originalPage);
-      vm.state.originalPage = null;
-      vm.state.originalWebsite = null;
-        $timeout(function() {
-            vm.state.originalWebsite = angular.copy(vm.state.website);
-            vm.state.originalPage = angular.copy(vm.state.page);
-        }, 0);
+      SimpleSiteBuilderService.page = angular.copy(vm.state.originalPage);
     }
 
     function saveWebsite() {
-        vm.state.pendingChanges = false;
+        vm.state.pendingWebsiteChanges = false;
         return (
             SimpleSiteBuilderService.saveWebsite(vm.state.website).then(function(response){
                 console.log('website saved');

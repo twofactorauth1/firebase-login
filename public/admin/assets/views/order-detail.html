@@ -210,6 +210,7 @@
                                 </fieldset>
                             </div>
                             <div class="col-sm-6 col-xs-12">
+                                
                                 <fieldset class="padding-15 margin-bottom-0">
                                     <legend>
                                         Shipping Details <span class="fa" ng-init="shippingEdit = false" ng-click="shippingEdit = !shippingEdit" ng-class="{'fa-edit': !shippingEdit, 'fa-times': shippingEdit}"></span>
@@ -217,8 +218,8 @@
                                     <div class="row margin-top-5" ng-if="shippingEdit">
                                         <div class="form-group col-sm-12">
                                             <div class="checkbox clip-check check-primary col-sm-6 col-xs-12">
-                                                <input type="checkbox" id="sameAsBilling" ng-model="sameAsBilling">
-                                                <label for="sameAsBilling" class="text-bold">
+                                                <input type="checkbox" id="billing.sameAsBilling" ng-model="billing.sameAsBilling">
+                                                <label for="billing.sameAsBilling" class="text-bold">
                                                     Same As Billing
                                                 </label>
                                             </div>
@@ -226,7 +227,7 @@
                                                 <button class="btn btn-info btn-o btn-wide pull-left" ng-click="customerSync('shipping')" ng-if="selectedCustomer">Customer Sync</button>
                                             </div>
                                         </div>
-                                        <div ng-if="!sameAsBilling">
+                                        <div ng-if="!billing.sameAsBilling">
                                             <div class="form-group col-sm-6">
                                                 <label for="shipping-first-name">
                                                     First
@@ -294,7 +295,7 @@
                                                 <input type="text" class="form-control" id="shipping-country" placeholder="Country" ng-model="order.shipping_address.country">
                                             </div>
                                         </div>
-                                        <div ng-if="sameAsBilling">
+                                        <div ng-if="billing.sameAsBilling">
                                             <div class="form-group col-sm-6">
                                                 <label for="shipping-first-name">
                                                     First
@@ -363,24 +364,25 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="margin-top-5" ng-if="!shippingEdit">
-                                        <address>
-                                            <strong>{{order.shipping_address.company}}</strong>
-                                            <br> {{order.shipping_address.address_1}}<span ng-if='order.shipping_address.address_2'>,</span> {{order.shipping_address.address_2}}
-                                            <br> {{order.shipping_address.city}}<span ng-if='order.shipping_address.state'>,</span> {{order.shipping_address.state}} {{order.shipping_address.postcode}}
-                                            <br>
-                                            <span ng-if="order.shipping_address.phone"><span class="fa fa-phone"></span> {{order.shipping_address.phone}}</span>
-                                        </address>
-                                        <address class="margin-bottom-0">
-                                            <strong>{{order.shipping_address.first_name}} {{order.shipping_address.last_name}}</strong>
-                                            <br>
-                                            <span ng-if="order.shipping_address.email">
-                                            <span class="fa fa-envelope-o"></span>
-                                            <a href="mailto:#{{order.shipping_address.email}}">
-                                                {{order.shipping_address.email}}
-                                            </a>
-                                            </span>
-                                        </address>
+                                     <div class="margin-top-5" ng-if="!shippingEdit">
+                                            <address>
+                                                <strong>{{order.shipping_address.company}}</strong>
+                                                <br> {{order.shipping_address.address_1}}<span ng-if='order.shipping_address.address_2'>,</span> {{order.shipping_address.address_2}}
+                                                <br> {{order.shipping_address.city}}<span ng-if='order.shipping_address.state'>,</span> {{order.shipping_address.state}} {{order.shipping_address.postcode}}
+                                                <br>
+                                                <span ng-if="order.shipping_address.phone"><span class="fa fa-phone"></span> {{order.shipping_address.phone}}</span>
+                                            </address>
+                                            <address class="margin-bottom-0">
+                                                <strong>{{order.shipping_address.first_name}} {{order.shipping_address.last_name}}</strong>
+                                                <br>
+                                                <span ng-if="order.shipping_address.email">
+                                                <span class="fa fa-envelope-o"></span>
+                                                <a href="mailto:#{{order.shipping_address.email}}">
+                                                    {{order.shipping_address.email}}
+                                                </a>
+                                                </span>
+                                            </address>
+                                        
                                     </div>
                                 </fieldset>
                             </div>

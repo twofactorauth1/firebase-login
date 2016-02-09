@@ -52,20 +52,47 @@ app.directive("elem", function($timeout, $compile) {
             }).froalaEditor($.FroalaEditor.config)
               .on('froalaEditor.contentChanged', function(e, editor) {
                 scope.updateFroalaContent(editor);
+                $(elem).froalaEditor('html.cleanEmptyTags');
               }).on('froalaEditor.keydown', function(e, editor) {
                 scope.updateFroalaContent(editor);
               }).on('froalaEditor.image.resizeEnd', function(e, editor, $img) {
                 scope.updateFroalaContent(editor);
               }).on('froalaEditor.toolbar.show', function(e, editor) {
+
+                editor.$tb.css({ 'opacity': 0, 'pointer-events': 'none' });
+
                 $timeout(function(){
-                  var left = editor.$tb.offset().left;
-                  var screenLeft = 0;
-                  if($("#componentloader").offset)
-                    screenLeft = $("#componentloader").offset().left;
-                  if(left < screenLeft){
-                    editor.$tb.css("left", screenLeft);
-                  }  
-                },0)                              
+                    var left = editor.$tb.offset().left;
+                    var screenLeft = 0;
+
+                    if ($("#componentloader").offset) {
+                        screenLeft = $("#componentloader").offset().left;
+                    }
+
+                    if (left < screenLeft) {
+                        editor.$tb.css("left", screenLeft);
+                    }
+
+                    /*
+                     * Adjust the vertical position of the toolbar so that it doesn't cover up the text!
+                     */
+                    var frElementTopLine = parseInt($(editor.selection.element()).offset().top, 10);
+                    var frElementHeightLine = parseInt($(editor.selection.element()).height(), 10);
+                    var lineHeight = parseInt($(e.currentTarget).find('.fr-element').css('line-height'), 10);
+                    var fontSize = parseInt($(e.currentTarget).find('.fr-element').css('font-size'), 10);
+
+                    // debugging divs
+                    // $('.testel123').remove();
+                    // $('<div class="testel123"></div>').appendTo($('body')).css({
+                    //     'position': 'absolute', 'width': '150px', 'height': '350px', 'background-color': 'red', 'top': frElementTopLine - fontSize - frElementHeightLine, 'right': '20px'
+                    // })
+                    // $('<div class="testel123"></div>').appendTo($('body')).css({
+                    //     'position': 'absolute', 'width': '150px', 'height': '350px', 'background-color': 'blue', 'top': frElementTopLine - lineHeight - frElementHeightLine
+                    // })
+
+                    editor.$tb.css({ 'top': frElementTopLine + frElementHeightLine, 'opacity': 1, 'pointer-events': 'auto' });
+
+                }, 0);
               });
           }, 1000);
         });

@@ -30,7 +30,7 @@ var component = $$.m.ModelBase.extend({
              */
             anchor: null,
 
-            txtcolor : "#444",
+            txtcolor : "",
 
             title : "<div style=\"text-align: center;\"><span style=\"font-size:28px;\">Welcome to Our Store<br></span><br></div>",
 

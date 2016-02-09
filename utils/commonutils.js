@@ -4,6 +4,7 @@
  * All use or reproduction of any or all of this content must be approved.
  * Please contact info@indigenous.io for approval or questions.
  */
+var _ = require('underscore');
 
 var utils = {
 
@@ -435,5 +436,9 @@ if (typeof $$ === 'undefined') {
 
 $$.u = $$.u || {};
 $$.u = _.extend($$.u, utils);
+
+if (typeof module === "object" && module.exports) {
+    module.exports = $$.u;
+}
 
 return $$.u;

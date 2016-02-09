@@ -19,7 +19,8 @@ app.directive('blogComponent', ['$filter', '$timeout', 'WebsiteService', 'toaste
             });
         };
         scope.deletedPosts = [];
-        scope.component.spacing = scope.$parent.defaultSpacings;
+        if(!scope.ssbEditor)
+          scope.component.spacing = scope.$parent.defaultSpacings;
 
         scope.control.saveBlogData = function () {
             _.each(scope.blog.blogposts, function (value, index) {

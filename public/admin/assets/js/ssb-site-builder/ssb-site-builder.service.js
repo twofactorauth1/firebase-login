@@ -5,9 +5,9 @@
 
 	app.factory('SimpleSiteBuilderService', SimpleSiteBuilderService);
 
-	SimpleSiteBuilderService.$inject = ['$rootScope', '$http', '$q', '$timeout', 'AccountService', 'WebsiteService', '$modal'];
+	SimpleSiteBuilderService.$inject = ['$rootScope', '$http', '$q', '$timeout', 'AccountService', 'WebsiteService', '$modal', 'pageConstant'];
 	/* @ngInject */
-	function SimpleSiteBuilderService($rootScope, $http, $q, $timeout, AccountService, WebsiteService, $modal) {
+	function SimpleSiteBuilderService($rootScope, $http, $q, $timeout, AccountService, WebsiteService, $modal, pageConstant) {
 		var ssbService = {};
 		var baseWebsiteAPIUrl = '/api/1.0/cms/website/';
 		var basePageAPIUrl = '/api/1.0/cms/page/';
@@ -57,6 +57,7 @@
         ssbService.extendComponentData = extendComponentData;
 
         ssbService.contentComponentDisplayOrder = [];
+        ssbService.inValidPageHandles = pageConstant.inValidPageHandles;
 
         /*
          * This represents the category sorting for the add content panel
@@ -200,8 +201,16 @@
                   url: baseWebsiteAPIUrlv2 + ssbService.website._id + '/page/',
                   method: 'POST',
                   data: { templateId: templateId }
-                }).success(successPage).error(errorPage))
+                }).success(success).error(error))
             )
+
+            function success(data) {
+                console.log('SimpleSiteBuilderService requested page created');
+            }
+
+            function error(error) {
+                console.error('SimpleSiteBuilderService page creation error: ' + error);
+            }
 
         }
 
@@ -243,7 +252,10 @@
                 page.sections = angular.copy(page.components);
                 for (var i = 0; i < page.sections.length; i++) {
                     var component = angular.copy(page.sections[i]);
+                    var id = Math.random().toString(36).replace('0.','');
                     var defaultSectionObj = {
+                        _id: id,
+                        accountId: ssbService.account._id,
                         layout: '1-col',
                         components: [component],
                         visibility: true
@@ -628,7 +640,7 @@
                 ssbService.getSection(section, version || 1).then(function(response) {
                     if (response) {
 
-                        if (replaceAtIndex) {
+                        if (angular.isDefined(replaceAtIndex)) {
                             var extendedData = ssbService.extendComponentData(oldSection, response);
                             ssbService.setActiveSection(null);
                             ssbService.page.sections.splice(replaceAtIndex, 1, extendedData);
@@ -662,7 +674,7 @@
          */
         function extendComponentData(oldSection, newSection) {
 
-            var keysToOmit = ['$$hashKey', '_id', 'anchor', 'accountId', 'version', 'type', 'layout', 'spacing'];
+            var keysToOmit = ['$$hashKey', '_id', 'anchor', 'accountId', 'version', 'type', 'layout', 'spacing', 'visibility', 'bg'];
             var newComponents = angular.copy(newSection.components);
             var newComponentsOrder = _.invert(_.object(_.pairs(_.pluck(newComponents, 'type')))); // ['componentType1', 'componentType2', ...]
             var oldComponents = _(angular.copy(oldSection.components)).chain()
@@ -736,10 +748,10 @@
                     ssbService.applyThemeToSite(defaultTheme, false, _website);
                     _website.themeId = defaultTheme._id;
                     ssbService.saveWebsite(_website);
+                    $timeout(function() {
+                        ssbService.website = _website;
+                    }, 0);
                 }
-                $timeout(function() {
-                    ssbService.website = _website;
-                }, 100);
             });
         }
 
@@ -770,6 +782,18 @@
                             }
                         });
                         unbindWatcher();
+                        _website.themeId = theme._id;
+                        _website.theme = theme;
+
+                        if (keepCurrentOverrides === undefined || !angular.isDefined(_website.themeOverrides.styles)) {
+                            $timeout(function() {
+                                _website.themeOverrides = theme;
+                            });
+                        }
+                        if(!ssbService.website)
+                            $timeout(function() {
+                                ssbService.website = _website;
+                            }, 100);
                     }
                 });
 
@@ -778,16 +802,6 @@
                         sessionStorage.fonts = true;
                     }
                 }
-
-
-            _website.themeId = theme._id;
-            _website.theme = theme;
-
-            if (keepCurrentOverrides === undefined || !angular.isDefined(_website.themeOverrides.styles)) {
-                $timeout(function() {
-                    _website.themeOverrides = theme;
-                });
-            }
 
         }
 
@@ -807,7 +821,7 @@
                 appendTo: 'body',
                 palette: [
                   ["#C91F37", "#DC3023", "#9D2933", "#CF000F", "#E68364", "#F22613", "#CF3A24", "#C3272B", "#8F1D21", "#D24D57"],
-                  ["#F08F907", "#F47983", "#DB5A6B", "#C93756", "#FCC9B9", "#FFB3A7", "#F62459", "#F58F84", "#875F9A", "#5D3F6A"],
+                  ["#f47998", "#F47983", "#DB5A6B", "#C93756", "#FCC9B9", "#FFB3A7", "#F62459", "#F58F84", "#875F9A", "#5D3F6A"],
                   ["#89729E", "#763568", "#8D608C", "#A87CA0", "#5B3256", "#BF55EC", "#8E44AD", "#9B59B6", "#BE90D4", "#4D8FAC"],
                   ["#5D8CAE", "#22A7F0", "#19B5FE", "#59ABE3", "#48929B", "#317589", "#89C4F4", "#4B77BE", "#1F4788", "#003171"],
                   ["#044F67", "#264348", "#7A942E", "#8DB255", "#5B8930", "#6B9362", "#407A52", "#006442", "#87D37C", "#26A65B"],
@@ -925,6 +939,7 @@
 		(function init() {
 
 			AccountService.getAccount(function(data) {
+                ssbService.account = data;
 				ssbService.websiteId = data.website.websiteId;
                 ssbService.getSite(data.website.websiteId, true);
                 ssbService.getPages();

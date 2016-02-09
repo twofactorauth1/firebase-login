@@ -49,7 +49,6 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
     vm.removeBackgroundImage = removeBackgroundImage;
     vm.removeImage = removeImage;
     vm.createPage = createPage;
-    vm.getNumberOfPages = getNumberOfPages;
     vm.getTemplateById = getTemplateById;
     vm.editSectionName = editSectionName;
     vm.hideSectionFromPage = hideSectionFromPage;
@@ -57,7 +56,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
     vm.duplicatePage = duplicatePage;
     vm.hideFromMenu = hideFromMenu;
     vm.moveSection = moveSection;
-
+    vm.validateDuplicatePage = validateDuplicatePage;
     editableOptions.theme = 'bs3';
 
     vm.sortableOptions = {
@@ -356,7 +355,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
     }
 
   	function saveWebsite() {
-  		vm.state.pendingChanges = false;
+  		vm.state.pendingWebsiteChanges = false;
   		return (
   			SimpleSiteBuilderService.saveWebsite(vm.state.website).then(function(response){
   				console.log('website saved');
@@ -366,8 +365,8 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
 
     //TODO: refactor, this function exists in multiple controllers :)
   	function savePage() {
+        vm.state.saveLoading = true;
         var isLegacyPage = !vm.state.page.ssb;
-
         console.log(isLegacyPage);
 
         if (!vm.uiState.hasSeenWarning && isLegacyPage) {
@@ -388,7 +387,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
 
                     vm.uiState.hasSeenWarning = true;
 
-                    vm.state.pendingChanges = false;
+                    vm.state.pendingPageChanges = false;
 
                     //hide section panel
                     vm.uiState.showSectionPanel = false;
@@ -397,20 +396,27 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
                     vm.uiState.navigation.sectionPanel.reset();
 
                     saveWebsite().then(function(){
-                    return (
-                        SimpleSiteBuilderService.savePage(vm.state.page).then(function(response){
-                            console.log('page saved');
-                            toaster.pop('success', 'Page Saved', 'The page was saved successfully.');
-                        }).catch(function(err) {
-                            toaster.pop('error', 'Error', 'The page was not saved. Please try again.');
-                        })
-                      )
+                        return (
+                            SimpleSiteBuilderService.savePage(vm.state.page).then(function(response){
+                                SimpleSiteBuilderService.getSite(vm.state.website._id).then(function(){
+                                    console.log('page saved');
+                                    toaster.pop('success', 'Page Saved', 'The page was saved successfully.');
+                                    vm.state.saveLoading = false;
+                                })
+                            }).catch(function(err) {
+                                vm.state.saveLoading = false;
+                                toaster.pop('error', 'Error', 'The page was not saved. Please try again.');
+                            })
+                        )
                     })
+                }
+                else{
+                    vm.state.saveLoading = false;
                 }
             });
 
         } else {
-            vm.state.pendingChanges = false;
+            vm.state.pendingPageChanges = false;
 
             //hide section panel
             vm.uiState.showSectionPanel = false;
@@ -419,25 +425,28 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
             vm.uiState.navigation.sectionPanel.reset();
 
             saveWebsite().then(function(){
-              return (
-                SimpleSiteBuilderService.savePage(vm.state.page).then(function(response){
-                    console.log('page saved');
-                    toaster.pop('success', 'Page Saved', 'The page was saved successfully.');
-                }).catch(function(err) {
-                    toaster.pop('error', 'Error', 'The page was not saved. Please try again.');
-                })
-              )
+                return (
+                    SimpleSiteBuilderService.savePage(vm.state.page).then(function(response){
+                        SimpleSiteBuilderService.getSite(vm.state.website._id).then(function(){
+                            console.log('page saved');
+                            toaster.pop('success', 'Page Saved', 'The page was saved successfully.');
+                            vm.state.saveLoading = false;
+                        })
+                    }).catch(function(err) {
+                        toaster.pop('error', 'Error', 'The page was not saved. Please try again.');
+                        vm.state.saveLoading = false;
+                    })
+                )
             })
-
-            
         }
 
     }
 
   	function cancelPendingEdits() {
-      vm.state.pendingChanges = false;
+      vm.state.pendingPageChanges = false;
+      vm.state.pendingWebsiteChanges = false;
       vm.state.website = angular.copy(vm.state.originalWebsite);
-      vm.state.page = angular.copy(vm.state.originalPage);
+      SimpleSiteBuilderService.page = angular.copy(vm.state.originalPage);
     }
 
   	function togglePageSectionAccordion(index) {
@@ -634,18 +643,15 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
         vm.state.saveLoading = true;
         vm.saveWebsite().then(function(){
           return (
-            SimpleSiteBuilderService.createPage(template._id).then(function(data) {              
+            SimpleSiteBuilderService.createPage(template._id).then(function(data) {
                   vm.closeModal();
                   vm.state.saveLoading = false;
-                  vm.uiState.navigation.loadPage(data.data._id);              
+                  vm.uiState.navigation.loadPage(data.data._id);
             })
           )
         })
     };
 
-    function getNumberOfPages() {
-        return Object.keys(vm.state.pages).length;
-    }
 
     function getTemplateById(id) {
         SimpleSiteBuilderService.getTemplateById(id);
@@ -777,6 +783,9 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
         if (isConfirm) {
             vm.state.page.mainmenu = false;
         }
+        else{
+          vm.state.page.mainmenu = true;
+        }
       });
     }
 
@@ -799,6 +808,8 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
       }, function (isConfirm) {
         if (isConfirm) {
           vm.state.saveLoading = true;
+          vm.state.pendingPageChanges = false;
+          vm.state.pendingWebsiteChanges = false;
           SimpleSiteBuilderService.deletePage(vm.state.page).then(function(response){
             SimpleSiteBuilderService.getSite(vm.state.page.websiteId).then(function() {
               SimpleSiteBuilderService.getPages().then(function(pages) {
@@ -834,13 +845,26 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
         if (isConfirm) {
           vm.state.saveLoading = true;
           saveWebsite().then(function(){
-            SimpleSiteBuilderService.createDuplicatePage(vm.state.page).then(function(page) {            
+            SimpleSiteBuilderService.createDuplicatePage(vm.state.page).then(function(page) {
               vm.state.saveLoading = false;
               vm.uiState.navigation.loadPage(page.data._id);
             })
           })
         }
       });
+    }
+
+    function validateDuplicatePage(pageHandle) {
+      var _page = vm.state.originalPages[pageHandle];
+      if (_page && _page._id !== vm.state.page._id) {
+        return "Page handles must be unique.";
+      } else if (SimpleSiteBuilderService.inValidPageHandles[pageHandle.toLowerCase()]) {
+        var _handles = [];
+        angular.forEach(SimpleSiteBuilderService.inValidPageHandles, function(value, key) {
+          _handles.push(value);
+        });
+        return "Page handle cannot be a system route.";
+      }
     }
 
     function init(element) {

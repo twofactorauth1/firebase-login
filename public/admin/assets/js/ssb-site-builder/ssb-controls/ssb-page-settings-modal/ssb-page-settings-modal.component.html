@@ -91,9 +91,10 @@
                             <label>Keywords</label>                           
                             <tags-input min-length="1" ng-model="vm.page.seo.keywords"></tags-input>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group" ng-class="{'has-error': vm.inValidPageHandle}">
                             <label>Url:</label>
                             <input class="form-control input-lg" type="text" ng-model="vm.page.handle">
+                            <span class="help-block" ng-if="vm.inValidPageHandle">{{vm.inValidPageHandle}}</span>
                         </div>
                         <div class="form-group">
                             <div class="checkbox clip-check check-info checkbox-inline">
@@ -126,7 +127,7 @@
             <button class="btn btn-primary" ng-click="vm.parentVm.closeModal()">Close</button>
         </div>
         <div class="pull-right margin-right-5">
-            <button ng-disabled="vm.loading || vm.saveLoading || !vm.page.title || !vm.page.handle" class="btn btn-primary" ng-click="vm.saveSettings()">Save <span ng-if="vm.saveLoading" class="fa fa-spinner fa-spin"></span></button>
+            <button ng-disabled="vm.loading || vm.saveLoading || !vm.page.title || !vm.page.handle || vm.inValidPageHandle" class="btn btn-primary" ng-click="vm.saveSettings()">Save <span ng-if="vm.saveLoading" class="fa fa-spinner fa-spin"></span></button>
         </div>
     </div>
 </script>

@@ -64,7 +64,7 @@ var component = $$.m.ModelBase.extend({
              *
              *
              */
-            txtcolor: "#ffffff",
+            txtcolor: "",
 
             /**
              *
@@ -72,7 +72,7 @@ var component = $$.m.ModelBase.extend({
              */
             bg: {
                 img : {
-                    url : "http://s3.amazonaws.com/indigenous-digital-assets/account_6/bg-grey_1421966329788.jpg",
+                    url : "",
                     width : 838,
                     height : 470,
                     parallax : true,

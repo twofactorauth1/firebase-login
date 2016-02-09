@@ -35,6 +35,15 @@
 
 [class*="ssb-theme-"] {
 
+    -webkit-font-smoothing: antialiased !important;
+
+    .ssb-media-query-small-only({
+        .container {
+            padding-right: 15px!important;
+            padding-left: 15px!important;
+        }
+    });
+
     .ssb-theme-btn:hover:before {
         background: rgba(255, 255, 255, 0.1);
         content: '';
@@ -77,33 +86,6 @@
                 font-size: inherit;
             }
         });
-    }
-
-    .ssb-page-section-layout-header {
-        .ssb-media-query-medium({
-            padding: 2em 0 0;
-        });
-    }
-
-    .ssb-page-section-layout-header [navigation-component] {
-        // position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        padding: 0;
-        margin: 0;
-
-        .ssb-media-query-medium({
-            position: static;
-            top: auto;
-            left: auto;
-            width: 50%;
-        });
-    }
-
-    .ssb-page-section-layout-header [navigation-component] .navbar-toggle {
-        font-size: 14vw; //align with top of header
-        margin-top: .35em;
     }
 
     .ssb-page-section-layout-hero [ssb-text-component] {

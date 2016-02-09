@@ -26,7 +26,11 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude) {
 
         if (section.layout) {
 
-            classString += 'ssb-page-section-layout-' + section.layout;
+            classString += ' ssb-page-section-layout-' + section.layout;
+
+            if (section.version) {
+                classString += ' ssb-page-section-layout-' + section.layout + '-v' + section.version;
+            }
 
         }
 

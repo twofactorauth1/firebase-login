@@ -2,7 +2,7 @@
 /*global app, moment, angular, window, CKEDITOR*/
 /*jslint unparam:true*/
 (function (angular) {
-  app.controller('EditorCtrl', ["$scope", "$state", "$document", "$rootScope", "$interval", "$timeout", "toaster", "$modal", "$filter", "$location", "WebsiteService", "SweetAlert", "hoursConstant", "GeocodeService", "ProductService", "AccountService", "postConstant", "formValidations", function ($scope, $state, $document, $rootScope, $interval, $timeout, toaster, $modal, $filter, $location, WebsiteService, SweetAlert, hoursConstant, GeocodeService, ProductService, AccountService, postConstant, formValidations) {
+  app.controller('EditorCtrl', ["$scope", "$state", "$document", "$rootScope", "$interval", "$timeout", "toaster", "$modal", "$filter", "$location", "WebsiteService", "SweetAlert", "hoursConstant", "GeocodeService", "ProductService", "AccountService", "postConstant", "formValidations", "$window", function ($scope, $state, $document, $rootScope, $interval, $timeout, toaster, $modal, $filter, $location, WebsiteService, SweetAlert, hoursConstant, GeocodeService, ProductService, AccountService, postConstant, formValidations, $window) {
 
     /*
      * @circleOptions
@@ -102,7 +102,9 @@
     };
 
     $scope.setDirty = function(is_dirty){
-      $scope.isDirty.dirty = is_dirty;      
+      $scope.isDirty.dirty = is_dirty;
+      if(is_dirty)   
+        $scope.changesConfirmed = false;   
     }
 
 
@@ -317,7 +319,7 @@
              
               $scope.blog.post = $scope.postControl.getSinglePost();
               angular.copy($scope.blog.post, $scope.originalPost);
-              toaster.pop('success', "Post Saved", "The " + $filter('htmlToPlaintext')($scope.blog.post.post_title) + " post was saved successfully.");              
+              toaster.pop('success', "Post Saved", "The post was saved successfully.");              
               $scope.redirectAfterSave(redirect_url, reload);
             });
           }
@@ -587,7 +589,7 @@
           $scope.single_post = true;
           $scope.components = $scope.page.components;
           $scope.originalPost = angular.copy(data);
-          $rootScope.breadcrumbTitle = $filter('htmlToPlaintext')($scope.blog.post.post_title);
+          $rootScope.breadcrumbTitle = "Single Post"
           $scope.activateCKeditor();
         });
 
@@ -1254,10 +1256,6 @@
         post.post_url = $filter('slugify')(title); 
     };
 
-    $scope.plainTextTitle = function () {
-      $scope.blog.post.post_title = $filter('htmlToPlaintext')($scope.blog.post.post_title);
-    };
-
     $scope.newPage = {};
 
     /*
@@ -1759,6 +1757,24 @@
       }
     };
 
+    $scope.$watch('app.layout.isSidebarClosed', function (newValue, oldValue) {
+      resetEditorPosition();
+    });
+
+    angular.element($window).bind('resize', function () {
+      resetEditorPosition();   
+    });
+
+    function resetEditorPosition(){
+      var x = window.scrollX
+      var y = window.scrollY
+      $window.scrollTo(0, 0);
+      $timeout(function() {
+        $window.scrollTo(x, y);
+      },0);
+
+    }
+
     /*
      * @locationChangeStart
      * - Before user leaves editor, ask if they want to save changes
@@ -1778,20 +1794,20 @@
               confirmButtonText: "Yes, save changes!",
               cancelButtonText: "No, do not save changes!",
               closeOnConfirm: false,
-              closeOnCancel: false
+              closeOnCancel: true
             }, function (isConfirm) {
               if (isConfirm) {
                 $scope.redirect = true;
                 $scope.savePage(redirectUrl);
                 $scope.setDirty(false);
-              } else {
-                $scope.redirectWithoutSave(newUrl, true);  
+              } else {                
+                  $scope.redirectWithoutSave(newUrl, true);
               }
               offFn();
             });
-          } else {
-            $scope.redirectWithoutSave(newUrl, false);
-        }
+          } else   
+              $scope.redirectWithoutSave(newUrl, false);
+       
       }) 
     });
 

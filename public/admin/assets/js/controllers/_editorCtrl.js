@@ -247,8 +247,8 @@
         });
       }
       var postSettingsModal = angular.element("#iframe-website").contents().find("#component-setting-modal");
-      //var scrollTop = $(document).scrollTop(); 
-      //var editorToolbar = angular.element("#iframe-website").contents().find("#editor-toolbar");       
+      //var scrollTop = $(document).scrollTop();
+      //var editorToolbar = angular.element("#iframe-website").contents().find("#editor-toolbar");
       //var toolBarTop = editorToolbar.offset().top;
       if (postSettingsModal.length)
         postSettingsModal.css({
@@ -306,7 +306,7 @@
         appendTo: angular.element("#component-setting-modal"),
         palette: [
           ["#C91F37", "#DC3023", "#9D2933", "#CF000F", "#E68364", "#F22613", "#CF3A24", "#C3272B", "#8F1D21", "#D24D57"],
-          ["#F08F907", "#F47983", "#DB5A6B", "#C93756", "#FCC9B9", "#FFB3A7", "#F62459", "#F58F84", "#875F9A", "#5D3F6A"],
+          ["#f47998", "#F47983", "#DB5A6B", "#C93756", "#FCC9B9", "#FFB3A7", "#F62459", "#F58F84", "#875F9A", "#5D3F6A"],
           ["#89729E", "#763568", "#8D608C", "#A87CA0", "#5B3256", "#BF55EC", "#8E44AD", "#9B59B6", "#BE90D4", "#4D8FAC"],
           ["#5D8CAE", "#22A7F0", "#19B5FE", "#59ABE3", "#48929B", "#317589", "#89C4F4", "#4B77BE", "#1F4788", "#003171"],
           ["#044F67", "#264348", "#7A942E", "#8DB255", "#5B8930", "#6B9362", "#407A52", "#006442", "#87D37C", "#26A65B"],
@@ -1096,13 +1096,13 @@
     $scope.editPage = function () {
       $scope.isEditing = true;
       $scope.childScope.triggerEditMode();
-      
+
       setTimeout(function () {
         $scope.bindEvents();
       }, 1000)
       $scope.backup['website'] = angular.copy($scope['website']);
     };
-    
+
     /*
      * @cancelPage
      * -
@@ -1303,7 +1303,7 @@
             if ($scope.originalCurrentPage.handle !== $scope.currentPage.handle) {
               window.location = '/admin/#/website/pages/?pagehandle=' + $scope.currentPage.handle;
             }
-            //Update linked list                        
+            //Update linked list
             $scope.website.linkLists.forEach(function (value, index) {
               if (value.handle === "head-menu") {
                 WebsiteService.updateLinkList($scope.website.linkLists[index], $scope.website._id, 'head-menu', function (data) {
@@ -2770,7 +2770,7 @@
 
     $scope.loadPost = function (post) {
       if (post) {
-        $scope.singlePost = true;        
+        $scope.singlePost = true;
         $scope.post_data = post;
       }
     };
@@ -2905,7 +2905,7 @@
 
     /*
      * @validateHours
-     * 
+     *
      */
 
     $scope.validateHours = function (hours, index) {
@@ -3010,19 +3010,19 @@
               $scope.redirect = true;
               $scope.savePage();
               window.location = redirectUrl;
-              if (reload) 
+              if (reload)
                 window.location.reload();
-              
+
             } else {
               SweetAlert.swal("Cancelled", "Your edits were NOT saved.", "error");
               window.location = redirectUrl;
-              if (reload) 
+              if (reload)
                 window.location.reload();
             }
           });
       } else {
           window.location = redirectUrl;
-          if (reload) 
+          if (reload)
             window.location.reload();
       }
     }

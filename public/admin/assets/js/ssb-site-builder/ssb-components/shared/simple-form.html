@@ -2,7 +2,7 @@
 
     <div class="row padding-10">
         <div class="form-group margin-bottom-0">
-            <label><strong>Fields to Show:</strong></label>
+            <label><strong>Fields to Show</strong></label>
             <span tooltip-placement="top" tooltip-html-unsafe="What fields would you like to show?"><i class="fa fa-info-circle" /></span>
             <div class="clearfix"></div>
             <div class="ckbox ckbox-success checkbox-inline" ng-repeat="field in component.fields">
@@ -88,14 +88,14 @@
     <div class="row padding-10">
         <div class="well margin-bottom-0">
             <div class="form-group" ng-class="{'margin-bottom-0': !component.redirect}">
-                <label for="redirect"><strong>Redirect:</strong></label>
+                <label for="redirect"><strong>Redirect</strong></label>
                 <span tooltip-placement="top" tooltip-html-unsafe="Redirect after submission"><i class="fa fa-info-circle" /></span>
                 <switch name="redirect" ng-model="component.redirect" class="pull-right"></switch>
             </div>
             <div class="row">
                 <div class="col-sm-5 col-xs-12">
                     <div class="form-group margin-bottom-0" ng-if="component.redirect">
-                        <label for="link-title">Redirect To: </label>
+                        <label for="link-title">Redirect To </label>
                         <br>
                         <div class="radio-inline" style="margin-bottom: 0px!important">
                             <label for="redirectOptions" class="pull-right">Page</label>
@@ -125,7 +125,7 @@
                         </div>
                     </div>
                     <div class="form-group margin-bottom-0" ng-if="component.redirect && component.redirectType === 'external'">
-                        <label>External URL:</label>
+                        <label>External URL</label>
                         <input class="form-control" type="text" ng-model="component.redirectUrl">
                     </div>
                 </div>

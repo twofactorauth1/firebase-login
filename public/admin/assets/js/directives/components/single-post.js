@@ -10,7 +10,8 @@ app.directive('singlePostComponent', ['$location', "WebsiteService", "$timeout",
     },
     templateUrl: '/components/component-wrap.html',
     link: function (scope, element, attrs) {
-      scope.component.spacing = scope.$parent.defaultSpacings;
+      if(!scope.ssbEditor)
+        scope.component.spacing = scope.$parent.defaultSpacings;
       scope.isEditing = true;
       scope.blog = {};
       scope.datePicker = {};
@@ -69,6 +70,16 @@ app.directive('singlePostComponent', ['$location', "WebsiteService", "$timeout",
       };
       scope.getEncodedUrl = function(url){
         return encodeURI(url);
+      }
+      scope.getPlainTitle=function(title){
+        var returnValue = title;
+        if(title){
+          var element = angular.element(".plain-post-title");
+          if(element && element.length){
+            returnValue = element.text().trim();
+          }
+        }
+        return returnValue;
       }
     }
   };

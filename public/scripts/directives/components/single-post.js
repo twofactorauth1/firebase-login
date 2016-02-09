@@ -6,6 +6,7 @@ app.directive('singlePostComponent', ['$window', '$location', 'accountService', 
     templateUrl: '/components/component-wrap.html',
     link: function (scope, element, attrs) {
       scope.component.spacing = scope.$parent.defaultSpacings;
+      scope.blogPageUrl = $location.$$absUrl;
       var _handle = $location.$$path.replace('/page', '').replace('/blog/', '');
       scope.blog = {};
       // If single-post page
@@ -30,6 +31,16 @@ app.directive('singlePostComponent', ['$window', '$location', 'accountService', 
       };
       scope.getEncodedUrl = function(url){
         return encodeURI(url);
+      }
+      scope.getPlainTitle=function(title){
+        var returnValue = title;
+        if(title){
+          var element = angular.element(".plain-post-title");
+          if(element && element.length){
+            returnValue = element.text().trim();
+          }
+        }
+        return returnValue;
       }
     }
   }

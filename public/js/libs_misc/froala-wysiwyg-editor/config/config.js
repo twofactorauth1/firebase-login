@@ -19,7 +19,6 @@ var toolbarbuttons = [
         '-',
         'insertLink',
         'insertButton',
-        'insertIcon',
         'insertImage',
         'insertVideo',
         'insertFile',
@@ -33,7 +32,7 @@ var toolbarbuttons = [
     ];
 var spectrumColors = [
               ["#C91F37", "#DC3023", "#9D2933", "#CF000F", "#E68364", "#F22613", "#CF3A24", "#C3272B", "#8F1D21", "#D24D57"],
-              ["#F08F907", "#F47983", "#DB5A6B", "#C93756", "#FCC9B9", "#FFB3A7", "#F62459", "#F58F84", "#875F9A", "#5D3F6A"],
+              ["#f47998", "#F47983", "#DB5A6B", "#C93756", "#FCC9B9", "#FFB3A7", "#F62459", "#F58F84", "#875F9A", "#5D3F6A"],
               ["#89729E", "#763568", "#8D608C", "#A87CA0", "#5B3256", "#BF55EC", "#8E44AD", "#9B59B6", "#BE90D4", "#4D8FAC"],
               ["#5D8CAE", "#22A7F0", "#19B5FE", "#59ABE3", "#48929B", "#317589", "#89C4F4", "#4B77BE", "#1F4788", "#003171"],
               ["#044F67", "#264348", "#7A942E", "#8DB255", "#5B8930", "#6B9362", "#407A52", "#006442", "#87D37C", "#26A65B"],
@@ -46,6 +45,7 @@ var spectrumColors = [
 
 $.FroalaEditor.config = {
      enter: $.FroalaEditor.ENTER_BR,
+     // enter: $.FroalaEditor.ENTER_DIV,
      toolbarInline: true,
      toolbarVisibleWithoutSelection: true,
      toolbarButtons: toolbarbuttons,
@@ -58,23 +58,43 @@ $.FroalaEditor.config = {
         'img-circle': 'Circle'
      },
      linkStyles:{
-        'fr-green': 'Green',
-        'fr-strong': 'Thick'
+        'ssb-theme-btn': 'SB Button',
+        'btn': 'Button',
+        'btn-default': 'Default Button',
+        'btn-primary': 'Primary Button',
+        'btn-success': 'Success Button',
+        'btn-info': 'Info Button',
+        'btn-warning': 'Warning Button',
+        'btn-danger': 'Danger Button',
+        'btn-link': 'Link Button',
      },
-     fontFamily:{"Arial,Helvetica,sans-serif":"Arial","Georgia,serif":"Georgia",
-                "Impact,Charcoal,sans-serif":"Impact",
-                "Tahoma,Geneva,sans-serif":"Tahoma",
-                "'Times New Roman',Times,serif":"Times New Roman",
-                "Verdana,Geneva,sans-serif":"Verdana",
-                "Roboto,sans-serif": 'Roboto',
-                "Oswald,sans-serif": 'Oswald',
-                "Montserrat,sans-serif": 'Montserrat',
-                "'Open Sans Condensed',sans-serif": 'Open Sans Condensed'
-                },
+     linkText: true,
+     fontFamily: {
+        "Helvetica Neue, Helvetica, Arial, sans-serif": "Helvetica Neue",
+        "Arial,Helvetica,sans-serif":"Arial","Georgia,serif":"Georgia",
+        "Impact,Charcoal,sans-serif":"Impact",
+        "Tahoma,Geneva,sans-serif":"Tahoma",
+        "'Times New Roman',Times,serif":"Times New Roman",
+        "Verdana,Geneva,sans-serif":"Verdana",
+        "Roboto,sans-serif": 'Roboto',
+        "Oswald,sans-serif": 'Oswald',
+        "Montserrat,sans-serif": 'Montserrat',
+        "'Open Sans Condensed',sans-serif": 'Open Sans Condensed'
+    },
     imageInsertButtons: ['imageBack', 'imageByURL', 'mediaManager'],
+    linkEditButtons: ['linkOpen', 'linkStyle', 'linkEdit', 'linkRemove', 'deleteButton'],
     colorsText: [].concat.apply([], spectrumColors),
     colorsBackground: [].concat.apply([], spectrumColors),
     colorsStep: 10,
+    paragraphFormat: {
+        N: 'Normal',
+        H1: 'Heading 1',
+        H2: 'Heading 2',
+        H3: 'Heading 3',
+        H4: 'Heading 4',
+        P: 'Paragraph',
+        PRE: 'Code'
+    }
     // imageUploadToS3: {
     //     bucket: 'indigenous-digital-assets',
     //     region: 's3',

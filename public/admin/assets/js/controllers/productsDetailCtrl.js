@@ -85,12 +85,20 @@
         'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
       }
     };
-
+       
     $scope.initDatePicker = function(){
-      setTimeout(function() {
+      $timeout(function() {
         $scope.myform.$dirty = false;
-      }, 500);
+      }, 0);
     }
+
+    $scope.selectedDate = {};
+    var startDate =  moment();
+    var endDate = moment().add(6, 'days');
+    $scope.selectedDate.range = {
+        startDate: new Date(startDate),
+        endDate: new Date(endDate)
+    };
 
     var setProductEmailSettings = function(product){
       product.emailSettings = {
@@ -179,10 +187,7 @@
     } 
     $scope.product_tags = [];
     var productPlanStatus = {};
-    var productPlanSignupFee = {};
-    $scope.selectedDate = {};
-
-   
+    var productPlanSignupFee = {};   
 
     /*
      * @insertMedia
