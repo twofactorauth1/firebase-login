@@ -12,7 +12,7 @@ app.controller('SiteBuilderPageSettingsModalController', ['$scope', '$timeout', 
   vm.setAsHomePage = setAsHomePage;
   vm.duplicatePage = duplicatePage;
   vm.hideFromMenu = hideFromMenu;
-  
+
   function duplicatePage(){
     vm.saveLoading = true;
     saveWebsite().then(function(){
@@ -22,7 +22,7 @@ app.controller('SiteBuilderPageSettingsModalController', ['$scope', '$timeout', 
         vm.parentVm.uiState.navigation.loadPage(page.data._id);
       });
     })
-    
+
   }
   function hideFromMenu(){
     angular.element('.modal.in').hide();
@@ -114,7 +114,7 @@ app.controller('SiteBuilderPageSettingsModalController', ['$scope', '$timeout', 
                 console.log('page deleted');
                 SimpleSiteBuilderService.getSite(vm.page.websiteId).then(function() {
                   SimpleSiteBuilderService.getPages().then(function() {
-                   toaster.pop('success', 'Page deleted', 'The page deleted successfully.');                  
+                   toaster.pop('success', 'Page deleted', 'The page deleted successfully.');
                     vm.parentVm.closeModal();
                     vm.saveLoading = false;
                     if(vm.parentVm.state.page._id === vm.page._id){
@@ -125,12 +125,12 @@ app.controller('SiteBuilderPageSettingsModalController', ['$scope', '$timeout', 
                 		}, 0);
                     }
                   });
-                })  
+                })
             })
           })
       } else {
         vm.saveLoading = false;
-        angular.element('.modal.in').show();        
+        angular.element('.modal.in').show();
       }
     });
   };
@@ -139,10 +139,10 @@ app.controller('SiteBuilderPageSettingsModalController', ['$scope', '$timeout', 
     vm.saveLoading = true;
       return(
         saveWebsite().then(function(){
-          SimpleSiteBuilderService.savePage(page, true).then(function(data) {      
+          SimpleSiteBuilderService.savePage(page, true).then(function(data) {
             SimpleSiteBuilderService.getSite(page.websiteId).then(function() {
               SimpleSiteBuilderService.getPages().then(function(pages) {
-                  vm.saveLoading = false;              
+                  vm.saveLoading = false;
                   toaster.pop('success', 'Setting Saved', 'The page settings saved successfully.');
                   if(hide){
                     vm.page.mainmenu = false;
@@ -153,7 +153,7 @@ app.controller('SiteBuilderPageSettingsModalController', ['$scope', '$timeout', 
                       SimpleSiteBuilderService.page = data.data;
                       $timeout(function() {
                         vm.parentVm.state.pendingPageChanges = false;
-                      }, 0);                      
+                      }, 0);
                     }
                     vm.parentVm.closeModal();
                   }
@@ -163,9 +163,9 @@ app.controller('SiteBuilderPageSettingsModalController', ['$scope', '$timeout', 
         }).catch(function(err) {
             vm.saveLoading = false;
             if(err.message)
-               toaster.pop('error', error.message);   
+               toaster.pop('error', error.message);
             else
-              toaster.pop('error', "Setting not saved", "Error while saving page settings");                  
+              toaster.pop('error', "Setting not saved", "Error while saving page settings");
           })
       )
   }
@@ -179,16 +179,15 @@ app.controller('SiteBuilderPageSettingsModalController', ['$scope', '$timeout', 
   }
 
   function validateDuplicatePage(pageHandle) {
-    var _page = vm.parentVm.state.originalPages[pageHandle];      
-    if(_page && _page._id !== vm.page._id){
-      return "Page url should be unique";
-    }
-    else if(SimpleSiteBuilderService.inValidPageHandles[pageHandle.toLowerCase()]){
+    var _page = vm.parentVm.state.originalPages[pageHandle];
+    if(_page && _page._id !== vm.page._id) {
+      return "Page handles must be unique.";
+    } else if (SimpleSiteBuilderService.inValidPageHandles[pageHandle.toLowerCase()]) {
       var _handles = [];
       angular.forEach(SimpleSiteBuilderService.inValidPageHandles, function(value, key) {
         _handles.push(value);
       });
-      return "Page url can't be a server routes. Invalid page url's are: " + _handles.join(", ");
+      return "Page handle cannot be a system route.";
     }
   }
 
@@ -204,15 +203,15 @@ app.controller('SiteBuilderPageSettingsModalController', ['$scope', '$timeout', 
   vm.loading = true;
   if(vm.pageId === vm.parentVm.state.page._id){
     vm.page = angular.copy(vm.parentVm.state.page);
-    vm.originalPage = angular.copy(vm.page); 
+    vm.originalPage = angular.copy(vm.page);
     vm.loading = false;
   }
   else{
     SimpleSiteBuilderService.getPage(vm.pageId, true).then(function(page) {
       vm.page = page.data;
-      vm.originalPage = angular.copy(vm.page);      
+      vm.originalPage = angular.copy(vm.page);
       vm.loading = false;
     })
-  } 
+  }
 
 }]);
