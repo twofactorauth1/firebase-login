@@ -674,7 +674,7 @@
          */
         function extendComponentData(oldSection, newSection) {
 
-            var keysToOmit = ['$$hashKey', '_id', 'anchor', 'accountId', 'version', 'type', 'layout', 'spacing'];
+            var keysToOmit = ['$$hashKey', '_id', 'anchor', 'accountId', 'version', 'type', 'layout', 'spacing', 'visibility', 'bg'];
             var newComponents = angular.copy(newSection.components);
             var newComponentsOrder = _.invert(_.object(_.pairs(_.pluck(newComponents, 'type')))); // ['componentType1', 'componentType2', ...]
             var oldComponents = _(angular.copy(oldSection.components)).chain()

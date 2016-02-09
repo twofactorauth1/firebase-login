@@ -99,7 +99,7 @@ function ssbSiteBuilderSiteTemplatesController($scope, $attrs, $filter, $documen
                         //clear loading var
                         $timeout(function() {
                             vm.uiState.loading = false;
-                        }, 2000);
+                        }, 5000);
 
                     });
                 });
