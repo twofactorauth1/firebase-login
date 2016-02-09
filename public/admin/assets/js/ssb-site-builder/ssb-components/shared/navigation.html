@@ -19,7 +19,7 @@
             <div class="clearfix margin-bottom-5"></div>
             <div ng-if="!component.customnav" class="col-xs-12">
                 <label ng-if="newLink.linkType!=='page'" for="link-title">Title</label>
-                <input ng-if="newLink.linkType!=='page'" type="text" ng-model="newLink.linkTitle" placeholder="Enter link title" class="form-control margin-bottom-10">
+                <input ng-if="newLink.linkType && newLink.linkType!=='page'" type="text" ng-model="newLink.linkTitle" placeholder="Enter link title" class="form-control margin-bottom-10">
             </div>
             <div class="col-xs-12" ng-if="component.customnav">
                 <label for="link-title">Title</label>
@@ -76,7 +76,7 @@
                 <div class="head-menu-links" data-label="{{link.label}}">
                         <div class="ssb-page-section-settings-item">
                           <div class="reorder ssb-sidebar-item-icon ssb-sidebar-move-handle ti-move display-ib" ng-hide="edit[$index]"></div>
-                          <div class="ssb-sidebar-item-icon ssb-sidebar-item-icon-offset-1 ti-close display-ib" ng-hide="edit[$index]" ng-click="deleteLinkFromNav($index);" ></div>
+                          <div class="ssb-sidebar-item-icon ssb-sidebar-item-icon-offset-1 ti-close display-ib" ng-hide="edit[$index]" ng-click="deleteLinkFromNav($index, mainMenu.links);" ></div>
                           <div class="ssb-sidebar-item-icon ssb-sidebar-item-icon-offset-2 fa fa-pencil-square-o display-ib" ng-show="!edit[$index]" ng-click="edit[$index]=true; linkType[$index]=link.linkTo.type;initializeEditLinks(link.linkTo, false)"></div>
 
                           <div class="panel-group">
@@ -91,7 +91,7 @@
 
                           <div class="panel-body" ng-show="edit[$index]">
                             <label  ng-if="link.linkTo.type !== 'page'" ng-show="edit[$index]" for="edit[$index]">Title</label>
-                            <input ng-if="link.linkTo.type !== 'page'" ng-blur="refreshLinks(link.label, component.customnav)" placeholder="Enter link title" ng-show="edit[$index]" type="text" ng-model="link.label" class="form-control" style="margin-bottom: 10px;">
+                            <input ng-if="link.linkTo.type !== 'page'" placeholder="Enter link title" ng-show="edit[$index]" type="text" ng-model="link.label" class="form-control" style="margin-bottom: 10px;">
                           </div>
 
                           <div class="panel-body padding-top-0" ng-show="edit[$index]">
@@ -128,7 +128,7 @@
                                     <label style="margin-top:10px" ng-if="linkType[$index]=='section'" for="link-url">Select Component</label>
                                     <label ng-if="linkType[$index]=='page'" for="link-url">Select Page</label>
                                     <label ng-if="linkType[$index]=='external'" for="link-url">Enter Url</label>
-                                    <select id="linkSection" style="text-transform:capitalize" ng-if="linkType[$index]=='section'" ng-model="link.linkTo.data" placeholder="Select a component" ng-change="updateLinkList()" class="form-control margin-bottom-0">
+                                    <select id="linkSection" style="text-transform:capitalize" ng-if="linkType[$index]=='section'" ng-model="link.linkTo.data" placeholder="Select a component" class="form-control margin-bottom-0">
                                         <option value="" disabled>Select a Component</option>
                                         <option ng-repeat="component in currentPage.components track by $index" data-ng-if="component.anchor || component._id" value="{{component.anchor || component._id}}" ng-selected="{{link.linkTo.data === (component.anchor || component._id)}}">{{setLinkTitle(component.type, $index)}}</option>
                                     </select>
@@ -136,13 +136,13 @@
                                         <option value="" disabled>Select a Page</option>
                                         <option ng-repeat="page in filterdedPages track by $index" data-ng-if="page.title && page.handle" value="{{page.handle}}" ng-selected="{{link.linkTo.data == page.handle}}">{{page.title}}</option>
                                     </select>
-                                    <input class="form-control" type="text" ng-if="linkType[$index]=='external'" ng-change="updateLinkList()" ng-model="link.linkTo.data" placeholder="Enter External URL">
+                                    <input class="form-control" type="text" ng-if="linkType[$index]=='external'" ng-model="link.linkTo.data" placeholder="Enter External URL">
                                 </div>
                             </div>
                           </div>
 
                           <div class="panel-body padding-top-0" ng-show="edit[$index]">
-                            <div class="btn btn-primary pull-right" ng-click="edit[$index]= false">Done</div>
+                            <div class="btn btn-primary pull-right" ng-click="edit[$index]= false;">Done</div>
                           </div>
 
                       </div>
@@ -156,7 +156,7 @@
                 <div class="head-menu-links clearfix" data-label="{{link.label}}">
                     <div class="ssb-page-section-settings-item">
                       <div class="reorder ssb-sidebar-item-icon ssb-sidebar-move-handle ti-move display-ib" ng-hide="edit[$index]"></div>
-                      <div class="ssb-sidebar-item-icon ssb-sidebar-item-icon-offset-1 ti-close display-ib" ng-hide="edit[$index]" ng-click="deleteLinkFromNav($index);" ></div>
+                      <div class="ssb-sidebar-item-icon ssb-sidebar-item-icon-offset-1 ti-close display-ib" ng-hide="edit[$index]" ng-click="deleteLinkFromNav($index, customMenu.links);" ></div>
                       <div class="ssb-sidebar-item-icon ssb-sidebar-item-icon-offset-2 fa fa-pencil-square-o display-ib" ng-show="!edit[$index]" ng-click="edit[$index]=true; linkType[$index]=link.linkTo.type;initializeEditLinks(link.linkTo, false)"></div>
 
                       <div class="panel-group">
@@ -171,7 +171,7 @@
 
                       <div class="panel-body" ng-show="edit[$index]">
                         <label ng-show="edit[$index]" for="edit[$index]">Title</label>
-                        <input ng-blur="refreshLinks(link.label, component.customnav)" placeholder="Enter link title" ng-show="edit[$index]" type="text" ng-model="link.label" class="form-control" style="margin-bottom: 10px;">
+                        <input placeholder="Enter link title" ng-show="edit[$index]" type="text" ng-model="link.label" class="form-control" style="margin-bottom: 10px;">
                       </div>
 
                       <div class="panel-body padding-top-0" ng-show="edit[$index]">
@@ -208,21 +208,21 @@
                                 <label style="margin-top:10px" ng-if="linkType[$index]=='section'" for="link-url">Select Component</label>
                                 <label ng-if="linkType[$index]=='page'" for="link-url">Select Page</label>
                                 <label ng-if="linkType[$index]=='external'" for="link-url">Enter Url</label>
-                                <select id="linkSection" style="text-transform:capitalize" ng-if="linkType[$index]=='section'" ng-model="link.linkTo.data" placeholder="Select a component" ng-change="updateLinkList()" class="form-control margin-bottom-0">
+                                <select id="linkSection" style="text-transform:capitalize" ng-if="linkType[$index]=='section'" ng-model="link.linkTo.data" placeholder="Select a component" class="form-control margin-bottom-0">
                                     <option value="" disabled>Select a Component</option>
                                     <option ng-repeat="component in currentPage.components track by $index" data-ng-if="component.anchor || component._id" value="{{component.anchor || component._id}}" ng-selected="{{link.linkTo.data === (component.anchor || component._id)}}">{{setLinkTitle(component.type, $index)}}</option>
                                 </select>
-                                <select ng-if="linkType[$index]=='page'" placeholder="Select a page" ng-change="updateLinkList()" ng-model="link.linkTo.data" class="form-control margin-bottom-0">
+                                <select ng-if="linkType[$index]=='page'" placeholder="Select a page" ng-model="link.linkTo.data" class="form-control margin-bottom-0">
                                     <option value="" disabled>Select a Page</option>
                                     <option ng-repeat="page in filterdedPages track by $index" data-ng-if="page.title && page.handle" value="{{page.handle}}" ng-selected="{{link.linkTo.data == page.handle}}">{{page.title}}</option>
                                 </select>
-                                <input class="form-control" type="text" ng-if="linkType[$index]=='external'" ng-change="updateLinkList()" ng-model="link.linkTo.data" placeholder="Enter External URL">
+                                <input class="form-control" type="text" ng-if="linkType[$index]=='external'" ng-model="link.linkTo.data" placeholder="Enter External URL">
                             </div>
                         </div>
                       </div>
 
                       <div class="panel-body padding-top-0" ng-show="edit[$index]">
-                        <div class="btn btn-primary pull-right" ng-click="edit[$index]= false">Done</div>
+                        <div class="btn btn-primary pull-right" ng-click="edit[$index]= false;">Done</div>
                       </div>
 
                   </div>
