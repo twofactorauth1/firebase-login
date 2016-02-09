@@ -856,10 +856,9 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
 
     function validateDuplicatePage(pageHandle) {
       var _page = vm.state.originalPages[pageHandle];
-      if(_page && _page._id !== vm.state.page._id){
+      if (_page && _page._id !== vm.state.page._id) {
         return "Page handles must be unique.";
-      }
-      else if(SimpleSiteBuilderService.inValidPageHandles[pageHandle.toLowerCase()]){
+      } else if (SimpleSiteBuilderService.inValidPageHandles[pageHandle.toLowerCase()]) {
         var _handles = [];
         angular.forEach(SimpleSiteBuilderService.inValidPageHandles, function(value, key) {
           _handles.push(value);
