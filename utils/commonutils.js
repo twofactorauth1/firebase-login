@@ -437,4 +437,8 @@ if (typeof $$ === 'undefined') {
 $$.u = $$.u || {};
 $$.u = _.extend($$.u, utils);
 
+if (typeof module === "object" && module.exports) {
+    module.exports = $$.u;
+}
+
 return $$.u;

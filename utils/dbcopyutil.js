@@ -8,6 +8,7 @@ var STRIPE_ACCESS_TOKEN = 'sk_test_osAnWDulUbCkgw0D2kkwo1Ju';
 var STRIPE_REFRESH_TOKEN = 'rt_5NU1M6ubOAkICDJs0TpIa8iCRHDUwbSaC7VJgPXQ75MCfFGZ';
 var utils = require('./commonutils');
 
+
 var copyutil = {
 
     copyAccountFromTestToProd : function(accountId, cb) {
@@ -20,6 +21,11 @@ var copyutil = {
         //self._copyAccount(accountId, mongoConfig.PROD_MONGODB_CONNECT, mongoConfig.TEST_MONGODB_CONNECT, cb);
         self._copyAccountWithUpdatedStripeIDs(accountId, mongoConfig.PROD_MONGODB_CONNECT, mongoConfig.TEST_MONGODB_CONNECT, cb);
 
+    },
+
+    convertAccountToSiteTemplate: function(accountId, cb) {
+        var self = this;
+        self._convertAccountToSiteTemplate(accountId, cb);
     },
 
 
@@ -481,6 +487,237 @@ var copyutil = {
         ], function done(err){
             srcMongo.close();
             destMongo.close();
+            fn(err);
+        });
+    },
+
+    _convertAccountToSiteTemplate: function(accountId, fn) {
+        var srcDBUrl = mongoConfig.TEST_MONGODB_CONNECT;
+        var srcMongo = mongoskin.db(srcDBUrl, {safe: true});
+        var websitesCollection = srcMongo.collection('websites');
+        var pagesCollection = srcMongo.collection('pages');
+        var templatesCollection = srcMongo.collection('templates');
+        var sectionsCollection = srcMongo.collection('sections');
+        var sitetemplatesCollection = srcMongo.collection('sitetemplates');
+        var siteTemplate = {
+            "_id" : utils.idutils.generateUUID(),
+            "name" : "Site Template from account:" + accountId,
+            "accountId" : 0,
+            "public" : true,
+            "description" : "Site Template from account:" + accountId,
+            "siteThemeId" : "565decfdfa7d8f489a489104",
+            "defaultPageTemplates" : [
+                // {
+                //     "type" : "template",
+                //     "pageTemplateId" : "1103202892929",
+                //     "pageHandle" : "index",
+                //     "pageTitle" : "Home"
+                // },
+                // {
+                //     "type" : "template",
+                //     "pageTemplateId" : "110320289292911",
+                //     "pageHandle" : "contact-us",
+                //     "pageTitle" : "Contact Us"
+                // }
+            ],
+            "defaultTheme" : "565decfdfa7d8f489a489104",
+            "created" : {
+                "date" : new Date().toISOString(),
+                "by" : 0
+            },
+            "modified" : {
+                "date" : new Date().toISOString(),
+                "by" : 0
+            },
+            "previewUrl" : "https://placeholdit.imgix.net/~text?txtsize=33&txt=Site%20Template%20"+accountId+"&w=672&h=383"
+        }
+
+        // fn();
+
+        /*
+         * 1. Get the website object
+         * 2. Update siteTemplate defaultTheme prop with website.themeId
+         * 3. Get the ssb pages on the account
+         * 4. Save all section _ids to sectionMap
+         * 5. Save all sections as new sections with:
+         *      - accountId=0
+         *      - siteTemplateRef=siteTemplate._id
+         *      - enabled=false
+         *
+         * 6. Save all new _ids to sectionMap mapped to old ids
+         * 7. Loop through pages, updating section _ids and saving as templates
+         * 8. Update siteTemplate defaultPageTemplates prop with new template _ids, name, handles
+         * 9. Save siteTemplate
+         */
+
+        async.waterfall([
+            function getWebsite(cb) {
+                console.log('getWebsite: fetch account website');
+                websitesCollection.find({'accountId': accountId}).toArray(function(err, websites){
+
+                    if (err || !websites[0]) {
+                        console.log('Error finding account website in test:', err);
+                        return cb(err);
+                    }
+
+                    siteTemplate.defaultTheme = websites[0].themeId;
+                    // siteTemplate.siteThemeId = website.themeId;
+
+                    return cb(null, websites[0]);
+
+                });
+            },
+            function getPages(website, cb) {
+                console.log('getPages: fetch account pages and loop through section data');
+                pagesCollection.find({'accountId': accountId, 'ssb': true}).toArray(function(err, pages){
+                    if (err) {
+                        console.log('Error finding pages:', err);
+                        return cb(err);
+                    }
+
+                    var sectionMap = {};
+
+                    async.each(pages,
+                        function(page, _cb){
+
+                            async.each(page.sections,
+                                function(section, _cb2){
+                                    sectionMap[section._id] = null;
+                                    _cb2();
+                                },
+                                function(err){
+                                    return _cb(err);
+                                }
+                            );
+
+                        },
+                        function(err){
+                            if(err) {
+                                console.log('Error during getPages: ' + err);
+                                return cb(err);
+                            }
+                            console.log('looped through page sections successfully');
+                            return cb(null, website, pages, sectionMap);
+                        }
+                    );
+
+                });
+            },
+            function saveNewSections(website, pages, sectionMap, cb) {
+                console.log('saveNewSections: save sections as platform sections accountId=0 and save new _id to sectionMap');
+
+                async.each(Object.keys(sectionMap),
+                    function(id, _cb){
+
+                        var sectionData;
+
+                        sectionsCollection.find({'_id': id}).toArray(function(err, section){
+                            if (err || !section[0]) {
+                                return _cb(err);
+                            }
+
+                            sectionData = section[0];
+
+                            sectionMap[id] = utils.idutils.generateUUID(); //map new _id to old _id
+                            sectionData._id = sectionMap[id]; //set to new _id
+                            sectionData.accountId = 0;
+                            sectionData.siteTemplateRef = siteTemplate._id;
+                            sectionData.enabled = false;
+
+                            sectionsCollection.save(sectionData, function(err, savedSection){
+                                return _cb(err);
+                            });
+
+                        });
+
+
+                    },
+                    function(err){
+                        if (err) {
+                            console.log('Error saving new sections:', err);
+                            return cb(err);
+                        }
+
+                        return cb(null, website, pages, sectionMap);
+
+                    }
+                );
+
+            },
+            function savePagesAsPageTemplates(website, pages, sectionMap, cb) {
+                console.log('savePagesAsPageTemplates: save pages as page templates');
+
+                var newTemplates = [];
+
+                async.each(pages,
+                    function(page, _cb){
+
+                        page._id = utils.idutils.generateUUID();
+                        page.accountId = 0;
+                        page['public'] = false;
+
+                        delete page.websiteId;
+
+                        page.sections = _(page.sections).map(function(section) {
+                            // console.log('old section _id: ' + section._id);
+                            // console.log('new section _id: ' + sectionMap[section._id]);
+                            section._id = sectionMap[section._id];
+                            return section;
+                        })
+
+                        templatesCollection.save(page, function(err, savedTemplate){
+                            if (err) {
+                                return _cb(err);
+                            }
+                            console.log('saved page as template: ', savedTemplate);
+                            console.log('page: ', page._id);
+                            newTemplates.push(page);
+                            return _cb();
+                        });
+
+                    },
+                    function(err){
+                        if (err) {
+                            console.log('Error saving new pages as templates:', err);
+                            return cb(err);
+                        }
+
+                        return cb(null, website, pages, sectionMap, newTemplates);
+
+                    }
+                );
+
+            },
+            function updateSiteTemplate(website, pages, sectionMap, newTemplates, cb) {
+                console.log('updateSiteTemplate: save new sitetemplate');
+
+                console.log('newTemplates:', newTemplates);
+
+                siteTemplate.defaultPageTemplates = _(newTemplates).map(function(template) {
+                    return {
+                        "type" : "template",
+                        "pageTemplateId" : template._id,
+                        "pageHandle" : template.handle,
+                        "pageTitle" : template.title || template.name
+                    }
+                })
+
+                console.log('siteTemplate.defaultPageTemplates', siteTemplate.defaultPageTemplates);
+
+                sitetemplatesCollection.save(siteTemplate, function(err, savedSiteTemplate) {
+                    if (err) {
+                        return cb(err);
+                    }
+
+                    console.log('successfully converted account content to sitetemplate: ' + siteTemplate._id);
+
+                    return cb();
+
+                });
+
+            }
+        ], function done(err){
+            srcMongo.close();
             fn(err);
         });
     }

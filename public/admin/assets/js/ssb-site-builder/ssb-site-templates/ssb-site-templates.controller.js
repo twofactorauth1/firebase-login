@@ -42,7 +42,7 @@ function ssbSiteBuilderSiteTemplatesController($scope, $attrs, $filter, $documen
             vm.state.pages = pages;
             vm.state.website = website;
 
-            if (Object.keys(pages).length !== 0 && website.siteTemplateId) {
+            if (Object.keys(pages).length !== 0 || website.siteTemplateId) {
                 vm.redirectToEditor();
             } else {
                 vm.uiState.loading = false;
@@ -99,7 +99,7 @@ function ssbSiteBuilderSiteTemplatesController($scope, $attrs, $filter, $documen
                         //clear loading var
                         $timeout(function() {
                             vm.uiState.loading = false;
-                        }, 2000);
+                        }, 5000);
 
                     });
                 });
@@ -132,7 +132,12 @@ function ssbSiteBuilderSiteTemplatesController($scope, $attrs, $filter, $documen
 
         }
 
-        $location.path('/website/site-builder/pages/' + id);
+        if (id) {
+            $location.path('/website/site-builder/pages/' + id);
+        } else {
+            vm.uiState.loading = false;
+        }
+
     }
 
     function init(element) {

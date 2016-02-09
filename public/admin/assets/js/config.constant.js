@@ -354,6 +354,20 @@ app.constant('pageConstant', {
   page_handles: {
     BLOG: 'blog',
     SINGLEPOST: 'single-post',
+  },
+  inValidPageHandles:{
+     'home': 'home', 
+    'login': 'login', 
+    'logout': 'logout', 
+    'admin': 'admin', 
+    'redirect': 'redirect', 
+    'template': 'template', 
+    'demo': 'demo', 
+    'admin1': 'admin1', 
+    'interim': 'interim', 
+    'unsubscribe': 'unsubscribe', 
+    'forgotpassword': 'forgotpassword', 
+    'current-user': 'current-user'
   }
 });
 

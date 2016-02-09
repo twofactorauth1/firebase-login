@@ -418,7 +418,7 @@ module.exports = function(grunt) {
 
         //Adds interactive prompt for grunt tasks
         prompt: {
-            target: {
+            copyAccount: {
                 options: {
                     questions: [
                         {
@@ -438,6 +438,28 @@ module.exports = function(grunt) {
                             config: 'doCopyAccount.accountId', // arbitray name or config for any other grunt task
                             type: 'input', // list, checkbox, confirm, input, password
                             message: 'Enter the accountId to copy', // Question to ask the user, function needs to return a string,
+                            //default: 0, // default value if nothing is entered
+                            //choices: 'Array|function(answers)',
+                            validate: function(value){
+                                if(isNaN(parseInt(value))){
+                                    return 'please enter a valid id. [' + value + ' is not valid.]';
+                                } else {
+                                    return true;
+                                }
+                            } // return true if valid, error message if invalid
+                            //filter:  function(value), // modify the answer
+                            //when: function(answers) // only ask this question when this function returns true
+                        }
+                    ]
+                }
+            },
+            convertAccountToSiteTemplate: {
+                options: {
+                    questions: [
+                        {
+                            config: 'doConvertAccountToSiteTemplate.accountId', // arbitray name or config for any other grunt task
+                            type: 'input', // list, checkbox, confirm, input, password
+                            message: 'Enter the accountId to convert into a site template', // Question to ask the user, function needs to return a string,
                             //default: 0, // default value if nothing is entered
                             //choices: 'Array|function(answers)',
                             validate: function(value){
@@ -483,12 +505,22 @@ module.exports = function(grunt) {
         dbcopyutil.updateEmailCollection(done);
     });
 
-    grunt.registerTask('copyAccount',  ['prompt', 'doCopyAccount']);
+    grunt.registerTask('copyAccount',  ['prompt:copyAccount', 'doCopyAccount']);
 
     grunt.registerTask('syncSSB', 'A task to copy SSB artifacts from test to prod', function(){
         var done = this.async();
         dbcopyutil.syncSSBArtifacts(done);
     });
+
+    grunt.registerTask('doConvertAccountToSiteTemplate', 'A task to convert an account to a sitetemplate', function(){
+
+        var done = this.async();
+        var accountId = parseInt(grunt.config('doConvertAccountToSiteTemplate.accountId'));
+        dbcopyutil.convertAccountToSiteTemplate(accountId, done);
+
+    });
+
+    grunt.registerTask('convertAccountToSiteTemplate', ['prompt:convertAccountToSiteTemplate', 'doConvertAccountToSiteTemplate']);
 
     grunt.registerTask('generateJS', 'Generate JS', function(){
         var done = this.async();

@@ -506,33 +506,13 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
     value: 20
   }];
 
-
-
   /*
    * @deleteLinkFromNav
    * -
    */
 
-  $scope.deleteLinkFromNav = function (index) {
-    if ($scope.component.customnav) {
-      $scope.component.linkLists.forEach(function (value) {
-        if (value.handle === "head-menu") {
-          value.links.splice(index, 1);
-          setTimeout(function () {
-            $scope.updateLinkList();
-          }, 1000);
-        }
-      });
-    } else {
-      $scope.website.linkLists.forEach(function (value) {
-        if (value.handle === "head-menu") {
-          value.links.splice(index, 1);
-          setTimeout(function () {
-            $scope.updateLinkList();
-          }, 1000);
-        }
-      });
-    }
+  $scope.deleteLinkFromNav = function (index, links) {
+    links.splice(index, 1);    
   };
 
   /*
@@ -584,9 +564,36 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
       }
 
     }
-    setTimeout(function () {
-      $scope.updateLinkList();
-    }, 1000);
+  };
+
+  /*
+   * @setPageLinkTitle
+   * -
+   */
+  $scope.setPageLinkTitle = function (url, update, link) {
+    if(!$scope.component.customnav){
+        var _label = null;
+        var _page = _.findWhere($scope.filterdedPages, {
+            handle: url
+          });
+        if(_page){
+          _label =  _page.menuTitle || _page.title; 
+        }
+
+        if(update){
+          link.label = _label
+        }
+        else{
+          $scope.newLink.linkTitle = _label
+        }
+        if(update)
+        {
+          $timeout(function() {
+            $scope.refreshLinks(_label, false);
+          }, 0);
+          
+        }
+      }
   };
 
   /*
@@ -594,78 +601,9 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
    * - when the navigation is reordered, update the linklist in the website object
    */
 
-  $scope.updateLinkList = function (index) {
-    var linkLabelsArr = [];
-    var editedLinksLists = angular.element('.head-menu-links');
-    _.each(editedLinksLists, function (link) {
-      var linkLabel = link.attributes['data-label'].value;
-      if (linkLabel) {
-        linkLabelsArr.push(linkLabel);
-      }
-    });
-    if (linkLabelsArr.length) {
-      if ($scope.component.customnav) {
-        $scope.component.linkLists.forEach(function (value, index) {
-          if (value.handle === "head-menu") {
-            var newLinkListOrder = [];
-            _.each(editedLinksLists, function (link, index) {
-              if (value) {
-                var matchedLinkList = _.findWhere(value.links, {
-                  label: linkLabelsArr[index]
-                });
-                newLinkListOrder.push(matchedLinkList);
-              }
-            });
-            if (newLinkListOrder.length) {
-              $scope.component.linkLists[index].links = newLinkListOrder;
-            }
-          }
-        });
-      } else {
-        $scope.website.linkLists.forEach(function (value, index) {
-          if (value.handle === "head-menu") {
-            var newLinkListOrder = [];
-            _.each(editedLinksLists, function (link, index) {
-              if (value) {
-                var matchedLinkList = _.findWhere(value.links, {
-                  label: linkLabelsArr[index]
-                });
-                newLinkListOrder.push(matchedLinkList);
-              }
-            });
-            if (newLinkListOrder.length) {
-              $scope.website.linkLists[index].links = newLinkListOrder;
-            }
-
-          }
-        });
-      }
-
-    } else {
-
-      if ($scope.component.customnav) {
-        $scope.website.linkLists.forEach(function (value, index) {
-          if (value.handle === "head-menu") {
-            $scope.component.linkLists[index] = $scope.component.linkLists[index] || {};
-            $scope.component.linkLists[index].links = [];
-          }
-        });
-      } else {
-        $scope.website.linkLists.forEach(function (value, index) {
-          if (value.handle === "head-menu") {
-            $scope.website.linkLists[index].links = [];
-          }
-        });
-      }
-
-    }
-    $scope.originalLinkList = angular.copy($scope.website.linkLists);
-    $scope.originalCustomLinkList = angular.copy($scope.component.linkLists);
-  };
-
   $scope.refreshLinks = function(label, customnav){
     if(label){
-      $scope.updateLinkList();
+      //$scope.updateLinkList();
     }
     else{
       if(customnav)
@@ -681,7 +619,6 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
       $rootScope.$broadcast('rzSliderForceRender');
     }, 0);
   };
-
 
   $scope.saveComponentVersion = function () {
     $scope.$parent.vm.pendingChanges = true;

@@ -1,6 +1,6 @@
 'use strict';
 /*global app*/
-app.controller('SiteBuilderPageSettingsModalController', ['$timeout', 'parentVm', 'pageId', 'toaster', 'SimpleSiteBuilderService', 'SweetAlert', '$location', function ($timeout, parentVm, pageId, toaster, SimpleSiteBuilderService, SweetAlert, $location) {
+app.controller('SiteBuilderPageSettingsModalController', ['$scope', '$timeout', 'parentVm', 'pageId', 'toaster', 'SimpleSiteBuilderService', 'SweetAlert', '$location', function ($scope, $timeout, parentVm, pageId, toaster, SimpleSiteBuilderService, SweetAlert, $location) {
 
 	var sectionLabel;
 	var vm = this;
@@ -12,7 +12,7 @@ app.controller('SiteBuilderPageSettingsModalController', ['$timeout', 'parentVm'
   vm.setAsHomePage = setAsHomePage;
   vm.duplicatePage = duplicatePage;
   vm.hideFromMenu = hideFromMenu;
-  
+
   function duplicatePage(){
     vm.saveLoading = true;
     saveWebsite().then(function(){
@@ -22,7 +22,7 @@ app.controller('SiteBuilderPageSettingsModalController', ['$timeout', 'parentVm'
         vm.parentVm.uiState.navigation.loadPage(page.data._id);
       });
     })
-    
+
   }
   function hideFromMenu(){
     angular.element('.modal.in').hide();
@@ -114,7 +114,7 @@ app.controller('SiteBuilderPageSettingsModalController', ['$timeout', 'parentVm'
                 console.log('page deleted');
                 SimpleSiteBuilderService.getSite(vm.page.websiteId).then(function() {
                   SimpleSiteBuilderService.getPages().then(function() {
-                   toaster.pop('success', 'Page deleted', 'The page deleted successfully.');                  
+                   toaster.pop('success', 'Page deleted', 'The page deleted successfully.');
                     vm.parentVm.closeModal();
                     vm.saveLoading = false;
                     if(vm.parentVm.state.page._id === vm.page._id){
@@ -125,12 +125,12 @@ app.controller('SiteBuilderPageSettingsModalController', ['$timeout', 'parentVm'
                 		}, 0);
                     }
                   });
-                })  
+                })
             })
           })
       } else {
         vm.saveLoading = false;
-        angular.element('.modal.in').show();        
+        angular.element('.modal.in').show();
       }
     });
   };
@@ -139,22 +139,21 @@ app.controller('SiteBuilderPageSettingsModalController', ['$timeout', 'parentVm'
     vm.saveLoading = true;
       return(
         saveWebsite().then(function(){
-          SimpleSiteBuilderService.savePage(page, true).then(function() {      
+          SimpleSiteBuilderService.savePage(page, true).then(function(data) {
             SimpleSiteBuilderService.getSite(page.websiteId).then(function() {
               SimpleSiteBuilderService.getPages().then(function(pages) {
-                  vm.saveLoading = false;              
+                  vm.saveLoading = false;
                   toaster.pop('success', 'Setting Saved', 'The page settings saved successfully.');
                   if(hide){
                     vm.page.mainmenu = false;
                     angular.element('.modal.in').show();
                   }
                   else{
-                    if(vm.page._id === vm.parentVm.state.page._id && vm.page.homePage){
-                      var changes = angular.copy(vm.parentVm.state.pendingPageChanges);
-                      vm.parentVm.state.page.handle = "index";
+                    if(vm.page._id === vm.parentVm.state.page._id){
+                      SimpleSiteBuilderService.page = data.data;
                       $timeout(function() {
-                        vm.parentVm.state.pendingPageChanges = changes;
-                      }, 0);                      
+                        vm.parentVm.state.pendingPageChanges = false;
+                      }, 0);
                     }
                     vm.parentVm.closeModal();
                   }
@@ -164,9 +163,9 @@ app.controller('SiteBuilderPageSettingsModalController', ['$timeout', 'parentVm'
         }).catch(function(err) {
             vm.saveLoading = false;
             if(err.message)
-               toaster.pop('error', error.message);   
+               toaster.pop('error', error.message);
             else
-              toaster.pop('error', "Setting not saved", "Error while saving page settings");                  
+              toaster.pop('error', "Setting not saved", "Error while saving page settings");
           })
       )
   }
@@ -177,18 +176,42 @@ app.controller('SiteBuilderPageSettingsModalController', ['$timeout', 'parentVm'
               console.log('website saved');
           })
       )
-  }  
-  vm.loading = true;
-  SimpleSiteBuilderService.getPage(vm.pageId, true).then(function(page) {
-    vm.page = page.data;
-    vm.originalPage = angular.copy(vm.page);
-    // Special case if selected page is current page
-    if(vm.parentVm.state.page && vm.parentVm.state.page._id === vm.pageId){
-      vm.page.title = vm.parentVm.state.page.title;
-      vm.page.handle = vm.parentVm.state.page.handle;
-    }
-    vm.loading = false;
+  }
 
-  })
+  function validateDuplicatePage(pageHandle) {
+    var _page = vm.parentVm.state.originalPages[pageHandle];
+    if(_page && _page._id !== vm.page._id) {
+      return "Page handles must be unique.";
+    } else if (SimpleSiteBuilderService.inValidPageHandles[pageHandle.toLowerCase()]) {
+      var _handles = [];
+      angular.forEach(SimpleSiteBuilderService.inValidPageHandles, function(value, key) {
+        _handles.push(value);
+      });
+      return "Page handle cannot be a system route.";
+    }
+  }
+
+  $scope.$watch('vm.page.handle', function(handle){
+      if(handle){
+        vm.inValidPageHandle = validateDuplicatePage(handle);
+      }
+      else{
+        vm.inValidPageHandle = null;
+      }
+  });
+
+  vm.loading = true;
+  if(vm.pageId === vm.parentVm.state.page._id){
+    vm.page = angular.copy(vm.parentVm.state.page);
+    vm.originalPage = angular.copy(vm.page);
+    vm.loading = false;
+  }
+  else{
+    SimpleSiteBuilderService.getPage(vm.pageId, true).then(function(page) {
+      vm.page = page.data;
+      vm.originalPage = angular.copy(vm.page);
+      vm.loading = false;
+    })
+  }
 
 }]);

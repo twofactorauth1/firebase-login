@@ -6591,16 +6591,53 @@ a[href="https://froala.com/wysiwyg-editor"] {
   opacity: .5;
 }
 .ssb-site-template-grid-item {
-  display: inline-block;
-  text-align: center;
   padding: 1em;
+}
+.ssb-site-template-grid-item:not(:hover) img {
+  opacity: 0.8;
+}
+.ssb-site-template-grid-item:hover .ssb-site-template-description {
+  display: block;
 }
 .ssb-site-template-grid-item h1 {
   display: inline-block;
-  margin: .5em 0 0;
+  margin: .25em 0 0;
+}
+.ssb-site-template-grid-item-inner {
+  position: relative;
+  display: inline-block;
+  text-align: center;
+  padding: 0 0 1em;
+  background: #fefefe;
+  border: 2px solid #fcfcfc;
+  box-shadow: 0 1px 2px rgba(34, 25, 25, 0.4);
+  transition: opacity 0.4s ease-in-out;
 }
 .ssb-site-template-img-container {
+  position: relative;
   cursor: pointer;
+  max-height: 258px;
+  overflow: hidden;
+}
+@media screen and (min-width: 1653px) {
+  .ssb-site-template-img-container {
+    max-height: 400px;
+  }
+}
+.ssb-site-template-description {
+  display: none;
+  pointer-events: none;
+  position: absolute;
+  width: calc(100% - 4em);
+  background: #ffffff;
+  color: #48b1cc;
+  text-align: left;
+  padding: 1em 1em .5em 1em;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  max-width: 300px;
+  left: 50%;
+  font-family: Helvetica Neue;
 }
 .ssb-sidebar {
   display: none;
@@ -6848,6 +6885,10 @@ a[href="https://froala.com/wysiwyg-editor"] {
 .ssb-sidebar-inner > .tab-pane {
   padding: 0;
 }
+.ssb-sidebar-inner .editable-error.help-block {
+  white-space: normal;
+  max-width: 300px;
+}
 .ssb-sidebar-icons {
   float: left;
   background: #131e26;
@@ -6888,6 +6929,9 @@ a[href="https://froala.com/wysiwyg-editor"] {
 }
 .ssb-sidebar-add-section:hover .ssb-sidebar-add-section-btn {
   display: block;
+}
+.ssb-sidebar-add-section .ssb-sidebar-add-section-img {
+  background: lightGray;
 }
 .ssb-sidebar-add-section .fa-info {
   color: #48b1cc;
@@ -7034,6 +7078,19 @@ ssb-topbar .ui-select-match-text > small {
 }
 .ssb-control-bar .btn[disabled] {
   pointer-events: none;
+}
+[class*="ssb-theme-"] {
+  -webkit-font-smoothing: antialiased !important;
+}
+[class*="ssb-theme-"][data-eq-state$="small"] .container {
+  padding-right: 15px!important;
+  padding-left: 15px!important;
+}
+@media screen and (max-width: 767px) {
+  [class*="ssb-theme-"]:not([class*="ssb-edit-mode"]) .container {
+    padding-right: 15px!important;
+    padding-left: 15px!important;
+  }
 }
 [class*="ssb-theme-"] .ssb-theme-btn:hover:before {
   background: rgba(255, 255, 255, 0.1);
@@ -7260,6 +7317,17 @@ ssb-topbar .ui-select-match-text > small {
 .ssb-section-layout .ssb-component {
   z-index: 1;
 }
+.ssb-page-section-layout-1-col .row,
+.ssb-page-section-layout-2-col .row,
+.ssb-page-section-layout-3-col .row {
+  margin: 0 !important;
+}
+.ssb-page-section-layout-1-col [class*="col-"],
+.ssb-page-section-layout-2-col [class*="col-"],
+.ssb-page-section-layout-3-col [class*="col-"] {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
 .ssb-page-section-layout-overflow-visible {
   overflow: visible;
 }
@@ -7351,9 +7419,6 @@ ssb-topbar .ui-select-match-text > small {
   border: none!important;
   color: inherit!important;
 }
-.ssb-page-section-layout-header-v1 .social-link-v1 .social-link > .btn.social-links {
-  display: none;
-}
 [data-eq-state$="medium"] .ssb-page-section-layout-header-v1 .social-link-v1 .social-link ul,
 [data-eq-state$="large"] .ssb-page-section-layout-header-v1 .social-link-v1 .social-link ul {
   padding-top: 1em!important;
@@ -7384,6 +7449,21 @@ ssb-topbar .ui-select-match-text > small {
     z-index: 2;
   }
 }
+/*
+ * layout-header-v2
+ */
+/*
+ * layout-header-v3
+ */
+/*
+ * layout-header-v4
+ */
+/*
+ * layout-header-v5
+ */
+.ssb-page-section-layout-header-v5 .navigation-v2 .navbar {
+  min-height: 0!important;
+}
 .ssb-page-section-layout-header-v5 .navigation-v2 .navbar .navbar-header {
   display: none;
 }
@@ -7406,7 +7486,6 @@ ssb-topbar .ui-select-match-text > small {
   line-height: initial;
 }
 .ssb-image-gallery {
-  background: green;
   min-height: 150px;
 }
 .ssb-image-gallery ssb-text-component {
@@ -7427,6 +7506,9 @@ ssb-topbar .ui-select-match-text > small {
 /*
  * OVERRIDES FOR LEGACY COMPONENT STYLES
  */
+.ssb-main .social-link-v1 .social-link > .btn.social-links {
+  display: none;
+}
 .ssb-main .video-block .videogular-container {
   max-width: 100%!important;
   width: 100%!important;
@@ -7786,7 +7868,7 @@ ssb-topbar .ui-select-match-text > small {
 }
 .dohy-dashboard-container .dohy-dashboard-inner {
   background-color: black;
-  background-image: linear-gradient(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.35)), url('//s3.amazonaws.com/indigenous-digital-assets/account_6/dohy-bg-mountain-1_1449539273222.jpg');
+  background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('//s3.amazonaws.com/indigenous-digital-assets/account_6/photo-1448814100339-234df1d4005d_1455048378574.jpeg');
   background-repeat: no-repeat;
   background-size: cover;
   min-height: 100vh;

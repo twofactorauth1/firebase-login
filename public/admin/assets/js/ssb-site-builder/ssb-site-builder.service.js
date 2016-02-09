@@ -5,9 +5,9 @@
 
 	app.factory('SimpleSiteBuilderService', SimpleSiteBuilderService);
 
-	SimpleSiteBuilderService.$inject = ['$rootScope', '$http', '$q', '$timeout', 'AccountService', 'WebsiteService', '$modal'];
+	SimpleSiteBuilderService.$inject = ['$rootScope', '$http', '$q', '$timeout', 'AccountService', 'WebsiteService', '$modal', 'pageConstant'];
 	/* @ngInject */
-	function SimpleSiteBuilderService($rootScope, $http, $q, $timeout, AccountService, WebsiteService, $modal) {
+	function SimpleSiteBuilderService($rootScope, $http, $q, $timeout, AccountService, WebsiteService, $modal, pageConstant) {
 		var ssbService = {};
 		var baseWebsiteAPIUrl = '/api/1.0/cms/website/';
 		var basePageAPIUrl = '/api/1.0/cms/page/';
@@ -57,6 +57,7 @@
         ssbService.extendComponentData = extendComponentData;
 
         ssbService.contentComponentDisplayOrder = [];
+        ssbService.inValidPageHandles = pageConstant.inValidPageHandles;
 
         /*
          * This represents the category sorting for the add content panel
@@ -251,7 +252,10 @@
                 page.sections = angular.copy(page.components);
                 for (var i = 0; i < page.sections.length; i++) {
                     var component = angular.copy(page.sections[i]);
+                    var id = Math.random().toString(36).replace('0.','');
                     var defaultSectionObj = {
+                        _id: id,
+                        accountId: ssbService.account._id,
                         layout: '1-col',
                         components: [component],
                         visibility: true
@@ -670,7 +674,7 @@
          */
         function extendComponentData(oldSection, newSection) {
 
-            var keysToOmit = ['$$hashKey', '_id', 'anchor', 'accountId', 'version', 'type', 'layout', 'spacing'];
+            var keysToOmit = ['$$hashKey', '_id', 'anchor', 'accountId', 'version', 'type', 'layout', 'spacing', 'visibility', 'bg'];
             var newComponents = angular.copy(newSection.components);
             var newComponentsOrder = _.invert(_.object(_.pairs(_.pluck(newComponents, 'type')))); // ['componentType1', 'componentType2', ...]
             var oldComponents = _(angular.copy(oldSection.components)).chain()
@@ -747,7 +751,7 @@
                     $timeout(function() {
                         ssbService.website = _website;
                     }, 0);
-                }                
+                }
             });
         }
 
@@ -935,6 +939,7 @@
 		(function init() {
 
 			AccountService.getAccount(function(data) {
+                ssbService.account = data;
 				ssbService.websiteId = data.website.websiteId;
                 ssbService.getSite(data.website.websiteId, true);
                 ssbService.getPages();
