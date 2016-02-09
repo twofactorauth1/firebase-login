@@ -482,6 +482,9 @@ h5.over-title {
 #topnav.navbar .navbar-collapse.in {
   overflow-y: visible;
 }
+#topnav.navbar .navbar-brand > img {
+  max-height: 33px;
+}
 @media (min-width: 992px) {
   .app-navbar-fixed #topnav.navbar .navbar-collapse,
   .app-navbar-fixed #topnav.navbar .navbar-header {
