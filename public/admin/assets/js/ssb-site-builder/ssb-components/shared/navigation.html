@@ -56,7 +56,7 @@
                 <label ng-if="newLink.linkType=='external'" for="link-url">Enter Url</label>
                 <select ng-if="newLink.linkType=='page'" ng-change="setPageLinkTitle(newLink.linkUrl, false)" placeholder="Select a page" ng-model="newLink.linkUrl" class="form-control margin-bottom-0">
                     <option value="" disabled>Select a Page</option>
-                    <option ng-repeat="page in filterdedPages track by $index" data-ng-if="page.title && page.handle" value="{{page.handle}}" ng-selected="{{link.label == page.title}}">{{page.title}}</option>
+                    <option ng-repeat="page in filterdedPages  | filterPages:website.linkLists:component.linkLists:component.customnav track by $index" data-ng-if="page.title && page.handle" value="{{page.handle}}" ng-selected="{{link.label == page.title}}">{{page.title}}</option>
                 </select>
                 <input class="form-control" type="text" ng-if="newLink.linkType=='external'" ng-model="newLink.linkUrl" placeholder="Enter External URL">
             </div>
@@ -134,7 +134,7 @@
                                     </select>
                                     <select ng-if="linkType[$index]=='page'" placeholder="Select a page" ng-change="setPageLinkTitle(link.linkTo.data, true, link)" ng-model="link.linkTo.data" class="form-control margin-bottom-0">
                                         <option value="" disabled>Select a Page</option>
-                                        <option ng-repeat="page in filterdedPages track by $index" data-ng-if="page.title && page.handle" value="{{page.handle}}" ng-selected="{{link.linkTo.data == page.handle}}">{{page.title}}</option>
+                                        <option ng-repeat="page in filterdedPages | filterPages:website.linkLists:component.linkLists:component.customnav:link.linkTo.data track by $index" data-ng-if="page.title && page.handle" value="{{page.handle}}" ng-selected="{{link.linkTo.data == page.handle}}">{{page.title}}</option>
                                     </select>
                                     <input class="form-control" type="text" ng-if="linkType[$index]=='external'" ng-model="link.linkTo.data" placeholder="Enter External URL">
                                 </div>
@@ -214,7 +214,7 @@
                                 </select>
                                 <select ng-if="linkType[$index]=='page'" placeholder="Select a page" ng-model="link.linkTo.data" class="form-control margin-bottom-0">
                                     <option value="" disabled>Select a Page</option>
-                                    <option ng-repeat="page in filterdedPages track by $index" data-ng-if="page.title && page.handle" value="{{page.handle}}" ng-selected="{{link.linkTo.data == page.handle}}">{{page.title}}</option>
+                                    <option ng-repeat="page in filterdedPages | filterPages:website.linkLists:component.linkLists:component.customnav:link.linkTo.data track by $index" data-ng-if="page.title && page.handle" value="{{page.handle}}" ng-selected="{{link.linkTo.data == page.handle}}">{{page.title}}</option>
                                 </select>
                                 <input class="form-control" type="text" ng-if="linkType[$index]=='external'" ng-model="link.linkTo.data" placeholder="Enter External URL">
                             </div>

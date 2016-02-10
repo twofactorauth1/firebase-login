@@ -731,6 +731,7 @@ app.constant('JS_REQUIRES', {
     'selectedTags': 'assets/js/filters/productTags.js',
     'propsFilter': 'assets/js/filters/propsFilter.js',
     'cleanType': 'assets/js/filters/cleanType.js',
+    'filterPages': 'assets/js/filters/filterPages.js',
 
     //*** Directives
     'mediaModal': 'assets/js/directives/mediadirective.js',
