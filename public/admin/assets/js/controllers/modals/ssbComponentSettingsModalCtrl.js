@@ -393,7 +393,7 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
 
   $scope.$watch('newLink.linkPage', function (newValue) {
     if (newValue) {
-      $scope.currentPage = _.find($scope.filterdedPages, function (page) {
+      $scope.currentPage = _.find($scope.filteredPages, function (page) {
         return page.handle === newValue;
       });
     }
@@ -409,14 +409,15 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
             if (section && section.components) {
               _.each(section.components, function (component) {              
                 if (component) {
-                  if(section.components.length > 1)
+                  if(section.components.length > 1){
                     component.sectionTitle = section.name;
+                  }
                   components.push(component)
                 }
               })
             }
         })
-    }
+    }    
     return components;
   }
 
@@ -426,7 +427,7 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
         link.data = null;
       }
       $scope.linkPage = link.page;
-      $scope.currentPage = _.find($scope.filterdedPages, function (page) {
+      $scope.currentPage = _.find($scope.filteredPages, function (page) {
         return page.handle === link.page;
       });
     }
@@ -463,15 +464,27 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
 
   $scope.setLinkTitle = function (value, index, newLink) {
     var title = value.replace("-", " ");
+    var sectionTitle = $scope.currentPage.components[index].sectionTitle;
     var newArray = _.first(angular.copy($scope.currentPage.components), [index + 1]);
     var hash = _.filter(newArray, function (obj) {
       return obj.type === value;
     });
-    if($scope.currentPage.components[index].sectionTitle){
-      title = $scope.currentPage.components[index].sectionTitle + " - " + title;
+    
+    if(sectionTitle){
+      title = sectionTitle + " - " + title;
     }
-    if (hash.length > 1 && !$scope.currentPage.components[index].sectionTitle) {     
-       title = title + "-" + (hash.length - 1);
+    if (hash.length > 1) {  
+      if(sectionTitle){
+        var headerSection = _.filter(hash, function (obj) {
+          return obj.sectionTitle === sectionTitle;      
+        });
+        if(headerSection.length > 1){
+          title = sectionTitle + " - " + (hash.length - 1) + " - " + title;
+        }
+      }
+      else{
+        title = title + "-" + (hash.length - 1);
+      } 
     }
     return title;
   };
@@ -577,7 +590,7 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
   $scope.setPageLinkTitle = function (url, update, link) {
     if(!$scope.component.customnav){
         var _label = null;
-        var _page = _.findWhere($scope.filterdedPages, {
+        var _page = _.findWhere($scope.filteredPages, {
             handle: url
           });
         if(_page){
@@ -950,12 +963,12 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
             }
           }
           allPages = _.reject(allPages, function(page){ return page.mainmenu === false });
-          $scope.filterdedPages = $filter('orderBy')(allPages, "title", false);
-          _.each($scope.filterdedPages, function (page) {
+          $scope.filteredPages = $filter('orderBy')(allPages, "title", false);
+          _.each($scope.filteredPages, function (page) {
               page.components = getPageComponents(page);
           })
           if($scope.linkPage)
-            $scope.currentPage = _.find($scope.filterdedPages, function (page) {
+            $scope.currentPage = _.find($scope.filteredPages, function (page) {
               return page.handle === $scope.linkPage;
             });
         });

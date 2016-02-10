@@ -6991,6 +6991,10 @@ a[href="https://froala.com/wysiwyg-editor"] {
   display: inline-block;
   margin: 1em;
 }
+.ssb-sidebar-section-panel .loadingNavigation {
+  min-height: 200px;
+  margin: 20px;
+}
 .ssb-sidebar-section-panel-btn.btn-link {
   width: 100%;
   padding: .5em 0;
