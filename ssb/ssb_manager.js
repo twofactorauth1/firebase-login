@@ -592,7 +592,7 @@ module.exports = {
 
         var linkList = list.links.filter(function (lnk) {
         return lnk.type === 'link' &&
-             lnk.linkTo && lnk.linkTo.data === handle
+             lnk.linkTo && (lnk.linkTo.data === handle || lnk.linkTo.page === handle)
         });
         if(linkList){
             _.each(linkList, function(link){
@@ -1083,11 +1083,14 @@ module.exports = {
 
                                                 .filter(function(link){
                                                     //only keep pages that exist and are visible in menu
-                                                    if(link.linkTo.type === 'section'){
-                                                        return _.contains(pageHandles, link.linkTo.page)    
+                                                    if(link.linkTo.type === 'section' && link.linkTo.page){
+                                                        return _.contains(pageHandles, link.linkTo.page)   
+                                                    }
+                                                    else if(link.linkTo.type === 'page' || link.linkTo.type === 'home'){
+                                                        return _.contains(pageHandles, link.linkTo.data)
                                                     }
                                                     else{
-                                                        return _.contains(pageHandles, link.linkTo.data)
+                                                        return true;
                                                     }                                                    
                                                 })
                                                 .value(); //return array value

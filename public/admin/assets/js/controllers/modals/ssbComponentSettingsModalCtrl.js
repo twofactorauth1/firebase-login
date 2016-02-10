@@ -404,7 +404,7 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
 
   function getPageComponents(page) {
     var components = [];
-    if (page.components && page.components.length && !page.sections.length) {
+    if (page.components && page.components.length && !page.sections) {
         components = page.components;
     }
     else{
@@ -934,8 +934,7 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
        * @getPages
        * -
        */
-      SimpleSiteBuilderService.getPagesWithSections().then(function(pages) {
-        var allPages = pages.data;
+      var allPages = angular.copy($scope.$parent.vm.state.originalPages);      
 
         AccountService.getAccount(function(data) {
           if (!data.showhide.blog) {
@@ -950,8 +949,6 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
           allPages = _.reject(allPages, function(page){ return page.mainmenu === false });
           $scope.filterdedPages = $filter('orderBy')(allPages, "title", false);
         });
-
-      });
 
       WebsiteService.getEmails(true, function (emails) {
         $timeout(function () {
