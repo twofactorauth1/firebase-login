@@ -6471,8 +6471,7 @@ a[href="https://froala.com/wysiwyg-editor"] {
   padding: 0 0 0 1em;
 }
 .ssb-site-builder .ssb-edit-control .ssb-edit-control-active {
-  display: none;
-  background: black;
+  background: #47B8D9;
 }
 .ssb-site-builder .ssb-edit-control:hover {
   width: 100%;
