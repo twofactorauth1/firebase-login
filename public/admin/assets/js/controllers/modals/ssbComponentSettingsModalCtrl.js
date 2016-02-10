@@ -405,15 +405,17 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
         components = page.components;
     }
     else{
-        for (var i = 0; i < page.sections.length; i++) {
-            if (page.sections[i] && page.sections[i].components) {
-              for (var j = 0; j < page.sections[i].components.length; j++) {
-                if (page.sections[i].components[j]) {
-                  components.push(page.sections[i].components[j])
+        _.each(page.sections, function (section) {
+            if (section && section.components) {
+              _.each(section.components, function (component) {              
+                if (component) {
+                  if(section.components.length > 1)
+                    component.sectionTitle = section.name;
+                  components.push(component)
                 }
-              }
+              })
             }
-        }
+        })
     }
     return components;
   }
@@ -460,14 +462,18 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
    */
 
   $scope.setLinkTitle = function (value, index, newLink) {
-    var newArray = _.first(angular.copy($scope.components), [index + 1]);
+    var title = value.replace("-", " ");
+    var newArray = _.first(angular.copy($scope.currentPage.components), [index + 1]);
     var hash = _.filter(newArray, function (obj) {
       return obj.type === value;
     });
-    if (hash.length > 1) {
-      return value.replace("-", " ") + "-" + (hash.length - 1);
+    if($scope.currentPage.components[index].sectionTitle){
+      title = $scope.currentPage.components[index].sectionTitle + " - " + title;
     }
-    return value.replace("-", " ");
+    if (hash.length > 1 && !$scope.currentPage.components[index].sectionTitle) {     
+       title = title + "-" + (hash.length - 1);
+    }
+    return title;
   };
 
   /*
