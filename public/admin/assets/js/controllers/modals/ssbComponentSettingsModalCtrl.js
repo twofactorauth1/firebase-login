@@ -396,15 +396,12 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
       $scope.currentPage = _.find($scope.filterdedPages, function (page) {
         return page.handle === newValue;
       });
-      if($scope.currentPage)
-        $scope.currentPage.components = getPageComponents($scope.currentPage);
     }
   });
 
-
   function getPageComponents(page) {
     var components = [];
-    if (page.components && page.components.length && !page.sections) {
+    if (page.components && page.components.length && !page.sections.length) {
         components = page.components;
     }
     else{
@@ -426,11 +423,10 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
       if (status) {
         link.data = null;
       }
+      $scope.linkPage = link.page;
       $scope.currentPage = _.find($scope.filterdedPages, function (page) {
         return page.handle === link.page;
       });
-      if($scope.currentPage)
-        $scope.currentPage.components = getPageComponents($scope.currentPage);
     }
   };
 
@@ -934,7 +930,8 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
        * @getPages
        * -
        */
-      var allPages = angular.copy($scope.$parent.vm.state.originalPages);      
+      SimpleSiteBuilderService.getPagesWithSections().then(function(pages) {
+        var allPages = pages.data;
 
         AccountService.getAccount(function(data) {
           if (!data.showhide.blog) {
@@ -948,7 +945,16 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
           }
           allPages = _.reject(allPages, function(page){ return page.mainmenu === false });
           $scope.filterdedPages = $filter('orderBy')(allPages, "title", false);
+          _.each($scope.filterdedPages, function (page) {
+              page.components = getPageComponents(page);
+          })
+          if($scope.linkPage)
+            $scope.currentPage = _.find($scope.filterdedPages, function (page) {
+              return page.handle === $scope.linkPage;
+            });
         });
+
+      });
 
       WebsiteService.getEmails(true, function (emails) {
         $timeout(function () {
