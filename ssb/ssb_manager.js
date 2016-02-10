@@ -510,7 +510,7 @@ module.exports = {
                         fn(err, value);
                     } else {
                         if(list && list.links){
-                            self.getUpdatedWebsiteLinkList(list, page.get("handle"), function(err, updatedList){
+                            self.getUpdatedWebsiteLinkList(list, page.get("handle"), true, function(err, updatedList){
                                 list = updatedList;
                             })
                         }
@@ -587,13 +587,13 @@ module.exports = {
         });
     },
 
-    getUpdatedWebsiteLinkList: function(list, handle, fn){
+    getUpdatedWebsiteLinkList: function(list, handle, deletePage, fn){
         var self = this;
 
-        var linkList = list.links.filter(function (lnk) {
+        var linkList = list.links.filter(function (lnk) {                 
         return lnk.type === 'link' &&
-             lnk.linkTo && (lnk.linkTo.data === handle || lnk.linkTo.page === handle)
-        });
+             lnk.linkTo && deletePage ? (lnk.linkTo.data === handle || lnk.linkTo.page === handle) : lnk.linkTo && lnk.linkTo.data === handle
+        })
         if(linkList){
             _.each(linkList, function(link){
                 var _index = list.links.indexOf(link);
@@ -1020,7 +1020,7 @@ module.exports = {
                             cb(err);
                         } else {
                             if(list && list.links){
-                                self.getUpdatedWebsiteLinkList(list, existingPage.get("handle"), function(err, updatedList){
+                                self.getUpdatedWebsiteLinkList(list, existingPage.get("handle"), false, function(err, updatedList){
                                     list = updatedList;
                                 })
                             }
