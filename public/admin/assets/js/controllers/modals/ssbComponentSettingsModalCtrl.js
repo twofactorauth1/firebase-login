@@ -396,7 +396,8 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
       $scope.currentPage = _.find($scope.filterdedPages, function (page) {
         return page.handle === newValue;
       });
-      $scope.currentPage.components = getPageComponents($scope.currentPage);
+      if($scope.currentPage)
+        $scope.currentPage.components = getPageComponents($scope.currentPage);
     }
   });
 
@@ -428,7 +429,8 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
       $scope.currentPage = _.find($scope.filterdedPages, function (page) {
         return page.handle === link.page;
       });
-      $scope.currentPage.components = getPageComponents($scope.currentPage);
+      if($scope.currentPage)
+        $scope.currentPage.components = getPageComponents($scope.currentPage);
     }
   };
 
