@@ -1468,7 +1468,8 @@
 
     var checkIfPageDirty = function(url, fn){
       if ($scope.originalPage && $scope.originalPage.components && $scope.components && $scope.originalPage.components.length !== $scope.components.length) {
-         $scope.setDirty(true);
+         if(!$scope.changesConfirmed)
+            $scope.setDirty(true);
       }
       if ($scope.isSinglePost) {
           var post_data = angular.copy($scope.blog.post);
@@ -1479,7 +1480,8 @@
               }
             });
         if (post_data && !angular.equals($scope.originalPost, post_data)) {
-          $scope.setDirty(true);
+          if(!$scope.changesConfirmed)
+            $scope.setDirty(true);
         }
       }
       var redirectUrl = url;
@@ -1779,7 +1781,7 @@
      * @locationChangeStart
      * - Before user leaves editor, ask if they want to save changes
      */
-    $scope.changesConfirmed = false;
+    $scope.changesConfirmed = true;
     var offFn = $rootScope.$on('$locationChangeStart', function (event, newUrl, oldUrl) {
         checkIfPageDirty(newUrl, function (redirectUrl) {  
           var condition = $scope.isDirty.dirty && !$scope.changesConfirmed;
