@@ -22,7 +22,7 @@ app.directive('singlePostComponent', ['$window', '$location', 'accountService', 
           PostService.getSinglePost(_handle, data.website.websiteId, function (post) {
             console.log('post data ', post);
             scope.blog.post = post;
-            $window.document.title = $window.document.title + ": " + post.post_title;
+            $window.document.title = $window.document.title + ": " + post.post_title.replace(/<\/?[^>]+(>|$)/g, "");
           });
         });
 
