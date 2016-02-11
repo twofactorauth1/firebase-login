@@ -10,12 +10,12 @@ var stripeDao = require('./dao/stripe.dao.js');
 var log = $$.g.getLogger("payments_manager");
 
 module.exports = {
-    createStripeCustomerForUser: function(cardToken, user, accountId, newAccountId, fn) {
+    createStripeCustomerForUser: function(cardToken, user, accountId, newAccountId, accessToken, fn) {
         log.debug('>> createStripeCustomerForUser');
         //check for customer first.
         var customerId = user.get('stripeId');
         if(customerId && customerId.length >0){
-            stripeDao.getStripeCustomer(customerId, function(err, stripeCustomer){
+            stripeDao.getStripeCustomer(customerId, accessToken, function(err, stripeCustomer){
                 if(err) {
                     log.error('Error fetching Stripe customer:',err);
                     return fn(err);
@@ -25,11 +25,12 @@ module.exports = {
                     accounts.push(stripeCustomer.metadata.accounts ||'');
                     accounts.push(newAccountId);
                     stripeCustomer.metadata.accounts = accounts;
-                    stripeDao.updateStripeCustomer(customerId, null, null, null, null, null, null, stripeCustomer.metadata, fn);
+                    stripeDao.updateStripeCustomer(customerId, null, null, null, null, null, null,
+                        stripeCustomer.metadata, accessToken, fn);
                 }
             });
         } else {
-            stripeDao.createStripeCustomerForUser(cardToken, user, accountId, 0, newAccountId, fn);
+            stripeDao.createStripeCustomerForUser(cardToken, user, accountId, 0, newAccountId, accessToken, fn);
         }
     },
 
@@ -96,9 +97,9 @@ module.exports = {
         return stripeDao.deleteCoupon(couponName, accessToken, fn);
     },
 
-    addCardToCustomer: function(cardToken, customerId, fn) {
+    addCardToCustomer: function(cardToken, customerId, accessToken, fn) {
         log.debug('>> addCardToCustomer');
-        stripeDao.createStripeCard(customerId, cardToken, function(err, value){
+        stripeDao.createStripeCard(customerId, cardToken, accessToken, function(err, value){
             if(err) {
                 log.error('error adding card: ' + err);
                 return fn(err, null);

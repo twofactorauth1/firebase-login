@@ -158,11 +158,11 @@ module.exports = {
          * - Assumption: customer_id = contact_id with a stripeId
          * - Assumption: total_line_items_quantity = sum(line_items.quantity)
          */
+        var accountId = parseInt(order.get('account_id'));
         async.waterfall([
             //get the account
             function(callback) {
                 log.debug('fetching account ' + order.get('account_id'));
-                var accountId = parseInt(order.get('account_id'));
                 accountDao.getAccountByID(accountId, function(err, account){
                     callback(err, account);
                 });
@@ -288,52 +288,21 @@ module.exports = {
                 totalAmount = subTotal + taxAdded;
 
 
-                /*
-                 * Ignoring client side params
-
-                _.each(order.get('line_items'), function (line_item) {
-                    totalAmount += parseFloat(line_item.total);
-                    subTotal += parseFloat(line_item.total);
-                    totalLineItemsQuantity += parseFloat(line_item.quantity);
-                });
-                log.debug('subtotal: ' + totalAmount);
-                if (order.get('cart_discount')) {
-                    totalAmount -= parseFloat(order.get('cart_discount'));
-                    log.debug('subtracting cart_discount of ' + order.get('cart_discount'));
-                }
-                if (order.get('total_discount')) {
-                    totalAmount -= parseFloat(order.get('total_discount'));
-                    log.debug('subtracting total_discount of ' + order.get('total_discount'));
-                }
-                if (order.get('total_tax') && order.get('total_tax') > 0) {
-                    totalAmount += parseFloat(order.get('total_tax'));
-                    log.debug('adding tax of ' + order.get('total_tax'));
-                }
-                else {
-                    totalAmount += parseFloat(totalAmount * taxPercent);
-                    log.debug('adding tax of ' + order.get('total_tax'));
-                }
-                if (order.get('total_shipping')) {
-                    totalAmount += parseFloat(order.get('total_shipping'));
-                    log.debug('adding shipping of ' + order.get('total_shipping'));
-                }
-                */
-
                 order.set('tax_rate', taxPercent);
                 order.set('subtotal', subTotal.toFixed(2));
                 order.set('total', totalAmount.toFixed(2));
                 log.debug('total is now: ' + order.get('total'));
                 order.set('total_line_items_quantity', totalLineItemsQuantity);
-                callback(null, account, order);
+                callback(null, account, order, productAry);
 
             },
             //save
-            function(account, validatedOrder, callback){
+            function(account, validatedOrder, productAry, callback){
                 //look for customer instead of customer_id
                 if(validatedOrder.get('customer') && validatedOrder.get('customer_id')) {
                     log.warn('request contains BOTH customer and customer_id.  Dropping customer.');
                     validatedOrder.set('customer', null);
-                    callback(null, account, validatedOrder);
+                    callback(null, account, validatedOrder, productAry);
                 } else if(validatedOrder.get('customer') === null && validatedOrder.get('customer_id') === null) {
                     //return an error.
                     callback('Either a customer or customer_id is required.');
@@ -348,16 +317,16 @@ module.exports = {
                         } else {
                             validatedOrder.set('customer_id', savedContact.id());
                             validatedOrder.set('customer', null);
-                            callback(null, account, validatedOrder);
+                            callback(null, account, validatedOrder, productAry);
                         }
                     });
                 } else {
                     //we have the id.
-                    callback(null, account, validatedOrder);
+                    callback(null, account, validatedOrder, productAry);
                 }
             },
             //get contact
-            function(account, savedOrder, callback) {
+            function(account, savedOrder, productAry, callback) {
                 log.debug('getting contact');
                 contactDao.getById(savedOrder.get('customer_id'), $$.m.Contact, function(err, contact){
                     if(err) {
@@ -384,7 +353,7 @@ module.exports = {
 
                                 savedOrder.set('order_id', max);
                                 dao.saveOrUpdate(savedOrder, function(err, updatedOrder){
-                                    callback(err, account, updatedOrder, contact);
+                                    callback(err, account, updatedOrder, contact, productAry);
                                 });
                             }
                         });
@@ -392,8 +361,32 @@ module.exports = {
                     }
                 });
             },
+            function(account, savedOrder, contact, productAry, callback) {
+                var customerId = contact.get('stripeId');
+                if(customerId) {
+                    callback(null, account, savedOrder, contact, productAry);
+                } else {
+                    var cardToken = savedOrder.get('payment_details').card_token;
+                    stripeDao.createStripeCustomer(cardToken, contact, accountId, accountId, accessToken, function(err, customer){
+                        if(err) {
+                            log.error('Error creating stripe customer:', err);
+                            callback(err);
+                        } else {
+                            contact.set('stripeId', customer.id);
+                            contactDao.saveOrUpdateContact(contact, function(err, savedContact){
+                                if(err) {
+                                    log.error('Error saving stripe customerId:', err);
+                                    callback(err);
+                                } else {
+                                    callback(null, account, savedOrder, savedContact, productAry);
+                                }
+                            });
+                        }
+                    });
+                }
+            },
             //charge
-            function(account, savedOrder, contact, callback){
+            function(account, savedOrder, contact, productAry, callback){
                 log.debug('attempting to charge order');
                 var paymentDetails = savedOrder.get('payment_details');
                 if (savedOrder.get('total') > 0) {
@@ -404,6 +397,7 @@ module.exports = {
                         log.debug('amount ', savedOrder.get('total'));
                         var currency = savedOrder.get('currency');
                         var customerId = contact.get('stripeId');
+                        log.debug('customerId:', customerId);
                         var contactId = savedOrder.get('customer_id');
                         var description = "Charge for order " + savedOrder.id();
                         if(paymentDetails.charge_description) {
@@ -423,12 +417,35 @@ module.exports = {
                         log.debug('contact ', contact);
                         var receipt_email = contact.getEmails()[0].email;
                         log.debug('Setting receipt_email to ' + receipt_email);
+                        //TODO: if the product is a subscription, create a subscription rather than a charge
+                        if(_.find(productAry, function(product){return product.get('type') === 'SUBSCRIPTION'})) {
+                            log.debug('creating a subscription');
+                            var subscriptionProduct = _.find(productAry, function(product){
+                                return product.get('type') === 'SUBSCRIPTION';});
+                            var productAttributes = subscriptionProduct.get('product_attributes');
+                            var stripePlanAttributes = productAttributes.stripePlans[0];
+                            var planId = stripePlanAttributes.id;
+                            var coupon = null;
+                            var trial_end = null;
+                            var quantity = 1;
+                            var application_fee_percent = null;
+                            var accountId = savedOrder.get('account_id');
+                            //other items in the purchase can be add-ons
+                            var invoiceItems = _.reject(productAry, function(product){
+                                return product.get('type') === 'SUBSCRIPTION';
+                            });
+                            //TODO: handle invoiceItems
+                            /*
+                             async.eachSeries(invoiceItems, function(item, _callback){
+                             stripeDao.createInvoiceItem(customerId, amount, currency, invoiceId, subscriptionId, description, metadata, accessToken, _callback);
+                             }, function done(err){
 
-                        stripeDao.createStripeCharge(amount, currency, card, customerId, contactId, description, metadata,
-                            capture, statement_description, receipt_email, application_fee, userId, accessToken,
-                            function(err, charge){
+                             });
+                             */
+                            stripeDao.createStripeSubscription(customerId, planId, coupon, trial_end, card, quantity,
+                                    application_fee_percent, metadata, accountId, contactId, userId, accessToken, function(err, value){
                                 if(err) {
-                                    log.error('Error creating Stripe Charge: ' + err);
+                                    log.error('Error creating Stripe Subscription: ' + err);
                                     //set the status of the order to failed
                                     savedOrder.set('status', $$.m.Order.status.FAILED);
                                     savedOrder.set('note', savedOrder.get('note') + '\n Payment error: ' + err);
@@ -441,9 +458,34 @@ module.exports = {
                                         callback(err);
                                     });
                                 } else {
-                                    callback(null, account, savedOrder, charge, contact);
+                                    callback(null, account, savedOrder, value, contact);
                                 }
                             });
+
+                        } else {
+                            log.debug('creating a charge');
+                            stripeDao.createStripeCharge(amount, currency, card, customerId, contactId, description, metadata,
+                                capture, statement_description, receipt_email, application_fee, userId, accessToken,
+                                function(err, charge){
+                                    if(err) {
+                                        log.error('Error creating Stripe Charge: ' + err);
+                                        //set the status of the order to failed
+                                        savedOrder.set('status', $$.m.Order.status.FAILED);
+                                        savedOrder.set('note', savedOrder.get('note') + '\n Payment error: ' + err);
+                                        var modified = {
+                                            date: new Date(),
+                                            by: userId
+                                        };
+                                        savedOrder.set('modified', modified);
+                                        dao.saveOrUpdate(savedOrder, function(_err, updatedSavedOrder){
+                                            callback(err);
+                                        });
+                                    } else {
+                                        callback(null, account, savedOrder, charge, contact);
+                                    }
+                                }
+                            );
+                        }
                     } else {
                         log.warn('unsupported payment method: ' + paymentDetails.method_id);
                         callback(null, account, savedOrder, null, contact);

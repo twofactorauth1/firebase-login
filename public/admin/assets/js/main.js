@@ -33,7 +33,7 @@ function ($rootScope, $state, $stateParams) {
             isFooterFixed: false, // true if you want to initialize the template with fixed footer
             isMinimalAdminChrome: false, //minimal admin chrome for site builder experience
             theme: 'theme-6', // indicate the theme chosen for your project
-            logo: 'assets/images/logo-medium.png', // relative path of the project logo
+            logo: 'assets/images/logo.png', // relative path of the project logo
         }
     };
     $rootScope.user = {

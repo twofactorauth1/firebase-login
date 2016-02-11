@@ -53,13 +53,13 @@
         ssbService.deletePage = deletePage;
         ssbService.openMediaModal = openMediaModal;
         ssbService.setMediaForComponent = setMediaForComponent;
-        ssbService.getPagesWithSections = getPagesWithSections;
+
         ssbService.extendComponentData = extendComponentData;
 
         ssbService.contentComponentDisplayOrder = [];
         ssbService.inValidPageHandles = pageConstant.inValidPageHandles;
 
-        /*
+        /**
          * This represents the category sorting for the add content panel
          */
         ssbService.contentSectionDisplayOrder = [
@@ -83,26 +83,44 @@
         ];
 
 
+        /**
+         * A wrapper around API requests
+         * @param {function} fn - callback
+         *
+         * @returns {function} fn - callback
+         *
+         */
 		function ssbRequest(fn) {
-			// return $timeout(function() {
-				ssbService.loading.value = ssbService.loading.value + 1;
-				console.info('service | loading +1 : ' + ssbService.loading.value);
-				fn.finally(function() {
-					ssbService.loading.value = ssbService.loading.value - 1;
-					console.info('service | loading -1 : ' + ssbService.loading.value);
-				})
-				return fn;
-			// }, 0);
+			ssbService.loading.value = ssbService.loading.value + 1;
+			console.info('service | loading +1 : ' + ssbService.loading.value);
+			fn.finally(function() {
+				ssbService.loading.value = ssbService.loading.value - 1;
+				console.info('service | loading -1 : ' + ssbService.loading.value);
+			})
+			return fn;
 		}
 
+        /**
+         * Active section is the section focused for editing
+         * @param {integer} sectionIndex - index of section to set active
+         */
 		function setActiveSection(sectionIndex) {
 			ssbService.activeSectionIndex = sectionIndex;
 		}
 
+        /**
+         * Active component is the component within a section that is focused for editing
+         * @param {integer} componentIndex - index of component to set active
+         */
 		function setActiveComponent(componentIndex) {
 			ssbService.activeComponentIndex = componentIndex;
 		}
 
+        /**
+         * Get latest website object for this account
+         * @param {string} id - website _id
+         * @param {boolean} isLoading - if loading this data is in progress
+         */
 		function getSite(id, isLoading) {
 
 			function success(data) {
@@ -120,7 +138,11 @@
 			return ssbRequest($http.get(baseWebsiteAPIUrlv2 + id).success(success).error(error));
 		}
 
-		function getPages(id) {
+        /**
+         * Get all pages for this account's website
+         *
+         */
+		function getPages() {
 
 			function success(data) {
 				ssbService.pages = data;
@@ -130,9 +152,13 @@
 				console.error('SimpleSiteBuilderService getPages error: ' + error);
 			}
 
-			return ssbRequest($http.get(baseWebsiteAPIUrl + ssbService.websiteId + '/pages').success(success).error(error));
+			return ssbRequest($http.get(basePagesWebsiteAPIUrl + ssbService.websiteId + '/pages').success(success).error(error));
 		}
 
+        /**
+         * TODO: @sanjeev to document
+         *
+         */
         function getPagesWithSections() {
 
             function success(data) {
@@ -146,6 +172,12 @@
             return ssbRequest($http.get(basePagesWebsiteAPIUrl + ssbService.websiteId + '/pages').success(success).error(error));
         }
 
+        /**
+         * Get page
+         * @param {string} id - page _id
+         * @param {boolean} isSettings - is settings request
+         * TODO: @sanjeev to document "isSettings" param
+         */
 		function getPage(id, isSettings) {
             function success(data) {
                 console.log('SimpleSiteBuilderService requested page data' + data);
@@ -156,6 +188,12 @@
             .error(errorPage));
 		}
 
+        /**
+         * Save page to db, update client instance with response from server
+         * @param {object} page - page data
+         * @param {boolean} isSettings - is settings request
+         * TODO: @sanjeev to document "isSettings" param
+         */
 		function savePage(page, isSettings) {
             function success(data) {
                 if(ssbService.pages && ssbService.pages[page.handle] && data.title){
@@ -174,6 +212,10 @@
 			)
 		}
 
+        /**
+         * Delete page from db, delete client instance
+         * @param {object} page - page data
+         */
         function deletePage(page) {
             function success(data) {
                 console.log('SimpleSiteBuilderService requested page deleted');
@@ -194,6 +236,10 @@
 
         }
 
+        /**
+         * Create a page from a page template
+         * @param {string} templateId - template's _id
+         */
         function createPage(templateId) {
 
             return (
@@ -214,13 +260,17 @@
 
         }
 
+        /**
+         * Create a page from an existing page
+         * @param {object} page - page data
+         */
         function createDuplicatePage(page) {
             function success(data) {
                 console.log('SimpleSiteBuilderService requested page created');
             }
 
             function error(error) {
-                console.error('SimpleSiteBuilderService page error: ' + error);
+                console.error('SimpleSiteBuilderService page error: ', error);
             }
             return (
                 ssbRequest($http({
@@ -232,6 +282,10 @@
 
         }
 
+        /**
+         * Shared success callback for page API requests
+         * @param {object} data - page data response from server
+         */
 		function successPage(data) {
 
 			var page = transformComponentsToSections(data);
@@ -239,10 +293,18 @@
 
 		}
 
+        /**
+         * Shared error callback for page API requests
+         * @param {object} error - error response from server
+         */
 		function errorPage(error) {
-			console.error('SimpleSiteBuilderService page error: ' + error);
+			console.error('SimpleSiteBuilderService page error: ', error);
 		}
 
+        /**
+         * Transform legacy component objects into section objects with a single component child
+         * @param {object} page - page data
+         */
         function transformComponentsToSections(page) {
             /*
              *
@@ -266,13 +328,12 @@
                     page.sections[i] = defaultSectionObj;
 
                 }
-                // delete page.components;
             }
 
             /*
-            *
-            * Name sections without a name (can be edited in UI)
-            */
+             *
+             * Name sections without a name (can be edited in UI)
+             */
             for (var i = 0; i < page.sections.length; i++) {
                 if (page.sections[i] && !page.sections[i].name) {
                   page.sections[i].name = sectionName(page.sections[i]) + ' Section';
@@ -282,6 +343,10 @@
             return page;
         }
 
+        /**
+         * Save website to db, update client instance with response from server
+         * @param {object} webite - website data
+         */
 		function saveWebsite(website) {
 
 			function success(data) {
@@ -302,7 +367,11 @@
 
 		}
 
-		//TODO: component versions
+        /**
+         * Get component data from server
+         * @param {object} component - default component data
+         * @param {integer} version - version number of component
+         */
 		function getComponent(component, version) {
 
             if (!version) {
@@ -329,7 +398,11 @@
 
 		}
 
-		//TODO: api implement
+        /**
+         * Get section data from server
+         * @param {object} section - default section data
+         * @param {integer} version - version number of section
+         */
 		function getSection(section, version) {
 
 			var deferred = $q.defer();
@@ -359,7 +432,10 @@
 
 		}
 
-
+        /**
+         * Infer a decent name for a content section
+         * @param {object} section - section data
+         */
         function sectionName(section) {
           var sectionName = section.layout;
 
@@ -375,6 +451,11 @@
 
         }
 
+        /**
+         * Get legacy (Pages) component as a section
+         * @param {object} section - section data
+         * @param {integer} version - version number of section
+         */
 		function getLegacySection(section, version) {
 			var sectionDefault = {
 				"layout": "1-col",
@@ -426,6 +507,10 @@
 			});
 		}
 
+        /**
+         * Get list of content sections available for adding to a page
+         *
+         */
 		function getPlatformSections() {
 
 			function success(data) {
@@ -444,6 +529,10 @@
 
 		}
 
+        /**
+         * Get list of content sections created by current user available for re-using on multiple pages
+         *
+         */
         function getUserSections() {
 
             function success(data) {
@@ -462,6 +551,10 @@
 
         }
 
+        /**
+         * Get list of components available for adding to a section
+         *
+         */
 		function getPlatformComponents() {
 
             function success(data) {
@@ -489,6 +582,10 @@
                 );
 		}
 
+        /**
+         * Get list of themes available for applying to a website
+         *
+         */
 		function getThemes() {
 
 			function success(data) {
@@ -509,6 +606,10 @@
 
 		}
 
+        /**
+         * Check for existing page with given handle
+         * @param {string} pageHandle - page handle
+         */
 		function checkForDuplicatePage(pageHandle) {
 
 			function success(data) {
@@ -516,7 +617,7 @@
 			}
 
 			function error(error) {
-				console.error('SimpleSiteBuilderService checkForDuplicatePage error: ' + error);
+				console.error('SimpleSiteBuilderService checkForDuplicatepage error: ', error);
 			}
 
 			return (
@@ -528,6 +629,10 @@
 
 		}
 
+        /**
+         * Get list of page templates
+         *
+         */
         function getTemplates() {
 
           function success(data) {
@@ -548,6 +653,10 @@
 
         }
 
+        /**
+         * Get list of site templates
+         *
+         */
         function getSiteTemplates() {
 
           function success(data) {
@@ -568,6 +677,13 @@
 
         }
 
+        /**
+         * Apply the site template to the website, results in:
+         *   - creating a set of pages defined in the site template
+         *   - applying the theme defined in the site template
+         *
+         * @param {object} siteTemplate - site template data obj
+         */
         function setSiteTemplate(siteTemplate) {
 
             function success(data) {
@@ -590,6 +706,11 @@
             )
         }
 
+        /**
+         * Get a page template by _id
+         * @param {string} id - page template _id
+         *
+         */
         function getTemplateById(id) {
 
           return _.where(ssbService.templates, {
@@ -598,6 +719,10 @@
 
         }
 
+        /**
+         * Get list of legacy templates
+         *
+         */
         function getLegacyTemplates() {
 
           function success(data) {
@@ -618,6 +743,14 @@
 
         }
 
+        /**
+         * Add a section to the current page
+         * @param {object} section - section data
+         * @param {integer} version - section version number
+         * @param {integer} replaceAtIndex - index of page section to replace with new section
+         * @param {object} oldSection - the data of the existing section to be replaced
+         *
+         */
         function addSectionToPage(section, version, replaceAtIndex, oldSection) {
             var insertAt;
             var numSections;
@@ -666,8 +799,8 @@
          * - match component order of newSection
          * - omit keys we don't want transfered
          *
-         * @param {} oldSection - section being replaced
-         * @param {} newSection - section from server
+         * @param {object} oldSection - section being replaced
+         * @param {object} newSection - section from server
          *
          * @returns {*} newSection with any authored data
          *
@@ -709,7 +842,7 @@
         /*
          * Determine if page has a footer
          *
-         *
+         * @returns {boolean}
          *
          */
         function pageHasFooter(sections) {
@@ -733,6 +866,7 @@
          * setup Theme
          *
          * - get latest theme data based on website's themeId
+         * @param {object} website - website data
          *
          */
         function setupTheme(website) {
@@ -758,53 +892,60 @@
         /*
          * Apply theme fonts, styles and default themeoverrides for theme
          *
-         * @param theme - theme obj
-         * @param keepCurrentOverrides - when not changing themes, should not set new themeOverrides
+         * @param {object} theme - theme obj
+         * @param {boolean} keepCurrentOverrides - when not changing themes, should not set new themeOverrides
+         * @param {object} website - website data
          *
          */
         function applyThemeToSite(theme, keepCurrentOverrides, website) {
             // Load web font loader
 
-                var _website = website || ssbService.website;
-                var unbindWatcher = $rootScope.$watch(function() {
-                    return angular.isDefined(window.WebFont);
-                }, function(newValue, oldValue) {
-                    if (newValue) {
-                        var defaultFamilies = ["Roboto", "Oswald", "Montserrat", "Open+Sans+Condensed"];
-                        if (theme.name && theme.hasCustomFonts) {
-                          var _fontStack = theme.defaultFontStack.split(',')[0].replace(/"/g, '');
-                          if(defaultFamilies.indexOf(_fontStack) === -1)
-                            defaultFamilies.push(_fontStack);
+            var _website = website || ssbService.website;
+            var unbindWatcher = $rootScope.$watch(function() {
+                return angular.isDefined(window.WebFont);
+            }, function(newValue, oldValue) {
+                if (newValue) {
+                    var defaultFamilies = ["Roboto", "Oswald", "Montserrat", "Open+Sans+Condensed"];
+                    if (theme.name && theme.hasCustomFonts) {
+                      var _fontStack = theme.defaultFontStack.split(',')[0].replace(/"/g, '');
+                      if(defaultFamilies.indexOf(_fontStack) === -1)
+                        defaultFamilies.push(_fontStack);
+                    }
+                    window.WebFont.load({
+                        google: {
+                            families: defaultFamilies
                         }
-                        window.WebFont.load({
-                            google: {
-                                families: defaultFamilies
-                            }
+                    });
+                    unbindWatcher();
+                    _website.themeId = theme._id;
+                    _website.theme = theme;
+
+                    if (keepCurrentOverrides === undefined || !angular.isDefined(_website.themeOverrides.styles)) {
+                        $timeout(function() {
+                            _website.themeOverrides = theme;
                         });
-                        unbindWatcher();
-                        _website.themeId = theme._id;
-                        _website.theme = theme;
-
-                        if (keepCurrentOverrides === undefined || !angular.isDefined(_website.themeOverrides.styles)) {
-                            $timeout(function() {
-                                _website.themeOverrides = theme;
-                            });
-                        }
-                        if(!ssbService.website)
-                            $timeout(function() {
-                                ssbService.website = _website;
-                            }, 100);
                     }
-                });
-
-                window.WebFontConfig = {
-                    active: function() {
-                        sessionStorage.fonts = true;
-                    }
+                    if(!ssbService.website)
+                        $timeout(function() {
+                            ssbService.website = _website;
+                        }, 100);
                 }
+            });
+
+            window.WebFontConfig = {
+                active: function() {
+                    sessionStorage.fonts = true;
+                }
+            }
 
         }
 
+        /*
+         * Provide list of colors to use in color pickers
+         *
+         * @returns {array}
+         *
+         */
         function getSpectrumColorOptions() {
             return {
                 showPalette: true,
@@ -833,6 +974,22 @@
             }
         }
 
+        /*
+         * Open the media modal
+         *
+         * @param {string} modal - name of modal
+         * @param {string} controller - name of controller
+         * @param {integer} index - null (TODO: remove)
+         * @param {string} size - layout of modal 'lg', 'md', 'sm'
+         * @param {object} vm - view model of parent controller, to pass into modal
+         * @param {object} component - component to insert media into
+         * @param {integer} componentIndex - index of component within the section
+         * @param {boolean} update - update existing media
+         *
+         *
+         * @returns {object} $modal instance
+         *
+         */
         function openMediaModal(modal, controller, index, size, vm, component, componentItemIndex, update) {
             console.log('openModal >>> ', modal, controller, index);
             var _modal = {
@@ -876,15 +1033,21 @@
 
             return $modal.open(_modal);
 
-            // vm.modalInstance = $modal.open(_modal);
-
-            // vm.modalInstance.result.then(null, function () {
-            //     angular.element('.sp-container').addClass('sp-hidden');
-            // });
-
         }
 
-        //TODO: this is legacy code adapted from editorCtrl.js, needs to be removed when we no longer support these components
+        /*
+         * Open the media modal
+         *
+         * @param {object} asset - asset data from media modal (S3)
+         * @param {object} component - component to insert media into
+         * @param {integer} componentIndex - index of component within the section
+         * @param {boolean} update - update existing media
+         *
+         * TODO: this is legacy code adapted from editorCtrl.js, needs to be removed when we no longer support these components
+         *
+         * @returns {object} $modal instance
+         *
+         */
         function setMediaForComponent(asset, component, index, update) {
 
             var obj = {};

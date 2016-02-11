@@ -654,6 +654,7 @@ var copyutil = {
 
                         page._id = utils.idutils.generateUUID();
                         page.accountId = 0;
+                        page['public'] = false;
 
                         delete page.websiteId;
 

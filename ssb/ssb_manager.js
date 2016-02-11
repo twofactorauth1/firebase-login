@@ -510,7 +510,7 @@ module.exports = {
                         fn(err, value);
                     } else {
                         if(list && list.links){
-                            self.getUpdatedWebsiteLinkList(list, page.get("handle"), function(err, updatedList){
+                            self.getUpdatedWebsiteLinkList(list, page.get("handle"), true, function(err, updatedList){
                                 list = updatedList;
                             })
                         }
@@ -587,13 +587,13 @@ module.exports = {
         });
     },
 
-    getUpdatedWebsiteLinkList: function(list, handle, fn){
+    getUpdatedWebsiteLinkList: function(list, handle, deletePage, fn){
         var self = this;
 
-        var linkList = list.links.filter(function (lnk) {
+        var linkList = list.links.filter(function (lnk) {                 
         return lnk.type === 'link' &&
-             lnk.linkTo && lnk.linkTo.data === handle
-        });
+             lnk.linkTo && deletePage ? (lnk.linkTo.data === handle || lnk.linkTo.page === handle) : lnk.linkTo && lnk.linkTo.data === handle
+        })
         if(linkList){
             _.each(linkList, function(link){
                 var _index = list.links.indexOf(link);
@@ -675,7 +675,18 @@ module.exports = {
                     });
                 }, function done(err){
                     self.log.debug('<< listPages');
-                    return fn(err, pages);
+                    var map = {};
+                    _.each(pages, function(value){
+                        if(map[value.get('handle')] === undefined) {
+                            map[value.get('handle')] = value;
+                        } else {
+                            var currentVersion = map[value.get('handle')].get('version');
+                            if(value.get('version') > currentVersion) {
+                                map[value.get('handle')] = value;
+                            }
+                        }
+                    });
+                    return fn(err, map);
                 });
 
             }
@@ -1020,7 +1031,7 @@ module.exports = {
                             cb(err);
                         } else {
                             if(list && list.links){
-                                self.getUpdatedWebsiteLinkList(list, existingPage.get("handle"), function(err, updatedList){
+                                self.getUpdatedWebsiteLinkList(list, existingPage.get("handle"), false, function(err, updatedList){
                                     list = updatedList;
                                 })
                             }
@@ -1083,11 +1094,14 @@ module.exports = {
 
                                                 .filter(function(link){
                                                     //only keep pages that exist and are visible in menu
-                                                    if(link.linkTo.type === 'section'){
-                                                        return _.contains(pageHandles, link.linkTo.page)    
+                                                    if(link.linkTo.type === 'section' && link.linkTo.page){
+                                                        return _.contains(pageHandles, link.linkTo.page)   
+                                                    }
+                                                    else if(link.linkTo.type === 'page' || link.linkTo.type === 'home'){
+                                                        return _.contains(pageHandles, link.linkTo.data)
                                                     }
                                                     else{
-                                                        return _.contains(pageHandles, link.linkTo.data)
+                                                        return true;
                                                     }                                                    
                                                 })
                                                 .value(); //return array value
