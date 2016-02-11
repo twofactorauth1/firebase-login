@@ -101,10 +101,17 @@
       }]
     };
 
+    $scope.changesConfirmed = false;
+
+    $scope.cancelChanges = false;
+
     $scope.setDirty = function(is_dirty){
       $scope.isDirty.dirty = is_dirty;
-      if(is_dirty)   
-        $scope.changesConfirmed = false;   
+     
+        if(is_dirty)   
+          $scope.changesConfirmed = false;     
+      
+      
     }
 
 
@@ -261,10 +268,16 @@
 
     $scope.redirectWithoutSave = function(redirect_url, show_alert, reload){
     $scope.changesConfirmed = true;
+    $scope.originalPage = null;
+    $scope.originalPost = null;
+    $scope.cancelChanges = true;
     if(redirect_url){       
           if(show_alert)
-              SweetAlert.swal("Cancelled", "Your edits were NOT saved.", "error");
-          window.location = redirect_url;
+            SweetAlert.swal("Cancelled", "Your edits were NOT saved.", "error");
+            
+            $timeout(function () {
+              window.location = redirect_url;
+            }, 500);
           if (reload) {
             window.location.reload();
           }
@@ -1468,20 +1481,18 @@
 
     var checkIfPageDirty = function(url, fn){
       if ($scope.originalPage && $scope.originalPage.components && $scope.components && $scope.originalPage.components.length !== $scope.components.length) {
-         if(!$scope.changesConfirmed)
-            $scope.setDirty(true);
+         $scope.setDirty(true);
       }
       if ($scope.isSinglePost) {
           var post_data = angular.copy($scope.blog.post);
-          if($scope.originalPost.post_tags && $scope.originalPost.post_tags.length && !angular.isObject($scope.originalPost.post_tags[0]))
+          if($scope.originalPost && $scope.originalPost.post_tags && $scope.originalPost.post_tags.length && !angular.isObject($scope.originalPost.post_tags[0]))
             post_data.post_tags.forEach(function (v, i) {
               if (v.text) {
                 post_data.post_tags[i] = v.text;
               }
             });
-        if (post_data && !angular.equals($scope.originalPost, post_data)) {
-          if(!$scope.changesConfirmed)
-            $scope.setDirty(true);
+        if (post_data && $scope.originalPost && !angular.equals($scope.originalPost, post_data)) {
+          $scope.setDirty(true);
         }
       }
       var redirectUrl = url;
@@ -1781,36 +1792,37 @@
      * @locationChangeStart
      * - Before user leaves editor, ask if they want to save changes
      */
-    $scope.changesConfirmed = true;
+    
     var offFn = $rootScope.$on('$locationChangeStart', function (event, newUrl, oldUrl) {
-        checkIfPageDirty(newUrl, function (redirectUrl) {  
-          var condition = $scope.isDirty.dirty && !$scope.changesConfirmed;
-          if (condition && !$scope.isCampaign && !$scope.isProduct) {
-            event.preventDefault();
-            SweetAlert.swal({
-              title: "Are you sure?",
-              text: "You have unsaved data that will be lost",
-              type: "warning",
-              showCancelButton: true,
-              confirmButtonColor: "#DD6B55",
-              confirmButtonText: "Yes, save changes!",
-              cancelButtonText: "No, do not save changes!",
-              closeOnConfirm: false,
-              closeOnCancel: true
-            }, function (isConfirm) {
-              if (isConfirm) {
-                $scope.redirect = true;
-                $scope.savePage(redirectUrl);
-                $scope.setDirty(false);
-              } else {                
-                  $scope.redirectWithoutSave(newUrl, true);
-              }
-              offFn();
-            });
-          } else   
-              $scope.redirectWithoutSave(newUrl, false);
-       
-      }) 
+        if(!$scope.changesConfirmed && !$scope.cancelChanges){
+          checkIfPageDirty(newUrl, function (redirectUrl) {  
+            var condition = $scope.isDirty.dirty && !$scope.changesConfirmed;
+            if (condition && !$scope.isCampaign && !$scope.isProduct) {
+              event.preventDefault();
+              SweetAlert.swal({
+                title: "Are you sure?",
+                text: "You have unsaved data that will be lost",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Yes, save changes!",
+                cancelButtonText: "No, do not save changes!",
+                closeOnConfirm: false,
+                closeOnCancel: true
+              }, function (isConfirm) {
+                if (isConfirm) {
+                  $scope.redirect = true;
+                  $scope.savePage(redirectUrl);
+                  $scope.setDirty(false);
+                } else {                
+                    $scope.redirectWithoutSave(newUrl, true);
+                }
+                offFn();
+              });
+            } else   
+                $scope.redirectWithoutSave(newUrl, false);
+          }) 
+        }
     });
 
   }]);
