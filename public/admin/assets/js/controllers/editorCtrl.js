@@ -1510,7 +1510,7 @@
             confirmButtonText: "Yes, save changes!",
             cancelButtonText: "No, do not save changes!",
             closeOnConfirm: false,
-            closeOnCancel: false
+            closeOnCancel: true
           }, function (isConfirm) {
             if (isConfirm) {            
               //SweetAlert.swal("Saved!", "Your edits were saved to the page.", "success");
