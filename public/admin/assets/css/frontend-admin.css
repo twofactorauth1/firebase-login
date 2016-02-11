@@ -6994,6 +6994,12 @@ a[href="https://froala.com/wysiwyg-editor"] {
   min-height: 200px;
   margin: 20px;
 }
+.ssb-sidebar-section-panel .product-ui-select {
+  margin-bottom: 100px;
+}
+.ssb-sidebar-section-panel .product-ui-select ul.dropdown-menu {
+  max-height: 100px;
+}
 .ssb-sidebar-section-panel-btn.btn-link {
   width: 100%;
   padding: .5em 0;

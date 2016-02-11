@@ -2,12 +2,9 @@
 /*global app, moment, angular, window*/
 /*jslint unparam:true*/
 
-app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http', '$timeout', '$q', '$compile', '$filter', 'WebsiteService', 'CustomerService', 'ProductService', 'GeocodeService', 'toaster', 'hoursConstant', 'CampaignService', 'AccountService', 'SimpleSiteBuilderService', function ($scope, $rootScope, $http, $timeout, $q, $compile, $filter, WebsiteService, CustomerService, ProductService, GeocodeService, toaster, hoursConstant, CampaignService, AccountService, SimpleSiteBuilderService) {
+app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http', '$timeout', '$q', '$compile', '$filter', 'WebsiteService', 'CustomerService', 'ProductService', 'GeocodeService', 'toaster', 'hoursConstant', 'CampaignService', 'SimpleSiteBuilderService', function ($scope, $rootScope, $http, $timeout, $q, $compile, $filter, WebsiteService, CustomerService, ProductService, GeocodeService, toaster, hoursConstant, CampaignService, SimpleSiteBuilderService) {
 
   $scope.blog = {};
-
-  // $scope.openParentModal = openParentModal;
-  // $scope.clickedIndex = clickedIndex;
 
   $scope.$parent.$watchGroup(['vm.uiState.activeSectionIndex', 'vm.uiState.activeComponentIndex'], function() {
     var section = $scope.$parent.vm.state.page.sections[$scope.$parent.vm.uiState.activeSectionIndex];
@@ -603,32 +600,9 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
         else{
           $scope.newLink.linkTitle = _label
         }
-        if(update)
-        {
-          $timeout(function() {
-            $scope.refreshLinks(_label, false);
-          }, 0);
-          
-        }
       }
   };
 
-  /*
-   * @updateLinkList
-   * - when the navigation is reordered, update the linklist in the website object
-   */
-
-  $scope.refreshLinks = function(label, customnav){
-    if(label){
-      //$scope.updateLinkList();
-    }
-    else{
-      if(customnav)
-        $scope.component.linkLists = angular.copy($scope.originalCustomLinkList);
-      else
-        $scope.website.linkLists = angular.copy($scope.originalLinkList);
-    }
-  }
 
   $scope.refreshSlider = function () {
     console.log('refresh slider');
@@ -769,9 +743,7 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
         componentType = _.findWhere($scope.componentTypes, {
           type: $scope.component.type,
           version: parseInt($scope.component.version, 10)
-        });
-        $scope.originalLinkList = angular.copy($scope.website.linkLists);
-        $scope.originalCustomLinkList = angular.copy($scope.component.linkLists);
+        });        
       } else {
         componentType = _.findWhere($scope.componentTypes, {
           type: $scope.component.type
@@ -949,31 +921,33 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
        * @getPages
        * -
        */
-      SimpleSiteBuilderService.getPagesWithSections().then(function(pages) {
-        var allPages = pages.data;
-
-        AccountService.getAccount(function(data) {
-          if (!data.showhide.blog) {
-            var _blogPage = _.findWhere(allPages, {
-              handle: 'blog'
-            });
-            if (_blogPage) {
-              var _index = _.indexOf(allPages, _blogPage);
-              allPages.splice(_index, 1);
-            }
-          }
-          allPages = _.reject(allPages, function(page){ return page.mainmenu === false });
-          $scope.filteredPages = $filter('orderBy')(allPages, "title", false);
-          _.each($scope.filteredPages, function (page) {
-              page.components = getPageComponents(page);
-          })
-          if($scope.linkPage)
-            $scope.currentPage = _.find($scope.filteredPages, function (page) {
-              return page.handle === $scope.linkPage;
-            });
+      
+        var parsed = angular.fromJson(SimpleSiteBuilderService.pages);
+        var arr = [];
+        _.each(parsed, function (page) {
+            arr.push(page);
         });
-
-      });
+        var allPages = arr;
+        var account = SimpleSiteBuilderService.account;
+        
+        if (!account.showhide.blog) {
+          var _blogPage = _.findWhere(allPages, {
+            handle: 'blog'
+          });
+          if (_blogPage) {
+            var _index = _.indexOf(allPages, _blogPage);
+            allPages.splice(_index, 1);
+          }
+        }
+        allPages = _.reject(allPages, function(page){ return page.mainmenu === false });
+        $scope.filteredPages = $filter('orderBy')(allPages, "title", false);
+        _.each($scope.filteredPages, function (page) {
+            page.components = getPageComponents(page);
+        })
+        if($scope.linkPage)
+          $scope.currentPage = _.find($scope.filteredPages, function (page) {
+            return page.handle === $scope.linkPage;
+          });
 
       WebsiteService.getEmails(true, function (emails) {
         $timeout(function () {
