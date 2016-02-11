@@ -101,21 +101,15 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
     scope.$watch(function() { return CartDetailsService.items }, function(items){
       scope.cartDetails = items
     });
+  
 
-    
-
-    scope.$watch(function() { return CartDetailsService.storedItems; }, function(items){
-      scope.storedItems = items
-    });
-
-   
-
-    scope.clicked = function(item){
+    scope.itemClicked = function(item){
       var returnValue = false;
-      if(item && scope.storedItems){
-        if(scope.storedItems.indexOf(item) > -1){
-          returnValue = true;
-        }
+      if(item && scope.cartDetails){
+        var clicked =   _.find(scope.cartDetails, function (product) {
+            return product._id === item._id;
+          });
+        returnValue = clicked ? true : false;
       }
       return returnValue;
     }
@@ -445,10 +439,6 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
         } else {
             CartDetailsService.addItemToCart(productMatch);
         }
-        $timeout(function() {
-            CartDetailsService.storeItemToCart(productMatch);
-            CartDetailsService.items = scope.cartDetails;
-        }, 0);
         
         scope.calculateTotalChargesfn();
       };
@@ -467,13 +457,10 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
         var productMatch = _.find(scope.products, function (item) {
           return item._id === product._id;
         });        
-        
-        var filteredStoredItems = _.filter(scope.storedItems, function (item) {
-          return item._id !== product._id;
-        });
+               
         
         CartDetailsService.items = filteredItems;
-        CartDetailsService.storedItems = filteredStoredItems;
+        
         scope.calculateTotalChargesfn();
       };
 
@@ -780,7 +767,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
             console.log('order, ', order);
             scope.checkoutModalState = 5;
             CartDetailsService.items = [];
-            CartDetailsService.storedItems = [];
+           
             
             scope.subTotal = 0;
             scope.totalTax = 0;
