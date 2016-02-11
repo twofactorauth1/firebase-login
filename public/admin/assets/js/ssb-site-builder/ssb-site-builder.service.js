@@ -53,7 +53,7 @@
         ssbService.deletePage = deletePage;
         ssbService.openMediaModal = openMediaModal;
         ssbService.setMediaForComponent = setMediaForComponent;
-        ssbService.getPagesWithSections = getPagesWithSections;
+        
         ssbService.extendComponentData = extendComponentData;
 
         ssbService.contentComponentDisplayOrder = [];
@@ -130,21 +130,9 @@
 				console.error('SimpleSiteBuilderService getPages error: ' + error);
 			}
 
-			return ssbRequest($http.get(baseWebsiteAPIUrl + ssbService.websiteId + '/pages').success(success).error(error));
+			return ssbRequest($http.get(basePagesWebsiteAPIUrl + ssbService.websiteId + '/pages').success(success).error(error));
 		}
 
-        function getPagesWithSections() {
-
-            function success(data) {
-                 console.log('SimpleSiteBuilderService getPages');
-            }
-
-            function error(error) {
-                console.error('SimpleSiteBuilderService getPages error: ' + error);
-            }
-
-            return ssbRequest($http.get(basePagesWebsiteAPIUrl + ssbService.websiteId + '/pages').success(success).error(error));
-        }
 
 		function getPage(id, isSettings) {
             function success(data) {
