@@ -1,6 +1,6 @@
 'use strict';
 /*global app*/
-app.directive('productsComponent', ['$timeout', 'paymentService', 'productService', 'accountService', 'cartService', 'userService', 'orderService', 'formValidations', function ($timeout, PaymentService, ProductService, AccountService, cartService, UserService, OrderService, formValidations) {
+app.directive('productsComponent', ['$timeout', 'paymentService', 'productService', 'accountService', 'CartDetailsService', 'userService', 'orderService', 'formValidations', function ($timeout, PaymentService, ProductService, AccountService, CartDetailsService, UserService, OrderService, formValidations) {
   return {
     require: [],
     scope: {
@@ -98,6 +98,27 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
         });
       });
 
+    scope.$watch(function() { return CartDetailsService.items }, function(items){
+      scope.cartDetails = items
+    });
+
+    
+
+    scope.$watch(function() { return CartDetailsService.storedItems; }, function(items){
+      scope.storedItems = items
+    });
+
+   
+
+    scope.clicked = function(item){
+      var returnValue = false;
+      if(item && scope.storedItems){
+        if(scope.storedItems.indexOf(item) > -1){
+          returnValue = true;
+        }
+      }
+      return returnValue;
+    }
 
       /*
        * @getTax
@@ -408,23 +429,27 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
           productMatch = _.find(scope.products, function (item) {
             return item._id === product._id;
           });
-          productMatch.clicked = true;
-        }
-        if (!scope.cartDetails) {
-          scope.cartDetails = [];
         }
         if (!productMatch.quantity) {
           productMatch.quantity = 1;
         }
+        if(scope.cartDetails.indexOf(productMatch) === -1){
+          productMatch.quantity = 1;
+        }
+
         var match = _.find(scope.cartDetails, function (item) {
           return item._id === productMatch._id;
         });
         if (match) {
           match.quantity = parseInt(match.quantity, 10) + 1;
         } else {
-          cartService.addItem(productMatch);
-          scope.cartDetails.push(productMatch);
+            CartDetailsService.addItemToCart(productMatch);
         }
+        $timeout(function() {
+            CartDetailsService.storeItemToCart(productMatch);
+            CartDetailsService.items = scope.cartDetails;
+        }, 0);
+        
         scope.calculateTotalChargesfn();
       };
 
@@ -434,14 +459,21 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
        */
 
       scope.removeFromCart = function (product) {
-        var filtered = _.filter(scope.cartDetails, function (item) {
+        
+        var filteredItems = _.filter(scope.cartDetails, function (item) {
           return item._id !== product._id;
         });
+
         var productMatch = _.find(scope.products, function (item) {
           return item._id === product._id;
+        });        
+        
+        var filteredStoredItems = _.filter(scope.storedItems, function (item) {
+          return item._id !== product._id;
         });
-        productMatch.clicked = false;
-        scope.cartDetails = filtered;
+        
+        CartDetailsService.items = filteredItems;
+        CartDetailsService.storedItems = filteredStoredItems;
         scope.calculateTotalChargesfn();
       };
 
@@ -747,10 +779,9 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
               }
             console.log('order, ', order);
             scope.checkoutModalState = 5;
-            scope.cartDetails = [];
-            _.each(scope.products, function (product) {
-              product.clicked = false;
-            });
+            CartDetailsService.items = [];
+            CartDetailsService.storedItems = [];
+            
             scope.subTotal = 0;
             scope.totalTax = 0;
             scope.total = 0;
@@ -954,14 +985,3 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
     }
   };
 }]);
-
-app.service('cartService', function () {
-  var cartData = {};
-  cartData.items = [];
-  this.getCartItems = function () {
-    return cartData.items;
-  };
-  this.addItem = function (item) {
-    cartData.items.push(item);
-  };
-});
