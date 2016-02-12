@@ -36,7 +36,8 @@ var mainApp = angular
         'socialLinks',
         'slick',
         'ngMap',
-        'wu.masonry'
+        'wu.masonry',
+        'slugifier'
     ])
     .config(['$routeProvider', '$locationProvider', '$httpProvider', function ($routeProvider, $locationProvider, $httpProvider) {
         //$locationProvider.html5Mode(true);
