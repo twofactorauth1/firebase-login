@@ -2,7 +2,7 @@
 /*global app, moment, angular, window, $$*/
 /*jslint unparam:true*/
 (function (angular) {
-  app.service('WebsiteService', function ($http, $cacheFactory, $timeout, $q, ChartEmailService) {
+  app.service('WebsiteService', function ($http, $cacheFactory, $timeout, $q, ChartEmailService, pageConstant) {
     var baseUrl = '/api/1.0/';
     this.editPageHandle = null;
 
@@ -792,6 +792,15 @@
       image.src = src;
       return deferred.promise;
     }
+
+    this.checkSystemRoute = function(handle){    
+      var inValidPageHandles = pageConstant.inValidPageHandles;
+      if(inValidPageHandles[handle.toLowerCase()]){
+        return "Page handle cannot be a system route.";
+      }
+      return false;
+    }
+    
 
   });
 }(angular));

@@ -1202,8 +1202,16 @@
 
     $scope.checkForDuplicatePage = function (fn) {
       $scope.validateEditPage($scope.page);
-      if ($scope.editPageValidated && !$scope.isEmail)
-        WebsiteService.checkDuplicatePage($scope.page.handle, $scope.page._id, function (data) {
+      if ($scope.editPageValidated && !$scope.isEmail){
+        var error = WebsiteService.checkSystemRoute($scope.page.handle);
+        if(error){        
+          $scope.duplicateUrl = true;
+          toaster.pop('error', error);
+          if (fn)
+            fn();
+        } 
+        else{
+          WebsiteService.checkDuplicatePage($scope.page.handle, $scope.page._id, function (data) {
           if (data) {
             $scope.duplicateUrl = true;
             toaster.pop('error', "Page URL " + $scope.page.handle, "Already exists");
@@ -1212,7 +1220,10 @@
           }
           if (fn)
             fn();
-        });
+          }); 
+        }       
+           
+      }
       else
       if (fn)
         fn();
@@ -1296,6 +1307,11 @@
         toaster.pop('error', "Page Title or URL can not be blank.");
         return false;
       }
+      var error = WebsiteService.checkSystemRoute(newPage.handle);
+      if(error){
+        toaster.pop('error', error);
+        return false;
+      } 
       WebsiteService.checkDuplicatePage(newPage.handle, newPage._id, function (data) {
         if (data) {
           toaster.pop('error', "Page URL " + newPage.handle, "Already exists");
