@@ -2339,6 +2339,11 @@ div[data-type="feature-block"] .component-inner {
   right: 0;
   margin: 0 10px 0 0;
 }
+@media screen and (max-width: 767px) {
+  .order-line-items .close {
+    top: -5em;
+  }
+}
 .order-line-items > ul {
   padding-left: 0;
 }
@@ -2419,12 +2424,17 @@ div[data-type="feature-block"] .component-inner {
   font-weight: bold;
   text-decoration: underline;
 }
+.order-summary h3 {
+  white-space: nowrap;
+  margin-top: 0!important;
+  padding-top: 0!important;
+}
 .order-summary ul {
   list-style-type: none;
   padding-left: 0;
 }
 .order-summary li {
-  padding: 5px 0;
+  padding: 1em 1em .25em;
   border-bottom: 1px solid #f2f2f2;
 }
 .order-summary .product-name {
@@ -2856,6 +2866,7 @@ div[data-type="feature-block"] .component-inner {
 }
 .shopping-cart .order-line-items ul li .description {
   margin-bottom: 0px;
+  margin-top: 1em;
 }
 .shopping-cart .order-line-items ul li .quantity,
 .shopping-cart .order-line-items ul li .price {
@@ -2876,7 +2887,7 @@ div[data-type="feature-block"] .component-inner {
 }
 .ribbon {
   position: absolute;
-  right: 10px;
+  right: -5px;
   top: -5px;
   z-index: 1;
   overflow: hidden;
@@ -10021,13 +10032,6 @@ a[href="https://froala.com/wysiwyg-editor"] {
 .ssb-site-builder .ssb-page-section:hover .ssb-settings-btn {
   display: block;
 }
-.ssb-site-builder .ssb-page-section .row {
-  margin: 0 !important;
-}
-.ssb-site-builder .ssb-page-section .row [class*="col-"] {
-  padding-left: 0 !important;
-  padding-right: 0 !important;
-}
 .ssb-site-builder .ssb-edit-control {
   position: absolute;
   top: 0;
@@ -10696,10 +10700,16 @@ ssb-topbar .ui-select-match-text > small {
 [class*="ssb-theme-"] .ssb-page-section-layout-header [ssb-text-component][data-eq-state$="small"],
 [class*="ssb-theme-"] .ssb-page-section-layout-hero [ssb-text-component][data-eq-state$="small"] {
   font-size: 14vw;
-  margin: .25em auto 0;
   text-align: center;
-  width: 60%;
   line-height: 1;
+  width: 100%!important;
+  margin: 0!important;
+  padding: 0!important;
+}
+[class*="ssb-theme-"] .ssb-page-section-layout-header [ssb-text-component][data-eq-state$="small"] .element-wrap,
+[class*="ssb-theme-"] .ssb-page-section-layout-hero [ssb-text-component][data-eq-state$="small"] .element-wrap {
+  width: 60%;
+  margin: .25em auto 0;
 }
 [class*="ssb-theme-"] .ssb-page-section-layout-header [ssb-text-component][data-eq-state$="small"] span[style],
 [class*="ssb-theme-"] .ssb-page-section-layout-hero [ssb-text-component][data-eq-state$="small"] span[style] {
@@ -10709,10 +10719,16 @@ ssb-topbar .ui-select-match-text > small {
   [class*="ssb-theme-"] .ssb-page-section-layout-header [ssb-text-component]:not([class*="ssb-edit-mode"]),
   [class*="ssb-theme-"] .ssb-page-section-layout-hero [ssb-text-component]:not([class*="ssb-edit-mode"]) {
     font-size: 14vw;
-    margin: .25em auto 0;
     text-align: center;
-    width: 60%;
     line-height: 1;
+    width: 100%!important;
+    margin: 0!important;
+    padding: 0!important;
+  }
+  [class*="ssb-theme-"] .ssb-page-section-layout-header [ssb-text-component]:not([class*="ssb-edit-mode"]) .element-wrap,
+  [class*="ssb-theme-"] .ssb-page-section-layout-hero [ssb-text-component]:not([class*="ssb-edit-mode"]) .element-wrap {
+    width: 60%;
+    margin: .25em auto 0;
   }
   [class*="ssb-theme-"] .ssb-page-section-layout-header [ssb-text-component]:not([class*="ssb-edit-mode"]) span[style],
   [class*="ssb-theme-"] .ssb-page-section-layout-hero [ssb-text-component]:not([class*="ssb-edit-mode"]) span[style] {
@@ -10903,14 +10919,10 @@ ssb-topbar .ui-select-match-text > small {
 .ssb-section-layout .ssb-component {
   z-index: 1;
 }
-.ssb-page-section-layout-1-col .row,
-.ssb-page-section-layout-2-col .row,
-.ssb-page-section-layout-3-col .row {
+.ssb-page-section-video-form .row {
   margin: 0 !important;
 }
-.ssb-page-section-layout-1-col [class*="col-"],
-.ssb-page-section-layout-2-col [class*="col-"],
-.ssb-page-section-layout-3-col [class*="col-"] {
+.ssb-page-section-video-form [class*="col-"] {
   padding-left: 0 !important;
   padding-right: 0 !important;
 }

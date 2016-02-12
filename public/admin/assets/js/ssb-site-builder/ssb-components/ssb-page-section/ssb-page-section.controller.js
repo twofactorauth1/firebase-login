@@ -23,13 +23,25 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude) {
 
     function sectionClass(section) {
         var classString = 'container-fluid '; //col-xs-12 was messing up legacy
+        var title = section.title || section.name;
+        var version = section.version;
+
+        if (title) {
+
+            classString += ' ssb-page-section-' + $filter('slugify')(title);
+
+            if (version) {
+                classString += ' ssb-page-section-' + $filter('slugify')(title); + '-v' + version;
+            }
+
+        }
 
         if (section.layout) {
 
             classString += ' ssb-page-section-layout-' + section.layout;
 
-            if (section.version) {
-                classString += ' ssb-page-section-layout-' + section.layout + '-v' + section.version;
+            if (version) {
+                classString += ' ssb-page-section-layout-' + section.layout + '-v' + version;
             }
 
         }
@@ -41,6 +53,12 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude) {
                 classString += ' ssb-page-section-layout-' + section.layout + '-fixed';
 
             }
+
+            // if (section.layoutModifiers.sidePadding0) {
+
+            //     classString += ' ssb-page-section-layout-side-padding-0';
+
+            // }
 
         }
 
