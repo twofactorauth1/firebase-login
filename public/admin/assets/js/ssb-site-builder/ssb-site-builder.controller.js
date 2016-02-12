@@ -138,7 +138,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     }, true);
 
     $scope.$watch('vm.state.website', function(website) {
-        if (website && vm.state.originalWebsite && !angular.equals(website, vm.state.originalWebsite)) {
+        if (SimpleSiteBuilderService.websiteLoading && website && vm.state.originalWebsite && !angular.equals(website, vm.state.originalWebsite)) {
             vm.state.pendingWebsiteChanges = true;
             console.log("Website changed");
         } else {
@@ -295,7 +295,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     function cancelPendingEdits() {
       vm.state.pendingPageChanges = false;
       vm.state.pendingWebsiteChanges = false;
-      vm.state.website = angular.copy(vm.state.originalWebsite);
+      SimpleSiteBuilderService.website = angular.copy(vm.state.originalWebsite);
       SimpleSiteBuilderService.page = angular.copy(vm.state.originalPage);
     }
 
