@@ -15,7 +15,7 @@
                 <article class="entry clearfix">
                     <div id="et_pt_blog" class="responsive clearfix single-blog" data-postid="{{blog.post._id}}">
                         <div class="et_pt_blogentry clearfix">
-                            <h1>{{blog.post.post_title}}</h1>
+                            <h1 class="plain-post-title" ng-bind-html="blog.post.post_title | unsafe"></h1>
                             <div class="blog-meta single-post-publish-date">
                                 <div data-class="publish_date">
                                     <p class="input-group" ng-if="isEditing">
