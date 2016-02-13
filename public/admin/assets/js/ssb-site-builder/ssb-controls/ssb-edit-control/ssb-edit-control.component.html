@@ -1,13 +1,31 @@
 <div class="ssb-settings-btn" ng-click="vm.setActiveSection(vm.index)"><i class="fa fa-pencil"></i></div>
 <!-- <div class="ssb-edit-control-inactive"></div> -->
 <div class="ssb-edit-control-active">
-	
-	<a href ng-click="vm.setActiveSection(vm.index)">Edit</a>
-	<a href>ActionLink2</a>
-	<a href>ActionLink3</a>
 
-	<button type="button" class="close" ng-click="vm.setActiveSection(undefined)">
+	<a
+        href
+        class="ssb-edit-control-active-title"
+        ng-click="vm.setActiveSection(vm.index)">
+        Edit {{vm.component.type || vm.component.title || vm.component.name}}
+    </a>
+
+    <div
+        ng-if="vm.uiState.activeSectionIndex !== 0"
+        class="ssb-sidebar-item-icon ssb-sidebar-item-icon-offset-3 display-ib ti-arrow-up ng-scope"
+        ng-click="vm.moveSection('up', vm.state.page.sections[vm.uiState.activeSectionIndex], vm.uiState.activeSectionIndex)" >
+    </div>
+
+    <div
+        ng-if="vm.uiState.activeSectionIndex !== (vm.state.page.sections.length - 1)"
+        class="ssb-sidebar-item-icon ssb-sidebar-item-icon-offset-3 display-ib ti-arrow-down ng-scope"
+        ng-click="vm.moveSection('down', vm.state.page.sections[vm.uiState.activeSectionIndex], vm.uiState.activeSectionIndex)" >
+    </div>
+
+    <!-- <a href>ActionLink2</a>
+	<a href>ActionLink3</a> -->
+
+	<!-- <button type="button" class="close" ng-click="vm.setActiveSection(undefined)">
 		<i class="ti-close"></i>
-	</button>
+	</button> -->
 
 </div>

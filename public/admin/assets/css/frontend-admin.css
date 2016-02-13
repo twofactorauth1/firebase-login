@@ -2887,7 +2887,7 @@
 }
 #componentloader .ribbon {
   position: absolute;
-  right: -5px;
+  right: 10px;
   top: -5px;
   z-index: 1;
   overflow: hidden;
@@ -6359,6 +6359,9 @@ a[href="https://froala.com/wysiwyg-editor"] {
   position: relative;
   top: 100px;
 }
+.ssb-site-builder .bg {
+  pointer-events: none;
+}
 .ssb-site-builder .ssb-main {
   top: 60px;
 }
@@ -6408,11 +6411,11 @@ a[href="https://froala.com/wysiwyg-editor"] {
   width: 3em;
   height: 40px;
   z-index: 9999;
+  padding-left: 3em;
 }
 .ssb-site-builder .ssb-edit-control > *,
 .ssb-site-builder .ssb-edit-control > * > * {
-  display: inline-block;
-  float: none;
+  float: left;
   position: static;
   height: 40px;
   line-height: 40px;
@@ -6470,19 +6473,72 @@ a[href="https://froala.com/wysiwyg-editor"] {
 }
 .ssb-site-builder .ssb-edit-control .ti-close {
   position: relative;
-  top: -0.55em;
-  left: -0.25em;
+  top: 50%;
+  left: -50%;
   padding: 0 0 0 1em;
 }
 .ssb-site-builder .ssb-edit-control .ssb-edit-control-active {
+  display: none;
   background: #47B8D9;
+  margin-left: -20px;
+  padding-left: 30px;
+  box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.5);
+  margin-top: .25em;
 }
-.ssb-site-builder .ssb-edit-control:hover {
-  width: 100%;
-  padding-left: 3em;
+.ssb-site-builder .ssb-edit-control .ssb-edit-control-active-title {
+  border-right: 1px solid rgba(255, 255, 255, 0.5);
+  padding: 0 1em 0 0;
+  margin-left: 3em;
+}
+.ssb-site-builder .ssb-edit-control .ti-arrow-up,
+.ssb-site-builder .ssb-edit-control .ti-arrow-down {
+  border-right: 1px solid rgba(255, 255, 255, 0.5);
+  padding: 0 1em;
+}
+.ssb-site-builder .ssb-edit-control .ti-arrow-down {
+  border: 0 none;
+}
+.ssb-site-builder .ssb-edit-control .ssb-edit-control-active-title:hover,
+.ssb-site-builder .ssb-edit-control .ssb-settings-btn:hover,
+.ssb-site-builder .ssb-edit-control .ti-arrow-down:hover,
+.ssb-site-builder .ssb-edit-control .ti-arrow-up:hover {
+  background-color: #54bddc;
 }
 .ssb-site-builder .ssb-edit-control:hover .ssb-edit-control-inactive {
   display: none;
+}
+.ssb-site-builder .ssb-edit-control:hover .ssb-edit-control-active {
+  display: inline-block;
+}
+.ssb-site-builder .ssb-edit-control-component {
+  display: none;
+}
+.ssb-site-builder .ssb-edit-control-component > *,
+.ssb-site-builder .ssb-edit-control-component > * > * {
+  height: 30px;
+  line-height: 30px;
+}
+.ssb-site-builder .ssb-edit-control-component .ssb-settings-btn {
+  background: #eda200;
+  height: 30px;
+  line-height: 30px;
+}
+.ssb-site-builder .ssb-edit-control-component .ssb-edit-control-active {
+  background: #eda200;
+}
+.ssb-site-builder .ssb-edit-control-component .ssb-edit-control-active-title:hover,
+.ssb-site-builder .ssb-edit-control-component .ssb-settings-btn:hover {
+  background-color: #fcac00;
+}
+.ssb-site-builder .ssb-edit-control-component .ti-arrow-down,
+.ssb-site-builder .ssb-edit-control-component .ti-arrow-up {
+  display: none;
+}
+.ssb-site-builder .ssb-edit-control-component.on {
+  display: block;
+}
+.ssb-site-builder .ssb-edit-control-component.on .ssb-edit-control-active {
+  display: inline-block;
 }
 .ssb-site-builder .ssb-active-section .ssb-settings-btn {
   display: block;

@@ -129,7 +129,7 @@
 			}
 
 			function error(error) {
-				console.error('SimpleSiteBuilderService getSite error: ' + error);
+				console.error('SimpleSiteBuilderService getSite error: ', error);
 			}
 
 			return ssbRequest($http.get(baseWebsiteAPIUrlv2 + id).success(success).error(error));
@@ -146,7 +146,7 @@
 			}
 
 			function error(error) {
-				console.error('SimpleSiteBuilderService getPages error: ' + error);
+				console.error('SimpleSiteBuilderService getPages error: ', error);
 			}
 
 			return ssbRequest($http.get(basePagesWebsiteAPIUrl + ssbService.websiteId + '/pages').success(success).error(error));
@@ -163,7 +163,7 @@
             }
 
             function error(error) {
-                console.error('SimpleSiteBuilderService getPages error: ' + error);
+                console.error('SimpleSiteBuilderService getPages error: ', error);
             }
 
             return ssbRequest($http.get(basePagesWebsiteAPIUrl + ssbService.websiteId + '/pages').success(success).error(error));
@@ -220,7 +220,7 @@
             }
 
             function error(error) {
-                console.error('SimpleSiteBuilderService page delete error: ' + error);
+                console.error('SimpleSiteBuilderService page delete error: ', error);
             }
 
             return (
@@ -252,7 +252,7 @@
             }
 
             function error(error) {
-                console.error('SimpleSiteBuilderService page creation error: ' + error);
+                console.error('SimpleSiteBuilderService page creation error: ', error);
             }
 
         }
@@ -351,7 +351,7 @@
 			}
 
 			function error(error) {
-				console.error('SimpleSiteBuilderService saveWebsite error: ' + error);
+				console.error('SimpleSiteBuilderService saveWebsite error: ', error);
 			}
 
 			return (
@@ -380,7 +380,7 @@
 			}
 
 			function error(error) {
-				console.error('SimpleSiteBuilderService component error: ' + error);
+				console.error('SimpleSiteBuilderService component error: ', error);
 			}
 
 			return (
@@ -422,7 +422,7 @@
 
 			function error(error) {
                 deferred.reject(error);
-				console.error('SimpleSiteBuilderService section error: ' + error);
+				console.error('SimpleSiteBuilderService section error: ', error);
 			}
 
 			return ssbRequest(deferred.promise);
@@ -516,7 +516,7 @@
 			}
 
 			function error(error) {
-				console.error('SimpleSiteBuilderService getPlatformSections error: ' + error);
+				console.error('SimpleSiteBuilderService getPlatformSections error: ', error);
 			}
 
 			return (ssbRequest($http({
@@ -538,7 +538,7 @@
             }
 
             function error (error) {
-                console.error('SimpleSiteBuilderService getUserSections error: ' + error);
+                console.error('SimpleSiteBuilderService getUserSections error: ', error);
             }
 
             return (ssbRequest($http({
@@ -568,7 +568,7 @@
                 });
             }
             function error(error) {
-                console.error('SimpleSiteBuilderService getPlatformComponents error: ' + error);
+                console.error('SimpleSiteBuilderService getPlatformComponents error: ', error);
             }
 
             return (
@@ -591,7 +591,7 @@
 			}
 
 			function error(error) {
-				console.error('SimpleSiteBuilderService themes error: ' + error);
+				console.error('SimpleSiteBuilderService themes error: ', error);
 			}
 
             return (
@@ -638,7 +638,7 @@
           }
 
           function error(error) {
-            console.error('SimpleSiteBuilderService getTemplates error: ' + error);
+            console.error('SimpleSiteBuilderService getTemplates error: ', error);
           }
 
           return (
@@ -662,7 +662,7 @@
           }
 
           function error(error) {
-            console.error('SimpleSiteBuilderService getSiteTemplates error: ' + error);
+            console.error('SimpleSiteBuilderService getSiteTemplates error: ', error);
           }
 
           return (
@@ -688,7 +688,7 @@
             }
 
             function error(error) {
-                console.error('SimpleSiteBuilderService setSiteTemplate error: ' + error);
+                console.error('SimpleSiteBuilderService setSiteTemplate error: ', error);
             }
 
             return (
@@ -728,7 +728,7 @@
           }
 
           function error(error) {
-            console.error('SimpleSiteBuilderService getLegacyTemplates error: ' + error);
+            console.error('SimpleSiteBuilderService getLegacyTemplates error: ', error);
           }
 
           return (
