@@ -15,7 +15,7 @@
                 <article class="entry clearfix">
                     <div id="et_pt_blog" class="responsive clearfix single-blog" data-postid="{{blog.post._id}}">
                         <div class="et_pt_blogentry clearfix">
-                            <h1>{{blog.post.post_title}}</h1>
+                            <h1 class="plain-post-title" ng-bind-html="blog.post.post_title | unsafe"></h1>
                             <div class="blog-meta single-post-publish-date">
                                 <div data-class="publish_date">
                                     <p class="input-group" ng-if="isEditing">
@@ -73,17 +73,63 @@
                             <button title="Share on LinkedIn" ng-click="sharePost(blog.post,'linked-in')" class="btn ssb-theme-btn btn-social-icon btn-linkedin"><i class="fa fa-linkedin"></i></button>
                         </div>
                     </div> -->
-                    <div>
+                    <div ng-if="blog.post">
                         <h4>SHARE</h4>
                         <div class="post-social-link">
                             <h2>
-                                <a ctooltip class="fa fa-facebook-square" href="" social-facebook custom-url="{{ blogPageUrl }}"><span class="hide">Share on facebook</span></a>
-                                <a ctooltip class="fa fa-twitter-square" href="" social-twitter><span class="hide">Share on twitter</span></a>
-                                <a ctooltip class="fa fa-google-plus-square" href="" social-gplus><span class="hide">Share on google plus</span></a>
-                                <a ctooltip class="fa fa-pinterest-square" href="" social-pinterest media="{{ demo.pinterestMediaUrl }}" description="An awesome description"><span class="hide">Share on pinterest</span></a>
-                                <a ctooltip class="fa fa-stumbleupon" href="" social-stumbleupon><span class="hide">Share on stumbleupon</span></a>
-                                <a ctooltip class="fa fa-linkedin-square" href="" social-linkedin><span class="hide">Share on linkedin</span></a>
-                                <a ctooltip class="fa fa-reddit-square" href="" social-reddit><span class="hide">Share on reddit</span></a>
+
+                                <a ctooltip href="javascript:void(0)" class="fa fa-facebook-square"
+                                socialshare socialshare-url="{{blogPageUrl}}" socialshare-type="feed"
+                                socialshare-provider="facebook"
+                                socialshare-media="{{blog.post.featured_image}}"
+                                socialshare-text="{{getPlainTitle(blog.post.post_title)}}">
+                                </a>
+
+                                <a ctooltip href="javascript:void(0)"
+                                class="fa fa-twitter-square"
+                                socialshare
+                                socialshare-url="{{blogPageUrl}}"
+                                socialshare-provider="twitter"
+                                socialshare-text="{{getPlainTitle(blog.post.post_title)}}"
+                                >
+                                </a>
+
+                               <a ctooltip href="javascript:void(0)"
+                                class="fa fa-google-plus-square"
+                                socialshare
+                                socialshare-provider="google+"
+                                socialshare-url="{{blogPageUrl}}"
+                                socialshare-media="{{blog.post.featured_image}}"
+                                socialshare-text="{{getPlainTitle(blog.post.post_title)}}"
+                                >
+                                </a>
+
+                                <a href="javascript:void(0)" ctooltip class="fa fa-pinterest-square"
+                                socialshare socialshare-url="{{blogPageUrl}}"
+                                socialshare-provider="pinterest"
+                                socialshare-media="{{blog.post.featured_image}}"
+                                socialshare-text="{{getPlainTitle(blog.post.post_title)}}">
+                                </a>
+
+                                <a href="javascript:void(0)" ctooltip class="fa fa-stumbleupon"
+                                socialshare socialshare-url="{{blogPageUrl}}"
+                                socialshare-provider="stumbleupon"
+                                socialshare-media="{{blog.post.featured_image}}"
+                                socialshare-text="{{getPlainTitle(blog.post.post_title)}}">
+                                </a>
+
+                                <a href="javascript:void(0)" ctooltip class="fa fa-linkedin-square"
+                                socialshare socialshare-url="{{blogPageUrl}}"
+                                socialshare-provider="linkedin"
+                                socialshare-text="{{getPlainTitle(blog.post.post_title)}}">
+                                </a>
+
+                                <a href="javascript:void(0)" ctooltip class="fa fa-reddit-square"
+                                socialshare socialshare-url="{{blogPageUrl}}"
+                                socialshare-provider="reddit"
+                                socialshare-text="{{getPlainTitle(blog.post.post_title)}}">
+                                </a>
+
                             </h2>
                         </div>
                     </div>
