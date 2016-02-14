@@ -378,12 +378,13 @@
     height: auto;
     width: 100%;
 
-    .ssb-media-query-medium({
+    @media (min-width: 768px) {
         position: static;
         float: left;
         background: #131e26;
         height: 100%;
-    });
+        width: auto;
+    }
 
     .nav {
         background: #131e26;

@@ -10574,19 +10574,13 @@ a[href="https://froala.com/wysiwyg-editor"] {
   height: auto;
   width: 100%;
 }
-.ssb-sidebar-icons[data-eq-state$="medium"],
-.ssb-sidebar-icons[data-eq-state$="large"] {
-  position: static;
-  float: left;
-  background: #131e26;
-  height: 100%;
-}
-@media screen and (min-width: 768px) {
-  .ssb-sidebar-icons:not([class*="ssb-edit-mode"]) {
+@media (min-width: 768px) {
+  .ssb-sidebar-icons {
     position: static;
     float: left;
     background: #131e26;
     height: 100%;
+    width: auto;
   }
 }
 .ssb-sidebar-icons .nav {
