@@ -32,6 +32,20 @@ app.directive('singlePostComponent', ['$window', '$location', 'accountService', 
       scope.getEncodedUrl = function(url){
         return encodeURI(url);
       }
+
+      scope.getImageUrl = function (src) {
+        if (src && !/http[s]?/.test(src)) {
+          src = 'http:' + src;
+        }
+        if(angular.isDefined(src) && PostService.isValidImage(src)){
+          return encodeURI(src);
+        }
+        else{
+          return "";
+        }
+      };
+
+      
       scope.getPlainTitle=function(title){
         var returnValue = title;
         if(title){

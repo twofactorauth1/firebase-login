@@ -81,7 +81,7 @@
                                 <a ctooltip href="javascript:void(0)" class="fa fa-facebook-square"
                                 socialshare socialshare-url="{{blogPageUrl}}" socialshare-type="feed"
                                 socialshare-provider="facebook"
-                                socialshare-media="{{blog.post.featured_image}}"
+                                socialshare-media="{{getImageUrl(blog.post.featured_image)}}"
                                 socialshare-text="{{getPlainTitle(blog.post.post_title)}}">
                                 </a>
 
@@ -99,7 +99,7 @@
                                 socialshare
                                 socialshare-provider="google+"
                                 socialshare-url="{{blogPageUrl}}"
-                                socialshare-media="{{blog.post.featured_image}}"
+                                socialshare-media="{{getImageUrl(blog.post.featured_image)}}"
                                 socialshare-text="{{getPlainTitle(blog.post.post_title)}}"
                                 >
                                 </a>
@@ -107,14 +107,14 @@
                                 <a href="javascript:void(0)" ctooltip class="fa fa-pinterest-square"
                                 socialshare socialshare-url="{{blogPageUrl}}"
                                 socialshare-provider="pinterest"
-                                socialshare-media="{{blog.post.featured_image}}"
+                                socialshare-media="{{getImageUrl(blog.post.featured_image)}}"
                                 socialshare-text="{{getPlainTitle(blog.post.post_title)}}">
                                 </a>
 
                                 <a href="javascript:void(0)" ctooltip class="fa fa-stumbleupon"
                                 socialshare socialshare-url="{{blogPageUrl}}"
                                 socialshare-provider="stumbleupon"
-                                socialshare-media="{{blog.post.featured_image}}"
+                                socialshare-media="{{getImageUrl(blog.post.featured_image)}}"
                                 socialshare-text="{{getPlainTitle(blog.post.post_title)}}">
                                 </a>
 

@@ -3,7 +3,7 @@
  *
  * */
 'use strict';
-mainApp.service('postService', function ($http) {
+mainApp.service('postService', function ($http, $q) {
   var baseUrl = '/api/1.0/';
   this.getAllPosts = function (fn) {
     var apiUrl = baseUrl + ['cms', 'blog'].join('/');
@@ -121,5 +121,18 @@ mainApp.service('postService', function ($http) {
         fn(err, null);
       });
   };
+
+  this.isValidImage= function(src){
+    var deferred = $q.defer();
+    var image = new Image();
+    image.onerror = function() {
+        deferred.resolve(false);
+    };
+    image.onload = function() {
+        deferred.resolve(true);
+    };
+    image.src = src;
+    return deferred.promise;
+  }
 
 });
