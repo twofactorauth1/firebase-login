@@ -19,8 +19,8 @@ function ssbComponentLoader($compile, $timeout) {
         componentStyle: '&',
         componentControl: '=',
         componentMedia: '=',
-        index: '=',
-        sectionIndex: '='
+        sectionIndex: '=',
+        componentIndex: '='
       },
     replace: true,
   	link: function (scope, element, attrs, ctrl) {
@@ -42,13 +42,13 @@ function ssbComponentLoader($compile, $timeout) {
         //if edit mode
         if (ctrl.uiState) {
             template = '<ssb-edit-control ' +
-                            'ng-if="vm.uiState.hoveredSectionIndex === vm.sectionIndex && vm.uiState.hoveredComponentIndex === vm.index" ' +
+                            'ng-if="vm.uiState.hoveredSectionIndex === vm.sectionIndex && vm.uiState.hoveredComponentIndex === vm.componentIndex" ' +
                             'class="ssb-edit-control ssb-edit-control-component" ' +
                             'component="vm.component" ' +
                             'state="vm.state" ' +
                             'ui-state="vm.uiState" ' +
-                            'index="vm.index" ' +
-                            'section-index="vm.sectionIndex">' +
+                            'section-index="vm.sectionIndex" ' +
+                            'component-index="vm.componentIndex">' +
                         '</ssb-edit-control>\n' +
                         template;
         }

@@ -92,7 +92,12 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
 
                 hist.pop();
 
-                previousPanel = hist.length ? hist[hist.length - 1] : { name: '', id: ''};
+                if (hist.length) {
+                    previousPanel = hist[hist.length - 1];
+                } else {
+                    previousPanel = { name: '', id: ''};
+                    SimpleSiteBuilderService.setActiveComponent(undefined);
+                }
 
                 vm.uiState.navigation.sectionPanel.loadPanel(previousPanel, true);
             },
@@ -308,11 +313,11 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
             vm.uiState.accordion.sections[index].isOpen = true;
 
             //if there is only 1 component in a section, make it active
-            if (vm.state.page.sections[index] && vm.state.page.sections[index].components && vm.state.page.sections[index].components.length === 1) {
-                updateActiveComponent(0);
-            } else {
-                SimpleSiteBuilderService.setActiveComponent(undefined);
-            }
+            // if (vm.state.page.sections[index] && vm.state.page.sections[index].components && vm.state.page.sections[index].components.length === 1) {
+            //     // updateActiveComponent(0);
+            // } else {
+            //     // SimpleSiteBuilderService.setActiveComponent(undefined);
+            // }
 
         } else {
             vm.uiState.activeSectionIndex = undefined;
@@ -320,7 +325,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         }
 
         //reset section sidebar panel navigation
-        vm.uiState.navigation.sectionPanel.reset();
+        // vm.uiState.navigation.sectionPanel.reset();
     }
 
     function updateActiveComponent(index) {
