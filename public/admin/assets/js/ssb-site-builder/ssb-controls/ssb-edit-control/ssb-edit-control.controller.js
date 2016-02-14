@@ -126,7 +126,7 @@ function ssbSiteBuilderEditControlController($scope, $attrs, $filter, $timeout, 
 
         sectionsArray.splice(toIndex, 0, sectionsArray.splice(fromIndex, 1)[0] );
 
-        vm.setActiveSection(toIndex);
+        vm.setActive(toIndex);
 
     }
 
