@@ -48,7 +48,8 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         openSidebarSectionPanel: { name: '', id: '' },
         showSectionPanel: false,
         componentControl: {}, //hook into component scope (contact-us)
-        componentMedia: vm.legacyComponentMedia //hook into component scope (image-gallery)
+        componentMedia: vm.legacyComponentMedia, //hook into component scope (image-gallery)
+        sidebarOrientation: 'vertical'
     };
 
 
@@ -492,23 +493,37 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
       vm.openMediaModal('media-modal', 'MediaModalCtrl', null, 'lg');
     };
 
+    function pageLinkClick(e) {
+      if (!angular.element(this).hasClass("clickable-link")) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+    }
+
+    function pageSectionClick(e) {
+      vm.uiState.openSidebarPanel = '';
+      // vm.uiState.showSectionPanel = true;
+    }
+
+    function pageResize(e) {
+        if ($(this).width() > 767) {
+            vm.uiState.sidebarOrientation = 'vertical';
+        } else {
+            vm.uiState.sidebarOrientation = 'horizontal';
+        }
+    }
+
 
 
     function init(element) {
 
         vm.element = element;
 
-        angular.element("body").on("click", ".ssb-page-section a", function (e) {
-          if (!angular.element(this).hasClass("clickable-link")) {
-            e.preventDefault();
-            e.stopPropagation();
-          }
-        });
+        angular.element("body").on("click", ".ssb-page-section a", pageLinkClick);
 
-        angular.element("body").on("click", ".ssb-page-section", function (e) {
-          vm.uiState.openSidebarPanel = '';
-          // vm.uiState.showSectionPanel = true;
-        });
+        angular.element("body").on("click", ".ssb-page-section", pageSectionClick);
+
+        angular.element('.ssb-main').on('eqResize', pageResize)
 
         setupBreakpoints();
 
