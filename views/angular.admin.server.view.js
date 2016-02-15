@@ -12,6 +12,7 @@ var _req = null;
 var urlUtils = require('../utils/urlutils');
 var intercomConfig = require('../configs/intercom.config');
 var CryptoJS = require('crypto-js');
+var appConfig = require('../configs/app.config');
 
 var view = function(req,resp,options) {
     this.init.apply(this, arguments);
@@ -36,7 +37,7 @@ _.extend(view.prototype, BaseView.prototype, {
                 data.account = value.toJSON();
                 //determine trial days remaining
                 data.account.billing = data.account.billing || {};
-                var trialDays = data.account.billing.trialLength || 15;//using 15 instead of 14 to give 14 FULL days
+                var trialDays = data.account.billing.trialLength || appConfig.trialLength;//using 15 instead of 14 to give 14 FULL days
                 var endDate = moment(data.account.billing.signupDate).add(trialDays, 'days');
                 data.account.trialDaysRemaining = endDate.diff(moment(), 'days');
                 if(data.account.trialDaysRemaining < 0) {
@@ -48,7 +49,7 @@ _.extend(view.prototype, BaseView.prototype, {
                 logger.warn('Error or null in getAccount');
                 logger.error('Error: ' + err);
             }
-            
+
             data.segmentIOWriteKey=segmentioConfig.SEGMENT_WRITE_KEY;
 
             data.showPreloader = false;

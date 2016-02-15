@@ -147,6 +147,7 @@ module.exports = {
     cookie_name: cookieName,
     groupAdminUserIds: groupAdminUserIDs,
     nonProduction:nonProduction,
+    trialLength: 30,
 
     getServerUrl: function (subdomain, domain) {
         if (subdomain == null && domain == null) {
