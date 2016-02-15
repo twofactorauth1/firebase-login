@@ -12,7 +12,7 @@
                 <small ng-bind-html="$select.selected.title"></small>
             </ui-select-match>
 
-            <ui-select-choices class="margin-top-20" repeat="page in vm.state.arr_pages track by $index">
+            <ui-select-choices class="margin-top-20" repeat="page in vm.state.arr_pages">
                 <small ng-bind-html="page.title"></small>
             </ui-select-choices>
 
