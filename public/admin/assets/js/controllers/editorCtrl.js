@@ -272,15 +272,12 @@
     $scope.originalPost = null;
     $scope.cancelChanges = true;
     if(redirect_url){       
-          if(show_alert)
-            SweetAlert.swal("Cancelled", "Your edits were NOT saved.", "error");
-            
-            $timeout(function () {
-              window.location = redirect_url;
-            }, 500);
-          if (reload) {
-            window.location.reload();
-          }
+      if(show_alert)
+        SweetAlert.swal("Cancelled", "Your edits were NOT saved.", "error");
+          window.location = redirect_url;
+      if (reload) {
+        window.location.reload();
+      }
       }
     }
 
@@ -1202,8 +1199,16 @@
 
     $scope.checkForDuplicatePage = function (fn) {
       $scope.validateEditPage($scope.page);
-      if ($scope.editPageValidated && !$scope.isEmail)
-        WebsiteService.checkDuplicatePage($scope.page.handle, $scope.page._id, function (data) {
+      if ($scope.editPageValidated && !$scope.isEmail){
+        var error = WebsiteService.checkSystemRoute($scope.page.handle);
+        if(error){        
+          $scope.duplicateUrl = true;
+          toaster.pop('error', error);
+          if (fn)
+            fn();
+        } 
+        else{
+          WebsiteService.checkDuplicatePage($scope.page.handle, $scope.page._id, function (data) {
           if (data) {
             $scope.duplicateUrl = true;
             toaster.pop('error', "Page URL " + $scope.page.handle, "Already exists");
@@ -1212,7 +1217,10 @@
           }
           if (fn)
             fn();
-        });
+          }); 
+        }       
+           
+      }
       else
       if (fn)
         fn();
@@ -1296,6 +1304,11 @@
         toaster.pop('error', "Page Title or URL can not be blank.");
         return false;
       }
+      var error = WebsiteService.checkSystemRoute(newPage.handle);
+      if(error){
+        toaster.pop('error', error);
+        return false;
+      } 
       WebsiteService.checkDuplicatePage(newPage.handle, newPage._id, function (data) {
         if (data) {
           toaster.pop('error', "Page URL " + newPage.handle, "Already exists");
@@ -1794,35 +1807,33 @@
      */
     
     var offFn = $rootScope.$on('$locationChangeStart', function (event, newUrl, oldUrl) {
-        if(!$scope.changesConfirmed && !$scope.cancelChanges){
-          checkIfPageDirty(newUrl, function (redirectUrl) {  
-            var condition = $scope.isDirty.dirty && !$scope.changesConfirmed;
-            if (condition && !$scope.isCampaign && !$scope.isProduct) {
-              event.preventDefault();
-              SweetAlert.swal({
-                title: "Are you sure?",
-                text: "You have unsaved data that will be lost",
-                type: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#DD6B55",
-                confirmButtonText: "Yes, save changes!",
-                cancelButtonText: "No, do not save changes!",
-                closeOnConfirm: false,
-                closeOnCancel: true
-              }, function (isConfirm) {
-                if (isConfirm) {
-                  $scope.redirect = true;
-                  $scope.savePage(redirectUrl);
-                  $scope.setDirty(false);
-                } else {                
-                    $scope.redirectWithoutSave(newUrl, true);
-                }
-                offFn();
-              });
-            } else   
-                $scope.redirectWithoutSave(newUrl, false);
-          }) 
-        }
+      checkIfPageDirty(newUrl, function (redirectUrl) {  
+          var condition = $scope.isDirty.dirty && !$scope.changesConfirmed && !$scope.cancelChanges;
+          if (condition && !$scope.isCampaign && !$scope.isProduct) {
+            event.preventDefault();
+            SweetAlert.swal({
+              title: "Are you sure?",
+              text: "You have unsaved data that will be lost",
+              type: "warning",
+              showCancelButton: true,
+              confirmButtonColor: "#DD6B55",
+              confirmButtonText: "Yes, save changes!",
+              cancelButtonText: "No, do not save changes!",
+              closeOnConfirm: false,
+              closeOnCancel: true
+            }, function (isConfirm) {
+              if (isConfirm) {
+                $scope.redirect = true;
+                $scope.savePage(redirectUrl);
+                $scope.setDirty(false);
+              } else {                
+                  $scope.redirectWithoutSave(newUrl, true);
+              }
+              offFn();
+            });
+          } else   
+              $scope.redirectWithoutSave(newUrl, false);
+      })
     });
 
   }]);

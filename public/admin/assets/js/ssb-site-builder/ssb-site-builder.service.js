@@ -38,6 +38,7 @@
         ssbService.getUserSections   = getUserSections;
 		ssbService.checkForDuplicatePage = checkForDuplicatePage;
 		ssbService.loading = { value: 0 };
+        ssbService.websiteLoading = false;
         ssbService.getThemes = getThemes;
     	ssbService.setupTheme = setupTheme;
         ssbService.applyThemeToSite = applyThemeToSite;
@@ -121,18 +122,14 @@
          * @param {string} id - website _id
          * @param {boolean} isLoading - if loading this data is in progress
          */
-		function getSite(id, isLoading) {
+		function getSite(id) {
 
-			function success(data) {
-                if(!isLoading)
-				    ssbService.website = data;
-                else{
-                    ssbService.setupTheme(data);
-                }
+			function success(data) {                
+				ssbService.website = data;                
 			}
 
 			function error(error) {
-				console.error('SimpleSiteBuilderService getSite error: ' + error);
+				console.error('SimpleSiteBuilderService getSite error: ', error);
 			}
 
 			return ssbRequest($http.get(baseWebsiteAPIUrlv2 + id).success(success).error(error));
@@ -149,7 +146,7 @@
 			}
 
 			function error(error) {
-				console.error('SimpleSiteBuilderService getPages error: ' + error);
+				console.error('SimpleSiteBuilderService getPages error: ', error);
 			}
 
 			return ssbRequest($http.get(basePagesWebsiteAPIUrl + ssbService.websiteId + '/pages').success(success).error(error));
@@ -166,7 +163,7 @@
             }
 
             function error(error) {
-                console.error('SimpleSiteBuilderService getPages error: ' + error);
+                console.error('SimpleSiteBuilderService getPages error: ', error);
             }
 
             return ssbRequest($http.get(basePagesWebsiteAPIUrl + ssbService.websiteId + '/pages').success(success).error(error));
@@ -223,7 +220,7 @@
             }
 
             function error(error) {
-                console.error('SimpleSiteBuilderService page delete error: ' + error);
+                console.error('SimpleSiteBuilderService page delete error: ', error);
             }
 
             return (
@@ -255,7 +252,7 @@
             }
 
             function error(error) {
-                console.error('SimpleSiteBuilderService page creation error: ' + error);
+                console.error('SimpleSiteBuilderService page creation error: ', error);
             }
 
         }
@@ -290,7 +287,10 @@
 
 			var page = transformComponentsToSections(data);
 			ssbService.page = page;
-
+            // Refresh page list with updated page
+            if(ssbService.pages && ssbService.pages[page.handle]){
+                ssbService.pages[page.handle] = page;
+            }
 		}
 
         /**
@@ -354,7 +354,7 @@
 			}
 
 			function error(error) {
-				console.error('SimpleSiteBuilderService saveWebsite error: ' + error);
+				console.error('SimpleSiteBuilderService saveWebsite error: ', error);
 			}
 
 			return (
@@ -383,7 +383,7 @@
 			}
 
 			function error(error) {
-				console.error('SimpleSiteBuilderService component error: ' + error);
+				console.error('SimpleSiteBuilderService component error: ', error);
 			}
 
 			return (
@@ -425,7 +425,7 @@
 
 			function error(error) {
                 deferred.reject(error);
-				console.error('SimpleSiteBuilderService section error: ' + error);
+				console.error('SimpleSiteBuilderService section error: ', error);
 			}
 
 			return ssbRequest(deferred.promise);
@@ -519,7 +519,7 @@
 			}
 
 			function error(error) {
-				console.error('SimpleSiteBuilderService getPlatformSections error: ' + error);
+				console.error('SimpleSiteBuilderService getPlatformSections error: ', error);
 			}
 
 			return (ssbRequest($http({
@@ -541,7 +541,7 @@
             }
 
             function error (error) {
-                console.error('SimpleSiteBuilderService getUserSections error: ' + error);
+                console.error('SimpleSiteBuilderService getUserSections error: ', error);
             }
 
             return (ssbRequest($http({
@@ -571,7 +571,7 @@
                 });
             }
             function error(error) {
-                console.error('SimpleSiteBuilderService getPlatformComponents error: ' + error);
+                console.error('SimpleSiteBuilderService getPlatformComponents error: ', error);
             }
 
             return (
@@ -594,7 +594,7 @@
 			}
 
 			function error(error) {
-				console.error('SimpleSiteBuilderService themes error: ' + error);
+				console.error('SimpleSiteBuilderService themes error: ', error);
 			}
 
             return (
@@ -641,7 +641,7 @@
           }
 
           function error(error) {
-            console.error('SimpleSiteBuilderService getTemplates error: ' + error);
+            console.error('SimpleSiteBuilderService getTemplates error: ', error);
           }
 
           return (
@@ -665,7 +665,7 @@
           }
 
           function error(error) {
-            console.error('SimpleSiteBuilderService getSiteTemplates error: ' + error);
+            console.error('SimpleSiteBuilderService getSiteTemplates error: ', error);
           }
 
           return (
@@ -691,7 +691,7 @@
             }
 
             function error(error) {
-                console.error('SimpleSiteBuilderService setSiteTemplate error: ' + error);
+                console.error('SimpleSiteBuilderService setSiteTemplate error: ', error);
             }
 
             return (
@@ -731,7 +731,7 @@
           }
 
           function error(error) {
-            console.error('SimpleSiteBuilderService getLegacyTemplates error: ' + error);
+            console.error('SimpleSiteBuilderService getLegacyTemplates error: ', error);
           }
 
           return (
@@ -869,22 +869,18 @@
          * @param {object} website - website data
          *
          */
-        function setupTheme(website) {
-            var _website = website || ssbService.website;
+        function setupTheme() {
             return ssbService.getThemes().then(function(themes) {
-                var theme = themes.data.filter(function(t) { return t._id === _website.themeId })[0] || {};
+                var theme = themes.data.filter(function(t) { return t._id === ssbService.website.themeId })[0] || {};
                 var defaultTheme;
 
                 if (theme._id) {
-                    ssbService.applyThemeToSite(theme, true, _website);
+                    ssbService.applyThemeToSite(theme);
                 } else {
                     defaultTheme = themes.data.filter(function(t) { return t.handle === 'default' })[0] || {};
-                    ssbService.applyThemeToSite(defaultTheme, false, _website);
-                    _website.themeId = defaultTheme._id;
-                    ssbService.saveWebsite(_website);
-                    $timeout(function() {
-                        ssbService.website = _website;
-                    }, 0);
+                    ssbService.applyThemeToSite(defaultTheme, false);
+                    ssbService.website.themeId = defaultTheme._id;
+                    ssbService.saveWebsite(ssbService.website);
                 }
             });
         }
@@ -897,10 +893,8 @@
          * @param {object} website - website data
          *
          */
-        function applyThemeToSite(theme, keepCurrentOverrides, website) {
+        function applyThemeToSite(theme, keepCurrentOverrides) {
             // Load web font loader
-
-            var _website = website || ssbService.website;
             var unbindWatcher = $rootScope.$watch(function() {
                 return angular.isDefined(window.WebFont);
             }, function(newValue, oldValue) {
@@ -917,18 +911,18 @@
                         }
                     });
                     unbindWatcher();
-                    _website.themeId = theme._id;
-                    _website.theme = theme;
+                    ssbService.website.themeId = theme._id;
+                    ssbService.website.theme = theme;
 
-                    if (keepCurrentOverrides === undefined || !angular.isDefined(_website.themeOverrides.styles)) {
+                    if (keepCurrentOverrides === undefined || !angular.isDefined(ssbService.website.themeOverrides.styles)) {
                         $timeout(function() {
-                            _website.themeOverrides = theme;
-                        });
+                            ssbService.website.themeOverrides = theme;
+                        },0);
                     }
-                    if(!ssbService.website)
+                    if(!ssbService.websiteLoading)
                         $timeout(function() {
-                            ssbService.website = _website;
-                        }, 100);
+                            ssbService.websiteLoading = true;
+                        },100);                
                 }
             });
 
@@ -1104,7 +1098,9 @@
 			AccountService.getAccount(function(data) {
                 ssbService.account = data;
 				ssbService.websiteId = data.website.websiteId;
-                ssbService.getSite(data.website.websiteId, true);
+                ssbService.getSite(data.website.websiteId).then(function(website){
+                    ssbService.setupTheme(website);
+                });
                 ssbService.getPages();
                 ssbService.getTemplates();
                 ssbService.getLegacyTemplates();

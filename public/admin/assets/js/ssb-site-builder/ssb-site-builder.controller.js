@@ -48,7 +48,8 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         openSidebarSectionPanel: { name: '', id: '' },
         showSectionPanel: false,
         componentControl: {}, //hook into component scope (contact-us)
-        componentMedia: vm.legacyComponentMedia //hook into component scope (image-gallery)
+        componentMedia: vm.legacyComponentMedia, //hook into component scope (image-gallery)
+        sidebarOrientation: 'vertical'
     };
 
 
@@ -92,7 +93,12 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
 
                 hist.pop();
 
-                previousPanel = hist.length ? hist[hist.length - 1] : { name: '', id: ''};
+                if (hist.length) {
+                    previousPanel = hist[hist.length - 1];
+                } else {
+                    previousPanel = { name: '', id: ''};
+                    SimpleSiteBuilderService.setActiveComponent(undefined);
+                }
 
                 vm.uiState.navigation.sectionPanel.loadPanel(previousPanel, true);
             },
@@ -131,6 +137,8 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         if (page && vm.state.originalPage && !angular.equals(page, vm.state.originalPage)) {
             vm.state.pendingPageChanges = true;
             console.log("Page changed");
+            if(vm.uiState && vm.uiState.selectedPage)
+                vm.uiState.selectedPage = vm.state.page;
             setupBreakpoints();
         } else {
             vm.state.pendingPageChanges = false;
@@ -138,7 +146,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     }, true);
 
     $scope.$watch('vm.state.website', function(website) {
-        if (website && vm.state.originalWebsite && !angular.equals(website, vm.state.originalWebsite)) {
+        if (SimpleSiteBuilderService.websiteLoading && website && vm.state.originalWebsite && !angular.equals(website, vm.state.originalWebsite)) {
             vm.state.pendingWebsiteChanges = true;
             console.log("Website changed");
         } else {
@@ -147,16 +155,16 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     }, true);
 
     $scope.$watch(function() { return SimpleSiteBuilderService.pages }, function(pages) {
-      // To track duplicate pages 
+      // To track duplicate pages
       vm.state.originalPages = angular.copy(pages);
       vm.state.pages = angular.copy(pages);
-      
+
       //filter blog pages and coming soon
       if(pages){
         delete vm.state.pages["blog"];
         delete vm.state.pages["single-post"];
         delete vm.state.pages["coming-soon"];
-      }      
+      }
       var parsed = angular.fromJson(vm.state.pages);
       var arr = [];
       _.each(parsed, function (page) {
@@ -295,7 +303,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     function cancelPendingEdits() {
       vm.state.pendingPageChanges = false;
       vm.state.pendingWebsiteChanges = false;
-      vm.state.website = angular.copy(vm.state.originalWebsite);
+      SimpleSiteBuilderService.website = angular.copy(vm.state.originalWebsite);
       SimpleSiteBuilderService.page = angular.copy(vm.state.originalPage);
     }
 
@@ -308,16 +316,19 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
             vm.uiState.accordion.sections[index].isOpen = true;
 
             //if there is only 1 component in a section, make it active
-            if (vm.state.page.sections[index] && vm.state.page.sections[index].components && vm.state.page.sections[index].components.length === 1) {
-                updateActiveComponent(0);
-            } else {
-                SimpleSiteBuilderService.setActiveComponent(undefined);
-            }
+            // if (vm.state.page.sections[index] && vm.state.page.sections[index].components && vm.state.page.sections[index].components.length === 1) {
+            //     // updateActiveComponent(0);
+            // } else {
+            //     // SimpleSiteBuilderService.setActiveComponent(undefined);
+            // }
 
+        } else {
+            vm.uiState.activeSectionIndex = undefined;
+            vm.uiState.activeComponentIndex = undefined;
         }
 
         //reset section sidebar panel navigation
-        vm.uiState.navigation.sectionPanel.reset();
+        // vm.uiState.navigation.sectionPanel.reset();
     }
 
     function updateActiveComponent(index) {
@@ -439,7 +450,10 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     };
 
     function addFroalaImage(asset) {
-        vm.imageEditor.editor.image.insert(asset.url, !1, null, vm.imageEditor.img);
+        $timeout(function() {
+            vm.imageEditor.editor.image.insert(asset.url, !1, null, vm.imageEditor.img);
+        }, 0);
+        
     };
 
     function setupBreakpoints() {
@@ -484,23 +498,37 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
       vm.openMediaModal('media-modal', 'MediaModalCtrl', null, 'lg');
     };
 
+    function pageLinkClick(e) {
+      if (!angular.element(this).hasClass("clickable-link")) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+    }
+
+    function pageSectionClick(e) {
+      vm.uiState.openSidebarPanel = '';
+      // vm.uiState.showSectionPanel = true;
+    }
+
+    function pageResize(e) {
+        if ($(this).width() > 767) {
+            vm.uiState.sidebarOrientation = 'vertical';
+        } else {
+            vm.uiState.sidebarOrientation = 'horizontal';
+        }
+    }
+
 
 
     function init(element) {
 
         vm.element = element;
 
-        angular.element("body").on("click", ".ssb-page-section a", function (e) {
-          if (!angular.element(this).hasClass("clickable-link")) {
-            e.preventDefault();
-            e.stopPropagation();
-          }
-        });
+        angular.element("body").on("click", ".ssb-page-section a", pageLinkClick);
 
-        angular.element("body").on("click", ".ssb-page-section", function (e) {
-          vm.uiState.openSidebarPanel = '';
-          // vm.uiState.showSectionPanel = true;
-        });
+        angular.element("body").on("click", ".ssb-page-section", pageSectionClick);
+
+        angular.element('.ssb-main').on('eqResize', pageResize)
 
         setupBreakpoints();
 

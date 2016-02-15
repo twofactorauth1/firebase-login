@@ -1,4 +1,5 @@
 @indigenous-blue: #47B8D9;
+@indigenous-orange: #eda200;
 
 //TODO: pay for froala
 a[href="https://froala.com/wysiwyg-editor"] {
@@ -62,6 +63,7 @@ a[href="https://froala.com/wysiwyg-editor"] {
 	height: 100%;
 	// width: 100%;
 	display: block;
+    position: relative;
     // overflow: hidden;
 
     .empty-page {
@@ -73,9 +75,21 @@ a[href="https://froala.com/wysiwyg-editor"] {
 
     }
 
-	.ssb-main {
+    .bg {
+        pointer-events: none;
+    }
 
-        top: 60px;
+	.ssb-main {
+        position: relative;
+        top: 120px;
+
+        @media screen and (min-width: 768px) {
+            height: 100%;
+            width: 100%;
+            top: 60px;
+            float: left;
+            padding-left: 70px;
+        }
 
         @media screen and (min-width: 992px) {
             top: 125px;
@@ -86,22 +100,8 @@ a[href="https://froala.com/wysiwyg-editor"] {
 			left: 60%;
 			top: 60px;
 			z-index: 1;
-			// background: @indigenous-blue;
 			background: rgba(71,184,217, 0.75);
 			padding: .25em 1em 1.15em;
-		}
-
-		@media screen and (min-width: 768px) {
-			// float: left;
-		    height: 100%;
-            // width: 70%;
-		    width: 100%;
-		    position: relative;
-		    // left: 30%;
-		    // box-shadow: 0px -1px 3px 1px rgba(0, 0, 0, .5);
-    		float: left;
-            // margin: 40px 0 300px;
-            padding-left: 70px;
 		}
 
         .fr-toolbar {
@@ -123,32 +123,50 @@ a[href="https://froala.com/wysiwyg-editor"] {
         border: inset solid 1px transparent;
         // z-index: 1;
 
+        &:hover .ssb-edit-control,
 		&:hover .ssb-settings-btn {
 			display: block;
+            opacity: 1;
 		}
 
-		//TODO: make setting
-		.row {
-			margin: 0 !important;
-			[class*="col-"] {
-				padding-left: 0 !important;
-				padding-right: 0 !important;
-			}
-		}
+
+        // &:hover .ssb-edit-control-component.on {
+        //     display: block;
+
+        //     .ssb-edit-control-active {
+        //         display: inline-block;
+        //     }
+
+        // }
+
 	}
 
+    .ssb-active-section .ssb-edit-control {
+        display: block;
+        opacity: 1;
+    }
+
 	.ssb-edit-control {
+        display: none;
+        // display: block;
+        opacity: 0;
+        // opacity: 1;
+        transition: opacity 200ms linear;
 		position: absolute;
 		top: 0;
 		left: 0;
-		width: 3em;
+		// width: 3em;
 		height: 40px;
 		z-index: 9999;
 
+
+        // width: 100%;
+        // padding-left: 3em;
+
 		& > *,
 		& > * > * {
-			display: inline-block;
-			float: none;
+			// display: inline-block;
+			float: left;
 			position: static;
 			height: 40px;
 			line-height: 40px;
@@ -170,10 +188,12 @@ a[href="https://froala.com/wysiwyg-editor"] {
 			font-size: 1em;
 			width: 100%;
     		text-align: center;
+            transform: translateZ(0);
 		}
 
 		.ssb-settings-btn {
-			display: none;
+			// display: none;
+            display: inline-block;
 
 			//triangle
 			color: white!important;
@@ -219,8 +239,8 @@ a[href="https://froala.com/wysiwyg-editor"] {
 
 		.ti-close {
 	    	position: relative;
-		    top: -.55em;
-		    left: -.25em;
+		    top: 50%;
+            left: -50%;
 		    padding: 0 0 0 1em;
 	    }
 
@@ -230,15 +250,50 @@ a[href="https://froala.com/wysiwyg-editor"] {
 		}
 
 		.ssb-edit-control-active {
-			display: none;
-			background: black;
+			// display: none;
+            display: inline-block;
+            text-transform: capitalize;
+			background: @indigenous-blue;
+            box-shadow: 0px 1px 4px rgba(0,0,0,0.5);
+            margin: .25em 0 0 1.5em;
+            height: 38px;
+            line-height: 38px;
 		}
+
+        .ssb-edit-control-active-title {
+            border-right: 1px solid rgba(255,255,255,.5);
+            padding: 0 1em 0 2.5em;
+        }
+
+        .ssb-settings-btn, .ssb-edit-control-active {
+            // transition: opacity 500ms linear;
+            // opacity: 0;
+        }
+
+        .ti-arrow-up,
+        .ti-arrow-down {
+            border-right: 1px solid rgba(255, 255, 255, 0.5);
+            padding: 0 1em;
+        }
+
+        .ti-arrow-down {
+            // border: 0 none;
+        }
+
+        .ssb-edit-control-active-title,
+        .ssb-settings-btn,
+        .ti-arrow-down,
+        .ti-arrow-up {
+            &:hover {
+                // text-decoration: underline!important;
+                background-color: lighten(@indigenous-blue, 3%);
+            }
+        }
+
 	}
 
 	// .ssb-edit-control.ssb-edit-control-on {
 	.ssb-edit-control:hover {
-		width: 100%;
-		padding-left: 3em;
 
 		.ssb-settings-btn {
 			// background: black;
@@ -249,12 +304,75 @@ a[href="https://froala.com/wysiwyg-editor"] {
 		}
 
 		.ssb-edit-control-active {
-			// display: inline-block;
+			display: inline-block;
+            opacity: 1;
 		}
 	}
 
-    .ssb-active-section .ssb-settings-btn {
-        display: block;
+    .hide-edit-control {
+        opacity: 0!important;
+        pointer-events: none;
+    }
+
+    //section-level edit-controls
+    .ssb-edit-control-section {
+
+    }
+
+    //component-level edit-controls
+    .ssb-edit-control-component {
+        // display: none;
+        // opacity: 0;
+        width: auto;
+
+        & > *,
+        & > * > * {
+            height: 30px;
+            line-height: 30px;
+        }
+
+        .ssb-settings-btn {
+            display: inline-block;
+            background: @indigenous-orange;
+            height: 30px;
+            line-height: 30px;
+            width: 30px;
+        }
+
+        .ssb-settings-btn i {
+            height: 30px;
+            line-height: 30px;
+        }
+
+        .ssb-edit-control-active {
+            background: @indigenous-orange;
+            display: block;
+            opacity: 1;
+            margin: .25em 0 0 1.5em;
+            height: 2em;
+            padding: 0;
+        }
+
+        .ssb-edit-control-active-title {
+            margin-left: 0;
+            padding-left: 1.5em;
+            height: 100%;
+            line-height: 2em;
+        }
+
+        .ssb-edit-control-active-title,
+        .ssb-settings-btn {
+            &:hover {
+                // text-decoration: underline!important;
+                background-color: lighten(@indigenous-orange, 3%);
+            }
+        }
+
+        .ti-arrow-down,
+        .ti-arrow-up {
+            display: none;
+        }
+
     }
 
 	.ssb-active-section,
@@ -275,7 +393,7 @@ a[href="https://froala.com/wysiwyg-editor"] {
 
 	&:hover .ssb-active-section .ssb-active-component {
 		&:before {
-			box-shadow: inset 0px 0px 0px 4px orange
+			box-shadow: inset 0px 0px 0px 4px @indigenous-orange;
 		}
 	}
 

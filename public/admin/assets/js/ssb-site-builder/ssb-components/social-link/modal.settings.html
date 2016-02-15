@@ -22,7 +22,7 @@
             </div>
             <div ng-if="vm.social.icon" class="form-group" id="social-link-name">
                 <label for="link-name">Selected Link Type </label>
-                <a id="link-name" class="btn btn-social-icon btn-{{social.name}}"><i class="fa fa-{{vm.social.icon}}"></i></a>
+                <a id="link-name" class="btn btn-social-icon btn-{{vm.social.name}}"><i class="fa fa-{{vm.social.icon}}"></i></a>
                 <span class="error help-block" />
             </div>
             <div ng-if="vm.social.icon" class="form-group" id="social-link-url">
@@ -34,8 +34,8 @@
         <div class="clearfix"></div>
     </div>
     <div class="modal-footer">
-        <button ng-if="vm.social.selectedLink" type="button" class="btn btn-primary" ng-click="vm.saveSocialLink(vm.social, vm.component._id, 'update')">Update {{vm.social.selectedLink}}</button>
-        <button ng-if="vm.social.selectedLink" type="button" class="btn btn-primary" ng-click="vm.saveSocialLink(vm.social, vm.component._id, 'delete')" data-dismiss="modal">Delete {{vm.social.selectedLink}}</button>
-        <button ng-if="!vm.social.selectedLink && vm.social.name" type="button" class="btn btn-primary" ng-click="vm.saveSocialLink(vm.social, vm.component._id, 'add')">Add {{vm.social.name}}</button>
+        <button ng-if="vm.social.selectedLink" type="button" class="btn btn-primary" ng-click="vm.saveSocialLink(vm.social, vm.component._id, 'update')">Update {{vm.social.tooltip}}</button>
+        <button ng-if="vm.social.selectedLink" type="button" class="btn btn-primary" ng-click="vm.saveSocialLink(vm.social, vm.component._id, 'delete')" data-dismiss="modal">Delete {{vm.social.tooltip}}</button>
+        <button ng-if="!vm.social.selectedLink && vm.social.name" type="button" class="btn btn-primary" ng-click="vm.saveSocialLink(vm.social, vm.component._id, 'add')">Add {{vm.social.tooltip}}</button>
     </div>
 </script>

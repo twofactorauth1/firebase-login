@@ -33,10 +33,11 @@ var mainApp = angular
         "com.2fdevs.videogular.plugins.poster",
         "truncate",
         'angular-jqcloud',
-        'socialLinks',
+        '720kb.socialshare',
         'slick',
         'ngMap',
-        'wu.masonry'
+        'wu.masonry',
+        'slugifier'
     ])
     .config(['$routeProvider', '$locationProvider', '$httpProvider', function ($routeProvider, $locationProvider, $httpProvider) {
         //$locationProvider.html5Mode(true);

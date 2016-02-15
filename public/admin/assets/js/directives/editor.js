@@ -59,7 +59,11 @@ app.directive("elem", function($timeout, $compile) {
                 scope.updateFroalaContent(editor);
               }).on('froalaEditor.toolbar.show', function(e, editor) {
 
+                //hide toolbar so we can move it
                 editor.$tb.css({ 'opacity': 0, 'pointer-events': 'none' });
+
+                //hide any edit-control labels
+                $('.ssb-site-builder .ssb-edit-control').addClass('hide-edit-control');
 
                 $timeout(function(){
                     var left = editor.$tb.offset().left;
@@ -90,9 +94,12 @@ app.directive("elem", function($timeout, $compile) {
                     //     'position': 'absolute', 'width': '150px', 'height': '350px', 'background-color': 'blue', 'top': frElementTopLine - lineHeight - frElementHeightLine
                     // })
 
+                    //show toolbar in adjusted position
                     editor.$tb.css({ 'top': frElementTopLine + frElementHeightLine, 'opacity': 1, 'pointer-events': 'auto' });
 
                 }, 0);
+              }).on('froalaEditor.toolbar.hide', function(e, editor) {
+                $('.ssb-site-builder .ssb-edit-control').removeClass('hide-edit-control');
               });
           }, 1000);
         });

@@ -17,16 +17,21 @@ app.filter('filterPages', function () {
     });
     if (pages) {
       return pages.filter(function (page) {   
-          var valid = true;   
-          _.each(linkList, function (link) {
-            if (page.handle === link.linkTo.data && (link.linkTo.type === 'page' || link.linkTo.type === 'home')) {
-              if(handle && handle === link.linkTo.data){
-                valid = true;
+          var valid = true;
+          if(page.mainmenu === false){
+            valid = false;
+          }
+          if(valid){
+            _.each(linkList, function (link) {
+              if (page.handle === link.linkTo.data && (link.linkTo.type === 'page' || link.linkTo.type === 'home')) {
+                if(handle && handle === link.linkTo.data){
+                  valid = true;
+                }
+                else
+                  valid = false;
               }
-              else
-                valid = false;
-            }
-          });
+            });
+          }
           return valid;          
       });
     }

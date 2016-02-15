@@ -938,8 +938,7 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
             var _index = _.indexOf(allPages, _blogPage);
             allPages.splice(_index, 1);
           }
-        }
-        allPages = _.reject(allPages, function(page){ return page.mainmenu === false });
+        }        
         $scope.filteredPages = $filter('orderBy')(allPages, "title", false);
         _.each($scope.filteredPages, function (page) {
             page.components = getPageComponents(page);

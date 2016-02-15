@@ -445,7 +445,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
   	function cancelPendingEdits() {
       vm.state.pendingPageChanges = false;
       vm.state.pendingWebsiteChanges = false;
-      vm.state.website = angular.copy(vm.state.originalWebsite);
+      SimpleSiteBuilderService.website = angular.copy(vm.state.originalWebsite);
       SimpleSiteBuilderService.page = angular.copy(vm.state.originalPage);
     }
 

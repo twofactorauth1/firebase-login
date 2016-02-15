@@ -67,10 +67,16 @@
 
         .ssb-media-query-small-only({
             font-size: 14vw;
-            margin: .25em auto 0;
             text-align: center;
-            width: 60%;
             line-height: 1;
+            width: 100%!important;
+            margin: 0!important;
+            padding: 0!important;
+
+            .element-wrap {
+                width: 60%;
+                margin: .25em auto 0;
+            }
 
             span[style] {
                 font-size: 14vw!important;
@@ -88,20 +94,6 @@
         });
     }
 
-    .ssb-page-section-layout-hero [ssb-text-component] {
-        width: 100%;
-        position: static;
-        transform: none;
-        margin: 0;
-
-        .ssb-media-query-medium({
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 100%;
-        });
-    }
 }
 
 

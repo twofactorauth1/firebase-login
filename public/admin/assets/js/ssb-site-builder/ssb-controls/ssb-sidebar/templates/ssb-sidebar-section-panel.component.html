@@ -1,6 +1,6 @@
 <section ng-init="vm.state.editSection=false"
     ng-if="vm.uiState.showSectionPanel && vm.state.page.sections[vm.uiState.activeSectionIndex]"
-    class="ssb-sidebar-section-panel draggable"
+    class="ssb-sidebar-section-panel draggable fade-in"
     ind-draggable>
 
     <h4 class="ssb-sidebar-sub-heading draggable-handle">
@@ -26,7 +26,7 @@
         </span>
         <div ng-if="vm.uiState.openSidebarSectionPanel.name !== ''">
 
-            <i class="ti-arrow-left" ng-click="vm.uiState.navigation.sectionPanel.back();"></i>
+            <i ng-if="vm.uiState.navigation.sectionPanel.navigationHistory.length > 0" class="ti-arrow-left" ng-click="vm.uiState.navigation.sectionPanel.back();"></i>
             {{vm.uiState.openSidebarSectionPanel.name | cleanType}}
 
             <!-- <small>

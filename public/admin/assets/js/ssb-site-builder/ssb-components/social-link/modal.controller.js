@@ -14,10 +14,7 @@ app.controller('SiteBuilderSocialLinkModalController', ['$timeout', 'parentVm', 
     vm.social = {};
 
     function setSelectedLink(social_link) {
-        vm.social.name = social_link.name;
-        vm.social.icon = social_link.icon;
-        vm.social.url = social_link.url;
-
+        vm.social = social_link;
         var isLinkAdded = _.findWhere(vm.component.networks, {
             name: social_link.name
         });

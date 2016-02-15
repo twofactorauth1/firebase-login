@@ -178,6 +178,13 @@
         mainmenu: page.mainmenu
       };
 
+      var error = WebsiteService.checkSystemRoute(page.handle);
+      if(error){        
+        toaster.pop('error', error);
+        $scope.saveLoading = false;
+        return false;
+      }
+
 
       var hasHandle = false;
       _.each($scope.pages, function (_page) {
@@ -185,6 +192,9 @@
           hasHandle = true;
         }
       });
+
+      
+      
 
       if (!hasHandle) {
         WebsiteService.createPageFromTemplate($scope.selectedTemplate._id, pageData, function (_newPage, error) {

@@ -1,6 +1,8 @@
 <div class="ssb-sidebar-inner" ng-class="vm.uiState.navigation.indexClass">
 
-    <div class="ssb-sidebar-icons tabbable tabs-left margin-bottom-0 ng-isolate-scope">
+    <div
+        class="ssb-sidebar-icons tabbable margin-bottom-0 ng-isolate-scope"
+        ng-class="{ 'tabs-left': vm.uiState.sidebarOrientation === 'vertical' }">
         <ul class="nav nav-tabs">
 
             <li class="nav-tab" ng-class="{ 'nav-tab-is-active': vm.uiState.openSidebarPanel === 'add' }">

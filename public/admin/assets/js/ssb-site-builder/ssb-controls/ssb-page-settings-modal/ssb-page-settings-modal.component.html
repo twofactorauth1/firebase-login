@@ -127,7 +127,7 @@
             <button class="btn btn-primary" ng-click="vm.parentVm.closeModal()">Close</button>
         </div>
         <div class="pull-right margin-right-5">
-            <button ng-disabled="vm.loading || vm.saveLoading || !vm.page.title || !vm.page.handle || vm.inValidPageHandle" class="btn btn-primary" ng-click="vm.saveSettings()">Save <span ng-if="vm.saveLoading" class="fa fa-spinner fa-spin"></span></button>
+            <button ng-disabled="vm.loading || vm.saveLoading || !vm.page.title || !vm.page.handle || vm.inValidPageHandle" class="btn btn-primary" ng-click="vm.saveSettings()">Save <span ng-if="vm.saveLoading"><i class="fa fa-spinner fa-spin"></i></span></button>
         </div>
     </div>
 </script>
