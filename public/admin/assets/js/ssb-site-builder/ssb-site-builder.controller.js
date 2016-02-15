@@ -137,6 +137,8 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         if (page && vm.state.originalPage && !angular.equals(page, vm.state.originalPage)) {
             vm.state.pendingPageChanges = true;
             console.log("Page changed");
+            if(vm.uiState && vm.uiState.selectedPage)
+                vm.uiState.selectedPage = vm.state.page;
             setupBreakpoints();
         } else {
             vm.state.pendingPageChanges = false;
@@ -448,7 +450,10 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     };
 
     function addFroalaImage(asset) {
-        vm.imageEditor.editor.image.insert(asset.url, !1, null, vm.imageEditor.img);
+        $timeout(function() {
+            vm.imageEditor.editor.image.insert(asset.url, !1, null, vm.imageEditor.img);
+        }, 0);
+        
     };
 
     function setupBreakpoints() {
