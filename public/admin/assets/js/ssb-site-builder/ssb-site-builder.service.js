@@ -287,7 +287,10 @@
 
 			var page = transformComponentsToSections(data);
 			ssbService.page = page;
-
+            // Refresh page list with updated page
+            if(ssbService.pages && ssbService.pages[page.handle]){
+                ssbService.pages[page.handle] = page;
+            }
 		}
 
         /**
