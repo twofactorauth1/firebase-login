@@ -450,7 +450,10 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     };
 
     function addFroalaImage(asset) {
-        vm.imageEditor.editor.image.insert(asset.url, !1, null, vm.imageEditor.img);
+        $timeout(function() {
+            vm.imageEditor.editor.image.insert(asset.url, !1, null, vm.imageEditor.img);
+        }, 0);
+        
     };
 
     function setupBreakpoints() {
