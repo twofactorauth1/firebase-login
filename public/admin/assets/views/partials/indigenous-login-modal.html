@@ -1,0 +1,20 @@
+<script type="text/ng-template" id="indigeneous-admin-login-modal">
+    <div class="modal-header">
+        <button type="button" class="close" ng-click="closeModal()">
+            <span aria-hidden="true">&times;</span>
+            <span class="sr-only">Close</span>
+        </button>
+        <h3 class="modal-title">
+            <span ng-if="!templateDetails">Select Template</span>
+            <span ng-if="templateDetails">Template Details</span>
+        </h3>
+    </div>
+    
+    <div class="modal-body pages-modal bg-white" ng-class="{'no-padding pages-padding-top': !templateDetails }">
+        
+    </div>
+
+    <div class="modal-footer" ng-show="templateDetails">
+        <button class="btn btn-primary btn-o" ng-click="login()">Login</button>
+    </div>
+</script>
