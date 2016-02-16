@@ -69,3 +69,31 @@ function (cfpLoadingBarProvider) {
     cfpLoadingBarProvider.includeSpinner = false;
 
 }]);
+
+app.config(['$httpProvider', function ($httpProvider) {
+
+    $httpProvider.interceptors.push('RequestsErrorHandler');
+
+}]);
+
+app.factory('RequestsErrorHandler', ['$q', function($q) {
+    // http://www.codelord.net/2014/06/25/generic-error-handling-in-angularjs/
+    return {
+
+        responseError: function(rejection) {
+
+            if (rejection && rejection.config & rejection.status !== null) {
+
+                if (rejection.status === 401) {
+
+                    console.debug('pop up login modal');
+
+                }
+
+            }
+
+            return $q.reject(rejection);
+        }
+
+    };
+}])
