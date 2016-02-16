@@ -146,6 +146,10 @@ function ssbSiteBuilderSiteTemplatesController($scope, $attrs, $filter, $documen
 
         vm.getSiteTemplates();
 
+        if(SimpleSiteBuilderService.pages === null){
+            SimpleSiteBuilderService.getPages();
+        }
+
     }
 }
 

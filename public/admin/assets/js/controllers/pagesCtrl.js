@@ -228,6 +228,7 @@
           page.handle = "";
           $scope.checkAndSetIndexPage($scope.pages);
           $scope.resetTemplateDetails();
+          resetSitebuilderPages();
         });
       } else {
         toaster.pop('error', "Page URL " + page.handle, "Already exists");
@@ -323,6 +324,10 @@
     };
 
     $scope.getPages();
+
+    function resetSitebuilderPages(){
+      SimpleSiteBuilderService.pages = null;
+    }
 
   }]);
   app.filter('ignoreSsbPages', function () {

@@ -2,7 +2,7 @@
 /*global app, moment, angular, window, CKEDITOR*/
 /*jslint unparam:true*/
 (function (angular) {
-  app.controller('EditorCtrl', ["$scope", "$state", "$document", "$rootScope", "$interval", "$timeout", "toaster", "$modal", "$filter", "$location", "WebsiteService", "SweetAlert", "hoursConstant", "GeocodeService", "ProductService", "AccountService", "postConstant", "formValidations", "$window", function ($scope, $state, $document, $rootScope, $interval, $timeout, toaster, $modal, $filter, $location, WebsiteService, SweetAlert, hoursConstant, GeocodeService, ProductService, AccountService, postConstant, formValidations, $window) {
+  app.controller('EditorCtrl', ["$scope", "$state", "$document", "$rootScope", "$interval", "$timeout", "toaster", "$modal", "$filter", "$location", "WebsiteService", "SweetAlert", "hoursConstant", "GeocodeService", "ProductService", "AccountService", "postConstant", "formValidations", "$window", "SimpleSiteBuilderService", function ($scope, $state, $document, $rootScope, $interval, $timeout, toaster, $modal, $filter, $location, WebsiteService, SweetAlert, hoursConstant, GeocodeService, ProductService, AccountService, postConstant, formValidations, $window, SimpleSiteBuilderService) {
 
     /*
      * @circleOptions
@@ -393,7 +393,7 @@
                   //$scope.page = data;
                   var originalPageHandle = angular.copy($scope.originalPage.handle);
                   $scope.originalPage = angular.copy($scope.page);
-                  
+                  resetSitebuilderPages();
                   //Update linked list
                   $scope.website.linkLists.forEach(function (value, index) {
                     if (value.handle === "head-menu") {
@@ -1319,6 +1319,7 @@
           $scope.single_post = false;
           $scope.post_blog_page = false;
           $scope.duplicate = true;
+          resetSitebuilderPages();
           $scope.checkForSaveBeforeLeave('/admin/#/website/pages/?pagehandle=' + newPage.handle, true);
         });
       });
@@ -1602,6 +1603,7 @@
           WebsiteService.deletePage($scope.page, websiteId, title, function (data) {
             toaster.pop('success', "Page Deleted", "The " + title + " page was deleted successfully.");
             $scope.closeModal();
+            resetSitebuilderPages();
             $timeout(function () {
               window.location = '/admin/#/website/pages';
             }, 500);
@@ -1835,6 +1837,10 @@
               $scope.redirectWithoutSave(newUrl, false);
       })
     });
+
+    function resetSitebuilderPages(){
+      SimpleSiteBuilderService.pages = null;
+    }
 
   }]);
 }(angular));
