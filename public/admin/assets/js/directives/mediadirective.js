@@ -32,7 +32,7 @@ app.directive('mediaModal', ['$http', '$timeout', 'FileUploader', 'AssetsService
                         filterType.addClass('filter-type');
                     }, 0);
                 }
-                
+
             }
             uploader = $scope.uploader = new FileUploader({
                 url: '/api/1.0/assets/',
@@ -45,18 +45,24 @@ app.directive('mediaModal', ['$http', '$timeout', 'FileUploader', 'AssetsService
                                 if (500 * 1024 * 1024 + 1 > parseInt(item.size)) {
                                     return true;
                                 } else {
-                                    ToasterService.show('error', 'Max Video file size 500MB. Unable to Upload.');
+                                    ToasterService.show('error', 'The maximum video file size 500MB. Unable to Upload.');
                                 }
                                 break;
                             case "image":
                             case "audio":
+                                //size in bytes
+                                if (50 * 1024 * 1024 > parseInt(item.size)) {
+                                    return true;
+                                } else {
+                                    ToasterService.show('error', 'The maximum audio file size 50MB. Unable to Upload.');
+                                }
                             case "document":
                             default:
                                 //size in bytes
                                 if (10 * 1024 * 1024 > parseInt(item.size)) {
                                     return true;
                                 } else {
-                                    ToasterService.show('error', 'Max file size 10MB. Unable to Upload.');
+                                    ToasterService.show('error', 'The maximum file size 10MB. Unable to Upload.');
                                 }
                         }
                         return false;
