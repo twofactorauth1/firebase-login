@@ -1833,8 +1833,7 @@
               }
               offFn();
             });
-          } else   
-              $scope.redirectWithoutSave(newUrl, false);
+          }
       })
     });
 
