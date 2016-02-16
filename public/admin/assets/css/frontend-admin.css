@@ -6433,6 +6433,10 @@ a[href="https://froala.com/wysiwyg-editor"] {
   opacity: 1;
   font-size: 1em;
 }
+.ssb-site-builder .ssb-edit-control div.tooltip {
+  position: absolute;
+  width: 80%;
+}
 .ssb-site-builder .ssb-edit-control .ssb-settings-btn i {
   display: inline-block;
   float: none;
