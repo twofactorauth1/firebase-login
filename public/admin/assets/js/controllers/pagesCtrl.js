@@ -2,7 +2,7 @@
 /*global app, moment, angular, window, CKEDITOR*/
 /*jslint unparam:true*/
 (function (angular) {
-  app.controller('PagesCtrl', ["$scope", "$location", "toaster", "$filter", "$modal", "WebsiteService", "pageConstant", "$timeout", function ($scope, $location, toaster, $filter, $modal, WebsiteService, pageConstant, $timeout) {
+  app.controller('PagesCtrl', ["$scope", "$location", "toaster", "$filter", "$modal", "WebsiteService", "pageConstant", "$timeout", "SimpleSiteBuilderService", function ($scope, $location, toaster, $filter, $modal, WebsiteService, pageConstant, $timeout, SimpleSiteBuilderService) {
     $scope.tableView = 'list';
     $scope.itemPerPage = 40;
     $scope.showPages = 15;
