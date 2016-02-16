@@ -70,23 +70,41 @@ function (cfpLoadingBarProvider) {
 
 }]);
 
+/**
+ * Handle session timed out
+ *
+ * - http://www.codelord.net/2014/06/25/generic-error-handling-in-angularjs/
+ * - http://stackoverflow.com/a/28583107/77821
+ */
 app.config(['$httpProvider', function ($httpProvider) {
 
     $httpProvider.interceptors.push('RequestsErrorHandler');
 
 }]);
 
-app.factory('RequestsErrorHandler', ['$q', function($q) {
-    // http://www.codelord.net/2014/06/25/generic-error-handling-in-angularjs/
+app.factory('RequestsErrorHandler', ['$q', '$injector', function($q, $injector) {
+
+    var $modal;
+    var modalInstance;
+
     return {
 
         responseError: function(rejection) {
 
-            if (rejection && rejection.config & rejection.status !== null) {
+            if (rejection && rejection.config && rejection.status !== null) {
 
                 if (rejection.status === 401) {
 
+                    $modal = $modal || $injector.get('$modal');
                     console.debug('pop up login modal');
+                    modalInstance = $modal.open({
+                        templateUrl: 'indigeneous-admin-login-modal',
+                        keyboard: false,
+                        backdrop: 'static',
+                        size: 'md'
+                    }).result.then(function(result) {
+                        console.debug('login modal result', result);
+                    });
 
                 }
 

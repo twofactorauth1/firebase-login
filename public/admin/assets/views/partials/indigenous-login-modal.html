@@ -5,16 +5,17 @@
             <span class="sr-only">Close</span>
         </button>
         <h3 class="modal-title">
-            <span ng-if="!templateDetails">Select Template</span>
-            <span ng-if="templateDetails">Template Details</span>
+            <span>Please sign in</span>
         </h3>
     </div>
-    
-    <div class="modal-body pages-modal bg-white" ng-class="{'no-padding pages-padding-top': !templateDetails }">
-        
+
+    <div class="modal-body bg-white">
+        <!-- <p>Your session has expired. Please log in to continue working</p> -->
+        <indi-login-modal></indi-login-modal>
+
     </div>
 
-    <div class="modal-footer" ng-show="templateDetails">
+    <!-- <div class="modal-footer" ng-show="templateDetails">
         <button class="btn btn-primary btn-o" ng-click="login()">Login</button>
-    </div>
+    </div> -->
 </script>
