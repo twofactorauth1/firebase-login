@@ -8381,3 +8381,8 @@ ssb-topbar .ui-select-match-text > small {
   color: #cc181e;
   opacity: 1;
 }
+.indi-iframe-login {
+  width: 100%;
+  border: none;
+  height: calc(100vh - 20px);
+}

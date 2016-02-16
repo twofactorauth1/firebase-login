@@ -93,6 +93,7 @@ app.factory('RequestsErrorHandler', ['$q', '$injector', function($q, $injector) 
 
             if (rejection && rejection.config && rejection.status !== null) {
 
+                //unauthorized
                 if (rejection.status === 401) {
 
                     $modal = $modal || $injector.get('$modal');
@@ -101,7 +102,12 @@ app.factory('RequestsErrorHandler', ['$q', '$injector', function($q, $injector) 
                         templateUrl: 'indigeneous-admin-login-modal',
                         keyboard: false,
                         backdrop: 'static',
-                        size: 'md'
+                        size: 'md',
+                        resolve: {
+                            modalInstance: function() {
+                                return modalInstance || this;
+                            }
+                        }
                     }).result.then(function(result) {
                         console.debug('login modal result', result);
                     });

@@ -12,9 +12,24 @@ function indiLoginModalController($scope, $attrs, $filter, $document, $timeout, 
 
     vm.init = init;
 
+    function overrideLoginStyles() {
+
+        var loginContainer = vm.element.find('iframe').contents().find('.main-login');
+
+        loginContainer.css({
+            margin: '0',
+            padding: '0',
+            width: '100%',
+            overflow: 'hidden'
+        });
+
+    }
+
     function init(element) {
 
         vm.element = element;
+
+        overrideLoginStyles();
 
     }
 }
