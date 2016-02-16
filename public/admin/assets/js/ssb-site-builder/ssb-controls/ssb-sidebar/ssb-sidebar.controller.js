@@ -327,9 +327,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
       },
       function (isConfirm) {
         if (isConfirm) {
-          vm.state.page.sections.splice(index, 1);
-          vm.uiState.activeSectionIndex = undefined;
-          vm.uiState.activeComponentIndex = undefined;
+          SimpleSiteBuilderService.removeSectionFromPage(index)
         }
       });
     }

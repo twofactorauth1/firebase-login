@@ -50,6 +50,7 @@
         ssbService.getTemplateById = getTemplateById;
         ssbService.getLegacyTemplates = getLegacyTemplates;
         ssbService.addSectionToPage = addSectionToPage;
+        ssbService.removeSectionFromPage = removeSectionFromPage;
         ssbService.getSpectrumColorOptions = getSpectrumColorOptions;
         ssbService.deletePage = deletePage;
         ssbService.openMediaModal = openMediaModal;
@@ -791,6 +792,19 @@
                 })
             )
 
+        }
+
+
+        /**
+         * Remove a section from the current page        
+         * @param {integer} index - index of page section to be removed         
+         *
+         */
+
+        function removeSectionFromPage(index) {
+            ssbService.page.sections.splice(index, 1);
+            ssbService.setActiveSection(null);
+            ssbService.setActiveComponent(null);
         }
 
         /*
