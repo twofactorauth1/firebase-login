@@ -27,7 +27,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
     // For any unmatched url, redirect to /app/dashboard
     $urlRouterProvider.otherwise("/dashboard");
     //
-    // lower casing all urls
+    //lower casing all urls
     $urlRouterProvider.rule(function ($injector, $location) {
         var path = $location.path(), normalized = path.toLowerCase();
         if (path != normalized) {
@@ -37,12 +37,12 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
     // Set up the states
     $stateProvider.state('app', {
         url: "",
-        templateUrl: "assets/views/app.html",
+        templateUrl: "/admin/assets/views/app.html",
         resolve: loadSequence('modernizr', 'underscore', 'moment', 'angularMoment', 'uiSwitch', 'perfect-scrollbar-plugin', 'toaster', 'ngAside', 'vAccordion', 'chartjs', 'tc.chartjs', 'oitozero.ngSweetAlert', 'chatCtrl', 'smart-table', 'touchspin-plugin', 'slugifier', 'commonService', 'timeAgoFilter','angularFileUpload', 'ngTextTruncate', 'infinite-scroll', 'ui.select', 'blueimp', 'ngTagsInput', 'titleCase', 'bootstrap-confirmation', 'ladda', 'angular-ladda', 'uuid', 'formatText', 'asideCtrl', 'settingsCtrl', 'assetsService', 'mediaModalCtrl', 'xeditable', 'angular-percentage-filter', 'angular-clipboard', 'google-fonts', 'dashboardService', 'videogular'),
         abstract: true
     }).state('app.dashboard', {
         url: "/_dashboard",
-        templateUrl: "assets/views/dashboard.html",
+        templateUrl: "/admin/assets/views/dashboard.html",
         title: 'Dashboard',
         ncyBreadcrumb: {
             label: 'Dashboard'
@@ -87,7 +87,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         }, loadSequence('editorCtrl', 'userService', 'htmlToPlaintext', 'spectrum', 'angular-slider', 'assetsService', 'toasterService', 'geocodeService', 'productService', 'paymentService', 'accountService', 'toTrusted', 'generateURLforLinks', 'truncate', 'ngSticky', 'slick', 'offset', 'jqcloud', 'jsVideoUrlParser', 'selectedTags', 'addComponentModalCtrl', 'componentSettingsModalCtrl', 'ssbComponentSettingsModalCtrl', 'googlePlaces', 'ngMap', 'angularCircularNavigation', 'campaignService', 'angular-resizable', 'wu.masonry', 'froala-wysiwyg-editor', 'froala-wysiwyg-editor-plugins', 'custom-froala-wysiwyg-editor', 'cleanType', 'filterPages'))
     }).state('app.website.analytics', {
         url: '/site-analytics',
-        templateUrl: "assets/views/site-analytics.html",
+        templateUrl: "/admin/assets/views/site-analytics.html",
         title: 'Site Analytics',
         icon: 'ti-layout-media-left-alt',
         ncyBreadcrumb: {
@@ -96,7 +96,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         resolve: loadSequence('siteAnalyticsCtrl', 'highcharts', 'highmaps', 'secTotime', 'dateRangePicker', 'keenService', 'chartAnalyticsService')
     }).state('app.website.pages', {
         url: '/pages',
-        templateUrl: "assets/views/pages.html",
+        templateUrl: "/admin/assets/views/pages.html",
         title: 'Pages',
         icon: 'ti-layout-media-left-alt',
         ncyBreadcrumb: {
@@ -105,7 +105,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         resolve: loadSequence('pagesCtrl', 'userService')
     }).state('app.website.templates', {
         url: '/templates',
-        templateUrl: "assets/views/templates.html",
+        templateUrl: "/admin/assets/views/templates.html",
         title: 'Templates',
         icon: 'ti-layout-media-left-alt',
         ncyBreadcrumb: {
@@ -114,7 +114,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         resolve: loadSequence('templatesCtrl', 'userService')
     }).state('app.website.posts', {
         url: '/posts',
-        templateUrl: "assets/views/posts.html",
+        templateUrl: "/admin/assets/views/posts.html",
         title: 'Posts',
         icon: 'ti-layout-media-left-alt',
         ncyBreadcrumb: {
@@ -123,7 +123,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         resolve: loadSequence('postsCtrl', 'userService', 'htmlToPlaintext')
     }).state('app.website.singlepage', {
         url: '/pages/:id',
-        templateUrl: "assets/views/editor.html",
+        templateUrl: "/admin/assets/views/editor.html",
         title: 'Page Single',
         icon: 'ti-layout-media-left-alt',
         ncyBreadcrumb: {
@@ -136,7 +136,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         resolve: loadSequence('editorCtrl', 'userService', 'htmlToPlaintext', 'spectrum', 'angular-slider', 'assetsService', 'toasterService', 'geocodeService', 'productService', 'paymentService', 'accountService', 'toTrusted', 'generateURLforLinks', 'truncate', 'ckeditor', 'ngSticky', 'slick', 'offset', 'jqcloud', 'jsVideoUrlParser', 'selectedTags', 'addComponentModalCtrl', 'componentSettingsModalCtrl', 'googlePlaces', 'ngMap', 'angularCircularNavigation', 'campaignService', 'angular-resizable', 'wu.masonry')
     }).state('app.website.singlepost', {
         url: '/posts/:id',
-        templateUrl: "assets/views/editor.html",
+        templateUrl: "/admin/assets/views/editor.html",
         title: 'Post Single',
         icon: 'ti-layout-media-left-alt',
         ncyBreadcrumb: {
@@ -149,7 +149,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         resolve: loadSequence('editorCtrl', 'userService', 'htmlToPlaintext', 'spectrum', 'angular-slider', 'assetsService', 'toasterService', 'geocodeService', 'productService', 'paymentService', 'accountService', 'toTrusted', 'generateURLforLinks', 'truncate', 'ckeditor', 'ngSticky', 'slick', 'offset', 'jqcloud', 'jsVideoUrlParser', 'selectedTags', 'addComponentModalCtrl', 'componentSettingsModalCtrl', 'googlePlaces','ngMap', 'angularCircularNavigation', 'campaignService', 'angular-resizable', 'wu.masonry')
     }).state('app.website.singletemplate', {
         url: '/templates/:id',
-        templateUrl: "assets/views/editor.html",
+        templateUrl: "/admin/assets/views/editor.html",
         title: 'Template Single',
         icon: 'ti-layout-media-left-alt',
         ncyBreadcrumb: {
@@ -162,7 +162,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         resolve: loadSequence('editorCtrl', 'userService', 'htmlToPlaintext', 'spectrum',  'angular-slider', 'assetsService', 'toasterService', 'geocodeService', 'productService', 'paymentService', 'accountService', 'toTrusted', 'generateURLforLinks', 'truncate', 'ckeditor', 'ngSticky', 'slick', 'offset', 'jqcloud', 'jsVideoUrlParser', 'selectedTags', 'addComponentModalCtrl', 'componentSettingsModalCtrl', 'templateSettingsModalCtrl', 'googlePlaces', 'ngMap', 'angularCircularNavigation', 'campaignService', 'angular-resizable', 'wu.masonry')
     }).state('app.editor', {
         url: '/editor',
-        templateUrl: "assets/views/editor.html",
+        templateUrl: "/admin/assets/views/editor.html",
         title: 'Editor',
         icon: 'ti-layout-media-left-alt',
         ncyBreadcrumb: {
@@ -171,7 +171,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         resolve: loadSequence('editorCtrl', 'userService', 'htmlToPlaintext', 'spectrum', 'angular-slider', 'assetsService', 'toasterService', 'geocodeService', 'productService', 'accountService', 'toTrusted', 'generateURLforLinks', 'truncate', 'ckeditor', 'ngSticky', 'slick', 'offset', 'jqcloud', 'jsVideoUrlParser', 'selectedTags', 'addComponentModalCtrl', 'componentSettingsModalCtrl', 'templateSettingsModalCtrl', 'angularCircularNavigation', 'campaignService', 'angular-resizable', 'wu.masonry')
     }).state('app.customers', {
         url: '/customers',
-        templateUrl: "assets/views/customers.html",
+        templateUrl: "/admin/assets/views/customers.html",
         title: 'Customers',
         icon: 'ti-layout-media-left-alt',
         ncyBreadcrumb: {
@@ -180,7 +180,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         resolve: loadSequence('customersCtrl', 'ImportContactService', "socialConfigService", 'customerService', 'papaParse', 'string_score', 'importCustomerModalCtrl')
     }).state('app.singleCustomer', {
         url: '/customers/:contactId',
-        templateUrl: "assets/views/customer-detail.html",
+        templateUrl: "/admin/assets/views/customer-detail.html",
         title: 'Single Customer',
         icon: 'ti-layout-media-left-alt',
         ncyBreadcrumb: {
@@ -198,7 +198,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         }
     }).state('app.commerce.products', {
         url: '/products',
-        templateUrl: "assets/views/products.html",
+        templateUrl: "/admin/assets/views/products.html",
         title: 'Products',
         icon: 'ti-layout-media-left-alt',
         ncyBreadcrumb: {
@@ -207,7 +207,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         resolve: loadSequence('productsCtrl', 'productService', 'accountService', 'ipCookie')
     }).state('app.commerce.productsingle', {
         url: '/products/:productId',
-        templateUrl: "assets/views/product-detail.html",
+        templateUrl: "/admin/assets/views/product-detail.html",
         title: 'Products',
         icon: 'ti-layout-media-left-alt',
         ncyBreadcrumb: {
@@ -217,7 +217,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         resolve: loadSequence('productsDetailCtrl', 'productService', 'dateRangePicker', 'ngCurrency', 'bootstrap-icon-picker', 'campaignService', 'editorCtrl', 'ckeditor', 'addComponentModalCtrl', 'componentSettingsModalCtrl', 'toTrusted', 'propsFilter', 'angularCircularNavigation', 'string_score', 'htmlToPlaintext', 'spectrum')
     }).state('app.commerce.orders', {
         url: '/orders',
-        templateUrl: "assets/views/orders.html",
+        templateUrl: "/admin/assets/views/orders.html",
         title: 'Orders',
         icon: 'ti-layout-media-left-alt',
         ncyBreadcrumb: {
@@ -226,7 +226,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         resolve: loadSequence('ordersCtrl', 'orderService', 'customerService', 'dateRangePicker')
     }).state('app.commerce.orderdetail', {
         url: '/orders/:orderId',
-        templateUrl: "assets/views/order-detail.html",
+        templateUrl: "/admin/assets/views/order-detail.html",
         title: 'Order Detail',
         icon: 'ti-layout-media-left-alt',
         ncyBreadcrumb: {
@@ -244,7 +244,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         }
     }).state('app.marketing.socialfeed', {
         url: '/social-feed',
-        templateUrl: "assets/views/social-feed.html",
+        templateUrl: "/admin/assets/views/social-feed.html",
         title: 'Social Feed',
         icon: 'ti-layout-media-left-alt',
         ncyBreadcrumb: {
@@ -253,7 +253,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         resolve: loadSequence('socialFeedCtrl', 'socialConfigService', 'wu.masonry','orderByArrayLength')
     }).state('app.emails', {
         url: '/emails',
-        templateUrl: "assets/views/emails.html",
+        templateUrl: "/admin/assets/views/emails.html",
         title: 'Emails',
         icon: 'ti-layout-media-left-alt',
         ncyBreadcrumb: {
@@ -262,7 +262,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         resolve: loadSequence('emailsCtrl', 'chartEmailService')
     }).state('app.marketing.campaigns', {
         url: '/campaigns',
-        templateUrl: "assets/views/campaigns.html",
+        templateUrl: "/admin/assets/views/campaigns.html",
         title: 'Campaigns',
         icon: 'ti-layout-media-left-alt',
         ncyBreadcrumb: {
@@ -271,7 +271,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         resolve: loadSequence('campaignsCtrl', 'campaignService')
     }).state('app.marketing.createcampaign', {
         url: '/campaigns/create-campaign',
-        templateUrl: "assets/views/create-campaign.html",
+        templateUrl: "/admin/assets/views/create-campaign.html",
         title: 'Create Campaign',
         icon: 'ti-layout-media-left-alt',
         ncyBreadcrumb: {
@@ -281,7 +281,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         resolve: loadSequence('createCampaignCtrl', 'campaignService', 'editorCtrl', 'userService', 'htmlToPlaintext', 'spectrum', 'angular-slider', 'assetsService', 'toasterService', 'geocodeService', 'productService', 'paymentService', 'accountService', 'toTrusted', 'generateURLforLinks', 'truncate', 'ckeditor', 'ngSticky', 'slick', 'offset', 'jqcloud', 'jsVideoUrlParser', 'selectedTags', 'addComponentModalCtrl', 'componentSettingsModalCtrl', 'googlePlaces', 'ngMap', 'angularCircularNavigation', 'string_score', 'angular-bootstrap-datetimepicker', 'propsFilter')
     }).state('app.campaignDetail', {
         url: '/marketing/campaigns/:campaignId',
-        templateUrl: "assets/views/create-campaign.html",
+        templateUrl: "/admin/assets/views/create-campaign.html",
         title: 'Campaign Detail',
         icon: 'ti-layout-media-left-alt',
         ncyBreadcrumb: {
@@ -299,7 +299,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         }
     }).state('app.account.profilebusiness', {
         url: '/profile-business',
-        templateUrl: "assets/views/profile-business.html",
+        templateUrl: "/admin/assets/views/profile-business.html",
         title: 'Profile Business',
         icon: 'ti-layout-media-left-alt',
         ncyBreadcrumb: {
@@ -308,7 +308,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         resolve: loadSequence('profileBusinessCtrl', 'toasterService', 'assetsService')
     }).state('app.account.profilepersonal', {
         url: '/profile-personal',
-        templateUrl: "assets/views/profile-personal.html",
+        templateUrl: "/admin/assets/views/profile-personal.html",
         title: 'Profile Personal',
         icon: 'ti-layout-media-left-alt',
         ncyBreadcrumb: {
@@ -317,7 +317,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         resolve: loadSequence('profilePersonalCtrl', 'toasterService', 'assetsService', 'offset')
     }).state('app.account.billing', {
         url: '/billing',
-        templateUrl: "assets/views/billing.html",
+        templateUrl: "/admin/assets/views/billing.html",
         title: 'Billing',
         icon: 'ti-layout-media-left-alt',
         ncyBreadcrumb: {
@@ -326,7 +326,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         resolve: loadSequence('billingCtrl', 'productService', 'stripe', 'paymentService', 'userService', 'toasterService', 'ipCookie', 'skeuocard')
     }).state('app.account.integrations', {
         url: '/integrations',
-        templateUrl: "assets/views/integrations.html",
+        templateUrl: "/admin/assets/views/integrations.html",
         title: 'Integrations',
         icon: 'ti-layout-media-left-alt',
         ncyBreadcrumb: {
@@ -343,7 +343,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         }
     }).state('app.support.gettingstarted', {
         url: '/getting-started',
-        templateUrl: "assets/views/getting-started.html",
+        templateUrl: "/admin/assets/views/getting-started.html",
         title: 'Getting Started',
         icon: 'ti-layout-media-left-alt',
         ncyBreadcrumb: {
@@ -352,7 +352,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         resolve: loadSequence('gettingStartedCtrl')
     }).state('app.support.helptopics', {
         url: '/help-topics',
-        templateUrl: "assets/views/help-topics.html",
+        templateUrl: "/admin/assets/views/help-topics.html",
         title: 'Help Topics',
         icon: 'ti-layout-media-left-alt',
         ncyBreadcrumb: {
@@ -361,7 +361,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         resolve: loadSequence('helpTopicsCtrl', 'toTrusted', 'ckeditor', 'jsVideoUrlParser')
     }).state('app.support.oldhelptopics', {
         url: '/old-help-topics',
-        templateUrl: "assets/views/old-help-topics.html",
+        templateUrl: "/admin/assets/views/old-help-topics.html",
         title: 'Old Help Topics',
         icon: 'ti-layout-media-left-alt',
         ncyBreadcrumb: {
@@ -370,7 +370,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         resolve: loadSequence('oldHelpTopicsCtrl')
     }).state('app.support.managetopics', {
         url: '/manage-topics',
-        templateUrl: "assets/views/manage-topics.html",
+        templateUrl: "/admin/assets/views/manage-topics.html",
         title: 'Manage Topics',
         icon: 'ti-layout-media-left-alt',
         ncyBreadcrumb: {
@@ -379,7 +379,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         resolve: loadSequence('manageTopicsCtrl', 'userService')
     }).state('app.support.singletopic', {
         url: '/manage-topics/:id',
-        templateUrl: "assets/views/editor.html",
+        templateUrl: "/admin/assets/views/editor.html",
         title: 'Topic Single',
         icon: 'ti-layout-media-left-alt',
         ncyBreadcrumb: {
@@ -392,7 +392,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         resolve: loadSequence('editorCtrl', 'userService', 'htmlToPlaintext', 'spectrum', 'angular-slider', 'assetsService', 'toasterService', 'geocodeService', 'productService', 'paymentService', 'accountService', 'toTrusted', 'generateURLforLinks', 'truncate', 'ckeditor', 'ngSticky', 'slick', 'offset', 'jqcloud', 'jsVideoUrlParser', 'selectedTags', 'addComponentModalCtrl', 'componentSettingsModalCtrl', 'templateSettingsModalCtrl', 'googlePlaces', 'ngMap', 'campaignService', 'angularCircularNavigation')
     }).state('app.onboarding', {
         url: '/onboarding',
-        templateUrl: "assets/views/onboarding.html",
+        templateUrl: "/admin/assets/views/onboarding.html",
         title: 'Onboarding',
         icon: 'ti-layout-media-left-alt',
         ncyBreadcrumb: {
@@ -401,7 +401,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         resolve: loadSequence('onboardingCtrl')
     }).state('app.dohy', {
         url: '/dashboard',
-        templateUrl: "assets/js/dashboard/dohy.html",
+        templateUrl: "/admin/assets/js/dashboard/dohy.html",
         title: 'Dashboard',
         icon: 'ti-layout-media-left-alt',
         ncyBreadcrumb: {
@@ -422,16 +422,16 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         abstract: true
     }).state('login.signin', {
         url: '/signin',
-        templateUrl: "assets/views/login_login.html"
+        templateUrl: "/admin/assets/views/login_login.html"
     }).state('login.forgot', {
         url: '/forgot',
-        templateUrl: "assets/views/login_forgot.html"
+        templateUrl: "/admin/assets/views/login_forgot.html"
     }).state('login.registration', {
         url: '/registration',
-        templateUrl: "assets/views/login_registration.html"
+        templateUrl: "/admin/assets/views/login_registration.html"
     }).state('login.lockscreen', {
         url: '/lock',
-        templateUrl: "assets/views/login_lock_screen.html"
+        templateUrl: "/admin/assets/views/login_lock_screen.html"
     });
 
     // Generates a resolve object previously configured in constant.JS_REQUIRES (config.constant.js)
