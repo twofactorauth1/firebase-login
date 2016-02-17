@@ -19,7 +19,7 @@ module.exports = function (config) {
       'public/js/libs/angular/angular.js',
       'public/js/libs/angular-mocks/angular-mocks.js',
       'public/js/libs/moment/moment.js',
-      
+
 
       // add mocks after real angular dependencies
       // TODO: shouldn't jquery be before angular?
@@ -58,6 +58,7 @@ module.exports = function (config) {
       'public/js/libs/underscore/underscore.js',
       'node_modules/stripe-debug/stripe-debug.js',
       'public/js/libs/angular-cookie/angular-cookie.min.js',
+      'public/js/libs/angular-http-auth/src/http-auth-interceptor.js',
 
 
       'public/js/scripts/config.js',
