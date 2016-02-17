@@ -13,7 +13,7 @@ mainApp.factory('pagesService', ['$http', '$location', '$cacheFactory', function
     }
 
     return function (websiteId, callback) {
-        var path = $location.$$path.replace('/page/', '');
+        var path = $location.$$path.toLowerCase().replace('/page/', '');
 
         if (path === "/" || path === "") {
             path = "index";
