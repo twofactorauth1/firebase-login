@@ -80,8 +80,12 @@
 
                                 <a ctooltip href="javascript:void(0)" class="fa fa-facebook-square"
                                 socialshare socialshare-url="{{blogPageUrl}}" socialshare-type="feed"
+                                socialshare-via="{{facebookClientID}}"
+                                socialshare-redirect-uri="https://www.facebook.com/dialog/return/close"
                                 socialshare-provider="facebook"
                                 socialshare-media="{{getImageUrl(blog.post.featured_image)}}"
+                                socialshare-popup-height="500"
+                                socialshare-popup-width="500"
                                 socialshare-text="{{getPlainTitle(blog.post.post_title)}}">
                                 </a>
 
