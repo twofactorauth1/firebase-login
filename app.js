@@ -140,6 +140,7 @@ app.use(busboy());
 app.use(express.json());
 app.use(express.urlencoded());
 app.use(express.methodOverride());
+app.use(require('express-uncapitalize')());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.cookieParser('mys3cr3tco00k13s'));
 app.use(express.session({

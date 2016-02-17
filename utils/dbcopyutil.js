@@ -4,10 +4,29 @@ var mongoskin = require('mongoskin');
 var async = require('async');
 var STRIPE_CUSTOMER_ID = 'cus_5Rf0LtLeyl1bh0';
 var SUBSCRIPTION_ID = 'sub_6HfA5moT1ErVcM';
+var STRIPE_PLAN_ID = 'jtospfftdw';
 var STRIPE_ACCESS_TOKEN = 'sk_test_osAnWDulUbCkgw0D2kkwo1Ju';
 var STRIPE_REFRESH_TOKEN = 'rt_5NU1M6ubOAkICDJs0TpIa8iCRHDUwbSaC7VJgPXQ75MCfFGZ';
 var utils = require('./commonutils');
 
+var defaultSubscriptionPrivs = [
+    'integrations/payments',
+    'account',
+    'analytics',
+    'assets',
+    'authentication',
+    'campaign',
+    'cms',
+    'contact',
+    'courses',
+    'dashboard',
+    'emaildata',
+    'products',
+    'user',
+    'social/socialconfig',
+    'order',
+    'all'
+];
 
 var copyutil = {
 
@@ -38,9 +57,11 @@ var copyutil = {
         var pagesToSaveArray = [];
         var productsToSaveArray = [];
         var postsToSaveArray = [];
+        var sectionsToSaveArray = [];
         var accounts = srcMongo.collection('accounts');
         var websites = srcMongo.collection('websites');
         var pages = srcMongo.collection('pages');
+        var sections = srcMongo.collection('sections');
         var products = srcMongo.collection('products');
         var posts = srcMongo.collection('posts');
 
@@ -102,6 +123,17 @@ var copyutil = {
                 });
             },
             function(cb) {
+                sections.find({accountId:srcAccountId}).toArray(function (err, sections) {
+                    if (err) {
+                        console.log('Error getting sections:', err);
+                        return cb(err);
+                    } else {
+                        sectionsToSaveArray = sections;
+                        cb(null);
+                    }
+                });
+            },
+            function(cb) {
                 console.log('Closing src mongo');
                 srcMongo.close();
                 cb(null);
@@ -141,6 +173,7 @@ var copyutil = {
                 accountToSave._id = newAccountId;
                 accountToSave.billing.stripeCustomerId = STRIPE_CUSTOMER_ID;
                 accountToSave.billing.subscriptionId = SUBSCRIPTION_ID;
+                accountToSave.billing.plan = STRIPE_PLAN_ID;
                 if(accountToSave.credentials['type'=='stripe']) {
                     var credentials = accountToSave.credentials['type'=='stripe'];
                     credentials.accessToken = STRIPE_ACCESS_TOKEN;
@@ -239,7 +272,46 @@ var copyutil = {
                         }
                     });
                 }, function done(err){
-                    cb(err);
+                    cb(err, newAccountId);
+                });
+            },
+            function saveSections(newAccountId, cb) {
+                var sectionsCollection = destMongo.collection('sections');
+                async.eachSeries(sectionsToSaveArray, function(section, callback){
+                    section.accountId = newAccountId;
+                    sectionsCollection.save(section, function(err, savedSection){
+                        if(err) {
+                            console.log('Error saving section:' + err);
+                            callback(err);
+                        } else {
+                            console.log('Saved section:' + savedSection._id);
+                            callback();
+                        }
+                    });
+                }, function done(err){
+                    cb(err, newAccountId);
+                });
+            },
+            function doSecurity(newAccountId, cb) {
+                //create a subscription privs object
+                var subpriv = {
+                    _id: utils.idutils.generateUUID(),
+                    accountId: newAccountId,
+                    subscriptionId: STRIPE_PLAN_ID,
+                    activePrivs: defaultSubscriptionPrivs,
+                    created: {
+                        date: new Date(),
+                        by: 1
+                    }
+                };
+                var subprivsCollection = destMongo.collection('subscription_privileges');
+                subprivsCollection.save(subpriv, function(err, savedPriv){
+                    if(err) {
+                        console.log('Error saving subscription privs');
+                        cb(err);
+                    } else {
+                        cb();
+                    }
                 });
             }
         ], function done(err){
