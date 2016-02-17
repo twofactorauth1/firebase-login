@@ -78,68 +78,78 @@ function (cfpLoadingBarProvider) {
  * - http://stackoverflow.com/questions/19711550/angularjs-how-to-prevent-a-request
  * - http://blog.xebia.com/cancelling-http-requests-for-fun-and-profit/
  */
-app.config(['$httpProvider', function ($httpProvider) {
+// app.config(['$httpProvider', function ($httpProvider) {
 
-    $httpProvider.interceptors.push('RequestsErrorHandler');
+//     $httpProvider.interceptors.push('RequestsErrorHandler');
 
-}]);
+// }]);
 
-app.factory('RequestsErrorHandler', ['$q', '$injector', function($q, $injector) {
+// app.factory('RequestsErrorHandler', ['$q', '$injector', function($q, $injector) {
 
-    var $modal;
-    var IndiLoginModalService;
-    var modalInstance;
+//     var $modal;
+//     var IndiLoginModalService;
+//     var modalInstance;
 
-    return {
+//     function isDashboardAPIRequest(url) {
+//         return url.indexOf('/api/2.0/dashboard/workstreams') !== -1 || url.indexOf('/api/2.0/dashboard/analytics') !== -1;
+//     }
 
-        request: function(config) {
+//     return {
 
-            var canceler = $q.defer();
+//         request: function(config) {
 
-            config.timeout = canceler.promise;
+//             if (isDashboardAPIRequest(config.url)) {
 
-            if (IndiLoginModalService && angular.isObject(IndiLoginModalService.getModalInstance())) {
+//                 var canceler = $q.defer();
 
-                // Canceling request
-                canceler.resolve();
+//                 config.timeout = canceler.promise;
 
-            }
+//                 if (IndiLoginModalService && angular.isObject(IndiLoginModalService.getModalInstance())) {
 
-            return config;
-        },
+//                     // Canceling request
+//                     canceler.resolve();
 
-        responseError: function(rejection) {
+//                 }
 
-            if (rejection && rejection.config && rejection.status !== null) {
+//             }
 
-                //unauthorized
-                if (rejection.status === 401) {
+//             return config;
+//         },
 
-                    $modal = $modal || $injector.get('$modal');
-                    IndiLoginModalService = IndiLoginModalService || $injector.get('IndiLoginModalService');
+//         responseError: function(rejection) {
 
-                    if (!angular.isObject(IndiLoginModalService.getModalInstance())) {
-                        modalInstance = $modal.open({
-                            templateUrl: 'indigeneous-admin-login-modal',
-                            keyboard: false,
-                            backdrop: 'static',
-                            size: 'sm'
-                        });
+//             if (rejection && rejection.config && rejection.status !== null) {
 
-                        IndiLoginModalService.setModalInstance(modalInstance);
+//                 //unauthorized
+//                 if (rejection.status === 401) {
 
-                        // return promise that will never resolve
-                        return $q.defer().promise;
+//                     $modal = $modal || $injector.get('$modal');
+//                     IndiLoginModalService = IndiLoginModalService || $injector.get('IndiLoginModalService');
 
-                    }
+//                     if (!angular.isObject(IndiLoginModalService.getModalInstance())) {
+//                         modalInstance = $modal.open({
+//                             templateUrl: 'indigeneous-admin-login-modal',
+//                             keyboard: false,
+//                             backdrop: 'static',
+//                             size: 'sm'
+//                         });
 
-                }
+//                         IndiLoginModalService.setModalInstance(modalInstance);
 
-            }
+//                         // return promise that we will resolve when authenticated
+//                         // return $q.defer().promise;
 
-            return $q.reject(rejection);
+//                     }
 
-        }
+//                     IndiLoginModalService.enqueueFailed401Request(rejection);
 
-    };
-}])
+//                 }
+
+//             }
+
+//             return $q.reject(rejection);
+
+//         }
+
+//     };
+// }])

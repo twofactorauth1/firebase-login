@@ -12,6 +12,10 @@ function indiLoginModalService($rootScope, $http, $q, $timeout) {
     indiService.setModalInstance = setModalInstance;
     indiService.getModalInstance = getModalInstance;
     indiService.closeModal = closeModal;
+    indiService.enqueueFailed401Request = enqueueFailed401Request;
+    indiService.resolveFailed401Requests = resolveFailed401Requests;
+
+    indiService.queue = [];
 
 
     function setModalInstance(modalInstance) {
@@ -25,6 +29,24 @@ function indiLoginModalService($rootScope, $http, $q, $timeout) {
     function closeModal() {
         indiService.modalInstance.close();
         indiService.modalInstance = undefined;
+        indiService.resolveFailed401Requests();
+    }
+
+    function enqueueFailed401Request(request) {
+        indiService.queue.push(request);
+    }
+
+    function resolveFailed401Requests() {
+        debugger;
+        var requests = indiService.queue.map(function(request) {
+            return $http(request.config);
+        });
+
+        indiService.queue = [];
+
+        debugger;
+
+        return $q.all(requests);
     }
 
     return indiService;

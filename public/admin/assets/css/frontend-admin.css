@@ -8385,11 +8385,30 @@ ssb-topbar .ui-select-match-text > small {
   display: none;
   width: 100%;
   border: none;
-  height: 310px;
+  height: 0;
   max-height: 90vh;
+  -webkit-animation: fadeOut 0.5s;
+  animation: fadeOut 0.5s;
 }
-.indi-iframe-login .visible {
+.indi-iframe-login.visible {
+  -webkit-animation: fadeIn 0.5s;
+  animation: fadeIn 0.5s;
   display: block;
+  height: auto;
+  min-height: 310px;
+}
+.indi-login-modal-loading {
+  height: 100%;
+  width: 100%;
+  min-height: 310px;
+  max-height: 90vh;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  align-items: center;
 }
 .is-indi-modal {
   height: auto;
@@ -8424,6 +8443,11 @@ ssb-topbar .ui-select-match-text > small {
   max-height: 90px!important;
   max-width: 100%!important;
 }
+.is-indi-modal .error {
+  font-size: 12px;
+  margin: -0.5em 0 -2em;
+  height: 1em;
+}
 .is-indi-modal .box-login legend,
 .is-indi-modal .social,
 .is-indi-modal fieldset > p,
@@ -8431,17 +8455,4 @@ ssb-topbar .ui-select-match-text > small {
 .is-indi-modal .copyright,
 .is-indi-modal a[href="/forgotpassword"] {
   display: none;
-}
-.indi-login-modal-loading {
-  height: 100%;
-  width: 100%;
-  min-height: 300px;
-  max-height: calc(90vh - 20px);
-  display: -ms-flexbox;
-  display: -webkit-flex;
-  display: flex;
-  -ms-flex-align: center;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  align-items: center;
 }

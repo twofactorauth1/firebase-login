@@ -12,7 +12,6 @@ function indiLoginModalController($scope, $attrs, $filter, $document, $timeout, 
 
     vm.init = init;
     vm.onload = onload;
-    vm.onunload = onunload;
     vm.setupModalEvents = setupModalEvents;
     vm.closeModal = closeModal;
 
@@ -20,7 +19,7 @@ function indiLoginModalController($scope, $attrs, $filter, $document, $timeout, 
         loading: true
     }
 
-    $scope.$watch(function() { IndiLoginModalService.getModalInstance(); }, function(modalInstance) {
+    vm.unbindModalWatcher = $scope.$watch(function() { IndiLoginModalService.getModalInstance(); }, function(modalInstance) {
         if (modalInstance) {
             vm.setupModalEvents(modalInstance);
         }
@@ -40,22 +39,45 @@ function indiLoginModalController($scope, $attrs, $filter, $document, $timeout, 
 
     function closeModal() {
         IndiLoginModalService.closeModal();
+        vm.unbindModalWatcher();
+        vm.loginIframe = null;
+        vm.loginIframeContentWindow = null;
     }
 
     function login(e) {
+
         console.debug('login');
-        vm.uiState.loading = true;
+
+        $timeout(function() {
+            vm.uiState.loading = true;
+        });
+
     }
 
     function onload(e) {
-        debugger;
-        vm.uiState.loading = false;
-        overrideLoginStyles();
-    }
 
-    function onunload(e) {
-        debugger;
-        // IndiLoginModalService.closeModal();
+        vm.loginIframeContentWindow = vm.loginIframe.get(0).contentWindow;
+
+        $timeout(function() {
+
+            vm.uiState.loading = false;
+
+            //if iframe is at login screen
+            if (vm.loginIframeContentWindow.location.pathname === '/login') {
+
+                overrideLoginStyles();
+
+            //if iframe is at any other page
+            } else {
+
+                vm.closeModal();
+
+                toaster.pop('success', 'Signed in', 'Sign in successful.');
+
+            }
+
+        });
+
     }
 
     function overrideLoginStyles() {
@@ -72,8 +94,7 @@ function indiLoginModalController($scope, $attrs, $filter, $document, $timeout, 
 
         vm.element = element;
         vm.loginIframe = vm.element.find('iframe');
-        vm.loginIframe.on('load', onload);
-        vm.loginIframe.on('unload', onunload);
+        vm.loginIframe.on('load', vm.onload);
 
     }
 

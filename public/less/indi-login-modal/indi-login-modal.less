@@ -9,12 +9,33 @@ indi-login-modal {
     width: 100%;
     border: none;
     // height: calc(~"90vh");
-    height: 310px;
+    height: 0;
     max-height: 90vh;
+    -webkit-animation: fadeOut 0.5s;
+    animation: fadeOut 0.5s;
+}
 
-    .visible {
-        display: block;
-    }
+.indi-iframe-login.visible {
+    -webkit-animation: fadeIn 0.5s;
+    animation: fadeIn 0.5s;
+    display: block;
+    height: auto;
+    min-height: 310px
+}
+
+.indi-login-modal-loading {
+    height: 100%;
+    width: 100%;
+    min-height: 310px;
+    // max-height: calc(~"90vh - 20px");
+    max-height: 90vh;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -ms-flex-align: center;
+    -webkit-align-items: center;
+    -webkit-box-align: center;
+    align-items: center;
 }
 
 .is-indi-modal {
@@ -54,22 +75,14 @@ indi-login-modal {
         max-width: 100%!important;
     }
 
+    .error {
+        font-size: 12px;
+        margin: -.5em 0 -2em;
+        height: 1em;
+    }
+
     .box-login legend, .social, fieldset > p, .new-account, .copyright, a[href="/forgotpassword"] {
         display: none;
     }
 
-}
-
-.indi-login-modal-loading {
-    height: 100%;
-    width: 100%;
-    min-height: 300px;
-    max-height: calc(~"90vh - 20px");
-    display: -ms-flexbox;
-    display: -webkit-flex;
-    display: flex;
-    -ms-flex-align: center;
-    -webkit-align-items: center;
-    -webkit-box-align: center;
-    align-items: center;
 }
