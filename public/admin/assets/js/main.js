@@ -3,6 +3,7 @@ app.run(['$rootScope', '$state', '$stateParams', '$injector',
 function ($rootScope, $state, $stateParams, $injector) {
 
     var $modal;
+    var modalInstance;
     var IndiLoginModalService;
 
     // Attach Fastclick for eliminating the 300ms delay between a physical tap and the firing of a click event on mobile browsers

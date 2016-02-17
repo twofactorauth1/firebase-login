@@ -947,7 +947,6 @@ app.constant('JS_REQUIRES', {
   {
     name: 'indi-login-modal',
     files: [
-        'assets/js/indi-login-modal/indi-login-modal.component.js',
         'assets/js/indi-login-modal/indi-login-modal.controller.js',
         'assets/js/indi-login-modal/indi-login-modal.service.js'
     ]

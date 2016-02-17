@@ -411,11 +411,11 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
     })
 
     // Login routes
-    .state('logout', {
-        url: '/logout',
-        template: '<div ui-view class="fade-in-right-big smooth"></div>',
-        abstract: true
-    })
+    // .state('logout', {
+    //     url: '/logout',
+    //     template: '<div ui-view class="fade-in-right-big smooth"></div>',
+    //     abstract: true
+    // })
     .state('login', {
         url: '/login',
         template: '<div ui-view class="fade-in-right-big smooth"></div>',

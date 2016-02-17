@@ -10177,9 +10177,6 @@ nav.links a {
   text-shadow: 1px 1px 1px #FFFFFF;
   top: 9px;
 }
-.main-login input.password {
-  padding-right: 130px;
-}
 .main-login label {
   color: #7F7F7F;
   font-size: 14px;
@@ -14137,8 +14134,13 @@ tags-input.ti-input-sm .tags .input,
   width: 14.28%;
   float: left;
 }
+indi-login-modal .modal-body {
+  min-height: 345px;
+}
+indi-login-modal .modal-title {
+  font-size: 1.5em;
+}
 .indi-iframe-login {
-  display: none;
   width: 100%;
   border: none;
   height: 0;
@@ -14149,13 +14151,17 @@ tags-input.ti-input-sm .tags .input,
 .indi-iframe-login.visible {
   -webkit-animation: fadeIn 0.5s;
   animation: fadeIn 0.5s;
-  display: block;
+  visibility: visible;
+  pointer-events: auto;
   height: auto;
   min-height: 310px;
 }
 .indi-login-modal-loading {
-  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
+  height: 100%;
   min-height: 310px;
   max-height: 90vh;
   display: -ms-flexbox;
