@@ -27,6 +27,13 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
     // For any unmatched url, redirect to /app/dashboard
     $urlRouterProvider.otherwise("/dashboard");
     //
+    // lower casing all urls
+    $urlRouterProvider.rule(function ($injector, $location) {
+        var path = $location.path(), normalized = path.toLowerCase();
+        if (path != normalized) {
+            $location.replace().path(normalized);
+        }
+    });
     // Set up the states
     $stateProvider.state('app', {
         url: "",
