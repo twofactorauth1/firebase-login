@@ -67,14 +67,20 @@ function indiLoginModalController($scope, $attrs, $filter, $document, $timeout, 
 
                 overrideLoginStyles();
 
-            //if iframe is at any other page
-            } else {
+            //if iframe is at any other admin page
+            } else if(vm.loginIframeContentWindow.location.pathname.indexOf('/admin') !== -1) {
 
                 authService.loginConfirmed();
 
                 vm.closeModal();
 
                 toaster.pop('success', 'Signed in', 'Sign in successful.');
+
+            } else {
+
+                vm.closeModal();
+
+                toaster.pop('success', 'Not Signed in', 'Sign in failed. Please try again.');
 
             }
 
