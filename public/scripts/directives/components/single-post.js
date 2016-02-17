@@ -1,4 +1,4 @@
-app.directive('singlePostComponent', ['$window', '$location', 'accountService', 'postService', 'ENV', function ($window, $location, AccountService, PostService, ENV) {
+app.directive('singlePostComponent', ['$window', '$location', 'accountService', 'postService', function ($window, $location, AccountService, PostService) {
   return {
     scope: {
       component: '='
@@ -6,7 +6,6 @@ app.directive('singlePostComponent', ['$window', '$location', 'accountService', 
     templateUrl: '/components/component-wrap.html',
     link: function (scope, element, attrs) {
       scope.component.spacing = scope.$parent.defaultSpacings;
-      scope.facebookClientID = ENV.facebookClientID;
       scope.blogPageUrl = $location.$$absUrl;
       var _handle = $location.$$path.replace('/page', '').replace('/blog/', '');
       scope.blog = {};
