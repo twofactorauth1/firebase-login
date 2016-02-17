@@ -19,5 +19,6 @@ angular.module("indigenous", [
     'config',
     'angular-parallax',
     'google.places',
-    'ng-sortable'
+    'ng-sortable',
+    'http-auth-interceptor'
 ]);

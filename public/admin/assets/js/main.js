@@ -1,6 +1,9 @@
 var app = angular.module('indigenousApp', ['indigenous']);
-app.run(['$rootScope', '$state', '$stateParams',
-function ($rootScope, $state, $stateParams) {
+app.run(['$rootScope', '$state', '$stateParams', '$injector',
+function ($rootScope, $state, $stateParams, $injector) {
+
+    var $modal;
+    var IndiLoginModalService;
 
     // Attach Fastclick for eliminating the 300ms delay between a physical tap and the firing of a click event on mobile browsers
     FastClick.attach(document.body);
@@ -41,6 +44,28 @@ function ($rootScope, $state, $stateParams) {
         job: 'ng-Dev',
         picture: 'app/img/user/02.jpg'
     };
+
+    $rootScope.$on('event:auth-loginRequired', function() {
+
+        $modal = $modal || $injector.get('$modal');
+        IndiLoginModalService = IndiLoginModalService || $injector.get('IndiLoginModalService');
+
+        if (!angular.isObject(IndiLoginModalService.getModalInstance())) {
+
+            modalInstance = $modal.open({
+                templateUrl: 'indigeneous-admin-login-modal',
+                keyboard: false,
+                backdrop: 'static',
+                size: 'sm'
+            });
+
+            IndiLoginModalService.setModalInstance(modalInstance);
+
+        }
+
+    })
+
+
 }]);
 // translate config
 app.config(['$translateProvider',
