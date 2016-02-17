@@ -75,6 +75,8 @@ function (cfpLoadingBarProvider) {
  *
  * - http://www.codelord.net/2014/06/25/generic-error-handling-in-angularjs/
  * - http://stackoverflow.com/a/28583107/77821
+ * - http://stackoverflow.com/questions/19711550/angularjs-how-to-prevent-a-request
+ * - http://blog.xebia.com/cancelling-http-requests-for-fun-and-profit/
  */
 app.config(['$httpProvider', function ($httpProvider) {
 
@@ -85,9 +87,26 @@ app.config(['$httpProvider', function ($httpProvider) {
 app.factory('RequestsErrorHandler', ['$q', '$injector', function($q, $injector) {
 
     var $modal;
+    var IndiLoginModalService;
     var modalInstance;
 
     return {
+
+        request: function(config) {
+
+            var canceler = $q.defer();
+
+            config.timeout = canceler.promise;
+
+            if (IndiLoginModalService && angular.isObject(IndiLoginModalService.getModalInstance())) {
+
+                // Canceling request
+                canceler.resolve();
+
+            }
+
+            return config;
+        },
 
         responseError: function(rejection) {
 
@@ -97,26 +116,29 @@ app.factory('RequestsErrorHandler', ['$q', '$injector', function($q, $injector) 
                 if (rejection.status === 401) {
 
                     $modal = $modal || $injector.get('$modal');
-                    console.debug('pop up login modal');
-                    modalInstance = $modal.open({
-                        templateUrl: 'indigeneous-admin-login-modal',
-                        keyboard: false,
-                        backdrop: 'static',
-                        size: 'md',
-                        resolve: {
-                            modalInstance: function() {
-                                return modalInstance || this;
-                            }
-                        }
-                    }).result.then(function(result) {
-                        console.debug('login modal result', result);
-                    });
+                    IndiLoginModalService = IndiLoginModalService || $injector.get('IndiLoginModalService');
+
+                    if (!angular.isObject(IndiLoginModalService.getModalInstance())) {
+                        modalInstance = $modal.open({
+                            templateUrl: 'indigeneous-admin-login-modal',
+                            keyboard: false,
+                            backdrop: 'static',
+                            size: 'sm'
+                        });
+
+                        IndiLoginModalService.setModalInstance(modalInstance);
+
+                        // return promise that will never resolve
+                        return $q.defer().promise;
+
+                    }
 
                 }
 
             }
 
             return $q.reject(rejection);
+
         }
 
     };

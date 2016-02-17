@@ -6,9 +6,9 @@ function indiLoginModal() {
 
     return {
         restrict: 'E',
-        scope: {
-            modalInstance: '='
-        },
+        // scope: {
+        //     modalInstance: '='
+        // },
         templateUrl: 'assets/js/indi-login-modal/indi-login-modal.component.html',
         controller: 'IndiLoginModalController',
         controllerAs: 'vm',

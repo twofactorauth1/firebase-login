@@ -1,1 +1,27 @@
-<iframe class="indi-iframe-login" src="/login" seamless></iframe>
+<div class="modal-header">
+    <button type="button" class="close" ng-click="vm.closeModal()">
+        <span aria-hidden="true">&times;</span>
+        <span class="sr-only">Close</span>
+    </button>
+    <h3 class="modal-title">
+        <span><i class="fa fa-sign-in"></i> Please sign in</span>
+    </h3>
+</div>
+
+<div class="modal-body bg-white">
+
+    <iframe class="indi-iframe-login" ng-class="{ 'visible': !vm.uiState.loading }" src="/login" seamless></iframe>
+
+    <div ng-if="vm.uiState.loading" class="indi-login-modal-loading fade-in">
+        <div class="col-xs-12">
+            <h1 class="center">
+                <span class="fa fa-spinner fa-spin"></span>
+            </h1>
+        </div>
+    </div>
+
+</div>
+
+<div class="modal-footer" ng-show="templateDetails">
+    <button class="btn btn-primary btn-o" ng-click="login()">Login</button>
+</div>
