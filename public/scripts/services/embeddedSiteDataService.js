@@ -30,7 +30,7 @@ mainApp.factory('embeddedSiteDataService', ['$http', '$location', '$cacheFactory
      *
      */
     function urlPathFallbacks()  {
-        var path = $location.$$path.replace('/page/', '');
+        var path = $location.$$path.toLowerCase().replace('/page/', '');
 
         if (path === "/" || path === "") {
             path = "index";

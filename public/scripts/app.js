@@ -80,7 +80,7 @@ var mainApp = angular
                 template: function(urlattr) {
 
                     var s = '<div data-ng-include="';
-                    s += " '/template/" + urlattr.name;
+                    s += " '/template/" + urlattr.name.toLowerCase();
                     if(urlattr.cachebuster) {
                         s+='?cachebuster=' + urlattr.cachebuster;
                     }

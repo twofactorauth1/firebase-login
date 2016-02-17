@@ -795,7 +795,7 @@ module.exports = {
 
                     //if template uses section references instead of full section data
                     if (section._id && Object.keys(section).length === 1) {
-                        sectionDao.getById(section._id, $$.m.ssb.Section, function(err, referencedSection){
+                        sectionDao.findOne({_id:section._id}, $$.m.ssb.Section, function(err, referencedSection){
                             if(err) {
                                 callback(err);
                             } else {
