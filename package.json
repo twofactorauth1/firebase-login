@@ -87,7 +87,6 @@
     "grunt-contrib-watch": "^0.6.1",
     "grunt-copy-to": "0.0.10",
     "grunt-csssplit": "0.2.1",
-    "grunt-jsdoc-to-markdown": "0.4.2",
     "grunt-karma": "^0.12.0",
     "grunt-ng-annotate": "1.0.1",
     "grunt-ng-constant": "^1.0.0",
