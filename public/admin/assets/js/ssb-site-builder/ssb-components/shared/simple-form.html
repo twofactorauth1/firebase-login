@@ -100,22 +100,26 @@
                 <span tooltip-placement="top" tooltip-html-unsafe="Redirect after submission"><i class="fa fa-info-circle" /></span>
                 <switch name="redirect" ng-model="component.redirect" class="pull-right"></switch>
             </div>
-            <div class="row">
-                <div class="col-sm-5 col-xs-12">
+            <div class="row padding-10">
+                <div class="col-sm-12 col-xs-12">
                     <div class="form-group margin-bottom-0" ng-if="component.redirect">
                         <label for="link-title">Redirect To </label>
                         <br>
-                        <div class="radio-inline" style="margin-bottom: 0px!important">
-                            <label for="redirectOptions" class="pull-right">Page</label>
-                            <input type="radio" name="redirectOptions" ng-model="component.redirectType" ng-click="component.redirectType='page'" value="page">
+                        <div class="radio radio-inline clip-radio radio-primary">
+                            <input type="radio" id="radio5" name="redirectOptions" value="page" ng-model="component.redirectType">
+                            <label for="radio5">
+                                Page
+                            </label>
                         </div>
-                        <div class="radio-inline" style="margin-bottom: 0px!important">
-                            <label for="redirectOptions" class="pull-right">External</label>
-                            <input type="radio" name="redirectOptions" ng-model="component.redirectType" ng-click="component.redirectType='external'" value="external">
-                        </div>
+                        <div class="radio radio-inline clip-radio radio-primary">
+                            <input type="radio" id="radio6" name="redirectOptions" value="external" ng-model="component.redirectType">
+                            <label for="radio6">
+                                External
+                            </label>
+                        </div>                        
                     </div>
                 </div>
-                <div class="col-sm-7 col-xs-12">
+                <div class="col-sm-12 col-xs-12">
                     <div class="form-group margin-bottom-0" ng-if="component.redirect && component.redirectType === 'page'">
                         <label for="link-page">Select Page</label>
                         <div ng-if="allPages">
