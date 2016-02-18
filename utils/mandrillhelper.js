@@ -598,19 +598,17 @@ var mandrillHelper =  {
         //debugger;
         var self = this;
         self.log = log;
-        
         self.log.debug('>> sendBasicEmail');
         self._checkForUnsubscribe(accountId, toAddress, function(err, isUnsubscribed) {
             if (isUnsubscribed == true) {
                 fn('skipping email for user on unsubscribed list');
             } else {
-               
                 vars.push({
                     "name": "SENDDATE",
                     "content": moment().format('MMM Do, YYYY')
                 });
                 var message = {
-                    'html': mergedHtml,
+                    'html': htmlContent,
                     'subject': subject,
                     'from_email':fromAddress,
                     'to': [
