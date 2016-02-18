@@ -13,6 +13,14 @@
         </div>
     </div>
     <div class="row padding-10">
+        <div class="form-group margin-bottom-0">
+            <label><strong>Unique email check:</strong></label>
+            <span tooltip-placement="top" tooltip-html-unsafe="Enforced unique check on email for contact creation"><i class="fa fa-info-circle" /></span>
+            <switch name="uniqueemail" ng-model="component.uniqueEmail" class="pull-right"></switch>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+    <div class="row padding-10">
         <div class="form-group customer-tags">
             <label class="block">
                 <strong>Add tag to contact</strong>

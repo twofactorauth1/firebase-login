@@ -928,6 +928,7 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
             arr.push(page);
         });
         var allPages = arr;
+
         var account = SimpleSiteBuilderService.account;
         
         if (!account.showhide.blog) {
@@ -938,7 +939,8 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
             var _index = _.indexOf(allPages, _blogPage);
             allPages.splice(_index, 1);
           }
-        }        
+        }
+        $scope.allPages = angular.copy(allPages);        
         $scope.filteredPages = $filter('orderBy')(allPages, "title", false);
         _.each($scope.filteredPages, function (page) {
             page.components = getPageComponents(page);
