@@ -395,7 +395,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 self.log.warn('email will not be sent.');
             } else {
                 //fromAddress, fromName, toAddress, toName, subject, html, accountId, vars, emailId, fn)
-                mandrillHelper.sendBasicEmail(
+                mandrillHelper.sendTestEmail(
                     emailDataObj.content.fromEmail,
                     emailDataObj.content.fromName,
                     emailDataObj.address.email,
