@@ -310,7 +310,8 @@ module.exports = function(grunt) {
                 }
             }
         },
-
+        
+        /*
         jsdoc2md: {
 
             separateOutputFilePerInput: {
@@ -321,7 +322,7 @@ module.exports = function(grunt) {
             }
 
         },
-
+        */
 
         //TESTING
         nodeunit: {
@@ -571,7 +572,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-ng-annotate');
-    grunt.loadNpmTasks("grunt-jsdoc-to-markdown");
+    //grunt.loadNpmTasks("grunt-jsdoc-to-markdown");
     grunt.loadNpmTasks('grunt-prompt');
     grunt.loadNpmTasks('grunt-csssplit');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
