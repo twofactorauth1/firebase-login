@@ -61,15 +61,12 @@
     font-family: Helvetica Neue;
 }
 .site-templates-container{
-    min-height:400px;
+    min-height:calc(~"100% - 65px");
     .loading-editor {
+        top:65px;        
         position: relative;
-        top: 225px;
-        background: #131e26;
-        color: white;
-
-        h1 {
-            color: white;
-        }
+        background: #f1f1f1;
+        min-height: 400px;
     }
+   
 }

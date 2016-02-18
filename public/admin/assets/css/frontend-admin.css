@@ -6722,6 +6722,12 @@ a[href="https://froala.com/wysiwyg-editor"] {
   font-family: Helvetica Neue;
 }
 .site-templates-container {
+  min-height: calc(100% - 65px);
+}
+.site-templates-container .loading-editor {
+  top: 65px;
+  position: relative;
+  background: #f1f1f1;
   min-height: 400px;
 }
 .ssb-sidebar {
