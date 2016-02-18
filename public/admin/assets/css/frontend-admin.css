@@ -6721,6 +6721,9 @@ a[href="https://froala.com/wysiwyg-editor"] {
   left: 50%;
   font-family: Helvetica Neue;
 }
+.site-templates-container {
+  min-height: 400px;
+}
 .ssb-sidebar {
   background: #131e26;
 }
