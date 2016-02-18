@@ -1085,6 +1085,9 @@ module.exports = {
                                                         link.linkTo.data = updatedPage.get("handle");
                                                         _exists = true;
                                                     }
+                                                    else if(link.linkTo && (link.linkTo.type === 'section') && link.linkTo.page === existingPage.get('handle')){                                                        
+                                                        link.linkTo.page = updatedPage.get("handle");
+                                                    }
                                                     return link
                                                 })
 
