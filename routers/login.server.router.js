@@ -320,13 +320,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
         var accountId = this.accountId(req);
         var userId = this.userId(req);
 
-        req.session.cookie = null;
-        req.session.accountId = null;
-        req.logout();
-        req.session.destroy();
-        req.session = null;
-        req.user = null;
-        resp.clearCookie(appConfig.cookie_name, { path: '/' });
+        this.logout(req, resp);
         resp.redirect('/login');
         userActivityManager.createUserLogoutActivity(accountId, userId, function(){});
 
