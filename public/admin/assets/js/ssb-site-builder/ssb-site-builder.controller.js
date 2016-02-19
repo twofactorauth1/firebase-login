@@ -482,10 +482,9 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
             .value()
 
         SimpleSiteBuilderService.openMediaModal('media-modal', 'MediaModalCtrl', null, 'lg', vm, component, index, update).result.then(function(){
-            // debugger;
-
-            //TODO: somehow need to trigger this if component.type === 'thumbnail-slider'
-            // $scope.thumbnailSlider.refreshSlider();
+           if(component.type === 'thumbnail-slider'){
+                $scope.$broadcast('refreshThumbnailSlider');
+           }
         })
     }
 
