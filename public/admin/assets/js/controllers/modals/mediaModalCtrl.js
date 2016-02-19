@@ -70,12 +70,13 @@ app.controller('MediaModalCtrl', ['$scope', '$injector', '$modalInstance', '$htt
             break;
           case "image":
           case "audio":
-              //size in bytes
-              if (50 * 1024 * 1024 > parseInt(item.size)) {
-                  return true;
-              } else {
-                  ToasterService.show('error', 'The maximum audio file size 50MB. Unable to Upload.');
-              }
+            //size in bytes
+            if (50 * 1024 * 1024 > parseInt(item.size)) {
+              return true;
+            } else {
+              ToasterService.show('error', 'The maximum audio file size 50MB. Unable to Upload.');
+            }
+            break;
           case "document":
           default:
             //size in bytes
