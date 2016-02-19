@@ -409,6 +409,11 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
                   if(section.components.length > 1){
                     component.sectionTitle = section.name;
                   }
+                  else if(section.components.length === 1){
+                    if(section.name && component.type && section.name.toLowerCase() !== component.type.toLowerCase()){
+                      component.sectionTitle = section.name;  
+                    }
+                  }
                   components.push(component)
                 }
               })
