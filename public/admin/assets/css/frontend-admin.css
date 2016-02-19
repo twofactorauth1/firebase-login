@@ -7515,6 +7515,11 @@ ssb-topbar .ui-select-match-text > small {
   float: right!important;
   width: auto!important;
 }
+[class*="ssb-theme-"][data-eq-state$="medium"] .ssb-page-section-layout-header-v1 [social-link-component],
+[class*="ssb-theme-"][data-eq-state$="large"] .ssb-page-section-layout-header-v1 [social-link-component] {
+  float: right;
+  width: 50%;
+}
 @media screen and (min-width: 768px) {
   [class*="ssb-theme-"]:not([class*="ssb-edit-mode"]) .ssb-page-section-layout-header-v1 .navigation-v2 .navbar .nav > li > a {
     padding: 10px 25px 10px;
@@ -7528,6 +7533,10 @@ ssb-topbar .ui-select-match-text > small {
   [class*="ssb-theme-"]:not([class*="ssb-edit-mode"]) .ssb-page-section-layout-header-v1 .navigation-v2 .navbar ul.navbar-nav {
     float: right!important;
     width: auto!important;
+  }
+  [class*="ssb-theme-"]:not([class*="ssb-edit-mode"]) .ssb-page-section-layout-header-v1 [social-link-component] {
+    float: right;
+    width: 50%;
   }
 }
 [class*="ssb-theme-"] .ssb-page-section-layout-header-v1 [social-link-component] .component-inner .container {
