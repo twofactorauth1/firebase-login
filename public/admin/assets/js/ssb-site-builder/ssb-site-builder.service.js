@@ -864,7 +864,7 @@
             var hasComponentFooter = false;
             var match = _.filter(sections, function(s){
 
-                if (s.name && s.components) {
+                if (s && s.name && s.components) {
                     hasSectionFooter = s.name.toLowerCase() === 'footer';
                     hasComponentFooter = _.where(s.components, { type: 'footer' }).length !== 0;
                 }
