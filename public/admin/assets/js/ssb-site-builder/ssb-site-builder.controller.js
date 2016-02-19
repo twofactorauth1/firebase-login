@@ -453,7 +453,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         $timeout(function() {
             vm.imageEditor.editor.image.insert(asset.url, !1, null, vm.imageEditor.img);
         }, 0);
-        
+
     };
 
     function setupBreakpoints() {
@@ -510,7 +510,8 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     }
 
     function pageResize(e) {
-        if ($(this).width() > 767) {
+        console.log($(this).width());
+        if ($(this).innerWidth() > 767) {
             vm.uiState.sidebarOrientation = 'vertical';
         } else {
             vm.uiState.sidebarOrientation = 'horizontal';
@@ -527,7 +528,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
 
         angular.element("body").on("click", ".ssb-page-section", pageSectionClick);
 
-        angular.element('.ssb-main').on('eqResize', pageResize)
+        angular.element('.ssb-main').on('eqResize', pageResize);
 
         setupBreakpoints();
 
