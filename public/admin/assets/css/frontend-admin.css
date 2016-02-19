@@ -7100,7 +7100,7 @@ a[href="https://froala.com/wysiwyg-editor"] {
   font-size: 1.5em;
 }
 .ssb-sidebar-section-panel .ui-select-match-close {
-  position: initial;
+  position: static;
 }
 .ssb-sidebar-section-panel .panel-group {
   margin-bottom: 0;
