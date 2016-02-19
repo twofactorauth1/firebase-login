@@ -590,7 +590,7 @@ module.exports = {
     getUpdatedWebsiteLinkList: function(list, handle, deletePage, fn){
         var self = this;
 
-        var linkList = list.links.filter(function (lnk) {                 
+        var linkList = list.links.filter(function (lnk) {
         return lnk.type === 'link' &&
              lnk.linkTo && deletePage ? (lnk.linkTo.data === handle || lnk.linkTo.page === handle) : lnk.linkTo && lnk.linkTo.data === handle
         })
@@ -704,7 +704,7 @@ module.exports = {
             } else {
                 var sections = page.get('sections') || [];
                 sectionDao.dereferenceSections(sections, function(err, sectionAry){
-                    page.set('sections', sectionAry);
+                    page.set('sections', _.compact(sectionAry));
                     self.log.debug('<< getPage');
                     return fn(null, page);
                 });
@@ -1000,7 +1000,7 @@ module.exports = {
                                                         }
                                                     });
                                             }
-                                        });                                        
+                                        });
                                     }
                                 });
                             }
@@ -1085,7 +1085,7 @@ module.exports = {
                                                         link.linkTo.data = updatedPage.get("handle");
                                                         _exists = true;
                                                     }
-                                                    else if(link.linkTo && (link.linkTo.type === 'section') && link.linkTo.page === existingPage.get('handle')){                                                        
+                                                    else if(link.linkTo && (link.linkTo.type === 'section') && link.linkTo.page === existingPage.get('handle')){
                                                         link.linkTo.page = updatedPage.get("handle");
                                                     }
                                                     return link
@@ -1098,14 +1098,14 @@ module.exports = {
                                                 .filter(function(link){
                                                     //only keep pages that exist and are visible in menu
                                                     if(link.linkTo.type === 'section' && link.linkTo.page){
-                                                        return _.contains(pageHandles, link.linkTo.page)   
+                                                        return _.contains(pageHandles, link.linkTo.page)
                                                     }
                                                     else if(link.linkTo.type === 'page' || link.linkTo.type === 'home'){
                                                         return _.contains(pageHandles, link.linkTo.data)
                                                     }
                                                     else{
                                                         return true;
-                                                    }                                                    
+                                                    }
                                                 })
                                                 .value(); //return array value
 
