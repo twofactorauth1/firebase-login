@@ -326,25 +326,18 @@ _.extend(router.prototype, BaseRouter.prototype, {
         req.session.destroy();
         req.session = null;
         req.user = null;
+        resp.clearCookie(appConfig.cookie_name, { path: '/' });
+        resp.redirect('/login');
+        userActivityManager.createUserLogoutActivity(accountId, userId, function(){});
+
 
         /*
-        if (accountId > 0) {
-            var appConfig = require('../configs/app.config');
-            var redirect = req.protocol + '://' + req.get('host') + "/login";
-
-            return resp.redirect(appConfig.server_url + "/logout?redirect=" + encodeURIComponent(redirect));
-        } else {
-            if (String.isNullOrEmpty(req.query.redirect) == false) {
-                return resp.redirect(req.query.redirect);
-            }
-        }
-        */
         userActivityManager.createUserLogoutActivity(accountId, userId, function() {
             setTimeout(function() {
                 resp.redirect("/login");
             }, 2000);
         });
-
+        */
         //return resp.redirect("/login");
     },
     //endregion
