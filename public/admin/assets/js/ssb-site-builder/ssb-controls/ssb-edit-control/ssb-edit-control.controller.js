@@ -11,6 +11,7 @@ function ssbSiteBuilderEditControlController($scope, $attrs, $filter, $timeout, 
     vm.init = init;
     vm.setActive = setActive;
     vm.moveSection = moveSection;
+    vm.scrollToActiveSection = scrollToActiveSection;
 
     /**
      * Watch for hovered components
@@ -127,7 +128,19 @@ function ssbSiteBuilderEditControlController($scope, $attrs, $filter, $timeout, 
         sectionsArray.splice(toIndex, 0, sectionsArray.splice(fromIndex, 1)[0] );
 
         vm.setActive(toIndex);
+        
+        scrollToActiveSection();
 
+    }
+
+    function scrollToActiveSection() {
+        $timeout(function () {
+            var scrollContainerEl = document.querySelector('.ssb-site-builder-container');
+            var activeSection = document.querySelector('.ssb-active-section');
+            if (activeSection) {
+              scrollContainerEl.scrollTop = activeSection.offsetTop;
+            }
+        }, 500);
     }
 
     function init(element) {
