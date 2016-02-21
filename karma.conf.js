@@ -40,7 +40,6 @@ module.exports = function (config) {
       'public/js/libs/oclazyload/dist/ocLazyLoad.min.js',
       'public/js/libs/angular-card/src/card.js',
       'public/js/libs/angular-loading-bar/build/loading-bar.min.js',
-      'public/js/libs/angular-breadcrumb/dist/angular-breadcrumb.min.js',
       'public/js/libs/angular-scroll/angular-scroll.min.js',
       'public/js/libs/angular-translate/angular-translate.min.js',
       'public/js/libs/angular-translate-loader-url/angular-translate-loader-url.min.js',

@@ -56,6 +56,7 @@ app.directive('mediaModal', ['$http', '$timeout', 'FileUploader', 'AssetsService
                                 } else {
                                     ToasterService.show('error', 'The maximum audio file size 50MB. Unable to Upload.');
                                 }
+                                break;
                             case "document":
                             default:
                                 //size in bytes

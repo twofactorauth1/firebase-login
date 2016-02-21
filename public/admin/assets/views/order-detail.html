@@ -7,7 +7,6 @@
                 <h1 class="mainTitle">Order #{{ order.order_id }}</h1>
                 <span class="mainDescription">This order is currently <span class="label label-default">{{formatOrderStatus(order.status)}}</span></span>
             </div>
-            <div ncy-breadcrumb></div>
         </div>
     </section>
     <form name="myform">
@@ -210,7 +209,7 @@
                                 </fieldset>
                             </div>
                             <div class="col-sm-6 col-xs-12">
-                                
+
                                 <fieldset class="padding-15 margin-bottom-0">
                                     <legend>
                                         Shipping Details <span class="fa" ng-init="shippingEdit = false" ng-click="shippingEdit = !shippingEdit" ng-class="{'fa-edit': !shippingEdit, 'fa-times': shippingEdit}"></span>

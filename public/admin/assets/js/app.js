@@ -12,7 +12,6 @@ angular.module("indigenous", [
     'oc.lazyLoad',
     'gavruk.card',
     'cfp.loadingBar',
-    'ncy-angular-breadcrumb',
     'duScroll',
     'pascalprecht.translate',
     'autocomplete',
