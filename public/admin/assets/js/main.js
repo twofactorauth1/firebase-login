@@ -46,25 +46,35 @@ function ($rootScope, $state, $stateParams, $injector) {
         picture: 'app/img/user/02.jpg'
     };
 
-    $rootScope.$on('event:auth-loginRequired', function() {
+    $rootScope.$on('event:auth-loginRequired', function(data) {
 
-        $modal = $modal || $injector.get('$modal');
-        IndiLoginModalService = IndiLoginModalService || $injector.get('IndiLoginModalService');
+        /**
+         * Ignore social feed 401's
+         * - TODO: handle social feed token expiration in:
+         *          - socialconfig_manager.js
+         *          - /public/admin/assets/js/services/socialconfig.js
+         */
+        if (data.currentScope.pageTitle().indexOf('Social Feed') !== -1) {
 
-        if (!angular.isObject(IndiLoginModalService.getModalInstance())) {
+            $modal = $modal || $injector.get('$modal');
+            IndiLoginModalService = IndiLoginModalService || $injector.get('IndiLoginModalService');
 
-            modalInstance = $modal.open({
-                templateUrl: 'indigeneous-admin-login-modal',
-                keyboard: false,
-                backdrop: 'static',
-                size: 'sm'
-            });
+            if (!angular.isObject(IndiLoginModalService.getModalInstance())) {
 
-            IndiLoginModalService.setModalInstance(modalInstance);
+                modalInstance = $modal.open({
+                    templateUrl: 'indigeneous-admin-login-modal',
+                    keyboard: false,
+                    backdrop: 'static',
+                    size: 'sm'
+                });
+
+                IndiLoginModalService.setModalInstance(modalInstance);
+
+            }
 
         }
 
-    })
+    });
 
 
 }]);
