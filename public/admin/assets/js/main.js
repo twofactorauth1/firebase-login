@@ -49,28 +49,24 @@ function ($rootScope, $state, $stateParams, $injector) {
     $rootScope.$on('event:auth-loginRequired', function(data) {
 
         /**
-         * Ignore social feed 401's
-         * - TODO: handle social feed token expiration in:
-         *          - socialconfig_manager.js
-         *          - /public/admin/assets/js/services/socialconfig.js
+         * List of ignored API requests
+         *  - /api/1.0/social/socialconfig/*
+         *      - Reason: 401's on expired auth
          */
-        if (data.currentScope.pageTitle().indexOf('Social Feed') === -1) {
 
-            $modal = $modal || $injector.get('$modal');
-            IndiLoginModalService = IndiLoginModalService || $injector.get('IndiLoginModalService');
+        $modal = $modal || $injector.get('$modal');
+        IndiLoginModalService = IndiLoginModalService || $injector.get('IndiLoginModalService');
 
-            if (!angular.isObject(IndiLoginModalService.getModalInstance())) {
+        if (!angular.isObject(IndiLoginModalService.getModalInstance())) {
 
-                modalInstance = $modal.open({
-                    templateUrl: 'indigeneous-admin-login-modal',
-                    keyboard: false,
-                    backdrop: 'static',
-                    size: 'sm'
-                });
+            modalInstance = $modal.open({
+                templateUrl: 'indigeneous-admin-login-modal',
+                keyboard: false,
+                backdrop: 'static',
+                size: 'sm'
+            });
 
-                IndiLoginModalService.setModalInstance(modalInstance);
-
-            }
+            IndiLoginModalService.setModalInstance(modalInstance);
 
         }
 

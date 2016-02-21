@@ -7,7 +7,7 @@
         var baseUrl = '/api/1.0/';
         this.getAllSocialConfig = function(fn) {
             var apiUrl = baseUrl + ['social', 'socialconfig'].join('/');
-            $http.get(apiUrl)
+            $http({ method: 'GET', url: apiUrl, ignoreAuthModule: true })
                 .success(function(data, status, headers, config) {
                     fn(data);
                 });
@@ -15,7 +15,7 @@
 
         this.getTrackedObject = function(id, socialId, fn) {
             var apiUrl = baseUrl + ['social', 'socialconfig', 'tracked', id].join('/');
-            $http.get(apiUrl)
+            $http({ method: 'GET', url: apiUrl, ignoreAuthModule: true })
                 .success(function(data, status, headers, config) {
                     fn(data, socialId);
                 });
@@ -23,7 +23,7 @@
 
         this.getTrackedObjectPromise = function(id, socialId, fn) {
             var apiUrl = baseUrl + ['social', 'socialconfig', 'tracked', id].join('/');
-            return $http.get(apiUrl);
+            return $http({ method: 'GET', url: apiUrl, ignoreAuthModule: true });
         };
 
         this.postFBPost = function(socialAccountId, post, fn) {
@@ -70,7 +70,7 @@
 
         this.getFBPages = function(socialAccountId, fn) {
             var apiUrl = baseUrl + ['social', 'socialconfig', 'facebook', socialAccountId, 'pages'].join('/');
-            $http.get(apiUrl)
+            $http({ method: 'GET', url: apiUrl, ignoreAuthModule: true })
                 .success(function(data, status, headers, config) {
                     fn(data);
                 });
@@ -78,12 +78,12 @@
 
         this.getFBPagesPromise = function(socialAccountId, fn) {
             var apiUrl = baseUrl + ['social', 'socialconfig', 'facebook', socialAccountId, 'pages'].join('/');
-            return $http.get(apiUrl);
+            return $http({ method: 'GET', url: apiUrl, ignoreAuthModule: true });
         };
 
         this.getFBPageInfo = function(socialAccountId, pageId, fn) {
             var apiUrl = baseUrl + ['social', 'socialconfig', 'facebook', socialAccountId, 'page', pageId].join('/');
-            $http.get(apiUrl)
+            $http({ method: 'GET', url: apiUrl, ignoreAuthModule: true })
                 .success(function(data, status, headers, config) {
                     fn(data);
                 });
@@ -109,7 +109,7 @@
         //Twitter
         this.getTwitterFeed = function(socialAccountId, fn) {
             var apiUrl = baseUrl + ['social', 'socialconfig', 'twitter', socialAccountId, 'feed'].join('/');
-            $http.get(apiUrl)
+            $http({ method: 'GET', url: apiUrl, ignoreAuthModule: true })
                 .success(function(data, status, headers, config) {
                     fn(data);
                 });
@@ -117,7 +117,7 @@
 
         this.getTwitterFollowers = function(socialAccountId, fn) {
             var apiUrl = baseUrl + ['social', 'socialconfig', 'twitter', socialAccountId, 'followers'].join('/');
-            $http.get(apiUrl)
+            $http({ method: 'GET', url: apiUrl, ignoreAuthModule: true })
                 .success(function(data, status, headers, config) {
                     fn(data);
                 });
@@ -125,7 +125,7 @@
 
         this.getTwitterProfile = function(socialAccountId, fn) {
             var apiUrl = baseUrl + ['social', 'socialconfig', 'twitter', socialAccountId, 'profile'].join('/');
-            $http.get(apiUrl)
+            $http({ method: 'GET', url: apiUrl, ignoreAuthModule: true })
                 .success(function(data, status, headers, config) {
                     fn(data);
                 });
@@ -204,7 +204,7 @@
         //Facebook
         this.getFBPosts = function(socialAccountId, fn) {
             var apiUrl = baseUrl + ['social', 'socialconfig', 'facebook', socialAccountId, 'posts'].join('/');
-            $http.get(apiUrl)
+            $http({ method: 'GET', url: apiUrl, ignoreAuthModule: true })
                 .success(function(data, status, headers, config) {
                     fn(data);
                 });
@@ -212,7 +212,7 @@
 
         this.getFBProfile = function(socialAccountId, fn) {
             var apiUrl = baseUrl + ['social', 'socialconfig', 'facebook', socialAccountId, 'profile'].join('/');
-            $http.get(apiUrl)
+            $http({ method: 'GET', url: apiUrl, ignoreAuthModule: true })
                 .success(function(data, status, headers, config) {
                     fn(data);
                 });

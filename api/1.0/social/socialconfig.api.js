@@ -600,6 +600,7 @@ _.extend(api.prototype, baseApi.prototype, {
             } else {
                 socialConfigManager.getFacebookPosts(accountId, socialAccountId, function(err, posts){
                     self.log.debug('<< getFacebookPosts');
+                    self.log.debug('<< getFacebookPosts err:', err);
                     self.sendResultOrError(resp, err, posts, "Error fetching posts");
                 });
             }
