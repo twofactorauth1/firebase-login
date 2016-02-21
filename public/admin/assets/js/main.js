@@ -54,7 +54,7 @@ function ($rootScope, $state, $stateParams, $injector) {
          *          - socialconfig_manager.js
          *          - /public/admin/assets/js/services/socialconfig.js
          */
-        if (data.currentScope.pageTitle().indexOf('Social Feed') !== -1) {
+        if (data.currentScope.pageTitle().indexOf('Social Feed') === -1) {
 
             $modal = $modal || $injector.get('$modal');
             IndiLoginModalService = IndiLoginModalService || $injector.get('IndiLoginModalService');
