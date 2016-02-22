@@ -11,9 +11,9 @@ function ssbComponentLoaderController($scope, $attrs, $filter) {
     var vm = this;
 
     vm.init = init;
-    vm.hover = hover;
+    vm.click = click;
 
-    function hover(e) {
+    function click(e) {
 
         if (vm.state && vm.uiState) {
 

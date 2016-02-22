@@ -36,7 +36,7 @@ function ssbComponentLoader($compile, $timeout) {
                         'ng-attr-style="{{vm.componentStyle(vm.component)}}" ' +
                         'control="vm.componentControl"' +
                         'media="vm.componentMedia(componentId, index, update)" ' +
-                        'ng-mouseenter="vm.hover($event);">' +
+                        'ng-click="vm.click($event);">' +
                       '</div>';
 
         //if edit mode
