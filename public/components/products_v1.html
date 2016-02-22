@@ -45,7 +45,7 @@
                             <a class="btn ssb-theme-btn btn-primary btn-block center" href="#" ng-if="product.hasVariations" data-toggle="modal" data-target="#product-details-modal" ng-click="updateSelectedProduct(product)">
                                 Select Options
                             </a>
-                            <button class="btn ssb-theme-btn btn-primary btn-block center" ng-click="addDetailsToCart(product)" href="#" ng-if="product.type != 'external' && itemClicked(product) != true && !product.hasVariations">
+                            <button class="btn ssb-theme-btn btn-primary btn-block center" ng-click="addDetailsToCart(true, product)" href="#" ng-if="product.type != 'external' && itemClicked(product) != true && !product.hasVariations">
                                 <div data-class="btn-text">
                                     <span class="fa fa-shopping-cart"></span> Add to Cart
                                 </div>
@@ -412,7 +412,7 @@
                                     </div>
                                 </div>
                                 <div class="actions">
-                                    <button class="btn ssb-theme-btn btn-primary btn-block center" ng-click="addDetailsToCart(selectedProduct, matchedVariation)" href="#" ng-if="selectedProduct.type != 'external' && itemClicked(selectedProduct) != true && matchedVariation">
+                                    <button class="btn ssb-theme-btn btn-primary btn-block center" ng-click="addDetailsToCart(true, selectedProduct, matchedVariation)" href="#" ng-if="selectedProduct.type != 'external' && itemClicked(selectedProduct) != true && matchedVariation">
                                         <div data-class="btn-text">
                                             <span class="fa fa-shopping-cart"></span> Add to Cart
                                         </div>
