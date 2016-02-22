@@ -21,9 +21,6 @@
                         <a href="{{image.url}}" title="{{image.label}}" data-gallery>
                             <img class="img-responsive img-gallery-{{$index}} image-gallery" data-index="{{$index}}" ng-click="addImageFromMedia(component._id, $index, true)" alt="{{image.label}}" ng-src="{{image.url}}">
                         </a>
-                        <span class="caption" ng-if="isEditing">
-                            <i class="fa fa-times-circle" ng-click="deleteImage(component, $index)"></i>
-                        </span>
                     </div>
                     <div ng-if="isEditing" class="delete-single-image center">
                         <button ng-click="deleteImageFromGallery(component._id, $index)" class="ng-scope btn-delete-single-image"><i class='fa fa-trash'></i></button>

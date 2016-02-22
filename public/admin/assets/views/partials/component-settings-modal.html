@@ -302,8 +302,7 @@
                                 <h2 class="blog-title">
                                     <a data-ng-if="blog.post.post_url" href="javascript:void(0)">
                                         <div class="post_title"
-                                             data-ng-if="blog.post.post_title">
-                                            {{blog.post.post_title | htmlToPlaintext}}
+                                             data-ng-if="blog.post.post_title" ng-bind-html="blog.post.post_title">                      
                                         </div>
                                     </a>
                                 </h2>

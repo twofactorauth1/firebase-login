@@ -140,7 +140,7 @@
       setTimeout(function () {
         $scope.$apply(function(){
           $scope.isLoaded = true;
-        });        
+        });
       }, 1500);
       //push the feed into the display
       $scope.displayFeed = $scope.feed;
@@ -300,7 +300,7 @@
               $scope.feedLengths[socialAccountId] = posts.length;
             }
           $scope.afterPosting();
-         })         
+         })
       });
     };
 
@@ -739,7 +739,7 @@
       }, 1000);
     };
 
-    
+
     angular.element(".sidebar-toggler").click(function(){
       if($scope && $scope.$state && $scope.$state.current && $scope.$state.current.name === "app.marketing.socialfeed"){
         setTimeout(function () {
@@ -747,7 +747,7 @@
             $('#mcontainer').masonry();
           $scope.sortFeed({label: "Most Recent", data: "date"});
         }, 500);
-      }        
+      }
     })
 
   }]);

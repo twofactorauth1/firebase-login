@@ -7,7 +7,6 @@
                 <span ng-if="emails" class="mainDescription">There are currently {{emails.length}} emails.</span>
                 <span ng-if="!emails" class="mainDescription">Loading emails...</span>
             </div>
-            <div ncy-breadcrumb></div>
         </div>
     </section>
     <!-- end: PAGE TITLE -->
@@ -69,7 +68,7 @@
                                 <th class="hidden-xs" st-sort-default="{{order}}" st-sort="getters.modified" ng-class="{'center': tableView != 'grid'}">Modified</th>
                             </tr>
                             <tr ng-if="showFilter">
-                                
+
                                 <th>
                                     <input st-search="title" placeholder="Title" class="form-control" type="search" />
                                 </th>

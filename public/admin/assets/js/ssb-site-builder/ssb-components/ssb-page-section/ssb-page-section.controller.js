@@ -23,49 +23,50 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude) {
 
     function sectionClass(section) {
         var classString = 'container-fluid '; //col-xs-12 was messing up legacy
-        var title = section.title || section.name;
-        var version = section.version;
+        if(section){
+            var title = section.title || section.name;
+            var version = section.version;
 
-        if (title) {
+            if (title) {
 
-            classString += ' ssb-page-section-' + $filter('slugify')(title);
+                classString += ' ssb-page-section-' + $filter('slugify')(title);
 
-            if (version) {
-                classString += ' ssb-page-section-' + $filter('slugify')(title); + '-v' + version;
-            }
-
-        }
-
-        if (section.layout) {
-
-            classString += ' ssb-page-section-layout-' + section.layout;
-
-            if (version) {
-                classString += ' ssb-page-section-layout-' + section.layout + '-v' + version;
-            }
-
-        }
-
-        if (section.layoutModifiers) {
-
-            if (section.layoutModifiers.fixed) {
-
-                classString += ' ssb-page-section-layout-' + section.layout + '-fixed';
+                if (version) {
+                    classString += ' ssb-page-section-' + $filter('slugify')(title); + '-v' + version;
+                }
 
             }
 
-            // if (section.layoutModifiers.sidePadding0) {
+            if (section.layout) {
 
-            //     classString += ' ssb-page-section-layout-side-padding-0';
+                classString += ' ssb-page-section-layout-' + section.layout;
 
-            // }
+                if (version) {
+                    classString += ' ssb-page-section-layout-' + section.layout + '-v' + version;
+                }
 
-        }
+            }
 
-        if (vm.sectionHasFooter(section)) {
-            classString += ' ssb-page-section-layout-overflow-visible';
-        }
+            if (section.layoutModifiers) {
 
+                if (section.layoutModifiers.fixed) {
+
+                    classString += ' ssb-page-section-layout-' + section.layout + '-fixed';
+
+                }
+
+                // if (section.layoutModifiers.sidePadding0) {
+
+                //     classString += ' ssb-page-section-layout-side-padding-0';
+
+                // }
+
+            }
+
+            if (vm.sectionHasFooter(section)) {
+                classString += ' ssb-page-section-layout-overflow-visible';
+            }
+        }   
         // console.debug('section classString')
         // console.debug(classString)
 
@@ -76,7 +77,7 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude) {
         var classString = ' ';
 
 
-        if (section.bg) {
+        if (section && section.bg) {
 
             if (section.bg.img && section.bg.img.blur) {
                 classString += ' blur-image';
@@ -94,7 +95,7 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude) {
     function sectionStyle(section) {
         var styleString = ' ';
 
-        if (section.spacing) {
+        if (section && section.spacing) {
             if (section.spacing.pt) {
                 styleString += 'padding-top: ' + section.spacing.pt + 'px;';
             }
@@ -139,7 +140,7 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude) {
 
         }
 
-        if (section.txtcolor) {
+        if (section && section.txtcolor) {
             styleString += 'color: ' + section.txtcolor + ';';
         }
 
@@ -149,7 +150,7 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude) {
     function sectionBGStyle(section) {
         var styleString = ' ';
 
-        if (section.bg) {
+        if (section && section.bg) {
 
             /*
             bg:

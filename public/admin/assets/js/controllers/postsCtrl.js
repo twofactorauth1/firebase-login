@@ -142,6 +142,7 @@
                       $scope.posts.unshift(data);
                       $scope.displayedPosts.unshift(data);
                       $scope.saveLoading = false;
+                      $scope.post = {};
                     })
             })
         };

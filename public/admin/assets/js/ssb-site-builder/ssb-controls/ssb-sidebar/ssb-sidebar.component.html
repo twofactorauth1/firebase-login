@@ -76,7 +76,8 @@
                                     <i
                                         class="fa fa-info"
                                         tooltip-placement="left"
-                                        tooltip-html-unsafe="<h4>{{section.name || section.title}}</h4><p>{{section.description}}</p>">
+                                        tooltip-html-unsafe="<h4>{{section.name || section.title}}</h4><p>{{section.description}}</p>"
+                                        tooltip-append-to-body="true">
                                     </i>
                                 </div>
                                 <div class="ssb-sidebar-add-section-btn">
@@ -97,7 +98,8 @@
                                     <i
                                         class="fa fa-info"
                                         tooltip-placement="left"
-                                        tooltip-html-unsafe="<h4>{{section.name || section.title}}</h4><p>{{section.description}}</p>">
+                                        tooltip-html-unsafe="<h4>{{section.name || section.title}}</h4><p>{{section.description}}</p>"
+                                        tooltip-append-to-body="true">
                                     </i>
                                 </div>
                                 <div class="ssb-sidebar-add-section-btn">
@@ -302,7 +304,7 @@
                 <div class="close-panel ti-close"  ng-click="vm.uiState.openSidebarPanel = ''"></div>
                     <div class="form-group">
 
-                        <ui-select ng-model="vm.state.website.theme" ng-change="vm.applyThemeToSite($select.selected)" theme="bootstrap">
+                        <ui-select ng-model="vm.state.website.theme" ng-change="vm.applyThemeToSite($select.selected, true)" theme="bootstrap">
                           <ui-select-match placeholder="Select a theme">
                               <small ng-bind-html="$select.selected.name"></small>
                           </ui-select-match>

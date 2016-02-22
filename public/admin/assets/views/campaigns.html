@@ -7,7 +7,6 @@
                 <span ng-if="campaigns" class="mainDescription">There are currently {{campaigns.length}} campaigns.</span>
                 <span ng-if="!campaigns" class="mainDescription">Loading campaigns...</span>
             </div>
-            <div ncy-breadcrumb></div>
         </div>
     </section>
     <!-- end: PAGE TITLE -->
@@ -154,8 +153,8 @@
                                                 </div>
                                             </div>
 
-                                            <div class="row">  
-                                                <div class="col-xs-12">  
+                                            <div class="row">
+                                                <div class="col-xs-12">
                                                     <div class="col-xs-6 text-center border-right">
                                                         <div class="rate">
                                                             <i class="fa fa-caret-up text-green"></i> <span class=" text-bold">{{campaign.statistics.emailsOpened || 0 }}</span><span ng-if="campaign.statistics.participants" class="text-small muted"> ({{Math.round(((campaign.statistics.emailsOpened/campaign.statistics.participants)*100) * 100) / 100}}%)</span>
@@ -168,8 +167,8 @@
                                                         </div>
                                                         Clicked
                                                     </div>
-                                                </div>    
-                                            </div>    
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </td>

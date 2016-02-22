@@ -1,5 +1,5 @@
 @charset "UTF-8";
-/* ---------------------------------------------------------------------- 
+/* ----------------------------------------------------------------------
 >>> TABLE OF CONTENT
 -------------------------------------------------------------------------
 1 - Basic Elements & Classes
@@ -162,14 +162,6 @@ a:active {
 }
 button {
   outline: 0 !important;
-}
-a {
-  color: #000;
-}
-a:hover,
-a:focus,
-a:active {
-  color: #000000;
 }
 h1,
 h2 {
@@ -10177,9 +10169,6 @@ nav.links a {
   text-shadow: 1px 1px 1px #FFFFFF;
   top: 9px;
 }
-.main-login input.password {
-  padding-right: 130px;
-}
 .main-login label {
   color: #7F7F7F;
   font-size: 14px;
@@ -14136,4 +14125,93 @@ tags-input.ti-input-sm .tags .input,
 .email-templates table.grid thead th {
   width: 14.28%;
   float: left;
+}
+indi-login-modal .modal-body {
+  min-height: 345px;
+}
+indi-login-modal .modal-title {
+  font-size: 1.5em;
+}
+.indi-iframe-login {
+  visibility: hidden;
+  pointer-events: none;
+  width: 100%;
+  border: none;
+  height: 0;
+  max-height: 90vh;
+  -webkit-animation: fadeOut 0.5s;
+  animation: fadeOut 0.5s;
+}
+.indi-iframe-login.visible {
+  -webkit-animation: fadeIn 0.5s;
+  animation: fadeIn 0.5s;
+  visibility: visible;
+  pointer-events: auto;
+  height: auto;
+  min-height: 310px;
+}
+.indi-login-modal-loading {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  min-height: 310px;
+  max-height: 90vh;
+  background: white;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  align-items: center;
+}
+.is-indi-modal {
+  height: auto;
+}
+.is-indi-modal body {
+  height: auto;
+  background: #fff;
+}
+.is-indi-modal .main-login {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  overflow: hidden;
+}
+.is-indi-modal .logo,
+.is-indi-modal .box-login,
+.is-indi-modal fieldset,
+.is-indi-modal .row {
+  padding: 0!important;
+  margin: 0!important;
+  border: 0 none;
+  border-radius: 0;
+}
+.is-indi-modal fieldset {
+  margin-top: 15px!important;
+}
+.is-indi-modal .social {
+  margin: 0 0 15px -5px !important;
+  padding: 0!important;
+}
+.is-indi-modal .logo img {
+  max-height: 90px!important;
+  max-width: 100%!important;
+}
+.is-indi-modal .error {
+  font-size: 12px;
+  font-size: 4.45vmin;
+  margin: -6px 0 -10px;
+  height: 1em;
+  color: orange;
+}
+.is-indi-modal .box-login legend,
+.is-indi-modal .social,
+.is-indi-modal fieldset > p,
+.is-indi-modal .new-account,
+.is-indi-modal .copyright,
+.is-indi-modal a[href="/forgotpassword"] {
+  display: none;
 }

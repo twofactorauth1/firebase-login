@@ -9,6 +9,7 @@ var SEGMENTIO_CONFIG = require('./configs/segmentio.config.js');
 var KEEN_CONFIG = require('./configs/keen.config');
 var GOOGLE_CONFIG = require('./configs/google.config');
 var LEADDYNO_CONFIG = require('./configs/leaddyno.config');
+var FACEBOOK_CONFIG = require('./configs/facebook.config');
 
 //var wiredepJSAry = require('wiredep')().js;
 
@@ -309,7 +310,8 @@ module.exports = function(grunt) {
                 }
             }
         },
-
+        
+        /*
         jsdoc2md: {
 
             separateOutputFilePerInput: {
@@ -320,7 +322,7 @@ module.exports = function(grunt) {
             }
 
         },
-
+        */
 
         //TESTING
         nodeunit: {
@@ -389,7 +391,8 @@ module.exports = function(grunt) {
                         googleClientId: GOOGLE_CONFIG.CLIENT_ID,
                         googleClientSecret: GOOGLE_CONFIG.CLIENT_SECRET,
                         googleServerKey: GOOGLE_CONFIG.SERVER_KEY,
-                        leaddyno: LEADDYNO_CONFIG.LEAD_DYNO_KEY
+                        leaddyno: LEADDYNO_CONFIG.LEAD_DYNO_KEY,
+                        facebookClientID: FACEBOOK_CONFIG.CLIENT_ID
                     }
                 }
             },
@@ -410,7 +413,8 @@ module.exports = function(grunt) {
                         googleClientId: GOOGLE_CONFIG.PROD_CLIENT_ID,
                         googleClientSecret: GOOGLE_CONFIG.PROD_CLIENT_SECRET,
                         googleServerKey: GOOGLE_CONFIG.SERVER_KEY,
-                        leaddyno: LEADDYNO_CONFIG.LEAD_DYNO_KEY
+                        leaddyno: LEADDYNO_CONFIG.LEAD_DYNO_KEY,
+                        facebookClientID: FACEBOOK_CONFIG.CLIENT_ID
                     }
                 }
             }
@@ -568,7 +572,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-ng-annotate');
-    grunt.loadNpmTasks("grunt-jsdoc-to-markdown");
+    //grunt.loadNpmTasks("grunt-jsdoc-to-markdown");
     grunt.loadNpmTasks('grunt-prompt');
     grunt.loadNpmTasks('grunt-csssplit');
     grunt.loadNpmTasks('grunt-contrib-cssmin');

@@ -1,6 +1,7 @@
 @import "../modules/_mixins.less";
 @import "../modules/_variables.less";
 
+
 .ssb-sidebar {
     background: #131e26;
     // opacity: 0;
@@ -311,7 +312,7 @@
         top: 120px;
         width: 100%;
 
-        .ssb-media-query-medium({
+        @media (min-width: 768px) {
             float: left;
             width: ~"calc(100% - 70px)"; //70px for ssb-sidebar-icons width
             max-width: 800px;
@@ -320,9 +321,6 @@
             position: relative;
             top: auto;
             box-shadow: 0px -1px 3px 1px rgba(0, 0, 0, .5);
-        });
-
-        @media (min-width: 768px) {
             min-width: 470px;
         }
 
@@ -500,9 +498,13 @@
         border-radius: 5px 5px 0px 0px;
         // border: 0 none;
         text-transform: capitalize;
+        background: @indigenous-gray-blue;
+        color: white;
+        border-top: 0 none;
 
         i {
             cursor: pointer;
+            color: white;
         }
     }
 
@@ -513,7 +515,7 @@
         font-size: 1.5em;
     }
     .ui-select-match-close{
-        position: initial;
+        position: static;
     }
 
     .panel-group {
@@ -522,6 +524,11 @@
 
     .row:not(:first-of-type) {
         border-top: 1px solid #ddd;
+    }
+
+    .ssb-sidebar-item-section-actions {
+        background: @indigenous-gray-blue;
+        color: white;
     }
 
     .ssb-sidebar-item-section-actions .ssb-sidebar-item-icon {

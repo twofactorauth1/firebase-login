@@ -320,31 +320,18 @@ _.extend(router.prototype, BaseRouter.prototype, {
         var accountId = this.accountId(req);
         var userId = this.userId(req);
 
-        req.session.cookie = null;
-        req.session.accountId = null;
-        req.logout();
-        req.session.destroy();
-        req.session = null;
-        req.user = null;
+        this.logout(req, resp);
+        resp.redirect('/login');
+        userActivityManager.createUserLogoutActivity(accountId, userId, function(){});
+
 
         /*
-        if (accountId > 0) {
-            var appConfig = require('../configs/app.config');
-            var redirect = req.protocol + '://' + req.get('host') + "/login";
-
-            return resp.redirect(appConfig.server_url + "/logout?redirect=" + encodeURIComponent(redirect));
-        } else {
-            if (String.isNullOrEmpty(req.query.redirect) == false) {
-                return resp.redirect(req.query.redirect);
-            }
-        }
-        */
         userActivityManager.createUserLogoutActivity(accountId, userId, function() {
             setTimeout(function() {
                 resp.redirect("/login");
             }, 2000);
         });
-
+        */
         //return resp.redirect("/login");
     },
     //endregion

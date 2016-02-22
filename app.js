@@ -140,6 +140,7 @@ app.use(busboy());
 app.use(express.json());
 app.use(express.urlencoded());
 app.use(express.methodOverride());
+
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.cookieParser('mys3cr3tco00k13s'));
 app.use(express.session({
@@ -171,12 +172,15 @@ app.use(function (req, res) {
     res.status(400);
     res.render('404.html', {title: '404: File Not Found'});
 });
-
+var exceptionlogger = require('./utils/exceptionlogger');
 // Handle 500
 app.use(function (error, req, res, next) {
     console.dir(error);
-    res.status(500);
-    res.render('500.html', {title: '500: Internal Server Error', error: error});
+    exceptionlogger.logIt(error, function(){
+        res.status(500);
+        res.render('500.html', {title: '500: Internal Server Error', error: error});
+    });
+
 });
 
 /*
@@ -339,11 +343,14 @@ if (process.env.NODE_ENV != "testing") {//disables the collator for unit tests
 //-----------------------------------------------------
 //  CATCH UNCAUGHT EXCEPTIONS - Log them and email the error
 //-----------------------------------------------------
+
 process.on('uncaughtException', function (err) {
     log.error("Stack trace: " + err.stack);
     log.error('Caught exception: ', err);
+    exceptionlogger.logIt(err, function(){
+        //$$.g.mailer.sendMail("errors@indigenous.io", "{ENTER YOUR EMAIL ADDRESS HERE}", null, "Uncaught Error occurred - " + process.env.NODE_ENV, null, err + ":  " + err.stack, function(err, value) {
+        process.exit(1);
+        //});
+    });
 
-    //$$.g.mailer.sendMail("errors@indigenous.io", "{ENTER YOUR EMAIL ADDRESS HERE}", null, "Uncaught Error occurred - " + process.env.NODE_ENV, null, err + ":  " + err.stack, function(err, value) {
-    process.exit(1);
-    //});
 });

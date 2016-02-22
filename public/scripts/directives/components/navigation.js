@@ -18,7 +18,9 @@ app.directive('navigationComponent', ['websiteService', 'accountService', '$time
                 accountService(function (err, account) {
                     $scope.account = account;
                 });
-                $scope.currentpage = $scope.$parent.page;
+                var args = {};                
+                $scope.$emit('getCurrentPage', args);
+                $scope.currentpage = args.currentpage;
             });
 
         }

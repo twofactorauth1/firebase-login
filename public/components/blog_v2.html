@@ -17,7 +17,9 @@
                             <div class="blog-entry clearfix" data-id="{{blogpost._id}}">
                                 <h2 class="blog-title">
                                     <a data-ng-if="blogpost.post_url" href="/page/blog/{{blogpost.post_url}}">
-                                        <div elem ng-model="blogpost.post_title"></div>
+                                        <div class="post_title" data-class="post_title"
+                                            data-ng-if="blogpost.post_title" ng-bind-html="blogpost.post_title | unsafe">
+                                    </div> 
                                     </a>
                                     <a ng-if="isEditing" class="btn ssb-theme-btn btn-warning pull-right btn-delete-post pull-right" type="button" ng-click="deleteBlogPost(blogpost._id, blogpost)" style="margin-right:10px">
                                         <span class="fa fa-times"></span>

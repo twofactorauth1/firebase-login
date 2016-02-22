@@ -356,17 +356,17 @@ app.constant('pageConstant', {
     SINGLEPOST: 'single-post',
   },
   inValidPageHandles:{
-     'home': 'home', 
-    'login': 'login', 
-    'logout': 'logout', 
-    'admin': 'admin', 
-    'redirect': 'redirect', 
-    'template': 'template', 
-    'demo': 'demo', 
-    'admin1': 'admin1', 
-    'interim': 'interim', 
-    'unsubscribe': 'unsubscribe', 
-    'forgotpassword': 'forgotpassword', 
+     'home': 'home',
+    'login': 'login',
+    'logout': 'logout',
+    'admin': 'admin',
+    'redirect': 'redirect',
+    'template': 'template',
+    'demo': 'demo',
+    'admin1': 'admin1',
+    'interim': 'interim',
+    'unsubscribe': 'unsubscribe',
+    'forgotpassword': 'forgotpassword',
     'current-user': 'current-user'
   }
 });
@@ -632,7 +632,7 @@ app.constant('JS_REQUIRES', {
     'ladda': ['../js/libs/ladda/dist/ladda.min.js', '../js/libs/ladda/dist/ladda-themeless.min.css'],
     'chartjs': '../js/libs/chartjs/Chart.min.js',
     'jquery-sparkline': '../js/libs/jquery.sparkline.build/dist/jquery.sparkline.min.js',
-    'jsVideoUrlParser': '../js/libs//js-video-url-parser/dist/jsVideoUrlParser.min.js',
+    'jsVideoUrlParser': '../js/libs/js-video-url-parser/dist/jsVideoUrlParser.min.js',
     'jquery-nestable-plugin': ['../js/libs_misc/jquery-nestable/jquery.nestable.js'],
     'touchspin-plugin': ['../js/libs/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.js', '../js/libs/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.css'],
     // 'bootstrap': '../js/libs/bootstrap/dist/js/bootstrap.min.js',
@@ -718,6 +718,7 @@ app.constant('JS_REQUIRES', {
     'geocodeService': 'assets/js/services/geocode.js',
     'dashboardService': 'assets/js/dashboard/dashboard.service.js',
     'simpleSiteBuilderService': 'assets/js/ssb-site-builder/ssb-site-builder.service.js',
+    'indiLoginModalService': 'assets/js/indi-login-modal/indi-login-modal.service.js',
     //*** Filters
     'htmlToPlaintext': 'assets/js/filters/htmlToPlaintext.js',
     'secTotime': 'assets/js/filters/secTotime.js',
@@ -734,8 +735,7 @@ app.constant('JS_REQUIRES', {
     'filterPages': 'assets/js/filters/filterPages.js',
 
     //*** Directives
-    'mediaModal': 'assets/js/directives/mediadirective.js',
-
+    'mediaModal': 'assets/js/directives/mediadirective.js'
 
 
   },
@@ -943,5 +943,12 @@ app.constant('JS_REQUIRES', {
       '../js/libs/videogular-overlay-play/overlay-play.js',
       '../js/libs/videogular-buffering/buffering.js',
       '../js/libs/videogular-poster/poster.js']
+  },
+  {
+    name: 'indi-login-modal',
+    files: [
+        'assets/js/indi-login-modal/indi-login-modal.controller.js',
+        'assets/js/indi-login-modal/indi-login-modal.service.js'
+    ]
   }]
 });

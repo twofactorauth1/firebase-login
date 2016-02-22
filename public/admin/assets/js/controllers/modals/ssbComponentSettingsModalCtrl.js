@@ -2,7 +2,7 @@
 /*global app, moment, angular, window*/
 /*jslint unparam:true*/
 
-app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http', '$timeout', '$q', '$compile', '$filter', 'WebsiteService', 'CustomerService', 'ProductService', 'GeocodeService', 'toaster', 'hoursConstant', 'CampaignService', 'SimpleSiteBuilderService', function ($scope, $rootScope, $http, $timeout, $q, $compile, $filter, WebsiteService, CustomerService, ProductService, GeocodeService, toaster, hoursConstant, CampaignService, SimpleSiteBuilderService) {
+app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http', '$timeout', '$q', '$compile', '$filter', 'WebsiteService', 'CustomerService', 'ProductService', 'GeocodeService', 'toaster', 'hoursConstant', 'CampaignService', 'SimpleSiteBuilderService', 'SweetAlert', function ($scope, $rootScope, $http, $timeout, $q, $compile, $filter, WebsiteService, CustomerService, ProductService, GeocodeService, toaster, hoursConstant, CampaignService, SimpleSiteBuilderService, SweetAlert) {
 
   $scope.blog = {};
 
@@ -409,6 +409,11 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
                   if(section.components.length > 1){
                     component.sectionTitle = section.name;
                   }
+                  else if(section.components.length === 1){
+                    if(section.name && component.type && section.name.toLowerCase() !== component.type.toLowerCase()){
+                      component.sectionTitle = section.name;  
+                    }
+                  }
                   components.push(component)
                 }
               })
@@ -526,8 +531,41 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
    */
 
   $scope.deleteLinkFromNav = function (index, links) {
-    links.splice(index, 1);    
+    SweetAlert.swal({
+      title: "Are you sure?",
+      text: "Do you want to remove this link from main menu",
+      type: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#DD6B55",
+      confirmButtonText: "Yes, remove this link!",
+      cancelButtonText: "No, do not remove this link!",
+      closeOnConfirm: true,
+      closeOnCancel: true
+    }, function (isConfirm) {
+      if (isConfirm) {
+        var link = links[index];
+        updateParentPageSettings(link.linkTo.type, link.linkTo.data, false);
+        links.splice(index, 1); 
+      }
+    });
+       
   };
+
+  /*
+   * @updateParentPageSettings
+   * -
+   */
+
+   function updateParentPageSettings(linkType, linkUrl, status, oldUrl) {
+    if(linkType === 'page' && !$scope.customnav && linkUrl === $scope.$parent.vm.state.page.handle){      
+      $scope.$parent.vm.state.page.mainmenu = status;
+    }
+    // case when current page is updated to another page.
+    if(linkType === 'page' && !$scope.customnav && oldUrl && oldUrl === $scope.$parent.vm.state.page.handle){
+       $scope.$parent.vm.state.page.mainmenu = false;
+    }
+  };
+
 
   /*
    * @addLinkToNav
@@ -558,6 +596,7 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
               }
             });
             $scope.initializeLinks(false);
+
           }
         });
       } else {
@@ -572,7 +611,9 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
                 page: $scope.newLink.linkPage
               }
             });
-            $scope.initializeLinks(false);
+            updateParentPageSettings($scope.newLink.linkType, $scope.newLink.linkUrl, true);
+            $scope.initializeLinks(false);            
+
           }
         });
       }
@@ -584,7 +625,7 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
    * @setPageLinkTitle
    * -
    */
-  $scope.setPageLinkTitle = function (url, update, link) {
+  $scope.setPageLinkTitle = function (url, update, link, oldUrl) {
     if(!$scope.component.customnav){
         var _label = null;
         var _page = _.findWhere($scope.filteredPages, {
@@ -595,11 +636,13 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
         }
 
         if(update){
-          link.label = _label
+          link.label = _label;
+          updateParentPageSettings(link.linkTo.type, url, true, oldUrl);
         }
         else{
           $scope.newLink.linkTitle = _label
         }
+        
       }
   };
 
@@ -928,6 +971,7 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
             arr.push(page);
         });
         var allPages = arr;
+
         var account = SimpleSiteBuilderService.account;
         
         if (!account.showhide.blog) {
@@ -938,7 +982,8 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
             var _index = _.indexOf(allPages, _blogPage);
             allPages.splice(_index, 1);
           }
-        }        
+        }
+        $scope.allPages = angular.copy(allPages);        
         $scope.filteredPages = $filter('orderBy')(allPages, "title", false);
         _.each($scope.filteredPages, function (page) {
             page.components = getPageComponents(page);

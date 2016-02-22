@@ -453,7 +453,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         $timeout(function() {
             vm.imageEditor.editor.image.insert(asset.url, !1, null, vm.imageEditor.img);
         }, 0);
-        
+
     };
 
     function setupBreakpoints() {
@@ -482,10 +482,9 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
             .value()
 
         SimpleSiteBuilderService.openMediaModal('media-modal', 'MediaModalCtrl', null, 'lg', vm, component, index, update).result.then(function(){
-            // debugger;
-
-            //TODO: somehow need to trigger this if component.type === 'thumbnail-slider'
-            // $scope.thumbnailSlider.refreshSlider();
+           if(component.type === 'thumbnail-slider'){
+                $scope.$broadcast('refreshThumbnailSlider');
+           }
         })
     }
 
@@ -511,7 +510,8 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     }
 
     function pageResize(e) {
-        if ($(this).width() > 767) {
+        console.log($(this).width());
+        if ($(this).innerWidth() > 767) {
             vm.uiState.sidebarOrientation = 'vertical';
         } else {
             vm.uiState.sidebarOrientation = 'horizontal';
@@ -528,7 +528,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
 
         angular.element("body").on("click", ".ssb-page-section", pageSectionClick);
 
-        angular.element('.ssb-main').on('eqResize', pageResize)
+        angular.element('.ssb-main').on('eqResize', pageResize);
 
         setupBreakpoints();
 

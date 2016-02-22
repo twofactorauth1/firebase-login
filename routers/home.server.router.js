@@ -372,7 +372,7 @@ _.extend(router.prototype, BaseRouter.prototype, {
                 resp.end(page, 'utf8');
                 req.session.cookie = null;
                 req.session.accountId = null;
-                req.logout();
+                this.logout(req, resp);
                 req.session.destroy();
                 req.session = null;
                 req.user = null;

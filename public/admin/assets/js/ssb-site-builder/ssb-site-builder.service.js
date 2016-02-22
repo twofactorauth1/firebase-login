@@ -50,6 +50,7 @@
         ssbService.getTemplateById = getTemplateById;
         ssbService.getLegacyTemplates = getLegacyTemplates;
         ssbService.addSectionToPage = addSectionToPage;
+        ssbService.removeSectionFromPage = removeSectionFromPage;
         ssbService.getSpectrumColorOptions = getSpectrumColorOptions;
         ssbService.deletePage = deletePage;
         ssbService.openMediaModal = openMediaModal;
@@ -793,6 +794,19 @@
 
         }
 
+
+        /**
+         * Remove a section from the current page        
+         * @param {integer} index - index of page section to be removed         
+         *
+         */
+
+        function removeSectionFromPage(index) {
+            ssbService.page.sections.splice(index, 1);
+            ssbService.setActiveSection(null);
+            ssbService.setActiveComponent(null);
+        }
+
         /*
          * extendComponentData
          * - extend authored data onto new components
@@ -850,7 +864,7 @@
             var hasComponentFooter = false;
             var match = _.filter(sections, function(s){
 
-                if (s.name && s.components) {
+                if (s && s.name && s.components) {
                     hasSectionFooter = s.name.toLowerCase() === 'footer';
                     hasComponentFooter = _.where(s.components, { type: 'footer' }).length !== 0;
                 }
@@ -914,7 +928,7 @@
                     ssbService.website.themeId = theme._id;
                     ssbService.website.theme = theme;
 
-                    if (keepCurrentOverrides === undefined || !angular.isDefined(ssbService.website.themeOverrides.styles)) {
+                    if (keepCurrentOverrides || !angular.isDefined(ssbService.website.themeOverrides.styles)) {
                         $timeout(function() {
                             ssbService.website.themeOverrides = theme;
                         },0);

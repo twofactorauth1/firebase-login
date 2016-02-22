@@ -11,9 +11,9 @@ function ssbComponentLoaderController($scope, $attrs, $filter) {
     var vm = this;
 
     vm.init = init;
-    vm.hover = hover;
+    vm.click = click;
 
-    function hover(e) {
+    function click(e) {
 
         if (vm.state && vm.uiState) {
 
@@ -33,9 +33,11 @@ function ssbComponentLoaderController($scope, $attrs, $filter) {
                 })
                 .value()
 
-            vm.uiState.hoveredComponentOffset = vm.element.offset();
-            vm.uiState.hoveredComponentPosition = vm.element.position();
-            vm.uiState.hoveredComponentParent = vm.element.offsetParent();
+            if (vm.element) {
+                vm.uiState.hoveredComponentOffset = vm.element.offset();
+                vm.uiState.hoveredComponentPosition = vm.element.position();
+                vm.uiState.hoveredComponentParent = vm.element.offsetParent();
+            }
 
             // console.log('hovered on ' + vm.component.type);
             // console.log('vm.uiState.hoveredSectionIndex', vm.uiState.hoveredSectionIndex);

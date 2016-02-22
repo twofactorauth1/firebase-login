@@ -7,7 +7,6 @@
                 <h1 class="mainTitle">{{product.name}}</h1>
                 <span class="mainDescription">{{product.description}}</span>
             </div>
-            <div ncy-breadcrumb></div>
         </div>
     </section>
     <!-- end: PAGE TITLE -->
@@ -21,7 +20,7 @@
                             <!-- <button type="button" class="btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti ti-receipt ng-click-active pull-right">
                                 <span>Duplicate</span>
                             </button> -->
-                            <button type="button" ng-click="saveProductFn()" class="btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti ti-credit-card ng-click-active pull-right margin-right-5" ng-disabled="saveLoading">
+                            <button type="button" ng-click="saveProductFn()" class="btn btn-o btn-info btn-wide btn-scroll btn-scroll-top ti ti-credit-card ng-click-active pull-right margin-right-5" ng-disabled="saveLoading || (product.on_sale && productDetail.$invalid && !productDetail.$pristine )">
                                 <span><i ng-class="{'fa fa-spin fa-spinner':saveLoading}"></i> Save</span>
                             </button>
                             <!-- <a ladda="ldloading.expand_right" class="btn btn-wide btn-primary" data-style="expand-right" ng-click="clickBtn('expand-right')">
@@ -34,192 +33,193 @@
             </div>
         </div>
     </div>
-    <div class="container-fluid container-fullw ng-scope">
-        <div class="clearfix"></div>
-        <div class="row">
-            <div class="col-md-12">
-                <h5 class="over-title margin-bottom-15">Product <span class="text-bold">Details</span></h5>
-                <div class="row">
-                    <div class="col-sm-4">
-                        <div ng-show="!product.is_image">
-                            <div class="panel panel-green">
-                                <div class="panel-heading">
-                                    <p class="product-img" style="font-size: 75px;text-align:center;  padding: 40px 0;">
-                                        <a id="convert" data-iconset="fontawesome" data-icon="fa-cube" role="iconpicker"></a>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                        <div ng-if="product.is_image">
-                            <div class="image">
-                                <div class="thumbnail">
-                                    <img ng-src="{{ product.icon }}" err-src="assets/images/default-user.png" alt="">
-                                </div>
-                            </div>
-                            <div class="row hidden">
-                                <div class="col-xs-3"><img src="assets/images/lion-565818_640.jpg" class="img-thumbnail img-responsive margin-bottom-15" alt="A generic image with a white border around it, making it resemble a photograph taken with an old instant camera"></div>
-                                <div class="col-xs-3"><img src="assets/images/lion-565818_640.jpg" class="img-thumbnail img-responsive margin-bottom-15" alt="A generic image with a white border around it, making it resemble a photograph taken with an old instant camera"></div>
-                                <div class="col-xs-3"><img src="assets/images/lion-565818_640.jpg" class="img-thumbnail img-responsive margin-bottom-15" alt="A generic image with a white border around it, making it resemble a photograph taken with an old instant camera"></div>
-                                <div class="col-xs-3"><img src="assets/images/lion-565818_640.jpg" class="img-thumbnail img-responsive margin-bottom-15" alt="A generic image with a white border around it, making it resemble a photograph taken with an old instant camera"></div>
-                            </div>
-                        </div>
-                        <div>
-                            <div class="form-group pull-left">
-                                <div class="radio clip-radio radio-primary radio-inline">
-                                    <input type="radio" id="product_image_icon" name="inline" ng-change="setDefault()" ng-value="false" ng-model="product.is_image">
-                                    <label for="product_image_icon">
-                                        Icon
-                                    </label>
-                                </div>
-                                <div class="radio clip-radio radio-primary radio-inline">
-                                    <input type="radio" id="product_image_image" name="inline" ng-value="true" ng-model="product.is_image">
-                                    <label for="product_image_image">
-                                        Image
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="pull-right" ng-if="product.is_image">
-                                 <a class="btn btn-success" ng-click="openMediaModal()"> <span class="fa fa-image"></span> <span class="hidden-xs">Change Image</span>
-                            </a>
-                            </div>
-                        </div>
-                        <div class="btn-group btn-group-justified margin-top-10">
-                            <div class="btn-group">
-                                <button type="button" class="btn btn-danger btn-o btn-wide btn-scroll btn-scroll-top ti-trash" ng-click="deleteProductFn(product)">
-                                    <span>Delete Product</span>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <div ng-class="{'col-sm-8': showVariations, 'col-sm-4 padding-right-0': !showVariations}">
-                        <div class="panel panel-transparent  margin-bottom-0">
-                            <div class="panel-body padding-top-0">
-                                <form role="form" class="ng-pristine ng-valid">
-                                    <div class="form-group" ng-class="{'has-error': productNameError}">
-                                        <label>
-                                            Name
-                                        </label>
-                                        <input type="text" placeholder="Name" ng-model="product.name" class="form-control">
-                                        <p ng-show="productNameError" class="help-block">Product name is required.</p>
+    <form role="form" name="productDetail">
+        <div class="container-fluid container-fullw ng-scope">
+            <div class="clearfix"></div>
+            <div class="row">
+                <div class="col-md-12">
+                    <h5 class="over-title margin-bottom-15">Product <span class="text-bold">Details</span></h5>
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div ng-show="!product.is_image">
+                                <div class="panel panel-green">
+                                    <div class="panel-heading">
+                                        <p class="product-img" style="font-size: 75px;text-align:center;  padding: 40px 0;">
+                                            <a id="convert" data-iconset="fontawesome" data-icon="fa-cube" role="iconpicker"></a>
+                                        </p>
                                     </div>
-                                    <div class="form-group">
-                                        <label for="form-field-select-1">
-                                            Description
-                                        </label>
-                                        <textarea class="form-control autosize area-animated msd-elastic: \n; ng-pristine ng-valid ng-touched" ng-model="product.description" style="overflow: hidden; word-wrap: break-word; resize: vertical; height: 110px;" placeholder="Description"></textarea>
+                                </div>
+                            </div>
+                            <div ng-if="product.is_image">
+                                <div class="image">
+                                    <div class="thumbnail">
+                                        <img ng-src="{{ product.icon }}" err-src="assets/images/default-user.png" alt="">
                                     </div>
-                                    <div ng-if="!showVariations">
-                                        <div class="form-group">
-                                            <label for="form-field-select-1">
-                                                Status
+                                </div>
+                                <div class="row hidden">
+                                    <div class="col-xs-3"><img src="assets/images/lion-565818_640.jpg" class="img-thumbnail img-responsive margin-bottom-15" alt="A generic image with a white border around it, making it resemble a photograph taken with an old instant camera"></div>
+                                    <div class="col-xs-3"><img src="assets/images/lion-565818_640.jpg" class="img-thumbnail img-responsive margin-bottom-15" alt="A generic image with a white border around it, making it resemble a photograph taken with an old instant camera"></div>
+                                    <div class="col-xs-3"><img src="assets/images/lion-565818_640.jpg" class="img-thumbnail img-responsive margin-bottom-15" alt="A generic image with a white border around it, making it resemble a photograph taken with an old instant camera"></div>
+                                    <div class="col-xs-3"><img src="assets/images/lion-565818_640.jpg" class="img-thumbnail img-responsive margin-bottom-15" alt="A generic image with a white border around it, making it resemble a photograph taken with an old instant camera"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="form-group pull-left">
+                                    <div class="radio clip-radio radio-primary radio-inline">
+                                        <input type="radio" id="product_image_icon" name="inline" ng-change="setDefault()" ng-value="false" ng-model="product.is_image">
+                                        <label for="product_image_icon">
+                                            Icon
+                                        </label>
+                                    </div>
+                                    <div class="radio clip-radio radio-primary radio-inline">
+                                        <input type="radio" id="product_image_image" name="inline" ng-value="true" ng-model="product.is_image">
+                                        <label for="product_image_image">
+                                            Image
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="pull-right" ng-if="product.is_image">
+                                     <a class="btn btn-success" ng-click="openMediaModal()"> <span class="fa fa-image"></span> <span class="hidden-xs">Change Image</span>
+                                </a>
+                                </div>
+                            </div>
+                            <div class="btn-group btn-group-justified margin-top-10">
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-danger btn-o btn-wide btn-scroll btn-scroll-top ti-trash" ng-click="deleteProductFn(product)">
+                                        <span>Delete Product</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div ng-class="{'col-sm-8': showVariations, 'col-sm-4 padding-right-0': !showVariations}">
+                            <div class="panel panel-transparent  margin-bottom-0">
+                                <div class="panel-body padding-top-0">
+                                    <form role="form" class="ng-pristine ng-valid">
+                                        <div class="form-group" ng-class="{'has-error': productNameError}">
+                                            <label>
+                                                Name
                                             </label>
-                                            <select ng-model="product.status" class="form-control" ng-options="status.data as status.label for status in productStatusOptions">
-                                                <option value="">-- choose status --</option>
-                                            </select>
-                                        </div>
-                                        <div class="form-group" ng-class="{'has-error': productTypeError}">
-                                            <label for="form-field-select-1">
-                                                Type
-                                            </label>
-                                            <select ng-model="product.type" class="form-control" ng-options="type.data as type.label for type in productTypes.dp">
-                                                <option value="">-- choose type --</option>
-                                            </select>
-                                            <p ng-show="productTypeError" class="help-block">Product type is required.</p>
+                                            <input type="text" placeholder="Name" ng-model="product.name" class="form-control">
+                                            <p ng-show="productNameError" class="help-block">Product name is required.</p>
                                         </div>
                                         <div class="form-group">
                                             <label for="form-field-select-1">
-                                                Tags
+                                                Description
                                             </label>
-                                            <tags-input ng-model="product_tags" min-length="1"></tags-input>
+                                            <textarea class="form-control autosize area-animated msd-elastic: \n; ng-pristine ng-valid ng-touched" ng-model="product.description" style="overflow: hidden; word-wrap: break-word; resize: vertical; height: 110px;" placeholder="Description"></textarea>
                                         </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-4" ng-if="!showVariations">
-                        <div class="panel panel-transparent  margin-bottom-0">
-                            <div class="panel-body padding-top-0">
-                                <form role="form" name="productDetail">
-                                    <div class="form-group">
-                                        <label tooltip-placement="top" tooltip-html-unsafe="unique alphanumeric identifier that refers to a particular product, used for inventory management">
-                                            SKU <i class="fa fa-info-circle" />
-                                        </label>
-                                        <input type="text" placeholder="SKU" ng-model="product.sku" class="form-control">
-                                    </div>
-                                    <div class="form-group" ng-class="{ 'has-error' : productDetail.regular_price.$invalid && !productDetail.regular_price.$pristine }">
-                                        <label tooltip-placement="top" tooltip-html-unsafe="the price a customer sees until you enable a sale">
-                                            Regular Price <i class="fa fa-info-circle" />
-                                        </label>
-                                        <div class="input-group">
-                                            <span class="input-group-addon">$</span>
-                                            <input type="text" name="regular_price" class="form-control" ng-model="product.regular_price" ng-model-options="{ debounce: 800 }" ng-currency min="product.sale_price" currency-symbol="">
-                                        </div>
-                                        <p ng-show="productDetail.regular_price.$invalid && !productDetail.regular_price.$pristine" class="help-block">Regular Price cannot be less than sale price</p>
-                                    </div>
-                                    <div>
-                                        <div class="form-group">
-                                            <label tooltip-placement="top" tooltip-html-unsafe="enable to specify dates of sale">
-                                                On Sale <i class="fa fa-info-circle" />
-                                            </label>
-                                            <div class="input-group">
-                                                <switch ng-model="product.on_sale" type="checkbox" switch-label="OnSale"></switch>
+                                        <div ng-if="!showVariations">
+                                            <div class="form-group">
+                                                <label for="form-field-select-1">
+                                                    Status
+                                                </label>
+                                                <select ng-model="product.status" class="form-control" ng-options="status.data as status.label for status in productStatusOptions">
+                                                    <option value="">-- choose status --</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group" ng-class="{'has-error': productTypeError}">
+                                                <label for="form-field-select-1">
+                                                    Type
+                                                </label>
+                                                <select ng-model="product.type" class="form-control" ng-options="type.data as type.label for type in productTypes.dp">
+                                                    <option value="">-- choose type --</option>
+                                                </select>
+                                                <p ng-show="productTypeError" class="help-block">Product type is required.</p>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="form-field-select-1">
+                                                    Tags
+                                                </label>
+                                                <tags-input ng-model="product_tags" min-length="1"></tags-input>
                                             </div>
                                         </div>
-                                        <div class="form-group" ng-show="product.on_sale" ng-class="{ 'has-error' : productDetail.sale_price.$invalid && !productDetail.sale_price.$pristine }">
-                                            <label tooltip-placement="top" tooltip-html-unsafe="the price the customer sees while a sale is enabled">
-                                                Sale Price <i class="fa fa-info-circle" />
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4" ng-if="!showVariations">
+                            <div class="panel panel-transparent  margin-bottom-0">
+                                <div class="panel-body padding-top-0">
+                                        <div class="form-group">
+                                            <label tooltip-placement="top" tooltip-html-unsafe="unique alphanumeric identifier that refers to a particular product, used for inventory management">
+                                                SKU <i class="fa fa-info-circle" />
+                                            </label>
+                                            <input type="text" placeholder="SKU" ng-model="product.sku" class="form-control">
+                                        </div>
+                                        <div class="form-group" ng-class="{ 'has-error' : productDetail.regular_price.$invalid && !productDetail.regular_price.$pristine }">
+                                            <label tooltip-placement="top" tooltip-html-unsafe="the price a customer sees until you enable a sale">
+                                                Regular Price <i class="fa fa-info-circle" />
                                             </label>
                                             <div class="input-group">
                                                 <span class="input-group-addon">$</span>
-                                                <input type="text" ng-model-options="{ debounce: 800 }" name="sale_price" class="form-control" ng-model="product.sale_price" ng-currency min="0.1" max="product.regular_price" currency-symbol=""/>
+                                                <input type="text" name="regular_price" class="form-control" ng-model="product.regular_price" ng-model-options="{ debounce: 800 }" ng-currency min="product.sale_price || 0.00" currency-symbol="">
                                             </div>
-                                            <p ng-show="productDetail.sale_price.$invalid && !productDetail.sale_price.$pristine" class="help-block">Sale Price cannot be more than regular price</p>
+                                            <p ng-show="productDetail.regular_price.$invalid && !productDetail.regular_price.$pristine" class="help-block">Regular Price cannot be less than sale price</p>
                                         </div>
-                                        <div class="form-group" ng-if="product.on_sale">
-                                            <label tooltip-placement="top" tooltip-html-unsafe="the dates of the sale">
-                                                Sale Dates <i class="fa fa-info-circle" />
+                                        <div>
+                                            <div class="form-group">
+                                                <label tooltip-placement="top" tooltip-html-unsafe="enable to specify dates of sale">
+                                                    On Sale <i class="fa fa-info-circle" />
+                                                </label>
+                                                <div class="input-group">
+                                                    <switch ng-model="product.on_sale" type="checkbox" switch-label="OnSale"></switch>
+                                                </div>
+                                            </div>
+                                            <div class="form-group" ng-if="product.on_sale" ng-class="{ 'has-error' : productDetail.sale_price.$invalid && !productDetail.sale_price.$pristine }">
+                                                <label tooltip-placement="top" tooltip-html-unsafe="the price the customer sees while a sale is enabled">
+                                                    Sale Price <i class="fa fa-info-circle" />
+                                                </label>
+                                                <div class="input-group">
+                                                    <span class="input-group-addon">$</span>
+                                                    <input type="text" ng-model-options="{ debounce: 800 }" name="sale_price" class="form-control" ng-model="product.sale_price" ng-currency max="product.regular_price" currency-symbol=""/>
+                                                </div>
+                                                <p ng-show="productDetail.sale_price.$invalid && !productDetail.sale_price.$pristine" class="help-block">Sale Price cannot be more than regular price</p>
+                                            </div>
+                                            <div class="form-group" ng-if="product.on_sale">
+                                                <label tooltip-placement="top" tooltip-html-unsafe="the dates of the sale">
+                                                    Sale Dates <i class="fa fa-info-circle" />
+                                                </label>
+                                                <div class="input-group">
+                                                    <div class="input-group-addon"><i class="fa fa-calendar"></i></div>
+                                                    <input date-range-picker class="form-control deshboard-date-picker date-picker hidden-xs" type="text" ng-model="selectedDate.range" options="pickerOptions" />
+                                                    <span class="input-group-addon" onClick="$('.deshboard-date-picker').click();"><i class="fa fa-chevron-down fa-fw"></i></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- <div class="form-group">
+                                            <label tooltip-placement="top" tooltip-html-unsafe="the price at which you purchase or create a product">
+                                                Cost <i class="fa fa-info-circle" />
                                             </label>
                                             <div class="input-group">
-                                                <div class="input-group-addon"><i class="fa fa-calendar"></i></div>
-                                                <input date-range-picker class="form-control deshboard-date-picker date-picker hidden-xs" type="text" ng-model="selectedDate.range" options="pickerOptions" />
-                                                <span class="input-group-addon" onClick="$('.deshboard-date-picker').click();"><i class="fa fa-chevron-down fa-fw"></i></span>
+                                                <span class="input-group-addon">$</span>
+                                                <input type="text" class="form-control" ng-model="product.cost" currency-input>
+                                            </div>
+                                        </div> -->
+                                        <div class="form-group">
+                                            <label tooltip-placement="top" tooltip-html-unsafe="Send fulfillment email when this item is ordered">
+                                                Fulfillment Email? <i class="fa fa-info-circle" />
+                                            </label>
+                                            <div class="input-group">
+                                                <switch ng-model="product.fulfillment_email" type="checkbox" switch-label="Fulfillment Email?"></switch>
                                             </div>
                                         </div>
-                                    </div>
-                                    <!-- <div class="form-group">
-                                        <label tooltip-placement="top" tooltip-html-unsafe="the price at which you purchase or create a product">
-                                            Cost <i class="fa fa-info-circle" />
-                                        </label>
-                                        <div class="input-group">
-                                            <span class="input-group-addon">$</span>
-                                            <input type="text" class="form-control" ng-model="product.cost" currency-input>
+                                        <div class="form-group">
+                                            <label tooltip-placement="top" tooltip-html-unsafe="calculate taxes when the customer purchases this item">
+                                                Taxable <i class="fa fa-info-circle" />
+                                            </label>
+                                            <div class="input-group">
+                                                <switch ng-model="product.taxable" type="checkbox" switch-label="Taxable"></switch>
+                                            </div>
                                         </div>
-                                    </div> -->
-                                    <div class="form-group">
-                                        <label tooltip-placement="top" tooltip-html-unsafe="Send fulfillment email when this item is ordered">
-                                            Fulfillment Email? <i class="fa fa-info-circle" />
-                                        </label>
-                                        <div class="input-group">
-                                            <switch ng-model="product.fulfillment_email" type="checkbox" switch-label="Fulfillment Email?"></switch>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label tooltip-placement="top" tooltip-html-unsafe="calculate taxes when the customer purchases this item">
-                                            Taxable <i class="fa fa-info-circle" />
-                                        </label>
-                                        <div class="input-group">
-                                            <switch ng-model="product.taxable" type="checkbox" switch-label="Taxable"></switch>
-                                        </div>
-                                    </div>
-                                </form>
+
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    </form>
     <div data-ng-include=" 'assets/views/partials/variations.html' "></div>
     <div data-ng-include=" 'assets/views/partials/attributes.html' "></div>
     <div class="container-fluid container-fullw">

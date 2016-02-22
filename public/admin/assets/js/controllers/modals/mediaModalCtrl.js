@@ -6,7 +6,7 @@ app.controller('MediaModalCtrl', ['$scope', '$injector', '$modalInstance', '$htt
 
   $scope.showInsert = showInsert;
   $scope.loadingAssets = true;
-  
+
   AssetsService.getAssetsByAccount(function (data) {
     if (data instanceof Array) {
       $scope.originalAssets = data.slice(0);
@@ -65,18 +65,25 @@ app.controller('MediaModalCtrl', ['$scope', '$injector', '$modalInstance', '$htt
             if (500 * 1024 * 1024 + 1 > parseInt(item.size)) {
               return true;
             } else {
-              ToasterService.show('error', 'Max Video file size 500MB. Unable to Upload.');
+              ToasterService.show('error', 'The maximum video file size 500MB. Unable to Upload.');
             }
             break;
           case "image":
           case "audio":
+            //size in bytes
+            if (50 * 1024 * 1024 > parseInt(item.size)) {
+              return true;
+            } else {
+              ToasterService.show('error', 'The maximum audio file size 50MB. Unable to Upload.');
+            }
+            break;
           case "document":
           default:
             //size in bytes
             if (10 * 1024 * 1024 > parseInt(item.size)) {
               return true;
             } else {
-              ToasterService.show('error', 'Max file size 10MB. Unable to Upload.');
+              ToasterService.show('error', 'The maximum file size 10MB. Unable to Upload.');
             }
         }
         return false;
@@ -157,7 +164,7 @@ app.controller('MediaModalCtrl', ['$scope', '$injector', '$modalInstance', '$htt
     document: ['application/octet-stream', 'application/pdf']
   };
 
-  
+
 
   $scope.getFileType = function(mime){
     if(mime.match('audio.*'))
@@ -167,7 +174,7 @@ app.controller('MediaModalCtrl', ['$scope', '$injector', '$modalInstance', '$htt
     else if(mime === 'application/pdf')
       return "pdf"
     if(mime === 'application/octet-stream')
-      return "octet-stream"    
+      return "octet-stream"
   }
 
   $scope.m.selectTriggerFn = function (status) {
@@ -278,10 +285,10 @@ app.controller('MediaModalCtrl', ['$scope', '$injector', '$modalInstance', '$htt
       closeOnCancel: true
     }, function (isConfirm) {
       if (isConfirm) {
-        if (asset) 
-          $scope.batch.push(asset);        
-        if($scope.batch && $scope.batch.length){   
-          $scope.batch = _.uniq($scope.batch);       
+        if (asset)
+          $scope.batch.push(asset);
+        if($scope.batch && $scope.batch.length){
+          $scope.batch = _.uniq($scope.batch);
           AssetsService.deleteAssets($scope.batch, function (resp, status) {
             if (status === 200) {
               $scope.originalAssets.forEach(function (v, i) {
@@ -319,7 +326,7 @@ app.controller('MediaModalCtrl', ['$scope', '$injector', '$modalInstance', '$htt
       } else {
         angular.element('.modal.in').show();
       }
-    });    
+    });
   };
 
   $scope.m.editImage = function (asset) {
