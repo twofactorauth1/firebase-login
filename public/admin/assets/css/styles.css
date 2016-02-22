@@ -163,14 +163,6 @@ a:active {
 button {
   outline: 0 !important;
 }
-a {
-  color: #000;
-}
-a:hover,
-a:focus,
-a:active {
-  color: #000000;
-}
 h1,
 h2 {
   font-family: "Raleway", sans-serif;
