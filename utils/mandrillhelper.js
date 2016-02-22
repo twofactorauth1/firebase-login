@@ -19,6 +19,8 @@ var userDao = require('../dao/user.dao');
 var async = require('async');
 var juice = require('juice');
 
+var appConfig = require('../configs/app.config');
+
 var mandrillHelper =  {
 
     sendAccountWelcomeEmail: function(fromAddress, fromName, toAddress, toName, subject, htmlContent, accountId, userId, vars, emailId, contactId, fn) {
@@ -707,7 +709,7 @@ var mandrillHelper =  {
         var self = this;
         self.log = log;
         var contactId = null;
-        self.log.debug('>> sendBasicEmail');
+        self.log.debug('>> sendTestEmail');
         self._checkForUnsubscribe(accountId, toAddress, function(err, isUnsubscribed) {
             if (isUnsubscribed == true) {
                 fn('skipping email for user on unsubscribed list');
@@ -1001,6 +1003,7 @@ var mandrillHelper =  {
      * @param  {number}   accountId   account id of the user sending the email
      * @param  {number}   contactId   contact id of the recipient
      * @param  {string}   htmlContent raw html content being sent
+     
      * @param  {Function} fn          return function
      * @return {string}               html merge tags replaced with actual data
      */
@@ -1090,12 +1093,23 @@ var mandrillHelper =  {
                 }
             },
             function mergeTags(callback) {
+
+                var environment = appConfig.environment;
+                var port = appConfig.port;
+               
                 //list of possible merge vars and the matching data
                 var _address = _account.get('business').addresses && _address ? _address : null;
+                var hostname = '.indigenous.io';
 
+                if(environment === appConfig.environments.DEVELOPMENT){                    
+                    hostname = '.indigenous.local' + ":" + port;
+                }
+                else if(environment === appConfig.environments.TESTING){
+                    hostname = '.test.indigenous.io';
+                }
                 var mergeTagMap = [{
                   mergeTag: '[URL]',
-                  data: _account ? _account.get('subdomain') + '.indigenous.io': ''
+                  data: _account ? _account.get('subdomain') + hostname : ''
                 }, {
                   mergeTag: '[SUBDOMAIN]',
                   data: _account ? _account.get('subdomain') : ''
@@ -1153,7 +1167,7 @@ var mandrillHelper =  {
                   var _data = !contactId && !_userAccount ? _account.get('subdomain') : _userAccount.get('subdomain')
                   var adminMergeTagMap = [{
                     mergeTag: '[USERACCOUNTURL]',
-                    data: _data + '.indigenous.io'
+                    data: _data + hostname
                   }];
                   mergeTagMap = _.union(mergeTagMap, adminMergeTagMap);
                 }
