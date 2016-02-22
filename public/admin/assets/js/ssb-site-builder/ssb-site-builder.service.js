@@ -125,8 +125,8 @@
          */
 		function getSite(id) {
 
-			function success(data) {                
-				ssbService.website = data;                
+			function success(data) {
+				ssbService.website = data;
 			}
 
 			function error(error) {
@@ -150,7 +150,7 @@
 				console.error('SimpleSiteBuilderService getPages error: ', error);
 			}
 
-			return ssbRequest($http.get(basePagesWebsiteAPIUrl + ssbService.websiteId + '/pages').success(success).error(error));
+			return ssbRequest($http.get(baseWebsiteAPIUrlv2 + ssbService.websiteId + '/pages').success(success).error(error));
 		}
 
         /**
@@ -796,8 +796,8 @@
 
 
         /**
-         * Remove a section from the current page        
-         * @param {integer} index - index of page section to be removed         
+         * Remove a section from the current page
+         * @param {integer} index - index of page section to be removed
          *
          */
 
@@ -936,7 +936,7 @@
                     if(!ssbService.websiteLoading)
                         $timeout(function() {
                             ssbService.websiteLoading = true;
-                        },100);                
+                        },100);
                 }
             });
 
