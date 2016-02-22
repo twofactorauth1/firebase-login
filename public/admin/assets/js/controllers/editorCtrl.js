@@ -538,8 +538,7 @@
         }
         $scope.originalPage = angular.copy(data);
         $scope.activePage = true;
-        $scope.activateCKeditor();
-        $rootScope.breadcrumbTitle = $scope.page.title;
+        $scope.activateCKeditor();        
         if($scope.page.templateId)
           WebsiteService.getTemplates(function (templates) {
             $scope.pageTemplate = _.findWhere(templates, {
@@ -565,7 +564,7 @@
           $scope.originalPage = angular.copy(data);
           $scope.activePage = true;
           $scope.activateCKeditor();
-          $rootScope.breadcrumbTitle = $scope.page.title;
+          
         });
       }
 
@@ -576,7 +575,6 @@
         $scope.originalPage = angular.copy(_email);
         $scope.activePage = true;
         $scope.activateCKeditor();
-        $rootScope.breadcrumbTitle = $scope.page.title;
       }
     };
 
@@ -598,8 +596,7 @@
           $scope.blog.post = data;
           $scope.single_post = true;
           $scope.components = $scope.page.components;
-          $scope.originalPost = angular.copy(data);
-          $rootScope.breadcrumbTitle = "Single Post"
+          $scope.originalPost = angular.copy(data);          
           $scope.activateCKeditor();
         });
 
@@ -663,7 +660,7 @@
         $scope.components = $scope.page.config.components;
         $scope.originalPage = angular.copy($scope.page);
         $scope.activateCKeditor();
-        $rootScope.breadcrumbTitle = $scope.page.title || $scope.page.handle;
+        
       });
     };
 
@@ -695,7 +692,6 @@
 
         $scope.components = $scope.topic.components;
         $scope.activateCKeditor();
-        $rootScope.breadcrumbTitle = $scope.topic.title;
       });
     };
 
