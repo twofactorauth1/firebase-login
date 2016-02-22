@@ -40,6 +40,10 @@ mainApp.controller('CacheCtrl', ['$scope', 'embeddedSiteDataService', '$window',
         'usePage': false
     };
 
+    $scope.$on('getCurrentPage', function (event, args) {         
+        args.currentpage = $scope.page;
+    });
+
 
     $scope.components = [];
     embeddedSiteDataService.getPageData($scope.websiteId, function (err, data) {

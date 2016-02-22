@@ -139,7 +139,7 @@
                                           <option value="" disabled>Select a Component</option>
                                           <option ng-repeat="component in currentPage.components track by $index" data-ng-if="component.anchor || component._id" value="{{component.anchor || component._id}}" ng-selected="{{link.linkTo.data === (component.anchor || component._id)}}">{{setLinkTitle(component.type, $index)}}</option>
                                       </select>
-                                      <select ng-if="linkType[$index]=='page'" placeholder="Select a page" ng-change="setPageLinkTitle(link.linkTo.data, true, link)" ng-model="link.linkTo.data" class="form-control margin-bottom-0">
+                                      <select ng-if="linkType[$index]=='page'" placeholder="Select a page" ng-change="setPageLinkTitle(link.linkTo.data, true, link, '{{link.linkTo.data}}')" ng-model="link.linkTo.data" class="form-control margin-bottom-0">
                                           <option value="" disabled>Select a Page</option>
                                           <option ng-repeat="page in filteredPages | filterPages:website.linkLists:component.linkLists:component.customnav:link.linkTo.data track by $index" data-ng-if="page.title && page.handle" value="{{page.handle}}" ng-selected="{{link.linkTo.data == page.handle}}">{{page.title}}</option>
                                       </select>
