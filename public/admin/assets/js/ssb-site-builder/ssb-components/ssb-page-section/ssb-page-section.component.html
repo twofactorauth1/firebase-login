@@ -1,7 +1,7 @@
 <section ng-show="vm.section.visibility || vm.section.visibility === undefined" id="section_{{vm.section._id}}" class="ssb-section-layout {{vm.sectionClass(vm.section)}}" ng-attr-style="{{vm.sectionStyle(vm.section)}}">
 
     <style>
-    #section_{{vm.section._id}} .bg-overlay {
+    #section_{{vm.section._id}} > .bg-overlay {
         background: {{vm.section.bg.img.overlaycolor || 'transparent'}}!important;
         opacity: {{vm.section.bg.img.overlayopacity === 0 ? vm.section.bg.img.overlayopacity : vm.section.bg.img.overlayopacity/100 || 1}};
     }
