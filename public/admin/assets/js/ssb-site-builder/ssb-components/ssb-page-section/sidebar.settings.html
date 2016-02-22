@@ -1,52 +1,4 @@
-<div class="col-xs-12 container-fluid">
-
-    <div class="row padding-10">
-
-        <button ng-click="vm.uiState.navigation.sectionPanel.loadPanel({ name: 'Design', id: 'design' })" class="ssb-sidebar-section-panel-btn btn btn-link">
-            <i class="ti-brush display-ib"></i> Design
-        </button>
-
-        <button ng-click="vm.uiState.navigation.sectionPanel.loadPanel({ name: 'Layout', id: 'layout' })" class="ssb-sidebar-section-panel-btn btn btn-link">
-            <i class="ti-layout display-ib"></i> Layout
-        </button>
-
-
-    </div>
-
-    <div class="row center padding-10 ssb-sidebar-item-section-actions">
-        <div
-            ng-if="vm.uiState.activeSectionIndex !== 0"
-            class="ssb-sidebar-item-icon ssb-sidebar-item-icon-offset-3 display-ib ti-arrow-up"
-            ng-click="vm.moveSection('up', vm.state.page.sections[vm.uiState.activeSectionIndex], vm.uiState.activeSectionIndex)"
-            tooltip-placement="top"
-            tooltip-html-unsafe="Move section up">
-        </div>
-        <div
-            ng-if="vm.uiState.activeSectionIndex !== (vm.state.page.sections.length - 1)"
-            class="ssb-sidebar-item-icon ssb-sidebar-item-icon-offset-3 display-ib ti-arrow-down"
-            ng-click="vm.moveSection('down', vm.state.page.sections[vm.uiState.activeSectionIndex], vm.uiState.activeSectionIndex)"
-            tooltip-placement="top"
-            tooltip-html-unsafe="Move section down">
-        </div>
-        <div
-            class="ssb-sidebar-item-icon ssb-sidebar-item-icon-offset-2 ti-pencil display-ib"
-            ng-click="vm.state.editSection = true; vm.editSectionName('edit_section_name')"
-            tooltip-placement="top"
-            tooltip-html-unsafe="Rename section">
-        </div>
-        <div
-            class="ssb-sidebar-item-icon ssb-sidebar-item-icon-offset-3 display-ib ti-eye"
-            ng-click="vm.hideSectionFromPage(vm.state.page.sections[vm.uiState.activeSectionIndex], vm.uiState.activeSectionIndex)"
-            tooltip-placement="top"
-            tooltip-html-unsafe="Show/hide section">
-        </div>
-        <div
-            class="ssb-sidebar-item-icon ssb-sidebar-item-icon-offset-1 ti-close display-ib"
-            ng-click="vm.removeSectionFromPage(vm.uiState.activeSectionIndex)"
-            tooltip-placement="top"
-            tooltip-html-unsafe="Remove section">
-        </div>
-    </div>
+<div class="col-xs-12 container-fluid" style="background: white;">
 
     <div class="row padding-10 ssb-sidebar-section-panel-component-btns">
         <div ng-repeat="component in vm.state.page.sections[vm.uiState.activeSectionIndex].components track by $index">
@@ -61,5 +13,65 @@
 
     </div>
 
+    <div class="row padding-10">
 
+        <button ng-click="vm.uiState.navigation.sectionPanel.loadPanel({ name: 'Design', id: 'design' })" class="ssb-sidebar-section-panel-btn btn btn-link">
+            <i class="ti-brush display-ib"></i> Design
+        </button>
+
+        <!-- <button ng-click="vm.uiState.navigation.sectionPanel.loadPanel({ name: 'Style', id: 'style' })" class="ssb-sidebar-section-panel-btn btn btn-link">
+            <i class="ti-brush display-ib"></i> Style
+        </button> -->
+
+        <button ng-click="vm.uiState.navigation.sectionPanel.loadPanel({ name: 'Layout', id: 'layout' })" class="ssb-sidebar-section-panel-btn btn btn-link">
+            <i class="ti-layout display-ib"></i> Size &amp; Position
+        </button>
+
+        <!-- <button ng-click="vm.uiState.navigation.sectionPanel.loadPanel({ name: 'Advanced', id: 'advanced' })" class="ssb-sidebar-section-panel-btn btn btn-link">
+            <i class="ti-layout display-ib"></i> Advanced
+        </button> -->
+
+    </div>
+
+
+</div>
+
+<div class="col-xs-12 container-fluid padding-top-10 padding-bottom-10 center ssb-sidebar-item-section-actions">
+    <div
+        ng-if="vm.uiState.activeSectionIndex !== 0"
+        class="ssb-sidebar-item-icon ssb-sidebar-item-icon-offset-3 display-ib ti-arrow-up"
+        ng-click="vm.moveSection('up', vm.state.page.sections[vm.uiState.activeSectionIndex], vm.uiState.activeSectionIndex)"
+        tooltip-placement="top"
+        tooltip-html-unsafe="Move section up"
+        tooltip-append-to-body="true">
+    </div>
+    <div
+        ng-if="vm.uiState.activeSectionIndex !== (vm.state.page.sections.length - 1)"
+        class="ssb-sidebar-item-icon ssb-sidebar-item-icon-offset-3 display-ib ti-arrow-down"
+        ng-click="vm.moveSection('down', vm.state.page.sections[vm.uiState.activeSectionIndex], vm.uiState.activeSectionIndex)"
+        tooltip-placement="top"
+        tooltip-html-unsafe="Move section down"
+        tooltip-append-to-body="true">
+    </div>
+    <div
+        class="ssb-sidebar-item-icon ssb-sidebar-item-icon-offset-2 ti-pencil display-ib"
+        ng-click="vm.state.editSection = true; vm.editSectionName('edit_section_name')"
+        tooltip-placement="top"
+        tooltip-html-unsafe="Rename section"
+        tooltip-append-to-body="true">
+    </div>
+    <div
+        class="ssb-sidebar-item-icon ssb-sidebar-item-icon-offset-3 display-ib ti-eye"
+        ng-click="vm.hideSectionFromPage(vm.state.page.sections[vm.uiState.activeSectionIndex], vm.uiState.activeSectionIndex)"
+        tooltip-placement="top"
+        tooltip-html-unsafe="Show/hide section"
+        tooltip-append-to-body="true">
+    </div>
+    <div
+        class="ssb-sidebar-item-icon ssb-sidebar-item-icon-offset-1 ti-close display-ib"
+        ng-click="vm.removeSectionFromPage(vm.uiState.activeSectionIndex)"
+        tooltip-placement="top"
+        tooltip-html-unsafe="Remove section"
+        tooltip-append-to-body="true">
+    </div>
 </div>
