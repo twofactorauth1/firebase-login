@@ -9,6 +9,7 @@ var dao = require('./dao/order.dao.js');
 var log = $$.g.getLogger("order_manager");
 var async = require('async');
 var stripeDao = require('../payments/dao/stripe.dao');
+var paymentManager = require('../payments/payments_manager');
 var contactDao = require('../dao/contact.dao');
 require('./model/order');
 var mandrillHelper = require('../utils/mandrillhelper');
