@@ -10153,12 +10153,6 @@ a[href="https://froala.com/wysiwyg-editor"] {
 .ssb-site-builder .ssb-edit-control .ti-arrow-up:hover {
   background-color: #213340;
 }
-.ssb-site-builder .ssb-edit-control .ssb-edit-control-active-title:hover:last-child,
-.ssb-site-builder .ssb-edit-control .ssb-settings-btn:hover:last-child,
-.ssb-site-builder .ssb-edit-control .ti-arrow-down:hover:last-child,
-.ssb-site-builder .ssb-edit-control .ti-arrow-up:hover:last-child {
-  border-radius: 0px 10em 10em 0px;
-}
 .ssb-site-builder .ssb-edit-control:hover .ssb-edit-control-inactive {
   display: none;
 }
@@ -10666,6 +10660,7 @@ div[class^="spacing-"] input {
   text-transform: capitalize;
   background: #1c2b36;
   color: white;
+  border-top: 0 none;
 }
 .ssb-sidebar-section-panel.draggable > .ssb-sidebar-sub-heading i {
   cursor: pointer;
