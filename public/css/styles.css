@@ -10057,8 +10057,8 @@ a[href="https://froala.com/wysiwyg-editor"] {
 .ssb-site-builder .ssb-edit-control > * > * {
   float: left;
   position: static;
-  height: 40px;
-  line-height: 40px;
+  height: 38px;
+  line-height: 38px;
   color: white;
   vertical-align: top;
   opacity: 1;
@@ -10123,13 +10123,20 @@ a[href="https://froala.com/wysiwyg-editor"] {
   padding: 0 0 0 1em;
 }
 .ssb-site-builder .ssb-edit-control .ssb-edit-control-active {
-  display: inline-block;
+  display: none;
   text-transform: capitalize;
-  background: #47B8D9;
+  background: #1c2b36;
   box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.5);
   margin: .25em 0 0 1.5em;
   height: 38px;
   line-height: 38px;
+  border-radius: 0px 10em 10em 0px;
+}
+.ssb-site-builder .ssb-edit-control .ssb-edit-control-active > * {
+  background: #1c2b36;
+}
+.ssb-site-builder .ssb-edit-control .ssb-edit-control-active > .ssb-sidebar-item-icon:last-child {
+  border-radius: 0px 10em 10em 0px;
 }
 .ssb-site-builder .ssb-edit-control .ssb-edit-control-active-title {
   border-right: 1px solid rgba(255, 255, 255, 0.5);
@@ -10144,7 +10151,13 @@ a[href="https://froala.com/wysiwyg-editor"] {
 .ssb-site-builder .ssb-edit-control .ssb-settings-btn:hover,
 .ssb-site-builder .ssb-edit-control .ti-arrow-down:hover,
 .ssb-site-builder .ssb-edit-control .ti-arrow-up:hover {
-  background-color: #54bddc;
+  background-color: #213340;
+}
+.ssb-site-builder .ssb-edit-control .ssb-edit-control-active-title:hover:last-child,
+.ssb-site-builder .ssb-edit-control .ssb-settings-btn:hover:last-child,
+.ssb-site-builder .ssb-edit-control .ti-arrow-down:hover:last-child,
+.ssb-site-builder .ssb-edit-control .ti-arrow-up:hover:last-child {
+  border-radius: 0px 10em 10em 0px;
 }
 .ssb-site-builder .ssb-edit-control:hover .ssb-edit-control-inactive {
   display: none;
@@ -10651,9 +10664,12 @@ div[class^="spacing-"] input {
   cursor: move;
   border-radius: 5px 5px 0px 0px;
   text-transform: capitalize;
+  background: #1c2b36;
+  color: white;
 }
 .ssb-sidebar-section-panel.draggable > .ssb-sidebar-sub-heading i {
   cursor: pointer;
+  color: white;
 }
 .ssb-sidebar-section-panel .close {
   position: absolute;
@@ -10669,6 +10685,10 @@ div[class^="spacing-"] input {
 }
 .ssb-sidebar-section-panel .row:not(:first-of-type) {
   border-top: 1px solid #ddd;
+}
+.ssb-sidebar-section-panel .ssb-sidebar-item-section-actions {
+  background: #1c2b36;
+  color: white;
 }
 .ssb-sidebar-section-panel .ssb-sidebar-item-section-actions .ssb-sidebar-item-icon {
   position: static;

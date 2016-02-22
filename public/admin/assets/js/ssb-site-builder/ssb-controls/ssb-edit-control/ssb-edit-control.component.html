@@ -21,14 +21,16 @@
         ng-if="vm.sectionIndex !== 0"
         class="ssb-sidebar-item-icon ssb-sidebar-item-icon-offset-3 display-ib ti-arrow-up ng-scope"
         ng-click="vm.moveSection('up', vm.state.page.sections[vm.sectionIndex], vm.sectionIndex)" tooltip-animation="false" tooltip-placement="bottom"
-            tooltip-html-unsafe="Move section up">
+        tooltip-html-unsafe="Move section up"
+        tooltip-append-to-body="true">
     </div>
 
     <div
         ng-if="vm.sectionIndex !== (vm.state.page.sections.length - 1)"
         class="ssb-sidebar-item-icon ssb-sidebar-item-icon-offset-3 display-ib ti-arrow-down ng-scope"
         ng-click="vm.moveSection('down', vm.state.page.sections[vm.sectionIndex], vm.sectionIndex)" tooltip-animation="false" tooltip-placement="bottom"
-            tooltip-html-unsafe="Move section down">
+        tooltip-html-unsafe="Move section down"
+        tooltip-append-to-body="true">
     </div>
 
     <!-- <a href>ActionLink2</a>

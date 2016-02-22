@@ -1,6 +1,7 @@
 @import "../modules/_mixins.less";
 @import "../modules/_variables.less";
 
+
 .ssb-sidebar {
     background: #131e26;
     // opacity: 0;
@@ -497,9 +498,12 @@
         border-radius: 5px 5px 0px 0px;
         // border: 0 none;
         text-transform: capitalize;
+        background: @indigenous-gray-blue;
+        color: white;
 
         i {
             cursor: pointer;
+            color: white;
         }
     }
 
@@ -519,6 +523,11 @@
 
     .row:not(:first-of-type) {
         border-top: 1px solid #ddd;
+    }
+
+    .ssb-sidebar-item-section-actions {
+        background: @indigenous-gray-blue;
+        color: white;
     }
 
     .ssb-sidebar-item-section-actions .ssb-sidebar-item-icon {
