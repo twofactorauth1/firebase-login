@@ -14202,8 +14202,10 @@ indi-login-modal .modal-title {
 }
 .is-indi-modal .error {
   font-size: 12px;
-  margin: -0.5em 0 -2em;
+  font-size: 4.45vmin;
+  margin: -6px 0 -10px;
   height: 1em;
+  color: orange;
 }
 .is-indi-modal .box-login legend,
 .is-indi-modal .social,
