@@ -131,7 +131,7 @@
 			}
 
 			function error(error) {
-				console.error('SimpleSiteBuilderService getSite error: ', error);
+				console.error('SimpleSiteBuilderService getSite error: ', JSON.stringify(error));
 			}
 
 			return ssbRequest($http.get(baseWebsiteAPIUrlv2 + id).success(success).error(error));
@@ -148,7 +148,7 @@
 			}
 
 			function error(error) {
-				console.error('SimpleSiteBuilderService getPages error: ', error);
+				console.error('SimpleSiteBuilderService getPages error: ', JSON.stringify(error));
 			}
 
 			return ssbRequest($http.get(baseWebsiteAPIUrlv2 + ssbService.websiteId + '/pages').success(success).error(error));
@@ -166,11 +166,11 @@
             }
 
             function error(error) {
-                console.error('SimpleSiteBuilderService getPages with sections: ', error);
+                console.error('SimpleSiteBuilderService getPages with sections: ', JSON.stringify(error));
             }
 
             return ssbRequest($http.get(basePagesWebsiteAPIUrl + ssbService.websiteId + '/pages').success(success).error(error));
-            
+
         }
 
         /**
@@ -224,7 +224,7 @@
             }
 
             function error(error) {
-                console.error('SimpleSiteBuilderService page delete error: ', error);
+                console.error('SimpleSiteBuilderService page delete error: ', JSON.stringify(error));
             }
 
             return (
@@ -256,7 +256,7 @@
             }
 
             function error(error) {
-                console.error('SimpleSiteBuilderService page creation error: ', error);
+                console.error('SimpleSiteBuilderService page creation error: ', JSON.stringify(error));
             }
 
         }
@@ -271,7 +271,7 @@
             }
 
             function error(error) {
-                console.error('SimpleSiteBuilderService page error: ', error);
+                console.error('SimpleSiteBuilderService page error: ', JSON.stringify(error));
             }
             return (
                 ssbRequest($http({
@@ -302,7 +302,7 @@
          * @param {object} error - error response from server
          */
 		function errorPage(error) {
-			console.error('SimpleSiteBuilderService page error: ', error);
+			console.error('SimpleSiteBuilderService page error: ', JSON.stringify(error));
 		}
 
         /**
@@ -358,7 +358,7 @@
 			}
 
 			function error(error) {
-				console.error('SimpleSiteBuilderService saveWebsite error: ', error);
+				console.error('SimpleSiteBuilderService saveWebsite error: ', JSON.stringify(error));
 			}
 
 			return (
@@ -387,7 +387,7 @@
 			}
 
 			function error(error) {
-				console.error('SimpleSiteBuilderService component error: ', error);
+				console.error('SimpleSiteBuilderService component error: ', JSON.stringify(error));
 			}
 
 			return (
@@ -429,7 +429,7 @@
 
 			function error(error) {
                 deferred.reject(error);
-				console.error('SimpleSiteBuilderService section error: ', error);
+				console.error('SimpleSiteBuilderService section error: ', JSON.stringify(error));
 			}
 
 			return ssbRequest(deferred.promise);
@@ -523,7 +523,7 @@
 			}
 
 			function error(error) {
-				console.error('SimpleSiteBuilderService getPlatformSections error: ', error);
+				console.error('SimpleSiteBuilderService getPlatformSections error: ', JSON.stringify(error));
 			}
 
 			return (ssbRequest($http({
@@ -545,7 +545,7 @@
             }
 
             function error (error) {
-                console.error('SimpleSiteBuilderService getUserSections error: ', error);
+                console.error('SimpleSiteBuilderService getUserSections error: ', JSON.stringify(error));
             }
 
             return (ssbRequest($http({
@@ -575,7 +575,7 @@
                 });
             }
             function error(error) {
-                console.error('SimpleSiteBuilderService getPlatformComponents error: ', error);
+                console.error('SimpleSiteBuilderService getPlatformComponents error: ', JSON.stringify(error));
             }
 
             return (
@@ -598,7 +598,7 @@
 			}
 
 			function error(error) {
-				console.error('SimpleSiteBuilderService themes error: ', error);
+				console.error('SimpleSiteBuilderService themes error: ', JSON.stringify(error));
 			}
 
             return (
@@ -621,7 +621,7 @@
 			}
 
 			function error(error) {
-				console.error('SimpleSiteBuilderService checkForDuplicatepage error: ', error);
+				console.error('SimpleSiteBuilderService checkForDuplicatepage error: ', JSON.stringify(error));
 			}
 
 			return (
@@ -645,7 +645,7 @@
           }
 
           function error(error) {
-            console.error('SimpleSiteBuilderService getTemplates error: ', error);
+            console.error('SimpleSiteBuilderService getTemplates error: ', JSON.stringify(error));
           }
 
           return (
@@ -669,7 +669,7 @@
           }
 
           function error(error) {
-            console.error('SimpleSiteBuilderService getSiteTemplates error: ', error);
+            console.error('SimpleSiteBuilderService getSiteTemplates error: ', JSON.stringify(error));
           }
 
           return (
@@ -695,7 +695,7 @@
             }
 
             function error(error) {
-                console.error('SimpleSiteBuilderService setSiteTemplate error: ', error);
+                console.error('SimpleSiteBuilderService setSiteTemplate error: ', JSON.stringify(error));
             }
 
             return (
@@ -735,7 +735,7 @@
           }
 
           function error(error) {
-            console.error('SimpleSiteBuilderService getLegacyTemplates error: ', error);
+            console.error('SimpleSiteBuilderService getLegacyTemplates error: ', JSON.stringify(error));
           }
 
           return (
