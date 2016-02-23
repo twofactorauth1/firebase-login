@@ -5,37 +5,28 @@
 
     <h4 class="ssb-sidebar-sub-heading draggable-handle">
 
-        <span onhide="vm.state.editSection=false" id="edit_section_name" ng-if="vm.state.editSection" editable-text="vm.state.page.sections[vm.uiState.activeSectionIndex].name">{{vm.state.page.sections[vm.uiState.activeSectionIndex].name}}</span>
+        <span
+            onhide="vm.state.editSection=false"
+            id="edit_section_name"
+            ng-if="vm.state.editSection"
+            editable-text="vm.state.page.sections[vm.uiState.activeSectionIndex].name">
+
+            {{vm.state.page.sections[vm.uiState.activeSectionIndex].name}}
+
+        </span>
 
 
         <span ng-if="!vm.state.editSection && vm.uiState.openSidebarSectionPanel.name === ''">
+
             {{vm.state.page.sections[vm.uiState.activeSectionIndex].name}}
 
-            <!-- <small>
-            <br>
-            vm.uiState.activeComponentIndex:{{vm.uiState.activeComponentIndex}}
-            <br>
-            vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex]._id:{{vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex]._id}}
-            <br>
-            vm.uiState.openSidebarSectionPanel.id:{{vm.uiState.openSidebarSectionPanel.id}}
-            <br>
-            (vm.state.page.sections[vm.uiState.activeSectionIndex].components.length === 1):{{(vm.state.page.sections[vm.uiState.activeSectionIndex].components.length === 1)}}
-            <br>
-            </small> -->
-
         </span>
+
         <div ng-if="vm.uiState.openSidebarSectionPanel.name !== ''">
 
             <i ng-if="vm.uiState.navigation.sectionPanel.navigationHistory.length > 0" class="ti-arrow-left" ng-click="vm.uiState.navigation.sectionPanel.back();"></i>
-            {{vm.uiState.openSidebarSectionPanel.name | cleanType}}
 
-            <!-- <small>
-            {{vm.uiState.openSidebarSectionPanel._id}}-<br>
-            {{vm.uiState.openSidebarSectionPanel.name}}-<br>
-            {{vm.uiState.openSidebarSectionPanel.componentId}}-<br>
-            {{vm.uiState.activeSectionIndex}}-<br>
-            {{vm.uiState.componentIndex}}-<br>
-            </small> -->
+            {{vm.uiState.openSidebarSectionPanel.name | cleanType}}
 
         </div>
     </h4>
