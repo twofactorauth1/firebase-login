@@ -129,7 +129,13 @@ _.extend(api.prototype, baseApi.prototype, {
         // ------------------------------------------------
         //  Webhook
         // ------------------------------------------------
-        app.post('stripe/webhook', this.verifyEvent.bind(this), this.handleEvent.bind(this));
+        app.post(this.url('stripe/webhook'), this.verifyEvent.bind(this), this.handleEvent.bind(this));
+
+        // ------------------------------------------------
+        // Paypal?
+        // ------------------------------------------------
+        //TODO: for testing only.  This can be removed
+        app.get(this.url('paypal'), this.setup.bind(this), this.trytomakeapayment.bind(this));
 
     },
 
@@ -2181,6 +2187,21 @@ _.extend(api.prototype, baseApi.prototype, {
             }
         });
 
+    },
+
+    //TODO: this can be removed...
+    trytomakeapayment: function(req, resp) {
+        var self = this;
+        self.log.debug('>> trytomakeapayment?');
+        var receiverEmail = 'kyle+testbusiness@indigenous.io';
+        var amount = '101.01';
+        var memo = 'trytomakeapayment';
+        var cancelUrl = 'http://kyletesting.indigenous.local:3000/nope';
+        var returnUrl = 'http://kyletesting.indigenous.local:3000/yep';
+        paymentsManager.payWithPaypal(receiverEmail, amount, memo, cancelUrl, returnUrl, function(err, value){
+            self.log.debug('<< trytomakeapayment');
+            return self.sendResultOrError(resp, err, value, "Error calling paypal.");
+        });
     },
 
     getStripeAccount: function(req, resp) {
