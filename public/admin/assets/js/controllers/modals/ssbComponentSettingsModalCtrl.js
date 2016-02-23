@@ -750,25 +750,7 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
     if ($scope.component) {
 
       var componentType;
-      console.log('$scope.component.spacing', $scope.component.spacing);
-      if (!$scope.component.spacing) {
-        console.log('component editing doesnt have spacing');
-        var pt, pb = 0;
-        var mw = "100%";        
-        $scope.component.spacing = {
-          'pt': pt,
-          'pb': pb,
-          'pl': 0,
-          'pr': 0,
-          'mt': 0,
-          'mb': 0,
-          'mr': 'auto',
-          'ml': 'auto',
-          'mw': mw,
-          'usePage': false
-        };
-      }
-
+      
       if(!$scope.component.bg)
         $scope.component.bg = {};
       if($scope.component.bg && !angular.isDefined($scope.component.bg.opacity))
