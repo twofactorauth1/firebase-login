@@ -753,12 +753,8 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
       console.log('$scope.component.spacing', $scope.component.spacing);
       if (!$scope.component.spacing) {
         console.log('component editing doesnt have spacing');
-        var pt, pb = 50;
-        var mw = 1024;
-        if($scope.component.type === "contact-us" || $scope.component.type === "navigation"){
-          pt = pb = 0;
-          mw = "100%";
-        }
+        var pt, pb = 0;
+        var mw = "100%";        
         $scope.component.spacing = {
           'pt': pt,
           'pb': pb,
