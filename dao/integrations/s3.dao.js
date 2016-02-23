@@ -113,7 +113,7 @@ var dao = {
         fs.readFile(path, function (err, data) {
             var s3 = new AWS.S3({params: {Bucket: bucket}});
 
-            var params = {Key: key, Body: data, ContentType:type};
+            var params = {Key: key, Body: data, ContentType:type, CacheControl:"max-age=86400"};
             //console.dir(params);
             s3.putObject(params, function (err, data) {
                 if (!err) {

@@ -4579,7 +4579,6 @@ div[data-type="social-link"] .inner-page {
   margin: 0 0 0 10px;
 }
 .social-link-v1 ul li a {
-  color: white;
   position: relative;
 }
 .social-link-v1 ul li a span {
@@ -4837,8 +4836,8 @@ fieldset[disabled] .btn-vimeo-square.active {
   color: #1ab7ea;
   background-color: #fff;
 }
-.fa-reddit {
-  color: #000 !important;
+.btn-reddit {
+  color: #000;
   background-color: #eff7ff;
   border-color: rgba(0, 0, 0, 0.2);
 }

@@ -8,6 +8,7 @@
 var stripeDao = require('./dao/stripe.dao.js');
 
 var log = $$.g.getLogger("payments_manager");
+var paypalClient = require('./paypal/paypal.client');
 
 module.exports = {
     createStripeCustomerForUser: function(cardToken, user, accountId, newAccountId, accessToken, fn) {
@@ -126,7 +127,14 @@ module.exports = {
                 return fn(null, invoiceObj);
             }
         });
+    },
 
+    payWithPaypal: function(receiverEmail, amount, memo, cancelUrl, returnUrl, fn) {
+        log.debug('>> payWithPaypal');
+        paypalClient.pay(receiverEmail, amount, memo, cancelUrl, returnUrl, function(err, value){
+            log.debug('<< payWithPaypal');
+            return fn(err, value);
+        });
     }
 
 

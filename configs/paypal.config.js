@@ -7,9 +7,14 @@
 
 var paypalClientID = process.env.PAYPAL_CLIENT_ID || 'Adai01SoHe9BcFr9GkfTNzys2bqUdqdpSphHVzouKPKQxxDRe1eBRKGaKNNETr5tYNf02OfG-e-YzOnO';
 var paypalClientSecret = process.env.PAYPAL_CLIENT_SECRET || 'EMLp1mnLTtXX6PSgZBqnS2U6Cp4-KSUPvUxg1lpDgKEv4fHX3DUo5Ux980Qhu90Aat4fwQSZMlOZJcV5';
-var paypalAPIUsername = process.env.PAYPAL_API_USERNAME || 'kyle_api1.indigenous.io';
-var paypalAPIPassword = process.env.PAYPAL_API_PASSWORD || '7RHC3SGTNEULVR6Y';
-var paypalAPISignature = process.env.PAYPAL_API_SIGNATURE || 'AFcWxV21C7fd0v3bYYYRCpSSRl31Alk0IwKAI2V3IGQrs1zhM9AVfiEB';
+var paypalAPIUsername = process.env.PAYPAL_API_USERNAME || 'kyle-facilitator_api1.indigenous.io';
+var paypalAPIPassword = process.env.PAYPAL_API_PASSWORD || '9UQNLK8V9ZNHFSBM';
+var paypalAPISignature = process.env.PAYPAL_API_SIGNATURE || 'AFcWxV21C7fd0v3bYYYRCpSSRl31AUrCEslod6r62qh4l6zrsCME.JV-';
+
+//The real deal:
+//kyle_api1.indigenous.io
+//7RHC3SGTNEULVR6Y
+//AFcWxV21C7fd0v3bYYYRCpSSRl31Alk0IwKAI2V3IGQrs1zhM9AVfiEB
 
 module.exports = {
 

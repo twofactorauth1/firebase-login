@@ -4571,7 +4571,6 @@
   margin: 0 0 0 10px;
 }
 #componentloader .social-link-v1 ul li a {
-  color: white;
   position: relative;
 }
 #componentloader .social-link-v1 ul li a span {
@@ -4829,8 +4828,8 @@
   color: #1ab7ea;
   background-color: #fff;
 }
-#componentloader .fa-reddit {
-  color: #000 !important;
+#componentloader .btn-reddit {
+  color: #000;
   background-color: #eff7ff;
   border-color: rgba(0, 0, 0, 0.2);
 }

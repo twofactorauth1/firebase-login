@@ -156,7 +156,7 @@
             }
 
             function error(error) {
-                console.error('DashboardService getWorkstream:', error);
+                console.error('DashboardService getWorkstream:', JSON.stringify(error));
             }
 
             return dashRequest($http.get(baseWorkstreamsAPIUrl + '/' + id).success(success).error(error));
@@ -175,7 +175,7 @@
             }
 
             function error(error) {
-                console.error('DashboardService unlockWorkstream:', error);
+                console.error('DashboardService unlockWorkstream:', JSON.stringify(error));
             }
 
             return dashRequest($http.post(baseWorkstreamsAPIUrl + '/' + id + '/unlock').success(success).error(error));
@@ -205,7 +205,7 @@
             }
 
             function error(error) {
-                console.error('DashboardService getAccount:', error);
+                console.error('DashboardService getAccount:', JSON.stringify(error));
             }
             return (
                 dashRequest($http.get(baseAccountAPIUrl).success(success).error(error))
@@ -219,7 +219,7 @@
             }
 
             function error(error) {
-                console.error('DashboardService updateAccount:', error);
+                console.error('DashboardService updateAccount:', JSON.stringify(error));
             }
             return (
                 dashRequest($http.put(baseAccountAPIUrl + [account._id].join('/'), account).success(success).error(error))

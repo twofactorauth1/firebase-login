@@ -750,29 +750,7 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
     if ($scope.component) {
 
       var componentType;
-      console.log('$scope.component.spacing', $scope.component.spacing);
-      if (!$scope.component.spacing) {
-        console.log('component editing doesnt have spacing');
-        var pt, pb = 50;
-        var mw = 1024;
-        if($scope.component.type === "contact-us" || $scope.component.type === "navigation"){
-          pt = pb = 0;
-          mw = "100%";
-        }
-        $scope.component.spacing = {
-          'pt': pt,
-          'pb': pb,
-          'pl': 0,
-          'pr': 0,
-          'mt': 0,
-          'mb': 0,
-          'mr': 'auto',
-          'ml': 'auto',
-          'mw': mw,
-          'usePage': false
-        };
-      }
-
+      
       if(!$scope.component.bg)
         $scope.component.bg = {};
       if($scope.component.bg && !angular.isDefined($scope.component.bg.opacity))
@@ -965,33 +943,28 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
        * -
        */
       
-        var parsed = angular.fromJson(SimpleSiteBuilderService.pages);
-        var arr = [];
-        _.each(parsed, function (page) {
-            arr.push(page);
-        });
-        var allPages = arr;
-
-        var account = SimpleSiteBuilderService.account;
-        
-        if (!account.showhide.blog) {
-          var _blogPage = _.findWhere(allPages, {
-            handle: 'blog'
-          });
-          if (_blogPage) {
-            var _index = _.indexOf(allPages, _blogPage);
-            allPages.splice(_index, 1);
+        SimpleSiteBuilderService.getPagesWithSections().then(function(pages){
+          var allPages = pages.data;
+          var account = SimpleSiteBuilderService.account;
+          if (!account.showhide.blog) {
+            var _blogPage = _.findWhere(allPages, {
+              handle: 'blog'
+            });
+            if (_blogPage) {
+              var _index = _.indexOf(allPages, _blogPage);
+              allPages.splice(_index, 1);
+            }
           }
-        }
-        $scope.allPages = angular.copy(allPages);        
-        $scope.filteredPages = $filter('orderBy')(allPages, "title", false);
-        _.each($scope.filteredPages, function (page) {
-            page.components = getPageComponents(page);
+          $scope.allPages = angular.copy(allPages);        
+          $scope.filteredPages = $filter('orderBy')(allPages, "title", false);
+          _.each($scope.filteredPages, function (page) {
+              page.components = getPageComponents(page);
+          })
+          if($scope.linkPage)
+            $scope.currentPage = _.find($scope.filteredPages, function (page) {
+              return page.handle === $scope.linkPage;
+            });
         })
-        if($scope.linkPage)
-          $scope.currentPage = _.find($scope.filteredPages, function (page) {
-            return page.handle === $scope.linkPage;
-          });
 
       WebsiteService.getEmails(true, function (emails) {
         $timeout(function () {
