@@ -21,12 +21,15 @@ app.directive('indDraggable', ['$document', function($document) {
 
       container.on('mousedown', function(event) {
 
-        // Prevent default dragging of selected content (if not form element)
+        // Prevent default dragging for input elements
         if (event.target.nodeName !== 'INPUT' &&
             event.target.nodeName !== 'TEXTAREA' &&
             event.target.nodeName !== 'SELECT') {
 
-            event.preventDefault();
+            startX = event.pageX - x;
+            startY = event.pageY - y;
+            $document.on('mousemove', mousemove);
+            $document.on('mouseup', mouseup);
 
         }
 
@@ -38,10 +41,7 @@ app.directive('indDraggable', ['$document', function($document) {
 
         // }
 
-        startX = event.pageX - x;
-        startY = event.pageY - y;
-        $document.on('mousemove', mousemove);
-        $document.on('mouseup', mouseup);
+        
       });
 
       function mousemove(event) {
