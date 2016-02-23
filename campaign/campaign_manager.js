@@ -334,6 +334,10 @@ module.exports = {
                                     self.log.error('Error finding campaign: ' + err);
                                     return fn(err, null);
                                 }
+                                if(campaign === null){
+                                   self.log.error('Could not find campaign with campaignId: ' + campaignId);
+                                   return fn('Could not find campaign with campaignId: ' + campaignId, null); 
+                                }
                                 //need to create flow.
                                 var flow = new $$.m.CampaignFlow({
                                     campaignId: campaignId,
