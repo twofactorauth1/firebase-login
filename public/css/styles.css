@@ -10136,6 +10136,7 @@ a[href="https://froala.com/wysiwyg-editor"] {
 }
 .ssb-site-builder .ssb-edit-control .ssb-edit-control-active > .ssb-sidebar-item-icon:last-child {
   border-radius: 0px 10em 10em 0px;
+  border-right: 1px solid #1c2b36;
 }
 .ssb-site-builder .ssb-edit-control .ssb-edit-control-active-title {
   border-right: 1px solid rgba(255, 255, 255, 0.5);
@@ -10196,6 +10197,8 @@ a[href="https://froala.com/wysiwyg-editor"] {
   padding-left: 1.5em;
   height: 100%;
   line-height: 2em;
+  border-radius: 0px 10em 10em 0px;
+  border-right: 1px solid #1c2b36;
 }
 .ssb-site-builder .ssb-edit-control-component .ti-arrow-down,
 .ssb-site-builder .ssb-edit-control-component .ti-arrow-up {
@@ -10721,6 +10724,11 @@ div[class^="spacing-"] input {
   right: 1em;
   cursor: pointer;
 }
+.ssb-sidebar-section-panel-scrollable {
+  overflow: auto;
+  overflow-x: hidden;
+  max-height: calc(100vh - 250px);
+}
 .ssb-sidebar-section-panel-component-panel {
   display: block;
   position: relative;
@@ -10734,6 +10742,9 @@ div[class^="spacing-"] input {
 }
 .ssb-sidebar-section-panel-component-panel rzslider {
   width: calc(100% - 15px);
+}
+.ssb-sidebar-section-panel-component-panel.ng-enter {
+  min-height: 128px;
 }
 .ssb-section-content-list-item {
   margin: 0 .5em 1em 0;
