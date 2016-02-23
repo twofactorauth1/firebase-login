@@ -25,6 +25,7 @@
 		ssbService.getSite = getSite;
 		ssbService.getPage = getPage;
 		ssbService.getPages = getPages;
+        ssbService.getPagesWithSections = getPagesWithSections;
 		ssbService.savePage = savePage;
 		ssbService.saveWebsite = saveWebsite;
 		ssbService.setActiveSection = setActiveSection;
@@ -159,15 +160,17 @@
          */
         function getPagesWithSections() {
 
+
             function success(data) {
-                 console.log('SimpleSiteBuilderService getPages');
+                 console.log('SimpleSiteBuilderService getPages with sections');
             }
 
             function error(error) {
-                console.error('SimpleSiteBuilderService getPages error: ', error);
+                console.error('SimpleSiteBuilderService getPages with sections: ', error);
             }
 
             return ssbRequest($http.get(basePagesWebsiteAPIUrl + ssbService.websiteId + '/pages').success(success).error(error));
+            
         }
 
         /**

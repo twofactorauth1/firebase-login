@@ -965,33 +965,28 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
        * -
        */
       
-        var parsed = angular.fromJson(SimpleSiteBuilderService.pages);
-        var arr = [];
-        _.each(parsed, function (page) {
-            arr.push(page);
-        });
-        var allPages = arr;
-
-        var account = SimpleSiteBuilderService.account;
-        
-        if (!account.showhide.blog) {
-          var _blogPage = _.findWhere(allPages, {
-            handle: 'blog'
-          });
-          if (_blogPage) {
-            var _index = _.indexOf(allPages, _blogPage);
-            allPages.splice(_index, 1);
+        SimpleSiteBuilderService.getPagesWithSections().then(function(pages){
+          var allPages = pages.data;
+          var account = SimpleSiteBuilderService.account;
+          if (!account.showhide.blog) {
+            var _blogPage = _.findWhere(allPages, {
+              handle: 'blog'
+            });
+            if (_blogPage) {
+              var _index = _.indexOf(allPages, _blogPage);
+              allPages.splice(_index, 1);
+            }
           }
-        }
-        $scope.allPages = angular.copy(allPages);        
-        $scope.filteredPages = $filter('orderBy')(allPages, "title", false);
-        _.each($scope.filteredPages, function (page) {
-            page.components = getPageComponents(page);
+          $scope.allPages = angular.copy(allPages);        
+          $scope.filteredPages = $filter('orderBy')(allPages, "title", false);
+          _.each($scope.filteredPages, function (page) {
+              page.components = getPageComponents(page);
+          })
+          if($scope.linkPage)
+            $scope.currentPage = _.find($scope.filteredPages, function (page) {
+              return page.handle === $scope.linkPage;
+            });
         })
-        if($scope.linkPage)
-          $scope.currentPage = _.find($scope.filteredPages, function (page) {
-            return page.handle === $scope.linkPage;
-          });
 
       WebsiteService.getEmails(true, function (emails) {
         $timeout(function () {
