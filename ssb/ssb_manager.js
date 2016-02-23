@@ -674,19 +674,8 @@ module.exports = {
                         }
                     });
                 }, function done(err){
-                    self.log.debug('<< listPages');
-                    var map = {};
-                    _.each(pages, function(value){
-                        if(map[value.get('handle')] === undefined) {
-                            map[value.get('handle')] = value;
-                        } else {
-                            var currentVersion = map[value.get('handle')].get('version');
-                            if(value.get('version') > currentVersion) {
-                                map[value.get('handle')] = value;
-                            }
-                        }
-                    });
-                    return fn(err, map);
+                    self.log.debug('<< listPages');                    
+                    return fn(err, pages);
                 });
 
             }
