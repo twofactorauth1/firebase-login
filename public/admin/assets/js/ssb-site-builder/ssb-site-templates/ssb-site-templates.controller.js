@@ -29,9 +29,7 @@ function ssbSiteBuilderSiteTemplatesController($scope, $attrs, $filter, $documen
         var pages = values[0];
         if(pages)
         {
-            delete pages["blog"];
-            delete pages["single-post"];
-            delete pages["coming-soon"];
+            pages = _.reject(pages, function(page){ return page.handle === "blog" || page.handle === "single-post" || page.handle === "coming-soon" });
         }
         var website = values[1];
 

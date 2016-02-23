@@ -160,17 +160,9 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
       vm.state.pages = angular.copy(pages);
 
       //filter blog pages and coming soon
-      if(pages){
-        delete vm.state.pages["blog"];
-        delete vm.state.pages["single-post"];
-        delete vm.state.pages["coming-soon"];
+      if(pages){ 
+        vm.state.pages = _.reject(pages, function(page){ return page.handle === "blog" || page.handle === "single-post" || page.handle === "coming-soon" });
       }
-      var parsed = angular.fromJson(vm.state.pages);
-      var arr = [];
-      _.each(parsed, function (page) {
-          arr.push(page);
-      });
-      vm.state.arr_pages = arr;
     }, true);
 
     //TODO: optimize this, we dont need to watch since this won't change

@@ -179,14 +179,12 @@ app.controller('SiteBuilderPageSettingsModalController', ['$scope', '$timeout', 
   }
 
   function validateDuplicatePage(pageHandle) {
-    var _page = vm.parentVm.state.originalPages[pageHandle];
+    var _page = _.find(vm.state.originalPages, function (page) {
+      return page.handle === pageHandle;
+    });
     if(_page && _page._id !== vm.page._id) {
       return "Page handles must be unique.";
-    } else if (SimpleSiteBuilderService.inValidPageHandles[pageHandle.toLowerCase()]) {
-      var _handles = [];
-      angular.forEach(SimpleSiteBuilderService.inValidPageHandles, function(value, key) {
-        _handles.push(value);
-      });
+    } else if (SimpleSiteBuilderService.inValidPageHandles[pageHandle.toLowerCase()]) {     
       return "Page handle cannot be a system route.";
     }
   }
