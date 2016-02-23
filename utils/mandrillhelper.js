@@ -1101,10 +1101,10 @@ var mandrillHelper =  {
                 var _address = _account.get('business').addresses && _address ? _address : null;
                 var hostname = '.indigenous.io';
 
-                if(environment === appConfig.environments.DEVELOPMENT){                    
+                if(environment === appConfig.environments.DEVELOPMENT && appConfig.nonProduction){                    
                     hostname = '.indigenous.local' + ":" + port;
                 }
-                else if(environment === appConfig.environments.TESTING){
+                else if(environment !== appConfig.environments.DEVELOPMENT && appConfig.nonProduction){
                     hostname = '.test.indigenous.io';
                 }
                 var mergeTagMap = [{
