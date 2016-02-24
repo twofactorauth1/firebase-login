@@ -1,6 +1,6 @@
 'use strict';
 /*global app*/
-app.directive('productsComponent', ['$timeout', 'paymentService', 'productService', 'accountService', 'CartDetailsService', 'userService', 'orderService', 'formValidations', function ($timeout, PaymentService, ProductService, AccountService, CartDetailsService, UserService, OrderService, formValidations) {
+app.directive('productsComponent', ['$timeout', 'paymentService', 'productService', 'accountService', 'CartDetailsService', 'userService', 'orderService', 'formValidations', 'ipCookie', function ($timeout, PaymentService, ProductService, AccountService, CartDetailsService, UserService, OrderService, formValidations, ipCookie) {
   return {
     require: [],
     scope: {
@@ -8,6 +8,9 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
     },
     templateUrl: '/components/component-wrap.html',
     link: function (scope) {
+      //cookie data fetch
+      var cookieKey = 'cart_cookie';
+      var cookieData = ipCookie(cookieKey);
       //assign and hold the checkout modal state
       scope.checkoutModalState = 1;
       //default newContact object for checkout modal
@@ -96,12 +99,13 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
         filterProducts(scope.originalProducts, function () {
           scope.pageChanged(1);
         });
+        cookieProcessFn();
       });
 
     scope.$watch(function() { return CartDetailsService.items }, function(items){
       scope.cartDetails = items
     });
-  
+
 
     scope.itemClicked = function(item){
       var returnValue = false;
@@ -413,7 +417,11 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
        * - add product to cart
        */
 
-      scope.addDetailsToCart = function (product, variation) {
+      scope.addDetailsToCart = function (setCookie, product, variation) {
+          if (setCookie) {
+              cookieData.products.push({product: product, variation: variation, quantity: 1});
+              ipCookie(cookieKey, cookieData);
+          }
         var productMatch = '';
         if (variation) {
           productMatch = variation;
@@ -439,7 +447,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
         } else {
             CartDetailsService.addItemToCart(productMatch);
         }
-        
+
         scope.calculateTotalChargesfn();
       };
 
@@ -448,19 +456,27 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
        * - remove product to cart
        */
 
-      scope.removeFromCart = function (product) {
-        
+      scope.removeFromCart = function (setCookie, product) {
+          if (setCookie) {
+              cookieData.products.forEach(function(e, i){
+                  if (e.product._id == product._id) {
+                      cookieData.products.splice(i, 1);
+                  }
+              });
+              ipCookie(cookieKey, cookieData);
+          }
+
         var filteredItems = _.filter(scope.cartDetails, function (item) {
           return item._id !== product._id;
         });
 
         var productMatch = _.find(scope.products, function (item) {
           return item._id === product._id;
-        });        
-               
-        
+        });
+
+
         CartDetailsService.items = filteredItems;
-        
+
         scope.calculateTotalChargesfn();
       };
 
@@ -767,11 +783,12 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
             console.log('order, ', order);
             scope.checkoutModalState = 5;
             CartDetailsService.items = [];
-           
-            
+
+
             scope.subTotal = 0;
             scope.totalTax = 0;
             scope.total = 0;
+            ipCookie.remove(cookieKey);
             // PaymentService.saveCartDetails(token, parseInt(scope.total * 100), function(data) {});
           });
         });
@@ -964,9 +981,52 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
         }
       };*/
 
+      /**
+       * @cookieProcessFn
+       * - if cookie has data restore the checkout flow to that state
+       */
+      if (!cookieData) {
+          cookieData = {products: []};
+      }
+       var cookieProcessFn = function () {
+           console.log('Cookie Data', cookieData);
+           cookieData.products.forEach(function (entry, index) {
+               scope.addDetailsToCart(false, entry.product, entry.variation);
+               scope.cartDetails[index].quantity = entry.quantity;
+           });
+           scope.calculateTotalChargesfn();
+
+           if (cookieData.state) {
+               scope.checkoutModalState = cookieData.state;
+           }
+
+           if (cookieData.contactInfo) {
+               scope.newContact = cookieData.contactInfo;
+           };
+       };
+
+       scope.cookieUpdateContactFn = function() {
+           cookieData.contactInfo = scope.newContact;
+           ipCookie(cookieKey, cookieData);
+       };
+
+       scope.cookieUpdateQuantityFn = function (item) {
+           cookieData.products.forEach(function(product, index) {
+               if (item._id == product.product._id) {
+                   product.quantity = parseInt(item.quantity);
+               }
+           });
+           ipCookie(cookieKey, cookieData);
+       };
     },
     controller: function ($scope) {
-      $scope.setCheckoutState = function (state) {
+        var cookieKey = 'cart_cookie';
+        var cookieData = ipCookie(cookieKey);
+      $scope.setCheckoutState = function (setCookie, state) {
+          if (setCookie) {
+              cookieData.state = state;
+              ipCookie(cookieKey, cookieData);
+          }
         $scope.checkoutModalState = state;
       };
     }
