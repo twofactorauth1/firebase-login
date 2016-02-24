@@ -158,10 +158,10 @@ app.controller('MediaModalCtrl', ['$scope', '$injector', '$modalInstance', '$htt
   $scope.checkMobile();
   //http://en.wikipedia.org/wiki/Internet_media_type
   $scope.typeMimes = {
-    image: ['image/png', 'image/jpeg', 'image/gif'],
-    video: ['video/mpeg', 'video/mp4', 'video/webm', 'video/x-flv', 'video/x-ms-wmv'],
+    image: ['image/png', 'image/jpeg', 'image/gif', 'image/*'],
+    video: ['video/mpeg', 'video/mp4', 'video/webm', 'video/x-flv', 'video/x-ms-wmv', 'video/*' ],
     audio: ['audio/mpeg', 'audio/mp3', 'audio/*'],
-    document: ['application/octet-stream', 'application/pdf']
+    document: ['application/octet-stream', 'application/pdf', 'text/plain']
   };
 
 
@@ -171,9 +171,11 @@ app.controller('MediaModalCtrl', ['$scope', '$injector', '$modalInstance', '$htt
       return "audio"
     else if(mime.match('video.*'))
       return "video"
+    else if(mime.match('image.*'))
+      return "image"
     else if(mime === 'application/pdf')
       return "pdf"
-    if(mime === 'application/octet-stream')
+    else if(mime === 'application/octet-stream' || mime === 'text/plain')
       return "octet-stream"
   }
 
