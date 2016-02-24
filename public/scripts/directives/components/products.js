@@ -1005,7 +1005,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
            };
        };
 
-       scope.updateCookieFn = function() {
+       scope.cookieUpdateContactFn = function() {
            cookieData.contactInfo = scope.newContact;
            ipCookie(cookieKey, cookieData);
        };
