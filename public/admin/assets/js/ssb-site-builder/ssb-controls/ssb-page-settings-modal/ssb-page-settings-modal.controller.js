@@ -179,7 +179,7 @@ app.controller('SiteBuilderPageSettingsModalController', ['$scope', '$timeout', 
   }
 
   function validateDuplicatePage(pageHandle) {
-    var _page = _.find(vm.state.originalPages, function (page) {
+    var _page = _.find(vm.parentVm.state.originalPages, function (page) {
       return page.handle === pageHandle;
     });
     if(_page && _page._id !== vm.page._id) {
