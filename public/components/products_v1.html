@@ -162,14 +162,14 @@
                                         <div class="col-sm-6">
                                             <div class="form-group has-feedback" ng-class="{'has-error': emptyFirstName}">
                                                 <label class="control-label" for="firstName">First Name</label>
-                                                <input type="text" placeholder="First Name" class="form-control" id="firstName" ng-model="newContact.first" ng-blur="checkBillingFirst(newContact.first)">
+                                                <input type="text" placeholder="First Name" class="form-control" id="firstName" ng-model="newContact.first" ng-blur="checkBillingFirst(newContact.first); updateCookieFn()">
                                                 <span class="help-block" ng-if="emptyFirstName"></i>Required</span>
                                             </div>
                                         </div>
                                         <div class="col-sm-6">
                                             <div class="form-group" ng-class="{'has-error': emptyLastName}">
                                                 <label class="control-label" for="lastName">Last Name</label>
-                                                <input type="text" placeholder="Last Name" class="form-control" id="lastName" ng-blur="checkBillingLast(newContact.last)" ng-model="newContact.last">
+                                                <input type="text" placeholder="Last Name" class="form-control" id="lastName" ng-blur="checkBillingLast(newContact.last); updateCookieFn()" ng-model="newContact.last">
                                                 <span class="help-block" ng-if="emptyLastName"></i>Required</span>
                                             </div>
                                         </div>
@@ -178,7 +178,7 @@
                                         <div class="col-sm-6">
                                             <div class="form-group" ng-class="{'has-error': emptyEmail || invalidEmail}">
                                                 <label class="control-label" for="email">Email</label>
-                                                <input type="text" placeholder="Email" class="form-control" id="email" ng-blur="checkBillingEmail(newContact.details[0].emails[0].email)" ng-model="newContact.details[0].emails[0].email">
+                                                <input type="text" placeholder="Email" class="form-control" id="email" ng-blur="checkBillingEmail(newContact.details[0].emails[0].email); updateCookieFn()" ng-model="newContact.details[0].emails[0].email">
                                                 <span class="help-block" ng-if="emptyEmail"></i>Required</span>
                                                 <span class="help-block" ng-if="invalidEmail"></i>Invalid</span>
                                             </div>
@@ -186,7 +186,7 @@
                                         <div class="col-sm-6">
                                             <div class="form-group" ng-class="{'has-error': invalidPhone}">
                                                 <label class="control-label" for="phone">Phone</label>
-                                                <input type="text" ng-blur="checkBillingPhone(newContact.details[0].phones[0].number)"  placeholder="Phone" class="form-control" id="phone" ng-model="newContact.details[0].phones[0].number">
+                                                <input type="text" ng-blur="checkBillingPhone(newContact.details[0].phones[0].number); updateCookieFn()"  placeholder="Phone" class="form-control" id="phone" ng-model="newContact.details[0].phones[0].number">
                                                 <span class="help-block" ng-if="invalidPhone"></i>Invalid</span>
                                             </div>
                                         </div>
@@ -195,14 +195,14 @@
                                         <div class="col-sm-6">
                                             <div class="form-group" ng-class="{'has-error': emptyAddress}">
                                                 <label class="control-label" for="address">Address</label>
-                                                <input type="text" ng-blur="checkBillingAddress(newContact.details[0].addresses[0].address)" placeholder="Address" class="form-control" id="address" ng-model="newContact.details[0].addresses[0].address">
+                                                <input type="text" ng-blur="checkBillingAddress(newContact.details[0].addresses[0].address); updateCookieFn()" placeholder="Address" class="form-control" id="address" ng-model="newContact.details[0].addresses[0].address">
                                                 <span class="help-block" ng-if="emptyAddress"></i>Required</span>
                                             </div>
                                         </div>
                                         <div class="col-sm-6">
                                             <div class="form-group">
                                                 <label class="control-label" for="address2">Address 2</label>
-                                                <input type="text" placeholder="Address 2" class="form-control" id="address2" ng-model="newContact.details[0].addresses[0].address2">
+                                                <input type="text" placeholder="Address 2" class="form-control" id="address2" ng-model="newContact.details[0].addresses[0].address2" ng-blur='updateCookieFn()'>
                                             </div>
                                         </div>
                                     </div>
@@ -210,21 +210,21 @@
                                         <div class="col-sm-4">
                                             <div class="form-group" ng-class="{'has-error': emptyCity}">
                                                 <label class="control-label" for="city">City</label>
-                                                <input type="text" ng-blur="checkBillingCity(newContact.details[0].addresses[0].city)" placeholder="City" class="form-control" id="city" ng-model="newContact.details[0].addresses[0].city">
+                                                <input type="text" ng-blur="checkBillingCity(newContact.details[0].addresses[0].city); updateCookieFn()" placeholder="City" class="form-control" id="city" ng-model="newContact.details[0].addresses[0].city">
                                                 <span class="help-block" ng-if="emptyCity"></i>Required</span>
                                             </div>
                                         </div>
                                         <div class="col-sm-2">
                                             <div class="form-group" ng-class="{'has-error': emptyState}">
                                                 <label class="control-label" for="state">State</label>
-                                                <input type="text" ng-blur="checkBillingState(newContact.details[0].addresses[0].state)" placeholder="State" class="form-control" id="state" ng-model="newContact.details[0].addresses[0].state">
+                                                <input type="text" ng-blur="checkBillingState(newContact.details[0].addresses[0].state); updateCookieFn()" placeholder="State" class="form-control" id="state" ng-model="newContact.details[0].addresses[0].state">
                                                 <span class="help-block" ng-if="emptyState"></i>Required</span>
                                             </div>
                                         </div>
                                         <div class="col-sm-6">
                                             <div class="form-group" ng-class="{'has-error': invalidZipCode || emptyZipCode}">
                                                 <label class="control-label" for="zipCode">Zip Code</label>
-                                                <input type="text" placeholder="Zip Code" class="form-control" id="zipCode" ng-model="newContact.details[0].addresses[0].zip" ng-blur="shippingPostCodeChanged(newContact.details[0].addresses[0].zip)">
+                                                <input type="text" placeholder="Zip Code" class="form-control" id="zipCode" ng-model="newContact.details[0].addresses[0].zip" ng-blur="shippingPostCodeChanged(newContact.details[0].addresses[0].zip); updateCookieFn()">
                                                 <span class="help-block" ng-if="emptyZipCode"></i>Required.</span>
                                                 <span class="help-block" ng-if="invalidZipCode"></i>Zip Code is not valid.</span>
                                             </div>
@@ -351,18 +351,18 @@
                 </div>
                 <div class="modal-footer cart-footer" ng-hide="checkoutModalState !== 3">
                     <button class="btn ssb-theme-btn btn-orange btn-checkout pull-right" ng-click="makeCartPayment()"><i class="fa fa-shopping-cart"></i> Checkout</button>
-                    <button class="btn ssb-theme-btn btn-info continue-shopping pull-left" ng-click="setCheckoutState(2)"><i class="fa fa-chevron-left"></i> Back
+                    <button class="btn ssb-theme-btn btn-info continue-shopping pull-left" ng-click="setCheckoutState(true, 2)"><i class="fa fa-chevron-left"></i> Back
                     </button>
                 </div>
                 <div class="modal-footer billing-footer" ng-hide="checkoutModalState !== 2">
                     <button class="btn ssb-theme-btn btn-success btn-payment pull-right" ng-click="validateAddressDetails(newContact.details[0].addresses[0], newContact.details[0].emails[0].email, newContact.details[0].phones[0].number)"><i class="fa fa-credit-card"></i> Payment <i class="fa fa-chevron-right"></i></button>
-                    <button class="btn ssb-theme-btn pull-left btn-info back-to-shopping-cart" ng-click="setCheckoutState(1)"><i class="fa fa-chevron-left"></i> Back
+                    <button class="btn ssb-theme-btn pull-left btn-info back-to-shopping-cart" ng-click="setCheckoutState(true, 1)"><i class="fa fa-chevron-left"></i> Back
                     </button>
                 </div>
                 <div class="modal-footer payment-footer" ng-hide="checkoutModalState !== 1">
-                    <button class="btn ssb-theme-btn btn-success btn-confirm-payment pull-right" ng-disabled="!cartDetails || cartDetails.length <= 0" ng-click="setCheckoutState(2)"> Next <i class="fa fa-chevron-right"></i>
+                    <button class="btn ssb-theme-btn btn-success btn-confirm-payment pull-right" ng-disabled="!cartDetails || cartDetails.length <= 0" ng-click="setCheckoutState(true, 2)"> Next <i class="fa fa-chevron-right"></i>
                     </button>
-                    <button class="btn ssb-theme-btn pull-left btn-info back-to-billing-shipping" data-dismiss="modal" ng-click="setCheckoutState(1)"><i class="fa fa-chevron-left"></i> Continue Shopping
+                    <button class="btn ssb-theme-btn pull-left btn-info back-to-billing-shipping" data-dismiss="modal" ng-click="setCheckoutState(true, 1)"><i class="fa fa-chevron-left"></i> Continue Shopping
                     </button>
                 </div>
             </div>

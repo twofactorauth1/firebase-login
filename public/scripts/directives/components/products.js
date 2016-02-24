@@ -988,13 +988,33 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
           cookieData = {products: []};
       }
        var cookieProcessFn = function () {
+           console.log('Cookie Data', cookieData);
            cookieData.products.forEach(function (entry, index) {
                scope.addDetailsToCart(false, entry.product, entry.variation);
            });
+
+           if (cookieData.state) {
+               scope.checkoutModalState = cookieData.state;
+           }
+
+           if (cookieData.contactInfo) {
+               scope.newContact = cookieData.contactInfo;
+           };
+       };
+
+       scope.updateCookieFn = function() {
+           cookieData.contactInfo = scope.newContact;
+           ipCookie(cookieKey, cookieData);
        };
     },
     controller: function ($scope) {
-      $scope.setCheckoutState = function (state) {
+        var cookieKey = 'cart_cookie';
+        var cookieData = ipCookie(cookieKey);
+      $scope.setCheckoutState = function (setCookie, state) {
+          if (setCookie) {
+              cookieData.state = state;
+              ipCookie(cookieKey, cookieData);
+          }
         $scope.checkoutModalState = state;
       };
     }
