@@ -788,6 +788,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
             scope.subTotal = 0;
             scope.totalTax = 0;
             scope.total = 0;
+            ipCookie.remove(cookieKey);
             // PaymentService.saveCartDetails(token, parseInt(scope.total * 100), function(data) {});
           });
         });
