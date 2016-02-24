@@ -10665,7 +10665,7 @@ div[class^="spacing-"] input {
 .ssb-sidebar-section-panel .ssb-sidebar-item-section-actions .ssb-sidebar-item-icon {
   position: static;
   display: inline-block;
-  margin: 1em;
+  padding: 1em;
 }
 .ssb-sidebar-section-panel .loadingNavigation {
   min-height: 200px;

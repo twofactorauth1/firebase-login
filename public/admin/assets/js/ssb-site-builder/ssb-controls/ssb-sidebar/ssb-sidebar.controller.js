@@ -326,7 +326,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
 
         section.accountId = 0;
 
-        vm.addSectionToPage(section, null, null, null, insertAtIndex).then(function() {
+        vm.addSectionToPage(section, null, null, null, index).then(function() {
             vm.setActiveSection(insertAtIndex);
         });
 

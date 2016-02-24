@@ -2,9 +2,9 @@
 
 app.controller('SiteBuilderEditControlController', ssbSiteBuilderEditControlController);
 
-ssbSiteBuilderEditControlController.$inject = ['$scope', '$attrs', '$filter', '$timeout', '$q', 'SimpleSiteBuilderService'];
+ssbSiteBuilderEditControlController.$inject = ['$scope', '$attrs', '$filter', '$timeout', '$q', 'SimpleSiteBuilderService', 'SweetAlert'];
 /* @ngInject */
-function ssbSiteBuilderEditControlController($scope, $attrs, $filter, $timeout, $q, SimpleSiteBuilderService) {
+function ssbSiteBuilderEditControlController($scope, $attrs, $filter, $timeout, $q, SimpleSiteBuilderService, SweetAlert) {
 
     var vm = this;
 
@@ -144,7 +144,7 @@ function ssbSiteBuilderEditControlController($scope, $attrs, $filter, $timeout, 
 
         section.accountId = 0;
 
-        SimpleSiteBuilderService.addSectionToPage(section, null, null, null, insertAtIndex).then(function() {
+        SimpleSiteBuilderService.addSectionToPage(section, null, null, null, index).then(function() {
             console.log('duplicateSection -> SimpleSiteBuilderService.addSectionToPage')
         }, function(error) {
             console.error('duplicateSection -> SimpleSiteBuilderService.addSectionToPage', JSON.stringify(error));
