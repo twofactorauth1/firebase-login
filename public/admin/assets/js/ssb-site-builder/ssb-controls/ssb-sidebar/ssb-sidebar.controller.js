@@ -56,6 +56,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
     vm.duplicatePage = duplicatePage;
     vm.hideFromMenu = hideFromMenu;
     vm.moveSection = moveSection;
+    vm.duplicateSection = duplicateSection;
     vm.validateDuplicatePage = validateDuplicatePage;
     editableOptions.theme = 'bs3';
 
@@ -243,9 +244,13 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
     }
 
     function addSectionToPage(section, version, replaceAtIndex, oldSection) {
-      SimpleSiteBuilderService.addSectionToPage(section, version, replaceAtIndex, vm.state.page.sections[vm.uiState.activeSectionIndex]).then(function() {
-        vm.scrollToActiveSection();
-      });
+        return (
+            SimpleSiteBuilderService.addSectionToPage(section, version, replaceAtIndex, vm.state.page.sections[vm.uiState.activeSectionIndex]).then(function() {
+                vm.scrollToActiveSection();
+            }, function(error) {
+                console.error('section panel -> SimpleSiteBuilderService.addSectionToPage', JSON.stringify(error));
+            })
+        )
     }
 
     function scrollToActiveSection() {
@@ -310,6 +315,20 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
         sectionsArray.splice(toIndex, 0, sectionsArray.splice(fromIndex, 1)[0] );
 
         vm.setActiveSection(toIndex);
+
+    }
+
+    function duplicateSection(section, index) {
+
+        var insertAtIndex = (index > 0) ? (index - 1) : index;
+
+        section = SimpleSiteBuilderService.setTempUUIDForSection(section);
+
+        section.accountId = 0;
+
+        vm.addSectionToPage(section, null, null, null, insertAtIndex).then(function() {
+            vm.setActiveSection(insertAtIndex);
+        });
 
     }
 
@@ -852,13 +871,13 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
       });
     }
 
-    function validateDuplicatePage(pageHandle) {      
+    function validateDuplicatePage(pageHandle) {
       var _page = _.find(vm.state.originalPages, function (page) {
           return page.handle === pageHandle;
         });
       if (_page && _page._id !== vm.state.page._id) {
         return "Page handles must be unique.";
-      } else if (SimpleSiteBuilderService.inValidPageHandles[pageHandle.toLowerCase()]) {        
+      } else if (SimpleSiteBuilderService.inValidPageHandles[pageHandle.toLowerCase()]) {
         return "Page handle cannot be a system route.";
       }
     }

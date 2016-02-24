@@ -10123,15 +10123,13 @@ a[href="https://froala.com/wysiwyg-editor"] {
   border-right: 1px solid rgba(255, 255, 255, 0.5);
   padding: 0 1em 0 2.5em;
 }
-.ssb-site-builder .ssb-edit-control .ti-arrow-up,
-.ssb-site-builder .ssb-edit-control .ti-arrow-down {
+.ssb-site-builder .ssb-edit-control .ssb-sidebar-item-icon {
   border-right: 1px solid rgba(255, 255, 255, 0.5);
   padding: 0 1em;
 }
 .ssb-site-builder .ssb-edit-control .ssb-edit-control-active-title:hover,
 .ssb-site-builder .ssb-edit-control .ssb-settings-btn:hover,
-.ssb-site-builder .ssb-edit-control .ti-arrow-down:hover,
-.ssb-site-builder .ssb-edit-control .ti-arrow-up:hover {
+.ssb-site-builder .ssb-edit-control .ssb-sidebar-item-icon:hover {
   background-color: #213340;
 }
 .ssb-site-builder .ssb-edit-control:hover .ssb-edit-control-inactive {
@@ -10181,8 +10179,7 @@ a[href="https://froala.com/wysiwyg-editor"] {
   border-radius: 0px 10em 10em 0px;
   border-right: 1px solid #1c2b36;
 }
-.ssb-site-builder .ssb-edit-control-component .ti-arrow-down,
-.ssb-site-builder .ssb-edit-control-component .ti-arrow-up {
+.ssb-site-builder .ssb-edit-control-component .ssb-sidebar-item-icon {
   display: none;
 }
 .ssb-site-builder .ssb-active-section:before,

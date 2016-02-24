@@ -11,6 +11,8 @@ function ssbSiteBuilderEditControlController($scope, $attrs, $filter, $timeout, 
     vm.init = init;
     vm.setActive = setActive;
     vm.moveSection = moveSection;
+    vm.duplicateSection = duplicateSection;
+    vm.removeSectionFromPage = removeSectionFromPage;
     vm.scrollToActiveSection = scrollToActiveSection;
 
     /**
@@ -131,6 +133,42 @@ function ssbSiteBuilderEditControlController($scope, $attrs, $filter, $timeout, 
 
         scrollToActiveSection();
 
+    }
+
+    function duplicateSection(section, index) {
+
+        var sectionsArray = vm.state.page.sections;
+        var insertAtIndex = (index > 0) ? (index - 1) : index;
+
+        section = SimpleSiteBuilderService.setTempUUIDForSection(section);
+
+        section.accountId = 0;
+
+        SimpleSiteBuilderService.addSectionToPage(section, null, null, null, insertAtIndex).then(function() {
+            console.log('duplicateSection -> SimpleSiteBuilderService.addSectionToPage')
+        }, function(error) {
+            console.error('duplicateSection -> SimpleSiteBuilderService.addSectionToPage', JSON.stringify(error));
+        });
+
+    }
+
+    function removeSectionFromPage(index) {
+      SweetAlert.swal({
+        title: "Are you sure?",
+        text: "Do you want to delete this section?",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: "Yes, delete it!",
+        cancelButtonText: "No, do not delete it!",
+        closeOnConfirm: true,
+        closeOnCancel: true
+      },
+      function (isConfirm) {
+        if (isConfirm) {
+          SimpleSiteBuilderService.removeSectionFromPage(index)
+        }
+      });
     }
 
     function scrollToActiveSection() {
