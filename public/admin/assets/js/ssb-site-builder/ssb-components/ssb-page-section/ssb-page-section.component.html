@@ -29,7 +29,7 @@
     <div ng-if="vm.section.bg.img.show && vm.section.bg.img.overlay" class="bg bg-overlay"></div>
 
     <ssb-component-loader
-        ng-if="vm.section.components.length && (vm.section.visibility || vm.section.visibility === undefined)"
+        ng-if="vm.section.components.length"
         ng-repeat="component in vm.section.components track by $index"
         component-class="vm.componentClass(component, $index)"
         component-style="vm.componentStyle(component, $index)"
@@ -40,7 +40,9 @@
         component-control="vm.uiState.componentControl"
         component-media="vm.uiState.componentMedia"
         section-index="vm.index"
-        component-index="$index">
+        component-index="$index"
+        show-component="vm.section.visibility || vm.section.visibility === undefined"
+        >
     </ssb-component-loader>
 
 </section>
