@@ -419,7 +419,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
 
       scope.addDetailsToCart = function (setCookie, product, variation) {
           if (setCookie) {
-              cookieData.products.push({product: product, variation: variation});
+              cookieData.products.push({product: product, variation: variation, quantity: 1});
               ipCookie(cookieKey, cookieData);
           }
         var productMatch = '';
@@ -992,7 +992,9 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
            console.log('Cookie Data', cookieData);
            cookieData.products.forEach(function (entry, index) {
                scope.addDetailsToCart(false, entry.product, entry.variation);
+               scope.cartDetails[index].quantity = entry.quantity;
            });
+           scope.calculateTotalChargesfn();
 
            if (cookieData.state) {
                scope.checkoutModalState = cookieData.state;
@@ -1005,6 +1007,15 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
 
        scope.updateCookieFn = function() {
            cookieData.contactInfo = scope.newContact;
+           ipCookie(cookieKey, cookieData);
+       };
+
+       scope.cookieUpdateQuantityFn = function (item) {
+           cookieData.products.forEach(function(product, index) {
+               if (item._id == product.product._id) {
+                   product.quantity = parseInt(item.quantity);
+               }
+           });
            ipCookie(cookieKey, cookieData);
        };
     },

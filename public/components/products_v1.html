@@ -107,7 +107,7 @@
                                         <div class="line-item-header row">
                                             <h4 class="col-sm-5">{{item.name}}</h4>
                                             <div class="col-sm-3">
-                                                <input type="text" ng-model="item.quantity" ng-change="calculateTotalChargesfn()" class="form-control spinner-input quantity">
+                                                <input type="text" ng-model="item.quantity" ng-change="cookieUpdateQuantityFn(item); calculateTotalChargesfn()" class="form-control spinner-input quantity">
                                             </div>
                                             <p class="price col-sm-3"><span ng-class="{'strikethrough text-small': item.onSaleToday}">{{item.regular_price | currency}}</span><span ng-if="item.onSaleToday">{{item.sale_price | currency}}</span></p>
                                             <div class="col-sm-1">
