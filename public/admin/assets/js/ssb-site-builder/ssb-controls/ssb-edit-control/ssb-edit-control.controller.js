@@ -22,7 +22,7 @@ function ssbSiteBuilderEditControlController($scope, $attrs, $filter, $timeout, 
 
 
     /*
-     * Turn on edit control for hovered element, set position near top left of element
+     * Turn on edit control for clicked element, set position near top left of element
      * - adjust position to account for section's
      *   margin/padding and edit-control placement @ top:0, left:0
      */
@@ -128,7 +128,7 @@ function ssbSiteBuilderEditControlController($scope, $attrs, $filter, $timeout, 
         sectionsArray.splice(toIndex, 0, sectionsArray.splice(fromIndex, 1)[0] );
 
         vm.setActive(toIndex);
-        
+
         scrollToActiveSection();
 
     }
