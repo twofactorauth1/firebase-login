@@ -111,7 +111,7 @@
                                             </div>
                                             <p class="price col-sm-3"><span ng-class="{'strikethrough text-small': item.onSaleToday}">{{item.regular_price | currency}}</span><span ng-if="item.onSaleToday">{{item.sale_price | currency}}</span></p>
                                             <div class="col-sm-1">
-                                                <button type="button" class="close" aria-hidden="true" ng-click="removeFromCart(item)">×</button>
+                                                <button type="button" class="close" aria-hidden="true" ng-click="removeFromCart(true, item)">×</button>
                                             </div>
                                         </div>
                                         <p if="item.description" class="description">

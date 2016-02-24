@@ -456,7 +456,15 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
        * - remove product to cart
        */
 
-      scope.removeFromCart = function (product) {
+      scope.removeFromCart = function (setCookie, product) {
+          if (setCookie) {
+              cookieData.products.forEach(function(e, i){
+                  if (e.product._id == product._id) {
+                      cookieData.products.splice(i, 1);
+                  }
+              });
+              ipCookie(cookieKey, cookieData);
+          }
 
         var filteredItems = _.filter(scope.cartDetails, function (item) {
           return item._id !== product._id;
