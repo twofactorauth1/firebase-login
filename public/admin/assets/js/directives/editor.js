@@ -43,63 +43,38 @@ app.directive("elem", function($timeout, $compile) {
         $(function() {
           $timeout(function() {
             $(elem).on('froalaEditor.initialized', function(e, editor) {
-              //var div = editor.$tb.first("fr-toolbar");
-              //div.attr('ind-draggable', 'ind-draggable');
-              //$compile(div)(scope);
+
+              // $('.fr-toolbar.fr-inline.fr-desktop:first').addClass('ssb-froala-first-editor');
+
+              //set initial text
               if (ngModel.$viewValue) {
                 editor.html.set(ngModel.$viewValue);
               }
+
             }).froalaEditor($.FroalaEditor.config)
               .on('froalaEditor.contentChanged', function(e, editor) {
                 scope.updateFroalaContent(editor);
                 $(elem).froalaEditor('html.cleanEmptyTags');
+              }).on('froalaEditor.click', function(e, editor, clickEvent) {
+                $(elem).froalaEditor('commands.show');
               }).on('froalaEditor.keydown', function(e, editor) {
                 scope.updateFroalaContent(editor);
               }).on('froalaEditor.image.resizeEnd', function(e, editor, $img) {
                 scope.updateFroalaContent(editor);
               }).on('froalaEditor.toolbar.show', function(e, editor) {
 
-                //hide toolbar so we can move it
-                editor.$tb.css({ 'opacity': 0, 'pointer-events': 'none' });
+                //move toolbar to highest z-index
+                // editor.$tb.addClass('ssb-froala-active-editor');
 
                 //hide any edit-control labels
                 $('.ssb-site-builder .ssb-edit-control').addClass('hide-edit-control');
 
-                $timeout(function(){
-                    var left = editor.$tb.offset().left;
-                    var screenLeft = 0;
-
-                    if ($("#componentloader").offset) {
-                        screenLeft = $("#componentloader").offset().left;
-                    }
-
-                    if (left < screenLeft) {
-                        editor.$tb.css("left", screenLeft);
-                    }
-
-                    /*
-                     * Adjust the vertical position of the toolbar so that it doesn't cover up the text!
-                     */
-                    var frElementTopLine = parseInt($(editor.selection.element()).offset().top, 10);
-                    var frElementHeightLine = parseInt($(editor.selection.element()).height(), 10);
-                    var lineHeight = parseInt($(e.currentTarget).find('.fr-element').css('line-height'), 10);
-                    var fontSize = parseInt($(e.currentTarget).find('.fr-element').css('font-size'), 10);
-
-                    // debugging divs
-                    // $('.testel123').remove();
-                    // $('<div class="testel123"></div>').appendTo($('body')).css({
-                    //     'position': 'absolute', 'width': '150px', 'height': '350px', 'background-color': 'red', 'top': frElementTopLine - fontSize - frElementHeightLine, 'right': '20px'
-                    // })
-                    // $('<div class="testel123"></div>').appendTo($('body')).css({
-                    //     'position': 'absolute', 'width': '150px', 'height': '350px', 'background-color': 'blue', 'top': frElementTopLine - lineHeight - frElementHeightLine
-                    // })
-
-                    //show toolbar in adjusted position
-                    editor.$tb.css({ 'top': frElementTopLine + frElementHeightLine, 'opacity': 1, 'pointer-events': 'auto' });
-
-                }, 0);
               }).on('froalaEditor.toolbar.hide', function(e, editor) {
+
                 $('.ssb-site-builder .ssb-edit-control').removeClass('hide-edit-control');
+
+                // editor.$tb.removeClass('ssb-froala-active-editor');
+
               });
           }, 1000);
         });

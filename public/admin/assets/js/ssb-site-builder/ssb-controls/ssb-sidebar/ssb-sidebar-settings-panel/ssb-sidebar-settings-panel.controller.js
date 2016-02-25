@@ -24,6 +24,7 @@ function ssbSiteBuilderSidebarSettingsPanelController($scope, $attrs, $filter, $
     vm.hideSectionFromPage = pVm.hideSectionFromPage;
     vm.editSectionName = pVm.editSectionName;
     vm.moveSection = pVm.moveSection;
+    vm.duplicateSection = pVm.duplicateSection;
     vm.enabledPlatformSections = pVm.enabledPlatformSections;
     vm.customerTags = pVm.customerTags;
     vm.addSectionToPage = pVm.addSectionToPage;

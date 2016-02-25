@@ -2,15 +2,17 @@
 
 app.controller('SiteBuilderEditControlController', ssbSiteBuilderEditControlController);
 
-ssbSiteBuilderEditControlController.$inject = ['$scope', '$attrs', '$filter', '$timeout', '$q', 'SimpleSiteBuilderService'];
+ssbSiteBuilderEditControlController.$inject = ['$scope', '$attrs', '$filter', '$timeout', '$q', 'SimpleSiteBuilderService', 'SweetAlert'];
 /* @ngInject */
-function ssbSiteBuilderEditControlController($scope, $attrs, $filter, $timeout, $q, SimpleSiteBuilderService) {
+function ssbSiteBuilderEditControlController($scope, $attrs, $filter, $timeout, $q, SimpleSiteBuilderService, SweetAlert) {
 
     var vm = this;
 
     vm.init = init;
     vm.setActive = setActive;
     vm.moveSection = moveSection;
+    vm.duplicateSection = duplicateSection;
+    vm.removeSectionFromPage = removeSectionFromPage;
     vm.scrollToActiveSection = scrollToActiveSection;
 
     /**
@@ -22,7 +24,7 @@ function ssbSiteBuilderEditControlController($scope, $attrs, $filter, $timeout, 
 
 
     /*
-     * Turn on edit control for hovered element, set position near top left of element
+     * Turn on edit control for clicked element, set position near top left of element
      * - adjust position to account for section's
      *   margin/padding and edit-control placement @ top:0, left:0
      */
@@ -63,6 +65,22 @@ function ssbSiteBuilderEditControlController($scope, $attrs, $filter, $timeout, 
     }
 
     function setActive(sectionIndex, componentIndex) {
+
+        //if panel already open, a click on edit control should toggle it off
+        if (vm.uiState.showSectionPanel === true) {
+            var isActiveSection = vm.uiState.activeSectionIndex === sectionIndex;
+            var isActiveComponent = vm.uiState.activeComponentIndex === componentIndex;
+
+            if ((isActiveSection && componentIndex === undefined && vm.uiState.activeComponentIndex === undefined) ||
+                (isActiveSection && isActiveComponent)) {
+
+                vm.uiState.showSectionPanel = false;
+                return
+
+            }
+
+        }
+
         vm.uiState.showSectionPanel = false;
         vm.uiState.navigation.sectionPanel.reset();
 
@@ -75,8 +93,13 @@ function ssbSiteBuilderEditControlController($scope, $attrs, $filter, $timeout, 
 
     function setActiveSection(index) {
 
+        var section = vm.state.page.sections[index];
+        var name = $filter('cleanType')(section.title).toLowerCase().trim().replace(' ', '-');
+
         SimpleSiteBuilderService.setActiveSection(index);
         SimpleSiteBuilderService.setActiveComponent(undefined);
+
+        vm.uiState.navigation.sectionPanel.loadPanel({ id: '', name: name });
 
         if (index !== undefined) {
             vm.uiState.showSectionPanel = true;
@@ -128,9 +151,45 @@ function ssbSiteBuilderEditControlController($scope, $attrs, $filter, $timeout, 
         sectionsArray.splice(toIndex, 0, sectionsArray.splice(fromIndex, 1)[0] );
 
         vm.setActive(toIndex);
-        
+
         scrollToActiveSection();
 
+    }
+
+    function duplicateSection(section, index) {
+
+        var sectionsArray = vm.state.page.sections;
+        var insertAtIndex = (index > 0) ? (index - 1) : index;
+
+        section = SimpleSiteBuilderService.setTempUUIDForSection(section);
+
+        section.accountId = 0;
+
+        SimpleSiteBuilderService.addSectionToPage(section, null, null, null, index).then(function() {
+            console.log('duplicateSection -> SimpleSiteBuilderService.addSectionToPage')
+        }, function(error) {
+            console.error('duplicateSection -> SimpleSiteBuilderService.addSectionToPage', JSON.stringify(error));
+        });
+
+    }
+
+    function removeSectionFromPage(index) {
+      SweetAlert.swal({
+        title: "Are you sure?",
+        text: "Do you want to delete this section?",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: "Yes, delete it!",
+        cancelButtonText: "No, do not delete it!",
+        closeOnConfirm: true,
+        closeOnCancel: true
+      },
+      function (isConfirm) {
+        if (isConfirm) {
+          SimpleSiteBuilderService.removeSectionFromPage(index)
+        }
+      });
     }
 
     function scrollToActiveSection() {

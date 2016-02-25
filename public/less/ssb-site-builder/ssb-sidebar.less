@@ -534,7 +534,7 @@
     .ssb-sidebar-item-section-actions .ssb-sidebar-item-icon {
         position: static;
         display: inline-block;
-        margin: 1em;
+        padding: 1em;
     }
     .loadingNavigation{
         min-height: 200px;
@@ -578,6 +578,12 @@
     cursor: pointer;
 }
 
+.ssb-sidebar-section-panel-scrollable {
+    overflow: auto;
+    overflow-x: hidden;
+    max-height: calc(~"100vh - 250px");
+}
+
 .ssb-sidebar-section-panel-component-panel {
     display: block;
     position: relative;
@@ -599,7 +605,7 @@
 }
 
 .ssb-sidebar-section-panel-component-panel.ng-enter{
-
+    min-height: 128px;
 }
 
 

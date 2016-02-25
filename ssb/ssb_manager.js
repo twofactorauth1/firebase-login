@@ -638,6 +638,17 @@ module.exports = {
                 return fn(err);
             } else {
                 self.log.debug('<< listPages');
+
+                pages.sort(function (a, b) {
+                    var p1 = a.attributes.handle.toLowerCase();
+                    var p2 = b.attributes.handle.toLowerCase();
+
+                    if (p1 > p2) return 1;
+                    if (p2 > p1) return -1;
+
+                    return 0;
+                });
+
                 return fn(null, pages);
             }
         });
@@ -645,7 +656,7 @@ module.exports = {
 
     listPagesWithSections: function(accountId, websiteId, fn) {
         var self = this;
-        self.log.debug('>> listPages');
+        self.log.debug('>> listPagesWithSections');
         var query = {accountId:accountId, websiteId:websiteId, latest:true};
         pageDao.findMany(query, $$.m.ssb.Page, function(err, pages){
             if(err) {
@@ -674,7 +685,7 @@ module.exports = {
                         }
                     });
                 }, function done(err){
-                    self.log.debug('<< listPages');                    
+                    self.log.debug('<< listPagesWithSections');
                     return fn(err, pages);
                 });
 

@@ -20,7 +20,8 @@ function ssbComponentLoader($compile, $timeout) {
         componentControl: '=',
         componentMedia: '=',
         sectionIndex: '=',
-        componentIndex: '='
+        componentIndex: '=',
+        showComponent: '='
       },
     replace: true,
   	link: function (scope, element, attrs, ctrl) {
@@ -37,6 +38,7 @@ function ssbComponentLoader($compile, $timeout) {
                         'control="vm.componentControl"' +
                         'media="vm.componentMedia(componentId, index, update)" ' +
                         'ng-click="vm.click($event);">' +
+                        'ng-if="vm.showComponent">' +
                       '</div>';
 
         //if edit mode

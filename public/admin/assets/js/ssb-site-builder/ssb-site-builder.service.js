@@ -56,8 +56,9 @@
         ssbService.deletePage = deletePage;
         ssbService.openMediaModal = openMediaModal;
         ssbService.setMediaForComponent = setMediaForComponent;
-
         ssbService.extendComponentData = extendComponentData;
+        ssbService.getTempUUID = getTempUUID;
+        ssbService.setTempUUIDForSection = setTempUUIDForSection;
 
         ssbService.contentComponentDisplayOrder = [];
         ssbService.inValidPageHandles = pageConstant.inValidPageHandles;
@@ -751,15 +752,18 @@
          * Add a section to the current page
          * @param {object} section - section data
          * @param {integer} version - section version number
-         * @param {integer} replaceAtIndex - index of page section to replace with new section
-         * @param {object} oldSection - the data of the existing section to be replaced
+         * @param {integer} replaceAtIndex - optional, index of page section to replace with new section
+         * @param {object} oldSection - optional, the data of the existing section to be replaced
+         * @param {integer} copyAtIndex - optional, index to insert section copy
          *
          */
-        function addSectionToPage(section, version, replaceAtIndex, oldSection) {
+        function addSectionToPage(section, version, replaceAtIndex, oldSection, copyAtIndex) {
             var insertAt;
             var numSections;
             var hasHeader = false;
             var hasFooter = false;
+            var deferred = $q.defer();
+            var promise;
 
             if (!ssbService.page.sections) {
                 ssbService.page.sections = [];
@@ -773,8 +777,10 @@
 
             insertAt = hasFooter ? numSections - 1 : numSections;
 
-            return (
-                ssbService.getSection(section, version || 1).then(function(response) {
+            if (copyAtIndex === undefined) {
+
+                promise = ssbService.getSection(section, version || 1).then(function(response) {
+
                     if (response) {
 
                         if (angular.isDefined(replaceAtIndex)) {
@@ -792,8 +798,19 @@
                     } else {
                         console.error("Error loading section/component:", section);
                     }
-                })
-            )
+
+                });
+
+            } else {
+
+                ssbService.page.sections.splice(copyAtIndex, 0, section);
+                ssbService.setActiveSection(copyAtIndex);
+                deferred.resolve();
+                promise = deferred.promise;
+
+            }
+
+            return promise;
 
         }
 
@@ -1107,6 +1124,28 @@
 
             }
 
+        }
+
+        function getTempUUID() {
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
+                return v.toString(16);
+            })
+        }
+
+        function setTempUUIDForSection(section) {
+
+            section._id = ssbService.getTempUUID();
+
+            if (section.components.length) {
+                section.components.forEach(function(component) {
+                    component._id = ssbService.getTempUUID();
+                });
+            }
+
+            section = JSON.parse(angular.toJson(section));
+
+            return section;
         }
 
 

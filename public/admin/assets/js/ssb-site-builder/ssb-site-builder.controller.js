@@ -93,12 +93,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
 
                 hist.pop();
 
-                if (hist.length) {
-                    previousPanel = hist[hist.length - 1];
-                } else {
-                    previousPanel = { name: '', id: ''};
-                    SimpleSiteBuilderService.setActiveComponent(undefined);
-                }
+                previousPanel = hist[hist.length - 1];
 
                 vm.uiState.navigation.sectionPanel.loadPanel(previousPanel, true);
             },
@@ -160,7 +155,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
       vm.state.pages = angular.copy(pages);
 
       //filter blog pages and coming soon
-      if(pages){ 
+      if(pages){
         vm.state.pages = _.reject(pages, function(page){ return page.handle === "blog" || page.handle === "single-post" || page.handle === "coming-soon" });
       }
     }, true);
@@ -502,8 +497,9 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     }
 
     function pageResize(e) {
-        console.log($(this).width());
-        if ($(this).innerWidth() > 767) {
+        console.log($(this).width() + 70);
+        console.log($(this).innerWidth() + 70);
+        if (($(this).innerWidth() + 70) > 767) {
             vm.uiState.sidebarOrientation = 'vertical';
         } else {
             vm.uiState.sidebarOrientation = 'horizontal';

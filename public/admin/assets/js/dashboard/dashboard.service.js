@@ -143,7 +143,7 @@
             }
 
             function error(error) {
-                console.error('DashboardService getWorkstreams error: ' + error);
+                console.error('DashboardService getWorkstreams error: ', JSON.stringify(error));
             }
 
             return dashRequest($http.get(baseWorkstreamsAPIUrl).success(success).error(error));
