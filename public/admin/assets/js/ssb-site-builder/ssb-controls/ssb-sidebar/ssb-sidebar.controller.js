@@ -243,9 +243,9 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
     	)
     }
 
-    function addSectionToPage(section, version, replaceAtIndex, oldSection) {
+    function addSectionToPage(section, version, replaceAtIndex, oldSection, copyAtIndex) {
         return (
-            SimpleSiteBuilderService.addSectionToPage(section, version, replaceAtIndex, vm.state.page.sections[vm.uiState.activeSectionIndex]).then(function() {
+            SimpleSiteBuilderService.addSectionToPage(section, version, replaceAtIndex, vm.state.page.sections[vm.uiState.activeSectionIndex], copyAtIndex).then(function() {
                 vm.scrollToActiveSection();
             }, function(error) {
                 console.error('section panel -> SimpleSiteBuilderService.addSectionToPage', JSON.stringify(error));
