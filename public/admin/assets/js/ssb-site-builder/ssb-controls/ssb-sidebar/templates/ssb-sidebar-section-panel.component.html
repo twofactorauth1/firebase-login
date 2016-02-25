@@ -54,11 +54,31 @@
             ui-state="vm.uiState">
         </ssb-sidebar-settings-panel>
 
+        <!-- Section Settings Version -->
+        <ssb-sidebar-settings-panel
+            class="ssb-sidebar-section-panel-component-panel container-fluid"
+            ng-if="'version' === vm.uiState.openSidebarSectionPanel.id"
+            settings-template="assets/js/ssb-site-builder/ssb-components/ssb-page-section/sidebar.settings.version.html"
+            component="vm.state.page.sections[vm.uiState.activeSectionIndex]"
+            state="vm.state"
+            ui-state="vm.uiState">
+        </ssb-sidebar-settings-panel>
+
         <!-- Section Settings Layout -->
         <ssb-sidebar-settings-panel
             class="ssb-sidebar-section-panel-component-panel container-fluid"
             ng-if="'layout' === vm.uiState.openSidebarSectionPanel.id"
             settings-template="assets/js/ssb-site-builder/ssb-components/ssb-page-section/sidebar.settings.layout.html"
+            component="vm.state.page.sections[vm.uiState.activeSectionIndex]"
+            state="vm.state"
+            ui-state="vm.uiState">
+        </ssb-sidebar-settings-panel>
+
+        <!-- Section Settings Settings -->
+        <ssb-sidebar-settings-panel
+            class="ssb-sidebar-section-panel-component-panel container-fluid"
+            ng-if="'settings' === vm.uiState.openSidebarSectionPanel.id"
+            settings-template="assets/js/ssb-site-builder/ssb-components/ssb-page-section/sidebar.settings.settings.html"
             component="vm.state.page.sections[vm.uiState.activeSectionIndex]"
             state="vm.state"
             ui-state="vm.uiState">
