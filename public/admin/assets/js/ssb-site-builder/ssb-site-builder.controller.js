@@ -93,12 +93,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
 
                 hist.pop();
 
-                if (hist.length) {
-                    previousPanel = hist[hist.length - 1];
-                } else {
-                    previousPanel = { name: '', id: ''};
-                    SimpleSiteBuilderService.setActiveComponent(undefined);
-                }
+                previousPanel = hist[hist.length - 1];
 
                 vm.uiState.navigation.sectionPanel.loadPanel(previousPanel, true);
             },

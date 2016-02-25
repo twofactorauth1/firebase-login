@@ -22,9 +22,8 @@
 
         </span>
 
-        <div ng-if="vm.uiState.openSidebarSectionPanel.name !== ''">
-
-            <i ng-if="vm.uiState.navigation.sectionPanel.navigationHistory.length > 0" class="ti-arrow-left" ng-click="vm.uiState.navigation.sectionPanel.back();"></i>
+        <div>
+            <i ng-if="vm.uiState.navigation.sectionPanel.navigationHistory.length > 1" class="ti-arrow-left" ng-click="vm.uiState.navigation.sectionPanel.back();"></i>
 
             {{vm.uiState.openSidebarSectionPanel.name | cleanType}}
 

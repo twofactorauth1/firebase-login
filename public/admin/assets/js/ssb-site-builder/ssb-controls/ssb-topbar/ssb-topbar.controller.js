@@ -23,7 +23,7 @@ function ssbSiteBuilderTopbarController($scope, $timeout, $attrs, $filter, Simpl
     //TODO: refactor, this function exists in multiple controllers :)
     function savePage() {
         vm.state.saveLoading = true;
-        var isLegacyPage = !vm.state.page.ssb;        
+        var isLegacyPage = !vm.state.page.ssb;
         console.log(isLegacyPage);
 
         if (!vm.uiState.hasSeenWarning && isLegacyPage) {
@@ -96,14 +96,16 @@ function ssbSiteBuilderTopbarController($scope, $timeout, $attrs, $filter, Simpl
                 )
             })
         }
-        
+
     }
 
     function cancelPendingEdits() {
-      vm.state.pendingPageChanges = false;
-      vm.state.pendingWebsiteChanges = false;
-      SimpleSiteBuilderService.website = angular.copy(vm.state.originalWebsite);
-      SimpleSiteBuilderService.page = angular.copy(vm.state.originalPage);
+        vm.uiState.showSectionPanel = false;
+        vm.uiState.openSidebarSectionPanel = { name: '', id: '' };
+        vm.state.pendingPageChanges = false;
+        vm.state.pendingWebsiteChanges = false;
+        SimpleSiteBuilderService.website = angular.copy(vm.state.originalWebsite);
+        SimpleSiteBuilderService.page = angular.copy(vm.state.originalPage);
     }
 
     function saveWebsite() {
