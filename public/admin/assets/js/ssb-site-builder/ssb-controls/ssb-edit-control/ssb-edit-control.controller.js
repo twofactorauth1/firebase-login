@@ -104,6 +104,7 @@ function ssbSiteBuilderEditControlController($scope, $attrs, $filter, $timeout, 
             SimpleSiteBuilderService.setActiveComponent(componentIndex);
 
             vm.uiState.navigation.sectionPanel.loadPanel(sectionPanelLoadConfig);
+            vm.uiState.navigation.sectionPanel.navigationHistory = [];
 
             if (sectionIndex !== undefined && componentIndex !== undefined) {
                 vm.uiState.showSectionPanel = true;
