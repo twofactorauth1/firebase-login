@@ -376,6 +376,10 @@
     height: auto;
     width: 100%;
 
+    @media (max-width: 768px) {
+        background: transparent;
+    }
+
     @media (min-width: 768px) {
         position: static;
         float: left;
@@ -386,6 +390,12 @@
 
     .nav {
         background: #131e26;
+        @media (max-width: 768px) {
+            border-bottom: 0 none;
+            max-width: 300px;
+            margin: 0 auto;
+            width: 100%;
+        }
     }
 
     .nav-tab {
@@ -493,6 +503,14 @@
     width: 300px;
     // max-height: 600px;
 
+    @media (max-width: 767px) {
+        top: auto;
+        bottom: 0;
+        width: 90%;
+        left: 5%;
+        right: 5%;
+    }
+
     &.draggable > .ssb-sidebar-sub-heading {
         cursor: move;
         border-radius: 5px 5px 0px 0px;
@@ -505,14 +523,17 @@
         i {
             cursor: pointer;
             color: white;
+            font-size: .85em;
         }
     }
 
     .close {
         position: absolute;
-        top: .5em;
-        right: .5em;
-        font-size: 1.5em;
+        top: 1.45em;
+        right: 1em;
+        cursor: pointer;
+        color: white;
+        font-size: 1.2em;
     }
     .ui-select-match-close{
         position: static;

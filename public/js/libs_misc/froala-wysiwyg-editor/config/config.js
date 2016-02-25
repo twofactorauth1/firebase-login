@@ -6,7 +6,7 @@ var toolbarbuttons = [
         'fontFamily',
         'fontSize',
         'color',
-        'emoticons',
+        // 'emoticons',
         'paragraphStyle',
         'paragraphFormat',
         'align',
@@ -22,8 +22,8 @@ var toolbarbuttons = [
         'insertTable',
         'undo',
         'redo',
-        'clearFormatting',
-        'selectAll'
+        // 'clearFormatting',
+        // 'selectAll'
     ];
 var spectrumColors = [
               ["#C91F37", "#DC3023", "#9D2933", "#CF000F", "#E68364", "#F22613", "#CF3A24", "#C3272B", "#8F1D21", "#D24D57"],
@@ -41,10 +41,10 @@ var spectrumColors = [
 $.FroalaEditor.config = {
      enter: $.FroalaEditor.ENTER_BR,
      // enter: $.FroalaEditor.ENTER_DIV,
-     // toolbarBottom: true,
+     toolbarBottom: false,
      toolbarInline: true,
      toolbarVisibleWithoutSelection: true,
-     // scrollableContainer: '#ssb-froala-scrollable-container',
+     scrollableContainer: '#ssb-froala-scrollable-container',
      toolbarButtons: toolbarbuttons,
      toolbarButtonsMD: toolbarbuttons,
      toolbarButtonsSM: toolbarbuttons,

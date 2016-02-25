@@ -6976,6 +6976,11 @@ div[class^="spacing-"] input {
   height: auto;
   width: 100%;
 }
+@media (max-width: 768px) {
+  .ssb-sidebar-icons {
+    background: transparent;
+  }
+}
 @media (min-width: 768px) {
   .ssb-sidebar-icons {
     position: static;
@@ -6987,6 +6992,14 @@ div[class^="spacing-"] input {
 }
 .ssb-sidebar-icons .nav {
   background: #131e26;
+}
+@media (max-width: 768px) {
+  .ssb-sidebar-icons .nav {
+    border-bottom: 0 none;
+    max-width: 300px;
+    margin: 0 auto;
+    width: 100%;
+  }
 }
 .ssb-sidebar-icons .nav-tab {
   width: 70px;
@@ -7057,6 +7070,15 @@ div[class^="spacing-"] input {
   overflow-x: hidden;
   width: 300px;
 }
+@media (max-width: 767px) {
+  .ssb-sidebar-section-panel {
+    top: auto;
+    bottom: 0;
+    width: 90%;
+    left: 5%;
+    right: 5%;
+  }
+}
 .ssb-sidebar-section-panel.draggable > .ssb-sidebar-sub-heading {
   cursor: move;
   border-radius: 5px 5px 0px 0px;
@@ -7068,12 +7090,15 @@ div[class^="spacing-"] input {
 .ssb-sidebar-section-panel.draggable > .ssb-sidebar-sub-heading i {
   cursor: pointer;
   color: white;
+  font-size: .85em;
 }
 .ssb-sidebar-section-panel .close {
   position: absolute;
-  top: .5em;
-  right: .5em;
-  font-size: 1.5em;
+  top: 1.45em;
+  right: 1em;
+  cursor: pointer;
+  color: white;
+  font-size: 1.2em;
 }
 .ssb-sidebar-section-panel .ui-select-match-close {
   position: static;
@@ -7183,6 +7208,31 @@ ssb-topbar {
     padding-left: 75px;
   }
 }
+ssb-topbar .ssb-topbar-inner > .pull-left,
+ssb-topbar .ssb-topbar-inner > .pull-right {
+  z-index: 4;
+  padding: 0 10px;
+}
+@media screen and (min-width: 768px) {
+  ssb-topbar .ssb-topbar-inner > .pull-left,
+  ssb-topbar .ssb-topbar-inner > .pull-right {
+    border-right: 1px solid black;
+  }
+}
+ssb-topbar .ssb-topbar-inner > .pull-left {
+  width: 100px;
+}
+@media screen and (min-width: 768px) {
+  ssb-topbar .ssb-topbar-inner > .pull-left {
+    width: auto;
+  }
+}
+@media screen and (min-width: 768px) {
+  ssb-topbar .ssb-topbar-inner > .pull-right {
+    border: 0 none;
+    border-left: 1px solid black;
+  }
+}
 ssb-topbar .ui-select-match {
   outline: none;
   box-shadow: none;
@@ -7201,12 +7251,16 @@ ssb-topbar .ui-select-match-text > small {
   font-size: 2em;
 }
 .ssb-control-bar .btn {
-  font-size: 1.5em;
+  font-size: 15px;
   border: 0 none;
   color: white;
+  position: relative;
+  top: -2px;
 }
 .ssb-control-bar .btn[disabled] {
   pointer-events: none;
+  color: white;
+  opacity: .5;
 }
 [class*="ssb-theme-"] {
   -webkit-font-smoothing: antialiased !important;
@@ -7707,8 +7761,43 @@ ssb-topbar .ui-select-match-text > small {
 [ssb-image-component] img {
   width: 100%;
 }
+ssb-topbar #ssb-froala-scrollable-container {
+  position: absolute;
+  left: 70px;
+  width: 100%;
+}
+@media (min-width: 1280px) {
+  ssb-topbar #ssb-froala-scrollable-container {
+    width: calc(100% - (16.66666667% + 15px + 15px + 3px) - (16.66666667% + 15px + 15px + 1px));
+    left: calc(16.66666667% + 15px + 15px + 3px);
+    right: calc(16.66666667% + 15px + 15px + 1px);
+    white-space: nowrap;
+    height: 60px;
+    border-top: 0;
+    border-bottom: 0;
+  }
+}
 .fr-toolbar.fr-inline.fr-desktop {
   transition: opacity 0.25s ease-in-out;
+  max-width: 300px;
+}
+@media (min-width: 1280px) {
+  .fr-toolbar.fr-inline.fr-desktop {
+    pointer-events: none;
+    border: 0;
+    box-shadow: none;
+    height: 60px;
+    position: relative!important;
+    top: 0!important;
+    left: 0!important;
+    margin: 0!important;
+    max-width: none;
+  }
+}
+@media (min-width: 1280px) {
+  .fr-popup.fr-desktop.fr-inline {
+    position: fixed;
+  }
 }
 .fr-wrapper.show-placeholder .fr-placeholder {
   pointer-events: none;
@@ -7740,17 +7829,39 @@ ssb-topbar .ui-select-match-text > small {
 /*
  * Style the first instance to use as a "disabled" state
  */
-.fr-toolbar.fr-inline.fr-desktop.ssb-froala-first-editor {
-  display: inline-block !important;
-}
-.fr-toolbar.fr-inline.fr-desktop.ssb-froala-first-editor button {
-  opacity: .5;
+@media (min-width: 1280px) {
+  .fr-toolbar.fr-inline.fr-desktop.ssb-froala-first-editor {
+    display: inline-block !important;
+  }
+  .fr-toolbar.fr-inline.fr-desktop.ssb-froala-first-editor button {
+    opacity: .5;
+  }
 }
 /*
  * Style the active instance of the editor toolbar
  */
-.fr-toolbar.fr-inline.fr-desktop.ssb-froala-active-editor button {
-  opacity: 1;
+@media (min-width: 1280px) {
+  .fr-toolbar.fr-inline.fr-desktop.ssb-froala-active-editor {
+    position: absolute!important;
+    z-index: 5;
+    pointer-events: auto!important;
+    display: block!important;
+  }
+  .fr-toolbar.fr-inline.fr-desktop.ssb-froala-active-editor button {
+    opacity: 1;
+  }
+}
+@media (min-width: 1300px) {
+  .fr-toolbar.fr-inline.fr-desktop.ssb-froala-active-editor {
+    left: 50%!important;
+    transform: translateX(-50%);
+  }
+}
+@media (min-width: 1280px) {
+  .fr-popup .fr-arrow,
+  .fr-toolbar .fr-arrow {
+    opacity: 0!important;
+  }
 }
 /*
  * Code auto-generated from https://www.froala.com/wysiwyg-editor/customize
@@ -8109,8 +8220,11 @@ body[ng-controller] .fr-popup.fr-desktop .fr-arrow {
   margin-left: -5px;
 }
 body[ng-controller] .fr-popup.fr-desktop.fr-above .fr-arrow {
-  bottom: -9px;
+  bottom: -15px;
   border-top-width: 5px;
+  top: auto;
+  border-top-color: black;
+  border-bottom-color: transparent;
 }
 body[ng-controller] .fr-toolbar {
   color: #ffffff;

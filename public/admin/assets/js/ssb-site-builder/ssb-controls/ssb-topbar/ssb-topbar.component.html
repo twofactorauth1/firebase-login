@@ -1,6 +1,6 @@
 <div class="ssb-topbar-inner">
 
-    <div class="col-xs-2 pull-left">
+    <div class="pull-left">
         <ui-select
             ng-init="vm.uiState.selectedPage = vm.state.page"
             ng-model="vm.uiState.selectedPage"
@@ -19,9 +19,9 @@
         </ui-select>
     </div>
 
-    <!-- <div id="ssb-froala-scrollable-container"></div> -->
+    <div id="ssb-froala-scrollable-container"></div>
 
-    <div class="col-xs-2 pull-right text-right">
+    <div class="pull-right text-right">
         <ssb-action-buttons class="ssb-control-bar" save-action="vm.savePage()" cancel-action="vm.cancelPendingEdits()" state="vm.state"></ssb-action-buttons>
     </div>
 
