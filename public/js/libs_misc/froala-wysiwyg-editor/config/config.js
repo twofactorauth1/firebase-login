@@ -41,8 +41,10 @@ var spectrumColors = [
 $.FroalaEditor.config = {
      enter: $.FroalaEditor.ENTER_BR,
      // enter: $.FroalaEditor.ENTER_DIV,
+     // toolbarBottom: true,
      toolbarInline: true,
      toolbarVisibleWithoutSelection: true,
+     // scrollableContainer: '#ssb-froala-scrollable-container',
      toolbarButtons: toolbarbuttons,
      toolbarButtonsMD: toolbarbuttons,
      toolbarButtonsSM: toolbarbuttons,

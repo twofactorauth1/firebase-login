@@ -10762,6 +10762,7 @@ ssb-topbar .ui-select-match {
   box-shadow: none;
   background-color: transparent;
   width: 150px;
+  max-width: 100%;
 }
 ssb-topbar .ui-select-match-text > small {
   width: 125px;
@@ -10776,6 +10777,7 @@ ssb-topbar .ui-select-match-text > small {
 .ssb-control-bar .btn {
   font-size: 1.5em;
   border: 0 none;
+  color: white;
 }
 .ssb-control-bar .btn[disabled] {
   pointer-events: none;
@@ -11281,12 +11283,6 @@ ssb-topbar .ui-select-match-text > small {
 }
 .fr-toolbar.fr-inline.fr-desktop {
   transition: opacity 0.25s ease-in-out;
-  position: fixed!important;
-  top: 65px!important;
-  left: 50%!important;
-  transform: translate(-50%, 0);
-  max-width: 60%;
-  pointer-events: none;
 }
 .fr-wrapper.show-placeholder .fr-placeholder {
   pointer-events: none;
@@ -11318,17 +11314,16 @@ ssb-topbar .ui-select-match-text > small {
 /*
  * Style the first instance to use as a "disabled" state
  */
-.ssb-froala-first-editor {
-  display: block!important;
+.fr-toolbar.fr-inline.fr-desktop.ssb-froala-first-editor {
+  display: inline-block !important;
+}
+.fr-toolbar.fr-inline.fr-desktop.ssb-froala-first-editor button {
   opacity: .5;
 }
 /*
  * Style the active instance of the editor toolbar
  */
-.ssb-froala-active-editor {
-  z-index: 5;
-  pointer-events: auto!important;
-  display: block!important;
+.fr-toolbar.fr-inline.fr-desktop.ssb-froala-active-editor button {
   opacity: 1;
 }
 /*
@@ -11388,24 +11383,6 @@ body[ng-controller] .fr-tooltip {
   -moz-transition: opacity 0.2s ease 0s;
   -ms-transition: opacity 0.2s ease 0s;
   -o-transition: opacity 0.2s ease 0s;
-}
-body[ng-controller] .fr-element {
-  color: #000000;
-}
-body[ng-controller] .fr-box.fr-basic .fr-element {
-  padding: 10px;
-}
-body[ng-controller] .fr-wrapper .fr-placeholder {
-  font-size: 12px;
-  color: #aaaaaa;
-}
-body[ng-controller] .fr-wrapper ::selection {
-  background: #b5d6fd;
-  color: #000000;
-}
-body[ng-controller] .fr-wrapper ::-moz-selection {
-  background: #b5d6fd;
-  color: #000000;
 }
 body[ng-controller] .fr-box.fr-basic .fr-wrapper {
   background: #ffffff;
@@ -11569,7 +11546,7 @@ body[ng-controller] .fr-command.fr-btn + .fr-dropdown-menu {
   background-clip: padding-box;
 }
 body[ng-controller] .fr-command.fr-btn + .fr-dropdown-menu .fr-dropdown-wrapper {
-  background: #131e26;
+  background: #1c2b36;
   -webkit-box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 2px 4px rgba(0, 0, 0, 0.23);
   -moz-box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 2px 4px rgba(0, 0, 0, 0.23);
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 2px 4px rgba(0, 0, 0, 0.23);
@@ -11606,7 +11583,7 @@ body[ng-controller] .fr-popup {
   -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
   color: #ffffff;
-  background: #131e26;
+  background: #1c2b36;
   border-radius: 2px;
   -moz-border-radius: 2px;
   -webkit-border-radius: 2px;
@@ -11711,7 +11688,7 @@ body[ng-controller] .fr-popup.fr-desktop.fr-above .fr-arrow {
 }
 body[ng-controller] .fr-toolbar {
   color: #ffffff;
-  background: #131e26;
+  background: #1c2b36;
   font-family: Arial, Helvetica, sans-serif;
   padding: 0 2px;
   border-radius: 2px;
@@ -12037,7 +12014,7 @@ body[ng-controller] .fr-modal .fr-modal-wrapper {
   border-top: 5px solid #222222;
 }
 body[ng-controller] .fr-modal .fr-modal-wrapper .fr-modal-title {
-  background: #131e26;
+  background: #1c2b36;
   -webkit-transition: height 0.2s ease 0s;
   -moz-transition: height 0.2s ease 0s;
   -ms-transition: height 0.2s ease 0s;
@@ -12126,7 +12103,7 @@ body[ng-controller] .fr-modal .fr-modal-wrapper div.fr-scroller div.fr-image-lis
   color: #ffffff;
 }
 body[ng-controller] .fr-modal .fr-modal-wrapper div.fr-scroller div.fr-image-list div.fr-image-container .fr-insert-img {
-  background: #131e26;
+  background: #1c2b36;
   color: #ffffff;
 }
 body[ng-controller] .fr-modal.fr-desktop .fr-modal-wrapper .fr-modal-title .fr-modal-title-line i:hover {

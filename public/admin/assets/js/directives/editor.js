@@ -44,7 +44,7 @@ app.directive("elem", function($timeout, $compile) {
           $timeout(function() {
             $(elem).on('froalaEditor.initialized', function(e, editor) {
 
-              $('.fr-toolbar.fr-inline.fr-desktop:first').addClass('ssb-froala-first-editor');
+              // $('.fr-toolbar.fr-inline.fr-desktop:first').addClass('ssb-froala-first-editor');
 
               //set initial text
               if (ngModel.$viewValue) {
@@ -64,7 +64,7 @@ app.directive("elem", function($timeout, $compile) {
               }).on('froalaEditor.toolbar.show', function(e, editor) {
 
                 //move toolbar to highest z-index
-                editor.$tb.addClass('ssb-froala-active-editor');
+                // editor.$tb.addClass('ssb-froala-active-editor');
 
                 //hide any edit-control labels
                 $('.ssb-site-builder .ssb-edit-control').addClass('hide-edit-control');
@@ -73,7 +73,7 @@ app.directive("elem", function($timeout, $compile) {
 
                 $('.ssb-site-builder .ssb-edit-control').removeClass('hide-edit-control');
 
-                editor.$tb.removeClass('ssb-froala-active-editor');
+                // editor.$tb.removeClass('ssb-froala-active-editor');
 
               });
           }, 1000);
