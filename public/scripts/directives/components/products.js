@@ -1022,8 +1022,8 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
     controller: function ($scope) {
         var cookieKey = 'cart_cookie';
         var cookieData = ipCookie(cookieKey);
-      $scope.setCheckoutState = function (setCookie, state) {
-          if (setCookie) {
+        $scope.setCheckoutState = function (setCookie, state) {
+          if (setCookie && cookieData) {
               cookieData.state = state;
               ipCookie(cookieKey, cookieData);
           }
