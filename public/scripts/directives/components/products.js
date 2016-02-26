@@ -159,6 +159,13 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
         if (err) {
           console.log('Controller:MainCtrl -> Method:accountService Error: ' + err);
         } else {
+          scope.account = account;
+          scope.paypalInfo = null;
+          scope.account.credentials.forEach(function(cred, index) {
+            if (cred.type == 'paypal') {
+              scope.paypalInfo = cred;
+            }
+          });
           console.log('commerceSettings ', account.commerceSettings);
           scope.settings = account.commerceSettings;
           if (scope.settings && scope.settings.taxes && scope.settings.taxbased === 'business_location') {
@@ -315,7 +322,11 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
         if (scope.emptyFirstName || scope.emptyLastName || scope.emptyEmail || scope.emptyAddress || scope.emptyState || scope.emptyCity || scope.invalidZipCode || scope.emptyZipCode || scope.invalidEmail || scope.invalidPhone) {
           return;
         }
-        scope.checkoutModalState = 3;
+        if (scope.paypalInfo) {
+          scope.checkoutModalState = 6;
+        } else {
+          scope.checkoutModalState = 3;
+        }
       };
 
       /*
