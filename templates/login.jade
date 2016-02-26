@@ -14,13 +14,13 @@ block content
                 if account.business.logo
                     img(src="#{account.business.logo}" style="max-width:300px; max-height:100px; margin: 15px auto; display: block;")
                 else if account.company.name
-                    h1.center.company-title #{account.company.name}
+                    h2.center.company-title #{account.company.name}
                 else if account.company.customDomain
-                    h1.center.company-title #{account.company.customDomain}
+                    h2.center.company-title #{account.company.customDomain}
                 else if account.domain
-                    h1.center.company-title #{account.domain}
+                    h2.center.company-title #{account.domain}
                 else
-                    h1.center.company-title #{account.subdomain}
+                    h2.center.company-title #{account.subdomain}
 
         // start: LOGIN BOX
         .box-login
