@@ -34,6 +34,29 @@ ssb-topbar {
 
     }
 
+    .ssb-topbar-inner > .pull-left,
+    .ssb-topbar-inner > .pull-right {
+        @media screen and (min-width: 768px) {
+            border-right: 1px solid black;
+        }
+        z-index: 4;
+        padding: 0 10px;
+    }
+
+    .ssb-topbar-inner > .pull-left {
+        width: 100px;
+        @media screen and (min-width: 768px) {
+            width: auto;
+        }
+    }
+
+    .ssb-topbar-inner > .pull-right {
+        @media screen and (min-width: 768px) {
+            border: 0 none;
+            border-left: 1px solid black;
+        }
+    }
+
     .ui-select-match {
         outline: none;
         box-shadow: none;
@@ -58,12 +81,16 @@ ssb-topbar {
 
 .ssb-control-bar {
     .btn {
-        font-size: 1.5em;
+        font-size: 15px; //matches froala buttons
         border: 0 none;
         color: white;
+        position: relative;
+        top: -2px;
     }
 
     .btn[disabled] {
         pointer-events: none;
+        color: white;
+        opacity: .5;
     }
 }

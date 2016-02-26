@@ -3,34 +3,38 @@
 }
 
 ssb-topbar #ssb-froala-scrollable-container {
+    position: absolute;
+    left: 70px;
+    width: 100%;
+
     //topbar positioning
-    // @media (min-width: 1024px) {
-    //     width: 100%;
-    //     white-space: nowrap;
-    //     height: 60px;
-    //     border: 1px solid black;
-    //     border-top: 0;
-    //     border-bottom: 0;
-    //     overflow-x: auto;
-    //     overflow-y: hidden;
-    //     position: absolute;
-    // }
+    @media (min-width: 1280px) {
+        width: calc(~"100% - (16.66666667% + 15px + 15px + 3px) - (16.66666667% + 15px + 15px + 1px)");
+        left: calc(~"16.66666667% + 15px + 15px + 3px");
+        right: calc(~"16.66666667% + 15px + 15px + 1px");
+        white-space: nowrap;
+        height: 60px;
+        border-top: 0;
+        border-bottom: 0;
+    }
 }
 
 .fr-toolbar.fr-inline.fr-desktop {
     transition: opacity .25s ease-in-out;
+    max-width: 300px;
 
     //topbar positioning
-    // @media (min-width: 1024px) {
-    //     pointer-events: none;
-    //     border: 0;
-    //     box-shadow: none;
-    //     height: 60px;
-    //     position: relative!important;
-    //     top: 0!important;
-    //     left: 0!important;
-    //     margin: 0!important;
-    // }
+    @media (min-width: 1280px) {
+        pointer-events: none;
+        border: 0;
+        box-shadow: none;
+        height: 60px;
+        position: relative!important;
+        top: 0!important;
+        left: 0!important;
+        margin: 0!important;
+        max-width: none;
+    }
 
     //bottom positioning
     // position: fixed!important;
@@ -51,9 +55,9 @@ ssb-topbar #ssb-froala-scrollable-container {
 
 .fr-popup.fr-desktop.fr-inline {
     //topbar positioning
-    // @media (min-width: 1024px) {
-    //     position: fixed;
-    // }
+    @media (min-width: 1280px) {
+        position: fixed;
+    }
 }
 
 .fr-wrapper.show-placeholder .fr-placeholder {
@@ -92,37 +96,47 @@ ssb-topbar #ssb-froala-scrollable-container {
  * Style the first instance to use as a "disabled" state
  */
 .fr-toolbar.fr-inline.fr-desktop.ssb-froala-first-editor {
-    display: inline-block!important;
+    //topbar positioning
+    @media (min-width: 1280px) {
+        display: inline-block!important;
 
-    button {
-        opacity: .5;
+        button {
+            opacity: .5;
+        }
     }
-
 }
 
 /*
  * Style the active instance of the editor toolbar
  */
 .fr-toolbar.fr-inline.fr-desktop.ssb-froala-active-editor {
-    //topbar positioning
-    // @media (min-width: 1024px) {
-    //     position: absolute!important;
-    //     left: 50%!important;
-    //     z-index: 5;
-    //     pointer-events: auto!important;
-    //     display: block!important;
-    //     transform: translateX(-50%);
-    // }
 
-    button {
-        opacity: 1;
+    //topbar positioning
+    @media (min-width: 1280px) {
+        position: absolute!important;
+        z-index: 5;
+        pointer-events: auto!important;
+        display: block!important;
+
+        button {
+            opacity: 1;
+        }
+    }
+
+    //topbar positioning for wider screens
+    @media (min-width: 1300px) {
+        left: 50%!important;
+        transform: translateX(-50%);
     }
 
 }
 
 .fr-popup .fr-arrow,
 .fr-toolbar .fr-arrow {
-    // opacity: 0!important;
+    @media (min-width: 1280px) {
+        //topbar positioning
+        opacity: 0!important;
+    }
 }
 
 /*
@@ -540,8 +554,13 @@ body[ng-controller] .fr-popup.fr-desktop .fr-arrow {
   margin-left: -5px;
 }
 body[ng-controller] .fr-popup.fr-desktop.fr-above .fr-arrow {
-  bottom: -9px;
-  border-top-width: 5px;
+  // bottom: -9px;
+  // border-top-width: 5px;
+    bottom: -15px;
+    border-top-width: 5px;
+    top: auto;
+    border-top-color: black;
+    border-bottom-color: transparent;
 }
 body[ng-controller] .fr-toolbar {
   color: #ffffff;

@@ -422,10 +422,20 @@ h5.over-title {
   display: inline-block;
   margin-top: -6px;
 }
+@media (max-width: 400px) {
+  #topnav.navbar .navbar-header .navbar-brand {
+    width: 70%;
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
 #topnav.navbar .navbar-header .menu-toggler {
   padding: 0 15px;
   font-size: 17px;
   color: #c8c7cc;
+  position: absolute;
+  top: 0;
+  right: 0;
 }
 #topnav.navbar .navbar-header .sidebar-toggler {
   font-size: 17px;
