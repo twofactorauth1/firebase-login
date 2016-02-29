@@ -237,6 +237,7 @@ app.directive('blogComponent', ['$filter', '$timeout', 'WebsiteService', 'toaste
             toaster.pop('success', 'Post deleted successfully');
             SweetAlert.swal("Saved!", "Post deleted.", "success");
             $scope.deletedPosts.push(postId);
+            $scope.$parent.setDirty(true); 
             //Refresh tags
             $scope.blog.postTags = [];
             _.each($scope.blog.blogposts, function (post) {

@@ -13,7 +13,7 @@
     <div class="form-group">
         <label>Show Products by Tags</label>
         <div class="product-ui-select">
-            <ui-select multiple ng-model="component.productTags" theme="bootstrap" ng-disabled="disabled" on-remove="saveComponent()" on-select="saveComponent()">
+            <ui-select multiple ng-model="component.productTags" theme="bootstrap" ng-disabled="disabled" on-remove="vm.resizeWindow()" on-select="vm.resizeWindow()">
                 <ui-select-match placeholder="Select tags...">
                     {{$item}}
                 </ui-select-match>

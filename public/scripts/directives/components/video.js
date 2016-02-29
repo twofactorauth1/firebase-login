@@ -22,9 +22,7 @@ app.directive('videoComponent',['$sce', function ($sce) {
         return $sce.trustAsResourceUrl(src);
       };
 
-      scope.config = {
-        width: 780,
-        height: 320,
+      scope.config = {        
         autoHide: true,
         autoPlay: false,
         autoHideTime: 1500,

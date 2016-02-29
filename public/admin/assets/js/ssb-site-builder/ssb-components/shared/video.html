@@ -42,16 +42,6 @@
           <span tooltip-placement="top" tooltip-html-unsafe="Youtube video branding."><i class="fa fa-info-circle" /></span>
           <switch id="splitHours" ng-model="component.videoBranding" class="pull-right"></switch>
       </div>
-      <div class="form-group" ng-hide="component.videoType == 'html5'">
-          <label for="member-name">Optional Width</label>
-          <span tooltip-placement="top" tooltip-html-unsafe="Set video width."><i class="fa fa-info-circle" /></span>
-          <input id="member-name" class="form-control" type="text" ng-model="component.videoWidth">
-      </div>
-      <div class="form-group" ng-hide="component.videoType == 'html5'">
-          <label for="member-name">Optional Height</label>
-          <span tooltip-placement="top" tooltip-html-unsafe="Set video height."><i class="fa fa-info-circle" /></span>
-          <input id="member-name" class="form-control" type="text" ng-model="component.videoHeight">
-      </div>
       <div class="form-group" ng-show="component.videoType == 'html5'">
           <label for="member-name">Start Video Image Url</label>
           <span tooltip-placement="top" tooltip-html-unsafe="Set start video image URL."><i class="fa fa-info-circle" /></span>
