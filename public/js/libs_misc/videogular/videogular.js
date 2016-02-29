@@ -601,13 +601,16 @@ angular.module("com.2fdevs.videogular", ["ngSanitize"])
 					};
 
 					$scope.onResizeBrowser = function() {
-						var percentWidth = vg.elementScope[0].parentNode.clientWidth * 100 / vg.videoElement[0].videoWidth;
-						var videoHeight = vg.videoElement[0].videoHeight * percentWidth / 100;
+						if(vg.elementScope[0].parentNode){
+							var percentWidth = vg.elementScope[0].parentNode.clientWidth * 100 / vg.videoElement[0].videoWidth;
+							var videoHeight = vg.videoElement[0].videoHeight * percentWidth / 100;
 
-						currentWidth = vg.elementScope[0].parentNode.clientWidth;
-						currentHeight = videoHeight;
+							currentWidth = vg.elementScope[0].parentNode.clientWidth;
+							currentHeight = videoHeight;
 
-						$scope.updateSize();
+							$scope.updateSize();
+						}
+						
 					};
 
 					$scope.onFullScreenChange = function(event) {

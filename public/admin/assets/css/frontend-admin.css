@@ -4528,8 +4528,30 @@
 }
 #componentloader .videogular-container {
   width: 100%;
+  height: 320px;
   margin: auto;
   overflow: hidden;
+}
+@media (min-width: 1200px) {
+  #componentloader .videogular-container {
+    width: 700px;
+    height: 400px;
+  }
+}
+@media (min-width: 992px) and (max-width: 1199px) {
+  #componentloader .videogular-container {
+    width: 500px;
+    height: 300px;
+  }
+}
+@media (min-width: 768px) and (max-width: 991px) {
+  #componentloader .videogular-container {
+    width: 500px;
+    height: 300px;
+  }
+}
+#componentloader .videogular-container.videogular-html5 {
+  height: 100% !important;
 }
 #componentloader div[data-type="social-link"] .inner-page {
   padding: 0;
