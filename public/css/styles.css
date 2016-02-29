@@ -3828,9 +3828,8 @@ div[data-type=blog] .container {
   display: block;
   font-size: 28px;
 }
-.editing.image-wrap:hover .imgHeight {
-  max-height: 146px;
-  min-height: 146px;
+.editing.image-wrap:hover .image-gallery {
+  min-height: 246px;
 }
 .editing.image-wrap:hover .delete-single-image .btn-delete-single-image {
   background: rgba(0, 0, 0, 0.5);
@@ -3903,10 +3902,17 @@ div[data-type=blog] .container {
   transition: all 0.2s ease-in-out;
 }
 .image-gallery-v1 .imgHeight {
-  max-height: 150px;
   overflow: hidden;
-  min-height: 150px;
   margin: 10px 0 20px 0;
+}
+.image-gallery-v1 .image-gallery {
+  position: relative;
+  float: left;
+  width: 100%;
+  min-height: 250px;
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 .image-gallery-v1 .image-gallery-title {
   position: relative;

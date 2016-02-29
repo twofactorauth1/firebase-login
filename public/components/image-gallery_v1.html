@@ -19,7 +19,7 @@
                 <div class="col-sm-3 col-xs-12 image-wrap {{isEditing ? 'editing' : ''}}">
                     <div class="thumbnail imgHeight single-image">
                         <a href="{{image.url}}" title="{{image.label}}" data-gallery>
-                            <img class="img-responsive img-gallery-{{$index}} image-gallery" data-index="{{$index}}" ng-click="addImageFromMedia(component._id, $index, true)" alt="{{image.label}}" ng-src="{{image.url}}">
+                            <div class="img-responsive img-gallery-{{$index}} image-gallery" data-index="{{$index}}" ng-click="addImageFromMedia(component._id, $index, true)" alt="{{image.label}}" style="background-image:url('{{image.url}}');"></div>
                         </a>
                     </div>
                     <div ng-if="isEditing" class="delete-single-image center">
