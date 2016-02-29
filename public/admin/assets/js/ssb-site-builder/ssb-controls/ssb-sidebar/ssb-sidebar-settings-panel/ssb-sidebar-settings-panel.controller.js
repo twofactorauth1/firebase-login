@@ -33,6 +33,7 @@ function ssbSiteBuilderSidebarSettingsPanelController($scope, $attrs, $filter, $
     vm.setTags = setTags;
     vm.filteredSections = filteredSections;
     vm.isSelectedLayout = isSelectedLayout;
+    vm.resizeWindow = resizeWindow;
 
 
     //TODO: move into config services
@@ -151,6 +152,10 @@ function ssbSiteBuilderSidebarSettingsPanelController($scope, $attrs, $filter, $
           }
         });
         vm.customerTags = _.uniq(_customerTags, function(c) { return c.label; })
+    }
+
+    function resizeWindow(){        
+      $(window).trigger('resize');
     }
 
     function init(element) {
