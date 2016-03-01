@@ -26,7 +26,7 @@ var urlutils = {
         var self = this
             , defaultHost = process.env.ROOT_HOST || "indigenous"
             , globalSubdomains = process.env.GLOBAL_SUBDOMAINS || "www"
-            , globalEnvironments = process.env.GLOBAL_ENVIRONMENTS || 'test'
+            , globalEnvironments = process.env.GLOBAL_ENVIRONMENTS || 'test' || 'asia'
             , hosts
             , subdomain
             , domain
@@ -130,12 +130,7 @@ var urlutils = {
             host = host.substr(0, portIndex);
         }
 
-
         hosts = host.split(".");
-
-
-
-
 
         if (hosts[0] == "localhost") {
             isMainApp = true;
