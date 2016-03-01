@@ -26,6 +26,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.get(this.url(':id'), this.isAuthAndSubscribedApi.bind(this), this.getOrder.bind(this));
         app.get(this.url('customer/:customerid'), this.isAuthAndSubscribedApi.bind(this), this.listOrdersByCustomer.bind(this));
         app.post(this.url(''), this.setup.bind(this), this.createOrder.bind(this));
+        app.post(this.url('payment/paypal'), this.setup.bind(this), this.createPaypalOrder.bind(this));
         app.post(this.url(':id/update'), this.isAuthAndSubscribedApi.bind(this), this.updateOrder.bind(this));
         app.post(this.url(':id/complete'), this.isAuthAndSubscribedApi.bind(this), this.completeOrder.bind(this));
         app.post(this.url(':id/cancel'), this.isAuthAndSubscribedApi.bind(this), this.cancelOrder.bind(this));
@@ -58,6 +59,42 @@ _.extend(api.prototype, baseApi.prototype, {
         });
         //var accessToken = self.getAccessToken(req);
 
+    },
+
+    /**
+     * *Note* If req.body.cancelUrl and req.body.returnUrl are not present on the req.body object, they will
+     * be inferred from the referrer header
+     * @param req.body is of type $$.m.Order (with optional params req.body.cancelUrl and req.body.returnUrl)
+     * @param resp
+     */
+    createPaypalOrder: function(req, resp) {
+        var self = this;
+        self.log.debug('>> createPaypalOrder');
+
+        var order = new $$.m.Order(req.body);
+        order.set('status', 'PENDING_PAYMENT');
+        var userId = self.userId(req);
+        var accountId = self.currentAccountId(req);
+        order.set('account_id', accountId);
+        if(order.get('cancelUrl')) {
+            cancelUrl = order.get('cancelUrl');
+        } else {
+            //TODO:get it from the referrer
+        }
+        if(order.get('returnUrl')) {
+            returnUrl = order.get('returnUrl');
+        } else {
+            //TODO: get it from the referrer
+        }
+        var cancelUrl = null;
+        var returnUrl = null;
+        orderManager.createPaypalOrder(order, userId, cancelUrl, returnUrl, function(err, order){
+            self.log.debug('<< createOrder', err);
+            self.sendResultOrError(resp, err, order, 'Error creating order', 500);
+            if(userId && order) {
+                self.createUserActivity(req, 'CREATE_PAYPAL_ORDER', null, {id: order.id()}, function(){});
+            }
+        });
 
     },
 
