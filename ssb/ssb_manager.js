@@ -1166,13 +1166,12 @@ module.exports = {
             },
             // update existing pages if global sections set as true OR false
             function updateExistingPages(updatedPage, updatedSections, pages, cb){   
-                var _update = false;            
-                _.each(updatedSections, function(gsection){                                        
-                    if(gsection.get("global") === false){
-                        _update = true;
-                        _.each(pages, function(_page){
-                            if(_page.get("_id") !== updatedPage.get("_id"))
-                            {
+                var _update = false;    
+                _.each(pages, function(_page){
+                    if(_page.get("_id") !== updatedPage.get("_id")){
+                        _.each(updatedSections, function(gsection){
+                            if(gsection.get("global") === false){
+                                _update = true;
                                 var sections = _.filter(_page.get("sections"), function(section){                                        
                                     if(section._id !== gsection.get("_id")) {
                                        return true;
@@ -1180,13 +1179,8 @@ module.exports = {
                                 });
                                 _page.set("sections", sections);
                             }
-                        })                                
-                    }
-                    if(gsection.get("global") === true){
-                        _update = true;
-                        _.each(pages, function(_page){
-                            if(_page.get("_id") !== updatedPage.get("_id"))
-                            {
+                            if(gsection.get("global") === true){
+                                _update = true;
                                 var sections = _page.get("sections");
                                 var exists = _.filter(sections, function(section){                                        
                                     if(section._id === gsection.get("_id")) {
@@ -1199,9 +1193,9 @@ module.exports = {
                                 }
                                 _page.set("sections", sections);
                             }
-                        })                                
+                        })
                     }
-                }); 
+                })
                 if(_update){
                    pageDao.batchUpdate(pages, $$.m.ssb.Page, function(err, value){
                         if (err) {
