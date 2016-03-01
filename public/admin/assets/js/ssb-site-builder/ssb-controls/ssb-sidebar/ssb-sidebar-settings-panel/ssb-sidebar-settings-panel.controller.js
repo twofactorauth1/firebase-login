@@ -113,8 +113,11 @@ function ssbSiteBuilderSidebarSettingsPanelController($scope, $attrs, $filter, $
             //if ssb-page-section, match on title
             if (section.type === 'ssb-page-section') {
 
-                //match title
-                return section.title === currentSection.title;
+                //match title if current section has title else match name
+                if(currentSection.title)
+                  return section.title === currentSection.title;
+                else
+                  return section.name === currentSection.name;
 
             //else if legacy component
             } else if (currentSection.components.length === 1) {
