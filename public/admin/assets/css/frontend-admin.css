@@ -7760,6 +7760,10 @@ ssb-topbar .ui-select-match-text > small {
 .ssb-main .simple-form-v1 .simple-form-subtitle {
   margin-left: 0!important;
 }
+.ssb-main .feature-list-v3 .features-wrap,
+.ssb-main .feature-list-v3 .feature-single {
+  margin: 0;
+}
 [ssb-text-component] {
   position: relative;
 }

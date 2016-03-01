@@ -78,7 +78,7 @@ process.env.GLOBAL_SUBDOMAINS = "www,app";
  * These MUST come right before the host.
  * If none are present, production is assumed.
  */
-process.env.GLOBAL_ENVIRONMENTS = "test,prod";
+process.env.GLOBAL_ENVIRONMENTS = "test,prod,asia";
 
 /**
  * A configuration for the db ID of the main account.  This can be useful

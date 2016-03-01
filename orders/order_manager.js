@@ -496,7 +496,6 @@ module.exports = {
                 }
             },
             //update
-
             function(account, savedOrder, charge, contact, callback){
                 log.debug('updating saved order');
                 /*
@@ -782,6 +781,238 @@ module.exports = {
 
     },
 
+    createPaypalOrder: function(order, userId, cancelUrl, returnUrl, fn) {
+
+        var self = this;
+        log.debug('>> createPaypalOrder');
+
+        var accountId = parseInt(order.get('account_id'));
+        async.waterfall([
+            //get the account
+            function getAccount(callback) {
+                log.debug('fetching account ' + order.get('account_id'));
+                accountDao.getAccountByID(accountId, function(err, account){
+                    callback(err, account);
+                });
+            },
+            //get the products
+            function getProducts(account, callback) {
+                log.debug('fetching products');
+                var productAry = [];
+                async.each(order.get('line_items'), function iterator(item, cb){
+                    productManager.getProduct(item.product_id, function(err, product){
+                        if(err) {
+                            cb(err);
+                        } else {
+                            productAry.push(product);
+                            item.sku = product.get('sku');
+                            item.name = product.get('name');
+                            log.debug('Product is', product);
+                            cb();
+                        }
+                    });
+                }, function done(err){
+                    callback(err, account, productAry);
+                });
+            },
+            //determine tax rate
+            function getTaxRate(account, productAry, callback) {
+                log.debug('commerceSettings');
+                var _taxRate = 0;
+                var commerceSettings = account.get('commerceSettings');
+
+                if(commerceSettings && commerceSettings.taxes === true) {
+                    //figure out the rate
+                    var zip = 0;
+                    if(commerceSettings.taxbased === 'customer_shipping') {
+                        zip = order.get('shipping_address').postcode;
+                    } else if(commerceSettings.taxbased === 'customer_billing') {
+                        zip = order.get('billing_address').postcode;
+                    } else if(commerceSettings.taxbased === 'business_location') {
+                        zip = account.get('business').addresses && account.get('business').addresses[0] ? account.get('business').addresses[0].zip : 0;
+                    } else {
+                        log.warn('Unable to determine tax rate based on ', commerceSettings);
+                    }
+                    if(zip !== 0) {
+                        productManager.getTax(zip, function(err, rate){
+                            log.debug('Tax Service Response: ', rate);
+                            if(rate && rate.results && rate.results.length > 0) {
+                                _taxRate = rate.results[0].taxSales.toFixed(4); // nexus location or business_location
+                                log.debug('Initial Tax Rate: ', _taxRate);
+
+                                if(commerceSettings.taxbased !== 'business_location'
+                                    && commerceSettings.taxnexus && commerceSettings.taxnexus.length > 0) {
+
+                                    log.debug('Vetting Nexus: ', _.pluck(commerceSettings.taxnexus, "text"), '<-', rate.results[0].geoState);
+                                    if (_.pluck(commerceSettings.taxnexus, "text").indexOf(rate.results[0].geoState) < 0) {
+                                        _taxRate = 0; // Force rate to zero. Non-nexus location
+                                    }
+                                }
+                            } else {
+                                log.debug('Tax Service (productManager.getTax) Response ERR: ', err);
+                                _taxRate = 0; // Force rate to zero. Error or issue getting rate from tax service.
+                            }
+                            log.debug('Applicable Tax Rate (first): ', _taxRate);
+                            callback(err, account, productAry, _taxRate);
+                        });
+                    } else {
+                        log.debug('Applicable Tax Rate (second): ', _taxRate);
+                        callback(null, account, productAry, _taxRate);
+                    }
+                } else {
+                    log.debug('Applicable Tax Rate (third): ', _taxRate);
+                    callback(null, account, productAry, _taxRate);
+                }
+            },
+            //validate
+            function validateOrder(account, productAry, taxPercent, callback){
+                log.debug('validating order on account ' + order.get('account_id'));
+                log.debug('using a tax rate of ', taxPercent);
+                //calculate total amount and number line items
+                var totalAmount = 0;
+                var subTotal = 0;
+                var totalLineItemsQuantity = 0;
+                var taxAdded = 0;
+
+                /*
+                 * loop through line items
+                 *   based on quantity and id, get lineItemSubtotal
+                 *   if item is taxable, get tax rate and add to lineItemTax
+                 *   sum
+                 *
+                 *
+                 */
+                _.each(order.get('line_items'), function iterator(item, index){
+                    var product = _.find(productAry, function(currentProduct){
+                        if(currentProduct.id() === item.product_id) {
+                            return true;
+                        }
+                    });
+                    log.debug('found product ', product);
+                    var lineItemSubtotal = item.quantity * product.get('regular_price');
+                    if(product.get('on_sale') === true) {
+                        var startDate = product.get('sale_date_from', 'day');
+                        var endDate = product.get('sale_date_to', 'day');
+                        var rightNow = new Date();
+                        if(moment(rightNow).isBefore(endDate) && moment(rightNow).isAfter(startDate)) {
+                            lineItemSubtotal = item.quantity * product.get('sale_price');
+                            item.sale_price = product.get('sale_price').toFixed(2);
+                            //TODO: Should not need this line.  Receipt template currently needs it.
+                            item.regular_price = product.get('sale_price').toFixed(2);
+                            item.total = lineItemSubtotal.toFixed(2);
+                        }
+                    }
+                    if(product.get('taxable') === true) {
+                        taxAdded += (lineItemSubtotal * taxPercent);
+                    }
+                    subTotal += lineItemSubtotal;
+                    totalLineItemsQuantity += parseFloat(item.quantity);
+                });
+                log.debug('Calculated subtotal: ' + subTotal + ' with tax: ' + taxAdded);
+                /*
+                 * We have to ignore discounts and shipping for now.  They *must* come from a validated code server
+                 * side to avoid shenanigans.
+                 */
+                totalAmount = subTotal + taxAdded;
+
+
+                order.set('tax_rate', taxPercent);
+                order.set('subtotal', subTotal.toFixed(2));
+                order.set('total', totalAmount.toFixed(2));
+                log.debug('total is now: ' + order.get('total'));
+                order.set('total_line_items_quantity', totalLineItemsQuantity);
+                callback(null, account, order, productAry);
+
+            },
+            //save
+            function saveOrder(account, validatedOrder, productAry, callback){
+                //look for customer instead of customer_id
+                if(validatedOrder.get('customer') && validatedOrder.get('customer_id')) {
+                    log.warn('request contains BOTH customer and customer_id.  Dropping customer.');
+                    validatedOrder.set('customer', null);
+                    callback(null, account, validatedOrder, productAry);
+                } else if(validatedOrder.get('customer') === null && validatedOrder.get('customer_id') === null) {
+                    //return an error.
+                    callback('Either a customer or customer_id is required.');
+                } else if(validatedOrder.get('customer')) {
+                    var contact = new $$.m.Contact(validatedOrder.get('customer'));
+                    contact.set('accountId', parseInt(validatedOrder.get('account_id')));
+                    contact.createdBy(userId, $$.constants.social.types.LOCAL);
+                    contactDao.saveOrUpdateContact(contact, function(err, savedContact){
+                        if(err) {
+                            log.error('Error creating contact for new order', err);
+                            callback(err);
+                        } else {
+                            validatedOrder.set('customer_id', savedContact.id());
+                            validatedOrder.set('customer', null);
+                            callback(null, account, validatedOrder, productAry);
+                        }
+                    });
+                } else {
+                    //we have the id.
+                    callback(null, account, validatedOrder, productAry);
+                }
+            },
+            //get contact
+            function getContact(account, savedOrder, productAry, callback) {
+                log.debug('getting contact');
+                contactDao.getById(savedOrder.get('customer_id'), $$.m.Contact, function(err, contact){
+                    if(err) {
+                        log.error('Error getting contact: ' + err);
+                        callback(err);
+                    } else if(contact === null) {
+                        log.error('Could not find contact for id: ' + savedOrder.get('customer_id'));
+                        callback('contact not found');
+                    } else {
+
+                        //set order_id based on orders length for the account
+                        var query = {
+                            account_id: savedOrder.get('account_id')
+                        };
+                        dao.getMaxValue(query, 'order_id', $$.m.Order, function(err, value){
+                            if(err ) {
+                                log.warn('Could not find order_id:', err);
+                                callback(err);
+                            } else {
+                                var max = 1;
+                                if(value) {
+                                    max = parseInt(value) + 1;
+                                }
+
+                                savedOrder.set('order_id', max);
+                                dao.saveOrUpdate(savedOrder, function(err, updatedOrder){
+                                    callback(err, account, updatedOrder, contact, productAry);
+                                });
+                            }
+                        });
+
+                    }
+                });
+            },
+            //get pay key from Paypal
+            function getPaypalPayKey(account, savedOrder, contact, productAry, callback) {
+                var receiverEmail = null;//TODO: get from the account (credentials?)
+                var amount = null;//TODO: get from the order
+                var memo = null;//TODO: get from the order
+                paymentManager.payWithPaypal(receiverEmail, amount, memo, cancelUrl, returnUrl, function(err, value){
+                    //TODO: call next function
+                });
+            },
+            //save info on order
+            function updateOrder() {
+                //TODO: store paypal correlationId and key on order
+            }
+
+        ], function done(err, result){
+            if(err) {
+                log.error('Error creating order: ' + err);
+                return fn(err.message, null);
+            } else {
+                log.debug('<< createPaypalOrder');
+                return fn(null, result);
+            }
+        });
+    },
 
     completeOrder: function(accountId, orderId, note, userId, fn) {
         log.debug('>> completeOrder ');
