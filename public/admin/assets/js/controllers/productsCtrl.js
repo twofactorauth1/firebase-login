@@ -13,28 +13,33 @@
     console.log('ProductConstant.product_types.dp ', ProductConstant.product_types.dp);
     $scope.productTypeOptions = ProductConstant.product_types.dp;
 
-    $scope.checkStripeExists = function (fn) {
+    $scope.checkPaymentAccountExistsFn = function (cb) {
       AccountService.getAccount(function(account) {
         var stripe = _.find(account.credentials, function (cred) {
           return cred.type === 'stripe';
         });
-        if (fn && stripe) {
-          fn(true);
+
+        var paypal = _.find(account.credentials, function (cred) {
+          return cred.type === 'paypal';
+        });
+
+        if (cb && (stripe || paypal)) {
+          cb(true);
         } else {
-          fn(false);
+          cb(false);
         }
       });
     };
 
-    $scope.checkStripeExists(function (value) {
+    $scope.checkPaymentAccountExistsFn(function (value) {
       if (value) {
         ProductService.getProducts(function (products) {
           $scope.products = products;
           $scope.showProducts = true;
-          $scope.noStripe = false;
+          $scope.noPaymentAccount = false;
         });
       } else {
-        $scope.noStripe = true;
+        $scope.noPaymentAccount = true;
       }
     });
 
@@ -111,7 +116,7 @@
       label: "No Image",
       data: "false"
     }];
-    
+
     ProductService.productStatusTypes(function(types) {
       $scope.productStatusTypes = types;
     });
@@ -133,10 +138,10 @@
                 $scope.maxProductHeight = Math.max.apply(null, $("tr.product-item").map(function () {
                   return $(this).height();
                 }).get());
-                $scope.maxProductHeight = $scope.maxProductHeight + 3;             
+                $scope.maxProductHeight = $scope.maxProductHeight + 3;
               }
             }
-            $("tr.product-item").css("min-height", $scope.maxProductHeight);           
+            $("tr.product-item").css("min-height", $scope.maxProductHeight);
         }, 500)
     }
 
