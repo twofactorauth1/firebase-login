@@ -54,6 +54,7 @@ $.FroalaEditor.config = {
         'img-thumbnail': 'Square with Border',
         'img-circle': 'Circle'
      },
+     imageDefaultWidth: 'auto',
      linkStyles:{
         'ssb-theme-btn': 'SB Button',
         'btn': 'Button',

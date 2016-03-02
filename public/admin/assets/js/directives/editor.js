@@ -13,37 +13,42 @@ app.directive("elem", function($timeout, $compile) {
     template: '<div class="edit-wrap"><span class="editable-title">{{title | formatText}}</span><div class="editable element-wrap {{className}}" ng-bind-html="ngModel | unsafe"></div></div>',
     link: function(scope, element, attrs, ngModel) {
 
-      scope.update = function(e) {
-        $timeout(function() {
-          scope.$apply(function() {
-            ngModel.$setViewValue(e.editor.getData());
-          });
-        }, 0);
-      };
+        scope.update = function(e) {
+            $timeout(function() {
+                scope.$apply(function() {
+                    ngModel.$setViewValue(e.editor.getData());
+                });
+            }, 0);
+        };
 
-      scope.setContent = function(e) {
-        $timeout(function() {
-          scope.$apply(function() {
-            e.editor.setData(ngModel.$viewValue);
-          });
-        }, 0);
-      };
+        scope.setContent = function(e) {
+            $timeout(function() {
+                scope.$apply(function() {
+                    e.editor.setData(ngModel.$viewValue);
+                });
+            }, 0);
+        };
 
-      scope.updateFroalaContent = function(editor) {
-        $timeout(function() {
-          scope.$apply(function() {
-            ngModel.$setViewValue(editor.html.get());
+        scope.updateFroalaContent = function(editor) {
+            $timeout(function() {
+                scope.$apply(function() {
+                    ngModel.$setViewValue(editor.html.get());
+                    scope.compileButtons(editor);
+                });
+            }, 0);
+        };
 
-            scope.compileButtons(editor.html.get());
-
-          });
-        }, 0);
-      };
-
-        scope.compileButtons = function(html) {
-            var $html = $('<div id="temp-wrapper">' + html + '</div>');
-            var btns = $html.find('.ssb-theme-btn');
-            console.log('btns', btns);
+        scope.compileButtons = function(editor) {
+            scope.ssbThemeButtons = scope.ssbThemeButtons || {};
+            editor.$el.find('.ssb-theme-btn').each(function() {
+                var btn = $(this);
+                if (undefined === btn.data('$scope')) {
+                    $compile(btn)(scope, function(cloned, scope){
+                        btn.replaceWith(cloned);
+                        // scope.ssbThemeButtons[]element.data('$scope').$id
+                    });
+                }
+            });
         };
 
       var elem = angular.element(element[0].querySelector('.editable'))[0];
@@ -61,40 +66,65 @@ app.directive("elem", function($timeout, $compile) {
                 editor.html.set(ngModel.$viewValue);
               }
 
+              scope.compileButtons(editor);
+
             }).froalaEditor($.FroalaEditor.config)
-              .on('froalaEditor.contentChanged', function(e, editor) {
-                scope.updateFroalaContent(editor);
-                $(elem).froalaEditor('html.cleanEmptyTags');
-              }).on('froalaEditor.click', function(e, editor, clickEvent) {
-                $(elem).froalaEditor('commands.show');
-              }).on('froalaEditor.keydown', function(e, editor) {
-                scope.updateFroalaContent(editor);
-              }).on('froalaEditor.image.resizeEnd', function(e, editor, $img) {
-                scope.updateFroalaContent(editor);
-              }).on('froalaEditor.toolbar.show', function(e, editor) {
-                console.log('toolbar show')
-                //move toolbar to highest z-index
-                editor.$tb.addClass('ssb-froala-active-editor');
+                .on('froalaEditor.contentChanged', function(e, editor) {
+                    scope.updateFroalaContent(editor);
+                    // $(elem).froalaEditor('html.cleanEmptyTags');
+                }).on('froalaEditor.click', function(e, editor, clickEvent) {
+                    // $(elem).froalaEditor('commands.show');
+                    // debugger;
+                }).on('froalaEditor.keydown', function(e, editor) {
+                    scope.updateFroalaContent(editor);
+                }).on('froalaEditor.image.resizeEnd', function(e, editor, $img) {
+                    scope.updateFroalaContent(editor);
+                }).on('froalaEditor.toolbar.show', function(e, editor) {
 
-                //hide any edit-control labels
-                $('.ssb-site-builder .ssb-edit-control').addClass('hide-edit-control');
+                    console.log('toolbar show')
 
-              }).on('froalaEditor.toolbar.hide', function(e, editor) {
-                console.log('toolbar hide')
-                $('.ssb-site-builder .ssb-edit-control').removeClass('hide-edit-control');
+                    //hide any currently shown toolbar
+                    $('.fr-toolbar').removeClass('ssb-froala-active-editor');
 
-                //topbar positioning
-                editor.$tb.removeClass('ssb-froala-active-editor');
+                    //move toolbar to highest z-index
+                    editor.$tb.addClass('ssb-froala-active-editor');
 
-              }).on('froalaEditor.popups.hide.image.insert', function(e, editor) {
-                console.log('froalaEditor.popups.hide.image.insert');
-              }).on('froalaEditor.popups.hide.image.edit', function(e, editor) {
-                console.log('froalaEditor.popups.hide.image.edit');
-              }).on('froalaEditor.popups.hide.image.alt', function(e, editor) {
-                console.log('froalaEditor.popups.hide.image.alt');
-              }).on('froalaEditor.popups.hide.image.size', function (e, editor) {
-                console.log('froalaEditor.popups.hide.image.size');
-              });
+                    //hide any edit-control labels
+                    $('.ssb-site-builder .ssb-edit-control').addClass('hide-edit-control');
+
+                }).on('froalaEditor.toolbar.hide', function(e, editor) {
+
+                    console.log('toolbar hide');
+
+                    if (editor.popups.areVisible()) {
+                        //hide any currently shown toolbar
+                        $('.fr-toolbar').removeClass('ssb-froala-active-editor');
+                    }
+
+                    $('.ssb-site-builder .ssb-edit-control').removeClass('hide-edit-control');
+
+                }).on('froalaEditor.commands.after', function (e, editor, cmd, param1, param2) {
+
+                    // debugger;
+                    if (editor.popups.areVisible()) {
+                        //hide any currently shown toolbar
+                        $('.fr-toolbar').removeClass('ssb-froala-active-editor');
+                    }
+
+                }).on('froalaEditor.blur', function (e, editor) {
+
+                    //hide any currently shown toolbar
+                    $('.fr-toolbar').removeClass('ssb-froala-active-editor');
+
+                }).on('froalaEditor.popups.hide.image.insert', function(e, editor) {
+                    console.log('froalaEditor.popups.hide.image.insert');
+                }).on('froalaEditor.popups.hide.image.edit', function(e, editor) {
+                    console.log('froalaEditor.popups.hide.image.edit');
+                }).on('froalaEditor.popups.hide.image.alt', function(e, editor) {
+                    console.log('froalaEditor.popups.hide.image.alt');
+                }).on('froalaEditor.popups.hide.image.size', function (e, editor) {
+                    console.log('froalaEditor.popups.hide.image.size');
+                });
 
           }, 1000);
         });

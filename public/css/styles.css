@@ -11491,9 +11491,6 @@ ssb-topbar #ssb-froala-scrollable-container {
   .fr-popup .fr-input-line {
     padding: 0!important;
   }
-  body[ng-controller] .fr-popup .fr-input-line input[type="text"]:focus {
-    color: #808080!important;
-  }
   body[ng-controller] .fr-popup .fr-active.fr-layer {
     margin: 0!important;
     display: block;
@@ -11512,6 +11509,9 @@ body[ng-controller] .fr-popup .fr-input-line textarea.fr-not-empty + span {
 }
 body[ng-controller] .fr-popup .fr-input-line input[type="text"] {
   padding: 1em;
+}
+body[ng-controller] .fr-popup .fr-input-line textarea {
+  padding-top: 1em;
 }
 body[ng-controller] .fr-popup .fr-action-buttons button.fr-command {
   height: 2.5em;
@@ -11804,6 +11804,7 @@ body[ng-controller] .fr-popup .fr-input-line textarea {
 body[ng-controller] .fr-popup .fr-input-line input[type="text"]:focus,
 body[ng-controller] .fr-popup .fr-input-line textarea:focus {
   border-bottom: solid 2px #ffffff;
+  background-color: inherit!important;
 }
 body[ng-controller] .fr-popup .fr-input-line input + span,
 body[ng-controller] .fr-popup .fr-input-line textarea + span {
