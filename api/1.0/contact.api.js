@@ -606,8 +606,8 @@ _.extend(api.prototype, baseApi.prototype, {
                                 self.log.debug('emailId: ', emailId);
                                 self.log.debug('sendEmail: ', sendEmail);
 
-                                //sendEmail is string, convert to boolean
-                                var sendEmailBoolean = (sendEmail && sendEmail.toLowerCase() === 'true');
+                                //sendEmail is usually a string, convert to boolean
+                                var sendEmailBoolean = (sendEmail && (sendEmail===true || sendEmail.toLowerCase() === 'true'));
                                 sendEmail = sendEmailBoolean;
 
                                 /*

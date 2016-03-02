@@ -349,11 +349,32 @@
                     </div>
                     <div class="row thank-you" style="height:400px" ng-if="checkoutModalState == 6">
                         <h3 class="center mb20">Payment Choice</h3>
-                        <p class="center">
-                          <button class="btn ssb-theme-btn btn-info btn-checkout pull-left disabled" ng-click="paypalPayment()"><i class="fa fa-shopping-cart"></i>Checkout with Paypal (coming soon)</button>
-                          <button class="btn ssb-theme-btn btn-info btn-checkout pull-right" ng-click="makeCartPayment()"><i class="fa fa-shopping-cart"></i> Checked with a Credit Card (powered by Stripe)</button>
-                        </p>
+                        <div class="col-sm-6">
+                            <div class="panel animated no-radius text-center margin-bottom-0 cursor-pointer" ng-class="{true:'panel-light-grey pulse',false:'panel-white'}">
+                                <div class="panel-body" ng-class="{'bg-light-grey': hover1}" ng-mouseenter="hover1 = true" ng-mouseleave="hover1 = false" ng-click="paypalPayment()">
+                                    <span class="fa-stack fa-2x"> <i class="fa fa-square fa-stack-2x text-primary"></i> <i class="fa fa-envelope fa-stack-1x fa-inverse"></i> </span>
+                                    <h3 class="StepTitle margin-top-10">Paypal</h3>
+                                    <p class="text-small">
+                                        Checkout with Paypal
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="panel animated no-radius text-center margin-bottom-0 cursor-pointer" ng-class="{true:'panel-light-grey pulse',false:'panel-white'}">
+                                <div class="panel-body" ng-class="{'bg-light-grey': hover1}" ng-mouseenter="hover1 = true" ng-mouseleave="hover1 = false" ng-click="makeCartPayment()">
+                                    <span class="fa-stack fa-2x"> <i class="fa fa-square fa-stack-2x text-primary"></i> <i class="fa fa-envelope fa-stack-1x fa-inverse"></i> </span>
+                                    <h3 class="StepTitle margin-top-10">Credit Card</h3>
+                                    <p class="text-small">
+                                        Checkout with a Credit Card (Powered by Stripe)
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
                         <div class="clearfix" style="margin-bottom:30px"></div>
+                    </div>
+                    <div class="row thank-you" style="height:400px" ng-if="checkoutModalState == 7">
+                        <p>This is where the paypal checkout will go.</p>
                     </div>
                     <div class="clearfix"></div>
                 </div>
