@@ -185,6 +185,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     $rootScope.$on('$stateChangeStart',
         function (event) {
             $rootScope.app.layout.isMinimalAdminChrome =  false;
+            $rootScope.app.layout.isSidebarClosed = vm.uiState.isSidebarClosed;
         }
     );
 
@@ -497,13 +498,13 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     }
 
     function pageResize(e) {
-        console.log($(this).width() + 70);
-        console.log($(this).innerWidth() + 70);
-        if (($(this).innerWidth() + 70) > 767) {
+
+        if ($('body').innerWidth() > 767) {
             vm.uiState.sidebarOrientation = 'vertical';
         } else {
             vm.uiState.sidebarOrientation = 'horizontal';
         }
+
     }
 
 
@@ -521,6 +522,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         setupBreakpoints();
 
         vm.uiState.isSidebarClosed = $rootScope.app.layout.isSidebarClosed;
+        $rootScope.app.layout.isSidebarClosed = true;
         $rootScope.app.layout.isMinimalAdminChrome = true;
 
         vm.uiStateOriginal = angular.copy(vm.uiState);
