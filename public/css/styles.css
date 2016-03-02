@@ -1278,7 +1278,7 @@ ul.nav {
   max-width: 500px;
   text-align: center;
 }
-.navigation-v2 .navbar .navbar-brand img {
+.navigation-v2 .navbar .navbar-brand img:not(.fr-dii) {
   margin: 0 auto;
   display: block;
 }
