@@ -33,9 +33,18 @@ app.directive("elem", function($timeout, $compile) {
         $timeout(function() {
           scope.$apply(function() {
             ngModel.$setViewValue(editor.html.get());
+
+            scope.compileButtons(editor.html.get());
+
           });
         }, 0);
       };
+
+        scope.compileButtons = function(html) {
+            var $html = $('<div id="temp-wrapper">' + html + '</div>');
+            var btns = $html.find('.ssb-theme-btn');
+            console.log('btns', btns);
+        };
 
       var elem = angular.element(element[0].querySelector('.editable'))[0];
 
