@@ -94,7 +94,7 @@ function ssbSiteBuilderEditControlController($scope, $attrs, $filter, $timeout, 
     function setActiveSection(index) {
 
         var section = vm.state.page.sections[index];
-        var name = $filter('cleanType')(section.title).toLowerCase().trim().replace(' ', '-');
+        var name = $filter('cleanType')(section.title || section.name).toLowerCase().trim().replace(' ', '-');
 
         SimpleSiteBuilderService.setActiveSection(index);
         SimpleSiteBuilderService.setActiveComponent(undefined);

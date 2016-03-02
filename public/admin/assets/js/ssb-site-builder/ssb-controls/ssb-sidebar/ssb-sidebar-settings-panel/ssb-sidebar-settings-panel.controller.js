@@ -15,6 +15,7 @@ function ssbSiteBuilderSidebarSettingsPanelController($scope, $attrs, $filter, $
     //get functions from ssb-sidebar.controller.js
     var pVm = $scope.$parent.vm;
     vm.addBackground = pVm.addBackground;
+    vm.addBackgroundVideo = pVm.addBackgroundVideo;
     vm.addImage = pVm.addImage;
     vm.openModal = pVm.openModal;
     vm.setActiveComponent = pVm.setActiveComponent;
@@ -28,6 +29,7 @@ function ssbSiteBuilderSidebarSettingsPanelController($scope, $attrs, $filter, $
     vm.enabledPlatformSections = pVm.enabledPlatformSections;
     vm.customerTags = pVm.customerTags;
     vm.addSectionToPage = pVm.addSectionToPage;
+    vm.constructVideoUrl = pVm.constructVideoUrl;
 
     vm.tagToCustomer = tagToCustomer;
     vm.setTags = setTags;
@@ -157,7 +159,7 @@ function ssbSiteBuilderSidebarSettingsPanelController($scope, $attrs, $filter, $
         vm.customerTags = _.uniq(_customerTags, function(c) { return c.label; })
     }
 
-    function resizeWindow(){        
+    function resizeWindow(){
       $(window).trigger('resize');
     }
 

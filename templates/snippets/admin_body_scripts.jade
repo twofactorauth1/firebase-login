@@ -200,6 +200,11 @@ script(src="/admin/assets/js/dashboard/dashboard-workstream-tile/dashboard-works
 //Indi Login Modal
 script(src="assets/js/indi-login-modal/indi-login-modal.component.js")
 
+script.
+    var tag = document.createElement('script');
+    tag.src = "https://www.youtube.com/iframe_api";
+    var firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
 if environment === 'local'
     script(type="text/javascript").
