@@ -163,7 +163,14 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 } else {
                     scope.account = account;
                     scope.paypalInfo = null;
+                    scope.stripeInfo = null;
 
+                    scope.account.credentials.forEach(function(cred, index) {
+                        if (cred.type == 'stripe') {
+                            scope.stripeInfo = cred;
+                        }
+                    });
+                    console.log('Stripe?', scope.stripeInfo);
                     console.log('commerceSettings ', account.commerceSettings);
                     scope.settings = account.commerceSettings;
                     if(scope.settings) {
@@ -324,10 +331,12 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 if (scope.emptyFirstName || scope.emptyLastName || scope.emptyEmail || scope.emptyAddress || scope.emptyState || scope.emptyCity || scope.invalidZipCode || scope.emptyZipCode || scope.invalidEmail || scope.invalidPhone) {
                     return;
                 }
-                if (scope.paypalInfo) {
+                if (scope.paypalInfo && scope.stripeInfo) {
                     scope.checkoutModalState = 6;
-                } else {
+                } else if (scope.stripeInfo){
                     scope.checkoutModalState = 3;
+                } else {
+                    scope.checkoutModalState = 7;
                 }
             };
 
@@ -587,7 +596,8 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
              */
 
             scope.paypalPayment = function() {
-
+                scope.failedOrderMessage = "";
+                scope.checkoutModalState = 7;
             }
 
             scope.makeCartPayment = function () {
