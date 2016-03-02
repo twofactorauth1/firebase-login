@@ -70,6 +70,7 @@ _.extend(api.prototype, baseApi.prototype, {
      */
     createPaypalOrder: function(req, resp) {
         var self = this;
+        var fullUrl = req.protocol + '://' + req.get('host') + req.path;
         self.log.debug('>> createPaypalOrder');
 
         var order = new $$.m.Order(req.body);
@@ -80,12 +81,12 @@ _.extend(api.prototype, baseApi.prototype, {
         if(order.get('cancelUrl')) {
             cancelUrl = order.get('cancelUrl');
         } else {
-            //TODO:get it from the referrer
+            cancelUrl = fullUrl + '?state=6';
         }
         if(order.get('returnUrl')) {
             returnUrl = order.get('returnUrl');
         } else {
-            //TODO: get it from the referrer
+            cancelUrl = fullUrl + '?state=5';
         }
         var cancelUrl = null;
         var returnUrl = null;

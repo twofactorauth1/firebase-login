@@ -1,6 +1,6 @@
 'use strict';
 /*global app*/
-app.directive('productsComponent', ['$timeout', 'paymentService', 'productService', 'accountService', 'CartDetailsService', 'userService', 'orderService', 'formValidations', 'ipCookie', function ($timeout, PaymentService, ProductService, AccountService, CartDetailsService, UserService, OrderService, formValidations, ipCookie) {
+app.directive('productsComponent', ['$timeout', 'paymentService', 'productService', 'accountService', 'CartDetailsService', 'userService', 'orderService', 'formValidations', 'ipCookie', '$routeParams', function ($timeout, PaymentService, ProductService, AccountService, CartDetailsService, UserService, OrderService, formValidations, ipCookie, $routeParams) {
   return {
     require: [],
     scope: {
@@ -1017,6 +1017,10 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
            if (cookieData.contactInfo) {
                scope.newContact = cookieData.contactInfo;
            };
+
+           if ($routeParams.state) {
+             scope.checkoutModalState = parseInt($routeParams.state);
+           }
        };
 
        scope.cookieUpdateContactFn = function() {
