@@ -1188,16 +1188,46 @@ module.exports = {
                                     }
                                 });
                                 self.log.debug('exists: ' , exists);
-                                if(!exists.length){
-                                   sections.push(gsection);
+                                if(!exists.length){                                    
+                                    var globalSection = {_id: gsection.get("_id")};
+                                    var sectionIds = sections.map(function(sec) { return sec._id});                                    
+                                    var query = {
+                                        accountId:accountId,
+                                        _id: { $in: sectionIds},
+                                        name: 'Footer'
+                                    };
+                                    sectionDao.findOne(query, $$.m.ssb.Section, function(err, footerSection){
+                                        if(err) {
+                                            self.log.error('Error finding global footer:', err);
+                                            cb(err);
+                                        } else { 
+                                            if(footerSection){
+                                                var filteredFooter = _.findWhere(sections, {
+                                                    _id: footerSection.get("_id")
+                                                });
+                                              
+                                                if(filteredFooter){
+                                                    var footerIndex = _.indexOf(sections, filteredFooter);
+                                                    self.log.debug('footerIndex: ' , footerIndex);
+                                                    self.log.debug('globalSection: ' , globalSection);
+                                                    sections.splice(footerIndex, 0, globalSection);
+                                                }
+                                                else
+                                                    sections.push(globalSection);
+                                                }
+                                            else
+                                                sections.push(globalSection);
+                                        }
+                                    });
                                 }
                                 _page.set("sections", sections);
+                                
                             }
                         })
                     }
                 })
-                if(_update){
-                   pageDao.batchUpdate(pages, $$.m.ssb.Page, function(err, value){
+                if(_update){                   
+                    pageDao.batchUpdate(pages, $$.m.ssb.Page, function(err, value){
                         if (err) {
                             self.log.error('Error updating page: ' + err);
                             cb(err);
@@ -1207,9 +1237,7 @@ module.exports = {
                     }); 
                 }
                 else
-                    cb(null, updatedPage, updatedSections);        
-                
-                
+                    cb(null, updatedPage, updatedSections);
             },
         ], function done(err, updatedPage, updatedSections){
             if(updatedPage) {
