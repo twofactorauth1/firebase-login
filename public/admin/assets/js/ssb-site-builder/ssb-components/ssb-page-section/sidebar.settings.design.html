@@ -92,12 +92,12 @@
 </div>
 <div class="row padding-10">
     <div class="col-xs-12">
-        <div class="form-group" ng-show="component.bg.img.show" ng-if="component.type != 'navigation'">
+        <div class="form-group" ng-show="component.bg.img.show || component.bg.video.show">
             <label for="bg_blur">Blur BG</label>
             <span tooltip-placement="top" tooltip-html-unsafe="Add/remove blur effect to background image."><i class="fa fa-info-circle" /></span>
             <switch ng-model="component.bg.img.blur" class="pull-right"></switch>
         </div>
-        <div class="form-group" ng-if="component.type != 'navigation'" ng-show="component.bg.img.show">
+        <div class="form-group" ng-show="component.bg.img.show && !component.bg.video.show">
             <label for="bg_parallax" ng-if="component.type != 'navigation'">Parallax:</label>
             <span tooltip-placement="top" tooltip-html-unsafe="Add/remove Parallax to background image."><i class="fa fa-info-circle" /></span>
             <switch ng-model="component.bg.img.parallax" class="pull-right"></switch>
@@ -113,12 +113,12 @@
             <switch ng-model="component.bg.img.fullscreen" class="pull-right"></switch>
         </div>
         <!-- <hr ng-show="component.bg.img.show"></hr> -->
-        <div class="form-group" ng-if="component.type != 'navigation'" ng-show="component.bg.img.show">
+        <div class="form-group" ng-show="component.bg.img.show || component.bg.video.show">
             <label for="bg_overlay">Add Overlay</label>
             <span tooltip-placement="top" tooltip-html-unsafe="Add/remove Overlay to background image."><i class="fa fa-info-circle" /></span>
             <switch ng-model="component.bg.img.overlay" class="pull-right"></switch>
         </div>
-        <div class="form-group" ng-if="component.type != 'navigation'" ng-show="component.bg.img.show && component.bg.img.overlay">
+        <div class="form-group" ng-show="(component.bg.img.show || component.bg.video.show) && component.bg.img.overlay">
             <label for="bg_overlay_color">Overlay Color</label>
             <span tooltip-placement="top" tooltip-html-unsafe="Add color to Overlay effect."><i class="fa fa-info-circle" /></span>
             <div class="pull-right">
@@ -126,7 +126,7 @@
                 <spectrum-colorpicker format="rgba" options="vm.spectrum.options" class="pull-right" ng-model="component.bg.img.overlaycolor"></spectrum-colorpicker>
             </div>
         </div>
-        <div ng-if="component.type != 'navigation'" ng-show="component.bg.img.overlay && component.bg.img.show">
+        <div ng-show="(component.bg.img.show || component.bg.video.show) && component.bg.img.overlay">
             <div class="row">
                 <div class="col-xs-12">
                     <label for="bg_overlay_opacity">Overlay Opacity</label>
