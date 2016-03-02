@@ -1091,9 +1091,9 @@
         _modal.resolve.clickedIndex = function () {
           return index;
         };
-        if($scope.page)
+        
           _modal.resolve.pageHandle = function () {
-            return $scope.page.handle;
+             return $scope.page ? $scope.page.handle : null;
           };
       }
 
