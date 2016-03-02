@@ -680,7 +680,8 @@
           }
         });
 
-        pagedformattedTopPages = formattedTopPages.slice(0, 15);
+        //pagedformattedTopPages = formattedTopPages.slice(0, 15);  // don't bother shortening list (UI does)
+        pagedformattedTopPages = formattedTopPages;
         reportData.formattedTopPages = formattedTopPages;
         reportData.pagedformattedTopPages = pagedformattedTopPages;
         fn(reportData);
