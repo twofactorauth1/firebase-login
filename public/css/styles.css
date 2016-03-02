@@ -2484,12 +2484,12 @@ div[data-type="feature-block"] .component-inner {
 .masthead-v1 .masthead-title h1 {
   font-size: 45px;
 }
-.masthead-v1 .btn {
+.masthead-v1 .btn:not(.ssb-theme-btn) {
   height: 50px;
   max-width: 200px;
   display: block;
 }
-.masthead-v1 .btn .fa {
+.masthead-v1 .btn:not(.ssb-theme-btn) .fa {
   float: left;
   margin-right: 10px;
   margin-top: 2px;

@@ -2487,12 +2487,12 @@
 #componentloader .masthead-v1 .masthead-title h1 {
   font-size: 45px;
 }
-#componentloader .masthead-v1 .btn {
+#componentloader .masthead-v1 .btn:not(.ssb-theme-btn) {
   height: 50px;
   max-width: 200px;
   display: block;
 }
-#componentloader .masthead-v1 .btn .fa {
+#componentloader .masthead-v1 .btn:not(.ssb-theme-btn) .fa {
   float: left;
   margin-right: 10px;
   margin-top: 2px;
