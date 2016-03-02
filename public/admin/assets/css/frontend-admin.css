@@ -7489,6 +7489,12 @@ ssb-topbar .ui-select-match-text > small {
   background-position: 50% 0px;
   background-repeat: no-repeat;
 }
+.ssb-section-layout .bg-video {
+  width: 100vw;
+  height: 56.25vw;
+  margin: 0 auto;
+  pointer-events: none;
+}
 .ssb-section-layout .blur-image {
   -webkit-filter: blur(5px);
   -moz-filter: blur(5px);
@@ -7508,6 +7514,9 @@ ssb-topbar .ui-select-match-text > small {
 }
 .ssb-page-section-layout-overflow-visible {
   overflow: visible;
+}
+.ssb-page-section-layout-video-bg {
+  height: 56.25vw;
 }
 [class*="ssb-theme-"] {
   /*
@@ -7791,16 +7800,23 @@ ssb-topbar #ssb-froala-scrollable-container {
     border-bottom: 0;
   }
 }
+@media (min-width: 1330px) {
+  ssb-topbar #ssb-froala-scrollable-container {
+    width: calc(100% - (16.66666667% + 75px + 15px + 15px + 3px) - (16.66666667% + 15px + 15px + 1px));
+    left: calc(16.66666667% + 75px + 15px + 15px + 3px);
+  }
+}
+.fr-popup.fr-desktop.fr-inline,
 .fr-toolbar.fr-inline.fr-desktop {
   transition: opacity 0.25s ease-in-out;
-  max-width: 300px;
+  max-width: 330px;
 }
 @media (min-width: 1280px) {
+  .fr-popup.fr-desktop.fr-inline,
   .fr-toolbar.fr-inline.fr-desktop {
     pointer-events: none;
-    border: 0;
-    box-shadow: none;
-    height: 60px;
+    border: 0 none!important;
+    box-shadow: none!important;
     position: relative!important;
     top: 0!important;
     left: 0!important;
@@ -7810,7 +7826,20 @@ ssb-topbar #ssb-froala-scrollable-container {
 }
 @media (min-width: 1280px) {
   .fr-popup.fr-desktop.fr-inline {
-    position: fixed;
+    text-align: center;
+  }
+  .fr-popup.fr-desktop.fr-inline:before {
+    content: "";
+    display: inline-block;
+    vertical-align: middle;
+    height: 100%;
+  }
+  .fr-popup.fr-desktop.fr-inline .fr-buttons {
+    position: relative;
+    display: inline-block;
+    box-shadow: none;
+    vertical-align: middle;
+    text-align: center;
   }
 }
 .fr-wrapper.show-placeholder .fr-placeholder {
@@ -7844,9 +7873,6 @@ ssb-topbar #ssb-froala-scrollable-container {
  * Style the first instance to use as a "disabled" state
  */
 @media (min-width: 1280px) {
-  .fr-toolbar.fr-inline.fr-desktop.ssb-froala-first-editor {
-    display: inline-block !important;
-  }
   .fr-toolbar.fr-inline.fr-desktop.ssb-froala-first-editor button {
     opacity: .5;
   }
@@ -7872,10 +7898,55 @@ ssb-topbar #ssb-froala-scrollable-container {
   }
 }
 @media (min-width: 1280px) {
+  .fr-popup.fr-inline.fr-desktop.fr-active {
+    z-index: 5;
+    pointer-events: auto!important;
+    display: inline-block !important;
+  }
+}
+@media (min-width: 1280px) {
   .fr-popup .fr-arrow,
   .fr-toolbar .fr-arrow {
     opacity: 0!important;
   }
+  .fr-popup .fr-input-line,
+  .fr-popup .fr-action-buttons {
+    display: inline-block !important;
+    margin: 0 1em;
+  }
+  .fr-popup .fr-input-line {
+    padding: 0!important;
+  }
+  body[ng-controller] .fr-popup .fr-input-line input[type="text"]:focus {
+    color: #808080!important;
+  }
+  body[ng-controller] .fr-popup .fr-active.fr-layer {
+    margin: 0!important;
+    display: block;
+    width: auto!important;
+    margin: 0 auto!important;
+  }
+  body[ng-controller] .fr-popup .fr-input-line input.fr-not-empty + span,
+  body[ng-controller] .fr-popup .fr-input-line textarea.fr-not-empty + span {
+    color: #808080!important;
+    line-height: 0;
+  }
+}
+body[ng-controller] .fr-popup .fr-input-line input.fr-not-empty + span,
+body[ng-controller] .fr-popup .fr-input-line textarea.fr-not-empty + span {
+  line-height: 1;
+}
+body[ng-controller] .fr-popup .fr-input-line input[type="text"] {
+  padding: 1em;
+}
+body[ng-controller] .fr-popup .fr-action-buttons button.fr-command {
+  height: 2.5em;
+}
+body[ng-controller] .fr-image-progress-bar-layer > h3 {
+  color: inherit;
+}
+body[ng-controller] .fr-popup .fr-buttons {
+  white-space: normal;
 }
 /*
  * Code auto-generated from https://www.froala.com/wysiwyg-editor/customize
@@ -8191,6 +8262,7 @@ body[ng-controller] .fr-popup .fr-layer {
   }
 }
 body[ng-controller] .fr-popup .fr-action-buttons button.fr-command {
+  background: #47B8D9;
   color: #ffffff;
   -webkit-transition: background 0.2s ease 0s;
   -moz-transition: background 0.2s ease 0s;
@@ -8271,8 +8343,11 @@ body[ng-controller] .fr-toolbar.fr-inline.fr-desktop.fr-above {
   box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.12), 0 -1px 2px rgba(0, 0, 0, 0.24);
 }
 body[ng-controller] .fr-toolbar.fr-inline.fr-desktop.fr-above .fr-arrow {
-  bottom: -9px;
+  bottom: -15px;
   border-top-width: 5px;
+  top: auto;
+  border-top-color: black;
+  border-bottom-color: transparent;
 }
 body[ng-controller] .fr-toolbar.fr-top {
   border-radius: 2px 2px 0 0;

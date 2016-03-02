@@ -26,6 +26,10 @@
             background-size: cover;'>
     </div>
 
+    <div ng-show="vm.section.bg.video.show && vm.section.bg.video.urlProcessed" class="bg bg-video">
+        <div id="section_video_{{vm.section._id}}"></div>
+    </div>
+
     <div ng-if="vm.section.bg.img.show && vm.section.bg.img.overlay" class="bg bg-overlay"></div>
 
     <ssb-component-loader

@@ -63,7 +63,7 @@ app.directive("elem", function($timeout, $compile) {
               }).on('froalaEditor.image.resizeEnd', function(e, editor, $img) {
                 scope.updateFroalaContent(editor);
               }).on('froalaEditor.toolbar.show', function(e, editor) {
-
+                console.log('toolbar show')
                 //move toolbar to highest z-index
                 editor.$tb.addClass('ssb-froala-active-editor');
 
@@ -71,13 +71,22 @@ app.directive("elem", function($timeout, $compile) {
                 $('.ssb-site-builder .ssb-edit-control').addClass('hide-edit-control');
 
               }).on('froalaEditor.toolbar.hide', function(e, editor) {
-
+                console.log('toolbar hide')
                 $('.ssb-site-builder .ssb-edit-control').removeClass('hide-edit-control');
 
                 //topbar positioning
                 editor.$tb.removeClass('ssb-froala-active-editor');
 
+              }).on('froalaEditor.popups.hide.image.insert', function(e, editor) {
+                console.log('froalaEditor.popups.hide.image.insert');
+              }).on('froalaEditor.popups.hide.image.edit', function(e, editor) {
+                console.log('froalaEditor.popups.hide.image.edit');
+              }).on('froalaEditor.popups.hide.image.alt', function(e, editor) {
+                console.log('froalaEditor.popups.hide.image.alt');
+              }).on('froalaEditor.popups.hide.image.size', function (e, editor) {
+                console.log('froalaEditor.popups.hide.image.size');
               });
+
           }, 1000);
         });
       } else {

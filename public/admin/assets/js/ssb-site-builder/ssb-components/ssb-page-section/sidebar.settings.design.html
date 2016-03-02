@@ -15,7 +15,6 @@
             <span tooltip-placement="top" tooltip-html-unsafe="show/hide background image of component."><i class="fa fa-info-circle" /></span>
             <switch ng-model="component.bg.img.show" class="pull-right"></switch>
             <br>
-            <!-- <small>Please select an image of 1280 x 400px minimum to prevent blurriness</small> -->
         </div>
         <div class="form-group add-image" ng-show="component.bg.img.show" ng-if="!component.bg.img.url">
             <div class="btn-wrap">
@@ -50,6 +49,45 @@
                 </label>
             </div>
         </div>
+    </div>
+</div>
+<div class="row padding-10">
+    <div class="col-xs-12">
+        <div class="form-group" ng-if="component.type != 'contact-us' && component.type != 'navigation' && component.type != 'top-bar' && component.type != 'blog'" ng-hide="isEmail">
+            <label class="margin-bottom-0">Show Background Video</label>
+            <span tooltip-placement="top" tooltip-html-unsafe="show/hide background video of component."><i class="fa fa-info-circle" /></span>
+            <switch ng-model="component.bg.video.show" class="pull-right"></switch>
+            <br>
+        </div>
+        <div class="form-group" ng-if="component.bg.video.show">
+            <label for="member-name">Video Type</label>
+            <span tooltip-placement="right" tooltip-html-unsafe="Select video type."><i class="fa fa-info-circle" /></span>
+            <select class="form-control" ng-model="component.bg.video.type">
+                <option selected value="youtube">YouTube</option>
+                <!-- <option value="vimeo">Vimeo</option> -->
+            </select>
+        </div>
+        <div class="form-group" ng-if="component.bg.video.type == 'vimeo' && component.bg.video.show">
+            <label for="video-url-vimeo">Video URL</label>
+            <span tooltip-placement="top" tooltip-html-unsafe="Add video URL."><i class="fa fa-info-circle" /></span>
+            <input
+                id="video-url-vimeo"
+                class="form-control"
+                type="text"
+                ng-model="component.bg.video.url"
+                ng-change="vm.constructVideoUrl(component);"/>
+        </div>
+        <div class="form-group" ng-if="component.bg.video.type == 'youtube' && component.bg.video.show">
+            <label for="video-url-youtube">Video URL</label>
+            <span tooltip-placement="top" tooltip-html-unsafe="Add video URL."><i class="fa fa-info-circle" /></span>
+            <input
+                id="video-url-youtube"
+                class="form-control"
+                type="url"
+                ng-model="component.bg.video.url"
+                ng-change="vm.constructVideoUrl(component);"/>
+        </div>
+        <div class="clearfix margin-bottom-10"></div>
     </div>
 </div>
 <div class="row padding-10">
