@@ -474,6 +474,9 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                       cookieData.products.splice(i, 1);
                   }
               });
+              if (!cookieData.products.length) {
+                cookieData.state = 1;
+              }
               ipCookie(cookieKey, cookieData);
           }
 
