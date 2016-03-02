@@ -1166,49 +1166,114 @@ module.exports = {
             },
             // update existing pages if global sections set as true OR false
             function updateExistingPages(updatedPage, updatedSections, pages, cb){   
-                var _update = false;    
-                _.each(pages, function(_page){
+                var _update = false;  
+                if(pages.length <= 1){
+                    cb(null, updatedPage, updatedSections);
+                }  
+                async.eachSeries(pages, function(_page, p_callback){
                     if(_page.get("_id") !== updatedPage.get("_id")){
-                        _.each(updatedSections, function(gsection){
-                            if(gsection.get("global") === false){
+                        async.each(updatedSections, function(gsection, g_callback){
+                            var g_update = false;
+                            if(gsection.get("global") === false || gsection.get("global") === true){
                                 _update = true;
-                                var sections = _.filter(_page.get("sections"), function(section){                                        
-                                    if(section._id !== gsection.get("_id")) {
-                                       return true;
-                                    }
-                                });
-                                _page.set("sections", sections);
-                            }
-                            if(gsection.get("global") === true){
-                                _update = true;
-                                var sections = _page.get("sections");
-                                var exists = _.filter(sections, function(section){                                        
-                                    if(section._id === gsection.get("_id")) {
-                                       return true;
-                                    }
-                                });
-                                self.log.debug('exists: ' , exists);
-                                if(!exists.length){
-                                   sections.push(gsection);
+                                if(gsection.get("global") === false){                                    
+                                    var sections = _.filter(_page.get("sections"), function(section){                                        
+                                        if(section._id !== gsection.get("_id")) {
+                                           return true;
+                                        }
+                                    });
+                                    _page.set("sections", sections);
                                 }
-                                _page.set("sections", sections);
+                                if(gsection.get("global") === true){ 
+                                    g_update = true;                                  
+                                    var sections = _page.get("sections");
+                                    var exists = _.filter(sections, function(section){                                        
+                                        if(section._id === gsection.get("_id")) {
+                                           return true;
+                                        }
+                                    });
+                                    self.log.debug('exists: ' , exists);
+                                    if(!exists.length){                                    
+                                        var globalSection = {_id: gsection.get("_id")};
+                                        var sectionIds = sections.map(function(sec) { return sec._id});                                    
+                                        var query = {
+                                            accountId:accountId,
+                                            _id: { $in: sectionIds},
+                                            name: 'Footer'
+                                        };
+                                        sectionDao.findOne(query, $$.m.ssb.Section, function(err, footerSection){
+                                            if(err) {
+                                                self.log.error('Error finding global footer:', err);
+                                                cb(err);
+                                            } else { 
+                                                if(footerSection){
+                                                    var filteredFooter = _.findWhere(sections, {
+                                                        _id: footerSection.get("_id")
+                                                    });
+                                                  
+                                                    if(filteredFooter){
+                                                        var footerIndex = _.indexOf(sections, filteredFooter);
+                                                        self.log.debug('footerIndex: ' , footerIndex);
+                                                        self.log.debug('globalSection: ' , globalSection);
+                                                        sections.splice(footerIndex, 0, globalSection);
+                                                    }
+                                                    else
+                                                        sections.push(globalSection);
+                                                    }
+                                                else{
+                                                    sections.push(globalSection);
+                                                }
+                                                _page.set("sections", sections);                                                
+                                                g_callback();
+                                            }
+                                        });
+                                    }
+                                    else{
+                                        _page.set("sections", sections);
+                                        g_callback();
+                                    }
+                                    
+                                }
+                                if(!g_update){
+                                    g_callback();
+                                }
                             }
-                        })
+                            else{
+                                g_callback();
+                            }
+                            
+                        }, function(err){
+
+                            if(err) {
+                                self.log.error("Error getting template's referenced sections:", err);
+                                cb(err);
+                            }
+                            p_callback();
+
+                        });
                     }
-                })
-                if(_update){
-                   pageDao.batchUpdate(pages, $$.m.ssb.Page, function(err, value){
-                        if (err) {
-                            self.log.error('Error updating page: ' + err);
-                            cb(err);
-                        } else {
-                           cb(null, updatedPage, updatedSections);
-                        }
-                    }); 
-                }
-                else
-                    cb(null, updatedPage, updatedSections);        
-                
+                    else{
+                        p_callback();
+                    }
+                }, function(err){
+                    if(err) {
+                        self.log.error("Error getting template's referenced sections:", err);
+                        cb(err);
+                    }
+
+                    if(_update){                   
+                        pageDao.batchUpdate(pages, $$.m.ssb.Page, function(err, value){
+                            if (err) {
+                                self.log.error('Error updating page: ' + err);
+                                cb(err);
+                            } else {
+                               cb(null, updatedPage, updatedSections);
+                            }
+                        }); 
+                    }
+                    else
+                        cb(null, updatedPage, updatedSections);
+                    });
                 
             },
         ], function done(err, updatedPage, updatedSections){
