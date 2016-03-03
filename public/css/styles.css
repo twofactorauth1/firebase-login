@@ -10301,6 +10301,19 @@ a[href="https://froala.com/wysiwyg-editor"] {
 div[class^="spacing-"] input {
   width: 60px;
 }
+.accordion.simple-form-settings {
+  margin-left: -15px;
+  margin-right: -15px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+.accordion.simple-form-settings .accordion-toggle {
+  background: #47B8D9;
+  font-size: inherit;
+}
+.accordion.simple-form-settings .row {
+  border-top: 0px !important;
+}
 .ssb-sidebar {
   background: #131e26;
 }

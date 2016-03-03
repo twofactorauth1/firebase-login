@@ -1,17 +1,150 @@
 <div ng-controller="SSBComponentSettingsModalCtrl" class="container-fluid">
-
-    <div class="row padding-10">
-        <div class="form-group margin-bottom-0">
-            <label><strong>Fields to Show</strong></label>
-            <span tooltip-placement="top" tooltip-html-unsafe="What fields would you like to show?"><i class="fa fa-info-circle" /></span>
-            <div class="clearfix"></div>
-            <div class="ckbox ckbox-success checkbox-inline" ng-repeat="field in component.fields">
-                <input type="checkbox" id="chk_{{field.name}}" ng-model="field.value" checked="checked">
-                <label for="chk_{{field.name}}">{{field.display}}</label>
+    <accordion close-others="oneAtATime" class="accordion simple-form-settings">
+    <accordion-group heading="Form Arrangement">
+        <div class="row padding-10">
+            <div class="form-group margin-bottom-0">
+                <label><strong>Fields to Show</strong></label>
+                <span tooltip-placement="top" tooltip-html-unsafe="What fields would you like to show?"><i class="fa fa-info-circle" /></span>
+                <div class="clearfix"></div>
+                <div class="ckbox ckbox-success checkbox-inline" ng-repeat="field in component.fields">
+                    <input type="checkbox" id="chk_{{field.name}}" ng-model="field.value" checked="checked">
+                    <label for="chk_{{field.name}}">{{field.display}}</label>
+                </div>
+                <div class="clearfix"></div>
             </div>
-            <div class="clearfix"></div>
         </div>
-    </div>
+        <div class="row padding-10">
+            <div class="form-group margin-bottom-0">
+                <label><strong>Fields per row</strong></label>
+                <span tooltip-placement="top" tooltip-html-unsafe="number of fields to show per row. So a value of 1 means that each field takes up a whole row, spanning 100% of the width of the row"><i class="fa fa-info-circle" /></span>
+                <div class="clearfix"></div>
+                <select ng-model="component.formSettings.fieldsPerRow" class="form-control margin-bottom-0">
+                    <option value="">--Select--</option>
+                    <option ng-repeat="num in fieldsCount" value="{{num}}" ng-selected="{{num == component.formSettings.fieldsPerRow}}">{{num}}</option>
+                </select>            
+                <div class="clearfix"></div>
+            </div>
+        </div>
+        <div class="row padding-10">
+                <div class="form-group margin-bottom-0">
+                    <label><strong>Row spacing</strong></label>
+                    <span tooltip-placement="top" tooltip-html-unsafe="top/bottom margin between rows"><i class="fa fa-info-circle" /></span>
+                </div> 
+                <div class="col-xs-6 margin-bottom-10">
+                    <label><strong>Top</strong></label>                
+                </div> 
+                <div class="col-xs-6 pull-right">                
+                    <input type="number" string-to-number ng-model="component.formSettings.spacing.mt"  min="0" max="500" data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down">
+                </div>
+                <div class="clearfix"></div>
+                <div class="col-xs-6">
+                    <label><strong>Bottom</strong></label>                
+                </div> 
+                <div class="col-xs-6 pull-right">
+                    <input type="number" string-to-number ng-model="component.formSettings.spacing.mb"  min="0" max="500" data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down">
+                </div>
+        </div>
+        <div class="row padding-10">
+                <div class="form-group margin-bottom-0">
+                    <label><strong>Column spacing</strong></label>
+                    <span tooltip-placement="top" tooltip-html-unsafe="horizontal space between fields"><i class="fa fa-info-circle" /></span>
+                </div> 
+                <div class="col-xs-6 margin-bottom-10">
+                    <label><strong>Left</strong></label>                
+                </div> 
+                <div class="col-xs-6 pull-right">                
+                    <input type="number" string-to-number ng-model="component.formSettings.spacing.pl" min="0" max="500" data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down">
+                </div>
+                <div class="clearfix"></div>
+                <div class="col-xs-6">
+                    <label><strong>Right</strong></label>                
+                </div> 
+                <div class="col-xs-6 pull-right">
+                    <input type="number" string-to-number ng-model="component.formSettings.spacing.pr"  min="0" max="500" data-verticalbuttons="true" data-verticalupclass="ti-angle-up" data-verticaldownclass="ti-angle-down">
+                </div>
+        </div>
+        <div class="row padding-10">
+            <div class="form-group margin-bottom-0">
+                <label><strong>Field alignment</strong></label>
+                <span tooltip-placement="top" tooltip-html-unsafe="left, center, right"><i class="fa fa-info-circle" /></span>
+                <div class="clearfix"></div>
+                <select ng-model="component.formSettings.align" class="form-control margin-bottom-0">
+                    <option value="">--Select--</option>
+                    <option ng-repeat="option in alignmentOptions" value="{{option}}" ng-selected="{{option == component.formSettings.align}}">{{option}}</option>
+                </select>            
+                <div class="clearfix"></div>
+            </div>
+        </div>
+        <div class="row padding-10">
+            <div class="form-group margin-bottom-0">
+                <label><strong>Button alignment</strong></label>
+                <span tooltip-placement="top" tooltip-html-unsafe="left, center, right"><i class="fa fa-info-circle" /></span>
+                <div class="clearfix"></div>
+                <select ng-model="component.btn.align" class="form-control margin-bottom-0">
+                    <option value="">--Select--</option>
+                    <option ng-repeat="option in alignmentOptions" value="{{option}}" ng-selected="{{option == component.btn.align}}">{{option}}</option>
+                </select>            
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </accordion-group>
+
+    <accordion-group heading="Text">       
+        <div class="row padding-10">
+            <div class="form-group margin-bottom-0">
+                <label><strong>Text Size</strong></label>
+                <span tooltip-placement="top" tooltip-html-unsafe="text size appearing on the form"><i class="fa fa-info-circle" /></span>
+                <div class="clearfix"></div>
+                <select ng-model="component.formSettings.formTextSize" class="form-control margin-bottom-0">
+                    <option value="">--Select--</option>
+                    <option ng-repeat="size in fontSizeOptions" value="{{size}}" ng-selected="{{size == component.formSettings.formTextSize}}">{{size}}</option>
+                </select>            
+                <div class="clearfix"></div>
+            </div>
+        </div>
+        <div class="row padding-10">
+            <div class="form-group margin-bottom-0">
+                <label><strong>Input text size</strong></label>
+                <span tooltip-placement="top" tooltip-html-unsafe="text size appearing on input fields"><i class="fa fa-info-circle" /></span>
+                <div class="clearfix"></div>
+                <select ng-model="component.formSettings.inputTextSize" class="form-control margin-bottom-0">
+                    <option value="">--Select--</option>
+                    <option ng-repeat="size in fontSizeOptions" value="{{size}}" ng-selected="{{size == component.formSettings.inputTextSize}}">{{size}}</option>
+                </select>            
+                <div class="clearfix"></div>
+            </div>
+        </div>
+        <div class="row padding-10">
+            <div class="form-group margin-bottom-0">
+                <label><strong>Font</strong></label>
+                <span tooltip-placement="top" tooltip-html-unsafe="font family for entire form"><i class="fa fa-info-circle" /></span>
+                <div class="clearfix"></div>
+                <select ng-model="component.formSettings.formFontFamily" class="form-control margin-bottom-0">
+                    <option value="">--Select--</option>
+                    <option ng-repeat="(value, key) in fontFamilyOptions" value="{{value}}" ng-selected="{{value == component.formSettings.formFontFamily}}">{{key}}</option>
+                </select>            
+                <div class="clearfix"></div>
+            </div>
+        </div>
+        <div class="row padding-10">
+            <div class="form-group margin-bottom-0">
+                <label><strong>Input text font</strong></label>
+                <span tooltip-placement="top" tooltip-html-unsafe="font family for input fields"><i class="fa fa-info-circle" /></span>
+                <div class="clearfix"></div>
+                <select ng-model="component.formSettings.inputFontFamily" class="form-control margin-bottom-0">
+                    <option value="">--Select--</option>
+                    <option ng-repeat="(value, key) in fontFamilyOptions" value="{{value}}" ng-selected="{{value == component.formSettings.inputFontFamily}}">{{key}}</option>
+                </select>            
+                <div class="clearfix"></div>
+            </div>
+        </div>
+        
+    </accordion-group>
+    <accordion-group heading="Submit settings">
+       
+    </accordion-group>
+</accordion>
+    
     <div class="row padding-10">
         <div class="form-group margin-bottom-0">
             <label><strong>Unique email check:</strong></label>
