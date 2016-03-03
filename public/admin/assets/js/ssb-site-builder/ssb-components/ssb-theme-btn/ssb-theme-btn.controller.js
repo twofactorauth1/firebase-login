@@ -48,8 +48,8 @@ function ssbThemeBtnController($scope, $attrs, $filter, $transclude, $sce, $time
 
         // vm.compile();
 
-        vm.element.on('mouseover', function() {
-            console.log('mouseover');
+        vm.element.on('mouseenter', function() {
+            console.log('mouseenter');
         });
 
         vm.element.on('click', function() {
