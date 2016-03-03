@@ -250,7 +250,7 @@
                                 </div>
                                 <div class="form-group" ng-show="componentEditing.bg.img.show">
                                     <label for="bg_parallax">Parallax:</label>
-                                    <span tooltip-placement="top" tooltip-html-unsafe="Add/remove Parallax to background image."><i class="fa fa-info-circle" /></span>
+                                    <span tooltip-placement="top" tooltip-html-unsafe="Add/remove Parallax (depth-effect) to background image."><i class="fa fa-info-circle" /></span>
                                     <switch ng-model="componentEditing.bg.img.parallax" class="pull-right" ng-change="saveComponent()"></switch>
                                 </div>
                                 <div class="form-group" ng-if="componentEditing.type == 'masthead'" ng-show="componentEditing.bg.img.show">
@@ -302,7 +302,7 @@
                                 <h2 class="blog-title">
                                     <a data-ng-if="blog.post.post_url" href="javascript:void(0)">
                                         <div class="post_title"
-                                             data-ng-if="blog.post.post_title" ng-bind-html="blog.post.post_title">                      
+                                             data-ng-if="blog.post.post_title" ng-bind-html="blog.post.post_title">
                                         </div>
                                     </a>
                                 </h2>

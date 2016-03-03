@@ -165,6 +165,7 @@ ssb-topbar #ssb-froala-scrollable-container {
         z-index: 5;
         pointer-events: auto!important;
         display: inline-block!important;
+        // width: 100%;
         // top: -60px!important;
 
         // left: 50%!important;
@@ -194,7 +195,7 @@ ssb-topbar #ssb-froala-scrollable-container {
 
     body[ng-controller] .fr-popup .fr-input-line input[type="text"]:focus {
         // background: transparent!important;
-        color: #808080!important;
+        // color: #808080!important;
     }
 
     body[ng-controller] .fr-popup .fr-active.fr-layer {
@@ -219,6 +220,11 @@ body[ng-controller] .fr-popup .fr-input-line textarea.fr-not-empty + span {
 body[ng-controller] .fr-popup .fr-input-line input[type="text"] {
     padding: 1em;
 }
+
+body[ng-controller] .fr-popup .fr-input-line textarea {
+    padding-top: 1em;
+}
+
 body[ng-controller] .fr-popup .fr-action-buttons button.fr-command {
     height: 2.5em;
 }
@@ -571,6 +577,7 @@ body[ng-controller] .fr-popup .fr-input-line textarea {
 body[ng-controller] .fr-popup .fr-input-line input[type="text"]:focus,
 body[ng-controller] .fr-popup .fr-input-line textarea:focus {
   border-bottom: solid 2px #ffffff;
+  background-color: inherit!important;
 }
 body[ng-controller] .fr-popup .fr-input-line input + span,
 body[ng-controller] .fr-popup .fr-input-line textarea + span {

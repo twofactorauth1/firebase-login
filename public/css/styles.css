@@ -1278,7 +1278,7 @@ ul.nav {
   max-width: 500px;
   text-align: center;
 }
-.navigation-v2 .navbar .navbar-brand img {
+.navigation-v2 .navbar .navbar-brand img:not(.fr-dii) {
   margin: 0 auto;
   display: block;
 }
@@ -2484,12 +2484,12 @@ div[data-type="feature-block"] .component-inner {
 .masthead-v1 .masthead-title h1 {
   font-size: 45px;
 }
-.masthead-v1 .btn {
+.masthead-v1 .btn:not(.ssb-theme-btn) {
   height: 50px;
   max-width: 200px;
   display: block;
 }
-.masthead-v1 .btn .fa {
+.masthead-v1 .btn:not(.ssb-theme-btn) .fa {
   float: left;
   margin-right: 10px;
   margin-top: 2px;
@@ -9834,7 +9834,7 @@ Social Icons
 }
 .social-icons ul li.social-paypal a:before,
 .social-icons ul li.social-paypal a:after {
-  content: "\f1ee";
+  content: "\f1ed";
 }
 .social-icons ul li.social-paypal a:after {
   background: #003087;
@@ -11491,9 +11491,6 @@ ssb-topbar #ssb-froala-scrollable-container {
   .fr-popup .fr-input-line {
     padding: 0!important;
   }
-  body[ng-controller] .fr-popup .fr-input-line input[type="text"]:focus {
-    color: #808080!important;
-  }
   body[ng-controller] .fr-popup .fr-active.fr-layer {
     margin: 0!important;
     display: block;
@@ -11512,6 +11509,9 @@ body[ng-controller] .fr-popup .fr-input-line textarea.fr-not-empty + span {
 }
 body[ng-controller] .fr-popup .fr-input-line input[type="text"] {
   padding: 1em;
+}
+body[ng-controller] .fr-popup .fr-input-line textarea {
+  padding-top: 1em;
 }
 body[ng-controller] .fr-popup .fr-action-buttons button.fr-command {
   height: 2.5em;
@@ -11804,6 +11804,7 @@ body[ng-controller] .fr-popup .fr-input-line textarea {
 body[ng-controller] .fr-popup .fr-input-line input[type="text"]:focus,
 body[ng-controller] .fr-popup .fr-input-line textarea:focus {
   border-bottom: solid 2px #ffffff;
+  background-color: inherit!important;
 }
 body[ng-controller] .fr-popup .fr-input-line input + span,
 body[ng-controller] .fr-popup .fr-input-line textarea + span {

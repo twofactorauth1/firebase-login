@@ -70,7 +70,7 @@ if account.accountUrl == 'https://main.indigenous.io'
         }());
 
     script(src="//fast.wistia.net/assets/external/E-v1.js" async).
-    
+
     script(type='text/javascript').
       (function() {
       window._pa = window._pa || {};
@@ -110,6 +110,11 @@ if account._id == 37
            if(oldonload){oldonload()}};
         }());
 
+script.
+    var tag = document.createElement('script');
+    tag.src = "https://www.youtube.com/iframe_api";
+    var firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
 if includeEditor
     include _aloha_editor
