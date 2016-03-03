@@ -4,13 +4,13 @@
         <span class="message"></span>
     </div>
     <div>
-        <div class="col-xs-12 component-body">
+        <div class="col-xs-12 component-body" ng-class="{'default-font-size': component.formSettings.formTextSize}" style="{{formStyle(component.formSettings)}}">
             <div ng-if="!component.isModal">
                 <div class="inner-page row">
-                    <div style="{{formStyle(component.formSettings)}}" class="simple-form-title ssb-theme-heading-text">
+                    <div class="simple-form-title ssb-theme-heading-text">
                         <div elem ng-model="component.maintitle"></div>
                     </div>
-                    <div style="{{formStyle(component.formSettings)}}" class="simple-form-subtitle">
+                    <div class="simple-form-subtitle">
                         <div elem ng-model="component.subtitle"></div>
                     </div>
                     <div class="clearfix mb15"></div>
@@ -129,6 +129,10 @@
     }
     ;
 }
+.simple-form-v1 .component-body.default-font-size * {
+    font-size: {{component.formSettings.formTextSize}}px;
+}
+
 .btn-simple-form:hover, .btn-simple-form:active, .btn-simple-form:active:focus, .btn-simple-form:active:hover
 {
     color: {{component.btn.color}}!important

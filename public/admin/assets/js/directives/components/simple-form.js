@@ -70,13 +70,13 @@ app.directive('simpleFormComponent',["formValidations", function (formValidation
       scope.inputStyle = function(field){
         var styleString = ' ';
         if (field && field.align) {
-            styleString += 'text-align: ' + field.align;         
+            styleString += 'text-align: ' + field.align + ";";         
         }
         if (field && field.inputTextSize) {
           styleString += 'font-size: ' + field.inputTextSize  + 'px;';
         }
         if (field && field.inputFontFamily) {
-          styleString += 'font-family: ' + field.inputFontFamily;
+          styleString += 'font-family: ' + field.inputFontFamily + ";";
         }
         return styleString;
       };
@@ -88,7 +88,7 @@ app.directive('simpleFormComponent',["formValidations", function (formValidation
         }
         if (btn && btn.align) {           
             if(btn.align === 'left' || btn.align === 'right')
-              styleString += 'float: ' + btn.align;
+              styleString += 'float: ' + btn.align + ";";
             
             if(btn.align === 'center'){
               styleString += 'margin: 0 auto;';
@@ -98,16 +98,12 @@ app.directive('simpleFormComponent',["formValidations", function (formValidation
       };
 
       scope.formStyle = function(form){ 
-        var styleString = '';
-        if (form && form.formTextSize) {
-          styleString += 'font-size: ' + form.formTextSize + 'px;';
-        }
+        var styleString = '';        
         if (form && form.formFontFamily) {
           styleString += 'font-family: ' + form.formFontFamily;
         }
         return styleString;
       };
-
     }
   };
 }]);
