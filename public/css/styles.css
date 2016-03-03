@@ -3829,7 +3829,7 @@ div[data-type=blog] .container {
   font-size: 28px;
 }
 .editing.image-wrap:hover .image-gallery {
-  min-height: 246px;
+  min-height: 196px;
 }
 .editing.image-wrap:hover .delete-single-image .btn-delete-single-image {
   background: rgba(0, 0, 0, 0.5);
@@ -3909,7 +3909,7 @@ div[data-type=blog] .container {
   position: relative;
   float: left;
   width: 100%;
-  min-height: 250px;
+  min-height: 200px;
   background-position: 50% 50%;
   background-repeat: no-repeat;
   background-size: cover;
