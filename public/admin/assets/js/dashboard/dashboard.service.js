@@ -185,12 +185,12 @@
         function getAnalytics() {
 
             function success(data) {
-                console.log('DashboardService getAnalytics: ', data);
+                console.log('DashboardService getAnalytics: ', JSON.stringify(data));
                 dashboardService.state.analytics = data;
             }
 
             function error(error) {
-                console.error('DashboardService getAnalytics error: ' + error);
+                console.error('DashboardService getAnalytics error: ', JSON.stringify(error));
             }
 
             return dashRequest($http.get(baseAnalyticsAPIUrl).success(success).error(error));
@@ -200,7 +200,7 @@
         function getAccount(account) {
 
             function success(data) {
-                console.info('DashboardService getAccount:', data);
+                console.info('DashboardService getAccount:', JSON.stringify(data));
                 dashboardService.state.account = data;
             }
 
