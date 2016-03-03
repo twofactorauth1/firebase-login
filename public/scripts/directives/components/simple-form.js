@@ -29,6 +29,14 @@ app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userSe
         return classString;
       };
 
+      scope.fieldClass = function(field){
+        var classString = ' ';
+        if(scope.component.formSettings && scope.component.formSettings.fieldsPerRow){
+          classString = "col-sm-" + Math.floor(12/scope.component.formSettings.fieldsPerRow);
+        }
+        return classString;
+      };
+
       scope.fieldShow = function (name) {
         var field = _.find(scope.component.fields, function (_field) {
           return _field.name === name;
@@ -59,7 +67,6 @@ app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userSe
             if (field.spacing.pr) {
                 styleString += 'padding-right: ' + field.spacing.pr + 'px !important;';
             }
-            
         }
         return styleString;
       };
@@ -67,13 +74,13 @@ app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userSe
       scope.inputStyle = function(field){
         var styleString = ' ';
         if (field && field.align) {
-            styleString += 'text-align: ' + field.align;         
+            styleString += 'text-align: ' + field.align + ";";         
         }
         if (field && field.inputTextSize) {
           styleString += 'font-size: ' + field.inputTextSize  + 'px;';
         }
         if (field && field.inputFontFamily) {
-          styleString += 'font-family: ' + field.inputFontFamily;
+          styleString += 'font-family: ' + field.inputFontFamily + ";";
         }
         return styleString;
       };
@@ -85,7 +92,7 @@ app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userSe
         }
         if (btn && btn.align) {           
             if(btn.align === 'left' || btn.align === 'right')
-              styleString += 'float: ' + btn.align;
+              styleString += 'float: ' + btn.align + ";";
             
             if(btn.align === 'center'){
               styleString += 'margin: 0 auto;';
@@ -95,10 +102,7 @@ app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userSe
       };
 
       scope.formStyle = function(form){ 
-        var styleString = '';
-        if (form && form.formTextSize) {
-          styleString += 'font-size: ' + form.formTextSize + 'px;';
-        }
+        var styleString = '';        
         if (form && form.formFontFamily) {
           styleString += 'font-family: ' + form.formFontFamily;
         }
