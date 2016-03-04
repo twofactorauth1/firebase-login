@@ -605,17 +605,6 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                     scope.checkoutModalState = 2;
                     return;
                 }
-                if (contact) {
-                    cardInput.name = contact.first + ' ' + contact.last;
-                    cardInput.address_line1 = contact.details[0].addresses[0].address;
-                    cardInput.address_city = contact.details[0].addresses[0].city;
-                    cardInput.address_state = contact.details[0].addresses[0].state;
-                    cardInput.address_zip = contact.details[0].addresses[0].zip;
-                    cardInput.address_country = contact.details[0].addresses[0].country || 'US';
-                    if (contact.details[0].addresses[0].address2) {
-                        cardInput.address_line2 = contact.details[0].addresses[0].address2;
-                    }
-                }
 
                 scope.initializeModalEvents();
                 var phone_number = '';
