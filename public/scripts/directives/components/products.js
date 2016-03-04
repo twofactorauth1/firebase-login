@@ -171,7 +171,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                     console.log('commerceSettings ', account.commerceSettings);
                     scope.settings = account.commerceSettings;
                     if (scope.settings) {
-                        scope.paypalInfo = scope.settings.paypalAddress;
+                        scope.paypalInfo = scope.settings.paypal;
                         if (scope.settings.taxes && scope.settings.taxbased === 'business_location') {
                             if (account.business.addresses && account.business.addresses.length > 0 && account.business.addresses[0].zip) {
                                 console.log('getting tax ', account.business.addresses[0].zip);
@@ -1036,6 +1036,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
 
                 if ($routeParams.state) {
                     scope.checkoutModalState = parseInt($routeParams.state);
+                    $('#cart-checkout-modal').modal('show');
                 }
             };
 
