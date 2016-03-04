@@ -995,7 +995,8 @@ module.exports = {
                 if(commerceSettings && commerceSettings.paypalAddress) {
                     var receiverEmail = commerceSettings.paypalAddress;
                     var amount = savedOrder.total;
-                    var memo = null; //TODO: get from the order
+                    var orderID = savedOrder.get('order_id');
+                    var memo = "Order #" + orderID + " for " + account.get('business').name;
                     paymentManager.payWithPaypal(receiverEmail, amount, memo, cancelUrl, returnUrl, function(err, value){
                         if (err) {
                             log.error('Error creating paypal pay key: ' + err);
