@@ -991,7 +991,7 @@ module.exports = {
             },
             //get pay key from Paypal
             function getPaypalPayKey(account, savedOrder, contact, productAry, callback) {
-                var receiverEmail = account.commerceSettings.paypalAddress;
+                var receiverEmail = account.attributes.commerceSettings.paypalAddress;
                 var amount = savedOrder.total;
                 var memo = 'trytomakeapayment';
                 paymentManager.payWithPaypal(receiverEmail, amount, memo, cancelUrl, returnUrl, function(err, value){
