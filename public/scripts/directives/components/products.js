@@ -726,6 +726,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                     }
                     console.log('order, ', order);
                     scope.checkoutModalState = 7;
+                    scope.paypalKey = data.payment_details.payKey;
                     CartDetailsService.items = [];
 
 
