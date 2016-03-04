@@ -994,7 +994,7 @@ module.exports = {
                 var commerceSettings = account.get('commerceSettings');
                 if(commerceSettings && commerceSettings.paypalAddress) {
                     var receiverEmail = commerceSettings.paypalAddress;
-                    var amount = savedOrder.total;
+                    var amount = savedOrder.get('total');
                     var orderID = savedOrder.get('order_id');
                     var memo = "Order #" + orderID + " for " + account.get('business').name;
                     paymentManager.payWithPaypal(receiverEmail, amount, memo, cancelUrl, returnUrl, function(err, value){
@@ -1014,7 +1014,7 @@ module.exports = {
             //save info on order
             function updateOrder(savedOrder, paypalInfo, callback) {
                 order.set('payment_details', paypalInfo);
-                this.updateOrderById(savedOrder, function(err, savedOrder) {
+                dao.saveOrUpdate(savedOrder, function(err, savedOrder) {
                   if (err) {
                     log.error('Error updating order: ' + err);
                     return callback(err.message, null);

@@ -41,7 +41,9 @@ module.exports = {
             email:receiverEmail,
             amount:amount
         };
+        self.log.debug('Receiver:', receiver);
         payload.receiverList.receiver.push(receiver);
+        self.log.debug('Sending:', payload);
         paypalSdk.pay(payload, function (err, response) {
             if (err) {
                 self.log.error('Error creating payment:', err);
@@ -51,8 +53,8 @@ module.exports = {
                 // Response will have the original Paypal API response
                 //self.log.debug('Response:', response);
                 // But also a paymentApprovalUrl, so you can redirect the sender to checkout easily
-                self.log.debug('<< pay');
-                fn(err, response.paymentApprovalUrl);
+                self.log.debug('<< pay', response);
+                fn(err, response);
             }
         });
 

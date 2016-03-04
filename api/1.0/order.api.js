@@ -88,7 +88,7 @@ _.extend(api.prototype, baseApi.prototype, {
         if(order.get('returnUrl')) {
             returnUrl = order.get('returnUrl');
         } else {
-            cancelUrl = fullUrl + '?state=5';
+            returnUrl = fullUrl + '?state=5';
         }
 
         orderManager.createPaypalOrder(order, userId, cancelUrl, returnUrl, function(err, order){
