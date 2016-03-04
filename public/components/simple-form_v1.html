@@ -15,33 +15,39 @@
                     </div>
                     <div class="clearfix mb15"></div>
                     <form name="simpleForm" ng-submit="createUser(simpleForm)">
-                        <!-- FIRST -->
-                        <div style="{{fieldStyle(component.formSettings)}}" class="form-group {{fieldClass()}}"  ng-if="fieldShow('first')" ng-class="{ 'has-error' : simpleForm.first.$invalid && !simpleForm.first.$pristine }">
-                            <input style="{{inputStyle(component.formSettings)}}" type="text" name="first" ng-model="user.first" class="form-control" placeholder="First" required>
-                            <p ng-show="simpleForm.first.$invalid && !simpleForm.first.$pristine" class="help-block">Enter a valid first name.</p>
-                        </div>
-                        <!-- LAST -->
-                        <div style="{{fieldStyle(component.formSettings)}}" class="form-group {{fieldClass()}}"  ng-if="fieldShow('last')" ng-class="{ 'has-error' : simpleForm.last.$invalid && !simpleForm.last.$pristine }">
-                            <input style="{{inputStyle(component.formSettings)}}" type="text" name="last" ng-model="user.last" class="form-control" placeholder="Last" required>
-                            <p ng-show="simpleForm.last.$invalid && !simpleForm.last.$pristine" class="help-block">Enter a valid last name.</p>
-                        </div>
-                        <!-- EXTENSION -->
-                        <div style="{{fieldStyle(component.formSettings)}}" class="form-group {{fieldClass()}}"  ng-if="fieldShow('extension')" ng-class="{ 'has-error' : simpleForm.phone.$invalid && !simpleForm.extension.$pristine }">
-                            <input style="{{inputStyle(component.formSettings)}}" type="text" name="extension" ng-model="user.extension" ng-pattern="formValidations.extension" class="form-control" placeholder="Extension">
-                            <p ng-show="simpleForm.extension.$invalid && !simpleForm.extension.$pristine" class="help-block">Enter a valid extension.</p>
-                        </div>
-                        <!-- PHONE -->
-                        <div style="{{fieldStyle(component.formSettings)}}" class="form-group {{fieldClass()}}" ng-if="fieldShow('phone')" ng-class="{ 'has-error' : simpleForm.phone.$invalid && !simpleForm.phone.$pristine }">
-                            <input style="{{inputStyle(component.formSettings)}}" type="text" name="phone" ng-model="user.phone" ng-pattern="formValidations.phone" class="form-control" placeholder="Phone" required>
-                            <p ng-show="simpleForm.phone.$invalid && !simpleForm.phone.$pristine" class="help-block">Enter a valid phone number.</p>
+                        <div class="inputFields {{nthRow}}">
+                            <!-- FIRST -->
+                            <div style="{{fieldStyle(component.formSettings)}}" class="form-group {{fieldClass()}}"  ng-if="fieldShow('first')" ng-class="{ 'has-error' : simpleForm.first.$invalid && !simpleForm.first.$pristine }">
+                                <input style="{{inputStyle(component.formSettings)}}" type="text" name="first" ng-model="user.first" class="form-control" placeholder="First" required>
+                                <p ng-show="simpleForm.first.$invalid && !simpleForm.first.$pristine" class="help-block">Enter a valid first name.</p>
+                            </div>
+
+                            <!-- LAST -->
+                            <div style="{{fieldStyle(component.formSettings)}}" class="form-group {{fieldClass()}}"  ng-if="fieldShow('last')" ng-class="{ 'has-error' : simpleForm.last.$invalid && !simpleForm.last.$pristine }">
+                                <input style="{{inputStyle(component.formSettings)}}" type="text" name="last" ng-model="user.last" class="form-control" placeholder="Last" required>
+                                <p ng-show="simpleForm.last.$invalid && !simpleForm.last.$pristine" class="help-block">Enter a valid last name.</p>
+                            </div>
+
+                            <!-- EXTENSION -->
+                            <div style="{{fieldStyle(component.formSettings)}}" class="form-group {{fieldClass()}}"  ng-if="fieldShow('extension')" ng-class="{ 'has-error' : simpleForm.phone.$invalid && !simpleForm.extension.$pristine }">
+                                <input style="{{inputStyle(component.formSettings)}}" type="text" name="extension" ng-model="user.extension" ng-pattern="formValidations.extension" class="form-control" placeholder="Extension">
+                                <p ng-show="simpleForm.extension.$invalid && !simpleForm.extension.$pristine" class="help-block">Enter a valid extension.</p>
+                            </div>
+
+                            <!-- PHONE -->
+                            <div style="{{fieldStyle(component.formSettings)}}" class="form-group {{fieldClass()}}" ng-if="fieldShow('phone')" ng-class="{ 'has-error' : simpleForm.phone.$invalid && !simpleForm.phone.$pristine }">
+                                <input style="{{inputStyle(component.formSettings)}}" type="text" name="phone" ng-model="user.phone" ng-pattern="formValidations.phone" class="form-control" placeholder="Phone" required>
+                                <p ng-show="simpleForm.phone.$invalid && !simpleForm.phone.$pristine" class="help-block">Enter a valid phone number.</p>
+                            </div>
+                            
+                            <!-- EMAIL -->
+                            <div style="{{fieldStyle(component.formSettings)}}" class="form-group {{fieldClass()}}"  ng-class="{ 'has-error' : userExists || simpleForm.email.$invalid && !simpleForm.email.$pristine }">
+                                <input style="{{inputStyle(component.formSettings)}}" type="email" name="email" ng-model="user.email" class="form-control" ng-pattern="formValidations.email" ng-model-options="{ debounce: 800 }" placeholder="Email" ng-change="clearValidations()" required>
+                                <p ng-if="simpleForm.email.$invalid && !simpleForm.email.$pristine && !userExists" class="help-block">Enter a valid email.</p>
+                                <p ng-if="userExists" class="help-block">Email already exists.</p>
+                            </div>
                         </div>
                         
-                        <!-- EMAIL -->
-                        <div style="{{fieldStyle(component.formSettings)}}" class="form-group {{fieldClass()}}"  ng-class="{ 'has-error' : userExists || simpleForm.email.$invalid && !simpleForm.email.$pristine }">
-                            <input style="{{inputStyle(component.formSettings)}}" type="email" name="email" ng-model="user.email" class="form-control" ng-pattern="formValidations.email" ng-model-options="{ debounce: 800 }" placeholder="Email" ng-change="clearValidations()" required>
-                            <p ng-if="simpleForm.email.$invalid && !simpleForm.email.$pristine && !userExists" class="help-block">Enter a valid email.</p>
-                            <p ng-if="userExists" class="help-block">Email already exists.</p>
-                        </div>
                         <div class="clearfix mb15 visible-xs"></div>
                         <div class="col-sm-12">
                             <button type="submit" style="{{buttonStyle(component.btn)}}" ng-style="{'background': component.btn.bgcolor, 'color':component.btn.color, 'border-color': component.btn.bgcolor}" class="btn ssb-theme-btn btn-default btn-block btn-simple-form" ng-disabled="simpleForm.$invalid" ng-class="{'custom-orange': component.customBtn}">
@@ -137,6 +143,28 @@
 .simple-form-v1 .component-body.default-font-size * {
     font-size: {{component.formSettings.formTextSize}}px;
 }
+
+
+.inputFields.nthRow div:nth-child(n) {
+  padding-right: {{component.formSettings.spacing.pr}}px;
+}
+
+.inputFields.nthRow2 div:not(:nth-child(2n)) {
+  padding-right: {{component.formSettings.spacing.pr}}px;
+}
+
+.inputFields.nthRow3 div:not(:nth-child(3n)) {
+  padding-right: {{component.formSettings.spacing.pr}}px;
+}
+
+.inputFields.nthRow4 div:not(:nth-child(4n)) {
+  padding-right: {{component.formSettings.spacing.pr}}px;
+}
+
+.inputFields.thRow5 div:not(:nth-child(5n)) {
+  padding-right: {{component.formSettings.spacing.pr}}px;
+}
+
 
 .btn-simple-form:hover, .btn-simple-form:active, .btn-simple-form:active:focus, .btn-simple-form:active:hover
 {

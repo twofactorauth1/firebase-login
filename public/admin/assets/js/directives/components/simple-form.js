@@ -11,6 +11,7 @@ app.directive('simpleFormComponent',["formValidations", function (formValidation
     link: function (scope, element, attrs) {
       
       scope.isEditing = true;
+      scope.nthRow = 'nthRow';
       scope.formValidations = formValidations;
       if(!angular.isDefined(scope.component.tags)){
         scope.component.tags = [];
@@ -25,10 +26,12 @@ app.directive('simpleFormComponent',["formValidations", function (formValidation
         scope.component.fields.push({"display" : "Phone Extension", "value" : false,"name" : "extension"})
       }
 
-     scope.fieldClass = function(field){
+      scope.fieldClass = function(field){
         var classString = ' ';
+        
         if(scope.component.formSettings && scope.component.formSettings.fieldsPerRow){
           classString = "col-sm-" + Math.floor(12/scope.component.formSettings.fieldsPerRow);
+          scope.nthRow = 'nthRow' + scope.component.formSettings.fieldsPerRow;
         }
         return classString;
       };
@@ -50,11 +53,6 @@ app.directive('simpleFormComponent',["formValidations", function (formValidation
         if (field && field.spacing) {
             if (field.spacing.mb) {
                 styleString += 'margin-bottom: ' + field.spacing.mb + 'px;';
-            }
-
-            
-            if (field.spacing.pr) {
-                styleString += 'padding-right: ' + field.spacing.pr + 'px !important;';
             }
         }
         return styleString;
@@ -88,7 +86,7 @@ app.directive('simpleFormComponent',["formValidations", function (formValidation
             }
         }
         return styleString;
-      };
+      };      
 
       scope.formStyle = function(form){ 
         var styleString = '';        

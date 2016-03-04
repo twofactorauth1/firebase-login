@@ -8,6 +8,7 @@ app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userSe
     templateUrl: '/components/component-wrap.html',
     link: function (scope) {
       console.log('scope.component ', scope.component);
+      scope.nthRow = 'nthRow';
       if(!angular.isDefined(scope.component.tags)){
         scope.component.tags = [];
         if(scope.component.contact_type)
@@ -18,8 +19,10 @@ app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userSe
 
       scope.fieldClass = function(field){
         var classString = ' ';
+        
         if(scope.component.formSettings && scope.component.formSettings.fieldsPerRow){
           classString = "col-sm-" + Math.floor(12/scope.component.formSettings.fieldsPerRow);
+          scope.nthRow = 'nthRow' + scope.component.formSettings.fieldsPerRow;
         }
         return classString;
       };
@@ -41,11 +44,6 @@ app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userSe
         if (field && field.spacing) {
             if (field.spacing.mb) {
                 styleString += 'margin-bottom: ' + field.spacing.mb + 'px;';
-            }
-
-            
-            if (field.spacing.pr) {
-                styleString += 'padding-right: ' + field.spacing.pr + 'px !important;';
             }
         }
         return styleString;
@@ -79,7 +77,7 @@ app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userSe
             }
         }
         return styleString;
-      };
+      };      
 
       scope.formStyle = function(form){ 
         var styleString = '';        
