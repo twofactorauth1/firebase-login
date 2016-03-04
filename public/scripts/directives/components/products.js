@@ -1036,6 +1036,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
 
                 if ($routeParams.state) {
                     scope.checkoutModalState = parseInt($routeParams.state);
+                    $('#cart-checkout-modal').modal('show');
                 }
             };
 
