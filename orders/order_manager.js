@@ -997,23 +997,23 @@ module.exports = {
                 paymentManager.payWithPaypal(receiverEmail, amount, memo, cancelUrl, returnUrl, function(err, value){
                     if (err) {
                       log.error('Error creating paypal pay key: ' + err);
-                      return callback(err.message, null);
+                      return callback(err.message, savedOrder, null);
                     } else {
                       log.debug('<< getPaypalPayKey');
-                      return callback(null, value);
+                      return callback(null, savedOrder, value);
                     }
                 });
             },
             //save info on order
-            function updateOrder(paypalInfo, callback) {
+            function updateOrder(savedOrder, paypalInfo, callback) {
                 order.set('payment_details', paypalInfo);
-                this.updateOrderById(order, function(err, order) {
+                this.updateOrderById(savedOrder, function(err, savedOrder) {
                   if (err) {
                     log.error('Error updating order: ' + err);
                     return callback(err.message, null);
                   } else {
                     log.debug('<< updateOrder');
-                    return callback(null, order);
+                    return callback(null, savedOrder);
                   }
                 });
             }

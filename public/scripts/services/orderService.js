@@ -17,4 +17,17 @@ mainApp.service('orderService', function ($http) {
     });
   };
 
+  this.createPaypalOrder = function (order, fn) {
+    var apiUrl = baseUrl + ['orders', 'payment', 'paypal'].join('/');
+    $http({
+      url: apiUrl,
+      method: "POST",
+      data: angular.toJson(order)
+    }).success(function (data, status, headers, config) {
+      fn(data);
+    }).error(function (err) {
+      console.log('END:Create Paypal Order with ERROR');
+        fn(err);
+    });
+  };
 });
