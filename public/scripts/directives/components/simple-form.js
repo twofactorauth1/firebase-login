@@ -168,8 +168,14 @@ app.directive('simpleFormComponent', ["ipCookie", '$window', '$timeout', 'userSe
         userService.addContact(formatted, function (data, err) {
           if (err && err.code === 409) {
             scope.userExists = true;
-
-          } else if (data) {
+          } 
+          else if(err && err.code !== 409){
+              scope.formError = true;
+              $timeout(function () {
+                scope.formError = false;
+              }, 5000);
+          }
+          else if (data) {
             var name;
             if (scope.user.first && scope.user.last) {
               name = scope.user.first + ' ' + scope.user.last;

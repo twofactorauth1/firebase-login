@@ -10314,6 +10314,10 @@ div[class^="spacing-"] input {
 .accordion.simple-form-settings .row {
   border-top: 0px !important;
 }
+.btn-radio-form.active {
+  background-color: #286090 !important;
+  border-color: #204d74 !important;
+}
 .ssb-sidebar {
   background: #131e26;
 }

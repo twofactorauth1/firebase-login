@@ -51,7 +51,12 @@
                         <div class="clearfix mb15"></div>
                         <div ng-show="formSuccess">
                             <div class="row thank-you animated" ng-class="{fadeOut: !formSuccess, tada: formSuccess}">
-                                <h3 class="center mb20">Thank You for Submitting!</h3>
+                                <h3 class="center mb20" ng-bind-html="component.formSettings.successMessage || 'Thank You for Submitting!'"></h3>
+                            </div>
+                        </div>
+                         <div ng-show="formError">
+                            <div class="row thank-you animated" ng-class="{fadeOut: !formError, tada: formError}">
+                                <h3 class="center mb20" ng-bind-html="component.formSettings.errorMessage || 'Error while Submitting!'"></h3>
                             </div>
                         </div>
                     </form>

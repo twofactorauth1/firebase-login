@@ -48,18 +48,11 @@ app.directive('simpleFormComponent',["formValidations", function (formValidation
       scope.fieldStyle = function(field){
         var styleString = ' ';
         if (field && field.spacing) {
-            if (field.spacing.mt) {
-                styleString += 'margin-top: ' + field.spacing.mt + 'px;';
-            }
-
             if (field.spacing.mb) {
                 styleString += 'margin-bottom: ' + field.spacing.mb + 'px;';
             }
 
-            if (field.spacing.pl) {
-                styleString += 'padding-left: ' + field.spacing.pl + 'px !important;';
-            }
-
+            
             if (field.spacing.pr) {
                 styleString += 'padding-right: ' + field.spacing.pr + 'px !important;';
             }
