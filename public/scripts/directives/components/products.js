@@ -22,6 +22,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
             scope.showTax = true;
             scope.showNotTaxed = false; // Some items are not taxed when summing
 
+
             /*
              * @filterTags
              * - if component has tags filter them or return the _product
@@ -171,7 +172,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                     console.log('commerceSettings ', account.commerceSettings);
                     scope.settings = account.commerceSettings;
                     if (scope.settings) {
-                        scope.paypalInfo = scope.settings.paypal;
+                        scope.paypalInfo = scope.settings.paypalAddress;
                         if (scope.settings.taxes && scope.settings.taxbased === 'business_location') {
                             if (account.business.addresses && account.business.addresses.length > 0 && account.business.addresses[0].zip) {
                                 console.log('getting tax ', account.business.addresses[0].zip);

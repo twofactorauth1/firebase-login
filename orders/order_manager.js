@@ -991,18 +991,24 @@ module.exports = {
             },
             //get pay key from Paypal
             function getPaypalPayKey(account, savedOrder, contact, productAry, callback) {
-                var receiverEmail = account.attributes.commerceSettings.paypalAddress;
-                var amount = savedOrder.total;
-                var memo = 'trytomakeapayment';
-                paymentManager.payWithPaypal(receiverEmail, amount, memo, cancelUrl, returnUrl, function(err, value){
-                    if (err) {
-                      log.error('Error creating paypal pay key: ' + err);
-                      return callback(err.message, savedOrder, null);
-                    } else {
-                      log.debug('<< getPaypalPayKey');
-                      return callback(null, savedOrder, value);
-                    }
-                });
+                var commerceSettings = account.get('commerceSettings');
+                if(commerceSettings && commerceSettings.paypalAddress) {
+                    var receiverEmail = commerceSettings.paypalAddress;
+                    var amount = savedOrder.total;
+                    var memo = null; //TODO: get from the order
+                    paymentManager.payWithPaypal(receiverEmail, amount, memo, cancelUrl, returnUrl, function(err, value){
+                        if (err) {
+                            log.error('Error creating paypal pay key: ' + err);
+                            return callback(err.message, savedOrder, null);
+                        } else {
+                            log.debug('<< getPaypalPayKey');
+                            return callback(null, savedOrder, value);
+                        }
+                    });
+                } else {
+                    callback('No Paypal Address found on the account');
+                }
+
             },
             //save info on order
             function updateOrder(savedOrder, paypalInfo, callback) {
