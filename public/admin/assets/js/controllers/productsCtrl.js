@@ -19,7 +19,7 @@
                     return cred.type === 'stripe';
                 });
 
-                var paypal = account.commerceSettings.paypal;
+                var paypal = account.commerceSettings.paypalAddress;
 
                 if (cb && (stripe || paypal)) {
                     cb(true);

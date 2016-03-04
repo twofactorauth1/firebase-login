@@ -991,23 +991,30 @@ module.exports = {
             },
             //get pay key from Paypal
             function getPaypalPayKey(account, savedOrder, contact, productAry, callback) {
-                var receiverEmail = account.attributes.commerceSettings.paypalAddress;
-                var amount = savedOrder.total;
-                var memo = 'trytomakeapayment';
-                paymentManager.payWithPaypal(receiverEmail, amount, memo, cancelUrl, returnUrl, function(err, value){
-                    if (err) {
-                      log.error('Error creating paypal pay key: ' + err);
-                      return callback(err.message, savedOrder, null);
-                    } else {
-                      log.debug('<< getPaypalPayKey');
-                      return callback(null, savedOrder, value);
-                    }
-                });
+                var commerceSettings = account.get('commerceSettings');
+                if(commerceSettings && commerceSettings.paypalAddress) {
+                    var receiverEmail = commerceSettings.paypalAddress;
+                    var amount = savedOrder.get('total');
+                    var orderID = savedOrder.get('order_id');
+                    var memo = "Order #" + orderID + " for " + account.get('business').name;
+                    paymentManager.payWithPaypal(receiverEmail, amount, memo, cancelUrl, returnUrl, function(err, value){
+                        if (err) {
+                            log.error('Error creating paypal pay key: ' + err);
+                            return callback(err.message, savedOrder, null);
+                        } else {
+                            log.debug('<< getPaypalPayKey');
+                            return callback(null, savedOrder, value);
+                        }
+                    });
+                } else {
+                    callback('No Paypal Address found on the account');
+                }
+
             },
             //save info on order
             function updateOrder(savedOrder, paypalInfo, callback) {
                 order.set('payment_details', paypalInfo);
-                this.updateOrderById(savedOrder, function(err, savedOrder) {
+                dao.saveOrUpdate(savedOrder, function(err, savedOrder) {
                   if (err) {
                     log.error('Error updating order: ' + err);
                     return callback(err.message, null);
