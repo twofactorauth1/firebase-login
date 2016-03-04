@@ -9,20 +9,18 @@
             </div>
         </header>
         <div ng-if="filteredProducts.length" masonry load-images="true" reload-on-resize reload-on-show class="tab-pane active" id="{{productSection['product-section-id']}}">
-            <div class="masonry-brick" data-class="product-section-id"
-                 ng-class="{
+            <div class="masonry-brick" data-class="product-section-id" ng-class="{
                     'col-xs-12 col-sm-4 col-sm-offset-4': filteredProducts.length == 1,
                     'col-xs-12 col-sm-6': filteredProducts.length == 2,
                     'col-xs-12 col-sm-6 col-md-4': filteredProducts.length > 2
-                    }"
-                 ng-repeat="product in filteredProducts track by $index">
+                    }" ng-repeat="product in filteredProducts track by $index">
                 <div class="product">
                     <div class="thumbnail">
                         <div ng-if="product.onSaleToday" class="ribbon red"><span>SALE</span></div>
                         <div ng-if="product.is_image || product.icon" class="product-img">
                             <div ng-if="product.is_image" class="img-wrap">
                                 <div class="product-img">
-                                    <img src="{{::product.icon}}" class="img-responsive"/>
+                                    <img src="{{::product.icon}}" class="img-responsive" />
                                 </div>
                             </div>
                             <div ng-if="!product.is_image && product.icon" class="img-wrap icon">
@@ -80,7 +78,7 @@
             <pagination total-items="products.length" items-per-page="component.numtodisplay" ng-model="currentProductPage" ng-change="pageChanged(currentProductPage)"></pagination>
         </div>
         <div ng-if="isEditing && originalProducts && originalProducts.length === 0" class="col-xs-12 center">
-        <h2 class="margin-bottom-30">No product to display.</h2>
+            <h2 class="margin-bottom-30">No product to display.</h2>
             <a ng-click="addProducts()" class=" btn btn-primary btn-lg btn-wide btn-o add-feature"> <i class="fa fa-plus"></i> Add Products</a>
         </div>
     </div>
@@ -186,7 +184,7 @@
                                         <div class="col-sm-6">
                                             <div class="form-group" ng-class="{'has-error': invalidPhone}">
                                                 <label class="control-label" for="phone">Phone</label>
-                                                <input type="text" ng-blur="checkBillingPhone(newContact.details[0].phones[0].number); cookieUpdateContactFn()"  placeholder="Phone" class="form-control" id="phone" ng-model="newContact.details[0].phones[0].number">
+                                                <input type="text" ng-blur="checkBillingPhone(newContact.details[0].phones[0].number); cookieUpdateContactFn()" placeholder="Phone" class="form-control" id="phone" ng-model="newContact.details[0].phones[0].number">
                                                 <span class="help-block" ng-if="invalidPhone"></i>Invalid</span>
                                             </div>
                                         </div>
@@ -374,7 +372,18 @@
                         <div class="clearfix" style="margin-bottom:30px"></div>
                     </div>
                     <div class="row thank-you" style="height:400px" ng-if="checkoutModalState == 7">
-                        <p>This is where the paypal checkout will go.</p>
+                        <h3 class="center mb20">Paypal Payment</h3>
+                        <form action="https://www.sandbox.paypal.com/webapps/adaptivepayment/flow/pay" target="PPDGFrame" class="standard">
+                            <label for="buy">Buy Now:</label>
+                            <input type="image" id="submitBtn" value="Pay with PayPal" src="https://www.paypalobjects.com/en_US/i/btn/btn_paynowCC_LG.gif">
+                            <input id="type" type="hidden" name="expType" value="light">
+                            <input id="paykey" type="hidden" name="paykey" value="{{paypalKey}}">
+                        </form>
+                        <script type="text/javascript" charset="utf-8">
+                            var embeddedPPFlow = new PAYPAL.apps.DGFlow({
+                                trigger: 'submitBtn'
+                            });
+                        </script>
                     </div>
                     <div class="clearfix"></div>
                 </div>
@@ -465,7 +474,7 @@
                                 </div>
                             </tab>
                             <tab heading="Addtional Information">
-                            <p class="description">{{selectedProduct.description}}</p>
+                                <p class="description">{{selectedProduct.description}}</p>
                                 <!--<h4>Static content</h4>
                                 <p>
                                     Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent.
@@ -483,9 +492,8 @@
     </div>
 </div>
 <script type="text/javascript">
-
-if ($('.payment :first').card)
-    card = $('.payment :first').card({
-        container: '.card-wrapper'
-    });
+    if ($('.payment :first').card)
+        card = $('.payment :first').card({
+            container: '.card-wrapper'
+        });
 </script>
