@@ -599,7 +599,153 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
             scope.paypalPayment = function() {
                 scope.failedOrderMessage = "";
                 scope.checkoutModalState = 7;
-            }
+
+                var contact = scope.newContact;
+                if (isEmpty(contact.first) || isEmpty(contact.last) || isEmpty(contact.first) || isEmpty(contact.details[0].emails[0].email)) {
+                    scope.checkoutModalState = 2;
+                    return;
+                }
+                if (contact) {
+                    cardInput.name = contact.first + ' ' + contact.last;
+                    cardInput.address_line1 = contact.details[0].addresses[0].address;
+                    cardInput.address_city = contact.details[0].addresses[0].city;
+                    cardInput.address_state = contact.details[0].addresses[0].state;
+                    cardInput.address_zip = contact.details[0].addresses[0].zip;
+                    cardInput.address_country = contact.details[0].addresses[0].country || 'US';
+                    if (contact.details[0].addresses[0].address2) {
+                        cardInput.address_line2 = contact.details[0].addresses[0].address2;
+                    }
+                }
+
+                scope.initializeModalEvents();
+                var phone_number = '';
+                if (scope.newContact.details[0].phones && scope.newContact.details[0].phones[0] && scope.newContact.details[0].phones[0].number) {
+                    phone_number = scope.newContact.details[0].phones[0].number;
+                }
+                var _formattedDetails = [{
+                    _id: Math.uuid(10),
+                    emails: [{
+                        _id: Math.uuid(10),
+                        email: scope.newContact.details[0].emails[0].email
+                    }],
+                    phones: [],
+                    addresses: [{
+                        _id: Math.uuid(10),
+                        address: scope.newContact.details[0].addresses[0].address,
+                        address2: scope.newContact.details[0].addresses[0].address2,
+                        state: scope.newContact.details[0].addresses[0].state,
+                        zip: scope.newContact.details[0].addresses[0].zip,
+                        country: "US",
+                        defaultShipping: false,
+                        defaultBilling: false,
+                        city: scope.newContact.details[0].addresses[0].city,
+                        countryCode: "",
+                        displayName: ""
+                    }]
+                }];
+                if (scope.newContact.details[0].phones && scope.newContact.details[0].phones[0] && scope.newContact.details[0].phones[0].number) {
+                    _formattedDetails[0].phones.push({
+                        _id: Math.uuid(10),
+                        number: scope.newContact.details[0].phones[0].number
+                    });
+                }
+                console.log('scope.newContact ', scope.newContact);
+                scope.newContact.details = _formattedDetails;
+                console.log('scope.newContact ', scope.newContact);
+
+                var customer = scope.newContact;
+                console.log('customer, ', customer);
+
+                //UserService.postContact(scope.newContact, function (customer) {
+                var order = {
+                    //"customer_id": customer._id,
+                    "customer": customer,
+                    "session_id": null,
+                    "status": "processing",
+                    "cart_discount": 0,
+                    "total_discount": 0,
+                    "total_shipping": 0,
+                    "total_tax": formatNum(scope.totalTax),
+                    "shipping_tax": 0,
+                    "cart_tax": 0,
+                    "currency": "usd",
+                    "line_items": [], // { "product_id": 31, "quantity": 1, "variation_id": 7, "subtotal": "20.00", "tax_class": null, "sku": "", "total": "20.00", "name": "Product Name", "total_tax": "0.00" }
+                    "total_line_items_quantity": scope.cartDetails.length,
+                    "payment_details": {
+                        "method_title": 'Credit Card Payment', //Check Payment, Credit Card Payment
+                        "method_id": 'cc', //check, cc
+                        "card_token": null, //Stripe card token if applicable
+                        "charge_description": null, //description of charge if applicable
+                        "statement_description": null, //22char string for cc statement if applicable
+                        "paid": true
+                    },
+                    "shipping_methods": "", // "Free Shipping",
+                    "shipping_address": {
+                        "first_name": customer.first,
+                        "last_name": customer.last,
+                        "phone": phone_number,
+                        "city": customer.details[0].addresses[0].city,
+                        "country": "US",
+                        "address_1": customer.details[0].addresses[0].address,
+                        "company": "",
+                        "postcode": customer.details[0].addresses[0].zip,
+                        "email": customer.details[0].emails[0].email,
+                        "address_2": customer.details[0].addresses[0].address2,
+                        "state": customer.details[0].addresses[0].state
+                    },
+                    "billing_address": {
+                        "first_name": customer.first,
+                        "last_name": customer.last,
+                        "phone": phone_number,
+                        "city": customer.details[0].addresses[0].city,
+                        "country": "US",
+                        "address_1": customer.details[0].addresses[0].address,
+                        "company": "",
+                        "postcode": customer.details[0].addresses[0].zip,
+                        "email": customer.details[0].emails[0].email,
+                        "address_2": customer.details[0].addresses[0].address2,
+                        "state": customer.details[0].addresses[0].state
+                    },
+                    "notes": []
+                };
+                _.each(scope.cartDetails, function(item) {
+                    var totalAmount = item.regular_price * item.quantity;
+                    var _item = {
+                        "product_id": item._id,
+                        "quantity": item.quantity,
+                        "regular_price": formatNum(item.regular_price),
+                        "variation_id": '',
+                        "tax_class": null,
+                        "sku": "",
+                        "total": formatNum(totalAmount),
+                        "name": item.name,
+                        "total_tax": "0.00"
+                    };
+                    order.line_items.push(_item);
+                });
+
+                OrderService.createPaypalOrder(order, function(data) {
+                    if (data && !data._id) {
+                        var failedOrderMessage = "Error in order processing";
+                        console.log(failedOrderMessage);
+                        if (data.message)
+                            failedOrderMessage = data.message;
+                        scope.checkoutModalState = 6;
+                        scope.failedOrderMessage = failedOrderMessage;
+                        return;
+                    }
+                    console.log('order, ', order);
+                    scope.checkoutModalState = 7;
+                    CartDetailsService.items = [];
+
+
+                    scope.subTotal = 0;
+                    scope.totalTax = 0;
+                    scope.total = 0;
+                    ipCookie.remove(cookieKey);
+                    // PaymentService.saveCartDetails(token, parseInt(scope.total * 100), function(data) {});
+                });
+            };
 
             scope.makeCartPayment = function() {
                 scope.failedOrderMessage = "";
