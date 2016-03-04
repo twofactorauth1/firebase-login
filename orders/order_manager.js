@@ -637,8 +637,8 @@ module.exports = {
 
             },
             // check and get fulfillment email products
-            function(account, order, callback) {  
-                log.debug('Order is', order);              
+            function(account, order, callback) {
+                log.debug('Order is', order);
                 if(order.get('payment_details') && order.get('payment_details').card_token && order.get('payment_details').paid && order.get('status') && order.get('status') !=='pending_payment') {
                     var productAry = [];
                     async.each(order.get('line_items'), function iterator(item, cb){
@@ -991,16 +991,31 @@ module.exports = {
             },
             //get pay key from Paypal
             function getPaypalPayKey(account, savedOrder, contact, productAry, callback) {
-                var receiverEmail = null;//TODO: get from the account (credentials?)
-                var amount = null;//TODO: get from the order
-                var memo = null;//TODO: get from the order
+                var receiverEmail = account.commerceSettings.paypalAddress;
+                var amount = savedOrder.total;
+                var memo = 'trytomakeapayment';
                 paymentManager.payWithPaypal(receiverEmail, amount, memo, cancelUrl, returnUrl, function(err, value){
-                    //TODO: call next function
+                    if (err) {
+                      log.error('Error creating paypal pay key: ' + err);
+                      return callback(err.message, null);
+                    } else {
+                      log.debug('<< getPaypalPayKey');
+                      return callback(null, value);
+                    }
                 });
             },
             //save info on order
-            function updateOrder() {
-                //TODO: store paypal correlationId and key on order
+            function updateOrder(paypalInfo, callback) {
+                order.set('payment_details', paypalInfo);
+                this.updateOrderById(order, function(err, order) {
+                  if (err) {
+                    log.error('Error updating order: ' + err);
+                    return callback(err.message, null);
+                  } else {
+                    log.debug('<< updateOrder');
+                    return callback(null, order);
+                  }
+                });
             }
 
         ], function done(err, result){
