@@ -64,7 +64,7 @@ app.directive('simpleFormComponent',["formValidations", function (formValidation
             styleString += 'text-align: ' + field.align + ";";         
         }
         if (field && field.inputTextSize) {
-          styleString += 'font-size: ' + field.inputTextSize  + 'px;';
+          styleString += 'font-size: ' + field.inputTextSize  + 'px !important;';
         }
         if (field && field.inputFontFamily) {
           styleString += 'font-family: ' + field.inputFontFamily + ";";

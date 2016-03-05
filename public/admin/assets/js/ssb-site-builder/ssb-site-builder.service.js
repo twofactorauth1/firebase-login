@@ -53,6 +53,7 @@
         ssbService.addSectionToPage = addSectionToPage;
         ssbService.removeSectionFromPage = removeSectionFromPage;
         ssbService.getSpectrumColorOptions = getSpectrumColorOptions;
+        ssbService.getFontFamilyOptions = getFontFamilyOptions;
         ssbService.deletePage = deletePage;
         ssbService.openMediaModal = openMediaModal;
         ssbService.setMediaForComponent = setMediaForComponent;
@@ -999,6 +1000,28 @@
                   ["#E29C45", "#F9690E", "#CA6924", "#F5AB35", "#BFBFBF", "#F2F1EF", "#BDC3C7", "#ECF0F1", "#D2D7D3", "#757D75"],
                   ["#EEEEEE", "#ABB7B7", "#6C7A89", "#95A5A6", "#9ACCCB", "#E8E7E7", "#000000", "#FFFFFF", "#50c7e8"]
                 ]
+            }
+        }
+
+        /*
+         * Provide list of font family
+         *
+         * @returns {object}
+         *
+         */
+        function getFontFamilyOptions() {
+            return {
+              "Helvetica Neue, Helvetica, Arial, sans-serif": "Helvetica Neue",
+              "Arial,Helvetica,sans-serif":"Arial",
+              "Georgia,serif":"Georgia",
+              "Impact,Charcoal,sans-serif":"Impact",
+              "Tahoma,Geneva,sans-serif":"Tahoma",
+              "'Times New Roman',Times,serif":"Times New Roman",
+              "Verdana,Geneva,sans-serif":"Verdana",
+              "Roboto,sans-serif": 'Roboto',
+              "Oswald,sans-serif": 'Oswald',
+              "Montserrat,sans-serif": 'Montserrat',
+              "'Open Sans Condensed',sans-serif": 'Open Sans Condensed'
             }
         }
 

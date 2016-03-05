@@ -811,24 +811,8 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
 
         $scope.fontSizeOptions = [
           8,9,10,11,12,14,18,24,30,36,48,60,72,96
-        ]
-
-        $scope.fontFamilyOptions = {
-          "Helvetica Neue, Helvetica, Arial, sans-serif": "Helvetica Neue",
-          "Arial,Helvetica,sans-serif":"Arial",
-          "Georgia,serif":"Georgia",
-          "Impact,Charcoal,sans-serif":"Impact",
-          "Tahoma,Geneva,sans-serif":"Tahoma",
-          "'Times New Roman',Times,serif":"Times New Roman",
-          "Verdana,Geneva,sans-serif":"Verdana",
-          "Roboto,sans-serif": 'Roboto',
-          "Oswald,sans-serif": 'Oswald',
-          "Montserrat,sans-serif": 'Montserrat',
-          "'Open Sans Condensed',sans-serif": 'Open Sans Condensed'
-        }
-
+        ]        
         
-
       }
 
       if ($scope.component.type === "contact-us") {

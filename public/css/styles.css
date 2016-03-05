@@ -2646,6 +2646,11 @@ div[data-type="feature-block"] .component-inner {
   top: 8px;
   right: 8px;
 }
+@media (max-width: 767px) {
+  .simple-form-v1 .btn-simple-form {
+    width: 100% !important;
+  }
+}
 /********** Simple Form v2 **********/
 .simple-form-v2 {
   background: black;
@@ -10304,12 +10309,8 @@ div[class^="spacing-"] input {
 .accordion.simple-form-settings {
   margin-left: -15px;
   margin-right: -15px;
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
-.accordion.simple-form-settings .accordion-toggle {
-  background: #47B8D9;
-  font-size: inherit;
+  margin-top: 0;
+  margin-bottom: 0;
 }
 .accordion.simple-form-settings .row {
   border-top: 0px !important;
