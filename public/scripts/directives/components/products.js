@@ -8,6 +8,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
         },
         templateUrl: '/components/component-wrap.html',
         link: function(scope) {
+            scope.showPaypalLoading = false;
             //cookie data fetch
             var cookieKey = 'cart_cookie';
             var orderCookieKey = 'order_cookie';
@@ -600,6 +601,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
              */
 
             scope.paypalPayment = function() {
+                scope.showPaypalLoading = true;
                 scope.failedOrderMessage = "";
 
                 var contact = scope.newContact;
@@ -716,6 +718,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 });
 
                 OrderService.createPaypalOrder(order, function(data) {
+                    scope.showPaypalLoading = false;
                     if (data && !data._id) {
                         var failedOrderMessage = "Error in order processing";
                         console.log(failedOrderMessage);
