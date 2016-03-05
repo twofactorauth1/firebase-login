@@ -374,6 +374,8 @@ module.exports = {
                             callback(err);
                         } else {
                             contact.set('stripeId', customer.id);
+                            //clear the card token so we don't try to use it again for purchase
+                            savedOrder.get('payment_details').card_token = null;
                             contactDao.saveOrUpdateContact(contact, function(err, savedContact){
                                 if(err) {
                                     log.error('Error saving stripe customerId:', err);
