@@ -30,4 +30,31 @@ mainApp.service('orderService', function ($http) {
         fn(err);
     });
   };
+
+  this.getOrder = function (orderId, fn) {
+    var apiUrl = baseUrl + ['orders', orderId].join('/');
+    $http({
+      url: apiUrl,
+      method: "GET"
+    }).success(function (data, status, headers, config) {
+      fn(data);
+    }).error(function (err) {
+      console.log('END:Got Order with ERROR');
+        fn(err);
+    });
+  };
+
+  this.setOrderPaid = function (order, fn) {
+    var apiUrl = baseUrl + ['orders', order._id, 'paid'].join('/');
+    $http({
+      url: apiUrl,
+      method: "POST",
+      data: angular.toJson(order)
+    }).success(function (data, status, headers, config) {
+      fn(data);
+    }).error(function (err) {
+      console.log('END:Create Paypal Order with ERROR');
+        fn(err);
+    });
+  };
 });

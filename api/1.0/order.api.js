@@ -308,7 +308,7 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> orderPaymentComplete');
 
         console.dir(req.body);
-        var order = new $$.m.Order(req.body.order);
+        var order = new $$.m.Order(req.body);
         var orderId = req.params.id;
         order.set('_id', orderId);
         order.set('status', 'PROCESSING');

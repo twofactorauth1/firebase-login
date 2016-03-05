@@ -9,8 +9,14 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
         templateUrl: '/components/component-wrap.html',
         link: function(scope) {
             //cookie data fetch
+            var embeddedPPFlow = new PAYPAL.apps.DGFlow({
+                trigger: 'submitBtn',
+                expType: 'instant'
+            });
             var cookieKey = 'cart_cookie';
+            var orderCookieKey = 'order_cookie';
             var cookieData = ipCookie(cookieKey);
+            var orderCookieData = ipCookie(orderCookieKey);
             //assign and hold the checkout modal state
             scope.checkoutModalState = 1;
             //default newContact object for checkout modal
@@ -599,7 +605,6 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
 
             scope.paypalPayment = function() {
                 scope.failedOrderMessage = "";
-                scope.checkoutModalState = 7;
 
                 var contact = scope.newContact;
                 if (isEmpty(contact.first) || isEmpty(contact.last) || isEmpty(contact.first) || isEmpty(contact.details[0].emails[0].email)) {
@@ -726,6 +731,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                     }
                     console.log('order, ', order);
                     scope.checkoutModalState = 7;
+                    ipCookie(orderCookieKey, data);
                     scope.paypalKey = data.payment_details.payKey;
                     CartDetailsService.items = [];
 
@@ -1174,6 +1180,19 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 if ($routeParams.state) {
                     scope.checkoutModalState = parseInt($routeParams.state);
                     $('#cart-checkout-modal').modal('show');
+                    if (scope.checkoutModalState == 5 && orderCookieData) {
+                        OrderService.setOrderPaid(orderCookieData, function(data) {
+                            if (data && !data._id) {
+                                var failedOrderMessage = "Error in order processing";
+                                console.log(failedOrderMessage);
+                                if (data.message)
+                                    failedOrderMessage = data.message;
+                                scope.failedOrderMessage = failedOrderMessage;
+                                return;
+                            }
+                            ipCookie.remove(orderCookieKey);
+                        });
+                    }
                 }
             };
 
