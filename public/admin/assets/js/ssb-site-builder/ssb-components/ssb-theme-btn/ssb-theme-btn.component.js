@@ -12,10 +12,7 @@ function ssbThemeBtn($compile) {
   	controllerAs: 'vm',
   	bindToController: true,
     // scope: {
-    //     section: '=',
-    //     index: '=',
-    //     state: '=',
-    //     uiState: '='
+    //     pVm: '=vm'
     // },
     // replace: true,
   	link: function (scope, element, attrs, ctrl) {

@@ -527,6 +527,8 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
 
         vm.uiStateOriginal = angular.copy(vm.uiState);
 
+        vm.state.permissions = SimpleSiteBuilderService.permissions;
+
     }
 
 

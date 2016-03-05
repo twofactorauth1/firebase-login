@@ -6360,7 +6360,6 @@ a.text-light:hover {
 .btn-default:hover {
   background-color: #ffffff;
   border-color: #e1e1e1;
-  color: #8e8e93 !important;
 }
 .btn-default:active,
 .btn-default.active,
@@ -10301,6 +10300,26 @@ a[href="https://froala.com/wysiwyg-editor"] {
 div[class^="spacing-"] input {
   width: 60px;
 }
+.ssb-edit-control-component-btn {
+  display: none;
+  position: fixed!important;
+  font-size: 13px;
+  opacity: 0;
+}
+.ssb-edit-control-component-btn.on {
+  opacity: 1;
+  z-index: 10;
+  display: block;
+}
+.ssb-theme-btn {
+  -webkit-user-select: text;
+  user-select: text;
+}
+.ssb-theme-btn-active-element:before {
+  display: block;
+  opacity: .75;
+  box-shadow: 0px 0px 0px 4px #eda200 !important;
+}
 .ssb-sidebar {
   background: #131e26;
 }
@@ -11478,6 +11497,10 @@ ssb-topbar #ssb-froala-scrollable-container {
     display: inline-block !important;
   }
 }
+.fr-box.fr-code-view .CodeMirror {
+  font-size: 16px!important;
+  text-align: left;
+}
 @media (min-width: 1280px) {
   .fr-popup .fr-arrow,
   .fr-toolbar .fr-arrow {
@@ -11496,6 +11519,7 @@ ssb-topbar #ssb-froala-scrollable-container {
     display: block;
     width: auto!important;
     margin: 0 auto!important;
+    min-width: 310px;
   }
   body[ng-controller] .fr-popup .fr-input-line input.fr-not-empty + span,
   body[ng-controller] .fr-popup .fr-input-line textarea.fr-not-empty + span {
@@ -11990,7 +12014,10 @@ body[ng-controller] .fr-box.fr-code-view.fr-inline {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
 }
 body[ng-controller] .fr-box.fr-inline .fr-command.fr-btn.html-switch {
-  background: #ffffff;
+  background: #1c2b36;
+  top: auto;
+  bottom: 0;
+  font-size: 16px;
   color: #ffffff;
   padding: 11px 11.5px;
   -webkit-transition: background 0.2s ease 0s;

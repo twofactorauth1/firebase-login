@@ -1,5 +1,5 @@
 <section ng-init="vm.state.editSection=false"
-    ng-if="vm.uiState.showSectionPanel && vm.state.page.sections[vm.uiState.activeSectionIndex]"
+    ng-if="(vm.uiState.showSectionPanel && vm.state.page.sections[vm.uiState.activeSectionIndex]) || (vm.uiState.openSidebarSectionPanel.id === vm.uiState.activeElement.id)"
     class="ssb-sidebar-section-panel draggable fade-in"
     ind-draggable>
 
@@ -192,6 +192,15 @@
             ng-if="vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex] &&  ('blog' + vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex]._id) === vm.uiState.openSidebarSectionPanel.id"
             settings-template="assets/js/ssb-site-builder/ssb-components/shared/blog.html"
             component="vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex]"
+            state="vm.state"
+            ui-state="vm.uiState">
+        </ssb-sidebar-settings-panel>
+
+        <ssb-sidebar-settings-panel
+            class="ssb-sidebar-section-panel-component-panel container-fluid"
+            ng-if="vm.uiState.openSidebarSectionPanel.id === vm.uiState.activeElement.id"
+            settings-template="assets/js/ssb-site-builder/ssb-components/ssb-theme-btn/sidebar.settings.html"
+            component="vm.uiState.activeElement"
             state="vm.state"
             ui-state="vm.uiState">
         </ssb-sidebar-settings-panel>

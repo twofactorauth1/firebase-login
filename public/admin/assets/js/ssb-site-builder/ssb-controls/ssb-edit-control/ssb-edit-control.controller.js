@@ -84,11 +84,14 @@ function ssbSiteBuilderEditControlController($scope, $attrs, $filter, $timeout, 
         vm.uiState.showSectionPanel = false;
         vm.uiState.navigation.sectionPanel.reset();
 
-        if (componentIndex !== undefined) {
+        if (!sectionIndex && !componentIndex && vm.uiState.activeElement.id) {
+            setActiveElement();
+        } else if (componentIndex !== undefined) {
             setActiveComponent(sectionIndex, componentIndex);
         } else {
             setActiveSection(sectionIndex);
         }
+
     }
 
     function setActiveSection(index) {
@@ -129,6 +132,22 @@ function ssbSiteBuilderEditControlController($scope, $attrs, $filter, $timeout, 
             if (sectionIndex !== undefined && componentIndex !== undefined) {
                 vm.uiState.showSectionPanel = true;
             }
+
+        });
+
+    }
+
+    function setActiveElement() {
+
+        var sectionPanelLoadConfig = {
+            name: vm.uiState.activeElement.name,
+            id: vm.uiState.activeElement.id
+        };
+
+        $timeout(function() {
+
+            vm.uiState.navigation.sectionPanel.loadPanel(sectionPanelLoadConfig);
+            vm.uiState.showSectionPanel = true;
 
         });
 

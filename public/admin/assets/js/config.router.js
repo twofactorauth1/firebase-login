@@ -67,7 +67,7 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
             init: ['$stateParams', 'SimpleSiteBuilderService', function($stateParams, SimpleSiteBuilderService) {
                 return SimpleSiteBuilderService.getPage($stateParams.pageId);
             }]
-        }, loadSequence('editorCtrl', 'userService', 'htmlToPlaintext', 'spectrum', 'angular-slider', 'assetsService', 'toasterService', 'geocodeService', 'productService', 'paymentService', 'accountService', 'toTrusted', 'generateURLforLinks', 'truncate', 'ngSticky', 'slick', 'offset', 'jqcloud', 'jsVideoUrlParser', 'selectedTags', 'addComponentModalCtrl', 'componentSettingsModalCtrl', 'ssbComponentSettingsModalCtrl', 'googlePlaces', 'ngMap', 'angularCircularNavigation', 'campaignService', 'angular-resizable', 'wu.masonry', 'froala-wysiwyg-editor', 'froala-wysiwyg-editor-plugins', 'custom-froala-wysiwyg-editor', 'cleanType', 'filterPages'))
+        }, loadSequence('froala-wysiwyg-editor', 'froala-wysiwyg-editor-plugins', 'custom-froala-wysiwyg-editor', 'editorCtrl', 'userService', 'htmlToPlaintext', 'spectrum', 'angular-slider', 'assetsService', 'toasterService', 'geocodeService', 'productService', 'paymentService', 'accountService', 'toTrusted', 'generateURLforLinks', 'truncate', 'ngSticky', 'slick', 'offset', 'jqcloud', 'jsVideoUrlParser', 'selectedTags', 'addComponentModalCtrl', 'componentSettingsModalCtrl', 'ssbComponentSettingsModalCtrl', 'googlePlaces', 'ngMap', 'angularCircularNavigation', 'campaignService', 'angular-resizable', 'wu.masonry', 'cleanType', 'filterPages'))
     }).state('app.website.analytics', {
         url: '/site-analytics',
         templateUrl: "/admin/assets/views/site-analytics.html",
@@ -102,31 +102,31 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         url: '/posts/:id',
         templateUrl: "/admin/assets/views/editor.html",
         title: 'Post Single',
-        icon: 'ti-layout-media-left-alt',       
+        icon: 'ti-layout-media-left-alt',
         resolve: loadSequence('editorCtrl', 'userService', 'htmlToPlaintext', 'spectrum', 'angular-slider', 'assetsService', 'toasterService', 'geocodeService', 'productService', 'paymentService', 'accountService', 'toTrusted', 'generateURLforLinks', 'truncate', 'ckeditor', 'ngSticky', 'slick', 'offset', 'jqcloud', 'jsVideoUrlParser', 'selectedTags', 'addComponentModalCtrl', 'componentSettingsModalCtrl', 'googlePlaces','ngMap', 'angularCircularNavigation', 'campaignService', 'angular-resizable', 'wu.masonry')
     }).state('app.website.singletemplate', {
         url: '/templates/:id',
         templateUrl: "/admin/assets/views/editor.html",
         title: 'Template Single',
-        icon: 'ti-layout-media-left-alt',        
+        icon: 'ti-layout-media-left-alt',
         resolve: loadSequence('editorCtrl', 'userService', 'htmlToPlaintext', 'spectrum',  'angular-slider', 'assetsService', 'toasterService', 'geocodeService', 'productService', 'paymentService', 'accountService', 'toTrusted', 'generateURLforLinks', 'truncate', 'ckeditor', 'ngSticky', 'slick', 'offset', 'jqcloud', 'jsVideoUrlParser', 'selectedTags', 'addComponentModalCtrl', 'componentSettingsModalCtrl', 'templateSettingsModalCtrl', 'googlePlaces', 'ngMap', 'angularCircularNavigation', 'campaignService', 'angular-resizable', 'wu.masonry')
     }).state('app.editor', {
         url: '/editor',
         templateUrl: "/admin/assets/views/editor.html",
         title: 'Editor',
-        icon: 'ti-layout-media-left-alt',       
+        icon: 'ti-layout-media-left-alt',
         resolve: loadSequence('editorCtrl', 'userService', 'htmlToPlaintext', 'spectrum', 'angular-slider', 'assetsService', 'toasterService', 'geocodeService', 'productService', 'accountService', 'toTrusted', 'generateURLforLinks', 'truncate', 'ckeditor', 'ngSticky', 'slick', 'offset', 'jqcloud', 'jsVideoUrlParser', 'selectedTags', 'addComponentModalCtrl', 'componentSettingsModalCtrl', 'templateSettingsModalCtrl', 'angularCircularNavigation', 'campaignService', 'angular-resizable', 'wu.masonry')
     }).state('app.customers', {
         url: '/customers',
         templateUrl: "/admin/assets/views/customers.html",
         title: 'Customers',
-        icon: 'ti-layout-media-left-alt',       
+        icon: 'ti-layout-media-left-alt',
         resolve: loadSequence('customersCtrl', 'ImportContactService', "socialConfigService", 'customerService', 'papaParse', 'string_score', 'importCustomerModalCtrl')
     }).state('app.singleCustomer', {
         url: '/customers/:contactId',
         templateUrl: "/admin/assets/views/customer-detail.html",
         title: 'Single Customer',
-        icon: 'ti-layout-media-left-alt',        
+        icon: 'ti-layout-media-left-alt',
         resolve: loadSequence('customerDetailCtrl', 'customerService', 'ngMap', 'keenService', 'offset','assetsService', 'toasterService', 'orderService')
     }).state('app.commerce', {
         url: '/commerce',
@@ -136,25 +136,25 @@ function ($stateProvider, $urlRouterProvider, $controllerProvider, $compileProvi
         url: '/products',
         templateUrl: "/admin/assets/views/products.html",
         title: 'Products',
-        icon: 'ti-layout-media-left-alt',        
+        icon: 'ti-layout-media-left-alt',
         resolve: loadSequence('productsCtrl', 'productService', 'accountService', 'ipCookie')
     }).state('app.commerce.productsingle', {
         url: '/products/:productId',
         templateUrl: "/admin/assets/views/product-detail.html",
         title: 'Products',
-        icon: 'ti-layout-media-left-alt',        
+        icon: 'ti-layout-media-left-alt',
         resolve: loadSequence('productsDetailCtrl', 'productService', 'dateRangePicker', 'ngCurrency', 'bootstrap-icon-picker', 'campaignService', 'editorCtrl', 'ckeditor', 'addComponentModalCtrl', 'componentSettingsModalCtrl', 'toTrusted', 'propsFilter', 'angularCircularNavigation', 'string_score', 'htmlToPlaintext', 'spectrum')
     }).state('app.commerce.orders', {
         url: '/orders',
         templateUrl: "/admin/assets/views/orders.html",
         title: 'Orders',
-        icon: 'ti-layout-media-left-alt',       
+        icon: 'ti-layout-media-left-alt',
         resolve: loadSequence('ordersCtrl', 'orderService', 'customerService', 'dateRangePicker')
     }).state('app.commerce.orderdetail', {
         url: '/orders/:orderId',
         templateUrl: "/admin/assets/views/order-detail.html",
         title: 'Order Detail',
-        icon: 'ti-layout-media-left-alt',       
+        icon: 'ti-layout-media-left-alt',
         resolve: loadSequence('orderDetailCtrl', 'orderService', 'customerService', 'userService')
     }).state('app.marketing', {
         url: '/marketing',

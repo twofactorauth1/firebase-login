@@ -514,6 +514,7 @@ a[href="https://froala.com/wysiwyg-editor"] {
 		}
 	}
 }
+
 .ssb-footer-page-settings-modal.disabled{
 	ul.page-settings{
 		li{
@@ -523,13 +524,45 @@ a[href="https://froala.com/wysiwyg-editor"] {
 		}
 	}
 }
+
 .greyed-out{
 	background: #f1f1f1;
     padding: 1em;
     opacity: .5;
 }
+
 div[class^="spacing-"] {
     input{
         width: 60px;
+    }
+}
+
+.ssb-edit-control-component-btn {
+    display: none;
+    position: fixed!important;
+    font-size: 13px;
+    // pointer-events: none;
+    opacity: 0;
+
+    &.on {
+        // pointer-events: auto;
+        opacity: 1;
+        z-index: 10;
+        display: block;
+    }
+
+}
+
+
+.ssb-theme-btn {
+    -webkit-user-select: text;
+    user-select: text;
+}
+
+.ssb-theme-btn-active-element {
+    &:before {
+        display: block;
+        opacity: .75;
+        box-shadow: 0px 0px 0px 4px @indigenous-orange!important;
     }
 }

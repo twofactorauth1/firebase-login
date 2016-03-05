@@ -13,9 +13,6 @@
         refreshAfterCallback: true,
         callback: function () {
             var buttonHTML = '<a class="btn btn-primary ssb-theme-btn">' +
-                                '<span contenteditable="false" class="ssb-froala-content-editable-false">' +
-                                    '&nbsp;' +
-                                '</span>' +
                                 'Button Text' +
                              '</a>';
 

@@ -5556,7 +5556,6 @@ input[type="checkbox"] {
 .btn-default:hover {
   background-color: #ffffff;
   border-color: #e1e1e1;
-  color: #8e8e93 !important;
 }
 .btn-default:active,
 .btn-default.active,

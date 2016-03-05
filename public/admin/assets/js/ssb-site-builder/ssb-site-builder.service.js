@@ -59,9 +59,12 @@
         ssbService.extendComponentData = extendComponentData;
         ssbService.getTempUUID = getTempUUID;
         ssbService.setTempUUIDForSection = setTempUUIDForSection;
+        ssbService.setPermissions = setPermissions;
 
         ssbService.contentComponentDisplayOrder = [];
         ssbService.inValidPageHandles = pageConstant.inValidPageHandles;
+
+        ssbService.permissions = {};
 
         /**
          * This represents the category sorting for the add content panel
@@ -1148,11 +1151,37 @@
             return section;
         }
 
+        function setPermissions() {
+
+            var unbindWatcher = $rootScope.$watch(function() {
+                return angular.isDefined($.FroalaEditor) && angular.isObject($.FroalaEditor.config);
+            }, function(newValue) {
+                if (newValue) {
+                    unbindWatcher();
+                    $timeout(function() {
+                        if (ssbService.account._id === 1693 && $.FroalaEditor.config.toolbarButtons.indexOf('html') === -1) {
+                            $.FroalaEditor.config.toolbarButtons.push('html');
+                            ssbService.permissions.html = true;
+                            //todo: better permissions-based script loading
+                            $.getScript('//cdnjs.cloudflare.com/ajax/libs/codemirror/5.12.0/codemirror.min.js', function() {
+                                console.log('loaded codemirror main');
+                                $.getScript('//cdnjs.cloudflare.com/ajax/libs/codemirror/5.12.0/mode/xml/xml.min.js', function() {
+                                    console.log('loaded codemirror mode');
+                                });
+                            });
+                        }
+                    })
+                }
+            });
+
+        }
+
 
 		(function init() {
 
 			AccountService.getAccount(function(data) {
                 ssbService.account = data;
+                ssbService.setPermissions();
 				ssbService.websiteId = data.website.websiteId;
                 ssbService.getSite(data.website.websiteId).then(function(website){
                     ssbService.setupTheme(website);
@@ -1161,7 +1190,7 @@
                 ssbService.getTemplates();
                 ssbService.getLegacyTemplates();
                 ssbService.getPlatformSections();
-				ssbService.getUserSections();
+				//ssbService.getUserSections(); //not yet implemented
 			});
 
 		})();
