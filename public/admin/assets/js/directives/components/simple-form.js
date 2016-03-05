@@ -27,7 +27,7 @@ app.directive('simpleFormComponent',["formValidations", function (formValidation
       }
 
       scope.fieldClass = function(field){
-        var classString = ' ';
+        var classString = 'col-sm-12';
         
         if(scope.component.formSettings && scope.component.formSettings.fieldsPerRow){
           classString = "col-sm-" + Math.floor(12/scope.component.formSettings.fieldsPerRow);

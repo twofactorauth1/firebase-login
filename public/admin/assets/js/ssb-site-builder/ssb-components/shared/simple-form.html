@@ -18,7 +18,7 @@
                 <label><strong>Fields per row</strong></label>
                 <span tooltip-placement="top" tooltip-html-unsafe="number of fields to show per row. So a value of 1 means that each field takes up a whole row, spanning 100% of the width of the row"><i class="fa fa-info-circle" /></span>
                 <div class="clearfix"></div>
-                <input type="text" string-to-number ng-model="component.formSettings.fieldsPerRow" min="0" max="{{component.fields.length || 5}}" touchspin>
+                <input type="text" ng-model="component.formSettings.fieldsPerRow" min="0" max="{{component.fields.length || 5}}" integer-touch-spin>
                 <div class="clearfix"></div>
             </div>
         </div>
@@ -27,7 +27,7 @@
                 <label><strong>Row spacing</strong></label>
                 <span tooltip-placement="top" tooltip-html-unsafe="top/bottom margin between rows"><i class="fa fa-info-circle" /></span>
                 <div class="clearfix"></div>
-                <input type="text" string-to-number ng-model="component.formSettings.spacing.mb" min="0" max="500" touchspin>
+                <input type="text" ng-model="component.formSettings.spacing.mb" min="0" max="500" integer-touch-spin>
                 <div class="clearfix"></div>
             </div>
         </div>
@@ -37,7 +37,7 @@
                 <label><strong>Column spacing</strong></label>
                 <span tooltip-placement="top" tooltip-html-unsafe="horizontal space between fields"><i class="fa fa-info-circle" /></span>
                 <div class="clearfix"></div>
-                <input type="text" string-to-number ng-model="component.formSettings.spacing.pr" min="0" max="500" touchspin>
+                <input type="text" ng-model="component.formSettings.spacing.pr" min="0" max="500" integer-touch-spin>
                 <div class="clearfix"></div>
             </div>
         </div>

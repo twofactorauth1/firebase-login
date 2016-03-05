@@ -3,7 +3,7 @@
         <button type="button" aria-hidden="true" class="close">×</button>
         <span class="message"></span>
     </div>
-    <div>
+    <div class="simple-form-{{component._id}}">
         <div class="col-xs-12 component-body" ng-class="{'default-font-size': component.formSettings.formTextSize}" style="{{formStyle(component.formSettings)}}">
             <div ng-if="!component.isModal">
                 <div class="inner-page row">
@@ -132,41 +132,71 @@
     </div>
 </div>
 <style>
-.simple-form-v1 .simple-form-title {
+.simple-form-v1 .simple-form-{{component._id}} .simple-form-title {
     color: {
         {
             component.txtcolor || 'white'
         }
-    }
-    ;
+    };
 }
-.simple-form-v1 .component-body.default-font-size * {
+.simple-form-v1 .simple-form-{{component._id}} .component-body.default-font-size * {
     font-size: {{component.formSettings.formTextSize}}px;
 }
 
-
-.inputFields.nthRow div:nth-child(n) {
-  padding-right: {{component.formSettings.spacing.pr}}px;
+.simple-form-v1 .simple-form-{{component._id}} .inputFields.nthRow2 div:nth-child(2n) {
+  padding-left: {{component.formSettings.spacing.pr/2}}px;
 }
 
-.inputFields.nthRow2 div:not(:nth-child(2n)) {
-  padding-right: {{component.formSettings.spacing.pr}}px;
+.simple-form-v1 .simple-form-{{component._id}} .inputFields.nthRow2 div:nth-child(2n+1) {
+  padding-right: {{component.formSettings.spacing.pr/2}}px;
 }
 
-.inputFields.nthRow3 div:not(:nth-child(3n)) {
-  padding-right: {{component.formSettings.spacing.pr}}px;
+.simple-form-v1 .simple-form-{{component._id}} .inputFields.nthRow2 div:not(:nth-child(2n)), .inputFields.nthRow2 div:not(:nth-child(2n+1)) {
+    padding-left: {{component.formSettings.spacing.pr/2}}px;
+    padding-right: {{component.formSettings.spacing.pr/2}}px;
 }
 
-.inputFields.nthRow4 div:not(:nth-child(4n)) {
-  padding-right: {{component.formSettings.spacing.pr}}px;
+.simple-form-v1 .simple-form-{{component._id}} .inputFields.nthRow3 div:nth-child(3n) {
+  padding-left: {{component.formSettings.spacing.pr/2}}px;
 }
 
-.inputFields.thRow5 div:not(:nth-child(5n)) {
-  padding-right: {{component.formSettings.spacing.pr}}px;
+.simple-form-v1 .simple-form-{{component._id}} .inputFields.nthRow3 div:nth-child(3n+1) {
+  padding-right: {{component.formSettings.spacing.pr/2}}px;
+}
+
+.simple-form-v1 .simple-form-{{component._id}} .inputFields.nthRow3 div:not(:nth-child(3n)), .inputFields.nthRow3 div:not(:nth-child(3n+1)) {
+    padding-left: {{component.formSettings.spacing.pr/2}}px;
+    padding-right: {{component.formSettings.spacing.pr/2}}px;
+}
+
+.simple-form-v1 .simple-form-{{component._id}} .inputFields.nthRow4 div:nth-child(4n) {
+  padding-left: {{component.formSettings.spacing.pr/2}}px;
+}
+
+.simple-form-v1 .simple-form-{{component._id}} .inputFields.nthRow4 div:nth-child(4n+1) {
+  padding-right: {{component.formSettings.spacing.pr/2}}px;
+}
+
+.simple-form-v1 .simple-form-{{component._id}} .inputFields.nthRow4 div:not(:nth-child(4n)), .inputFields.nthRow4 div:not(:nth-child(4n+1)) {
+    padding-left: {{component.formSettings.spacing.pr/2}}px;
+    padding-right: {{component.formSettings.spacing.pr/2}}px;
+}
+
+.simple-form-v1 .simple-form-{{component._id}} .inputFields.nthRow5 div:nth-child(5n) {
+  padding-left: {{component.formSettings.spacing.pr/2}}px;
+}
+
+.simple-form-v1 .simple-form-{{component._id}} .inputFields.nthRow5 div:nth-child(5n+1) {
+  padding-right: {{component.formSettings.spacing.pr/2}}px;
+}
+
+.simple-form-v1 .simple-form-{{component._id}} .inputFields.nthRow5 div:not(:nth-child(5n)), .inputFields.nthRow5 div:not(:nth-child(5n+1)) {
+    padding-left: {{component.formSettings.spacing.pr/2}}px;
+    padding-right: {{component.formSettings.spacing.pr/2}}px;
 }
 
 
-.btn-simple-form:hover, .btn-simple-form:active, .btn-simple-form:active:focus, .btn-simple-form:active:hover
+.simple-form-v1 .simple-form-{{component._id}} .btn-simple-form:hover, .btn-simple-form:active, .btn-simple-form:active:focus, .btn-simple-form:active:hover
 {
     color: {{component.btn.color}}!important
 }
