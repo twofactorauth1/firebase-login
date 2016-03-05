@@ -168,6 +168,12 @@ function ssbSiteBuilderSidebarSettingsPanelController($scope, $attrs, $filter, $
       $(window).trigger('resize');
     }
 
+    function addSectionToPage(section, version, activeSectionIndex){
+      if(vm.isSelectedLayout(section)){
+        return pVm.addSectionToPage(section, version, activeSectionIndex);
+      }
+    }
+
     function init(element) {
         vm.element = element;
         vm.setTags(vm.customerTags);

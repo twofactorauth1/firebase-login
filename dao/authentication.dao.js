@@ -275,7 +275,7 @@ var dao = {
                                 req.session.domain = account.get('domain');
                                 self.log.info("Login successful. AccountId is now " + req.session.accountId);
                                 if(!self._verifyActiveTrialOrSub(account) ) {
-                                    log.debug('locking session for account ' + req.session.accountId);
+                                    self.log.debug('locking session for account ' + req.session.accountId);
                                     req.session.locked_sub = true;
                                     account.set('locked_sub', true);
                                     accountDao.saveOrUpdate(account, function(err, savedAccount){

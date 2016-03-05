@@ -1219,7 +1219,7 @@ var dao = {
 
                 if (website.get('themeId')) {
                     var themeId = website.get('themeId').valueOf();
-                    self.log.debug('>> getThemeById', themeId);
+                    self.log.debug('>> getThemeById');
                     ssbThemeDao.getThemeById(themeId, function(err, theme) {
                         if(err || !theme) {
                             self.log.error('Error getting theme, err:', err);

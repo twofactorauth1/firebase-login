@@ -1,16 +1,18 @@
 'use strict';
 /*global app*/
-app.directive('productsComponent', ['$timeout', 'paymentService', 'productService', 'accountService', 'CartDetailsService', 'userService', 'orderService', 'formValidations', 'ipCookie', function ($timeout, PaymentService, ProductService, AccountService, CartDetailsService, UserService, OrderService, formValidations, ipCookie) {
+app.directive('productsComponent', ['$timeout', 'paymentService', 'productService', 'accountService', 'CartDetailsService', 'userService', 'orderService', 'formValidations', 'ipCookie', '$routeParams', '$location', function($timeout, PaymentService, ProductService, AccountService, CartDetailsService, UserService, OrderService, formValidations, ipCookie, $routeParams, $location) {
     return {
         require: [],
         scope: {
             component: '='
         },
         templateUrl: '/components/component-wrap.html',
-        link: function (scope) {
+        link: function(scope) {
             //cookie data fetch
             var cookieKey = 'cart_cookie';
+            var orderCookieKey = 'order_cookie';
             var cookieData = ipCookie(cookieKey);
+            var orderCookieData = ipCookie(orderCookieKey);
             //assign and hold the checkout modal state
             scope.checkoutModalState = 1;
             //default newContact object for checkout modal
@@ -21,6 +23,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
             // initializations
             scope.showTax = true;
             scope.showNotTaxed = false; // Some items are not taxed when summing
+
 
             /*
              * @filterTags
@@ -75,7 +78,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
 
             function filterProducts(data, fn) {
                 var _filteredProducts = [];
-                _.each(data, function (product) {
+                _.each(data, function(product) {
                     if (filterTags(product)) {
                         if (checkOnSale(product)) {
                             product.onSaleToday = true;
@@ -94,25 +97,25 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
              * - get all products, set originalProducts obj and filter
              */
 
-            ProductService.getActiveProducts(function (data) {
+            ProductService.getActiveProducts(function(data) {
                 scope.originalProducts = data;
-                filterProducts(scope.originalProducts, function () {
+                filterProducts(scope.originalProducts, function() {
                     scope.pageChanged(1);
                 });
                 cookieProcessFn();
             });
 
-            scope.$watch(function () {
+            scope.$watch(function() {
                 return CartDetailsService.items
-            }, function (items) {
+            }, function(items) {
                 scope.cartDetails = items
             });
 
 
-            scope.itemClicked = function (item) {
+            scope.itemClicked = function(item) {
                 var returnValue = false;
                 if (item && scope.cartDetails) {
-                    var clicked = _.find(scope.cartDetails, function (product) {
+                    var clicked = _.find(scope.cartDetails, function(product) {
                         return product._id === item._id;
                     });
                     returnValue = clicked ? true : false;
@@ -125,14 +128,11 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
              * - fetch the tax for any given postcode and calculate percent
              */
 
-            scope.getTax = function (postcode, fn) {
-                ProductService.getTax(postcode, function (taxdata) {
+            scope.getTax = function(postcode, fn) {
+                ProductService.getTax(postcode, function(taxdata) {
                     if (taxdata.results[0] && taxdata.results[0].taxSales) {
                         scope.showTax = true;
-                        if ((scope.settings.taxbased === 'business_location')
-                            || (!scope.settings.taxnexus)
-                            || (scope.settings.taxnexus && scope.settings.taxnexus.length == 0)
-                            || (scope.settings.taxnexus && _.pluck(scope.settings.taxnexus, "text").indexOf(taxdata.results[0].geoState) > -1)) {
+                        if ((scope.settings.taxbased === 'business_location') || (!scope.settings.taxnexus) || (scope.settings.taxnexus && scope.settings.taxnexus.length == 0) || (scope.settings.taxnexus && _.pluck(scope.settings.taxnexus, "text").indexOf(taxdata.results[0].geoState) > -1)) {
                             console.debug('Nexus location - taxable: ', taxdata.results[0].geoState);
                             scope.taxPercent = parseFloat(taxdata.results[0].taxSales * 100).toFixed(2);
                         } else {
@@ -157,7 +157,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
             scope.taxPercent = 0;
             scope.showTax = false;
 
-            AccountService(function (err, account) {
+            AccountService(function(err, account) {
                 if (err) {
                     console.log('Controller:MainCtrl -> Method:accountService Error: ' + err);
                 } else {
@@ -173,9 +173,9 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                     console.log('Stripe?', scope.stripeInfo);
                     console.log('commerceSettings ', account.commerceSettings);
                     scope.settings = account.commerceSettings;
-                    if(scope.settings) {
-                        scope.paypalInfo = scope.settings.paypalAddress;
-                        if(scope.settings.taxes && scope.settings.taxbased === 'business_location'){
+                    if (scope.settings) {
+                        scope.paypalInfo = scope.settings.paypal;
+                        if (scope.settings.taxes && scope.settings.taxbased === 'business_location') {
                             if (account.business.addresses && account.business.addresses.length > 0 && account.business.addresses[0].zip) {
                                 console.log('getting tax ', account.business.addresses[0].zip);
                                 if (account.business.addresses[0].zip) {
@@ -205,7 +205,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
              */
 
             scope.invalidZipCode = false;
-            scope.shippingPostCodeChanged = function (postcode) {
+            scope.shippingPostCodeChanged = function(postcode) {
                 console.log('isValidUSZip(postcode) ', isValidUSZip(postcode));
                 scope.emptyZipCode = false;
                 scope.invalidZipCode = false;
@@ -219,7 +219,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                         scope.calculatingTax = true;
                         scope.invalidZipCode = false;
                         scope.showTax = false;
-                        scope.getTax(postcode, function () {
+                        scope.getTax(postcode, function() {
                             scope.calculatingTax = false;
                             scope.showTax = true;
                             scope.calculateTotalChargesfn();
@@ -238,7 +238,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
              */
 
             //TODO: change to $isValid angular style
-            scope.checkBillingFirst = function (first) {
+            scope.checkBillingFirst = function(first) {
                 if (!first) {
                     scope.emptyFirstName = true;
                 } else {
@@ -246,7 +246,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 }
             };
 
-            scope.checkBillingLast = function (last) {
+            scope.checkBillingLast = function(last) {
                 if (!last) {
                     scope.emptyLastName = true;
                 } else {
@@ -254,7 +254,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 }
             };
 
-            scope.checkBillingEmail = function (email) {
+            scope.checkBillingEmail = function(email) {
                 if (!email) {
                     scope.emptyEmail = true;
                     scope.invalidEmail = false;
@@ -264,7 +264,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 }
             };
 
-            scope.checkBillingAddress = function (address) {
+            scope.checkBillingAddress = function(address) {
                 if (!address) {
                     scope.emptyAddress = true;
                 } else {
@@ -272,7 +272,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 }
             };
 
-            scope.checkBillingState = function (state) {
+            scope.checkBillingState = function(state) {
                 if (!state) {
                     scope.emptyState = true;
                 } else {
@@ -280,7 +280,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 }
             };
 
-            scope.checkBillingCity = function (city) {
+            scope.checkBillingCity = function(city) {
                 if (!city) {
                     scope.emptyCity = true;
                 } else {
@@ -288,7 +288,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 }
             };
 
-            scope.checkBillingPhone = function (phone) {
+            scope.checkBillingPhone = function(phone) {
                 if (!phone) {
                     scope.invalidPhone = false;
                 } else {
@@ -296,7 +296,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 }
             };
 
-            scope.validateAddressDetails = function (details, email, phone) {
+            scope.validateAddressDetails = function(details, email, phone) {
                 scope.emptyFirstName = false;
                 scope.emptyLastName = false;
                 scope.emptyEmail = false;
@@ -333,7 +333,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 }
                 if (scope.paypalInfo && scope.stripeInfo) {
                     scope.checkoutModalState = 6;
-                } else if (scope.stripeInfo){
+                } else if (scope.stripeInfo) {
                     scope.checkoutModalState = 3;
                 } else {
                     scope.checkoutModalState = 7;
@@ -345,7 +345,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
              * - when product details is clicked update selected product
              */
 
-            scope.updateSelectedProduct = function (product) {
+            scope.updateSelectedProduct = function(product) {
                 product.attributes = scope.selectedProductAttributes(product);
                 scope.selectedProduct = product;
             };
@@ -378,13 +378,13 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
              * - get attributes availiable for the selected product
              */
 
-            scope.selectedProductAttributes = function (product) {
+            scope.selectedProductAttributes = function(product) {
                 var attributes;
                 if (product) {
                     var formattedAttributes = [];
-                    _.each(product.variations, function (variation) {
-                        _.each(variation.attributes, function (attribute) {
-                            var foundAttr = _.find(formattedAttributes, function (formAttr) {
+                    _.each(product.variations, function(variation) {
+                        _.each(variation.attributes, function(attribute) {
+                            var foundAttr = _.find(formattedAttributes, function(formAttr) {
                                 return formAttr.name === attribute.name;
                             });
                             if (foundAttr) {
@@ -412,13 +412,13 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
              * - update the price when a matching variation is found based on the attribute selection
              */
 
-            scope.updatePrice = function () {
+            scope.updatePrice = function() {
                 var variations = scope.selectedProduct.variations;
                 var selectedAttributes = scope.selectedProduct.attributes;
-                var _matchedVariation = _.find(variations, function (_variation) {
+                var _matchedVariation = _.find(variations, function(_variation) {
                     var match = true;
-                    _.each(selectedAttributes, function (attr) {
-                        var matchedVarAttr = _.find(_variation.attributes, function (var_attr) {
+                    _.each(selectedAttributes, function(attr) {
+                        var matchedVarAttr = _.find(_variation.attributes, function(var_attr) {
                             return var_attr.name === attr.name;
                         });
                         if (matchedVarAttr.option !== attr.selected) {
@@ -439,9 +439,13 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
              * - add product to cart
              */
 
-            scope.addDetailsToCart = function (setCookie, product, variation) {
+            scope.addDetailsToCart = function(setCookie, product, variation) {
                 if (setCookie) {
-                    cookieData.products.push({product: product, variation: variation, quantity: 1});
+                    cookieData.products.push({
+                        product: product,
+                        variation: variation,
+                        quantity: 1
+                    });
                     ipCookie(cookieKey, cookieData);
                 }
                 var productMatch = '';
@@ -450,7 +454,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                     productMatch.variation = true;
                     productMatch.name = product.name;
                 } else {
-                    productMatch = _.find(scope.products, function (item) {
+                    productMatch = _.find(scope.products, function(item) {
                         return item._id === product._id;
                     });
                 }
@@ -461,7 +465,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                     productMatch.quantity = 1;
                 }
 
-                var match = _.find(scope.cartDetails, function (item) {
+                var match = _.find(scope.cartDetails, function(item) {
                     return item._id === productMatch._id;
                 });
                 if (match) {
@@ -478,9 +482,9 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
              * - remove product to cart
              */
 
-            scope.removeFromCart = function (setCookie, product) {
+            scope.removeFromCart = function(setCookie, product) {
                 if (setCookie) {
-                    cookieData.products.forEach(function (e, i) {
+                    cookieData.products.forEach(function(e, i) {
                         if (e.product._id == product._id) {
                             cookieData.products.splice(i, 1);
                         }
@@ -491,11 +495,11 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                     ipCookie(cookieKey, cookieData);
                 }
 
-                var filteredItems = _.filter(scope.cartDetails, function (item) {
+                var filteredItems = _.filter(scope.cartDetails, function(item) {
                     return item._id !== product._id;
                 });
 
-                var productMatch = _.find(scope.products, function (item) {
+                var productMatch = _.find(scope.products, function(item) {
                     return item._id === product._id;
                 });
 
@@ -505,7 +509,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 scope.calculateTotalChargesfn();
             };
 
-            scope.checkCardNumber = function () {
+            scope.checkCardNumber = function() {
                 var card_number = angular.element('#number').val();
                 if (!card_number) {
                     angular.element("#card_number .error").html("Card Number Required");
@@ -539,7 +543,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
              */
 
             scope.basicInfo = {};
-            scope.validateBasicInfo = function () {
+            scope.validateBasicInfo = function() {
                 console.log('validateBasicInfo >>>');
                 // check to make sure the form is completely valid
                 // if (isValid) {
@@ -553,11 +557,11 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
              * - calculate the total based on products in cart
              */
 
-            scope.calculateTotalChargesfn = function () {
+            scope.calculateTotalChargesfn = function() {
                 var _subTotal = 0;
                 var _totalTax = 0;
                 // var total = 0;
-                _.each(scope.cartDetails, function (item) {
+                _.each(scope.cartDetails, function(item) {
                     var _price = item.regular_price;
                     if (checkOnSale(item)) {
                         _price = item.sale_price
@@ -597,10 +601,146 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
 
             scope.paypalPayment = function() {
                 scope.failedOrderMessage = "";
-                scope.checkoutModalState = 7;
-            }
 
-            scope.makeCartPayment = function () {
+                var contact = scope.newContact;
+                if (isEmpty(contact.first) || isEmpty(contact.last) || isEmpty(contact.first) || isEmpty(contact.details[0].emails[0].email)) {
+                    scope.checkoutModalState = 2;
+                    return;
+                }
+
+                scope.initializeModalEvents();
+                var phone_number = '';
+                if (scope.newContact.details[0].phones && scope.newContact.details[0].phones[0] && scope.newContact.details[0].phones[0].number) {
+                    phone_number = scope.newContact.details[0].phones[0].number;
+                }
+                var _formattedDetails = [{
+                    _id: Math.uuid(10),
+                    emails: [{
+                        _id: Math.uuid(10),
+                        email: scope.newContact.details[0].emails[0].email
+                    }],
+                    phones: [],
+                    addresses: [{
+                        _id: Math.uuid(10),
+                        address: scope.newContact.details[0].addresses[0].address,
+                        address2: scope.newContact.details[0].addresses[0].address2,
+                        state: scope.newContact.details[0].addresses[0].state,
+                        zip: scope.newContact.details[0].addresses[0].zip,
+                        country: "US",
+                        defaultShipping: false,
+                        defaultBilling: false,
+                        city: scope.newContact.details[0].addresses[0].city,
+                        countryCode: "",
+                        displayName: ""
+                    }]
+                }];
+                if (scope.newContact.details[0].phones && scope.newContact.details[0].phones[0] && scope.newContact.details[0].phones[0].number) {
+                    _formattedDetails[0].phones.push({
+                        _id: Math.uuid(10),
+                        number: scope.newContact.details[0].phones[0].number
+                    });
+                }
+                console.log('scope.newContact ', scope.newContact);
+                scope.newContact.details = _formattedDetails;
+                console.log('scope.newContact ', scope.newContact);
+
+                var customer = scope.newContact;
+                console.log('customer, ', customer);
+
+                //UserService.postContact(scope.newContact, function (customer) {
+                var order = {
+                    //"customer_id": customer._id,
+                    "customer": customer,
+                    "session_id": null,
+                    "status": "processing",
+                    "cart_discount": 0,
+                    "total_discount": 0,
+                    "total_shipping": 0,
+                    "total_tax": formatNum(scope.totalTax),
+                    "shipping_tax": 0,
+                    "cart_tax": 0,
+                    "currency": "usd",
+                    "line_items": [], // { "product_id": 31, "quantity": 1, "variation_id": 7, "subtotal": "20.00", "tax_class": null, "sku": "", "total": "20.00", "name": "Product Name", "total_tax": "0.00" }
+                    "total_line_items_quantity": scope.cartDetails.length,
+                    "payment_details": {
+                        "method_title": 'Credit Card Payment', //Check Payment, Credit Card Payment
+                        "method_id": 'cc', //check, cc
+                        "card_token": null, //Stripe card token if applicable
+                        "charge_description": null, //description of charge if applicable
+                        "statement_description": null, //22char string for cc statement if applicable
+                        "paid": true
+                    },
+                    "shipping_methods": "", // "Free Shipping",
+                    "shipping_address": {
+                        "first_name": customer.first,
+                        "last_name": customer.last,
+                        "phone": phone_number,
+                        "city": customer.details[0].addresses[0].city,
+                        "country": "US",
+                        "address_1": customer.details[0].addresses[0].address,
+                        "company": "",
+                        "postcode": customer.details[0].addresses[0].zip,
+                        "email": customer.details[0].emails[0].email,
+                        "address_2": customer.details[0].addresses[0].address2,
+                        "state": customer.details[0].addresses[0].state
+                    },
+                    "billing_address": {
+                        "first_name": customer.first,
+                        "last_name": customer.last,
+                        "phone": phone_number,
+                        "city": customer.details[0].addresses[0].city,
+                        "country": "US",
+                        "address_1": customer.details[0].addresses[0].address,
+                        "company": "",
+                        "postcode": customer.details[0].addresses[0].zip,
+                        "email": customer.details[0].emails[0].email,
+                        "address_2": customer.details[0].addresses[0].address2,
+                        "state": customer.details[0].addresses[0].state
+                    },
+                    "notes": []
+                };
+                _.each(scope.cartDetails, function(item) {
+                    var totalAmount = item.regular_price * item.quantity;
+                    var _item = {
+                        "product_id": item._id,
+                        "quantity": item.quantity,
+                        "regular_price": formatNum(item.regular_price),
+                        "variation_id": '',
+                        "tax_class": null,
+                        "sku": "",
+                        "total": formatNum(totalAmount),
+                        "name": item.name,
+                        "total_tax": "0.00"
+                    };
+                    order.line_items.push(_item);
+                });
+
+                OrderService.createPaypalOrder(order, function(data) {
+                    if (data && !data._id) {
+                        var failedOrderMessage = "Error in order processing";
+                        console.log(failedOrderMessage);
+                        if (data.message)
+                            failedOrderMessage = data.message;
+                        scope.checkoutModalState = 6;
+                        scope.failedOrderMessage = failedOrderMessage;
+                        return;
+                    }
+                    console.log('order, ', order);
+                    scope.checkoutModalState = 7;
+                    ipCookie(orderCookieKey, data);
+                    scope.paypalKey = data.payment_details.payKey;
+                    CartDetailsService.items = [];
+
+
+                    scope.subTotal = 0;
+                    scope.totalTax = 0;
+                    scope.total = 0;
+                    ipCookie.remove(cookieKey);
+                    // PaymentService.saveCartDetails(token, parseInt(scope.total * 100), function(data) {});
+                });
+            };
+
+            scope.makeCartPayment = function() {
                 scope.failedOrderMessage = "";
                 scope.checkoutModalState = 4;
                 var expiry = angular.element('#expiry').val().split("/");
@@ -615,16 +755,16 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                     cvc: angular.element('#cvc').val(),
                     exp_month: exp_month,
                     exp_year: exp_year
-                    //TODO: add the following:
-                    /*
-                     * name:name,
-                     * address_city:city,
-                     * address_country:country,
-                     * address_line1:line1,
-                     * address_line2:line2,
-                     * address_state:state,
-                     * address_zip:zip
-                     */
+                        //TODO: add the following:
+                        /*
+                         * name:name,
+                         * address_city:city,
+                         * address_country:country,
+                         * address_line1:line1,
+                         * address_line2:line2,
+                         * address_state:state,
+                         * address_zip:zip
+                         */
                 };
                 if (!cardInput.number || !cardInput.cvc || !cardInput.exp_month || !cardInput.exp_year || !cardInput.name) {
                     scope.checkCardName();
@@ -655,7 +795,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                     }
                 }
 
-                PaymentService.getStripeCardToken(cardInput, function (token, error) {
+                PaymentService.getStripeCardToken(cardInput, function(token, error) {
 
                     // PaymentService.saveCartDetails(token, parseInt(scope.total * 100), function (data) {
                     //     console.log('card details ', data);
@@ -697,33 +837,27 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                     if (scope.newContact.details[0].phones && scope.newContact.details[0].phones[0] && scope.newContact.details[0].phones[0].number) {
                         phone_number = scope.newContact.details[0].phones[0].number;
                     }
-                    var _formattedDetails = [
-                        {
+                    var _formattedDetails = [{
+                        _id: Math.uuid(10),
+                        emails: [{
                             _id: Math.uuid(10),
-                            emails: [
-                                {
-                                    _id: Math.uuid(10),
-                                    email: scope.newContact.details[0].emails[0].email
-                                }
-                            ],
-                            phones: [],
-                            addresses: [
-                                {
-                                    _id: Math.uuid(10),
-                                    address: scope.newContact.details[0].addresses[0].address,
-                                    address2: scope.newContact.details[0].addresses[0].address2,
-                                    state: scope.newContact.details[0].addresses[0].state,
-                                    zip: scope.newContact.details[0].addresses[0].zip,
-                                    country: "US",
-                                    defaultShipping: false,
-                                    defaultBilling: false,
-                                    city: scope.newContact.details[0].addresses[0].city,
-                                    countryCode: "",
-                                    displayName: ""
-                                }
-                            ]
-                        }
-                    ];
+                            email: scope.newContact.details[0].emails[0].email
+                        }],
+                        phones: [],
+                        addresses: [{
+                            _id: Math.uuid(10),
+                            address: scope.newContact.details[0].addresses[0].address,
+                            address2: scope.newContact.details[0].addresses[0].address2,
+                            state: scope.newContact.details[0].addresses[0].state,
+                            zip: scope.newContact.details[0].addresses[0].zip,
+                            country: "US",
+                            defaultShipping: false,
+                            defaultBilling: false,
+                            city: scope.newContact.details[0].addresses[0].city,
+                            countryCode: "",
+                            displayName: ""
+                        }]
+                    }];
                     if (scope.newContact.details[0].phones && scope.newContact.details[0].phones[0] && scope.newContact.details[0].phones[0].number) {
                         _formattedDetails[0].phones.push({
                             _id: Math.uuid(10),
@@ -789,7 +923,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                         },
                         "notes": []
                     };
-                    _.each(scope.cartDetails, function (item) {
+                    _.each(scope.cartDetails, function(item) {
                         var totalAmount = item.regular_price * item.quantity;
                         var _item = {
                             "product_id": item._id,
@@ -804,7 +938,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                         };
                         order.line_items.push(_item);
                     });
-                    OrderService.createOrder(order, function (data) {
+                    OrderService.createOrder(order, function(data) {
                         if (data && !data._id) {
                             var failedOrderMessage = "Error in order processing";
                             console.log(failedOrderMessage);
@@ -829,7 +963,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 //});
             };
 
-            var clearCardDetails = function () {
+            var clearCardDetails = function() {
                 angular.element("#product-card-details").trigger("reset");
                 angular.element("#card_number").removeClass('has-error has-success');
                 angular.element("#card_number .glyphicon").removeClass('glyphicon-remove glyphicon-ok')
@@ -850,11 +984,11 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
              * @
              * -
              */
-            scope.initializeModalEvents = function () {
-                angular.element('#cart-checkout-modal').off('hidden.bs.modal').on('hidden.bs.modal', function () {
+            scope.initializeModalEvents = function() {
+                angular.element('#cart-checkout-modal').off('hidden.bs.modal').on('hidden.bs.modal', function() {
                     console.log("modal closed");
-                    $timeout(function () {
-                        scope.$apply(function () {
+                    $timeout(function() {
+                        scope.$apply(function() {
                             if (scope.checkoutModalState === 5) {
                                 scope.checkoutModalState = 1;
                                 scope.newContact = {};
@@ -871,7 +1005,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
              * - when a page is changes splice the array to show offset products
              */
 
-            scope.pageChanged = function (pageNo) {
+            scope.pageChanged = function(pageNo) {
                 scope.currentProductPage = pageNo;
                 if (scope.products) {
                     var begin = ((scope.currentProductPage - 1) * scope.component.numtodisplay);
@@ -891,11 +1025,11 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
              * - check variation attributes to see if they exist
              */
 
-            scope.variationAttributeExists = function (value) {
+            scope.variationAttributeExists = function(value) {
                 var variations = scope.selectedProduct.variations;
                 var matchedAttribute = false;
-                _.each(variations, function (_variation) {
-                    _.find(_variation.attributes, function (_attribute) {
+                _.each(variations, function(_variation) {
+                    _.find(_variation.attributes, function(_attribute) {
                         if (_attribute.option === value) {
                             matchedAttribute = true;
                         }
@@ -904,7 +1038,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 return matchedAttribute;
             };
 
-            scope.checkCardNumber = function () {
+            scope.checkCardNumber = function() {
                 scope.failedOrderMessage = "";
                 var card_number = angular.element('#number').val();
                 if (!card_number) {
@@ -918,7 +1052,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 }
             };
 
-            scope.checkCardName = function () {
+            scope.checkCardName = function() {
                 scope.failedOrderMessage = "";
                 var name = angular.element('#card_name #name').val();
                 if (!name) {
@@ -934,7 +1068,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
             };
 
 
-            scope.checkCardExpiry = function () {
+            scope.checkCardExpiry = function() {
                 scope.failedOrderMessage = "";
                 var expiry = angular.element('#expiry').val();
                 var card_expiry = expiry.split("/");
@@ -961,7 +1095,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 }
             };
 
-            scope.checkCardCvv = function () {
+            scope.checkCardCvv = function() {
                 scope.failedOrderMessage = "";
                 var card_cvc = angular.element('#cvc').val();
                 if (!card_cvc) {
@@ -975,13 +1109,13 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 }
             };
 
-            scope.checkCoupon = function () {
+            scope.checkCoupon = function() {
                 console.log('>> checkCoupon');
                 var coupon = scope.newAccount.coupon;
                 //console.dir(coupon);
                 //console.log(scope.newAccount.coupon);
                 if (coupon) {
-                    PaymentService.validateCoupon(coupon, function (data) {
+                    PaymentService.validateCoupon(coupon, function(data) {
                         if (data.id && data.id === coupon) {
                             console.log('valid');
                             angular.element("#coupon-name .error").html("");
@@ -1019,11 +1153,13 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
              * - if cookie has data restore the checkout flow to that state
              */
             if (!cookieData) {
-                cookieData = {products: []};
+                cookieData = {
+                    products: []
+                };
             }
-            var cookieProcessFn = function () {
+            var cookieProcessFn = function() {
                 console.log('Cookie Data', cookieData);
-                cookieData.products.forEach(function (entry, index) {
+                cookieData.products.forEach(function(entry, index) {
                     scope.addDetailsToCart(false, entry.product, entry.variation);
                     scope.cartDetails[index].quantity = entry.quantity;
                 });
@@ -1036,30 +1172,54 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 if (cookieData.contactInfo) {
                     scope.newContact = cookieData.contactInfo;
                 }
-                ;
+
+                if ($routeParams.state) {
+                    scope.checkoutModalState = parseInt($routeParams.state);
+                    $('#cart-checkout-modal').modal('show');
+                    if (scope.checkoutModalState == 5 && orderCookieData) {
+                        OrderService.setOrderPaid(orderCookieData, function(data) {
+                            if (data && !data._id) {
+                                var failedOrderMessage = "Error in order processing";
+                                console.log(failedOrderMessage);
+                                if (data.message)
+                                    failedOrderMessage = data.message;
+                                scope.failedOrderMessage = failedOrderMessage;
+                                return;
+                            }
+                            ipCookie.remove(orderCookieKey);
+                        });
+                    }
+                }
             };
 
-            scope.cookieUpdateContactFn = function () {
+            scope.cookieUpdateContactFn = function() {
                 cookieData.contactInfo = scope.newContact;
                 ipCookie(cookieKey, cookieData);
             };
 
-            scope.cookieUpdateQuantityFn = function (item) {
-                cookieData.products.forEach(function (product, index) {
+            scope.cookieUpdateQuantityFn = function(item) {
+                cookieData.products.forEach(function(product, index) {
                     if (item._id == product.product._id) {
                         product.quantity = parseInt(item.quantity);
                     }
                 });
                 ipCookie(cookieKey, cookieData);
             };
+
+            scope.paypalLoginClickFn = function () {
+                var embeddedPPFlow = new PAYPAL.apps.DGFlow({expType: 'instant'});
+                embeddedPPFlow.startFlow($location.absUrl());
+            };
         },
-        controller: function ($scope) {
+        controller: function($scope) {
             var cookieKey = 'cart_cookie';
             var cookieData = ipCookie(cookieKey);
             if (!cookieData) {
-                cookieData = {products: []};
+                cookieData = {
+                    products: []
+                };
             }
-            $scope.setCheckoutState = function (setCookie, state) {
+            $scope.setCheckoutState = function(setCookie, state) {
                 if (setCookie) {
                     cookieData.state = state;
                     ipCookie(cookieKey, cookieData);

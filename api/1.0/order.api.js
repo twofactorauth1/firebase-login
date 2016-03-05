@@ -70,6 +70,7 @@ _.extend(api.prototype, baseApi.prototype, {
      */
     createPaypalOrder: function(req, resp) {
         var self = this;
+        var fullUrl = req.protocol + '://' + req.get('host') + req.path;
         self.log.debug('>> createPaypalOrder');
 
         var order = new $$.m.Order(req.body);
@@ -77,18 +78,19 @@ _.extend(api.prototype, baseApi.prototype, {
         var userId = self.userId(req);
         var accountId = self.currentAccountId(req);
         order.set('account_id', accountId);
+        var cancelUrl = null;
+        var returnUrl = null;
         if(order.get('cancelUrl')) {
             cancelUrl = order.get('cancelUrl');
         } else {
-            //TODO:get it from the referrer
+            cancelUrl = fullUrl + '?state=6';
         }
         if(order.get('returnUrl')) {
             returnUrl = order.get('returnUrl');
         } else {
-            //TODO: get it from the referrer
+            returnUrl = fullUrl + '?state=5';
         }
-        var cancelUrl = null;
-        var returnUrl = null;
+
         orderManager.createPaypalOrder(order, userId, cancelUrl, returnUrl, function(err, order){
             self.log.debug('<< createOrder', err);
             self.sendResultOrError(resp, err, order, 'Error creating order', 500);
@@ -306,7 +308,7 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> orderPaymentComplete');
 
         console.dir(req.body);
-        var order = new $$.m.Order(req.body.order);
+        var order = new $$.m.Order(req.body);
         var orderId = req.params.id;
         order.set('_id', orderId);
         order.set('status', 'PROCESSING');
