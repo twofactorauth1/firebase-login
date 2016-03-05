@@ -92,6 +92,13 @@
         toaster.pop('error', "Subdomain can't be blank");
         return;
       }
+
+      if ($scope.account.commerceSettings.paypal && !account.commerceSettings.paypalAddress) {
+          $scope.saveLoading = false;
+          toaster.pop('error', "Paypal address can't be blank");
+          return;
+      }
+
       AccountService.updateAccount($scope.account, function (data, error) {
         if (error) {
           $scope.saveLoading = false;
