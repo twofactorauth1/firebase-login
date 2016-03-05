@@ -1,6 +1,6 @@
 'use strict';
 /*global app*/
-app.directive('productsComponent', ['$timeout', 'paymentService', 'productService', 'accountService', 'CartDetailsService', 'userService', 'orderService', 'formValidations', 'ipCookie', '$routeParams', function($timeout, PaymentService, ProductService, AccountService, CartDetailsService, UserService, OrderService, formValidations, ipCookie, $routeParams) {
+app.directive('productsComponent', ['$timeout', 'paymentService', 'productService', 'accountService', 'CartDetailsService', 'userService', 'orderService', 'formValidations', 'ipCookie', '$routeParams', '$location', function($timeout, PaymentService, ProductService, AccountService, CartDetailsService, UserService, OrderService, formValidations, ipCookie, $routeParams, $location) {
     return {
         require: [],
         scope: {
@@ -9,10 +9,6 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
         templateUrl: '/components/component-wrap.html',
         link: function(scope) {
             //cookie data fetch
-            var embeddedPPFlow = new PAYPAL.apps.DGFlow({
-                trigger: 'submitBtn',
-                expType: 'instant'
-            });
             var cookieKey = 'cart_cookie';
             var orderCookieKey = 'order_cookie';
             var cookieData = ipCookie(cookieKey);
@@ -1208,6 +1204,11 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                     }
                 });
                 ipCookie(cookieKey, cookieData);
+            };
+
+            scope.paypalLoginClickFn = function () {
+                var embeddedPPFlow = new PAYPAL.apps.DGFlow({expType: 'instant'});
+                embeddedPPFlow.startFlow($location.absUrl());
             };
         },
         controller: function($scope) {
