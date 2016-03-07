@@ -169,7 +169,7 @@ function ssbSiteBuilderSidebarSettingsPanelController($scope, $attrs, $filter, $
     }
 
     function addSectionToPage(section, version, activeSectionIndex){
-      if(vm.isSelectedLayout(section)){
+      if(!vm.isSelectedLayout(section)){
         return pVm.addSectionToPage(section, version, activeSectionIndex);
       }
     }
