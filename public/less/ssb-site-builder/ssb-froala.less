@@ -2,91 +2,178 @@
     //bottom positioning
 }
 
+.app-sidebar-closed{
+    ssb-topbar #ssb-froala-scrollable-container {
+        //topbar positioning
+        @media (min-width: 1280px) {
+            width: calc(~"100% - (16.66666667% + 15px + 15px + 3px) - (16.66666667% + 15px + 15px + 1px)");
+            left: calc(~"16.66666667% + 15px + 15px + 3px");
+            right: calc(~"16.66666667% + 15px + 15px + 1px");
+            white-space: nowrap;
+            height: 60px;
+            border-top: 0;
+            border-bottom: 0;
+        }
+
+        @media (min-width: 1330px) {
+            width: calc(~"100% - (16.66666667% + 75px + 15px + 15px + 3px) - (16.66666667% + 15px + 15px + 1px)");
+            left: calc(~"16.66666667% + 75px + 15px + 15px + 3px");
+        }
+    }
+
+    .fr-popup.fr-desktop.fr-inline,
+    .fr-toolbar.fr-inline.fr-desktop {
+    
+      //topbar positioning
+      @media (min-width: 1280px) {
+          pointer-events: none;
+          border: 0 none!important;
+          box-shadow: none!important;
+          // height: 60px;
+          position: relative!important;
+          top: 0!important;
+          left: 0!important;
+          margin: 0!important;
+          max-width: none;
+      }
+    }
+
+    .fr-popup.fr-desktop.fr-inline {
+      //topbar positioning
+      @media (min-width: 1280px) {
+
+          // position: absolute!important;
+          // width: 100%;
+          text-align: center;
+
+          &:before {
+              content: "";
+              display: inline-block;
+              vertical-align: middle;
+              height: 100%;
+          }
+
+          .fr-buttons {
+              position: relative;
+              display: inline-block;
+              box-shadow: none;
+              vertical-align: middle;
+              text-align: center;
+          }
+          // position: fixed;
+          // transform: translate(calc(-1 * ((16.666667% + 15px + 15px + 3px) + (16.66666667% + 15px + 15px + 1px))),0)
+      }
+    } 
+
+    /*
+    * Style the first instance to use as a "disabled" state
+    */
+    .fr-toolbar.fr-inline.fr-desktop.ssb-froala-first-editor {
+      //topbar positioning
+      @media (min-width: 1280px) {
+          // display: inline-block!important;
+
+          button {
+              opacity: .5;
+          }
+      }
+    }
+
+    /*
+     * Style the active instance of the editor toolbar
+     */
+    .fr-toolbar.fr-inline.fr-desktop.ssb-froala-active-editor {
+
+        //topbar positioning
+        @media (min-width: 1280px) {
+            position: absolute!important;
+            z-index: 5;
+            pointer-events: auto!important;
+            display: block!important;
+
+            button {
+                opacity: 1;
+            }
+        }
+
+        //topbar positioning for wider screens
+        @media (min-width: 1300px) {
+            left: 50%!important;
+            transform: translateX(-50%);
+        }
+
+    }
+
+    .fr-popup.fr-inline.fr-desktop.fr-active {
+        //topbar positioning for wider screens
+        @media (min-width: 1280px) {
+            // position: absolute!important;
+            z-index: 5;
+            pointer-events: auto!important;
+            display: inline-block!important;
+            // width: 100%;
+            // top: -60px!important;
+
+            // left: 50%!important;
+            // transform: translateX(-50%);
+        }
+    }
+
+    //various tweaks to layout within topbar
+    @media (min-width: 1280px) {
+        .fr-popup .fr-arrow,
+        .fr-toolbar .fr-arrow {
+            opacity: 0!important;
+        }
+
+        .fr-popup .fr-input-line, .fr-popup .fr-action-buttons {
+            display: inline-block!important;
+            margin: 0 1em;
+        }
+
+        .fr-popup .fr-input-line {
+            padding: 0!important;
+        }
+
+        .fr-popup .fr-input-line input + span {
+
+        }
+
+        body[ng-controller] .fr-popup .fr-input-line input[type="text"]:focus {
+            // background: transparent!important;
+            // color: #808080!important;
+        }
+
+        body[ng-controller] .fr-popup .fr-active.fr-layer {
+            margin: 0!important;
+            display: block;
+            width: auto!important;
+            margin: 0 auto!important;
+        }
+
+        body[ng-controller] .fr-popup .fr-input-line input.fr-not-empty + span,
+        body[ng-controller] .fr-popup .fr-input-line textarea.fr-not-empty + span {
+            color: #808080!important;
+            line-height: 0;
+        }
+    }
+
+}
+
 ssb-topbar #ssb-froala-scrollable-container {
     position: absolute;
     left: 70px;
     width: 100%;
 
-    //topbar positioning
-    @media (min-width: 1280px) {
-        width: calc(~"100% - (16.66666667% + 15px + 15px + 3px) - (16.66666667% + 15px + 15px + 1px)");
-        left: calc(~"16.66666667% + 15px + 15px + 3px");
-        right: calc(~"16.66666667% + 15px + 15px + 1px");
-        white-space: nowrap;
-        height: 60px;
-        border-top: 0;
-        border-bottom: 0;
-    }
-
-    @media (min-width: 1330px) {
-        width: calc(~"100% - (16.66666667% + 75px + 15px + 15px + 3px) - (16.66666667% + 15px + 15px + 1px)");
-        left: calc(~"16.66666667% + 75px + 15px + 15px + 3px");
-    }
+    
 
 }
 
 .fr-popup.fr-desktop.fr-inline,
 .fr-toolbar.fr-inline.fr-desktop {
     transition: opacity .25s ease-in-out;
-    max-width: 330px;
-
-    //topbar positioning
-    @media (min-width: 1280px) {
-        pointer-events: none;
-        border: 0 none!important;
-        box-shadow: none!important;
-        // height: 60px;
-        position: relative!important;
-        top: 0!important;
-        left: 0!important;
-        margin: 0!important;
-        max-width: none;
-    }
-
-    //bottom positioning
-    // position: fixed!important;
-    // transform: translate(-50%,0);
-    // top: auto!important;
-    // bottom: 0!important;
-    // left: 50%!important;
-    // width: 100%;
-    // @media (min-width: 768px) {
-    //     //bottom positioning
-    //     // margin-left: 70px;
-    // }
-    // @media (min-width: 992px) {
-    //     //bottom positioning
-    //     // margin-left: 140px;
-    // }
+    max-width: 330px;    
 }
-
-.fr-popup.fr-desktop.fr-inline {
-    //topbar positioning
-    @media (min-width: 1280px) {
-
-        // position: absolute!important;
-        // width: 100%;
-        text-align: center;
-
-        &:before {
-            content: "";
-            display: inline-block;
-            vertical-align: middle;
-            height: 100%;
-        }
-
-        .fr-buttons {
-            position: relative;
-            display: inline-block;
-            box-shadow: none;
-            vertical-align: middle;
-            text-align: center;
-        }
-        // position: fixed;
-        // transform: translate(calc(-1 * ((16.666667% + 15px + 15px + 3px) + (16.66666667% + 15px + 15px + 1px))),0)
-    }
-}
-
 .fr-wrapper.show-placeholder .fr-placeholder {
     pointer-events: none;
 }
@@ -119,98 +206,7 @@ ssb-topbar #ssb-froala-scrollable-container {
     display: none!important;
 }
 
-/*
- * Style the first instance to use as a "disabled" state
- */
-.fr-toolbar.fr-inline.fr-desktop.ssb-froala-first-editor {
-    //topbar positioning
-    @media (min-width: 1280px) {
-        // display: inline-block!important;
 
-        button {
-            opacity: .5;
-        }
-    }
-}
-
-/*
- * Style the active instance of the editor toolbar
- */
-.fr-toolbar.fr-inline.fr-desktop.ssb-froala-active-editor {
-
-    //topbar positioning
-    @media (min-width: 1280px) {
-        position: absolute!important;
-        z-index: 5;
-        pointer-events: auto!important;
-        display: block!important;
-
-        button {
-            opacity: 1;
-        }
-    }
-
-    //topbar positioning for wider screens
-    @media (min-width: 1300px) {
-        left: 50%!important;
-        transform: translateX(-50%);
-    }
-
-}
-
-.fr-popup.fr-inline.fr-desktop.fr-active {
-    //topbar positioning for wider screens
-    @media (min-width: 1280px) {
-        // position: absolute!important;
-        z-index: 5;
-        pointer-events: auto!important;
-        display: inline-block!important;
-        // width: 100%;
-        // top: -60px!important;
-
-        // left: 50%!important;
-        // transform: translateX(-50%);
-    }
-}
-
-//various tweaks to layout within topbar
-@media (min-width: 1280px) {
-    .fr-popup .fr-arrow,
-    .fr-toolbar .fr-arrow {
-        opacity: 0!important;
-    }
-
-    .fr-popup .fr-input-line, .fr-popup .fr-action-buttons {
-        display: inline-block!important;
-        margin: 0 1em;
-    }
-
-    .fr-popup .fr-input-line {
-        padding: 0!important;
-    }
-
-    .fr-popup .fr-input-line input + span {
-
-    }
-
-    body[ng-controller] .fr-popup .fr-input-line input[type="text"]:focus {
-        // background: transparent!important;
-        // color: #808080!important;
-    }
-
-    body[ng-controller] .fr-popup .fr-active.fr-layer {
-        margin: 0!important;
-        display: block;
-        width: auto!important;
-        margin: 0 auto!important;
-    }
-
-    body[ng-controller] .fr-popup .fr-input-line input.fr-not-empty + span,
-    body[ng-controller] .fr-popup .fr-input-line textarea.fr-not-empty + span {
-        color: #808080!important;
-        line-height: 0;
-    }
-}
 
 body[ng-controller] .fr-popup .fr-input-line input.fr-not-empty + span,
 body[ng-controller] .fr-popup .fr-input-line textarea.fr-not-empty + span {
