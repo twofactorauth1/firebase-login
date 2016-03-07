@@ -9,6 +9,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
         templateUrl: '/components/component-wrap.html',
         link: function(scope) {
             scope.showPaypalLoading = false;
+            scope.showPaypalErrorMsg = false;
             //cookie data fetch
             var cookieKey = 'cart_cookie';
             var orderCookieKey = 'order_cookie';
@@ -1191,6 +1192,9 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                             }
                             ipCookie.remove(orderCookieKey);
                         });
+                    }
+                    if (scope.checkoutModalState == 6) {
+                        scope.showPaypalErrorMsg = true;
                     }
                 }
             };
