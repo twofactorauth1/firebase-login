@@ -93,7 +93,7 @@
         return;
       }
 
-      if ($scope.account.commerceSettings.paypal && !account.commerceSettings.paypalAddress) {
+      if ($scope.account.commerceSettings.paypal && !$scope.account.commerceSettings.paypalAddress) {
           $scope.saveLoading = false;
           toaster.pop('error', "Paypal address can't be blank");
           return;
