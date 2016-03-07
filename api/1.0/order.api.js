@@ -74,7 +74,7 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> createPaypalOrder');
 
         var order = new $$.m.Order(req.body);
-        order.set('status', 'PENDING_PAYMENT');
+        order.set('status', 'pending_payment');
         var userId = self.userId(req);
         var accountId = self.currentAccountId(req);
         order.set('account_id', accountId);
@@ -311,7 +311,7 @@ _.extend(api.prototype, baseApi.prototype, {
         var order = new $$.m.Order(req.body);
         var orderId = req.params.id;
         order.set('_id', orderId);
-        order.set('status', 'PROCESSING');
+        order.set('status', 'processing');
         order.attributes.modified.date = new Date();
         self.log.debug('>> Order', order);
         var created_at = order.get('created_at');

@@ -16,7 +16,7 @@ app.directive('featureListComponent',["$window", function ($window) {
           index = 0;
         }
         var newFeature = {
-          "top": "<div style='text-align:center'><span class=\"fa fa-arrow-right\" style=\"color:ffffff;font-size:96px;\"></span></div>",
+          "top": "<div style='text-align:center'><span class=\"fa fa-arrow-right\" style=\"color:#ffffff;font-size:96px;\"></span></div>",
           "content": "<div style=\"text-align: center;\"><br><span style=\"font-size:24px;\">Feature Title</span></div><div style=\"text-align: center;\"><br>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nisi ab, placeat. Officia qui molestiae incidunt est adipisci.</div><div style=\"text-align: center;\"><br><a class=\"btn ssb-theme-btn\" data-cke-saved-href=\"http://\" href=\"http://\">Learn More</a></div>"
         };
 

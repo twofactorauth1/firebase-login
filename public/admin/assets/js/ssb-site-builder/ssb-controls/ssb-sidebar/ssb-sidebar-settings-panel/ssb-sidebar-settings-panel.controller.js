@@ -28,7 +28,7 @@ function ssbSiteBuilderSidebarSettingsPanelController($scope, $attrs, $filter, $
     vm.duplicateSection = pVm.duplicateSection;
     vm.enabledPlatformSections = pVm.enabledPlatformSections;
     vm.customerTags = pVm.customerTags;
-    vm.addSectionToPage = pVm.addSectionToPage;
+    vm.addSectionToPage = addSectionToPage;
     vm.constructVideoUrl = pVm.constructVideoUrl;
 
     vm.tagToCustomer = tagToCustomer;
@@ -169,7 +169,7 @@ function ssbSiteBuilderSidebarSettingsPanelController($scope, $attrs, $filter, $
     }
 
     function addSectionToPage(section, version, activeSectionIndex){
-      if(vm.isSelectedLayout(section)){
+      if(!vm.isSelectedLayout(section)){
         return pVm.addSectionToPage(section, version, activeSectionIndex);
       }
     }

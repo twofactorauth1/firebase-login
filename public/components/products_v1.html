@@ -347,13 +347,15 @@
                     </div>
                     <div class="row thank-you" style="height:400px" ng-if="checkoutModalState == 6">
                         <h3 class="center mb20">Payment Choice</h3>
+                        <div class="alert alert-danger" ng-show='showPaypalErrorMsg'>Try again with paypal or use Credit Card?</div>
                         <div class="col-sm-6">
                             <div class="panel animated no-radius text-center margin-bottom-0 cursor-pointer" ng-class="{true:'panel-light-grey pulse',false:'panel-white'}">
-                                <div class="panel-body" ng-class="{'bg-light-grey': hover1}" ng-mouseenter="hover1 = true" ng-mouseleave="hover1 = false" ng-click="paypalPayment()">
+                                <div class="panel-body" ng-class="{'bg-light-grey': hover1}" ng-mouseenter="hover1 = true" ng-mouseleave="hover1 = false" ng-click="showPaypalLoading || paypalPayment()" ng-disabled='showPaypalLoading'>
                                     <span class="fa-stack fa-2x"> <i class="fa fa-square fa-stack-2x text-primary"></i> <i class="fa fa-envelope fa-stack-1x fa-inverse"></i> </span>
                                     <h3 class="StepTitle margin-top-10">Paypal</h3>
                                     <p class="text-small">
                                         Checkout with Paypal
+                                        <img src='/images/paypal-loading.gif' ng-show='showPaypalLoading' />
                                     </p>
                                 </div>
                             </div>

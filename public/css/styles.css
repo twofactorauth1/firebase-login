@@ -2587,7 +2587,7 @@ div[data-type="feature-block"] .component-inner {
   max-width: 1100px;
   margin: 0 auto;
 }
-.simple-form-v1 .btn,
+.simple-form-v1 .btn.btn-simple-form,
 .simple-form-v1 input {
   height: 50px;
   margin: 0;
@@ -2595,7 +2595,7 @@ div[data-type="feature-block"] .component-inner {
   border: 0;
   border: 1px solid #eeeeee;
 }
-.simple-form-v1 .btn .fa,
+.simple-form-v1 .btn.btn-simple-form .fa,
 .simple-form-v1 input .fa {
   padding: 0 0 0 10px;
 }
@@ -2678,7 +2678,7 @@ div[data-type="feature-block"] .component-inner {
   padding-top: 15px !important;
   -moz-user-select: text;
 }
-.simple-form-v2 .btn {
+.simple-form-v2 .btn.btn-simple-form {
   height: 50px;
   margin: 0;
   padding: 0;
