@@ -2589,7 +2589,7 @@
   max-width: 1100px;
   margin: 0 auto;
 }
-#componentloader .simple-form-v1 .btn,
+#componentloader .simple-form-v1 .btn.btn-simple-form,
 #componentloader .simple-form-v1 input {
   height: 50px;
   margin: 0;
@@ -2597,7 +2597,7 @@
   border: 0;
   border: 1px solid #eeeeee;
 }
-#componentloader .simple-form-v1 .btn .fa,
+#componentloader .simple-form-v1 .btn.btn-simple-form .fa,
 #componentloader .simple-form-v1 input .fa {
   padding: 0 0 0 10px;
 }
