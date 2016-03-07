@@ -2679,7 +2679,7 @@
   padding-top: 15px !important;
   -moz-user-select: text;
 }
-#componentloader .simple-form-v2 .btn {
+#componentloader .simple-form-v2 .btn.btn-simple-form {
   height: 50px;
   margin: 0;
   padding: 0;

@@ -2678,7 +2678,7 @@ div[data-type="feature-block"] .component-inner {
   padding-top: 15px !important;
   -moz-user-select: text;
 }
-.simple-form-v2 .btn {
+.simple-form-v2 .btn.btn-simple-form {
   height: 50px;
   margin: 0;
   padding: 0;
