@@ -113,8 +113,9 @@
                                                 <label for="form-field-select-1">
                                                     Status
                                                 </label>
-                                                <select ng-model="product.status" class="form-control" ng-options="status.data as status.label for status in productStatusOptions">
+                                                <select ng-model="product.status" class="form-control">
                                                     <option value="">-- choose status --</option>
+                                                    <option value="{{status.data}}" ng-repeat="status in productStatusOptions" ng-disabled='status.data == "active" && product.type == "SUBSCRIPTION" && !plans.length'>{{status.label}}</option>
                                                 </select>
                                             </div>
                                             <div class="form-group" ng-class="{'has-error': productTypeError}">
