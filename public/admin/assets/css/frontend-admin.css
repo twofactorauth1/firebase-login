@@ -1601,7 +1601,7 @@
 }
 #componentloader .meet-team-v1 .profilepic {
   margin-bottom: 20px;
-  min-width: 300px;
+  min-width: 256px;
 }
 @media (max-width: 767px) {
   #componentloader .meet-team-v1 .profilepic {
@@ -2783,7 +2783,6 @@
 }
 #componentloader .products-v1 .product {
   margin-bottom: 35px;
-  min-width: 256px;
 }
 #componentloader .products-v1 .product .img-wrap {
   text-align: center;
@@ -2794,11 +2793,6 @@
 }
 #componentloader .products-v1 .product .img-wrap i.fa {
   color: #5b5b60;
-}
-@media (max-width: 767px) {
-  #componentloader .products-v1 .product {
-    min-width: 100%;
-  }
 }
 #componentloader .products-v1 .tab-content .col-sm-3 {
   padding-top: 0px;
