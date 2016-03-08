@@ -174,6 +174,7 @@ function ssbSiteBuilderSidebarSettingsPanelController($scope, $attrs, $filter, $
       }
     }
 
+
     function init(element) {
         vm.element = element;
         vm.setTags(vm.customerTags);

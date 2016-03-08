@@ -494,7 +494,6 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
 
     function pageSectionClick(e) {
       vm.uiState.openSidebarPanel = '';
-      // vm.uiState.showSectionPanel = true;
     }
 
     function pageResize(e) {

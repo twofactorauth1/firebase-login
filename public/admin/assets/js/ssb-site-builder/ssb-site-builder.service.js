@@ -5,9 +5,9 @@
 
 	app.factory('SimpleSiteBuilderService', SimpleSiteBuilderService);
 
-	SimpleSiteBuilderService.$inject = ['$rootScope', '$http', '$q', '$timeout', 'AccountService', 'WebsiteService', '$modal', 'pageConstant'];
+	SimpleSiteBuilderService.$inject = ['$rootScope', '$compile', '$http', '$q', '$timeout', 'AccountService', 'WebsiteService', '$modal', 'pageConstant'];
 	/* @ngInject */
-	function SimpleSiteBuilderService($rootScope, $http, $q, $timeout, AccountService, WebsiteService, $modal, pageConstant) {
+	function SimpleSiteBuilderService($rootScope, $compile, $http, $q, $timeout, AccountService, WebsiteService, $modal, pageConstant) {
 		var ssbService = {};
 		var baseWebsiteAPIUrl = '/api/1.0/cms/website/';
 		var basePageAPIUrl = '/api/1.0/cms/page/';
@@ -60,11 +60,18 @@
         ssbService.getTempUUID = getTempUUID;
         ssbService.setTempUUIDForSection = setTempUUIDForSection;
         ssbService.setPermissions = setPermissions;
+        ssbService.addCompiledElement = addCompiledElement;
+        ssbService.addCompiledElementEditControl = addCompiledElementEditControl;
+        ssbService.getCompiledElement = getCompiledElement;
+        ssbService.getCompiledElementEditControl = getCompiledElementEditControl;
+        ssbService.compileEditorElements = compileEditorElements;
 
         ssbService.contentComponentDisplayOrder = [];
         ssbService.inValidPageHandles = pageConstant.inValidPageHandles;
 
         ssbService.permissions = {};
+        ssbService.compiledElements = {};
+        ssbService.compiledElementEditControls = {};
 
         /**
          * This represents the category sorting for the add content panel
@@ -1175,6 +1182,101 @@
             });
 
         }
+
+        function addCompiledElement(componentId, elementId, el) {
+            if (!ssbService.compiledElements[componentId]) {
+                ssbService.compiledElements[componentId] = {};
+            }
+            ssbService.compiledElements[componentId][elementId] = el;
+        }
+
+        function addCompiledElementEditControl(componentId, elementId, el) {
+            if (!ssbService.compiledElementEditControls[componentId]) {
+                ssbService.compiledElementEditControls[componentId] = {};
+            }
+            ssbService.compiledElementEditControls[componentId][elementId] = el;
+        }
+
+        function getCompiledElement(componentId, elementId) {
+            return ssbService.compiledElements[componentId] && ssbService.compiledElements[componentId][elementId];
+        }
+
+        function getCompiledElementEditControl(componentId, elementId) {
+            return ssbService.compiledElementEditControls[componentId] && ssbService.compiledElementEditControls[componentId][elementId];
+        }
+
+        /**
+         * For special elements that are added to sections via drag and drop or Froala
+         *  - TODO: support other element types (currently only buttons)
+         *  - Need to be compiled, so:
+         *  - Find the matching markup and $compile to Angular directive
+         *  - Don't recompile
+         *
+         * @param {object} editor - editor instance (froala)
+         * @param {boolean} initial - compile all if true
+         * @param {string} componentId - id of parent text component/directive
+         * @param {object} scope - initial scope from editor.js
+         *
+         */
+        function compileEditorElements(editor, initial, componentId, scope) {
+
+            if (initial) {
+                ssbService.compiledElements[componentId] = {};
+            }
+
+            editor.$el.find('.ssb-theme-btn').each(function() {
+                var btn = $(this);
+                var btnHTML;
+                if (initial || undefined === btn.attr('data-compiled')) {
+                    btn.removeClass('ssb-theme-btn-active-element');
+                    btn.attr('ng-class', 'vm.elementClass()');
+                    btn.attr('ng-attr-style', '{{vm.elementStyle()}}');
+                    btnHTML = btn.get(0).outerHTML.replace('ng-scope', '');
+                    $compile(btnHTML)(scope, function(cloned, scope) {
+                        var tempId = ssbService.getTempUUID();
+                        cloned.attr('data-compiled', tempId);
+                        btn.replaceWith(cloned);
+                        ssbService.compiledElements[componentId][tempId] = angular.element('[data-compiled=' + tempId + ']');
+                        $rootScope.$broadcast('$ssbElementAdded', tempId);
+                    });
+                }
+            });
+
+            Object.keys(ssbService.compiledElements[componentId]).forEach(function(elementId) {
+                if (editor.$el.find('[data-compiled=' + elementId + ']').length === 0) {
+                    $rootScope.$broadcast('$ssbElementRemoved', elementId);
+                }
+            });
+
+            $rootScope.$broadcast('$ssbElementsChanged', componentId);
+
+        }
+
+        function removeCompiledElement(componentId, elementId) {
+            if (ssbService.compiledElements[componentId][elementId]) {
+                ssbService.compiledElements[componentId][elementId].remove();
+                ssbService.compiledElements[componentId][elementId] = null;
+                delete ssbService.compiledElements[componentId][elementId];
+            }
+        }
+
+        function removeCompiledElementEditControl(componentId, elementId) {
+            if (ssbService.compiledElementEditControls[componentId][elementId]) {
+                ssbService.compiledElementEditControls[componentId][elementId].remove();
+                ssbService.compiledElementEditControls[componentId][elementId] = null;
+                delete ssbService.compiledElementEditControls[componentId][elementId];
+            }
+        }
+
+        $rootScope.$on('$ssbElementAdded', function(event, componentId, elementId) {
+            console.log('$ssbElementAdded', componentId, elementId);
+        });
+
+        $rootScope.$on('$ssbElementRemoved', function(event, componentId, elementId) {
+            removeCompiledElement(componentId, elementId);
+            removeCompiledElementEditControl(componentId, elementId);
+            console.log('$ssbElementRemoved', componentId, elementId);
+        });
 
 
 		(function init() {

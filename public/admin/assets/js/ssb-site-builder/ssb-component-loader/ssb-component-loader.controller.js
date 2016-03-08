@@ -2,9 +2,9 @@
 
 app.controller('SiteBuilderComponentLoaderController', ssbComponentLoaderController);
 
-ssbComponentLoaderController.$inject = ['$scope', '$attrs', '$filter'];
+ssbComponentLoaderController.$inject = ['$rootScope', '$scope', '$attrs', '$filter', 'SimpleSiteBuilderService'];
 /* @ngInject */
-function ssbComponentLoaderController($scope, $attrs, $filter) {
+function ssbComponentLoaderController($rootScope, $scope, $attrs, $filter, SimpleSiteBuilderService) {
 
     console.info('component-loader directive init...')
 

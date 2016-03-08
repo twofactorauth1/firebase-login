@@ -11,7 +11,8 @@ function ssbEditControl() {
             uiState: '=',
             sectionIndex: '=',
             component: '=',
-            componentIndex: '=?'
+            componentIndex: '=?',
+            compiledControlId: '@?'
         },
         templateUrl: 'assets/js/ssb-site-builder/ssb-controls/ssb-edit-control/ssb-edit-control.component.html',
         controller: 'SiteBuilderEditControlController',

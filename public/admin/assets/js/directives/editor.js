@@ -33,46 +33,20 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
             $timeout(function() {
                 scope.$apply(function() {
                     ngModel.$setViewValue(editor.html.get());
-                    scope.compileEditorComponents(editor);
+                    scope.compileEditorElements(editor);
                 });
             }, 0);
         };
 
-        /**
-         * For elements that are added to sections via drag and drop or Froala
-         *  - Need to be compiled, so:
-         *  - Find the matching markup and $compile to Angular directive
-         *  - Don't recompile
-         */
-        scope.compileEditorComponents = function(editor, initial) {
-            scope.compiledComponents = scope.compiledComponents || [];
+        scope.compileEditorElements = function(editor, initial) {
 
-            if (initial) {
-                scope.compiledComponents = [];
-            }
+            SimpleSiteBuilderService.compileEditorElements(editor, initial, componentId, scope);
 
-            editor.$el.find('.ssb-theme-btn').each(function() {
-                var btn = $(this);
-                if (initial || undefined === btn.attr('data-compiled')) {
-                    btn[0].className += ' {{vm.btnClass()}}';
-                    //TODO: need to get parent scope onto buttons scope somehow...
-                    // scope.$parent.vm
-                    $compile(btn)(scope, function(cloned, scope){
-                        var tempId = SimpleSiteBuilderService.getTempUUID();
-                        cloned.attr('data-compiled', tempId);
-                        btn.replaceWith(cloned);
-                        scope.compiledComponents.push(tempId);
-                    });
-                }
-            });
-            scope.compiledComponents.forEach(function(id) {
-                if (editor.$el.find('[data-compiled=' + id + ']').length === 0) {
-                    $rootScope.$broadcast('$ssbComponentRemoved_' + id);
-                }
-            });
         };
 
+
       var elem = angular.element(element[0].querySelector('.editable'))[0];
+      var componentId = $(elem).closest('[component]').attr('id');
 
       if (scope.$parent.ssbEditor || (scope.$parent.vm && scope.$parent.vm.ssbEditor)) {
         $(function() {
@@ -88,7 +62,7 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
               }
 
               //compile special elements
-              scope.compileEditorComponents(editor, true);
+              scope.compileEditorElements(editor, true);
 
             }).froalaEditor($.FroalaEditor.config)
                 .on('froalaEditor.contentChanged', function(e, editor) {
@@ -132,7 +106,7 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
                     }
 
                     if (cmd === 'undo') {
-                        scope.compileEditorComponents(editor, true);
+                        scope.compileEditorElements(editor, true);
                     }
 
                 }).on('froalaEditor.blur', function (e, editor) {
