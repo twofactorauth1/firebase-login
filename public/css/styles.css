@@ -2842,6 +2842,14 @@ div[data-type="feature-block"] .component-inner {
 .products-v1 .line-wrap-text {
   word-wrap: break-word;
 }
+.products-v1 .masonry-brick {
+  min-width: 256px;
+}
+@media (max-width: 767px) {
+  .products-v1 .masonry-brick {
+    min-width: 100%;
+  }
+}
 .shopping-cart {
   color: #444!important;
   margin-left: -10px;
