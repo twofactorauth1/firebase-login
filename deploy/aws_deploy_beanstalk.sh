@@ -30,7 +30,7 @@ env_check(){
 		export ENV_NAME="indigeweb-test-env"
 		export S3_BUCKET="elasticbeanstalk-us-east-1-213805526570"
 		export GOOGLE_CLIENT_ID="277102651227-koaeib7b05jjc355thcq3bqtkbuv1o5r.apps.googleusercontent.com"
-	    export GOOGLE_CLIENT_SECRET="lg41TWgRgRfZQ22Y9Qd902pH"
+	  export GOOGLE_CLIENT_SECRET="lg41TWgRgRfZQ22Y9Qd902pH"
 	else
 		on_err "No environment specified"
 	fi	
