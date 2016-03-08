@@ -1601,6 +1601,12 @@
 }
 #componentloader .meet-team-v1 .profilepic {
   margin-bottom: 20px;
+  min-width: 300px;
+}
+@media (max-width: 767px) {
+  #componentloader .meet-team-v1 .profilepic {
+    min-width: 100%;
+  }
 }
 #componentloader .meet-team-v1 .profilepic-hover {
   opacity: 0;

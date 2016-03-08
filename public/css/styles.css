@@ -1592,6 +1592,12 @@ div[data-type="feature-block"] .component-inner {
 }
 .meet-team-v1 .profilepic {
   margin-bottom: 20px;
+  min-width: 300px;
+}
+@media (max-width: 767px) {
+  .meet-team-v1 .profilepic {
+    min-width: 100%;
+  }
 }
 .meet-team-v1 .profilepic-hover {
   opacity: 0;
