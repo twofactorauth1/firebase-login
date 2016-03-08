@@ -980,6 +980,10 @@ div[data-type="feature-list"] .inner-page {
 .feature-list-v4 .feature-icon {
   padding-top: 10px;
   padding-bottom: 10px;
+  min-width: 30%;
+}
+.feature-list-v4 .feature-content-container {
+  max-width: 70%;
 }
 .feature-list-v4 .container-xs-height {
   display: table;
