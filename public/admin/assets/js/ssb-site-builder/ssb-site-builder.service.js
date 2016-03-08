@@ -1134,18 +1134,19 @@
         }
 
         function setTempUUIDForSection(section) {
+            var duplicateSection = angular.copy(section);
 
-            section._id = ssbService.getTempUUID();
+            duplicateSection._id = ssbService.getTempUUID();
 
-            if (section.components.length) {
-                section.components.forEach(function(component) {
+            if (duplicateSection.components.length) {
+                duplicateSection.components.forEach(function(component) {
                     component._id = ssbService.getTempUUID();
                 });
             }
 
-            section = JSON.parse(angular.toJson(section));
+            duplicateSection = JSON.parse(angular.toJson(duplicateSection));
 
-            return section;
+            return duplicateSection;
         }
 
 
