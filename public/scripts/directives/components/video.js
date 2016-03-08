@@ -5,7 +5,7 @@ app.directive('videoComponent',['$sce', function ($sce) {
     },
     templateUrl: '/components/component-wrap.html',
     link: function (scope, element, attrs, ctrl) {
-      scope.flvVideoUrl = function (iframeUrl, url, autoPlay, controls) {
+      scope.flvVideoUrl = function (iframeUrl, url, autoPlay, controls, branding) {
         var parsedUrl = urlParser.parse(url);
         var retUrl = "";
         if (parsedUrl) {
@@ -14,6 +14,8 @@ app.directive('videoComponent',['$sce', function ($sce) {
             retUrl = retUrl + '&autoplay=1';
           if(!controls)
             retUrl = retUrl + '&controls=0';
+          if(!branding)
+            retUrl = retUrl + '&modestbranding=1';
         }
         else
           retUrl = iframeUrl
