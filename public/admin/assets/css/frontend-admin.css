@@ -853,6 +853,14 @@
   background: url('../assets/images/indimain/wave-bg.jpg');
   background-size: 15% auto;
 }
+#componentloader .feature-list-v1 .feature {
+  min-width: 256px;
+}
+@media (max-width: 767px) {
+  #componentloader .feature-list-v1 .feature {
+    min-width: 100%;
+  }
+}
 #componentloader div[data-type="feature-list"] .inner-page {
   padding: 30px 0;
 }
@@ -954,6 +962,14 @@
 }
 #componentloader .feature-list-v3 .feature-single img {
   max-width: 100%;
+}
+#componentloader .feature-list-v3 .feature {
+  min-width: 256px;
+}
+@media (max-width: 767px) {
+  #componentloader .feature-list-v3 .feature {
+    min-width: 100%;
+  }
 }
 #componentloader .feature-list-v4 {
   /* fix firefox responsive images */
