@@ -1217,6 +1217,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 var embeddedPPFlow = new PAYPAL.apps.DGFlow({expType: 'instant'});
                 embeddedPPFlow.startFlow($location.absUrl());
             };
+            
         },
         controller: function($scope) {
             var cookieKey = 'cart_cookie';
