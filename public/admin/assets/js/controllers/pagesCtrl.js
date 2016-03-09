@@ -58,7 +58,7 @@
             }
             page.hasScreenshot = true;
           }
-          if (page.type !== 'template' && page.handle !== 'blog' && page.handle !== 'single-post' && page.handle !== 'signup') {
+          if (page.type !== 'template' && page.handle !== 'blog' && page.handle !== 'single-post') {
             pagesArr.push(page);
           }
         }
