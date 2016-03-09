@@ -225,6 +225,15 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
           classString += ' ssb-component-index-' + index + ' ';
         }
 
+        if (component.layoutModifiers) {
+            if (component.layoutModifiers.columns) {
+                classString += ' ssb-component-layout-columns-' + component.layoutModifiers.columns + ' ';
+            }
+            if (component.layoutModifiers.columnsSpacing) {
+                classString += ' ssb-component-layout-columns-spacing-' + component.layoutModifiers.columnsSpacing + ' ';
+            }
+        }
+
 
         if (vm.uiState && index === vm.uiState.activeComponentIndex) {
           classString += ' ssb-active-component ';

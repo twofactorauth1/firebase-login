@@ -7,7 +7,7 @@
     <hr ng-if="vm.component.type != 'navigation'"></hr>
     <div class="form-group" ng-if="vm.component.type != 'navigation'">
         <label for="component-title" tooltip-placement="top" tooltip="The anchor of the component">Anchor</label>
-        <span tooltip-placement="top" tooltip-html-unsafe="The anchor of the vm.component."><i class="fa fa-info-circle" /></span>
+        <span tooltip-placement="top" tooltip-html-unsafe="The anchor of the component."><i class="fa fa-info-circle" /></span>
         <input class="form-control" type="text" ng-model="vm.component.anchor" ng-change="slugifyAnchor(vm.component.anchor);">
     </div>
     <!-- <hr></hr>
@@ -26,5 +26,23 @@
             <option value="left">Left</option>
             <option value="right">Right</option>
         </select>
+    </div>
+</div>
+<div class="row padding-10" ng-if="vm.component.type === 'text-only' || vm.component.type === 'ssb-text'">
+    <div class="form-group margin-bottom-5">
+        <label><strong>Columns</strong></label>
+        <span tooltip-placement="top" tooltip-html-unsafe="The number of columns for text to flow into."><i class="fa fa-info-circle" /></span>
+        <div class="col-sm-6 pull-right">
+            <input type="text" ng-model="vm.component.layoutModifiers.columns" min="0" max="4" integer-touch-spin>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <div class="form-group margin-bottom-5">
+        <label><strong>Columns Spacing</strong></label>
+        <span tooltip-placement="top" tooltip-html-unsafe="The space between columns."><i class="fa fa-info-circle" /></span>
+        <div class="col-sm-6 pull-right">
+            <input type="text" ng-model="vm.component.layoutModifiers.columnsSpacing" min="0" max="500" integer-touch-spin>
+        </div>
+        <div class="clearfix"></div>
     </div>
 </div>
