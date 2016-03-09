@@ -43,6 +43,9 @@ function ssbSiteBuilderSidebarSettingsPanelController($scope, $attrs, $filter, $
       options: SimpleSiteBuilderService.getSpectrumColorOptions()
     };
 
+    vm.fontFamilyOptions = SimpleSiteBuilderService.getFontFamilyOptions();
+
+
     $scope.component = vm.component;
 
     //TODO: change child components... unset (blank out) or set to color?
