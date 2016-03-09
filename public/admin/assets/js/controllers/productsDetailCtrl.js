@@ -515,6 +515,10 @@
           }
         });
 
+        if (!$scope.plans.length) {
+            $scope.product.status = 'inactive';
+        }
+
         if (fn) {
           fn();
         }
