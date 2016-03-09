@@ -155,6 +155,48 @@
             <!-- <small>Please select an image of 1280 x 400px minimum to prevent blurriness</small> -->
         </div>
     </div>
+    <div class="row" ng-if="component.type == 'simple-form'">
+        <accordion close-others="oneAtATime" class="accordion">
+            <accordion-group heading="INPUT FIELD STYLE">
+                <div class="form-group margin-bottom-5">
+                    <label><strong>Text Size</strong></label>
+                    <span tooltip-placement="top" tooltip-html-unsafe="horizontal space between fields"><i class="fa fa-info-circle" /></span>
+                    <div class="col-sm-6 pull-right">
+                        <input type="text" ng-model="component.formSettings.formTextSize" min="6" max="96" integer-touch-spin>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="form-group margin-bottom-5">
+                    <label><strong>Input Text Size</strong></label>
+                    <span tooltip-placement="top" tooltip-html-unsafe="horizontal space between fields"><i class="fa fa-info-circle" /></span>
+                    <div class="col-sm-6 pull-right">
+                        <input type="text" ng-model="component.formSettings.inputTextSize" min="6" max="96" integer-touch-spin>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="form-group margin-bottom-5">
+                    <label><strong>Font</strong></label>
+                    <span tooltip-placement="top" tooltip-html-unsafe="font family for entire form"><i class="fa fa-info-circle" /></span>
+                    <div class="clearfix"></div>
+                    <select ng-model="component.formSettings.formFontFamily" class="form-control margin-bottom-0">
+                        <option value="">--Select--</option>
+                        <option ng-repeat="(value, key) in vm.fontFamilyOptions" value="{{value}}" ng-selected="{{value == component.formSettings.formFontFamily}}">{{key}}</option>
+                    </select>            
+                    <div class="clearfix"></div>
+                </div>
+                <div class="form-group margin-bottom-5">
+                    <label><strong>Input text font</strong></label>
+                    <span tooltip-placement="top" tooltip-html-unsafe="font family for input fields"><i class="fa fa-info-circle" /></span>
+                    <div class="clearfix"></div>
+                    <select ng-model="component.formSettings.inputFontFamily" class="form-control margin-bottom-0">
+                        <option value="">--Select--</option>
+                        <option ng-repeat="(value, key) in vm.fontFamilyOptions" value="{{value}}" ng-selected="{{value == component.formSettings.inputFontFamily}}">{{key}}</option>
+                    </select>            
+                    <div class="clearfix"></div>
+                </div>       
+            </accordion-group>
+        </accordion>    
+    </div>
     <div class="row padding-10" ng-if="component.type === 'blog' || component.type === 'blog-teaser'">
         <div class="form-group">
             <label for="post-order">Post Order </label>
