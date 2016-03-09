@@ -2671,6 +2671,11 @@ div[data-type="feature-block"] .component-inner {
   top: 8px;
   right: 8px;
 }
+@media (max-width: 767px) {
+  .simple-form-v1 .btn-simple-form {
+    width: 100% !important;
+  }
+}
 /********** Simple Form v2 **********/
 .simple-form-v2 {
   background: black;
@@ -10332,6 +10337,19 @@ a[href="https://froala.com/wysiwyg-editor"] {
 }
 div[class^="spacing-"] input {
   width: 60px;
+}
+.accordion.simple-form-settings {
+  margin-left: -15px;
+  margin-right: -15px;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+.accordion.simple-form-settings .row {
+  border-top: 0px !important;
+}
+.btn-radio-form.active {
+  background-color: #286090 !important;
+  border-color: #204d74 !important;
 }
 .ssb-edit-control-component-btn {
   display: none!important;
