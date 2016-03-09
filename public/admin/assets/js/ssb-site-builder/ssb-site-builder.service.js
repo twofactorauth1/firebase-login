@@ -1167,7 +1167,7 @@
                 if (newValue) {
                     unbindWatcher();
                     $timeout(function() {
-                        if (ssbService.account._id === 1693 && $.FroalaEditor.config.toolbarButtons.indexOf('html') === -1) {
+                        if (ssbService.account.showhide.editHTML === true && $.FroalaEditor.config.toolbarButtons.indexOf('html') === -1) {
                             $.FroalaEditor.config.toolbarButtons.push('html');
                             ssbService.permissions.html = true;
                             //todo: better permissions-based script loading
@@ -1238,14 +1238,14 @@
                         cloned.attr('data-compiled', tempId);
                         btn.replaceWith(cloned);
                         ssbService.compiledElements[componentId][tempId] = angular.element('[data-compiled=' + tempId + ']');
-                        $rootScope.$broadcast('$ssbElementAdded', tempId);
+                        $rootScope.$broadcast('$ssbElementAdded', componentId, tempId);
                     });
                 }
             });
 
             Object.keys(ssbService.compiledElements[componentId]).forEach(function(elementId) {
                 if (editor.$el.find('[data-compiled=' + elementId + ']').length === 0) {
-                    $rootScope.$broadcast('$ssbElementRemoved', elementId);
+                    $rootScope.$broadcast('$ssbElementRemoved', componentId, elementId);
                 }
             });
 
@@ -1262,7 +1262,7 @@
         }
 
         function removeCompiledElementEditControl(componentId, elementId) {
-            if (ssbService.compiledElementEditControls[componentId][elementId]) {
+            if (ssbService.compiledElementEditControls && ssbService.compiledElementEditControls[componentId][elementId]) {
                 ssbService.compiledElementEditControls[componentId][elementId].remove();
                 ssbService.compiledElementEditControls[componentId][elementId] = null;
                 delete ssbService.compiledElementEditControls[componentId][elementId];

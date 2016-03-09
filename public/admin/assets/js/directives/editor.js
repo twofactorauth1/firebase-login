@@ -78,6 +78,9 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
 
                     console.log('toolbar show')
 
+                    //close sidebar
+                    $rootScope.app.layout.isSidebarClosed = true;
+
                     //hide any currently shown toolbar
                     $('.fr-toolbar').removeClass('ssb-froala-active-editor');
 

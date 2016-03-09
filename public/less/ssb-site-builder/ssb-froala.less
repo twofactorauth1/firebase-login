@@ -9,8 +9,8 @@ ssb-topbar #ssb-froala-scrollable-container {
 
     //topbar positioning
     @media (min-width: 1280px) {
-        width: calc(~"100% - (16.66666667% + 15px + 15px + 3px) - (16.66666667% + 15px + 15px + 1px)");
-        left: calc(~"16.66666667% + 15px + 15px + 3px");
+        width: calc(~"100% - (16.66666667% + 85px + 15px + 15px + 3px) - (16.66666667% + 15px + 15px + 1px)");
+        left: calc(~"16.66666667% + 85px + 15px + 15px + 3px");
         right: calc(~"16.66666667% + 15px + 15px + 1px");
         white-space: nowrap;
         height: 60px;
@@ -18,10 +18,10 @@ ssb-topbar #ssb-froala-scrollable-container {
         border-bottom: 0;
     }
 
-    @media (min-width: 1330px) {
-        width: calc(~"100% - (16.66666667% + 75px + 15px + 15px + 3px) - (16.66666667% + 15px + 15px + 1px)");
-        left: calc(~"16.66666667% + 75px + 15px + 15px + 3px");
-    }
+    // @media (min-width: 1330px) {
+    //     width: calc(~"100% - (16.66666667% + 75px + 15px + 15px + 3px) - (16.66666667% + 15px + 15px + 1px)");
+    //     left: calc(~"16.66666667% + 75px + 15px + 15px + 3px");
+    // }
 
 }
 
@@ -144,6 +144,8 @@ ssb-topbar #ssb-froala-scrollable-container {
         z-index: 5;
         pointer-events: auto!important;
         display: block!important;
+        left: 50%!important;
+        transform: translateX(-50%);
 
         button {
             opacity: 1;
@@ -151,10 +153,10 @@ ssb-topbar #ssb-froala-scrollable-container {
     }
 
     //topbar positioning for wider screens
-    @media (min-width: 1300px) {
-        left: 50%!important;
-        transform: translateX(-50%);
-    }
+    // @media (min-width: 1300px) {
+    //     left: 50%!important;
+    //     transform: translateX(-50%);
+    // }
 
 }
 

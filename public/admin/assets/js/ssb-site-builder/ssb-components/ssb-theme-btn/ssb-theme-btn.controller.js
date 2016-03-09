@@ -118,6 +118,8 @@ function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude,
 
         if (buildDataObjFromHTMLDone) {
 
+            positionEditControl();
+
             vm.elementDataOriginal = vm.elementDataOriginal || angular.copy(vm.elementData);
 
             if (!angular.equals(vm.elementDataOriginal, vm.elementData)) {

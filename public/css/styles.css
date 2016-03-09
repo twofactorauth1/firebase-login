@@ -11417,18 +11417,15 @@ ssb-topbar .ui-select-match-text > small {
 [ssb-image-component] img {
   width: 100%;
 }
-.app-sidebar-closed {
-  /*
-    * Style the first instance to use as a "disabled" state
-    */
-  /*
-     * Style the active instance of the editor toolbar
-     */
+ssb-topbar #ssb-froala-scrollable-container {
+  position: absolute;
+  left: 70px;
+  width: 100%;
 }
 @media (min-width: 1280px) {
-  .app-sidebar-closed ssb-topbar #ssb-froala-scrollable-container {
-    width: calc(100% - (16.66666667% + 15px + 15px + 3px) - (16.66666667% + 15px + 15px + 1px));
-    left: calc(16.66666667% + 15px + 15px + 3px);
+  ssb-topbar #ssb-froala-scrollable-container {
+    width: calc(100% - (16.66666667% + 85px + 15px + 15px + 3px) - (16.66666667% + 15px + 15px + 1px));
+    left: calc(16.66666667% + 85px + 15px + 15px + 3px);
     right: calc(16.66666667% + 15px + 15px + 1px);
     white-space: nowrap;
     height: 60px;
@@ -11436,15 +11433,14 @@ ssb-topbar .ui-select-match-text > small {
     border-bottom: 0;
   }
 }
-@media (min-width: 1330px) {
-  .app-sidebar-closed ssb-topbar #ssb-froala-scrollable-container {
-    width: calc(100% - (16.66666667% + 75px + 15px + 15px + 3px) - (16.66666667% + 15px + 15px + 1px));
-    left: calc(16.66666667% + 75px + 15px + 15px + 3px);
-  }
+.fr-popup.fr-desktop.fr-inline,
+.fr-toolbar.fr-inline.fr-desktop {
+  transition: opacity 0.25s ease-in-out;
+  max-width: 330px;
 }
 @media (min-width: 1280px) {
-  .app-sidebar-closed .fr-popup.fr-desktop.fr-inline,
-  .app-sidebar-closed .fr-toolbar.fr-inline.fr-desktop {
+  .fr-popup.fr-desktop.fr-inline,
+  .fr-toolbar.fr-inline.fr-desktop {
     pointer-events: none;
     border: 0 none!important;
     box-shadow: none!important;
@@ -11456,91 +11452,22 @@ ssb-topbar .ui-select-match-text > small {
   }
 }
 @media (min-width: 1280px) {
-  .app-sidebar-closed .fr-popup.fr-desktop.fr-inline {
+  .fr-popup.fr-desktop.fr-inline {
     text-align: center;
   }
-  .app-sidebar-closed .fr-popup.fr-desktop.fr-inline:before {
+  .fr-popup.fr-desktop.fr-inline:before {
     content: "";
     display: inline-block;
     vertical-align: middle;
     height: 100%;
   }
-  .app-sidebar-closed .fr-popup.fr-desktop.fr-inline .fr-buttons {
+  .fr-popup.fr-desktop.fr-inline .fr-buttons {
     position: relative;
     display: inline-block;
     box-shadow: none;
     vertical-align: middle;
     text-align: center;
   }
-}
-@media (min-width: 1280px) {
-  .app-sidebar-closed .fr-toolbar.fr-inline.fr-desktop.ssb-froala-first-editor button {
-    opacity: .5;
-  }
-}
-@media (min-width: 1280px) {
-  .app-sidebar-closed .fr-toolbar.fr-inline.fr-desktop.ssb-froala-active-editor {
-    position: absolute!important;
-    z-index: 5;
-    pointer-events: auto!important;
-    display: block!important;
-  }
-  .app-sidebar-closed .fr-toolbar.fr-inline.fr-desktop.ssb-froala-active-editor button {
-    opacity: 1;
-  }
-}
-@media (min-width: 1300px) {
-  .app-sidebar-closed .fr-toolbar.fr-inline.fr-desktop.ssb-froala-active-editor {
-    left: 50%!important;
-    transform: translateX(-50%);
-  }
-}
-@media (min-width: 1280px) {
-  .app-sidebar-closed .fr-popup.fr-inline.fr-desktop.fr-active {
-    z-index: 5;
-    pointer-events: auto!important;
-    display: inline-block !important;
-  }
-}
-.fr-box.fr-code-view .CodeMirror {
-  font-size: 16px!important;
-  text-align: left;
-}
-@media (min-width: 1280px) {
-  .app-sidebar-closed .fr-popup .fr-arrow,
-  .app-sidebar-closed .fr-toolbar .fr-arrow {
-    opacity: 0!important;
-  }
-  .app-sidebar-closed .fr-popup .fr-input-line,
-  .app-sidebar-closed .fr-popup .fr-action-buttons {
-    display: inline-block !important;
-    margin: 0 1em;
-  }
-  .app-sidebar-closed .fr-popup .fr-input-line {
-    padding: 0!important;
-  }
-  .app-sidebar-closed body[ng-controller] .fr-popup .fr-active.fr-layer {
-    margin: 0!important;
-    display: block;
-    width: auto!important;
-    margin: 0 auto!important;
-    min-width: 310px;
-  }
-  .app-sidebar-closed body[ng-controller] .fr-popup .fr-input-line input.fr-not-empty + span,
-  .app-sidebar-closed body[ng-controller] .fr-popup .fr-input-line textarea.fr-not-empty + span {
-    color: #808080!important;
-    line-height: 0;
-  }
-}
-ssb-topbar #ssb-froala-scrollable-container {
-  position: absolute;
-  left: 70px;
-  width: 100%;
-}
-.fr-popup.fr-desktop.fr-inline,
-.fr-toolbar.fr-inline.fr-desktop {
-  transition: opacity 0.25s ease-in-out;
-  max-width: 330px;
 }
 .fr-wrapper.show-placeholder .fr-placeholder {
   pointer-events: none;
@@ -11568,6 +11495,67 @@ ssb-topbar #ssb-froala-scrollable-container {
  */
 .ssb-froala-content-editable-false {
   display: none!important;
+}
+/*
+ * Style the first instance to use as a "disabled" state
+ */
+@media (min-width: 1280px) {
+  .fr-toolbar.fr-inline.fr-desktop.ssb-froala-first-editor button {
+    opacity: .5;
+  }
+}
+/*
+ * Style the active instance of the editor toolbar
+ */
+@media (min-width: 1280px) {
+  .fr-toolbar.fr-inline.fr-desktop.ssb-froala-active-editor {
+    position: absolute!important;
+    z-index: 5;
+    pointer-events: auto!important;
+    display: block!important;
+    left: 50%!important;
+    transform: translateX(-50%);
+  }
+  .fr-toolbar.fr-inline.fr-desktop.ssb-froala-active-editor button {
+    opacity: 1;
+  }
+}
+@media (min-width: 1280px) {
+  .fr-popup.fr-inline.fr-desktop.fr-active {
+    z-index: 5;
+    pointer-events: auto!important;
+    display: inline-block !important;
+  }
+}
+.fr-box.fr-code-view .CodeMirror {
+  font-size: 16px!important;
+  text-align: left;
+}
+@media (min-width: 1280px) {
+  .fr-popup .fr-arrow,
+  .fr-toolbar .fr-arrow {
+    opacity: 0!important;
+  }
+  .fr-popup .fr-input-line,
+  .fr-popup .fr-action-buttons {
+    display: inline-block !important;
+    margin: 0 1em;
+  }
+  .fr-popup .fr-input-line {
+    padding: 0!important;
+  }
+  body[ng-controller] .fr-popup .fr-active.fr-layer {
+    margin: 0!important;
+    display: block;
+    width: auto!important;
+    margin: 0 auto!important;
+    min-width: 310px;
+  }
+  body[ng-controller] .fr-popup .fr-input-line input.fr-not-empty + span,
+  body[ng-controller] .fr-popup .fr-input-line textarea.fr-not-empty + span {
+    color: #808080!important;
+    line-height: 0;
+  }
 }
 body[ng-controller] .fr-popup .fr-input-line input.fr-not-empty + span,
 body[ng-controller] .fr-popup .fr-input-line textarea.fr-not-empty + span {
