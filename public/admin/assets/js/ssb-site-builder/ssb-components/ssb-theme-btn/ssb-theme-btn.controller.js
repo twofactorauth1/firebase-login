@@ -144,7 +144,7 @@ function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude,
     //TODO: use https://github.com/martinandert/react-inline to generate inline styles for sections/components
     function elementClass() {
         var classObj = {};
-        var el = SimpleSiteBuilderService.getCompiledElement(parentComponent.attr('id'), elementId);
+       // var el = SimpleSiteBuilderService.getCompiledElement(parentComponent.attr('id'), elementId);
 
         classObj['ssb-' + vm.elementData.type] = true;
 
