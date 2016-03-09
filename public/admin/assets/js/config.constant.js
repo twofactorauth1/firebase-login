@@ -954,5 +954,12 @@ app.constant('JS_REQUIRES', {
         'assets/js/indi-login-modal/indi-login-modal.controller.js',
         'assets/js/indi-login-modal/indi-login-modal.service.js'
     ]
+  },
+  {
+    name: 'fast-json-patch',
+    files: [
+        // '../js/libs/fast-json-patch/src/json-patch.js',
+        '../js/libs/fast-json-patch/src/json-patch-duplex.js',
+    ]
   }]
 });

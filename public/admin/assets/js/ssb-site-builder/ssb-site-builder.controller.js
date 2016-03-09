@@ -29,6 +29,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     vm.legacyComponentMedia = legacyComponentMedia;
     vm.checkIfDirty = checkIfDirty;
     vm.resetDirty = resetDirty;
+    vm.pageChanged = pageChanged;
 
 
     vm.uiState = {
@@ -128,7 +129,9 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     $scope.$watch(function() { return SimpleSiteBuilderService.loading }, updateLoading, true);
 
     $scope.$watch('vm.state.page', function(page) {
-        if (page && vm.state.originalPage && !angular.equals(page, vm.state.originalPage)) {
+        console.time('angular.equals for page');
+        if (page && vm.state.originalPage && !vm.pageChanged(page, vm.state.originalPage)) {
+            console.timeEnd('angular.equals for page');
             vm.state.pendingPageChanges = true;
             console.log("Page changed");
             if(vm.uiState && vm.uiState.selectedPage)
@@ -502,6 +505,49 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         } else {
             vm.uiState.sidebarOrientation = 'horizontal';
         }
+
+    }
+
+    function pageChanged(originalPage, currentPage) {
+        var originalPage = JSON.parse(angular.toJson(originalPage));
+        var currentPage = JSON.parse(angular.toJson(currentPage));
+        var jsondiff = jsonpatch.compare(originalPage, currentPage);
+        var changes = jsondiff.length;
+
+        if (changes) {
+            for (var i = 0; i < changes; i++) {
+                var diff = jsondiff[i];
+                if (diff.op === 'replace' && diff.path.indexOf('text') != -1 && diff.value.indexOf('data-compile')) {
+
+                    var originalPageCopy = angular.copy(originalPage);
+                    var pointer = { op: "_get", "path": diff.path };
+                    jsonpatch.apply(originalPageCopy, [pointer]);
+
+                    console.log('pointer.value', pointer.value);
+                    console.log('diff.value', diff.value);
+
+
+                    var i = 0;
+                    var j = 0;
+                    var result = "";
+
+                    while (j < diff.value.length) {
+                        if (pointer.value[i] != diff.value[j] || i == pointer.value.length) {
+                            result += diff.value[j];
+                        } else {
+                            i++;
+                            j++;
+                        }
+                    }
+
+                    console.log(result);
+
+                    // changes--;
+                }
+            }
+        }
+
+        return changes > 0;
 
     }
 

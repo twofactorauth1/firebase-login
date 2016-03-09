@@ -85,6 +85,7 @@
     "ckeditor": "4.4.7",
     "components-modernizr": "2.8.3",
     "eq.js": "~1.7.1",
+    "fast-json-patch": "~0.5.7",
     "fastclick": "1.0.6",
     "fingerprint": "0.5.4",
     "font-awesome": "4.4.0",
