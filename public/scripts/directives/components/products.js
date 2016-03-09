@@ -333,12 +333,12 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 if (scope.emptyFirstName || scope.emptyLastName || scope.emptyEmail || scope.emptyAddress || scope.emptyState || scope.emptyCity || scope.invalidZipCode || scope.emptyZipCode || scope.invalidEmail || scope.invalidPhone) {
                     return;
                 }
-                if (scope.paypalInfo && scope.stripeInfo) {
+                if (scope.stripeInfo && scope.paypalInfo) {
                     scope.checkoutModalState = 6;
                 } else if (scope.stripeInfo) {
                     scope.checkoutModalState = 3;
-                } else {
-                    scope.checkoutModalState = 7;
+                } else if (scope.paypalInfo) {
+                    scope.checkoutModalState = 6;
                 }
             };
 
@@ -1217,7 +1217,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 var embeddedPPFlow = new PAYPAL.apps.DGFlow({expType: 'instant'});
                 embeddedPPFlow.startFlow($location.absUrl());
             };
-            
+
         },
         controller: function($scope) {
             var cookieKey = 'cart_cookie';
