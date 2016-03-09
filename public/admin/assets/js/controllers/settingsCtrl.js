@@ -50,15 +50,7 @@
       }, 0);
     };
 
-    /*
-     * @getWebsite
-     * get website obj for SEO tab and keywords
-     */
 
-    WebsiteService.getWebsite(function (website) {
-      $scope.website = website;
-      $scope.keywords = website.seo.keywords;
-    });
 
     /*
      * @AccountService
@@ -75,6 +67,35 @@
           taxnexus: ''
         };
       }
+        /*
+       * @getWebsite
+       * get website obj for SEO tab and keywords
+       */
+      WebsiteService.getWebsite(function (website) {
+        // Website Title/Description #4223
+        var _defaults = false;
+        $scope.website = website;
+        $scope.keywords = website.seo.keywords;
+        if($scope.website){
+          if(!$scope.website.title && account.business.name){
+            $scope.website.title = angular.copy(account.business.name);
+            _defaults = true;
+          }
+          if(!$scope.website.seo){
+            $scope.website.seo = {};
+          }
+          if(!$scope.website.seo.description && account.business.description){
+            $scope.website.seo.description = angular.copy(account.business.description);
+            _defaults = true;
+          }
+        }
+        if(_defaults){
+          $scope.saveLoading = true;
+          WebsiteService.updateWebsite($scope.website, function () {
+            $scope.saveLoading = false;
+          });
+        }
+      });
     });
 
     /*
