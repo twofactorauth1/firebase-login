@@ -62,13 +62,14 @@ function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude,
 
     $scope.$watch('vm.elementData', updateTextEditor, true);
 
-    // $scope.$watch('pvm.state.saveLoading', function() {
-    //     if (pvm && pvm.state.saveLoading) {
-    //         SimpleSiteBuilderService
-    //             .getCompiledElement(parentComponent.attr('id'), elementId)
-    //             .removeClass('ssb-theme-btn-active-element');
-    //     }
-    // });
+    $scope.$watch('pvm.state.saveLoading', function() {
+        if (pvm && pvm.state.saveLoading) {
+            SimpleSiteBuilderService
+                .getCompiledElement(parentComponent.attr('id'), elementId)
+                .removeClass('ssb-theme-btn-active-element');
+            updateTextEditor(true);
+        }
+    });
 
 
 
@@ -114,7 +115,7 @@ function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude,
         buildDataObjFromHTMLDone = true;
     }
 
-    function updateTextEditor() {
+    function updateTextEditor(force) {
 
         if (buildDataObjFromHTMLDone) {
 
@@ -130,6 +131,10 @@ function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude,
                     textEditorElement.froalaEditor('events.trigger', 'contentChanged');
                 }
 
+            }
+
+            if (force && textEditorElement.froalaEditor) {
+                textEditorElement.froalaEditor('events.trigger', 'contentChanged');
             }
 
         }
