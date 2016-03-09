@@ -1227,8 +1227,9 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
             };
 
             scope.paypalLoginClickFn = function () {
-                var embeddedPPFlow = new PAYPAL.apps.DGFlow({expType: 'instant'});
-                embeddedPPFlow.startFlow($location.absUrl());
+                var dgFlow = new PAYPAL.apps.DGFlow({expType: null});
+                dgFlow.startFlow($location.absUrl());
+                $('#cart-checkout-modal').modal('hide');
             };
 
         },
