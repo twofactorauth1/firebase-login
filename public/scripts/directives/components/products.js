@@ -25,6 +25,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
             // initializations
             scope.showTax = true;
             scope.showNotTaxed = false; // Some items are not taxed when summing
+            scope.hasSubscriptionProduct = false;
 
 
             /*
@@ -333,12 +334,23 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 if (scope.emptyFirstName || scope.emptyLastName || scope.emptyEmail || scope.emptyAddress || scope.emptyState || scope.emptyCity || scope.invalidZipCode || scope.emptyZipCode || scope.invalidEmail || scope.invalidPhone) {
                     return;
                 }
-                if (scope.stripeInfo && scope.paypalInfo) {
-                    scope.checkoutModalState = 6;
-                } else if (scope.stripeInfo) {
+
+                scope.hasSubscriptionProduct = false;
+                scope.cartDetails.forEach(function (item, index) {
+                    if (item.type == "SUBSCRIPTION") {
+                        scope.hasSubscriptionProduct = true;
+                    }
+                });
+                if (scope.hasSubscriptionProduct) {
                     scope.checkoutModalState = 3;
-                } else if (scope.paypalInfo) {
-                    scope.checkoutModalState = 6;
+                } else {
+                    if (scope.stripeInfo && scope.paypalInfo) {
+                        scope.checkoutModalState = 6;
+                    } else if (scope.stripeInfo) {
+                        scope.checkoutModalState = 3;
+                    } else if (scope.paypalInfo) {
+                        scope.checkoutModalState = 6;
+                    }
                 }
             };
 
@@ -714,7 +726,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                         "total": formatNum(totalAmount),
                         "name": item.name,
                         "total_tax": "0.00",
-                        type: item.type
+                        "type": item.type
                     };
                     order.line_items.push(_item);
                 });

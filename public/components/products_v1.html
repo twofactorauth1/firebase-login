@@ -395,9 +395,9 @@
                 </div>
                 <div class="modal-footer cart-footer" ng-hide="checkoutModalState !== 3">
                     <button class="btn ssb-theme-btn btn-orange btn-checkout pull-right" ng-click="makeCartPayment()"><i class="fa fa-shopping-cart"></i> Checkout</button>
-                    <button ng-if='!paypalInfo' class="btn ssb-theme-btn btn-info continue-shopping pull-left" ng-click="setCheckoutState(true, 2)"><i class="fa fa-chevron-left"></i> Back
+                    <button ng-if='(paypalInfo && hasSubscriptionProduct) || (stripeInfo && hasSubscriptionProduct)' class="btn ssb-theme-btn btn-info continue-shopping pull-left" ng-click="setCheckoutState(true, 2)"><i class="fa fa-chevron-left"></i> Back
                     </button>
-                    <button ng-if='paypalInfo' class="btn ssb-theme-btn btn-info continue-shopping pull-left" ng-click="setCheckoutState(true, 6)"><i class="fa fa-chevron-left"></i> Back
+                    <button ng-if='paypalInfo && !hasSubscriptionProduct' class="btn ssb-theme-btn btn-info continue-shopping pull-left" ng-click="setCheckoutState(true, 6)"><i class="fa fa-chevron-left"></i> Back
                     </button>
                 </div>
                 <div class="modal-footer billing-footer" ng-hide="checkoutModalState !== 2">
