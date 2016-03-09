@@ -4,22 +4,16 @@
         <span tooltip-placement="top" tooltip-html-unsafe="Show/hide vm.component."><i class="fa fa-info-circle" /></span>
         <switch ng-model="vm.component.visibility" class="pull-right" ng-change="saveComponentChanges()"></switch>
     </div>
-    <hr ng-if="vm.component.type != 'navigation'"></hr>
-    <div class="form-group" ng-if="vm.component.type != 'navigation'">
+</div>
+<div class="row padding-10" ng-if="vm.component.type != 'navigation'">
+    <div class="form-group">
         <label for="component-title" tooltip-placement="top" tooltip="The anchor of the component">Anchor</label>
-        <span tooltip-placement="top" tooltip-html-unsafe="The anchor of the vm.component."><i class="fa fa-info-circle" /></span>
+        <span tooltip-placement="top" tooltip-html-unsafe="The anchor of the component."><i class="fa fa-info-circle" /></span>
         <input class="form-control" type="text" ng-model="vm.component.anchor" ng-change="slugifyAnchor(vm.component.anchor);">
     </div>
-    <!-- <hr></hr>
+</div>
+<div class="row padding-10" ng-if="vm.component.type == 'image-text'">
     <div class="form-group">
-        <label for="component-title">Version</label>
-        <span tooltip-placement="top" tooltip-html-unsafe="The version of the vm.component."><i class="fa fa-info-circle" /></span>
-        <select ng-model="vm.component.version" ng-change="saveComponentChanges()" class="form-control margin-bottom-0">
-            <option ng-repeat="version in componentVersions track by $index" value="{{version}}" ng-selected="{{version == vm.component.version}}">{{version}}</option>
-        </select>
-    </div> -->
-    <hr ng-if="vm.component.type == 'image-text'"></hr>
-    <div class="form-group" ng-if="vm.component.type == 'image-text'">
         <label for="colorpicker">Image Position</label>
         <span tooltip-placement="top" tooltip-html-unsafe="Set image position to left/right."><i class="fa fa-info-circle" /></span>
         <select ng-model="vm.component.imagePosition" ng-change="saveComponent(true)" class="form-control">
@@ -28,3 +22,42 @@
         </select>
     </div>
 </div>
+<div class="row padding-10" ng-if="vm.component.type === 'text-only' || vm.component.type === 'ssb-text'">
+    <div class="form-group">
+        <label for="colorpicker">Multi Column Layout</label>
+        <span tooltip-placement="top" tooltip-html-unsafe="Column-based text layout."><i class="fa fa-info-circle" /></span>
+        <switch ng-model="vm.component.layoutModifiers.columns" class="pull-right"></switch>
+    </div>
+    <div class="form-group margin-bottom-5">
+        <label>Columns</label>
+        <span tooltip-placement="top" tooltip-html-unsafe="The number of columns for text to flow into."><i class="fa fa-info-circle" /></span>
+        <div class="col-sm-6 pull-right">
+            <input type="text" ng-model="vm.component.layoutModifiers.columnsNum" min="0" max="4" integer-touch-spin>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <div class="form-group margin-bottom-5">
+        <label>Columns Spacing</label>
+        <span tooltip-placement="top" tooltip-html-unsafe="The space between columns."><i class="fa fa-info-circle" /></span>
+        <div class="col-sm-6 pull-right">
+            <input type="text" ng-model="vm.component.layoutModifiers.columnsSpacing" step="10" min="0" max="500" integer-touch-spin>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <div class="form-group margin-bottom-5">
+        <label>Max Height</label>
+        <span tooltip-placement="top" tooltip-html-unsafe="The height at which text should flow into columns."><i class="fa fa-info-circle" /></span>
+        <div class="col-sm-6 pull-right">
+            <input type="text" ng-model="vm.component.layoutModifiers.columnsMaxHeight" min="0" max="1000" integer-touch-spin>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+</div>
+<!-- <hr></hr>
+    <div class="form-group">
+        <label for="component-title">Version</label>
+        <span tooltip-placement="top" tooltip-html-unsafe="The version of the vm.component."><i class="fa fa-info-circle" /></span>
+        <select ng-model="vm.component.version" ng-change="saveComponentChanges()" class="form-control margin-bottom-0">
+            <option ng-repeat="version in componentVersions track by $index" value="{{version}}" ng-selected="{{version == vm.component.version}}">{{version}}</option>
+        </select>
+    </div> -->

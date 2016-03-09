@@ -367,7 +367,8 @@ app.constant('pageConstant', {
     'interim': 'interim',
     'unsubscribe': 'unsubscribe',
     'forgotpassword': 'forgotpassword',
-    'current-user': 'current-user'
+    'current-user': 'current-user',
+    'signup': 'signup'
   }
 });
 
@@ -924,6 +925,9 @@ app.constant('JS_REQUIRES', {
       "../js/libs/froala-wysiwyg-editor/css/plugins/line_breaker.css",
       "../js/libs/froala-wysiwyg-editor/css/plugins/table.css",
       "../js/libs/froala-wysiwyg-editor/css/plugins/video.css",
+      "../js/libs/froala-wysiwyg-editor/js/plugins/code_view.min.js",
+      "../js/libs/froala-wysiwyg-editor/css/plugins/code_view.css",
+      "../js/libs/froala-wysiwyg-editor/js/plugins/code_beautifier.min.js"
       ]
   },
   {

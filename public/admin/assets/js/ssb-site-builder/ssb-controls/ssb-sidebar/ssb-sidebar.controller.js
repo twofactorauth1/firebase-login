@@ -36,6 +36,7 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
     vm.removeComponentFromSection = removeComponentFromSection;
     vm.addComponentToSection = addComponentToSection;
     vm.addBackground = addBackground;
+    vm.addBackgroundVideo = addBackgroundVideo;
     vm.addImage = addImage;
     vm.openModal = openModal;
     vm.openPageSettingsModal = openPageSettingsModal;
@@ -58,7 +59,11 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
     vm.moveSection = moveSection;
     vm.duplicateSection = duplicateSection;
     vm.validateDuplicatePage = validateDuplicatePage;
+    vm.constructVideoUrl = constructVideoUrl;
+    vm.closeSectionPanel = closeSectionPanel;
+
     editableOptions.theme = 'bs3';
+
 
     vm.sortableOptions = {
     	handle: '.ssb-sidebar-move-handle',
@@ -488,24 +493,33 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
     }
 
     function addBackground(sectionIndex, componentIndex) {
-    	vm.openMediaModal('media-modal', 'MediaModalCtrl', null, 'lg');
+        vm.openMediaModal('media-modal', 'MediaModalCtrl', null, 'lg');
 
-      vm.insertMediaCallback = function(asset) {
-        if (componentIndex !== undefined && componentIndex !== null) {
-          vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex].bg.img.url = asset.url;
-        } else {
-          vm.state.page.sections[vm.uiState.activeSectionIndex].bg.img.url = asset.url;
+        vm.insertMediaCallback = function(asset) {
+            if (componentIndex !== undefined && componentIndex !== null) {
+                vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex].bg.img.url = asset.url;
+            } else {
+                vm.state.page.sections[vm.uiState.activeSectionIndex].bg.img.url = asset.url;
+            }
         }
-      }
 
-      // if (sectionIndex !== undefined) {
-      //   SimpleSiteBuilderService.setActiveSection(sectionIndex);
-      //   SimpleSiteBuilderService.setActiveComponent(undefined);
-      // } else {
         SimpleSiteBuilderService.setActiveSection(sectionIndex);
         SimpleSiteBuilderService.setActiveComponent(componentIndex);
-      // }
+    }
 
+    function addBackgroundVideo(sectionIndex, componentIndex) {
+        vm.openMediaModal('media-modal', 'MediaModalCtrl', null, 'lg');
+
+        vm.insertMediaCallback = function(asset) {
+            if (componentIndex !== undefined && componentIndex !== null) {
+                vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex].bg.video.url = asset.url;
+            } else {
+                vm.state.page.sections[vm.uiState.activeSectionIndex].bg.video.url = asset.url;
+            }
+        }
+
+        SimpleSiteBuilderService.setActiveSection(sectionIndex);
+        SimpleSiteBuilderService.setActiveComponent(componentIndex);
     }
 
     function addImage(sectionIndex, componentIndex) {
@@ -880,6 +894,68 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
       } else if (SimpleSiteBuilderService.inValidPageHandles[pageHandle.toLowerCase()]) {
         return "Page handle cannot be a system route.";
       }
+    }
+
+    function getYoutubeVideoUrl(videoIdReplaceToken, url) {
+        var returnUrl;
+        var id;
+        var defaultUrl = '//www.youtube.com/embed/#VIDEO_ID#?playlist=#VIDEO_ID#&autoplay=1&controls=0&loop=1&rel=0&showinfo=0&autohide=1&wmode=transparent&hd=1';
+        var regex = /^(?:https?:\/\/)?(?:www\.)?youtu\.?be(?:\.com)?.*?(?:v|list)=(.*?)(?:&|$)|^(?:https?:\/\/)?(?:www\.)?youtu\.?be(?:\.com)?(?:(?!=).)*\/(.*)$/;
+
+        if (url) {
+            var match = url.match(regex);
+            var id = match && match[1] ? match[1] : null;
+
+            returnUrl = defaultUrl.replace(videoIdReplaceToken, id).replace(videoIdReplaceToken, id);
+        }
+
+        return {
+            url: returnUrl,
+            id: id
+        }
+    }
+
+    function getVimeoVideoUrl(videoIdReplaceToken, url) {
+        var returnUrl;
+        var id;
+        var defaultUrl = '//vimeo.com/#VIDEO_ID#?autopause=0&autoplay=1&badge=0&byline=0&color=&loop=0&player_id=0&portrait=0&title=0';
+        var regex = /https?:\/\/(?:www\.|player\.)?vimeo.com\/(?:channels\/(?:\w+\/)?|groups\/([^\/]*)\/videos\/|album\/(\d+)\/video\/|video\/|)(\d+)(?:$|\/|\?)/;
+
+        if (url) {
+            var match = url.match(regex);
+            var id = match && match[4] ? match[4] : null;
+
+            returnUrl = defaultUrl.replace(videoIdReplaceToken, id);
+        }
+
+        return {
+            url: returnUrl,
+            id: id
+        }
+    }
+
+    function constructVideoUrl(section) {
+        var videoData = {};
+        var videoIdReplaceToken = '#VIDEO_ID#';
+
+        if (section.bg.video.type === 'youtube') {
+            videoData = getYoutubeVideoUrl(videoIdReplaceToken, section.bg.video.url);
+        } else if (section.bg.video.type === 'vimeo') {
+            videoData = getVimeoVideoUrl(videoIdReplaceToken, section.bg.video.url);
+        }
+
+        section.bg.video.urlProcessed = videoData.url;
+        section.bg.video.id = videoData.id;
+
+        console.log(videoData);
+
+        return videoData;
+    }
+
+    function closeSectionPanel() {
+        vm.uiState.activeElement = {};
+        vm.uiState.showSectionPanel = false;
+        vm.uiState.openSidebarSectionPanel = { name: '', id: '' };
     }
 
     function init(element) {

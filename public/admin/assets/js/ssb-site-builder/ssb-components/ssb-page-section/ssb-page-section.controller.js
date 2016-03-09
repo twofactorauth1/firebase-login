@@ -2,9 +2,9 @@
 
 app.controller('SiteBuilderPageSectionController', ssbPageSectionController);
 
-ssbPageSectionController.$inject = ['$scope', '$attrs', '$filter', '$transclude'];
+ssbPageSectionController.$inject = ['$scope', '$attrs', '$filter', '$transclude', '$sce', '$timeout'];
 /* @ngInject */
-function ssbPageSectionController($scope, $attrs, $filter, $transclude) {
+function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $timeout) {
 
     console.info('page-section directive init...')
 
@@ -18,12 +18,27 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude) {
     vm.componentClass = componentClass;
     vm.componentStyle = componentStyle;
     vm.sectionHasFooter = sectionHasFooter;
+    vm.getTrustedUrl = getTrustedUrl;
+    vm.setupVideoBackground = setupVideoBackground;
+    vm.playerObject = {};
+    vm.player = {};
+
+    $scope.$watch(function() { return vm.section.bg.video ? vm.section.bg.video.id : null }, function() {
+
+        if (vm.section.bg.video && vm.section.bg.video.id) {
+            $timeout(function() {
+                vm.setupVideoBackground();
+            });
+        }
+
+    });
 
     //TODO: use https://github.com/martinandert/react-inline to generate inline styles for sections/components
 
     function sectionClass(section) {
         var classString = 'container-fluid '; //col-xs-12 was messing up legacy
-        if(section){
+
+        if (section) {
             var title = section.title || section.name;
             var version = section.version;
 
@@ -66,6 +81,11 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude) {
             if (vm.sectionHasFooter(section)) {
                 classString += ' ssb-page-section-layout-overflow-visible';
             }
+
+            if (section.bg.video && section.bg.video.show && section.bg.video.urlProcessed) {
+                classString += ' ssb-page-section-layout-video-bg';
+            }
+
         }
         // console.debug('section classString')
         // console.debug(classString)
@@ -205,6 +225,20 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude) {
           classString += ' ssb-component-index-' + index + ' ';
         }
 
+        if (component.layoutModifiers) {
+
+            if (component.layoutModifiers.columns) {
+                if (component.layoutModifiers.columnsNum) {
+                    classString += ' ssb-component-layout-columns-' + component.layoutModifiers.columnsNum + ' ';
+                }
+
+                if (component.layoutModifiers.columnsSpacing) {
+                    classString += ' ssb-component-layout-columns-spacing-' + component.layoutModifiers.columnsSpacing + ' ';
+                }
+            }
+
+        }
+
 
         if (vm.uiState && index === vm.uiState.activeComponentIndex) {
           classString += ' ssb-active-component ';
@@ -283,6 +317,14 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude) {
 
     }
 
+    if (component.layoutModifiers) {
+        if (component.layoutModifiers.columns) {
+            if (component.layoutModifiers.columnsMaxHeight) {
+                styleString += ' max-height: ' + component.layoutModifiers.columnsMaxHeight + 'px';
+            }
+        }
+    }
+
     return styleString;
   }
 
@@ -308,6 +350,62 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude) {
 
     function sectionHasFooter(section) {
         return _.findWhere(section.components, { type: 'footer' });
+    }
+
+    function getTrustedUrl(url) {
+        return $sce.trustAsResourceUrl(url);
+    }
+
+    function setupVideoBackground() {
+
+        if (vm.section.bg.video && vm.section.bg.video.id) {
+
+            if (vm.playerObject.destroy) {
+                vm.playerObject.destroy();
+            }
+
+            if (YT && YT.Player) {
+                vm.playerObject = new YT.Player('section_video_' + vm.section._id, {
+                    height: '100%',
+                    width: '100%',
+                    videoId: vm.section.bg.video.id,
+                    events: {
+                        'onReady': vm.onPlayerReady,
+                        'onStateChange': vm.onPlayerStateChange,
+                        'onError': vm.onPlayerError
+                    },
+                    playerVars: {
+                        autohide: 1,
+                        loop: 1,
+                        rel: 0,
+                        enablejsapi: 1,
+                        controls: 0,
+                        autoplay: 1,
+                        showinfo: 0,
+                        modestbranding: 1,
+                        playlist: vm.section.bg.video.id,
+                    }
+                });
+            } else {
+                $timeout(setupVideoBackground, 500);
+            }
+
+        }
+
+    }
+
+    vm.onPlayerReady = function(event) {
+        vm.player = event.target;
+        vm.player.playVideo();
+        vm.player.mute();
+    }
+
+    vm.onPlayerStateChange = function(event) {
+        // console.log('onPlayerStateChange', JSON.stringify(event));
+    }
+
+    vm.onPlayerError = function(event) {
+        console.log('onPlayerError', JSON.stringify(event));
     }
 
     function init(element) {

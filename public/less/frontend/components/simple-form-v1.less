@@ -68,7 +68,7 @@
         max-width: 1100px;
         margin: 0 auto;
     }
-    .btn,
+    .btn.btn-simple-form,
     input {
         height: 50px;
         margin: 0;
@@ -131,5 +131,10 @@
         position: absolute;
         top: 8px;
         right: 8px;
+    }
+    @media(max-width:767px) {
+        .btn-simple-form {
+            width: 100% !important;
+        }
     }
 }

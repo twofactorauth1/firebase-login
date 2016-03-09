@@ -54,6 +54,7 @@ $.FroalaEditor.config = {
         'img-thumbnail': 'Square with Border',
         'img-circle': 'Circle'
      },
+     imageDefaultWidth: 'auto',
      linkStyles:{
         'ssb-theme-btn': 'SB Button',
         'btn': 'Button',
@@ -80,6 +81,7 @@ $.FroalaEditor.config = {
     },
     imageInsertButtons: ['imageBack', 'imageByURL', 'mediaManager'],
     linkEditButtons: ['linkOpen', 'linkStyle', 'linkEdit', 'linkRemove', 'deleteButton'],
+    imageEditButtons: ["imageReplace", "imageAlign", "imageRemove", "|", "imageLink", "linkOpen", "linkEdit", "linkRemove", "imageDisplay", "imageStyle", "imageAlt", "imageSize"],
     colorsText: [].concat.apply([], spectrumColors),
     colorsBackground: [].concat.apply([], spectrumColors),
     colorsStep: 10,
@@ -91,6 +93,14 @@ $.FroalaEditor.config = {
         H4: 'Heading 4',
         P: 'Paragraph',
         PRE: 'Code'
+    },
+    codeMirrorOptions: {
+        indentWithTabs: true,
+        lineNumbers: true,
+        lineWrapping: false,
+        mode: 'text/html',
+        tabMode: 'indent',
+        tabSize: 2
     }
     // imageUploadToS3: {
     //     bucket: 'indigenous-digital-assets',

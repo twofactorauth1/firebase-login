@@ -120,6 +120,20 @@
             <label for="colorpicker">Button BG <span tooltip-placement="top" tooltip-html-unsafe="Set color of submit button."><i class="fa fa-info-circle" /></span></label>
         </div>
     </div>
+
+    <!-- <div class="row padding-10" ng-if="component.type == 'ssb-element-button'">
+        <div class="form-group col-xs-6 ssb-spectrum-color-picker">
+            <spectrum-colorpicker format="'hex'" options="vm.spectrum.options" ng-model="component.btn.color"></spectrum-colorpicker>
+            <br />
+            <label for="colorpicker">Hover Text Color <span tooltip-placement="top" tooltip-html-unsafe="Set text color of button when hovered."><i class="fa fa-info-circle" /></span></label>
+        </div>
+        <div class="form-group col-xs-6 ssb-spectrum-color-picker">
+            <spectrum-colorpicker format="'hex'" options="vm.spectrum.options" ng-model="component.btn.bgcolor"></spectrum-colorpicker>
+            <br />
+            <label for="colorpicker">Hover Background Color <span tooltip-placement="top" tooltip-html-unsafe="Set the background color of the button when hovered."><i class="fa fa-info-circle" /></span></label>
+        </div>
+    </div> -->
+
     <div class="row padding-10" ng-if="component.type == 'products'">
         <div class="form-group col-xs-6 ssb-spectrum-color-picker">
             <spectrum-colorpicker format="'hex'" options="vm.spectrum.options" ng-model="component.boxColor"></spectrum-colorpicker>
@@ -132,7 +146,7 @@
             <label for="colorpicker">Icon Color <span tooltip-placement="top" tooltip-html-unsafe="Set color of product icons."><i class="fa fa-info-circle" /></span></label>
         </div>
     </div>
-    <div class="row padding-10" ng-if="component.type != 'contact-us' && component.type != 'navigation' && component.type != 'top-bar' && component.type != 'blog'" ng-hide="isEmail">
+    <div class="row padding-10" ng-if="component.type != 'ssb-element-button' && component.type != 'contact-us' && component.type != 'navigation' && component.type != 'top-bar' && component.type != 'blog'" ng-hide="isEmail">
         <div class="form-group">
             <label for="bg_hide" class="margin-bottom-0">Show Background Image</label>
             <span tooltip-placement="top" tooltip-html-unsafe="show/hide background image of component."><i class="fa fa-info-circle" /></span>
@@ -140,6 +154,48 @@
             <br>
             <!-- <small>Please select an image of 1280 x 400px minimum to prevent blurriness</small> -->
         </div>
+    </div>
+    <div class="row" ng-if="component.type == 'simple-form'">
+        <accordion close-others="oneAtATime" class="accordion">
+            <accordion-group heading="INPUT FIELD STYLE">
+                <div class="form-group margin-bottom-5">
+                    <label><strong>Text Size</strong></label>
+                    <span tooltip-placement="top" tooltip-html-unsafe="horizontal space between fields"><i class="fa fa-info-circle" /></span>
+                    <div class="col-sm-6 pull-right">
+                        <input type="text" ng-model="component.formSettings.formTextSize" min="6" max="96" integer-touch-spin>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="form-group margin-bottom-5">
+                    <label><strong>Input Text Size</strong></label>
+                    <span tooltip-placement="top" tooltip-html-unsafe="horizontal space between fields"><i class="fa fa-info-circle" /></span>
+                    <div class="col-sm-6 pull-right">
+                        <input type="text" ng-model="component.formSettings.inputTextSize" min="6" max="96" integer-touch-spin>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="form-group margin-bottom-5">
+                    <label><strong>Font</strong></label>
+                    <span tooltip-placement="top" tooltip-html-unsafe="font family for entire form"><i class="fa fa-info-circle" /></span>
+                    <div class="clearfix"></div>
+                    <select ng-model="component.formSettings.formFontFamily" class="form-control margin-bottom-0">
+                        <option value="">--Select--</option>
+                        <option ng-repeat="(value, key) in vm.fontFamilyOptions" value="{{value}}" ng-selected="{{value == component.formSettings.formFontFamily}}">{{key}}</option>
+                    </select>            
+                    <div class="clearfix"></div>
+                </div>
+                <div class="form-group margin-bottom-5">
+                    <label><strong>Input text font</strong></label>
+                    <span tooltip-placement="top" tooltip-html-unsafe="font family for input fields"><i class="fa fa-info-circle" /></span>
+                    <div class="clearfix"></div>
+                    <select ng-model="component.formSettings.inputFontFamily" class="form-control margin-bottom-0">
+                        <option value="">--Select--</option>
+                        <option ng-repeat="(value, key) in vm.fontFamilyOptions" value="{{value}}" ng-selected="{{value == component.formSettings.inputFontFamily}}">{{key}}</option>
+                    </select>            
+                    <div class="clearfix"></div>
+                </div>       
+            </accordion-group>
+        </accordion>    
     </div>
     <div class="row padding-10" ng-if="component.type === 'blog' || component.type === 'blog-teaser'">
         <div class="form-group">
@@ -201,7 +257,7 @@
         </div>
         <div class="form-group" ng-if="component.type != 'navigation'" ng-show="component.bg.img.show">
             <label for="bg_parallax" ng-if="component.type != 'navigation'">Parallax</label>
-            <span tooltip-placement="top" tooltip-html-unsafe="Add/remove Parallax to background image."><i class="fa fa-info-circle" /></span>
+            <span tooltip-placement="top" tooltip-html-unsafe="Add/remove Parallax (depth-effect) to background image."><i class="fa fa-info-circle" /></span>
             <switch ng-model="component.bg.img.parallax" class="pull-right"></switch>
         </div>
         <div class="form-group" ng-if="component.type == 'masthead'" ng-show="component.bg.img.show">

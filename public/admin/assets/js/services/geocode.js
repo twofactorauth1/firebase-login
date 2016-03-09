@@ -34,7 +34,7 @@
 
       var address = locationObj ? locationObj.formatted_address : this.stringifyAddress(location);
       
-      if (!((location.city && location.state) || location.zip)) {
+      if (!(location.city || location.state || location.zip)) {
         fn(false, null);
       } else {
         geocoder.geocode({

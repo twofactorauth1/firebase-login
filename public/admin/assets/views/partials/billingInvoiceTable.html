@@ -14,15 +14,15 @@
     </tr>
     </thead>
     <tbody>
-    <tr ng-repeat="invoice in ::pagedTransactions track by $index">
+    <tr ng-repeat="invoice in ::pagedInvoices track by $index">
         <td ng-class="{'refunded': invoice.refunded}">{{::$index + 1}}</td>
       <!--  <td>{{::invoice.date * 1000 | date : 'longDate'}}</td>
         <td>${{::(invoice.total/100).toFixed( 2 )}}</td>
         <td ng-show="invoice.paid && invoice.total/100 <= 0">NO CHARGE</td>
         <td ng-show="invoice.paid && invoice.total/100 > 0">PAID</td>
         <td ng-hide="invoice.paid">NOT PAID</td>-->
-        <td ng-class="{'refunded': invoice.refunded}">{{::invoice.created * 1000 | date : 'longDate'}}</td>
-        <td ng-class="{'refunded': invoice.refunded}">${{::(invoice.amount/100).toFixed( 2 )}}</td>
+        <td ng-class="{'refunded': invoice.refunded}">{{::invoice.date * 1000 | date : 'longDate'}}</td>
+        <td ng-class="{'refunded': invoice.refunded}">${{::(invoice.total/100).toFixed( 2 )}}</td>
         <td ng-show="invoice.paid && invoice.amount/100 <= 0" ng-class="{'refunded': invoice.refunded}">NO CHARGE</td>
         <td ng-show="invoice.paid && invoice.amount/100 > 0" ng-hide="invoice.refunded">PAID</td>
         <td ng-hide="invoice.paid">NOT PAID</td>

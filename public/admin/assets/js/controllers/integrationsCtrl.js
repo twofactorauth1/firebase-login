@@ -2,7 +2,7 @@
 /*global app, moment, angular, window, L*/
 /*jslint unparam:true*/
 (function (angular) {
-  app.controller('IntegrationsCtrl', ["$scope", "SocialConfigService", "AccountService", "userConstant", "SweetAlert", "ipCookie", "toaster", "$location", function ($scope, SocialConfigService, AccountService, userConstant, SweetAlert, ipCookie, toaster, $location) {
+  app.controller('IntegrationsCtrl', ["$scope", "SocialConfigService", "AccountService", "userConstant", "SweetAlert", "ipCookie", "toaster", "$location", "$state", function ($scope, SocialConfigService, AccountService, userConstant, SweetAlert, ipCookie, toaster, $location, $state) {
 
     /*
      * Global Variables
@@ -61,7 +61,7 @@
           if(completedIntegration.accountsCount != _filteredAccount.length)
           {
            $scope.minRequirements = true;
-           toaster.pop('success', "Integrated Successfully", completedIntegration.socialAccount + ' has been added.');            
+           toaster.pop('success', "Integrated Successfully", completedIntegration.socialAccount + ' has been added.');
           }
         }
       }
@@ -83,7 +83,7 @@
 
     /*
      * @disconnectSocial
-     * disconnect the social account 
+     * disconnect the social account
      */
 
     $scope.disconnectSocial = function (sa, index) {
@@ -174,6 +174,12 @@
       if (socialAccount === 'Stripe') {
         ///redirect/?next={{currentHost}}/stripe/connect&socialNetwork=stripe
         _redirectUrl = '/redirect/?next=' + $scope.currentHost + '/stripe/connect/';
+      }
+
+      if (socialAccount === 'Paypal') {
+        //$state.go('app.support.helptopics');
+        //return;
+          _redirectUrl = '/admin/#/support/help-topics?topic=bc373213-58ab-4581-9844-d69014d91f37'
       }
       window.location = _redirectUrl;
     };

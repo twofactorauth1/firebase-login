@@ -9,7 +9,7 @@ angular.module('mainApp').directive("elem", function ($timeout) {
       ngModel: '=',
       className: '@className'
     },
-    template: '<div class="element-wrap" ng-class="className" ng-bind-html="ngModel | unsafe"></div>',
+    template: '<div class="element-wrap fr-view" ng-class="className" ng-bind-html="ngModel | unsafe"></div>',
     link: function(scope, element, attrs, modelCtrl) {
 
 

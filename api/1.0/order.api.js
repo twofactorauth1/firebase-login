@@ -34,6 +34,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.post(this.url(':id/hold'), this.isAuthAndSubscribedApi.bind(this), this.holdOrder.bind(this));
 
         app.post(this.url(':id/note'), this.isAuthAndSubscribedApi.bind(this), this.addOrderNote.bind(this));
+        app.post(this.url(':id/paid'), this.isAuthAndSubscribedApi.bind(this), this.orderPaymentComplete.bind(this));
     },
 
     createOrder: function(req, res) {
@@ -69,25 +70,37 @@ _.extend(api.prototype, baseApi.prototype, {
      */
     createPaypalOrder: function(req, resp) {
         var self = this;
+        
+        var fullUrl = req.get('Referrer');
         self.log.debug('>> createPaypalOrder');
 
         var order = new $$.m.Order(req.body);
-        order.set('status', 'PENDING_PAYMENT');
+        var hasSubscriptionProduct = false;
+        order.attributes.line_items.forEach(function(item, index) {
+            if (item.type == 'SUBSCRIPTION') {
+                hasSubscriptionProduct = true;
+            }
+        });
+        if (hasSubscriptionProduct) {
+            return resp.status(500).send('Unsupported Payment method');
+        }
+        order.set('status', 'pending_payment');
         var userId = self.userId(req);
         var accountId = self.currentAccountId(req);
         order.set('account_id', accountId);
+        var cancelUrl = null;
+        var returnUrl = null;
         if(order.get('cancelUrl')) {
             cancelUrl = order.get('cancelUrl');
         } else {
-            //TODO:get it from the referrer
+            cancelUrl = fullUrl + '?state=6';
         }
         if(order.get('returnUrl')) {
             returnUrl = order.get('returnUrl');
         } else {
-            //TODO: get it from the referrer
+            returnUrl = fullUrl + '?state=5';
         }
-        var cancelUrl = null;
-        var returnUrl = null;
+
         orderManager.createPaypalOrder(order, userId, cancelUrl, returnUrl, function(err, order){
             self.log.debug('<< createOrder', err);
             self.sendResultOrError(resp, err, order, 'Error creating order', 500);
@@ -120,7 +133,7 @@ _.extend(api.prototype, baseApi.prototype, {
     updateOrder: function(req, res) {
         var self = this;
         self.log.debug('>> updateOrder');
-       
+
         console.dir(req.body);
         var order = new $$.m.Order(req.body.order);
         var orderId = req.params.id;
@@ -298,6 +311,35 @@ _.extend(api.prototype, baseApi.prototype, {
         });
 
 
+    },
+
+    orderPaymentComplete: function(req, res) {
+        var self = this;
+        self.log.debug('>> orderPaymentComplete');
+
+        console.dir(req.body);
+        var order = new $$.m.Order(req.body);
+        var orderId = req.params.id;
+        order.set('_id', orderId);
+        order.set('status', 'processing');
+        order.attributes.modified.date = new Date();
+        self.log.debug('>> Order', order);
+        var created_at = order.get('created_at');
+
+        if (created_at && _.isString(created_at)) {
+            created_at = moment(created_at).toDate();
+            order.set('created_at', created_at);
+        }
+        self.checkPermission(req, self.sc.privs.MODIFY_ORDER, function(err, isAllowed) {
+            if (isAllowed !== true) {
+                return self.send403(res);
+            } else {
+                orderManager.updateOrderById(order, function(err, order){
+                    self.log.debug('<< orderPaymentComplete');
+                    self.sendResultOrError(res, err, order, 'Error updating order');
+                });
+            }
+        });
     }
 });
 

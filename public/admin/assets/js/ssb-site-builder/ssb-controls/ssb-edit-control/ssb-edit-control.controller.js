@@ -59,12 +59,16 @@ function ssbSiteBuilderEditControlController($scope, $attrs, $filter, $timeout, 
             })
 
         } else {
-            vm.element.removeClass('on');
+
+            if (!vm.element.data('compiled-control-id')) {
+                vm.element.removeClass('on');
+            }
+
         }
 
     }
 
-    function setActive(sectionIndex, componentIndex) {
+    function setActive(sectionIndex, componentIndex, compiled) {
 
         //if panel already open, a click on edit control should toggle it off
         if (vm.uiState.showSectionPanel === true) {
@@ -83,27 +87,34 @@ function ssbSiteBuilderEditControlController($scope, $attrs, $filter, $timeout, 
 
         vm.uiState.showSectionPanel = false;
         vm.uiState.navigation.sectionPanel.reset();
+        SimpleSiteBuilderService.setActiveSection(undefined);
+        SimpleSiteBuilderService.setActiveComponent(undefined);
 
-        if (componentIndex !== undefined) {
+        if (compiled) {
+            setActiveElement();
+        } else if (componentIndex !== undefined) {
             setActiveComponent(sectionIndex, componentIndex);
         } else {
             setActiveSection(sectionIndex);
         }
+
     }
 
     function setActiveSection(index) {
 
         var section = vm.state.page.sections[index];
-        var name = $filter('cleanType')(section.title).toLowerCase().trim().replace(' ', '-');
+        var name = $filter('cleanType')(section.title || section.name).toLowerCase().trim().replace(' ', '-');
 
-        SimpleSiteBuilderService.setActiveSection(index);
-        SimpleSiteBuilderService.setActiveComponent(undefined);
+        $timeout(function() {
+            SimpleSiteBuilderService.setActiveSection(index);
+            SimpleSiteBuilderService.setActiveComponent(undefined);
 
-        vm.uiState.navigation.sectionPanel.loadPanel({ id: '', name: name });
+            vm.uiState.navigation.sectionPanel.loadPanel({ id: '', name: name });
 
-        if (index !== undefined) {
-            vm.uiState.showSectionPanel = true;
-        }
+            if (index !== undefined) {
+                vm.uiState.showSectionPanel = true;
+            }
+        });
     }
 
     function setActiveComponent(sectionIndex, componentIndex) {
@@ -116,8 +127,8 @@ function ssbSiteBuilderEditControlController($scope, $attrs, $filter, $timeout, 
             componentId: component._id
         };
 
-        SimpleSiteBuilderService.setActiveSection(undefined);
-        SimpleSiteBuilderService.setActiveComponent(undefined);
+        // SimpleSiteBuilderService.setActiveSection(undefined);
+        // SimpleSiteBuilderService.setActiveComponent(undefined);
 
         $timeout(function() {
 
@@ -130,6 +141,20 @@ function ssbSiteBuilderEditControlController($scope, $attrs, $filter, $timeout, 
                 vm.uiState.showSectionPanel = true;
             }
 
+        });
+
+    }
+
+    function setActiveElement() {
+
+        $timeout(function() {
+            var sectionPanelLoadConfig = {
+                name: vm.uiState.activeElement.name,
+                id: vm.uiState.activeElement.id
+            };
+
+            vm.uiState.navigation.sectionPanel.loadPanel(sectionPanelLoadConfig);
+            vm.uiState.showSectionPanel = true;
         });
 
     }

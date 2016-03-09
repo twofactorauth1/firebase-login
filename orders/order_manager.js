@@ -639,8 +639,8 @@ module.exports = {
 
             },
             // check and get fulfillment email products
-            function(account, order, callback) {  
-                log.debug('Order is', order);              
+            function(account, order, callback) {
+                log.debug('Order is', order);
                 if(order.get('payment_details') && order.get('payment_details').card_token && order.get('payment_details').paid && order.get('status') && order.get('status') !=='pending_payment') {
                     var productAry = [];
                     async.each(order.get('line_items'), function iterator(item, cb){
@@ -993,16 +993,38 @@ module.exports = {
             },
             //get pay key from Paypal
             function getPaypalPayKey(account, savedOrder, contact, productAry, callback) {
-                var receiverEmail = null;//TODO: get from the account (credentials?)
-                var amount = null;//TODO: get from the order
-                var memo = null;//TODO: get from the order
-                paymentManager.payWithPaypal(receiverEmail, amount, memo, cancelUrl, returnUrl, function(err, value){
-                    //TODO: call next function
-                });
+                var commerceSettings = account.get('commerceSettings');
+                if(commerceSettings && commerceSettings.paypalAddress) {
+                    var receiverEmail = commerceSettings.paypalAddress;
+                    var amount = savedOrder.get('total');
+                    var orderID = savedOrder.get('order_id');
+                    var memo = "Order #" + orderID + " for " + account.get('business').name;
+                    paymentManager.payWithPaypal(receiverEmail, amount, memo, cancelUrl, returnUrl, function(err, value){
+                        if (err) {
+                            log.error('Error creating paypal pay key: ' + err);
+                            return callback(err.message, savedOrder, null);
+                        } else {
+                            log.debug('<< getPaypalPayKey');
+                            return callback(null, savedOrder, value);
+                        }
+                    });
+                } else {
+                    callback('No Paypal Address found on the account');
+                }
+
             },
             //save info on order
-            function updateOrder() {
-                //TODO: store paypal correlationId and key on order
+            function updateOrder(savedOrder, paypalInfo, callback) {
+                order.set('payment_details', paypalInfo);
+                dao.saveOrUpdate(savedOrder, function(err, savedOrder) {
+                  if (err) {
+                    log.error('Error updating order: ' + err);
+                    return callback(err.message, null);
+                  } else {
+                    log.debug('<< updateOrder');
+                    return callback(null, savedOrder);
+                  }
+                });
             }
 
         ], function done(err, result){

@@ -2,18 +2,18 @@
 
 app.controller('SiteBuilderComponentLoaderController', ssbComponentLoaderController);
 
-ssbComponentLoaderController.$inject = ['$scope', '$attrs', '$filter'];
+ssbComponentLoaderController.$inject = ['$rootScope', '$scope', '$attrs', '$filter'];
 /* @ngInject */
-function ssbComponentLoaderController($scope, $attrs, $filter) {
+function ssbComponentLoaderController($rootScope, $scope, $attrs, $filter) {
 
     console.info('component-loader directive init...')
 
     var vm = this;
 
     vm.init = init;
-    vm.click = click;
+    vm.hover = hover;
 
-    function click(e) {
+    function hover(e) {
 
         if (vm.state && vm.uiState) {
 

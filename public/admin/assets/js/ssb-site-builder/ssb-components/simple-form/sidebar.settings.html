@@ -1,6 +1,6 @@
-<div class="row padding-10">
+<div class="row padding-10 hidden">
 <!-- <div ng-include=" 'assets/js/ssb-site-builder/ssb-components/shared/video.html' "></div> -->
-    <button
+    <button 
         ng-click="vm.uiState.navigation.sectionPanel.loadPanel({ name: 'simple-form', id: 'simple-form' + component._id, componentId: component._id });"
         class="ssb-sidebar-section-panel-btn btn btn-primary">
         <i class="ti-settings display-ib"></i> Edit Simple Form
@@ -10,7 +10,7 @@
 
 <div class="row padding-10">
 
-    <button ng-click="vm.uiState.navigation.sectionPanel.loadPanel({ name: 'Design', id: 'design' + component._id, componentId: component._id })" class="ssb-sidebar-section-panel-btn btn btn-link">
+    <button ng-click="vm.uiState.navigation.sectionPanel.loadPanel({ name: 'Style', id: 'design' + component._id, componentId: component._id })" class="ssb-sidebar-section-panel-btn btn btn-link">
         <i class="ti-brush display-ib"></i> Style
     </button>
 
@@ -18,8 +18,12 @@
         <i class="ti-layout display-ib"></i> Size &amp; Padding
     </button>
 
-    <button ng-click="vm.uiState.navigation.sectionPanel.loadPanel({ name: 'Advanced', id: 'advanced' + component._id, componentId: component._id })" class="ssb-sidebar-section-panel-btn btn btn-link">
-        <i class="ti-settings display-ib"></i> Advanced Settings
+    <button ng-click="vm.uiState.navigation.sectionPanel.loadPanel({ name: 'Settings', id: 'simple-form' + component._id, componentId: component._id });" class="ssb-sidebar-section-panel-btn btn btn-link">
+        <i class="ti-settings display-ib"></i> Settings
+    </button>
+
+    <button ng-click="vm.uiState.navigation.sectionPanel.loadPanel({ name: 'Settings', id: 'advanced' + component._id, componentId: component._id })" class="ssb-sidebar-section-panel-btn btn btn-link">
+        <i class="ti-settings display-ib"></i> Settings
     </button>
 
 </div>

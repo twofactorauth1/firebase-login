@@ -57,6 +57,9 @@
                             <li>
                                 <a ng-click="viewSettings('commerce', 'Taxes')">Taxes</a>
                             </li>
+                            <li>
+                                <a ng-click="viewSettings('commerce', 'Paypal')">Paypal</a>
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -266,6 +269,20 @@
                                 <tags-input min-length="2" placeholder="State(s)" ng-model="account.commerceSettings.taxnexus"></tags-input>
                             </div>
                         </div>
+                    </form>
+                    <div class="clearfix"></div>
+                </tab>
+                <tab heading="Paypal">
+                    <form class="col-sm-6 form-horizontal">
+                        <div class="form-group">
+                            <label>Enable paypal payments</label>
+                            <switch ng-model="account.commerceSettings.paypal" class="pull-right"></switch>
+                        </div>
+                        <div class="form-group" ng-if='account.commerceSettings.paypal'>
+                            <label>Paypal account email address</label>
+                            <input type="text" placeholder="Email" class="pull-right" ng-model="account.commerceSettings.paypalAddress">
+                        </div>
+                        <div class="clearfix"></div>
                     </form>
                     <div class="clearfix"></div>
                 </tab>

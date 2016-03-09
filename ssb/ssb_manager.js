@@ -312,7 +312,21 @@ module.exports = {
                     }
                 });
             },
-            function createPage(website, theme, template, sections, header, footer, cb){
+            function getGlobalSections(website, theme, template, sections, header, footer, cb){
+                var query = {
+                    accountId:accountId,
+                    global:true
+                };
+                sectionDao.findMany(query, $$.m.ssb.Section, function(err, gsections){
+                    if(err) {
+                        self.log.error('Error finding global sections:', err);
+                        cb(err);
+                    } else {
+                        cb(null, website, theme, template, sections, header, footer, gsections);
+                    }
+                });
+            },
+            function createPage(website, theme, template, sections, header, footer, gsections, cb){
                 //TODO: make sure this name is unique
                 //var pageName = slug(template.get('name') + '-' + $$.u.idutils.generateUniqueAlphaNumeric(5, true, true));
 
@@ -328,6 +342,9 @@ module.exports = {
                        }
                    });
                 }
+
+                
+
                 if(footer) {
                     //find and remove the default footer
                     sections = _.filter(sections, function(section){
@@ -335,13 +352,22 @@ module.exports = {
                             return true;
                         }
                     });
-                }
+                }                
                 _.each(sections, function(section){
                     jsonSections.push(section.toReference());
                 });
+
+                if(gsections){
+                    _.each(gsections, function(section){                        
+                        jsonSections.push(section.toReference());
+                    });  
+                }
                 if(footer) {
                     jsonSections.push(footer.toReference());
                 }
+                // Get unique sections
+                
+               var pageSections = _.uniq(jsonSections, function(section) { return section._id });
 
                 var page = new $$.m.ssb.Page({
                     accountId:accountId,
@@ -353,7 +379,7 @@ module.exports = {
                         asOf:null,
                         displayOn:null
                     },
-                    sections: jsonSections,
+                    sections: pageSections,
                     templateId: templateId,
                     created: created,
                     modified:created,
@@ -1023,7 +1049,18 @@ module.exports = {
                     cb(null, existingPage, updatedPage, updatedSections);
                 }
             },
-            function updateLinkList(existingPage, updatedPage, updatedSections, cb){
+            function listPages(existingPage, updatedPage, updatedSections, cb){
+                self.listPages(accountId, updatedPage.get('websiteId'), function(err, pages){
+                    if (err) {
+                        self.log.error('Error getting index page: ' + err);
+                        cb(err);
+                    }
+                    else{
+                        cb(null, existingPage, updatedPage, updatedSections, pages);
+                    }
+                })
+            },
+            function updateLinkList(existingPage, updatedPage, updatedSections, pages, cb){
                 if (updatedPage.get('mainmenu') === false) {
                     self.getWebsiteLinklistsByHandle(accountId, updatedPage.get('websiteId'), "head-menu", function(err, list) {
                         if (err) {
@@ -1040,7 +1077,7 @@ module.exports = {
                                     self.log.error('Error updating website linklists by handle: ' + err);
                                     cb(err);
                                 } else {
-                                   cb(null, updatedPage, updatedSections);
+                                   cb(null, updatedPage, updatedSections, pages);
                                 }
                             });
                         }
@@ -1051,13 +1088,6 @@ module.exports = {
                             self.log.error('Error getting website linklists by handle: ' + err);
                             cb(err);
                         } else {
-
-                            self.log.debug('>> listPages');
-
-                            self.listPages(accountId, updatedPage.get('websiteId'), function(err, pages){
-
-                                self.log.debug('<< listPages');
-
                                 if (err) {
                                     self.log.error('Error updating website linklists by handle: ' + err);
                                     return cb(err);
@@ -1127,16 +1157,125 @@ module.exports = {
                                         self.log.error('Error updating website linklists by handle: ' + err);
                                         cb(err);
                                     } else {
-                                        cb(null, updatedPage, updatedSections);
+                                        cb(null, updatedPage, updatedSections, pages);
                                     }
                                 });
-
-                            })
                         }
                     });
                 }
-            }
+            },
+            // update existing pages if global sections set as true OR false
+            function updateExistingPages(updatedPage, updatedSections, pages, cb){   
+                var _update = false;  
+                if(pages.length <= 1){
+                    cb(null, updatedPage, updatedSections);
+                }  
+                async.eachSeries(pages, function(_page, p_callback){
+                    if(_page.get("_id") !== updatedPage.get("_id")){
+                        async.each(updatedSections, function(gsection, g_callback){
+                            var g_update = false;
+                            if(gsection.get("global") === false || gsection.get("global") === true){
+                                _update = true;
+                                if(gsection.get("global") === false){                                    
+                                    var sections = _.filter(_page.get("sections"), function(section){                                        
+                                        if(section._id !== gsection.get("_id")) {
+                                           return true;
+                                        }
+                                    });
+                                    _page.set("sections", sections);
+                                }
+                                if(gsection.get("global") === true){ 
+                                    g_update = true;                                  
+                                    var sections = _page.get("sections");
+                                    var exists = _.filter(sections, function(section){                                        
+                                        if(section._id === gsection.get("_id")) {
+                                           return true;
+                                        }
+                                    });
+                                    self.log.debug('exists: ' , exists);
+                                    if(!exists.length){                                    
+                                        var globalSection = {_id: gsection.get("_id")};
+                                        var sectionIds = sections.map(function(sec) { return sec._id});                                    
+                                        var query = {
+                                            accountId:accountId,
+                                            _id: { $in: sectionIds},
+                                            name: 'Footer'
+                                        };
+                                        sectionDao.findOne(query, $$.m.ssb.Section, function(err, footerSection){
+                                            if(err) {
+                                                self.log.error('Error finding global footer:', err);
+                                                cb(err);
+                                            } else { 
+                                                if(footerSection){
+                                                    var filteredFooter = _.findWhere(sections, {
+                                                        _id: footerSection.get("_id")
+                                                    });
+                                                  
+                                                    if(filteredFooter){
+                                                        var footerIndex = _.indexOf(sections, filteredFooter);
+                                                        self.log.debug('footerIndex: ' , footerIndex);
+                                                        self.log.debug('globalSection: ' , globalSection);
+                                                        sections.splice(footerIndex, 0, globalSection);
+                                                    }
+                                                    else
+                                                        sections.push(globalSection);
+                                                    }
+                                                else{
+                                                    sections.push(globalSection);
+                                                }
+                                                _page.set("sections", sections);                                                
+                                                g_callback();
+                                            }
+                                        });
+                                    }
+                                    else{
+                                        _page.set("sections", sections);
+                                        g_callback();
+                                    }
+                                    
+                                }
+                                if(!g_update){
+                                    g_callback();
+                                }
+                            }
+                            else{
+                                g_callback();
+                            }
+                            
+                        }, function(err){
 
+                            if(err) {
+                                self.log.error("Error getting template's referenced sections:", err);
+                                cb(err);
+                            }
+                            p_callback();
+
+                        });
+                    }
+                    else{
+                        p_callback();
+                    }
+                }, function(err){
+                    if(err) {
+                        self.log.error("Error getting template's referenced sections:", err);
+                        cb(err);
+                    }
+
+                    if(_update){                   
+                        pageDao.batchUpdate(pages, $$.m.ssb.Page, function(err, value){
+                            if (err) {
+                                self.log.error('Error updating page: ' + err);
+                                cb(err);
+                            } else {
+                               cb(null, updatedPage, updatedSections);
+                            }
+                        }); 
+                    }
+                    else
+                        cb(null, updatedPage, updatedSections);
+                    });
+                
+            },
         ], function done(err, updatedPage, updatedSections){
             if(updatedPage) {
                 var sectionArray = [];
@@ -1150,8 +1289,6 @@ module.exports = {
             self.log.debug('<< updatePage');
             return fn(err, updatedPage);
         });
-
-
     },
 
     listAccountSectionSummaries: function(accountId, fn) {

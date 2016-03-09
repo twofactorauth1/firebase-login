@@ -15,6 +15,7 @@ function ssbSiteBuilderSidebarSettingsPanelController($scope, $attrs, $filter, $
     //get functions from ssb-sidebar.controller.js
     var pVm = $scope.$parent.vm;
     vm.addBackground = pVm.addBackground;
+    vm.addBackgroundVideo = pVm.addBackgroundVideo;
     vm.addImage = pVm.addImage;
     vm.openModal = pVm.openModal;
     vm.setActiveComponent = pVm.setActiveComponent;
@@ -27,7 +28,8 @@ function ssbSiteBuilderSidebarSettingsPanelController($scope, $attrs, $filter, $
     vm.duplicateSection = pVm.duplicateSection;
     vm.enabledPlatformSections = pVm.enabledPlatformSections;
     vm.customerTags = pVm.customerTags;
-    vm.addSectionToPage = pVm.addSectionToPage;
+    vm.addSectionToPage = addSectionToPage;
+    vm.constructVideoUrl = pVm.constructVideoUrl;
 
     vm.tagToCustomer = tagToCustomer;
     vm.setTags = setTags;
@@ -40,6 +42,9 @@ function ssbSiteBuilderSidebarSettingsPanelController($scope, $attrs, $filter, $
     vm.spectrum = {
       options: SimpleSiteBuilderService.getSpectrumColorOptions()
     };
+
+    vm.fontFamilyOptions = SimpleSiteBuilderService.getFontFamilyOptions();
+
 
     $scope.component = vm.component;
 
@@ -106,19 +111,24 @@ function ssbSiteBuilderSidebarSettingsPanelController($scope, $attrs, $filter, $
 
         var currentSection = vm.state.page.sections[vm.uiState.activeSectionIndex];
         var childComponentTypes = _(currentSection.components).pluck('type');
+        var enabledPlatformSectionsWithFooter =  _.filter(vm.state.platformSections, function(section) {
+                                return  section.type === 'footer' || section.enabled
+                              });
 
         //filter list of enabled content sections based on title or type
-        return _.filter(vm.enabledPlatformSections, function(section) {
+        return _.filter(enabledPlatformSectionsWithFooter, function(section) {
 
             //if ssb-page-section, match on title
             if (section.type === 'ssb-page-section') {
 
-                //match title if current section has title else match name
+                //match title if current section has title else match component type
                 if(currentSection.title)
                   return section.title === currentSection.title;
-                else
-                  return section.name === currentSection.name;
-
+                else if(currentSection.components.length === 1){
+                  if(currentSection.components[0].type === "navigation"){
+                    return section.title === "Header";
+                  }
+                }
             //else if legacy component
             } else if (currentSection.components.length === 1) {
 
@@ -138,28 +148,36 @@ function ssbSiteBuilderSidebarSettingsPanelController($scope, $attrs, $filter, $
 
     function setTags(_customerTags) {
         console.log('setTags >>>');
-
-        _.each(vm.component.tags, function (tag , index) {
-          var matchingTag = _.findWhere(vm.customerTags, {
-            data: tag
-          });
-          if(matchingTag)
-          {
-            _customerTags.push(matchingTag);
-          }
-          else {
-            _customerTags.push({
-                data : tag,
-                label : tag
+        if(vm.component && vm.component.tags){
+          _.each(vm.component.tags, function (tag , index) {
+            var matchingTag = _.findWhere(vm.customerTags, {
+              data: tag
             });
-          }
-        });
-        vm.customerTags = _.uniq(_customerTags, function(c) { return c.label; })
+            if(matchingTag)
+            {
+              _customerTags.push(matchingTag);
+            }
+            else {
+              _customerTags.push({
+                  data : tag,
+                  label : tag
+              });
+            }
+          });
+          vm.customerTags = _.uniq(_customerTags, function(c) { return c.label; })
+        }
     }
 
-    function resizeWindow(){        
+    function resizeWindow(){
       $(window).trigger('resize');
     }
+
+    function addSectionToPage(section, version, activeSectionIndex){
+      if(!vm.isSelectedLayout(section)){
+        return pVm.addSectionToPage(section, version, activeSectionIndex);
+      }
+    }
+
 
     function init(element) {
         vm.element = element;

@@ -798,6 +798,21 @@ app.controller('SSBComponentSettingsModalCtrl', ['$scope', '$rootScope', '$http'
         if (!$scope.component.redirectType) {
           $scope.component.redirectType = 'page';
         }
+        $scope.fieldsCount = [];
+        
+        var i = 0;
+        for (i; i <= $scope.component.fields.length; i++) {
+          $scope.fieldsCount.push(i + 1);
+        }
+
+        $scope.alignmentOptions = [
+          'left', 'center', 'right'
+        ]
+
+        $scope.fontSizeOptions = [
+          8,9,10,11,12,14,18,24,30,36,48,60,72,96
+        ]        
+        
       }
 
       if ($scope.component.type === "contact-us") {
