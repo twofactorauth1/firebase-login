@@ -226,12 +226,17 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
         }
 
         if (component.layoutModifiers) {
+
             if (component.layoutModifiers.columns) {
-                classString += ' ssb-component-layout-columns-' + component.layoutModifiers.columns + ' ';
+                if (component.layoutModifiers.columnsNum) {
+                    classString += ' ssb-component-layout-columns-' + component.layoutModifiers.columnsNum + ' ';
+                }
+
+                if (component.layoutModifiers.columnsSpacing) {
+                    classString += ' ssb-component-layout-columns-spacing-' + component.layoutModifiers.columnsSpacing + ' ';
+                }
             }
-            if (component.layoutModifiers.columnsSpacing) {
-                classString += ' ssb-component-layout-columns-spacing-' + component.layoutModifiers.columnsSpacing + ' ';
-            }
+
         }
 
 
@@ -310,6 +315,14 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
           }
         }
 
+    }
+
+    if (component.layoutModifiers) {
+        if (component.layoutModifiers.columns) {
+            if (component.layoutModifiers.columnsMaxHeight) {
+                styleString += ' max-height: ' + component.layoutModifiers.columnsMaxHeight + 'px';
+            }
+        }
     }
 
     return styleString;

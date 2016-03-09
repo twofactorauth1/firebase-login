@@ -209,7 +209,7 @@
 
         <ssb-sidebar-settings-panel
             class="ssb-sidebar-section-panel-component-panel container-fluid"
-            ng-if="'design' + vm.uiState.activeElement._id === vm.uiState.openSidebarSectionPanel.id"
+            ng-if="'design' + vm.uiState.activeElement._id === vm.uiState.openSidebarSectionPanel.id && vm.uiState.activeElement._id"
             settings-template="assets/js/ssb-site-builder/ssb-components/shared/sidebar.settings.design.html"
             component="vm.uiState.activeElement"
             state="vm.state"
@@ -218,7 +218,7 @@
 
         <ssb-sidebar-settings-panel
             class="ssb-sidebar-section-panel-component-panel container-fluid"
-            ng-if="'version' + vm.uiState.activeElement._id === vm.uiState.openSidebarSectionPanel.id"
+            ng-if="'version' + vm.uiState.activeElement._id === vm.uiState.openSidebarSectionPanel.id && vm.uiState.activeElement._id"
             settings-template="assets/js/ssb-site-builder/ssb-components/shared/sidebar.settings.version.html"
             component="vm.uiState.activeElement"
             state="vm.state"
@@ -227,7 +227,7 @@
 
         <ssb-sidebar-settings-panel
             class="ssb-sidebar-section-panel-component-panel container-fluid"
-            ng-if="'layout' + vm.uiState.activeElement._id === vm.uiState.openSidebarSectionPanel.id"
+            ng-if="'layout' + vm.uiState.activeElement._id === vm.uiState.openSidebarSectionPanel.id && vm.uiState.activeElement._id"
             settings-template="assets/js/ssb-site-builder/ssb-components/shared/sidebar.settings.layout.html"
             component="vm.uiState.activeElement"
             state="vm.state"
@@ -237,7 +237,7 @@
 
         <ssb-sidebar-settings-panel
             class="ssb-sidebar-section-panel-component-panel container-fluid"
-            ng-if="'settings' + vm.uiState.activeElement._id === vm.uiState.openSidebarSectionPanel.id"
+            ng-if="'settings' + vm.uiState.activeElement._id === vm.uiState.openSidebarSectionPanel.id && vm.uiState.activeElement._id"
             settings-template="assets/js/ssb-site-builder/ssb-components/shared/sidebar.settings.advanced.html"
             component="vm.uiState.activeElement"
             state="vm.state"

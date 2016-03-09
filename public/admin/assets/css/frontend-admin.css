@@ -7830,6 +7830,293 @@ ssb-topbar .ui-select-match-text > small {
 #componentloader .ssb-component:empty {
   min-height: 400px;
 }
+.ssb-component-layout-columns-1 {
+  -moz-column-count: 1 300px;
+  -moz-columns: 1 300px;
+  -webkit-columns: 1 300px;
+  columns: 1 300px;
+}
+.ssb-component-layout-columns-2 {
+  -moz-column-count: 2 300px;
+  -moz-columns: 2 300px;
+  -webkit-columns: 2 300px;
+  columns: 2 300px;
+}
+.ssb-component-layout-columns-3 {
+  -moz-column-count: 3 300px;
+  -moz-columns: 3 300px;
+  -webkit-columns: 3 300px;
+  columns: 3 300px;
+}
+.ssb-component-layout-columns-4 {
+  -moz-column-count: 4 300px;
+  -moz-columns: 4 300px;
+  -webkit-columns: 4 300px;
+  columns: 4 300px;
+}
+.ssb-component-layout-columns-spacing-10 {
+  -moz-column-gap: 10px;
+  -webkit-column-gap: 10px;
+  column-gap: 10px;
+}
+.ssb-component-layout-columns-spacing-20 {
+  -moz-column-gap: 20px;
+  -webkit-column-gap: 20px;
+  column-gap: 20px;
+}
+.ssb-component-layout-columns-spacing-30 {
+  -moz-column-gap: 30px;
+  -webkit-column-gap: 30px;
+  column-gap: 30px;
+}
+.ssb-component-layout-columns-spacing-40 {
+  -moz-column-gap: 40px;
+  -webkit-column-gap: 40px;
+  column-gap: 40px;
+}
+.ssb-component-layout-columns-spacing-50 {
+  -moz-column-gap: 50px;
+  -webkit-column-gap: 50px;
+  column-gap: 50px;
+}
+.ssb-component-layout-columns-spacing-60 {
+  -moz-column-gap: 60px;
+  -webkit-column-gap: 60px;
+  column-gap: 60px;
+}
+.ssb-component-layout-columns-spacing-70 {
+  -moz-column-gap: 70px;
+  -webkit-column-gap: 70px;
+  column-gap: 70px;
+}
+.ssb-component-layout-columns-spacing-80 {
+  -moz-column-gap: 80px;
+  -webkit-column-gap: 80px;
+  column-gap: 80px;
+}
+.ssb-component-layout-columns-spacing-90 {
+  -moz-column-gap: 90px;
+  -webkit-column-gap: 90px;
+  column-gap: 90px;
+}
+.ssb-component-layout-columns-spacing-100 {
+  -moz-column-gap: 100px;
+  -webkit-column-gap: 100px;
+  column-gap: 100px;
+}
+.ssb-component-layout-columns-spacing-110 {
+  -moz-column-gap: 110px;
+  -webkit-column-gap: 110px;
+  column-gap: 110px;
+}
+.ssb-component-layout-columns-spacing-120 {
+  -moz-column-gap: 120px;
+  -webkit-column-gap: 120px;
+  column-gap: 120px;
+}
+.ssb-component-layout-columns-spacing-130 {
+  -moz-column-gap: 130px;
+  -webkit-column-gap: 130px;
+  column-gap: 130px;
+}
+.ssb-component-layout-columns-spacing-140 {
+  -moz-column-gap: 140px;
+  -webkit-column-gap: 140px;
+  column-gap: 140px;
+}
+.ssb-component-layout-columns-spacing-150 {
+  -moz-column-gap: 150px;
+  -webkit-column-gap: 150px;
+  column-gap: 150px;
+}
+.ssb-component-layout-columns-spacing-160 {
+  -moz-column-gap: 160px;
+  -webkit-column-gap: 160px;
+  column-gap: 160px;
+}
+.ssb-component-layout-columns-spacing-170 {
+  -moz-column-gap: 170px;
+  -webkit-column-gap: 170px;
+  column-gap: 170px;
+}
+.ssb-component-layout-columns-spacing-180 {
+  -moz-column-gap: 180px;
+  -webkit-column-gap: 180px;
+  column-gap: 180px;
+}
+.ssb-component-layout-columns-spacing-190 {
+  -moz-column-gap: 190px;
+  -webkit-column-gap: 190px;
+  column-gap: 190px;
+}
+.ssb-component-layout-columns-spacing-200 {
+  -moz-column-gap: 200px;
+  -webkit-column-gap: 200px;
+  column-gap: 200px;
+}
+.ssb-component-layout-columns-spacing-210 {
+  -moz-column-gap: 210px;
+  -webkit-column-gap: 210px;
+  column-gap: 210px;
+}
+.ssb-component-layout-columns-spacing-220 {
+  -moz-column-gap: 220px;
+  -webkit-column-gap: 220px;
+  column-gap: 220px;
+}
+.ssb-component-layout-columns-spacing-230 {
+  -moz-column-gap: 230px;
+  -webkit-column-gap: 230px;
+  column-gap: 230px;
+}
+.ssb-component-layout-columns-spacing-240 {
+  -moz-column-gap: 240px;
+  -webkit-column-gap: 240px;
+  column-gap: 240px;
+}
+.ssb-component-layout-columns-spacing-250 {
+  -moz-column-gap: 250px;
+  -webkit-column-gap: 250px;
+  column-gap: 250px;
+}
+.ssb-component-layout-columns-spacing-260 {
+  -moz-column-gap: 260px;
+  -webkit-column-gap: 260px;
+  column-gap: 260px;
+}
+.ssb-component-layout-columns-spacing-270 {
+  -moz-column-gap: 270px;
+  -webkit-column-gap: 270px;
+  column-gap: 270px;
+}
+.ssb-component-layout-columns-spacing-280 {
+  -moz-column-gap: 280px;
+  -webkit-column-gap: 280px;
+  column-gap: 280px;
+}
+.ssb-component-layout-columns-spacing-290 {
+  -moz-column-gap: 290px;
+  -webkit-column-gap: 290px;
+  column-gap: 290px;
+}
+.ssb-component-layout-columns-spacing-300 {
+  -moz-column-gap: 300px;
+  -webkit-column-gap: 300px;
+  column-gap: 300px;
+}
+.ssb-component-layout-columns-spacing-310 {
+  -moz-column-gap: 310px;
+  -webkit-column-gap: 310px;
+  column-gap: 310px;
+}
+.ssb-component-layout-columns-spacing-320 {
+  -moz-column-gap: 320px;
+  -webkit-column-gap: 320px;
+  column-gap: 320px;
+}
+.ssb-component-layout-columns-spacing-330 {
+  -moz-column-gap: 330px;
+  -webkit-column-gap: 330px;
+  column-gap: 330px;
+}
+.ssb-component-layout-columns-spacing-340 {
+  -moz-column-gap: 340px;
+  -webkit-column-gap: 340px;
+  column-gap: 340px;
+}
+.ssb-component-layout-columns-spacing-350 {
+  -moz-column-gap: 350px;
+  -webkit-column-gap: 350px;
+  column-gap: 350px;
+}
+.ssb-component-layout-columns-spacing-360 {
+  -moz-column-gap: 360px;
+  -webkit-column-gap: 360px;
+  column-gap: 360px;
+}
+.ssb-component-layout-columns-spacing-370 {
+  -moz-column-gap: 370px;
+  -webkit-column-gap: 370px;
+  column-gap: 370px;
+}
+.ssb-component-layout-columns-spacing-380 {
+  -moz-column-gap: 380px;
+  -webkit-column-gap: 380px;
+  column-gap: 380px;
+}
+.ssb-component-layout-columns-spacing-390 {
+  -moz-column-gap: 390px;
+  -webkit-column-gap: 390px;
+  column-gap: 390px;
+}
+.ssb-component-layout-columns-spacing-400 {
+  -moz-column-gap: 400px;
+  -webkit-column-gap: 400px;
+  column-gap: 400px;
+}
+.ssb-component-layout-columns-spacing-410 {
+  -moz-column-gap: 410px;
+  -webkit-column-gap: 410px;
+  column-gap: 410px;
+}
+.ssb-component-layout-columns-spacing-420 {
+  -moz-column-gap: 420px;
+  -webkit-column-gap: 420px;
+  column-gap: 420px;
+}
+.ssb-component-layout-columns-spacing-430 {
+  -moz-column-gap: 430px;
+  -webkit-column-gap: 430px;
+  column-gap: 430px;
+}
+.ssb-component-layout-columns-spacing-440 {
+  -moz-column-gap: 440px;
+  -webkit-column-gap: 440px;
+  column-gap: 440px;
+}
+.ssb-component-layout-columns-spacing-450 {
+  -moz-column-gap: 450px;
+  -webkit-column-gap: 450px;
+  column-gap: 450px;
+}
+.ssb-component-layout-columns-spacing-460 {
+  -moz-column-gap: 460px;
+  -webkit-column-gap: 460px;
+  column-gap: 460px;
+}
+.ssb-component-layout-columns-spacing-470 {
+  -moz-column-gap: 470px;
+  -webkit-column-gap: 470px;
+  column-gap: 470px;
+}
+.ssb-component-layout-columns-spacing-480 {
+  -moz-column-gap: 480px;
+  -webkit-column-gap: 480px;
+  column-gap: 480px;
+}
+.ssb-component-layout-columns-spacing-490 {
+  -moz-column-gap: 490px;
+  -webkit-column-gap: 490px;
+  column-gap: 490px;
+}
+.ssb-component-layout-columns-spacing-500 {
+  -moz-column-gap: 500px;
+  -webkit-column-gap: 500px;
+  column-gap: 500px;
+}
+[class*="ssb-component-layout-columns-"] {
+  padding: 1em;
+}
+[class*="ssb-component-layout-columns-"] .inner-page {
+  display: inline-block !important;
+  padding: 0!important;
+  min-height: 200px;
+}
+[class*="ssb-component-layout-columns-"] .col-xs-12 {
+  float: none!important;
+  padding-left: 0!important;
+  padding-right: 0!important;
+}
 /*
  * OVERRIDES FOR LEGACY COMPONENT STYLES
  */
