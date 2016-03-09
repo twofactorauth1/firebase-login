@@ -13,7 +13,7 @@
       $scope.trackedAccounts = [];
       $scope.feed = [];
       $scope.feedLengths = {};
-      $scope.orderByAttribute = '';
+      $scope.orderByAttribute = 'date';
     };
 
     // execute the 'constructor'
@@ -732,6 +732,10 @@
     }
     ];
 
+    $scope.sortBy = {
+        label: "Most Recent",
+        data: "date"
+    };
     $scope.sortFeed = function (type) {
       $scope.orderByAttribute = type.data;
       setTimeout(function () {
