@@ -60,7 +60,10 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
     vm.duplicateSection = duplicateSection;
     vm.validateDuplicatePage = validateDuplicatePage;
     vm.constructVideoUrl = constructVideoUrl;
+    vm.closeSectionPanel = closeSectionPanel;
+
     editableOptions.theme = 'bs3';
+
 
     vm.sortableOptions = {
     	handle: '.ssb-sidebar-move-handle',
@@ -947,6 +950,12 @@ function ssbSiteBuilderSidebarController($scope, $attrs, $filter, $document, $ti
         console.log(videoData);
 
         return videoData;
+    }
+
+    function closeSectionPanel() {
+        vm.uiState.activeElement = {};
+        vm.uiState.showSectionPanel = false;
+        vm.uiState.openSidebarSectionPanel = { name: '', id: '' };
     }
 
     function init(element) {

@@ -853,6 +853,14 @@
   background: url('../assets/images/indimain/wave-bg.jpg');
   background-size: 15% auto;
 }
+#componentloader .feature-list-v1 .feature {
+  min-width: 256px;
+}
+@media (max-width: 767px) {
+  #componentloader .feature-list-v1 .feature {
+    min-width: 100%;
+  }
+}
 #componentloader div[data-type="feature-list"] .inner-page {
   padding: 30px 0;
 }
@@ -955,6 +963,14 @@
 #componentloader .feature-list-v3 .feature-single img {
   max-width: 100%;
 }
+#componentloader .feature-list-v3 .feature {
+  min-width: 256px;
+}
+@media (max-width: 767px) {
+  #componentloader .feature-list-v3 .feature {
+    min-width: 100%;
+  }
+}
 #componentloader .feature-list-v4 {
   /* fix firefox responsive images */
 }
@@ -979,6 +995,10 @@
 #componentloader .feature-list-v4 .feature-icon {
   padding-top: 10px;
   padding-bottom: 10px;
+  min-width: 30%;
+}
+#componentloader .feature-list-v4 .feature-content-container {
+  max-width: 70%;
 }
 #componentloader .feature-list-v4 .container-xs-height {
   display: table;
@@ -1563,7 +1583,6 @@
   height: 40px;
   border-radius: 30px;
   line-height: 35px;
-  color: white;
   border: 2px solid white;
   margin-right: 5px;
 }
@@ -1601,6 +1620,12 @@
 }
 #componentloader .meet-team-v1 .profilepic {
   margin-bottom: 20px;
+  min-width: 256px;
+}
+@media (max-width: 767px) {
+  #componentloader .meet-team-v1 .profilepic {
+    min-width: 100%;
+  }
 }
 #componentloader .meet-team-v1 .profilepic-hover {
   opacity: 0;
@@ -2589,7 +2614,7 @@
   max-width: 1100px;
   margin: 0 auto;
 }
-#componentloader .simple-form-v1 .btn,
+#componentloader .simple-form-v1 .btn.btn-simple-form,
 #componentloader .simple-form-v1 input {
   height: 50px;
   margin: 0;
@@ -2597,7 +2622,7 @@
   border: 0;
   border: 1px solid #eeeeee;
 }
-#componentloader .simple-form-v1 .btn .fa,
+#componentloader .simple-form-v1 .btn.btn-simple-form .fa,
 #componentloader .simple-form-v1 input .fa {
   padding: 0 0 0 10px;
 }
@@ -2684,7 +2709,7 @@
   padding-top: 15px !important;
   -moz-user-select: text;
 }
-#componentloader .simple-form-v2 .btn {
+#componentloader .simple-form-v2 .btn.btn-simple-form {
   height: 50px;
   margin: 0;
   padding: 0;
@@ -2840,6 +2865,14 @@
 }
 #componentloader .products-v1 .line-wrap-text {
   word-wrap: break-word;
+}
+#componentloader .products-v1 .masonry-brick {
+  min-width: 256px;
+}
+@media (max-width: 767px) {
+  #componentloader .products-v1 .masonry-brick {
+    min-width: 100%;
+  }
 }
 #componentloader .shopping-cart {
   color: #444!important;
@@ -6398,7 +6431,7 @@ a[href="https://froala.com/wysiwyg-editor"] {
   clear: both;
   border: inset solid 1px transparent;
 }
-.ssb-site-builder .ssb-page-section:hover .ssb-edit-control,
+.ssb-site-builder .ssb-page-section:hover .ssb-edit-control:not(.ssb-edit-control-component-btn),
 .ssb-site-builder .ssb-page-section:hover .ssb-settings-btn {
   display: block;
   opacity: 1;
@@ -6687,6 +6720,35 @@ div[class^="spacing-"] input {
 .btn-radio-form.active {
   background-color: #286090 !important;
   border-color: #204d74 !important;
+}
+.ssb-edit-control-component-btn {
+  display: none!important;
+  position: fixed!important;
+  font-size: 13px;
+  opacity: 0;
+}
+.ssb-edit-control-component-btn.on {
+  opacity: 1;
+  z-index: 10;
+  display: block!important;
+}
+.ssb-theme-btn {
+  -webkit-user-select: text;
+  user-select: text;
+}
+.ssb-theme-btn-active-element:before {
+  display: block;
+  opacity: .75;
+  box-shadow: 0px 0px 0px 4px #eda200 !important;
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+.ssb-theme-btn-style-1 {
+  background: blue;
 }
 .ssb-site-template-grid-item {
   padding: 1em;
@@ -7809,19 +7871,13 @@ ssb-topbar #ssb-froala-scrollable-container {
 }
 @media (min-width: 1280px) {
   ssb-topbar #ssb-froala-scrollable-container {
-    width: calc(100% - (16.66666667% + 15px + 15px + 3px) - (16.66666667% + 15px + 15px + 1px));
-    left: calc(16.66666667% + 15px + 15px + 3px);
+    width: calc(100% - (16.66666667% + 85px + 15px + 15px + 3px) - (16.66666667% + 15px + 15px + 1px));
+    left: calc(16.66666667% + 85px + 15px + 15px + 3px);
     right: calc(16.66666667% + 15px + 15px + 1px);
     white-space: nowrap;
     height: 60px;
     border-top: 0;
     border-bottom: 0;
-  }
-}
-@media (min-width: 1330px) {
-  ssb-topbar #ssb-froala-scrollable-container {
-    width: calc(100% - (16.66666667% + 75px + 15px + 15px + 3px) - (16.66666667% + 15px + 15px + 1px));
-    left: calc(16.66666667% + 75px + 15px + 15px + 3px);
   }
 }
 .fr-popup.fr-desktop.fr-inline,
@@ -7904,15 +7960,11 @@ ssb-topbar #ssb-froala-scrollable-container {
     z-index: 5;
     pointer-events: auto!important;
     display: block!important;
+    left: 50%!important;
+    transform: translateX(-50%);
   }
   .fr-toolbar.fr-inline.fr-desktop.ssb-froala-active-editor button {
     opacity: 1;
-  }
-}
-@media (min-width: 1300px) {
-  .fr-toolbar.fr-inline.fr-desktop.ssb-froala-active-editor {
-    left: 50%!important;
-    transform: translateX(-50%);
   }
 }
 @media (min-width: 1280px) {
@@ -7921,6 +7973,10 @@ ssb-topbar #ssb-froala-scrollable-container {
     pointer-events: auto!important;
     display: inline-block !important;
   }
+}
+.fr-box.fr-code-view .CodeMirror {
+  font-size: 16px!important;
+  text-align: left;
 }
 @media (min-width: 1280px) {
   .fr-popup .fr-arrow,
@@ -7940,6 +7996,7 @@ ssb-topbar #ssb-froala-scrollable-container {
     display: block;
     width: auto!important;
     margin: 0 auto!important;
+    min-width: 310px;
   }
   body[ng-controller] .fr-popup .fr-input-line input.fr-not-empty + span,
   body[ng-controller] .fr-popup .fr-input-line textarea.fr-not-empty + span {
@@ -8434,7 +8491,10 @@ body[ng-controller] .fr-box.fr-code-view.fr-inline {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
 }
 body[ng-controller] .fr-box.fr-inline .fr-command.fr-btn.html-switch {
-  background: #ffffff;
+  background: #1c2b36;
+  top: auto;
+  bottom: 0;
+  font-size: 16px;
   color: #ffffff;
   padding: 11px 11.5px;
   -webkit-transition: background 0.2s ease 0s;

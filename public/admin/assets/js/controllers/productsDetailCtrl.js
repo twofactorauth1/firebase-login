@@ -85,7 +85,7 @@
         'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
       }
     };
-       
+
     $scope.initDatePicker = function(){
       $timeout(function() {
         $scope.myform.$dirty = false;
@@ -184,10 +184,10 @@
         }
       });
       return promise;
-    } 
+    }
     $scope.product_tags = [];
     var productPlanStatus = {};
-    var productPlanSignupFee = {};   
+    var productPlanSignupFee = {};
 
     /*
      * @insertMedia
@@ -300,7 +300,7 @@
     $scope.validateProduct = function () {
       var _isValid = true;
       if (!$scope.product.name) {
-        _isValid = false;        
+        _isValid = false;
         $scope.productNameError = true;
       }
       if (!$scope.product.type) {
@@ -334,12 +334,12 @@
     $scope.saveLoading = false;
 
     $scope.saveProductFn = function () {
-      
+
       console.log('$scope.selectedDate ', $scope.selectedDate);
       if ($scope.selectedDate.range) {
         $scope.product.sale_date_from = new Date($scope.selectedDate.range.startDate).toISOString();
         $scope.product.sale_date_to = new Date($scope.selectedDate.range.endDate).toISOString();
-      }    
+      }
       $scope.setProductTags();
       if ($scope.validateProduct()) {
         $scope.saveLoading = true;
@@ -354,7 +354,7 @@
             $scope.saveLoading = false;
             return;
           }
-          
+
           var stepSettings = $scope.product.emailSettings;
           if (!stepSettings.emailId || (angular.isDefined($scope.existingEmail.replace) && !$scope.existingEmail.replace)) {
             $scope.emailToSend.productId = $scope.product._id;
@@ -379,9 +379,9 @@
           $scope.product = product;
           angular.copy($scope.product, $scope.originalProduct);
           if($scope.product.fulfillment_email){
-            $scope.getEmails();  
+            $scope.getEmails();
           }
-          $scope.saveLoading = false;          
+          $scope.saveLoading = false;
           toaster.pop('success', 'Product Saved.');
         });
     }
@@ -408,7 +408,7 @@
       console.log('removeVariation');
     };
 
-   
+
     ProductService.productStatusTypes(function(types) {
         $scope.productStatusOptions = types;
     });
@@ -435,7 +435,7 @@
 
     $scope.addSubscriptionFn = function (newSubscription, showToaster) {
       console.log('newSubscription ', newSubscription);
-      if ($scope.user.stripeId === undefined || $scope.user.stripeId === null || $scope.user.stripeId === '') {
+      if (!$scope.stripeAccountExist) {
         toaster.pop('error', 'Need to add a stripe account first.');
         $state.go('account');
       }
@@ -514,6 +514,10 @@
             $scope.product.product_attributes.stripePlans.splice(index, 1);
           }
         });
+
+        if (!$scope.plans.length) {
+            $scope.product.status = 'inactive';
+        }
 
         if (fn) {
           fn();
@@ -596,7 +600,7 @@
     }
 
     $scope.checkIfDirty = function(){
-      var isDirty = false;      
+      var isDirty = false;
       if($scope.originalProduct && !angular.equals($scope.originalProduct, $scope.product))
         isDirty = true;
       return isDirty;
@@ -631,7 +635,7 @@
         // "title": "<h2 class='center'>New Email</h2>",
         // "subtitle": "subtitle",
         // "text": "This is your new email",
-        
+
         "bg": {
           "img": {
             "url": "",
@@ -654,7 +658,7 @@
         "title": '<h2 style="text-align:center;">One Column Layout Section</h2>',
         // "subtitle": "subtitle",
         "text": '<p style="text-align:center;">This is a single column content section.</p>',
-        
+
         "bg": {
           "img": {
             "url": "",
@@ -677,7 +681,7 @@
         // "subtitle": "subtitle",
         "text1": '<p style="text-align:center;">This is column 1.</p>',
         "text2": '<p style="text-align:center;">This is column 2.</p>',
-        
+
         "bg": {
           "img": {
             "url": "",
@@ -701,7 +705,7 @@
         "text1": '<p style="text-align:center;">This is column 1.</p>',
         "text2": '<p style="text-align:center;">This is column 2.</p>',
         "text3": '<p style="text-align:center;">This is column 3.</p>',
-        
+
         "bg": {
           "img": {
             "url": "",
@@ -724,7 +728,7 @@
         // "title": "<h2 class='center'>New Email</h2>",
         // "subtitle": "subtitle",
         "text": "This is an email footer.",
-        
+
         "bg": {
           "img": {
             "url": "",
@@ -749,6 +753,13 @@
     $scope.getAccount = function() {
       var promise = AccountService.getAccount(function (_account) {
         $scope.account = _account;
+        $scope.stripeAccountExist = false;
+        $scope.paypalAccountExist = $scope.account.commerceSettings.paypal;
+        $scope.account.credentials.forEach(function(cred, index) {
+            if (cred.type == 'stripe') {
+                $scope.stripeAccountExist = true;
+            }
+        });
         $scope.setBusinessDetails();
         $scope.actualEmailToSend = angular.copy($scope.emailToSend);
       });
@@ -792,7 +803,7 @@
 
     /*
      * @setEmailstoSendDetails
-     * 
+     *
      */
     $scope.setEmailDefaults = function (_name) {
       $scope.emailToSend.title = _name + ' Email';
@@ -800,7 +811,7 @@
       $scope.checkEmailTitle($scope.emailToSend.title);
     };
 
-    
+
 
      /*
      * @changeCurrentEmail
@@ -818,12 +829,12 @@
       if(!$scope.product.emailSettings){
         setProductEmailSettings($scope.product);
       }
-      if($scope.product.fulfillment_email && $scope.product.emailSettings.emailId)      
+      if($scope.product.fulfillment_email && $scope.product.emailSettings.emailId)
         $scope.selectedEmail = {
           type: 'template'
         };
-      
-      var promise = WebsiteService.getEmails(false, function (_emails) {        
+
+      var promise = WebsiteService.getEmails(false, function (_emails) {
         var emailId = $scope.product.emailSettings.emailId;
         var matchedEmail = null;
         var emailMatch = function(email) {
@@ -843,7 +854,7 @@
         } else {
           console.log('email not found');
         }
-        $scope.emailToSendPrevious = $scope.emails[0];       
+        $scope.emailToSendPrevious = $scope.emails[0];
       });
       $scope.originalProduct = angular.copy($scope.product);
       return promise;
@@ -873,7 +884,7 @@
      * - callback for toggle on radio input "New Email" vs. "Template"
      */
     $scope.clearEmail = function (newEmail) {
-      $scope.checkingEmailTitle = false;     
+      $scope.checkingEmailTitle = false;
       if (newEmail) {
         $scope.emailToSendPrevious = angular.copy($scope.emailToSend);
         $scope.setBusinessDetails(newEmail);

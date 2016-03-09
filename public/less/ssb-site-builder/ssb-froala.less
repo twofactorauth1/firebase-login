@@ -9,8 +9,8 @@ ssb-topbar #ssb-froala-scrollable-container {
 
     //topbar positioning
     @media (min-width: 1280px) {
-        width: calc(~"100% - (16.66666667% + 15px + 15px + 3px) - (16.66666667% + 15px + 15px + 1px)");
-        left: calc(~"16.66666667% + 15px + 15px + 3px");
+        width: calc(~"100% - (16.66666667% + 85px + 15px + 15px + 3px) - (16.66666667% + 15px + 15px + 1px)");
+        left: calc(~"16.66666667% + 85px + 15px + 15px + 3px");
         right: calc(~"16.66666667% + 15px + 15px + 1px");
         white-space: nowrap;
         height: 60px;
@@ -18,10 +18,10 @@ ssb-topbar #ssb-froala-scrollable-container {
         border-bottom: 0;
     }
 
-    @media (min-width: 1330px) {
-        width: calc(~"100% - (16.66666667% + 75px + 15px + 15px + 3px) - (16.66666667% + 15px + 15px + 1px)");
-        left: calc(~"16.66666667% + 75px + 15px + 15px + 3px");
-    }
+    // @media (min-width: 1330px) {
+    //     width: calc(~"100% - (16.66666667% + 75px + 15px + 15px + 3px) - (16.66666667% + 15px + 15px + 1px)");
+    //     left: calc(~"16.66666667% + 75px + 15px + 15px + 3px");
+    // }
 
 }
 
@@ -144,6 +144,8 @@ ssb-topbar #ssb-froala-scrollable-container {
         z-index: 5;
         pointer-events: auto!important;
         display: block!important;
+        left: 50%!important;
+        transform: translateX(-50%);
 
         button {
             opacity: 1;
@@ -151,10 +153,10 @@ ssb-topbar #ssb-froala-scrollable-container {
     }
 
     //topbar positioning for wider screens
-    @media (min-width: 1300px) {
-        left: 50%!important;
-        transform: translateX(-50%);
-    }
+    // @media (min-width: 1300px) {
+    //     left: 50%!important;
+    //     transform: translateX(-50%);
+    // }
 
 }
 
@@ -171,6 +173,11 @@ ssb-topbar #ssb-froala-scrollable-container {
         // left: 50%!important;
         // transform: translateX(-50%);
     }
+}
+
+.fr-box.fr-code-view .CodeMirror {
+    font-size: 16px!important;
+    text-align: left;
 }
 
 //various tweaks to layout within topbar
@@ -203,6 +210,7 @@ ssb-topbar #ssb-froala-scrollable-container {
         display: block;
         width: auto!important;
         margin: 0 auto!important;
+        min-width: 310px;
     }
 
     body[ng-controller] .fr-popup .fr-input-line input.fr-not-empty + span,
@@ -767,7 +775,10 @@ body[ng-controller] .fr-box.fr-code-view.fr-inline {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
 }
 body[ng-controller] .fr-box.fr-inline .fr-command.fr-btn.html-switch {
-  background: #ffffff;
+  background: @indigenous-gray-blue;
+  top: auto;
+  bottom: 0;
+  font-size: 16px;
   color: #ffffff;
   padding: 11px 11.5px;
   -webkit-transition: background 0.2s ease 0s;

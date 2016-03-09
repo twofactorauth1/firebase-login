@@ -1,11 +1,13 @@
-<div class="ssb-settings-btn" ng-click="vm.setActive(vm.sectionIndex, vm.componentIndex)"><i class="fa fa-pencil"></i></div>
-<!-- <div class="ssb-edit-control-inactive"></div> -->
+<div class="ssb-settings-btn" ng-click="vm.setActive(vm.sectionIndex, vm.componentIndex, vm.compiledControlId)">
+    <i class="fa fa-pencil"></i>
+</div>
+
 <div class="ssb-edit-control-active">
 
 	<a
         href
         class="ssb-edit-control-active-title"
-        ng-click="vm.setActive(vm.sectionIndex, vm.componentIndex)">
+        ng-click="vm.setActive(vm.sectionIndex, vm.componentIndex, vm.compiledControlId)">
 
         <span ng-if="vm.componentIndex !== undefined">
             Edit {{(vm.component.name || vm.component.type || vm.component.title) | cleanType}}

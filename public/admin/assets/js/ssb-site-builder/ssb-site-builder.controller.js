@@ -61,7 +61,6 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         loadPage: function(pageId) {
             if (pageId && pageId !== vm.state.page._id) {
                 SimpleSiteBuilderService.getPages();
-                SimpleSiteBuilderService.getSite(vm.state.website._id);
                 if(!vm.state.pendingWebsiteChanges && !vm.state.pendingPageChanges)
                     vm.uiState.loaded = false;
                 $location.path('/website/site-builder/pages/' + pageId);
@@ -494,7 +493,6 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
 
     function pageSectionClick(e) {
       vm.uiState.openSidebarPanel = '';
-      // vm.uiState.showSectionPanel = true;
     }
 
     function pageResize(e) {
@@ -526,6 +524,8 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         $rootScope.app.layout.isMinimalAdminChrome = true;
 
         vm.uiStateOriginal = angular.copy(vm.uiState);
+
+        vm.state.permissions = SimpleSiteBuilderService.permissions;
 
     }
 

@@ -42,7 +42,8 @@ var order = $$.m.ModelBase.extend({
                     "sku" : "",
                     "total" : "20.00",
                     "name" : "Product Name",
-                    "total_tax" : "0.00"
+                    "total_tax" : "0.00",
+                    type: "SUBSCRIPTION"
                 }
                 */
             ],

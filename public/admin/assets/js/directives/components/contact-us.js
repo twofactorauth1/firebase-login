@@ -92,22 +92,23 @@ app.directive('contactUsComponent', ['AccountService', 'GeocodeService', '$timeo
           if (scope.component.location.lat && scope.component.location.lon) {
             scope.reloadMap();
           } else {
-            GeocodeService.getGeoSearchAddress(scope.contactAddress, function (data) {
-              if (data.lat && data.lon) {
-                scope.component.location.lat = data.lat;
-                scope.component.location.lon = data.lon;
-                scope.reloadMap();
-              }
-              else
-                GeocodeService.validateAddress(scope.component.location, null, function (data, results) {
-                  if (data && results.length === 1) {
-                    scope.component.location.lat = results[0].geometry.location.lat();
-                    scope.component.location.lon = results[0].geometry.location.lng();
-                    scope.reloadMap();
-                  }
-                });
-            });
-          }
+              GeocodeService.validateAddress(scope.component.location, null, function (data, results) {
+                if (data && results.length === 1) {
+                  scope.component.location.lat = results[0].geometry.location.lat();
+                  scope.component.location.lon = results[0].geometry.location.lng();
+                  scope.reloadMap();
+                }
+                else{
+                  GeocodeService.getGeoSearchAddress(scope.contactAddress, function (data) {
+                    if (data.lat && data.lon) {
+                      scope.component.location.lat = data.lat;
+                      scope.component.location.lon = data.lon;
+                      scope.reloadMap();
+                    }
+                  })
+                }
+              });
+            }
         }, 500);
       };
       scope.$on('mapInitialized', function(event, map) {

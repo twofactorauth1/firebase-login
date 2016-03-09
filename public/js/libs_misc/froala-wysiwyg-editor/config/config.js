@@ -93,6 +93,14 @@ $.FroalaEditor.config = {
         H4: 'Heading 4',
         P: 'Paragraph',
         PRE: 'Code'
+    },
+    codeMirrorOptions: {
+        indentWithTabs: true,
+        lineNumbers: true,
+        lineWrapping: false,
+        mode: 'text/html',
+        tabMode: 'indent',
+        tabSize: 2
     }
     // imageUploadToS3: {
     //     bucket: 'indigenous-digital-assets',

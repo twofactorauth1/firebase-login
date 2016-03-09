@@ -47,7 +47,7 @@ app.controller('SiteBuilderContactUsModalController', ['$scope', '$timeout', 'pa
                 }, 0);
             } else {
                 $timeout(function () {
-                    vm.$apply(function () {
+                    $scope.$apply(function () {
                         vm.errorMapData = true;
                         angular.copy(vm.component.location, vm.originalContactMap);
                     });
