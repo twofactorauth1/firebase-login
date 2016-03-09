@@ -103,6 +103,10 @@
     }
     .profilepic {
         margin-bottom: 20px;
+        min-width: 256px;
+        @media(max-width:767px) {
+            min-width: 100%;
+        }
     }
     .profilepic-hover {
         opacity: 0;
