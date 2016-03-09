@@ -74,6 +74,15 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> createPaypalOrder');
 
         var order = new $$.m.Order(req.body);
+        var hasSubscriptionProduct = false;
+        order.attributes.line_items.forEach(function(item, index) {
+            if (item.type == 'SUBSCRIPTION') {
+                hasSubscriptionProduct = true;
+            }
+        });
+        if (hasSubscriptionProduct) {
+            return resp.status(500).send('Unsupported Payment method');
+        }
         order.set('status', 'pending_payment');
         var userId = self.userId(req);
         var accountId = self.currentAccountId(req);

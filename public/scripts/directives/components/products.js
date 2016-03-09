@@ -713,7 +713,8 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                         "sku": "",
                         "total": formatNum(totalAmount),
                         "name": item.name,
-                        "total_tax": "0.00"
+                        "total_tax": "0.00",
+                        type: item.type
                     };
                     order.line_items.push(_item);
                 });
