@@ -367,7 +367,8 @@ app.constant('pageConstant', {
     'interim': 'interim',
     'unsubscribe': 'unsubscribe',
     'forgotpassword': 'forgotpassword',
-    'current-user': 'current-user'
+    'current-user': 'current-user',
+    'signup': 'signup'
   }
 });
 
