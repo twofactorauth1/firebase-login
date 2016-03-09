@@ -29,7 +29,7 @@ function ssbSiteBuilderSiteTemplatesController($scope, $attrs, $filter, $documen
         var pages = values[0];
         if(pages)
         {
-            pages = _.reject(pages, function(page){ return page.handle === "blog" || page.handle === "single-post" || page.handle === "coming-soon" });
+            pages = _.reject(pages, function(page){ return page.handle === "blog" || page.handle === "single-post" || page.handle === "coming-soon" || page.handle === "signup" });
         }
         var website = values[1];
 

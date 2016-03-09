@@ -70,7 +70,8 @@ _.extend(api.prototype, baseApi.prototype, {
      */
     createPaypalOrder: function(req, resp) {
         var self = this;
-        var fullUrl = req.protocol + '://' + req.get('host') + req.path;
+        
+        var fullUrl = req.get('Referrer');
         self.log.debug('>> createPaypalOrder');
 
         var order = new $$.m.Order(req.body);

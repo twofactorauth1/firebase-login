@@ -155,7 +155,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
 
       //filter blog pages and coming soon
       if(pages){
-        vm.state.pages = _.reject(pages, function(page){ return page.handle === "blog" || page.handle === "single-post" || page.handle === "coming-soon" });
+        vm.state.pages = _.reject(pages, function(page){ return page.handle === "blog" || page.handle === "single-post" || page.handle === "coming-soon" || page.handle === "signup" });
       }
     }, true);
 
