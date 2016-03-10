@@ -13,8 +13,8 @@ var paypalAPISignature = process.env.PAYPAL_API_SIGNATURE || 'AFcWxV21C7fd0v3bYY
 
 //The real deal:
 //kyle_api1.indigenous.io
-//7RHC3SGTNEULVR6Y
-//AFcWxV21C7fd0v3bYYYRCpSSRl31Alk0IwKAI2V3IGQrs1zhM9AVfiEB
+//L5VSWK2GJ8ZXFPDS
+//AFcWxV21C7fd0v3bYYYRCpSSRl31ARIjICnFMYduIfRqDGmPXFSW1Wus
 
 module.exports = {
 
