@@ -521,7 +521,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
      *      - else the change is legit, return true
      * - else the change is legit, return true
      *
-     * TODO: how to handle undo in Froala?
+     * TODO: handle undo in Froala
      */
     function pageChanged(originalPage, currentPage) {
         if (!angular.equals(originalPage, currentPage)) {
