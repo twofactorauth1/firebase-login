@@ -748,10 +748,10 @@ _.extend(api.prototype, baseApi.prototype, {
                                                             if(activity){
                                                                 var accountEmail = null;
                                                                 if(emailPreferences.new_contacts === true) {
-                                                                    if(account && account.attributes.business && account.attributes.business.emails && account.attributes.business.emails[0] && account.attributes.business.emails[0].email) {
-                                                                        self.log.debug('user email: ', account.attributes.business.emails[0].email);
-                                                                        accountEmail = account.attributes.business.emails[0].email;
-                                                                        self._sendEmailOnCreateAccount(req, resp, accountEmail, activity.contact, account._id, components[0], emailPage.get('_id'), savedContact)
+                                                                    if(account && account.get("business") && account.get("business").emails && account.get("business").emails[0] && account.get("business").emails[0].email) {
+                                                                        self.log.debug('user email: ', account.get("business").emails[0].email);
+                                                                        accountEmail = account.get("business").emails[0].email;
+                                                                        self._sendEmailOnCreateAccount(req, resp, accountEmail, activity.contact, account.id(), components[0], emailPage.get('_id'), savedContact)
                                                                     } else{
                                                                         userDao.getUserAccount(query.accountId, function(err, user){
                                                                             self.log.debug('user: ', user);
