@@ -189,8 +189,9 @@
       var _taxrate= $scope.order.tax_rate || 0;
 
       _.each($scope.order.line_items, function (line_item) {
+        var item_price = line_item.product.sale_price && line_item.product.on_sale ? line_item.product.sale_price : line_item.product.regular_price;
         if (line_item.quantity) {
-          line_item.total = line_item.regular_price * line_item.quantity;
+          line_item.total = item_price * line_item.quantity;
         }
         if (line_item.discount) {
           var _dc = parseFloat(line_item.discount);
@@ -198,8 +199,8 @@
           _discount += _dc;
           _total -= _dc;
         }
-        _subtotal += parseFloat(line_item.regular_price) * parseFloat(line_item.quantity);
-        _total += parseFloat(line_item.regular_price) * parseFloat(line_item.quantity);
+        _subtotal += parseFloat(item_price) * parseFloat(line_item.quantity);
+        _total += parseFloat(item_price) * parseFloat(line_item.quantity);
       });
 
       $scope.order.subtotal = _subtotal;
@@ -810,7 +811,7 @@
       }
       if(!$scope.order.billing_address || invalid)
       {
-        
+
         toaster.pop('error', 'Billing details cannot be blank');
         $scope.saveLoading = false;
         return;
