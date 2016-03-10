@@ -549,8 +549,7 @@ var mandrillHelper =  {
                             ],
                             "google_analytics_campaign": null,
                             "metadata": {
-                                "accountId": accountId,
-                                "emailId": emailId
+                                "accountId": accountId
                             },
                             "recipient_metadata": [
                                 {
