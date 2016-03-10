@@ -57,9 +57,9 @@ function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude,
 
     });
 
-    $scope.$watch('vm.elementData', updateTextEditor, true);
+    var watchElementData = $scope.$watch('vm.elementData', updateTextEditor, true);
 
-    $scope.$watch('pvm.state.saveLoading', function() {
+    var pvmStateLoading = $scope.$watch('pvm.state.saveLoading', function() {
         if (parentComponent && pvm && pvm.state.saveLoading) {
             var el = SimpleSiteBuilderService.getCompiledElement(parentComponent.attr('id'), elementId)
 
@@ -353,6 +353,15 @@ function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude,
         } else {
 
             console.log('button outside of editor context: ', element.html());
+
+            /**
+             *  unbind watchers for inactive .ssb-theme-btn's
+             */
+            vm.elementClass = angular.noop();
+
+            watchElementData();
+
+            pvmStateLoading();
 
         }
 
