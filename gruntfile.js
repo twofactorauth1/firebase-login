@@ -10,6 +10,7 @@ var KEEN_CONFIG = require('./configs/keen.config');
 var GOOGLE_CONFIG = require('./configs/google.config');
 var LEADDYNO_CONFIG = require('./configs/leaddyno.config');
 var FACEBOOK_CONFIG = require('./configs/facebook.config');
+var PAYPAL_CONFIG = require('./configs/paypal.config');
 
 //var wiredepJSAry = require('wiredep')().js;
 
@@ -392,7 +393,8 @@ module.exports = function(grunt) {
                         googleClientSecret: GOOGLE_CONFIG.CLIENT_SECRET,
                         googleServerKey: GOOGLE_CONFIG.SERVER_KEY,
                         leaddyno: LEADDYNO_CONFIG.LEAD_DYNO_KEY,
-                        facebookClientID: FACEBOOK_CONFIG.CLIENT_ID
+                        facebookClientID: FACEBOOK_CONFIG.CLIENT_ID,
+                        paypalCheckoutURL: PAYPAL_CONFIG.PAYPAL_CHECKOUT_URL
                     }
                 }
             },
@@ -414,7 +416,8 @@ module.exports = function(grunt) {
                         googleClientSecret: GOOGLE_CONFIG.PROD_CLIENT_SECRET,
                         googleServerKey: GOOGLE_CONFIG.SERVER_KEY,
                         leaddyno: LEADDYNO_CONFIG.LEAD_DYNO_KEY,
-                        facebookClientID: FACEBOOK_CONFIG.CLIENT_ID
+                        facebookClientID: FACEBOOK_CONFIG.CLIENT_ID,
+                        paypalCheckoutURL: PAYPAL_CONFIG.PAYPAL_CHECKOUT_URL
                     }
                 }
             }

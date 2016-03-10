@@ -10,6 +10,7 @@ var paypalClientSecret = process.env.PAYPAL_CLIENT_SECRET || 'EMLp1mnLTtXX6PSgZB
 var paypalAPIUsername = process.env.PAYPAL_API_USERNAME || 'kyle-facilitator_api1.indigenous.io';
 var paypalAPIPassword = process.env.PAYPAL_API_PASSWORD || '9UQNLK8V9ZNHFSBM';
 var paypalAPISignature = process.env.PAYPAL_API_SIGNATURE || 'AFcWxV21C7fd0v3bYYYRCpSSRl31AUrCEslod6r62qh4l6zrsCME.JV-';
+var paypalCheckoutURL = process.env.PAYPAL_CHECKOUT_URL || 'https://www.sandbox.paypal.com/webapps/adaptivepayment/flow/pay';
 
 //The real deal:
 //kyle_api1.indigenous.io
@@ -22,6 +23,7 @@ module.exports = {
     PAYPAL_CLIENT_SECRET : paypalClientSecret,
     PAYPAL_API_USERNAME : paypalAPIUsername,
     PAYPAL_API_PASSWORD : paypalAPIPassword,
-    PAYPAL_API_SIGNATURE : paypalAPISignature
+    PAYPAL_API_SIGNATURE : paypalAPISignature,
+    PAYPAL_CHECKOUT_URL : paypalCheckoutURL
 
 }
