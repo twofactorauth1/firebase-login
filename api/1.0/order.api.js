@@ -34,7 +34,7 @@ _.extend(api.prototype, baseApi.prototype, {
         app.post(this.url(':id/hold'), this.isAuthAndSubscribedApi.bind(this), this.holdOrder.bind(this));
 
         app.post(this.url(':id/note'), this.isAuthAndSubscribedApi.bind(this), this.addOrderNote.bind(this));
-        app.post(this.url(':id/paid'), this.isAuthAndSubscribedApi.bind(this), this.orderPaymentComplete.bind(this));
+        app.post(this.url(':id/paid'), this.setup.bind(this), this.orderPaymentComplete.bind(this));
     },
 
     createOrder: function(req, res) {
@@ -330,15 +330,9 @@ _.extend(api.prototype, baseApi.prototype, {
             created_at = moment(created_at).toDate();
             order.set('created_at', created_at);
         }
-        self.checkPermission(req, self.sc.privs.MODIFY_ORDER, function(err, isAllowed) {
-            if (isAllowed !== true) {
-                return self.send403(res);
-            } else {
-                orderManager.updateOrderById(order, function(err, order){
-                    self.log.debug('<< orderPaymentComplete');
-                    self.sendResultOrError(res, err, order, 'Error updating order');
-                });
-            }
+        orderManager.updateOrderById(order, function(err, order){
+            self.log.debug('<< orderPaymentComplete');
+            self.sendResultOrError(res, err, order, 'Error updating order');
         });
     }
 });
