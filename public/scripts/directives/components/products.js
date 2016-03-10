@@ -1,6 +1,6 @@
 'use strict';
 /*global app*/
-app.directive('productsComponent', ['$timeout', 'paymentService', 'productService', 'accountService', 'CartDetailsService', 'userService', 'orderService', 'formValidations', 'ipCookie', '$routeParams', '$location', function($timeout, PaymentService, ProductService, AccountService, CartDetailsService, UserService, OrderService, formValidations, ipCookie, $routeParams, $location) {
+app.directive('productsComponent', ['$timeout', 'paymentService', 'productService', 'accountService', 'CartDetailsService', 'userService', 'orderService', 'formValidations', 'ipCookie', '$routeParams', '$location', 'ENV', '$sce', function($timeout, PaymentService, ProductService, AccountService, CartDetailsService, UserService, OrderService, formValidations, ipCookie, $routeParams, $location, ENV, $sce) {
     return {
         require: [],
         scope: {
@@ -26,6 +26,8 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
             scope.showTax = true;
             scope.showNotTaxed = false; // Some items are not taxed when summing
             scope.hasSubscriptionProduct = false;
+            scope.paypalURL = $sce.trustAsResourceUrl(ENV.paypalCheckoutURL);
+            console.log('url:', scope.paypalURL);
 
 
             /*
