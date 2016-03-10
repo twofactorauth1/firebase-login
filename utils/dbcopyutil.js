@@ -857,7 +857,7 @@ var copyutil = {
             },
             function getPages(cb) {
                 console.log('getPages: fetch account pages that haven not been saved in SB yet');
-                pagesCollection.find({'accountId': accountId, 'ssb': { $exists: false } }).toArray(function(err, pages){
+                pagesCollection.find({'accountId': accountId, 'ssb': { $exists: false }, 'handle': { $nin: ['blog', 'single-post', 'coming-soon'] } }).toArray(function(err, pages){
                     if (err) {
                         console.log('Error finding pages:', err);
                         return cb(err);
