@@ -95,7 +95,7 @@
                                                 <tr>
                                                     <td>Email:</td>
                                                     <td>
-                                                        <div ng-repeat="email in customer.details[0].emails track by $index">
+                                                        <div ng-repeat="email in customer.details[0].emails | uniq: 'email' track by $index">
                                                             <a href="mailto:{{email.email}}">{{email.email}}</a>
                                                             <br>
                                                         </div>
@@ -104,7 +104,7 @@
                                                 <tr>
                                                     <td>Phone:</td>
                                                     <td>
-                                                        <div ng-repeat="phone in customer.details[0].phones  track by $index">
+                                                        <div ng-repeat="phone in customer.details[0].phones | uniq: 'number' track by $index">
                                                             <a ng-if="phone.number" href="tel:{{phone.number}}">{{phone.number}}</a>
                                                             <span ng-if="phone.extension && !phone.number"> N/A </span>
                                                             <span ng-if="phone.extension"> x{{phone.extension}}</span>
