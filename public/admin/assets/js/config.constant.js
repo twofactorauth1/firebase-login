@@ -956,10 +956,9 @@ app.constant('JS_REQUIRES', {
     ]
   },
   {
-    name: 'fast-json-patch',
+    name: 'deep-diff',
     files: [
-        // '../js/libs/fast-json-patch/src/json-patch.js',
-        '../js/libs/fast-json-patch/src/json-patch-duplex.js',
+        '../js/libs/deep-diff/index.js',
     ]
   }]
 });

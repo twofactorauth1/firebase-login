@@ -1209,26 +1209,28 @@
 
         }
 
-        function addCompiledElement(componentId, elementId, el) {
-            if (!ssbService.compiledElements[componentId]) {
-                ssbService.compiledElements[componentId] = {};
-            }
-            ssbService.compiledElements[componentId][elementId] = el;
+        function addCompiledElement(componentId, editorId, elementId, el) {
+            ssbService.compiledElements[componentId] = ssbService.compiledElements[componentId] || {};
+            ssbService.compiledElements[componentId][editorId] = ssbService.compiledElements[componentId][editorId] || {};
+            ssbService.compiledElements[componentId][editorId][elementId] = el;
         }
 
-        function addCompiledElementEditControl(componentId, elementId, el) {
-            if (!ssbService.compiledElementEditControls[componentId]) {
-                ssbService.compiledElementEditControls[componentId] = {};
-            }
-            ssbService.compiledElementEditControls[componentId][elementId] = el;
+        function addCompiledElementEditControl(componentId, editorId, elementId, el) {
+            ssbService.compiledElementEditControls[componentId] = ssbService.compiledElementEditControls[componentId] || {};
+            ssbService.compiledElementEditControls[componentId][editorId] = ssbService.compiledElementEditControls[componentId][editorId] || {};
+            ssbService.compiledElementEditControls[componentId][editorId][elementId] = el;
         }
 
-        function getCompiledElement(componentId, elementId) {
-            return ssbService.compiledElements[componentId] && ssbService.compiledElements[componentId][elementId];
+        function getCompiledElement(componentId, editorId, elementId) {
+            return ssbService.compiledElements[componentId] &&
+                    ssbService.compiledElements[componentId][editorId] &&
+                    ssbService.compiledElements[componentId][editorId][elementId];
         }
 
-        function getCompiledElementEditControl(componentId, elementId) {
-            return ssbService.compiledElementEditControls[componentId] && ssbService.compiledElementEditControls[componentId][elementId];
+        function getCompiledElementEditControl(componentId, editorId, elementId) {
+            return ssbService.compiledElementEditControls[componentId] &&
+                    ssbService.compiledElementEditControls[componentId][editorId] &&
+                    ssbService.compiledElementEditControls[componentId][editorId][elementId];
         }
 
         /**
@@ -1241,13 +1243,15 @@
          * @param {object} editor - editor instance (froala)
          * @param {boolean} initial - compile all if true
          * @param {string} componentId - id of parent text component/directive
+         * @param {string} editorId - id of parent text editor
          * @param {object} scope - initial scope from editor.js
          *
          */
-        function compileEditorElements(editor, initial, componentId, scope) {
+        function compileEditorElements(editor, initial, componentId, editorId, scope) {
 
             if (initial) {
-                ssbService.compiledElements[componentId] = {};
+                ssbService.compiledElements[componentId] = ssbService.compiledElements[componentId] || {};
+                ssbService.compiledElements[componentId][editorId] = {};
             }
 
             editor.$el.find('.ssb-theme-btn').each(function() {
@@ -1262,53 +1266,57 @@
                         var tempId = ssbService.getTempUUID();
                         cloned.attr('data-compiled', tempId);
                         btn.replaceWith(cloned);
-                        ssbService.compiledElements[componentId][tempId] = angular.element('[data-compiled=' + tempId + ']');
-                        $rootScope.$broadcast('$ssbElementAdded', componentId, tempId);
+                        ssbService.addCompiledElement(componentId, editorId, tempId, angular.element('[data-compiled=' + tempId + ']'));
+                        $rootScope.$broadcast('$ssbElementAdded', componentId, editorId, tempId);
                     });
                 }
             });
 
-            Object.keys(ssbService.compiledElements[componentId]).forEach(function(elementId) {
+            Object.keys(ssbService.compiledElements[componentId][editorId]).forEach(function(elementId) {
                 if (editor.$el.find('[data-compiled=' + elementId + ']').length === 0) {
-                    $rootScope.$broadcast('$ssbElementRemoved', componentId, elementId);
+                    $rootScope.$broadcast('$ssbElementRemoved', componentId, editorId, elementId);
                 }
             });
 
-            $rootScope.$broadcast('$ssbElementsChanged', componentId);
+            $rootScope.$broadcast('$ssbElementsChanged', componentId, editorId);
 
         }
 
-        function removeCompiledElement(componentId, elementId) {
-            if (ssbService.compiledElements[componentId] &&
-                ssbService.compiledElements[componentId][elementId]) {
+        function removeCompiledElement(componentId, editorId, elementId) {
+            var item = ssbService.compiledElements[componentId][editorId][elementId];
+            if (item) {
+                item.remove();
+                item = null;
+                delete ssbService.compiledElements[componentId][editorId][elementId];
+            }
+        }
 
-                ssbService.compiledElements[componentId][elementId].remove();
-                ssbService.compiledElements[componentId][elementId] = null;
-                delete ssbService.compiledElements[componentId][elementId];
+        function removeCompiledElementEditControl(componentId, editorId, elementId) {
+            var item;
+
+            try {
+                item = ssbService.compiledElementEditControls[componentId][editorId][elementId];
+            } catch(e) {
+                item = null;
+            }
+
+            if (item) {
+
+                item.remove();
+                item = null;
+                delete ssbService.compiledElementEditControls[componentId][editorId][elementId];
 
             }
         }
 
-        function removeCompiledElementEditControl(componentId, elementId) {
-            if (ssbService.compiledElementEditControls &&
-                ssbService.compiledElementEditControls[componentId] &&
-                ssbService.compiledElementEditControls[componentId][elementId]) {
-
-                ssbService.compiledElementEditControls[componentId][elementId].remove();
-                ssbService.compiledElementEditControls[componentId][elementId] = null;
-                delete ssbService.compiledElementEditControls[componentId][elementId];
-
-            }
-        }
-
-        $rootScope.$on('$ssbElementAdded', function(event, componentId, elementId) {
-            console.log('$ssbElementAdded', componentId, elementId);
+        $rootScope.$on('$ssbElementAdded', function(event, componentId, editorId, elementId) {
+            console.log('$ssbElementAdded', componentId, editorId, elementId);
         });
 
-        $rootScope.$on('$ssbElementRemoved', function(event, componentId, elementId) {
-            removeCompiledElement(componentId, elementId);
-            removeCompiledElementEditControl(componentId, elementId);
-            console.log('$ssbElementRemoved', componentId, elementId);
+        $rootScope.$on('$ssbElementRemoved', function(event, componentId, editorId, elementId) {
+            removeCompiledElement(componentId, editorId, elementId);
+            removeCompiledElementEditControl(componentId, editorId, elementId);
+            console.log('$ssbElementRemoved', componentId, editorId, elementId);
         });
 
 

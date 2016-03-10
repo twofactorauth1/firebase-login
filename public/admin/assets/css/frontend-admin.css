@@ -8104,19 +8104,6 @@ ssb-topbar .ui-select-match-text > small {
   -webkit-column-gap: 500px;
   column-gap: 500px;
 }
-[class*="ssb-component-layout-columns-"] {
-  padding: 1em;
-}
-[class*="ssb-component-layout-columns-"] .inner-page {
-  display: inline-block !important;
-  padding: 0!important;
-  min-height: 200px;
-}
-[class*="ssb-component-layout-columns-"] .col-xs-12 {
-  float: none!important;
-  padding-left: 0!important;
-  padding-right: 0!important;
-}
 /*
  * OVERRIDES FOR LEGACY COMPONENT STYLES
  */
