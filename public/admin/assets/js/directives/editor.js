@@ -29,18 +29,16 @@ app.directive("elem", function($rootScope, $timeout, $compile, SimpleSiteBuilder
             }, 0);
         };
 
-        scope.updateFroalaContent = function(editor) {
+        scope.updateFroalaContent = _.debounce(function(editor) {
             $timeout(function() {
-                scope.$apply(function() {
-                    ngModel.$setViewValue(editor.html.get());
-                    scope.compileEditorElements(editor);
-                });
-            }, 0);
-        };
+                ngModel.$setViewValue(editor.html.get());
+                scope.compileEditorElements(editor);
+            });
+        }, 500)
 
         scope.compileEditorElements = function(editor, initial) {
 
-            SimpleSiteBuilderService.compileEditorElements(editor, initial, componentId, scope);
+            SimpleSiteBuilderService.compileEditorElements(editor, initial, componentId, editor.id, scope);
 
         };
 

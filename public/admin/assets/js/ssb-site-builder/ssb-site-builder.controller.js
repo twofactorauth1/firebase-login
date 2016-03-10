@@ -509,50 +509,66 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
 
     }
 
+    /**
+     * Inspect changes beyond simple angular.equals
+     * - if angular.equals detects a change, then:
+     *      - get the specific change from the data (DeepDiff)
+     *      - if that change is ONLY a [data-compile] difference, then:
+     *          - ignore it as a change
+     *          - apply to original data so future compares don't include this diff
+     *          - decrement changes so we don't count it in number of changes
+     *          - return changes > 0
+     *      - else the change is legit, return true
+     * - else the change is legit, return true
+     *
+     * TODO: handle undo in Froala
+     */
     function pageChanged(originalPage, currentPage) {
         if (!angular.equals(originalPage, currentPage)) {
             var originalPage = JSON.parse(angular.toJson(originalPage));
             var currentPage = JSON.parse(angular.toJson(currentPage));
-            var jsondiff = jsonpatch.compare(currentPage, originalPage);
-            var changes = jsondiff.length;
+            var jsondiff1 = DeepDiff.diff(originalPage, currentPage);
+            var changes = jsondiff1.length;
 
             if (changes) {
+
                 for (var i = 0; i < changes; i++) {
-                    var diff = jsondiff[i];
-                    if (diff.op === 'replace' && diff.path.indexOf('text') != -1 && diff.value.indexOf('data-compiled') != -1) {
 
-                        var originalPageCopy = angular.copy(originalPage);
-                        var pointer = { op: "_get", "path": diff.path };
-                        jsonpatch.apply(originalPageCopy, [pointer]);
+                    var diff1 = jsondiff1[i].lhs;
+                    var diff2 = jsondiff1[i].rhs;
 
-                        console.log('pointer.value');
-                        console.log(pointer.value);
-                        console.log('diff.value');
-                        console.log(diff.value);
+                    var dataCompiledAdded = diff1 && diff1.indexOf('data-compiled') === -1 && diff2.indexOf('data-compiled') !== -1;
+                    var dataCompiledRemoved = diff1 && diff1.indexOf('data-compiled') !== -1 && diff2.indexOf('data-compiled') === -1;
 
+                    if (dataCompiledAdded || dataCompiledRemoved) {
 
-                        var i = 0;
-                        var j = 0;
-                        var result = "";
+                        console.log('change to ignore detected @: ', jsondiff1[i].path);
 
-                        while (j < diff.value.length) {
-                            if (pointer.value[i] != diff.value[j] || i == pointer.value.length) {
-                                console.log(pointer.value[i], diff.value[j]);
-                                result += diff.value[j];
-                            } else {
-                                i++;
-                            }
-                            j++;
-                        }
+                        $timeout(function() {
 
-                        console.log(result);
+                            DeepDiff.applyChange(originalPage, currentPage, jsondiff1[i]);
 
-                        // changes--;
+                            vm.state.originalPage = originalPage;
+
+                            console.log('should be empty: ', DeepDiff.diff(originalPage, currentPage));
+
+                            changes--;
+
+                            return changes > 0;
+
+                        });
+
+                    } else {
+
+                        return true
+
                     }
                 }
-            }
+            } else {
 
-            return changes > 0;
+                return changes > 0;
+
+            }
 
         } else {
 
