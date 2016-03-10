@@ -35,20 +35,17 @@ function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude,
         },
         'txtcolor': '',
         'visibility': true,
-        'spacing': {
-            'mt': '0',
-            'pt': '0',
-            'pl': '0',
-            'pr': '0',
-            'pb': '0',
-            'ml': '0',
-            'mr': '0',
-            'mb': '0'
-        }
+        'spacing': {}
     };
 
     //get functions from parent text component
-    var pvm = $scope.$parent.$parent.$parent.vm;
+    var limit = 10;
+    var pScope = $scope.$parent;
+    while ((!pScope.vm || pScope.vm && !pScope.vm.uiState) && limit > 0) {
+      pScope = pScope.$parent;
+      limit--;
+    }
+    var pvm = pScope.vm;
     $scope.pvm = pvm;
 
     $rootScope.$on('$ssbElementsChanged', function(event, componentId) {
@@ -63,10 +60,13 @@ function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude,
     $scope.$watch('vm.elementData', updateTextEditor, true);
 
     $scope.$watch('pvm.state.saveLoading', function() {
-        if (pvm && pvm.state.saveLoading) {
-            SimpleSiteBuilderService
-                .getCompiledElement(parentComponent.attr('id'), elementId)
-                .removeClass('ssb-theme-btn-active-element');
+        if (parentComponent && pvm && pvm.state.saveLoading) {
+            var el = SimpleSiteBuilderService.getCompiledElement(parentComponent.attr('id'), elementId)
+
+            if (el) {
+                el.removeClass('ssb-theme-btn-active-element');
+            }
+
             updateTextEditor(true);
         }
     });
@@ -334,7 +334,7 @@ function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude,
 
         console.info('ssb-theme-btn directive init...');
 
-        if (pvm) {
+        if (pvm && element.data('compiled')) {
 
             elementId = element.data('compiled');
 
@@ -349,6 +349,10 @@ function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude,
             angular.element('[data-compiled-control-id=control_' + elementId + ']').on('click', setActiveElementId);
 
             angular.element('.ssb-page-section').on('click', clearActiveElement);
+
+        } else {
+
+            console.log('button outside of editor context: ', element.html());
 
         }
 

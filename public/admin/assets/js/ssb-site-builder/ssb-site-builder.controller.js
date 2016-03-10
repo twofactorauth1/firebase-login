@@ -130,12 +130,13 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
 
     $scope.$watch('vm.state.page', function(page) {
         console.time('angular.equals for page');
-        if (page && vm.state.originalPage && !vm.pageChanged(page, vm.state.originalPage)) {
+        if (page && vm.state.originalPage && vm.pageChanged(page, vm.state.originalPage)) {
             console.timeEnd('angular.equals for page');
             vm.state.pendingPageChanges = true;
             console.log("Page changed");
-            if(vm.uiState && vm.uiState.selectedPage)
+            if (vm.uiState && vm.uiState.selectedPage) {
                 vm.uiState.selectedPage = vm.state.page;
+            }
             setupBreakpoints();
         } else {
             vm.state.pendingPageChanges = false;
@@ -509,45 +510,55 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     }
 
     function pageChanged(originalPage, currentPage) {
-        var originalPage = JSON.parse(angular.toJson(originalPage));
-        var currentPage = JSON.parse(angular.toJson(currentPage));
-        var jsondiff = jsonpatch.compare(originalPage, currentPage);
-        var changes = jsondiff.length;
+        if (!angular.equals(originalPage, currentPage)) {
+            var originalPage = JSON.parse(angular.toJson(originalPage));
+            var currentPage = JSON.parse(angular.toJson(currentPage));
+            var jsondiff = jsonpatch.compare(currentPage, originalPage);
+            var changes = jsondiff.length;
 
-        if (changes) {
-            for (var i = 0; i < changes; i++) {
-                var diff = jsondiff[i];
-                if (diff.op === 'replace' && diff.path.indexOf('text') != -1 && diff.value.indexOf('data-compile')) {
+            if (changes) {
+                for (var i = 0; i < changes; i++) {
+                    var diff = jsondiff[i];
+                    if (diff.op === 'replace' && diff.path.indexOf('text') != -1 && diff.value.indexOf('data-compiled') != -1) {
 
-                    var originalPageCopy = angular.copy(originalPage);
-                    var pointer = { op: "_get", "path": diff.path };
-                    jsonpatch.apply(originalPageCopy, [pointer]);
+                        var originalPageCopy = angular.copy(originalPage);
+                        var pointer = { op: "_get", "path": diff.path };
+                        jsonpatch.apply(originalPageCopy, [pointer]);
 
-                    console.log('pointer.value', pointer.value);
-                    console.log('diff.value', diff.value);
+                        console.log('pointer.value');
+                        console.log(pointer.value);
+                        console.log('diff.value');
+                        console.log(diff.value);
 
 
-                    var i = 0;
-                    var j = 0;
-                    var result = "";
+                        var i = 0;
+                        var j = 0;
+                        var result = "";
 
-                    while (j < diff.value.length) {
-                        if (pointer.value[i] != diff.value[j] || i == pointer.value.length) {
-                            result += diff.value[j];
-                        } else {
-                            i++;
+                        while (j < diff.value.length) {
+                            if (pointer.value[i] != diff.value[j] || i == pointer.value.length) {
+                                console.log(pointer.value[i], diff.value[j]);
+                                result += diff.value[j];
+                            } else {
+                                i++;
+                            }
                             j++;
                         }
+
+                        console.log(result);
+
+                        // changes--;
                     }
-
-                    console.log(result);
-
-                    // changes--;
                 }
             }
-        }
 
-        return changes > 0;
+            return changes > 0;
+
+        } else {
+
+            return true
+
+        }
 
     }
 

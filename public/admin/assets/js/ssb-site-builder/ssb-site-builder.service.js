@@ -326,7 +326,7 @@
              *
              * Transform legacy pages to new section/component model format
              */
-            if (page.components && page.components.length && !page.sections.length) {
+            if (page.components && page.components.length && !page.ssb) {
                 page.sections = angular.copy(page.components);
                 for (var i = 0; i < page.sections.length; i++) {
                     var component = angular.copy(page.sections[i]);
@@ -355,6 +355,8 @@
                   page.sections[i].name = sectionName(page.sections[i]) + ' Section';
                 }
             }
+
+            page.ssb = true;
 
             return page;
         }
@@ -1277,18 +1279,25 @@
         }
 
         function removeCompiledElement(componentId, elementId) {
-            if (ssbService.compiledElements[componentId][elementId]) {
+            if (ssbService.compiledElements[componentId] &&
+                ssbService.compiledElements[componentId][elementId]) {
+
                 ssbService.compiledElements[componentId][elementId].remove();
                 ssbService.compiledElements[componentId][elementId] = null;
                 delete ssbService.compiledElements[componentId][elementId];
+
             }
         }
 
         function removeCompiledElementEditControl(componentId, elementId) {
-            if (ssbService.compiledElementEditControls && ssbService.compiledElementEditControls[componentId][elementId]) {
+            if (ssbService.compiledElementEditControls &&
+                ssbService.compiledElementEditControls[componentId] &&
+                ssbService.compiledElementEditControls[componentId][elementId]) {
+
                 ssbService.compiledElementEditControls[componentId][elementId].remove();
                 ssbService.compiledElementEditControls[componentId][elementId] = null;
                 delete ssbService.compiledElementEditControls[componentId][elementId];
+
             }
         }
 
