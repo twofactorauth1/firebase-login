@@ -775,8 +775,8 @@
      * -
      */
 
-    $scope.saveOrder = function (flag, cust) {
-
+    $scope.saveOrder = function (flag, cust, invalid) {
+      $scope.formSubmitted = true;
       $scope.saveLoading = true;
       // Set order customer Id
       if ($scope.selectedCustomer) {
@@ -805,6 +805,13 @@
       if($scope.order.line_items.length <= 0)
       {
         toaster.pop('error', 'Products cannot be blank');
+        $scope.saveLoading = false;
+        return;
+      }
+      if(!$scope.order.billing_address || invalid)
+      {
+        
+        toaster.pop('error', 'Billing details cannot be blank');
         $scope.saveLoading = false;
         return;
       }
