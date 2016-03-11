@@ -530,6 +530,7 @@
     // };
 
     $scope.bulkActionSelectFn = function (choice) {
+        $scope.bulkActionChoice = choice;
         console.log(choice);
     };
   }]);
