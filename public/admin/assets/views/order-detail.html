@@ -115,7 +115,7 @@
                                     <legend>
                                         Billing Details <span class="fa" ng-init="billingEdit = false" ng-click="billingEdit = !billingEdit" ng-class="{'fa-edit': !billingEdit, 'fa-times': billingEdit}"></span>
                                     </legend>
-                                    <div class="row margin-top-5" ng-if="billingEdit">
+                                    <div class="row margin-top-5" ng-show="billingEdit">
                                         <div class="col-xs-12">
                                             <div class="form-group">
                                                 <button class="btn btn-info btn-o btn-wide" ng-click="customerSync('billing')" ng-if="selectedCustomer">Customer Sync</button>
