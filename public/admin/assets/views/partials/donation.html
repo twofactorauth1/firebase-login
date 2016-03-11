@@ -1,0 +1,35 @@
+<div class="col-sm-12" ng-if="product.type == productTypes.DONATION && !showVariations">
+    <div class="panel panel-white">
+        <div class="panel-heading border-light">
+            <h4 class="panel-title">Donation</h4>
+        </div>
+        <div class="panel-body">
+            <form name="donationForm">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Default Donation Amount</label>
+                        <input class="form-control" type="text" placeholder="Default Donation Amount" ng-model="product.donationDefaultAmount">
+                    </div>
+                    <div class="form-group" ng-class="{'has-error': donationForm.min_amount.$error.required}">
+                        <label>Minimum Donation Amount</label>
+                        <input class="form-control" name="min_amount" type="text" placeholder="Minimum Donation Amount" ng-model="product.donationMinimumAmount" required='true'>
+                    </div>
+                    <div class="form-group" ng-class="{'has-error': donationForm.max_amount.$error.required}">
+                        <label>Maximum Donation Amount</label>
+                        <input class="form-control" name="max_amount" type="text" placeholder="Maximum Donation Amount" ng-model="product.donationMaximumAmount" required='true'>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group" ng-class="{'has-error': donationForm.post.$error.required}">
+                        <label>Default Social Post</label>
+                        <textarea ng-model='product.donationDefaultSocialPost' class="form-control" name='post' placeholder="Default Social Post"></textarea>
+                    </div>
+                    <div class="form-group" ng-class="{'has-error': donationForm.email.$error.required || donationForm.email.$error.email}">
+                        <label>Thank You Email ID</label>
+                        <input class="form-control" name="email" type="email" placeholder="Thank You Email ID" ng-model="product.donationThankYouEmailID" required='true'>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

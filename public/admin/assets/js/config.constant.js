@@ -392,6 +392,7 @@ app.constant('productConstant', {
     SUBSCRIPTION: 'SUBSCRIPTION',
     EXTERNAL: 'EXTERNAL',
     VIRTUAL: 'VIRTUAL',
+    DONATION: 'DONATION',
 
     dp: [{
         label: "Digital",
@@ -405,7 +406,10 @@ app.constant('productConstant', {
       }, {
         label: "Virtual",
         data: "VIRTUAL"
-      }
+    }, {
+            label: 'Donation',
+            data: 'DONATION'
+    }
     ]
   },
   product_status_types:{
