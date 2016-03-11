@@ -13,7 +13,7 @@
                     'col-xs-12 col-sm-4 col-sm-offset-4': filteredProducts.length == 1,
                     'col-xs-12 col-sm-6': filteredProducts.length == 2,
                     'col-xs-12 col-sm-6 col-md-4': filteredProducts.length > 2
-                    }" ng-repeat="product in filteredProducts track by $index">
+                }" ng-repeat="product in filteredProducts track by $index" ng-hide='product.type == "DONATION"'>
                 <div class="product">
                     <div class="thumbnail">
                         <div ng-if="product.onSaleToday" class="ribbon red"><span>SALE</span></div>
@@ -396,7 +396,7 @@
                 <div class="modal-footer cart-footer" ng-hide="checkoutModalState !== 3">
                     <button class="btn ssb-theme-btn btn-orange btn-checkout pull-right" ng-click="makeCartPayment()"><i class="fa fa-shopping-cart"></i> Checkout</button>
                     <button class="btn ssb-theme-btn btn-info continue-shopping pull-left" ng-click="setCheckoutState(true, paypalInfo && !hasSubscriptionProduct ? 6 : 2)"><i class="fa fa-chevron-left"></i> Back
-                    </button>                    
+                    </button>
                 </div>
                 <div class="modal-footer billing-footer" ng-hide="checkoutModalState !== 2">
                     <button class="btn ssb-theme-btn btn-success btn-payment pull-right" ng-click="validateAddressDetails(newContact.details[0].addresses[0], newContact.details[0].emails[0].email, newContact.details[0].phones[0].number)"><i class="fa fa-credit-card"></i> Payment <i class="fa fa-chevron-right"></i></button>
