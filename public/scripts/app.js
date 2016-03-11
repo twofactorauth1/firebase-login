@@ -37,9 +37,10 @@ var mainApp = angular
         'slick',
         'ngMap',
         'wu.masonry',
-        'slugifier'
+        'slugifier',
+        'LocalStorageModule'
     ])
-    .config(['$routeProvider', '$locationProvider', '$httpProvider', function ($routeProvider, $locationProvider, $httpProvider) {
+    .config(['$routeProvider', '$locationProvider', '$httpProvider', 'localStorageServiceProvider', function ($routeProvider, $locationProvider, $httpProvider, localStorageServiceProvider) {
         //$locationProvider.html5Mode(true);
         if (window.history && window.history.pushState) {
             $locationProvider.html5Mode(true).hashPrefix('!');
@@ -99,6 +100,7 @@ var mainApp = angular
                 controller: 'LayoutCtrl as layout'
             });
 
+            localStorageServiceProvider.setPrefix('indi');
 
     }])
     // .factory('noCacheInterceptor', function () {
