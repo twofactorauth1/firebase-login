@@ -1,6 +1,6 @@
 'use strict';
 /*global app*/
-app.directive('productsComponent', ['$timeout', 'paymentService', 'productService', 'accountService', 'CartDetailsService', 'userService', 'orderService', 'formValidations', 'ipCookie', '$routeParams', '$location', 'ENV', '$sce', 'localStorageService', function($timeout, PaymentService, ProductService, AccountService, CartDetailsService, UserService, OrderService, formValidations, ipCookie, $routeParams, $location, ENV, $sce, localStorageService) {
+app.directive('productsComponent', ['$timeout', 'paymentService', 'productService', 'accountService', 'CartDetailsService', 'userService', 'orderService', 'formValidations', '$routeParams', '$location', 'ENV', '$sce', 'localStorageService', function($timeout, PaymentService, ProductService, AccountService, CartDetailsService, UserService, OrderService, formValidations, $routeParams, $location, ENV, $sce, localStorageService) {
     return {
         require: [],
         scope: {
@@ -13,8 +13,8 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
             //cookie data fetch
             var cookieKey = 'cart_cookie';
             var orderCookieKey = 'order_cookie';
-            var cookieData = ipCookie(cookieKey);
-            var orderCookieData = ipCookie(orderCookieKey);
+            var cookieData = localStorageService.get(cookieKey);
+            var orderCookieData = localStorageService.get(orderCookieKey);
             //assign and hold the checkout modal state
             scope.checkoutModalState = 1;
             //default newContact object for checkout modal
@@ -462,7 +462,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                         variation: variation,
                         quantity: 1
                     });
-                    ipCookie(cookieKey, cookieData);
+                    localStorageService.set(cookieKey, cookieData);
                 }
                 var productMatch = '';
                 if (variation) {
@@ -508,7 +508,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                     if (!cookieData.products.length) {
                         cookieData.state = 1;
                     }
-                    ipCookie(cookieKey, cookieData);
+                    localStorageService.set(cookieKey, cookieData);
                 }
 
                 var filteredItems = _.filter(scope.cartDetails, function(item) {
@@ -746,7 +746,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                     }
                     console.log('order, ', order);
                     scope.checkoutModalState = 7;
-                    ipCookie(orderCookieKey, data);
+                    localStorageService.set(orderCookieKey, data);
                     scope.paypalKey = data.payment_details.payKey;
                     CartDetailsService.items = [];
 
@@ -754,7 +754,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                     scope.subTotal = 0;
                     scope.totalTax = 0;
                     scope.total = 0;
-                    ipCookie.remove(cookieKey);
+                    localStorageService.remove(cookieKey);
                     // PaymentService.saveCartDetails(token, parseInt(scope.total * 100), function(data) {});
                 });
             };
@@ -975,7 +975,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                         scope.subTotal = 0;
                         scope.totalTax = 0;
                         scope.total = 0;
-                        ipCookie.remove(cookieKey);
+                        localStorageService.remove(cookieKey);
                         // PaymentService.saveCartDetails(token, parseInt(scope.total * 100), function(data) {});
                     });
                 });
@@ -1205,7 +1205,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                                 scope.failedOrderMessage = failedOrderMessage;
                                 return;
                             }
-                            ipCookie.remove(orderCookieKey);
+                            localStorageService.remove(orderCookieKey);
                         });
                     }
                     if (scope.checkoutModalState == 6) {
@@ -1216,7 +1216,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
 
             scope.cookieUpdateContactFn = function() {
                 cookieData.contactInfo = scope.newContact;
-                ipCookie(cookieKey, cookieData);
+                localStorageService.set(cookieKey, cookieData);
             };
 
             scope.cookieUpdateQuantityFn = function(item) {
@@ -1225,7 +1225,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                         product.quantity = parseInt(item.quantity);
                     }
                 });
-                ipCookie(cookieKey, cookieData);
+                localStorageService.set(cookieKey, cookieData);
             };
 
             scope.paypalLoginClickFn = function () {
@@ -1237,7 +1237,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
         },
         controller: function($scope) {
             var cookieKey = 'cart_cookie';
-            var cookieData = ipCookie(cookieKey);
+            var cookieData = localStorageService.get(cookieKey);
             if (!cookieData) {
                 cookieData = {
                     products: []
@@ -1246,7 +1246,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
             $scope.setCheckoutState = function(setCookie, state) {
                 if (setCookie) {
                     cookieData.state = state;
-                    ipCookie(cookieKey, cookieData);
+                    localStorageService.set(cookieKey, cookieData);
                 }
                 $scope.checkoutModalState = state;
             };
