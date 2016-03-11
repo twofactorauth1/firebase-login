@@ -534,6 +534,8 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
 
                 for (var i = 0; i < changes; i++) {
 
+                    console.debug('tracked change: ', jsondiff1[i]);
+
                     var diff1 = jsondiff1[i].lhs;
                     var diff2 = jsondiff1[i].rhs;
 
@@ -542,7 +544,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
 
                     if (dataCompiledAdded || dataCompiledRemoved) {
 
-                        console.log('change to ignore detected @: ', jsondiff1[i].path);
+                        console.debug('change to ignore detected @: ', jsondiff1[i].path);
 
                         $timeout(function() {
 
@@ -550,7 +552,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
 
                             vm.state.originalPage = originalPage;
 
-                            console.log('should be empty: ', DeepDiff.diff(originalPage, currentPage));
+                            console.debug('should be empty: ', DeepDiff.diff(originalPage, currentPage));
 
                             changes--;
 

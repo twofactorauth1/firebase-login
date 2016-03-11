@@ -336,38 +336,42 @@ function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude,
 
         console.info('ssb-theme-btn directive init...');
 
-        if (pvm && element.data('compiled')) {
+        $timeout(function() {
 
-            elementId = element.data('compiled');
+            if (pvm && element.data('compiled')) {
 
-            parentComponent = element.closest('[component]');
+                elementId = element.data('compiled');
 
-            parentEditor = element.closest('.editable');
+                parentComponent = element.closest('[component]');
 
-            parentEditorId = parentEditor.froalaEditor().data('froala.editor').id;
+                parentEditor = element.closest('.editable');
 
-            buildDataObjFromHTML();
+                parentEditorId = parentEditor.froalaEditor().data('froala.editor').id;
 
-            angular.element('[data-compiled=' + elementId + ']').on('click', showEditControl);
+                buildDataObjFromHTML();
 
-            angular.element('[data-compiled-control-id=control_' + elementId + ']').on('click', setActiveElementId);
+                angular.element('[data-compiled=' + elementId + ']').on('click', showEditControl);
 
-            angular.element('.ssb-page-section').on('click', clearActiveElement);
+                angular.element('[data-compiled-control-id=control_' + elementId + ']').on('click', setActiveElementId);
 
-        } else {
+                angular.element('.ssb-page-section').on('click', clearActiveElement);
 
-            console.log('button outside of editor context: ', element.html());
+            } else {
 
-            /**
-             *  unbind watchers for inactive .ssb-theme-btn's
-             */
-            vm.elementClass = angular.noop();
+                console.log('button outside of editor context: ', element.html());
 
-            watchElementData();
+                /**
+                 *  unbind watchers for inactive .ssb-theme-btn's
+                 */
+                vm.elementClass = angular.noop();
 
-            pvmStateLoading();
+                watchElementData();
 
-        }
+                pvmStateLoading();
+
+            }
+
+        });
 
     }
 
