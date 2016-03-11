@@ -13,6 +13,8 @@
     $scope.formValidations = formValidations;
     $scope.default_image_url = "/admin/assets/images/default-user.png";
 
+    $scope.bulkActionChoices = [{data: 'tags', label: 'Tags'}, {data: 'delete', label: 'Delete'}];
+
     $scope.filterCustomerPhotos = function (customers) {
       _.each(customers, function (customer) {
         if (customer) {
@@ -58,11 +60,11 @@
                 tempTags.push(tag);
           });
           if(tempTags)
-            customer.tempTags = _.uniq(tempTags); 
+            customer.tempTags = _.uniq(tempTags);
         });
         $scope.customers = customers;
         // In case customer is created from simple form component.
-        if($scope.customers.length > 0){          
+        if($scope.customers.length > 0){
           $scope.minRequirements = true;
         }
         if ($state.current.sort) {
@@ -280,7 +282,7 @@
           if(_bottomline && _topline){
             separator = ", "
           }
-          if (_topline) {            
+          if (_topline) {
             return _topline + separator + _bottomline;
           }
           return _bottomline;
@@ -320,7 +322,7 @@
     $scope.customer = {};
     $scope.customer.tags = {};
 
-    
+
 
     $scope.tagToCustomer = function(value) {
      return CustomerService.tagToCustomer(value);
@@ -341,14 +343,14 @@
     };
 
     $scope.addCustomer = function () {
-      
-      $scope.saveLoading = true;      
+
+      $scope.saveLoading = true;
       var tempTags = [];
       _.each($scope.customer.tags, function (tag) {
         tempTags.push(tag.data);
       });
       if(tempTags)
-        tempTags = _.uniq(tempTags);    
+        tempTags = _.uniq(tempTags);
       var matchingCustomer = _.findWhere($scope.customers, {
         bestEmail: $scope.customer.email
       });
@@ -365,7 +367,7 @@
       };
       if($scope.customer.email){
         tempCustomer.details = [];
-        tempCustomer.details.push({          
+        tempCustomer.details.push({
           emails: [{
             _id: CommonService.generateUniqueAlphaNumericShort(),
             email: $scope.customer.email
@@ -379,8 +381,8 @@
         $scope.customer.email = '';
         $scope.duplicateCustomer = false;
         $scope.closeModal();
-       
-        
+
+
         returnedCustomer.bestEmail = $scope.checkBestEmail(returnedCustomer);
         $scope.customers.unshift(returnedCustomer);
         $scope.incrementCustomerTags(returnedCustomer);
@@ -392,7 +394,7 @@
     $scope.incrementCustomerTags = function (contact) {
       var customerTags = $scope.customerTags;
       if(contact){
-        var contactTags = [];                
+        var contactTags = [];
           if (contact.tags) {
             _.each(contact.tags, function (tag) {
               var type = _.find(customerTags, function (type) {
@@ -406,7 +408,7 @@
               }
             });
           }
-        $scope.customerTags = _.uniq(customerTags.concat(contactTags), function(w) { return w.label; })       
+        $scope.customerTags = _.uniq(customerTags.concat(contactTags), function(w) { return w.label; })
       }
     };
 
@@ -527,5 +529,8 @@
     //   }
     // };
 
+    $scope.bulkActionSelectFn = function (choice) {
+        console.log(choice);
+    };
   }]);
 }(angular));
