@@ -147,7 +147,7 @@
                                             </label>
                                             <input type="text" placeholder="SKU" ng-model="product.sku" class="form-control">
                                         </div>
-                                        <div class="form-group" ng-class="{ 'has-error' : productDetail.regular_price.$invalid && !productDetail.regular_price.$pristine }">
+                                        <div class="form-group" ng-class="{ 'has-error' : productDetail.regular_price.$invalid && !productDetail.regular_price.$pristine }" ng-hide='product.type == productTypes.DONATION'>
                                             <label tooltip-placement="top" tooltip-html-unsafe="The price a customer sees until you enable a sale">
                                                 Regular Price <i class="fa fa-info-circle" />
                                             </label>
@@ -158,7 +158,7 @@
                                             <p ng-show="productDetail.regular_price.$invalid && !productDetail.regular_price.$pristine" class="help-block">Regular Price cannot be less than sale price</p>
                                         </div>
                                         <div>
-                                            <div class="form-group">
+                                            <div class="form-group" ng-hide='product.type == productTypes.DONATION'>
                                                 <label tooltip-placement="top" tooltip-html-unsafe="To enable to specify dates of sale">
                                                     On Sale <i class="fa fa-info-circle" />
                                                 </label>
@@ -196,7 +196,7 @@
                                                 <input type="text" class="form-control" ng-model="product.cost" currency-input>
                                             </div>
                                         </div> -->
-                                        <div class="form-group">
+                                        <div class="form-group" ng-hide='product.type == productTypes.DONATION'>
                                             <label tooltip-placement="top" tooltip-html-unsafe="To specify and send a fulfillment email when this item is ordered (scroll down)">
                                                 Fulfillment Email? <i class="fa fa-info-circle" />
                                             </label>
@@ -204,7 +204,7 @@
                                                 <switch ng-model="product.fulfillment_email" type="checkbox" switch-label="Fulfillment Email?"></switch>
                                             </div>
                                         </div>
-                                        <div class="form-group">
+                                        <div class="form-group" ng-hide='product.type == productTypes.DONATION'>
                                             <label tooltip-placement="top" tooltip-html-unsafe="To make this item taxable (See Taxes in Settings for more configuration)">
                                                 Taxable <i class="fa fa-info-circle" />
                                             </label>
