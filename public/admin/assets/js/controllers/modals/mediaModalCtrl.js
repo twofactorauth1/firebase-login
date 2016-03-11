@@ -6,6 +6,7 @@ app.controller('MediaModalCtrl', ['$scope', '$injector', '$modalInstance', '$htt
 
   $scope.showInsert = showInsert;
   $scope.loadingAssets = true;
+  $scope.maximumUploadItems = 20;
 
   AssetsService.getAssetsByAccount(function (data) {
     if (data instanceof Array) {
@@ -94,7 +95,11 @@ app.controller('MediaModalCtrl', ['$scope', '$injector', '$modalInstance', '$htt
   uploader.filters.push({
     name: 'customFilter',
     fn: function (item /*{File|FileLikeObject}*/ , options) {
-      return this.queue.length < 20;
+      if(this.queue.length < $scope.maximumUploadItems)
+        $scope.maxLengthExceed = false;
+      else
+        $scope.maxLengthExceed = true;
+      return this.queue.length < $scope.maximumUploadItems;
     }
   });
 
