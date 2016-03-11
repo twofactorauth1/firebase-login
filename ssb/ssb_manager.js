@@ -1166,10 +1166,14 @@ module.exports = {
             },
             // update existing pages if global sections set as true OR false
             function updateExistingPages(updatedPage, updatedSections, pages, cb){   
-                var _update = false;  
+                var _update = false; 
+                self.rejectSystemPages(pages, function(err, filteredPages) {
+                    pages = filteredPages;
+                });
                 if(pages.length <= 1){
                     cb(null, updatedPage, updatedSections);
-                }  
+                }
+
                 async.eachSeries(pages, function(_page, p_callback){
                     if(_page.get("_id") !== updatedPage.get("_id")){
                         async.each(updatedSections, function(gsection, g_callback){
@@ -1289,6 +1293,12 @@ module.exports = {
             self.log.debug('<< updatePage');
             return fn(err, updatedPage);
         });
+    },
+
+    rejectSystemPages: function(pages, fn){
+        var routeHandles = ['signup', 'single-post', 'blog'];
+        var filteredPages = _.reject(pages, function(page){ return page.get("handle") === "blog" || page.get("handle") === "single-post" || page.get("handle") === "signup" });
+        return fn(null, filteredPages);
     },
 
     listAccountSectionSummaries: function(accountId, fn) {
