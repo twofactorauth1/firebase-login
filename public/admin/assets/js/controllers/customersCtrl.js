@@ -1,7 +1,7 @@
 'use strict';
 /*global app, window*/
 (function (angular) {
-  app.controller('CustomersCtrl', ["$scope", "$state", "toaster", "$modal", "$window", "CustomerService", "SocialConfigService", "userConstant", "formValidations", "CommonService", '$timeout', function ($scope, $state, toaster, $modal, $window, CustomerService, SocialConfigService, userConstant, formValidations, CommonService, $timeout) {
+  app.controller('CustomersCtrl', ["$scope", "$state", "toaster", "$modal", "$window", "CustomerService", "SocialConfigService", "userConstant", "formValidations", "CommonService", '$timeout', 'SweetAlert', function ($scope, $state, toaster, $modal, $window, CustomerService, SocialConfigService, userConstant, formValidations, CommonService, $timeout, SweetAlert) {
 
     $scope.tableView = 'list';
     $scope.itemPerPage = 100;
@@ -13,7 +13,7 @@
     $scope.formValidations = formValidations;
     $scope.default_image_url = "/admin/assets/images/default-user.png";
 
-    $scope.bulkActionChoices = [{data: 'tags', label: 'Tags'}, {data: 'delete', label: 'Delete'}];
+    $scope.bulkActionChoices = [{data: 'delete', label: 'Delete'}];
 
     $scope.filterCustomerPhotos = function (customers) {
       _.each(customers, function (customer) {
@@ -531,7 +531,36 @@
 
     $scope.bulkActionSelectFn = function (choice) {
         $scope.bulkActionChoice = choice;
-        console.log(choice);
+        if (choice.data == 'delete') {
+            SweetAlert.swal({
+                title: "Are you sure?",
+                text: "Do you want to delete the filtered customers?",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Yes, delete it!",
+                cancelButtonText: "No, do not delete it!",
+                closeOnConfirm: true,
+                closeOnCancel: true
+              },
+              function (isConfirm) {
+                if (isConfirm) {
+                    $scope.displayedCustomers.forEach(function(c, i) {
+                        CustomerService.deleteCustomer(c._id, function () {});
+                        $scope.customers.forEach(function(cust, index) {
+                            if (cust._id == c._id) {
+                                $scope.customers.splice(index, 1);
+                            }
+                        });
+                    });
+                    $scope.displayedCustomers = [];
+                    $scope.bulkActionChoice = null;
+                    toaster.pop('warning', 'Customers Deleted.');
+                } else {
+                 $scope.bulkActionChoice = null;
+                }
+              });
+        }
     };
   }]);
 }(angular));
