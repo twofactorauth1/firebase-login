@@ -811,7 +811,7 @@
       }
       if(!$scope.order.billing_address || invalid)
       {
-
+        $scope.billingEdit = true;
         toaster.pop('error', 'Billing details cannot be blank');
         $scope.saveLoading = false;
         return;

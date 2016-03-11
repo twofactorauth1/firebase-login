@@ -77,42 +77,43 @@ function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude,
 
     function buildDataObjFromHTML() {
         var el = SimpleSiteBuilderService.getCompiledElement(parentComponent.attr('id'), parentEditorId, elementId);
-        var style = el[0].style;
-        var data = {
-            id: 'button-element_' + elementId,
-            _id: 'button-element_' + elementId,
-            anchor: 'button-element_' + elementId,
-            'bg': {},
-            'spacing': {}
-        };
+        if(el){
+            var style = el[0].style;
+            var data = {
+                id: 'button-element_' + elementId,
+                _id: 'button-element_' + elementId,
+                anchor: 'button-element_' + elementId,
+                'bg': {},
+                'spacing': {}
+            };
+            var bgcolor = style.backgroundColor;
+            var txtcolor = style.color;
+            var visibility = style.display !== 'none';
+            var spacingPT = style.paddingTop.replace('px', '');
+            var spacingPL = style.paddingLeft.replace('px', '');
+            var spacingPR = style.paddingRight.replace('px', '');
+            var spacingPB = style.paddingBottom.replace('px', '');
+            var spacingMT = style.marginTop.replace('px', '');
+            var spacingML = style.marginLeft.replace('px', '');
+            var spacingMR = style.marginRight.replace('px', '');
+            var spacingMB = style.marginBottom.replace('px', '');
+            var spacingMW = style.maxWidth.replace('px', '');
 
-        var bgcolor = style.backgroundColor;
-        var txtcolor = style.color;
-        var visibility = style.display !== 'none';
-        var spacingPT = style.paddingTop.replace('px', '');
-        var spacingPL = style.paddingLeft.replace('px', '');
-        var spacingPR = style.paddingRight.replace('px', '');
-        var spacingPB = style.paddingBottom.replace('px', '');
-        var spacingMT = style.marginTop.replace('px', '');
-        var spacingML = style.marginLeft.replace('px', '');
-        var spacingMR = style.marginRight.replace('px', '');
-        var spacingMB = style.marginBottom.replace('px', '');
-        var spacingMW = style.maxWidth.replace('px', '');
+            data.bg.color = bgcolor;
+            data.txtcolor = txtcolor;
+            data.visibility = visibility;
+            data.spacing.pt = spacingPT;
+            data.spacing.pl = spacingPL;
+            data.spacing.pr = spacingPR;
+            data.spacing.pb = spacingPB;
+            data.spacing.mt = spacingMT;
+            data.spacing.ml = spacingML;
+            data.spacing.mr = spacingMR;
+            data.spacing.mb = spacingMB;
+            data.spacing.mw = spacingMW;
 
-        data.bg.color = bgcolor;
-        data.txtcolor = txtcolor;
-        data.visibility = visibility;
-        data.spacing.pt = spacingPT;
-        data.spacing.pl = spacingPL;
-        data.spacing.pr = spacingPR;
-        data.spacing.pb = spacingPB;
-        data.spacing.mt = spacingMT;
-        data.spacing.ml = spacingML;
-        data.spacing.mr = spacingMR;
-        data.spacing.mb = spacingMB;
-        data.spacing.mw = spacingMW;
-
-        angular.extend(vm.elementData, data);
+            angular.extend(vm.elementData, data); 
+        }        
 
         buildDataObjFromHTMLDone = true;
     }

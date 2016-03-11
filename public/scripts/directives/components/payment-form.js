@@ -8,6 +8,7 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
         templateUrl: '/components/component-wrap.html',
         link: function(scope, element, attrs, ctrl) {
             scope.newAccount = {};
+            scope.emailValidation = formValidations.email;
 
             //scope.domainExistsAlready = false;  // needs to be undefined to begin with
             scope.emptyBusinessName = false;

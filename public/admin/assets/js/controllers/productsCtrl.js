@@ -18,7 +18,7 @@
                 var stripe = _.find(account.credentials, function (cred) {
                     return cred.type === 'stripe';
                 });
-
+                $scope.stripeAccountExist = stripe;
                 var paypal = account.commerceSettings.paypal;
 
                 if (cb && (stripe || paypal)) {

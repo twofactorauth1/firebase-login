@@ -523,6 +523,21 @@ _.extend(api.prototype, baseApi.prototype, {
                     });
 
                 }
+                else if(emailPreferences.new_contacts === true && req.body.activity){
+                    var accountEmail = null;
+                   
+                    if(value && value.get("business") && value.get("business").emails && value.get("business").emails[0] && value.get("business").emails[0].email) {
+                        self.log.debug('user email: ', value.get("business").emails[0].email);
+                        accountEmail = value.get("business").emails[0].email;
+                        self._sendEmailOnCreateAccount(accountEmail, req.body.activity.contact, value.id());
+                    } else{
+                        userDao.getUserAccount(value.id(), function(err, user){                            
+                            accountEmail = user.get("email");
+                            self._sendEmailOnCreateAccount(accountEmail, req.body.activity.contact, value.id());
+                        })
+                    }
+
+                }
                 //TODO: check if contact exists
                 var query = {};
                 query.accountId = value.id();
@@ -744,25 +759,7 @@ _.extend(api.prototype, baseApi.prototype, {
                                                             } catch(exception) {
                                                                 self.log.error(exception);
                                                             }
-
-                                                            if(activity){
-                                                                var accountEmail = null;
-                                                                if(emailPreferences.new_contacts === true) {
-                                                                    if(account && account.get("business") && account.get("business").emails && account.get("business").emails[0] && account.get("business").emails[0].email) {
-                                                                        self.log.debug('user email: ', account.get("business").emails[0].email);
-                                                                        accountEmail = account.get("business").emails[0].email;
-                                                                        self._sendEmailOnCreateAccount(req, resp, accountEmail, activity.contact, account.id(), components[0], emailPage.get('_id'), savedContact)
-                                                                    } else{
-                                                                        userDao.getUserAccount(query.accountId, function(err, user){
-                                                                            self.log.debug('user: ', user);
-                                                                            self.log.debug('user email: ', user.attributes.email);
-                                                                            accountEmail = user.attributes.email;
-                                                                            self._sendEmailOnCreateAccount(req, resp, accountEmail, activity.contact, account._id, components[0], emailPage.get('_id'), savedContact);
-                                                                        })
-                                                                    }
-                                                                }
-
-                                                            }
+                                                            
                                                         }
                                                     });
                                                 }
@@ -1158,11 +1155,10 @@ _.extend(api.prototype, baseApi.prototype, {
         });
 
     },
-    _sendEmailOnCreateAccount: function(req, resp, accountEmail, fields, accountId, comp, emailId, savedContact) {
-        console.log('savedContact ', savedContact);
+   _sendEmailOnCreateAccount: function(accountEmail, fields, accountId) {        
         var self = this;
         var component = {};
-        component.logourl = 'https://s3.amazonaws.com/indigenous-account-websites/acct_6/logo.png';
+        //component.logourl = 'https://s3.amazonaws.com/indigenous-account-websites/acct_6/logo.png';
         var text = [];
          for(var attributename in fields){
             text.push("<b>"+attributename+"</b>: "+fields[attributename]);
@@ -1184,7 +1180,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 var vars = [];
 
                 
-                mandrillHelper.sendBasicEmail(fromEmail, fromName, accountEmail, null, emailSubject, html, accountId, vars, emailId, function(err, result){
+                mandrillHelper.sendBasicEmail(fromEmail, fromName, accountEmail, null, emailSubject, html, accountId, vars, '', function(err, result){
                     self.log.debug('result: ', result);
                 });
             }

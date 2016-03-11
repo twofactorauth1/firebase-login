@@ -23,14 +23,14 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
     vm.playerObject = {};
     vm.player = {};
 
-    $scope.$watch(function() { return vm.section.bg.video ? vm.section.bg.video.id : null }, function() {
+    
 
-        if (vm.section.bg.video && vm.section.bg.video.id) {
+    $scope.$watch('vm.section.bg.video.id', function (_id) {
+        if (_id) {
             $timeout(function() {
                 vm.setupVideoBackground();
             });
         }
-
     });
 
     //TODO: use https://github.com/martinandert/react-inline to generate inline styles for sections/components
