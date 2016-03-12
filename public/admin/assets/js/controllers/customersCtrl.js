@@ -546,7 +546,7 @@
               },
               function (isConfirm) {
                 if (isConfirm) {
-                    var selectedCustomers = _.filter($scope.displayedCustomers, function(customer) { return customer.isSelected; });
+                    var selectedCustomers = $scope.selectedCustomersFn();
                     selectedCustomers.forEach(function(sc, sci) {
                         CustomerService.deleteCustomer(sc._id, function () {});
                         $scope.customers.splice(_.findIndex($scope.customers, function(c) {return c._id == sc._id; }), 1);
@@ -580,6 +580,10 @@
         } else {
             customer.isSelected = true;
         }
+    };
+
+    $scope.selectedCustomersFn = function () {
+        return _.filter($scope.displayedCustomers, function(customer) { return customer.isSelected; });
     };
   }]);
 }(angular));
