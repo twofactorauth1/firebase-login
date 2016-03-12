@@ -549,16 +549,8 @@
                     var selectedCustomers = _.filter($scope.displayedCustomers, function(customer) { return customer.isSelected; });
                     selectedCustomers.forEach(function(sc, sci) {
                         CustomerService.deleteCustomer(sc._id, function () {});
-                        $scope.customers.forEach(function(cc, cci) {
-                            if (cc._id == sc._id) {
-                                $scope.customers.splice(cci, 1);
-                            }
-                        });
-                        $scope.displayedCustomers.forEach(function(dc, dci) {
-                            if (dc._id == sc._id) {
-                                $scope.displayedCustomers.splice(dci, 1);
-                            }
-                        });
+                        $scope.customers.splice(_.findIndex($scope.customers, function(c) {return c._id == sc._id; }), 1);
+                        $scope.displayedCustomers.splice(_.findIndex($scope.displayedCustomers, function(c) {return c._id == sc._id; }), 1);
                     });
                     $scope.bulkActionChoice = null;
                     toaster.pop('success', 'Customers Deleted.');
