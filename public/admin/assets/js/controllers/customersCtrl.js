@@ -546,17 +546,22 @@
               },
               function (isConfirm) {
                 if (isConfirm) {
-                    $scope.displayedCustomers.forEach(function(c, i) {
-                        CustomerService.deleteCustomer(c._id, function () {});
-                        $scope.customers.forEach(function(cust, index) {
-                            if (cust._id == c._id) {
-                                $scope.customers.splice(index, 1);
+                    var selectedCustomers = _.filter($scope.displayedCustomers, function(customer) { return customer.isSelected; });
+                    selectedCustomers.forEach(function(sc, sci) {
+                        CustomerService.deleteCustomer(sc._id, function () {});
+                        $scope.customers.forEach(function(cc, cci) {
+                            if (cc._id == sc._id) {
+                                $scope.customers.splice(cci, 1);
+                            }
+                        });
+                        $scope.displayedCustomers.forEach(function(dc, dci) {
+                            if (dc._id == sc._id) {
+                                $scope.displayedCustomers.splice(dci, 1);
                             }
                         });
                     });
-                    $scope.displayedCustomers = [];
                     $scope.bulkActionChoice = null;
-                    toaster.pop('warning', 'Customers Deleted.');
+                    toaster.pop('success', 'Customers Deleted.');
                 } else {
                  $scope.bulkActionChoice = null;
                 }
