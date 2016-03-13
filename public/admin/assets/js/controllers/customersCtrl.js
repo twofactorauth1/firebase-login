@@ -7,6 +7,7 @@
     $scope.itemPerPage = 100;
     $scope.showPages = 15;
     $scope.selectAllChecked = false;
+    $scope.tagsBulkAction = {};
 
     if (!$state.current.sort) {
       $scope.order = "reverse";
@@ -14,7 +15,7 @@
     $scope.formValidations = formValidations;
     $scope.default_image_url = "/admin/assets/images/default-user.png";
 
-    $scope.bulkActionChoices = [{data: 'delete', label: 'Delete'}];
+    $scope.bulkActionChoices = [{data: 'tags', label: 'Tags'}, {data: 'delete', label: 'Delete'}];
 
     $scope.filterCustomerPhotos = function (customers) {
       _.each(customers, function (customer) {
@@ -559,6 +560,10 @@
                 }
               });
         }
+
+        if (choice.data == 'tags') {
+            $scope.openSimpleModal('tags-bulk-action-modal');
+        }
     };
 
     $scope.selectAllClickFn = function ($event) {
@@ -584,6 +589,11 @@
 
     $scope.selectedCustomersFn = function () {
         return _.filter($scope.displayedCustomers, function(customer) { return customer.isSelected; });
+    };
+
+    $scope.tagsBulkActionClickFn = function (operation) {
+        console.log(operation, $scope.tagsBulkAction);
+        $scope.closeModal();
     };
   }]);
 }(angular));
