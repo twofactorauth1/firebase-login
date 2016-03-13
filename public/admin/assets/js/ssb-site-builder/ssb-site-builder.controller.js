@@ -128,7 +128,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
 
     $scope.$watch(function() { return SimpleSiteBuilderService.loading }, updateLoading, true);
 
-    $scope.$watch('vm.state.page', function(page) {
+    $scope.$watch('vm.state.page', _.debounce(function(page) {
         console.time('angular.equals for page');
         if (page && vm.state.originalPage && vm.pageChanged(page, vm.state.originalPage)) {
             console.timeEnd('angular.equals for page');
@@ -141,7 +141,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         } else {
             vm.state.pendingPageChanges = false;
         }
-    }, true);
+    }, 100), true);
 
     $scope.$watch('vm.state.website', function(website) {
         if (SimpleSiteBuilderService.websiteLoading && website && vm.state.originalWebsite && !angular.equals(website, vm.state.originalWebsite)) {
@@ -534,7 +534,9 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
 
                 for (var i = 0; i < changes; i++) {
 
-                    console.debug('tracked change: ', jsondiff1[i]);
+                    console.debug('tracked change');
+                    console.debug(jsondiff1[i].lhs);
+                    console.debug(jsondiff1[i].rhs);
 
                     var diff1 = jsondiff1[i].lhs;
                     var diff2 = jsondiff1[i].rhs;

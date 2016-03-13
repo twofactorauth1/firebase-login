@@ -60,18 +60,18 @@ function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude,
 
     var watchElementData = $scope.$watch('vm.elementData', updateTextEditor, true);
 
-    var pvmStateLoading = $scope.$watch('pvm.state.saveLoading', function() {
-        if (parentComponent && pvm && pvm.state.saveLoading) {
-            var el = SimpleSiteBuilderService.getCompiledElement(parentComponent.attr('id'), parentEditorId, elementId)
+    // var pvmStateLoading = $scope.$watch('pvm.state.saveLoading', function() {
+    //     if (parentComponent && pvm && pvm.state.saveLoading) {
+    //         var el = SimpleSiteBuilderService.getCompiledElement(parentComponent.attr('id'), parentEditorId, elementId)
 
-            if (el) {
-                el.removeClass('ssb-theme-btn-active-element ng-scope');
-                el.removeAttr('data-compiled');
-            }
+    //         if (el) {
+    //             el.removeClass('ssb-theme-btn-active-element ng-scope');
+    //             el.removeAttr('data-compiled');
+    //         }
 
-            updateTextEditor(true);
-        }
-    });
+    //         updateTextEditor(true);
+    //     }
+    // });
 
 
 
@@ -112,8 +112,8 @@ function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude,
             data.spacing.mb = spacingMB;
             data.spacing.mw = spacingMW;
 
-            angular.extend(vm.elementData, data); 
-        }        
+            angular.extend(vm.elementData, data);
+        }
 
         buildDataObjFromHTMLDone = true;
     }
