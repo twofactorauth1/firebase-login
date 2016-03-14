@@ -592,8 +592,28 @@
     };
 
     $scope.tagsBulkActionClickFn = function (operation) {
-        console.log(operation, $scope.tagsBulkAction);
+        var selectedCustomers = $scope.selectedCustomersFn();
+        var tags = _.uniq(_.pluck($scope.tagsBulkAction.tags, 'data'));
+
+        selectedCustomers.forEach(function(customer, index) {
+            if (operation == 'add') {
+                if ($scope.tagsBulkAction.toReplace) {
+                    customer.tags = tags;
+                } else {
+                    customer.tags = customer.tags.concat(tags);
+                }
+            }
+
+            if (operation == 'remove') {
+                customer.tags = _.difference(customer.tags, tags);
+            }
+
+            CustomerService.saveCustomer(customer, function() {});
+        });
+
+        $scope.tagsBulkAction = {};
         $scope.closeModal();
+        toaster.pop('success', 'Customers tags updated.');
     };
   }]);
 }(angular));
