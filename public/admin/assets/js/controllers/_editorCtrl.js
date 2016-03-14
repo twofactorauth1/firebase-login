@@ -40,12 +40,12 @@
 
     $scope.slugifyHandle = function (title) {
       if (title) {
-        $scope.newPage.handle = $filter('slugify')(title.replace(/_/g, ' '));
+        $scope.newPage.handle = $filter('slugify')(title);
       }
     };
     $scope.$watch('currentPage.handle', function (newValue, oldValue) {
       if (newValue) {
-        $scope.currentPage.handle = $filter('slugify')(newValue.replace(/_/g, ' '));
+        $scope.currentPage.handle = $filter('slugify')(newValue);
       }
     });
     $scope.breadcrumbTitle = $location.$$search['pagehandle'] || $location.$$search['posthandle'];

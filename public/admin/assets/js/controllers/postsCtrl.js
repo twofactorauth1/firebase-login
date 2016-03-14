@@ -39,7 +39,7 @@
         {
             $scope.posts = $filter('orderBy')($scope.posts, 'modified.date', true);
         }
-
+        
         $scope.getters = {
             created: function (value) {
                 return value.created.date;
@@ -71,13 +71,13 @@
 
         $scope.$watch('post.post_title', function(newValue, oldValue) {
             if (newValue) {
-                $scope.post.post_url = $filter('slugify')(newValue.replace(/_/g, ' '));
+                $scope.post.post_url = $filter('slugify')(newValue);
             }
         });
 
         $scope.$watch('post.post_url', function(newValue, oldValue) {
             if (newValue) {
-                $scope.post.post_url = $filter('slugify')(newValue.replace(/_/g, ' '));
+                $scope.post.post_url = $filter('slugify')(newValue);
             }
         });
 
@@ -86,7 +86,7 @@
             console.log('post ', post);
             if (!post || !post.post_title || post.post_title == '') {
               $scope.postTitleError = true
-            } else {
+            } else {              
               $scope.postTitleError = false
             }
             if (!post || !post.post_author || post.post_author == '') {
@@ -127,7 +127,7 @@
                 $scope.saveLoading = false;
                 return false;
             }
-
+           
             postData.websiteId = $scope.website._id;
             WebsiteService.getSinglePost(postData.post_url, function (data) {
                 if (data && data._id) {

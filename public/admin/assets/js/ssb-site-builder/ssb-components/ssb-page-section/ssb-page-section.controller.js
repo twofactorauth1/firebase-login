@@ -23,7 +23,7 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
     vm.playerObject = {};
     vm.player = {};
 
-
+    
 
     $scope.$watch('vm.section.bg.video.id', function (_id) {
         if (_id) {
@@ -44,10 +44,10 @@ function ssbPageSectionController($scope, $attrs, $filter, $transclude, $sce, $t
 
             if (title) {
 
-                classString += ' ssb-page-section-' + $filter('slugify')(title.replace(/_/g, ' '));
+                classString += ' ssb-page-section-' + $filter('slugify')(title);
 
                 if (version) {
-                    classString += ' ssb-page-section-' + $filter('slugify')(title.replace(/_/g, ' ')); + '-v' + version;
+                    classString += ' ssb-page-section-' + $filter('slugify')(title); + '-v' + version;
                 }
 
             }

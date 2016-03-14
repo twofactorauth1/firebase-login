@@ -67,13 +67,13 @@
 
     $scope.$watch('createpage.title', function (newValue) {
       if (newValue) {
-        $scope.createpage.handle = $filter('slugify')(newValue.replace(/_/g, ' '));
+        $scope.createpage.handle = $filter('slugify')(newValue);
       }
     });
 
     $scope.$watch('createpage.handle', function (newValue) {
       if (newValue) {
-        $scope.createpage.handle = $filter('slugify')(newValue.replace(/_/g, ' '));
+        $scope.createpage.handle = $filter('slugify')(newValue);
       }
     });
 
@@ -85,7 +85,7 @@
         } else {
           $scope.handleError = false;
           if (!restrict) {
-            page.handle = $filter('slugify')(page.title.replace(/_/g, ' '));
+            page.handle = $filter('slugify')(page.title);
           }
         }
         if (page.title === '') {

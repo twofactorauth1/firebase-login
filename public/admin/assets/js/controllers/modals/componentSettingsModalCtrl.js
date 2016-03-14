@@ -1203,7 +1203,7 @@ app.controller('ComponentSettingsModalCtrl', ['$scope', '$rootScope', '$modalIns
 
   $scope.slugifyAnchor = function (url) {
     if (url) {
-      $scope.componentEditing.anchor = $filter('slugify')(url.replace(/_/g, ' '));
+      $scope.componentEditing.anchor = $filter('slugify')(url);
     }
   };
 
