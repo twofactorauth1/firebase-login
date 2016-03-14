@@ -147,7 +147,7 @@
 
     $scope.slugifyHandle = function (title) {
       if (title) {
-        $scope.createpage.handle = $filter('slugify')(title.replace(/_/g, ' '));
+        $scope.createpage.handle = $filter('slugify')(title);
       }
     };
 
@@ -159,9 +159,9 @@
         } else {
           $scope.handleError = false;
           if (!restrict) {
-            page.handle = $filter('slugify')(page.title.replace(/_/g, ' '));
+            page.handle = $filter('slugify')(page.title);
           } else {
-            page.handle = $filter('slugify')(page.handle.replace(/_/g, ' '));
+            page.handle = $filter('slugify')(page.handle);
           }
         }
         if (!page.title) {

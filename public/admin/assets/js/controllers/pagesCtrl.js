@@ -128,7 +128,7 @@
 
     $scope.slugifyHandle = function (title) {
       if (title) {
-        $scope.createpage.handle = $filter('slugify')(title.replace(/_/g, ' '));
+        $scope.createpage.handle = $filter('slugify')(title);
       }
     };
 
@@ -140,9 +140,9 @@
         } else {
           $scope.handleError = false;
           if (!restrict) {
-            page.handle = $filter('slugify')(page.title.replace(/_/g, ' '));
+            page.handle = $filter('slugify')(page.title);
           } else {
-            page.handle = $filter('slugify')(page.handle.replace(/_/g, ' '));
+            page.handle = $filter('slugify')(page.handle);
           }
         }
         if (page.title === '') {
@@ -179,7 +179,7 @@
       };
 
       var error = WebsiteService.checkSystemRoute(page.handle);
-      if(error){
+      if(error){        
         toaster.pop('error', error);
         $scope.saveLoading = false;
         return false;
@@ -193,8 +193,8 @@
         }
       });
 
-
-
+      
+      
 
       if (!hasHandle) {
         WebsiteService.createPageFromTemplate($scope.selectedTemplate._id, pageData, function (_newPage, error) {
@@ -333,8 +333,8 @@
   app.filter('ignoreSsbPages', function () {
   return function (pages) {
     if (pages) {
-      return pages.filter(function (page) {
-            return !page.ssb;
+      return pages.filter(function (page) {        
+            return !page.ssb;          
       });
     }
   };
