@@ -49,7 +49,7 @@
         } else {
           $scope.handleError = false;
           if (!restrict) {
-            page.handle = $filter('slugify')(page.title);
+            page.handle = $filter('slugify')(page.title.replace(/_/g, ' '));
           }
         }
         if (page.title === '') {
