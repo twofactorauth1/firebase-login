@@ -172,7 +172,7 @@ _.extend(api.prototype, baseApi.prototype, {
         }
         if (isNew === true) {
             contact.set("accountId", accountId);
-            if(this.userId(req)) {                
+            if(this.userId(req)) {
                 contact.createdBy(this.userId(req), $$.constants.social.types.LOCAL);
             }
         } else {
@@ -181,7 +181,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 by: self.userId(req)
             };
         }
-        
+
         contactDao.saveOrUpdateContact(contact, function (err, value) {
             if (!err) {
                 self.log.debug('>> saveOrUpdate', value);
@@ -500,7 +500,7 @@ _.extend(api.prototype, baseApi.prototype, {
         self.log.debug('>> signUpNews');
         self.log.debug('>> host', req.get("host"));
         //req.get("host")
-        
+
         accountDao.getAccountByHost(req.get("host"), function(err, value) {
             if(err) {
                 self.log.error('Error signing up: ' + err);
@@ -525,13 +525,13 @@ _.extend(api.prototype, baseApi.prototype, {
                 }
                 else if(emailPreferences.new_contacts === true && req.body.activity){
                     var accountEmail = null;
-                   
+
                     if(value && value.get("business") && value.get("business").emails && value.get("business").emails[0] && value.get("business").emails[0].email) {
                         self.log.debug('user email: ', value.get("business").emails[0].email);
                         accountEmail = value.get("business").emails[0].email;
                         self._sendEmailOnCreateAccount(accountEmail, req.body.activity.contact, value.id());
                     } else{
-                        userDao.getUserAccount(value.id(), function(err, user){                            
+                        userDao.getUserAccount(value.id(), function(err, user){
                             accountEmail = user.get("email");
                             self._sendEmailOnCreateAccount(accountEmail, req.body.activity.contact, value.id());
                         })
@@ -541,7 +541,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 //TODO: check if contact exists
                 var query = {};
                 query.accountId = value.id();
-                
+
                 query['details.emails.email'] = new RegExp('^'+req.body.details[0].emails[0].email+'$', "i");
                 var skipWelcomeEmail = req.body.skipWelcomeEmail;
                 var fromContactEmail = req.body.fromEmail;
@@ -640,7 +640,7 @@ _.extend(api.prototype, baseApi.prototype, {
                                         }
                                     });
                                 }
-                                //TODO: add a param to not send the welcome. 
+                                //TODO: add a param to not send the welcome.
                                 //skipWelcomeEmail !== 'true' && skipWelcomeEmail !== true &&
                                 if(emailId && sendEmail) {
                                     /*
@@ -690,7 +690,7 @@ _.extend(api.prototype, baseApi.prototype, {
                                                         }
                                                     });
                                                 } else {
-                                                    
+
                                                     var components = [];
                                                     var keys = ['logo','title','text','text1','text2','text3'];
                                                     var regex = new RegExp('src="//s3.amazonaws', "g");
@@ -715,9 +715,9 @@ _.extend(api.prototype, baseApi.prototype, {
                                                                 component.txtcolor = '#000000';
                                                             }
                                                             components.push(component);
-                                                        }                                                        
+                                                        }
                                                     });
-                                                    
+
                                                     self.log.debug('components >>> ', components);
 
                                                     //debugger;
@@ -759,7 +759,7 @@ _.extend(api.prototype, baseApi.prototype, {
                                                             } catch(exception) {
                                                                 self.log.error(exception);
                                                             }
-                                                            
+
                                                         }
                                                     });
                                                 }
@@ -842,7 +842,7 @@ _.extend(api.prototype, baseApi.prototype, {
                 if(req.query.limit) {
                     limit = parseInt(req.query.limit);
                 }
-                
+
 
                 contactActivityManager.listActivitiesByContactId(accountId, contactId, skip, limit, null, function(err, value){
                     self.log.debug('<< getActivityByContactId');
@@ -1155,7 +1155,7 @@ _.extend(api.prototype, baseApi.prototype, {
         });
 
     },
-   _sendEmailOnCreateAccount: function(accountEmail, fields, accountId) {        
+   _sendEmailOnCreateAccount: function(accountEmail, fields, accountId) {
         var self = this;
         var component = {};
         //component.logourl = 'https://s3.amazonaws.com/indigenous-account-websites/acct_6/logo.png';
@@ -1179,14 +1179,14 @@ _.extend(api.prototype, baseApi.prototype, {
                 var emailSubject = notificationConfig.NEW_CUSTOMER_EMAIL_SUBJECT;
                 var vars = [];
 
-                
-                mandrillHelper.sendBasicEmail(fromEmail, fromName, accountEmail, null, emailSubject, html, accountId, vars, '', function(err, result){
+
+                mandrillHelper.sendBasicEmail(fields.email, fromName, accountEmail, null, emailSubject, html, accountId, vars, '', function(err, result){
                     self.log.debug('result: ', result);
                 });
             }
         });
     }
-    
+
     //endregion CONTACT ACTIVITY
 });
 
