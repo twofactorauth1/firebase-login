@@ -10,6 +10,7 @@ var KEEN_CONFIG = require('./configs/keen.config');
 var GOOGLE_CONFIG = require('./configs/google.config');
 var LEADDYNO_CONFIG = require('./configs/leaddyno.config');
 var FACEBOOK_CONFIG = require('./configs/facebook.config');
+var PAYPAL_CONFIG = require('./configs/paypal.config');
 
 //var wiredepJSAry = require('wiredep')().js;
 
@@ -310,7 +311,7 @@ module.exports = function(grunt) {
                 }
             }
         },
-        
+
         /*
         jsdoc2md: {
 
@@ -392,7 +393,8 @@ module.exports = function(grunt) {
                         googleClientSecret: GOOGLE_CONFIG.CLIENT_SECRET,
                         googleServerKey: GOOGLE_CONFIG.SERVER_KEY,
                         leaddyno: LEADDYNO_CONFIG.LEAD_DYNO_KEY,
-                        facebookClientID: FACEBOOK_CONFIG.CLIENT_ID
+                        facebookClientID: FACEBOOK_CONFIG.CLIENT_ID,
+                        paypalCheckoutURL: PAYPAL_CONFIG.PAYPAL_CHECKOUT_URL
                     }
                 }
             },
@@ -414,7 +416,8 @@ module.exports = function(grunt) {
                         googleClientSecret: GOOGLE_CONFIG.PROD_CLIENT_SECRET,
                         googleServerKey: GOOGLE_CONFIG.SERVER_KEY,
                         leaddyno: LEADDYNO_CONFIG.LEAD_DYNO_KEY,
-                        facebookClientID: FACEBOOK_CONFIG.CLIENT_ID
+                        facebookClientID: FACEBOOK_CONFIG.CLIENT_ID,
+                        paypalCheckoutURL: PAYPAL_CONFIG.PAYPAL_CHECKOUT_URL
                     }
                 }
             }
@@ -457,6 +460,34 @@ module.exports = function(grunt) {
                     ]
                 }
             },
+            enableSiteBuilderOnLegacyAccount: {
+                options: {
+                    questions: [
+                        {
+                            config: 'doEnableSiteBuilderOnLegacyAccount.isTestAccount', // arbitray name or config for any other grunt task
+                            type: 'list', // list, checkbox, confirm, input, password
+                            message: 'Which environment is the account?', // Question to ask the user, function needs to return a string,
+                            default: true, // default value if nothing is entered
+                            choices: [
+                                { name: 'On Test', value: true, checked:true },
+                                { name: 'On Production', value: false }
+                            ]
+                        },
+                        {
+                            config: 'doEnableSiteBuilderOnLegacyAccount.accountId', // arbitray name or config for any other grunt task
+                            type: 'input', // list, checkbox, confirm, input, password
+                            message: 'Enter the accountId to enable SB for.', // Question to ask the user, function needs to return a string,
+                            validate: function(value){
+                                if(isNaN(parseInt(value))){
+                                    return 'please enter a valid id. [' + value + ' is not valid.]';
+                                } else {
+                                    return true;
+                                }
+                            }
+                        }
+                    ]
+                }
+            },
             convertAccountToSiteTemplate: {
                 options: {
                     questions: [
@@ -464,17 +495,13 @@ module.exports = function(grunt) {
                             config: 'doConvertAccountToSiteTemplate.accountId', // arbitray name or config for any other grunt task
                             type: 'input', // list, checkbox, confirm, input, password
                             message: 'Enter the accountId to convert into a site template', // Question to ask the user, function needs to return a string,
-                            //default: 0, // default value if nothing is entered
-                            //choices: 'Array|function(answers)',
                             validate: function(value){
                                 if(isNaN(parseInt(value))){
                                     return 'please enter a valid id. [' + value + ' is not valid.]';
                                 } else {
                                     return true;
                                 }
-                            } // return true if valid, error message if invalid
-                            //filter:  function(value), // modify the answer
-                            //when: function(answers) // only ask this question when this function returns true
+                            }
                         }
                     ]
                 }
@@ -503,6 +530,19 @@ module.exports = function(grunt) {
 
     });
 
+    grunt.registerTask('doEnableSiteBuilderOnLegacyAccount', 'A task to enable SB on an account and update pages to be SB-compatible.', function(){
+
+        var done = this.async();
+        var accountId = parseInt(grunt.config('doEnableSiteBuilderOnLegacyAccount.accountId'));
+        var isTestAccount = grunt.config('doEnableSiteBuilderOnLegacyAccount.isTestAccount');
+        if(isTestAccount === true) {
+            dbcopyutil.enableSiteBuilderOnLegacyAccountOnTest(accountId, done);
+        } else {
+            dbcopyutil.enableSiteBuilderOnLegacyAccountOnProd(accountId, done);
+        }
+
+    });
+
     grunt.registerTask('updateEmails', 'A task to update email collection', function(){
         var done = this.async();
 
@@ -510,6 +550,8 @@ module.exports = function(grunt) {
     });
 
     grunt.registerTask('copyAccount',  ['prompt:copyAccount', 'doCopyAccount']);
+
+    grunt.registerTask('enableSiteBuilderOnLegacyAccount',  ['prompt:enableSiteBuilderOnLegacyAccount', 'doEnableSiteBuilderOnLegacyAccount']);
 
     grunt.registerTask('syncSSB', 'A task to copy SSB artifacts from test to prod', function(){
         var done = this.async();

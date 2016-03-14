@@ -29,6 +29,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     vm.legacyComponentMedia = legacyComponentMedia;
     vm.checkIfDirty = checkIfDirty;
     vm.resetDirty = resetDirty;
+    vm.pageChanged = pageChanged;
 
 
     vm.uiState = {
@@ -128,11 +129,14 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
     $scope.$watch(function() { return SimpleSiteBuilderService.loading }, updateLoading, true);
 
     $scope.$watch('vm.state.page', function(page) {
-        if (page && vm.state.originalPage && !angular.equals(page, vm.state.originalPage)) {
+        console.time('angular.equals for page');
+        if (page && vm.state.originalPage && vm.pageChanged(page, vm.state.originalPage)) {
+            console.timeEnd('angular.equals for page');
             vm.state.pendingPageChanges = true;
             console.log("Page changed");
-            if(vm.uiState && vm.uiState.selectedPage)
+            if (vm.uiState && vm.uiState.selectedPage) {
                 vm.uiState.selectedPage = vm.state.page;
+            }
             setupBreakpoints();
         } else {
             vm.state.pendingPageChanges = false;
@@ -501,6 +505,75 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
             vm.uiState.sidebarOrientation = 'vertical';
         } else {
             vm.uiState.sidebarOrientation = 'horizontal';
+        }
+
+    }
+
+    /**
+     * Inspect changes beyond simple angular.equals
+     * - if angular.equals detects a change, then:
+     *      - get the specific change from the data (DeepDiff)
+     *      - if that change is ONLY a [data-compile] difference, then:
+     *          - ignore it as a change
+     *          - apply to original data so future compares don't include this diff
+     *          - decrement changes so we don't count it in number of changes
+     *          - return changes > 0
+     *      - else the change is legit, return true
+     * - else the change is legit, return true
+     *
+     * TODO: handle undo in Froala
+     */
+    function pageChanged(originalPage, currentPage) {
+        if (!angular.equals(originalPage, currentPage)) {
+            var originalPage = JSON.parse(angular.toJson(originalPage));
+            var currentPage = JSON.parse(angular.toJson(currentPage));
+            var jsondiff1 = DeepDiff.diff(originalPage, currentPage);
+            var changes = jsondiff1.length;
+
+            if (changes) {
+
+                for (var i = 0; i < changes; i++) {
+
+                    var diff1 = jsondiff1[i].lhs;
+                    var diff2 = jsondiff1[i].rhs;
+
+                    var dataCompiledAdded = diff1 && angular.isDefined(diff1.indexOf) && diff1.indexOf('data-compiled') === -1 && angular.isDefined(diff2.indexOf) && diff2.indexOf('data-compiled') !== -1;
+                    var dataCompiledRemoved = diff1 && angular.isDefined(diff1.indexOf) && diff1.indexOf('data-compiled') !== -1 && angular.isDefined(diff2.indexOf) && diff2.indexOf('data-compiled') === -1;
+
+                    if (dataCompiledAdded || dataCompiledRemoved) {
+
+                        console.log('change to ignore detected @: ', jsondiff1[i].path);
+
+                        $timeout(function() {
+
+                            DeepDiff.applyChange(originalPage, currentPage, jsondiff1[i]);
+
+                            vm.state.originalPage = originalPage;
+
+                            console.log('should be empty: ', DeepDiff.diff(originalPage, currentPage));
+
+                            changes--;
+
+                            return changes > 0;
+
+                        });
+
+                    } else {
+
+                        return true
+
+                    }
+                }
+            } else {
+
+                return changes > 0;
+
+            }
+
+        } else {
+
+            return true
+
         }
 
     }

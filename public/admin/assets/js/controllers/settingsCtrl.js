@@ -170,6 +170,7 @@
     $scope.modifysub.show = false;
 
     $scope.checkDomainExists = function (account) {
+      account.subdomain = account.subdomain.replace(/ /g, '').replace(/\./g, '_').replace(/@/g, '').replace(/_/g, ' ').replace(/\W+/g, '').toLowerCase();
       console.log('account.subdomain >>> ', account.subdomain);
       if (account.subdomain) {
         $scope.checkingSubdomain = true;

@@ -155,7 +155,7 @@
 
     /*
      * @switchSubscriptionPlanFn
-     * -  
+     * -
      */
 
     $scope.switchSubscriptionPlanFn = function (planId) {
@@ -297,7 +297,7 @@
             if (cards.data.length) {
               $scope.hasCard = true;
             }
-          });
+        }, function() {});
 
           //TODO: need this?
           // if ($scope.firstTime) {
@@ -327,13 +327,13 @@
         $scope.selectedPlan.paymentProcessing = false;
 
         console.warn('BillingCtrl, received account:\n', account);
-        
+
         if (account.billing.subscriptionId) {
           PaymentService.getStripeSubscription(
             account.billing.stripeCustomerId,
             account.billing.subscriptionId,
             function(subscription) {
-              // $scope.subscription = subscription; 
+              // $scope.subscription = subscription;
               $scope.selectedPlan = $scope.planlist.list.filter(function(plan) {
                 return plan.product_attributes.stripePlans[0].id === subscription.plan.id;
               })[0];

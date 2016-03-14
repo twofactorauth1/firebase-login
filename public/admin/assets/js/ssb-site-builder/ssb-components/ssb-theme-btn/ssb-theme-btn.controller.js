@@ -9,7 +9,8 @@ function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude,
     var vm = this;
     var elementId = '';
     var parentComponent;
-    var textEditorElement;
+    var parentEditor;
+    var parentEditorId;
     var buildDataObjFromHTMLDone = false;
 
     vm.init = init;
@@ -35,38 +36,39 @@ function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude,
         },
         'txtcolor': '',
         'visibility': true,
-        'spacing': {
-            'mt': '0',
-            'pt': '0',
-            'pl': '0',
-            'pr': '0',
-            'pb': '0',
-            'ml': '0',
-            'mr': '0',
-            'mb': '0'
-        }
+        'spacing': {}
     };
 
     //get functions from parent text component
-    var pvm = $scope.$parent.$parent.$parent.vm;
+    var limit = 10;
+    var pScope = $scope.$parent;
+    while ((!pScope.vm || pScope.vm && !pScope.vm.uiState) && limit > 0) {
+      pScope = pScope.$parent;
+      limit--;
+    }
+    var pvm = pScope.vm;
     $scope.pvm = pvm;
 
-    $rootScope.$on('$ssbElementsChanged', function(event, componentId) {
+    $rootScope.$on('$ssbElementsChanged', function(event, componentId, editorId) {
 
-        if (parentComponent && componentId === parentComponent.attr('id')) {
+        if (parentEditorId && parentEditorId === editorId && parentComponent && componentId === parentComponent.attr('id')) {
             console.log('$ssbElementsChanged');
             positionEditControl();
         }
 
     });
 
-    $scope.$watch('vm.elementData', updateTextEditor, true);
+    var watchElementData = $scope.$watch('vm.elementData', updateTextEditor, true);
 
-    $scope.$watch('pvm.state.saveLoading', function() {
-        if (pvm && pvm.state.saveLoading) {
-            SimpleSiteBuilderService
-                .getCompiledElement(parentComponent.attr('id'), elementId)
-                .removeClass('ssb-theme-btn-active-element');
+    var pvmStateLoading = $scope.$watch('pvm.state.saveLoading', function() {
+        if (parentComponent && pvm && pvm.state.saveLoading) {
+            var el = SimpleSiteBuilderService.getCompiledElement(parentComponent.attr('id'), parentEditorId, elementId)
+
+            if (el) {
+                el.removeClass('ssb-theme-btn-active-element ng-scope');
+                el.removeAttr('data-compiled');
+            }
+
             updateTextEditor(true);
         }
     });
@@ -74,43 +76,44 @@ function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude,
 
 
     function buildDataObjFromHTML() {
-        var el = SimpleSiteBuilderService.getCompiledElement(parentComponent.attr('id'), elementId);
-        var style = el[0].style;
-        var data = {
-            id: 'button-element_' + elementId,
-            _id: 'button-element_' + elementId,
-            anchor: 'button-element_' + elementId,
-            'bg': {},
-            'spacing': {}
-        };
+        var el = SimpleSiteBuilderService.getCompiledElement(parentComponent.attr('id'), parentEditorId, elementId);
+        if(el){
+            var style = el[0].style;
+            var data = {
+                id: 'button-element_' + elementId,
+                _id: 'button-element_' + elementId,
+                anchor: 'button-element_' + elementId,
+                'bg': {},
+                'spacing': {}
+            };
+            var bgcolor = style.backgroundColor;
+            var txtcolor = style.color;
+            var visibility = style.display !== 'none';
+            var spacingPT = style.paddingTop.replace('px', '');
+            var spacingPL = style.paddingLeft.replace('px', '');
+            var spacingPR = style.paddingRight.replace('px', '');
+            var spacingPB = style.paddingBottom.replace('px', '');
+            var spacingMT = style.marginTop.replace('px', '');
+            var spacingML = style.marginLeft.replace('px', '');
+            var spacingMR = style.marginRight.replace('px', '');
+            var spacingMB = style.marginBottom.replace('px', '');
+            var spacingMW = style.maxWidth.replace('px', '');
 
-        var bgcolor = style.backgroundColor;
-        var txtcolor = style.color;
-        var visibility = style.display !== 'none';
-        var spacingPT = style.paddingTop.replace('px', '');
-        var spacingPL = style.paddingLeft.replace('px', '');
-        var spacingPR = style.paddingRight.replace('px', '');
-        var spacingPB = style.paddingBottom.replace('px', '');
-        var spacingMT = style.marginTop.replace('px', '');
-        var spacingML = style.marginLeft.replace('px', '');
-        var spacingMR = style.marginRight.replace('px', '');
-        var spacingMB = style.marginBottom.replace('px', '');
-        var spacingMW = style.maxWidth.replace('px', '');
+            data.bg.color = bgcolor;
+            data.txtcolor = txtcolor;
+            data.visibility = visibility;
+            data.spacing.pt = spacingPT;
+            data.spacing.pl = spacingPL;
+            data.spacing.pr = spacingPR;
+            data.spacing.pb = spacingPB;
+            data.spacing.mt = spacingMT;
+            data.spacing.ml = spacingML;
+            data.spacing.mr = spacingMR;
+            data.spacing.mb = spacingMB;
+            data.spacing.mw = spacingMW;
 
-        data.bg.color = bgcolor;
-        data.txtcolor = txtcolor;
-        data.visibility = visibility;
-        data.spacing.pt = spacingPT;
-        data.spacing.pl = spacingPL;
-        data.spacing.pr = spacingPR;
-        data.spacing.pb = spacingPB;
-        data.spacing.mt = spacingMT;
-        data.spacing.ml = spacingML;
-        data.spacing.mr = spacingMR;
-        data.spacing.mb = spacingMB;
-        data.spacing.mw = spacingMW;
-
-        angular.extend(vm.elementData, data);
+            angular.extend(vm.elementData, data); 
+        }        
 
         buildDataObjFromHTMLDone = true;
     }
@@ -127,14 +130,14 @@ function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude,
 
                 pvm.state.pendingPageChanges = true;
 
-                if (textEditorElement.froalaEditor) {
-                    textEditorElement.froalaEditor('events.trigger', 'contentChanged');
+                if (parentEditor.froalaEditor) {
+                    parentEditor.froalaEditor('events.trigger', 'contentChanged');
                 }
 
             }
 
-            if (force && textEditorElement.froalaEditor) {
-                textEditorElement.froalaEditor('events.trigger', 'contentChanged');
+            if (force && parentEditor.froalaEditor) {
+                parentEditor.froalaEditor('events.trigger', 'contentChanged');
             }
 
         }
@@ -144,7 +147,7 @@ function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude,
     //TODO: use https://github.com/martinandert/react-inline to generate inline styles for sections/components
     function elementClass() {
         var classObj = {};
-       // var el = SimpleSiteBuilderService.getCompiledElement(parentComponent.attr('id'), elementId);
+       // var el = SimpleSiteBuilderService.getCompiledElement(parentComponent.attr('id'), parentEditorId, elementId);
 
         classObj['ssb-' + vm.elementData.type] = true;
 
@@ -244,7 +247,7 @@ function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude,
         pvm.uiState.activeComponentIndex = null;
 
         //get element
-        var el = SimpleSiteBuilderService.getCompiledElement(parentComponent.attr('id'), elementId);
+        var el = SimpleSiteBuilderService.getCompiledElement(parentComponent.attr('id'), parentEditorId, elementId);
 
         $timeout(function() {
             // un-highlight other compiled elements in this component
@@ -258,7 +261,7 @@ function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude,
         });
 
         // if edit control hasn't been created, create it and compile it
-        if (!SimpleSiteBuilderService.getCompiledElementEditControl(parentComponent.attr('id'), elementId)) {
+        if (!SimpleSiteBuilderService.getCompiledElementEditControl(parentComponent.attr('id'), parentEditorId, elementId)) {
             $scope.component = { title: 'Button_'+elementId, type: 'Button' }; //TODO: make generic/configurable
             var template = '<ssb-edit-control ' +
                                 'data-compiled-control-id="control_' + elementId + '" ' +
@@ -294,7 +297,7 @@ function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude,
             cloned.prependTo(parentComponent.parent());
             newEl = $('.ssb-edit-control[data-compiled-control-id="control_' + elementId + '"]')
             newEl.addClass('on');
-            SimpleSiteBuilderService.addCompiledElementEditControl(parentComponent.attr('id'), elementId, newEl);
+            SimpleSiteBuilderService.addCompiledElementEditControl(parentComponent.attr('id'), parentEditorId, elementId, newEl);
             setActiveElementId();
             positionEditControl();
         });
@@ -308,8 +311,8 @@ function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude,
         var scrollTop = document.querySelector('.ssb-site-builder-container').scrollTop;
         var topOffset = 35;
         var leftOffset = 35;
-        var compiledEl = SimpleSiteBuilderService.getCompiledElement(parentComponent.attr('id'), elementId);
-        var compiledEditControl = SimpleSiteBuilderService.getCompiledElementEditControl(parentComponent.attr('id'), elementId);
+        var compiledEl = SimpleSiteBuilderService.getCompiledElement(parentComponent.attr('id'), parentEditorId, elementId);
+        var compiledEditControl = SimpleSiteBuilderService.getCompiledElementEditControl(parentComponent.attr('id'), parentEditorId, elementId);
 
         if (compiledEl) {
             top = compiledEl[0].getBoundingClientRect().top - topOffset - topbarHeight + scrollTop;
@@ -334,13 +337,15 @@ function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude,
 
         console.info('ssb-theme-btn directive init...');
 
-        if (pvm) {
+        if (pvm && element.data('compiled')) {
 
             elementId = element.data('compiled');
 
             parentComponent = element.closest('[component]');
 
-            textEditorElement = element.closest('.editable');
+            parentEditor = element.closest('.editable');
+
+            parentEditorId = parentEditor.froalaEditor().data('froala.editor').id;
 
             buildDataObjFromHTML();
 
@@ -349,6 +354,19 @@ function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude,
             angular.element('[data-compiled-control-id=control_' + elementId + ']').on('click', setActiveElementId);
 
             angular.element('.ssb-page-section').on('click', clearActiveElement);
+
+        } else {
+
+            console.log('button outside of editor context: ', element.html());
+
+            /**
+             *  unbind watchers for inactive .ssb-theme-btn's
+             */
+            vm.elementClass = angular.noop();
+
+            watchElementData();
+
+            pvmStateLoading();
 
         }
 

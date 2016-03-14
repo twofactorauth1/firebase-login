@@ -481,7 +481,7 @@ var mandrillHelper =  {
                     });
                 });
 
-                
+
             }
         });
 
@@ -549,8 +549,7 @@ var mandrillHelper =  {
                             ],
                             "google_analytics_campaign": null,
                             "metadata": {
-                                "accountId": accountId,
-                                "emailId": emailId
+                                "accountId": accountId
                             },
                             "recipient_metadata": [
                                 {
@@ -620,7 +619,8 @@ var mandrillHelper =  {
                         }
                     ],
                     "headers": {
-                        'encoding': 'UTF8'
+                        'encoding': 'UTF8',
+                        'Reply-To': fromAddress
                     },
                     "important": false,
                     "track_opens": true,
@@ -1003,7 +1003,7 @@ var mandrillHelper =  {
      * @param  {number}   accountId   account id of the user sending the email
      * @param  {number}   contactId   contact id of the recipient
      * @param  {string}   htmlContent raw html content being sent
-     
+
      * @param  {Function} fn          return function
      * @return {string}               html merge tags replaced with actual data
      */
@@ -1096,12 +1096,12 @@ var mandrillHelper =  {
 
                 var environment = appConfig.environment;
                 var port = appConfig.port;
-               
+
                 //list of possible merge vars and the matching data
                 var _address = _account.get('business').addresses && _address ? _address : null;
                 var hostname = '.indigenous.io';
 
-                if(environment === appConfig.environments.DEVELOPMENT && appConfig.nonProduction){                    
+                if(environment === appConfig.environments.DEVELOPMENT && appConfig.nonProduction){
                     hostname = '.indigenous.local' + ":" + port;
                 }
                 else if(environment !== appConfig.environments.DEVELOPMENT && appConfig.nonProduction){

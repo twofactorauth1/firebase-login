@@ -47,6 +47,17 @@ var copyutil = {
         self._convertAccountToSiteTemplate(accountId, cb);
     },
 
+    enableSiteBuilderOnLegacyAccountOnTest : function(accountId, cb) {
+        var self = this;
+        self._enableSiteBuilderOnLegacyAccount(accountId, mongoConfig.TEST_MONGODB_CONNECT, cb);
+    },
+
+    enableSiteBuilderOnLegacyAccountOnProd: function(accountId, cb) {
+        var self = this;
+        //self._copyAccount(accountId, mongoConfig.PROD_MONGODB_CONNECT, mongoConfig.TEST_MONGODB_CONNECT, cb);
+        self._enableSiteBuilderOnLegacyAccount(accountId, mongoConfig.PROD_MONGODB_CONNECT, cb);
+    },
+
 
     _copyAccountWithUpdatedStripeIDs: function(srcAccountId, srcDBUrl, destDBUrl, fn) {
         var srcMongo = mongoskin.db(srcDBUrl, {safe: true});
@@ -786,6 +797,137 @@ var copyutil = {
                     return cb();
 
                 });
+
+            }
+        ], function done(err){
+            srcMongo.close();
+            fn(err);
+        });
+    },
+
+    _enableSiteBuilderOnLegacyAccount: function(accountId, srcDBUrl, fn) {
+        var srcMongo = mongoskin.db(srcDBUrl, {safe: true});
+        var websitesCollection = srcMongo.collection('websites');
+        var pagesCollection = srcMongo.collection('pages');
+        var sectionsCollection = srcMongo.collection('sections');
+        var accountsCollection = srcMongo.collection('accounts');
+
+        async.waterfall([
+            function setAccountShowHide(cb){
+                console.log('setAccountShowHide: fetch account and update showhide.ssbSiteBuilder = true');
+                accountsCollection.find({'_id':accountId}).toArray(function(err, accounts){
+                    if(err || !accounts[0]) {
+                        console.log('Error getting account:', err);
+                        cb(err);
+                    } else {
+                        accounts[0].showhide.ssbSiteBuilder = true;
+                        accountsCollection.save(accounts[0], function(err, savedAccount) {
+                            if (err) {
+                                console.log('Error saving account showhide:', err);
+                                return cb(err);
+                            }
+                            cb(null);
+                        });
+                    }
+
+                });
+            },
+            function setWebsiteSBProps(cb) {
+                console.log('getWebsite: fetch account website');
+                websitesCollection.find({'accountId': accountId}).toArray(function(err, websites){
+
+                    if (err || !websites[0]) {
+                        console.log('Error finding account website in test:', err);
+                        return cb(err);
+                    }
+
+                    websites[0].themeId = '565decfdfa7d8f489a489104';
+                    websites[0].ssb = true;
+
+                    websitesCollection.save(websites[0], function(err, savedWebsite) {
+                        if (err) {
+                            console.log('Error saving website SB props:', err);
+                            return cb(err);
+                        }
+
+                        return cb(null);
+                    });
+
+                });
+            },
+            function getPages(cb) {
+                console.log('getPages: fetch account pages that haven not been saved in SB yet');
+                pagesCollection.find({'accountId': accountId, 'ssb': { $exists: false }, 'handle': { $nin: ['blog', 'single-post', 'coming-soon'] } }).toArray(function(err, pages){
+                    if (err) {
+                        console.log('Error finding pages:', err);
+                        return cb(err);
+                    }
+
+                    return cb(null, pages);
+
+                });
+            },
+            function saveNewSections(pages, cb) {
+                console.log('saveNewSections: wrap components in section data obj');
+
+                async.each(pages,
+                    function(page, _cb){
+
+                        if (page.components) {
+                            var sectionIdArray = [];
+                            async.each(page.components,
+                                function(component, _cb2) {
+                                    var id = utils.idutils.generateUUID();
+                                    var sectionData = {
+                                        _id: id,
+                                        accountId: 3,
+                                        layout: '1-col',
+                                        components: [component],
+                                        visibility: true,
+                                        transformed: true,
+                                        transformedFrom: component._id
+                                    };
+
+                                    sectionIdArray.push({ _id: id })
+
+                                    sectionsCollection.save(sectionData, function(err, savedSection){
+                                        return _cb2(err);
+                                    });
+                                },
+                                function(err){
+                                    if (err) {
+                                        console.log('Error saving new sections:', err);
+                                        return _cb(err);
+                                    }
+
+                                    page.ssb = true;
+                                    page.sections = sectionIdArray;
+
+                                    pagesCollection.save(page, function(err, savedPage) {
+                                        if (err) {
+                                            console.log('Error saving updated page:', err);
+                                            return _cb(err);
+                                        }
+
+                                        return _cb(null);
+                                    });
+
+                                }
+
+                            );
+                        }
+
+                    },
+                    function(err){
+                        if (err) {
+                            console.log('Error transforming components to sections:', err);
+                            return cb(err);
+                        }
+
+                        return cb(null);
+
+                    }
+                );
 
             }
         ], function done(err){

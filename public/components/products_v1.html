@@ -13,7 +13,7 @@
                     'col-xs-12 col-sm-4 col-sm-offset-4': filteredProducts.length == 1,
                     'col-xs-12 col-sm-6': filteredProducts.length == 2,
                     'col-xs-12 col-sm-6 col-md-4': filteredProducts.length > 2
-                    }" ng-repeat="product in filteredProducts track by $index">
+                }" ng-repeat="product in filteredProducts track by $index" ng-hide='product.type == "DONATION"'>
                 <div class="product">
                     <div class="thumbnail">
                         <div ng-if="product.onSaleToday" class="ribbon red"><span>SALE</span></div>
@@ -362,7 +362,7 @@
                         </div>
                         <div ng-show='stripeInfo' ng-class='{"col-sm-6": paypalInfo, "col-sm-12": !paypalInfo}'>
                             <div class="panel animated no-radius text-center margin-bottom-0 cursor-pointer" ng-class="{true:'panel-light-grey pulse',false:'panel-white'}">
-                                <div class="panel-body" ng-class="{'bg-light-grey': hover1}" ng-mouseenter="hover1 = true" ng-mouseleave="hover1 = false" ng-click="makeCartPayment()">
+                                <div class="panel-body" ng-class="{'bg-light-grey': hover1}" ng-mouseenter="hover1 = true" ng-mouseleave="hover1 = false" ng-click="setCheckoutState(false, 3)">
                                     <span class="fa-stack fa-2x"> <i class="fa fa-square fa-stack-2x text-primary"></i> <i class="fa fa-envelope fa-stack-1x fa-inverse"></i> </span>
                                     <h3 class="StepTitle margin-top-10">Credit Card</h3>
                                     <p class="text-small">
@@ -376,7 +376,7 @@
                     <div class="row thank-you" style="height:400px" ng-if="checkoutModalState == 7">
 
                         <h3 class="center mb20">Paypal Payment</h3>
-                        <form action="https://www.sandbox.paypal.com/webapps/adaptivepayment/flow/pay" target="_self" class="standard">
+                        <form action="{{paypalURL}}" target="_self" class="standard">
                             <label for="buy">Buy Now:</label>
                             <input type="image" id="submitBtn" value="Pay with PayPal" src="https://www.paypalobjects.com/en_US/i/btn/btn_paynowCC_LG.gif" ng-click='paypalLoginClickFn()'>
                             <input id="type" type="hidden" name="expType" value="light">
@@ -395,9 +395,7 @@
                 </div>
                 <div class="modal-footer cart-footer" ng-hide="checkoutModalState !== 3">
                     <button class="btn ssb-theme-btn btn-orange btn-checkout pull-right" ng-click="makeCartPayment()"><i class="fa fa-shopping-cart"></i> Checkout</button>
-                    <button ng-if='(paypalInfo && hasSubscriptionProduct) || (stripeInfo && hasSubscriptionProduct) || (stripeInfo && !hasSubscriptionProduct)' class="btn ssb-theme-btn btn-info continue-shopping pull-left" ng-click="setCheckoutState(true, 2)"><i class="fa fa-chevron-left"></i> Back
-                    </button>
-                    <button ng-if='paypalInfo && !hasSubscriptionProduct' class="btn ssb-theme-btn btn-info continue-shopping pull-left" ng-click="setCheckoutState(true, 6)"><i class="fa fa-chevron-left"></i> Back
+                    <button class="btn ssb-theme-btn btn-info continue-shopping pull-left" ng-click="setCheckoutState(true, paypalInfo && !hasSubscriptionProduct ? 6 : 2)"><i class="fa fa-chevron-left"></i> Back
                     </button>
                 </div>
                 <div class="modal-footer billing-footer" ng-hide="checkoutModalState !== 2">

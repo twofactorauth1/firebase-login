@@ -57,6 +57,7 @@ main(){
 	    cp public/admin/assets/js/config.js public/js/scripts/config.js
 	    export APP_DESCRIPTION="Test Build"
 	    echo $APP_DESCRIPTION
+	    cp public/robots-test.txt public/robots.txt
 	else
 		echo "No environment specified.  No constants"
 	fi

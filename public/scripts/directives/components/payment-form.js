@@ -8,6 +8,7 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
         templateUrl: '/components/component-wrap.html',
         link: function(scope, element, attrs, ctrl) {
             scope.newAccount = {};
+            scope.emailValidation = formValidations.email;
 
             //scope.domainExistsAlready = false;  // needs to be undefined to begin with
             scope.emptyBusinessName = false;
@@ -200,7 +201,7 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                 scope.isFormValid = true;
                 scope.showFooter(false);
                 var tmpAccount = scope.tmpAccount;
-                tmpAccount.subdomain = $.trim(newAccount.businessName).replace(" ", "").replace(".", "_").replace("@", "");
+                tmpAccount.subdomain = $.trim(newAccount.businessName).replace(/ /g, '').replace(/\./g, '_').replace(/@/g, '').replace(/_/g, ' ').replace(/\W+/g, '').toLowerCase();
                 tmpAccount.business = tmpAccount.business || {};
                 tmpAccount.business.name = newAccount.businessName;
 
@@ -398,7 +399,7 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                     scope.loading = false;
                     scope.showFooter(false);
                     var tmpAccount = scope.tmpAccount;
-                    tmpAccount.subdomain = $.trim(newAccount.businessName).replace(" ", "").replace(".", "_").replace("@", "");
+                    tmpAccount.subdomain = $.trim(newAccount.businessName).replace(/ /g, '').replace(/\./g, '_').replace(/@/g, '').replace(/_/g, ' ').replace(/\W+/g, '').toLowerCase();
                     tmpAccount.business = tmpAccount.business || {};
                     tmpAccount.business.name = newAccount.businessName;
                     tmpAccount.signupPage = $location.path();
@@ -564,7 +565,7 @@ app.directive('paymentFormComponent', ['$filter', '$q', 'productService', 'payme
                     {
                         scope.dotComExt = true;
                     }
-                    name = name.replace(" ", "").replace(".", "_").replace("@", "");
+                    name = name.replace(/ /g, '').replace(/\./g, '_').replace(/@/g, '').replace(/_/g, ' ').replace(/\W+/g, '').toLowerCase();
 
                     newAccount.businessName = name;
                     UserService.checkDomainExists(name, function(domainAvailable) {

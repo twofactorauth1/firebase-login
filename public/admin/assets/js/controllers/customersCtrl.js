@@ -1,17 +1,21 @@
 'use strict';
 /*global app, window*/
 (function (angular) {
-  app.controller('CustomersCtrl', ["$scope", "$state", "toaster", "$modal", "$window", "CustomerService", "SocialConfigService", "userConstant", "formValidations", "CommonService", '$timeout', function ($scope, $state, toaster, $modal, $window, CustomerService, SocialConfigService, userConstant, formValidations, CommonService, $timeout) {
+  app.controller('CustomersCtrl', ["$scope", "$state", "toaster", "$modal", "$window", "CustomerService", "SocialConfigService", "userConstant", "formValidations", "CommonService", '$timeout', 'SweetAlert', function ($scope, $state, toaster, $modal, $window, CustomerService, SocialConfigService, userConstant, formValidations, CommonService, $timeout, SweetAlert) {
 
     $scope.tableView = 'list';
     $scope.itemPerPage = 100;
     $scope.showPages = 15;
+    $scope.selectAllChecked = false;
+    $scope.tagsBulkAction = {};
 
     if (!$state.current.sort) {
       $scope.order = "reverse";
     }
     $scope.formValidations = formValidations;
     $scope.default_image_url = "/admin/assets/images/default-user.png";
+
+    $scope.bulkActionChoices = [{data: 'tags', label: 'Tags'}, {data: 'delete', label: 'Delete'}];
 
     $scope.filterCustomerPhotos = function (customers) {
       _.each(customers, function (customer) {
@@ -58,11 +62,11 @@
                 tempTags.push(tag);
           });
           if(tempTags)
-            customer.tempTags = _.uniq(tempTags); 
+            customer.tempTags = _.uniq(tempTags);
         });
         $scope.customers = customers;
         // In case customer is created from simple form component.
-        if($scope.customers.length > 0){          
+        if($scope.customers.length > 0){
           $scope.minRequirements = true;
         }
         if ($state.current.sort) {
@@ -280,7 +284,7 @@
           if(_bottomline && _topline){
             separator = ", "
           }
-          if (_topline) {            
+          if (_topline) {
             return _topline + separator + _bottomline;
           }
           return _bottomline;
@@ -320,7 +324,7 @@
     $scope.customer = {};
     $scope.customer.tags = {};
 
-    
+
 
     $scope.tagToCustomer = function(value) {
      return CustomerService.tagToCustomer(value);
@@ -341,14 +345,14 @@
     };
 
     $scope.addCustomer = function () {
-      
-      $scope.saveLoading = true;      
+
+      $scope.saveLoading = true;
       var tempTags = [];
       _.each($scope.customer.tags, function (tag) {
         tempTags.push(tag.data);
       });
       if(tempTags)
-        tempTags = _.uniq(tempTags);    
+        tempTags = _.uniq(tempTags);
       var matchingCustomer = _.findWhere($scope.customers, {
         bestEmail: $scope.customer.email
       });
@@ -365,7 +369,7 @@
       };
       if($scope.customer.email){
         tempCustomer.details = [];
-        tempCustomer.details.push({          
+        tempCustomer.details.push({
           emails: [{
             _id: CommonService.generateUniqueAlphaNumericShort(),
             email: $scope.customer.email
@@ -379,8 +383,8 @@
         $scope.customer.email = '';
         $scope.duplicateCustomer = false;
         $scope.closeModal();
-       
-        
+
+
         returnedCustomer.bestEmail = $scope.checkBestEmail(returnedCustomer);
         $scope.customers.unshift(returnedCustomer);
         $scope.incrementCustomerTags(returnedCustomer);
@@ -392,7 +396,7 @@
     $scope.incrementCustomerTags = function (contact) {
       var customerTags = $scope.customerTags;
       if(contact){
-        var contactTags = [];                
+        var contactTags = [];
           if (contact.tags) {
             _.each(contact.tags, function (tag) {
               var type = _.find(customerTags, function (type) {
@@ -406,7 +410,7 @@
               }
             });
           }
-        $scope.customerTags = _.uniq(customerTags.concat(contactTags), function(w) { return w.label; })       
+        $scope.customerTags = _.uniq(customerTags.concat(contactTags), function(w) { return w.label; })
       }
     };
 
@@ -527,5 +531,89 @@
     //   }
     // };
 
+    $scope.bulkActionSelectFn = function (choice) {
+        $scope.bulkActionChoice = choice;
+        if (choice.data == 'delete') {
+            SweetAlert.swal({
+                title: "Are you sure?",
+                text: "Do you want to delete the filtered customers?",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Yes, delete it!",
+                cancelButtonText: "No, do not delete it!",
+                closeOnConfirm: true,
+                closeOnCancel: true
+              },
+              function (isConfirm) {
+                if (isConfirm) {
+                    var selectedCustomers = $scope.selectedCustomersFn();
+                    selectedCustomers.forEach(function(sc, sci) {
+                        CustomerService.deleteCustomer(sc._id, function () {});
+                        $scope.customers.splice(_.findIndex($scope.customers, function(c) {return c._id == sc._id; }), 1);
+                        $scope.displayedCustomers.splice(_.findIndex($scope.displayedCustomers, function(c) {return c._id == sc._id; }), 1);
+                    });
+                    $scope.bulkActionChoice = null;
+                    toaster.pop('success', 'Customers Deleted.');
+                } else {
+                 $scope.bulkActionChoice = null;
+                }
+              });
+        }
+
+        if (choice.data == 'tags') {
+            $scope.openSimpleModal('tags-bulk-action-modal');
+        }
+    };
+
+    $scope.selectAllClickFn = function ($event) {
+        $event.stopPropagation();
+        if ($scope.selectAllChecked) {
+            $scope.selectAllChecked = false;
+        } else {
+            $scope.selectAllChecked = true;
+        }
+        $scope.displayedCustomers.forEach(function(customer, index) {
+            customer.isSelected = $scope.selectAllChecked;
+        });
+    };
+
+    $scope.customerSelectClickFn = function ($event, customer) {
+        $event.stopPropagation();
+        if (customer.isSelected) {
+            customer.isSelected = false;
+        } else {
+            customer.isSelected = true;
+        }
+    };
+
+    $scope.selectedCustomersFn = function () {
+        return _.filter($scope.displayedCustomers, function(customer) { return customer.isSelected; });
+    };
+
+    $scope.tagsBulkActionClickFn = function (operation) {
+        var selectedCustomers = $scope.selectedCustomersFn();
+        var tags = _.uniq(_.pluck($scope.tagsBulkAction.tags, 'data'));
+
+        selectedCustomers.forEach(function(customer, index) {
+            if (operation == 'add') {
+                if ($scope.tagsBulkAction.toReplace) {
+                    customer.tags = tags;
+                } else {
+                    customer.tags = customer.tags.concat(tags);
+                }
+            }
+
+            if (operation == 'remove') {
+                customer.tags = _.difference(customer.tags, tags);
+            }
+
+            CustomerService.saveCustomer(customer, function() {});
+        });
+
+        $scope.tagsBulkAction = {};
+        $scope.closeModal();
+        toaster.pop('success', 'Customers tags updated.');
+    };
   }]);
 }(angular));

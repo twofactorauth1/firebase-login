@@ -9897,6 +9897,26 @@ Social Icons
 .social-icons ul li.social-authorize a:after {
   background: #5fabe4;
 }
+.social-icons .btn-icon-stripe {
+  background: #000000;
+  opacity: 0.8;
+}
+.social-icons .btn-icon-paypal {
+  background: #003087;
+  opacity: 0.8;
+}
+.social-icons .btn-icon-facebook {
+  background: #3B5998;
+  opacity: 0.8;
+}
+.social-icons .btn-icon-twitter {
+  background: #48C4D2;
+  opacity: 0.8;
+}
+.social-icons .btn-icon-google-plus {
+  background: #DD4B39;
+  opacity: 0.8;
+}
 .btn-scroll {
   position: relative;
   overflow: hidden;
@@ -11676,19 +11696,6 @@ ssb-topbar .ui-select-match-text > small {
   -moz-column-gap: 500px;
   -webkit-column-gap: 500px;
   column-gap: 500px;
-}
-[class*="ssb-component-layout-columns-"] {
-  padding: 1em;
-}
-[class*="ssb-component-layout-columns-"] .inner-page {
-  display: inline-block !important;
-  padding: 0!important;
-  min-height: 200px;
-}
-[class*="ssb-component-layout-columns-"] .col-xs-12 {
-  float: none!important;
-  padding-left: 0!important;
-  padding-right: 0!important;
 }
 /*
  * OVERRIDES FOR LEGACY COMPONENT STYLES
