@@ -11,10 +11,12 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
             scope.showPaypalLoading = false;
             scope.showPaypalErrorMsg = false;
             //cookie data fetch
+            scope.cartDetails = [];
             var cookieKey = 'cart_cookie';
             var orderCookieKey = 'order_cookie';
             var cookieData = localStorageService.get(cookieKey);
             var orderCookieData = localStorageService.get(orderCookieKey);
+
             //assign and hold the checkout modal state
             scope.checkoutModalState = 1;
             //default newContact object for checkout modal
@@ -110,11 +112,9 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 cookieProcessFn();
             });
 
-            scope.$watch(function() {
-                return CartDetailsService.items
-            }, function(items) {
-                scope.cartDetails = items
-            });
+            scope.$watch('cartDetails', function() {
+                CartDetailsService.items = scope.cartDetails;
+            }, true);
 
 
             scope.itemClicked = function(item) {
@@ -520,7 +520,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 });
 
 
-                CartDetailsService.items = filteredItems;
+                scope.cartDetails = filteredItems;
 
                 scope.calculateTotalChargesfn();
             };
@@ -748,7 +748,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                     scope.checkoutModalState = 7;
                     localStorageService.set(orderCookieKey, data);
                     scope.paypalKey = data.payment_details.payKey;
-                    CartDetailsService.items = [];
+                    scope.cartDetails = [];
 
 
                     scope.subTotal = 0;
@@ -969,7 +969,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                         }
                         console.log('order, ', order);
                         scope.checkoutModalState = 5;
-                        CartDetailsService.items = [];
+                        scope.cartDetails = [];
 
 
                         scope.subTotal = 0;

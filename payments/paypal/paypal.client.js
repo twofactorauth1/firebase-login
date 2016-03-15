@@ -13,7 +13,8 @@ var paypalSdk = new Paypal({
     userId:    config.PAYPAL_API_USERNAME,
     password:  config.PAYPAL_API_PASSWORD,
     signature: config.PAYPAL_API_SIGNATURE,
-    sandbox:   true //defaults to false
+    sandbox:   config.PAYPAL_SANDBOX,
+    appId:     config.PAYPAL_APP_ID
 });
 
 module.exports = {
