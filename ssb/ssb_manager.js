@@ -1635,48 +1635,81 @@ module.exports = {
 
     },
 
+    /**
+     * Remove helper classes and attributes from editor markup
+     *
+     * - get page sections
+     * - call processHTML on each component
+     * - processHTML recurses through data where we might have HTML
+     * - if item looks like it would be HTML markup, remove the stuff
+     * - save "clean" sections back onto page
+     */
     cleanEditorHTML: function(page) {
         var sections = page.get('sections');
         var classesToRemove = 'ng-scope ssb-theme-btn-active-element';
         var attributesToRemove = 'data-compiled';
-        var classesToRemoveRegex = new RegExp(classesToRemove.replace(' ' , '|'), 'gi');
-        var attributesToRemoveRegex = new RegExp(attributesToRemove.replace(' ' , '|'), 'gi');
         var ignoreKeys = ['_id'];
 
-        function processHTML(component) {
+        function processHTML(dataObject) {
 
-            _.reduce(component, function(memo, value, key) {
+            return _.each(dataObject, function(value, key, obj) {
 
-                if (typeof value === 'string' &&
-                    value.indexOf(classesToRemoveRegex) !== -1 &&
-                    value.indexOf(attributesToRemoveRegex) !== -1 &&
-                    ignoreKeys.indexOf(key) === -1) {
+                var isString = typeof value === 'string';
+                var isGoodKey = ignoreKeys.indexOf(key) === -1;
 
-                    debugger;
+                if (isString && isGoodKey) {
 
-                    $ = cheerio.load(value);
-                    console.log($('*').html());
-                    return memo[key] = value;
+                    // $ = cheerio.load(value);
+                    $ = cheerio.load('<div id="temp_wrap"></div>');
+                    $('#temp_wrap').append(value);
+                    var $classSelection = $(classesToRemove.split(' ').map(function(c) { return '.' + c }).join(', '));
+                    var $attrSelection = $(attributesToRemove.split(' ').map(function(a) { return '[' + a + ']'; }).join(', '));
+                    var hasClass = $classSelection.length > 0;
+                    var hasAttr = $attrSelection.length > 0;
+
+                    // console.log('hasClass', hasClass);
+                    // console.log('hasAttr', hasAttr);
+
+                    if (hasClass || hasAttr) {
+
+                        var htmlString = '';
+
+                        // console.log('before ::', $('#temp_wrap').html());
+
+                        $('#temp_wrap').find('.ssb-theme-btn')
+                            .removeClass(classesToRemove)
+                            .removeAttr(attributesToRemove);
+                        // console.log('after ::', $('#temp_wrap').html());
+
+                        htmlString = $('#temp_wrap').html();
+
+                        if (htmlString.length) {
+                            obj[key] = htmlString;
+                        }
+                    }
 
                 } else if(value !== null && typeof value !== 'boolean' && typeof value !== 'string' && typeof value !== 'number') {
-                    // debugger;
-                    return processHTML(value);
 
-                } else {
-
-                    return memo;
+                    processHTML(value);
 
                 }
 
-            }, {});
+            });
         }
 
         _(sections)
             .chain()
-            .pluck('components')
-            .flatten()
-            .each(processHTML)
+            .each(function(section) {
+                _(section.components)
+                    .chain()
+                    .each(processHTML)
+                    .value();
+            })
             .value();
+
+        if (sections.length) {
+            page.set('sections', sections);
+        }
 
         return page;
 

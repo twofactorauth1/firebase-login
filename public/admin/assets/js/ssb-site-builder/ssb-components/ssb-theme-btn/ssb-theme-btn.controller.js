@@ -72,20 +72,27 @@ function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude,
     //         updateTextEditor(true);
     //     }
     // });
+    var pvmActiveElement = $scope.$watch('pvm.uiState.activeElement', function(value) {
+        console.log('pvm.uiState.activeElement', pvm.uiState.activeElement);
+    });
 
 
 
     function buildDataObjFromHTML() {
-        var el = SimpleSiteBuilderService.getCompiledElement(parentComponent.attr('id'), parentEditorId, elementId);
-        if(el){
-            var style = el[0].style;
-            var data = {
-                id: 'button-element_' + elementId,
-                _id: 'button-element_' + elementId,
-                anchor: 'button-element_' + elementId,
-                'bg': {},
-                'spacing': {}
-            };
+        // var el = SimpleSiteBuilderService.getCompiledElement(parentComponent.attr('id'), parentEditorId, elementId);
+        var ssbStyle = vm.element.attr('data-ssb-style');
+        var ssbClass = vm.element.attr('data-ssb-class');
+        var data = {
+            id: 'button-element_' + elementId,
+            _id: 'button-element_' + elementId,
+            anchor: 'button-element_' + elementId,
+            'bg': {},
+            'spacing': {}
+        };
+
+        if (ssbStyle) {
+            var styleEl = $('<div style="' + ssbStyle + '"></div>');
+            var style = styleEl.get(0).style;
             var bgcolor = style.backgroundColor;
             var txtcolor = style.color;
             var visibility = style.display !== 'none';
@@ -111,11 +118,20 @@ function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude,
             data.spacing.mr = spacingMR;
             data.spacing.mb = spacingMB;
             data.spacing.mw = spacingMW;
-
-            angular.extend(vm.elementData, data);
         }
 
+        if (ssbClass) {
+            try {
+                var classObj = JSON.parse(ssbClass);
+            } catch(e) {};
+
+            console.log('classObj', classObj);
+        }
+
+        angular.extend(vm.elementData, data);
+
         buildDataObjFromHTMLDone = true;
+
     }
 
     function updateTextEditor(force) {
@@ -149,12 +165,19 @@ function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude,
         var classObj = {};
        // var el = SimpleSiteBuilderService.getCompiledElement(parentComponent.attr('id'), parentEditorId, elementId);
 
-        classObj['ssb-' + vm.elementData.type] = true;
+        classObj[vm.elementData.type] = true;
+
+        classObj['ssb-hide-during-load'] = !buildDataObjFromHTMLDone;
+
+        if (vm.element) {
+            vm.element.attr('data-ssb-class', JSON.stringify(classObj));
+        }
 
         return classObj;
     }
 
     function elementStyle() {
+
         var styleString = ' ';
         var component = vm.elementData;
 
@@ -220,6 +243,10 @@ function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude,
                 styleString += 'background-image: url("' + component.bg.img.url + '")';
             }
 
+        }
+
+        if (vm.element) {
+            vm.element.attr('data-ssb-style', styleString);
         }
 
         return styleString;
@@ -337,42 +364,42 @@ function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude,
 
         console.info('ssb-theme-btn directive init...');
 
-        $timeout(function() {
+        vm.element = element;
 
-            if (pvm && element.data('compiled')) {
+        if (pvm && element.data('compiled')) {
 
-                elementId = element.data('compiled');
+            elementId = element.data('compiled');
 
-                parentComponent = element.closest('[component]');
+            parentComponent = element.closest('[component]');
 
-                parentEditor = element.closest('.editable');
+            parentEditor = element.closest('.editable');
 
-                parentEditorId = parentEditor.froalaEditor().data('froala.editor').id;
+            parentEditorId = parentEditor.froalaEditor().data('froala.editor').id;
 
-                buildDataObjFromHTML();
+            buildDataObjFromHTML();
 
-                angular.element('[data-compiled=' + elementId + ']').on('click', showEditControl);
+            $timeout(function() {
+                angular.element(parentComponent).on('click', '[data-compiled=' + elementId + ']', showEditControl);
 
-                angular.element('[data-compiled-control-id=control_' + elementId + ']').on('click', setActiveElementId);
+                angular.element(parentComponent).on('click', '[data-compiled-control-id=control_' + elementId + ']', setActiveElementId);
 
                 angular.element('.ssb-page-section').on('click', clearActiveElement);
+            });
 
-            } else {
+        } else {
 
-                console.log('button outside of editor context: ', element.html());
+            console.log('button outside of editor context: ', element.html());
 
-                /**
-                 *  unbind watchers for inactive .ssb-theme-btn's
-                 */
-                vm.elementClass = angular.noop();
+            /**
+             *  unbind watchers for inactive .ssb-theme-btn's
+             */
+            vm.elementClass = angular.noop();
 
-                watchElementData();
+            watchElementData();
 
-                pvmStateLoading();
+            // pvmStateLoading();
 
-            }
-
-        });
+        }
 
     }
 
