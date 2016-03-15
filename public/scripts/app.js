@@ -34,11 +34,11 @@ var mainApp = angular
         "truncate",
         'angular-jqcloud',
         '720kb.socialshare',
-        'slick',
-        'ngMap',
+        'slick',        
         'wu.masonry',
         'slugifier',
-        'LocalStorageModule'
+        'LocalStorageModule',
+        'ngMap'
     ])
     .config(['$routeProvider', '$locationProvider', '$httpProvider', 'localStorageServiceProvider', function ($routeProvider, $locationProvider, $httpProvider, localStorageServiceProvider) {
         //$locationProvider.html5Mode(true);
