@@ -31,7 +31,8 @@ app.directive('simpleFormComponent',["formValidations", function (formValidation
         
         if(scope.component.formSettings && scope.component.formSettings.fieldsPerRow){
           classString = "col-sm-" + Math.floor(12/scope.component.formSettings.fieldsPerRow);
-          scope.nthRow = 'nthRow' + scope.component.formSettings.fieldsPerRow;
+          if(scope.component.formSettings.spacing && scope.component.formSettings.spacing.pr)
+            scope.nthRow = 'nthRow' + scope.component.formSettings.fieldsPerRow;
         }
         return classString;
       };
