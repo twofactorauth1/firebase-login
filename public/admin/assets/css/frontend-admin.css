@@ -8310,6 +8310,27 @@ body[ng-controller] .fr-popup .fr-buttons {
 .ssb-table-white-border {
   border: 1px double #fff!important;
 }
+.ssb-editor-style-line-height-small-1 {
+  line-height: .5em;
+}
+.ssb-editor-style-line-height-small-2 {
+  line-height: .85em;
+}
+.ssb-editor-style-line-height-1 {
+  line-height: 1em;
+}
+.ssb-editor-style-line-height-2 {
+  line-height: 1.25em;
+}
+.ssb-editor-style-line-height-3 {
+  line-height: 1.5em;
+}
+.ssb-editor-style-line-height-4 {
+  line-height: 1.75em;
+}
+.ssb-editor-style-line-height-5 {
+  line-height: 2em;
+}
 /*
  * Code originally auto-generated from https://www.froala.com/wysiwyg-editor/customize
  * - replaced .custom-theme class with bodybody[ng-controller] selector
