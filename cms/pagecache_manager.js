@@ -419,7 +419,7 @@ module.exports = {
         };
         if(typeof lookup[type] !== 'function') {
             console.log('ERROR: could not find matching directive for component.type =' + type);
-            lookup['text-only']();
+            return lookup['text-only']();
         }
         return lookup[type]();
     }
