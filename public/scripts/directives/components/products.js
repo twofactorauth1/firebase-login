@@ -11,7 +11,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
             scope.showPaypalLoading = false;
             scope.showPaypalErrorMsg = false;
             //cookie data fetch
-            scope.cartDetails = [];
+
             var cookieKey = 'cart_cookie';
             var orderCookieKey = 'order_cookie';
             var cookieData = localStorageService.get(cookieKey);
@@ -30,6 +30,23 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
             scope.hasSubscriptionProduct = false;
             scope.paypalURL = $sce.trustAsResourceUrl(ENV.paypalCheckoutURL);
             console.log('url:', scope.paypalURL);
+            scope.taxPercent = 0;
+
+            scope.calculateTotalChargesfn = CartDetailsService.calculateTotalCharges;
+
+            scope.$watch(function() {
+                return CartDetailsService;
+            }, function() {
+                console.log('watch');
+                scope.total = CartDetailsService.total;
+                scope.subTotal = CartDetailsService.subTotal;
+                scope.totalTax = CartDetailsService.totalTax;
+                scope.showTax = CartDetailsService.showTax;
+                scope.taxPercent = CartDetailsService.taxPercent;
+                scope.showNotTaxed = CartDetailsService.showNotTaxed;
+                scope.numItems = CartDetailsService.items.length;
+                scope.cartDetails = CartDetailsService.items;
+            }, true);
 
 
             /*
@@ -58,25 +75,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 }
             }
 
-            /*
-             * @checkOnSale
-             * - check if today is inbetween sales dates
-             */
 
-            function checkOnSale(_product) {
-                if (_product.on_sale) {
-                    if (_product.sale_date_from && _product.sale_date_to) {
-                        var date = new Date();
-                        var startDate = new Date(_product.sale_date_from);
-                        var endDate = new Date(_product.sale_date_to);
-                        if (startDate <= date && date <= endDate) {
-                            return true; //false in this case
-                        }
-                        return false;
-                    }
-                    return true;
-                }
-            }
 
             /*
              * @filterProducts
@@ -87,7 +86,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 var _filteredProducts = [];
                 _.each(data, function(product) {
                     if (filterTags(product)) {
-                        if (checkOnSale(product)) {
+                        if (CartDetailsService.checkOnSale(product)) {
                             product.onSaleToday = true;
                         }
                         _filteredProducts.push(product);
@@ -112,15 +111,12 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 cookieProcessFn();
             });
 
-            scope.$watch('cartDetails', function() {
-                CartDetailsService.items = scope.cartDetails;
-            }, true);
 
 
             scope.itemClicked = function(item) {
                 var returnValue = false;
-                if (item && scope.cartDetails) {
-                    var clicked = _.find(scope.cartDetails, function(product) {
+                if (item && CartDetailsService.items) {
+                    var clicked = _.find(CartDetailsService.items, function(product) {
                         return product._id === item._id;
                     });
                     returnValue = clicked ? true : false;
@@ -136,20 +132,20 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
             scope.getTax = function(postcode, fn) {
                 ProductService.getTax(postcode, function(taxdata) {
                     if (taxdata.results[0] && taxdata.results[0].taxSales) {
-                        scope.showTax = true;
+                        CartDetailsService.showTax = true;
                         if ((scope.settings.taxbased === 'business_location') || (!scope.settings.taxnexus) || (scope.settings.taxnexus && scope.settings.taxnexus.length == 0) || (scope.settings.taxnexus && _.pluck(scope.settings.taxnexus, "text").indexOf(taxdata.results[0].geoState) > -1)) {
                             console.debug('Nexus location - taxable: ', taxdata.results[0].geoState);
-                            scope.taxPercent = parseFloat(taxdata.results[0].taxSales * 100).toFixed(2);
+                            CartDetailsService.taxPercent = parseFloat(taxdata.results[0].taxSales * 100).toFixed(2);
                         } else {
                             console.debug('Non Nexus location - not taxable: ', taxdata.results[0].geoState);
-                            scope.taxPercent = 0.00; // Show 0% for non-nexus locations - force think/rethink by client
+                            CartDetailsService.taxPercent = 0.00; // Show 0% for non-nexus locations - force think/rethink by client
                         }
                         if (fn) {
-                            fn(scope.taxPercent);
+                            fn(CartDetailsService.taxPercent);
                         }
                     } else {
                         scope.invalidZipCode = true;
-                        scope.showTax = false;
+                        CartDetailsService.showTax = false;
                     }
                 });
             };
@@ -159,8 +155,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
              * - fetch the user tax preferences for calculations
              */
 
-            scope.taxPercent = 0;
-            scope.showTax = false;
+
 
             AccountService(function(err, account) {
                 if (err) {
@@ -223,17 +218,17 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                     if (postcode && scope.settings.taxes && scope.settings.taxbased !== 'business_location') {
                         scope.calculatingTax = true;
                         scope.invalidZipCode = false;
-                        scope.showTax = false;
+                        CartDetailsService.showTax = false;
                         scope.getTax(postcode, function() {
                             scope.calculatingTax = false;
-                            scope.showTax = true;
-                            scope.calculateTotalChargesfn();
+                            CartDetailsService.showTax = true;
+                            CartDetailsService.calculateTotalCharges();
                         });
                         console.log('shipping postcode changed ', postcode);
                     }
                 } else {
                     scope.invalidZipCode = true;
-                    scope.showTax = false;
+                    CartDetailsService.showTax = false;
                 }
             };
 
@@ -337,13 +332,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                     return;
                 }
 
-                scope.hasSubscriptionProduct = false;
-                scope.cartDetails.forEach(function (item, index) {
-                    if (item.type == "SUBSCRIPTION") {
-                        scope.hasSubscriptionProduct = true;
-                    }
-                });
-                if (scope.hasSubscriptionProduct) {
+                if (CartDetailsService.hasSubscriptionProduct) {
                     scope.checkoutModalState = 3;
                 } else {
                     if (scope.stripeInfo && scope.paypalInfo) {
@@ -474,23 +463,53 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                         return item._id === product._id;
                     });
                 }
-                if (!productMatch.quantity) {
-                    productMatch.quantity = 1;
-                }
-                if (scope.cartDetails.indexOf(productMatch) === -1) {
-                    productMatch.quantity = 1;
+                if(productMatch) {
+                    if (!productMatch.quantity) {
+                        productMatch.quantity = 1;
+                    }
+                    if (CartDetailsService.items.indexOf(productMatch) === -1) {
+                        productMatch.quantity = 1;
+                    }
+
+                    var match = _.find(CartDetailsService.items, function(item) {
+                        return item._id === productMatch._id;
+                    });
+                    if (match) {
+                        match.quantity = parseInt(match.quantity, 10) + 1;
+                    } else {
+                        CartDetailsService.addItemToCart(productMatch);
+                    }
                 }
 
-                var match = _.find(scope.cartDetails, function(item) {
-                    return item._id === productMatch._id;
-                });
-                if (match) {
-                    match.quantity = parseInt(match.quantity, 10) + 1;
+            };
+
+
+
+            scope.reloadCartDetails = function(product, variation, quantity) {
+                var productMatch = '';
+                if (variation) {
+                    productMatch = variation;
+                    productMatch.variation = true;
+                    productMatch.name = product.name;
                 } else {
-                    CartDetailsService.addItemToCart(productMatch);
+                    productMatch = _.find(scope.products, function(item) {
+                        return item._id === product._id;
+                    });
+                }
+                if(productMatch) {
+                    productMatch.quantity = quantity;
+
+                    var match = _.find(CartDetailsService.items, function(item) {
+                        return item._id === productMatch._id;
+                    });
+                    if (match) {
+                        match.quantity = parseInt(match.quantity, 10) + quantity;
+                    } else {
+                        CartDetailsService.addItemToCart(productMatch);
+                    }
+
                 }
 
-                scope.calculateTotalChargesfn();
             };
 
             /*
@@ -511,18 +530,8 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                     localStorageService.set(cookieKey, cookieData);
                 }
 
-                var filteredItems = _.filter(scope.cartDetails, function(item) {
-                    return item._id !== product._id;
-                });
+                CartDetailsService.removeItemFromCart(product);
 
-                var productMatch = _.find(scope.products, function(item) {
-                    return item._id === product._id;
-                });
-
-
-                scope.cartDetails = filteredItems;
-
-                scope.calculateTotalChargesfn();
             };
 
             scope.checkCardNumber = function() {
@@ -566,34 +575,6 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                 //   alert('our form is amazing');
                 //   checkoutModalState = 3
                 // }
-            };
-
-            /*
-             * @calculateTotalChargesfn
-             * - calculate the total based on products in cart
-             */
-
-            scope.calculateTotalChargesfn = function() {
-                var _subTotal = 0;
-                var _totalTax = 0;
-                // var total = 0;
-                _.each(scope.cartDetails, function(item) {
-                    var _price = item.regular_price;
-                    if (checkOnSale(item)) {
-                        _price = item.sale_price
-                    }
-                    _subTotal = parseFloat(_subTotal) + (parseFloat(_price) * item.quantity);
-                    if (item.taxable && scope.showTax) {
-                        _totalTax += (_price * parseFloat(scope.taxPercent) / 100) * item.quantity;
-                    }
-
-                    if (!item.taxable) {
-                        scope.showNotTaxed = true;
-                    }
-                });
-                scope.subTotal = _subTotal;
-                scope.totalTax = _totalTax;
-                scope.total = _subTotal + _totalTax;
             };
 
 
@@ -678,7 +659,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                     "cart_tax": 0,
                     "currency": "usd",
                     "line_items": [], // { "product_id": 31, "quantity": 1, "variation_id": 7, "subtotal": "20.00", "tax_class": null, "sku": "", "total": "20.00", "name": "Product Name", "total_tax": "0.00" }
-                    "total_line_items_quantity": scope.cartDetails.length,
+                    "total_line_items_quantity": CartDetailsService.items.length,
                     "payment_details": {
                         "method_title": 'Credit Card Payment', //Check Payment, Credit Card Payment
                         "method_id": 'cc', //check, cc
@@ -716,7 +697,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                     },
                     "notes": []
                 };
-                _.each(scope.cartDetails, function(item) {
+                _.each(CartDetailsService.items, function(item) {
                     var totalAmount = item.regular_price * item.quantity;
                     var _item = {
                         "product_id": item._id,
@@ -748,12 +729,12 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                     scope.checkoutModalState = 7;
                     localStorageService.set(orderCookieKey, data);
                     scope.paypalKey = data.payment_details.payKey;
-                    scope.cartDetails = [];
+                    CartDetailsService.items = [];
 
 
-                    scope.subTotal = 0;
-                    scope.totalTax = 0;
-                    scope.total = 0;
+                    CartDetailsService.subTotal = 0;
+                    CartDetailsService.totalTax = 0;
+                    CartDetailsService.total = 0;
                     localStorageService.remove(cookieKey);
                     // PaymentService.saveCartDetails(token, parseInt(scope.total * 100), function(data) {});
                 });
@@ -899,12 +880,12 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                         "cart_discount": 0,
                         "total_discount": 0,
                         "total_shipping": 0,
-                        "total_tax": formatNum(scope.totalTax),
+                        "total_tax": formatNum(CartDetailsService.totalTax),
                         "shipping_tax": 0,
                         "cart_tax": 0,
                         "currency": "usd",
                         "line_items": [], // { "product_id": 31, "quantity": 1, "variation_id": 7, "subtotal": "20.00", "tax_class": null, "sku": "", "total": "20.00", "name": "Product Name", "total_tax": "0.00" }
-                        "total_line_items_quantity": scope.cartDetails.length,
+                        "total_line_items_quantity": CartDetailsService.items.length,
                         "payment_details": {
                             "method_title": 'Credit Card Payment', //Check Payment, Credit Card Payment
                             "method_id": 'cc', //check, cc
@@ -942,7 +923,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                         },
                         "notes": []
                     };
-                    _.each(scope.cartDetails, function(item) {
+                    _.each(CartDetailsService.items, function(item) {
                         var totalAmount = item.regular_price * item.quantity;
                         var _item = {
                             "product_id": item._id,
@@ -969,12 +950,12 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                         }
                         console.log('order, ', order);
                         scope.checkoutModalState = 5;
-                        scope.cartDetails = [];
+                        CartDetailsService.items = [];
 
 
-                        scope.subTotal = 0;
-                        scope.totalTax = 0;
-                        scope.total = 0;
+                        CartDetailsService.subTotal = 0;
+                        CartDetailsService.totalTax = 0;
+                        CartDetailsService.total = 0;
                         localStorageService.remove(cookieKey);
                         // PaymentService.saveCartDetails(token, parseInt(scope.total * 100), function(data) {});
                     });
@@ -1012,7 +993,7 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
                                 scope.checkoutModalState = 1;
                                 scope.newContact = {};
                                 clearCardDetails();
-                                scope.showTax = false;
+                                CartDetailsService.showTax = false;
                             }
                         });
                     }, 0);
@@ -1179,10 +1160,9 @@ app.directive('productsComponent', ['$timeout', 'paymentService', 'productServic
             var cookieProcessFn = function() {
                 console.log('Cookie Data', cookieData);
                 cookieData.products.forEach(function(entry, index) {
-                    scope.addDetailsToCart(false, entry.product, entry.variation);
-                    scope.cartDetails[index].quantity = entry.quantity;
+                    scope.reloadCartDetails(entry.product, entry.variation, entry.quantity);
                 });
-                scope.calculateTotalChargesfn();
+                CartDetailsService.calculateTotalCharges();
 
                 if (cookieData.state) {
                     scope.checkoutModalState = cookieData.state;
