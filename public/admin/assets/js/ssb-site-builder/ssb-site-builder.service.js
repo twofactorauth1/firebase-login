@@ -1222,12 +1222,14 @@
         }
 
         function getCompiledElement(componentId, editorId, elementId) {
-            return ssbService.compiledElements[componentId] &&
-                    ssbService.compiledElements[componentId][editorId] &&
-                    ssbService.compiledElements[componentId][editorId][elementId];
+            return angular.element('#' + componentId + ' [data-compiled=' + elementId + ']');
+            // return ssbService.compiledElements[componentId] &&
+            //         ssbService.compiledElements[componentId][editorId] &&
+            //         ssbService.compiledElements[componentId][editorId][elementId];
         }
 
         function getCompiledElementEditControl(componentId, editorId, elementId) {
+            // return angular.element('#' + componentId + ' [data-compiled-control-id=control_' + elementId + ']');
             return ssbService.compiledElementEditControls[componentId] &&
                     ssbService.compiledElementEditControls[componentId][editorId] &&
                     ssbService.compiledElementEditControls[componentId][editorId][elementId];
