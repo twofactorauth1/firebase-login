@@ -542,7 +542,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
                     var diff2 = jsondiff1[i].rhs;
 
                     var dataCompiledAdded = angular.isDefined(diff1) && angular.isDefined(diff1.indexOf) && diff1.indexOf('data-compiled') === -1 && angular.isDefined(diff2) && angular.isDefined(diff2.indexOf) && diff2.indexOf('data-compiled') !== -1;
-                    var dataCompiledRemoved = angular.isDefined(diff1) && angular.isDefined(diff1.indexOf) && diff1.indexOf('data-compiled') !== -1 && angular.isDefined(diff2) angular.isDefined(diff2.indexOf) && diff2.indexOf('data-compiled') === -1;
+                    var dataCompiledRemoved = angular.isDefined(diff1) && angular.isDefined(diff1.indexOf) && diff1.indexOf('data-compiled') !== -1 && angular.isDefined(diff2) && angular.isDefined(diff2.indexOf) && diff2.indexOf('data-compiled') === -1;
 
                     if (dataCompiledAdded || dataCompiledRemoved) {
 
