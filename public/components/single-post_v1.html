@@ -34,7 +34,7 @@
                                 <div ng-if="isEditing" class="post_text_div">
                                     <div elem ng-model="blog.post.post_author"></div>
                                 </div>
-                                <a ng-if="!isEditing" href="/author/{{blog.post.post_author}}">{{blog.post.post_author}}</a>
+                                <a ng-bind-html="blog.post.post_author" ng-if="!isEditing" href="/author/{{blog.post.post_author}}"></a>
                             </div>
                             <div class="single-post-category" ng-if="blog.post.post_category">
                                 in

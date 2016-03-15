@@ -31,7 +31,7 @@
                                      • {{blogpost.publish_date || blogpost.created.date | date: 'MM/dd/yyyy'}}
                                     </span>
                                     <span data-ng-if="blogpost.post_author">
-                                       Posted by <a href="/author/{{blogpost.post_author}}">{{blogpost.post_author}}</a>
+                                       Posted by <a ng-bind-html="blogpost.post_author" href="/author/{{blogpost.post_author}}"></a>
                                     </span>
                                     <span data-ng-if="blogpost.post_category">
                                       in <a href="/category/{{blogpost.post_category}}">{{blogpost.post_category}}</a>
