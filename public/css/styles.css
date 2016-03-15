@@ -10400,6 +10400,9 @@ div[class^="spacing-"] input {
 .ssb-theme-btn-style-1 {
   background: blue;
 }
+.ssb-hide-during-load {
+  opacity: 0;
+}
 .ssb-sidebar {
   background: #131e26;
 }
@@ -11790,6 +11793,7 @@ ssb-topbar #ssb-froala-scrollable-container {
   text-align: inherit!important;
   color: inherit;
   overflow: hidden;
+  padding: 4px;
 }
 .fr-wrapper ::selection {
   background: rgba(21, 86, 103, 0.5) !important;
@@ -11890,9 +11894,19 @@ body[ng-controller] .fr-image-progress-bar-layer > h3 {
 body[ng-controller] .fr-popup .fr-buttons {
   white-space: normal;
 }
+.ssb-table-transparent-border {
+  border: 1px double transparent!important;
+}
+.ssb-table-black-border {
+  border: 1px double #000!important;
+}
+.ssb-table-white-border {
+  border: 1px double #fff!important;
+}
 /*
- * Code auto-generated from https://www.froala.com/wysiwyg-editor/customize
+ * Code originally auto-generated from https://www.froala.com/wysiwyg-editor/customize
  * - replaced .custom-theme class with bodybody[ng-controller] selector
+ * - changed various styles to match out design
  */
 body[ng-controller] a.fr-floating-btn {
   -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
@@ -11927,6 +11941,10 @@ body[ng-controller] .fr-visible a.fr-floating-btn {
   -moz-transform: scale(1);
   -ms-transform: scale(1);
   -o-transform: scale(1);
+}
+body[ng-controller] .fr-dii,
+body[ng-controller] .fr-dib {
+  max-width: 100%;
 }
 body[ng-controller] .fr-tooltip {
   border-radius: 2px;

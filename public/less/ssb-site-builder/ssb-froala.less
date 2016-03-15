@@ -95,6 +95,7 @@ ssb-topbar #ssb-froala-scrollable-container {
     text-align: inherit!important;
     color: inherit;
     overflow: hidden;
+    padding: 4px;
 }
 
 .fr-wrapper ::selection {
@@ -245,9 +246,30 @@ body[ng-controller] .fr-popup .fr-buttons {
     white-space: normal;
 }
 
+.ssb-table-transparent-border {
+    border: 1px double transparent!important;
+}
+.ssb-table-black-border {
+    border: 1px double #000!important;
+}
+.ssb-table-white-border {
+    border: 1px double #fff!important;
+}
+
+
+
+
+
+
+
+
+
+
+
 /*
- * Code auto-generated from https://www.froala.com/wysiwyg-editor/customize
+ * Code originally auto-generated from https://www.froala.com/wysiwyg-editor/customize
  * - replaced .custom-theme class with bodybody[ng-controller] selector
+ * - changed various styles to match out design
  */
 // body[ng-controller] .fr-view table td,
 // body[ng-controller] .fr-view table th {
@@ -299,6 +321,12 @@ body[ng-controller] .fr-visible a.fr-floating-btn {
   -ms-transform: scale(1);
   -o-transform: scale(1);
 }
+
+body[ng-controller] .fr-dii,
+body[ng-controller] .fr-dib {
+    max-width: 100%;
+}
+
 // body[ng-controller] img.fr-dib {
 //   margin-top: 5px;
 //   margin-bottom: 5px;

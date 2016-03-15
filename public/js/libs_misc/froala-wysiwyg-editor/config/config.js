@@ -101,7 +101,15 @@ $.FroalaEditor.config = {
         mode: 'text/html',
         tabMode: 'indent',
         tabSize: 2
-    }
+    },
+    tableEditButtons: ['tableHeader', 'tableRemove', 'tableRows', 'tableColumns', 'tableStyle', 'tableCells', 'tableCellBackground', 'tableCellVerticalAlign', 'tableCellHorizontalAlign', 'tableCellStyle'],
+    tableCellStyles: {
+        'ssb-table-transparent-border': 'Clear Border',
+        'ssb-table-black-border': 'Black Border',
+        'ssb-table-white-border': 'White Border'
+    },
+    tableColors: [].concat.apply([], spectrumColors),
+    tableColorsStep: 10
     // imageUploadToS3: {
     //     bucket: 'indigenous-digital-assets',
     //     region: 's3',
