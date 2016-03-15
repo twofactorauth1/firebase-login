@@ -7154,14 +7154,15 @@ div[class^="spacing-"] input {
   position: fixed;
   top: 145px;
   right: 35px;
-  background: white;
-  box-shadow: 4px 4px 11px 1px rgba(0, 0, 0, 0.4);
-  border-radius: 5px;
+  background: transparent;
+  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.65);
+  border-radius: 14px;
   font-size: 12px;
   max-height: calc(100% - 182px);
   overflow: auto;
   overflow-x: hidden;
   width: 300px;
+  border: 10px solid rgba(255, 255, 255, 0.15);
 }
 @media (max-width: 767px) {
   .ssb-sidebar-section-panel {
@@ -7179,11 +7180,24 @@ div[class^="spacing-"] input {
   background: #1c2b36;
   color: white;
   border-top: 0 none;
+  font-weight: 600;
 }
 .ssb-sidebar-section-panel.draggable > .ssb-sidebar-sub-heading i {
   cursor: pointer;
+  font-size: 14px;
+  line-height: 1;
+  height: 100%;
+  position: relative;
+  top: -2px;
+  margin: 0 .85em 0 .25em;
+}
+.ssb-sidebar-section-panel.draggable > .close-panel {
+  top: -1px;
+  right: 1em;
+  cursor: pointer;
+  font-size: 16px;
   color: white;
-  font-size: .85em;
+  line-height: 3.5em;
 }
 .ssb-sidebar-section-panel .close {
   position: absolute;
@@ -7205,11 +7219,15 @@ div[class^="spacing-"] input {
 .ssb-sidebar-section-panel .ssb-sidebar-item-section-actions {
   background: #1c2b36;
   color: white;
+  padding-left: 0;
+  padding-right: 0;
 }
 .ssb-sidebar-section-panel .ssb-sidebar-item-section-actions .ssb-sidebar-item-icon {
   position: static;
   display: inline-block;
   padding: 1em;
+  font-size: 14px!important;
+  font-weight: 600;
 }
 .ssb-sidebar-section-panel .loadingNavigation {
   min-height: 200px;
@@ -7225,9 +7243,11 @@ div[class^="spacing-"] input {
   width: 100%;
   padding: .5em 0;
   text-align: left;
+  color: #454545;
 }
 .ssb-sidebar-section-panel-btn.btn-link:hover {
   text-decoration: none;
+  color: #2d2d2d;
 }
 .ssb-sidebar-section-panel-btn.btn-link i {
   padding-right: .25em;
@@ -7250,6 +7270,7 @@ div[class^="spacing-"] input {
   overflow: auto;
   overflow-x: hidden;
   max-height: calc(100vh - 250px);
+  border-radius: 0px 0px 5px 5px;
 }
 .ssb-sidebar-section-panel-component-panel {
   display: block;
