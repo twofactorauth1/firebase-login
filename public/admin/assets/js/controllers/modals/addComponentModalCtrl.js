@@ -229,7 +229,7 @@ app.controller('AddComponentModalCtrl', ['$scope', '$document', '$modalInstance'
     preview: 'https://s3-us-west-2.amazonaws.com/indigenous-admin/45274f46-0a21-11e5-83dc-0aee4119203c.png',
     filter: 'blog',
     description: 'Used for single post design. This is a mandatory page used to show single posts. This will apply to all posts.',
-    enabled: false
+    enabled: true
   }, {
     title: 'Social',
     type: 'social-link',

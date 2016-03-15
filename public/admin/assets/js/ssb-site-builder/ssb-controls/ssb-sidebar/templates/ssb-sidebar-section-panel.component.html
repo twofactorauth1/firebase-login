@@ -24,14 +24,14 @@
         </span>
 
         <div>
-            <i ng-if="vm.uiState.navigation.sectionPanel.navigationHistory.length > 1" class="ti-arrow-left" ng-click="vm.uiState.navigation.sectionPanel.back();"></i>
+            <i ng-if="vm.uiState.navigation.sectionPanel.navigationHistory.length > 1" class="fa fa-arrow-left" ng-click="vm.uiState.navigation.sectionPanel.back();"></i>
 
             {{vm.uiState.openSidebarSectionPanel.name | cleanType}}
 
         </div>
     </h4>
 
-    <div class="close-panel ti-close" ng-click="vm.closeSectionPanel()"></div>
+    <div class="close-panel fa fa-close" ng-click="vm.closeSectionPanel()"></div>
 
     <div class="ssb-sidebar-section-panel-scrollable">
 

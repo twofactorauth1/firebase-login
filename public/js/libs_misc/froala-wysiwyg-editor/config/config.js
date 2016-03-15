@@ -101,6 +101,23 @@ $.FroalaEditor.config = {
         mode: 'text/html',
         tabMode: 'indent',
         tabSize: 2
+    },
+    tableEditButtons: ['tableHeader', 'tableRemove', 'tableRows', 'tableColumns', 'tableStyle', 'tableCells', 'tableCellBackground', 'tableCellVerticalAlign', 'tableCellHorizontalAlign', 'tableCellStyle'],
+    tableCellStyles: {
+        'ssb-table-transparent-border': 'Clear Border',
+        'ssb-table-black-border': 'Black Border',
+        'ssb-table-white-border': 'White Border'
+    },
+    tableColors: [].concat.apply([], spectrumColors),
+    tableColorsStep: 10,
+    paragraphStyles: {
+        'ssb-editor-style-line-height-small-1': 'Line Height Small 1',
+        'ssb-editor-style-line-height-small-2': 'Line Height Small 2',
+        'ssb-editor-style-line-height-1': 'Line Height 1',
+        'ssb-editor-style-line-height-2': 'Line Height 2',
+        'ssb-editor-style-line-height-3': 'Line Height 3',
+        'ssb-editor-style-line-height-4': 'Line Height 4',
+        'ssb-editor-style-line-height-5': 'Line Height 5',
     }
     // imageUploadToS3: {
     //     bucket: 'indigenous-digital-assets',

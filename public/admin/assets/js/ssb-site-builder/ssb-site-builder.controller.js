@@ -6,7 +6,7 @@ ssbSiteBuilderController.$inject = ['$scope', '$rootScope', '$attrs', '$filter',
 /* @ngInject */
 function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSiteBuilderService, $state, $stateParams, $modal, SweetAlert, $window, $timeout, $location, toaster) {
 
-    console.info('site-builder directive init...')
+    console.info('site-builder directive init...');
 
     var vm = this;
 
@@ -128,7 +128,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
 
     $scope.$watch(function() { return SimpleSiteBuilderService.loading }, updateLoading, true);
 
-    $scope.$watch('vm.state.page', function(page) {
+    $scope.$watch('vm.state.page', _.debounce(function(page) {
         console.time('angular.equals for page');
         if (page && vm.state.originalPage && vm.pageChanged(page, vm.state.originalPage)) {
             console.timeEnd('angular.equals for page');
@@ -141,7 +141,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
         } else {
             vm.state.pendingPageChanges = false;
         }
-    }, true);
+    }, 100), true);
 
     $scope.$watch('vm.state.website', function(website) {
         if (SimpleSiteBuilderService.websiteLoading && website && vm.state.originalWebsite && !angular.equals(website, vm.state.originalWebsite)) {
@@ -449,7 +449,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
 
     function setupBreakpoints() {
         $timeout(function() {
-            console.log('setupBreakpoints')
+            console.log('setupBreakpoints');
             $window.eqjs.refreshNodes();
             $window.eqjs.query();
         }, 3000);
@@ -470,7 +470,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
             .pluck('components')
             .flatten()
             .findWhere({_id: componentId})
-            .value()
+            .value();
 
         SimpleSiteBuilderService.openMediaModal('media-modal', 'MediaModalCtrl', null, 'lg', vm, component, index, update).result.then(function(){
            if(component.type === 'thumbnail-slider'){
@@ -534,15 +534,19 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
 
                 for (var i = 0; i < changes; i++) {
 
+                    console.debug('tracked change');
+                    console.debug(jsondiff1[i].lhs);
+                    console.debug(jsondiff1[i].rhs);
+
                     var diff1 = jsondiff1[i].lhs;
                     var diff2 = jsondiff1[i].rhs;
 
-                    var dataCompiledAdded = diff1 && angular.isDefined(diff1.indexOf) && diff1.indexOf('data-compiled') === -1 && angular.isDefined(diff2.indexOf) && diff2.indexOf('data-compiled') !== -1;
-                    var dataCompiledRemoved = diff1 && angular.isDefined(diff1.indexOf) && diff1.indexOf('data-compiled') !== -1 && angular.isDefined(diff2.indexOf) && diff2.indexOf('data-compiled') === -1;
+                    var dataCompiledAdded = angular.isDefined(diff1) && angular.isDefined(diff1.indexOf) && diff1.indexOf('data-compiled') === -1 && angular.isDefined(diff2) && angular.isDefined(diff2.indexOf) && diff2.indexOf('data-compiled') !== -1;
+                    var dataCompiledRemoved = angular.isDefined(diff1) && angular.isDefined(diff1.indexOf) && diff1.indexOf('data-compiled') !== -1 && angular.isDefined(diff2) && angular.isDefined(diff2.indexOf) && diff2.indexOf('data-compiled') === -1;
 
                     if (dataCompiledAdded || dataCompiledRemoved) {
 
-                        console.log('change to ignore detected @: ', jsondiff1[i].path);
+                        console.debug('change to ignore detected @: ', jsondiff1[i].path);
 
                         $timeout(function() {
 
@@ -550,7 +554,7 @@ function ssbSiteBuilderController($scope, $rootScope, $attrs, $filter, SimpleSit
 
                             vm.state.originalPage = originalPage;
 
-                            console.log('should be empty: ', DeepDiff.diff(originalPage, currentPage));
+                            console.debug('should be empty: ', DeepDiff.diff(originalPage, currentPage));
 
                             changes--;
 
