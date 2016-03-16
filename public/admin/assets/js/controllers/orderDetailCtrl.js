@@ -6,7 +6,7 @@
 
     $scope.dataLoaded = false;
     $scope.billing= {sameAsBilling:false};
-    
+
     //TODO
     // - $q all api calls
     // 1. getCustomers
@@ -401,7 +401,8 @@
         "sku": selected.sku,
         "total": selected.regular_price,
         "name": selected.name,
-        "product": selected
+        "product": selected,
+        "type": selected.type
       };
       $scope.order.line_items.push(_line_item);
       $scope.calculateTotals();
@@ -842,7 +843,7 @@
           else
           {
           	$location.path('/commerce/orders');
-          }          
+          }
         });
       }
     };
