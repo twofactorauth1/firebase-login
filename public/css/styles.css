@@ -10398,7 +10398,23 @@ div[class^="spacing-"] input {
   height: 100%;
 }
 .ssb-theme-btn-style-1 {
-  background: blue;
+  box-shadow: #d8ab00 0px 5px 0px 0px;
+  color: #ffffff;
+  display: inline-block;
+  height: 30px;
+  position: relative;
+  text-align: center;
+  text-decoration: none;
+  width: 154.75px;
+  perspective-origin: 102.375px 30px;
+  transform-origin: 102.375px 30px;
+  background: #f1c40f none repeat scroll 0% 0% / auto padding-box border-box;
+  border: 0px none #ffffff;
+  border-radius: 5px 5px 5px 5px;
+  font: normal normal normal normal 22px / normal 'Open Sans', sans-serif;
+  margin: 20px;
+  outline: #ffffff none 0px;
+  padding: 15px 25px;
 }
 .ssb-hide-during-load {
   opacity: 0;
@@ -11211,6 +11227,10 @@ ssb-topbar .ui-select-match-text > small {
 }
 .ssb-page-section-layout-overflow-visible {
   overflow: visible;
+}
+.ssb-page-section-layout-legacy-undernav {
+  overflow: visible;
+  opacity: 1;
 }
 .ssb-page-section-layout-video-bg {
   height: 56.25vw;

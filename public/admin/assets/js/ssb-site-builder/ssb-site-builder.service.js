@@ -56,7 +56,7 @@
         ssbService.getFontFamilyOptions = getFontFamilyOptions;
         ssbService.deletePage = deletePage;
         ssbService.openMediaModal = openMediaModal;
-        ssbService.setMediaForComponent = setMediaForComponent;
+        ssbService.setMediaForComponent = setMediaForComponent; //legacy re-impl
         ssbService.extendComponentData = extendComponentData;
         ssbService.getTempUUID = getTempUUID;
         ssbService.setTempUUIDForSection = setTempUUIDForSection;
@@ -66,6 +66,7 @@
         ssbService.getCompiledElement = getCompiledElement;
         ssbService.getCompiledElementEditControl = getCompiledElementEditControl;
         ssbService.compileEditorElements = compileEditorElements;
+        ssbService.addUnderNavSetting = addUnderNavSetting; //legacy re-impl
 
         ssbService.contentComponentDisplayOrder = [];
         ssbService.inValidPageHandles = pageConstant.inValidPageHandles;
@@ -96,6 +97,19 @@
             'social',
             'misc'
         ];
+
+        /**
+         * Events for compiled editor elememts
+         */
+        $rootScope.$on('$ssbElementAdded', function(event, componentId, editorId, elementId) {
+            console.log('$ssbElementAdded', componentId, editorId, elementId);
+        });
+
+        $rootScope.$on('$ssbElementRemoved', function(event, componentId, editorId, elementId) {
+            removeCompiledElement(componentId, editorId, elementId);
+            removeCompiledElementEditControl(componentId, editorId, elementId);
+            console.log('$ssbElementRemoved', componentId, editorId, elementId);
+        });
 
 
         /**
@@ -1311,15 +1325,31 @@
             }
         }
 
-        $rootScope.$on('$ssbElementAdded', function(event, componentId, editorId, elementId) {
-            console.log('$ssbElementAdded', componentId, editorId, elementId);
-        });
+        function addUnderNavSetting(masthead_id, fn) {
+            var data = {
+                allowUndernav : false,
+                navComponent: null
+            }
 
-        $rootScope.$on('$ssbElementRemoved', function(event, componentId, editorId, elementId) {
-            removeCompiledElement(componentId, editorId, elementId);
-            removeCompiledElementEditControl(componentId, editorId, elementId);
-            console.log('$ssbElementRemoved', componentId, editorId, elementId);
-        });
+            ssbService.page.sections.forEach(function (sectionValue, sectionIndex) {
+                sectionValue.components.forEach(function (value, index) {
+                    if (value && value.type === 'masthead' && value._id == masthead_id) {
+                        var navComponent = _.findWhere(ssbService.page.sections[sectionIndex - 1].components, { type: 'navigation' });
+                        if (
+                            sectionIndex != 0 &&
+                            navComponent !== undefined
+                        ) {
+                            data.allowUndernav = true;
+                            data.navComponent = navComponent;
+                        } else {
+                            data.allowUndernav = false;
+                        }
+                    }
+                });
+            });
+
+            fn(data);
+        }
 
 
 		(function init() {
