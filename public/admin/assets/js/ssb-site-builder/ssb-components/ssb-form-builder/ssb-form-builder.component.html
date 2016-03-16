@@ -53,7 +53,7 @@
                                     </button>                           
                                 </div>
                             </div>
-                            <div ng-switch-when="3" class="form-layout-3" style="{{vm.inputStyle(vm.component.formSettings)}}">
+                            <div ng-switch-when="3" class="form-layout-3 col-sm-12" style="{{vm.inputStyle(vm.component.formSettings)}}">
                                 <div class="col-sm-6">
                                     <div style="{{vm.fieldStyle(vm.component.formSettings)}}" class="form-group" ng-if="val.visible" ng-repeat="val in vm.component.contactInfo">    
                                       <input placeholder="{{val.label}}" type="text" class="form-control" ng-model="vm.formBuilder[val.type]">

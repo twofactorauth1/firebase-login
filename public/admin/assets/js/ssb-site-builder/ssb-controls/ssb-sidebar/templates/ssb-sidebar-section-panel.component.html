@@ -114,7 +114,7 @@
             ui-state="vm.uiState">
         </ssb-sidebar-settings-panel>
 
-        <!-- Component Settings Form Layout -->
+        <!-- Component Settings Form Builder Layout -->
         <ssb-sidebar-settings-panel
             class="ssb-sidebar-section-panel-component-panel container-fluid"
             ng-if="vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex] && ('form-builder-layout' + vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex]._id) === vm.uiState.openSidebarSectionPanel.id"
@@ -124,11 +124,21 @@
             ui-state="vm.uiState">
         </ssb-sidebar-settings-panel>
 
-        <!-- Component Settings Form Layout -->
+        <!-- Component Settings Form Builder -->
         <ssb-sidebar-settings-panel
             class="ssb-sidebar-section-panel-component-panel container-fluid"
             ng-if="vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex] && ('form-builder' + vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex]._id) === vm.uiState.openSidebarSectionPanel.id"
             settings-template="assets/js/ssb-site-builder/ssb-components/shared/form-builder.html"
+            component="vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex]"
+            state="vm.state"
+            ui-state="vm.uiState">
+        </ssb-sidebar-settings-panel>
+
+        <!-- Component Settings Form Builder -->
+        <ssb-sidebar-settings-panel
+            class="ssb-sidebar-section-panel-component-panel container-fluid"
+            ng-if="vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex] && ('form-builder-settings' + vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex]._id) === vm.uiState.openSidebarSectionPanel.id"
+            settings-template="assets/js/ssb-site-builder/ssb-components/shared/form-builder-settings.html"
             component="vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex]"
             state="vm.state"
             ui-state="vm.uiState">
