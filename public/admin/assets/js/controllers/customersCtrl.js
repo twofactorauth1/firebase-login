@@ -196,7 +196,6 @@
       $scope.modalInstance.close();
       $scope.socailList = false;
       $scope.groupList = false;
-      $scope.clearSelectionFn();
     };
 
     /*
@@ -561,7 +560,6 @@
                 } else {
                  $scope.bulkActionChoice = null;
                  $scope.bulkActionChoice = {};
-                 $scope.clearSelectionFn();
                 }
               });
         }
