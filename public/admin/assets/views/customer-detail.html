@@ -569,6 +569,61 @@
                                 </div>
                             </div>
                         </tab>
+                        <tab ng-if="donations">
+                            <tab-heading>
+                                Donations <span class="badge">{{donations.length}}</span>
+                            </tab-heading>
+                            <div st-table="displayedDonations" st-safe-src="donations">
+                                <div class="panel panel-transparent row margin-bottom-0">
+                                    <div class="panel-body">
+                                        <table class="table table-hover bg-white margin-bottom-0" ng-class="{'grid': tableView == 'grid', 'bg-white': tableView != 'grid'}" ng-show="donations">
+                                            <thead>
+                                                <tr>
+                                                    <th class="center column-width" st-sort="status">Status</th>
+                                                    <th class="hidden-xs center column-width" st-sort="getters.line_items">Items</th>
+                                                    <th class="hidden-xs center column-width" st-sort="total">Total</th>
+                                                    <th class="hidden-xs column-width" st-sort="getters.created">Created</th>
+                                                    <th class="hidden-xs column-width" st-sort="getters.modified">Modified</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr ng-repeat="donation in displayedDonations" ng-click="viewSingle(donation)">
+                                                    <td class="center"><strong>Status: </strong>
+                                                        <span class="fa-stack">
+                                                            <span class="fa fa-circle-thin fa-stack-2x"
+                                        ng-class="{'text-warning': donation.status == orderConstant.order_status.PENDING_PAYMENT,
+                                                      'text-muted': donation.status == orderConstant.order_status.ON_HOLD,
+                                                      'text-blue': donation.status == orderConstant.order_status.PROCESSING,
+                                                      'text-green': donation.status == orderConstant.order_status.COMPLETED,
+                                                      'text-purple': donation.status == orderConstant.order_status.REFUNDED,
+                                                      'text-orange': donation.status == orderConstant.order_status.FAILED,
+                                                      'text-red': donation.status == orderConstant.order_status.CANCELLED,
+                                                      }">
+                                        </span>
+                                        <span class="fa fa-stack-1x" tooltip-placement="top" tooltip="{{formatOrderStatus(donation.status)}} "
+                                           ng-class="{'fa-ellipsis-h text-warning': donation.status == orderConstant.order_status.PENDING_PAYMENT,
+                                                      'fa-minus text-muted': donation.status == orderConstant.order_status.ON_HOLD,
+                                                      'fa-clock-o text-blue': donation.status == orderConstant.order_status.PROCESSING,
+                                                      'fa-check text-green': donation.status == orderConstant.order_status.COMPLETED,
+                                                      'fa-exchange text-purple': donation.status == orderConstant.order_status.REFUNDED,
+                                                      'fa-exclamation text-orange': donation.status == orderConstant.order_status.FAILED,
+                                                      'fa-times text-red': donation.status == orderConstant.order_status.CANCELLED,
+                                                      }">
+                                        </span>
+                                                        </span>
+                                                    </td>
+                                                    <td class="hidden-xs center"><strong>Items: </strong>{{donation.line_items.length}}</td>
+                                                    <td class="hidden-xs center"><strong>Total: </strong> {{donation.total | currency}}</td>
+                                                    <td class="hidden-xs"><strong>Created: </strong> {{donation.created.date | date:'MMM d yy'}}</td>
+                                                    <td class="hidden-xs"><strong>Modified: </strong>{{donation.modified.date | date:'MMM d yy'}}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <div class="load1 csspinner height-400" ng-show="!displayedDonations"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </tab>
                     </tabset>
                 </div>
             </div>
