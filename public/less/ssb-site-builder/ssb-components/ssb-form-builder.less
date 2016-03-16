@@ -106,12 +106,8 @@
         position: absolute;
         top: 8px;
         right: 8px;
-    }
-    @media(max-width:767px) {
-        .btn-form {
-            width: 100% !important;
-        }
-    }
+    }    
+    
 }
 
 
@@ -144,6 +140,8 @@
                 display: block;            
             }
         }
+
+        
     }
     .form-layout-2{   
         width: 50%;
@@ -193,4 +191,15 @@
 .form-builder.panel.panel-default{
     margin-left: -15px;
     margin-right: -15px;
+}
+
+@media(max-width:767px) {        
+    .form-builder-layout{ 
+    	.form-layout-1,  .form-layout-2,  .form-layout-3,  .form-layout-4{
+    		width: 100%;
+        	button{            	
+            	width:100% !important;
+    		}
+    	}
+    }
 }

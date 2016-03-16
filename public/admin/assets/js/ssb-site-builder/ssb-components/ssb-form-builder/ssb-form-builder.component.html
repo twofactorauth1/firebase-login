@@ -12,7 +12,7 @@
                     <form name="formBuilder" ng-submit="createUser(formBuilder)">
                     
                         <div class="form-builder-layout" ng-switch="vm.component.layout">
-                            <div ng-switch-when="1" class="form-layout-1">
+                            <div ng-switch-when="1" class="form-layout-1" style="{{vm.inputStyle(vm.component.formSettings)}}">
                                 <div style="{{vm.fieldStyle(vm.component.formSettings)}}" class="form-group col-sm-12" ng-if="val.visible" ng-repeat="val in vm.component.contactInfo">
                                     <label class="control-label">{{val.label}}</label>
                                     <input type="text" class="form-control" ng-model="vm.formBuilder[val.type]">
@@ -25,14 +25,14 @@
 
                                 <div class="clearfix mb15 visible-xs"></div>
                                 <div class="col-sm-12">                        
-                                    <button ng-class="{'ssb-theme-btn': vm.component.submitBtn}" type="submit" ng-style="{'background': component.btn.bgcolor, 'color':component.btn.color, 'border-color': component.btn.bgcolor}" class="btn btn-form btn-default pull-right btn-block" ng-disabled="formBuilder.$invalid">
+                                    <button style="{{vm.buttonStyle(vm.component.btn)}}" ng-class="{'ssb-theme-btn': vm.component.submitBtn}" type="submit" ng-style="{'background': component.btn.bgcolor, 'color':component.btn.color, 'border-color': component.btn.bgcolor}" class="btn btn-form btn-default pull-right btn-block" ng-disabled="formBuilder.$invalid">
                                         <span elem ng-model="vm.component.submitBtn"></span>
                                     </button>                           
                                 </div>
 
                                 
                             </div>
-                            <div ng-switch-when="2" class="form-layout-2">
+                            <div ng-switch-when="2" class="form-layout-2" style="{{vm.inputStyle(vm.component.formSettings)}}">
                                 <div style="{{vm.fieldStyle(vm.component.formSettings)}}" class="form-group col-sm-12" ng-if="val.visible" ng-repeat="val in vm.component.contactInfo">
                                     <label class="col-sm-2 control-label">{{val.label}}</label>                                    
                                     <div class="col-sm-10">
@@ -48,12 +48,12 @@
                                 </div>
                                 <div class="clearfix mb15 visible-xs"></div>
                                 <div class="col-sm-12">                        
-                                    <button ng-class="{'ssb-theme-btn': vm.component.submitBtn}" type="submit" ng-style="{'background': component.btn.bgcolor, 'color':component.btn.color, 'border-color': component.btn.bgcolor}" class="btn btn-form btn-default pull-right btn-block" ng-disabled="formBuilder.$invalid">
+                                    <button style="{{vm.buttonStyle(vm.component.btn)}}" ng-class="{'ssb-theme-btn': vm.component.submitBtn}" type="submit" ng-style="{'background': component.btn.bgcolor, 'color':component.btn.color, 'border-color': component.btn.bgcolor}" class="btn btn-form btn-default pull-right btn-block" ng-disabled="formBuilder.$invalid">
                                         <span elem ng-model="vm.component.submitBtn"></span>
                                     </button>                           
                                 </div>
                             </div>
-                            <div ng-switch-when="3" class="form-layout-3">
+                            <div ng-switch-when="3" class="form-layout-3" style="{{vm.inputStyle(vm.component.formSettings)}}">
                                 <div class="col-sm-6">
                                     <div style="{{vm.fieldStyle(vm.component.formSettings)}}" class="form-group" ng-if="val.visible" ng-repeat="val in vm.component.contactInfo">    
                                       <input placeholder="{{val.label}}" type="text" class="form-control" ng-model="vm.formBuilder[val.type]">
@@ -67,13 +67,13 @@
 
                                 <div class="clearfix mb15 visible-xs"></div>
                                 <div class="col-sm-12">                        
-                                    <button ng-class="{'ssb-theme-btn': vm.component.submitBtn}" type="submit" ng-style="{'background': component.btn.bgcolor, 'color':component.btn.color, 'border-color': component.btn.bgcolor}" class="btn btn-form btn-default pull-right btn-block" ng-disabled="formBuilder.$invalid">
+                                    <button style="{{vm.buttonStyle(vm.component.btn)}}" ng-class="{'ssb-theme-btn': vm.component.submitBtn}" type="submit" ng-style="{'background': component.btn.bgcolor, 'color':component.btn.color, 'border-color': component.btn.bgcolor}" class="btn btn-form btn-default pull-right btn-block" ng-disabled="formBuilder.$invalid">
                                         <span elem ng-model="vm.component.submitBtn"></span>
-                                    </button>                           
+                                    </button>                            
                                 </div>
                                 
                             </div>
-                            <div ng-switch-when="4" class="form-layout-4">
+                            <div ng-switch-when="4" class="form-layout-4" style="{{vm.inputStyle(vm.component.formSettings)}}">
                                 <div style="{{vm.fieldStyle(vm.component.formSettings)}}" class="form-group col-sm-12" ng-if="val.visible" ng-repeat="val in vm.component.contactInfo">
                                     <input placeholder="{{val.label}}" type="text" class="form-control" ng-model="vm.formBuilder[val.type]">
                                 </div>
@@ -83,12 +83,12 @@
                                 </div>
                                 <div class="clearfix mb15 visible-xs"></div>
                                 <div class="col-sm-12">                        
-                                    <button ng-class="{'ssb-theme-btn': vm.component.submitBtn}" type="submit" ng-style="{'background': component.btn.bgcolor, 'color':component.btn.color, 'border-color': component.btn.bgcolor}" class="btn btn-form btn-default pull-right btn-block" ng-disabled="formBuilder.$invalid">
+                                    <button style="{{vm.buttonStyle(vm.component.btn)}}" ng-class="{'ssb-theme-btn': vm.component.submitBtn}" type="submit" ng-style="{'background': component.btn.bgcolor, 'color':component.btn.color, 'border-color': component.btn.bgcolor}" class="btn btn-form btn-default pull-right btn-block" ng-disabled="formBuilder.$invalid">
                                         <span elem ng-model="vm.component.submitBtn"></span>
                                     </button>                           
                                 </div>
                             </div>
-                            <div ng-switch-default class="form-layout-1">
+                            <div ng-switch-default class="form-layout-1" style="{{vm.inputStyle(vm.component.formSettings)}}">
                                 <div style="{{vm.fieldStyle(vm.component.formSettings)}}" class="form-group col-sm-12" ng-if="val.visible" ng-repeat="val in vm.component.contactInfo">
                                     <label class="control-label">{{val.label}}</label>
                                     <input type="text" class="form-control" ng-model="vm.formBuilder[val.type]">
@@ -100,9 +100,9 @@
                                 </div>
                                 <div class="clearfix mb15 visible-xs"></div>
                                 <div class="col-sm-12">                        
-                                    <button ng-class="{'ssb-theme-btn': vm.component.submitBtn}" type="submit" ng-style="{'background': component.btn.bgcolor, 'color':component.btn.color, 'border-color': component.btn.bgcolor}" class="btn btn-form btn-default pull-right btn-block" ng-disabled="formBuilder.$invalid">
+                                    <button style="{{vm.buttonStyle(vm.component.btn)}}" ng-class="{'ssb-theme-btn': vm.component.submitBtn}" type="submit" ng-style="{'background': component.btn.bgcolor, 'color':component.btn.color, 'border-color': component.btn.bgcolor}" class="btn btn-form btn-default pull-right btn-block" ng-disabled="formBuilder.$invalid">
                                         <span elem ng-model="vm.component.submitBtn"></span>
-                                    </button>                           
+                                    </button>                            
                                 </div>
                             </div>
                         </div>                        

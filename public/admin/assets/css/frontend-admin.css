@@ -8263,11 +8263,6 @@ ssb-topbar .ui-select-match-text > small {
   top: 8px;
   right: 8px;
 }
-@media (max-width: 767px) {
-  .form-builder-component .btn-form {
-    width: 100% !important;
-  }
-}
 .form-builder-layout {
   margin: 10px;
 }
@@ -8339,6 +8334,20 @@ ssb-topbar .ui-select-match-text > small {
 .form-builder.panel.panel-default {
   margin-left: -15px;
   margin-right: -15px;
+}
+@media (max-width: 767px) {
+  .form-builder-layout .form-layout-1,
+  .form-builder-layout .form-layout-2,
+  .form-builder-layout .form-layout-3,
+  .form-builder-layout .form-layout-4 {
+    width: 100%;
+  }
+  .form-builder-layout .form-layout-1 button,
+  .form-builder-layout .form-layout-2 button,
+  .form-builder-layout .form-layout-3 button,
+  .form-builder-layout .form-layout-4 button {
+    width: 100% !important;
+  }
 }
 ssb-topbar #ssb-froala-scrollable-container {
   position: absolute;

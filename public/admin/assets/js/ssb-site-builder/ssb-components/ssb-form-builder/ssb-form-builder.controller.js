@@ -44,9 +44,12 @@ function ssbFormBuilderComponentController($scope, $attrs, $filter, $transclude)
 
 	function inputStyle(field){
 		var styleString = ' ';
-		if (field && field.align) {
-		    styleString += 'text-align: ' + field.align + ";";         
-		}
+		if(field.align === 'left' || field.align === 'right')
+	      styleString += 'float: ' + field.align + " !important;";
+	    
+	    if(field.align === 'center'){
+	      styleString += 'margin: 0 auto !important; float:none !important;';
+	    }
 		if (field && field.inputTextSize) {
 		  styleString += 'font-size: ' + field.inputTextSize  + 'px !important;';
 		}
@@ -56,17 +59,17 @@ function ssbFormBuilderComponentController($scope, $attrs, $filter, $transclude)
 		return styleString;
 	};
 
+
+
 	function buttonStyle(btn){ 
 		var styleString = '';
-		if(vm.component.formSettings && vm.component.formSettings.fieldsPerRow){
-		    styleString = "width:" + 100/vm.component.formSettings.fieldsPerRow + "%;";
-		}
+		
 		if (btn && btn.align) {           
 		    if(btn.align === 'left' || btn.align === 'right')
-		      styleString += 'float: ' + btn.align + ";";
+		      styleString += 'float: ' + btn.align + " !important;";
 		    
 		    if(btn.align === 'center'){
-		      styleString += 'margin: 0 auto;';
+		      styleString += 'margin: 0 auto !important; float:none !important;';
 		    }
 		}
 		return styleString;
