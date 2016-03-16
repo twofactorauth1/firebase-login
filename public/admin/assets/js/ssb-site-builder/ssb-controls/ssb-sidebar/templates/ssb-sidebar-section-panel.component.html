@@ -114,6 +114,26 @@
             ui-state="vm.uiState">
         </ssb-sidebar-settings-panel>
 
+        <!-- Component Settings Form Layout -->
+        <ssb-sidebar-settings-panel
+            class="ssb-sidebar-section-panel-component-panel container-fluid"
+            ng-if="vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex] && ('form-builder-layout' + vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex]._id) === vm.uiState.openSidebarSectionPanel.id"
+            settings-template="assets/js/ssb-site-builder/ssb-components/shared/form-builder-layout.html"
+            component="vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex]"
+            state="vm.state"
+            ui-state="vm.uiState">
+        </ssb-sidebar-settings-panel>
+
+        <!-- Component Settings Form Layout -->
+        <ssb-sidebar-settings-panel
+            class="ssb-sidebar-section-panel-component-panel container-fluid"
+            ng-if="vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex] && ('form-builder' + vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex]._id) === vm.uiState.openSidebarSectionPanel.id"
+            settings-template="assets/js/ssb-site-builder/ssb-components/shared/form-builder.html"
+            component="vm.state.page.sections[vm.uiState.activeSectionIndex].components[vm.uiState.activeComponentIndex]"
+            state="vm.state"
+            ui-state="vm.uiState">
+        </ssb-sidebar-settings-panel>
+
         <!-- Component Settings Advanced -->
         <ssb-sidebar-settings-panel
             class="ssb-sidebar-section-panel-component-panel container-fluid"
