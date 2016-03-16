@@ -11906,7 +11906,7 @@ ssb-topbar .ui-select-match-text > small {
 .form-builder-layout .form-layout-3 button {
   float: right;
   margin-right: 15px;
-  width: 50%;
+  width: 33%;
 }
 .form-builder-layout .form-layout-3:hover {
   cursor: pointer;
