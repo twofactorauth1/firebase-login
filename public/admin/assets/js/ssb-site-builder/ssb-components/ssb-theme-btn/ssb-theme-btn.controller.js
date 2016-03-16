@@ -341,12 +341,12 @@ function ssbThemeBtnController($rootScope, $scope, $attrs, $filter, $transclude,
         var compiledEl = SimpleSiteBuilderService.getCompiledElement(parentComponent.attr('id'), parentEditorId, elementId);
         var compiledEditControl = SimpleSiteBuilderService.getCompiledElementEditControl(parentComponent.attr('id'), parentEditorId, elementId);
 
-        if (compiledEl) {
+        if (compiledEl.length) {
             top = compiledEl[0].getBoundingClientRect().top - topOffset - topbarHeight + scrollTop;
             left = compiledEl[0].getBoundingClientRect().left - leftOffset - sidebarWidth;
         }
 
-        if (compiledEditControl) {
+        if (compiledEditControl && compiledEditControl.length) {
             compiledEditControl.css({ top: top, left: left });
         }
 
