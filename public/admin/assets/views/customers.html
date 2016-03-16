@@ -29,7 +29,7 @@
                                             </button>
                                         </div>
                                         <div class="col-xs-3 col-md-3 padding-right-0">
-                                            <ui-select ng-model="bulkActionChoice" on-select="bulkActionSelectFn(bulkActionChoice)" theme="bootstrap" ng-disabled='!(selectedCustomersFn()).length'>
+                                            <ui-select ng-model="bulkActionChoice.action" on-select="bulkActionSelectFn()" theme="bootstrap" ng-disabled='!(selectedCustomersFn()).length'>
                                                 <ui-select-match placeholder="Bulk Actions">
                                                     <small ng-bind-html="$select.selected.label"></small>
                                                 </ui-select-match>
