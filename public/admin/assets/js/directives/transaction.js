@@ -26,6 +26,22 @@ app.directive('indigewebTransactionLabel', ['OrderService', function(OrderServic
                 } else if (!scope.hasOrder && scope.hasDonation) {
                     scope.label = 'donation';
                 }
+                
+                if (attrs.plural) {
+                    scope.label = scope.label + 's';
+                }
+
+                if (attrs.lower) {
+                    scope.label = scope.label.toLowerCase();
+                }
+
+                if (attrs.upper) {
+                    scope.label = scope.label.toUpperCase();
+                }
+
+                if (attrs.capitalize) {
+                    scope.label = scope.label.charAt(0).toUpperCase() + scope.label.slice(1);
+                }
             };
 
             OrderService.getOrders(function(orders) {
