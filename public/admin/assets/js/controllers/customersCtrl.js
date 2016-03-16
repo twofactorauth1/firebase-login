@@ -196,6 +196,7 @@
       $scope.modalInstance.close();
       $scope.socailList = false;
       $scope.groupList = false;
+      $scope.clearSelectionFn();
     };
 
     /*
@@ -555,10 +556,12 @@
                     });
                     $scope.bulkActionChoice = null;
                     $scope.bulkActionChoice = {};
+                    $scope.clearSelectionFn();
                     toaster.pop('success', 'Customers Deleted.');
                 } else {
                  $scope.bulkActionChoice = null;
                  $scope.bulkActionChoice = {};
+                 $scope.clearSelectionFn();
                 }
               });
         }
@@ -576,6 +579,13 @@
         } else {
             $scope.selectAllChecked = true;
         }
+        $scope.displayedCustomers.forEach(function(customer, index) {
+            customer.isSelected = $scope.selectAllChecked;
+        });
+    };
+
+    $scope.clearSelectionFn = function () {
+        $scope.selectAllChecked = false;
         $scope.displayedCustomers.forEach(function(customer, index) {
             customer.isSelected = $scope.selectAllChecked;
         });
@@ -615,6 +625,7 @@
         });
 
         $scope.tagsBulkAction = {};
+        $scope.clearSelectionFn();
         $scope.closeModal();
         toaster.pop('success', 'Customers tags updated.');
     };
